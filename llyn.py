@@ -1867,7 +1867,7 @@ class RDFStore(RDFSink) :
 	    if r == None: return
             f = r.fragments.get(urirefString[hash+1:], None)
             if f == None: return
-	raise RuntimeError("Ooops! Attempt to create new identifier hits on one already used: %s"%(urirefString))
+	raise ValueError("Ooops! Attempt to create new identifier hits on one already used: %s"%(urirefString))
 	return
 
 

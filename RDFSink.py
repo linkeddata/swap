@@ -212,16 +212,22 @@ class RDFSink:
 	pass
 	
     def genId(self):
-	subj = self._genPrefix
-	assert subj # don't mask bugs
-        subj = subj + `self._nextId`
-        self._nextId = self._nextId + 1
+        subj = None
+        while not subj:
+            subj = self._genPrefix
+            assert subj # don't mask bugs
+            subj = subj + `self._nextId`
+            self._nextId = self._nextId + 1
+            try:
+                self.checkNewId(subj)  # For a store, just in case, check really unique
+            except ValueError:
+                subj = None
+    
 	if self.usingRunNamespace and not self.declaredRunNamespace:
 	    self.declaredRunNamespace = 1
 	    ns =  self._genPrefix
 	    hash = ns.find("#")
 	    self.bind("run", ns[:hash+1])
-	self.checkNewId(subj)  # For a store, just in case, check really unique
         return subj
 
     def setGenPrefix(self, genPrefix):
