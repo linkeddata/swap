@@ -8,6 +8,7 @@ __version__ = "$Revision$"
 
 from sys import stderr
 import time
+from html import xstr
 
 class printReporter:
     """
@@ -45,21 +46,22 @@ class printReporter:
         self.stream=stream
         self.level = 0
         self.indent = ".  "
-        self.before = ""
-        self.after = ""
         self.t0 = []
 
     def msg(self, string):
-        print >>self.stream, self.before + (self.indent*self.level) + string + self.after
+        self.write((self.indent*self.level) + string)
 
     def begin(self, string=""):
-        print >>self.stream, self.before + (self.indent*self.level) + "/  " + string + self.after
+        self.write((self.indent*self.level) + "/  " + string)
         self.level += 1
 
     def end(self, string=""):
         self.level -= 1
-        print >>self.stream, self.before + (self.indent*self.level) + "\\  " + string + self.after
+        self.write((self.indent*self.level) + "\\  " + string)
 
+    def write(self, string):
+        self.stream.write(string+"\n")
+        self.stream.flush()
 
 class nullReporter:
     def __init__(self, stream=stderr):
@@ -98,13 +100,14 @@ class timingPrintReporter(printReporter):
 
 class timingHTMLReporter(timingPrintReporter):
 
-   def __init__(self, stream=stderr):
-       timingPrintReporter.__init__(self, stream)
-       self.before="<p>"
-       self.after="</p>"
+   #def __init__(self, stream=stderr):
+   #   timingPrintReporter.__init__(self, stream)
 
-       #  @@ BUG -- should do XML escaping on text as well
-    
+   def write(self, string):
+        self.stream.write("<p class=\"reporter\">")
+        self.stream.write(xstr(string))
+        self.stream.write("</p>\n")
+        self.stream.flush()
 
 if __name__ == "__main__":
     import doctest, sys
@@ -112,7 +115,10 @@ if __name__ == "__main__":
 
 
 # $Log$
-# Revision 1.3  2003-09-17 16:12:10  sandro
+# Revision 1.4  2003-09-17 18:10:43  sandro
+# redid html, with quoting; added flush()
+#
+# Revision 1.3  2003/09/17 16:12:10  sandro
 # added HTML reporter
 #
 # Revision 1.2  2003/09/16 17:49:35  sandro
