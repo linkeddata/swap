@@ -1449,7 +1449,9 @@ t   "this" and "()" special syntax should be suppresed.
         if type == LITERAL: return stringToN3(value)
 
         j = string.rfind(value, "#")
-        if j>=0 and "p" not in self._flags:   # Suppress use of prefixes?
+        if (j>=0
+            and "p" not in self._flags   # Suppress use of prefixes?
+            and value[j+1:].find(".") <0 ): # Can't use prefix is localname includes "."
             prefix = self.prefixes.get((RESOURCE, value[:j+1]), None) # @@ #CONVENTION
             if prefix != None : return prefix + ":" + value[j+1:]
         
