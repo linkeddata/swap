@@ -1,0 +1,37 @@
+
+<!-- Processed by Id: cwm.py,v 1.97 2002/07/06 12:52:02 timbl Exp -->
+<!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/util/sniffSchema.n3-->
+
+
+<r:RDF xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/util/sniffSchema#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:ss="file:/home/connolly/w3ccvs/WWW/2000/10/swap/util/sniffSchema#"
+    xmlns:str="http://www.w3.org/2000/10/swap/string#">
+
+    <r:Description r:about="#0_work">
+        <log:forAll r:resource="#C"/>
+        <log:forAll r:resource="#P"/>
+        <log:forAll r:resource="#T"/>
+        <log:forAll r:resource="#X"/>
+    </r:Description>
+
+    <s:Property r:about="#intersectsDomainOf">
+        <s:label>intersects domain of</s:label>
+    </s:Property>
+
+    <s:Property r:about="#label">
+        <s:label>label?</s:label>
+    </s:Property>
+
+    <r:Description r:about="">
+        <dc:description>
+Sniff a schema from some RDF data.
+</dc:description>
+        <dc:description>$Id$</dc:description>
+        <dc:relation r:resource=""/>
+        <dc:relation r:resource="sniffSchema.rdf"/>
+    </r:Description>
+</r:RDF>

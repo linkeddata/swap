@@ -5,3 +5,14 @@
 #	cwm valp.n3 valc.n3 recurse.n3 > validate.n3
 
 #end
+
+PYTHON=python
+SWAP=..
+CWM=$(SWAP)/cwm.py
+
+.SUFFIXES: .n3 .rdf
+
+.n3.rdf:
+	$(PYTHON) $(CWM) $< --purge --rdf >$@
+
+sniffSchema.rdf: sniffSchema.n3

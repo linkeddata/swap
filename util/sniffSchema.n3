@@ -3,7 +3,8 @@
 <> dc:description """
 Sniff a schema from some RDF data.
 """,
-"$Id$".
+"$Id$";
+dc:relation <sniffSchema.rdf>, <sniffSchema.n3>.
 
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix r: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
@@ -15,6 +16,9 @@ Sniff a schema from some RDF data.
 @prefix ss: <sniffSchema#>.
 
 this log:forAll :P, :C, :X, :T.
+
+ss:label a s:Property; s:label "label?".
+ss:intersectsDomainOf a s:Property; s:label "intersects domain of".
 
 { [] :P []. } log:implies { :P a r:Property }.
 { [] a :C } log:implies { :C a s:Class }.
@@ -39,3 +43,5 @@ this log:forAll :P, :C, :X, :T.
      s:label :T } log:implies { :X s:label :T }.
 { :X a s:Class;
      s:label :T } log:implies { :X s:label :T }.
+
+log:implies a log:Chaff. #@@ I hate this hack.
