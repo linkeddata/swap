@@ -9,7 +9,6 @@ __version__ = "$Revision$"
 
 from __future__ import generators
 import re
-
 import LX
 
 
@@ -47,16 +46,25 @@ class Node:
 
     def __str__(self):
         try:
-            return self.kb.nickname(self.fromTerm)
-        except KeyError, error:
-            return "Node("+str(self.fromTerm)+")"
+            name =  self.kb.nickname(self.fromTerm)
+        except LX.namespace.NoShortNameDeclared, error:
+            name = "Node("+str(self.fromTerm)+")"
+        except LX.namespace.TermHasNoURI, error:
+            name = "Node("+str(self.fromTerm)+")"
+        done = {}
+        return name+" -- "+self.dump(done)
 
     def __repr__(self):
         return "Node"+"("+`self.kb`+","+`self.fromTerm`+")"
 
     
     def preFill(self, attr, value, term, invert):
+        #print "preFill", self, attr, value, term, invert
         self.arcLists.setdefault((term,invert), []).append(value)
+        l = self.arcLists[(term,invert)]
+        assert(value == l[len(l)-1])
+        #print "preFilled to: ", self.arcLists[(term,invert)]
+        #print 
 
     def dump(self, done):
         """needs shorter names, maybe line breaking, is-of handling, ..."""
@@ -68,6 +76,7 @@ class Node:
             result += "= "+self.kb.nickname(self.fromTerm)+"; "
         except: pass
         keytexts = []
+        # keytexts.append("**"+str(self.arcLists))
         for (key, values) in self.arcLists.iteritems():
             
             try:
@@ -149,10 +158,13 @@ class Path:
         
         if isinstance(self.from_, Node):
             for n in self.from_.arcLists.setdefault(key, []):
+                #    if there are none, we shouldn't have gotten here?
+                #for n in self.from_.arcLists[key]:
                 yield n
         else:
             for m in self.from_:
                 for n in m.arcLists.setdefault(key, []):
+                    #for n in m.arcLists[key]:
                     yield n
 
     def only(self):
@@ -238,7 +250,10 @@ if __name__ == "__main__":
 
  
 # $Log$
-# Revision 1.3  2003-08-28 11:44:43  sandro
+# Revision 1.4  2003-09-06 04:45:04  sandro
+# nicer (?  longer at least) printing, arcList assertion
+#
+# Revision 1.3  2003/08/28 11:44:43  sandro
 # * added nickname-based __str__ functions
 # * added .uri and .data to paths, as a smarter only().uri, etc.
 #
