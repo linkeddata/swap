@@ -36,7 +36,6 @@ this log:forAll :LAT1, :LON1, :LAT2, :LON2, :NUM, :YMD,
         geo:lat :LAT2;
         geo:long :LON2;
       ];
-      k:startingDate [ dt:date :YMD];
   ] ].
 
   (:LAT1 " " :LON1 " " :LAT2 " " :LON2 " color=blue\n") str:concatenation :TXT.
