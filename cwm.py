@@ -382,6 +382,11 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 print doCommand.__doc__
                 print notation3.ToN3.flagDocumentation
                 print toXML.ToRDF.flagDocumentation
+		try:
+		    import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
+		    print sax2rdf.RDFXMLParser.flagDocumentation
+		except:
+		    pass
                 return
             elif arg == "-revision":
                 progress( "cwm=",cvsRevision, "llyn=", llyn.cvsRevision)
@@ -441,7 +446,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         if not _gotInput: # default input
             _inputURI = _baseURI # Make abs from relative
 	    if option_first_format == "rdf" :
-		p = sax2rdf.RDFXMLParser(_store, _inputURI, formulaURI=workingContextURI)
+		p = sax2rdf.RDFXMLParser(_store, _inputURI, formulaURI=workingContextURI, flags=option_rdf_flags)
 	    else: p = notation3.SinkParser(_store,  _inputURI, formulaURI=workingContextURI)
             p.load("", baseURI=_baseURI)
             del(p)
@@ -472,7 +477,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 _inputURI = join(option_baseURI, arg)
                 assert ':' in _inputURI
                 if option_format == "rdf" :
-                    p = sax2rdf.RDFXMLParser(_store, _inputURI, formulaURI=workingContextURI)
+                    p = sax2rdf.RDFXMLParser(_store, _inputURI, formulaURI=workingContextURI, flags=option_rdf_flags)
                 else: p = notation3.SinkParser(_store,  _inputURI, formulaURI=workingContextURI)
                 if not option_pipe: workingContext.reopen()
                 p.load(_inputURI)

@@ -60,6 +60,7 @@ SYMBOL=RDFSink.SYMBOL #@@misnomer
 
 # States:
 
+STATE_OUTERMOST =   "outermost level"     # Before <rdf:RDF>
 STATE_NOT_RDF =     "not RDF"     # Before <rdf:RDF>
 STATE_NO_SUBJECT =  "no context"  # @@@@@@@@@ use numbers for speed
 STATE_DESCRIPTION = "Description (have subject)" #
@@ -73,21 +74,25 @@ RDF_Specification = "http://www.w3.org/TR/REC-rdf-syntax/" # Must come in useful
 DAML_ONT_NS = "http://www.daml.org/2000/10/daml-ont#"  # DAML early version
 DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
 
+from diag import verbosity, progress
 
 RDF_IS = SYMBOL, NODE_MERGE_URI   # Used with quoting
 
 _nextId = 0        # For generation of arbitrary names for anonymous nodes
 
 class RDFHandler(xml.sax.ContentHandler):
+    """RDF Parser using SAX API for XML parsing
+"""
 
-    def __init__(self, sink, thisURI, formulaURI=None):
+    def __init__(self, sink, thisURI, formulaURI=None, flags=""):
         self.testdata = ""
+	self.flags = flags
         self._stack =[]  # Stack of states
         self._nsmap = [] # stack of namespace bindings
 
         self.sink = sink
         self._thisURI = thisURI
-        self._state = STATE_NOT_RDF  # Maybe should ignore RDF poutside <rdf:RDF>??
+        self._state = STATE_OUTERMOST  # Maybe should ignore RDF poutside <rdf:RDF>??
         if formulaURI==None:
             self._context = FORMULA, thisURI + "#_formula"  # Context of current statements, change in bags
         else:
@@ -249,24 +254,30 @@ class RDFHandler(xml.sax.ContentHandler):
         
         tagURI = ((name[0] or "") + name[1]).encode('utf-8')
 
-#@@change to use progress
-#        if thing.verbosity():
-#            if not attrs:
-#                print '# State =', self._state, 'start tag: <' + tagURI + '>'
-#            else:
-#                print '# state =', self._state, 'start tag: <' + tagURI,
-#                for name, value in attrs.items():
-#                    print "    " + name + '=' + '"' + value + '"',
-#                print '>'
+        if verbosity() > 80:
+	    indent = "-" * len(self._stack) 
+            if not attrs:
+                progress(indent+'# State =', self._state, ', start tag: <' + tagURI + '>')
+            else:
+                str = '# State =%s, start tag= <%s ' %( self._state, tagURI)
+                for name, value in attrs.items():
+                    str = str + "  " + `name` + '=' + '"' + `value` + '"'
+                progress(indent + str + '>')
 
 
         self._stack.append([self._state, self._context, self._predicate, self._subject])
 
-        if self._state == STATE_NOT_RDF:
+        if self._state == STATE_OUTERMOST:
             if tagURI == RDF_NS_URI + "RDF":
                 self._state = STATE_NO_SUBJECT
             else:
-                pass                    # Some random XML
+                self._state = STATE_NOT_RDF                    # Some random XML
+
+        elif self._state == STATE_NOT_RDF:
+            if tagURI == RDF_NS_URI + "RDF" and "T" in self.flags:
+                self._state = STATE_NO_SUBJECT
+            else:
+                pass                    # Ignore embedded RDF
 
         elif self._state == STATE_NO_SUBJECT:  # 6.2 obj :: desription | container
             self._obj(tagURI, attrs)
@@ -415,7 +426,9 @@ class RDFHandler(xml.sax.ContentHandler):
         elif self._state == STATE_DESCRIPTION:
             self._items.pop()
         elif self._state == STATE_NOVALUE or \
-             self._state == STATE_NO_SUBJECT:
+             self._state == STATE_NO_SUBJECT or \
+             self._state == STATE_OUTERMOST or \
+             self._state == STATE_NOT_RDF: # akuchlin@mems-exchange.org 2002-09-11
             pass
         else:
             raise RuntimeError, ("Unknown RDF parser state '%s' in end tag" % self._state, self._stack)
@@ -434,8 +447,18 @@ class RDFHandler(xml.sax.ContentHandler):
 
 
 class RDFXMLParser(RDFHandler):
-    def __init__(self, sink, thisURI, formulaURI=None):
-        RDFHandler.__init__(self, sink, thisURI, formulaURI=formulaURI)
+    """XML/RDF parser based on sax XML interface"""
+
+    flagDocumentation = """
+    Flags to control RDF/XML INPUT (after --rdf=) follow:
+        
+        T  - take foreign XML as transparent and parse any RDF in it
+             (default it is to ignore unless rdf:RDF at top level)
+
+"""
+
+    def __init__(self, sink, thisURI, formulaURI=None, flags=""):
+        RDFHandler.__init__(self, sink, thisURI, formulaURI=formulaURI, flags=flags)
         p = xml.sax.make_parser()
         p.setFeature(feature_namespaces, 1)
         p.setContentHandler(self)
