@@ -11,10 +11,8 @@
 <body xml:lang="en" lang="en">
 <p><a href="/">W3C</a> | <a href="/2001/sw/">Semantic Web</a> | <a
 href="../">SWAP</a></p>
-
-<a href="../../../../DesignIssues/Notation3.html">
-<img align=right alt="n3" src="../../../../RDF/icons/n3_small"/>
-</a>
+<a href="../../../../DesignIssues/Notation3.html"><img align="right" alt="n3"
+src="../../../../RDF/icons/n3_small" /></a> 
 
 <h1>Cwm</h1>
 
@@ -38,7 +36,32 @@ href="../">SWAP</a>, a Semantic Web Application Platform.</p>
   <li><a href="CwmHelp">Command line syntax</a></li>
   <li><a href="CwmBuiltins">Built-in functions</a></li>
   <li><a href="CwmInstall">Installation</a></li>
+  <li><a href="changes.html">Change log</a></li>
 </ul>
+
+<p>Mail lists:</p>
+<dl>
+  <dt><a
+  href="http://lists.w3.org/Archives/Public/public-cwm-announce">public-cwm-announce</a></dt>
+    <dd>This low-traffic is for announcements about releases of cwm software,
+      and monthly summaries of changes to the bug/RFE list</dd>
+  <dt><a
+  href="http://lists.w3.org/Archives/public/public-cwm-bugs/">public-cwm-bugs</a><a></a></dt>
+    <dd>This is for the announcement and brief discussion/clarification of
+      cwm bugs or Requests For Enhancement (RFE). If responding to an
+      existing bug, only use mailers which send the refernce headers so that
+      the threads on this mail ling list work. For new threads, please make
+      the subject line informative, and use the word "bug" or "RFE" as
+      appopriate. The current plan is to review changes in this monthly and
+      send it to the announce list</dd>
+  <dt><a
+  href="http://lists.w3.org/Archives/Public/pub;ic-www-talk/">public-cwm-talk</a></dt>
+    <dd>Discussion by users and/or developers of the use and abuse of project
+      software.</dd>
+  <dt></dt>
+</dl>
+
+<p></p>
 
 <h2 id="Closed">Features and Tutorial</h2>
 
@@ -86,13 +109,13 @@ thoroughly:</p>
     </ul>
   </li>
 </ul>
-
 <dl>
-<dt id="Installing"><a href="CwmInstall">Installing Cwm</a></dt>
-<dd> How to get it running for the first time. <em>Installation is not very mature; <a
-href="http://esw.w3.org/topic/CwmTips">CwmTips</a> is a community Wiki resource
-for living with cwm</em>.</dd>
-<dt><a href="changes.html">Changes</a></dt><dd>List of major changes. </dd>
+  <dt id="Installing"><a href="CwmInstall">Installing Cwm</a></dt>
+    <dd>How to get it running for the first time. <em>Installation is not
+      very mature; <a href="http://esw.w3.org/topic/CwmTips">CwmTips</a> is a
+      community Wiki resource for living with cwm</em>.</dd>
+  <dt><a href="changes.html">Changes</a></dt>
+    <dd>List of major changes.</dd>
 </dl>
 
 <h3><a name="Environmen" id="Environmen">Environment Variables</a></h3>
@@ -265,43 +288,6 @@ documents.</p>
   <li>The question of quoting and BagIDs etc</li>
 </ul>
 
-<h3><a id="QA" name="QA">Code Review notes</a></h3>
-
-<p><em>5Aug2002, DanC</em></p>
-<ul>
-  <li>relative URI stuff is all over the map. move to uripath.py <em>done,
-    pretty much</em></li>
-  <li>why is verbosity() in thing? that seems to be the only part of the
-    thing module that llyn uses</li>
-  <li>use Namespace() class; N3_forAll_URI = RDFSink.forAllSym -&gt;
-    log.forAll</li>
-  <li>use subclasses of string, rather than pairs, for terms? (ala eikon's
-    rdflib)</li>
-  <li>python style: 
-    <ul>
-      <li>would be nice to have module dependency graph, to know where to
-        start scrubbing</li>
-      <li>scrub modules for python style; (cite the <a
-        href="http://www.python.org/doc/essays/styleguide.html">styleguide</a>
-        from scrubbed modules) benefit: nice pydoc</li>
-      <li>start using python's unit test stuff? maybe start with
-      uripath.py</li>
-      <li>scrub with pychecker? (@@cf. earlier report mailed to
-      www-archive)</li>
-      <li>is there a __debug__ or some other established convention to use in
-        place of verbosity()?</li>
-    </ul>
-  </li>
-  <li>open source community style: 
-    <ul>
-      <li>no README in cwm.tar.Z</li>
-      <li>no CHANGES in cwm.tar.Z</li>
-      <li>cwm.tar.Z: compress??? er... .tgz, please</li>
-    </ul>
-  </li>
-  <li>this file should be XHTML</li>
-</ul>
-
 <h2 id="acks">Acknowledgements</h2>
 
 <p>Thanks to Dan Connolly for writing the first code and thereby <a
@@ -313,10 +299,9 @@ href="http://infomesh.net/2001/cwm/">guide</a> to cwm. Thanks for all on
 #RDFIG for being everything which is #RDFIG.</p>
 
 <p>Development of cwm is supported in part by funding from US Defense
-Advanced Research Projects Agency (DARPA) and Air Force Research
-Laboratory, Air Force Materiel Command, USAF, under agreement number
-F30602-00-2-0593, "Semantic Web Development".</p>
-
+Advanced Research Projects Agency (DARPA) and Air Force Research Laboratory,
+Air Force Materiel Command, USAF, under agreement number F30602-00-2-0593,
+"Semantic Web Development".</p>
 <hr />
 <address>
   Tim BL, with his director hat off<br />

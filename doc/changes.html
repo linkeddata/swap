@@ -17,46 +17,52 @@ href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
 Comparing Formats</p>
 </div>
 
-<h1>Cwm Changes</h1>
+<h1><a href="cwm">Cwm</a> Changes</h1>
+
+<p style="text-align: right"><a
+href="../../../../DesignIssues/Notation3.html"><img alt="n3"
+src="../../../../RDF/icons/n3_small" /></a></p>
+
+<h3>Release 0.7, 2004-02-04</h3>
 
 <p></p>
 
-<h3>Tagged release rel-0-7</h3>
-
-<p></p>
-
-<p>2004-02-04: Added a CVS tag to the current release. You up or downgrade to
-this by</p>
+<p>Release 0.7. 2004-02-04: This is a numbered release. After much discussion
+we picked 0.7 as the number. Added a CVS tag rel-0-7 to the current release.
+If you have the source through CVS, you up- or down-grade to this by</p>
 <pre>cvs update -r rel-0-7</pre>
 
-<p>The idea is that this release has a well-defined set of bugs, and that </p>
+<p>The idea is that this release has a well-defined set of bugs, and that we
+work toward a more community-supported platform with time.</p>
 <ol>
   <li>The set of open bugs or request for enhancements (RFEs) which have been
-    sent to the list are now available, every time we run make, in iCalendar
-    <a href="../admin/N3-Bugs.ics">ToDo list</a>. This at least tracks the
-    outstanding one. Those for which a "[closed] Re: ..." response exists are
-    given <em>Completed</em> status. </li>
+    sent to the list are now available, every time we run make, in an
+    iCalendar format <a href="../admin/N3-Bugs.ics">ToDo list</a>. . This at
+    least tracks the outstanding one. Those for which a "[closed] Re: ..."
+    response exists are given <em>Completed</em> status.</li>
   <li>A few have actually been closed. Closure now where appropiate involves
-    including a suitabl etest in the regression tests. This test currently
+    including a suitable test in the regression tests. This test currently
     includes all the n3 format files detailed.tests in subdirectories of
     $SWAP/test.</li>
-  <li>New mailing lists have been made.
+  <li>New mailing lists have been made. 
     <dl>
       <dt><a
-      href="http://lists.w3.org/Archives/Public/public-cwm-annouce">public-cwm-announce</a></dt>
-        <dd>This low-traffic  is for announcements about releases of cwm
+      href="http://lists.w3.org/Archives/Public/public-cwm-announce">public-cwm-announce</a></dt>
+        <dd>This low-traffic is for announcements about releases of cwm
           software.</dd>
       <dt><a
       href="http://lists.w3.org/Archives/public/public-cwm-bugs/">public-cwm-bugs</a><a></a></dt>
         <dd>This is for the announcement and brief discussion/clarification
-          of cwm bugs. A mail with subject [closed] Re: ....  marks a thread
-          as closed.  We may make this protocol more sophistiucaed with time.
-           If responding to  only use mailers which send the refernce headers
-          so that the threads on this mail ling list work.    For new
-          threads, please make the subject line informative, and use the word
-          "bug" or "RFE" as appopriate.</dd>
-      <dt>public-cwm-talk</dt>
-        <dd>Discussion by users and/or developers of the use and abuse of 
+          of cwm bugs. A mail with subject [closed] Re: .... marks a thread
+          as closed. We may make this protocol more sophistiucaed with time.
+          If responding to only use mailers which send the refernce headers
+          so that the threads on this mail ling list work. For new threads,
+          please make the subject line informative, and use the word "bug" or
+          "RFE" as appopriate. The current plan is to review changes in this
+          monthly and send it to the announce list</dd>
+      <dt><a
+      href="http://lists.w3.org/Archives/Public/pub;ic-www-talk/">public-cwm-talk</a></dt>
+        <dd>Discussion by users and/or developers of the use and abuse of
           project software.</dd>
       <dt></dt>
     </dl>
