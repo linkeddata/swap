@@ -2,8 +2,11 @@
 @prefix : <http://example.com/foo#>.
 
 
-<http://example.com/foo#hypen-ated> <http://example.com/foo#dot.ted>
-<http://example.com/foo#hypen-and.dot> .
+<http://example.com/foo#hyphen-ated> <http://example.com/foo#dot.ted>
+<http://example.com/foo#hyphen-and.dot> .
+
+<http://example.com/foo#minus-_underscore> <http://example.com/foo#under_score>
+<http://example.com/foo#underscore_-minus> .
 
 <http://example.com/foo#a> <http://example.com/foo#b> <http://example.com/foo#c>.
 

@@ -86,6 +86,7 @@ steps,&nbsp;in&nbsp;order&nbsp;left&nbsp;to&nbsp;right:<br>
 --engine=otter&nbsp;use&nbsp;otter&nbsp;(in&nbsp;your&nbsp;$PATH)&nbsp;instead&nbsp;of&nbsp;llyn&nbsp;for&nbsp;linking,&nbsp;etc<br>
 --why&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Replace&nbsp;the&nbsp;store&nbsp;with&nbsp;an&nbsp;explanation&nbsp;of&nbsp;its&nbsp;contents<br>
 --mode=flags&nbsp;&nbsp;Set&nbsp;modus&nbsp;operandi&nbsp;for&nbsp;inference&nbsp;(see&nbsp;below)<br>
+--closure=flags&nbsp;&nbsp;Control&nbsp;automatic&nbsp;lookup&nbsp;of&nbsp;identifiers&nbsp;(see&nbsp;below)<br>
 --flatten&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;turn&nbsp;formulas&nbsp;into&nbsp;triples&nbsp;using&nbsp;LX&nbsp;vocabulary<br>
 --unflatten&nbsp;&nbsp;&nbsp;turn&nbsp;described-as-true&nbsp;LX&nbsp;sentences&nbsp;into&nbsp;formulas<br>
 --think=foo&nbsp;&nbsp;&nbsp;as&nbsp;-apply=foo&nbsp;but&nbsp;continue&nbsp;until&nbsp;no&nbsp;more&nbsp;rule&nbsp;matches&nbsp;(or&nbsp;forever!)<br>
@@ -115,8 +116,16 @@ Mode&nbsp;flags&nbsp;affect&nbsp;inference&nbsp;extedning&nbsp;to&nbsp;the&nbsp;
 &nbsp;m&nbsp;&nbsp;&nbsp;Schemas&nbsp;and&nbsp;definitive&nbsp;documents&nbsp;laoded&nbsp;are&nbsp;merged&nbsp;into&nbsp;the&nbsp;meta&nbsp;knowledge<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(otherwise&nbsp;they&nbsp;are&nbsp;consulted&nbsp;independently)<br>
 &nbsp;s&nbsp;&nbsp;&nbsp;Read&nbsp;the&nbsp;schema&nbsp;for&nbsp;any&nbsp;predicate&nbsp;in&nbsp;a&nbsp;query.<br>
-&nbsp;<br>
 &nbsp;u&nbsp;&nbsp;&nbsp;Generate&nbsp;unique&nbsp;ids&nbsp;using&nbsp;a&nbsp;run-specific<br>
+&nbsp;<br>
+Closure&nbsp;flags&nbsp;are&nbsp;set&nbsp;to&nbsp;cause&nbsp;the&nbsp;working&nbsp;formula&nbsp;to&nbsp;be&nbsp;automatically&nbsp;exapnded&nbsp;to<br>
+the&nbsp;closure&nbsp;under&nbsp;the&nbsp;operation&nbsp;of&nbsp;looking&nbsp;up:<br>
+&nbsp;<br>
+&nbsp;s&nbsp;&nbsp;&nbsp;the&nbsp;subject&nbsp;of&nbsp;a&nbsp;statement&nbsp;added<br>
+&nbsp;p&nbsp;&nbsp;&nbsp;the&nbsp;predicate&nbsp;of&nbsp;a&nbsp;statement&nbsp;added<br>
+&nbsp;o&nbsp;&nbsp;&nbsp;the&nbsp;object&nbsp;of&nbsp;a&nbsp;statement&nbsp;added<br>
+&nbsp;i&nbsp;&nbsp;&nbsp;any&nbsp;owl:imports&nbsp;documents<br>
+&nbsp;r&nbsp;&nbsp;&nbsp;any&nbsp;doc:rules&nbsp;documents<br>
 &nbsp;<br>
 See&nbsp;<a href="http://www.w3.org/2000/10/swap/doc/cwm">http://www.w3.org/2000/10/swap/doc/cwm</a>&nbsp;&nbsp;for&nbsp;more&nbsp;documentation.</tt></dd></dl>
  <dl><dt><a name="-getParser"><strong>getParser</strong></a>(format, inputURI, formulaURI, flags)</dt><dd><tt>Return&nbsp;something&nbsp;which&nbsp;can&nbsp;load&nbsp;from&nbsp;a&nbsp;URI&nbsp;in&nbsp;the&nbsp;given&nbsp;format,&nbsp;while<br>

@@ -41,10 +41,15 @@
 	test:description	"An N3 file with no final newline character";
 	test:arguments		"syntax/no-last-nl.n3".
 
+:t1005b a test:CwmTest;
+	test:shortFileName 	"dot-dash.n3";
+	test:description	"combinations of - and _ in identifiers";
+	test:arguments		"syntax/dot-dash.n3".
+
 :t1006 a test:CwmTest;
-    test:shortFileName "contexts-1.n3";
-    test:description   "Parse and generate simple contexts";
-    test:arguments     """contexts.n3""".
+    test:shortFileName 	"contexts-1.n3";
+    test:description   	"Parse and generate simple contexts";
+    test:arguments     	"""contexts.n3""".
 
 
 :t1007 a test:CwmTest;

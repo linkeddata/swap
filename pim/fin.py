@@ -44,8 +44,6 @@ thing.setStore(store)
 rdf_type = rdf.type
 cat = cat_ns
 
-
-#################################################  Command line
     
 def sym(uri):
     global store
@@ -286,7 +284,7 @@ def doCommand(year, inputURI="/dev/stdin"):
 	upperBound = abs(income)
 	if abs(outgoings) > upperBound: upperBound = abs(outgoings)
 	
-	dh = 600
+	dh = 1200  # document hight in pixels
 	scale = (dh - 30) / abs(upperBound)   # Pixels/dollar
 	
 	y = 0
@@ -337,7 +335,7 @@ def doCommand(year, inputURI="/dev/stdin"):
 	    chart.write("""    <a l:href="year-cat.html#%s">
         <rect stroke="black" fill="none" y="%ipx" x="%ipx" width="200px"
 	    height="%ipx" style="stroke: black; fill: %s"/></a>
-""" %(`c`, dh-round(top*scale), offset[out], height, color[out]))
+""" %(c.fragid, dh-round(top*scale), offset[out], height, color[out]))
 #"
 	    if  height > lineheight:
 		text = label
