@@ -23,6 +23,11 @@ RDF and all points west.</p>
 <p>This NOT W3C endorsed material, it is related to the Semantic Web activity
 of the W3C.</p>
 
+<h2>Source</h2>
+
+<p>This stuff is not guaranteed but is open source and available from the <a
+href="http://dev.w3.org/cvsweb/">w3c CVS repository</a>. </p>
+
 <h2 id="Motivation">Motivation</h2>
 
 <p>These are a few things I put together to</p>
@@ -60,8 +65,8 @@ interface</p>
 <p>The command line form  (alias n3 python notation3.py; n3 -help) allows RDF
 to be parsed and re-output.</p>
 
-<p>The module will also run as a CGI script to convert N3 to RDF M&amp;S 1.0
-- by DanC magic.</p>
+<p>The module will also run as a CGI script to convert N3 to RDF M&amp;S 1.0 -
+by DanC magic.</p>
 <ul>
   <li><a href="notation3.py">Source</a></li>
 </ul>
@@ -74,10 +79,10 @@ href="http://www.python.org/">Python</a> as something you could start quickly
 but which would scale to a large system.  One day, 15 minutes before I had to
 leave for the airport, I got my laptop back out of my bag, and sucked off the
 web the <a href="http://www.python.org/1.6/">python 1.6 system</a> and the <a
-href="http://www.python.org/doc/current/tut/tut.html">python tutorial</a>,
-and a copy of a small <a href="../n3/notation3.py">notation3 parser</a> Dan
-had hacked together. I was happy to find that Python is a language you can
-get into on one battery!  I have been happily hacking ever since.</p>
+href="http://www.python.org/doc/current/tut/tut.html">python tutorial</a>, and
+a copy of a small <a href="../n3/notation3.py">notation3 parser</a> Dan had
+hacked together. I was happy to find that Python is a language you can get
+into on one battery!  I have been happily hacking ever since.</p>
 
 <p>I remember Guido trying to persuade me to use python as I was trying to
 persuade him to write web software!</p>
@@ -146,17 +151,17 @@ are processed in order from left to right.</p>
       conclusions being added to the store.</dd>
   <dt>-filter=<em>uri</em></dt>
     <dd>Apply the rules in a given resource, once each, to the store,
-      replacing the original contents of the store with those things
-      concluded from the rules.</dd>
+      replacing the original contents of the store with those things concluded
+      from the rules.</dd>
   <dt>-rules</dt>
     <dd>Apply any rules in the store to the store itself, conclusions being
       added to the store.</dd>
   <dt>-ugly</dt>
-    <dd>Dump the store in a more or less random order. This tends to be
-      messy, as related information is not grouped.</dd>
+    <dd>Dump the store in a more or less random order. This tends to be messy,
+      as related information is not grouped.</dd>
   <dt>-bySubject</dt>
-    <dd>Dump the store grouping statements by subject. This tends to be
-      better than -ugly, but the default is to make the output as readable as
+    <dd>Dump the store grouping statements by subject. This tends to be better
+      than -ugly, but the default is to make the output as readable as
       possible using anonymous nodes wherever possible, and is therefore
       recommended. (flag)</dd>
 </dl>
@@ -168,8 +173,8 @@ how URIs were supposed to work.</p>
 
 <h4 id="Rule">Rule file format</h4>
 
-<p>A rule file is simply a notation3 file. A rule is a statement which
-asserts an implication using log:imples (where the namespace must be
+<p>A rule file is simply a notation3 file. A rule is a statement which asserts
+an implication using log:imples (where the namespace must be
 http://www.w3.org/2000/10/swap/log#) between premise and a conclusion. The
 premise is simply a template: cwm will search for all combinations of
 statements in the store which match the template.  Variables must be
