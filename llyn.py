@@ -297,6 +297,12 @@ class Formula(Fragment):
         return len(self.statements)
 
     def statementsMatching(self, pred=None, subj=None, obj=None):
+        """Return a READ-ONLY list of StoredStatement objects matching the parts given
+	
+	For example:
+	for s in f.statementsMatching(pred=pantoneColor):
+	    print "We've got one which is ", `s[OBJ]`
+	"""
         return self._index.get((pred, subj, obj), [])
 
     def close(self):
