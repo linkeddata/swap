@@ -1,0 +1,62 @@
+#    Hack daml_oil kiflike axioms
+#
+#
+#
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
+@prefix daml: <http://www.daml.org/2000/12/daml+oil#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix : <#> .       # For our use
+@prefix v: <myvar#> .	# Hint for others use
+@prefix ko: <kif-ops#> .
+@prefix a: <axioms.n3#> .  # The source of all knowledge for this one
+
+@prefix av: <vars#> .	# variables used by the axioms.n3
+
+
+<> log:forAll :v, :x, :y, y3, :z, z3 , :p, :s, :o.
+
+:AxiomVar is rdf:type of av:a, av:b, av:c, av:d, av:d, av:e, av:f, av:g, av:h,
+	av:i, av:j, av:k,
+	av:l, av:m, av:n, av:o, av:p, av:q, av:p1, av:p2,
+	av:r, av:s, av:t, av:u, av:v, av:vl, av:w,
+	av:x, av:x1, av:x2, av:y, av:y1, av:y2, av:z. # hack
+
+# Convert in general; believe the axioms.
+### { :x a ko:Axiom .  :x :inN3 :y } log:implies { :y a log:Truth } .
+
+# Find occurences of variables:
+ 
+{ :y a :AxiomVar . :x daml:first :y . } log:implies { :y :isVarIn :x } .
+{ :y :isVarIn :x . :z daml:rest  :x . } log:implies { :y :isVarIn :z } .
+{ :y :isVarIn :x . :z daml:first :x . } log:implies { :y :isVarIn :z } .
+{ :x a ko:Axiom . :x = :z . :y :isVarIn :z } log:implies { :y :isVarInAxiom :x } .
+
+{ :x :inN3 :y . :v :isVarInAxiom :x . } log:implies { :y log:FORALL :v . } .
+
+# Implication
+
+{  	:x daml:first ko:implies;
+		daml:rest ( :y :z ) .
+    	:y :inN3 :y3.
+	:z :inN3 :z3 . } log:implies { :x :inN3 { :y3 log:IMPLIES :z3 }}. 
+
+{  :x daml:first ko:means; daml:rest ( :y :z ) .
+    :y :inN3 :y3. :z :inN3 :z3 . } log:implies { :x :inN3 { :y3 log:MEANS :z3 }}. 
+
+# Variables are themselves - although note the forall we have to deduce above.
+
+{:x a :AxiomVar} log:implies {:x :inN3 :x } .
+
+# Type assertions
+
+{ :x daml:first a:Type; daml:rest (:x :y).
+  :x :inN3 :x3.
+  :y :inN3 :y3. } log:implies {:x :inN3 {:x3 a :y3}}.
+
+# Convert explicit statements 
+
+{ :x = (a:PropertyValue :x :y :z).
+	:x :inN3 :x3. :y :inN3 :y3. :z :inN3 :z3  } log:implies { :x :inN3 { :x3 :y3 :z3 }} .
+

@@ -1,0 +1,1390 @@
+%% Saying that relation "Type" holds for objects S and O is logically equivalent to saying that relation "PropertyValue" holds for objects "type", S, and O.
+
+Ax1.        (<=> (Type ?s ?o) (PropertyValue type[3] ?s ?o))[4]
+
+2.3.         No Repeats List
+This relation is used in the axiomatization of properties "cardinality", "minCardinality", and "maxCardinality".
+
+ 
+
+%% A "no-repeats-list" is a list for which no item occurs more than once.
+
+Ax2.        (<=> (no-repeats-list ?l) 
+
+           (or (= ?l nil) 
+
+               (exists (?x) (= ?l (listof ?x))) 
+
+               (and (not (item (rest ?l) (first ?l))) 
+
+                    (no-repeats-list (rest ?l)))))[5]
+
+3.    RDF
+As stated in the introduction, each RDF statement with predicate P, subject S, and object O is translated into a KIF sentence of the form "(PropertyValue P S O)".
+
+3.1.         Classes
+This section axiomatizes the classes that are included in RDF and defines one additional class (i.e., FunctionalProperty) that is useful in axiomatizing other classes and properties.
+
+3.1.1.      Resource
+All things being described by RDF expressions are called resources.
+
+ 
+
+%% "Resource" is type "Class".
+
+Ax3.        (Type Resource Class)
+
+3.1.2.      Property
+ 
+
+%% If an object P is type "Property" then P is also type "Resource".  (I.e., properties are resources.)
+
+Ax4.         (=> (Type ?p Property) (Type ?p Resource))[6][7]
+
+ 
+
+%% The first argument of relation "PropertyValue" is type "Property".
+
+Ax5.        (=> (PropertyValue ?p ?s ?o) (Type ?p Property))
+
+3.1.3.      Class
+ 
+
+%% If an object C is type "Class" then C is also type "Resource" (i.e., classes are resources), and no object can be both type "Property" and type "Class" (i.e., properties and classes are disjoint).
+
+Ax6.        (=> (Type ?c Class) (Type ?c Resource))
+
+Ax7.        (not (and (Type ?x Property) (Type ?x Class)))
+
+3.1.4.      FunctionalProperty
+The class "FunctionalProperty" is not in RDF or RDF-S.  We define "FunctionalProperty" only for convenience in axiomatizing other classes and properties. 
+
+ 
+
+%% If an object A is type "FunctionalProperty" then A is also type "Property".  (I.e., functional properties are properties.)
+
+Ax8.        (=> (Type ?a FunctionalProperty) (Type ?a Property))
+
+ 
+
+%% If an object FP is type "FunctionalProperty", and objects V1 and V2 are both values of FP for some object, then V1 is equal to V2.  (I.e., a functional property is functional in its value.)
+
+Ax9.        (=> (and (Type ?fp FunctionalProperty) 
+
+               (PropertyValue ?fp ?s ?v1) 
+
+               (PropertyValue ?fp ?s ?v2))
+
+          (= ?v1 ?v2))
+
+3.1.5.      Literal
+ 
+
+%% "Literal" is type "Class".
+
+Ax10.    (Type Literal Class)
+
+3.1.6.      Statement
+ 
+
+%% If an object S is type "Statement", then S is also type "Resource".  (I.e., statements are resources.)
+
+Ax11.     (=> (Type ?s Statement) (Type ?s Resource))
+
+ 
+
+%% If an object ST is type "Statement", then there exists a value of "Predicate" for ST, a value of "Subject" for ST, and a value of "Object" for ST. (I.e., every statement has a predicate, subject, and object.)
+
+Ax12.    (=> (Type Statement ?st)
+
+          (exists (?p ?s ?o) 
+
+                  (and (PropertyValue Predicate ?st ?p)
+
+                       (PropertyValue Subject ?st ?r)
+
+                       (PropertyValue Object ?st ?o))))
+
+3.1.7.      Container
+ 
+
+%% If an object C is type "Container", then C is also type "Resource".  (I.e., containers are resources.)
+
+Ax13.     (=> (Type ?c Container) (Type ?c Resource))
+
+ 
+
+%% If an object C is type "Container", then C is a KIF list.  (I.e., a container is considered to be a list as defined in KIF.)
+
+Ax14.    (=> (Type ?c Container) (List ?c))
+
+ 
+
+%% If an object C is type "Container", then C is type "Bag" or type "Seq" or type "Alt".  (I.e., a container is a bag, a sequence, or an alternative.)
+
+Ax15.    (=> (Type ?c Container) 
+
+          (or (Type ?c Bag) 
+
+              (Type ?c Seq) 
+
+              (Type ?c Alt))) 
+
+3.1.7.1.            Bag
+ 
+
+%% If an object B is type "Bag", then B is also type "Container".  (I.e., bags are containers.)
+
+Ax16.    (=> (Type ?b Bag) (Type ?b Container))
+
+3.1.7.2.            Seq
+ 
+
+%% If an object S is type "Seq", then S is also type "Container".  (I.e., sequences are containers.)
+
+Ax17.    (=> (Type ?s Seq) (Type ?s Container))
+
+ 
+
+%% No object X is both type "Bag" and type "Seq".  (I.e., bags and sequences are disjoint.)
+
+Ax18.    (not (and (Type ?x Bag) (Type ?x Seq)))
+
+3.1.7.3.            Alt
+ 
+
+%% If an object A is type "Alt", then A is also type "Container".  (I.e., alternatives are containers.)
+
+Ax19.    (=> (Type ?a Alt) (Type ?a Container))
+
+3.1.7.4.            ContainerMembershipProperty
+ 
+
+%% If an object C is type "ContainerMembershipProperty", then C is also type "Property".  (I.e., container membership properties are properties.)
+
+Ax20.    (=> (Type ?c ContainerMembershipProperty) (Type ?c Property))
+
+3.2.         Properties
+This section axiomatizes the properties that are included in RDF.
+
+3.2.1.      type
+"type" is used to indicate that a resource is a member of a class.
+
+ 
+
+%% "type" is type "Property".  (I.e., "type" is a property.)
+
+Ax21.    (Type type Property)
+
+ 
+
+%% The first argument of "Type" is a resource and the second argument of "Type" is a class.
+
+Ax22.    (=> (Type ?r ?c) (and (Type ?r Resource) (Type ?c Class)))[8]
+
+3.2.2.      subject
+ 
+
+%% "Subject" is type "FunctionalProperty", and if an object SB is the value of "Subject" for an object ST, then ST is type "Statement" and SB is type "Resource".  (I.e., every statement has exactly one subject, and that subject is a resource.)
+
+Ax23.    (Type Subject FunctionalProperty)
+
+Ax24.    (=> (PropertyValue Subject ?st ?sb) 
+
+          (and (Type ?st Statement) (Type ?sb Resource))) 
+
+3.2.3.      predicate
+ 
+
+%% "Predicate" is type "FunctionalProperty", and if an object P is the value of "Predicate" for an object ST, then P is type "Property" and ST is type "Statement".  (I.e., every statement has exactly one predicate, and that predicate is a property.)
+
+Ax25.    (Type Predicate FunctionalProperty)
+
+Ax26.    (=> (PropertyValue Predicate ?st ?p) 
+
+          (and (Type ?st Statement) (Type ?p Property))) 
+
+3.2.4.      object
+ 
+
+%% "Object" is type "FunctionalProperty", and if an object O is the value of "Object" for an object ST, then O is either type "Resource" or type "Literal" and ST is type "Statement".  (I.e., every statement has exactly one object, and that object is either a resource or a literal.)
+
+Ax27.    (Type Object FunctionalProperty) 
+
+Ax28.    (=> (PropertyValue Object ?st ?o)
+
+          (and (Type ?st Statement)
+
+               (or (Type ?o Resource) (Type ?o Literal))))
+
+3.2.5.      value
+ 
+
+%% "value" is type "Property", and if an object V is a value of "value" for an object SV, then SV is type "Resource" and V is either type "Resource" or type "Literal".
+
+Ax29.    (Type value Property)
+
+Ax30.    (=> (PropertyValue value ?sv ?v) 
+
+          (and (Type ?sv Resource) 
+
+               (or (Type ?v Resource) (Type ?v Literal))))
+
+3.2.6.      _1, _2, _3, …
+ 
+
+%% For each positive integer N, "_N" is type "FunctionalProperty", and if an object O is the value of "_N" for an object C, then C is type "Collection".  (The _N of a collection is intended to be the Nth element of that collection.)
+
+Ax31.    (Type FunctionalProperty _1)
+
+Ax32.    (=> (PropertyValue _1 ?c ?o) (Type Collection ?c))
+
+ 
+
+and similarly for _2, _3, etc.
+
+4.    RDF-S
+RDF-S is a collection of classes and properties that is added to RDF.  Statements in RDF-S are RDF statements.  
+
+4.1.         Classes
+This section axiomatizes the classes that are added to RDF in RDF-S.
+
+4.1.1.      ConstraintResource
+"ConstraintResource" is a class of RDF-S constructs involved in the expression of constraints.
+
+ 
+
+%% "Resource" is a value of "subClassOf" for "ConstraintResource".  (I.e., constraint resources are resources.)
+
+Ax33.    (PropertyValue subClassOf ConstraintResource Resource)
+
+4.1.2.      ConstraintProperty
+ 
+
+%% An object CP is type "ConstraintProperty" if and only if it is type "ConstraintResource" and type "Property".  (I.e., constraint properties are exactly those constraint resources that are also properties.)
+
+Ax34.    (<=> (Type ?cp ConstraintProperty)
+
+           (and (Type ?cp ConstraintResource)
+
+                (Type ?cp Property)))
+
+4.2.         Properties
+This section axiomatizes the properties that are added to RDF in RDF-S.
+
+4.2.1.      subClassOf
+ 
+
+%% "subClassOf" is type "Property".
+
+Ax35.    (Type subClassOf Property)
+
+ 
+
+%% If an object CSUPER is a value of "subClassOf" for an object CSUB, then CSUPER is type "Class", CSUB is type "Class", CSUB is not CSUPER, and if an object X is type CSUB then it is also type CSUPER.  (I.e., the arguments of subClassOf are classes, and objects in a subclass are also in the superclass.)
+
+Ax36.    (=> (PropertyValue subClassOf ?csub ?csuper) 
+
+          (and (Type ?csub Class)
+
+               (Type ?csuper Class)
+
+               (\= ?csub ?csuper)
+
+               (forall (?x) (=> (Type ?x ?csub) (Type ?x ?csuper)))))
+
+4.2.2.      subPropertyOf
+ 
+
+%% "subPropertyOf" is type "Property".
+
+Ax37.    (Type subPropertyOf Property)
+
+ 
+
+%% If an object SUPERP is a value of "subPropertyOf" of an object SUBP, then SUBP is type "Property", SUPERP is type "Property", and if an object V is a value of SUBP for an object O then V is also a value of SUPERP for O.  (I.e., if a subProperty has a value V for an object O, then the superproperty also has value V for O.)
+
+Ax38.    (=> (PropertyValue subPropertyOf ?subP ?superP) 
+
+          (and (Type ?subP Property)
+
+               (Type ?superP Property)
+
+               (forall (?o ?v) (=> (PropertyValue ?subP ?o ?v) 
+
+                                   (PropertyValue ?superP ?o ?v)))))
+
+4.2.3.      seeAlso
+ 
+
+%% "seeAlso" is type "Property", and "Resource" is a value of both "domain" and "range" for "seeAlso.  (I.e., "seeAlso" is a property whose arguments are resources.)
+
+Ax39.    (Type seeAlso Property)
+
+Ax40.    (PropertyValue domain seeAlso Resource)
+
+Ax41.    (PropertyValue range seeAlso Resource)
+
+4.2.4.      isDefinedBy
+ 
+
+%% "seeAlso" is a value of "subPropertyOf" for "isDefinedBy".  (I.e., "isDefinedBy" is a subproperty of "seeAlso".)
+
+Ax42.    (PropertyValue subPropertyOf isDefinedBy seeAlso)
+
+4.2.5.      comment
+ 
+
+%% "comment" is type "Property", and "Literal" is the value of "range" for "comment".  (I.e., "comment" is a property whose value is a literal.)
+
+Ax43.    (Type comment Property)
+
+Ax44.    (PropertyValue range comment Literal)
+
+4.2.6.      label
+ 
+
+%% "label" is type "Property", and "Literal" is the value of "range" for "label".  (I.e., "label" is a property whose value is a literal.)
+
+Ax45.    (Type label Property)
+
+Ax46.    (PropertyValue range label Literal)
+
+4.3.         Constraint Properties
+ 
+
+%% "Property" is a value of "subClassOf" for "ConstraintProperty".  (I.e., constraint properties are properties.)
+
+Ax47.    (PropertyValue subClassOf ConstraintProperty Property)
+
+4.3.1.      range
+ 
+
+%% "range" is type "ConstraintProperty" and type "FunctionalProperty".
+
+Ax48.    (Type range ConstraintProperty)
+
+Ax49.    (Type range FunctionalProperty)
+
+ 
+
+%% If an object R is the value of "range" for an object P, then P is type "Property", R is type "Class", and if an object Y is a value of P then Y is type R.  (I.e., if R is the range of P, then P is a property, R is a class, and every value of P is an R.)
+
+Ax50.    (=> (PropertyValue range ?p ?r) 
+
+          (and (Type ?p Property)
+
+               (Type ?r Class)
+
+               (forall (?x ?y) 
+
+                       (=> (PropertyValue ?p ?x ?y) (Type ?y ?r)))))
+
+ 
+
+%% Note that the following can be inferred from the axioms regarding "domain" and "range":
+
+Th1.        (PropertyValue domain range Property)
+
+Th2.        (PropertyValue range range Class)
+
+4.3.2.      domain
+ 
+
+%% "domain" is type "ConstraintProperty".
+
+Ax51.    (Type domain ConstraintProperty)
+
+ 
+
+%% If an object D is a value of "domain" for an object P, then P is type "Property", D is type "Class", and if P has a value for an object X then X is type D.  (I.e., if D is a domain of P, then P is a property, D is a class, and every object that has a value of P is a D.)
+
+Ax52.    (=> (PropertyValue domain ?p ?d) 
+
+          (and (Type ?p Property)
+
+               (Type ?d Class)
+
+               (forall (?x ?y) 
+
+                       (=> (PropertyValue ?p ?x ?y) (Type ?x ?d))))) 
+
+ 
+
+%% Note that the following can be inferred from the axioms regarding "domain" and "range":
+
+Th3.        (PropertyValue domain domain Property)
+
+Th4.        (PropertyValue range domain Class)
+
+5.    DAML+OIL
+DAML+OIL is a collection of classes, properties, and objects that is added to RDF and RDF-S.  Statements in DAML+OIL are RDF statements.  
+
+5.1.         Classes
+This section axiomatizes the classes that are added to RDF and RDF-S.
+
+5.1.1.      Thing
+ 
+
+%% If an object C is type "class", then if NC is the value of "complementOf" for C and L is a two element list containing C and NC, then L is a value of "unionOf" for "Thing".  (I.e., "Thing" is the union of any class and its complement.)
+
+Ax53.    (=> (Type ?c Class)
+
+          (forall (?nc ?l) 
+
+                  (=> (and (PropertyValue complementOf ?c ?nc)
+
+                           (Type ?l List)
+
+                           (PropertyValue item ?l ?c)
+
+                           (PropertyValue item ?l ?nc)
+
+                           (forall (?x) (=> (PropertyValue item ?l ?x) 
+
+                                            (or (= ?x ?c) 
+
+                                                (= ?x ?nc)))))
+
+                      (PropertyValue unionOf Thing ?l))))
+
+5.1.2.      Nothing
+ 
+
+%% "Nothing" is the value of "complementOf" for "Thing".  (I.e., "Nothing" is the complement of "Thing".)
+
+Ax54.    (PropertyValue complementOf Thing Nothing)
+
+5.1.3.      Disjoint
+ 
+
+%% "Disjoint" is type "Class".
+
+Ax55.    (Type Disjoint Class)
+
+ 
+
+%% Saying that an object is type "Disjoint" is logically equivalent to saying that the object is type "List", that every item in the list is type "Class", and that the classes in the list are pairwise joint.
+
+Ax56.    (<=> (Type ?l Disjoint)
+
+           (and (Type ?l List)
+
+                (forall (?c) (=> (PropertyValue Item ?c ?l)
+
+                                 (Type ?c Class)))
+
+                (forall (?c1 ?c2) 
+
+                        (=> (and (PropertyValue item ?c1 ?l)
+
+                                 (PropertyValue item ?c2 ?l) 
+
+                                 (not (= ?c1 ?c2))) 
+
+                            (PropertyValue disjointWith ?c1 ?c2)))))
+
+ 
+
+%% Note that the following can be inferred from the axioms regarding "Disjoint" and "subClassOf":
+
+Th5.        (PropertyValue subClassOf Disjoint List)
+
+5.1.4.      Restriction
+ 
+
+%% "Restriction" is type "Class".
+
+Ax57.    (Type Restriction Class)
+
+5.1.5.      NonNegativeInteger
+ 
+
+%% "Integer" is a value of "subClassOf" for "NonNegativeInteger".  (I.e., non-negative integers are integers.)
+
+Ax58.    (subClassOf NonNegativeInteger Integer)
+
+5.1.6.      TransitiveProperty
+ 
+
+%% "TransitiveProperty" is type "Class".
+
+Ax59.    (Type TransitiveProperty Class)
+
+ 
+
+%% Saying that an object P is type "TransitiveProperty" is logically equivalent to saying that P is a property and that if an object Y is a value of P for an object X and an object Z is a value of P for Y then Z is a value of P for X.
+
+Ax60.    (<=> (Type ?p TransitiveProperty)
+
+           (and (Type ?p Property)
+
+                (forall (?x ?y ?z) 
+
+                        (=> (and (PropertyValue ?p ?x ?y) 
+
+                                 (PropertyValue ?p ?y ?z)) 
+
+                            (PropertyValue ?p ?x ?z)))))
+
+ 
+
+%% Note that the following can be inferred from the axioms regarding "TransitiveProperty" and "subClassOf":
+
+Th6.        (PropertyValue subClassOf TransitiveProperty Property)
+
+5.1.7.      UniqueProperty
+ 
+
+%% "UniqueProperty" is type "Class".
+
+Ax61.    (Type UniqueProperty Class)
+
+ 
+
+%% Saying that an object P is type "UniqueProperty" is logically equivalent to saying that P is type "Property" and that if an object Y is a value of P for an object X and an object Z is a value of P for X then Y is equal to Z (i.e., then Y and Z are the same object).
+
+Ax62.    (<=> (Type ?p UniqueProperty) 
+
+           (and (Type ?p Property) 
+
+                (forall (?x ?y ?z) 
+
+                        (=> (and (PropertyValue ?p ?x ?y) 
+
+                                 (PropertyValue ?p ?x ?z)) 
+
+                            (= ?y ?z)))))
+
+ 
+
+%% Note that the following can be inferred from the axioms regarding "UniqueProperty" and "subClassOf":
+
+Th7.        (PropertyValue subClassOf UniqueProperty Property)
+
+5.1.8.      UnambiguousProperty
+ 
+
+%%"UnambiguousProperty" is type "Class".
+
+Ax63.    (Type UnambiguousProperty Class)
+
+ 
+
+%% Saying that an object P is type "UnambiguousProperty" is logically equivalent to saying that P is type "Property" and that if an object V is a value of P for an object X and V is a value of P for an object Y then X is equal to Y (i.e., then X and Y are the same object).
+
+Ax64.    (<=> (Type ?p UnambiguousProperty) 
+
+           (and (Type ?p Property)
+
+                (forall (?x ?y ?v) 
+
+                        (=> (and (PropertyValue ?p ?x ?v) 
+
+                                 (PropertyValue ?p ?y ?v)) 
+
+                            (= ?x ?y)))))
+
+ 
+
+%% Note that the following can be inferred from the axioms regarding "UnambiguousProperty" and "subClassOf":
+
+Th8.        (PropertyValue subClassOf UnambiguousProperty Property)
+
+5.1.9.      List
+ 
+
+%% "Seq" is a value of "subClassOf" for "List".  (I.e., lists are sequences.)
+
+Ax65.    (PropertyValue subClassOf List Seq)
+
+5.1.10.  Ontology
+ 
+
+%% An ontology is type "Class".
+
+Ax66.    (Type Ontology Class)
+
+5.2.         Properties
+This section axiomatizes the properties that are added to RDF and RDF-S.
+
+5.2.1.      equivalentTo
+ 
+
+%% "equivalentTo" is type "Property".
+
+Ax67.    (Type equivalentTo Property)
+
+ 
+
+%% An object Y is a value of "equivalentTo" for an object X if and only if X is equal to Y.  (I.e., saying that objects X and Y are "equivalentTo" is logically equivalent to saying that X and Y denote the same object.)
+
+Ax68.    (<=> (PropertyValue equivalentTo ?x ?y) (= ?x ?y))
+
+5.2.2.      sameClassAs
+ 
+
+%% The values of "subPropertyOf" for "sameClassAs" include "equivalentTo" and "subClassOf".  (I.e., "sameClassAs" is "equivalentTo" for classes, and two classes that are the same are also subclasses of each other.)
+
+Ax69.    (PropertyValue subPropertyOf sameClassAs equivalentTo)
+
+Ax70.    (PropertyValue subPropertyOf sameClassAs subClassOf)
+
+5.2.3.      samePropertyAs
+ 
+
+%% The values of "subPropertyOf" for "samePropertyAs" include "equivalentTo" and "subPropertyOf".  (I.e., "samePropertyAs" is "equivalentTo" for properties, and two properties that are the same are also subproperties of each other.)
+
+Ax71.    (PropertyValue subPropertyOf samePropertyAs equivalentTo)
+
+Ax72.    (PropertyValue subPropertyOf samePropertyAs subPropertyOf)
+
+5.2.4.      disjointWith
+ 
+
+%% "disjointWith" is type "Property".
+
+Ax73.    (Type disjointWith Property)
+
+ 
+
+%% Saying that an object C2 is a value of "disjointWith" for an object C1 is logically equivalent to saying that C1 is type "Class", C2 is type "Class", and that no object X is both type C1 and type C2.
+
+Ax74.    (<=> (PropertyValue disjointWith ?c1 ?c2)
+
+           (and (Type ?c1 Class)
+
+                (Type ?c2 Class)
+
+                (not (exists (?x) (and (Type ?x ?c1) (Type ?x ?c2)))))) 
+
+%% Note that the following can be inferred from the axioms regarding "disjointWith", "domain", and "range":
+
+Th9.        (PropertyValue domain disjointWith Class)
+
+Th10.    (PropertyValue range disjointWith Class)
+
+5.2.5.      unionOf
+ 
+
+%% "unionOf" is a property.
+
+Ax75.    (Type unionOf Property)
+
+ 
+
+%% Saying that an object L is a value of "unionOf" for an object C1 is logically equivalent to saying that C1 is type "Class", L is type "List", every item in list L is type "Class", and the objects of type C1 are exactly the objects that are of type one or more of the classes in the list L.
+
+Ax76.    (<=> (PropertyValue unionOf ?c1 ?l)
+
+           (and (Type ?c1 Class)
+
+                (Type ?l List)
+
+                (forall (?x) (=> (PropertyValue item ?x ?l)
+
+                                 (Type ?x Class)))
+
+                (forall (?x) 
+
+                        (<=> (Type ?x ?c1) 
+
+                             (exists (?c2) 
+
+                                     (and (PropertyValue item ?c2 ?l) 
+
+                                          (Type ?x ?c2)))))))
+
+ 
+
+%% Note that the following can be inferred from the axioms regarding "unionOf", "domain", and "range":
+
+Th11.    (PropertyValue domain unionOf Class)
+
+Th12.    (PropertyValue range unionOf List)
+
+5.2.6.      disjointUnionOf
+ 
+
+%% "disjointUnionOf" is type "Property".
+
+Ax77.    (Type disjointUnionOf Property)
+
+ 
+
+%% Saying that an object L is a value of "disjointUnionOf" for an object C is logically equivalent to saying that L is type "Disjoint" and L is a value of "unionOf" for C.  (I.e., an object C is a disjoint union of an object L if and only if L is a list of pairwise disjoint classes and C is the union of the list L of classes.)
+
+Ax78.    (<=> (PropertyValue disjointUnionOf ?c ?l) 
+
+           (and (PropertyValue unionOf ?c ?l) (Type ?l Disjoint)))
+
+ 
+
+%% Note that the following can be inferred from the axioms regarding "disjointUnionOf", "unionOf", "domain", and "range":
+
+Th13.    (PropertyValue domain disjointUnionOf Class)
+
+Th14.    (PropertyValue range disjointUnionOf Disjoint)
+
+5.2.7.      intersectionOf
+ 
+
+%% "intersectionOf" is type "Property".
+
+Ax79.    (Type intersectionOf Property)
+
+ 
+
+%% Saying that an object L is a value of "intersectionOf" for an object C1 is logically equivalent to saying that C1 is type "Class", L is type "List", all of the items in list L are type "Class", and the objects that are type C1 are exactly those objects that are type all of the classes in list L.
+
+Ax80.    (<=> (PropertyValue intersectionOf ?c1 ?l)
+
+           (and (Type ?c1 Class)
+
+                (Type ?l List)
+
+                (forall (?x) (=> (PropertyValue item ?x ?l)
+
+                                 (Type ?x Class)))
+
+                (forall (?x) 
+
+                        (<=> (Type ?x ?c1) 
+
+                             (forall (?c2) 
+
+                                     (=> (PropertyValue item ?c2 ?l) 
+
+                                         (Type ?x ?c2 )))))))
+
+ 
+
+%% Note that the following can be inferred from the axioms regarding "intersectionOf", "domain", and "range":
+
+Th15.    (PropertyValue domain intersectionOf Class)
+
+Th16.    (PropertyValue range intersectionOf List)
+
+5.2.8.      complementOf
+ 
+
+%% "complementOf" is type "Property".
+
+Ax81.    (Type complementOf Property)
+
+ 
+
+%% Saying that an object C2 is a value of "complementOf" for an object C1 is logically equivalent to saying that C1 and C2 are disjoint classes and all objects are either type C1 or type C2.
+
+Ax82.    (<=> (PropertyValue complementOf ?c1 ?c2)
+
+           (and (PropertyValue disjointWith ?c1 ?c2) 
+
+                (forall (?x) (or (Type ?x ?c1) (Type ?x ?c2)))))
+
+%% Note that the following can be inferred from the axioms regarding "complementOf", "disjointWith", "domain", and "range":
+
+Th17.    (PropertyValue domain complementOf Class)
+
+Th18.    (PropertyValue range complementOf Class)
+
+Th19.    (PropertyValue complementOf Thing Nothing)
+
+5.2.9.      one of
+ 
+
+%% "oneOf" is type "Property".
+
+Ax83.    (Type oneOf Property)
+
+ 
+
+%% Saying that an object L is a value of "oneOf" for an object C is logically equivalent to saying that C is type "Class", L is type "List", and the objects that are type C are exactly the objects that are values of "item" for L.  (I.e., saying that C is "oneOf" L is saying that C is a class, L is a list, and the objects of type C are the objects on the list L.)
+
+Ax84.    (<=> (PropertyValue oneOf ?c ?l) 
+
+           (and (Type ?c Class)
+
+                (Type ?l List)
+
+                (forall (?x) (<=> (Type ?x ?c) 
+
+                                  (PropertyValue item ?l ?x)))))
+
+ 
+
+%% Note that the following can be inferred from the axioms regarding "oneOf", "domain", and "range":
+
+Th20.    (PropertyValue domain oneOf Class)
+
+Th21.    (PropertyValue range oneOf List)
+
+5.2.10.  onProperty
+ 
+
+%% "onProperty" is type "Property".
+
+Ax85.    (Type onProperty Property)
+
+ 
+
+%% "Ristriction" is a value of "domain" for "onProperty".  (I.e., the first argument of onProperty is a restriction.)
+
+Ax86.    (PropertyValue domain onProperty Restriction)
+
+ 
+
+%% "Property" is the value of "range" for "onProperty".  (I.e., the second argument of onProperty is a property.)
+
+Ax87.    (PropertyValue range onProperty Property)
+
+5.2.11.  toClass
+ 
+
+%% "toClass" is type "Property".
+
+Ax88.    (Type toClass Property)
+
+ 
+
+%% "Restriction" is a value of "domain" for "toClass".  (I.e., the first argument of toClass is a restriction.)
+
+Ax89.    (PropertyValue domain toClass Restriction)
+
+ 
+
+%% "Class" is the value of "range" for "toClass".  (I.e., the second argument of toClass is a class.)
+
+Ax90.    (PropertyValue range toClass Class)
+
+ 
+
+%% If a property P is a value of "onProperty" for a restriction R and a class C is a value of "toClass" for R, then an object I is type R if and only if every value of P for I is type C.  (I.e., a "toClass" restriction of C on a property P is the class of all objects I such that all values of P for I are type C.)
+
+Ax91.    (=> (and (PropertyValue onProperty ?r ?p)
+
+               (PropertyValue toClass ?r ?c)) 
+
+          (forall (?i) (<=> (Type ?i ?r)
+
+                            (forall (?j) (=> (PropertyValue ?p ?i ?j) 
+
+                                             (Type ?j ?c))))))
+
+5.2.12.  hasValue
+ 
+
+%% "hasValue" is type "Property".
+
+Ax92.    (Type hasValue Property)
+
+ 
+
+%% "Restriction" is a value of "domain" for "hasValue".  (I.e., the first argument of hasValue is a restriction.)
+
+Ax93.    (PropertyValue domain hasValue Restriction)
+
+ 
+
+%% If a property P is a value of "onProperty" for a restriction R and an object V is a value for "hasValue" for R, then an object I is type R if and only if V is a value of P for I.  (I.e., a "hasValue" restriction of V on a property P is the class of all objects that have V as a value  of P.)
+
+Ax94.    (=> (and (PropertyValue onProperty ?r ?p) 
+
+               (PropertyValue hasValue ?r ?v)) 
+
+          (forall (?i) (<=> (Type ?i ?r) (PropertyValue ?p ?i ?v))))
+
+ 
+
+%% Note that the following can be inferred from the axioms regarding "qualifiedBy", "onProperty", "hasValue" and "minCardinality":
+
+Th22.    (=> (and (PropertyValue qualifiedBy ?c1 ?q) 
+
+               (PropertyValue onProperty ?q ?p)
+
+               (PropertyValue hasValue ?q ?c2)) 
+
+          (PropertyValue minCardinality ?p 1))
+
+5.2.13.  hasClass
+ 
+
+%% "hasClass" is type "Property".
+
+Ax95.    (Type hasClass Property)
+
+ 
+
+%% "Restriction" is a value of "domain" for "hasClass".  (I.e., the first argument of hasClass is a restriction.)
+
+Ax96.    (PropertyValue domain hasClass Restriction)
+
+ 
+
+%% "Class" is the value of "range" for "hasClass".  (I.e., the second argument of hasClass is a class.)
+
+Ax97.    (PropertyValue range hasClass Class)
+
+ 
+
+%% If a property P is a value of "onProperty" for a restriction R and a class C is a value of "hasClass" for R, then an object I is type R if and only if there exists a value of P for I that is type C.  (I.e., a "hasClass" restriction of C on a property P is the class of all objects I which have a value of P that is type C.)
+
+Ax98.    (=> (and (PropertyValue onProperty ?r ?p)
+
+               (PropertyValue hasClass ?r ?c)) 
+
+          (forall (?i) (<=> (Type ?i ?r)
+
+                            (exists (?j) (and (PropertyValue ?p ?i ?j) 
+
+                                              (Type ?j ?c))))))
+
+5.2.14.  minCardinality
+ 
+
+%% "minCardinality" is type "Property".
+
+Ax99.    (Type minCardinality Property)
+
+ 
+
+%% "Restriction" is a value of "domain" for "minCardinality".  (I.e., the first argument of minCardinality is a restriction.)
+
+Ax100.(PropertyValue domain minCardinality Restriction)
+
+ 
+
+%% "NonNegativeInteger" is the value of "range" for "minCardinality".  (I.e., the second argument of minCardinality is a non-negative integer.)
+
+Ax101.(PropertyValue range minCardinality NonNegativeInteger)
+
+ 
+
+%% If a property P is a value of "onProperty" for a restriction R and a non-negative integer N is a value of "minCardinality" for R, then an object I is type R if and only if there is a "no-repeats-list" all of whose items are values of P for I and whose length is greater than or equal to N.  (I.e., a "minCardinality" restriction of N on a property P is the class of all objects I which have at least N values of P.)
+
+Ax102.(=> (and (PropertyValue onProperty ?r ?p)
+
+                     (PropertyValue minCardinality ?r ?n))
+
+                (forall (?i) 
+
+                        (<=> (Type ?i ?r) 
+
+                             (exists (?vl) 
+
+                                     (and (no-repeats-list ?vl) 
+
+                                          (forall (?v) 
+
+                                                  (=> (PropertyValue 
+
+                                                        item ?vl ?v) 
+
+                                                      (PropertyValue
+
+                                                        ?p ?i ?v))) 
+
+                                          (>= (length ?vl) ?n))))))[9]
+
+5.2.15.  maxCardinality
+ 
+
+%% "maxCardinality" is type "Property".
+
+Ax103.(Type maxCardinality Property)
+
+ 
+
+%% "Restriction" is a value of "domain" for "maxCardinality".  (I.e., the first argument of maxCardinality is a restriction.)
+
+Ax104.(PropertyValue domain maxCardinality Restriction)
+
+ 
+
+%% "NonNegativeInteger" is the value of "range" for "maxCardinality".  (I.e., the second argument of maxCardinality is a non-negative integer.)
+
+Ax105.(PropertyValue range maxCardinality NonNegativeInteger)
+
+ 
+
+%% If a property P is a value of "onProperty" for a restriction R and a non-negative integer N is a value of "maxCardinality" for R, then an object I is type R if and only if all "no-repeats-lists" whose items are exactly the values of P have length less than or equal to N.  (I.e., a "maxCardinality" restriction of N on a property P is the class of all objects I which have at most N values of P.)
+
+Ax106.(=> (and (PropertyValue onProperty ?r ?p)
+
+                     (PropertyValue maxCardinality ?r ?n))
+
+                (forall (?i) 
+
+                        (<=> (Type ?i ?r)
+
+                             (forall (?vl) 
+
+                                     (=> (and (no-repeats-list ?vl) 
+
+                                              (forall 
+
+                                                (?v) 
+
+                                                (<=> (PropertyValue 
+
+                                                       item ?vl ?v) 
+
+                                                     (PropertyValue 
+
+                                                       ?p ?i ?v))))
+
+                                         (=< (length ?vl) ?n))))))[10]
+
+5.2.16.  cardinality
+ 
+
+%% "cardinality" is type "Property".
+
+Ax107.(Type cardinality Property)
+
+ 
+
+%% "Restriction" is a value of "domain" for "cardinality".  (I.e., the first argument of cardinality is a restriction.)
+
+Ax108.(PropertyValue domain cardinality Restriction)
+
+ 
+
+%% "NonNegativeInteger" is the value of "range" for "cardinality".  (I.e., the second argument of cardinality is a non-negative integer.)
+
+Ax109.(PropertyValue range cardinality NonNegativeInteger)
+
+ 
+
+%% If a property P is a value of "onProperty" for a restriction R and a non-negative integer N is a value of "cardinality" for R, then an object I is type R if and only if all "no-repeats-lists" whose items are exactly the values of P have length N.  (I.e., a "cardinality" restriction of N on a property P is the class of all objects I which have exactly N values of P.)
+
+Ax110.(=> (and (PropertyValue onProperty ?r ?p)
+
+                     (PropertyValue cardinality ?r ?n))
+
+                (forall (?i) 
+
+                        (<=> (Type ?i ?r)
+
+                             (forall (?vl) 
+
+                                     (=> (and (no-repeats-list ?vl) 
+
+                                              (forall 
+
+                                                (?v) 
+
+                                                (<=> (PropertyValue 
+
+                                                       item ?vl ?v) 
+
+                                                     (PropertyValue 
+
+                                                       ?p ?i ?v))))
+
+                                         (= (length ?vl) ?n))))))
+
+5.2.17.  hasClassQ
+ 
+
+%% "hasClassQ" is type "Property".
+
+Ax111.(Type hasClassQ Property)
+
+ 
+
+%% "Restriction" is a value of "domain" for "hasClassQ".  (I.e., the first argument of hasClassQ is a restriction.)
+
+Ax112.(PropertyValue domain hasClassQ Restriction)
+
+ 
+
+%% "Class" is the value of "range" for "hasClassQ".  (I.e., the second argument of hasClassQ is a class.)
+
+Ax113.(PropertyValue range hasClassQ Class)
+
+5.2.18.  minCardinalityQ
+ 
+
+%% "minCardinalityQ" is type "Property".
+
+Ax114.(Type minCardinalityQ Property)
+
+ 
+
+%% "Restriction" is a value of "domain" for "minCardinalityQ".  (I.e., the first argument of minCardinalityQ is a restriction.)
+
+Ax115.(PropertyValue domain minCardinalityQ Restriction)
+
+ 
+
+%% "NonNegativeInteger" is the value of "range" for "minCardinalityQ".  (I.e., the second argument of minCardinalityQ is a non-negative integer.)
+
+Ax116.(PropertyValue range minCardinalityQ NonNegativeInteger)
+
+ 
+
+%% If a property P is a value of "onProperty" for a restriction R, a non-negative integer N is a value of "minCardinalityQ" for R, and a class C is a value of "hasClassQ" for R, then an object I is type R if and only if there is a "no-repeats-list" all of whose items are type C and values of P for I and whose length is greater than or equal to N.  (I.e., a "minCardinalityQ" restriction of N on a property P is the class of all objects I which have at least N values of P that are type C.)
+
+Ax117.(=> (and (PropertyValue onProperty ?r ?p)
+
+                     (PropertyValue minCardinalityQ ?r ?n)
+
+                     (PropertyValue hasClassQ ?r ?c))
+
+                (forall 
+
+                  (?i) 
+
+                  (<=> (Type ?i ?r) 
+
+                       (exists 
+
+                         (?vl) 
+
+                         (and (no-repeats-list ?vl) 
+
+                              (forall 
+
+                                (?v) 
+
+                                (=> (PropertyValue item ?vl ?v)
+
+                                    (and (PropertyValue ?p ?i ?v) 
+
+                                         (Type ?v ?c))) 
+
+                              (>= (length ?vl) ?n))))))        )
+
+5.2.19.  maxCardinalityQ
+ 
+
+%% "maxCardinalityQ" is type "Property".
+
+Ax118.(Type maxCardinalityQ Property)
+
+ 
+
+%% "Restriction" is a value of "domain" for "maxCardinalityQ".  (I.e., the first argument of maxCardinalityQ is a restriction.)
+
+Ax119.(PropertyValue domain maxCardinalityQ Restriction)
+
+ 
+
+%% "NonNegativeInteger" is the value of "range" for "maxCardinalityQ".  (I.e., the second argument of maxCardinalityQ is a non-negative integer.)
+
+Ax120.(PropertyValue range maxCardinalityQ NonNegativeInteger)
+
+ 
+
+%% If a property P is a value of "onProperty" for a restriction R, a non-negative integer N is a value of "maxCardinalityQ" for R, and a class C is a value of "hasClassQ" for R, then an object I is type R if and only if all "no-repeats-lists" whose items are exactly the values of P that are type C have length less than or equal to N.  (I.e., a "maxCardinalityQ" restriction of N on a property P is the class of all objects I which have at most N values of P that are type C.)
+
+Ax121.(=> (and (PropertyValue onProperty ?r ?p)
+
+                     (PropertyValue maxCardinalityQ ?r ?n)
+
+                     (PropertyValue hasClassQ ?r ?c))
+
+                (forall 
+
+                  (?i) 
+
+                  (<=> (Type ?i ?r)
+
+                       (forall 
+
+                         (?vl) 
+
+                         (=> (and (no-repeats-list ?vl) 
+
+                                  (forall 
+
+                                    (?v) 
+
+                                    (<=> (PropertyValue item ?vl ?v) 
+
+                                         (and (PropertyValue ?p ?i ?v)
+
+                                              (Type ?v ?c)))))
+
+                             (=< (length ?vl) ?n))))))
+
+5.2.20.  cardinalityQ
+ 
+
+%% "cardinalityQ" is type "Property".
+
+Ax122.(Type cardinalityQ Property)
+
+ 
+
+%% "Restriction" is a value of "domain" for "cardinalityQ".  (I.e., the first argument of cardinalityQ is a restriction.)
+
+Ax123.(PropertyValue domain cardinalityQ Restriction)
+
+ 
+
+%% "NonNegativeInteger" is the value of "range" for "cardinalityQ".  (I.e., the second argument of cardinalityQ is a non-negative integer.)
+
+Ax124.(PropertyValue range cardinalityQ NonNegativeInteger)
+
+ 
+
+%% If a property P is a value of "onProperty" for a restriction R, a non-negative integer N is a value of "cardinalityQ" for R and a class C is a value of "hasClassQ" for R, then an object I is type R if and only if all "no-repeats-lists" whose items are exactly the values of P that are type C have length N.  (I.e., a "cardinalityQ" restriction of N on a property P is the class of all objects I which have exactly N values of P that are type C.)
+
+Ax125.(=> (and (PropertyValue onProperty ?r ?p)
+
+                     (PropertyValue cardinalityQ ?r ?n)
+
+                     (PropertyValue hasClassQ ?r ?c))
+
+                (forall 
+
+                  (?i) 
+
+                  (<=> (Type ?i ?r)
+
+                       (forall 
+
+                         (?vl) 
+
+                         (=> (and (no-repeats-list ?vl) 
+
+                                  (forall 
+
+                                    (?v) 
+
+                                    (<=> (PropertyValue item ?vl ?v) 
+
+                                         (and (PropertyValue ?p ?i ?v)
+
+                                              (Type ?v ?c)))))
+
+                             (= (length ?vl) ?n))))))
+
+5.2.21.  inverseOf
+ 
+
+%% "inverseOf" is type "Property".
+
+Ax126.(Type inverseOf Property)
+
+ 
+
+%% Saying that an object P2 is a value of "inverseOf" for an object P1 is logically equivalent to saying that P1 is type "Property", P2 is type "Property", and that an object X2 is a value of P1 for an an object X1 if and only X1 is a value of P2 for X2.
+
+Ax127.(<=> (PropertyValue inverseOf ?p1 ?p2) 
+
+                 (and (Type ?p1 Property)
+
+                      (Type ?p2 Property)
+
+                      (forall (?x1 ?x2) 
+
+                              (<=> (PropertyValue ?p1 ?x1 ?x2) 
+
+                                   (PropertyValue ?p2 ?x2 ?x1)))))
+
+ 
+
+%% Note that the following can be inferred from the axioms regarding "inverseOf", "domain", and "range":
+
+Th23.    (PropertyValue domain inverseOf Property)
+
+Th24.    (PropertyValue range inverseOf Property)
+
+5.2.22.  first
+ 
+
+%% "first" is type "FunctionalProperty".
+
+Ax128.(Type first FunctionalProperty)
+
+ 
+
+%% Saying that an object X is the value of "first" for an object L is logically equivalent to saying that L is type "List" and the value of "_1" for L is X.  (I.e., "first" is "_1" for lists.)
+
+Ax129.(<=> (PropertyValue first ?l ?x) 
+
+                 (and (Type ?l List) (PropertyValue _1 ?l ?x)))
+
+5.2.23.  rest
+ 
+
+%% "rest" is type "FunctionalProperty".
+
+Ax130.(Type rest FunctionalProperty)
+
+ 
+
+%% Saying that an object R is the value of "rest" for an object L is logically equivalent to saying that L is type "List", R is type "List", and L has the same items in the same order as list R with one additional object as its first item.
+
+Ax131.(<=> (PropertyValue rest ?l ?r)
+
+                 (and (Type ?l List)
+
+                      (Type ?r List)
+
+                      (exists (?x) (= ?l (cons ?x ?r)))))[11]
+
+ 
+
+%% Note that the following can be inferred from the axioms regarding "oneOf", "domain", and "range":
+
+Th25.    (PropertyValue domain rest List)
+
+Th26.    (PropertyValue range rest List)
+
+5.2.24.  item
+ 
+
+%% "item" is type "Property".
+
+Ax132.(Type item Property)
+
+ 
+
+%% Saying that an object X is a value of "item" for an object L is logically equivalent to saying that L is type "List" and either X is the value of "first" for L or X is a value of "item" for the value of "rest" of L.  (I.e., Saying that X is an item of L is saying that X is the first item in list L or there is a list R that is the rest of list L and X is an item in the list R.)
+
+Ax133.(<=> (PropertyValue item ?l ?x)
+
+                 (and (Type ?l List)
+
+                      (or (PropertyValue first ?l ?x) 
+
+                          (exists (?r) 
+
+                                  (and (PropertyValue rest ?l ?r) 
+
+                                       (PropertyValue item ?r ?x))))))
+
+ 
+
+%% Note that the following can be inferred from the axioms regarding "item", and "domain":
+
+Th27.    (PropertyValue domain item List)
+
+5.2.25.  versionInfo
+ 
+
+%% "versionInfo" is a property.
+
+Ax134.(Type versionInfo Property)
+
+5.2.26.  imports
+ 
+
+%% "imports" is a property.
+
+Ax135.(Type imports Property)
+
+5.3.         Other Objects
+5.3.1.      nil
+ 
+
+%% "nil" is a list for which there are no values of "item".  (I.e., "nil" is the empty list.)
+
+Ax136.(Type nil List)
+
+Ax137.(not (PropertyValue item nil ?x))
+
