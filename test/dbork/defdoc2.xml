@@ -1,0 +1,35 @@
+
+<!-- Processed by Id: cwm.py,v 1.126 2003/02/14 17:48:08 sandro Exp -->
+<!--     using base http://www.w3.org/2000/10/swap/test/dbork/defdoc2.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/test/dbork/defdoc2.n3#"
+    xmlns:city="http://www.w3.org/2000/10/swap/test/dbork/data/USCity.n3#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:state="http://www.w3.org/2000/10/swap/test/dbork/data/USRegionState.n3#">
+
+    <rdf:Description rdf:about="#0_work">
+        <log:forAll rdf:resource="#n"/>
+    </rdf:Description>
+
+    <rdf:Description>
+        <log:is rdf:parseType="Quote">
+            <rdf:Description rdf:about="#_g0">
+                <log:forSome rdf:resource="#_g2"/>
+            </rdf:Description>
+            <rdf:Description>
+                <state:borderstate rdf:resource="#_g2"/>
+                <state:code>MA</state:code>
+            </rdf:Description>
+            <rdf:Description>
+                <city:name rdf:resource="#n"/>
+                <city:state rdf:resource="#_g2"/>
+            </rdf:Description>
+        </log:is>
+        <log:implies rdf:parseType="Quote">
+            <NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS rdf:about="#n">
+            </NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS>
+        </log:implies>
+    </rdf:Description>
+</rdf:RDF>
