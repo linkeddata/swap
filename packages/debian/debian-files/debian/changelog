@@ -1,0 +1,5 @@
+swap-cwm (0.9-1) unstable; urgency=low
+
+  * Initial Release, test packaging by danbri.
+
+ -- Dan Brickley <danbri@w3.org>  Sun,  9 Jun 2002 11:37:57 +0100

@@ -1,0 +1,7 @@
+swap-cwm for Debian
+-----------------------
+
+Semantic Web Area for Play (SWAP) and Closed World Machine (Cwm).
+An RDF parser, query and rule engine for the Semantic Web. 
+packaged by...
+ -- Dan Brickley <danbri@w3.org> Sun Jun  9 11:28:43 BST 2002 
