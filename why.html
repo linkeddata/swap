@@ -49,9 +49,7 @@ it&nbsp;more&nbsp;complicated&nbsp;here&nbsp;for&nbsp;the&nbsp;recursively&nbsp;
 </font></dt></dl>
 </dd>
 <dt><font face="helvetica, arial"><a href="why.html#BecauseOfRule">BecauseOfRule</a>
-</font></dt><dt><font face="helvetica, arial"><a href="why.html#BecauseRuleApplication">BecauseRuleApplication</a>
 </font></dt><dt><font face="helvetica, arial"><a href="why.html#FormulaReason">FormulaReason</a>
-</font></dt><dt><font face="helvetica, arial"><a href="why.html#StatementReason">StatementReason</a>
 </font></dt></dl>
 </dd>
 </dl>
@@ -224,34 +222,6 @@ Methods inherited from <a href="why.html#Reason">Reason</a>:<br>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="BecauseRuleApplication">class <strong>BecauseRuleApplication</strong></a>(<a href="why.html#Reason">Reason</a>)</font></td></tr>
-    
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2>&nbsp;</td></tr>
-<tr><td>&nbsp;&nbsp;</td>
-<td width="100%">Methods defined here:<br>
-<dl><dt><a name="BecauseRuleApplication-__init__"><strong>__init__</strong></a>(self, because<font color="#909090">=None</font>)</dt></dl>
-
-<dl><dt><a name="BecauseRuleApplication-explain"><strong>explain</strong></a>(self, ko)</dt><dd><tt>Describe&nbsp;this&nbsp;reason&nbsp;to&nbsp;an&nbsp;RDF&nbsp;store<br>
-Returns&nbsp;the&nbsp;value&nbsp;of&nbsp;this&nbsp;reason&nbsp;as&nbsp;interned&nbsp;in&nbsp;the&nbsp;store.</tt></dd></dl>
-
-<hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = None</dl>
-
-<dl><dt><strong>__module__</strong> = 'why'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
-
-<hr>
-Methods inherited from <a href="why.html#Reason">Reason</a>:<br>
-<dl><dt><a name="BecauseRuleApplication-meIn"><strong>meIn</strong></a>(self, ko)</dt><dd><tt>The&nbsp;representation&nbsp;of&nbsp;this&nbsp;object&nbsp;in&nbsp;the&nbsp;formula&nbsp;ko</tt></dd></dl>
-
-</td></tr></table> 
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#ffc8d8">
-<td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="FormulaReason">class <strong>FormulaReason</strong></a>(<a href="why.html#Reason">Reason</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
@@ -262,7 +232,9 @@ interned,&nbsp;the&nbsp;collector&nbsp;must&nbsp;be&nbsp;informed&nbsp;that&nbsp
 The&nbsp;collector&nbsp;is&nbsp;also&nbsp;informed&nbsp;of&nbsp;each&nbsp;statement&nbsp;added.<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="FormulaReason-__init__"><strong>__init__</strong></a>(self)</dt></dl>
+<dl><dt><a name="FormulaReason-__init__"><strong>__init__</strong></a>(self, formula<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="FormulaReason-explain"><strong>explain</strong></a>(self, ko)</dt></dl>
 
 <dl><dt><a name="FormulaReason-explanation"><strong>explanation</strong></a>(self, ko<font color="#909090">=None</font>)</dt><dd><tt>Produce&nbsp;a&nbsp;justification&nbsp;for&nbsp;this&nbsp;formula&nbsp;into&nbsp;the&nbsp;output&nbsp;formula<br>
 &nbsp;<br>
@@ -270,7 +242,9 @@ Creates&nbsp;an&nbsp;output&nbsp;formula&nbsp;if&nbsp;necessary.<br>
 returns&nbsp;it.<br>
 (NB:&nbsp;This&nbsp;is&nbsp;different&nbsp;from&nbsp;reason.<a href="#FormulaReason-explain">explain</a>(ko)&nbsp;which&nbsp;returns&nbsp;the&nbsp;reason)</tt></dd></dl>
 
-<dl><dt><a name="FormulaReason-newStatement"><strong>newStatement</strong></a>(s, why)</dt></dl>
+<dl><dt><a name="FormulaReason-newStatement"><strong>newStatement</strong></a>(self, s, why)</dt></dl>
+
+<dl><dt><a name="FormulaReason-setFormula"><strong>setFormula</strong></a>(self, formula)</dt><dd><tt>Change&nbsp;the&nbsp;address&nbsp;fo&nbsp;the&nbsp;formula&nbsp;when&nbsp;the&nbsp;formula&nbsp;is&nbsp;moved&nbsp;on&nbsp;close()</tt></dd></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -286,9 +260,6 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 
 <hr>
 Methods inherited from <a href="why.html#Reason">Reason</a>:<br>
-<dl><dt><a name="FormulaReason-explain"><strong>explain</strong></a>(self, ko)</dt><dd><tt>Describe&nbsp;this&nbsp;reason&nbsp;to&nbsp;an&nbsp;RDF&nbsp;store<br>
-Returns&nbsp;the&nbsp;value&nbsp;of&nbsp;this&nbsp;object&nbsp;as&nbsp;interned&nbsp;in&nbsp;the&nbsp;store.</tt></dd></dl>
-
 <dl><dt><a name="FormulaReason-meIn"><strong>meIn</strong></a>(self, ko)</dt><dd><tt>The&nbsp;representation&nbsp;of&nbsp;this&nbsp;object&nbsp;in&nbsp;the&nbsp;formula&nbsp;ko</tt></dd></dl>
 
 </td></tr></table> 
@@ -323,67 +294,18 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
 If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
 
-</td></tr></table> 
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#ffc8d8">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="StatementReason">class <strong>StatementReason</strong></a>(<a href="why.html#Reason">Reason</a>)</font></td></tr>
-    
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2>&nbsp;</td></tr>
-<tr><td>&nbsp;&nbsp;</td>
-<td width="100%">Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = None</dl>
-
-<dl><dt><strong>__module__</strong> = 'why'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
-
-<hr>
-Methods inherited from <a href="why.html#Reason">Reason</a>:<br>
-<dl><dt><a name="StatementReason-__init__"><strong>__init__</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="StatementReason-explain"><strong>explain</strong></a>(self, ko)</dt><dd><tt>Describe&nbsp;this&nbsp;reason&nbsp;to&nbsp;an&nbsp;RDF&nbsp;store<br>
-Returns&nbsp;the&nbsp;value&nbsp;of&nbsp;this&nbsp;object&nbsp;as&nbsp;interned&nbsp;in&nbsp;the&nbsp;store.</tt></dd></dl>
-
-<dl><dt><a name="StatementReason-meIn"><strong>meIn</strong></a>(self, ko)</dt><dd><tt>The&nbsp;representation&nbsp;of&nbsp;this&nbsp;object&nbsp;in&nbsp;the&nbsp;formula&nbsp;ko</tt></dd></dl>
-
 </td></tr></table></td></tr></table>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#eeaa77">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
-    
-<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
-<td width="100%"><dl><dt><a name="-asFormula"><strong>asFormula</strong></a>(self, store)</dt><dd><tt>The&nbsp;formula&nbsp;which&nbsp;contains&nbsp;only&nbsp;a&nbsp;statement&nbsp;like&nbsp;this.<br>
-&nbsp;<br>
-This&nbsp;extends&nbsp;the&nbsp;StoredStatement&nbsp;class&nbsp;with&nbsp;functionality&nbsp;we&nbsp;only&nbsp;need&nbsp;with&nbsp;who&nbsp;module.</tt></dd></dl>
- <dl><dt><a name="-explainStatement"><strong>explainStatement</strong></a>(s, ko)</dt><dd><tt>Explain&nbsp;a&nbsp;statement.<br>
-&nbsp;<br>
-Returns&nbsp;the&nbsp;statement&nbsp;as&nbsp;a&nbsp;formula,&nbsp;having&nbsp;explained&nbsp;that&nbsp;statement.</tt></dd></dl>
-</td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
     
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
-<td width="100%"><strong>ALL4</strong> = (0, 1, 2, 3)<br>
-<strong>ANONYMOUS</strong> = 3<br>
-<strong>CONTEXT</strong> = 0<br>
-<strong>FORMULA</strong> = 1<br>
-<strong>LITERAL</strong> = 2<br>
-<strong>Logic_NS</strong> = 'http://www.w3.org/2000/10/swap/log#'<br>
-<strong>OBJ</strong> = 3<br>
-<strong>PARTS</strong> = (1, 2, 3)<br>
-<strong>PRED</strong> = 1<br>
-<strong>SUBJ</strong> = 2<br>
-<strong>SYMBOL</strong> = 0<br>
-<strong>__file__</strong> = './why.pyc'<br>
+<td width="100%"><strong>__file__</strong> = './why.pyc'<br>
 <strong>__name__</strong> = 'why'<br>
 <strong>dontAsk</strong> = &lt;why.Because instance&gt;<br>
 <strong>log</strong> = &lt;thing.Namespace object&gt;<br>
+<strong>proofOf</strong> = {}<br>
 <strong>rdf</strong> = &lt;thing.Namespace object&gt;<br>
 <strong>reason</strong> = &lt;thing.Namespace object&gt;</td></tr></table>
 </body></html>

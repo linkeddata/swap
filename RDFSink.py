@@ -67,7 +67,18 @@ N3_List = (SYMBOL, List_NS + "List")
 N3_Empty = (SYMBOL, List_NS + "Empty")
 
 
+from os import getpid
+from time import time
 
+runNamespaceValue = None
+
+def runNamespace():
+    "Return a URI suitable as a namespace for run-local objects"
+    # @@@ include hostname (privacy?) (hash it?)
+    global runNamespaceValue
+    if runNamespaceValue == None:
+	runNamespaceValue = uripath.join(uripath.base(), ".run-" + `time()` + "p"+ `getpid()` +"#")
+    return runNamespaceValue
 
 class URISyntaxError(ValueError):
     """A parameter is passed to a routine that requires a URI reference"""
@@ -108,9 +119,7 @@ class RDFSink:
 
 	self._genPrefix = genPrefix
 	if genPrefix == None:
-            # add PID?
-	    ns = uripath.join(uripath.base(), ".run-" + `time.time()` + "#_g" )
-	    self._genPrefix = ns
+	    self._genPrefix = runNamespace()  + "_g"
 	    self.usingRunNamespace = 1
 	self._nextId = 0
 

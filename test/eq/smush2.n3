@@ -1,0 +1,10 @@
+# Smush me
+
+@prefix : <#>.
+
+:a = :b.
+
+:a  :p "1".
+:b  :q "2".
+
+#ends

@@ -30,7 +30,9 @@ Agenda:
 
 
 import string
-from diag import verbosity, setVerbosity, progress, tracking
+import diag
+
+from diag import verbosity, setVerbosity, progress, tracking, setTracking
 from llyn import compareURI
 from uripath import join
 
@@ -308,7 +310,6 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         global _store
         global workingContext
         global lxkb
-        
         option_need_rdf_sometime = 0  # If we don't need it, don't import it
                                # (to save errors where parsers don't exist)
         
@@ -318,7 +319,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         option_reify = 0    # Flag: reify on output  (process?)
         option_flat = 0    # Flag: reify on output  (process?)
 	option_crypto = 0  # Flag: make cryptographic algorithms available
-	tracking = 0
+	setTracking(0)
         option_outURI = None
         option_outputStyle = "-best"
         _gotInput = 0     #  Do we not need to take input from stdin?
@@ -340,6 +341,9 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         
         _outURI = _baseURI
         option_baseURI = _baseURI     # To start with - then tracks running base
+	
+	#  First pass on command line			  			- - - - - - - P A S S  1
+	
         for argnum in range(1,len(sys.argv)):  # Command line options after script name
             arg = sys.argv[argnum]
             if arg.startswith("--"): arg = arg[1:]   # Chop posix-style double dash to one
@@ -374,7 +378,9 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             elif arg == "-quiet": option_quiet = 1
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-crypto": option_crypto = 1
-            elif arg == "-why": tracking = 1
+            elif arg == "-why":
+		diag.tracking=1
+		diag.setTracking(1)
             elif arg == "-bySubject": option_outputStyle = arg
             elif arg == "-no": option_outputStyle = "-no"
             elif arg == "-strings": option_outputStyle = "-no"
@@ -415,8 +421,6 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         # needs C and Python to compile xpat.
         if option_need_rdf_sometime:
             import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
-	if tracking:
-	    from why import explanation
 
         # Between passes, prepare for processing
         setVerbosity(0)
@@ -456,6 +460,10 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             history = None
         lxkb = LX.KB()      # set up a parallel store for LX-based operations
 
+	if diag.tracking:
+	    from why import FormulaReason
+	    proof = FormulaReason(workingContext)
+
         if not _gotInput: # default input
             _inputURI = _baseURI # Make abs from relative
             if option_first_format is None: option_first_format = option_format
@@ -467,7 +475,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 history = inputContext
 
 
-        #  Take commands from command line: Second Pass on command line:
+        #  Take commands from command line: Second Pass on command line:    - - - - - - - P A S S 2
 
         option_format = "n3"      # Use RDF/n3 rather than RDF/XML 
         option_flags = { "rdf":"", "n3":"" } 
@@ -502,7 +510,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             elif arg == "-test": test()
             elif _lhs == "-base":
                 option_baseURI = _uri
-                progress("Base now "+option_baseURI)
+                if verbosity() > 10: progress("Base now "+option_baseURI)
 
             elif arg == "-ugly":
                 option_outputStyle = arg            
@@ -555,7 +563,8 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
             elif arg == "-why":
                 need(_store); touch(_store)
-		workingContext = explanation(workingContext.close())
+		workingContext.close()
+		workingContext = proof.explanation()
                 workingContextURI = workingContext.uriref()
 
             elif arg == "-purge":

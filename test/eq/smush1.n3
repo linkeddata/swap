@@ -1,0 +1,6 @@
+# Smush me
+
+@prefix : <#>.
+
+:a = :b.
+

@@ -277,6 +277,7 @@ class Fragment(Term):
          It is useful to know that its ID has no use outside that
          context.
          """
+	 return 0   # Use class Anonymous for generated IDs
          return self.fragid[0] == "_"  # Convention for now @@@@@
                                 # parser should use seperate class?
 

@@ -7,21 +7,22 @@
 @prefix ex:   <http://www.daml.org/2000/10/daml-ex#> .
 @prefix log:  <http://www.w3.org/2000/10/swap/log#> .
 
-@prefix : <#>.  # Local stuff
+@prefix : <foo#>.  # Local stuff
+@prefix foo: <foo#>.  # Local stuff
 
 # Usage:   cwm includes/t7.n3 -think
 #
 # Output should conclude all test* a :success and no failures.
-#
+#  This used to make a self-reference which was not allowed.
 
 #this log:forAll :x.
     	{ this log:forAll :y.  :x :loves  :y } log:implies
 	{  { this log:forSome :z. :x :hates :z } a log:falsehood }.
 
-this :is :doc.
+#this :is :doc.
 # Now a positive test:
 
-{ [ :is :doc] log:includes
+{ [is log:semantics of <>] log:includes
     { # this log:forAll :x.
     		{ this log:forAll :y.  :x :loves  :y } log:implies 
 		{ { this log:forSome :z. :x :hates :z } a log:falsehood }.
@@ -30,7 +31,7 @@ this :is :doc.
 
 # Now a negative test:
 
-{ [ :is :doc] log:notIncludes
+{ [is log:semantics of <>] log:notIncludes
     {# this log:forAll :x.
     		{ this log:forAll :y.  :x :loves  :y } log:implies 
 		{ { this log:forSome :z. :x :hates :z } a log:falsehood }.

@@ -24,6 +24,10 @@ chatty_level = 0
 global tracking
 tracking = 0  # Are we keeping reason information for proof generation?
 
+def setTracking(x):
+    global tracking
+    chatty_flag = x
+
 def setVerbosity(x):
     global chatty_flag
     chatty_flag = x

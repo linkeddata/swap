@@ -61,8 +61,8 @@
         {
             :fee     :bar :baz .
             
-            }     log:includes {
-              [      :bar :baz ].
+            }     log:includes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
         }     log:implies {:testa2d     a :success .
@@ -90,8 +90,8 @@
         {
             :fee     :bar :baz .
             
-            }     log:notIncludes {
-              [      :bar :baz ].
+            }     log:notIncludes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
         }     log:implies {:testa2nd     a :FAILURE .
@@ -119,8 +119,8 @@
         {
             :foo     :bar :baz .
             
-            }     log:includes {
-              [      :bar :baz ].
+            }     log:includes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
         }     log:implies {:testa2     a :success .
@@ -148,8 +148,8 @@
         {
             :foo     :bar :baz .
             
-            }     log:notIncludes {
-              [      :bar :baz ].
+            }     log:notIncludes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
         }     log:implies {:testa2n     a :FAILURE .
@@ -180,8 +180,8 @@
             this     log:forAll :fee .
             :fee     :bar :baz .
             
-            }     log:includes {
-              [      :bar :baz ].
+            }     log:includes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
         }     log:implies {:testc2d     a :success .
@@ -212,8 +212,8 @@
             this     log:forAll :fee .
             :fee     :bar :baz .
             
-            }     log:notIncludes {
-              [      :bar :baz ].
+            }     log:notIncludes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
         }     log:implies {:testc2nd     a :FAILURE .
@@ -244,8 +244,8 @@
             this     log:forAll :foo .
             :foo     :bar :baz .
             
-            }     log:includes {
-              [      :bar :baz ].
+            }     log:includes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
         }     log:implies {:testc2     a :success .
@@ -276,16 +276,16 @@
             this     log:forAll :foo .
             :foo     :bar :baz .
             
-            }     log:notIncludes {
-              [      :bar :baz ].
+            }     log:notIncludes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
         }     log:implies {:testc2n     a :FAILURE .
         } .
     {
         {
-            
-              [      :bar :baz ].
+            this     log:forSome :fee .
+            :fee     :bar :baz .
             
             }     log:includes {:foo     :bar :baz .
             } .
@@ -294,8 +294,8 @@
         } .
     {
         {
-            
-              [      :bar :baz ].
+            this     log:forSome :fee .
+            :fee     :bar :baz .
             
             }     log:includes {this     log:forAll :foo .
             :foo     :bar :baz .
@@ -305,19 +305,19 @@
         } .
     {
         {
+            this     log:forSome :fee .
+            :fee     :bar :baz .
             
-              [      :bar :baz ].
-            
-            }     log:includes {
-              [      :bar :baz ].
+            }     log:includes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
         }     log:implies {:testb2d     a :success .
         } .
     {
         {
-            
-              [      :bar :baz ].
+            this     log:forSome :fee .
+            :fee     :bar :baz .
             
             }     log:notIncludes {:foo     :bar :baz .
             } .
@@ -326,8 +326,8 @@
         } .
     {
         {
-            
-              [      :bar :baz ].
+            this     log:forSome :fee .
+            :fee     :bar :baz .
             
             }     log:notIncludes {this     log:forAll :foo .
             :foo     :bar :baz .
@@ -337,19 +337,19 @@
         } .
     {
         {
+            this     log:forSome :fee .
+            :fee     :bar :baz .
             
-              [      :bar :baz ].
-            
-            }     log:notIncludes {
-              [      :bar :baz ].
+            }     log:notIncludes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
         }     log:implies {:testb2nd     a :FAILURE .
         } .
     {
         {
-            
-              [      :bar :baz ].
+            this     log:forSome :foo .
+            :foo     :bar :baz .
             
             }     log:includes {:foo     :bar :baz .
             } .
@@ -358,8 +358,8 @@
         } .
     {
         {
-            
-              [      :bar :baz ].
+            this     log:forSome :foo .
+            :foo     :bar :baz .
             
             }     log:includes {this     log:forAll :foo .
             :foo     :bar :baz .
@@ -369,19 +369,19 @@
         } .
     {
         {
+            this     log:forSome :foo .
+            :foo     :bar :baz .
             
-              [      :bar :baz ].
-            
-            }     log:includes {
-              [      :bar :baz ].
+            }     log:includes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
         }     log:implies {:testb2     a :success .
         } .
     {
         {
-            
-              [      :bar :baz ].
+            this     log:forSome :foo .
+            :foo     :bar :baz .
             
             }     log:notIncludes {:foo     :bar :baz .
             } .
@@ -390,8 +390,8 @@
         } .
     {
         {
-            
-              [      :bar :baz ].
+            this     log:forSome :foo .
+            :foo     :bar :baz .
             
             }     log:notIncludes {this     log:forAll :foo .
             :foo     :bar :baz .
@@ -401,11 +401,11 @@
         } .
     {
         {
+            this     log:forSome :foo .
+            :foo     :bar :baz .
             
-              [      :bar :baz ].
-            
-            }     log:notIncludes {
-              [      :bar :baz ].
+            }     log:notIncludes {this     log:forSome :foo .
+            :foo     :bar :baz .
             } .
         
         }     log:implies {:testb2n     a :FAILURE .

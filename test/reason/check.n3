@@ -1,0 +1,19 @@
+# check it
+
+@prefix reason: <http://www.w3.org/2000/10/swap/reason#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix os: <http://www.w3.org/2000/10/swap/os#> .
+
+@prefix : <#>.
+
+this log:forAll :x; :y; :z.
+
+{ "1"!os:argv^log:uri!log:semantics ?f} => { ?f a :Proof}.
+
+{ ?f a :Proof; log:includes { :x a reason:QED }.
+	:x a :Justified } => { ?f a :ValidProof }.
+
+{ ?f a :Proof; log:includes { :x reason:because :y }. }
+{ ?
+
+{ f statemenlist l.@@@@@@@@@@@@@@@@@

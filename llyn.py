@@ -140,6 +140,7 @@ import md5, binascii  # for building md5 URIs
 import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
+import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
 from diag import progress, progressIndent, verbosity, tracking
 from thing import Namespace, BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
@@ -493,6 +494,9 @@ class Formula(Fragment):
 	if obj == None: return s[OBJ]
 	raise parameterError("You must give one wildcard")
 
+    def bind(self, prefix, uri):
+	return self.store.bind(prefix, uri) # Otherwise, do as usual.
+
     def add(self, subj, pred, obj, why=None):
         return self.store.storeQuad((self, pred, subj, obj), why=why) # Note order change
     
@@ -536,6 +540,10 @@ class Formula(Fragment):
         pairs.sort(comparePair)
         for key, str in pairs:
             channel.write(str.string.encode('utf-8'))
+
+    def includes(f, g, _variables=[], smartIn=[], bindings=[]):
+	return  f.store.testIncludes(f, g, _variables=_variables, smartIn=smartIn, bindings=bindings)
+
 
     def subFormulae(self, path = []):
         """
@@ -1300,6 +1308,8 @@ class RDFStore(RDFSink) :
             if verbosity() > 70:
                 progress("End formula -- @@ already cannonical:"+`F`)
             return F.cannonical
+	collector = F.collector
+#	F.collector = None  # can't collect any more - remember though for reopen
         fl = F.statements
         fl.sort(StoredStatement.compareSubjPredObj)
         l = len(fl)   # The number of statements
@@ -1457,11 +1467,12 @@ class RDFStore(RDFSink) :
 
         s = StoredStatement(q)
 	
-	if tracking:
-	    if (why == None): raise RunTimeError("Tracking errors but no reason given for"+`s`)
-	    if context.collector:
+	if diag.tracking:
+	    if (why == None): raise RuntimeError("Tracking reasons but no reason given for"+`s`)
+	    if (context.collector == None):
+		pass #raise RuntimeError("Tracking reasons but no collector given for "+`context`)
+	    else:
 		context.collector.newStatement(s, why)
-
 
         # Build 8 indexes.
 #       This now takes a lot of the time in a typical  cwm run! :-( 
@@ -1691,8 +1702,12 @@ class RDFStore(RDFSink) :
         _loop = len(context._index.get((None, x, x),[]))  # does'es count as incomming
         
         if isinstance(x, Literal):
-            anon = 0     #  Never anonymous, always just use the string
-        if context.listValue(x) != None or isinstance(x, Formula):
+            _anon = 0     #  Never anonymous, always just use the string
+	elif isinstance(x, Formula):
+	    _anon = 2	# always anonymous, represented as itself
+	elif not x.generated():
+	    _anon = 0	# Got a name, not anonymous
+        elif context.listValue(x) != None:
             _anon = 2    # Always represent it just as itself
         else:
             contextClosure = context.subFormulae()[:]
@@ -1743,7 +1758,7 @@ class RDFStore(RDFSink) :
         elif type(x) == type(2):
             return self.intern((LITERAL, `x`))    # @@ Add literal numeric type to N3?
         elif type(x) == type([]):
-	    raise RunTimeError("Internals generating lists not supported yet")
+	    raise RuntimeError("Internals generating lists not supported yet")
             g = store.nil
             y = x[:]
             y.reverse()
@@ -1818,8 +1833,11 @@ class RDFStore(RDFSink) :
             sink.endBagSubject(subj.asPair())       # Subject is now set up
             # continue to do arcs
             
-        elif _anon and (_incoming == 0 or (li != None and not isinstance(li, EmptyList))):    # Will be root anonymous node - {} or [] or ()
-
+        elif _anon and (_incoming == 0 or 
+	    (li != None and not isinstance(li, EmptyList) and subj.generated())):    # Will be root anonymous node - {} or [] or ()
+#	    progress("@@@@@@@@@@@@@ generated", `subj`, `subj.asPair()`)
+#	    if subj.generated() and subj.asPair()[0]==0:
+		
             if subj is context:
                 pass
             else:     #  Could have alternative syntax here
@@ -1834,14 +1852,14 @@ class RDFStore(RDFSink) :
 
                 if sorting: statements.sort(StoredStatement.comparePredObj)    # Order only for output
 
-                li = context.listValue(subj)
-                if li != None and not isinstance(li, EmptyList):   # The subject is a list
+                if li != None and not isinstance(li, EmptyList) and subj.generated():   # The subject is a list
                     for s in statements:
                         p = s.quad[PRED]
                         if p is not self.first and p is not self.rest:
-			    if verbosity() > 90: progress("@@ Has list, has values for", `p`)
+			    if verbosity() > 90: progress("@@ Is list, has values for", `p`)
                             break # Something to print (later)
-                    else: return # Nothing.
+                    else:
+			if subj.generated(): return # Nothing.
                     sink.startAnonymousNode(subj.asPair(), li)
                     for s in statements:
                         p = s.quad[PRED]
@@ -1878,10 +1896,18 @@ class RDFStore(RDFSink) :
 
         _anon, _incoming = self._topology(obj, context)
         _se = isinstance(obj, Formula) and obj is not context
-        
+        li = 0
         if ((pre is self.forSome) and sub is context and _anon):
             return # implicit forSome
-        li = (context.listValue(obj) != None)
+        if (context.listValue(obj) != None) and obj is not self.nil and obj.generated():
+	    for s in context.statementsMatching(subj=obj):
+		p = s.quad[PRED]
+		if p is not self.first and p is not self.rest:
+		    if verbosity() > 90: progress("@@ Is list, has values for", `p`)
+		    break # Can't print as object, just print it elsewhere.
+	    else:
+		    li = 1
+
         if _anon and (_incoming == 1 or li or _se):  # Embedded anonymous node in N3
             _isSubject = len(context._index.get((obj, None, None), [])) # Has properties in this context?
 
@@ -2116,32 +2142,34 @@ class RDFStore(RDFSink) :
 
 
 
-    def testIncludes(self, workingContext, template, _variables=[], smartIn=[], bindings=[]):
-	"""Return whether or nor workingContext containts a top-level template equvalent to subexp.
+    def testIncludes(self, f, g, _variables=[], smartIn=[], bindings=[]):
+	"""Return whether or nor f contains a top-level formula equvalent to g.
 	Just a test: no bindings returned."""
         if verbosity() >30: progress("\n\n=================== testIncludes ============")
 
         # When the template refers to itself, the thing we are
         # are looking for will refer to the context we are searching
 
-        if not(isinstance(workingContext, Formula) and isinstance(template, Formula)): return 0
+        if not(isinstance(f, Formula) and isinstance(g, Formula)): return 0
 
+	assert f.cannonical is f
+	assert g.cannonical is g
 
-        unmatched, templateExistentials = self.oneContext(template)
-        _substitute([( template, workingContext)], unmatched)
+        unmatched, templateExistentials = self.oneContext(g)
+        _substitute([( g, f)], unmatched)
         
         if bindings != []: _substitute(bindings, unmatched)
 
         if verbosity() > 20:
             progress( "# testIncludes BUILTIN, %i terms in template %s, %i unmatched, %i template variables" % (
-                len(template.statements),
-                `template`[-8:], len(unmatched), len(templateExistentials)))
+                len(g.statements),
+                `g`[-8:], len(unmatched), len(templateExistentials)))
         if verbosity() > 80:
             for v in _variables:
                 progress( "    Variable: " + `v`[-8:])
 
         result = Query(self, unmatched=unmatched,
-		    template = template,
+		    template = g,
 		    variables=[],
 		    existentials=_variables + templateExistentials,
 		    smartIn=smartIn, justOne=1).resolve()
@@ -2221,9 +2249,10 @@ class RDFStore(RDFSink) :
         """ Figure out, given a set of variables which if any occur in a formula, list, etc
          The result is returned as an ordered set so that merges can be done faster.
         """
+#	progress("  "*level+"@@@@ occurringIn x=%s, vars=%s:"%(x, vars))
         if isinstance(x, Formula):
             set = []
-#            if verbosity() > 98: progress("    occuringIn: "+"  "*level+`x`)
+            if verbosity() > 98: progress("  "*level+"----occuringIn: "+"  "*level+`x`)
             for s in x.statements:
                 if s[PRED] is not self.forSome:
                     for p in PRED, SUBJ, OBJ:
@@ -2232,10 +2261,12 @@ class RDFStore(RDFSink) :
                             pass
                         else:
                             set = merge(set, self.occurringIn(y, vars, level+1, context=x))
+#			    progress("@@@@ ------ occurringIn x=%s, vars=%s, set=%s after %s"%(x, vars, set, y))
+#	    progress("@@@@ occurringIn x=%s, vars=%s, set=%s."%(x, vars, set))
             return set
 
 	assert context != None, "needs context param for this"
-        if context.listValue(x) != None:
+        if context.listValue(x) != None and x.generated():
             set = []
             for y in context.listValue(x).value():
                 set = merge(set, self.occurringIn(y, vars, level+1, context=context))
@@ -2352,7 +2383,7 @@ class Query:
 
 
 
-    def conclude(self, bindings, level=0):
+    def conclude(self, bindings, level=0, evidence = []):
 	"""When a match found in a query, add conclusions to target formula.
 
 	Returns the number of statements added."""
@@ -2399,9 +2430,9 @@ class Query:
 	
 
         if verbosity()>10:
-            progress( "indent, Concluding definitively" + bindingsToString(b2) )
+            progress( indent, "Concluding definitively" + bindingsToString(b2) )
         before = self.store.size
-	reason = BecauseOfRule(self.rule, bindings=bindings, evidence="whatever@@@@")
+	reason = BecauseOfRule(self.rule, bindings=bindings, evidence=evidence)
         self.store.copyContextRecursive(self.conclusion, self.targetContext, b2, reason)
         if verbosity()>30:
             progress( indent, "   size of store changed from %i to %i."%(before, self.store.size))
@@ -2418,7 +2449,8 @@ class Query:
                                     # Existentials or any kind of variable in subexpression
                bindings = [],       # Bindings discovered so far
                newBindings = [],    # New bindings not yet incorporated
-               level = 0):           # Nesting level for diagnostic indentation only
+               level = 0,           # Nesting level for diagnostic indentation only
+	       evidence = []):	    # List of statements supporting the bindings so far
         """ Iterate on the remaining query items
     bindings      collected matches already found
     newBindings  matches found and not yet applied - used in recursion
@@ -2521,7 +2553,7 @@ class Query:
                 if verbosity()>60: progress(
 		    " "*level+ "QUERY FOUND MATCH (dropping lists) with bindings: "
 		    + bindingsToString(bindings))
-                return query.conclude(bindings, level)  # No non-list terms left .. success!
+                return query.conclude(bindings, level, evidence=evidence)  # No non-list terms left .. success!
             elif state ==S_HEAVY_WAIT or state == S_LIGHT_WAIT: # Can't
                 if verbosity() > 49 :
                     progress("@@@@ Warning: query can't find term which will work.")
@@ -2543,7 +2575,7 @@ class Query:
                         q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
 		    
                     total = total + query.query2(q2, variables[:], existentials[:],
-                                          bindings[:], nb, level=level+2)
+                                          bindings[:], nb, level=level+2, evidence = evidence + [reason])
                     if query.justOne and total:
                         return total
 
@@ -2553,7 +2585,7 @@ class Query:
             # And loop back to take the next item
 
         if verbosity()>50: progress( " "*level+"QUERY MATCH COMPLETE with bindings: " + bindingsToString(bindings))
-        return query.conclude(bindings, level)  # No terms left .. success!
+        return query.conclude(bindings, level, evidence)  # No terms left .. success!
 
 
 
@@ -2640,6 +2672,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         hasUnboundFormula = 0
         for p in PRED, SUBJ, OBJ :
             x = self.quad[p]
+	    if x is con:  # "this" is special case.
+		self.neededToRun[p] = []
+		continue
             if x in allvars:   # Variable
                 self.neededToRun[p] = [x]
                 self.searchPattern[p] = None   # can bind this
@@ -2700,7 +2735,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                     if result != None:
                         self.state = S_FAIL
 			rea=None
-			if tracking: rea = BecauseBuiltIn(subj, pred, result)
+			if diag.tracking: rea = BecauseBuiltIn(subj, pred, result)
                         return [([ (obj, result)], rea)]
         else:
             if (self.neededToRun[OBJ] == []):
@@ -2710,7 +2745,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                     if result != None:
                         self.state = S_FAIL
 			rea=None
-			if tracking: rea = BecauseBuiltIn(result, pred, obj)
+			if diag.tracking: rea = BecauseBuiltIn(result, pred, obj)
                         return [([ (subj, result)], rea)]
         if verbosity() > 30:
             progress("Builtin could not give result"+`self`)

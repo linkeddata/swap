@@ -26,9 +26,9 @@ from thing   import Namespace
 
 from diag import verbosity, progress
 
-from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
-from RDFSink import Logic_NS
+#from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
+#from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
+from RDFSink import runNamespace
 
 
 rdf=Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
@@ -36,7 +36,9 @@ log=Namespace("http://www.w3.org/2000/10/swap/log#")
 reason=Namespace("http://www.w3.org/2000/10/swap/reason#")
 
 
-global dontAsk
+global 	dontAsk
+global	proofOf
+proofOf = {} # Track reasons for formulae
 
 class Reason:
     """The Reason class holds a reason for having some information.
@@ -69,18 +71,29 @@ class FormulaReason(Reason):
     collector) with the actual formla. Beware that when a new formula is
     interned, the collector must be informed that its identity has changed.
     The collector is also informed of each statement added."""
-    def __init__(self):
-	Reason.__init__(self, formula=None)
+    def __init__(self, formula=None):
+	Reason.__init__(self)
 	self._string = str
-	self._reason = because
+#	self._reason = because
 	self.statementReasons = []
 	self.formula = formula
 	if formula != None:
 	    formula.collector = self
+	    self.setFormula(formula)
+	self.reasonForStatement = {}
 	return
 
-    def	newStatement(s, why):
-	self.statementReasons.append((s[SUBJ], s[PRED], s[OBJ], why))
+    def setFormula(self, formula):
+	"""Change the address fo the formula when the formula is moved on close()"""
+	global proofOf
+	self.store = formula.store
+	proofOf[formula] = self
+	return
+
+    def	newStatement(self, s, why):
+	if verbosity() > 80: progress("Believing %s because of %s"%(s, why))
+	self.statementReasons.append((s, why)) # @@@ redundant
+	self.reasonForStatement[s]=why
 
     def explanation(self, ko=None):
 	"""Produce a justification for this formula into the output formula
@@ -89,28 +102,34 @@ class FormulaReason(Reason):
 	returns it.
 	(NB: This is different from reason.explain(ko) which returns the reason)"""
 	if ko == None: ko = self.formula.store.newFormula()
-	qed = ko.newBlankNode(why= dontAsk)
-    #    ko.add(subj=ko, pred=reason.proves, obj=self.formula, why=dontAsk) 
-    #   ko.add(obj=ko, pred=reason.proof, subj=self.formula, why=dontAsk) 
-	ko.add(subj=self.formula, pred=rdf.type, obj=reason.QED, why=dontAsk) 
-	ko.add(subj=self.formula, pred=reason.because, obj=qed, why=dontAsk) 
-	ko.add(subj=qed, pred=rdf.type, obj=reason.Conjunction, why=dontAsk) 
-    #    ko.add(subj=qed, pred=reason.gives, obj=self.formula, why=dontAsk)
-	ko.add(obj=qed, pred=reason.because, subj=self.formula, why=dontAsk)
-    
-    
-	for subj, pred, obj, rea in self.statementReasons:
-	    if pred is not self.store.forAll and pred is not self.store.forSome:
-		si = explainStatement(s,  ko)
-		if si == None:
-		    progress("ooops .. no explain for statement", s)
-		    continue
-		ko.add(subj=qed, pred=reason.given, obj=si, why=dontAsk)
+	ko.bind("reason", "http://www.w3.org/2000/10/swap/reason#")
+	ko.bind("run", runNamespace())
+	me=self.explain(ko)
+	ko.add(me, rdf.type, reason.Proof, why=dontAsk)
 	return ko
+	
+    def explain(self, ko):
+    	me = self.meIn(ko)
 
+	qed = ko.newBlankNode(why= dontAsk)
+#        ko.add(subj=ko, pred=reason.prooves, obj=self.formula, why=dontAsk) 
+    #   ko.add(obj=ko, pred=reason.proof, subj=self.formula, why=dontAsk) 
+#	ko.add(subj=self.formula, pred=rdf.type, obj=reason.QED, why=dontAsk) 
+#	ko.add(subj=self.formula, pred=reason.because, obj=qed, why=dontAsk) 
+	ko.add(subj=me, pred=rdf.type, obj=reason.Conjunction, why=dontAsk) 
+        ko.add(subj=me, pred=reason.gives, obj=self.formula, why=dontAsk)
+#	ko.add(obj=qed, pred=reason.because, subj=self.formula, why=dontAsk)
+    
+    
+	for s, rea in self.statementReasons:
+	    pred = s.predicate()
+	    if pred is not self.store.forAll and pred is not self.store.forSome:
+		si = describeStatement(s, ko)
+		ko.add(si, rdf.type, reason.Extraction, why=dontAsk)
+		ko.add(si, reason.because, rea.explain(ko), why=dontAsk)
+		ko.add(me, reason.component, si, why=dontAsk)
+	return me
 
-class StatementReason(Reason):
-    pass
 
 
 
@@ -158,54 +177,50 @@ class BecauseOfRule(Reason):
 	    ko.add(subj=me, pred=reason.binding, obj=b, why= dontAsk)
 	    ko.add(subj=b, pred=reason.variable, obj=var,why= dontAsk)
 	    ko.add(subj=b, pred=reason.boundTo, obj=val, why= dontAsk)
-	if self._rule.why != None:
-	    si = explainStatement(self._rule, ko)
-	    ko.add(subj=me, pred=reason.rule, obj=si, why= dontAsk)
-	else:
-	    progress("No reason for rule "+`self._rule`)
+
+	ru = explainStatement(self._rule,ko)
+	ko.add(subj=me, pred=reason.rule, obj=ru, why=dontAsk)
+	    
 	for s in self._evidence:
 	    if isinstance(s, BecauseBuiltIn):
 		fact = s.explain(ko)
-		ko.add(subj=me, pred=reason.given, obj=si, why= dontAsk)
-	    elif s.why != None:
-		si = explainStatement(s, ko)
-		ko.add(subj=me, pred=reason.given, obj=si, why= dontAsk)
+		ko.add(subj=me, pred=reason.givenBuiltin, obj=fact, why= dontAsk)
+	    else:
+		e = explainStatement(s, ko)
+		ko.add(me, reason.evidence, e, why= dontAsk)
+
 	return me
+
+
+def explainStatement(s, ko):
+    statementFormula = s.context()
+    statementFormulaReason = proofOf.get(statementFormula, None)
+    if statementFormulaReason == None:
+	progress("Ooops, no proof for statement formula", s)
+    else:
+	statementReason = statementFormulaReason.reasonForStatement.get(s, None)
+	if statementReason == None:
+	    progress("Ooops, formula has no reason for statement,", s)
+	    return None
+	else:
+	    ri = statementReason.explain(ko)
+	    si = describeStatement(s, ko)
+	    ko.add(subj=si, pred=reason.because, obj=ri, why=dontAsk)
+	    return si
+
+def describeStatement(s, ko):
+	"Describe the statement into the output formula ko"
+	si = ko.newBlankNode(why=dontAsk)
+	ko.add(si, rdf.type, reason.Extraction, why=dontAsk)
+	ko.add(si, reason.gives, asFormula(s, ko.store), why=dontAsk)
+
+#	con, pred, subj, obj = s.quad
+#	ko.add(subj=si, pred=reason.subject, obj=subj, why=dontAsk)
+#	ko.add(subj=si, pred=reason.predicate, obj=pred, why=dontAsk)
+#	ko.add(subj=si, pred=reason.object, obj=obj, why=dontAsk)
+	return si
 
 	
-class BecauseRuleApplication(Reason):
-    def __init__(self, because=None):
-	Reason.__init__(self)
-	self._bindings = bindings
-	self._rule = rule
-	self._evidence = [] # Set of statements with reasons
-	self._reason = because
-	return
-
-    def explain(self, ko):
-	"""Describe this reason to an RDF store
-	Returns the value of this reason as interned in the store.
-	"""
-	me = self.meIn(ko)
-	ko.add(subj=me, pred=rdf.type, obj=reason.Inference123, why=dontAsk) 
-	for var, val in self._bindings:
-	    b = ko.newBlankNode(why= dontAsk)
-	    ko.add(subj=me, pred=reason.binding, obj=b, why= dontAsk)
-	    ko.add(subj=b, pred=reason.variable, obj=var,why= dontAsk)
-	    ko.add(subj=b, pred=reason.boundTo, obj=val, why= dontAsk)
-	if self._rule.why != None:
-	    si = explainStatement(self._rule, ko)
-	    ko.add(subj=me, pred=reason.rule, obj=si, why= dontAsk)
-	else:
-	    progress("No reason for rule "+`self._rule`)
-	for s in self._evidence:
-	    if isinstance(s, BecauseBuiltIn):
-		fact = s.explain(ko)
-		ko.add(subj=me, pred=reason.given, obj=si, why= dontAsk)
-	    elif s.why != None:
-		si = explainStatement(s, ko)
-		ko.add(subj=me, pred=reason.given, obj=si, why= dontAsk)
-	return me
 
 	
 class BecauseOfData(Because):
@@ -259,28 +274,14 @@ class BecauseBuiltIn:
 # 
 #
 
-def explainStatement(s, ko):
-    """Explain a statement.
-    
-    Returns the statement as a formula, having explained that statement."""
-    r = s.why
-    if r != None:
-	statementAsFormula = asFormula(s, ko.store)
-	ri = r.explain(ko)
-#	ko.add(subj=ri, pred=reason.gives, obj=statementAsFormula, why=dontAsk)
-	ko.add( subj=statementAsFormula, pred=reason.because,  obj=ri, why=dontAsk)
-	return statementAsFormula
-    else:
-	progress("Statement has no reason recorded "+`s`)
-	return None
 
 def asFormula(self, store):
     """The formula which contains only a statement like this.
     
     This extends the StoredStatement class with functionality we only need with who module."""
     statementAsFormula = store.newFormula()   # @@@CAN WE DO THIS BY CLEVER SUBCLASSING? statement subclass of f?
-    statementAsFormula.add(subj=self[SUBJ], pred=self[PRED], obj=self[OBJ], why=dontAsk)
-    kb = self[CONTEXT]
+    statementAsFormula.add(subj=self.subject(), pred=self.predicate(), obj=self.object(), why=dontAsk)
+    kb = self.context()
     uu = store.occurringIn(statementAsFormula, kb.universals())
     ee = store.occurringIn(statementAsFormula, kb.existentials())
     for v in uu:

@@ -2,15 +2,18 @@
 
 SWAP=../..
 
-.SUFFIXES: .proof .n3
+.SUFFIXES: .checked .proof .result .n3
 
 .n3.proof:
-	python $SWAP/cwm.py $< --think --base=foo --why > $>
-.proof.check:
-	python check.py $<
-	touch $>
+	python $(SWAP)/cwm.py $< --think --base=foo --why > $@
+.n3.result:
+	python $(SWAP)/cwm.py $< --think --base=foo > $@
+.proof.checked:
+	python $(SWAP)/check.py $< > $@
 
-all : t5.proof
+all : t1.checked t2.checked t3.checked t4.checked t5.checked
 
+t5.diff: t5.result  t5.checked
+	diff t5.result t5.checked > $@
 
 #ends

@@ -12,14 +12,15 @@ reason = Namespace("http://www.w3.org/2000/10/swap/reason#")
 log = Namespace("http://www.w3.org/2000/10/swap/log#")
 rdf=Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 
+chatty = 0
 
 def fail(str, level=0):
-    if verbosity() > 10:
+    if chatty > 10:
 	progress(" "*(level*4), "Proof failed: ", str)
     return None
 
 def fyi(str, level=0):
-    if verbosity() > 50:
+    if chatty > 50:
 	progress(" "*(level*4),  str)
     return None
 
@@ -44,15 +45,13 @@ def statementFromFormula(f):
 	    s = x
     return s
 
-def valid(f, level=0):
-    fyi("target"+`f`, level)
+def valid(r, level=0):
+    """Check whether this reason is valid. Returns the formula proved or None is not"""
+    f = proof.any(r,reason.gives)
+    fyi("Reason for %s is %s."%(f, r), level)
 
-    r = proof.any(subj=f, pred=reason.because)
     if r == None:
-	v = verbosity()
-	setVerbosity(0)
 	str = f.n3String()
-	setVerbosity(v)
 	return fail("No reason for "+`f` + " :\n\n"+str +"\n\n", level=level)
     t = proof.any(subj=r, pred=rdf.type)
     fyi("Validating a "+`t`, level=level)
@@ -61,51 +60,59 @@ def valid(f, level=0):
 	res = proof.any(subj=r, pred=reason.source)
 	if res == None: return fail("No source given to parse", level=level)
 	u = res.uriref()
-#	try:
-	v = verbosity()
-	setVerbosity(15)
-	g = parse(u)
-	setVerbosity(v)
-#	except:
-#	    return fail("Can't retreive/parse <%s>." %u, level)
-	for sf in f.statements:
-	    for sg in g.statements:
-		bindings = [(f, g)]
-		if (bind(sf[PRED], bindings) is sg[PRED] and
-		    bind(sf[SUBJ], bindings) is sg[SUBJ] and
-		    bind(sf[OBJ],  bindings) is sg[OBJ]):
-		    break
-	    else:
-		progress("@@@"+`g.statements`)
-		return fail("Can't verify that <%s> says %s" %(u, sf), level=level)
-	return 1
+	try:
+	    v = verbosity()
+	    setVerbosity(0)
+	    g = parse(u)
+	    setVerbosity(v)
+	except:
+	    return fail("Can't retreive/parse <%s>." %u, level)
+	if f != None:  # Additional intermediate check not essential
+	    for sf in f.statements:
+		for sg in g.statements:
+		    bindings = [(f, g)]
+		    if (bind(sf[PRED], bindings) is sg[PRED] and
+			bind(sf[SUBJ], bindings) is sg[SUBJ] and
+			bind(sf[OBJ],  bindings) is sg[OBJ]):
+			break
+		else:
+		    progress("@@@"+`g.statements`)
+		    return fail("Can't verify that <%s> says %s" %(u, sf), level=level)
+	return g
 
     elif t is reason.Inference:
-	evidence = proof.each(subj=r, pred=reason.given)
+	evidence = proof.each(subj=r, pred=reason.evidence)
 	bindings = []
 	for b in proof.each(subj=r, pred=reason.binding):
 	    var  = proof.the(subj=b, pred=reason.variable)
-	    val  = proof.the(subj=b, pred=reason.boundTo) # @@@ Check that tey really are variables in the rule!
+	    val  = proof.the(subj=b, pred=reason.boundTo) # @@@ Check that they really are variables in the rule!
 	    bindings.append((var, val))
 
 	rule = proof.any(subj=r, pred=reason.rule)
 	if not valid(rule, level+1):
 	    return fail("No justification for rule"+`rule`, level)
-	for s in rule.statements:
+	for s in proof.the(rule, reason.gives).statements:
 	    if s[PRED] is log.implies:
 		ruleStatement = s
 		break
 	else: return fail("Rule has %s instead of log:implies as predicate.", level)
 	evidenceStatements = []
-	for e in evidence: evidenceStatements.append(statementFromFormula(e))
+	for e in evidence:
+	    f2 = valid(e, level+1)
+	    if f2 == None:
+		return fail("Evidence %s was not proved."%(e))
+	    evidenceStatements.append(f2)
 	for s in ruleStatement[SUBJ]: # Antecedent
 	    context, pred, subj, obj = s.quad
 	    pred = bind(pred, bindings)
 	    subj = bind(subj, bindings)
 	    obj  = bind(obj, bindings) 
-	    for t in evidenceStatements:
-		if t[SUBJ] == subj and t[PRED]==pred and t[OBJ]==obj:
-		    break
+	    for x in evidenceStatements:
+		for t in x.statements:
+		    if t[SUBJ] == subj and t[PRED]==pred and t[OBJ]==obj:
+			break
+		else: continue
+		break
 	    else:
 		return fail("Can't find %s in evidence for rule %s: \nEvidence:%s\nBindings:%s\n"
 			      %((subj, pred,  obj), ruleStatement, evidenceStatements, bindings),
@@ -116,46 +123,60 @@ def valid(f, level=0):
 		return fail("Evidence could not be proved: " + `e`, level=level)
 	fyi("Rule %s conditions met" % ruleStatement, level=level)
 
-	conclusions = []
-	for s in ruleStatement[OBJ]:
+	proved = proof.newFormula()
+	for s in ruleStatement[OBJ]: # Conclusion
 	    context, pred, subj, obj = s.quad
 	    pred = bind(pred, bindings)
 	    subj = bind(subj, bindings)
 	    obj  = bind(obj, bindings)
-	    conclusions.append((f, pred, subj, obj))
-	for t in f.statements:
-	    if t.quad not in conclusions:
-		progress("@@@@@ f.statements: "+`f.statements`)
-		return fail("Statement %s not justified by \n conclusions %s\nof rule %s." %
-			    (t, conclusions, ruleStatement), level=level)
-	return 1
+	    proved.add(subj, pred, obj)
+	proved=proved.close()
+	return proved
 	
     elif t is reason.Conjunction:
-	evidence = proof.each(subj=r, pred=reason.given)
-	conclusions = []
-	for e in evidence:
+	components = proof.each(subj=r, pred=reason.component)
+	proved = []
+	for e in components:
 	    if not valid(e, level+1):
-		return fail("Evidence could not be proved:"+`e`, level=level)
-	return 1
-    return fail("Reason is of unknown type "+`t`, level=level)
+		return fail("In Conjunction %s, evidence %s could not be proved."%(r,e), level=level)
+	    proved.append(proof.the(subj=e, pred=reason.gives))
+	
+	return f
+	
+    elif t is reason.Extraction:
+	r2 = proof.the(r, reason.because)
+	f2 = valid(r2, level+1)
+	if f2 == None:
+	    return fail("Extraction: validation of source forumla failed.")
+#	setchatty
+	if not f2.includes(f):
+	    return fail("""Extraction %s not included in formula  %s.\n______________\n%s\n______________not included in formula ______________\n%s"""
+		    %(f, f2, f.n3String(), f2.n3String()), level=level)
+	return f
+
+    s = ""
+    for x in proof.statementsMatching(subj=r): s = `x` + "\n"
+    return fail("Reason %s is of unknown type %s.\n%s"%(r,t, s), level=level)
 
 # Main program 
 	    
 parsed = {}
-setVerbosity(15)
+setVerbosity(0)
 
 inputURI = argv[1]
-progress("Taking input from"+inputURI)
+fyi("Reading proof from "+inputURI)
 proof = load(inputURI)
-setVerbosity(100)
+#setVerbosity(60)
 fyi("Length of proof: "+`len(proof)`)
-qed = proof.the(pred=rdf.type, obj=reason.QED)  # the thing to be prooved
+proof2 = proof.the(pred=rdf.type, obj=reason.Proof)  # the thing to be proved
 
 
-if valid(qed):
-    fyi("Proof valid.")
+proved = valid(proof2)
+if proved != None:
+    fyi("Proof looks OK.")
+    print proved.n3String()
     exit(0)
-fyi("Proof invalid.")
+progress("Proof invalid.")
 exit(-1)
 
 #ends

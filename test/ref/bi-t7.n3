@@ -1,4 +1,4 @@
-     @prefix : <#> .
+     @prefix : <foo#> .
      @prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
      @prefix dpo: <http://www.daml.org/2001/03/daml+oil#> .
      @prefix ex: <http://www.daml.org/2000/10/daml-ex#> .
@@ -6,50 +6,46 @@
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
-    this     :is :doc .
-    
     :testg_1     a :success .
     {
         this     log:forAll :y .
         :x     :loves :y .
         
         }     log:implies {{
-            :x     :hates  [
-                 ] .
+            this     log:forSome :z .
+            :x     :hates :z .
             
             }     a log:falsehood .
         } .
     {
-        
-          [      :is :doc;
+        <>     log:semantics  [
                  log:notIncludes {{
                     this     log:forAll :y .
                     :x     :loves :y .
                     
                     }     log:implies {{
-                        :x     :hates  [
-                             ] .
+                        this     log:forSome :z .
+                        :x     :hates :z .
                         
                         }     a log:falsehood .
                     } .
-                } ].
+                } ] .
         
         }     log:implies {:testg_1     a :FAILURE .
         } .
     {
-        
-          [      :is :doc;
+        <>     log:semantics  [
                  log:includes {{
                     this     log:forAll :y .
                     :x     :loves :y .
                     
                     }     log:implies {{
-                        :x     :hates  [
-                             ] .
+                        this     log:forSome :z .
+                        :x     :hates :z .
                         
                         }     a log:falsehood .
                     } .
-                } ].
+                } ] .
         
         }     log:implies {:testg_1     a :success .
         } .
