@@ -2,8 +2,9 @@
 #@prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @keywords a, of, is .
 #
-#
-#
+# An combinators interpreter.n3
+# usage: cwm un_expr.n3 --think=unlambda.n3 --filter=un_filter.n3
+# see un_expr.n3 for examples
 
 #
 # Begin defining what needs to be eval'ed
