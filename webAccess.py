@@ -26,9 +26,8 @@ def urlopenForRDF(addr):
     This is now uses urllib2.urlopen(), in order to get better error handling
     """
     z = urllib2.Request(addr)
-    z.add_header('Accept', 'application/rdf+xml q=1')
-    z.add_header('Accept', 'application/n3 q=1')
-    z.add_header('Accept', 'text/plain q=0.1')
+    z.add_header('Accept', 'application/n3, application/rdf+xml')
+#    z.add_header('Accept', 'text/plain q=0.1')
     return urllib2.urlopen(z)
 
 def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
