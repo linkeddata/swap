@@ -168,6 +168,12 @@
     test:description   "conversion of subset of N3 list syntax to RDF";
     test:arguments     """-n3 lists-simple.n3 -rdf""".
 
+:t1018a1 a test:CwmTest;
+    test:referenceOutput <ref/itemType.n3>;
+    test:description   "make sure typeNodes in RDF/XML Collections are parsed";
+    test:arguments     """-rdf list/itemType.rdf -n3""".
+
+
 #:t1018b1 a test:CwmTest;
 #    test:referenceOutput <ref/list-bug1.n3>;
 #    test:description   "List processing bug check 1";
