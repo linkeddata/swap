@@ -52,6 +52,11 @@ import string
 import urlparse
 import re
 
+# Magic resources we know about
+
+RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+DAML_equivalentTo_URI = "http://www.daml.org/2000/10/daml-ont#equivalentTo"
+
 # The statement is stored as a quad - affectionately known as a triple ;-)
 
 CONTEXT = 0
@@ -591,10 +596,27 @@ class Resource(Thing):
         else:
             return self.uri
 
-    def newId(self):
-        self.nextId = self.nextId + 1
-        return self.nextId - 1
-
+    def internFrag(r,fragid):
+            try:
+                return r.fragments[fragid]
+            except KeyError:
+                f = Fragment(r, fragid)
+                r.fragments[fragid] = f
+                return f
+                
+    def internAnonymous(r):
+            f = Anonymous(r)
+            r.fragments[f.fragid] = f
+            return f
+                
+    def internVariable(r, fragid):
+            try:
+                return r.fragments[fragid]
+            except KeyError:
+                f = Variable(r, fragid)
+                r.fragments[f.fragid] = f
+                return f
+                
     
 class Fragment(Thing):
     """    A Thing which DOES have a fragment id in its URI
@@ -680,51 +702,31 @@ class Engine:
         resources = {}    # Hash table of URIs for interning things
         
         
-def intern(uriref):
-    """  Returns either a Fragment or a Resource as appropriate
+    def intern(self, pair):
+        """  Returns either a Fragment or a Resource as appropriate
 
-This is the way they are actually made.
-"""
-    hash = len(uriref)-1
-#    print " ... interning <%s>" % uriref
-    while (hash >= 0) and not (uriref[hash] == "#"):
-        hash = hash-1
-    if hash < 0 :     # This is a resource with no fragment
-        try:
-            return Resource.table[uriref]
-        except KeyError:
+    This is the way they are actually made.
+    """
+        type, uriref = pair
+        if type == LITERAL:
+            return Literal(uriref)  # No interning for literals (?@@?)
+
+        hash = len(uriref)-1
+    #    print " ... interning <%s>" % uriref
+        while (hash >= 0) and not (uriref[hash] == "#"):
+            hash = hash-1
+        if hash < 0 :     # This is a resource with no fragment
+            r = self.resources.get(uriref, None)
+            if r return r
             r = Resource(uriref)
-            Resource.table[uriref] = r  
+            self.resources[uriref] = r
             return r
-  
-    else :      # This has a fragment and a resource
-        r = intern(uriref[:hash])
-        return internFrag(r,uriref[hash+1:])
-
-def internFrag(r,fragid):
-        try:
-            return r.fragments[fragid]
-        except KeyError:
-            f = Fragment(r, fragid)
-            r.fragments[fragid] = f
-            return f
-            
-def internAnonymous(r):
-        f = Anonymous(r)
-        r.fragments[f.fragid] = f
-        return f
-            
-def internVariable(r, fragid):  #@@@ untested
-        try:
-            return r.fragments[fragid]
-        except KeyError:
-            f = Variable(r, fragid)
-            r.fragments[f.fragid] = f
-            return f
-            
-
-RDF_type = intern("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
-DAML_equivalentTo = intern("http://www.daml.org/2000/10/daml-ont#equivalentTo")
+        
+         else :      # This has a fragment and a resource
+            r = self.intern(uriref[:hash])
+            if type == RESOURCE return r.internFrag(uriref[hash+1:])
+            if type == ANONYMOUS return r.internAnonymous(uriref[hash+1:])
+            if type == VARIBALE return r.internVariable(uriref[hash+1:])
 
 
 ######################################################### Tests
@@ -816,7 +818,7 @@ bind default <>
 
 """
     thisURI = "file:notation3.py"
-    thisDoc = intern(thisURI)
+    thisDoc = thisURI
     testString.append(  t0 + t1 + t2 + t3 + t4 )
 #    testString.append(  t5 )
 
@@ -946,7 +948,7 @@ class ToRDF(RDFSink):
         RDFSink.__init__(self)
 	self._wr = XMLWriter(outFp)
 	self._subj = None
-	self._thisDoc = intern(thisURI)
+	self._thisDoc = thisURI
 
     #@@I18N
     _namechars = string.lowercase + string.uppercase + string.digits + '_'
@@ -1089,7 +1091,7 @@ class SinkToN3(RDFSink):
 	self._subj = None
 	self.prefixes = {}      # Look up prefix conventions
 	self.indent = 1         # Level of nesting of output
-	self.base = intern(base)
+	self.base = base
 	self.nextId = 0         # Regenerate Ids on output
 	self.regen = {}         # Mapping of regenerated Ids
 	self.genPrefix = genPrefix  # Prefix for generated URIs on output
@@ -1235,12 +1237,6 @@ class StringWriter:
 #
 #   store.occurs[context, thing][partofspeech]   dict, list, ???
 
-class StoredThing:
-
-    def __init__(self, thing):
-        self.thing = thing
-        self.contains = {}   # First is dummy
-        # c.contains[p][PRED] is list of statements (c, p, * ,* ) 
 
 class StoredStatement:
 
@@ -1251,35 +1247,18 @@ class RDFStore(RDFSink) :
     """ Absorbs RDF stream and saves in triple store
     """
 
-    def __init__(self):
+    def __init__(self, engine):
         RDFSink.__init__(self)
-        self.storedThings = {}         # occurrences of [interned!] URIs in the store
+        self.engine = engine
 
 # Input methods:
 
     def makeStatement(self, tuple):
         q = None, None, None, None
-        for p in CONTEXT, PRED, SUBJ, OBJ : q[p] = stored(tuple[p])
-        statement = StoredStatement(q)
-        for p in PRED, SUBJ, OBJ: self.addIndex(statement, q[p], p)
-        
-
-# Record that x has occured in part of speech p in statement in context c
-# in c.contains[x][p]
-    def index(self, statement, x, p):
-        l = context.contains.get(x, None)
-        if l : l[p].append(x)
-        else:
-            l = [], [], [], []
-            l[p] = [ statement ]
-            context.contains[x] = l
-
-    def stored(self, thing):
-            """ Intern thing so we can hang more data of it """"
-            st = self.things.get(thing, None)
-            if st return st
-            self.things[thing] = StoredThing(thing)
-            
+        for p in CONTEXT, PRED, SUBJ, OBJ : q[p] = self.engine.intern(tuple[p])
+        s = StoredStatement(q)
+        for p in ALL4: s.triple[p].occursAs[p].append(s)
+                    
     def startDoc(self):
         pass
 
