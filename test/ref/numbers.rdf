@@ -1,7 +1,7 @@
 
 
 
-<rdf:RDF xmlns="file:/devel/WWW/2000/10/swap/test/syntax/numbers.n3#"
+<rdf:RDF xmlns="http://example.com/swap/test/syntax/numbers.n3#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 
     <rdf:Description>

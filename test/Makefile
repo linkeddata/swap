@@ -42,6 +42,8 @@ rdflib: rdfcore-tests.n3
 mellow : pyc-check $(CODE) $(TESTS) 
 	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py --ignoreErrors -c $(TESTS)
 
+just_work : pyc-check $(CODE) $(TESTS) 
+	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py --overwrite -c $(TESTS)
 
 fast : $(CODE) regression.n3
 	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py -n -f regression.n3

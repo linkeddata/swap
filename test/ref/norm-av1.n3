@@ -7,7 +7,7 @@
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 
-    <rdf:Description rdf:about="file:/devel/WWW/2000/10/swap/test/norm/av.n3">
+    <rdf:Description rdf:about="http://example.com/swap/test/norm/av.n3">
         <digraph rdf:nodeID="b1"/>
     </rdf:Description>
 

@@ -20,11 +20,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#success" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#success" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testa2" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testa2" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -38,16 +38,16 @@
                                          :object  [
                                              :existentials  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
@@ -59,11 +59,11 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ] ] ) ];
                              :universals  [
@@ -76,11 +76,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#success" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#success" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testb2" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testb2" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -105,11 +105,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#success" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#success" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testc2" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testc2" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -123,16 +123,16 @@
                                          :object  [
                                              :existentials  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
@@ -144,14 +144,14 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ] ] ] ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ] ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ] ]
                  [
@@ -162,11 +162,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#success" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#success" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testa1" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testa1" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -191,11 +191,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testb1" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testb1" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -213,11 +213,11 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
@@ -225,16 +225,16 @@
                                          :subject  [
                                              :existentials  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ] ] ) ];
                              :universals  [
@@ -247,11 +247,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#success" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#success" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testc1" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testc1" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -269,11 +269,11 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
@@ -285,14 +285,14 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ] ] ] ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ] ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ] ]
                  [
@@ -303,11 +303,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testa2n" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testa2n" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -321,16 +321,16 @@
                                          :object  [
                                              :existentials  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
@@ -342,11 +342,11 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ] ] ) ];
                              :universals  [
@@ -359,11 +359,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testb2n" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testb2n" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -388,11 +388,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testc2n" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testc2n" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -406,16 +406,16 @@
                                          :object  [
                                              :existentials  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
@@ -427,14 +427,14 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ] ] ] ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ] ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ] ]
                  [
@@ -445,11 +445,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testa1n" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testa1n" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -474,11 +474,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#success" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#success" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testb1n" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testb1n" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -496,11 +496,11 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
@@ -508,16 +508,16 @@
                                          :subject  [
                                              :existentials  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ] ] ) ];
                              :universals  [
@@ -530,11 +530,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testc1n" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testc1n" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -552,11 +552,11 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
@@ -568,14 +568,14 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ] ] ] ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ] ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ] ]
                  [
@@ -586,11 +586,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#success" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#success" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testa2d" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testa2d" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -604,16 +604,16 @@
                                          :object  [
                                              :existentials  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
@@ -625,11 +625,11 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ] ] ) ];
                              :universals  [
@@ -642,11 +642,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#success" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#success" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testb2d" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testb2d" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -660,16 +660,16 @@
                                          :object  [
                                              :existentials  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
@@ -677,16 +677,16 @@
                                          :subject  [
                                              :existentials  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee"  ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#fee"  ) ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ] ] ) ];
                              :universals  [
@@ -699,11 +699,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#success" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#success" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testc2d" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testc2d" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -717,72 +717,16 @@
                                          :object  [
                                              :existentials  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
-                                             :universals  [
-                                                 owl:oneOf () ] ];
-                                         :predicate  [
-                                             :uri "http://www.w3.org/2000/10/swap/log#includes" ];
-                                         :subject  [
-                                             :existentials  [
-                                                 owl:oneOf () ];
-                                             :statements  [
-                                                 owl:oneOf  (
-                                                 [
-                                                         :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
-                                                         :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
-                                                         :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
-                                             :universals  [
-                                                 owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee"  ) ] ] ] ) ];
-                             :universals  [
-                                 owl:oneOf () ] ] ]
-                 [
-                         :object  [
-                             :existentials  [
-                                 owl:oneOf () ];
-                             :statements  [
-                                 owl:oneOf  (
-                                 [
-                                         :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
-                                         :predicate  [
-                                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
-                                         :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testa1d" ] ] ) ];
-                             :universals  [
-                                 owl:oneOf () ] ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
-                         :subject  [
-                             :existentials  [
-                                 owl:oneOf () ];
-                             :statements  [
-                                 owl:oneOf  (
-                                 [
-                                         :object  [
-                                             :existentials  [
-                                                 owl:oneOf () ];
-                                             :statements  [
-                                                 owl:oneOf  (
-                                                 [
-                                                         :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
-                                                         :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
-                                                         :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
@@ -794,13 +738,14 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
                                              :universals  [
-                                                 owl:oneOf () ] ] ] ) ];
+                                                 owl:oneOf  (
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#fee"  ) ] ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ] ]
                  [
@@ -811,11 +756,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testb1d" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testa1d" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -833,67 +778,11 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
-                                             :universals  [
-                                                 owl:oneOf () ] ];
-                                         :predicate  [
-                                             :uri "http://www.w3.org/2000/10/swap/log#includes" ];
-                                         :subject  [
-                                             :existentials  [
-                                                 owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee"  ) ];
-                                             :statements  [
-                                                 owl:oneOf  (
-                                                 [
-                                                         :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
-                                                         :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
-                                                         :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
-                                             :universals  [
-                                                 owl:oneOf () ] ] ] ) ];
-                             :universals  [
-                                 owl:oneOf () ] ] ]
-                 [
-                         :object  [
-                             :existentials  [
-                                 owl:oneOf () ];
-                             :statements  [
-                                 owl:oneOf  (
-                                 [
-                                         :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#success" ];
-                                         :predicate  [
-                                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
-                                         :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testc1d" ] ] ) ];
-                             :universals  [
-                                 owl:oneOf () ] ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
-                         :subject  [
-                             :existentials  [
-                                 owl:oneOf () ];
-                             :statements  [
-                                 owl:oneOf  (
-                                 [
-                                         :object  [
-                                             :existentials  [
-                                                 owl:oneOf () ];
-                                             :statements  [
-                                                 owl:oneOf  (
-                                                 [
-                                                         :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
-                                                         :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
-                                                         :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
@@ -905,68 +794,11 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
-                                             :universals  [
-                                                 owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee"  ) ] ] ] ) ];
-                             :universals  [
-                                 owl:oneOf () ] ] ]
-                 [
-                         :object  [
-                             :existentials  [
-                                 owl:oneOf () ];
-                             :statements  [
-                                 owl:oneOf  (
-                                 [
-                                         :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
-                                         :predicate  [
-                                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
-                                         :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testa2nd" ] ] ) ];
-                             :universals  [
-                                 owl:oneOf () ] ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
-                         :subject  [
-                             :existentials  [
-                                 owl:oneOf () ];
-                             :statements  [
-                                 owl:oneOf  (
-                                 [
-                                         :object  [
-                                             :existentials  [
-                                                 owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
-                                             :statements  [
-                                                 owl:oneOf  (
-                                                 [
-                                                         :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
-                                                         :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
-                                                         :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
-                                             :universals  [
-                                                 owl:oneOf () ] ];
-                                         :predicate  [
-                                             :uri "http://www.w3.org/2000/10/swap/log#notIncludes" ];
-                                         :subject  [
-                                             :existentials  [
-                                                 owl:oneOf () ];
-                                             :statements  [
-                                                 owl:oneOf  (
-                                                 [
-                                                         :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
-                                                         :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
-                                                         :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ] ] ) ];
                              :universals  [
@@ -979,11 +811,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testb2nd" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testb1d" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -996,34 +828,33 @@
                                  [
                                          :object  [
                                              :existentials  [
-                                                 owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
+                                                 owl:oneOf () ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
-                                             :uri "http://www.w3.org/2000/10/swap/log#notIncludes" ];
+                                             :uri "http://www.w3.org/2000/10/swap/log#includes" ];
                                          :subject  [
                                              :existentials  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee"  ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#fee"  ) ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ] ] ) ];
                              :universals  [
@@ -1036,11 +867,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#success" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testc2nd" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testc1d" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -1053,21 +884,20 @@
                                  [
                                          :object  [
                                              :existentials  [
-                                                 owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
+                                                 owl:oneOf () ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
-                                             :uri "http://www.w3.org/2000/10/swap/log#notIncludes" ];
+                                             :uri "http://www.w3.org/2000/10/swap/log#includes" ];
                                          :subject  [
                                              :existentials  [
                                                  owl:oneOf () ];
@@ -1075,14 +905,14 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee"  ) ] ] ] ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#fee"  ) ] ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ] ]
                  [
@@ -1093,11 +923,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#success" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testa1nd" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testa2nd" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -1110,16 +940,17 @@
                                  [
                                          :object  [
                                              :existentials  [
-                                                 owl:oneOf () ];
+                                                 owl:oneOf  (
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
@@ -1131,11 +962,11 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ] ] ) ];
                              :universals  [
@@ -1148,11 +979,11 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#success" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testb1nd" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testb2nd" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -1165,16 +996,17 @@
                                  [
                                          :object  [
                                              :existentials  [
-                                                 owl:oneOf () ];
+                                                 owl:oneOf  (
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
@@ -1182,16 +1014,16 @@
                                          :subject  [
                                              :existentials  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee"  ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#fee"  ) ];
                                              :statements  [
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ] ] ) ];
                              :universals  [
@@ -1204,11 +1036,68 @@
                                  owl:oneOf  (
                                  [
                                          :object  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
                                          :predicate  [
                                              :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                                          :subject  [
-                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#testc1nd" ] ] ) ];
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testc2nd" ] ] ) ];
+                             :universals  [
+                                 owl:oneOf () ] ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
+                         :subject  [
+                             :existentials  [
+                                 owl:oneOf () ];
+                             :statements  [
+                                 owl:oneOf  (
+                                 [
+                                         :object  [
+                                             :existentials  [
+                                                 owl:oneOf  (
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
+                                             :statements  [
+                                                 owl:oneOf  (
+                                                 [
+                                                         :object  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                         :predicate  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                         :subject  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                             :universals  [
+                                                 owl:oneOf () ] ];
+                                         :predicate  [
+                                             :uri "http://www.w3.org/2000/10/swap/log#notIncludes" ];
+                                         :subject  [
+                                             :existentials  [
+                                                 owl:oneOf () ];
+                                             :statements  [
+                                                 owl:oneOf  (
+                                                 [
+                                                         :object  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                         :predicate  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                         :subject  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
+                                             :universals  [
+                                                 owl:oneOf  (
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#fee"  ) ] ] ] ) ];
+                             :universals  [
+                                 owl:oneOf () ] ] ]
+                 [
+                         :object  [
+                             :existentials  [
+                                 owl:oneOf () ];
+                             :statements  [
+                                 owl:oneOf  (
+                                 [
+                                         :object  [
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#success" ];
+                                         :predicate  [
+                                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                                         :subject  [
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testa1nd" ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
                          :predicate  [
@@ -1226,11 +1115,11 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf () ] ];
                                          :predicate  [
@@ -1242,14 +1131,125 @@
                                                  owl:oneOf  (
                                                  [
                                                          :object  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                                                          :predicate  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                                                          :subject  [
-                                                             :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
+                                             :universals  [
+                                                 owl:oneOf () ] ] ] ) ];
+                             :universals  [
+                                 owl:oneOf () ] ] ]
+                 [
+                         :object  [
+                             :existentials  [
+                                 owl:oneOf () ];
+                             :statements  [
+                                 owl:oneOf  (
+                                 [
+                                         :object  [
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#success" ];
+                                         :predicate  [
+                                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                                         :subject  [
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testb1nd" ] ] ) ];
+                             :universals  [
+                                 owl:oneOf () ] ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
+                         :subject  [
+                             :existentials  [
+                                 owl:oneOf () ];
+                             :statements  [
+                                 owl:oneOf  (
+                                 [
+                                         :object  [
+                                             :existentials  [
+                                                 owl:oneOf () ];
+                                             :statements  [
+                                                 owl:oneOf  (
+                                                 [
+                                                         :object  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                         :predicate  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                         :subject  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                             :universals  [
+                                                 owl:oneOf () ] ];
+                                         :predicate  [
+                                             :uri "http://www.w3.org/2000/10/swap/log#notIncludes" ];
+                                         :subject  [
+                                             :existentials  [
+                                                 owl:oneOf  (
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#fee"  ) ];
+                                             :statements  [
+                                                 owl:oneOf  (
+                                                 [
+                                                         :object  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                         :predicate  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                         :subject  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
+                                             :universals  [
+                                                 owl:oneOf () ] ] ] ) ];
+                             :universals  [
+                                 owl:oneOf () ] ] ]
+                 [
+                         :object  [
+                             :existentials  [
+                                 owl:oneOf () ];
+                             :statements  [
+                                 owl:oneOf  (
+                                 [
+                                         :object  [
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#FAILURE" ];
+                                         :predicate  [
+                                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                                         :subject  [
+                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#testc1nd" ] ] ) ];
+                             :universals  [
+                                 owl:oneOf () ] ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
+                         :subject  [
+                             :existentials  [
+                                 owl:oneOf () ];
+                             :statements  [
+                                 owl:oneOf  (
+                                 [
+                                         :object  [
+                                             :existentials  [
+                                                 owl:oneOf () ];
+                                             :statements  [
+                                                 owl:oneOf  (
+                                                 [
+                                                         :object  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                         :predicate  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                         :subject  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                                             :universals  [
+                                                 owl:oneOf () ] ];
+                                         :predicate  [
+                                             :uri "http://www.w3.org/2000/10/swap/log#notIncludes" ];
+                                         :subject  [
+                                             :existentials  [
+                                                 owl:oneOf () ];
+                                             :statements  [
+                                                 owl:oneOf  (
+                                                 [
+                                                         :object  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
+                                                         :predicate  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
+                                                         :subject  [
+                                                             :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#fee" ] ] ) ];
                                              :universals  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#fee"  ) ] ] ] ) ];
+                                                "http://example.com/swap/test/includes/quantifiers_limited.n3#fee"  ) ] ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ] ] ) ];
              :universals  [
@@ -1257,16 +1257,16 @@
     
     qu:_g0     :existentials  [
              owl:oneOf  (
-            "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
+            "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
          :statements  [
              owl:oneOf  (
              [
                      :object  [
-                         :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                         :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                      :predicate  [
-                         :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                         :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                      :subject  [
-                         :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                         :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
          :universals  [
              owl:oneOf () ] .
     
@@ -1276,26 +1276,26 @@
              owl:oneOf  (
              [
                      :object  [
-                         :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                         :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                      :predicate  [
-                         :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                         :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                      :subject  [
-                         :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                         :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
          :universals  [
              owl:oneOf () ] .
     
     qu:_g2     :existentials  [
              owl:oneOf  (
-            "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
+            "http://example.com/swap/test/includes/quantifiers_limited.n3#foo"  ) ];
          :statements  [
              owl:oneOf  (
              [
                      :object  [
-                         :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                         :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                      :predicate  [
-                         :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                         :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                      :subject  [
-                         :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                         :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
          :universals  [
              owl:oneOf () ] .
     
@@ -1305,11 +1305,11 @@
              owl:oneOf  (
              [
                      :object  [
-                         :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#baz" ];
+                         :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#baz" ];
                      :predicate  [
-                         :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#bar" ];
+                         :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#bar" ];
                      :subject  [
-                         :uri "file:/devel/WWW/2000/10/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
+                         :uri "http://example.com/swap/test/includes/quantifiers_limited.n3#foo" ] ] ) ];
          :universals  [
              owl:oneOf () ] .
     

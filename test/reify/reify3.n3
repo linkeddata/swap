@@ -419,591 +419,591 @@
       [      a log:Truth;
              :existentials  [
                  owl:oneOf  (
-                "file:/devel/WWW/2000/10/swap/test/run#_g97" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g98" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g99" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g100" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g101" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g102" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g103" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g104" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g105" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g106" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g107" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g108" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g109" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g110" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g111" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g112" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g113" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g114" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g115" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g116" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g117" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g118" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g119" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g120" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g121" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g122" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g123" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g124" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g125" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g126" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g127" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g128" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g129" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g130" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g131" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g132" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g133" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g134" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g135" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g136" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g137" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g138" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g139" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g140" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g141" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g142" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g143" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g144" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g145" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g146" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g147" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g148" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g149" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g150" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g151" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g152" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g153" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g154" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g155" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g156" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g157" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g158" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g159" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g160" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g161" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g162" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g163" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g164" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g165" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g166" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g167" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g168" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g169" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g170" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g171" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g172" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g173" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g174" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g175" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g176" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g177" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g178" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g179" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g180" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g181" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g182" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g183" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g184" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g185" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g186" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g187" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g188" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g189" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g190" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g191" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g192" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g193" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g194" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g195" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g196" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g197" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g198" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g199" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g200" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g201" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g202" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g203" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g204" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g205" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g206" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g207" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g208" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g209" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g210" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g211" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g212" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g213" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g214" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g215" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g216" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g217" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g218" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g219" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g220" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g221" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g222" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g223" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g224" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g225" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g226" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g227" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g228" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g229" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g230" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g231" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g232" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g233" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g234" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g235" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g236" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g237" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g238" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g239" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g240" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g241" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g242" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g243" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g244" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g245" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g246" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g247" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g248" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g249" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g250" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g251" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g252" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g253" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g254" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g255" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g256" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g257" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g258" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g259" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g260" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g261" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g262" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g263" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g264" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g265" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g266" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g267" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g268" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g269" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g270" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g271" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g272" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g273" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g274" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g275" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g276" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g277" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g278" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g279" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g280" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g281" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g282" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g283" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g284" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g285" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g286" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g287" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g288" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g289" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g290" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g291" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g292" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g293" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g294" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g295" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g296" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g297" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g298" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g299" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g300" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g301" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g302" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g303" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g304" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g305" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g306" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g307" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g308" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g309" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g310" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g311" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g312" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g313" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g314" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g315" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g316" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g317" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g318" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g319" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g320" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g321" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g322" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g323" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g324" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g325" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g326" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g327" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g328" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g329" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g330" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g331" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g332" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g333" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g334" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g335" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g336" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g337" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g338" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g339" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g340" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g341" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g342" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g343" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g344" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g345" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g346" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g347" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g348" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g349" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g350" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g351" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g352" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g353" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g354" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g355" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g356" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g357" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g358" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g359" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g360" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g361" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g362" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g363" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g364" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g365" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g366" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g367" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g368" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g369" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g370" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g371" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g372" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g373" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g374" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g375" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g376" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g377" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g378" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g379" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g380" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g381" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g382" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g383" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g384" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g385" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g386" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g387" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g388" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g389" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g390" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g391" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g392" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g393" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g394" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g395" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g396" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g397" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g398" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g399" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g400" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g401" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g402" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g403" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g404" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g405" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g406" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g407" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g408" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g409" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g410" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g411" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g412" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g413" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g414" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g415" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g416" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g417" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g418" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g419" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g420" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g421" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g422" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g423" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g424" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g425" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g426" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g427" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g428" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g429" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g430" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g431" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g432" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g433" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g434" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g435" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g436" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g437" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g438" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g439" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g440" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g441" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g442" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g443" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g444" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g445" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g446" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g447" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g448" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g449" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g450" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g451" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g452" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g453" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g454" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g455" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g456" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g457" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g458" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g459" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g460" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g461" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g462" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g463" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g464" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g465" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g466" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g467" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g468" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g469" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g470" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g471" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g472" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g473" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g474" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g475" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g476" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g477" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g478" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g479" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g480" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g481" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g482" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g483" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g484" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g485" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g486" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g487" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g488" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g489" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g490" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g491" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g492" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g493" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g494" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g495" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g496" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g497" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g498" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g499" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g500" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g501" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g502" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g503" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g504" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g505" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g506" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g507" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g508" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g509" 
-                "file:/devel/WWW/2000/10/swap/test/run#_g510"  ) ];
+                "http://example.com/swap/test/run#_g97" 
+                "http://example.com/swap/test/run#_g98" 
+                "http://example.com/swap/test/run#_g99" 
+                "http://example.com/swap/test/run#_g100" 
+                "http://example.com/swap/test/run#_g101" 
+                "http://example.com/swap/test/run#_g102" 
+                "http://example.com/swap/test/run#_g103" 
+                "http://example.com/swap/test/run#_g104" 
+                "http://example.com/swap/test/run#_g105" 
+                "http://example.com/swap/test/run#_g106" 
+                "http://example.com/swap/test/run#_g107" 
+                "http://example.com/swap/test/run#_g108" 
+                "http://example.com/swap/test/run#_g109" 
+                "http://example.com/swap/test/run#_g110" 
+                "http://example.com/swap/test/run#_g111" 
+                "http://example.com/swap/test/run#_g112" 
+                "http://example.com/swap/test/run#_g113" 
+                "http://example.com/swap/test/run#_g114" 
+                "http://example.com/swap/test/run#_g115" 
+                "http://example.com/swap/test/run#_g116" 
+                "http://example.com/swap/test/run#_g117" 
+                "http://example.com/swap/test/run#_g118" 
+                "http://example.com/swap/test/run#_g119" 
+                "http://example.com/swap/test/run#_g120" 
+                "http://example.com/swap/test/run#_g121" 
+                "http://example.com/swap/test/run#_g122" 
+                "http://example.com/swap/test/run#_g123" 
+                "http://example.com/swap/test/run#_g124" 
+                "http://example.com/swap/test/run#_g125" 
+                "http://example.com/swap/test/run#_g126" 
+                "http://example.com/swap/test/run#_g127" 
+                "http://example.com/swap/test/run#_g128" 
+                "http://example.com/swap/test/run#_g129" 
+                "http://example.com/swap/test/run#_g130" 
+                "http://example.com/swap/test/run#_g131" 
+                "http://example.com/swap/test/run#_g132" 
+                "http://example.com/swap/test/run#_g133" 
+                "http://example.com/swap/test/run#_g134" 
+                "http://example.com/swap/test/run#_g135" 
+                "http://example.com/swap/test/run#_g136" 
+                "http://example.com/swap/test/run#_g137" 
+                "http://example.com/swap/test/run#_g138" 
+                "http://example.com/swap/test/run#_g139" 
+                "http://example.com/swap/test/run#_g140" 
+                "http://example.com/swap/test/run#_g141" 
+                "http://example.com/swap/test/run#_g142" 
+                "http://example.com/swap/test/run#_g143" 
+                "http://example.com/swap/test/run#_g144" 
+                "http://example.com/swap/test/run#_g145" 
+                "http://example.com/swap/test/run#_g146" 
+                "http://example.com/swap/test/run#_g147" 
+                "http://example.com/swap/test/run#_g148" 
+                "http://example.com/swap/test/run#_g149" 
+                "http://example.com/swap/test/run#_g150" 
+                "http://example.com/swap/test/run#_g151" 
+                "http://example.com/swap/test/run#_g152" 
+                "http://example.com/swap/test/run#_g153" 
+                "http://example.com/swap/test/run#_g154" 
+                "http://example.com/swap/test/run#_g155" 
+                "http://example.com/swap/test/run#_g156" 
+                "http://example.com/swap/test/run#_g157" 
+                "http://example.com/swap/test/run#_g158" 
+                "http://example.com/swap/test/run#_g159" 
+                "http://example.com/swap/test/run#_g160" 
+                "http://example.com/swap/test/run#_g161" 
+                "http://example.com/swap/test/run#_g162" 
+                "http://example.com/swap/test/run#_g163" 
+                "http://example.com/swap/test/run#_g164" 
+                "http://example.com/swap/test/run#_g165" 
+                "http://example.com/swap/test/run#_g166" 
+                "http://example.com/swap/test/run#_g167" 
+                "http://example.com/swap/test/run#_g168" 
+                "http://example.com/swap/test/run#_g169" 
+                "http://example.com/swap/test/run#_g170" 
+                "http://example.com/swap/test/run#_g171" 
+                "http://example.com/swap/test/run#_g172" 
+                "http://example.com/swap/test/run#_g173" 
+                "http://example.com/swap/test/run#_g174" 
+                "http://example.com/swap/test/run#_g175" 
+                "http://example.com/swap/test/run#_g176" 
+                "http://example.com/swap/test/run#_g177" 
+                "http://example.com/swap/test/run#_g178" 
+                "http://example.com/swap/test/run#_g179" 
+                "http://example.com/swap/test/run#_g180" 
+                "http://example.com/swap/test/run#_g181" 
+                "http://example.com/swap/test/run#_g182" 
+                "http://example.com/swap/test/run#_g183" 
+                "http://example.com/swap/test/run#_g184" 
+                "http://example.com/swap/test/run#_g185" 
+                "http://example.com/swap/test/run#_g186" 
+                "http://example.com/swap/test/run#_g187" 
+                "http://example.com/swap/test/run#_g188" 
+                "http://example.com/swap/test/run#_g189" 
+                "http://example.com/swap/test/run#_g190" 
+                "http://example.com/swap/test/run#_g191" 
+                "http://example.com/swap/test/run#_g192" 
+                "http://example.com/swap/test/run#_g193" 
+                "http://example.com/swap/test/run#_g194" 
+                "http://example.com/swap/test/run#_g195" 
+                "http://example.com/swap/test/run#_g196" 
+                "http://example.com/swap/test/run#_g197" 
+                "http://example.com/swap/test/run#_g198" 
+                "http://example.com/swap/test/run#_g199" 
+                "http://example.com/swap/test/run#_g200" 
+                "http://example.com/swap/test/run#_g201" 
+                "http://example.com/swap/test/run#_g202" 
+                "http://example.com/swap/test/run#_g203" 
+                "http://example.com/swap/test/run#_g204" 
+                "http://example.com/swap/test/run#_g205" 
+                "http://example.com/swap/test/run#_g206" 
+                "http://example.com/swap/test/run#_g207" 
+                "http://example.com/swap/test/run#_g208" 
+                "http://example.com/swap/test/run#_g209" 
+                "http://example.com/swap/test/run#_g210" 
+                "http://example.com/swap/test/run#_g211" 
+                "http://example.com/swap/test/run#_g212" 
+                "http://example.com/swap/test/run#_g213" 
+                "http://example.com/swap/test/run#_g214" 
+                "http://example.com/swap/test/run#_g215" 
+                "http://example.com/swap/test/run#_g216" 
+                "http://example.com/swap/test/run#_g217" 
+                "http://example.com/swap/test/run#_g218" 
+                "http://example.com/swap/test/run#_g219" 
+                "http://example.com/swap/test/run#_g220" 
+                "http://example.com/swap/test/run#_g221" 
+                "http://example.com/swap/test/run#_g222" 
+                "http://example.com/swap/test/run#_g223" 
+                "http://example.com/swap/test/run#_g224" 
+                "http://example.com/swap/test/run#_g225" 
+                "http://example.com/swap/test/run#_g226" 
+                "http://example.com/swap/test/run#_g227" 
+                "http://example.com/swap/test/run#_g228" 
+                "http://example.com/swap/test/run#_g229" 
+                "http://example.com/swap/test/run#_g230" 
+                "http://example.com/swap/test/run#_g231" 
+                "http://example.com/swap/test/run#_g232" 
+                "http://example.com/swap/test/run#_g233" 
+                "http://example.com/swap/test/run#_g234" 
+                "http://example.com/swap/test/run#_g235" 
+                "http://example.com/swap/test/run#_g236" 
+                "http://example.com/swap/test/run#_g237" 
+                "http://example.com/swap/test/run#_g238" 
+                "http://example.com/swap/test/run#_g239" 
+                "http://example.com/swap/test/run#_g240" 
+                "http://example.com/swap/test/run#_g241" 
+                "http://example.com/swap/test/run#_g242" 
+                "http://example.com/swap/test/run#_g243" 
+                "http://example.com/swap/test/run#_g244" 
+                "http://example.com/swap/test/run#_g245" 
+                "http://example.com/swap/test/run#_g246" 
+                "http://example.com/swap/test/run#_g247" 
+                "http://example.com/swap/test/run#_g248" 
+                "http://example.com/swap/test/run#_g249" 
+                "http://example.com/swap/test/run#_g250" 
+                "http://example.com/swap/test/run#_g251" 
+                "http://example.com/swap/test/run#_g252" 
+                "http://example.com/swap/test/run#_g253" 
+                "http://example.com/swap/test/run#_g254" 
+                "http://example.com/swap/test/run#_g255" 
+                "http://example.com/swap/test/run#_g256" 
+                "http://example.com/swap/test/run#_g257" 
+                "http://example.com/swap/test/run#_g258" 
+                "http://example.com/swap/test/run#_g259" 
+                "http://example.com/swap/test/run#_g260" 
+                "http://example.com/swap/test/run#_g261" 
+                "http://example.com/swap/test/run#_g262" 
+                "http://example.com/swap/test/run#_g263" 
+                "http://example.com/swap/test/run#_g264" 
+                "http://example.com/swap/test/run#_g265" 
+                "http://example.com/swap/test/run#_g266" 
+                "http://example.com/swap/test/run#_g267" 
+                "http://example.com/swap/test/run#_g268" 
+                "http://example.com/swap/test/run#_g269" 
+                "http://example.com/swap/test/run#_g270" 
+                "http://example.com/swap/test/run#_g271" 
+                "http://example.com/swap/test/run#_g272" 
+                "http://example.com/swap/test/run#_g273" 
+                "http://example.com/swap/test/run#_g274" 
+                "http://example.com/swap/test/run#_g275" 
+                "http://example.com/swap/test/run#_g276" 
+                "http://example.com/swap/test/run#_g277" 
+                "http://example.com/swap/test/run#_g278" 
+                "http://example.com/swap/test/run#_g279" 
+                "http://example.com/swap/test/run#_g280" 
+                "http://example.com/swap/test/run#_g281" 
+                "http://example.com/swap/test/run#_g282" 
+                "http://example.com/swap/test/run#_g283" 
+                "http://example.com/swap/test/run#_g284" 
+                "http://example.com/swap/test/run#_g285" 
+                "http://example.com/swap/test/run#_g286" 
+                "http://example.com/swap/test/run#_g287" 
+                "http://example.com/swap/test/run#_g288" 
+                "http://example.com/swap/test/run#_g289" 
+                "http://example.com/swap/test/run#_g290" 
+                "http://example.com/swap/test/run#_g291" 
+                "http://example.com/swap/test/run#_g292" 
+                "http://example.com/swap/test/run#_g293" 
+                "http://example.com/swap/test/run#_g294" 
+                "http://example.com/swap/test/run#_g295" 
+                "http://example.com/swap/test/run#_g296" 
+                "http://example.com/swap/test/run#_g297" 
+                "http://example.com/swap/test/run#_g298" 
+                "http://example.com/swap/test/run#_g299" 
+                "http://example.com/swap/test/run#_g300" 
+                "http://example.com/swap/test/run#_g301" 
+                "http://example.com/swap/test/run#_g302" 
+                "http://example.com/swap/test/run#_g303" 
+                "http://example.com/swap/test/run#_g304" 
+                "http://example.com/swap/test/run#_g305" 
+                "http://example.com/swap/test/run#_g306" 
+                "http://example.com/swap/test/run#_g307" 
+                "http://example.com/swap/test/run#_g308" 
+                "http://example.com/swap/test/run#_g309" 
+                "http://example.com/swap/test/run#_g310" 
+                "http://example.com/swap/test/run#_g311" 
+                "http://example.com/swap/test/run#_g312" 
+                "http://example.com/swap/test/run#_g313" 
+                "http://example.com/swap/test/run#_g314" 
+                "http://example.com/swap/test/run#_g315" 
+                "http://example.com/swap/test/run#_g316" 
+                "http://example.com/swap/test/run#_g317" 
+                "http://example.com/swap/test/run#_g318" 
+                "http://example.com/swap/test/run#_g319" 
+                "http://example.com/swap/test/run#_g320" 
+                "http://example.com/swap/test/run#_g321" 
+                "http://example.com/swap/test/run#_g322" 
+                "http://example.com/swap/test/run#_g323" 
+                "http://example.com/swap/test/run#_g324" 
+                "http://example.com/swap/test/run#_g325" 
+                "http://example.com/swap/test/run#_g326" 
+                "http://example.com/swap/test/run#_g327" 
+                "http://example.com/swap/test/run#_g328" 
+                "http://example.com/swap/test/run#_g329" 
+                "http://example.com/swap/test/run#_g330" 
+                "http://example.com/swap/test/run#_g331" 
+                "http://example.com/swap/test/run#_g332" 
+                "http://example.com/swap/test/run#_g333" 
+                "http://example.com/swap/test/run#_g334" 
+                "http://example.com/swap/test/run#_g335" 
+                "http://example.com/swap/test/run#_g336" 
+                "http://example.com/swap/test/run#_g337" 
+                "http://example.com/swap/test/run#_g338" 
+                "http://example.com/swap/test/run#_g339" 
+                "http://example.com/swap/test/run#_g340" 
+                "http://example.com/swap/test/run#_g341" 
+                "http://example.com/swap/test/run#_g342" 
+                "http://example.com/swap/test/run#_g343" 
+                "http://example.com/swap/test/run#_g344" 
+                "http://example.com/swap/test/run#_g345" 
+                "http://example.com/swap/test/run#_g346" 
+                "http://example.com/swap/test/run#_g347" 
+                "http://example.com/swap/test/run#_g348" 
+                "http://example.com/swap/test/run#_g349" 
+                "http://example.com/swap/test/run#_g350" 
+                "http://example.com/swap/test/run#_g351" 
+                "http://example.com/swap/test/run#_g352" 
+                "http://example.com/swap/test/run#_g353" 
+                "http://example.com/swap/test/run#_g354" 
+                "http://example.com/swap/test/run#_g355" 
+                "http://example.com/swap/test/run#_g356" 
+                "http://example.com/swap/test/run#_g357" 
+                "http://example.com/swap/test/run#_g358" 
+                "http://example.com/swap/test/run#_g359" 
+                "http://example.com/swap/test/run#_g360" 
+                "http://example.com/swap/test/run#_g361" 
+                "http://example.com/swap/test/run#_g362" 
+                "http://example.com/swap/test/run#_g363" 
+                "http://example.com/swap/test/run#_g364" 
+                "http://example.com/swap/test/run#_g365" 
+                "http://example.com/swap/test/run#_g366" 
+                "http://example.com/swap/test/run#_g367" 
+                "http://example.com/swap/test/run#_g368" 
+                "http://example.com/swap/test/run#_g369" 
+                "http://example.com/swap/test/run#_g370" 
+                "http://example.com/swap/test/run#_g371" 
+                "http://example.com/swap/test/run#_g372" 
+                "http://example.com/swap/test/run#_g373" 
+                "http://example.com/swap/test/run#_g374" 
+                "http://example.com/swap/test/run#_g375" 
+                "http://example.com/swap/test/run#_g376" 
+                "http://example.com/swap/test/run#_g377" 
+                "http://example.com/swap/test/run#_g378" 
+                "http://example.com/swap/test/run#_g379" 
+                "http://example.com/swap/test/run#_g380" 
+                "http://example.com/swap/test/run#_g381" 
+                "http://example.com/swap/test/run#_g382" 
+                "http://example.com/swap/test/run#_g383" 
+                "http://example.com/swap/test/run#_g384" 
+                "http://example.com/swap/test/run#_g385" 
+                "http://example.com/swap/test/run#_g386" 
+                "http://example.com/swap/test/run#_g387" 
+                "http://example.com/swap/test/run#_g388" 
+                "http://example.com/swap/test/run#_g389" 
+                "http://example.com/swap/test/run#_g390" 
+                "http://example.com/swap/test/run#_g391" 
+                "http://example.com/swap/test/run#_g392" 
+                "http://example.com/swap/test/run#_g393" 
+                "http://example.com/swap/test/run#_g394" 
+                "http://example.com/swap/test/run#_g395" 
+                "http://example.com/swap/test/run#_g396" 
+                "http://example.com/swap/test/run#_g397" 
+                "http://example.com/swap/test/run#_g398" 
+                "http://example.com/swap/test/run#_g399" 
+                "http://example.com/swap/test/run#_g400" 
+                "http://example.com/swap/test/run#_g401" 
+                "http://example.com/swap/test/run#_g402" 
+                "http://example.com/swap/test/run#_g403" 
+                "http://example.com/swap/test/run#_g404" 
+                "http://example.com/swap/test/run#_g405" 
+                "http://example.com/swap/test/run#_g406" 
+                "http://example.com/swap/test/run#_g407" 
+                "http://example.com/swap/test/run#_g408" 
+                "http://example.com/swap/test/run#_g409" 
+                "http://example.com/swap/test/run#_g410" 
+                "http://example.com/swap/test/run#_g411" 
+                "http://example.com/swap/test/run#_g412" 
+                "http://example.com/swap/test/run#_g413" 
+                "http://example.com/swap/test/run#_g414" 
+                "http://example.com/swap/test/run#_g415" 
+                "http://example.com/swap/test/run#_g416" 
+                "http://example.com/swap/test/run#_g417" 
+                "http://example.com/swap/test/run#_g418" 
+                "http://example.com/swap/test/run#_g419" 
+                "http://example.com/swap/test/run#_g420" 
+                "http://example.com/swap/test/run#_g421" 
+                "http://example.com/swap/test/run#_g422" 
+                "http://example.com/swap/test/run#_g423" 
+                "http://example.com/swap/test/run#_g424" 
+                "http://example.com/swap/test/run#_g425" 
+                "http://example.com/swap/test/run#_g426" 
+                "http://example.com/swap/test/run#_g427" 
+                "http://example.com/swap/test/run#_g428" 
+                "http://example.com/swap/test/run#_g429" 
+                "http://example.com/swap/test/run#_g430" 
+                "http://example.com/swap/test/run#_g431" 
+                "http://example.com/swap/test/run#_g432" 
+                "http://example.com/swap/test/run#_g433" 
+                "http://example.com/swap/test/run#_g434" 
+                "http://example.com/swap/test/run#_g435" 
+                "http://example.com/swap/test/run#_g436" 
+                "http://example.com/swap/test/run#_g437" 
+                "http://example.com/swap/test/run#_g438" 
+                "http://example.com/swap/test/run#_g439" 
+                "http://example.com/swap/test/run#_g440" 
+                "http://example.com/swap/test/run#_g441" 
+                "http://example.com/swap/test/run#_g442" 
+                "http://example.com/swap/test/run#_g443" 
+                "http://example.com/swap/test/run#_g444" 
+                "http://example.com/swap/test/run#_g445" 
+                "http://example.com/swap/test/run#_g446" 
+                "http://example.com/swap/test/run#_g447" 
+                "http://example.com/swap/test/run#_g448" 
+                "http://example.com/swap/test/run#_g449" 
+                "http://example.com/swap/test/run#_g450" 
+                "http://example.com/swap/test/run#_g451" 
+                "http://example.com/swap/test/run#_g452" 
+                "http://example.com/swap/test/run#_g453" 
+                "http://example.com/swap/test/run#_g454" 
+                "http://example.com/swap/test/run#_g455" 
+                "http://example.com/swap/test/run#_g456" 
+                "http://example.com/swap/test/run#_g457" 
+                "http://example.com/swap/test/run#_g458" 
+                "http://example.com/swap/test/run#_g459" 
+                "http://example.com/swap/test/run#_g460" 
+                "http://example.com/swap/test/run#_g461" 
+                "http://example.com/swap/test/run#_g462" 
+                "http://example.com/swap/test/run#_g463" 
+                "http://example.com/swap/test/run#_g464" 
+                "http://example.com/swap/test/run#_g465" 
+                "http://example.com/swap/test/run#_g466" 
+                "http://example.com/swap/test/run#_g467" 
+                "http://example.com/swap/test/run#_g468" 
+                "http://example.com/swap/test/run#_g469" 
+                "http://example.com/swap/test/run#_g470" 
+                "http://example.com/swap/test/run#_g471" 
+                "http://example.com/swap/test/run#_g472" 
+                "http://example.com/swap/test/run#_g473" 
+                "http://example.com/swap/test/run#_g474" 
+                "http://example.com/swap/test/run#_g475" 
+                "http://example.com/swap/test/run#_g476" 
+                "http://example.com/swap/test/run#_g477" 
+                "http://example.com/swap/test/run#_g478" 
+                "http://example.com/swap/test/run#_g479" 
+                "http://example.com/swap/test/run#_g480" 
+                "http://example.com/swap/test/run#_g481" 
+                "http://example.com/swap/test/run#_g482" 
+                "http://example.com/swap/test/run#_g483" 
+                "http://example.com/swap/test/run#_g484" 
+                "http://example.com/swap/test/run#_g485" 
+                "http://example.com/swap/test/run#_g486" 
+                "http://example.com/swap/test/run#_g487" 
+                "http://example.com/swap/test/run#_g488" 
+                "http://example.com/swap/test/run#_g489" 
+                "http://example.com/swap/test/run#_g490" 
+                "http://example.com/swap/test/run#_g491" 
+                "http://example.com/swap/test/run#_g492" 
+                "http://example.com/swap/test/run#_g493" 
+                "http://example.com/swap/test/run#_g494" 
+                "http://example.com/swap/test/run#_g495" 
+                "http://example.com/swap/test/run#_g496" 
+                "http://example.com/swap/test/run#_g497" 
+                "http://example.com/swap/test/run#_g498" 
+                "http://example.com/swap/test/run#_g499" 
+                "http://example.com/swap/test/run#_g500" 
+                "http://example.com/swap/test/run#_g501" 
+                "http://example.com/swap/test/run#_g502" 
+                "http://example.com/swap/test/run#_g503" 
+                "http://example.com/swap/test/run#_g504" 
+                "http://example.com/swap/test/run#_g505" 
+                "http://example.com/swap/test/run#_g506" 
+                "http://example.com/swap/test/run#_g507" 
+                "http://example.com/swap/test/run#_g508" 
+                "http://example.com/swap/test/run#_g509" 
+                "http://example.com/swap/test/run#_g510"  ) ];
              :statements  [
                  owl:oneOf  (
                  [
                          :object  [
                              :items  (
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g13" ]
+                                     :value "http://example.com/swap/test/run#_g13" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g14" ]
+                                     :value "http://example.com/swap/test/run#_g14" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g15" ]
+                                     :value "http://example.com/swap/test/run#_g15" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g16" ]
+                                     :value "http://example.com/swap/test/run#_g16" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g17" ]
+                                     :value "http://example.com/swap/test/run#_g17" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g18" ]
+                                     :value "http://example.com/swap/test/run#_g18" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g19" ]
+                                     :value "http://example.com/swap/test/run#_g19" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g20" ]
+                                     :value "http://example.com/swap/test/run#_g20" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g21" ]
+                                     :value "http://example.com/swap/test/run#_g21" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g22" ]
+                                     :value "http://example.com/swap/test/run#_g22" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g23" ]
+                                     :value "http://example.com/swap/test/run#_g23" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g24" ]
+                                     :value "http://example.com/swap/test/run#_g24" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g25" ]
+                                     :value "http://example.com/swap/test/run#_g25" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g26" ]
+                                     :value "http://example.com/swap/test/run#_g26" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g27" ]
+                                     :value "http://example.com/swap/test/run#_g27" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g28" ]
+                                     :value "http://example.com/swap/test/run#_g28" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g29" ]
+                                     :value "http://example.com/swap/test/run#_g29" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g30" ]
+                                     :value "http://example.com/swap/test/run#_g30" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g31" ]
+                                     :value "http://example.com/swap/test/run#_g31" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g32" ]
+                                     :value "http://example.com/swap/test/run#_g32" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g33" ]
+                                     :value "http://example.com/swap/test/run#_g33" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g34" ]
+                                     :value "http://example.com/swap/test/run#_g34" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g35" ]
+                                     :value "http://example.com/swap/test/run#_g35" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g36" ]
+                                     :value "http://example.com/swap/test/run#_g36" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g37" ]
+                                     :value "http://example.com/swap/test/run#_g37" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g38" ]
+                                     :value "http://example.com/swap/test/run#_g38" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g39" ]
+                                     :value "http://example.com/swap/test/run#_g39" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g40" ]
+                                     :value "http://example.com/swap/test/run#_g40" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g41" ]
+                                     :value "http://example.com/swap/test/run#_g41" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g42" ]
+                                     :value "http://example.com/swap/test/run#_g42" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g43" ]
+                                     :value "http://example.com/swap/test/run#_g43" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g44" ]
+                                     :value "http://example.com/swap/test/run#_g44" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g45" ]
+                                     :value "http://example.com/swap/test/run#_g45" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g46" ]
+                                     :value "http://example.com/swap/test/run#_g46" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g47" ]
+                                     :value "http://example.com/swap/test/run#_g47" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g48" ]
+                                     :value "http://example.com/swap/test/run#_g48" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g49" ]
+                                     :value "http://example.com/swap/test/run#_g49" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g50" ]
+                                     :value "http://example.com/swap/test/run#_g50" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g51" ]
+                                     :value "http://example.com/swap/test/run#_g51" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g52" ]
+                                     :value "http://example.com/swap/test/run#_g52" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g53" ]
+                                     :value "http://example.com/swap/test/run#_g53" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g54" ]
+                                     :value "http://example.com/swap/test/run#_g54" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g55" ]
+                                     :value "http://example.com/swap/test/run#_g55" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g56" ]
+                                     :value "http://example.com/swap/test/run#_g56" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g57" ]
+                                     :value "http://example.com/swap/test/run#_g57" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g58" ]
+                                     :value "http://example.com/swap/test/run#_g58" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g59" ]
+                                     :value "http://example.com/swap/test/run#_g59" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g60" ]
+                                     :value "http://example.com/swap/test/run#_g60" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g61" ]
+                                     :value "http://example.com/swap/test/run#_g61" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g62" ]
+                                     :value "http://example.com/swap/test/run#_g62" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g63" ]
+                                     :value "http://example.com/swap/test/run#_g63" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g64" ]
+                                     :value "http://example.com/swap/test/run#_g64" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g65" ]
+                                     :value "http://example.com/swap/test/run#_g65" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g66" ]
+                                     :value "http://example.com/swap/test/run#_g66" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g67" ]
+                                     :value "http://example.com/swap/test/run#_g67" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g68" ]
+                                     :value "http://example.com/swap/test/run#_g68" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g69" ]
+                                     :value "http://example.com/swap/test/run#_g69" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g70" ]
+                                     :value "http://example.com/swap/test/run#_g70" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g71" ]
+                                     :value "http://example.com/swap/test/run#_g71" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g72" ]
+                                     :value "http://example.com/swap/test/run#_g72" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g73" ]
+                                     :value "http://example.com/swap/test/run#_g73" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g74" ]
+                                     :value "http://example.com/swap/test/run#_g74" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g75" ]
+                                     :value "http://example.com/swap/test/run#_g75" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g76" ]
+                                     :value "http://example.com/swap/test/run#_g76" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g77" ]
+                                     :value "http://example.com/swap/test/run#_g77" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g78" ]
+                                     :value "http://example.com/swap/test/run#_g78" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g79" ]
+                                     :value "http://example.com/swap/test/run#_g79" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g80" ]
+                                     :value "http://example.com/swap/test/run#_g80" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g81" ]
+                                     :value "http://example.com/swap/test/run#_g81" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g82" ]
+                                     :value "http://example.com/swap/test/run#_g82" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g83" ]
+                                     :value "http://example.com/swap/test/run#_g83" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g84" ]
+                                     :value "http://example.com/swap/test/run#_g84" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g85" ]
+                                     :value "http://example.com/swap/test/run#_g85" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g86" ]
+                                     :value "http://example.com/swap/test/run#_g86" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g87" ]
+                                     :value "http://example.com/swap/test/run#_g87" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g88" ]
+                                     :value "http://example.com/swap/test/run#_g88" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g89" ]
+                                     :value "http://example.com/swap/test/run#_g89" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g90" ]
+                                     :value "http://example.com/swap/test/run#_g90" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g91" ]
+                                     :value "http://example.com/swap/test/run#_g91" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g92" ]
+                                     :value "http://example.com/swap/test/run#_g92" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g93" ]
+                                     :value "http://example.com/swap/test/run#_g93" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g94" ]
+                                     :value "http://example.com/swap/test/run#_g94" ]
                              [
-                                     :value "file:/devel/WWW/2000/10/swap/test/run#_g95" ] ) ];
+                                     :value "http://example.com/swap/test/run#_g95" ] ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2002/07/owl#oneOf" ];
                          :subject <#_g0> ]
@@ -1089,19 +1089,19 @@
                          :subject <#_g10> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#a" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g13> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#b" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g14> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#p" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g15> ]
@@ -1158,7 +1158,7 @@
                          :subject <#_g19> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#ancestor" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#ancestor" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g22> ]
@@ -1302,7 +1302,7 @@
                          :subject <#_g38> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#bill" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#bill" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g41> ]
@@ -1350,7 +1350,7 @@
                          :subject <#_g45> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#ancestor" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#ancestor" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g48> ]
@@ -1398,7 +1398,7 @@
                          :subject <#_g51> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#pa" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#pa" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g54> ]
@@ -1446,7 +1446,7 @@
                          :subject <#_g57> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#pa" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#pa" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g60> ]
@@ -1494,7 +1494,7 @@
                          :subject <#_g64> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#ancestor" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#ancestor" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g67> ]
@@ -1542,7 +1542,7 @@
                          :subject <#_g70> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#granpa" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#granpa" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g73> ]
@@ -1686,7 +1686,7 @@
                          :subject <#_g89> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#a" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g92> ]
@@ -1734,7 +1734,7 @@
                          :subject <#_g96> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#means" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#means" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g99> ]
@@ -1782,7 +1782,7 @@
                          :subject <#_g102> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#b" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g105> ]
@@ -2044,7 +2044,7 @@
                          :subject <#_g136> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#a" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g139> ]
@@ -2140,7 +2140,7 @@
                          :subject <#_g149> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#b" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g152> ]
@@ -2188,7 +2188,7 @@
                          :subject <#_g155> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#b" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g158> ]
@@ -2284,7 +2284,7 @@
                          :subject <#_g168> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#a" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g171> ]
@@ -2499,7 +2499,7 @@
                          :subject <#_g195> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#p" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g198> ]
@@ -2713,7 +2713,7 @@
                          :subject <#_g223> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#means" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#means" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g226> ]
@@ -2905,19 +2905,19 @@
                          :subject <#_g249> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#x" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#x" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g252> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#y" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#y" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g253> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#z" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#z" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g254> ]
@@ -3070,7 +3070,7 @@
                          :subject <#_g271> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#x" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#x" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g274> ]
@@ -3118,7 +3118,7 @@
                          :subject <#_g278> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#p" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g281> ]
@@ -3166,7 +3166,7 @@
                          :subject <#_g284> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#y" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#y" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g287> ]
@@ -3214,7 +3214,7 @@
                          :subject <#_g290> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#y" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#y" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g293> ]
@@ -3262,7 +3262,7 @@
                          :subject <#_g297> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#p" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g300> ]
@@ -3310,7 +3310,7 @@
                          :subject <#_g303> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#z" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#z" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g306> ]
@@ -3573,7 +3573,7 @@
                          :subject <#_g337> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#x" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#x" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g340> ]
@@ -3621,7 +3621,7 @@
                          :subject <#_g344> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#p" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g347> ]
@@ -3669,7 +3669,7 @@
                          :subject <#_g350> ]
                  [
                          :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#z" ];
+                             :value "http://example.com/swap/test/reify/reify0.n3#z" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#value" ];
                          :subject <#_g353> ]

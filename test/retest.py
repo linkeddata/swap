@@ -49,6 +49,7 @@ import getopt
 import sys
 import re
 
+
 def localize(uri):
     """Get URI relative to where this lives"""
     import uripath
@@ -92,9 +93,13 @@ def diff(case, ref=None, prog="diff -Bbwu"):
     d = urllib.urlopen(",diffs/"+case)
     buf = d.read()
     if len(buf) > 0:
-	print "#  If this is OK,   cp ,temp/%s %s" %(case, ref)
-	print "######### Differences from reference output:\n" + buf
-	return 1
+        if just_fix_it == 0:
+            print "#  If this is OK,   cp ,temp/%s %s" %(case, ref)
+            print "######### Differences from reference output:\n" + buf
+            return 1
+        else:
+            os.system("cp ,temp/%s %s" %(case, ref))
+            return 0
     return result
 
 def rdfcompare3(case, ref=None):
@@ -149,13 +154,15 @@ def main():
     ploughOn = 0
     global verbose
     verbose = 0
+    global just_fix_it
+    just_fix_it = 0
     if diag.print_all_file_names:
         a = file('testfilelist','w')
         a.write('')
         a.close()
     try:
         opts, testFiles = getopt.getopt(sys.argv[1:], "hs:ncipf:v",
-	    ["help", "start=", "testsFrom=", "normal", "chatty", "ignoreErrors", "proofs", "verbose","cwm="])
+	    ["help", "start=", "testsFrom=", "normal", "chatty", "ignoreErrors", "proofs", "verbose","overwrite","cwm="])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
@@ -179,6 +186,8 @@ def main():
 	    chatty = 1
 	if o in ("-p", "--proofs"):
 	    proofs = 1
+	if o in ("--overwrite",):
+            just_fix_it = 1
 	if o in ("--cwm", "--the_end"):
             cwm_command=a
 
@@ -192,7 +201,7 @@ def main():
     global problems
     problems = []
     
-    REFWD="file:/devel/WWW/2000/10/swap/test"
+    REFWD="http://example.com/swap/test"
     WD = "file:" + os.getcwd()
     
     #def basicTest(case, desc, args)

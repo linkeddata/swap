@@ -19,10 +19,10 @@
     test:description   "simple reifying";
     test:arguments     """-n3 reify/reify0.n3 --reify""".
 
-#:t1003 a test:CwmTest;
-#    test:referenceOutput <quantifiers.ref.n3>;
-#    test:description   "reify a document with quantifiers";
-#    test:arguments     """-n3 includes/quantifiers_limited.n3 --reify """.
+:t1003 a test:CwmTest;
+    test:referenceOutput <quantifiers.ref.n3>;
+    test:description   "reify a document with quantifiers";
+    test:arguments     """-n3 includes/quantifiers_limited.n3 --reify """.
 
 :t1004 a test:CwmTest;
     test:referenceOutput <reify2.n3>;
@@ -50,17 +50,17 @@
     test:arguments     """-n3 reify/reify1.n3 --dereify""".
 
 :t1012 a test:CwmTest;
-    test:referenceOutput <dereify0.n3>;
+    test:referenceOutput <dereify0.n3>; 
     test:description   "dereifying twice";
     test:arguments     """-n3 reify/reify2.n3 --dereify --dereify""".
 
-#:t1014 a test:CwmTest;
-#    test:referenceOutput <dereify0.n3>;
-#    test:description   "dereifying thrice";
-#    test:arguments     """-n3 reify/reify3.n3 --dereify --dereify --dereify""".
+:t1014 a test:CwmTest;
+    test:referenceOutput <reify0.n3>; #de
+    test:description   "dereifying thrice";
+    test:arguments     """-n3 reify/reify3.n3 --dereify --dereify --dereify""".
 
 :t1016 a test:CwmTest;
-    test:referenceOutput <dereify1.n3>;
+    test:referenceOutput <dereify1.n3>; 
     test:description   "dereifying test 2";
     test:arguments     """-n3 reify/reify2.n3 --dereify""".
 
@@ -69,10 +69,10 @@
     test:description   "flatten test 1";
     test:arguments     """-n3 reify/reify0.n3 --flatten""".
 
-:t1102 a test:CwmTest;
-    test:referenceOutput <flatten1.n3>;
-    test:description   "flatten a flattened file";
-    test:arguments     """-n3 reify/flatten1.n3 --flatten""".
+#:t1102 a test:CwmTest;
+#    test:referenceOutput <flatten1.n3>;
+#    test:description   "flatten a flattened file";
+#    test:arguments     """-n3 reify/flatten1.n3 --flatten""".
 
 :t1101 a test:CwmTest;
     test:referenceOutput <flatten1.n3>;
@@ -85,25 +85,25 @@
     test:arguments     """-n3 reify/flatten1.n3 --unflatten""".
 
 
-#:t1018 a test:CwmTest;
-#    test:referenceOutput <dereify2.n3>;
-#    test:description   "dereifying test 3";
-#    test:arguments     """-n3 reify/reify3.n3 --dereify""".
-#
+:t1018 a test:CwmTest;
+    test:referenceOutput <reify2.n3>; #de
+    test:description   "dereifying test 3";
+    test:arguments     """-n3 reify/reify3.n3 --dereify""".
+
 #:t1020 a test:CwmTest;
 #    test:referenceOutput <reify2.n3>;
 #    test:description   "sanity check on serializing 1";
 #    test:arguments     """-n3 reify/reify1.n3 --reify""".
-#
+
 #:t1025 a test:CwmTest;
 #    test:referenceOutput <reify3.n3>;
 #    test:description   "sanity check on serializing 2";
 #    test:arguments     """-n3 reify/reify2.n3 --reify""".
-#
-#:t1027 a test:CwmTest;
-#    test:referenceOutput <reify3.n3>;
-#    test:description   "reify thrice";
-#    test:arguments     """-n3 reify/reify0.n3 --reify --reify --reify""".
+
+:t1027 a test:CwmTest;
+    test:referenceOutput <reify3.n3>;
+    test:description   "reify thrice";
+    test:arguments     """-n3 reify/reify0.n3 --reify --reify --reify""".
 
 
 #ends
