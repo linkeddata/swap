@@ -1,13 +1,32 @@
 """
    rdfpath.py : A Multi-Valued Node-Centric RDF API
 
+   NOT a quad store.   NOT a formula store.  Just the triples, ma'am.
 
-   x>>> import rdfpath
-   x>>> s = rdfpath.Store()
-   x>>> s.ns.bindPrefix("foaf_", "http://xmlns.com/foaf/0.1/")
-   x>>> s.ns.bindPrefix("", "http://example.com/")
+   We store things de-labeled, using a "uri" arc.
+
+   For literal values we just use the python object.
+
+   For other things, we use a Node, which is really any class you like
+   (and which you can supply, to give yourself a Node- centric API).
+   We tell the Node what store it's in, in case it cares.
+
+
+   >>> import rdfpath
+   >>> s = rdfpath.Store()
+   >>> s.nameMapper.bindPrefix("foaf_", "http://xmlns.com/foaf/0.1/")
+   >>> s.nameMapper.bindPrefix("", "http://example.com/")
+   >>> str(s)
+   ''
+   >>> ghost = s.node()
+   >>> str(s)
+   ''
 
    alice = s.node(rdf_type=ns.foaf_Person, foaf_nick="Al1ce")
+
+   >>> alice = s.node(foaf_nick="Al1ce")
+   >>> print str(s)
+   _:anon1 <http://xmlns.com/foaf/0.1/nick> "Al1ce" .
 
    x>>> alice = s.node(foaf_nick="Al1ce")
    x>>> bob = s.node(foaf_knows=alice)
@@ -15,10 +34,18 @@
    x>>> alice.foaf_knows << bob
    x>>> alice.foaf_knows << charlie
    x>>> print s.values(alice.foaf_knows)
+
+
+   we could fact this appart except that
+   a generic RDF store wont let us override
+   its << function, eh?
+
+   wrap rdfstore22.Store()'s node() function
    
 """
-
+from __future__ import generators
 from cStringIO import StringIO
+from ntriples import serialize
 
 class NameMapper:
 
@@ -49,7 +76,7 @@ class NameMapper:
         http://www.w3.org/1999/02/22-rdf-syntax-ns#foo
 
     But look -- that's still just the STRING, not the NODE.  It's NOT
-    what end users want.
+    what end users want.   They want store.ns.rdf_type
 
     todo:
       + sanity checking name syntax
@@ -128,16 +155,55 @@ sharedNS.bindPrefix("rdf_", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 sharedNS.uri = uri
 sharedNS.eg_ = "http://example.com/"
 
+class NodeMapper:
+
+    def __init__(self, store):
+        self.store = store
+
+    # just route everything back via store
+
+nodenumber=0
+
+class Node:
+    
+    def __init__(self):
+        global nodenumber
+        self.nodenumber = nodenumber
+        nodenumber += 1
+        
+    def __getattr__(self, other):
+        """
+       
+        """
+        return PathStep(prior=self, prop=other)
+
+    def __repr__(self):
+        return "n#"+str(self.nodenumber)
+
+
+
+    
 class Store(list):
     """A trivial implementation of an RDF store, for testing
     and to define the API we expect from a store.
 
     """
-    def __init__(self, nameMapper=sharedNS):
+
+    # switch URI to be properly a triple, so we can
+    # really view it that way...?
+
+    sinkType='triples, owns it nodes'      #hack
+    
+    def __init__(self, nameMapper=sharedNS, nodeClass=Node):
         self.triples = []
+        self.nodeClass = nodeClass
         self.nameMapper = nameMapper
+        self.ns = NodeMapper(self)
         # self.ns = NameMappingHack(self)   #  s.ns.rdf_type is the node
         self.nodeByURI = { }    # sync with URI predicate???
+        self.uriNode = Node()
+        self.nodeByURI[uri] = self.uriNode
+        self.append((self.uriNode, self.uriNode, uri))
         
     def node(self, **kwargs):
         """Obtain a Node to stand for something.
@@ -149,7 +215,7 @@ class Store(list):
         The URI property is especially commonly used.   If you call
         node twice giving the same URI property, you'll get back the
         same Node.   At some point we might return an existing Node
-        do to other inferrable equalities.
+        due to other equalities.
 
            >>> import rdfpath
            >>> s = rdfpath.Store()
@@ -157,7 +223,8 @@ class Store(list):
            >>> p2 = s.node(uri="http://www.w3.org", eg_quality="good")
            >>> p1 is p2
            1
-           >>> print s
+           >>> str(s)
+           <http://www.w3.org> <http://example.com/quality> "good" .\n'
            
         """
         
@@ -178,14 +245,17 @@ class Store(list):
             self.add((node, self.nodeWithURI(p), v))
 
 
-    def nodeWithURI(self, uri):
+    def nodeWithURI(self, u):
         """Lower level, roughly equiv to .node(uri="...") but
         that uri keyword is really a python keyword here."""
         try:
-            return self.nodeByURI[uri]
+            #print "looking for node for uri %s" % u
+            return self.nodeByURI[u]
         except:
             node = Node()
-            self.nodeByURI[uri] = node
+            #print "Made new node for uri %s" % u
+            self.nodeByURI[u] = node
+            self.add((node, self.uriNode, u))
             return node
 
     def add(self, other):
@@ -199,11 +269,22 @@ class Store(list):
     def __iadd__(self, other):
         return self.add(other)
 
-    # externalize this one?
+    # externalize this one?   or mixin?
     def appendToCollection(self, collection, item):
         raise NotImplemented
-    
 
+
+    def match(self, s, p, o):
+        for (cs, cp, co) in self:
+            if ((s is None or s is cs) and
+                (p is None or p is cp) and
+                (o is None or o is co)):
+                yield (cs, cp, co)
+                
+
+    def __str__(self):
+        return serialize(self)
+    
 class PathStep:
 
     def __init__(previous, predicate):
@@ -223,25 +304,6 @@ class PathStep:
         """
         pass
     
-nodenumber=0
-
-class Node:
-
-    def __init__(self):
-        global nodenumber
-        self.nodenumber = nodenumber
-        nodenumber += 1
-        
-    def __getattr__(self, other):
-        """
-       
-        """
-        return Tree(prior=self, prop=other)
-
-    def __repr__(self):
-        return "n#"+str(self.nodenumber)
-
-
 
 ## ****************************************************************
 
@@ -373,6 +435,9 @@ if __name__ =='__main__':
     print "Done."
 
 # $Log$
-# Revision 1.1  2003-05-01 04:34:14  sandro
+# Revision 1.2  2003-08-01 15:45:10  sandro
+# from May 2, uncommitted changes...
+#
+# Revision 1.1  2003/05/01 04:34:14  sandro
 # first checkin; getting stabler
 #
