@@ -46,7 +46,7 @@ setup(
     url = "http://www.w3.org/2000/10/swap/",
     package_dir = {'swap': 'swap'},
     packages = ['swap'],
-    py_modules = ['cwm'],
+    py_modules = ['cwm', 'delta', 'cant'],
     scripts = ['cwm.py', 'delta.py', 'cant.py'],
    )
     # todo, figure out which other modules are in public APIs

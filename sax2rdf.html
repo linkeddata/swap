@@ -8,7 +8,7 @@
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>sax2rdf</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/CVS-local/WWW/2000/10/swap/sax2rdf.py">/home/syosi/CVS-local/WWW/2000/10/swap/sax2rdf.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/cvs-trunk/WWW/2000/10/swap/sax2rdf.py">/home/syosi/cvs-trunk/WWW/2000/10/swap/sax2rdf.py</a></font></td></tr></table>
     <p><tt>&nbsp;&nbsp;A&nbsp;parser&nbsp;for&nbsp;RDF/XML&nbsp;built&nbsp;on&nbsp;the&nbsp;sax2&nbsp;interface;<br>
 &nbsp;&nbsp;derived&nbsp;from&nbsp;a&nbsp;parser&nbsp;for&nbsp;RDF/XML&nbsp;built&nbsp;on&nbsp;the&nbsp;xmllib&nbsp;XML&nbsp;parser.<br>
 &nbsp;<br>
@@ -53,11 +53,12 @@
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="RDFSink.html">RDFSink</a><br>
 <a href="diag.html">diag</a><br>
-</td><td width="25%" valign=top><a href="string.html">string</a><br>
-<a href="sys.html">sys</a><br>
-</td><td width="25%" valign=top><a href="uripath.html">uripath</a><br>
-<a href="_xmlplus.html">_xmlplus</a><br>
-</td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
+</td><td width="25%" valign=top><a href="isXML.html">isXML</a><br>
+<a href="string.html">string</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+<a href="uripath.html">uripath</a><br>
+</td><td width="25%" valign=top><a href="_xmlplus.html">_xmlplus</a><br>
+</td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
 <td colspan=3 valign=bottom>&nbsp;<br>
@@ -387,6 +388,13 @@ the&nbsp;element.</tt></dd></dl>
 <strong>STATE_OUTERMOST</strong> = 'outermost level'<br>
 <strong>STATE_VALUE</strong> = 'plain value'<br>
 <strong>XML_NS_URI</strong> = 'http://www.w3.org/XML/1998/namespace'<br>
+<strong>a</strong> = 'bagID'<br>
+<strong>coreSyntaxTerms</strong> = ['RDF', 'ID', 'about', 'parseType', 'resource', 'nodeID', 'datatype']<br>
 <strong>feature_namespaces</strong> = 'http://xml.org/sax/features/namespaces'<br>
+<strong>nodeElementExceptions</strong> = {'http://www.w3.org/1999/02/22-rdf-syntax-ns#ID': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#RDF': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#about': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#aboutEach': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#aboutEachPrefix': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#bagID': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#datatype': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#li': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#nodeID': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#parseType': True, ...}<br>
+<strong>oldTerms</strong> = ['aboutEach', 'aboutEachPrefix', 'bagID']<br>
+<strong>propertyAttributeExceptions</strong> = {'http://www.w3.org/1999/02/22-rdf-syntax-ns#Description': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#ID': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#RDF': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#about': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#aboutEach': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#aboutEachPrefix': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#bagID': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#datatype': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#li': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#nodeID': True, ...}<br>
+<strong>propertyElementExceptions</strong> = {'http://www.w3.org/1999/02/22-rdf-syntax-ns#Description': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#ID': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#RDF': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#about': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#aboutEach': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#aboutEachPrefix': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#bagID': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#datatype': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#nodeID': True, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#parseType': True, ...}<br>
+<strong>syntaxTerms</strong> = ['RDF', 'ID', 'about', 'parseType', 'resource', 'nodeID', 'datatype', 'Description', 'li']<br>
 <strong>tracking</strong> = 0</td></tr></table>
 </body></html>
