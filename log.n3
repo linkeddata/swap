@@ -98,6 +98,12 @@ log:notIncludes a rdf:Property;
     rdfs:isDefinedBy <>;
     rdfs:range log:Formula.
 
+
+log:parsedAsN3 a rdf:Property;
+    rdfs:comment "A string, parsed as N3, gives this formula.";
+    rdfs:label "parses to";
+    rdfs:domain log:String;
+    rdfs:range log:Formula.
  
 log:semantics a rdf:Property;   # (was resolvesTo but we use role nouns by preference)
     rdfs:domain doc:Work;

@@ -138,6 +138,10 @@ cr:RSA_validSignature a rdf:Property;   # Must be an internal built-in
     s:domain string:String;   # A signed string, typically the hash of the document contents
     s:range string:String.   # The signature
 
+cr:md5 a rdf:Property,
+cr:verify a rdf:Property,
+cr:verifyBoolean a rdf:Property,
+
 ####### Metaproperties
 #
 # These generate, given an encryptionb module, the funmctions for that module.
