@@ -61,7 +61,9 @@ table.wide { margin-left: 20; font-size: 9pt; width: 95%;}
 .ns  { text-align: left;  font-family: monospace; align: top;  }
 
 th { margin-left: 12pt; text-align: right; background: #ffffff; }
-td { margin-left: 12pt; border: 4pt; border-color: #555555; padding: 3pt; padding-color: #ffeeee; }
+td { margin-left: 12pt; border: 4pt; border-color: #555555;
+ padding: 3pt; padding-color: #ffeeee;
+ vertical-align: top; }
 td.ln { font-family: monospace; valign: top; }
 td.amount { width: 6em; text-align: right;  } /* font-family: monospace; */
 td.amt { text-align: right;  } /* font-family: monospace; */
