@@ -383,30 +383,28 @@ class Formula(Fragment):
 
     def __len__(self):
         """ How many statements? """
-#	progress("@@@ "+`self`+" has "+`len(self.statements)`+" statements")
-#	raise RuntimeError("This should not be called until we are sure code does not accidentally")
         return len(self.statements)
 
     def __iter__(self):
 	for s in self.statements:
 	    yield s
 
-    def newBlankNode(self):
+    def newBlankNode(self, why=None):
 	"""Create or reuse, in the default store, a new unnamed node within the given
 	formula as context, and return it for future use"""
-	return self.store.newBlankNode(self)
+	return self.store.newBlankNode(self, why=why)
     
-    def newExistential(self, uri=None):
+    def newExistential(self, uri=None, why=None):
 	"""Create or reuse, in the default store, a new named variable
 	existentially qualified within the given
 	formula as context, and return it for future use"""
-	return self.store.newExistential(self, uri)
+	return self.store.newExistential(self, uri, why=why)
     
-    def newUniversal(self, uri=None):
+    def newUniversal(self, uri=None, why=None):
 	"""Create or reuse, in the default store, a named variable
 	universally qualified within the given
 	formula as context, and return it for future use"""
-	return self.store.newUniversal(self, uri)
+	return self.store.newUniversal(self, uri, why=why)
 
 
     def statementsMatching(self, pred=None, subj=None, obj=None):
@@ -488,8 +486,8 @@ class Formula(Fragment):
 	if obj == None: return s[OBJ]
 	raise parameterError("You must give one wildcard")
 
-    def add(self, subj, pred, obj):
-        return self.store.storeQuad((self, pred, subj, obj)) # Note order change
+    def add(self, subj, pred, obj, why=None):
+        return self.store.storeQuad((self, pred, subj, obj), why=why) # Note order change
     
     def remove(self, subj, pred, obj):
         return self.store.remove((self, pred, subj, obj))
@@ -555,12 +553,6 @@ class StoredStatement:
 
 #   The order of statements is only for cannonical output
 #   We cannot override __cmp__ or the object becomes unhashable, and can't be put into a dictionary.
-
-    def asFormula(self, store):
-	"""The formula which conatins only a statement like this"""
-	statementAsFormula = store.newFormula()   # @@@CAN WE DO THIS BY CLEVER SUBCLASSING? statement subclass of f?
-	statementAsFormula.add(subj=self[SUBJ], pred=self[PRED], obj=self[OBJ])
-	return statementAsFormula.close()  # probably slow - much slower than statement subclass of formula
 
 
     def compareSubjPredObj(self, other):
@@ -1092,22 +1084,22 @@ class RDFStore(RDFSink) :
     def newSymbol(self, uri):
 	return self.intern(RDFSink.newSymbol(self, uri))
 
-    def newBlankNode(self, context):
+    def newBlankNode(self, context, why=None):
 	"""Create or reuse, in the default store, a new unnamed node within the given
 	formula as context, and return it for future use"""
-	return self.intern(RDFSink.newBlankNode(self, context))
+	return self.intern(RDFSink.newBlankNode(self, context, why=why))
     
-    def newExistential(self, context, uri=None):
+    def newExistential(self, context, uri=None, why=None):
 	"""Create or reuse, in the default store, a new named variable
 	existentially qualified within the given
 	formula as context, and return it for future use"""
-	return self.intern(RDFSink.newExistential(self, context, uri))
+	return self.intern(RDFSink.newExistential(self, context, uri, why=why))
     
-    def newUniversal(self, context, uri=None):
+    def newUniversal(self, context, uri=None, why=None):
 	"""Create or reuse, in the default store, a named variable
 	universally qualified within the given
 	formula as context, and return it for future use"""
-	return self.intern(RDFSink.newUniversal(self, context, uri))
+	return self.intern(RDFSink.newUniversal(self, context, uri, why=why))
 
 
 
@@ -1166,11 +1158,11 @@ class RDFStore(RDFSink) :
 		progress("llyn.genid Rejecting Id already used: "+uriRefString)
 		
 
-    def internURI(self, str):
+    def internURI(self, str, why=None):
         assert type(str) is type("") # caller %xx-ifies unicode
-        return self.intern((SYMBOL,str))
+        return self.intern((SYMBOL,str), why=None)
     
-    def intern(self, pair):
+    def intern(self, pair, why=None):
         """find-or-create a Fragment or a Symbol or Literal as appropriate
 
         returns URISyntaxError if, for example, the URIref has
@@ -1441,6 +1433,7 @@ class RDFStore(RDFSink) :
                     self.checkList(context, subj)
 
         s = StoredStatement(q, why)
+#	if why == None: raise RunTimeError("@@@@@@@@@@@")
 
 
         # Build 8 indexes.

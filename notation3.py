@@ -160,9 +160,10 @@ class SinkParser:
 	"""Parses a document of the given URI and returns its top level formula"""
         if uri:
             _inputURI = uripath.join(baseURI, uri) # Make abs from relative
+	    inputResource = self._sink.newSymbol(_inputURI)
             self._sink.makeComment("Taking input from " + _inputURI)
             stream = urllib.urlopen(_inputURI)
-	    if self._reason: self._reason2 = BecauseOfData(_inputURI, because=self._reason) 
+	    if self._reason: self._reason2 = BecauseOfData(inputResource, because=self._reason) 
         else:
             self._sink.makeComment("Taking input from standard input")
             _inputURI = uripath.join(baseURI, "STDIN") # Make abs from relative
@@ -667,7 +668,7 @@ class SinkParser:
 	if self._parentContext == None:
 	    raise BadSyntax(self._thisDoc, self.lines, str, j,
 			    "Can't use ?xxx syntax for variable in outermost level: %s" % str[j-1:i])
-	var = self._sink.newUniversal(self._parentContext, self. _thisDoc +"#"+str[j:i])
+	var = self._sink.newUniversal(self._parentContext, self. _thisDoc +"#"+str[j:i], why=self._reason2)
         res.append(var)
 #        print "Variable found: <<%s>>" % str[j:i]
         return i
@@ -1101,10 +1102,10 @@ t   "this" and "()" special syntax should be suppresed.
         self.stack.pop()
         self._endStatement()     # @@@@@@@@ remove in syntax change to implicit
         self._newline()
+        self.indent = self.indent - 1
         self._write("}")
         self._subj = subj
         self._pred = None
-        self.indent = self.indent - 1
      
     def startBagNamed(self, context, subj):
         if self._subj != subj:
