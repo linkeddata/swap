@@ -36,7 +36,14 @@ class Constant(LX.expr.AtomicExpr):
     This denotes something in the domain of discourse.  In FOL, it is
     quite distinct from a variable, predicate, or function   
     """
-    pass
+
+    def __repr__(self):
+        try:
+            return "LX.logic.ConstantForURI(\""+self.uri+", "+str(id(self))+")"
+        except AttributeError:
+            return "LX.logic.Constant(#"+str(id(self))+")"
+            
+
 
 class Function(LX.expr.AtomicExpr):
     """
@@ -261,7 +268,10 @@ def _test():
 if __name__ == "__main__": _test()
 
 # $Log$
-# Revision 1.5  2003-08-20 09:26:48  sandro
+# Revision 1.6  2003-08-22 20:49:41  sandro
+# midway on getting load() and parser abstraction to work better
+#
+# Revision 1.5  2003/08/20 09:26:48  sandro
 # update --flatten code path to work again, using newer URI strategy
 #
 # Revision 1.4  2003/08/01 15:27:21  sandro

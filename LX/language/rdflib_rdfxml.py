@@ -16,7 +16,21 @@ import LX.expr
 import LX.kb
 import LX.rdf
 
-class Parser(rdflib.syntax.parser.Parser):
+import pluggable
+
+class Parser(pluggable.Parser):
+
+    name = "rdflib_rdfxml"
+    #language = "application/rdf"
+    language = "http://www.w3.org/1999/02/22-rdf-syntax-ns#RDF"
+    sinkStyle = LX.kb.KB
+
+    def parse(self, stream, sink):
+        p = ParserX(sink=sink)
+        p.parse(stream)
+
+    
+class ParserX(rdflib.syntax.parser.Parser):
 
     def __init__(self, sink=None, flags=""):
         self.kb = sink
@@ -27,10 +41,10 @@ class Parser(rdflib.syntax.parser.Parser):
 
     def termFor(self, s):
         if isinstance(s, rdflib.URIRef.URIRef):
-            return LX.logic.ConstantForURI(s)
+            return LX.logic.ConstantForURI(str(s))
         if isinstance(s, rdflib.Literal.Literal):
             # print "LIT: ", str(s), s.datatype
-            return LX.logic.ConstantForDatatypeValue(str(s), s.datatype)
+            return LX.logic.ConstantForDatatypeValue(str(s), str(s.datatype))
         if isinstance(s, rdflib.BNode.BNode):
             try:
                 tt = self.bnodes[s]
@@ -61,7 +75,10 @@ class Serializer:
         pass
 
 # $Log$
-# Revision 1.3  2003-08-01 15:27:22  sandro
+# Revision 1.4  2003-08-22 20:49:41  sandro
+# midway on getting load() and parser abstraction to work better
+#
+# Revision 1.3  2003/08/01 15:27:22  sandro
 # kind of vaguely working datatype support (for xsd unsigned ints)
 #
 # Revision 1.2  2003/07/31 18:26:02  sandro

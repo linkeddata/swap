@@ -7,6 +7,10 @@ import re
 
 import LX
 import LX.rdf
+import sniff
+import urllib
+import LX.language
+import pluggable
 
 class UnsupportedDatatype(RuntimeError):
     pass
@@ -24,7 +28,7 @@ def stdValuesFilter(obj):
     if obj == LX.ns.lx.uri: return 1
     return 0
 
-class KB(list):
+class KB(list, pluggable.Store):
     """A Knowledge Base, a list of implicitely conjoined sentences.
 
     This is comparable to an RDF Graph if the Sentences here are all
@@ -177,6 +181,7 @@ class KB(list):
 
         if pair in self.__datatypeValuesChecked: return
 
+        #print "DTURI", dturi
         if dturi == "::native":
             # ignore for now....
             return
@@ -195,9 +200,8 @@ class KB(list):
                 self.append(LX.logic.RDF(lesser,succ,greater))
                 self.__datatypeValuesChecked[pair] = 1
             return
-        
-        raise UnsupportedDatatype, ("unsupported datatype: "+lexrep+
-                             ", type "+dturi)
+
+        #raise UnsupportedDatatype, ("unsupported datatype: "+lexrep+ ", type "+dturi)
         
         
     def add(self, formula, p=None, o=None):
@@ -412,10 +416,20 @@ class KB(list):
                  expression's meaning and separable metadata. 
 
         """
-        print "LOADING ",uri,
-        print "  (not really...)"
-        
+        #print "LOADING",uri
+        stream=urllib.urlopen(uri)
+        language=sniff.sniffLanguage(stream)
+        #print "LANGUAGE",language
 
+        # generalize this!   first one which can handle this lang!
+        
+        if language=="http://www.w3.org/1999/02/22-rdf-syntax-ns#RDF":
+            language="rdflib"
+        
+        parser=LX.language.getParser(language=language)
+        parser.parse(stream, self) 
+
+    
 def _test():
     import doctest, kb
     return doctest.testmod(kb) 
@@ -424,7 +438,10 @@ if __name__ == "__main__": _test()
 
  
 # $Log$
-# Revision 1.14  2003-08-20 11:50:58  sandro
+# Revision 1.15  2003-08-22 20:49:41  sandro
+# midway on getting load() and parser abstraction to work better
+#
+# Revision 1.14  2003/08/20 11:50:58  sandro
 # --dereify implemented (linear time algorithm)
 #
 # Revision 1.13  2003/08/20 09:26:48  sandro

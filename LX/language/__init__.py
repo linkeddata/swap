@@ -12,8 +12,8 @@ import LX
 serializers = {
     "otter":  { "module": "LX.language.otter",
               },
-    "lbase":  { "module": "LX.language.lbase",
-              },
+#    "lbase":  { "module": "LX.language.lbase",
+#              },
     }
 
 parsers = {
@@ -24,6 +24,8 @@ parsers = {
     "kifax":  { "module": "LX.language.kifax",
               },
     "rdflib":  { "module": "LX.language.rdflib_rdfxml",
+              },
+    "otter":  { "module": "LX.language.otter",
               },
     }
 
@@ -43,12 +45,18 @@ def getParser(language=None, sink=None, flags=""):
         ser = parsers[language]
         moduleName = ser["module"]
         __import__(moduleName)
+        if sink is None and flags == "":
+            return eval(moduleName+".Parser()")
+        # obsolete interface?
         return eval(moduleName+".Parser(sink=sink, flags=flags)")
     else:
         raise RuntimeError, "No such parser: \"%s\"\nWe have: %s" % (language, ", ".join(parsers.keys()))
     
 # $Log$
-# Revision 1.6  2003-07-31 18:26:02  sandro
+# Revision 1.7  2003-08-22 20:49:41  sandro
+# midway on getting load() and parser abstraction to work better
+#
+# Revision 1.6  2003/07/31 18:26:02  sandro
 # unknown older stuff
 #
 # Revision 1.5  2003/07/18 04:37:18  sandro
