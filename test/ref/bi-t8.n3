@@ -1,98 +1,95 @@
-     @prefix : <http://www.w3.org/2000/10/swap/log#> .
-     @prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
-     @prefix dpo: <http://www.daml.org/2001/03/daml+oil#> .
-     @prefix ex: <http://www.daml.org/2000/10/daml-ex#> .
-     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix : <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
     {
-        "abc"     :greaterThan "aaa" .
+        "abc"     string:greaterThan "aaa" .
         
-        }     :implies {<#testh1>     a <#success> .
+        }     log:implies {:testh1     a :success .
         } .
     {
-        "aaa"     :notGreaterThan "abc" .
+        "aaa"     string:notGreaterThan "abc" .
         
-        }     :implies {<#testh3>     a <#success> .
+        }     log:implies {:testh3     a :success .
         } .
     {
-        "abc"     :lessThan "aaa" .
+        "abc"     string:lessThan "aaa" .
         
-        }     :implies {<#testh_4>     a <#FAILURE> .
+        }     log:implies {:testh_4     a :FAILURE .
         } .
     {
-        "abc"     :lessThan "abc" .
+        "abc"     string:lessThan "abc" .
         
-        }     :implies {<#testh_5>     a <#FAILURE> .
+        }     log:implies {:testh_5     a :FAILURE .
         } .
     {
-        "aaa"     :lessThan "abc" .
+        "aaa"     string:lessThan "abc" .
         
-        }     :implies {<#testh4>     a <#success> .
+        }     log:implies {:testh4     a :success .
         } .
     {
-        "abc"     :notLessThan "aaa" .
+        "abc"     string:notLessThan "aaa" .
         
-        }     :implies {<#testh5>     a <#success> .
+        }     log:implies {:testh5     a :success .
         } .
     {
-        "abc"     :notLessThan "abc" .
+        "abc"     string:notLessThan "abc" .
         
-        }     :implies {<#testh6>     a <#success> .
+        }     log:implies {:testh6     a :success .
         } .
     {
-        "aaa"     :notLessThan "abc" .
+        "aaa"     string:notLessThan "abc" .
         
-        }     :implies {<#testh_6>     a <#FAILURE> .
+        }     log:implies {:testh_6     a :FAILURE .
         } .
     {
-        "abc"     :startsWith "a" .
+        "abc"     string:startsWith "a" .
         
-        }     :implies {<#testh7>     a <#success> .
+        }     log:implies {:testh7     a :success .
         } .
     {
-        "def"     :startsWith "def" .
+        "def"     string:startsWith "def" .
         
-        }     :implies {<#testh8>     a <#success> .
+        }     log:implies {:testh8     a :success .
         } .
     {
-        "a"     :startsWith "abc" .
+        "a"     string:startsWith "abc" .
         
-        }     :implies {<#testh_7>     a <#FAILURE> .
+        }     log:implies {:testh_7     a :FAILURE .
         } .
     {
-        "abc"     :greaterThan "abc" .
+        "abc"     string:greaterThan "abc" .
         
-        }     :implies {<#testh_1>     a <#FAILURE> .
+        }     log:implies {:testh_1     a :FAILURE .
         } .
     {
-        "aaa"     :greaterThan "abc" .
+        "aaa"     string:greaterThan "abc" .
         
-        }     :implies {<#testh_2>     a <#FAILURE> .
+        }     log:implies {:testh_2     a :FAILURE .
         } .
     {
-        "abc"     :notGreaterThan "aaa" .
+        "abc"     string:notGreaterThan "aaa" .
         
-        }     :implies {<#testh_3>     a <#FAILURE> .
+        }     log:implies {:testh_3     a :FAILURE .
         } .
     {
-        "abc"     :notGreaterThan "abc" .
+        "abc"     string:notGreaterThan "abc" .
         
-        }     :implies {<#testh2>     a <#success> .
+        }     log:implies {:testh2     a :success .
         } .
     
-    <#testh1>     a <#success> .
+    :testh1     a :success .
     
-    <#testh2>     a <#success> .
+    :testh2     a :success .
     
-    <#testh3>     a <#success> .
+    :testh3     a :success .
     
-    <#testh4>     a <#success> .
+    :testh4     a :success .
     
-    <#testh5>     a <#success> .
+    :testh5     a :success .
     
-    <#testh6>     a <#success> .
+    :testh6     a :success .
     
-    <#testh7>     a <#success> .
+    :testh7     a :success .
     
-    <#testh8>     a <#success> .
+    :testh8     a :success .
     

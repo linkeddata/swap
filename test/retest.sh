@@ -90,6 +90,8 @@ cwm_test bi-t9.n3 "Filter event by date using strcmp BI's" includes/t9br.n3 -thi
 
 cwm_test bi-t10.n3 "log:resolvesTo and log:includes" includes/t10.n3 -think
 
+cwm_test bi-t11.n3 "log:resolvesTo and log:includes - schema checking" includes/t11.n3 -think
+
 cwm_test bi-concat.n3 "Test string concatetnation built-in" includes/concat.n3 -think
 
 cwm_test resolves-rdf.n3 "log:resolvesTo with RDF/xml syntax" resolves-rdf.n3 -think
@@ -98,10 +100,15 @@ cwm_test sameDan.n3 "dealing with multiple descriptions of the same thing using 
 
 cwm_test smush.rdf "Data aggregation challenge from Jan 2001" --rdf smush-examples.rdf --n3 smush-schema.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge --filter=smush-query.n3 --rdf
 
+TEST_PARAMETER_1=TEST_VALUE_1; export TEST_PARAMETER_1 
+cwm_test environ.n3 "Read operating system environment variable" os/environ.n3 -think
 
 
 # $Log$
-# Revision 1.18  2001-09-07 02:07:52  timbl
+# Revision 1.19  2001-09-17 02:59:32  timbl
+# split up
+#
+# Revision 1.18  2001/09/07 02:07:52  timbl
 # string.concatenation
 #
 # Revision 1.17  2001/08/30 21:29:16  connolly
