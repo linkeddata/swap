@@ -1,6 +1,11 @@
 #
 #
-"""              Divide            by      Quotient  Remainder
+@prefix rdfs:.
+@prefix : <#>.
+@prefix math:.
+
+<> rdfs:comment """
+              Divide            by      Quotient  Remainder
         ---------------------------------------------------
                  y               19                   j
                  y              100        k          h
@@ -16,3 +21,23 @@
 Here x is the number of the month ond 1 + z is the day of that
 month upon which Easter Sunday falls in the year y. 
 """.
+
+
+{ (?y "19") math:remainder ?j.
+  (?y "100") math:quotient ?k; math:remainder ?h.
+  ((?k "8").math:sum "25") math:quotient ?p.
+  (((?k ?p).math:difference "1").math:sum "3") math:quotient ?q.
+  ((((("19" ?j).math:product ?k).math:sum ?m).math:difference
+                 ?q).math:difference "15").math:sum math:remainder ?r.
+  (?h "4") math:quotient ?s; math:remainder ?u.
+  (("32" ("2" ?n).math:product) ("2" ?s).math:product ?r.math:negation
+	?u.math:negation).math:sum "7") math:remainder ?v.
+  ((?j ("11" ?r).math:product ("22" ?v).math:product).math:sum "451")
+				math:quotient ?w.
+   ((?r ?v ("7" ?w).math:product.math:negation "114").math:sum
+				math:quotient ?x; math:remainder ?z.
+   (?z "1") math:sum ?day.
+} => {
+   ?y  :hasEasterOnDay ?day; :hasEatserOnMonth ?x
+}.
+ 
