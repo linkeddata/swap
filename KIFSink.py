@@ -89,7 +89,7 @@ class Sink(RDFSink.RDFSink):
                 #progress("pushing into scope...", c)
                 self._ancestors.append(self._scope)
                 self._ex, self._uv, self._conj = [], [], []
-            self._scope = c
+        self._scope = c
 
 
     def endDoc(self):
@@ -150,7 +150,7 @@ class Sink(RDFSink.RDFSink):
             lit = re.sub(r'[\"\\]', escchar, t[1]) # escape newlines? hmm...
             w('"%s"' % lit)
         else:
-            raise RuntimeError, "not implemented"
+            raise RuntimeError, "term implemented: " + str(t)
         
     def withPrefix(self, pair):
         i = pair[1]
@@ -192,7 +192,10 @@ def _moreVarNames(outermap, uris, level):
 
 
 # $Log$
-# Revision 1.7  2001-11-27 00:51:59  connolly
+# Revision 1.8  2002-06-21 16:04:02  connolly
+# implemented list handling
+#
+# Revision 1.7  2001/11/27 00:51:59  connolly
 # gotta keep popping...
 #
 # Revision 1.6  2001/11/26 23:53:55  connolly

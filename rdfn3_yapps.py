@@ -17,7 +17,8 @@
 
 import string
 import urlparse # for urljoin. hmm... @@patch bugs?
-import notation3 # for FORMULA
+import RDFSink # for FORMULA, SYMBOL
+import notation3
 
 
 from string import *
@@ -57,7 +58,7 @@ class _ParserScanner(Scanner):
 
 class _Parser(Parser):
     def document(self):
-        scp = self.docScope()
+        self.bindListPrefix(); scp = self.docScope()
         while self._peek('END', '"@prefix"', '"\\\\["', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"{"') != 'END':
             _token_ = self._peek('"@prefix"', '"\\\\["', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"{"')
             if _token_ == '"@prefix"':
@@ -173,11 +174,15 @@ class _Parser(Parser):
 
     def list(self, scp):
         self._scan('"\\\\("')
-        l = self.something(self.docScope(), "list")
-        while self._peek('"\\\\)"', '"of"', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '","', '"\\\\("', '"\\\\["', '"{"', '"is"', '";"', '"\\\\."', '"\\\\]"', '"}"') not in ['"\\\\)"', '"of"', '","', '"is"', '";"', '"\\\\."', '"\\\\]"', '"}"']:
-            term = self.term(scp)
+        items = []
+        while self._peek('"\\\\)"', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"') != '"\\\\)"':
+            item = self.item(scp, items)
         self._scan('"\\\\)"')
-        return l
+        return self.mkList(scp, items)
+
+    def item(self, scp, items):
+        term = self.term(scp)
+        items.append(term)
 
     def phrase(self, scp):
         self._scan('"\\\\["')
@@ -233,7 +238,7 @@ class Parser(_Parser):
         return mkFormula(self._baseURI)
 
     def uriref(self, str):
-        return notation3.RESOURCE, urlparse.urljoin(self._baseURI, str[1:-1])
+        return RDFSink.SYMBOL, urlparse.urljoin(self._baseURI, str[1:-1])
 
     def qname(self, str):
         i = string.find(str, ":")
@@ -244,7 +249,7 @@ class Parser(_Parser):
         except:
             raise BadSyntax, "prefix %s not bound" % pfx
         else:
-            return notation3.RESOURCE, ns + ln
+            return RDFSink.SYMBOL, ns + ln
 
     def lname(self, str):
         n = str[2:]
@@ -261,7 +266,7 @@ class Parser(_Parser):
             return self._vnames[n]
         except KeyError:
             x = self.something(self.docScope(), n,
-                               quant=notation3.N3_forAll_URI)
+                               quant=RDFSink.forAllSym)
             self._vnames[n] = x
             return x
 
@@ -272,8 +277,11 @@ class Parser(_Parser):
         return notation3.DAML_equivalentTo
 
     def strlit(self, str, delim):
-        return notation3.LITERAL, str[1:-1] #@@BROKEN
+        return RDFSink.LITERAL, str[1:-1] #@@BROKEN
 
+    def bindListPrefix(self):
+        self._sink.bind("l", (RDFSink.SYMBOL, notation3.N3_nil[1][:-3]))
+    
     def bind(self, pfx, ref):
         ref = ref[1:-1] # take of <>'s
         if ref[-1] == '#': # @@work around bug in urljoin...
@@ -282,12 +290,12 @@ class Parser(_Parser):
         else: sep = ''
         addr = urlparse.urljoin(self._baseURI, ref) + sep
         #DEBUG("bind", pfx, ref, addr)
-        self._sink.bind(pfx, (notation3.RESOURCE, addr))
+        self._sink.bind(pfx, (RDFSink.SYMBOL, addr))
         #@@ check for pfx already bound?
         self._prefixes[pfx] = addr
 
     def gotStatement(self, scp, subj, verb, obj):
-        #DEBUG("gotStatement:", scp, subj, verb, obj)
+	#DEBUG("gotStatement:", scp, subj, verb, obj)
         
         dir, pred = verb
         if dir<0: subj, obj = obj, subj
@@ -295,22 +303,38 @@ class Parser(_Parser):
 
     def newScope(self):
         return self.something(self.docScope(),
-                              "clause", notation3.FORMULA)
+                              "clause", RDFSink.FORMULA)
 
     def something(self, scp, hint="thing",
-                  ty=notation3.RESOURCE,
-                  quant = notation3.N3_forSome_URI):
+                  ty=RDFSink.SYMBOL,
+                  quant = RDFSink.forSomeSym):
         it = (ty, "%s#%s_%s" % (self._baseURI, hint, self._serial))
 
-        p = (notation3.RESOURCE, quant)
+        p = (RDFSink.SYMBOL, quant)
         self._sink.makeStatement((scp, p, scp, it))
 
         self._serial = self._serial + 1
         return it
 
+
+    def mkList(self, scp, items):
+	tail = None
+	head = notation3.N3_nil
+	say = self._sink.makeStatement
+	for term in items:
+	    cons = self.something(scp, "cons")
+	    say((scp, notation3.N3_first, cons, term))
+	    if tail:
+	        say((scp, notation3.N3_rest, tail, cons))
+	    tail = cons
+	    if not head: head = cons
+	if tail:
+	    say((scp, notation3.N3_rest, tail, notation3.N3_nil))
+	return head
+
 def mkFormula(absURI):
     """move this somewhere else?"""
-    return notation3.FORMULA, absURI + "#_formula" #@@KLUDGE from notation3.py, cwm.py
+    return RDFSink.FORMULA, absURI + "#_formula" #@@KLUDGE from notation3.py, cwm.py
 
 def DEBUG(*args):
     import sys
@@ -319,7 +343,10 @@ def DEBUG(*args):
     sys.stderr.write("\n")
     
 # $Log$
-# Revision 1.2  2002-01-12 23:37:14  connolly
+# Revision 1.3  2002-06-21 16:04:02  connolly
+# implemented list handling
+#
+# Revision 1.14  2002/01/12 23:37:14  connolly
 # allow . after ;
 #
 # Revision 1.13  2001/09/06 19:55:13  connolly
