@@ -406,6 +406,8 @@ NRT TOKYO NARITA
 MSP MINNEAPOLIS ST PL
 MEM MEMPHIS
 BRU BRUSSELS
+ATL ATLANTA
+HEL HELSINKI VANTAA
 EODATA
 
     # SNA confirmed via http://www.ocair.com/
@@ -422,7 +424,10 @@ EODATA
 
 
 # $Log$
-# Revision 1.17  2004-08-19 21:23:36  connolly
+# Revision 1.18  2004-12-23 15:42:16  connolly
+# HEL airport
+#
+# Revision 1.17  2004/08/19 21:23:36  connolly
 # oops... BRUSSELS is BRU
 #
 # Revision 1.16  2004/08/19 21:16:10  connolly
