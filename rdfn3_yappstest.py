@@ -18,7 +18,9 @@ class Parser:
 def test(text):
     gen = notation3.ToN3(sys.stdout.write)
     p = Parser(gen, 'http://example.org/2001/stuff/doc23')
+    gen.startDoc()
     p.feed(text)
+    gen.endDoc()
 
 if __name__ == '__main__':
     test(sys.stdin.read())

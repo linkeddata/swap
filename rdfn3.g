@@ -52,7 +52,7 @@ parser _Parser:
     # foos0 is mnemonic for 0 or more foos
     # foos1      "          1 or more foos
 
-    rule statement<<ctx>> : term<<ctx>> predicates0<<term, ctx>> STOP
+    rule statement<<ctx>> : term<<ctx>> predicates0<<ctx, term>> STOP
 
     rule term<<ctx>>
               : URIREF        {{ return self.uriref(URIREF) }}
@@ -161,6 +161,7 @@ class Parser(_Parser):
         ref = ref[1:-1] # take of <>'s
         if ref[-1] == '#': # @@work around bug in urljoin...
             sep = '#'
+            ref = ref[:-1]
         else: sep = ''
         addr = urlparse.urljoin(self._baseURI, ref) + sep
         #DEBUG("bind", pfx, ref, addr)
@@ -172,10 +173,8 @@ class Parser(_Parser):
         #DEBUG("gotStatement:", ctx, subj, verb, obj)
         
         dir, pred = verb
-        if dir>0:
-            self._sink.makeStatement((ctx, pred, subj, obj))
-        else:
-            self._sink.makeStatement((ctx, pred, obj, subj))
+        if dir<0: subj, obj = obj, subj
+        self._sink.makeStatement((ctx, pred, subj, obj))
 
     def newClause(self):
         return self.something(self.docContext(),
@@ -184,10 +183,8 @@ class Parser(_Parser):
     def something(self, ctx, hint="thing", ty=notation3.RESOURCE):
         it = (ty, "%s#%s_%s" % (self._baseURI, hint, self._serial))
 
-        self._sink.makeStatement((ctx,
-                                  (notation3.RESOURCE, notation3.N3_forSome_URI), #pred
-                                  ctx,
-                                  it))
+        ex = (notation3.RESOURCE, notation3.N3_forSome_URI)
+        self._sink.makeStatement((ctx, ex, ctx, it))
 
         self._serial = self._serial + 1
         return it
@@ -204,7 +201,10 @@ def DEBUG(*args):
     sys.stderr.write("\n")
     
 # $Log$
-# Revision 1.7  2001-08-31 21:28:39  connolly
+# Revision 1.8  2001-08-31 22:15:44  connolly
+# aha! fixed serious arg-ordering bug; a few other small clean-ups
+#
+# Revision 1.7  2001/08/31 21:28:39  connolly
 # quick release for others to test
 #
 # Revision 1.6  2001/08/31 21:14:11  connolly
