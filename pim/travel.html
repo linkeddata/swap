@@ -28,6 +28,8 @@ from the iterary into my calendar:</p>
     able to key in the diffs, but that's even more error prone.</li>
 </ol>
 
+<h2>Step 1: Grok Legacy Data</h2>
+
 <p>So I wrote a little perl script (<a
 href="/2001/07dc-bos/grokNavItin.pl">grokNavItin.pl</a>) to convert the
 travel itinerary, which had obviously been dumped from a relational
@@ -48,12 +50,28 @@ calendar. (see <a href="">Makefile</a> for (some of the?) details).</p>
 <p><em>[@@image of palm pilot showing flight in the datebook]</em></p>
 
 <p>The next month, I wrote rules like "itineraries that have me leaving
-before 30 July are no good" and ran them over the RDF (Makefile). I was much
-more confident having the machine review my itinerary than eyeballing it.
-More details: <a href="/2001/08swws67/">SWWS stuff</a>.</p>
+before 30 July are no good" and ran them over the RDF. I was much more
+confident having the machine review my itinerary than eyeballing it. The rule
+are a bit tedious...</p>
+<pre>{
+ v:itin a i:Itinerary;
+  i:air
+    [ i:date v:d1;
+      i:LV [ i:place [ t:iata "MCI" ];
+             i:time v:t1;
+           ];
+    ].
+  v:d1 log:lessThan "2001-07-30".
+}
+  log:implies {
+   v:itin &lt;#leavesDaysTooSoon&gt; v:d1;
+          &lt;#at&gt; v:t1.
+}.</pre>
 
-<p>I have since rewritten the little perl script; rather than
-hoping/pretending that our travel agent would use an RDF vocabulary, <a
+<p>More details: <a href="/2001/08swws67/">SWWS stuff</a>.</p>
+
+<p>I have since revised the little perl script; rather than hoping/pretending
+that our travel agent would use an RDF vocabulary, <a
 href="grokTravItin.pl">grokTravItin.pl</a>  uses terms from the <a
 href="http://www.cyc.com/cyc-2-1/vocab/transportation-vocab.html">cyc
 ontology of common sense transportation terms</a>. (The opencyc project
@@ -62,18 +80,76 @@ released a version in DAML/RDF). I needed a few extra terms:
 href="travelTerms">travelTerms</a>, in <a href="travelTerms.rdf">RDF/xml</a>,
 <a href="travelTerms.rdf">RDF/n3</a>.</p>
 
-<p>[@@some figures? SVG view of Makefiles, showing data flow thru tools?]</p>
+<p><em>[@@figure of (some of the) travelTerms? use dia? use
+sniffSchema.n3?]</em></p>
 
-<p>@@grokNavItin... schema?</p>
+<p><em>[@@some figures? SVG view of Makefiles, showing data flow thru
+tools?]</em></p>
 
-<p>@@checking travel itineraries</p>
+<h2>Evolution Import</h2>
 
 <p>@@converting flight itineraries to .ics for import into evolution</p>
 
+<h2>Visualization: projecting itineraries on earth maps</h2>
+
 <p>@@visualization with xearth</p>
+
+<h2>Steps Toward Synchronization</h2>
 
 <p>@@"if it's in my HTML schedule but not in evo, print it out in evo format
 for import".</p>
+
+<p>Diagram with more stuff: socialParticipants, eventOccursAt, etc.</p>
+
+<p>details from <a href="/2002/08dc-ymx/Makefile">Makefile</a>:</p>
+
+<p>First, scrape a formal version of my HTML schedule:</p>
+<pre>
+status-formal.rdf: $(TEAM)/connolly.html $(SW)/schedScrape.xsl
+   $(XSLTPROC) --novalid $(SW)/schedScrape.xsl $(TEAM)/connolly.html &gt;$@</pre>
+
+<p>Then, conver evo ical to RDF:</p>
+<pre>,evocal.rdf: $(HOME)/evolution/local/Calendar/calendar.ics $(PALMAGENT)/vcal2xml.pl
+   $(PERL) $(PALMAGENT)/vcal2xml.pl $(HOME)/evolution/local/Calendar/calendar.ics &gt;$@
+
+</pre>
+
+<p>Finally, check rules ala:</p>
+<pre>evoMissing.n3: status2evo.n3 status-formal.rdf ,evocal.rdf
+   $(PYTHON) $(CWM) status2evo.n3 --think &gt;$@
+</pre>
+
+<p>The rules look like:</p>
+<pre>{
+  :P s:subPropertyOf :cityName.
+&lt;status-formal.rdf&gt; log:semantics [
+  log:includes {
+    :E r:value :WHAT;
+      k:socialParticipants [ con:mailbox &lt;mailto:connolly@w3.org&gt; ];
+      k:eventOccursAt [ :P :CITYNAME; ];
+      k:startingDate [ dt:date :START ];
+      k:endingDate [ dt:date :END ];
+    
+  }].
+
+  # ... date conversion stuff...
+
+   &lt;,evocal.rdf&gt; log:semantics [ log:notIncludes {
+     [ ical:DTSTART [ ical:DATE :STARTi ];
+       ical:DTEND   [ ical:DATE :ENDi ];
+       ical:LOCATION :CITYNAME;
+     ]
+   }].
+} log:implies {
+   :SyncInfo :eg
+     [ ical:DTSTART [ ical:DATE :STARTi ];
+       ical:DTEND   [ ical:DATE :ENDi ];
+       ical:LOCATION :CITYNAME;
+       ical:UID :UID;
+       ical:DTSTAMP :STAMP;
+     ]
+}.
+</pre>
 
 <h2>Earlier work</h2>
 <ol>
