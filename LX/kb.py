@@ -401,7 +401,7 @@ class KB(list, pluggable.Store):
             nick = "_".join(self.ns.inverseLookup(term))
         except KeyError, e:
             # print "Term: ", term
-            raise e
+            raise KeyError(term)
         self.nicknames[term] = nick
         return nick
         
@@ -413,7 +413,10 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
  
 # $Log$
-# Revision 1.18  2003-09-04 03:15:20  sandro
+# Revision 1.19  2003-09-04 07:14:12  sandro
+# fixed plain literal handling
+#
+# Revision 1.18  2003/09/04 03:15:20  sandro
 # removed a leftover reference to __interpretation; diddled with nick exceptions
 #
 # Revision 1.17  2003/08/25 21:10:01  sandro

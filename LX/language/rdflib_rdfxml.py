@@ -44,7 +44,10 @@ class ParserX(rdflib.syntax.parser.Parser):
             return LX.logic.ConstantForURI(str(s))
         if isinstance(s, rdflib.Literal.Literal):
             # print "LIT: ", str(s), s.datatype
-            return LX.logic.ConstantForDatatypeValue(str(s), str(s.datatype))
+            if s.datatype:
+                return LX.logic.ConstantForDatatypeValue(str(s), LX.logic.ConstantForURI(str(s.datatype)))
+            else:
+                return LX.logic.ConstantForDatatypeValue(str(s))
         if isinstance(s, rdflib.BNode.BNode):
             try:
                 tt = self.bnodes[s]
@@ -75,7 +78,10 @@ class Serializer:
         pass
 
 # $Log$
-# Revision 1.4  2003-08-22 20:49:41  sandro
+# Revision 1.5  2003-09-04 07:14:15  sandro
+# fixed plain literal handling
+#
+# Revision 1.4  2003/08/22 20:49:41  sandro
 # midway on getting load() and parser abstraction to work better
 #
 # Revision 1.3  2003/08/01 15:27:22  sandro

@@ -223,26 +223,27 @@ for (key, value) in constantsForDTVs:
     valuesForConstants[value] = key
 
 
-def ConstantForDatatypeValue(dtvPassed, dtURI=None):
+def ConstantForDatatypeValue(value, datatype=None):
     """
     Basically we'd like to handle python types and RDF/XSD types
     in the same place.  Hrm.
     """
-    if dtURI is None:
-        dtURI = "::native"
 
-    dtv = (dtvPassed, dtURI)
+    pair = (value, datatype)
     try:
-        return constantsForDTVs[dtv]
+        return constantsForDTVs[pair]
     except KeyError:
-        tt = Constant(suggestedName=("lit"+str(dtv[0])))
-        constantsForDTVs[dtv] = tt
-        valuesForConstants[tt] = dtv
-        # this doesnt handle non-URIs right at all, and what
-        # about plain literals?
-        tt.data = (dtvPassed, ConstantForURI(dtURI))
+        tt = Constant(suggestedName=("lit"+str(value)))
+        constantsForDTVs[pair] = tt
+        valuesForConstants[tt] = pair
+        tt.data = pair
         return tt
 
+def ConstantForPlainLiterals(value):
+    return ConstantForDatatypeValue(value)
+                                    
+                                    
+                                    
     
 ################################################################
         
@@ -271,7 +272,10 @@ def _test():
 if __name__ == "__main__": _test()
 
 # $Log$
-# Revision 1.8  2003-08-28 11:40:50  sandro
+# Revision 1.9  2003-09-04 07:14:12  sandro
+# fixed plain literal handling
+#
+# Revision 1.8  2003/08/28 11:40:50  sandro
 # let Constants know their data, if they have any.  Still not complete
 # literal handling.  Used by owl-systems/display.py right now.
 #
