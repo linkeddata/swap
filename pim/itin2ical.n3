@@ -82,6 +82,9 @@ a:YMX a k:Airport-Physical;
 a:YVR a k:Airport-Physical;
   k:nameString "VANCOUVER BC";
   :timeZone :LosAngelesTime.
+a:SNA a k:Airport-Physical;
+  k:nameString "JOHN WAYNE INTL";
+  :timeZone :LosAngelesTime.
 
 
 { :FLT
