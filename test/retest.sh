@@ -38,6 +38,8 @@ cwm_test daml-ont.n3 "Convert some RDF/XML into RDF/N3" daml-pref.n3 -rdf daml-o
 
 cwm_test strquot.n3 "N3 string quoting" -n3 strquot.n3
 
+cwm_test lstring-out.n3 "N3 string nested triple quoting" --n3 syntax/lstring.n3
+
 #oops... misleading test case name.
 cwm_test equiv-syntax.n3 "conversion of N3 = to RDF" -n3 equiv-syntax.n3 -rdf
 
@@ -139,7 +141,10 @@ cwm_test argv-2.n3 "os:argv argument other values"  os/argv.n3 --think --with bo
 
 
 # $Log$
-# Revision 1.32  2002-03-30 22:06:24  timbl
+# Revision 1.33  2002-05-15 00:38:13  timbl
+# lstring.n3
+#
+# Revision 1.32  2002/03/30 22:06:24  timbl
 # Add test for n3ExprFor
 #
 # Revision 1.30  2002/03/17 04:24:12  timbl

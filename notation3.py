@@ -1548,7 +1548,7 @@ def stringToN3(str):
         j = i + m.start()
         res = res + str[i:j]
         ch = m.group(0)
-        if ch == '"' and delim == '"""':
+        if ch == '"' and delim == '"""' and str[j:j+3] != '"""':
             res = res + ch
         else:
             k = string.find('\a\b\f\r\t\v\n\\"', ch)
