@@ -1,0 +1,8 @@
+@prefix ex: <http://example/vocab#>.
+[ a ex:Foo].
+
+
+# test with: python ../cwm.py typednode.n3 --rdf
+# you should get a typednode in the RDF output,
+# i.e. not a Description element.
+# as of 21Jan2002, you get Description. bug.
