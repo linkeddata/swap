@@ -31,9 +31,9 @@ value. (See Tutorial on Builtins).</p>
 <p>This is a (working) copy of the table of contents of the XQ/XPath
 Functions and Operators.</p>
 
-<h3>2 <a href="/TR/xquery-operators/#accessors">Accessors</a> </h3>
+<h3>2 <a href="/TR/xquery-operators/#accessors">Accessors</a></h3>
 
-<p>These are XML-sepcific.  I would not expect them to be picked up in RDF
+<p>These are XML-sepcific. I would not expect them to be picked up in RDF
 query langauge.</p>
 
 <p></p>
@@ -49,8 +49,8 @@ query langauge.</p>
 <h3>3 <a href="/TR/xquery-operators/#func-error">The Error Function</a><br />
 </h3>
 
-<p>This is useful.  I was thinking of more levels of progress, warning,
-error.  This is less of an essential for interop.</p>
+<p>This is useful. I was thinking of more levels of progress, warning, error.
+This is less of an essential for interop.</p>
 
 <p>3.1 <a href="/TR/xquery-operators/#d1e412">Examples</a><br />
 </p>
@@ -73,30 +73,46 @@ Numerics</a><br />
 </p>
 
 <h3>5.2 <a href="/TR/xquery-operators/#op.numeric">Operators on Numeric
-Values</a> </h3>
+Values</a></h3>
 
-<p>These should dirtectly map into builtins.  Most of these exist in cwm with
-different names in math:</p>
+<p>These should dirtectly map into builtins. These already (2003/03) exist in
+cwm with different names in math: namespace.</p>
 
-<p>5.2.1 <a
-href="/TR/xquery-operators/#func-numeric-add">op:numeric-add</a><br />
-5.2.2 <a
-href="/TR/xquery-operators/#func-numeric-subtract">op:numeric-subtract</a><br
-/>
-5.2.3 <a
-href="/TR/xquery-operators/#func-numeric-multiply">op:numeric-multiply</a><br
-/>
-5.2.4 <a
-href="/TR/xquery-operators/#func-numeric-divide">op:numeric-divide</a><br />
-5.2.5 <a
+<p>They take the form in RDF of a property of the List of arguments, as  in 
+the N3    <code>(2 3) math:sum 5.</code></p>
+
+<p>When used as back-up of operators, the argument list will tend to be of
+length 2, though sum and product take a list of any lenth.  (Note: Zero
+length should of course yield for consistency the idenity under the
+operation: 0 for sum and 1 for product)</p>
+
+<p>5.2.1 <a href="/TR/xquery-operators/#func-numeric-add">op:numeric-add</a> 
+-- math:sum</p>
+
+<p>5.2.2 <a
+href="/TR/xquery-operators/#func-numeric-subtract">op:numeric-subtract</a> --
+math:difference</p>
+
+<p>5.2.3 <a
+href="/TR/xquery-operators/#func-numeric-multiply">op:numeric-multiply</a> --
+math:product</p>
+
+<p>5.2.4 <a
+href="/TR/xquery-operators/#func-numeric-divide">op:numeric-divide</a> --
+math:divid</p>
+
+<p></p>
+
+<p>5.2.5 <a
 href="/TR/xquery-operators/#func-numeric-integer-divide">op:numeric-integer-divide</a><br
 />
 5.2.6 <a href="/TR/xquery-operators/#func-numeric-mod">op:numeric-mod</a><br
 />
 5.2.7 <a
-href="/TR/xquery-operators/#func-numeric-unary-plus">op:numeric-unary-plus</a><br
-/>
-5.2.8 <a
+href="/TR/xquery-operators/#func-numeric-unary-plus">op:numeric-unary-plus</a>
+   ---- This is the identity operation  (aka NOP)</p>
+
+<p>5.2.8 <a
 href="/TR/xquery-operators/#func-numeric-unary-minus">op:numeric-unary-minus</a><br
 />
 </p>
@@ -584,7 +600,7 @@ Appendices</p>
 <p><a href="/TR/xquery-operators/">XQuery 1.0 and XPath 2.0 Functions and
 Operators</a></p>
 
-<p></p>
+<p><a href="CwmBuiltins.html">Built-In functions in Cwm</a><a></a></p>
 
 <p></p>
 
