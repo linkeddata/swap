@@ -437,13 +437,13 @@ def main():
 	yacc=open(yaccFile, "w")
 	yaccConvert(yacc, document, tokenRegexps)
 	yacc.close()
-    
+
     if parseFile == None: exit(0)
 
     
     ip = webAccess.urlopenForRDF(parseFile, None)
     
-    str = ip.read()
+    str = ip.read().decode('utf_8')
     sink = g.newFormula()
     p = PredictiveParser(sink=sink, top=document, branchTable= branchTable,
 	    tokenRegexps= tokenRegexps)
