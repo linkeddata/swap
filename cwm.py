@@ -8,7 +8,8 @@ Closed World Machine
 (also, in Wales, a valley  - topologiclly a partially closed world perhaps?)
 
 This is an engine which knows a certian amount of stuff and can manipulate it.
-It is a query engine, not an inference engine: that is, it will apply rules
+It is a (forward chaining) query engine, not an (backward chaining) inference engine:
+that is, it will apply all rules it can
 but won't figure out which ones to apply to prove something.  It is not
 optimized particularly.
 
@@ -105,7 +106,7 @@ import re
 import StringIO
 
 import notation3    # N3 parsers and generators, and RDF generator
-import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
+# import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 import urllib # for hasContent
 import md5, binascii  # for building md5 URIs
@@ -114,6 +115,8 @@ urlparse.uses_relative.append("md5") #@@kludge/patch
 
 LITERAL_URI_prefix = "data:application/n3;"
 
+# Should the internal representation of lists be with DAML:first and :rest?
+DAML_LISTS = notation3.DAML_LISTS    # If not, do the funny compact ones
 
 # Magic resources we know about
 
@@ -156,6 +159,20 @@ doMeta = 0  # wait until we have written the code! :-)
 
 INFINITY = 1000000000           # @@ larger than any number occurences
 
+
+# In the query engine we use tuples as data structure in the queue, offsets as follows:
+# Queue elements as follows:
+STATE = 0
+SHORT = 1
+CONSTS = 2
+VARS = 3
+BOUNDLISTS = 4
+QUAD = 5
+
+#  Keep a cache of subcontext closure:
+subcontext_cache_context = None
+subcontext_cache_subcontexts = None
+
 ########################################  Storage URI Handling
 #
 #  In general an RDf resource - here a Thing, has a uriRef rather
@@ -188,6 +205,8 @@ class Thing:
         """  Is this thing a genid - is its name arbitrary? """
         return 0    # unless overridden
 
+    def definedAsListIn(self):  # Is this a list? (override me!)
+        return None
   
     def asPair(self):
         return (RESOURCE, self.uriref(None))
@@ -237,7 +256,24 @@ def compareURI(self, other):
         print "Error with '%s' being the same as '%s'" %(s,o)
         raise internalError # Strings should not match if not same object
 
+def compareFormulae(self, other):
+    """ This algorithm checks for equality in the sense of structural equivalence, and
+    also provides an ordering which allows is to render a graph in a canonical way.
+    This is a form of unification.
 
+    The steps are as follows:
+    1. If one forumula has more statments than the other, it is greater.
+    2. The variables of each are found. If they have different number of variables,
+       then the ine with the most is "greater".
+    3. The statements of both formulae are ordered, and the formulae compared statement
+       for statement ignoring variables. If this produced a difference, then
+       the one with the first largest statement is greater.
+       Note that this may involve a recursive comparison of subformulae.
+    3. If the formulae are still the same, then for each variable, a list
+       of appearances is created.  Note that because we are comparing statements without
+       variables, two may be equal, in which case the same (first) statement number
+       is used whichever statement the variable was in fact in. Ooops
+    """
 class Resource(Thing):
     """   A Thing which has no fragment
     """
@@ -268,7 +304,7 @@ class Resource(Thing):
             return f
                 
                 
-    
+
 class Fragment(Thing):
     """    A Thing which DOES have a fragment id in its URI
     """
@@ -277,7 +313,11 @@ class Fragment(Thing):
 
         self.resource = resource
         self.fragid = fragid
+        self._defAsListIn = None      # This is not a list as far as we know
 
+    def definedAsListIn(self):  # Is this a list? (override me!)
+        return self._defAsListIn
+  
     def uriref(self, base=None):
         return self.resource.uriref(base) + "#" + self.fragid
 
@@ -295,6 +335,11 @@ class Fragment(Thing):
          """
          return self.fragid[0] == "_"  # Convention for now @@@@@
                                 # parser should use seperate class?
+
+class FragmentNil(Fragment):
+
+    def definedAsListIn(self):  # Is this a list? (override me!)
+        return self  # YEs, though a special one
 
 
 class Anonymous(Fragment):
@@ -416,7 +461,11 @@ class Engine:
         
         else :      # This has a fragment and a resource
             r = self.internURI(urirefString[:hash])
-            if type == RESOURCE: return r.internFrag(urirefString[hash+1:], Fragment)
+            if type == RESOURCE:
+                if urirefString == notation3.N3_nil[1]:  # Hack - easier if we have a different classs
+                    return r.internFrag(urirefString[hash+1:], FragmentNil)
+                else:
+                    return r.internFrag(urirefString[hash+1:], Fragment)
             if type == FORMULA: return r.internFrag(urirefString[hash+1:], Formula)
             else: raise shouldntBeHere    # Source code did not expect other type
 
@@ -432,6 +481,9 @@ class StoredStatement:
     def __init__(self, q):
         self.triple = q
 
+    def __getitem__(self, i):   # So that we can index the stored thing directly
+        return self.triple[i]
+
 #   The order of statements is only for cannonical output
     def __cmp__(self, other):
         if self is other: return 0
@@ -443,10 +495,11 @@ class StoredStatement:
 
 ##################################################################################
 #
-#   Built in classes
+#   Built-in master classes
 #
 # These are resources in the store which have processing capability.
-# Each one has to have its own class.
+# Each one has to have its own class, and eachinherits from various of the generic
+# classes below, according to its capabilities.
 #
 # First, the template classes:
 #
@@ -459,6 +512,8 @@ class LightBuiltIn(BuiltIn):
 class HeavyBuiltIn(BuiltIn):
     pass
 
+# A function can calculate its object from a given subject.
+#  Example: Joe mother Jane .
 class Function:
     def __init__(self):
         pass
@@ -469,6 +524,8 @@ class Function:
     def evaluateObject(self, store, context, subj, obj):
         raise function_has_no_evaluate_object_method #  Ooops - you can't inherit this.
 
+
+# A function can calculate its object from a given subject
 class ReverseFunction:
     def __init__(self):
         pass
@@ -479,6 +536,10 @@ class ReverseFunction:
     def evaluateSubject(self, store, context, obj):
         raise function_has_no_evaluate_subject_method #  Ooops - you can't inherit this.
 
+###############################################################################################
+#
+#                               S P E C I F I C   B U I L T - I N s
+#
 #   Light Built-in classes
 class BI_GreaterThan(LightBuiltIn):
     def evaluate(self, store, context, subj, obj):
@@ -504,12 +565,11 @@ class BI_StartsWith(LightBuiltIn):
 
 class BI_concat(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, store, context, obj):
-        list = store.getList(obj, context)
-        progress("##### list:"+`list`)
-        if list == None: return store.engine.intern((LITERAL, "*** concat: BAD LIST!"))
+        list = store._toPython(obj)
+        progress("##### list input to concat:"+`list`)
         str = ""
-        for x in list: str = str + x.string 
-        return store.engine.intern((LITERAL, str))
+        for x in list: str = str + x 
+        return store._fromPython(str)
 
 
 # Equivalence relations
@@ -533,12 +593,10 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
         return store.engine.intern((LITERAL, subj.uriref()))
 
     def evaluateSubject(self, store, context, obj):
-        if isinstance(obj, Literal):
-            return store.engine.intern((RESOURCE, obj.string))
-        else:
-            raise RuntimeError, `("@@ log:uri object not a literal", obj)`
+        if type(obj, ""):
+            return store.engine.intern((RESOURCE, obj))
 
-class BI_racine(LightBuiltIn, Function):
+class BI_racine(LightBuiltIn, Function):    # The resource whose URI is the same up to the "#" 
 
     def evaluateObject(self, store, context, subj):
         if isinstance(subj, Fragment):
@@ -596,14 +654,10 @@ class BI_resolvesTo(HeavyBuiltIn, Function):
 #                if option_format == "rdf" : p = sax2rdf.RDFXMLParser(_store,  _inputURI)
 # @@@ Only handles N3 - should handle anything especially RDF/XML.
         p = notation3.SinkParser(store,  inputURI)
-        try:
-            p.load(inputURI)
-        except IOError:
-            return None #@@ is that OK?
-        else:
-            del(p)
-            F = store.engine.intern((FORMULA, inputURI+ "#_formula"))
-            return F
+        p.load(inputURI)
+        del(p)
+        F = store.engine.intern((FORMULA, inputURI+ "#_formula"))
+        return F
     
     def evaluate2(self, store, subj, obj, variables, bindings):
         F = self.evaluateObject2(store, subj)
@@ -646,7 +700,8 @@ class BI_n3ExprFor(HeavyBuiltIn, Function):
         F = self.evaluateObject2(store, subj)
         return (F == obj) # @@@@@@@@@@@@@@@@@@@@@@@@@@@@ do structual equivalnce thing
 
-
+    
+###################################################################################        
 class RDFStore(notation3.RDFSink) :
     """ Absorbs RDF stream and saves in triple store
     """
@@ -711,6 +766,7 @@ class RDFStore(notation3.RDFSink) :
         self.first = engine.intern(notation3.N3_first)
         self.rest = engine.intern(notation3.N3_rest)
         self.nil = engine.intern(notation3.N3_nil)
+#        self.only = engine.intern(notation3.N3_only)
         self.Empty = engine.intern(notation3.N3_Empty)
         self.List = engine.intern(notation3.N3_List)
 
@@ -777,10 +833,53 @@ class RDFStore(notation3.RDFSink) :
         #  Check whether this quad already exists
 	if self.contains(q): return 0  # Return no change in size of store
 
+        # Compress string constructors within store:
+        # The first, rest pair becomes a single dotted-pair-like compact list element
+        # These are extended in the output routine back to first and rest.
+        
+        context, pred, subj, obj = q        
+        if pred is self.first:  # If first, and rest already known, combine:
+            for s in subj.occursAs[SUBJ]:
+                if s[PRED] is self.rest and s[CONTEXT] is context:
+                    q = (context, s[OBJ], subj, obj)
+                    context, pred, subj, obj = q
+                    self.removeStatement(s)
+                    break
+        elif pred is self.rest:  # And vice versa
+            for s in subj.occursAs[SUBJ]:
+                if s[PRED] is self.first and s[CONTEXT] is context:
+                    q = (context, obj, subj, s[OBJ])
+                    context, pred, subj, obj = q
+                    self.removeStatement(s)
+                    break
+
 	s = StoredStatement(q)
-        for p in ALL4: s.triple[p].occursAs[p].append(s)
+        for p in ALL4: q[p].occursAs[p].append(s)
         self.size = self.size+1
+
+        if pred.definedAsListIn():
+            subj = q[SUBJ]
+            if (not isinstance(subj, Fragment)) or subj._defAsListIn:
+                progress("??? ")
+                raise internalError #should only once
+            subj._defAsListIn = s
+            self.newList(subj)
         return 1  # One statement has been added
+
+    def newList(self, x):  # Note, for speed, that this is a list
+        for s in x.occursAs[PRED]:  # For every one which tis list gen'd
+            y = s.triple[SUBJ]
+            if not y._defAsListIn:
+                y._defAsListIn = s
+                self.newList(y)
+        return
+
+    def deList(self, x):
+        for s in x.occursAs[PRED]:
+            y = s.triple[SUBJ]
+            y._defAsListIn = None
+            self.deList(y)
+        return
 
     def startDoc(self):
         pass
@@ -792,24 +891,50 @@ class RDFStore(notation3.RDFSink) :
 
         """ Resource whose fragments have the most occurrences.
         """
+
         best = 0
         mp = None
-        for r in self.engine.resources.values() :
-            total = 0
-            if isinstance(r, Resource):
-                for f in r.fragments.values():
-                    anon, inc, se = self._topology(f, context)
-                    if not anon:
-                        total = total + (f.occurrences(PRED,context)+
-                                         f.occurrences(SUBJ,context)+
-                                         f.occurrences(OBJ,context))
-                if total > best or (total == best and `mp` > `r`) :  # Must be repeatable for retests
-                    best = total
-                    mp = r
-        if mp is None: return
-        
+        counts = {}   # Dictionary of how many times each
+        closure = self.subContexts(context)    # This context and all subcontexts
+        for con in closure:
+            for s in con.occursAs[CONTEXT]:
+                for p in PRED, SUBJ, OBJ:
+                    x = s[p]
+                    if isinstance(x, Fragment):
+                        anon, inc, se = self._topology(x, con)
+                        if not anon and not isinstance(x, Formula):
+                            r = x.resource
+                            total = counts.get(r, 0) + 1
+                            counts[r] = total
+                            if total > best or (total == best and `mp` > `r`) :  # Must be repeatable for retests
+                                best = total
+                                mp = r
+
+        if chatty > 25:
+            for r, count in counts.items():
+                if count > 4:
+                    progress("    Count is %3i for %s" %(count, `r`))
+
         if chatty > 20:
             progress("# Most popular Namesapce in %s is %s with %i" % (`context`, `mp`, best))
+        
+#        best = 0
+#        mp = None
+#        for r in self.engine.resources.values() :
+#            total = 0
+#            if isinstance(r, Resource):
+#                for f in r.fragments.values():
+#                    anon, inc, se = self._topology(f, context)
+#                    if not anon and not isinstance(f, Formula):
+#                        total = total + (f.occurrences(PRED,context)+
+#                                         f.occurrences(SUBJ,context)+
+#                                         f.occurrences(OBJ,context))
+#                if total > best or (total == best and `mp` > `r`) :  # Must be repeatable for retests
+#                    best = total
+#                    mp = r
+
+        if mp is None: return
+        
         mpPair = (RESOURCE, mp.uriref(None)+"#")
         defns = self.namespaces.get("", None)
         if defns :
@@ -837,11 +962,11 @@ class RDFStore(notation3.RDFSink) :
         self.dumpPrefixes(sink)
 #        print "# There are %i statements in %s" % (len(context.occursAs[CONTEXT]), `context` )
         for s in context.occursAs[CONTEXT]:
-            self._outputStatement(sink, s)
+            self._outputStatement(sink, s.triple)
         sink.endDoc()
 
-    def _outputStatement(self, sink, s):
-        sink.makeStatement(self.extern(s.triple))
+    def _outputStatement(self, sink, triple):
+        sink.makeStatement(self.extern(triple))
 
     def extern(self, t):
         return(t[CONTEXT].asPair(),
@@ -860,7 +985,7 @@ class RDFStore(notation3.RDFSink) :
         if sorting: context.occursAs[SUBJ].sort()
         for s in context.occursAs[SUBJ] :
             if context is s.triple[CONTEXT]and s.triple[PRED] is self.forSome:
-                self._outputStatement(sink, s)
+                self._outputStatement(sink, s.triple)
 
         rs = self.engine.resources.values()
         if sorting: rs.sort()
@@ -869,7 +994,7 @@ class RDFStore(notation3.RDFSink) :
             for s in r.occursAs[SUBJ] :
                 if context is s.triple[CONTEXT]:
                     if not(context is s.triple[SUBJ]and s.triple[PRED] is self.forSome):
-                        self._outputStatement(sink, s)
+                        self._outputStatement(sink, s.triple)
             if not isinstance(r, Literal):
                 fs = r.fragments.values()
                 if sorting: fs.sort
@@ -877,13 +1002,13 @@ class RDFStore(notation3.RDFSink) :
                     for s in f.occursAs[SUBJ] :
 #                        print "...dumping %s in context %s" % (`s.triple[CONTEXT]`, `context`)
                         if s.triple[CONTEXT] is context:
-                            self._outputStatement(sink, s)
+                            self._outputStatement(sink, s.triple)
         sink.endDoc()
 #
 #  Pretty printing
 #
 #   x is an existential if there is in the context C we are printing
-# a statement  (c log:forSome x). If so the anonymous syntaxes follow.
+# is a statement  (C log:forSome x). If so, the anonymous syntaxes follow.
 # c is 1 if x is a subexpression of the current context else c=0
 # r s and o are the number  times x occurs within context as p,s or o
 # o excludes the statements making it an existential and maybe subexp.
@@ -925,7 +1050,7 @@ class RDFStore(notation3.RDFSink) :
 
 # Contexts
 #
-# These are in some way like literal strings, in that theyu are defined completely
+# These are in some way like literal strings, in that they are defined completely
 # by their contents. They are sets of statements. (To say a statement occurs
 # twice has no menaing).  Can they be given an id?  You can assert that any
 # object is equivalent to (=) a given context. However, it is the contexts which
@@ -949,17 +1074,18 @@ class RDFStore(notation3.RDFSink) :
         or zero if self can NOT be represented as an anonymous node.
         Paired with this is whether this is a subexpression.
         """
-        # @@@@ This is NOT a proper test - we should test that the statment
+        # @@@@ This is NOT a proper test - we should test that the statement
         # is an assumed one.
         # @@@ what about nested contexts? @@@@@@@@@@@@@@@@@@@@@@@@@@
+
+        subcontexts = self.subContexts(context)   #  @@ Cache these on the formula for speed?         
         _asPred = x.occurrences(PRED, context)
         
         _isSubExp = 0
         _asObj = 0       # Times occurs as object NOT counting the subExpression or ForSome
         _isExistential = 0  # Is there a forSome?
+        _elsewhere = 0
         for s in x.occursAs[OBJ]:  # Checking all statements about x
-#            if string.find(`x`, "_gs") >0: print "  ----- ",quadToString(s.triple)
-            if not isinstance(s,StoredStatement):print "s=",`s`
             con, pred, subj, obj = s.triple
             # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ HACK - error - check context is ancestor
             if subj is con and pred is self.forSome :
@@ -967,25 +1093,22 @@ class RDFStore(notation3.RDFSink) :
             else:
                 if con is context:
                     _asObj = _asObj + 1  # Regular object
+                elif con in subcontexts:
+                    _elsewhere = _elsewhere + 1  # Occurs in a subformula - can't be anonymous!
+                else:
+                    pass    # Irrelevant occurrence in some other formula
 
-            # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ end hack
-#            
-#            if con is context:  # believing ones in this context
-#                if subj is context and pred is self.forSome :
-#                    _isExistential = 1
-#                else:
-#                    _asObj = _asObj + 1  # Regular object
-#            elif con is x:   # Believing also for this purpose only those in context x
-#                if pred is self.forSome :
-#                    _isExistential = 1
 
-        _op = _asObj + _asPred
 #        _anon = (_op < 2) and _isExistential
-        _anon = (_asObj < 2) and _asPred == 0 and _isExistential
+        _anon = (_asObj < 2) and ( _asPred == 0) and _isExistential and not _elsewhere
+        if x.definedAsListIn():
+            _asObj = _asObj + _asPred  # List links are like obj (daml:rest)
+            _asPred = 0
+            _anon = 1    # Always represent it as anonymous
         _isSubExp = _isExistential and (isinstance(x, Formula) and x is not context) # subExpression removal
 
-        if 0: print "Topology <%s in <%sanon=%i ob=%i,pr=%i se=%i exl=%i"%(
-            `x`[-8:], `context`[-8:], _anon, _asObj, _asPred, _isSubExp, _isExistential)
+        if chatty > 98: progress( "\nTopology <%s in <%sanon=%i ob=%i,pr=%i se=%i exl=%i"%(
+            `x`[-8:], `context`[-8:], _anon, _asObj, _asPred, _isSubExp, _isExistential))
         return ( _anon, _asObj+_asPred, _isSubExp)  
 
     def isList(self, x, context):
@@ -993,44 +1116,91 @@ class RDFStore(notation3.RDFSink) :
         This should check that this is a node which can be represented in N3
         without loss of information as a list.
         This does not check whether the node is anonymous - check that first.
+        It does check whether there is more info about the node which
+            can't be represented in ()
         
         """
         if x is self.nil: return 1  # Yes, nil is the list ()
 
-        empty = 0
-        left = []
-        right = []
-        for s in x.occursAs[SUBJ]:
-            con, pred, subj, obj = s.triple
-            if con == context:
-                #print "     ",quadToString(s.triple), `self.first`
-                if pred is self.first: left.append(obj)
-                elif pred is self.rest: right.append(obj)
-                elif pred is self.type:
-                    if obj is self.Empty: empty = 1
-                    if obj is not self.List and obj is not self.Empty : return 0
-                else:
-                    #print "     Unacceptable: ",quadToString(s.triple), `self.rest`, `pred`
-                    return 0  # Can't have anything else - wouldn't print.
-        #print "# ", `x`[-8:], "left:", left, "right", right
-        if left == [] and right == [] and empty: return 1
-        if len(left) != 1 or len(right)!=1: return 0 # Invalid
-        return self.isList(right[0], context)
+        if not DAML_LISTS:
+            if x is self.nil: return 1  # Yes, only is actually the list ()
+            ld = x.definedAsListIn()
+            if not ld: return None
+            first = ld.triple[OBJ]     # first
+            rest = ld.triple[PRED]    # rest
+            empty = 0
+            left = []
+            right = []
+            for s in x.occursAs[SUBJ]:
+                con, pred, subj, obj = s.triple
+                if con == context and s is not ld: 
+                    #print "     ",quadToString(s.triple), `self.first`
+                    if pred is self.first and obj is first:
+                        pass
+                    elif pred is self.rest and obj is rest:
+                        pass
+                    elif pred is self.type:
+                        if obj is self.Empty: empty = 1
+                        if obj is not self.List and obj is not self.Empty : return 0
+                    else:
+                        #print "     Unacceptable: ",quadToString(s.triple), `self.rest`, `pred`
+                        return 0  # Can't have anything else - wouldn't print.
+            #print "# ", `x`[-8:], "left:", left, "right", right
+            return self.isList(rest, context)
+        else:  # DAML_LISTS
+            empty = 0
+            left = []
+            right = []
+            for s in x.occursAs[SUBJ]:
+                con, pred, subj, obj = s.triple
+                if con == context:
+                    #print "     ",quadToString(s.triple), `self.first`
+                    if pred is self.first: left.append(obj)
+                    elif pred is self.rest: right.append(obj)
+                    elif pred is self.type:
+                        if obj is self.Empty: empty = 1
+                        if obj is not self.List and obj is not self.Empty : return 0
+                    else:
+                        #print "     Unacceptable: ",quadToString(s.triple), `self.rest`, `pred`
+                        return 0  # Can't have anything else - wouldn't print.
+            #print "# ", `x`[-8:], "left:", left, "right", right
+            if left == [] and right == [] and empty: return 1
+            if len(left) != 1 or len(right)!=1: return 0 # Invalid
+            return self.isList(right[0], context)
     
-    def getList(self, x, context):
-        progress("#### getting list"+`x`)
+#  Convert a data item with no unbound variables into a python equivalent 
+#  Given the entries in a queue template, find the value of a list.
+#  @@ slow
+#   These mthods are at the disposal of built-ins.
+
+    def _toPython(self, x, boundLists, queue):
+        if chatty > 85: progress("#### Converting to python "+ xToStr(x))
         """ Returns an N3 list as a Python sequence"""
         if x is self.nil: return []  # Yes, nil is the list ()
-        first = self.any((context, self.first, x, None))
-        if first == None:
-            progress("Warning: Bad list - no first "+x2s(x))
-            return None   # Bad list!
-        rest =  self.any((context, self.rest,  x, None))
-        if rest == None:
-            progress("Warning: Bad list - no rest "+x2s(x))
-            return None  # Bad list!
-        return [ first ] + self.getList(rest, context)
-    
+        ld = x.definedAsListIn()
+        if not ld:
+            if isinstance(x, Literal):
+                return x.string
+            return x    # If not a list, return unchanged
+        if x in boundLists: # This is a hypothetical list in the query
+            for i in range(len(queue)):  # @@ slow
+                c2, p2, s2, o2 = queue[i][QUAD]
+                if s2 is list and p2.definedAsListIn():
+                    return [ self._toPython(o2,boundLists, queue) ] + self._toPython(p2,boundLists, queue)
+            else:
+                raise noendtolist  # oops -bug
+        else:  #  A stored list - get it from the store
+            ld = x.definedAsListIn()
+            return  [ self._toPython(ld[OBJ], boundLists, queue) ] + self._toPython(ld[PRED], boundLists, queue) 
+
+    def _fromPython(self, x):
+        if type(x, ''):
+            return self.engine.intern(LITERAL, x)
+        if type(x, 2):
+            return self.engine.intern(LITERAL, `x`)
+#        if type(x, []): # @@@@@@@@@@@@@ return list
+#            return self.engine.intern(LITERAL, x)
+        return x
 
     def dumpNested(self, context, sink):
         """ Iterates over all URIs ever seen looking for statements
@@ -1071,6 +1241,9 @@ class RDFStore(notation3.RDFSink) :
             for f in fs :  # then anything in its namespace
                 self._dumpSubject(f, context, sink, sorting)
 
+# This outputs arcs leading away from a node, and where appropriate
+# recursively descends the tree, by dumping the object nodes
+# (and in the case of a compact list, the predicate (rest) node).
 
     def _dumpSubject(self, subj, context, sink, sorting=1, statements=[]):
         """ Take care of top level anonymous nodes
@@ -1080,9 +1253,9 @@ class RDFStore(notation3.RDFSink) :
             subj.occurrences(PRED,context), subj.occurrences(SUBJ,context),
             subj.occurrences(OBJ, context))
         _anon, _incoming, _se = self._topology(subj, context)    # Is anonymous?
-#        _isSubject = subj.occurrences(SUBJ,context) # Has properties in this context?
-#        if not _isSubject and not _se: return       # Waste no more time
-#        if not _isSubject: return       # Waste no more time
+
+
+
         
         if 0: sink.makeComment("DEBUG: %s incoming=%i, se=%i, anon=%i" % (
             `subj`[-8:], _incoming, _se, _anon))
@@ -1112,11 +1285,16 @@ class RDFStore(notation3.RDFSink) :
                 sink.startAnonymousNode(subj.asPair())
                 if sorting: statements.sort()    # Order only for output
                 for s in statements:
-                    self.dumpStatement(sink, s)
+                    self.dumpStatement(sink, s.triple)
 #                if _se > 0:  # Is subexpression of this context  @@@@@@ MISSING "="
 #                    sink.startBagSubject(subj.asPair())
 #                    self.dumpNestedStatements(subj, sink)  # dump contents of anonymous bag
 #                    sink.endBagSubject(subj.asPair())
+
+                    next = s[PRED].definedAsListIn()    # List?
+                    if next:
+                        self.dumpStatement(sink, next.triple) # If so, unweave now
+                        
                 sink.endAnonymousNode()
                 return  # arcs as subject done
 
@@ -1127,15 +1305,21 @@ class RDFStore(notation3.RDFSink) :
 
         if sorting: statements.sort()
         for s in statements:
-            self.dumpStatement(sink, s)
+            self.dumpStatement(sink, s.triple)
 
 
                 
-    def dumpStatement(self, sink, s, sorting=0):
-        triple = s.triple
+    def dumpStatement(self, sink, triple, sorting=0):
+        # triple = s.triple
         context, pre, sub, obj = triple
         if sub is obj:
-            self._outputStatement(sink, s) # Do 1-loops simply
+            self._outputStatement(sink, triple) # Do 1-loops simply
+            return
+        # Expand lists to DAML lists on output - its easier
+        if pre.definedAsListIn():
+            self.dumpStatement(sink, (context, self.first, sub, obj), sorting)
+#            if pre is not self.nil:
+            self.dumpStatement(sink, (context, self.rest,  sub, pre), sorting)
             return
         _anon, _incoming, _se = self._topology(obj, context)
         if 0: sink.makeComment("...%s anon=%i, incoming=%i, se=%i" % (
@@ -1152,11 +1336,18 @@ class RDFStore(notation3.RDFSink) :
             
             if _isSubject > 0 or not _se :   #   Do [ ] if nothing else as placeholder.
                 li = _anon and self.isList(obj,context)
+                if chatty>49 and li:
+                    progress("List found in " + x2s(obj))
                 sink.startAnonymous(self.extern(triple), li)
                 if sorting: obj.occursAs[SUBJ].sort()
                 for t in obj.occursAs[SUBJ]:
                     if t.triple[CONTEXT] is context:
-                        self.dumpStatement(sink, t)
+                        self.dumpStatement(sink, t.triple)
+
+                ld = pre.definedAsListIn()
+                if ld: #@@@@
+                    self.dumpStatement(sink, ld.triple)
+  
                 if _se > 0:
                     sink.startBagNamed(context.asPair(),obj.asPair()) # @@@@@@@@@  missing "="
                     self.dumpNestedStatements(obj, sink)  # dump contents of anonymous bag
@@ -1175,7 +1366,7 @@ class RDFStore(notation3.RDFSink) :
             sink.endBagObject(pre.asPair(), sub.asPair())
             return
 
-        self._outputStatement(sink, s)
+        self._outputStatement(sink, triple)
                 
 
 
@@ -1211,7 +1402,7 @@ class RDFStore(notation3.RDFSink) :
                             self.removeStatement(t)
                             total = total + 1
 
-                progress("Purged %i statements with...%s" % (total,`subj`[-20:]))
+                if chatty > 30: progress("Purged %i statements with...%s" % (total,`subj`[-20:]))
 
 
     def removeStatement(self, s):
@@ -1222,6 +1413,13 @@ class RDFStore(notation3.RDFSink) :
                 i = i + 1
             l[i:i+1] = []  # Remove one element
             # s.triple[p].occursAs[p].remove(s)  # uses slow __cmp__
+        pred = s.triple[PRED]
+        if pred.definedAsListIn():
+            subj = s.triple[SUBJ]
+            if not subj._defAsListIn: raise internalError #should only once
+            subj._defAsListIn = None
+            self.deList(subj)
+
         self.size = self.size-1
         del s
 
@@ -1290,14 +1488,14 @@ class RDFStore(notation3.RDFSink) :
         template = t[SUBJ]
         conclusion = t[OBJ]
 
-        if chatty >30: print"\n\n=================== IMPLIES ============\n"
+        if chatty >30: progress("\n=================== IMPLIES RULE ============")
 
         # When the template refers to itself, the thing we are
         # are looking for will refer to the context we are searching
         # Similarly, refernces to the working context have to be moved into the
         # target context when the conclusion is drawn.
 
-        unmatched, _templateVariables = self.nestedContexts(template)
+        unmatched, _templateVariables = self.oneContext(template)
         _substitute([( template, workingContext)], unmatched)
 
 # If we know :a :b :c, then [ :b :c ] is true.
@@ -1307,26 +1505,26 @@ class RDFStore(notation3.RDFSink) :
                 and quad[SUBJ] is workingContext
                 and quad[PRED] is self.forSome):
                 pass
-                if chatty>80: print " Stripped forSome <%s" % `quad[OBJ]`[-10:]
+                if chatty>80: progress( " Stripped forSome <%s" % `quad[OBJ]`[-10:])
             else:
                 u2.append(quad)
-        if chatty>80: print " Stripped %i  %i" % (len(unmatched), len(u2))
+        if chatty>80: progress( " Stripped %i  %i" % (len(unmatched), len(u2)))
         unmatched = u2
         
         if chatty >20:
-            print "# IMPLIES Template", setToString(unmatched)
-            for v in _variables: print "    %s" % `v`[-8:]
+            progress( "# IMPLIES Template" + setToString(unmatched, _variables))
+
         conclusions, _outputVariables = self.nestedContexts(conclusion)
         _substitute([( conclusion, targetContext)], conclusions)                
 
-        if chatty > 20:
-            print "# IMPLIES rule, %i terms in template %s (%i t,%i e) => %s (%i t, %i e)" % (
+        if chatty > 50:
+            progress( "# IMPLIES rule, %i terms in template %s (%i t,%i e) => %s (%i t, %i e)" % (
                 len(template.occursAs[CONTEXT]),
                 `template`[-8:], len(unmatched), len(_templateVariables),
-                `conclusion`[-8:], len(conclusions), len(_outputVariables))
-        if chatty > 80:
+                `conclusion`[-8:], len(conclusions), len(_outputVariables)))
+        if chatty > 95:
             for v in _variables:
-                print "    Variable: ", `v`[-8:]
+                progress( "    Variable: " + `v`[-8:])
     # The smartIn context was the template context but it has been mapped to the workingContext.
         return self.match(unmatched, _variables, _templateVariables, [workingContext],
                       self.conclude, ( self, conclusions, targetContext, _outputVariables))
@@ -1334,7 +1532,7 @@ class RDFStore(notation3.RDFSink) :
 # Return whether or nor workingContext containts a top-level template equvalent to subexp 
     def testIncludes(self, workingContext, template, _variables, smartIn=[], bindings=[]):
 
-        if chatty >30: print"\n\n=================== includes ============\n"
+        if chatty >30: progress("\n\n=================== testIncludes ============")
 
         # When the template refers to itself, the thing we are
         # are looking for will refer to the context we are searching
@@ -1342,26 +1540,49 @@ class RDFStore(notation3.RDFSink) :
         if not(isinstance(workingContext, Formula) and isinstance(template, Formula)): return 0
 
 
-        unmatched, _templateVariables = self.nestedContexts(template)
+        unmatched, _templateVariables = self.oneContext(template)
         _substitute([( template, workingContext)], unmatched)
         if bindings != []: _substitute(bindings, unmatched)
 
         if chatty > 20:
-            print "# includes rule, %i terms in template %s, %i unmatched, %i template variables" % (
+            progress( "# includes rule, %i terms in template %s, %i unmatched, %i template variables" % (
                 len(template.occursAs[CONTEXT]),
-                `template`[-8:], len(unmatched), len(_templateVariables))
+                `template`[-8:], len(unmatched), len(_templateVariables)))
         if chatty > 80:
             for v in _variables:
-                print "    Variable: ", `v`[-8:]
+                progress( "    Variable: " + `v`[-8:])
 
         result = self.match(unmatched, [], _variables + _templateVariables, smartIn, justOne=1)
-        if chatty >30: print"=================== end includes =", result
+        if chatty >30: progress("=================== end includes =" + `result`)
         return result
  
     def genid(self,context, type=RESOURCE):        
         self._nextId = self._nextId + 1
         return self.engine.intern((type, self._genPrefix+`self._nextId`))
 
+    def subContexts(self,con, path = []):
+        """
+        slow...
+        """
+        global subcontext_cache_context
+        global subcontext_cache_subcontexts
+        if con is subcontext_cache_context:
+            return subcontext_cache_subcontexts
+#        progress("subcontext "+`con`+" path "+`len(path)`)
+        set = [con]
+        path2 = path + [ con ]     # Avoid loops
+        for s in con.occursAs[CONTEXT]:
+            for p in PRED, SUBJ, OBJ:
+                if isinstance(s[p], Formula):
+                    if s[p] not in path2:
+                        set2 = self.subContexts(s[p], path2)
+                        for c in set2:
+                            if c not in set: set.append(c)
+        if path == []:
+            subcontext_cache_context = con
+            subcontext_cache_subcontexts = set  #  @@ when set this dirty?
+        return set
+                        
     def nestedContexts(self, con):
         """ Return a list of statements and variables of either type
         found within the nested subcontexts
@@ -1402,6 +1623,86 @@ class RDFStore(notation3.RDFSink) :
         return statements, variables
 
 
+#  One context only:
+# When we return the context, any nested ones are of course referenced in it
+
+    def oneContext(self, con):
+        """ Return a list of statements and variables of either type
+        found within the top level
+        """
+        statements = []
+        variables = []
+        existentials = []
+#        print "# NESTING in ", `self`, " using ", `subExpression`
+        for arc in con.occursAs[CONTEXT]:
+#            print"#    NESTED ",arc.triple
+            context, pred, subj, obj = arc.triple
+            statements.append(arc.triple)
+#            print "%%%%%%", quadToString(arc.triple)
+            if subj is context and (pred is self.forSome or pred is self.forAll): # @@@@
+                variables.append(obj)   # Collect list of existentials
+#                if obj is self.Truth: print "#@@@@@@@@@@@@@", quadToString(arc.triple)
+            if subj is context and pred is self.forSome: # @@@@
+                existentials.append(obj)   # Collect list of existentials
+                
+        return statements, variables
+
+#   Find how many variables occur in an expression
+#   Not sure whether we need thus .. but anyway, here iut is for the record.
+
+    def variableOccurence(x, vars):
+        """ Figure out, given a set of variables which if any occur in a list, formula etc."""
+        if x in vars:
+            return [ x ]
+        if isinstance(x, Literal):
+            return []
+        set = []
+        if isinstance(x, Formula):
+            for s in x.occursAs[CONTEXT]:
+                for p in PRED, SUBJ, OBJ:
+                    v2 = variableOccuences(s[p], vars)
+                    for v in v2:
+                        if v not in set: set.append(v)
+            return set 
+
+        ld = x.definedAsListIn()
+        if ld:
+            first = variableOccurrences(ld[OBJ], vars) 
+            rest = variableOccurrences(ld[PRED], vars)
+            for v in first + rest:
+                if v not in set: set.append(v)
+            return set
+
+        return []
+    
+
+
+#   Find whether any variables occur in an expression
+#  Used in the built-ins to see whether they can run
+
+    def anyOccurrences(x, vars):
+        """ Figure out, given a set of variables which if any occur in a list, formula etc."""
+        if x in vars:
+            return x
+        if isinstance(x, Literal):
+            return None
+        if isinstance(x, Formula):
+            for s in x.occursAs[CONTEXT]:
+                for p in PRED, SUBJ, OBJ:
+                    if anyOccurences(s[p], vars):
+                        return s[p]
+            return None
+
+        ld = x.definedAsListIn()
+        if ld:
+            if anyOccurrences(ld[OBJ], vars) or Occurrences(ld[PRED], vars):
+                return x
+            
+        return None
+    
+
+
+
 ############################################################## Query engine
 #
 # Template matching in a graph
@@ -1422,6 +1723,25 @@ class RDFStore(notation3.RDFSink) :
 # heavy built-ins which still have too many variables to calculate at this stage.
 # When we do the variable substitution for new bindings, these can be reconsidered.
 
+#
+#  Lists
+#     List links can be resolved either of two ways.  Firstly, they can be matched against
+# links in the store, which process can only, as far as I can see, start from the nil end
+# and work back up.  This gives you a list which is not a variable, and whose contents
+# are defined in the store.  This may then match against other parts of the template
+# and be resolved usual, or be presented to a built-in function which succeeds.
+#    Secondly, the list links may not themselves be found, but the first (obj) part of
+# each may be resolved. This gives us, at the head, a list which is a variable. This
+# means that its contents are defined in the query queue.  This is still interesting
+# as a built-in function, as in  v:x st:concat ("hot" "house") .  For that purpose,
+# a queue element which defines a list which contains no variables is put into a special
+# state when a search fails for it. (It would otherwise cause the query to fail.)
+
+#   The list can be built hypothetically and acted on.  An alternative way of looking
+# at this is that all list statements "are true" in that they define the resource. That
+# resource is then used for nothing else. Yes, we can search to see whether list is in the
+# store, as there may be a statemnt aboiut it, but built-ins can work on hypothetical lists.
+
 # Utilities to search the store:
 
 #    def any(self, quad):             # Returns first match for one variable
@@ -1441,12 +1761,7 @@ class RDFStore(notation3.RDFSink) :
 #        return listOfBindings[0][0][1]  # First result, first variable, value.
 
 
-    def every(self, quad):
-        """Returns a list of lists of values.
-        
-        unlike any(), you can feed as many None's as you like.
-        if you're looking for triplesMatching, this is it."""
-        
+    def every(self, quad):             # Returns a list of lists of values
         variables = []
         q2 = [ quad[0], quad[1], quad[2], quad[3]]  # tuple to list
         for p in ALL4:
@@ -1466,6 +1781,17 @@ class RDFStore(notation3.RDFSink) :
         return results
 
 
+    # Note that there are no unbound variables in a list L
+    def _noteBoundList(L, queue):
+        for i in range(len(queue)):
+            item = queue[i]
+            state, short, consts, vars, boundLists, quad = item
+            for p in PARTS:
+                if quad[p] is L:
+                    queue[i][VARS].remove(p)
+                    queue[i][BOUNDLISTS].append(p)
+            if PRED in boundLists and (OBJ not in vars):  # Propagate
+                _noteBoundList(quad[SUBJ], queue)
 
 # Generic match routine, outer level:
         
@@ -1477,28 +1803,44 @@ class RDFStore(notation3.RDFSink) :
                smartIn = [],        # List of contexts in which to use builtins - typically the top one
                action = None,       # Action routine return subtotal of actions
                param = None,        # a tuple, see the call itself and conclude()
-               bindings = [],       # Bindings discovered so far
-               newBindings = [],    # Bindings JUST discovered - to be folded in
+               hypothetical =0,     # The formulae are not in the store - check for their contents
                justOne = 0):        # Flag: Stop when you find the first one
 
         """ Apply action(bindings, param) to succussful matches
-    bindings      collected matches already found
-    newBindings  matches found and not yet applied - used in recursion
         """
         if action == None: action=self.doNothing
         
         if chatty > 50:
-            print "## match: called %i terms, %i bindings:" % (len(unmatched),len(bindings))
-            print bindingsToString(newBindings)
-            if chatty > 90: print setToString(unmatched)
+            progress( "match: called with %i terms." % (len(unmatched)))
+            if chatty > 90: progress( setToString(unmatched, variables))
+
+        if not hypothetical:
+            for x in existentials[:]:   # Existentials don't count when they are just formula names
+                                        # Also, we don't want a partial match. 
+                if isinstance(x,Formula):
+                    existentials.remove(x)
 
         queue = []   #  Unmatched with more info, in order
         for quad in unmatched:
-            item = (99, 9999, [], [], quad) 
+            item = (99, INFINITY, [], [], [], quad) 
+#        self.quad = quad   # The pattern being searched for
+#        self.state = 99    # See table elsewhere
+#        self.short = 99999 # Shortest one to check 
+#        self.consts = []   # List of positions (PRED, SUBJ, etc) where quad is bound (not var)
+#        self.vars = []     #   Positions where quad has a variable (local exist'l, or rule univ'l), eEXcluding: 
+#        self.boundLists = [] # Variables which are in fact just list Ids for Lists containing no unbound vars
             queue.append(item)
-        return self.query(queue, variables, existentials, smartIn, action, param, bindings, newBindings, justOne)
+        return self.query(queue, variables, existentials, smartIn, action, param, justOne=justOne)
 
 
+    STATES = """State values as follows, high value=try first:
+    99  State unknown - to be [re]calculated.
+    60  Not a light built-in, haven't searched yet.
+    50  Light built-in, not enough constants to calculate, haven't searched yet.
+    20  Light built-in, not enough constants to calculate, search failed.
+    10  Heavy built-in, not enough constants to calculate, search failed
+     5  List defining statement, search failed.
+                    """
 
     def  query(self,                # Neded for getting interned constants
                queue,               # Ordered queue of items we are trying to match CORRUPTED
@@ -1520,9 +1862,9 @@ class RDFStore(notation3.RDFSink) :
         total = 0
         
         if chatty > 50:
-            print "\n## query: called %i terms, %i bindings:" % (len(queue),len(bindings))
-            print "  new: ", bindingsToString(newBindings)
-            if chatty > 90: print queueToString(queue)
+            progress( "QUERY: called %i terms, %i bindings, (new: %s)" %
+                      (len(queue),len(bindings),bindingsToString(newBindings)))
+            if chatty > 90: progress( queueToString(queue))
 
         for pair in newBindings:   # Take care of business left over from recursive call
             if chatty>40: progress("New binding:  %s -> %s" % (x2s(pair[0]), x2s(pair[1])))
@@ -1532,23 +1874,28 @@ class RDFStore(notation3.RDFSink) :
             else:
                 existentials.remove(pair[0]) # Can't match anything anymore, need exact match
 
-        for item in queue[:]:                   # (Copy for loop)
-            state, short, consts, vars, quad = item
+        # Perform the substitution, noting where lists become boundLists.
+        # We do this carefully, messing up the order only of things we have already processed.
+        i = len(queue) - 1
+        while i >= 0:  # A valid index into q
+            state, short, consts, vars, boundLists, quad = queue[i]
             for var, val in newBindings:
-                for p in vars:  # consts
-                    if quad[p] == var:
+                for p in vars + boundLists:  # any variables, even list IDs, can be bound
+                    if quad[p] is var:
                         state = 99
                         quad = _lookupQuad([(var,val)], quad)  # Quicker to do above but how in python?
                         break     # Done all 4
-            if state == 99:    # Has fewer variables now .. this is progress
-                queue.remove(item)
-                item = state, short, consts, vars, quad
-                queue.append(item)  # Needs attention - put onto end
+                if (quad[OBJ] is var  # No vars now in daml:first
+                    and PRED in boundLists): # and this is a list with no vars in daml:rest   @@@@??? 
+                    _noteBoundList(quad[SUBJ], queue)  # The list is now bound, so propagate this up
+            if state == 99:   # Has fewer variables now .. this is progress
+                queue[i:i+1] = []  # Take it out from where it was and 
+                queue.append((state, short, consts, vars, boundLists, quad)) # put it on the top
+            i = i - 1
 
 
         if len(queue) == 0:
-
-            if chatty>50: print "# Match found with bindings: ", bindingsToString(bindings)
+            if chatty>50: progress( "# QUERY FOUND MATCH with bindings: " + bindingsToString(bindings))
             return action(bindings, param)  # No terms left .. success!
 
 
@@ -1556,23 +1903,26 @@ class RDFStore(notation3.RDFSink) :
 
         while len(queue) > 0:
 
-            if chatty > 70:
-                print "\n## query iterating called %i terms, %i bindings:" % (len(queue),len(bindings))
-                print " bindings currently:", bindingsToString(newBindings)
-            if chatty > 79: print queueToString(queue)
+            if (chatty > 90) or (chatty > 65) and queue[-1][STATE] != 99:
+                progress( "   query iterating with %i terms, %i bindings: %s ." %
+                          (len(queue),len(bindings),bindingsToString(newBindings)))
+                progress (queueToString(queue))
 
 
-            item = queue.pop()     # Take last.  Could search here instead of keeping queue in order
-            state, short, consts, vars, quad = item
+            # Take last.  (Could search here instead of keeping queue in order)
+            state, short, consts, vars, boundLists, quad = queue.pop()
             con, pred, subj, obj = quad
             if state == 99:   # Haven't looked at it yet
 
-                # First, check how many variables in this term
+                # First, check how many variables in this term, and how long it would take to search:
                 short = INFINITY    
                 consts = []         # Parts of speech to test for match
                 vars = []           # Parts of speech which are variables
+#                boundLists = []     # Parts of speech which are bound lists
                 for p in ALL4 :
-                    if quad[p] in variables + existentials:
+                    if quad[p] in boundLists: # If we know this from before
+                        pass
+                    elif quad[p] in variables + existentials:
                         vars.append(p)
                     else:
                         length = len(quad[p].occursAs[p])   # The length of search we would have to do
@@ -1587,15 +1937,20 @@ class RDFStore(notation3.RDFSink) :
                     if len(vars) == 0:   # no variables: constant expression - we can definitely evaluate it
                         if pred.evaluate(self, con, subj, obj):
                             return self.query(queue, variables, existentials, smartIn, action, param,
-                                          bindings, []) # No new bindings but success in calculated logical operator
+                                          bindings, [], justOne) # No new bindings but success in calculated logical operator
+                                                        #    and so, one less query line.
                         else: return 0   # We absoluteley know this won't match with this in it
                     elif len(vars) == 1 :  # The statement has one variable - try functions
                         if vars[0] == OBJ and isinstance(pred, Function):
-                            return self.query(queue, variables, existentials, smartIn, action, param,
-                                                      bindings, [ (obj, pred.evaluateObject(self,con,subj))])
+                            result = pred.evaluateObject(self, con, subj)
+                            if result == None: state = 50 # Light, Waiting for SOME CONDITION, not searched
+                            else: return self.query(queue, variables, existentials, smartIn, action, param,
+                                                      bindings, [ (obj, result)], justOne)
                         elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
-                            return self.query(queue, variables, existentials, smartIn, action, param,
-                                                      bindings, [ (subj, pred.evaluateSubject(self,con,obj))])
+                            result = pred.evaluateSubject(self, con, obj)
+                            if result == None: state = 50 # Light, Waiting for constants, not searched
+                            else: return self.query(queue, variables, existentials, smartIn, action, param,
+                                                      bindings, [ (subj, result)], justOne)
                     # Now we have a light builtin needs search, otherwise waiting for enough constants to run
                     state = 50
 
@@ -1607,7 +1962,7 @@ class RDFStore(notation3.RDFSink) :
 
 
             elif state == 50 or state == 60: #  Not searched yet
-
+                # Search the store
                 if len(vars) == 4:
                     raise notimp # Can't handle something with no constants at all.
                     return 0    
@@ -1615,55 +1970,55 @@ class RDFStore(notation3.RDFSink) :
                                 # Actually, it could be a valid problem -but pathalogical.
                 shortest_p = consts[0]
                 if chatty > 36:
-                    print "# Searching %i with %s in slot %i." %(
+                    progress( "# Searching %i with %s in slot %i for %s" %(
                         len(quad[shortest_p].occursAs[shortest_p]),
                         x2s(quad[shortest_p]),
-                        shortest_p)
-                    print "#    for ", quadToString(quad, vars)
-                    if chatty > 75:
-                        print "#    where variables are"
+                        shortest_p,
+                        quadToString(quad, vars, boundLists)))
+                    if chatty > 95:
+                        progress( "#    where variables are")
                         for i in variables + existentials:
-                            print "#   var or ext:      ", `i`[-8:-1] 
+                            progress ("#   var or ext:      " + `i`[-8:-1]) 
 
                 matches = 0
-#                zzz = quad[shortest_p].occursAs[shortest_p]
-#                if len(zzz) == 2 and `zzz[0].triple[2]`.endswith("Woman>") : raise whacko
                 for s in quad[shortest_p].occursAs[shortest_p]:
                     for p in consts:
                         if s.triple[p] is not quad[p]:
-                            if chatty>78: print "   Rejecting ", quadToString(s.triple), "\n      for ", quadToString(quad)
+                            if chatty>90: progress( "   Rejecting " + quadToString(s.triple) +
+                                                    "\n      for " + quadToString(quad))
                             break
                     else:  # found match
                         nb = []
                         for p in vars:
                             nb.append(( quad[p], s.triple[p]))
+                        #  We must take copies of the lists each time, as they get corrupted and we need them again:
                         total = total + self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
-                                              bindings[:], nb)
+                                              bindings[:], nb[:], justOne=justOne)
                         matches = matches + 1
                         if justOne and total: return total
 
-                if state == 50: state = 20   # Note that search on light builtin failed
-                else: # State was 60 (not light, may be heavy)
-                    state = 0  # Not found and if not heavy (below) drop it
+                if state == 50: state = 20   # Note that search on light builtin tried
+                else: # state was 60 (not light, may be heavy)
+                    state = 0  # Not found and if not heavy (below), fail
 
 # notIncludes has to be a recursive call, but log:includes just extends the search
-                    if quad[CONTEXT] in smartIn and isinstance(pred, HeavyBuiltIn):
+                    if con in smartIn and isinstance(pred, HeavyBuiltIn):
                         state = 10   # Heavy, man
-                        if quad[PRED] is self.includes:
-                            if (isinstance(quad[SUBJ], Formula)
-                                and isinstance(quad[OBJ], Formula)):
+                        if pred is self.includes:
+                            if (isinstance(subj, Formula)
+                                and isinstance(obj, Formula)):
 
-                                more_unmatched, more_variables = self.nestedContexts(quad[OBJ])
-                                _substitute([( quad[OBJ], quad[SUBJ])], more_unmatched)
+                                more_unmatched, more_variables = self.oneContext(quad[OBJ])
+                                _substitute([( obj, subj)], more_unmatched)
                                 _substitute(bindings, more_unmatched)
                                 for quad in more_unmatched:
-                                    item = 99, 0, [], [], quad
+                                    item = 99, 0, [], [], [], quad
                                     queue.append(item)
                                 existentials = existentials + more_variables
                                 if chatty > 40: progress(" **** Includes: Adding %i new terms and %s as new existentials."%
-                                                         (len(more_unmatched),setToString(more_variables)))
+                                                         (len(more_unmatched),seqToString(more_variables)))
                                 return self.query(queue, variables, existentials, smartIn, action, param,
-                                                  bindings=bindings) # bindings new to this forumula
+                                                  bindings=bindings, justOne=justOne) # bindings new to this forumula
                             else:  # Not forumla
                                 if len(vars) == 0: return total  # Not going to work if not forumlae ever
                                 # otherwise might work if vars 
@@ -1672,37 +2027,38 @@ class RDFStore(notation3.RDFSink) :
 
                                 if pred.evaluate2(self, subj, obj, variables[:], bindings[:]):
                                     if chatty > 80: progress("Heavy predicate succeeds")
-                                    return self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
-                                                  bindings, []) # No new bindings but success in calculated logical operator
+                                    return self.query(queue, variables, existentials, smartIn, action, param,
+                                                  bindings, [],justOne=justOne) # No new bindings but success in calculated logical operator
                                 else:
                                     if chatty > 80: progress("Heavy predicate fails")
                                     return total   # We absoluteley know this won't match with this in it
                         elif len(vars) == 1 :  # The statement has one variable - try functions
                             if vars[0] == OBJ and isinstance(pred, Function):
-                                return self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
-                                                          bindings, [ (obj, pred.evaluateObject2(self, subj))])
+                                result = pred.evaluateObject2(self, subj)
+                                if result != None:
+                                    return self.query(queue, variables, existentials, smartIn, action, param,
+                                                          bindings, [ (obj, result)],justOne=justOne)
                             elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
-                                return self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
-                                                          bindings, [ (subj, pred.evaluateSubject2(self, obj))])
+                                result = pred.evaluateSubject2(self, obj)
+                                if result != None:  # There is some such result
+                                    return self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
+                                                          bindings, [ (subj, result)],justOne=justOne)
                     # Now we have a heavy builtin  waiting for enough constants to run
                         state = 10
-                    else: # Not heavy, failed to find any.
+                    else: # Not heavy, done search.
                         if chatty > 80: progress("Not builtin, search done, %i found." % total)
                         return total
                         
+            elif state == 5: # All we are left with are list definitions, which are fine
+                if chatty>50: progress( "# QUERY FOUND MATCH (dropping lists) with bindings: " + bindingsToString(bindings))
+                return action(bindings, param)  # No non-list terms left .. success!
 
-            else: # State was not 99, 60 or 50, so either 20 or 10:
+            else: # state was not 99, 60 or 50, so either 20 or 10:
                 if chatty > 0:
                     progress("@@@@ Warning: rule has no constant to start with.")
-                    progress( "   State is %s, que length %i" % (state, len(queue)))
-                    progress("""State values as follows, high value=try first:
-    99  State unknown - to be [re]calculated.
-    60  Not a light built-in, haven't searched yet.
-    50  Light built-in, not enough constants to calculate, haven't searched yet.
-    20  Light built-in, not enough constants to calculate, search failed.
-    10  Heavy built-in, not enough constants to calculate, search failed
-                    """)
-                    item = state, short, consts, vars, quad
+                    progress( "   state is %s, que length %i" % (state, len(queue)))
+                    progress(STATES)
+                    item = state, short, consts, vars, boundLists, quad
                     progress("@@ Current item: %s" % itemToString(item))
                     progress(queueToString(queue))
                 return total  # Forget it
@@ -1712,14 +2068,17 @@ class RDFStore(notation3.RDFSink) :
 # We prefer terms with a single variable to those with two.
 # (Those with none we immediately check and therafter ignore)
 # Secondarily, we prefer short searches to long ones.
-            i = 0
-            while (i <len(queue)
-                   and (state > queue[i][0]
-                        or state == queue[i][0] and (len(consts) > len(queue[i][2])
-                                                     or len(consts) == len(queue[i][2]) and short < queue[i][1]))):
-                i = i + 1
-            item = state, short, consts, vars, quad
-            queue[i:i] = [ item ]
+
+            if state != 0:   # state 0 means leave me off the list
+                i = 0
+                while (i <len(queue)
+                       and (state > queue[i][0]
+                            or state == queue[i][0] and (len(consts) > len(queue[i][2])
+                                                                 or len(consts) == len(queue[i][2])
+                                                                     and short < queue[i][1]))):
+                    i = i + 1
+                item = state, short, consts, vars, boundLists, quad
+                queue[i:i] = [ item ]
             # And loop back to take the next item
 
         if queue != []:
@@ -1727,22 +2086,23 @@ class RDFStore(notation3.RDFSink) :
         return total
          
     def doNothing(self, bindings, param):
-        if chatty>99: print "Success! found it!"
+        if chatty>99: progress( "Success! found it!")
         return 1                    # Return count of calls only
 
     # Whether we do a smart match determines whether we will be able to conclude
     # things which in fact we knew already thanks to the builtins.
     def conclude(self, bindings, param):  # Returns number of statements added to store
         store, conclusions, targetContext, oes = param
-        if chatty >60: print "\n#Concluding tenttatively...", bindingsToString(bindings)
+        if chatty >60: progress( "\n#Concluding tentatively..." + bindingsToString(bindings))
 
         myConclusions = conclusions[:]
         _substitute(bindings, myConclusions)
         # Does this conclusion exist already in the database?
-        found = self.match(myConclusions[:], [], oes[:], smartIn=[targetContext], justOne=1)  # Find first occurrence, SMART
+        found = self.match(myConclusions[:], [], oes[:], smartIn=[targetContext],hypothetical=1, justOne=1)  # Find first occurrence, SMART
         if found:
-            if chatty>60: print "    .... forget it, conclusion already in store."
+            if chatty>60: progress( "Concluding: Forget it, already had" + bindingsToString(bindings))
             return 0
+        if chatty>60: progress( "Concluding definitively" + bindingsToString(bindings))
         
         # Regenerate a new form with its own existential variables
         # because we can't reuse the subexpression identifiers.
@@ -1757,7 +2117,7 @@ class RDFStore(notation3.RDFSink) :
         for q in myConclusions:
             q2 = _lookupQuad(bindings2, q)
             total = total + store.storeQuad(q2)
-            if chatty>75: print "# *** Conclude: ", quadToString(q2)
+            if chatty>75: progress( "        *** Conclude: " + quadToString(q2))
         return total
 
 # An action routine for collecting bindings:
@@ -1766,7 +2126,6 @@ class RDFStore(notation3.RDFSink) :
         param = param + bindings
         return len(bindings)
     
-
 
 def _substitute(bindings, list):
     for i in range(len(list)):
@@ -1795,10 +2154,18 @@ def bindingsToString(bindings):
         str = str + " %s->%s" % ( x2s(x), x2s(y))
     return str + "\n"
 
-def setToString(set):
+def setToString(set, vars=[], boundLists = []):
     str = ""
     for q in set:
-        str = str+ "        " + quadToString(q) + "\n"
+        str = str+ "        " + quadToString(q, vars, boundLists) + "\n"
+    return str
+
+def seqToString(set):
+    str = ""
+    for x in set[:-1]:
+        str = str+ " " + x2s(x) + ","
+    for x in set[-1:]:
+        str = str+ " " + x2s(x)
     return str
 
 def queueToString(queue):
@@ -1807,24 +2174,30 @@ def queueToString(queue):
         str = str + "    "+ itemToString(item) + "\n"
     return str
 
-def itemToString(item):
-    state, short, consts, vars, quad = item
-    return "%3i)  %s  consts=%s  vars=%s short=%i" % (state, quadToString(quad, vars), `consts`, `vars`, short )
 
-def quadToString(q, vars=[]):
-    qm=["","","",""]
+def quadToString(q, vars=[], boundLists = []):
+    qm=[" "," "," "," "]
     for p in ALL4:
         if p in vars: qm[p]= "?"
+        if p in boundLists: qm[p]= "~"
     return "%s%s ::  %8s%s %8s%s %8s%s ." %(x2s(q[CONTEXT]), qm[CONTEXT],
                                             x2s(q[SUBJ]),qm[SUBJ],
                                             x2s(q[PRED]),qm[PRED],
                                             x2s(q[OBJ]),qm[OBJ])
+def itemToString(item):
+    return "%3i)  %s  short=%i" % (item[STATE],
+                                   quadToString(item[QUAD], item[VARS], item[BOUNDLISTS]),
+                                   item[SHORT] )
 
 def x2s(x):
+    if isinstance(x, Literal):
+        return '"' + x.string[0:8] + '"'
     s = `x`[1:-1]
     p = string.find(s,'#')
     if p >= 0: return s[p+1:]
-    else: return s
+    p = string.find(s,'/')
+    if p >= 0: return s[p+1:]
+    return s
 
 
 
@@ -1928,25 +2301,25 @@ bind default <>
                   thisURI,'http://example.org/base/',)
     r.startDoc()
     
-    print "=== test stringing: ===== STARTS\n ", t0, "\n========= ENDS\n"
+    progress( "=== test stringing: ===== STARTS\n " + t0 + "\n========= ENDS\n")
     r.feed(t0)
 
-    print "=== test stringing: ===== STARTS\n ", t1, "\n========= ENDS\n"
+    progress( "=== test stringing: ===== STARTS\n " + t1 + "\n========= ENDS\n")
     r.feed(t1)
 
-    print "=== test stringing: ===== STARTS\n ", t2, "\n========= ENDS\n"
+    progress( "=== test stringing: ===== STARTS\n " + t2 + "\n========= ENDS\n")
     r.feed(t2)
 
-    print "=== test stringing: ===== STARTS\n ", t3, "\n========= ENDS\n"
+    progress( "=== test stringing: ===== STARTS\n " + t3 + "\n========= ENDS\n")
     r.feed(t3)
 
     r.endDoc()
 
-    print "----------------------- Test store:"
+    progress( "----------------------- Test store:")
 
     testEngine = Engine()
     thisDoc = testEngine.internURI(thisURI)    # Store used interned forms of URIs
-    thisContext = testEngine.intern((FORUMLA, thisURI+ "#_formula"))    # @@@ Store used interned forms of URIs
+    thisContext = testEngine.intern((FORMULA, thisURI+ "#_formula"))    # @@@ Store used interned forms of URIs
 
     store = RDFStore(testEngine)
     # (sink,  thisDoc,  baseURI, bindings)
@@ -1955,49 +2328,49 @@ bind default <>
     p.feed(testString[0])
     p.endDoc()
 
-    print "\n\n------------------ dumping chronologically:"
+    progress( "\n\n------------------ dumping chronologically:")
 
     store.dumpChronological(thisContext, notation3.ToN3(sys.stdout.write, base=thisURI))
 
-    print "\n\n---------------- dumping in subject order:"
+    progress( "\n\n---------------- dumping in subject order:")
 
     store.dumpBySubject(thisContext, notation3.ToN3(sys.stdout.write, base=thisURI))
 
-    print "\n\n---------------- dumping nested:"
+    progress( "\n\n---------------- dumping nested:")
 
     store.dumpNested(thisContext, notation3.ToN3(sys.stdout.write, base=thisURI))
 
-    print "Regression test **********************************************"
+    progress( "Regression test **********************************************")
 
     
     testString.append(reformat(testString[-1], thisURI))
 
     if testString[-1] == testString[-2]:
-        print "\nRegression Test succeeded FIRST TIME- WEIRD!!!!??!!!!!\n"
+        progress( "\nRegression Test succeeded FIRST TIME- WEIRD!!!!??!!!!!\n")
         return
     
     testString.append(reformat(testString[-1], thisURI))
 
     if testString[-1] == testString[-2]:
-        print "\nRegression Test succeeded SECOND time!!!!!!!!!\n"
+        progress( "\nRegression Test succeeded SECOND time!!!!!!!!!\n")
     else:
-        print "Regression Test Failure: ===================== LEVEL 1:"
-        print testString[1]
-        print "Regression Test Failure: ===================== LEVEL 2:"
-        print testString[2]
-        print "\n============================================= END"
+        progress( "Regression Test Failure: ===================== LEVEL 1:")
+        progress( testString[1])
+        progress( "Regression Test Failure: ===================== LEVEL 2:")
+        progress( testString[2])
+        progress( "\n============================================= END")
 
     testString.append(reformat(testString[-1], thisURI))
     if testString[-1] == testString[-2]:
-        print "\nRegression Test succeeded THIRD TIME. This is not exciting.\n"
+        progress( "\nRegression Test succeeded THIRD TIME. This is not exciting.\n")
 
     
                 
 def reformat(str, thisURI):
     if 0:
-        print "Regression Test: ===================== INPUT:"
-        print str
-        print "================= ENDs"
+        progress( "Regression Test: ===================== INPUT:")
+        progress( str)
+        progress( "================= ENDs")
     buffer=StringIO.StringIO()
     r=notation3.SinkParser(notation3.ToN3(buffer.write, base=thisURI), thisURI)
     r.startDoc()
@@ -2123,8 +2496,9 @@ def doCommand():
 --n3        Input & Output in N3 from now on
 --rdf=flags Input & Output ** in RDF and set given RDF flags
 --n3=flags  Input & Output in N3 and set N3 flags
+--ntriples  Input & Output in NTriples (equiv --n3=spart -bySubject -quiet)
 --ugly      Store input and regurgitate *
---bySubject Store inpyt and regurgitate in subject order *
+--bySubject Store input and regurgitate in subject order *
 --no        No output *
             (default is to store and pretty print with anonymous nodes) *
 --apply=foo Read rules from foo, apply to store, adding conclusions to store
@@ -2140,15 +2514,21 @@ def doCommand():
             * mutually exclusive
             ** doesn't work for complex cases :-/
 Examples:
-  cwm --rdf foo.rdf --n3 --pipe        Convert from rdf to n3
-  cwm foo.n3 bar.n3 --think          Combine data and find all deductions
-  cwm foo.n3 -flat -n3=spart
+  cwm --rdf foo.rdf --n3 --pipe     Convert from rdf/xml to rdf/n3
+  cwm foo.n3 bar.n3 --think         Combine data and find all deductions
+  cwm foo.n3 --flat --n3=spart
 
 """
         
         import urllib
         import time
         global chatty
+        global sax2rdf
+#        import sax2rdf
+
+        option_need_rdf_sometime = 0  # If we don't need it, don't import it
+                               # (to save errors where parsers don't exist)
+        
         option_pipe = 0     # Don't store, just pipe though
         option_inputs = []
         option_test = 0     # Do simple self-test
@@ -2189,10 +2569,13 @@ Examples:
                 _gotInput = 1
             elif arg == "-ugly": option_outputStyle = arg
             elif _lhs == "-base": option_baseURI = _uri
-            elif arg == "-rdf": option_format = "rdf"
+            elif arg == "-rdf":
+                option_format = "rdf"
+                option_need_rdf_sometime = 1
             elif _lhs == "-rdf":
                 option_format = "rdf"
                 option_rdf_flags = _rhs
+                option_need_rdf_sometime = 1
             elif arg == "-n3": option_format = "n3"
             elif _lhs == "-n3":
                 option_format = "n3"
@@ -2200,7 +2583,7 @@ Examples:
             elif arg == "-quiet": option_quiet = 1
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-bySubject": option_outputStyle = arg
-            elif arg == "-triples":
+            elif arg == "-triples" or arg == "-ntriples":
                 option_format = "n3"
                 option_n3_flags = "spart"
                 option_outputStyle = "-bySubject"
@@ -2219,6 +2602,11 @@ Examples:
                 option_inputs.append(urlparse.urljoin(option_baseURI,arg))
                 _gotInput = _gotInput + 1  # input filename
             
+
+        # This is conditional as it is not available on all platforms,
+        # needs C and Python to compile xpat.
+        if option_need_rdf_sometime:
+            import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 # Between passes, prepare for processing
         chatty =  0
@@ -2358,7 +2746,7 @@ Examples:
                 print "# Command line error: %s illegal option with -pipe", arg
                 break
 
-            elif arg == "-triples":
+            elif arg == "-triples" or arg == "-ntriples":
                 option_format = "n3"
                 option_n3_flags = "spart"
                 option_outputStyle = "-bySubject"
@@ -2431,8 +2819,10 @@ Examples:
             else:  # "-best"
                 _store.dumpNested(workingContext, _outSink)
 
+# Use this with diagnostics so that it can be changed as necessary
+# For example, sometimes want on stdout maybe or in a scroll window....
 def progress(str):
-    sys.stderr.write("#   " + str + "\n")
+    sys.stderr.write(  str + "\n")
     
 def fixslash(str):
     """ Fix windowslike filename to unixlike

@@ -1,103 +1,103 @@
-     @prefix : <http://www.w3.org/2000/10/swap/log#> .
+     @prefix : <#> .
      @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
-     @prefix rules: <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    this     :forAll rules:p,
-                rules:x,
-                rules:y;
-         :forSome {rules:p     a daml:TransitiveProperty .
+    this     log:forAll :p,
+                :x,
+                :y;
+         log:forSome {:p     a daml:TransitiveProperty .
         },
                 {{
             {
-                rules:x     rules:p rules:y .
-                rules:y     rules:p rules:z .
+                :x     :p :y .
+                :y     :p :z .
                 
-                }     :implies {rules:x     rules:p rules:z .
+                }     log:implies {:x     :p :z .
                 } .
             
-            }     a :Truth;
-             :forAll rules:x,
-                    rules:y,
-                    rules:z .
+            }     a log:Truth;
+             log:forAll :x,
+                    :y,
+                    :z .
         } .
     
-    rules:_g0 :- {
-        rules:p     a daml:TransitiveProperty .
+    :_g0 :- {
+        :p     a daml:TransitiveProperty .
         
-        }     :implies {{
+        }     log:implies {{
             {
-                rules:x     rules:p rules:y .
-                rules:y     rules:p rules:z .
+                :x     :p :y .
+                :y     :p :z .
                 
-                }     :implies {rules:x     rules:p rules:z .
+                }     log:implies {:x     :p :z .
                 } .
             
-            }     a :Truth;
-             :forAll rules:x,
-                    rules:y,
-                    rules:z .
+            }     a log:Truth;
+             log:forAll :x,
+                    :y,
+                    :z .
         };
-         :means {{
+         log:means {{
             {
-                rules:x     rules:p rules:y .
-                rules:y     rules:p rules:z .
+                :x     :p :y .
+                :y     :p :z .
                 
-                }     :implies {rules:x     rules:p rules:z .
+                }     log:implies {:x     :p :z .
                 } .
             
-            }     a :Truth;
-             :forAll rules:x,
-                    rules:y,
-                    rules:z .
+            }     a log:Truth;
+             log:forAll :x,
+                    :y,
+                    :z .
         } .
     
-    rules:_g1 :- {
+    :_g1 :- {
         {
             {
-                rules:x     rules:p rules:y .
-                rules:y     rules:p rules:z .
+                :x     :p :y .
+                :y     :p :z .
                 
-                }     :implies {rules:x     rules:p rules:z .
+                }     log:implies {:x     :p :z .
                 } .
             
-            }     a :Truth;
-             :forAll rules:x,
-                    rules:y,
-                    rules:z .
+            }     a log:Truth;
+             log:forAll :x,
+                    :y,
+                    :z .
         
-        }     :implies {rules:p     a daml:TransitiveProperty .
+        }     log:implies {:p     a daml:TransitiveProperty .
         };
-         :means {rules:p     a daml:TransitiveProperty .
+         log:means {:p     a daml:TransitiveProperty .
         } .
     {
-        rules:x     :means rules:y .
+        :x     log:means :y .
         
-        }     :implies {rules:x     :implies rules:y .
-        rules:y     :implies rules:x .
+        }     log:implies {:x     log:implies :y .
+        :y     log:implies :x .
         } .
     {
-        rules:x     :implies rules:y .
-        rules:y     :implies rules:x .
+        :x     log:implies :y .
+        :y     log:implies :x .
         
-        }     :implies {rules:x     :means rules:y .
+        }     log:implies {:x     log:means :y .
         } .
     {
         {
-            rules:_gs2     rules:ancestor rules:_gs3 .
-            rules:_gs3     rules:ancestor rules:_gs4 .
+            :_gs2     :ancestor :_gs3 .
+            :_gs3     :ancestor :_gs4 .
             
-            }     :implies {rules:_gs2     rules:ancestor rules:_gs4 .
+            }     log:implies {:_gs2     :ancestor :_gs4 .
             } .
         
-        }     a :Truth;
-         :forAll rules:_gs2,
-                rules:_gs3,
-                rules:_gs4 .
+        }     a log:Truth;
+         log:forAll :_gs2,
+                :_gs3,
+                :_gs4 .
     
-    rules:ancestor     a daml:TransitiveProperty .
+    :ancestor     a daml:TransitiveProperty .
     
-    rules:granpa     rules:ancestor rules:bill,
-                rules:pa .
+    :granpa     :ancestor :bill,
+                :pa .
     
-    rules:pa     rules:ancestor rules:bill .
+    :pa     :ancestor :bill .
     

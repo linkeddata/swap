@@ -1,22 +1,28 @@
-# Input rules to apply from  file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/forgetDups.n3
-     @prefix : <http://www.w3.org/2000/10/swap/log#> .
+     @prefix : <sameThing.n3#> .
      @prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
      @prefix dc: <http://purl.org/dc/elements/1.1/> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix ont: <http://www.daml.org/2001/03/daml+oil#> .
      @prefix rcs: <http://www.w3.org/2001/03swell/rcs#> .
     
-    this     :forAll <sameDan.n3#x>,
-                <sameThing.n3#p>,
-                <sameThing.n3#q>,
-                <sameThing.n3#x>,
-                <sameThing.n3#y>,
-                <sameThing.n3#z>;
-         :forSome <sameDan.n3#_g0> .
+    this     log:forAll <sameDan.n3#x>,
+                :p,
+                :q,
+                :x,
+                :y,
+                :z;
+         log:forSome <sameDan.n3#_g0> .
     {
-        <sameThing.n3#x>     contact:mailbox <sameThing.n3#z> .
-        <sameThing.n3#y>     contact:mailbox <sameThing.n3#z> .
+        :x     contact:mailbox :z .
+        :y     contact:mailbox :z .
         
-        }     :implies {<sameThing.n3#x>     = <sameThing.n3#y> .
+        }     log:implies {:x     = :y .
+        } .
+    {
+        :x     contact:homePageAddress :z .
+        :y     contact:homePageAddress :z .
+        
+        }     log:implies {:x     = :y .
         } .
     
     <sameDan.n3#_g0>     <sameDan.n3#birthPlace> <sameDan.n3#KC>;
@@ -29,7 +35,7 @@
         <sameDan.n3#x>     <sameDan.n3#birthPlace> <sameDan.n3#KC>;
              <sameDan.n3#hairColor> <sameDan.n3#red> .
         
-        }     :implies {<sameDan.n3#test1>     a <sameDan.n3#Success> .
+        }     log:implies {<sameDan.n3#test1>     a <sameDan.n3#Success> .
         } .
     
     <sameDan.n3#test1>     a <sameDan.n3#Success> .
@@ -41,50 +47,61 @@ the same thing.""";
          <http://purl.org/dc/elements/1.1/rights> "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
          rcs:id "" .
     {
-        <sameThing.n3#p>     a ont:UnambiguousProperty .
+        :p     a ont:UniqueProperty .
         
-        }     :implies {{
-            <sameThing.n3#x>     <sameThing.n3#p> <sameThing.n3#z> .
-            <sameThing.n3#y>     <sameThing.n3#p> <sameThing.n3#z> .
+        }     log:implies {{
+            :x     :p :y,
+                        :z .
             
-            }     :implies {<sameThing.n3#x>     = <sameThing.n3#y> .
+            }     log:implies {:y     = :z .
             } .
         } .
     {
-        <sameThing.n3#x>     <sameThing.n3#p> <sameThing.n3#y>;
-             = <sameThing.n3#z> .
+        :p     a ont:UnambiguousProperty .
         
-        }     :implies {<sameThing.n3#z>     <sameThing.n3#p> <sameThing.n3#y> .
-        } .
-    {
-        <sameThing.n3#p>     = <sameThing.n3#q> .
-        <sameThing.n3#x>     <sameThing.n3#p> <sameThing.n3#y> .
-        
-        }     :implies {<sameThing.n3#x>     <sameThing.n3#q> <sameThing.n3#y> .
-        } .
-    {
-        <sameThing.n3#x>     <sameThing.n3#p> <sameThing.n3#y> .
-        <sameThing.n3#y>     = <sameThing.n3#z> .
-        
-        }     :implies {<sameThing.n3#x>     <sameThing.n3#p> <sameThing.n3#z> .
-        } .
-    {
-        <sameThing.n3#p>     a ont:UniqueProperty .
-        
-        }     :implies {{
-            <sameThing.n3#x>     <sameThing.n3#p> <sameThing.n3#y>,
-                        <sameThing.n3#z> .
+        }     log:implies {{
+            :x     :p :z .
+            :y     :p :z .
             
-            }     :implies {<sameThing.n3#y>     = <sameThing.n3#z> .
+            }     log:implies {:x     = :y .
             } .
+        } .
+    {
+        :x     = :y .
+        
+        }     log:implies {:y     = :x .
+        } .
+    {
+        :x     = :z .
+        
+        }     log:implies {:x     = :z .
+        } .
+    {
+        :x     :p :y;
+             = :z .
+        
+        }     log:implies {:z     :p :y .
+        } .
+    {
+        :p     = :q .
+        :x     :p :y .
+        
+        }     log:implies {:x     :q :y .
+        } .
+    {
+        :x     :p :y .
+        :y     = :z .
+        
+        }     log:implies {:x     :p :z .
         } .
     
     <sameThing.n3>     <http://purl.org/dc/elements/1.1/creator> <sameDan.n3#_g0>;
-         <http://purl.org/dc/elements/1.1/description> """rules for determining when two terms denote
-the same thing.""";
+         <http://purl.org/dc/elements/1.1/description> "substituion of equals for equals in triples, plus some rules for unambiguous/unique properties (@@that probably belong elsewhere)";
          <http://purl.org/dc/elements/1.1/relation> <forgetDups.n3>;
          <http://purl.org/dc/elements/1.1/rights> "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
          rcs:id "" .
+    
+    contact:homePageAddress     a ont:UnambiguousProperty .
     
     contact:mailbox     a ont:UnambiguousProperty .
     
