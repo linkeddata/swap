@@ -1,0 +1,72 @@
+
+<!-- Processed by Id: cwm.py,v 1.130 2003/06/24 13:44:47 timbl Exp -->
+<!--     using base file:/home/sandro/cvs/cvs.w3c.org/WWW/2000/10/swap/test/ferrell/biology.n3-->
+
+
+<rdf:RDF xmlns="file:/home/sandro/cvs/cvs.w3c.org/WWW/2000/10/swap/test/ferrell/biology.n3#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:owl="http://www.w3.org/2003/07/ferrell#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <owl:Ontology rdf:about="">
+        <dc:creator>Sandro Hawke, sandro@w3.org</dc:creator>
+        <dc:date>2003-03-28</dc:date>
+        <dc:description>An Ontology of Biology, based on the standard 
+                      binomial nomenclature of Carolus Linnaeus.
+
+                      Far from being complete, this is just a small
+                      demonstration of what one could do.</dc:description>
+        <dc:language>en</dc:language>
+        <dc:subject>Biology</dc:subject>
+        <dc:title>Biology Ontology (demo)</dc:title>
+        <rdfs:seeAlso rdf:resource="http://www.wikipedia.org/wiki/Binomial_nomenclature"/>
+        <owl:imports rdf:resource="http://www.w3.org/2000/01/rdf-schema#"/>
+        <owl:imports rdf:resource="http://www.w3.org/2003/07/ferrell#"/>
+        <owl:versionInfo>$Id$</owl:versionInfo>
+    </owl:Ontology>
+
+    <owl:Class rdf:about="#Canis">
+    </owl:Class>
+
+    <owl:Class rdf:about="#CanisFamiliaris">
+        <rdfs:comment>The class of animals designated 
+               Canis familiaris (domestic dog).  This
+	       includes all the dog breeds, but
+	       not wolves.</rdfs:comment>
+        <rdfs:label>Canis familiaris</rdfs:label>
+        <rdfs:seeAlso rdf:resource="http://www.agrobiologicals.com/glossary/G3089.htm"/>
+        <owl:disjointWith rdf:resource="#CanisRufus"/>
+        <owl:disjointWith rdf:resource="#HomoSapiens"/>
+        <owl:subClassOf rdf:resource="#Canis"/>
+    </owl:Class>
+
+    <rdf:Description rdf:about="#CanisFamiliarisDingo">
+        <rdfs:seeAlso rdf:resource="http://www.naturalworlds.org/wolf/canis/Canis_familiaris_dingo.htm"/>
+        <owl:subClassOf rdf:resource="#CanisFamiliaris"/>
+    </rdf:Description>
+
+    <owl:Class rdf:about="#CanisRufus">
+        <rdfs:comment>As of 1999 there were about 300 individuals of this 
+	       endangered species</rdfs:comment>
+        <rdfs:label>Red Wolf</rdfs:label>
+        <rdfs:seeAlso rdf:resource="http://druidry.org/obod/endangered/redwolf.html"/>
+        <owl:subClassOf rdf:resource="#Canis"/>
+    </owl:Class>
+
+    <rdf:Description rdf:about="#Dog">
+        <owl:sameClassAs rdf:resource="#CanisFamiliaris"/>
+    </rdf:Description>
+
+    <owl:Class rdf:about="#HomoSapiens">
+    </owl:Class>
+
+    <rdf:Description rdf:about="#Human">
+        <owl:sameClassAs rdf:resource="#HomoSapiens"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#RedWolf">
+        <owl:sameClassAs rdf:resource="#CanisRufus"/>
+    </rdf:Description>
+</rdf:RDF>
