@@ -3,7 +3,6 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <title>Tutorial - Built-in functions in cwm</title>
   <link href="/People/Berners-Lee/general.css" rel="stylesheet"
   type="text/css" />
@@ -11,10 +10,11 @@
 </head>
 
 <body xml:lang="en" lang="en">
+
 <div class="noprint">
-<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a>
-| <a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
-								    href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> | Built-In Functions</p>
+<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a> |
+<a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a>SWAP</a> |
+<a href="/2000/10/swap/doc/">Tutorial</a> | Built-In Functions</p>
 </div>
 
 <h1>Built-in functions in Cwm</h1>
@@ -22,26 +22,26 @@
 <p>The processing we have done so far involves matching existing data against
 a template, and where a match occurs, generating more inferred data. This is
 much like which you do with a database using SQL, and just as with SQL, in
-practice you need to be able to combine it with basic arithmetic and string
+practice you need to be able to combine it with basic arithmetic, string
 operations, and so on.</p>
 
-<p>This is done by some magic "built-in" properties for which cwm knows the
-meaning and can test the validity of a statement or calculate the rest of the
-statement given part of it.</p>
+<p>This is done by some magic "built-in" properties of which cwm knows the
+meaning. It automatically test the truth of a statement, or calculate the
+rest of the statement given part of it.</p>
 
-<p>Built-in <dfn>functions</dfn> are properties which cwm can calculate the
-object, given the subject.</p>
+<p>Built-in <dfn>functions</dfn> are properties for which cwm can calculate
+the object, given the subject.</p>
 
-<p>Built-in <dfn>inverse functions</dfn> are properties which cwm can
+<p>Built-in <dfn>inverse functions</dfn> are properties for which cwm can
 calculate the subject, given the object.</p>
 
 <p>Some built-ins are both. Examples are log:uri, the relationship between a
 resource and its URI, and time:inSeconds, the relationship between a
 date-time in standard string form and the date-time as number seconds since
-the start of the era, One can work these either way.</p>
+the start of the era. One can work these either way.</p>
 
-<p>Relational operators are bultins weher you can't calculate either side
-from th other, but you can test for truth if both sides have been realoved.
+<p>Relational operators are bultins where you can't calculate either side
+from the other, but you can test for truth if both sides have been resolved.
 Examples are comparison operations such as <code>math:equalTo</code> and
 <code>string:greaterThan</code>.</p>
 
@@ -56,8 +56,7 @@ variable. If you just add data to the strore with a built-in function in it,
 it is just stored.</p>
 
 <p>Let's make a more complicated thermostat rule::</p>
-<pre>{ :thermostat :temp ?x.  ?x math:greaterThan "70" } log:implies { :cooling :power "high" } .
-</pre>
+<pre>{ :thermostat :temp ?x.  ?x math:greaterThan "70" } log:implies { :cooling :power "high" } .</pre>
 
 <p>The first part, <code>:thermostat :temp ?x</code>, is statisfied by
 looking in the strore, where presumably the temperature at the thermostat is
@@ -119,6 +118,7 @@ some very interesting possibilities -- so much so that it warrants a move to
 <p></p>
 <hr />
 
+<div class="noprint">
 <h2 id="References">References</h2>
 <ul>
   <li><a href="Examples.html">Many More Examples</a></li>
@@ -127,9 +127,6 @@ some very interesting possibilities -- so much so that it warrants a move to
   <li>For comparison - <a href="http://www.w3.org/TR/xquery-operators/">the
     XQuery functions</a></li>
 </ul>
-
-<div class="noprint">
-
 <br />
 <br />
 
@@ -142,6 +139,5 @@ the original primer.<br />
 
 <p>$Id$</p>
 </div>
-
 </body>
 </html>
