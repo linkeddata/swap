@@ -53,7 +53,6 @@ class printReporter:
     def begin(self, string=""):
         print >>self.stream, (self.indent*self.level) + "/  " + string
         self.level += 1
-        self.t0.append(time.time())
 
     def end(self, string=""):
         self.level -= 1
@@ -73,6 +72,8 @@ class nullReporter:
     def end(self, string=""):
         pass
 
+theNullReporter = nullReporter()
+
 class timingPrintReporter(printReporter):
 
    def __init__(self, stream=stderr):
@@ -82,10 +83,12 @@ class timingPrintReporter(printReporter):
    def begin(self, string=""):
        printReporter.begin(self, string)
        self.t0.append(time.time())
+       assert(len(self.t0) == self.level)
 
    def end(self, string=""):
-       tmsg = " (after %fs)" % (time.time() - self.t0.pop())
-       printReporter.begin(self, string + tmsg)
+       tmsg = " (took  %fs)" % (time.time() - self.t0.pop())
+       printReporter.end(self, string + tmsg)
+       assert(len(self.t0) == self.level)
     
 
 if __name__ == "__main__":
@@ -94,6 +97,9 @@ if __name__ == "__main__":
 
 
 # $Log$
-# Revision 1.1  2003-09-16 16:50:30  sandro
+# Revision 1.2  2003-09-16 17:49:35  sandro
+# fixed bug in timing
+#
+# Revision 1.1  2003/09/16 16:50:30  sandro
 # first draft, passes tests
 #
