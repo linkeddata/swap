@@ -60,7 +60,10 @@ class BI_cos(LightBuiltIn, Function, ReverseFunction):
         return cos(numeric(subj_py))
 
     def evaluateSubject(self, x):
-        return acos(numeric(x))
+	try:
+            return acos(numeric(x))
+        except ValueError:
+            return None
 
 class BI_cosh(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
@@ -90,7 +93,10 @@ class BI_sin(LightBuiltIn, Function, ReverseFunction):
         return sin(numeric(subj_py))
 
     def evaluateSubject(self, x):
-        return asin(numeric(x))
+        try:
+            return asin(numeric(x))
+        except:
+            return None
 
 class BI_sinh(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
