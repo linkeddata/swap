@@ -4,6 +4,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix bnf: <http://www.w3.org/2000/10/swap/grammar/bnf#>.
+@prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#>.
 @prefix : <http://www.w3.org/2000/10/swap/grammar/n3#>.
 @prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#>.
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
@@ -13,10 +14,10 @@
 
 # The N3 Full Grammar
 
-n3document a :Used;
+n3document a rul:Used;
 	bnf:mustBeOneSequence(
 	
-		( void ) 
+		( bnf:void ) 
 		(
 			[ bnf:zeroOrMore declaration ]
 			[ bnf:zeroOrMore  universal ]
@@ -65,12 +66,12 @@ statement bnf:mustBeOneSequence(( subject propertylist )).
 
 
 propertylist bnf:mustBeOneSequence (
-		( void )
+		( bnf:void )
 		( verb objectlist propertylisttail )
 	).
 
 propertylisttail bnf:mustBeOneSequence (
-		( void )
+		( bnf:void )
 		( semicolon propertylist )
 	).
 
@@ -110,7 +111,7 @@ path bnf:mustBeOneSequence(
 	).
 
 pathtail bnf:mustBeOneSequence(
-		( void )
+		( bnf:void )
 		( traverse path )
 		( uparrow path )
 	).
@@ -162,28 +163,7 @@ uparrow		bnf:matches 	"\\^";
 		bnf:canStartWith	"^".
 
 
-#_____________________________________
-
-# Shorthand expansion into BNF
-
-{ ?x bnf:zeroOrMore ?y } => {
-    ?x bnf:mustBeOneSequence (
-		( void )
-		( ?y ?x )
-	) 
-}.
-
-{ ?x bnf:mustBe ?y } => {?x bnf:mustBeOneSequence ((?y))}.
-
-# Axioms relating the definite (open world) form to the indefinte (closed world) 
-#(better words?) form:
-
-{ ?x bnf:mustBe ?y } => { ?x bnf:mustBeOneSequence (( ?y )) }.
-
-{ ?x bnf:mustBeOneSequence ?options.
-  ?y list:in  ?options } =>  { ?x bnf:canBeSequence ?y }.
-
-#______________________________________________________________
+#____________________________________________________
 
 #  Axioms reducing the shortcut BNF terms to bnf:canBeSequence.
 
@@ -197,31 +177,6 @@ uparrow		bnf:matches 	"\\^";
 		( comma ?y ?x )
 	)
 }.
-
-
-# Rules for determining branching
-
-{ 	?x bnf:canBeSequence [rdf:first [bnf:canStartWith ?y]].
-} => {
-	?x selector ( ?y ?s ); bnf:canStartWith ?y.
-}.
-
-
-{   	?x a Used; bnf:canBeSequence ?s.
-} => {
-	?y a Used.
-	?s a UsedSequence.
-	?s a UsedTail.
-}.
-
-{ ?y list:in [a UsedSequence].} => {?y a Used}.
-
-{ ?s a UsedTail; rdf:first ?x; rdf:rest ?r } => {?r a UsedTail}.
-
-{ ?s a UsedTail; rdf:first ?x; rdf:rest [ rdf:first ?y ] } => { ?x canPrecede ?y }.
-
-{ ?x bnf:canBeSequence [ list:last ?y ]; canPrecede ?z} => { ?y canPrecede ?z }.
-
 
 
 #ends

@@ -10,6 +10,8 @@
 @prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#>.
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
 @keywords a, is, of.
 
 #_____________________________________
@@ -32,30 +34,34 @@
 
 { ?x bnf:mustBeOneSequence ?y} => { ?x optionTail ?y }.
 
-{?x optionTail [rdf:first ?y; rdf:rest ?z]} => {?x bnf:canBeSeQuence ?y;optionTail ?z}.
+{?x optionTail [rdf:first ?y; rdf:rest ?z]} => {
+	?x 	bnf:canBeSequence ?y;
+		optionTail ?z.
+	?y a :Used}.
 
+{ ?x bnf:canBeSequence ?y } =>  { ?y sequenceTail ?y }.
+
+{ ?x sequenceTail [ rdf:rest ?z ] } => { ?x sequenceTail ?z }.
+
+{ ?x sequenceTail [ rdf:first ?y; rdf:rest [ rdf:first ?z ]] } =>
+	{?y canPrecede ?z}.
+
+# Have to separatethe next two rules 
+{ ?x bnf:canBeSequence [ rdf:first ?y ].
+  ?y log:rawType log:Literal. }  => { ?x bnf:canStartWithLiteral ?y }.
+
+{ ?x bnf:canStartWithLiteral ?y .
+  (?y "(.).*")  string:scrape ?c }  => { ?x bnf:canStartWith ?c }.
 
 #______________________________________________________________
 
-#  Axioms reducing the shortcut BNF terms to bnf:canBeSequence.
-
-#{ ?x bnf:oneOrMore ?y } => { ?x bnf:canBeSequence ( ?y [ bnf:zeroOrMore ?y ] )  }.
-
-
-{ ?x bnf:commaSeparatedPeriodTerminatedListOf ?y } =>
-{
-	?x bnf:mustBeOneSequence (
-		( period )
-		( comma ?y ?x )
-	)
-}.
 
 
 # Rules for determining branching
 
-{ 	?x bnf:canBeSequence [rdf:first [bnf:canStartWith ?y]].
+{ 	?x bnf:canBeSequence ?s. ?s rdf:first [bnf:canStartWith ?y].
 } => {
-	?x selector ( ?y ?s ); bnf:canStartWith ?y.
+	?x bnf:selector ( ?y ?s ); bnf:canStartWith ?y.
 }.
 
 
@@ -66,11 +72,12 @@
 	?s a UsedTail.
 }.
 
-{ ?y list:in [a UsedSequence].} => {?y a Used}.
 
-{ ?s a UsedTail; rdf:first ?x; rdf:rest ?r } => {?r a UsedTail}.
+# { ?y list:in [a UsedSequence].} => {?y a Used}.
 
-{ ?s a UsedTail; rdf:first ?x; rdf:rest [ rdf:first ?y ] } => { ?x canPrecede ?y }.
+#{ ?s a UsedTail; rdf:first ?x; rdf:rest ?r } => {?r a UsedTail}.
+
+#{ ?s a UsedTail; rdf:first ?x; rdf:rest [ rdf:first ?y ] } => { ?x canPrecede ?y }.
 
 { ?x bnf:canBeSequence [ list:last ?y ]; canPrecede ?z} => { ?y canPrecede ?z }.
 
