@@ -1878,7 +1878,12 @@ def backslashUify(ustr):
     return str
 
 def hexify(ustr):
-    """Use URL encoding to return an ASCII string corresponding to the given unicode"""
+    """Use URL encoding to return an ASCII string corresponding to the given unicode
+
+    >>> hexify("http://example/a b")
+    'http://example/a%20b'
+    
+    """
 #    progress("String is "+`ustr`)
 #    s1=ustr.encode('utf-8')
     str  = ""
@@ -1912,3 +1917,12 @@ def dummy():
 
 
 #ends
+
+
+def _test():
+    import doctest
+    doctest.testmod()
+
+
+if __name__ == '__main__':
+    _test()
