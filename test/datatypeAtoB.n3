@@ -1,0 +1,36 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+
+<> dc:description """an example of rules
+	to convert from the S-A idiom to
+	the S-B idiom.
+
+	run with cwm ala:
+	python cwm.py --rdf datatype-exA.rdf \
+		--n3 datatypeAtoB.n3 \
+		--filter=datatypeAtoB.n3 --rdf
+	""".
+
+@prefix dtA: <http://example/datatypesA#>.
+@prefix exA: <http://example/vocabA#>.
+@prefix exB: <http://example/vocabB#>.
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <#>.
+
+
+dtA:decimal a :InterpretationProperty.
+dtA:date a :InterpretationProperty.
+dtA:string a :InterpretationProperty.
+#...rest of the primitive types...
+
+exA:birthdate :lexicalForm exB:birthdate.
+
+this log:forAll :s, :p, :o, :ip, :olit, :lp.
+
+{ :s :p :o.
+  :o :ip :olit.
+  :ip a :InterpretationProperty .
+  :p :lexicalForm :lp.
+ }
+log:implies
+  { :s :lp :olit }.

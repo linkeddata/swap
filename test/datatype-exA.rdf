@@ -1,0 +1,13 @@
+<rdf:RDF
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"  
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        xmlns:dtA="http://example/datatypesA#"
+        xmlns:exA="http://example/vocabA#"
+        xmlns:exB="http://example/vocabB#">
+  <rdf:Description rdf:about="#Jenny">
+    <exA:birthdate>
+      <rdf:Description><dtA:date>2001-07-15</dtA:date></rdf:Description>
+    </exA:birthdate>
+  </rdf:Description>
+</rdf:RDF>
+

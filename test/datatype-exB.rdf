@@ -1,0 +1,18 @@
+
+<!-- Processed by Id: cwm.py,v 1.83 2002/01/04 16:16:10 timbl Exp -->
+<!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/-->
+
+
+<rdf:RDF xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/datatype-exA.rdf#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:dtA="http://example/datatypesA#"
+    xmlns:exA="http://example/vocabA#"
+    xmlns:exB="http://example/vocabB#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <rdf:Description rdf:about="datatype-exA.rdf#Jenny">
+        <exB:birthdate>2001-07-15</exB:birthdate>
+    </rdf:Description>
+</rdf:RDF>
