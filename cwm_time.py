@@ -1,4 +1,4 @@
-#! /usr/bin/env python 
+#
 #
 #
 # TODO:
@@ -6,6 +6,16 @@
 #
 # See http://www.python.org/doc/current/lib/module-time.html
 #
+
+"""
+The time built-ins concern dates and times expressed in a specific
+version of ISO date-time format.  These functions allow the various
+parts of the date and time to be compared, and converted
+into interger second GMT era format for arithmetic.
+
+Be aware that ISo times carry timezone offset information:  they cannot be
+converted to integer second times without a valid timezone offset, such as "Z".
+"""
 
 import string
 import re
@@ -19,17 +29,16 @@ from thing import LightBuiltIn, Function, ReverseFunction
 import time, calendar # Python standard distribution
 
 
-#TIME_NS_URI = "http://www.mnot.net/2002/02/25/time#"
 TIME_NS_URI = "http://www.w3.org/2000/10/swap/time#"
 
-#LITERAL_URI_prefix = "data:application/n3;"
-#DATE_NS_URI = "http://www.mnot.net/2002/01/11/date#"
 
 __version__ = "0.3"
 
 DAY = 24 * 60 * 60
 
 class BI_inSeconds(LightBuiltIn, Function, ReverseFunction):
+    """For a time string, the number of seconds from the era start as an integer-representing string.
+    """
     def evaluateObject(self, store, context, subj, subj_py):
         try:
             return store._fromPython(context, str(isodate.parse(subj_py)))
@@ -37,8 +46,14 @@ class BI_inSeconds(LightBuiltIn, Function, ReverseFunction):
             return None
 
     def evaluateSubject(self, store, context, obj, obj_py):
-	return store._fromPython(context, isodate.asString(int(obj_py)))
+	return store._fromPython(context, isodate.fullString(int(obj_py)))
 
+class BI_equalTo(LightBuiltIn):
+    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+	try:
+	    return isodate.parse(subj_py) == isodate.parse(obj_py)
+        except:
+            return None
 
 class BI_year(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py):
@@ -58,6 +73,13 @@ class BI_day(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py):
         try:
             return store._fromPython(context, subj_py[8:10])
+        except:
+            return None
+
+class BI_date(LightBuiltIn, Function):
+    def evaluateObject(self, store, context, subj, subj_py):
+        try:
+            return store._fromPython(context, subj_py[:10])
         except:
             return None
 
@@ -170,6 +192,8 @@ def register(store):
     str.internFrag("year", BI_year)
     str.internFrag("month", BI_month)
     str.internFrag("day", BI_day)
+    str.internFrag("date", BI_date)
+    str.internFrag("equalTo", BI_equalTo)
     str.internFrag("hour", BI_hour)
     str.internFrag("minute", BI_minute)
     str.internFrag("second", BI_second)

@@ -96,6 +96,13 @@ def parse(s):
             ( int(a.get('tz_min', 0)) * 60 ))
     )
     
+def fullString(i):
+    """ given seconds since the epoch, return a full dateTime string in Z timezone. """
+    assert type(i) in [IntType, FloatType]
+    year, month, day, hour, minute, second, wday, jday, dst = time.gmtime(i)
+    return str(year) + '-%2.2d-%2.2dT%2.2d:%2.2d:%2.2dZ' % (month, day, hour, minute, second)
+
+
 def asString(i):
     """ given seconds since the epoch, return a dateTime string. """
     assert type(i) in [IntType, FloatType]

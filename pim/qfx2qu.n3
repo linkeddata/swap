@@ -7,13 +7,13 @@
 # in a much simpler format rather like the old quicken interchange format (.qu3).
 #
 #  Actually reverse makes more sense as modelling is much better - this
-# way removes information.  The .ofx3 file is a self-describing
+# way removes information.  The .ofx3 file is a self-describing statement.
 #
-#  This invents URIs for bank accounts and transactions, so that otehr files
+#  This invents URIs for bank accounts and transactions, so that other files
 # can easily refer to them, and different statements will refer to the
 # same bank account easily.
 #
-# Example Makefile exctract to convert downloaded .ofx files:
+# Example Makefile extract to convert downloaded .ofx files:
 #.ofx.ofx3:
 #	sed -f $(PIM)/qfx2n3.sed < $< > $@
 #.ofx3.qu3:
@@ -88,7 +88,7 @@ this log:forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x, :y, :z.
 :r  qu:number :x .
 }.
 
-# Prepare for purging the old voabulary bits we no longer need:
+# Prepare for purging the old vocabulary bits we no longer need:
 
 {} log:implies {ofx:STMTTRN a log:Chaff.
 		ofx:DTPOSTED a log:Chaff.  

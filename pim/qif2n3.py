@@ -12,7 +12,6 @@ import sys
 import string
 import os
 
-
 def convertName(what, value):
     """ Convert a random name to a ID as part of a URI."""
     pref=string.lower(what[:3])
@@ -51,6 +50,7 @@ def convertDate(qdate):
     """ convert from QIF time format to ISO date string
 
     QIF is like   "7/ 9/98"  "9/ 7/99"  or   "10/10/99"  or "10/10'01" for y2k
+         or, it seems (citibankdownload 20002) like "01/22/2002"
     ISO is like   YYYY-MM-DD  I think @@check
     """
     if qdate[1] == "/":
@@ -58,6 +58,8 @@ def convertDate(qdate):
     for i in range(len(qdate)):
         if qdate[i] == " ":
             qdate = qdate[:i] + "0" + qdate[i+1:]
+    if len(qdate) == 10: # new form with YYYY date
+	return qdate[6:10] + "-" + qdate[0:2] + "-" + qdate[3:5]	
     if qdate[5] == "'": C="20"
     else: C="19"
     return C + qdate[6:8] + "-" + qdate[0:2] + "-" + qdate[3:5]
@@ -65,6 +67,7 @@ def convertDate(qdate):
 def extract(path):
     global nochange
     global verbose
+    defaultUsed = 0
     crs = 0
     total = 0
     ignorables = [ "Clear:AutoSwitch", "Option:AutoSwitch" ]   # Without leading "!"
@@ -163,6 +166,7 @@ def extract(path):
 		    print "qu:toAccount ",toAccount,
 		else:
 		    print "qu:toAccount acc:Default",
+		    defaultUsed = 1
             print "."
             inSentence = 0
         else:
@@ -214,6 +218,7 @@ def extract(path):
                 print 'qu:%s "%s";'%(property, val),
     if inSentence: print ".",
 #    if inAccount: print "]\n."
+    if defaultUsed: print """    acc:Default s:label "DEFAULT". """
     print "\n\n#ends\n"
             
     input.close()
