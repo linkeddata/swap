@@ -1,0 +1,394 @@
+<rdf:RDF
+  xmlns:rdf ="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:daml="http://www.daml.org/2001/03/daml+oil#"
+  xmlns     ="http://www.ksl.Stanford.EDU/projects/DAML/Proof/query-answer.daml#"
+>
+
+<daml:Ontology rdf:about="">
+  <daml:versionInfo>$Id$</daml:versionInfo>
+  <rdfs:comment> An ontology of basic query answering terms </rdfs:comment>
+  <daml:imports rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns"/>
+  <daml:imports rdf:resource="http://www.w3.org/2000/01/rdf-schema"/>
+  <daml:imports rdf:resource="http://www.daml.org/2001/03/daml+oil"/>
+</daml:Ontology>
+
+
+
+<!-- ======= Constructs about Queries ======= -->
+
+
+<daml:Class rdf:ID="Query">
+  <rdfs:comment> 
+	A Query represents a question posed to the reasoner.
+
+	It consists of two principle parts: query premise and query pattern.
+
+	A query premise is an ordinary DAML KB that is effectively asserted
+	to the queried KB for the duration of the query. It should contain
+	assumptions particular to the current query. The query premise can be
+	empty to indicate the absence of such assumptions.
+
+	A query pattern is the question itself. It is in effect a conjunction 
+   	of one or more triples. Each triple corresponds to a RDF Statement except 
+	that its predicate, subject, or object can be variables. Variables present
+	in a query pattern, if any, are implicitly quantified existentially at
+	the beginning of the pattern. Syntactically, a query pattern is in xml
+	markup.
+  </rdfs:comment>
+
+  <rdfs:subClassOf>
+    <daml:intersectionOf rdf:parseType="daml:collection">
+	<daml:Restriction>
+		<daml:onProperty rdf:resource="#queryPremise"/>
+		<daml:maxCardinality> 1 </daml:maxCardinality>
+	</daml:Restriction>
+
+	<daml:Restriction>
+		<daml:onProperty rdf:resource="#queryPattern"/>
+		<daml:cardinality> 1 </daml:cardinality>
+	</daml:Restriction>
+    </daml:intersectionOf>
+  </rdfs:subClassOf>
+</daml:Class>
+
+
+
+<rdf:Property rdf:ID="queryPremise">
+  <rdfs:comment>
+	A value of queryPremise is a URI of the DamlKB as the premise part
+	of the Query.
+  </rdfs:comment>
+
+  <rdfs:domain rdf:resource="#Query"/>
+  <rdfs:range rdf:resource="#URI"/>
+</rdf:Property>
+
+
+
+<rdf:Property rdf:ID="queryPattern">
+  <rdfs:domain rdf:resource="#Query"/>
+  <rdfs:range rdf:resource="#Conjunction"/>
+</rdf:Property>
+
+
+
+<!-- ======== Constructs about Answers to Queries ======= -->
+
+
+<daml:Class rdf:ID="QueryAnswer">
+  <rdfs:comment>
+	A QueryAnswer represents ONE answer to a query.
+
+	It consists of two principle parts: the query posed and 
+	a set of bindings to the query variables representing an 
+	instantiation of those query variables.
+  </rdfs:comment>
+
+  <rdfs:subClassOf>
+      	<daml:Restriction>
+        	<daml:onProperty rdf:resource="#query"/>
+        	<daml:cardinality> 1 </daml:cardinality>
+      	</daml:Restriction>
+  </rdfs:subClassOf>
+</daml:Class>
+
+
+
+<rdf:Property rdf:ID="query">
+  <rdfs:comment>
+	A value of query is a URI of the QueryKB as the Query posed.
+  </rdfs:comment>
+
+  <rdfs:domain rdf:resource="#QueryAnswer"/>
+  <rdfs:range rdf:resource="#URI"/>
+</rdf:Property>
+
+
+
+<rdf:Property rdf:ID="variableBinding">
+  <rdfs:domain rdf:resource="#QueryAnswer"/>
+  <rdfs:range rdf:resource="#VariableBinding"/>
+</rdf:Property>
+
+
+
+<daml:Class rdf:ID="VariableBinding">
+  <rdfs:subClassOf>
+    <daml:intersectionOf rdf:parseType="daml:collection">
+      	<daml:Restriction>
+        	<daml:onProperty rdf:resource="#var"/>
+        	<daml:toClass rdf:resource="#Variable"/>
+      	</daml:Restriction>
+
+      	<daml:Restriction>
+        	<daml:onProperty rdf:resource="#var"/>
+        	<daml:cardinality> 1 </daml:cardinality>
+      	</daml:Restriction>
+
+      	<daml:Restriction>
+        	<daml:onProperty rdf:resource="#val"/>
+        	<daml:toClass rdf:resource="#Term"/>
+      	</daml:Restriction>
+
+      	<daml:Restriction>
+        	<daml:onProperty rdf:resource="#val"/>
+        	<daml:cardinality> 1 </daml:cardinality>
+      	</daml:Restriction>
+    </daml:intersectionOf>
+  </rdfs:subClassOf>
+</daml:Class>
+
+
+
+<!-- ======= Constructs about DAML+OIL Knowledge Bases ======= -->
+
+
+<daml:Class rdf:ID="DamlKB">
+  <rdfs:comment> 
+	A DamlKB is a well-formed DAML+OIL knowledge base.
+  </rdfs:comment>
+</daml:Class>
+
+
+
+<daml:Class rdf:ID="QueryKB">
+  <rdfs:comment> 
+	A QueryKB is a DamlKB that contains exactly one upmost Description, which is
+	an instance of Query. 
+
+	All Descriptions in a QueryKB should be explicitly named and indicate the most
+	specific types to which the subjects of the Descriptions belong.
+  </rdfs:comment>
+
+  <rdfs:subClassOf rdf:resource="#DamlKB"/>
+</daml:Class>
+
+
+
+<daml:Class rdf:ID="QueryAnswerKB">
+  <rdfs:comment> 
+	A QueryAnswerKB is a DamlKB that contains zero or more upmost Descriptions, all
+	of which are instances of QueryAnswer. 
+
+	All Descriptions in a QueryAnswerKB should be explicitly named and indicate 
+	the most specific types to which the subjects of the Descriptions belong.
+  </rdfs:comment>
+
+  <rdfs:subClassOf rdf:resource="#DamlKB"/>
+</daml:Class>
+
+
+
+<!-- ========= Constructs about Logical Expressions ========= -->
+
+
+<daml:Class rdf:ID="Expression">
+  <daml:disjointUnionOf rdf:parseType="daml:collection">
+    <daml:Class rdf:about="#Conjunction"/>
+    <daml:Class rdf:about="#Triple"/>
+    <daml:Class rdf:about="#Term"/>
+  </daml:disjointUnionOf>
+</daml:Class>
+
+
+
+<daml:Class rdf:ID="Conjunction">
+  <rdfs:subClassOf>
+      	<daml:Restriction>
+        	<daml:onProperty rdf:resource="#conjunct"/>
+        	<daml:minCardinality> 1 </daml:minCardinality>
+      	</daml:Restriction>
+  </rdfs:subClassOf>
+</daml:Class>
+
+
+
+<rdf:Property rdf:ID="conjunct">
+  <rdfs:domain rdf:resource="#Conjunction"/>
+  <rdfs:range rdf:resource="#Triple"/>
+</rdf:Property>
+
+
+
+<daml:Class rdf:ID="Triple">
+  <rdfs:subClassOf>
+    <daml:intersectionOf rdf:parseType="daml:collection">
+	<daml:Restriction>
+		<daml:onProperty rdf:resource="#predicate"/>
+		<daml:cardinality> 1 </daml:cardinality>
+	</daml:Restriction>
+
+	<daml:Restriction>
+		<daml:onProperty rdf:resource="#subject"/>
+		<daml:cardinality> 1 </daml:cardinality>
+	</daml:Restriction>
+
+	<daml:Restriction>
+		<daml:onProperty rdf:resource="#object"/>
+		<daml:cardinality> 1 </daml:cardinality>
+	</daml:Restriction>
+    </daml:intersectionOf>
+  </rdfs:subClassOf>
+</daml:Class>
+
+
+
+<rdf:Property rdf:ID="predicate">
+  <rdfs:domain rdf:resource="#Triple"/>
+  <rdfs:range rdf:resource="#PropertyTerm"/>
+</rdf:Property>
+
+
+
+<rdf:Property rdf:ID="subject">
+  <rdfs:domain rdf:resource="#Triple"/>
+  <rdfs:range rdf:resource="#Term"/>
+</rdf:Property>
+
+
+
+<rdf:Property rdf:ID="object">
+  <rdfs:domain rdf:resource="#Triple"/>
+  <rdfs:range rdf:resource="#Term"/>
+</rdf:Property>
+
+
+
+<daml:Class rdf:ID="Term">
+  <daml:disjointUnionOf rdf:parseType="daml:collection">
+    <daml:Class rdf:about="#Variable"/>
+    <daml:Class rdf:about="#Constant"/>
+  </daml:disjointUnionOf>
+</daml:Class>
+
+
+
+<daml:Class rdf:ID="Variable">
+  <rdfs:subClassOf>
+	<daml:Restriction>
+		<daml:onProperty rdf:resource="#vName"/>
+		<daml:cardinality> 1 </daml:cardinality>
+	</daml:Restriction>
+  </rdfs:subClassOf>
+</daml:Class>
+
+
+
+<rdf:Property rdf:ID="vName">
+  <rdfs:domain rdf:resource="#Variable"/>
+  <rdfs:range rdf:resource="#Identifier"/>
+</rdf:Property>
+
+
+
+<daml:Class rdf:ID="Constant">
+  <daml:disjointUnionOf rdf:parseType="daml:collection">
+    <daml:Class rdf:about="#ObjectConstant"/>
+    <daml:Class rdf:about="#LiteralConstant"/>
+  </daml:disjointUnionOf>
+</daml:Class>
+
+
+
+<daml:Class rdf:ID="ObjectConstant">
+  <rdfs:comment> An ObjectConstant denotes a resource in the object domain </rdfs:comment>
+
+  <rdfs:subClassOf>
+	<daml:Restriction>
+		<daml:onProperty rdf:resource="#qName"/>
+		<daml:cardinality> 1 </daml:cardinality>
+	</daml:Restriction>
+  </rdfs:subClassOf>
+</daml:Class>
+
+
+
+<rdf:Property rdf:ID="qName">
+  <rdfs:domain rdf:resource="#ObjectConstant"/>
+  <rdfs:range rdf:resource="#QualifiedName"/>
+</rdf:Property>
+
+
+
+<daml:Class rdf:ID="LiteralConstant">
+  <rdfs:comment> A LiteralConstant denotes a resource in the datatype domain </rdfs:comment>
+
+  <rdfs:subClassOf>
+	<daml:Restriction>
+		<daml:onProperty rdf:resource="#literalValue"/>
+		<daml:cardinality> 1 </daml:cardinality>
+	</daml:Restriction>
+  </rdfs:subClassOf>
+</daml:Class>
+
+
+
+<rdf:Property rdf:ID="literalValue">
+  <rdfs:domain rdf:resource="#LiteralConstant"/>
+  <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</rdf:Property>
+
+
+
+<daml:Class rdf:ID="PropertyTerm">
+  <daml:disjointUnionOf rdf:parseType="daml:collection">
+    <daml:Class rdf:about="#Variable"/>
+    <daml:Class rdf:about="#PropertyConstant"/>
+  </daml:disjointUnionOf>
+</daml:Class>
+
+
+
+<daml:Class rdf:ID="PropertyConstant">
+  <rdfs:subClassOf rdf:resource="#ObjectConstant"/>
+</daml:Class>
+
+
+
+<!-- ========= Constructs about Names and Web Addresses ========= -->
+
+
+<daml:Class rdf:ID="QualifiedName">
+  <rdfs:subClassOf>
+    <daml:intersectionOf rdf:parseType="daml:collection">
+	<daml:Restriction>
+		<daml:onProperty rdf:resource="#nsName"/>
+		<daml:cardinality> 1 </daml:cardinality>
+	</daml:Restriction>
+
+	<daml:Restriction>
+		<daml:onProperty rdf:resource="#localName"/>
+		<daml:cardinality> 1 </daml:cardinality>
+	</daml:Restriction>
+    </daml:intersectionOf>
+  </rdfs:subClassOf>
+</daml:Class>
+
+
+
+<rdf:Property rdf:ID="nsName">
+  <rdfs:domain rdf:resource="#QualifiedName"/>
+  <rdfs:range rdf:resource="#URI"/>
+</rdf:Property>
+
+
+
+<rdf:Property rdf:ID="localName">
+  <rdfs:domain rdf:resource="#QualifiedName"/>
+  <rdfs:range rdf:resource="#Identifier"/>
+</rdf:Property>
+
+
+
+<daml:Class rdf:ID="Identifier">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</daml:Class>
+
+
+
+<daml:Class rdf:ID="URI">
+  <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+</daml:Class>
+
+</rdf:RDF>
