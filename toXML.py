@@ -193,7 +193,7 @@ z  - Allow relative URIs for namespaces
             self._nextId = 0
             self._docOpen = 1
 
-    def makeStatement(self,  tuple, why=None):
+    def makeStatement(self,  tuple, why=None, aIsPossible=0):
         context, pred, subj, obj = tuple # Context is ignored
 
 	if subj == context: # and context == self._formula:

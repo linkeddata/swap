@@ -1199,7 +1199,8 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
     def _newline(self, extra=0):
         self._write("\n"+ "    " * (self.indent+extra))
 
-    def makeStatement(self, triple, why=None):
+    def makeStatement(self, triple, why=None, aIsPossible=1):
+#        triple = tuple([a.asPair() for a in triple2])
         if self.stack[-1]:
 	    if triple[PRED] == N3_first:
 		self._write(self.representationOf(triple[CONTEXT], triple[OBJ])+" ")
@@ -1212,9 +1213,11 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 				    %(N3_first, N3_rest), triple)
             return
         
-        if ("a" in self._flags and
+        if ("a" in self._flags and aIsPossible and
             triple[PRED] == (SYMBOL, N3_forSome_URI) and
-            triple[CONTEXT] == triple[SUBJ]):   # We assume the output is flat @@@
+            triple[CONTEXT] == triple[SUBJ]) : # and   # We assume the output is flat @@@ true, we should not
+#            canItbeAnExistential([],triple2[SUBJ],triple2[OBJ])[1] == 0):
+            #print triple
 	    ty, value = triple[OBJ]
 	    i = len(value)
 	    while i > 0 and value[i-1] not in _notNameChars+"_": i = i - 1
@@ -1392,7 +1395,7 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 		else:
 		    self._write(";")
 		self._newline(1)   # Indent predicate from subject
-            else: self._write("    ")
+            elif not varDecl: self._write("    ")
 
 	    if varDecl:
 		    if pred == (SYMBOL, N3_forAll_URI):

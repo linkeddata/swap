@@ -221,8 +221,15 @@ class Serializer:
 		    
         sink.endDoc()
 
-    def _outputStatement(self, sink, quad):
-        sink.makeStatement(self.extern(quad))
+    def _outputStatement(self, sink, quad, aWorks = 1):
+        sink.makeStatement(self.extern(quad), aIsPossible=aWorks)
+
+    def notAsExtern(self, t):
+        return(t[CONTEXT],
+                            t[PRED],
+                            t[SUBJ],
+                            t[OBJ],
+                            )
 
     def extern(self, t):
         return(t[CONTEXT].asPair(),
@@ -245,12 +252,15 @@ class Serializer:
 	    for v in uv:
 		self._outputStatement(sink, (context, self.store.forAll, context, v))
 	for v in ev:
+            aWorks = 0
 	    if pretty:
 		_anon, _incoming = self._topology(v, context)
 	    else:
 		_anon = 0
 	    if not _anon:
-		self._outputStatement(sink, (context, self.store.forSome, context, v))
+                if canItbeABNode(context, v):
+                    aWorks = 1
+		self._outputStatement(sink, (context, self.store.forSome, context, v), aWorks)
 
     def dumpBySubject(self, sorting=1):
         """ Dump one formula only by order of subject except forSome's first for n3=a mode"""
@@ -558,7 +568,35 @@ class Serializer:
             return
 
         self._outputStatement(sink, triple)
+
 	
+def canItbeABNode(formula, symbol):
+    for quad in formula.statements:
+        for s in SUBJ, OBJ:
+            if isinstance(quad[s], Formula):
+                if quad[s].doesNodeAppear(symbol):
+                    return 0
+    return 1
+
+##    toplayer = 1
+##    otherlayers = 1
+##    statementList = formula.statements[:]
+##    parentList.append(formula)
+##    while statementList:
+##        quad = statementList.pop(0)
+##        for s in SUBJ, OBJ:
+##            if quad[s] == symbol:
+##                toplayer = 0
+##            elif isinstance(quad[s], List):
+##                for elt in quad[s]:
+##                    statementList.append(elt)
+##            elif isinstance(quad[s], Formula):
+##                top, other = canItbeABNode(parentList, quad[s], symbol)
+##                otherlayers = otherlayers and top and other
+##            else:
+##                pass
+##    return toplayer, otherlayers
+
 
 #ends
 
