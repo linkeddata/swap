@@ -32,7 +32,10 @@ http://www.w3.org/Consortium/Legal/copyright-software-19980720
 
 import urllib2
 
-import libxml2 # http://xmlsoft.org/python.html , DebianPackage:libxml2-python2.1 (@@no 2.2 package yet?)
+# eliminate this dependency; use mnot's HtmlDom instead
+# http://www.mnot.net/python/HtmlDom.py
+# <AaronSw> it lets me do: d = fetch(url); print xml.xpath.Evaluate("//*[@class='rss:item']/text()", d)
+import libxml2 # http://xmlsoft.org/python.html , DebianPackage:libxml2-python2.1 won't work because llyn.py uses 2.2isms
 
 import llyn, uripath, toXML # http://www.w3.org/2000/10/swap/
 from RDFSink import SYMBOL, LITERAL, FORMULA
@@ -131,6 +134,9 @@ if __name__ == '__main__':
     main(sys.argv)
 
 # $Log$
-# Revision 1.1  2003-01-02 05:29:59  connolly
+# Revision 1.2  2003-01-02 05:32:46  connolly
+# some comments about dependencies
+#
+# Revision 1.1  2003/01/02 05:29:59  connolly
 # works on one web site
 #
