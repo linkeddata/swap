@@ -1,0 +1,34 @@
+# $Id$
+
+@prefix    : <http://www.w3.org/2000/10/swap/util/reqThreads#>.
+@prefix req: <http://www.w3.org/2000/10/swap/util/reqThreads#>.
+
+@prefix m: <http://www.w3.org/2000/10/swap/pim/email#>.
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+
+#
+# email threading rules
+# (+ closed/moved)
+#
+# cribbed from http://www.w3.org/2001/sw/WebOnt/lc-comment-rules.n3
+#  Revision 1.6, Wed Jul 30 22:25:36 2003 UTC
+
+{
+  ?MSG m:subject [
+    str:notMatches "^\\[(close|Close|move|cosed|clodes)",
+                   "^R[Ee] *:" ]
+}
+ => { ?MSG :threadRoot ?MSG }.
+
+{ ?M m:references [ :threadRoot ?R ] } => { ?M :threadRoot ?R }.
+
+
+
+#
+# thread closing conventions
+#
+{
+  ?M m:subject [ str:matches "^\\[(close|Close|move|clodes|cosed)"];
+     :threadRoot ?R.
+}
+ => { ?R :threadTail ?M }.
