@@ -67,6 +67,15 @@ my(%ValueType) = (
 		  'prodid', 'text', # 4.7.3 Product Identifier
 		  'version', 'text', # 4.7.4 Version
 		  'dtstamp', 'date-time', # 4.8.7.2 Date/Time Stamp
+		  'lastModified', 'date-time',    
+		  'status', 'text',   # @@@ tbl 200410 should be enum type @@ was missing
+		  'tzid',   'text' ,  # @@@@@ tbl " 
+		  'action',   'text' ,  # @@@@@ tbl " enum?
+		  'duration',	'fooBar',
+		  'lastmodified', 'date-time',
+		  'tzoffsetto', 'text',   # @@
+		  'tzoffsetfrom', 'text',   
+		  'tzname', 'text',   
 		  'summary', 'text',
 		  'sequence', 'integer', # 4.8.7.4 Sequence Number
 		  'uid', 'text', # 4.8.4.7 Unique Identifier
@@ -282,6 +291,7 @@ sub lexForm{
   my($iprop, $v) = @_;
 
   if($iprop eq 'text'
+     || $iprop eq 'uri'
      || $iprop eq 'integer'){
     # do nothing
   }
@@ -341,7 +351,13 @@ sub testCamelCase{
 # @@TODO: params
 
 # $Log$
-# Revision 1.7  2003-04-14 21:20:51  connolly
+# Revision 1.8  2004-10-28 17:42:00  timbl
+# Fix bugs in cwm --patch
+# diff.py now can generate weak deltas when necessary, when the graphs are not solid.
+# Offline working hack in webaccess.py
+# Fixed bug in lllyn.py with interning of datatyped literals giving diff objects for same type  sometimes.
+#
+# Revision 1.7  2003/04/14 21:20:51  connolly
 # ical section done
 #
 # Revision 1.6  2002/12/13 18:55:21  connolly

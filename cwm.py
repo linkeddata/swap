@@ -335,8 +335,14 @@ rdf/xml files. Note that this requires rdflib.
         #if option_reify: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula")
         if option_flat: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula", flat=1)
 
+	becauseCwm = None
+	if diag.tracking:
+	    becauseCwm = BecauseOfCommandLine(sys.argv[0]) 
+	    # @@ add user, host, pid, date time? Privacy!
+
         if option_pipe:
             _store = _outSink
+	    workingContext = _outSink
         else:
 	    if "u" in option_flags["think"]:
 		_store = llyn.RDFStore(argv=option_with, crypto=option_crypto)
@@ -344,28 +350,24 @@ rdf/xml files. Note that this requires rdflib.
 		_store = llyn.RDFStore( _outURI+"#_g", argv=option_with, crypto=option_crypto)
 	    myStore.setStore(_store)
 
-	becauseCwm = None
-	if diag.tracking:
-	    becauseCwm = BecauseOfCommandLine(sys.argv[0]) 
-	    # @@ add user, host, pid, date time? Privacy!
 
-	workingContext = None
-        if  _gotInput: 
-	    workingContext = _store.newFormula(option_inputs [0]+"#_work")
-	else: # default input
-            if option_first_format is None: option_first_format = option_format
-	    ContentType={ "rdf": "application/xml+rdf", "n3":
-				"text/rdf+n3" }[option_first_format]
-	    workingContext = _store.load(
-#			    asIfFrom = join(_baseURI, ".stdin"),
-			    asIfFrom = _baseURI,
-			    contentType = ContentType,
-			    flags = option_flags[option_first_format],
-			    remember = 0,
-                            referer = "",
-			    why = becauseCwm)
+	    if  _gotInput: 
+		workingContext = _store.newFormula(option_inputs [0]+"#_work")
+	    else: # default input
+		if option_first_format is None: option_first_format = option_format
+		ContentType={ "rdf": "application/xml+rdf", "n3":
+				    "text/rdf+n3" }[option_first_format]
+		workingContext = _store.load(
+    #			    asIfFrom = join(_baseURI, ".stdin"),
+				asIfFrom = _baseURI,
+				contentType = ContentType,
+				flags = option_flags[option_first_format],
+				remember = 0,
+				referer = "",
+				why = becauseCwm)
 	    workingContext.reopen()
-
+	    workingContext.stayOpen = 1 # Never canonicalize this. Never share it.
+	
 	if diag.tracking:
 	    proof = FormulaReason(workingContext)
 
@@ -621,25 +623,21 @@ rdf/xml files. Note that this requires rdflib.
         # Squirt it out if not piped
 
         if not option_pipe:
-            # we're really checking two things:
-            #   (1) does the sink really want to take control, being given
-            #       the kb, not just the triples one at a time, and
-            #   (2) does it use lxkb or llyn ?
             if hasattr(_outSink, "serializeKB"):
                 raise NotImplementedError
             else:
                 if verbosity()>5: progress("Begining output.")
+		workingContext.stayOpen = 0  # End its use as an always-open knoweldge base
+		workingContext = workingContext.close()
+		assert workingContext.canonical != None
+
                 if option_outputStyle == "-ugly":
-		    workingContext = workingContext.close()
                     _store.dumpChronological(workingContext, _outSink)
                 elif option_outputStyle == "-bySubject":
-		    workingContext = workingContext.close()
                     _store.dumpBySubject(workingContext, _outSink)
                 elif option_outputStyle == "-no":
                     pass
                 else:  # "-best"
-		    workingContext = workingContext.close()
-		    assert workingContext.canonical != None
                     _store.dumpNested(workingContext, _outSink)
 
 

@@ -5,7 +5,7 @@ Options:
 
 --verbose	-v      Print what you are doing as you go
 --help          -h      Print this message and exit
---from=	uri	-f uri	Specify an input file (or web resource)
+--from=uri	-f uri	Specify an input file (or web resource)
 --diff=uri      -d uri  Specify a difference file
 
 Can have any number of --from <file> parameters, in which case files are

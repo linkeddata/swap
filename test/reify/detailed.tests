@@ -24,7 +24,7 @@
     test:description   "reify a document with quantifiers";
     test:arguments     """-n3 includes/quantifiers_limited.n3 --reify """.
 
-:t1004 a test:CwmTest;
+:t1004 a test:CwmTest, test:VerboseTest;   # Don't run with debug output on
     test:referenceOutput <reify2.n3>;
     test:description   "reify twice";
     test:arguments     """-n3 reify/reify0.n3 --reify --reify""".

@@ -548,7 +548,8 @@ class Query:
 
         
         if diag.chatty_flag > 50:
-            progress( "Query: created with %i terms. (justone=%i)" % (len(unmatched), justOne))
+            progress( "Query: created with %i terms. (justone=%i, wc=%s)" % 
+		    (len(unmatched), justOne, workingContext))
             if diag.chatty_flag > 80: progress( setToString(unmatched))
 	    if diag.chatty_flag > 90: progress(
 		"    Smart in: ", smartIn)

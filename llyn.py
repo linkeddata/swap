@@ -160,6 +160,8 @@ class IndexedFormula(Formula):
 	self._closureMode = ""
 	self._closureAgenda = []
 	self._closureAlready = []
+	
+	self.stayOpen = 0   # If set, works as a knowledegbase, never canonicalized.
 
 
     def statementsMatching(self, pred=None, subj=None, obj=None):
@@ -456,7 +458,11 @@ class IndexedFormula(Formula):
             if diag.chatty_flag > 70:
                 progress("End formula -- @@ already canonical:"+`F`)
             return F.canonical
-
+	if F.stayOpen:
+            if diag.chatty_flag > 70:
+                progress("End formula -- @@ Knowledge base mode, ignoring c'n:"+`F`)
+            return F
+ 
 	F.existentialDict = {}
 	for existentialVariable in F.existentials():
             F.existentialDict[existentialVariable] = 1
@@ -1081,12 +1087,12 @@ class RDFStore(RDFSink) :
 	    cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
 
     def newLiteral(self, str, dt=None, lang=None):
-	"Interned version: generat new literal object as stored in this store"
-	uriref2 = LITERAL_URI_prefix + `dt` + " " + `lang` + " " + str # @@@ encoding at least hashes!!
-	result = self.resources.get(uriref2, None)
+	"Interned version: generate new literal object as stored in this store"
+	key = (str, dt, lang)
+	result = self.resources.get(key, None)
 	if result != None: return result
 	result = Literal(self, str, dt, lang)
-	self.resources[uriref2] = result
+	self.resources[key] = result
 	return result
 	
     def newFormula(self, uri=None):
@@ -1311,8 +1317,8 @@ class RDFStore(RDFSink) :
             if diag.chatty_flag > 50:
                 progress("reopen formula -- @@ already open: "+`F`)
             return F # was open
-        if diag.chatty_flag > 70:
-            progress("reopen formula:"+`F`)
+        if diag.chatty_flag > 00:
+            progress("warning - reopen formula:"+`F`)
 	key = len(F.statements), len(F.universals()), len(F.existentials()) 
         self._formulaeOfLength[key].remove(F)  # Formulae of same length
         F.canonical = None

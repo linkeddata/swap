@@ -580,7 +580,7 @@ class Serializer:
         self._outputStatement(sink, triple)
 
 	
-def canItbeABNode(formula, symbol):
+def canItbeABNode(formula, symbol):   # @@@@ Really slow -tbl
     def returnFunc():
         for quad in formula.statements:
             for s in PRED, SUBJ, OBJ:

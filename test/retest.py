@@ -217,6 +217,7 @@ def main():
 #	kb=load(fn)
     
     for t in kb.each(pred=rdf.type, obj=test.CwmTest):
+	verboseDebug = kb.contains(subj=t, pred=rdf.type, obj=test.VerboseTest)
 	u = t.uriref()
 	ref = kb.the(t, test.referenceOutput)
 	if ref == None:
@@ -233,7 +234,7 @@ def main():
 	environment = kb.the(t, test.environment)
 	if environment == None: env=""
 	else: env = str(environment) + " "
-	testData.append((t.uriref(), case, refFile, description, env, arguments))
+	testData.append((t.uriref(), case, refFile, description, env, arguments, verboseDebug))
 
     for t in kb.each(pred=rdf.type, obj=rdft.PositiveParserTest):
 
@@ -284,7 +285,7 @@ def main():
     totalTests = cwmTests + rdfTests + perfTests
     if verbose: print "RDF parser tests: %i" % rdfTests
 
-    for u, case, refFile, description, env, arguments in testData:
+    for u, case, refFile, description, env, arguments, verboseDebug in testData:
 	tests = tests + 1
 	if tests < start: continue
 	
@@ -302,7 +303,7 @@ def main():
 		problem("######### from normal case %s: %scwm %s" %( case, env, arguments))
 		continue
 
-	if chatty:
+	if chatty and not verboseDebug:
 	    execute("""%spython %s --chatty=100  %s  &> /dev/null""" %
 		(env, cwm_command, arguments))	
 

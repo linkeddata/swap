@@ -1,14 +1,16 @@
 
 <!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html><head><title>Python: module toXML</title>
-</head><body bgcolor="#f0f0f8">
+<style type="text/css"><!--
+TT { font-family: lucidatypewriter, lucida console, courier }
+--></style></head><body bgcolor="#f0f0f8">
 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
 <tr bgcolor="#7799ee">
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>toXML</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/cvs-trunk/WWW/2000/10/swap/toXML.py">/home/syosi/cvs-trunk/WWW/2000/10/swap/toXML.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/toXML.py">/devel/WWW/2000/10/swap/toXML.py</a></font></td></tr></table>
     <p><tt>$Id$<br>
 &nbsp;<br>
 &nbsp;<br>
@@ -43,13 +45,13 @@ ______________________________________________<br>
 &nbsp;<br>
 Module&nbsp;originally&nbsp;by&nbsp;Dan&nbsp;Connolly.<br>
 TimBL&nbsp;added&nbsp;RDF&nbsp;stream&nbsp;model.</tt></p>
-<p>
+
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
-<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="RDFSink.html">RDFSink</a><br>
 <a href="codecs.html">codecs</a><br>
 </td><td width="25%" valign=top><a href="re.html">re</a><br>
@@ -57,13 +59,13 @@ TimBL&nbsp;added&nbsp;RDF&nbsp;stream&nbsp;model.</tt></p>
 </td><td width="25%" valign=top><a href="sys.html">sys</a><br>
 <a href="urllib.html">urllib</a><br>
 </td><td width="25%" valign=top><a href="urlparse.html">urlparse</a><br>
-</td></tr></table></td></tr></table><p>
+</td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
     
-<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl>
 <dt><font face="helvetica, arial"><a href="RDFSink.html#RDFStructuredOutput">RDFSink.RDFStructuredOutput</a>(<a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>)
 </font></dt><dd>
@@ -73,15 +75,15 @@ TimBL&nbsp;added&nbsp;RDF&nbsp;stream&nbsp;model.</tt></p>
 </dd>
 <dt><font face="helvetica, arial"><a href="toXML.html#XMLWriter">XMLWriter</a>
 </font></dt></dl>
- <p>
+ 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="ToRDF">class <strong>ToRDF</strong></a>(<a href="RDFSink.html#RDFStructuredOutput">RDFSink.RDFStructuredOutput</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>keeps&nbsp;track&nbsp;of&nbsp;most&nbsp;recent&nbsp;subject,&nbsp;reuses&nbsp;it<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;</td>
+<tr><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="toXML.html#ToRDF">ToRDF</a></dd>
 <dd><a href="RDFSink.html#RDFStructuredOutput">RDFSink.RDFStructuredOutput</a></dd>
@@ -122,7 +124,15 @@ Methods defined here:<br>
 <dl><dt><a name="ToRDF-startDoc"><strong>startDoc</strong></a>(self)</dt></dl>
 
 <hr>
-Data and other attributes defined here:<br>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'keeps track of most recent subject, reuses it'</dl>
+
+<dl><dt><strong>__module__</strong> = 'toXML'</dl>
+
+<dl><dt><strong>_rdfns</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'</dl>
+
+<dl><dt><strong>_valChars</strong> = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_ !#$%&amp;().,+*/'</dl>
+
 <dl><dt><strong>flagDocumentation</strong> = '<font color="#c040c0">\n</font>Flags to control RDF/XML output (after --rdf=) ...e URIs.<font color="#c040c0">\n</font>z  - Allow relative URIs for namespaces<font color="#c040c0">\n\n</font>'</dl>
 
 <hr>
@@ -180,18 +190,18 @@ avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt
 
 <dl><dt><a name="ToRDF-setGenPrefix"><strong>setGenPrefix</strong></a>(self, genPrefix)</dt></dl>
 
-</td></tr></table> <p>
+</td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="XMLWriter">class <strong>XMLWriter</strong></a></font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>taken&nbsp;from<br>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>&nbsp;taken&nbsp;from<br>
 Id:&nbsp;tsv2xml.py,v&nbsp;1.1&nbsp;2000/10/02&nbsp;19:41:02&nbsp;connolly&nbsp;Exp&nbsp;connolly<br>
 &nbsp;<br>
 Takes&nbsp;as&nbsp;argument&nbsp;a&nbsp;writer&nbsp;which&nbsp;does&nbsp;the&nbsp;(eg&nbsp;utf-8)&nbsp;encoding<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;</td>
+<tr><td>&nbsp;&nbsp;</td>
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="XMLWriter-__init__"><strong>__init__</strong></a>(self, encodingWriter, counter, squeaky<font color="#909090">=0</font>, version<font color="#909090">='1.0'</font>)</dt></dl>
 
@@ -220,27 +230,33 @@ Takes&nbsp;as&nbsp;argument&nbsp;a&nbsp;writer&nbsp;which&nbsp;does&nbsp;the&nbs
 <dl><dt><a name="XMLWriter-startElement"><strong>startElement</strong></a>(self, n, attrs<font color="#909090">=[]</font>, prefixes<font color="#909090">={}</font>)</dt></dl>
 
 <hr>
-Data and other attributes defined here:<br>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = ' taken from<font color="#c040c0">\n</font>    Id: tsv2xml.py,v 1.1 2000/10/02 ... a writer which does the (eg utf-8) encoding<font color="#c040c0">\n</font>    '</dl>
+
+<dl><dt><strong>__module__</strong> = 'toXML'</dl>
+
+<dl><dt><strong>_namechars</strong> = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-'</dl>
+
 <dl><dt><strong>attrEsc</strong> = &lt;_sre.SRE_Pattern object&gt;</dl>
 
 <dl><dt><strong>dataEsc</strong> = &lt;_sre.SRE_Pattern object&gt;</dl>
 
-</td></tr></table></td></tr></table><p>
+</td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
-<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl><dt><a name="-dummyWrite"><strong>dummyWrite</strong></a>(x)</dt></dl>
  <dl><dt><a name="-xmldata"><strong>xmldata</strong></a>(write, str, markupChars)</dt></dl>
-</td></tr></table><p>
+</td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
     
-<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><strong>ADDED_HASH</strong> = '#'<br>
 <strong>ALL4</strong> = (0, 1, 2, 3)<br>
 <strong>ANONYMOUS</strong> = 3<br>
@@ -274,6 +290,9 @@ Data and other attributes defined here:<br>
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
 <strong>XML_NS_URI</strong> = 'http://www.w3.org/XML/1998/namespace'<br>
+<strong>__file__</strong> = './toXML.pyc'<br>
+<strong>__name__</strong> = 'toXML'<br>
+<strong>_namechars</strong> = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-'<br>
 <strong>option_noregen</strong> = 0<br>
 <strong>parsesTo_URI</strong> = 'http://www.w3.org/2000/10/swap/log#parsesTo'</td></tr></table>
 </body></html>

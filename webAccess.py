@@ -1,16 +1,22 @@
 #!/usr/local/bin/python
-"""
+"""Web Access
+
+This module implements some basic bits of the web architecture:
+dereferencing a URI to get a document, with content negotiation,
+and deciding on the basis of the Internet Content Type what to do with it.
+
 $Id$
 
 
-Web access functionality building on urllib
+Web access functionality building on urllib2
 
 """
 
-import sys
+import sys, os
 
 #import urllib
-import urllib2
+import urllib2  # Python standard
+
 import uripath # http://www.w3.org/2000/10/swap/uripath.py
 import diag
 from diag import progress
@@ -23,12 +29,31 @@ HTTP_Content_Type = 'content-type' #@@ belongs elsewhere?
 print_all_file_names = diag.print_all_file_names   # for listing test files
 
 
-
+def cacheHack(addr):
+    """ If on a plane, hack remote w3.org access to local access
+    """
+    real = "http://www.w3.org/"
+    local = "/devel/WWW/"
+    suffixes = [ "", ".rdf", ".n3" ]
+    if addr.startswith(real):
+	rest = local + addr[len(real):]
+	for s in suffixes:
+	    fn = rest + s
+	    try:
+		os.stat(fn)
+		progress("Offline: Using local copy %s" % fn)
+		return "file://" + fn
+	    except OSError:
+		continue
+    return addr
+		
 def urlopenForRDF(addr, referer):
     """A version of urllib.urlopen() which asks for RDF by preference
 
     This is now uses urllib2.urlopen(), in order to get better error handling
     """
+    
+    addr = cacheHack(addr) # @@ hack
     z = urllib2.Request(addr)
     z.add_header('Accept', 'text/rdf+n3, application/rdf+xml')
     if referer: #consistently misspelt

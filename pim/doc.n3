@@ -25,36 +25,46 @@
 
 
 doc:Work a s:Class;
+    s:label 	"work";
     s:comment   "An abstract information thing of value, typically intellectual property".
 
 doc:version a r:Property;
+    s:label 	"vesrion";
     s:comment   "This version of this document (eg number, date, etc). A string".
     
-doc:creator a r:Property; s:comment "The person (not string) who created this.";
+doc:creator a r:Property;
+    s:comment "The person (not string) who created this.";
+    s:label	"creator";
     s:domain    doc:Work;
     s:range	    :SocialEntity .
 
 doc:derivedFrom a r:Property;
+    s:label	"derived from"
     s:comment   "A work wholey or partly used in the creation of this one.";
     s:domain    doc:Work;
     s:range     doc:Work .
 
 doc:ipr a r:Property;
+    s:label	"IPR";
     s:comment   "Terms and interllectual property rights licencing condidtions.";
     s:domain    doc:Work;
     s:range     doc:Work .
 
-doc:subLicense a r:Property; s:comment 
+doc:subLicense a r:Property;
+    s:label	"sub-property";
+    s:comment 
 """For any licence, a sublicense is a licensing offering a subset of the rights.  If A doc:sublicense B then anything under licence A can be released under
 licence B.""";
     s:domain    doc:Work;
     s:range     doc:Work .
 
 doc:OpenSourceLicense s:subClassOf doc:Work;
+    s:label	"Opem Source licence";
     s:comment   """Class of licenses which can be called Open Soutrce
                 according to opensource.org""".
 
 doc:persistencePolicy a r:Property;
+    s:label	"persistence policy";
     s:comment   """Publishers policy regarding the peristence of the mapping
                 between URI and its meaning and/or representation in bits.""";
     s:domain    doc:Work;
@@ -64,22 +74,33 @@ doc:persistencePolicy a r:Property;
 #
 # With these you can build a CVS tree:
 
+doc:version a r:Property;
+    s:label	"version";
+    s:comment   """This generic work has a specific version in the
+	follwing specific document""";
+    s:domain    doc:Work;
+    s:range     doc:Work .
+    
 doc:versionOf a r:Property;
-    s:comment   """This work is a a specific version of the follwing generic document""";
+    s:comment   """This work is a a specific version of the follwing generic document.
+		OBSOLETE - use its converse, version.""";
     s:domain    doc:Work;
     s:range     doc:Work .
     
 doc:obsoletes a r:Property;
+    s:label	"obsoletes";
     s:comment   """This work is more upto date than that and makes it obsolete.""";
     s:domain    doc:Work;
     s:range     doc:Work .
 
 doc:dependsOn a r:Property;
+    s:label	"depends on";
     s:comment   """The meaning or value of this work depends on that of that work.""";
     s:domain    doc:Work;
     s:range     doc:Work .
 
 doc:adminPage a r:Property;
+    s:label	"administrative page";
     s:comment   """A web page allowing a human user to administer this work,
             for example changing access control, version control information etc.""";
     s:domain    doc:Work.
@@ -89,16 +110,19 @@ doc:adminPage a r:Property;
 # Eg [ :mailbox <mailto:timbl@w3.org> ] doc:mayWrite <> .
 #
 doc:mayRead a r:Property;
+    s:label	"may read";
     s:comment   "This may access that for read -- compare 'r' unix";
     s:domain    :SocialEntity;
     s:range     doc:Work .
 
 doc:mayWrite a r:Property;
+    s:label	"may write";
     s:comment   "This may access that to modify it -- compare 'w' unix";
     s:domain    :SocialEntity;
     s:range     doc:Work .
 
 doc:mayControl a r:Property;
+    s:label	"may control";
     s:comment   "This may change that access control for that";
     s:domain    :SocialEntity;
     s:range     doc:Work .
@@ -110,12 +134,13 @@ doc:mayControl a r:Property;
 #
 
 doc:rules a r:Property;
-	s:comment """
+    s:label	"rules";
+    s:comment """
 	The subject is a namespace document; the object is a document
 	containing rules. The rules are valid information about the terms
 	defined in the namespace document.
 	""".
-	s:range :Work;
-	s:domain :Work.
+    s:range :Work;
+    s:domain :Work.
 
 #ENDS

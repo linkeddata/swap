@@ -978,7 +978,8 @@ class SinkParser:
             m = interesting.search(str, j)  # was str[j:].
 	    # Note for pos param to work, MUST be compiled  ... re bug?
 #	    print "Matched >>>>", m.group(0), "<<< in string >>>>>", m.string, "<<<<<<"
-            assert m # we at least have to find a quote
+            assert m , "Quote expected in string at ^ in %s^%s" %(
+		str[j-20:j], str[j:j+20]) # we at least have to find a quote
 #	    print "@@@ old i = ",i, " j=",j, "m.start=", m.start(),"m.end=", m.end(), 
 #	    print ">>>>>>>", m.string[:j+m.start()], "|||||||", m.string[j+m.start(): j+m.end()], "<<<<<<<"
 

@@ -2,8 +2,8 @@
 %token N3_EXPLICITURI
 %token N3_VARIABLE
 %token N3_NUMERICLITERAL
-%token N3_STRING
 %token N3_BARENAME
+%token N3_STRING
 
 %%
 

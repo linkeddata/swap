@@ -2,23 +2,23 @@
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix del: <http://www.w3.org/2004/delta#> .
     
-    this     log:forAll <#_g0>,
-                <#_g1>,
-                <#_g2> .
+    this     log:forAll <#_account>,
+                <#_ac2>,
+                <#_who> .
     {
-        <#_g0>     :accountNumber "1234567-0" .
+        <#_account>     :accountNumber "1234567-0" .
         
-        }     del:deletion {<#_g0>     :accountBalance "-4000" .
+        }     del:deletion {<#_account>     :accountBalance "-4000" .
         } .
     {
-        <#_g1>     :accountNumber "1234567-0" .
+        <#_ac2>     :accountNumber "1234567-0" .
         
-        }     del:insertion {<#_g1>     :accountBalance "-3347.47" .
+        }     del:insertion {<#_ac2>     :accountBalance "-3347.47" .
         } .
     {
-        <#_g2>     :ssn "123456789" .
+        <#_who>     :ssn "123456789" .
         
-        }     del:insertion {<#_g2>     :address  [
+        }     del:insertion {<#_who>     :address  [
                  :city "Anytown";
                  :street "77 Accacia Avenue" ];
              :phoneNumber "+1 202 555 1212" .
