@@ -72,7 +72,7 @@ from os import getpid
 from time import time
 
 # SWAP modules:
-from diag import verbosity
+from diag import verbosity, progress
 
 runNamespaceValue = None
 
