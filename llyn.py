@@ -1113,6 +1113,7 @@ class RDFStore(RDFSink) :
 # Remote service flag in metadata:
 
 	self.authoritativeService = log.internFrag("authoritativeService", Fragment)
+	self.pointsAt = log.internFrag("pointsAt", Fragment)
 
 # Constants:
 
@@ -2617,7 +2618,7 @@ class Query:
             elif state == S_REMOTE: # Remote query -- need to find all of them for the same service
 		items = [item]
 		for i in queue[:]:
-		    if i.state == S_REMOTE and i.service is self.service: #@@ optimize which group is done first!
+#!!! EGP		    if i.state == S_REMOTE and i.service is self.service: #@@ optimize which group is done first!
 			items.append(i)
 			queue.remove(i)
 		nbs = query.remoteQuery(items)
@@ -2684,7 +2685,7 @@ class Query:
             cachedDetails = HostDB2SchemeMapping.get(items[0].service.uri)
         else:
             cachedDetails = None
-        a = SqlDBAlgae("http://localhost/SqlDB/", cachedDetails, user, password, host, database)
+        a = SqlDBAlgae(query.store.internURI("http://localhost/SqlDB/"), cachedDetails, user, password, host, database, query.meta, query.store.pointsAt)
         messages = []
         nextResults, nextStatements = a._processRow([], [], qp, rs, messages, {})
         rs.results = nextResults
@@ -2697,9 +2698,9 @@ class Query:
 	reason = Because("Remote query") # @ add more info?
         for resultsRow in nextResults:
             boundRow = []
-            for i in range(len(variables)):
-                v = variables[i]
-                index = rs.getVarIndex(`v`)
+            for i in range(len(query.variables)):
+                v = query.variables[i]
+                index = rs.getVarIndex(`v`) # @@@ may be in different, but equivilent, ns prefix
                 interned = query.store.intern((LITERAL, `resultsRow[index]`))
                 boundRow = boundRow + [(v, interned)]
             bindings.append((boundRow, reason))

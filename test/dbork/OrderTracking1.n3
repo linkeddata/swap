@@ -9,27 +9,29 @@
 
 @prefix : <#>.
 
-this log:forAll :o, :cEK, :pEK, :dEK, :p, :productName, :c, :first, :last, :billAddrEK, :billAddr, :billStreet, :billCity, :billState .
+this log:forAll :o, :cEK, :pEK, :d, :p, :productName, :c, :first, :last, :billAddrEK, :billAddr, :billStreet, :billCity, :billState .
 
 <sql://rdftest@swada.w3.org/OrderTracking> is log:authoritativeService of
 	Orders:id, Orders:customer, Orders:product, Orders:orderDate, 
 	Products:id, Products:name, 
 	Customers:id, Customers:familyName, Customers:givenName, Customers:billingAddress, 
 	Addresses:id, Addresses:street, Addresses:city, Addresses:state.
-{
- :o Orders:customer :cEK .
- :o Orders:product :pEK .
- :o Orders:orderDate :dEK .
 
- :p Products:id :pEK .
+Orders:product log:pointsAt Products:id .
+Orders:customer log:pointsAt Customers:id .
+Customers:billingAddress log:pointsAt Addresses:id .
+
+{
+ :o Orders:customer :c .
+ :o Orders:product :p .
+ :o Orders:orderDate :d .
+
  :p Products:name :productName .
 
- :c Customers:id :cEK .
  :c Customers:familyName :first .
  :c Customers:givenName :last .
- :c Customers:billingAddress :billAddrEK .
+ :c Customers:billingAddress :billAddr .
 
- :billAddr Addresses:id :billAddrEK .
  :billAddr Addresses:street :billStreet .
  :billAddr Addresses:city :billCity .
  :billAddr Addresses:state :billState .

@@ -6,7 +6,6 @@
 @prefix Products: 		<http://localhost/SqlDB/Products#>.
 
 @prefix : <#>.
-@prefix v: <#>.
 
 this log:forAll :customer, :family, :given .
 

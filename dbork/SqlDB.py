@@ -231,7 +231,7 @@ class RdfDBAlgae:
     ""
     
 class SqlDBAlgae(RdfDBAlgae):
-    def __init__(self, baseURI, tableDescModuleName, user, password, host, database, duplicateFieldsInQuery=0, checkUnderConstraintsBeforeQuery=1, checkOverConstraintsOnEmptyResult=1):
+    def __init__(self, baseURI, tableDescModuleName, user, password, host, database, meta, pointsAt, duplicateFieldsInQuery=0, checkUnderConstraintsBeforeQuery=1, checkOverConstraintsOnEmptyResult=1):
         # Grab _AllTables from tableDescModuleName, analogous to
         #        import tableDescModuleName
         #        from tableDescModuleName import _AllTables
@@ -258,6 +258,10 @@ class SqlDBAlgae(RdfDBAlgae):
         except TypeError, e:
             self.structure = None
 
+        self.baseUri = baseURI
+        self.predicateRE = re.compile(baseURI.uri+
+                                      "(?P<table>\w+)\#(?P<field>[\w\d\%\=\&]+)$")
+
         if (self.structure == None):
             print "analyzing sql://%s/%s\n" % (host, database)
             self.structure = {}
@@ -267,11 +271,7 @@ class SqlDBAlgae(RdfDBAlgae):
                 tableName_ = cursor.fetchone()
                 if not tableName_:
                     break
-                self._buildTableDesc(tableName_[0])
-
-        self.baseUri = baseURI
-        self.predicateRE = re.compile(baseURI+
-                                      "(?P<table>\w+)\#(?P<field>[\w\d\%\=\&]+)$")
+                self._buildTableDesc(tableName_[0], meta, pointsAt)
 
         # SQL query components:
         self.tableAliases = [];		# FROM foo AS bar
@@ -297,7 +297,7 @@ class SqlDBAlgae(RdfDBAlgae):
 					# all paths of an OR. Handy diagnostic.
         self.overConstraints = {};	# Redundent constraints between aliases.
 
-    def _buildTableDesc(self, table):
+    def _buildTableDesc(self, table, meta, pointsAt):
         self.structure[table] = { '-fields' : {},
                                   '-primaryKey' : [] }
         cursor = self._getCursor()
@@ -306,7 +306,14 @@ class SqlDBAlgae(RdfDBAlgae):
             name_type_null_key_default_extra_ = cursor.fetchone()
             if not name_type_null_key_default_extra_:
                 break
-            self.structure[table]['-fields'][name_type_null_key_default_extra_[0]] = {}
+            name = name_type_null_key_default_extra_[0]
+            self.structure[table]['-fields'][name] = {}
+            target = meta.any(pred=pointsAt, subj=self.baseUri.store.internURI(self.baseUri.uri+table+"#"+name))
+            if (target):
+                self.structure[table]['-fields'][name]['-target'] = self.predicateRE.match(target.uriref()).groups()
+                #print "%s#%s -> %s#%s" % (table, name,
+                #                          self.structure[table]['-fields'][name]['-target'][0],
+                #                          self.structure[table]['-fields'][name]['-target'][1])
 
         cursor = self._getCursor()
         cursor.execute("SHOW INDEX FROM " + table)
@@ -501,14 +508,14 @@ class SqlDBAlgae(RdfDBAlgae):
             rvalue = self.CGI_escape(str(values[field]))
 	    segments.append(lvalue+"="+rvalue)
         value = string.join(segments, '&')
-        return self.baseUri+table+"."+value;
+        return self.baseUri.uri+table+"."+value;
 
     def _decomposeUniques(self, uri, tableAs, table):
         m = self.predicateRE.match(uri)
         table1 = m.group("table")
         field = m.group("field")
         if (table1 != table):
-            raise RuntimeError, "\""+uri+"\" not based on "+self.baseUri+table
+            raise RuntimeError, "\""+uri+"\" not based on "+self.baseUri.uri+table
         recordId = self.CGI_unescape(field)
         specifiers = strings.split(recordId, '&')
         constraints = [];
@@ -726,15 +733,22 @@ class SqlDBAlgae(RdfDBAlgae):
             try:
                 self.constraintReaches[firstAlias][alias]
             except KeyError, e:
-                messages.append("  firstAlias not constrained against alias")
-                for reaches in self.constraintReaches[firstAlias].keys():
-                    messages.append("    firstAlias reaches reaches")
-                for reaches in self.constraintReaches[alias].keys():
-                    messages.append("    alias reaches reaches")
-                for terms in self.constraintHints[firstAlias][alias]:
-                    constrainedByStr = terms[1].toString({-brief : 1})
-                    constrainedInStr = terms[0].toString({-brief : 1})
-                    messages.append("    partially constrained by 'constrainedByStr' in 'constrainedInStr'")
+                messages.append("  %s not constrained against %s" % (firstAlias, alias))
+                if (self.constraintReaches.has_key(firstAlias)):
+                    for reaches in self.constraintReaches[firstAlias].keys():
+                        messages.append("    %s reaches %s" % (firstAlias, reaches))
+                else:
+                    messages.append("    %s reaches NOTHING" % (firstAlias))
+                if (self.constraintReaches.has_key(alias)):
+                    for reaches in self.constraintReaches[alias].keys():
+                        messages.append("    %s reaches %s" % (alias, reaches))
+                else:
+                    messages.append("    %s reaches NOTHING" % (alias))
+                if (self.constraintHints.has_key(firstAlias) and self.constraintHints[firstAlias].has_key(alias)):
+                    for terms in self.constraintHints[firstAlias][alias]:
+                        constrainedByStr = terms[1].toString({-brief : 1})
+                        constrainedInStr = terms[0].toString({-brief : 1})
+                        messages.append("    partially constrained by 'constrainedByStr' in 'constrainedInStr'")
         if (len(messages) > 0):
             raise RuntimeError, "underconstraints exception:\n"+string.join(messages, "\n")
 
