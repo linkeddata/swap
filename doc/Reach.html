@@ -16,39 +16,128 @@
 <br />
 
 
-<h1>Primer: Reaching out onto the Web</h1>
+<h1><a name="Primer" id="Primer">Primer: Reaching out onto the Web</a></h1>
 
 <p>So what is this Semantic <em>Web</em>, anyway? Where does the <em>Web</em>
-come in?  So far you've shown us just a language for writing data.</p>
+come in? So far you've shown us just a language for writing data.</p>
 
 <p>(You <em>do</em> need to know this bit!)</p>
 
-<h2>Looking inside web resources:   log:semantics and log:includes</h2>
+<h2><a name="Looking" id="Looking">Looking inside web resources:
+<code>log:semantics</code> and <code>log:includes</code></a></h2>
+
+<p>Life in the real world is full of data from different places. Rather than
+putting all the data into one big put and believing it, rules oftenhave to
+look specifically at which document said what.</p>
+
+<p>Cwm has built-in functions to allow it to interact with the web. The
+concept of a formula - a set of RDF statements - allows it to consider
+seperate sets of data.</p>
+
+<p>The basic function which connects RDF to the web is <code><dfn><a
+name="semantics" id="semantics">log:semantics</a></dfn></code>. The
+log;semantics of a document is the formula which one gets by parsing a
+semantic web document. As it is a built-in function, when cwm needs to
+evaluate it it will pick up the document (N3 or RDF/XML) and parse it,
+returning the formula<a href="#L4808"><sup>1</sup></a>..</p>
+
+<p></p>
+<pre>{ &lt;foo.rdf&gt; log:semantics ?f } =&gt; { ?f a :InterestingFormula}.</pre>
 
 <p></p>
 
-<h2>More peeking: log;content, log:n3String, log:uri</h2>
+<p>Having got a formula, we can test what it has using log:includes. One
+formula <code>log:incldues</code> a second formula if for each statement in
+the second, there is a corresponding one in the first. This the same pattern
+matching which happens with rules.</p>
+
+<p>So let's say we we have a concept of a semantic web home page for a
+person.  Instead of believing anyone, we only believe that page about the
+person being a vegetarian.</p>
+<pre>this log:forAll :x.
+{:x.:homePage log:includes { :x a :Vegetarian }}=&gt; { :x a :Vegetarian}.
+</pre>
+
+<h3><a name="Implementi" id="Implementi">Implementing defaults and
+<code>log:notIncludes</code></a></h3>
+
+<p>Because the document is a finite size, you can test for what it does
+<em>not</em> say, with <code>log:notIncludes.</code>  Here, we have a rule
+that is the specification for a car doesn't say what color it is then it is
+black.</p>
+<pre>this log:forAll :car.
+{ :car.auto:specification log:notIncludes {:car auto:color []}}
+    =&gt; {:car auto:color auto:black}.</pre>
 
 <p></p>
 
-<h2>Getting results from the web: log:definitiveService and
-log:definitiveDocument</h2>
+<p>Note the use of [] here in the nested formula as a blank node.  </p>
+
+<p>This is a way to do defaults.   N3 as it is doesn't have defaults, because
+on the web, you can't say "if nothing says it is another color".  You can
+handle defaults by first running rules to work out everything which is
+specified, and then on the result of that do a <code>notIncldues</code> rule
+like that above to implement the default values.  </p>
+
+<p>@@ examples</p>
+
+<h2><a name="More" id="More">More peeking: <code>log:content</code>,
+<code>log:n3String</code>, <code>log:uri</code></a></h2>
+
+<p></p>
+
+<p>The nice thing about log:semantics is it deals with all the web protocols
+in one simple function.  It is possible also to get a little more involved,
+using the following functions which separate the looking up from the
+parsing.</p>
+<dl>
+  <dt><code>log:content</code></dt>
+    <dd>For a document,  the string which was returned as the document
+      contents when the URI of the resource was looked up.</dd>
+  <dt><code>log:parsedAsN3</code></dt>
+    <dd>For a string, the formula you get by parsing it as a Notation3
+      document.</dd>
+  <dt><code>log:N3String</code></dt>
+    <dd>For a formula, a string which expressed that formula in N3.</dd>
+  <dt>log:uri</dt>
+    <dd>The uri of a resource.  &lt;http://example.org/&gt; log:uri
+      "http://example.org/".  Normal logic processing doesn't look at URIs
+      but in some cases one needs to. This is a level-breaker: it lets an N3
+      system look at its infrastructure.   </dd>
+  <dt></dt>
+    <dd> </dd>
+</dl>
+
+<p>One of the uses of this, as we will see in the next section, is to test
+the digital signature of a string before accepting the data encoded in it.</p>
+
+<h2><a name="Getting" id="Getting">Getting results from the web:</a>
+<code>log:definitiveService </code>and
+<code>log:definitiveDocument</code></h2>
 
 <p></p>
 
 <p>By now you should know how to publish tables of useful infromation on the
 semantic web. You should know how to use published data and semantic web
-services and SQL servers to answer parts of your queries.   You are starting
-to get into some useful scalable stuff, and the next thing you know you'll be
+services and SQL servers to answer parts of your queries. You are starting to
+get into some useful scalable stuff, and the next thing you know you'll be
 needing to reign in your system before it explores the whole world. You'll be
-needing to think about trust.  Fortunately, you already have some of the
-tools: you can write rules which keep track of  data from different places
-separately.   Now all you need  is some crypto ....</p>
+needing to think about trust. Fortunately, you already have some of the
+tools: you can write rules which keep track of data from different places
+separately. Now all you need is some crypto ....</p>
 
 <p>Next: Web of Trust</p>
+<hr />
 
-<p><br />
-</p>
+<h2>Footnotes</h2>
+
+<p><a name="L4808" id="L4808">1.</a> Of course, the value of this function
+depends on the real world, which can change. Many systems either assume that
+other documents won't change or accept that the information derived from it
+will change with it. It is would also possible to model the time at which a
+given representation of a document was returned by a server, and what expiry
+date was given, and so on, but cwm does not in 2003 provide such
+functionality..)</p>
 <hr />
 
 <p>Tim BL, with his director hat off</p>
