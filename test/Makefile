@@ -4,10 +4,10 @@ P=python
 W=../../../..
 C=../cwm.py
 
-CODE=../cwm.py ../notation3.py ../xml2rdf.py
+CODE=retest.py ../cwm.py ../notation3.py ../xml2rdf.py
 
-all : $(CODE) retest.sh
-	./retest.sh
+all : $(CODE) regression.n3
+	PYTHONPATH=`/bin/pwd`/.. $P retest.py -n -f regression.n3
 	touch all
 
 rules12.rdf : rules12.n3
