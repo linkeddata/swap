@@ -19,15 +19,10 @@ of any identifiers used in the document.
 
 #   The following are inherent in the translation of N3 syntax to quad representation:
 
-log:forSome a rdf:Property;
+log:forSome a rdf:Property;  #@@@@@ buggy!
 	rdfs:comment "A is true for some objectfor which here we use B" ;
 	rdfs:domain log:context.
 
-log:subExpression a rdf:Property;
-	rdfs:comment """B is lexically nested within A. The information
-	is in B is part of the information in A.  Lexically scoped varibles are
-	inherited from A to B.
-	""".
 
 log:forAll a rdf:Property;
 	rdfs:comment "A is true for any object in place of B" .
@@ -50,11 +45,12 @@ log:implies a rdfs:Property;
 ############# Rules
 # Rule names may change.
 # Conversion between falsehood and implication:
-rule1 log:forAll :x, :y, :z; =
-{
-    { :x log:implies :y } log:means {  { :x a :Truth . :y a :Falsehood.} a:Falsehood}.
-} .
-
+#rule1 log:forAll :x, :y, :z; =
+#{
+#    { :x log:implies :y } log:means {  { :x a :Truth . :y a :Falsehood.} a:Falsehood}.
+#} .
+#
 # etc etc
 
 # ends
+
