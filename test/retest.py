@@ -26,12 +26,12 @@ This is or was http://www.w3.org/2000/10/swap/test/retest.py
 W3C open source licence <http://www.w3.org/Consortium/Legal/copyright-software.html>.
 
 """
-from os import system, popen3
+from os import system
 import os
 import sys
 import urllib
 
-# From PYTHONPATH equivalent to http://www.w3.org/2000/10
+# From PYTHONPATH equivalent to http://www.w3.org/2000/10/swap
 
 from swap import llyn
 from swap.myStore import load, loadMany, Namespace
@@ -199,7 +199,7 @@ def main():
 
     if verbose: progress("Test files:", testFiles)
     
-    kb = loadMany(testFiles, referer="")
+    kb = loadMany(testFiles)
     testData = []
     RDFTestData  = []
     perfData = []

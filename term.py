@@ -48,9 +48,15 @@ import diag
 from diag import progress
 
 
+
 import sys
 if sys.hexversion < 0x02020000:
     raise RuntimeError("Sorry, this software requires python2.2 or newer.")
+
+try:
+    from sets import Set, ImmutableSet, BaseSet
+except ImportError:
+    raise NotImplementedError("We need to figure out how to support python 2.2 users")
     
 REIFY_NS = "http://www.w3.org/2004/06/rei#"
 
@@ -154,8 +160,8 @@ class Term:
 
     def occurringIn(self, vars):
 	if self in vars:
-	    return [self]
-	return []
+	    return Set([self])
+	return Set()
 
     def value(self):
 	"As a python value - by default, none exists, use self"
@@ -186,7 +192,7 @@ class Term:
 	    return x.unify(other, vars, existentials, bindings)
 	except KeyError:	    
 	    if self is other: return [ ({}, None)]
-	    if self in vars+existentials:
+	    if self in vars|existentials:
 		if diag.chatty_flag > 80: progress("Unifying term MATCHED %s to %s"%(self,other))
 		return [ ({self: other}, None) ]
 	    return 0
@@ -435,8 +441,103 @@ _nextList = 0
 
 class CompoundTerm(Term):
     """A compound term has occurrences of terms within it.
-    Examples: List, Formula"""
+    Examples: List, Formula, Bag"""
     pass
+
+
+_nextBag = 0
+class Bag(CompoundTerm):
+    def __init__(self, store, set):
+        global _nextBag
+        Term.__init__(self, store)
+        self._set = Set(set)
+        self._id = _nextBag
+        _nextBag = _nextBag + 1
+
+
+    def uriref(self):
+        raise NotImplementedError
+        return runNamespace() + "bag"+ `self._id`
+
+    
+    def classOrder(self):
+	return	3
+    
+    def __iter__(self):
+        return iter(self._set)
+
+    def value(self):
+        return self._set
+
+    def substitution(self, bindings, why=None):
+	"Return this or a version of me with variable substitution made"
+	if self.occurringIn(bindings.keys()) == Set():
+	    return self # phew!
+	tail = Set([x.substitution(bindings, why=why) for x in self._set])
+	if diag.chatty_flag > 90:
+	    progress("Substition of variables %s in set %s" % (bindings, self))
+	    progress("...yields NEW %s = %s" % (tail, tail.value()))
+	return tail
+	    
+    def substituteEquals(self, bindings, newBindings):
+	"Return this or a version of me with substitution of equals made"
+	if diag.chatty_flag > 100: progress("SubstituteEquals set %s with %s" % (self, bindings))
+	if self.occurringIn(bindings.keys()) == Set():
+	    return self # phew!
+	tail = Set([x.substitution(bindings, why=why) for x in self._set])
+	newBindings[self] = tail # record a new equality
+	if diag.chatty_flag > 90: progress("SubstitueEquals list CHANGED %s -> %s" % (self, tail))
+	return tail
+	    
+
+    def occurringIn(self, vars):
+	"Which variables in the list occur in this list?"
+	set = Set()
+	for y in self._set:
+	    set = set |  y.occurringIn(vars)
+	return set
+
+    def asSequence(self):
+	"Convert to a python sequence - NOT recursive"
+	return self._set
+
+    def reification(self, sink, bnodeMap={}, why=None):
+	"""Describe myself in RDF to the given context
+	
+	[ reify:items ( [ reify:value "foo"]  .... ) ]
+	"""
+	elements = sink.newBag([ x.reification(sink, bnodeMap, why) for x in self])
+	b = sink.newBlankNode()
+	sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"bag"), obj=elements, why=why)
+	return b
+
+    def flatten(self, sink, why=None):
+        newset = sink.newBag([x.flatten(sink, why=why) for x in self])
+        return newset
+
+    def unflatten(self, sink, bNodes, why=None):
+        newset = sink.newBag([x.unflatten(sink, bNodes, why=why) for x in self])
+        return newset
+    
+    def doesNodeAppear(self, symbol):
+        """Does that particular node appear anywhere in this list
+
+        This function is necessarily recursive, and is useful for the pretty printer
+        It will also be useful for the flattener, when we write it.
+        """
+        for elt in self:
+            val = 0
+            if isinstance(elt, CompoundTerm):
+                val = val or elt.doesNodeAppear(symbol)
+            elif elt == symbol:
+                val = 1
+            else:
+                pass
+            if val == 1:
+                #print 'I won!'
+                return 1
+        return 0
+    
     
 class List(CompoundTerm):
     def __init__(self, store, first, rest):  # Do not use directly
@@ -475,7 +576,7 @@ class List(CompoundTerm):
 
     def substitution(self, bindings, why=None):
 	"Return this or a version of me with variable substitution made"
-	if self.occurringIn(bindings.keys()) == []:
+	if self.occurringIn(bindings.keys()) == Set():
 	    return self # phew!
 	s = self.asSequence()
 	s.reverse()
@@ -490,7 +591,7 @@ class List(CompoundTerm):
     def substituteEquals(self, bindings, newBindings):
 	"Return this or a version of me with substitution of equals made"
 	if diag.chatty_flag > 100: progress("SubstituteEquals list %s with %s" % (self, bindings))
-	if self.occurringIn(bindings.keys()) == []:
+	if self.occurringIn(bindings.keys()) == Set():
 	    return self # phew!
 	s = self.asSequence()
 	s.reverse()
@@ -504,13 +605,13 @@ class List(CompoundTerm):
 
     def occurringIn(self, vars):
 	"Which variables in the list occur in this list?"
-	set = []
+	set = Set()
 	x = self
 	while not isinstance(x, EmptyList):
 	    y = x.first
 	    x = x.rest
 	    import types
-	    set = merge(set, y.occurringIn(vars))
+	    set = set |  y.occurringIn(vars)
 	return set
 
     def asSequence(self):
@@ -555,7 +656,7 @@ class List(CompoundTerm):
             else:
                 pass
             if val == 1:
-                print 'I won!'
+                #print 'I won!'
                 return 1
         return 0
             
@@ -593,8 +694,8 @@ class NonEmptyList(List):
 	    if nb == []:
 		nbs2 = self.rest.unify(other.rest, vars, existentials,  b2)
 	    else:
-		vars2 = vars[:]
-		existentials2 = existentials[:]
+		vars2 = vars.__copy__()
+		existentials2 = existentials.__copy__()
 		for var in nb:
 		    if var in vars2:
 			vars2.remove(var)
@@ -670,7 +771,7 @@ class EmptyList(List):
 	return 0
 	
     def occurringIn(self, vars):
-	return []
+	return Set()
 
     def __repr__(self):
 	return "()"
@@ -764,7 +865,7 @@ class Literal(Term):
         return decimal(self.string)
 
     def occurringIn(self, vars):
-	return []
+	return Set()
 
     def __repr__(self):
         return '"' + self.string[0:8] + '"'

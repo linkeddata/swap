@@ -1970,8 +1970,6 @@ strings&nbsp;output.</tt></dd></dl>
 <dl><dt><a name="IndexedFormula-removeStatement"><strong>removeStatement</strong></a>(self, s)</dt><dd><tt>Removes&nbsp;a&nbsp;statement&nbsp;The&nbsp;formula&nbsp;must&nbsp;be&nbsp;open.<br>
 &nbsp;<br>
 This&nbsp;implementation&nbsp;is&nbsp;alas&nbsp;slow,&nbsp;as&nbsp;removal&nbsp;of&nbsp;items&nbsp;from&nbsp;tha&nbsp;hash&nbsp;is&nbsp;slow.<br>
-The&nbsp;above&nbsp;statement&nbsp;is&nbsp;false.&nbsp;Removing&nbsp;items&nbsp;from&nbsp;a&nbsp;hash&nbsp;is&nbsp;easily&nbsp;over&nbsp;five&nbsp;times<br>
-faster&nbsp;than&nbsp;removing&nbsp;them&nbsp;from&nbsp;a&nbsp;list.<br>
 Also,&nbsp;truth&nbsp;mainainance&nbsp;is&nbsp;not&nbsp;done.&nbsp;&nbsp;You&nbsp;can't&nbsp;undeclare&nbsp;things&nbsp;equal.<br>
 This&nbsp;is&nbsp;really&nbsp;a&nbsp;low-level&nbsp;method,&nbsp;used&nbsp;within&nbsp;<a href="#IndexedFormula-add">add</a>()&nbsp;and&nbsp;for&nbsp;cleaning&nbsp;up&nbsp;the&nbsp;store<br>
 to&nbsp;save&nbsp;space&nbsp;in&nbsp;purge()&nbsp;etc.</tt></dd></dl>
@@ -2206,7 +2204,7 @@ This&nbsp;is&nbsp;the&nbsp;way&nbsp;they&nbsp;are&nbsp;actually&nbsp;made.</tt><
 
 <dl><dt><a name="RDFStore-internURI"><strong>internURI</strong></a>(self, str, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="RDFStore-load"><strong>load</strong></a>(store, uri<font color="#909090">=None</font>, openFormula<font color="#909090">=None</font>, asIfFrom<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>, remember<font color="#909090">=1</font>, flags<font color="#909090">=''</font>, referer<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
+<dl><dt><a name="RDFStore-load"><strong>load</strong></a>(store, uri<font color="#909090">=None</font>, openFormula<font color="#909090">=None</font>, asIfFrom<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>, remember<font color="#909090">=1</font>, flags<font color="#909090">=''</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
 &nbsp;<br>
 uri:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;None,&nbsp;load&nbsp;from&nbsp;standard&nbsp;input.<br>
 remember:&nbsp;if&nbsp;1,&nbsp;store&nbsp;as&nbsp;metadata&nbsp;the&nbsp;relationship&nbsp;between&nbsp;this&nbsp;URI&nbsp;and&nbsp;this&nbsp;formula.<br>
@@ -2218,7 +2216,7 @@ This&nbsp;was&nbsp;and&nbsp;could&nbsp;be&nbsp;an&nbsp;independent&nbsp;function
 of&nbsp;the&nbsp;store.&nbsp;However,&nbsp;it&nbsp;is&nbsp;natural&nbsp;to&nbsp;call&nbsp;it&nbsp;as&nbsp;a&nbsp;method&nbsp;on&nbsp;the&nbsp;store.<br>
 And&nbsp;a&nbsp;proliferation&nbsp;of&nbsp;APIs&nbsp;confuses.</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-loadMany"><strong>loadMany</strong></a>(self, uris, openFormula<font color="#909090">=None</font>, referer<font color="#909090">=None</font>)</dt><dd><tt>Get,&nbsp;parse&nbsp;and&nbsp;merge&nbsp;serveral&nbsp;documents,&nbsp;given&nbsp;a&nbsp;list&nbsp;of&nbsp;URIs.&nbsp;<br>
+<dl><dt><a name="RDFStore-loadMany"><strong>loadMany</strong></a>(self, uris, openFormula<font color="#909090">=None</font>)</dt><dd><tt>Get,&nbsp;parse&nbsp;and&nbsp;merge&nbsp;serveral&nbsp;documents,&nbsp;given&nbsp;a&nbsp;list&nbsp;of&nbsp;URIs.&nbsp;<br>
 &nbsp;<br>
 Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
 Returns&nbsp;top-level&nbsp;formula&nbsp;which&nbsp;is&nbsp;the&nbsp;parse&nbsp;result.<br>

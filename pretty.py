@@ -17,7 +17,7 @@ import string
 import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
 from diag import progress, verbosity, tracking
 from term import   Literal, Symbol, Fragment, AnonymousVariable, FragmentNil, \
-     Term, CompoundTerm, List, EmptyList, NonEmptyList
+     Term, CompoundTerm, List, EmptyList, NonEmptyList, Bag
 from formula import Formula, StoredStatement
 
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
@@ -242,13 +242,13 @@ class Serializer:
     def dumpVariables(self, context, sink, sorting=1, pretty=0, dataOnly=0):
 	"""Dump the forAlls and the forSomes at the top of a formula"""
 	if sorting:
-	    uv = context.universals()[:]
+	    uv = list(context.universals())
 	    uv.sort(Term.compareAnyTerm)
-	    ev = context.existentials()[:]
+	    ev = context._existentialVariables #context.existentials()
 	    ev.sort(Term.compareAnyTerm)
 	else:
 	    uv = context.universals()
-	    ev = context.existentials()
+	    ev = context._existentialVariables #context.existentials()
 	if not dataOnly:
 	    for v in uv:
 		self._outputStatement(sink, (context, self.store.forAll, context, v))
@@ -266,7 +266,7 @@ class Serializer:
         """ Dump one formula only by order of subject except forSome's first for n3=a mode"""
         
 	context = self.context
-	uu = context.universals()[:]
+	uu = list(context.universals())
 	sink = self.sink
 	self._scan(context)
         sink.startDoc()
@@ -274,7 +274,7 @@ class Serializer:
 	self.dumpVariables(context, sink, sorting)
 	self.dumpLists()
 
-	ss = context.statements[:]
+	ss = list(context.statements)
 	ss.sort(StoredStatement.compareSubjPredObj)
         for s in ss:
 	    for p in SUBJ, PRED, OBJ:
@@ -392,8 +392,8 @@ class Serializer:
 ##        except KeyError:
 ##            pass
 #	progress("&&&&&&&&& ", `self`,  self._occurringAs)
-#        _isExistential = x in context.existentials()
-        _isExistential = context.existentialDict.get(x,0)
+        _isExistential = x in context.existentials(alwaysDict=1)
+#        _isExistential = context._existentialDict.get(x,0)
 #        return (0, 2)
         _loop = context.any(subj=x, obj=x)  # does'nt count as incomming
 	_asPred = self._occurringAs[PRED].get(x, 0)
@@ -409,6 +409,10 @@ class Serializer:
 	    else:
 		_anon = 2	# always anonymous, represented as itself
 		_isExistential = 1
+
+	elif isinstance(x, Bag):
+            _anon = 2
+            _isExistential = 1
 	elif not x.generated():
 	    _anon = 0	# Got a name, not anonymous
         else:  # bnode
@@ -448,7 +452,7 @@ class Serializer:
         for each subject.
         """
 
-	allStatements = context.statements[:]
+	allStatements = list(context.statements)
 	if equals:
 	    for x, y in context._redirections.items():
 		if not x.generated() and x not in context.variables():
@@ -467,7 +471,10 @@ class Serializer:
         currentSubject = None
         statements = []
         for s in allStatements:
-            con, pred, subj, obj =  s.quad
+            try:
+                con, pred, subj, obj =  s.quad
+            except:
+                print s
             if subj is con: continue # Done them above
             if currentSubject == None: currentSubject = subj
             if subj != currentSubject:
@@ -492,7 +499,7 @@ class Serializer:
         _anon, _incoming = self._topology(subj, context)    # Is anonymous?
         if _anon and  _incoming == 1 and not isinstance(subj, Formula): return   # Forget it - will be dealt with in recursion
 
-	if isinstance(subj, List): li = subj
+	if isinstance(subj, List) or isinstance(subj, Bag): li = subj
 	else: li = None
 	
         if isinstance(subj, Formula) and subj is not context:
@@ -570,7 +577,7 @@ class Serializer:
         _anon, _incoming = self._topology(obj, context)
         if _anon and _incoming == 1:  # Embedded anonymous node in N3
 	    sink.startAnonymous(self.extern(triple))
-	    ss = context.statementsMatching(subj=obj)
+	    ss = list(context.statementsMatching(subj=obj))
 	    if sorting: ss.sort(StoredStatement.comparePredObj)
 	    for t in ss:
 		self.dumpStatement(sink, t.quad, sorting)

@@ -23,8 +23,8 @@ History:
     Spilt off from  thing.py 2003-08-19
 
 $Log$
-Revision 1.9  2004-07-29 16:16:11  syosi
-rdflib tests in the default test suite
+Revision 1.10  2004-08-06 19:11:52  syosi
+so I have stuff to work on at home
 
 Revision 1.8  2004/04/19 13:32:22  connolly
 trap __special_names__ in Namespace.__getattr__ so
@@ -153,13 +153,13 @@ def load(uri=None, openFormula=None, contentType=None, remember=1):
     return _checkStore().load(uri, openFormula=openFormula, contentType=contentType,
 			remember=remember)
 
-def loadMany(uris, openFormula=None, referer=None):
+def loadMany(uris, openFormula=None):
     """Load a number of resources into the same formula
     
     Returns:  top-level formula of the parsed information.
     Raises:   IOError, SyntaxError, DocumentError
     """
-    return _checkStore().loadMany(uris, openFormula, referer=referer)
+    return _checkStore().loadMany(uris, openFormula)
 
 def bind(prefix, uri):
     return _checkStore().bind(prefix, uri)

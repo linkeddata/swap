@@ -175,14 +175,30 @@
                  owl:oneOf  (
                  [
                          :object  [
+                             :uri "http://www.w3.org/2000/10/swap/log#Truth" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g0> ]
+                 [
+                         :object <#_g1>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
+                         :subject <#_g0> ]
+                 [
+                         :object <#_g2>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#statements" ];
+                         :subject <#_g0> ]
+                 [
+                         :object <#_g3>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                         :subject <#_g0> ]
+                 [
+                         :object  [
                              :items () ];
                          :predicate  [
                              :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g0> ]
-                 [
-                         :object <#_g0>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
                          :subject <#_g1> ]
                  [
                          :object  [
@@ -195,205 +211,209 @@
                                      :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ] ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g2> ]
+                         :subject <#_g3> ]
                  [
-                         :object <#_g2>;
+                         :object <#_g5>;
                          :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#universals" ];
-                         :subject <#_g1> ]
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g4> ]
+                 [
+                         :object <#_g6>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g4> ]
+                 [
+                         :object <#_g7>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g4> ]
                  [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#ancestor" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g3> ]
-                 [
-                         :object <#_g3>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g4> ]
+                         :subject <#_g7> ]
                  [
                          :object  [
                              :value "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g5> ]
-                 [
-                         :object <#_g5>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g4> ]
+                         :subject <#_g6> ]
                  [
                          :object  [
                              :value "http://www.daml.org/2001/03/daml+oil#TransitiveProperty" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g6> ]
+                         :subject <#_g5> ]
                  [
-                         :object <#_g6>;
+                         :object <#_g9>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g4> ]
+                         :subject <#_g8> ]
+                 [
+                         :object <#_g10>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g8> ]
+                 [
+                         :object <#_g11>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g8> ]
                  [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#bill" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g7> ]
-                 [
-                         :object <#_g7>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g8> ]
+                         :subject <#_g11> ]
                  [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#ancestor" ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g9> ]
-                 [
-                         :object <#_g9>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g8> ]
-                 [
-                         :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#pa" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
                          :subject <#_g10> ]
                  [
-                         :object <#_g10>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g8> ]
-                 [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#pa" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g11> ]
+                         :subject <#_g9> ]
                  [
-                         :object <#_g11>;
+                         :object <#_g13>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g12> ]
+                 [
+                         :object <#_g14>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g12> ]
+                 [
+                         :object <#_g15>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g12> ]
                  [
                          :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#pa" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g15> ]
+                 [
+                         :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#ancestor" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g13> ]
-                 [
-                         :object <#_g13>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g12> ]
+                         :subject <#_g14> ]
                  [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#granpa" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g14> ]
-                 [
-                         :object <#_g14>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g12> ]
-                 [
-                         :object  [
-                             :items () ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g15> ]
-                 [
-                         :object <#_g15>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
-                         :subject <#_g16> ]
-                 [
-                         :object  [
-                             :items () ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g17> ]
+                         :subject <#_g13> ]
                  [
                          :object <#_g17>;
                          :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g16> ]
+                 [
+                         :object <#_g18>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g16> ]
+                 [
+                         :object <#_g19>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g16> ]
+                 [
+                         :object <#_g20>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
+                         :subject <#_g19> ]
+                 [
+                         :object <#_g21>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#statements" ];
+                         :subject <#_g19> ]
+                 [
+                         :object <#_g22>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                         :subject <#_g19> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g20> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g22> ]
+                 [
+                         :object <#_g24>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g23> ]
+                 [
+                         :object <#_g25>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g23> ]
+                 [
+                         :object <#_g26>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g23> ]
                  [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g18> ]
-                 [
-                         :object <#_g18>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g19> ]
+                         :subject <#_g26> ]
                  [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#means" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g20> ]
-                 [
-                         :object <#_g20>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g19> ]
+                         :subject <#_g25> ]
                  [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g21> ]
-                 [
-                         :object <#_g21>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g19> ]
+                         :subject <#_g24> ]
                  [
                          :object  [
                              :items  (
-                            <#_g19>  ) ];
+                            <#_g23>  ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g22> ]
-                 [
-                         :object <#_g22>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#statements" ];
-                         :subject <#_g16> ]
-                 [
-                         :object <#_g16>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g23> ]
+                         :subject <#_g21> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2000/10/swap/log#implies" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g24> ]
+                         :subject <#_g18> ]
                  [
-                         :object <#_g24>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g23> ]
-                 [
-                         :object  [
-                             :items () ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g25> ]
-                 [
-                         :object <#_g25>;
+                         :object <#_g27>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#existentials" ];
-                         :subject <#_g26> ]
+                         :subject <#_g17> ]
+                 [
+                         :object <#_g28>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#statements" ];
+                         :subject <#_g17> ]
+                 [
+                         :object <#_g29>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                         :subject <#_g17> ]
                  [
                          :object  [
                              :items () ];
@@ -401,32 +421,38 @@
                              :uri "http://www.w3.org/2002/07/owl#oneOf" ];
                          :subject <#_g27> ]
                  [
-                         :object <#_g27>;
+                         :object  [
+                             :items () ];
                          :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#universals" ];
-                         :subject <#_g26> ]
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g29> ]
+                 [
+                         :object <#_g31>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g30> ]
+                 [
+                         :object <#_g32>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g30> ]
+                 [
+                         :object <#_g33>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g30> ]
                  [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g28> ]
-                 [
-                         :object <#_g28>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g29> ]
+                         :subject <#_g33> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2000/10/swap/log#implies" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g30> ]
-                 [
-                         :object <#_g30>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g29> ]
+                         :subject <#_g32> ]
                  [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ];
@@ -434,32 +460,32 @@
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
                          :subject <#_g31> ]
                  [
-                         :object <#_g31>;
+                         :object <#_g35>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g29> ]
+                         :subject <#_g34> ]
+                 [
+                         :object <#_g36>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g34> ]
+                 [
+                         :object <#_g37>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g34> ]
                  [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g32> ]
-                 [
-                         :object <#_g32>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g33> ]
+                         :subject <#_g37> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2000/10/swap/log#implies" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g34> ]
-                 [
-                         :object <#_g34>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g33> ]
+                         :subject <#_g36> ]
                  [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ];
@@ -467,122 +493,116 @@
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
                          :subject <#_g35> ]
                  [
-                         :object <#_g35>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g33> ]
-                 [
                          :object  [
                              :items  (
-                            <#_g29> 
-                            <#_g33>  ) ];
+                            <#_g30> 
+                            <#_g34>  ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g36> ]
-                 [
-                         :object <#_g36>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#statements" ];
-                         :subject <#_g26> ]
-                 [
-                         :object <#_g26>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g23> ]
-                 [
-                         :object  [
-                             :items () ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g37> ]
-                 [
-                         :object <#_g37>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
-                         :subject <#_g38> ]
-                 [
-                         :object  [
-                             :items () ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g39> ]
+                         :subject <#_g28> ]
                  [
                          :object <#_g39>;
                          :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g38> ]
+                 [
+                         :object <#_g40>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g38> ]
+                 [
+                         :object <#_g41>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g38> ]
+                 [
+                         :object <#_g42>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
+                         :subject <#_g41> ]
+                 [
+                         :object <#_g43>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#statements" ];
+                         :subject <#_g41> ]
+                 [
+                         :object <#_g44>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                         :subject <#_g41> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g42> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g44> ]
+                 [
+                         :object <#_g46>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g45> ]
+                 [
+                         :object <#_g47>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g45> ]
+                 [
+                         :object <#_g48>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g45> ]
                  [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g40> ]
-                 [
-                         :object <#_g40>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g41> ]
+                         :subject <#_g48> ]
                  [
                          :object  [
                              :value "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g42> ]
-                 [
-                         :object <#_g42>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g41> ]
+                         :subject <#_g47> ]
                  [
                          :object  [
                              :value "http://www.daml.org/2001/03/daml+oil#TransitiveProperty" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g43> ]
-                 [
-                         :object <#_g43>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g41> ]
+                         :subject <#_g46> ]
                  [
                          :object  [
                              :items  (
-                            <#_g41>  ) ];
+                            <#_g45>  ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g44> ]
-                 [
-                         :object <#_g44>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#statements" ];
-                         :subject <#_g38> ]
-                 [
-                         :object <#_g38>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g45> ]
+                         :subject <#_g43> ]
                  [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#means" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g46> ]
+                         :subject <#_g40> ]
                  [
-                         :object <#_g46>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g45> ]
-                 [
-                         :object  [
-                             :items () ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g47> ]
-                 [
-                         :object <#_g47>;
+                         :object <#_g49>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#existentials" ];
-                         :subject <#_g48> ]
+                         :subject <#_g39> ]
+                 [
+                         :object <#_g50>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#statements" ];
+                         :subject <#_g39> ]
+                 [
+                         :object <#_g51>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                         :subject <#_g39> ]
                  [
                          :object  [
                              :items () ];
@@ -590,21 +610,47 @@
                              :uri "http://www.w3.org/2002/07/owl#oneOf" ];
                          :subject <#_g49> ]
                  [
-                         :object <#_g49>;
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g51> ]
+                 [
+                         :object <#_g53>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g52> ]
+                 [
+                         :object <#_g54>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g52> ]
+                 [
+                         :object <#_g55>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g52> ]
+                 [
+                         :object <#_g56>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
+                         :subject <#_g55> ]
+                 [
+                         :object <#_g57>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#statements" ];
+                         :subject <#_g55> ]
+                 [
+                         :object <#_g58>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#universals" ];
-                         :subject <#_g48> ]
+                         :subject <#_g55> ]
                  [
                          :object  [
                              :items () ];
                          :predicate  [
                              :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g50> ]
-                 [
-                         :object <#_g50>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
-                         :subject <#_g51> ]
+                         :subject <#_g56> ]
                  [
                          :object  [
                              :items  (
@@ -616,162 +662,103 @@
                                      :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#z" ] ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g52> ]
-                 [
-                         :object <#_g52>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#universals" ];
-                         :subject <#_g51> ]
-                 [
-                         :object  [
-                             :items () ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g53> ]
-                 [
-                         :object <#_g53>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
-                         :subject <#_g54> ]
-                 [
-                         :object  [
-                             :items () ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g55> ]
-                 [
-                         :object <#_g55>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#universals" ];
-                         :subject <#_g54> ]
-                 [
-                         :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#x" ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g56> ]
-                 [
-                         :object <#_g56>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g57> ]
-                 [
-                         :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#uri" ];
                          :subject <#_g58> ]
-                 [
-                         :object <#_g58>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g57> ]
-                 [
-                         :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#y" ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g59> ]
-                 [
-                         :object <#_g59>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g57> ]
-                 [
-                         :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#y" ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g60> ]
                  [
                          :object <#_g60>;
                          :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g61> ]
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g59> ]
                  [
-                         :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
+                         :object <#_g61>;
                          :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g62> ]
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g59> ]
                  [
                          :object <#_g62>;
                          :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g61> ]
-                 [
-                         :object  [
-                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#z" ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g63> ]
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g59> ]
                  [
                          :object <#_g63>;
                          :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g61> ]
-                 [
-                         :object  [
-                             :items  (
-                            <#_g57> 
-                            <#_g61>  ) ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g64> ]
+                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
+                         :subject <#_g62> ]
                  [
                          :object <#_g64>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#statements" ];
-                         :subject <#_g54> ]
+                         :subject <#_g62> ]
                  [
-                         :object <#_g54>;
+                         :object <#_g65>;
                          :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g65> ]
-                 [
-                         :object  [
-                             :value "http://www.w3.org/2000/10/swap/log#implies" ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g66> ]
-                 [
-                         :object <#_g66>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g65> ]
+                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                         :subject <#_g62> ]
                  [
                          :object  [
                              :items () ];
                          :predicate  [
                              :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g67> ]
+                         :subject <#_g63> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g65> ]
                  [
                          :object <#_g67>;
                          :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
-                         :subject <#_g68> ]
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g66> ]
                  [
-                         :object  [
-                             :items () ];
+                         :object <#_g68>;
                          :predicate  [
-                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g69> ]
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g66> ]
                  [
                          :object <#_g69>;
                          :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#universals" ];
-                         :subject <#_g68> ]
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g66> ]
                  [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#x" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g69> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g68> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#y" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g67> ]
+                 [
+                         :object <#_g71>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g70> ]
                  [
-                         :object <#_g70>;
+                         :object <#_g72>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g70> ]
+                 [
+                         :object <#_g73>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g71> ]
+                         :subject <#_g70> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#y" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g73> ]
                  [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
@@ -779,138 +766,151 @@
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
                          :subject <#_g72> ]
                  [
-                         :object <#_g72>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g71> ]
-                 [
                          :object  [
                              :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#z" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g73> ]
-                 [
-                         :object <#_g73>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g71> ]
                  [
                          :object  [
                              :items  (
-                            <#_g71>  ) ];
+                            <#_g66> 
+                            <#_g70>  ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g74> ]
-                 [
-                         :object <#_g74>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#statements" ];
-                         :subject <#_g68> ]
-                 [
-                         :object <#_g68>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g65> ]
-                 [
-                         :object  [
-                             :items  (
-                            <#_g65>  ) ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g75> ]
-                 [
-                         :object <#_g75>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#statements" ];
-                         :subject <#_g51> ]
-                 [
-                         :object <#_g51>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g76> ]
-                 [
-                         :object  [
-                             :value "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g77> ]
-                 [
-                         :object <#_g77>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g76> ]
-                 [
-                         :object  [
-                             :value "http://www.w3.org/2000/10/swap/log#Truth" ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g78> ]
-                 [
-                         :object <#_g78>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g76> ]
-                 [
-                         :object  [
-                             :items  (
-                            <#_g76>  ) ];
-                         :predicate  [
-                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g79> ]
-                 [
-                         :object <#_g79>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#statements" ];
-                         :subject <#_g48> ]
-                 [
-                         :object <#_g48>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g45> ]
-                 [
-                         :object <#_g26>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g80> ]
+                         :subject <#_g64> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2000/10/swap/log#implies" ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#uri" ];
-                         :subject <#_g81> ]
+                         :subject <#_g61> ]
                  [
-                         :object <#_g81>;
+                         :object <#_g74>;
                          :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g80> ]
+                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
+                         :subject <#_g60> ]
                  [
-                         :object <#_g16>;
+                         :object <#_g75>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#statements" ];
+                         :subject <#_g60> ]
+                 [
+                         :object <#_g76>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                         :subject <#_g60> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g74> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g76> ]
+                 [
+                         :object <#_g78>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g77> ]
+                 [
+                         :object <#_g79>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g77> ]
+                 [
+                         :object <#_g80>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g77> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#x" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
                          :subject <#_g80> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g79> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#z" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g78> ]
+                 [
+                         :object  [
+                             :items  (
+                            <#_g77>  ) ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g75> ]
+                 [
+                         :object  [
+                             :items  (
+                            <#_g59>  ) ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g57> ]
+                 [
+                         :object  [
+                             :value "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g54> ]
+                 [
+                         :object  [
+                             :value "http://www.w3.org/2000/10/swap/log#Truth" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g53> ]
+                 [
+                         :object  [
+                             :items  (
+                            <#_g52>  ) ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g50> ]
+                 [
+                         :object <#_g19>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g81> ]
+                 [
+                         :object <#_g82>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g81> ]
+                 [
+                         :object <#_g17>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g81> ]
+                 [
+                         :object  [
+                             :value "http://www.w3.org/2000/10/swap/log#implies" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g82> ]
                  [
                          :object  [
                              :items  (
                             <#_g4> 
                             <#_g8> 
                             <#_g12> 
-                            <#_g23> 
-                            <#_g45> 
-                            <#_g80>  ) ];
+                            <#_g16> 
+                            <#_g38> 
+                            <#_g81>  ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2002/07/owl#oneOf" ];
-                         :subject <#_g82> ]
-                 [
-                         :object <#_g82>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2004/06/rei#statements" ];
-                         :subject <#_g1> ]
-                 [
-                         :object  [
-                             :uri "http://www.w3.org/2000/10/swap/log#Truth" ];
-                         :predicate  [
-                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
-                         :subject <#_g1> ] ) ];
+                         :subject <#_g2> ] ) ];
              :universals  [
                  owl:oneOf () ] ].
     

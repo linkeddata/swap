@@ -22,6 +22,10 @@ from formula import StoredStatement, Formula
 from why import Because, BecauseBuiltIn, BecauseOfRule, \
     BecauseOfExperience, becauseSubexpression, BecauseMerge ,report
 
+try:
+    from sets import Set, ImmutableSet, BaseSet
+except ImportError:
+    raise NotImplementedError("We need to figure out how to support python 2.2 users")
 
 import types
 import sys
@@ -87,7 +91,7 @@ class InferenceTask:
 		workingContext,    # Data we assume 
 		ruleFormula = None,    # Where to find the rules
 		targetContext = None,   # Where to put the conclusions
-		universals = [],        # Inherited from higher contexts
+		universals = Set(),        # Inherited from higher contexts
 		mode="",		# modus operandi
 		why=None,			# Trace reason for all this
 		repeat = 0):		# do it until finished
@@ -113,9 +117,9 @@ class InferenceTask:
 	"""Run the rules by mapping rule interactions first"""
 	rules= self.ruleFor.values()
 	for r1 in rules:
-	    vars1 = r1.templateExistentials + r1.variablesUsed
+	    vars1 = r1.templateExistentials | r1.variablesUsed
 	    for r2 in rules:
-		vars2 = r2.templateExistentials + r2.variablesUsed
+		vars2 = r2.templateExistentials | r2.variablesUsed
 		for s1 in r1.conclusion.statements:
 		    for s2 in r2.template.statements:
 			for p in PRED, SUBJ, OBJ:
@@ -252,14 +256,14 @@ class InferenceTask:
 
 
     def gatherRules(self, ruleFormula):
-	universals = [] # @@ self.universals??
+	universals = Set() # @@ self.universals??
 	for s in ruleFormula.statementsMatching(pred=self.store.implies):
 	    r = self.ruleFor.get(s, None)
 	    if r != None: continue
 	    con, pred, subj, obj  = s.quad
 	    if (isinstance(subj, Formula)
 		and isinstance(obj, Formula)):
-		v2 = universals + ruleFormula.universals() # Note new variables can be generated
+		v2 = universals | ruleFormula.universals() # Note new variables can be generated
 		r = Rule(self, antecedent=subj, consequent=obj, statement=s,  variables=v2)
 		self.ruleFor[s] = r
 		if r.meta: self.hasMetaRule = 1
@@ -271,7 +275,7 @@ class InferenceTask:
 
     def gatherQueries(self, ruleFormula):
 	"Find a set of rules in N3QL"
-	universals = [] # @@ self.universals??
+	universals = Set() # @@ self.universals??
 	ql_select = self.store.newSymbol(QL_NS + "select")
 	ql_where = self.store.newSymbol(QL_NS + "where")
 	for s in ruleFormula.statementsMatching(pred=ql_select):
@@ -283,7 +287,7 @@ class InferenceTask:
 	    
 	    if (isinstance(selectClause, Formula)
 		and isinstance(whereClause, Formula)):
-		v2 = universals + ruleFormula.universals() # Note new variables can be generated
+		v2 = universals | ruleFormula.universals() # Note new variables can be generated
 		r = Rule(self, antecedent=whereClause, consequent=selectClause,
 				statement=s,  variables=v2)
 		self.ruleFor[s] = r
@@ -377,7 +381,7 @@ class Rule:
 	self.statement = statement      #  original statement
 	self.number = nextRule = nextRule+1
 	self.meta = self.conclusion.contains(pred=self.conclusion.store.implies) #generate rules?
-	if task.repeat: self.already = []
+	if task.repeat: self.already = {}
 	else: self.already = None
 	self.affects = {}
 	self.indirectlyAffects = []
@@ -391,20 +395,20 @@ class Rule:
 	# target context when the conclusion is drawn.
     
     
-	if self.template.universals() != []:
+	if self.template.universals() != Set():
 	    raise RuntimeError("""Cannot query for universally quantified things.
 	    As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
 	    This/these were: %s\n""" % self.template.universals())
     
-	self.unmatched = self.template.statements[:]
-	self.templateExistentials = self.template.existentials()[:]
+	self.unmatched = Set(self.template.statements) # self.template.statements.__copy__()
+	self.templateExistentials = self.template.existentials(alwaysDict=1).__copy__()
 	_substitute({self.template: task.workingContext}, self.unmatched)
     
 	variablesMentioned = self.template.occurringIn(variables)
 	self.variablesUsed = self.conclusion.occurringIn(variablesMentioned)
 	for x in variablesMentioned:
 	    if x not in self.variablesUsed:
-		self.templateExistentials.append(x)
+		self.templateExistentials.add(x)
 	if diag.chatty_flag >20:
 	    progress("New Rule %s ============ looking for:" % `self` )
 	    for s in self.template.statements: progress("    ", `s`)
@@ -423,10 +427,10 @@ class Rule:
 	    progress( setToString(self.unmatched))
 	task = self.task
 	query = Query(self.store,
-			unmatched = self.unmatched[:],
+			unmatched = self.unmatched.__copy__(),
 			template = self.template,
-			variables = self.variablesUsed[:],
-			existentials = self.templateExistentials[:],
+			variables = self.variablesUsed.__copy__(),
+			existentials = self.templateExistentials.__copy__(),
 			workingContext = task.workingContext,
 			conclusion = self.conclusion,
 			targetContext = task.targetContext,
@@ -462,7 +466,7 @@ class Rule:
 #	    else:
 #		self.__setattr__("leadsToCycle", 1)
     
-def testIncludes(f, g, _variables=[],  bindings={}):
+def testIncludes(f, g, _variables=Set(),  bindings={}):
     """Return whether or nor f contains a top-level formula equvalent to g.
     Just a test: no bindings returned."""
     if diag.chatty_flag >30: progress("testIncludes ============")
@@ -471,11 +475,11 @@ def testIncludes(f, g, _variables=[],  bindings={}):
     assert f.canonical is f
     assert g.canonical is g
 
-    unmatched = g.statements[:]
-    templateExistentials = g.existentials()
+    unmatched = g.statements.__copy__()
+    templateExistentials = g.existentials(alwaysDict=1)
     _substitute({g: f}, unmatched)
     
-    if g.universals() != []:
+    if g.universals() != Set():
 	raise RuntimeError("""Cannot query for universally quantified things.
 	As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
 	This/these were: %s\n""" % g.universals())
@@ -493,8 +497,8 @@ def testIncludes(f, g, _variables=[],  bindings={}):
     result = Query(f.store,
 		unmatched=unmatched,
 		template = g,
-		variables=[],
-		existentials=_variables + templateExistentials,
+		variables=Set(),
+		existentials=_variables | templateExistentials,
 		justOne=1, mode="").resolve()
 
     if diag.chatty_flag >30: progress("=================== end testIncludes =" + `result`)
@@ -533,8 +537,8 @@ class Query:
 	       store,
                unmatched=[],           # Tuple of interned quads we are trying to match CORRUPTED
 	       template = None,		# Actually, must have one
-               variables=[],           # List of variables to match and return CORRUPTED
-               existentials=[],        # List of variables to match to anything
+               variables=Set(),           # List of variables to match and return CORRUPTED
+               existentials=Set(),        # List of variables to match to anything
                                     # Existentials or any kind of variable in subexpression
 	       workingContext = None,
 	       conclusion = None,
@@ -554,6 +558,8 @@ class Query:
 		"    Smart in: ", smartIn)
 
         self.queue = []   #  Unmatched with more info
+        if type(existentials) is type([]):
+            raise RuntimeError(`existentials`)
 	self.store = store
 	self.variables = variables
 	self.existentials = existentials
@@ -572,7 +578,7 @@ class Query:
 	self.lastCheckedNumberOfRedirections = 0
         for quad in unmatched:
             item = QueryItem(self, quad)
-            if item.setup(allvars=variables+existentials, unmatched=unmatched, smartIn=smartIn, mode=mode) == 0:
+            if item.setup(allvars=variables|existentials, unmatched=unmatched, smartIn=smartIn, mode=mode) == 0:
                 if diag.chatty_flag > 80: progress("match: abandoned, no way for "+`item`)
                 self.noWay = 1
 		return  # save time
@@ -605,67 +611,80 @@ class Query:
 	"""When a match found in a query, add conclusions to target formula.
 
 	Returns the number of statements added."""
+	hbindings = hashable_dict(bindings)
 	if self.justOne: return 1   # If only a test needed
 
         if diag.chatty_flag >60: progress( "Concluding tentatively...%r" % bindings)
-        if self.already != None:
+        if self.already is not None:
 	    self.checkRedirectsInAlready() # @@@ KLUDGE - use delegation and notification systme instead
-            if bindings in self.already:
+	    if diag.chatty_flag > 30: progress("size of self.already: %i" % len(self.already))
+            if hbindings in self.already:  ##@@@@ uh oh. How big is self.already?
                 if diag.chatty_flag > 30: progress("@@ Duplicate result: %r" %  bindings)
                 return 0
             if diag.chatty_flag > 30: progress("Not duplicate: %r" % bindings)
-            self.already.append(bindings)
+            self.already[hbindings] = 1
 
 	if diag.tracking:
 	    reason = BecauseOfRule(self.rule, bindings=bindings, evidence=evidence)
 	    progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
 	else:
 	    reason = None
+#        def internalFunction():
+        es, exout = self.workingContext.existentials(alwaysDict=1), []
+        #if diag.chatty_flag > 0: progress("length of es is: %i, type of es is: %s. bindings.items is %s" % (len(es), type(es), bindings.items()))
+        for var, val in bindings.items():
+#            def internalFunction3():
+##            try:
+##                es[val]
+##            except KeyError:
+##                pass
+##            else:
+            if val in es:   #  Take time for large number of bnodes? -- not if we are careful
+                exout.append(val)
+                if diag.chatty_flag > 25:
+                    progress("Match found to that which is only an existential: %s -> %s" % (var, val))
+                if self.workingContext is not self.targetContext:
+                    self.targetContext.declareExistential(val)
+#            internalFunction3()
 
-	es, exout = self.workingContext.existentials(), []
-	for var, val in bindings.items():
-	    if val in es:   #  Take time for large number of bnodes?
-		exout.append(val)
-		if diag.chatty_flag > 25:
-		    progress("Match found to that which is only an existential: %s -> %s" % (var, val))
-		if self.workingContext is not self.targetContext:
-		    self.targetContext.declareExistential(val)
-
+#        def internalFunction2():
+        #b2 = hbindings
         b2 = bindings.copy()
-	b2[self.conclusion] = self.targetContext
+        b2[self.conclusion] = self.targetContext
         ok = self.targetContext.universals()  # It is actually ok to share universal variables with other stuff
-        poss = self.conclusion.universals()[:]
-        for x in poss[:]:
-            if x in ok: poss.remove(x)
-
+        poss = self.conclusion.universals().__copy__()
+        for x in poss.__copy__():
+            if x in ok: poss.remove(x)  ###@@@@this looks really bad --- but doesn't seem to be.
 #        vars = self.conclusion.existentials() + poss  # Terms with arbitrary identifiers
 #        clashes = self.occurringIn(targetContext, vars)    Too slow to do every time; play safe
-	if diag.chatty_flag > 25:
-	    s=""
-	for v in poss:
-	    v2 = self.targetContext.newUniversal()
-	    b2[v] =v2   # Regenerate names to avoid clash
-	    if diag.chatty_flag > 25: s = s + ",uni %s -> %s" %(v, v2)
-	for v in self.conclusion.existentials():
-	    if v not in exout:
-		v2 = self.targetContext.newBlankNode()
-		b2[v] =v2   # Regenerate names to avoid clash
-		if diag.chatty_flag > 25: s = s + ",exi %s -> %s" %(v, v2)
-	    else:
-		if diag.chatty_flag > 25: s = s + (", (%s is existential in kb)"%v)
-	if diag.chatty_flag > 25:
-	    progress("Variables regenerated: universal " + `poss`
-		+ " existential: " +`self.conclusion.existentials()` + s)
-	
+        if diag.chatty_flag > 25:
+            s=""
+        for v in poss:
+            v2 = self.targetContext.newUniversal()
+            b2[v] =v2   # Regenerate names to avoid clash
+            if diag.chatty_flag > 25: s = s + ",uni %s -> %s" %(v, v2)
+        for v in self.conclusion.existentials():
+            if v not in exout:  ###@@@ how big is exout? looks like 0. I won't worry about it.
+                v2 = self.targetContext.newBlankNode()
+                b2[v] =v2   # Regenerate names to avoid clash
+                if diag.chatty_flag > 25: s = s + ",exi %s -> %s" %(v, v2)
+            else:
+                if diag.chatty_flag > 25: s = s + (", (%s is existential in kb)"%v)
+        if diag.chatty_flag > 25:
+            progress("Variables regenerated: universal " + `poss`
+                + " existential: " +`self.conclusion.existentials()` + s)
+        
 
         if diag.chatty_flag>19:
             progress("Concluding DEFINITELY" + bindingsToString(b2) )
         before = self.store.size
         delta = self.targetContext.loadFormulaWithSubsitution(
-		    self.conclusion, b2, why=reason)
+                    self.conclusion, b2, why=reason)
         if diag.chatty_flag>30:
             progress("Added %i, nominal size of store changed from %i to %i."%(delta, before, self.store.size))
         return delta #  self.store.size - before
+#        return internalFunction2()
+#        return internalFunction()
 
 
 ##################################################################################
@@ -744,11 +763,12 @@ class Query:
             state = item.state
             if state == S_DONE:
                 return total # Forget it -- must be impossible
+            #def internalFunction4():
             if state == S_LIGHT_UNS_GO:
-		item.state = S_LIGHT_EARLY   # Unsearched, try builtin
+                item.state = S_LIGHT_EARLY   # Unsearched, try builtin
                 nbs = item.tryBuiltin(queue, bindings, heavy=0, evidence=evidence)
             elif state == S_LIGHT_GO:
-		item.state = S_DONE   # Searched.
+                item.state = S_DONE   # Searched.
                 nbs = item.tryBuiltin(queue, bindings, heavy=0, evidence=evidence)
             elif state == S_LIGHT_EARLY or state == S_NOT_LIGHT or state == S_NEED_DEEP: #  Not searched yet
                 nbs = item.tryDeepSearch()
@@ -757,24 +777,24 @@ class Query:
                     if (isinstance(subj, Formula)
                         and isinstance(obj, Formula)):
 
-                        more_unmatched = obj.statements[:]
-			more_variables = obj.variables()[:]
+                        more_unmatched = obj.statements.__copy__()
+                        more_variables = obj.variables().__copy__()
 
-			if obj.universals() != []:
-			    raise RuntimeError("""Cannot query for universally quantified things.
-	    As of 2003/07/28 forAll x ...x cannot be on object of log:includes.
-	    This/these were: %s\n""" % obj.universals())
+                        if obj.universals() != Set():
+                            raise RuntimeError("""Cannot query for universally quantified things.
+            As of 2003/07/28 forAll x ...x cannot be on object of log:includes.
+            This/these were: %s\n""" % obj.universals())
 
 
                         _substitute({obj: subj}, more_unmatched)
                         _substitute(bindings, more_unmatched)
-                        existentials = existentials + more_variables
-                        allvars = variables + existentials
+                        existentials = existentials | more_variables
+                        allvars = variables | existentials
                         for quad in more_unmatched:
                             newItem = QueryItem(query, quad)
                             queue.append(newItem)
                             newItem.setup(allvars, smartIn = query.smartIn + [subj],
-				    unmatched=more_unmatched, mode=query.mode)
+                                    unmatched=more_unmatched, mode=query.mode)
                         if diag.chatty_flag > 40:
                                 progress("**** Includes: Adding %i new terms and %s as new existentials."%
                                           (len(more_unmatched),
@@ -785,16 +805,16 @@ class Query:
                         item.state = S_DONE
                     nbs = []
                 else:
-		    item.state = S_HEAVY_WAIT  # Assume can't resolve
+                    item.state = S_HEAVY_WAIT  # Assume can't resolve
                     nbs = item.tryBuiltin(queue, bindings, heavy=1, evidence=evidence)
             elif state == S_REMOTE: # Remote query -- need to find all of them for the same service
-		items = [item]
-		for i in queue[:]:
-		    if i.state == S_REMOTE and i.service is item.service: #@@ optimize which group is done first!
-			items.append(i)
-			queue.remove(i)
-		nbs = query.remoteQuery(items)
-		item.state = S_SATISFIED  # do not put back on list
+                items = [item]
+                for i in queue[:]:
+                    if i.state == S_REMOTE and i.service is item.service: #@@ optimize which group is done first!
+                        items.append(i)
+                        queue.remove(i)
+                nbs = query.remoteQuery(items)
+                item.state = S_SATISFIED  # do not put back on list
             elif state ==S_HEAVY_WAIT or state == S_LIGHT_WAIT: # Can't
                 if diag.chatty_flag > 49 :
                     progress("@@@@ Warning: query can't find term which will work.")
@@ -807,33 +827,34 @@ class Query:
                 raise RuntimeError, "Unknown state " + `state`
             if diag.chatty_flag > 90: progress("nbs=" + `nbs`)
             if nbs == 0: return total
-            elif nbs != []:
+            elif nbs != [] and nbs != Set():
 #		if nbs != 0 and nbs != []: pass
-		# progress("llyn.py 2738:   nbs = %s" % nbs)
+                # progress("llyn.py 2738:   nbs = %s" % nbs)
                 for nb, reason in nbs:
-		    assert type(nb) is types.DictType, nb
+                    assert type(nb) is types.DictType, nb
                     q2 = []
                     for i in queue:
                         newItem = i.clone()
                         q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
-		    
-                    found = query.unify(q2, variables[:], existentials[:],
+                    
+                    found = query.unify(q2, variables.__copy__(), existentials.__copy__(),
                                           bindings.copy(), nb, evidence = evidence + [reason])
-		    if diag.chatty_flag > 80: progress(
-			"Nested query returns %i fo %r" % (found, nb))
+                    if diag.chatty_flag > 80: progress(
+                        "Nested query returns %i fo %r" % (found, nb))
                     total = total + found
-		    if query.justOne and total:
+                    if query.justOne and total:
                         return total
 # NO - more to do return total # The called recursive calls above will have generated the output @@@@ <====XXXX
-	    if diag.chatty_flag > 80: progress("Item state %i, returning total %i" % (item.state, total))
+            if diag.chatty_flag > 80: progress("Item state %i, returning total %i" % (item.state, total))
             if item.state == S_DONE:
-		return total
+                return total
             if item.state != S_SATISFIED:   # state 0 means leave me off the list
                 queue.append(item)
             # And loop back to take the next item
 
         if diag.chatty_flag>50: progress("QUERY MATCH COMPLETE with bindings: " + `bindings`)
         return query.conclude(bindings,  evidence=evidence)  # No terms left .. success!
+#        return internalFunction4()
 
 
 
@@ -971,7 +992,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                 self.neededToRun[p] = [x]
                 self.searchPattern[p] = None   # can bind this
             elif isinstance(x, Formula) or isinstance(x, List): # expr
-                ur = x.occurringIn(allvars)
+                ur = list(x.occurringIn(allvars)) #@@@ should this be a set too? <<<>>> find me
                 self.neededToRun[p] = ur
                 if ur != []:
                     hasUnboundCoumpundTerm = 1     # Can't search directly
@@ -1234,9 +1255,17 @@ def compareCyclics(self,other):
 
 def _substitute(bindings, list):
     """Subsitustes IN-LINE into a list of quads"""
-    for i in range(len(list)):
-        q = list[i]
-        list[i] = lookupQuad(bindings, q)
+    if type(list) is type([]):
+        raise RuntimeError(`list`)
+        for i in range(len(list)):
+            q = list[i]
+            list[i] = lookupQuad(bindings, q)
+        return
+    returnSet = Set([lookupQuad(bindings, q) for q in list])
+    for thing in list.__copy__():
+        list.remove(thing)
+    for thing in returnSet:
+        list.add(thing)
                             
 def lookupQuad(bindings, q):
 	"Return a subsituted quad"
@@ -1284,14 +1313,14 @@ def quadToString(q, neededToRun=[[],[],[],[]], pattern=[1,1,1,1]):
                                             `q[OBJ]`,qm[OBJ])
 
 def seqToString(set):
-#    return `set`
-    
-    str = ""
-    for x in set[:-1]:
-        str = str + `x` + ","
-    for x in set[-1:]:
-        str = str+ `x`
-    return str
+    return `set`
+#    
+#    str = ""
+#    for x in set[:-1]:
+#        str = str + `x` + ","
+#    for x in set[-1:]:
+#        str = str+ `x`
+#    return str
 
 def bindingsToString(bindings):
 #    return `bindings`
@@ -1317,5 +1346,8 @@ class BuiltInFailed(Exception):
             `reason`))
     
 
+class hashable_dict(dict):
+    def __hash__(self):
+        return hash(tuple(self.items()))
 
 # ends

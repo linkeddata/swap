@@ -14,7 +14,11 @@ from diag import chatty_flag, tracking, progress
 from formula import Formula
 from query import Query, Rule, seqToString, _substitute
 
-    
+try:
+    from sets import Set, ImmutableSet, BaseSet
+except ImportError:
+    raise NotImplementedError("We need to figure out how to support python 2.2 users")
+
 def patch(workingContext, patchFormula):
     """A task of running a set of updates on a knowledge base
     
@@ -28,8 +32,8 @@ def patch(workingContext, patchFormula):
     true = store.newFormula().close()  #   {}
     universals = []
     lhs_done = []
-    insertions = patchFormula.statementsMatching(pred=store.insertion)[:]
-    deletions = patchFormula.statementsMatching(pred=store.deletion)[:]
+    insertions = list(patchFormula.statementsMatching(pred=store.insertion))
+    deletions = list(patchFormula.statementsMatching(pred=store.deletion))
 
     for st in insertions + deletions:
 	lhs = st.subject()
@@ -44,20 +48,20 @@ def patch(workingContext, patchFormula):
 		deletions = [ st.object() ]
 		conclusion = true
 
-	    if lhs.universals() != []:
+	    if lhs.universals() != Set():
 		raise RuntimeError("""Cannot query for universally quantified things.
 		As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
 		This/these were: %s\n""" % lhs.universals())
 	
-	    unmatched = lhs.statements[:]
-	    templateExistentials = lhs.existentials()[:]
+	    unmatched = lhs.statements
+	    templateExistentials = lhs.existentials(alwaysDict=1).__copy__()
 	    _substitute({lhs: workingContext}, unmatched)
 	
 	    variablesMentioned = lhs.occurringIn(patchFormula.universals())
 	    variablesUsed = conclusion.occurringIn(variablesMentioned)
 	    for x in variablesMentioned:
 		if x not in variablesUsed:
-		    templateExistentials.append(x)
+		    templateExistentials.add(x)
 	    if diag.chatty_flag >20:
 		progress("New Patch  =========== applied to %s" %(workingContext) )
 		for s in lhs.statements: progress("    ", `s`)
@@ -123,8 +127,8 @@ class UpdateQuery(Query):
 		    raise RuntimeError(
 			"Error: %i matches removing statement {%s %s %s} from %s:\n%s" %
 			 (len(ss),s,p,o,self.workingContext, ss))
-		if diag.chatty_flag > 25: progress("Deleting %s" % ss[0])
-		self.workingContext.removeStatement(ss[0])
+		if diag.chatty_flag > 25: progress("Deleting %s" % iter(ss).next())
+		self.workingContext.removeStatement(iter(ss).next())
 	self.justOne = 1  # drop out of here when done
 	return 1     # Success -- no behave as a test and drop out
 

@@ -4,14 +4,18 @@
 # version: $Id$
 # by Dan Brickley <danbri@w3.org>
 #
-# STATUS: this file now works
-# much of what danbri typed I honestly do not know what it is trying to do. I suspect the answer is
-# ``not much''
-#
-# DO NOT run this file directly! Use make dist_tarball instead.
+# STATUS: not working yet
 # 
 # notes:
 # http://esw.w3.org/t/view/ESW/CwmTips
+
+# current output / error:
+#	sudo ./setup.py install
+#	swap dir: /usr/lib/python2.2/site-packages/swap
+#	running install
+#	running build
+#	running build_py
+#	error: package directory 'swap/swap/cwm' does not exist
 
 
 from distutils.sysconfig import get_python_lib

@@ -67,7 +67,7 @@ from diag import progress, verbosity
 from term import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Term,\
-    CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode
+    CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode, Bag
 from OrderedSequence import merge
 from formula import Formula, StoredStatement
 
@@ -85,6 +85,11 @@ from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 
 from pretty import Serializer
 from OrderedSequence import indentString
+
+try:
+    from sets import Set, ImmutableSet, BaseSet
+except ImportError:
+    raise NotImplementedError("We need to figure out how to support python 2.2 users")
 
 LITERAL_URI_prefix = "data:text/rdf+n3;"
 Delta_NS = "http://www.w3.org/2004/delta#"
@@ -171,7 +176,7 @@ class IndexedFormula(Formula):
 	    
 	If none, returns []
 	"""
-        return self._index.get((pred, subj, obj), [])
+        return self._index.get((pred, subj, obj), Set())
 
     def contains(self, pred=None, subj=None, obj=None):
         """Return boolean true iff formula contains statement(s) matching the parts given
@@ -196,12 +201,12 @@ class IndexedFormula(Formula):
 	Note SPO order not PSO.
 	To aboid confusion, use named parameters.
 	"""
-	hits = self._index.get((pred, subj, obj), [])
+	hits = self._index.get((pred, subj, obj), Set())
 	if not hits: return None
-	s = hits[0]
-	if pred == None: return s[PRED]
-	if subj == None: return s[SUBJ]
-	if obj == None: return s[OBJ]
+	s = iter(hits).next()
+	if pred is None: return s[PRED]
+	if subj is None: return s[SUBJ]
+	if obj is None: return s[OBJ]
 	raise ParameterError("You must give one wildcard")
 
 
@@ -214,14 +219,14 @@ class IndexedFormula(Formula):
 	color = f.the(pred=pantoneColor, subj=myCar)
 	redCar = f.the(pred=pantoneColor, obj=red)
 	"""
-	hits = self._index.get((pred, subj, obj), [])
+	hits = self._index.get((pred, subj, obj), Set())
 	if not hits: return None
 	assert len(hits) == 1, """There should only be one match for (%s %s %s).
 	    Found: %s""" %(subj, pred, obj, self.each(subj, pred, obj))
-	s = hits[0]
-	if pred == None: return s[PRED]
-	if subj == None: return s[SUBJ]
-	if obj == None: return s[OBJ]
+	s = iter(hits).next()
+	if pred is None: return s[PRED]
+	if subj is None: return s[SUBJ]
+	if obj is None: return s[OBJ]
 	raise parameterError("You must give one wildcard using the()")
 
     def each(self, subj=None, pred=None, obj=None):
@@ -233,11 +238,11 @@ class IndexedFormula(Formula):
 	for redthing in f.each(pred=pantoneColor, obj=red): ...
 	
 	"""
-	hits = self._index.get((pred, subj, obj), [])
-	if hits == []: return []
-	if pred == None: wc = PRED
-	elif subj == None: wc = SUBJ
-	elif obj == None: wc = OBJ
+	hits = self._index.get((pred, subj, obj), Set())
+	if hits == {}: return {}
+	if pred is None: wc = PRED
+	elif subj is None: wc = SUBJ
+	elif obj is None: wc = OBJ
 	else: raise ParameterError("You must give one wildcard None for each()")
 	res = []
 	for s in hits:
@@ -253,7 +258,7 @@ class IndexedFormula(Formula):
 	If it is 0 there is no solution to the query, we know now.
 	
 	In this implementation, we use the length of the sequence to be searched."""
-        res = self._index.get((pred, subj, obj), [])
+        res = self._index.get((pred, subj, obj), Set())
 	return len(res), res
 
 
@@ -307,10 +312,10 @@ class IndexedFormula(Formula):
 # When that happens, expend smushing to symbols.)
 
 	if pred is store.rest:
-	    if isinstance(obj, List) and  subj in self._existentialVariables:
+	    if isinstance(obj, List) and  subj in self._existentialDict:
 		ss = self.statementsMatching(pred=store.first, subj=subj)
 		if ss:
-		    s = ss[0]
+		    s = iter(ss).next()
 		    self.removeStatement(s)
 		    first = s[OBJ]
 		    list = obj.prepend(first)
@@ -318,10 +323,10 @@ class IndexedFormula(Formula):
 		    self.substituteEqualsInPlace(newBindings)
 		    return 1  # Added a statement but ... it is hidden in lists
     
-	elif pred is store.first  and  subj in self._existentialVariables:
+	elif pred is store.first  and  subj in self._existentialDict:
 	    ss = self.statementsMatching(pred=store.rest, subj=subj)
 	    if ss:
-		s = ss[0]
+		s = iter(ss).next()
 		rest = s[OBJ]
 		if isinstance(rest, List):
 		    list = rest.prepend(obj)
@@ -356,57 +361,62 @@ class IndexedFormula(Formula):
         s = StoredStatement((self, pred, subj, obj))
 	
 	if diag.tracking:
-	    if (why == None): raise RuntimeError(
+	    if (why is None): raise RuntimeError(
 		"Tracking reasons but no reason given for"+`s`)
 	    report(s, why)
 
         # Build 8 indexes.
-#       This now takes a lot of the time in a typical  cwm run! :-(
-#       I honestly think the above line is a bit pessemistic. The below lines scale.
-#       The above lines do not (removeStatement does not scale)
+#       This now takes a lot of the time in a typical  cwm run! :-( 
 
 	if subj is self:  # Catch variable declarations
 	    if pred is self.store.forAll:
 		if obj not in self._universalVariables:
 		    if diag.chatty_flag > 50: progress("\tUniversal ", obj)
-		    self._universalVariables.append(obj)
+		    self._universalVariables.add(obj)
 		return 1
 	    if pred is self.store.forSome:
-		if obj not in self._existentialVariables:
-		    if diag.chatty_flag > 50: progress("\tExistential ", obj)
-		    self._existentialVariables.append(obj)
+#		if obj not in self._existentialDict:
+#		    if diag.chatty_flag > 50: progress("\tExistential ", obj)
+#		    self._existentialVariables.append(obj)
+                self._existentialDict.add(obj)
 		return 1
 	    raise ValueError("You cannot use 'this' except as subject of forAll or forSome")
 
-        self.statements.append(s)
+        self.statements.add(s)
+##        try:
+##            numhits = self.statements[s]
+##        except KeyError:
+##            self.statements[s] = 1
+##        else:
+##            self.statements[s] = numhits + 1
        
         list = self._index.get((None, None, obj), None)
-        if list is None: self._index[(None, None, obj)]=[s]
-        else: list.append(s)
+        if list is None: self._index[(None, None, obj)]=Set([s])
+        else: list.add(s)
 
         list = self._index.get((None, subj, None), None)
-        if list is None: self._index[(None, subj, None)]=[s]
-        else: list.append(s)
+        if list is None: self._index[(None, subj, None)]=Set([s])
+        else: list.add(s)
 
         list = self._index.get((None, subj, obj), None)
-        if list is None: self._index[(None, subj, obj)]=[s]
-        else: list.append(s)
+        if list is None: self._index[(None, subj, obj)]=Set([s])
+        else: list.add(s)
 
         list = self._index.get((pred, None, None), None)
-        if list is None: self._index[(pred, None, None)]=[s]
-        else: list.append(s)
+        if list is None: self._index[(pred, None, None)]=Set([s])
+        else: list.add(s)
 
         list = self._index.get((pred, None, obj), None)
-        if list is None: self._index[(pred, None, obj)]=[s]
-        else: list.append(s)
+        if list is None: self._index[(pred, None, obj)]=Set([s])
+        else: list.add(s)
 
         list = self._index.get((pred, subj, None), None)
-        if list is None: self._index[(pred, subj, None)]=[s]
-        else: list.append(s)
+        if list is None: self._index[(pred, subj, None)]=Set([s])
+        else: list.add(s)
 
         list = self._index.get((pred, subj, obj), None)
-        if list is None: self._index[(pred, subj, obj)]=[s]
-        else: list.append(s)
+        if list is None: self._index[(pred, subj, obj)]=Set([s])
+        else: list.add(s)
 
 	if self._closureMode != "":
 	    self.checkClosure(subj, pred, obj)
@@ -419,25 +429,22 @@ class IndexedFormula(Formula):
 	"""Removes a statement The formula must be open.
 	
 	This implementation is alas slow, as removal of items from tha hash is slow.
-	The above statement is false. Removing items from a hash is easily over five times
-	faster than removing them from a list.
 	Also, truth mainainance is not done.  You can't undeclare things equal.
 	This is really a low-level method, used within add() and for cleaning up the store
 	to save space in purge() etc.
 	"""
-	assert self.canonical == None, "Cannot remove statement from canonnical"+`self`
+	assert self.canonical is None, "Cannot remove statement from canonnical"+`self`
         self.store.size = self.store.size-1
 	if diag.chatty_flag > 97:  progress("removing %s" % (s))
 	context, pred, subj, obj = s.quad
-        self.statements.remove(s)
-        self._index[(None, None, obj)].remove(s)
-        self._index[(None, subj, None)].remove(s)
-        self._index[(None, subj, obj)].remove(s)
-        self._index[(pred, None, None)].remove(s)
-        self._index[(pred, None, obj)].remove(s)
-        self._index[(pred, subj, None)].remove(s)
-        self._index[(pred, subj, obj)].remove(s)
-        #raise RuntimeError("The triple is %s: %s %s %s"%(context, pred, subj, obj))
+        removeIt(s, self.statements)
+        removeIt(s, self._index[(None, None, obj)])
+        removeIt(s, self._index[(None, subj, None)])
+        removeIt(s, self._index[(None, subj, obj)])
+        removeIt(s, self._index[(pred, None, None)])
+        removeIt(s, self._index[(pred, None, obj)])
+        removeIt(s, self._index[(pred, subj, None)])
+        removeIt(s, self._index[(pred, subj, obj)])
 	return
     
     def canonicalize(F):
@@ -457,14 +464,16 @@ class IndexedFormula(Formula):
                 progress("End formula -- @@ already canonical:"+`F`)
             return F.canonical
 
-	F.existentialDict = {}
-	for existentialVariable in F.existentials():
-            F.existentialDict[existentialVariable] = 1
-        fl = F.statements
+        F._existentialVariables = list(F._existentialDict)
+        F._existentialVariables.sort(Term.compareAnyTerm)
+#        for existentialVariable in F.existentials():
+#            F.existentialDict[existentialVariable]  = 1
+        
+        fl = list(F.statements)
         l = len(fl), len(F.universals()), len(F.existentials())   # The number of statements
         possibles = store._formulaeOfLength.get(l, None)  # Formulae of same length
 
-        if possibles == None:
+        if possibles is None:
             store._formulaeOfLength[l] = [F]
             if diag.chatty_flag > 70:
                 progress("End formula - first of length", l, F)
@@ -472,19 +481,21 @@ class IndexedFormula(Formula):
             return F
 
         fl.sort(StoredStatement.compareSubjPredObj)
-	fe = F.existentials()
+##        for fls in fl.keys():
+##            fl[fls] = 1
+	fe = F._existentialVariables
 	fe.sort(Term.compareAnyTerm)
-	fu = F.universals ()
+	fu = list(F.universals ())
 	fu.sort(Term.compareAnyTerm)
-
+        
         for G in possibles:
-            gl = G.statements
+            gl = list(G.statements)
 	    gkey = len(gl), len(G.universals()), len(G.existentials())
             if gkey != l: raise RuntimeError("@@Key of %s is %s instead of %s" %(G, `gkey`, `l`))
 
 	    gl.sort(StoredStatement.compareSubjPredObj)
-            for se, oe, in  ((fe, G.existentials()),
-			     (fu, G.universals())):
+            for se, oe, in  ((fe, G._existentialVariables),  ####@@@existentials()
+			     (fu, list(G.universals()))):
 		lse = len(se)
 		loe = len(oe)
 		if lse > loe: return 1
@@ -510,6 +521,9 @@ class IndexedFormula(Formula):
 		    "** End Formula: Smushed new formula %s giving old %s" % (F, G))
 		del(F)  # Make sure it ain't used again
                 return G
+##	    if fl == gl:
+##                del(F)
+##                return G
         possibles.append(F)
 #        raise oops
         F.canonical = F
@@ -571,9 +585,9 @@ class IndexedFormula(Formula):
         such that the order of the keys is the order in which you want the corresponding
         strings output.
         """
-        if channel == None:
+        if channel is None:
             channel = sys.stdout
-        if relation == None:
+        if relation is None:
             relation = self.store.intern((SYMBOL, Logic_NS + "outputString"))
         list = self.statementsMatching(pred=relation)  # List of things of (subj, obj) pairs
         pairs = []
@@ -592,7 +606,7 @@ class IndexedFormula(Formula):
 	red = ""
 	if self._redirections != {}: red = " redirections:" + `self._redirections`
 	str = `self`+ red + " is {"
-	for vv, ss in ((self.universals(), "@forAll"),(self.existentials(), "@forSome")):
+	for vv, ss in ((list(self.universals()), "@forAll"),(list(self.existentials()), "@forSome")):
 	    if vv != []:
 		str = str + " " + ss + " " + `vv[0]`
 		for v in vv[1:]:
@@ -617,23 +631,23 @@ class IndexedFormula(Formula):
 	
 	Check whether this new list (given as bnode) causes other things to become lists.
 	Set up redirection so the list is used from now on instead of the bnode.	
-	Internal function.
-
-	This function is extraordinarily slow, .08 seconds per call on reify/reify3.n3"""
+	Internal function."""
         if diag.chatty_flag > 80: progress("New list was %s, now %s = %s"%(`bnode`, `list`, `list.value()`))
 	if isinstance(bnode, List): return  ##@@@@@ why is this necessary? weid.
 	newBindings[bnode] = list
         if diag.chatty_flag > 80: progress("...New list newBindings %s"%(`newBindings`))
-	if bnode in self._existentialVariables:
-	    self._existentialVariables.remove(bnode)
+#	if bnode in self._existentialDict:
+#	    self._existentialVariables.remove(bnode)
+        self._existentialDict.discard(bnode)
         possibles = self.statementsMatching(pred=self.store.rest, obj=bnode)  # What has this as rest?
-        for s in possibles[:]:
+        for s in possibles.__copy__():
             L2 = s[SUBJ]
             ff = self.statementsMatching(pred=self.store.first, subj=L2)
-            if ff != []:
-                first = ff[0][OBJ]
+            if ff != {}:
+                ff0 = iter(ff).next()
+                first = ff0[OBJ]
 		self.removeStatement(s) 
-		self.removeStatement(ff[0])
+		self.removeStatement(ff0)
 		list2 = list.prepend(first)
 		self._noteNewList(L2, list2, newBindings)
 	return
@@ -644,7 +658,7 @@ class IndexedFormula(Formula):
 	while bindings != {}:
 	    self._redirections.update(bindings)
 	    newBindings = {}
-	    for s in self.statements[:]:  # take a copy!
+	    for s in list(self.statements):  # take a copy!
 		changed = 0
 		quad = [self, s[PRED], s[SUBJ], s[OBJ]]
 		for p in PRED, SUBJ, OBJ:
@@ -1121,7 +1135,7 @@ class RDFStore(RDFSink) :
 	assert isinstance(self._experience, Formula)
 
     def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None, remember=1,
-		    flags="", referer=None, why=None):
+		    flags="", why=None):
 	"""Get and parse document.  Guesses format if necessary.
 
 	uri:      if None, load from standard input.
@@ -1142,20 +1156,19 @@ class RDFStore(RDFSink) :
 	    if F != None:
 		if diag.chatty_flag > 40: progress("Using cached semantics for",addr)
 		return F 
-	    F = webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, referer, why)  
+	    F = webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, why)  
 	    store._experience.add(
 		    store.intern((SYMBOL, addr)), store.semantics, F,
 		    why=BecauseOfExperience("load document"))
 	    return F
 	    
-	return webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, \
-                              referer=referer, why=why)  
+	return webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, why)  
 
     
 
 
 
-    def loadMany(self, uris, openFormula=None, referer=None):
+    def loadMany(self, uris, openFormula=None):
 	"""Get, parse and merge serveral documents, given a list of URIs. 
 	
 	Guesses format if necessary.
@@ -1163,12 +1176,12 @@ class RDFStore(RDFSink) :
 	Raises IOError, SyntaxError
 	"""
 	assert type(uris) is type([])
-	if openFormula == None: F = self.newFormula()
+	if openFormula is None: F = self.newFormula()
 	else:  F = openFormula
 	f = F.uriref()
 	for u in uris:
 	    F.reopen()  # should not be necessary
-	    self.load(u, openFormula=F, remember=0, referer=referer)
+	    self.load(u, openFormula=F, remember=0)
 	return F.close()
 
     def genId(self):
@@ -1184,10 +1197,10 @@ class RDFStore(RDFSink) :
 		return uriRefString # ?!
 	    resid = uriRefString[:hash]
 	    r = self.resources.get(resid, None)
-	    if r == None: return uriRefString
+	    if r is None: return uriRefString
 	    fragid = uriRefString[hash+1:]
 	    f = r.fragments.get(fragid, None)
-	    if f == None: return uriRefString
+	    if f is None: return uriRefString
 	    if diag.chatty_flag > 70:
 		progress("llyn.genid Rejecting Id already used: "+uriRefString)
 		
@@ -1200,12 +1213,12 @@ class RDFStore(RDFSink) :
 	hash = string.rfind(urirefString, "#")
 	if hash < 0 :     # This is a resource with no fragment
 	    result = self.resources.get(urirefString, None)
-	    if result == None: return
+	    if result is None: return
 	else:
 	    r = self.resources.get(urirefString[:hash], None)
-	    if r == None: return
+	    if r is None: return
             f = r.fragments.get(urirefString[hash+1:], None)
-            if f == None: return
+            if f is None: return
 	raise ValueError("Ooops! Attempt to create new identifier hits on one already used: %s"%(urirefString))
 	return
 
@@ -1299,6 +1312,9 @@ class RDFStore(RDFSink) :
     def newList(self, value):
 	return self.nil.newList(value)
 
+    def newBag(self, value):
+        return Bag(self, value)
+
 #    def deleteFormula(self,F):
 #        if diag.chatty_flag > 30: progress("Deleting formula %s %ic" %
 #                                            ( `F`, len(F.statements)))
@@ -1307,7 +1323,7 @@ class RDFStore(RDFSink) :
 
 
     def reopen(self, F):
-        if F.canonical == None:
+        if F.canonical is None:
             if diag.chatty_flag > 50:
                 progress("reopen formula -- @@ already open: "+`F`)
             return F # was open
@@ -1346,10 +1362,10 @@ class RDFStore(RDFSink) :
         matching in that position.
 	"""
         list = q[CONTEXT].statementsMatching(q[PRED], q[SUBJ], q[OBJ])
-        if list == []: return None
+        if list == Set(): return None
         for p in ALL4:
-            if q[p] == None:
-                return list[0].quad[p]
+            if q[p] is None:
+                return iter(list).next().quad[p]
 
 
     def storeQuad(self, q, why=None):
@@ -1415,7 +1431,7 @@ class RDFStore(RDFSink) :
 	    new.declareUniversal(bindings.get(v,v))
 	for v in old.existentials():
 	    new.declareExistential(bindings.get(v,v))
-        for s in old.statements[:] :   # Copy list!
+        for s in old.statements.__copy__() :   # Copy list!
             q = s.quad
             for p in CONTEXT, PRED, SUBJ, OBJ:
                 x = q[p]
@@ -1430,7 +1446,7 @@ class RDFStore(RDFSink) :
     Statements in the given context that a term is a Chaff cause
     any mentions of that term to be removed from the context.
     """
-        if boringClass == None:
+        if boringClass is None:
             boringClass = self.Chaff
         for subj in context.subjects(pred=self.type, obj=boringClass):
 	    self.purgeSymbol(context, subj)
@@ -1439,13 +1455,13 @@ class RDFStore(RDFSink) :
 	"""Purge all triples in which a symbol occurs.
 	"""
 	total = 0
-	for t in context.statementsMatching(subj=subj)[:]:
+	for t in context.statementsMatching(subj=subj).__copy__():
 		    context.removeStatement(t)    # SLOW
 		    total = total + 1
-	for t in context.statementsMatching(pred=subj)[:]:
+	for t in context.statementsMatching(pred=subj).__copy__():
 		    context.removeStatement(t)    # SLOW
 		    total = total + 1
-	for t in context.statementsMatching(obj=subj)[:]:
+	for t in context.statementsMatching(obj=subj).__copy__():
 		    context.removeStatement(t)    # SLOW
 		    total = total + 1
 	if diag.chatty_flag > 30:
@@ -1460,13 +1476,13 @@ class RDFStore(RDFSink) :
     def purgeExceptData(self, context):
 	"""Remove anything which can't be expressed in plain RDF"""
 	uu = context.universals()
-	for s in context.statements[:]:
+	for s in context.statements.__copy__():
 	    for p in PRED, SUBJ, OBJ:
 		x = s[p]
 		if x in uu or isinstance(x, Formula):
 		    context.removeStatement(s)
 		    break
-	context._universalVariables =[]  # Cheat! @ use API
+	context._universalVariables = Set()  # Cheat! @ use API
 
 
 
@@ -1480,6 +1496,17 @@ def isString(x):
     # in 2.2, evidently we can test for isinstance(types.StringTypes)
     #    --- but on some releases, we need to say tuple(types.StringTypes)
     return type(x) is type('') or type(x) is type(u'')
+
+##def addIt(x, dict):
+##    try:
+##        num = dict[x]
+##    except KeyError:
+##        dict[x] = 1
+##    else:
+##        dict[x] = num + 1
+##
+def removeIt(x, set):
+    set.discard(x)
 
 #####################  Register this module
 

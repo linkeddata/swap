@@ -25,7 +25,7 @@ TESTS=online.tests rdfcore-tests.n3 $(OFFLINETESTS)
 post-install : pyc-check $(CODE) $(OFFLINETESTS)
 	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py -c $(OFFLINETESTS)
 
-pre-release : pyc-check $(CODE) $(TESTS) rdflib
+pre-release : pyc-check $(CODE) $(TESTS)
 	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py -c $(TESTS)
 
 
@@ -34,9 +34,6 @@ filelist : pyc-check $(CODE) $(OFFLINETESTS)
 	sort testfilelist > testfilelist3
 	uniq testfilelist3 > testfilelist
 	rm testfilelist3
-
-rdflib: rdfcore-tests.n3
-	CWM_RDF_PARSER="rdflib" PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py -c rdfcore-tests.n3
 
 
 mellow : pyc-check $(CODE) $(TESTS) 
