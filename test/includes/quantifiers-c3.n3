@@ -1,0 +1,26 @@
+#  Test of interactions of qualifiers with log:includes
+#
+#  $Id$
+#
+# Usage: cwm quantifiers.n3 -think -purge
+#  Should give 18 successes and no failures.
+#
+ 
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+@prefix : <#>.
+@prefix qu: <#>.
+
+
+
+{{ this log:forAll :foo. :foo :bar :baz } log:includes {this log:forAll :foo.  :foo :bar :baz }}
+  log:implies { :testc3 a :success }.
+
+
+#{{ this log:forAll :foo. :foo :bar :baz } log:notIncludes {this log:forAll :foo.  :foo :bar :baz }}
+#  log:implies { :testc3n a :FAILURE }.
+
+log:implies a log:Chaff.  # Purge input rules
+
+# ENDS
+
