@@ -59,7 +59,7 @@ print: tutorial.pdf tutorial.ps
 
 #@@cwm.html -- remove junk
 #@@CwmBuiltins.html -- reformat
-TUTFILES=Overview.html ../Primer.html formats.html Shortcuts.html ontologies.html Rules.html Processing.html Built-In.html rule-systems.html Glossary.html
+TUTFILES=Overview.html ../Primer.html formats.html CwmInstall.html CwmHelp.html Shortcuts.html ontologies.html Rules.html Processing.html Built-In.html rule-systems.html Glossary.html
 
 HTML2PS=html2ps # debian package originally from http://www.tdb.uu.se/~jan/html2ps.html
  # user guide http://www.tdb.uu.se/~jan/html2psug.html
