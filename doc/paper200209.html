@@ -4,12 +4,17 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
 <head>
 <meta name="generator" content="HTML Tidy, see www.w3.org" />
-<title>Classical Logic on the Semantic Web</title>
-<link rel="stylesheet" type="text/css" href="style.css" />
-</head>
+
+<title>
+Using Full First-Order Logic with Quotation (FOLQ) on the Semantic Web
+</title>
+
+<link rel="stylesheet" type="text/css" href="style.css" /></head>
 <body bgcolor="#FFFFFF">
 
-<h1>Classical Logic on the Semantic Web</h1>
+<h1>
+Using Full First-Order Logic with Quotation (FOLQ) on the Semantic Web
+</h1>
 
 <h3>Status</h3>
 
@@ -20,9 +25,53 @@ href="http://lists.w3.org/Archives/Public/www-rdf-logic/2002Sep/0013.html">More
 Approaches to Avoiding Paradox with Asserted Reifications</a> needs to be
 integrated.</p>
 
-<p>By Sandro Hawke.   Thanks (or more) to Tim Berners-Lee,
-Dan Connolly, Bijan Parsia, Lynn Andrea Stein, Jim Hendler, Damian Steer,
-William McCune, ... ?</p>
+<p>By Sandro Hawke (and perhaps TimBL and DanC -- many of the ideas
+are theirs).  Thanks to Bijan Parsia, Lynn Andrea Stein, Jim Hendler,
+and many others.
+</p>
+
+<hr>
+
+<h2>Overview</h2>
+
+<p>To be part of the Semantic Web, a document must convey precise
+information about how things are related to each other.  This is an
+abstraction of knowledge, a simplification of what might be knowable,
+which allows computers to work with the contents of the documents in a
+way similar to human logic.  An automated reasoning process can read
+these document, consider their logical consequences, and answer
+queries.</p>
+
+<p>This is not "Artificial Intelligence" in the sense of natural
+language processing, speech recognition, common-sense reasoning, or
+many other interesting areas of research.  This is formal logic, an
+area of exciting research a hundred years ago, and a well understood
+field of computer science by 1970.  There is always room for
+improvement, but a basic reasoner of the sort we consider is the
+subject of numerous undergraduate textbooks.</p>
+
+<p>Still, there is something new here: the Web.  Traditionally,
+reasoners have operated on a specific knowledge base, maintained by a
+centralized authority.  The web has no central authority, and
+documents are always appearing and disappearing.  Reasoning with this
+knowledge base presents several new challenges. </p>
+
+<p>In our work, we have considered two areas which seem crucial to the
+function of the Semantic Web: sharing interpretations and reasoning
+about documents.   @@ elucidate
+
+<p>To date, most Semantic Work seems to use RDF/XML.  While we
+understand the need for a common language, it was never designed to be
+manipulated by hand.  For reading and writing, we need languages that
+are easier for people to read and write; we've experimented with some
+of these (primarily an evolving language called N3).   In some cases
+these language appear to have a greater expressive power than RDF, but
+we'll show how that's a false comparison since RDF itself has a
+variable expressive power depending on the which vocabulary terms are
+considered to be part of the language.
+
+<br>
+
 
 <h2>Abstract</h2>
 
@@ -39,6 +88,32 @@ sample problems.  Finally, we suggest that adoption of LX reasoners
 could allow other logics (such as RDFS and OWL) to be trivially
 deployed for applications needing only moderate performance.
 </p>
+
+<h2>Contents</h2>
+
+<ul>
+<li>Introduction</li>
+<ul>
+  <li>Context</li>
+  <li>Motivation</li>
+</ul>
+<li>Practice</li>
+<ul>
+  <li>Documents, Concrete Syntax, Abstract Syntax</li>
+  <li>Inference</li>
+  <li>Applications</li>
+</ul>
+<li>Theory</li>
+<ul>
+  <li>Extension By External Constrains (RDF Layering)  </li>
+  <li>  </li>
+</ul>
+<li>Conclusions</li>
+<ul>
+
+</ul>
+
+</ul>
 
 <h2>1. Introduction</h2>
 
