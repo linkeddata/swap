@@ -1,0 +1,49 @@
+@prefix : <#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+
+this log:forAll :x , :y , :z , :q .
+
+# The rules
+
+# Get my file contents, and hash it
+
+{ <MyFile.txt> log:content [ crypto:md5 :x ] } 
+   log:implies { <MyFile.txt> :md5 :x } .
+
+# Get my key from a local key file
+
+# { <MyKeyPair.rsa> log:content :x } log:implies { :Bob :keyPair :x } .
+# { <MyPubKey.rsa> log:content :x } log:implies { :Bob :pubKey :x } .
+{ :x crypto:keyLength "1024" } log:implies { :Bob :keyPair :x } .
+
+{ :Bob :keyPair :x . :x crypto:publicKey :y } 
+   log:implies { :Bob :pubKey :y } .
+
+# Sign the hash of my document with my key
+
+{ <MyFile.txt> :md5 :x . :Bob :keyPair :y . 
+  (:x :y) crypto:sign :z } log:implies { :z a :Signature } .
+
+# Verify the signature... once against the file, and once against some junk
+
+{ :Bob :pubKey :x . <MyFile.txt> :md5 :y . :z a :Signature . 
+  (:x :y :z) crypto:verifyBoolean :q } log:implies { :q :shouldBeEqualTo "1" } .
+
+{ :Bob :pubKey :x . :z a :Signature . 
+  (:x "garbage" :z) crypto:verifyBoolean :q } 
+   log:implies { :q :shouldBeEqualTo "0" } .
+
+{ :Bob :pubKey :x . <MyFile.txt> :md5 :y . :z a :Signature . 
+  :x crypto:verify (:y :z) } log:implies { :Test a :Pass } .
+{ :Bob :pubKey :x . :z a :Signature . 
+  :x crypto:verify ("garbage" :z) } log:implies { :Test a :Fail } .
+
+{ :Bob :keyPair [ crypto:keyLength :x ] } log:implies 
+   { :Bob :keyPairLength :x } .
+
+# For purging
+
+log:implies a log:Chaff .
+log:forAll a log:Chaff .

@@ -1,0 +1,16 @@
+# Just test log:n3String
+@prefix : <#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#>.
+@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+
+
+this log:forAll :s.
+
+{ { this acc:forDocument <http://www.w3.org/Member>;
+                 acc:credential <access-tina-cert.n3>;
+                 acc:junk "32746213462187364732164732164321"  } log:n3String :s
+} log:implies { :s a :result }.
+
+#ends
