@@ -9,14 +9,18 @@
 </head>
 
 <body xml:lang="en" lang="en">
+
+<div class="noprint">
 <p><a href="/">W3C</a> | <a href="/2000/01/sw/Overview.html">Semantic Web</a>
 | <a href="Overview.html">SWAP</a></p>
 <br />
 <br />
-
+</div>
 
 <h1>Processing your data using N3 and Cwm</h1>
-Now that we know how to make a statements in N3, what can we do with them? 
+
+<p>Now that we know how to make a statements in N3, what can we do with them?
+</p>
 
 <p>You know about how to write your data in N3, and also how to describe the
 terms you are using in a schema, or ontology. Why is that so useful? Because
@@ -93,7 +97,7 @@ do with plain XML documents) is that merging data is trivial.</p>
 
 <p>reads three n3 files, and then outputs the results in N3 to white.n3.</p>
 
-<p>This is particulaly useful if the  files have used the same URIs for the
+<p>This is particulaly useful if the files have used the same URIs for the
 same concepts. Suppose the first has that someone is attending a meeting
 which has a given home page.</p>
 
@@ -300,10 +304,11 @@ up a bug: is that <em>really</em> what you meant?</p>
 
 <p>When you use N3, you find that all your files, data and rules, can all be
 in the same language. Sometimes, when using tools like <code>make</code>, it
-is convenient to gibe files different file extensions depending on their
+is convenient to give files different file extensions depending on their
 role. You might want to leave the rule files as .n3, but make the sensor data
-.sense and the analyzed data as .ana. Then you can make makefile rules to map
-create .ana files from .sen files.</p>
+<code>.sen</code> and the analyzed data as <code>.ana</code>. Then you can
+make makefile rules to map create <code>.ana</code> files from
+<code>.sen</code> files.</p>
 
 <p>If you need to pass parameters to your rules, for example something to
 search for, or your name, then pass them as command line arguments, putting
@@ -319,6 +324,8 @@ list of more complex and varied examples</a>. These come with less tutorial
 explanation.</p>
 
 <p>Have fun!</p>
+
+<div class="noprint">
 <hr />
 
 <h2 id="References">References</h2>
@@ -338,5 +345,6 @@ the original primer.<br />
 <p>Tim BL, with his director hat off</p>
 
 <p>$Id$</p>
+</div>
 </body>
 </html>
