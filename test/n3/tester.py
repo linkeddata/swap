@@ -128,12 +128,14 @@ def main():
     assert system("mkdir -p ,diffs") == 0
 
     kb = loadMany(testFiles, referer="")
-    output = formula()
+    z = 0
     for command in commands:
+        output = formula()
         testParser(command, kb, output)
 
-    output.close()
-    output.store.dumpNested(output, ToN3(file(outputFile, 'w').write))
+        output.close()
+        output.store.dumpNested(output, ToN3(file(outputFile+z, 'w').write))
+        z = z+1
     
 if __name__ == "__main__":
     main()

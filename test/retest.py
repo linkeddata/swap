@@ -440,7 +440,11 @@ I should have.
 	assert case and description and inputDocument
 #	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
 #			WD, REFWD)
-	execute("""python %s --grammar=../grammar/n3-selectors.n3  --as=http://www.w3.org/2000/10/swap/grammar/n3#document --parse=%s  > ,temp/%s 2>/dev/null""" %
+        try:
+            execute("""python %s --grammar=../grammar/n3-selectors.n3  --as=http://www.w3.org/2000/10/swap/grammar/n3#document --parse=%s  > ,temp/%s 2>/dev/null""" %
+	    ('../grammar/predictiveParser.py', inputDocument, case))
+        except RuntimeError:
+            problem("""Error running ``python %s --grammar=../grammar/n3-selectors.n3  --as=http://www.w3.org/2000/10/swap/grammar/n3#document --parse=%s  > ,temp/%s 2>/dev/null''""" %
 	    ('../grammar/predictiveParser.py', inputDocument, case))
 
 	passes = passes + 1
@@ -456,12 +460,12 @@ I should have.
 #	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
 #			WD, REFWD)
         try:
-            execute("""python %s ../grammar/n3-selectors.n3  http://www.w3.org/2000/10/swap/grammar/n3#document %s  > ,temp/%s 2>/dev/null""" %
+            execute("""python %s --grammar=../grammar/n3-selectors.n3  --as=http://www.w3.org/2000/10/swap/grammar/n3#document --parse=%s    > ,temp/%s 2>/dev/null""" %
                 ('../grammar/predictiveParser.py', inputDocument, case))
         except:
             pass
         else:
-            raise RuntimeError("""There was no error executing ``python %s ../grammar/n3-selectors.n3  http://www.w3.org/2000/10/swap/grammar/n3#document %s  > ,temp/%s''
+            problem("""There was no error executing ``python %s --grammar=../grammar/n3-selectors.n3  --as=http://www.w3.org/2000/10/swap/grammar/n3#document --parse=%s    > ,temp/%s''
             There should have been one.""" %
                 ('../grammar/predictiveParser.py', inputDocument, case))
 

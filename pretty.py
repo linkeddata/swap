@@ -222,6 +222,10 @@ class Serializer:
         sink.endDoc()
 
     def _outputStatement(self, sink, quad, aWorks = 1):
+        if isinstance(quad[1], Literal):
+            raise ValueError("Cannot have a literal as a predicate. This makes no sense")
+        if isinstance(quad[1], Formula):
+            raise ValueError("Cannot have a formula as a predicate. This makes no sense")
         sink.makeStatement(self.extern(quad), aIsPossible=aWorks)
 
     def notAsExtern(self, t):

@@ -105,6 +105,10 @@
 	n3test:outputDocument <n3/n3parser.tests_n3_10020.nt> ;
     n3test:inputDocument  <syntax/this-rules.n3> .
 
+:n3_10021 a n3test:PositiveParserTest;
+	n3test:description "Are we exceeding a maximum recursion limit or two?";
+	n3test:inputDocument <syntax/too-nested.n3> .
+
 :n3_10025 a n3test:PositiveParserTest;
     n3test:description    "The = keyword";
 #	n3test:outputDocument <n3/n3parser.tests_n3_10020.nt> ;
