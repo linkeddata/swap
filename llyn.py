@@ -145,6 +145,8 @@ from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import N3_nil, N3_first, N3_rest, DAML_NS, N3_Empty, N3_List
 from RDFSink import RDF_NS_URI
 
+import LX          # Alternate storage for Formulas
+
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 # = RDFSink.SYMBOL # @@misnomer
 
@@ -895,18 +897,18 @@ class RDFStore(RDFSink.RDFSink) :
     """ Absorbs RDF stream and saves in triple store
     """
 
-    def __init__(self, genPrefix=None, metaURI=None, argv=None, crypto=0):
-        RDFSink.RDFSink.__init__(self, genPrefix=genPrefix)
-
+    def clear(self):
+        "Remove all formulas from the store     @@@ DOESN'T ACTUALLY DO IT/BROKEN"
         self.resources = {}    # Hash table of URIs for interning things
         self.formulae = []     # List of all formulae        
         self._experience = None   #  A formula of all the things program run knows from direct experience
         self._formulaeOfLength = {} # A dictionary of all the constant formuale in the store, lookup by length.
-
         self.size = 0
+        
+    def __init__(self, genPrefix=None, metaURI=None, argv=None, crypto=0):
+        RDFSink.RDFSink.__init__(self, genPrefix=genPrefix)
+        self.clear()
         self.argv = argv     # List of command line arguments for N3 scripts
-
-
 
         # Constants, as interned:
         
@@ -1196,7 +1198,6 @@ class RDFStore(RDFSink.RDFSink) :
         p.load(uri)
         del(p)
 
-
     def bind(self, prefix, nsPair):
         if prefix != "":   #  Ignore binding to empty prefix
             return RDFSink.RDFSink.bind(self, prefix, nsPair) # Otherwise, do as usual.
@@ -1308,8 +1309,55 @@ class RDFStore(RDFSink.RDFSink) :
     def endDoc(self, rootFormulaPair):
 	self.endFormulaNested(self.intern(rootFormulaPair), notThis=1)
         return
-#        F =self.intern(rootFormulaPair)
-#        return F.close()
+        #        F =self.intern(rootFormulaPair)
+        #        return F.close()
+
+
+    def addLXKB(self, context, kb):
+        "Add all the formulas in an LX.KB to the store"
+        terms = {}
+        for term in kb.exivars:
+            # Oh, maybe we should use RDFSink.newExistential, I see now.
+            # but.... it doesn't allow us to give our own fragment name.
+            if term.value:
+                n = self.intern((RDFSink.SYMBOL, term.value),)
+            else:
+                n = self.intern((RDFSink.ANONYMOUS, self._genPrefix+term.name),)
+            terms[term] = n
+            self.storeQuad([context, self.forSome, context, n])
+        for term in kb.univars:
+            if term.value:
+                n = self.intern((RDFSink.SYMBOL, term.value),)
+            else:
+                n = self.intern((RDFSink.ANONYMOUS, self._genPrefix+term.name),)
+            terms[term] = n
+            self.storeQuad([context, self.forAll, context, n])
+        for f in kb:
+            self.addLXFormula(context, f, terms)
+        
+    def addLXFormula(self, context, lxFormula, terms={}):
+        """Add an LX.Formula to the store.
+
+        terms maps from LX.Term to RDFSink pairs
+        """
+        if lxFormula.operator is LX.ATOMIC_SENTENCE:
+            t = [None, None, None, None]
+            t[CONTEXT] = context
+            for (index, term) in zip((SUBJ, PRED, OBJ), lxFormula.operands):
+                try:
+                    sym = terms[term]
+                except KeyError:
+                    if isinstance(term, LX.URIRef):
+                        sym = self.intern((RDFSink.SYMBOL, term.value),)
+                    elif isinstance(term, LX.Variable):
+                        sym = self.intern((RDFSink.SYMBOL, term.value),)
+                    else:
+                        msg = "Conversion of %s's not implemented" % term.__class__
+                        raise RuntimeError, msg
+                t[index] = sym
+            self.storeQuad(t)
+        else: 
+            raise RuntimeError, "Can only convert atomic formula yet"
 
 ##########################################################################
 #
@@ -1699,7 +1747,78 @@ class RDFStore(RDFSink.RDFSink) :
 
         self._outputStatement(sink, triple)
                 
+    def toLX(self, formula, maxDepth=4, kb=None, vars=None):
+        """Convert a llyn.formula to an LX.Formula and return it, or
+        to one or more LX.Formulas and add them to an LX.KB; also convert
+        a non-formula into an LX.Term.
 
+        If a kb is specified, the conjoined parts of the formula (or
+        just the formula itself, if there are no conjoined parts) will
+        be added to it, instead of being returned.  For document
+        top-level formulas this is often the appropriate usage.
+        
+        """
+
+        if not isinstance(formula, Formula):
+            try:
+                return vars[formula]
+            except KeyError:
+                return LX.URIRef(formula.uriref())
+
+        if vars is None:
+            vars = {}
+        # @@ is there a problem with adding vars like this an never
+        # taking them away -- something that's a variable in one scope
+        # being inappropriately called a variable in another scope;
+        # probably!   Need some stacking structure to solve this.
+        for v in formula.existentials(): self.toLXVar(v, vars)
+        for v in formula.universals():   self.toLXVar(v, vars)
+        if kb is None or formula.existentials() or formula.universals():
+            deferAddingToKB = 1
+        else:
+            deferAddingToKB = 0
+        result = None
+        if maxDepth < 0:
+            raise RuntimeError, "Formulas too deeply nested, probably looping"
+        for s in formula:
+            #print "statement", s
+            if s[PRED] is self.forAll or s[PRED] is self.forSome:
+                if s[SUBJ] is formula: continue
+                # BUG: this construction may be obsolete; it loses var declarations
+                # as in   {   } log:forall :x.
+                this = self.toLX(s[SUBJ], maxDepth-1, vars=vars)
+            elif s[PRED] is self.implies:
+                this = LX.Conditional(self.toLX(s[SUBJ], maxDepth-1, vars=vars),
+                                      self.toLX(s[OBJ], maxDepth-1, vars=vars))
+            elif s[PRED] is self.type and s[OBJ] is self.Truth:
+                this = self.toLX(s[SUBJ], maxDepth-1, vars=vars)
+            else:
+                this = LX.Triple(self.toLX(s[SUBJ], maxDepth-1, vars=vars),
+                                 self.toLX(s[PRED], maxDepth-1, vars=vars),
+                                 self.toLX(s[OBJ], maxDepth-1, vars=vars))
+            if deferAddingToKB:
+                if result is None:
+                    result = this
+                else:
+                    result = result & this
+            else:
+                kb.add(this)
+        for v in formula.existentials():
+            result = LX.ExistentialQuantification(vars[v], result)
+        for v in formula.universals():
+            result = LX.UniversalQuantification(vars[v], result)
+        if kb is None:
+            return result
+        elif deferAddingToKB:
+            kb.add(result)
+
+    def toLXVar(self, term, vars):
+        try:
+            return vars[term]
+        except KeyError:
+            v = LX.Variable(uriref=term.uriref())
+            vars[term] = v
+            return v
 
 ########1#########################  Manipulation methods:
 #
@@ -1771,7 +1890,7 @@ class RDFStore(RDFSink.RDFSink) :
         context._index[(pred, subj, None)].remove(s)
         context._index[(pred, subj, obj)].remove(s)
         self.size = self.size-1
-#        del s
+        #        del s
 
 #   Iteratively apply rules to a formula
 
