@@ -16,10 +16,9 @@
 href="/2000/10/swap/">SWAP</a> | <a href="cwm.html">Cwm</a></p>
 </div>
 
-<h1><a
-href="../../../../DesignIssues/Notation3.html"><img alt="n3" style="float: right"
-src="../../../../RDF/icons/n3_small" /></a>
-<a href="cwm">Cwm</a> Release Roadmap</h1>
+<h1><a href="../../../../DesignIssues/Notation3.html"><img alt="n3"
+style="float: right" src="../../../../RDF/icons/n3_small" />
+</a> <a href="cwm">Cwm</a> Release Roadmap</h1>
 
 <p></p>
 
@@ -46,8 +45,10 @@ src="../../../../RDF/icons/n3_small" /></a>
   <li>Distribution mechanisms 
     <ul>
       <li>tarball (with test) (<em>done in 0.8</em>)</li>
-      <li>pyton setup.py <em>in progress as of 22 Jul</em></li>
-      <li>dpkg debian packaging</li>
+      <li>pyton setup.py <em>in progress as of 22 Jul.  Now works - yosi
+        2004/9/3.</em></li>
+      <li>dpkg debian packaging  Done once setup.py -&gt; RPM -alien-&gt;
+        debian</li>
     </ul>
   </li>
   <li>allow alternative parsers; in particular, 
@@ -58,7 +59,6 @@ src="../../../../RDF/icons/n3_small" /></a>
         not critical path for 1.0)</li>
     </ul>
   </li>
-  <li>Speed benchmark</li>
   <li>N3 formal grammar (<a
     href="http://lists.w3.org/Archives/Public/public-cwm-bugs/2004Jun/0015.html">RFE
     10 Jul)</a></li>
@@ -67,8 +67,26 @@ src="../../../../RDF/icons/n3_small" /></a>
     valid in forward and backward chaining systems. Providing it will allow
     the same problems to be tackled by different techniques, and different
     systems and clones.</li>
-  <li>connect with semwebcentral</li>
+  <li>connect with semwebcentral <em>(Now exists on semwebcentral as much as
+    it can link to its w3.or home 2004/9/1)</em></li>
   <li>W3.org homepage announcement</li>
+</ul>
+
+<h2 id="Release">by Release 1.1    2004/10/??  (Requires Python 2.3)</h2>
+
+<p>This contains performance work which would have been been in 0.9 except
+for unexpected medical situation.   This will use Python sets where
+appropriate (instead of homebrew sets or sequences) and will therefore
+<strong>require python 2.3.</strong></p>
+<ul>
+  <li>Speed benchmark</li>
+  <li>allow alternative parsers; in particular, 
+    <ul>
+      <li>redland (<a
+        href="http://lists.w3.org/Archives/Public/public-cwm-bugs/2004Jun/0011.html">RFE</a>)</li>
+    </ul>
+  </li>
+  <li></li>
 </ul>
 
 <h2>Longer Term</h2>
