@@ -1037,7 +1037,7 @@ class RDFStore(RDFSink.RDFSink) :
             else :      # This has a fragment and a resource
                 resid = urirefString[:hash]
                 if string.find(resid, "#") >= 0:
-                    raise URISyntaxError # Hash in document ID - can be from parsing XML as N3!
+                    raise URISyntaxError("Hash in document ID - can be from parsing XML as N3! -"+resid)
                 r = self.internURI(resid)
                 if typ == SYMBOL:
                     if urirefString == N3_nil[1]:  # Hack - easier if we have a different classs

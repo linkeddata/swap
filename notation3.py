@@ -287,7 +287,7 @@ class SinkParser:
 	return j
 
     def subject(self, str, i, res):
-	return self.node(str, i, res)
+	return self.item(str, i, res)
 
     def verb(self, str, i, res):
 	""" has _prop_
@@ -357,7 +357,30 @@ class SinkParser:
 	return -1
 
     def prop(self, str, i, res):
-	return self.node(str, i, res)
+	return self.item(str, i, res)
+
+    def item(self, str, i, res):
+	return self.path(str, i, res)
+	
+    def path(self, str, i, res):
+	"""Parse the path production.
+	"""
+	j = self.nodeOrLiteral(str, i, res)
+	if j<0: return j  # nope
+
+	while str[j:j+1] in "!^":  # no spaces, must follow exactly (?)
+	    ch = str[j:j+1]
+	    subj = res.pop()
+	    obj = self._sink.newBlankNode(self._context)
+	    j = self.node(str, j+1, res)
+	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "EOF found in middle of path syntax")
+	    pred = res.pop()
+	    if ch == "!":
+		self._sink.makeStatement((self._context, pred, subj, obj)) 
+	    else:
+		self._sink.makeStatement((self._context, pred, obj, subj)) 
+	    res.append(obj)
+	return j
 
     def node(self, str, i, res, subjectAlready=None):
 	"""Parse the <node> production.
@@ -474,15 +497,15 @@ class SinkParser:
 	if subj is None:   # If this can be a named node, then check for a name.
             j = self.uri_ref2(str, i, res)
             if j >= 0:
-                if res[0][0] == ANONYMOUS:
-                    x = SYMBOL , self._genPrefix + res[0][1] # ANONYMOUS node
+                if res[-1][0] == ANONYMOUS:
+                    x = SYMBOL , self._genPrefix + res[-1][1] # ANONYMOUS node
                     if x not in self._anonymousNodes:
                         self._anonymousNodes.append(x)
                         self.makeStatement((self._formula, # Make declaration at outermost level
                             (SYMBOL, N3_forSome_URI), #pred
                             self._formula,  #subj    Scope of universal quantification is whole document
                             x))                      # declare it as anonymous only once
-                    res[0] = x
+                    res[-1] = x
                 return j
 
         return -1
@@ -683,6 +706,27 @@ class SinkParser:
 	    
     def object(self, str, i, res):
 	j = self.subject(str, i, res)
+	if j>= 0:
+	    return j
+	else:
+	    j = self.skipSpace(str, i)
+	    if j<0: return -1
+	    else: i=j
+
+	    if str[i]=='"':
+		if str[i:i+3] == '"""': delim = '"""'
+		else: delim = '"'
+                i = i + len(delim)
+
+                j, s = self.strconst(str, i, delim)
+
+                res.append((LITERAL, s))
+		return j
+	    else:
+		return -1
+
+    def nodeOrLiteral(self, str, i, res):
+	j = self.node(str, i, res)
 	if j>= 0:
 	    return j
 	else:

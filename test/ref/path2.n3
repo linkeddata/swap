@@ -1,0 +1,27 @@
+     @prefix : <foo.n3#> .
+     @prefix fam: <http://www.daml.example.org/2001/03/fam#> .
+     @prefix lang: <http://www.daml.example.org/2000/10/lang#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix math: <http://www.w3.org/2000/10/swap/math#> .
+     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    this     log:forSome <#_g0>,
+                <#_g1> .
+    
+    :admires     :converse <#_g1> .
+    
+    :albert     <#_g1> :grumpy;
+         fam:mother  [
+             <#_g0> :auntieAnne ] .
+    
+    :mentor     :inverse <#_g0> .
+    
+    :x     s:label  [
+             lang:eng "Help!" ],
+                 [
+             lang:fr "foo" ] .
+      ( "1" 
+        "2"  )
+         math:sum  [
+             a :THREE ] .
+    

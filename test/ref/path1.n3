@@ -1,0 +1,8 @@
+     @prefix : <http://www.daml.example.org/2001/03/fam#> .
+     @prefix foo: <foo.n3#> .
+    
+    foo:albert     :mother  [
+             :sister foo:auntieAnne ] .
+      [      :father foo:albert;
+             :sister foo:nieceBertha ].
+    
