@@ -47,51 +47,12 @@ class KB(list, pluggable.Store):
 
     (aka a sentence in "prenex" form.)
 
-    [ @@@OBSOLETE -- NEED TO WRITE ABOUT HOW WE NOW HANDLE DATATYPES ... ]
-    xMeanwhile, we also can store information about fixed
-    xinterpretations of constant symbols.  If you want to say something
-    xabout the integer 57, you can make a symbol
-    x
-    x>>> from LX.all import *
-    x>>> my57 = Constant(suggestedName="the number fifty-seven")
-    x
-    xand then tell your kb that that symbol actually MEANS what python
-    xmeans by the number 57.
-    x 
-    x>>> kb = KB()
-    x>>> kb.interpret(my57, 57)
-    x>>> print kb.getInterpretations(my57)
-    x[57]
-    x
-    xNow other bits of code using your kb can see and use that fact.
-    xIf you want to serialize the kb in a language that has integers,
-    xit can just use that fact.  Alternatively, you could rewrite that
-    xinterpretation information into other information, perhaps using
-    xURIs.
-    x 
-    x[ This information is lost in a plain
-    xconversion of the KB to a Formula, unless there are describers
-    xused/usable to encode it into more formulas.  Those describers
-    xstill need SOME fixed-interpretation objects (eg Zero and Succ,
-    xfor this example).
-    x
-    xHow exactly URIs fit into this story is still debatable.
-    xStrictly, we should do it via something like...  strings and the
-    xmagic 'uri' function.  But what is that URI function?  Aint no
-    xsuch thing, .. there's various ones.  Maybe the kburi function
-    xworks okay -- ie what KB is most strongly denoted by the URI?
-    x(Sometimes I think we'd be better of with just a basis vocabulary
-    xfor describing strings, and an englishDenotation() function.)
-    x]
-    
     """
 
     def __init__(self):
         self.exivars = []
         self.univars = []
         self.exIndex = 0
-        self.__interpretation = { }
-        self.__revInterpretation = { }
         self.__datatypeValuesChecked = { }
 
     def clear(self):
@@ -114,24 +75,6 @@ class KB(list, pluggable.Store):
         #result+= "\n  asFormula:       "+str(self.asFormula())+"\n"
         return result
     
-    def interpret(self, term, object):
-        raise RuntimeError, "not anymore!   interface changed!"
-        self.__interpretation.setdefault(term, []).append(object)
-        self.__revInterpretation.setdefault(object, []).append(term)
-
-    def getInterpretations(self, term):
-        return self.__interpretation[term]
-
-    def constantFor(self, interpretation, suggestedName="<default>"):
-        try:
-            return self.__revInterpretation[interpretation][0]
-        except KeyError:
-            if suggestedName == "<default>":
-                suggestedName = str(interpretation)
-            c = LX.logic.Constant(suggestedName)
-            self.interpret(c, interpretation)
-            return c
-
     def asFormulaString(self):
         scope = defaultScope.copy()
         result = ""
@@ -206,11 +149,8 @@ class KB(list, pluggable.Store):
         
     def add(self, formula, p=None, o=None):
         """
-        SHOULD allow non-constants, and replace them with constants
-        and user interp() to link to the other thing?   But also
-        look up if we already have a symbol for that?   Nah, just
-        let the user user logic.ConstantForDatatypeValue, etc.
-
+        Possibility: call Constant, ConstantForURI, ConstantForDTV,
+        if you don't pass in constants...?  Nah.
         """
         if (p):
             s = formula
@@ -230,8 +170,6 @@ class KB(list, pluggable.Store):
         self.append(formula)
         self.addSupportingTheory(formula)
 
-    #def check(self, formula, ):
-        
     def addFrom(self, kb):
         for formula in kb:
             self.add(formula)
@@ -245,55 +183,6 @@ class KB(list, pluggable.Store):
         self.exivars.append(v)
         return v
 
-    def describeInterpretation(i, descriptionLadder=None):
-        """BAD IDEA?
-
-        For all the exprs in the kb which are keys in i, "describe"
-        them as the value.
-
-        >>> import LX.kb
-        >>> import LX.expr
-        >>> a=LX.expr.AtomicExpr("joe")
-        >>> b=LX.expr.AtomicExpr("joe")
-        >>> kb = LX.kb.KB()
-        >>> kb.add(a(b))
-
-        xxx kb.describeInterpretation( {b:[a,b]} )   loop check?!
-        """
-        raise RuntimeError, "Not Implemented"
-
-    def narrow(acceptableValuesFilter=stdValuesFilter):
-        """For all interpretations in the KB which are not instances
-           of one of the types in leavingTypes, have it 'described' into
-           the KB.
-
-           Once we have done so, mark the interpretation as
-           DESCRIBED.
-
-           [ how?     undescInterp, descInterp  ]
-
-           how to keep in sync?      show which formulas are used?
-
-           is this the same as recog...?
-
-            [ sym, val, status.... ]
-
-           mark certain formulas as encoding certain facts!
-
-           LX.expr.Expr e
-
-           kb.descriptions([term, value], formula)
-              (formula may or may not be in KB)
-
-        """
-        raise RuntimeError, "not implemented"
-
-    def widen(acceptableValuesFilter=stdValuesFilter):
-        """For all constants, see if they are described as having some
-        fixed interpretation we should add to interpretations;  And
-        maybe we can trim out those formulas...."""
-        raise RuntimeError, "not implemented"
-        
     def reifyAsTrue(self):
         flat = KB()
         LX.rdf.flatten(self, flat, indirect=1)
@@ -429,16 +318,15 @@ class KB(list, pluggable.Store):
         parser=LX.language.getParser(language=language)
         parser.parse(stream, self) 
 
-    
-def _test():
-    import doctest, kb
-    return doctest.testmod(kb) 
-
-if __name__ == "__main__": _test()
-
+if __name__ == "__main__":
+    import doctest, sys
+    doctest.testmod(sys.modules[__name__])
  
 # $Log$
-# Revision 1.15  2003-08-22 20:49:41  sandro
+# Revision 1.16  2003-08-25 16:10:41  sandro
+# removed all the leftover 'interpretation' stuff
+#
+# Revision 1.15  2003/08/22 20:49:41  sandro
 # midway on getting load() and parser abstraction to work better
 #
 # Revision 1.14  2003/08/20 11:50:58  sandro
