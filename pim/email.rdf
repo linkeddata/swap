@@ -3,21 +3,24 @@
 
 <!-- Processed by Id: cwm.py,v 1.129 2003/04/08 16:12:43 timbl Exp -->
 <!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/-->
+<!-- and hand edited since then -->
+<!-- $Id$ -->
 
 
-<r:RDF xmlns="http://www.w3.org/2000/10/swap/pim/email@@#"
+
+<r:RDF xmlns="http://www.w3.org/2000/10/swap/pim/email#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
-    xmlns:email="http://www.w3.org/2000/10/swap/pim/email@@#"
+    xmlns:email="http://www.w3.org/2000/10/swap/pim/email#"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:s="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:ss="http://www.w3.org/2000/10/swap/util/sniffSchema#"
     xmlns:str="http://www.w3.org/2000/10/swap/string#">
 
     <r:Description r:about="">
-      <s:seeAlso r:resource="util/sniffSchema.n3"/>
+      <s:seeAlso r:resource="../util/sniffSchema.n3"/>
     </r:Description>
-
 
     <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#cc">
         <s:label>cc</s:label>
@@ -41,10 +44,10 @@
         <s:comment>domain message? range agent?</s:comment>
     </r:Property>
 
-    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#mbox">
+    <owl:InverseFunctionalProperty r:about="http://www.w3.org/2000/10/swap/pim/email#mbox">
         <s:label>mbox</s:label>
         <s:comment>domain agent, range mailbox</s:comment>
-    </r:Property>
+    </owl:InverseFunctionalProperty>
 
     <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#phrase">
         <s:label>phrase</s:label>
