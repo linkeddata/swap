@@ -1,5 +1,9 @@
 #!/usr/bin/perl
 #
+# OBSOLETE in favor of
+# http://www.w3.org/2002/12/cal/icalrdf.pl
+# as of 2002/12/20 06:52:50
+#
 # usage: perl ical2rdf.pl something.ics >something.rdf
 #
 # copyright (c) W3C (MIT, INRIA, Keio)
@@ -351,7 +355,10 @@ sub testCamelCase{
 # @@TODO: params
 
 # $Log$
-# Revision 1.8  2004-10-28 17:42:00  timbl
+# Revision 1.9  2005-02-11 18:32:18  connolly
+# forward pointer to newer work
+#
+# Revision 1.8  2004/10/28 17:42:00  timbl
 # Fix bugs in cwm --patch
 # diff.py now can generate weak deltas when necessary, when the graphs are not solid.
 # Offline working hack in webaccess.py
