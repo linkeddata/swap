@@ -402,7 +402,7 @@ class SinkParser:
 	    ch = str[j:j+1]		# @@ Allow "." followed IMMEDIATELY by a node.
 	    if ch == ".":
 		ahead = str[j+1:j+2]
-		if ahead not in _namechars + "[{(":
+		if not ahead or ahead not in _namechars + "[{(":
 		    break
 	    subj = res.pop()
 	    obj = self._sink.newBlankNode(self._context, uri=self.here(j), why=self._reason2)
