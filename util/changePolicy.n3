@@ -1,0 +1,63 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> . #@@ missing hash
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<> dc:description """change policy vocabulary and rules
+
+in a discussion of an ontology hosting service, it seemed
+useful to support formalized change policies; meanwhile,
+the TAG has been writing on the subject of language extensibility.
+
+This is an attempt to transcribe the TAG text into N3 and
+use it to build a change policy vocabulary.
+
+I'd also like to formalize policies like the RDF Calendar
+'subject to change with notice to www-rdf-calendar' policy.
+
+""",
+  "$Id$";
+  s:seeAlso <http://www.w3.org/2001/tag/webarch/#language-extensibility>,
+   <http://www.w3.org/1999/10/nsuri>;
+  s:seeAlso
+   <http://en.wikipedia.org/wiki/Liskov_substitution_principle>. #tx roy
+
+
+:Document a s:Class; s:label "Document";
+  s:comment "octet sequence".
+
+:Language s:subClassOf s:Property; s:label "Language";
+  s:comment """a languge is a property that relates a
+	document to its meaning""".
+
+:subset s:label "subset"; owl:samePropertyAs s:subPropertyOf;
+  s:comment """Subset language: one language is a subset (or,
+	"profile") of a second language if any document in the first
+	language is also a valid document in the second language and
+	has the same interpretation in the second language.""".
+
+# I think this is a theorem w.r.t. rdfs... or perhaps owl...
+
+{ ?L1 :subset ?L2 } log:means
+  { @forAll ?D.
+    { ?D ?L1 [] } => { ?D ?L1 [ is ?L2 of ?D ] }
+  }.
+
+:interpretation a s:Property; s:label "interpretation";
+  s:domain :Language; s:range s:Resource. #hm... what's the range?
+
+:NamespaceDocument a s:Class; s:label "Namespace Document".
+
+:Stable s:subClassOf :NamespaceDocument;
+  s:isDefinedBy <http://www.w3.org/1999/10/nsuri>;
+  s:comment """This namespace name may be reused in any update of the
+	specification which is made for the purpose of clarification
+	or bug fixes. These changes will be minor in that they do not
+	(a) change the meaning or validity of existing documents
+	written using the namespace, or (b) affect the operation of
+	existing software written to process such documents.""";
+  s:comment "hmm... 'the specification'?".
+
+
+
+   2. [Warning: Until the specification reaches W3C Candidate Recommendation (CR) status, this namespace name may be reused by any update in such a way as to cause documents written using the namespace to become invalid or to change in meaning.]
+   3. [Warning: Until the specification reaches W3C CR status, this namespace name may be reused by any update in such a way as to affect the operation of existing software written to process documents written according to this specification.]
+
