@@ -36,6 +36,7 @@ holds = [ LX.fol.Predicate("holds0"),
 
 tokens = (
     'AND', 'OR', 'IMPLIES', 'IFF', 'NOT',
+    'PLUS', 'GT', 'LT', 'GTE', 'LTE',
     'FORALL', 'EXISTS',
     'CONSTANT',
     'NUMERAL', 'QUOTEDSTRING',
@@ -77,6 +78,11 @@ def t_BODY(t):
     '\:body'
     return t
 
+t_PLUS = r'\+'
+t_GT = r'\>'
+t_LT = r'\<'
+t_GTE = r'\>='
+t_LTE = r'=\<'
 t_EQUALS  = r'\='
 t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
@@ -84,19 +90,19 @@ t_RPAREN  = r'\)'
 # In fact, KIF's notion of WORDS is much more complex, and
 # BLOCK is downright scary (length-delimited identifiers),
 # ... but this is probably good enough for now.
-t_CONSTANT = r'[a-zA-Z_-][a-zA-Z0-9_-]*'
+t_CONSTANT = r'[+a-zA-Z_-][+a-zA-Z0-9_-]*'
 t_INDVAR = r'\?'+t_CONSTANT
 t_SEQVAR = r'\@'+t_CONSTANT
 t_TAG = r'\:'+t_CONSTANT
 
-#def t_NUMERAL(t):
-#    r'\d+'
-#    try:
-#        t.value = int(t.value)
-#    except ValueError:
-#        print "Integer value too large", t.value
-#        t.value = 0
-#    return t
+def t_NUMERAL(t):
+    r'\d+'
+    try:
+        t.value = int(t.value)
+    except ValueError:
+        print "Integer value too large", t.value
+        t.value = 0
+    return t
 
 def t_QUOTEDSTRING(t):
     r"""('[^']*')|("[^"]*")"""   # need \-handling
@@ -154,42 +160,39 @@ longData = '''
     
 
 # Precedence rules for the arithmetic operators
-precedence = (
-    ('left', 'IMPLIES'),
-    ('left', 'IFF'), 
-    ('left', 'OR'),
-    ('left', 'AND'),
-    ('right','NOT'),
-    )
+## precedence = (
+##     ('left', 'IMPLIES'),
+##     ('left', 'IFF'), 
+##     ('left', 'OR'),
+##     ('left', 'AND'),
+##     ('right','NOT'),
+##     )
 
 # dictionary of names (for storing variables)
 names = { }
 
 def p_unit(t):
-    '''unit : chunkList'''
+    '''unit : axiomList'''
     pass
 
-def p_chunkList_empty(t):
-    '''chunkList : '''
+def p_axiomList_empty(t):
+    '''axiomList : '''
     pass
 
-def p_chunkList_more(t):
-    '''chunkList : chunkList chunk'''
+def p_axiomList_more(t):
+    '''axiomList : axiomList axiom'''
 
-def p_chunk(t):
-    '''chunk : LPAREN tagList BODY sentence RPAREN'''
-    print "Adding formula %s\n" % t[4]
+def p_axiom(t):
+    '''axiom : LPAREN tagList BODY sentence RPAREN'''
+    #print "Adding formula %s\n" % t[4]
     kb.add(t[4])
 
 def p_tagList(t):
     '''tagList :
-               | tagList TAG QUOTEDSTRING'''
+               | tagList TAG QUOTEDSTRING
+               | tagList TAG CONSTANT'''
     # ignore the tags for now
     pass
-
-def p_sentence(t):
-    '''sentence : sformula'''
-    t[0] = t[1]
 
 constants = {}
 variables = {}
@@ -231,23 +234,19 @@ def p_term_simple1(t):
 ##         kb.interpret(tt, LX.uri.DescribedThing(uri))
 ##         constants[uri] = tt
 
-## def p_term_numeral(t):
-##     '''term : NUMERAL'''
-##     if constants.has_key(t[1]):
-##         t[0] = constants[y[1]]
-##     else:
-##         tt = LX.logic.Constant(str(t[1]))
-##         t[0] = tt
-##         kb.interpret(tt, t[1])
-##         constants[t[1]] = tt
+def p_term_numeral(t):
+    '''term : NUMERAL'''
+    if constants.has_key(t[1]):
+        t[0] = constants[t[1]]
+    else:
+        tt = LX.logic.Constant(str(t[1]))
+        t[0] = tt
+        ## kb.interpret(tt, t[1])
+        constants[t[1]] = tt
 
-## def p_term_quotedstrin(t):
-##     '''term : QUOTEDSTRING'''
-##     t[0] = kb.constantFor(t[1])
-
-#            | NUMERAL
-#            | QUOTEDSTRING
-#            | XMLSTRUCTURE'''
+def p_term_quotedstring(t):
+    '''term : QUOTEDSTRING'''
+    t[0] = kb.constantFor(t[1])
 
 def p_term_var(t):
     'term : INDVAR'
@@ -264,7 +263,7 @@ def p_term_var(t):
         kb.univars.append(tt)
 
 def p_term_compound(t):        # funterm
-    '''term : LPAREN termlist RPAREN '''
+    '''term : LPAREN termlist sequse RPAREN '''
     #t[0] = apply(LX.expr.CompoundExpr, [t[1]] + t[3])
     #   for now just read it in as FOL.
     args = t[2]
@@ -273,13 +272,26 @@ def p_term_compound(t):        # funterm
     else:
         t[0] = apply(holds[len(args)], args)
 
+def p_sequse(t):
+    '''sequse :
+              | SEQVAR '''
+    pass
+
 def p_termlist_empty(t):
     '''termlist : '''
     t[0] = []
 
+def p_termlist_specialOps(t):
+    '''termlist : PLUS
+                | GT
+                | GTE
+                | LT
+                | LTE '''
+    t[0] = [kb.constantFor(t[1])]
+
 def p_termlist_more(t):
-    'termlist : term termlist'''
-    t[0] = [t[1]] + t[2]
+    'termlist : termlist term'''
+    t[0] = t[1] + [t[2]]
 
 ##def p_atomicformula(t):
 ##   'atomicformula : term'
@@ -312,11 +324,17 @@ def p_formula_2(t):
           "=>": LX.fol.IMPLIES,
           "<=>": LX.fol.MEANS}[t[1]]
     #print "APPLYING", f, t[2]
-    t[0] = apply(f, t[2])
+    if (len(t[2]) > 2):
+        print "WARNING, too-high-arity on", f, " ** EXTRA IGNORED"
+        t[0] = apply(f, t[2][0:2])
+    else:
+        t[0] = apply(f, t[2])
     # is LX.fol.AND allowed to be n-ary...???
+    #    FIX HERE OR THERE????
+
 
 def p_formula_3(t):
-     'formula : NOT formula'
+     'formula : NOT sentence'
      t[0] = LX.fol.NOT(t[2])
 
 def p_formulaList_empty(t):
@@ -324,7 +342,7 @@ def p_formulaList_empty(t):
     t[0] = []
 
 def p_formulaList_more(t):
-    'formulaList : formulaList sformula'
+    'formulaList : formulaList sentence'
     t[0] = t[1] + [t[2]]
 
 class Frame:
@@ -351,7 +369,7 @@ def p_quantification(t):
     #print "varStack built up to", varStack
             
 def p_formula_4(t):
-     'formula : quantification sformula'
+     'formula : quantification sentence'
      f = t[2]
      while 1:
          frame = varStack.pop(0)
@@ -361,12 +379,12 @@ def p_formula_4(t):
      #print "varStack chopped to", varStack, "@@@ forgot to quantify"
      t[0] = f
      
-def p_sformula(t):
-     'sformula : LPAREN formula RPAREN'
+def p_sentence(t):
+     'sentence : LPAREN formula RPAREN'
      t[0] = t[2]
 
-def p_sformula_2(t):
-     'sformula : term'
+def p_sentence_2(t):
+     'sentence : term'
      t[0] = t[1]
 
 def p_error(t):
@@ -430,7 +448,10 @@ class Serializer:
         pass
 
 # $Log$
-# Revision 1.1  2003-07-18 04:35:38  sandro
+# Revision 1.2  2003-07-31 18:26:02  sandro
+# unknown older stuff
+#
+# Revision 1.1  2003/07/18 04:35:38  sandro
 # first cut, based on lbase.py, parser for DAML+OIL KIF axioms
 #
 #

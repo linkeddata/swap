@@ -244,16 +244,7 @@ def p_term_simple1(t):
     '''term : CONSTANT'''
     # It seems like what's actually meant is this:
     uri = "http://example.com#"+t[1]
-    if constants.has_key(uri):
-        t[0] = constants[uri]
-    else:
-        tt = LX.logic.Constant(uri)
-        t[0] = tt
-        kb.interpret(tt, LX.uri.DescribedThing(uri))
-        constants[uri] = tt
-    # not
-    # t[0] = constants.setdefault(t[1], LX.fol.Constant(t[1]))
-
+    t[0] = LX.logic.ConstantForURI(uri)
 
 def p_term_simple2(t):
     '''term : URIREF'''      ##  need two productions here?!
@@ -262,14 +253,8 @@ def p_term_simple2(t):
     except ValueError:
         raise RuntimeError, "Can't find the : in %s\n" % t[1]
     uri = prefixes[pre]+post
-    if constants.has_key(uri):
-        t[0] = constants[uri]
-    else:
-        tt = LX.logic.Constant(uri)
-        t[0] = tt
-        kb.interpret(tt, LX.uri.DescribedThing(uri))
-        constants[uri] = tt
-
+    t[0] = LX.logic.ConstantForURI(uri)
+    
 def p_term_numeral(t):
     '''term : NUMERAL'''
     if constants.has_key(t[1]):
@@ -454,7 +439,10 @@ class Serializer:
         pass
 
 # $Log$
-# Revision 1.10  2003-07-12 09:58:33  sandro
+# Revision 1.11  2003-07-31 18:26:02  sandro
+# unknown older stuff
+#
+# Revision 1.10  2003/07/12 09:58:33  sandro
 # added #comment support
 #
 # Revision 1.9  2003/07/12 09:49:10  sandro

@@ -23,6 +23,8 @@ parsers = {
               },
     "kifax":  { "module": "LX.language.kifax",
               },
+    "rdflib":  { "module": "LX.language.rdflib_rdfxml",
+              },
     }
 
 def getSerializer(language=None, stream=None, flags=""):
@@ -46,7 +48,10 @@ def getParser(language=None, sink=None, flags=""):
         raise RuntimeError, "No such parser: \"%s\"\nWe have: %s" % (language, ", ".join(parsers.keys()))
     
 # $Log$
-# Revision 1.5  2003-07-18 04:37:18  sandro
+# Revision 1.6  2003-07-31 18:26:02  sandro
+# unknown older stuff
+#
+# Revision 1.5  2003/07/18 04:37:18  sandro
 # added kifax parser
 #
 # Revision 1.4  2003/02/14 17:21:59  sandro
