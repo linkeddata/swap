@@ -276,9 +276,10 @@ class PredictiveParser:
 
 # The Grammar formula
 
-print "Loading", argv[1]
+grammarFile = argv[1].split("#")[0]
+print "Loading", grammarFile
 start = clock()
-g = load(argv[1])
+g = load(grammarFile)
 taken = clock() - start
 print "Loaded %i statements in %fs, ie %f/s." % (len(g), taken, len(g)/taken)
 
