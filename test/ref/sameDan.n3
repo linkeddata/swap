@@ -40,7 +40,16 @@
         } .
     
     <sameDan.n3#test1>     a <sameDan.n3#Success> .
+
+    
+    <sameDan.n3>     <http://purl.org/dc/elements/1.1/creator> <sameDan.n3#_g0>;
+         <http://purl.org/dc/elements/1.1/description> """rules for determining when two terms denote
+the same thing.""";
+         <http://purl.org/dc/elements/1.1/relation> <forgetDups.n3>;
+         <http://purl.org/dc/elements/1.1/rights> "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
+         rcs:id "" .
     {
+
         :p     a ont:UniqueProperty .
         
         }     log:implies {{

@@ -56,8 +56,8 @@
          daml:comment """if P is an UnambiguousProperty, then
 	if P(x, y) and P(z, y) then x=z.
 	aka injective.
-	e.g. if nameOfMonth(m, \"Feb\")
-	and nameOfMonth(n, \"Feb\") then m and n are the same month.
+	e.g. if nameOfMonth(m, "Feb")
+	and nameOfMonth(n, "Feb") then m and n are the same month.
   """;
          daml:label "UnambiguousProperty";
          daml:subClassOf :Property .
@@ -142,12 +142,12 @@ cf OIL NOT""";
 	i.e. if imports(X, Y) and you believe X and Y says something,
 	then you should believe it.
 
-	Note: \"the contents\" is, in the general case,
+	Note: "the contents" is, in the general case,
 	an il-formed definite description. Different
 	interactions with a resource may expose contents
 	that vary with time, data format, preferred language,
-	requestor credentials, etc. So for \"the contents\",
-	read \"any contents\".
+	requestor credentials, etc. So for "the contents",
+	read "any contents".
   """;
          daml:label "imports" .
     

@@ -7,6 +7,7 @@
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
     xmlns:ont="http://www.daml.org/2001/03/daml+oil#"
     xmlns:rcs="http://www.w3.org/2001/03swell/rcs#"
+    xmlns:string="http://www.w3.org/2000/10/swap/string#"
     xmlns:v="http://www.w3.org/2000/10/swapt/test/smush-schema#"
     xmlns:vg1="http://www.w3.org/2000/10/swapt/test/smush-query#"
     xmlns:web="http://www.w3.org/1999/02/22-rdf-syntax-ns#">

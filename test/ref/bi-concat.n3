@@ -108,25 +108,15 @@
         } .
     {
         this     log:forSome :_g59 .
-          [      <http://www.daml.org/2001/03/daml+oil#first> "World";
-                 <http://www.daml.org/2001/03/daml+oil#rest>  (
-                :_g59 
-                "Web"  ) .
-            :_g64     <http://www.daml.org/2001/03/daml+oil#first> :_g59;
-                 <http://www.daml.org/2001/03/daml+oil#rest>  (
-                "Web"  ) .
-            :_g58     string:concatenation :x ].
-        
-          [      <http://www.daml.org/2001/03/daml+oil#first> "W";
-                 <http://www.daml.org/2001/03/daml+oil#rest>  (
-                "i" 
-                "d" 
-                "e"  ) .
-            :_g61     <http://www.daml.org/2001/03/daml+oil#first> "i";
-                 <http://www.daml.org/2001/03/daml+oil#rest>  (
-                "d" 
-                "e"  ) .
-            :_g60     string:concatenation :_g59 ].
+          ( "World" 
+            :_g59 
+            "Web"  )
+             string:concatenation :x .
+          ( "W" 
+            "i" 
+            "d" 
+            "e"  )
+             string:concatenation :_g59 .
         
         }     log:implies {:www5     :is :x .
         } .

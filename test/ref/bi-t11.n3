@@ -62,7 +62,8 @@
     {
         :p     a :UsedProperty;
              log:semantics  [
-                 log:notIncludes {:p     s:isDefinedBy :x .
+                 log:notIncludes {:p     s:isDefinedBy  [
+                     ] .
                 } ] .
         
         }     log:implies {:p     a :ERROR_CANT_GET_SCHEMA .

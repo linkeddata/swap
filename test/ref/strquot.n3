@@ -6,7 +6,7 @@
     :y     :prop """triple quoted
 string with newlines in it.""" .
     
-    :z     :prop "string with \" escaped quote marks" .
+    :z     :prop """string with " escaped quote marks""" .
     
     :zz     :escapes "\\\"\a\b\f\r\t\v" .
     
