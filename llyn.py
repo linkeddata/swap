@@ -144,7 +144,7 @@ from term import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Anonymous, Term,\
     CompoundTerm, List, EmptyList, NonEmptyList
-from term import merge
+from OrderedSequence import merge
 from formula import Formula, StoredStatement, compareTerm
 
 from query import think, applyRules, testIncludes
@@ -157,7 +157,7 @@ from RDFSink import RDF_NS_URI
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 
 from pretty import Serializer
-from thing import indentString
+from OrderedSequence import indentString
 
 LITERAL_URI_prefix = "data:application/n3;"
 

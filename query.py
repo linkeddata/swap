@@ -8,7 +8,7 @@ from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, List_NS
 from RDFSink import RDF_NS_URI
 
-from thing import merge, intersection, minus, indentString
+from OrderedSequence import merge, intersection, minus, indentString
 
 import diag
 from diag import chatty_flag, tracking, progress

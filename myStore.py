@@ -41,6 +41,8 @@ def _checkStore(s=None):
     global store, storeClass
     if s != None: return s
     if store != None: return store
+    if storeClass == None:
+	import llyn   # default 
     assert storeClass!= None, "Some storage module must register with myStore.py before you can use it"
     store = storeClass() # Make new one
     return store

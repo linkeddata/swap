@@ -45,6 +45,7 @@ import codecs # python 2-ism; for writing utf-8 in RDF/xml output
 import urlparse
 import urllib
 import re
+import sys
 #import thing
 from uripath import refTo
 from diag import progress
@@ -106,7 +107,15 @@ class ToRDF(RDFSink.RDFStructuredOutput):
     def __init__(self, outFp, thisURI, base=None, flags=""):
         RDFSink.RDFSink.__init__(self)
         dummyEnc, dummyDec, dummyReader, encWriter = codecs.lookup('utf-8')
-	self._wr = XMLWriter(encWriter(outFp))
+#	progress("&&&&& enxWriter factory is ", encWriter)
+#	z = encWriter(outFp)
+	z = encWriter(sys.stdout)
+#	progress("&&&& Instance of encWriter is", z)
+	zw = z.write
+#	progress("&&&& writer of encWriter is", zw)
+#	zw(u"This \u00BE was sent to zw")
+	self._xwr = XMLWriter(zw)
+#	progress("&&&& _xwr, and XMLWriter,  is", self._xwr)
 	self._subj = None
 	self._base = base
 	self._formula = None   # Where do we get this from? The outermost formula
@@ -133,13 +142,13 @@ class ToRDF(RDFSink.RDFStructuredOutput):
     def endDoc(self, rootFormulaPair=None):
         self.flushStart()  # Note: can't just leave empty doc if not started: bad XML
 	if self._subj:
-	    self._wr.endElement()  # </rdf:Description>
+	    self._xwr.endElement()  # </rdf:Description>
 	self._subj = None
-	self._wr.endElement()  # </rdf:RDF>
-	self._wr.endDocument()
+	self._xwr.endElement()  # </rdf:RDF>
+	self._xwr.endDocument()
 
     def makeComment(self, str):
-        self._wr.makeComment(str)
+        self._xwr.makeComment(str)
 
     def flushStart(self):
         if not self._docOpen:
@@ -159,7 +168,7 @@ class ToRDF(RDFSink.RDFStructuredOutput):
                     ats.append(('xmlns:'+pfx, self.namespaces[pfx]))
 #                else:
 #                    ats.append(('xmlns', self.namespaces[pfx]))
-            self._wr.startElement(RDF_NS_URI+'RDF', ats, self.prefixes)
+            self._xwr.startElement(RDF_NS_URI+'RDF', ats, self.prefixes)
             self._subj = None
             self._nextId = 0
             self._docOpen = 1
@@ -187,15 +196,15 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 
 	if self._subj != subj:
 	    if self._subj:
-		self._wr.endElement()
+		self._xwr.endElement()
 	    self._subj = subj
             if (pred == (SYMBOL, RDF_type_URI)# Special case starting with rdf:type as element name
                 and obj[0] != LITERAL
                 and "c" not in self._flags): # "c" flag suppresses class element syntax on RDF output
-                 self._wr.startElement(obj[1], [(RDF_NS_URI+" about", subjn),], self.prefixes)
+                 self._xwr.startElement(obj[1], [(RDF_NS_URI+" about", subjn),], self.prefixes)
                  return
 	    if subj[0] == SYMBOL or subj[0] == ANONYMOUS:
-		self._wr.startElement(RDF_NS_URI+'Description',
+		self._xwr.startElement(RDF_NS_URI+'Description',
 				    [(RDF_NS_URI+" about", subjn),], self.prefixes)
 	    elif subj[0] == LITERAL:
 		v = subj[1]
@@ -204,16 +213,16 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 		    v, dt, lang = v
 		    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt.uriref()))
 		    if lang != None: attrs.append((XML_NS_URI+' lang', lang))
-		self._wr.startElement(RDF_NS_URI+'Description',
+		self._xwr.startElement(RDF_NS_URI+'Description',
 				    [], self.prefixes)
-		self._wr.startElement(RDF_NS_URI+"is", attrs, self.prefixes)
-		self._wr.data(v)
-		self._wr.endElement()
+		self._xwr.startElement(RDF_NS_URI+"is", attrs, self.prefixes)
+		self._xwr.data(v)
+		self._xwr.endElement()
 	    else:
 		raise RuntimeError("Unexpected subject", `subj`)
 	if obj[0] != LITERAL: 
 	    objn = refTo(self._base, obj[1])
-	    self._wr.emptyElement(pred[1], [(RDF_NS_URI+' resource', objn)], self.prefixes)
+	    self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' resource', objn)], self.prefixes)
 	    return
 	attrs = []  # Literal
 	v = obj[1]
@@ -221,9 +230,9 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 	    v, dt, lang = v
 	    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt.uriref()))
 	    if lang != None: attrs.append((XML_NS_URI+' lang', lang))
-        self._wr.startElement(pred[1], attrs, self.prefixes)
-        self._wr.data(v)
-        self._wr.endElement()
+        self._xwr.startElement(pred[1], attrs, self.prefixes)
+        self._xwr.data(v)
+        self._xwr.endElement()
 
 # Below is for writing an anonymous node which is the object of only one arc
 # This is the arc leading to it.
@@ -233,20 +242,20 @@ class ToRDF(RDFSink.RDFStructuredOutput):
         context, pred, subj, obj = tuple 
 	if self._subj != subj:
 	    if self._subj:
-		self._wr.endElement()
+		self._xwr.endElement()
 	    subjn = refTo(self._base, subj[1])
-	    self._wr.startElement(RDF_NS_URI + 'Description',
+	    self._xwr.startElement(RDF_NS_URI + 'Description',
 				 ((RDF_NS_URI+' about', subjn),), self.prefixes)
 	    self._subj = subj
 
-        self._wr.startElement(pred[1], [(RDF_NS_URI+' parseType','Resource')], self.prefixes)  # @@? Parsetype RDF
+        self._xwr.startElement(pred[1], [(RDF_NS_URI+' parseType','Resource')], self.prefixes)  # @@? Parsetype RDF
 
         self._subj = obj    # The object is now the current subject
 
 
     def endAnonymous(self, subject, verb):    # Remind me where we are
 
-        self._wr.endElement()
+        self._xwr.endElement()
 #        self._subj = subject
         self._subj = subject       # @@@ This all needs to be thought about!
 
@@ -256,13 +265,13 @@ class ToRDF(RDFSink.RDFStructuredOutput):
     def startAnonymousNode(self, subj, li=0):
         self.flushStart()
         if self._subj:
-            self._wr.endElement()
+            self._xwr.endElement()
             self._subj = None
-        self._wr.startElement(RDF_NS_URI+'Description', [], self.prefixes)
+        self._xwr.startElement(RDF_NS_URI+'Description', [], self.prefixes)
         self._subj = subj    # The object is not the subject context
 
     def endAnonymousNode(self, subj=None):    # Remove context
-    	self._wr.endElement()
+    	self._xwr.endElement()
 	self._subj = None
 
 # Below we notate a nested bag of statements - a context
@@ -270,24 +279,24 @@ class ToRDF(RDFSink.RDFStructuredOutput):
     def startBagSubject(self, context):  # Doesn't work with RDF sorry ILLEGAL
         self.flushStart()
         if self._subj:
-            self._wr.endElement()
+            self._xwr.endElement()
             self._subj = None
-        self._wr.startElement(RDF_NS_URI+'Description', 
+        self._xwr.startElement(RDF_NS_URI+'Description', 
 			      [],
 #			      [(RDF_NS_URI+' about', refTo(self._base,context[1]))],
                               self.prefixes)
 #        print "# @@@@@@@@@@@@@ ", self.prefixes
 #        log_quote = self.prefixes[(SYMBOL, Logic_NS)] + ":Quote"  # Qname yuk
         
-        self._wr.startElement(NODE_MERGE_URI, [(RDF_NS_URI+' parseType', "Quote")], self.prefixes)
+        self._xwr.startElement(NODE_MERGE_URI, [(RDF_NS_URI+' parseType', "Quote")], self.prefixes)
         self._subj = None
 
 
     def endBagSubject(self, subj):    # Remove context
         if self._subj:
-            self._wr.endElement()   # End description if any
+            self._xwr.endElement()   # End description if any
             self._subj = 0
-        self._wr.endElement()     # End quote
+        self._xwr.endElement()     # End quote
         self._subj = subj
 
     def startBagObject(self, tuple):
@@ -295,22 +304,22 @@ class ToRDF(RDFSink.RDFStructuredOutput):
         context, pred, subj, obj = tuple 
 	if self._subj != subj:
 	    if self._subj:
-		self._wr.endElement()
+		self._xwr.endElement()
 	    subjn = refTo(self._base, subj[1])
-	    self._wr.startElement(RDF_NS_URI + 'Description',
+	    self._xwr.startElement(RDF_NS_URI + 'Description',
 				 ((RDF_NS_URI+' about', subjn),), self.prefixes)
 	    self._subj = subj
 
 #        log_quote = self.prefixes[(SYMBOL, Logic_NS)] + ":Quote"  # Qname yuk
-        self._wr.startElement(pred[1], [(RDF_NS_URI+' parseType', "Quote")], self.prefixes)  # @@? Parsetype RDF
+        self._xwr.startElement(pred[1], [(RDF_NS_URI+' parseType', "Quote")], self.prefixes)  # @@? Parsetype RDF
         self._subj = None
 
 
     def endBagObject(self, pred, subj):    # Remove context
         if self._subj:
-            self._wr.endElement()        #  </description> if any
+            self._xwr.endElement()        #  </description> if any
             self._subj = None
-        self._wr.endElement()           # end quote
+        self._xwr.endElement()           # end quote
         self._subj = subj   # restore context from start
 #	print "Ending formula, pred=", pred, "\n   subj=", subj
 #        print "\nEnd bag object, pred=", `pred`[-12:]
@@ -322,11 +331,13 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 class XMLWriter:
     """ taken from
     Id: tsv2xml.py,v 1.1 2000/10/02 19:41:02 connolly Exp connolly
+    
+    Takes as argument a writer which does the (eg utf-8) encoding
     """
 
-    def __init__(self, outFp, squeaky=0):
-	self._outFp = outFp
-	self._wr = outFp.write
+    def __init__(self, encodingWriter, squeaky=0):
+#	self._outFp = outFp
+	self._encwr = encodingWriter
 	self._elts = []
 	self.squeaky = squeaky  # No, not squeaky clean output
 	self.tab = 4        # Number of spaces to indent per level
@@ -346,22 +357,22 @@ class XMLWriter:
             return
         i = howmany
         if i<1: i=1
-        self._wr("\n\n\n\n"[:i])
+        self._encwr("\n\n\n\n"[:i])
         self.indent()
 
     def indent(self, extra=0):
-        self._wr(' ' * ((len(self._elts)+extra) * self.tab))
+        self._encwr(' ' * ((len(self._elts)+extra) * self.tab))
         self.flushClose()
         
     def closeTag(self):
         if self.squeaky:
             self.needClose =1
         else:
-            self._wr(">")
+            self._encwr(">")
             
     def flushClose(self):
         if self.needClose:
-            self._wr(">")
+            self._encwr(">")
             self.needClose = 0
 
     def figurePrefix(self, uriref, rawAttrs, prefixes):
@@ -402,19 +413,19 @@ class XMLWriter:
             attrs.append(( prefix+":"+lan, val))    
 
 	self.newline(3-len(self._elts))    # Newlines separate higher levels
-	self._wr("<%s" % (ln,))
+	self._encwr("<%s" % (ln,))
 
         needNL = 0
 	for n, v in attrs:
             if needNL:
                 self.newline()
-                self._wr("   ")
-	    self._wr(" %s=\"" % (n, ))
+                self._encwr("   ")
+	    self._encwr(" %s=\"" % (n, ))
 	    if type(v) is type((1,1)):
 		progress("@@@@@@ toXML.py 382: ", `v`)
 		v = `v`
-            xmldata(self._wr, v, self.attrEsc)
-            self._wr("\"")
+            xmldata(self._encwr, v, self.attrEsc)
+            self._encwr("\"")
 	    needNL = 1
 
             
@@ -422,7 +433,7 @@ class XMLWriter:
 
     def makeComment(self, str):
         self.newline()
-        self._wr("<!-- " + str + "-->") # @@
+        self._encwr("<!-- " + str + "-->") # @@
         
     def startElement(self, n, attrs = [], prefixes={}):
         oldNS = self.currentNS
@@ -436,14 +447,14 @@ class XMLWriter:
         ln, at2 = self.figurePrefix(n, attrs, prefixes)
 
 	self.currentNS = oldNS  # Forget change - no nesting
-	self._wr("/")
+	self._encwr("/")
         self.closeTag()
 
     def endElement(self):
 
 	n, self.currentNS = self._elts.pop()
         self.newline()
-	self._outFp.write("</%s" % n)
+	self._encwr("</%s" % n)
 	self.closeTag()
 
 
@@ -452,24 +463,33 @@ class XMLWriter:
 
     def data(self, str):
 	#@@ throw an exception if the element stack is empty
-	o = self._outFp
+#	o = self._outFp
         self.flushClose()
-        xmldata(o.write, str, self.dataEsc)
+#        xmldata(o.write, str, self.dataEsc)
+        xmldata(self._encwr, str, self.dataEsc)
+
 	self.noWS = 1  # Suppress whitespace - we are in data
 
     def endDocument(self):
         while len(self._elts) > 0:
             self.endElement()
         self.flushClose()
-        self._wr("\n")
+        self._encwr("\n")
 
 
 def xmldata(write, str, markupChars):
     i = 0
+#    progress("XML data: type is ", type(str))
+#    write(u"&&&& Called xmldata \u00BE\n")
+#    write(u"&&&& Called xmldata with %s" % str)
     while i < len(str):
         m = markupChars.search(str, i)
         if not m:
-            write(str[i:])
+	    t = str[i:]
+#	    for ch in str[i:]: progress( "Char ", ord(ch))
+#	    progress("Writer is %s" %(`write`))
+#	    progress("t = "+t.encode(u)
+            write(t)
             break
         j = m.start()
         write(str[i:j])

@@ -2,7 +2,13 @@
 """
 $Id$
 
-Interning of URIs and strings for storage in SWAP store
+OBSOLETE
+ This module was too much of a mixture. See
+ 
+ - myStore.py to import to set up a default store for your program, and Namespace.
+ - term.py to define the class of Term and some subclasses.
+
+Was: Interning of URIs and strings for storage in SWAP store
 
 Includes:
  - template classes for builtins
@@ -62,6 +68,9 @@ subcontext_cache_subcontexts = None
 
 store = None
 storeClass = None
+
+from diag import progress
+progress("Warning: $SWAP/thing.py is obsolete: use term/py and myStore.py")
 
 def setStoreClass(c):
     """Set the process-global class to be used to generate a new store if needed"""
@@ -789,66 +798,6 @@ def merge(a,b):
             i = i + 1
             j = j + 1
         
-def intersection(a,b):
-    """Find intersection of sorted sequences
-
-    The fact that the sequences are sorted makes this faster"""
-    i = 0
-    j = 0
-    m = len(a)
-    n = len(b)
-#    progress(" &&& Intersection of %s and %s" %(a,b))
-    result = []
-    while 1:
-        if i==m or j==n:   # No more of one, return what we have
-            return result
-        if a[i] < b[j]:
-            i = i + 1
-        elif a[i] > b[j]:
-            j = j + 1
-        else:  # a[i]=b[j]
-            result.append(a[i])
-            i = i + 1
-            j = j + 1
-    
-def minus(a,b):
-    """Those in a but not in n for sorted sequences
-
-    The fact that the sequences are sorted makes this faster"""
-    i = 0
-    j = 0
-    m = len(a)
-    n = len(b)
-    result = []
-#    progress(" &&& minus of %s and %s" %(a,b))
-    while 1:
-        if j==n:   # No more of b, return rest of a
-            return result + a[i:]
-        if i==m:   # No more of a, some of b - error
-	    raise ValueError("Cannot remove items" + `b[j:]`)
-            return result + b[j:]
-        if a[i] < b[j]:
-            result.append(a[i])
-            i = i + 1
-        elif a[i] > b[j]:
-	    raise ValueError("Cannot remove item" + `b[j]`)
-            j = j + 1
-        else:  # a[i]=b[j]
-            i = i + 1
-            j = j + 1
-        
-#______________________________________________ More utilities
-
-def indentString(str):
-    """ Return a string indented by 4 spaces"""
-    s = "    "
-    for ch in str:
-        s = s + ch
-        if ch == "\n": s = s + "    "
-    if s.endswith("    "):
-        s = s[:-4]
-    return s
-
 
 
 

@@ -501,7 +501,11 @@ class RDFHandler(xml.sax.ContentHandler):
             
         elif self._state == STATE_VALUE:
             buf = self.testdata
-	    obj = self.sink.newLiteral(buf, self._datatype, self._language)
+	    if self._datatype == None:    # RDFCore changes 2003 - can't have dt and lang
+		lang = self._language
+	    else:
+		lang = None
+	    obj = self.sink.newLiteral(buf, self._datatype, lang)
             self.sink.makeStatement(( self._context,
                                        self._predicate,
                                        self._subject,

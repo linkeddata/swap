@@ -235,9 +235,11 @@ def doCommand(year, inputURI="/dev/stdin"):
 	    <link rel="Stylesheet" href="report.css">
 	</head>
 	<body>
-	    <img src="sand-dollar.gif" alt="dollar" align="right"/>
 	"""
+#	    <img src="sand-dollar.gif" alt="dollar" align="right"/>
 	
+
+
         version = "$Id$"
 #	if not option_quiet:
 #	_outSink.makeComment("<address>Processed by " + version[1:-1]+"</address>") # Strip $ to disarm

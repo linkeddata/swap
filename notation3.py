@@ -1414,19 +1414,26 @@ t   "this" and "()" special syntax should be suppresed.
 
         j = string.rfind(value, "#")
 	if j<0: j=string.rfind(value, "/")   # Allow "/" namespaces as a second best
+	
         if (j>=0
-            and "p" not in self._flags   # Suppress use of prefixes?
-            and value[j+1:].find(".") <0 ): # Can't use prefix if localname includes "."
+            and "p" not in self._flags):   # Suppress use of prefixes?
+#            and value[j+1:].find(".") <0 ): # Can't use prefix if localname includes "."
 #            print "|%s|%s|"%(self.defaultNamespace, value[:j+1])
-            if (self.defaultNamespace
-                and self.defaultNamespace == value[:j+1]
-                and "d" not in self._flags):
-                return ":"+value[j+1:]
-            prefix = self.prefixes.get(value[:j+1], None) # @@ #CONVENTION
-            if prefix != None : return prefix + ":" + value[j+1:]
-        
-            if value[:j] == self.base:   # If local to output stream,
-                return "<#" + value[j+1:] + ">" #   use local frag id (@@ lone word?)
+	    for ch in value[j+1:]:  #  Examples: "."   ";"  we can't have in qname
+		if ch in _notQNameChars:
+		    if verbosity() > 0:
+			progress("Cannot have character %i in local name." % ord(ch))
+		    break
+	    else:
+		if (self.defaultNamespace
+		    and self.defaultNamespace == value[:j+1]
+		    and "d" not in self._flags):
+		    return ":"+value[j+1:]
+		prefix = self.prefixes.get(value[:j+1], None) # @@ #CONVENTION
+		if prefix != None : return prefix + ":" + value[j+1:]
+	    
+		if value[:j] == self.base:   # If local to output stream,
+		    return "<#" + value[j+1:] + ">" #   use local frag id (@@ lone word?)
             
         if "r" in self._flags: return "<" + hexify(value) + ">"    # Suppress relative URIs?
 
