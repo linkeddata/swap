@@ -1,6 +1,9 @@
 # An attempt to se how one can get into MS Outlook from Python
 # Ideal - to export to RDF.
 
+# Refs:
+# http://www.oreilly.com/catalog/pythonwin32/chapter/ch12.html
+
 # Derived from
 # $Id$
 # <http://www.w3.org/Tools/1998/07contactlog/contactlog.py>
@@ -93,26 +96,24 @@ _test_data = \
 """
 
 def main():
-	oapp = Pilot2Outlook()
-	oapp.testAdd()
+	oapp = outlookToN3()
 
-	raise OK
-	#infp = open(Inf)
-	infp = StringIO.StringIO(_test_data)
+	_version = "$Id$"[1:-1]
+	print "# Outlook data extractde by"
+	print "#   ", _version
+	print
+	
+	print "# Calendar:"
+	oapp.getFolder(outlook.constants.olFolderCalendar)
+	
+	print "# Contacts:"
+	oapp.getFolder(outlook.constants.olFolderContacts)
 
-	i = 0
-	while 1:
-		row = nextrow(infp)
-		if not row: break
-		i = i + 1
-		if i > 500: break #@@ can't figure out how
-			# to break a runaway script in PythonWin,
-			# so I added this little hack
-		print "@@add:", row
-		oapp.addPilotAddress(row)
+	print "# ENDS"
+	
 
 
-# outlook.Application is the Application class, per
+# DWC: outlook.Application is the Application class, per
 # the type library and help file cited above.
 #
 # It integrates completely seamlessly into the python
@@ -128,21 +129,58 @@ def main():
 # http://www.microsoft.com/OutlookDev/Articles/Outprog.htm
 #
 
-class Pilot2Outlook(outlook.Application):
+def _toString(x):
+	""" In N3 everything is represented as a string (at the moment), so we need
+	to turn everything into a string withoyt Python encoding.
+	"""
+	if type(x) is type(' '): return '"'+x+'"'
+	if type(x) is type(6): return '"'+`x`+'"'
+	return `x`   # @@@ unhandled things
+
+class outlookToN3(outlook.Application):
 	def findContact(self, filter):
 		_mapi = self.GetNamespace(MAPI)
-#		print `outlook._Folders`
-#		_folders = outlook._Folders
-#		print `_folders`
-#		_one = _folders.GetFirst(self)
-#		print "one" , `_one`
-#		_two = outlook._Folders.GetNext(self, _one)
+
 #		_c = outlook.OlDefaultFolders.olFolderContacts
 		_c = outlook.constants.olFolderContacts
 #		contacts = _mapi.GetDefaultFolder(outlook.OlDefaultFolders.olFolderContacts)
 		contacts = _mapi.GetDefaultFolder(outlook.constants.olFolderContacts)
+
 		return contacts.Items.Find(filter)
 
+	def getFolder(self, what):
+		_mapi = self.GetNamespace(MAPI)
+		_c = outlook.constants.olFolderCalendar
+		# Result is of type MAPIFolder
+		cal = _mapi.GetDefaultFolder(what)
+		print "\n# Folder %i:" % what
+		self._getItem(cal)
+		
+		list = cal.Items
+		n = len(list)
+		print " util:item "
+		for i in range(n):
+			item = list[i+1] # GetFirst()
+			self._getItem(item)
+			if i<n-1: print ","
+		print "."
+			
+	def _getItem(self, item):
+		gkeys = item._prop_map_get_.keys()
+		pkeys = item._prop_map_put_.keys()		
+		print "\n  [ ",
+		for k in range(len(gkeys)):
+			key = gkeys[k]
+			_w = (key in pkeys)		# Is this writable?
+			if not _w : print "              # Read only:"
+			if key == "End":
+				pass  # Breakpoint me! @@ ;-)
+			x = item.__getattr__(key)
+			if x != "":
+				print "%-32s  %s" % (key, _toString(x)),
+				if k < len(keys)-1: print ";\n    ",
+		print " . ]"
+		
 	def incomingCall(self, name, num, isotime):
 		# convert caller-id format: 333-555-1212
 		# to Outlook format: (333) 555-1212
@@ -177,6 +215,7 @@ class Pilot2Outlook(outlook.Application):
 			contact.Save()
 
 		ji.Recipients.Add(name)
+
 		
 		t = iso2vb(isotime)
 		ji.Start = t
