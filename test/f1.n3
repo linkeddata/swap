@@ -1,9 +1,0 @@
-#    Test filter in N3
-#
-bind log: <http://www.w3.org/2000/10/swap/log.n3> .
-bind test: <s1.n3> .
-bind : <> .
-
-<> log:forAll <#x> , <#y> .
-{ <#x> test:includes <#y> } log:implies { <#y> test:partOf <#x> } .
-
