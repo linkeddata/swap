@@ -14,6 +14,518 @@ Web</a></p>
 
 <h1>Functions and Operators</h1>
 
+<p>It is valuable that the functions and oprators in XML and RDF query
+langauges be aligned and interconvertable, if not simply identical.</p>
+
+<p>The convention used in Cwm is for a function to be considered a functional
+Property relating (as subject) the argument, if single, or rdf:List of
+arguments, if multiple, to (as object) the returned value. (See Tutorial on
+Builtins)</p>
+
+<p></p>
+
+<p>Notes on equivalence</p>
+
+<p></p>
+
+<p>2 <a href="#accessors">Accessors</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;2.1 <a href="#func-node-kind">fn:node-kind</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;2.2 <a href="#func-node-name">fn:node-name</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;2.3 <a href="#func-string">fn:string</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;2.4 <a href="#func-data">fn:data</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;2.5 <a href="#func-base-uri">fn:base-uri</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;2.6 <a href="#func-unique-ID">fn:unique-ID</a><br />
+3 <a href="#func-error">The Error Function</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;3.1 <a href="#d1e412">Examples</a><br />
+4 <a href="#constructor-functions">Constructor Functions</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;4.1 <a
+href="#constructor-functions-for-xsd-types">Constructor Functions for XML
+Schema Built-in Types</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;4.2 <a
+href="#constructor-functions-for-user-defined-types">Constructor Functions
+for User-Defined Types</a><br />
+5 <a href="#d1e607">Functions and Operators on Numerics</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;5.1 <a href="#d1e611">Numeric Types</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;5.2 <a href="#op.numeric">Operators on Numeric
+Values</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.2.1 <a
+href="#func-numeric-add">op:numeric-add</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.2.2 <a
+href="#func-numeric-subtract">op:numeric-subtract</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.2.3 <a
+href="#func-numeric-multiply">op:numeric-multiply</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.2.4 <a
+href="#func-numeric-divide">op:numeric-divide</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.2.5 <a
+href="#func-numeric-integer-divide">op:numeric-integer-divide</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.2.6 <a
+href="#func-numeric-mod">op:numeric-mod</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.2.7 <a
+href="#func-numeric-unary-plus">op:numeric-unary-plus</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.2.8 <a
+href="#func-numeric-unary-minus">op:numeric-unary-minus</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;5.3 <a href="#comp.numeric">Comparison of Numeric
+Values</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.3.1 <a
+href="#func-numeric-equal">op:numeric-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.3.2 <a
+href="#func-numeric-less-than">op:numeric-less-than</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.3.3 <a
+href="#func-numeric-greater-than">op:numeric-greater-than</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;5.4 <a href="#d1e982">Functions on Numeric
+Values</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.4.1 <a
+href="#func-floor">fn:floor</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.4.2 <a
+href="#func-ceiling">fn:ceiling</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;5.4.3 <a
+href="#func-round">fn:round</a><br />
+6 <a href="#d1e1074">Functions on Strings</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;6.1 <a href="#d1e1078">String Types</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;6.2 <a href="#d1e1139">Functions to Assemble and
+Disassemble Strings</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.2.1 <a
+href="#func-codepoints-to-string">fn:codepoints-to-string</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.2.2 <a
+href="#func-string-to-codepoints">fn:string-to-codepoints</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;6.3 <a href="#string-compare">Equality and Comparison
+of Strings</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.3.1 <a
+href="#func-compare">fn:compare</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;6.4 <a href="#d1e1288">Functions on String
+Values</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.1 <a
+href="#func-concat">fn:concat</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.2 <a
+href="#func-string-join">fn:string-join</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.3 <a
+href="#func-starts-with">fn:starts-with</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.4 <a
+href="#func-ends-with">fn:ends-with</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.5 <a
+href="#func-contains">fn:contains</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.6 <a
+href="#func-substring">fn:substring</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.7 <a
+href="#func-string-length">fn:string-length</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.8 <a
+href="#func-substring-before">fn:substring-before</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.9 <a
+href="#func-substring-after">fn:substring-after</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.10 <a
+href="#func-normalize-space">fn:normalize-space</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.11 <a
+href="#func-normalize-unicode">fn:normalize-unicode</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.12 <a
+href="#func-upper-case">fn:upper-case</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.13 <a
+href="#func-lower-case">fn:lower-case</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.14 <a
+href="#func-translate">fn:translate</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.15 <a
+href="#func-string-pad">fn:string-pad</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.16 <a
+href="#func-matches">fn:matches</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.17 <a
+href="#func-replace">fn:replace</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.18 <a
+href="#func-tokenize">fn:tokenize</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;6.4.19 <a
+href="#func-escape-uri">fn:escape-uri</a><br />
+7 <a href="#d1e2144">Functions and Operators on Booleans</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;7.1 <a href="#d1e2148">Boolean Constructor
+Functions</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7.1.1 <a
+href="#func-true">fn:true</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7.1.2 <a
+href="#func-false">fn:false</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;7.2 <a href="#d1e2194">Operators on Boolean
+Values</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7.2.1 <a
+href="#func-boolean-equal">op:boolean-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7.2.2 <a
+href="#func-boolean-less-than">op:boolean-less-than</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7.2.3 <a
+href="#func-boolean-greater-than">op:boolean-greater-than</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;7.3 <a href="#d1e2268">Functions on Boolean
+Values</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;7.3.1 <a
+href="#func-not">fn:not</a><br />
+8 <a href="#durations-dates-times">Functions and Operators on Durations,
+Dates, and Times</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;8.1 <a href="#d1e2317">Duration, Date, and Time
+Types</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;8.2 <a href="#duration-subtypes">Two Totally Ordered
+Subtypes of Duration</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.2.1 <a
+href="#dt-yearMonthDuration">yearMonthDuration</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.2.2 <a
+href="#dt-dayTimeDuration">dayTimeDuration</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;8.3 <a href="#comp.duration.datetime">Comparisons of
+Duration, Date and Time Values</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.1 <a
+href="#func-duration-equal">op:duration-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.2 <a
+href="#func-yearMonthDuration-equal">op:yearMonthDuration-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.3 <a
+href="#func-yearMonthDuration-less-than">op:yearMonthDuration-less-than</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.4 <a
+href="#func-yearMonthDuration-greater-than">op:yearMonthDuration-greater-than</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.5 <a
+href="#func-dayTimeDuration-equal">op:dayTimeDuration-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.6 <a
+href="#func-dayTimeDuration-less-than">op:dayTimeDuration-less-than</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.7 <a
+href="#func-dayTimeDuration-greater-than">op:dayTimeDuration-greater-than</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.8 <a
+href="#func-dateTime-equal">op:dateTime-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.9 <a
+href="#func-dateTime-less-than">op:dateTime-less-than</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.10 <a
+href="#func-dateTime-greater-than">op:dateTime-greater-than</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.11 <a
+href="#func-date-equal">op:date-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.12 <a
+href="#func-date-less-than">op:date-less-than</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.13 <a
+href="#func-date-greater-than">op:date-greater-than</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.14 <a
+href="#func-time-equal">op:time-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.15 <a
+href="#func-time-less-than">op:time-less-than</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.16 <a
+href="#func-time-greater-than">op:time-greater-than</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.17 <a
+href="#func-gYearMonth-equal">op:gYearMonth-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.18 <a
+href="#func-gYear-equal">op:gYear-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.19 <a
+href="#func-gMonthDay-equal">op:gMonthDay-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.20 <a
+href="#func-gMonth-equal">op:gMonth-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.3.21 <a
+href="#func-gDay-equal">op:gDay-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;8.4 <a href="#d1e2805">Component Extraction Functions
+on Duration, Date and Time Values</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.1 <a
+href="#func-get-years-from-yearMonthDuration">fn:get-years-from-yearMonthDuration</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.2 <a
+href="#func-get-months-from-yearMonthDuration">fn:get-months-from-yearMonthDuration</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.3 <a
+href="#func-get-days-from-dayTimeDuration">fn:get-days-from-dayTimeDuration</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.4 <a
+href="#func-get-hours-from-dayTimeDuration">fn:get-hours-from-dayTimeDuration</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.5 <a
+href="#func-get-minutes-from-dayTimeDuration">fn:get-minutes-from-dayTimeDuration</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.6 <a
+href="#func-get-seconds-from-dayTimeDuration">fn:get-seconds-from-dayTimeDuration</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.7 <a
+href="#func-get-year-from-dateTime">fn:get-year-from-dateTime</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.8 <a
+href="#func-get-month-from-dateTime">fn:get-month-from-dateTime</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.9 <a
+href="#func-get-day-from-dateTime">fn:get-day-from-dateTime</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.10 <a
+href="#func-get-hours-from-dateTime">fn:get-hours-from-dateTime</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.11 <a
+href="#func-get-minutes-from-dateTime">fn:get-minutes-from-dateTime</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.12 <a
+href="#func-get-seconds-from-dateTime">fn:get-seconds-from-dateTime</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.13 <a
+href="#func-get-timezone-from-dateTime">fn:get-timezone-from-dateTime</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.14 <a
+href="#func-get-year-from-date">fn:get-year-from-date</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.15 <a
+href="#func-get-month-from-date">fn:get-month-from-date</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.16 <a
+href="#func-get-day-from-date">fn:get-day-from-date</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.17 <a
+href="#func-get-timezone-from-date">fn:get-timezone-from-date</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.18 <a
+href="#func-get-hours-from-time">fn:get-hours-from-time</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.19 <a
+href="#func-get-minutes-from-time">fn:get-minutes-from-time</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.20 <a
+href="#func-get-seconds-from-time">fn:get-seconds-from-time</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.4.21 <a
+href="#func-get-timezone-from-time">fn:get-timezone-from-time</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;8.5 <a href="#d1e3233">Arithmetic Functions on
+yearMonthDuration and dayTimeDuration</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.5.1 <a
+href="#func-add-yearMonthDurations">op:add-yearMonthDurations</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.5.2 <a
+href="#func-subtract-yearMonthDurations">op:subtract-yearMonthDurations</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.5.3 <a
+href="#func-multiply-yearMonthDuration">op:multiply-yearMonthDuration</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.5.4 <a
+href="#func-divide-yearMonthDuration">op:divide-yearMonthDuration</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.5.5 <a
+href="#func-add-dayTimeDurations">op:add-dayTimeDurations</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.5.6 <a
+href="#func-subtract-dayTimeDurations">op:subtract-dayTimeDurations</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.5.7 <a
+href="#func-multiply-dayTimeDuration">op:multiply-dayTimeDuration</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.5.8 <a
+href="#func-divide-dayTimeDuration">op:divide-dayTimeDuration</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;8.6 <a href="#timezone.functions">Timezone Functions
+on dateTime, date, and time</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.6.1 <a
+href="#func-add-timezone-to-dateTime">fn:add-timezone-to-dateTime</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.6.2 <a
+href="#func-remove-timezone-from-dateTime">fn:remove-timezone-from-dateTime</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.6.3 <a
+href="#func-add-timezone-to-date">fn:add-timezone-to-date</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.6.4 <a
+href="#func-add-timezone-to-time">fn:add-timezone-to-time</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.6.5 <a
+href="#func-remove-timezone-from-time">fn:remove-timezone-from-time</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;8.7 <a href="#dateTimeArithmetic">Adding and
+Subtracting Durations From dateTime, date and time</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.7.1 <a
+href="#func-subtract-dateTimes-yielding-yearMonthDuration">fn:subtract-dateTimes-yielding-yearMonthDuration</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.7.2 <a
+href="#func-subtract-dateTimes-yielding-dayTimeDuration">fn:subtract-dateTimes-yielding-dayTimeDuration</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.7.3 <a
+href="#func-subtract-dates">op:subtract-dates</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.7.4 <a
+href="#func-subtract-times">op:subtract-times</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.7.5 <a
+href="#func-add-yearMonthDuration-to-dateTime">op:add-yearMonthDuration-to-dateTime</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.7.6 <a
+href="#func-add-dayTimeDuration-to-dateTime">op:add-dayTimeDuration-to-dateTime</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.7.7 <a
+href="#func-subtract-yearMonthDuration-from-dateTime">op:subtract-yearMonthDuration-from-dateTime</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.7.8 <a
+href="#func-subtract-dayTimeDuration-from-dateTime">op:subtract-dayTimeDuration-from-dateTime</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.7.9 <a
+href="#func-add-yearMonthDuration-to-date">op:add-yearMonthDuration-to-date</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.7.10 <a
+href="#func-add-dayTimeDuration-to-date">op:add-dayTimeDuration-to-date</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.7.11 <a
+href="#func-subtract-yearMonthDuration-from-date">op:subtract-yearMonthDuration-from-date</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.7.12 <a
+href="#func-subtract-dayTimeDuration-from-date">op:subtract-dayTimeDuration-from-date</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.7.13 <a
+href="#func-add-dayTimeDuration-to-time">op:add-dayTimeDuration-to-time</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;8.7.14 <a
+href="#func-subtract-dayTimeDuration-from-time">op:subtract-dayTimeDuration-from-time</a><br
+/>
+9 <a href="#d1e3972">Functions Related to QNames</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;9.1 <a href="#d1e3974">Constructor Functions for
+QNames</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9.1.1 <a
+href="#func-QName-in-context">fn:QName-in-context</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;9.2 <a href="#d1e4055">Functions Related to
+QNames</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9.2.1 <a
+href="#func-QName-equal">op:QName-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9.2.2 <a
+href="#func-get-local-name-from-QName">fn:get-local-name-from-QName</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9.2.3 <a
+href="#func-get-namespace-from-QName">fn:get-namespace-from-QName</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9.2.4 <a
+href="#func-get-namespace-uri-for-prefix">fn:get-namespace-uri-for-prefix</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;9.2.5 <a
+href="#func-get-in-scope-namespaces">fn:get-in-scope-namespaces</a><br />
+10 <a href="#d1e4157">Functions and Operators for anyURI</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;10.1 <a href="#d1e4159">Constructor Functions for
+anyURI</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10.1.1 <a
+href="#func-resolve-uri">fn:resolve-uri</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;10.2 <a href="#d1e4199">Functions on anyURI</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;10.2.1 <a
+href="#func-anyURI-equal">op:anyURI-equal</a><br />
+11 <a href="#d1e4233">Functions and Operators on base64Binary and
+hexBinary</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;11.1 <a href="#d1e4235">Comparisons of base64Binary
+and hexBinary Values</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11.1.1 <a
+href="#func-hexBinary-equal">op:hexBinary-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;11.1.2 <a
+href="#func-base64Binary-equal">op:base64Binary-equal</a><br />
+12 <a href="#d1e4283">Functions and Operators on NOTATION</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;12.1 <a href="#d1e4285">Functions on NOTATION</a><br
+/>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;12.1.1 <a
+href="#func-NOTATION-equal">op:NOTATION-equal</a><br />
+13 <a href="#d1e4312">Functions and Operators on Nodes</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;13.1 <a href="#d1e4318">Functions and Operators on
+Nodes</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13.1.1 <a
+href="#func-xpath-name">fn:name</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13.1.2 <a
+href="#func-local-name">fn:local-name</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13.1.3 <a
+href="#func-namespace-uri">fn:namespace-uri</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13.1.4 <a
+href="#func-number">fn:number</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13.1.5 <a
+href="#func-lang">fn:lang</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13.1.6 <a
+href="#func-node-equal">op:node-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13.1.7 <a
+href="#func-deep-equal">fn:deep-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13.1.8 <a
+href="#func-node-before">op:node-before</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13.1.9 <a
+href="#func-node-after">op:node-after</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;13.1.10 <a
+href="#func-root">fn:root</a><br />
+14 <a href="#d1e4627">Functions and Operators on Sequences</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;14.1 <a href="#d1e4641">Constructor Functions on
+Sequences</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.1.1 <a
+href="#func-to">op:to</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;14.2 <a href="#d1e4664">Functions and Operators on
+Sequences</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.2.1 <a
+href="#func-boolean">fn:boolean</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.2.2 <a
+href="#func-concatenate">op:concatenate</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.2.3 <a
+href="#func-item-at">fn:item-at</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.2.4 <a
+href="#func-index-of">fn:index-of</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.2.5 <a
+href="#func-empty">fn:empty</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.2.6 <a
+href="#func-exists">fn:exists</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.2.7 <a
+href="#func-distinct-nodes">fn:distinct-nodes</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.2.8 <a
+href="#func-distinct-values">fn:distinct-values</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.2.9 <a
+href="#func-insert">fn:insert</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.2.10 <a
+href="#func-remove">fn:remove</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.2.11 <a
+href="#func-subsequence">fn:subsequence</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.2.12 <a
+href="#func-unordered">fn:unordered</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;14.3 <a href="#d1e5030">Equals, Union, Intersection
+and Except</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.3.1 <a
+href="#func-sequence-deep-equal">fn:sequence-deep-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.3.2 <a
+href="#func-sequence-node-equal">fn:sequence-node-equal</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.3.3 <a
+href="#func-union">op:union</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.3.4 <a
+href="#func-intersect">op:intersect</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.3.5 <a
+href="#func-except">op:except</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;14.4 <a href="#d1e5200">Aggregate Functions</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.4.1 <a
+href="#func-count">fn:count</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.4.2 <a
+href="#func-avg">fn:avg</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.4.3 <a
+href="#func-max">fn:max</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.4.4 <a
+href="#func-min">fn:min</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.4.5 <a
+href="#func-sum">fn:sum</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;14.5 <a href="#fns-that-generate-sequences">Functions
+that Generate Sequences</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.5.1 <a
+href="#func-xpath-id">fn:id</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.5.2 <a
+href="#func-xpath-idref">fn:idref</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.5.3 <a
+href="#func-document">fn:document</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.5.4 <a
+href="#func-collection">fn:collection</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;14.5.5 <a
+href="#func-input">fn:input</a><br />
+15 <a href="#context">Context Functions</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;15.1 <a
+href="#func-context-item">fn:context-item</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;15.2 <a href="#func-position">fn:position</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;15.3 <a href="#func-last">fn:last</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;15.4 <a
+href="#func-current-dateTime">fn:current-dateTime</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;15.4.1 <a
+href="#d1e5595">Examples</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;15.5 <a
+href="#func-current-date">fn:current-date</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;15.5.1 <a
+href="#d1e5612">Examples</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;15.6 <a
+href="#func-current-time">fn:current-time</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;15.6.1 <a
+href="#d1e5629">Examples</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;15.7 <a
+href="#func-default-collation">fn:default-collation</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;15.8 <a
+href="#func-implicit-timezone">fn:implicit-timezone</a><br />
+16 <a href="#casting">Casting Functions</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;16.1 <a
+href="#casting-from-primitive-to-primitive">Casting from primitive types to
+primitive types</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;16.2 <a href="#casting-to-derived-types">Casting to
+derived types</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;16.3 <a
+href="#casting-from-derived-to-parent">Casting from derived types to parent
+types</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;16.4 <a href="#casting-within-branch">Casting within
+a branch of the type hierarchy</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;16.5 <a href="#casting-across-hierarchy">Casting
+across the type hierarchy</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;16.6 <a href="#casting-from-strings">Casting from
+string and anySimpleType</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;16.7 <a href="#casting-to-string">Casting to string
+and anySimpleType</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;16.8 <a href="#casting-to-numerics">Casting to
+numeric types</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;16.9 <a
+href="#casting-to-durations-datetimes">Casting to duration and date and time
+types</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;16.10 <a href="#casting-boolean">Casting to
+boolean</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;16.11 <a href="#d1e7084">Casting to base64Binary and
+hexBinary</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;16.12 <a href="#casting-to-anyuri">Casting to
+anyURI</a><br />
+&nbsp;&nbsp;&nbsp;&nbsp;16.13 <a href="#casting-to-notation">Casting to
+NOTATION</a><br />
+<a name="appendices" id="appendices"></a>Appendices</p>
+
+<p></p>
+
+<h2>References</h2>
+
+<p></p>
+
+<p><a href="/TR/xquery-operators/">XQuery 1.0 and XPath 2.0 Functions and
+Operators</a></p>
+
+<p></p>
+
 <p></p>
 
 <h2>Places to talk about this</h2>
