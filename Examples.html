@@ -67,15 +67,46 @@ like:</p>
 
 <h2 id="Ontologies">Ontologies in DAML</h2>
 
-<p>These examples do not contain rules, just ontology information in DAML.
-DAML allows you to describe the properties and class you create and the
-relationships between them. Here are two fairly large examples from
-biochemistry. They seem to have been generated using the OILED software.  The
-owners of these ontologies retain all rights, so you should
-<strong>not</strong> copy them for the purposes of making your own ontology.
-They are just here as examples:</p>
+<p></p>
+
+<h3 id="Family">Family relationships - GEDCOM</h3>
+
+<p></p>
+
+<p>Here is an ontology for geneology, (where from?). Thanks to <a
+href="http://www.agfa.com/w3c/jdroo/">Jos De Roo</a><a></a> for <a
+href="http://lists.w3.org/Archives/Public/www-rdf-logic/2001Mar/0018.html">putting
+this into N3</a><a></a>.</p>
+<ul>
+  <li>Some rules relating relationships. One's father's sister is ones' aunt,
+    and so on. (<a
+    href="test/gedcom/gedcom-relations.n3">gedcom/gedcom-relations.n3</a><a></a>)</li>
+  <li>Some data of some imaginary families (<a
+    href="test/gedcom/gedcom-facts.n3">gedcom/gedcom-facts.n3</a><a></a>);</li>
+  <li>The same data after processing by the rules, with each person's extended
+    family relationships calculated (<a
+    href="test/gedcom/lots.n3">gedcom/lots.n3</a>)</li>
+  <li><a href="test/gedcom/Makefile ">gedcom/Makefile </a>shows (for unix
+    people) the commands to buld them
+    <p></p>
+  </li>
+</ul>
+
+<p></p>
 
 <h3 id="TAMBIS">TAMBIS</h3>
+
+<blockquote>
+  <p><i>The owners of the next two ontologies retain all rights, so you should
+  </i><strong><i>not</i></strong><i> copy them for the purposes of making your
+  own ontology.</i></p>
+</blockquote>
+
+<p> These examples do not contain rules, just ontology information in DAML.
+DAML allows you to describe the properties and class you create and the
+relationships between them. Here are two fairly large examples from
+biochemistry. They seem to have been generated using the OILED software. They
+are just here as examples.</p>
 
 <p>The tambis ontology was provided as an example by Ian Horrocks.  Files in
 <code>test/tambis</code></p>
@@ -173,24 +204,25 @@ optimised.  The rules are by no means complete, so the axoim set is not
 translated in its entirity. This example is unfinished but still may be
 instructive.</p>
 <ul>
-  <li>Makefile  contains the recipes - files are all in the dpo
-  subdirectory</li>
-  <li>axioms.txt  was cut and pasted from the axiomatic semantics
+  <li>dpo/Makefile  contains the recipes - files are all in the dpo
+    subdirectory</li>
+  <li>dpo/axioms.txt  was cut and pasted from the axiomatic semantics
   document</li>
-  <li>axioms.n3 is the result ofmaking this into N3 format for the KIF
-  lists</li>
-  <li>axioms.sed was the stream editor file used to do that;</li>
-  <li>kludge.n3 labels everything in the file as an axiom</li>
-  <li>consts.n3 is a list of all the constants which are deemed the same in
-    KIF and N3</li>
-  <li>convert.n3 has the actual rules for deriving some N3 expressions from
-    some KIF expressions;</li>
-  <li>result.n3 is the result of conversion</li>
-  <li>purged,n3 is the result of converting and purging the log:Chaff;</li>
-  <li>purged2.n3 is the result of purging it still futher (too far!) removing
-    all lists as well</li>
-  <li>noKIF.n3 is the file usedto do that, to label all lists as
-  log:Chaff.</li>
+  <li>dpo/axioms.n3 is the result ofmaking this into N3 format for the KIF
+    lists</li>
+  <li>dpo/axioms.sed was the stream editor file used to do that;</li>
+  <li>dpo/kludge.n3 labels everything in the file as an axiom</li>
+  <li>dpo/consts.n3 is a list of all the constants which are deemed the same
+    in KIF and N3</li>
+  <li>dpo/convert.n3 has the actual rules for deriving some N3 expressions
+    from some KIF expressions;</li>
+  <li>dpo/result.n3 is the result of conversion</li>
+  <li>dpo/purged,n3 is the result of converting and purging the
+  log:Chaff;</li>
+  <li>dpo/purged2.n3 is the result of purging it still futher (too far!)
+    removing all lists as well</li>
+  <li>dpo/noKIF.n3 is the file usedto do that, to label all lists as
+    log:Chaff.</li>
 </ul>
 
 <h2 id="Parser">Parser test files</h2>
