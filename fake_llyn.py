@@ -4,32 +4,6 @@
 $Id$
 
 
-RDF Store and Query engine
-
-Logic Lookup: Yet another Name
-
-(also, in Wales, a lake - a storage area at the centre of the valley?)
-
-This is an engine which knows a certian amount of stuff and can manipulate it.
-It is a (forward chaining) query engine, not an (backward chaining) inference engine:
-that is, it will apply all rules it can
-but won't figure out which ones to apply to prove something.  It is not
-optimized particularly.
-
-Used by cwm - the closed world machine.
-See:  http://www.w3.org/DesignIssues/Notation3
-
-Interfaces
-==========
-
-This store stores many formulae, where one formula is what in
-straight RDF implementations is known as a "triple store".
-So look at the Formula class for a triple store interface.
-
-See also for comparison, a python RDF API for the Redland library (in C):
-   http://www.redland.opensource.ac.uk/docs/api/index.html 
-and the redfoot/rdflib interface, a python RDF API:
-   http://rdflib.net/latest/doc/triple_store.html
 
     
 Copyright ()  2000-2004 World Wide Web Consortium, (Massachusetts Institute
@@ -58,8 +32,8 @@ import urllib # for log:content
 import md5, binascii  # for building md5 URIs
 
 import uripath
-import notation3    # N3 parsers and generators, and RDF generator
-from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
+#import notation3    # N3 parsers and generators, and RDF generator
+#from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 import diag  # problems importing the tracking flag, and chatty_flag must be explicit it seems diag.tracking
@@ -67,15 +41,16 @@ from diag import progress, verbosity
 from term import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Term,\
-    CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode
+    CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode,  AnonymousExistential
 from OrderedSequence import merge
 from formula import Formula, StoredStatement
 import reify
 
 from query import think, applyRules, testIncludes
-import webAccess
-from webAccess import DocumentAccessError
+#import webAccess
+#from webAccess import DocumentAccessError
 from decimal import Decimal
+#from llyn import RDFStore
 
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
@@ -457,7 +432,7 @@ class fakeFormula(Formula):
 
     def objects(self, pred=None, subj=None):
         """Obsolete - use each(subj=..., pred=...)"""
-	raise RuntimeError]
+	raise RuntimeError
 
     def reification(self, sink, bnodeMap={}, why=None):
 	"""Describe myself in RDF to the given context
@@ -500,7 +475,7 @@ def comparePair(self, other):
 
 ################################################################################################
 
-class fakeRDFStore(RDFStore) :
+class fakeRDFStore(RDFSink):
     """ Absorbs RDF stream and saves in triple store
     """
 
@@ -511,10 +486,94 @@ class fakeRDFStore(RDFStore) :
         self._experience = None   #  A formula of all the things program run knows from direct experience
         self._formulaeOfLength = {} # A dictionary of all the constant formuale in the store, lookup by length key.
         self.size = 0
+
+    def __init__(self, genPrefix=None, metaURI=None, argv=None, crypto=0):
+        RDFSink.__init__(self, genPrefix=genPrefix)
+        self.clear()
+        self.argv = argv     # List of command line arguments for N3 scripts
+
+	run = uripath.join(uripath.base(), ".RUN/") + `time.time()`  # Reserrved URI @@
+
+        if metaURI != None: meta = metaURI
+	else: meta = run + "meta#formula"
+	self.reset(meta)
+
+
+        # Constants, as interned:
         
+        self.forSome = self.symbol(forSomeSym)
+	self.integer = self.symbol(INTEGER_DATATYPE)
+	self.float  = self.symbol(FLOAT_DATATYPE)
+	self.decimal = self.symbol(DECIMAL_DATATYPE)
+        self.forAll  = self.symbol(forAllSym)
+        self.implies = self.symbol(Logic_NS + "implies")
+        self.insertion = self.symbol(Delta_NS + "insertion")
+        self.deletion  = self.symbol(Delta_NS + "deletion")
+        self.means = self.symbol(Logic_NS + "means")
+        self.asserts = self.symbol(Logic_NS + "asserts")
+        
+# Register Light Builtins:
+
+        log = self.symbol(Logic_NS[:-1])   # The resource without the hash
+
+# Functions:        
+
+        self.Literal =  log.internFrag("Literal", Fragment) # syntactic type possible value - a class
+        self.List =     log.internFrag("List", Fragment) # syntactic type possible value - a class
+        self.Formula =  log.internFrag("Formula", Fragment) # syntactic type possible value - a class
+        self.Other =    log.internFrag("Other", Fragment) # syntactic type possible value - a class
+        
+	self.sameAs = self.symbol(OWL_NS + "sameAs")
+
+# Remote service flag in metadata:
+
+	self.definitiveService = log.internFrag("definitiveService", Fragment)
+	self.definitiveDocument = log.internFrag("definitiveDocument", Fragment)
+	self.pointsAt = log.internFrag("pointsAt", Fragment)  # This was EricP's
+
+# Constants:
+
+        self.Truth = self.symbol(Logic_NS + "Truth")
+        self.Falsehood = self.symbol(Logic_NS + "Falsehood")
+        self.type = self.symbol(RDF_type_URI)
+        self.Chaff = self.symbol(Logic_NS + "Chaff")
+	self.docRules = self.symbol("http://www.w3.org/2000/10/swap/pim/doc#rules")
+	self.imports = self.symbol("http://www.w3.org/2002/07/owl#imports")
+
+# List stuff - beware of namespace changes! :-(
+
+	from cwm_list import BI_first, BI_rest
+        rdf = self.symbol(List_NS[:-1])
+	self.first = rdf.internFrag("first", BI_first)
+        self.rest = rdf.internFrag("rest", BI_rest)
+        self.nil = self.intern(N3_nil, FragmentNil)
+        self.Empty = self.intern(N3_Empty)
+        self.List = self.intern(N3_List)
+
+        import cwm_string  # String builtins
+        import cwm_os      # OS builtins
+        import cwm_time    # time and date builtins
+        import cwm_math    # Mathematics
+        import cwm_trigo   # Trignometry
+        import cwm_times    # time and date builtins
+        import cwm_maths   # Mathematics, perl/string style
+	import cwm_list	   # List handling operations
+        cwm_string.register(self)
+        cwm_math.register(self)
+        cwm_trigo.register(self)
+        cwm_maths.register(self)
+        cwm_os.register(self)
+        cwm_time.register(self)
+        cwm_times.register(self)
+	cwm_list.register(self)
+        if crypto:
+	    import cwm_crypto  # Cryptography
+	    cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
+
+
     def newLiteral(self, str, dt=None, lang=None):
 	"In a fake RDFStore we don't intern things"
-	result = Literal(self, str, dt, lang)
+	return Literal(self, str, dt, lang)
 	
     def newFormula(self, uri=None):
 	return fakeFormula(self, uri)
@@ -657,8 +716,6 @@ class fakeRDFStore(RDFStore) :
             hash = string.rfind(urirefString, "#")
             if hash < 0 :     # This is a resource with no fragment
 		assert typ == SYMBOL, "If URI <%s>has no hash, must be symbol" % urirefString
-                result = self.resources.get(urirefString, None)
-                if result != None: return result
                 result = Symbol(urirefString, self)           
             else :      # This has a fragment and a resource
                 resid = urirefString[:hash]
@@ -678,7 +735,7 @@ class fakeRDFStore(RDFStore) :
                 else: raise RuntimeError, "did not expect other type:"+`typ`
         return result
 
-    def newList(self, value):
+    def newList(self, value, context=None):
 	raise RuntimeError("You'll want to override this function too")
 
 #    def deleteFormula(self,F):
@@ -700,12 +757,6 @@ class fakeRDFStore(RDFStore) :
         F.canonical = None
         return F
 
-
-    def bind(self, prefix, uri):
-
-        if prefix != "":   #  Ignore binding to empty prefix
-            return RDFSink.bind(self, prefix, uri) # Otherwise, do as usual.
-    
                     
     def makeComment(self, str):
         raise RuntimeError("You'll want to override this")
@@ -722,6 +773,21 @@ class fakeRDFStore(RDFStore) :
             if q[p] == None:
                 return list[0].quad[p]
 
+    def bind(self, prefix, uri):
+        raise RuntimeError("you want to do something here")
+        if prefix != "":   #  Ignore binding to empty prefix
+            return RDFSink.bind(self, prefix, uri) # Otherwise, do as usual.
+
+    def makeStatement(self, tuple, why=None):
+	"""Add a quad to the store, each part of the quad being in pair form."""
+        q = ( self.intern(tuple[CONTEXT]),
+              self.intern(tuple[PRED]),
+              self.intern(tuple[SUBJ]),
+              self.intern(tuple[OBJ]) )
+        if q[PRED] is self.forSome and isinstance(q[OBJ], Formula):
+            if diag.chatty_flag > 97:  progress("Makestatement suppressed")
+            return  # This is implicit, and the same formula can be used un >1 place
+        self.storeQuad(q, why)
 
     def storeQuad(self, q, why=None):
         """ intern quads, in that dupliates are eliminated.
@@ -730,17 +796,19 @@ class fakeRDFStore(RDFStore) :
         Builds the indexes and does stuff for lists.
 	Deprocated: use Formula.add()         
         """
-        
         context, pred, subj, obj = q
-	assert isinstance(context, Formula), "Should be a Formula: "+`context`
+	assert isinstance(context, fakeFormula), "Should be a Formula: "+`context`
+	
 	return context.add(subj=subj, pred=pred, obj=obj, why=why)
 	
+    def newBlankNode(self, context, uri=None, why=None):
+        return context.newBlankNode(uri, why)
 
     def startDoc(self):
-        pass
+        raise RuntimeError("You'll want to override this function too")
 
     def endDoc(self, rootFormulaPair):
-        return
+        raise RuntimeError("You'll want to override this function too")
 
 
 
@@ -846,10 +914,6 @@ def isString(x):
     #    --- but on some releases, we need to say tuple(types.StringTypes)
     return type(x) is type('') or type(x) is type(u'')
 
-#####################  Register this module
-
-from myStore import setStoreClass
-setStoreClass(RDFStore)
 
 #ends
 

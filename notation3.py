@@ -363,7 +363,8 @@ class SinkParser:
 	return self._formula
 
     def makeStatement(self, quadruple):
-#        print "# Parser output: ", `triple`
+        #$$$$$$$$$$$$$$$$$$$$$
+#        print "# Parser output: ", `quadruple`
         self._store.makeStatement(quadruple, why=self._reason2)
 
 
@@ -610,7 +611,7 @@ class SinkParser:
                 j = self.item(str,i, item) #@@@@@ should be path, was object
                 if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected item in list or ')'")
                 List.append(self._store.intern(item[0]))
-            res.append(self._store.newList(List))
+            res.append(self._store.newList(List, self._context))
             return j
 
         j = self.tok('this', str, i)   # This context
@@ -1553,8 +1554,191 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 
         return "<" + value + ">"    # Everything else
 
+def nothing():
+    pass
+
+import fake_llyn
+from formula import Formula
+from term import Node, Literal, AnonymousExistential
+class N3OutputFormula(fake_llyn.fakeFormula):
+    """Something or other
 
 
+    """
+    def __init__(self, store, write, uri=None):
+        self._write = write
+        self._subj = None
+        self._pred = None
+        self._subjList = []
+        self._predList = []
+        self._todoList = []
+        fake_llyn.fakeFormula.__init__(self, store, uri)
+        self.bNodes = {}
+
+    def outputNode(self, node):
+        if isinstance(node, AnonymousExistential):
+            a = self.bNodes.get(node, nothing)
+            self._write(' [')
+            a()
+            self._write(']')
+        elif type(node) is type([]):
+            # list
+            self._write(' (')
+            [self.outputNode(a) for a in node]
+            self._write(')')
+        elif isinstance(node, Formula):
+            # formula
+            pass
+        elif isinstance(node, Literal):
+            # literal
+            self._write(" ")
+            self._write(stringToN3(str(node)))
+        elif isinstance(node, Node):
+            # Node
+            self._write('\n <')
+            self._write(node.uriref())
+            #self._write(`node.__class__`)
+            self._write('>')
+
+    def setDefaultNamespace(self, uri):
+        return self.bind("", uri)
+    
+    def _endStatement(self):
+        if self._subjList != []:
+            self._write(']')
+            self._subj = self._subjList.pop()
+            self._pred = self._predList.pop()
+            todo = self._todoList.pop()
+            todo()
+        if self._subj is not None:
+            self._write(' . ')
+
+    def _endPred(self):
+        if self._pred is not None:
+            self._write('; ')
+
+    def _endObj(self):
+        self._write(', ')
+
+#    def newBlankNode(self):
+        
+
+    def add(self, subj, pred, obj, why=None):
+        """
+
+        """
+        def out1():
+            self.outputNode(subj)
+            out2()
+
+        def out2():
+            self.outputNode(pred)
+            out3()
+
+        def out3():
+            self.outputNode(obj)
+
+        if subj != self._subj:
+            if isinstance(subj, AnonymousExistential):
+                f = self.bNodes.get(subj, None)
+                if f is not None:
+                    self._subj = subj
+                else:
+                    self.bNodes[subj] = out2
+            else:
+                self._endStatement()
+                out1()
+        if subj == self._subj and pred != self._pred:
+            if isinstance(subj, AnonymousExistential):
+                f = self.bNodes.get(subj, None)
+                def func():
+                    f()
+                    self._endPred()
+                    out2()
+                if f:
+                    self.bNodes[subj] = func
+                else:
+                    self.bNodes[subj] = out2
+            else:
+                self._endPred()
+                out2()
+        elif subj == self._subj and pred == self._pred:
+            if isinstance(subj, AnonymousExistential):
+                f = self.bNodes.get(subj, None)
+                def func():
+                    f()
+                    self._endObj()
+                    out3()
+                if f:
+                    self.bNodes[subj] = func
+                else:
+                    self.bNodes[subj] = out1
+            else:
+                self._endObj()
+                out3()
+        self._subj = subj
+        self._pred = pred
+
+    def bind(self, prefix, uri):
+        self._endStatement
+        self._write('\n @prefix ' + prefix + ': <' + uri + '> .')
+        self.store.bindings[uri] = prefix
+            
+
+class N3OutputStore(fake_llyn.fakeRDFStore):
+    """How to really output n3
+
+
+    """
+
+    def __init__(self, write, base=None, genPrefix = None, noLists=0 , quiet=0, flags=""):
+        """
+
+        """
+        self._write = write
+        self.base = base
+        self.flags = flags
+        self.__topformula = None
+        self.indent = 0
+        self._quiet = quiet
+        self.bindings = {}
+        fake_llyn.fakeRDFStore.__init__(self)
+        
+    def newFormula(self, uri=None, outfunc=None):
+        if outfunc is None:
+            outfunc = self._write
+	q = N3OutputFormula(self, outfunc, uri)
+	if self.__topformula is None: self.__topformula = q
+	return q
+
+    def makeComment(self, str):
+        for line in string.split(str, "\n"):
+            self._write("#" + line + "\n")  # Newline order??@@
+        self._write("    " * self.indent + "    ")
+
+    def newList(self, List, context=None):
+        return List
+
+    def startDoc(self):
+ 
+        if not self._quiet:  # Suppress stuff which will confuse test diffs
+            self._write("\n#  Notation3 generation by\n")
+            idstring = "$Id$" # CVS CHANGES THIS
+            self._write("#       " + idstring[5:-2] + "\n\n") # Strip $s in case result is checked in
+            if self.base: self._write("#   Base was: " + self.base + "\n")
+        self._write("    " * self.indent)
+#        self._nextId = 0
+
+    def endDoc(self, rootFormulaPair=None):
+	rootFormulaPair._endStatement()
+	self._write("\n")
+	if not self._quiet: self._write("#ENDS\n")
+	return  # No formula returned - this is not a store
+
+    def bind(self, prefix, uri):
+        self.__topformula.bind(prefix, uri)
+
+        
 ###################################################
 #
 #   Utilities
