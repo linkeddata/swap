@@ -1,5 +1,5 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-                      "http://www.w3.org/TR/REC-html40/loose.dtd">
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+    "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
   <title>Primer - Getting ino the semantic web and RDF using N3</title>
@@ -28,37 +28,37 @@ in its XML syntax, but easier to scribble when getting started.</p>
 <p>In RDF, information is simply a collection of statements, each with a
 subject, verb and object - and nothing else. In N3, you can write an RDF
 triple just like that, with a period:</p>
-<pre>&lt;#pat> &lt;#knows> &lt;#jo> .</pre>
+<pre>&lt;#pat&gt; &lt;#knows&gt; &lt;#jo&gt; .</pre>
 
 <p></p>
 
 <p>Everything, be it subject, verb, or object, is identified with a Universal
-Resource Identifier.  This is something like &lt;http://www.w3.org/> or
-&lt;http://www.w3.org/2000/10/swap/test/s1.n3#includes>, but when everything
-is missed out before the "#" it identifies &lt;#pat> in the current document
-whatever it is.</p>
+Resource Identifier.  This is something like &lt;http://www.w3.org/&gt; or
+&lt;http://www.w3.org/2000/10/swap/test/s1.n3#includes&gt;, but when
+everything is missed out before the "#" it identifies &lt;#pat&gt; in the
+current document whatever it is.</p>
 
 <p>There is one exception that the object (only) can be a string representing
 a value:</p>
-<pre>&lt;#pat> &lt;#knows> &lt;#jo> .
-&lt;#pat> &lt;#age> "24" .</pre>
+<pre>&lt;#pat&gt; &lt;#knows&gt; &lt;#jo&gt; .
+&lt;#pat&gt; &lt;#age&gt; "24" .</pre>
 
 <p>The verb "knows" is in RDF called a "property" and thought of as a noun
 expressing a relation between the two. In fact you can write</p>
-<pre>&lt;#pat> &lt;#child> &lt;#al> .</pre>
+<pre>&lt;#pat&gt; &lt;#child&gt; &lt;#al&gt; .</pre>
 
 <p>alternatively, to make it more readable, as either</p>
-<pre>&lt;#pat> has &lt;#child> of &lt;#al> .</pre>
+<pre>&lt;#pat&gt; has &lt;#child&gt; of &lt;#al&gt; .</pre>
 
 <p>or</p>
-<pre>&lt;#al> is &lt;#child> of &lt;#pat> .</pre>
+<pre>&lt;#al&gt; is &lt;#child&gt; of &lt;#pat&gt; .</pre>
 
 <p>There are two shortcuts for when you have several statements about the same
 subject: a semicolon ";" introduces another property of the same subject, and
 a comma introduces another object with  the same predicate and subject.</p>
-<pre>&lt;#pat> &lt;#child>  &lt;#al>, &lt;#chaz>, &lt;#mo> ;
-       &lt;#age>    "24" ;
-       &lt;#eyecolor> "blue" .</pre>
+<pre>&lt;#pat&gt; &lt;#child&gt;  &lt;#al&gt;, &lt;#chaz&gt;, &lt;#mo&gt; ;
+       &lt;#age&gt;    "24" ;
+       &lt;#eyecolor&gt; "blue" .</pre>
 
 <p>So, for example, the data in the table</p>
 <pre></pre>
@@ -89,25 +89,26 @@ a comma introduces another object with  the same predicate and subject.</p>
 </table>
 
 <p>could be written</p>
-<pre>  &lt;#pat>   &lt;#age> "24";  &lt;#eyecolor> "blue" .
-  &lt;#al>    &lt;#age>  "3";  &lt;#eyecolor> "green" .
-  &lt;#jo>    &lt;#age>  "5";  &lt;#eyecolor> "green" .</pre>
+<pre>  &lt;#pat&gt;   &lt;#age&gt; "24";  &lt;#eyecolor&gt; "blue" .
+  &lt;#al&gt;    &lt;#age&gt;  "3";  &lt;#eyecolor&gt; "green" .
+  &lt;#jo&gt;    &lt;#age&gt;  "5";  &lt;#eyecolor&gt; "green" .</pre>
 <pre></pre>
 
 <p>Sometimes there are things involved in a statement don't actually have any
 identifier you want to give them - you know one exists but you only want to
 give the properties .  You represent this by square brackets with the
 properties inside.</p>
-<pre>&lt;#pat> &lt;#child> [ &lt;#age> "4" ] , [ &lt;age> "3" ].</pre>
+<pre>&lt;#pat&gt; &lt;#child&gt; [ &lt;#age&gt; "4" ] , [ &lt;age&gt; "3" ].</pre>
 
 <p>You could read this as #pat has a #child which has #age of "4" and a #child
 which has an #age of "3".  There are two important things to remember</p>
 <ul>
   <li>The identifiers are just identifiers - the fact that the letters p a t
     are used doesn't tell anyone or any machine that we are talking about
-    anyone whose name is "Pat" -- unless we say &lt;#pat> &lt;#name> "Pat". 
-    The same applies to the verbs - never take the actual letters c h i l d as
-    telling you what it means - we will find out how to do that later.</li>
+    anyone whose name is "Pat" -- unless we say &lt;#pat&gt; &lt;#name&gt;
+    "Pat". The same applies to the verbs - never take the actual letters c h i
+    l d as telling you what it means - we will find out how to do that
+  later.</li>
   <li>The square brackets declare that something exists with the given
     properties, but don't give you a way to refer to it elsewhere in this or
     another document.</li>
@@ -115,9 +116,9 @@ which has an #age of "3".  There are two important things to remember</p>
 
 <p>If we actually wany to use a name, we could have written the table above
 as</p>
-<pre>  [ &lt;#name> "Pat"; &lt;#age> "24";  &lt;#eyecolor> "blue"  ].
-  [ &lt;#name> "Al" ; &lt;#age>  "3";  &lt;#eyecolor> "green" ].
-  [ &lt;#name> "Jo" ; &lt;#age>  "5";  &lt;#eyecolor> "green" ].</pre>
+<pre>  [ &lt;#name&gt; "Pat"; &lt;#age&gt; "24";  &lt;#eyecolor&gt; "blue"  ].
+  [ &lt;#name&gt; "Al" ; &lt;#age&gt;  "3";  &lt;#eyecolor&gt; "green" ].
+  [ &lt;#name&gt; "Jo" ; &lt;#age&gt;  "5";  &lt;#eyecolor&gt; "green" ].</pre>
 
 <p>There are many ways of combining square brackets - but you can figure that
 out from the examples later on. There is not much left learn about using N3 to
@@ -133,29 +134,29 @@ web, we share quite precisely by using exactly the same URI for the concept of
 title.</p>
 
 <p>I could try to give the title of an N3 document by</p>
-<pre>&lt;> &lt;#title>  "A simple example of N3".</pre>
+<pre>&lt;&gt; &lt;#title&gt;  "A simple example of N3".</pre>
 
-<p>(The &lt;> being an empty URI reference always refers to the document it is
-written in.) The &lt;#title> refers to the concept of #title as defined by the
-document itself.  This won't mean much to the reader. However, a group of
-people created a list of properties called the <a
+<p>(The &lt;&gt; being an empty URI reference always refers to the document it
+is written in.) The &lt;#title&gt; refers to the concept of #title as defined
+by the document itself.  This won't mean much to the reader. However, a group
+of people created a list of properties called the <a
 href="http://purl.oclc.org/dc/">Dublin Core</a>, among which is their idea of
 title, which they gave the identifier</p>
 
-<p>&lt;http://purl.org/dc/elements/1.1/title>. So we can make a much better
+<p>&lt;http://purl.org/dc/elements/1.1/title&gt;. So we can make a much better
 defined statement if we say</p>
-<pre>&lt;> &lt;http://purl.org/dc/elements/1.1/title>
+<pre>&lt;&gt; &lt;http://purl.org/dc/elements/1.1/title&gt;
  "Primer - Getting into the Semantic Web and RDF using N3".</pre>
 
 <p>That of course would be a bit verbose - imagine using such long identifiers
 for everything like #age and #eyecolor above. So N3 allows you to set up a
 shorthand prefix for the long part. This is called a namespace identifier, and
 you set it up using "@prefix" like this:</p>
-<pre>@prefix dc:  &lt;http://purl.org/dc/elements/1.1/> .
-&lt;> dc:title  "Primer - Getting ino the semantic web and RDF using N3".</pre>
+<pre>@prefix dc:  &lt;http://purl.org/dc/elements/1.1/&gt; .
+&lt;&gt; dc:title  "Primer - Getting ino the semantic web and RDF using N3".</pre>
 
 <p>Note that when you use a prefix, you use a colon instead of a hash between
-dc and title, and you don't use the &lt;angle brackets> around the whole
+dc and title, and you don't use the &lt;angle brackets&gt; around the whole
 thing.  This is much quicker.  This is how you will see and write almost all
 your predicates in N3.  Once set up, a prefix can be used for the rest of the
 file (* may change).</p>
@@ -166,15 +167,15 @@ and you can build your own for your own applications very simply.</p>
 
 <p>From now, on we are going to use some well known namesapaces, and so to
 save space, I will just assume the prefixes</p>
-<pre>@prefix rdf:  &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#> .
-@prefix ont:  &lt;http://www.daml.org/2000/10/daml-ont#> .</pre>
+<pre>@prefix rdf:  &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
+@prefix ont:  &lt;http://www.daml.org/2000/10/daml-ont#&gt; .</pre>
 
 <p>These are the RDF, RDF schema, and experimental DAML ontology namespaces,
 respectively.  They give us the core terms which we can bootstrap ourselves
 into the semantic web.  I am also going to assume that  the empty prefix
 stands for the document we are writing, which we can say in N3 as</p>
-<pre>@prefix : &lt;#> .</pre>
+<pre>@prefix : &lt;#&gt; .</pre>
 
 <p>This means we could have the example above as</p>
 <pre>:pat :child [ :age "4" ] , [ :age "3" ].</pre>
@@ -265,7 +266,7 @@ message, and use that. Another way is to put a document in a bit of very well
 maintained web space which no one can take away from you.  Or of course if you
 are just playing with it, use a file (say <code>mydb.n3</code>) in the same
 directory as the rest of your work, and the namespace identifier you can use
-is just &lt;<code>mydb.n3#></code>.</p>
+is just &lt;<code>mydb.n3#&gt;</code>.</p>
 
 <p>When use a web document to contain information in N3 about the terms you
 define (good practice!) then the namespace will end in a hash.</p>
@@ -314,7 +315,7 @@ context.</p>
 <p>In N3 a context can be represented by enclosing all the statements it
 encloses in curly braces { }. (In RDF/XML, contexts are declared using the
 <code>bagid</code> attribute on a collection of statements) .</p>
-<pre>&lt;x.rdf> :says {  :pat a :Person . } .</pre>
+<pre>&lt;x.rdf&gt; :says {  :pat a :Person . } .</pre>
 
 <p>The context in braces acts just like an identifier in the rest of the
 syntax.  It is like a literal expression in that it is defined only by its
@@ -334,7 +335,7 @@ the simplest sort of rule, all you need is one property:
 <code>log:implies</code>. (One engine which is progrmmed to process this is <a
 href="Overview.html">cwm</a>). The namespace for the logical and rather
 experimental things which we introduce now are as in</p>
-<pre>@prefix log: &lt;http://www.w3.org/2000/10/swap/log.n3#> .</pre>
+<pre>@prefix log: &lt;http://www.w3.org/2000/10/swap/log.n3#&gt; .</pre>
 
 <p>A simple rule, then, is,</p>
 
@@ -353,7 +354,7 @@ can be applied to any identifiers. We nee a way of saying this.  A given
 context is true even if the given identifier is replaced -- consistently
 throughout hte context -- with any other identifier. This is represented by
 (guess what!) a property of the context.</p>
-<pre>&lt;> log:forAll :x, :y.
+<pre>&lt;&gt; log:forAll :x, :y.
 { :x :parent :y .} log:implies { y: :child .} .</pre>
 
 <p>Read this something like: "This document is true for any values of x and y.
@@ -364,7 +365,7 @@ are inverse.</p>
 <pre>:parent ont:inverse :child .</pre>
 
 <p>A machine can then infer the same thing given a generic rule</p>
-<pre>&lt;> log:forAll :p :q, .
+<pre>&lt;&gt; log:forAll :p :q, .
 
 {  :p ont:inverse :q . } log:implies
 
@@ -400,21 +401,23 @@ what these things mean.</p>
   <dt>cwm</dt>
     <dd>(From: Closed world machine; valley.) A bit of code for playing with
       this stuff, as grep is for regular expressions. Sucks in RDF in XML or
-      N3, processes rules, and spits it out again. </dd>
+      N3, processes rules, and spits it out again.</dd>
   <dt><a href="#Properties">Property</a></dt>
     <dd>A sort of relationship between two things; a binary relation.</dd>
   <dt>rule</dt>
     <dd>A loose term for a Statement that an engine has been programmed to
       process.  Different engines have different sets fo rules.</dd>
   <dt>Resource</dt>
-    <dd>That identified by a Universal Resource Identifier.</dd>
+    <dd>That identified by a Universal Resource Identifier (without a "#"). If
+      the URI starts "http:", then the resource is some form of generic
+      document.</dd>
   <dt>Statement</dt>
     <dd>A subject, prediate and object which assert meaning defined by the
       particular prediate used.</dd>
   <dt>Thing</dt>
     <dd>In DAML, a generic name for anything - abstract, animate, inanimate,
-      whatever. The class which anything is in. (In RDF parlance,
-    Resource.)</dd>
+      whatever. The class which anything is in. (In RDF parlance, confusingly,
+      rdf:Resource.)  Idenified by a URI with or without a "#" in it. </dd>
   <dt>Truth</dt>
     <dd>In the log: namespace, a Class of all contexts which are true.</dd>
   <dt>type</dt>
@@ -433,13 +436,14 @@ what these things mean.</p>
 <p>Footnotes</p>
 <dl>
   <dt>rules</dt>
-    <dd>Strictly, you can argue as to whether </dd>
+    <dd>Strictly, you can argue as to whether</dd>
 </dl>
 
 <p></p>
 
 <h2 id="References">References</h2>
 <ul>
+  <li><a href="Examples.html">Many More Examples</a></li>
   <li><a href="/DesignIssues/Notation3.html">Notation3 - Design Issues
     article</a></li>
 </ul>
