@@ -24,6 +24,7 @@ td.pass {background-color : green; }
 td.partial {background-color : teal; }
 td.failure {background-color: red; }
 td.pretty {width : 10em; }
+td.pad_me {width : 4em; }
 h1 {background-color: red; }
 div.diff { width: 80%; 
 	border : 1px solid black; }
@@ -49,6 +50,23 @@ pre {	border : 1px solid black;
   <h1>
 Notation3 Parser Test Results
   </h1>
+  <table border="1">
+   <caption>Color Key:</caption>
+   <tbody>
+     <tr>
+       <td class="pass pad_me"></td>
+       <td>Parser parses the file, and generates the expected output</td>
+     </tr>
+     <tr>
+       <td class="partial pad_me"></td>
+       <td>Parser parses the file</td>
+     </tr>
+     <tr>
+       <td class="failure pad_me"></td>
+       <td>Parser throws an exception on the file</td>
+     </tr>
+   </tbody>
+  </table
 """ .
 
 #
