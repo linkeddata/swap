@@ -1,0 +1,10 @@
+# From http://ilrt.org/discovery/chatlogs/rdfig/2003-03-31.html#T14-50-22-1
+
+@prefix : <http://nwalsh.com/rdf/rules#> .
+@prefix m: <http://nwalsh.com/rdf/movies#> .
+@prefix xmb: <file:/home/ndw/.xmlMemo.rdf#> .
+
+xmb:movie-dieanotherday2002 m:cast "Emilio EchevarrÃ­a"  .
+
+#ends
+
