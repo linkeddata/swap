@@ -21,6 +21,31 @@ import LX.kb
 ##
 axiomFile = "otter/owlAx%s.otter"    # temp hack path, etc
 
+prefixMap = {
+
+    # OWL
+    'http://www.w3.org/2002/07/owl#':
+    'file:web-override/owl/',
+
+    # RDFS
+    'http://www.w3.org/2000/01/rdf-schema#':
+    'file:web-override/rdfs/',
+
+    # RDF
+    'http://www.w3.org/1999/02/22-rdf-syntax-ns#':
+    'file:web-override/rdf/',
+
+    # OWL TESTS
+    'http://www.w3.org/2002/03owlt/':
+    None,
+
+    # EXAMPLE.COM
+    'http://example.com/':
+    None,
+
+    }
+
+
 ################################################################
 
 class UnsupportedDatatype(RuntimeError):
@@ -66,19 +91,17 @@ def checkConsistency(inputDocument,
     kb = LX.kb.KB()
 
     try:
-        
-        parser = LX.language.getParser(language="rdflib", sink=kb)
-        parser.load(inputDocument)
+        kb.load(inputDocument)
 
         if entailedDocument:
             kb2 = LX.kb.KB()
-            parser = LX.language.getParser(language="rdflib", sink=kb2)
-            parser.load(entailedDocument)
+            kb2.load(entailedDocument)
             #print "Adding negated:", kb2
             kb.add(LX.logic.NOT(kb2.asFormula()))
 
         # possible huge performance gains by using subset of axioms (when that's not cheating)
         # possible huge performance gains by puting kb [or just kb2 if present] into SOS
+        #kb.gather(prefixMap)
 
         try:
             LX.engine.otter.run(kb, fileBase=",ot/"+tag,
