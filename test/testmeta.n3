@@ -11,7 +11,13 @@
      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
      @prefix rdft: <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#> .
      @prefix string: <http://www.w3.org/2000/10/swap/string#> .
-    
+ 
+# Added by hand:
+<http://www.w3.org/2000/10/rdf-tests/rdfcore/xml-canon/Manifest.rdf#test001> 
+       a :BoringTest,
+                :ParseTypeLiteralTest.
+# My machine:
+
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#test004>     a :BoringTest,
                 :ParseTypeLiteralTest,
                 :ReificationTest .
