@@ -11,19 +11,20 @@
 </head>
 
 <body xml:lang="en">
-<div class="noprint">
-<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a>
-| <a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
-								    href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> | Rules and Formulae</p>
-</div>
 
+<div class="noprint">
+<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a> |
+<a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
+href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
+Rules and Formulae</p>
+</div>
 
 <h1>Rules and Formulae</h1>
 
 <p>We are going to learn how to express rules in N3, which will allow us to
-do all kinds of things. A simple rule might say something like (in a
-mechanical vocabulry, say) "If one this includes another, then the second is
-a part of the first", or</p>
+do all kinds of things. A simple rule might say something like (in some
+central heating vocabulary) "If the thermostat temperature is high, then the
+heating system power is zero", or</p>
 <pre>{ :thermostat :temp :high } log:implies { :heating :power "0" } .</pre>
 
 <p>The curly brackets here enclose a set of statements. Until this point, all
@@ -46,7 +47,7 @@ out.</p>
 <p>The curly brackets are important. They do take us out of the things we can
 represent using the current RDF/XML OWL specifications. ((Formulae are
 (2003/2) a longer-term issue for the RDF Core group). Cwm will in most cases
-serialize formulae using an XML sysntax which is not standard.</p>
+serialize formulae using an XML syntax which is not standard.</p>
 
 <p></p>
 
@@ -67,7 +68,8 @@ a rule which implies something generally about anything. The
 for the formula in which it is, in this case the outermost formula of the
 document. In most cases for simple rules, the variables are quantified in the
 scope of the document, but when things get nested, it is wise to think about
-what you mean. We don't deal with it in detail here. Mathematically, the</p>
+what you mean. We don't deal with it in detail here. Mathematically, the
+formula above might be written</p>
 
 <p><math xmlns="http://www.w3.org/1998/Math/MathML">
   <mo>&ForAll;</mo>
@@ -104,9 +106,9 @@ actually implicit in the [bracket] syntax.</p>
 
 <p></p>
 
-<p>Each pair of square brackets actully stands for an unnamed existential
+<p>Each pair of square brackets actually stands for an unnamed existential
 variable. Cwm will generally use square brackets on output when it can - if
-there are loops then one has to use explict variables.</p>
+there are loops then one has to use explicit variables.</p>
 <pre>this log:forSome :a.
 :Joe :home :a.
 :a   :owner :Joe.
@@ -116,15 +118,16 @@ there are loops then one has to use explict variables.</p>
 
 <h2><a id="Variables1">Variables with ? and _:</a></h2>
 
-<p>So far we have introduce variables for rules using <em>log:forAll</em>. We
-have introduced existential variables (blank nodes) with
-<code>log:forSome</code>. These are both special pseudoProperies which are
-really special langauge things. There are shortcuts under certain
-circumstances, which avoid you having to type them.</p>
+<p>So far we have introduce variables for rules using
+<code>log:forAll</code>. We have introduced existential variables (blank
+nodes) with <code>log:forSome</code>. These are both special
+pseudo-properties which are really special language things. There are
+shortcuts under certain circumstances, which avoid you having to type
+them.</p>
 
 <p>When a variable is universally quantified in not the formula itself but
 the surrounding formula, then you can just use ?x. This is in fact what you
-want for rules whcih don't have nested formulae inside the antecentent.</p>
+want for rules which don't have nested formulae inside the antecedent.</p>
 
 <p>So instead of</p>
 <pre>this log:forAll :x, :y.</pre>
@@ -150,14 +153,14 @@ the same as the ntriples notation)</p>
 
 <p></p>
 
-<p>In practice this is very ofetn used in ntriples but in N3, you can
-normally use the [] syntax to avoid usiing any variables at all.</p>
+<p>In practice this is very often used in ntriples but in N3, you can
+normally use the [] syntax to avoid using any variables at all.</p>
 
 <p></p>
 
 <h2><a id="Puctuation1">Shorthand symbols for implies, etc.</a></h2>
 
-<p>When it is used as a predciate (verb) in N3, <code>log:implies</code> and
+<p>When it is used as a predicate (verb) in N3, <code>log:implies</code> and
 =&gt; are the same; <code>owl:equivalentTo</code> and = are the same.</p>
 
 <p>So, having gone into a few details of universal and existential
@@ -184,7 +187,6 @@ still a fairly straightforward extension of RDF.</p>
 </ul>
 
 <div class="noprint">
-
 <p><br />
 <br />
 </p>
@@ -197,6 +199,5 @@ the original primer.<br />
 
 <p>$Id$</p>
 </div>
-
 </body>
 </html>
