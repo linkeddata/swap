@@ -369,8 +369,10 @@ sub airportNames{
   my($data, $ln, %ret);
 
   # good place to look these up is
-  # http://www.ar-group.com/icaoiata.htm , linked from
-  # http://www.daml.org/2001/10/html/
+  # http://home.hccnet.nl/de.bock/icao/iataairp/mcod.htm#m
+  #
+  # http://www.ar-group.com/icaoiata.htm seems 404
+  # (from http://www.daml.org/2001/10/html/)
   $data = <<EODATA;
 AHO ALGHERO
 BOS BOSTON
@@ -401,6 +403,8 @@ BUD BUDAPEST
 CMH COLUMBUS OH
 IAD WASHINGTON DULLES
 NRT TOKYO NARITA
+MSP MINNEAPOLIS ST PL
+MEM MEMPHIS
 EODATA
 
     # SNA confirmed via http://www.ocair.com/
@@ -417,7 +421,10 @@ EODATA
 
 
 # $Log$
-# Revision 1.14  2003-09-16 14:57:54  connolly
+# Revision 1.15  2004-03-31 21:25:58  connolly
+# added MSP, MEM
+#
+# Revision 1.14  2003/09/16 14:57:54  connolly
 # added NRT
 #
 # Revision 1.13  2003/05/08 22:50:50  connolly
