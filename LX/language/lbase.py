@@ -14,8 +14,10 @@ __version__ = "$Revision$"
 import LX.fol
 import LX.expr
 import LX.kb
+import LX.rdf
 
 kb = LX.kb.KB()
+holds = LX.fol.Predicate("holds")
 
 tokens = (
     'AND', 'OR', 'IMPLIES', 'IFF', 'NOT',
@@ -60,7 +62,8 @@ t_LPAREN  = r'\('
 t_RPAREN  = r'\)'
 t_COMMA   = r','
 t_PERIOD   = r'\.'
-t_CONSTANT = r'[a-zA-Z_][:a-zA-Z0-9_]*'
+t_URIREF = r'[a-zA-Z_][a-zA-Z0-9_]*:[a-zA-Z0-9_]*'
+t_CONSTANT = r'[a-zA-Z_][a-zA-Z0-9_]*'
 t_VARIABLE = r'\?'+t_CONSTANT
 
 def t_NUMERAL(t):
@@ -223,20 +226,29 @@ def p_formulaList_more(t):
 
 constants = {}
 variables = {}
-
+prefixes = {
+    'rdf':'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
+    'rdfs':'http://www.w3.org/2000/01/rdf-schema#',
+    'Lbase':'http://..../lbase#',
+    }
 def p_term_simple1(t):
     '''term : CONSTANT'''
     t[0] = constants.setdefault(t[1], LX.fol.Constant(t[1]))
 
 def p_term_simple2(t):
     '''term : URIREF'''      ##  need two productions here?!
-    if constants.has_key(t[1]):
-        t[0] = constants[t[1]]
+    try:
+        (pre, post) = t[1].split(":", 1)
+    except ValueError:
+        raise RuntimeError, "Can't find the : in %s\n" % t[1]
+    uri = prefixes[pre]+post
+    if constants.has_key(uri):
+        t[0] = constants[uri]
     else:
-        tt = LX.fol.Constant(t[1])
+        tt = LX.fol.Constant(uri)
         t[0] = tt
-        kb.interpret(tt, LX.rdf.Thing(t[1]))
-        print "NEW URIREF", t[1]
+        kb.interpret(tt, LX.rdf.Thing(uri))
+        print "NEW URIREF", uri
 
 #            | NUMERAL
 #            | QUOTEDSTRING
@@ -259,7 +271,8 @@ def p_term_var(t):
 
 def p_term_compound(t):
     '''term : term LPAREN termlist RPAREN '''
-    t[0] = apply(LX.expr.CompoundExpr, [t[1]] + t[3])
+    #t[0] = apply(LX.expr.CompoundExpr, [t[1]] + t[3])
+    t[0] = apply(holds, [t[1]] + t[3])
 
 def p_termlist_singleton(t):
     '''termlist : term'''
@@ -372,7 +385,10 @@ yacc.parse(longData)
 print LX.language.otter.serialize(kb)
 
 # $Log$
-# Revision 1.2  2003-02-01 05:58:12  sandro
+# Revision 1.3  2003-02-01 06:23:55  sandro
+# intermediate lbase support; getting even better
+#
+# Revision 1.2  2003/02/01 05:58:12  sandro
 # intermediate lbase support; getting there but buggy; commented out some fol chreccks
 #
 # Revision 1.1  2003/01/30 22:11:52  sandro
