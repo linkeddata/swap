@@ -198,13 +198,13 @@ class CalWr:
         w = self._w
         w(propName + ":")
         freq = sts.any(r, ICAL.freq)
-        if freq: w("FREQ=%s;" % freq)
+        if freq: w("FREQ=%s" % freq)
         ival = sts.any(r, ICAL.interval)
-        if freq: w("INTERVAL=%s;" % ival)
+        if freq: w(";INTERVAL=%s" % ival)
         by = sts.any(r, ICAL.byday)
-        if by: w("BYDAY=%s;" % by)
+        if by: w(";BYDAY=%s" % by)
         by = sts.any(r, ICAL.bymonth)
-        if by: w("BYMONTH=%s;" % by)
+        if by: w(";BYMONTH=%s" % by)
         w(CRLF)
 
 
@@ -294,7 +294,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.16  2004-03-10 00:04:55  connolly
+# Revision 2.17  2004-03-13 00:01:37  connolly
+# fixed the punctuation of RECUR values
+#
+# Revision 2.16  2004/03/10 00:04:55  connolly
 # slightly nicer error message
 #
 # Revision 2.15  2004/03/09 23:29:40  connolly
