@@ -25,4 +25,9 @@ bank:id rdfs:domain bank:Bank; a owl:InverseFunctionalProperty.
 bank:dateOfBirth rdfs:domain con:Person; a owl:FunctionalProperty.
 bank:homePhone rdfs:domain con:Person; a owl:FunctionalProperty.
 
+bank:address	rdfs:domain con:Person; a owl:FunctionalProperty;
+	rdfs:range bank:Address.
+
+bank:street	a owl:FunctionalProperty.
+bank:city	a owl:FunctionalProperty.
 
