@@ -82,9 +82,9 @@ class Reason:
 
 	
 class FormulaReason(Reason):
-    """A Formula reason reproduces the information ina formula
+    """A Formula reason reproduces the information in a formula
     but includes reason information.  There is a link each way (formula,
-    collector) with the actual formla. Beware that when a new formula is
+    collector) with the actual formula. Beware that when a new formula is
     interned, the collector must be informed that its identity has changed.
     The collector is also informed of each statement added."""
     def __init__(self, formula=None):
@@ -104,6 +104,7 @@ class FormulaReason(Reason):
 	global proofOf
 	self.store = formula.store
 	proofOf[formula] = self
+	progress("@@@@@@@ Proof of %s is %s"%(formula, self))
 	return
 
     def	newStatement(self, s, why):
@@ -118,6 +119,8 @@ class FormulaReason(Reason):
 	returns it.
 	(NB: This is different from reason.explain(ko) which returns the reason)"""
 	if ko == None: ko = self.formula.store.newFormula()
+	ko.bind("n3", "http://www.w3.org/2000/10/swap/reify#")
+	ko.bind("log", "http://www.w3.org/2000/10/swap/log#")
 	ko.bind("reason", "http://www.w3.org/2000/10/swap/reason#")
 	ko.bind("run", runNamespace())
 	me=self.explain(ko)
@@ -136,11 +139,13 @@ class FormulaReason(Reason):
         ko.add(subj=me, pred=reason.gives, obj=self.formula, why=dontAsk)
 #	ko.add(obj=qed, pred=reason.because, subj=self.formula, why=dontAsk)
     
+
+	# Needed? u and e
 	for u in self.formula.universals():
-	    ko.add(me, reason.universal, u, why=dontAsk)
+	    ko.add(me, reason.universal, u.uriref() , why=dontAsk) # ko.newLiteral(u.uriref())
 
 	for e in self.formula.existentials():
-	    ko.add(me, reason.existential, e, why=dontAsk)
+	    ko.add(me, reason.existential, e.uriref(), why=dontAsk)
 
 	for s, rea in self.statementReasons:
 	    pred = s.predicate()
@@ -197,6 +202,7 @@ class BecauseOfRule(Reason):
 	self._reason = because
 	return
 
+
     def explain(self, ko):
 	"""Describe this reason to an RDF store
 	Returns the value of this reason as interned in the store.
@@ -206,9 +212,8 @@ class BecauseOfRule(Reason):
 	for var, val in self._bindings:
 	    b = ko.newBlankNode(why= dontAsk)
 	    ko.add(subj=me, pred=reason.binding, obj=b, why= dontAsk)
-	    ko.add(subj=b, pred=reason.variable, obj=var,why= dontAsk)
-	    ko.add(subj=b, pred=reason.boundTo, obj=val, why= dontAsk)
-
+	    ko.add(subj=b, pred=reason.variable, obj=var.reification(ko, why= dontAsk),why= dontAsk)
+	    ko.add(subj=b, pred=reason.boundTo, obj=val.reification(ko, why= dontAsk), why= dontAsk)
 	ru = explainStatement(self._rule,ko)
 	ko.add(subj=me, pred=reason.rule, obj=ru, why=dontAsk)
 	    
@@ -223,6 +228,7 @@ class BecauseOfRule(Reason):
 	return me
 
 
+
 def explainStatement(s, ko):
     si = describeStatement(s, ko)
 
@@ -232,9 +238,9 @@ def explainStatement(s, ko):
 #    if statementFormulaReason == None:
 #	statementFormulaReason = f.collector  # try  that - works for subformulae? @@@ no
     if statementFormulaReason == None:
-#	raise RuntimeError(
+	raise RuntimeError(
 	"Ooops, only have proofs for %s.\n No proof for formula %s needed for statement %s\n%s\n" 
-#				% (proofOf.keys(),f,s, f.debugString()))
+				% (proofOf,f,s, f.debugString()))
 
 	pass
     else:
@@ -254,9 +260,9 @@ def describeStatement(s, ko):
 	ko.add(si, reason.gives, s.asFormula(why=dontAsk), why=dontAsk)
 
 #	con, pred, subj, obj = s.quad
-#	ko.add(subj=si, pred=reason.subject, obj=subj, why=dontAsk)
-#	ko.add(subj=si, pred=reason.predicate, obj=pred, why=dontAsk)
-#	ko.add(subj=si, pred=reason.object, obj=obj, why=dontAsk)
+#	ko.add(subj=si, pred=reason.subj, obj=subj.uriref(), why=dontAsk)
+#	ko.add(subj=si, pred=reason.pred, obj=pred.uriref(), why=dontAsk)
+#	ko.add(subj=si, pred=reason.obj, obj=obj.uriref(), why=dontAsk)
 	return si
 
 	

@@ -11,7 +11,7 @@
 #  see why.py, check.py etc
 
 :Term a rdf:Class;
-	s:label "RDF Term".
+	s:label "Term".
 
 :RDFTerm a s:subClassOf :Term.
 
@@ -123,23 +123,6 @@
 	s:domain :Statement;
 	s:range :Term.	# For RDF 1.0, :RDFTerm
 
-# proof stuff - different namespace?
-
-:Binding a s:Class;
-	s:label "binding";
-	s:comment """A binding is given eg in a proof or query result
-
-	This is not needed for simple description of N3.""".
-
-:variable a rdf:Property;
-	s:label "variable";
-	s:domain :Binding;
-	s:range	:Symbol.
-
-:boundTo  a rdf:Property;
-	s:label "bound to";
-	s:domain :Binding;
-	s:range	:Term.
 
 
 

@@ -170,6 +170,8 @@ class Namespace(object):
 	For, and from, pim/toIcal.py"""
 	return  _checkStore().intern((SYMBOL, self._name + lname))
 
+reify = Namespace("http://www.w3.org/2000/10/swap/reify#")
+
 ########################################  Storage URI Handling
 #
 #  In general an RDf resource - here a Term, has a uriRef rather
@@ -210,6 +212,8 @@ class Term:
         if (p>=0 and s[p+1:].find(".") <0 ): # Can't use prefix if localname includes "."
             prefix = self.store.prefixes.get(s[:p+1], None) # @@ #CONVENTION
             if prefix != None : return prefix + ":" + s[p+1:]
+	if s.endswith("#_formula"):
+	    return "`"+s[-22:-9]+"`" # Hack - debug notation for formula
         if p >= 0: return s[p+1:]
         return s
 
@@ -271,7 +275,15 @@ class Symbol(Term):
             f = Anonymous(r, fragid)
             r.fragments[fragid] = f
             return f
-                
+     
+    def reification(self, sink, why=None):
+	"""Describe myself in RDF to the given context
+	
+	[ reify:uri "http://example.org/whatever"]
+	"""
+	b = sink.newBlankNode(why=why)
+	sink.add(subj=b, pred=reify.uri, obj=sink.newLiteral(self.uriref()), why=why)
+	return b
                 
 
 class Fragment(Term):
@@ -303,6 +315,15 @@ class Fragment(Term):
 	 return 0   # Use class Anonymous for generated IDs
          return self.fragid[0] == "_"  # Convention for now @@@@@
                                 # parser should use seperate class?
+
+    def reification(self, sink, why=None):
+	"""Describe myself in RDF to the given context
+	
+	[ reify:uri "http://example.org/#whatever"]
+	"""
+	b = sink.newBlankNode(why=why)
+	sink.add(subj=b, pred=reify.uri, obj=sink.newLiteral(self.uriref()), why=why)
+	return b
 
 class FragmentNil(Fragment):
     pass
@@ -421,6 +442,15 @@ class Literal(Term):
         # used in test/sameTerm.n3 testing 2001/07/19
         return self.asHashURI() #something of a kludge?
         #return  LITERAL_URI_prefix + uri_encode(self.representation())    # tbl preferred
+
+    def reification(self, sink, why=None):
+	"""Describe myself in RDF to the given context
+	
+	[ reify:value "un expression quelconque"@fr ]
+	"""
+	b = sink.newBlankNode(why=why)
+	sink.add(subj=b, pred=reify.value, obj=sink.newLiteral(self.string), why=why)
+	return b
 
 class Integer(Literal):
     def __init__(self, store, str):

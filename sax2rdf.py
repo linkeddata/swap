@@ -10,7 +10,7 @@
 
   - Add parsing of RDF bags
 
- parses DAML_ONT_NS or DPO_NS lists, generates DPO_NS
+ parses DAML_ONT_NS or List_NS lists, generates List_NS
 
  References:
 
@@ -77,6 +77,10 @@ RDF_NS_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#" # As per the spec
 RDF_Specification = "http://www.w3.org/TR/REC-rdf-syntax/" # Must come in useful :-)
 DAML_ONT_NS = "http://www.daml.org/2000/10/daml-ont#"  # DAML early version
 DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
+
+List_NS = DPO_NS     # We have to pick just one all the time
+
+XML_NS_URI = "http://www.w3.org/XML/1998/namespace"
 
 from diag import verbosity, progress, tracking
 
@@ -253,7 +257,7 @@ class RDFHandler(xml.sax.ContentHandler):
 	    obj = self.sink.newSymbol(self.uriref(value)) # SYN#7.2.11 step 2/3
 	else:
 	    obj = self.sink.newLiteral(value)
-	progress("ns %s and name %s" % (`ns`, `name`)) 
+	# progress("ns %s and name %s" % (`ns`, `name`)) 
 	self.sink.makeStatement((self._context,
 				    self.sink.newSymbol(self.uriref(pred)),
 				    self.bnode,
@@ -351,6 +355,7 @@ class RDFHandler(xml.sax.ContentHandler):
                 ns, name = name
                 if name == "ID":
                     print "# Warning: ID=%s on statement ignored" %  (value) # I consider these a bug
+		    raise ValueError("ID attribute?  Reification not supported.")
                 elif name == "parseType":
 #		    x = value.find(":")
 #		    if x>=0: pref = value[:x]
@@ -427,16 +432,16 @@ class RDFHandler(xml.sax.ContentHandler):
                                       pair ), why=self._reason2) 
             self.idAboutAttr(attrs)  # set subject (the next item) and context 
             self.sink.makeStatement(( c,
-                                      self.sink.newSymbol(DPO_NS + "first"),
+                                      self.sink.newSymbol(List_NS + "first"),
                                       pair,
                                       self._subject), why=self._reason2) # new item
 	    if "S" in self.flags: # Strictly to spec
 		self.sink.makeStatement(( c,
 					self.sink.newSymbol(RDF_NS_URI + "type"),
-					self.sink.newSymbol(DPO_NS + "List"),
+					self.sink.newSymbol(List_NS + "List"),
 					self._subject), why=self._reason2) # new item
             
-            self._stack[-1][2] = self.sink.newSymbol(DPO_NS + "rest")  # Leave dangling link   #@check
+            self._stack[-1][2] = self.sink.newSymbol(List_NS + "rest")  # Leave dangling link   #@check
             self._stack[-1][3] = pair  # Underlying state tracks tail of growing list
 
          
@@ -498,9 +503,9 @@ class RDFHandler(xml.sax.ContentHandler):
             
         elif self._state == STATE_LIST:
             self.sink.makeStatement(( self._context,
-                                      self.sink.newSymbol(DPO_NS + "rest"),
+                                      self.sink.newSymbol(List_NS + "rest"),
                                       self._subject,
-                                      self.sink.newSymbol(DPO_NS + "nil") ), why=self._reason2)
+                                      self.sink.newSymbol(List_NS + "nil") ), why=self._reason2)
         elif self._state == STATE_DESCRIPTION:
             self._items.pop()
         elif self._state == STATE_NOVALUE or \

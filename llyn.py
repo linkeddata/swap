@@ -173,7 +173,7 @@ from why import Because, BecauseBuiltIn, BecauseOfRule, \
 STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
 META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"
 INTEGER_DATATYPE = "http://www.w3.org/2001/XMLSchema#integer"
-DOUBLE_DATATYPE = "http://www.w3.org/2001/XMLSchema#double"
+FLOAT_DATATYPE = "http://www.w3.org/2001/XMLSchema#double"
 
 reason=Namespace("http://www.w3.org/2000/10/swap/reason#")
 
@@ -594,10 +594,10 @@ class Formula(Fragment):
 	todo = []
 	for s in self.statements:
 	    con, pred, subj, obj = s.quad
-	    str = str + "\n%28s  %20s %20s ." % (subj, pred, obj)
+	    str = str + "\n%28s  %20s %20s ." % (`subj`, `pred`, `obj`)
 	    for p in PRED, SUBJ, OBJ:
 		if (isinstance(s[p], Formula)
-		    and s[p] not in already and s[p] not in todo):
+		    and s[p] not in already and s[p] not in todo and s[p] is not self):
 		    todo.append(s[p])
 	str = str+ "}.\n"
 	already = already + todo + [ self ]
@@ -795,26 +795,35 @@ class StoredStatement:
 	"""The formula which contains only a statement like this.
 	
 	When we split the statement up, we lose information in any existentials which are
-	shared with other statements. So we introduce a (skolem?) constant to tie the
+	shared with other statements. So we introduce a skolem constant to tie the
 	statements together.  We don't have access to any enclosing formula 
 	so we can't express its quantification.  This @@ not ideal.
 	
-	This extends the StoredStatement class with functionality we only need with who module."""
+	This extends the StoredStatement class with functionality we only need with "why" module."""
 	
 	store = self.quad[CONTEXT].store
-	statementAsFormula = store.newFormula()   # @@@CAN WE DO THIS BY CLEVER SUBCLASSING? statement subclass of f?
-	kb = self.context()
-	uu = store.occurringIn(statementAsFormula, kb.universals())
-	ee = store.occurringIn(statementAsFormula, kb.existentials())
-	for v in uu:
-	    statementAsFormula.add(subj= statementAsFormula, pred=log.forAll, obj=v, why=why)
+	c, p, s, o = self.quad
+	f = store.newFormula()   # @@@CAN WE DO THIS BY CLEVER SUBCLASSING? statement subclass of f?
+	f.add(s, p, o, why=why)
+	uu = store.occurringIn(f, c.universals())
+	ee = store.occurringIn(f, c.existentials())
+#	if p is store.implies:
+#	    progress("\n@@ Variables in outer layer %s: " % `c`+ `c.variables()`)
+#	    progress("@@@@@@ a rule %s, with universals %s" % (`self`, uu))
+#	    progress("\tContext %s has %i statements:\n%s" % (`c`, len(c.statements), c.debugString()))
 	bindings = []
+	for v in uu:
+#	    progress("@@ llyn.py 814:   Universal %s in %s " %( v, f))
+	    x = f.newUniversal(v.uriref(), why=why)
+#	    f.add(subj= f, pred=log.forAll, obj=v, why=why)
+#	    bindings.append( (v, f.newUniversal(v.uriref())))
 	for v in ee:
-    #	statementAsFormula.add(subj= statementAsFormula, pred=log.forSome, obj=v, why=why)
-	    bindings.append( (v, statementAsFormula.newSymbol(v.uriref()+"_1")))
-	c, p, s, o = lookupQuad(bindings, self.quad)
-	statementAsFormula.add(s, p, o, why=why)
-	return statementAsFormula.close()  # probably slow - much slower than statement subclass of formula
+#	    progress("@@ Existentail  llyn.py" + `v`)
+	    x  = f.newExistential(v.uriref(), why=why)
+#	    f.add(subj= f, pred=log.forSome, obj=v, why=why)
+#	    bindings.append( (v, f.newExistential(v.uriref())))
+#	c, p, s, o = lookupQuad(bindings, self.quad)
+	return f.close()  # probably slow - much slower than statement subclass of formula
 
 
 ###############################################################################################
@@ -1169,7 +1178,7 @@ class RDFStore(RDFSink) :
         
         self.forSome = self.internURI(forSomeSym)
 	self.integer = self.internURI(INTEGER_DATATYPE)
-	self.double  = self.internURI(DOUBLE_DATATYPE)
+	self.float  = self.internURI(FLOAT_DATATYPE)
         self.forAll  = self.internURI(forAllSym)
         self.implies = self.internURI(Logic_NS + "implies")
         self.means = self.internURI(Logic_NS + "means")
@@ -1429,7 +1438,7 @@ class RDFStore(RDFSink) :
         assert type(str) is type("") # caller %xx-ifies unicode
         return self.intern((SYMBOL,str), why=None)
     
-    def intern(self, pair, why=None, dt=None, lang=None):
+    def intern(self, what, dt=None, lang=None, why=None, ):
         """find-or-create a Fragment or a Symbol or Literal as appropriate
 
         returns URISyntaxError if, for example, the URIref has
@@ -1438,10 +1447,19 @@ class RDFStore(RDFSink) :
         This is the way they are actually made.
         """
 
-	if isinstance(pair, Term): return pair # Already interned.  @@Could mask bugs
-	if type(pair) is not type((1,2)):
-	    raise RuntimeError("Eh?  can't intern "+`pair`)
-        typ, urirefString = pair
+	if isinstance(what, Term): return what # Already interned.  @@Could mask bugs
+	if type(what) is not types.TupleType:
+#	    progress("llyn1450 @@@ interning ", `what`)
+	    if isinstance(what, types.StringTypes):
+		return self.newLiteral(what, dt, lang)
+	    progress("llyn1450 @@@ interning non-string", `what`)
+	    if type(what) is types.IntType:
+		return self.newLiteral(`what`, INTEGER_DATATYPE)
+	    if type(what) is types.FloatType:
+		return self.newLiteral(`what`, FLOAT_DATATYPE)
+		
+	    raise RuntimeError("Eh?  can't intern "+`what`)
+        typ, urirefString = what
 
         if typ == LITERAL:
 	    return self.newLiteral(urirefString, dt, lang)
@@ -1620,18 +1638,19 @@ class RDFStore(RDFSink) :
     def storeQuad(self, q, why=None):
         """ intern quads, in that dupliates are eliminated.
 
+	subject, predicate and object are terms - or atomic values to be interned.
         Builds the indxes and does stuff for lists.         
         """
-        #  Check whether this quad already exists
-#        print "Before, Formula now has %i statements" % len(self._index[(q[CONTEXT],None,None,None)])
         if verbosity() > 29:
             progress("storeQuad (size before %i) "%self.size +`q`)
         
         context, pred, subj, obj = q
-	assert isinstance(context, Formula), "Should be a Formula:"+`context`
-	assert isinstance(pred, Term), "Should be a term:"+`pred`
-	assert isinstance(subj, Term), "Should be a term:"+`subj`
-	assert isinstance(obj, Term), "Should be a term:"+`obj`
+	assert isinstance(context, Formula), "Should be a Formula: "+`context`
+	if not isinstance(pred, Term): pred = self.intern(pred)
+	if not isinstance(subj, Term): subj = self.intern(subj)
+	if not isinstance(obj, Term): obj = self.intern(obj)
+
+
         if context.statementsMatching(pred, subj, obj):
             if verbosity() > 97:  progress("storeQuad duplicate suppressed"+`q`)
             return 0  # Return no change in size of store
@@ -1663,7 +1682,7 @@ class RDFStore(RDFSink) :
                     context._listValue[subj] = context.listValue(rest).precededBy(obj)
                     context._checkList(subj)
 
-        s = StoredStatement(q)
+        s = StoredStatement((context, pred, subj, obj))
 	
 	if diag.tracking:
 	    if (why == None): raise RuntimeError(
@@ -1936,9 +1955,9 @@ class RDFStore(RDFSink) :
         if isinstance(x, Literal):
 	    if x.datatype == None: return x.string
 	    if x.datatype is self.integer: return int(x.string)
-	    if x.datatype is self.double: return double(x.string)
+	    if x.datatype is self.float: return float(x.string)
 	    raise ValueError("Attempt to run built-in on unknown datatype %s of value %s." 
-			    % x.datatype, x.string)
+			    % (`x.datatype`, x.string))
 	if x is self.nil: return []
 #       if @@@ this is not in the queue, must be in the store 
 
@@ -1958,6 +1977,8 @@ class RDFStore(RDFSink) :
             return self.intern((LITERAL, x))
         elif type(x) is types.IntType:
             return self.newLiteral(`x`, self.integer)
+        elif type(x) is types.FloatType:
+            return self.newLiteral(`x`, self.float)
         elif type(x) == type([]):
 #	    progress("x is >>>%s<<<" % x)
 	    raise RuntimeError("Internals generating lists not supported yet")

@@ -10,6 +10,7 @@ to check.
 
 from thing import load, Namespace
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ
+from llyn import Formula #@@ dependency should not be be necessary
 from diag import verbosity, setVerbosity, progress
 from sys import argv, exit
 import sys
@@ -19,6 +20,7 @@ import llyn # Chosen engine registers itself
 reason = Namespace("http://www.w3.org/2000/10/swap/reason#")
 log = Namespace("http://www.w3.org/2000/10/swap/log#")
 rdf=Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+rei = Namespace("http://www.w3.org/2000/10/swap/reify#")
 
 chatty = 0
 
@@ -41,7 +43,7 @@ def parse(resourceURI):
     global parsed
     f = parsed.get(resourceURI, None)
     if f == None:
-	setVerbosity(90) #@@
+#	setVerbosity(90) #@@
 	f = load(resourceURI)
 	parsed[resourceURI] = f
     return f
@@ -58,6 +60,7 @@ def valid(proof, r, level=0):
     """Check whether this reason is valid. Returns the formula proved or None is not"""
     f = proof.any(r,reason.gives)
     if f != None:
+	assert isinstance(f, Formula), "%s gives: %s which should be Formula" % (`r`, f)
 	s = statementFromFormula(f)
 	if s != None:
 	    fs = " proof of {%s %s %s}" % (s.subject(), s.predicate(), s.object())
@@ -102,8 +105,19 @@ def valid(proof, r, level=0):
 	evidence = proof.each(subj=r, pred=reason.evidence)
 	bindings = []
 	for b in proof.each(subj=r, pred=reason.binding):
-	    var  = proof.the(subj=b, pred=reason.variable)
-	    val  = proof.the(subj=b, pred=reason.boundTo) # @@@ Check that they really are variables in the rule!
+	    var_rei  = proof.the(subj=b, pred=reason.variable)  # de-reify  symbool
+	    var_uri   = proof.the(subj=var_rei, pred=rei.uri)
+	    var	      = proof.newSymbol(var_uri.string)
+	    val_rei  = proof.the(subj=b, pred=reason.boundTo) # @@@ Check that they really are variables in the rule!
+	    val_uri   = proof.the(subj=val_rei, pred=rei.uri)
+	    if val_uri != None:
+		val = proof.newSymbol(val_uri.string)
+	    else:
+		val_value   = proof.the(subj=val_rei, pred=rei.value)
+		if val_value != None:
+		    val = proof.newLiteral(val_value.string, val_value.datatype, val_value.lang)
+		else:
+		    raise RuntimeError("Can't de-reify %s" % val_rei)
 	    bindings.append((var, val))
 
 	rule = proof.any(subj=r, pred=reason.rule)
@@ -167,13 +181,15 @@ def valid(proof, r, level=0):
 	return f
     elif t is reason.Extraction:
 	r2 = proof.the(r, reason.because)
+	if r2 == None:
+	    return fail("Extraction: no source formula given for %s." % (`r`), level)
 	f2 = valid(proof, r2, level)
 	if f2 == None:
 	    return fail("Extraction: validation of source forumla failed.", level)
 	v = verbosity()
 	setVerbosity(0)
 	if not f2.includes(f):
-	    return fail("""Extraction %s not included in formula  %s.\n______________\n%s\n______________not included in formula ______________\n%s"""
+	    return fail("""Extraction %s not included in formula  %s.\n______________\n%s\n______________not included in: ______________\n%s"""
 		    %(f, f2, f.debugString(), f2. debugString()), level=level)
 	setVerbosity(v)
 	return f
@@ -194,7 +210,7 @@ def main():
     #fyi("Reading proof from "+inputURI)
     fyi("Reading proof from standard input.")
     proof = load()
-    #setVerbosity(60)
+    # setVerbosity(60)
     fyi("Length of proof: "+`len(proof)`)
     proof2 = proof.the(pred=rdf.type, obj=reason.Proof)  # the thing to be proved
     

@@ -31,6 +31,7 @@ is complete lack of treatment of symmetry between bnodes.
 
 References:
  .google graph isomorphism
+ See also eg http://www.w3.org/2000/10/rdf-tests/rdfcore/utils/ntc/compare.cc
  
  $Id$
 This is or was http://www.w3.org/2000/10/swap/cant.py

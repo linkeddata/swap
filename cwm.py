@@ -310,6 +310,8 @@ Mode flags affect inference extedning to the web:
      (otherwise they are consulted independently)
  r   Needed to enable any remote stuff.
  s   Read the schema for any predicate in a query.
+ 
+ u   Generate unique ids using a run-specific
 
 """
         
@@ -339,7 +341,7 @@ Mode flags affect inference extedning to the web:
         option_outputStyle = "-best"
         _gotInput = 0     #  Do we not need to take input from stdin?
         option_meta = 0
-        option_flags = { "rdf":"", "n3":"" }    # Random flags affecting parsing/output
+        option_flags = { "rdf":"", "n3":"", "think":"" }    # Random flags affecting parsing/output
         option_quiet = 0
         option_with = None  # Command line arguments made available to N3 processing
         option_engine = "llyn"
@@ -492,13 +494,13 @@ Mode flags affect inference extedning to the web:
         if option_pipe:
             _store = _outSink
         else:
-#            _metaURI = join(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
-            _store = llyn.RDFStore( _outURI+"#_g", argv=option_with, crypto=option_crypto)
+	    if "u" in option_flags["think"]:
+		_store = llyn.RDFStore(argv=option_with, crypto=option_crypto)
+	    else:
+		_store = llyn.RDFStore( _outURI+"#_g", argv=option_with, crypto=option_crypto)
 	    thing.setStore(_store)
             workingContext = _store.newFormula(outFormulaURI)   #@@@ Hack - use metadata
-            #  Metadata context - storing information about what we are doing
 
-#            _store.reset(_metaURI+"#_experience")     # Absolutely need this for remembering URIs loaded
             history = None
         lxkb = LX.kb.KB()      # set up a parallel store for LX-based operations
 
@@ -600,8 +602,12 @@ Mode flags affect inference extedning to the web:
                 _store.applyRules(workingContext, filterContext);
 
             elif _lhs == "-filter":
+		if tracking: 
+		    r = BecauseOfCommandLine(sys.argv[0]) # @@ add user, host, pid, date time? Privacy!
+		else:
+		    r = None
                 need(_store); touch(_store)
-                filterContext = _store.load(_uri)
+                filterContext = _store.load(_uri, why=r)
 		_newContext = _store.newFormula()
 		if diag.tracking: proof = FormulaReason(_newContext)
                 _store.applyRules(workingContext, filterContext, _newContext)

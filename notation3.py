@@ -75,7 +75,7 @@ from RDFSink import  LITERAL, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
 import diag
 
-from why import BecauseOfData
+from why import BecauseOfData, FormulaReason
 
 N3_forSome_URI = RDFSink.forSomeSym
 N3_forAll_URI = RDFSink.forAllSym
@@ -100,7 +100,7 @@ from RDFSink import N3_first, N3_rest, N3_nil, N3_List, N3_Empty
 LOG_implies_URI = "http://www.w3.org/2000/10/swap/log#implies"
 
 INTEGER_DATATYPE = "http://www.w3.org/2001/XMLSchema#integer"
-DOUBLE_DATATYPE = "http://www.w3.org/2001/XMLSchema#double"
+FLOAT_DATATYPE = "http://www.w3.org/2001/XMLSchema#double"
 
 option_noregen = 0   # If set, do not regenerate genids on output
 
@@ -162,6 +162,14 @@ class SinkParser:
         else:
             formulaURI = formulaURI # Formula node is what the document parses to
 	self._formula = sink.newFormula(formulaURI)
+	if diag.tracking:
+	    progress ("@@@@@@ notation3  167 loading ",thisDoc,  why, self._formula)
+	    proof = self._formula.collector
+	    if proof == None:
+		proof = FormulaReason(self._formula)
+		progress ("\tAllocating new FormulaReason")
+	    progress ("\tNow: 169", why, proof, self._formula)
+
         self._context = self._formula
 	self._parentContext = None
         
@@ -801,7 +809,7 @@ class SinkParser:
 		j = m.end()
 		if m.group(2) != None or  m.group(3) != None: # includes decimal exponent
 		    res.append(self._sink.newLiteral(str[i:j],
-			self._sink.newSymbol(DOUBLE_DATATYPE)))
+			self._sink.newSymbol(FLOAT_DATATYPE)))
 		else:
 		    res.append(self._sink.newLiteral(str[i:j],
 			self._sink.newSymbol(INTEGER_DATATYPE)))
@@ -1297,7 +1305,7 @@ t   "this" and "()" special syntax should be suppresed.
 	    if dt != None:
 		dt_uri = dt.uriref()		 
 		if (dt_uri == INTEGER_DATATYPE or
-		    dt_uri == DOUBLE_DATATYPE) and "n" not in self._flags:
+		    dt_uri == FLOAT_DATATYPE) and "n" not in self._flags:
 		    return s    # Naked numeric value
 	    str = stringToN3(s)
 	    if lang != None: str = str + "@" + lang
