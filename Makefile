@@ -6,14 +6,14 @@ YAPPS=yapps2.py
 
 TESTIN=test/sameDan.n3
 
-HTMLS= term.html formula.html pretty.html myStore.html check.html query.html RDFSink.html cwm.html cwm_crypto.html cwm_list.html cwm_math.html cwm_maths.html cwm_os.html cwm_string.html cwm_time.html cwm_times.html diag.html llyn.html notation3.html reify.html sax2rdf.html rdflib2rdf.html tab2n3.html thing.html toXML.html uripath.html xml2infoset.html why.html
+HTMLS= term.html formula.html pretty.html myStore.html check.html query.html RDFSink.html cwm.html cwm_crypto.html cwm_list.html cwm_math.html cwm_maths.html cwm_os.html cwm_string.html cwm_time.html cwm_times.html diag.html llyn.html notation3.html reify.html sax2rdf.html rdflib2rdf.html tab2n3.html thing.html toXML.html uripath.html xml2infoset.html why.html doc/changes.html
 
 SOURCES = cwm.py notation3.py query.py llyn.py uripath.py diag.py RDFSink.py reify.py why.py myStore.py webAccess.py OrderedSequence.py term.py formula.py pretty.py cwm_list.py cwm_string.py cwm_os.py cwm_time.py isodate.py cwm_math.py cwm_trigo.py cwm_times.py cwm_maths.py toXML.py update.py sax2rdf.py rdflib_user.py rdfxml.py test/retest.py 
 DOC=doc/CwmHelp.htm
 
 TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/ql/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/cwm/detailed.tests test/ntriples/detailed.tests test/delta/detailed.tests test/syntax/detailed.tests test/reify/detailed.tests test/testmeta.n3
 
-TARNAME = cwm-0.7.3-plus
+TARNAME = cwm-0.8
 
 TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3
 
@@ -41,7 +41,7 @@ filelist: $(SOURCES) $(TESTS)
 doc.made : cwm.py notation3.py sax2rdf.py toXML.py
 	(cd doc; make)
 
-release : cwm.tar.gz doc.made message.txt
+release : doc.made cwm.tar.gz message.txt
 	cvs commit -F message.txt
 	rm message.txt
 
