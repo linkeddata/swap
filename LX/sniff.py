@@ -31,7 +31,7 @@ def sniffLanguage(stream, baseURI=ianaBase):
     >>> import urllib
     >>> f=urllib.urlopen("http://www.w3.org/Icons/w3c_main")
     >>> sniff.sniffLanguage(f)
-    'http://www.isi.edu/in-notes/iana/assignments/media-types/image/png'
+    'image/png'
 
     Now let's try it with XML content.  Right now at least this is
     served as text/html, but we'll sniff out the namespace:
@@ -43,20 +43,20 @@ def sniffLanguage(stream, baseURI=ianaBase):
     Note the first line still appears next...
     
     >>> f.readline().strip()
-    '<?xml version="1.0" encoding="UTF-8"?>'
+    '<?xml version="1.0" encoding="utf-8"?>'
     
     Now try a few sniffs of text/plain documents.   This one has no
     override:
     
     >>> f=urllib.urlopen("file:test/sniff-1.plain")
     >>> sniff.sniffLanguage(f)
-    'http://www.isi.edu/in-notes/iana/assignments/media-types/text/plain'
+    'text/plain'
 
     But this one does:
     
     >>> f=urllib.urlopen("file:test/sniff-2.plain")
     >>> sniff.sniffLanguage(f)
-    'http://www.isi.edu/in-notes/iana/assignments/media-types/application/octet-stream'
+    'application/octet-stream'
 
     #>>> f=urllib.urlopen("file:/home/sandro/WWW/2000/10/swap/test/crypto/acc.n3")
     #>>> sniff.sniffLanguage(f)
@@ -103,14 +103,18 @@ def sniffLanguage(stream, baseURI=ianaBase):
 
     # fall back to suffix!
     if lang == baseURI+"text/plain":
-        uri=stream.info().uri
         try:
-            suffix = uri[uri.rindex(".")+1:]
-            return baseURI+"application/"+suffix
-        except ValueError:
-            # no period in it?!?!
+            uri=stream.info().uri
+        except AttributeError:
             pass
-    
+        else:
+            try:
+                suffix = uri[uri.rindex(".")+1:]
+                return baseURI+"application/"+suffix
+            except ValueError:
+                # no period in it?!?!
+                pass
+
     return lang
 
 def makeSeekable(stream):
@@ -185,7 +189,11 @@ class sniffXMLHandler(xml.sax.handler.ContentHandler):
     
 
 # $Log$
-# Revision 1.5  2003-09-17 16:09:08  sandro
+# Revision 1.6  2003-09-17 18:01:04  sandro
+# updated doctests to reflect removal of iana prefix
+# made more tollerant of not having a URI
+#
+# Revision 1.5  2003/09/17 16:09:08  sandro
 # handle a change to python 2.3 silently
 #
 # Revision 1.4  2003/08/22 20:49:41  sandro
