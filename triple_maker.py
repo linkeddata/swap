@@ -26,6 +26,10 @@ from term import BuiltIn, LightBuiltIn, \
     Literal, Symbol, Fragment, FragmentNil, Term,\
     CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode
 
+import RDFSink
+N3_forSome_URI = RDFSink.forSomeSym
+N3_forAll_URI = RDFSink.forAllSym
+
 NOTHING   = -1
 SUBJECT   = 0
 PREDICATE = 1
@@ -55,8 +59,10 @@ class TripleMaker:
     def __init__(self, formula):
         self.formulas = [formula]
         self.store = formula.store
+        self.forSome = formula.newSymbol(N3_forSome_URI)
+        self.forAll  = formula.newSymbol(N3_forAll_URI)
 
-    def begin(self):
+    def start(self):
         self._parts = [NOTHING]
         self._triples = [[None, None, None]]
         self.lists = []
@@ -64,56 +70,86 @@ class TripleMaker:
         self.bNodes = []
         self._predIsOfs = [NO]
         self._pathModes = [False]
+        self.store.startDoc()
+
+    def end(self):
+        assert len(self.formulas) == 1
+        assert len(self.lists) == 0
+        assert len(self.bNodes) == 0
+        self.store.endDoc(self.formulas[0])
+        return self.formulas[0]
 
     def addNode(self, node):
-        if self._modes[-1] == FORMULA or self._modes[-1] == ANONYMOUS
+        if self._modes[-1] == ANONYMOUS and node is not None and self._parts[-1] == NOTHING:
+            raise ValueError('You put a dot in a bNode')
+        if self._modes[-1] == FORMULA or self._modes[-1] == ANONYMOUS:
             self._parts[-1] = self._parts[-1] + 1
             if self._parts[-1] > 3:
                 raise ValueError('Try ending the statement')
-            if node is not None
-                self.triples[-1][self._parts[-1]] = node
+            if node is not None:
+                #print node, '+', self._triples, '++', self._parts
+                self._triples[-1][self._parts[-1]] = node
                 if self._parts[-1] == PREDICATE and self._predIsOfs[-1] == STALE:
                     self._predIsOfs[-1] = NO
         if self._modes[-1] == ANONYMOUS and self._pathModes[-1] == True:
             self.endStatement()
             self.endAnonymous()
+        if self._modes[-1] == LIST:
+            self.lists[-1].append(node)
 
     def IsOf(self):
         self._predIsOfs[-1] = FRESH
 
+    def checkIsOf(self):
+        return self._predIsOfs[-1]
+
     def forewardPath(self):
-        a = self.triples[-1][self._parts[-1]]
-        self._parts[-1] = self._parts[-1] - 1
+        if self._modes[-1] == LIST:
+            a = self.lists[-1].pop()
+        else:
+            a = self._triples[-1][self._parts[-1]]
+            self._parts[-1] = self._parts[-1] - 1
         self.beginAnonymous()
         self.addNode(a)
         self._predIsOfs[-1] = FRESH
         self._pathModes[-1] = True
         
     def backwardPath(self):
-        a = self.triples[-1][self._parts[-1]]
+        a = self._triples[-1][self._parts[-1]]
         self._parts[-1] = self._parts[-1] - 1
         self.beginAnonymous()
         self.addNode(a)
         self._pathModes[-1] = True
 
     def endStatement(self):
-        if self._parts[-1] != 3:
-            raise ValueError('try adding more to the statement')
-        formula = self.formulas[-1]
+        if self._parts[-1] == SUBJECT:
+            pass
+        else:
+            if self._parts[-1] != OBJECT:
+                raise ValueError('try adding more to the statement' + `self._triples`)
+            formula = self.formulas[-1]
 
-        if self._pathModes[-1]:
-            swap(self.triples[-1], PREDICATE, OBJECT)
-        if self._predIsOfs[-1]:
-            swap(self.triples[-1], SUBJECT, OBJECT)
-        subj, pred, obj = self.triples[-1]
-        
-        formula.add(subj, pred, obj)
+            if self._pathModes[-1]:
+                swap(self._triples[-1], PREDICATE, OBJECT)
+            if self._predIsOfs[-1]:
+                swap(self._triples[-1], SUBJECT, OBJECT)
+            subj, pred, obj = self._triples[-1]
+
+            if subj == '@this':
+                if pred == self.forSome:
+                    formula.declareExistential(obj)
+                elif pred == self.forAll:
+                    formula.declareUniversal(obj)
+                else:
+                    raise ValueError("This is useless!")
+            else:
+                formula.add(subj, pred, obj)
         self._parts[-1] = NOTHING
-        if self._modes[-1] == ANONYMOUS:
+        if self._modes[-1] == ANONYMOUS and self._pathModes[-1]:
             self._parts[-1] = SUBJECT
 
     def addLiteral(self, lit):
-        a = self.store.newLiteral(lit)
+        a = self.store.intern(lit)
         self.addNode(a)
 
     def addSymbol(self, sym):
@@ -121,7 +157,7 @@ class TripleMaker:
         self.addNode(a)
     
     def beginFormula(self):
-        a = store.newFormula()
+        a = self.store.newFormula()
         self.formulas.append(a)
         self._modes.append(FORMULA)
         self._triples.append([None, None, None])
@@ -130,6 +166,8 @@ class TripleMaker:
         self._pathModes.append(False)
 
     def endFormula(self):
+        if self._parts[-1] != NOTHING:
+            self.endStatement()
         a = self.formulas.pop().close()
         self._modes.pop()
         self._triples.pop()
@@ -145,14 +183,13 @@ class TripleMaker:
         self._parts.append(NOTHING)
 
     def endList(self):
-        a = store.newList(self.lists.pop())
+        a = self.store.newList(self.lists.pop())
         self._modes.pop()
-        self.lists.pop()
         self._parts.pop()
         self.addNode(a)
 
     def beginAnonymous(self):
-        a = store.newBlankNode()
+        a = self.formulas[-1].newBlankNode()
         self.bNodes.append(a)
         self._modes.append(ANONYMOUS)
         self._triples.append([a, None, None])
@@ -162,13 +199,16 @@ class TripleMaker:
         
 
     def endAnonymous(self):
+        if self._parts[-1] != NOTHING:
+            self.endStatement()
         a = self.bNodes.pop()
         self._modes.pop()
         self._triples.pop()
         self._parts.pop()
-        self.addNode(a)
         self._predIsOfs.pop()
         self._pathModes.pop()
+        self.addNode(a)
+        return a
 
     def declareExistential(self, sym):
         formula = self.formulas[-1]
@@ -179,6 +219,12 @@ class TripleMaker:
         formula = self.formulas[-1]
         a = formula.newSymbol(sym)
         formula.declareUniversal(a)
+
+    def addQuestionMarkedSymbol(self, sym):
+        formula = self.formulas[-2]
+        a = formula.newSymbol(sym)
+        formula.declareUniversal(a)
+        self.addNode(a)
     
         
         
