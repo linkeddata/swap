@@ -20,8 +20,8 @@ TESTS=regression.n3 list/detailed.tests online.tests \
 all : pyc-check $(CODE) $(TESTS)
 	PYTHONPATH=`/bin/pwd`/.. $P retest.py -c $(TESTS)
 
-mellow : pyc-check $(CODE) $(TESTS)
-        PYTHONPATH=`/bin/pwd`/.. $P retest.py --ignoreErrors -c $(TESTS)
+mellow : pyc-check $(CODE) $(TESTS) 
+	PYTHONPATH=`/bin/pwd`/.. $P retest.py --ignoreErrors -c $(TESTS)
 
 fast : $(CODE) regression.n3
 	PYTHONPATH=`/bin/pwd`/.. $P retest.py -n -f regression.n3
