@@ -70,21 +70,27 @@ class Constant(LX.expr.AtomicExpr):
 
 class URIConstant(Constant):
 
-    __slots__ = ["uri"]
+    __slots__ = ["uri", "suggestedName"]
 
     def __new__(class_, uri):
-        #print "New called, uri:",uri,"  uri(id):",id(uri)
+        uri=intern(uri)
+        #if uri.endswith("Run"):
+        #    print >>stderr, "New called, uri:",uri,"  uri(id):",id(uri)
         try:
             result = constantsForURIs[uri]
         except KeyError:
             result = Constant.__new__(class_)
             result.uri = uri
+            result.suggestedName = uri
             constantsForURIs[uri] = result
-            #print "  creating new"
+            #if uri.endswith("Run"):
+            #    print >>stderr, "  creating new"
         else:
-            #print "  reusing"
+            #if uri.endswith("Run"):
+            #    print >>stderr, "  reusing"
             pass
-        #print "  id(result)=",id(result)
+        #if uri.endswith("Run"):
+        #    print >>stderr, "  id(result)=",id(result)
         return result
 
     def __reduce__(self):
@@ -381,10 +387,20 @@ def ConstantForPlainLiterals(value):
 constantsForDTVs = {
 
     # this needs work, but its enough for surnia right now....
-    ("0", "http://www.w3.org/2001/XMLSchema#nonNegativeInteger"):
-    URIConstant("foo:zero")
 
-    }
+    ("0", URIConstant("http://www.w3.org/2001/XMLSchema#nonNegativeInteger")):
+    URIConstant("foo:zero"),
+
+    ("0", URIConstant("http://www.w3.org/2001/XMLSchema#int")):
+    URIConstant("foo:zero"),
+
+    ("0", URIConstant("http://www.w3.org/2001/XMLSchema#integer")):
+    URIConstant("foo:zero"),
+
+    ("0", URIConstant("http://www.w3.org/2001/XMLSchema#decimal")):
+    URIConstant("foo:zero"),
+
+}
 
 class NoSuitableDatatype(RuntimeError):
     pass
@@ -442,7 +458,10 @@ def _test():
 if __name__ == "__main__": _test()
 
 # $Log$
-# Revision 1.11  2003-09-17 17:18:02  sandro
+# Revision 1.12  2003-11-07 06:53:05  sandro
+# support for running RDF Core tests
+#
+# Revision 1.11  2003/09/17 17:18:02  sandro
 # changed how URIs and Datatypes are handled, mostly to supporting pickling
 #
 # Revision 1.10  2003/09/05 04:39:06  sandro

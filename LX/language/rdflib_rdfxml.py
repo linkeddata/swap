@@ -17,6 +17,7 @@ import LX.kb
 import LX.rdf
 
 import pluggable
+from sys import stderr
 
 class Parser(pluggable.Parser):
 
@@ -41,7 +42,7 @@ class ParserX(rdflib.syntax.parser.Parser):
 
     def termFor(self, s):
         if isinstance(s, rdflib.URIRef.URIRef):
-            return LX.logic.ConstantForURI(str(s))
+            return LX.logic.ConstantForURI(unicode(s).encode('UTF-8'))
         if isinstance(s, rdflib.Literal.Literal):
             # print "LIT: ", str(s), s.datatype
             if s.datatype:
@@ -77,7 +78,10 @@ class Serializer:
         pass
 
 # $Log$
-# Revision 1.7  2003-09-10 20:13:56  sandro
+# Revision 1.8  2003-11-07 06:53:05  sandro
+# support for running RDF Core tests
+#
+# Revision 1.7  2003/09/10 20:13:56  sandro
 # removed obsolete comment
 #
 # Revision 1.6  2003/09/05 04:39:07  sandro

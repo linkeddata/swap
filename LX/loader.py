@@ -24,7 +24,9 @@ defaultSuffixes=[("rdf",  "applicate/rdf+xml"),
 
 class NotCached(RuntimeError): pass
 
-class NotModified(RuntimeError): pass
+class NotModified(RuntimeError):
+    def __init__(self, headers):
+        self.headers = headers
 
 class AlreadyLoaded(RuntimeError): pass
 
@@ -36,11 +38,12 @@ class Opener(urllib.FancyURLopener):
     # http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.25
     def http_error_304(self, url, fp, errcode, errmsg, headers, data=None):
         """Error 304 -- Not Modified."""
-        raise NotModified()
+        raise NotModified(headers)
 
 class Meta:
 
     def __init__(self, stream_info):
+        """Give it something which has the "headers" field"""
 
         self.lastModText = stream_info.getheader("Last-Modified")
         try:
@@ -84,7 +87,7 @@ class Loader:
         check == check for a remote one being more recent, even
                 if we're not expired.  This is what pressing "reload"
                 usually does.   Mozilla FORCE_VALIDATE, http1.1
-                must-revalidate.
+                must-revalidate, or more commonly max-age=0
 
         remote == use the remote copy (updating the local one),
                 even if it's not more recent.  Never looks at
@@ -168,19 +171,23 @@ class Loader:
             self.cacheAction = "used cache"
             self.reporter.end("used cache")
             return
-        
+
         self.typeFromSniff=sniff.sniffLanguage(self.stream)
         language=self.typeFromSniff
-        #print "LANGUAGE",language
+        #print >>stderr, "LANGUAGE",language
 
         # generalize this!   first one which can handle this lang!
         
         if language=="http://www.w3.org/1999/02/22-rdf-syntax-ns#RDF":
             language="rdflib"
-        if language=="application/rdf":
+        elif language=="application/rdf":
             language="rdflib"
-        if language=="application/rdf+xml":
+        elif language=="application/rdf+xml":
             language="rdflib"
+        elif language=="application/nt":
+            language="nt"
+        else:
+            raise RuntimeError("unknown language: "+language)
         
         parser=LX.language.getParser(language=language)
 
@@ -231,7 +238,7 @@ class Loader:
             try:
                 meta = self.savedMeta()
             except NotCached:
-                print >>stderr, "No cache (meta) data"
+                self.reporter.msg("No cache (meta) data")
                 pass
             else:
                 if mode <= 2:
@@ -260,19 +267,38 @@ class Loader:
                 self.reporter.msg("using If-Modified-Since conditional GET")
                 # http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.25
 
+        # maybe something like this?
+        #opener.addheader("Accept", "application/rdf+xml")
+        #print >>stderr, "opening connection for "+self.uri
+
         firstError=None
         for (suffix, contenttype) in [("",None)]+self.suffixes:
             try:
                 self.stream = opener.open(self.uri+suffix)
+                self.reporter.msg("open connection for "+self.uri+suffix)
+                self.stream.baseURI = self.uri
             except NotImplemented, error:
                 if firstError is None: firstError = error
                 continue
-            except NotModified:
+            except NotModified, e:
                 self.reporter.msg("server says \"304 Not Modified\"; using cached version")
+                # self.reporter.msg(str(e.headers))
+                #self.reporter.msg("New Expires: "+time.mktime(e.headers.getdate("Expires")))
                 #  @@ reset expiration information
+                #      Date: Fri, 10 Oct 2003 20:41:18 GMT
+                #Server: Apache/1.3.28 (Unix) PHP/4.2.3
+                #Connection: close
+                #ETag: "3f56edac"
+                #Expires: Sat, 11 Oct 2003 02:41:18 GMT
+                #Cache-Control: max-age=21600
+                #WWW-Authenticate: Basic realm="W3CACL"
+                #   generate a new Meta, and save it...
                 self.loadLocal()
                 raise AlreadyLoaded()
             else:
+                #print >>stderr, self.stream.info().headers
+                #['Date: Fri, 10 Oct 2003 20:41:13 GMT\r\n', 'Server: Apache\r\n', 'Last-Modified: Fri, 10 Oct 2003 03:37:32 GMT\r\n', 'ETag: "2deb47-1cab9-3f86297c"\r\n', 'Accept-Ranges: bytes\r\n', 'Content-Length: 117433\r\n', 'Connection: close\r\n', 'Content-Type: application/xml\r\n']
+                #    
                 self.stream.info().uri = self.uri+suffix
                 self.typeFromSuffix = contenttype
                 self.reporter.begin("receiving data")
@@ -414,7 +440,10 @@ def __test1():
 
     
 # $Log$
-# Revision 1.3  2003-10-02 18:35:57  sandro
+# Revision 1.4  2003-11-07 06:53:05  sandro
+# support for running RDF Core tests
+#
+# Revision 1.3  2003/10/02 18:35:57  sandro
 # fixed unbalanced messages when remote modified
 #
 # Revision 1.2  2003/09/16 17:05:59  sandro

@@ -25,6 +25,8 @@ parsers = {
               },
     "rdflib":  { "module": "LX.language.rdflib_rdfxml",
               },
+    "nt":     { "module": "LX.language.rdflib_nt",
+              },
     "otter":  { "module": "LX.language.otter",
               },
     }
@@ -53,7 +55,10 @@ def getParser(language=None, sink=None, flags=""):
         raise RuntimeError, "No such parser: \"%s\"\nWe have: %s" % (language, ", ".join(parsers.keys()))
     
 # $Log$
-# Revision 1.8  2003-09-17 16:12:41  sandro
+# Revision 1.9  2003-11-07 06:53:05  sandro
+# support for running RDF Core tests
+#
+# Revision 1.8  2003/09/17 16:12:41  sandro
 # removed n3x; it never materialized
 #
 # Revision 1.7  2003/08/22 20:49:41  sandro

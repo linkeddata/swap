@@ -111,7 +111,9 @@ ns.rdf  = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns",
 ns.rdfs = Namespace("http://www.w3.org/2000/01/rdf-schema",
                    ["Resource", "Class", "Datatype", "seeAlso",
                     "label", "comment", "subClassOf", "isDefinedBy",
-                    "domain", "range", "subPropertyOf", ])
+                    "domain", "range", "subPropertyOf",
+                    "ContainerMembershipProperty",
+                    ])
 ns.xsd = Namespace("http://www.w3.org/2001/XMLSchema#", strict=0)
 ns.dc10 = Namespace("http://purl.org/dc/elements/1.0/", strict=0)
 ns.dc = Namespace("http://purl.org/dc/elements/1.1/", strict=0)
@@ -127,7 +129,10 @@ if __name__ == "__main__":
 
 
 # $Log$
-# Revision 1.14  2003-09-10 20:13:25  sandro
+# Revision 1.15  2003-11-07 06:53:05  sandro
+# support for running RDF Core tests
+#
+# Revision 1.14  2003/09/10 20:13:25  sandro
 # added rdf:Property
 #
 # Revision 1.13  2003/09/08 17:30:44  sandro

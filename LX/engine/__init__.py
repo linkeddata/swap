@@ -1,7 +1,42 @@
-"""A package of various inference engines, or at least of consistent
-interfaces to them.
+"""A package of various inference engines (reasoner), or at least of proxies
+for them.
 
-ToDoPerhaps:
+Basic use, simple style
+
+    x>>> import LX.engine
+    x>>> e = LX.engine.any()          # just picks one
+    x>>> e.setStore(st)
+    x>>> e.findInconsistencies()
+                NotImplemented
+                Timeout, ...
+                SearchComplete
+    x>>> e.proveConsistent()
+                NotImplemented
+                Timeout, ...
+                SearchComplete
+
+         e.query(Query(retval, formula))
+
+         e.forwardChain(extraRules, intoStore=maybeSelf)
+
+
+
+engine.any()
+    see what it can import and instantiate, and does one.
+    maybe give it the store
+    * Given a list of classes (not modules)
+
+WHAT about having this hidden inside the store?   Or as MixIn?
+
+
+    x>>> import LX.engine.external_otter
+    x>>> e = LX.engine.external_otter
+    e = 
+An engine is something which can look at a the contents of a
+store and tell you if it's consistent and what you can 
+
+
+OLD ToDoPerhaps:
    allow module name and engine name to be different
    give some metadata
    know which modules will work on this platform
@@ -15,6 +50,24 @@ __all__ = ["otter",
            ]
 import LX
 
+def any(prefs=__all__, store=None):
+    """ other ways of picking one?
+    http://c2.com/cgi/wiki?YouArentGonnaNeedIt
+    """
+    engine = None
+    for engine in prefs:
+        try:
+            mod = __import__("LX.engine."+engine).engine
+        except ImportError:
+            continue
+        try:
+            engine = mod.Engine(store=store)
+        except NotAvailable, e:
+            continue
+    if engine is None:
+        return NotAvailable()
+    return engine
+
 def think(engine=None, kb=None):
     try:
         mod = __import__("LX.engine."+engine).engine
@@ -26,7 +79,10 @@ def think(engine=None, kb=None):
     mod.think(kb=kb)
 
 # $Log$
-# Revision 1.2  2003-02-14 17:21:59  sandro
+# Revision 1.3  2003-11-07 06:53:05  sandro
+# support for running RDF Core tests
+#
+# Revision 1.2  2003/02/14 17:21:59  sandro
 # Switched to import-as-needed for LX languages and engines
 #
 # Revision 1.3  2003/01/29 20:59:33  sandro

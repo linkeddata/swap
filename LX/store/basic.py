@@ -8,12 +8,14 @@ class FormulaNotFound(KeyError):
 class Store:
     """
 
-    A set, with reasons why things are in it, and watchers.
+    A set, with reasons why things are in it, and watchers.  A
+    WatchableSupportedElementSet, if you like.  :-)  Order of adds
+    is also preserved.  (although not among the reasons right now.)
 
     When you add, you supply a reason
 
     When you remove, you say which reason is no longer valid.  When
-    all reasons for an element are gone, the element goes away.
+    all reasons for an element are gone, the element gets removed.
     
     At this level we don't actually *look* at the formula or reason at
     all!   The examples just use strings.   I imagine this will be
@@ -98,7 +100,10 @@ class Store:
 
     (I want this for Node-centric form to be kept in sync, not
     to mention all sorts of .... other stuff.)
-    
+    - like adding dt theory
+    - cache stuff / network watch
+    - delta/sigma views -- reason will need to be described uri in
+      some store?   python object which can get described?
     
     """
 
@@ -197,6 +202,9 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
  
 # $Log$
-# Revision 1.1  2003-09-30 05:04:42  sandro
+# Revision 1.2  2003-11-07 06:53:06  sandro
+# support for running RDF Core tests
+#
+# Revision 1.1  2003/09/30 05:04:42  sandro
 # first draft
 #

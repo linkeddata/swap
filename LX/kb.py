@@ -22,6 +22,8 @@ import LX.nodepath
 import LX.loader
 from LX.namespace import ns
 
+from sys import stderr
+
 class UnsupportedDatatype(RuntimeError):
     pass
 
@@ -29,6 +31,10 @@ defaultScope = {
     ("legal",): re.compile(r"^[a-zA-Z0-9_]+$"),
     ("hint",): re.compile(r"(?:\/|#)([a-zA-Z0-9_]*)/?$")
     }
+
+nonNegIntPattern = re.compile("[0-9]+")
+intPattern = re.compile("-?[0-9]+")
+decimalPattern = re.compile("(-?[0-9]*)(\.([0-9])+)?")
 
 class KB(list, pluggable.Store):
     """A Knowledge Base, a list of implicitely conjoined sentences.
@@ -64,7 +70,7 @@ class KB(list, pluggable.Store):
         self.nodes = { }
         self.nodesAreCurrent = 1
         self.nicknames = { }
-        self.firstOrder = 0
+        self.firstOrder = False
         self.reporter = LX.reporter.theNullReporter
 
     def clear(self):
@@ -125,11 +131,27 @@ class KB(list, pluggable.Store):
         support it.
         """
         if not term.isAtomic():
-            for e in term.all:
+            for e in term.args:   # don't bother with function???! @@@
                 # print 
-                assert(e != term)
-                #self.addSupportingTheory(e)
+                #assert(e != term)
+                self.addSupportingTheory(e)
             return
+
+        # hack in rdf:_(n) here  -- if it's mentioned, makes sure
+        # we know it's a ContainerMembershipProperty
+        try:
+            uri = term.uri
+        except AttributeError:
+            pass
+        else:
+            if uri.startswith("http://www.w3.org/1999/02/22-rdf-syntax-ns#_"):
+                if uri in self.__datatypeValuesChecked: return
+                self.append(LX.logic.RDF(term, ns.rdf.type,
+                                         ns.rdfs.ContainerMembershipProperty))
+                self.__datatypeValuesChecked[uri] = 1
+            return
+        
+
         try:
             lexrep = term.lexrep
             dturi = term.datatype
@@ -141,8 +163,11 @@ class KB(list, pluggable.Store):
         if pair in self.__datatypeValuesChecked: return
 
         #print "DTURI", dturi
-        
+
         if dturi == ns.xsd.nonNegativeInteger:
+            m = nonNegIntPattern.match(lexrep)
+            if m is None:
+                return  # it's not real...   Report this somehow?
             val = int(lexrep)
             assert(val != 0)   # would have been handled in LX.logic
             assert(val > 0)
@@ -157,7 +182,64 @@ class KB(list, pluggable.Store):
                 self.__datatypeValuesChecked[pair] = 1
             return
 
-        #raise UnsupportedDatatype, ("unsupported datatype: "+lexrep+ ", type "+dturi)
+        if dturi == ns.xsd.int or dturi == ns.xsd.integer:
+            m = intPattern.match(lexrep)
+            if m is None:
+                return  # it's not real...   Report this somehow?
+            val = int(lexrep)
+            if val == 0:
+                raise RuntimeError("Int 0 not caught in LX.logic? "+repr(lexrep)+", "+repr(dturi))
+            if val > 50:
+                raise UnsupportedDatatype, "Int %s too big" % val
+            if val < 0:
+                raise UnsupportedDatatype, "Int %s too small" % val
+            for n in range(1, val+1):
+                # print "Describing",n,"via:", n-1, "succ", n
+                lesser = LX.logic.ConstantForDatatypeValue(str(n-1), dturi)
+                succ = LX.logic.ConstantForURI('foo:succ')
+                greater = LX.logic.ConstantForDatatypeValue(str(n), dturi)
+                self.append(LX.logic.RDF(lesser,succ,greater))
+                self.__datatypeValuesChecked[pair] = 1
+            return
+
+
+        if dturi == ns.xsd.decimal:
+            m = decimalPattern.match(lexrep)
+            if m is None:
+                return  # it's not real...   Report this somehow?
+            if m.group(3) is not None and int(m.group(3)) != 0:
+                raise UnsupportedDatatype, "Decimal really a decimal!" % val
+            val = int(m.group(1))
+            if val == 0:
+                raise RuntimeError("Int 0 not caught in LX.logic? "+repr(lexrep)+", "+repr(dturi))
+            if val > 50:
+                raise UnsupportedDatatype, "Int %s too big" % val
+            if val < 0:
+                raise UnsupportedDatatype, "Int %s too small" % val
+            for n in range(1, val+1):
+                # print "Describing",n,"via:", n-1, "succ", n
+                lesser = LX.logic.ConstantForDatatypeValue(str(n-1), dturi)
+                succ = LX.logic.ConstantForURI('foo:succ')
+                greater = LX.logic.ConstantForDatatypeValue(str(n), dturi)
+                self.append(LX.logic.RDF(lesser,succ,greater))
+                self.__datatypeValuesChecked[pair] = 1
+            return
+
+        if dturi is None:
+            self.append(LX.logic.URIConstant("foo:plainLit")(term))
+            self.__datatypeValuesChecked[pair] = 1
+            return
+
+        if dturi == ns.xsd.string:
+            self.__datatypeValuesChecked[pair] = 1
+            return
+        
+        if dturi == ns.rdf.XMLLiteral:
+            self.append(LX.logic.URIConstant("foo:xmlLit")(term))
+            self.__datatypeValuesChecked[pair] = 1
+            return
+
+        raise UnsupportedDatatype, ("unsupported datatype: "+str(lexrep)+ ", type "+str(dturi))
         
         
     def add(self, formula, p=None, o=None):
@@ -166,12 +248,14 @@ class KB(list, pluggable.Store):
         if you don't pass in constants...?  Nah.
         """
         self.nodesAreCurrent = 0
-        if (p):
+        if (p is not None):
             s = formula
             if self.firstOrder:
                 self.append(LX.logic.RDF(s,p,o))
+                #print >>stderr, "Doing FO"
             else:
                 self.append(p(s,o))
+                #print >>stderr, "Doing HO"
             self.addSupportingTheory(s)
             self.addSupportingTheory(p)
             self.addSupportingTheory(o)
@@ -184,7 +268,15 @@ class KB(list, pluggable.Store):
         ##assert(isinstance(formula, LX.Formula))
         ##assert(LX.fol.isFirstOrderFormula(formula))
         # could check that all its openVars are in are vars
+
+        if (self.firstOrder and
+            formula.function != LX.logic.RDF and
+            len(formula) == 3):
+            #print >>stderr, "FO-ind during formula add"
+            formula = LX.logic.RDF(formula[1], formula[0], formula[2])
+        
         self.append(formula)
+        #print >>stderr, "Doing Formula"
         self.addSupportingTheory(formula)
 
     def addFrom(self, kb):
@@ -337,7 +429,9 @@ class KB(list, pluggable.Store):
                 try:
                     (pred, subj, obj) = f.all
                 except ValueError:
-                    raise RuntimeError, "Not pure-RDF KB!"
+                    pass  
+                    # was:  raise RuntimeError, "Not pure-RDF KB!"
+                    # but the foo:plainLit terms mess that up.
 
             #print "PreFill-SPO", subj, pred, obj
 
@@ -377,7 +471,10 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
  
 # $Log$
-# Revision 1.24  2003-09-17 17:55:57  sandro
+# Revision 1.25  2003-11-07 06:53:05  sandro
+# support for running RDF Core tests
+#
+# Revision 1.24  2003/09/17 17:55:57  sandro
 # moved load() code over to loader.py; changed to accomodate changes in logic.py
 #
 # Revision 1.23  2003/09/10 20:12:56  sandro

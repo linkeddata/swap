@@ -136,7 +136,7 @@ class Serializer:
             if (isinstance(f, LX.logic.Constant) or
                 isinstance(f, LX.logic.Predicate) or 
                 isinstance(f, LX.logic.Function)):
-                s = str(f)
+                s = f.__str__()
                 try:
                     (pre,post) = s.split("#")
                     result = ns[pre]+"_"+escapeUnlessSafe(post)
@@ -266,7 +266,10 @@ class Parser:
             
 
 # $Log$
-# Revision 1.10  2003-08-20 09:26:01  sandro
+# Revision 1.11  2003-11-07 06:53:05  sandro
+# support for running RDF Core tests
+#
+# Revision 1.10  2003/08/20 09:26:01  sandro
 # in progress addition of otter parser
 #
 # Revision 1.9  2003/07/23 19:43:02  sandro
