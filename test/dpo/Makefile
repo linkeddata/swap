@@ -41,7 +41,7 @@ result.n3 : axioms.n3 kludge.n3 convert.n3 consts.n3
 purged.n3 : result.n3
 	$C result.n3 -purge > purged.n3
  
-purged2.n3 : result.n3 noKIF.n3
+purged2.n3 : purged.n3 noKIF.n3
 	$C purged.n3 noKIF.n3 -purge > purged2.n3
 
 a001-conv.n3 : a001.n3 ../../cwm.py ../../notation3.py convert.n3
