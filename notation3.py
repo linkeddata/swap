@@ -99,7 +99,7 @@ class SinkParser:
 
         if not self._baseURI: self._baseURI = self._thisDoc
         if not self._genPrefix: self._genPrefix = self._thisDoc + "#_g"
-        if not self._varprefix: self._varPrefix = self._thisDoc + "#_v"
+        if not self._varPrefix: self._varPrefix = self._thisDoc + "#_v"
 
     def feed(self, str):
 	"""if BadSyntax is raised, the string
@@ -315,9 +315,9 @@ class SinkParser:
 		for obj in objs:
 		    dir, sym = v[0]
 		    if dir == '->':
-			self.makeStatement((self.context, sym, subj, obj))
+			self.makeStatement((self._context, sym, subj, obj))
 		    else:
-			self.makeStatement((self.context, sym, obj, subj))
+			self.makeStatement((self._context, sym, obj, subj))
 
 		j = self.tok(';', str, i)
 		if j<0:
@@ -359,7 +359,7 @@ class SinkParser:
 		except KeyError:
 		    raise BadSyntax(str, i, "prefix not bound")
 #	    res.append(internFrag(ns, ln))
-            res.append( RESOURCE, `ns`+ "#" + ln)
+            res.append( RESOURCE, ns+ "#" + ln)
 	    return j
 
         v = []
@@ -698,7 +698,7 @@ class Engine:
     """ The root of the references in the system -a set of things and stores
     """
 
-    def __init__(self)
+    def __init__(self):
         resources = {}    # Hash table of URIs for interning things
         
         
@@ -717,16 +717,16 @@ class Engine:
             hash = hash-1
         if hash < 0 :     # This is a resource with no fragment
             r = self.resources.get(uriref, None)
-            if r return r
+            if r: return r
             r = Resource(uriref)
             self.resources[uriref] = r
             return r
         
-         else :      # This has a fragment and a resource
+        else :      # This has a fragment and a resource
             r = self.intern(uriref[:hash])
-            if type == RESOURCE return r.internFrag(uriref[hash+1:])
-            if type == ANONYMOUS return r.internAnonymous(uriref[hash+1:])
-            if type == VARIBALE return r.internVariable(uriref[hash+1:])
+            if type == RESOURCE:  return r.internFrag(uriref[hash+1:])
+            if type == ANONYMOUS: return r.internAnonymous(uriref[hash+1:])
+            if type == VARIBALE:  return r.internVariable(uriref[hash+1:])
 
 
 ######################################################### Tests
@@ -1149,7 +1149,7 @@ class SinkToN3(RDFSink):
         self._pred = None
 
     def endAnonymousNode(self):    # Remove context
-        self    ite(" ].\n")
+        self._write(" ].\n")
         self._subj = None
         self._pred = None
 
@@ -1240,7 +1240,7 @@ class StringWriter:
 
 class StoredStatement:
 
-    def __init__(self, q)
+    def __init__(self, q):
         self.triple = q
         
 class RDFStore(RDFSink) :
