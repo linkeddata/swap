@@ -1,0 +1,36 @@
+@prefix : <#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+# NOTE: we use custom versions of RDFS and OWL here....
+@prefix rdfs: <http://www.w3.org/2000/10/swap/test/ferrell/ferrell#> .
+@prefix owl: <http://www.w3.org/2000/10/swap/test/ferrell/ferrell#> .
+
+# equivalentClass
+{ ?c1 owl:equivalentClass ?c2.
+  ?i a ?c1. }
+ =>
+{ ?i a ?c2 }.
+
+# (transitivity, applied by hand)
+{ ?c1 owl:equivalentClass ?c2.
+  ?i a ?c2. }
+ =>
+{ ?i a ?c1 }.
+
+
+# subClassOf
+{ ?i a ?c1.
+  ?c1 rdfs:subClassOf ?c2.
+}
+ =>
+{ ?i a ?c2 }.
+
+# disjointWith
+{ ?i a ?c1.
+  ?i a ?c2.
+  ?c1 owl:disjointWith ?c2.
+}
+ =>
+{ [ a :Inconsistency. ] }         ## How do we want to report these?
+
