@@ -1,11 +1,125 @@
 % $Id$
 
+set(auto).
+
 % we need inList
 include('otter/owlAx-oneOf.otter').
 
 % we need SOMETHING of sameAs/differentFrom, ...
 
 formula_list(usable).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  A little number theory
+%
+
+% nothing is less than zero
+all X -(lt(X, i0)).
+
+% succ is 1:1
+all X Y (succ(X)=succ(Y) -> X=Y).
+
+% definition of Less Than
+
+all HIGH LOW (
+   lt(LOW, HIGH) 
+   <->
+   ( HIGH=succ(LOW) 
+     |
+     ( exists MIDDLE (
+         lt(LOW,MIDDLE) & lt(MIDDLE,HIGH)
+     ))
+   )
+).
+
+all X Y (
+  lt(X, Y) -> X != Y
+).
+
+% define Less-Than-Or-Equal-To
+%all X Y (
+%  lt(X, Y) | X=Y <-> lte(X, Y)
+%).
+
+all X ( X=X ).
+
+% threorem 
+%lt(succ(anotherZero), succ(i0)).
+%-(
+%   anotherZero = i0
+%).
+
+
+i1 = succ(i0).
+i2 = succ(i1).
+i3 = succ(i2).
+i4 = succ(i3).
+ 
+% TEST
+j1 = succ(i0).
+j2 = succ(j1).
+j3 = succ(j2).
+j4 = succ(j3).
+%lt(i4,j4).
+%lt(j4,i4).
+%i0 = succ(iNeg1). 
+%  not working....lt(x,i1) & x != i1.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%  Some axioms about cardinality of sets, but I haven't figured
+%  out how to do this recursively, so it's instantiated for each
+%  cardinality.    That's not as bad as it seems, since the recursion
+%  might well be too slow for large sets anyway.
+
+% MaxCardinality
+
+all S (
+   maxCardinality(S, i0)
+   <->
+   -(exists A (item(A, S)))
+).
+
+all S (
+   maxCardinality(S, i1)
+   <->
+   -(exists A B ( A!=B & item(A, S) & item(B, S)))
+).
+
+all S (
+   maxCardinality(S, i2)
+   <->
+   -(exists A B C ( A!=B & A!=C & B!=C & 
+                    item(A, S) & item(B, S) & item(C, S)))
+).
+
+% MinCardinality 
+
+all S (
+   minCardinality(S, i0)
+).
+
+all S (
+   minCardinality(S, i1)
+   <->
+   (exists A (item(A, S)))
+).
+
+all S (
+   minCardinality(S, i2)
+   <->
+   (exists A B ( A!=B & item(A, S) & item(B, S)))
+).
+
+
+% TEST
+minCardinalty(kids, i2).
+
+-(
+all KID (item(KID, kids) -> (KID=a | KID=b))
+).
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -55,85 +169,32 @@ formula_list(usable).
 %%% ).
 %%% 
 
-all SET (
-    -(exists ELEM item(ELEM, SET))
-    <->
-    card(SET)=base
-).
 
-all SET SUBSET (
-  subset(SET, SUBSET) <-> (all E (item(E, SUBSET) -> item(E, SET)))
-).
+% Cardinality Zero
 
-all ELEM SET (
-   item(ELEM, SET) 
+
+% Cardinality < One
+
+one = succ(zero).
+
+all S (
+  lt(one, cardinality(S))
   ->
-   (exists SUBSET (
-     subset(SET, SUBSET) &
-     -item(ELEM, SUBSET) &
-     succ(card(SUBSET))=card(SET)
-   ))
-).
-
-all A B SET (
-    item(A, SET) &
-    item(B, SET) &
-    card(SET) = succ(base)
-   ->
-    A=B
-).
-
-all ELEM SET (
-   -item(ELEM, SET)
-   ->
-   (exists SUPERSET (
-      item(ELEM, SUPERSET) &
-      subset(SUPERSET, SET) &
-      succ(card(SET))=card(SUPERSET)
-   ))
-).
-
-% nah, how do you say teh card >= the number of distinct objects?
-
-all A B SET (
-    item(A, SET) &
-    item(B, SET) &
+  (exists A B (
+    item(A, S) &
+    item(B, S) &
     A != B
-   ->
-   (exists SUBSET (
-     -item(A, SUBSET) &
-     item(B, SUBSET) &
-     subset(SET, SUBSET) &
-     succ(card(SUBSET))=card(SET)
-   ))
-).
-
-%all A B SET (
-%   -item(A, SET) &
-%  ->
-%   -(exists SET2 (
-%      item(A, SET2) &
-%      (all X (item(X, SET) -> item(X,SET2)) ) &
-%      card(SET)=card(SET2)
-%    ))
-%).
-      
-all x x=x.
-
-all X (
-  lt(X, succ(X))
-).
-
-all X (
-  -lt(X,X)
+  ))
 ).
 
 
 
-
-
+	
 % $Log$
-% Revision 1.8  2003-08-08 15:01:37  sandro
+% Revision 1.9  2003-08-08 16:16:21  sandro
+% getting closer...
+%
+% Revision 1.8  2003/08/08 15:01:37  sandro
 % a failed experiment #3
 %
 % Revision 1.4  2003/08/01 16:27:35  sandro
