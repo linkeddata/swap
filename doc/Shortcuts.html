@@ -15,58 +15,10 @@
 <br />
 
 
-<h1>Primer: Shortcuts and longcuts</h1>
+<h1>Tutorial: Paths and lists</h1>
 
 <p>You don't need to know this. It just makes life easier, and of course
-helps when reading other people's work. Cwm doesn't use many of these forms
-(except lists) on output, so getting cwm to input and output a file will turn
-it into the form of N3 you already know.</p>
-
-<h2><a name="Variables" id="Variables">Variables with ? and _:</a></h2>
-
-<p>So far we have introduce variables for rules using log:forAll. We have
-introduced existential variables (blank nodes) with log:forSome. These are
-both special pseudoProperies which are really special langauge things. There
-are shortcuts under certain circumstances.</p>
-
-<p>When a variable is universally quantified in not the formula itself but
-the surrounding formula, then you can just use ?x. This is in fact what you
-want for rules whcih don't have nested formulae inside the antecentent.</p>
-
-<p>So instead of</p>
-<pre>this log:forAll :x, :y.</pre>
-<pre>{ :x :parent :y } =&gt;  { :y :child :x }.</pre>
-
-<p>you can write</p>
-<pre>{ ?x parent ?y } =&gt;  { ?y :child ?x }.</pre>
-
-<p>which means just the same. We will use this all the time when writing
-simple rules. If you need the same variable to appear at several levels, then
-you can't use this form.</p>
-
-<p>The other shortcut is that if you have existentially qualified variables
-in the scope of the whole document, then you can use _:a and so on. (This is
-the same as the ntriples notation)</p>
-
-<p>So instead of writing</p>
-<pre>this log:forSome :a, :b.</pre>
-<pre>:a :hates :b.   :b :loves :a.</pre>
-
-<p>you could just write</p>
-<pre>_:a :hates _:b.   _:b :loves _:a.</pre>
-
-<p></p>
-
-<p>In practice this is very ofetn used in ntriples but in N3, you can
-normally use the [] syntax to avoid usiing any variables at all.</p>
-
-<p></p>
-
-<h2><a name="Puctuation" id="Puctuation">Shorthand symbols for implies,
-etc.</a></h2>
-
-<p>When it is used as a predciate (verb) in N3, <code>log:implies</code> and
-=&gt; are the same; <code>owl:equivalentTo</code>and = are the same.</p>
+helps when reading other people's work. </p>
 
 <h2><a name="Paths" id="Paths">Paths</a></h2>
 
@@ -124,6 +76,9 @@ across the page.</p>
 simpler. If you think of the circles and arrows graph of data, think of a
 path from node to node.</p>
 
+<p>Cwm doesn't currently use paths on output, so getting cwm to input and
+output a file will turn it into the form of N3 you already know.</p>
+
 <h2 id="Lists">Lists</h2>
 
 <p>A common need is to represent an ordered collection of things. This is
@@ -132,15 +87,15 @@ the objects with whitespace and surrounding them with parenthases. Examples
 are:</p>
 <pre>( "Monday" "Tuesday" "Wednesday" )
 
-( ?x  ?y )
+(:x :y)
 
-( ?cust.bus:order.bus:number  ?cust.bus:order.bus:referncedPurchaseOrder.bus:number )</pre>
+( :cust.bus:order.bus:number  :cust.bus:order.bus:referncedPurchaseOrder.bus:number )</pre>
 
-<p>These lists are actually shorthand for statements which knit them together
-using owl:first and owl:rest. owl:first is the relationship betwen a list and
-its foirst component. owl:rest if the relationship between a list and the
-list of everything except its first element. owl:nil is the name for the
-empty list. Therefore,</p>
+<p>These lists are actually shorthand for statements which knit blank nodes
+together using owl:first and owl:rest. owl:first is the relationship betwen a
+list and its foirst component. owl:rest if the relationship between a list
+and the list of everything except its first element. owl:nil is the name for
+the empty list. Therefore,</p>
 <pre>( "Monday" "Tuesday" "Wednesday" )</pre>
 
 <p>is equivalent to</p>
@@ -161,7 +116,7 @@ with built-in functions which we will discuss later.</p>
 
 <p></p>
 
-<p><a href="Rules.html">Next: Procesing your data</a></p>
+<p><a href="Rules.html">Next: Rules</a></p>
 <br />
 
 <hr />

@@ -68,10 +68,10 @@ cwm command cwm="python /whereverYouPutThem/cwm.py"</p>
 
 <h3>Prerequisites</h3>
 <ul>
-  <li><strong><a href="http://www.python.org/">Python</a></strong>. 
-    Currently (2003/2) cwm needs Python2.2 or later. It comes with many
-    systems. If you don't have it, on debian type apt-get install python. Mac
-     OSX comes witgh it after 10.2. On earlier, get fink then  type <a
+  <li><strong><a href="http://www.python.org/">Python</a></strong>. Currently
+    (2003/2) cwm needs Python2.2 or later. It comes with many systems. If you
+    don't have it, on debian type apt-get install python. Mac OSX comes witgh
+    it after 10.2. On earlier, get fink then type <a
     href="http://fink.sourceforge.net/"><code>fink</code></a> <code>install
     python</code>. On cygwin, select python in the setup.exe installer..</li>
   <li>If you are reading things in RDF/XML format, you will need the
@@ -114,7 +114,7 @@ or N3 { expression }. The features at the moment include</p>
         signatures.</li>
     </ul>
   </li>
-  <li>Accessing the web to directly or indirectly resolve a query, including:
+  <li>Accessing the web to directly or indirectly resolve a query, including: 
     <ul>
       <li>Getting schemas for terms in the query</li>
       <li>Using metadata to point to definitive documents</li>
@@ -215,41 +215,26 @@ how URIs were supposed to work.</p>
       knowledge base (formula) being queried.s.</dd>
 </dl>
 
-<h2>Environment Variables</h2>
+<h2><a name="Environmen" id="Environmen">Environment Variables</a></h2>
 <dl>
   <dt>CWM_RDF_PARSER</dt>
     <dd>rdflin2rdf or sax2rdf (default). Affects the choice of RDF parser
       module used by cwm.</dd>
 </dl>
 
-<h2 id="Rule">Rule file format</h2>
+<h2 id="Tutorial">Tutorial</h2>
 
-<p>A rule file is simply a notation3 file. A rule is a statement which
-asserts an implication using log:implies (where the namespace must be
-http://www.w3.org/2000/10/swap/log#) between premise and a conclusion. The
-premise is simply a template: cwm will search for all combinations of
-statements in the store which match the template. Variables must be
-explicitly connected to the enclosing context (often, the document) by a
-"log:forAll" statement. For each match, a conclusion is formed by taking the
-conclusion and in it replacing any variables which have been matched with the
-values found. The following is an example:</p>
-<pre>@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .
-@prefix mech: &lt;s1.n3#&gt; .
+<p>The <a href="Overview.html">tutorial</a> explains the N3 language from the
+practical point of view. </p>
 
-this log:forAll &lt;#x&gt; , &lt;#y&gt; .
-{ &lt;#x&gt; mech:includes &lt;#y&gt; } log:implies { &lt;#y&gt; mech:partOf &lt;#x&gt; } .
-</pre>
+<p>It explains how to encode data, make ontologies, and process data using
+rules. </p>
 
-<p>The @prefix directives define the prefixes log: and mech: as representing
-namespaces. The this log:forAll line declares #x and #y, two local
-identifiers, as being universally quantified variables in the context of this
-formula (this).</p>
+<h2><a name="Built-in" id="Built-in">Built-in functions</a></h2>
 
-<h2>Built-in functions</h2>
+<p>See the full <a href="CwmBuiltins.html">list of functions</a>.</p>
 
-<p>See the <a href="CwmBuiltins.html">list of functions</a>.</p>
-
-<h3>Logic</h3>
+<h3><a name="Logic" id="Logic">Logic</a></h3>
 
 <p>See the <a href="../log.n3">schema</a></p>
 
@@ -312,15 +297,27 @@ system before you really rely on it: good security has to be learned.</p>
 <p>@prefix cr: &lt;<a
 href="../../../10./swap/crypto">http://www.w3.org/2000/10/swap/crypto</a>#&gt;.</p>
 
-<p>I am not an expert but a few things to watch are:</p>
+<h2><a name="Security" id="Security">Security Issues</a></h2>
+
+<p>Be careful when using rules from an untrusted source.</p>
+<ul>
+  <li>Rules can read data from the web, indirectly letting data out by the
+    URIs they use.</li>
+  <li>Rules can take up your resources such as processor time and memory.</li>
+  <li>Rules can pick data up from within the web you have access to,
+    including confidential files.</li>
+</ul>
+
+<p>Be carfeul even when using cryptography. I am not an expert but a few
+things to watch are:</p>
 <ul>
   <li>Allways think where the weakest link is. It is not always on the
   net.</li>
   <li>Where do you keep the private key, anyway?</li>
   <li>Beware of all forms of attack, including replay and man in the
   middle.</li>
-  <li>Always sign some random junk as well as the critical data to stop
-    reverse engineering of the key.</li>
+  <li>Always sign some random junk as well as the critical data to prevent
+    the reverse engineering of the key.</li>
   <li>Ask a crypto specialist to look over your stuff</li>
   <li>Make the techniques, rules, code. public. Public debugging is valuable.
     trying to hide it from attackers by keeping it secret doesn't pay.</li>
@@ -335,7 +332,7 @@ href="../../../10./swap/crypto">http://www.w3.org/2000/10/swap/crypto</a>#&gt;.<
 <h3>Don't trust the doc</h3>
 
 <p>The best test of works is what has been tested. So the list of files in
-the <a href="../test/retest.sh">regression test</a> defines the set of
+the <a href="../test/regression.n3">regression test</a> defines the set of
 features which are generally checked on each checkin.</p>
 
 <h3>llyn.py - The Store</h3>

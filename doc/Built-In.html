@@ -20,8 +20,8 @@
 <h1>Tutorial: Built-in functions Cwm</h1>
 
 <p>The processing we have done so far involves matching existing data against
-a template, and where a match occurs, generating more inferred data.   This
-is much like which you do with a database using SQL, and just as with SQL, in
+a template, and where a match occurs, generating more inferred data. This is
+much like which you do with a database using SQL, and just as with SQL, in
 practice you need to be able to combine it with basic arithmetic and string
 operations, and so on.</p>
 
@@ -35,14 +35,62 @@ given the subject.</p>
 <p>Built-in inverse functions are properties which cwm can calculate the
 subject, given the object.</p>
 
-<p>Some built-ins are both.  Exampes are log:uri, the relationship between a
+<p>Some built-ins are both. Exampes are log:uri, the relationship between a
 resource and its URI, and time:inSeconds, the relationship between a
 date-time in standard string form and the date-time as number seconds since
-the start of the era,  as one can work either way.</p>
+the start of the era, as one can work either way.</p>
 
-<p>A complete list of of bultin- functions is available.</p>
+<p>A <a href="CwmBuiltins.html">complete list of of bultin- functions</a> is
+available.</p>
 
-<p></p>
+<p>Builtin-in functions in cwm <strong>only work</strong> when they are used
+inside the <strong>left-hand side of a rule</strong>.</p>
+
+<p>They are only used to figure out what things could take the place of a 
+variable.  If you add data to the stroe with a built-in function in it, it is
+just stored.</p>
+
+<p>Let's make a more complicates thermostat rule::</p>
+<pre>
+{ :thermostat :temp ?x.  ?x math:greaterThan "70" } log:implies { :cooling :power "high" } .
+</pre>
+
+<p>The first part, <code>:thermostat :temp ?x</code>, is statisfied by
+looking in the strore, where presumably the temperature at the thermostat is
+stored as, say, <code>:thermostat :temp "76.4"</code>.   Under the hypothesis
+that ?x is is "76.4", then the second part, which now looks like  "76.4"
+math:greaterThan "70" , is satified just by the built-in property of the
+math:greaterThan operator.</p>
+
+<p>You can use path expressions to invoke builtins, especially useful for
+chaining them.</p>
+<pre>{ "1".os:argv^log:uri  log:semantics ?f } =&gt; { ?f a :InputFormula }.</pre>
+
+<p>@@explain</p>
+
+<p>Some functions need mroe than one parameter, and in N3 they take lists.</p>
+<pre>{   ((?x.tempInF "32").math:difference "0.5555") math:product ?c) } =&gt; { ?x tempInC ?c}.
+ </pre>
+
+<p>Let's look at that one without the path expressions.</p>
+<pre>{   (?x.tempInF "32") math:difference ?a.
+    (?a "0.5555") math:product ?c.
+} =&gt; {
+     ?x  tempInC ?c.
+}.
+ </pre>
+
+<p><strong>Tip:</strong> Its useful to think of where the rule engine is
+going to start with some data, which will alow it to find the values of
+variables.</p>
+
+<p>{   ?x math:greaterThan ?y.  } =&gt; { ?x  :moreInterestingThan ?y }.</p>
+
+<p>This doesn't give cwm, a forward reasoner, much to go on. It won't list
+all pairs of number where the first   is greate than the second. A backward
+reasoner, such as Euler, will be able to use that.  Future semantic web
+engines will get smarter about picking rules to use and algorithms to use
+them with.</p>
 
 <p></p>
 <hr />
