@@ -312,8 +312,8 @@ Examples:
 
 Mode flags affect inference extedning to the web:
  r   Needed to enable any remote stuff.
- a   When reading schema, also load rules pointed to by schema.
- e   Errors loading schemas of definitive documents are fatal
+ a   When reading schema, also load rules pointed to by schema (requires r, s)
+ E   Errors loading schemas of definitive documents are ignored
  m   Schemas and definitive documents laoded are merged into the meta knowledge
      (otherwise they are consulted independently)
  s   Read the schema for any predicate in a query.
@@ -645,8 +645,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 		
             elif arg == "-purge-rules":
                 need(_store); touch(_store)
-                _store.purgeSymbol(workingContext, _store.implies)
-                _store.purgeSymbol(workingContext, _store.forAll)
+                _store.purgeExceptData(workingContext)
 
             elif arg == "-rules":
                 need(_store); touch(_store)

@@ -238,6 +238,9 @@ def compareURI(self, other):
 
     if isinstance(self, Formula):
         if isinstance(other, Formula):
+	    for f in self, other:
+		if f.cannonical is not f:
+		    progress("@@@@@ Comparing formula NOT CANNONICAL", `f`)
             s = self.statements
             o = other.statements
             ls = len(s)
@@ -245,15 +248,27 @@ def compareURI(self, other):
             if ls > lo: return 1
             if ls < lo: return -1
 
+            for se, oe, in  ((self.universals(), other.universals()),
+			     (self.existentials(), other.existentials())
+			    ):
+		lse = len(se)
+		loe = len(oe)
+		if lse > loe: return 1
+		if lse < loe: return -1
+		se.sort(compareURI)
+		oe.sort(compareURI)
+		for i in range(lse):
+		    diff = compareURI(se[i], oe[i])
+		    if diff != 0: return diff
+
+#		No need - cannonical formulae are always sorted
             s.sort(StoredStatement.compareSubjPredObj) # forumulae are all the same
             o.sort(StoredStatement.compareSubjPredObj)
             for i in range(ls):
                 diff = s[i].compareSubjPredObj(o[i])
                 if diff != 0: return diff
-	    for f in self, other:
-		if f.cannonical is not f:
-		    progress("@@@@@ Comparing formula NOT CANNONICAL", `f`)
-            raise RuntimeError("Identical formulae not interned! Length %i: %s" % (ls, `s`))
+            raise RuntimeError("Identical formulae not interned! Length %i: %s\n\t%s\n vs\t%s" % (
+			ls, `s`, self.debugString(), other.debugString()))
         else:
             return 1
     if isinstance(other, Formula):
@@ -326,17 +341,10 @@ def dereference(x, mode="", workingContext=None):
     """
     if isinstance(x, Fragment): x = x.resource
     if hasattr(x, "_semantics"): return x._semantics
-#	if x.store._experience:
-#	    f = x.store._experience.the(x, x.store.semantics)
-#	    if f != None: return f
-#	    s = x.store._experience.the(x, self.semanticsOrError)
-#	    if isinstance(s, Formula): return F
-#	    if s != None:
-#		return None
-#
+
     inputURI = x.uriref()
     if verbosity() > 20: progress("Web: Looking up %s" % x)
-    if "e" in mode: F = x.store.load(inputURI)
+    if "E" not in mode: F = x.store.load(inputURI)
     else:
 	try:
 	    F = x.store.load(inputURI)
@@ -344,9 +352,9 @@ def dereference(x, mode="", workingContext=None):
 	    F = None
     if F != None and "m" in mode:
 	workingContext.reopen()
-	if verbosity() > 45: progress("Web: Dereferencing %s gives %s, added to %s" %(
-		    x, F, workingContext))
-	workingContext.store.copyContext(F, workingContext)
+	if verbosity() > 45: progress("Web: dereferenced %s  added to %s" %(
+		    x, workingContext))
+	workingContext.store.copyFormula(F, workingContext)
     setattr(x, "_semantics", F)
     if verbosity() > 25: progress("Web: Dereferencing %s gave %s" %(x, F))
     return F
@@ -385,6 +393,8 @@ class Formula(Fragment):
 	self._index[(None,None,None)] = self.statements
 	self.closureMode = ""
 	self.closureAlready = []
+	self._existentialVariables = []
+	self._universalVariables = []
 
 
     def existentials(self):
@@ -392,24 +402,16 @@ class Formula(Fragment):
 	
 	Implementation:
 	we may move to an internal storage rather than these pseudo-statements"""
-        exs = []
-        ss = self._index.get((self.store.forSome, self, None),[])
-        for s in ss:
-            exs.append(s[OBJ])
-        if verbosity() > 90: progress("Existentials in %s: %s" % (self, exs))
-        return exs
+        return self._existentialVariables
+#        return self.each(subj=self, pred=self.store.forSome)
 
     def universals(self):
         """Return a list of variables universally quantified with this formula as scope.
 
 	Implementation:
 	We may move to an internal storage rather than these statements."""
-        exs = []
-        ss = self._index.get((self.store.forAll, self, None),[])
-        for s in ss:
-            exs.append(s[OBJ])
-        if verbosity() > 90: progress("Universals in %s: %s" % (self, exs))
-        return exs
+	return self._universalVariables
+#        return self.each(subj=self, pred=self.store.forAll)
     
     def variables(self):
         """Return a list of all variables quantified within this scope."""
@@ -455,6 +457,14 @@ class Formula(Fragment):
         If given is used as the (arbitrary) internal identifier of the node."""
 	return self.store.newBlankNode(self, uri,  why=why)
     
+    def declareUniversal(self, v):
+	if v not in self._universalVariables:
+	    self._universalVariables.append(v)
+	
+    def declareExistential(self, v):
+	if v not in self._existentialVariables:
+	    self._existentialVariables.append(v)
+	
     def newExistential(self, uri=None, why=None):
 	"""Create a named variable existentially qualified within this formula
 	
@@ -518,6 +528,7 @@ class Formula(Fragment):
 	if obj == None: return s[OBJ]
 	raise ParameterError("You must give one wildcard")
 
+
     def the(self, subj=None, pred=None, obj=None):
         """Return None or the value filing the blank in the called parameters
 	
@@ -557,6 +568,18 @@ class Formula(Fragment):
 	    res.append(s[wc])   # should use yeild @@ when we are ready
 	return res
 
+    def searchable(self, subj=None, pred=None, obj=None):
+	"""A pair of the difficulty of searching and a statement iterator of found statements
+	
+	The difficulty is a store-portable measure of how long the store
+	thinks (in arbitrary units) it will take to search.
+	This will only be used for choisng which part of the query to search first.
+	If it is 0 there is no solution to the query, we know now.
+	
+	In this implementation, we use the length of the sequence to be searched."""
+        res = self._index.get((pred, subj, obj), [])
+	return len(res), res
+
     def bind(self, prefix, uri):
 	"""Give a prefix and associated URI as a hint for output
 	
@@ -569,17 +592,124 @@ class Formula(Fragment):
 	"""Add a triple to the formula.
 	
 	The formula must be open.
-	subj, pred and obj must be objects as for example generated by Formula.newSymbol() and newLiteral()
+	subj, pred and obj must be objects as for example generated by Formula.newSymbol() and newLiteral(), or else literal values which can be interned.
 	why 	may be a reason for use when a proof will be required.
 	"""
-        return self.store.storeQuad((self, pred, subj, obj), why=why) # Note order change
-    
-    def remove(self, subj, pred, obj):
-	"""Removes the information from the store.
+	store = self.store
+	if not isinstance(pred, Term): pred = store.intern(pred)
+	if not isinstance(subj, Term): subj = store.intern(subj)
+	if not isinstance(obj, Term): obj = store.intern(obj)
+
+
+	q = self, pred, subj, obj
+        if verbosity() > 50:
+            progress("add quad (size before %i) " % self.store.size +`q`)
+        if self.statementsMatching(pred, subj, obj):
+            if verbosity() > 97:  progress("storeQuad duplicate suppressed"+`q`)
+            return 0  # Return no change in size of store
+        if self.cannonical != None:
+            raise RuntimeError("Attempt to add statement to cannonical formula "+`self`)
+	assert not isinstance(pred, Formula) or pred.cannonical is pred, "pred Should be closed"+`pred`
+	assert (not isinstance(subj, Formula)
+		or subj is self
+		or subj.cannonical is subj), "subj Should be closed or this"+`subj`
+	assert not isinstance(obj, Formula) or obj.cannonical is obj, "obj Should be closed"+`obj`
+
+        store.size = store.size+1
+
+# We collapse lists from the declared daml first,rest structure into List objects.
+# To do this, we need (a) a first; (b) a rest, and (c) the rest being a list.
+# We trigger List collapse on any of these three becoming true.
+# @@@ we don't reverse this on remove statement.
+
+        if pred is store.rest and self.listValue(obj) != None:
+            first = self.the(pred=store.first, subj=subj)
+            if first != None and self.listValue(subj) == None:
+                self._listValue[subj] = self.listValue(obj).precededBy(first)
+                self._checkList(subj)
+
+        elif pred is store.first:
+            rest = self.the(pred=store.rest, subj=subj)
+            if rest !=None:
+                if content.listValue(rest) != None and self.listValue(subj) == None:
+                    self._listValue[subj] = self.listValue(rest).precededBy(obj)
+                    self._checkList(subj)
+
+        s = StoredStatement(q)
 	
-	Similar to add(). The formula must be open.
+	if diag.tracking:
+	    if (why == None): raise RuntimeError(
+		"Tracking reasons but no reason given for"+`s`)
+	    report(s, why)
+
+        # Build 8 indexes.
+#       This now takes a lot of the time in a typical  cwm run! :-( 
+
+	if subj is self:  # Catch variable declarations
+	    if pred is self.store.forAll:
+		if obj not in self._universalVariables:
+		    if verbosity() > 50: progress("\tUniversal ", obj)
+		    self._universalVariables.append(obj)
+		return 1
+	    if pred is self.store.forSome:
+		if obj not in self._existentialVariables:
+		    if verbosity() > 50: progress("\tExistential ", obj)
+		    self._existentialVariables.append(obj)
+		return 1
+
+        self.statements.append(s)
+       
+        list = self._index.get((None, None, obj), None)
+        if list == None: self._index[(None, None, obj)]=[s]
+        else: list.append(s)
+
+        list = self._index.get((None, subj, None), None)
+        if list == None: self._index[(None, subj, None)]=[s]
+        else: list.append(s)
+
+        list = self._index.get((None, subj, obj), None)
+        if list == None: self._index[(None, subj, obj)]=[s]
+        else: list.append(s)
+
+        list = self._index.get((pred, None, None), None)
+        if list == None: self._index[(pred, None, None)]=[s]
+        else: list.append(s)
+
+        list = self._index.get((pred, None, obj), None)
+        if list == None: self._index[(pred, None, obj)]=[s]
+        else: list.append(s)
+
+        list = self._index.get((pred, subj, None), None)
+        if list == None: self._index[(pred, subj, None)]=[s]
+        else: list.append(s)
+
+        list = self._index.get((pred, subj, obj), None)
+        if list == None: self._index[(pred, subj, obj)]=[s]
+        else: list.append(s)
+
+	if self.closureMode != "":
+	    self.checkClosure(subj, pred, obj)
+
+        return 1  # One statement has been added  @@ ignore closure extras from closure
+		    # Obsolete this return value? @@@ 
+    
+    def removeStatement(self, s):
+	"""Removes a statement The formula must be open.
+	
+	This implementation is alas slow, as removal of items from tha hash is slow.
 	"""
-        return self.store.remove((self, pred, subj, obj))
+        self.store.size = self.store.size-1
+	if verbosity() > 97:  progress("removing %s" % (s))
+	context, pred, subj, obj = s.quad
+        self.statements.remove(s)
+        self._index[(None, None, obj)].remove(s)
+        self._index[(None, subj, None)].remove(s)
+        self._index[(None, subj, obj)].remove(s)
+        self._index[(pred, None, None)].remove(s)
+        self._index[(pred, None, obj)].remove(s)
+        self._index[(pred, subj, None)].remove(s)
+        self._index[(pred, subj, obj)].remove(s)
+	return
     
     def close(self):
         """No more to add. Please return interned value.
@@ -609,21 +739,20 @@ class Formula(Fragment):
 	if "s" in self.closureMode: self.checkClosureOfSymbol(subj)
 	if "p" in self.closureMode: self.checkClosureOfSymbol(pred)
 	if "o" in self.closureMode: self.checkClosureOfSymbol(obj)
-	if ("r" in self.closureMode and
-	    pred is self.store.docRules and
-	    subj in self.closureAlready):
-	    self.checkClosureOfSymbol(obj)
-	if ("i" in self.closureMode and
-	    pred is self.store.imports and
-	    subj in self.closureAlready):
-	    self.checkClosureOfSymbol(obj)
+	if (("r" in self.closureMode and
+	      pred is self.store.docRules) or
+	    ("i" in self.closureMode and
+	      pred is self.store.imports)) and subj in self.closureAlready:
+	    self.checkClosureDocument(obj)
     
-    def checkClosureOfSymbol(self, x):
-	if isinstance(x, Fragment): x = x.resource
-	if not isinstance(x, Symbol):return
+    def checkClosureOfSymbol(self, y):
+	if not isinstance(y, Fragment): return
+	return self.checkClosureDocument(y.resource)
+
+    def checkClosureDocument(self, x):
 	if x != None and x not in self.closureAlready:
 	    self.closureAlready.append(x)
-	    dereference(x, "m", self)
+	    dereference(x, "m" + self.closureMode, self)
 
 
     def n3String(self, flags=""):
@@ -641,6 +770,12 @@ class Formula(Fragment):
 	This formula is dumped, using ids for nested formula.
 	Then, each nested formula mentioned is dumped."""
 	str = `self`+" is {"
+	for vv, ss in ((self.universals(), "@forAll"),(self.existentials(), "@forSome")):
+	    if vv != []:
+		str = str + " " + ss + " " + `vv[0]`
+		for v in vv[1:]:
+		    str = str + ", " + `v`
+		str = str + "."
 	todo = []
 	for s in self.statements:
 	    con, pred, subj, obj = s.quad
@@ -745,6 +880,41 @@ class Formula(Fragment):
                     self._listValue[L2] = rest.precededBy(first)
                     self._checkList(L2)
                 return
+
+###################################### Forumula
+#
+# A Formula is a set of triples.
+
+class FormulaSimple(Formula):
+    """A formula of a set of RDF statements, triples.
+    
+    (The triples are actually instances of StoredStatement.)
+    Other systems such as jena and redland use the term "Model" for Formula.
+    For rdflib, this is known as a TripleStore.
+    Cwm and N3 extend RDF to allow a literal formula as an item in a triple.
+    
+    A formula is either open or closed.  Initially, it is open. In this
+    state is may be modified - for example, triples may be added to it.
+    When it is closed, note that a different interned version of itself
+    may be returned. From then on it is a constant.
+    
+    Only closed formulae may be mentioned in statements in other formuale.
+    
+    There is a reopen() method but it is not recommended, and if desperate should
+    only be used immediately after a close().
+    
+    This version is simplified by having no indexing at all.
+    """
+    def __init__(self, resource, fragid):
+        Fragment.__init__(self, resource, fragid)
+        self.descendents = None   # Placeholder for list of closure under subcontext
+        self.cannonical = None # Set to self if this has been checked for duplicates
+	self.collector = None # Object collecting evidence, if any 
+	self._listValue = {}
+	self.statements = []
+	self._index[(None,None,None)] = self.statements
+	self.closureMode = ""
+	self.closureAlready = []
 
 	
 def comparePair(self, other):
@@ -857,22 +1027,11 @@ class StoredStatement:
 	f.add(s, p, o, why=why)
 	uu = store.occurringIn(f, c.universals())
 	ee = store.occurringIn(f, c.existentials())
-#	if p is store.implies:
-#	    progress("\n@@ Variables in outer layer %s: " % `c`+ `c.variables()`)
-#	    progress("@@@@@@ a rule %s, with universals %s" % (`self`, uu))
-#	    progress("\tContext %s has %i statements:\n%s" % (`c`, len(c.statements), c.debugString()))
 	bindings = []
 	for v in uu:
-#	    progress("@@ llyn.py 814:   Universal %s in %s " %( v, f))
 	    x = f.newUniversal(v.uriref(), why=why)
-#	    f.add(subj= f, pred=log.forAll, obj=v, why=why)
-#	    bindings.append( (v, f.newUniversal(v.uriref())))
 	for v in ee:
-#	    progress("@@ Existentail  llyn.py" + `v`)
 	    x  = f.newExistential(v.uriref(), why=why)
-#	    f.add(subj= f, pred=log.forSome, obj=v, why=why)
-#	    bindings.append( (v, f.newExistential(v.uriref())))
-#	c, p, s, o = lookupQuad(bindings, self.quad)
 	return f.close()  # probably slow - much slower than statement subclass of formula
 
 
@@ -1149,7 +1308,7 @@ class BI_conclusion(HeavyBuiltIn, Function):
 		proof.append(reason)
 	    else: reason = None
             if verbosity() > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
-            self.store.copyContext(subj, F, why=reason)
+            self.store.copyFormula(subj, F, why=reason)
             self.store.think(F)
 	    F = F.close()
             self.store.storeQuad((store._experience, store.cufi, subj, F),
@@ -1176,7 +1335,7 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
 	else: reason = None
         for x in subj_py:
             if not isinstance(x, Formula): return None # Can't
-            self.store.copyContext(x, F, why=reason)
+            self.store.copyFormula(x, F, why=reason)
             if verbosity() > 74:
                 progress("    Formula %s now has %i" % (x2s(F),len(F.statements)))
         return self.store.endFormula(F)
@@ -1207,7 +1366,7 @@ class RDFStore(RDFSink) :
         self.resources = {}    # Hash table of URIs for interning things
 #        self.formulae = []     # List of all formulae        
         self._experience = None   #  A formula of all the things program run knows from direct experience
-        self._formulaeOfLength = {} # A dictionary of all the constant formuale in the store, lookup by length.
+        self._formulaeOfLength = {} # A dictionary of all the constant formuale in the store, lookup by length key.
         self.size = 0
         
     def __init__(self, genPrefix=None, metaURI=None, argv=None, crypto=0):
@@ -1288,7 +1447,7 @@ class RDFStore(RDFSink) :
         self.type = self.internURI(RDF_type_URI)
         self.Chaff = self.internURI(Logic_NS + "Chaff")
 	self.docRules = self.internURI("http://www.w3.org/2000/10/swap/pim/doc#rules")
-#	self.imports = self.internURI("
+	self.imports = self.internURI("http://www.w3.org/2002/07/owl#imports")
 
 # List stuff - beware of namespace changes! :-(
 
@@ -1549,15 +1708,6 @@ class RDFStore(RDFSink) :
                 else: raise RuntimeError, "did not expect other type:"+`typ`
         return result
 
-#    def initTerm(self, x):
-#        """ The store initialized the pointers in a new Term
-#        """
-#
-##        x.occursAs = [], [], [], []    # These are special cases of indexes
-#
-#        if isinstance(x, Formula):
-##             self.formulae.append(x)
-#        return x
      
     def internList(self, value):
         x = nil
@@ -1585,10 +1735,9 @@ class RDFStore(RDFSink) :
                 progress("End formula -- @@ already cannonical:"+`F`)
             return F.cannonical
 	collector = F.collector
-#	F.collector = None  # can't collect any more - remember though for reopen
+
         fl = F.statements
-        fl.sort(StoredStatement.compareSubjPredObj)
-        l = len(fl)   # The number of statements
+        l = len(fl), len(F.universals()), len(F.existentials())   # The number of statements
         possibles = self._formulaeOfLength.get(l, None)  # Formulae of same length
 
     
@@ -1599,21 +1748,44 @@ class RDFStore(RDFSink) :
             F.cannonical = F
             return F
 
+        fl.sort(StoredStatement.compareSubjPredObj)
+	fe = F.existentials()
+	fe.sort(compareURI)
+	fu = F.universals ()
+	fu.sort(compareURI)
+
         for G in possibles:
             gl = G.statements
-            if len(gl) != l: raise RuntimeError("@@Length of %s is %i instead of %i" %(G, len(gl), l))
-            for i in range(l):
-                for p in CONTEXT, PRED, SUBJ, OBJ:
+	    gkey = len(gl), len(G.universals()), len(G.existentials())
+            if gkey != l: raise RuntimeError("@@Key of %s is %s instead of %s" %(G, `gkey`, `l`))
+
+	    gl.sort(StoredStatement.compareSubjPredObj)
+            for se, oe, in  ((fe, G.existentials()),
+			     (fu, G.universals())):
+		lse = len(se)
+		loe = len(oe)
+		if lse > loe: return 1
+		if lse < loe: return -1
+		oe.sort(compareURI)
+		for i in range(lse):
+		    if se[i] is not oe[i]:
+			break # mismatch
+		else:
+		    continue # match
+		break
+
+            for i in range(l[0]):
+                for p in PRED, SUBJ, OBJ:
                     if (fl[i][p] is not gl[i][p]
-                        and (fl[i][p] is not F or gl[i][p] is not G)):
+                        and (fl[i][p] is not F or gl[i][p] is not G)): # Allow self-reference @@
                         break # mismatch
                 else: #match one statement
                     continue
                 break
             else: #match
-                if verbosity() > 20: progress("** Smushed new formula %s giving old %s" % (F, G))
-                if verbosity() > 70:
-                    progress("End formula -- found match! ", F, G)
+                if verbosity() > 20: progress(
+		    "** End Formula: Smushed new formula %s giving old %s" % (F, G))
+		del(F)  # Make sure it ain't used again
                 return G
         possibles.append(F)
 #        raise oops
@@ -1629,7 +1801,8 @@ class RDFStore(RDFSink) :
             return F # was open
         if verbosity() > 70:
             progress("reopen formula:"+`F`)
-        self._formulaeOfLength[len(F.statements)].remove(F)  # Formulae of same length
+	key = len(F.statements), len(F.universals()), len(F.existentials())  
+        self._formulaeOfLength[key].remove(F)  # Formulae of same length
         F.cannonical = None
         return F
 
@@ -1671,95 +1844,14 @@ class RDFStore(RDFSink) :
         """ intern quads, in that dupliates are eliminated.
 
 	subject, predicate and object are terms - or atomic values to be interned.
-        Builds the indexes and does stuff for lists.         
+        Builds the indexes and does stuff for lists.
+	Deprocated: use Formula.add()         
         """
-        if verbosity() > 50:
-            progress("storeQuad (size before %i) "%self.size +`q`)
         
         context, pred, subj, obj = q
 	assert isinstance(context, Formula), "Should be a Formula: "+`context`
-	if not isinstance(pred, Term): pred = self.intern(pred)
-	if not isinstance(subj, Term): subj = self.intern(subj)
-	if not isinstance(obj, Term): obj = self.intern(obj)
-
-
-        if context.statementsMatching(pred, subj, obj):
-            if verbosity() > 97:  progress("storeQuad duplicate suppressed"+`q`)
-            return 0  # Return no change in size of store
-        if context.cannonical != None:
-            raise RuntimeError("Attempt to add statement to cannonical formula "+`context`)
-	assert not isinstance(pred, Formula) or pred.cannonical is pred, "pred Should be closed"+`pred`
-	assert (not isinstance(subj, Formula)
-		or subj is context
-		or subj.cannonical is subj), "subj Should be closed or this"+`subj`
-	assert not isinstance(obj, Formula) or obj.cannonical is obj, "obj Should be closed"+`obj`
-
-        self.size = self.size+1
-
-# We collapse lists from the declared daml first,rest structure into List objects.
-# To do this, we need (a) a first; (b) a rest, and (c) the rest being a list.
-# We trigger List collapse on any of these three becoming true.
-# @@@ we don't reverse this on remove statement.
-
-        if pred is self.rest and context.listValue(obj) != None:
-            first = context.the(pred=self.first, subj=subj)
-            if first != None and context.listValue(subj) == None:
-                context._listValue[subj] = context.listValue(obj).precededBy(first)
-                context._checkList(subj)
-
-        elif pred is self.first:
-            rest = context.the(pred=self.rest, subj=subj)
-            if rest !=None:
-                if content.listValue(rest) != None and context.listValue(subj) == None:
-                    context._listValue[subj] = context.listValue(rest).precededBy(obj)
-                    context._checkList(subj)
-
-        s = StoredStatement((context, pred, subj, obj))
+	return context.add(subj=subj, pred=pred, obj=obj, why=why)
 	
-	if diag.tracking:
-	    if (why == None): raise RuntimeError(
-		"Tracking reasons but no reason given for"+`s`)
-	    report(s, why)
-
-        # Build 8 indexes.
-#       This now takes a lot of the time in a typical  cwm run! :-( 
-
-        context.statements.append(s)
-        
-        list = context._index.get((None, None, obj), None)
-        if list == None: context._index[(None, None, obj)]=[s]
-        else: list.append(s)
-
-        list = context._index.get((None, subj, None), None)
-        if list == None: context._index[(None, subj, None)]=[s]
-        else: list.append(s)
-
-        list = context._index.get((None, subj, obj), None)
-        if list == None: context._index[(None, subj, obj)]=[s]
-        else: list.append(s)
-
-        list = context._index.get((pred, None, None), None)
-        if list == None: context._index[(pred, None, None)]=[s]
-        else: list.append(s)
-
-        list = context._index.get((pred, None, obj), None)
-        if list == None: context._index[(pred, None, obj)]=[s]
-        else: list.append(s)
-
-        list = context._index.get((pred, subj, None), None)
-        if list == None: context._index[(pred, subj, None)]=[s]
-        else: list.append(s)
-
-        list = context._index.get((pred, subj, obj), None)
-        if list == None: context._index[(pred, subj, obj)]=[s]
-        else: list.append(s)
-
-
-	if context.closureMode != "":
-	    context.checkClosure(subj, pred, obj)
-
-        return 1  # One statement has been added  @@ ignore closure extras from closure
-		    # Obsolete this return value @@@ 
 
     def crawl(s):
 	"Crawl the web to find the definitions of terms used"
@@ -1816,7 +1908,15 @@ class RDFStore(RDFSink) :
 
         counts = {}   # Dictionary of how many times each
         closure = context.subFormulae()    # This context and all subFormulae
+	counts[self.implies.resource] = 0
         for con in closure:
+	    for x in con.existentials() + con.universals():
+		_anon, _incoming = self._topology(x, con)
+		if not _anon:
+		    r = x.resource
+		    total = counts.get(r, 0) + 1
+		    counts[r] = total
+		counts[self.forAll.resource] = counts[self.forAll.resource] + 1
             for s in con.statements:
                 for p in PRED, SUBJ, OBJ:
                     x = s[p]
@@ -1833,7 +1933,8 @@ class RDFStore(RDFSink) :
         for r, count in counts.items():
             if verbosity() > 25: progress("    Count is %3i for %s" %(count, r.uriref()))
             if (r.uri != RDF_NS_URI[:-1]
-                and (count > best or
+                and count > 0
+		and (count > best or
                      (count == best and mp.uriref() > r.uriref()))) :  # Must be repeatable for retests
                 best = count
                 mp = r
@@ -1875,8 +1976,8 @@ class RDFStore(RDFSink) :
             self._outputStatement(sink, s.quad)
         sink.endDoc()
 
-    def _outputStatement(self, sink, triple):
-        sink.makeStatement(self.extern(triple))
+    def _outputStatement(self, sink, quad):
+        sink.makeStatement(self.extern(quad))
 
     def extern(self, t):
         return(t[CONTEXT].asPair(),
@@ -1885,6 +1986,26 @@ class RDFStore(RDFSink) :
                             t[OBJ].asPair(),
                             )
 
+    def dumpVariables(self, context, sink, sorting=1, pretty=0):
+	"""Dump the forAlls and the forSomes at the top of a formula"""
+	if sorting:
+	    uv = context.universals()[:]
+	    uv.sort(compareURI)
+	    ev = context.existentials()[:]
+	    ev.sort(compareURI)
+	else:
+	    uv = context.universals()
+	    ev = context.existentials()
+	for v in uv:
+	    self._outputStatement(sink, (context, self.forAll, context, v))
+	for v in ev:
+	    if pretty:
+		_anon, _incoming = self._topology(v, context)
+	    else:
+		_anon = 0
+	    if not _anon:
+		self._outputStatement(sink, (context, self.forSome, context, v))
+
     def dumpBySubject(self, context, sink, sorting=1):
         """ Dump by order of subject except forSome's first for n3=a mode"""
         
@@ -1892,10 +2013,7 @@ class RDFStore(RDFSink) :
         sink.startDoc()
         self.dumpPrefixes(sink, counts)
 
-        statements = context.statementsMatching(self.forSome, context, None)
-        if sorting: statements.sort(StoredStatement.compareObj)
-        for s in statements:
-            self._outputStatement(sink, s.quad)
+	self.dumpVariables(context, sink, sorting)
 
         rs = self.resources.values()
         if sorting: rs.sort(compareURI)
@@ -1903,7 +2021,7 @@ class RDFStore(RDFSink) :
             statements = context.statementsMatching(subj=r)
             if sorting: statements.sort(StoredStatement.comparePredObj)
             for s in statements :
-                if not(context is s.quad[SUBJ]and s.quad[PRED] is self.forSome):
+#                if not(context is s.quad[SUBJ]and s.quad[PRED] is self.forSome):
                     self._outputStatement(sink, s.quad)
             if not isinstance(r, Literal):
                 fs = r.fragments.values()
@@ -1922,21 +2040,16 @@ class RDFStore(RDFSink) :
 #
 # An intersting alternative is to use the reverse syntax to the max, which
 # makes the DLG an undirected labelled graph. s and o above merge. The only think which
-# then prevents us from dumping the graph without newInterneds is the presence of cycles.
+# then prevents us from dumping the graph without new bnode ids is the presence of cycles.
 
 # Formulae
 #
 # These are in some way like literal strings, in that they are defined completely
 # by their contents. They are sets of statements. (To say a statement occurs
-# twice has no menaing).  Can they be given an id?  You can assert that any
+# twice has no meaning).  Can they be given an id? No, not directly. You can assert that any
 # object is equivalent to (=) a given formula.
 # If one could label it in one place then one would want to
-# be able to label it in more than one.  I'm not sure whether this is wise.
-# Let's try it with no IDs on formulae as in the N3 syntax.  There would be
-# the question of in which context the assertion wa made that the URI was
-# a label for the expression. You couldn't just treat it as part of the
-# machinery as we do for URI of a regular thing.
-
+# be able to label it in more than one.
 
     def _topology(self, x, context): 
         """ Can be output as an anonymous node in N3. Also counts incoming links.
@@ -1952,11 +2065,11 @@ class RDFStore(RDFSink) :
         Paired with this is whether this is a subexpression.
         """
 
-        _asPred = len(context._index.get((x, None, None),[]))
+        _asPred = len(context.each(pred=x))
         _elsewhere = 0
-        _isExistential = len(context._index.get((self.forSome, context, x),[]))
-        _asObj = len(context._index.get((None, None, x),[])) - _isExistential
-        _loop = len(context._index.get((None, x, x),[]))  # does'es count as incomming
+        _isExistential = x in context.existentials()
+        _asObj = len(context.each(obj=x))
+        _loop = context.any(subj=x, obj=x)  # does'nt count as incomming
         
         if isinstance(x, Literal):
             _anon = 0     #  Never anonymous, always just use the string
@@ -1970,15 +2083,15 @@ class RDFStore(RDFSink) :
             contextClosure = context.subFormulae()[:]
             contextClosure.remove(context)
             for sc in contextClosure:
-                if (sc._index.get((None, None, x),None)
-                    or sc._index.get((None, x, None),None)
-                        or sc._index.get((x, None, None),None)):
+                if (sc.any(obj=x)
+                    or sc.any(subj=x)
+		    or sc.any(pred=x)):
                     _elsewhere = 1  # Occurs in a subformula - can't be anonymous!
                     break
-            _anon = (_asObj < 2) and ( _asPred == 0) and (_loop ==0) and _isExistential and not _elsewhere
+            _anon = (_asObj < 2) and ( _asPred == 0) and (not _loop) and _isExistential and not _elsewhere
 
         if verbosity() > 98:
-            progress( "Topology %s in %s is: anon=%i ob=%i, loop=%i pr=%i ex=%i elsewhere=%i"%(
+            progress( "Topology %s in %s is: anon=%i ob=%i, loop=%s pr=%i ex=%i elsewhere=%i"%(
             `x`, `context`, _anon, _asObj, _loop, _asPred,  _isExistential, _elsewhere))
 
         return ( _anon, _asObj+_asPred )  
@@ -2059,8 +2172,11 @@ class RDFStore(RDFSink) :
         """
         if sorting: context.statements.sort(StoredStatement.compareSubjPredObj)
 
-        statements = context.statementsMatching(subj=context)  # context is subject
+	self.dumpVariables(context, sink, sorting, pretty=1)
+
+	statements = context.statementsMatching(subj=context)  # context is subject
         if statements:
+	    progress("@@ Statement with context as subj?!", statements,)
             self._dumpSubject(context, context, sink, sorting, statements)
 
         currentSubject = None
@@ -2112,13 +2228,13 @@ class RDFStore(RDFSink) :
                 pass
             else:     #  Could have alternative syntax here
 
-                for s in statements:  # Find at least one we will print
-                    context, pre, sub, obj = s.quad
-                    if sub is obj: break  # Ok, we will do it
-                    _anon, _incoming = self._topology(obj, context)
-                    if not((pre is self.forSome) and sub is context and _anon):
-                        break # We will print it
-                else: return # Nothing to print - so avoid printing [].
+#                for s in statements:  # Find at least one we will print
+#                    context, pre, sub, obj = s.quad
+#                    if sub is obj: break  # Ok, we will do it
+#                    _anon, _incoming = self._topology(obj, context)
+#                    if not((pre is self.forSome) and sub is context and _anon):
+#                        break # We will print it
+#                else: return # Nothing to print - so avoid printing [].
 
                 if sorting: statements.sort(StoredStatement.comparePredObj)    # Order only for output
 
@@ -2167,8 +2283,8 @@ class RDFStore(RDFSink) :
         _anon, _incoming = self._topology(obj, context)
         _se = isinstance(obj, Formula) and obj is not context
         li = 0
-        if ((pre is self.forSome) and sub is context and _anon):
-            return # implicit forSome
+#        if ((pre is self.forSome) and sub is context and _anon):
+#            return # implicit forSome
         if (context.listValue(obj) != None) and obj is not self.nil and obj.generated():
 	    for s in context.statementsMatching(subj=obj):
 		p = s.quad[PRED]
@@ -2179,9 +2295,11 @@ class RDFStore(RDFSink) :
 		    li = 1
 
         if _anon and (_incoming == 1 or li or _se):  # Embedded anonymous node in N3
-            _isSubject = len(context._index.get((obj, None, None), [])) # Has properties in this context?
 
-#            if _isContext > 0 and _isSubject > 0: raise CantDoThat # Syntax problem!@@@
+            _isSubject = context.any(pred=obj) # Has any properties in this context? 
+	    # was: _isSubject = len(context.each(pred=obj)_index.get((obj, None, None), []))
+	    # Has properties in this context?
+	    #@@@@@ comments don't match code
             
             if _isSubject > 0 or not _se :   #   Do [ ] if nothing else as placeholder.
 
@@ -2222,15 +2340,31 @@ class RDFStore(RDFSink) :
 #  Note when we move things, then the store may shrink as they may
 # move on top of existing entries and we don't allow duplicates.
 #
+#   @@@@ Should automatically here rewrite any variable name clashes
+#  for variable names which occur in the other but not as the saem sort of variable
+# Must be done by caller.
 
-    def copyContextRecursive(self, old, new, bindings, why=None):
+    def copyFormulaRecursive(self, old, new, bindings, why=None):
         total = 0
+	for v in old.universals():
+	    new.declareUniversal(_lookup(bindings, v))
+	for v in old.existentials():
+	    new.declareExistential(_lookup(bindings, v))
+	bindings2 = bindings + [(old, new)]
         for s in old.statements[:] :   # Copy list!
-            q2 = lookupQuadRecursive(bindings, s.quad, why=becauseSubexpression)
-            total = total -1 + self.storeQuad(q2, why)
+	    self.storeQuad((new,
+                         _lookupRecursive(bindings2, s[PRED], why=why),
+                         _lookupRecursive(bindings2, s[SUBJ], why=why),
+                         _lookupRecursive(bindings2, s[OBJ],  why=why))
+			 , why)
         return total
                 
-    def copyContext(self, old, new, why=None):
+    def copyFormula(self, old, new, why=None):
+	bindings = [ (old, new) ]
+	for v in old.universals():
+	    new.declareUniversal(_lookup(bindings, v))
+	for v in old.existentials():
+	    new.declareExistential(_lookup(bindings, v))
         for s in old.statements[:] :   # Copy list!
             q = s.quad
             for p in CONTEXT, PRED, SUBJ, OBJ:
@@ -2253,12 +2387,7 @@ class RDFStore(RDFSink) :
 
     def purgeSymbol(self, context, subj):
 	"""Purge all triples in which a symbol occurs.
-	Defaults to all removing occurrences of log:implies, and log:forAll, eg rules.
 	"""
-	if subj == None:
-            self.purgeSymbol(context, self.implies)
-            self.purgeSymbol(context, self.forAll)
-            return
 	total = 0
 	for t in context.statementsMatching(subj=subj)[:]:
 		    self.removeStatement(t)    # SLOW
@@ -2275,20 +2404,20 @@ class RDFStore(RDFSink) :
 
 
     def removeStatement(self, s):
-        "Slow, alas. The remove()s take a lot of time."
-        context, pred, subj, obj = s.quad
-        if verbosity() > 97:  progress("removeStatement "+`s.quad`)
-        context.statements.remove(s)
-        context._index[(None, None, obj)].remove(s)
-        context._index[(None, subj, None)].remove(s)
-        context._index[(None, subj, obj)].remove(s)
-        context._index[(pred, None, None)].remove(s)
-        context._index[(pred, None, obj)].remove(s)
-        context._index[(pred, subj, None)].remove(s)
-        context._index[(pred, subj, obj)].remove(s)
-        self.size = self.size-1
-        #        del s
+        "Remove statement from store"
+ 	return s[CONTEXT].removeStatement(s)
 
+    def purgeExceptData(self, context):
+	"""Remove anything which can't be expressed in plain RDF"""
+	uu = context.universals()
+	for s in context.statements[:]:
+	    for p in PRED, SUBJ, OBJ:
+		x = s[p]
+		if x in uu or isinstance(x, Formula):
+		    context.removeStatement(s)
+		    break
+	context._universalVariables =[]  # Cheat! @ use API
+		    
 #   Iteratively apply rules to a formula
 
     def think(self, F, G=None, mode=""):
@@ -2375,13 +2504,20 @@ class RDFStore(RDFSink) :
         template = rule[SUBJ]
         conclusion = rule[OBJ]
 
-
         # When the template refers to itself, the thing we are
         # are looking for will refer to the context we are searching
         # Similarly, refernces to the working context have to be moved into the
         # target context when the conclusion is drawn.
 
-        unmatched, templateExistentials = self.oneContext(template)
+
+	x = self.occurringIn(template, template.universals()[:])
+	if template.universals() != []:
+	    raise RuntimeError("""Cannot query for universally quantified things.
+	    As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
+	    This/these were: %s\n""" % x)
+
+        unmatched = template.statements[:]
+	templateExistentials = template.existentials()[:]
         _substitute([( template, workingContext)], unmatched)
 
         variablesMentioned = self.occurringIn(template, _variables)
@@ -2431,9 +2567,15 @@ class RDFStore(RDFSink) :
 	assert f.cannonical is f
 	assert g.cannonical is g
 
-        unmatched, templateExistentials = self.oneContext(g)
+        unmatched = g.statements[:]
+	templateExistentials = g.existentials()
         _substitute([( g, f)], unmatched)
         
+	if g.universals() != []:
+	    raise RuntimeError("""Cannot query for universally quantified things.
+	    As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
+	    This/these were: %s\n""" % x)
+
         if bindings != []: _substitute(bindings, unmatched)
 
         if verbosity() > 20:
@@ -2457,31 +2599,7 @@ class RDFStore(RDFSink) :
     def newInterned(self, type):        
         return self.intern((type, self.genId()))
 
-
-    def oneContext(self, con):
-        """Find statements and variables in formula as template of a query.
-
-        Return a list of statements and variables of either type
-        found within the top level. Strip out forSome statments as
-        when we are searching an existentially qualified can match against a constant (or a universal).
-        """
-        statements = []
-        variables = []
-        for arc in con.statements:
-            context, pred, subj, obj = arc.quad
-            if not(subj is context and pred is self.forSome):
-                statements.append(arc.quad)
-            else:
-                if verbosity()>79: progress( " Stripped forSome %s" % x2s(obj))
-
-            if subj is context and (pred is self.forSome or pred is self.forAll): # @@@@
-                if not isinstance(obj, Formula):
-                    variables.append(obj)   # Collect list of existentials
-                
-        return statements, variables
-
-#   Find which variables occur in an expression
-
+ 
     def occurringIn(self, x, vars, level=0, context=None):
         """ Figure out, given a set of variables which if any occur in a formula, list, etc
          The result is returned as an ordered set so that merges can be done faster.
@@ -2491,7 +2609,7 @@ class RDFStore(RDFSink) :
             set = []
             if verbosity() > 98: progress("  "*level+"----occuringIn: "+"  "*level+`x`)
             for s in x.statements:
-                if s[PRED] is not self.forSome:
+#                if s[PRED] is not self.forSome:
                     for p in PRED, SUBJ, OBJ:
                         y = s[p]
                         if y is x:
@@ -2628,7 +2746,7 @@ class Query:
 
 #        store, workingContext, conclusion, targetContext,  already, rule = param
 	if verbosity > 0: indent = " "*level
-        if verbosity() >60: progress( indent, "\n#Concluding tentatively..." + bindingsToString(bindings))
+        if verbosity() >60: progress( indent, "\nConcluding tentatively..." + bindingsToString(bindings))
 
         if self.already != None:
             if bindings in self.already:
@@ -2653,7 +2771,7 @@ class Query:
 
         b2 = bindings + [(self.conclusion, self.targetContext)]
         ok = self.targetContext.universals()  # It is actually ok to share universal variables with other stuff
-        poss = self.conclusion.universals()
+        poss = self.conclusion.universals()[:]
         for x in poss[:]:
             if x in ok: poss.remove(x)
         vars = self.conclusion.existentials() + poss  # Terms with arbitrary identifiers
@@ -2674,7 +2792,7 @@ class Query:
         if verbosity()>10:
             progress( indent, "Concluding definitively" + bindingsToString(b2) )
         before = self.store.size
-        self.store.copyContextRecursive(
+        self.store.copyFormulaRecursive(
 		    self.conclusion, self.targetContext, b2, why=reason)
         if verbosity()>30:
             progress( indent, "   size of store changed from %i to %i."%(before, self.store.size))
@@ -2766,7 +2884,15 @@ class Query:
                     if (isinstance(subj, Formula)
                         and isinstance(obj, Formula)):
 
-                        more_unmatched, more_variables = query.store.oneContext(obj)
+                        more_unmatched = obj.statements[:]
+			more_variables = obj.variables()[:]
+
+			if obj.universals() != []:
+			    raise RuntimeError("""Cannot query for universally quantified things.
+	    As of 2003/07/28 forAll x ...x cannot be on object of log:includes.
+	    This/these were: %s\n""" % obj.universals())
+
+
                         _substitute([( obj, subj)], more_unmatched)
                         _substitute(bindings, more_unmatched)
                         existentials = existentials + more_variables
@@ -2998,10 +3124,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         if hasUnboundFormula:
             self.short = INFINITY   # can't search
         else:
-            self.myIndex = con._index.get((self.searchPattern[1],
-                                           self.searchPattern[2],
-                                           self.searchPattern[3]), [])
-            self.short = len(self.myIndex)
+            self.short, self.myIndex = con.searchable(self.searchPattern[SUBJ],
+                                           self.searchPattern[PRED],
+                                           self.searchPattern[OBJ])
         if con in smartIn and isinstance(pred, LightBuiltIn):
             if self.canRun(): self.state = S_LIGHT_UNS_GO  # Can't do it here
             else: self.state = S_LIGHT_EARLY # Light built-in, can't run yet, not searched
@@ -3145,7 +3270,6 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         if verbosity() > 90:
             progress(" binding ", `self` + " with "+ `newBindings`)
         q=[con, pred, subj, obj]
-        changedPattern = 0
         for p in ALL4:
             changed = 0
             for var, val in newBindings:
@@ -3154,7 +3278,6 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                     changed = 1
                 if q[p] is var and self.searchPattern[p]==None:
                     self.searchPattern[p] = val # const now
-                    changedPattern = 1
                     changed = 1
                     self.neededToRun[p] = [] # Now it is definitely all bound
             if changed:
@@ -3171,11 +3294,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                         self.short = INFINITY  # Forget it
                         break
             else:
-                self.myIndex = con._index.get(( self.searchPattern[1],
-                                                self.searchPattern[2],
-                                                self.searchPattern[3]), [])
-                self.short = len(self.myIndex)
-#                progress("@@@ Ooops, short is ", self.short, self.searchPattern)
+		self.short, self.myIndex = con.searchable(self.searchPattern[SUBJ],
+                                           self.searchPattern[PRED],
+                                           self.searchPattern[OBJ])
             if self.short == 0:
                 self.searchDone()
 
@@ -3206,11 +3327,13 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 #############  Substitution functions    
 
 def _substitute(bindings, list):
+    """Subsitustes IN-LINE into a list of quads"""
     for i in range(len(list)):
         q = list[i]
         list[i] = lookupQuad(bindings, q)
                             
 def lookupQuad(bindings, q):
+	"Return a subsituted quad"
 	context, pred, subj, obj = q
 	return (
             _lookup(bindings, context),
@@ -3225,16 +3348,17 @@ def _lookup(bindings, value):
 
 def lookupQuadRecursive(bindings, q, why=None):
 	context, pred, subj, obj = q
+	if verbosity() > 99: progress("\tlookupQuadRecursive:", q)
 	return (
             _lookupRecursive(bindings, context, why=why),
             _lookupRecursive(bindings, pred, why=why),
             _lookupRecursive(bindings, subj, why=why),
             _lookupRecursive(bindings, obj, why=why) )
 
-def _lookupRecursive(bindings, x, old=None, new=None, why=None):
+def _lookupRecursive(bindings, x, why=None):
     """ Subsitute into formula."""
     vars = []
-    if x is old: return new
+#    if x is old: return new
     for left, right in bindings:
         if left == x: return right
         vars.append(left)
@@ -3244,13 +3368,15 @@ def _lookupRecursive(bindings, x, old=None, new=None, why=None):
     oc = store.occurringIn(x, vars)
     if oc == []: return x # phew!
     y = store.newInterned(FORMULA)
-    if verbosity() > 90: progress("lookupRecursive "+`x`+" becomes new "+`y`)
-    for s in x.statements:
-        store.storeQuad((y,
-                         _lookupRecursive(bindings, s[PRED], x, y, why=why),
-                         _lookupRecursive(bindings, s[SUBJ], x, y, why=why),
-                         _lookupRecursive(bindings, s[OBJ], x, y, why=why))
-			 , why)
+    if verbosity() > 90: progress("lookupRecursive: formula"+`x`+" becomes new "+`y`,
+				" because of ", oc)
+    store.copyFormulaRecursive(x, y, bindings, why=why)
+#    for s in x.statements:
+#        store.storeQuad((y,
+#                         _lookupRecursive(bindings, s[PRED], x, y, why=why),
+#                         _lookupRecursive(bindings, s[SUBJ], x, y, why=why),
+#                         _lookupRecursive(bindings, s[OBJ], x, y, why=why))
+#			 , why)
     return store.endFormula(y) # intern
 
 
