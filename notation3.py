@@ -634,8 +634,8 @@ class SinkParser:
                         self.lines = self.lines + 1
                         
                     if ch == "\\":
-                        j = j + 1
                         ch = str[j:j+1]  # Will be empty if string ends
+                        j = j + 1
                         if ch == "":
                             raise BadSyntax(startline, str, i, "unterminated string literal (2)")
                         k = string.find('abfrtvn\\"', ch)
@@ -920,7 +920,7 @@ def relativeURI(base, uri):
             break
 #    print "# relative", base, uri, "   same up to ", i
     # i point to end of shortest one or first difference
-    if uri[i] =="#": return uri[i:]  # fragment of base
+    if i<len(uri) and uri[i] =="#": return uri[i:]  # fragment of base
     while i>0 and uri[i-1] != '/' : i=i-1  # scan for slash
     if i < 3: return uri  # No way.
     if string.find(base, "//", i-2)>0: return uri # An unshared "//"
@@ -1371,7 +1371,7 @@ def stringToN3(str):
         for i in range(len(str)):
                 ch = str[i]
                 j = string.find(forbidden, ch)
-                if j>=0: ch = "\\" + '\"abfrtvn'[j]
+                if j>=0: ch = "\\" + '\\"abfrtvn'[j]
                 elif ch < " " or ch > "}" : ch= 'x'+`ch`[1:-1] # Use python
                 res = res + ch
         return delim + res + delim
