@@ -209,6 +209,11 @@ class CalWr:
         w(propName + ":")
         freq = sts.any(r, ICAL.freq)
         if freq: w("FREQ=%s" % freq)
+        else: warn("no freq in recur")
+        
+        when = sts.any(r, ICAL.until)
+        if when: w(";UNTIL=%s" % when)
+
         ival = sts.any(r, ICAL.interval)
         if ival: w(";INTERVAL=%s" % ival)
         by = sts.any(r, ICAL.byday)
@@ -329,7 +334,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.21  2004-09-08 15:46:05  connolly
+# Revision 2.22  2004-11-13 16:51:14  connolly
+# added UNTIL support in doRecur (IOU a test)
+#
+# Revision 2.21  2004/09/08 15:46:05  connolly
 # - update to using timezones as properties
 # - kinda kludge converting timezone URIs to tzids
 #
