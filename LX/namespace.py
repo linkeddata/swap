@@ -30,7 +30,10 @@ class NamespaceCluster:
 
     """
     def inverseLookup(self, term):
-        uri = term.uri
+        try:
+            uri = term.uri
+        except AttributeError, e:
+            return None
         for (key, value) in self.__dict__.iteritems():
             if uri.startswith(value.uri):
                 rest = uri[len(value.uri):]
@@ -97,7 +100,8 @@ ns = NamespaceCluster()
 ns.rdf  = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns",
                    ["type", "nil", "first", "rest", "XMLLiteral"])
 ns.rdfs = Namespace("http://www.w3.org/2000/01/rdf-schema",
-                   ["Resource", "Class", "Datatype", "seeAlso"])
+                   ["Resource", "Class", "Datatype", "seeAlso",
+                    "label", ])
 ns.xsd = Namespace("http://www.w3.org/2001/XMLSchema#", strict=0)
 ns.dc = Namespace("http://purl.org/dc/elements/1.1/", strict=0)
 ns.foaf = Namespace("http://xmlns.com/foaf/0.1/", strict=0)
@@ -111,7 +115,10 @@ if __name__ == "__main__":
 
 
 # $Log$
-# Revision 1.8  2003-08-28 11:35:55  sandro
+# Revision 1.9  2003-09-03 21:07:10  sandro
+# added rdfs:label, change bnode handling a little
+#
+# Revision 1.8  2003/08/28 11:35:55  sandro
 # removed a debuging "print"; added ns.xsd
 #
 # Revision 1.7  2003/08/25 18:21:44  sandro
