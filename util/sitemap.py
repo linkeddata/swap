@@ -2,6 +2,11 @@
 """
 sitemap -- craw web site, record titles and links
 
+see also: RDFIG chump entry
+http://rdfig.xmlhack.com/2003/01/02/2003-01-02.html#1041485614.375205
+and discussion
+http://ilrt.org/discovery/chatlogs/rdfig/2003-01-02.html#T02-43-10
+
 $Id$
 see changelog at end.
 
@@ -42,8 +47,11 @@ from RDFSink import SYMBOL, LITERAL, FORMULA
 import diag
 diag.setVerbosity(0)
 
-def DC(n):
-    return 'http://purl.org/dc/elements/1.1/' + n
+def DC(ln):
+    return 'http://purl.org/dc/elements/1.1/' + ln
+
+def RDFS(ln):
+    return 'http://www.w3.org/2000/01/rdf-schema#' + ln
 
 
 class Crawler:
@@ -64,19 +72,50 @@ class Crawler:
             progress("crawling at: ", head, " iter ", iter, " of ", max)
             iter = iter + 1
             if iter > max:
-                progress("should stop now.")
+                progress ("max limit reached.")
                 break
 
             seen.append(head)
 
             try:
-                content = urllib2.urlopen(head).read()
+                rep = urllib2.urlopen(head)
+                content = rep.read()
             except IOError:
                 progress("can't GET", head)
                 continue
                 #@@ makeStatement(head type NoGood)
 
-            progress("... got content")
+            # try to find a short label for
+            # a diagram or some such.
+            # try the last path segment,
+            # or the 2nd last in case of an empty last segment...
+            slash = head[:-1].rfind('/')
+            label = head[slash+1:]
+            
+            ct = rep.info().getheader('content-type')
+            progress("... got content of type ", ct)
+            isHTML = ct.find('text/html') == 0
+
+            kb.makeStatement((ctx,
+                              kb.newSymbol(DC('type')),
+                              kb.newSymbol(head),
+                              kb.newLiteral(ct)))
+
+            # note that we're not peeking into the URI
+            # to find out if it's HTML; we're just
+            # eliding the extension in the case we
+            # know (from the HTTP headers) that it's HTML.
+            if isHTML and label[-5:] == '.html':
+                label = label[:-5]
+
+            kb.makeStatement((ctx,
+                              kb.newSymbol(RDFS('label')),
+                              kb.newSymbol(head),
+                              kb.newLiteral(label)))
+
+            if not isHTML: continue
+            
+            progress("... parsing text/html content")
             doc = libxml2.htmlParseDoc(content, 'us-ascii')
             try:
                 titles = doc.xpathNewContext().xpathEval('//title')
@@ -127,6 +166,7 @@ def main(argv):
     c.crawlFrom(site, site, max)
     sink = toXML.ToRDF(sys.stdout, here)
     sink.bind('dc', DC(''))
+    sink.bind('s', RDFS(''))
     kb.dumpNested(f, sink)
     
 if __name__ == '__main__':
@@ -134,7 +174,10 @@ if __name__ == '__main__':
     main(sys.argv)
 
 # $Log$
-# Revision 1.2  2003-01-02 05:32:46  connolly
+# Revision 1.3  2003-01-03 04:18:32  connolly
+# added rdfs:label for use with circles and arrows tools; added dc:type while I was at it
+#
+# Revision 1.2  2003/01/02 05:32:46  connolly
 # some comments about dependencies
 #
 # Revision 1.1  2003/01/02 05:29:59  connolly
