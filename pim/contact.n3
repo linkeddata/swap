@@ -76,6 +76,11 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 :sortName a rdf:Property; rdfs:label "sort name";
   rdfs:comment "re-arranged for lexicographic ordering; ala Doe, John".
 
+
+:knownAs a rdf:Property;
+    rdfs:comment """A person may be known as various strings.
+For example, an email freindly name string.""".
+
 :ContactLocation a rdfs:Class;
     rdfs:comment  "A place with address, phone number, fax, etc".
 
@@ -268,7 +273,7 @@ mso:WebPage  a rdf:Property;
 
 <> dc:description """
 $Log$
-Revision 1.14  2002-10-07 17:32:15  timbl
+Revision 1.15  2002-10-07 19:41:24  timbl
 (timbl) Changed through Jigsaw.
 
 Revision 1.13  2002/07/18 05:30:49  connolly
