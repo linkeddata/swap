@@ -431,7 +431,9 @@ class Rule:
 			conclusion = self.conclusion,
 			targetContext = task.targetContext,
 			already = self.already,
-#			rule = self.statement,
+                      ###
+			rule = self.statement,
+                      ###
 			smartIn = [task.workingContext],    # (...)
 			meta = task.workingContext,
 			mode = task.mode)
@@ -562,6 +564,8 @@ class Query:
 	self.justOne = justOne
 	self.already = already
 	self.rule = rule
+#	if self.rule == None:
+#            raise RuntimeError
 	self.template = template  # For looking for lists
 	self.meta = meta
 	self.mode = mode
@@ -612,8 +616,9 @@ class Query:
             if diag.chatty_flag > 30: progress("Not duplicate: %r" % bindings)
             self.already.append(bindings)
 
-	if tracking:
+	if diag.tracking:
 	    reason = BecauseOfRule(self.rule, bindings=bindings, evidence=evidence)
+	    progress("We have a reason for %s of %s with bindings %s" % (self.rule, reason, bindings))
 	else:
 	    reason = None
 
@@ -697,7 +702,7 @@ class Query:
                 variables.remove(pair[0])
                 bindings.update({pair[0]: pair[1]})  # Record for posterity
             else:      # Formulae aren't needed as existentials, unlike lists. hmm.
-		if tracking: bindings.update({pair[0]: pair[1]})  # Record for proof only
+		if diag.tracking: raise Error #bindings.update({pair[0]: pair[1]})  # Record for proof only
 		if pair[0] not in existentials:
 		    progress("@@@  Not in existentials or variables but now bound:", `pair[0]`)
                 if not isinstance(pair[0], Formula): # Hack - else rules13.n3 fails @@
@@ -1007,7 +1012,8 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    if pred.eval(subj, obj,  queue, bindings.copy(), proof, self.query):
 			self.state = S_SATISFIED # satisfied
                         if diag.chatty_flag > 80: progress("Builtin buinary relation operator succeeds")
-			if tracking:
+			if diag.tracking:
+                            raise Error
 			    rea = BecauseBuiltIn(subj, pred, obj, proof)
 			    evidence = evidence + [rea]
 #			    return [([], rea)]  # Involves extra recursion just to track reason

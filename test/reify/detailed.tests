@@ -64,6 +64,27 @@
     test:description   "dereifying test 2";
     test:arguments     """-n3 reify/reify2.n3 --dereify""".
 
+:t1100 a test:CwmTest;
+    test:referenceOutput <flatten1.n3>;
+    test:description   "flatten test 1";
+    test:arguments     """-n3 reify/reify0.n3 --flatten""".
+
+:t1102 a test:CwmTest;
+    test:referenceOutput <flatten1.n3>;
+    test:description   "flatten a flattened file";
+    test:arguments     """-n3 reify/flatten1.n3 --flatten""".
+
+:t1101 a test:CwmTest;
+    test:referenceOutput <flatten1.n3>;
+    test:description   "flatten twice -- the second should do nothing";
+    test:arguments     """-n3 reify/reify0.n3 --flatten --flatten""".
+
+:t1103 a test:CwmTest;
+    test:referenceOutput <flatten0.n3>;
+    test:description   "unflatten a flattened file";
+    test:arguments     """-n3 reify/flatten1.n3 --unflatten""".
+
+
 #:t1018 a test:CwmTest;
 #    test:referenceOutput <dereify2.n3>;
 #    test:description   "dereifying test 3";

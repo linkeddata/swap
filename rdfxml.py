@@ -8,7 +8,6 @@
 
 """
 
-
 def rdfxmlparser(store, openFormula, thisDoc=None,  flags="", why=None, parser='sax2rdf'):
     if parser == 'rdflib':
         import rdflib_user

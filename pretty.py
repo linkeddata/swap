@@ -54,6 +54,7 @@ class Serializer:
 	self.sorting = sorting
 	self._inContext ={}
 	self._occurringAs = [{}, {}, {}, {}]
+	self._topology_returns = {}
 
     def selectDefaultPrefix(self, printFunction):
 
@@ -384,7 +385,10 @@ class Serializer:
         or zero if self can NOT be represented as an anonymous node.
         Paired with this is whether this is a subexpression.
         """
-
+    # This function is called way too many times. My attempts to speed it up using a try / except
+    # loop were clearly misguided, because this function does very little as is.
+    #Finding out what is calling wait() is far more importand. I suspect that try / excepts are
+    #part of the problem
 #	progress("&&&&&&&&& ", `self`,  self._occurringAs)
         _isExistential = x in context.existentials()
         _loop = context.any(subj=x, obj=x)  # does'nt count as incomming
@@ -418,6 +422,7 @@ class Serializer:
             progress( "Topology %s in %s is: anon=%i obj=%i, pred=%i loop=%s ex=%i "%(
             `x`, `context`,  _anon, _asObj, _asPred, _loop, _isExistential))
 
+        #self._topology_returns[(x,context)] = ( _anon, _asObj+_asPred )
         return ( _anon, _asObj+_asPred )  
 
 

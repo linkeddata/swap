@@ -71,6 +71,10 @@
     test:description   	"Parse and generate simple contexts";
     test:arguments     	"""contexts.n3""".
 
+:t1006a a test:CwmTest;
+    test:referenceOutput <ref/animal-1.rdf>;
+    test:description   	"reading data from stdin";
+    test:arguments     	"""-rdf=z < animal.rdf""".
 
 :t1007 a test:CwmTest;
     test:referenceOutput <ref/anon-prop-1.n3>;

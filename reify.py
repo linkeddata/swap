@@ -49,7 +49,21 @@ def flatten(formula):
             except ValueError:
                 pass
         invalid_triples.extend(new_invalid_triples)
+    still_needed_existentials = {}
+    for a in formula.existentials():
+        for triple in valid_triples:
+            for part in SUBJ, PRED, OBJ:
+                if triple[part].doesNodeAppear(a):
+                    still_needed_existentials[a] = 1
+                    break
+            else:
+                continue
+            break
+        else:
+            print a
     returnFormula = formula.newFormula()
+    for a in still_needed_existentials.keys():
+        returnFormula.declareExistential(a)
     tempformula = formula.newFormula()
     for var in formula.universals():
         tempformula.declareUniversal(var)
