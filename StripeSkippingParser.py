@@ -8,6 +8,14 @@ just runs standalone now, and just writes to
 one particular sink.  needs reworking on that
 front.
 
+   @@@ switch to Span objects with plain literal values, for all
+   character content.
+
+      Leaf elements have a .text which is a str lit
+      Tree elements have first/rest which are trees or leaves.
+
+      Nah, use literals directly...
+   
 """
 __version__ = "$Revision$"
 # $Id$
@@ -129,8 +137,9 @@ class docHandler(xml.sax.ContentHandler):
         
     def characters(self, content):
         self.prepareForIndividual()
-        for char in content:
-            self.gotIndividual(self.sink.termFor(char))
+        #for char in content:
+        #    self.gotIndividual(self.sink.termFor(char))
+        self.gotIndividual(self.sink.termFor(content))
 
     def gotIndividual(self, term):
         if self.awaitingFirstValue:
@@ -161,6 +170,10 @@ if __name__ == '__main__':
 #    doctest.testmod(sys.modules[__name__])
 
 # $Log$
-# Revision 1.1  2003-04-03 21:55:06  sandro
+# Revision 1.2  2003-04-04 12:52:10  sandro
+# added quoting of newlines
+# made characters be RDF literals, grouped together
+#
+# Revision 1.1  2003/04/03 21:55:06  sandro
 # First cut prototype of a parser which reads plain XML as if it were RDF.
 #

@@ -5,6 +5,8 @@
 __version__ = "$Revision$"
 # $Id$
 
+import re
+
 class Error(RuntimeError):
    pass
 
@@ -24,6 +26,7 @@ class FormulaSink:
                 self.nodeIDCounter += 1
             else:
                 # @@@ datatype support goes here!
+                value = re.sub(r'\n', r'\\n', str(value))
                 result = '"'+str(value)+'"'
         else:
             if value is None:
@@ -43,6 +46,10 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
 
 # $Log$
-# Revision 1.1  2003-04-03 21:55:06  sandro
+# Revision 1.2  2003-04-04 12:52:10  sandro
+# added quoting of newlines
+# made characters be RDF literals, grouped together
+#
+# Revision 1.1  2003/04/03 21:55:06  sandro
 # First cut prototype of a parser which reads plain XML as if it were RDF.
 #
