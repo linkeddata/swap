@@ -19,7 +19,6 @@ def runProfile(logfile):
     sys.stdout = saveout
     fsock.close()
     profiler.close()
-
     stats = hotshot.stats.load(logfile)
     stats.strip_dirs()
     stats.sort_stats('time', 'calls')
