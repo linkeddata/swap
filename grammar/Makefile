@@ -13,7 +13,12 @@ all : n3-checked.txt n3-report.html \
 
 #  N3 Full:
 
-n3-checked.txt: n3-selectors.n3
+
+n3-yacc.c : n3-selectors.n3-yacc.y
+	yacc -o $@ n3-selectors.n3-yacc.y
+
+n3-selectors.n3-yacc.y : n3-selectors.n3
+#n3-checked.txt: n3-selectors.n3
 	python check-grammar.py n3-selectors.n3 \
 		http://www.w3.org/2000/10/swap/grammar/n3#document> $@
 

@@ -170,7 +170,7 @@ dtlang bnf:mustBeOneSequence(  ()  ("@" 1)  ("^^" symbol)).
 numericliteral	bnf:matches	"""[-+]?[0-9]+(\\.[0-9]+)?(e[-+]?[0-9]+)?""";
 		bnf:canStartWith 	"0", "-", "+".
 
-explicituri 	bnf:matches 	"<[^>].*>";
+explicituri 	bnf:matches 	"<[^>]*>";
 		bnf:canStartWith 	"<".
 
 qname 		bnf:matches  	"(([a-zA-Z_][a-zA-Z0-9_]*)?:)?([a-zA-Z_][a-zA-Z0-9_]*)?";
@@ -193,7 +193,7 @@ langcode	bnf:matches  	"[a-z]+(-[a-z0-9]+)*"; # http://www.w3.org/TR/rdf-testcas
 #               raw regexp single quoted would be   "([^"]|(\\"))*"
 # @@@ triple-quoted version too
 
-string		bnf:matches		"""("([^"]|(\\\\"))*")""";
+string		bnf:matches		"""(\"\"\".*\"\"\")|("([^"]|(\\\\["\\\\a-z]))*")""";
 		bnf:canStartWith 	"\"".
 
 #____________________________________________________

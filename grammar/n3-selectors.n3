@@ -570,7 +570,7 @@
                 <#_g9>,
                 <#_g10>;
          :canStartWith "<";
-         :matches "<[^>].*>" .
+         :matches "<[^>]*>" .
     
     n3:formulacontent     :TEST <#_g3>;
          :branch  [
@@ -1377,7 +1377,7 @@
                 n3:propertylisttail,
                 n3:statementtail;
          :canStartWith "\"";
-         :matches "(\"([^\"]|(\\\\\"))*\")" .
+         :matches """(\""".*\""")|("([^"]|(\\\\["\\\\a-z]))*")""" .
     
     n3:subject     :TEST n3:path;
          :branch  [
