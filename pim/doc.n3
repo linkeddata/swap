@@ -13,22 +13,24 @@
 #  Other related schemata:
 # http://www.daml.org/2000/04/maillog2rdf/email#     ( .rdf and .html)
 
-<> doc:version "$Id: " .
-
-@prefix s: <> .  # RDFS
+@prefix r:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
-@prefix :    <http://www.w3.org/2000/10/swap/pim/contacts.n3#>
+@prefix :    <http://www.w3.org/2000/10/swap/pim/contacts.n3#> .
+
+<> doc:version "$Id: " .
+
 
 doc:Work a s:Class;
-    s:comment   "A thing of value, typically intellectual property".
+    s:comment   "An abstract information thing of value, typically intellectual property".
 
 doc:version a r:Property;
     s:comment   "This version of this document (eg number, date, etc). A string".
     
 doc:creator a r:Property; s:comment "The person (not string) who created this.";
-    s:domain: doc:Work;
-    d:range: :SocialEntity .
+    s:domain    doc:Work;
+    s:range	    :SocialEntity .
 
 doc:derivedFrom a r:Property;
     s:comment   "A work wholey or partly used in the creation of this one.";
@@ -71,7 +73,7 @@ doc:dependsOn a r:Property;
 
 doc:adminPage a r:Property;
     s:comment   """A web page allowing a human user to administer this work,
-            for example changing access control, version control information etc."""
+            for example changing access control, version control information etc.""";
     s:domain    doc:Work.
 
 # Access control

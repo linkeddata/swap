@@ -12,9 +12,11 @@
 #
 #  $Id$
 
-@prefix : <#> .
+@prefix : <http://www.w3.org/2000/10/swap/pim/iCalendar#> .
+@prefix ical: <http://www.w3.org/2000/10/swap/pim/iCalendar#> .
+@prefix pim: <http://www.w3.org/2000/10/swap/pim/contacts#> .
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . # type, Property
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix ont:  <http://www.daml.org/2000/10/daml-ont#> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 
@@ -32,21 +34,23 @@
 
 ######## iCalendar
 
-# Capitals are used fro standard terms from the iCalendar spec.
-# lower or mixed case denotes concepts created in th emappingt to RDF
+# Capitals are used for standard terms from the iCalendar spec.
+# lower or mixed case denotes concepts created in the mapping to RDF
 
-:SocialEntity #implicit node in all properties with a CAL-ADDRESS value type. (person or group: anything which can have a mailbox)  
-ical:cal-address a rdf:Property;
- = pim:mailbox. # A mailbox - normally mailto:... URI 
+pim:SocialEntity a s:Class. #implicit node in all properties with a CAL-ADDRESS value type. 
+		#(person or group: anything which can have a mailbox)  
+
+ical:calAddress a rdf:Property;
+ 	= pim:mailbox. # A mailbox - normally mailto:... URI 
 
 # Types of celendar entry
 
-:Event a rdfs:Class; rdfs:comment "Any item which a datebook can contain.".
+:Event a s:Class; s:comment "Any item which a datebook can contain.".
 
-:ToDo rdfs:subClassOf :Event; rdfs:comment "A To-do list item (agendum!)".
-:Journal rdfs:subClassOf :Event; rdfs:comment "A To-do list item (agendum!)".
-:Freebusy rdfs:subClassOf :Event; rdfs:comment "A free/busy marker time stop for some CU".
-:Timezone rdfs:subClassOf :Event; rdfs:comment "A Timezoned definition".
+:ToDo s:subClassOf :Event; s:comment "A To-do list item (agendum!)".
+:Journal s:subClassOf :Event; s:comment "A To-do list item (agendum!)".
+:Freebusy s:subClassOf :Event; s:comment "A free/busy marker time stop for some CU".
+:Timezone s:subClassOf :Event; s:comment "A Timezoned definition".
 
 
 
@@ -54,62 +58,62 @@ ical:cal-address a rdf:Property;
 # Caldendar Users
 #
 # These categorize social entities which exist in iCal's world.
-ical:CU a rdfs:Class .#  Calendar user, defined in CUTYPE  
 
-ical:INDIVIDUAL a rdfs:Class;
-    rdfs:isSubClassOf  ical:CU; = :Person.
+ical:CU a s:Class .		#  Calendar user, defined in CUTYPE  
+
+ical:INDIVIDUAL a s:Class;
+    s:isSubClassOf  ical:CU; = :Person.
     
-ical:GROUP a rdfs:Class;
-    rdfs:isSubClassOf  ical:CU;
+ical:GROUP a s:Class;
+    s:isSubClassOf  ical:CU.
     
-ical:RESOURCE a rdfs:Class;
-    rdfs:isSubClassOf  ical:CU;
+ical:RESOURCE a s:Class;
+    s:isSubClassOf  ical:CU.
     
-ical:ROOM a rdfs:Class;
-    rdfs:isSubClassOf  ical:CU;
+ical:ROOM a s:Class;
+    s:isSubClassOf  ical:CU.
     
-ical:ldap-directory a rdfs"Class; starts "ldap:" (is this a standard?) URI 
-ical:mime-type a rdfs:Class;    # string 
+ical:ldapDirectory a s:Class. # uriStartsWith "ldap:"; # (is this a standard?) URI 
+ical:mimeType a s:Class.    # string 
 
 ################################# Participation status
 
-:ParticipationStatus rdfs:subClasOf rdf:Property;
+:ParticipationStatus s:subClasOf rdf:Property.
 
 # These are tricky -- they are in the iCalendar as absolute states of the iCalendar
 # entry.  However they really don't make sense globally it might need action by
 # one person and be delgated by others.  So, let us make them properties adding "By".
 #
-:needsActionBy a :ParticipationStatus; rdfs:comment "This event A needs action by B";
-    s:domain :Event;  s:range:SocialEntity;
+:needsActionBy a :ParticipationStatus; s:comment "This event A needs action by B";
+    s:domain :Event;  s:range  pim:SocialEntity.
     
-:AcceptedBy a :ParticipationStatus; rdfs:comment """This event A has been accepted by B.
-    B has agreed to particpate.";
+:AcceptedBy a :ParticipationStatus; s:comment """This event A has been accepted by B.
+    B has agreed to particpate.""";
 # Has this been thought out wrt changes in what is agreed to?
-    s:domain :Event;  s:range:SocialEntity;
+    s:domain :Event;  s:range pim:SocialEntity.
     
-:DeclinedBy a :ParticipationStatus; rdfs:comment "This event A has been declined by B";
-    s:domain :Event;  s:range:SocialEntity;
+:DeclinedBy a :ParticipationStatus; s:comment "This event A has been declined by B";
+    s:domain :Event;  s:range pim:SocialEntity.
     
 :DelegatedBy a :ParticipationStatus;
-    rdfs:comment "This event A has been delegated (to whom?) by B";
-    s:domain :Event;  s:range:SocialEntity;
+    s:comment "This event A has been delegated (to whom?) by B";
+    s:domain :Event;  s:range pim:SocialEntity.
     
 # Not clear which combinations of the above are allowed.
 
-# component of a calendar  
-EVENT, TODO, etc  component 
+# component of a calendar  EVENT, TODO, etc  component 
 # TimeProperty DTSTART, DTEND, DUE, EXDATE, RDATE  
 
-:TimeProperty subClassOf s:Property.
+:TimeProperty s:isSubClassOf s:Property.
 
-ical:DTSTART subClass of :TimeProperty; s:comment "Start date/time of subject" .
-ical:DTEND   subClass of :TimeProperty; s:comment "End date/time of subject" .
-ical:DUE     subClass of :TimeProperty; s:comment "Date/time fro ToDo to be done" .
-ical:EXDATE  subClass of :TimeProperty; s:comment "Excluded Dates @@@@ Logical Problem" .
-ical:RDATE   subClass of :TimeProperty; s:comment "????" .
+ical:DTSTART s:isSubClassOf :TimeProperty; s:comment "Start date/time of subject" .
+ical:DTEND   s:isSubClassOf :TimeProperty; s:comment "End date/time of subject" .
+ical:DUE     s:isSubClassOf :TimeProperty; s:comment "Date/time fro ToDo to be done" .
+ical:EXDATE  s:isSubClassOf :TimeProperty; s:comment "Excluded Dates @@@@ Logical Problem" .
+ical:RDATE   s:isSubClassOf :TimeProperty; s:comment "????" .
 
-Timezone see TZID string 
-icalobject   
+#Timezone see TZID string 
+#icalobject   
 
 
 #recur defined by recurrence properties -Really complex datatype could be broken down into RDF!
@@ -126,5 +130,8 @@ icalobject
 #
 #  Use these with :Address!
 #
-:latitiude  a r:Property;   # Float
-:longitude   a r:Property;  # Float
+:latitiude  a rdf:Property.   # Float
+:longitude   a rdf:Property.  # Float
+
+#ends
+
