@@ -1,0 +1,16 @@
+_:me <#hairColor> "red".
+
+
+<#something> <#suggests> { _:me <#height> "6foot2inches" }.
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <#>.
+
+this log:forAll :x.
+
+{ :x <#hairColor> "red".
+  <#something> <#suggests> { :x <#height> "6foot2inches" }
+}
+  log:implies { :x a :Found }.
+
+  
