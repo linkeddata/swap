@@ -97,8 +97,8 @@ tf:line6b a form:CheckBox;
 tf:line6c a form:NumericField; s:"Number of Dependents". # @@ name, ssn, etc..
 
 tf:line6d a form:Calculated; s:label "Total number of exemptions claimed".
-	{ (?my!tf:line6a ?my!tf:line6b ?my!tf:line6c) math:sum ?s }
-	=> { ?my tf:line6d ?s }.  # Total number of dependents
+	{ (?my!tf:line6a ?my!tf:line6b ?my!tf:line6c) math:sum ?s6d }
+	=> { ?my tf:line6d ?s6d }.  # Total number of dependents
 
 tf:line7 a form:NumericField;
 	s:label "Wages, salaries, tips, etc. Attach Form(s) W-2".
@@ -148,9 +148,9 @@ tf:line22 a form:Calculated;
 { ?z 	tf:line7 ?a; tf:line8a ?b; tf:line9 ?c; tf:line10 ?d; tf:line11 ?e; tf:line12 ?f; tf:line13 ?g;
 	tf:line14 ?h; tf:line15b ?i; tf:line16b ?j; tf:line17 ?k; tf:line18 ?l; tf:line19 ?m; tf:line20b ?n;
 	tf:line21 ?o.
- (?a ?b ?c ?d ?e ?f ?g ?h ?i ?j ?k ?l ?m ?n ?o) math:sum ?s.
+ (?a ?b ?c ?d ?e ?f ?g ?h ?i ?j ?k ?l ?m ?n ?o) math:sum ?s22.
  }
-=> { ?z tf:line22 ?s}.
+=> { ?z tf:line22 ?s22}.
 
 
 # ADJUSTED INCOME
@@ -185,9 +185,9 @@ tf:line34 a form:Calculated;
 
 { ?z 	tf:line23 ?a; tf:line24 ?b; tf:line25 ?c; tf:line26 ?d; tf:line27 ?e; tf:line28 ?f; tf:line29 ?g;
 	tf:line30 ?h; tf:line31 ?i; tf:line32 ?j; tf:line33a ?k.
- (?a ?b ?c ?d ?e ?f ?g ?h ?i ?j ?k) math:sum ?s.
+ (?a ?b ?c ?d ?e ?f ?g ?h ?i ?j ?k) math:sum ?s34.
  }
-=> { ?z tf:line34 ?s}.
+=> { ?z tf:line34 ?s34}.
 
 
 
@@ -196,8 +196,8 @@ tf:line35 a form:Calculated;
 	s:comment	"Subtract line 34 from line 22. This is your adjusted gross income".
 
 
-{ ?z tf:line22 ?i; tf:line34 ?a.
-  (?i ?a) math:difference ?d} => { ?z tf:line35 ?d}.
+	{ ?z tf:line22 ?i; tf:line34 ?a.
+  	  (?i ?a) math:difference ?d35} => { ?z tf:line35 ?d35}.
 
 
 #### Page 2:
@@ -205,7 +205,7 @@ tf:line35 a form:Calculated;
 
 tf:line36 a form:Calculated;
 	s:label "Amount from line 35 (adjusted gross income) 36".
-{ ?z tf:line35 ?d} => { ?z tf:line36 ?d}.
+	{ ?z tf:line35 ?d36} => { ?z tf:line36 ?d36}.
 
 tf:line37ax a form:CheckBox;
 	s:label "Check if: You were 65 or older".
@@ -218,10 +218,10 @@ tf:line37ays a form:CheckBox;
 tf:line37a a form:Calculated;
 	s:label "Add the number of boxes checked above and enter the total here".
 
-{ ?z 	tf:line37ax ?a; tf:line37ay ?b; tf:line37axs ?c; tf:line37ays ?d.
- (?a ?b ?c ?d) math:sum ?s.
- }
-=> { ?z tf:line37a ?s}.
+	{ ?z 	tf:line37ax ?a; tf:line37ay ?b; tf:line37axs ?c; tf:line37ays ?d.
+	 (?a ?b ?c ?d) math:sum ?s37a.
+	 }
+	=> { ?z tf:line37a ?s37a}.
 
 tf:line37b a form:CheckBox;
 	s:label """If you are married filing separately and your spouse itemizes deductions,
@@ -266,7 +266,7 @@ All others:
 tf:line39 a form:Calculated;
 	s:label "Subtract line 38 from line 36".
 
-{ (?z!tf:line36 ?z!tf:line38) math:difference ?d} => { ?z tf:line39 :d }.
+	{ (?z!tf:line36 ?z!tf:line38) math:difference ?d39} => { ?z tf:line39 ?d39 }.
 
 
 tf:line40 a form:Calculated;
@@ -289,8 +289,19 @@ tf:line41 a form:Calculated;
 { ?my!tf:line40 math:notGreaterThan ?z!tf:line39.
   (?my!tf:line39 ?my!tf:line40) math:difference ?L41 } => {?my tf:line41 ?L41}.
 
-tf:line42 a form:NumericField;
-	s:label "Tax (see page 36@@@@@).".
+tf:line42 a form:Calculated;
+	s:label "Tax (see page 36@@@@@).";
+	s:comment """[At time of writing 2002/11/25, the IRS has not published for 2002 pages 63ff (tax table)
+		or page 76 (tax formula). The tax line 42 is presumably calculated from the
+		taxable income, line 41. At this time, to test the software, an arbitrary
+		function of 40% tax is given.]""";
+	s:comment """Tax Table or Tax Rate Schedules. If your	taxable income is less than $100,000, you	must use the Tax Table, which starts on page 63, to figure your tax. Be sure you use		the correct column. If your taxable income is $100,000 or more, use the Tax Rate	Schedules on page 75.
+	Exception. Do not use the Tax Table or Tax Rate Schedules to figure your tax if either	1 or 2 below applies.	1. You are required to figure your tax using Form 8615, Schedule D, or the Capital		Gain Tax Worksheet below.	2. You use Schedule J (for farm income) to figure your tax.
+
+	Form 8615. Form 8615 must generally be used to figure the tax for any child who was	under age 14 at the end of 2002, and who had more than $1,500 of investment income,	such as taxable interest, ordinary dividends,	or capital gains (including capital gain distributions).	But if neither of the child's parents was alive on December 31, 2002, do	not use Form 8615 to figure the child's tax.""".
+
+	{ (?my!tf:line41 "0.40") math:product ?x } =>  { ?my tf:line42 ?x }.
+		
 tf:line42a a form:CheckBox;
 	s:label "Tax (see page 36). Check if any tax is from Form(s) 8814".
 tf:line42b a form:CheckBox;
@@ -304,7 +315,7 @@ tf:line43 a form:NumericField;
 tf:line44 a form:Calculated;
 	s:label "Add lines 42 and 43".
 
-	{ (?z!tf:line42 ?z!tf:line43) math:sum ?s} => { ?z tf:line44 ?s}.
+	{ (?z!tf:line42 ?z!tf:line43) math:sum ?s44} => { ?z tf:line44 ?s44}.
 
 tf:line45 a form:NumericField;
 	s:label "Foreign tax credit. Attach Form 1116 if required".
@@ -346,9 +357,9 @@ tf:line54 a form:Calculated;
 
 	{ ?z 	tf:line45 ?a; tf:line46 ?b; tf:line47 ?c; tf:line48 ?d; tf:line49 ?e; tf:line50 ?f; tf:line51 ?g;
 		tf:line52 ?h; tf:line53 ?i.
- 	  (?a ?b ?c ?d ?e ?f ?g ?h ?i) math:sum ?s.
+ 	  (?a ?b ?c ?d ?e ?f ?g ?h ?i) math:sum ?s54.
  	}
-	=> { ?z tf:line54 ?s}.
+	=> { ?z tf:line54 ?s54}.
 
 
 tf:line55 a form:Calculated;
@@ -356,7 +367,7 @@ tf:line55 a form:Calculated;
 
 	{ ?my!tf:line54 math:greaterThan ?z!tf:line44 } => {?my tf:line55 "0"}.
 	{ ?my!tf:line54 math:notGreaterThan ?z!tf:line44.
-  	  (?my!tf:line44 ?my!tf:line54) math:difference ?d } => {?my tf:line55 ?d}.
+  	  (?my!tf:line44 ?my!tf:line54) math:difference ?d55 } => {?my tf:line55 ?d55}.
 
 ############ OTHER TAXES
 
@@ -375,8 +386,8 @@ tf:line60 a form:NumericField;
 
 tf:line61 a form:Calculated;
 	s:label "Add lines 55 through 60. This is your total tax".
-	{ (?my!tf:line55 ?my!tf:line56 ?my!tf:line57 ?my!tf:line58 ?my!tf:line59 ?my!tf:line60) math:sum ?s}
-	=> { ?my tf:line54 ?s}.
+	{ (?my!tf:line55 ?my!tf:line56 ?my!tf:line57 ?my!tf:line58 ?my!tf:line59 ?my!tf:line60) math:sum ?s61}
+	=> { ?my tf:line61 ?s61}.
 
 
 ######### Payments
@@ -404,15 +415,15 @@ tf:line69 a form:Calculated;
 	s:label "Add lines 62 through 68. These are your total payments".
 
 	{ (?my!tf:line62 ?my!tf:line63 ?my!tf:line64 ?my!tf:line65 ?my!tf:line66
-		?my!tf:line67 ?my!tf:line68) math:sum ?s}
-	=> { ?my tf:line69 ?s}.
+		?my!tf:line67 ?my!tf:line68) math:sum ?s69}
+	=> { ?my tf:line69 ?s69}.
 
 tf:line70 a form:Calculated;
 	s:label "If line 69 is more than line 61, subtract line 61 from line 69. This is the amount you overpaid".
 
 	{ ?my!tf:line69 math:greaterThan ?my!tf:line61.
-	  (?my!tf:line69 ?my!tf:line61) math:difference ?d}
-	 => { ?my tf:line70 ?d }.
+	  (?my!tf:line69 ?my!tf:line61) math:difference ?d70}
+	 => { ?my tf:line70 ?d70 }.
 
 	{ ?my!tf:line69 math:notGreaterThan ?my!tf:line61} => { ?my tf:line70 "0"}.
 
@@ -428,7 +439,7 @@ tf:line73 a form:Calculated;
 	s:label "Amount you owe. Subtract line 69 from line 61. For details on how to pay, see page 57".
 
 	{ ?my!tf:line69 math:notGreaterThan ?my!tf:line61.
-	  (?my!tf:line61 ?my!tf:line69) math:difference ?d} => { ?my tf:line73 ?d }.
+	  (?my!tf:line61 ?my!tf:line69) math:difference ?d73} => { ?my tf:line73 ?d73 }.
 
 	{ ?my!tf:line69 math:greaterThan ?my!tf:line61} => { ?my tf:line73 "0"}.
 
@@ -442,7 +453,7 @@ tf:line74 a form:NumericField;
 # Medical and dental epenses:
 sa:line1 a form:NumericField; s:label "Medical and dental expenses".
 sa:line2 a form:Calculated; s:label "1040 line 34 (Adjusted gross income)".
-	{ ?z tf:line34 ?x } => { ?z sa:line2 ?x }.
+	{ ?z tf:line34 ?x2 } => { ?z sa:line2 ?x2 }.
 sa:line3 a form:Calculated; s:label "Multiply line 2 above by 0.075".
 	{ (?z!sa:line2 "0.075") math:product ?p } => { ?z sa:line3 ?p }.
 sa:line4 a form:Calculated; s:label """Subtract line 3 from line 1.
@@ -456,14 +467,14 @@ sa:line6 a form:NumericField; s:label "Real Estate taxes".
 sa:line7 a form:NumericField; s:label "Personal property Taxes".
 sa:line8 a form:NumericField; s:label "Other Taxes".
 sa:line9 a form:Calculated; s:label "Add lines 5 though 8".
-	{ (?my!sa:line5 ?my!sa:line6 ?my!sa:line7 ?my!sa:line8) math:sum ?s} => { ?my sa:line9 ?s}.
+	{ (?my!sa:line5 ?my!sa:line6 ?my!sa:line7 ?my!sa:line8) math:sum ?sa9} => { ?my sa:line9 ?sa9}.
 
 sa:line10 a form:NumericField; s:label "Mortgage Interest (see form 1098)".
 sa:line11 a form:NumericField; s:label "Other Mortgage Interest".
 sa:line12 a form:NumericField; s:label "Points not reported to you on form 1098".
 sa:line13 a form:NumericField; s:label "Investment interest. Attach form 4952 if required. (See page A-3)".
 sa:line14 a form:Calculated; s:label "Add lines 10-13".
-	{ (?my!sa:line10 ?my!sa:line11 ?my!sa:line12 ?my!sa:line12) math:sum ?s} => { ?my sa:line14 ?s}.
+	{ (?my!sa:line10 ?my!sa:line11 ?my!sa:line12 ?my!sa:line12) math:sum ?sa14} => { ?my sa:line14 ?sa14}.
 
 # Gifts to charity
 sa:line15 a form:NumericField;
@@ -472,7 +483,7 @@ sa:line16 a form:NumericField; s:label """Other than by cash or check.
 	If any gift of $250 or more, see page A-4. You must attach Form 8283 if over $500""".
 sa:line17 a form:NumericField; s:label "Carryover from prior year".
 sa:line18 a form:Calculated; s:label "Add lines 15 through 17".
-	{ (?my!sa:line15 ?my!sa:line16 ?my!sa:line17) math:sum ?s} => { ?my sa:line18 ?s}.
+	{ (?my!sa:line15 ?my!sa:line16 ?my!sa:line17) math:sum ?sa18} => { ?my sa:line18 ?sa18}.
 
 
 sa:line19 a form:NumericField; s:label "Casualty or theft loss(es). Attach Form 4684. (See page A-5.) 19".
@@ -481,10 +492,10 @@ sa:line20 a form:NumericField;
 sa:line21 a form:NumericField; s:label "Tax preparation fees".
 sa:line22 a form:NumericField; s:label "Other Expenses".
 sa:line23 a form:Calculated; s:label "Add lines 20 through 22".
-	{ (?my!sa:line20 ?my!sa:line21 ?my!sa:line22) math:sum ?s} => { ?my sa:line23 ?s}.
+	{ (?my!sa:line20 ?my!sa:line21 ?my!sa:line22) math:sum ?sa23} => { ?my sa:line23 ?sa23}.
 
 sa:line24 a form:Calculated; s:label "Enter amount from Form 1040, line 36".
-	{ ?my tf:line36 ?x } => { ?my sa:line24 ?x }.
+	{ ?my tf:line36 ?x24 } => { ?my sa:line24 ?x24 }.
 
 sa:line25 a form:Calculated; s:label "Multiply line 24 by 2% (.02)".
 	{ ( ?my!sa:line24 "0.02") math:product ?p } =>  { ?my sa:line25 ?p }.
@@ -499,15 +510,15 @@ sa:line28 a form:Calculated; s:label "Total Itemized deducsions";
 	s:comment """Is Form 1040, line 36, over $137,300 (over $68,650 if married filing separately)?	No. Your deduction is not limited. Add the amounts in the far right column	for lines 4 through 27. Also, enter this amount on Form 1040, line 38.	Yes. Your deduction may be limited. See page A-6 for the amount to enter.""".
 
 	{ ( ?my!sa:line4 ?my!sa:line9 ?my!sa:line14 ?my!sa:line18
-		?my!sa:line19 ?my!sa:line26 ?my!sa:line27) math:sum ?s. } 
-	=> { ?my sa:line28Provisional ?s. }.
+		?my!sa:line19 ?my!sa:line26 ?my!sa:line27) math:sum ?sa28. } 
+	=> { ?my sa:line28Provisional ?sa28. }.
 
 	{ ?my tf:line3 "0" } => { ?my tf:deductionLimitValue "137300.00" }.
 	{ ?my tf:line3 "1" } => { ?my tf:deductionLimitValue  "68650.00" }. # Married filing sep.
 
-	 {  ?my!tf:line36 math:greaterThan ?my!tf:deductionLimitValue;
-	       sa:line28Provisional ?s. } 
-	=> { ?my sa:line28 ?s; tf:line38_a ?s. }. #@@@ Pick larger of this figure and version from 1040
+	 {  ?my!tf:line36 math:notGreaterThan ?my!tf:deductionLimitValue.
+	    ?my sa:line28Provisional ?pv. } 
+	=> { ?my sa:line28 ?s; tf:line38_a ?pv. }. # we pick larger of this figure and version from 1040
 
 	 { ?my!tf:line36 math:greaterThan ?my!tf:deductionLimitValue }
 	=> { ?my a :maybeLimited. }.   # See Page A-6 and the following worksheet!
@@ -516,7 +527,7 @@ sa:line28 a form:Calculated; s:label "Total Itemized deducsions";
 #  Needed only in the "maybelimited " case above.
 
 sa:line28_1 a form:Calculated; s:label "Add the amounts on Schedule A, lines 4, 9, 14, 18, 19, 26, and 27".
-	{ ?my sa:line28Provisional ?x } => { ?my sa:line28_1 ?x }.
+	{ ?my sa:line28Provisional ?x281 } => { ?my sa:line28_1 ?x281 }.
 
 
 sa:line28_2a a form:NumericField;
@@ -527,26 +538,26 @@ sa:line28_2 a form:Calculated; s:label """Add the amounts on Schedule A,
 	s:comment """Be sure your total gambling and casualty or theft
 	losses are clearly identified on the dotted lines next to line 27.@@""".
 
-	{ ( ?my!sa:line4 ?my!sa:line13 ?my!sa:line19 ?my!sa:line28_2a) math:sum ?s. } 
-	=> { ?my sa:line28Provisional ?s. }.
+	{ ( ?my!sa:line4 ?my!sa:line13 ?my!sa:line19 ?my!sa:line28_2a) math:sum ?s282. } 
+	=> { ?my sa:line28_2 ?s282. }.
 
 sa:line28_3 a form:Calculated; s:label """Is the amount on line 2 less than the amount on line 1?	No. STOP [this worksheet] Your deduction is not limited.
 	 Enter the amount from line 1 above on Schedule A, line 28.	Yes. Subtract line 2 from line 1""".
 
 	{ ?my!sa:line28_2 math:lessThan ?my!sa:line28_1.
-	  ?my sa:line28_1 ?x} =>  { ?mt sa:line28 ?x }.  # (stop! ;-)
+	  ?my sa:line28_1 ?a28} =>  { ?mt sa:line28 ?a28 }.  # (stop! ;-)
 
 	{ ?my!sa:line28_2 math:notLessThan ?my!sa:line28_1.
-	   (?my!sa:line28_1 ?my!sa:line28_2) math:difference ?x} =>  { ?mt sa:line28_3 ?x }.
+	   (?my!sa:line28_1 ?my!sa:line28_2) math:difference ?a283} =>  { ?mt sa:line28_3 ?a283 }.
 
 sa:line28_4 a form:Calculated; s:label "Multiply line 3 above by 80% (.80)".
-	{ (?my!sa:line28_3 "0.80") math:product :p } => { ?my sa:line28_4 ?p }.
+	{ (?my!sa:line28_3 "0.80") math:product :p284 } => { ?my sa:line28_4 ?p284 }.
  
 sa:line28_5 a form:Calculated; s:label "Enter the amount from Form 1040, line 36".
-	{ ?my tf:line36 ?x } => { ?my sa:line28_5 ?x}.
+	{ ?my tf:line36 ?x285 } => { ?my sa:line28_5 ?x285}.
 
 sa:line28_6 a form:Calculated; s:label "Enter: $137,300 ($68,650 if married filing separately)".
-	{ ?my tf:deductionLimitValue ?x } => { ?my sa:line28_6 ?x }.
+	{ ?my tf:deductionLimitValue ?x286 } => { ?my sa:line28_6 ?x286 }.
 
 sa:line28_7 a form:Calculated; s:label """Is the amount on line 6 less than the amount on line 5?
 	No. Your deduction is not limited. Enter the amount from line 1 above on Schedule A, line 28.	Yes. Subtract line 6 from line 5.""".
@@ -577,7 +588,7 @@ sb:line1 a form:List; s:label "Interest entries detail".
 sb:line2 a form:NumericField; s:label "Total Interest".
 sb:line3 a form:NumericField; s:label "Excludable Interest".
 sb:line4 a form:Calculated; s:label "Non-excludable Interest".
-	{ (?my!sb:line2 ?my!sb:line3) math:difference ?d} => { ?my sb:line4 ?d}.
+	{ (?my!sb:line2 ?my!sb:line3) math:difference ?d4} => { ?my sb:line4 ?d4}.
 	{ ?z sb:line4 ?x } => { ?z tf:line8a ?x }.
 
 sb:line5 a form:List; s:label "Ordinary dividends detail".
