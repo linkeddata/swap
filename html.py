@@ -146,6 +146,7 @@ __version__ = "$Revision$"
 # $Id$
 
 import cStringIO
+import re
 
 class Streamer:
     """An base class for things which implement writeTo instead of
@@ -188,6 +189,24 @@ class Document(Streamer):
        """Convenience syntax for append, with no parens to balance."""
        return self.append(content)
 
+class Raw(Streamer):
+    """Wrapper for text content to say DONT XML-escape it"""
+
+    def __init__(self, s):
+        self.data = s
+        
+    def writeTo(self, s, prefix=""):
+        text = re.sub("\n", "\n"+prefix, self.data)
+        s.write(text)
+
+def xstr(s):
+    """Return the XML-escaped version of s"""
+    s = str(s)
+    s = re.sub("&", "&amp;", s)
+    s = re.sub("<", "&lt;", s)
+    s = re.sub(">", "&gt;", s)
+    return s
+    
 class Element(Streamer):
 
     def __init__(self, tag, *content, **kwargs):
@@ -244,18 +263,25 @@ class Element(Streamer):
                 s.write("\"")
         if self.content:
             s.write(">")
+            #print "SELF", self.__class__
             try:
                 for child in self.content:
+                    #print "CHILD", child.__class__
                     try:
+                        #print "Doing WriteTo", 
                         child.writeTo(s, prefix+(" "*self.prefixLength))
+                        #print "Did WriteTo"
                     except AttributeError:
-                        s.write(str(child))
+                        #print child.__class__
+                        s.write(xstr(child))
             except TypeError:   # iteration over non-sequence
                 child = self.content
+                #print "CHILD", child.__class__
                 try:
                     child.writeTo(s, prefix+(" "*self.prefixLength))
                 except AttributeError:
-                    s.write(str(child))
+                    #print child.__class__
+                    s.write(xstr(child))
             s.write("</")
             s.write(self.tag)
             s.write(">")
@@ -279,7 +305,6 @@ class Element(Streamer):
     def __lshift__(self, content):
        """Convenience syntax for append, with no parens to balance."""
        return self.append(content)
-
 
 class Comment:
     def __init__(self, content=None, inline=0):
@@ -386,7 +411,10 @@ if __name__ =='__main__':
     print doctest.testmod(html) 
 
 # $Log$
-# Revision 1.5  2003-08-01 15:40:46  sandro
+# Revision 1.6  2003-09-04 05:40:13  sandro
+# added XML quoting and Raw elements
+#
+# Revision 1.5  2003/08/01 15:40:46  sandro
 # simpler API; actually changed Apr 29 but not comitted
 #
 # Revision 1.4  2003/04/29 04:46:57  sandro
