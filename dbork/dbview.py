@@ -707,6 +707,8 @@ def testSQL():
                       '/w3c/.dbq?name1=uris&fields1=uri&key1=id'
            )
 
+    if sys.argv[2:]: cases = sys.argv[2:]
+    
     for path in cases:
         path, fields = split(path, '?')
         print "CGI parse:", cgi.parse_qs(fields)
@@ -779,7 +781,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.17  2002-03-16 05:59:43  connolly
+# Revision 1.18  2002-03-16 06:14:53  connolly
+# allow command-line test cases for --testSQL
+#
+# Revision 1.17  2002/03/16 05:59:43  connolly
 # xml mime type more convenient; fixed buggy namespace bindings
 #
 # Revision 1.16  2002/03/08 06:45:24  connolly
