@@ -154,6 +154,10 @@ def main():
 #	    if description == None: description = case + " (no description)"
 	    inputDocument = kb.the(t, rdft.inputDocument).uriref()
 	    outputDocument = kb.the(t, rdft.outputDocument).uriref()
+	    status = kb.the(t, rdft.status).string
+	    if status != "APPROVED":
+		print "@@@ Not approved: "+ inputDocument
+		continue
 	    RDFTestData.append((t.uriref(), case, description,  inputDocument, outputDocument))
 
 
