@@ -1149,7 +1149,7 @@ class SinkToN3(RDFSink):
         self._pred = None
 
     def endAnonymousNode(self):    # Remove context
-        self._write(" ].\n")
+        self    ite(" ].\n")
         self._subj = None
         self._pred = None
 
@@ -1271,12 +1271,13 @@ class RDFStore(RDFSink) :
         """
         best = 0
         mp = None
-        for r in Resource.table.values() :
+        for r in self.engine.resources.values() :
             total = 0
             for f in r.fragments.values():
-                total = total + (len(context.contains[f][PRED])+
-                                 len(context.contains[f][SUBJ])+
-                                 len(context.contains[f][OBJ]) )
+                total = total + (f.occurrences(PRED,context)+
+                                 f.occurrences(SUBJ,context)+
+                                 f.occurrences(OBJ,context))
+
             if total > 3 and chatty:
                 print "#   Resource %s has %i occurrences in %s" % (`r`, total, `context`)
             if total > best :
