@@ -111,8 +111,8 @@ that it is indeed Kari's key as AC rep for Eliza.</p>
  --think --purge --with "Elisa" &gt; access-eliza.cert</pre>
 
 <p>Here, Alan uses the private key which he (alone) has access to and the
-public key which Kari gave him.  <code>access-sign-member-cert.n3</code> is a
-rule file which does the signing.  It contains, in essence:</p>
+public key which Kari gave him. <code>access-sign-member-cert.n3</code> is a
+rule file which does the signing. It contains, in essence:</p>
 <pre>{ :n is os:argv of "1".
   :tk a acc:MemberKey.
   { :tk a acc:MemberKey;
@@ -129,12 +129,12 @@ rule file which does the signing.  It contains, in essence:</p>
 <p></p>
 
 <p>:n resolves to be the name "Eliza", :tk resolves to be Eliza's public key.
- The string str is string form of the certificate formula, as the digital
-signatures work on strings.    The MD5 checksum of the string is formed, and
-that is signed with the master key pair (:kp).   All this happens as the left
+The string str is string form of the certificate formula, as the digital
+signatures work on strings. The MD5 checksum of the string is formed, and
+that is signed with the master key pair (:kp). All this happens as the left
 hand side of the rule is resolved, and when it has, then the conclusion is
 that that string has an endorsement which has a given signature and a given
-public key.  This  ensordsement information is the certificate.</p>
+public key. This ensordsement information is the certificate.</p>
 
 <p>In exactly the same fashion, Tiina, the employee, makes a key, and gets a
 certificate from Kari about that key.</p>
@@ -149,8 +149,64 @@ access.</p>
 
 <p>The crux of this whole system is the file <code>access-rule.n3</code>
 which tells the web site how to trust a request.</p>
+<pre>this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z , :q .
 
-<p></p>
+# The rule of access.
+#
+#  acc:requestSupportedBy means that it correctly claimed to be
+#        signed by the given key.
+
+{ :request a acc:GoodRequest } is log:implies of
+{
+    :request acc:forDocument :d;
+             acc:requestSupportedBy :k.
+
+    []       acc:certSupportedBy :k2;    # Certificate
+             log:includes { :k a acc:RequestKey }.
+
+    []       acc:certSupportedBy [a acc:MasterKey];    # Certificate
+             log:includes { :k2 a acc:MemberKey }.
+
+}.
+
+#  What is a Master key?
+#
+#  (we could just put in the text here)
+
+{ &lt;access-master.public&gt; log:semantics [
+        log:includes {:x a acc:MasterKey}]
+} log:implies {:x a acc:MasterKey}.
+
+
+#  What do we belive is a request?
+#  We trust the command line in defining what is a request.
+
+{  "1"!os:argv!os:baseAbsolute^log:uri log:semantics :F.
+   :F log:includes { :str acc:endorsement[acc:signature :sig; acc:key :k]}.
+   :k crypto:verify ([is crypto:md5 of :str] :sig).
+   :str log:parsedAsN3:G } log:implies { :G acc:requestSupportedBy :k }.
+
+#  What do we believe from a signed request?
+#   - what it says it is asking for.
+#   - what it quotes as credentials
+#  It could actually enclose a copy of the credentials inline,
+#  but here we use the web.  A credential is a document which
+#  provides evidence in support of the request.
+
+{:G acc:requestSupportedBy :k; log:includes {:G acc:forDocument :d}} log:implies {:G acc:forDocument :d}.
+
+{:G acc:requestSupportedBy :k; log:includes {:G acc:credential :d}} log:implies {:G acc:credential :d}.
+
+# What do we belive from a signed credential.
+#
+# In this case, just note that a key supports the signed formula.
+# The fact of this support is used in eth access rule above.
+# We don't actually beleive everything the certificate says.
+
+{  [] acc:credential [ log:semantics :F ].
+   :F log:includes { :str acc:endorsement[acc:signature :sig; acc:key :k]}.
+   :k crypto:verify ([is crypto:md5 of :str] :sig).
+   :str log:parsedAsN3 :G } log:implies { :G acc:certSupportedBy :k }.</pre>
 
 <p></p>
 

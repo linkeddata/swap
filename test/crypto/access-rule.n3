@@ -73,10 +73,10 @@ this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z
 
 {:G acc:requestSupportedBy :k; log:includes {:G acc:credential :d}} log:implies {:G acc:credential :d}.
 
-# What do we belive from a signed credential.
+# What do we belive from a signed credential?
 #
 # In this case, just note that a key supports the signed formula.
-# The fact of this support is used in eth access rule above.
+# The fact of this support is used in the access rule above.
 # We don't actually beleive everything the certificate says.
 
 {  [] acc:credential [ log:semantics :F ].
