@@ -175,6 +175,7 @@ class RDFXMLParser(xmllib.XMLParser):
         """ Handle start tag. We register none so all are unknown
         """
         self.flush()
+        
         tagURI = self.tag2uri(tag)
 
         if chatty:
@@ -192,6 +193,16 @@ class RDFXMLParser(xmllib.XMLParser):
         if self._state == STATE_NOT_RDF:
             if tagURI == RDFNS + "RDF":
                 self._state = STATE_NO_CONTEXT
+                
+                # HACK @@ to grab prefixes
+                nslist = self._XMLParser__namespaces.items()
+                for t, d, nst in self.stack:     # Hack
+                    nslist = nslist + d.items()
+  #              print "### Namespaces: ", `nslist`
+                for prefix, nsURI in nslist:
+                    if nsURI:
+                        self.sink.bind(prefix, (RESOURCE, nsURI))
+                    
             else:
                 pass                    # Some random XML
 
@@ -222,11 +233,15 @@ class RDFXMLParser(xmllib.XMLParser):
                                                   (RESOURCE, s),
                                                   (RESOURCE, self._subject) ))
                         self._state = STATE_DESCRIPTION  # Nest description
-                    elif value == "daml:collection":  # Is this a daml:collection qname?
- #                       pref = value[:-11]    # We ought to translate to URI but can't get NS's.
- #                       if self.namespaces.get(pref, "") == DAML_ONT_URI:   # @@@@@@@@ HACK!
+                    elif value[-11:] == ":collection":  # Is this a daml:collection qname?
+                        pref = value[:-11]
+                        nslist = self._XMLParser__namespaces.items()
+                        for t, d, nst in self.stack:     # Hack - look inside parser
+                            nslist = nslist + d.items()
+                        for p, nsURI in nslist:
+                            if p == pref and  nsURI == DAML_ONT_NS: 
+                                self._state = STATE_LIST  # Linked list of obj's
 
-                        self._state = STATE_LIST  # Linked list of obj's
                 elif name == "resource":
                     self.sink.makeStatement(((RESOURCE, self._context),
                                              (RESOURCE, self._predicate),
