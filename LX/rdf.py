@@ -10,7 +10,7 @@ import re
 
 import LX
 from LX.ladder import Ladder
-from LX.defaultns import rdfns, lxns
+from LX.namespace import ns
 from LX.describer import CombinedDescriber, ListDescriber, DescriptionFailed
 import LX.logic
 
@@ -31,14 +31,14 @@ def flatten(kb, toKB, indirect=0):
     # ladder = ladder.set("verbose", 1)
     if kb.univars:
         term = d.describe(kb.asFormula(), ladder)
-        toKB.add(term, rdfns.type, lxns.TrueSentence)
+        toKB.add(term, ns.rdf.type, ns.lx.TrueSentence)
         return
     for f in kb:
         if f.function is LX.logic.RDF and not indirect:
             toKB.add(f)
         else:
             term = d.describe(f, ladder)
-            toKB.add(term, rdfns.type, lxns.TrueSentence)
+            toKB.add(term, ns.rdf.type, ns.lx.TrueSentence)
 
 def unflatten(f):
     """Return a formula which expresses the same knowledge, but any
@@ -78,22 +78,22 @@ class Reconstructed:
 
 # could construct this from class info...
 decode = {
-    lxns.condLeft: [ 0, LX.logic.IMPLIES ],
-    lxns.condRight:[ 1, LX.logic.IMPLIES ],
-    lxns.bicondLeft: [ 0, LX.logic.MEANS],
-    lxns.bicondRight:[ 1, LX.logic.MEANS ],
-    lxns.conjLeft: [ 0, LX.logic.AND ],
-    lxns.conjRight: [ 1, LX.logic.AND ],
-    lxns.disjLeft: [ 0, LX.logic.OR ],
-    lxns.disjRight: [ 1, LX.logic.OR ],
-    lxns.negated:[ 0, LX.logic.NOT ],
-    lxns.subformula:[ 1, None ],
-    lxns.univar:[ 0, LX.logic.FORALL ],
-    lxns.exivar:[ 0, LX.logic.EXISTS ],
-    lxns.subjectTerm:[ 0, LX.logic.RDF ],
-    lxns.predicateTerm:[ 1, LX.logic.RDF ],
-    lxns.objectTerm:[ 2, LX.logic.RDF ],
-    lxns.denotation: "uri",
+    ns.lx.condLeft: [ 0, LX.logic.IMPLIES ],
+    ns.lx.condRight:[ 1, LX.logic.IMPLIES ],
+    ns.lx.bicondLeft: [ 0, LX.logic.MEANS],
+    ns.lx.bicondRight:[ 1, LX.logic.MEANS ],
+    ns.lx.conjLeft: [ 0, LX.logic.AND ],
+    ns.lx.conjRight: [ 1, LX.logic.AND ],
+    ns.lx.disjLeft: [ 0, LX.logic.OR ],
+    ns.lx.disjRight: [ 1, LX.logic.OR ],
+    ns.lx.negated:[ 0, LX.logic.NOT ],
+    ns.lx.subformula:[ 1, None ],
+    ns.lx.univar:[ 0, LX.logic.FORALL ],
+    ns.lx.exivar:[ 0, LX.logic.EXISTS ],
+    ns.lx.subjectTerm:[ 0, LX.logic.RDF ],
+    ns.lx.predicateTerm:[ 1, LX.logic.RDF ],
+    ns.lx.objectTerm:[ 2, LX.logic.RDF ],
+    ns.lx.denotation: "uri",
     }
 
 def reconstruct(kb, keys, recons, byClass=None, class_=Reconstructed, cluster=None):
@@ -118,7 +118,7 @@ def reconstruct(kb, keys, recons, byClass=None, class_=Reconstructed, cluster=No
             continue
         (subj, pred, obj) = f.args
         subjRecon = recons.setdefault(subj, apply(class_,[subj]))
-        if pred == rdfns.type and byClass is not None:
+        if pred == ns.rdf.type and byClass is not None:
             byClass.setdefault(obj, []).append(subjRecon)
         if keys is not None:
             try:
@@ -164,7 +164,7 @@ def dereify(kb):
         if f.function != LX.logic.RDF:
             continue
         (subj, pred, obj) = f.args
-        if pred is rdfns.type and obj is lxns.TrueSentence:
+        if pred is ns.rdf.type and obj is ns.lx.TrueSentence:
             kb.add(asExpr(recons[subj], { }))
     
 def asExpr(r, map):
@@ -229,14 +229,14 @@ class VariableDescriber:
                 term=vars[object]
             except KeyError:
                 if isinstance(object, LX.logic.ExiVar):
-                    type = lxns.exivar
+                    type = ns.lx.exivar
                 elif isinstance(object, LX.logic.UniVar):
-                    type = lxns.exivar
+                    type = ns.lx.exivar
                 term=vars.setdefault(object, ladder.kb.newExistential())
-                # ladder.kb.add(term, rdfns
+                # ladder.kb.add(term, ns.rdf
             
         if ladder.has("verbose"):
-            ladder.kb.add(term, rdfns.type, lxns.Variable)
+            ladder.kb.add(term, ns.rdf.type, ns.lx.Variable)
         return term
         
     
@@ -256,21 +256,21 @@ class URIRefDescriber:
             term = ladder.kb.newExistential()
             
         if ladder.has("verbose"):
-            ladder.kb.add(term, rdfns.type, lxns.Constant)
-        ladder.kb.add(term, lxns.denotation, object)
+            ladder.kb.add(term, ns.rdf.type, ns.lx.Constant)
+        ladder.kb.add(term, ns.lx.denotation, object)
         return term
     
 class FormulaDescriber:
 
     nameTable = {
-        LX.logic.IMPLIES:   [ lxns.Conditional,   lxns.condLeft,   lxns.condRight   ],
-        LX.logic.MEANS: [ lxns.Biconditional, lxns.bicondLeft, lxns.bicondRight ],
-        LX.logic.AND:   [ lxns.Conjunction,   lxns.conjLeft,   lxns.conjRight   ],
-        LX.logic.OR:   [ lxns.Disjunction,   lxns.disjLeft,   lxns.disjRight   ],
-        LX.logic.NOT:      [ lxns.Negation,      lxns.negated ],
-        LX.logic.FORALL: [ lxns.UniversalQuantification, lxns.univar, lxns.subformula ],
-        LX.logic.EXISTS: [ lxns.ExistentialQuantification, lxns.exivar, lxns.subformula ],
-        LX.logic.RDF: [ lxns.Triple, lxns.subjectTerm, lxns.predicateTerm, lxns.objectTerm ]
+        LX.logic.IMPLIES:   [ ns.lx.Conditional,   ns.lx.condLeft,   ns.lx.condRight   ],
+        LX.logic.MEANS: [ ns.lx.Biconditional, ns.lx.bicondLeft, ns.lx.bicondRight ],
+        LX.logic.AND:   [ ns.lx.Conjunction,   ns.lx.conjLeft,   ns.lx.conjRight   ],
+        LX.logic.OR:   [ ns.lx.Disjunction,   ns.lx.disjLeft,   ns.lx.disjRight   ],
+        LX.logic.NOT:      [ ns.lx.Negation,      ns.lx.negated ],
+        LX.logic.FORALL: [ ns.lx.UniversalQuantification, ns.lx.univar, ns.lx.subformula ],
+        LX.logic.EXISTS: [ ns.lx.ExistentialQuantification, ns.lx.exivar, ns.lx.subformula ],
+        LX.logic.RDF: [ ns.lx.Triple, ns.lx.subjectTerm, ns.lx.predicateTerm, ns.lx.objectTerm ]
         }
     
     def describe(self, object, ladder):
@@ -284,7 +284,7 @@ class FormulaDescriber:
         entry = self.nameTable[object.function]
 
         if ladder.has("verbose"):
-            ladder.kb.add(term, rdfns.type, entry[0])
+            ladder.kb.add(term, ns.rdf.type, entry[0])
 
         for (pred, obj) in zip(entry[1:], object.args):
             ladder.kb.add(term, pred, ladder.describer.describe(obj, ladder))
@@ -311,7 +311,10 @@ def denotation(triple, index):
     return LX.uri.Resource(u)
     
 # $Log$
-# Revision 1.11  2003-08-22 20:49:07  sandro
+# Revision 1.12  2003-08-28 11:47:07  sandro
+# change from defaultns to namespace.ns
+#
+# Revision 1.11  2003/08/22 20:49:07  sandro
 # generalized ns and reconstructor, for second use (2003/08/owl-systems)
 #
 # Revision 1.10  2003/08/20 11:50:58  sandro
