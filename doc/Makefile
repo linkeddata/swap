@@ -53,28 +53,35 @@ formats-examplex1.ps: formats-example1.dot
 
 states.svg: states.graph
 
-print: tutorial.pdf tutorial.ps appendix.pdf appendix.ps
+print: tutorial-1.pdf tutorial-1.ps tutorial.pdf tutorial.ps appendix.pdf appendix.ps
 
 #@@cwm.html -- remove junk
 #@@CwmBuiltins.html -- reformat
-TUTFILES=Overview.html ../Primer.html Shortcuts.html ontologies.html Rules.html Processing.html Built-In.html rule-systems.html Trust.html ../pim/travel.html Glossary.html
+TUTFILES=Overview.html ../Primer.html Shortcuts.html ontologies.html Rules.html Processing.html Built-In.html Trust.html ../pim/travel.html Glossary.html
 TUTFIGS=../../../../DesignIssues/diagrams/arcs-1.gif ../../../../DesignIssues/diagrams/arcs-3.gif ../../../../2002/Talks/04-sweb/elisaaccess.png ../test/crypto/make.jpg
 
-APPENDICES=formats.html CwmInstall.html CwmHelp.html
+APPENDICES=formats.html CwmInstall.html CwmHelp.html rule-systems.html
 APPFIGS=formats-examplex1.ps
 
 HTML2PS=html2ps # debian package originally from http://www.tdb.uu.se/~jan/html2ps.html
 # user guide http://www.tdb.uu.se/~jan/html2psug.html
 
 tutorial.ps: $(TUTFILES) print.css formats-examplex1.ps $(TUTFIGS)
-	$(HTML2PS) -f print.css -o $@ $(TUTFILES)
+	$(HTML2PS) -f print.css -2 --xref -o $@ $(TUTFILES)
 
 PS2PDF=ps2pdf # ghostscript? acroread?
 tutorial.pdf: tutorial.ps
 	$(PS2PDF) tutorial.ps
 
+tutorial-1.ps: $(TUTFILES) print.css formats-examplex1.ps $(TUTFIGS)
+	$(HTML2PS) -f print.css --xref -o $@ $(TUTFILES)
+
+tutorial-1.pdf: tutorial-1.ps
+	$(PS2PDF) tutorial-1.ps
+
 appendix.ps: $(APPENDICES) print.css $(APPFIGS)
-	$(HTML2PS) -f print.css -o $@ $(APPENDICES)
+	$(HTML2PS) -f print.css --xref -o $@ $(APPENDICES)
+
 
 #@@factor out .ps.pdf rule
 appendix.pdf: appendix.ps

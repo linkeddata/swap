@@ -4,6 +4,11 @@ BODY {
   /* font-family: Palatino; */
 }
 
+H1 { font-size: 16pt; }
+H2 { font-size: 14pt; }
+H3 { font-size: 13pt; }
+H4 { font-size: 12pt; }
+
 H3 { font-style: italic }
 
 /* not used by html2ps*/
@@ -21,13 +26,14 @@ DIV.version {
   seq-number: 1; 
   ball-radius: 0.1em
   extrapage: 1
+  showurl: 1
 
   paper {
      type: A4
   }
 
   option {
-    twoup: 1
+  /*    twoup: 1   let this be on cmd line */
     scaleimage: 2
     toc: bh 
     frame: 0

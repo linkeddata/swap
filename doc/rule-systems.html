@@ -3,7 +3,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <title>Comparing Rule Systems</title>
+  <title>Comparing Rule-Based Systems</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -13,7 +13,7 @@
 <p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a> |
 <a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
 href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
-Comparing Rule Systems</p>
+Comparing Rule-Based Systems</p>
 </div>
 
 <h1>Comparing Rule-Based Systems</h1>
@@ -24,20 +24,64 @@ processors are not exactly commonplace, and understanding them is not
 manditory for the working programmer, they do have a long and solid history.
 Where does cwm fit into that history?</p>
 
-<p>The field is sometimes called <a
+<p>The field has sometimes been called <a
 href="http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?knowledge-based+system">Knowledge-Based
 Systems</a> or <a
 href="http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?expert+system">Expert
-Systems</a>.</p>
+Systems</a>, but now people often just says something "uses rules." </p>
 
-<p>We can perhaps divide the territory into four camps, as follows.</p>
 
-<h2>Automated Theorem Provers</h2>
+<h2>Four Kinds of Rules</h2>
 
-<p>Automated reasoning using first-order became generally feasible in 1965
-with Robinson's resolution and hyperresolution algorithms. Today a raft of
-automated theorem provers continue this tradition, but they see little use in
-general computing.</p>
+<p>There seem to be four different ways people think about and want to
+use rules:</p>
+
+<ol>
+
+<li><strong>Derivation or Deduction Rules.</strong>  These are cwm's
+normal rules.   Each rule expresses the knowledge that if one set
+of statements happens to be true, then some other set of
+statements must also be true.  In most cases this is the same as what
+is sometimes called a <em>logical implication</em>, a
+<em>material conditional</em>, or a <em>Horn clause</em>.
+</li>
+
+<li><strong>Transformation Rules.</strong>  These are what cwm uses
+with --filter.  Each rule relates truth in one knowledge base to truth
+in another.  Transformation rules on n-tuples can be rewritten as
+derivation rules on (n+1)-tuples, where the additional element
+specifies the knowledge base.
+</li>
+
+<li><strong>Integrity Constraints.</strong>  These are rules of the
+form "it must be true that ....".   Cwm does not have these rules, but
+they can be emulated with derivation rules like "if it is not true
+that .... then we-have-an-error" and a check for "we-have-and-error".
+</li>
+
+<li><strong>Reaction or Event-Condition-Action (ECA) Rules.</strong>
+These involve a notion of action, not just inference, when a rule
+applies.  Reaction rules may be emulated by wrapping a reaction rule
+system in a procedure which queries for actions to perform.
+</li>
+
+</ol>
+
+
+<h2>A Varierty of Engines</h2>
+
+Along with the variety in types of rules, there is also a wide variety
+in types of rules engines and general logic processors or "reasoners".
+
+<h3>Automated Theorem Provers</h3>
+
+<p>Automated reasoning using first-order became generally feasible in
+1965 with Robinson's resolution and hyperresolution algorithms. Today
+a raft of automated theorem provers continue this tradition, but they
+see little use in general computing.  The strength here is general
+expressive power: the machine does perform classical logic operations;
+the weakness is that such systems generally become too practical,
+real-world application problems.</p>
 
 <p>A focal point for this research is <a href="http://www.tptp.org">Thousands
 of Problems for Theorem-Provers (TPTP)</a>, which includes links to provers
@@ -49,7 +93,7 @@ problem ALG001-1).</p>
 href="http://www-unix.mcs.anl.gov/AR/otter/">OTTER</a> and <a
 href="http://belo.stanford.edu:8080/iwregistrar/Lookup?type=1&amp;value=SNARK&amp;mode=full">SNARK</a>.</p>
 
-<h2>Logic Programming (Prolog)</h2>
+<h3>Logic Programming</h3>
 
 <p>In 1970-1972, <a
 href="http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?Prolog">Prolog</a>
@@ -63,22 +107,44 @@ much like running a program. Prolog always chains backward from a query.</p>
 href="http://www.byte.com/art/9509/sec7/art19.htm">saw</a> the introduction
 of C, Pascal, Scheme, Smalltalk, and Microsoft BASIC.)</p>
 
-<h2>Production Systems (OPS5, CLIPS, JESS)</h2>
-<pre>http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?production+system
-http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?OPS5
+<p>Tabled Prolog (as in <a href="http://xsb.sourceforge.net/">XSB</a>)
+allows rules to be written without worrying about looping, much like
+with cwm.</p>
 
-Usually (but not always) chaining forward from the givens.
-Same timeframe as awk.</pre>
+<h3>Production Systems</h3>
 
-<h2>Modern Hybrid</h2>
-<pre>Euler?
-cwm...
-http://www.ksl.stanford.edu/software/IW/
-http://belo.stanford.edu:8080/iwregistrar/Lookup?type=1&amp;value=JTP&amp;mode=full
+<p>A different approach became popular with <a
+href="http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?OPS5">OPS5</a>
+(which is since continued into 
+<a href="http://www.ghg.net/clips/CLIPS.html">CLIPS</a> and 
+<a href="http://herzberg.ca.sandia.gov/jess/">JESS</a>), presenting
+rules as being "triggered" and causing actions.</p>
+ 
+<p>Unlike Prolog, these are usually (but not always) chaining forward
+from the givens, like cwm.</p>
 
-@@@ DL systems. fact, etc.
+<h3>Modern Reasoners</h3>
 
-@@ Mention cycl &amp; cyc engine.</pre>
+<p>Modern reasoners and rule systems often use a complex hybrid of
+strategies, or are simply developed for a focussed application
+domain.</p>
+
+<p>Some worth mentioning include:</p>
+
+<ol>
+<li>Euler handles N3 and many of cwm's operations, using a backward
+chaining approach with loop-avoidance techniques.</li>
+
+<li><a href="http://belo.stanford.edu:8080/iwregistrar/Lookup?type=1&amp;value=JTP&amp;mode=full
+">JTP</a> is used for web-reasoning in the
+<a href="http://www.ksl.stanford.edu/software/IW/">KSL InferenceWeb project</a></li>
+
+<li><a href="http://www.fh-wedel.de/~mo/racer/">RACER</a> and <a href="http://www.cs.man.ac.uk/~horrocks/FaCT/">FaCT</a> are leading description-logic
+(ontology) reasoners</li>
+
+<li><a href="http://www.opencyc.org/">OpenCyc</a> </li>
+
+</ol>
 
 <div class="noprint">
 <p></p>
