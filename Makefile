@@ -1,5 +1,6 @@
 # $Id$
 
+
 PYTHON=python
 
 YAPPS=yapps2.py
@@ -54,22 +55,23 @@ release : doc.made cwm.tar.gz message.txt
 
 package: math.rdf maths.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf times.rdf LICENSE.rdf  $(HTMLS)
 
+
 # Can't make dependencies on *.py :-(
 
 # cwm.py notation3.py llyn.py  RDFSink.py toXML.py
 cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
 	cvs -q update
 	tar -czf  cwm.tar.gz $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) `cat test/testfilelist | sed -e 's/^/test\//'`
-	rm -rf cwm
-	mkdir cwm
-	cd cwm && tar -xzf ../cwm.tar.gz
-	cd cwm/test && $(MAKE)
-	cd cwm && rm -rf *
-	cd cwm && tar -xzf ../cwm.tar.gz
-	mv cwm $(TARNAME)
+	rm -rf ,cwm-tarball-test
+	mkdir ,cwm-tarball-test
+	cd ,cwm-tarball-test && tar -xzf ../cwm.tar.gz
+	cd ,cwm-tarball-test/test && $(MAKE)
+	cd ,cwm-tarball-test && rm -rf *
+	cd ,cwm-tarball-test && tar -xzf ../cwm.tar.gz
+	mv ,cwm-tarball-test $(TARNAME)
 	rm cwm.tar.gz
 	tar -czf $(TARNAME).tar.gz $(TARNAME)
-	mv $(TARNAME) cwm
+	mv $(TARNAME) ,cwm-tarball-test
 	head -n -1 .htaccess > ,htaccess
 	echo 'RewriteRule ^cwm.tar.gz$ ' $(TARNAME) '[L]' >> ,htaccess
 	mv ,htaccess .htaccess
@@ -94,7 +96,7 @@ setup_tarball: $(SOURCES) tested $(HTMLS) $(TESTS) $(TARBALL_STUFF) filelist
 	mkdir ,cwm-$(VERSION)-test
 	cd ,cwm-$(VERSION)-test && tar -xzf ../cwm-$(VERSION).tar.gz
 	cd ,cwm-$(VERSION)-test/cwm-$(VERSION)/test && $(MAKE)
-	head -n -1 .htaccess > ,htaccess
+	head -n 1 .htaccess > ,htaccess
 	echo 'RewriteRule ^cwm.tar.gz$ ' $(TARNAME) '[L]' >> ,htaccess
 	mv ,htaccess .htaccess
 	cvs add $(TARNAME).tar.gz	
