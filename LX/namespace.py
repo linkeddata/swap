@@ -22,6 +22,8 @@ class TermHasNoURI(RuntimeError):
     pass
 class NoShortNameDeclared(RuntimeError):
     pass
+class NotInNamespace(RuntimeError):
+    pass
 
 class NamespaceCluster:
     """An object whose attributes (eg rdf, rdfs, foaf, dc, ...) are
@@ -124,7 +126,10 @@ if __name__ == "__main__":
 
 
 # $Log$
-# Revision 1.12  2003-09-06 04:49:00  sandro
+# Revision 1.13  2003-09-08 17:30:44  sandro
+# added missing exception class
+#
+# Revision 1.12  2003/09/06 04:49:00  sandro
 # made inverse lookup use its own errors
 #
 # Revision 1.11  2003/09/05 04:38:49  sandro
