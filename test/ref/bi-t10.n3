@@ -1,0 +1,58 @@
+     @prefix : <foo.n3#> .
+     @prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
+     @prefix dpo: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix ex: <http://www.daml.org/2000/10/daml-ex#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    :fred     :favoriteColor :blue .
+    
+    :test10a     a :success .
+    
+    :test10b     a :success .
+    
+    this     log:forAll :F,
+                :G,
+                :d,
+                :x,
+                :y .
+    {
+        :F     log:includes {:theSky     :is :blue .
+            } .
+        <t10a.n3>     log:resolvesTo :F .
+        
+        }     log:implies {:test10a     a :success .
+        } .
+    {
+        :F     log:includes :G .
+        :d     log:resolvesTo :F .
+        
+        }     log:implies {:doc     :says :G .
+        } .
+    {
+        <t10a.n3>     :says {:theSky     :is :blue .
+            } .
+        
+        }     log:implies {:test_SURPRISE     a :success .
+        } .
+    {
+        :F     log:includes {:theSky     :is :green .
+            } .
+        <t10a.n3>     log:resolvesTo :F .
+        
+        }     log:implies {:test10-bis     a :FAILURE .
+        } .
+    {
+        :F     log:includes {:theSky     :is :x .
+            } .
+        <t10a.n3>     log:resolvesTo :F .
+        
+        }     log:implies {:fred     :favoriteColor :x .
+        } .
+    {
+        :fred     :favoriteColor :blue .
+        
+        }     log:implies {:test10b     a :success .
+        } .
+    

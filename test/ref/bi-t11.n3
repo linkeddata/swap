@@ -1,0 +1,116 @@
+     @prefix : <foo.n3#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    :blue     a :ERROR_PROPERTY_NOT_DECLARED,
+                :UsedProperty;
+         :schema <foo.n3>;
+         :schemaFormula :_formula .
+    
+    :includesTest2     a :success .
+    
+    :includesTest3     a :success .
+    
+    :is     a :Property_declared,
+                :UsedProperty;
+         :schema <foo.n3>;
+         :schemaFormula :_formula .
+    
+    :isjunk     a :ERROR_CANT_GET_SCHEMA,
+                :UsedProperty .
+    
+    this     log:forAll :F,
+                :G,
+                :H,
+                :S,
+                :d,
+                :o,
+                :p,
+                :s1,
+                :s,
+                :x,
+                :y .
+    {
+        :F     log:includes {:blue     a rdf:Property .
+            } .
+        <foo.n3>     log:resolvesTo :F .
+        
+        }     log:implies {:includesTest     a :FAILURE .
+        } .
+    {
+        :F     log:includes {:s     :p :o .
+            } .
+        <t10a.n3>     log:resolvesTo :F .
+        
+        }     log:implies {:p     a :UsedProperty .
+        } .
+    {
+        :p     a :UsedProperty;
+             log:resolvesTo  [
+                 log:includes {:p     s:isDefinedBy :s .
+                } ] .
+        
+        }     log:implies {:p     :schema :s .
+        } .
+    {
+        :p     :schema  [
+                 log:resolvesTo :F ] .
+        
+        }     log:implies {:p     :schemaFormula :F .
+        } .
+    {
+        :p     a :UsedProperty;
+             log:resolvesTo  [
+                 log:notIncludes {:p     s:isDefinedBy :x .
+                } ] .
+        
+        }     log:implies {:p     a :ERROR_CANT_GET_SCHEMA .
+        } .
+    {
+        :F     log:includes {:p     s:isDefinedBy :s .
+            } .
+        :p     a :UsedProperty;
+             log:resolvesTo :F .
+        :s     log:resolvesTo :G .
+        
+        }     log:implies {:p     :schemaFormula :G .
+        } .
+    {
+        :F     log:includes {:p     a rdf:Property .
+            } .
+        :p     :schemaFormula :F .
+        
+        }     log:implies {:p     a :Property_declared .
+        } .
+    {
+        :F     log:notIncludes {:p     a rdf:Property .
+            } .
+        :p     :schemaFormula :F .
+        
+        }     log:implies {:p     a :ERROR_PROPERTY_NOT_DECLARED .
+        } .
+    {
+        :F     log:notIncludes {:blue     a rdf:Property .
+            } .
+        <foo.n3>     log:resolvesTo :F .
+        
+        }     log:implies {:includesTest2     a :success .
+        } .
+    {
+        :F     log:includes {:is     a rdf:Property .
+            } .
+        <foo.n3>     log:resolvesTo :F .
+        
+        }     log:implies {:includesTest3     a :success .
+        } .
+    {
+        :F     log:notIncludes {:is     a rdf:Property .
+            } .
+        <foo.n3>     log:resolvesTo :F .
+        
+        }     log:implies {:includesTest4     a :FAILURE .
+        } .
+    
+    log:implies     a log:Chaff .
+    
