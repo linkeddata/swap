@@ -45,7 +45,7 @@ def NTriplesAtom(s, rowBindings, interner):
     if (s._URI()):
         subj = interner.intern((SYMBOL, s._URI()))
     elif (s._literal()):
-        subj = interner.intern((SYMBOL, s._literal()))
+        subj = interner.intern((LITERAL, s._literal()))
     else:
         try:
             subj = rowBindings[s.symbol()]
