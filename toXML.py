@@ -621,6 +621,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
 	self._flags = flags
 	self._nodeID = {}
 	self._nextnodeID = 0
+	self.namedAnonID = 0
 	self._docOpen = 0  # Delay doc open <rdf:RDF .. till after binds
         def doNothing():
             pass
@@ -723,10 +724,16 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
             self.addNode(node)
             self._modes[-1] = tm.LIST
 
+    def nodeIDize(self, argument):
+        q = argument[1]
+        if (q[0] == ANONYMOUS or q[0] == SYMBOL) and q[1] in self._nodeID:
+            return (RDF_NS_URI+' nodeID', self._nodeID[q[1]])
+        return (argument[0], q[1])
+        
     def _openSubject(self, subject):
         if subject is not None:
             subj = subject[1]
-            q = ((RDF_NS_URI+' about', subj),)
+            q = (nodeIDize((RDF_NS_URI+' about', subject)),)
         else:
             q = []
         if self._classes[-1] is None:
@@ -755,7 +762,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
                 print pred[1], attrs
                 self._xwr.startElement(pred[1], attrs, self.prefixes)
         else:
-            self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' resource', obj[1])], self.prefixes)
+            self._xwr.emptyElement(pred[1], [nodeIDize((RDF_NS_URI+' resource', obj))], self.prefixes)
 
     def _closePredicate(self):
         self._xwr.endElement()
@@ -841,24 +848,33 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
 
     def addAnonymous(self, Id):
         a = (tm.ANONYMOUS, Id)
+        self._nodeID[Id] = self.nextNodeID
+        self._nextNodeID += 1
         self.addNode(a)
         
-    
+
     def beginAnonymous(self):
         a = (tm.ANONYMOUS, 'hi')
         self.bNodes.append(a)
         if self._parts[-1] == tm.NOTHING:
             self._openSubject(None)
-        if self._parts[-1] == tm.PREDICATE:
+            self._parts[-1] += 1
+        elif self._parts[-1] == tm.PREDICATE:
             self._openPredicate(self._triples[-1][tm.PREDICATE], resource=[])
-        self._modes.append(tm.ANONYMOUS)
-        self._triples.append([a, None, None])
-        self._parts.append(tm.SUBJECT)
-        self._predIsOfs.append(tm.NO)
-        self._pathModes.append(False)
+            self._modes.append(tm.ANONYMOUS)
+            self._triples.append([a, None, None])
+            self._parts.append(tm.SUBJECT)
+            self._predIsOfs.append(tm.NO)
+            self._pathModes.append(False)
+        else:
+            self.namedAnonID += 1
+            self.addAnonymous(self.namedAnonID)
         
 
     def endAnonymous(self):
+        if self._modes[-1] != tm.ANONYMOUS:
+            self.endStatement()
+            return
         if self._parts[-1] != tm.NOTHING:
             self.endStatement()
         a = self.bNodes.pop()
@@ -870,6 +886,8 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
         self._closePredicate()
 
     def declareExistential(self, sym):
+        self.nodeID[(SYMBOL, sym)] = _nextNodeID
+        _nextNodeID += 1
         return
         formula = self.formulas[-1]
         a = formula.newSymbol(sym)
