@@ -39,8 +39,11 @@
 :annotation a r:Property s:domain t:Issue; r:range doc:Work;
     s:comment  """No semantics apart from human understanding. no state change""".
 
+:reopener a r:Property s:domain t:Issue; r:range doc:Work;
+    s:comment  """A closed issue is re-openned.""".
 
 #  Assigns?  Reassigns?
+#  Subsumed by? 
 
 #ends
 
