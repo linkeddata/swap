@@ -31,13 +31,15 @@ setup(
     maintainer = "Tim Berners-Lee",
     maintainer_email = "timbl@w3.org",
     url = "http://www.w3.org/2000/10/swap/",
-    package_dir = {'swap': 'swap-cwm-0.9/lib/swap'},
-    packages = ['swap.cwm',
-		'swap.RDFSink',
-		'swap.llyn'],
-    )
+     packages = ['swap']
+   )
     # todo, figure out which other modules are in public APIs
     # --danbri
-#
+#,'swap.cwm','swap.RDFSink','swap.llyn'],
+
 #		'swap.RDFSink',
 #		'swap.llyn'],
+#    packages = ['swap.cwm',
+#		'swap.RDFSink',
+#		'swap.llyn'],
+#    package_dir = {'': 'swap'},

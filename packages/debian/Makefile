@@ -22,19 +22,19 @@ website:	package publish
 update:
 	# grab latest version of files from development tree
 	mkdir -p $(PACKAGE)-$(MAINVERSION)/doc ; \
-	mkdir -p $(PACKAGE)-$(MAINVERSION)/lib ; \
-	cd $(PACKAGE)-$(MAINVERSION)/lib; tar -zxvf ../../../../cwm.tgz
+	mkdir -p $(PACKAGE)-$(MAINVERSION)/lib/swap ; \
+	cd $(PACKAGE)-$(MAINVERSION)/lib/swap; tar -zxvf   ../../../../../cwm.tgz
 	(cd ./debian-files && tar cf - .  --exclude CVS) | (cd  $(PACKAGE)-$(MAINVERSION)  && tar xf -)
 	(cd ../.. && tar cf - doc  --exclude CVS --exclude format ) | (cd $(PACKAGE)-$(MAINVERSION)/  && tar xf -)
 
-	cp setup.py $(PACKAGE)-$(MAINVERSION)
+	cp setup.py $(PACKAGE)-$(MAINVERSION)/lib/
 
-	touch $(PACKAGE)-$(MAINVERSION)/lib/__init__.py 
+	touch $(PACKAGE)-$(MAINVERSION)/lib/swap/__init__.py 
 	
 	
 
 pyinstall: update
-	cd $(PACKAGE)-$(MAINVERSION); python ./setup.py install
+	cd $(PACKAGE)-$(MAINVERSION)/lib; python ./setup.py install
 
 test:
 	cd $(PACKAGE)-$(MAINVERSION)/test/; make test\
@@ -77,7 +77,7 @@ uninstall:
 #
 finktree:
 	# grab latest version of files from development tree
-	mkdir -p fink/$(PACKAGE)-$(MAINVERSION)/lib
+	mkdir -p fink/$(PACKAGE)-$(MAINVERSION)/lib/swap
 	mkdir -p fink/$(PACKAGE)-$(MAINVERSION)/doc
 	(cd ../../pack && tar cf - lib --exclude CVS) | (cd fink/$(PACKAGE)-$(MAINVERSION)  && tar xf -)
 	(cd ../../pack && tar cf - doc --exclude CVS) | (cd fink/$(PACKAGE)-$(MAINVERSION)  && tar xf -)
