@@ -284,7 +284,7 @@ class SinkParser:
 
     #@@I18N
     global _namechars
-    _namechars = string.lowercase + string.uppercase + string.digits + '_'
+    _namechars = string.lowercase + string.uppercase + string.digits + '_-'
 
     def tok(self, tok, str, i):
         """tokenizer strips whitespace and comment"""
@@ -841,7 +841,7 @@ def stripCR(str):
 ########################## RDF 1.0 Syntax generator
 
     global _namechars	
-    _namechars = string.lowercase + string.uppercase + string.digits + '_'
+    _namechars = string.lowercase + string.uppercase + string.digits + '_-'
 	    
 class ToRDF(RDFSink):
     """keeps track of most recent subject, reuses it"""
@@ -1068,7 +1068,7 @@ class XMLWriter:
         
     #@@ on __del__, close all open elements?
 
-    _namechars = string.lowercase + string.uppercase + string.digits + '_'
+    _namechars = string.lowercase + string.uppercase + string.digits + '_-'
 
 
     def newline(self, howmany=1):
@@ -1252,7 +1252,7 @@ t   "this" and "()" special syntax should be suppresed.
 
 	
 	#@@I18N
-    _namechars = string.lowercase + string.uppercase + string.digits + '_'
+    _namechars = string.lowercase + string.uppercase + string.digits + '_-'
     _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
 
     
