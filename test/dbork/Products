@@ -1,0 +1,9 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+#@prefix Customers: 	<Customers#>.
+@prefix Products: 	<Products#>.
+
+@prefix : <#>.
+
+<sql://rdftest@swada.w3.org/OrderTracking/> is log:authoritativeService of
+	 Products:name.
