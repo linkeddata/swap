@@ -17,7 +17,7 @@
 
 this log:forAll :x, :y, :z.
 
-#{ ""  log:concat () } log:implies {:test13a a :success}.
+{ ""  log:concat () } log:implies {:test13a a :success}.
 
 # { :x  log:concat ( :y ) } log:implies {:empty :is :x}.
 
@@ -27,13 +27,13 @@ this log:forAll :x, :y, :z.
 
 { :x  log:concat ("World" "Wide" "Web") } log:implies {:www :is :x}.
 
-#{ :x  log:concat ("World" :y "Web").
-#  :y  log:concat ( "W" " " "I" " " "D" " " "E").
-# } log:implies {:www2:is :x}.
+{ :x  log:concat ("World" :y "Web").
+  :y  log:concat ( "W" " " "I" " " "D" " " "E").
+ } log:implies {:www2:is :x}.
 
 
-#{ "" log:equalTo [ log:concat () ]  } log:implies {:test13a1 a :success}.
-#
+{ "" log:equalTo [ log:concat () ]  } log:implies {:test13a1 a :success}.
+
 #{ "one" log:equalTo [ log:concat ( "one" ) ].} log:implies {:test13b a :success}.
 #
 #{ "WorldWideWeb" log:equalTo [ log:concat ( "World" "Wide" "Web" ) ]}

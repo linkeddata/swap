@@ -518,7 +518,7 @@ class Function:
     def __init__(self):
         pass
     
-    def evaluate(self, store, context,  subj, obj):    # For inheritance only
+    def evaluate(self, store, context,  subj, obj, obj_py):    # For inheritance only
         return (obj is self.evaluateObject( store, context, subj))
 
     def evaluateObject(self, store, context, subj, obj):
@@ -530,11 +530,11 @@ class ReverseFunction:
     def __init__(self):
         pass
 
-    def evaluate(self, store, context, subj, obj):    # For inheritance only
-        return (subj is self.evaluateSubject(store, context, obj))
+    def evaluate(self, store, context, subj, obj, obj_py):    # For inheritance only
+        return (subj is self.evaluateSubject(store, context, obj, obj_py))
 
-    def evaluateSubject(self, store, context, obj):
-        raise function_has_no_evaluate_subject_method #  Ooops - you can't inherit this.
+    def evaluateSubject(self, store, context, obj, obj_py):
+        raise reverse_function_has_no_evaluate_subject_method #  Ooops - you can't inherit this.
 
 ###############################################################################################
 #
@@ -542,46 +542,45 @@ class ReverseFunction:
 #
 #   Light Built-in classes
 class BI_GreaterThan(LightBuiltIn):
-    def evaluate(self, store, context, subj, obj):
+    def evaluate(self, store, context, subj, obj, obj_py):
         return (subj.string > obj.string)
 
 class BI_NotGreaterThan(LightBuiltIn):
-    def evaluate(self, store, context, subj, obj):
+    def evaluate(self, store, context, subj, obj, obj_py):
         return (subj.string <= obj.string)
 
 class BI_LessThan(LightBuiltIn):
-    def evaluate(self, store, context, subj, obj):
+    def evaluate(self, store, context, subj, obj, obj_py):
         return (subj.string < obj.string)
 
 class BI_NotLessThan(LightBuiltIn):
-    def evaluate(self, store, context, subj, obj):
+    def evaluate(self, store, context, subj, obj, obj_py):
         return (subj.string >= obj.string)
 
 class BI_StartsWith(LightBuiltIn):
-    def evaluate(self, store, context, subj, obj):
+    def evaluate(self, store, context, subj, obj, obj_py):
         return subj.string.startswith(obj.string)
 
 #  Constructors - more light built-ins
 
 class BI_concat(LightBuiltIn, ReverseFunction):
-    def evaluateSubject(self, store, context, obj):
-        list = store._toPython(obj)
-        progress("##### list input to concat:"+`list`)
+    def evaluateSubject(self, store, context, obj, obj_py):
+        progress("##### list input to concat:"+`obj_py`)
         str = ""
-        for x in list: str = str + x 
+        for x in obj_py: str = str + x 
         return store._fromPython(str)
 
 
 # Equivalence relations
 
 class BI_EqualTo(LightBuiltIn,Function, ReverseFunction):
-    def evaluate(self, store, context, subj, obj):
+    def evaluate(self, store, context, subj, obj, obj_py):
         return (subj is obj)   # Assumes interning
 
     def evaluateObject(self, store, context, subj):
         return subj
 
-    def evaluateSubject(self, store, context, obj):
+    def evaluateSubject(self, store, context, obj, obj_py):
         return obj
 
 # Functions 
@@ -592,9 +591,9 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
     def evaluateObject(self, store, context, subj):
         return store.engine.intern((LITERAL, subj.uriref()))
 
-    def evaluateSubject(self, store, context, obj):
-        if type(obj, ""):
-            return store.engine.intern((RESOURCE, obj))
+    def evaluateSubject(self, store, context, obj, obj_py):
+        if type(obj_py, ""):
+            return store.engine.intern((RESOURCE, obj_py))
 
 class BI_racine(LightBuiltIn, Function):    # The resource whose URI is the same up to the "#" 
 
@@ -844,6 +843,7 @@ class RDFStore(notation3.RDFSink) :
                     q = (context, s[OBJ], subj, obj)
                     context, pred, subj, obj = q
                     self.removeStatement(s)
+                    if chatty > 80: progress("Found list:" + quadToStr(q))
                     break
         elif pred is self.rest:  # And vice versa
             for s in subj.occursAs[SUBJ]:
@@ -851,6 +851,7 @@ class RDFStore(notation3.RDFSink) :
                     q = (context, obj, subj, s[OBJ])
                     context, pred, subj, obj = q
                     self.removeStatement(s)
+                    if chatty > 80: progress("Found list:" + quadToStr(q))
                     break
 
 	s = StoredStatement(q)
@@ -1174,7 +1175,7 @@ class RDFStore(notation3.RDFSink) :
 #   These mthods are at the disposal of built-ins.
 
     def _toPython(self, x, boundLists, queue):
-        if chatty > 85: progress("#### Converting to python "+ xToStr(x))
+        if chatty > 85: progress("#### Converting to python "+ x2s(x))
         """ Returns an N3 list as a Python sequence"""
         if x is self.nil: return []  # Yes, nil is the list ()
         ld = x.definedAsListIn()
@@ -1194,10 +1195,10 @@ class RDFStore(notation3.RDFSink) :
             return  [ self._toPython(ld[OBJ], boundLists, queue) ] + self._toPython(ld[PRED], boundLists, queue) 
 
     def _fromPython(self, x):
-        if type(x, ''):
-            return self.engine.intern(LITERAL, x)
-        if type(x, 2):
-            return self.engine.intern(LITERAL, `x`)
+        if type(x) == type('"'):
+            return self.engine.intern((LITERAL, x))
+        if type(x) == type(2):
+            return self.engine.intern((LITERAL, `x`))
 #        if type(x, []): # @@@@@@@@@@@@@ return list
 #            return self.engine.intern(LITERAL, x)
         return x
@@ -1782,16 +1783,20 @@ class RDFStore(notation3.RDFSink) :
 
 
     # Note that there are no unbound variables in a list L
-    def _noteBoundList(L, queue):
+    def _noteBoundList(self, L, queue):
+        if chatty > 49: progress("Bound list: " + x2s(L))
         for i in range(len(queue)):
             item = queue[i]
             state, short, consts, vars, boundLists, quad = item
             for p in PARTS:
                 if quad[p] is L:
-                    queue[i][VARS].remove(p)
+                    # Might not be on vars yet, as may be in state 99
+                    if p in queue[i][VARS]: queue[i][VARS].remove(p)
                     queue[i][BOUNDLISTS].append(p)
-            if PRED in boundLists and (OBJ not in vars):  # Propagate
-                _noteBoundList(quad[SUBJ], queue)
+                    if queue[i][STATE] == 20:
+                        queue [i] [STATE] = 50 # Try again    @@@ reorder!!
+            if quad[PRED] is L and (OBJ not in vars):  # Propagate
+                self._noteBoundList(quad[SUBJ], queue)
 
 # Generic match routine, outer level:
         
@@ -1886,8 +1891,8 @@ class RDFStore(notation3.RDFSink) :
                         quad = _lookupQuad([(var,val)], quad)  # Quicker to do above but how in python?
                         break     # Done all 4
                 if (quad[OBJ] is var  # No vars now in daml:first
-                    and PRED in boundLists): # and this is a list with no vars in daml:rest   @@@@??? 
-                    _noteBoundList(quad[SUBJ], queue)  # The list is now bound, so propagate this up
+                    and (PRED in boundLists or quad[PRED] is self.nil)): # and this is a list with no vars in daml:rest   @@@@??? 
+                    self._noteBoundList(quad[SUBJ], queue)  # The list is now bound, so propagate this up
             if state == 99:   # Has fewer variables now .. this is progress
                 queue[i:i+1] = []  # Take it out from where it was and 
                 queue.append((state, short, consts, vars, boundLists, quad)) # put it on the top
@@ -1920,7 +1925,7 @@ class RDFStore(notation3.RDFSink) :
                 vars = []           # Parts of speech which are variables
 #                boundLists = []     # Parts of speech which are bound lists
                 for p in ALL4 :
-                    if quad[p] in boundLists: # If we know this from before
+                    if p in boundLists: # If we know this from before
                         pass
                     elif quad[p] in variables + existentials:
                         vars.append(p)
@@ -1932,10 +1937,16 @@ class RDFStore(notation3.RDFSink) :
                         else:
                             consts = consts + [ p ]
                             
+                if PRED in boundLists or quad[PRED] is self.nil and SUBJ in vars and OBJ not in vars:
+#                    vars.remove(SUBJ)
+#                    boundLists.append(SUBJ)
+                    self._noteBoundList(quad[SUBJ], queue)
+                            
                 # Next, check for "light" (quick) built-in functions
                 if con in smartIn and isinstance(pred, LightBuiltIn):
                     if len(vars) == 0:   # no variables: constant expression - we can definitely evaluate it
-                        if pred.evaluate(self, con, subj, obj):
+                        obj_py = self._toPython(obj, boundLists, queue)
+                        if pred.evaluate(self, con, subj, obj, obj_py):
                             return self.query(queue, variables, existentials, smartIn, action, param,
                                           bindings, [], justOne) # No new bindings but success in calculated logical operator
                                                         #    and so, one less query line.
@@ -1947,7 +1958,8 @@ class RDFStore(notation3.RDFSink) :
                             else: return self.query(queue, variables, existentials, smartIn, action, param,
                                                       bindings, [ (obj, result)], justOne)
                         elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
-                            result = pred.evaluateSubject(self, con, obj)
+                            obj_py = self._toPython(obj, boundLists, queue)
+                            result = pred.evaluateSubject(self, con, obj, obj_py)
                             if result == None: state = 50 # Light, Waiting for constants, not searched
                             else: return self.query(queue, variables, existentials, smartIn, action, param,
                                                       bindings, [ (subj, result)], justOne)
@@ -2039,12 +2051,15 @@ class RDFStore(notation3.RDFSink) :
                                     return self.query(queue, variables, existentials, smartIn, action, param,
                                                           bindings, [ (obj, result)],justOne=justOne)
                             elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
-                                result = pred.evaluateSubject2(self, obj)
+                                obj_py = self._toPython(obj, boundLists, queue)
+                                result = pred.evaluateSubject2(self, obj, obj_py)
                                 if result != None:  # There is some such result
                                     return self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
                                                           bindings, [ (subj, result)],justOne=justOne)
                     # Now we have a heavy builtin  waiting for enough constants to run
                         state = 10
+                    elif pred is self.nil or PRED in boundLists:  # This is a structural line: a hypothesis. Keep it
+                        state = 5
                     else: # Not heavy, done search.
                         if chatty > 80: progress("Not builtin, search done, %i found." % total)
                         return total
@@ -2055,9 +2070,9 @@ class RDFStore(notation3.RDFSink) :
 
             else: # state was not 99, 60 or 50, so either 20 or 10:
                 if chatty > 0:
-                    progress("@@@@ Warning: rule has no constant to start with.")
+                    progress("@@@@ Warning: query can't find term which will work.")
                     progress( "   state is %s, que length %i" % (state, len(queue)))
-                    progress(STATES)
+
                     item = state, short, consts, vars, boundLists, quad
                     progress("@@ Current item: %s" % itemToString(item))
                     progress(queueToString(queue))
