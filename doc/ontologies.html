@@ -105,11 +105,11 @@ kinds of things:</p>
 </ul>
 
 <h2>Subclass Reasoning</h2>
-<pre>Man subclassOf Human
-YoungMan subclassOf Man</pre>
+<pre>:Man s:subclassOf :Human .
+:YoungMan s:subclassOf :Man .</pre>
 
 <h3>OWL Inference</h3>
-<pre>Joe is a YoungMan --&gt;  Joe is a Man, Joe is a Human
+<pre>:Joe a :YoungMan --&gt;  :Joe a :Man. Joe a :Human.
 
 Joe is a YoungMMMan --&gt;  [okay] </pre>
 
@@ -121,11 +121,25 @@ Joe is a YoungMMMan --&gt;  Warning: "YoungMMMan" used as a Class but
 
 <h2>Domain, Range, Cardinality</h2>
 
+<p></p>
+<pre>:father s:domain :Human; s:range :Man.
+:Sara :father :Alan.
+______________________________________
+:Sara a :Human.  :Alan a :Man.
+
+
+:father owl:cardinality "1".
+:Sara :father :Alan.
+:Sara :father :MrFoster.
+___________________________________
+:Alan = :MrFoster.
+</pre>
+
 <h2>Sameness</h2>
 
 <h2>Difference</h2>
 
-<p>Hrm. testing.</p>
+<p>@@Hrm. testing.</p>
 
 <div class="noprint">
 <hr />
