@@ -1,52 +1,100 @@
-#  
-
-#
-# total bailing wire for now -- need to move peices into LX
 
 import os
 import sys
+import getopt
 
-import rdf
-import toShortNames
+import LX.old.rdf
+import LX.old.toShortNames
+import LX.engine.otter
 
-axlong=sys.argv[1]
-axname = axlong.split(".")[0]
-axclean = axname + "Cleaned.n3"
-axrdf = axname + ".rdf"
-axP = axname + ".P"
-axOtter = axname + ".otter"
+def otterFormulaFromN3Files(files, base=",n32o"):
 
-# include swap/util/rdfs-rules.n3
-os.system("grep -v '#HIDELINE' < %s > %s" % (axlong, axclean))
-os.system("cwm %s --flatten --rdf > %s" % (axclean, axrdf))
+    # this is a nutty way to do this; there should be a much shorter
+    # path through other LX code, not even involving reification.
 
-ax=rdf.read(axrdf)
-#axclean=[]
-#for t in ax:
-#    skip = 0
-#    for s in t:
-#        if (s.getURI() == "http://www.w3.org/2000/10/swap/log#forAll" or
-#            s.getURI() == "http://www.w3.org/2000/10/swap/log#forSome"):
-#            skip = 1
-#        print s.getURI()
-#    if not skip: axclean.append(t)
+    inputs = []
+    for f in files:
+        clean = base + "-cleaned-" + str(len(inputs))
+        os.system("grep -v '#HIDELINE' < %s > %s" % (f, clean))
+        inputs.append(clean)
+
+    axrdf = base + ".rdf"
+    axP = base + ".P"
+
+    os.system("cwm %s --flatten --rdf > %s" % (" ".join(inputs), axrdf))
+    ax=LX.old.rdf.read(axrdf)
     
-p=rdf.asOtter(ax)
-ps = toShortNames.trans(p)
-f=open(axP, "w")
-f.write(ps)
-f.close()
+    p=LX.old.rdf.asOtter(ax)
+    ps = LX.old.toShortNames.trans(p)
+    f=open(axP, "w")
+    f.write(ps)
+    f.close()
 
-f=open(axOtter, "w")
-f.write("""set(auto).
-formula_list(usable).
-""")
-f.close()
-
-cmd = "xsb --quietload --noprompt --nobanner -e \"['%s'], ['../LX/recognizeLX.P'], writeKB, halt.\" >> %s" % (axP, axOtter)
-#print "PY running:", cmd
-os.system(cmd)
+    recfile = LX.__file__[:-13] + "/support/recognizeLX.P"
+    cmd = "xsb --quietload --noprompt --nobanner -e \"['%s'], ['%s'], writeKB, halt.  halt\"" % (axP, recfile)
+    fromXSB = os.popen(cmd, "r")
+    result = fromXSB.read()
+    return result
 
 
-# don't actually call otter yet!
+def main():
+    try:
+        opts, args = getopt.getopt(sys.argv[1:],
+                                   "hk:g:",
+                                   ["help", "keep=", "goal="])
+    except getopt.GetoptError:
+        usage()
+        sys.exit(2)
 
+    base = ",testViaOtter"
+    keepBase = 0
+    goal = 0
+    
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            usage()
+            sys.exit()
+        if o in ("-t", "--basefile"):
+            base = a
+            keepBase = 1
+        if o in ("-g", "--goal"):
+            print "Got a goal:", a
+            goal = otterFormulaFromN3Files([a], base+"-goal")
+
+    if len(args) == 0: usage()
+
+    prem = otterFormulaFromN3Files(args, base)
+
+    #if maceFindsModel(prem):
+    #    print "Mace found a model (premises are consistent)"
+
+    try:
+        proof = LX.engine.otter.run(prem, base+".prem")
+        print "Otter found an inconsistency in the premises"
+    except LX.engine.otter.SOSEmpty:
+        print "Otter says: system is consistent (hyperres terminated)"
+
+    if goal:
+        while goal.endswith("\n") or goal.endswith(" ") or goal.endswith("."):
+            goal = goal[:-1]
+        kb = prem + "\n" + "-(" + goal + ").\n"
+        proof = LX.engine.otter.run(kb, base+".all")
+        print "Otter found a proof!"
+    
+
+def usage():
+    print """
+usage:  testViaOtter [opts] premise...
+
+ opts:  --keep basename       Set the tempfile prefix, and leave temp
+                              files around after completion.
+        --goal goalfile       Set a goal; system will look for a proof
+                              of the goal from the premises.
+
+Always checks for satisfiability of the combined premises.
+   
+"""
+    sys.exit(1)
+    
+if __name__ == "__main__":
+    main()

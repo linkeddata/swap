@@ -1,0 +1,200 @@
+
+%
+%  Demo:
+%
+%     
+%   xsb --quietload --nobanner --noprompt -e '[abcdef], [recognizer], writeKB, halt.'
+
+
+:- auto_table.
+
+triple(T,A,B,C) :-
+  rdf(T, lx_subjectTerm, A),
+  rdf(T, lx_predicateTerm, B),
+  rdf(T, lx_objectTerm, C).
+
+conjunction(F,L,R) :-
+  rdf(F, lx_conjLeft, L),
+  rdf(F, lx_conjRight, R).
+
+disjunction(F,L,R) :-
+  rdf(F, lx_disjLeft, L),
+  rdf(F, lx_disjRight, R).
+
+conditional(F,L,R) :-
+  rdf(F, lx_condLeft, L),
+  rdf(F, lx_condRight, R).
+
+biconditional(F,L,R) :-
+  rdf(F, lx_bicondLeft, L),
+  rdf(F, lx_bicondRight, R).
+
+negation(F,N) :-
+  rdf(F, lx_negated, N).
+
+quantification(F, V, S) :-
+  rdf(F, lx_var, V),
+  rdf(F, lx_subformula, S).
+
+quantification(F, V, S) :-
+  rdf(F, lx_exivar, V),
+  rdf(F, lx_subformula, S).
+
+quantification(F, V, S) :-
+  rdf(F, lx_univar, V),
+  rdf(F, lx_subformula, S).
+
+denotation(T, D) :-
+  rdf(T, lx_denotation, D).
+
+% use class/2 ?
+
+isConstant(T) :-
+    rdf(T, lx_denotation, _).
+
+isUniVar(T) :-
+  rdf(T, rdf_type, lx_UniVar).	     
+
+isExiVar(T) :-
+  rdf(T, rdf_type, lx_ExiVar).	     
+
+isVar(T) :-
+  isUniVar(T) ; isExiVar(T).
+
+trueSentence(F) :-
+  rdf(F, rdf_type, lx_TrueSentence).
+
+%%%
+% work with some missing RDFS-able stuff
+
+isUniVar(T) :-
+  rdf(_, lx_univar, T).
+
+isExiVar(T) :-
+  rdf(_, lx_exivar, T).
+
+%%%
+%%%   Look for some malformations; should be generated automatically
+%%%   from the ontology.
+%%%
+
+malformed(S,'Term is both Constant and Variable') :-
+		  isConstant(S), isVar(S).
+
+%%%
+%%%   Grammar for turning Formulas into strings
+%%%
+
+oKBAtom(A) :- oKB(S,[]), atom_codes(A,S).
+
+oKB --> 
+  {findall(S, trueSentence(S), L)},
+  oFormulaList(L, []).
+
+oFormulaList([Head|Tail], End) --> oFormula(Head), ". ", [10],
+			           oFormulaList(Tail, End).
+oFormulaList(End, End) --> "".
+
+oAssertion --> {trueSentence(F)}, oFormula(F), ". ", [10].
+
+oFormula(F) --> {triple(F,A,B,C)}, "rdf(", oTerm(A),
+		",", oTerm(B), ",", oTerm(C), ")".
+oFormula(F) --> {conjunction(F,L,R)}, 
+	        "(", oFormula(L), " & ", oFormula(R), ")".
+oFormula(F) --> {disjunction(F,L,R)}, 
+	        "(", oFormula(L), " | ", oFormula(R), ")".
+oFormula(F) --> {conditional(F,L,R)}, 
+	        "(", oFormula(L), " -> ", oFormula(R), ")".
+oFormula(F) --> {biconditional(F,L,R)}, 
+	        "(", oFormula(L), " <-> ", oFormula(R), ")".
+oFormula(F) --> {negation(F,N)}, 
+	        "-", oFormula(N).
+oFormula(F) --> {quantification(F,V,S), isUniVar(V)}, 
+	        "(all ", oTerm(V), " (", oFormula(S), "))".
+oFormula(F) --> {quantification(F,V,S), isExiVar(V)}, 
+	        "(exists ", oTerm(V), " (", oFormula(S), "))".
+
+:- import append/3 from basics.
+
+oTerm(T) --> {denotation(T, D), atom_codes(D, DStr),
+	      append("<#", Rest, DStr),
+	      append(Body, ">", Rest)
+	 }, 
+	     Body.
+
+oTerm(T) --> {denotation(T, D), atom_codes(D, DStr),
+	     not(append("<#", _, DStr))
+	     }, 
+	     "'", DStr, "'".
+
+oTerm(T) --> {isVar(T), atom_codes(T, TStr),
+	      append("<#", Rest, TStr),
+	      append(Body, ">", Rest)
+	     }, 
+	     Body.
+
+oTerm(T) --> {isVar(T), atom_codes(T, TStr),
+	     not(append("<#", _, TStr))
+	     }, 
+	     "'", TStr, "'".
+
+
+%%%
+%%%    Use Function      (impure)
+%%%
+
+writeKB :- wellformed, oKBAtom(X), write(X).
+
+wellformed :-
+   malformed(S,M), 
+   write('ERROR: '), 
+   write(S), 
+   write(' '), 
+   write(M),
+   halt.
+wellformed.
+
+
+
+%%%
+%%%   Older code for outputing formulas
+%%%
+%%%   NOT PURE, USES write/1 and put/1   
+%%%
+
+writeAssertions :-
+  trueSentence(F), writeFormula(F), fail.
+
+writeFormula(F) :-
+  triple(F,A,B,C),
+  write('rdf('),
+  writeTerm(A),
+  write(','),
+  writeTerm(B),
+  write(','),
+  writeTerm(C),
+  write(')').
+
+writeFormula(F) :-
+  conjunction(F, L, R),
+  write('('),
+  writeFormula(L),
+  write(' & '),
+  writeFormula(R),
+  write(')').
+
+writeTerm(T) :-
+  rdf(T, lx_denotation, X),
+  put(39),
+  write(X),
+  put(39).
+
+writeTerm(T) :-
+  rdf(T, rdf_type, lx_Variable),
+  put(39),
+  write(T),
+  put(39).
+
+
+
+
