@@ -17,6 +17,9 @@ Unpack this tarball in a useful place. cd to that directory and type:
 at the command line. It should spend a while testing to make sure
 the program is working.
 
+The test files should give you a good idea of commands to get 
+Cwm to work. 
+
 If a test fails: There are three possiblilities:
 	1. Your Python setup is borked / sufficiently different from the
 		one used in development. This is a distinct possiblility.
@@ -27,11 +30,6 @@ If a test fails: There are three possiblilities:
 	3. We knowingly published a version of Cwm that failed our own tests.
 		This is highly unlikely.
 
-Therefore, submitting bugs when you fail the tests, besides perhaps the fact 
-that you did fail the tests, is in not in general a good idea.
-
-The test files should give you a good idea of commands to get 
-Cwm to work. 
 
 
 == Submitting Bugs ==
