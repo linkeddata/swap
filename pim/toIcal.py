@@ -81,8 +81,7 @@ class CalWr:
         propNames.sort()
         for prop in propNames:
             predName, valueType = props[prop][:2]
-            val  = sts.any(comp, ICAL.sym(predName))
-            if val:
+            for val in sts.each(comp, ICAL.sym(predName)):
                 if valueType == 'TEXT':
                     self.doSIMPLE(mkTEXT(val), prop)
                 elif valueType == 'INTEGER':
@@ -389,7 +388,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.24  2005-02-17 23:02:27  connolly
+# Revision 2.25  2005-02-17 23:34:37  connolly
+# each, not just any value, e.g. for EXDATE
+#
+# Revision 2.24  2005/02/17 23:02:27  connolly
 # - sort components by uid, dtstart
 # - sort properties by name
 # - added --test arg to run doctest tests
