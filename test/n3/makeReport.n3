@@ -55,7 +55,7 @@ Notation3 Parser Test Results
    <tbody>
      <tr>
        <td class="pass pad_me"></td>
-       <td>Parser parses the file, and generates the expected output</td>
+       <td>Parser parses the file, and generates the expected output. Or, on a negative test, fails to parse the file</td>
      </tr>
      <tr>
        <td class="partial pad_me"></td>
@@ -63,7 +63,7 @@ Notation3 Parser Test Results
      </tr>
      <tr>
        <td class="failure pad_me"></td>
-       <td>Parser throws an exception on the file</td>
+       <td>Parser throws an exception on the file. Or, on a negative test, fails to throw an exception</td>
      </tr>
    </tbody>
   </table
@@ -112,8 +112,8 @@ Class
 {?file a n3test:Input; log:uri ?uri;
 	n3test:description ?a;
 	n3test:expected ?b .
-	("G" ?file) string:concatenation ?x .
-	("G" ?file "zzzzzzzzzzzzzzzzz") string:concatenation ?y .
+	("G" ?b ?file) string:concatenation ?x .
+	("G" ?b ?file "zzzzzzzzzzzzzzzzz") string:concatenation ?y .
 	("""<tr>
     <td>
 <a href="
@@ -136,9 +136,28 @@ Class
 {?parser a n3test:N3Parser; 
 	n3test:command ?y; 
 	n3test:parses ?file .
+	?file n3test:expected "Positive" .
 	?file ?parser [n3test:doesNotMatch () ] .
-	("G" ?file ?y) string:concatenation ?x .
+	("GPositive" ?file ?y) string:concatenation ?x .
 	("""<td class="partial">&nbsp;</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file n3test:expected "Undecided" .
+	?file ?parser [n3test:doesNotMatch () ] .
+	("GUndecided" ?file ?y) string:concatenation ?x .
+	("""<td class="partial">&nbsp;</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file n3test:expected "Negative" .
+	?file ?parser [n3test:doesNotMatch () ] .
+	("GNegative" ?file ?y) string:concatenation ?x .
+	("""<td class="failure">&nbsp;</td>""") string:concatenation ?z . } log:implies
 {?x log:outputString ?z } .
 
 #
@@ -147,13 +166,40 @@ Class
 {?parser a n3test:N3Parser; 
 	n3test:command ?y; 
 	n3test:parses ?file .
+	?file n3test:expected "Positive" .
 	?file ?parser ?q .
 	?q ?r ?s .
 	?r a n3test:Diff .
 	?r n3test:diffString ?t .
 	?t string:equalIgnoringCase "" .
-	("G" ?file ?y) string:concatenation ?x .
+	("GPositive" ?file ?y) string:concatenation ?x .
 	("""<td class="pass">&nbsp;</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file n3test:expected "Undecided" .
+	?file ?parser ?q .
+	?q ?r ?s .
+	?r a n3test:Diff .
+	?r n3test:diffString ?t .
+	?t string:equalIgnoringCase "" .
+	("GUndecided" ?file ?y) string:concatenation ?x .
+	("""<td class="pass">&nbsp;</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file n3test:expected "Negative" .
+	?file ?parser ?q .
+	?q ?r ?s .
+	?r a n3test:Diff .
+	?r n3test:diffString ?t .
+	?t string:equalIgnoringCase "" .
+	("GNegative" ?file ?y) string:concatenation ?x .
+	("""<td class="failure">&nbsp;</td>""") string:concatenation ?z . } log:implies
 {?x log:outputString ?z } .
 
 #
@@ -164,15 +210,47 @@ Class
 	n3test:command ?y; 
 	n3test:parses ?file .
 	?file ?parser ?q .
+	?file n3test:expected "Positive" .
 	?q ?r ?s .
 	?r a n3test:Diff;
 	n3test:diffString ?t;
 	log:uri ?b .
 	?b crypto:md5 ?c .
 	?t string:notEqualIgnoringCase "" .
-	("G" ?file ?y) string:concatenation ?x .
+	("GPositive" ?file ?y) string:concatenation ?x .
 	("<td class=\"partial\"><a href=\"#a" ?c "\">diff</a></td>") string:concatenation ?z . } log:implies
 {?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file ?parser ?q .
+	?file n3test:expected "Undecided" .
+	?q ?r ?s .
+	?r a n3test:Diff;
+	n3test:diffString ?t;
+	log:uri ?b .
+	?b crypto:md5 ?c .
+	?t string:notEqualIgnoringCase "" .
+	("GUndecided" ?file ?y) string:concatenation ?x .
+	("<td class=\"partial\"><a href=\"#a" ?c "\">diff</a></td>") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file ?parser ?q .
+	?file n3test:expected "Negative" .
+	?q ?r ?s .
+	?r a n3test:Diff;
+	n3test:diffString ?t;
+	log:uri ?b .
+	?b crypto:md5 ?c .
+	?t string:notEqualIgnoringCase "" .
+	("GNegative" ?file ?y) string:concatenation ?x .
+	("<td class=\"failure\"><a href=\"#a" ?c "\">diff</a></td>") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
 
 #
 #Finally, if the parser crashed on the file
@@ -180,9 +258,29 @@ Class
 {?parser a n3test:N3Parser; 
 	n3test:command ?y; 
 	n3test:failsParsing ?file .
-	("G" ?file ?y) string:concatenation ?x .
+	?file n3test:expected "Undecided" .
+	("GUndecided" ?file ?y) string:concatenation ?x .
 	("""<td class="failure">&nbsp</td>""") string:concatenation ?z . } log:implies
 {?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:failsParsing ?file .
+	?file n3test:expected "Positive" .
+	("GPositive" ?file ?y) string:concatenation ?x .
+	("""<td class="failure">&nbsp</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:failsParsing ?file .
+	?file n3test:expected "Negative" .
+	("GNegative" ?file ?y) string:concatenation ?x .
+	("""<td class="pass">&nbsp</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+
+
 
 # The end of the table
 #

@@ -40,7 +40,7 @@
         n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-07.nt?rev=1.1> ;
         n3test:description "Tests reverse properties" .
 
-:jena_10008 a n3test:NegativeParserTest;
+:jena_10008 a n3test:UndecidedParserTest;
         n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-08.n3?rev=1.1> ;
         n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-08.nt?rev=1.1> ;
         n3test:description "newline conversion. Will fail on cwm" .
