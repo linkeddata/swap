@@ -1,0 +1,53 @@
+     @prefix : <http://www.w3.org/2000/10/swap/log#> .
+     @prefix foo: <#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    this     :forAll foo:x .
+    {
+        "1"     os:argv foo:x .
+        
+        }     :implies {foo:test_param_1     foo:is foo:x .
+        } .
+    {
+        "3"     os:argv "baz" .
+        
+        }     :implies {foo:test3     a foo:sucess .
+        } .
+    {
+        "4"     os:argv foo:x .
+        
+        }     :implies {foo:test3     a foo:FAILURE .
+        } .
+    {
+        "THIS is not a valid number"     os:argv foo:x .
+        
+        }     :implies {foo:test4     a foo:FAILURE .
+        } .
+    {
+        "1"     os:argv "foo" .
+        
+        }     :implies {foo:test1     a foo:sucess .
+        } .
+    {
+        "1"     os:argv "foot" .
+        
+        }     :implies {foo:test1b     a foo:FAILURE .
+        } .
+    {
+        "1"     os:argv  [
+                 :notEqualTo "foo" ] .
+        
+        }     :implies {foo:test1c     a foo:FAILURE .
+        } .
+    {
+        "2"     os:argv "bar" .
+        
+        }     :implies {foo:test2     a foo:sucess .
+        } .
+    
+    foo:test1c     a foo:FAILURE .
+    
+    foo:test_param_1     foo:is "boof" .
+    
