@@ -16,11 +16,15 @@
 #
 #
 # Output should not incldue any error messages.
+#    (look for "ERROR" in caps)
 #
 
 this log:forAll :c, :d, :o, :p, :r, :s, :S, :s1, :x, :y, :F, :G, :H.
 
 #  Some internal terms we will be using in this document:
+#  These are declared here because older versions of the validator
+#  checked for the. Later versions assume local (<#>) variables are
+#  used consistently.
 
 :usedAsPropertyIn a rdf:Property;
     s:comment "This term is used as a Property in the given document.";
@@ -46,8 +50,9 @@ schema which declares it as a Property""".
 
 #####################################################################################
 
-# Target formulae are the top level formula we are pointed at,
+#  Target formulae are the top level formula we are pointed at,
 #  and any subformulae.
+#  (The command line arguments we get are those after cwm's --with )
 
 { :d log:uri [is os:argv of "1"]  } log:implies { :d a :targetDocument }.
 
@@ -138,7 +143,8 @@ schema which declares it as a Property""".
 
 { :d :documentSchema :s.
   :s :semanticsOK  :F.
-  (:F [is log:semantics of <schema-rules.n3>]) log:conjunction [log:conclusion :G].
+  (:F [is log:semantics of <rdfs-rules.n3>]
+      [is log:semantics of <dpo-rules-subset.n3>]) log:conjunction [log:conclusion :G].
 } log:implies {
   :s :augmented :G
 }.
