@@ -8,11 +8,13 @@
 </head>
 
 <body xml:lang="en" lang="en">
-<div class="noprint">
-<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a>
-| <a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> | Glossary</p>
-</div>
 
+<div class="noprint">
+<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a> |
+<a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
+href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
+Glossary</p>
+</div>
 
 <h1>Glossary</h1>
 
@@ -23,6 +25,11 @@ information where available.</p>
   <dt><a href="#Class" name="Class1" id="Class1">Class</a></dt>
     <dd>A set of <a href="#Thing">Things</a>; a one-parameter predicate; a
       unary relation.</dd>
+  <dt>DAML</dt>
+    <dd>Darpa Agent Markup Langauge. This is DARPA's name for the US
+      govenment funded projects which led to, among other things, OWL. The <a
+      href="http://www.daml.org/">DAML site</a> has useful pointers and
+      registries of useful ontologies and data in RDF.</dd>
   <dt><a name="Domain" id="Domain" href="#domain">domain</a></dt>
     <dd>For a <a href="#Property">Property</a>, a class of things which any
       subject of the <a href="#Property">Property</a> must be in.</dd>
@@ -35,9 +42,17 @@ information where available.</p>
     <dd>(From: Closed world machine; valley.) A bit of code for playing with
       this stuff, as grep is for regular expressions. Sucks in RDF in XML or
       N3, processes rules, and spits it out again.</dd>
+  <dt>existential variable</dt>
+    <dd>A term in a language (such as N3) which stands in place of a normal
+      symbol, allowing one to consider a formula being true for some symbol
+      being put consistently in place of the variable.</dd>
   <dt><a name="filter" id="filter" href="#filter1">filter</a></dt>
     <dd>A set of <a href="#rule">rules</a> which are used to select certain
       data from a larger amount of information.</dd>
+  <dt>Formula</dt>
+    <dd>A set of statements, with a list of universally quanitified variables
+      and a list of existentially quantified variables.  In N3, a literal
+      formula if representated by braces {}.</dd>
   <dt><a name="N3" id="N3" href="/DesignIssues/Notation3">N3</a></dt>
     <dd>Notation3, a quick notation for jotting down or reading RDF semantic
       web information, and experimenting with more advanced sematic web
@@ -85,14 +100,22 @@ information where available.</p>
   <dt><a name="type" id="type">type</a></dt>
     <dd>A particular property used to assert that a thing is in a certain
       Class. The relationship between a thing and any Class it is in.</dd>
+  <dt>universal variable</dt>
+    <dd>A term in a language (such as N3) which stands in place of a normal
+      symbol, allowing one to consider a formula being true for any symbol
+      being put consistently in place of the variable.</dd>
   <dt><a name="URI" id="URI">URI</a></dt>
     <dd>Universal Resource Identifier. The way of identifying anything
       (including Classes, Properties or individual things of any sort). Not
       everything has a URI, as you can talk about something by just using its
       properties. But using a URI allows other documents and systems to
       easily reuse your information.</dd>
+  <dt>variable</dt>
+    <dd>Either a universal variable or an existential variable.</dd>
+  <dt></dt>
 </dl>
 
+<div class="noprint">
 <h2 id="References">References</h2>
 <ul>
   <li><a href="Examples.html">Many More Examples</a></li>
@@ -100,12 +123,10 @@ information where available.</p>
     article</a></li>
 </ul>
 
-<div class="noprint">
 
 <p>Tim BL, with his director hat off</p>
 
 <p>$Id$</p>
 </div>
-
 </body>
 </html>
