@@ -30,17 +30,12 @@ Agenda:
 
 
 import string
-import urlparse
-import thing
+from diag import verbosity, setVerbosity, progress
 from llyn import compareURI
+from uripath import join
 
 # import re
 # import StringIO
-
-#import urllib # for log:content
-import md5, binascii  # for building md5 URIs
-urlparse.uses_fragment.append("md5") #@@kludge/patch
-urlparse.uses_relative.append("md5") #@@kludge/patch
 
 import notation3    	# N3 parsers and generators
 import toXML 		#  RDF generator
@@ -49,8 +44,6 @@ from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL, Logic_NS
 
 # from llyn import RDFStore  # A store with query functiuonality
 import llyn
-
-from thing import progress
 
 cvsRevision = "$Revision$"
 
@@ -342,7 +335,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             if _equals >=0:
                 _lhs = arg[:_equals]
                 _rhs = arg[_equals+1:]
-                _uri = urlparse.urljoin(option_baseURI, _rhs) # Make abs from relative
+                _uri = join(option_baseURI, _rhs)
             if arg == "-test":
                 option_test = 1
                 _gotInput = 1
@@ -377,7 +370,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 option_quiet = 1
             elif _lhs == "-outURI": option_outURI = _uri
             elif _lhs == "-chatty":
-                thing.setVerbosity(int(_rhs))
+                setVerbosity(int(_rhs))
             elif arg[:7] == "-apply=": pass
             elif arg == "-reify": option_reify = 1
             elif arg == "-flat": option_flat = 1
@@ -394,7 +387,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 break
             elif arg[0] == "-": pass  # Other option
             else :
-                option_inputs.append(urlparse.urljoin(option_baseURI,arg))
+                option_inputs.append(join(option_baseURI, arg))
                 _gotInput = _gotInput + 1  # input filename
             
 
@@ -404,7 +397,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 # Between passes, prepare for processing
-        thing.setVerbosity(0)
+        setVerbosity(0)
 #  Base defauts
 
         if option_baseURI == _baseURI:  # Base not specified explicitly - special case
@@ -432,7 +425,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             _store = _outSink
             workingContextURI = None
         else:
-            _metaURI = urlparse.urljoin(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
+            _metaURI = join(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
             _store = llyn.RDFStore( _outURI+"#_g", metaURI=_metaURI, argv=option_with, crypto=option_crypto)
             workingContextURI = _outURI+ "#0_work"
             workingContext = _store.intern((FORMULA, workingContextURI))   #@@@ Hack - use metadata
@@ -470,10 +463,11 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             if _equals >=0:
                 _lhs = arg[:_equals]
                 _rhs = arg[_equals+1:]
-                _uri = urlparse.urljoin(option_baseURI, _rhs) # Make abs from relative
+                _uri = join(option_baseURI, _rhs)
                 
             if arg[0] != "-":
-                _inputURI = urlparse.urljoin(option_baseURI, arg) # Make abs from relative
+                _inputURI = join(option_baseURI, arg)
+                assert ':' in _inputURI
                 if option_format == "rdf" :
                     p = sax2rdf.RDFXMLParser(_store, _inputURI, formulaURI=workingContextURI)
                 else: p = notation3.SinkParser(_store,  _inputURI, formulaURI=workingContextURI)
@@ -517,7 +511,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 option_format = "n3"
                 option_n3_flags = _rhs
             elif arg == "-quiet" : option_quiet = 1            
-            elif _lhs == "-chatty": thing.setVerbosity(int(_rhs))
+            elif _lhs == "-chatty": setVerbosity(int(_rhs))
 
             elif arg == "-reify":
                 pass
@@ -540,13 +534,13 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
             elif arg[:7] == "-apply=":
                 filterContext = (_store.intern((FORMULA, _uri+ "#_formula")))
-                if thing.verbosity() > 4: progress( "Input rules to --apply from " + _uri)
+                if verbosity() > 4: progress( "Input rules to --apply from " + _uri)
                 _store.loadURI(_uri)
                 _store.applyRules(workingContext, filterContext);
 
             elif _lhs == "-filter":
                 filterContext = _store.intern((FORMULA, _uri+ "#_formula"))
-                _newURI = urlparse.urljoin(_baseURI, "_w_"+`_genid`)  # Intermediate
+                _newURI = join(_baseURI, "_w_"+`_genid`)  # Intermediate
                 _genid = _genid + 1
                 _newContext = _store.intern((FORMULA, _newURI+ "#_formula"))
                 _store.loadURI(_uri)
@@ -574,7 +568,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
             elif arg[:7] == "-think=":
                 filterContext = (_store.intern((FORMULA, _uri+ "#_formula")))
-                if thing.verbosity() > 4: progress( "Input rules to --think from " + _uri)
+                if verbosity() > 4: progress( "Input rules to --think from " + _uri)
                 _store.loadURI(_uri)
                 _store.think(workingContext, filterContext);
             elif arg == "-think":
@@ -601,7 +595,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 # Squirt it out if not piped
 
         if not option_pipe:
-            if thing.verbosity()>5: progress("Begining output.")
+            if verbosity()>5: progress("Begining output.")
             if option_outputStyle == "-ugly":
                 _store.dumpChronological(workingContext, _outSink)
             elif option_outputStyle == "-bySubject":
@@ -625,6 +619,5 @@ def fixslash(str):
     
 if __name__ == '__main__':
     import os
-#    import urlparse
     doCommand()
 

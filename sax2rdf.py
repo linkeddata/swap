@@ -227,8 +227,7 @@ class RDFHandler(xml.sax.ContentHandler):
 
         #print "startPrefixMapping with prefix=", prefix, "uri=", `uri`
         prefix = prefix or ""
-        uri = uri.encode('utf-8') # reduce XML's unicode to URI's US-ASCII
-        #print "startPrefixMapping uri encoded as=", `uri`
+        uri = self.uriref(uri)
 
         if self._nsmap:
             b = self._nsmap[-1].copy()

@@ -14,7 +14,7 @@ See cwm.py
 import string
 import re
 
-import thing
+from diag import verbosity
 
 import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
@@ -22,7 +22,7 @@ import notation3    # N3 parsers and generators, and RDF generator
 import urllib # for hasContent
 import md5, binascii  # for building md5 URIs
 
-from thing import *
+from thing import LightBuiltIn, ReverseFunction, Function
 
 LITERAL_URI_prefix = "data:application/n3;"
 
@@ -97,7 +97,7 @@ class BI_notEqualIgnoringCase(LightBuiltIn):
 
 class BI_concat(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, store, context, obj, obj_py):
-        if thing.verbosity() > 80: progress("Concat input:"+`obj_py`)
+        if verbosity() > 80: progress("Concat input:"+`obj_py`)
         str = ""
         for x in obj_py:
             if not isString(x): return None # Can't
@@ -106,7 +106,7 @@ class BI_concat(LightBuiltIn, ReverseFunction):
 
 class BI_concatenation(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py):
-        if thing.verbosity() > 80: progress("Concatenation input:"+`subj_py`)
+        if verbosity() > 80: progress("Concatenation input:"+`subj_py`)
         str = ""
         for x in subj_py:
             if not isString(x): return None # Can't
@@ -124,7 +124,7 @@ class BI_scrape(LightBuiltIn, Function):
     """
     
     def evaluateObject(self, store, context, subj, subj_py):
-        if thing.verbosity() > 80: progress("scrape input:"+`subj_py`)
+        if verbosity() > 80: progress("scrape input:"+`subj_py`)
 
         str, pat = subj_py
         patc = re.compile(pat)

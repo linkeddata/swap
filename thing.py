@@ -11,7 +11,6 @@ Includes:
 
 
 import string
-import urlparse
 #import re
 #import StringIO
 import sys
@@ -21,9 +20,8 @@ import sys
 
 import urllib # for hasContent
 import md5, binascii  # for building md5 URIs
-urlparse.uses_fragment.append("md5") #@@kludge/patch
-urlparse.uses_relative.append("md5") #@@kludge/patch
 
+from uripath import refTo
 
 LITERAL_URI_prefix = "data:application/n3;"
 
@@ -39,6 +37,8 @@ ALL4 = CONTEXT, PRED, SUBJ, OBJ
 # But you should not assume that ... use RDFSink.new*()
 
 
+#####
+# @@ dead code?
 doMeta = 0  # wait until we have written the code! :-)
 
 INFINITY = 1000000000           # @@ larger than any number occurences
@@ -57,11 +57,15 @@ QUAD = 5
 #  Keep a cache of subcontext closure:
 subcontext_cache_context = None
 subcontext_cache_subcontexts = None
+#
+####
 
 ########################################  Storage URI Handling
 #
 #  In general an RDf resource - here a Thing, has a uriRef rather
 # than just a URI.  It has subclasses of Resource and Fragment.
+# (@@ use/mention error -- DWC)
+#
 # (libwww equivalent HTParentAnchor and HTChildAnchor IIRC)
 #
 # Every resource has a symbol table of fragments.
@@ -114,18 +118,18 @@ class Resource(Thing):
     
     def __init__(self, store, uri):
         Thing.__init__(self, store)
-        assert string.find(uri, "#") < 0
+        assert string.find(uri, "#") < 0, "no fragments allowed: %s" % uri
+        assert ':' in uri, "must be absolute: %s" % uri
         self.uri = uri
         self.fragments = {}
 
     def uriref2(self, base):
-        if base is self :  # @@@@@@@ Really should generate relative URI!
-            return ""
-        else:
-            return self.uri
+        assert ':' in base, "base must be absolute: %s" % base
+        return refTo(base, self.uri)
 
     def uriref(self):
-            return self.uri
+        assert ':' in self.uri, "oops! must be absolute: %s" % self.uri
+        return self.uri
 
     def internFrag(self, fragid, thetype):   # type was only Fragment before
             f = self.fragments.get(fragid, None)
@@ -365,68 +369,3 @@ class ReverseFunction:
 
 #  For examples of use, see, for example, cwm_string.py
     
-# Use this with diagnostics so that it can be changed as necessary
-# For example, sometimes want on stdout maybe or in a scroll window....
-def progress(*args):
-    import sys
-    global chatty_level  # verbosity indent level
-    sys.stderr.write(" "*chatty_level)
-    for a in args:
-        sys.stderr.write("%s " % (a,))
-    sys.stderr.write("\n")
-#        sys.stderr.write(  str + "\n")
-
-global chatty_flag   # verbosity debug flag
-global chatty_level  # verbosity indent level
-
-chatty_level = 0
-
-def setVerbosity(x):
-    global chatty_flag
-    chatty_flag = x
-
-def verbosity():
-    global chatty_flag
-    return chatty_flag
-
-def progressIndent(delta):
-    global chatty_level
-    chatty_level = chatty_level + delta
-    return chatty_level
-    
-    
-    
-import re
-commonHost = re.compile(r'^[-_a-zA-Z0-9.]://[^/]+/[^/]*$')
-
-
-def relativeURI(base, uri):
-    """Your regular relative URI algorithm -- never trust anyone else's ;-)
-    This one checks that it uses a root-realtive one where that is all they share.
-    Now uses root-relative where appropriate."""
-    if base == None: return uri
-    if base == uri: return ""
-    i=0
-    while i<len(uri) and i<len(base):  # Find how much in common
-        if uri[i] == base[i]: i = i + 1
-        else: break
-    # print "# relative", base, uri, "   same up to ", i
-    # i point to end of shortest one or first difference
-
-    m = commonHost.match(base[:i])
-    if m:
-	k=uri.find("//")
-	if k>=0:
-	    l=uri.find("/", k+2)
-	    return uri[l:]
-
-    if uri[i:i+1] =="#": return uri[i:]  # fragment of base
-    while i>0 and uri[i-1] != '/' : i=i-1  # scan for slash
-
-    if i < 3: return uri  # No way.
-    if string.find(base, "//", i-2)>0 \
-       or string.find(uri, "//", i-2)>0: return uri # An unshared "//"
-    if string.find(base, ":", i)>0: return uri  # An unshared ":"
-    n = string.count(base, "/", i)
-    return ("../" * n) + uri[i:]
-

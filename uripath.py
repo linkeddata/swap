@@ -120,6 +120,8 @@ def refTo(src, dest):
     both src and dest are absolute URI references
     """
 
+    assert ':' in dest
+    
     scolon = index(src, ':')
     dcolon = index(dest, ':')
 
@@ -129,6 +131,13 @@ def refTo(src, dest):
 
 
     src, dummy = splitFrag(src)
+
+    if dest == src:
+        return ''
+    
+    # foo#bar - foo = #bar
+    if dest[:len(src)] == src and dest[len(src):len(src)+1] == '#':
+        return dest[len(src):]
     
     # http://example/x/y/z - http://example/x/abc = ../abc
     slashr = rfind(src, '/', scolon+3)
@@ -156,9 +165,11 @@ def test():
              ('http://ex/x/y', 'http://ex/x/q/r#s', 'q/r#s'),
              ('http://ex/x/y', 'http://ex/x/q/r#s/t', 'q/r#s/t'),
              ('http://ex/x/y', 'ftp://ex/x/q/r', 'ftp://ex/x/q/r'),
-             ('http://ex/x/y', 'http://ex/x/y', 'y'),
+             ('http://ex/x/y', 'http://ex/x/y', ''),
              ('http://ex/x/y/', 'http://ex/x/y/', ''),
+             ('http://ex/x/y/pdq', 'http://ex/x/y/pdq', ''),
              ('http://ex/x/y/', 'http://ex/x/y/z/', 'z/'),
+             ('file:/swap/test/animal.rdf', 'file:/swap/test/animal.rdf#Animal', '#Animal')
              )
 
     for inp1, inp2, exp in cases:
@@ -260,7 +271,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.2  2002-03-15 23:53:02  connolly
+# Revision 1.3  2002-08-06 01:36:09  connolly
+# cleanup: diagnostic interface, relative/absolute uri handling
+#
+# Revision 1.2  2002/03/15 23:53:02  connolly
 # handle no-auth case
 #
 # Revision 1.1  2002/02/19 22:52:42  connolly

@@ -46,11 +46,9 @@ import urlparse
 import urllib
 import re
 import thing
-from thing import relativeURI
+from uripath import refTo
 
 import RDFSink
-
-from notation3 import relativeURI
 
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
@@ -164,8 +162,8 @@ class ToRDF(RDFSink.RDFStructuredOutput):
     def makeStatement(self,  tuple):
         self.flushStart()
         context, pred, subj, obj = tuple # Context is ignored
-	predn = relativeURI(self._base, pred[1])
-	subjn = relativeURI(self._base, subj[1])
+	predn = refTo(self._base, pred[1])
+	subjn = refTo(self._base, subj[1])
 
 	if self._subj != subj:
 	    if self._subj:
@@ -180,7 +178,7 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 				 [(RDF_NS_URI+" about", subjn),], self.prefixes)
 
 	if obj[0] != LITERAL: 
-	    objn = relativeURI(self._base, obj[1])
+	    objn = refTo(self._base, obj[1])
 	    self._wr.emptyElement(pred[1], [(RDF_NS_URI+' resource', objn)], self.prefixes)
 	    return
 # Actually this "value=" shorthand notation is *not* RDF! It was my misunderstanding! rats...
@@ -204,7 +202,7 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 	if self._subj != subj:
 	    if self._subj:
 		self._wr.endElement()
-	    subjn = relativeURI(self._base, subj[1])
+	    subjn = refTo(self._base, subj[1])
 	    self._wr.startElement(RDF_NS_URI + 'Description',
 				 ((RDF_NS_URI+' about', subjn),), self.prefixes)
 	    self._subj = subj
@@ -244,7 +242,7 @@ class ToRDF(RDFSink.RDFStructuredOutput):
             self._subj = None
         self._wr.startElement(RDF_NS_URI+'Description', 
 			      [],
-#			      [(RDF_NS_URI+' about', relativeURI(self._base,context[1]))],
+#			      [(RDF_NS_URI+' about', refTo(self._base,context[1]))],
                               self.prefixes)
 #        print "# @@@@@@@@@@@@@ ", self.prefixes
 #        log_quote = self.prefixes[(SYMBOL, Logic_NS)] + ":Quote"  # Qname yuk
@@ -266,7 +264,7 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 	if self._subj != subj:
 	    if self._subj:
 		self._wr.endElement()
-	    subjn = relativeURI(self._base, subj[1])
+	    subjn = refTo(self._base, subj[1])
 	    self._wr.startElement(RDF_NS_URI + 'Description',
 				 ((RDF_NS_URI+' about', subjn),), self.prefixes)
 	    self._subj = subj
@@ -284,11 +282,6 @@ class ToRDF(RDFSink.RDFStructuredOutput):
         self._subj = subj   # restore context from start
 #	print "Ending formula, pred=", pred, "\n   subj=", subj
 #        print "\nEnd bag object, pred=", `pred`[-12:]
-
-def relativeTo(here, there):
-    print "### Relative to ", here[1], there[1]
-    return relativeURI(here[1], there[1])
-    
 
             
     

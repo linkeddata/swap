@@ -58,12 +58,12 @@ idea: use notation3 for wiki record keeping.
 
 import string
 import codecs # python 2-ism; for writing utf-8 in RDF/xml output
-import urlparse
 import urllib
 import re
 import thing
-from thing import relativeURI
+from uripath import refTo, join
 
+import uripath
 import RDFSink
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
@@ -99,17 +99,19 @@ N3CommentCharacter = "#"     # For unix script #! compatabilty
 #
 
 class SinkParser:
-    def __init__(self, sink, thisDoc, baseURI="", bindings = {},
+    def __init__(self, sink, thisDoc, baseURI=None, bindings = {},
                  genPrefix = "", metaURI=None,
                  formulaURI = None):
 	""" note: namespace names should *not* end in #;
 	the # will get added during qname processing """
+
+        assert ':' in thisDoc, "must be absolute: %s" % thisDoc
+
         self._sink = sink
 	if genPrefix: sink.setGenPrefix(genPrefix) # pass it on
 	
     	self._bindings = bindings
 	self._thisDoc = thisDoc
-        self._baseURI = baseURI
 #	self._context = SYMBOL , self._thisDoc    # For storing with triples @@@@ use stack
         self._contextStack = []      # For nested conjunctions { ... }
 #        self._nextId = 0
@@ -117,7 +119,11 @@ class SinkParser:
         self._genPrefix = genPrefix
         self._anonymousNodes = []   # List of anon nodes already declared
 
-        if not self._baseURI: self._baseURI = self._thisDoc
+        if baseURI: self._baseURI = baseURI
+        else: self._baseURI = thisDoc
+
+        assert ':' in self._baseURI
+
         if not self._genPrefix: self._genPrefix = self._thisDoc + "#_g"
 
         if formulaURI == None:
@@ -142,7 +148,7 @@ class SinkParser:
     
     def load(self, uri, baseURI=""):
         if uri:
-            _inputURI = urlparse.urljoin(baseURI, uri) # Make abs from relative
+            _inputURI = uripath.join(baseURI, uri) # Make abs from relative
             self._sink.makeComment("Taking input from " + _inputURI)
             netStream = urllib.urlopen(_inputURI)
             self.startDoc()
@@ -150,7 +156,7 @@ class SinkParser:
             self.endDoc()
         else:
             self._sink.makeComment("Taking input from standard input")
-            _inputURI = urlparse.urljoin(baseURI, "STDIN") # Make abs from relative
+            _inputURI = uripath.join(baseURI, "STDIN") # Make abs from relative
             self.startDoc()
             self.feed(sys.stdin.read())     # May be big - buffered in memory!
             self.endDoc()
@@ -228,6 +234,8 @@ class SinkParser:
 
         ns = t[1][1] + delim
         if string.find(ns,"##")>=0: raise BadSyntax(self._thisDoc, self.lines, str, j-2, "trailing # illegal on bind: use @prefix")
+        ns = join(self._baseURI, ns)
+        assert ':' in ns # must be absolute
 	self._bindings[t[0][0]] = ns
 	self.bind(t[0][0], (SYMBOL, ns))
 	return j
@@ -532,7 +540,7 @@ class SinkParser:
             while i < len(str):
                 if str[i] == ">":
                     uref = str[st:i] # the join should dealt with "":
-                    uref = urlparse.urljoin(self._baseURI, str[st:i])
+                    uref = uripath.join(self._baseURI, str[st:i])
                     if str[i-1:i]=="#" and not uref[-1:]=="#":
                         uref = uref + "#"  # She meant it! Weirdness in urlparse?
                     res.append((SYMBOL , uref))
@@ -823,7 +831,7 @@ t   "this" and "()" special syntax should be suppresed.
 	gp = genPrefix
 	if gp == None:
 	    if base==None: gp = "#_g"
-	    else: gp = urlparse.urljoin(base, "#_g")
+	    else: gp = uripath.join(base, "#_g")
 	RDFSink.RDFSink.__init__(self, gp)
 	self._write = write
 	self._quiet = quiet or "q" in flags
@@ -856,6 +864,7 @@ t   "this" and "()" special syntax should be suppresed.
     
     def bind(self, prefixString, nsPair):
         """ Just accepting a convention here """
+        assert ':' in nsPair[1] # absolute URI references only
         if "p" in self._flags: return  # Ignore the prefix system completely
         if not prefixString:
             raise RuntimError("Please use setDefaultNamespace instead")
@@ -864,14 +873,14 @@ t   "this" and "()" special syntax should be suppresed.
             and "d" not in self._flags): return # don't duplicate ??
         self._endStatement()
         self.prefixes[nsPair] = prefixString
-        self._write(" @prefix %s: <%s> ." % (prefixString, relativeURI(self.base, nsPair[1])) )
+        self._write(" @prefix %s: <%s> ." % (prefixString, refTo(self.base, nsPair[1])) )
         self._newline()
 
     def setDefaultNamespace(self, nsPair):
         if "d" in self._flags or "p" in self._flags: return  # Ignore the prefix system completely
         self._endStatement()
         self.defaultNamespace = nsPair
-        self._write(" @prefix : <%s> ." % (relativeURI(self.base, nsPair[1])) )
+        self._write(" @prefix : <%s> ." % (refTo(self.base, nsPair[1])) )
         self._newline()
        
 
@@ -1141,11 +1150,11 @@ t   "this" and "()" special syntax should be suppresed.
             if prefix != None : return prefix + ":" + value[j+1:]
         
             if value[:j] == self.base:   # If local to output stream,
-                return "<#" + relativeURI(self.base, value[j+1:]) + ">" #   use local frag id (@@ lone word?)
+                return "<#" + value[j+1:] + ">" #   use local frag id (@@ lone word?)
             
         if "r" in self._flags: return "<" + value+ ">"    # Suppress relative URIs?
 
-        return "<" + relativeURI(self.base, value) + ">"    # Everything else
+        return "<" + refTo(self.base, value) + ">"    # Everything else
 
 ###################################################
 #
@@ -1532,7 +1541,7 @@ See also: cwm
 #	_baseURI = "file://" + hostname + os.getcwd() + "/"
 	_baseURI = "file://" + os.getcwd() + "/"
 	
-        _outURI = urlparse.urljoin(_baseURI, "STDOUT")
+        _outURI = uripath.join(_baseURI, "STDOUT")
 	if option_rdf1out:
             _sink = ToRDF(sys.stdout, _outURI)
         else:
@@ -1543,13 +1552,13 @@ See also: cwm
 
         inputContexts = []
         for i in option_inputs:
-            _inputURI = urlparse.urljoin(_baseURI, i) # Make abs from relative
+            _inputURI = uripath.join(_baseURI, i) # Make abs from relative
             p = SinkParser(_sink,  _inputURI)
             p.load(_inputURI)
             del(p)
 
         if option_inputs == []:
-            _inputURI = urlparse.urljoin( _baseURI, "STDIN") # Make abs from relative
+            _inputURI = uripath.join( _baseURI, "STDIN") # Make abs from relative
             p = SinkParser(_sink,  _inputURI)
             p.load("")
             del(p)
@@ -1563,7 +1572,6 @@ See also: cwm
     
 if __name__ == '__main__':
     import os
-    import urlparse
     if os.environ.has_key('SCRIPT_NAME'):
         serveRequest(os.environ)
     else:

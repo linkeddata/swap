@@ -141,6 +141,14 @@ class RDFSink:
 	or avoid useing namespaces, which will look ugly
 	"""
 
+        if ':' not in nsPair[1]:
+            # can't raise exceptions inside SAX callback
+            print nsPair
+            import traceback
+            for ln in traceback.format_stack():
+                print ln
+            print "@@@@"
+        
         # If we don't have a prefix for this ns...
         if not self.prefixes.get(nsPair, None):
             if not self.namespaces.get(prefix,None):   # For conventions

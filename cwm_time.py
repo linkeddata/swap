@@ -14,7 +14,8 @@ import notation3    # N3 parsers and generators, and RDF generator
 import isodate	    # Local, by mnot. implements <http://www.w3.org/TR/NOTE-datetime>
 
 
-from thing import LightBuiltIn, Function, ReverseFunction, progress # here
+from diag import progress, verbosity
+from thing import LightBuiltIn, Function, ReverseFunction
 import time, calendar # Python standard distribution
 
 
@@ -99,7 +100,7 @@ class BI_dayOfWeek(LightBuiltIn, Function):
 class BI_format(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py):
 	"""params are ISO time string, format string. Returns reformatted. Ignores TZ@@"""
-        if thing.verbosity() > 80: progress("strTime:format input:"+`subj_py`)
+        if verbosity() > 80: progress("strTime:format input:"+`subj_py`)
         str, format = subj_py
         try:
             return store._fromPython(context, 
@@ -112,7 +113,7 @@ class BI_gmTime(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py):
 	"""Subject is  (empty string for standard formatting or) format string.
 	Returns formatted."""
-        if thing.verbosity() > 80: progress("time:gmTime input:"+`subj_py`)
+        if verbosity() > 80: progress("time:gmTime input:"+`subj_py`)
         format = subj_py
 	if format =="" : format="%Y-%M-%dT%H:%m:%SZ"
         try:
@@ -125,7 +126,7 @@ class BI_localTime(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py):
 	"""Subject is format string or empty string for std formatting.
 	Returns reformatted. @@@@ Ignores TZ"""
-        if thing.verbosity() > 80: progress("time:localTime input:"+`subj_py`)
+        if verbosity() > 80: progress("time:localTime input:"+`subj_py`)
         format = subj_py
 	if format =="" : return store._fromPython(context,
 		    isodate.asString(time.time()))
@@ -141,7 +142,7 @@ class BI_localTime(LightBuiltIn, Function):
 class BI_formatSeconds(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py):
 	"""params are epoch-seconds time string, format string. Returns reformatted"""
-        if thing.verbosity() > 80: progress("strTime:format input:"+`subj_py`)
+        if verbosity() > 80: progress("strTime:format input:"+`subj_py`)
         str, format = subj_py
         try:
             return store._fromPython(context, 
@@ -151,7 +152,7 @@ class BI_formatSeconds(LightBuiltIn, Function):
 
 class BI_parseToSeconds(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py):
-        if thing.verbosity() > 80: progress("strTime:parse input:"+`subj_py`)
+        if verbosity() > 80: progress("strTime:parse input:"+`subj_py`)
         str, format = subj_py
         try:
             return store._fromPython(context, 

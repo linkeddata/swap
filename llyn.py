@@ -112,21 +112,18 @@ research version. Written in C. Of te order of 30k lines
 # emacsbug="""emacs got confused by long string above@@"""
 
 import string
-import urlparse
 import re
 import StringIO
 import sys
 
 import urllib # for log:content
 import md5, binascii  # for building md5 URIs
-urlparse.uses_fragment.append("md5") #@@kludge/patch
-urlparse.uses_relative.append("md5") #@@kludge/patch
 
 import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
-import thing
-from thing import  progress, progressIndent, BuiltIn, LightBuiltIn, \
+from diag import progress, progressIndent, verbosity
+from thing import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, Resource, Fragment, FragmentNil, Anonymous, Thing, List, EmptyList
 
@@ -295,7 +292,7 @@ class Formula(Fragment):
         ss = self._index.get((self.store.forSome, self, None),[])
         for s in ss:
             exs.append(s[OBJ])
-        if thing.verbosity() > 90: progress("Existentials in %s: %s" % (self, exs))
+        if verbosity() > 90: progress("Existentials in %s: %s" % (self, exs))
         return exs
 
     def universals(self):
@@ -304,7 +301,7 @@ class Formula(Fragment):
         ss = self._index.get((self.store.forAll, self, None),[])
         for s in ss:
             exs.append(s[OBJ])
-        if thing.verbosity() > 90: progress("Universals in %s: %s" % (self, exs))
+        if verbosity() > 90: progress("Universals in %s: %s" % (self, exs))
         return exs
     
     def variables(self):
@@ -474,10 +471,16 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
         # or at least for non-uri chars, such as space?
 
         if type(obj_py) is type(""):
-            return store.intern((SYMBOL, obj_py))
+            if ':' in obj_py:
+                return store.intern((SYMBOL, obj_py))
+            else:
+                progress("taking log:uri of non-abs: %s" % obj_py)
         elif type(obj_py) is type(u""):
-            uri = obj_py.encode('utf-8')
-            return store.intern((SYMBOL, uri))
+            if ':' in obj_py:
+                uri = obj_py.encode('utf-8') #@@ %xx-lify
+                return store.intern((SYMBOL, uri))
+            else:
+                progress("taking log:uri of non-abs: %s" % obj_py)
 
 class BI_rawUri(BI_uri):
     """This is like  uri except that it allows you to get the internal
@@ -500,7 +503,7 @@ class BI_rawType(LightBuiltIn, Function):
         elif isinstance(subj, Formula): y = store.Formula
         elif subj.asList(): y = store.List
         else: y = store.Other  #  None?  store.Other?
-        if thing.verbosity() > 91:
+        if verbosity() > 91:
             progress("%s  rawType %s." %(`subj`, y))
         return y
         
@@ -560,13 +563,13 @@ class BI_semantics(HeavyBuiltIn, Function):
         else: doc = subj
         F = store.any((store._experience, store.semantics, doc, None))
         if F:
-            if thing.verbosity() > 10: progress("Already read and parsed "+`doc`+" to "+ `F`)
+            if verbosity() > 10: progress("Already read and parsed "+`doc`+" to "+ `F`)
             return F
         
-        if thing.verbosity() > 10: progress("Reading and parsing " + `doc`)
+        if verbosity() > 10: progress("Reading and parsing " + `doc`)
         inputURI = doc.uriref()
         loadToStore(store, inputURI)
-        if thing.verbosity()>10: progress("    semantics: %s" % (inputURI+ "#_formula"))
+        if verbosity()>10: progress("    semantics: %s" % (inputURI+ "#_formula"))
         F = store.intern((FORMULA, inputURI+ "#_formula"))
         return F
     
@@ -576,14 +579,14 @@ class BI_semanticsOrError(BI_semantics):
         store = subj.store
         x = store.any((store._experience, store.semanticsOrError, subj, None))
         if x:
-            if thing.verbosity() > 10: progress(`store._experience`+`store.semanticsOrError`+": Already found error for "+`subj`+" was: "+ `x`)
+            if verbosity() > 10: progress(`store._experience`+`store.semanticsOrError`+": Already found error for "+`subj`+" was: "+ `x`)
             return x
         try:
             return BI_semantics.evaluateObject2(self, subj)
         except (IOError, SyntaxError):
             message = sys.exc_info()[1].__str__()
             result = store.intern((LITERAL, message))
-            if thing.verbosity() > 0: progress(`store.semanticsOrError`+": Error trying to resolve <" + `subj` + ">: "+ message) 
+            if verbosity() > 0: progress(`store.semanticsOrError`+": Error trying to resolve <" + `subj` + ">: "+ message) 
             store.storeQuad((store._experience,
                              store.semanticsOrError,
                              subj,
@@ -599,12 +602,12 @@ def loadToStore(store, addr):
     try:
         netStream = urllib.urlopen(addr)
         ct=netStream.headers.get(HTTP_Content_Type, None)
-    #    if thing.verbosity() > 19: progress("HTTP Headers:" +`netStream.headers`)
+    #    if verbosity() > 19: progress("HTTP Headers:" +`netStream.headers`)
     #    @@How to get at all headers??
     #    @@ Get sensible net errors and produce dignostics
 
         guess = ct
-        if thing.verbosity() > 29: progress("Content-type: " + ct + " for "+addr)
+        if verbosity() > 29: progress("Content-type: " + ct + " for "+addr)
 #        if ct.find('text/plain') >=0 :   # Rats - nothing to go on
         if ct.find('xml') < 0 and ct.find('rdf') < 0 :   # Rats - nothing to go on
             buffer = netStream.read(500)
@@ -614,18 +617,18 @@ def loadToStore(store, addr):
                 guess = 'application/xml'
             elif buffer[0] == "#" or buffer[0:7] == "@prefix":
                 guess = 'application/n3'
-            if thing.verbosity() > 29: progress("    guess " + guess)
+            if verbosity() > 29: progress("    guess " + guess)
     except (IOError, OSError):
         raise DocumentAccessError(addr, sys.exc_info() )
         
     # Hmmm ... what about application/rdf; n3 or vice versa?
     if guess.find('xml') >= 0 or guess.find('rdf') >= 0:
-        if thing.verbosity() > 49: progress("Parsing as RDF")
+        if verbosity() > 49: progress("Parsing as RDF")
         import sax2rdf, xml.sax._exceptions
         p = sax2rdf.RDFXMLParser(store, addr)
         p.loadStream(netStream)
     else:
-        if thing.verbosity() > 49: progress("Parsing as N3")
+        if verbosity() > 49: progress("Parsing as N3")
         p = notation3.SinkParser(store, addr)
         p.startDoc()
         p.feed(netStream.read())
@@ -677,9 +680,9 @@ class BI_content(HeavyBuiltIn, Function): #@@DWC: Function?
         else: doc = subj
         C = store.any((store._experience, store.content, doc, None))
         if C:
-            if thing.verbosity() > 10: progress("already read " + `doc`)
+            if verbosity() > 10: progress("already read " + `doc`)
             return C
-        if thing.verbosity() > 10: progress("Reading " + `doc`)
+        if verbosity() > 10: progress("Reading " + `doc`)
         inputURI = doc.uriref()
         try:
             netStream = urllib.urlopen(inputURI)
@@ -701,7 +704,7 @@ class BI_parsedAsN3(HeavyBuiltIn, Function):
         if isinstance(subj, Literal):
             F = store.any((store._experience, store.parsedAsN3, subj, None))
             if F: return F
-            if thing.verbosity() > 10: progress("parsing " + subj.string[:30] + "...")
+            if verbosity() > 10: progress("parsing " + subj.string[:30] + "...")
             inputURI = subj.asHashURI() # iffy/bogus... rather asDataURI? yes! but make more efficient
             p = notation3.SinkParser(store, inputURI)
             p.startDoc()
@@ -722,7 +725,7 @@ class BI_cufi(HeavyBuiltIn, Function):
             F = store.any((store._experience, store.cufi, subj, None))  # Cached value?
             if F: return F
 
-            if thing.verbosity() > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
+            if verbosity() > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
             F = store.newInterned(FORMULA)
 #            store.storeQuad((context, store.forSome, context, F ))
             store.copyContext(subj, F)
@@ -735,7 +738,7 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
     just the union of the sets of statements
     modulo non-duplication of course"""
     def evaluateObject(self, store, context, subj, subj_py):
-        if thing.verbosity() > 50:
+        if verbosity() > 50:
             progress("Conjunction input:"+`subj_py`)
             for x in subj_py:
                 progress("    conjunction input formula %s has %i statements" % (x, x.size()))
@@ -746,7 +749,7 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
         for x in subj_py:
             if not isinstance(x, Formula): return None # Can't
             store.copyContext(x, F)
-            if thing.verbosity() > 74:
+            if verbosity() > 74:
                 progress("    Formula %s now has %i" % (x2s(F),len(F.statements)))
         return store.endFormula(F)
 
@@ -759,7 +762,7 @@ class BI_n3String(LightBuiltIn, Function):      # Light? well, I suppose so.
     If we *did* have a cannonical form it would be great for signature
     A cannonical form is possisble but not simple."""
     def evaluateObject(self, store, context, subj, subj_py):
-        if thing.verbosity() > 50:
+        if verbosity() > 50:
             progress("Generating N3 string for:"+`subj_py`)
         if isinstance(subj, Formula):
             return store.intern((LITERAL, subj.n3String()))
@@ -895,6 +898,7 @@ class RDFStore(RDFSink.RDFSink) :
             self.resources[uriref2] = result
         else:
             assert type(urirefString) is type("") # caller %xx-ifies unicode
+            assert ':' in urirefString, "must be absolute: %s" % urirefString
 
             hash = string.rfind(urirefString, "#")
             if hash < 0 :     # This is a resource with no fragment
@@ -941,7 +945,7 @@ class RDFStore(RDFSink.RDFSink) :
         return x
 
     def deleteFormula(self,F):
-        if thing.verbosity() > 30: progress("Deleting formula %s %ic" %
+        if verbosity() > 30: progress("Deleting formula %s %ic" %
                                             ( `F`, len(F.statements)))
         for s in F.statements[:]:   # Take copy
             self.removeStatement(s)
@@ -957,7 +961,7 @@ class RDFStore(RDFSink.RDFSink) :
         Make sure no one else has a copy of the pointer to the smushed one.
         """
         if F.cannonical != None:
-            if thing.verbosity() > 70:
+            if verbosity() > 70:
                 progress("End formula -- @@ already cannonical:"+`F`)
             return F.cannonical
         fl = F.statements
@@ -968,7 +972,7 @@ class RDFStore(RDFSink.RDFSink) :
     
         if possibles == None:
             self._formulaeOfLength[l] = [F]
-            if thing.verbosity() > 70:
+            if verbosity() > 70:
                 progress("End formula - first of length", l, F)
             F.cannonical = F
             return F
@@ -985,31 +989,31 @@ class RDFStore(RDFSink.RDFSink) :
                     continue
                 break
             else: #match
-                if thing.verbosity() > 20: progress("** Smushed new formula %s giving old %s" % (F, G))
+                if verbosity() > 20: progress("** Smushed new formula %s giving old %s" % (F, G))
 #                self.replaceWith(F,G)
-                if thing.verbosity() > 70:
+                if verbosity() > 70:
                     progress("End formula -- found match! ", F, G)
                 return G
         possibles.append(F)
 #        raise oops
         F.cannonical = F
-        if thing.verbosity() > 70:
+        if verbosity() > 70:
             progress("End formula, a fresh one:"+`F`)
         return F
 
     def reopen(self, F):
         if F.cannonical == None:
-            if thing.verbosity() > 70:
+            if verbosity() > 70:
                 progress("reopen formula -- @@ already open:"+`F`)
             return F # was open
-        if thing.verbosity() > 70:
+        if verbosity() > 70:
             progress("reopen formula:"+`F`)
         self._formulaeOfLength[len(F.statements)].remove(F)  # Formulae of same length
         F.cannonical = None
         return F
 
     def replaceWith(self,old, new):
-        if thing.verbosity() > 30:
+        if verbosity() > 30:
             progress("Smush: Replacing %s (%i statements) with %s" %
                         ( `old`,
                           len(old.statements),
@@ -1017,11 +1021,11 @@ class RDFStore(RDFSink.RDFSink) :
         bindings = [ (old, new) ]
         for F in self.formulae[:]:
             for s in F.statements[:]:
-                if thing.verbosity() > 95: progress(".......removed", s.quad)
+                if verbosity() > 95: progress(".......removed", s.quad)
                 q2 = _lookupQuad(bindings, s.quad)
                 self.removeStatement(s)
                 self.storeQuad(q2)
-                if thing.verbosity() > 95: progress(".......restored", q2)
+                if verbosity() > 95: progress(".......restored", q2)
         return new
 
     def endFormulaNested(self, F, bindings = [], level=0, notThis=0):
@@ -1029,7 +1033,7 @@ class RDFStore(RDFSink.RDFSink) :
         Note the subs must be done first. Also note that we can't assume statements
         or formulae are valid after a call to this, unless we track the
         changes which are kept in a shared list, bindings. """
-        if thing.verbosity() > 70:
+        if verbosity() > 70:
             progress("  "*level, "endFormulaNested:"+`F`+ `bindings`)
 
         if F.cannonical:
@@ -1046,10 +1050,10 @@ class RDFStore(RDFSink.RDFSink) :
             for s in F.statements[:]:  # Take a copy as the lists change
                 q2 = _lookupQuad(bindings, s.quad)
                 if q2 != s.quad:
-                    if thing.verbosity() > 95: progress(".......removed", s.quad)
+                    if verbosity() > 95: progress(".......removed", s.quad)
                     self.removeStatement(s)
                     self.storeQuad(q2)   #  Could be faster? Patch the existing one?
-                    if thing.verbosity() > 95: progress(".......restored", q2)
+                    if verbosity() > 95: progress(".......restored", q2)
 
 	if notThis: return F
 
@@ -1076,7 +1080,7 @@ class RDFStore(RDFSink.RDFSink) :
               self.intern(tuple[SUBJ]),
               self.intern(tuple[OBJ]) )
         if q[PRED] is self.forSome and isinstance(q[OBJ], Formula):
-            if thing.verbosity() > 97:  progress("Makestatement suppressed")
+            if verbosity() > 97:  progress("Makestatement suppressed")
             return  # This is implicit, and the same formula can be used un >1 place
         self.storeQuad(q)
                     
@@ -1102,12 +1106,12 @@ class RDFStore(RDFSink.RDFSink) :
         """
         #  Check whether this quad already exists
 #        print "Before, Formula now has %i statements" % len(self._index[(q[CONTEXT],None,None,None)])
-        if thing.verbosity() > 97:
+        if verbosity() > 97:
             progress("storeQuad (size before %i) "%self.size +`q`)
         
         context, pred, subj, obj = q
         if context.statementsMatching(pred, subj, obj):
-            if thing.verbosity() > 97:  progress("storeQuad duplicate suppressed"+`q`)
+            if verbosity() > 97:  progress("storeQuad duplicate suppressed"+`q`)
             return 0  # Return no change in size of store
         if context.cannonical:
             raise RuntimeError("Attempt to add statement to cannonical formula "+`context`)
@@ -1211,14 +1215,14 @@ class RDFStore(RDFSink.RDFSink) :
         best = 0
         mp = None
         for r, count in counts.items():
-            if thing.verbosity() > 25: progress("    Count is %3i for %s" %(count, r.uriref()))
+            if verbosity() > 25: progress("    Count is %3i for %s" %(count, r.uriref()))
             if (r.uri != RDF_NS_URI[:-1]
                 and (count > best or
                      (count == best and `mp` > `r`))) :  # Must be repeatable for retests
                 best = count
                 mp = r
 
-        if thing.verbosity() > 20:
+        if verbosity() > 20:
             progress("# Most popular Namesapce in %s is %s with %i" % (`context`, `mp`, best))
 
         if mp is None: return
@@ -1353,7 +1357,7 @@ class RDFStore(RDFSink.RDFSink) :
                     break
             _anon = (_asObj < 2) and ( _asPred == 0) and (_loop ==0) and _isExistential and not _elsewhere
 
-        if thing.verbosity() > 98:
+        if verbosity() > 98:
             progress( "Topology %s in %s is: anon=%i ob=%i, loop=%i pr=%i ex=%i elsewhere=%i"%(
             `x`[-8:], `context`[-8:], _anon, _asObj, _loop, _asPred,  _isExistential, _elsewhere))
 
@@ -1368,7 +1372,7 @@ class RDFStore(RDFSink.RDFSink) :
        @@ slow
        These methods are at the disposal of built-ins.
 """
-        if thing.verbosity() > 85: progress("#### Converting to python "+ x2s(x))
+        if verbosity() > 85: progress("#### Converting to python "+ x2s(x))
         """ Returns an N3 list as a Python sequence"""
         if x.asList() != None:
             if x is self.nil: return []
@@ -1542,7 +1546,7 @@ class RDFStore(RDFSink.RDFSink) :
                 sink.startAnonymous(self.extern(triple), li)
                 if not li or not isinstance(obj.asList(), EmptyList):   # nil gets no contents
                     if li:
-                        if thing.verbosity()>49:
+                        if verbosity()>49:
                             progress("List found as object of dumpStatement " + x2s(obj))
 #                        self.dumpStatement(sink, (context, self.first, obj, obj.asList().first))
 #                        self.dumpStatement(sink, (context, self.rest, obj, obj.asList().rest)) # includes rest of list
@@ -1586,7 +1590,7 @@ class RDFStore(RDFSink.RDFSink) :
 #            q = s.quad
 #            self.removeStatement(s)
             q2 = _lookupQuadRecursive(bindings, s.quad)
-            if thing.verbosity() > 30: progress("    Conclude: "+`q2`) 
+            if verbosity() > 30: progress("    Conclude: "+`q2`) 
             total = total -1 + self.storeQuad(q2)
         return total
                 
@@ -1627,7 +1631,7 @@ class RDFStore(RDFSink.RDFSink) :
 	for t in context.statementsMatching(obj=subj)[:]:
 		    self.removeStatement(t)    # SLOW
 		    total = total + 1
-	if thing.verbosity() > 30:
+	if verbosity() > 30:
 	    progress("Purged %i statements with %s" % (total,`subj`))
 	return total
 
@@ -1635,7 +1639,7 @@ class RDFStore(RDFSink.RDFSink) :
     def removeStatement(self, s):
         "Slow, alas. The remove()s take a lot of time."
         context, pred, subj, obj = s.quad
-        if thing.verbosity() > 97:  progress("removeStatement "+`s.quad`)
+        if verbosity() > 97:  progress("removeStatement "+`s.quad`)
         context.statements.remove(s)
         context._index[(None, None, obj)].remove(s)
         context._index[(None, subj, None)].remove(s)
@@ -1660,7 +1664,7 @@ class RDFStore(RDFSink.RDFSink) :
             step = self.applyRules(F, G, alreadyDictionary=bindingsFound)
             if step == 0: break
             grandtotal= grandtotal + step
-        if thing.verbosity() > 5: progress("Grand total of %i new statements in %i iterations." %
+        if verbosity() > 5: progress("Grand total of %i new statements in %i iterations." %
                  (grandtotal, iterations))
         return grandtotal
 
@@ -1706,7 +1710,7 @@ class RDFStore(RDFSink.RDFSink) :
                 v2 = universals + filterContext.universals() # Note new variables can be generated
                 found = self.tryRule(s, workingContext, targetContext, v2,
                                      already=already)
-                if (thing.verbosity() >40):
+                if (verbosity() >40):
                     progress( "Found %i new stmts on for rule %s" % (found, s))
                 _total = _total+found
             else:
@@ -1720,7 +1724,7 @@ class RDFStore(RDFSink.RDFSink) :
                                                       + filterContext.universals())
 
 
-        if thing.verbosity() > 4:
+        if verbosity() > 4:
                 progress("Total %i new statements from rules in %s"
                          % ( _total, filterContext))
         return _total
@@ -1745,7 +1749,7 @@ class RDFStore(RDFSink.RDFSink) :
         for x in variablesMentioned:
             if x not in variablesUsed:
                 templateExistentials.append(x)
-        if thing.verbosity() >20:
+        if verbosity() >20:
             progress("\n=================== tryRule ============ looking for:")
             progress( setToString(unmatched))
             progress("Variables declared       " + seqToString(_variables))
@@ -1769,7 +1773,7 @@ class RDFStore(RDFSink.RDFSink) :
 # Return whether or nor workingContext containts a top-level template equvalent to subexp 
     def testIncludes(self, workingContext, template, _variables=[], smartIn=[], bindings=[]):
 
-        if thing.verbosity() >30: progress("\n\n=================== testIncludes ============")
+        if verbosity() >30: progress("\n\n=================== testIncludes ============")
 
         # When the template refers to itself, the thing we are
         # are looking for will refer to the context we are searching
@@ -1782,17 +1786,17 @@ class RDFStore(RDFSink.RDFSink) :
         
         if bindings != []: _substitute(bindings, unmatched)
 
-        if thing.verbosity() > 20:
+        if verbosity() > 20:
             progress( "# testIncludes BUILTIN, %i terms in template %s, %i unmatched, %i template variables" % (
                 len(template.statements),
                 `template`[-8:], len(unmatched), len(templateExistentials)))
-        if thing.verbosity() > 80:
+        if verbosity() > 80:
             for v in _variables:
                 progress( "    Variable: " + `v`[-8:])
 
         result = self.match(unmatched, [], _variables + templateExistentials, smartIn, justOne=1)
-        if thing.verbosity() >30: progress("=================== end testIncludes =" + `result`)
-#        thing.verbosity() = thing.verbosity()-100
+        if verbosity() >30: progress("=================== end testIncludes =" + `result`)
+#        verbosity() = verbosity()-100
         return result
  
     def newInterned(self, type):        
@@ -1871,7 +1875,7 @@ class RDFStore(RDFSink.RDFSink) :
             if not(subj is context and pred is self.forSome):
                 statements.append(arc.quad)
             else:
-                if thing.verbosity()>79: progress( " Stripped forSome %s" % x2s(obj))
+                if verbosity()>79: progress( " Stripped forSome %s" % x2s(obj))
 
             if subj is context and (pred is self.forSome or pred is self.forAll): # @@@@
                 if not isinstance(obj, Formula):
@@ -1889,7 +1893,7 @@ class RDFStore(RDFSink.RDFSink) :
         """
         if isinstance(x, Formula):
             set = []
-#            if thing.verbosity() > 98: progress("    occuringIn: "+"  "*level+`x`)
+#            if verbosity() > 98: progress("    occuringIn: "+"  "*level+`x`)
             for s in x.statements:
                 if s[PRED] is not self.forSome:
                     for p in PRED, SUBJ, OBJ:
@@ -1955,7 +1959,7 @@ class RDFStore(RDFSink.RDFSink) :
 
     def checkList(self, context, L):
         """Check whether this new list causes ohter things to become lists"""
-        if thing.verbosity() > 80: progress("Checking new list ",`L`)
+        if verbosity() > 80: progress("Checking new list ",`L`)
         rest = L.asList()
         possibles = context.statementsMatching(pred=self.rest, obj=L)  # What has this as rest?
         for s in possibles:
@@ -1985,9 +1989,9 @@ class RDFStore(RDFSink.RDFSink) :
         """
         if action == None: action=self.doNothing
         
-        if thing.verbosity() > 50:
+        if verbosity() > 50:
             progress( "match: called with %i terms." % (len(unmatched)))
-            if thing.verbosity() > 80: progress( setToString(unmatched))
+            if verbosity() > 80: progress( setToString(unmatched))
 
         if not hypothetical:
             for x in existentials[:]:   # Existentials don't count when they are just formula names
@@ -1999,7 +2003,7 @@ class RDFStore(RDFSink.RDFSink) :
         for quad in unmatched:
             item = QueryItem(self, quad)
             if item.setup(allvars=variables+existentials, smartIn=smartIn) == 0:
-                if thing.verbosity() > 80: progress("match: abandoned, no way for "+`item`)
+                if verbosity() > 80: progress("match: abandoned, no way for "+`item`)
                 return 0
             queue.append(item)
         return self.query2(queue, variables, existentials, smartIn, action, param,
@@ -2007,21 +2011,21 @@ class RDFStore(RDFSink.RDFSink) :
 
          
     def doNothing(self, bindings, param, level=0):
-        if thing.verbosity()>99: progress( " "*level, "doNothing: Success! found it!")
+        if verbosity()>99: progress( " "*level, "doNothing: Success! found it!")
         return 1                    # Return count of calls only
 
     # Whether we do a smart match determines whether we will be able to conclude
     # things which in fact we knew already thanks to the builtins.
     def conclude(self, bindings, param, level=0):  # Returns number of statements added to store
         store, conclusion, targetContext,  already = param
-        if thing.verbosity() >60: progress( "\n#Concluding tentatively..." + bindingsToString(bindings))
+        if verbosity() >60: progress( "\n#Concluding tentatively..." + bindingsToString(bindings))
 
         if already != None:
             if bindings in already:
-                if thing.verbosity() > 30: progress("@@Duplicate result: ", bindingsToString(bindings))
+                if verbosity() > 30: progress("@@Duplicate result: ", bindingsToString(bindings))
                 # raise foo
                 return 0
-            if thing.verbosity() > 30: progress("Not duplicate: ", bindingsToString(bindings))
+            if verbosity() > 30: progress("Not duplicate: ", bindingsToString(bindings))
             already.append(bindings)   # A list of lists
 
         b2 = bindings + [(conclusion, targetContext)]
@@ -2034,11 +2038,11 @@ class RDFStore(RDFSink.RDFSink) :
 #        for v in clashes:
         for v in vars:
             b2.append((v, store.newInterned(ANONYMOUS))) # Regenerate names to avoid clash
-        if thing.verbosity()>20:
+        if verbosity()>20:
             progress( "Concluding definitively" + bindingsToString(b2) )
         before = self.size
         self.copyContextRecursive(conclusion, targetContext, b2)
-        if thing.verbosity()>20:
+        if verbosity()>20:
             progress( "  Size of store changed from %i to %i"%(before, self.size))
         return self.size - before
 
@@ -2051,13 +2055,13 @@ class RDFStore(RDFSink.RDFSink) :
 #                           justOne=1,
 #                           level = level + 8)  # Find first occurrence, SMART
 #        if found:
-#            if thing.verbosity()>00:
+#            if verbosity()>00:
 #                progress( "Concluding: Forget it, already had info" + bindingsToString(bindings))
 #                progress("Already list: ", already) 
 #                
 #            if already != None: raise RunTimeError, "Already in store but bindings new?" 
 #            return 0
-        if thing.verbosity()>20:
+        if verbosity()>20:
             progress( "Concluding definitively" + bindingsToString(bindings))
         
 
@@ -2065,7 +2069,7 @@ class RDFStore(RDFSink.RDFSink) :
         for q in myConclusions:
             q2 = _lookupQuad(bindings2, q)
             total = total + store.storeQuad(q2)
-            if thing.verbosity()>10: progress( "        *** Conclude: " + quadToString(q2))
+            if verbosity()>10: progress( "        *** Conclude: " + quadToString(q2))
         return total
 
 ##################################################################################
@@ -2090,14 +2094,14 @@ class RDFStore(RDFSink.RDFSink) :
         if action == None: action=self.doNothing
         total = 0
         
-        if thing.verbosity() > 28:
+        if verbosity() > 28:
             progress( " "*level+"QUERY2: called %i terms, %i bindings %s, (new: %s)" %
                       (len(queue),len(bindings),bindingsToString(bindings),
                        bindingsToString(newBindings)))
-            if thing.verbosity() > 90: progress( queueToString(queue, level))
+            if verbosity() > 90: progress( queueToString(queue, level))
 
         for pair in newBindings:   # Take care of business left over from recursive call
-            if thing.verbosity()>95: progress(" "*level+"    new binding:  %s -> %s" % (x2s(pair[0]), x2s(pair[1])))
+            if verbosity()>95: progress(" "*level+"    new binding:  %s -> %s" % (x2s(pair[0]), x2s(pair[1])))
             if pair[0] in variables:
                 variables.remove(pair[0])
                 bindings.append(pair)  # Record for posterity
@@ -2114,7 +2118,7 @@ class RDFStore(RDFSink.RDFSink) :
 
         while len(queue) > 0:
 
-            if (thing.verbosity() > 90):
+            if (verbosity() > 90):
                 progress(  " "*level+"query iterating with %i terms, %i bindings: %s; %i new bindings: %s ." %
                           (len(queue),
                            len(bindings),bindingsToString(bindings),
@@ -2133,7 +2137,7 @@ class RDFStore(RDFSink.RDFSink) :
                 i = i - 1                
             item = queue[best]
             queue.remove(item)
-            if thing.verbosity()>49:
+            if verbosity()>49:
                 progress( " "*level+"Looking at " + `item`
                          + "\nwith vars("+seqToString(variables)+")"
                          + " ExQuVars:("+seqToString(existentials)+")")
@@ -2159,7 +2163,7 @@ class RDFStore(RDFSink.RDFSink) :
                             newItem = QueryItem(self, quad)
                             queue.append(newItem)
                             newItem.setup(allvars, smartIn + [subj])
-                        if thing.verbosity() > 40:
+                        if verbosity() > 40:
                                 progress( " "*level+
                                           "**** Includes: Adding %i new terms and %s as new existentials."%
                                           (len(more_unmatched),
@@ -2171,14 +2175,14 @@ class RDFStore(RDFSink.RDFSink) :
                 else:
                     nbs = item.tryHeavy(queue, bindings)
             elif state == S_LIST_UNBOUND: # Lists with unbound vars
-                if thing.verbosity()>50:
+                if verbosity()>50:
                         progress( " "*level+ "List left unbound, returing")
                 return 0   # forget it  (this right?!@@)
             elif state == S_LIST_BOUND: # bound list
-                if thing.verbosity()>50: progress( " "*level+ "QUERY FOUND MATCH (dropping lists) with bindings: " + bindingsToString(bindings))
+                if verbosity()>50: progress( " "*level+ "QUERY FOUND MATCH (dropping lists) with bindings: " + bindingsToString(bindings))
                 return action(bindings, param)  # No non-list terms left .. success!
             elif state ==S_HEAVY_WAIT or state == S_LIGHT_WAIT: # Can't
-                if thing.verbosity() > 49 :
+                if verbosity() > 49 :
                     progress("@@@@ Warning: query can't find term which will work.")
                     progress( "   state is %s, queue length %i" % (state, len(queue)+1))
                     progress("@@ Current item: %s" % `item`)
@@ -2187,7 +2191,7 @@ class RDFStore(RDFSink.RDFSink) :
                 return 0  # Forget it
             else:
                 raise RuntimeError, "Unknown state " + `state`
-            if thing.verbosity() > 90: progress(" "*level +"nbs=" + `nbs`)
+            if verbosity() > 90: progress(" "*level +"nbs=" + `nbs`)
             if nbs == 0: return 0
             else:
                 total = 0
@@ -2206,7 +2210,7 @@ class RDFStore(RDFSink.RDFSink) :
                 queue.append(item)
             # And loop back to take the next item
 
-        if thing.verbosity()>50: progress( " "*level+"QUERY MATCH COMPLETE with bindings: " + bindingsToString(bindings))
+        if verbosity()>50: progress( " "*level+"QUERY MATCH COMPLETE with bindings: " + bindingsToString(bindings))
         return action(bindings, param, level)  # No terms left .. success!
 
 
@@ -2277,7 +2281,7 @@ class QueryItem:
             self.searchDone()
         else:
             self.state = S_NOT_LIGHT   # Not a light built in, not searched.
-        if thing.verbosity() > 80: progress("setup:" + `self`)
+        if verbosity() > 80: progress("setup:" + `self`)
         if self.state == S_FAIL: return 0
         return []
 
@@ -2313,7 +2317,7 @@ class QueryItem:
                     if result != None:
                         self.state = S_FAIL
                         return [[ (subj, result)]]
-        if thing.verbosity() > 30:
+        if verbosity() > 30:
             progress("Builtin could not give result"+`self`)
 
         # Now we have a light builtin needs search,
@@ -2324,10 +2328,10 @@ class QueryItem:
         """Search the store"""
         nbs = []
         if self.short == INFINITY:
-            if thing.verbosity() > 36:
+            if verbosity() > 36:
                 progress( "  Can't search for %s" % `self`)
         else:
-            if thing.verbosity() > 36:
+            if verbosity() > 36:
                 progress( "  Searching %i for %s" %(self.short, `self`))
             for s in self.myIndex :  # search the index
                 nb = []
@@ -2368,7 +2372,7 @@ class QueryItem:
             self.state = S_HEAVY_READY
         else:
             self.state = S_HEAVY_WAIT
-        if thing.verbosity() > 90:
+        if verbosity() > 90:
             progress("...searchDone, now ",self)
         return
     
@@ -2394,12 +2398,12 @@ class QueryItem:
                 if self.neededToRun[OBJ] == []: # Binary operators?
                     result = pred.evaluate2(subj, obj, bindings[:])
                     if result:
-                        if thing.verbosity() > 80:
+                        if verbosity() > 80:
                                 progress("Heavy predicate succeeds")
                         self.state = S_DONE  #  0 done
                         return []
                     else:
-                        if thing.verbosity() > 80:
+                        if verbosity() > 80:
                                 progress("Heavy predicate fails")
                         return 0   # It won't match with this in it
                 else:   # The statement has one variable - try functions
@@ -2418,7 +2422,7 @@ class QueryItem:
                             self.state = S_FAIL  # Do this then stop - that is all
                             return [[ (subj, result)]]
                         else: return 0
-            if thing.verbosity() > 30:
+            if verbosity() > 30:
                 progress("Builtin could not give result"+`self`)
         except (IOError, SyntaxError):
             raise BuiltInFailed(sys.exc_info(), self ),None
@@ -2431,7 +2435,7 @@ class QueryItem:
         Lists may either be matched against store by searching,
         and/or may turn out to be bound and therefore ready to run."""
         con, pred, subj, obj = self.quad
-        if thing.verbosity() > 90:
+        if verbosity() > 90:
             progress("....Binding ", `self` + " with "+ `newBindings`)
         q=[con, pred, subj, obj]
         changedPattern = 0
@@ -2478,10 +2482,10 @@ class QueryItem:
               and self.neededToRun[OBJ] == []):
             self.state = S_LIST_BOUND
 	if self.state == S_LIST_BOUND and self.searchPattern[SUBJ] != None:
-	    if thing.verbosity() > 50:
+	    if verbosity() > 50:
 		progress("Rejecting list already searched and now bound", self)
 	    self.state = S_FAIL    # see test/list-bug1.n3
-        if thing.verbosity() > 90:
+        if verbosity() > 90:
             progress("...bound becomes ", `self`)
         if self.state == S_FAIL: return 0
         return [] # continue
@@ -2540,7 +2544,7 @@ def _lookupRecursive(bindings, x, old=None, new=None):
     oc = store.occurringIn(x, vars)
     if oc == []: return x # phew!
     y = store.newInterned(FORMULA)
-    if thing.verbosity() > 90: progress("lookupRecursive "+`x`+" becomes new "+`y`)
+    if verbosity() > 90: progress("lookupRecursive "+`x`+" becomes new "+`y`)
     for s in x.statements:
         store.storeQuad((y,
                          _lookupRecursive(bindings, s[PRED], x, y),
