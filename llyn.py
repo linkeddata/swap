@@ -1294,6 +1294,24 @@ class RDFStore(RDFSink) :
 	    if verbosity() > 70:
 		progress("llyn.genid Rejecting Id already used: "+uriRefString)
 		
+    def checkNewId(self, urirefString):
+	"""Raise an exception if the id is not in fact new.
+	
+	This is useful because it is usfeul
+	to generate IDs with useful diagnostic ways but this lays them
+	open to possibly clashing in pathalogical cases."""
+	hash = string.rfind(urirefString, "#")
+	if hash < 0 :     # This is a resource with no fragment
+	    result = self.resources.get(urirefString, None)
+	    if result == None: return
+	else:
+	    r = self.resources.get(urirefString[:hash], None)
+	    if r == None: return
+            f = r.fragments.get(uriref[hash+1:], None)
+            if f == None: return
+	raise RuntimeError("Ooops! Attempt to create new identifier hits on one already used: %s"%(urirefString))
+	return
+
 
     def internURI(self, str, why=None):
         assert type(str) is type("") # caller %xx-ifies unicode
@@ -2751,7 +2769,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    self.service = self.query.meta.any(pred=self.store.authoritativeService, subj=pred)
 	    if self.service == None:
 		uri = pred.uriref()
-		if uri.startsWith("sql:"):
+		if uri[:4] == "sql:":
 		    j = uri.rfind("/")
 		    if j>0: self.service = meta.newSymbol(uri[:j])
 	    if verbosity() > 90 and self.service: progress("Ooooo. we have a remote service for "+`pred`)

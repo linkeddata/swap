@@ -62,7 +62,7 @@ def diff(case):
     if len(buf) > 0:
 	print "######### Differences from reference output:\n" + buf
 	return 1
-    return 0
+    return result
 
 def main():
     testFiles = []

@@ -228,8 +228,8 @@ class RDFSink:
 	if uri==None: return FORMULA, self.genId()
 	else: return (FORMULA, uri)
 
-    def newBlankNode(self, context, why=None):
-	return self.newExistential(context, why=why)
+    def newBlankNode(self, context, uri=None, why=None):
+	return self.newExistential(context, uri, why=why)
 	
     def newUniversal(self, context, uri=None, why=None):
 	if uri==None: subj = ANONYMOUS, self.genId()  # ANONYMOUS means "arbitrary symbol"

@@ -126,6 +126,7 @@ class SinkParser:
     	self._bindings = bindings
 	self._thisDoc = thisDoc
         self.lines = 0              # for error handling
+	self.startOfLine = 0	    # For calculating character number
         self._genPrefix = genPrefix
 	self.keywords = ['a', 'this', 'bind', 'has', 'is', 'of' ]
 	self.keywordsSet = 0    # When and only when they have been set can others be considerd qnames
@@ -158,6 +159,17 @@ class SinkParser:
                             (SYMBOL, N3_forSome_URI), #pred
                             self._context,  #subj
                             subj))                      # obj
+
+    def here(self, i):
+	"""String generated from position in file
+	
+	This is for repeatability when refering people to bnodes in a document.
+	This has diagnostic uses less formally, as it should point one to which 
+	bnode the arbitrary identifier actually is. It gives the
+	line and character number of the '[' charcacter or path character
+	which introduced the blank node.  The first blank node is boringly _L1C1."""
+	if not diag.tracking: return None
+	return "%s#_L%iC%i" % (self. _thisDoc , self.lines + 1, i - self.startOfLine + 1) 
         
     def formula(self):
         return self._formula
@@ -386,10 +398,14 @@ class SinkParser:
 	j = self.nodeOrLiteral(str, i, res)
 	if j<0: return j  # nope
 
-	while str[j:j+1] in "!^":  # no spaces, must follow exactly (?)
-	    ch = str[j:j+1]
+	while str[j:j+1] in "!^.":  # no spaces, must follow exactly (?)
+	    ch = str[j:j+1]		# @@ Allow "." followed IMMEDIATELY by a node.
+	    if ch == ".":
+		ahead = str[j+1:j+2]
+		if ahead not in _namechars + "[{(":
+		    break
 	    subj = res.pop()
-	    obj = self._sink.newBlankNode(self._context, why=self._reason2)
+	    obj = self._sink.newBlankNode(self._context, uri=self.here(j), why=self._reason2)
 	    j = self.node(str, j+1, res)
 	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "EOF found in middle of path syntax")
 	    pred = res.pop()
@@ -421,6 +437,7 @@ class SinkParser:
 	ch = str[i:i+1]  # Quick 1-character checks first:
 
         if ch == "[":
+	    bnodeID = self.here(i)
 	    j=self.skipSpace(str,i+1)
 	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "EOF after '['")
 	    if str[j:j+1] == "=":     #   Hack for "is"  binding name to anon node
@@ -441,7 +458,7 @@ class SinkParser:
                 else:
                     raise BadSyntax(self._thisDoc, self.lines, str, i, "object_list expected after [= ")
 
-            if subj is None: subj=self._sink.newBlankNode(self._context, why=self._reason2)
+            if subj is None: subj=self._sink.newBlankNode(self._context,uri= bnodeID, why=self._reason2)
 
             i = self.property_list(str, j, subj)
             if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "property_list expected")
@@ -653,6 +670,7 @@ class SinkParser:
 	    if m == None: break
 	    self.lines = self.lines + 1
 	    i = m.end()   # Point to first character unmatched
+	    self.startOfLine = i
 	m = ws.match(str, i)
 	if m != None:
 	    i = m.end()
@@ -808,6 +826,7 @@ class SinkParser:
                 self.lines = self.lines + 1
                 ustr = ustr + ch
                 j = i + 1
+		self.startOfLine = j
 
             elif ch == "\\":
                 j = i + 1

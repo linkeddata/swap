@@ -23,9 +23,7 @@
                      :rule  [
                          a :Extraction;
                          :because <#_g0>;
-                         :gives {this     log:forAll foo:x,
-                                    foo:y .
-                        {
+                         :gives {{
                             foo:a     foo:y foo:x .
                             
                             }     log:implies {foo:x     foo:y <reason/c2> .
@@ -41,9 +39,7 @@
                      [
                  a :Extraction;
                  :because <#_g0>;
-                 :gives {this     log:forAll foo:x,
-                            foo:y .
-                {
+                 :gives {{
                     foo:a     foo:y foo:x .
                     
                     }     log:implies {foo:x     foo:y <reason/c2> .
@@ -58,7 +54,9 @@
                 
                 }     log:implies {foo:x     foo:y <reason/c2> .
                 } .
-            } ].
+            };
+             :universal foo:x,
+                    foo:y ].
     
     <#_g0>     a :Parsing;
          :source <reason/t5.n3> .
