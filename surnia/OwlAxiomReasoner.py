@@ -22,6 +22,9 @@ axiomFile = "util/owlAx.otter"    # temp hack path, etc
 
 ################################################################
 
+class UnsupportedDatatype(RuntimeError):
+    pass
+
 def checkSyntax(inputDocument):
     """An OWL syntax checker takes a document as input, and returns
     one word being one of Lite, DL, Full, Other.
@@ -35,8 +38,10 @@ def checkSyntax(inputDocument):
     raise NotImplemented
 
 def checkConsistency(inputDocument,
+                     entailedDocument=None,
                      requiredDatatypes=[],    # dt not impl
-                     forbiddenDatatypes=[]):
+                     forbiddenDatatypes=[],
+                     tag="unnamed", maxSeconds=5):
     """An OWL consistency checker takes a document as input, and
        returns one word being Consistent, Inconsistent, or Unknown.
 
@@ -46,31 +51,40 @@ def checkConsistency(inputDocument,
        
           -- from http://www.w3.org/TR/owl-test/#conformance
 
-
        Search for an inconsistency & see what we find!
+
+       ...   Meanwhile, if we also have an "entailedDocument",
+       add its negation; Inconsistent==Entailed, etc.
     """
+
+    for dt in requiredDatatypes:
+        # if not supported, ... but they are ALL not supported right now!
+        raise UnsupportedDatatype, dt
+
     kb = LX.kb.KB()
+
     parser = LX.language.getParser(language="rdflib", sink=kb)
     parser.load(inputDocument)
 
-    # possible huge performance gains by using subset of axioms
-    # possible huge performance gains by puting kb into SOS
-    # datatype theories...?
+    if entailedDocument:
+        kb2 = LX.kb.KB()
+        parser = LX.language.getParser(language="rdflib", sink=kb2)
+        parser.load(entailedDocument)
+        #print "Adding negated:", kb2
+        kb.add(LX.logic.NOT(kb2.asFormula()))
+
+    # possible huge performance gains by using subset of axioms (when that's not cheating)
+    # possible huge performance gains by puting kb [or just kb2 if present] into SOS
 
     try:
-        LX.engine.otter.run(kb, includes=[axiomFile])
+        LX.engine.otter.run(kb, fileBase=",ot/"+tag,
+                            includes=[axiomFile], maxSeconds=maxSeconds)
         return "Inconsistent"
     except LX.engine.otter.SOSEmpty:
         return "Consistent"
+    except LX.engine.otter.TimeoutBeforeAnyProof:
+        return "Unknown"
 
-def checkEntailment(premiseDocument, conclusionDocument):
-    """Not defined as a peice of software, per se.
-
-    invert conclusion and turn into a consistency check,
-    with SOS as inverted conclusions
-    
-    """
-    raise NotImplemented
 
 
 # but what we want and can test for is
