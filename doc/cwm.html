@@ -2,7 +2,7 @@
     "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
-  <title>Semantic Web Application Platform</title>
+  <title>cwm - a general purpose data processor for the semantic web</title>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <link href="/StyleSheets/base.css" rel="stylesheet" type="text/css">
 </head>
@@ -18,13 +18,13 @@ Web</a></p>
 <p></p>
 
 <p>Cwm is a general-purpose data processor for the semantic web.  It is a
-forward chaining reasoner which can be used fro analysing, checking,
-transfroming and filtering information.  Its core language is RDF, extended
+forward chaining reasoner which can be used for querying, checking,
+transforming and filtering information.  Its core language is RDF, extended
 to include rules, and it uses RDF/XML or N3 serializations as required.</p>
 
 <p>Originally, from "Closed world machine" because it procesed infromation in
-a limited, cwm does not make any assumptions about a closed world.  Think of
-it as defined area but with openings - like a valley.</p>
+a limited space, cwm does not make any assumptions about a closed world. 
+Think of it as defined area but with openings - like a valley.</p>
 
 <p></p>
 <ul>
@@ -221,7 +221,11 @@ href="http://www.w3.org/2000/10/swap/math"><code>http://www.w3.org/2000/10/swap/
 the <a href="../test/retest.sh">regression test</a> defines the set of
 features which are generally checked on each checkin.</p>
 
-<h3 id="L133">Serializing/deserializaing RDF: notation3.py</h3>
+<h3>llyn.py - The Store</h3>
+
+<p>An in-memory store which does the inference.</p>
+
+<h3 id="L133">notation3.py - Serializing/deserializaing RDF: </h3>
 
 <p>Originally written by Dan Connolly, uses a basic RDF stream parser
 interface</p>
@@ -253,6 +257,10 @@ generators.  <strong>Defunct. Now use sax parser and sax2rdf.py.</strong></p>
 <ul>
   <li><a href="xml2rdf.py">Source</a></li>
 </ul>
+
+<h3>cwm_xxx.py   - builtin modules</h3>
+
+<p>These are quite easy to add to</p>
 
 <p></p>
 
