@@ -1,12 +1,16 @@
-@prefix : <#> .
+@prefix : <http://www.w3.org/2000/10/swap/test/ferrell/myDingo#> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix bio: <http://www.w3.org/2000/10/swap/test/ferrell/biology#>. 
 
 :Donny a bio:Dingo.
+:Bonny a bio:Dog.
 
-# with "cwm --mode=a --think" this should fire...
-
-{ :Donny a bio:Dog } => { <> rdfs:comment "THIS TEST WORKS" }.
-
+#  Run with 
+#
+#    cwm myDingo.n3 biology.n3 axioms.n3 --think --filter=anyDogs.n3
+#
+#  or....
+#
+#    cwm --mode=a myDingo.n3 --think --filter=anyDogs.n3

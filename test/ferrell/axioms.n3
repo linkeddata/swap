@@ -32,5 +32,6 @@
   ?c1 owl:disjointWith ?c2.
 }
  =>
-{ [ a :Inconsistency. ] }         ## How do we want to report these?
+# { [ a :Inconsistency. ] }.         ## How do we want to report these?
+{ <> :error :Inconsistency. }. 
 

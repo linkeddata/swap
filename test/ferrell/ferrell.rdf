@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:dc="http://purl.org/dc/elements/1.1/"
+  xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc#"
+  xml:base="http://www.w3.org/2000/10/swap/test/ferrell/ferrell"
+>
+
+  <rdf:Description rdf:about="">
+    <dc:description>The is an experimental namespace document, 
+for an imaginary ontology language, set up yo result in 
+automatic lookup of axioms, etc.
+
+It's meant to be a drop-in replacement for RDFS and OWL, but
+of course if you do that drop in, you're no longer using RDFS
+or OWL.
+</dc:description> 
+    <doc:rules rdf:resource="http://www.w3.org/2000/10/swap/test/ferrell/axioms.n3"/>
+  </rdf:Description>
+</rdf:RDF>
+  

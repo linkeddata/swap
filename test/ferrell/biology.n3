@@ -1,4 +1,4 @@
-@prefix : <#> .
+@prefix : <http://www.w3.org/2000/10/swap/test/ferrell/biology#> .
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 @prefix f: <http://www.w3.org/2000/10/swap/test/ferrell/ferrell#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -32,6 +32,7 @@
 :Dog f:equivalentClass :CanisFamiliaris.
 :Human f:equivalentClass :HomoSapiens.
 :RedWolf f:equivalentClass :CanisRufus.
+:Dingo f:equivalentClass :CanisFamiliarisDingo.
 
 # Some binomial names
 

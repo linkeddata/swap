@@ -1,0 +1,14 @@
+@prefix : <http://www.w3.org/2000/10/swap/test/ferrell/myDingo#> .
+@prefix bio: <http://www.w3.org/2000/10/swap/test/ferrell/biology#>. 
+
+{ bio:Dingo ?x ?y }
+=>
+{ bio:Dingo ?x ?y }.
+
+{ ?a bio:Dingo ?x }
+=>
+{ ?a bio:Dingo ?x }.
+
+{ ?a ?b bio:Dingo }
+=>
+{ ?a ?b bio:Dingo }.
