@@ -66,9 +66,15 @@ it was raised (URI), who raised it (the issue author), and on what date.""".
 :reopener a r:Property; s:domain t:Issue; r:range doc:Work;
     s:comment  """A closed issue is re-openned.""".
 
-# IMPORTANT: Need date on accept, resolve, reject, reopener
-# messages since it may be difficult to get date out of
-# resource (e.g., may not always be in mail archives).
+# IMPORTANT: 
+# Need at least two dates:
+#  - Date of the state transition.
+#  - Date of the message sent (e.g., message raised on this date.
+# It's likely that given the diversity of messages, this would
+# be hard to figure out by machine with certainty.
+# Need date on accept, resolve, reject, reopener...
+
+# Probably want "raisedBy" in addition to "onBehalfOf"
 
 # - Assigns?  Reassigns?
 # - Subsumed by? 
