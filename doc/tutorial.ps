@@ -16873,7 +16873,7 @@ B/g{0 M}B/h{1 M}B/i{2 M}B/j{3 M}B/k{4 M}B/w{0 rmoveto}B/l{p -4 w}B/m{p
 TeXDict begin} D
 %EndDH
 /P1 {save -71 -704 translate
-DH 40258437 52099154 1200 600 600 (/tmp/filejP7qiZ.dvi)
+DH 40258437 52099154 1200 600 600 (/tmp/filepWX1KY.dvi)
 @start
 /Fa 2 42 df<1406140E141C143814F014E01301EB03C0EB0780EB0F005B131E133E5B13
 7813F85B1201A2485AA2485AA2120F5BA2121FA290C7FCA25AA3123E127EA65AB3A2127E
@@ -16997,7 +16997,7 @@ userdict /end-hook known{end-hook}if
 (24) (24) (25) (26) (27) (29) (29) (29) (30) (30) (31) (31) (32) (32) (33)
 (33) (34) (28) (29) (29) (29) (30) (31) (31) (31) (32) (32) (33) (33) (34)
 (37) (35) (37) (38) (38) (38) (38) (39) (39) (40) (40) (40) (40) (40) (40)
-(40) (40) (40) (40) (40) (41) (41) (41) (41) (41) (41) (41) (41) (41) (??)
+(40) (40) (40) (40) (40) (40) (41) (41) (41) (41) (41) (41) (41) (41) (??)
 (??) (??) (??) (??) (??) (??) (40) (41)] D
 /h0 [()(Table of Contents)] D
 /h1 [(1\240\240)(Semantic Web Tutorial Using N3)] D
@@ -17679,6 +17679,7 @@ any sort of committment.)EP(
   )-1 LI(Declare things as OWL classes if they are, not RDFS classes)LU(
 
 )0 P()EP(
+
 )WB NL
 /Cb Db D /Ct [16#00 16#00 16#00] D /Cl [16#00 16#00 16#00] D /CL -1 D Ct Sc
 DS
@@ -17691,7 +17692,6 @@ DS
 
 0 BO R
 ()4 Sl()WB 1 Sn(
-
 
 
 
@@ -17997,6 +17997,7 @@ the )R8 2 A(name)EA(
  
 
  )0 0 IM(
+ 
  
 
 
@@ -18484,9 +18485,10 @@ DS
 )0 P(You can get a list of these by typing cwm --help)EP(
 
 )0 P()EP(
-) 83 90 PR(Command line RDF/N3 tool
+) 84 90 PR(Command line RDF/N3 tool
         
-    
+ <command> <options> <inputURIs>
+ 
 --pipe        Don't store, just pipe out *
 
 --rdf         Input & Output ** in RDF M&S 1.0 insead of n3 from now on
@@ -18513,8 +18515,8 @@ DS
 --unflatten   turn described-as-true LX sentences into formulas
 --think=foo   as -apply=foo but continue until no more rule matches \201or forever!\202
 --purge       Remove from store any triple involving anything in class log:Chaff
---purge-rules Remove from store any triple involving log:implies
---crypto      Enable processing of crypto builtin functions. Requires python crypto.)WR(
+--purge-rules Remove from store any triple involving log:implies)WR(
+--crypto      Enable processing of crypto builtin functions. Requires python crypto.
 --help        print this message
 --revision    print CVS revision numbers of major modules
 --chatty=50   Verbose output of questionable use, range 0-99
@@ -18543,8 +18545,8 @@ Mode flags affect inference extedning to the web:
 Flags for N3 output are as follows:-
         
 a   Anonymous nodes should be output using the _: convention \201p flag or not\202.
-d   Don't use default namespace \201empty prefix\202
-i   Use identifiers from store - don't regen on output)WR(
+d   Don't use default namespace \201empty prefix\202)WR(
+i   Use identifiers from store - don't regen on output
 l   List syntax suppression. Don't use \201..\202
 n   No numeric syntax - use strings typed with ^^ syntax
 p   Prefix suppression - don't use them, always URIs in <> instead of qnames.
@@ -18586,9 +18588,9 @@ DS
 0 BO R
 ()4 Sl()WB 5 Sn(
 
-)0 P()0 2 A(W3C)EA( | )0 2 A(Semantic Web)EA(
-| )0 0 1 A(SWAP)EA( | )0 0 1 A(Tutorial)EA()EP(
-)BR(
+
+
+
 
 )0 1 31 H(Tutorial:)WB 50 Sn( Paths and lists)EH(
 
@@ -18689,14 +18691,7 @@ ihas more than one argment.)EP(
 the three strings "Dear", whatever ?name is, and a comma. This will be used
 with built-in functions which we will discuss later.)EP(
 
-)0 P()EP(
 
-)0 P()0 7 1 A(Next: Rules)7 0 TN TL()Ec /AF f D()EP(
-)BR(
-)2 0.6 1 HR(
-)0 P(Tim BL, with his director hat off)EP(
-
-)0 P($Id: Shortcuts.html,v 1.4 2003/02/13 23:47:37 timbl Exp $)EP(
 )WB NL
 /Cb Db D /Ct [16#00 16#00 16#00] D /Cl [16#00 16#00 16#00] D /CL -1 D Ct Sc
 DS
@@ -18710,9 +18705,7 @@ DS
 0 BO R
 ()4 Sl()WB 6 Sn(
 
-)0 P()0 2 A(W3C)EA( | )0 2 A(Semantic Web)EA( |
-)0 2 A(Advanced Development)EA( | )0 2 A(SWAP)EA( | )0 2 A(Tutorial)EA( |
-Ontologies)EP(
+
 
 )0 1 34 H(Ontologies)WB 53 Sn()EH(
 
@@ -18814,8 +18807,9 @@ Joe is a YoungMMMan -->  Warning: No Such Class)RP(
 )0 2 41 H(Difference)WB 60 Sn()EH(
 
 )0 P(Hrm.   testing.)EP(
-)2 0.6 1 HR(
-)0 P($Id: ontologies.html,v 1.3 2003/03/28 17:15:18 sandro Exp $)EP(
+
+
+
 )WB NL
 /Cb Db D /Ct [16#00 16#00 16#00] D /Cl [16#00 16#00 16#00] D /CL -1 D Ct Sc
 DS
@@ -19307,9 +19301,7 @@ DS
 0 BO R
 ()4 Sl()WB 9 Sn(
 
-)0 P()0 2 A(W3C)EA( | )0 2 A(Semantic Web)EA(
-| )0 0 1 A(SWAP)EA( | )0 0 1 A(Tutorial)EA()EP(
-)BR()BR(
+
 
 )0 1 60 H(Tutorial:)WB 95 Sn( Built-in functions Cwm)EH(
 
@@ -19415,13 +19407,9 @@ some very interesting possibilities -- so much so that it warrants a move to
     article)EA(
   )-1 LI(For comparison - )R21 2 A(the
     XQuery functions)EA()LU(
-)BR()BR(
-)2 0.6 1 HR(Thanks to contrubters including Joseph Reagle who added the unclue example to
-the original primer.)BR(
 
-)0 P(Tim BL, with his director hat off)EP(
 
-)0 P($Id: Built-In.html,v 1.4 2003/02/16 03:35:49 timbl Exp $)EP(
+
 )WB NL
 /Cb Db D /Ct [16#00 16#00 16#00] D /Cl [16#00 16#00 16#00] D /CL -1 D Ct Sc
 DS
@@ -19435,8 +19423,7 @@ DS
 0 BO R
 ()4 Sl()WB 97 Sn(
 
-)0 P()0 2 A(W3C)EA( | )0 2 A(Semantic Web)EA(
-| )0 2 A(Advanced Development)EA( | )0 2 A(SWAP)EA( | )0 2 A(Tutorial)EA( | Comparing Rule Systems)EP(
+
 
 )0 1 62 H(Comparing)WB 98 Sn( Rule-Based Systems)EH(
 
@@ -19494,9 +19481,7 @@ cwm...
 http://www.ksl.stanford.edu/software/IW/
 http://belo.stanford.edu:8080/iwregistrar/Lookup?type=1&value=JTP&mode=full)RP(
 
-)0 P()EP(
-)2 0.6 1 HR(
-)0 P($Id: rule-systems.html,v 1.1 2003/03/24 02:44:40 sandro Exp $)EP(
+
 )WB NL
 /Cb Db D /Ct [16#00 16#00 16#00] D /Cl [16#00 16#00 16#00] D /CL -1 D Ct Sc
 DS
@@ -19510,9 +19495,8 @@ DS
 0 BO R
 ()4 Sl()WB 10 Sn(
 
-)0 P()0 2 A(W3C)EA( | )0 2 A(Semantic Web)EA(
-| )0 0 1 A(SWAP | Tutorial)EA()EP(
-)BR(
+
+
 
 )0 1 67 H(Glossary)WB 130 Sn()EH(
 
@@ -19593,11 +19577,7 @@ information where available.)EP(
   )-1 LI()0 2 A(Notation3 - Design Issues
     article)EA()LU(
 
-)0 P()BR()BR()EP(
-)2 0.6 1 HR()BR()BR(
 
-)0 P(Tim BL, with his director hat off)EP(
 
-)0 P($Id: Glossary.html,v 1.4 2003/03/04 19:38:42 timbl Exp $)EP(
 )WB NL
 /TE t D NP TU PM 0 eq and{/Pn () D showpage}if end restore
