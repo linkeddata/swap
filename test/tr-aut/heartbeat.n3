@@ -9,41 +9,38 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/>. #@@ missing #
 @prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
 
-threeMonths    a InterestingPeriod; start "2005-01-01";
- next sixMonths.
-sixMonths      a InterestingPeriod; start "2004-10-01";
- next twelveMonths.
-twelveMonths   a InterestingPeriod; start "2004-04-01";
- next eighteenMonths.
-eighteenMonths a InterestingPeriod; start "2003-10-01".
+months03    a InterestingPeriod; start "2005-01-01".
+months06    a InterestingPeriod; start "2004-10-01".
+months12    a InterestingPeriod; start "2004-04-01".
+months18    a InterestingPeriod; start "2003-10-01".
 
 {
-#@@ <http://www.w3.org/2002/01/tr-automation/tr.rdf> log:semantics ?F
- <tr.rdf> log:semantics ?F
+ <http://www.w3.org/2002/01/tr-automation/tr.rdf> log:semantics ?F
 } => { ?F a TRKB }.
 
 @forAll DOC, WHEN, PG, GROUP, PLONG, PSHORT.
 
 {
-  ?K a TRKB.
-  (?K
-   [ is log:semantics of <heartbeat-aux.n3> ]
+  ([ is log:semantics of <heartbeat-aux.n3> ]
   ) log:conjunction [ log:conclusion ?AUDITKB].
 } => { ?AUDITKB a AuditKB }.
 
 {
   ?AUDITKB a AuditKB.
-  PSHORT next PLONG.
+  PSHORT a InterestingPeriod.
+
+  <../../../../04/mem-news/groups.rdf>.log:semantics log:includes {
+   [ a org:WorkingGroup; contact:homePage PG ].
+  }.
 
   ?AUDITKB log:includes {
     GROUP contact:homePage PG;
-      publishedInRecent PLONG
   }.
 
   ?AUDITKB log:notIncludes {
    GROUP publishedInRecent PSHORT
   }
 }
- => { PSHORT noPubFrom GROUP }.
+ => { PSHORT noPub PG }.
 
 
