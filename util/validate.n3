@@ -1,0 +1,308 @@
+#Processed by Id: cwm.py,v 1.82 2001/11/15 22:11:23 timbl Exp 
+        #    using base file:/cygdrive/c/devel/WWW/2000/10/swap/util/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.98 2001/11/15 22:11:24 timbl Exp
+
+#   Base was: file:/cygdrive/c/devel/WWW/2000/10/swap/util/
+     @prefix : <validate.n3#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    rdf:type     a log:Chaff .
+    
+    this     log:forAll :F,
+                :G,
+                :H,
+                :S,
+                :c,
+                :d,
+                :o,
+                :p,
+                :s1,
+                :s,
+                :x,
+                :y .
+    {
+        "TARGET"     os:environ <valc.n3#_g1> .
+        this     log:forSome <valc.n3#_g1> .
+        :d     log:uri <valc.n3#_g1> .
+        
+        }     log:implies {:d     a :targetDocument .
+        } .
+    {
+        :F     :within :d;
+             log:includes {:s     a :c .
+            } .
+        :c     log:rawType log:Other .
+        :d     a :targetDocument .
+        
+        }     log:implies {:c     :usedAsClassIn :d .
+        } .
+    {
+        :c     :usedAsClassIn :d;
+             log:semanticsOrError :x .
+        :d     a :targetDocument .
+        
+        }     log:implies {:c     :classSemanticsOrError :x .
+        } .
+    {
+        :c     :classSemanticsOrError :x;
+             :usedAsClassIn :d .
+        :d     a :targetDocument .
+        :x     log:rawType log:Literal .
+        
+        }     log:implies {:c     :CLASS_HAS_SCHEMA_ACCESS_ERROR :x .
+        :d     :ERROR_IN_SCHEMA_ACCESS_FOR_CLASS :c .
+        } .
+    {
+        :c     :classSemanticsOrError :x .
+        :x     log:rawType log:Formula .
+        
+        }     log:implies {:c     :semanticsOK :x .
+        } .
+    {
+        :c     :semanticsOK  [
+                 log:includes {:c     s:isDefinedBy :s .
+                } ];
+             :usedAsClassIn :d .
+        :d     a :targetDocument .
+        
+        }     log:implies {:c     :schema :s .
+        } .
+    {
+        :c     :schema  [
+                 :semanticsOK :F ] .
+        
+        }     log:implies {:c     :classSchemaFormula :F .
+        } .
+    {
+        :F     log:includes {:c     a s:Class .
+            } .
+        :c     :semanticsOK :F;
+             :usedAsClassIn :d .
+        :d     a :targetDocument .
+        
+        }     log:implies {:c     a :classDeclaredInDirectSchema;
+             :classSchemaFormula :F .
+        } .
+    {
+        :F     log:notIncludes {:c     s:isDefinedBy  [
+                 ] .
+            },
+                    {:c     a s:Class .
+            } .
+        :G     log:notEqualTo :F .
+        :c     :semanticsOK :F;
+             :usedAsClassIn :d .
+        :d     a :targetDocument;
+             log:semantics :G .
+        
+        }     log:implies {:d     :ERROR_DEREF_DOC_DOES_NOT_DECLARE_CLASS :c .
+        } .
+    {
+        :F     log:notIncludes {:c     a s:Class .
+            } .
+        :c     :classSchemaFormula :F .
+        
+        }     log:implies {:d     :ERROR_CLASS_NOT_DECLARED :c .
+        } .
+    {
+        :F     :within :d .
+        :d     a :targetDocument .
+        
+        }     log:implies {:F     a log:Chaff .
+        } .
+    {
+        :d     a :targetDocument;
+             log:semantics :F .
+        
+        }     log:implies {:F     :within :d .
+        } .
+    {
+        :F     :within :d;
+             log:includes {:s     :p :o .
+            } .
+        :d     a :targetDocument .
+        :s     log:rawType log:Formula .
+        
+        }     log:implies {:s     :within :d .
+        } .
+    {
+        :F     :within :d;
+             log:includes {:s     :p :o .
+            } .
+        :d     a :targetDocument .
+        :o     log:rawType log:Formula .
+        
+        }     log:implies {:o     :within :d .
+        } .
+    
+    :ERROR_CLASS_NOT_DECLARED     a rdf:Property .
+    
+    :ERROR_NO_SCHEMA_OR_CLASS_NOT_DECLARED     a rdf:Property;
+         s:comment """The document used this as a predicate and there is no
+schema which declares it as a Property""" .
+    
+    :ERROR_NO_SCHEMA_OR_NOT_DECLARED     a rdf:Property;
+         s:comment """The document used this as a predicate and there is no
+schema which declares it as a Property""" .
+    
+    :ERROR_PROPERTY_NOT_DECLARED     a rdf:Property .
+    
+    :classSchemaFormula     a log:Chaff .
+    
+    :classSemanticsOrError     a log:Chaff .
+    
+    :predicateSemanticsOrError     a log:Chaff .
+    
+    :schema     a rdf:Property,
+                log:Chaff;
+         s:comment "The schema for a Class is the document which defines it.",
+                "The schema for a Property is the document which defines it." .
+    
+    :schemaFormula     a log:Chaff .
+    
+    :semanticsOK     a log:Chaff .
+    
+    :targetDocument     a s:Class,
+                log:Chaff;
+         s:comment "Documents which this run is checking for schema validity" .
+    
+    :usedAsClassIn     a rdf:Property,
+                log:Chaff;
+         s:comment "This term is used as a Class in the given document." .
+    
+    :usedAsPropertyIn     a rdf:Property,
+                log:Chaff;
+         s:comment "This term is used as a Property in the given document." .
+    
+    :within     a rdf:Property,
+                log:Chaff;
+         s:comment "relationship between a subforumula and the document it was found in" .
+    {
+        "TARGET"     os:environ <valp.n3#_g1> .
+        :d     log:uri <valp.n3#_g1> .
+        this     log:forSome <valp.n3#_g1> .
+        
+        }     log:implies {:d     a :targetDocument .
+        } .
+    {
+        :F     :within :d;
+             log:includes {:s     :p :o .
+            } .
+        :d     a :targetDocument .
+        :p     log:notEqualTo log:forAll,
+                    log:forSome;
+             log:rawType log:Other .
+        
+        }     log:implies {:p     :usedAsPropertyIn :d .
+        } .
+    {
+        :d     a :targetDocument .
+        :p     :usedAsPropertyIn :d;
+             log:semanticsOrError :x .
+        
+        }     log:implies {:p     :predicateSemanticsOrError :x .
+        } .
+    {
+        :d     a :targetDocument .
+        :p     :predicateSemanticsOrError :x;
+             :usedAsPropertyIn :d .
+        :x     log:rawType log:Literal .
+        
+        }     log:implies {:d     :ERROR_IN_SCHEMA_ACCESS_FOR :p .
+        :p     :SCHEMA_ACCESS_ERROR :x .
+        } .
+    {
+        :p     :predicateSemanticsOrError :x .
+        :x     log:rawType log:Formula .
+        
+        }     log:implies {:p     :semanticsOK :x .
+        } .
+    {
+        :d     a :targetDocument .
+        :p     :semanticsOK  [
+                 log:includes {:p     s:isDefinedBy :s .
+                } ];
+             :usedAsPropertyIn :d .
+        
+        }     log:implies {:p     :schema :s .
+        } .
+    {
+        :p     :schema  [
+                 :semanticsOK :F ] .
+        
+        }     log:implies {:p     :schemaFormula :F .
+        } .
+    {
+        :F     log:includes {:p     a rdf:Property .
+            } .
+        :d     a :targetDocument .
+        :p     :semanticsOK :F;
+             :usedAsPropertyIn :d .
+        
+        }     log:implies {:p     a :declaredInDirectSchema;
+             :schemaFormula :F .
+        } .
+    {
+        :F     log:notIncludes {:p     s:isDefinedBy  [
+                 ] .
+            },
+                    {:p     a rdf:Property .
+            } .
+        :G     log:notEqualTo :F .
+        :d     a :targetDocument;
+             log:semantics :G .
+        :p     :semanticsOK :F;
+             :usedAsPropertyIn :d .
+        
+        }     log:implies {:d     :ERROR_NO_SCHEMA_OR_NOT_DECLARED :p .
+        } .
+    {
+        :F     log:notIncludes {:p     a rdf:Property .
+            } .
+        :p     :schemaFormula :F .
+        
+        }     log:implies {:d     :ERROR_PROPERTY_NOT_DECLARED :p .
+        } .
+    {
+        :F     :within :d .
+        :d     a :targetDocument .
+        
+        }     log:implies {:F     a log:Chaff .
+        } .
+    {
+        :d     a :targetDocument;
+             log:semantics :F .
+        
+        }     log:implies {:F     :within :d .
+        } .
+    {
+        :F     :within :d;
+             log:includes {:s     :p :o .
+            } .
+        :d     a :targetDocument .
+        :s     log:rawType log:Formula .
+        
+        }     log:implies {:s     :within :d .
+        } .
+    {
+        :F     :within :d;
+             log:includes {:s     :p :o .
+            } .
+        :d     a :targetDocument .
+        :o     log:rawType log:Formula .
+        
+        }     log:implies {:o     :within :d .
+        } .
+    
+    s:comment     a log:Chaff .
+    
+    log:forAll     a log:Chaff .
+    
+    log:implies     a log:Chaff .
+    
+#ENDS
