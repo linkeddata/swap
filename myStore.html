@@ -15,21 +15,32 @@ TT { font-family: lucidatypewriter, lucida console, courier }
 &nbsp;<br>
 Process-global&nbsp;store<br>
 &nbsp;<br>
-Global&nbsp;variables&nbsp;are&nbsp;often&nbsp;a&nbsp;bad&nbsp;idea.&nbsp;However,&nbsp;the&nbsp;majority&nbsp;of&nbsp;cwm&nbsp;applications<br>
-involve&nbsp;just&nbsp;one&nbsp;RDF&nbsp;store.&nbsp;One&nbsp;store&nbsp;can&nbsp;contain&nbsp;many&nbsp;formulae.<br>
-The&nbsp;main&nbsp;thing&nbsp;which&nbsp;these&nbsp;formulae&nbsp;of&nbsp;the&nbsp;same&nbsp;store&nbsp;share&nbsp;is&nbsp;the&nbsp;index&nbsp;with&nbsp;which&nbsp;names&nbsp;<br>
-and&nbsp;strings&nbsp;are&nbsp;interned.&nbsp;&nbsp;Within&nbsp;a&nbsp;store,&nbsp;you&nbsp;can&nbsp;compare&nbsp;things&nbsp;by&nbsp;comparing<br>
-memory&nbsp;addresses&nbsp;rather&nbsp;than&nbsp;the&nbsp;whole&nbsp;tring,&nbsp;uri&nbsp;or&nbsp;list.<br>
+Global&nbsp;variables&nbsp;are&nbsp;often&nbsp;a&nbsp;bad&nbsp;idea.&nbsp;However,&nbsp;the&nbsp;majority&nbsp;of&nbsp;cwm<br>
+applications&nbsp;involve&nbsp;just&nbsp;one&nbsp;RDF&nbsp;store.&nbsp;One&nbsp;store&nbsp;can&nbsp;contain&nbsp;many<br>
+formulae.&nbsp;&nbsp;The&nbsp;main&nbsp;thing&nbsp;which&nbsp;these&nbsp;formulae&nbsp;of&nbsp;the&nbsp;same&nbsp;store&nbsp;share<br>
+is&nbsp;the&nbsp;index&nbsp;with&nbsp;which&nbsp;names&nbsp;and&nbsp;strings&nbsp;are&nbsp;interned.&nbsp;&nbsp;Within&nbsp;a<br>
+store,&nbsp;you&nbsp;can&nbsp;compare&nbsp;things&nbsp;by&nbsp;comparing&nbsp;memory&nbsp;addresses&nbsp;rather<br>
+than&nbsp;the&nbsp;whole&nbsp;tring,&nbsp;uri&nbsp;or&nbsp;list.<br>
 &nbsp;<br>
-Therefore,&nbsp;it&nbsp;is&nbsp;normal&nbsp;to&nbsp;just&nbsp;use&nbsp;one&nbsp;store.<br>
-When&nbsp;you&nbsp;do&nbsp;this,&nbsp;the&nbsp;store&nbsp;paremeter&nbsp;to&nbsp;most&nbsp;methods&nbsp;beceomes&nbsp;unnecessary,&nbsp;and&nbsp;you&nbsp;get&nbsp;a&nbsp;simpler&nbsp;API.<br>
-That&nbsp;is&nbsp;what&nbsp;this&nbsp;module&nbsp;does.&nbsp;If&nbsp;you&nbsp;import&nbsp;it,&nbsp;you&nbsp;will&nbsp;get<br>
-a&nbsp;global&nbsp;store.&nbsp;This&nbsp;will&nbsp;not&nbsp;stop&nbsp;you&nbsp;using&nbsp;other&nbsp;stores.<br>
+Therefore,&nbsp;it&nbsp;is&nbsp;normal&nbsp;to&nbsp;just&nbsp;use&nbsp;one&nbsp;store.&nbsp;&nbsp;When&nbsp;you&nbsp;do&nbsp;this,&nbsp;the<br>
+store&nbsp;paremeter&nbsp;to&nbsp;most&nbsp;methods&nbsp;beceomes&nbsp;unnecessary,&nbsp;and&nbsp;you&nbsp;get&nbsp;a<br>
+simpler&nbsp;API.&nbsp;&nbsp;That&nbsp;is&nbsp;what&nbsp;this&nbsp;module&nbsp;does.&nbsp;If&nbsp;you&nbsp;import&nbsp;it,&nbsp;you<br>
+will&nbsp;get&nbsp;a&nbsp;global&nbsp;store.&nbsp;This&nbsp;will&nbsp;not&nbsp;stop&nbsp;you&nbsp;using&nbsp;other&nbsp;stores.<br>
 &nbsp;<br>
-You&nbsp;also&nbsp;get&nbsp;the&nbsp;<a href="#Namespace">Namespace</a>()&nbsp;class&nbsp;which&nbsp;allows&nbsp;you&nbsp;to&nbsp;generate&nbsp;symbols&nbsp;easily<br>
+You&nbsp;also&nbsp;get&nbsp;the&nbsp;<a href="#Namespace">Namespace</a>()&nbsp;class&nbsp;which&nbsp;allows&nbsp;you&nbsp;to&nbsp;generate<br>
+symbols&nbsp;easily<br>
 &nbsp;<br>
 History:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;Spilt&nbsp;of&nbsp;from&nbsp;&nbsp;thing.py&nbsp;2003-08-19</tt></p>
+&nbsp;&nbsp;&nbsp;&nbsp;Spilt&nbsp;of&nbsp;from&nbsp;&nbsp;thing.py&nbsp;2003-08-19<br>
+&nbsp;<br>
+$Log$
+Revision 1.3  2004-01-29 18:03:20  timbl
+Passes tests. notation3.py has utf-8 encoding on output. Non-ascii text is output as such in qnames and strings.
+<br>
+Revision&nbsp;1.3&nbsp;&nbsp;2004/01/28&nbsp;23:03:00&nbsp;&nbsp;connolly<br>
+-&nbsp;added&nbsp;unit&nbsp;tests&nbsp;to&nbsp;confirm&nbsp;that&nbsp;symbol&nbsp;functions&nbsp;take&nbsp;ustrings<br>
+-&nbsp;wrapped&nbsp;some&nbsp;comments&nbsp;at&nbsp;79&nbsp;chars<br>
+&nbsp;&nbsp;per&nbsp;<a href="http://www.python.org/doc/essays/styleguide.html">http://www.python.org/doc/essays/styleguide.html</a></tt></p>
 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
@@ -55,9 +66,9 @@ History:<br>
 <td colspan=2><tt>A&nbsp;shortcut&nbsp;for&nbsp;getting&nbsp;a&nbsp;symbols&nbsp;as&nbsp;interned&nbsp;by&nbsp;the&nbsp;default&nbsp;store<br>
 &nbsp;<br>
 &gt;&gt;&gt;&nbsp;RDF&nbsp;=&nbsp;<a href="#Namespace">Namespace</a>('<a href="http://www.w3.org/1999/02/22-rdf-syntax-ns">http://www.w3.org/1999/02/22-rdf-syntax-ns</a>#')<br>
-&gt;&gt;&gt;&nbsp;RDF.type<br>
-'<a href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.w3.org/1999/02/22-rdf-syntax-ns#type</a>'<br>
-&gt;&gt;&gt;&nbsp;RDF.type&nbsp;is&nbsp;RDF.type<br>
+&gt;&gt;&gt;&nbsp;x&nbsp;=&nbsp;RDF.type<br>
+&gt;&gt;&gt;&nbsp;y&nbsp;=&nbsp;RDF.type<br>
+&gt;&gt;&gt;&nbsp;x&nbsp;is&nbsp;y<br>
 1<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;&nbsp;</td>
 <td width="100%">Methods defined here:<br>
@@ -75,15 +86,9 @@ For,&nbsp;and&nbsp;from,&nbsp;pim/toIcal.py</tt></dd></dl>
 Data and non-method functions defined here:<br>
 <dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
 
-<dl><dt><strong>__doc__</strong> = "A shortcut for getting a symbols as interned by ...ype'<font color="#c040c0">\n</font>      &gt;&gt;&gt; RDF.type is RDF.type<font color="#c040c0">\n</font>      1<font color="#c040c0">\n\n</font>    "<dd><tt>str(<a href="__builtin__.html#object">object</a>)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;<a href="__builtin__.html#object">object</a>.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;<a href="__builtin__.html#object">object</a>.</tt></dl>
+<dl><dt><strong>__doc__</strong> = 'A shortcut for getting a symbols as interned by ...  &gt;&gt;&gt; y = RDF.type<font color="#c040c0">\n</font>      &gt;&gt;&gt; x is y<font color="#c040c0">\n</font>      1<font color="#c040c0">\n\n</font>    '</dl>
 
-<dl><dt><strong>__module__</strong> = 'myStore'<dd><tt>str(<a href="__builtin__.html#object">object</a>)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;<a href="__builtin__.html#object">object</a>.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;<a href="__builtin__.html#object">object</a>.</tt></dl>
+<dl><dt><strong>__module__</strong> = 'myStore'</dl>
 
 <dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Namespace' objects&gt;</dl>
 
@@ -105,9 +110,9 @@ Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:
 
 <hr>
 Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
-<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;<a href="__builtin__.html#object">object</a>'s&nbsp;class</tt></dl>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;</dl>
 
-<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object at 0xbf74c&gt;<dd><tt>T.<a href="#Namespace-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object at 0xc39bc&gt;<dd><tt>T.<a href="#Namespace-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
 
 </td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -117,6 +122,7 @@ Data and non-method functions inherited from <a href="__builtin__.html#object">_
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl><dt><a name="-_checkStore"><strong>_checkStore</strong></a>(s<font color="#909090">=None</font>)</dt><dd><tt>Check&nbsp;that&nbsp;an&nbsp;explict&nbsp;or&nbsp;implicit&nbsp;stroe&nbsp;exists</tt></dd></dl>
+ <dl><dt><a name="-_test"><strong>_test</strong></a>()</dt></dl>
  <dl><dt><a name="-bNode"><strong>bNode</strong></a>(str, context)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;new&nbsp;unnamed&nbsp;node&nbsp;within&nbsp;the&nbsp;given<br>
 formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
  <dl><dt><a name="-existential"><strong>existential</strong></a>(str, context, uri)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;new&nbsp;named&nbsp;variable<br>
@@ -124,8 +130,13 @@ existentially&nbsp;qualified&nbsp;within&nbsp;the&nbsp;given<br>
 formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
  <dl><dt><a name="-formula"><strong>formula</strong></a>()</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;new&nbsp;empty&nbsp;formula&nbsp;(triple&nbsp;people&nbsp;think:&nbsp;triple&nbsp;store)<br>
 and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
- <dl><dt><a name="-literal"><strong>literal</strong></a>(str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;an&nbsp;interned&nbsp;version&nbsp;of&nbsp;the&nbsp;given&nbsp;literal&nbsp;string<br>
-and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+ <dl><dt><a name="-literal"><strong>literal</strong></a>(str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;an&nbsp;interned&nbsp;version&nbsp;of<br>
+the&nbsp;given&nbsp;literal&nbsp;string&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;x&nbsp;=&nbsp;<a href="#-literal">literal</a>("#Andr\xe9")<br>
+&gt;&gt;&gt;&nbsp;y&nbsp;=&nbsp;<a href="#-literal">literal</a>("#Andr\xe9")<br>
+&gt;&gt;&gt;&nbsp;x&nbsp;is&nbsp;y<br>
+1</tt></dd></dl>
  <dl><dt><a name="-load"><strong>load</strong></a>(uri<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>, formulaURI<font color="#909090">=None</font>, remember<font color="#909090">=1</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
 &nbsp;<br>
 uri:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;None,&nbsp;load&nbsp;from&nbsp;standard&nbsp;input.<br>
@@ -139,8 +150,13 @@ Returns:&nbsp;&nbsp;top-level&nbsp;formula&nbsp;of&nbsp;the&nbsp;parsed&nbsp;inf
 Raises:&nbsp;&nbsp;&nbsp;IOError,&nbsp;SyntaxError,&nbsp;DocumentError</tt></dd></dl>
  <dl><dt><a name="-setStore"><strong>setStore</strong></a>(s)</dt><dd><tt>Set&nbsp;the&nbsp;process-global&nbsp;default&nbsp;store&nbsp;to&nbsp;be&nbsp;used&nbsp;when&nbsp;an&nbsp;explicit&nbsp;store&nbsp;is&nbsp;not</tt></dd></dl>
  <dl><dt><a name="-setStoreClass"><strong>setStoreClass</strong></a>(c)</dt><dd><tt>Set&nbsp;the&nbsp;process-global&nbsp;class&nbsp;to&nbsp;be&nbsp;used&nbsp;to&nbsp;generate&nbsp;a&nbsp;new&nbsp;store&nbsp;if&nbsp;needed</tt></dd></dl>
- <dl><dt><a name="-symbol"><strong>symbol</strong></a>(uri)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;an&nbsp;interned&nbsp;version&nbsp;of&nbsp;the&nbsp;given&nbsp;symbol<br>
-and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+ <dl><dt><a name="-symbol"><strong>symbol</strong></a>(uri)</dt><dd><tt>Create&nbsp;or&nbsp;reuse&nbsp;an&nbsp;interned&nbsp;version&nbsp;of&nbsp;the&nbsp;given&nbsp;symbol<br>
+in&nbsp;the&nbsp;default&nbsp;store.&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;x&nbsp;=&nbsp;<a href="#-symbol">symbol</a>(u'<a href="http://example.org/#Andr\xe9">http://example.org/#Andr\xe9</a>')<br>
+&gt;&gt;&gt;&nbsp;y&nbsp;=&nbsp;<a href="#-symbol">symbol</a>(u'<a href="http://example.org/#Andr\xe9">http://example.org/#Andr\xe9</a>')<br>
+&gt;&gt;&gt;&nbsp;x&nbsp;is&nbsp;y<br>
+1</tt></dd></dl>
  <dl><dt><a name="-universal"><strong>universal</strong></a>(str, context, uri)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;named&nbsp;variable<br>
 universally&nbsp;qualified&nbsp;within&nbsp;the&nbsp;given<br>
 formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>

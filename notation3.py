@@ -1094,7 +1094,8 @@ t   "this" and "()" special syntax should be suppresed.
 		except ValueError:
 		    pass # bogus: base eg
 	RDFSink.RDFSink.__init__(self, gp)
-	self._write = write
+	self._write = self.writeEncoded
+	self._writeRaw = write
 	self._quiet = quiet or "q" in flags
 	self._flags = flags
 	self._subj = None
@@ -1112,10 +1113,10 @@ t   "this" and "()" special syntax should be suppresed.
         if "l" in self._flags: self.noLists = 1
 	
     
-#    def newId(self):
-#        nextId = nextId + 1
-#        return nextId - 1
-
+    def writeEncoded(self, str):
+	"""Write a possibly unicode string out to the output"""
+	return self._writeRaw(str.encode('utf-8'))
+	
     def setDefaultNamespace(self, uri):
         return self.bind("", uri)
     
@@ -1386,7 +1387,7 @@ t   "this" and "()" special syntax should be suppresed.
 		    return s    # Naked numeric value
 	    str = stringToN3(s, singleLine= singleLine)
 	    if lang != None: str = str + "@" + lang
-	    if dt != None: str = str + "^^" + self.representationOf(context, dt.asPair())
+	    if dt != None: return str + "^^" + self.representationOf(context, dt.asPair())
 	    return str
 
         if pair in self._anonymousNodes:   # "a" flags only

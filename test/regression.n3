@@ -16,7 +16,7 @@
 :t1002 a test:CwmTest;
     test:referenceOutput <ref/animal-1.rdf>;
     test:description   "Parse a small RDF file and regenerate RDF";
-    test:arguments     """-rdf animal.rdf""".
+    test:arguments     """-rdf=z animal.rdf""".
 
 
 :t1003 a test:CwmTest;

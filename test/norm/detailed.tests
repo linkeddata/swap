@@ -19,6 +19,11 @@
     test:description   "Bug with --chatty=200 after --base=bogus:";
     test:arguments     """norm/av.n3 --think --base=bogus: --purge --chatty=200 --rdf --bySubject""".
 
-	
+:norm12 a test:CwmTest;
+    test:referenceOutput <t-200401-unicode.ref>;
+    test:description   "Unicode non-ascii characters in RDF/XML";
+    test:arguments     """--rdf norm/t-200401-unicode.rdf""".
+
+
 
 #ends

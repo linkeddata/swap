@@ -1,0 +1,47 @@
+#  For use with cwm --closue=e
+
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
+@prefix rcs: <http://www.w3.org/2001/03swell/rcs#>.
+@prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <#>.
+
+
+@keywords a, is , of.
+
+<> derivedFrom <../test/sameThing.n3>.
+ 
+<> dc:rights "copyright (c) 2001 W3C (MIT, Keio, INRIA)".
+
+# These should be derivable from the axiomatic semantics for DAML+OIL
+
+this log:forAll :x, :y, :z, :p, :q.
+
+{  	?p a owl:FunctionalProperty. 
+   	?x ?p ?y.
+	?x ?p ?z.
+} =>  {
+	 ?y = ?z
+} .
+
+{  :p a owl:InverseFunctionalProperty.
+   :x :p :z.
+   :y :p :z.
+} =>  {
+   :x = :y
+}.
+
+# Old DAML+OIL terms:
+
+{  :p a ont:UniqueProperty. 
+   :x :p :y. 
+   :x :p :z. 
+} log:implies  { :y = :z } .
+
+{  :p a ont:UnambiguousProperty. 
+   :x :p :z.
+   :y :p :z. } log:implies  { :x = :y }.
+
+# ends

@@ -172,9 +172,11 @@ this&nbsp;yeild&nbsp;the&nbsp;URI&nbsp;of&nbsp;the&nbsp;file.<br>
 If&nbsp;we&nbsp;had&nbsp;a&nbsp;reliable&nbsp;way&nbsp;of&nbsp;getting&nbsp;a&nbsp;computer&nbsp;name,<br>
 we&nbsp;should&nbsp;put&nbsp;it&nbsp;in&nbsp;the&nbsp;hostname&nbsp;just&nbsp;to&nbsp;prevent&nbsp;ambiguity</tt></dd></dl>
  <dl><dt><a name="-join"><strong>join</strong></a>(here, there)</dt><dd><tt>join&nbsp;an&nbsp;absolute&nbsp;URI&nbsp;and&nbsp;URI&nbsp;reference<br>
+(non-ascii&nbsp;characters&nbsp;are&nbsp;supported/doctested;<br>
+haven't&nbsp;checked&nbsp;the&nbsp;details&nbsp;of&nbsp;the&nbsp;IRI&nbsp;spec&nbsp;though)<br>
 &nbsp;<br>
-here&nbsp;must&nbsp;be&nbsp;an&nbsp;absolute&nbsp;URI.<br>
-there&nbsp;must&nbsp;be&nbsp;a&nbsp;URI&nbsp;reference.<br>
+here&nbsp;is&nbsp;assumed&nbsp;to&nbsp;be&nbsp;absolute.<br>
+there&nbsp;is&nbsp;URI&nbsp;reference.<br>
 &nbsp;<br>
 &gt;&gt;&gt;&nbsp;<a href="#-join">join</a>('<a href="http://example/x/y/z">http://example/x/y/z</a>',&nbsp;'../abc')<br>
 '<a href="http://example/x/abc">http://example/x/abc</a>'<br>
@@ -185,7 +187,16 @@ syntax&nbsp;but&nbsp;here&nbsp;has&nbsp;no&nbsp;hierarchical&nbsp;path.<br>
 &gt;&gt;&gt;&nbsp;<a href="#-join">join</a>('mid:foo@example',&nbsp;'../foo')<br>
 Traceback&nbsp;(most&nbsp;recent&nbsp;call&nbsp;last):<br>
 &nbsp;&nbsp;&nbsp;&nbsp;raise&nbsp;ValueError,&nbsp;here<br>
-ValueError:&nbsp;Base&nbsp;&lt;mid:foo@example&gt;&nbsp;has&nbsp;no&nbsp;slash&nbsp;after&nbsp;colon&nbsp;-&nbsp;with&nbsp;relative&nbsp;&lt;../foo&gt;.</tt></dd></dl>
+ValueError:&nbsp;Base&nbsp;&lt;mid:foo@example&gt;&nbsp;has&nbsp;no&nbsp;slash&nbsp;after&nbsp;colon&nbsp;-&nbsp;with&nbsp;relative&nbsp;'../foo'.<br>
+&nbsp;<br>
+&nbsp;<br>
+We&nbsp;grok&nbsp;IRIs<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;len(u'Andr\xe9')<br>
+5<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#-join">join</a>('<a href="http://example.org/">http://example.org/</a>',&nbsp;u'#Andr\xe9')<br>
+u'<a href="http://example.org/#Andr\xe9">http://example.org/#Andr\xe9</a>'</tt></dd></dl>
  <dl><dt><a name="-refTo"><strong>refTo</strong></a>(base, uri)</dt><dd><tt>figure&nbsp;out&nbsp;a&nbsp;relative&nbsp;URI&nbsp;reference&nbsp;from&nbsp;base&nbsp;to&nbsp;uri<br>
 &nbsp;<br>
 &gt;&gt;&gt;&nbsp;<a href="#-refTo">refTo</a>('<a href="http://example/x/y/z">http://example/x/y/z</a>',&nbsp;'<a href="http://example/x/abc">http://example/x/abc</a>')<br>

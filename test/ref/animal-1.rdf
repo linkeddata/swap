@@ -1,7 +1,7 @@
 
 
 
-<rdf:RDF xmlns="file:/devel/WWW/2000/10/swap/test/animal.rdf#"
+<rdf:RDF xmlns="#"
     xmlns:daml="http://www.daml.org/2001/03/daml+oil#"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"

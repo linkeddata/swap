@@ -713,7 +713,7 @@ A&nbsp;canonical&nbsp;form&nbsp;is&nbsp;possisble&nbsp;but&nbsp;not&nbsp;simple.
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_n3String-evalObj"><strong>evalObj</strong></a>(self, store, context, subj, queue, bindings, proof, query)</dt></dl>
+<dl><dt><a name="BI_n3String-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -1980,7 +1980,7 @@ two&nbsp;#'s.<br>
 &nbsp;<br>
 This&nbsp;is&nbsp;the&nbsp;way&nbsp;they&nbsp;are&nbsp;actually&nbsp;made.</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-internURI"><strong>internURI</strong></a>(self, str, why<font color="#909090">=None</font>)</dt><dd><tt>old&nbsp;-use&nbsp;<a href="#RDFStore-symbol">symbol</a>()</tt></dd></dl>
+<dl><dt><a name="RDFStore-internURI"><strong>internURI</strong></a>(self, str, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="RDFStore-load"><strong>load</strong></a>(store, uri<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>, formulaURI<font color="#909090">=None</font>, remember<font color="#909090">=1</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
 &nbsp;<br>
@@ -2044,7 +2044,7 @@ subject,&nbsp;predicate&nbsp;and&nbsp;object&nbsp;are&nbsp;terms&nbsp;-&nbsp;or&
 Builds&nbsp;the&nbsp;indexes&nbsp;and&nbsp;does&nbsp;stuff&nbsp;for&nbsp;lists.<br>
 Deprocated:&nbsp;use&nbsp;<a href="formula.html#Formula">Formula</a>.add()</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-symbol"><strong>symbol</strong></a>(self, str)</dt><dd><tt>Intern&nbsp;a&nbsp;URI&nbsp;for&nbsp;a&nbsp;symvol,&nbsp;returning&nbsp;a&nbsp;symbol&nbsp;object</tt></dd></dl>
+<dl><dt><a name="RDFStore-symbol"><strong>symbol</strong></a>(self, str, why<font color="#909090">=None</font>)</dt><dd><tt>Intern&nbsp;a&nbsp;URI&nbsp;for&nbsp;a&nbsp;symvol,&nbsp;returning&nbsp;a&nbsp;symbol&nbsp;object</tt></dd></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -2056,10 +2056,11 @@ Data and non-method functions defined here:<br>
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>
 <dl><dt><a name="RDFStore-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
 &nbsp;<br>
-This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;this&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;default&nbsp;namespace&nbsp;which<br>
-it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
-of&nbsp;the&nbsp;same&nbsp;namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent<br>
-or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt></dd></dl>
+This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;this&nbsp;to&nbsp;pass&nbsp;on<br>
+the&nbsp;default&nbsp;namespace&nbsp;which&nbsp;it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a<br>
+useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output&nbsp;of&nbsp;the&nbsp;same<br>
+namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent&nbsp;or<br>
+avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-setGenPrefix"><strong>setGenPrefix</strong></a>(self, genPrefix)</dt></dl>
 

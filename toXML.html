@@ -56,9 +56,10 @@ TimBL&nbsp;added&nbsp;RDF&nbsp;stream&nbsp;model.</tt></p>
 <a href="codecs.html">codecs</a><br>
 </td><td width="25%" valign=top><a href="re.html">re</a><br>
 <a href="string.html">string</a><br>
-</td><td width="25%" valign=top><a href="urllib.html">urllib</a><br>
-<a href="urlparse.html">urlparse</a><br>
-</td><td width="25%" valign=top></td></tr></table></td></tr></table>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+<a href="urllib.html">urllib</a><br>
+</td><td width="25%" valign=top><a href="urlparse.html">urlparse</a><br>
+</td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
 <td colspan=3 valign=bottom>&nbsp;<br>
@@ -120,30 +121,15 @@ Methods defined here:<br>
 
 <hr>
 Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'keeps track of most recent subject, reuses it'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__doc__</strong> = 'keeps track of most recent subject, reuses it'</dl>
 
-<dl><dt><strong>__module__</strong> = 'toXML'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__module__</strong> = 'toXML'</dl>
 
-<dl><dt><strong>_rdfns</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>_rdfns</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'</dl>
 
-<dl><dt><strong>_valChars</strong> = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_ !#$%&amp;().,+*/'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>_valChars</strong> = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_ !#$%&amp;().,+*/'</dl>
 
-<dl><dt><strong>flagDocumentation</strong> = "<font color="#c040c0">\n</font>        Flags to control RDF/XML output (after ... names<font color="#c040c0">\n</font>        d  - Don't use default namespace<font color="#c040c0">\n\n</font>"<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>flagDocumentation</strong> = "<font color="#c040c0">\n</font>        Flags to control RDF/XML output (after ... names<font color="#c040c0">\n</font>        d  - Don't use default namespace<font color="#c040c0">\n\n</font>"</dl>
 
 <hr>
 Methods inherited from <a href="RDFSink.html#RDFStructuredOutput">RDFSink.RDFStructuredOutput</a>:<br>
@@ -155,10 +141,11 @@ Methods inherited from <a href="RDFSink.html#RDFStructuredOutput">RDFSink.RDFStr
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>
 <dl><dt><a name="ToRDF-bind"><strong>bind</strong></a>(self, prefix, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
 &nbsp;<br>
-This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;bind&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;prefix&nbsp;which<br>
-it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
-of&nbsp;the&nbsp;same&nbsp;namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent<br>
-or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly</tt></dd></dl>
+This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;bind&nbsp;to&nbsp;pass&nbsp;on<br>
+the&nbsp;prefix&nbsp;which&nbsp;it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for<br>
+a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output&nbsp;of&nbsp;the&nbsp;same<br>
+namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent&nbsp;or<br>
+avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly</tt></dd></dl>
 
 <dl><dt><a name="ToRDF-checkNewId"><strong>checkNewId</strong></a>(self, uri)</dt><dd><tt>The&nbsp;store&nbsp;can&nbsp;override&nbsp;this&nbsp;to&nbsp;raise&nbsp;an&nbsp;exception&nbsp;if&nbsp;the<br>
 id&nbsp;is&nbsp;not&nbsp;in&nbsp;fact&nbsp;new.&nbsp;This&nbsp;is&nbsp;useful&nbsp;because&nbsp;it&nbsp;is&nbsp;usfeul<br>
@@ -187,10 +174,11 @@ is&nbsp;again&nbsp;acceptable.&nbsp;Remember&nbsp;to&nbsp;end&nbsp;the&nbsp;docu
 
 <dl><dt><a name="ToRDF-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
 &nbsp;<br>
-This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;this&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;default&nbsp;namespace&nbsp;which<br>
-it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
-of&nbsp;the&nbsp;same&nbsp;namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent<br>
-or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt></dd></dl>
+This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;this&nbsp;to&nbsp;pass&nbsp;on<br>
+the&nbsp;default&nbsp;namespace&nbsp;which&nbsp;it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a<br>
+useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output&nbsp;of&nbsp;the&nbsp;same<br>
+namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent&nbsp;or<br>
+avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt></dd></dl>
 
 <dl><dt><a name="ToRDF-setGenPrefix"><strong>setGenPrefix</strong></a>(self, genPrefix)</dt></dl>
 
@@ -202,10 +190,12 @@ or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;u
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>&nbsp;taken&nbsp;from<br>
-Id:&nbsp;tsv2xml.py,v&nbsp;1.1&nbsp;2000/10/02&nbsp;19:41:02&nbsp;connolly&nbsp;Exp&nbsp;connolly<br>&nbsp;</tt></td></tr>
+Id:&nbsp;tsv2xml.py,v&nbsp;1.1&nbsp;2000/10/02&nbsp;19:41:02&nbsp;connolly&nbsp;Exp&nbsp;connolly<br>
+&nbsp;<br>
+Takes&nbsp;as&nbsp;argument&nbsp;a&nbsp;writer&nbsp;which&nbsp;does&nbsp;the&nbsp;(eg&nbsp;utf-8)&nbsp;encoding<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="XMLWriter-__init__"><strong>__init__</strong></a>(self, outFp, squeaky<font color="#909090">=0</font>)</dt></dl>
+<dl><dt><a name="XMLWriter-__init__"><strong>__init__</strong></a>(self, encodingWriter, squeaky<font color="#909090">=0</font>)</dt></dl>
 
 <dl><dt><a name="XMLWriter-closeTag"><strong>closeTag</strong></a>(self)</dt></dl>
 
@@ -231,20 +221,11 @@ Id:&nbsp;tsv2xml.py,v&nbsp;1.1&nbsp;2000/10/02&nbsp;19:41:02&nbsp;connolly&nbsp;
 
 <hr>
 Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = ' taken from<font color="#c040c0">\n</font>    Id: tsv2xml.py,v 1.1 2000/10/02 19:41:02 connolly Exp connolly<font color="#c040c0">\n</font>    '<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__doc__</strong> = ' taken from<font color="#c040c0">\n</font>    Id: tsv2xml.py,v 1.1 2000/10/02 ... a writer which does the (eg utf-8) encoding<font color="#c040c0">\n</font>    '</dl>
 
-<dl><dt><strong>__module__</strong> = 'toXML'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__module__</strong> = 'toXML'</dl>
 
-<dl><dt><strong>_namechars</strong> = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>_namechars</strong> = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-'</dl>
 
 <dl><dt><strong>attrEsc</strong> = &lt;_sre.SRE_Pattern object&gt;</dl>
 

@@ -31,7 +31,7 @@ import sys
 import time
 import uripath
 
-from term import merge
+from OrderedSequence import merge
 
 import urllib # for log:content
 import md5, binascii  # for building md5 URIs

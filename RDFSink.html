@@ -84,10 +84,11 @@ in&nbsp;the&nbsp;current&nbsp;directory.</tt></dd></dl>
 
 <dl><dt><a name="RDFSink-bind"><strong>bind</strong></a>(self, prefix, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
 &nbsp;<br>
-This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;bind&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;prefix&nbsp;which<br>
-it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
-of&nbsp;the&nbsp;same&nbsp;namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent<br>
-or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly</tt></dd></dl>
+This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;bind&nbsp;to&nbsp;pass&nbsp;on<br>
+the&nbsp;prefix&nbsp;which&nbsp;it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for<br>
+a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output&nbsp;of&nbsp;the&nbsp;same<br>
+namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent&nbsp;or<br>
+avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly</tt></dd></dl>
 
 <dl><dt><a name="RDFSink-checkNewId"><strong>checkNewId</strong></a>(self, uri)</dt><dd><tt>The&nbsp;store&nbsp;can&nbsp;override&nbsp;this&nbsp;to&nbsp;raise&nbsp;an&nbsp;exception&nbsp;if&nbsp;the<br>
 id&nbsp;is&nbsp;not&nbsp;in&nbsp;fact&nbsp;new.&nbsp;This&nbsp;is&nbsp;useful&nbsp;because&nbsp;it&nbsp;is&nbsp;usfeul<br>
@@ -133,10 +134,11 @@ is&nbsp;again&nbsp;acceptable.&nbsp;Remember&nbsp;to&nbsp;end&nbsp;the&nbsp;docu
 
 <dl><dt><a name="RDFSink-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
 &nbsp;<br>
-This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;this&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;default&nbsp;namespace&nbsp;which<br>
-it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
-of&nbsp;the&nbsp;same&nbsp;namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent<br>
-or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt></dd></dl>
+This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;this&nbsp;to&nbsp;pass&nbsp;on<br>
+the&nbsp;default&nbsp;namespace&nbsp;which&nbsp;it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a<br>
+useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output&nbsp;of&nbsp;the&nbsp;same<br>
+namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent&nbsp;or<br>
+avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt></dd></dl>
 
 <dl><dt><a name="RDFSink-setGenPrefix"><strong>setGenPrefix</strong></a>(self, genPrefix)</dt></dl>
 
@@ -144,15 +146,9 @@ or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;u
 
 <hr>
 Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'interface to connect modules in RDF processing.<font color="#c040c0">\n</font>...uch as craeting new arbitray<font color="#c040c0">\n</font>    identifiers<font color="#c040c0">\n</font>    '<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__doc__</strong> = 'interface to connect modules in RDF processing.<font color="#c040c0">\n</font>...uch as craeting new arbitray<font color="#c040c0">\n</font>    identifiers<font color="#c040c0">\n</font>    '</dl>
 
-<dl><dt><strong>__module__</strong> = 'RDFSink'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__module__</strong> = 'RDFSink'</dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -188,10 +184,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Data and non-method functions defined here:<br>
 <dl><dt><strong>__doc__</strong> = None</dl>
 
-<dl><dt><strong>__module__</strong> = 'RDFSink'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__module__</strong> = 'RDFSink'</dl>
 
 <hr>
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink</a>:<br>
@@ -201,10 +194,11 @@ in&nbsp;the&nbsp;current&nbsp;directory.</tt></dd></dl>
 
 <dl><dt><a name="RDFStructuredOutput-bind"><strong>bind</strong></a>(self, prefix, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
 &nbsp;<br>
-This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;bind&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;prefix&nbsp;which<br>
-it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
-of&nbsp;the&nbsp;same&nbsp;namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent<br>
-or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly</tt></dd></dl>
+This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;bind&nbsp;to&nbsp;pass&nbsp;on<br>
+the&nbsp;prefix&nbsp;which&nbsp;it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for<br>
+a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output&nbsp;of&nbsp;the&nbsp;same<br>
+namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent&nbsp;or<br>
+avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly</tt></dd></dl>
 
 <dl><dt><a name="RDFStructuredOutput-checkNewId"><strong>checkNewId</strong></a>(self, uri)</dt><dd><tt>The&nbsp;store&nbsp;can&nbsp;override&nbsp;this&nbsp;to&nbsp;raise&nbsp;an&nbsp;exception&nbsp;if&nbsp;the<br>
 id&nbsp;is&nbsp;not&nbsp;in&nbsp;fact&nbsp;new.&nbsp;This&nbsp;is&nbsp;useful&nbsp;because&nbsp;it&nbsp;is&nbsp;usfeul<br>
@@ -250,10 +244,11 @@ is&nbsp;again&nbsp;acceptable.&nbsp;Remember&nbsp;to&nbsp;end&nbsp;the&nbsp;docu
 
 <dl><dt><a name="RDFStructuredOutput-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
 &nbsp;<br>
-This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;this&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;default&nbsp;namespace&nbsp;which<br>
-it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
-of&nbsp;the&nbsp;same&nbsp;namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent<br>
-or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt></dd></dl>
+This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;this&nbsp;to&nbsp;pass&nbsp;on<br>
+the&nbsp;default&nbsp;namespace&nbsp;which&nbsp;it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a<br>
+useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output&nbsp;of&nbsp;the&nbsp;same<br>
+namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent&nbsp;or<br>
+avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt></dd></dl>
 
 <dl><dt><a name="RDFStructuredOutput-setGenPrefix"><strong>setGenPrefix</strong></a>(self, genPrefix)</dt></dl>
 
@@ -312,15 +307,9 @@ bash-2.04$&nbsp;python&nbsp;cwm.py&nbsp;test/rules12.n3&nbsp;--bySubject&nbsp;--
 
 <hr>
 Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'An implementation of the RDFSink interface which...race<font color="#c040c0">\n\n</font>    ... and see the different outputs<font color="#c040c0">\n\n</font>    '<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__doc__</strong> = 'An implementation of the RDFSink interface which...race<font color="#c040c0">\n\n</font>    ... and see the different outputs<font color="#c040c0">\n\n</font>    '</dl>
 
-<dl><dt><strong>__module__</strong> = 'RDFSink'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__module__</strong> = 'RDFSink'</dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -339,15 +328,9 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 </dl>
 <hr>
 Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'A parameter is passed to a routine that requires a URI reference'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__doc__</strong> = 'A parameter is passed to a routine that requires a URI reference'</dl>
 
-<dl><dt><strong>__module__</strong> = 'RDFSink'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__module__</strong> = 'RDFSink'</dl>
 
 <hr>
 Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception</a>:<br>
@@ -405,7 +388,7 @@ Fractions&nbsp;of&nbsp;a&nbsp;second&nbsp;may&nbsp;be&nbsp;present&nbsp;if&nbsp;
 <strong>__file__</strong> = './RDFSink.pyc'<br>
 <strong>__name__</strong> = 'RDFSink'<br>
 <strong>__version__</strong> = '$Id$'<br>
-<strong>environ</strong> = {'INFOPATH': '/sw/share/info:/sw/info:/usr/local... 'MFLAGS': '', 'SWAP': '/devel/WWW/2000/10/swap'}<br>
+<strong>environ</strong> = {'INFOPATH': '/sw/share/info:/sw/info:/usr/share... 'MFLAGS': '', 'SWAP': '/devel/WWW/2000/10/swap'}<br>
 <strong>forAllSym</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>
 <strong>forSomeSym</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
 <strong>parsesTo_URI</strong> = 'http://www.w3.org/2000/10/swap/log#parsesTo'<br>

@@ -41,6 +41,8 @@ from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
 
+from OrderedSequence import merge, intersection, minus
+
 import diag
 from diag import progress
 
@@ -769,35 +771,5 @@ class FiniteProperty(BuiltIn, Function, ReverseFunction):
 
     
 #  For examples of use, see, for example, cwm_*.py
-
-#################################
-#
-# Utilty routines
-
-def merge(a,b):
-    """Merge sorted sequences
-
-    The fact that the sequences are sorted makes this faster"""
-    i = 0
-    j = 0
-    m = len(a)
-    n = len(b)
-    result = []
-    while 1:
-        if i==m:   # No more of a, return rest of b
-            return result + b[j:]
-        if j==n:
-            return result + a[i:]
-        if a[i] < b[j]:
-            result.append(a[i])
-            i = i + 1
-        elif a[i] > b[j]:
-            result.append(b[j])
-            j = j + 1
-        else:  # a[i]=b[j]
-            result.append(a[i])
-            i = i + 1
-            j = j + 1
-        
 
 

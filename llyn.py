@@ -1333,12 +1333,12 @@ class RDFStore(RDFSink) :
 
     def internURI(self, str, why=None):
         warn("use symbol()", DeprecationWarning, stacklevel=3)
-        return self.intern((SYMBOL,str), why=None)
+        return self.intern((SYMBOL,str), why)
 
-    def symbol(self, str):
-	"""Intern a URI for a symbol, returning a symbol object"""
+    def symbol(self, str, why=None):
+	"""Intern a URI for a symvol, returning a symbol object"""
+        return self.intern((SYMBOL,str), why)
 
-        return self.intern((SYMBOL, str), why=None)
     
     def _fromPython(self, x, queue=None):
 	"""Takem a python string, seq etc and represent as a llyn object"""
