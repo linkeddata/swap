@@ -16,10 +16,8 @@ function cwm_test () {
   echo
   echo Test $case: $desc
 
-  echo Test    TARGET=$target cwm $args
-  # Hmm... this suggests a --nocomments flag on cwm  its -quiet
-#  (python ../../cwm.py $args | sed -e 's/^ *#.*//' | sed -e 's/\$[I]d:\$//g' > temp/$case) || echo CRASH $case
-  (TARGET=$target python ../../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' > temp/$case) || echo CRASH $case
+  echo    cwm -quiet $args --with $target
+  (python ../../cwm.py -quiet $args --with $target | sed -e 's/\$[I]d.*\$//g' > temp/$case) || echo CRASH $case
   diff -Bbwu ref/$case temp/$case >diffs/$case
   if [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case "############"; else echo Pass $case; fi
 }
@@ -38,6 +36,9 @@ cwm_test val-invalid-ex.n3 "Simple test of invalid file" invalid-ex.n3 ../../uti
 
 
 # $Log$
-# Revision 1.1  2002-01-04 16:19:03  timbl
+# Revision 1.2  2002-01-04 16:56:26  timbl
+# Tests of schema validation, need to be online.
+#
+# Revision 1.1  2002/01/04 16:19:03  timbl
 # Tests for schema validation
 #
