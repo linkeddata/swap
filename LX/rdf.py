@@ -83,9 +83,13 @@ class FormulaDescriber:
         for (pred, obj) in zip(entry[1:], object.operands):
             ladder.kb.add(Triple(term, pred, ladder.describer.describe(obj, ladder)))
 
+        return term
 
 # $Log$
-# Revision 1.2  2002-08-29 16:39:55  sandro
+# Revision 1.3  2002-08-29 17:10:38  sandro
+# fixed description bug; flatten runs and may even be correct
+#
+# Revision 1.2  2002/08/29 16:39:55  sandro
 # fixed various early typos and ommissions; working on logic bug which is manifesting in description loops
 #
 # Revision 1.1  2002/08/29 11:00:46  sandro

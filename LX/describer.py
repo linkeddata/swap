@@ -14,6 +14,12 @@ class ListDescriber:
     "A describer of python sequences using rdf:first/rest/nil"
 
     def describe(self, object, ladder):
+
+        # for now, let's be strict about it
+        if object.__class__ is not [].__class__:
+            raise DescriptionFailed, 'not strictly a list'
+
+        # here' a more general approach
         try:
             length = len(object)
             first = object[0]
@@ -54,41 +60,41 @@ class CombinedDescriber:
             ladder = ladder.set("depth", ladder.depth+1)
             ladder = ladder.setIfMissing("tracePrefix", "")
             ladder = ladder.set("tracePrefix", ladder.tracePrefix+"|  ")
-            print ladder.tracePrefix, "describe a",  type(object), object.__class__
+            print ladder.tracePrefix, "/", "describe a",  type(object), object.__class__
             print ladder.tracePrefix, "value:",  `object`[0:80]
-        ##tries = []
         for describer in self.describers:
             dname = describer.__class__.__name__
             try:
                 if ladder.has("trace"):
                     print ladder.tracePrefix, dname, "trying..."
                 result = describer.describe(object, ladder)
-                if result:
+                if result is not None:
                     if ladder.has("trace"):
-                        print ladder.tracePrefix, dname, "worked!"
+                        print ladder.tracePrefix, "\\", dname, "worked!"
                     return result
+                else:
+                    if ladder.has("trace"):
+                        print ladder.tracePrefix, dname, "failed returning None"
+                    # return result
             except DescriptionFailed, msg:
                 if ladder.has("trace"):
                     print ladder.tracePrefix, dname, "failed", msg
-                ##tries.append( (describer,msg), )
-        # Ugh!  We failed!   Now try to explain this....
-        # (skip most of this unless at depth 0?)
-        # ... or just prepend "!  " to ever line in child messages!
-        # and don't pay attention to depth
-        ##nl = "\n|" + " " * (ladder.depth * 4)
-        ##msg = ("\n" + ("="*60) + nl + self.__class__.__name__ +
-        ##       " failed at depth " + str(ladder.depth))
-        ##msg = msg + nl + "Object is 
-        ##msg = msg + nl + "Value is %s " % (`object`[0:60] )
-        ##msg = msg + nl + "Describers and their Errors:: "
-        ##for (d, m) in tries:
-        ##    msg = msg + nl + " " + d.__class__.__name__ + ":" + str(m)
-        ##msg = msg + "\n"
-        raise DescriptionFailed, "Try turning tracing on"
+                continue
+            if ladder.has("trace"):
+                print ladder.tracePrefix, dname, "did something odd!"
+        if ladder.has("trace"):
+            print ladder.tracePrefix, "*** All failed, punt back up stack"
+            msg = "All available describers failed"
+        else:
+            msg = "Try turning on tracing"
+        raise DescriptionFailed, msg
 
 
 # $Log$
-# Revision 1.2  2002-08-29 16:39:55  sandro
+# Revision 1.3  2002-08-29 17:10:38  sandro
+# fixed description bug; flatten runs and may even be correct
+#
+# Revision 1.2  2002/08/29 16:39:55  sandro
 # fixed various early typos and ommissions; working on logic bug which is manifesting in description loops
 #
 # Revision 1.1  2002/08/29 11:00:46  sandro
