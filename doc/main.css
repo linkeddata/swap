@@ -1,0 +1,79 @@
+/* this style sheet defines the basic style for all W3C pages */
+/* you can point to this by adding:
+
+     <LINK rel="Stylesheet" href="general">
+
+
+   in the HEAD of your HTML document */
+
+body {
+  font-family: Trebuchet MS, Palatino, sans-serif;
+  color: black;
+  background: white;
+  margin-left: 3em;
+  margin-right: 2em;
+}
+
+p  { /* text-indent : 1em ;  */
+
+     }
+
+/* pre is always an example, even if it doesn't say so? */
+
+/* pre { margin-left: 2em; } */
+
+pre, .example {
+  margin-left: 1em;
+  padding: 0.5em;
+  border-style: dotted;
+  border-width: 1px;
+  margin-right: 1em;
+  background: #f0f6f9;
+}
+
+h1 { text-align: center }
+h3 { font-style: italic }   /* distinguish from h2 */
+
+address { text-align: right }
+
+a:link, a:active {
+  color: #00e;
+  background: transparent;
+}
+
+a:visited {
+  color: #529;
+  background: transparent;
+}
+
+div.intro {
+  margin-left: 5%;
+  margin-right: 5%;
+  font-style: italic
+}
+
+pre {
+  font-family: monospace
+}
+
+a:link img, a:visited img {
+   border-style: none
+}
+
+a img {
+  color: white;		/* The only way to hide the border in NS 4.x */
+}
+
+UL.toc {
+  list-style: disc;
+  list-style: none;
+}
+
+div.issue {
+  padding: 0.5em;
+  border: none;
+  margin-right: 5%;
+}
+
+.hideme { display: none }
+
