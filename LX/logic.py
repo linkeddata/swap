@@ -233,7 +233,7 @@ def ConstantForDatatypeValue(value, datatype=None):
     try:
         return constantsForDTVs[pair]
     except KeyError:
-        tt = Constant(suggestedName=("lit"+str(value)))
+        tt = Constant(suggestedName=(u"lit"+value))
         constantsForDTVs[pair] = tt
         valuesForConstants[tt] = pair
         tt.data = pair
@@ -272,7 +272,10 @@ def _test():
 if __name__ == "__main__": _test()
 
 # $Log$
-# Revision 1.9  2003-09-04 07:14:12  sandro
+# Revision 1.10  2003-09-05 04:39:06  sandro
+# changed handling of i18n chars
+#
+# Revision 1.9  2003/09/04 07:14:12  sandro
 # fixed plain literal handling
 #
 # Revision 1.8  2003/08/28 11:40:50  sandro
