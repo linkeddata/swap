@@ -41,7 +41,7 @@ CwmBuiltins.html : $(SCHEMAS)
 
 states.svg: states.graph
 
-print: tut.pdf tut.ps
+print: tutorial.pdf tutorial.ps
 
 #@@cwm.html -- remove junk
 #@@CwmBuiltins.html -- reformat
@@ -49,12 +49,12 @@ TUTFILES=Overview.html ../Primer.html formats.html Shortcuts.html ontologies.htm
 
 HTML2PS=html2ps # debian package originally from http://www.tdb.uu.se/~jan/html2ps.html
  # user guide http://www.tdb.uu.se/~jan/html2psug.html
-tut.ps: $(TUTFILES)
+tutorial.ps: $(TUTFILES)
 	$(HTML2PS) -o $@ -2 --xref $(TUTFILES)
 
 PS2PDF=ps2pdf # ghostscript? acroread?
-tut.pdf: tut.ps
-	$(PS2PDF) tut.ps
+tutorial.pdf: tutorial.ps
+	$(PS2PDF) tutorial.ps
 
 
 clean:
