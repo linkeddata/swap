@@ -1254,8 +1254,10 @@ class RDFStore(RDFSink) :
         import cwm_os      # OS builtins
         import cwm_time    # time and date builtins
         import cwm_math    # Mathematics
+        import cwm_maths   # Mathematics, perl/string style
         cwm_string.register(self)
         cwm_math.register(self)
+        cwm_maths.register(self)
         cwm_os.register(self)
         cwm_time.register(self)
         if crypto:
@@ -2203,9 +2205,12 @@ class RDFStore(RDFSink) :
 
     def purgeSymbol(self, context, subj=None):
 	"""Purge all triples in which a symbol occurs.
-	Defaults to all removing occurrences of log:implies, eg rules.
+	Defaults to all removing occurrences of log:implies, and log:forAll, eg rules.
 	"""
-	if subj == None: subj = self.implies
+	if subj == None:
+            self.purgeSymbol(context, self.implies)
+            self.purgeSymbol(context, self.forAll)
+            return
 	total = 0
 	for t in context.statementsMatching(subj=subj)[:]:
 		    self.removeStatement(t)    # SLOW
