@@ -1,0 +1,7 @@
+set(auto).
+formula_list(usable).
+
+f(a).
+a=b.
+b=c.
+-f(c).
