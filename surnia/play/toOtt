@@ -1,0 +1,22 @@
+set(auto).
+include('util/owlAxNarrow3.otter').
+formula_list(usable).
+rdf(s0, rdf_type, rdf_List) &
+rdf(s0, rdf_first, ns6_Student) &
+rdf(u, rdf_type, rdf_List) &
+rdf(s0, rdf_rest, u) &
+rdf(u, rdf_first, ns6_Employee) &
+rdf(u, rdf_rest, rdf_nil) &
+rdf(ns6_B, owl_intersectionOf, s0) &
+rdf(t, rdf_type, rdf_List) &
+rdf(t, rdf_first, ns6_Employee) &
+rdf(s, rdf_type, rdf_List) &
+rdf(t, rdf_rest, s) &
+rdf(s, rdf_first, ns6_Student) &
+rdf(s, rdf_rest, rdf_nil) &
+rdf(ns6_C, owl_intersectionOf, t) &
+rdf(ns6_John, rdf_type, ns6_B).
+
+-rdf(ns6_John, rdf_type, ns6_C).
+
+end_of_list.

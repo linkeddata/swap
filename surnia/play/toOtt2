@@ -1,0 +1,98 @@
+set(auto).
+clear(control_memory).
+% include('util/owlAx.otter').
+formula_list(usable).
+
+rdf(s1, rdf_type, rdf_List).
+rdf(s1, rdf_first, ns6_Human).
+rdf(s0, rdf_type, rdf_List).
+rdf(s1, rdf_rest, s0).
+rdf(s0, rdf_first, ns6_Animal).
+rdf(s0, rdf_rest, rdf_nil).
+rdf(ns6_A, owl_unionOf, s1).
+rdf(u, rdf_type, rdf_List).
+rdf(u, rdf_first, ns6_Animal).
+rdf(t, rdf_type, rdf_List).
+rdf(u, rdf_rest, t).
+rdf(t, rdf_first, ns6_Human).
+rdf(s, rdf_type, rdf_List).
+rdf(t, rdf_rest, s).
+rdf(s, rdf_first, ns6_Stone).
+rdf(s, rdf_rest, rdf_nil).
+rdf(ns6_B, owl_unionOf, u).
+rdf(ns6_John, rdf_type, ns6_A).
+-rdf(ns6_John, rdf_type, ns6_B).
+% -(rdf(ns6_John, rdf_type, ns6_Human) | rdf(ns6_John, rdf_type, ns6_Animal)).
+
+%%%-(exists Y (rdf(ns6_A, owl_differentFrom, Y))).
+
+% theorem: union of 1
+(all INST CLASS LIST FIRST (
+  ( rdf(INST, rdf_type, CLASS) &
+    rdf(CLASS, owl_unionOf, LIST) &
+    rdf(LIST, rdf_first, FIRST) &
+    rdf(LIST, rdf_rest, rdf_nil) )
+  -> 
+  rdf(INST, rdf_type, FIRST)
+)).
+
+% theorem: union of 2
+(all INST CLASS LIST L2 FIRST SECOND (
+  ( rdf(INST, rdf_type, CLASS) &
+    rdf(CLASS, owl_unionOf, LIST) &
+    rdf(LIST, rdf_first, FIRST) &
+    rdf(LIST, rdf_rest, L2) &
+    rdf(L2, rdf_first, SECOND) &
+    rdf(L2, rdf_rest, rdf_nil) )
+  -> 
+  ( rdf(INST, rdf_type, FIRST) | rdf(INST, rdf_type, SECOND) )
+)).
+   
+% theorem: union of 3
+(all INST CLASS LIST L2 L3 FIRST SECOND THIRD (
+  ( rdf(INST, rdf_type, CLASS) &
+    rdf(CLASS, owl_unionOf, LIST) &
+    rdf(LIST, rdf_first, FIRST) &
+    rdf(LIST, rdf_rest, L2) &
+    rdf(L2, rdf_first, SECOND) &
+    rdf(L2, rdf_rest, L3) &
+    rdf(L3, rdf_first, THIRD) &
+    rdf(L3, rdf_rest, rdf_nil) )
+  -> 
+  ( rdf(INST, rdf_type, FIRST) | 
+    rdf(INST, rdf_type, SECOND) |
+    rdf(INST, rdf_type, THIRD) )
+)).
+   
+% hack theorem: union of 2 back into 3
+%   if something is the disjunction of 2,
+%   and there's also one of three, use it.
+
+
+all INST CLASS LIST (
+   rdf(CLASS, owl_unionOf, LIST)
+   ->
+   ( rdf(INST, rdf_type, CLASS) 
+     <->
+     instanceOfAny(INST, LIST)
+   )
+).
+
+all INST LIST HEAD TAIL (
+   ( rdf(LIST, rdf_first, HEAD) &
+     rdf(LIST, rdf_rest, TAIL) )
+   ->
+   ( instanceOfAny(INST, LIST)		
+     <->
+     ( rdf(INST, rdf_type, HEAD) |
+       instanceOfAny(INST, TAIL) )
+   )
+).
+
+all INST (-instanceOfAny(INST, rdf_nil)).
+
+
+-(exists c (rdf(rdf_nil, rdf_rest, c))).
+-(exists c (rdf(rdf_nil, rdf_first, c))).
+
+end_of_list.
