@@ -66,6 +66,31 @@
     n3test:description   "Quick variable syntax, more";
     n3test:inputDocument  <syntax/qvars2.n3> .
 
+:n3_10016 a n3test:PositiveParserTest;
+    n3test:description   "N3 string nested triple quoting";
+    n3test:inputDocument  <syntax/lstring.n3> .
+
+:n3_10017 a n3test:PositiveParserTest;
+    n3test:description    "parsing and generation of N3 list syntax";
+    n3test:inputDocument  <lists.n3> .
+
+:n3_10018 a n3test:PositiveParserTest;
+    n3test:description    "Propertylists can end in trailing semicolon.";
+    n3test:inputDocument  <syntax/trailing-semicolon.n3> .
+
+:n3_10019 a n3test:PositiveParserTest;
+    n3test:description    "Can still read the old 'this log:forSome' syntax";
+    n3test:inputDocument  <syntax/this-quantifiers.n3> .
+
+:n3_10020 a n3test:PositiveParserTest;
+    n3test:description    "Can still read the old 'this log:forAll' syntax";
+    n3test:inputDocument  <syntax/this-rules.n3> .
+
+:n3_20000 a n3test:NegativeParserTest;
+    n3test:description    "something that isn't n3";
+    n3test:inputDocument  <tests-work.txt> .
 
 
-
+:n3_20001 a n3test:NegativeParserTest;
+    n3test:description    "@keywords is not a valid predicate";
+    n3test:inputDocument  <syntax/neg-keywords3.n3> .

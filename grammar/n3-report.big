@@ -1,10 +1,10 @@
 #Processed by Id: cwm.py,v 1.164 2004/10/28 17:41:59 timbl Exp 
-        #    using base file:/devel/WWW/2000/10/swap/grammar/
+        #    using base file:/home/syosi/CVS-local/WWW/2000/10/swap/grammar/
         
 #  Notation3 generation by
 #       notation3.py,v 1.166 2004/10/28 17:41:59 timbl Exp
 
-#   Base was: file:/devel/WWW/2000/10/swap/grammar/
+#   Base was: file:/home/syosi/CVS-local/WWW/2000/10/swap/grammar/
      @prefix : <http://www.w3.org/2000/10/swap/grammar/bnf2html#> .
      @prefix bnf: <http://www.w3.org/2000/10/swap/grammar/bnf#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
@@ -182,16 +182,16 @@
                 :SequenceTail;
          :seqlabel """<b><code>"@forSome"</code></b> <a href='#symbol_csl'>symbol_csl</a>""" .
       ( "@has" 
-        n3:prop  )
+        n3:path  )
          a :Sequence,
                 :SequenceTail;
-         :seqlabel """<b><code>"@has"</code></b> <a href='#prop'>prop</a>""" .
+         :seqlabel """<b><code>"@has"</code></b> <a href='#path'>path</a>""" .
       ( "@is" 
-        n3:prop 
+        n3:path 
         "@of"  )
          a :Sequence,
                 :SequenceTail;
-         :seqlabel """<b><code>"@is"</code></b> <a href='#prop'>prop</a> <b><code>"@of"</code></b>""" .
+         :seqlabel """<b><code>"@is"</code></b> <a href='#path'>path</a> <b><code>"@of"</code></b>""" .
       ( "@keywords" 
         <#_g8>  )
          a :Sequence,
@@ -361,6 +361,8 @@
       ( "formulacontent" 
         5  )
          log:outputString """		<p><a href='#declaration_s'>declaration_s</a> <a href='#universal_s'>universal_s</a> <a href='#existential_s'>existential_s</a> <a href='#statementlist'>statementlist</a></p>
+""",
+                """		<p><em>void</em></p>
 """ .
       ( "formulacontent" 
         9  )
@@ -686,7 +688,7 @@
 """ .
       ( "verb" 
         5  )
-         log:outputString """		<p><a href='#prop'>prop</a></p>
+         log:outputString """		<p><a href='#path'>path</a></p>
 """,
                 """		<p><b><code>"<="</code></b></p>
 """,
@@ -696,9 +698,9 @@
 """,
                 """		<p><b><code>"@a"</code></b></p>
 """,
-                """		<p><b><code>"@has"</code></b> <a href='#prop'>prop</a></p>
+                """		<p><b><code>"@has"</code></b> <a href='#path'>path</a></p>
 """,
-                """		<p><b><code>"@is"</code></b> <a href='#prop'>prop</a> <b><code>"@of"</code></b></p>
+                """		<p><b><code>"@is"</code></b> <a href='#path'>path</a> <b><code>"@of"</code></b></p>
 """ .
       ( "verb" 
         9  )
@@ -795,6 +797,10 @@
          a :SequenceTail;
          :seqlabel "<a href='#objecttail'>objecttail</a>" .
       ( n3:path 
+        "@of"  )
+         a :SequenceTail;
+         :seqlabel """<a href='#path'>path</a> <b><code>"@of"</code></b>""" .
+      ( n3:path 
         n3:pathlist  )
          a :Sequence,
                 :SequenceTail;
@@ -813,14 +819,6 @@
       ( n3:pathtail  )
          a :SequenceTail;
          :seqlabel "<a href='#pathtail'>pathtail</a>" .
-      ( n3:prop 
-        "@of"  )
-         a :SequenceTail;
-         :seqlabel """<a href='#prop'>prop</a> <b><code>"@of"</code></b>""" .
-      ( n3:prop  )
-         a :Sequence,
-                :SequenceTail;
-         :seqlabel "<a href='#prop'>prop</a>" .
       ( n3:propertylist 
         "]"  )
          a :SequenceTail;
@@ -1116,19 +1114,28 @@
          :reference "<a href='#explicituri'>explicituri</a>" .
     
     n3:formulacontent     a :Production;
-         bnf:canBeSequence  (
+         bnf:canBeSequence (),
+                 (
         <#_g3> 
         <#_g4> 
         <#_g5> 
         n3:statementlist  );
          bnf:label "formulacontent";
          bnf:mustBeOneSequence  (
+        () 
          (
             <#_g3> 
             <#_g4> 
             <#_g5> 
             n3:statementlist  ) );
          :optionTail (),
+                 (
+        () 
+         (
+            <#_g3> 
+            <#_g4> 
+            <#_g5> 
+            n3:statementlist  ) ),
                  (
          (
             <#_g3> 
@@ -1683,23 +1690,23 @@
         "@a"  ),
                  (
         "@has" 
-        n3:prop  ),
+        n3:path  ),
                  (
         "@is" 
-        n3:prop 
+        n3:path 
         "@of"  ),
                  (
-        n3:prop  );
+        n3:path  );
          bnf:label "verb";
          bnf:mustBeOneSequence  (
          (
-            n3:prop  )
+            n3:path  )
          (
             "@has" 
-            n3:prop  )
+            n3:path  )
          (
             "@is" 
-            n3:prop 
+            n3:path 
             "@of"  )
          (
             "@a"  )
@@ -1737,10 +1744,10 @@
                  (
          (
             "@has" 
-            n3:prop  )
+            n3:path  )
          (
             "@is" 
-            n3:prop 
+            n3:path 
             "@of"  )
          (
             "@a"  )
@@ -1753,7 +1760,7 @@
                  (
          (
             "@is" 
-            n3:prop 
+            n3:path 
             "@of"  )
          (
             "@a"  )
@@ -1765,13 +1772,13 @@
             "<="  ) ),
                  (
          (
-            n3:prop  )
+            n3:path  )
          (
             "@has" 
-            n3:prop  )
+            n3:path  )
          (
             "@is" 
-            n3:prop 
+            n3:path 
             "@of"  )
          (
             "@a"  )

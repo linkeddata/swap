@@ -1,10 +1,10 @@
 #Processed by Id: cwm.py,v 1.164 2004/10/28 17:41:59 timbl Exp 
-        #    using base file:/home/syosi/cvs-trunk/WWW/2000/10/swap/grammar/
+        #    using base file:/home/syosi/CVS-local/WWW/2000/10/swap/grammar/
         
 #  Notation3 generation by
 #       notation3.py,v 1.166 2004/10/28 17:41:59 timbl Exp
 
-#   Base was: file:/home/syosi/cvs-trunk/WWW/2000/10/swap/grammar/
+#   Base was: file:/home/syosi/CVS-local/WWW/2000/10/swap/grammar/
      @prefix : <http://www.w3.org/2000/10/swap/grammar/bnf#> .
      @prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#> .
      @prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#> .
@@ -75,7 +75,7 @@
     "=>"     :canPrecede n3:object;
          :canStartWith "=>" .
     
-    "@"     :canPrecede 1;
+    "@"     :canPrecede n3:langcode;
          :canStartWith "@" .
     
     "@a"     :canPrecede n3:object;
@@ -158,19 +158,6 @@
                 n3:propertylisttail,
                 n3:statementtail .
     
-    1     :canPrecede ")",
-                ".",
-                "@of",
-                "]",
-                "}",
-                n3:object,
-                n3:objecttail,
-                n3:pathlist,
-                n3:pathtail,
-                n3:propertylist,
-                n3:propertylisttail,
-                n3:statementtail .
-    
     ()     a rul:Used .
       ( "!" 
         n3:path  )
@@ -210,7 +197,7 @@
       ( "=>"  )
          a rul:Used .
       ( "@" 
-        1  )
+        n3:langcode  )
          a rul:Used .
       ( "@a"  )
          a rul:Used .
@@ -495,11 +482,11 @@
                  [
              :branchTail  (
             "@" 
-            1  );
+            n3:langcode  );
              :condition "@";
              :sequence  (
             "@" 
-            1  ) ],
+            n3:langcode  ) ],
                  [
              :branchTail  (
             "^^" 
@@ -528,7 +515,7 @@
         () 
          (
             "@" 
-            1  )
+            n3:langcode  )
          (
             "^^" 
             n3:symbol  ) ) .
@@ -641,7 +628,19 @@
             <#_g5> 
             n3:statementlist  ) ) .
     
-    n3:langcode     :canStartWith "a";
+    n3:langcode     :canPrecede ")",
+                ".",
+                "@of",
+                "]",
+                "}",
+                n3:object,
+                n3:objecttail,
+                n3:pathlist,
+                n3:pathtail,
+                n3:propertylist,
+                n3:propertylisttail,
+                n3:statementtail;
+         :canStartWith "a";
          :matches "[a-z]+(-[a-z0-9]+)*" .
     
     n3:literal     :TEST n3:string;
@@ -1376,7 +1375,7 @@
                 n3:propertylisttail,
                 n3:statementtail;
          :canStartWith "\"";
-         :matches """(\"""[^"\\\\]*(?:(?:\\\\.|"(?!""))[^"\\\\]*)*\""")|("[^"\\\\]*(?:\\\\.[^"\\\\]*)*")""" .
+         :matches """(\"""[^"\\\\]*(?:(?:\\\\.|"(?!""))[^"\\\\]*)*\""")|("[^"\\\\]*(?:\\\\.[^"\\\\]*)*")([a-z]+(-[a-z0-9]+)*)?""" .
     
     n3:subject     :TEST n3:path;
          :branch  [

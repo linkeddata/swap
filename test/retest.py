@@ -214,6 +214,7 @@ def main():
     RDFTestData  = []
     perfData = []
     n3PositiveTestData = []
+    n3NegativeTestData = []
 #    for fn in testFiles:
 #	print "Loading tests from", fn
 #	kb=load(fn)
@@ -282,6 +283,20 @@ def main():
 	n3PositiveTestData.append((t.uriref(), case, description,  inputDocument))
 
 
+    for t in kb.each(pred=rdf.type, obj=n3test.NegativeParserTest):
+	u = t.uriref()
+	hash = u.rfind("#")
+	slash = u.rfind("/")
+	assert hash >0 and slash > 0
+	case = u[slash+1:hash] + "_" + u[hash+1:] + ".out" # Make up temp filename
+	
+	description = str(kb.the(t, n3test.description))
+#	    if description == None: description = case + " (no description)"
+	inputDocument = kb.the(t, n3test.inputDocument).uriref()
+
+	n3NegativeTestData.append((t.uriref(), case, description,  inputDocument))
+
+
     for t in kb.each(pred=rdf.type, obj=test.PerformanceTest):
         x = t.uriref()
         theTime = kb.the(subj=t, pred=test.pyStones)
@@ -301,7 +316,9 @@ def main():
     perfTests = len(perfData)
     n3PositiveTestData.sort()
     n3PositiveTests = len(n3PositiveTestData)
-    totalTests = cwmTests + rdfTests + perfTests + n3PositiveTests
+    n3NegativeTestData.sort()
+    n3NegativeTests = len(n3NegativeTestData)
+    totalTests = cwmTests + rdfTests + perfTests + n3PositiveTests + n3NegativeTests
     if verbose: print "RDF parser tests: %i" % rdfTests
 
     for u, case, refFile, description, env, arguments, verboseDebug in testData:
@@ -364,7 +381,29 @@ def main():
 #	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
 #			WD, REFWD)
 	execute("""python %s ../grammar/n3-selectors.n3  http://www.w3.org/2000/10/swap/grammar/n3#document %s  > ,temp/%s""" %
-	    ('../grammar/check-grammar.py', inputDocument, case))
+	    ('../grammar/predictiveParser.py', inputDocument, case))
+
+	passes = passes + 1
+
+    for u, case, description, inputDocument in n3NegativeTestData:
+	tests = tests + 1
+	if tests < start: continue
+    
+    
+	print "%3i/%i)  %s   %s" %(tests, totalTests, case, description)
+    #    print "      %scwm %s   giving %s" %(inputDocument, case)
+	assert case and description and inputDocument
+#	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
+#			WD, REFWD)
+        try:
+            execute("""python %s ../grammar/n3-selectors.n3  http://www.w3.org/2000/10/swap/grammar/n3#document %s  > ,temp/%s""" %
+                ('../grammar/predictiveParser.py', inputDocument, case))
+        except:
+            pass
+        else:
+            raise RuntimeError("""There was no error executing ``python %s ../grammar/n3-selectors.n3  http://www.w3.org/2000/10/swap/grammar/n3#document %s  > ,temp/%s''
+            There should have been one.""" %
+                ('../grammar/predictiveParser.py', inputDocument, case))
 
 	passes = passes + 1
 

@@ -250,17 +250,19 @@ class PredictiveParser:
 	    return "0", i #  Numeric
 	j = i+1
 	if ch == "@":
+            if i!=0 and whiteSpace.match(str[i-1]).end() == 0:
+                return ch, i
 	    while str[j] not in notNameChars: j = j + 1
 	    if str[i+1:j] == "keywords" : parser.keywords = [] # Special
 	    return str[i:j], i # keyword
 	if ch == '"':  #"
-	    if str[i+1:i+3] == '""':  # Triple quoted
-		m = tripleQuotedString.match(str,i+3)
-	    else:
-		m = quotedString.match(str,i+1)
-	    if m == None: return '""', -1  # Error
-	    parser.lineNumber += str[i: m.end()].count("\n")
-	    i = m.end()
+#	    if str[i+1:i+3] == '""':  # Triple quoted
+#		m = tripleQuotedString.match(str,i+3)
+#	    else:
+#		m = quotedString.match(str,i+1)
+#	    if m == None: return '""', -1  # Error
+#	    parser.lineNumber += str[i: m.end()].count("\n")
+#	    i = m.end()
 	    return '"', i #"
    
 	while str[j] not in notQNameChars: j = j+1

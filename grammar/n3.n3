@@ -161,7 +161,7 @@ symbol bnf:mustBeOneSequence (
 
 literal bnf:mustBeOneSequence(( string dtlang)).
 
-dtlang bnf:mustBeOneSequence(  ()  ("@" 1)  ("^^" symbol)).
+dtlang bnf:mustBeOneSequence(  ()  ("@" langcode)  ("^^" symbol)).
 
 
 #______________________________________________________________________
@@ -206,7 +206,7 @@ langcode	bnf:matches  	"[a-z]+(-[a-z0-9]+)*"; # http://www.w3.org/TR/rdf-testcas
 # string3		bnf:matches		"\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\"".
 # string1		bnf:matches		"\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"".
 
-string		bnf:matches		"(\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\")|(\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\")";
+string		bnf:matches		"(\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\")|(\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\")([a-z]+(-[a-z0-9]+)*)?";
 		bnf:canStartWith 	"\"".
 
 #____________________________________________________
