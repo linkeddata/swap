@@ -64,7 +64,7 @@ def convert():
     for i in range(0,len(headings)-1):
 	h = headings[i]
         for j in range(0,len(h)-1):
-	    if h[j]==" ":
+	    if h[j] not in "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_":
 		headings[i] = headings[i][:j] + "_" + headings[i] [j+1:]
 
     if "-schema" in sys.argv[1:]:
