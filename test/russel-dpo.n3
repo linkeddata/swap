@@ -1,4 +1,11 @@
 # $Id$
+#
+# taken from
+#  A Proposal for the Web Ontology Language - slide "DAML+OIL Paradox"
+#  http://www-db.research.bell-labs.com/user/pfps/talks/webont-f2f-owl/slide25-0.html
+#
+# see also, discussion with bijan in #rdfig
+# http://ilrt.org/discovery/chatlogs/rdfig/2002-01-17#T22-14-42
 
 @prefix owl: <http://www.daml.org/2001/03/daml+oil#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
@@ -20,7 +27,8 @@ this log:forSome :_g1 .
 #####
 # background... some rules/axioms to define the DAML+OIL/owl terms...
 
-this log:forAll :s, :p, :o, :C, :C1, :C2, :F.
+this log:forAll :s, :p, :o, :C, :C1, :C2, :F,
+	:sn, :pn, :on.
 
 
 # some axioms about oneOf...
@@ -46,28 +54,39 @@ this log:forAll :s, :p, :o, :C, :C1, :C2, :F.
 #  is the/a class of things with at most N different values
 #  from class :C
 #  of the property :p.
-# a (not so good) example: every person has at most 2 parents:
-#  :Person 
-#    owl:onProperty :parent.
+# a (not so good) example: every person has at most 2 parents that are Persons:
+#  :Person rdfs:subClassOf [
+#    owl:onProperty :parent;
 #    owl:maxCardinalityQ "2";
-#    owl:hasClassQ :Person;
+#    owl:hasClassQ :Person].
 #
 # hence if N is zero and :o is a :C,
 # then :s is not related to :o by :p.
 #
 { :s a [ owl:hasClassQ :C; owl:maxCardinalityQ "0";    owl:onProperty :p ].
-  :o a :C }
+  :o a :C.
+
+  :s log:uri :sn.
+  :p log:uri :pn.
+  :o log:uri :on.
+
+ }
   log:implies {
-   # cwm seems to have trouble with {}s nested in the conclusion, so
+   # I tried writing
+   #   { :s :p :o } a log:Falsehood.
+   # but cwm seems to have trouble with {}s nested in the conclusion, so
    # I'm making up this funky form of reification...
-   [ form:subject :s; form:predicate :p; form:object :o ]
-    a log:Falsehood }.
+   [ form:subject :sn; form:predicate :pn; form:object :on ]
+    a log:Falsehood
+  }.
 
 
 # Finally
 # if P and not(P), then P is Goofy!
 { :s :p :o.
-  :F form:subject :s; form:predicate :p; form:object :o.
+  :F form:subject [ is log:uri of :s];
+     form:predicate [ is log:uri of :p];
+     form:object [is log:uri of :o].
   :F a log:Falsehood }
   log:implies {
    :F a :Goofy. }.
