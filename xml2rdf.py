@@ -18,13 +18,14 @@ STATE_DESCRIPTION = "Description (have subject)" #
 STATE_LITERAL = "within literal"
 STATE_VALUE = "plain value"
 STATE_NOVALUE = "no value"
+STATE_LIST =    "within list"
 
 RESOURCE = notation3.RESOURCE
 LITERAL = notation3.LITERAL
 
 RDFNS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#" # As per the spec
 RDF_Specification = "http://www.w3.org/TR/REC-rdf-syntax/" # Must come in useful :-)
-
+DAML_ONT_NS = "http://www.daml.org/2000/10/daml-ont#"  # 
 chatty = 0
 
 class RDFXMLParser(xmllib.XMLParser):
@@ -138,40 +139,21 @@ class RDFXMLParser(xmllib.XMLParser):
                     (RESOURCE, self._context) ))
 
         if self._subject == None:
-            self._subject = self._genPrefix + `self._nextId`  #
+            self._subject = self._generate()
+
+            
+    def _generate(self):
+            generatedId = self._genPrefix + `self._nextId`  #
             self._nextId = self._nextId + 1
             self.sink.makeStatement(( (RESOURCE, self._context),                                 
                                       (RESOURCE, notation3.N3_forSome_URI),
                                       (RESOURCE, self._context),
-                                      (RESOURCE, self._subject) )) #  Note this is anonymous node
+                                      (RESOURCE, generatedId) )) #  Note this is anonymous node
+            return generatedId
 
-    def unknown_starttag(self, tag, attrs):
-        """ Handle start tag. We register none so all are unknown
-        """
-        self.flush()
-        tagURI = self.tag2uri(tag)
-
-        if chatty:
-            if not attrs:
-                print '# State =', self._state, 'start tag: <' + tagURI + '>'
-            else:
-                print '# state =', self._state, 'start tag: <' + tagURI,
-                for name, value in attrs.items():
-                    print "    " + name + '=' + '"' + value + '"',
-                print '>'
-
-
-        self._stack.append([self._state, self._context, self._subject])
-
-        if self._state == STATE_NOT_RDF:
-            if tagURI == RDFNS + "RDF":
-                self._state = STATE_NO_CONTEXT
-            else:
-                pass                    # Some random XML 
-        elif self._state == STATE_NO_CONTEXT:  # 6.2 obj :: desription | container
-            if tag == RDFNS + " Description":
+    def _obj(self, tagURI, attrs):  # 6.2
+            if tagURI == RDFNS + "Description":
                 self.idAboutAttr(attrs)  # Set up subject and context                
-                
 
             elif ( tagURI == RDFNS + "Bag" or  # 6.4 container :: bag | sequence | alternative
                    tagURI == RDFNS + "Alt" or
@@ -189,8 +171,34 @@ class RDFXMLParser(xmllib.XMLParser):
                 self._state = STATE_DESCRIPTION
                 
 
+    def unknown_starttag(self, tag, attrs):
+        """ Handle start tag. We register none so all are unknown
+        """
+        self.flush()
+        tagURI = self.tag2uri(tag)
+
+        if chatty:
+            if not attrs:
+                print '# State =', self._state, 'start tag: <' + tagURI + '>'
+            else:
+                print '# state =', self._state, 'start tag: <' + tagURI,
+                for name, value in attrs.items():
+                    print "    " + name + '=' + '"' + value + '"',
+                print '>'
+
+
+        self._stack.append([self._state, self._context, self._predicate, self._subject])
+
+        if self._state == STATE_NOT_RDF:
+            if tagURI == RDFNS + "RDF":
+                self._state = STATE_NO_CONTEXT
+            else:
+                pass                    # Some random XML
+
+        elif self._state == STATE_NO_CONTEXT:  # 6.2 obj :: desription | container
+            self._obj(tagURI, attrs)
             
-        elif self._state == STATE_DESCRIPTION:   # Expect predicate (property)
+        elif self._state == STATE_DESCRIPTION:   # Expect predicate (property) PropertyElt
             self._predicate = tagURI # Declaration by class name [ a my:class ;... ]
             self._state = STATE_VALUE  # Propably looking for value but see parse type
             self.testdata = ""         # Flush value data
@@ -201,21 +209,24 @@ class RDFXMLParser(xmllib.XMLParser):
                 x = string.find(name, " ")
                 if x>=0: name=name[x+1:]    # Strip any namespace on attributes!!! @@@@
                 if name == "id":
-                    print "Warning: id=%s on <%s...> ignored" %  (value,) # Meaning?
+                    print "# Warning: id=%s on <%s...> ignored" %  (value,) # Meaning?
                 elif name == "parseType":
                     if value == "Literal":
                         self._state = STATE_LITERAL # That's an XML subtree not a string
                     elif value == "Resource":
                         c = self._context
                         s = self._subject
-                        p = self._predicate
-                        self.idAboutAttrs(attrs)  # set subject etc for nested description
+                        self.idAboutAttr(attrs)  # set subject and context for nested description
                         self.sink.makeStatement(( (RESOURCE, c),
-                                                  (RESOURCE, p),
+                                                  (RESOURCE, self._predicate),
                                                   (RESOURCE, s),
                                                   (RESOURCE, self._subject) ))
-
                         self._state = STATE_DESCRIPTION  # Nest description
+                    elif value == "daml:collection":  # Is this a daml:collection qname?
+ #                       pref = value[:-11]    # We ought to translate to URI but can't get NS's.
+ #                       if self.namespaces.get(pref, "") == DAML_ONT_URI:   # @@@@@@@@ HACK!
+
+                        self._state = STATE_LIST  # Linked list of obj's
                 elif name == "resource":
                     self.sink.makeStatement(((RESOURCE, self._context),
                                              (RESOURCE, self._predicate),
@@ -228,8 +239,39 @@ class RDFXMLParser(xmllib.XMLParser):
                                              (RESOURCE, self._subject),
                                              (LITERAL,  value) ))
                     self._state = STATE_NOVALUE  # NOT looking for value
-        elif self._state == STATE_VALUE:
-            raise syntaxError # Found tag in plain value
+                    
+        elif self._state == STATE_LIST:   # damlCollection :: objs - make list
+            # Subject and predicate are set and dangling. 
+            c = self._context
+            s = self._subject  # The tail of the list so far
+            p = self._predicate
+            pair = self._generate()        # The new pair
+            self.sink.makeStatement(( (RESOURCE, c),   # Link in new pair
+                                      (RESOURCE, p),
+                                      (RESOURCE, s),
+                                      (RESOURCE, pair) )) 
+            self.idAboutAttr(attrs)  # set subject (the next item) and context 
+            self.sink.makeStatement(( (RESOURCE, c),
+                                      (RESOURCE, DAML_ONT_NS + "first"),
+                                      (RESOURCE, pair),
+                                      (RESOURCE, self._subject) )) # new item
+            
+            self._stack[-1][2] = DAML_ONT_NS + "rest"  # Leave dangling link
+            self._stack[-1][3] = pair  # Underlying state tracks tail of growing list
+
+         
+        elif self._state == STATE_VALUE:   # Value :: Obj in this case # 6.17  6.2
+            c = self._context
+            p = self._predicate
+            s = self._subject
+            self._obj(tagURI, attrs)   # Parse the object thing's attributes
+            self.sink.makeStatement(( (RESOURCE, c), # Link to new object
+                                      (RESOURCE, p),
+                                      (RESOURCE, s),
+                                      (RESOURCE, self._subject) ))
+            
+            self._stack[-1][0] = STATE_NOVALUE  # When we return, cannot have literal now
+
         elif self._state == STATE_NOVALUE:
             raise syntaxError # Found tag, expected empty
         else:
@@ -249,11 +291,19 @@ class RDFXMLParser(xmllib.XMLParser):
                                        (RESOURCE, self._subject),
                                        (LITERAL,  buf) ))
             self.testdata = ""
+            
+        elif self._state == STATE_LIST:
+            self.sink.makeStatement(( (RESOURCE, self._context),
+                                      (RESOURCE, DAML_ONT_NS + "rest"),
+                                      (RESOURCE, self._subject),
+                                      (RESOURCE, DAML_ONT_NS + "null") ))
+
 
         l =  self._stack.pop() # [self._state, self._context, self._subject])
         self._state = l[0]
         self._context = l[1]
-        self._subject = l[2]
+        self._predicate = l[2]
+        self._subject = l[3]
         self.flush()
         # print '\nend tag: </' + tag + '>'
 

@@ -516,7 +516,6 @@ class RDFStore(notation3.RDFSink) :
                 elif pred is subExpression :
                     _isSubExp = 1
 
-        if _asObj > 2: return 0, _isSubExp         # No - occurs as object too much
         _op = _asObj + _asPred
         _anon = (_op < 2) and _isExistential
         return ( _anon, _asObj+_asPred, _isSubExp)  
