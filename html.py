@@ -63,15 +63,14 @@ The Document class handle doctype, html/head/body.
    * <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
    *           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
    * <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
-   *   <head>
-   *     <title>Test Document</title>
-   *   </head>
+   *   <head><title>Test Document</title></head>
    * 
    *   <body>
    *     <h1>Test Document</h1>
    *   </body>
    * </html>
    * 
+
 
 Pseudo-elements using the class= attribute can be handled nicely:
 
@@ -85,9 +84,7 @@ Pseudo-elements using the class= attribute can be handled nicely:
    * <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
    *           "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
    * <html lang="en" xml:lang="en" xmlns="http://www.w3.org/1999/xhtml">
-   *   <head>
-   *     <title>Test Document</title>
-   *   </head>
+   *   <head><title>Test Document</title></head>
    * 
    *   <body>
    *     <p class="status">This is a Demonstration Document</p>
@@ -160,7 +157,13 @@ class Element(Streamer):
         for key in keys:
             if self.attrs[key] is not None:
                 s.write(" ")
-                s.write(key)
+                if key.endswith("_"):
+                    # to allow the "class" attr to be given as "class_"
+                    # (in standard python style) to avoid conflict with
+                    # the python keyword.
+                    s.write(key[0:-1])
+                else:
+                    s.write(key)
                 s.write("=\"")
                 s.write(self.attrs[key])
                 s.write("\"")
@@ -218,45 +221,6 @@ class Comment:
             s.write("\n")
             s.write(prefix[0:-2])
    
-def em(content, attrs=None):
-    return Element('em', content=content, attrs=attrs, inline=1)
-
-def strong(content, attrs=None):
-    return Element('strong', content=content, attrs=attrs, inline=1)
-
-def span(content, attrs=None):
-    return Element('span', content=content, attrs=attrs, inline=1)
-
-
-
-def p(content, attrs=None):
-    return Element('p', content=content, attrs=attrs)
-
-
-def h1(content, attrs=None):
-    return Element('h1', content=content, attrs=attrs)
-
-def h2(content, attrs=None):
-    return Element('h2', content=content, attrs=attrs)
-
-def h3(content, attrs=None):
-    return Element('h3', content=content, attrs=attrs)
-
-def h4(content, attrs=None):
-    return Element('h4', content=content, attrs=attrs)
-
-def h5(content, attrs=None):
-    return Element('h5', content=content, attrs=attrs)
-
-def h6(content, attrs=None):
-    return Element('h6', content=content, attrs=attrs)
-
-
-def title(content, attrs=None):
-    return Element('title', content=content, attrs=attrs)
-
-def div(content, attrs=None):
-    return Element('div', content=content, attrs=attrs)
 
 def stylelink(href):
     return Element("link", attrs={
@@ -264,36 +228,73 @@ def stylelink(href):
         "type":"text/css",
         "href":href})
 
-def htable(content=None, attrs=None):
-    return Element('table', content=content, attrs=attrs)
-
-def tr(content=None, attrs=None):
-    return Element('tr', content=content, attrs=attrs)
-
-def td(content=None, attrs=None):
-    return Element('td', content=content, attrs=attrs)
-
-# could we have the automatic for all the elements and their
-# standard attributes...???   Need to use DTD....
-#
-#   See Lars's
-# http://www.garshol.priv.no/download/software/xmlproc/dtd-parser-doco.html
-#
-#  elements = {
-#    'a': InLine(['class', 'id', 'href', 'rel', 'rev']), ...
-#    'em': ['class', 'id', 'href', 'rel', 'rev'],
-#    }
-
-def a(content, href=None, attrs=None):
-    e =  Element("a", content, attrs=attrs)
-    if href: e.attrs.setdefault('href', href)
-    return e
-
 def prefixEveryLine(prefix, s):
     extra = ""
     s = str(s)
     if s.endswith("\n"): extra = "\n"+prefix
     return prefix+("\n"+prefix).join(s.splitlines())+extra
+
+class Flow:
+    """
+    >>> import html
+    >>> h = html.Flow()
+    >>> print prefixEveryLine("* ",
+    ...                       h.span("Spanned Text", class_="authorName"))
+    * 
+    * <span class="authorName">Spanned Text</span>
+    * 
+    """
+    def __getattr__(self, name):
+        def func(content="", **kw):
+            return Element(name, content, attrs=kw)
+        return func
+
+class Inline:
+    """
+    >>> import html
+    >>> h = html.Inline()
+    >>> print h.span("Spanned Text", class_="authorName")
+    <span class="authorName">Spanned Text</span>
+    """
+    def __getattr__(self, name):
+        def func(content="", **kw):
+            return Element(name, content, attrs=kw, inline=1)
+        return func
+
+"""Foo"""
+
+def createStdElements():
+    import html
+
+    flow = Flow()
+    inline = Inline()
+
+    # These element names come from
+    # http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd
+    #
+    # I added the "+" myself (a flag for non-inline element); it's
+    # just about the style in which the HTML is generated and doesnt
+    # HAVE to match inline/flow in HTML's own syntax.
+
+    elements = """a abbr acronym address area b base bdo big
+    blockquote+ body+ br button caption cite code col colgroup dd del
+    dfn div+ dl dt em fieldset form+ h1+ h2+ h3+ h4+ h5+ h6+ head+ hr+ html+ i
+    img input ins kbd label legend li link map meta noscript object ol+
+    optgroup option p+ param pre q samp script+ select small span strong
+    style sub sup table+ tbody+ td textarea tfoot th thead title tr+ tt
+    ul+ var"""
+
+    for x in elements.split(" "):
+        tag = x.strip()
+        if tag:
+            if tag.endswith("+"):
+                tag = tag[0:-1]
+                html.__dict__[tag] = getattr(flow, tag)
+            else:
+                html.__dict__[tag] = getattr(inline, tag)
+            
+
+createStdElements()
 
 if __name__ =='__main__':
     import doctest, html
@@ -301,7 +302,10 @@ if __name__ =='__main__':
     print doctest.testmod(html) 
 
 # $Log$
-# Revision 1.2  2003-02-14 00:44:24  sandro
+# Revision 1.3  2003-02-18 17:02:05  sandro
+# added auto-generation of element-creation functions, based on XHTML DTD
+#
+# Revision 1.2  2003/02/14 00:44:24  sandro
 # added some more functions: htable, tr, td, a
 #
 # Revision 1.1  2003/01/29 18:28:37  sandro
