@@ -114,7 +114,8 @@ the URI of the table, a slash, and the URI-encoded value of the
 primary key value for that row. 
 
 The row document gives the value of each cell in the row.
-It identifies the row by the 
+It identifies the row with a local <#item> URI.
+It must also identify <#item> as being of rdf$type of the Table.
 """.
 
 
