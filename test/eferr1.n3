@@ -1,0 +1,16 @@
+# test catching N3 syntax errors.
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix v: <#>.
+@prefix : <ef1#>.
+
+<#something> <#note>
+  "  <#s> <#p> #missing o. ".
+
+this log:forAll v:x, v:n, v:f, v:s, v:o.
+
+{ v:x <#note> v:n.
+  v:n log:n3ExprFor v:f.
+  v:f log:includes { v:s a v:o }
+}
+ log:implies
+  { :test1 a :Failure; :witness v:s, v:o }.

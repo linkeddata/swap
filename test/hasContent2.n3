@@ -1,0 +1,17 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix v: <#>.
+
+@prefix : <mid:hasContent2@example#>.
+@prefix hasC2: <mid:hasContent2@example#>.
+
+:fido a :Dog.
+
+this log:forAll v:str, v:f, v:g, v:x, v:p, v:s, v:o.
+
+{ <hasContent2.n3> log:hasContent v:str.
+  v:str log:n3ExprFor v:f.
+  v:f log:includes { v:s a v:o. }
+ }
+  log:implies
+  { :test2 a :Success;
+	:witnessSubject v:s; :witnessObject v:o. }.

@@ -1,0 +1,44 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix v: <#>.
+@prefix : <ef1#>.
+
+<#something> <#note>
+  " <mid:joe@example> <mid:knows@example> <mid:jane@example>. ".
+
+<#somethingRel> <#note>
+  " <#joe> <mid:knows@example> <#jane>. ".
+
+this log:forAll v:x, v:n, v:f, v:s, v:o.
+
+{ v:x <#note> v:n.
+  v:n log:n3ExprFor v:f.
+  v:f log:includes
+   { <mid:joe@example> <mid:knows@example> <mid:jane@example> }
+}
+ log:implies
+  { :test1 a :Success. }.
+
+{ v:x <#note> v:n.
+  v:n log:n3ExprFor v:f.
+  v:f log:includes
+   { <mid:joe@example> <mid:knows@example> v:o }
+}
+ log:implies
+  { :test2 a :Success. v:o :the :Object }.
+
+{ v:x <#note> v:n.
+  v:n log:n3ExprFor v:f.
+  v:f log:includes
+   { v:s <mid:knows@example> v:o }
+}
+ log:implies
+  { :test2r a :Success.
+    v:s :knows v:o }.
+
+{ v:x <#note> v:n.
+  v:n log:n3ExprFor v:f.
+  v:f log:includes
+   { <mid:joe@example> <mid:knows@example> <mid:jane@example> }
+}
+ log:implies
+  { :test3 a :Success. v:f :the :Formula. }.

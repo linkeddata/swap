@@ -1,0 +1,12 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix v: <#>.
+
+@prefix : <hasContent1#>.
+
+this log:forAll v:str.
+
+{ <hasContent1.n3> log:hasContent v:str }
+  log:implies
+  { :test1 a :Success.
+    <hasContent1.n3> log:hasContent v:str }.
+

@@ -107,6 +107,10 @@ import StringIO
 import notation3    # N3 parsers and generators, and RDF generator
 import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
+import urllib # for hasContent
+import md5, binascii  # for building md5 URIs
+urlparse.uses_fragment.append("md5") #@@kludge/patch
+urlparse.uses_relative.append("md5") #@@kludge/patch
 
 LITERAL_URI_prefix = "data:application/n3;"
 
@@ -333,6 +337,17 @@ class Literal(Thing):
 
     def asPair(self):
         return (LITERAL, self.string)
+
+    def asHashURI(self):
+        """return a md5: URI for this literal.
+        Hmm... encoding... assuming utf8? @@test this.
+        Hmm... for a class of literals including this one,
+        strictly speaking."""
+        x=md5.new()
+        x.update(self.string)
+        d=x.digest()
+        b16=binascii.hexlify(d)
+        return "md5:" + b16
 
     def representation(self, base=None):
         return '"' + self.string + '"'   # @@@ encode quotes; @@@@ strings containing \n
@@ -585,6 +600,41 @@ class BI_resolvesTo(HeavyBuiltIn, Function):
         return (F == obj) # @@@@@@@@@@@@@@@@@@@@@@@@@@@@ do structual equivalnce thing
 
 
+class BI_hasContent(HeavyBuiltIn, Function): #@@DWC: Function?
+    def evaluateObject2(self, store, subj):
+        if isinstance(subj, Fragment): doc = subj.resource
+        else: doc = subj
+        C = store.any((experience, store.hasContent, doc, None))
+        if C: return C
+        if chatty > 10: progress("Reading " + `doc`)
+        inputURI = doc.uriref()
+        netStream = urllib.urlopen(inputURI)
+        str = netStream.read() # May be big - buffered in memory!
+        C = store.engine.intern((LITERAL, str))
+        return C
+
+    def evaluate2(self, store, subj, obj, variables):
+        C = self.evaluateObject2(store, subj)
+        return (C == obj)
+
+class BI_n3ExprFor(HeavyBuiltIn, Function):
+    def evaluateObject2(self, store, subj):
+        if isinstance(subj, Literal):
+            F = store.any((experience, store.n3ExprFor, subj, None))
+            if F: return F
+            if chatty > 10: progress("parsing " + subj.string[:30] + "...")
+            inputURI = subj.asHashURI() # iffy/bogus... rather asDataURI?
+            p = notation3.SinkParser(store, inputURI)
+            p.startDoc()
+            p.feed(subj.string) #@@ catch parse errors
+            p.endDoc()
+            del(p)
+            F = store.engine.intern((FORMULA, inputURI+ "#_formula"))
+            return F
+    
+    def evaluate2(self, store, subj, obj, variables):
+        F = self.evaluateObject2(store, subj)
+        return (F == obj) # @@@@@@@@@@@@@@@@@@@@@@@@@@@@ do structual equivalnce thing
 
 
 class RDFStore(notation3.RDFSink) :
@@ -636,6 +686,8 @@ class RDFStore(notation3.RDFSink) :
 #Heavy functions:
 
         self.resolvesTo =       log.internFrag("resolvesTo", BI_resolvesTo)
+        self.hasContent =       log.internFrag("hasContent", BI_hasContent)
+        self.n3ExprFor  =       log.internFrag("n3ExprFor",  BI_n3ExprFor)
         
 # Constants:
 
