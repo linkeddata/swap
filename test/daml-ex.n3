@@ -1,117 +1,107 @@
-# Base URI of process is file:///devel/WWW/2000/10/swap/test/
-# Input from  file:/devel/WWW/2000/10/swap/test/daml-pref.n3
-# Input from  http://www.daml.org/2001/03/daml-ex
-# flushed data: '\012    '
-# flushed data: '\012    '
-# flushed data: '\012    '
-
+#Processed by Id: cwm.py,v 1.44 2001/05/19 03:39:00 timbl Exp 
+        #    using base file:/cygdrive/c/devel/WWW/2000/10/swap/test/daml-ex.rdf
+        
 #  Notation3 generation by
-#  $Id$
+#       notation3.py,v 1.76 2001/05/19 03:39:00 timbl Exp
 
-     @prefix ex: <http://www.daml.org/2001/03/daml-ex#> .
-     @prefix : <http://www.daml.org/2001/03/daml+oil#> .
-     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+#   Base was: file:/cygdrive/c/devel/WWW/2000/10/swap/test/daml-ex.rdf
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix : <#> .
+     @prefix ex: <#> .
     
-    <file:/devel/WWW/2000/10/swap/test/STDOUT>     a :Ontology;
-         :versionInfo "$Id$";
-         :comment "An example ontology";
-         :imports <http://www.daml.org/2001/03/daml-ont> .
+    :Adam     a daml:Person;
+         daml:comment "Adam is a person.";
+         daml:label "Adam" .
     
-    ex:Man     a :Class;
-         :subClassOf ex:Person,
-                ex:Male .
+    :Animal     a daml:Class;
+         daml:comment """This class of animals is illustrative of a number of
+	ontological idioms.""";
+         daml:label "Animal" .
     
-    ex:TallThing     a :Class;
-         :restrictedBy  [
-             a :Restriction;
-             :onProperty ex:height;
-             :toValue ex:tall ] .
+    :Car     a daml:Class;
+         daml:comment "no car is a person";
+         daml:subClassOf  [
+             a daml:Class;
+             daml:complementOf :Person ] .
     
-    ex:Woman     a :Class;
-         :subClassOf ex:Person,
-                ex:Female .
+    :Female     a daml:Class;
+         daml:disjointFrom :Male;
+         daml:subClassOf :Animal .
     
-    ex:ancestor     a :TransitiveProperty;
-         :label "ancestor" .
+    :Height     a daml:Class;
+         daml:oneOf  (
+        :short 
+        :medium 
+        :tall  ) .
     
-    ex:mother     a :UniqueProperty;
-         :subProperty ex:parent;
-         :range ex:Woman .
+    :Male     a daml:Class;
+         daml:subClassOf :Animal .
     
-    ex:Female     a :Class;
-         :subClassOf ex:Animal;
-         :disjointFrom ex:Male .
+    :Man     a daml:Class;
+         daml:subClassOf :Male,
+                :Person .
     
-    ex:Height     a :Class;
-         :oneOf  [
-             :first ex:short;
-             :rest  [
-                 :first ex:medium;
-                 :rest  [
-                     :first ex:tall;
-                     :rest :null ] ] ] .
+    :Person     a daml:Class;
+         daml:comment "every person is a man or a woman";
+         daml:disjointUnionOf  (
+        :Man 
+        :Woman  );
+         daml:restrictedBy  [
+             a daml:Restriction;
+             daml:onProperty :parent;
+             daml:toClass :Person ];
+         daml:subClassOf :Animal .
     
-    ex:father     a :Property;
-         :subProperty ex:parent;
-         :range ex:Man;
-         :cardinality "1" .
+    :TallMan     a daml:Class;
+         daml:intersectionOf  (
+        :TallThing 
+        :Man  ) .
     
-    ex:occupation     a :Property;
-         :maxCardinality "1" .
+    :TallThing     a daml:Class;
+         daml:restrictedBy  [
+             a daml:Restriction;
+             daml:onProperty :height;
+             daml:toValue :tall ] .
     
-    ex:TallMan     a :Class;
-         :intersectionOf  [
-             :first ex:TallThing;
-             :rest  [
-                 :first ex:Man;
-                 :rest :null ] ] .
+    :Woman     a daml:Class;
+         daml:subClassOf :Female,
+                :Person .
     
-    ex:Animal     a :Class;
-         :label "Animal";
-         :comment """This class of animals is illustrative of a number of
-	ontological idioms.""" .
+    :ancestor     a daml:TransitiveProperty;
+         daml:label "ancestor" .
     
-    ex:descendant     a :TransitiveProperty .
+    :child     a daml:Property;
+         daml:inverseOf :parent .
     
-    ex:Male     a :Class;
-         :subClassOf ex:Animal .
+    :descendant     a daml:TransitiveProperty .
     
-    ex:child     a :Property;
-         :inverseOf ex:parent .
+    :father     a daml:Property;
+         daml:cardinality "1";
+         daml:range :Man;
+         daml:subProperty :parent .
     
-    ex:mom     a :Property;
-         = ex:mother .
+    :height     a daml:Property;
+         daml:domain :Person;
+         daml:range :Height .
     
-    ex:Adam     a :Person;
-         :label "Adam";
-         :comment "Adam is a person." .
+    :mom     a daml:Property;
+         = :mother .
     
-    ex:Person     a :Class;
-         :subClassOf ex:Animal;
-         :restrictedBy  [
-             a :Restriction;
-             :onProperty ex:parent;
-             :toClass ex:Person ];
-         :comment "every person is a man or a woman";
-         :disjointUnionOf  [
-             :first ex:Man;
-             :rest  [
-                 :first ex:Woman;
-                 :rest :null ] ] .
+    :mother     a daml:UniqueProperty;
+         daml:range :Woman;
+         daml:subProperty :parent .
     
-    ex:height     a :Property;
-         :domain ex:Person;
-         :range ex:Height .
+    :occupation     a daml:Property;
+         daml:maxCardinality "1" .
     
-    ex:Car     a :Class;
-         :comment "no car is a person";
-         :subClassOf  [
-             a :Class;
-             :complementOf ex:Person ] .
+    :parent     a daml:Property;
+         daml:cardinality "2";
+         daml:domain :Animal .
     
-    ex:parent     a :Property;
-         :domain ex:Animal;
-         :cardinality "2" .
+    <>     a daml:Ontology;
+         daml:comment "An example ontology";
+         daml:imports <http://www.daml.org/2000/10/daml-ont>;
+         daml:versionInfo "$Id$" .
     
  #ENDS

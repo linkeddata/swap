@@ -5,7 +5,7 @@
 #       notation3.py,v 1.54 2001/02/12 18:38:31 timbl Exp
 
 #   Base was: file:/devel/WWW/2000/10/swap/test/gedcom/
-     @prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix : <gedcom-relations.n3#> .
      @prefix gc: <http://www.daml.org/2001/01/gedcom/gedcom#> .
     

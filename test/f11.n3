@@ -1,6 +1,6 @@
 #    Test filter in N3
 #
-bind log: <http://www.w3.org/2000/10/swap/log.n3> .
+bind log: <http://www.w3.org/2000/10/swap/log> .
 bind mech: <s1.n3> .
 bind daml: <http://www.daml.org/2001/03/daml+oil> .
 bind : <> .
@@ -8,12 +8,12 @@ bind : <> .
 #  Simple one-triple template:
 #
 
-<> log:forAll <#x> , <#y> .
+this log:forAll <#x> , <#y> .
 { <#x> mech:includes <#y> } log:implies { <#y> mech:partOf <#x> } .
 
 #  Non-trivial template including existentials and statements about predicates:
 
-<> log:forAll <#p>, <#z> .   #  as well as x and y above
+this log:forAll <#p>, <#z> .   #  as well as x and y above
 
 { <#x> <#p> <#y> .
   <#y> <#p> <#z> .

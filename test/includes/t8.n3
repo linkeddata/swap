@@ -5,7 +5,7 @@
 @prefix daml:  <http://www.daml.org/2000/10/daml-ont#> .
 @prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
 @prefix ex:   <http://www.daml.org/2000/10/daml-ex#> .
-@prefix log:  <http://www.w3.org/2000/10/swap/log.n3#> .
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
 
 @prefix : <#>.  # Local stuff
 
@@ -32,6 +32,7 @@
 {  "aaa" log:notLessThan "abc" } log:implies { :testh_6 a :FAILURE }.
 
 { "abc" log:startsWith "a" } log:implies { :testh7 a :success }.
+{ "def" log:startsWith "def" } log:implies { :testh8 a :success }.
 { "a" log:startsWith "abc" } log:implies { :testh_7 a :FAILURE }.
 
 # ends

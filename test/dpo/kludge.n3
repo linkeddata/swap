@@ -2,7 +2,7 @@
 #
 #
 #
-@prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 @prefix : <#> .       # For our use

@@ -1,11 +1,11 @@
 #    Test filter in N3
 #
-bind log: <http://www.w3.org/2000/10/swap/log.n3> .
+bind log: <http://www.w3.org/2000/10/swap/log> .
 bind rules: <rules12.n3> .
 
 # DanC challenge - see rules12.n3
 
-<>   log:forAll <#x> , <#y> , <#z>.
+this log:forAll <#x> , <#y> , <#z>.
 
 { <#x> rules:ancestor <#y> . } log:implies { <#x> rules:ancestor <#y> .}.
 

@@ -1,5 +1,5 @@
 @prefix gc: <http://www.daml.org/2001/01/gedcom/gedcom#>.
-@prefix log: <http://www.w3.org/2000/10/swap/log.n3#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix : <gedcom-relations.n3#>.
 
 :Goedele gc:childIn :dt; :gender :F.

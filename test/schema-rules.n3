@@ -14,7 +14,7 @@
 # The basic strategy is that which ontology systems seem to assume:
 # Find all classes to which everything belongs, and deduce things from that.
 #
-@prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
@@ -25,7 +25,7 @@
 # This is what we will flag:
 :schemaInconsistency daml:subPropertyOf log:Falsehood .
 
-<> log:forAll <#p>, <#p1>, <#p2>,	# Properties
+this log:forAll <#p>, <#p1>, <#p2>,	# Properties
 	 <#c>, <#c1>, <#c2>.   # Classes
 
 # The following is a su bset of the properties of =, which should not need stating.
@@ -95,7 +95,7 @@ rdfs:subClassOf 		a daml:TransitiveProperty .
 
 # The first NOT we come across is disjointWith:
 
-<> log:forAll <#x>, <#y>, <#z> .
+this log:forAll <#x>, <#y>, <#z> .
 { 	<#x> a <#y> .
 	<#x> a <#z> .
 	<#y> daml:disjointFrom <#z> } log:implies { <#x> a v:schemaInconsistency } .

@@ -16,7 +16,7 @@
 #  This file just filters out the error messages from everything else.
 #
 
-@prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
 #bind daml: <http://www.daml.org/2001/03/daml+oil> .
 #bind : <> .       # For our use
 @prefix val: <schema-rules.n3#> .	# Hint for others use
@@ -26,7 +26,7 @@
 # @@@ neater syntax for this
 # @@@ way of specifiying the whole process in one file.
 
-<> log:forAll <#x> .
+this log:forAll <#x> .
 {<#x> a val:schemaInconsistency} log:implies {<#x> a val:schemaInconsistency}.
 
 

@@ -1,13 +1,13 @@
 #    Test filter in N3
 #
-bind log: <http://www.w3.org/2000/10/swap/log.n3> .
+bind log: <http://www.w3.org/2000/10/swap/log> .
 bind mech: <s1.n3> .
 bind daml: <http://www.daml.org/2001/03/daml+oil> .
 bind : <> .
 
 # DanC challenge
 
-<> log:forAll <#p> .
+this log:forAll <#p> .
 
 {  <#p> a daml:TransitiveProperty . } log:means
 
