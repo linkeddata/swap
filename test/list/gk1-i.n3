@@ -1,0 +1,52 @@
+#Processed by Id: cwm.py,v 1.112 2002/12/25 20:01:31 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/list/gk1.n3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.124 2002/12/25 20:01:32 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/list/gk1.n3
+     @prefix : <http://www.w3.org/2000/10/swap/log#> .
+     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix rule: <http://id.ninebynine.org/wip/2002/rule/> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :forAll <#A>,
+                <#H>,
+                <#T>,
+                <#T1> .
+    
+    <#A1>     rule:append  (
+         (
+            "L11" 
+            "L12" 
+            "L13"  )
+        "L14"  );
+         daml:first "L11";
+         daml:rest  [
+             rule:append  (
+             (
+                "L12" 
+                "L13"  )
+            "L14"  ) ] .
+    
+    <#_g9>     daml:first "L12";
+         daml:rest  (
+        "L13"  ) .
+    {
+        <#A>     rule:append  (
+             [
+                     daml:first <#H>;
+                     daml:rest <#T> ]
+            <#T1>  ) .
+        
+        }     :implies {<#A>     daml:first <#H>;
+             daml:rest  [
+                 rule:append  (
+                <#T> 
+                <#T1>  ) ] .
+        } .
+    
+#ENDS
