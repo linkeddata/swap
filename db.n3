@@ -1,0 +1,96 @@
+# Schema for database concepts
+#
+# $Id$
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix db: <http://www.w3.org/2000/10/swap/db#> .
+#@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+
+
+<> dc:title "Database terms for the Sematic Web";
+   dc:creator [ con:mailbox <mailto:timbl@w3.org>],
+              [con:mailbox <mailto:connolly@w3.org>].
+ 
+db:Database a rdfs:Class;
+    rdfs:label "database";
+    rdfs:comment """ """.
+
+db:databaseSchema a rdf:Property;
+    rdfs:label "database schema";
+    rdfs:comment "The document which describes the form of this database";
+    rdfs:domain db:Database;
+    rdfs:range db:DatabaseDocument.
+
+db:DatabaseDocument a rdfs:Class;
+    rdfs:subClassOf soc:Work;
+    rdfs:label "database document";
+    rdfs:comment """The resource on the web which describes a database, though not
+    the one which contains all the data.
+    Convention: Any database <xxx#f> has a databaseDocumemnt <xxx>.""".
+
+db:table a rdf:Property;
+    rdfs:label "table";
+    rdfs:domain db:Database;
+    rdfs:range db:Table;
+    rdfs:comment """A table in the database""".
+
+db:Table a rdfs:Class;
+    rdfs:subClassOf rdfs:Class.
+    rdfs:label "Table";
+    rdfs:comment """A Table is a class which has in it a finite
+    set of things each of which is described by a row in the database table""".
+
+db:TableDocument a rdfs:Class;
+    rdfs:subClassOf soc:Work;
+    rdfs:label "table document";
+    rdfs:comment """The resource on the web which describes a Table, though not
+    the one which contains all the data.
+    Convention: Any table <xxx#f> has a tabledocumemnt <xxx>.
+
+   The table document defines a set of db:Column's, one for each column
+   of the table.  It is definitive, in that any column in the table MUST
+   be described in the table document.
+""".
+
+db:tableSchema a rdf:Property;
+    rdfs:label "table schema";
+    rdfs:comment "The document which describes the form of this table";
+    rdfs:domain db:Table;
+    rdfs:range db:TableDocument.
+
+db:ColumnProperty a rdfs:Class;
+    rdfs:label "column property";
+    rdfs:comment """A property corresponding to a database column name."""
+
+db:column a rdf:Property;
+    rdfs:label "column";
+    rdfs:domain db:Table; rdfs:range db:ColumnProperty;
+    rdfs:comment """The relationship between a table and one of its columns.
+
+The fact that a table has a db:column in this sense assures that certain conventions
+are followed.
+1. The column 
+""".
+
+db:primaryKey rdfs:subPropertyOf db:column;
+    a daml:uniqueProperty;    # You can only have one primary key in a table
+    rdfs:domain daml:UnambiguousProperty # No two rows can have same value of a key
+    rdfs:comment"""
+The fact that a table t has primary key means that a row document exists
+whose URI is formed by concatenating the URI of the table, a slash, and
+the URI-encoded value of the primary key value for that row.
+""".
+
+
+
+ rdfs:subClassOf daml:UnambiguousProperty;
+
+    rdfs:label "database";
+    rdfs:comment """ """.
+
+
+#ends
+
