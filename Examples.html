@@ -224,7 +224,8 @@ instructive.</p>
     log:Chaff.</li>
 </ul>
 
-<h2>Integrating applications: Roadmaps, Organizations and diagrams</h2>
+<h2><a name="Integratin">Integrating applications: Roadmaps, Organizations and
+diagrams</a></h2>
 
 <p>Many see the semantic web's impact on the industry as a tool for Enterprise
 Application Integration.  That is, just as the web integrates human-oriented
@@ -249,6 +250,26 @@ extract subsets of this data when focussing on a specific problem or area.</p>
   <li>Subsets: technical architecture planned for: web services, semantic web,
     both</li>
 </ul>
+
+<h2><a name="Following">Following links: Schema validation II</a></h2>
+
+<p>The schema validation above looked for inconsistencies with a schema. The
+example worked by the file and the schemas being given to cwm on the command
+line. However, it would be more useful to find the schemas automatically. By
+using notation3's forumlae, it is possible to extract all the predicates used
+in an RDF document.  If the namespace's URI scheme is dereferencable (such as
+http:), or if the user has a local schema catalog, then one should be able to
+look up the schema in real time.  The is done with cwm's builtin 
+<code>log:semantics</code> which gives the N3 formula corresponding to the
+parsing of the semantic content of a resource.</p>
+<ul>
+  <li>The rule file which checks schema validity - <a
+    href="test/includes/checkn3">check.n3</a></li>
+</ul>
+
+<p>Note that this file doesn't (yet) check consistency as the example above,
+it just checks that the prediccates used are indeed declared as Proprties in
+the schema. </p>
 
 <p></p>
 <hr>
