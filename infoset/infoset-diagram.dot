@@ -1,5 +1,5 @@
 /* transformed by by Id: rdf2dot.xsl,v 1.10 2001/05/09 20:29:01 connolly Exp  */
-digraph N1523 {
+digraph N871 {
 label="XML Infoset $Date$";
 rankdir="LR";
 "http://www.w3.org/2001/05id/infoset#Document" [color="skyblue1",
@@ -7,13 +7,7 @@ style="filled",
 label="Document",
 shape="diamond",
 ];
-"http://www.w3.org/2001/05id/infoset#Document" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g30" [ /* edge attributes */
-color="skyblue2",
-];
-"http://www.w3.org/2001/05id/infoset#Document" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g62" [ /* edge attributes */
-color="skyblue2",
-];
-"http://www.w3.org/2001/05id/infoset#Document" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#DocChildren" [ /* edge attributes */
+"http://www.w3.org/2001/05id/infoset#Document" -> "http://www.w3.org/2001/05id/infoset#_DocChildren" [ /* edge attributes */
 label="children",
 color="blue",
 ];
@@ -51,53 +45,30 @@ label="unparsed entities",
 color="orange",
 style="bold",
 ];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g30" [label="Elt/Doc",
+"http://www.w3.org/2001/05id/infoset#_DocChildren" [color="skyblue1",
+style="filled",
+label="(E|P|C|D)*",
 ];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g30" -> "http://www.w3.org/2001/05id/infoset#Element" [ /* edge attributes */
+"http://www.w3.org/2001/05id/infoset#_DocChildren" -> "http://www.w3.org/2001/05id/infoset#Element" [ /* edge attributes */
 color="purple",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g30" -> "http://www.w3.org/2001/05id/infoset#Document" [ /* edge attributes */
-color="purple",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g62" [label="Elt/Doc/DTD",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g62" -> "http://www.w3.org/2001/05id/infoset#Element" [ /* edge attributes */
-color="purple",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g62" -> "http://www.w3.org/2001/05id/infoset#Document" [ /* edge attributes */
-color="purple",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g62" -> "http://www.w3.org/2001/05id/infoset#DocumentTypeDeclaration" [ /* edge attributes */
-color="purple",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#DocChildren" [label="Doc Items...",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#DocChildren" -> "http://www.w3.org/2001/05id/infoset#Element" [ /* edge attributes */
-color="green",
 style="bold",
 ];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#DocChildren" -> "http://www.w3.org/2001/05id/infoset#ProcessingInstruction" [ /* edge attributes */
-color="green",
+"http://www.w3.org/2001/05id/infoset#_DocChildren" -> "http://www.w3.org/2001/05id/infoset#ProcessingInstruction" [ /* edge attributes */
+color="purple",
 style="bold",
 ];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#DocChildren" -> "http://www.w3.org/2001/05id/infoset#Comment" [ /* edge attributes */
-color="green",
+"http://www.w3.org/2001/05id/infoset#_DocChildren" -> "http://www.w3.org/2001/05id/infoset#Comment" [ /* edge attributes */
+color="purple",
 style="bold",
 ];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#DocChildren" -> "http://www.w3.org/2001/05id/infoset#DocumentTypeDeclaration" [ /* edge attributes */
-color="green",
+"http://www.w3.org/2001/05id/infoset#_DocChildren" -> "http://www.w3.org/2001/05id/infoset#DocumentTypeDeclaration" [ /* edge attributes */
+color="purple",
 style="bold",
 ];
 "http://www.w3.org/2001/05id/infoset#Element" [color="skyblue1",
 style="filled",
 label="Element",
 shape="diamond",
-];
-"http://www.w3.org/2001/05id/infoset#Element" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g30" [ /* edge attributes */
-color="skyblue2",
-];
-"http://www.w3.org/2001/05id/infoset#Element" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g62" [ /* edge attributes */
-color="skyblue2",
 ];
 "http://www.w3.org/2001/05id/infoset#Element" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Content" [ /* edge attributes */
 label="children",
@@ -107,7 +78,7 @@ color="blue",
 label="base URI",
 color="blue",
 ];
-"http://www.w3.org/2001/05id/infoset#Element" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NamespaceName" [ /* edge attributes */
+"http://www.w3.org/2001/05id/infoset#Element" -> "http://www.w3.org/2001/05id/infoset#NamespaceName" [ /* edge attributes */
 label="namespace name",
 color="blue",
 ];
@@ -119,7 +90,7 @@ color="blue",
 label="prefix",
 color="blue",
 ];
-"http://www.w3.org/2001/05id/infoset#Element" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g30" [ /* edge attributes */
+"http://www.w3.org/2001/05id/infoset#Element" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g31" [ /* edge attributes */
 label="parent",
 color="blue",
 ];
@@ -138,20 +109,15 @@ label="in-scope namespaces",
 color="orange",
 style="bold",
 ];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#AbsoluteURI" [label="Absolute URI",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#AbsoluteURI" -> "http://www.w3.org/2000/01/rdf-schema#Literal" [ /* edge attributes */
-color="skyblue2",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#AbsoluteURI" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NamespaceName" [ /* edge attributes */
-color="skyblue2",
+"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#AbsoluteURI" [color="skyblue1",
+style="filled",
+label="Absolute URI",
+shape="rectangle",
 ];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#EncName" [color="skyblue1",
 style="filled",
 label="EncName",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#EncName" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Name" [ /* edge attributes */
-color="skyblue2",
+shape="rectangle",
 ];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#StandAloneType" [color="skyblue1",
 style="filled",
@@ -173,14 +139,14 @@ color="purple",
 "http://www.w3.org/2001/05id/infoset#Version" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#VersionNum" [ /* edge attributes */
 color="purple",
 ];
-"http://www.w3.org/2001/05id/infoset#Notation" [color="skyblue1",
+"http://www.w3.org/2001/05id/infoset#Notation" [label="Notation",
+color="skyblue1",
 style="filled",
-label="Notation",
 shape="diamond",
 ];
-"http://www.w3.org/2001/05id/infoset#UnparsedEntity" [color="skyblue1",
+"http://www.w3.org/2001/05id/infoset#UnparsedEntity" [label="Unparsed Entity",
+color="skyblue1",
 style="filled",
-label="Unparsed Entity",
 shape="diamond",
 ];
 "http://www.w3.org/2001/05id/infoset#ProcessingInstruction" [color="skyblue1",
@@ -192,7 +158,7 @@ shape="diamond",
 label="base URI",
 color="blue",
 ];
-"http://www.w3.org/2001/05id/infoset#ProcessingInstruction" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g62" [ /* edge attributes */
+"http://www.w3.org/2001/05id/infoset#ProcessingInstruction" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g63" [ /* edge attributes */
 label="parent",
 color="blue",
 ];
@@ -204,41 +170,43 @@ color="blue",
 label="content",
 color="blue",
 ];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Content" [label="Content",
+"http://www.w3.org/2001/05id/infoset#Comment" [label="Comment",
+color="skyblue1",
+style="filled",
+shape="diamond",
+];
+"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Content" [color="skyblue1",
+style="filled",
+label="Content",
 ];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Content" -> "http://www.w3.org/2001/05id/infoset#Element" [ /* edge attributes */
-color="green",
+color="purple",
 style="bold",
 ];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Content" -> "http://www.w3.org/2001/05id/infoset#ProcessingInstruction" [ /* edge attributes */
-color="green",
+color="purple",
 style="bold",
 ];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Content" -> "http://www.w3.org/2001/05id/infoset#Character" [ /* edge attributes */
-color="green",
+color="purple",
 style="bold",
 ];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Content" -> "http://www.w3.org/2001/05id/infoset#Comment" [ /* edge attributes */
-color="green",
+color="purple",
 style="bold",
 ];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NamespaceName" [label="Namespace Name",
+"http://www.w3.org/2001/05id/infoset#NamespaceName" [label="Namespace Name",
 ];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NamespaceName" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NoValue" [ /* edge attributes */
+"http://www.w3.org/2001/05id/infoset#NamespaceName" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NoValue" [ /* edge attributes */
 color="purple",
 ];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NamespaceName" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#AbsoluteURI" [ /* edge attributes */
+"http://www.w3.org/2001/05id/infoset#NamespaceName" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#AbsoluteURIref" [ /* edge attributes */
 color="purple",
 ];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NCName" [color="skyblue1",
 style="filled",
 label="NCName",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NCName" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Name" [ /* edge attributes */
-color="skyblue2",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NCName" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Prefix" [ /* edge attributes */
-color="skyblue2",
+shape="rectangle",
 ];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Prefix" [label="Prefix",
 ];
@@ -248,14 +216,18 @@ color="purple",
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Prefix" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NCName" [ /* edge attributes */
 color="purple",
 ];
+"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g31" [label="Elt/Doc",
+];
+"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g31" -> "http://www.w3.org/2001/05id/infoset#Element" [ /* edge attributes */
+color="purple",
+];
+"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g31" -> "http://www.w3.org/2001/05id/infoset#Document" [ /* edge attributes */
+color="purple",
+];
 "http://www.w3.org/2001/05id/infoset#Attribute" [color="skyblue1",
 style="filled",
 label="Attribute",
 shape="diamond",
-];
-"http://www.w3.org/2001/05id/infoset#Attribute" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NamespaceName" [ /* edge attributes */
-label="namespace name",
-color="blue",
 ];
 "http://www.w3.org/2001/05id/infoset#Attribute" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NCName" [ /* edge attributes */
 label="local name",
@@ -281,19 +253,10 @@ color="blue",
 label="owner element",
 color="blue",
 ];
-"http://www.w3.org/2001/05id/infoset#Namespace" [color="skyblue1",
+"http://www.w3.org/2001/05id/infoset#Namespace" [label="Namespace",
+color="skyblue1",
 style="filled",
-label="Namespace",
 shape="diamond",
-];
-"http://www.w3.org/2000/01/rdf-schema#Literal" [label="Literal",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Name" [color="skyblue1",
-style="filled",
-label="Name",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Name" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#String" [ /* edge attributes */
-color="skyblue2",
 ];
 "http://www.w3.org/2001/05id/infoset#yes" [label="yes",
 shape="plaintext",
@@ -305,15 +268,6 @@ shape="plaintext",
 style="filled",
 label="No Value",
 ];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NoValue" -> "http://www.w3.org/2001/05id/infoset#Version" [ /* edge attributes */
-color="skyblue2",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NoValue" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NamespaceName" [ /* edge attributes */
-color="skyblue2",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NoValue" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Prefix" [ /* edge attributes */
-color="skyblue2",
-];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NoValue" -> "http://www.w3.org/2001/05id/infoset#noValue" [ /* edge attributes */
 label="one of...",
 color="green",
@@ -321,24 +275,43 @@ color="green",
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#VersionNum" [color="skyblue1",
 style="filled",
 label="VersionNum",
+shape="rectangle",
 ];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#VersionNum" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#String" [ /* edge attributes */
-color="skyblue2",
+"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g63" [label="Elt/Doc/DTD",
 ];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#VersionNum" -> "http://www.w3.org/2001/05id/infoset#Version" [ /* edge attributes */
-color="skyblue2",
+"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g63" -> "http://www.w3.org/2001/05id/infoset#Element" [ /* edge attributes */
+color="purple",
 ];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#String" [label="String",
+"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g63" -> "http://www.w3.org/2001/05id/infoset#Document" [ /* edge attributes */
+color="purple",
 ];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#String" -> "http://www.w3.org/2000/01/rdf-schema#Literal" [ /* edge attributes */
-color="skyblue2",
+"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g63" -> "http://www.w3.org/2001/05id/infoset#DocumentTypeDeclaration" [ /* edge attributes */
+color="purple",
+];
+"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Name" [color="skyblue1",
+style="filled",
+label="Name",
+shape="rectangle",
+];
+"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#String" [color="skyblue1",
+style="filled",
+label="String",
+shape="rectangle",
+];
+"http://www.w3.org/2001/05id/infoset#Character" [label="Character",
+color="skyblue1",
+style="filled",
+shape="diamond",
+];
+"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#AbsoluteURIref" [color="skyblue1",
+style="filled",
+label="Abs. URIref",
+shape="rectangle",
 ];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Boolean" [color="skyblue1",
 style="filled",
 label="Boolean",
-];
-"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Boolean" -> "http://www.w3.org/2000/01/rdf-schema#Literal" [ /* edge attributes */
-color="skyblue2",
+shape="rectangle",
 ];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Boolean" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#true" [ /* edge attributes */
 label="one of...",
@@ -353,47 +326,78 @@ color="green",
 "http://www.w3.org/2001/05id/infoset#noValue" [label="no value",
 shape="plaintext",
 ];
+"http://www.w3.org/2001/05id/infoset#DocumentTypeDeclaration" [label="Document Type Declaration",
+color="skyblue1",
+style="filled",
+shape="diamond",
+];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#true" [label="true",
 shape="plaintext",
 ];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#false" [label="false",
 shape="plaintext",
 ];
-"http://www.w3.org/2001/05id/infoset#DocumentTypeDeclaration" [color="skyblue1",
-style="filled",
-label="Document Type Declaration",
-shape="diamond",
-];
-"http://www.w3.org/2001/05id/infoset#DocumentTypeDeclaration" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infoset-daml.n3#_g62" [ /* edge attributes */
-color="skyblue2",
-];
-"http://www.w3.org/2001/05id/infoset#Comment" [color="skyblue1",
-style="filled",
-label="Comment",
-shape="diamond",
-];
-"http://www.w3.org/2001/05id/infoset#Character" [color="skyblue1",
-style="filled",
-label="Character",
-shape="diamond",
-];
-subgraph clusterN1497 {
+subgraph clusterN756 {
 label="Items and Properties";
 "mid:abcXX#anItem" [color="skyblue1",
 style="filled",
 label="Item",
 shape="diamond",
 ];
-"mid:abcXX#anItem" -> "mid:abcXX#SomeClass" [ /* edge attributes */
-label="1-1",
+"mid:abcXX#anItem" -> "mid:abcXX#One" [ /* edge attributes */
+label="many-to-one",
 color="blue",
 ];
-"mid:abcXX#SomeClass" [label="Some Class",
+"mid:abcXX#anItem" -> "mid:abcXX#Parts" [ /* edge attributes */
+label="many-to-1",
+color="blue",
 ];
-"mid:abcXX#SomeClass" -> "mid:abcXX#Superclass" [ /* edge attributes */
-color="skyblue2",
+"mid:abcXX#anItem" -> "mid:abcXX#ABC" [ /* edge attributes */
+label="many-to-many",
+color="orange",
+style="bold",
 ];
-"mid:abcXX#Superclass" [label="Superclass",
+"mid:abcXX#anItem" -> "mid:abcXX#DEF" [ /* edge attributes */
+label="many-to-list",
+color="green",
+style="bold",
+];
+"mid:abcXX#One" [color="skyblue1",
+style="filled",
+label="A Class",
+];
+"mid:abcXX#Parts" [color="skyblue1",
+style="filled",
+label="X|Y|Z",
+];
+"mid:abcXX#Parts" -> "mid:abcXX#Part1" [ /* edge attributes */
+color="purple",
+];
+"mid:abcXX#Parts" -> "mid:abcXX#Part2" [ /* edge attributes */
+color="purple",
+];
+"mid:abcXX#Parts" -> "mid:abcXX#Part3" [ /* edge attributes */
+color="purple",
+];
+"mid:abcXX#Part1" [color="skyblue1",
+style="filled",
+label="X",
+];
+"mid:abcXX#Part2" [color="skyblue1",
+style="filled",
+label="Y",
+];
+"mid:abcXX#Part3" [color="skyblue1",
+style="filled",
+label="Z",
+];
+"mid:abcXX#ABC" [color="skyblue1",
+style="filled",
+label="ABC",
+];
+"mid:abcXX#DEF" [color="skyblue1",
+style="filled",
+label="DEF",
 ];
 }
 }
