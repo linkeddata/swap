@@ -20,7 +20,7 @@
 
 { ?x bnf:zeroOrMore ?y } => {
     ?x bnf:mustBeOneSequence (
-		( void )
+		( bnf:void )
 		( ?y ?x )
 	) 
 }.
@@ -63,6 +63,10 @@
 } => {
 	?x bnf:selector ( ?y ?s ); bnf:canStartWith ?y.
 }.
+
+
+{ 	?x bnf:canBeSequence ( bnf:void );
+		canPrecede ?z} =>  { ?x bnf:selector (?z ( bnf:void ))}.
 
 
 {   	?x a Used; bnf:canBeSequence ?s.
