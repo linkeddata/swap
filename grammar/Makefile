@@ -39,7 +39,7 @@ n3.rdf : n3.n3
 
 n3rdf-checked.txt: n3rdf-selectors.n3
 	$(CG) n3rdf-selectors.n3 \
-		http://www.w3.org/2000/10/swap/grammar/n3rules#document > $@
+		http://www.w3.org/2000/10/swap/grammar/n3rdf#document > $@
 
 n3rdf-selectors.n3 : n3-rdf.n3 bnf-rules.n3
 	time $P $C n3-rdf.n3 bnf-rules.n3 --think --purge --data > $@

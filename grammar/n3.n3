@@ -191,9 +191,21 @@ langcode	bnf:matches  	"[a-z]+(-[a-z0-9]+)*"; # http://www.w3.org/TR/rdf-testcas
 
 
 #               raw regexp single quoted would be   "([^"]|(\\"))*"
-# @@@ triple-quoted version too
+# See:
+# 	$ PYTHONPATH=$SWAP python
+# 	>>> import tokenize 
+# 	>>> import notation3
+# 	>>> print notation3.stringToN3(tokenize.Double3)
+# 	"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\""
+# 	>>> print notation3.stringToN3(tokenize.Double)
+# 	"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\""
+# After that we have to prefix with one or three opening \"  which
+# the python regexp doesn't have them.
+#
+# string3		bnf:matches		"\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\"".
+# string1		bnf:matches		"\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"".
 
-string		bnf:matches		"""(\"\"\".*\"\"\")|("([^"]|(\\\\["\\\\a-z]))*")""";
+string		bnf:matches		"(\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\")|(\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\")";
 		bnf:canStartWith 	"\"".
 
 #____________________________________________________

@@ -179,8 +179,10 @@ singleCharacterSelectors = "\t\r\n !\"#$%&'()*.,+/;<=>?[\\]^`{|}~"
 notQNameChars = singleCharacterSelectors + "@"  # Assume anything else valid qname :-/
 notNameChars = notQNameChars + ":"  # Assume anything else valid name :-/
 #quotedString = re.compile(r'"([^\n"\\]|(\\[\\"a-z]))*"')   # @@@ Missing: \U escapes etc
-quotedString = re.compile(r'"[^\n"\\]+"')   # @@@ Missing: \U escapes etc"
-tripleQuotedString = re.compile(r'""".*"""')	# @@@ Missing: any control on the content.
+#quotedString = re.compile(r'"[^\n"\\]+"')   # @@@ Missing: \U escapes etc"
+quotedString = re.compile("[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"")  # See n3.n3
+# was tripleQuotedString = re.compile(r'""".*"""')	# @@@ Missing: any control on the content.
+tripleQuotedString = re.compile("[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\"")
 
 class PredictiveParser:
     "A parser for N3 or derived languages"
@@ -220,7 +222,16 @@ class PredictiveParser:
 	    while str[j] not in notNameChars: j = j + 1
 	    if str[i+1:j] == "keywords" : parser.keywords = [] # Special
 	    return str[i:j], i # keyword
-    
+	if ch == '"':  #"
+	    if str[i+1:i+3] == '""':  # Triple quoted
+		m = tripleQuotedString.match(str,i+3)
+	    else:
+		m = quotedString.match(str,i+1)
+	    if m == None: return '""', -1  # Error
+	    parser.lineNumber += str[i: m.end()].count("\n")
+	    i = m.end()
+	    return '"', i #"
+   
 	while str[j] not in notQNameChars: j = j+1
 	word = str[i:j]
 	if word in parser.keywords:
@@ -268,6 +279,7 @@ class PredictiveParser:
 		if m == None:
 		    raise SyntaxError("Token: should match %s\n\t" % 
 				(rexp.pattern, parser.around(str, this)))
+		print "Token matched to <%s> as pattern <%s>" % (str[this:m.end()], rexp.pattern)
 		next = m.end()
 	    tok, this = parser.token(str, next)  # Next token
 	return tok, this

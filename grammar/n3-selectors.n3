@@ -1,15 +1,15 @@
-#Processed by Id: cwm.py,v 1.154 2004/06/24 03:17:11 timbl Exp 
+#Processed by Id: cwm.py,v 1.164 2004/10/28 17:41:59 timbl Exp 
         #    using base file:/devel/WWW/2000/10/swap/grammar/
         
 #  Notation3 generation by
-#       notation3.py,v 1.155 2004/06/25 01:26:59 timbl Exp
+#       notation3.py,v 1.166 2004/10/28 17:41:59 timbl Exp
 
 #   Base was: file:/devel/WWW/2000/10/swap/grammar/
      @prefix : <http://www.w3.org/2000/10/swap/grammar/bnf#> .
      @prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#> .
      @prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#> .
     
-         @forSome <#_g0>,
+     @forSome <#_g0>,
                 <#_g1>,
                 <#_g2>,
                 <#_g3>,
@@ -1377,7 +1377,11 @@
                 n3:propertylisttail,
                 n3:statementtail;
          :canStartWith "\"";
-         :matches """(\""".*\""")|("([^"]|(\\\\["\\\\a-z]))*")""" .
+         :matches """(\"""[^"\\\\]*(?:(?:\\\\.|"(?!""))[^"\\\\]*)*\""")|("[^"\\\\]*(?:\\\\.[^"\\\\]*)*")""" .
+    
+    n3:string1     :matches "\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"" .
+    
+    n3:string3     :matches "\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\"" .
     
     n3:subject     :TEST n3:path;
          :branch  [
