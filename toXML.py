@@ -206,6 +206,7 @@ z  - Allow relative URIs for namespaces
 		    self._nextnodeID += 1
 		    nid = 'b'+`self._nextnodeID`
 		    self._nodeID[obj] = nid
+                    progress("object is now", obj, nid)
 		return
 	    
 	if subj[0] not in (SYMBOL, ANONYMOUS, LITERAL):
@@ -225,16 +226,23 @@ z  - Allow relative URIs for namespaces
             if (pred == (SYMBOL, RDF_type_URI)# Special case starting with rdf:type as element name
                 and obj[0] != LITERAL
                 and "c" not in self._flags): # "c" flag suppresses class element syntax on RDF output
-                 self._xwr.startElement(obj[1], [(RDF_NS_URI+" about", subjn),], self.prefixes)
-                 return
+#                 self._xwr.startElement(obj[1], [(RDF_NS_URI+" about", subjn),], self.prefixes)
+#                 return
+                 start_tag = obj[1]
+            else:
+                 start_tag = RDF_NS_URI+'Description'
+                
 	    if subj[0] == SYMBOL or subj[0] == ANONYMOUS:
 		nid = self._nodeID.get(subj, None)
 		if nid == None:
-		    self._xwr.startElement(RDF_NS_URI+'Description',
+		    self._xwr.startElement(start_tag,
 					[(RDF_NS_URI+" about", subjn),], self.prefixes)
 		else:
-		    self._xwr.startElement(RDF_NS_URI+'Description',
+		    self._xwr.startElement(start_tag,
 					[(RDF_NS_URI+" nodeID", nid),], self.prefixes)
+		if start_tag != RDF_NS_URI+'Description':
+                    return
+                
 	    elif subj[0] == LITERAL:
 		v = subj[1]
 		attrs = []  # Literal

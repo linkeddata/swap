@@ -133,6 +133,8 @@ class BI_scrape(LightBuiltIn, Function):
     """
     
     def evaluateObject(self, subj_py):
+#        raise Error
+        store = self.store
         if verbosity() > 80: progress("scrape input:"+`subj_py`)
 
         str, pat = subj_py
@@ -143,6 +145,29 @@ class BI_scrape(LightBuiltIn, Function):
             if verbosity() > 80: progress("scrape matched:"+m.group(1))
             return m.group(1)
         if verbosity() > 80: progress("scrape didn't match")
+
+class BI_search(LightBuiltIn, Function):
+    """a more powerful built-in for scraping using regexps.
+    takes a list of 2 strings; the first is the
+    input data, and the second is a regex with one or more () group.
+    Returns the list of data matched by the () groups.
+
+    see also: test/includes/search.n3
+    """
+    
+    def evaluateObject(self, subj_py):
+#        raise Error
+        store = self.store
+        if verbosity() > 80: progress("search input:"+`subj_py`)
+
+        str, pat = subj_py
+        patc = re.compile(pat)
+        m = patc.search(str)
+
+        if m:
+            if verbosity() > 80: progress("search matched:"+m.group(1))
+            return [store._fromPython(x) for x in m.groups()]
+        if verbosity() > 80: progress("search didn't match")
 
 
 class BI_format(LightBuiltIn, Function):
@@ -217,6 +242,7 @@ def register(store):
     str.internFrag("concat", BI_concat)
     str.internFrag("concatenation", BI_concatenation)
     str.internFrag("scrape", BI_scrape)
+    str.internFrag("search", BI_search)
     str.internFrag("format", BI_format)
     str.internFrag("matches", BI_matches)
     str.internFrag("notMatches", BI_notMatches)

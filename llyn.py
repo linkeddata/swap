@@ -101,6 +101,7 @@ STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
 META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"
 INTEGER_DATATYPE = "http://www.w3.org/2001/XMLSchema#integer"
 FLOAT_DATATYPE = "http://www.w3.org/2001/XMLSchema#double"
+DECIMAL_DATATYPE = "http://www.w3.org/2001/XMLSchema#decimal"
 
 #reason=Namespace("http://www.w3.org/2000/10/swap/reason#")
 
@@ -972,6 +973,7 @@ class RDFStore(RDFSink) :
         self.forSome = self.symbol(forSomeSym)
 	self.integer = self.symbol(INTEGER_DATATYPE)
 	self.float  = self.symbol(FLOAT_DATATYPE)
+	self.decimal = self.symbol(DECIMAL_DATATYPE)
         self.forAll  = self.symbol(forAllSym)
         self.implies = self.symbol(Logic_NS + "implies")
         self.insertion = self.symbol(Delta_NS + "insertion")
@@ -1215,7 +1217,7 @@ class RDFStore(RDFSink) :
 		return None
             return self.newLiteral(`x`, self.float)
         elif type(x) == type([]):
-	    return self.store.nil.newList(x)
+	    return self.nil.newList(x)
         return x
 
     def intern(self, what, dt=None, lang=None, why=None, ):
