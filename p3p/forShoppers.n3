@@ -6,88 +6,143 @@
 
 #   Base was: file:/home/connolly/w3ccvs/WWW/2000/10/swap/p3p/forShoppers.rdf
      @prefix : <http://www.w3.org/2001/09/P3Pv1#> .
+     @prefix ont: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix p3dr: <http://www.w3.org/TR/P3P/base#> .
      @prefix p3p: <http://www.w3.org/2001/09/P3Pv1> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
     
     <#forShoppers>     a :Policy;
          :access :InfoClass-contact-and-other;
          :discuri <http://www.catalog.example.com/Privacy/PrivacyPracticeShopping.html>;
+         :disputes  [
+             :resolution-type "independent";
+             :service <http://www.PrivacySeal.example.org>;
+             :short-description "PrivacySeal.example.org";
+             :img <http://www.PrivacySeal.example.org/Logo.gif>;
+             :remedies  (
+            :correct 
+             ) ];
          :entity  [
-             <http://www.w3.org/2001/09/P3Pv1#business.name> "CatalogExample" ];
+             p3dr:business.name "CatalogExample";
+             p3dr:business.contact-info.postal.street "4000 Lincoln Ave.";
+             p3dr:business.contact-info.postal.city "Birmingham";
+             p3dr:business.contact-info.postal.stateprov "MI";
+             p3dr:business.contact-info.postal.postalcode "48009";
+             p3dr:business.contact-info.postal.country "USA";
+             p3dr:business.contact-info.online.email "catalog@example.com";
+             p3dr:business.contact-info.telecom.telephone.intcode "1";
+             p3dr:business.contact-info.telecom.telephone.loccode "248";
+             p3dr:business.contact-info.telecom.telephone.number "3926753" ];
          :opturi <http://catalog.example.com/preferences.html>;
          :statement  [
              :consequence """
-                    At your request, we will tailor our site and 
-                    highlight products related to your interests.
-                  """;
-             :recipient :Recipient-ours;
-             :retention :Retention-stated-purpose;
-             :purpose :Purpose-pseudo-decision,
-                    :Purpose-tailoring;
-             :data <http://www.w3.org/TR/P3P/base#user.bdate.ymd.year>,
-                    <http://www.w3.org/TR/P3P/base#user.gender> ],
-                 [
-             :consequence """
-                    We tailor our site based on your past visits.
-                  """;
-             :recipient :Recipient-ours;
-             :retention :Retention-stated-purpose;
-             :purpose :Purpose-tailoring,
-                    :Purpose-develop;
-             :data <http://www.w3.org/TR/P3P/base#dynamic.cookies>,
-                    <http://www.w3.org/TR/P3P/base#dynamic.miscdata> ],
-                 [
-             :consequence """
-                    We record some information in order to serve your request 
-                    and to secure and improve our Web site.
-                  """;
-             :recipient :Recipient-ours;
-             :retention :Retention-stated-purpose;
-             :purpose :Purpose-admin,
-                    :Purpose-develop;
-             :data <http://www.w3.org/TR/P3P/base#dynamic.clickstream>,
-                    <http://www.w3.org/TR/P3P/base#dynamic.http.useragent> ],
-                 [
-             :consequence """
                     We use this information when you make a purchase.
                   """;
+             :purpose :Purpose-current;
              :recipient :Recipient-ours;
              :retention :Retention-stated-purpose;
-             :purpose :Purpose-current;
-             :data <http://www.w3.org/TR/P3P/base#user.name>,
-                    <http://www.w3.org/TR/P3P/base#user.home-info.postal>,
-                    <http://www.w3.org/TR/P3P/base#user.home-info.telecom.telephone>,
-                    <http://www.w3.org/TR/P3P/base#user.business-info.postal>,
-                    <http://www.w3.org/TR/P3P/base#user.business-info.telecom.telephone>,
-                    <http://www.w3.org/TR/P3P/base#user.home-info.online.email>,
-                    <http://www.w3.org/TR/P3P/base#user.login.id>,
-                    <http://www.w3.org/TR/P3P/base#user.login.password>,
-                    <http://www.w3.org/TR/P3P/base#dynamic.miscdata> ],
+             :data  [
+                 :ref p3dr:user.name ],
+                     [
+                 :ref p3dr:user.home-info.postal ],
+                     [
+                 :ref p3dr:user.home-info.telecom.telephone ],
+                     [
+                 :ref p3dr:user.business-info.postal ],
+                     [
+                 :ref p3dr:user.business-info.telecom.telephone ],
+                     [
+                 :ref p3dr:user.home-info.online.email ],
+                     [
+                 :ref p3dr:user.login.id ],
+                     [
+                 :ref p3dr:user.login.password ],
+                     [
+                 :ref p3dr:dynamic.miscdata;
+                 :categories :purchase ] ],
                  [
              :consequence """
                     At your request, we will send you carefully selected marketing 
                     solicitations that we think you will be interested in.
                   """;
-             :recipient :Recipient-ours,
-                    :Recipient-same;
-             :retention :Retention-stated-purpose;
              :purpose :Purpose-contact,
                     :Purpose-individual-decision,
                     :Purpose-tailoring;
-             :data <http://www.w3.org/TR/P3P/base#user.name>,
-                    <http://www.w3.org/TR/P3P/base#user.home-info.postal>,
-                    <http://www.w3.org/TR/P3P/base#user.home-info.telecom.telephone>,
-                    <http://www.w3.org/TR/P3P/base#user.business-info.postal>,
-                    <http://www.w3.org/TR/P3P/base#user.business-info.telecom.telephone>,
-                    <http://www.w3.org/TR/P3P/base#user.home-info.online.email> ],
+             :recipient :Recipient-ours,
+                    :Recipient-same;
+             :retention :Retention-stated-purpose;
+             :data  [
+                 :ref p3dr:user.name;
+                 :optional "yes" ],
+                     [
+                 :ref p3dr:user.home-info.postal;
+                 :optional "yes" ],
+                     [
+                 :ref p3dr:user.home-info.telecom.telephone;
+                 :optional "yes" ],
+                     [
+                 :ref p3dr:user.business-info.postal;
+                 :optional "yes" ],
+                     [
+                 :ref p3dr:user.business-info.telecom.telephone;
+                 :optional "yes" ],
+                     [
+                 :ref p3dr:user.home-info.online.email;
+                 :optional "yes" ] ],
                  [
              :consequence """
                     We allow you to set a password so that you
                     can access your own information.
                   """;
+             :purpose :Purpose-individual-decision;
              :recipient :Recipient-ours;
              :retention :Retention-stated-purpose;
-             :purpose :Purpose-individual-decision;
-             :data <http://www.w3.org/TR/P3P/base#dynamic.miscdata> ] .
+             :data  [
+                 :ref p3dr:dynamic.miscdata;
+                 :categories :uniqueid ] ],
+                 [
+             :consequence """
+                    At your request, we will tailor our site and 
+                    highlight products related to your interests.
+                  """;
+             :purpose :Purpose-pseudo-decision,
+                    :Purpose-tailoring;
+             :recipient :Recipient-ours;
+             :retention :Retention-stated-purpose;
+             :data  [
+                 :ref p3dr:user.bdate.ymd.year;
+                 :optional "yes" ],
+                     [
+                 :ref p3dr:user.gender;
+                 :optional "yes" ] ],
+                 [
+             :consequence """
+                    We tailor our site based on your past visits.
+                  """;
+             :purpose :Purpose-tailoring,
+                    :Purpose-develop;
+             :recipient :Recipient-ours;
+             :retention :Retention-stated-purpose;
+             :data  [
+                 :ref p3dr:dynamic.cookies;
+                 :categories :state ],
+                     [
+                 :ref p3dr:dynamic.miscdata;
+                 :categories :preference ] ],
+                 [
+             :consequence """
+                    We record some information in order to serve your request 
+                    and to secure and improve our Web site.
+                  """;
+             :purpose :Purpose-admin,
+                    :Purpose-develop;
+             :recipient :Recipient-ours;
+             :retention :Retention-stated-purpose;
+             :data  [
+                 :ref p3dr:dynamic.clickstream ],
+                     [
+                 :ref p3dr:dynamic.http.useragent ] ] .
+    
+    <http://www.PrivacySeal.example.org/Logo.gif>     :alt "PrivacySeal's logo" .
     
 #ENDS

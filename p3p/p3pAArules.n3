@@ -1,0 +1,118 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+<> dc:description """
+  transcription of
+  Figure B.1: "Almost Anonymous" Ruleset 
+  from APPEL spec
+
+  using bwm's 2Dec P3P model
+  """;
+
+  dc:source <http://www.w3.org/TR/P3P-preferences>,
+<http://lists.w3.org/Archives/Public/www-archive/2001Dec/0006.html>
+.
+
+@prefix appel: <http://www.w3.org/2001/02/APPELv1#>. # added # at end.
+@prefix p3pr: <http://www.w3.org/2000/12/P3Pv1#>.
+
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+
+appel:crtdby s:subPropertyOf dc:creator.
+appel:crtdon s:subPropertyOf dc:date.
+
+
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <#>.
+
+:theseRules a appel:RULESET;
+  appel:crtdby "W3C";
+  appel:crtdon "2000-03-15T10:55:32+01:00".
+
+this log:forAll :p, :F, :x.
+
+# a bit of world-closing; we assume that all the (relevant?)
+# info about a policy is in the same document.
+# Hm... is there a 1-1 correspondence between documents
+# and policies? no: "The POLICIES element is used to gather several
+# P3P policies together in a single file. "
+{ :p a p3pr:Policy;
+    log:racine [log:semantics :F].
+  :F log:notIncludes { :p p3pr:access p3pr:nonident }
+}
+ log:implies {
+  :p :theseRules [ appel:behavior "limited"; appel:prompt "yes";
+    appel:description """Warning! Service collects some kind of identifiable 
+                                          information""";
+  ].
+}.
+
+
+p3pr:physical a _:InterestingDataGroup.
+p3pr:online a _:InterestingDataGroup.
+p3pr:uniqueid a _:InterestingDataGroup.
+p3pr:financial a _:InterestingDataGroup.
+p3pr:other-category a _:InterestingDataGroup. # is this an APPEL invention? or a term from the P3P spec?
+
+{ :x p3pr:ref [ p3pr:categories [ a _:InterestingDataGroup ] ] }
+  log:implies { :x a :InterestingDatum }.
+
+
+{
+  :p a p3pr:Policy;
+    p3pr:statement [
+      p3pr:data [ a _:InterestingDatum ]
+    ].
+}
+ log:implies
+{
+  :p :theseRules [ appel:behavior "limited"; appel:prompt "yes";
+           appel:description """Warning! Service collects physical and/or online 
+                                          contact information and/or financial account 
+                                          identifiers and/or other data that may be 
+                                          personally-identifiable"""]
+}.
+
+# Brian's data...
+#<http://lists.w3.org/Archives/Public/www-archive/2001Dec/att-0006/03-ex-3-1.xml#forBrowsers> a p3pr:Policy.
+
+<forShoppers.rdf#forShoppers> a p3pr:Policy.
+
+# P3P base data schema stuff...
+@prefix p3bd: <http://www.w3.org/TR/P3P/base#>.
+<http://www.w3.org/TR/P3P/base#>.
+
+
+{ """
+
+                 <appel:RULE behavior="request" 
+                             description="Service does not collect identifiable data or share
+                                          data with other parties">
+                   <p3p:POLICY>
+                     <p3p:STATEMENT>
+                       <p3p:RECIPIENT appel:connective="and-exact">
+                         <p3p:ours/>
+                       </p3p:RECIPIENT>
+                       <p3p:PURPOSE appel:connective="non-and">
+                         <p3p:contact/>
+                         <p3p:telemarketing/>
+                         <p3p:individual-analysis/>
+                         <p3p:individual-decision/>
+                         <p3p:other-purpose/>
+                       </p3p:PURPOSE>
+                       <p3p:DATA-GROUP appel:connective="or-exact">
+                         <p3p:DATA ref="#user.*"/>
+                         <p3p:DATA ref="#dynamic.*" category="state"/>
+                       </p3p:DATA-GROUP>
+                     </p3p:STATEMENT>
+                   </p3p:POLICY>
+                 </appel:RULE>
+                 <appel:RULE behavior="limited" 
+                             description="Warning! Service requests data from your data 
+                                          repository or has a practice that doesn't match
+                                          your preferences">
+                   <appel:OTHERWISE/>
+                 </appel:RULE>
+               </appel:RULESET>
+"""
+  a :TODO }.
