@@ -74,6 +74,8 @@ LITERAL = 2         # string etc - maps to data:
 ANONYMOUS = 3       # existentially qualified unlabelled resource
 VARIABLE = 4        # 
 
+RDF_type = ( RESOURCE , RDF_type_URI )
+DAML_equivalentTo = ( RESOURCE, DAML_equivalentTo_URI )
 
 
 chatty = 0   # verbosity flag
@@ -177,7 +179,7 @@ class SinkParser:
         self._sink.endDoc()
 
     def makeStatement(self, triple):
-        print "## Paser output: ", `triple`
+#        print "# Parser output: ", `triple`
         self._sink.makeStatement(triple)
 
 
@@ -845,7 +847,8 @@ bind default <>
 
     print "----------------------- Test store:"
 
-    store = RDFStore()
+    testEngine = Engine()
+    store = RDFStore(engine)
     # (sink,  thisDoc,  baseURI, bindings)
     p = SinkParser(store,  thisURI, 'http://example.org/base/')
     p.startDoc()
@@ -1167,19 +1170,19 @@ class SinkToN3(RDFSink):
      
     def _makeSubjPred(self, context, subj, pred):
         
-	if self._subj is not subj:
+	if self._subj != subj:
 	    self._endStatement()
 	    self._write(self.representationOf(subj))
 	    self._subj = subj
 	    self._pred = None
 
-	if self._pred is not pred:
+	if self._pred != pred:
 	    if self._pred:
 		  self._write(";\n" + "    " * self.indent+ "    ")
 
-            if pred is DAML_equivalentTo :
+            if pred == ( RESOURCE,  DAML_equivalentTo_URI ) :
                 self._write(" = ")
-            elif pred is RDF_type :
+            elif pred == ( RESOURCE, RDF_type_URI ) :
                 self._write(" a ")
             else :
 #	        self._write( " >- %s -> " % self.representationOf(pred))
@@ -1219,7 +1222,7 @@ class SinkToN3(RDFSink):
         if j>=0:
             str = self.prefixes.get(value[:j], None)
             if str != None : return str + ":" + value[j+1:]
-            if j=0: return "<#" + value[j+1:] + ">"
+            if j==0: return "<#" + value[j+1:] + ">"
                 
         return "<" + value + ">"    # Everything else
 
