@@ -10,7 +10,7 @@ C=../../cwm.py
 
 .SUFFIXES: .index .maint .def .info3
 
-# From a list of packages, find those no needed by others;
+# From a list of packages, find those not needed by others:
 .info3.def:
 	$P $C defaults.n3 --think --with $< > $@
 

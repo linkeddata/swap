@@ -20,11 +20,12 @@ function cwm_test () {
   echo Test $case: $desc
   echo "   "    cwm $args
 
-  # Hmm... this suggests a --nocomments flag on cwm  its -quiet
-#  (python ../cwm.py $args | sed -e 's/^ *#.*//' | sed -e 's/\$[I]d:\$//g' > temp/$case) || echo CRASH $case
-  (python ../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' > temp/$case) || echo CRASH $case
-  diff -Bbwu ref/$case temp/$case >diffs/$case
-  if [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case "############"; wc ref/$case temp/$case; else passes=$(($passes+1)); fi
+  if !(python ../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' > temp/$case);
+  then echo CRASH $case;
+  elif ! diff -Bbwu ref/$case temp/$case >diffs/$case;
+  then echo DIFF FAILS: less diffs/$case;
+  elif [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case "############"; wc ref/$case temp/$case;
+  else passes=$(($passes+1)); fi
 }
 
 cwm_test animal.n3 "Parse a small RDF file, generate N3" -rdf animal.rdf -n3
@@ -82,6 +83,8 @@ cwm_test two-route.n3 "test different rules giving same result" two-route.n3 -th
 cwm_test schema1.n3 "Schema validity 1" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think
 
 cwm_test schema2.n3 "Schema validity using filtering out essential output" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think -filter=schema-filter.n3
+
+cwm_test underbarscope-out.n3 "The scope of _:me should be the document" underbarscope.n3 --think
 
 echo
 echo "        Test list handling"
@@ -153,7 +156,10 @@ cwm_test argv-2.n3 "os:argv argument other values"  os/argv.n3 --think --with bo
 echo "Passed $passes out of $tests tests."
 
 # $Log$
-# Revision 1.36  2002-06-23 21:08:31  timbl
+# Revision 1.37  2002-07-01 20:46:53  timbl
+# mmm
+#
+# Revision 1.36  2002/06/23 21:08:31  timbl
 # Add cwm_time.py.  Thanks, Mark Nottingham! mnot.com
 #
 # Revision 1.35  2002/06/07 13:45:29  timbl
