@@ -176,7 +176,7 @@ def register(store):
     str.internFrag("scrape", BI_scrape)
     str.internFrag("format", BI_format)
     str.internFrag("matches", BI_matches)
-    str.internFrag("notMatches", BI_matches)
+    str.internFrag("notMatches", BI_notMatches)
     str.internFrag("contains", BI_Contains)
     str.internFrag("containsIgnoringCase", BI_ContainsIgnoringCase)
     str.internFrag("doesNotContain", BI_DoesNotContain)
