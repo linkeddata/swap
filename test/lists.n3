@@ -18,7 +18,7 @@ bind ont: <http://www.w3.org/2000/10/swap/log.n3> .
 
 :threeItems = ( :b :c :d ) .
 
-:nested =( :first :second ( :left3 :right3 ) fourth )  .
+:nested =( :first :second ( :left3 :right3 ) :fourth )  .
 
 :emptyList = ( ) .
 

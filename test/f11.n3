@@ -39,7 +39,7 @@ bind : <> .
       } log:means
 	{ 	<#x2> <#p2> <x1> .
       } .
-    } forall <#p1>, <#p2>, <#x1>, <#x2> .
+    } log:forall <#p1>, <#p2>, <#x1>, <#x2> .
 } .
 
 # <>log:asserts { . } .   # Problem representing this in N3 or RDF

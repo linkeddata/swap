@@ -11,7 +11,7 @@ bind dc: <http://purl.org/dc/elements/1.1/> .
    [ >- x:firstname -> "Ora" ] >- dc:wrote ->
     [ >- dc:title -> "Moby Dick" ] .
      bind default <http://example.org/default>.
-     <uriPath> :localProp defaultedName .
+     <uriPath> :localProp :defaultedName .
      
 #    t2="""
 [ >- x:type -> x:Receipt;

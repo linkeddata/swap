@@ -60,7 +60,7 @@
                Typically, the name of a Publisher should be used to
                indicate the entity.""".
 
-Contributor  a rdfs:Property;
+:Contributor  a rdfs:Property;
 
   rdfs:label  "An entity responsible for making contributions to the
                content of the resource.";
