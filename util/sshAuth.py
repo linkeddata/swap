@@ -32,18 +32,23 @@ SSH_COM_AGENT2_FAILURE = 102
 # http://www.python.org/doc/current/lib/modindex.html
 import os, socket, struct
 
-def test(data):
+def main():
+    import sys
+    data = sys.argv[1]
+    
     keyd = open("/home/connolly/.ssh/authorized_keys").readline()
-    progress("key data:", keyd)
     key = key_read(keyd)
+
     ap = os.getenv(SSH_AUTH_SOCK)
-    progress("path to ssh agent's unix socket:", ap)
     as = socket.socket(socket.AF_UNIX, socket.SOCK_STREAM)
     as.connect(ap)
-    progress("connected")
     progress("requesting signature of:", data)
     sig = ssh_agent_sign(as, key, data)
-    progress("signature:", sig)
+
+    keytn, sig = getString(sig)
+    sigdata, sig = getString(sig)
+    assert sig == ''
+    progress("signature:", keytn, binascii.hexlify(sigdata))
 
 class RSAKey:
     def __init__(self, e, n):
@@ -75,26 +80,23 @@ def ssh_agent_sign(auth, key, data):
 
     msg = request_reply(auth, buf)
     ty = ord(msg[0])
-    progress("reply type", ty)
     if ty == SSH_AGENT_FAILURE or ty == SSH_COM_AGENT2_FAILURE or \
        ty == SSH2_AGENT_FAILURE:
 	raise AgentFailed, ty
     if ty != SSH2_AGENT_SIGN_RESPONSE:
 	raise ProtocolError, ("expected", SSH2_AGENT_SIGN_RESPONSE, "got", ty)
-    (len,) = struct.unpack(">I", msg[:4])
-    return msg[4:4+len]
+    (ln,) = struct.unpack(">I", msg[1:5])
+    assert(len(msg) == 1+4+ln)
+    return msg[5:]
 
 
 def request_reply(auth, buf):
-    progress("about to write request length", len(buf))
     atomicio_w(auth, struct.pack(">I" , len(buf)))
-    progress("about to write request data")
     atomicio_w(auth, buf)
 
     ln = 4
     rx = ''
     while ln > 0:
-	progress("about to read reply length")
 	r = auth.recv(ln)
 	rx += r
 	ln -= len(r)
@@ -102,7 +104,6 @@ def request_reply(auth, buf):
     if ln > 256 * 1024: raise IOError, ("response size too big", ln)
     rx = ''
     while ln > 0:
-	progress("reading reply data; bytes to go:", ln)
 	r = auth.recv(ln)
 	rx += r
 	ln -= len(r)
@@ -122,7 +123,6 @@ def key_read(cpp):
     """from key.c
     """
     tn, uu, other = cpp.split()
-    progress("key_read:", tn, uu, other)
     if tn != "ssh-rsa": raise RuntimeError, "not implemented"
 
     blob = binascii.a2b_base64(uu)
@@ -149,12 +149,10 @@ def getBignum(buf):
     """
     
     (ln,) = struct.unpack(">I", buf[:4])
-    progress("bignum bytes", ln)
     bin = buf[4:4+ln]
     x = 0
     for byte in bin:
 	x = x * 256 + ord(byte)
-	progress("getBignum: value so far: %x" %x)
     return x, buf[4+ln:]
 
 def packBignum(n):
@@ -182,10 +180,13 @@ def _test():
 
 if __name__ == '__main__':
     _test()
-    test("data to sign")
+    main()
 
 # $Log$
-# Revision 1.2  2003-09-13 23:08:51  connolly
+# Revision 1.3  2003-09-13 23:18:03  connolly
+# decoded signature a bit
+#
+# Revision 1.2  2003/09/13 23:08:51  connolly
 # woohoo! got a signature back!
 #
 # Revision 1.1  2003/09/13 22:54:52  connolly
