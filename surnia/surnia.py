@@ -63,6 +63,7 @@ fudge = 2.5
 maxSecondsTable = {
     'http://www.w3.org/2002/03owlt/AllDifferent/Manifest001#test': (9 * fudge),
     'http://www.w3.org/2002/03owlt/FunctionalProperty/Manifest004#test': (72 * fudge),
+    'http://www.w3.org/2002/03owlt/InverseFunctionalProperty/Manifest004#test': (72 * fudge),
     }
 maxSeconds = 1
 
