@@ -2,7 +2,7 @@
 # Baccus - Naur Form (BNF) vocabulary
 #
 
-@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdf: <e n3-sel	> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix bnf: <http://www.w3.org/2000/10/swap/grammar/bnf#>.
 @prefix : <http://www.w3.org/2000/10/swap/grammar/n3#>.

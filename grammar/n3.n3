@@ -12,6 +12,13 @@
 @keywords a, is, of.
 
 
+# Issues:
+# - string token regexp not right
+# - tokenizing rules in general
+# - @keywords affects tokenizing
+# - Use of dot for !
+# - datatypes and/or* languages in literals (*choice - follow RDF)
+
 <> bnf:syntaxFor [ bnf:internetMediaType 
 		<http://www.w3.org/2003/mediatypes#application/n3>].
 
@@ -27,7 +34,7 @@ n3document a rul:Used;
 			[ bnf:zeroOrMore declaration ]
 			[ bnf:zeroOrMore  universal ]
 			[ bnf:zeroOrMore existential ]
-			[ bnf:zeroOrMore [ bnf:mustBeOneSequence((statement period)) ] ]
+			[ bnf:zeroOrMore [ bnf:mustBeOneSequence((statement ".")) ] ]
 		)
 	).
 
@@ -46,7 +53,7 @@ statementlist bnf:mustBeOneSequence (
 
 statementtail bnf:mustBeOneSequence (
 		( bnf:void)
-		( period statementlist )
+		( "." statementlist )
 	).
 
 universal bnf:mustBeOneSequence (
@@ -72,7 +79,7 @@ qname bnf:mustBeOneSequence(
 	).
 
 declaration bnf:mustBeOneSequence(
-		( "@prefix" qname explicituri period )
+		( "@prefix" qname explicituri "." )
 		( "@keywords" [ bnf:commaSeparatedPeriodTerminatedListOf barename ] )
 	).
 
@@ -82,21 +89,19 @@ statement bnf:mustBeOneSequence(( subject propertylist )).
 
 propertylist bnf:mustBeOneSequence (
 		( bnf:void )
-		( verb objectlist propertylisttail )
+		( verb  object objecttail propertylisttail )
 	).
 
 propertylisttail bnf:mustBeOneSequence (
 		( bnf:void )
-		( semicolon propertylist )
+		( ";" verb object objecttail propertylisttail )
 	).
 
-objectlist bnf:mustBeOneSequence (
-		( object  [ bnf:zeroOrMore [ 
-				bnf:mustBeOneSequence (
-					( comma )
-					( objectlist )
-				) ]
-			  ] )).
+
+objecttail bnf:mustBeOneSequence (
+		(void)
+		( ","   object objecttail )
+	).
 
 
 verb bnf:mustBeOneSequence (
@@ -127,8 +132,8 @@ path bnf:mustBeOneSequence(
 
 pathtail bnf:mustBeOneSequence(
 		( bnf:void )
-		( traverse path )
-		( uparrow path )
+		( "!" path )
+		( "^" path )
 	).
 
 
@@ -177,20 +182,6 @@ variable 	bnf:matches  	"\\?[a-zA-Z_][a-zA-Z0-9_]*";  # ? barename
 langcode	bnf:matches  	"[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?";
 		bnf:canStartWith 	"a".
 
-traverse	bnf:matches		"!";
-		bnf:canStartWith	"!".
-
-uparrow		bnf:mustBeOneSequence (( "^"));
-		bnf:canStartWith	"^".
-
-semicolon	bnf:mustBeOneSequence (( ";"));
-		bnf:canStartWith	";".
-
-comma		bnf:mustBeOneSequence (( ","));
-		bnf:canStartWith	",".
-
-period		bnf:mustBeOneSequence (( "."));
-		bnf:canStartWith	".".
 
 #               raw regexp single quoted would be   "([^"]|(\\"))*"
 # @@@ triple-quoted version too
@@ -212,8 +203,8 @@ string		bnf:matches		"""("([^"]|(\\\\"))*")""".
 { ?x bnf:commaSeparatedPeriodTerminatedListOf ?y } =>
 {
 	?x bnf:mustBeOneSequence (
-		( period )
-		( comma ?y ?x )
+		( "." )
+		( "," ?y ?x )
 	)
 }.
 

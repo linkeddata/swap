@@ -41,6 +41,9 @@
 
 { ?x bnf:canBeSequence ?y } =>  { ?y sequenceTail ?y }.
 
+sequenceTail a log:Chaff.
+optionTail a log:Chaff.
+
 { ?x sequenceTail [ rdf:rest ?z ] } => { ?x sequenceTail ?z }.
 
 { ?x sequenceTail [ rdf:first ?y; rdf:rest [ rdf:first ?z ]] } =>
@@ -66,7 +69,7 @@
 
 
 { 	?x bnf:canBeSequence ( bnf:void );
-		canPrecede ?z} =>  { ?x bnf:selector (?z ( bnf:void ))}.
+		canPrecede [bnf:canStartWith ?z]} =>  { ?x bnf:selector (?z ( bnf:void ))}.
 
 
 {   	?x a Used; bnf:canBeSequence ?s.
@@ -77,11 +80,6 @@
 }.
 
 
-# { ?y list:in [a UsedSequence].} => {?y a Used}.
-
-#{ ?s a UsedTail; rdf:first ?x; rdf:rest ?r } => {?r a UsedTail}.
-
-#{ ?s a UsedTail; rdf:first ?x; rdf:rest [ rdf:first ?y ] } => { ?x canPrecede ?y }.
 
 { ?x bnf:canBeSequence [ list:last ?y ]; canPrecede ?z} => { ?y canPrecede ?z }.
 
