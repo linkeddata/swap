@@ -7,8 +7,6 @@
          :worksWith 0,
                 1729 .
     
-    "1"     :valuOf " () math:product ?x  --- should be 1" .
-    
     "1.0e7"     a :testValue .
     
     "1729"     a :testValue;
@@ -16,8 +14,6 @@
                 1729 .
     
     "3.1415926"     a :testValue .
-    
-    "30"     :valueOf "5 * 3 * 2" .
     
     1.0e7     a :testValue .
     
@@ -34,7 +30,8 @@
          :worksWith 0,
                 1729 .
     
-    1     :valueOf "7 % 2" .
+    1     :valuOf " () math:product ?x  --- should be 1";
+         :valueOf "7 % 2" .
     
     1024     :valueOf "2^10" .
     
@@ -46,6 +43,8 @@
     
     3     :valueOf "sum(3) = 3",
                 "what -3's the - of" .
+    
+    30     :valueOf "5 * 3 * 2" .
     
     5     :valueOf "8 - 3" .
     
