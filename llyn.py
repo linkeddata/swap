@@ -132,6 +132,8 @@ from thing import  progress, progressIndent, BuiltIn, LightBuiltIn, \
 import RDFSink
 from RDFSink import Logic_NS
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
+from RDFSink import N3_nil, N3_first, N3_rest, DAML_NS, N3_Empty, N3_List
+from RDFSink import RDF_NS_URI
 
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE, SYMBOL
 # = RDFSink.SYMBOL # @@misnomer
@@ -141,12 +143,11 @@ LITERAL_URI_prefix = "data:application/n3;"
 cvsRevision = "$Revision$"
 
 # Should the internal representation of lists be with DAML:first and :rest?
-DAML_LISTS = notation3.DAML_LISTS    # If not, do the funny compact ones
+DAML_LISTS=1    # If not, do the funny compact ones
 
 # Magic resources we know about
 
-RDF_type_URI = notation3.RDF_type_URI # "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
-DAML_equivalentTo_URI = notation3.DAML_equivalentTo_URI
+from RDFSink import RDF_type_URI, DAML_equivalentTo_URI
 
 
 STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
@@ -216,7 +217,7 @@ def compareURI(self, other):
 
         # Both regular URIs
 #        progress("comparing", self.representation(), other.representation())
-    _type = notation3.RDF_type_URI
+    _type = RDF_type_URI
     s = self.uriref()
     if s == _type:
             return -1
@@ -319,7 +320,7 @@ class Formula(Fragment):
     def n3String(self, flags=""):
         "Dump the formula to an absolute string in N3"
         buffer=StringIO.StringIO()
-#      _outSink = notation3.ToRDF(buffer, _outURI, flags=flags)
+#      _outSink = ToRDF(buffer, _outURI, flags=flags)
         _outSink = notation3.ToN3(buffer.write,
                                       quiet=1, flags=flags)
         self.store.dumpNested(self, _outSink)
@@ -772,7 +773,7 @@ class RDFStore(RDFSink.RDFSink) :
 # Register Light Builtins:
 
         log = self.internURI(Logic_NS[:-1])   # The resource without the hash
-        daml = self.internURI(notation3.DAML_NS[:-1])   # The resource without the hash
+        daml = self.internURI(DAML_NS[:-1])   # The resource without the hash
 
 # Functions:        
 
@@ -812,20 +813,20 @@ class RDFStore(RDFSink.RDFSink) :
 # Constants:
 
         self.Truth = self.internURI(Logic_NS + "Truth")
-        self.type = self.internURI(notation3.RDF_type_URI)
+        self.type = self.internURI(RDF_type_URI)
         self.Chaff = self.internURI(Logic_NS + "Chaff")
 
 
 # List stuff - beware of namespace changes! :-(
 
-        self.first = self.intern(notation3.N3_first)
-        self.rest = self.intern(notation3.N3_rest)
-        self.nil = self.intern(notation3.N3_nil)
+        self.first = self.intern(N3_first)
+        self.rest = self.intern(N3_rest)
+        self.nil = self.intern(N3_nil)
         self.nil._asList = EmptyList(self, None, None)
 #        self.nil = EmptyList(self, None, None)
-#        self.only = self.intern(notation3.N3_only)
-        self.Empty = self.intern(notation3.N3_Empty)
-        self.List = self.intern(notation3.N3_List)
+#        self.only = self.intern(N3_only)
+        self.Empty = self.intern(N3_Empty)
+        self.List = self.intern(N3_List)
 
         import cwm_string  # String builtins
         import cwm_os      # OS builtins
@@ -888,7 +889,7 @@ class RDFStore(RDFSink.RDFSink) :
                     raise URISyntaxError # Hash in document ID - can be from parsing XML as N3!
                 r = self.internURI(resid)
                 if typ == SYMBOL:
-                    if urirefString == notation3.N3_nil[1]:  # Hack - easier if we have a different classs
+                    if urirefString == N3_nil[1]:  # Hack - easier if we have a different classs
                         result = r.internFrag(urirefString[hash+1:], FragmentNil)
                     else:
                         result = r.internFrag(urirefString[hash+1:], Fragment)
@@ -1189,7 +1190,7 @@ class RDFStore(RDFSink.RDFSink) :
         mp = None
         for r, count in counts.items():
             if thing.verbosity() > 25: progress("    Count is %3i for %s" %(count, r.uriref()))
-            if (r.uri != notation3.RDF_NS_URI[:-1]
+            if (r.uri != RDF_NS_URI[:-1]
                 and (count > best or
                      (count == best and `mp` > `r`))) :  # Must be repeatable for retests
                 best = count

@@ -16,7 +16,7 @@ import urlparse
 #import StringIO
 import sys
 
-import notation3    # N3 parsers and generators, and RDF generator
+# import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 import urllib # for hasContent
@@ -28,33 +28,37 @@ urlparse.uses_relative.append("md5") #@@kludge/patch
 LITERAL_URI_prefix = "data:application/n3;"
 
 # Should the internal representation of lists be with DAML:first and :rest?
-DAML_LISTS = notation3.DAML_LISTS    # If not, do the funny compact ones
+#DAML_LISTS = notation3.DAML_LISTS    # If not, do the funny compact ones
 
 # Magic resources we know about
 
-RDF_type_URI = notation3.RDF_type_URI # "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
-DAML_equivalentTo_URI = notation3.DAML_equivalentTo_URI
+#RDF_type_URI = notation3.RDF_type_URI # "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+#DAML_equivalentTo_URI = notation3.DAML_equivalentTo_URI
 
 
-Logic_NS = notation3.Logic_NS
+#Logic_NS = notation3.Logic_NS
 
-N3_forSome_URI = Logic_NS + "forSome"
+#N3_forSome_URI = Logic_NS + "forSome"
 #N3_subExpression_URI = Logic_NS + "subExpression"
-N3_forAll_URI = Logic_NS + "forAll"
+#N3_forAll_URI = Logic_NS + "forAll"
 
-STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
-META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"
-
-META_mergedWith = META_NS_URI + "mergedWith"
-META_source = META_NS_URI + "source"
-META_run = META_NS_URI + "run"
+#STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
+#META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"
+#
+#META_mergedWith = META_NS_URI + "mergedWith"
+#META_source = META_NS_URI + "source"
+#META_run = META_NS_URI + "run"
 
 # The statement is stored as a quad - affectionately known as a triple ;-)
 
-CONTEXT = notation3.CONTEXT
-PRED = notation3.PRED  # offsets when a statement is stored as a Python tuple (p, s, o, c)
-SUBJ = notation3.SUBJ
-OBJ = notation3.OBJ
+from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
+from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE, SYMBOL
+from RDFSink import Logic_NS
+
+#CONTEXT = notation3.CONTEXT
+#PRED = notation3.PRED  # offsets when a statement is stored as a Python tuple (p, s, o, c)
+#SUBJ = notation3.SUBJ
+#OBJ = notation3.OBJ
 
 PARTS =  PRED, SUBJ, OBJ
 ALL4 = CONTEXT, PRED, SUBJ, OBJ
@@ -64,11 +68,6 @@ ALL4 = CONTEXT, PRED, SUBJ, OBJ
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE, SYMBOL
 
-SYMBOL = notation3.SYMBOL        # which or may not have a fragment
-FORMULA = notation3.FORMULA          # A set of statements    
-LITERAL = notation3.LITERAL          # string etc - maps to data:
-ANONYMOUS = notation3.ANONYMOUS     # existentially qualified unlabelled resource
-VARIABLE = notation3.VARIABLE
 
 
 
@@ -425,3 +424,39 @@ def progressIndent(delta):
     global chatty_level
     chatty_level = chatty_level + delta
     return chatty_level
+    
+    
+    
+import re
+commonHost = re.compile(r'^[-_a-zA-Z0-9.]://[^/]+/[^/]*$')
+# Not perfect - should use root-relative in correct case but never mind.
+
+def relativeURI(base, uri):
+    """Your regular relative URI algorithm -- never trust anyone else's ;-)
+    This one checks that it uses a root-realtive one where that is all they share."""
+    if base == None: return uri
+    if base == uri: return ""
+    i=0
+    while i<len(uri) and i<len(base):  # Find how much in common
+        if uri[i] == base[i]: i = i + 1
+        else: break
+    # print "# relative", base, uri, "   same up to ", i
+    # i point to end of shortest one or first difference
+
+    m = commonHost.match(base[:i])
+    if m:
+	k=uri.find("//")
+	if k>=0:
+	    l=uri.find("/", k+2)
+	    return uri[l:]
+
+    if uri[i:i+1] =="#": return uri[i:]  # fragment of base
+    while i>0 and uri[i-1] != '/' : i=i-1  # scan for slash
+
+    if i < 3: return uri  # No way.
+    if string.find(base, "//", i-2)>0 \
+       or string.find(uri, "//", i-2)>0: return uri # An unshared "//"
+    if string.find(base, ":", i)>0: return uri  # An unshared ":"
+    n = string.count(base, "/", i)
+    return ("../" * n) + uri[i:]
+

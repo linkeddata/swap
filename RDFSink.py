@@ -40,8 +40,26 @@ Logic_NS = "http://www.w3.org/2000/10/swap/log#"
 forSomeSym = Logic_NS + "forSome"
 forAllSym = Logic_NS + "forAll"
 
+RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+RDF_NS_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+DAML_NS=DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
+DAML_equivalentTo_URI = DPO_NS+"equivalentTo"
+parsesTo_URI = Logic_NS + "parsesTo"
+RDF_spec = "http://www.w3.org/TR/REC-rdf-syntax/"
+List_NS = DPO_NS     # We have to pick just one all the time
+
 
 _Old_Logic_NS = "http://www.w3.org/2000/10/swap/log.n3#"
+
+
+# For lists:
+N3_first = (SYMBOL, List_NS + "first")
+N3_rest = (SYMBOL, List_NS + "rest")
+N3_nil = (SYMBOL, List_NS + "nil")
+N3_List = (SYMBOL, List_NS + "List")
+N3_Empty = (SYMBOL, List_NS + "Empty")
+
+
 
 
 class URISyntaxError(ValueError):
