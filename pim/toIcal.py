@@ -46,6 +46,7 @@ __version__ = '$Id$'
 from string import maketrans, translate
 
 from myStore import Namespace, load, setStore # http://www.w3.org/2000/10/swap/
+from RDFSink import LITERAL_DT
 
 #hmm... generate from schema?
 from fromIcal import iCalendarDefs # http://www.w3.org/2002/12/cal/ 
@@ -55,6 +56,7 @@ CRLF = chr(13) + chr(10)
 
 RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 ICAL = Namespace('http://www.w3.org/2002/12/cal/ical#')
+XMLSchema = Namespace('http://www.w3.org/2001/XMLSchema#')
 
 
 
@@ -169,36 +171,30 @@ class CalWr:
 
 
     def doDateTime(self, sts, when, propName, predName):
-        """ helper function to output general date value"""
+        """ helper function to output general date/dateTime value"""
         w = self._w
 
-        whenV = sts.any(when, ICAL.date)
-        if whenV:
-            whenV = mkDATE(whenV)
-            w("%s;VALUE=DATE:%s%s" % (propName, whenV, CRLF))
-        else:
-            for tzp in sts.each(pred=RDF.type, obj=ICAL.Vtimezone):
-                whenV = sts.any(when, tzp)
-                if whenV:
-                    whenV = translate(str(whenV), maketrans("", ""), "-:")
-                    whenTZ = tzid(tzp)
-                    w("%s;VALUE=DATE-TIME;TZID=%s:%s%s" %  
-                      (propName, str(whenTZ), whenV, CRLF))
-                    break
+        tk, tv = when.asPair()
+        if tk is LITERAL_DT:
+            tlit, dt = tv
+            if dt == XMLSchema.date.uriref():
+                w("%s;VALUE=DATE:%s%s" % (propName, mkDATE(tlit), CRLF))
             else:
-                whenV = sts.any(when, ICAL.dateTime)
-                if whenV:
-                    whenV = translate(str(whenV), maketrans("", ""), "-:")
-                    z = ""
-                    if whenV[-1:] == "Z":
-                        z = "Z"
-                        whenV = whenV[:-1]
-                    whenV = (whenV + "000000")[:15] # Must include seconds
-                    w("%s:%s%s%s" % (propName, whenV, z, CRLF))
+                tlit = tlit.replace("-", "").replace(":", "")
+                z = ""
+                if tlit[-1:] == "Z":
+                    z = "Z"
+                    tlit = tlit[:-1]
+                tlit = (tlit + "000000")[:15] # Must include seconds
+
+                if dt == XMLSchema.dateTime.uriref():
+                    w("%s:%s%s%s" % (propName, tlit, z, CRLF))
+                elif dt == ICAL.dateTime.uriref():
+                    w("%s:%s%s%s" % (propName, tlit, z, CRLF))
                 else:
-                    raise ValueError, \
-                          "no ical:dateTime or ical:date for %s = %s" \
-                          % (propName ,  when)
+                    whenTZ = tzid(dt)
+                    w("%s;VALUE=DATE-TIME;TZID=%s:%s%s" %  
+                      (propName, str(whenTZ), tlit, CRLF))
 
     def doDuration(self, sts, r, propName, predName):
         w = self._w
@@ -222,6 +218,8 @@ class CalWr:
         when = sts.any(r, ICAL.until)
         if when: w(";UNTIL=%s" % mkDATE(when))
 
+        ival = sts.any(r, ICAL.count)
+        if ival: w(";COUNT=%s" % ival)
         ival = sts.any(r, ICAL.interval)
         if ival: w(";INTERVAL=%s" % ival)
         by = sts.any(r, ICAL.byday)
@@ -328,14 +326,14 @@ def mkDATE(val):
     return translate(str(val), maketrans("", ""), "-:")
 
 
-def tzid(tzp):
+def tzid(tzi):
     """convert timezones from RdfCalendar norms to iCalendar norms
 
     ASSUME we're using one of the 2002/12/cal timezones. @@
     """
     
-    rel = tzp.uriref2("http://www.w3.org/2002/12/cal/tzd/")
-    short= uripath.splitFrag(rel)[0]
+    rel = uripath.refTo("http://www.w3.org/2002/12/cal/tzd/", tzi)
+    short = uripath.splitFrag(rel)[0]
     return "/softwarestudio.org/Olson_20011030_5/" + short
 
 
@@ -388,7 +386,11 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.25  2005-02-17 23:34:37  connolly
+# Revision 2.26  2005-03-19 14:10:46  connolly
+# COUNT param
+# timezones as datatypes
+#
+# Revision 2.25  2005/02/17 23:34:37  connolly
 # each, not just any value, e.g. for EXDATE
 #
 # Revision 2.24  2005/02/17 23:02:27  connolly
