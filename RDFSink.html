@@ -10,7 +10,7 @@ TT { font-family: lucidatypewriter, lucida console, courier }
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>RDFSink</strong></big></big> (version $Id$)</font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/timbl/swap/RDFSink.py">/Users/timbl/swap/RDFSink.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/RDFSink.py">/devel/WWW/2000/10/swap/RDFSink.py</a></font></td></tr></table>
     <p><tt><a href="#RDFSink">RDFSink</a>&nbsp;--&nbsp;RDF&nbsp;parser/serializer/store&nbsp;interface<br>
 &nbsp;<br>
 HISTORY<br>
@@ -59,12 +59,13 @@ REFERENCES<br>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>interface&nbsp;to&nbsp;connect&nbsp;modules&nbsp;in&nbsp;RDF&nbsp;processing.<br>
+OBSOLETE<br>
 &nbsp;<br>
 This&nbsp;is&nbsp;a&nbsp;superclass&nbsp;for&nbsp;other&nbsp;RDF&nbsp;processors&nbsp;which&nbsp;accept&nbsp;RDF&nbsp;events<br>
-or&nbsp;indeed&nbsp;Swell&nbsp;events.<br>
+or&nbsp;indeed&nbsp;Swell&nbsp;events.&nbsp;It&nbsp;is&nbsp;superceded,&nbsp;effectively,&nbsp;by&nbsp;the&nbsp;class&nbsp;Formula,<br>
+as&nbsp;a&nbsp;sink&nbsp;of&nbsp;data&nbsp;and&nbsp;a&nbsp;soiurce&nbsp;of&nbsp;new&nbsp;symbols.<br>
 &nbsp;<br>
-Keeps&nbsp;track&nbsp;of&nbsp;prefixes.&nbsp;There&nbsp;are&nbsp;some&nbsp;things&nbsp;which&nbsp;are&nbsp;in&nbsp;the<br>
-superclass&nbsp;for&nbsp;commonality&nbsp;(i.e.&nbsp;implementation&nbsp;inheritance)<br>
+Keeps&nbsp;track&nbsp;of&nbsp;prefixes.<br>
 &nbsp;<br>
 This&nbsp;interface&nbsp;has&nbsp;the&nbsp;advantage&nbsp;that&nbsp;it&nbsp;does&nbsp;n&nbsp;ot&nbsp;have&nbsp;any&nbsp;dependencies<br>
 on&nbsp;object&nbsp;types,&nbsp;it&nbsp;is&nbsp;really&nbsp;one-way&nbsp;(easily&nbsp;serialized&nbsp;as&nbsp;no&nbsp;return&nbsp;values).<br>
@@ -365,6 +366,7 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl><dt><a name="-getpid"><strong>getpid</strong></a>(...)</dt><dd><tt><a href="#-getpid">getpid</a>()&nbsp;-&gt;&nbsp;pid<br>
 Return&nbsp;the&nbsp;current&nbsp;process&nbsp;id</tt></dd></dl>
+ <dl><dt><a name="-runNamespace"><strong>runNamespace</strong></a>()</dt><dd><tt>Return&nbsp;a&nbsp;URI&nbsp;suitable&nbsp;as&nbsp;a&nbsp;namespace&nbsp;for&nbsp;run-local&nbsp;objects</tt></dd></dl>
  <dl><dt><a name="-time"><strong>time</strong></a>(...)</dt><dd><tt><a href="#-time">time</a>()&nbsp;-&gt;&nbsp;floating&nbsp;point&nbsp;number<br>
 &nbsp;<br>
 Return&nbsp;the&nbsp;current&nbsp;time&nbsp;in&nbsp;seconds&nbsp;since&nbsp;the&nbsp;Epoch.<br>

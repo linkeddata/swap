@@ -101,12 +101,13 @@ class URISyntaxError(ValueError):
 class RDFSink:
 
     """interface to connect modules in RDF processing.
+    OBSOLETE
 
     This is a superclass for other RDF processors which accept RDF events
-    or indeed Swell events.
+    or indeed Swell events. It is superceded, effectively, by the class Formula,
+    as a sink of data and a soiurce of new symbols.
     
-    Keeps track of prefixes. There are some things which are in the
-    superclass for commonality (i.e. implementation inheritance)
+    Keeps track of prefixes.
     
     This interface has the advantage that it does n ot have any dependencies
     on object types, it is really one-way (easily serialized as no return values).

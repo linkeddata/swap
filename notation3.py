@@ -62,7 +62,6 @@ import codecs # python 2-ism; for writing utf-8 in RDF/xml output
 import urllib
 
 import re
-import thing
 
 from diag import verbosity, setVerbosity, progress
 
@@ -258,11 +257,12 @@ class SinkParser:
     #@@I18N
     global _notNameChars
     #_namechars = string.lowercase + string.uppercase + string.digits + '_-'
-
+        
     def tok(self, tok, str, i):
         """Check for keyword.  Space must have been stripped on entry and
 	we must not be at end of file."""
 
+	whitespace = '\t\n\x0b\x0c\r ' # string.whitespace was '\t\n\x0b\x0c\r \xa0' not ascii
 	if str[i:i+1] == "@":
 	    i = i+1
 	else:
@@ -270,8 +270,8 @@ class SinkParser:
 		return -1   # Nope, this has neither keywords declaration nor "@"
 
 	if (str[i:i+len(tok)] == tok
-            and (tok[0]  in _notNameChars    # check keyword is not prefix
-                or str[i+len(tok)] in string.whitespace )):
+            and (tok[0]  in _notNameChars  # check keyword is not prefix
+                or str[i+len(tok)] in whitespace )): 
 	    i = i + len(tok)
 	    return i
 	else:
@@ -1299,15 +1299,16 @@ t   "this" and "()" special syntax should be suppresed.
         ty, value = pair
 
         if ty == LITERAL:
+	    singleLine = "n" in self._flags
 	    if type(value) is not types.TupleType:  # simple old-fashioned string
-		return stringToN3(value)
+		return stringToN3(value, singleLine=singleLine)
 	    s, dt, lang = value
 	    if dt != None:
 		dt_uri = dt.uriref()		 
 		if (dt_uri == INTEGER_DATATYPE or
 		    dt_uri == FLOAT_DATATYPE) and "n" not in self._flags:
 		    return s    # Naked numeric value
-	    str = stringToN3(s)
+	    str = stringToN3(s, singleLine= singleLine)
 	    if lang != None: str = str + "@" + lang
 	    if dt != None: str = str + "^^" + self.representationOf(context, dt.asPair())
 	    return str
@@ -1373,10 +1374,11 @@ Escapes = {'a':  '\a',
 forbidden1 = re.compile(ur'[\\\"\a\b\f\r\v\u0080-\uffff]')
 forbidden2 = re.compile(ur'[\\\"\a\b\f\r\v\t\n\u0080-\uffff]')
 #"
-def stringToN3(str):
+def stringToN3(str, singleLine=0):
     res = ''
     if (len(str) > 20 and
         str[-1] <> '"' and
+	not singleLine and
         (string.find(str, "\n") >=0 
          or string.find(str, '"') >=0)):
         delim= '"""'
@@ -1737,7 +1739,7 @@ See also: cwm
         option_inputs = []
         option_filters = []
         option_test = 0
-        thing.setVerbosity(0)          # not too verbose please
+        setVerbosity(0)          # not too verbose please
         hostname = "localhost" # @@@@@@@@@@@ Get real one
         
         for arg in sys.argv[1:]:  # Command line options after script name

@@ -9,30 +9,17 @@ This started as http://www.w3.org/2000/10/swap/string.py
 See cwm.py
 """
 
-
-
 import string
 import re
 
 from diag import verbosity, progress
 
-import notation3    # N3 parsers and generators, and RDF generator
-# import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
-
 import urllib # for hasContent
 import md5, binascii  # for building md5 URIs
 
-from thing import LightBuiltIn, ReverseFunction, Function
+from term import LightBuiltIn, ReverseFunction, Function
 
 LITERAL_URI_prefix = "data:application/n3;"
-
-# Should the internal representation of lists be with DAML:first and :rest?
-DAML_LISTS = notation3.DAML_LISTS    # If not, do the funny compact ones
-
-# Magic resources we know about
-
-RDF_type_URI = notation3.RDF_type_URI # "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
-DAML_equivalentTo_URI = notation3.DAML_equivalentTo_URI
 
 
 STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"

@@ -8,7 +8,7 @@ to check.
 """
 # check that proof
 
-from thing import load, Namespace
+from myStore import load, Namespace
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ
 from llyn import Formula #@@ dependency should not be be necessary
 from diag import verbosity, setVerbosity, progress
@@ -49,12 +49,10 @@ def parse(resourceURI):
     return f
 
 def statementFromFormula(f):
-    s = None
-    for x in f.statements:
-	if x[PRED] not in (log.forAll, log.forSome):
-	    if s != None: return None
-	    s = x
-    return s
+    "Check just one statement and return it"
+    if len(f) > 1:
+	raise RuntimeError("I think this was supposed tro be a single statement")
+    return f.statements[0]
 
 def valid(proof, r, level=0):
     """Check whether this reason is valid. Returns the formula proved or None is not"""

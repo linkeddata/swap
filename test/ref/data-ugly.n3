@@ -1,19 +1,40 @@
-     @prefix : <rules12.n3#> .
      @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
      @prefix ex: <daml-ex.n3#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rules: <rules12.n3#> .
     
     this     log:forSome <#_g0>,
                 <#_g1>,
                 <#_g2>,
-                <#_g3>,
-                <#_g4>,
-                <#_g5>,
-                <#_g6>,
-                <#_g7>,
-                <#_g8>,
-                <#_g9> .
+                <run#li3>,
+                <run#li2>,
+                <run#li1>,
+                <run#li5>,
+                <run#li4>,
+                <run#li7>,
+                <run#li6> .
+    
+    <run#li3>     rdf:first ex:short;
+         rdf:rest <run#li2> .
+    
+    <run#li2>     rdf:first ex:medium;
+         rdf:rest <run#li1> .
+    
+    <run#li1>     rdf:first ex:tall;
+         rdf:rest () .
+    
+    <run#li5>     rdf:first ex:Man;
+         rdf:rest <run#li4> .
+    
+    <run#li4>     rdf:first ex:Woman;
+         rdf:rest () .
+    
+    <run#li7>     rdf:first ex:TallThing;
+         rdf:rest <run#li6> .
+    
+    <run#li6>     rdf:first ex:Man;
+         rdf:rest () .
     
     ex:Adam     a daml:Person;
          daml:comment "Adam is a person.";
@@ -36,18 +57,8 @@
          daml:disjointFrom ex:Male;
          daml:subClassOf ex:Animal .
     
-    ex:Height     a daml:Class .
-    
-    <#_g1>     rdf:first ex:short;
-         rdf:rest <#_g2> .
-    
-    <#_g2>     rdf:first ex:medium;
-         rdf:rest <#_g3> .
-    
-    <#_g3>     rdf:first ex:tall;
-         rdf:rest () .
-    
-    ex:Height     daml:oneOf <#_g1> .
+    ex:Height     a daml:Class;
+         daml:oneOf <run#li3> .
     
     ex:Male     a daml:Class;
          daml:subClassOf ex:Animal .
@@ -57,40 +68,26 @@
                 ex:Person .
     
     ex:Person     a daml:Class;
-         daml:comment "every person is a man or a woman" .
+         daml:comment "every person is a man or a woman";
+         daml:disjointUnionOf <run#li5> .
     
-    <#_g4>     rdf:first ex:Man;
-         rdf:rest <#_g5> .
-    
-    <#_g5>     rdf:first ex:Woman;
-         rdf:rest () .
-    
-    ex:Person     daml:disjointUnionOf <#_g4> .
-    
-    <#_g6>     a daml:Restriction;
+    <#_g1>     a daml:Restriction;
          daml:onProperty ex:parent;
          daml:toClass ex:Person .
     
-    ex:Person     daml:restrictedBy <#_g6>;
+    ex:Person     daml:restrictedBy <#_g1>;
          daml:subClassOf ex:Animal .
     
-    ex:TallMan     a daml:Class .
-    
-    <#_g7>     rdf:first ex:TallThing;
-         rdf:rest <#_g8> .
-    
-    <#_g8>     rdf:first ex:Man;
-         rdf:rest () .
-    
-    ex:TallMan     daml:intersectionOf <#_g7> .
+    ex:TallMan     a daml:Class;
+         daml:intersectionOf <run#li7> .
     
     ex:TallThing     a daml:Class .
     
-    <#_g9>     a daml:Restriction;
+    <#_g2>     a daml:Restriction;
          daml:onProperty ex:height;
          daml:toValue ex:tall .
     
-    ex:TallThing     daml:restrictedBy <#_g9> .
+    ex:TallThing     daml:restrictedBy <#_g2> .
     
     ex:Woman     a daml:Class;
          daml:subClassOf ex:Female,
@@ -132,9 +129,9 @@
          daml:imports <http://www.daml.org/2000/10/daml-ont>;
          daml:versionInfo "" .
     
-    :ancestor     a daml:TransitiveProperty .
+    rules:ancestor     a daml:TransitiveProperty .
     
-    :granpa     :ancestor :pa .
+    rules:granpa     rules:ancestor rules:pa .
     
-    :pa     :ancestor :bill .
+    rules:pa     rules:ancestor rules:bill .
     

@@ -45,7 +45,7 @@ import codecs # python 2-ism; for writing utf-8 in RDF/xml output
 import urlparse
 import urllib
 import re
-import thing
+#import thing
 from uripath import refTo
 from diag import progress
 

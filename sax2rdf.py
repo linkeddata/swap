@@ -42,7 +42,6 @@ import urllib   # Opening resources in load()
 import string
 import sys
 
-import thing
 import uripath
 from why import BecauseOfData
 import diag
@@ -372,7 +371,7 @@ class RDFHandler(xml.sax.ContentHandler):
                     if value == "Resource":
                         c = self._context
                         s = self._subject
-                        self._subject = self.sink.newBlankNode(self._context, why=self._reason2)
+#                        self._subject = self.sink.newBlankNode(self._context, why=self._reason2)
                         self.idAboutAttr(attrs) #@@ not according to current syntax @@@@@@@@@@@
                         self.sink.makeStatement(( c, self._predicate, s, self._subject), why=self._reason2)
                         self._state = STATE_DESCRIPTION  # Nest description

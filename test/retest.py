@@ -31,7 +31,7 @@ import urllib
 # From PYTHONPATH equivalent to http://www.w3.org/2000/10/swap
 
 import llyn
-from thing import load, loadMany, Namespace
+from myStore import load, loadMany, Namespace
 from uripath import refTo, base
 
 rdf = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
@@ -51,7 +51,7 @@ def problem(str):
     global ploughOn
     global problems
     sys.stderr.write(str + "\n")
-    problems = problems + 1
+    problems.append(str)
     if not ploughOn:
 	sys.exit(-1)
 
@@ -150,7 +150,7 @@ def main():
     tests=0
     passes=0
     global problems
-    problems = 0
+    problems = []
     
     REFWD="file:/devel/WWW/2000/10/swap/test"
     WD = "file:" + os.getcwd()
@@ -200,7 +200,8 @@ def main():
     cwmTests = len(testData)
     if verbose: print "Cwm tests: %i" % cwmTests
     RDFTestData.sort()
-    if verbose: print "RDF parser tests: %i" % len(RDFTestData)
+    rdfTests = len(RDFTestData)
+    if verbose: print "RDF parser tests: %i" % rdfTests
 
     for u, case, description, env, arguments in testData:
 	tests = tests + 1
@@ -238,7 +239,7 @@ def main():
 	if tests < start: continue
     
     
-	print "%3i)  %s   %s" %(tests, case, description)
+	print "%3i/%i)  %s   %s" %(tests, rdfTests, case, description)
     #    print "      %scwm %s   giving %s" %(inputDocument, case)
 	assert case and description and inputDocument and outputDocument
 	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
@@ -251,8 +252,11 @@ def main():
 
 	passes = passes + 1
 
-    if problems > 0:
-	raise RuntimeError("Total %i errors in %i tests." % (problems, tests))
+    if problems != []:
+	sys.stderr.write("\nProblems:\n")
+	for s in problems:
+	    sys.stderr.write("  " + s + "\n")
+	raise RuntimeError("Total %i errors in %i tests." % (len(problems), tests))
 
 if __name__ == "__main__":
     main()

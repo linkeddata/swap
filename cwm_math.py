@@ -19,16 +19,11 @@ __cvsid__ = '$Id$'
 __version__ = '$Revision$'
 
 import sys, string, re, urllib
-import thing, notation3
 
-from thing import *
+from term import LightBuiltIn, Function, ReverseFunction
 import types
 
-LITERAL_URI_prefix = 'data:application/n3,'
-DAML_LISTS = notation3.DAML_LISTS
-
-RDF_type_URI = notation3.RDF_type_URI
-DAML_equivalentTo_URI = notation3.DAML_equivalentTo_URI
+# from RDFSink import DAML_LISTS, RDF_type_URI, DAML_equivalentTo_URI
 
 MATH_NS_URI = 'http://www.w3.org/2000/10/swap/math#'
 

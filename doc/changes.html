@@ -39,28 +39,26 @@ here.</p>
     <ul>
       <li>You can match against lists. Unification of formlae will catch
         identical lists such as ( &lt;a&gt; &lt;b&gt; ) matching against (
-        &lt;a&gt; &lt;b&gt; ) because Lists are interned, and also  unify (
-        ?x ?y ) with ( &lt;a&gt; &lt;b&gt; ). This does not work , however
-        with formulae. (It never did) behaviour of formulae. Watch this
-        space, though,as this should change. (Tests which fail:
-        test/list/detailed.n3)</li>
+        &lt;a&gt; &lt;b&gt; ) because Lists are interned, and also unify ( ?x
+        ?y ) with ( &lt;a&gt; &lt;b&gt; ). This still does not work , however
+        with formulae. Watch this space, though,as this may change.</li>
       <li>The list-handling is not complete when constructing lists. (test
-        that fail: test/list/gk*.n3 -- soryy Graham!).  Lists generated are
-        currently not available to be queried.  rdf:first and rdf:rest are
+        that fail: test/list/gk*.n3 -- sorry Graham!). Lists generated are
+        currently not available to be queried. rdf:first and rdf:rest are
         built-in functions which work to dismantle lists, but currently
         <strong>not to build them</strong>. or, that is, you can build them
-        but you can't directly query  them... watch this space. Hopefullythis
+        but you can't directly query them... watch this space. Hopefully this
         will be fixed, and the lists will behave just as thoug the actual
-        graph contained rdf:first and rdf:rest  triples (but be more
+        graph contained rdf:first and rdf:rest triples (but be more
         efficient).</li>
       <li>You should be able to generate lists from built-ins if you are
-        making new built-in functions.  Just return a python sequence from
+        making new built-in functions. Just return a python sequence from
         evaluateObject().</li>
       <li>The unification (query) engine was complicated by the fact that
         lists in the antecedent can be assumed as all lists exist by axiom.
         The last release of llyn had a bug (<code>test:t1018b2</code>) with
         that - and wrapping my head round that caused me to decide it was
-        time for the change.  It is nowsimpler in that regard.</li>
+        time for the change. It is nowsimpler in that regard.</li>
       <li>In canonical comparisons, Lists are greater than literals and
         smaller than formulae. This may affect the ordering of cwm-generated
         files. Lists currently compare element by element, or if elements
@@ -72,6 +70,27 @@ here.</p>
     mentoin nested formulae. --purge-rules is now deprocated and does the
     same thing. (--purge-rules sed to be a just remove things menioning
     forAll or implies.)</li>
+  <li><strong>Generated Ids</strong> have in the past been generated relative
+    to the current input file (or base) like &lt;#_g0&gt;. This had two
+    problems. The first is that purists point outthat cwm is assertingthings
+    about the user's namespace which aren't necessarily true - why does cwm
+    have the right to do this? The second is pragmatic: when two files
+    already with cwm-generated genids were re-processed using cwm, it could
+    under some cases end up reusing the same id. Now, cwm makes up, by
+    default, much more resilient ones. It imagines a file called something
+    like .run-19435661734.7651234 in the local directory, and uses that
+    file's local space for its names. If you don't like this (eg for
+    repeatable testing) you can set an environment variable
+    <code><strong>CWM_RUN_NS</strong></code> to something like "#", which
+    will create the original behaviour, or a specific namespace you know you
+    won't reuse in related work.</li>
+</ol>
+
+<p></p>
+
+<p>More changes</p>
+<ol>
+  <li>Unused variables are not listed on output.</li>
 </ol>
 
 <h3>For python cwm developers</h3>
@@ -83,6 +102,7 @@ here.</p>
     The unification engine which includes the built-in function operation now
     uses the store's api to access the store without peeking into
   internals.</li>
+  <li>thing.py split into myStore.py and term.py </li>
   <li>It used to be that the universal and existential variables in a formula
     were stored in forAll and forSome psudo-property triples. This was
     basically a kludge. One had to be always aware that the pseudoproperties
@@ -93,29 +113,6 @@ here.</p>
   <li></li>
 </ol>
 
-<h2>To Do:</h2>
-
-<p>RDF Output - bnodes</p>
-
-<p>RDF Output - Collections</p>
-
-<p>RDF Output: On lists, use exietnstial sor bnodes not symbols</p>
-
-<p>Unify nested lists, nested formulae</p>
-
-<p>Built-ins for lists</p>
-
-<p>Sets, plus builtins, plus syntax??</p>
-
-<p>Variables as separate python class</p>
-
-<p></p>
-
-<p>Builtin operations:</p>
-<ul>
-  <li>Return many bindings from builtin eg list:in, os:argv</li>
-</ul>
-
 <h2>Getting an old version</h2>
 
 <p></p>
@@ -124,6 +121,82 @@ here.</p>
 checking out with the tag oldLists .</p>
 
 <p><code>cvs update -r oldLists</code></p>
+
+<p></p>
+
+<h2>To Do:</h2>
+
+<p></p>
+
+<p>Performance:  Make test/perform test suite with standard tests for  </p>
+
+<h3>Syntax</h3>
+
+<p>RDF Output - bnodes</p>
+
+<p>RDF Output - Collections</p>
+
+<p>RDF Output: On lists, use exietnstials or bnodes not symbols</p>
+
+<p>N3 syntax - transision from <code>this log:forAll</code> to
+<code>@forAll</code>. Same for <code>forSome.</code></p>
+
+<p>N3 syntax - test set syntax (,) (&lt;a&gt;,) (&lt;a&gt;, &lt;b&gt;)</p>
+
+<p>Extended RDF output syntax for formulae (how? have RDF Core locked
+<em>all</em> the exits? Prevents RDF2 not superset of RDF/XML1)</p>
+
+<h3>Query/Inference</h3>
+
+<p>Unify nested formulae</p>
+
+<p>Built-ins for lists. in (needs muli value function, below); append,
+prepend, second..seventh, last, concat.</p>
+
+<p>Sets, plus builtins, plus syntax??</p>
+
+<p>Builtin-s extracting closed world data: s=Q(F, y, G) is set of x such that
+formula F.substite((y, x)) log:includes G.</p>
+
+<p>Symbols used as variables as separate python class - save some time
+checking occurrences</p>
+
+<p>Paramodulation - smushing built into store. reuse redirection used for
+lists?</p>
+
+<p>Builtin operations:</p>
+<ul>
+  <li>Return many bindings from builtin eg list:in, os:argv</li>
+  <li>Fairly complete XQ functions and operators implementations (use same
+    URIs?)</li>
+  <li>Extract datatype, language and string from a literal.</li>
+</ul>
+
+<p>Remove all vestiges of the old pair represetation of symbols.</p>
+
+<p>Implement backward chainer (like Euler) on the same store. Allow forward
+and backward chainers to interact, share built-ins.</p>
+
+<h3>Store</h3>
+
+<p>Implement versions of the store based on Redland, Jena, etc.</p>
+
+<p>Implement rete method. Rules with state as objects. <em>&lt;= student
+project?</em></p>
+
+<p></p>
+
+<h3>Net</h3>
+
+<p>Implement <strong>persistent cache</strong> - make an ontology (based very
+stongly on HTTP headers) for recording the results of an HTTP (etc) get. 
+Store metadata about fetched ontologies. Build an index into the persistent
+cache for offline working.  Functions: find the closure of these documents
+under eg --closure=ptr and make sure than they are all in my persistent
+cache.  Allow environment variable to specify persistent cache mode (default:
+ontologies only, write to cache when online and expiry check fails, read from
+cache when offline). Provide pcache.urlopen() as a transparent extension of
+urlopen()</p>
 
 <p></p>
 

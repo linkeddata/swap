@@ -60,7 +60,7 @@ name = "[A-Za-z][A-Za-z0-9]*" #http://www.w3.org/TR/rdf-testcases/#ntriples
 nodeID = '_:' + name
 uriref = r'<[^>]*>'
 language = r'[a-z0-9]+(?:-[a-z0-9]+)?'
-string_pattern = r'"[^"]*"'
+string_pattern = r'".*"'   # We know in ntriples that there can only be one string on the line
 langString = string_pattern + r'(?:@' + language + r')?'
 datatypeString = langString + '(?:\^\^' + uriref + r')?' 
 #literal = langString + "|" + datatypeString
@@ -106,14 +106,14 @@ def main():
     graph = []
     if testFiles == []: testFiles = [ "/dev/stdin" ]
     for fn in testFiles:
-	if verbose: print "Loading data from", fn
+	if verbose: stderr.write("Loading data from %s" % fn)
 
 	uri = uripath.join(WD, fn)
 	inStream = urllib.urlopen(uri)
 	while 1:
 	    line = inStream.readline()
 	    if line == "": break
-	    if verbose: print line
+	    if verbose: stderr.write("%s\n" % line)
 	    m = comment.match(line)
 	    if m != None: continue
 	    m = statement.match(line)
@@ -121,9 +121,9 @@ def main():
 		stderr.write("Syntax error: "+line+"\n")
 		exit(-1)
 	    triple = m.group(1), m.group(2), m.group(3)
-	    if verbose: print "-> %s  %s  %s ." % (triple[0], triple[1], triple[2])
+	    if verbose: stderr.write( "-> %s  %s  %s ." % (triple[0], triple[1], triple[2]))
 	    graph.append(triple)
-    if verbose: print "%i statements in graph" % (len(graph))
+    if verbose: stderr.write("%i statements in graph" % (len(graph)))
     g = canonicalize(graph)
     serialize(g)
     
@@ -148,7 +148,8 @@ def serialize(graph):
 
 def compare(a,b, level = 0):
     "Compare consistently nested lists of strings"
-    print("  "*level, "@@@@@@@@@ compare %s and %s" % (`a`,`b`))
+    if verbose:
+	stderr.write("  "*level + "@@@@@@@@@ compare %s and %s\n" % (`a`,`b`))
     if a==None and b == None: return 0
     if a == None: return -1
     if b == None: return 1
@@ -207,7 +208,7 @@ def canon(graph, c0=0):
     s = []
     for i in range(n):
 	signature[i].sort(compare)   # Signature is now intrinsic to the local environment of that bnode.
-	if verbose: print " %3i) %s" % (i, signature[i])
+	if verbose: stderr.write( " %3i) %s\n" % (i, signature[i]))
 	s.append((signature[i], i))
     s.sort()
     
@@ -215,18 +216,18 @@ def canon(graph, c0=0):
     c = c0
     for i in range(n):
 	if i != n-1 and s[i][0] == s[i+1][0]:
-	    if verbose: print "@@@ %3i]  %i and %i have same signature: \n\t%s\nand\t%s\n" % (
-		    i, s[i][1], s[i+1][1], s[i][0], s[i+1][0])
+	    if verbose: stderr.write( "@@@ %3i]  %i and %i have same signature: \n\t%s\nand\t%s\n" % (
+		    i, s[i][1], s[i+1][1], s[i][0], s[i+1][0]))
 	    dups = dups + 1
 	elif i != 0 and s[i][0] == s[i-1][0]:
-	    if verbose: print "@@@ %3i]  %i and %i have same signature: \n\t%s\nand\t%s\n" % (
-		    i, s[i][1], s[i-1][1], s[i][0], s[i-1][0])
+	    if verbose: stderr.write( "@@@ %3i]  %i and %i have same signature: \n\t%s\nand\t%s\n" % (
+		    i, s[i][1], s[i-1][1], s[i][0], s[i-1][0]))
 	else:
 	    canonical[i] = c
-	    if verbose: print "\t#%i canonicalized #%i" %(s[i][1], c)
+	    if verbose: stderr.write( "\t#%i canonicalized #%i\n" %(s[i][1], c))
 	    c = c + 1
 	    
-    if verbose: print "@@@ %i duplicate sigs out of %i" %(dups, n)
+    if verbose: stderr.write( "@@@ %i duplicate sigs out of %i\n" %(dups, n))
 
 #    if dups > 0:
 #	exit(-2)

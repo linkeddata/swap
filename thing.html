@@ -10,7 +10,7 @@ TT { font-family: lucidatypewriter, lucida console, courier }
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>thing</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/timbl/swap/thing.py">/Users/timbl/swap/thing.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/thing.py">/devel/WWW/2000/10/swap/thing.py</a></font></td></tr></table>
     <p><tt>$Id$<br>
 &nbsp;<br>
 Interning&nbsp;of&nbsp;URIs&nbsp;and&nbsp;strings&nbsp;for&nbsp;storage&nbsp;in&nbsp;SWAP&nbsp;store<br>
@@ -1277,6 +1277,45 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 
 </td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt><a name="-_checkStore"><strong>_checkStore</strong></a>(s<font color="#909090">=None</font>)</dt><dd><tt>Check&nbsp;that&nbsp;an&nbsp;explict&nbsp;or&nbsp;implicit&nbsp;stroe&nbsp;exists</tt></dd></dl>
+ <dl><dt><a name="-bNode"><strong>bNode</strong></a>(str, context)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;new&nbsp;unnamed&nbsp;node&nbsp;within&nbsp;the&nbsp;given<br>
+formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+ <dl><dt><a name="-existential"><strong>existential</strong></a>(str, context, uri)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;new&nbsp;named&nbsp;variable<br>
+existentially&nbsp;qualified&nbsp;within&nbsp;the&nbsp;given<br>
+formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+ <dl><dt><a name="-formula"><strong>formula</strong></a>()</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;new&nbsp;empty&nbsp;formula&nbsp;(triple&nbsp;people&nbsp;think:&nbsp;triple&nbsp;store)<br>
+and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+ <dl><dt><a name="-literal"><strong>literal</strong></a>(str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;an&nbsp;interned&nbsp;version&nbsp;of&nbsp;the&nbsp;given&nbsp;literal&nbsp;string<br>
+and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+ <dl><dt><a name="-load"><strong>load</strong></a>(uri<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>, formulaURI<font color="#909090">=None</font>, remember<font color="#909090">=1</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
+&nbsp;<br>
+uri:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;None,&nbsp;load&nbsp;from&nbsp;standard&nbsp;input.<br>
+remember:&nbsp;if&nbsp;1,&nbsp;store&nbsp;as&nbsp;metadata&nbsp;the&nbsp;relationship&nbsp;between&nbsp;this&nbsp;URI&nbsp;and&nbsp;this&nbsp;formula.<br>
+&nbsp;<br>
+Returns:&nbsp;&nbsp;top-level&nbsp;formula&nbsp;of&nbsp;the&nbsp;parsed&nbsp;document.<br>
+Raises:&nbsp;&nbsp;&nbsp;IOError,&nbsp;SyntaxError,&nbsp;DocumentError</tt></dd></dl>
+ <dl><dt><a name="-loadMany"><strong>loadMany</strong></a>(uris)</dt><dd><tt>Load&nbsp;a&nbsp;number&nbsp;of&nbsp;resources&nbsp;into&nbsp;the&nbsp;same&nbsp;formula<br>
+&nbsp;<br>
+Returns:&nbsp;&nbsp;top-level&nbsp;formula&nbsp;of&nbsp;the&nbsp;parsed&nbsp;information.<br>
+Raises:&nbsp;&nbsp;&nbsp;IOError,&nbsp;SyntaxError,&nbsp;DocumentError</tt></dd></dl>
+ <dl><dt><a name="-merge"><strong>merge</strong></a>(a, b)</dt><dd><tt>Merge&nbsp;sorted&nbsp;sequences<br>
+&nbsp;<br>
+The&nbsp;fact&nbsp;that&nbsp;the&nbsp;sequences&nbsp;are&nbsp;sorted&nbsp;makes&nbsp;this&nbsp;faster</tt></dd></dl>
+ <dl><dt><a name="-setStore"><strong>setStore</strong></a>(s)</dt><dd><tt>Set&nbsp;the&nbsp;process-global&nbsp;default&nbsp;store&nbsp;to&nbsp;be&nbsp;used&nbsp;when&nbsp;an&nbsp;explicit&nbsp;store&nbsp;is&nbsp;not</tt></dd></dl>
+ <dl><dt><a name="-setStoreClass"><strong>setStoreClass</strong></a>(c)</dt><dd><tt>Set&nbsp;the&nbsp;process-global&nbsp;class&nbsp;to&nbsp;be&nbsp;used&nbsp;to&nbsp;generate&nbsp;a&nbsp;new&nbsp;store&nbsp;if&nbsp;needed</tt></dd></dl>
+ <dl><dt><a name="-symbol"><strong>symbol</strong></a>(uri)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;an&nbsp;interned&nbsp;version&nbsp;of&nbsp;the&nbsp;given&nbsp;symbol<br>
+and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+ <dl><dt><a name="-universal"><strong>universal</strong></a>(str, context, uri)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;named&nbsp;variable<br>
+universally&nbsp;qualified&nbsp;within&nbsp;the&nbsp;given<br>
+formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+ <dl><dt><a name="-uri_encode"><strong>uri_encode</strong></a>(str)</dt><dd><tt>&nbsp;untested&nbsp;-&nbsp;this&nbsp;must&nbsp;be&nbsp;in&nbsp;a&nbsp;standard&nbsp;library&nbsp;somewhere</tt></dd></dl>
+</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
@@ -1302,7 +1341,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
 <strong>VARS</strong> = 3<br>
-<strong>__file__</strong> = './thing.pyc'<br>
+<strong>__file__</strong> = './thing.py'<br>
 <strong>__name__</strong> = 'thing'<br>
 <strong>_nextList</strong> = 0<br>
 <strong>generators</strong> = _Feature((2, 2, 0, 'alpha', 1), (2, 3, 0, 'final', 0), 4096)<br>

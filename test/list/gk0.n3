@@ -111,18 +111,18 @@ log:implies
 #  ValueError: list.remove(x): x not in list
 #
 
-#{ 
-#  ?A rule:append ( rdf:nil ?T1 ) .
-#}
-#log:implies
-#{ 
-#  ?A rdf:first ?T1 ;
-#     rdf:rest  rdf:nil .
-#} .
+{ 
+  ?A rule:append ( rdf:nil ?T1 ) .
+}
+log:implies
+{ 
+  ?A rdf:first ?T1 ;
+     rdf:rest  rdf:nil .
+} .
 
 # Test cases
 
-:A0 rule:append ( ()  "L1" )
+:A0 rule:append ( ()  "L1" ).
 
 #:A1 rule:append ( (  ) "L14" ) .
 
@@ -146,7 +146,10 @@ log:implies
 #
 #--------+---------+---------+---------+---------+---------+---------+---------+
 # $Log$
-# Revision 1.1  2003-08-14 00:00:23  timbl
+# Revision 1.2  2003-08-25 14:54:59  timbl
+# Passes regression test. (make release)
+#
+# Revision 1.1  2003/08/14 00:00:23  timbl
 # Re-engineered in places - See doc changes.html
 #
 # Revision 1.1  2003/01/16 05:06:45  timbl

@@ -17,15 +17,13 @@ Be aware that ISo times carry timezone offset information:  they cannot be
 converted to integer second times without a valid timezone offset, such as "Z".
 """
 
-import string
 import re
-import thing
 import notation3    # N3 parsers and generators, and RDF generator
 import isodate	    # Local, by mnot. implements <http://www.w3.org/TR/NOTE-datetime>
 
 
 from diag import progress, verbosity
-from thing import LightBuiltIn, Function, ReverseFunction
+from term import LightBuiltIn, Function, ReverseFunction
 import time, calendar # Python standard distribution
 
 

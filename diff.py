@@ -24,7 +24,7 @@ import uripath
 import string
 import sys
 from uripath import join
-from thing import  Namespace
+from term import  Namespace
 from notation3 import RDF_NS_URI
 
 from llyn import Formula, CONTEXT, PRED, SUBJ, OBJ

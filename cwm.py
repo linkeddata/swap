@@ -34,7 +34,6 @@ import diag
 
 from why import FormulaReason
 from diag import verbosity, setVerbosity, progress, tracking, setTracking
-from llyn import compareURI
 from uripath import join
 
 # import re
@@ -332,13 +331,10 @@ the closure under the operation of looking up:
 See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 """
         
-        #import urllib
         import time
         import sys
         global sax2rdf
-        import thing
-        #from thing import chatty
-        #import sax2rdf
+        import myStore
 
         # These would just be attributes if this were an object
         global _store
@@ -517,7 +513,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 		_store = llyn.RDFStore(argv=option_with, crypto=option_crypto)
 	    else:
 		_store = llyn.RDFStore( _outURI+"#_g", argv=option_with, crypto=option_crypto)
-	    thing.setStore(_store)
+	    myStore.setStore(_store)
             workingContext = _store.newFormula(outFormulaURI)   #@@@ Hack - use metadata
 
             history = None
@@ -743,12 +739,16 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 need(_store)
                 if verbosity()>5: progress("Begining output.")
                 if option_outputStyle == "-ugly":
+		    workingContext = workingContext.close()
                     _store.dumpChronological(workingContext, _outSink)
                 elif option_outputStyle == "-bySubject":
+		    workingContext = workingContext.close()
                     _store.dumpBySubject(workingContext, _outSink)
                 elif option_outputStyle == "-no":
                     pass
                 else:  # "-best"
+		    workingContext = workingContext.close()
+		    assert workingContext.canonical != None
                     _store.dumpNested(workingContext, _outSink)
 
 # These could well be methods using instance variables instead of

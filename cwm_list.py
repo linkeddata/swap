@@ -12,12 +12,11 @@ See cwm.py and the os module in python
 """
 
 
-from thing import LightBuiltIn, Function, ReverseFunction
+from term import LightBuiltIn, Function, ReverseFunction,\
+    List, EmptyList, NonEmptyList
+
 from diag import verbosity, progress
 import uripath
-
-from thing import List, EmptyList, NonEmptyList
-
 
 from RDFSink import List_NS, Logic_NS
 

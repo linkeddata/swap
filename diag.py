@@ -4,15 +4,15 @@ For example, sometimes want on stdout maybe or in a scroll window....
 """
 
 import sys
-import os
+import os, traceback
 
 def progress(*args):
-    global chatty_level  # verbosity indent level
-    sys.stderr.write(" "*chatty_level)
+#    global chatty_level  # verbosity indent level
+    level = len(traceback.extract_stack())
+    sys.stderr.write(" "*level)
     for a in args:
         sys.stderr.write("%s " % (a,))
     sys.stderr.write("\n")
-#        sys.stderr.write(  str + "\n")
 
 global chatty_flag # verbosity debug flag
 chatty_flag  =0
