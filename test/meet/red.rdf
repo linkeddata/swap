@@ -1,0 +1,18 @@
+
+<!-- Processed by Id: cwm.py,v 1.27 2001/02/05 19:58:24 timbl Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/test/meet/red.n3-->
+
+
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:m="http://www.example.org/meeting_organization#"
+    xmlns="http://www.another.example.org/geographical#">
+
+    <rdf:Description about="http://meetings.example.com/cal#m1">
+        <m:Location parseType="Resource">
+            <zip>02139</zip>
+            <lat>14.124425</lat>
+            <long>14.245</long>
+        </m:Location>
+        <m:chair resource="http://www.example.org/people#fred"/>
+    </rdf:Description>
+</rdf:RDF>
