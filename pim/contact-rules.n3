@@ -1,0 +1,339 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+<> dc:title "Contact: Utility concepts for everyday life";
+#    ----------------------------------
+dc:description """
+ To illustrate with examples the creation of a schema of RDF properties
+ and classes, but using abstract things for people, rather than strings, etc.
+ If you have an "Assistant's phone number", thenreally you have an assitant who has
+ a phone number - and that is much more useful in general.
+ For example, when data about you and your assietnt in merged,
+ you will end up with an "assistant's email" and the like.
+""",
+"$Id$". # see changelog at the bottom.
+
+
+@prefix : <http://www.w3.org/2000/10/swap/pim/contact#> .
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#> . # Hint
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . # type, Property
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
+
+<> :_nspolicy [ a :_SubjectToChange;
+   dc:description """If you change this, you have to tell the W3C SemWeb AD
+   folk, including Dan Connolly; so agreed 5 Jun 2001""" ].
+
+:_nspolicy a rdf:Property; rdfs:label "namespace policy";
+	rdfs:isDefinedBy <http://www.w3.org/1999/10/nsuri>. # @@move these :_ things there.
+:_SubjectToChange rdfs:label "subject to change". 
+
+##################################### CONTACT INFORMATION ######
+#
+#  @@ check out vcard
+#  http://www.imc.org/pdi/vcardwhite.html
+#  Eg http://msdn.microsoft.com/workshop/essentials/versions/vcard.asp
+
+
+<#vcard_list> = """ vCard.Cellular, vCard.Company, vCard.Department, 
+vCard.DisplayName,
+vCard.Email,
+vCard.FirstName, 
+vCard.Gender, vCard.Home.City, vCard.Home.Country, 
+vCard.Home.Fax, vCard.Home.Phone, vCard.Home.State, 
+vCard.Home.StreetAddress, vCard.Home.Zipcode, vCard.Homepage, 
+vCard.JobTitle, vCard.LastName, vCard.MiddleName, 
+vCard.Notes, vCard.Office,  # ??? Office what? Number?
+vCard.Pager, 
+vCard.Business.City, vCard.Business.Country, vCard.Business.Fax, 
+vCard.Business.Phone, vCard.Business.State, vCard.Business.StreetAddress, 
+vCard.Business.URL, vCard.Business.Zipcode""" .
+
+
+# Let's start with Contact information. See also
+
+@prefix mso: <../MSOutlookContacts.n3#> .
+
+:SocialEntity a rdfs:Class;
+    rdfs:comment  "The sort of thing which can have a phone number.".
+
+:Person rdfs:subClassOf :SocialEntity;
+    is rdfs:domain of :personalTitle,
+	:firstName,
+	:middleName,
+	:middleInitial,
+	:lastName,
+	:personalSuffix,
+	:organization,         # SocialEntity, was company
+	:departmentName ;
+	rdfs:comment """A person in the normal sense of the word.""".
+
+
+:personalTitle = 	mso:Title .
+:givenName = 		mso:First_Name .
+:middleName = 		mso:Middle_Name .
+:familyName = 		mso:Last_Name .
+:personalSuffix = 	mso:Suffix .
+:fullName a rdf:Property; rdfs:label "full name".
+:sortName a rdf:Property; rdfs:label "sort name";
+  rdfs:comment "re-arranged for lexicographic ordering; ala Doe, John".
+
+
+:knownAs a rdf:Property;
+    rdfs:comment """A person may be known as various strings.
+For example, an email friendly name string.""".
+
+:ContactLocation a rdfs:Class;
+    rdfs:comment  "A place with address, phone number, fax, etc";
+	is rdfs:domain of :phone, :fax.
+
+:office a rdf:Property;
+    rdfs:domain :Person; rdfs:range :ContactLocation.
+:home a rdf:Property;
+    rdfs:domain :Person; rdfs:range :ContactLocation.
+:vacationHome a rdf:Property;
+    rdfs:domain :Person; rdfs:range :ContactLocation.
+:mobile a rdf:Property;
+    rdfs:domain :Person; rdfs:range :ContactLocation.
+
+:address a rdf:Property; rdfs:domain :ContactLocation; rdfs:range :Address.
+
+:Address a rdfs:Class;
+    is rdfs:domain of :street, :street2, :street3,
+		:city, :stateOrProvince, :postalCode, :country .
+
+
+:zip rdfs:subClassOf :postalCode.
+
+:phone a rdf:Property.
+:fax a rdf:Property .
+
+
+
+##################### Rules for conversion
+
+:personalTitle = 	mso:Title .
+:firstName = 		mso:First_Name .
+:middleName = 		mso:Middle_Name .
+:lastName = 		mso:Last_Name .
+:personalSuffix = 	mso:Suffix .
+
+# MSO stuff:
+
+#  mso:Title  a rdf:Property .
+#  mso:First_Name  a rdf:Property .
+#  mso:Middle_Name  a rdf:Property .
+#  mso:Last_Name  a rdf:Property .
+#  mso:Suffix  a rdf:Property .
+#  mso:Company  a rdf:Property .
+#  mso:Department  a rdf:Property .
+#  mso:Job_Title  a rdf:Property .
+#  mso:Business_Street  a rdf:Property .
+#  mso:Business_Street_2  a rdf:Property .
+#  mso:Business_Street_3  a rdf:Property .
+#  mso:Business_City  a rdf:Property .
+#  mso:Business_State  a rdf:Property .
+#  mso:Business_Postal_Code  a rdf:Property .
+#  mso:Business_Country  a rdf:Property .
+#  mso:Home_Street  a rdf:Property .
+#  mso:Home_Street_2  a rdf:Property .
+#  mso:Home_Street_3  a rdf:Property .
+#  mso:Home_City  a rdf:Property .
+#  mso:Home_State  a rdf:Property .
+#  mso:Home_Postal_Code  a rdf:Property .
+#  mso:Home_Country  a rdf:Property .
+#  mso:Other_Street  a rdf:Property .
+#  mso:Other_Street_2  a rdf:Property .
+#  mso:Other_Street_3  a rdf:Property .
+#  mso:Other_City  a rdf:Property .
+#  mso:Other_State  a rdf:Property .
+#  mso:Other_Postal_Code  a rdf:Property .
+#  mso:Other_Country  a rdf:Property .
+#  mso:Assistant's_Phone  a rdf:Property .
+#  mso:Business_Fax  a rdf:Property .
+#  mso:Business_Phone  a rdf:Property .
+#  mso:Business_Phone_2  a rdf:Property .
+#  mso:Callback  a rdf:Property .
+#  mso:Car_Phone  a rdf:Property .
+#  mso:Company_Main_Phone  a rdf:Property .
+#  mso:Home_Fax  a rdf:Property .
+#  mso:Home_Phone  a rdf:Property .
+#  mso:Home_Phone_2  a rdf:Property .
+#  mso:ISDN  a rdf:Property .
+#  mso:Mobile_Phone  a rdf:Property .
+#  mso:Other_Fax  a rdf:Property .
+#  mso:Other_Phone  a rdf:Property .
+#  mso:Pager  a rdf:Property .
+#  mso:Primary_Phone  a rdf:Property .
+#  mso:Radio_Phone  a rdf:Property .
+#  mso:TTY/TDD_Phone  a rdf:Property .
+#  mso:Telex  a rdf:Property .
+#  mso:Account  a rdf:Property .
+#  mso:Anniversary  a rdf:Property .  # Assume we mean anniversay of celebration of union
+#  mso:Assistant's_Name  a rdf:Property .
+#  mso:Billing_Information  a rdf:Property .
+
+:birthday a rdf:Property; =  mso:Birthday; rdfs:range :Date .
+
+:Data a rdfs:Class.    # See ... ICalendar, etc etc
+
+#  mso:Categories  a rdf:Property .   # replace with RDF individual classes.
+#  mso:Children  a rdf:Property .
+#		replace with :child
+
+:child a rdf:Property .
+# { :x :child :y } log:implies {{ :x a :Person } means { y a :person } }
+
+#  mso:Directory_Server  a rdf:Property .
+
+#  mso:E-mail_Address  a rdf:Property    # Problmem: not as a URI
+:mailbox a ont:UnambiguousProperty;
+  rdfs:domain :SocialEntity;
+  rdfs:range :Mailbox;
+  :_example { :_Dan :mailbox <mailto:connolly@w3.org> }.
+
+:emailAddress a ont:UnambiguousProperty;
+  rdfs:domain :SocialEntity;
+  rdfs:range :_EmailAddress;
+  :_example { :_Dan :emailAddress "connolly@w3.org" }.
+
+# :_EmailAddress rdfs:subClassOf dt:string; dt:pattern "[^@]+@[^@]+". # or something like that. Check RFC822
+
+:mailboxURI a ont:UnambiguousProperty;
+  rdfs:domain :SocialEntity;
+  rdfs:range :_URI;
+  :_example { :_Dan :mailboxURI "mailto:connolly@w3.org" }.
+
+# move these rules to a transcription of the mailto: URI scheme spec.
+:_addressProperty a rdf:Property.
+:mailbox :_addressProperty :mailboxURI.
+
+#@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+this log:forAll :x, :p, :y.
+
+{ :x [ is :_addressProperty of :p] [ is log:uri of :y] } log:implies { :x :p :y }.
+
+#  { :ent :mailboxURI [ log:equalTo [ is log:concat of ( "mailto:" [ :_uriEncode :addr ] ) ] ] } log:implies { :ent :emailAddress :addr }. # only goes one way because we could use PUT to HTTP resources to deliver mail.
+
+#  mso:E-mail_Display_Name  a rdf:Property .   # Seems redundant and useless IMHO
+
+#  mso:E-mail_2_Address  a rdf:Property .    # Just have multiple email addresses.
+#  mso:E-mail_2_Display_Name  a rdf:Property . # One thing which RDF simplifies
+#  mso:E-mail_3_Address  a rdf:Property .
+#  mso:E-mail_3_Display_Name  a rdf:Property .
+
+#  mso:Gender  a rdf:Property .
+# Replace with:
+
+:Male a rdfs:Class; ont:complementOf :Female.
+
+
+#mso:Government_ID_Number  a rdf:Property .   # Let's keep to the topic now.
+#	rdfs:subClassOf gen:ssn.
+#
+#  mso:Hobby  a rdf:Property .   # Let's keep to the topic now.
+#  mso:Initials  a rdf:Property .  # Do WE HAVE to have this?! ;-)
+#  mso:Internet_Free_Busy  a rdf:Property .  # MSO specific I guess
+#  mso:Keywords  a rdf:Property .
+#  mso:Language  a rdf:Property .    # Hmmm. interesting See I18n. Try:
+
+:motherTongue a rdf:Property; rdfs:domain :Person; rdfs:range :LanguageCode .
+
+:LanguageCode a rdfs:Class. # A ISO langiuage 1 or 2 part string: a  datatype
+
+#  mso:Location  a rdf:Property .
+#  mso:Manager's_Name  a rdf:Property .
+#  mso:Mileage  a rdf:Property .
+#  mso:Notes  a rdf:Property .
+
+:description a rdf:Property .
+
+#  mso:Office_Location  a rdfs:Property .
+#  mso:Organizational_ID_Number  a rdfs:Property .
+#  mso:PO_Box  a rdfs:Property .
+#  mso:Priority  a rdfs:Property .
+#  mso:Private  a rdfs:Property .
+#  mso:Profession  a rdfs:Property .
+#  mso:Referred_By  a rdfs:Property .
+#  mso:Sensitivity  a rdfs:Property .
+
+:partner is rdfs:subPropertyOf of mso:Spouse .
+
+mso:Spouse  a rdfs:Property;  .
+#  mso:User_1  a rdfs:Property .   # Use new pererties and namespaces!
+#  mso:User_2  a rdfs:Property .
+#  mso:User_3  a rdfs:Property .
+#  mso:User_4  a rdfs:Property .
+
+mso:WebPage  a rdf:Property;
+= :publicHomePage .              # I have many home pages, some for me some for others
+:publicHomePage rdfs:subPropertyOf :homePage.
+:homePage a ont:UnambiguousProperty;
+  :_addressProperty :homePageAddress.
+:homePageAddress a ont:UnambiguousProperty.
+
+####################################### Calendaring -- Time ###########
+#
+# Exploring the next direction of human resource expenditure...
+#See:
+# xmlschema dates
+# iCalendar and my partial analysis of it
+# shoul dthis be a separate spec?
+# This is date book as opposde to address book.
+# (and agenda? - nothat need sful workflow tretment...
+#
+
+<> dc:description """
+$Log$
+Revision 1.1  2003-06-18 18:50:48  timbl
+mm
+
+Revision 1.19  2003/02/14 11:56:47  timbl
+bug fixes to tax rules
+
+Revision 1.18  2002/11/24 03:12:03  timbl
+base can be None in uripath:refTo
+
+Revision 1.17  2002/10/07 20:50:00  timbl
+(timbl) Changed through Jigsaw.
+
+Revision 1.13  2002/07/18 05:30:49  connolly
+remove dependency on 2001/03swell/rcs stuff; fix pointer to outlook contacts
+
+Revision 1.12  2002/03/19 18:55:57  connolly
+homePageAddress is unambiguous too.
+
+Revision 1.11  2001/11/05 17:04:37  connolly
+commented out rules
+
+Revision 1.10  2001/11/05 16:43:02  connolly
+oops... really updated RDF/xml version
+
+Revision 1.9  2001/11/05 16:30:21  connolly
+fixed log: prefix; updated RDF/xml version
+
+Revision 1.8  2001/11/05 16:28:37  connolly
+fixed daml+ont address
+
+added addressProperty rule. (should go elsewhere?)
+
+fixed partner/spouse relationship.
+
+futzed with homePage stuff a bit.
+
+Revision 1.7  2001/11/01 16:04:34  timbl
+fixes
+
+Revision 1.6  2001/06/13 23:58:48  timbl
+Fixed bug in log:includes that bindings were not taken into target of includes
+
+Revision 1.5  2001/06/05 23:12:42  connolly
+added mailboxURI and emailAddress in contrast to mailbox
+also: homePage and homePageAddress
+
+Revision 1.4  2001/06/05 22:01:57  connolly
+fixed :mailbox property as agreed in semweb-ad 5 Jun 2001.
+moved many of the n3 comments into RDF.
+updated ont: to March 2001 DAML namespace.
+
+""".
