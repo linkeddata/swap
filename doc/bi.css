@@ -65,7 +65,7 @@ td { margin-left: 12pt; border: 4pt; border-color: #555555;
     padding: 3pt;
  /* padding-color: #ffeeee; */
     vertical-align: top; }
-td.ln { font-family: monospace; vertical-align: top; }
+td.ln { font-family: monospace; vertical-align: top; width:30% }
 td.amount { width: 6em; text-align: right;  } /* font-family: monospace; */
 td.amt { text-align: right;  } /* font-family: monospace; */
 td.total { font-weight: bold; text-align: right;  } /* font-family: monospace; */
