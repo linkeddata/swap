@@ -1,15 +1,32 @@
-#!/usr/local/bin/python2.2
-"""toICal.py -- convert RDF to iCalendar syntax
+#!/usr/bin/python
+"""toIcal.py -- convert RDF to iCalendar syntax
 
-references:
+USAGE:
+  python toIcal.py foo.rdf > foo.ics
+  python toIcal.py foo.n3 > foo.ics
+  python toIcal.py http://example/foo.rdf > foo.ics
 
-  A quick look at iCalendar
-  http://www.w3.org/2000/01/foo
+see also:
+  RDF Calendar Workspace
+  http://www.w3.org/2002/12/cal/
+
+TODO:
+  @@get rid of xprop stuff that's not grounded in URI space
+  (i.e. most of the IANATOKEN stuff)
+  @@exportGeneral seems too hairy. refactor, test.
+
+"""
+
+"""
+References:
 
   Internet Calendaring and Scheduling Core Object Specification
                               (iCalendar)
   November 1998
   http://www.ietf.org/rfc/rfc2445.txt
+
+  A quick look at iCalendar
+  http://www.w3.org/2000/01/foo
 
 $Id$
 
@@ -26,7 +43,7 @@ from string import strip, maketrans, translate, replace, lstrip, \
                    capitalize, upper, uppercase, rfind, split, join
 import RDFSink, llyn # from SWAP http://www.w3.org/2000/10/swap/
 from RDFSink import SYMBOL, FORMULA, SUBJ, PRED, OBJ
-from thing import Namespace, load
+from thing import Namespace, load, setStore
 
 import sys
 try:
@@ -47,6 +64,9 @@ CRLF = chr(13) + chr(10)
 
 # Prints debugging messages:
 VERBOSE = ERR_NONE
+
+store = llyn.RDFStore()
+setStore(store)
 
 # Namespaces
 RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
@@ -154,6 +174,8 @@ class CalWr:
                     self.exportEvent(sts, comp)
                 elif sts.statementsMatching(RDF.type, comp, ICAL.Vtimezone):
                     self.exportTimezone(sts, comp)
+                elif sts.statementsMatching(RDF.type, comp, ICAL.Vtodo):
+                    self.exportTodo(sts, comp)
                 else:
                     progress("@@skipping component with types: ",
                              sts.each(subj = comp, pred = RDF.type))
@@ -280,6 +302,34 @@ class CalWr:
         w("END:VALARM" +CRLF)
     #enddef exportAlarm
 
+
+    def exportTodo(self, sts, comp):
+        """ see test
+        http://www.w3.org/2002/12/cal/test/todo1.rdf
+        """
+        
+        w = self._w
+
+        w("BEGIN:VTODO"+CRLF)
+        self.timeProp(sts, "dtstart", comp)
+        self.exportGeneral(E_PROP, sts, comp, ICAL.summary, "SUMMARY")
+        self.exportGeneral(E_PROP, sts, comp, ICAL.description, "DESCRIPTION")
+        self.exportGeneral(E_PROP, sts, comp, ICAL.location, "LOCATION")
+        self.exportGeneral(E_PROP, sts, comp, ICAL.priority, "PRIORITY")
+
+
+        # notes on 4.8.4.6 Uniform Resource Locator
+        # http://www.w3.org/2002/12/cal/rfc2445#sec4.8.4.6
+        #
+        # This is very muddled modelling; url makes sense as
+        # a value type, but not as a property name. It's a grab-bag
+        # for concepts like foaf:homePage, dc:related (which
+        # is another grab bag) etc.
+        self.refProp(sts, comp, "url")
+
+        w("END:TODO"+CRLF)
+
+        
     def exportEvent(self, sts, event):
         """ support for VEVENT components """
         w = self._w
@@ -557,6 +607,25 @@ class CalWr:
         w(":" + address + "\n")
     #enddef exportCalAddress
 
+    def refProp(self, sts, subj, pn):
+        """ handle reference properties
+        i.e. properties with value type URI
+        
+        http://www.w3.org/2002/12/cal/rfc2445#sec4.3.13
+
+        @@perhaps add support for example from 4.2.8 Format Type
+        http://www.w3.org/2002/12/cal/rfc2445#sec4.2.8
+
+        ATTACH;FMTTYPE=application/binary:ftp://domain.com/pub/docs/agenda.doc
+        """
+
+        sym  = sts.any(subj, ICAL.sym(pn))
+        if sym:
+            w = self._w
+            uri = sym.uriref() #@@need to encode non-ascii chars
+            w("%s;TYPE=URL:%s%s" % (pn, uri, CRLF))
+
+
     def recurProp(self, sts, pn, subj):
         """ helper function to output an RRULE node """
         r  = sts.any(subj, ICAL.sym(pn))
@@ -607,11 +676,19 @@ class CalWr:
 import sys, os
 import uripath
 
+def usage():
+    print __doc__
+
+
 def main(args):
+    if not args[1:]:
+        usage()
+        sys.exit(1)
     addr = uripath.join("file:" + os.getcwd() + "/", args[1])
     
     c = CalWr(sys.stdout.write)
     progress("loading...", addr)
+
     sts = load(addr)
 
     progress("exporting...")
@@ -647,7 +724,14 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.1  2003-08-28 15:49:04  connolly
+# Revision 2.2  2004-01-29 15:20:05  connolly
+# - added some Vtodo support (@@owe tests; struggling with cal test harness)
+# - added uri property support (@@I18N bugs)
+# - updated to thing API changes (which turns out to be obsolete. oops)
+# - unexpected usage gives help text rather than backtrace
+# - a few more code review notes
+#
+# Revision 2.1  2003/08/28 15:49:04  connolly
 # various code review notes that I want to discuss with ghuo
 #
 # Revision 2.0  2003/08/23 08:40:40  ghuo
