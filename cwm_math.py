@@ -36,6 +36,11 @@ def tidy(x):
     return s
 
 
+def isString(x):
+    # in 2.2, evidently we can test for isinstance(types.StringTypes)
+    return type(x) is type('') or type(x) is type(u'')
+
+
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #
 # M A T H E M A T I C A L   B U I L T - I N s
@@ -56,7 +61,7 @@ class BI_sum(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py): 
         t = 0
         for x in subj_py:
-            if type(x) is not type(""): return None
+            if not isString(x): return None
             t += float(x)
         return store.intern((LITERAL, tidy(t)))
 
