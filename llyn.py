@@ -568,8 +568,12 @@ class RDFStore(RDFSink.RDFSink) :
 
         import cwm_string  # String builtins
         import cwm_os      # OS builtins
+        import cwm_math    # Mathematics
+        import cwm_crypto  # Cryptography
         cwm_string.register(self)
+        cwm_math.register(self)
         cwm_os.register(self)
+        cwm_crypto.register(self)
         
         if metaURI != None:
             self.reset(metaURI)
