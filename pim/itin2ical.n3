@@ -23,7 +23,7 @@ $Id$
 @prefix ic: <itin2ical#>.
 
 this log:forAll :FLT, :CARRIER_NAME, :NUM, :SUM,
-    :YYMMDD, :HH_MM, :HH_MM2, :DTSTART, :DTEND, :TZ, :TZ2,
+    :YYMMDD, :YYMMDD2, :HH_MM, :HH_MM2, :DTSTART, :DTEND, :TZ, :TZ2,
     :WHERE, :FROM_NAME, :TO_NAME, :UID.
 
 # airports with the same nameString have the same timezone
@@ -85,10 +85,19 @@ a:YVR a k:Airport-Physical;
 a:SNA a k:Airport-Physical;
   k:nameString "JOHN WAYNE INTL";
   :timeZone :LosAngelesTime.
+a:LAX a k:Airport-Physical;
+  :timeZone :LosAngelesTime.
+a:LGA a k:Airport-Physical;
+  :timeZone :NewYorkTime.
+a:JFK a k:Airport-Physical;
+  :timeZone :NewYorkTime.
+a:DEN a k:Airport-Physical;
+  :timeZone :DenverTime.
 
 
 { :FLT
     k:startingDate [ dt:date :YYMMDD];
+    k:endingDate [ dt:date :YYMMDD2];
     t:carrier [ k:nameOfAgent :CARRIER_NAME ];
     t:flightNumber :NUM;
     t:departureTime :HH_MM;
@@ -102,7 +111,7 @@ a:SNA a k:Airport-Physical;
   :DTSTART is str:concatenation of
     (:YYMMDD "T" :HH_MM ":00"). #@@ extra punct in dates
   :DTEND is str:concatenation of
-    (:YYMMDD "T" :HH_MM2 ":00").
+    (:YYMMDD2 "T" :HH_MM2 ":00").
 
   ( :FLT!log:rawUri "@uri-2-mid.w3.org") str:concatenation :UID. #@@hmm... kludge?
 }
@@ -143,3 +152,6 @@ a:SNA a k:Airport-Physical;
 
 :LosAngelesTime
   cal:tzid "/softwarestudio.org/Olson_20011030_5/America/Los_Angeles".
+
+:DenverTime
+  cal:tzid "/softwarestudio.org/Olson_20011030_5/America/Denver".
