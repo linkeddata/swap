@@ -59,7 +59,7 @@ print: tutorial.pdf tutorial.ps appendix.pdf appendix.ps
 
 #@@cwm.html -- remove junk
 #@@CwmBuiltins.html -- reformat
-TUTFILES=Overview.html ../Primer.html Shortcuts.html ontologies.html Rules.html Processing.html Built-In.html rule-systems.html Trust.html Glossary.html
+TUTFILES=Overview.html ../Primer.html Shortcuts.html ontologies.html Rules.html Processing.html Built-In.html rule-systems.html Trust.html ../pim/travel.html Glossary.html
 TUTFIGS=../../../../DesignIssues/diagrams/arcs-1.gif ../../../../DesignIssues/diagrams/arcs-3.gif ../../../../2002/Talks/04-sweb/elisaaccess.png ../test/crypto/make.jpg
 
 APPENDICES=formats.html CwmInstall.html CwmHelp.html
@@ -88,6 +88,9 @@ cwm-help.txt : ../cwm.py ../notation3.py
 CwmHelp.html : CwmHelp-template.html cwm-help.txt
 	sed -e '/<pre>/rcwm-help.txt' < CwmHelp-template.html > CwmHelp.html
 
+
+travelFigs:
+	(cd ../pim; make travelFigs)
 
 clean:
 	$(RM) swws.{rdf,dot,ps,svg,png}
