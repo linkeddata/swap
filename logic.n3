@@ -9,6 +9,14 @@ bind ont: <http://www.daml.org/2000/10/daml-ont> .	 # contains aliases for the a
 bind log: <> .
 bind : <> .
 
+log:N3Document a rdfs:Class;
+	rdfs:comment	"""A document which, which parsed as Notation3
+as defined in general by http://www.w3.org/DesignIssues/Notation3.html
+and this schema, conveys the intent of the author by the semantics defined
+on those specifications, and the semantics defined by the specifications
+of any identifiers used in the document.
+""" .
+
 log:context a rdfs:Class;
 	rdfs:comment "An unordered conjunction of log statements" 
 
