@@ -1,0 +1,105 @@
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+
+:t1001 a test:CwmTest;
+    test:shortFileName "flatten-1g.n3";
+    test:description   "one ground triple";
+    test:arguments     """flatten-1g.n3 --flatten""".
+
+
+:t1002 a test:CwmTest;
+    test:shortFileName "flatten-2g.n3";
+    test:description   "two ground triples";
+    test:arguments     """flatten-2g.n3 --flatten""".
+
+
+:t1003 a test:CwmTest;
+    test:shortFileName "flatten-1u.n3";
+    test:description   "one triple with univar";
+    test:arguments     """flatten-1u.n3 --flatten""".
+
+
+:t1004 a test:CwmTest;
+    test:shortFileName "flatten-1e.n3";
+    test:description   "one triple with explicit univar";
+    test:arguments     """flatten-1e.n3 --flatten""".
+
+
+:t1005 a test:CwmTest;
+    test:shortFileName "flatten-1e2.n3";
+    test:description   "one triple with implicit univar";
+    test:arguments     """flatten-1e2.n3 --flatten""".
+
+
+:t1006 a test:CwmTest;
+    test:shortFileName "flatten-Truth.n3";
+    test:description   " ";
+    test:arguments     """flatten-Truth.n3 --flatten""".
+
+
+:t1007 a test:CwmTest;
+    test:shortFileName "flatten-rule1.n3";
+    test:description   " ";
+    test:arguments     """flatten-rule1.n3 --flatten""".
+
+
+:t1008 a test:CwmTest;
+    test:shortFileName "flatten-rules12.n3";
+    test:description   " ";
+    test:arguments     """rules12.n3 --flatten""".
+
+
+:t1009 a test:CwmTest;
+    test:shortFileName "flatten-rules13.n3";
+    test:description   " ";
+    test:arguments     """rules13.n3 --flatten""".
+
+
+:t1010 a test:CwmTest;
+    test:shortFileName "flatten-terse-1e.n3";
+    test:description   "tersified: one triple with explicit univar";
+    test:arguments     """flatten-1e.n3 --flatten --apply=flatten-terser.n3 --purge""".
+
+
+:t1011 a test:CwmTest;
+    test:shortFileName "flatten-terse-1e2.n3";
+    test:description   "tersified: one triple with implicit univar";
+    test:arguments     """flatten-1e2.n3 --flatten --apply=flatten-terser.n3 --purge""".
+
+
+:t1012 a test:CwmTest;
+    test:shortFileName "flatten-terse-Truth.n3";
+    test:description   " ";
+    test:arguments     """flatten-Truth.n3 --flatten --apply=flatten-terser.n3 --purge""".
+
+
+:t1013 a test:CwmTest;
+    test:shortFileName "flatten-terse-rule1.n3";
+    test:description   " ";
+    test:arguments     """flatten-rule1.n3 --flatten --apply=flatten-terser.n3 --purge""".
+
+
+:t1014 a test:CwmTest;
+    test:shortFileName "flatten-terse-rules12.n3";
+    test:description   " ";
+    test:arguments     """rules12.n3 --flatten --apply=flatten-terser.n3 --purge""".
+
+
+:t1015 a test:CwmTest;
+    test:shortFileName "flatten-terse-rules13.n3";
+    test:description   " ";
+    test:arguments     """rules13.n3 --flatten --apply=flatten-terser.n3 --purge""".
+
+
+:t1016 a test:CwmTest;
+    test:shortFileName "flatten-Falsehood.n3";
+    test:description   " ";
+    test:arguments     """flatten-Falsehood.n3 --flatten""".
+
+
+:t1017 a test:CwmTest;
+    test:shortFileName "flatten-means.n3";
+    test:description   " ";
+    test:arguments     """flatten-means.n3 --flatten""".
+

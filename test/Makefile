@@ -30,3 +30,5 @@ annotation.n3 :
 	find $(RC) -name "*.nt" -exec grep -l "22-rdf-syntax-ns#predicate" {} \; | \
 		sed -e 's/^/</' -e 's/.nt/.nt> a <#ReificationFile>./' > $@
 
+flatten::
+	PYTHONPATH=`/bin/pwd`/.. $P retest.py -n -c -f flatten-tests.n3
