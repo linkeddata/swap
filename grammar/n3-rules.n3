@@ -14,8 +14,7 @@
 
 # Issues:
 # - string token regexp not right
-# - tokenizing rules in general: whitespace
-# - encoding really needs specifying
+# - tokenizing rules in general
 # - @keywords affects tokenizing
 # - Use of dot for !
 # - datatypes and/or* languages in literals (*choice - follow RDF)
@@ -84,11 +83,22 @@ existential bnf:mustBeOneSequence(
 		)).
 
 
+symbol bnf:mustBeOneSequence (
+		(explicituri)
+		(qname)
+	).
+
+#qname bnf:mustBeOneSequence(
+#		( prefix colon localname )
+#		( localname )
+#	).
+
 declaration bnf:mustBeOneSequence(
 		( "@prefix" qname explicituri "." )
 		( "@keywords" [ bnf:commaSeparatedPeriodTerminatedListOf barename ] )
 	).
 
+########### Full N3 Versions
 
 statement bnf:mustBeOneSequence(( subject propertylist )).
 
@@ -121,9 +131,15 @@ verb bnf:mustBeOneSequence (
 
 prop bnf:mustBeOneSequence ((node)).
 
-subject bnf:mustBeOneSequence ((path)).
+subject bnf:mustBeOneSequence ((item)).
 
-object bnf:mustBeOneSequence ((path)).
+object bnf:mustBeOneSequence ((item)).
+
+item bnf:mustBeOneSequence(
+		(path)
+#		( node "@of" path )     # Not implemented, just an idea
+	).
+
 
 path bnf:mustBeOneSequence(
 		( node pathtail )
@@ -143,24 +159,30 @@ node bnf:mustBeOneSequence (
 		( numericliteral )
 		( string )
 		( "[" propertylist "]"  )
-		(  "("  pathlist ")"  )
+		(  "("  itemlist ")"  )
 		( "@this" )	  #  Deprocated.  Was allowed for this log:forAll x
 ).
 
 
-pathlist bnf:mustBeOneSequence (() (path pathlist)).
 
-symbol bnf:mustBeOneSequence (
-		(explicituri)
-		(qname)
-	).
-
-
+itemlist bnf:mustBeOneSequence (() (item itemlist)).
  
+#prefix bnf:mustBeOneSequence (
+#		( alphanumeric )
+#		( "_" )
+#	).
+
+#_____________________________________________________________________
+#
+
+RDF-only language
 
 #______________________________________________________________________
 #
 #   TOKENS
+
+alphanumeric 	bnf:matches  	"[a-zA-Z][a-zA-Z0-9_]*";
+		bnf:canStartWith	"a".
 
 numericliteral	bnf:matches	"""[-+]?[0-9]+(\\.[0-9]+)?(e[-+]?[0-9]+)?""";
 		bnf:canStartWith 	"0", "-", "+".

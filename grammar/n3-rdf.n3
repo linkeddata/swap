@@ -1,11 +1,12 @@
-# Notation3 
+# Notation3 subset which is RDF without extension
 # BNF without tokenization
 #
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix bnf: <http://www.w3.org/2000/10/swap/grammar/bnf#>.
 @prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#>.
-@prefix : <http://www.w3.org/2000/10/swap/grammar/n3#>.
+@prefix : <http://www.w3.org/2000/10/swap/grammar/n3-rdf#>.
+@prefix d3: <http://www.w3.org/2000/10/swap/grammar/n3-rdf#>.
 @prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#>.
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
 @prefix string: <http://www.w3.org/2000/10/swap/string#>.
@@ -14,8 +15,7 @@
 
 # Issues:
 # - string token regexp not right
-# - tokenizing rules in general: whitespace
-# - encoding really needs specifying
+# - tokenizing rules in general
 # - @keywords affects tokenizing
 # - Use of dot for !
 # - datatypes and/or* languages in literals (*choice - follow RDF)
@@ -30,20 +30,18 @@
 #
 
 <> bnf:syntaxFor [ bnf:internetMediaType 
-		<http://www.w3.org/2003/mediatypes#application/n3>].
+		<http://www.w3.org/2003/mediatypes#application/rdf+n3>].
 
-# <> rdfsem:semanticsFor ""   .....
 
 # __________________________________________________________________
 #
 # The N3 Full Grammar
 
-n3document a rul:Used;
+n3-rdfDocument
 	bnf:mustBeOneSequence(
 	
 		(
 			[ bnf:zeroOrMore declaration ]
-			[ bnf:zeroOrMore universal ]
 			[ bnf:zeroOrMore existential ]
 			statements_optional
 			bnf:eof
@@ -52,14 +50,6 @@ n3document a rul:Used;
 
 statements_optional bnf:mustBeOneSequence (() ( statement "." statements_optional )e ).
 
-# Formula does NOT need period on last statement
-
-formulacontent bnf:mustBeOneSequence ((
-		[ bnf:zeroOrMore declaration ]
-		[ bnf:zeroOrMore  universal ]
-		[ bnf:zeroOrMore existential ]
-		statementlist
-	)).
 
 
 statementlist bnf:mustBeOneSequence (
@@ -72,16 +62,17 @@ statementtail bnf:mustBeOneSequence (
 		( "." statementlist )
 	).
 
-universal bnf:mustBeOneSequence (
-		(
-			"@forAll"
-			[ bnf:commaSeparatedPeriodTerminatedListOf symbol ]
-		)).
 
 existential bnf:mustBeOneSequence(
 		(	 "@forSome" 
 			 [ bnf:commaSeparatedPeriodTerminatedListOf symbol ]
 		)).
+
+
+symbol bnf:mustBeOneSequence (
+		(explicituri)
+		(qname)
+	).
 
 
 declaration bnf:mustBeOneSequence(
@@ -115,52 +106,52 @@ verb bnf:mustBeOneSequence (
 		( "@is" prop "@of" )
 		( "@a" )
 		( "=" )
-		( "=>" )
-		( "<=" ) 
 	).
 
 prop bnf:mustBeOneSequence ((node)).
 
-subject bnf:mustBeOneSequence ((path)).
 
-object bnf:mustBeOneSequence ((path)).
+subject bnf:mustBeOneSequence(
+		( node_subject "!" pathtail )
+		( string "^" verb pathtail )
+		( numericliteral "^" verb pathtail )
+	).
 
-path bnf:mustBeOneSequence(
-		( node pathtail )
+object bnf:mustBeOneSequence(
+		( node_object pathtail )   # @@@@@@@@
 	).
 
 pathtail bnf:mustBeOneSequence(
 		(  )
-		( "!" path )
-		( "^" path )
+		( "!" verb pathtail )
+		( "^" verb pathtail )
 	).
 
 
-node bnf:mustBeOneSequence (
+node_subject bnf:mustBeOneSequence (
 		( symbol )
-		( "{" formulacontent "}" )
-		( variable )
+		( "[" propertylist "]"  )
+		(  "("  objectlist ")"  )
+).
+
+node_object bnf:mustBeOneSequence (
+		( symbol )
 		( numericliteral )
 		( string )
 		( "[" propertylist "]"  )
-		(  "("  pathlist ")"  )
-		( "@this" )	  #  Deprocated.  Was allowed for this log:forAll x
+		(  "("  itemlist ")"  )
 ).
 
 
-pathlist bnf:mustBeOneSequence (() (path pathlist)).
 
-symbol bnf:mustBeOneSequence (
-		(explicituri)
-		(qname)
-	).
-
-
+objectlist bnf:mustBeOneSequence (() (object objectlist)).
  
-
 #______________________________________________________________________
 #
 #   TOKENS
+
+alphanumeric 	bnf:matches  	"[a-zA-Z][a-zA-Z0-9_]*";
+		bnf:canStartWith	"a".
 
 numericliteral	bnf:matches	"""[-+]?[0-9]+(\\.[0-9]+)?(e[-+]?[0-9]+)?""";
 		bnf:canStartWith 	"0", "-", "+".
@@ -174,8 +165,6 @@ qname 		bnf:matches  	"(([a-zA-Z_][a-zA-Z0-9_]*)?:)?([a-zA-Z_][a-zA-Z0-9_]*)?";
 barename 	bnf:matches  	"[a-zA-Z_][a-zA-Z0-9_]*";  # subset of qname
 		bnf:canStartWith 	"a", "_".  # @@ etc
 
-variable 	bnf:matches  	"\\?[a-zA-Z_][a-zA-Z0-9_]*";  # ? barename
-		bnf:canStartWith 	"?".  #
 
 langcode	bnf:matches  	"[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?";
 		bnf:canStartWith 	"a".
