@@ -127,6 +127,6 @@
     n3test:description    "A predicate cannot be a literal, I hope";
     n3test:inputDocument  <syntax/neg-literal-predicate.n3> .
 
-:n3_20004 a n3test:NegativeParserTest;
+:n3_20005 a n3test:NegativeParserTest;
     n3test:description    "A predicate cannot be a formula, I hope";
     n3test:inputDocument  <syntax/neg-formula-predicate.n3> .
