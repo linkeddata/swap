@@ -1,0 +1,104 @@
+#Processed by Id: cwm.py,v 1.114 2002/12/30 15:00:33 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/reason/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.126 2002/12/31 05:50:30 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/reason/
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+     @prefix foo: <foo#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix run: <.run-1041973284.883513p6419#> .
+    
+    this     log:forSome <#_g0>,
+                <#_g1> .
+    
+    <#_g0>     a :Parsing;
+         :source <eric-b.n3> .
+      [      a :Conjunction,
+                    :Proof;
+             :component  [
+                 a :Extraction;
+                 :because <#_g1>;
+                 :gives {foo:a     foo:p1 <#_g2> .
+                } ],
+                     [
+                 a :Extraction;
+                 :because <#_g0>;
+                 :gives {<#_g3>     foo:baz foo:bar .
+                } ],
+                     [
+                 a :Extraction;
+                 :because <#_g0>;
+                 :gives {foo:b     foo:p2 <#_g3> .
+                } ],
+                     [
+                 a :Extraction;
+                 :because <#_g0>;
+                 :gives {{
+                    <eric-b.n3#x>     foo:foo <eric-b.n3#y> .
+                    <eric-b.n3#z>     foo:baz <eric-b.n3#y> .
+                    
+                    }     log:implies {<eric-b.n3#x>     foo:bog <eric-b.n3#y> .
+                    } .
+                } ],
+                     [
+                 a :Extraction;
+                 :because  [
+                     a :Inference;
+                     :binding  [
+                         :boundTo <#_g3>;
+                         :variable <eric-b.n3#z> ],
+                             [
+                         :boundTo foo:bar;
+                         :variable <eric-b.n3#y> ],
+                             [
+                         :boundTo <#_g2>;
+                         :variable <eric-b.n3#x> ];
+                     :evidence  [
+                         a :Extraction;
+                         :because <#_g0>;
+                         :gives {<#_g3>     foo:baz foo:bar .
+                        } ],
+                             [
+                         a :Extraction;
+                         :because <#_g1>;
+                         :gives {<#_g2>     foo:foo foo:bar .
+                        } ];
+                     :rule  [
+                         a :Extraction;
+                         :because <#_g0>;
+                         :gives {{
+                            <eric-b.n3#x>     foo:foo <eric-b.n3#y> .
+                            <eric-b.n3#z>     foo:baz <eric-b.n3#y> .
+                            
+                            }     log:implies {<eric-b.n3#x>     foo:bog <eric-b.n3#y> .
+                            } .
+                        } ] ];
+                 :gives {<#_g2>     foo:bog foo:bar .
+                } ],
+                     [
+                 a :Extraction;
+                 :because <#_g1>;
+                 :gives {<#_g2>     foo:foo foo:bar .
+                } ];
+             :gives {this     log:forAll <eric-b.n3#x>,
+                        <eric-b.n3#y>,
+                        <eric-b.n3#z> .
+            foo:a     foo:p1  [
+                     foo:bog foo:bar;
+                     foo:foo foo:bar ] .
+            foo:b     foo:p2  [
+                     foo:baz foo:bar ] .
+            {
+                <eric-b.n3#x>     foo:foo <eric-b.n3#y> .
+                <eric-b.n3#z>     foo:baz <eric-b.n3#y> .
+                
+                }     log:implies {<eric-b.n3#x>     foo:bog <eric-b.n3#y> .
+                } .
+            } ].
+    
+    <#_g1>     a :Parsing;
+         :source <eric-a.n3> .
+    
+#ENDS

@@ -1,0 +1,14 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix foo: <foo#>.
+@prefix : <foo#>.
+
+:b :p2 [ :baz :bar ].
+
+{?x :foo ?y. ?z :baz ?y} log:implies {?x :bog ?y}.
+
+
+#consequence
+#a :p1 _:1.
+#b :p2 _:2. _:1 bog _:2.
+# ericP doc1 has {a p1 [ foo bar ].}
+
