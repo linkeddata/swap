@@ -32,7 +32,7 @@ look specifically at which document said what.</p>
 
 <p>Cwm has built-in functions to allow it to interact with the web. The
 concept of a formula - a set of RDF statements - allows it to consider
-seperate sets of data.</p>
+separate sets of data.</p>
 
 <p>The basic function which connects RDF to the web is <code><dfn><a
 name="semantics" id="semantics">log:semantics</a></dfn></code>. The
@@ -47,7 +47,7 @@ returning the formula<a href="#L4808"><sup>1</sup></a>.</p>
 <p></p>
 
 <p>Having got a formula, we can test what it says using
-<code>log:includes</code>. One formula <code>log:incldues</code> a second
+<code>log:includes</code>. One formula <code>log:includes</code> a second
 formula if for each statement in the second, there is a corresponding one in
 the first. This the same pattern matching which happens with
 <code>log:implies</code> rules: the names of variables do not have to
@@ -55,7 +55,7 @@ match.</p>
 
 <p>So let's say we we have a concept of a semantic web home page for a
 person. We decide on the policy that if someone's home page says that they
-are a vegtarian, then we believe that they are a vegetarian.</p>
+are a vegetarian, then we believe that they are a vegetarian.</p>
 <pre>this log:forAll :x.
 {:x :homePage log:includes { :x a :Vegetarian }}=&gt; { :x a :Vegetarian}.</pre>
 
@@ -91,12 +91,12 @@ one with a value for the color.</p>
 <p>This is a way to do defaults. Notation3 as it is doesn't have defaults,
 because on the web, you can't say "if nothing says it is another color". You
 can never know in the whole web whether anyone has given a color. Also, if we
-start to just looslely talk about defaults in the sense of <em>if you don't
+start to just loosely talk about defaults in the sense of <em>if you don't
 already know a color</em>, then different agents will end up drawing
 different conclusions from the same data, which is not a good foundation for
 a scalable web. So, you handle defaults by first running rules to work out
 everything which is specified, and then on the result of that do a
-<code>notIncldues</code> rule like that above to implement the default
+<code>notIncludes</code> rule like that above to implement the default
 values.</p>
 
 <h2>Thinking inside thinking with <code>log:conclusion</code></h2>
@@ -169,7 +169,7 @@ them. That's got to be useful. It is represented by giving, somewhere, a
 data about data. You have a lot of control over where cwm will look for
 metadata, and how it will use it.</p>
 
-<p>This behaviour is controlable in cwm by the --mode flags. By default cwm
+<p>This behaviour is controllable in cwm by the --mode flags. By default cwm
 won't doing anything about it at all. (See:<a href="cwm.html#Mode">Cwm's
 --mode flags</a> in manual page)</p>
 
@@ -181,13 +181,13 @@ dataset.</p>
 
 <p>The <strong>s</strong> flag makes cwm also check for schemas. It does this
 only when trying to resolve a query. If the predicate is from a namespace it
-doesn't know, it will go to theweb to see what it can learn. Unless the
+doesn't know, it will go to the web to see what it can learn. Unless the
 <strong>e</strong>flag is set, then it won't mind if there are any errors in
-this proces, it will just abandon it.</p>
+this process, it will just abandon it.</p>
 
 <p>Most vocabularies, ontologies, have all kinds of metadata which helps a
 query engine resolve questions posed using those terms. Much of the
-interesting semantic web development will be in seeeing what kind of metdata
+interesting semantic web development will be in seeing what kind of meta data
 is most useful to leave, and how best to use it. The definitiveDocument
 property is a simple one, and the simplest way of using it is to let cwm pick
 it up either from the current store or a schema.</p>
@@ -204,7 +204,7 @@ expressing query involving US state information.</p>
    =&gt;{    ?n a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS }.</pre>
 
 <p>Its a rather random example (think of a better one? let us know! ;-), to
-look up the states bordering Massachusetts, and specifcially the names of
+look up the states bordering Massachusetts, and specifically the names of
 major cities in that state. Massachusetts is identified as the state with
 state code "MA". So what happens if we load this into cwm and do a --think?
 Nothing. Cwm just prints out the file reformatted. Now run it in remote query
@@ -232,7 +232,7 @@ mode with schema fetch:</p>
 
 <p></p>
 
-<p>By now you should know how to publish tables of useful infromation on the
+<p>By now you should know how to publish tables of useful information on the
 semantic web. You should know how to use published data and semantic web
 services and SQL servers to answer parts of your queries. You are starting to
 get into some useful scalable stuff, and the next thing you know you'll be
