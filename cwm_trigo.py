@@ -65,94 +65,49 @@ def numeric(s):
     return float(s)
 
 class BI_acos(LightBuiltIn, Function):
-	"""
-	acos (x)
-	Return the arc cosine of x.
-	"""
     def evaluateObject(self, subj_py):
 		return acos(numeric(subj_py))
 
 class BI_asin(LightBuiltIn, Function):
-	"""
-	asin (x)
-	Return the arc sine of x.
-	"""
     def evaluateObject(self, subj_py):
 		return asin(numeric(subj_py))
 
 class BI_atan(LightBuiltIn, Function):
-	"""
-	atan (x)
-	Return the arc tangent of x.
-	"""
     def evaluateObject(self, subj_py):
 		return atan(numeric(subj_py))
 
 class BI_atan2(LightBuiltIn, Function):
-	"""
-	atan2 (y,x)
-	Return atan(y/x).
-	"""
     def evaluateObject(self, subj_py): 
         if len(subj_py) == 2:
 	    return atan2(numeric(subj_py[0]),numeric(subj_py[1]))
 
 class BI_cos(LightBuiltIn, Function):
-	"""
-	cos (x)
-	Return the cosine of x.
-	"""
     def evaluateObject(self, subj_py):
 		return cos(numeric(subj_py))
 
 class BI_cosh(LightBuiltIn, Function):
-	"""
-	cosh (x)
-	Return the hyperbolic cosine of x.
-	"""
     def evaluateObject(self, subj_py):
 		return cosh(numeric(subj_py))
 
 class BI_degrees(LightBuiltIn, Function, ReverseFunction):
-	"""
-	degrees (x)
-	Converts angle x from radians to degrees.
-	Convert angle x from degrees to radians.
-	"""
     def evaluateObject(self, subj_py):
 		return degrees(numeric(subj_py))
 	def evaluateSubject(self, obj_py): 
 		return radians(numeric(obj_py))
 
 class BI_sin(LightBuiltIn, Function):
-	"""
-	sin (x)
-	Return the sine of x.
-	"""
     def evaluateObject(self, subj_py):
 		return sin(numeric(subj_py))
 
 class BI_sinh(LightBuiltIn, Function):
-	"""
-	sinh (x)
-	Return the hyperbolic sine of x.
-	"""
     def evaluateObject(self, subj_py):
 		return sinh(numeric(subj_py))
 
 class BI_tan(LightBuiltIn, Function):
-	"""
-	tan (x)
-	Return the tan of x.
-	"""
     def evaluateObject(self, subj_py):
 		return tan(numeric(subj_py))
 
 class BI_tanh(LightBuiltIn, Function):
-	"""
-	tanh (x)
-	Return the hyperbolic tangent of x.
-	"""
     def evaluateObject(self, subj_py):
 		return tanh(numeric(subj_py))
 
