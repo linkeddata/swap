@@ -1,0 +1,242 @@
+Loading n3-selectors.n3
+Loaded.
+
+Production n3:document :: li94  ie [[_g0, _g1, _g2, n3:statements_optional, eof]]
+	Can precede  []
+	option: [_g0, _g1, _g2, n3:statements_optional, eof]
+		Condition '@keywords'
+
+Production _g0 :: li141  ie [[], [n3:declaration, _g0]]
+	Can precede  [eof, n3:statements_optional, _g1, _g2]
+	option: []
+		Condition '"'
+	option: [n3:declaration, _g0]
+		Condition '@keywords'
+
+Production _g1 :: li143  ie [[], [n3:universal, _g1]]
+	Can precede  [eof, n3:statements_optional, _g2]
+	option: []
+		Condition '"'
+	option: [n3:universal, _g1]
+		Condition '@forAll'
+
+Production _g2 :: li145  ie [[], [n3:existential, _g2]]
+	Can precede  [eof, n3:statements_optional]
+	option: []
+		Condition '"'
+	option: [n3:existential, _g2]
+		Condition '@forSome'
+
+Production n3:statements_optional :: li127  ie [[], [n3:statement, u'.', n3:statements_optional]]
+	Can precede  [eof]
+	option: []
+		Condition '@EOFDUMMY'
+	option: [n3:statement, u'.', n3:statements_optional]
+		Condition '"'
+
+EOF
+
+Production n3:declaration :: li93  ie [[u'@prefix', n3:qname, n3:explicituri, u'.'], [u'@keywords', _g8]]
+	Can precede  ["}", eof, n3:statementlist, n3:statements_optional, _g0, _g1, _g2, _g3, _g4, _g5]
+	option: [u'@prefix', n3:qname, n3:explicituri, u'.']
+		Condition '@prefix'
+	option: [u'@keywords', _g8]
+		Condition '@keywords'
+
+Production n3:universal :: li132  ie [[u'@forAll', _g6]]
+	Can precede  ["}", eof, n3:statementlist, n3:statements_optional, _g1, _g2, _g4, _g5]
+	option: [u'@forAll', _g6]
+		Condition '@forAll'
+
+Production n3:existential :: li98  ie [[u'@forSome', _g7]]
+	Can precede  ["}", eof, n3:statementlist, n3:statements_optional, _g2, _g5]
+	option: [u'@forSome', _g7]
+		Condition '@forSome'
+
+Production n3:statement :: li123  ie [[n3:subject, n3:propertylist]]
+	Can precede  [".", "}", n3:statementtail]
+	option: [n3:subject, n3:propertylist]
+		Condition '"'
+Token n3:qname matches regexp (([a-zA-Z_][a-zA-Z0-9_]*)?:)?([a-zA-Z_][a-zA-Z0-9_]*)?
+Token n3:explicituri matches regexp <[^>].*>
+
+Production _g8 :: li157  ie [[u'.'], [u',', n3:barename, _g8]]
+	Can precede  ["}", eof, n3:statementlist, n3:statements_optional, _g0, _g1, _g2, _g3, _g4, _g5]
+	option: [u'.']
+		Condition '.'
+	option: [u',', n3:barename, _g8]
+		Condition ','
+
+Production _g6 :: li153  ie [[u'.'], [u',', n3:symbol, _g6]]
+	Can precede  ["}", eof, n3:statementlist, n3:statements_optional, _g1, _g2, _g4, _g5]
+	option: [u'.']
+		Condition '.'
+	option: [u',', n3:symbol, _g6]
+		Condition ','
+
+Production _g7 :: li155  ie [[u'.'], [u',', n3:symbol, _g7]]
+	Can precede  ["}", eof, n3:statementlist, n3:statements_optional, _g2, _g5]
+	option: [u'.']
+		Condition '.'
+	option: [u',', n3:symbol, _g7]
+		Condition ','
+
+Production n3:subject :: li109  ie [[n3:path]]
+	Can precede  [".", "]", "}", n3:propertylist, n3:statementtail]
+	option: [n3:path]
+		Condition '"'
+
+Production n3:propertylist :: li120  ie [[], [n3:verb, n3:object, n3:objecttail, n3:propertylisttail]]
+	Can precede  [".", "]", "}", n3:statementtail]
+	option: []
+		Condition '.'
+	option: [n3:verb, n3:object, n3:objecttail, n3:propertylisttail]
+		Condition '"'
+Token n3:barename matches regexp [a-zA-Z_][a-zA-Z0-9_]*
+
+Production n3:symbol :: li131  ie [[n3:explicituri], [n3:qname]]
+	Can precede  [")", ".", "@of", "]", "}", n3:object, n3:objecttail, n3:pathlist, n3:pathtail, n3:propertylist, n3:propertylisttail, n3:statementtail, _g6, _g7]
+	option: [n3:explicituri]
+		Condition '<'
+	option: [n3:qname]
+		Condition '_'
+
+Production n3:path :: li112  ie [[n3:node, n3:pathtail]]
+	Can precede  [")", ".", "]", "}", n3:objecttail, n3:pathlist, n3:propertylist, n3:propertylisttail, n3:statementtail]
+	option: [n3:node, n3:pathtail]
+		Condition '"'
+
+Production n3:verb :: li139  ie [[n3:prop], [u'@has', n3:prop], [u'@is', n3:prop, u'@of'], [u'@a'], [u'='], [u'=>'], [u'<=']]
+	Can precede  [n3:object]
+	option: [n3:prop]
+		Condition '"'
+	option: [u'@has', n3:prop]
+		Condition '@has'
+	option: [u'@is', n3:prop, u'@of']
+		Condition '@is'
+	option: [u'@a']
+		Condition '@a'
+	option: [u'=']
+		Condition '='
+	option: [u'=>']
+		Condition '=>'
+	option: [u'<=']
+		Condition '<='
+
+Production n3:object :: li109  ie [[n3:path]]
+	Can precede  [".", "]", "}", n3:objecttail, n3:propertylisttail, n3:statementtail]
+	option: [n3:path]
+		Condition '"'
+
+Production n3:objecttail :: li111  ie [[], [u',', n3:object, n3:objecttail]]
+	Can precede  [".", "]", "}", n3:propertylisttail, n3:statementtail]
+	option: []
+		Condition '.'
+	option: [u',', n3:object, n3:objecttail]
+		Condition ','
+
+Production n3:propertylisttail :: li122  ie [[], [u';', n3:verb, n3:object, n3:objecttail, n3:propertylisttail]]
+	Can precede  [".", "]", "}", n3:statementtail]
+	option: []
+		Condition '.'
+	option: [u';', n3:verb, n3:object, n3:objecttail, n3:propertylisttail]
+		Condition ';'
+
+Production n3:node :: li108  ie [[n3:symbol], [u'{', n3:formulacontent, u'}'], [n3:variable], [n3:numericliteral], [n3:literal], [u'[', n3:propertylist, u']'], [u'(', n3:pathlist, u')'], [u'@this']]
+	Can precede  [")", ".", "@of", "]", "}", n3:object, n3:objecttail, n3:pathlist, n3:pathtail, n3:propertylist, n3:propertylisttail, n3:statementtail]
+	option: [n3:symbol]
+		Condition '<'
+	option: [u'{', n3:formulacontent, u'}']
+		Condition '{'
+	option: [n3:variable]
+		Condition '?'
+	option: [n3:numericliteral]
+		Condition '+'
+	option: [n3:literal]
+		Condition '"'
+	option: [u'[', n3:propertylist, u']']
+		Condition '['
+	option: [u'(', n3:pathlist, u')']
+		Condition '('
+	option: [u'@this']
+		Condition '@this'
+
+Production n3:pathtail :: li117  ie [[], [u'!', n3:path], [u'^', n3:path]]
+	Can precede  [")", ".", "]", "}", n3:objecttail, n3:pathlist, n3:propertylist, n3:propertylisttail, n3:statementtail]
+	option: []
+		Condition '"'
+	option: [u'!', n3:path]
+		Condition '!'
+	option: [u'^', n3:path]
+		Condition '^'
+
+Production n3:prop :: li118  ie [[n3:node]]
+	Can precede  ["@of", n3:object]
+	option: [n3:node]
+		Condition '"'
+
+Production n3:formulacontent :: li99  ie [[_g3, _g4, _g5, n3:statementlist]]
+	Can precede  ["}"]
+	option: [_g3, _g4, _g5, n3:statementlist]
+		Condition '@keywords'
+Token n3:variable matches regexp \?[a-zA-Z_][a-zA-Z0-9_]*
+Token n3:numericliteral matches regexp [-+]?[0-9]+(\.[0-9]+)?(e[-+]?[0-9]+)?
+
+Production n3:literal :: li100  ie [[n3:string, n3:dtlang]]
+	Can precede  [")", ".", "@of", "]", "}", n3:object, n3:objecttail, n3:pathlist, n3:pathtail, n3:propertylist, n3:propertylisttail, n3:statementtail]
+	option: [n3:string, n3:dtlang]
+		Condition '"'
+
+Production n3:pathlist :: li114  ie [[], [n3:path, n3:pathlist]]
+	Can precede  [")"]
+	option: []
+		Condition ')'
+	option: [n3:path, n3:pathlist]
+		Condition '"'
+
+Production _g3 :: li147  ie [[], [n3:declaration, _g3]]
+	Can precede  ["}", n3:statementlist, _g4, _g5]
+	option: []
+		Condition '"'
+	option: [n3:declaration, _g3]
+		Condition '@keywords'
+
+Production _g4 :: li149  ie [[], [n3:universal, _g4]]
+	Can precede  ["}", n3:statementlist, _g5]
+	option: []
+		Condition '"'
+	option: [n3:universal, _g4]
+		Condition '@forAll'
+
+Production _g5 :: li151  ie [[], [n3:existential, _g5]]
+	Can precede  ["}", n3:statementlist]
+	option: []
+		Condition '"'
+	option: [n3:existential, _g5]
+		Condition '@forSome'
+
+Production n3:statementlist :: li125  ie [[], [n3:statement, n3:statementtail]]
+	Can precede  ["}"]
+	option: []
+		Condition '}'
+	option: [n3:statement, n3:statementtail]
+		Condition '"'
+Token n3:string matches regexp ("([^"]|(\\"))*")
+
+Production n3:dtlang :: li97  ie [[], [u'@', n3:langcode], [u'^^', n3:symbol]]
+	Can precede  [")", ".", "@of", "]", "}", n3:object, n3:objecttail, n3:pathlist, n3:pathtail, n3:propertylist, n3:propertylisttail, n3:statementtail]
+	option: []
+		Condition '!'
+	option: [u'@', n3:langcode]
+		Condition '@'
+	option: [u'^^', n3:symbol]
+		Condition '^^'
+
+Production n3:statementtail :: li129  ie [[], [u'.', n3:statementlist]]
+	Can precede  ["}"]
+	option: []
+		Condition '}'
+	option: [u'.', n3:statementlist]
+		Condition '.'
+Token n3:langcode matches regexp [a-zA-Z0-9]+(-[a-zA-Z0-9]+)?
+Ok for predictive parsing
