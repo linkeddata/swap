@@ -12,10 +12,12 @@ $Id$
 @prefix dt: <http://www.w3.org/2001/XMLSchema#> .
 
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+
 @prefix cal: <http://www.w3.org/2000/10/swap/pim/ical#>.
 @prefix t:   <http://www.w3.org/2000/10/swap/pim/travelTerms#> .
 
-@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+@prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#>.
 
 @prefix :   <itin2ical#>.
 @prefix ic: <itin2ical#>.
