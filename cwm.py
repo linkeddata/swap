@@ -376,30 +376,30 @@ class Engine:
 
     This is the way they are actually made.
     """
-        type, uriref = pair
+        type, urirefString = pair
         if type == LITERAL:
-            uriref2 = LITERAL_URI_prefix + uriref # @@@ encoding at least hashes?
+            uriref2 = LITERAL_URI_prefix + urirefString # @@@ encoding at least hashes!!
             r = self.resources.get(uriref2, None)
             if r: return r
-            r = Literal(uriref)
+            r = Literal(urirefString)
             self.resources[uriref2] = r
             return r
         
 #        print " ... interning <%s>" % `uriref`
-        hash = len(uriref)-1
-        while (hash >= 0) and not (uriref[hash] == "#"):
+        hash = len(urirefString)-1
+        while (hash >= 0) and not (urirefString[hash] == "#"):
             hash = hash-1
         if hash < 0 :     # This is a resource with no fragment
-            r = self.resources.get(uriref, None)
+            r = self.resources.get(urirefString, None)
             if r: return r
-            r = Resource(uriref)
-            self.resources[uriref] = r
+            r = Resource(urirefString)
+            self.resources[urirefString] = r
             return r
         
         else :      # This has a fragment and a resource
-            r = self.internURI(uriref[:hash])
-            if type == RESOURCE: return r.internFrag(uriref[hash+1:], Fragment)
-            if type == FORMULA: return r.internFrag(uriref[hash+1:], Formula)
+            r = self.internURI(urirefString[:hash])
+            if type == RESOURCE: return r.internFrag(urirefString[hash+1:], Fragment)
+            if type == FORMULA: return r.internFrag(urirefString[hash+1:], Formula)
             else: raise shouldntBeHere    # Source code did not expect other type
 
 
@@ -512,7 +512,7 @@ class BI_EqualTo(LightBuiltIn,Function, ReverseFunction):
 class BI_uri(LightBuiltIn, Function, ReverseFunction):
 
     def evaluateObject(self, store, context, subj):    
-        return store.engine.intern((LITERAL, subj.uriref))
+        return store.engine.intern((LITERAL, subj.uriref()))
 
     def evaluateSubject(self, store, context, obj):    
         return store.engine.intern((RESOURCE, obj.string))
@@ -529,12 +529,12 @@ class BI_racine(LightBuiltIn, Function):
 
 
 class BI_directlyIncludes(HeavyBuiltIn):
-    def evaluate2(self, store, subj, obj, variables):
-        return store.testIncludes(subj, obj, variables)
+    def evaluate2(self, store, subj, obj, variables, bindings):
+        return store.testIncludes(subj, obj, variables, bindings)
     
 class BI_notDirectlyIncludes(HeavyBuiltIn):
-    def evaluate2(self, store, subj, obj, variables):
-        return not store.testIncludes(subj, obj, variables)
+    def evaluate2(self, store, subj, obj, variables, bindings):
+        return not store.testIncludes(subj, obj, variables, bindings)
     
 
 class BI_includes(HeavyBuiltIn):
@@ -559,9 +559,9 @@ class BI_includes(HeavyBuiltIn):
             
     
 class BI_notIncludes(HeavyBuiltIn):
-    def evaluate2(self, store, subj, obj, variables):
+    def evaluate2(self, store, subj, obj, variables, bindings):
         if isinstance(subj, Formula) and isinstance(obj, Formula):
-            return not store.testIncludes(subj, obj, variables)
+            return not store.testIncludes(subj, obj, variables, bindings)
         return 0   # Can't say it *doesn't* include it if it ain't a formula
 
 class BI_resolvesTo(HeavyBuiltIn, Function):
@@ -580,7 +580,7 @@ class BI_resolvesTo(HeavyBuiltIn, Function):
         F = store.engine.intern((FORMULA, inputURI+ "#_formula"))
         return F
     
-    def evaluate2(self, store, subj, obj, variables):
+    def evaluate2(self, store, subj, obj, variables, bindings):
         F = self.evaluateObject2(store, subj)
         return (F == obj) # @@@@@@@@@@@@@@@@@@@@@@@@@@@@ do structual equivalnce thing
 
@@ -1270,7 +1270,7 @@ class RDFStore(notation3.RDFSink) :
                       self.conclude, ( self, conclusions, targetContext, _outputVariables))
 
 # Return whether or nor workingContext containts a top-level template equvalent to subexp 
-    def testIncludes(self, workingContext, template, _variables, smartIn=[]):
+    def testIncludes(self, workingContext, template, _variables, smartIn=[], bindings=[]):
 
         if chatty >30: print"\n\n=================== includes ============\n"
 
@@ -1282,6 +1282,7 @@ class RDFStore(notation3.RDFSink) :
 
         unmatched, _templateVariables = self.nestedContexts(template)
         _substitute([( template, workingContext)], unmatched)
+        if bindings != []: _substitute(bindings, unmatched)
 
         if chatty > 20:
             print "# includes rule, %i terms in template %s, %i unmatched, %i template variables" % (
@@ -1595,14 +1596,14 @@ class RDFStore(notation3.RDFSink) :
                                 if chatty > 40: progress(" **** Includes: Adding %i new terms and %s as new existentials."%
                                                          (len(more_unmatched),setToString(more_variables)))
                                 return self.query(queue, variables, existentials, smartIn, action, param,
-                                                  bindings[:], []) # No new bindings but lots more to search!
+                                                  bindings=bindings) # bindings new to this forumula
                             else:  # Not forumla
                                 if len(vars) == 0: return total  # Not going to work if not forumlae ever
                                 # otherwise might work if vars 
 
                         elif len(vars)==0:  # Deal with others
 
-                                if pred.evaluate2(self, subj, obj, variables[:]):
+                                if pred.evaluate2(self, subj, obj, variables[:], bindings[:]):
                                     if chatty > 80: progress("Heavy predicate succeeds")
                                     return self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
                                                   bindings, []) # No new bindings but success in calculated logical operator
