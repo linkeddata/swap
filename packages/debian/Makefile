@@ -26,11 +26,11 @@ update:
 	cd $(PACKAGE)-$(MAINVERSION)/lib; tar -zxvf ../../../../cwm.tgz
 	(cd ./debian-files && tar cf - .  --exclude CVS) | (cd  $(PACKAGE)-$(MAINVERSION)  && tar xf -)
 	(cd ../.. && tar cf - doc  --exclude CVS --exclude format ) | (cd $(PACKAGE)-$(MAINVERSION)/  && tar xf -)
-	cp setup.py $(PACKAGE)-$(MAINVERSION)/lib
+	cp setup.py $(PACKAGE)-$(MAINVERSION)
 	
 
 pyinstall: update
-	cd $(PACKAGE)-$(MAINVERSION)/lib; python ./setup.py install
+	cd $(PACKAGE)-$(MAINVERSION); python ./setup.py install
 
 test:
 	cd $(PACKAGE)-$(MAINVERSION)/test/; make test\
