@@ -63,7 +63,7 @@ table.wide { margin-left: 2em; font-size: 9pt; width: 95%;}
 th { margin-left: 12pt; text-align: right; background: #ffffff; }
 td { margin-left: 12pt; border: 4pt; border-color: #555555;
     padding: 3pt;
- padding-color: #ffeeee; 
+ /* padding-color: #ffeeee; */
     vertical-align: top; }
 td.ln { font-family: monospace; vertical-align: top; }
 td.amount { width: 6em; text-align: right;  } /* font-family: monospace; */
