@@ -82,25 +82,23 @@ have a "#". Including a "/" in the flags overrides this.</p>
 
 <p>cwm mydcdata.n3 --n3="/"</p>
 
-<p>Namespaces which end in "/" are architecturally flawed as the names of
-things in the namespace look like HTTP documents, whatever they are. The most
-notorious miscreatnts here are Dublin Core and FOAF. If you use these
-namespaces, you may want to do this, or you may want to encourage the authors
-to change to use a "#".</p>
+<p>Namespaces which end in "/" lead (in my opinion) to an unfortunate
+confusion between the RDF propoerties and the HTTP document they identify.
+This is related to W3C TAG Issue httpRange-14.</p>
 
 <h4>ValueError: You cannot use 'this' except as subject of forAll or
 forSome</h4>
 
-<p>The "this" syntax in a formula refers to the formula itself.  It was used
-for thr pseudo-statements   this log:forSome x, and this log;forAll y. </p>
+<p>The "this" syntax in a formula refers to the formula itself. It was used
+for thr pseudo-statements this log:forSome x, and this log;forAll y.</p>
 
 <p>In a few rare cases it actually was used to refer logically to the formula
-itself. A classic is of course { this a log:falseHood }.  I decided that this
-was going to make more problems than it would solve.  The psudostatements
-have gone anway (in response to popular request), they became just syntax.
-And the  @forAll syntax has been introduced as the way to go. So with this
-release, while you can still like many N3 files use this to qualify
-variables, you can't use it for anything else.</p>
+itself. A classic is of course { this a log:falseHood }. I decided that this
+was going to make more problems than it would solve. The psudostatements have
+gone anway (in response to popular request), they became just syntax. And the
+@forAll syntax has been introduced as the way to go. So with this release,
+while you can still like many N3 files use this to qualify variables, you
+can't use it for anything else.</p>
 
 <h3>Release 0.7, 2004-02-04</h3>
 
