@@ -60,14 +60,14 @@ p3pr:other-category a _:InterestingCategory. # is this an APPEL invention? or a 
   :p a p3pr:Policy;
      log:racine [ log:semantics [ log:includes {
       :p p3pr:statement [
-        p3pr:data [ p3pr:ref :x ]
+        p3pr:data [ p3pr:categories :o ]
       ].
      } ] ].
-  :o p3pr:categories [ a _:InterestingCategory ].
+  :o a _:InterestingCategory.
 }
- log:implies { :p a _:Rule2Target }.
+ log:implies { :p a :Rule2Target }.
 
-{ :p a _:Rule2Target }
+{ :p a :Rule2Target }
 log:implies
 {
   :p :theseRules [ appel:behavior "limited"; appel:prompt "yes";
