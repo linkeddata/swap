@@ -7,6 +7,7 @@ cf
 http://www.w3.org/DesignIssues/Notation3
 Date: 2000/07/17 21:46:13  
 
+DWC:
 oops... I'm not doing qname expansion as described
 there (i.e. adding a # if it's not already there).
 
@@ -21,18 +22,23 @@ idea: migrate toward CSS notation?
 
 idea: use notation3 for wiki record keeping.
 
-T: more cool things:
- - sucking in the schema (http library?)
+TBL: more cool things:
+ - sucking in the schema (http library?) - to know about r see r
  - metaindexes - "to know more about x please see r" - described by
  - equivalence handling inc. equivalence of equivalence
  - @@ regeneration of genids on output.
-- regression test! 
+- regression test - done once
  Shakedown:
  - Find all synonyms of synonym
  - Find closure for all synonyms
  - Find superclass closure?
  - Use unambiguous property to infer synomnyms
 
+ Manipulation:
+  { } as notation for bag of statements
+  - filter 
+  - graph match
+  - recursive dump of nested bags
 Validation:  validate domain and range constraints against closuer of classes and
    mutually disjoint classes.
 
@@ -53,16 +59,15 @@ PARTS = [ PRED, SUBJ, OBJ]
 N3CommentCharacter = "#"     # For unix script #! compatabilty
 
 class Parser:
-    def __init__(self, baseURI, thisDoc, genBase, bindings = {}):
+    def __init__(self, thisDoc, baseURI="", bindings = {}):
 	""" note: namespace names should *not* end in #;
 	the # will get added during qname processing """
-	self._baseURI = baseURI
-	self._genBase = genBase
-	self._bindings = bindings
-	self._nextID = 0
+	if baseURI == "" : self._baseURI = thisDoc
+	else: self._baseURI = baseURI
+    	self._bindings = bindings
 	self._thisDoc = intern(thisDoc)
 	self.context = self._thisDoc    # For storing with triples
-
+        self.contextStack = []      # For nested conjunctions { ... }
 
     def feed(self, str):
 	"""if BadSyntax is raised, the string
@@ -70,18 +75,26 @@ class Parser:
 	remainder after any statements have been parsed.
 	So if there is more data to feed to the
 	parser, it should be straightforward to recover."""
+        i = 0
+	while i >= 0:
+	    j = self.skipSpace(str, i)
+	    if j<0: return
 
-	while len(str)>0:
-	    i = self.skipSpace(str, 0)
-	    if i<0: return
+            i = self.directiveOrStatement(str,j)
+            if i<0: raise BadSyntax(str, j, "expected directive or statement")
+
+    def directiveOrStatement(self, str,h):
+    
+	    i = self.skipSpace(str, h)
+	    if i<0: return i   # EOF
 
 	    j = self.directive(str, i)
-	    if j<0:
-		j = self.statement(str, i)
-		if j<0:
-		    raise BadSyntax(str, i, "expected directive or statement")
-            j = self.checkDot(str,j)
-	    str = str[j:]
+	    if j>=0: return  self.checkDot(str,j)
+	    
+            j = self.statement(str, i)
+            if j>=0: return self.checkDot(str,j)
+            
+	    return j
 
     def makeStatement(self, context, triple):
 	pass
@@ -205,23 +218,38 @@ class Parser:
 	if j >= 0:
 	    return j
 	else:
-	    r = []
 	    j = self.tok('[', str, i)
-	    if j<0: return -1
-	    subj = internAnonymous(self._thisDoc)
-	    i = self.property_list(str, j, subj)
-	    if i<0: raise BadSyntax(str, j, "property_list expected")
-	    j = self.tok(']', str, i)
-	    if j<0: raise BadSyntax(str, i, "']' expected")
-	    res.append(subj)
-	    return j
+	    if j>=0:
+                subj = internAnonymous(self._thisDoc)
+                i = self.property_list(str, j, subj)
+                if i<0: raise BadSyntax(str, j, "property_list expected")
+                j = self.tok(']', str, i)
+                if j<0: raise BadSyntax(str, i, "']' expected")
+                res.append(subj)
+                return j
 
+	    j = self.tok('{', str, i)
+	    if j>=0:
+                oldContext = self.context
+                subj = internAnonymous(self._thisDoc)
+                self.context = subj
+                
+                while 1:
+                    i = self.skipSpace(str, j)
+                    if i<0: raise BadSyntax(str, i, "needed '}', found end.")
+                    
+                    j = self.tok('}', str,i)
+                    if j >=0: break
+                    
+                    j = self.directiveOrStatement(str,i)
+                    if j<0: raise BadSyntax(str, i, "expected statement or '}'")
 
-    def genURI(self):  # @@ genids should be regenerated on output
-	self._nextID = self._nextID + 1
-	return intern(self._genBase + `self._nextID`)
+                self.context = oldContext # restore
+                res.append(subj)
+                return j
 
-
+            return -1
+        
     def property_list(self, str, i, subj):
 	while 1:
 	    v = []
@@ -237,7 +265,7 @@ class Parser:
 		    if dir == '->':
 			self.makeStatement(self.context, (sym, subj, obj))
 		    else:
-			self.makeStatement(self.context, (sym, obj, sym))
+			self.makeStatement(self.context, (sym, obj, subj))
 
 		j = self.tok(';', str, i)
 		if j<0:
@@ -413,7 +441,7 @@ class BadSyntax:
 	if len(str)-i > 30: post="..."
 	else: post=""
 
-	return "bad syntax (%s) at: %s%s^%s%s" \
+	return 'bad syntax (%s) at: "%s%s^%s%s"' \
 	       % (self._why, pre, str[i-30:i], str[i:i+30], post)
 
 
@@ -421,8 +449,8 @@ class BadSyntax:
 class SinkParser(Parser):
     """Parses notation3 and outputs RDF stream to sink"""
 
-    def __init__(self, sink, baseURI, thisDoc, genBase, bindings = {}):
-	Parser.__init__(self, baseURI, thisDoc, genBase, bindings)
+    def __init__(self, sink, thisDoc, baseURI="", bindings = {}):
+	Parser.__init__(self, thisDoc, baseURI, bindings)
 	self._sink = sink
 
     def bind(self, qname, uriref):
@@ -490,16 +518,16 @@ class Thing:
 
     def generated(self):
         """  Is this thing a genid - is its name arbitrary? """
-        return None    # unless overridden
+        return 0    # unless overridden
 
-    def n3_anonymous(self):
+    def n3_anonymous(self, context):
         """ Can be output as an anonymous node in N3
         """
         return (self.generated() and  # The URI is irrelevant
-            len(self.occursAs[OBJ]) == 1 and  # This is only incoming arrow
-            len(self.occursAs[PRED]) == 0 )    # It is not used as a verb itself
+            self.occurrences(OBJ,context) == 1 and  # This is only incoming arrow
+            self.occurrences(PRED, context) == 0 )    # It is not used as a verb itself
 
-    def equivalent(self, x):
+    def equivalent(self, x):  # not used yet @@
         """ Find one reason for beliveing them equivalent
 
         Could search from subject, verb, or object, or find shortest. 
@@ -510,6 +538,18 @@ class Thing:
                 return s
         return None
 
+    def occurrences(self, p, context):
+        """ Count the times a thing occurs in a statement in given context
+        """
+        if context == None:
+            return len(self.occursAs(p))
+        else:
+            n = 0
+            for s in self.occursAs[p]:
+                if s.context is context:
+                    n = n+1
+            return n
+        
 class Resource(Thing):
     """   A Thing which has no fragment
     """
@@ -531,20 +571,6 @@ class Resource(Thing):
         self.nextId = self.nextId + 1
         return self.nextId - 1
 
-def mostPopular():
-        """ Resource whose fragments have the most occurrences
-        """
-        best = 0
-        mp = None
-        for r in Resource.table.values() :
-            total = 0
-            for f in r.fragments.values():
-                total = total + len(f.occursAs[SUBJ]) + len(f.occursAs[PRED]) + len(f.occursAs[OBJ])
-            if total > best :
-                best = total
-                mp = r
-        return mp
-        
     
 class Fragment(Thing):
     """    A Thing which DOES have a fragment id in its URI
@@ -561,6 +587,7 @@ class Fragment(Thing):
     def representation(self, prefixes = {}, base=None):
         """ Optimize output if prefixes available
         """
+#        print "Prefixes: ", prefixes
         try:
             return prefixes[self.resource] + ":" + self.fragid;
         except KeyError:
@@ -574,10 +601,8 @@ class Fragment(Thing):
          context.
          """
          return self.fragid[0] == "_"  # Convention for now @@@@@
-                                # parser should use seperate class
+                                # parser should use seperate class?
 
-    def representation(self, prefixes = {}, base=None):
-        return ":" + self.fragid;
 
 class Anonymous(Fragment):
     def __init__(self, resource):
@@ -590,6 +615,8 @@ class Variable(Fragment):
     def __init__(self, resource):
         Fragment.__init__(self, resource, "_v"+ `resource.newId()`)
 
+    def representation(self, prefixes = {}, base=None):
+        return ":" + self.fragid;
 
         
 class Literal(Thing):
@@ -734,7 +761,7 @@ bind default <http://example.org/payPalStuff?>.
   is pp:part of [ a pp:Transaction; = :t1 ] .
 """
 
-# Janets chart:
+# Janet's chart:
     t4="""
 bind q: <http://example.org/>.
 bind m: <>.
@@ -757,16 +784,27 @@ bind w3c: <http://www.w3.org/2000/10/org>.
 
 """
 
+    t5 = """
 
+bind u: <http://www.example.org/utilities>
+bind default <>
+
+:assumption = { :fred u:knows :john .
+                :john u:knows :mary .} .
+
+:conclusion = { :fred u:knows :mary . } .
+
+"""
+    thisURI = "file:notation3.py"
+    thisDoc = intern(thisURI)
     testString.append(  t0 + t1 + t2 + t3 + t4 )
+#    testString.append(  t5 )
 
 #    p=SinkParser(RDFSink(),'http://example.org/base/', 'file:notation3.py',
 #		     'data:#')
 
-    r=SinkParser(SinkToN3(sys.stdout.write, intern('file:output')), 'http://example.org/base/', 'file:notation3.py',
-		  '#_')
-
-
+    r=SinkParser(SinkToN3(sys.stdout.write, intern('file:output')),
+                  thisURI,'http://example.org/base/',)
     r.startDoc()
     
     print "=== test stringing: ===== STARTS\n ", t0, "\n========= ENDS\n"
@@ -786,8 +824,8 @@ bind w3c: <http://www.w3.org/2000/10/org>.
     print "----------------------- Test store:"
 
     store = RDFStore()
-    # (sink, baseURI, thisDoc, genBase, bindings)
-    p = SinkParser(store, 'http://example.org/base/', 'file:notation3.py', "#_")
+    # (sink,  thisDoc,  baseURI, bindings)
+    p = SinkParser(store,  thisURI, 'http://example.org/base/')
     p.startDoc()
     p.feed(testString[0])
     p.endDoc()
@@ -798,44 +836,46 @@ bind w3c: <http://www.w3.org/2000/10/org>.
 
     print "\n\n---------------- dumping in subject order:"
 
-    store.dumpBySubject(SinkToN3(sys.stdout.write))
+    store.dumpBySubject(thisDoc, SinkToN3(sys.stdout.write))
 
     print "\n\n---------------- dumping nested:"
 
-    thisDoc = intern("file:notation.py")
     store.dumpNested(thisDoc, SinkToN3(sys.stdout.write, thisDoc))
 
     print "Regression test **********************************************"
 
     
-    testString.append(reformat(testString[-1]))
+    testString.append(reformat(testString[-1], thisDoc))
 
     if testString[-1] == testString[-2]:
-        print "\nRegression Test succeeded FIRST TIME- WEIRD!!!!!!!!!\n"
+        print "\nRegression Test succeeded FIRST TIME- WEIRD!!!!??!!!!!\n"
         return
     
-    testString.append(reformat(testString[-1]))
+    testString.append(reformat(testString[-1], thisDoc))
 
     if testString[-1] == testString[-2]:
-        print "\nRegression Test succeeded!!!!!!!!!\n"
+        print "\nRegression Test succeeded SECOND time!!!!!!!!!\n"
     else:
+        print "Regression Test Failure: ===================== LEVEL 1:"
+        print testString[1]
         print "Regression Test Failure: ===================== LEVEL 2:"
         print testString[2]
         print "\n============================================= END"
 
-    testString.append(reformat(testString[-1]))
+    testString.append(reformat(testString[-1], thisDoc))
     if testString[-1] == testString[-2]:
-        print "\nRegression Test succeeded THIRD TIME.\n"
+        print "\nRegression Test succeeded THIRD TIME. This is not exciting.\n"
 
     
                 
-def reformat(str):
-    print "Regression Test: ===================== INPUT:"
-    print str
-    print "================= ENDs"
+def reformat(str, thisDoc):
+    if 0:
+        print "Regression Test: ===================== INPUT:"
+        print str
+        print "================= ENDs"
     buffer=StringWriter()
-    r=SinkParser(SinkToN3(buffer.write, intern('file:output')),
-                 'http://example.org/base/', 'file:notation3.py', '#_')   # missed chars@?
+    r=SinkParser(SinkToN3(buffer.write, thisDoc),
+                  'file:notation3.py')
     r.startDoc()
     r.feed(str)
     r.endDoc()
@@ -894,8 +934,7 @@ class ToRDF(RDFSink):
     def startDoc(self):
 	self._wr.startElement('web:RDF',
 			      (('xmlns:web', self._rdfns),
-			       ('xmlns:g', self._myns),
-			       ('g:genbase', self._genBase)))
+			       ('xmlns:g', self._myns)))
 	self._subj = None
 
     def endDoc(self):
@@ -1009,7 +1048,7 @@ class XMLWriter:
 class SinkToN3(RDFSink):
     """keeps track of most recent subject and predicate reuses them
 
-      Adapted from ToRDFParser(Parser);
+      Adapted from Dan's ToRDFParser(Parser);
     """
 
     def __init__(self, write, base=None):
@@ -1136,8 +1175,25 @@ class RDFStore(RDFSink) :
         pass
 
     def endDoc(self):
-        mp = mostPopular()
-        print "*********** Most popular Namesapce is " , `mp`
+        pass
+
+    def selectDefaultPrefix(self, context):
+
+        """ Resource whose fragments have the most occurrences
+        """
+        best = 0
+        mp = None
+        for r in Resource.table.values() :
+            total = 0
+            for f in r.fragments.values():
+                total = total + (f.occurrences(SUBJ,context) +
+                                 f.occurrences(PRED,context) +f.occurrences(OBJ, context))
+            if total > 3:
+                print "   Resource %s has %i occurrences in %s" % (`r`, total, `context`)
+            if total > best :
+                best = total
+                mp = r
+        print "*********** Most popular Namesapce in %s is %s" % (`context`, `mp`)
         defns = self.namespaces.get("", None)
         if defns :
             del self.namespaces[""]
@@ -1164,26 +1220,34 @@ class RDFStore(RDFSink) :
             sink.makeStatement(s.context, s.triple)
         sink.endDoc()
 
-    def dumpBySubject(self, sink):
+    def dumpBySubject(self, context, sink):
+
+        self.selectDefaultPrefix(context)        
         sink.startDoc()
         for c in self.prefixes.items() :   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
 
         for r in Resource.table.values() :  # First the bare resource
             for s in r.occursAs[SUBJ] :
-                sink.makeStatement(s.context, s.triple)
+                if context is s.context:
+                    sink.makeStatement(s.context, s.triple)
             for f in r.fragments.values() :  # then anything in its namespace
                 for s in f.occursAs[SUBJ] :
-                    sink.makeStatement(s.context, s.triple)
+#                    print "...dumping %s in context %s" % (`s.context`, `context`)
+                    if s.context is context:
+                        sink.makeStatement(s.context, s.triple)
         sink.endDoc()
-
+#
+#  Pretty printing
+#
     def dumpNested(self, context, sink):
         """ Iterates over all URIs ever seen looking for statements
         """
+        self.selectDefaultPrefix(context)        
         sink.startDoc()
         for c in self.prefixes.items() :   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
-        print "#RDFStore: Done bindings, doing arcs:" 
+        print "# RDFStore: Done bindings, doing arcs:" 
         for r in Resource.table.values() :  # First the bare resource
             self._dumpSubject(r, context, sink)
             for f in r.fragments.values() :  # then anything in its namespace
@@ -1191,36 +1255,39 @@ class RDFStore(RDFSink) :
         sink.endDoc()
 
 
-    def _dumpSubject(self, context, subj, sink):
+    def _dumpSubject(self, subj, context, sink):
         """ Take care of top level anonymous nodes
         """
         if (subj.generated() and  # The URI is irrelevant
-                len(subj.occursAs[OBJ]) == 0 and  # There is no incoming arrow
-                len(subj.occursAs[PRED]) == 0 ):    # It is not used as a verb itself
-            if len(subj.occursAs[SUBJ]) > 0 :   # Ignore if actually no statements for this thing
+                subj.occurrences(OBJ,context) == 0 and  # There is no incoming arrow
+                subj.occurrences(PRED,context) == 0 ):    # It is not used as a verb itself
+            if subj.occurrences(SUBJ,context) > 0 :   # Ignore if actually no statements for this thing
                 sink.startAnonymousNode(subj)
-                for s in subj.occursAs[SUBJ] :
-                    self.coolMakeStatement(sink, s.triple)
+                for s in subj.occursAs[SUBJ]:
+                    if s.context is context:
+                        self.coolMakeStatement(sink, context, s.triple)
                 sink.endAnonymousNode()
         else:
-            for s in subj.occursAs[SUBJ] :
-                self.coolMakeStatement(sink, context, s.triple)
+            for s in subj.occursAs[SUBJ]:
+                if s.context is context:
+                    self.coolMakeStatement(sink, context, s.triple)
 
     def coolMakeStatement(self, sink, context, triple):
      
-        if subject is object:
+        if triple[SUBJ] is triple[OBJ]:
             sink.makeStatement(context, triple)
         else:
-            if not subject.n3_anonymous():
+            if not triple[SUBJ].n3_anonymous(context):
                 self.coolMakeStatement2(sink, context, triple)
                 
     def coolMakeStatement2(self, sink, context, triple):
      
-        if object.n3_anonymous():  # Can be represented as anonymous node in N3
+        if triple[OBJ].n3_anonymous(context):  # Can be represented as anonymous node in N3
             sink.startAnonymous(context, triple)
-            for t in object.asSubject:
-                self.coolMakeStatement2(sink, t.context, triple)
-            sink.endAnonymous(subject, verb) # Restore context
+            for t in triple[OBJ].occursAs[SUBJ]:
+                if t.context is context:
+                    self.coolMakeStatement2(sink, t.context, t.triple)
+            sink.endAnonymous(triple[SUBJ], triple[PRED]) # Restore context
         else:    
             sink.makeStatement(context, triple)
                 
