@@ -18,6 +18,16 @@ href="/2000/10/swap/">SWAP</a> | <a href="cwm.html">Cwm</a></p>
 
 <h1><a href="cwm">Cwm</a> Release Roadmap</h1>
 
+<p></p>
+
+<p>See also:</p>
+<ul>
+  <li><a href="changes.html">Changes already made</a>.  Things move from this
+    page to that.</li>
+  <li><a href="../admin/bugStatus.html">Outstanding bugs.</a> Bugs (and some
+    small requests for enhancement) are tracked in RDF.</li>
+</ul>
+
 <p style="text-align: right"><a
 href="../../../../DesignIssues/Notation3.html"><img alt="n3"
 src="../../../../RDF/icons/n3_small" /></a></p>
@@ -45,8 +55,8 @@ src="../../../../RDF/icons/n3_small" /></a></p>
   <li><ul>
       <li>allow alternative parsers; in particular, RDFlib 22Jul: should be
         working, but test integration remains redland RFE not critical path,
-        right?  Speed benchmark  N3 formal grammar (RFE 10 Jul)  --think
-        --filter combination  connect with semwebcentral  W3.org homepage
+        right? Speed benchmark N3 formal grammar (RFE 10 Jul) --think
+        --filter combination connect with semwebcentral W3.org homepage
         announcementRDFlib 22Juldpkg debian packagingin progress as of 22
         Julpyton setup.py )done in 0.8tarball (with test) (Distribution
         mechanisms W3C home page announcement</li>
@@ -58,15 +68,15 @@ src="../../../../RDF/icons/n3_small" /></a></p>
         not critical path for 1.0)</li>
     </ul>
   </li>
-  <li>Speed benchmark </li>
+  <li>Speed benchmark</li>
   <li>N3 formal grammar (<a
     href="http://lists.w3.org/Archives/Public/public-cwm-bugs/2004Jun/0015.html">RFE
-    10 Jul)</a>  </li>
-  <li>--think --filter combination.   The application of rules to the
+    10 Jul)</a></li>
+  <li>--think --filter combination. The application of rules to the
     [notional] deductive closure of a formula is a function which is equally
     valid in forward and backward chaining systems. Providing it will allow
     the same problems to be tackled by different techniques, and different
-    systems and clones. </li>
+    systems and clones.</li>
   <li>connect with semwebcentral</li>
   <li>W3.org homepage announcement</li>
 </ul>
@@ -76,7 +86,7 @@ src="../../../../RDF/icons/n3_small" /></a></p>
 <p></p>
 
 <p>There is no timescale for these enhahcements, as they are not subject to
-existing funded development or volunteer commitment.  Bother are of course
+existing funded development or volunteer commitment. Bother are of course
 welcome at any time!</p>
 
 <h3>Performance</h3>
@@ -85,16 +95,16 @@ welcome at any time!</p>
 plot perfromance changes version to version.</p>
 
 <p>Develop specific benchmarks for specific problems, such as pipelineable
-cases, large store/small rules, large rules/small data, etc..  Include
+cases, large store/small rules, large rules/small data, etc.. Include
 feedback from users to characterize different types of way in whic cwm is
 used.</p>
 
 <h3>Clones</h3>
 
 <p>Cwm demonstrates the power of a particular langauge and a particular
-general-purpose tool.  Encourage and liaise with compatible systems, and
-share test data.  Work to define subsets of the rule langauges which work
-with different types of engine.</p>
+general-purpose tool. Encourage and liaise with compatible systems, and share
+test data. Work to define subsets of the rule langauges which work with
+different types of engine.</p>
 <ul>
   <li>Rete rule-based system</li>
   <li>Backward-chaining systems, eg Euler.</li>
@@ -126,9 +136,9 @@ store</em>).</p>
 <p>Built-ins for lists. in (needs muli value function, below); append,
 prepend, second..seventh, last, concat.</p>
 
-<p>Sets, plus builtins, see syntax in N3.  Information is lost, and
+<p>Sets, plus builtins, see syntax in N3. Information is lost, and
 optimizations are lost, when sets are actually represented as ordered lists
-because that is the only syntax easy to use in RDF.  owl:oneOf provides the
+because that is the only syntax easy to use in RDF. owl:oneOf provides the
 constructor for sets.</p>
 
 <p>Build cwm on python sets, requiring python 2.3, to gain speed.</p>
@@ -169,7 +179,7 @@ project?</em></p>
 <p>Implement <strong>persistent cache</strong> - make an ontology (based very
 stongly on HTTP headers) for recording the results of an HTTP (etc) get.
 Store metadata about fetched ontologies. Build an index into the persistent
-cache for offline working. </p>
+cache for offline working.</p>
 
 <p>Functions: find the closure of these documents under eg --closure=ptr and
 make sure than they are all in my persistent cache. Allow environment
@@ -186,14 +196,26 @@ thing.</p>
 
 <p></p>
 
-<p>Support DAWG remote query protocol as client, as currently done using SQL.
-</p>
+<p>Support DAWG remote query protocol as client, as currently done using
+SQL.</p>
 
 <p>DAWG server.</p>
 
 <p>Variations of DAWG using N3 where DAWG is not exactly N3.</p>
 
-<p>IRC bot (sWBot) - re</p>
+<p>IRC bot (sWBot) -- Your friendly N3-happy robotic chat room companion. </p>
+
+<p></p>
+
+<h3>Security</h3>
+
+<p>Sandboxed version of cwm, which is immune to attacks from rules in data,
+builtin functions in untrusted rules, confientiality violations by indirect
+web access, and so on.  While you can build a secure trusted system without
+needing a sandbox at all (it isn't really the way to build one) sandboxing is
+handy for things like demo servers and IRC bots.  </p>
+
+<p></p>
 
 <p></p>
 
