@@ -97,7 +97,7 @@ def join(here, there):
 
     # join('mid:foo@example', '../foo') bzzt
     if here[bcolonl+1:bcolonl+2] <> '/':
-        raise ValueError ("Base <%s> has no slash after colon - with relative <%s>." %(here, there))
+        raise ValueError ("Base <%s> has no slash after colon - with relative '%s'." %(here, there))
 
     if here[bcolonl+1:bcolonl+3] == '//':
         bpath = find(here, '/', bcolonl+3)
@@ -379,7 +379,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.12  2003-04-03 22:35:12  ryanlee
+# Revision 1.13  2003-07-03 21:04:39  timbl
+# New string function to compare strings normalizing case and whitespace string:containsRoughly
+#
+# Revision 1.12  2003/04/03 22:35:12  ryanlee
 # fixed previous fix, added test case
 #
 # Revision 1.11  2003/04/03 22:06:54  ryanlee

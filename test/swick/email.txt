@@ -1,0 +1,121 @@
+Resent-From: sw-team@w3.org
+From: "Ralph R. Swick" <swick@w3.org>
+Date: Thu Jun 19, 2003  10:49:22 US/Eastern
+To: sw-team@w3.org
+Subject: Re: ?bug in cwm's relative URI handling
+
+
+At 09:07 AM 6/3/2003 -0400, Ralph R. Swick wrote:
+http://lists.w3.org/Archives/Team/sw-team/2003Jun/0005.html
+
+I believe that cwm's handling of relative URIs is not correctly
+preserving base document URIs in its result.
+
+Here is another case, of a slightly different nature:
+
+Given a document named cwm_baseURI_test2.rdf with content
+
+[[
+<rdf:RDF 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/" >
+
+<rdf:Description rdf:about="#obj1">
+  <dc:creator>Ralph</dc:creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="#obj2">
+  <dc:creator>Also Ralph</dc:creator>
+</rdf:Description>
+
+</rdf:RDF>
+]]
+
+The command
+
+% cwm --rdf cwm_baseURI_test2.rdf --n3
+
+produces:
+
+[[
+#Processed by Id: cwm.py,v 1.129 2003/04/08 16:12:43 timbl Exp 
+        #    using base file:/tux/u2/swick/Projects/zakim/cwm_baseURI_test2.rdf
+
+#  Notation3 generation by
+#       notation3.py,v 1.138 2003/04/25 19:12:46 sandro Exp
+
+#   Base was: file:/tux/u2/swick/Projects/zakim/cwm_baseURI_test2.rdf
+     @prefix : <#> .
+     @prefix dc: <http://purl.org/dc/elements/1.1/> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+    :obj1     dc:creator "Ralph" .
+
+    :obj2     dc:creator "Also Ralph" .
+
+#ENDS
+]]
+
+I get the same output if I use --n3=r for the output and also if
+I give a full file: URI for the input (matching what cwm reported
+as the base URI in the comment in its output), whereas I would like
+to see full URIs for 
+file:/tux/u2/swick/Projects/zakim/cwm_baseURI_test2.rdf#obj1
+and
+file:/tux/u2/swick/Projects/zakim/cwm_baseURI_test2.rdf#obj2
+
+Furthermore, given the input
+
+[[
+<rdf:RDF 
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/" >
+
+<rdf:Description rdf:about="#obj1">
+  <dc:creator>Ralph</dc:creator>
+</rdf:Description>
+
+<rdf:Description rdf:about="cwm_baseURI_test2a#obj2">
+  <dc:creator>Also Ralph</dc:creator>
+</rdf:Description>
+
+</rdf:RDF>
+]]
+
+the command
+
+% cwm --rdf cwm_baseURI_test2a.rdf --n3
+
+produces
+
+[[
+#Processed by Id: cwm.py,v 1.129 2003/04/08 16:12:43 timbl Exp 
+        #    using base file:/tux/u2/swick/Projects/zakim/cwm_baseURI_test2a.rdf
+
+#  Notation3 generation by
+#       notation3.py,v 1.138 2003/04/25 19:12:46 sandro Exp
+
+#   Base was: file:/tux/u2/swick/Projects/zakim/cwm_baseURI_test2a.rdf
+     @prefix : <cwm_baseURI_test2a#> .
+     @prefix dc: <http://purl.org/dc/elements/1.1/> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+    :obj2     dc:creator "Also Ralph" .
+
+    <#obj1>     dc:creator "Ralph" .
+
+#ENDS
+]]
+
+Which does provide the (equivalent of) the full URI for obj2
+but something that seems entirely wrong for the name of obj1.
+
+I believe that these two inputs are equivalent (modulo the
+filename modified for test purposes) and that the two statements
+in test2a are describing objects whose names are identical but
+for the final character.
+
+Am I misunderstanding something, or is cwm?
+
+My need is to preserve the full uri of things identified using
+the RDF/XML 'about="#foo"' syntax in cwm's results.

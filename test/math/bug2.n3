@@ -1,0 +1,26 @@
+# Author: sbp
+#  $Id$
+
+@prefix : <#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+
+#"3.1415926" a :testValue.
+3.1415926 a :testValue.
+#"1729" a :testValue.
+1729 a :testValue.
+#"0" a :testValue.
+#0 a :testValue.
+#"1.0e7" a :testValue.
+#1.0e7 a :testValue.
+
+{ ?x a :testValue. ?y a :testValue.
+  ?z is math:sum of (?x (?y ?x).math:difference).
+  ?z math:notEqualTo :y } log:implies {(?x ?y) :SumDifferenceFAILS ?z}.
+
+
+# For purging
+
+log:implies a log:Chaff .
+log:forAll a log:Chaff .

@@ -1,7 +1,7 @@
 #  Find my conferences
 #    and make calendar events for them
-# expect the following env vars to be set up:
-# USER
+# expect the following command line variables
+#    1.  user name for user in question
 
 # Vocabs for talking about calendar stuff:
 
@@ -61,7 +61,7 @@ this log:forAll :a,:b,:c,:d,:e,:f,:g,:h,:i,:j,:k,:l,:m,
         ([is times:inSeconds of :s] [is maths:product of (:d "60")])].
 
     (:i "@telconf.w3.org") string:concatenation :u.
-    :n string:startsWith [ conf:attendee_user [ is os:environ of "USER"]].
+    :n string:startsWith [ conf:attendee_user [ is os:argv of "1"]].
 
 
 } log:implies {

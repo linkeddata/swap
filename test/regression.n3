@@ -323,6 +323,11 @@
     test:description   "string:endsWith";
     test:arguments     """string/endsWith.n3 -rules""".
 
+:t10431 a test:CwmTest;
+    test:shortFileName "roughly-out.n3";
+    test:description   "string:containsRoughly ignores case smart whitespace";
+    test:arguments     """string/roughly.n3 -rules""".
+
 
 :t1044 a test:CwmTest;
     test:shortFileName "bi-quant.n3";

@@ -1,0 +1,46 @@
+@prefix bk: <banking#>.
+@prefix ck: <checking#>.
+@prefix : <checking#>.
+
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix lst: <http://www.daml.org/2001/03/daml+oil#>.
+
+this log:forAll :B0, :DOC, :ACCT, :A1.
+#@@this log:forAll :acct, :draft, :tot, :b0, :tt, :a1, :doc, :l.
+
+
+{
+  :ACCT
+    bk:statements [ lst:first ?LAST_ST ];
+    bk:transAfter [ :amt ?TT; :more () ].
+
+  ?LAST_ST log:semantics [ log:includes
+        { :ACCT :balance :B0 }
+      ].
+
+  ( :B0 ?TT ) math:sum ?TOT.
+}
+  log:implies { :ACCT :balance ?TOT }.
+
+{ ?ACCT bk:transactions ?L }
+  log:implies {
+    ?ACCT bk:transAfter [ :amt "0"; :more ?L ]
+  }.
+
+{
+  ?ACCT bk:transAfter [ :amt :B0; :more [ lst:first :DOC; lst:rest ?L ]].
+  :DOC log:semantics [
+    log:includes { :DOC a ck:Check; ck:amount :A1; :account :ACCT. }
+  ].
+  ("8" "5") math:difference "3".
+  (:B0 :A1) math:difference ?TOT.
+ }
+  log:implies { :ACCT bk:transAfter [ :amt ?TOT; :more ?L ] }.
+
+
+####
+#@@ investigating cwm list bugs
+:xyz :foo ("1").
+
+{ :xyz :foo [ lst:rest :l] } log:implies { :xyz :snort :l }.
