@@ -33,8 +33,8 @@ import llyn
 from myStore import load, Namespace
 from term import Literal
 import diag
-from diag import progress
-diag.chatty_flag=10
+from diag import progress, chatty_flag
+#diag.chatty_flag=0
 
 # Standard python
 from sys import argv, exit, stderr
@@ -88,10 +88,10 @@ def yaccConvert(yacc, top, tokenRegexps):
     
 def yaccProduction(yacc, lhs,  tokenRegexps):
     if lhs is BNF.void:
-	print "\nvoid"
+	if chatty_flag: progress( "\nvoid")
 	return
     if lhs is BNF.eof:
-	print "\nEOF"
+	if chatty_flag: progress( "\nEOF")
 	return
     if isinstance(lhs, Literal):
 	literalTerminals[lhs.value()] = 1
@@ -100,15 +100,16 @@ def yaccProduction(yacc, lhs,  tokenRegexps):
 
     rhs = g.the(pred=BNF.matches, subj=lhs)
     if rhs != None:
-	print "\nToken %s matches regexp %s" %(lhs, rhs)
+	if chatty_flag: progress( "\nToken %s matches regexp %s" %(lhs, rhs))
 #	tokenRegexps[lhs] = re.compile(rhs.value())
 	return
     rhs = g.the(pred=BNF.mustBeOneSequence, subj=lhs)
     if rhs == None:
-	print recordError("No definition of " + `lhs`)
+	progress( recordError("No definition of " + `lhs`))
 	raise ValueError("No definition of %s  in\n %s" %(`lhs`, `g`))
     options = rhs
-    print "\nProduction %s :: %s  ie %s" %(`lhs`, `options` , `options.value()`)
+    if chatty_flag:
+	progress ("\nProduction %s :: %s  ie %s" %(`lhs`, `options` , `options.value()`))
     yacc.write("\n%s:" % toYacc(lhs, tokenRegexps))
 
     branches = g.each(subj=lhs, pred=BNF.branch)
@@ -118,7 +119,7 @@ def yaccProduction(yacc, lhs,  tokenRegexps):
 	    yacc.write("\t|\t")
 	first = 0
 	option = g.the(subj=branch, pred=BNF.sequence)
-	print "\toption: "+`option.value()`
+	if chatty_flag: progress( "\toption: "+`option.value()`)
 	yacc.write("\t")
 	if option.value() == [] and yacc: yacc.write(" /* empty */")
 	for part in option:
@@ -133,55 +134,58 @@ literalTerminals = {}
 def doProduction(lhs):
     global branchTable
     if lhs is BNF.void:
-	print "\nvoid"
+	progress("\nvoid")
 	return
     if lhs is BNF.eof:
-	print "\nEOF"
+	progress( "\nEOF")
 	return
     if isinstance(lhs, Literal):
 	literalTerminals[lhs.value()] = 1
-#    	print "\nLiteral %s" %(lhs)
 	return
 
     branchDict = {}
 
     rhs = g.the(pred=BNF.matches, subj=lhs)
     if rhs != None:
-	print "\nToken %s matches regexp %s" %(lhs, rhs)
+	if chatty_flag: progress( "\nToken %s matches regexp %s" %(lhs, rhs))
 	tokenRegexps[lhs] = re.compile(rhs.value())
 	cc = g.each(subj=lhs, pred=BNF.canStartWith)
-	if cc == []: print recordError("No recod of what token %s can start with" % `lhs`)
-	print "\tCan start with: %s" % cc 
+	if cc == []: progress (recordError(
+	    "No record of what token %s can start with" % `lhs`))
+	progress("\tCan start with: %s" % cc) 
 	return
     rhs = g.the(pred=BNF.mustBeOneSequence, subj=lhs)
     if rhs == None:
-	print recordError("No definition of " + `lhs`)
+	progress (recordError("No definition of " + `lhs`))
 	return
 #	raise RuntimeError("No definition of %s  in\n %s" %(`lhs`, `g`))
     options = rhs
-    print "\nProduction %s :: %s  ie %s" %(`lhs`, `options` , `options.value()`)
+    if chatty_flag: progress ( "\nProduction %s :: %s  ie %s" %(`lhs`, `options` , `options.value()`))
     succ = g.each(subj=lhs, pred=BNF.canPrecede)
-    print "\tCan precede ", succ
+    if chatty_flag: progress("\tCan precede ", succ)
 
     branches = g.each(subj=lhs, pred=BNF.branch)
     for branch in branches:
 	option = g.the(subj=branch, pred=BNF.sequence)
-	print "\toption: "+`option.value()`
+	if chatty_flag: progress( "\toption: "+`option.value()`)
 	for part in option:
 	    if part not in already and part not in agenda: agenda.append(part)
 	    y = `part`
 	conditions = g.each(subj=branch, pred=BNF.condition)
 	if conditions == []:
-	    print recordError(" NO SELECTOR for %s option %s ie %s" %(`lhs`, `option`, `option.value()` ))
+	    progress(
+		recordError(" NO SELECTOR for %s option %s ie %s" %
+		(`lhs`, `option`, `option.value()` )))
 	    if option.value == []: # Void case - the tricky one
 		succ = g.each(subj=lhs, pred=BNF.canPrecede)
 		for y in succ:
-		    print "\t\t\tCan precede ", `y`
-	print "\t\tConditions: %s" %(conditions)
+		    if chatty_flag: progress("\t\t\tCan precede ", `y`)
+	if chatty_flag: progress("\t\tConditions: %s" %(conditions))
 	for str1 in conditions:
 	    if str1 in branchDict:
-		print recordError("Conflict: %s is also the condition for %s" % (
-				str1, branchDict[str1].value()))
+		progress(recordError(
+		    "Conflict: %s is also the condition for %s" % (
+				str1, branchDict[str1].value())))
 	    branchDict[str1.__str__()] = option
 #	    break
 
@@ -192,10 +196,8 @@ def doProduction(lhs):
 	    s2 = str2.__str__()
 # @@ check that selectors are distinct, not substrings
 	    if (s1.startswith(s2) or s2.startswith(s1)) and branchDict[str1] is not branchDict[str2]:
-		print "WARNING: for %s, %s indicates %s, but  %s indicates %s" % (
-			    lhs, s1, branchDict[str1], s2, branchDict[str2])
-#		print recordError("Conflict: for %s, %s indicates %s, but  %s indicates %s" % (
-#			    option.value(), s1, branchDict[str1], s2, branchDict[str2]))
+		progress("WARNING: for %s, %s indicates %s, but  %s indicates %s" % (
+			    lhs, s1, branchDict[str1], s2, branchDict[str2]))
     branchTable[lhs] = branchDict
 
 
@@ -207,9 +209,9 @@ notQNameChars = singleCharacterSelectors + "@"  # Assume anything else valid qna
 notNameChars = notQNameChars + ":"  # Assume anything else valid name :-/
 #quotedString = re.compile(r'"([^\n"\\]|(\\[\\"a-z]))*"')   # @@@ Missing: \U escapes etc
 #quotedString = re.compile(r'"[^\n"\\]+"')   # @@@ Missing: \U escapes etc"
-quotedString = re.compile("[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"")  # See n3.n3
+#quotedString = re.compile("[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"")  # See n3.n3
 # was tripleQuotedString = re.compile(r'""".*"""')	# @@@ Missing: any control on the content.
-tripleQuotedString = re.compile("[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\"")
+# tripleQuotedString = re.compile("[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\"")
 
 class PredictiveParser:
     """A parser for N3 or derived languages"""
@@ -220,12 +222,21 @@ class PredictiveParser:
 	parser.branchTable = branchTable
 	parser.tokenRegexps = tokenRegexps
 	parser.lineNumber = 1
+	parser.startOfLine = 0	# Offset in buffer
 	parser.keywords = [ "a", "is", "of", "this" ]
 	parser.verb = 0  # Verbosity
 	
-    def token(parser, str, i):
-	"""The Tokenizer: Returns (token type, start of token)
+    def countLines(parser, buffer, here):
+	"""Count lines since called last time
 	
+	Make sure we count all lines
+	"""
+	parser.lineNumber+= buffer[parser.startOfLine:here].count("\n")
+	parser.startOfLine = here
+
+    def token(parser, str, i):
+	"""The Tokenizer:  returns (token type character, offset of token)
+	Skips spaces.
 	"0" means numeric
 	"a" means alphanumeric
 	"""
@@ -233,13 +244,13 @@ class PredictiveParser:
 	while 1:
 	    m = whiteSpace.match(str, i)
 	    if m == None or m.end() == i: break
-	    parser.lineNumber += str[i: m.end()].count("\n")
 	    i = m.end()
+	    parser.countLines(str, i)
 	if i == len(str):
 	    return "",  i # eof
 	
-	if parser.verb: print "%i) Looking at:  ...%s$%s..." % (
-	    parser.lineNumber, str[i-10:i],str[i:i+10])
+	if parser.verb: progress( "%i) Looking at:  ...%s$%s..." % (
+	    parser.lineNumber, str[i-10:i],str[i:i+10]))
 	for double in "=>", "<=", "^^":
 	    if double == str[i:i+2]: return double, i
     
@@ -256,15 +267,9 @@ class PredictiveParser:
 	    if str[i+1:j] == "keywords" : parser.keywords = [] # Special
 	    return str[i:j], i # keyword
 	if ch == '"':  #"
-#	    if str[i+1:i+3] == '""':  # Triple quoted
-#		m = tripleQuotedString.match(str,i+3)
-#	    else:
-#		m = quotedString.match(str,i+1)
-#	    if m == None: return '""', -1  # Error
-#	    parser.lineNumber += str[i: m.end()].count("\n")
-#	    i = m.end()
 	    return '"', i #"
    
+	# Alphanumeric: keyword hacks
 	while str[j] not in notQNameChars: j = j+1
 	word = str[i:j]
 	if word in parser.keywords:
@@ -293,7 +298,7 @@ class PredictiveParser:
 	if rhs == None: raise SyntaxError(
 		"Found %s when expecting some form of %s,\n\tsuch as %s\n\t%s"
 		    %(tok, lhs, lookupTable.keys(), parser.around(str, here)))
-	print "%i  %s means expand %s as %s" %(parser.lineNumber,tok, lhs, rhs.value())
+	if parser.verb: progress( "%i  %s means expand %s as %s" %(parser.lineNumber,tok, lhs, rhs.value()))
 	for term in rhs:
 	    if isinstance(term, Literal): # CFG Terminal
 		lit = term.value()
@@ -312,7 +317,7 @@ class PredictiveParser:
 		if m == None:
 		    raise SyntaxError("Token: should match %s\n\t" % 
 				(rexp.pattern, parser.around(str, here)))
-		print "Token matched to <%s> as pattern <%s>" % (str[here:m.end()], rexp.pattern)
+		if parser.verb: progress( "Token matched to <%s> as pattern <%s>" % (str[here:m.end()], rexp.pattern))
 		next = m.end()
 	    tok, here = parser.token(str, next)  # Next token
 	return tok, here
@@ -328,11 +333,12 @@ def _test():
 # The Grammar formula
 
 grammarFile = argv[1].split("#")[0]
-print "Loading", grammarFile
+progress("Loading " + grammarFile)
 start = clock()
 g = load(grammarFile)
 taken = clock() - start
-print "Loaded %i statements in %fs, ie %f/s." % (len(g), taken, len(g)/taken)
+progress("Loaded %i statements in %fs, ie %f/s." %
+    (len(g), taken, len(g)/taken))
 
 document = g.newSymbol(argv[2])
 
@@ -350,16 +356,18 @@ while agenda:
     doProduction(x)
     
 if errors != []:
-    print "###### FAILED with %i errors." % len(errors)
-    for s in errors: print "\t%s" % s
+    progress("###### FAILED with %i errors." % len(errors))
+    for s in errors: progress ("\t%s" % s)
     exit(-2)
 else:
-    print "Ok for predictive parsing"
+    progress( "Ok for predictive parsing")
 
-#print "Branch table:", branchTable
-print "Literal terminals:", literalTerminals.keys()
-print "Token regular expressions:"
-for r in tokenRegexps: print "\t%s matches %s" %(r, tokenRegexps[r].pattern) 
+#if parser.verb: progress "Branch table:", branchTable
+if chatty_flag:
+    progress( "Literal terminals: %s" %  literalTerminals.keys())
+    progress("Token regular expressions:")
+    for r in tokenRegexps:
+	progress( "\t%s matches %s" %(r, tokenRegexps[r].pattern) )
 
 yacc=open(argv[1]+"-yacc.y", "w")
 yaccConvert(yacc, document, tokenRegexps)
