@@ -24,6 +24,7 @@ operators = {
     LX.logic.OR:        [ 790, "xfy", " | " ],
     LX.logic.AND:       [ 780, "xfy", " & " ],
     LX.logic.NOT:       [ 710, "fx", " -" ],
+    LX.logic.EQUALS:    [ 600, "xfx", " = " ],
     }
 
 def univar(count):
@@ -76,11 +77,12 @@ def escapeUnlessSafe(s, safe=verysafe):
 
 class Serializer:
 
-    def __init__(self, stream, flags=""):
+    def __init__(self, stream=None, flags=""):
         self.stream = stream
         self.mace = flags.count("m")
-        print "Flags:", self.mace, flags
+        # print "Flags:", self.mace, flags
         self.constCount = 0
+        self.nsused = { }
 
     def makeComment(self, comment):
         self.stream.write("% "+comment.replace("\n","\\n")+"\n")
@@ -108,6 +110,12 @@ class Serializer:
                     result += "\n)"
                 result += ".\n"
             result = result[:-1]
+
+            nspres = self.nsused.keys()
+            nspres.sort()
+            for pre in nspres:
+                self.makeComment(" prefix %s_ <%s#>" % (pre, self.nsused[pre]))
+
             self.stream.write(result)
             self.stream.write("\n")
         else:
@@ -117,28 +125,36 @@ class Serializer:
     def prename(self, f, names, counter):
         global ns
         if names.has_key(f): return
+        if operators.has_key(f): return
         if f.isAtomic():
             #print "What to do with:", f
             result = None
-            if isinstance(f, LX.logic.Constant):
+            if (isinstance(f, LX.logic.Constant) or
+                isinstance(f, LX.logic.Predicate) or 
+                isinstance(f, LX.logic.Function)):
                 s = str(f)
                 try:
                     (pre,post) = s.split("#")
                     result = ns[pre]+"_"+post
+                    self.nsused[ns[pre]] = pre
                 except KeyError:
                     ns[pre] = "ns"+str(len(ns))
-                    ###print "# autoprefix %s %s" % (ns[pre], pre)    # @@@@@@
+                    self.nsused[ns[pre]] = pre
+                    # self.makeComment("autoprefix %s %s" % (ns[pre], pre))
                     result = ns[pre]+"_"+post
                 except ValueError:
-                    if self.mace == 0:
-                        result = "'"+escapeUnlessSafe(str(f),safe=mostchars)+"'"
+                    ee = escapeUnlessSafe(s)
+                    if s == ee:
+                        result = s
+                    elif self.mace == 0:
+                        result = "'"+escapeUnlessSafe(s,safe=mostchars)+"'"
                     elif self.mace == 1:
-                        result = "uri_"+escapeUnlessSafe(str(f))
-                        self.makeComment(result+" is "+str(f))
+                        result = "uri_"+escapeUnlessSafe(s)
+                        self.makeComment(result+" is "+s)
                     else:    # mace mace
                         result = "const"+str(self.constCount);
                         self.constCount += 1
-                        self.makeComment(result+" is "+str(f))
+                        self.makeComment(result+" is "+s)
             elif isinstance(f, LX.logic.UniVar):
                 result = univar(counter["u"])
                 counter["x"].append(result)
@@ -146,6 +162,10 @@ class Serializer:
             elif isinstance(f, LX.logic.ExiVar):
                 result = exivar(+counter["e"])
                 counter["e"] += 1
+            else:
+                raise RuntimeError, ("Can't serialize term %s of class %s" %
+                                     (str(f), f.__class__))
+            #print "names %s is %s" % (f, result)
             names[f] = result
         else:
             for t in f.all:
@@ -159,7 +179,10 @@ def serialize(kb):
     return str.getvalue()
 
 # $Log$
-# Revision 1.7  2003-02-14 17:21:59  sandro
+# Revision 1.8  2003-02-14 19:40:32  sandro
+# working lbase -> otter translation, with regression test
+#
+# Revision 1.7  2003/02/14 17:21:59  sandro
 # Switched to import-as-needed for LX languages and engines
 #
 # Revision 1.6  2003/02/14 00:36:08  sandro

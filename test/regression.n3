@@ -6,7 +6,6 @@
 @prefix x: <#>.
 @prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
 
-
 :t1001 a test:CwmTest;
     test:shortFileName "animal.n3";
     test:description   "Parse a small RDF file, generate N3";
@@ -402,6 +401,13 @@
     test:shortFileName	"defdoc2-out.n3";
     test:description	"Look up values in 2 definitive documents";
     test:arguments	"--mode=rse dbork/defdoc2.n3 --think".
+
+:t3001 a test:CwmTest;
+    test:shortFileName "lbase-to-otter";
+    test:description   "Parse lbase, serialize as otter (no llyn involvement)";
+    test:arguments     """--language=lbase lbase/note-long-example.lbase --language=otter""".
+    
+
 
 # Test proof generation -- see also the -p option of retest.py
 

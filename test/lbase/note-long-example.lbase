@@ -10,11 +10,11 @@ not F(?x).
 rdfs:Class(?y) implies (?y(?x) iff rdf:type(?x,?y)).
 (rdfs:range(?x,?y) and ?x(?u,?v)) implies ?y(?v).
 (rdfs:domain(?x,?y) and ?x(?u,?v)) implies ?y(?u).
-(rdfs:subClassOf(?x,?y) iff
+rdfs:subClassOf(?x,?y) iff
   (rdfs:Class(?x) and rdfs:Class(?y) and (forall
           (?u)(?x(?u) implies ?y(?u)))
 ).
-(rdfs:subPropertyOf(?x,?y) iff
+rdfs:subPropertyOf(?x,?y) iff
   (rdf:Property(?x) and rdf:Property(?y) and
           (forall (?u ?v)(?x(?u,?v) implies ?y(?u,?v)))
 ).

@@ -431,7 +431,7 @@ import urllib
 
 class Parser:
 
-    def __init__(self, sink=None):
+    def __init__(self, sink=None, flags=""):
         self.kb = sink
 
     def load(self, inputURI):
@@ -453,7 +453,10 @@ class Serializer:
         pass
 
 # $Log$
-# Revision 1.7  2003-02-14 17:21:59  sandro
+# Revision 1.8  2003-02-14 19:40:32  sandro
+# working lbase -> otter translation, with regression test
+#
+# Revision 1.7  2003/02/14 17:21:59  sandro
 # Switched to import-as-needed for LX languages and engines
 #
 # Revision 1.6  2003/02/14 14:47:24  sandro
