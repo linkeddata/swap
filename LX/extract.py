@@ -2,6 +2,7 @@ from sys import stderr
 
 import LX.kb
 import LX.rdf
+import types
 from LX.namespace import ns
 
 class Extracted:
@@ -25,8 +26,56 @@ class TooManyConstructors(RuntimeError):
     def __str__(self):
         return ("Term "+str(term)+" has too classes mapping to >1 constructor")
         #   ", ".join(map(str, classes))+
+
+def findTypes(kb, typeMap=None):
+    """Return a map from terms to a hash whose keys are their RDF
+    types (also terms).
+
+    Uses ns.rdf.type, assumes the object of those are themselves
+    instances of ns.rdfs.Class, and assumes anything in the predicate
+    position is an ns.rdf.Property.
+
+    Will add to an existing map, if given it.
+    """
+
+    if typeMap is None:
+        typeMap= {}
+
+    for f in kb:
+        if f.predicate == ns.rdf.type:
+            typeMap.setdefault(f.object, {})[ns.rdfs.Class] = 1
+            typeMap.setdefault(f.subject, {})[f.object] = 1
+        typeMap.setdefault(f.predicate, {})[ns.rdf.Property] = 1
+
+    return typeMap
+
+def useSubClassOf(typemap, ontkb):
+    """Expand a typemap based on all the rdfs:subClassOf arcs in a
+    given ontology/schema kb."""
+    raise NotImplemented
     
-def extract(kb, classMap, classesOf=None, constructorArgs=(), constructorKWArgs={}):
+
+def gather(classes, ctorMap, depth=4):
+    """Dive into module or list of modules or classes to find classes
+    with an rdfType attribute; return mapping from rdfTypes to the
+    associated classes (as dict keys)
+    """
+    if depth<=0: return
+    if not hasattr(classes, "__iter__"): classes=(classes,)
+    for x in classes:
+        if type(x) is types.ModuleType:
+            gather(x.__dict__.values(), ctorMap, depth=depth-1)
+        elif type(x) is types.ClassType:
+            try:
+                uri = x.rdfType
+            except AttributeError, error:
+                continue
+            print "U", uri, x
+            ctorMap.setdefault(uri, []).append(x)
+     
+def extract(kb, classes,
+            constructorArgs=(), constructorKWArgs={},
+            typemap=None):
     """Create Python instances for RDF instances of certain rdf types.
 
     classMap is a hash from rdf types (terms) to python classes
@@ -43,17 +92,19 @@ def extract(kb, classMap, classesOf=None, constructorArgs=(), constructorKWArgs=
     """
 
     extracted = {}
-    if classesOf is None:
-        classesOf= {}
 
-    for f in kb:
-        if f.predicate == ns.rdf.type:
-            classesOf.setdefault(f.object, {})[ns.rdfs.Class] = 1
-            classesOf.setdefault(f.subject, {})[f.object] = 1
-        classesOf.setdefault(f.predicate, {})[ns.rdf.Property] = 1
+    if typemap is None:
+        typemap = findTypes(kb)
 
-    for (term, classHash) in classesOf.iteritems():
+    ctorMap = { }
+    gather(classes, ctorMap)
+
+
+
+    for (term, classHash) in typemap.iteritems():
         myConstructor = None
+        ... for all term's types, gather up their constructors ...
+        
         for (classTerm, constructor) in classMap.iteritems():
             if classHash.has_key(classTerm):
                 if myConstructor is None:
