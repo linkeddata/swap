@@ -221,6 +221,12 @@
     test:description   "log:implies rules, iterating";
     test:arguments     """rules12.n3 -think""".
 
+:t1024a a test:CwmTest;
+    test:referenceOutput <unify/reflexive-ref.n3>;
+    test:description   "match same variable twice in one statement";
+    test:arguments     """unify/reflexive.n3 -think""".
+
+
 # Removed, because the set of things done on --rules is rather indeterminate
 # in the case of a file in which ne rule can lead to another.
 #:t1025 a test:CwmTest;
