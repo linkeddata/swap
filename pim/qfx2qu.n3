@@ -73,7 +73,7 @@ this log:forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x, :y, :z.
 :r  qu:toAccount :y ;
    qu:date :d;
    qu:payee :m;  	# Quicken seems to mix it like this
-   qu:accordingTo :s.	# useful to track the source
+   qu:accordingTo :s;	# useful to track the source
    qu:amount :x .
 }.
 
