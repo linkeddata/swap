@@ -14,21 +14,18 @@ the same thing.""";
 				# should I be using rdfs:seeAlso?
   dc:rights "copyright (c) 2001 W3C (MIT, Keio, INRIA)".
 
+
 @prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
-@prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix : <#>.
 
-# These should be derivable from the axiomatic semantics for DAML+OIL
+contact:mailbox a ont:UnambiguousProperty.
 
-this log:forAll :x, :y, :z, :p, :q.
+[ contact:mailbox <mailto:connolly@w3.org> ] :hairColor :red.
+[ contact:mailbox <mailto:connolly@w3.org> ] :birthPlace :KC.
 
-{ :x :p :y. :x = :z. } log:implies { :z :p :y }.
-{ :x :p :y. :p = :q. } log:implies { :x :q :y }.
-{ :x :p :y. :y = :z. } log:implies { :x :p :z }.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
 
-{  :p a ont:UniqueProperty. } log:implies
- { { :x :p :y. :x :p :z. } log:implies  { :y = :z } }.
+this log:forAll :x.
 
-{  :p a ont:UnambiguousProperty. } log:implies
- { { :x :p :z. :y :p :z. } log:implies  { :x = :y } }.
-
+{ :x :hairColor :red; :birthPlace :KC }
+  log:implies { :test1 a :Success }.

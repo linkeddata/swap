@@ -86,9 +86,14 @@ cwm_test bi-t8.n3 "Simple use of string built-ins" includes/t8.n3 -think
 
 cwm_test bi-t9.n3 "Filter event by date using strcmp BI's" includes/t9br.n3 -think
 
+cwm_test sameDan.n3 "dealing with multiple descriptions of the same thing using log:lessThan, log:uri, daml:equivalentTo" sameDan.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge
+
 
 # $Log$
-# Revision 1.12  2001-06-25 06:35:51  connolly
+# Revision 1.13  2001-07-19 16:56:00  connolly
+# whoohoo! node merging works!
+#
+# Revision 1.12  2001/06/25 06:35:51  connolly
 # fixed some bugs in def relativeURI(base, uri):
 #
 # Revision 1.11  2001/06/13 23:58:48  timbl

@@ -1,0 +1,30 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+<> dc:description """rules for forgetting things that are equal to other things""";
+  rcs:id "$Id$";
+  dc:creator [ 
+	contact:fullName "Dan Connolly";
+	contact:homePage <http://www.w3.org/People/Connolly/>;
+	contact:mailbox <mailto:connolly@w3.org>
+	];
+  dc:relation <sameThing.n3>; #@@ or is dc:relation a class of properties?
+				# should I be using rdfs:seeAlso?
+  dc:rights "copyright (c) 2001 W3C (MIT, Keio, INRIA)".
+
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+this log:forAll :x, :y, :z, :p, :q.
+
+this log:forAll :s1, :s2.
+
+{ :x = :y.
+  :x log:uri :s1.
+  :y log:uri :s2.
+  :s1 log:lessThan :s2.
+}
+  log:implies {
+   :y a log:Chaff.
+#   :s2 :forgottenInFavorOf :s1 # diagnostic/audit info
+  }.
+
