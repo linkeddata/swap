@@ -1,17 +1,20 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <title>Primer - Getting into the semantic web and RDF using N3</title>
   <link href="doc/style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body xml:lang="en" lang="en">
+
 <div class="noprint">
-<a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a>
-| <a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> | Primer
-</div>
+<a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a> | <a
+href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
+href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
+Primer</div>
 
 <h1>Primer: Getting into RDF &amp; Semantic Web using N3</h1>
 
@@ -25,8 +28,7 @@ in its XML syntax, but easier to scribble when getting started.</p>
 <p>In RDF, information is simply a collection of statements, each with a
 subject, verb and object - and nothing else. In N3, you can write an RDF
 triple just like that, with a period:</p>
-<pre>&lt;#pat&gt; &lt;#knows&gt; &lt;#jo&gt; .
-</pre>
+<pre>&lt;#pat&gt; &lt;#knows&gt; &lt;#jo&gt; .</pre>
 
 <p>Everything, be it subject, verb, or object, is identified with a Universal
 Resource Identifier. This is something like &lt;http://www.w3.org/&gt; or
@@ -34,11 +36,10 @@ Resource Identifier. This is something like &lt;http://www.w3.org/&gt; or
 everything is missed out before the "#" it identifies &lt;#pat&gt; in the
 current document whatever it is.</p>
 
-<p>There is one exception: the object (only) can be a 
-literal, such as a string or integer:</p>
-
+<p>There is one exception: the object (only) can be a literal, such as a
+string or integer:</p>
 <pre>&lt;#pat&gt; &lt;#knows&gt; &lt;#jo&gt; .
-&lt;#pat&gt; &lt;#age&gt; "24" .</pre>
+&lt;#pat&gt; &lt;#age&gt; 24 .</pre>
 
 <p>The verb "knows" is in RDF called a "property" and thought of as a noun
 expressing a relation between the two. In fact you can write</p>
@@ -55,7 +56,7 @@ same subject: a semicolon ";" introduces another property of the same
 subject, and a comma introduces another object with the same predicate and
 subject.</p>
 <pre>&lt;#pat&gt; &lt;#child&gt;  &lt;#al&gt;, &lt;#chaz&gt;, &lt;#mo&gt; ;
-       &lt;#age&gt;    "24" ;
+       &lt;#age&gt;    24 ;
        &lt;#eyecolor&gt; "blue" .</pre>
 
 <p>So, for example, the data in the table</p>
@@ -86,15 +87,15 @@ subject.</p>
 </table>
 
 <p>could be written</p>
-<pre>  &lt;#pat&gt;   &lt;#age&gt; "24";  &lt;#eyecolor&gt; "blue" .
-  &lt;#al&gt;    &lt;#age&gt;  "3";  &lt;#eyecolor&gt; "green" .
-  &lt;#jo&gt;    &lt;#age&gt;  "5";  &lt;#eyecolor&gt; "green" .</pre>
+<pre>  &lt;#pat&gt;   &lt;#age&gt; 24;  &lt;#eyecolor&gt; "blue" .
+  &lt;#al&gt;    &lt;#age&gt;  3;  &lt;#eyecolor&gt; "green" .
+  &lt;#jo&gt;    &lt;#age&gt;  5;  &lt;#eyecolor&gt; "green" .</pre>
 
 <p>Sometimes there are things involved in a statement don't actually have any
 identifier you want to give them - you know one exists but you only want to
 give the properties . You represent this by square brackets with the
 properties inside.</p>
-<pre>&lt;#pat&gt; &lt;#child&gt; [ &lt;#age&gt; "4" ] , [ &lt;#age&gt; "3" ].</pre>
+<pre>&lt;#pat&gt; &lt;#child&gt; [ &lt;#age&gt; 4 ] , [ &lt;#age&gt; 3 ].</pre>
 
 <p>You could read this as #pat has a #child which has #age of "4" and a
 #child which has an #age of "3". There are two important things to
@@ -113,9 +114,9 @@ remember</p>
 
 <p>If we actually want to use a name, we could have written the table above
 as</p>
-<pre>  [ &lt;#name&gt; "Pat"; &lt;#age&gt; "24";  &lt;#eyecolor&gt; "blue"  ].
-  [ &lt;#name&gt; "Al" ; &lt;#age&gt;  "3";  &lt;#eyecolor&gt; "green" ].
-  [ &lt;#name&gt; "Jo" ; &lt;#age&gt;  "5";  &lt;#eyecolor&gt; "green" ].</pre>
+<pre>  [ &lt;#name&gt; "Pat"; &lt;#age&gt; 24;  &lt;#eyecolor&gt; "blue"  ].
+  [ &lt;#name&gt; "Al" ; &lt;#age&gt;  3;  &lt;#eyecolor&gt; "green" ].
+  [ &lt;#name&gt; "Jo" ; &lt;#age&gt;  5;  &lt;#eyecolor&gt; "green" ].</pre>
 
 <p>There are many ways of combining square brackets - but you can figure that
 out from the examples later on. There is not much left learn about using N3
@@ -159,10 +160,10 @@ thing. This is much quicker. This is how you will see and write almost all
 your predicates in N3. Once set up, a prefix can be used for the rest of the
 file.</p>
 
-<p>There are an increasingly large number of RDF vocabularies for you
-to refer to - check the <a href="../../../../RDF/">RDF home page</a>
-and things linked from it - and you can build your own for your own
-applications very simply.</p>
+<p>There are an increasingly large number of RDF vocabularies for you to
+refer to - check the <a href="../../../../RDF/">RDF home page</a> and things
+linked from it - and you can build your own for your own applications very
+simply.</p>
 
 <p>From now, on we are going to use some well known namespaces, and so to
 save space, I will just assume the prefixes</p>
@@ -170,15 +171,14 @@ save space, I will just assume the prefixes</p>
 @prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
 @prefix owl:  &lt;http://www.w3.org/2002/07/owl#&gt; .</pre>
 
-<p>These are the RDF, RDF schema, and OWL namespaces,
-respectively. They give us the core terms which we can bootstrap ourselves
-into the semantic web. I am also going to assume that the empty prefix stands
-for the document we are writing, which we can say in N3 as</p>
+<p>These are the RDF, RDF schema, and OWL namespaces, respectively. They give
+us the core terms which we can bootstrap ourselves into the semantic web. I
+am also going to assume that the empty prefix stands for the document we are
+writing, which we can say in N3 as</p>
 <pre>@prefix : &lt;#&gt; .</pre>
 
 <p>This means we could have the example above as</p>
-<pre>:pat :child [ :age "4" ] , [ :age "3" ].</pre>
-
+<pre>:pat :child [ :age 4 ] , [ :age 3 ].</pre>
 
 <p>which is slightly less characters to type. Now you understand how to write
 data in N3, you can start making up your own vocabularies, because they are
@@ -188,15 +188,14 @@ just data themselves.</p>
 
 <p>Things like dc:title above are RDF <dfn><a id="Properties1"
 name="Properties1">Properties</a></dfn>. When you want to define a new
-vocabulary you define new classes of things and new properties.
-When you say what type of thing something is, you say a <dfn><a id="Class2"
+vocabulary you define new classes of things and new properties. When you say
+what type of thing something is, you say a <dfn><a id="Class2"
 name="Class2">Class</a></dfn> it belongs to.</p>
 
 <p>The property which tells you what type something is is
 <code>rdf:type</code> which can be abbreviated to N3 to just <code>a</code>.
 So we can define a class of person</p>
-<pre>:Person a rdfs:Class.
-</pre>
+<pre>:Person a rdfs:Class.</pre>
 
 <p>In the same document, we could introduce an actual person</p>
 <pre>:Pat a :Person.</pre>
@@ -205,11 +204,10 @@ So we can define a class of person</p>
 in many classes. There doesn't have to be any hierarchical relationship --
 think of Person, AnimateObject, Animal, TallPerson, Friend, and so on. If
 there is a relationship between two classes you can state it - check out the
-properties (of classes) in the 
-<a href="http://www.w3.org/TR/rdf-schema/">RDF Schema</a> and <a
-href="http://www.w3.org/TR/owl-guide/">OWL</a> vocabularies.</p>
-<pre>:Woman a rdfs:Class; rdfs:subClassOf :Person .
-</pre>
+properties (of classes) in the <a href="http://www.w3.org/TR/rdf-schema/">RDF
+Schema</a> and <a href="http://www.w3.org/TR/owl-guide/">OWL</a>
+vocabularies.</p>
+<pre>:Woman a rdfs:Class; rdfs:subClassOf :Person .</pre>
 
 <p>A property is something which is used to declare a relationship between
 two things.</p>
@@ -249,58 +247,50 @@ processors process your and others' data in meaningful ways.</p>
 
 <h4>Choosing a namespace and publishing your vocabulary</h4>
 
-<p>Good on-line documentation for vocabulary terms helps people read
-and write RDF data.  Writers need to see how a term is
-supposed to be used; readers need to see what it is supposed to mean.
-People developing software which uses the terms need to know in 
-particular detail exactly what each URI means.
-</p>
+<p>Good on-line documentation for vocabulary terms helps people read and
+write RDF data. Writers need to see how a term is supposed to be used;
+readers need to see what it is supposed to mean. People developing software
+which uses the terms need to know in particular detail exactly what each URI
+means.</p>
 
 <p>If you document your vocabulary using the <a
 href="http://www.w3.org/TR/rdf-schema/">RDF Schema</a> and <a
-href="http://www.w3.org/TR/owl-guide/">OWL</a> vocabularies, then
-your documentation will be machine-readable in a variety of
-interesting and useful ways, as mentioned above and covered
-in more detail in <a href="doc/ontologies">Vocabulary
-Documentation</a>.  
-This kind
-of RDF-documentation-in-RDF is sometimes called a "schema" or an "ontology."
-</p>
+href="http://www.w3.org/TR/owl-guide/">OWL</a> vocabularies, then your
+documentation will be machine-readable in a variety of interesting and useful
+ways, as mentioned above and covered in more detail in <a
+href="doc/ontologies">Vocabulary Documentation</a>. This kind of
+RDF-documentation-in-RDF is sometimes called a "schema" or an "ontology."</p>
 
 <div id="publish">
-<p>The easiest way to help people find your documentation is to make
-the URIs you create as vocabulary terms also work in a web browser.
-This happens automatically if you follow the naming convention we use
-here, where the vocabulary definition document has a URI like
+<p>The easiest way to help people find your documentation is to make the URIs
+you create as vocabulary terms also work in a web browser. This happens
+automatically if you follow the naming convention we use here, where the
+vocabulary definition document has a URI like
 <code>http://example.com/terms</code> and it refers to its terms like
-<code>&lt;#Woman&gt;</code>.   With the @prefix declaration above, this gives
-the URI <code>http://example.com/terms#Woman</code> which should work
-in any browser to display the definition document.</p>
+<code>&lt;#Woman&gt;</code>. With the @prefix declaration above, this gives
+the URI <code>http://example.com/terms#Woman</code> which should work in any
+browser to display the definition document.</p>
 
-<p>Ideally, you should publish your documentation on the web using a
-server and portion of URI-space which are owned by an organization which can
-commit to maintaining them well into the future.  That way, many years
-down the road, RDF data using your terms will still be
-documented and potentially understandable.  
-The convention of putting the current year into the
-URI can help with stability; some day people may be tempted to re-use
-<code>http://example.com/food-vocabulary</code>, but they will
-probably only touch
-<code>http://example.com/2003/food-vocabulary</code>, when they really
-mean to upgrade the documentation there.  In some circumstances you
-can also achieve increased stability by using a specialized domain
-name which may be insulated from possible organizational renaming and
-trademark issues.</p>
+<p>Ideally, you should publish your documentation on the web using a server
+and portion of URI-space which are owned by an organization which can commit
+to maintaining them well into the future. That way, many years down the road,
+RDF data using your terms will still be documented and potentially
+understandable. The convention of putting the current year into the URI can
+help with stability; some day people may be tempted to re-use
+<code>http://example.com/food-vocabulary</code>, but they will probably only
+touch <code>http://example.com/2003/food-vocabulary</code>, when they really
+mean to upgrade the documentation there. In some circumstances you can also
+achieve increased stability by using a specialized domain name which may be
+insulated from possible organizational renaming and trademark issues.</p>
 </div>
 
 <p>Of course if you are just playing around, you can use a file (say
-<code>mydb.n3</code>) in the same directory as the rest of your work.  
-When you do that, your can simply use &lt;<code>mydb.n3#&gt;</code> as
-your namespace identifier, because in N3 (as in HTML), the URIs can
-be specified relative to the current location.</p>
+<code>mydb.n3</code>) in the same directory as the rest of your work. When
+you do that, your can simply use &lt;<code>mydb.n3#&gt;</code> as your
+namespace identifier, because in N3 (as in HTML), the URIs can be specified
+relative to the current location.</p>
 
 <div class="noprint">
-
 <h3>More</h3>
 
 <p>Now you know all you need to start creating your own vocabularies, or
@@ -308,7 +298,6 @@ ontologies, and you have pointers to where to look for the richer ways of
 defining them.You don't have to go any further, as what you have now will
 allow you to create new applications, and create schemas, data files, and
 programs which interchange and manipulate data for the semantic web.</p>
-
 
 <p>At this point, you should be getting the hang of it and be writing stuff.
 To give you some more ideas, though, there is a <a href="Examples">longer
@@ -332,11 +321,10 @@ and long cuts</a></p>
 </ul>
 </div>
 
-
 <div class="noprint">
-<address>Tim BL, with his director hat off<br />
-<small>
-$Id$</small>
+<address>
+  <a href="/People/Berners-Lee/">Tim BL</a>, with his director hat off<br />
+  <small>$Id$</small>
 </address>
 </div>
 </body>
