@@ -11,19 +11,15 @@
 <p><a href="/">W3C </a>| <a href="/2000/01/sw/Overview.html">Semantic
 Web</a></p>
 
-<p></p>
-
 <h1>Cwm</h1>
-
-<p></p>
 
 <p>Cwm is a general-purpose data processor for the semantic web.  It is a
 forward chaining reasoner which can be used for querying, checking,
 transforming and filtering information.  Its core language is RDF, extended
 to include rules, and it uses RDF/XML or N3 serializations as required.</p>
 
-<p>Originally, from "Closed world machine" because it procesed infromation in
-a limited space, cwm does not make any assumptions about a closed world.
+<p>Originally, from "Closed world machine" because it processed information
+in a limited space, cwm does not make any assumptions about a closed world.
 Think of it as defined area but with openings - like a valley. Cwm is written
 in python.</p>
 
@@ -37,7 +33,8 @@ in python.</p>
     semantic web using cwm and n3</li>
 </ul>
 
-<p>Check out other programs which use the same formats:</p>
+<p><a name="Check">Check out other programs which use the same
+formats</a>:</p>
 <ul>
   <li><a href="http://www.agfa.com/w3c/euler/">Euler</a> - a
     backward-chaining reasoner by Jos de Roo</li>
@@ -68,20 +65,21 @@ web.</p>
 <ul>
   <li><strong><a href="http://www.python.org/">Python</a></strong>. That you
     need. It comes with many systems.  If not, on debian type apt-get install
-    python. On OSX, typee <a href="http://fink.sourceforge.net/"><code>fink
+    python. On OSX, type <a href="http://fink.sourceforge.net/"><code>fink
     </code></a><code>install python</code>. On cygwin, select python in the
     setup.exe installer.. </li>
   <li>If you are reading things in RDF/XML format, you will need the
-    <strong>pxml</strong> python extension.  Under debian, type <code>apt-get
-    install pyxml.</code>  Otherwise, untar it and in the right directory
-    type python setup.py install.  Under cygwin, select it in the the cygwin
-    setup.exe.</li>
+    <strong>pyxml</strong> python extension.  Under debian, type
+    <code>apt-get install pyxml.</code>  Otherwise, untar it and in the right
+    directory type python setup.py install.  Under cygwin, select it in the
+    the cygwin setup.exe.</li>
   <li>If you are using the public key cryptography builtins, you will need
-    the amkCrypto python extension. Hopefully the necessary functionality
-    will be in pycryto soon (next release later than 2002/05).  One version
-    had a print statement in number.py#inverse --the print statement needs to
-    be removed.  Edit directory names appropraitely in setup.py then run
-    <code>python setup.py install</code>.  Necessary changes for OSX: @@</li>
+    the <strong>amkCrypto</strong> python extension. Hopefully the necessary
+    functionality will be in pycrypto soon (next release later than 2002/05).
+     One version had a print statement in number.py#inverse --the print
+    statement needs to be removed.  Edit directory names appropriately in
+    setup.py then run <code>python setup.py install</code>.  Necessary
+    changes for OSX: @@</li>
 </ul>
 
 <p>You can do all this under MSWindows but the easiest thing is to install
@@ -99,14 +97,14 @@ or N3 { expression }. The features at the moment include</p>
   <li>Generating RDF or N3 files from the result.</li>
   <li>Pretty printing data so that anonymous nodes are used creatively to
     minimize the number of explicit existentials (generated Ids).</li>
-  <li>Gnerating arbitrary formats (using --strings)</li>
+  <li>Generating arbitrary formats (using --strings)</li>
   <li>Using an internal knowledge of functions to resolve them within a
     query, including:
     <ul>
       <li>Simple math and string operations</li>
       <li>Getting and parsing documents from the web</li>
-      <li>Accessing comamnd line aeguments and environment variables</li>
-      <li>Cryptograhy: hashing, generating keys, signing things and checking
+      <li>Accessing command line arguments and environment variables</li>
+      <li>Cryptography: hashing, generating keys, signing things and checking
         signatures.</li>
     </ul>
   </li>
@@ -132,14 +130,14 @@ are processed in order from left to right.</p>
   <dt>--rdf</dt>
     <dd>input/output format XML/RDF format from now on</dd>
   <dt>--rdf=flags</dt>
-    <dd>as above but sets flags as to ho wRDF is written</dd>
+    <dd>as above but sets flags as to how RDF is written</dd>
   <dt>--n3</dt>
     <dd>input/output is Notation3 from now on.</dd>
   <dt>--n3=flags</dt>
     <dd>as above, but also customizes N3 output.  cwm --help for list of
     flags</dd>
   <dt>--ntriples</dt>
-    <dd>As for n3, but customizied to produce the "ntriples" N3 subset.</dd>
+    <dd>As for n3, but customized to produce the "ntriples" N3 subset.</dd>
   <dt>--rdf1out</dt>
     <dd>output format is RDF. (flag)</dd>
   <dt><em>uri</em></dt>
@@ -183,7 +181,7 @@ how URIs were supposed to work.</p>
 <h4 id="Rule">Rule file format</h4>
 
 <p>A rule file is simply a notation3 file. A rule is a statement which
-asserts an implication using log:imples (where the namespace must be
+asserts an implication using log:implies (where the namespace must be
 http://www.w3.org/2000/10/swap/log#) between premise and a conclusion. The
 premise is simply a template: cwm will search for all combinations of
 statements in the store which match the template.  Variables must be
@@ -199,7 +197,7 @@ this log:forAll &lt;#x&gt; , &lt;#y&gt; .
 
 <p>The @prefix directives define the prefixes log: and mech: as representing
 namespaces.   The this log:forAll line declares #x and #y, two local
-identifiers, as being universaly quantified variables in the context of this
+identifiers, as being universally quantified variables in the context of this
 formula (this).</p>
 
 <h2>Built-in functions</h2>
@@ -304,7 +302,7 @@ to be parsed and re-output.</p>
 
 <h3 id="L311">xml2rdf.py   Parsing RDF/XML</h3>
 
-<p>Based on Python's xmllib, this parser is ocmpatible with the RDF stream
+<p>Based on Python's xmllib, this parser is compatible with the RDF stream
 interface of, notation3.py.  It completes the square of parsers and
 generators.  <strong>Defunct. Now use sax parser and sax2rdf.py.</strong></p>
 <ul>
@@ -344,15 +342,13 @@ documents.</p>
 <h2>Acknowledgements</h2>
 
 <p>Thanks to Dan Connolly for writing the first code and introducing me to
-Python, and him and Sean Palmer and Mark Nottingham for writing code. Thanks
-to Sean for his <a href="http://infomesh.net/2001/cwm/">guide</a> to cwm.
-Thanks for all on #RDFIG for being everything which #RDFIG is.</p>
+Python, and to him and Sean Palmer and Mark Nottingham for writing code.
+Thanks to Sean for his <a href="http://infomesh.net/2001/cwm/">guide</a> to
+cwm. Thanks for all on #RDFIG for being everything which #RDFIG is.</p>
 
 <h2 id="Related">Related work</h2>
-<ul>
-  <li>Jos De Roo, AGFA,<a href="http://www.agfa.com/w3c/euler/">Euler Proof
-    Mechaism</a></li>
-</ul>
+
+<p>See <a href="#Check">above</a></p>
 
 <h2>Places to talk about this</h2>
 <ul>
