@@ -19,7 +19,7 @@ import LX.kb
 ##  Which axioms to use?   all at once?  Some which are theorems?
 ##  Horn form?    ...  lots of work to do here.
 ##
-axiomFile = "otter/owlAx%s.otter"    # temp hack path, etc
+axiomFile = "otter/%s.otter"    # temp hack path, etc
 
 prefixMap = {
 
@@ -68,7 +68,7 @@ def checkConsistency(inputDocument,
                      requiredDatatypes=[],    # dt not impl
                      forbiddenDatatypes=[],
                      maxSeconds=5,
-                     axiomTag="",
+                     axiomTags=(),
                      inputFileName=None,
                      outputFileName=None):
     """An OWL consistency checker takes a document as input, and
@@ -91,15 +91,18 @@ def checkConsistency(inputDocument,
         raise UnsupportedDatatype, dt
 
     kb = LX.kb.KB()
+    kb.firstOrder = True    #   use rdf(s,p,o) instead of p(s,o)
 
     try:
         kb.load(inputDocument)
 
         if entailedDocument:
             kb2 = LX.kb.KB()
+            kb2.firstOrder = True    #   use rdf(s,p,o) instead of p(s,o)
             kb2.load(entailedDocument)
             #print "Adding negated:", kb2
             kb.add(LX.logic.NOT(kb2.asFormula()))
+            #print "Giving us:", kb
 
         # possible huge performance gains by using subset of axioms (when that's not cheating)
         # possible huge performance gains by puting kb [or just kb2 if present] into SOS
@@ -107,7 +110,7 @@ def checkConsistency(inputDocument,
 
         try:
             LX.engine.otter.run(kb, 
-                                includes=[axiomFile % axiomTag],
+                                includes=[axiomFile % tag for tag in axiomTags],
                                 maxSeconds=maxSeconds,
                                 inputFileName=inputFileName,
                                 outputFileName=outputFileName)

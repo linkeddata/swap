@@ -37,6 +37,8 @@ import re
 
 resultsPrefix=",results-"
 
+pubUriPrefix=""
+
 FOAF = Namespace("http://xmlns.com/foaf/0.1/")
 OTEST = Namespace("http://www.w3.org/2002/03owlt/testOntology#")
 TRES = Namespace("http://www.w3.org/2002/03owlt/resultsOntology#")
@@ -110,19 +112,47 @@ skip = {
 
 maxFailed = 999999
 failed = 0
-system = BNode()
+system = URIRef('http://www.w3.org/2003/08/surnia/data/surnia')
     
 def run(store, test, name, input, entailed, expected, resultStore):
 
     global failed
+
+    axiomTags = []
+    
     dtlist = []
     for dt in store.objects(test, OTEST["supportedDatatype"]):
         dtlist.append(dt)
+
+    for er in store.objects(test, RTEST["entailmentRules"]):
+        if str(er) == "http://www.w3.org/1999/02/22-rdf-syntax-ns":
+            tag = "RDF"
+        elif str(er) == "http://www.w3.org/2000/01/rdf-schema":
+            tag = "RDFS"
+        elif str(er) == "http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes":
+            tag = "RDFDT"
+        else:
+            print "skipped; uses unsupported entailmentRules", er
+            return
+        axiomTags.append(tag)
+
+    if 0:
+        try:
+            axiomTags.append("owlAx"+axiomTag.get(str(test)))
+        except TypeError:
+            pass
+        if not axiomTags:
+            axiomTags = ["owlAx"]
+    if not axiomTags:
+        print "skipped; ** NO ENTAILMENT RULES **"
+        return
+    
 
     tag=name
     if tag.endswith("#test"):
         tag = tag[:-5]
     tag = "__".join(tag.split("/"))
+    tag = re.sub("__Manifest.rdf#", "-", tag)
     tag = re.sub("__Manifest", "-", tag)
 
     localMaxSeconds=maxSecondsTable.get(str(test), maxSeconds)
@@ -132,7 +162,7 @@ def run(store, test, name, input, entailed, expected, resultStore):
     
     ifn = resultsPrefix+tag+".otter.in.txt"
     ofn = resultsPrefix+tag+".otter.out.txt"
-    
+
     try:
         start = time.time()
         result = OwlAxiomReasoner.checkConsistency(
@@ -140,7 +170,7 @@ def run(store, test, name, input, entailed, expected, resultStore):
                      entailedDocument=entailed,
                      requiredDatatypes=dtlist,
                      maxSeconds=localMaxSeconds,
-                     axiomTag=axiomTag.get(str(test), ""),
+                     axiomTags=axiomTags,
                      inputFileName=ifn,
                      outputFileName=ofn)
         end = time.time()
@@ -152,7 +182,7 @@ def run(store, test, name, input, entailed, expected, resultStore):
     resultStore.add((this, RDF["type"], TRES["TestRun"]))
     resultStore.add((this, TRES["test"], test))
     resultStore.add((this, TRES["system"], system))
-    resultStore.add((this, TRES["output"], URIRef(os.path.basename(ofn))))
+    resultStore.add((this, TRES["output"], URIRef(pubUriPrefix+os.path.basename(ofn))))
     #resultStore.add((this, TRES["start"],
     #                 Literal("20030203T12:12:12", datatype="xsd:time")))
     
@@ -163,7 +193,7 @@ def run(store, test, name, input, entailed, expected, resultStore):
     else:
         if result == "Unknown":
             print "(...unknown...)"
-            resultStore.add((this, RDF["type"], TRES["IncompleteRun"]))
+            resultStore.add((this, RDF["type"], TRES["UndecidedRun"]))
         else:
             print "Failed, '%s' when expecting '%s'" % (result, expected)
             resultStore.add((this, RDF["type"], TRES["FailingRun"]))
@@ -173,7 +203,9 @@ def run(store, test, name, input, entailed, expected, resultStore):
                     
 def runTests(store, resultStore):
 
-    resultStore.add((system, RDFS["label"], Literal("surnia")))
+    resultStore.add((system, RDFS["label"], Literal("Surnia")))
+    resultStore.add((system, RDFS["comment"], Literal("""Surnia is an OWL Full reasoner using Python (including librdf) for language translation, OTTER for inference, and custom axioms.
+    """)))
     
     for testType in (testTypes):
         print
@@ -181,6 +213,8 @@ def runTests(store, resultStore):
         print
         tests = []
         for s in store.subjects(TYPE, OTEST[testType]):
+            tests.append(s)
+        for s in store.subjects(TYPE, RTEST[testType]):
             tests.append(s)
         tests.sort()
         for s in tests:
@@ -193,6 +227,8 @@ def runTests(store, resultStore):
             name = str(s)
             if name.startswith("http://www.w3.org/2002/03owlt/"):
                 name = name[len("http://www.w3.org/2002/03owlt/"):]
+            if name.startswith("http://www.w3.org/2000/10/rdf-tests/rdfcore/"):
+                name = "rdfcore-" + name[len("http://www.w3.org/2000/10/rdf-tests/rdfcore/"):]
             creator = only(store.objects(s, DC["creator"]))
             status = only(store.objects(s, RTEST["status"]))
 
@@ -213,10 +249,18 @@ def runTests(store, resultStore):
             if testType == "PositiveEntailmentTest":
                 pdoc = only(store.objects(s, RTEST["premiseDocument"]))
                 cdoc = only(store.objects(s, RTEST["conclusionDocument"]))
+                if (cdoc, RDF["type"], RTEST["False-Document"]) in store:
+                    # concluding a False-Document is the same as just
+                    # being inconsistent
+                    cdoc = None
                 run(store, s, name, pdoc, cdoc, "Inconsistent", resultStore)
             elif testType == "NegativeEntailmentTest":
                 pdoc = only(store.objects(s, RTEST["premiseDocument"]))
                 cdoc = only(store.objects(s, RTEST["conclusionDocument"]))
+                if (cdoc, RDF["type"], RTEST["False-Document"]) in store:
+                    # concluding a False-Document is the same as just
+                    # being inconsistent
+                    cdoc = None
                 run(store, s, name, pdoc, cdoc, "Consistent", resultStore)
             elif testType == "InconsistencyTest":
                 idoc = only(store.objects(s, RTEST["inputDocument"]))
@@ -286,9 +330,9 @@ class MyArgHandler(ArgHandler.ArgHandler):
             print "KeyboardInterrupt"
         if resultsPrefix:
             f = resultsPrefix + "results.rdf"
-            print "Writing test results to %s ..." % f,
+            print "\n*** Writing test results to %s ..." % f,
             resultStore.save(f)
-            print " done."
+            print " done.\n"
 
     def handle__maxSeconds(self, timeLimit=1):
         """Time limit for each run of the underlying reasoner.
@@ -320,8 +364,17 @@ class MyArgHandler(ArgHandler.ArgHandler):
         global resultsPrefix
         resultsPrefix = getDirectoryName(prefixPattern)
         if resultsPrefix.endswith("/"):
-            os.makedirs(resultsPrefix)
-    
+            try:
+                os.makedirs(resultsPrefix)
+            except OSError, err:
+                pass    # @@@ assume OSError: [Errno 17] File exists
+
+    def handle__pubPrefix(self, pubPrefix=""):
+        """Beginning of a URI where results files will live,
+        as seen from the outside."""
+        global pubUriPrefix
+        pubUriPrefix = pubPrefix
+        
     def handleNoArgs(self):
         raise ArgHandler.Error, "no options or parameters specified."
 

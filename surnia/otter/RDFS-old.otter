@@ -1,0 +1,76 @@
+% $Id$
+
+% check for internal consistency with something like
+%   mace -P -N 10 -k 768000 < otter/owlAx.otter
+% but it's gotten too big.  :-(
+
+formula_list(usable).
+
+%   Note on "BIDIR"   These are all "->" which logically
+%   could/should be "<->", although the reverse arrows
+%   seems generally unneeded.
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rdfs_subClassOf
+%
+
+all C1 C2 (
+   rdf(C1, rdfs_subClassOf, C2)
+   <->     % <- needed for equivalentClass/Manifest002
+   (all INST (
+     rdf(INST, rdf_type, C1) -> rdf(INST, rdf_type, C2) 
+   ))
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rdfs_subClassOf
+%
+
+all INST C1 C2 (
+   rdf(C1, rdfs_subClassOf, C2)
+   ->    %%  This is the RDF Core definition; does OWL require
+         %%  <-> ???   
+   ( rdf(INST, rdf_type, C1) 
+     -> 
+     rdf(INST, rdf_type, C2) 
+   )
+).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rdfs_range
+%
+
+all PRED CLASS (
+   rdf(PRED, rdfs_range, CLASS) 
+   <->      % maybe needed for FunctionalProperty004
+   (all SUBJ OBJ (
+     rdf(SUBJ, PRED, OBJ) -> rdf(OBJ, rdf_type, CLASS)
+   ))
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rdfs_domain
+%
+
+all PRED CLASS (
+   rdf(PRED, rdfs_domain, CLASS) 
+   <->      % maybe needed for FunctionalProperty004
+   (all SUBJ OBJ (
+     rdf(SUBJ, PRED, OBJ) -> rdf(SUBJ, rdf_type, CLASS)
+   ))
+).
+
+
+% $Log$
+% Revision 1.1  2003-11-07 06:52:30  sandro
+% up to about 70% on RDF Core tests; may have broken OWL stuff
+%
