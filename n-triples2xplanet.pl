@@ -23,6 +23,7 @@
 use strict;
 
 my (@Markers, %X, %Y, %Label, %Align, %Color);
+my ($Map) = 'http://www.w3.org/2000/10/swap/pim/earthMap';
 
 &slurp();
 &burp();
@@ -62,10 +63,12 @@ sub slurp{
 sub burp{
   my($m);
   foreach $m (@Markers){
-    printf ("%s %s %s", $Y{$m}, $X{$m}, $Label{$m});
-    printf (" align=%s", $Align{$m}) if $Align{$m};
-    printf (" color=%s", $Color{$m}) if $Color{$m};
-    print "\n"
+    if($Y{$m} && $X{$m}){
+      printf ("%s %s %s", $Y{$m}, $X{$m}, $Label{$m});
+      printf (" align=%s", $Align{$m}) if $Align{$m};
+      printf (" color=%s", $Color{$m}) if $Color{$m};
+      print "\n"
+    };
   }
 }
 
@@ -76,31 +79,31 @@ sub statement{
   #print STDERR "statement: {$s} {$p} {$o}\n";
 
   if ($p eq 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
-      && $o eq 'http://www.w3.org/2001/02pd/xplanet#Marker'){
+      && $o eq "$Map#Marker"){
     push(@Markers, $s);
   }
-  elsif ($p eq 'http://www.w3.org/2001/02pd/xplanet#label'){
+  elsif ($p eq "$Map#label"){
     $Label{$s} = $o;
   }
-  elsif ($p eq 'http://www.w3.org/2001/02pd/xplanet#x'){
+  elsif ($p eq "$Map#x"){
     $o =~ s/^\"//; $o =~ s/\"$//;
     $X{$s} = $o;
   }
-  elsif ($p eq 'http://www.w3.org/2001/02pd/xplanet#y'){
+  elsif ($p eq "$Map#y"){
     $o =~ s/^\"//; $o =~ s/\"$//;
     $Y{$s} = $o;
   }
-  elsif ($p eq 'http://www.w3.org/2001/02pd/xplanet#xDMSd'){
+  elsif ($p eq "$Map#xDMSd"){
     $X{$s} = fromDMSd($o);
   }
-  elsif ($p eq 'http://www.w3.org/2001/02pd/xplanet#yDMSd'){
+  elsif ($p eq "$Map#yDMSd"){
     $Y{$s} = fromDMSd($o);
   }
-  elsif ($p eq 'http://www.w3.org/2001/02pd/xplanet#align'){
+  elsif ($p eq "$Map#align"){
     $o =~ s/^\"//; $o =~ s/\"$//;
     $Align{$s} = $o;
   }
-  elsif ($p eq 'http://www.w3.org/2001/02pd/xplanet#color'){
+  elsif ($p eq "$Map#color"){
     $o =~ s/^\"//; $o =~ s/\"$//;
     $Color{$s} = $o;
   }
@@ -161,7 +164,10 @@ sub term{
     
 
 # $Log$
-# Revision 1.3  2001-11-11 07:52:07  connolly
+# Revision 1.4  2002-02-10 03:26:42  connolly
+# Jan 23: namespace is in swap/pim now
+#
+# Revision 1.3  2001/11/11 07:52:07  connolly
 # no blank lines (trying to debug xplanet's display of these marker files)
 #
 # Revision 1.2  2001/11/11 03:46:06  connolly
