@@ -1,5 +1,6 @@
 """Triple Maker
 
+$Id$
 Explanation of the API
 
 the functions are addNode(),addNode(), addNode() endStatement() to add a triple

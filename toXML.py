@@ -620,7 +620,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
 	self._thisDoc = thisURI
 	self._flags = flags
 	self._nodeID = {}
-	self._nextnodeID = 0
+	self._nextNodeID = 0
 	self.namedAnonID = 0
 	self._docOpen = 0  # Delay doc open <rdf:RDF .. till after binds
         def doNothing():
@@ -680,7 +680,14 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
         self._docOpen = 0
         self._xwr.endDocument()
 
-    def addNode(self, node):
+    def referenceTo(self, uri):
+	"Conditional relative URI"
+	if "r" in self._flags or self._base == None:
+	    return uri
+	return refTo(self._base, uri)
+
+
+    def addNode(self, node, nameLess = 0):
         if self._modes[-1] == tm.ANONYMOUS and node is not None and self._parts[-1] == tm.NOTHING:
             raise ValueError('You put a dot in a bNode')
         if self._modes[-1] == tm.FORMULA or self._modes[-1] == tm.ANONYMOUS:
@@ -696,25 +703,28 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
                     if subj is not None and node !=  subj:
                         self._closeSubject()
                 elif self._parts[-1] == tm.PREDICATE:
-                    if node == (SYMBOL, RDF_type_URI):
+                    if node == (SYMBOL, RDF_type_URI) and self._classes[-1] is None:
                         #special thing for
                         self._classes[-1] = "Wait"
                     else:
                         if self._classes[-1] is None:
                             self._openSubject(self._triples[-1][tm.SUBJECT])
+                            self._classes[-1] = "Never"
                         #self._openPredicate(node)
                 else:
                     if self._classes[-1] == "Wait":
                         self._classes[-1] = node
-                        self.openSubject(self._triples[-1][tm.SUBJECT])
+                        self._openSubject(self._triples[-1][tm.SUBJECT])
                     else:
                         if node[0] == LITERAL:
                             self._openPredicate(self._triples[-1][tm.PREDICATE], args=(node[2],node[3]))
                             self._writeLiteral(node)
                             self._closePredicate()
-                        elif node[0] == SYMBOL:
+                        elif node[0] == SYMBOL or node[0] == ANONYMOUS:
                             self._openPredicate(self._triples[-1][tm.PREDICATE], obj=node)
                         
+                if nameLess:
+                    node = "NameLess"
                 self._triples[-1][self._parts[-1]] = node
         if self._modes[-1] == tm.ANONYMOUS and self._pathModes[-1] == True:
             self.endStatement()
@@ -727,13 +737,15 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
     def nodeIDize(self, argument):
         q = argument[1]
         if (q[0] == ANONYMOUS or q[0] == SYMBOL) and q[1] in self._nodeID:
+            #print '---', (RDF_NS_URI+' nodeID', self._nodeID[q[1]])
             return (RDF_NS_URI+' nodeID', self._nodeID[q[1]])
-        return (argument[0], q[1])
+        #print '+++', (argument[0], q[1])
+        return (argument[0], self.referenceTo(q[1]))
         
     def _openSubject(self, subject):
-        if subject is not None:
+        if subject != "NameLess":
             subj = subject[1]
-            q = (nodeIDize((RDF_NS_URI+' about', subject)),)
+            q = (self.nodeIDize((RDF_NS_URI+' about', subject)),)
         else:
             q = []
         if self._classes[-1] is None:
@@ -746,6 +758,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
 
     def _closeSubject(self):
         self._xwr.endElement()
+        self._classes[-1] = None
 
     def _openPredicate(self, pred, args=None, obj=None, resource=None):
         if obj is None:
@@ -759,10 +772,11 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
                         attrs.append((RDF_NS_URI+' datatype', dt))
                     if lang is not None:
                         attrs.append((XML_NS_URI+' lang', lang))
-                print pred[1], attrs
+                #print pred[1], attrs
                 self._xwr.startElement(pred[1], attrs, self.prefixes)
         else:
-            self._xwr.emptyElement(pred[1], [nodeIDize((RDF_NS_URI+' resource', obj))], self.prefixes)
+            #print '++', pred[1], ' ++'
+            self._xwr.emptyElement(pred[1], [self.nodeIDize((RDF_NS_URI+' resource', obj))], self.prefixes)
 
     def _closePredicate(self):
         self._xwr.endElement()
@@ -826,6 +840,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
         self.addNode(a)
 
     def addSymbol(self, sym):
+        #print '////', sym
         a = (SYMBOL, sym)
         self.addNode(a)
     
@@ -847,19 +862,21 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
         self._modes.pop()
 
     def addAnonymous(self, Id):
-        a = (tm.ANONYMOUS, Id)
-        self._nodeID[Id] = self.nextNodeID
+        #print '\\\\\\\\', Id
+        a = (ANONYMOUS, Id)
+        if Id not in self._nodeID:
+            self._nodeID[Id] = 'b'+`self._nextNodeID`
         self._nextNodeID += 1
         self.addNode(a)
         
 
     def beginAnonymous(self):
-        a = (tm.ANONYMOUS, 'hi')
-        self.bNodes.append(a)
+        self.namedAnonID += 1
+        a = (ANONYMOUS, `self.namedAnonID`)
         if self._parts[-1] == tm.NOTHING:
-            self._openSubject(None)
-            self._parts[-1] += 1
+            self.addNode(a, nameLess = 1)
         elif self._parts[-1] == tm.PREDICATE:
+            self.bNodes.append(a)
             self._openPredicate(self._triples[-1][tm.PREDICATE], resource=[])
             self._modes.append(tm.ANONYMOUS)
             self._triples.append([a, None, None])
@@ -867,13 +884,12 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
             self._predIsOfs.append(tm.NO)
             self._pathModes.append(False)
         else:
-            self.namedAnonID += 1
             self.addAnonymous(self.namedAnonID)
         
 
     def endAnonymous(self):
         if self._modes[-1] != tm.ANONYMOUS:
-            self.endStatement()
+            #self.endStatement()
             return
         if self._parts[-1] != tm.NOTHING:
             self.endStatement()
