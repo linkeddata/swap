@@ -13,6 +13,9 @@ SWAP=../..
 
 all : t1.checked t2.checked t3.checked t4.checked t5.checked
 
+clean :
+	rm *.proof *.result *.checked *.diff
+
 t5.diff: t5.result  t5.checked
 	diff t5.result t5.checked > $@
 
