@@ -1,0 +1,30 @@
+# See http://www.w3.org/2003/05/27-sw-team-irc#T19-46-32
+#
+#  Hacks:  It can't find P and C inside the formulae,
+#  do the hints give it clues to try.
+#  Also, W and Z have to be explicit as variables instead of []
+#
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix : <#>.
+
+this log:forAll :P, :C.
+
+{
+ :P a :Property.  # Hint
+ :C a :Class.
+    this log:forAll :Y, :Z .
+   
+       { :Z :P :Y } => { :Y a :C}
+
+} => { :P s:range :C }. 
+
+
+
+ this log:forAll :X, :W.
+ :sister a :Property.  # Hint
+ :Woman a :Class.
+
+{  :W :sister :X } =>  { :X a :Woman }.
+
+#ends
