@@ -53,7 +53,7 @@ class Node:
         term = getattr(ns, post)
         result = Path(self, term, invert)
         setattr(self, name, result)   # save the path, don't come to __getattr_ again!
-        assert(getattr(self, name) is result)
+        # assert(getattr(self, name) is result)
         return result
 
     def __str__(self):
@@ -73,8 +73,8 @@ class Node:
     def preFill(self, attr, value, term, invert):
         #print "preFill", self, attr, value, term, invert
         self.arcLists.setdefault((term,invert), []).append(value)
-        l = self.arcLists[(term,invert)]
-        assert(value == l[len(l)-1])
+        #l = self.arcLists[(term,invert)]
+        # assert(value == l[len(l)-1])
         #print "preFilled to: ", self.arcLists[(term,invert)]
         #print 
 
@@ -262,7 +262,10 @@ if __name__ == "__main__":
 
  
 # $Log$
-# Revision 1.5  2003-09-06 04:48:08  sandro
+# Revision 1.6  2003-09-17 17:19:37  sandro
+# remove really really slow asserts
+#
+# Revision 1.5  2003/09/06 04:48:08  sandro
 # added some "wisdom" comments
 #
 # Revision 1.4  2003/09/06 04:45:04  sandro
