@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <title>Primer - Shortcuts</title>
+  <link href="/People/Berners-Lee/general.css" rel="stylesheet"
+  type="text/css" />
+</head>
+
+<body xml:lang="en" lang="en">
+<p><a href="/">W3C</a> | <a href="/2000/01/sw/Overview.html">Semantic Web</a>
+| <a href="Overview.html">SWAP</a></p>
+<br />
+<br />
+
+
+<h1>Primer: Shortcuts and longcuts</h1>
+
+<p>You don't need to know this.  It just makes life easier, and of course
+helps when reading other people's work. Cwm doesn't use many of these forms
+on output, so getting cwm to input and output a file will turn it into the
+form ofN3 you already know.</p>
+
+<h2><a name="Variables" id="Variables">Variables with ?  and _:</a></h2>
+
+<p>So far we have introduce variables for rules using log:forAll.  We have
+introduced existential variables (blank nodes) with log:forSome.  These are
+both special pseudoProperies which are really special langauge things.  There
+are shortcuts under certain circumstances.</p>
+
+<p>When a variable is universally quantified in not the formula itself but
+the surrounding formula, then you can just use ?x. This is in fact what you
+want for rules whcih don't have nested formulae inside the antecentent.</p>
+
+<p>So instead of </p>
+<pre>this log:forAll :x, :y.</pre>
+<pre>{ :x :parent :y } =&gt;  { :y :child :x }.</pre>
+
+<p>you can write</p>
+<pre>{ ?x parent ?y } =&gt;  { ?y :child ?x }.</pre>
+
+<p>which means just the same.   We will use this all the time when writing
+simple rules.  If you need the same variable to appear at several levels,
+then you can't use this form.</p>
+
+<p>The other shortcut is that if you have existentially qualified variables
+in the scope of the whole document, then you can use _:a and so on. (This is
+the same as the ntriples notation)</p>
+
+<p>So instead of writing</p>
+<pre>this log:forSome :a, :b.</pre>
+<pre>:a :hates :b.   :b :loves :a.</pre>
+
+<p>you could just write</p>
+<pre>_:a :hates _:b.   _:b :loves _:a.</pre>
+
+<p></p>
+
+<p>In practice this is very ofetn used in ntriples but in N3, you can
+normally use the [] syntax to avoid usiing any variables at all.</p>
+
+<p>  </p>
+
+<h2><a name="Puctuation" id="Puctuation">Puctuation symbols for implies,
+etc.</a></h2>
+
+<p>When it is used as a predciate (verb) in N3,  log:implies and =&gt;  are
+the same;  daml:equivalentTo and = are the same.</p>
+
+<h3><a name="Paths" id="Paths">Paths</a></h3>
+
+<p>Often it turns out that you need to refer to something indirectly through
+a string of properties, such as "George's mother's assistant's home's
+address' zipcode".   This is traversal of the graph.  In the N3 we have dealt
+with up till now, this would look something like</p>
+<pre>[is con:zipcode of [
+    is con:address of [
+        is con:home of [
+            is off:assistant of [
+                is rel:mother of :George]]]]]</pre>
+
+<p>which reads "that which is the zipcode of that which is the address of
+that which is the home of that which is the assistant of that which is the
+mother of :George", which isn't very conventient to read or write. And this
+is when in ant object-oriented langauge, you would just cascade methods or
+attributes on properties using ".". </p>
+
+<p>To make it easier in N3 there is a shortcut for the above would just be
+written</p>
+<pre>:George.rel:mother.off:assistant.con:home.con:address.con:zipcode</pre>
+
+<p></p>
+
+<p>The dot must be immediately followed by the next thing, with no
+whitespace.</p>
+
+<p>This is  forward traversal of the graph, where with each "." you move from
+something to its property.  So  ?x.con:mailbox is x's  mailbox, and in fact
+in english you can read the "." as  " 's".</p>
+
+<p>You can do backward traversal, using "^" instead of "." as punctuation. So
+if  :me.con:mailbox  means my mailbox, then
+&lt;mailto:ora@lassila.com&gt;^con:mailbox is  that which has
+&lt;mailto:ora@lassila.com&gt; as a mailbox. This backward traversal is less
+usual - you can't do it object-oriented programming langauges -- but
+sometimes its what you need.</p>
+
+<p>Note that there isn't necessraily only one match for a path - often there
+are many, when it is used on the left side of a rule.</p>
+<pre>:me.rel:parent</pre>
+
+<p>would be "Some x such that I have parent x", and </p>
+<pre>:me.rel:parent^rel:parent</pre>
+
+<p>would mean "Some y such that for some x, I had parent x and y had parent
+x", or loosely, some sibling of mine.  In this imaginary ontology,
+".rel:child"  is equivalent to "^rel:parent".</p>
+
+<p>Whatever the sequence of "." and "^", they always are read left to right
+across the page.</p>
+
+<p>These are known as "paths".  If you are used to XML, think: Xpath but
+simpler. If you think of the circles and arrows graph of data, think of a
+path from node to node.</p>
+
+<p></p>
+
+<p><a href="Rules.html">Next: Procesing your data</a></p>
+<br />
+
+<hr />
+
+<p>Tim BL, with his director hat off</p>
+
+<p>$Id$</p>
+</body>
+</html>
