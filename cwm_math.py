@@ -57,6 +57,18 @@ def isString(x):
 # add, take, multiply, divide
 
 
+class BI_absoluteValue(LightBuiltIn, Function):
+    def evaluateObject(self, store, context, subj, subj_py):
+        if isinstance(subj, Literal):
+            t = abs(float(subj.string))
+            if t is not None: return store.intern((LITERAL, tidy(t)))
+
+class BI_rounded(LightBuiltIn, Function):
+    def evaluateObject(self, store, context, subj, subj_py):
+        if isinstance(subj, Literal):
+            t = round(float(subj.string))
+            if t is not None: return store.intern((LITERAL, tidy(t)))
+
 class BI_sum(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py): 
         t = 0
@@ -199,6 +211,8 @@ def register(store):
     str.internFrag('exponentiationOf', BI_exponentiationOf)
 
     str.internFrag('negation', BI_negation)
+    str.internFrag('absoluteValue', BI_absoluteValue)
+    str.internFrag('rounded', BI_rounded)
 
     str.internFrag('greaterThan', BI_greaterThan)
     str.internFrag('notGreaterThan', BI_notGreaterThan)

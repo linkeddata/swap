@@ -68,8 +68,12 @@ Agenda:<br>
 &nbsp;-&nbsp;Find&nbsp;closure&nbsp;for&nbsp;all&nbsp;synonyms<br>
 &nbsp;-&nbsp;Find&nbsp;superclass&nbsp;closure?<br>
 -&nbsp;represent&nbsp;URIs&nbsp;bound&nbsp;to&nbsp;same&nbsp;equivalence&nbsp;closure&nbsp;object?<br>
+&nbsp;-&nbsp;proof&nbsp;generation<br>
+&nbsp;<br>
+-&nbsp;dynamic&nbsp;bultins&nbsp;-&nbsp;ontology&nbsp;for&nbsp;adding&nbsp;python.<br>
 &nbsp;<br>
 BULTINS&nbsp;WE&nbsp;NEED<br>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;{x&nbsp;log:entails&nbsp;y&nbsp;}&nbsp;&lt;=&gt;&nbsp;&nbsp;{&nbsp;x!log:conclusion&nbsp;log:includes&nbsp;y}.&nbsp;&nbsp;&nbsp;&nbsp;[is&nbsp;log:conclusion&nbsp;of&nbsp;x]&nbsp;log:includes&nbsp;y<br>
 &nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;usesNamespace(x,y)&nbsp;&nbsp;&nbsp;#&nbsp;find&nbsp;transitive&nbsp;closure&nbsp;for&nbsp;validation&nbsp;&nbsp;-&nbsp;awful&nbsp;function&nbsp;in&nbsp;reality<br>
 &nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;delegation&nbsp;of&nbsp;query&nbsp;to&nbsp;remote&nbsp;database&nbsp;(cwm&nbsp;or&nbsp;rdbms)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;F&nbsp;impliesUnderThink&nbsp;G.&nbsp;&nbsp;(entails?&nbsp;leadsTo?&nbsp;conclusion?)<br>
@@ -116,7 +120,7 @@ Done<br>
 &nbsp;-&nbsp;Use&nbsp;unambiguous&nbsp;property&nbsp;to&nbsp;infer&nbsp;synomnyms<br>
 &nbsp;&nbsp;&nbsp;(see&nbsp;sameDan.n3&nbsp;test&nbsp;case&nbsp;in&nbsp;test/retest.sh)<br>
 &nbsp;-&nbsp;schema&nbsp;validation&nbsp;-&nbsp;done&nbsp;partly&nbsp;but&nbsp;no&nbsp;"no&nbsp;schema&nbsp;for&nbsp;xx&nbsp;predicate".<br>
-BULTINS&nbsp;WE&nbsp;HAVE&nbsp;DONE<br>
+&nbsp;ULTINS&nbsp;WE&nbsp;HAVE&nbsp;DONE<br>
 &nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;includes(expr1,&nbsp;expr2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(cf&nbsp;&gt;=&nbsp;,&nbsp;&nbsp;dixitInterAlia&nbsp;)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;indirectlyImplies(expr1,&nbsp;expr2)&nbsp;&nbsp;&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;startsWith(x,y)<br>
@@ -134,17 +138,16 @@ research&nbsp;version.&nbsp;Written&nbsp;in&nbsp;C.&nbsp;Of&nbsp;te&nbsp;order&n
 <font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
-<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="RDFSink.html">RDFSink</a><br>
-<a href="StringIO.html">StringIO</a><br>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="StringIO.html">StringIO</a><br>
 <a href="binascii.html">binascii</a><br>
-</td><td width="25%" valign=top><a href="md5.html">md5</a><br>
-<a href="notation3.html">notation3</a><br>
+<a href="md5.html">md5</a><br>
+</td><td width="25%" valign=top><a href="notation3.html">notation3</a><br>
 <a href="re.html">re</a><br>
-</td><td width="25%" valign=top><a href="string.html">string</a><br>
-<a href="sys.html">sys</a><br>
+<a href="string.html">string</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
 <a href="time.html">time</a><br>
-</td><td width="25%" valign=top><a href="uripath.html">uripath</a><br>
-<a href="urllib.html">urllib</a><br>
+<a href="uripath.html">uripath</a><br>
+</td><td width="25%" valign=top><a href="urllib.html">urllib</a><br>
 </td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
@@ -1633,7 +1636,9 @@ Returns&nbsp;&nbsp;number&nbsp;of&nbsp;incoming&nbsp;links&nbsp;(1&nbsp;or&nbsp;
 or&nbsp;zero&nbsp;if&nbsp;self&nbsp;can&nbsp;NOT&nbsp;be&nbsp;represented&nbsp;as&nbsp;an&nbsp;anonymous&nbsp;node.<br>
 Paired&nbsp;with&nbsp;this&nbsp;is&nbsp;whether&nbsp;this&nbsp;is&nbsp;a&nbsp;subexpression.</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-any"><strong>any</strong></a>(self, q)</dt><dd><tt>&nbsp;&nbsp;Quad&nbsp;contains&nbsp;one&nbsp;None&nbsp;as&nbsp;wildcard.&nbsp;Returns&nbsp;first&nbsp;value<br>
+<dl><dt><a name="RDFStore-any"><strong>any</strong></a>(self, q)</dt><dd><tt>Query&nbsp;the&nbsp;store&nbsp;for&nbsp;the&nbsp;first&nbsp;match.<br>
+&nbsp;<br>
+Quad&nbsp;contains&nbsp;one&nbsp;None&nbsp;as&nbsp;wildcard.&nbsp;Returns&nbsp;first&nbsp;value<br>
 matching&nbsp;in&nbsp;that&nbsp;position.</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-applyRules"><strong>applyRules</strong></a>(self, workingContext, filterContext<font color="#909090">=None</font>, targetContext<font color="#909090">=None</font>, universals<font color="#909090">=[]</font>, alreadyDictionary<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Apply&nbsp;rules&nbsp;in&nbsp;one&nbsp;context&nbsp;to&nbsp;the&nbsp;same&nbsp;or&nbsp;another</tt></dd></dl>
@@ -1676,12 +1681,17 @@ If&nbsp;not,&nbsp;record&nbsp;this&nbsp;one&nbsp;and&nbsp;return&nbsp;it.<br>
 Call&nbsp;this&nbsp;when&nbsp;the&nbsp;formula&nbsp;is&nbsp;in&nbsp;its&nbsp;final&nbsp;form,&nbsp;with&nbsp;all&nbsp;its&nbsp;statements.<br>
 Make&nbsp;sure&nbsp;no&nbsp;one&nbsp;else&nbsp;has&nbsp;a&nbsp;copy&nbsp;of&nbsp;the&nbsp;pointer&nbsp;to&nbsp;the&nbsp;smushed&nbsp;one.</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-endFormulaNested"><strong>endFormulaNested</strong></a>(self, F, bindings<font color="#909090">=[]</font>, level<font color="#909090">=0</font>, notThis<font color="#909090">=0</font>)</dt><dd><tt>Cannonicalize&nbsp;this&nbsp;(unloess&nbsp;notThis&nbsp;set)&nbsp;after&nbsp;cannonicalizing&nbsp;any&nbsp;subformulae&nbsp;recusrively<br>
+<dl><dt><a name="RDFStore-endFormulaNested"><strong>endFormulaNested</strong></a>(self, F, bindings<font color="#909090">=[]</font>, level<font color="#909090">=0</font>, notThis<font color="#909090">=0</font>)</dt><dd><tt>Cannonicalize&nbsp;this&nbsp;(unless&nbsp;notThis&nbsp;set)&nbsp;after&nbsp;cannonicalizing&nbsp;any&nbsp;subformulae&nbsp;recursively<br>
 Note&nbsp;the&nbsp;subs&nbsp;must&nbsp;be&nbsp;done&nbsp;first.&nbsp;Also&nbsp;note&nbsp;that&nbsp;we&nbsp;can't&nbsp;assume&nbsp;statements<br>
 or&nbsp;formulae&nbsp;are&nbsp;valid&nbsp;after&nbsp;a&nbsp;call&nbsp;to&nbsp;this,&nbsp;unless&nbsp;we&nbsp;track&nbsp;the<br>
 changes&nbsp;which&nbsp;are&nbsp;kept&nbsp;in&nbsp;a&nbsp;shared&nbsp;list,&nbsp;bindings.</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-extern"><strong>extern</strong></a>(self, t)</dt></dl>
+
+<dl><dt><a name="RDFStore-genId"><strong>genId</strong></a>(self)</dt><dd><tt>Generate&nbsp;a&nbsp;new&nbsp;identifier<br>
+&nbsp;<br>
+This&nbsp;uses&nbsp;the&nbsp;inherited&nbsp;class,&nbsp;but&nbsp;also&nbsp;checks&nbsp;that&nbsp;we&nbsp;haven't&nbsp;for&nbsp;some&nbsp;pathalogical&nbsp;reason<br>
+ended&nbsp;up&nbsp;generating&nbsp;the&nbsp;same&nbsp;one&nbsp;as&nbsp;for&nbsp;example&nbsp;in&nbsp;another&nbsp;run&nbsp;of&nbsp;the&nbsp;same&nbsp;system.</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-initTerm"><strong>initTerm</strong></a>(self, x)</dt><dd><tt>&nbsp;The&nbsp;store&nbsp;initialized&nbsp;the&nbsp;pointers&nbsp;in&nbsp;a&nbsp;new&nbsp;Term</tt></dd></dl>
 
@@ -1714,7 +1724,7 @@ Raises&nbsp;<a href="exceptions.html#IOError">IOError</a>,&nbsp;SyntaxError</tt>
 
 <dl><dt><a name="RDFStore-makeComment"><strong>makeComment</strong></a>(self, str)</dt></dl>
 
-<dl><dt><a name="RDFStore-makeStatement"><strong>makeStatement</strong></a>(self, tuple)</dt><dd><tt>Add&nbsp;a&nbsp;qud&nbsp;to&nbsp;the&nbsp;store,&nbsp;each&nbsp;part&nbsp;of&nbsp;the&nbsp;quad&nbsp;being&nbsp;in&nbsp;pair&nbsp;form.</tt></dd></dl>
+<dl><dt><a name="RDFStore-makeStatement"><strong>makeStatement</strong></a>(self, tuple)</dt><dd><tt>Add&nbsp;a&nbsp;quad&nbsp;to&nbsp;the&nbsp;store,&nbsp;each&nbsp;part&nbsp;of&nbsp;the&nbsp;quad&nbsp;being&nbsp;in&nbsp;pair&nbsp;form.</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-match"><strong>match</strong></a>(self, unmatched, variables, existentials, smartIn<font color="#909090">=[]</font>, action<font color="#909090">=None</font>, param<font color="#909090">=None</font>, hypothetical<font color="#909090">=0</font>, justOne<font color="#909090">=0</font>, level<font color="#909090">=0</font>, meta<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Apply&nbsp;action(bindings,&nbsp;param)&nbsp;to&nbsp;succussful&nbsp;matches</tt></dd></dl>
 
@@ -1786,8 +1796,6 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 
 <hr>
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>
-<dl><dt><a name="RDFStore-genId"><strong>genId</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="RDFStore-newBlankNode"><strong>newBlankNode</strong></a>(self, context)</dt></dl>
 
 <dl><dt><a name="RDFStore-newExistential"><strong>newExistential</strong></a>(self, context, uri<font color="#909090">=None</font>)</dt></dl>
@@ -1996,6 +2004,8 @@ The&nbsp;fact&nbsp;that&nbsp;the&nbsp;sequences&nbsp;are&nbsp;sorted&nbsp;makes&
 <strong>__name__</strong> = 'llyn'<br>
 <strong>cvsRevision</strong> = '$Revision$'<br>
 <strong>doMeta</strong> = 0<br>
+<strong>forAllSym</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>
+<strong>forSomeSym</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
 <strong>generators</strong> = _Feature((2, 2, 0, 'alpha', 1), (2, 3, 0, 'final', 0), 4096)<br>
 <strong>subcontext_cache_context</strong> = None<br>
 <strong>subcontext_cache_subcontexts</strong> = None</td></tr></table>

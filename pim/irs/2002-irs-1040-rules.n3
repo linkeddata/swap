@@ -317,15 +317,16 @@ tf:line44 a form:Calculated;
 
 tf:line45 a form:NumericField;
 	s:label "Foreign tax credit. Attach Form 1116 if required".
+	{ ?my!tf:line45 math:greaterThan "0"} => { ?my s:comment "Attach Form 1116" }.
 
 tf:line46 a form:NumericField;
 	s:label "Credit for child and dependent care expenses. Attach Form 2441".
 
-	{ ?z!tf:line46 math:greaterThan "0"} => { ?z form:attaches [ form:form tf:Form2441 ]}.
+	{ ?z!tf:line46 math:greaterThan "0"} => { ?z s:comment "Attach Form 2441"}.
 
 tf:line47 a form:NumericField;
 	s:label "Credit for the elderly or the disabled. Attach Schedule R".
-	{ ?z!tf:line47 math:greaterThan "0"} => { ?z form:attaches [ form:form tf:ScheduleR ]}.
+	{ ?z!tf:line47 math:greaterThan "0"} => {?z s:comment "Attch Schedule R"}.
 
 
 tf:line48 a form:NumericField;

@@ -164,9 +164,8 @@ class RDFHandler(xml.sax.ContentHandler):
                     if ns != RDF_NS_URI:
                         print ("# Warning -- %s attribute in %s namespace not RDF NS." %
                                name, ln)
-                        ns = RDF_NS_URI  # @@HACK!
+                        ns = RDF_NS_URI  # Allowed as per dajobe: ID, bagID, about, resource, parseType or type
                 uri = (ns + ln).encode('utf-8')
-#               raise NoNS   # @@@ Actually, XML spec says we should get these: parser is wrong
             if ns == RDF_NS_URI or ns == None:   # Opinions vary sometimes none but RDF_NS is common :-(
                 
                 if ln == "ID":

@@ -197,14 +197,22 @@ ValueError:&nbsp;mid:foo@example</tt></dd></dl>
 &gt;&gt;&gt;&nbsp;<a href="#-refTo">refTo</a>('file:/ex/x/y',&nbsp;'file:/ex/x/q/r#s')<br>
 'q/r#s'<br>
 &nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#-refTo">refTo</a>(None,&nbsp;'<a href="http://ex/x/y">http://ex/x/y</a>')<br>
+'<a href="http://ex/x/y">http://ex/x/y</a>'<br>
+&nbsp;<br>
 &gt;&gt;&gt;&nbsp;<a href="#-refTo">refTo</a>('<a href="http://ex/x/y">http://ex/x/y</a>',&nbsp;'<a href="http://ex/x/y">http://ex/x/y</a>')<br>
 ''<br>
+&nbsp;<br>
 &nbsp;<br>
 This&nbsp;one&nbsp;checks&nbsp;that&nbsp;it&nbsp;uses&nbsp;a&nbsp;root-realtive&nbsp;one&nbsp;where&nbsp;that&nbsp;is<br>
 all&nbsp;they&nbsp;share.&nbsp;&nbsp;Now&nbsp;uses&nbsp;root-relative&nbsp;where&nbsp;no&nbsp;path&nbsp;is&nbsp;shared.<br>
 This&nbsp;is&nbsp;a&nbsp;matter&nbsp;of&nbsp;taste&nbsp;but&nbsp;tends&nbsp;to&nbsp;give&nbsp;more&nbsp;resilience&nbsp;IMHO<br>
 --&nbsp;and&nbsp;shorter&nbsp;paths<br>
 &nbsp;<br>
+Note&nbsp;that&nbsp;base&nbsp;may&nbsp;be&nbsp;None,&nbsp;meaning&nbsp;no&nbsp;base.&nbsp;&nbsp;In&nbsp;some&nbsp;situations,&nbsp;there<br>
+just&nbsp;ain't&nbsp;a&nbsp;base.&nbsp;Slife.&nbsp;In&nbsp;these&nbsp;cases,&nbsp;relTo&nbsp;returns&nbsp;the&nbsp;absolute&nbsp;value.<br>
+The&nbsp;axiom&nbsp;abs(,rel(b,x))=x&nbsp;still&nbsp;holds.<br>
+This&nbsp;saves&nbsp;people&nbsp;having&nbsp;to&nbsp;set&nbsp;the&nbsp;base&nbsp;to&nbsp;"bogus:".<br>
 &nbsp;<br>
 &gt;&gt;&gt;&nbsp;<a href="#-refTo">refTo</a>('<a href="http://ex/x/y/z">http://ex/x/y/z</a>',&nbsp;'<a href="http://ex/r">http://ex/r</a>')<br>
 '/r'</tt></dd></dl>

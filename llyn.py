@@ -2271,11 +2271,11 @@ class RDFStore(RDFSink) :
 #        for v in clashes:
         for v in vars:
             b2.append((v, store.newInterned(ANONYMOUS))) # Regenerate names to avoid clash
-        if verbosity()>20:
+        if verbosity()>10:
             progress( "Concluding definitively" + bindingsToString(b2) )
         before = self.size
         self.copyContextRecursive(conclusion, targetContext, b2)
-        if verbosity()>20:
+        if verbosity()>30:
             progress( "  Size of store changed from %i to %i"%(before, self.size))
         return self.size - before
 
