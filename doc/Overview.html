@@ -12,13 +12,47 @@
 <p>This is an introduction to semantic web ideas aimed at someone with
 experience in programming, perhaps with web sites and scripting, who wants to
 understand how RDF is useful in practice.</p>
+<ol>
+<li>SECTION 1: Triples, Queries, and Rules
+
 <ul>
   <li><a href="../Primer.html">Primer: Getting into RDF &amp; Semantic Web
     using N3</a></li>
   <li><a href="Shortcuts.html">Shorthand: Paths and Lists</a></li>
   <li>Sidebar: Comparing with other data formats (TBD)</li>
+</ul>
+
+<pre>
+
+* Making Statements; simple assertions of triples (, ; . strings numbers :foo &lt;foo> has is/of)
+     show comparable versions in diagram, prolog, rdf/xml [via cwm?]
+
+* Asking Questions; queries using --filter and  {...}=>{...}  
+    examples using website metadata, friendships   [real or toy?]
+* Providing Rules: using {...}=>{...}  
+* Making It Go: installing cwm, running cwm, using the cwm-demo web form [ for break ]
+</pre>
+</li>
+
+<li>SECTION 2: Shared Meaning, More Syntactic Sugar
+<ul>
   <li><a href="Rules.html">Writing rules</a></li>
   <li><a href="Processing.html">Processing RDF data using rules</a></li>
+</ul>
+
+<pre>
+* shared meaning via URIs
+* vocabulary/ontology design
+    example using rules to do ontology mapping      [real or toy?]
+    rdfs semantics with rules
+* [], (), ., _:foo, ( ^^ not implemented )
+* log:semantics teaser
+</pre>
+</li>
+
+
+<li>SECTION 3: Declarative Logic Programming with cwm/n3
+<ul>
   <li><a href="Built-In.html">Built-in functions in rules</a> 
     <p><a href="CwmBuiltins.html">List of built-in functions in cwm</a></p>
   </li>
@@ -29,24 +63,6 @@ understand how RDF is useful in practice.</p>
 </ul>
 
 <pre>
-SECTION 1: Triples, Queries, and Rules
-* Making Statements; simple assertions of triples (, ; . strings numbers :foo <foo> has is/of)
-     show comparable versions in diagram, prolog, rdf/xml [via cwm?]
-
-* Asking Questions; queries using --filter and  {...}=>{...}  
-    examples using website metadata, friendships   [real or toy?]
-* Providing Rules: using {...}=>{...}  
-* Making It Go: installing cwm, running cwm, using the cwm-demo web form [ for break ]
-
-SECTION 2: Shared Meaning, More Syntactic Sugar
-* shared meaning via URIs
-* vocabulary/ontology design
-    example using rules to do ontology mapping      [real or toy?]
-    rdfs semantics with rules
-* [], (), ., _:foo, ( ^^ not implemented )
-* log:semantics teaser
-
-SECTION 3: Declarative Logic Programming with cwm/n3
 * builtins,  standard libary
      Using Builtins -- they only go on the left hand side
                     -- they take a list if they need more args
@@ -55,13 +71,15 @@ SECTION 3: Declarative Logic Programming with cwm/n3
      chaff?
 * reaching out to the web
     schema validation example
+</pre>
 
-SECTION 4: Two Serious Examples
+<li>SECTION 4: Two Serious Examples
+<pre>
 * database access example
 * crypto example
 
 OMIT:
-* more-than-horn expresivity (open disjunction & negation)
+* more-than-horn expresivity (open disjunction &amp; negation)
 * existentials in rule consequent ("every person has a father, who is
 a person.").   point this out as dangerous?   point it out as turing
 complete?
@@ -72,8 +90,10 @@ Advice:
 thing.
 
 </pre>
+</li>
+</ol>
 
-<hr>
+<hr />
 <p>$Id$</p>
 </body>
 </html>
