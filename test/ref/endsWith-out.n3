@@ -1,0 +1,64 @@
+     @prefix : <#> .
+     @prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
+     @prefix dc: <http://purl.org/dc/elements/1.1/> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix rcs: <http://www.w3.org/2001/03swell/rcs#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     log:forAll :p,
+                :q,
+                :x,
+                :y,
+                :z .
+    
+    <>     <http://purl.org/dc/elements/1.1/creator>  [
+             contact:fullName "Tim berners-Lee";
+             contact:homePage <http://www.w3.org/People/Berners-Lee/>;
+             contact:mailbox <mailto:timbl@w3.org> ];
+         <http://purl.org/dc/elements/1.1/description> "Test endswith";
+         <http://purl.org/dc/elements/1.1/rights> "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
+         rcs:id "" .
+    
+    :test1     a :success .
+    
+    :test3     a :success .
+    
+    :test6     a :success .
+    
+    :test7     a :success .
+    {
+        ""     string:endsWith "" .
+        
+        }     log:implies {:test7     a :success .
+        } .
+    {
+        "asdfghjkl"     string:endsWith "aaajkl" .
+        
+        }     log:implies {:test4     a :FAILURE .
+        } .
+    {
+        "asdfghjkl"     string:endsWith "jkk" .
+        
+        }     log:implies {:test2     a :FAILURE .
+        } .
+    {
+        "asdfghjkl"     string:endsWith "jkl" .
+        
+        }     log:implies {:test1     a :success .
+        } .
+    {
+        "asdfjhkh"     string:endsWith "asd" .
+        
+        }     log:implies {:test5     a :FAILURE .
+        } .
+    {
+        "foobar"     string:endsWith "" .
+        
+        }     log:implies {:test6     a :success .
+        } .
+    {
+        "jkl"     string:endsWith "jkl" .
+        
+        }     log:implies {:test3     a :success .
+        } .
+    
