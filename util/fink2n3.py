@@ -16,17 +16,18 @@ import re
 PREFIX="/sw"
 
 version = "$Id$"[1:-1]
-macros = { "N": "Package", "n":"Package",  "v":"Version", "r": "Revision",
+macros = { "N": "_parent", "n":"Package",  "v":"Version", "r": "Revision",
 	    "p": "_prefix", "P": "_prefix"}
 
 comment = re.compile(r'^(.*?)#.*$')
-header = re.compile(r'^ *([-A-Za-z0-9]*): *(.*) *$')
+header = re.compile(r'^\s*([-A-Za-z0-9]*):\s*(.*)\s*$')
 contact = re.compile(r'([-A-Za-z0-9]+) +([-A-Za-z0-9-]+) *<([-_A-Za-z0-9@\.+]*)>')
 contact2 = re.compile(r'None *<([-_A-Za-z0-9@\.+]*)>')
 contact3 = re.compile(r'^.*(.*?) *<([-_A-Za-z0-9@\.+]*)>')  # @@@@@@@ I18n
 qualified = re.compile(r'(.*)(\(.*\)) *')
+terminator = re.compile(r'^ *<< *$')   # must be on a line all by itself, save whitespace
 blank = re.compile(r'[ \t]*')
-
+commaEnd = re.compile(r'.*, *$')
 import  notation3
 
 def ss(str):
@@ -48,12 +49,14 @@ def expand(str, dict):
     while 1:
 	x = str.find("%")
 	if x < 0: break
+	c = str[x+1]
 	try:
-	    str = str[:x] + dict[macros[str[x+1]]].strip() + str[x+2:]
+	    str = str[:x] + dict[macros[c]].strip() + str[x+2:]
 	except KeyError:
 	    print "@@@@@ dict is", dict
 	    print "@@@@@ macros are", macros
 	    raise RuntimeError("Macros fails with"+str[x+1]+`dict`)
+#    print "#@@ expanded to", str
     return str
 
 def makePackageList(str, dict):
@@ -67,11 +70,13 @@ def makePackageList(str, dict):
 	    str = str [x+1:]
 	return res + "fink:option %s]" % makePackageList(str, dict)
 
+    str = str.strip()
     m = qualified.match(str)
     if m:
         str = m.group(1)   # strip off qualifications @@@@@@@@ losing info here
-#	print "@@@@@@@@@@@@@@@@@@@ CUT OUT QUALIFIER IN ", str
 
+    if str.find("(") >=0:
+	raise RuntimeError("Qualifier stripping failed for '%s'\nwith m=%s"%(str,m))
     str = expand(str,dict)
 
     while 1:
@@ -96,22 +101,23 @@ def prefixes():
 
 
 def convert(path):
-    """Convert Fink info format to n3"""
-    print "# Start info from", path
-    global nochange
-    global verbose
-    current = { "_prefix": PREFIX}
-    currentPackage = None
-    dict = {}
-
+    print "# Start of info from", path
     input = open(path, "r")
     buf = input.read()  # Read the file
     input.close()
-    i = 0
+    print "# End of info from", path
+    return convertString(buf, path)
+    
+def convertString(buf, path, nested=0, i=0, parent=None):
+    """Convert Fink info format to n3"""
+    global nochange
+    global verbose
+    current = { "_prefix": PREFIX}
+    if parent: current["_parent"] = parent
+    currentPackage = None
+    dict = {}
 
-
-    recipeList = []
-    subj = None
+    result = []   # list of property, value pairs
 
     while 1:
 	j = buf.find("\n", i)
@@ -129,16 +135,24 @@ def convert(path):
 	else:
 	    comment = ""
 
+	if nested and terminator.match(line):
+	    return i, currentPackage
 
 	m = header.match(line)
 	if m:
-#	    print "# header", m.group(1)
 	    head = m.group(1)
 	    property = m.group(1)
 	    property = "fink:" + property[0].lower()+property[1:]
 	    value = m.group(2)
 	    multiline = 0
 	    if value == "<<":
+		if head[:8].lower() == "splitoff":
+		    # print "."
+		    print "# SplitOff level:", nested+1, "from", current["Package"]
+		    i, child = convertString(buf, path, nested=nested+1, i=i, parent=current["Package"])
+		    result.append("# .  %s fink:child %s;\n" % (currentPackage, child))
+		    continue
+
 	        j = buf.find("<<", i)  # Not always at beginning of line. Sometimes no following \n
 	        if j<0: raise RuntimeError("In "+path+", no trailing delimiter to multiline value: "+buf[i:])
 		value = buf[i:j]
@@ -150,87 +164,93 @@ def convert(path):
 
 	    # RFC822-style line wrap
 	    else:
-		while buf[i:i+1] !="" and buf[i:i+1] in " \t":
+		while commaEnd.match(line) and buf[i:i+1] !="" and buf[i:i+1] in " \t":
 		    j = buf.find("\n", i)
 		    if j <0: break
 		    e = j
 		    if e>i and buf[e-1]=='\r':
 			e = e-1
-		    line = line + buf[i:e]
+		    line2 = buf[i:e]
 		    i = j+1
 	    
-		    k = line.find("#") # Chop comments
+		    k = line2.find("#") # Chop comments
 		    if k >= 0:
-			comment = comment + line[k:]
-			line = line[:k]
-		    m = header.match(line)
-		    value = m.group(2)
+			comment = comment + line2[k:]
+			line2 = line2[:k]
+		    line = line + " " + line2
+		    value = value + " " + line2.strip()
 
 	    current[head] = value    # track things like package, version, revision
 
 	    if head == "Package":
 	        if currentPackage:
+		    raise RuntimeError("Seem to already be in package"+currentPackage)
 		    print ". # End of ", currentPackage
-		print """%s  fink:packageName "%s";""" % (makePackageList(value,current), value)
-		currentPackage = value
+		currentPackage = makePackageList(value,current)
+		if not parent:
+		    current["_parent"] = value  # for macro expansion
 		continue
 
 	    if head == "Version":
-		versionId = makePackageList(current["Package"], current) + "_v" + makeId(value)
-		print "        fink:specificVersion %s ." % versionId
-		print "%s fink:version %s;" %(versionId, ss(value)) 
+		versionId = currentPackage + "_v" + makeId(value)
 		continue
 
 	    if head == "Revision":
 		revisionId = versionId + "_r" + makeId(value)
-		print "        fink:specificRevision %s ." % revisionId
-		print "%s fink:revision %s;" %(revisionId, ss(value))
-		print "    fink:infoFrom <%s>; " % path
 		continue
 
 	    if head in [ "Depends", "BuildDepends", "Recommends", "Conflicts", "Replaces"]:
 	        modules = string.split(value, ",")
 		if modules[0].strip() == "": continue
-		print "    "+property+" "+makePackageList(modules[0], current),
+		result.append( "    "+property+" "+makePackageList(modules[0], current))
 		for mod in modules[1:]:
-		    print ", "+makePackageList(mod, current),
-		print ";"
+		    result.append( ", "+makePackageList(mod, current))
+		result.append( ";")
 		continue
 
 	    if head == "Maintainer":
 		m = contact.match(value)
 		if m != None:
-		    print """     %s [con:firstName %s; con:lastName %s; con:mailbox <mailto:%s>];"""%(
-			property, ss(m.group(1)), ss(m.group(2)), m.group(3))
+		    result.append( """     %s [con:firstName %s; con:lastName %s; con:mailbox <mailto:%s>];\n"""%(
+			property, ss(m.group(1)), ss(m.group(2)), m.group(3)))
 		    continue
 		m = contact2.match(value)
 		if m != None:
-		    print """     %s [con:mailbox <mailto:%s>];"""%(
-			    property, m.group(1))
+		    result.append( """     %s [con:mailbox <mailto:%s>];\n"""%(
+			    property, m.group(1)))
 		    continue
 		m = contact3.match(value)
 		if m != None:
-		    print """     %s [con:name "%s"; con:mailbox <mailto:%s>];"""%(
-			    property, m.group(1), m.group(2))
+		    result.append( """     %s [con:name "%s"; con:mailbox <mailto:%s>];\n"""%(
+			    property, m.group(1), m.group(2)))
 		    continue
-		print """     %s [con:name %s];"""% (property, ss(value))
+		result.append( """     %s [con:name %s];\n"""% (property, ss(value)))
 		continue
 
-	    print "    " + property + " "+ss(value) + ';'
-#	    print "#was " + property + " "+value + ';'
-
+	    result.append( "    " + property + " "+ss(value) + ';\n')
 	    continue
 
 	m = blank.match(line)
 	if m:
-	    print comment
+	    result.append(comment+"\n")
 	    continue
 	print "#@@", line, comment
 	raise RuntimeError("Unknown line format:"+line)
 
-    if currentPackage:
-	print ". # End of package ", currentPackage
-    print "# End of info from", path
+# Now output the identifiers first:
+    h= """%s  fink:packageName "%s";\n""" % (currentPackage, current["Package"])
+    if parent:
+	h=h+( "    is fink:child of %s;\n" % makePackageList(parent, current))
+    h=h+( "        fink:specificVersion %s .\n" % versionId)
+    h=h+( "%s fink:version %s;" %(versionId, ss(current["Version"]))) 
+    h=h+( "        fink:specificRevision %s .\n" % revisionId)
+    h=h+( "%s fink:revision %s;\n" %(revisionId, ss(value)))
+    h=h+( "    fink:infoFrom <%s>; " % path)
+
+
+    print h
+    for i in result: print i,
+    print ". # End of package ", currentPackage
     print
 
 def do(path, explicit=1):
@@ -265,6 +285,7 @@ for arg in sys.argv[1:]:
     if arg[0:1] == "-":
         if arg == "-r": recursive = 1    # Recursive
 	elif arg == "-a": doall=1
+	elif arg == "-v": verbose=1
         elif arg == "-?" or arg == "-h" or arg == "--help":
 	    print """Convert Fink .info format  to n3 format.
 
@@ -275,7 +296,7 @@ Syntax:    make2n3  [-r] <file>
     $Id$
 """
         else:
-            print """Bad option argument."""
+            print """Bad option argument.""", arg, ". use -? for help."
             sys.exit(-1)
     else:
         files.append(arg)
