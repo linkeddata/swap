@@ -3,8 +3,9 @@
        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <title>Cwm features wished for and done</title>
-  <meta name="generator" content="amaya 7.1, see http://www.w3.org/Amaya/" />
+  <meta name="generator" content="amaya 8.5, see http://www.w3.org/Amaya/" />
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -18,8 +19,8 @@ Comparing Formats</p>
 </div>
 
 <h1><a href="../../../../DesignIssues/Notation3.html"><img alt="n3"
-style="float: right" src="../../../../RDF/icons/n3_small" />
-</a> <a href="cwm">Cwm</a> Changes</h1>
+style="float: right" src="../../../../RDF/icons/n3_small" /></a> <a
+href="cwm">Cwm</a> Changes</h1>
 
 <p>See also:</p>
 <ul>
@@ -31,7 +32,7 @@ style="float: right" src="../../../../RDF/icons/n3_small" />
 
 <p></p>
 
-<h2>Since Release 0.8</h2>
+<h2>Release 1.0rc1</h2>
 
 <h4>delta and cwm --patch</h4>
 <ul>
@@ -57,6 +58,9 @@ specified has been fixed</p>
 
 <p>A crude hack in WebAccess.py allows a local file system to be used instead
 of a given website. The intent is to clean this up in the future.</p>
+
+<p>There has been much work on a grammar for n3. grammar/n3.n3 is the
+grammar, grammar/predictiveParser.n3 can understand it. </p>
 
 <h4>RDF/XML support changes</h4>
 <ul>
@@ -316,7 +320,7 @@ work toward a more community-supported platform with time.</p>
     including a suitable test in the regression tests. This test currently
     includes all the n3 format files detailed.tests in subdirectories of
     $SWAP/test.</li>
-  <li>New mailing lists have been made. 
+  <li>New mailing lists have been made.
     <dl>
       <dt><a
       href="http://lists.w3.org/Archives/Public/public-cwm-announce">public-cwm-announce</a></dt>
@@ -357,7 +361,7 @@ work toward a more community-supported platform with time.</p>
     F is a formula to cause the content of F to be loaded into the knowledge
     base.</li>
   <li>The ordering of terms has been fixed so that all constants literals,
-    lsits amd formula should all appear before any symbols in a listing. 
+    lsits amd formula should all appear before any symbols in a listing.
     <p>(code is formula.compareTerm())</p>
   </li>
 </ol>
@@ -380,7 +384,7 @@ here.</p>
   <li><strong>Lists</strong> are handled differently internally. This is a
     bit of a an experiment. Instead of being stored in their first/rest forms
     in the graph, complete lists are stored as List objects. Thse are first
-    class objects. . 
+    class objects. .
     <ul>
       <li>You can match against lists. Unification of formlae will catch
         identical lists such as ( &lt;a&gt; &lt;b&gt; ) matching against (
