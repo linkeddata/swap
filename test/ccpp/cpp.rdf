@@ -1,0 +1,199 @@
+<?xml version='1.0'?>
+<!-- Checked by SiRPAC 1.16, 18-Jan-2001 -->
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY ns-rdf  'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+  <!ENTITY ns-rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+  <!ENTITY ns-ccpp 'http://www.w3.org/2000/07/04-ccpp#'>
+]>
+
+<rdf:RDF
+  xmlns:rdf  = '&ns-rdf;'
+  xmlns:rdfs = '&ns-rdfs;'
+  xmlns:ccpp = '&ns-ccpp;'>
+
+
+<!--  CC/PP class definitions -->
+
+  <rdfs:Class rdf:ID='Resource'>
+    <rdfs:label>CC/PP Resource</rdfs:label>
+    <rdfs:subClassOf rdf:resource='&ns-rdfs;Resource'/>
+    <rdfs:comment>
+      This is a common base class for all resources whose properties
+      may be asserted in a CC/PP profile.  (Note that the values of
+      CC/PP attributes are not necessarily instances of this class.)
+    </rdfs:comment>
+  </rdfs:Class>
+
+  <rdfs:Class rdf:ID='Profile'>
+    <rdfs:label>CC/PP Profile</rdfs:label>
+    <rdfs:subClassOf rdf:resource='&ns-ccpp;Resource'/>
+    <rdfs:comment>
+      This class is any complete profile that can be delivered to an
+      origin server or other system that generates content for a client.
+      May be a Request-profile or a Client-profile.
+    </rdfs:comment>
+  </rdfs:Class>
+
+  <rdfs:Class rdf:ID='Client-profile'>
+    <rdfs:label>CC/PP Client profile</rdfs:label>
+    <rdfs:subClassOf rdf:resource='&ns-ccpp;Profile'/>
+    <rdfs:comment>
+      A subclass of ccpp:Profile that represents a client profile,
+      without any intervening proxy behaviors included.  For systems
+      that do not have to deal with proxy behaviors (e.g. transcoding,
+      etc.) this is the only profile class that needs to be instantiated.
+    </rdfs:comment>
+  </rdfs:Class>
+  <rdfs:Class rdf:ID='Request-profile'>
+    <rdfs:label>CC/PP Request profile</rdfs:label>
+    <rdfs:subClassOf rdf:resource='&ns-ccpp;Profile'/>
+    <rdfs:comment>
+      A subclass of ccpp:Profile that represents a profile created from
+      a client profile and one or more Proxy-profiles.  This is used to
+      add proxy behavior descriptions to a request profile received
+      from an outbound proxy or client system.
+
+      See properties ccpp:proxy-profile' and 'ccpp:next-profile'.
+    </rdfs:comment>
+  </rdfs:Class>
+
+  <rdfs:Class rdf:ID='Proxy-profile'>
+    <rdfs:label>CC/PP Proxy profile</rdfs:label>
+    <rdfs:subClassOf rdf:resource='&ns-ccpp;Resource'/>
+    <rdfs:comment>
+      A complete description of a proxy's behavior, such as a
+      transcoding proxy that affects the range of content that may be
+      generated to satisfy a request.  A ccpp:Request-profile is used
+      to attach a proxy profile to an outbound client profile or
+      request profile.
+
+      A proxy profile has an arbitrary number of ccpp:proxy-behavior
+      properties, each of which indicates an individual
+      ccpp:Proxy-behavior value.
+    </rdfs:comment>
+  </rdfs:Class>
+
+  <rdfs:Class rdf:ID='Proxy-behavior'>
+    <rdfs:label>CC/PP Proxy behavior</rdfs:label>
+    <rdfs:subClassOf rdf:resource='&ns-ccpp;Resource'/>
+    <rdfs:comment>
+      A description of a single aspect of proxy behavior.  A proxy
+      profile is made up from an arbitrary number of these individual
+      proxy behaviors.
+    </rdfs:comment>
+  </rdfs:Class>
+
+  <rdfs:Class rdf:ID='Component'>
+    <rdfs:label>CC/PP profile component</rdfs:label>
+    <rdfs:subClassOf rdf:resource='&ns-ccpp;Resource'/>
+    <rdfs:comment>
+      A base class for any collection of CC/PP attribute values.
+      A CC/PP client profile consists of one or more components,
+      typically using a derived class that indicates the use of the
+      component (e.g. uaprof:HardwarePlatform, uaprof:SoftwarePlatform).
+      This class is also used for collecting CC/PP attributes that
+      form part of a proxy behavior description.
+    </rdfs:comment>
+  </rdfs:Class>
+
+  <rdfs:Class rdf:ID='URI'>
+    <rdfs:label>URI value</rdfs:label>
+    <rdfs:subClassOf rdf:resource='&ns-rdfs;Literal'/>
+    <rdfs:comment>
+      This class is used to represent any CC/PP attribute value that
+      is a URI identifying an arbitrary resource.  When this type is
+      used, the value of the CC/PP attribute is the URI rather than the
+      resource identified by the URI.
+    </rdfs:comment>
+  </rdfs:Class>
+
+  <rdfs:Class rdf:ID='Text'>
+    <rdfs:label>Text value</rdfs:label>
+    <rdfs:subClassOf rdf:resource='&ns-rdfs;Literal'/>
+    <rdfs:comment>
+      This class is used to represent any CC/PP attribute value that
+      is arbitrary text.
+    </rdfs:comment>
+  </rdfs:Class>
+
+  <rdfs:Class rdf:ID='Integer'>
+    <rdfs:label>Integer value</rdfs:label>
+    <rdfs:subClassOf rdf:resource='&ns-rdfs;Literal'/>
+    <rdfs:comment>
+      This class is used to represent any CC/PP attribute value that
+      is an integer number.
+    </rdfs:comment>
+  </rdfs:Class>
+
+  <rdfs:Class rdf:ID='Rational'>
+    <rdfs:label>Rational value</rdfs:label>
+    <rdfs:subClassOf rdf:resource='&ns-rdfs;Literal'/>
+    <rdfs:comment>
+      This class is used to represent any CC/PP attribute value that is
+      a rational number.
+    </rdfs:comment>
+  </rdfs:Class>
+
+  <rdfs:Class rdf:ID='Property'>
+    <rdfs:label>CC/PP Property</rdfs:label>
+    <rdfs:subClassOf rdf:resource='&ns-rdf;Property'/>
+    <rdfs:comment>
+      All property arcs that constitute parts of a CC/PP profile are
+      defined as subclasses of ccpp:Property.  This allows that in a
+      schema-validating environment with language missing, the CC/PP
+      elements of an RDF graph rooted in some given resource can be
+      isolated from other attributes of that resource.
+    </rdfs:comment>
+  </rdfs:Class>
+
+  <rdfs:Class rdf:ID='Attribute'>
+    <rdfs:label>CC/PP Attribute</rdfs:label>
+    <rdfs:subClassOf rdf:resource='&ns-ccpp;Property'/>
+    <rdfs:comment>
+      All property arcs that represent client capabilities or
+      preferences in a CC/PP profile are declared as subclasses of
+      ccpp:Attribute.  This allows that structural combining elements
+      of a profile can be distinguished from client features in a
+      schema-validating environment.
+    </rdfs:comment>
+  </rdfs:Class>
+
+
+<!--  CC/PP structural property definitions -->
+<!--  Basic client profile description      -->
+
+  <rdfs:Property rdf:ID='component'>
+    <rdfs:label>CC/PP component property</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Client-profile'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:comment>
+      Indicates a component of a top-level client profile.
+    </rdfs:comment>
+  </rdfs:Property>
+
+  <rdfs:Property rdf:ID='defaults'>
+    <rdfs:label>CC/PP default properties</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:comment>
+      This property indicates a Component that contains default
+      properties for some other component.  That is, any attributes
+      that are not found in the subject resource but are present in
+      the object resource may be incorporated from the object into
+      the resulting CC/PP profile.
+    </rdfs:comment>
+  </rdfs:Property>
+
+  <rdfs:Property rdf:ID='Defaults'>
+    <rdfs:label>CC/PP default properties</rdfs:label>
+    <rdfs:subPropertyOf rdf:resource='&ns-ccpp;defaults'/>
+    <rdfs:domain rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:comment>
+      Same as 'defaults'.
+      Defined as sub-property for backwards compatibility with UAPROF
+    </rdfs:comment>
+  </rdfs:Property>
+</rdf:RDF>
+

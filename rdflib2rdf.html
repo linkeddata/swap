@@ -1,0 +1,226 @@
+
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module rdflib2rdf</title>
+<style type="text/css"><!--
+TT { font-family: lucidatypewriter, lucida console, courier }
+--></style></head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>rdflib2rdf</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/rdflib2rdf.py">/devel/WWW/2000/10/swap/rdflib2rdf.py</a></font></td></tr></table>
+    <p><tt>This&nbsp;rdflib2rdf&nbsp;module&nbsp;provides&nbsp;code&nbsp;for&nbsp;glueing&nbsp;rdflib's&nbsp;rdf/xml<br>
+parser&nbsp;to&nbsp;cwm.<br>
+&nbsp;<br>
+STATUS:<br>
+&nbsp;<br>
+First&nbsp;pass,&nbsp;partially&nbsp;working,&nbsp;some&nbsp;questions.<br>
+&nbsp;<br>
+&nbsp;<br>
+QUESTIONS:<br>
+&nbsp;<br>
+Does&nbsp;the&nbsp;context&nbsp;need&nbsp;to&nbsp;change&nbsp;per&nbsp;bag?&nbsp;I&nbsp;have&nbsp;assumed&nbsp;for&nbsp;the&nbsp;moment<br>
+not,&nbsp;as&nbsp;it&nbsp;breaks&nbsp;(or&nbsp;complicates)&nbsp;the&nbsp;interface&nbsp;between&nbsp;the&nbsp;parser<br>
+and&nbsp;the&nbsp;store.<br>
+&nbsp;<br>
+Is&nbsp;there&nbsp;already&nbsp;or&nbsp;is&nbsp;there&nbsp;any&nbsp;interest&nbsp;in&nbsp;a&nbsp;<a href="#ContextSink">ContextSink</a>&nbsp;interface<br>
+to&nbsp;simplify&nbsp;the&nbsp;interface&nbsp;between&nbsp;the&nbsp;parser&nbsp;and&nbsp;the&nbsp;store?&nbsp;If<br>
+desired,&nbsp;I&nbsp;would&nbsp;be&nbsp;happy&nbsp;to&nbsp;help&nbsp;with&nbsp;any&nbsp;refactors&nbsp;that&nbsp;would&nbsp;be<br>
+needed.&nbsp;To&nbsp;better&nbsp;describe&nbsp;what&nbsp;I&nbsp;am&nbsp;thinking,&nbsp;I&nbsp;have&nbsp;implemented&nbsp;a<br>
+<a href="#ContextSink">ContextSink</a>&nbsp;enough&nbsp;to&nbsp;serve&nbsp;the&nbsp;purpose&nbsp;needed&nbsp;for&nbsp;this&nbsp;module.<br>
+&nbsp;<br>
+Is&nbsp;urlparse.urljoin&nbsp;from&nbsp;the&nbsp;Python&nbsp;standard&nbsp;library&nbsp;buggy?&nbsp;RDFLib<br>
+uses&nbsp;urlparse.urljoin&nbsp;and&nbsp;I&nbsp;noticed&nbsp;that&nbsp;the&nbsp;differences&nbsp;between&nbsp;it<br>
+and&nbsp;uriparse.join&nbsp;are&nbsp;causing&nbsp;the&nbsp;test&nbsp;cases&nbsp;to&nbsp;fail&nbsp;(export<br>
+PYTHONPATH=..;python2.3&nbsp;retest.py&nbsp;-n&nbsp;-f&nbsp;regression.n3).&nbsp;For&nbsp;example:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;file:/devel/WWW/2000/10/swap/test/animal.rdf#<br>
+&nbsp;&nbsp;&nbsp;&nbsp;vs.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;file:///devel/WWW/2000/10/swap/test/animal.rdf#<br>
+&nbsp;<br>
+Not&nbsp;really&nbsp;a&nbsp;question&nbsp;but...&nbsp;RDFLib's&nbsp;RDF/XML&nbsp;parser&nbsp;at&nbsp;the&nbsp;moment<br>
+does&nbsp;not&nbsp;make&nbsp;it&nbsp;easy&nbsp;to&nbsp;get&nbsp;to&nbsp;the&nbsp;namespace&nbsp;binding&nbsp;information.&nbsp;And<br>
+the&nbsp;way&nbsp;sax2rdf&nbsp;currently&nbsp;calls&nbsp;bind&nbsp;it&nbsp;looks&nbsp;like&nbsp;there&nbsp;will&nbsp;be<br>
+issues&nbsp;if&nbsp;a&nbsp;prefix&nbsp;gets&nbsp;redefined.&nbsp;Here&nbsp;is&nbsp;a&nbsp;question&nbsp;re:<br>
+this...&nbsp;should&nbsp;passing&nbsp;the&nbsp;namespace&nbsp;information&nbsp;to&nbsp;the&nbsp;store&nbsp;be&nbsp;a<br>
+[mandatory]&nbsp;part&nbsp;of&nbsp;the&nbsp;interface?&nbsp;or&nbsp;does&nbsp;it&nbsp;cause&nbsp;to&nbsp;much&nbsp;grief&nbsp;in<br>
+practice&nbsp;not&nbsp;too?<br>
+&nbsp;<br>
+&nbsp;<br>
+TO&nbsp;RUN:&nbsp;(cwm&nbsp;with&nbsp;rdflib's&nbsp;rdf/xml&nbsp;parser)<br>
+&nbsp;<br>
+Double&nbsp;check&nbsp;that&nbsp;you&nbsp;have&nbsp;rdflib-1.2.x&nbsp;installed&nbsp;:)<br>
+&nbsp;&nbsp;*&nbsp;Download&nbsp;from&nbsp;<a href="http://rdflib.net/stable/">http://rdflib.net/stable/</a><br>
+&nbsp;&nbsp;*&nbsp;extract<br>
+&nbsp;&nbsp;*&nbsp;cd&nbsp;root&nbsp;of&nbsp;distribution<br>
+&nbsp;&nbsp;*&nbsp;python2.2&nbsp;setup.py&nbsp;install<br>
+&nbsp;<br>
+Change&nbsp;the&nbsp;following&nbsp;line&nbsp;in&nbsp;cwm.py&nbsp;from:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;sax2rdf.<a href="#RDFXMLParser">RDFXMLParser</a>(...<br>
+to:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;return&nbsp;rdflib2rdf.<a href="#RDFXMLParser">RDFXMLParser</a>(...<br>
+&nbsp;<br>
+--eikeon,&nbsp;<a href="http://eikeon.com/">http://eikeon.com/</a></tt></p>
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="diag.html">diag</a><br>
+</td><td width="25%" valign=top><a href="uripath.html">uripath</a><br>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="rdflib.syntax.parser.html#Parser">rdflib.syntax.parser.Parser</a>(<a href="__builtin__.html#object">__builtin__.object</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="rdflib2rdf.html#RDFXMLParser">RDFXMLParser</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="__builtin__.html#object">__builtin__.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="rdflib2rdf.html#ContextSink">ContextSink</a>
+</font></dt></dl>
+</dd>
+</dl>
+ 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ContextSink">class <strong>ContextSink</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2>&nbsp;</td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="ContextSink-__init__"><strong>__init__</strong></a>(self, sink, thisURI, formulaURI<font color="#909090">=None</font>, flags<font color="#909090">=''</font>, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="ContextSink-makeStatement"><strong>makeStatement</strong></a>(self, (predicate, subject, object))</dt></dl>
+
+<dl><dt><a name="ContextSink-newBlankNode"><strong>newBlankNode</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ContextSink-newLiteral"><strong>newLiteral</strong></a>(self, s)</dt></dl>
+
+<dl><dt><a name="ContextSink-newSymbol"><strong>newSymbol</strong></a>(self, uri)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__doc__</strong> = None</dl>
+
+<dl><dt><strong>__module__</strong> = 'rdflib2rdf'<dd><tt>str(<a href="__builtin__.html#object">object</a>)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;<a href="__builtin__.html#object">object</a>.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;<a href="__builtin__.html#object">object</a>.</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'ContextSink' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="ContextSink-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ContextSink-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ContextSink-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#ContextSink-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="ContextSink-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#ContextSink-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="ContextSink-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="ContextSink-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#ContextSink-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="ContextSink-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#ContextSink-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="ContextSink-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#ContextSink-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;<a href="__builtin__.html#object">object</a>'s&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object at 0xbf74c&gt;<dd><tt>T.<a href="#ContextSink-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="RDFXMLParser">class <strong>RDFXMLParser</strong></a>(<a href="rdflib.syntax.parser.html#Parser">rdflib.syntax.parser.Parser</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2>&nbsp;</td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="rdflib2rdf.html#RDFXMLParser">RDFXMLParser</a></dd>
+<dd><a href="rdflib.syntax.parser.html#Parser">rdflib.syntax.parser.Parser</a></dd>
+<dd><a href="__builtin__.html#object">__builtin__.object</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="RDFXMLParser-_RDFXMLParser__convert"><strong>_RDFXMLParser__convert</strong></a> = __convert(self, t)</dt><dd><tt>Convert&nbsp;from&nbsp;rdflib&nbsp;to&nbsp;cwm&nbsp;style&nbsp;term.</tt></dd></dl>
+
+<dl><dt><a name="RDFXMLParser-__init__"><strong>__init__</strong></a>(self, sink, thisURI, formulaURI<font color="#909090">=None</font>, flags<font color="#909090">=''</font>, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="RDFXMLParser-add"><strong>add</strong></a>(self, (s, p, o))</dt><dd><tt>Add&nbsp;triple&nbsp;to&nbsp;the&nbsp;sink&nbsp;(rdflib.syntax.parser.<a href="rdflib.syntax.parser.html#Parser">Parser</a>&nbsp;calls<br>
+this&nbsp;method).</tt></dd></dl>
+
+<dl><dt><a name="RDFXMLParser-load"><strong>load</strong></a>(self, uri, baseURI<font color="#909090">=''</font>)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = None</dl>
+
+<dl><dt><strong>__module__</strong> = 'rdflib2rdf'<dd><tt>str(<a href="__builtin__.html#object">object</a>)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;<a href="__builtin__.html#object">object</a>.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;<a href="__builtin__.html#object">object</a>.</tt></dl>
+
+<hr>
+Methods inherited from <a href="rdflib.syntax.parser.html#Parser">rdflib.syntax.parser.Parser</a>:<br>
+<dl><dt><a name="RDFXMLParser-parse"><strong>parse</strong></a>(self, source)</dt></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="rdflib.syntax.parser.html#Parser">rdflib.syntax.parser.Parser</a>:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Parser' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="RDFXMLParser-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#RDFXMLParser-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="RDFXMLParser-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#RDFXMLParser-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="RDFXMLParser-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#RDFXMLParser-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="RDFXMLParser-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="RDFXMLParser-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#RDFXMLParser-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="RDFXMLParser-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#RDFXMLParser-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="RDFXMLParser-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#RDFXMLParser-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;<a href="__builtin__.html#object">object</a>'s&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object at 0xbf74c&gt;<dd><tt>T.<a href="#RDFXMLParser-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><strong>FORMULA</strong> = 1<br>
+<strong>__file__</strong> = './rdflib2rdf.pyc'<br>
+<strong>__name__</strong> = 'rdflib2rdf'</td></tr></table>
+</body></html>

@@ -1,0 +1,129 @@
+<?xml version='1.0'?>
+<!-- Checked by SiRPAC 1.16, 18-Jan-2001 -->
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY ns-rdf  'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+  <!ENTITY ns-rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+  <!ENTITY ns-ccpp 'http://www.w3.org/2000/07/04-ccpp#'>
+  <!ENTITY ns-ccpp-client 'http://www.w3.org/2000/07/04-ccpp-client#'>
+]>
+
+<rdf:RDF
+  xmlns:rdf         = '&ns-rdf;'
+  xmlns:rdfs        = '&ns-rdfs;'
+  xmlns:ccpp        = '&ns-ccpp;'
+  xmlns:ccpp-client = '&ns-ccpp-client;'>
+
+<!--  CC/PP attribute property definitions -->
+
+  <!-- These properties represent some common vocabulary that is     -->
+  <!-- available for use by applications that need to indicate       -->
+  <!-- the common features indicated by these attributes.  They      -->
+  <!-- serve as an example of how a new attribute vocabulary can     -->
+  <!-- be defined for use in a CC/PP profile.                        -->
+
+  <ccpp:Attribute rdf:ID='deviceIdentifier'>
+    <rdfs:label>Client device identifier</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;URI'/>
+    <rdfs:comment>
+      A URI that identifies the type of client device or user agent.
+    </rdfs:comment>
+  </ccpp:Attribute>
+
+  <ccpp:Attribute rdf:ID='type'>
+    <rdfs:label>MIME content type</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Set'/>
+    <rdfs:comment>
+      A string containing a MIME content-type, or a set of such strings,
+      indicating the MIME content-types that can be handled.
+    </rdfs:comment>
+  </ccpp:Attribute>
+
+  <ccpp:Attribute rdf:ID='schema'>
+    <rdfs:label>Schema identifier</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;URI'/>
+    <rdfs:comment>
+      A URI that identifies a language or DTD that is recognized by
+      the client, or a set of such URIs.
+
+      Specific values of this attribute may be applicable to certain
+      MIME content types.  For example, a URI that is associated with
+      a resource containing an XML DTD will generally be applicable
+      only with text/xml or application/xml content types.
+    </rdfs:comment>
+  </ccpp:Attribute>
+
+  <ccpp:Attribute rdf:ID='charWidth'>
+    <rdfs:label>Character display width</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Integer'/>
+    <rdfs:comment>
+      For character displays, the number of characters that can be
+      rendered across the display.  For displays using a proportional
+      font, this is the display width in typographical 'em's.
+    </rdfs:comment>
+  </ccpp:Attribute>
+
+  <ccpp:Attribute rdf:ID='charHeight'>
+    <rdfs:label>Character display height</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Integer'/>
+    <rdfs:comment>
+      For character displays, the number of rows of characters that
+      can be displayed.
+    </rdfs:comment>
+  </ccpp:Attribute>
+
+  <ccpp:Attribute rdf:ID='charset'>
+    <rdfs:label>Character set encoding</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Set'/>
+    <rdfs:comment>
+      For character displays, the MIME 'charset' values that
+      can be displayed.
+    </rdfs:comment>
+  </ccpp:Attribute>
+
+  <ccpp:Attribute rdf:ID='pix-x'>
+    <rdfs:label>Pixel display width</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Integer'/>
+    <rdfs:comment>
+      For raster displays, the width of the display in pixels.
+    </rdfs:comment>
+  </ccpp:Attribute>
+
+  <ccpp:Attribute rdf:ID='pix-y'>
+    <rdfs:label>Pixel display height</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Integer'/>
+    <rdfs:comment>
+       For raster displays, the height of the display in pixels.
+    </rdfs:comment>
+  </ccpp:Attribute>
+
+  <ccpp:Attribute rdf:ID='color'>
+    <rdfs:label>Color display capabilities</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Text'/>
+    <rdfs:comment>
+      For display or print devices, an indication of the color
+      rendering capabilities:
+      binary  - indicates bi-level color (black-and-white, or similar).
+      grey    - indicates gray scale capability, capable of sufficient
+                distinct levels for a monochrome photograph.
+      limited - indicates a limited number of distinct colors, but
+                not with sufficient control for displaying a color
+                photograph (e.g. a pen plotter, high-light printer or
+                limited display).
+      mapped  - indicates a palettized color display, with enough
+                levels and control for coarse display of color
+                photographs.
+      full    - indicates full color display capability.
+    </rdfs:comment>
+  </ccpp:Attribute>
+
+</rdf:RDF>

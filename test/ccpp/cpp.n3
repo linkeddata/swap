@@ -1,0 +1,174 @@
+#Processed by Id: cwm.py,v 1.105 2002/08/30 16:59:47 sandro Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/ccpp/cpp.rdf
+        
+#  Notation3 generation by
+#       notation3.py,v 1.118 2002/08/16 22:30:48 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/ccpp/cpp.rdf
+     @prefix : <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix ccpp: <http://www.w3.org/2000/07/04-ccpp#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    
+    <#Attribute>     a :Class;
+         :comment """
+      All property arcs that represent client capabilities or
+      preferences in a CC/PP profile are declared as subclasses of
+      ccpp:Attribute.  This allows that structural combining elements
+      of a profile can be distinguished from client features in a
+      schema-validating environment.
+    """;
+         :label "CC/PP Attribute";
+         :subClassOf ccpp:Property .
+    
+    <#Client-profile>     a :Class;
+         :comment """
+      A subclass of ccpp:Profile that represents a client profile,
+      without any intervening proxy behaviors included.  For systems
+      that do not have to deal with proxy behaviors (e.g. transcoding,
+      etc.) this is the only profile class that needs to be instantiated.
+    """;
+         :label "CC/PP Client profile";
+         :subClassOf ccpp:Profile .
+    
+    <#Component>     a :Class;
+         :comment """
+      A base class for any collection of CC/PP attribute values.
+      A CC/PP client profile consists of one or more components,
+      typically using a derived class that indicates the use of the
+      component (e.g. uaprof:HardwarePlatform, uaprof:SoftwarePlatform).
+      This class is also used for collecting CC/PP attributes that
+      form part of a proxy behavior description.
+    """;
+         :label "CC/PP profile component";
+         :subClassOf ccpp:Resource .
+    
+    <#Defaults>     a :Property;
+         :comment """
+      Same as 'defaults'.
+      Defined as sub-property for backwards compatibility with UAPROF
+    """;
+         :domain ccpp:Component;
+         :label "CC/PP default properties";
+         :range ccpp:Component;
+         :subPropertyOf ccpp:defaults .
+    
+    <#Integer>     a :Class;
+         :comment """
+      This class is used to represent any CC/PP attribute value that
+      is an integer number.
+    """;
+         :label "Integer value";
+         :subClassOf :Literal .
+    
+    <#Profile>     a :Class;
+         :comment """
+      This class is any complete profile that can be delivered to an
+      origin server or other system that generates content for a client.
+      May be a Request-profile or a Client-profile.
+    """;
+         :label "CC/PP Profile";
+         :subClassOf ccpp:Resource .
+    
+    <#Property>     a :Class;
+         :comment """
+      All property arcs that constitute parts of a CC/PP profile are
+      defined as subclasses of ccpp:Property.  This allows that in a
+      schema-validating environment with language missing, the CC/PP
+      elements of an RDF graph rooted in some given resource can be
+      isolated from other attributes of that resource.
+    """;
+         :label "CC/PP Property";
+         :subClassOf rdf:Property .
+    
+    <#Proxy-behavior>     a :Class;
+         :comment """
+      A description of a single aspect of proxy behavior.  A proxy
+      profile is made up from an arbitrary number of these individual
+      proxy behaviors.
+    """;
+         :label "CC/PP Proxy behavior";
+         :subClassOf ccpp:Resource .
+    
+    <#Proxy-profile>     a :Class;
+         :comment """
+      A complete description of a proxy's behavior, such as a
+      transcoding proxy that affects the range of content that may be
+      generated to satisfy a request.  A ccpp:Request-profile is used
+      to attach a proxy profile to an outbound client profile or
+      request profile.
+
+      A proxy profile has an arbitrary number of ccpp:proxy-behavior
+      properties, each of which indicates an individual
+      ccpp:Proxy-behavior value.
+    """;
+         :label "CC/PP Proxy profile";
+         :subClassOf ccpp:Resource .
+    
+    <#Rational>     a :Class;
+         :comment """
+      This class is used to represent any CC/PP attribute value that is
+      a rational number.
+    """;
+         :label "Rational value";
+         :subClassOf :Literal .
+    
+    <#Request-profile>     a :Class;
+         :comment """
+      A subclass of ccpp:Profile that represents a profile created from
+      a client profile and one or more Proxy-profiles.  This is used to
+      add proxy behavior descriptions to a request profile received
+      from an outbound proxy or client system.
+
+      See properties ccpp:proxy-profile' and 'ccpp:next-profile'.
+    """;
+         :label "CC/PP Request profile";
+         :subClassOf ccpp:Profile .
+    
+    <#Resource>     a :Class;
+         :comment """
+      This is a common base class for all resources whose properties
+      may be asserted in a CC/PP profile.  (Note that the values of
+      CC/PP attributes are not necessarily instances of this class.)
+    """;
+         :label "CC/PP Resource";
+         :subClassOf :Resource .
+    
+    <#Text>     a :Class;
+         :comment """
+      This class is used to represent any CC/PP attribute value that
+      is arbitrary text.
+    """;
+         :label "Text value";
+         :subClassOf :Literal .
+    
+    <#URI>     a :Class;
+         :comment """
+      This class is used to represent any CC/PP attribute value that
+      is a URI identifying an arbitrary resource.  When this type is
+      used, the value of the CC/PP attribute is the URI rather than the
+      resource identified by the URI.
+    """;
+         :label "URI value";
+         :subClassOf :Literal .
+    
+    <#component>     a :Property;
+         :comment """
+      Indicates a component of a top-level client profile.
+    """;
+         :domain ccpp:Client-profile;
+         :label "CC/PP component property";
+         :range ccpp:Component .
+    
+    <#defaults>     a :Property;
+         :comment """
+      This property indicates a Component that contains default
+      properties for some other component.  That is, any attributes
+      that are not found in the subject resource but are present in
+      the object resource may be incorporated from the object into
+      the resulting CC/PP profile.
+    """;
+         :domain ccpp:Component;
+         :label "CC/PP default properties";
+         :range ccpp:Component .
+    
+#ENDS

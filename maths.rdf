@@ -1,0 +1,183 @@
+
+<!-- Processed by Id: cwm.py,v 1.127 2003/03/28 14:11:20 timbl Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/maths.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/math#"
+    xmlns:daml="http://www.daml.org/2001/03/daml+oil#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:math="http://www.w3.org/2000/10/swap/math#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:string="http://www.w3.org/2000/10/swap/string#">
+
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/math#Function">
+        <rdfs:comment>A math:Function is unique in terms of math:EqualTo. </rdfs:comment>
+        <rdfs:label>Function</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/math#List">
+        <rdfs:comment>The class of things that are DAML lists were all of the 
+      members are math:Value items.</rdfs:comment>
+        <rdfs:label>List</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.daml.org/2001/03/daml+oil#List"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/math#LogicalOperator">
+        <rdfs:comment>a logical operator allows evaluation eihter way, or testing relationship
+         between two values</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/10/swap/math#Function"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/10/swap/math#ReverseFunction"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/math#ReverseFunction">
+        <rdfs:comment>A math:ReverseFunction is unambiguous in terms of math:EqualTo. </rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/math#StrictProperty">
+        <rdfs:label>StrictProperty</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/math#TwoMemberedList">
+        <rdfs:comment>This is the class of things that are math lists with only two members.</rdfs:comment>
+        <rdfs:label>TwoMemberedList</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/10/swap/math#List"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/math#Value">
+        <rdfs:comment>The class of things that are numeric float values as in Python.</rdfs:comment>
+        <rdfs:label>Value</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdfs:Class>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#absoluteValue">
+        <rdfs:comment>The object is calulated as the absolute value of the subject.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>negation</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#difference">
+        <rdfs:comment>The subject is a pair of numbers. The object
+is calculated by subtracting the second number of the pair from the first.
+</rdfs:comment>
+        <rdfs:label>difference</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#equalTo">
+        <rdfs:comment>True iff the subject is a string representation of a number which  is EQUAL TO a number of which the object is a string representation.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>equalTo</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </StrictProperty>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#exponentiation">
+        <rdfs:comment>The subject is a pair of numbers. The object
+is calculated by raising the first number of the power of the second.
+</rdfs:comment>
+        <rdfs:label>exponentiation</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#greaterThan">
+        <rdfs:comment>True iff the subject is a string representation of a number which  is greater than the number of which the object is a string representation.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>greaterThan</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </StrictProperty>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#intgerQuotient">
+        <rdfs:comment>The subject is a pair of integer numbers. The object
+is calculated by dividing the first number of the pair by the second, ignoring remainder.
+</rdfs:comment>
+        <rdfs:label>integerQuotient</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#lessThan">
+        <rdfs:comment>True iff the subject is a string representation of a number which  is LESS than a number of which the object is a string representation.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>lessThan</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </StrictProperty>
+
+    <Function rdf:about="http://www.w3.org/2000/10/swap/math#memberCount">
+        <rdfs:comment>The number of items in a list. The subject is a list,
+the object is calculated as the number of members.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#List"/>
+        <rdfs:label>memberCount</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </Function>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#negation">
+        <rdfs:comment>The subject or object is calculated to be the negation of the other.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>negation</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notEqualTo">
+        <rdfs:comment>True iff the subject is a string representation of a number which  is NOT EQUAL to a number of which the object is a string representation.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>notEqualTo</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </StrictProperty>
+
+    <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notGreaterThan">
+        <rdfs:comment>True iff the subject is a string representation of a number which is NOT greater than the number of which the object is a string representation.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>notGreaterThan</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </StrictProperty>
+
+    <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notlessThan">
+        <rdfs:comment>True iff the subject is a string representation of a number which  is NOT LESS than a number of which the object is a string representation.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>notlessThan</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/string#notlessThan"/>
+    </StrictProperty>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#product">
+        <rdfs:comment>The subject is a list of numbers.
+The object is calculated as the arithmentic product of those numbers.
+</rdfs:comment>
+        <rdfs:label>product</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#quotient">
+        <rdfs:comment>The subject is a pair of numbers. The object
+is calculated by dividing the first number of the pair by the second.
+</rdfs:comment>
+        <rdfs:label>quotient</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#remainder">
+        <rdfs:comment>The subject is a pair of integers. The object
+is calculated by dividing the first number of the pair by the second and taking the remainder.
+</rdfs:comment>
+        <rdfs:label>remainder</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#rounded">
+        <rdfs:comment>The object is calulated as the subject rounded to the nearest integer.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>rounded</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#sum">
+        <rdfs:comment>The subject is a list of numbers.
+The object is calculated as the arithmentic sum of those numbers.
+</rdfs:comment>
+        <rdfs:label>sum</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
+</rdf:RDF>

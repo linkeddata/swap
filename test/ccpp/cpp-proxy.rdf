@@ -1,0 +1,101 @@
+<?xml version='1.0'?>
+<!-- Checked by SiRPAC 1.16, 18-Jan-2001 -->
+
+<!DOCTYPE rdf:RDF [
+  <!ENTITY ns-rdf  'http://www.w3.org/1999/02/22-rdf-syntax-ns#'>
+  <!ENTITY ns-rdfs 'http://www.w3.org/2000/01/rdf-schema#'>
+  <!ENTITY ns-ccpp 'http://www.w3.org/2000/07/04-ccpp#'>
+  <!ENTITY ns-ccpp-proxy 'http://www.w3.org/2000/07/04-ccpp-proxy#'>
+]>
+
+<rdf:RDF
+  xmlns:rdf        = '&ns-rdf;'
+  xmlns:rdfs       = '&ns-rdfs;'
+  xmlns:ccpp       = '&ns-ccpp;'>
+  xmlns:ccpp-proxy = '&ns-ccpp-proxy;'>
+
+<!--  CC/PP structural property definitions -->
+<!--  Proxy behavior description           -->
+
+  <!-- These properties represent some common vocabulary that is     -->
+  <!-- available for use by applications that have cause to describe -->
+  <!-- proxy behaviors.  They serve as an example of how new        -->
+  <!-- structural vocabulary can be defined for use in a CC/PP       -->
+  <!-- profile.                                                      -->
+
+  <ccpp:Attribute rdf:ID='next-profile'>
+    <rdfs:label>Next profile in chain</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Request-profile'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Profile'/>
+    <rdfs:comment>
+      When a request passes through a proxy that affects the content
+      that may satisfy a request (such as a transcoding proxy), this
+      property links from a new request profile resource to the
+      outbound client or request profile.
+    </rdfs:comment>
+  </ccpp:Attribute>
+
+  <ccpp:Attribute rdf:ID='proxy-profile'>
+    <rdfs:label>Next profile in chain</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Request-profile'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Proxy-profile'/>
+    <rdfs:comment>
+      When a request passes through a proxy that affects the content
+      that may satisfy a request (such as a transcoding proxy), this
+      property links from a new request profile resource to the profile
+      that describes the proxy behaviors.
+    </rdfs:comment>
+  </ccpp:Attribute>
+
+  <ccpp:Attribute rdf:ID='proxyBehavior'>
+    <rdfs:label>Proxy behavior property</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Proxy-profile'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Proxy-behavior'/>
+    <rdfs:comment>
+      A proxy profile has a number of proxyBehavior properties,
+      each of which describes some aspect of the proxy's
+      capabilities.
+    </rdfs:comment>
+  </ccpp:Attribute>
+
+  <ccpp:Attribute rdf:ID='applicability'>
+    <rdfs:label>Proxy behavior applicability properties</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Proxy-behavior'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:comment>
+      This is one of three properties to describe a proxy behavior.
+
+      If this property is present, the behavior associated with the
+      corresponding ccpp:Proxy-behavior resource is applied only if
+      the outbound request profile indicates capabilities that match
+      all those of the Component that is the object of this property.
+    </rdfs:comment>
+  </ccpp:Attribute>
+
+  <ccpp:Attribute rdf:ID='proxyAllow'>
+    <rdfs:label>Capabilities allowed by proxy behavior</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Proxy-behavior'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:comment>
+      This is one of three properties to describe a proxy behavior.
+
+      If this property is present, it indicates capabilities that
+      are allowed in addition to those indicated by the outbound
+      request profile.
+    </rdfs:comment>
+  </ccpp:Attribute>
+
+  <ccpp:Attribute rdf:ID='proxyBlock'>
+    <rdfs:label>Capabilities blocked by proxy behavior</rdfs:label>
+    <rdfs:domain rdf:resource='&ns-ccpp;Proxy-behavior'/>
+    <rdfs:range  rdf:resource='&ns-ccpp;Component'/>
+    <rdfs:comment>
+      This is one of three properties to describe a proxy behavior.
+
+      If this property is present, it indicates capabilities that
+      are blocked,  even when they are indicated by the outbound
+      request profile.
+    </rdfs:comment>
+  </ccpp:Attribute>
+
+</rdf:RDF>

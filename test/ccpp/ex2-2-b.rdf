@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:ccpp="http://www.w3.org/2002/05/20-ccpp#"
+         xmlns:ex="http://www.example.com/schema#">
+  <rdf:Description
+      rdf:about="http://www.example.com/schema#MyProfile">
+    <ccpp:component>
+      <rdf:Description
+          rdf:about="http://www.example.com/schema#TerminalHardware">
+        <rdf:type
+            rdf:resource="http://www.example.com/schema#HardwarePlatform" />
+        <ex:display>320x200</ex:display>
+      </rdf:Description>
+    </ccpp:component>
+    <ccpp:component>
+      <rdf:Description
+          rdf:about="http://www.example.com/schema#TerminalSoftware">
+        <rdf:type
+            rdf:resource="http://www.example.com/schema#SoftwarePlatform" />
+        <ex:name>EPOC</ex:name>
+        <ex:version>2.0</ex:version>
+        <ex:vendor>Symbian</ex:vendor>
+      </rdf:Description>
+    </ccpp:component>
+    <ccpp:component>
+      <rdf:Description
+          rdf:about="http://www.example.com/schema#TerminalBrowser">
+        <rdf:type
+            rdf:resource="http://www.example.com/schema#BrowserUA" />
+        <ex:name>Mozilla</ex:name>
+        <ex:version>5.0</ex:version>
+        <ex:vendor>Symbian</ex:vendor>
+        <ex:htmlVersionsSupported>
+          <rdf:Bag>
+            <rdf:li>3.0</rdf:li>
+            <rdf:li>4.0</rdf:li>
+          </rdf:Bag>
+        </ex:htmlVersionsSupported>
+      </rdf:Description>
+    </ccpp:component>
+  </rdf:Description>
+</rdf:RDF>
+
