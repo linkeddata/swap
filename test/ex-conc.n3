@@ -1,0 +1,9 @@
+@prefix : <#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log.n3#>.
+
+:dan :uncle :shannon.
+
+<> log:forAll :x, :y.
+
+{ :x :uncle :y } log:implies { :x :sibling [ is :parent of :y] }.
+
