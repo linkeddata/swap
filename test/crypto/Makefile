@@ -37,7 +37,16 @@ access-master.public : access-master.private
 access-elisa.private : access-gen-elisa.n3
 	$(CWM) access-gen-elisa.n3 --think --purge --with "Elisa" > access-elisa.private
 
-access-elisa.public : acecss-elisa.private
+access-elisa.public : access-elisa.private
+
+
+#  Alan now signs a certificate for Kari, to indicate that he is representative of Elisa.
+#  (Alan makes a note of who he gave this cert to, for tracking.)
+#  He uses his private key for this, but only need Elisa's public key,
+# which Kari brings him.
+
+access-elisa.cert : access-elisa.public access-master.private
+	$(CWM) access-elisa.public access-master.private access-sign-member-cert.n3 --think --purge --with "Elisa" > $@
 
 
 # Tiina's browser (or w3C script) makes a keypair for her to use for access to the site.
@@ -61,7 +70,7 @@ access-1.request : access-tiina.private access-sign-request.n3
 
 # The response to the request is generated in the server by access-rule.n3 
 # It checks that the chain of authority has been satisfied by appropriate signed statements.
-access-1.response : access-1.request access-rule.n3 access-tiina.public access-tiina.cert access-master.public
+access-1.response : access-1.request access-rule.n3 access-tiina.public access-tiina.cert access-elisa.cert access-master.public
 
 
 # ends

@@ -1,5 +1,15 @@
 # Rules for access in imaginary access control situations
 #
+#  This is an example of all the processing done by a
+#  digital-signatue-aware inference engine in validating a
+#  request for access to a member access page.
+# 
+#  This is simplified, of course, but the whole thing is very straightforward.
+#  Enhancements would be to:
+#   - put expiry dates in certificates
+#   - do a revokation check back to a signed revokation list
+#   -  
+# 
 @prefix : <#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix os: <http://www.w3.org/2000/10/swap/os#> .
@@ -8,7 +18,7 @@
 @prefix string: <http://www.w3.org/2000/10/swap/string#> .
 
 
-<> :description <http://www.w3.org/2002/Talks/04-sweb/slide20-1.html>.
+<> :description <http://www.w3.org/2002/Talks/04-sweb/slide22-1.html>.
 
 # Notes.  This uses two levels, request and credentials (certificate)
 #        It would have been even simpler in fact to declare recursively but
@@ -17,14 +27,17 @@
 this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z , :q .
 
 # The rule of access.
+#
+#  acc:requestSupportedBy means that it correctly claimed to be
+#        signed by the given key.
 
 { :request a acc:GoodRequest } is log:implies of
 {
     :request acc:forDocument :d;
-             acc:requestSupportedByKey :k.
+             acc:requestSupportedBy :k.
 
     []       acc:certSupportedBy :k2;    # Certificate
-             log:includes { :k a acc:GoodKey }.
+             log:includes { :k a acc:RequestKey }.
 
     []       acc:certSupportedBy [a acc:MasterKey];    # Certificate
              log:includes { :k2 a acc:MemberKey }.
@@ -55,23 +68,23 @@ this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z
 {  "1" os:argv [ is log:uri of [ log:semantics :F ]].
    :F log:includes { :str acc:endorsement[acc:signature :sig; acc:key :k]}.
    :k crypto:verify ([is crypto:md5 of :str] :sig).
-   :str log:parsedAsN3:G } log:implies { :G :requestSupportedBy :k }.
+   :str log:parsedAsN3:G } log:implies { :G acc:requestSupportedBy :k }.
 
 #  So what do we believe from a signed request?
 #   - what it says it is asking for.
 #   - what it quotes as credentials
 #  It could actually enclose a copy of the credentials inline, but here we use the web
 #
-{:G :requestSupportedBy :k; log:includes {:G acc:forDocument :d}} log:implies {:G acc:forDocument :d}.
+{:G acc:requestSupportedBy :k; log:includes {:G acc:forDocument :d}} log:implies {:G acc:forDocument :d}.
 
-{:G :requestSupportedBy :k; log:includes {:G acc:credential :d}} log:implies {:G acc:credential :d}.
+{:G acc:requestSupportedBy :k; log:includes {:G acc:credential :d}} log:implies {:G acc:credential :d}.
 
 # What do we get from a signed credential?
 
 {  [] acc:credential [ log:semantics :F ].
    :F log:includes { :str acc:endorsement[acc:signature :sig; acc:key :k]}.
    :k crypto:verify ([is crypto:md5 of :str] :sig).
-   :str log:parsedAsN3:G } log:implies { :G :certSupportedBy :k }.
+   :str log:parsedAsN3:G } log:implies { :G acc:certSupportedBy :k }.
 
 # For purging
 

@@ -18,7 +18,7 @@ acc:GoodRequest a s:Class;
      s:label "good request".
 
 acc:forDocument a rdf:Property.
-acc:requestSupportedByKey a rdf:Property.
+acc:requestSupportedBy a rdf:Property.
 
 acc:certSupportedBy a rdf:Property.
 

@@ -1,4 +1,4 @@
-# Generate a signed certificate for soemone (tiina) in the organization
+# Generate a signed certificate for soemone (kari) in the organization
 #
 @prefix : <#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
@@ -8,15 +8,15 @@
 
 this log:forAll  :n, :k, :kp, :str, :tk, :tkp, :z.
 
-# Assume we have data from <access-member.private>  and, eg, <access-tiina.public>
+# Assume we have data from <access-master.private>  and, eg, <access-elisa.public>
 
 { :n is os:argv of "1".
-  :tk a acc:RequestKey.
-  {  :tk a acc:RequestKey;
+  :tk a acc:MemberKey.
+  {  :tk a acc:MemberKey;
          acc:authorityName :n;
          acc:junk "327462sjsdfjsakdhfkjsafd32164321"  } log:n3String :str.
-  :kp a acc:MemberKeyPair.
-  :k a acc:MemberKey.
+  :kp a acc:MasterKeyPair.
+  :k a acc:MasterKey.
   ([is crypto:md5 of :str] :kp) crypto:sign :z } log:implies {
 		:str acc:endorsement[acc:signature :z; acc:key :k]} .
   
@@ -25,7 +25,7 @@ this log:forAll  :n, :k, :kp, :str, :tk, :tkp, :z.
 
 {:z a acc:Secret} log:implies {:z a log:Chaff}.
 
-acc:RequestKey a log:Chaff.
+acc:MasterKey a log:Chaff.
 acc:MemberKey a log:Chaff.
 log:implies a log:Chaff .
 log:forAll a log:Chaff .

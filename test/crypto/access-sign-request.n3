@@ -11,11 +11,11 @@ this log:forAll  :d, :k, :kp, :str, :x, :z.
 # Assume we have data from <access-tiina.private>
 
 { :d log:uri [ is os:argv of "1"].
-  <DEBUG> log:uri :str.
-#  { this acc:forDocument :d;
-#                 acc:credential <access-tiina.cert>;
-#                 acc:junk "32746213462187364732164732164321"  }
-#     log:n3String :str.
+#  <DEBUG> log:uri :str.
+  { this acc:forDocument :d;
+                 acc:credential <access-tiina.cert>, <access-elisa.cert>;
+                 acc:junk "32746213462187364732164732164321"  }
+     log:n3String :str.
   :kp a acc:RequestKeyPair.
   :k a acc:RequestKey.
   ([is crypto:md5 of :str] :kp) crypto:sign :z } log:implies {

@@ -1,0 +1,22 @@
+#Processed by Id: cwm.py,v 1.93 2002/05/14 22:11:04 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/crypto/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/crypto/
+     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    """
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+"""     a :MemberKey .
+    
+#ENDS
