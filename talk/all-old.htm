@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <title>The Semantic Web</title>
+  <link rel="stylesheet" type="text/css" title="W3C Talk"
+  href="../../../Tools/w3ctalk-summary.css" />
+  <link href="em.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body xml:lang="en" lang="en">
+<h1>The Semantic Web</h1>
+
+<p align="center"><a href="http://http://www.w3.org/People/Berners-Lee/">Tim
+Berners-Lee, Director</a>, Director<br />
+</p>
+
+<p align="center">W3C World Wide Web Consortium</p>
+
+<p>Academic discussion,</p>
+
+<p>Japan Prize 2002</p>
+
+<p><br />
+<br />
+</p>
+
+<p>Slides available at:<br />
+<a
+href="http://www.w3.org/Talks/2002/Talks/04-sweb/slide1-1.html">http://www.w3.org/2002/Talks/04-sweb/</a><a></a></p>
+
+<h1>The Semantic Web</h1>
+<ul>
+  <li>Context: World Wide Web Consortium</li>
+  <li>History: World Wide Web</li>
+  <li>Levels of expressiveness</li>
+</ul>
+
+<h1>Context: World Wide Web Consortium</h1>
+<ul>
+  <li>Formed 1994</li>
+  <li>50 member companies/organizations</li>
+  <li>Host sites: MIT, INRIA, Keio</li>
+  <li>Semantic Web is 1 activity of many</li>
+  <li><a href="http://www.w3.org/">www.w3.org</a></li>
+</ul>
+
+<h1>History: The Web Idea</h1>
+
+<p style="text-align: center"><img src="../04-sweb/Architecture.crop.gif" alt="Pre web"
+/></p>
+
+<h1>The Current Web</h1>
+
+<table>
+  <tbody>
+    <tr>
+      <td valign="top"><p class="figure" style="text-align: center"><object
+        width="342" height="454" type="image/svg+xml" name="web"
+        data="../04-sweb/web.svg">
+        </object>
+        </p>
+        <span class="source">Machine cannot understand the meaning of the
+        links.</span> 
+
+        <p><span class="source">[alternate <a href="web.png">png</a>, <a
+        href="web.gif">gif</a> images]</span></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<h1>The Semantic Web: The original web realized</h1>
+
+<p>Information Management: A Proposal, Tim Berners-Lee, CERN, March 1989, May
+1990, <a
+href="http://www.w3.org/History/1989/proposal.html">http://www.w3.org/History/1989/proposal.html</a></p>
+
+<p class="figure"><img alt="image of timbl original web proposal"
+src="timbl-1989-image.gif" /></p>
+
+<h1>The Semantic Web - A Simple Extension to the Current Web</h1>
+
+<table>
+  <tbody>
+    <tr>
+      <td valign="top"><p class="figure"><object width="432" height="454"
+        type="image/svg+xml" name="web" data="../04-sweb/sweb.svg">
+        </object>
+        </p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Binary relationships capture the meaning of the link</p>
+
+<h1>Goal: building machinery</h1>
+
+<table border="0">
+  <tbody>
+    <tr>
+      <td width="70%"><cite>"The bane of my existence is doing things that I
+        know the computer could do for me."</cite> 
+
+        <p>-- Dan Connolly, The XML Revolution</p>
+      </td>
+      <td align="right"><p><img alt="computer refuses to do tasks"
+        src="bane.png" /></p>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h1>SW Principles</h1>
+
+<table>
+  <tbody>
+    <tr>
+      <td><ul>
+          <li>Any abstract thing can have a URI#xxx.</li>
+          <li>Vocabularies can merge and be replaced with time</li>
+          <li>"Anyone can say anything about anything"</li>
+          <li>No one system knows everything</li>
+          <li>Design must be minimalist</li>
+        </ul>
+      </td>
+    </tr>
+  </tbody>
+</table>
+
+<h1>Expressive power</h1>
+
+<p class="figure"><img alt="architectural layers" src="sw-stack-2002.png"
+/></p>
+
+<h1>RDF layer: Entities and Relations</h1>
+
+<p><img src="../04-sweb/arcs-1.gif" alt="a set of circles and arrows" /></p>
+
+<h1>...superimpose</h1>
+
+<p><img src="../04-sweb/arcs-3.gif" alt="more circles and arrows superim" /></p>
+
+<h1>RDF: Semantic links - "Joining the Web"</h1>
+
+<p style="text-align: center"><img src="../04-sweb/zipcode.png"
+alt=" Links between column headings " /></p>
+
+<h1>RDF: Application Integration Hub</h1>
+<ul>
+  <li>Consider an enterprise with N applications</li>
+  <li>Using XML: 
+    <ul>
+      <li>N*N scripts in XSLT to integrate</li>
+    </ul>
+  </li>
+  <li>Using RDF: 
+    <ul>
+      <li>N conversions to hub vocabulary</li>
+      <li>Higher level of initial understanding</li>
+    </ul>
+  </li>
+</ul>
+
+<h1>RDF Schema layer</h1>
+<ul>
+  <li>Minimalist model - (thing), Class, Property</li>
+  <li>Subproperty, Subclass</li>
+  <li>Domain &amp; Range</li>
+  <li>Comments &amp; labels</li>
+  <li>Very wide interoperability</li>
+</ul>
+
+<p>All that is needed for interoperability of the vast amount of "data" on
+the web.</p>
+
+<h1>Ontology layer</h1>
+<ul>
+  <li>More metainformation, such as 
+    <ul>
+      <li>Transitive property</li>
+      <li>Unique, Unambiguous, Cardinality, etc</li>
+    </ul>
+  </li>
+  <li>Ontology community exists- DL, OIL, SHOE, etc. etc.</li>
+  <li>Huge extra usage for extra functionality</li>
+  <li>Not Turing complete, tractable.</li>
+</ul>
+
+<p>Wide interoperability &amp; interconversion</p>
+
+<h1>Rules Layer</h1>
+<ul>
+  <li>General purpose rules languages that allow query and filtering</li>
+  <li>Query similar to SQL</li>
+  <li>Many rules systems currently exist</li>
+  <li>Rules layer allows form of Proof without full Logic layer</li>
+</ul>
+
+<h1>Logic layer</h1>
+<ul>
+  <li>Universal language for monotonic logic</li>
+  <li>Any rule system can export, generally cannot import</li>
+  <li>No one standard engine - inference capabilities differ</li>
+  <li>Many engines exist (SQL to KIF, Cycl, etc)</li>
+  <li>Any system can <em>validate</em> proofs</li>
+  <li>Web assumptions different from closed world</li>
+</ul>
+
+<h1>Web of Trust</h1>
+<ul>
+  <li>All statements on the Web occur in some context.</li>
+  <li>Applications need this context in order to evaluate the trustworthiness
+    of the statements.</li>
+  <li>The machinery of the SW does not assert that all statements found on
+    the Web are "true".</li>
+  <li>Trustworthiness is evaluated by each application.</li>
+  <li>Very flexible language can express existing systems</li>
+</ul>
+
+<h1>Web of Trust - simplified example</h1>
+
+<p><img alt="example of trust processing" src="elisaaccess.png" /></p>
+
+<h1>Semantic Web bus - and above</h1>
+
+<p style="text-align: center"><img src="../04-sweb/sweb-bus.gif"
+alt="Data interworking feeds logic b" /></p>
+
+<h1>Conclusion</h1>
+
+<p>Too general to be aimed at any specific application</p>
+<ul>
+  <li>A web of information machines can help us with</li>
+  <li>Catalogs on the web?</li>
+  <li>Electronic commerce transactions</li>
+  <li>Operating across many apps (eg PDAs)</li>
+  <li>Your favorite ....</li>
+</ul>
+
+<h1>More information</h1>
+<ul>
+  <li>Semantic Web Home Page: <a
+    href="http://www.w3.org/2001/sw/">http://www.w3.org/2001/sw/</a></li>
+  <li>Semantic Web Advanced Development Home Page: <a
+    href="http://www.w3.org/2001/sw/">http://www.w3.org/2000/01/sw/</a></li>
+  <li>RDF Home Page: <a
+    href="http://www.w3.org/rdf/">http://www.w3.org/rdf/</a></li>
+  <li>Semantic Web / RDF Interest Group: <a
+    href="http://www.w3.org/RDF/Interest">http://www.w3.org/RDF/Interest</a></li>
+  <li>Semantic Web / RDF IRC: <a
+    href="http://www.w3.org/RDF/Interest/#irc">irc://openprojects.net/#rdfig</a></li>
+</ul>
+
+<p></p>
+
+<p>ends</p>
+
+<p></p>
+</body>
+</html>

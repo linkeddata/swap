@@ -1,0 +1,26 @@
+#----------------------------------------------------------
+# Slidemaker tools parameters
+#----------------------------------------------------------
+
+baselang = en-US
+charset = ISO-8859-1
+author = Tim Berners-Lee
+authorUrl = http://www.w3.org/People/Berners-Lee/
+talkTitle = The Semantic Web and Rule engines
+cssUserFiles = local.css
+#logoLink =
+logoFile = ../../../../Talks/Icons/w3c_home.gif
+#logoLink2 = 
+#logoAlt = 
+#logoFile2 = 
+cssStandardFiles = ../../../../Talks/Tools/w3ctalk-1024w.css,../../../../Talks/Tools/w3ctalk-800.css,../../../../Talks/Tools/w3ctalk-1024.css,../../../../Talks/Tools/slide-1024.css
+# ../../../../Talks/Tools/w3ctalk-640w.css,../../Talks/Tools/w3ctalk-800w.css, ../../../../Talks/Tools/w3ctalk-640.css, ../../../../Talks/Tools/slide-800.css, ../../../../Talks/Tools/slide-640.css,
+#logoAlt2 = 
+left = ../../../../Talks/Icons/left.gif
+right = ../../../../Talks/Icons/right.gif
+top = ../../../../Talks/Icons/up.gif
+toc = ../../../../Talks/Icons/toc.gif
+bar = ../../../../Talks/Icons/change.gif
+barl = ../../../../Talks/Icons/barl.gif
+change = ../../../../Talks/Icons/change.png
+

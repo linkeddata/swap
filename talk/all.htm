@@ -1,0 +1,205 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <title>SWAP overview slides</title>
+  <link rel="stylesheet" type="text/css" title="W3C Talk"
+  href="../../../Tools/w3ctalk-summary.css" />
+  <link href="em.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body xml:lang="en" lang="en">
+<h1>The Semantic Web Application Platform</h1>
+
+<p align="center" style="text-align: left"><a
+href="http://http://www.w3.org/People/Berners-Lee/">Tim Berners-Lee,</a> Dan
+Brikley, Dan Connolly, Sandro Hawke, Jose Kahan/INRIA, Marja-Riitta Koivunen,
+EricMiller, Eric Prud'hommeaux, Ralph Swick, Danny Weitzner, in collaboration
+with David Karger and Lynn Stein/Olin College</p>
+
+<p><img alt="example of trust processing"
+src="../../../DesignIssues/diagrams/elisaaccess.png" /></p>
+
+<h1>Working with RDF and Notation3</h1>
+<ul>
+  <li>Native RDFapplications </li>
+  <li>Importing data from legacy applications</li>
+  <li>Exporting data to legacy applications</li>
+  <li>Processing the data across applications</li>
+</ul>
+
+<p></p>
+
+<h1>Application Integration: Native RDF</h1>
+
+<p>Some data is naturally in RDF....</p>
+<ul>
+  <li>Teleconference schedule, present in bridge, action items etc (Swick's
+    <em>Zakim</em>)</li>
+  <li>W3C roadmap (by hand)</li>
+  <li>RSS syndication feeds</li>
+  <li>Other project's metadata (e.g. RSS, Dublin Core, Adobe XMP)</li>
+</ul>
+
+<h1>Application Integration: Import</h1>
+
+<p>Things we played with at MIT/LCS:</p>
+
+<table border="1">
+  <tbody>
+    <tr>
+      <th>Topic</th>
+      <th>Format</th>
+      <th>Hack: Converter to RDF</th>
+    </tr>
+    <tr>
+      <td rowspan="3">Calendar</td>
+      <td>iCal</td>
+      <td><a href="../../../2000/10/swap/pim/ical2rdf.pl">ical2rdf.pl</a></td>
+    </tr>
+    <tr>
+      <td>Palm</td>
+      <td><a href="http://dev.w3.org/cvsweb/2001/palmagent">palmagent</a></td>
+    </tr>
+    <tr>
+      <td>Outlook</td>
+      <td><a href="../../../2000/10/swpa/pim/lookout.py">lookout.py</a></td>
+    </tr>
+    <tr>
+      <td>Financial</td>
+      <td>OFX</td>
+      <td><a href="../../../2000/10/swap/pim/qfx2n3.sed">qfx2n3.sed</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>QIF</td>
+      <td><a href="../../../2000/10/swap/pim/qif2n3.py">qif2n3.py</a></td>
+    </tr>
+    <tr>
+      <td>Trip</td>
+      <td>telex</td>
+      <td><a
+        href="../../../2000/10/swap/pim/grokTravItin.pl">grokTravItin.pl</a></td>
+    </tr>
+    <tr>
+      <td>Generic RDB</td>
+      <td>mysql, etc</td>
+      <td><a href="../../../2000/10/swap/dbork">dbview.py</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td></td>
+      <td>cwm+sqldb.py</td>
+    </tr>
+    <tr>
+      <td>Software dependencies</td>
+      <td>makefile</td>
+      <td><a href="../../../2000/10/swap/itil/make2n3.py">make2n3.py</a></td>
+    </tr>
+    <tr>
+      <td></td>
+      <td>dpkg</td>
+      <td><a href="../../../2000/10/swap/util/fink2n3.py">fink2n3.py</a></td>
+    </tr>
+    <tr>
+      <td>Photo metadata</td>
+      <td>EXIF</td>
+      <td><a href="../pim/jhead/">jhead</a> (as adapted)</td>
+    </tr>
+    <tr>
+      <td>W3C structure, etc</td>
+      <td>HTML scrape</td>
+      <td>___.n3</td>
+    </tr>
+  </tbody>
+</table>
+
+<p></p>
+
+<h1>Application integration: Export</h1>
+
+<p></p>
+
+<table border="1">
+  <tbody>
+    <tr>
+      <th>converter</th>
+      <th>Format</th>
+      <th>Application</th>
+    </tr>
+    <tr>
+      <td>cwm</td>
+      <td>HTML</td>
+      <td>Reports</td>
+    </tr>
+    <tr>
+      <td>Canonical RDF, 
+
+        <p>XSLT</p>
+      </td>
+      <td>.dot</td>
+      <td>GraphViz 
+
+        <p>circles &amp; arrows</p>
+      </td>
+    </tr>
+    <tr>
+      <td>various</td>
+      <td>JPG</td>
+      <td>Map</td>
+    </tr>
+    <tr>
+      <td>toIcal.py</td>
+      <td>iCalendar</td>
+      <td>Calendar</td>
+    </tr>
+  </tbody>
+</table>
+
+<h1>Application integration: Case study Roadmap</h1>
+
+<p><object width="100%" height="300" type="image/svg+xml" name="roadmap"
+data="../../../2001/04/roadmap/about.svg">
+  The all.n3 rules select (by graph traversal) a subset of the organizational
+  data in w3c.n3. Cwm runs these along with a style sheet, style.n3, which
+  determines the color and shapes of graphics as a function of properties of
+  the real things they represent. ATT's Graphviz turns the all.graph N3 file
+  into all.svg.</object>
+</p>
+
+<p><small>(</small><a
+href="../../../2001/04/roadmap/about.svg"><small>version with links working
+in ie</small></a><small>)</small></p>
+
+<h1>Application integration: Example - Trip</h1>
+
+<p><object width="100%" height="500" type="image/svg+xml" name="trip"
+data="../../../2002/08dc-ymx/make.svg">
+  The trip itinerary is hacked into RDF, processed, and then the results
+  projected onto a map.</object>
+</p>
+
+<p><a href="../../../2002/08dc-ymx/make.svg"><small>(version with links
+working in ie</small></a><small>) Dan Connolly</small></p>
+
+<h1>Semantic Web bus - and above</h1>
+<img src="../../../DesignIssues/diagrams/sweb-bus.png"
+alt="Data interworking feeds logic b" /> 
+
+<p></p>
+
+<h1>More information</h1>
+<ul>
+  <li>Semantic Web Home Page: <a
+    href="http://www.w3.org/2001/sw/">http://www.w3.org/2001/sw/</a></li>
+  <li>Semantic Web Advanced Development Home Page: <a
+    href="http://www.w3.org/2001/sw/">http://www.w3.org/2000/01/sw/</a></li>
+  <li>RDF Home Page: <a
+    href="http://www.w3.org/rdf/">http://www.w3.org/rdf/</a></li>
+  <li>Semantic Web / RDF Interest Group: <a
+    href="http://www.w3.org/RDF/Interest">http://www.w3.org/RDF/Interest</a></li>
+  <li>Semantic Web / RDF IRC: <a
+    href="http://www.w3.org/RDF/Interest/#irc">irc://openprojects.net/#rdfig</a></li>
+</ul>
+</body>
+</html>
