@@ -37,7 +37,7 @@ formula_list(usable).
 %   owl_Thing, rdf_Resource
 %
 
-% (all X (rdf(X, rdf_type, owl_Thing))).
+(all X (rdf(X, rdf_type, owl_Thing))).
 (all X (rdf(X, rdf_type, rdf_Resource))).
 
 
@@ -120,7 +120,7 @@ all MEMBER (-inList(MEMBER, rdf_nil)).
 
 all C1 C2 (
    rdf(C1, owl_equivalentClass, C2)
-   ->     % BIDIR 
+   <->     % <- needed for http://www.w3.org/2002/03owlt/I4.6/conclusions003
    (all INST (
      rdf(INST, rdf_type, C1) <-> rdf(INST, rdf_type, C2) 
    ))
@@ -460,7 +460,10 @@ all P1 P2 (
 ).
     
 % $Log$
-% Revision 1.6  2003-07-30 03:08:01  sandro
+% Revision 1.7  2003-07-30 03:25:18  sandro
+% added owl_Thing and a BIDIR to pass 5.24/...004
+%
+% Revision 1.6  2003/07/30 03:08:01  sandro
 % third try for allDifferent; passes test finally
 %
 % Revision 1.5  2003/07/30 03:05:40  sandro
