@@ -106,8 +106,9 @@ class CalWr:
         #  -- 4.5 Property, http://www.ietf.org/rfc/rfc2445.txt
         w = self._w
         txt  = kb.any((ctx, kb.internURI(ICAL.sym(pn)), subj, None))
+        if txt is None: return txt
         v = strip(str(txt))
-        w("%s:%s%s" % (pn, v, CRLF)) #@@linebreaks?
+        w("%s:%s%s" % (pn.upper(), v, CRLF)) #@@linebreaks?
         return v
     
     def timeProp(self, kb, ctx, pn, subj):
@@ -127,14 +128,14 @@ class CalWr:
 	    else:
 		whenV = whenV+"000000"
 		whenV = whenV[:15] # 8 for date, 1 for T, 6 for time
-            w("%s;TZID=%s:%s%s" % (pn, str(whenTZ), whenV, CRLF))
+            w("%s;TZID=%s:%s%s" % (pn.upper(), str(whenTZ), whenV, CRLF))
         else:
 	    if whenV[-1:] != "Z":
 		pass # local time. hmm...
 	    else:
 		whenV = whenV[:-1]+"000000"
 		whenV = whenV[:15] + "Z"
-            w("%s:%s%s" % (pn, str(whenV), CRLF))
+            w("%s:%s%s" % (pn.upper(), str(whenV), CRLF))
 
 import sys, os
 import uripath
@@ -164,7 +165,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.2  2002-07-23 21:44:16  connolly
+# Revision 1.3  2002-07-23 23:09:31  connolly
+# grumble... evo is case-sensitive where the RFC says not to be
+#
+# Revision 1.2  2002/07/23 21:44:16  connolly
 # - updated ICAL namespace pointer, case of RDF terms
 # - handle description, as well as summary
 # - be more clear about what properties we skip/don't handle
