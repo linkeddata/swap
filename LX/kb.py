@@ -69,8 +69,8 @@ class KB(list, pluggable.Store):
         result+= "\n  exivars: "+", ".join(map(LX.expr.getNameInScope, self.exivars, [scope] * len(self.exivars)))
         result+= "\n  univars: "+", ".join(map(LX.expr.getNameInScope, self.univars, [scope] * len(self.univars)))
         result+= "\n  interpretation: "
-        for (key,valueList) in self.__interpretation.iteritems():
-            result+="\n     %s -->  %s"%(key.getNameInScope(scope), ", ".join(map(str, valueList)))
+#        for (key,valueList) in self.__interpretation.iteritems():
+#            result+="\n     %s -->  %s"%(key.getNameInScope(scope), ", ".join(map(str, valueList)))
         result+= "\n  formulas: "
         result+= "\n     "
         result+= "\n     ".join(map(LX.expr.getNameInScope, self, [scope] * len(self)))
@@ -327,8 +327,8 @@ class KB(list, pluggable.Store):
         """
         >>> import LX.kb
         >>> kb=LX.kb.KB()
-        >>> kb.rdf_type
-        Node([],LX.logic.ConstantForURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type))
+        >>> kb.rdf_type.fromTerm
+        LX.logic.ConstantForURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type)
         """
 
         # is it a namespace-underscore-name name?
@@ -397,7 +397,11 @@ class KB(list, pluggable.Store):
             return self.nicknames[term]
         except KeyError:
             pass
-        nick = "_".join(self.ns.inverseLookup(term))
+        try:
+            nick = "_".join(self.ns.inverseLookup(term))
+        except KeyError, e:
+            # print "Term: ", term
+            raise e
         self.nicknames[term] = nick
         return nick
         
@@ -409,7 +413,10 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
  
 # $Log$
-# Revision 1.17  2003-08-25 21:10:01  sandro
+# Revision 1.18  2003-09-04 03:15:20  sandro
+# removed a leftover reference to __interpretation; diddled with nick exceptions
+#
+# Revision 1.17  2003/08/25 21:10:01  sandro
 # general nodepath support
 #
 # Revision 1.16  2003/08/25 16:10:41  sandro
