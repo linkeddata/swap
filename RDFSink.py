@@ -377,4 +377,8 @@ class TracingRDFSink:
         printState()
         return self.backing.newSymbol(uri)
 
+    def newLiteral(self, str):
+        printState()
+        return self.backing.newSymbol(str)
+
 # ends
