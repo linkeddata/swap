@@ -32,6 +32,7 @@ Agenda:
 import string
 import diag
 
+from why import FormulaReason
 from diag import verbosity, setVerbosity, progress, tracking, setTracking
 from llyn import compareURI
 from uripath import join
@@ -381,6 +382,9 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             elif arg == "-why":
 		diag.tracking=1
 		diag.setTracking(1)
+            elif arg == "-track":
+		diag.tracking=1
+		diag.setTracking(1)
             elif arg == "-bySubject": option_outputStyle = arg
             elif arg == "-no": option_outputStyle = "-no"
             elif arg == "-strings": option_outputStyle = "-no"
@@ -445,15 +449,14 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         #if option_reify: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula")
         if option_flat: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula", flat=1)
 
+	outFormulaURI = _outURI+ "#0_work"
         if option_pipe:
             _store = _outSink
-            workingContextURI = None
         else:
 #            _metaURI = join(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
             _store = llyn.RDFStore( _outURI+"#_g", argv=option_with, crypto=option_crypto)
 	    thing.setStore(_store)
-            workingContextURI = _outURI+ "#0_work"
-            workingContext = _store.newFormula(workingContextURI)   #@@@ Hack - use metadata
+            workingContext = _store.newFormula(outFormulaURI)   #@@@ Hack - use metadata
             #  Metadata context - storing information about what we are doing
 
 #            _store.reset(_metaURI+"#_experience")     # Absolutely need this for remembering URIs loaded
@@ -461,13 +464,12 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         lxkb = LX.KB()      # set up a parallel store for LX-based operations
 
 	if diag.tracking:
-	    from why import FormulaReason
 	    proof = FormulaReason(workingContext)
 
         if not _gotInput: # default input
             _inputURI = _baseURI # Make abs from relative
             if option_first_format is None: option_first_format = option_format
-            p = getParser(option_first_format, _inputURI, workingContextURI, option_flags)
+            p = getParser(option_first_format, _inputURI, outFormulaURI, option_flags)
             p.load("", baseURI=_baseURI)
             del(p)
             if not option_pipe:
@@ -495,7 +497,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             if arg[0] != "-":
                 _inputURI = join(option_baseURI, arg)
                 assert ':' in _inputURI
-                p = getParser(option_format, _inputURI, workingContextURI, option_flags)
+                p = getParser(option_format, _inputURI, outFormulaURI, option_flags)
                 if not option_pipe: workingContext.reopen()
                 p.load(_inputURI)
                 del(p)
@@ -529,7 +531,9 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 option_flags["n3"] = _rhs
             elif arg == "-quiet" : option_quiet = 1            
             elif _lhs == "-chatty": setVerbosity(int(_rhs))
-
+	    elif arg[:7] == "-track=":
+		diag.tracking = int(_rhs)
+		
             elif option_pipe: ############## End of pipable options
                 print "# Command line error: %s illegal option with -pipe", arg
                 break
@@ -545,27 +549,23 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
             elif arg[:7] == "-apply=":
                 need(_store); touch(_store)
-                filterContext = (_store.intern((FORMULA, _uri+ "#_formula")))
-                if verbosity() > 4: progress( "Input rules to --apply from " + _uri)
-                _store.loadURI(_uri)
+                filterContext = _store.load(_uri)
+		workingContext.reopen()
                 _store.applyRules(workingContext, filterContext);
 
             elif _lhs == "-filter":
                 need(_store); touch(_store)
-                filterContext = _store.intern((FORMULA, _uri+ "#_formula"))
-                _newURI = join(_baseURI, "_w_"+`_genid`)  # Intermediate
-                _genid = _genid + 1
-                _newContext = _store.intern((FORMULA, _newURI+ "#_formula"))
-                _store.loadURI(_uri)
+                filterContext = _store.load(_uri)
+		_newContext = _store.newFormula()
+		if diag.tracking: proof = FormulaReason(_newContext)
                 _store.applyRules(workingContext, filterContext, _newContext)
+		workingContext.close()
                 workingContext = _newContext
-                workingContextURI = _newURI
 
             elif arg == "-why":
                 need(_store); touch(_store)
 		workingContext.close()
-		workingContext = proof.explanation()
-                workingContextURI = workingContext.uriref()
+		workingContext = workingContext.collector.explanation()
 
             elif arg == "-purge":
                 need(_store); touch(_store)
@@ -582,9 +582,8 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
             elif arg[:7] == "-think=":
                 need(_store); touch(_store)
-                filterContext = (_store.intern((FORMULA, _uri+ "#_formula")))
+                filterContext = _store.load(_uri)
                 if verbosity() > 4: progress( "Input rules to --think from " + _uri)
-                _store.loadURI(_uri)
                 _store.think(workingContext, filterContext);
 
             elif arg == "-think":

@@ -40,6 +40,21 @@ global 	dontAsk
 global	proofOf
 proofOf = {} # Track reasons for formulae
 
+# origin = {}   # track (statement, formula) to reason
+
+def report(s, why):
+    """Report a new statement to the reason tracking software
+    
+    See the FormulaReason class"""
+    context, pred, subj, obj = s.quad
+    if (context.collector != None):
+	context.collector.newStatement(s, why)
+
+
+#    global origin
+#    x = origin.get(s, [])
+#    x.append(why)
+
 class Reason:
     """The Reason class holds a reason for having some information.
     Well, its subclasses actually do hold data.  This class should not be used itself
@@ -64,6 +79,7 @@ class Reason:
 	"""
 	raise RuntimeErrot("What, no explain method for this class?")
 	
+
 	
 class FormulaReason(Reason):
     """A Formula reason reproduces the information ina formula
@@ -120,7 +136,12 @@ class FormulaReason(Reason):
         ko.add(subj=me, pred=reason.gives, obj=self.formula, why=dontAsk)
 #	ko.add(obj=qed, pred=reason.because, subj=self.formula, why=dontAsk)
     
-    
+	for u in self.formula.universals():
+	    ko.add(me, reason.universal, u, why=dontAsk)
+
+	for e in self.formula.existentials():
+	    ko.add(me, reason.existential, e, why=dontAsk)
+
 	for s, rea in self.statementReasons:
 	    pred = s.predicate()
 	    if pred is not self.store.forAll and pred is not self.store.forSome:
@@ -130,6 +151,16 @@ class FormulaReason(Reason):
 		ko.add(me, reason.component, si, why=dontAsk)
 	return me
 
+class BecauseMerge(FormulaReason):
+    """Because this formula is a merging of others"""
+    def __init__(self, f, set):
+	FormulaReason.__init__(self, f)
+	self.fodder = set
+
+class BecauseSubexpression(Reason):
+    pass
+
+becauseSubexpression = BecauseSubexpression()
 
 
 
@@ -193,28 +224,34 @@ class BecauseOfRule(Reason):
 
 
 def explainStatement(s, ko):
+    si = describeStatement(s, ko)
+
     f = s.context()
     statementFormulaReason = proofOf.get(f, None)
+
+#    if statementFormulaReason == None:
+#	statementFormulaReason = f.collector  # try  that - works for subformulae? @@@ no
     if statementFormulaReason == None:
-	progress("Ooops, no proof for formula %s needed for statement %s" % (f,s))
-	raise RuntimeError("see above")
+#	raise RuntimeError(
+	"Ooops, only have proofs for %s.\n No proof for formula %s needed for statement %s\n%s\n" 
+#				% (proofOf.keys(),f,s, f.debugString()))
+
+	pass
     else:
 	statementReason = statementFormulaReason.reasonForStatement.get(s, None)
 	if statementReason == None:
 	    progress("Ooops, formula has no reason for statement,", s)
 	    raise RuntimeError("see above")
 	    return None
-	else:
-	    ri = statementReason.explain(ko)
-	    si = describeStatement(s, ko)
-	    ko.add(subj=si, pred=reason.because, obj=ri, why=dontAsk)
-	    return si
+	ri = statementReason.explain(ko)
+	ko.add(subj=si, pred=reason.because, obj=ri, why=dontAsk)
+    return si
 
 def describeStatement(s, ko):
 	"Describe the statement into the output formula ko"
 	si = ko.newBlankNode(why=dontAsk)
 	ko.add(si, rdf.type, reason.Extraction, why=dontAsk)
-	ko.add(si, reason.gives, asFormula(s, ko.store), why=dontAsk)
+	ko.add(si, reason.gives, s.asFormula(why=dontAsk), why=dontAsk)
 
 #	con, pred, subj, obj = s.quad
 #	ko.add(subj=si, pred=reason.subject, obj=subj, why=dontAsk)
@@ -252,15 +289,21 @@ class BecauseOfCommandLine(Because):
     """Becase the command line given in the string"""
     pass
     
+class BecauseOfExperience(Because):
+    """Becase the command line given in the string"""
+    pass
+    
 class BecauseBuiltIn(Reason):
     """Because the built-in function given concluded so.
     A nested reason for running the function can also be given"""
-    def __init__(self, subj, pred, obj, because=None):
+    def __init__(self, subj, pred, obj, proof):
 	Reason.__init__(self)
 	self._subject = subj
 	self._predicate = pred
 	self._object = obj
-	self._reason = because
+	self._proof = None
+	if len(proof)>0:
+	    self._proof = proof[0]
 	
     def explain(self, ko):
 	"This is just a plain fact - or was at the time."
@@ -270,6 +313,8 @@ class BecauseBuiltIn(Reason):
 	fact = fact.close()
 	ko.add(me, rdf.type, reason.Fact, why=dontAsk)
 	ko.add(me, reason.gives, fact, why=dontAsk)
+	if self._proof != None:
+	    ko.add(me, reason.proof, self._proof.explain(ko), why=dontAsk)
 	return me
 
 ###################################### Explanations of things
@@ -277,22 +322,6 @@ class BecauseBuiltIn(Reason):
 # Routine extending class Formula (how to extend a class in Python?)
 # 
 #
-
-
-def asFormula(self, store):
-    """The formula which contains only a statement like this.
-    
-    This extends the StoredStatement class with functionality we only need with who module."""
-    statementAsFormula = store.newFormula()   # @@@CAN WE DO THIS BY CLEVER SUBCLASSING? statement subclass of f?
-    statementAsFormula.add(subj=self.subject(), pred=self.predicate(), obj=self.object(), why=dontAsk)
-    kb = self.context()
-    uu = store.occurringIn(statementAsFormula, kb.universals())
-    ee = store.occurringIn(statementAsFormula, kb.existentials())
-    for v in uu:
-	statementAsFormula.add(subj= statementAsFormula, pred=log.forAll, obj=v, why=dontAsk)
-    for v in ee:
-	statementAsFormula.add(subj= statementAsFormula, pred=log.forSome, obj=v, why=dontAsk)
-    return statementAsFormula.close()  # probably slow - much slower than statement subclass of formula
 
 
 

@@ -363,9 +363,8 @@ class XMLWriter:
             lan = at[i+1:]
             prefix = prefixes.get(ans,":::")
             if prefix == ":::":
-                print ("#@@@@@ tag %s: atr %s has no prefiex :-(" %
+                raise RuntimeError("#@@@@@ tag %s: atr %s has no prefix :-( in prefix table:\n%s" %
                        (uriref, at, `prefixes`))
-                raise NoPrefixForAttributeError
             attrs.append(( prefix+":"+lan, val))    
 
 	self.newline(3-len(self._elts))    # Newlines separate higher levels

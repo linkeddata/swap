@@ -181,25 +181,30 @@ def valid(r, level=0):
     return fail("Reason %s is of unknown type %s.\n%s"%(r,t, s), level=level)
 
 # Main program 
-	    
-parsed = {}
-setVerbosity(0)
-chatty=60
-inputURI = argv[1]
-fyi("Reading proof from "+inputURI)
-proof = load(inputURI)
-#setVerbosity(60)
-fyi("Length of proof: "+`len(proof)`)
-proof2 = proof.the(pred=rdf.type, obj=reason.Proof)  # the thing to be proved
 
+def main():	    
+    parsed = {}
+    setVerbosity(0)
+    chatty=60
+    #inputURI = argv[1]
+    #fyi("Reading proof from "+inputURI)
+    fyi("Reading proof from standard input.")
+    proof = load()
+    #setVerbosity(60)
+    fyi("Length of proof: "+`len(proof)`)
+    proof2 = proof.the(pred=rdf.type, obj=reason.Proof)  # the thing to be proved
+    
+    
+    proved = valid(proof2)
+    if proved != None:
+	fyi("Proof looks OK.")
+	setVerbosity(0)
+	print proved.n3String()
+	exit(0)
+    progress("Proof invalid.")
+    exit(-1)
 
-proved = valid(proof2)
-if proved != None:
-    fyi("Proof looks OK.")
-    print proved.n3String()
-    exit(0)
-progress("Proof invalid.")
-exit(-1)
-
+if __name__ == "__main__":
+    main()
 #ends
 

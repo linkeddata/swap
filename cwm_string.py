@@ -48,49 +48,49 @@ STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
 #   Light Built-in classes
 
 class BI_GreaterThan(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings):
+    def eval(self,  subj, obj, queue, bindings, proof):
         return (subj.string > obj.string)
 
 class BI_NotGreaterThan(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings):
+    def eval(self,  subj, obj, queue, bindings, proof):
         return (subj.string <= obj.string)
 
 class BI_LessThan(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings):
+    def eval(self,  subj, obj, queue, bindings, proof):
         return (subj.string < obj.string)
 
 class BI_NotLessThan(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings):
+    def eval(self,  subj, obj, queue, bindings, proof):
         return (subj.string >= obj.string)
 
 class BI_StartsWith(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings):
+    def eval(self,  subj, obj, queue, bindings, proof):
         return subj.string.startswith(obj.string)
 
 class BI_EndsWith(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings):
+    def eval(self,  subj, obj, queue, bindings, proof):
         return subj.string.endswith(obj.string)
 
 # Added, SBP 2001-11:-
 
 class BI_Contains(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings):
+    def eval(self,  subj, obj, queue, bindings, proof):
         return string.find(subj.string, obj.string) >= 0
 
 class BI_ContainsIgnoringCase(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings):
+    def eval(self,  subj, obj, queue, bindings, proof):
         return string.find(string.lower(subj.string), string.lower(obj.string)) >= 0
 
 class BI_DoesNotContain(LightBuiltIn): # Converse of the above
-    def eval(self,  subj, obj, queue, bindings):
+    def eval(self,  subj, obj, queue, bindings, proof):
         return string.find(subj.string, obj.string) < 0
 
 class BI_equalIgnoringCase(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings):
+    def eval(self,  subj, obj, queue, bindings, proof):
         return (string.lower(subj.string) == string.lower(obj.string))
 
 class BI_notEqualIgnoringCase(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings):
+    def eval(self,  subj, obj, queue, bindings, proof):
         return (string.lower(subj.string) != string.lower(obj.string))
 
 #  String Constructors - more light built-ins
@@ -133,11 +133,11 @@ class BI_scrape(LightBuiltIn, Function):
             return m.group(1)
 
 class BI_matches(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings):
+    def eval(self,  subj, obj, queue, bindings, proof):
         return (re.compile(obj.string).search(subj.string))
 
 class BI_notMatches(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings):
+    def eval(self,  subj, obj, queue, bindings, proof):
         return (not re.compile(obj.string).search(subj.string))
 
 

@@ -19,7 +19,7 @@ include $(PD)/GVDOT.mak
 
 .request.proof:
 	$(CWM) access-rule.n3 --think --purge --filter=result-filter.n3 \
-		 --why --with $< > $@
+		 --base=foo --why --with $< > $@
 
 .private.public:
 	$(CWM) $< access-onlyPublic.n3 --think --purge > $@

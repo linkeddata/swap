@@ -8,8 +8,13 @@
 # see also: changelog at end of file.
 mkdir -p temp
 mkdir -p diffs
-tests=0
+tests=1000
 passes=0
+
+echo "@prefix : <#>."
+echo "@prefix x: <#>."
+echo "@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>"
+echo
 
 REFWD=file:/devel/WWW/2000/10/swap/test
 WD=file:`/bin/pwd`
@@ -19,15 +24,31 @@ function cwm_test () {
   args=$*
   echo
   tests=$(($tests+1))
-  echo $tests Test $case: $desc
-  echo "   "    cwm $args
 
-  if !(python ../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' -e "s;$WD;$REFWD;g" -e '/@prefix run/d' > temp/$case);
-  then echo CRASH $case;
-  elif ! diff -Bbwu ref/$case temp/$case >diffs/$case;
-  then echo DIFF FAILS: less diffs/$case  "############";
-  elif [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case "############"; wc ref/$case temp/$case;
-  else passes=$(($passes+1)); fi
+  echo ":t$tests a test:CwmTest;"
+  echo "    test:shortFileName \"$case\";"
+  echo "    test:description   \"$desc\";"
+  echo "    test:arguments     \"\"\"$args\"\"\"."
+  echo
+#  echo $tests Test $case: $desc
+#  echo "   "    cwm $args
+
+#  if !(python ../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' -e "s;$WD;$REFWD;g" -e '/@prefix run/d' > temp/$case);
+#  then echo CRASH $case;
+#  elif ! diff -Bbwu ref/$case temp/$case >diffs/$case;
+#  then echo DIFF FAILS: less diffs/$case  "############";
+#  elif [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case "############"; wc ref/$case temp/$case;
+#  else passes=$(($passes+1)); fi
+
+
+#  if !(python ../cwm.py -quiet $args --why | python ../check.py | sed -e 's/#\$[I]d.*\$//g' -e "s;$WD;$REFWD;g" -e '/@prefix run/d' > temp/$case);
+#  then echo CRASH $case;
+#  elif ! diff -Bbwu ref/$case temp/$case >diffs/$case;
+#  then echo DIFF FAILS: less diffs/$case  "############";
+#  elif [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case "############"; wc ref/$case temp/$case;
+#  else passes=$(($passes+1)); fi
+
+
 }
 
 cwm_test animal.n3 "Parse a small RDF file, generate N3" -rdf animal.rdf -n3
@@ -61,7 +82,7 @@ cwm_test equiv-syntax.n3 "conversion of N3 = to RDF" -n3 equiv-syntax.n3 -rdf
 
 cwm_test daml-ont-piped.n3 "Pipe mode for flat n3 to n3" daml-ont.n3 --pipe
 
-cwm_test lists-simple.n3 "parsing and generation of N3 list () syntax" -n3 lists-simple.n3
+cwm_test lists-simple.n3 "parsing and generation of N3 list syntax" -n3 lists-simple.n3
 
 cwm_test lists-simple-1.rdf "conversion of N3 list syntax to RDF" -n3 lists-simple.n3 -rdf
 
@@ -166,55 +187,60 @@ cwm_test argv-1.n3 "os:argv argument values"  os/argv.n3 --think --with foo bar 
 
 cwm_test argv-2.n3 "os:argv argument other values"  os/argv.n3 --think --with boof
 
-echo " "
-echo " Test --flatten:"
-
-cwm_test flatten-1g.n3 "one ground triple" flatten-1g.n3 --flatten
-
-cwm_test flatten-2g.n3 "two ground triples" flatten-2g.n3 --flatten
-
-cwm_test flatten-1u.n3 "one triple with univar" flatten-1u.n3 --flatten
-
-cwm_test flatten-1e.n3 "one triple with explicit univar" flatten-1e.n3 --flatten
-
-cwm_test flatten-1e2.n3 "one triple with implicit univar" flatten-1e2.n3 --flatten
-
-cwm_test flatten-Truth.n3 " " flatten-Truth.n3 --flatten
-
-cwm_test flatten-rule1.n3 " " flatten-rule1.n3 --flatten
-
+#echo " "
+#echo " Test --flatten:"
+#
+#cwm_test flatten-1g.n3 "one ground triple" flatten-1g.n3 --flatten
+#
+#cwm_test flatten-2g.n3 "two ground triples" flatten-2g.n3 --flatten
+#
+#cwm_test flatten-1u.n3 "one triple with univar" flatten-1u.n3 --flatten
+#
+#cwm_test flatten-1e.n3 "one triple with explicit univar" flatten-1e.n3 --flatten
+#
+#cwm_test flatten-1e2.n3 "one triple with implicit univar" flatten-1e2.n3 --flatten
+#
+#cwm_test flatten-Truth.n3 " " flatten-Truth.n3 --flatten
+#
+#cwm_test flatten-rule1.n3 " " flatten-rule1.n3 --flatten
+#
 # cwm_test flatten-rules12.n3 " " rules12.n3 --flatten
-
+#
 # cwm_test flatten-rules13.n3 " " rules13.n3 --flatten
-
-cwm_test flatten-terse-1e.n3 "tersified: one triple with explicit univar" flatten-1e.n3 --flatten --apply=flatten-terser.n3 --purge
-
-cwm_test flatten-terse-1e2.n3 "tersified: one triple with implicit univar" flatten-1e2.n3 --flatten --apply=flatten-terser.n3 --purge
-
-cwm_test flatten-terse-Truth.n3 " " flatten-Truth.n3 --flatten --apply=flatten-terser.n3 --purge
-
-cwm_test flatten-terse-rule1.n3 " " flatten-rule1.n3 --flatten --apply=flatten-terser.n3 --purge
+#
+#cwm_test flatten-terse-1e.n3 "tersified: one triple with explicit univar" flatten-1e.n3 --flatten --apply=flatten-terser.n3 --purge
+#
+#cwm_test flatten-terse-1e2.n3 "tersified: one triple with implicit univar" flatten-1e2.n3 --flatten --apply=flatten-terser.n3 --purge
+#
+#cwm_test flatten-terse-Truth.n3 " " flatten-Truth.n3 --flatten --apply=flatten-terser.n3 --purge
+#
+#cwm_test flatten-terse-rule1.n3 " " flatten-rule1.n3 --flatten --apply=flatten-terser.n3 --purge
 
 # cwm_test flatten-terse-rules12.n3 " " rules12.n3 --flatten --apply=flatten-terser.n3 --purge
 
 # cwm_test flatten-terse-rules13.n3 " " rules13.n3 --flatten --apply=flatten-terser.n3 --purge
 
-cwm_test flatten-Falsehood.n3 " " flatten-Falsehood.n3 --flatten
-
-cwm_test flatten-means.n3 " " flatten-means.n3 --flatten
-
-# echo "Test proof generation"
+#cwm_test flatten-Falsehood.n3 " " flatten-Falsehood.n3 --flatten
+#
+#cwm_test flatten-means.n3 " " flatten-means.n3 --flatten
+#
+echo "Test proof generation"
 
 cwm_test reason-t5.n3 "Proof for one simple rule" reason/t5.n3 --think --base=foo --why
   
 # echo  "Test applications"
+
+echo "#ends";exit
 
 echo "Passed $passes out of $tests geneneral regresssion tests."
 echo "Loopback parser tests:"
 ./n3-xml-test.sh `cat tests-work.txt`
 
 # $Log$
-# Revision 1.45  2002-12-30 15:00:35  timbl
+# Revision 1.46  2003-01-10 17:13:16  timbl
+# Works without proof stuff, working on proof stuff....
+#
+# Revision 1.45  2002/12/30 15:00:35  timbl
 # --why works up to reason/t5. GK and SBP's list bugs fixed.
 #
 # Revision 1.44  2002/12/08 05:27:24  timbl

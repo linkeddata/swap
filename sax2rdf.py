@@ -41,6 +41,8 @@ import sys
 
 import thing
 import uripath
+from why import BecauseOfData
+import diag
 
 import xml.sax # PyXML stuff
                #   http://sourceforge.net/projects/pyxml
@@ -73,7 +75,7 @@ RDF_Specification = "http://www.w3.org/TR/REC-rdf-syntax/" # Must come in useful
 DAML_ONT_NS = "http://www.daml.org/2000/10/daml-ont#"  # DAML early version
 DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
 
-from diag import verbosity, progress
+from diag import verbosity, progress, tracking
 
 
 _nextId = 0        # For generation of arbitrary names for anonymous nodes
@@ -82,7 +84,7 @@ class RDFHandler(xml.sax.ContentHandler):
     """RDF Parser using SAX API for XML parsing
 """
 
-    def __init__(self, sink, thisURI, formulaURI=None, flags=""):
+    def __init__(self, sink, thisURI, formulaURI=None, flags="", why=None):
         self.testdata = ""
 	self.flags = flags
         self._stack =[]  # Stack of states
@@ -96,6 +98,11 @@ class RDFHandler(xml.sax.ContentHandler):
         else:
             self._context = FORMULA, formulaURI  # Context of current statements, change in bags
         self._formula = self._context  # Root formula
+
+	self._reason = why	# Why the parser w
+	self._reason2 = None	# Why these triples
+	if diag.tracking: self._reason2 = BecauseOfData(sink.newSymbol(thisURI), because=self._reason)
+
         self._subject = None
         self._predicate = None
         self._items = [] # for <rdf:li> containers
@@ -188,12 +195,12 @@ class RDFHandler(xml.sax.ContentHandler):
 #                print "@@@@@@ <%s> <%s>" % properties[-1]
 
         if self._subject == None:
-            self._subject = self.sink.newBlankNode(self._context) #for debugging: encode file/line info?
+            self._subject = self.sink.newBlankNode(self._context, why=self._reason2) #for debugging: encode file/line info?
         for pred, obj in properties:
             self.sink.makeStatement(( self._context,
                                       self.sink.newSymbol(pred),
                                       self._subject,
-                                      self.sink.newLiteral(obj) ))
+                                      self.sink.newLiteral(obj) ), why=self._reason2)
 
             
 
@@ -211,7 +218,7 @@ class RDFHandler(xml.sax.ContentHandler):
             self.sink.makeStatement((  c,
                                        self.sink.newSymbol(RDF_NS_URI+"type"),
                                        self._subject,
-                                       self.sink.newSymbol(tagURI) ))
+                                       self.sink.newSymbol(tagURI) ), why=self._reason2)
         self._state = STATE_DESCRIPTION
                 
 
@@ -308,9 +315,9 @@ class RDFHandler(xml.sax.ContentHandler):
                     elif value == "Resource":
                         c = self._context
                         s = self._subject
-                        self._subject = self.sink.newBlankNode(self._context)
+                        self._subject = self.sink.newBlankNode(self._context, why=self._reason2)
                         self.idAboutAttr(attrs) #@@
-                        self.sink.makeStatement(( c, self._predicate, s, self._subject))
+                        self.sink.makeStatement(( c, self._predicate, s, self._subject), why=self._reason2)
                         self._state = STATE_DESCRIPTION  # Nest description
                         
                     elif value == "Quote":
@@ -341,7 +348,7 @@ class RDFHandler(xml.sax.ContentHandler):
                     self.sink.makeStatement((self._context,
                                              self._predicate,
                                              self._subject,
-                                             self.sink.newSymbol(self.uriref(value)) ))
+                                             self.sink.newSymbol(self.uriref(value)) ), why=self._reason2)
                     self._state = STATE_NOVALUE  # NOT looking for value
                 else:
                     self.sink.makeComment("# Warning: Ignored attribute %s on %s" % (
@@ -352,16 +359,16 @@ class RDFHandler(xml.sax.ContentHandler):
             c = self._context
             s = self._subject  # The tail of the list so far
             p = self._predicate
-            pair = self.sink.newBlankNode(self._context)        # The new pair
+            pair = self.sink.newBlankNode(self._context, why=self._reason2)        # The new pair
             self.sink.makeStatement(( c,   # Link in new pair
                                       p,
                                       s,
-                                      pair )) 
+                                      pair ), why=self._reason2) 
             self.idAboutAttr(attrs)  # set subject (the next item) and context 
             self.sink.makeStatement(( c,
                                       self.sink.newSymbol(DPO_NS + "first"),
                                       pair,
-                                      self._subject)) # new item
+                                      self._subject), why=self._reason2) # new item
             
             self._stack[-1][2] = self.sink.newSymbol(DPO_NS + "rest")  # Leave dangling link   #@check
             self._stack[-1][3] = pair  # Underlying state tracks tail of growing list
@@ -372,7 +379,7 @@ class RDFHandler(xml.sax.ContentHandler):
             p = self._predicate
             s = self._subject
             self._obj(tagURI, attrs)   # Parse the object thing's attributes
-            self.sink.makeStatement((c, p, s, self._subject))
+            self.sink.makeStatement((c, p, s, self._subject), why=self._reason2)
             
             self._stack[-1][0] = STATE_NOVALUE  # When we return, cannot have literal now
 
@@ -409,7 +416,7 @@ class RDFHandler(xml.sax.ContentHandler):
                 self.sink.makeStatement(( self._context,
                                           self._predicate,
                                           self._subject,
-                                          self.sink.newLiteral(buf) ))
+                                          self.sink.newLiteral(buf) ), why=self._reason2)
                 self.testdata = ""
             else:
                 return # don't pop state
@@ -419,14 +426,14 @@ class RDFHandler(xml.sax.ContentHandler):
             self.sink.makeStatement(( self._context,
                                        self._predicate,
                                        self._subject,
-                                       self.sink.newLiteral(buf) ))
+                                       self.sink.newLiteral(buf) ), why=self._reason2)
             self.testdata = ""
             
         elif self._state == STATE_LIST:
             self.sink.makeStatement(( self._context,
                                       self.sink.newSymbol(DPO_NS + "rest"),
                                       self._subject,
-                                      self.sink.newSymbol(DPO_NS + "nil") ))
+                                      self.sink.newSymbol(DPO_NS + "nil") ), why=self._reason2)
         elif self._state == STATE_DESCRIPTION:
             self._items.pop()
         elif self._state == STATE_NOVALUE or \
@@ -455,7 +462,7 @@ class RDFHandler(xml.sax.ContentHandler):
 	    else:
 		c, p, s, o = self._delayedStatement
 		o = o.close()
-		self.sink.makeStatement((c, p, s, o))
+		self.sink.makeStatement((c, p, s, o), why=self._reason2)
 		self._delayedStatement = None
 
 	self._delayedStatement = l[4]
@@ -523,6 +530,7 @@ class RDFXMLParser(RDFHandler):
         self._p.reset()
         self.flush()
         self.sink.endDoc(self._formula)
+	return self._formula
 
 class BadSyntax(SyntaxError):
     def __init__(self, info, message):

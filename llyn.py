@@ -166,7 +166,8 @@ DAML_LISTS=1    # If not, do the funny compact ones
 
 from RDFSink import RDF_type_URI, DAML_equivalentTo_URI
 
-from why import Because, BecauseBuiltIn, BecauseOfRule
+from why import Because, BecauseBuiltIn, BecauseOfRule, \
+    BecauseOfExperience, becauseSubexpression, BecauseMerge ,report
 
 STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
 META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"
@@ -380,8 +381,6 @@ class Formula(Fragment):
 	if x is self.store.nil: return x._asList  # bootstrap nil list
 	return self._listValue.get(x, None)
 
-#   TRAP:  If we define __len__, then the "if F" will fail if len(F)==0 !!!
-#   Solution: change all if F to if F != None @@@@
     def size(self):
         """ How many statements? """
         return len(self.statements)
@@ -528,7 +527,8 @@ class Formula(Fragment):
 	    con, pred, subj, obj = s.quad
 	    str = str + "\n%28s  %20s %20s ." % (subj, pred, obj)
 	    for p in PRED, SUBJ, OBJ:
-		if isinstance(s[p], Formula) and s[p] not in already:
+		if (isinstance(s[p], Formula)
+		    and s[p] not in already and s[p] not in todo):
 		    todo.append(s[p])
 	str = str+ "}.\n"
 	already = already + todo + [ self ]
@@ -688,6 +688,33 @@ class StoredStatement:
     def statements(self):
 	return [self]
 
+
+    def asFormula(self, why=None):
+	"""The formula which contains only a statement like this.
+	
+	When we split the statement up, we lose information in any existentials which are
+	shared with other statements. So we introduce a (skolem?) constant to tie the
+	statements together.  We don't have access to any enclosing formula 
+	so we can't express its quantification.  This @@ not ideal.
+	
+	This extends the StoredStatement class with functionality we only need with who module."""
+	
+	store = self.quad[CONTEXT].store
+	statementAsFormula = store.newFormula()   # @@@CAN WE DO THIS BY CLEVER SUBCLASSING? statement subclass of f?
+	kb = self.context()
+	uu = store.occurringIn(statementAsFormula, kb.universals())
+	ee = store.occurringIn(statementAsFormula, kb.existentials())
+	for v in uu:
+	    statementAsFormula.add(subj= statementAsFormula, pred=log.forAll, obj=v, why=why)
+	bindings = []
+	for v in ee:
+    #	statementAsFormula.add(subj= statementAsFormula, pred=log.forSome, obj=v, why=why)
+	    bindings.append( (v, statementAsFormula.newSymbol(v.uriref()+"_1")))
+	c, p, s, o = lookupQuad(bindings, self.quad)
+	statementAsFormula.add(s, p, o, why=why)
+	return statementAsFormula.close()  # probably slow - much slower than statement subclass of formula
+
+
 ###############################################################################################
 #
 #                       C W M - S P E C I A L   B U I L T - I N s
@@ -697,17 +724,17 @@ class StoredStatement:
 # Equivalence relations
 
 class BI_EqualTo(LightBuiltIn,Function, ReverseFunction):
-    def eval(self,  subj, obj, queue, bindings):
+    def eval(self,  subj, obj, queue, bindings, proof):
         return (subj is obj)   # Assumes interning
 
-    def evalObj(self, subj, queue, bindings):
+    def evalObj(self, subj, queue, bindings, proof):
         return subj
 
-    def evalSubj(self, obj, queue, bindings):
+    def evalSubj(self, obj, queue, bindings, proof):
         return obj
 
 class BI_notEqualTo(LightBuiltIn):
-    def eval(self, subj, obj, queue, bindings):
+    def eval(self, subj, obj, queue, bindings, proof):
         return (subj is not obj)   # Assumes interning
 
 
@@ -717,7 +744,7 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
 
 #    def evaluateObject(self, subject):
 #	return subject.uriref()
-    def evalObj(self, subj, q,b):
+    def evalObj(self, subj, queue, bindings, proof):
 	type, value = subj.asPair()
 	if type == SYMBOL:     #    or type == ANONYMOUS: 
          # @@@@@@ Should not allow anonymous, but test/forgetDups.n3 uses it
@@ -745,7 +772,7 @@ class BI_rawUri(BI_uri):
     """This is like  uri except that it allows you to get the internal
     identifiers for anonymous nodes and formuale etc."""
      
-    def evalObj(self, subj, queue, bindings):
+    def evalObj(self, subj, queue, bindings, proof):
 	type, value = subj.asPair()
 	return self.store.intern((LITERAL, value))
 
@@ -757,7 +784,7 @@ class BI_rawType(LightBuiltIn, Function):
     eg see test/includes/check.n3 
     """
 
-    def evalObj(self, subj,  queue, bindings):
+    def evalObj(self, subj,  queue, bindings, proof):
 	store = self.store
         if isinstance(subj, Literal): y = store.Literal
         elif isinstance(subj, Formula): y = store.Formula
@@ -770,7 +797,7 @@ class BI_rawType(LightBuiltIn, Function):
 
 class BI_racine(LightBuiltIn, Function):    # The resource whose URI is the same up to the "#" 
 
-    def evalObj(self, subj,  queue, bindings):
+    def evalObj(self, subj,  queue, bindings, proof):
         if isinstance(subj, Fragment):
             return subj.resource
         else:
@@ -793,7 +820,7 @@ class BI_includes(HeavyBuiltIn):
     This limits the ability to bind a variable by searching inside another
     context. This is quite a limitation in some ways. @@ fix
     """
-    def eval(self, subj, obj, queue, bindings):
+    def eval(self, subj, obj, queue, bindings, proof):
         store = subj.store
         if isinstance(subj, Formula) and isinstance(obj, Formula):
             return store.testIncludes(subj, obj, [], bindings=bindings) # No (relevant) variables
@@ -815,7 +842,7 @@ class BI_notIncludes(HeavyBuiltIn):
     As for the subject, it does make sense for the opposite reason.  If F(x)
     includes G for all x, then G would have to be infinite.  
     """
-    def eval(self, subj, obj, queue, bindings):
+    def eval(self, subj, obj, queue, bindings, proof):
         store = subj.store
         if isinstance(subj, Formula) and isinstance(obj, Formula):
             return not store.testIncludes(subj, obj, [], bindings=bindings) # No (relevant) variables
@@ -825,7 +852,7 @@ class BI_semantics(HeavyBuiltIn, Function):
     """ The semantics of a resource are its machine-readable meaning, as an
     N3 forumula.  The URI is used to find a represnetation of the resource in bits
     which is then parsed according to its content type."""
-    def evalObj(self, subj, queue, bindings):
+    def evalObj(self, subj, queue, bindings, proof):
         store = subj.store
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
@@ -833,17 +860,18 @@ class BI_semantics(HeavyBuiltIn, Function):
         if F != None:
             if verbosity() > 10: progress("Already read and parsed "+`doc`+" to "+ `F`)
             return F
-        
+
         if verbosity() > 10: progress("Reading and parsing " + `doc`)
         inputURI = doc.uriref()
-        loadToStore(store, inputURI)
-        if verbosity()>10: progress("    semantics: %s" % (inputURI+ "#_formula"))
-        F = store.intern((FORMULA, inputURI+ "#_formula"))
+        F = self.store.load(inputURI)
+        if verbosity()>10: progress("    semantics: %s" % (F))
+	if diag.tracking:
+	    proof.append(F.collector)
         return F
     
 class BI_semanticsOrError(BI_semantics):
     """ Either get and parse to semantics or return an error message on any error """
-    def evalObj(self, subj,  queue, bindings):
+    def evalObj(self, subj,  queue, bindings, proof):
         store = subj.store
         x = store.any((store._experience, store.semanticsOrError, subj, None))
         if x != None:
@@ -863,60 +891,6 @@ class BI_semanticsOrError(BI_semantics):
     
 
 HTTP_Content_Type = 'content-type' #@@ belongs elsewhere?
-
-def loadToStore(store, uri=None, contentType=None, formulaURI=None, remember=1):
-    """Get and parse document.  Guesses format if necessary.
-    Returns top-level formula of the parsed document.
-    raises IOError, SyntaxError
-    """
-    try:
-	baseURI = uripath.base()
-	ct = contentType
-        if uri != None:
-            addr = uripath.join(baseURI, uri) # Make abs from relative
-            if verbosity() > 40: progress("Taking input from " + addr)
-            netStream = urllib.urlopen(addr)
-	    if contentType == None: ct=netStream.headers.get(HTTP_Content_Type, None)
-        else:
-            if verbosity() > 40: progress("Taking input from standard input")
-            addr = uripath.join(baseURI, "STDIN") # Make abs from relative
-	    netStream = sys.stdin
-
-    #    if verbosity() > 19: progress("HTTP Headers:" +`netStream.headers`)
-    #    @@How to get at all headers??
-    #    @@ Get sensible net errors and produce dignostics
-
-        guess = ct
-        if verbosity() > 29: progress("Content-type: " + `ct` + " for "+addr)
-        if ct == None or (ct.find('xml') < 0 and ct.find('rdf') < 0) :   # Rats - nothing to go on
-            buffer = netStream.read(500)
-            netStream.close()
-            netStream = urllib.urlopen(addr)
-            if buffer.find('xmlns="') >=0 or buffer.find('xmlns:') >=0:
-                guess = 'application/xml'
-            elif buffer[0:1] == "#" or buffer[0:7] == "@prefix":
-                guess = 'application/n3'
-            if verbosity() > 29: progress("    guess " + guess)
-    except (IOError, OSError):
-        raise DocumentAccessError(addr, sys.exc_info() )
-        
-    # Hmmm ... what about application/rdf; n3 or vice versa?
-    if guess.find('xml') >= 0 or guess.find('rdf') >= 0:
-        if verbosity() > 49: progress("Parsing as RDF")
-        import sax2rdf, xml.sax._exceptions
-        p = sax2rdf.RDFXMLParser(store, addr)
-        Fpair = p.loadStream(netStream)
-    else:
-        if verbosity() > 49: progress("Parsing as N3")
-        p = notation3.SinkParser(store, addr, formulaURI=formulaURI)
-        p.startDoc()
-        p.feed(netStream.read())
-        Fpair = p.endDoc()
-    F = store.intern(Fpair)
-    F = F.close()
-    if remember: store.storeQuad((store._experience,
-                     store.semantics, store.intern((SYMBOL, addr)), F))
-    return F 
 
 
 def _indent(str):
@@ -955,7 +929,7 @@ class DocumentAccessError(IOError):
         return ("Unable to access document <%s>, because:\n%s" % ( self._uri, reason))
     
 class BI_content(HeavyBuiltIn, Function):
-    def evalObj(self, subj, queue, bindings):
+    def evalObj(self, subj, queue, bindings, proof):
         store = subj.store
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
@@ -980,7 +954,7 @@ class BI_content(HeavyBuiltIn, Function):
 
 
 class BI_parsedAsN3(HeavyBuiltIn, Function):
-    def evalObj(self, subj, queue, bindings):
+    def evalObj(self, subj, queue, bindings, proof):
         store = subj.store
         if isinstance(subj, Literal):
             F = store.any((store._experience, store.parsedAsN3, subj, None))
@@ -995,30 +969,37 @@ class BI_parsedAsN3(HeavyBuiltIn, Function):
             F = store.intern((FORMULA, inputURI+ "#_formula"))
             return F.close()
     
-class BI_cufi(HeavyBuiltIn, Function):
+class BI_conclusion(HeavyBuiltIn, Function):
     """ Deductive Closure
 
-    Closure under Forward Inference, equivalent to cwm's --think function
-    conclusion  might be a better word than cufi."""
-    def evalObj(self, subj, queue, bindings):
+    Closure under Forward Inference, equivalent to cwm's --think function.
+    """
+    def evalObj(self, subj, queue, bindings, proof):
         store = subj.store
         if isinstance(subj, Formula):
             F = self.store.any((store._experience, store.cufi, subj, None))  # Cached value?
             if F != None: return F
 
-            if verbosity() > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
             F = self.store.newInterned(FORMULA)
-            self.store.copyContext(subj, F)
+	    if diag.tracking:
+		reason = BecauseMerge(F, subj)
+		F.collector = reason
+		proof.append(reason)
+	    else: reason = None
+            if verbosity() > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
+            self.store.copyContext(subj, F, why=reason)
             self.store.think(F)
 	    F = F.close()
-            self.store.storeQuad((store._experience, store.cufi, subj, F))  # Cache for later
+            self.store.storeQuad((store._experience, store.cufi, subj, F),
+		    why=BecauseOfExperience("conclusion"))  # Cache for later
             return F
     
 class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
     """ The conjunction of a set of formulae is the set of statements which is
     just the union of the sets of statements
     modulo non-duplication of course"""
-    def evaluateObject(self, subj_py):
+    def evalObj(self, subj, queue, bindings, proof):
+	subj_py = self.store._toPython(subj, queue)
         if verbosity() > 50:
             progress("Conjunction input:"+`subj_py`)
             for x in subj_py:
@@ -1026,9 +1007,14 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
 #        F = conjunctionCache.get(subj_py, None)
 #        if F != None: return F
         F = self.store.newInterned(FORMULA)
+	if diag.tracking:
+	    reason = BecauseMerge(F, subj_py)
+	    F.collector = reason
+	    proof.append(reason)
+	else: reason = None
         for x in subj_py:
             if not isinstance(x, Formula): return None # Can't
-            self.store.copyContext(x, F)
+            self.store.copyContext(x, F, why=reason)
             if verbosity() > 74:
                 progress("    Formula %s now has %i" % (x2s(F),len(F.statements)))
         return self.store.endFormula(F)
@@ -1041,7 +1027,7 @@ class BI_n3String(LightBuiltIn, Function):      # Light? well, I suppose so.
     parse back using parsedAsN3 to exaclty the same original formula.
     If we *did* have a cannonical form it would be great for signature
     A cannonical form is possisble but not simple."""
-    def evalObj(self, store, context, subj, queue, bindings):
+    def evalObj(self, store, context, subj, queue, bindings, proof):
         if verbosity() > 50:
             progress("Generating N3 string for:"+`subj`)
         if isinstance(subj, Formula):
@@ -1117,7 +1103,7 @@ class RDFStore(RDFSink) :
 
         log.internFrag("resolvesTo", BI_semantics) # obsolete
         self.semantics = log.internFrag("semantics", BI_semantics)
-        self.cufi = log.internFrag("conclusion", BI_cufi)
+        self.cufi = log.internFrag("conclusion", BI_conclusion)
         self.semanticsOrError = log.internFrag("semanticsOrError", BI_semanticsOrError)
         self.content = log.internFrag("content", BI_content)
         self.parsedAsN3 = log.internFrag("parsedAsN3",  BI_parsedAsN3)
@@ -1194,7 +1180,7 @@ class RDFStore(RDFSink) :
         self._experience = self.intern((FORMULA, metaURI + "_formula"))
 	assert isinstance(self._experience, Formula)
 
-    def load(self, uri=None, formulaURI=None, remember=1):
+    def load(store, uri=None, contentType=None, formulaURI=None, remember=1, why=None):
 	"""Get and parse document.  Guesses format if necessary.
 
 	uri:      if None, load from standard input.
@@ -1202,8 +1188,73 @@ class RDFStore(RDFSink) :
 	
 	Returns:  top-level formula of the parsed document.
 	Raises:   IOError, SyntaxError, DocumentError
+	
+	This was and could be an independent function, as it is fairly independent
+	of the store. However, it is natural to call it as a method on the store.
+	And a proliferation of APIs confuses.
 	"""
-	return loadToStore(self, uri, formulaURI=formulaURI, remember=remember)
+	try:
+	    baseURI = uripath.base()
+	    if contentType == None: contentType = ""
+	    ct = contentType
+	    if uri != None:
+		addr = uripath.join(baseURI, uri) # Make abs from relative
+		source = store.newSymbol(addr)
+		if remember:
+		    F = store._experience.the(source, store.semantics)
+		    if F != None:
+			if verbosity() > 40: progress("Using cached semantics for",addr)
+			return F 
+		    
+		if verbosity() > 40: progress("Taking input from " + addr)
+		netStream = urllib.urlopen(addr)
+		if contentType == None: ct=netStream.headers.get(HTTP_Content_Type, None)
+	    else:
+		if verbosity() > 40: progress("Taking input from standard input")
+		addr = uripath.join(baseURI, "STDIN") # Make abs from relative
+		netStream = sys.stdin
+    
+	#    if verbosity() > 19: progress("HTTP Headers:" +`netStream.headers`)
+	#    @@How to get at all headers??
+	#    @@ Get sensible net errors and produce dignostics
+    
+	    guess = ct
+	    buffer = netStream.read()
+	    if verbosity() > 29: progress("Content-type: " + `ct` + " for "+addr)
+	    if ct == None or (ct.find('xml') < 0 and ct.find('rdf') < 0) :   # Rats - nothing to go on
+#		buffer = netStream.read(500)
+#		netStream.close()
+#		netStream = urllib.urlopen(addr)
+		if buffer.find('xmlns="') >=0 or buffer.find('xmlns:') >=0:
+		    guess = 'application/xml'
+		elif buffer[0:1] == "#" or buffer[0:7] == "@prefix":
+		    guess = 'application/n3'
+		if verbosity() > 29: progress("    guess " + guess)
+	except (IOError, OSError):  
+	    raise DocumentAccessError(addr, sys.exc_info() )
+	    
+	# Hmmm ... what about application/rdf; n3 or vice versa?
+	if guess.find('xml') >= 0 or guess.find('rdf') >= 0:
+	    if verbosity() > 49: progress("Parsing as RDF")
+	    import sax2rdf, xml.sax._exceptions
+	    p = sax2rdf.RDFXMLParser(store, addr)
+#	    Fpair = p.loadStream(netStream)
+	    p.feed(buffer)
+	    Fpair = p.close()
+	else:
+	    if verbosity() > 49: progress("Parsing as N3")
+	    p = notation3.SinkParser(store, addr, formulaURI=formulaURI, why=why)
+	    p.startDoc()
+	    p.feed(buffer)
+	    Fpair = p.endDoc()
+	F = store.intern(Fpair)
+	F = F.close()
+	if remember: store._experience.add(
+		    store.intern((SYMBOL, addr)), store.semantics, F,
+		    why=BecauseOfExperience("load document"))
+	return F 
+    
+
 
 
     def loadMany(self, uris):
@@ -1397,21 +1448,13 @@ class RDFStore(RDFSink) :
         for F in self.formulae[:]:
             for s in F.statements[:]:
                 if verbosity() > 95: progress(".......removed", s.quad)
-                q2 = _lookupQuad(bindings, s.quad)
+                q2 = lookupQuad(bindings, s.quad)
 		why = s.why
                 self.removeStatement(s)
                 self.storeQuad(q2, why)
                 if verbosity() > 95: progress(".......restored", q2)
         return new
 
-
-# Input methods:
-
-    def loadURI(self, uri):
-        p = notation3.SinkParser(self,  uri)
-        F = p.load(uri)
-        del(p)
-	return F
 
     def bind(self, prefix, uri):
 	assert type(uri) is type("")
@@ -1495,11 +1538,9 @@ class RDFStore(RDFSink) :
         s = StoredStatement(q)
 	
 	if diag.tracking:
-	    if (why == None): raise RuntimeError("Tracking reasons but no reason given for"+`s`)
-	    if (context.collector == None):
-		pass #raise RuntimeError("Tracking reasons but no collector given for "+`context`)
-	    else:
-		context.collector.newStatement(s, why)
+	    if (why == None): raise RuntimeError(
+		"Tracking reasons but no reason given for"+`s`)
+	    report(s, why)
 
         # Build 8 indexes.
 #       This now takes a lot of the time in a typical  cwm run! :-( 
@@ -1863,8 +1904,6 @@ class RDFStore(RDFSink) :
             
         elif _anon and (_incoming == 0 or 
 	    (li != None and not isinstance(li, EmptyList) and subj.generated())):    # Will be root anonymous node - {} or [] or ()
-#	    progress("@@@@@@@@@@@@@ generated", `subj`, `subj.asPair()`)
-#	    if subj.generated() and subj.asPair()[0]==0:
 		
             if subj is context:
                 pass
@@ -1884,7 +1923,7 @@ class RDFStore(RDFSink) :
                     for s in statements:
                         p = s.quad[PRED]
                         if p is not self.first and p is not self.rest:
-			    if verbosity() > 90: progress("@@ Is list, has values for", `p`)
+			    if verbosity() > 90: progress("@ Is list, has values for", `p`)
                             break # Something to print (later)
                     else:
 			if subj.generated(): return # Nothing.
@@ -1931,7 +1970,7 @@ class RDFStore(RDFSink) :
 	    for s in context.statementsMatching(subj=obj):
 		p = s.quad[PRED]
 		if p is not self.first and p is not self.rest:
-		    if verbosity() > 90: progress("@@ Is list, has values for", `p`)
+		    if verbosity() > 90: progress("@ Is list, has values for", `p`)
 		    break # Can't print as object, just print it elsewhere.
 	    else:
 		    li = 1
@@ -1984,7 +2023,7 @@ class RDFStore(RDFSink) :
     def copyContextRecursive(self, old, new, bindings, why=None):
         total = 0
         for s in old.statements[:] :   # Copy list!
-            q2 = _lookupQuadRecursive(bindings, s.quad)
+            q2 = lookupQuadRecursive(bindings, s.quad, why=becauseSubexpression)
             total = total -1 + self.storeQuad(q2, why)
         return total
                 
@@ -2289,8 +2328,6 @@ class RDFStore(RDFSink) :
                             pass
                         else:
                             set = merge(set, self.occurringIn(y, vars, level+1, context=x))
-#			    progress("@@@@ ------ occurringIn x=%s, vars=%s, set=%s after %s"%(x, vars, set, y))
-#	    progress("@@@@ occurringIn x=%s, vars=%s, set=%s."%(x, vars, set))
             return set
 
 	assert context != None, "needs context param for this"
@@ -2407,7 +2444,7 @@ class Query:
 	
     def resolve(self):
 	if hasattr(self, "noWay"): return 0
-        return self.query2(self.queue, self.variables, self.existentials)
+        return self.unify(self.queue, self.variables, self.existentials)
 
 
 
@@ -2429,13 +2466,18 @@ class Query:
             if verbosity() > 30: progress(indent, "Not duplicate: ", bindingsToString(bindings))
             self.already.append(bindings)   # A list of lists
 
+	if diag.tracking:
+	    reason = BecauseOfRule(self.rule, bindings=bindings, evidence=evidence)
+	else:
+	    reason = None
+
 	es, exout = self.workingContext.existentials(), []
 	for var, val in bindings:
 	    if val in es:
 		exout.append(val)
 		if verbosity() > 25:
 		    progress(indent, "Matches we found which is just existential: %s -> %s" % (var, val))
-		self.targetContext.add(subj=self.targetContext, pred=self.store.forSome, obj=val)
+		self.targetContext.add(subj=self.targetContext, pred=self.store.forSome, obj=val, why=reason)
 
         b2 = bindings + [(self.conclusion, self.targetContext)]
         ok = self.targetContext.universals()  # It is actually ok to share universal variables with other stuff
@@ -2460,8 +2502,8 @@ class Query:
         if verbosity()>10:
             progress( indent, "Concluding definitively" + bindingsToString(b2) )
         before = self.store.size
-	reason = BecauseOfRule(self.rule, bindings=bindings, evidence=evidence)
-        self.store.copyContextRecursive(self.conclusion, self.targetContext, b2, reason)
+        self.store.copyContextRecursive(
+		    self.conclusion, self.targetContext, b2, why=reason)
         if verbosity()>30:
             progress( indent, "   size of store changed from %i to %i."%(before, self.store.size))
         return self.store.size - before
@@ -2470,7 +2512,7 @@ class Query:
 ##################################################################################
 
 
-    def query2(query,
+    def unify(query,
                queue,               # Set of items we are trying to match CORRUPTED
                variables,           # List of variables to match and return CORRUPTED
                existentials,        # List of variables to match to anything
@@ -2482,6 +2524,10 @@ class Query:
         """ Iterate on the remaining query items
     bindings      collected matches already found
     newBindings  matches found and not yet applied - used in recursion
+    
+    You probably really need the state diagram to understand this
+    http://www.w3.org/2000/10/swap/doc/states.svg
+    even if it is a bit out of date.
         """
         total = 0
 	
@@ -2539,11 +2585,11 @@ class Query:
                 return total # Forget it -- must be impossible
             if state == S_LIGHT_UNS_GO or state == S_LIGHT_GO:
 		item.state = S_LIGHT_EARLY   # Assume can't run
-                nbs = item.tryLight(queue, bindings, heavy=0)
+                nbs = item.tryBuiltin(queue, bindings, heavy=0, evidence=evidence)
             elif state == S_LIGHT_EARLY or state == S_NOT_LIGHT: #  Not searched yet
                 nbs = item.trySearch()
             elif state == S_HEAVY_READY:  # not light, may be heavy; or heavy ready to run
-                if pred is query.store.includes and not diag.tracking:  # don't optimize when tracking
+                if pred is query.store.includes: # and not diag.tracking:  # don't optimize when tracking?
                     if (isinstance(subj, Formula)
                         and isinstance(obj, Formula)):
 
@@ -2567,11 +2613,11 @@ class Query:
                     nbs = []
                 else:
 		    item.state = S_HEAVY_WAIT  # Assume can't resolve
-                    nbs = item.tryLight(queue, bindings, heavy=1)
-            elif state == S_REMOTE: # Remote query -- need to find all of them
+                    nbs = item.tryBuiltin(queue, bindings, heavy=1, evidence=evidence)
+            elif state == S_REMOTE: # Remote query -- need to find all of them for the same service
 		items = [item]
 		for i in queue[:]:
-		    if i.state == S_REMOTE:
+		    if i.state == S_REMOTE and i.service is self.service: #@@ optimize which group is done first!
 			items.append(i)
 			queue.remove(i)
 		nbs = query.remoteQuery(items)
@@ -2579,12 +2625,12 @@ class Query:
             elif state == S_LIST_UNBOUND: # Lists with unbound vars
                 if verbosity()>70:
                         progress( " "*level+ "List left unbound, returing")
-                return 0   # forget it  (this right?!@@)
+                return total   # forget it  (this right?!@@)
             elif state == S_LIST_BOUND: # bound list
                 if verbosity()>60: progress(
 		    " "*level+ "QUERY FOUND MATCH (dropping lists) with bindings: "
 		    + bindingsToString(bindings))
-                return query.conclude(bindings, level, evidence=evidence)  # No non-list terms left .. success!
+                return total + query.conclude(bindings, level, evidence=evidence)  # No non-list terms left .. success!
             elif state ==S_HEAVY_WAIT or state == S_LIGHT_WAIT: # Can't
                 if verbosity() > 49 :
                     progress("@@@@ Warning: query can't find term which will work.")
@@ -2596,8 +2642,8 @@ class Query:
             else:
                 raise RuntimeError, "Unknown state " + `state`
             if verbosity() > 90: progress(" "*level +"nbs=" + `nbs`)
-            if nbs == 0: return 0
-            else:
+            if nbs == 0: return total
+            elif nbs != []:
                 total = 0
                 for nb, reason in nbs:
                     q2 = []
@@ -2605,11 +2651,11 @@ class Query:
                         newItem = i.clone()
                         q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
 		    
-                    total = total + query.query2(q2, variables[:], existentials[:],
+                    total = total + query.unify(q2, variables[:], existentials[:],
                                           bindings[:], nb, level=level+2, evidence = evidence + [reason])
                     if query.justOne and total:
                         return total
-
+		return total # The called recursive calls above will have generated the output
             if item.state == S_FAIL: return total
             if item.state != S_DONE:   # state 0 means leave me off the list
                 queue.append(item)
@@ -2744,41 +2790,45 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 
 
 
-    def tryLight(self, queue, bindings, heavy):                    
-        """check for "light" (quick) built-in functions.
+    def tryBuiltin(self, queue, bindings, heavy, evidence):                    
+        """check for  built-in functions to see whether it will resolve.
         Return codes:  0 - give up;  1 - continue,
                 [...] list of binding lists"""
         con, pred, subj, obj = self.quad
+	proof = []  # place for built-in to hang a justification
+	rea = None  # Reason for believing this item is true
 
 	try:
 	    if self.neededToRun[SUBJ] == []:
 		if self.neededToRun[OBJ] == []:   # bound expression - we can evaluate it
-		    if pred.eval(subj, obj,  queue, bindings):
+		    if pred.eval(subj, obj,  queue, bindings[:], proof):
 			self.state = S_DONE # satisfied
-                        if verbosity() > 80: progress("Heavy predicate succeeds")
+                        if verbosity() > 80: progress("Builtin buinary relation operator succeeds")
 			if diag.tracking:
-			    rea = BecauseBuiltIn(subj, pred, obj)
-			    return [([], rea)]  # Involves extra recursion just to track reason
+			    rea = BecauseBuiltIn(subj, pred, obj, proof)
+			    evidence = evidence + [rea]
+#			    return [([], rea)]  # Involves extra recursion just to track reason
 			return []   # No new bindings but success in logical operator
 		    else: return 0   # We absoluteley know this won't match with this in it
 		else: 
 		    if isinstance(pred, Function):
-			result = pred.evalObj(subj, queue, bindings[:])
+			result = pred.evalObj(subj, queue, bindings[:], proof)
 			if result != None:
 			    self.state = S_FAIL
 			    rea=None
-			    if diag.tracking: rea = BecauseBuiltIn(subj, pred, result)
+			    if diag.tracking: rea = BecauseBuiltIn(subj, pred, result, proof)
 			    return [([ (obj, result)], rea)]
                         else:
 			    if heavy: return 0
 	    else:
 		if (self.neededToRun[OBJ] == []):
 		    if isinstance(pred, ReverseFunction):
-			result = pred.evalSubj(obj, queue, bindings[:])
+			result = pred.evalSubj(obj, queue, bindings[:], proof)
 			if result != None:
 			    self.state = S_FAIL
 			    rea=None
-			    if diag.tracking: rea = BecauseBuiltIn(result, pred, obj)
+			    if diag.tracking:
+				rea = BecauseBuiltIn(result, pred, obj, proof)
 			    return [([ (subj, result)], rea)]
                         else:
 			    if heavy: return 0
@@ -2868,7 +2918,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         and/or may turn out to be bound and therefore ready to run."""
         con, pred, subj, obj = self.quad
         if verbosity() > 90:
-            progress("....Binding ", `self` + " with "+ `newBindings`)
+            progress(" binding ", `self` + " with "+ `newBindings`)
         q=[con, pred, subj, obj]
         changedPattern = 0
         for p in ALL4:
@@ -2883,7 +2933,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                     changed = 1
                     self.neededToRun[p] = [] # Now it is definitely all bound
             if changed:
-                q[p] = _lookupRecursive(newBindings, q[p])   # possibly expensive
+                q[p] = _lookupRecursive(newBindings, q[p], why=becauseSubexpression)   # possibly expensive
 		if self.searchPattern[p] != None: self.searchPattern[p] = q[p]
                 
         self.quad = q[0], q[1], q[2], q[3]  # yuk
@@ -2933,9 +2983,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 def _substitute(bindings, list):
     for i in range(len(list)):
         q = list[i]
-        list[i] = _lookupQuad(bindings, q)
+        list[i] = lookupQuad(bindings, q)
                             
-def _lookupQuad(bindings, q):
+def lookupQuad(bindings, q):
 	context, pred, subj, obj = q
 	return (
             _lookup(bindings, context),
@@ -2943,20 +2993,20 @@ def _lookupQuad(bindings, q):
             _lookup(bindings, subj),
             _lookup(bindings, obj) )
 
-def _lookupQuadRecursive(bindings, q, why=None):
-	context, pred, subj, obj = q
-	return (
-            _lookupRecursive(bindings, context, why),
-            _lookupRecursive(bindings, pred, why),
-            _lookupRecursive(bindings, subj, why),
-            _lookupRecursive(bindings, obj, why) )
-
 def _lookup(bindings, value):
     for left, right in bindings:
         if left == value: return right
     return value
 
-def _lookupRecursive(bindings, x, old=None, new=None):
+def lookupQuadRecursive(bindings, q, why=None):
+	context, pred, subj, obj = q
+	return (
+            _lookupRecursive(bindings, context, why=why),
+            _lookupRecursive(bindings, pred, why=why),
+            _lookupRecursive(bindings, subj, why=why),
+            _lookupRecursive(bindings, obj, why=why) )
+
+def _lookupRecursive(bindings, x, old=None, new=None, why=None):
     """ Subsitute into formula."""
     vars = []
     if x is old: return new
@@ -2972,9 +3022,10 @@ def _lookupRecursive(bindings, x, old=None, new=None):
     if verbosity() > 90: progress("lookupRecursive "+`x`+" becomes new "+`y`)
     for s in x.statements:
         store.storeQuad((y,
-                         _lookupRecursive(bindings, s[PRED], x, y),
-                         _lookupRecursive(bindings, s[SUBJ], x, y),
-                         _lookupRecursive(bindings, s[OBJ], x, y)))
+                         _lookupRecursive(bindings, s[PRED], x, y, why=why),
+                         _lookupRecursive(bindings, s[SUBJ], x, y, why=why),
+                         _lookupRecursive(bindings, s[OBJ], x, y, why=why))
+			 , why)
     return store.endFormula(y) # intern
 
 

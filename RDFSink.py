@@ -67,8 +67,12 @@ N3_List = (SYMBOL, List_NS + "List")
 N3_Empty = (SYMBOL, List_NS + "Empty")
 
 
+# Standard python modules:
 from os import getpid
 from time import time
+
+# SWAP modules:
+from diag import verbosity
 
 runNamespaceValue = None
 
@@ -170,14 +174,14 @@ class RDFSink:
             print "@@@@"
         
         # If we don't have a prefix for this ns...
-        if not self.prefixes.get(uri, None):
-            if not self.namespaces.get(prefix,None):   # For conventions
+        if self.prefixes.get(uri, None) == None:
+            if self.namespaces.get(prefix,None) == None:   # For conventions
                 self.prefixes[uri] = prefix
                 self.namespaces[prefix] = uri
-                #@@progress?
-                #if chatty: print "# RDFSink: Bound %s to %s" % (prefix, nsPair[1])
+		if verbosity() > 29:
+		    progress("RDFSink.bind:  prefix %s: to <%s>. "%(prefix, uri))
             else:
-                self.bind(prefix+"_", uri) # Recurive
+                self.bind(prefix+"_", uri) # Recursion unnecessary
 
     def setDefaultNamespace(self, uri):
 	"""Pass on a binding hint for later use in output

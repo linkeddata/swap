@@ -59,13 +59,13 @@ def isString(x):
 
 
 class BI_absoluteValue(LightBuiltIn, Function):
-    def evalObj(self, subj, queue, bindings):
+    def evalObj(self, subj, queue, bindings, proof):
         if isinstance(subj, Literal):
             t = abs(float(subj.string))
             if t is not None: return self.store.intern((LITERAL, tidy(t)))
 
 class BI_rounded(LightBuiltIn, Function):
-    def evalObj(self, subj, queue, bindings):
+    def evalObj(self, subj, queue, bindings, proof):
         if isinstance(subj, Literal):
             t = round(float(subj.string))
             if t is not None: return self.store.intern((LITERAL, tidy(t)))
@@ -136,12 +136,12 @@ class BI_remainderOf(LightBuiltIn, ReverseFunction):
         return tidy(t)
 
 class BI_negation(LightBuiltIn, Function, ReverseFunction):
-    def evalSubj(self, obj, queue, bindings): 
+    def evalSubj(self, obj, queue, bindings, proof): 
         if isinstance(obj, Literal):
             t = -float(obj.string)
             if t is not None: return store.intern((LITERAL, tidy(t)))
 
-    def evalObj(self, subj, queue, bindings):
+    def evalObj(self, subj, queue, bindings, proof):
         if isinstance(subj, Literal):
             t = -float(subj.string)
             if t is not None: return store.intern((LITERAL, tidy(t)))
@@ -165,27 +165,27 @@ class BI_exponentiationOf(LightBuiltIn, ReverseFunction):
 # These are truth testing things  - Binary logical operators
 
 class BI_greaterThan(LightBuiltIn):
-    def eval(self, subj, obj, queue, bindings):
+    def eval(self, subj, obj, queue, bindings, proof):
         return (float(subj.string) > float(obj.string))
 
 class BI_notGreaterThan(LightBuiltIn):
-    def eval(self, subj, obj, queue, bindings):
+    def eval(self, subj, obj, queue, bindings, proof):
         return (float(subj.string) <= float(obj.string))
 
 class BI_lessThan(LightBuiltIn):
-    def eval(self, subj, obj, queue, bindings):
+    def eval(self, subj, obj, queue, bindings, proof):
         return (float(subj.string) < float(obj.string))
 
 class BI_notLessThan(LightBuiltIn):
-    def eval(self, subj, obj, queue, bindings):
+    def eval(self, subj, obj, queue, bindings, proof):
         return (float(subj.string) >= float(obj.string))
 
 class BI_equalTo(LightBuiltIn):
-    def eval(self, subj, obj, queue, bindings):
+    def eval(self, subj, obj, queue, bindings, proof):
         return (float(subj.string) == float(obj.string))
 
 class BI_notEqualTo(LightBuiltIn):
-    def eval(self, subj, obj, queue, bindings):
+    def eval(self, subj, obj, queue, bindings, proof):
         return (float(subj.string) != float(obj.string))
 
 # memberCount - this is a proper forward function

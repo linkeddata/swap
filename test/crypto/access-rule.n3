@@ -10,6 +10,7 @@
 #   - do a revokation check back to a signed revokation list
 #   -  
 # 
+@prefix root: <#> .
 @prefix : <#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix os: <http://www.w3.org/2000/10/swap/os#> .

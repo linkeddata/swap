@@ -113,7 +113,7 @@ def universal(str, context, uri):
     formula as context, and return it for future use"""
     return _checkStore().newLiteral(context)
 
-def load(uri=None, formulaURI=None, remember=1):
+def load(uri=None, contentType=None, formulaURI=None, remember=1):
     """Get and parse document.  Guesses format if necessary.
 
     uri:      if None, load from standard input.
@@ -122,7 +122,7 @@ def load(uri=None, formulaURI=None, remember=1):
     Returns:  top-level formula of the parsed document.
     Raises:   IOError, SyntaxError, DocumentError
     """
-    return _checkStore().load(uri, formulaURI, remember)
+    return _checkStore().load(uri, contentType, formulaURI, remember)
 
 
 class Namespace(object):
@@ -427,13 +427,19 @@ class BuiltIn(Fragment):
     def __init__(self, resource, fragid):
         Fragment.__init__(self, resource, fragid)
 
-#    def eval(self, subj, obj, queue, bindings):
-#	"""This function which has access to the store, unless overridden,
-#	calls a simpler one which uses python conventions.
-#	
-#	To reduce confusion, the inital ones called with the internals available
-#	use abreviations "eval", "subj" etc while the python-style ones use evaluate, subject, etc."""
-#	return self.evaluate(self.store._toPython(subj, queue), (self.store._toPython(obj, queue)))
+    def eval(self, subj, obj, queue, bindings, proof):
+	"""This function which has access to the store, unless overridden,
+	calls a simpler one which uses python conventions.
+	
+	To reduce confusion, the inital ones called with the internals available
+	use abreviations "eval", "subj" etc while the python-style ones use evaluate, subject, etc."""
+	if hasattr(self, "evaluate"):
+	    return self.evaluate(self.store._toPython(subj, queue), (self.store._toPython(obj, queue)))
+	elif isinstance(self, Function):
+		return Function.eval(self, subj, obj, queue, bindings, proof)
+	elif isinstance(self, ReverseFunction):
+		return ReverseFunction.eval(self, subj, obj, queue, bindings, proof)
+	raise RuntimeError("Instance %s of built-in has no eval() or subsititue for it" %`self`)
 	
 class LightBuiltIn(BuiltIn):
     """A light built-in is fast and is calculated immediately before searching the store.
@@ -461,20 +467,20 @@ class Function(BuiltIn):
         pass
     
 
-    def evalObj(self, subj, queue, bindings):
+    def evalObj(self, subj, queue, bindings, proof):
 	"""This function which has access to the store, unless overridden,
-	calls a simpler one which uses python conventions"""
+	calls a simpler one which uses python conventions.
+
+	To reduce confusion, the inital ones called with the internals available
+	use abreviations "eval", "subj" etc while the python-style ones use "evaluate", "subject", etc."""
+
 	return self.store._fromPython(self.evaluateObject(self.store._toPython(subj, queue)), queue)
 
 
 # This version is used by functions by default:
 
-#    def evaluate(self, subject, object):
-#        F = self.evaluateObject(subject)
-#        return (F == object)
-
-    def eval(self, subj, obj, queue, bindings):
-	F = self.evalObj(subj, queue, bindings)
+    def eval(self, subj, obj, queue, bindings, proof):
+	F = self.evalObj(subj, queue, bindings, proof)
 	return F is obj
 
 class ReverseFunction(BuiltIn):
@@ -488,18 +494,12 @@ class ReverseFunction(BuiltIn):
     def __init__(self):
         pass
 
-
-#    def evaluate(self, subject, object):
-#	"""Simple comparison if none other defined"""
-#        F = self.evaluateObject(object)
-#        return (F == subject)
-
-    def eval(self, subj, obj, queue, bindings):
-	F = self.evalSubj(obj, queue, bindings)
+    def eval(self, subj, obj, queue, bindings, proof):
+	F = self.evalSubj(obj, queue, bindings, proof)
 	return F is subj
 
 
-    def evalSubj(self, obj,  queue, bindings):
+    def evalSubj(self, obj,  queue, bindings, proof):
 	"""This function which has access to the store, unless overridden,
 	calls a simpler one which uses python conventions"""
 	return self.store._fromPython(self.evaluateSubject(self.store._toPython(obj, queue)), queue)

@@ -68,6 +68,7 @@ import RDFSink
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import  LITERAL, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
+import diag
 
 from why import BecauseOfData
 
@@ -128,6 +129,8 @@ class SinkParser:
         self._anonymousNodes = {}   # Dict of anon nodes already declared  ln : Term
 	self._reason = why	# Why the parser w
 	self._reason2 = None	# Why these triples
+	if diag.tracking: self._reason2 = BecauseOfData(sink.newSymbol(thisDoc), because=self._reason) 
+
         if baseURI: self._baseURI = baseURI
         else: self._baseURI = thisDoc
 
@@ -163,7 +166,7 @@ class SinkParser:
 	    inputResource = self._sink.newSymbol(_inputURI)
             self._sink.makeComment("Taking input from " + _inputURI)
             stream = urllib.urlopen(_inputURI)
-	    if self._reason: self._reason2 = BecauseOfData(inputResource, because=self._reason) 
+	    if diag.tracking: self._reason2 = BecauseOfData(inputResource, because=self._reason) 
         else:
             self._sink.makeComment("Taking input from standard input")
             _inputURI = uripath.join(baseURI, "STDIN") # Make abs from relative
@@ -383,7 +386,7 @@ class SinkParser:
 	while str[j:j+1] in "!^":  # no spaces, must follow exactly (?)
 	    ch = str[j:j+1]
 	    subj = res.pop()
-	    obj = self._sink.newBlankNode(self._context)
+	    obj = self._sink.newBlankNode(self._context, why=self._reason2)
 	    j = self.node(str, j+1, res)
 	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "EOF found in middle of path syntax")
 	    pred = res.pop()
@@ -398,7 +401,7 @@ class SinkParser:
 	"""Remember or generate a term for one of these _: anonymous nodes"""
 	term = self._anonymousNodes.get(ln, None)
 	if term != None: return term
-	term = self._sink.newExistential(self._context, self._genPrefix + ln)
+	term = self._sink.newExistential(self._context, self._genPrefix + ln, why=self._reason2)
 	self._anonymousNodes[ln] = term
 	return term
 
@@ -484,7 +487,7 @@ class SinkParser:
                 item = []
                 j = self.object(str,i, item)
                 if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected item in list or ')'")
-                this = self._sink.newExistential(self._context)
+                this = self._sink.newExistential(self._context, why=self._reason2)
                 if DAML_LISTS:
                     if previous:
                         self.makeStatement((self._context, N3_rest, previous, this ))
