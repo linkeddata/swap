@@ -49,6 +49,6 @@
         <s:isDefinedBy rdf:resource="http://www.w3.org/2000/10/swap/util/make#"/>
         <s:label>To Extension</s:label>
         <s:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-        <s:seeAlso rdf:resource="http://www.w3.org/2000/10/swap/util/make#toExt"/>
+        <s:seeAlso rdf:resource="http://www.w3.org/2000/10/swap/util/make#fromExt"/>
     </rdf:Property>
 </rdf:RDF>
