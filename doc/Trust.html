@@ -149,14 +149,13 @@ access.</p>
 
 <p>The crux of this whole system is the file <code>access-rule.n3</code>
 which tells the web site how to trust a request. And the crux of that is its
-first rule.   It is a bit simple but you should get the idea. It says
-that:</p>
+first rule. It is a bit simple but you should get the idea. It says that:</p>
 
 <blockquote>
-  <p> if a request is supported by a key, and there is a certificate --
-  signed itself with k2 -- which says k is a good request key, and that there
-  is some other certificate, signed with the master key, that says that k2 is
-  a member key, then the request is a good request.</p>
+  <p>if a request is supported by a key, and there is a certificate -- signed
+  itself with k2 -- which says k is a good request key, and that there is
+  some other certificate, signed with the master key, that says that k2 is a
+  member key, then the request is a good request.</p>
 </blockquote>
 
 <p>The other details of what "supported" means are below.</p>
@@ -257,7 +256,7 @@ the value of Semantic Web!</p>
 
 <p>You will notice that in this example we didn't use a PKI certificates
 looked up in a x.509 hierarchy. We could have. We would have used an RDF
-interface to PKI. </p>
+interface to PKI.</p>
 
 <p>There are two interesting reasons not to. One is that in designing the
 system from scratch we defined exactly how it works. We defined what
@@ -268,33 +267,35 @@ represents Kari in the role he plays in this system. Because we are using
 RDF, we can put whatever information into the certificate we like. We don't
 have to worry about extending the certificate format. Because what we are
 doing concerns the relationships between the social entities involved without
-bringing in any  superfluous external authority, it is more weblike in
-nature. We are freer to model the actual social trust system we use.</p>
+bringing in any superfluous external authority, it is more weblike in nature.
+We are freer to model the actual social trust system we use.</p>
 
 <p>The other interesting point is that the amount of software for working out
-whether a request is valid is in fact quite small.   The access rule is the
-secure part which is specific to this system.  Apart from that the trusted
-code base is a general-purpose engine and a cryptographic library.ne can make
-it even smaller. Tiina can g</p>
+whether a request is valid is in fact quite small. The access rule is the
+secure part which is specific to this system. Apart from that the trusted
+code base is a general-purpose engine and a cryptographic library.</p>
 
 <p>One can make the code base even smaller. Tiina can herself run the access
 rule herself, and generate a proof - an output of the bits of data used and
-rules used step by step.   The web server then only has to check this proof. 
+rules used step by step. The web server then only has to check this proof.
 Although it wasn't very difficult, it did involve running a simple inference
-engine.  Checking a proof is in fact simpler.  (Cwm is being adapted to
-generate proofs, but it can't do it yet for this case) .   We assumed that
+engine. Checking a proof is in fact simpler. (Cwm is being adapted to
+generate proofs, but it can't do it yet for this case) . We assumed that
 Tiina had a program to generate the request which know exactly how to do it.
 You could imagine a more difficult situation in which her access agent had to
 search for some connection between her and W3C, and find a way of justifying
-the request.  In this case, finding the credentials could have taken a long
+the request. In this case, finding the credentials could have taken a long
 time, or used special knowledge -- things which the web server itself
 wouldn't want to worry about. The proof sent would then contain just the
-essential information actually used to justify entry.</p>
+essential information actually used to justify entry.  The web server's
+trusted code base would be a proof checker and a digital signature validator.
+ That's the sort of thing it every processor could have in ROM when it is
+made.</p>
 
 <p>The ability to write rules about what document actually says what allows
 us to make systems which behave in predicatable and appropriate ways in the
-real world.  Cryptography gives use the ability to build secure systems,
-which in a weblike way allow us to express what the real trust situation. </p>
+real world. Cryptography gives use the ability to build secure systems, which
+in a weblike way allow us to express what the real trust situation.</p>
 
 <p></p>
 <hr />
