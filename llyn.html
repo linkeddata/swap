@@ -2192,7 +2192,7 @@ open&nbsp;to&nbsp;possibly&nbsp;clashing&nbsp;in&nbsp;pathalogical&nbsp;cases.</
 
 <dl><dt><a name="RDFStore-dumpBySubject"><strong>dumpBySubject</strong></a>(self, context, sink, sorting<font color="#909090">=1</font>)</dt><dd><tt>&nbsp;Dump&nbsp;by&nbsp;order&nbsp;of&nbsp;subject&nbsp;except&nbsp;forSome's&nbsp;first&nbsp;for&nbsp;n3=a&nbsp;mode</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-dumpChronological"><strong>dumpChronological</strong></a>(self, context, sink)</dt></dl>
+<dl><dt><a name="RDFStore-dumpChronological"><strong>dumpChronological</strong></a>(self, context, sink)</dt><dd><tt>Fast&nbsp;as&nbsp;possible.&nbsp;Only&nbsp;dumps&nbsp;data.&nbsp;No&nbsp;formulae&nbsp;or&nbsp;universals.</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-dumpFormulaContents"><strong>dumpFormulaContents</strong></a>(self, context, sink, sorting)</dt><dd><tt>&nbsp;Iterates&nbsp;over&nbsp;statements&nbsp;in&nbsp;formula,&nbsp;bunching&nbsp;them&nbsp;up&nbsp;into&nbsp;a&nbsp;set<br>
 for&nbsp;each&nbsp;subject.<br>
@@ -2204,7 +2204,7 @@ We&nbsp;dump&nbsp;"this"&nbsp;first&nbsp;before&nbsp;everything&nbsp;else</tt></
 
 <dl><dt><a name="RDFStore-dumpStatement"><strong>dumpStatement</strong></a>(self, sink, triple, sorting)</dt></dl>
 
-<dl><dt><a name="RDFStore-dumpVariables"><strong>dumpVariables</strong></a>(self, context, sink, sorting<font color="#909090">=1</font>, pretty<font color="#909090">=0</font>)</dt><dd><tt>Dump&nbsp;the&nbsp;forAlls&nbsp;and&nbsp;the&nbsp;forSomes&nbsp;at&nbsp;the&nbsp;top&nbsp;of&nbsp;a&nbsp;formula</tt></dd></dl>
+<dl><dt><a name="RDFStore-dumpVariables"><strong>dumpVariables</strong></a>(self, context, sink, sorting<font color="#909090">=1</font>, pretty<font color="#909090">=0</font>, dataOnly<font color="#909090">=0</font>)</dt><dd><tt>Dump&nbsp;the&nbsp;forAlls&nbsp;and&nbsp;the&nbsp;forSomes&nbsp;at&nbsp;the&nbsp;top&nbsp;of&nbsp;a&nbsp;formula</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair)</dt></dl>
 

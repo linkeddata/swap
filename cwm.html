@@ -73,7 +73,7 @@ steps,&nbsp;in&nbsp;order&nbsp;left&nbsp;to&nbsp;right:<br>
 --ntriples&nbsp;&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;NTriples&nbsp;(equiv&nbsp;--n3=spartan&nbsp;-bySubject&nbsp;-quiet)<br>
 --language=x&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;"x"&nbsp;(rdf,&nbsp;n3,&nbsp;etc)&nbsp;&nbsp;--rdf&nbsp;same&nbsp;as:&nbsp;--language=rdf<br>
 --languageOptions=y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--n3=sp&nbsp;same&nbsp;as:&nbsp;&nbsp;--language=n3&nbsp;--languageOptions=sp<br>
---ugly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Store&nbsp;input&nbsp;and&nbsp;regurgitate&nbsp;*<br>
+--ugly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Store&nbsp;input&nbsp;and&nbsp;regurgitate,&nbsp;data&nbsp;only,&nbsp;fastest&nbsp;*<br>
 --bySubject&nbsp;&nbsp;&nbsp;Store&nbsp;input&nbsp;and&nbsp;regurgitate&nbsp;in&nbsp;subject&nbsp;order&nbsp;*<br>
 --no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;output&nbsp;*<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(default&nbsp;is&nbsp;to&nbsp;store&nbsp;and&nbsp;pretty&nbsp;print&nbsp;with&nbsp;anonymous&nbsp;nodes)&nbsp;*<br>
@@ -91,7 +91,7 @@ steps,&nbsp;in&nbsp;order&nbsp;left&nbsp;to&nbsp;right:<br>
 --unflatten&nbsp;&nbsp;&nbsp;turn&nbsp;described-as-true&nbsp;LX&nbsp;sentences&nbsp;into&nbsp;formulas<br>
 --think=foo&nbsp;&nbsp;&nbsp;as&nbsp;-apply=foo&nbsp;but&nbsp;continue&nbsp;until&nbsp;no&nbsp;more&nbsp;rule&nbsp;matches&nbsp;(or&nbsp;forever!)<br>
 --purge&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Remove&nbsp;from&nbsp;store&nbsp;any&nbsp;triple&nbsp;involving&nbsp;anything&nbsp;in&nbsp;class&nbsp;log:Chaff<br>
---purge-rules&nbsp;Remove&nbsp;from&nbsp;store&nbsp;any&nbsp;triple&nbsp;involving&nbsp;log:implies<br>
+--data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Remove&nbsp;all&nbsp;except&nbsp;plain&nbsp;RDF&nbsp;triples&nbsp;(formulae,&nbsp;forAll,&nbsp;etc)<br>
 --crypto&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enable&nbsp;processing&nbsp;of&nbsp;crypto&nbsp;builtin&nbsp;functions.&nbsp;Requires&nbsp;python&nbsp;crypto.<br>
 --help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;this&nbsp;message<br>
 --revision&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;CVS&nbsp;revision&nbsp;numbers&nbsp;of&nbsp;major&nbsp;modules<br>
@@ -124,6 +124,7 @@ the&nbsp;closure&nbsp;under&nbsp;the&nbsp;operation&nbsp;of&nbsp;looking&nbsp;up
 &nbsp;s&nbsp;&nbsp;&nbsp;the&nbsp;subject&nbsp;of&nbsp;a&nbsp;statement&nbsp;added<br>
 &nbsp;p&nbsp;&nbsp;&nbsp;the&nbsp;predicate&nbsp;of&nbsp;a&nbsp;statement&nbsp;added<br>
 &nbsp;o&nbsp;&nbsp;&nbsp;the&nbsp;object&nbsp;of&nbsp;a&nbsp;statement&nbsp;added<br>
+&nbsp;t&nbsp;&nbsp;&nbsp;the&nbsp;object&nbsp;of&nbsp;an&nbsp;rdf:type&nbsp;statement&nbsp;added<br>
 &nbsp;i&nbsp;&nbsp;&nbsp;any&nbsp;owl:imports&nbsp;documents<br>
 &nbsp;r&nbsp;&nbsp;&nbsp;any&nbsp;doc:rules&nbsp;documents<br>
 &nbsp;<br>
