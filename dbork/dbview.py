@@ -40,7 +40,7 @@ earlier dev notes, links, ...
 __version__ = "$Id$" #@@consult python style guide
 
 
-from string import join
+from string import join, split
 
 import MySQLdb # MySQL for Python
                # http://sourceforge.net/projects/mysql-python
@@ -54,24 +54,33 @@ import RDFSink
 import notation3 # move RDF/XML writer out of notation3
 
 import BaseHTTPServer
-
+import cgi # for URL-encoded query parsing
 
 class DBViewServer(BaseHTTPServer.HTTPServer):
-    def __init__(self, addr, handlerClass, db, base):
+    def __init__(self, addr, handlerClass, db, home, dbName):
         BaseHTTPServer.HTTPServer.__init__(self, addr, handlerClass)
         
         self._db = db
-        self._base = base
-        
+        self._home = home
+        self._dbName = dbName
+        self._base = 'http://%s:%s%s%s' % (addr[0], addr[1], home, dbName)
 
 class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
+    QPath = '/dbq'
+    UIPath = '/ui'
+    
     def do_GET(self):
-        if self.path == '/':
-            self.getRoot()
+        s = self.server
+
+        #DEBUG "which get?", self.path, s._home + s._dbName + self.UIPath
+        
+        if self.path == s._home + s._dbName + self.UIPath:
+            self.getUI()
         else:
             self.getView()
+
             
-    def getRoot(self):
+    def getUI(self):
         self.send_response(200)
         self.send_header("Content-type", "text/html")
         self.end_headers()
@@ -79,14 +88,19 @@ class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         self.wfile.write("""
         <html xmlns="http://www.w3.org/1999/xhtml">
         <head><title>RDF query interface@@</title></head>
-        <body>
-        <p>Query:</p>
-        <form action='/dbview'>
-        <input name="q"/>
-        </form>
-        </body>""")
+        <body>""")
 
-        
+        queryUI(self.wfile.write,
+                4, #@@ more tables?
+                self.server._home + self.server._dbName + self.QPath,
+                self.server._dbName)
+
+        self.wfile.write("""
+        <address>Dan C@@ $Revision$ $Date$</address>
+        </body></html>
+        """)
+
+
     def getView(self):
         self.send_response(200, "@@not sure you're winning yet, actually")
         self.send_header("Content-type", "application/rdf+xml") #@@ cf. RDF Core "what mime type to use for RDF?" issue...
@@ -153,10 +167,106 @@ def askdb(db, dbaddr, sink, fields, tables, condition):
         sink.endAnonymousNode()
 
 
+###############
+# Forms UI
+
+def queryUI(write, n, qpath, dbName):
+    write("<div><form action='%s'><table>\n" % qpath)
+    write("<caption>Query %s database</caption>\n" % dbName)
+
+    # table head:
+    # Tbl Name Fields Key =Key 1 =Key2 ...
+    write("<tr><th>Tbl</th><th>Name</th><th>Fields</th><th>Key</th>")
+    for k in range(1, n):
+        write("<th>= Key %s</th>" % k)
+    write("</tr>\n")
+    
+    for k in range(1, n+1):
+        write("<tr><th>%s</th>" % k)
+        write("<td><input name='name%s'/></td>" % k)
+        write("<td><input name='fields%s'/></td>" % k)
+        write("<td><input name='key%s'/></td>" % k)
+        for j in range(1, k):
+            write("<td><input name='kj%s_%s'/></td>" % (k, j))
+        write("</tr>\n")
+    write("</table>\n")
+    write("<p>other condition: <input name='condition'/></p>\n")
+    write("<p><input type=submit value='Get Results'/></p>\n")
+    write("</form></div>\n")
+        
+
+
+def parseQuery(qs):
+    """Parse url-encoded SQL query string
+
+    return fields, tables, keyJoins, condition
+       (ala: select fields from tables where keyJoins and condition)
+    where tables is a list of table names
+    fields is a list of (tableName, fieldName) pairs,
+    and keyJoins is a list of ((tn, fn), (tn, fn)) pairs.
+    
+    qs is an URL-encoded query string, ala the form above"""
+
+
+    form = cgi.parse_qs(qs)
+
+    try:
+        condition = form['condition'][0]
+    except KeyError:
+        condition = None
+        
+    i = 1
+
+    tables = []
+    fields = []
+    keys = {}
+    
+    while 1:
+        nameN = 'name%s' % i
+        if not form.has_key(nameN): break
+
+        tname = form[nameN][0]
+        tables.append(tname)
+        
+        try:
+            fieldsI = split(form['fields%s' % i][0], ',')
+        except KeyError:
+            pass
+        else:
+            for f in fieldsI:
+                fields.append((tname, f))
+
+        try:
+            key = form['key%s' % i][0]
+        except:
+            pass
+        else:
+            keys[tname] = key
+
+        i = i + 1
+
+    keyJoins = []
+    for i in range(1, len(tables)+1):
+        for j in range(1, i):
+            kjN = 'kj%s_%s' % (i, j)
+            try:
+                f = form[kjN][0]
+            except KeyError:
+                pass
+            else:
+                keyJoins.append(((tables[i-1], f),
+                                 (tables[j-1], keys[tables[j-1]]) ))
+
+    return fields, tables, keyJoins, condition
+
+
+#################
+# Test harness...
+
 def testSvc():
     import sys
 
-    host, port, user, passwd, httpPort = sys.argv[1:6]
+    host, port, user, passwd, httpHost, httpPort = sys.argv[1:7]
     port = int(port)
 
     dbName = 'administration' #@@
@@ -164,10 +274,10 @@ def testSvc():
                        user=user, passwd=passwd,
                        db=dbName)
 
-    hostPort = ('', int(httpPort))
-    base = "http://127.0.0.1:%s/%s" % (httpPort, dbName)
-    httpd = DBViewServer(hostPort, DBViewHandler, db, base)
+    hostPort = (httpHost, int(httpPort))
+    httpd = DBViewServer(hostPort, DBViewHandler, db, '/', dbName)
 
+    print "base:", httpd._base
     print "Serving HTTP on port", httpPort, "..."
     httpd.serve_forever()
 
@@ -198,14 +308,31 @@ def testCLI():
     host, port, user, passwd = sys.argv[1:5]
 
     testDBView(sys.stdout, host, atoi(port), user, passwd)
+
+def testUI():
+    import sys
+    queryUI(sys.stdout.write, 3, '/', "niftydb")
+
+
+def testQ():
+    path='/administration/dbq?name1=users&fields1=name%2Cemail%2Ccity&key1=id&name2=techplenary2002&fields2=&key2=&kj2_1=id&name3=&fields3=&key3=&kj3_1=&kj3_2=&name4=&fields4=&key4=&kj4_1=&kj4_2=&kj4_3='
+
+    path, fields = split(path, '?')
+    print "CGI parse:", cgi.parse_qs(fields)
     
+    print "SQL parse:", parseQuery(fields)
+
 if __name__ == '__main__':
     #testCLI()
-    testSvc()
+    #testSvc()
+    #testUI()
+    testQ()
     
-
 # $Log$
-# Revision 1.6  2002-03-05 22:16:24  connolly
+# Revision 1.7  2002-03-06 00:03:16  connolly
+# starting to work out the forms UI...
+#
+# Revision 1.6  2002/03/05 22:16:24  connolly
 # per-table namespace of columns starting to work...
 #
 # Revision 1.5  2002/03/05 22:04:18  connolly
