@@ -109,7 +109,7 @@ class RDFSink:
             if not self.namespaces.get(prefix,None):   # For conventions
                 self.prefixes[nsPair] = prefix
                 self.namespaces[prefix] = nsPair
-                if chatty: print "# RDFSink: Bound %s to %s" % (prefix, ns[1])
+                if chatty: print "# RDFSink: Bound %s to %s" % (prefix, nsPair[1])
             else:
                 self.bind(prefix+"g1", nsPair) # Recurive
         
@@ -1028,7 +1028,7 @@ class SinkToN3(RDFSink):
 
         j = string.rfind(value, "#")
         if j>=0:
-            str = self.prefixes.get(value[:j], None)
+            str = self.prefixes.get((RESOURCE, value[:j]), None)
             if str != None : return str + ":" + value[j+1:]
             if j==0: return "<#" + value[j+1:] + ">"
                 
@@ -1316,16 +1316,17 @@ class RDFStore(RDFSink) :
                 best = total
                 mp = r
         if chatty: print "# Most popular Namesapce in %s is %s" % (`context`, `mp`)
+        mpPair = mp.asPair()
         defns = self.namespaces.get("", None)
         if defns :
             del self.namespaces[""]
             del self.prefixes[defns]
-        if self.prefixes.has_key(mp) :
-            oldp = self.prefixes[mp]
-            del self.prefixes[mp]
+        if self.prefixes.has_key(mpPair) :
+            oldp = self.prefixes[mpPair]
+            del self.prefixes[mpPair]
             del self.namespaces[oldp]
-        self.prefixes[mp] = ""
-        self.namespaces[""] = mp
+        self.prefixes[mpPair] = ""
+        self.namespaces[""] = mpPair
         
 # Manipulation methods:
 
@@ -1407,7 +1408,7 @@ class RDFStore(RDFSink) :
     def _dumpSubject(self, subj, context, sink):
         """ Take care of top level anonymous nodes
         """
-        print "%s occures %i as context, %i as pred, %i as subj, %i as obj" % (
+        if chatty: print "%s occurs %i as context, %i as pred, %i as subj, %i as obj" % (
             `subj`, subj.occurrences(CONTEXT, None),
             subj.occurrences(PRED,context), subj.occurrences(SUBJ,context),
             subj.occurrences(OBJ, context))
@@ -1694,11 +1695,12 @@ def doCommand():
         option_rdf1out = 0  # Output in RDF M&S 1.0 instead of N3
         option_bySubject= 0 # Store and regurgitate in subject order *
         option_inputs = []
+        option_test = 0
         chatty = 0          # not too verbose please
         hostname = "localhost" # @@@@@@@@@@@ Get real one
         
         for arg in sys.argv[1:]:  # Command line options after script name
-            if arg == "-test": return test()
+            if arg == "-test": option_test = 1
             elif arg == "-ugly": option_ugly = 1
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-bySubject": option_bySubject = 1
@@ -1709,6 +1711,8 @@ def doCommand():
                 return
             elif arg[0] == "-": print "Unknown option", arg
             else : option_inputs.append(arg)
+            
+        if option_test: return test()
 
         # The base URI for this process - the Web equiv of cwd
 #	_baseURI = "file://" + hostname + os.getcwd() + "/"
