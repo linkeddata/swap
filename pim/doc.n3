@@ -42,7 +42,7 @@ doc:ipr a r:Property;
     s:domain    doc:Work;
     s:range     doc:Work .
 
-OpenSourceLicense s:subClassOf doc:Work;
+doc:OpenSourceLicense s:subClassOf doc:Work;
     s:comment   """Class of licenses which can be called Open Soutrce
                 according to opensource.org""".
 
