@@ -480,6 +480,13 @@ class BI_StartsWith(LightBuiltIn):
     def evaluate(self,subj, obj):
         return subj.string.startswith(obj.string)
 
+#  Constructors - more light built-ins
+
+class BI_concat(LightBuiltIn):
+    def evaluate(self,subj, obj):
+        return subj.string.startswith(obj.string)
+
+
 # Equivalence relations
 
 class BI_EqualTo(LightBuiltIn,Function, ReverseFunction):
@@ -736,15 +743,14 @@ class RDFStore(notation3.RDFSink) :
 
     def dumpChronological(self, context, sink):
         sink.startDoc()
-        self.sumpPrefixes(sink)
+        self.dumpPrefixes(sink)
 #        print "# There are %i statements in %s" % (len(context.occursAs[CONTEXT]), `context` )
         for s in context.occursAs[CONTEXT]:
             self._outputStatement(sink, s)
         sink.endDoc()
 
     def _outputStatement(self, sink, s):
-        t = s.triple
-        sink.makeStatement(self.extern(t))
+        sink.makeStatement(self.extern(s.triple))
 
     def extern(self, t):
         return(t[CONTEXT].asPair(),
@@ -753,18 +759,30 @@ class RDFStore(notation3.RDFSink) :
                             t[OBJ].asPair(),
                             )
 
-    def dumpBySubject(self, context, sink):
-
+    def dumpBySubject(self, context, sink, sorting=1):
+        """ Dump by order of subject except forSome's first for n3=a mode"""
+        
         self.selectDefaultPrefix(context)        
         sink.startDoc()
         self.dumpPrefixes(sink)
 
-        for r in self.engine.resources.values() :  # First the bare resource
+        if sorting: context.occursAs[SUBJ].sort()
+        for s in context.occursAs[SUBJ] :
+            if context is s.triple[CONTEXT]and s.triple[PRED] is self.forSome:
+                self._outputStatement(sink, s)
+
+        rs = self.engine.resources.values()
+        if sorting: rs.sort()
+        for r in rs :  # First the bare resource
+            if sorting: r.occursAs[SUBJ].sort()
             for s in r.occursAs[SUBJ] :
                 if context is s.triple[CONTEXT]:
-                    self._outputStatement(sink, s)
+                    if not(context is s.triple[SUBJ]and s.triple[PRED] is self.forSome):
+                        self._outputStatement(sink, s)
             if not isinstance(r, Literal):
-                for f in r.fragments.values() :  # then anything in its namespace
+                fs = r.fragments.values()
+                if sorting: fs.sort
+                for f in fs :  # then anything in its namespace
                     for s in f.occursAs[SUBJ] :
 #                        print "...dumping %s in context %s" % (`s.triple[CONTEXT]`, `context`)
                         if s.triple[CONTEXT] is context:
@@ -1262,7 +1280,7 @@ class RDFStore(notation3.RDFSink) :
         subformulae = []
         for arc in con.occursAs[CONTEXT]:
 #           if pred is self.subExpression and subj is con:
-            for p in [ SUBJ, PRED, OBJ]:  # @ can remove PRED if contexts and predicates distinct
+            for p in [ SUBJ, PRED, OBJ]:  # @ can remove PRED if formulae and predicates distinct
                 x = arc.triple[p]
                 if isinstance(x, Formula) and x in existentials:  # x is a Nested context
                     if x not in subformulae: subformulae.append(x) # Only one copy of each please
@@ -1326,8 +1344,6 @@ class RDFStore(notation3.RDFSink) :
                 v = self.engine.intern((RESOURCE, "internaluseonly:#var"+`p`))
                 variables.append(v)
                 q2[p] = v
-            else:
-                q2[p] = quad[p]
         unmatched = [ ( q2[0], q2[1], q2[2], q2[3])]
         listOfBindings = []
         count = match(self, unmatched, variables, [], action=collectBindings, param=listOfBindings, justOne=0)
@@ -2012,15 +2028,13 @@ Examples:
         import urllib
         import time
         global chatty
-        option_ugly = 0     # Store and regurgitate with genids *
         option_pipe = 0     # Don't store, just pipe though
-        option_bySubject= 0 # Store and regurgitate in subject order *
         option_inputs = []
         option_test = 0     # Do simple self-test
         option_reify = 0    # Flag: reify on output  (process?)
         option_flat = 0    # Flag: reify on output  (process?)
         option_outURI = None
-        _doneOutput = 0
+        option_outputStyle = "-best"
         _gotInput = 0     #  Do we not need to take input from stdin?
         option_meta = 0
         option_rdf_flags = ""  # Random flags affecting parsing/output
@@ -2052,7 +2066,7 @@ Examples:
             if arg == "-test":
                 option_test = 1
                 _gotInput = 1
-            elif arg == "-ugly": _doneOutput = 1
+            elif arg == "-ugly": option_outputStyle = arg
             elif _lhs == "-base": option_baseURI = _uri
             elif arg == "-rdf": option_format = "rdf"
             elif _lhs == "-rdf":
@@ -2064,7 +2078,12 @@ Examples:
                 option_n3_flags = _rhs
             elif arg == "-quiet": option_quiet = 1
             elif arg == "-pipe": option_pipe = 1
-            elif arg == "-bySubject": _doneOutput = 1
+            elif arg == "-bySubject": option_outputStyle = arg
+            elif arg == "-triples":
+                option_format = "n3"
+                option_n3_flags = "spart"
+                option_outputStyle = "-bySubject"
+                option_quiet = 1
             elif _lhs == "-outURI": option_outURI = _uri
             elif _lhs == "-chatty": chatty = int(_rhs)
             elif arg[:7] == "-apply=": pass
@@ -2179,8 +2198,7 @@ Examples:
                 progress("Base now "+option_baseURI)
 
             elif arg == "-ugly":
-                _store.dumpChronological(workingContext, _outSink)
-                _doneOutput = 1            
+                option_outputStyle = arg            
 
             elif arg == "-pipe": pass
             elif _lhs == "-outURI": option_outURI = _uri
@@ -2220,9 +2238,14 @@ Examples:
                 print "# Command line error: %s illegal option with -pipe", arg
                 break
 
+            elif arg == "-triples":
+                option_format = "n3"
+                option_n3_flags = "spart"
+                option_outputStyle = "-bySubject"
+                option_quiet = 1
+
             elif arg == "-bySubject":
-                _store.dumpBySubject(workingContext, _outSink)
-                _doneOutput = 1            
+                option_outputStyle = arg            
 
             elif arg[:7] == "-apply=":
                 filterContext = (myEngine.intern((FORMULA, _uri+ "#_formula")))
@@ -2268,17 +2291,25 @@ Examples:
                 progress("Size of store: %i statements." %(_store.size,))
 
             elif arg == "-no":  # suppress output
-                _doneOutput = 1
+                option_outputStyle = arg
                 
             elif arg[:8] == "-outURI=": pass
             else: print "Unknown option", arg
 
 
 
-# Squirt it out if no output done
-        if not option_pipe and not _doneOutput:
+# Squirt it out if not piped
+
+        if not option_pipe:
             if chatty>5: progress("Begining output.")
-            _store.dumpNested(workingContext, _outSink)
+            if option_outputStyle == "-ugly":
+                _store.dumpChronological(workingContext, _outSink)
+            elif option_outputStyle == "-bySubject":
+                _store.dumpBySubject(workingContext, _outSink)
+            elif option_outputStyle == "-no":
+                pass
+            else:  # "-best"
+                _store.dumpNested(workingContext, _outSink)
 
 def progress(str):
     sys.stderr.write("#   " + str + "\n")
