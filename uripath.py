@@ -163,10 +163,16 @@ commonHost = re.compile(r'^[-_a-zA-Z0-9.]+:(//[^/]*)?/[^/]*$')
 
 
 def refTo(base, uri):
-    """Your regular relative URI algorithm -- never trust anyone else's ;-)
-    This one checks that it uses a root-realtive one where that is all they share.
-    Now uses root-relative where no path is shared.
-    This is a matter of taste but tends to give more resilience IMHO -- and shorter paths"""
+    """figure out a relative URI reference from base to uri
+
+    Your regular relative URI algorithm -- never trust anyone else's
+    ;-) This one checks that it uses a root-realtive one where that is
+    all they share.  Now uses root-relative where no path is shared.
+    This is a matter of taste but tends to give more resilience IMHO
+    -- and shorter paths
+
+    """
+
     if base == None: return uri
     if base == uri: return ""
     i=0
@@ -184,7 +190,8 @@ def refTo(base, uri):
 	if uri[l+1:l+2] != "/" and base[l+1:l+2] != "/":
 	    return uri[l:]
 
-    if uri[i:i+1] =="#": return uri[i:]  # fragment of base
+    if uri[i:i+1] =="#" and len(base) == i: return uri[i:] # fragment of base
+
     while i>0 and uri[i-1] != '/' : i=i-1  # scan for slash
 
     if i < 3: return uri  # No way.
@@ -192,7 +199,10 @@ def refTo(base, uri):
        or string.find(uri, "//", i-2)>0: return uri # An unshared "//"
     if string.find(base, ":", i)>0: return uri  # An unshared ":"
     n = string.count(base, "/", i)
-    return ("../" * n) + uri[i:]
+    if n == 0 and uri[i] == '#':
+        return "./" + uri[i:]
+    else:
+        return ("../" * n) + uri[i:]
 
 import os
 def base():
@@ -238,6 +248,7 @@ def test():
              ('file:/ex/x/y/z', 'file:/r', '/r'),        # I prefer this. - tbl
              ('file:/ex/x/y', 'file:/ex/x/q/r', 'q/r'),
              ('file:/ex/x/y', 'file:/ex/x/q/r#s', 'q/r#s'),
+             ('file:/ex/x/y', 'file:/ex/x/q/r#', 'q/r#'),
              ('file:/ex/x/y', 'file:/ex/x/q/r#s/t', 'q/r#s/t'),
              ('file:/ex/x/y', 'ftp://ex/x/q/r', 'ftp://ex/x/q/r'),
              ('file:/ex/x/y', 'file:/ex/x/y', ''),
@@ -245,7 +256,10 @@ def test():
              ('file:/ex/x/y/pdq', 'file:/ex/x/y/pdq', ''),
              ('file:/ex/x/y/', 'file:/ex/x/y/z/', 'z/'),
 	     ('file:/devel/WWW/2000/10/swap/test/reluri-1.n3', 
-	     'file://meetings.example.com/cal#m1', 'file://meetings.example.com/cal#m1')
+	     'file://meetings.example.com/cal#m1', 'file://meetings.example.com/cal#m1'),
+             ('file:/some/dir/foo', 'file:/some/dir/#blort', './#blort'),
+             ('file:/some/dir/foo', 'file:/some/dir/#', './#')
+             
              )
 
     for inp1, inp2, exp in cases:
@@ -347,7 +361,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.4  2002-08-07 14:32:21  timbl
+# Revision 1.5  2002-08-23 04:36:15  connolly
+# fixed refTo case: file:/some/dir/foo  ->  file:/some/dir/#blort
+#
+# Revision 1.4  2002/08/07 14:32:21  timbl
 # uripath changes. passes 51 general tests and 25 loopback tests
 #
 # Revision 1.3  2002/08/06 01:36:09  connolly
