@@ -17,18 +17,22 @@
 <p>The N3 language  -- and the SWAP code such as Cwm which expeiments with it
 and  demonsrtates it -- were motivated by a desire to show the semantic web
 working in a practical, tryable prototype, with the  minimum of fuss and
-clutter. Mimumum fuss means a similicity which comes from a absense of extra
-features: this suggests a tactic of reusing existing features as far as
-possible - to push the bounds of one style or pattern until it is
-demonstrably unrerasonable, and then to stop.</p>
+clutter. Mimumum fuss includes an absense of extra features: this suggests a
+tactic of reusing existing features as far as possible - to push the bounds
+of one style or pattern until it is demonstrably unrerasonable, (and then to
+stop!).</p>
 
 <h2>N3 requirements</h2>
+
+<p>The Semantic Web involves doing things with data and logic but using URIs
+for identifiers, so that the semantics of symbols can be shared with other
+applications and other agents acrosss the world.</p>
 
 <h3>A data language</h3>
 
 <p>The first task of N3 was to allow data - pure facts -to be written down
 simply and easily in a text file -- or in an IRC chat channel, for that
-matter.    RDF had evolved as a way of expressingany data, be it tables,
+matter.    RDF had evolved as a way of expressing any data, be it tables,
 trees or mixtures of the above in a circles and arrows, but the XML format
 was too verbose for use in conversaion, on a whiteboard.</p>
 
@@ -38,7 +42,8 @@ was given for the same subject.  </p>
 
 <p>Most of the informatuion in most real systems is data (although the
 balance between data and rules varies widely).  Even the ontology layer (OWL)
-is expressable using the data langauge.</p>
+is expressable using the data langauge.  So RDF schemas and ontologies
+(unlike SGML and XML DTDs) are expressed in the same language.</p>
 
 <p>A goal of N3 was not only to make a concise and usable language for data,
 but also to show how much could be done by using that data language.</p>
@@ -58,11 +63,49 @@ from the data representation language</p>
 <p>On this Web of information, much of that information is about other
 information. Indeed, the first driver for a common language for data was data
 about information resources (hence the now rather outdated name <em>Resource
-Description Framework</em>). In this environment, the Frege and Russel era
-attempts to avoid refernce by data to data are not going to work. The
-alternative is to embrace quoting - to be able to make comments in one
-document about other documents without imposing any acyclic requirement on
-the whole gobal system.</p>
+Description Framework</em>). In this environment,  attempts to avoid paradox
+by avoidiung  data refering to data are not going to work. An alternative
+approach is to embrace quoting - to be able to make comments in one document
+about other documents without imposing any acyclic requirement on the whole
+gobal system.</p>
+
+<p>Information work in a real world necessarily involves considering
+information without just adding it to the pile of things one believes. An
+agent makes his or her or its way through life considering who said what.
+This requires <strong>referential opacity</strong> to distinguish between
+talking about Mary and saying "Mary", o distinguish between what a document
+actually said and what you would now infer from what it said.</p>
+
+<h2>Cwm requirements</h2>
+
+<p>Cwm was designed to show what could be done by webizing  knowledge
+representation ideas, implementing as much of the Semantic Web layer cake as
+possible to show (a) that it could be done and (b) what the semantic web was
+about. It is not designed to be particulaly efficient, to scale well for
+large datasets or large rulesets. There are a host of interesting algorithms
+which have been used in existing systems including databases including the
+SQL world, forward and backward chaining inference systems, including Prolog
+all the logic programming world, and KIF and the Knowledge Representation
+world.  The idea is not that the cwm inference engine is special, rather that
+it not:  you can take any inference system and webize it:</p>
+<ul>
+  <li>Fix the language so that the identifiers use namespaces (or something)
+    to actually be URIs;</li>
+  <li>Fix the software so that URIs can be used as URIs not just as
+    identifiers but as URIs.  Each URI scheme has different properties and
+    making the software aware of them and capable of implementing them makes
+    it a true Semantic Web application, not just a Semantic application.</li>
+</ul>
+
+<p>So the cwm should be able to...</p>
+<ul>
+  <li>look up documents on the web;</li>
+  <li>look inside semantic web documents on eth web without beliveing
+  them;</li>
+  <li>create and verify digital signatures of documents.
+    <p></p>
+  </li>
+</ul>
 
 <p></p>
 <hr />
