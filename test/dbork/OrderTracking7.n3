@@ -17,36 +17,40 @@ this log:forAll :o, :d, :p, :productName, :c, :first, :last, :billAddr, :billStr
 	Customers:id, Customers:familyName, Customers:givenName, Customers:billingAddress, 
 	Addresses:id, Addresses:street, Addresses:city, Addresses:state.
 
-Orders:product log:pointsAt Products:id .
-Orders:customer log:pointsAt Customers:id .
-Customers:billingAddress log:pointsAt Addresses:id .
+#@@ pointsAt is non-mon. --DWC
+#@@ Orders:product log:pointsAt Products:id .
+#@@ Orders:customer log:pointsAt Customers:id .
+#@@ Customers:billingAddress log:pointsAt Addresses:id .
 
 {
- <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id=3183> Orders:customer :c .
- <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id=3183> Orders:product :p .
- <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id=3183> Orders:orderDate :d .
+ <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id.3183> Orders:customer[
+   is Customers:id of :c ].
+ <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id.3183> Orders:product [
+   is Products:id of :p ].
+ <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id.3183> Orders:orderDate :d .
 
  :p Products:name :productName .
 
  :c Customers:familyName :first .
  :c Customers:givenName :last .
- :c Customers:billingAddress :billAddr .
+ :c Customers:billingAddress [ is Addresses:id of :billAddr ].
 
  :billAddr Addresses:street :billStreet .
  :billAddr Addresses:city :billCity .
  :billAddr Addresses:state :billState .
 } log:implies {
 
- "RESULT" :prodName :productName .
- "RESULT" :fistName :first .
- "RESULT" :lastName :last .
- "RESULT" :Street :billStreet .
- "RESULT" :City :billCity .
- "RESULT" :State :billState .
+ <#RESULT> :prodName :productName;
+  :fistName :first;
+  :lastName :last;
+  :Street :billStreet;
+  :City :billCity;
+  :State :billState.
 
 }.
 
 # SQL query (so nicely formatted):
+#@@ I took the pointsAt bit out...
 # SELECT Products_0.id AS p_id,
 #          Products_0.name AS productName_name,
 #        Addresses_0.id AS billAddr_id,

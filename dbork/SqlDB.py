@@ -274,6 +274,7 @@ class SqlDBAlgae(RdfDBAlgae):
         self.checkOverConstraintsOnEmptyResult = checkOverConstraintsOnEmptyResult
         self.interner = interner
 
+        # this compilation/import of schemas looks over-engineered, to me --DWC
         try:
             fp, path, stuff = imp.find_module(tableDescModuleName)
             tableDescModule = imp.load_module(tableDescModuleName, fp, path, stuff)
@@ -287,7 +288,7 @@ class SqlDBAlgae(RdfDBAlgae):
 
         self.baseUri = baseURI
         self.predicateRE = re.compile(baseURI.uri+
-                                      "(?P<table>\w+)\#(?P<field>[\w\d\%\=\&]+)$")
+                                      "(?P<table>\w+)\#(?P<field>[\w\d\%\.\&]+)$")
 
         if (self.structure == None):
             if verbosity() > 10: progress("analyzing mysql://%s/%s\n" % (host, database))
@@ -539,9 +540,9 @@ class SqlDBAlgae(RdfDBAlgae):
         except AttributeError, e:
             pk = pk
         for field in pk:
-	    lvalue = self.CGI_escape(field)
-            rvalue = self.CGI_escape(str(values[field]))
-	    segments.append(lvalue+"="+rvalue)
+	    lvalue = CGI_escape(field)
+            rvalue = CGI_escape(str(values[field]))
+	    segments.append(lvalue+"."+rvalue)
         value = string.join(segments, '&')
         return self.baseUri.uri+table+'#'+value; # '.'+value+"#item"
 
@@ -552,13 +553,14 @@ class SqlDBAlgae(RdfDBAlgae):
         field = m.group("field")
         if (table1 != table):
             raise RuntimeError, "\""+uri+"\" not based on "+self.baseUri.uri+table
-        recordId = self.CGI_unescape(field)
+        recordId = CGI_unescape(field)
         specifiers = string.split(recordId, '&')
         constraints = [];
         for specifier in specifiers:
-            field, value = string.split(specifier, '=')
-            field = self.unescapeName(field)
-            field = self.unescapeName(field)
+            print "@@specifier:", specifier
+            field, value = string.split(specifier, '.') #@@ catch ValueError and report as URI syntax error?
+            field = unescapeName(field)
+            value = unescapeName(value)
             constraints.append(tableAs+"."+field+"=\""+value+"\"")
         return constraints
 
@@ -627,13 +629,13 @@ class SqlDBAlgae(RdfDBAlgae):
             # Grab literals from the results
             for binding in self.scalarBindings:
                 queryPiece, cols = binding
-                str = answerRow[cols[0]]
-                if (hasattr(str, 'strftime')):
-                    str = self.interner.intern((LITERAL, str.strftime())) # @@FIXME: should use builtin date data type
+                st = answerRow[cols[0]]
+                if (hasattr(st, 'strftime')):
+                    st = self.interner.intern((LITERAL, st.strftime())) # @@FIXME: should use builtin date data type
                 else:
-                    str = self.interner.intern((LITERAL, str))
-                Assure(nextResults[-1], queryPiece.getVarIndex(), str) # nextResults[-1][queryPiece.getVarIndex()] = uri
-                rowBindings[queryPiece.symbol()] = str
+                    st = self.interner.intern((LITERAL, str(st))) #@@datatypes?
+                Assure(nextResults[-1], queryPiece.getVarIndex(), st) # nextResults[-1][queryPiece.getVarIndex()] = uri
+                rowBindings[queryPiece.symbol()] = st
             # Grab sub-expressions from the results
             for qpStr in self.disjunctionBindings.keys():
                 binding = self.disjunctionBindings[qpStr]
@@ -845,29 +847,38 @@ class SqlDBAlgae(RdfDBAlgae):
         else:
             return ret
 
-    def unescapeName(self, toEscape):
-        a = toEscape
-        # re.sub("\_e", "=", a)
-        a = re.sub("\_e", "\=", a)
-        a = re.sub("\_a", "\&", a)
-        a = re.sub("\_h", "\-", a)
-        a = re.sub("\_d", "\.", a)
-        a = re.sub("\_p", "\%", a)
-        a = re.sub("\_u", "_", a)
-        a = self.CGI_unescape(a)
-        return a
 
-    def CGI_escape(self, toEscape):
-        a = toEscape
-        a = re.sub("&", "\&amp\;", a)
-        a = re.sub("\"", "\&quot\;", a)
-        return a
+def unescapeName(toEscape):
+    """@@what is this actually doing? --DWC
+    """
+    a = toEscape
+    # re.sub("\_e", "=", a)
+    a = re.sub("\_e", "\=", a)
+    a = re.sub("\_a", "\&", a)
+    a = re.sub("\_h", "\-", a)
+    a = re.sub("\_d", "\.", a)
+    a = re.sub("\_p", "\%", a)
+    a = re.sub("\_u", "_", a)
+    a = CGI_unescape(a)
+    return a
 
-    def CGI_unescape(self, toEscape):
-        a = toEscape
-        a = re.sub("\&amp\;", "&", a)
-        a = re.sub("\&quot\;", "\"", a)
-        return a
+
+def CGI_escape(a):
+    """@@what is this actually doing? --DWC
+    It seems to turn strings into XML attribute value literals;
+    why is it called CGI_escape?
+    Note the python library has CGI support.
+    """
+    a = re.sub("&", "\&amp\;", a)
+    a = re.sub("\"", "\&quot\;", a)
+    return a
+
+def CGI_unescape(a):
+    """@@ what is this actually doing? --DWC
+    """
+    a = re.sub("\&amp\;", "&", a)
+    a = re.sub("\&quot\;", "\"", a)
+    return a
 
 if __name__ == '__main__':
     s = [["<mysql://rdftest@swada.w3.org/OrderTracking/uris#uri>", "?urisRow", "<http://www.w3.org/Member/Overview.html>"], 

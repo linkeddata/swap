@@ -17,21 +17,6 @@
                 :p,
                 :productName .
     
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Orders.id=2186'"     :RESULT "'123 Elm Street'",
-                "'EdgeCity'",
-                "'XX'",
-                "'skateboard'" .
-    
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Orders.id=2187'"     :RESULT "'123 Elm Street'",
-                "'EdgeCity'",
-                "'XX'",
-                "'nose ring'" .
-    
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Orders.id=3183'"     :RESULT "'123 Elm Street'",
-                "'EdgeCity'",
-                "'XX'",
-                "'other ring'" .
-    
     Addresses:city     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
     
     Addresses:id     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
@@ -53,6 +38,21 @@
          log:pointsAt Customers:id .
     
     Orders:id     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id.2186>     :RESULT "123 Elm Street",
+                "EdgeCity",
+                "XX",
+                "skateboard" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id.2187>     :RESULT "123 Elm Street",
+                "EdgeCity",
+                "XX",
+                "nose ring" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id.3183>     :RESULT "123 Elm Street",
+                "EdgeCity",
+                "XX",
+                "other ring" .
     
     Orders:orderDate     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
     

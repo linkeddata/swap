@@ -20,34 +20,6 @@
                 :pEK,
                 :productName .
     
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Orders.id=2185'"     :RESULT "'123 Elm Street'",
-                "'Biff'",
-                "'EdgeCity'",
-                "'Thompson'",
-                "'XX'",
-                "'pool'" .
-    
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Orders.id=2186'"     :RESULT "'123 Elm Street'",
-                "'Chip'",
-                "'EdgeCity'",
-                "'Thompson'",
-                "'XX'",
-                "'skateboard'" .
-    
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Orders.id=2187'"     :RESULT "'123 Elm Street'",
-                "'Chip'",
-                "'EdgeCity'",
-                "'Thompson'",
-                "'XX'",
-                "'nose ring'" .
-    
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Orders.id=3183'"     :RESULT "'123 Elm Street'",
-                "'Chip'",
-                "'EdgeCity'",
-                "'Thompson'",
-                "'XX'",
-                "'other ring'" .
-    
     Addresses:city     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
     
     Addresses:id     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
@@ -67,6 +39,34 @@
     Orders:customer     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
     
     Orders:id     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id.2185>     :RESULT "123 Elm Street",
+                "Biff",
+                "EdgeCity",
+                "Thompson",
+                "XX",
+                "pool" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id.2186>     :RESULT "123 Elm Street",
+                "Chip",
+                "EdgeCity",
+                "Thompson",
+                "XX",
+                "skateboard" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id.2187>     :RESULT "123 Elm Street",
+                "Chip",
+                "EdgeCity",
+                "Thompson",
+                "XX",
+                "nose ring" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Orders#id.3183>     :RESULT "123 Elm Street",
+                "Chip",
+                "EdgeCity",
+                "Thompson",
+                "XX",
+                "other ring" .
     
     Orders:orderDate     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
     

@@ -1,57 +1,61 @@
-     @prefix : <#> .
+     @prefix : <mysql://rdftest@swada.w3.org/OrderTracking/Products#> .
      @prefix Customers: <mysql://rdftest@swada.w3.org/OrderTracking/Customers#> .
-     @prefix Products: <mysql://rdftest@swada.w3.org/OrderTracking/Products#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    this     log:forAll :customer,
-                :family,
-                :given,
-                :name,
-                :products .
-    
-    "'Biff'"     :RESULT "'Thompson'" .
-    
-    "'Chip'"     :RESULT "'Thompson'" .
-    
-    "'Elie'"     :RESULT "'Tweak'" .
-    
-    "'Eustis'"     :RESULT "'Walker'" .
-    
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=1001'"     :RESULT "'white house'" .
-    
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=1002'"     :RESULT "'picket fence'" .
-    
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=1003'"     :RESULT "'sport utility vehicle'" .
-    
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=1004'"     :RESULT "'pool'" .
-    
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=1005'"     :RESULT "'grill'" .
-    
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=2001'"     :RESULT "'skateboard'" .
-    
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=2002'"     :RESULT "'rebelious music'" .
-    
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=2003'"     :RESULT "'earring'" .
-    
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=2004'"     :RESULT "'nose ring'" .
-    
-    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=2005'"     :RESULT "'other ring'" .
+    this     log:forAll <#customer>,
+                <#family>,
+                <#given>,
+                <#name>,
+                <#products> .
     
     Customers:familyName     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
     
     Customers:givenName     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
     
-    Products:name     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/>,
+    <mysql://rdftest@swada.w3.org/OrderTracking/Customers#id.1>     Customers:familyName "Thompson";
+         Customers:givenName "Biff" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Customers#id.2>     Customers:familyName "Thompson";
+         Customers:givenName "Chip" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Customers#id.3>     Customers:familyName "Walker";
+         Customers:givenName "Eustis" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Customers#id.4>     Customers:familyName "Tweak";
+         Customers:givenName "Elie" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Products#id.1001>     :name "white house" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Products#id.1002>     :name "picket fence" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Products#id.1003>     :name "sport utility vehicle" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Products#id.1004>     :name "pool" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Products#id.1005>     :name "grill" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Products#id.2001>     :name "skateboard" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Products#id.2002>     :name "rebelious music" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Products#id.2003>     :name "earring" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Products#id.2004>     :name "nose ring" .
+    
+    <mysql://rdftest@swada.w3.org/OrderTracking/Products#id.2005>     :name "other ring" .
+    
+    :name     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/>,
                 <mysql://root@localhost/OrderTracking> .
     {
-        :products     Products:name :name .
+        <#products>     :name <#name> .
         
-        }     log:implies {:products     :RESULT :name .
+        }     log:implies {<#products>     :name <#name> .
         } .
     {
-        :customer     Customers:familyName :family;
-             Customers:givenName :given .
+        <#customer>     Customers:familyName <#family>;
+             Customers:givenName <#given> .
         
-        }     log:implies {:given     :RESULT :family .
+        }     log:implies {<#customer>     Customers:familyName <#family>;
+             Customers:givenName <#given> .
         } .
     

@@ -15,9 +15,7 @@ this log:forAll :customer, :family, :given .
  :customer Customers:familyName :family .
  :customer Customers:givenName :given .
 } log:implies {
-
- :given :RESULT :family .
-
+ :customer Customers:familyName :family; Customers:givenName :given.
 }.
 
 this log:forAll :products, :name .
@@ -28,7 +26,7 @@ this log:forAll :products, :name .
  :products Products:name :name .
 } log:implies {
 
- :products :RESULT :name .
+ :products Products:name :name .
 
 }.
 

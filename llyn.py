@@ -959,7 +959,7 @@ class BI_semantics(HeavyBuiltIn, Function):
             if verbosity() > 10: progress("Already read and parsed "+`doc`+" to "+ `F`)
             return F
 
-        if verbosity() > 10: progress("Reading and parsing " + `doc`)
+        if verbosity() > 10: progress("Reading and parsing " + doc.uriref())
         inputURI = doc.uriref()
         F = self.store.load(inputURI)
         if verbosity()>10: progress("    semantics: %s" % (F))
@@ -2759,8 +2759,8 @@ class Query:
 	Currently  this only goes to an SQL store, but should later use RDFQL/DAMLQL etc
 	in remote HTTP/SOAP call."""
 	
-        import SqlDB
-        from SqlDB import ResultSet, SqlDBAlgae, ShowStatement
+        import dbork.SqlDB
+        from dbork.SqlDB import ResultSet, SqlDBAlgae, ShowStatement
 
         # SqlDB stores results in a ResultSet.
         rs = ResultSet()

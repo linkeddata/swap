@@ -1,6 +1,8 @@
 # invoke ala:
 # $ PYTHONPATH=..:../dbork  python ../cwm.py dbork/geo1.n3 --mode=r --think
 
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#>.
+
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 
 #@prefix db: 		<http://localhost/SqlDB#>.
@@ -15,23 +17,41 @@
 	,Places:elevation ,Places:population ,Places:mapname
 	,Places:namehash.
 
+:Places is s:domain of
+	Places:state, Places:name, Places:feature_type ,Places:county
+	,Places:state_fips_code ,Places:lat ,Places:lon
+	,Places:elevation ,Places:population ,Places:mapname
+	,Places:namehash.
+
 
 # hmm... we'd like to send stuff like math:lessThan over to the SQL engine
 
-{
+
+{ ?WHERE Places:name "Denver".
+  ?WHERE Places:feature_type "ppl".
+  ?WHERE Places:lat ?LAT.
+  ?WHERE Places:lon ?LON }
+=>
+{ ?WHERE Places:name "Denver"; Places:lat ?LAT; Places:lon ?LON }.
+
 
 {
- ?WHERE Places:name "Kansas"; Places:lat ?LAT; Places:lon ?LON
-} log:implies {
- ?WHERE Places:name "Kansas"; Places:lat ?LAT; Places:lon ?LON
-}.
+{
+ :Places is s:domain of ?P.
+ ?WHERE Places:name "Denver"; ?P ?V }
+=>
+{ ?WHERE Places:name "Denver"; ?P ?V }. } a :Noop.
 
-} a :Noop.
 
+
+
+{
 
 {
  ?WHERE Places:feature_type ?FT
 } log:implies {
  ?WHERE Places:feature_type ?FT
 }.
+
+} a :WasteOfTime.
 
