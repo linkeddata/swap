@@ -45,6 +45,9 @@ cwm_test strquot.n3 "N3 string quoting" -n3 strquot.n3
 cwm_test path1.n3 "Path syntax, simple" syntax/path1.n3
 cwm_test path2.n3 "Path syntax, more"   syntax/path2.n3
 
+cwm_test qvars1.n3 "Quick variable syntax, simple" syntax/qvars1.n3
+cwm_test qvars2.n3 "Quick variable syntax, more" syntax/qvars2.n3
+
 cwm_test lstring-out.n3 "N3 string nested triple quoting" --n3 syntax/lstring.n3
 
 #oops... misleading test case name.
@@ -161,7 +164,10 @@ echo "Loopback parser tests:"
 ./n3-xml-test.sh `cat tests-work.txt`
 
 # $Log$
-# Revision 1.39  2002-08-16 21:24:01  timbl
+# Revision 1.40  2002-08-16 22:30:49  timbl
+# Add two tests for  quick variable ?x syntax. Passes text/retest.sh.
+#
+# Revision 1.39  2002/08/16 21:24:01  timbl
 # Path parsing now tested too, simply.
 #
 # Revision 1.38  2002/08/07 14:32:21  timbl

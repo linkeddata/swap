@@ -1686,7 +1686,7 @@ This&nbsp;is&nbsp;the&nbsp;way&nbsp;they&nbsp;are&nbsp;actually&nbsp;made.</tt><
 
 <dl><dt><a name="RDFStore-makeComment"><strong>makeComment</strong></a>(self, str)</dt></dl>
 
-<dl><dt><a name="RDFStore-makeStatement"><strong>makeStatement</strong></a>(self, tuple)</dt></dl>
+<dl><dt><a name="RDFStore-makeStatement"><strong>makeStatement</strong></a>(self, tuple)</dt><dd><tt>Add&nbsp;a&nbsp;qud&nbsp;to&nbsp;the&nbsp;store,&nbsp;each&nbsp;part&nbsp;of&nbsp;the&nbsp;quad&nbsp;being&nbsp;in&nbsp;pair&nbsp;form.</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-match"><strong>match</strong></a>(self, unmatched, variables, existentials, smartIn<font color="#909090">=[]</font>, action<font color="#909090">=None</font>, param<font color="#909090">=None</font>, hypothetical<font color="#909090">=0</font>, justOne<font color="#909090">=0</font>, level<font color="#909090">=0</font>, meta<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Apply&nbsp;action(bindings,&nbsp;param)&nbsp;to&nbsp;succussful&nbsp;matches</tt></dd></dl>
 
@@ -1716,7 +1716,7 @@ Defaults&nbsp;to&nbsp;all&nbsp;removing&nbsp;occurrences&nbsp;of&nbsp;log:implie
 bindings&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;collected&nbsp;matches&nbsp;already&nbsp;found<br>
 newBindings&nbsp;&nbsp;matches&nbsp;found&nbsp;and&nbsp;not&nbsp;yet&nbsp;applied&nbsp;-&nbsp;used&nbsp;in&nbsp;recursion</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-remoteQuery"><strong>remoteQuery</strong></a>(items, variables, existentials)</dt></dl>
+<dl><dt><a name="RDFStore-remoteQuery"><strong>remoteQuery</strong></a>(self, items, variables, existentials)</dt></dl>
 
 <dl><dt><a name="RDFStore-removeStatement"><strong>removeStatement</strong></a>(self, s)</dt><dd><tt>Slow,&nbsp;alas.&nbsp;The&nbsp;remove()s&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;time.</tt></dd></dl>
 

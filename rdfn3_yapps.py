@@ -45,12 +45,10 @@ class _ParserScanner(Scanner):
             ('","', ','),
             ('"of"', 'of'),
             ('"is"', 'is'),
-            ('";"', ';'),
-            ('"\\\\."', '\\.'),
             ('"@prefix"', '@prefix'),
             ('\\s+', '\\s+'),
             ('#.*\\r?\\n', '#.*\\r?\\n'),
-            ('URIREF', '<[^ >]*>'),
+            ('URIREF', '<[^ \\n>]*>'),
             ('PREFIX', '[a-zA-Z0-9_-]*:'),
             ('QNAME', '([a-zA-Z][a-zA-Z0-9_-]*)?:[a-zA-Z0-9_-]+'),
             ('EXVAR', '_:[a-zA-Z0-9_-]+'),
@@ -59,6 +57,10 @@ class _ParserScanner(Scanner):
             ('STRLIT1', '"([^\\"\\\\\\n]|\\\\[\\\\\\"nrt])*"'),
             ('STRLIT2', "'([^\\'\\\\\\n]|\\\\[\\\\\\'nrt])*'"),
             ('STRLIT3', '"""([^\\"\\\\]|\\\\[\\\\\\"nrt])*"""'),
+            ('TERM', '\\.(?=\\s*})'),
+            ('SEP', '\\.(?!\\s*})'),
+            ('PTERM', ';(?=\\s*[\\.}])'),
+            ('PSEP', ';(?!\\s*[\\.}])'),
             ('END', '\\Z'),
             ], ['\\s+', '#.*\\r?\\n'], str)
 
@@ -76,30 +78,34 @@ class _Parser(Parser):
         self._scan('"@prefix"')
         PREFIX = self._scan('PREFIX')
         URIREF = self._scan('URIREF')
-        self._scan('"\\\\."')
+        SEP = self._scan('SEP')
         self.bind(PREFIX[:-1], URIREF)
 
     def statement(self, scp):
         clause_ind = self.clause_ind(scp)
-        self._scan('"\\\\."')
+        SEP = self._scan('SEP')
 
     def clause_ind(self, scp):
         _token_ = self._peek('"\\\\["', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"{"')
         if _token_ == '"\\\\["':
             phrase = self.phrase(scp)
-            if self._peek('";"', '"is"', '","', '"\\\\."', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"', '"\\\\]"', '"}"') not in ['";"', '","', '"\\\\."', '"\\\\]"', '"}"']:
+            if self._peek('PSEP', 'PTERM', '"is"', '","', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', 'SEP', '"\\\\("', '"\\\\["', '"{"', 'TERM', '"\\\\]"', '"}"') not in ['PSEP', 'PTERM', '","', 'SEP', 'TERM', '"\\\\]"', '"}"']:
                 predicate = self.predicate(scp, phrase)
-                while self._peek('";"', '","', '"\\\\."', '"\\\\]"', '"}"') == '";"':
-                    self._scan('";"')
-                    if self._peek('";"', '"is"', '","', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"', '"\\\\."', '"\\\\]"', '"}"') not in ['";"', '","', '"\\\\."', '"\\\\]"', '"}"']:
+                while self._peek('PSEP', '","', 'PTERM', 'SEP', '"\\\\]"', 'TERM', '"}"') == 'PSEP':
+                    PSEP = self._scan('PSEP')
+                    if self._peek('PSEP', '"is"', '","', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', 'PTERM', '"\\\\("', '"\\\\["', '"{"', 'SEP', '"\\\\]"', 'TERM', '"}"') not in ['PSEP', '","', 'PTERM', 'SEP', '"\\\\]"', 'TERM', '"}"']:
                         predicate = self.predicate(scp, phrase)
+            if self._peek('PTERM', 'SEP', 'TERM', '"}"') == 'PTERM':
+                PTERM = self._scan('PTERM')
         elif 1:
             term = self.term(scp)
             predicate = self.predicate(scp, term)
-            while self._peek('";"', '","', '"\\\\."', '"\\\\]"', '"}"') == '";"':
-                self._scan('";"')
-                if self._peek('";"', '"is"', '","', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"', '"\\\\."', '"\\\\]"', '"}"') not in ['";"', '","', '"\\\\."', '"\\\\]"', '"}"']:
+            while self._peek('PSEP', 'PTERM', '","', 'SEP', 'TERM', '"\\\\]"', '"}"') == 'PSEP':
+                PSEP = self._scan('PSEP')
+                if self._peek('PSEP', '"is"', '","', 'PTERM', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"', 'SEP', '"\\\\]"', 'TERM', '"}"') not in ['PSEP', '","', 'PTERM', 'SEP', '"\\\\]"', 'TERM', '"}"']:
                     predicate = self.predicate(scp, term)
+            if self._peek('PTERM', 'SEP', 'TERM', '"}"') == 'PTERM':
+                PTERM = self._scan('PTERM')
 
     def term(self, scp):
         _token_ = self._peek('"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"')
@@ -128,7 +134,7 @@ class _Parser(Parser):
     def objects1(self, scp,subj,verb):
         term = self.term(scp)
         self.gotStatement(scp, subj, verb, term)
-        while self._peek('","', '";"', '"\\\\."', '"\\\\]"', '"}"') == '","':
+        while self._peek('","', 'PSEP', 'PTERM', 'SEP', '"\\\\]"', 'TERM', '"}"') == '","':
             self._scan('","')
             term = self.term(scp)
             self.gotStatement(scp, subj, verb, term)
@@ -198,11 +204,11 @@ class _Parser(Parser):
         subj = self.something(scp)
         if self._peek('"\\\\]"', '"is"', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"') != '"\\\\]"':
             predicate = self.predicate(scp, subj)
-            while self._peek('";"', '","', '"\\\\]"', '"\\\\."', '"}"') == '";"':
-                self._scan('";"')
+            while self._peek('PSEP', 'PTERM', '","', '"\\\\]"', 'SEP', 'TERM', '"}"') == 'PSEP':
+                PSEP = self._scan('PSEP')
                 predicate = self.predicate(scp, subj)
-            if self._peek('";"', '"\\\\]"') == '";"':
-                self._scan('";"')
+            if self._peek('PTERM', '"\\\\]"') == 'PTERM':
+                PTERM = self._scan('PTERM')
         self._scan('"\\\\]"')
         return subj
 
@@ -211,11 +217,11 @@ class _Parser(Parser):
         scp = self.newScope()
         if self._peek('"}"', '"\\\\["', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"{"') != '"}"':
             clause_ind = self.clause_ind(scp)
-            while self._peek('";"', '"\\\\."', '","', '"}"', '"\\\\]"') == '"\\\\."':
-                self._scan('"\\\\."')
+            while self._peek('SEP', 'TERM', '"}"') == 'SEP':
+                SEP = self._scan('SEP')
                 clause_ind = self.clause_ind(scp)
-            if self._peek('"\\\\."', '"}"') == '"\\\\."':
-                self._scan('"\\\\."')
+            if self._peek('TERM', '"}"') == 'TERM':
+                TERM = self._scan('TERM')
         self._scan('"}"')
         return scp
 
@@ -309,7 +315,7 @@ class Parser(_Parser):
         self._prefixes[pfx] = addr
 
     def gotStatement(self, scp, subj, verb, obj):
-	DEBUG("gotStatement:", scp, subj, verb, obj)
+	#DEBUG("gotStatement:", scp, subj, verb, obj)
         
         dir, pred = verb
         if dir<0: subj, obj = obj, subj
@@ -351,7 +357,13 @@ def DEBUG(*args):
     sys.stderr.write("\n")
     
 # $Log$
-# Revision 1.4  2002-08-13 07:55:15  connolly
+# Revision 1.5  2002-08-16 22:30:48  timbl
+# Add two tests for  quick variable ?x syntax. Passes text/retest.sh.
+#
+# Revision 1.18  2002/08/15 23:20:36  connolly
+# fixed . separater/terminator grammar problem
+#
+# Revision 1.17  2002/08/13 07:55:15  connolly
 # playing with a new parser/sink interface
 #
 # Revision 1.16  2002/08/07 16:01:23  connolly

@@ -247,27 +247,35 @@ parser,&nbsp;it&nbsp;should&nbsp;be&nbsp;straightforward&nbsp;to&nbsp;recover.</
 
 <dl><dt><a name="SinkParser-formula"><strong>formula</strong></a>(self)</dt></dl>
 
+<dl><dt><a name="SinkParser-item"><strong>item</strong></a>(self, str, i, res)</dt></dl>
+
 <dl><dt><a name="SinkParser-load"><strong>load</strong></a>(self, uri, baseURI<font color="#909090">=''</font>)</dt></dl>
 
 <dl><dt><a name="SinkParser-makeStatement"><strong>makeStatement</strong></a>(self, quadruple)</dt></dl>
 
-<dl><dt><a name="SinkParser-node"><strong>node</strong></a>(self, str, i, res, subjectAlready<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="SinkParser-node"><strong>node</strong></a>(self, str, i, res, subjectAlready<font color="#909090">=None</font>)</dt><dd><tt>Parse&nbsp;the&nbsp;&lt;node&gt;&nbsp;production.<br>
+Space&nbsp;is&nbsp;now&nbsp;skipped&nbsp;once&nbsp;at&nbsp;the&nbsp;beginning<br>
+instead&nbsp;of&nbsp;in&nbsp;multipe&nbsp;calls&nbsp;to&nbsp;<a href="#SinkParser-skipSpace">skipSpace</a>().</tt></dd></dl>
+
+<dl><dt><a name="SinkParser-nodeOrLiteral"><strong>nodeOrLiteral</strong></a>(self, str, i, res)</dt></dl>
 
 <dl><dt><a name="SinkParser-object"><strong>object</strong></a>(self, str, i, res)</dt></dl>
 
 <dl><dt><a name="SinkParser-object_list"><strong>object_list</strong></a>(self, str, i, res)</dt></dl>
 
-<dl><dt><a name="SinkParser-operator"><strong>operator</strong></a>(self, str, i, res)</dt></dl>
+<dl><dt><a name="SinkParser-path"><strong>path</strong></a>(self, str, i, res)</dt><dd><tt>Parse&nbsp;the&nbsp;path&nbsp;production.</tt></dd></dl>
 
 <dl><dt><a name="SinkParser-prop"><strong>prop</strong></a>(self, str, i, res)</dt></dl>
 
-<dl><dt><a name="SinkParser-property_list"><strong>property_list</strong></a>(self, str, i, subj)</dt></dl>
+<dl><dt><a name="SinkParser-property_list"><strong>property_list</strong></a>(self, str, i, subj)</dt><dd><tt>Parse&nbsp;property&nbsp;list<br>
+Leaves&nbsp;the&nbsp;terminating&nbsp;punctuation&nbsp;in&nbsp;the&nbsp;buffer</tt></dd></dl>
 
 <dl><dt><a name="SinkParser-qname"><strong>qname</strong></a>(self, str, i, res)</dt><dd><tt>xyz:def&nbsp;-&gt;&nbsp;('xyz',&nbsp;'def')<br>
-#&nbsp;not&nbsp;any&nbsp;more:&nbsp;def&nbsp;-&gt;&nbsp;('',&nbsp;'def')<br>
+If&nbsp;not&nbsp;in&nbsp;keywords&nbsp;and&nbsp;keywordsSet:&nbsp;def&nbsp;-&gt;&nbsp;('',&nbsp;'def')<br>
 :def&nbsp;-&gt;&nbsp;('',&nbsp;'def')</tt></dd></dl>
 
-<dl><dt><a name="SinkParser-skipSpace"><strong>skipSpace</strong></a>(self, str, i)</dt></dl>
+<dl><dt><a name="SinkParser-skipSpace"><strong>skipSpace</strong></a>(self, str, i)</dt><dd><tt>Skip&nbsp;white&nbsp;space,&nbsp;newlines&nbsp;and&nbsp;comments.<br>
+return&nbsp;-1&nbsp;if&nbsp;EOF,&nbsp;else&nbsp;position&nbsp;of&nbsp;first&nbsp;non-ws&nbsp;character</tt></dd></dl>
 
 <dl><dt><a name="SinkParser-startDoc"><strong>startDoc</strong></a>(self)</dt></dl>
 
@@ -278,7 +286,8 @@ return&nbsp;index,&nbsp;val</tt></dd></dl>
 
 <dl><dt><a name="SinkParser-subject"><strong>subject</strong></a>(self, str, i, res)</dt></dl>
 
-<dl><dt><a name="SinkParser-tok"><strong>tok</strong></a>(self, tok, str, i)</dt><dd><tt>tokenizer&nbsp;strips&nbsp;whitespace&nbsp;and&nbsp;comment</tt></dd></dl>
+<dl><dt><a name="SinkParser-tok"><strong>tok</strong></a>(self, tok, str, i)</dt><dd><tt>Check&nbsp;for&nbsp;keyword.&nbsp;&nbsp;Space&nbsp;must&nbsp;have&nbsp;been&nbsp;stripped&nbsp;on&nbsp;entry&nbsp;and<br>
+we&nbsp;must&nbsp;not&nbsp;be&nbsp;at&nbsp;end&nbsp;of&nbsp;file.</tt></dd></dl>
 
 <dl><dt><a name="SinkParser-uEscape"><strong>uEscape</strong></a>(self, str, i, startline)</dt></dl>
 
@@ -288,7 +297,7 @@ Note&nbsp;that&nbsp;the&nbsp;RDF&nbsp;convention&nbsp;of&nbsp;directly&nbsp;conc
 NS&nbsp;and&nbsp;local&nbsp;name&nbsp;is&nbsp;now&nbsp;used&nbsp;though&nbsp;I&nbsp;prefer&nbsp;inserting&nbsp;a&nbsp;'#'<br>
 to&nbsp;make&nbsp;the&nbsp;namesapces&nbsp;look&nbsp;more&nbsp;like&nbsp;what&nbsp;XML&nbsp;folks&nbsp;expect.</tt></dd></dl>
 
-<dl><dt><a name="SinkParser-variable"><strong>variable</strong></a>(self, str, i, res)</dt><dd><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?abc&nbsp;-&gt;&nbsp;'abc'</tt></dd></dl>
+<dl><dt><a name="SinkParser-variable"><strong>variable</strong></a>(self, str, i, res)</dt><dd><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;?abc&nbsp;-&gt;&nbsp;<a href="#SinkParser-variable">variable</a>(:abc)</tt></dd></dl>
 
 <dl><dt><a name="SinkParser-verb"><strong>verb</strong></a>(self, str, i, res)</dt><dd><tt>&nbsp;has&nbsp;_prop_<br>
 is&nbsp;_prop_&nbsp;of<br>
@@ -478,8 +487,12 @@ See&nbsp;also:&nbsp;cwm</tt></dd></dl>
 <strong>__file__</strong> = './notation3.pyc'<br>
 <strong>__name__</strong> = 'notation3'<br>
 <strong>_namechars</strong> = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-'<br>
+<strong>eof</strong> = &lt;_sre.SRE_Pattern object&gt;<br>
+<strong>eol</strong> = &lt;_sre.SRE_Pattern object&gt;<br>
 <strong>forbidden1</strong> = &lt;_sre.SRE_Pattern object&gt;<br>
 <strong>forbidden2</strong> = &lt;_sre.SRE_Pattern object&gt;<br>
+<strong>interesting</strong> = &lt;_sre.SRE_Pattern object&gt;<br>
 <strong>option_noregen</strong> = 0<br>
-<strong>parsesTo_URI</strong> = 'http://www.w3.org/2000/10/swap/log#parsesTo'</td></tr></table>
+<strong>parsesTo_URI</strong> = 'http://www.w3.org/2000/10/swap/log#parsesTo'<br>
+<strong>ws</strong> = &lt;_sre.SRE_Pattern object&gt;</td></tr></table>
 </body></html>

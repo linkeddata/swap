@@ -1202,6 +1202,7 @@ class RDFStore(RDFSink.RDFSink) :
             return RDFSink.RDFSink.bind(self, prefix, nsPair) # Otherwise, do as usual.
     
     def makeStatement(self, tuple):
+	"""Add a qud to the store, each part of the quad being in pair form."""
         q = ( self.intern(tuple[CONTEXT]),
               self.intern(tuple[PRED]),
               self.intern(tuple[SUBJ]),
