@@ -12,8 +12,18 @@ __version__ = "$Revision$"
 
 # To allow "from LX import *", though I'm not sure when one would
 # want that.
-__all__ = ["language", "engine", "kb", "expr", "logic", "fol", "rdf",
-           "namespace", "uri", "defaultns" ] 
+__all__ = [
+    "language",
+    "engine",
+    "kb",
+    "expr",
+    "logic",
+    "fol",
+    "rdf",
+    "namespace",
+    "uri",
+    "defaultns",
+    ] 
 
 # Let people use LX.Expr instead of LX.expr.Expr, etc, while
 # having these parts in separate files
@@ -31,7 +41,10 @@ __all__ = ["language", "engine", "kb", "expr", "logic", "fol", "rdf",
 #from LX.defaultns import *
 
 # $Log$
-# Revision 1.6  2003-02-13 19:24:21  sandro
+# Revision 1.7  2003-02-13 19:47:48  sandro
+# reformate a little
+#
+# Revision 1.6  2003/02/13 19:24:21  sandro
 # Stopped importing everything, since doing so meant that any use of
 # anything in LX/* meant important everything.  We'll need to use LX.all
 # or some such if we want them all into one namespace.
