@@ -13,13 +13,18 @@ XML=python ../../xml2infoset.py
 .html.infoset:
 	$(XML) $< | $(CWM) > $@
 
-all : track-ex.xml 
+.infoset.actions:
+	$(CWM) $< actions.n3 -think > $@
+
+all : track-ex.xml 11-tag.actions
 	touch all
 
 track-ex.xml: track-ex.n3
 
-tag.infoset : tag.html
-	$(XML) tag.infoset | $(CWM) > $@
+11-tag.infoset : 11-tag.html ../../xml2infoset.py
+	$(XML) 11-tag.html | $(CWM) > $@
 
+11-tag.actions : 11-tag.infoset actions.n3
+	$(CWM) 11-tag.infoset actions.n3 -think > $@
 
 #ends

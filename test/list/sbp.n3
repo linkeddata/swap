@@ -1,0 +1,60 @@
+@prefix : <#> .
+@prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+this log:forAll :x , :y , :z .
+
+:a :b :c .
+:l :m :n .
+:p :q (:r :s) .
+
+{ :x :q [ daml:first :y; daml:rest [ daml:first :z ] ] }
+   log:implies { :p :qfirst :y; :qrest :z } .
+
+<> :comment """
+In
+Message-ID: <028001c1c728$e246e200$68b80150@localhost>
+From: "Sean B. Palmer" <sean@mysterylights.com>
+To: "Tim Berners-Lee" <timbl@w3.org>, "Dan Connolly" <connolly@w3.org>
+Cc: <www-archive+n3bugs@w3.org>
+Subject: CWM Bug: Rules Applied To Lists Fail Badly
+Date: Sat, 9 Mar 2002 05:11:29 -0000
+
+[...]
+the latest version of CWM gives the following:-
+
+[[[
+    :p     :q  (
+        :r
+        :s  );
+         :qfirst :r,
+                :y;
+         :qrest :r,
+                :s,
+                :z .
+]]]
+
+where two things seem to be going wrong at once: unbound variables are
+getting output (:y, :z), and false results are being concluded (:qrest
+:r).
+
+In version 1.82 of CWM, I get the following output:-
+
+[[[
+    :p     :q  (
+        :r
+        :s
+         ) .
+]]]
+
+I.e. the rule isn't applied at all. When I convert the rest input list
+to ":p :q [ daml:first :r; daml:rest [ daml:first :s; daml:rest
+daml:nil ] ] .", I get the same results.
+
+--
+Kindest Regards,
+Sean B. Palmer
+@prefix : <http://purl.org/net/swn#> .
+:Sean :homepage <http://purl.org/net/sbp/> .
+""".
+#ends

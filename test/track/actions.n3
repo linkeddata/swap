@@ -15,7 +15,7 @@
 @prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
 
 
-this log:forAll :a, :d, :e, :p, :s, :t, :w, :x, :y, :z.
+this log:forAll :a, :b, :c, :d, :e, :f, :g, :h, :j, :k, :p, :s, :t, :w, :x, :y, :z.
 
 #() :elementsOnly ().
 ##
@@ -35,10 +35,41 @@ this log:forAll :a, :d, :e, :p, :s, :t, :w, :x, :y, :z.
 
 {  [] xml:ln "tr";
     xml:zcontent [ daml:first :t ].
-#   xml:zcontent ( :t :p :a :s :d :y).
+#    xml:zcontent ( :t :p :a :s :d :y).
    :t xml:ln "td"; xml:zcontent :x.
 }   log:implies {
-   :x a :SUCCESS.
+   :x a :SUCCESS1.
+   :t a :COLUMN1
+}.
+
+{  [] xml:ln "tr";
+    xml:zcontent [ daml:first :t; daml:rest [daml:first :p ]].
+#    xml:zcontent ( :t :p :a :s :d :y).
+   :t xml:ln "td"; xml:zcontent :x.
+}   log:implies {
+   :x a :SUCCESS2.
+}.
+
+{  [] xml:ln "tr";
+#    xml:zcontent [ daml:first :t ].
+    xml:zcontent ( :t :p :a :s :d :y).
+   :t xml:ln "td"; xml:zcontent :x.
+}   log:implies {
+   :x a :fiver.
+}.
+{  [] xml:ln "tr";
+#    xml:zcontent [ daml:first :t ].
+    xml:zcontent ( :t :p :a :s :d :y).
+   :t xml:ln "td"; xml:zcontent :x.
+}   log:implies {
+   :x a :sixer.
+}.
+{  [] xml:ln "tr";
+#    xml:zcontent [ daml:first :t ].
+    xml:zcontent ( :t :p :a :s :d :y :z).
+   :t xml:ln "td"; xml:zcontent :x.
+}   log:implies {
+   :x a :sevener.
 }.
 #{ [ :topic :w; :assignedTo :p; :assigndeAt :a; :status :s; :delta :d]}.
 

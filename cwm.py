@@ -265,6 +265,7 @@ def doCommand():
 --filter=foo Read rules from foo, apply to store, REPLACING store with conclusions
 --rules     Apply rules in store to store, adding conclusions to store
 --think     as -rules but continue until no more rule matches (or forever!)
+--think=foo as -apply=foo but continue until no more rule matches (or forever!)
 --reify     Replace the statements in the store with statements describing them.
 --flat      Reify only nested subexpressions (not top level) so that no {} remain.
 --help      print this message
@@ -550,6 +551,11 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             elif arg == "-rules":
                 _store.applyRules(workingContext, workingContext)
 
+            elif arg[:7] == "-think=":
+                filterContext = (_store.intern((FORMULA, _uri+ "#_formula")))
+                if thing.verbosity() > 4: progress( "Input rules to --think from " + _uri)
+                _store.loadURI(_uri)
+                _store.think(workingContext, filterContext);
             elif arg == "-think":
                 _store.think(workingContext)
 

@@ -1562,14 +1562,15 @@ class RDFStore(RDFSink.RDFSink) :
 
 #   Iteratively apply rules to a formula
 
-    def think(self, F):
+    def think(self, F, G=None):
         grandtotal = 0
         iterations = 0
+        if G == None: G = F
         self.reopen(F)
         bindingsFound = {}  # rule: list bindings already found
         while 1:
             iterations = iterations + 1
-            step = self.applyRules(F, F, alreadyDictionary=bindingsFound)
+            step = self.applyRules(F, G, alreadyDictionary=bindingsFound)
             if step == 0: break
             grandtotal= grandtotal + step
         if thing.verbosity() > 5: progress("Grand total of %i new statements in %i iterations." %

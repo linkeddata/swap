@@ -765,13 +765,13 @@ class BadSyntax(SyntaxError):
 	str = self._str
 	i = self._i
 
-	if i>40: pre="..."
+	if i>60: pre="..."
 	else: pre=""
-	if len(str)-i > 40: post="..."
+	if len(str)-i > 60: post="..."
 	else: post=""
 
 	return 'Line %i of <%s>: Bad syntax (%s) at ^ in:\n"%s%s^%s%s"' \
-	       % (self.lines +1, self._uri, self._why, pre, str[i-40:i], str[i:i+40], post)
+	       % (self.lines +1, self._uri, self._why, pre, str[i-60:i], str[i:i+60], post)
 
 
 

@@ -12,11 +12,29 @@ import string
 import os
 
 
+def convertName(what, value):
+    """ Convert a random name to a ID as part of a URI."""
+    pref=string.lower(what[:3])
+    ln = zapOut(value,
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789_")
+    return pref + ":" + ln
+
 def stripOut(str, characters):
     str2 = ""
     for i in range(len(str)):
         if str[i] not in characters:
             str2 = str2 + str[i]
+    return str2
+
+def zapOut(str, allowed):
+    """Only allow the characters give. Strings of consecutive
+    unallowed characters are replaced with a single underscore character"""
+    str2 = ""
+    for i in range(len(str)):
+        if str[i] in allowed:
+            str2 = str2 + str[i]
+        else:
+            if str2[-1:] != "_": str2 = str2 + "_"
     return str2
 
 def dealWithNumber(str):
@@ -78,14 +96,21 @@ def extract(path):
     print """
     @prefix : <#>.
     @prefix d: <#>.
+    @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+    @prefix log: <http://www.w3.org/2000/10/swap/log#>.
     @prefix qu:  <http://www.w3.org/2000/10/swap/pim/qif#>.
+    @prefix acc: <accounts.n3#>.
+    @prefix cat: <categories.n3#>.
+    @prefix cla: <classes.n3#>.
     """
 
     input = open(path, "r")
     inRecord = 0
-    inList = 0
+#    inAccount = 0
     split = 0
     what = ""
+    toAccount = None  # The destination of current transactions.
+    inSentence = 0  # Flag:  The record has been closed, delay though.
 
     while 1:
         line = input.readline()
@@ -95,36 +120,36 @@ def extract(path):
         attr = line[0]
         value = line[1:]
         if attr == "!":
-            if inRecord:
-                print "]",
-                inRecord = 0
             while value[-1:]==" ":value=value[:-1] # strip trailing blanks(!)
             for i in range(len(value)):
                 if value[i]==" ":
                     value=value[:i]+"_"+value[i+1:]
-            if inList and what == "Account" and value[0:5]=="Type:":   #  @@@ sic
-                print ";\n    is qu:toAccount of [",
-                inList = 1
-                inRecord = 1
+            if what == "Account" and value[0:5]=="Type:":   #  @@@ sic
+#                print " is qu:toAccount of\n    [",
+#                inAccount = 1
+#                inRecord = 1
                 what = value[5:]
                 continue
 
-            if inList:
-                print ". ",
-                inList = 0
+            if inSentence:
+                print "."
+                inSentence = 0
+#            if inAccount:
+#                print "]. ",
+#                inAccount = 0
             print
             if value in ignorables:
                 print "# Ignoring ", line
             elif value[0:5] == "Type:":
                 was = what
                 what = value[5:]
-                print "\n# List of %s\n:theSnapshot qu:%s [" % (what,what),
-                inList = 1
+                print "\n# List of %s\n" % what
+#                inAccount = 1
                 inRecord = 1
             elif value == "Account":
                 what = "Account"
-                print "\n# List of Accounts OR define account\n:theSnapshot qu:account [", 
-                inList = 1
+                print "\n# Account information:\n", 
+#                inAccount = 0
                 inRecord = 1
             else:
                 print "#@@@@@@ Unknown ", line
@@ -132,15 +157,28 @@ def extract(path):
             if split:
                 print "]",
                 split = 0
-            print "]",
-            inRecord = 0
+            if what == "Bank" or what == "CCard":
+                print "qu:toAccount ",toAccount,
+            print "."
+            inSentence = 0
         else:
             dictionary = properties.get(what, None)
             if dictionary == None:
                 print dictionary
                 raise RuntimeError("@@ No propertylist for <%s>" % what)
             property = dictionary.get(attr, "quicken_"+what+"_"+attr)
-            if not inList : raise oops
+#            if not inAccount : raise oops
+            if property == "name":
+                if inSentence: raise oops
+                qname = convertName(what, value)
+                print '%s a qu:%s; s:label "%s";' %(qname, what, value),
+                inSentence = 1
+                if what == "Account":
+                    toAccount = string.lower(qname)
+                continue
+            if not inSentence:
+                print "[]",  # Start the sentence unnamed about thing
+                inSentence = 1
             val = ""
             for c in value:
                 if c == '"': val = val+'\\"'
@@ -156,12 +194,22 @@ def extract(path):
                     split =1
                 if property.find("date") >= 0: val = convertDate(val)
                 elif property.find("amount") >=0: val = convertAmount(val)
+                elif property=="category":
+                    i = val.find("/")
+                    if i >=0:
+                        print "a %s;" % convertName("class",val[i+1:]),
+                        val = val[:i]
+                    if val[0] == "[":
+                        print "qu:from %s;" %convertName("account",val[1:-1]),
+                    else:
+                        print "a %s;" % convertName("category",val),
+                    continue
                 elif property == "number":
                     print dealWithNumber(val),  # includess the property name
                     continue
-                print 'qu:%s "%s"; '%(property, val),
-    if inRecord: print "]",
-    if inList: print "\n."
+                print 'qu:%s "%s";'%(property, val),
+    if inSentence: print ".",
+#    if inAccount: print "]\n."
     print "\n\n#ends\n"
             
     input.close()
