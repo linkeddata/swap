@@ -397,7 +397,7 @@ Mode flags affect inference extedning to the web:
                 option_format = _rhs
                 if option_first_format == None: option_first_format = option_format
             elif _lhs == "-languageOptions":
-                option_flags[option_format] = _lhs
+                option_flags[option_format] = _rhs
             elif arg == "-quiet": option_quiet = 1
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-crypto": option_crypto = 1
