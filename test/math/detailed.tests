@@ -30,4 +30,9 @@
     test:referenceOutput <../ref/dec-div.ref.n3>;
     test:description   "A bug was found in division with decimals";
     test:arguments     """datatypes/dec-div.n3  --think""".
+
+:t10398 a test:CwmTest;
+    test:referenceOutput <../ref/quotient_string.ref.n3>;
+    test:description   "A bug was found in division with longs";
+    test:arguments     """math/quotient_string.n3  --think""".
 #ends
