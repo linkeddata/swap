@@ -1195,26 +1195,33 @@ class SinkToN3(RDFSink):
             self._write("    " * self.indent)
             self._subj = None
 
-    def representationOf(self, x):
+    def representationOf(self, pair):
         """  Representation of a thing in the output stream
 
         Regenerates genids and variable names if required.
         Uses prefix dictionary to use qname syntax if possible.
         """
-        if isinstance(x, Variable) or isinstance(x, Anonymous):
-            if x.generated() and not option_noregen:
-                i = self.regen.get(x,self.nextId)
+
+        type, value = pair
+        if ((type == VARIABLE or type == ANONYMOUS)
+            and not option_noregen ):
+                i = self.regen.get(value,self.nextId)
                 if i == self.nextId:
-                    self.regen[x] = i
+                    self.regen[value] = i
                     self.nextId = self.nextId + 1
-                if isinstance(x, Anonymous): return "<"+self.genPrefix + "g" + `i`+">"
+                if type == ANONYMOUS: return "<"+self.genPrefix + "g" + `i`+">"
                 else: return "<" + self.genPrefix + "v" + `i` + ">"   # variable
 
-        if isinstance(x, Fragment):            
-            str = self.prefixes.get(x.resource, None)
-            if str != None : return str + ":" + x.fragid;
+        if type == LITERAL:
+            return '"' + value + '"'   # @@@@ encoding !!!!!!
+
+        j = string.rfind(value, "#")
+        if j>=0:
+            str = self.prefixes.get(value[:j], None)
+            if str != None : return str + ":" + value[j+1:]
+            if j=0: return "<#" + value[j+1:] + ">"
                 
-        return x.representation(self.base)    # Everything else
+        return "<" + value + ">"    # Everything else
 
     
 class StringWriter:
