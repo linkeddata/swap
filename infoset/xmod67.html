@@ -13,10 +13,11 @@
 
 <h1>Using RDF to model XML structures</h1>
 
-<p>The XML information set <a href="#[infoset]">[infoset]</a> complements the
-XML 1.0 specifiction with an abstract model of the information in an XML
-document. The model of an XML document is a collection of information items;
-named properties associate items with values.</p>
+<p>The <a href="/TR/2001/REC-xml-infoset-20011024/"><cite>XML Information
+Set</cite></a> complements the XML 1.0 specifiction with an abstract model of
+the information in an XML document. The model of an XML document is a
+collection of information items; named properties associate items with
+values.</p>
 
 <p>The item/property/value structure of the XML information set is the same
 shape as the subject/predicate/object structure used in the Resource
@@ -26,7 +27,20 @@ Set</cite></a> is an April 2001 W3C Note that takes the terms from the XML
 information set, considers them as RDF properties, and constructs an RDF
 Schema as a result.</p>
 
-<p></p>
+<p>But the resulting RDF Schema does not capture many of the interesting
+features of the structure of the infoset; for example, that elements have
+many children but (at most) one parent.</p>
+
+<p>Using additional RDF vocabulary from <a
+href="http://www.daml.org/2001/03/daml+oil-index.html">DAML+OIL</a>, we can
+capture the structure of the XML information set much more completely. A
+transcription from the text of the infoset spec into RDF using DAML+OIL terms
+follows point by point; it was an afternoon's work.</p>
+
+<p>The resulting schema is usable with generic RDF tools; ising some <a
+href="/2001/02pd/">tools for visualizing RDF as circles-and-arrows
+diagrams</a>, we have produced a UML-like <a href="infoset-diagram.svg">SVG
+diagram of the schema</a>.</p>
 
 <p></p>
 
