@@ -145,7 +145,7 @@ math:quotient a rdf:Property;
 is calculated by dividing the first number of the pair by the second.
 """.
 
-math:intgerQuotient a rdf:Property;
+math:integerQuotient a rdf:Property;
 	rdfs:label "integerQuotient";
 	rdfs:range math:Value;
 	rdfs:comment
