@@ -25,10 +25,13 @@ yappstest: rdfn3_yapps.py rdfn3_yappstest.py
 rdfn3_yapps.py: rdfn3.g
 	$(PYTHON) $(YAPPS) rdfn3.g $@
 
-yappsdoc: rdfn3-gram.html
+yappsdoc: rdfn3-gram.html relaxNG-gram.html
 
 rdfn3-gram.html: rdfn3.g gram2html.py
 	$(PYTHON) gram2html.py rdfn3.g "RDF Notation3 Grammar" >$@
+
+relaxNG-gram.html: relaxNG.g gram2html.py
+	$(PYTHON) gram2html.py relaxNG.g "Relax NG non-XML Grammar" >$@
 
 kifExpr.py: kifExpr.g
 

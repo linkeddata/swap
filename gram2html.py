@@ -100,7 +100,7 @@ def generate(title, inputfilename, outputfilename=''):
     and an output filename (defaulting to X.py)."""
 
     import sys, codecs
-    from notation3 import XMLWriter
+    from toXML import XMLWriter
     dummy, dummy, dummy, encWriter = codecs.lookup('utf-8')
 
     if not outputfilename:
@@ -161,7 +161,10 @@ if __name__ == '__main__':
     main(sys.argv)
 
 # $Log$
-# Revision 1.1  2001-09-01 05:31:17  connolly
+# Revision 1.2  2002-07-17 19:33:48  connolly
+# published HTML version of relaxNG grammar
+#
+# Revision 1.1  2001/09/01 05:31:17  connolly
 # - gram2html.py generates HTML version of grammar from rdfn3.g
 # - make use of [] in rdfn3.g
 # - more inline terminals
