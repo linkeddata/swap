@@ -1575,9 +1575,9 @@ class RDFStore(notation3.RDFSink) :
                         matches = matches + 1
                         if justOne and total: return total
 
-                if state == 50: state = 20
+                if state == 50: state = 20   # Note that search on light builtin failed
                 else: # State was 60 (not light, may be heavy)
-                    state = 0  # Not found and if not hevay (below) drop it
+                    state = 0  # Not found and if not heavy (below) drop it
 
 # notIncludes has to be a recursive call, but log:includes just extends the search
                     if quad[CONTEXT] in smartIn and isinstance(pred, HeavyBuiltIn):
@@ -1624,12 +1624,22 @@ class RDFStore(notation3.RDFSink) :
                         return total
                         
 
-            else: # State was not a known one
-                progress( "@@@@@@@@@ State is %s, q length %i" % (state, len(queue)))
-                item = state, short, consts, vars, quad
-                progress("@@ Current item: %s" % itemToString(item))
-                progress(queueToString(queue))
-                raise internalError # We have something in an unknown state in the queue
+            else: # State was not 99, 60 or 50, so either 20 or 10:
+                if chatty > 0:
+                    progress("@@@@ Warning: rule has no constant to start with.")
+                    progress( "   State is %s, que length %i" % (state, len(queue)))
+                    progress("""State values as follows, high value=try first:
+    99  State unknown - to be [re]calculated.
+    60  Not a light built-in, haven't searched yet.
+    50  Light built-in, not enough constants to calculate, haven't searched yet.
+    20  Light built-in, not enough constants to calculate, search failed.
+    10  Heavy built-in, not enough constants to calculate, search failed
+                    """)
+                    item = state, short, consts, vars, quad
+                    progress("@@ Current item: %s" % itemToString(item))
+                    progress(queueToString(queue))
+                return total  # Forget it
+#                raise internalError # We have something in an unknown state in the queue
 
 # Reinsert into queue, so that the easiest tasks are later on:                    
 # We prefer terms with a single variable to those with two.
