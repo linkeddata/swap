@@ -178,7 +178,7 @@ class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         <body>""")
 
         queryUI(self.wfile.write,
-                4, #@@ more tables?
+                6, #@@ more tables?
                 self.server._home + self.server._dbName + self.QPath,
                 self.server._dbName)
 
@@ -296,11 +296,9 @@ def asSQL(fields, tables, keys, joins, condextra = ''):
         else:
             cond = condextra
 
-    #@@bug: empty cond is possible
-    return 'select %s from %s where %s;' % (join(fldnames, ','),
-                                            join(tables, ','),
-                                            cond)
-
+    q = 'select %s from %s' % (join(fldnames, ','), join(tables, ','))
+    if cond: q = q + ' where ' + cond
+    return q + ';'
     
 
 def askdb(db, dbaddr, sink, fields, tables, keys, joins, condextra):
@@ -386,6 +384,8 @@ def askdb(db, dbaddr, sink, fields, tables, keys, joins, condextra):
 
                 for fld in fields[ti]:
                     cell = row[col]
+                    if cell is None: continue
+                    
                     # @@our mysql implementation happens to use iso8859-1
                     ol = (LITERAL, latin1(str(cell)))
 
@@ -697,6 +697,26 @@ def testUI():
     queryUI(sys.stdout.write, 3, '/', "niftydb")
 
 
+def testSQL():
+    cases = ('/administration/.dbq?name1=users&fields1=family%2Cemail%2Ccity%2Cid&key1=id&name2=techplenary2002&fields2=plenary%2Cmeal_choice&key2=&kj2_1=id&name3=&fields3=&key3=&kj3_1=&kj3_2=&name4=&fields4=&key4=&kj4_1=&kj4_2=&kj4_3=',
+
+           '/manage/.dbq?name1=Resources&fields1=ResourceName%2CResourceID&key1=ResourceID&name2=Activities&fields2=ActivityName%2CActivityID&key2=ActivityID&kj2_1=ResourceID&name3=Assignments&fields3=Percent_of_person%2CAssignment_ID&key3=Assignment_ID&kj3_1=MyResourceID&kj3_2=MyActivityID&name4=&fields4=&key4=&kj4_1=&kj4_2=&kj4_3=&condition=',
+
+           '/w3c/.dbq?name1=uris&fields1=uri&key1=id&name2=groupDetails&fields2=id%2Cname&key2=id&kj2_1=sub&name3=ids&fields3=&key3=id&kj3_1=&kj3_2=sponsor&name4=userDetails&fields4=id%2Cfamily%2Cgiven%2Cphone&key4=&kj4_1=emailUrisId&kj4_2=&kj4_3=id&name5=hierarchy&fields5=&key5=id&kj5_1=&kj5_2=&kj5_3=sub&kj5_4=&name6=&fields6=&key6=&kj6_1=&kj6_2=&kj6_3=&kj6_4=&kj6_5=&name7=&fields7=&key7=&kj7_1=&kj7_2=&kj7_3=&kj7_4=&kj7_5=&kj7_6=&condition=hierarchy.type%3D%27U%27+and+hierarchy.super%3D30310',
+
+                      '/w3c/.dbq?name1=uris&fields1=uri&key1=id'
+           )
+
+    for path in cases:
+        path, fields = split(path, '?')
+        print "CGI parse:", cgi.parse_qs(fields)
+    
+        fields, tables, keys, joins, cond = parseQuery(fields)
+        print "SQL parse:", fields, tables, keys, joins, cond
+
+        print "as SQL:", asSQL(fields, tables, keys, joins, cond)
+
+
 def testQ():
     import sys
     
@@ -704,7 +724,7 @@ def testQ():
     port = int(port)
     
     path='/administration/.dbq?name1=users&fields1=family%2Cemail%2Ccity%2Cid&key1=id&name2=techplenary2002&fields2=plenary%2Cmeal_choice&key2=&kj2_1=id&name3=&fields3=&key3=&kj3_1=&kj3_2=&name4=&fields4=&key4=&kj4_1=&kj4_2=&kj4_3='
-
+    
     path, fields = split(path, '?')
     print "CGI parse:", cgi.parse_qs(fields)
     
@@ -752,13 +772,19 @@ if __name__ == '__main__':
     elif sys.argv[1] == '--testShow': testShow()
     elif sys.argv[1] == '--testQ': testQ()
     elif sys.argv[1] == '--testUI': testUI()
+    elif sys.argv[1] == '--testSQL': testSQL()
     else:
         main(sys.argv)
 
 
 
 # $Log$
-# Revision 1.15  2002-03-08 00:11:36  connolly
+# Revision 1.16  2002-03-08 06:45:24  connolly
+# fixed bug with empty where clause
+# added --testSQL
+# handle NULL values by not asserting anything. Hmm...
+#
+# Revision 1.15  2002/03/08 00:11:36  connolly
 # HTTP export of schemas working.
 # UI fleshed out a bit.
 #
