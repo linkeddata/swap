@@ -1,0 +1,118 @@
+<rdf:RDF
+  xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+  xmlns='http://www.w3.org/2000/10/swap/ical#'
+  xmlns:i='http://www.w3.org/2000/10/swap/ical#'
+  xmlns:x='http://www.w3.org/2000/01/foo-X@@#'
+><Vcalendar rdf:about=''><calscale rdf:resource='http://www.w3.org/2000/10/swap/ical#gregorian'/>
+<prodid>-//Ximian//NONSGML Evolution Calendar//EN</prodid>
+<version>2.0</version>
+</Vcalendar>
+<Vtimezone><tzid>/softwarestudio.org/Olson_20011030_5/America/New_York</tzid>
+<x:licLocation>America/New_York</x:licLocation>
+<standard rdf:parseType='Resource'><tzoffsetfrom>-0400</tzoffsetfrom>
+<tzoffsetto>-0500</tzoffsetto>
+<tzname>EST</tzname>
+<dtstart rdf:parseType='Resource'>
+<value>19701025T020000</value>
+</dtstart>
+<rrule rdf:parseType='Resource'>
+<bymonth>10</bymonth>
+<byday>-1SU</byday>
+<interval>1</interval>
+<freq>YEARLY</freq>
+</rrule>
+</standard
+><daylight rdf:parseType='Resource'><tzoffsetfrom>-0500</tzoffsetfrom>
+<tzoffsetto>-0400</tzoffsetto>
+<tzname>EDT</tzname>
+<dtstart rdf:parseType='Resource'>
+<value>19700405T020000</value>
+</dtstart>
+<rrule rdf:parseType='Resource'>
+<bymonth>4</bymonth>
+<byday>1SU</byday>
+<interval>1</interval>
+<freq>YEARLY</freq>
+</rrule>
+</daylight
+></Vtimezone
+><Vevent><uid>20020630T230353Z-3895-69-1-0@jammer</uid>
+<dtstamp>20020630T230353Z</dtstamp>
+<dtstart rdf:parseType='Resource'>
+<value>20020630T090000</value>
+<tzid>/softwarestudio.org/Olson_20011030_5/America/New_York</tzid>
+</dtstart>
+<dtend rdf:parseType='Resource'>
+<value>20020630T103000</value>
+<tzid>/softwarestudio.org/Olson_20011030_5/America/New_York</tzid>
+</dtend>
+<transp rdf:resource='http://www.w3.org/2000/10/swap/ical#opaque'/>
+<sequence>2</sequence>
+<summary>Church</summary>
+<class rdf:resource='http://www.w3.org/2000/10/swap/ical#private'/>
+<rrule rdf:parseType='Resource'>
+<byday>SU</byday>
+<interval>1</interval>
+<freq>WEEKLY</freq>
+</rrule>
+</Vevent
+><Vevent><uid>20020630T230445Z-3895-69-1-7@jammer</uid>
+<dtstamp>20020630T230445Z</dtstamp>
+<dtstart rdf:parseType='Resource'>
+<date>20020703</date>
+</dtstart>
+<dtend rdf:parseType='Resource'>
+<date>20020706</date>
+</dtend>
+<transp rdf:resource='http://www.w3.org/2000/10/swap/ical#opaque'/>
+<sequence>2</sequence>
+<summary>Scooby Conference</summary>
+<location>San Francisco</location>
+<description>can't wait!\n</description>
+<categories>Miscellaneous</categories>
+<class rdf:resource='http://www.w3.org/2000/10/swap/ical#public'/>
+</Vevent
+><Vevent><uid>20020630T230600Z-3895-69-1-16@jammer</uid>
+<dtstamp>20020630T230600Z</dtstamp>
+<dtstart rdf:parseType='Resource'>
+<value>20020718T090000</value>
+<tzid>/softwarestudio.org/Olson_20011030_5/America/New_York</tzid>
+</dtstart>
+<dtend rdf:parseType='Resource'>
+<value>20020718T093000</value>
+<tzid>/softwarestudio.org/Olson_20011030_5/America/New_York</tzid>
+</dtend>
+<transp rdf:resource='http://www.w3.org/2000/10/swap/ical#opaque'/>
+<sequence>3</sequence>
+<summary>Federal Reserve Board Meeting</summary>
+<class rdf:resource='http://www.w3.org/2000/10/swap/ical#public'/>
+<organizer rdf:parseType='Resource'>
+<value rdf:resource='mailto:connolly@w3.org'/>
+<cn>Dan Connolly</cn>
+</organizer>
+<attendee rdf:parseType='Resource'>
+<value rdf:resource='mailto:hoopy@frood.example'/>
+<partstat>NEEDS-ACTION</partstat>
+<language>en</language>
+<rsvp>TRUE</rsvp>
+<role>REQ-PARTICIPANT</role>
+<cutype>INDIVIDUAL</cutype>
+</attendee>
+<attendee rdf:parseType='Resource'>
+<value rdf:resource='mailto:prefect@ford.example'/>
+<partstat>NEEDS-ACTION</partstat>
+<language>en</language>
+<rsvp>TRUE</rsvp>
+<role>OPT-PARTICIPANT</role>
+<cutype>INDIVIDUAL</cutype>
+</attendee>
+<valarm rdf:parseType='Resource'><x:evolutionAlarmUid>20020701T033628Z-3895-69-1-22@jammer</x:evolutionAlarmUid>
+<trigger rdf:parseType='Resource'>
+<duration>-PT15M</duration>
+<related>START</related>
+</trigger>
+<action rdf:resource='http://www.w3.org/2000/10/swap/ical#display'/>
+<description>Federal Reserve Board Meeting</description>
+</valarm
+></Vevent
+></rdf:RDF>
