@@ -21,6 +21,8 @@ a:SFO k:nameString "SAN FRANCISCO".
 a:CDG k:nameString "PARIS DE GAULLE".
 a:FCO k:nameString "ROME FIUMICINO".
 a:AHO k:nameString "ALGHERO".
+a:PIT k:nameString "PITTSBURGH".
+a:YMX k:nameString "MONTREAL DORVALQC".
 
 
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
