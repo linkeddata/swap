@@ -1,0 +1,9 @@
+#
+#   Notation 3 variables
+#
+bind logically: <http://www.example.org/logic> .
+bind : <> .
+
+{  ?a :child ?b. }  logically:implies { ?b :parent ?b . }  .
+
+# ends
