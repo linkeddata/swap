@@ -42,6 +42,7 @@ from swap.diag import progress
 
 rdf = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 test = Namespace("http://www.w3.org/2000/10/swap/test.n3#")
+n3test = Namespace("http://www.w3.org/2004/11/n3test#")
 rdft = Namespace("http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#")
 triage = Namespace("http://www.w3.org/2000/10/swap/test/triage#")
 
@@ -212,6 +213,7 @@ def main():
     testData = []
     RDFTestData  = []
     perfData = []
+    n3PositiveTestData = []
 #    for fn in testFiles:
 #	print "Loading tests from", fn
 #	kb=load(fn)
@@ -265,6 +267,21 @@ def main():
 	if good:
 	    RDFTestData.append((t.uriref(), case, description,  inputDocument, outputDocument))
 
+
+    for t in kb.each(pred=rdf.type, obj=n3test.PositiveParserTest):
+	u = t.uriref()
+	hash = u.rfind("#")
+	slash = u.rfind("/")
+	assert hash >0 and slash > 0
+	case = u[slash+1:hash] + "_" + u[hash+1:] + ".out" # Make up temp filename
+	
+	description = str(kb.the(t, n3test.description))
+#	    if description == None: description = case + " (no description)"
+	inputDocument = kb.the(t, n3test.inputDocument).uriref()
+
+	n3PositiveTestData.append((t.uriref(), case, description,  inputDocument))
+
+
     for t in kb.each(pred=rdf.type, obj=test.PerformanceTest):
         x = t.uriref()
         theTime = kb.the(subj=t, pred=test.pyStones)
@@ -282,7 +299,9 @@ def main():
     rdfTests = len(RDFTestData)
     perfData.sort()
     perfTests = len(perfData)
-    totalTests = cwmTests + rdfTests + perfTests
+    n3PositiveTestData.sort()
+    n3PositiveTests = len(n3PositiveTestData)
+    totalTests = cwmTests + rdfTests + perfTests + n3PositiveTests
     if verbose: print "RDF parser tests: %i" % rdfTests
 
     for u, case, refFile, description, env, arguments, verboseDebug in testData:
@@ -332,6 +351,23 @@ def main():
 	    problem("  from positive parser test %s running\n\tcwm %s\n" %( case,  inputDocument))
 
 	passes = passes + 1
+
+
+    for u, case, description, inputDocument in n3PositiveTestData:
+	tests = tests + 1
+	if tests < start: continue
+    
+    
+	print "%3i/%i)  %s   %s" %(tests, totalTests, case, description)
+    #    print "      %scwm %s   giving %s" %(inputDocument, case)
+	assert case and description and inputDocument
+#	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
+#			WD, REFWD)
+	execute("""python %s ../grammar/n3-selectors.n3  http://www.w3.org/2000/10/swap/grammar/n3#document %s  > ,temp/%s""" %
+	    ('../grammar/check-grammar.py', inputDocument, case))
+
+	passes = passes + 1
+
 
     timeMatcher = re.compile(r'\t([0-9]+)m([0-9]+)\.([0-9]+)s')
     from test.pystone import pystones

@@ -1,7 +1,7 @@
 #  Build stuff uop from the BNF
 
 SWAP=..
-P=python2.2
+P=python
 C=$(SWAP)/cwm.py
 CG=PYTHONPATH=$(SWAP) python check-grammar.py
 

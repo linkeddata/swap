@@ -1,10 +1,10 @@
 #Processed by Id: cwm.py,v 1.164 2004/10/28 17:41:59 timbl Exp 
-        #    using base file:/devel/WWW/2000/10/swap/grammar/
+        #    using base file:/home/syosi/cvs-trunk/WWW/2000/10/swap/grammar/
         
 #  Notation3 generation by
 #       notation3.py,v 1.166 2004/10/28 17:41:59 timbl Exp
 
-#   Base was: file:/devel/WWW/2000/10/swap/grammar/
+#   Base was: file:/home/syosi/cvs-trunk/WWW/2000/10/swap/grammar/
      @prefix : <http://www.w3.org/2000/10/swap/grammar/bnf#> .
      @prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#> .
      @prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#> .
@@ -59,7 +59,11 @@
                 <#_g5>;
          :canStartWith "." .
     
-    ";"     :canPrecede n3:verb;
+    ";"     :canPrecede ".",
+                "]",
+                "}",
+                n3:propertylist,
+                n3:statementtail;
          :canStartWith ";" .
     
     "<="     :canPrecede n3:object;
@@ -83,10 +87,10 @@
     "@forSome"     :canPrecede <#_g7>;
          :canStartWith "@forSome" .
     
-    "@has"     :canPrecede n3:prop;
+    "@has"     :canPrecede n3:path;
          :canStartWith "@has" .
     
-    "@is"     :canPrecede n3:prop;
+    "@is"     :canPrecede n3:path;
          :canStartWith "@is" .
     
     "@keywords"     :canPrecede <#_g8>;
@@ -137,7 +141,8 @@
     "^^"     :canPrecede n3:symbol;
          :canStartWith "^^" .
     
-    "{"     :canPrecede n3:formulacontent;
+    "{"     :canPrecede "}",
+                n3:formulacontent;
          :canStartWith "{" .
     
     "}"     :canPrecede ")",
@@ -196,10 +201,7 @@
       ( "."  )
          a rul:Used .
       ( ";" 
-        n3:verb 
-        n3:object 
-        n3:objecttail 
-        n3:propertylisttail  )
+        n3:propertylist  )
          a rul:Used .
       ( "<="  )
          a rul:Used .
@@ -219,10 +221,10 @@
         <#_g7>  )
          a rul:Used .
       ( "@has" 
-        n3:prop  )
+        n3:path  )
          a rul:Used .
       ( "@is" 
-        n3:prop 
+        n3:path 
         "@of"  )
          a rul:Used .
       ( "@keywords" 
@@ -279,8 +281,6 @@
         n3:pathlist  )
          a rul:Used .
       ( n3:path  )
-         a rul:Used .
-      ( n3:prop  )
          a rul:Used .
       ( n3:qname  )
          a rul:Used .
@@ -574,6 +574,10 @@
     
     n3:formulacontent     :TEST <#_g3>;
          :branch  [
+             :branchTail ();
+             :condition "}";
+             :sequence () ],
+                 [
              :branchTail (),
                      (
             n3:statementlist  ),
@@ -630,6 +634,7 @@
                 "a",
                 "{";
          :mustBeOneSequence  (
+        () 
          (
             <#_g3> 
             <#_g4> 
@@ -906,8 +911,10 @@
             n3:pathtail  ) ];
          :canPrecede ")",
                 ".",
+                "@of",
                 "]",
                 "}",
+                n3:object,
                 n3:objecttail,
                 n3:pathlist,
                 n3:propertylist,
@@ -998,6 +1005,7 @@
                     "@a",
                     "@has",
                     "@is",
+                    "@of",
                     "@this",
                     "[",
                     "]",
@@ -1024,8 +1032,10 @@
             n3:path  ) ];
          :canPrecede ")",
                 ".",
+                "@of",
                 "]",
                 "}",
+                n3:object,
                 n3:objecttail,
                 n3:pathlist,
                 n3:propertylist,
@@ -1063,8 +1073,6 @@
                     "{";
              :sequence  (
             n3:node  ) ];
-         :canPrecede "@of",
-                n3:object;
          :canStartWith "\"",
                 "(",
                 "+",
@@ -1160,17 +1168,11 @@
                  [
              :branchTail  (
             ";" 
-            n3:verb 
-            n3:object 
-            n3:objecttail 
-            n3:propertylisttail  );
+            n3:propertylist  );
              :condition ";";
              :sequence  (
             ";" 
-            n3:verb 
-            n3:object 
-            n3:objecttail 
-            n3:propertylisttail  ) ];
+            n3:propertylist  ) ];
          :canPrecede ".",
                 "]",
                 "}",
@@ -1181,10 +1183,7 @@
         () 
          (
             ";" 
-            n3:verb 
-            n3:object 
-            n3:objecttail 
-            n3:propertylisttail  ) ) .
+            n3:propertylist  ) ) .
     
     n3:qname     :canPrecede ")",
                 ".",
@@ -1379,10 +1378,6 @@
          :canStartWith "\"";
          :matches """(\"""[^"\\\\]*(?:(?:\\\\.|"(?!""))[^"\\\\]*)*\""")|("[^"\\\\]*(?:\\\\.[^"\\\\]*)*")""" .
     
-    n3:string1     :matches "\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"" .
-    
-    n3:string3     :matches "\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\"" .
-    
     n3:subject     :TEST n3:path;
          :branch  [
              :branchTail  (
@@ -1509,10 +1504,10 @@
                 "@a",
                 "@has",
                 "@is",
-                n3:prop;
+                n3:path;
          :branch  [
              :branchTail  (
-            n3:prop  );
+            n3:path  );
              :condition "\"",
                     "(",
                     "+",
@@ -1527,24 +1522,24 @@
                     "a",
                     "{";
              :sequence  (
-            n3:prop  ) ],
+            n3:path  ) ],
                  [
              :branchTail  (
             "@has" 
-            n3:prop  );
+            n3:path  );
              :condition "@has";
              :sequence  (
             "@has" 
-            n3:prop  ) ],
+            n3:path  ) ],
                  [
              :branchTail  (
             "@is" 
-            n3:prop 
+            n3:path 
             "@of"  );
              :condition "@is";
              :sequence  (
             "@is" 
-            n3:prop 
+            n3:path 
             "@of"  ) ],
                  [
              :branchTail  (
@@ -1598,13 +1593,13 @@
                 "@is";
          :mustBeOneSequence  (
          (
-            n3:prop  )
+            n3:path  )
          (
             "@has" 
-            n3:prop  )
+            n3:path  )
          (
             "@is" 
-            n3:prop 
+            n3:path 
             "@of"  )
          (
             "@a"  )

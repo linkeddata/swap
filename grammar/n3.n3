@@ -56,8 +56,9 @@ statements_optional bnf:mustBeOneSequence (() ( statement "." statements_optiona
 
 # Formula does NOT need period on last statement
 
-formulacontent bnf:mustBeOneSequence ((
-		[ bnf:zeroOrMore declaration ]
+formulacontent bnf:mustBeOneSequence (
+		( ) 
+		( [ bnf:zeroOrMore declaration ]
 		[ bnf:zeroOrMore  universal ]
 		[ bnf:zeroOrMore existential ]
 		statementlist
@@ -113,9 +114,9 @@ objecttail bnf:mustBeOneSequence (
 
 
 verb bnf:mustBeOneSequence (
-		( prop )
-		( "@has" prop )
-		( "@is" prop "@of" )
+		( path )
+		( "@has" path )
+		( "@is" path "@of" )
 		( "@a" )
 		( "=" )
 		( "=>" )

@@ -1,9 +1,9 @@
-%token N3_QNAME
+%token N3_NUMERICLITERAL
 %token N3_EXPLICITURI
 %token N3_BARENAME
 %token N3_STRING
+%token N3_QNAME
 %token N3_VARIABLE
-%token N3_NUMERICLITERAL
 
 %%
 
@@ -77,9 +77,9 @@ _g10:	 '.'
 n3_path:	 n3_node n3_pathtail
 	;
 
-n3_verb:	 n3_prop
-	|		 '@has' n3_prop
-	|		 '@is' n3_prop '@of'
+n3_verb:	 n3_path
+	|		 '@has' n3_path
+	|		 '@is' n3_path '@of'
 	|		 '@a'
 	|		 '='
 	|		 '=>'
@@ -94,7 +94,7 @@ n3_objecttail:	 /* empty */
 	;
 
 n3_propertylisttail:	 /* empty */
-	|		 ';' n3_verb n3_object n3_objecttail n3_propertylisttail
+	|		 ';' n3_propertylist
 	;
 
 n3_node:	 n3_symbol
@@ -112,10 +112,8 @@ n3_pathtail:	 /* empty */
 	|		 '^' n3_path
 	;
 
-n3_prop:	 n3_node
-	;
-
-n3_formulacontent:	 _g3 _g4 _g5 n3_statementlist
+n3_formulacontent:	 /* empty */
+	|		 _g3 _g4 _g5 n3_statementlist
 	;
 
 n3_literal:	 N3_STRING n3_dtlang

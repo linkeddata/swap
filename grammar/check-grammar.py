@@ -29,8 +29,11 @@ __version__ = "$Id$"
 import llyn
 from myStore import load, Namespace
 from term import Literal
+import webAccess
+import uripath
 import diag
-diag.chatty_flag=10
+from codecs import utf_8_encode
+diag.chatty_flag=0
 
 from sys import argv, exit, stderr
 from time import clock
@@ -281,7 +284,7 @@ class PredictiveParser:
 	rhs = lookupTable.get(tok, None)  # Predict branch from token
 	if rhs == None: raise SyntaxError(
 		"Found %s when expecting some form of %s,\n\tsuch as %s\n\t%s"
-		    %(tok, lhs, lookupTable.keys(), parser.around(str, this)))
+		    %(utf_8_encode(tok)[0], lhs, lookupTable.keys(), parser.around(str, this)))
 	print "%i  %s means expand %s as %s" %(parser.lineNumber,tok, lhs, rhs.value())
 	for term in rhs:
 	    if isinstance(term, Literal):
@@ -301,7 +304,7 @@ class PredictiveParser:
 		if m == None:
 		    raise SyntaxError("Token: should match %s\n\t" % 
 				(rexp.pattern, parser.around(str, this)))
-		print "Token matched to <%s> as pattern <%s>" % (str[this:m.end()], rexp.pattern)
+#		print u"Token matched to <%s> as pattern <%s>" % (str[this:m.end()], rexp.pattern)
 		next = m.end()
 	    tok, this = parser.token(str, next)  # Next token
 	return tok, this
@@ -355,7 +358,7 @@ yacc.close()
 
 if len(argv) <= 3: exit(0)
 parseFile = argv[3]
-ip = open(parseFile)
+ip = webAccess.urlopenForRDF(uripath.join(uripath.base(), parseFile), None)
 str = ip.read()
 sink = g.newFormula()
 p = PredictiveParser(sink=sink, top=document, branchTable= branchTable,

@@ -1,3 +1,5 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+
 <#x> <#prop> "simple string".
 
 <#y> <#prop> """triple quoted
@@ -9,7 +11,6 @@ string with newlines in it.""".
 
 <#martin> <#surname> "D\u00fcrst".
 
-@prefix dc: <http://purl.org/dc/elements/1.1/>.
 <> dc:description """testing string parsing in N3.
 Hmm... how much of this is in the primer?
 How much should be there?

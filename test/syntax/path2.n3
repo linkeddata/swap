@@ -25,7 +25,7 @@
 # Can one put paths inside lists?
 #   yup.
 
-(  <a>.<b>  <c>^<d> ) <#relatedTo> ( <e>.<f>.<g> ) .
+(  <a>!<b>  <c>^<d> ) <#relatedTo> ( <e>!<f>!<g> ) .
 
 
 #ends
