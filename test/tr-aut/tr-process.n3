@@ -1,0 +1,124 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix rcs: <http://www.w3.org/2001/03swell/rcs#>.
+
+<>
+  dc:title "TR Papertrail processor";
+  dc:description """
+   Compute the current state of the W3C tech reports index
+   from a previous state and a set of publications since
+   then.""" ;
+  rcs:id "$Id$";
+  dc:relation <new-tr.rdf>.
+
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#>.
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
+@prefix org: <http://www.w3.org/2001/04/roadmap/org#>.
+@prefix rec: <http://www.w3.org/2001/02pd/rec54#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix os: <http://www.w3.org/2000/10/swap/os#>.
+@prefix mat: <http://www.w3.org/2002/05/matrix/vocab#>.
+@prefix : <tr-process#>.
+
+
+<> dc:description "we use :ALL_CAPS variable style (thx, Sandro)".
+
+this log:forAll :CP, :WORK, :WORK2, :GENERIC.
+
+:latestVersion s:label "latest version";
+  s:comments """Links a work to its latest incarnation(s), latest both in term of W3C Track progress (WD->REC) and date [hence the potential plurality, e.g. for a revised edition of a recommendation going through the regular track]""".
+
+
+# We get the name of the checkpoint file
+# from an environment variable (TRCHECKPOINT)
+{
+  :CP log:uri [ is os:environ of "TRCHECKPOINT"].
+}
+log:implies {
+  :CP a :Checkpoint.
+}.
+
+# What we want to keep
+:Interesting is rdf:type of
+  dc:date, dc:title,
+  doc:versionOf, doc:obsoletes,
+  rec:formerShortname, rec:fromSubmission, rec:cites, 
+  rec:implementationFeedbackDue, rec:lastCallFeedBackDue,
+  rec:prReviewsDue, rec:previousEdition, rec:supersedes, 
+  contact:fullName, org:name, mat:hasTranslations, mat:hasErrata,
+  rdf:type, contact:homePage, rec:minTimeCR, rec:sameWorkAs,
+  rec:perReviewsDue .
+:InterestingVector is rdf:type of rec:editor, org:deliveredBy.
+
+# a tr present in the frozen state but not in new-tr is
+# still the latest version...
+{
+ [ a :Checkpoint ] log:semantics [
+   log:includes { :WORK doc:versionOf :GENERIC }
+ ].
+
+ <new-tr.rdf> log:semantics [
+   log:notIncludes {
+     [ doc:obsoletes :WORK; doc:versionOf :GENERIC ]}, {
+     [ rec:sameWorkAs :GENERIC
+     ]
+    }
+   
+ ].
+
+} log:implies {
+  :GENERIC :latestVersion :WORK.
+}.
+
+# An updated TR with no more recent update is current...
+{
+ <new-tr.rdf> log:semantics [
+   log:includes { :WORK doc:versionOf :GENERIC}
+ ].
+
+  <new-tr.rdf> log:semantics [
+    log:notIncludes {
+     [ doc:obsoletes :WORK; doc:versionOf :GENERIC
+     ]
+    }, {
+     [ rec:sameWorkAs :GENERIC
+     ]
+    }
+  ].
+
+} log:implies {
+  :GENERIC :latestVersion :WORK.
+}.
+
+
+# a TR who isn't a Rec, but has a rec:previousEdition-linked object
+# is part of the TR list
+{ [ a :Checkpoint ] log:semantics [
+   log:includes { :WORK rec:previousEdition :WORK2; doc:versionOf :GENERIC }
+  ].
+
+  <new-tr.rdf> log:semantics [
+    log:notIncludes {
+      [ doc:obsoletes :WORK; doc:versionOf :GENERIC ]
+    }
+  ].
+} log:implies {
+   :GENERIC :latestVersion :WORK.
+}.
+
+# same situation for new-tr.rdf
+{ <new-tr.rdf> log:semantics [
+   log:includes { :WORK rec:previousEdition :WORK2; doc:versionOf :GENERIC }
+  ].
+
+  <new-tr.rdf> log:semantics [
+    log:notIncludes {
+      [ doc:obsoletes :WORK; doc:versionOf :GENERIC ]
+    }
+  ].
+} log:implies {
+   :GENERIC :latestVersion :WORK.
+}.
+

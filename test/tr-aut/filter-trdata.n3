@@ -1,0 +1,82 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix rcs: <http://www.w3.org/2001/03swell/rcs#>.
+
+<>
+  dc:title "TR Data Filter";
+  dc:description """
+    This filter takes as input a list of tr-process#latestVersion docs, and any data you have on this docs and keeps only those that are #Interesting.
+   """;
+  rcs:id "$Id$";
+  dc:relation <new-tr.rdf>, <tr-process.n3>.
+@prefix rec: <http://www.w3.org/2001/02pd/rec54#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix trp: <tr-process#>.
+
+@prefix : <#>.
+
+<> dc:description "we use :ALL_CAPS variable style (thx, Sandro)".
+
+this log:forAll :WORK, :WORK2, :GENERIC, :P, :X, :P2.
+
+
+# get document interesting properties
+{
+#  :GENERIC trp:latestVersion :WORK.
+
+  :WORK :P :X;
+    is trp:latestVersion of :GENERIC.
+
+  :P a trp:Interesting.
+} log:implies { 
+  :WORK :P :X.
+ }.
+
+
+{
+  :P a trp:InterestingVector.
+  :P2 a trp:Interesting;
+     log:notEqualTo <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>.
+  :GENERIC trp:latestVersion :WORK.
+
+  :WORK :P [:P2 :X].
+
+}
+  log:implies { :WORK :P [ :P2 :X]}.
+
+
+# Keep info about activity statements (@@@useful?)
+{
+ :X a rec:ActivityStatement.
+} log:implies {
+ :X a rec:ActivityStatement.
+}.
+
+# Keep any interesting info about generic versions
+{
+:GENERIC trp:latestVersion :WORK.
+:GENERIC :P :X.
+:P a trp:Interesting.
+} log:implies {
+:GENERIC :P :X.
+}.
+
+# Keep interesting info on first editions for RECs
+{
+:WORK a rec:FirstEdition;
+      :P :X.
+:P a trp:Interesting.
+} log:implies {
+:WORK a rec:FirstEdition;
+      :P :X.
+}.
+
+# Keep any interesting info about submissions
+{
+:GENERIC trp:latestVersion :WORK.
+:WORK rec:fromSubmission :WORK2.
+:WORK2 :P :X.
+:P a trp:Interesting.
+} log:implies {
+:WORK2 :P :X.
+}.
