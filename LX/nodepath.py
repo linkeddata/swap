@@ -3,6 +3,18 @@
 This is rarely needed directly; just use attributes off a KB, as with
 kb.getNode().
 
+
+WISDOM:
+
+   - it's nice to have versions of Terms which are attached to
+     a particular KB
+   - a Path is really just a kind of Query
+   - it's unclear whether preFilling, even if we prefilled
+     __dict__, would be any faster than generic Query.  The
+     difference depends on python internals, and whether lookup
+     in a large hash table is really slower than in a small one.
+     TRY IT.
+
 """
 __version__ = "$Revision$"
 # $Id$
@@ -250,7 +262,10 @@ if __name__ == "__main__":
 
  
 # $Log$
-# Revision 1.4  2003-09-06 04:45:04  sandro
+# Revision 1.5  2003-09-06 04:48:08  sandro
+# added some "wisdom" comments
+#
+# Revision 1.4  2003/09/06 04:45:04  sandro
 # nicer (?  longer at least) printing, arcList assertion
 #
 # Revision 1.3  2003/08/28 11:44:43  sandro
