@@ -468,7 +468,7 @@ class SinkParser:
             j = self.tok(']', str, i)
             if j>=0: return i # Can omit . before these
 
-            raise BadSyntax(str, j, "expected '.' or '}' or ']' at end of statement")
+            raise BadSyntax(str, i, "expected '.' or '}' or ']' at end of statement")
             return i
 
 
