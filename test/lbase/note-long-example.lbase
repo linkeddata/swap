@@ -1,0 +1,84 @@
+rdf:type(?x,?y) implies ?y(?x).
+rdf:Property(rdf:type).
+rdf:List(rdf:nil).
+pair(?x,?y)=pair(?u,?v) iff (?x=?u and ?y=?v) .
+Lbase:XMLThing(?x) implies
+          L2V(?x,rdf:XMLLiteral)=XMLCanonical(?x).
+(Lbase:XMLThing(?x) and LanguageTag(?y)) implies L2V(pair(?x,?y),rdf:XMLLiteral)=XMLCanonical(withLang(?x,?y)).
+T(?x).
+not F(?x).
+rdfs:Class(?y) implies (?y(?x) iff rdf:type(?x,?y)).
+(rdfs:range(?x,?y) and ?x(?u,?v)) implies ?y(?v).
+(rdfs:domain(?x,?y) and ?x(?u,?v)) implies ?y(?u).
+(rdfs:subClassOf(?x,?y) iff
+  (rdfs:Class(?x) and rdfs:Class(?y) and (forall
+          (?u)(?x(?u) implies ?y(?u)))
+).
+(rdfs:subPropertyOf(?x,?y) iff
+  (rdf:Property(?x) and rdf:Property(?y) and
+          (forall (?u ?v)(?x(?u,?v) implies ?y(?u,?v)))
+).
+rdfs:ContainerMembershipProperty(?x) implies rdfs:subPropertyOf(?x,rdfs:member).
+rdf:XMLLiteral(?x) implies rdfs:Literal(?x).
+Lbase:String(?y) implies
+          rdfs:Literal(?y).
+LanguageTag(?x) implies Lbase:String(?x).
+(Lbase:String(?x) and LanguageTag(?y))
+          implies rdfs:Literal(pair(?x,?y)).
+rdfs:Datatype(rdf:XMLLiteral).
+Lbase:NatNumber(?x) implies
+          rdfs:ContainerMembershipProperty(rdf:member(?x)).
+rdfs:Class(T).
+rdfs:Class(rdf:Property).
+rdfs:Class(rdfs:Class).
+rdfs:Class(rdfs:Datatype).
+rdfs:Class(rdf:Seq).
+rdfs:Class(rdf:Bag).
+rdfs:Class(rdf:Alt).
+rdfs:Class(rdfs:Container).
+rdfs:Class(rdf:List).
+rdfs:Class(rdfs:ContainerMembershipProperty).
+rdfs:Class(rdf:Statement).
+rdf:Property(rdfs:domain).
+rdf:Property(rdfs:range).
+rdf:Property(rdfs:subClassOf).
+rdf:Property(rdfs:subPropertyOf).
+rdf:Property(rdfs:comment).
+rdf:Property(rdf:predicate).
+rdf:Property(rdf:subject).
+rdf:Property(rdf:object).
+rdf:Property(rdf:first).
+rdf:Property(rdf:rest).
+rdf:Property(rdfs:seeAlso).
+rdf:Property(rdfs:isDefinedBy).
+rdf:Property(rdfs:label).
+rdf:Property(rdf:value).
+rdfs:domain(rdfs:subPropertyOf,rdf:Property).
+rdfs:domain(rdfs:subClassOf,rdfs:Class).
+rdfs:domain(rdfs:domain,rdf:Property).
+rdfs:domain(rdfs:range,rdf:Property).
+rdfs:domain(rdf:subject,rdf:Statement).
+rdfs:domain(rdf:predicate,rdf:Statement).
+rdfs:domain(rdf:object,rdf:Statement).
+rdfs:domain(rdf:first,rdf:List).
+rdfs:domain(rdf:rest,rdf:List).
+rdfs:range(rdfs:subPropertyOf,rdf:Property).
+rdfs:range(rdfs:subClassOf,rdfs:Class).
+rdfs:range(rdfs:domain,rdfs:Class).
+rdfs:range(rdfs:range,rdfs:Class).
+rdfs:range(rdf:type,rdfs:Class).
+rdfs:range(rdfs:comment,rdfs:Literal).
+rdfs:range(rdfs:label,rdfs:Literal).
+rdfs:range(rdf:rest,rdf:List).
+rdfs:subClassOf(rdfs:Datatype,rdfs:Literal).
+rdfs:subClassOf(rdf:Alt,rdfs:Container).
+rdfs:subClassOf(rdf:Bag,rdfs:Container).
+rdfs:subClassOf(rdf:Seq, rdfs:Container).
+rdfs:subClassOf(rdfs:ContainerMembershipProperty,rdf:Property).
+rdfs:subPropertyOf(rdfs:isDefinedBy,rdfs:seeAlso).
+rdfs:Datatype(?x) implies ( LegalLexicalForm(?y,?x)) iff
+          ?x(L2V(?y,?x)).
+( rdfs:Datatype(?x) and LegalLexicalForm(?y,?x) and ?x(?y))
+          implies rdfs:Literal(?y).
+Lbase:XMLThing(?x) iff
+          LegalLexicalForm(?x,rdf:XMLLiteral).
