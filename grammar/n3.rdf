@@ -1,0 +1,690 @@
+
+<!-- Processed by Id: cwm.py,v 1.145 2004/01/29 23:22:22 timbl Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/grammar/n3.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/grammar/bnf#"
+    xmlns:bnf="http://www.w3.org/2000/10/swap/grammar/bnf#"
+    xmlns:list="http://www.w3.org/2000/10/swap/list#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:n3="http://www.w3.org/2000/10/swap/grammar/n3#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:rul="http://www.w3.org/2000/10/swap/grammar/bnf-rules#"
+    xmlns:string="http://www.w3.org/2000/10/swap/string#">
+
+    <rdf:Description rdf:about="">
+        <syntaxFor rdf:parseType="Resource">
+            <internetMediaType rdf:resource="http://www.w3.org/2003/mediatypes#application/n3"/>
+        </syntaxFor>
+    </rdf:Description>
+
+    <rdf:Description>
+        <zeroOrMore rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#declaration"/>
+    </rdf:Description>
+
+    <rdf:Description>
+        <zeroOrMore rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#declaration"/>
+    </rdf:Description>
+
+    <rdf:Description>
+        <zeroOrMore rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#universal"/>
+    </rdf:Description>
+
+    <rdf:Description>
+        <zeroOrMore rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#existential"/>
+    </rdf:Description>
+
+    <rdf:Description>
+        <zeroOrMore rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#universal"/>
+    </rdf:Description>
+
+    <rdf:Description>
+        <commaSeparatedPeriodTerminatedListOf rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#symbol"/>
+    </rdf:Description>
+
+    <rdf:Description>
+        <commaSeparatedPeriodTerminatedListOf rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#symbol"/>
+    </rdf:Description>
+
+    <rdf:Description>
+        <commaSeparatedPeriodTerminatedListOf rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#barename"/>
+    </rdf:Description>
+
+    <rdf:Description>
+        <zeroOrMore rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#existential"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#barename">
+        <canStartWith>_</canStartWith>
+        <canStartWith>a</canStartWith>
+        <matches>[a-zA-Z_][a-zA-Z0-9_]*</matches>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#declaration">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:first>@prefix</rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#qname"/>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#explicituri"/>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first>.</rdf:first>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:rest>
+                    </rdf:rest>
+                </rdf:rest>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rdf:first>@keywords</rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="#_g45"/>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#dtlang">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rdf:first>@</rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#langcode"/>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <rdf:first>^^</rdf:first>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#symbol"/>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:rest>
+                    </rdf:first>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#existential">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:first>@forSome</rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="#_g36"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#explicituri">
+        <canStartWith>&#60;</canStartWith>
+        <matches>&#60;[^&#62;].*&#62;</matches>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#formulacontent">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:first rdf:resource="#_g15"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="#_g17"/>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="#_g19"/>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#statementlist"/>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:rest>
+                    </rdf:rest>
+                </rdf:rest>
+            </rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#langcode">
+        <canStartWith>a</canStartWith>
+        <matches>[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?</matches>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#literal">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#string"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#dtlang"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rul:Used rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#n3document">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:first rdf:resource="#_g1"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="#_g3"/>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="#_g5"/>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#statements_optional"/>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/bnf#eof"/>
+                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </rdf:rest>
+                        </rdf:rest>
+                    </rdf:rest>
+                </rdf:rest>
+            </rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </mustBeOneSequence>
+    </rul:Used>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#node">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#symbol"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rdf:first>{</rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#formulacontent"/>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first>}</rdf:first>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:rest>
+                    </rdf:rest>
+                </rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#variable"/>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:parseType="Resource">
+                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#numericliteral"/>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:first>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:parseType="Resource">
+                                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#literal"/>
+                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </rdf:first>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:parseType="Resource">
+                                    <rdf:first>[</rdf:first>
+                                    <rdf:rest rdf:parseType="Resource">
+                                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#propertylist"/>
+                                        <rdf:rest rdf:parseType="Resource">
+                                            <rdf:first>]</rdf:first>
+                                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                        </rdf:rest>
+                                    </rdf:rest>
+                                </rdf:first>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:parseType="Resource">
+                                        <rdf:first>(</rdf:first>
+                                        <rdf:rest rdf:parseType="Resource">
+                                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#pathlist"/>
+                                            <rdf:rest rdf:parseType="Resource">
+                                                <rdf:first>)</rdf:first>
+                                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                            </rdf:rest>
+                                        </rdf:rest>
+                                    </rdf:first>
+                                    <rdf:rest rdf:parseType="Resource">
+                                        <rdf:first rdf:parseType="Resource">
+                                            <rdf:first>@this</rdf:first>
+                                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                        </rdf:first>
+                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                    </rdf:rest>
+                                </rdf:rest>
+                            </rdf:rest>
+                        </rdf:rest>
+                    </rdf:rest>
+                </rdf:rest>
+            </rdf:rest>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#numericliteral">
+        <canStartWith>+</canStartWith>
+        <canStartWith>-</canStartWith>
+        <canStartWith>0</canStartWith>
+        <matches>[-+]?[0-9]+(\.[0-9]+)?(e[-+]?[0-9]+)?</matches>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#object">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#path"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#objecttail">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rdf:first>,</rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#object"/>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#objecttail"/>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:rest>
+                    </rdf:rest>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#path">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#node"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#pathtail"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#pathlist">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#path"/>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#pathlist"/>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#pathtail">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rdf:first>!</rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#path"/>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <rdf:first>^</rdf:first>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#path"/>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:rest>
+                    </rdf:first>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#prop">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#node"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#propertylist">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#verb"/>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#object"/>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#objecttail"/>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#propertylisttail"/>
+                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </rdf:rest>
+                        </rdf:rest>
+                    </rdf:rest>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#propertylisttail">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rdf:first>;</rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#verb"/>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#object"/>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#objecttail"/>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#propertylisttail"/>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                </rdf:rest>
+                            </rdf:rest>
+                        </rdf:rest>
+                    </rdf:rest>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#qname">
+        <canStartWith>_</canStartWith>
+        <canStartWith>a</canStartWith>
+        <matches>(([a-zA-Z_][a-zA-Z0-9_]*)?:)?([a-zA-Z_][a-zA-Z0-9_]*)?</matches>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#statement">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#subject"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#propertylist"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#statementlist">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#statement"/>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#statementtail"/>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#statements_optional">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#statement"/>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first>.</rdf:first>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#statements_optional"/>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:rest>
+                    </rdf:rest>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#statementtail">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rdf:first>.</rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#statementlist"/>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#string">
+        <canStartWith>"</canStartWith>
+        <matches>("([^"]|(\\"))*")</matches>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#subject">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#path"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#symbol">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#explicituri"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#qname"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#universal">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:first>@forAll</rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="#_g32"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#variable">
+        <canStartWith>?</canStartWith>
+        <matches>\?[a-zA-Z_][a-zA-Z0-9_]*</matches>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/grammar/n3#verb">
+        <mustBeOneSequence rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#prop"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rdf:first>@has</rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#prop"/>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </rdf:first>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <rdf:first>@is</rdf:first>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:resource="http://www.w3.org/2000/10/swap/grammar/n3#prop"/>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first>@of</rdf:first>
+                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </rdf:rest>
+                        </rdf:rest>
+                    </rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:parseType="Resource">
+                            <rdf:first>@a</rdf:first>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:first>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:parseType="Resource">
+                                <rdf:first>=</rdf:first>
+                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </rdf:first>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:parseType="Resource">
+                                    <rdf:first>=&#62;</rdf:first>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                </rdf:first>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:parseType="Resource">
+                                        <rdf:first>&#60;=</rdf:first>
+                                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                    </rdf:first>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                </rdf:rest>
+                            </rdf:rest>
+                        </rdf:rest>
+                    </rdf:rest>
+                </rdf:rest>
+            </rdf:rest>
+        </mustBeOneSequence>
+    </rdf:Description>
+
+    <rdf:Description>
+        <log:is rdf:parseType="Quote">
+            <rdf:Description rdf:about="#x">
+                <commaSeparatedPeriodTerminatedListOf rdf:resource="#y"/>
+            </rdf:Description>
+        </log:is>
+        <log:implies rdf:parseType="Quote">
+            <rdf:Description rdf:about="#x">
+                <mustBeOneSequence rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <rdf:first>.</rdf:first>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:parseType="Resource">
+                            <rdf:first>,</rdf:first>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:resource="#y"/>
+                                <rdf:rest rdf:parseType="Resource">
+                                    <rdf:first rdf:resource="#x"/>
+                                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                                </rdf:rest>
+                            </rdf:rest>
+                        </rdf:first>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </mustBeOneSequence>
+            </rdf:Description>
+        </log:implies>
+    </rdf:Description>
+
+    <rdf:Description>
+        <log:is rdf:parseType="Quote">
+            <rdf:Description rdf:about="#x">
+                <zeroOrMore rdf:resource="#y"/>
+            </rdf:Description>
+        </log:is>
+        <log:implies rdf:parseType="Quote">
+            <rdf:Description rdf:about="#x">
+                <mustBeOneSequence rdf:parseType="Resource">
+                    <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:parseType="Resource">
+                            <rdf:first rdf:resource="#y"/>
+                            <rdf:rest rdf:parseType="Resource">
+                                <rdf:first rdf:resource="#x"/>
+                                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                            </rdf:rest>
+                        </rdf:first>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </mustBeOneSequence>
+            </rdf:Description>
+        </log:implies>
+    </rdf:Description>
+
+    <rdf:Description>
+        <log:is rdf:parseType="Quote">
+            <rdf:Description>
+                <rdf:first rdf:resource="#y"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first>_s</rdf:first>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:Description>
+            <rdf:Description rdf:about=".run-1075585460.040463p2364#li130">
+                <string:concatenation rdf:resource="#str"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="#x">
+                <zeroOrMore rdf:parseType="Resource">
+                    <label rdf:resource="#y"/>
+                </zeroOrMore>
+            </rdf:Description>
+        </log:is>
+        <log:implies rdf:parseType="Quote">
+            <rdf:Description rdf:about="#x">
+                <label rdf:resource="#str"/>
+            </rdf:Description>
+        </log:implies>
+    </rdf:Description>
+
+    <rdf:Description>
+        <log:is rdf:parseType="Quote">
+            <rdf:Description>
+                <rdf:first rdf:resource="#y"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first>_csl</rdf:first>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:Description>
+            <rdf:Description rdf:about=".run-1075585460.040463p2364#li132">
+                <string:concatenation rdf:resource="#str"/>
+            </rdf:Description>
+            <rdf:Description rdf:about="#x">
+                <commaSeparatedPeriodTerminatedListOf rdf:parseType="Resource">
+                    <label rdf:resource="#y"/>
+                </commaSeparatedPeriodTerminatedListOf>
+            </rdf:Description>
+        </log:is>
+        <log:implies rdf:parseType="Quote">
+            <rdf:Description rdf:about="#x">
+                <label rdf:resource="#str"/>
+            </rdf:Description>
+        </log:implies>
+    </rdf:Description>
+</rdf:RDF>

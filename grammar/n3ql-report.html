@@ -1,0 +1,164 @@
+<html>
+<head>
+   <title>BNF</title>
+</head>
+<body>
+  <h1>BNF</h1>
+  <p>Productions are in normal type, linked to their definitions.<br />
+    <em>Regular expressions are in italics</em><br />
+    <b><code>Literal characters in quoted in bold</code></b><br />
+    <em>void</em> means an empty production.
+  </p>
+  <dl>
+  <dt><a name='alphanumeric'>alphanumeric</a></dt><dd>
+	<p><em>[a-zA-Z][a-zA-Z0-9_]*</em></p>
+	</dd>
+  <dt><a name='barename'>barename</a></dt><dd>
+	<p><em>[a-zA-Z_][a-zA-Z0-9_]*</em></p>
+	</dd>
+  <dt><a name='barename_csl'>barename_csl</a></dt><dd>
+		<p><b><code>","</code></b> <a href='#barename'>barename</a> <a href='#barename_csl'>barename_csl</a></p>
+		<p><b><code>"."</code></b></p>
+	</dd>
+  <dt><a name='declaration'>declaration</a></dt><dd>
+		<p><b><code>"@keywords"</code></b> <a href='#barename_csl'>barename_csl</a></p>
+		<p><b><code>"@prefix"</code></b> <a href='#qname'>qname</a> <a href='#explicituri'>explicituri</a> <b><code>"."</code></b></p>
+	</dd>
+  <dt><a name='declaration_s'>declaration_s</a></dt><dd>
+		<p><a href='#declaration'>declaration</a> <a href='#declaration_s'>declaration_s</a></p>
+		<p><em>void</em></p>
+	</dd>
+  <dt><a name='document'>document</a></dt><dd>
+		<p><a href='#declaration_s'>declaration_s</a> <a href='#existential_s'>existential_s</a> <a href='#statements_optional'>statements_optional</a> <em>EOF</em></p>
+	</dd>
+  <dt><a name='dtlang'>dtlang</a></dt><dd>
+		<p><b><code>"@"</code></b> <a href='#langcode'>langcode</a></p>
+		<p><b><code>"^^"</code></b> <a href='#symbol'>symbol</a></p>
+		<p><em>void</em></p>
+	</dd>
+  <dt><a name='existential'>existential</a></dt><dd>
+		<p><b><code>"@forSome"</code></b> <a href='#symbol_csl'>symbol_csl</a></p>
+	</dd>
+  <dt><a name='existential_s'>existential_s</a></dt><dd>
+		<p><a href='#existential'>existential</a> <a href='#existential_s'>existential_s</a></p>
+		<p><em>void</em></p>
+	</dd>
+  <dt><a name='explicituri'>explicituri</a></dt><dd>
+	<p><em><[^>].*></em></p>
+	</dd>
+  <dt><a name='formulacontent'>formulacontent</a></dt><dd>
+		<p><a href='#declaration_s'>declaration_s</a> <a href='#existential_s'>existential_s</a> <a href='#statementlist'>statementlist</a></p>
+	</dd>
+  <dt><a name='item'>item</a></dt><dd>
+		<p><a href='#path'>path</a></p>
+	</dd>
+  <dt><a name='itemlist'>itemlist</a></dt><dd>
+		<p><a href='#item'>item</a> <a href='#itemlist'>itemlist</a></p>
+		<p><em>void</em></p>
+	</dd>
+  <dt><a name='langcode'>langcode</a></dt><dd>
+	<p><em>[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?</em></p>
+	</dd>
+  <dt><a name='literal'>literal</a></dt><dd>
+		<p><a href='#string'>string</a> <a href='#dtlang'>dtlang</a></p>
+	</dd>
+  <dt><a name='node'>node</a></dt><dd>
+		<p><a href='#literal'>literal</a></p>
+		<p><a href='#numericliteral'>numericliteral</a></p>
+		<p><a href='#symbol'>symbol</a></p>
+		<p><a href='#variable'>variable</a></p>
+		<p><b><code>"("</code></b> <a href='#itemlist'>itemlist</a> <b><code>")"</code></b></p>
+		<p><b><code>"["</code></b> <a href='#propertylist'>propertylist</a> <b><code>"]"</code></b></p>
+	</dd>
+  <dt><a name='node_safe'>node_safe</a></dt><dd>
+		<p><a href='#literal'>literal</a></p>
+		<p><a href='#numericliteral'>numericliteral</a></p>
+		<p><a href='#symbol'>symbol</a></p>
+		<p><a href='#variable'>variable</a></p>
+	</dd>
+  <dt><a name='numericliteral'>numericliteral</a></dt><dd>
+	<p><em>[-+]?[0-9]+(\.[0-9]+)?(e[-+]?[0-9]+)?</em></p>
+	</dd>
+  <dt><a name='object'>object</a></dt><dd>
+		<p><a href='#item'>item</a></p>
+	</dd>
+  <dt><a name='objecttail'>objecttail</a></dt><dd>
+		<p><b><code>","</code></b> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a></p>
+		<p><em>void</em></p>
+	</dd>
+  <dt><a name='path'>path</a></dt><dd>
+		<p><a href='#node'>node</a> <a href='#pathtail'>pathtail</a></p>
+	</dd>
+  <dt><a name='pathtail'>pathtail</a></dt><dd>
+		<p><b><code>"!"</code></b> <a href='#path'>path</a></p>
+		<p><b><code>"^"</code></b> <a href='#path'>path</a></p>
+		<p><em>void</em></p>
+	</dd>
+  <dt><a name='prop'>prop</a></dt><dd>
+		<p><a href='#node'>node</a></p>
+	</dd>
+  <dt><a name='propertylist'>propertylist</a></dt><dd>
+		<p><a href='#verb'>verb</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a></p>
+		<p><em>void</em></p>
+	</dd>
+  <dt><a name='propertylisttail'>propertylisttail</a></dt><dd>
+		<p><b><code>";"</code></b> <a href='#verb'>verb</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a></p>
+		<p><em>void</em></p>
+	</dd>
+  <dt><a name='qname'>qname</a></dt><dd>
+	<p><em>(([a-zA-Z_][a-zA-Z0-9_]*)?:)?([a-zA-Z_][a-zA-Z0-9_]*)?</em></p>
+	</dd>
+  <dt><a name='rule'>rule</a></dt><dd>
+		<p><b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b> <b><code>"=>"</code></b> <b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b></p>
+	</dd>
+  <dt><a name='rule_safe'>rule_safe</a></dt><dd>
+	</dd>
+  <dt><a name='statement'>statement</a></dt><dd>
+		<p><a href='#subject'>subject</a> <a href='#propertylist'>propertylist</a></p>
+	</dd>
+  <dt><a name='statement_or_rule'>statement_or_rule</a></dt><dd>
+		<p><a href='#rule'>rule</a></p>
+		<p><a href='#statement'>statement</a></p>
+	</dd>
+  <dt><a name='statementlist'>statementlist</a></dt><dd>
+		<p><a href='#statement'>statement</a> <a href='#statementtail'>statementtail</a></p>
+		<p><em>void</em></p>
+	</dd>
+  <dt><a name='statements_optional'>statements_optional</a></dt><dd>
+		<p><a href='#statement_or_rule'>statement_or_rule</a> <b><code>"."</code></b> <a href='#statements_optional'>statements_optional</a></p>
+		<p><em>void</em></p>
+	</dd>
+  <dt><a name='statementtail'>statementtail</a></dt><dd>
+		<p><b><code>"."</code></b> <a href='#statementlist'>statementlist</a></p>
+		<p><em>void</em></p>
+	</dd>
+  <dt><a name='string'>string</a></dt><dd>
+	<p><em>("([^"]|(\\"))*")</em></p>
+	</dd>
+  <dt><a name='subject'>subject</a></dt><dd>
+		<p><a href='#item'>item</a></p>
+	</dd>
+  <dt><a name='symbol'>symbol</a></dt><dd>
+		<p><a href='#explicituri'>explicituri</a></p>
+		<p><a href='#qname'>qname</a></p>
+	</dd>
+  <dt><a name='symbol_csl'>symbol_csl</a></dt><dd>
+		<p><b><code>","</code></b> <a href='#symbol'>symbol</a> <a href='#symbol_csl'>symbol_csl</a></p>
+		<p><b><code>"."</code></b></p>
+	</dd>
+  <dt><a name='universal'>universal</a></dt><dd>
+		<p><b><code>"@forAll"</code></b> <a href='#symbol_csl'>symbol_csl</a></p>
+	</dd>
+  <dt><a name='variable'>variable</a></dt><dd>
+	<p><em>\?[a-zA-Z_][a-zA-Z0-9_]*</em></p>
+	</dd>
+  <dt><a name='verb'>verb</a></dt><dd>
+		<p><a href='#prop'>prop</a></p>
+		<p><b><code>"="</code></b></p>
+		<p><b><code>"@a"</code></b></p>
+		<p><b><code>"@has"</code></b> <a href='#prop'>prop</a></p>
+		<p><b><code>"@is"</code></b> <a href='#prop'>prop</a> <b><code>"@of"</code></b></p>
+	</dd>
+
+</dl>
+</html>
