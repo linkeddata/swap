@@ -576,11 +576,12 @@ class RDFStore(notation3.RDFSink) :
             for s in r.occursAs[SUBJ] :
                 if context is s.triple[CONTEXT]:
                     self._outputStatement(sink, s)
-            for f in r.fragments.values() :  # then anything in its namespace
-                for s in f.occursAs[SUBJ] :
-#                    print "...dumping %s in context %s" % (`s.triple[CONTEXT]`, `context`)
-                    if s.triple[CONTEXT] is context:
-                        self._outputStatement(sink, s)
+            if not isinstance(r, Literal):
+                for f in r.fragments.values() :  # then anything in its namespace
+                    for s in f.occursAs[SUBJ] :
+#                        print "...dumping %s in context %s" % (`s.triple[CONTEXT]`, `context`)
+                        if s.triple[CONTEXT] is context:
+                            self._outputStatement(sink, s)
         sink.endDoc()
 #
 #  Pretty printing
@@ -963,7 +964,7 @@ class RDFStore(notation3.RDFSink) :
                 elif t[PRED] is self.type and t[OBJ] is self.Truth: c=t[SUBJ]
 # We could shorten the rule format if forAll(x,y) asserted truth of y too, but this messes up
 # { x foo y } forAll x,y; log:implies {...}. where truth is NOT asserted. This line would do it:
-#                elif t[PRED] is self.forAll and t[SUBJ] is self.Truth: c=t[SUBJ]  # DanC suggestion
+                elif t[PRED] is self.forAll and t[SUBJ] is self.Truth: c=t[SUBJ]  # DanC suggestion @@
                 if c:
                     _vs = _variables[:]
                     for s in filterContext.occursAs[CONTEXT]: # find forAlls pointing downward
@@ -1018,7 +1019,7 @@ class RDFStore(notation3.RDFSink) :
         if chatty > 80:
             for v in _variables:
                 print "    Variable: ", `v`[-8:]
-    # The smartIn contaext was the template context but it has been mapped to the workingContext.
+    # The smartIn context was the template context but it has been mapped to the workingContext.
         return self.match(unmatched, _variables, _templateVariables, [workingContext],
                       self.conclude, ( self, conclusions, targetContext, _outputVariables))
 
@@ -1108,7 +1109,7 @@ class RDFStore(notation3.RDFSink) :
                existentials,        # List of variables to match to anything
                                     # Existentials or any kind of variable in subexpression
                smartIn = [],        # List of contexts in which to use builtins - typically the top one
-               action = None,  # Action routine return subtotal of actions
+               action = None,       # Action routine return subtotal of actions
                param = None,        # a tuple, see the call itself and conclude()
                bindings = [],       # Bindings discovered so far
                newBindings = [],    # Bindings JUST discovered - to be folded in
@@ -1193,6 +1194,7 @@ class RDFStore(notation3.RDFSink) :
                         if quad[PRED] is self.equivalentTo:
                             nb.append(( quad[SUBJ], quad[OBJ]))
                         elif quad[PRED] is self.uri and  isinstance(quad[OBJ], Literal):
+                            # @@@ Check must absolute - or don't bind. if not.?? Use base of context? No. ?
                             nb.append(( quad[SUBJ], self.engine.internURI(quad[OBJ].string)))
                     if lastVar == OBJ:
                         if quad[PRED] is self.equivalentTo:
@@ -1256,9 +1258,19 @@ class RDFStore(notation3.RDFSink) :
                 
 # If we have searched in vain for explicit knowledge we can still in some circumstances calculate it:
 #  @@@ why the difference between existentials and variables below?
-        if matches == 0 and quad[CONTEXT] in smartIn:
-            if ((quad[PRED] is self.includes and self.testIncludes(quad[SUBJ], quad[OBJ], existentials, smartIn))
-                or(quad[PRED] is self.directlyIncludes and self.testIncludes(quad[SUBJ], quad[OBJ], variables))
+# notIncludes has to be a recursive call, but log:includes just extends the search
+
+        if (matches == 0 and quad[CONTEXT] in smartIn
+            and isinstance(quad[SUBJ], Formula)
+            and isinstance(quad[OBJ], Formula)):
+            if quad[PRED] is self.includes:
+                more_unmatched, more_variables = self.nestedContexts(quad[OBJ])
+                _substitute([( quad[OBJ], quad[SUBJ])], more_unmatched)
+                if chatty > 40: progress("Includes: Adding %i new terms and %s as new variables."%
+                                         (len(more_unmatched),setToString(more_variables)))
+                total = total + self.match(unmatched+more_unmatched, variables+more_variables, existentials[:], smartIn, action, param,
+                                  bindings[:], []) # No new bindings but lots more to search!
+            elif ((quad[PRED] is self.directlyIncludes and self.testIncludes(quad[SUBJ], quad[OBJ], variables))
                 or(quad[PRED] is self.notIncludes and (isinstance(quad[SUBJ], Formula)
                                                        and not self.testIncludes(quad[SUBJ], quad[OBJ], existentials, smartIn)))
                 or(quad[PRED] is self.notDirectlyIncludes and (isinstance(quad[SUBJ], Formula)
@@ -1454,7 +1466,7 @@ bind default <>
 #    p=notation3.SinkParser(RDFSink(),'http://example.org/base/', 'file:notation3.py',
 #		     'data:#')
 
-    r=notation3.SinkParser(notation3.ToN3(sys.stdout.write, 'file:output'),
+    r=notation3.SinkParser(notation3.ToN3(sys.stdout.write, base='file:output'),
                   thisURI,'http://example.org/base/',)
     r.startDoc()
     
@@ -1476,6 +1488,7 @@ bind default <>
 
     testEngine = Engine()
     thisDoc = testEngine.internURI(thisURI)    # Store used interned forms of URIs
+    thisContext = testEngine.internURI(thisURI+ "#_formula")    # @@@ Store used interned forms of URIs
 
     store = RDFStore(testEngine)
     # (sink,  thisDoc,  baseURI, bindings)
@@ -1486,26 +1499,26 @@ bind default <>
 
     print "\n\n------------------ dumping chronologically:"
 
-    store.dumpChronological(thisDoc, notation3.ToN3(sys.stdout.write, thisURI))
+    store.dumpChronological(thisContext, notation3.ToN3(sys.stdout.write, base=thisURI))
 
     print "\n\n---------------- dumping in subject order:"
 
-    store.dumpBySubject(thisDoc, notation3.ToN3(sys.stdout.write, thisURI))
+    store.dumpBySubject(thisContext, notation3.ToN3(sys.stdout.write, base=thisURI))
 
     print "\n\n---------------- dumping nested:"
 
-    store.dumpNested(thisDoc, notation3.ToN3(sys.stdout.write, thisURI))
+    store.dumpNested(thisContext, notation3.ToN3(sys.stdout.write, base=thisURI))
 
     print "Regression test **********************************************"
 
     
-    testString.append(reformat(testString[-1], thisDoc))
+    testString.append(reformat(testString[-1], thisURI))
 
     if testString[-1] == testString[-2]:
         print "\nRegression Test succeeded FIRST TIME- WEIRD!!!!??!!!!!\n"
         return
     
-    testString.append(reformat(testString[-1], thisDoc))
+    testString.append(reformat(testString[-1], thisURI))
 
     if testString[-1] == testString[-2]:
         print "\nRegression Test succeeded SECOND time!!!!!!!!!\n"
@@ -1516,20 +1529,19 @@ bind default <>
         print testString[2]
         print "\n============================================= END"
 
-    testString.append(reformat(testString[-1], thisDoc))
+    testString.append(reformat(testString[-1], thisURI))
     if testString[-1] == testString[-2]:
         print "\nRegression Test succeeded THIRD TIME. This is not exciting.\n"
 
     
                 
-def reformat(str, thisDoc):
+def reformat(str, thisURI):
     if 0:
         print "Regression Test: ===================== INPUT:"
         print str
         print "================= ENDs"
     buffer=StringIO.StringIO()
-    r=notation3.SinkParser(notation3.ToN3(buffer.write, `thisDoc`),
-                  'file:notation3.py')
+    r=notation3.SinkParser(notation3.ToN3(buffer.write, base=thisURI), thisURI)
     r.startDoc()
     r.feed(str)
     r.endDoc()
@@ -1662,7 +1674,7 @@ def doCommand():
  -reify     Replace the statements in the store with statements describing them.
  -flat      Reify only nested subexpressions (not top level) so that no {} remain.
  -help      print this message
- -chatty    Verbose output of questionable use
+ -chatty=50 Verbose output of questionable use, range 0-99
  
 
             * mutually exclusive
@@ -1675,6 +1687,7 @@ Examples:
         
         import urllib
         import time
+        global chatty
         option_ugly = 0     # Store and regurgitate with genids *
         option_pipe = 0     # Don't store, just pipe though
         option_bySubject= 0 # Store and regurgitate in subject order *
@@ -1715,7 +1728,7 @@ Examples:
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-bySubject": _doneOutput = 1
             elif _lhs == "-outURI": option_outURI = _uri
-            elif arg == "-chatty": cwm.chatty = 50
+            elif _lhs == "-chatty": chatty = int(_rhs)
             elif arg[:7] == "-apply=": pass
             elif arg == "-reify": option_reify = 1
             elif arg == "-help":
@@ -1728,7 +1741,7 @@ Examples:
             
 
 # Between passes, prepare for processing
-
+        chatty =  0
 #  Base defauts
 
         if option_baseURI == _baseURI:  # Base not specified explicitly - special case
@@ -1736,8 +1749,6 @@ Examples:
                 if _gotInput == 1 and not option_test:  # But input file *is*, 
                     _outURI = option_inputs[0]        # Just output to same URI
                     option_baseURI = _outURI          # using that as base.
-                    progress("unchanged base is " + _outURI)
-
 
 #  Metadata context - storing information about what we are doing
 
@@ -1745,17 +1756,11 @@ Examples:
 	_runURI = _metaURI+`time.time()`
 	history = None
 
-#        _outURI = _baseURI
-#        if option_baseURI == _baseURI: # If base not specified
-#            if _gotInput == 1 and not option_test: # and only one input then relative to that
-#                _outURI = option_inputs[0]
-#                
-#        if option_outURI: _outURI = urlparse.urljoin(_outURI, option_outURI)
         
 	if option_rdf:
             _outSink = notation3.ToRDF(sys.stdout, _outURI, base=option_baseURI)
         else:
-            _outSink = notation3.ToN3(sys.stdout.write, _outURI, base=option_baseURI)
+            _outSink = notation3.ToN3(sys.stdout.write, base=option_baseURI)
         version = "$Id$"
 	_outSink.makeComment("Processed by " + version[1:-1]) # Strip $ to disarm
 	_outSink.makeComment("    using base " + option_baseURI)
@@ -1767,8 +1772,8 @@ Examples:
         else:
             myEngine = Engine()
             _store = RDFStore(myEngine, _outURI+"#_gs")
-            workingContext = myEngine.internURI(_outURI)
-            _meta = myEngine.internURI(_metaURI)
+            workingContext = myEngine.internURI(_outURI+ "#_formula")   #@@@ Hack - use metadata
+            _meta = myEngine.internURI(_runURI)
 
         if not _gotInput: #@@@@@@@@@@ default input
             _inputURI = _baseURI # Make abs from relative
@@ -1776,7 +1781,7 @@ Examples:
             p.load("")
             del(p)
             if not option_pipe:
-                inputContext = myEngine.internURI(_inputURI)
+                inputContext = myEngine.internURI(_inputURI+ "#_formula")
                 history = inputContext
                 if inputContext is not workingContext:
                     _store.moveContext(inputContext,workingContext)  # Move input data to output context
@@ -1803,7 +1808,7 @@ Examples:
                 p.load(_inputURI)
                 del(p)
                 if not option_pipe:
-                    inputContext = myEngine.internURI(_inputURI)
+                    inputContext = myEngine.internURI(_inputURI+ "#_formula")
                     _store.moveContext(inputContext,workingContext)  # Move input data to output context
                     _step  = _step + 1
                     s = _metaURI + `_step`  #@@ leading 0s to make them sort?
@@ -1834,7 +1839,7 @@ Examples:
             elif arg == "-rdf": option_rdf = 1
             elif arg == "-n3": option_rdf = 0
             
-            elif arg == "-chatty": self.chatty = 1
+            elif _lhs == "-chatty": chatty = int(_rhs)
 
             elif arg == "-reify":
                 if not option_pipe:
@@ -1863,15 +1868,15 @@ Examples:
                 _doneOutput = 1            
 
             elif arg[:7] == "-apply=":
-                filterContext = (myEngine.internURI(_uri))
+                filterContext = (myEngine.internURI(_uri+ "#_formula"))
                 print "# Input rules to apply from ", _uri
                 _store.loadURI(_uri)
                 _store.applyRules(workingContext, filterContext);
 
             elif _lhs == "-filter":
-                filterContext = myEngine.internURI(_uri)
+                filterContext = myEngine.internURI(_uri+ "#_formula")
                 _playURI = urlparse.urljoin(_baseURI, "PLAY")  # Intermediate
-                _playContext = myEngine.internURI(_playURI)
+                _playContext = myEngine.internURI(_playURI+ "#_formula")
                 _store.moveContext(workingContext, _playContext)
 #                print "# Input filter ", _uri
                 _store.loadURI(_uri)

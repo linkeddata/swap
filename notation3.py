@@ -67,8 +67,9 @@ RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 RDF_NS_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 DAML_NS=DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
 DAML_equivalentTo_URI = DPO_NS+"equivalentTo"
-Logic_NS = "http://www.w3.org/2000/10/swap/log.n3#"
-
+Logic_NS = "http://www.w3.org/2000/10/swap/log#"
+Old_Logic_NS = "http://www.w3.org/2000/10/swap/log.n3#"
+parsesTo_URI = Logic_NS + "parsesTo"
 RDF_spec = "http://www.w3.org/TR/REC-rdf-syntax/"
 
 ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
@@ -138,6 +139,9 @@ class RDFSink:
         self.namespaces = {}    # reverse mapping of prefixes
 
     def bind(self, prefix, nsPair):
+        if nsPair[1] == Old_Logic_NS:
+            sys.stderr.write("# **** Warning: The N3 logic namespace has changed. Take the '.n3' out!\n")
+            nsPair = RESOURCE, Logic_NS    # Temporary hack
         if not self.prefixes.get(nsPair, None):  # If we don't have a prefix for this ns
             if not self.namespaces.get(prefix,None):   # For conventions
                 self.prefixes[nsPair] = prefix
@@ -164,14 +168,14 @@ class RDFSink:
 
 class SinkParser:
     def __init__(self, sink, thisDoc, baseURI="", bindings = {},
-                 genPrefix = "", varPrefix = ""):
+                 genPrefix = "", varPrefix = "", metaURI=None):
 	""" note: namespace names should *not* end in #;
 	the # will get added during qname processing """
         self._sink = sink
     	self._bindings = bindings
 	self._thisDoc = thisDoc
         self._baseURI = baseURI
-	self._context = RESOURCE , self._thisDoc    # For storing with triples @@@@ use stack
+#	self._context = RESOURCE , self._thisDoc    # For storing with triples @@@@ use stack
         self._contextStack = []      # For nested conjunctions { ... }
         self._varPrefix = varPrefix
         self._nextId = 0
@@ -182,6 +186,22 @@ class SinkParser:
         if not self._genPrefix: self._genPrefix = self._thisDoc + "#_g"
         if not self._varPrefix: self._varPrefix = self._thisDoc + "#_v"
 
+        self._formula = FORMULA, thisDoc + "#_formula" # Formula node is what the document parses to
+        self._context = self._formula
+        
+        if metaURI:
+            self.makeStatement((RESOURCE, metaURI), # relate document to parse tree
+                            (RESOURCE, PARSES_TO_URI ), #pred
+                            (RESOURCE, thisDoc),  #subj
+                            self._context)                      # obj
+            self.makeStatement(((RESOURCE, metaURI), # quantifiers - use inverse?
+                            (RESOURCE, N3_forSome_URI), #pred
+                            self._context,  #subj
+                            subj))                      # obj
+        
+    def formula(self):
+        return self._forumula
+    
     def load(self, uri, _baseURI=""):
         if uri:
             _inputURI = urlparse.urljoin(_baseURI, uri) # Make abs from relative
@@ -924,6 +944,7 @@ def relativeTo(here, there):
 
 # Not perfect - should use root-relative in correct case but never mind.
 def relativeURI(base, uri):
+    if base == None: return uri
     if base == uri: return ""
     i=0
     while i<len(uri) and i<len(base):  # Find how much in common
@@ -1111,7 +1132,7 @@ class ToN3(RDFSink):
 #  We use here a convention that underscores at the start of fragment IDs
 # are reserved for generated Ids. The caller can change that.
 
-    def __init__(self, write, outURI, base=None, genPrefix = "#_", noLists=0 ):
+    def __init__(self, write, base=None, genPrefix = "#_", noLists=0 ):
 	self._write = write
 	self._subj = None
 	self.prefixes = {}      # Look up prefix conventions
@@ -1548,7 +1569,7 @@ bind default <#>
 #    p=SinkParser(RDFSink(),'http://example.org/base/', 'file:notation3.py',
 #		     'data:#')
 
-    r=SinkParser(ToN3(sys.stdout.write, thisURI),
+    r=SinkParser(ToN3(sys.stdout.write, base=thisURI),
                   thisURI,'http://example.org/base/',)
     r.startDoc()
     
@@ -1707,7 +1728,7 @@ See also: cwm
 	if option_rdf1out:
             _sink = ToRDF(sys.stdout, _outURI)
         else:
-            _sink = ToN3(sys.stdout.write, _outURI)
+            _sink = ToN3(sys.stdout.write, base=_outURI)
         _sink.makeComment("# Base URI of process is " + _baseURI)
         
 #  Parse and regenerate RDF in whatever notation:
