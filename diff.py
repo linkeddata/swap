@@ -89,12 +89,12 @@ def nailFormula(f):
 	for p in fps:  progress("Functional Property:", p)
 	for p in ifps: progress("Inverse Functional: ", p)
     
+    definitions = []
     a = float(len(bnodes))/len(nodes)
     if verbose: progress("Proportion of bodes which are blank: %f", a)
-    if a == 0: return
+    if a == 0: return bnodes, definitions
 
     loose = bnodes.copy()
-    definitions = []
     equivs = Set()
     #  Note possible optmization: First pass only like this, 
     # future passes work from newNodes.
