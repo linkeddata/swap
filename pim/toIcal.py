@@ -25,6 +25,13 @@ import RDFSink, llyn # from SWAP http://www.w3.org/2000/10/swap/
 from RDFSink import SYMBOL, FORMULA, SUBJ, PRED, OBJ
 from thing import Namespace, load
 
+import sys
+try:
+    reload (sys)
+    sys.setdefaultencoding('iso-8859-1')
+except:
+    pass
+
 CRLF = chr(13) + chr(10)
 
 ProdID = "-//w3.org/2002/01dc-nj/toICal.py//NONSGML v1.0/EN" #@@bogus?
@@ -208,7 +215,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.10  2003-03-14 06:01:04  connolly
+# Revision 1.11  2003-03-24 20:18:01  ryanlee
+# first pass at making toIcal understand non-ascii characters
+#
+# Revision 1.10  2003/03/14 06:01:04  connolly
 # cleaned up DATE-TIME vs DATE stuff
 #
 # Revision 1.9  2003/03/14 03:17:23  connolly
