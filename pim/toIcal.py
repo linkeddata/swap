@@ -23,21 +23,21 @@ from string import strip, maketrans, translate
 
 import RDFSink, llyn # from SWAP http://www.w3.org/2000/10/swap/
 from RDFSink import SYMBOL, FORMULA, SUBJ, PRED, OBJ
-
+from thing import Namespace, load
 
 CRLF = chr(13) + chr(10)
 
 ProdID = "-//w3.org/2002/01dc-nj/toICal.py//NONSGML v1.0/EN" #@@bogus?
 
-class Namespace:
-    """A collection of URIs witha common prefix.
-
-    ACK: AaronSw / #rdfig
-    http://cvs.plexdev.org/viewcvs/viewcvs.cgi/plex/plex/plexrdf/rdfapi.py?rev=1.6&content-type=text/vnd.viewcvs-markup
-    """
-    def __init__(self, nsname): self.nsname = nsname
-    def __getattr__(self, lname): return self.nsname + lname
-    def sym(self, lname): return self.nsname + lname
+#class Namespace:
+#    """A collection of URIs witha common prefix.
+#
+#    ACK: AaronSw / #rdfig
+#    http://cvs.plexdev.org/viewcvs/viewcvs.cgi/plex/plex/plexrdf/rdfapi.py?rev=1.6&content-type=text/vnd.viewcvs-markup
+#    """
+#    def __init__(self, nsname): self.nsname = nsname
+#    def __getattr__(self, lname): return self.nsname + lname
+#    def sym(self, lname): return self.nsname + lname
 
 RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 
@@ -53,12 +53,14 @@ class CalWr:
     def __init__(self, writeFun):
         self._w = writeFun
         
-    def export(self, kb, ctx):
+    def export(self, ctx, addr):
         """export calendar objects from an RDF KB
         in iCalendar syntax
         """
 
         w = self._w
+	kb = ctx.store
+	
         
         # cf  4.4. iCalendar Object of
         # http://www.ietf.org/rfc/rfc2445.txt
@@ -70,14 +72,13 @@ class CalWr:
 
         #hmm... method? cf 3.2 Parameters
 
-        ctx = kb.intern((FORMULA, ctx + "#_formula"))
-        ty = kb.internURI(RDF.type)
-        
+        ty = RDF.type
+
         progress("@@skipping timezones and lots of other component types")
         progress("querying for type ", ICAL.Vevent, " in ", ctx )
         eventHits = ctx.statementsMatching(ty,
                                            None,
-                                           kb.internURI(ICAL.Vevent))
+                                           ICAL.Vevent)
         
         for hit in eventHits:
             event = hit[SUBJ]
@@ -95,8 +96,8 @@ class CalWr:
 
             other = ctx.statementsMatching(None, event, None)
             for s in other:
-                if str(s[PRED]) not in ('dtstart', 'dtend', 'uid', 'summary',
-			'location', 'priority', 'description', 'type'):
+                if s[PRED] not in (ICAL.dtstart, ICAL.dtend, ICAL.uid, ICAL.summary,
+			ICAL.location, ICAL.priority, ICAL.description, RDF.type):
                     progress("@@skipping ", s[PRED], " of [", txt, "] = [", \
                              s[OBJ], "]")
             w("END:VEVENT"+CRLF)
@@ -108,7 +109,7 @@ class CalWr:
         # case insensitive."
         #  -- 4.5 Property, http://www.ietf.org/rfc/rfc2445.txt
         w = self._w
-        txt  = kb.any((ctx, kb.internURI(ICAL.sym(pn)), subj, None))
+        txt  = ctx.any(subj, ICAL.sym(pn))
         if txt is None: return txt
         v = strip(str(txt))
         w("%s:%s%s" % (pn.upper(), v, CRLF)) #@@linebreaks?
@@ -116,13 +117,15 @@ class CalWr:
     
     def timeProp(self, kb, ctx, pn, subj):
         w = self._w
-        when = kb.any((ctx, kb.internURI(ICAL.sym(pn)), subj, None))
-        whenV = kb.any((ctx, kb.internURI(ICAL.value), when, None)) \
-                or kb.any((ctx, kb.internURI(ICAL.date), when, None)) \
-                or kb.any((ctx, kb.internURI(ICAL.dateTime), when, None))
+	pni = ICAL.sym(pn)
+        when = ctx.any(subj, pni)
+#	progress("Time: %s is %s" % (pni, when)) 
+        whenV = ctx.any(when, ICAL.value) \
+                or ctx.any(when, ICAL.date) \
+                or ctx.any(when, ICAL.dateTime)
         if not whenV:
             progress("@@no value for ", when)
-        whenTZ = kb.any((ctx, kb.internURI(ICAL.tzid), when, None))
+        whenTZ = ctx.any(when, ICAL.tzid)
 
         whenV = translate(str(whenV), maketrans("", ""), "-:")
 	if whenTZ:
@@ -147,13 +150,13 @@ def main(args):
     addr = uripath.join("file:" + os.getcwd() + "/", args[1])
     
     c = CalWr(sys.stdout.write)
-    kb = llyn.RDFStore()
-    kb.reset("http://example/@@uuid-here#something")
+#    kb = llyn.RDFStore()
+#    kb.reset("http://example/@@uuid-here#something")
     progress("loading...", addr)
-    llyn.loadToStore(kb, addr)
+    k = load(addr)
 
     progress("exporting...")
-    c.export(kb, addr)
+    c.export(k, addr)
 
 def progress(*args):
     for i in args:
@@ -168,7 +171,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.6  2002-12-12 22:58:07  timbl
+# Revision 1.7  2003-01-13 19:48:23  timbl
+# Changed API, using thing.Namespace
+#
+# Revision 1.6  2002/12/12 22:58:07  timbl
 # minor
 #
 # Revision 1.5  2002/09/22 21:53:44  connolly
