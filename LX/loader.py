@@ -1,34 +1,5 @@
 """
 
-oops.
-Unpickling might shared (uri, data) Constants, etc.   :-/
-(does it?     getstate/setstate -- make it?)
-http://www.python.org/doc/current/lib/node68.html
-
- x >>> l=LX.loader.Loader(kb,
- "file:test/surnia-test-results-0013.rdf")
- 
->>> import LX.kb
->>> import LX.loader
->>> kb=LX.kb.KB()
->>> l=LX.loader.Loader(kb, "file:test/1blank.rdf")
->>> l.run()
->>> print len(kb), len(kb.exivars)
-2 1
->>> l2=LX.loader.Loader(kb, "file:test/1blank.rdf")
->>> l2.run()
->>> print len(kb), len(kb.exivars)
-4 2
->>> import time
->>> t0=time.time()
->>> kb.load("http://www.w3.org/TR/2003/CR-owl-test-20030818/Manifest.rdf")
->>> print time.time() - t0
->>> print len(kb), len(kb.exivars)
-xxx
->>> t0=time.time()
->>> kb.load("http://www.w3.org/TR/2003/CR-owl-test-20030818/Manifest.rdf")
->>> print time.time() - t0
->>> print len(kb), len(kb.exivars)
 xxx
 """
 __version__ = "$Revision$"
@@ -37,6 +8,8 @@ __version__ = "$Revision$"
 import time
 import os.path
 import os
+from reporter import theNullReporter
+from sys import stderr
 import LX
 import LX.kb
 import sniff
@@ -93,23 +66,31 @@ class Loader:
 
         local == use the local (saved) copy if there is one,
                  fatal error if not.  (never looks at the net)
+                 http1.1: only-if-cached
+
         saved == use the local (saved) copy if there is one,
                  otherwise try the network.   Good when you know
                  the page hasn't changed, you care about speed, and the
                  server gives a short or absent expireation time.
+                 max-stale=inf in http1.1
+
         auto == if there is a saved copy and it's not expired, then
                 use it.  If it's expired, then check the
 	        network for a more recent one.   This is
                 what network proxies should do; browsers usually do
                 this, unless you've configured them to only check once
                 per session.  Mozilla calls it "FOR_EACH_PAGE"
+
         check == check for a remote one being more recent, even
                 if we're not expired.  This is what pressing "reload"
-                usually does.   Mozilla FORCE_VALIDATE
+                usually does.   Mozilla FORCE_VALIDATE, http1.1
+                must-revalidate.
+
         remote == use the remote copy (updating the local one),
                 even if it's not more recent.  Never looks at
 	        what's saved.  This is what pressing shift-reload
-                usually does.   Mozilla FORCE_RELOAD
+                usually does.   Mozilla FORCE_RELOAD, http no-cache.
+                
         Moz per: http://www.geocrawler.com/archives/3/141/2001/3/50/5351741/
 
         WHY do we do our own cache management, you ask?!?!   Because
@@ -166,18 +147,26 @@ class Loader:
 
     """
 
-    def __init__(self, kb=None, uri=None):
+    def __init__(self, kb=None, uri=None, reporter=theNullReporter):
         self.kb=kb
         self.uri=uri
         self.cachePolicy="auto"
         self.suffixes=defaultSuffixes[:]
         self.typeFromSuffix=None
+        self.cacheDirectory="~/.LX/cache/"
+        self.reporter = reporter
 
     def run(self):
 
+        self.reporter.begin("loading "+self.uri)
+        
         try:
             self.openStream()
+            self.cacheAction = "fetched"
         except AlreadyLoaded, error:
+            #print >>stderr, "Used cached version"
+            self.cacheAction = "used cache"
+            self.reporter.end("used cache")
             return
         
         self.typeFromSniff=sniff.sniffLanguage(self.stream)
@@ -202,6 +191,7 @@ class Loader:
         parser.parse(self.stream, tempKB)
         self.saveInCache(Meta(self.stream.info()), tempKB)
         self.kb.addFrom(tempKB)
+        self.reporter.end()
 
     
     def openStream(self):
@@ -222,6 +212,8 @@ class Loader:
         mode = (["local", "saved", "auto", "check", "remote"]
                 .index(self.cachePolicy))
 
+        #print >>stderr, "MODE", mode
+
         if mode <= 1:
             try:
                 self.loadLocal()
@@ -238,23 +230,33 @@ class Loader:
             try:
                 meta = self.savedMeta()
             except NotCached:
+                print >>stderr, "No cache (meta) data"
                 pass
             else:
-                if mode <= 2 and meta.expires <= time.time():
-                    # should not fail, since metadata was there...
-                    self.loadLocal()
-                    raise AlreadyLoaded()
+                if mode <= 2:
+                    if meta.expires > time.time():
+                        # should not fail, since metadata was there...
+                        self.loadLocal()
+                        raise AlreadyLoaded()
+                    else:
+                        self.reporter.msg("cached version expired %f days ago"%
+                                          ((time.time() - meta.expires)/86400))
+                else:
+                    print >>stderr, "Assuming cache has expired"
             
         opener = Opener()
 
-        if mode <= 4:
+        if mode <= 3:
             if not meta:
                 try:
                     meta = self.savedMeta()
                 except NotCached:
                     pass
             if meta and meta.lastModText:
-                opener.addheader("If-Modified-Since", lastModText)
+                # can we get this to work with File URLs?
+                #print >>stderr, "If-Modified-Since:", meta.lastModText
+                opener.addheader("If-Modified-Since", meta.lastModText)
+                self.reporter.msg("using If-Modified-Since conditional GET")
                 # http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.25
 
         firstError=None
@@ -265,11 +267,14 @@ class Loader:
                 if firstError is None: firstError = error
                 continue
             except NotModified:
+                self.reporter.msg("server says \"304 Not Modified\"; using cached version")
+                #  @@ reset expiration information
                 self.loadLocal()
                 raise AlreadyLoaded()
             else:
                 self.stream.info().uri = self.uri+suffix
                 self.typeFromSuffix = contenttype
+                self.reporter.begin("receiving data")
                 return
         raise firstError
 
@@ -279,12 +284,17 @@ class Loader:
 
     def filename(self):
         q=urllib.quote(self.uri, safe='')
-        return os.path.expanduser(os.path.expandvars("~/.LX-save/"+q))
+        return os.path.expanduser(os.path.expandvars(self.cacheDirectory+q))
     
     def loadLocal(self):
         """Add to the KB the formulas associated with the given uri,
         or raise NotCached."""
-        f=file(self.filename()+",kb", "r")
+        try:
+            f=file(self.filename()+",kb", "r")
+        except IOError, error:
+            self.reporter.msg("not found in internal cache")
+            raise NotCached()
+        self.reporter.msg( "found in internal cache")
         p=Unpickler(f)
         (exivars, univars, formulas) = p.load()
         for f in formulas:
@@ -319,14 +329,98 @@ class Loader:
 
         f=file(self.filename()+",kb", "w")
         p=Pickler(f, 0)
+        #f=kb[0]
+        #print >>stderr, f
+        #t=f.function
+        #print >>stderr, t
+        #p.dump(t)
         p.dump((kb.exivars, kb.univars, kb[:]))
 
 if __name__ == "__main__":
     import doctest, sys
     doctest.testmod(sys.modules[__name__])
 
+def __test1():
+
+    tdir = "./test-tmp-dir/"
+    #try:
+    #    os.removedirs(tdir)
+    #except OSError, error:
+    #    if error.strerror.startswith("No such file or dir"):
+    #        pass
+    #    else:
+    #        raise error
+
+    from LX.kb import KB
+    kb=KB()
+    l=Loader(kb, "file:test/1blank.rdf")
+    l.cacheDirectory = tdir
+    l.cachePolicy="remote"
+
+    l.run()
+    #print kb
+    #print "LIT BEFORE", `kb[1].args[1]`
+
+    kb2=KB()
+
+    l=Loader(kb2, "file:test/1blank.rdf")
+    l.cacheDirectory = tdir
+    l.cachePolicy="saved"
+
+    l.run()
+    #print kb2
+    #print "LIT AFTER", `kb2[1].args[1]`
+
+    l=Loader(kb2, "file:test/1blank.rdf")
+    l.cacheDirectory = tdir
+    l.cachePolicy="saved"
+
+    l.run()
+    #print kb2
+    #print `kb2[1].args[1]`
+    #print `kb2[3].args[1]`
+
+    #type(q, PassingRun)
+    #label(q, lit)
+    #type(q2, PassingRun)
+    #label(q2, lit)
+
+    if kb2[1].args[1] is not kb2[3].args[1]:
+        raise RuntimeError()
+    if kb2[0].args[1] is not kb2[2].args[1]:
+        raise RuntimeError()
+    if kb2[1].args[0] is kb2[3].args[0]:
+        raise RuntimeError()
+    
+
+    kb = KB()
+    l=Loader(kb2, "http://www.w3.org/TR/2003/CR-owl-test-20030818/Manifest.rdf")
+    l.cacheDirectory = tdir
+    l.cachePolicy="remote"
+    print "Get Manifest"
+    t0 = time.time()
+    l.run()
+    assert(l.cacheAction=="fetched")
+    print "%fs" % (time.time() - t0)
+    print "Get Manifest"
+    l.cachePolicy="auto"
+    t0 = time.time()
+    l.run()
+    print "%fs" % (time.time() - t0)
+    assert(l.cacheAction=="used cache")
+    
+    
+
+    
 # $Log$
-# Revision 1.1  2003-09-11 06:16:11  sandro
+# Revision 1.2  2003-09-16 17:05:59  sandro
+# improved docs
+# added a little proper testing
+# change output to use reporter
+# made cacheDirectory variable
+# fixed a mode branch
+#
+# Revision 1.1  2003/09/11 06:16:11  sandro
 # new caching kb.load replacement (not yet working)
 #
         
