@@ -63,7 +63,9 @@ cwm_test rules13-1.n3 "log:implies rules more complex, with means, once" rules13
 
 cwm_test rules13-n.n3 "log:implies rules more complex, with means, many times" rules13.n3 -think
 
-cwm_test schema1.n3 "Schema validity" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think
+cwm_test two-route.n3 "test different rules giving same result" two-route.n3 -think
+
+cwm_test schema1.n3 "Schema validity 1" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think
 
 cwm_test schema2.n3 "Schema validity using filtering out essential output" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think -filter=schema-filter.n3
 
@@ -112,7 +114,10 @@ TARGET=roadmap/test.graph; export TARGET
 cwm_test roadmap-test.dot "using notIncludes and --strings to make a graphviz file"  roadmap/todot.n3 --think --strings
 
 # $Log$
-# Revision 1.23  2001-12-02 22:42:28  timbl
+# Revision 1.24  2001-12-08 02:32:54  timbl
+# Add two-route.n3
+#
+# Revision 1.23  2001/12/02 22:42:28  timbl
 # Added roadmap test
 #
 # Revision 1.22  2001/11/19 15:25:16  timbl
