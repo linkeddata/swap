@@ -42,7 +42,10 @@ import urllib2
 # <AaronSw> it lets me do: d = fetch(url); print xml.xpath.Evaluate("//*[@class='rss:item']/text()", d)
 import libxml2 # http://xmlsoft.org/python.html , DebianPackage:libxml2-python2.1 won't work because llyn.py uses 2.2isms
 
-import llyn, uripath, toXML # http://www.w3.org/2000/10/swap/
+# http://www.w3.org/2000/10/swap/
+from myStore import Namespace, load, symbol, literal, formula, bind
+import myStore
+import uripath, toXML # http://www.w3.org/2000/10/swap/
 from RDFSink import SYMBOL, LITERAL, FORMULA
 import diag
 diag.setVerbosity(0)
@@ -55,13 +58,11 @@ def RDFS(ln):
 
 
 class Crawler:
-    def __init__(self, kb, ctx, here):
-        self._kb = kb
-        self._ctx = ctx
+    def __init__(self, fmla, here):
+        self._fmla = fmla
 
     def crawlFrom(self, addr, prefix, max):
-        kb = self._kb
-        ctx = self._ctx
+        fmla = self._fmla
 
         iter = 1
         queue = [addr]
@@ -96,10 +97,9 @@ class Crawler:
             progress("... got content of type ", ct)
             isHTML = ct.find('text/html') == 0
 
-            kb.makeStatement((ctx,
-                              kb.newSymbol(DC('type')),
-                              kb.newSymbol(head),
-                              kb.newLiteral(ct)))
+            fmla.add(symbol(head),
+                     symbol(DC('type')),
+                     literal(ct))
 
             # note that we're not peeking into the URI
             # to find out if it's HTML; we're just
@@ -108,10 +108,9 @@ class Crawler:
             if isHTML and label[-5:] == '.html':
                 label = label[:-5]
 
-            kb.makeStatement((ctx,
-                              kb.newSymbol(RDFS('label')),
-                              kb.newSymbol(head),
-                              kb.newLiteral(label)))
+            fmla.add(symbol(head),
+                     symbol(RDFS('label')),
+                     literal(label))
 
             if not isHTML: continue
             
@@ -124,11 +123,9 @@ class Crawler:
                 pass
             else:
                 progress("... found title:", title)
-                #self._fmla.add(DC('title'), head, str(title))
-                kb.makeStatement((ctx,
-                                  kb.newSymbol(DC('title')),
-                                  kb.newSymbol(head),
-                                  kb.newLiteral(str(title))))
+                fmla.add(symbol(head),
+                         symbol(DC('title')),
+                         literal(str(title)) )
             
             hrefs = doc.xpathNewContext().xpathEval('//a/@href')
             progress("... found ", len(hrefs), " links")
@@ -137,11 +134,11 @@ class Crawler:
                 h = h.getContent()
                 progress("... found href", h)
                 i = uripath.join(head, h)
+                i = uripath.splitFrag(i)[0]
                 progress("... found link", head, ' -> ', i)
-                kb.makeStatement((ctx,
-                                  kb.newSymbol(DC('relation')),
-                                  kb.newSymbol(head),
-                                  kb.newSymbol(i)))
+                fmla.add(symbol(head),
+                         symbol(DC('relation')),
+                         symbol(i))
                 if i[:len(prefix)] == prefix and i not in seen:
                     queue.append(i)
 
@@ -158,23 +155,25 @@ def main(argv):
 
     site, max = argv[1:3]
     max = int(max)
-    kb = llyn.RDFStore()
+    f = formula()
     here = uripath.base()
-    f = kb.intern((FORMULA, here + "#_formula")) #@@ ugly!
-    progress("f = ", f)
-    c = Crawler(kb, f, here)
+    c = Crawler(f, here)
     c.crawlFrom(site, site, max)
+    f.close()
     sink = toXML.ToRDF(sys.stdout, here)
-    sink.bind('dc', DC(''))
-    sink.bind('s', RDFS(''))
-    kb.dumpNested(f, sink)
+    bind('dc', DC(''))
+    bind('s', RDFS(''))
+    myStore.store.dumpNested(f, sink)
     
 if __name__ == '__main__':
     import sys
     main(sys.argv)
 
 # $Log$
-# Revision 1.3  2003-01-03 04:18:32  connolly
+# Revision 1.4  2004-09-08 03:52:42  connolly
+# updated to current swap API
+#
+# Revision 1.3  2003/01/03 04:18:32  connolly
 # added rdfs:label for use with circles and arrows tools; added dc:type while I was at it
 #
 # Revision 1.2  2003/01/02 05:32:46  connolly
