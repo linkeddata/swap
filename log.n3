@@ -20,6 +20,7 @@ of any identifiers used in the document.
 
 log:Formula a rdfs:Class.
 log:String  a rdfs:Class.
+log:List    a rdfs:Class.     # Syntactic things
 
 #   The following are inherent in the translation of N3 syntax to quad representation:
 
@@ -100,6 +101,38 @@ log:content a rdf:Property;   # (was hasContent but we use role nouns by prefere
     rdfs:label  "content";
     rdfs:comment """This connects a document and a string that represents it.
         Cwm knows how to go get a document in order to evaluate this.""".
+
+#  Merge two formulae
+
+log:conjunction a rdf:Property;
+    rdfs:label "conjunction";
+    rdfs:domain log:List;
+    rdfs:range  log:Formula;
+    rdfs:comment """"A function to merge formulae: logical AND.
+
+The subject is a list of formulae.
+The object, which can be generated, is a formula containing a copy
+of each of the formulae in the list on the left.
+A cwm built-in function.
+""".
+
+#  Find the set of ALL statements entailed by a given formula.
+
+log:conclusion a rdf:Property;
+    rdfs:label "conclusion";
+    rdfs:domain log:Formula;
+    rdfs:range log:Formula;
+    rdfs:comment """The conclusions which can be drawn from a formula.
+
+The object of this function is the set of conclusions which can be
+drawn from the formula on the right, by successively applying any
+rules it contains to the data it contains. This is equivalent to
+cwm's "--think" command line function.  It does use built-ins, to
+it may for example indirectly invoke other documents, validate
+signatures, etc.
+""".
+
+ 
 
 ################# Simple Builtins:
 #
