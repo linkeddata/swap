@@ -391,7 +391,7 @@ def differences(f, g, assumptions):
 #	    raise RuntimeError("Can't match %s" % x)
 
 	if len(matches) > 1:
-	    raise RuntimeError("More than 1 match for %s: 6s" % (`x`, `matches`))
+	    raise RuntimeError("More than 1 match for %s: %s" % (`x`, `matches`))
 	for q in matches:  # pick only one  @@ python function?
 	    z = q
 	    break
