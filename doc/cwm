@@ -31,19 +31,25 @@ href="http://www.python.org/">python</a>.</p>
     often it more up to date than this!</a></li>
   <li><a href="../Primer.html">Notation3 Primer</a> - a quick introduction to
     semantic web using cwm and n3</li>
+  <li><a href="Overview">Tutorial</a> - continuing the work of the primer in
+    more depth</li>
+  <li><a href="CwmBuiltins.html">Reference List of built-in functions</a></li>
 </ul>
 
 <p><a id="Check" name="Check">Check out other programs which use the same
 formats</a>:</p>
 <ul>
   <li><a href="http://www.agfa.com/w3c/euler/">Euler</a> - a
-    backward-chaining reasoner by Jos de Roo</li>
+    backward-chaining reasoner by Jos de Roo.  Euler will tell you whether a
+    give set of facts and rules supports a give conclusion.</li>
   <li><a
     href="http://www.google.com/search?q=eulersharp&amp;ie=UTF-8&amp;oe=UTF-8">EulerSharp</a>
     - a C# port of Euler</li>
   <li><a
     href="http://www.unc.edu/~bparsia/sw/cwmclone/cwmclone.html">cwmclone</a>
-    - a partial clone of cwm by Bijan Parsia</li>
+    - a partial clone of cwm by Bijan Parsia to XSB prolog engine - to
+    demonstrate that conventional logica programming tools are efficent and
+    straightforwradly adapted to semantic web work. </li>
   <li>Jena RDF toolkit now accepts N3 as well as RDF/XML (2003/2)</li>
   <li>RDF::Notation3 perl module (<a
     href="http://archive.develooper.com/modules@perl.org/msg08120.html">submission</a>
