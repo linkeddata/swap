@@ -184,14 +184,20 @@ class CalWr:
                     w("%s;VALUE=DATE-TIME;TZID=%s:%s%s" % (pn.upper(), str(whenTZ),
                                            whenV, CRLF))
                 else:
-                    w("%s:VALUE=DATE-TIME;%s%s" % (pn.upper(), whenV, CRLF))
+		    z = ""
+		    if whenV[-1:] == "Z":
+			z = "Z"
+			whenV = whenV[:-1]
+		    whenV = (whenV + "000000")[:15] # Must include seconds
+#                    w("%s;VALUE=DATE-TIME:%s%s%s" % (pn.upper(), whenV, z, CRLF))
+                    w("%s:%s%s%s" % (pn.upper(), whenV, z, CRLF))
             else:
                 whenV = sts.any(when, ICAL.date)
                 if whenV:
                     whenV = translate(str(whenV), maketrans("", ""), "-:")
                     w("%s;VALUE=DATE:%s%s" % (pn.upper(), whenV, CRLF))
                 else:
-                    progress("@@no value for ", when)
+                    progress("@@no ical:dateTime or ical:date for ", when)
 
 
 import sys, os
@@ -222,7 +228,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.13  2003-06-03 17:35:38  connolly
+# Revision 1.14  2003-06-13 22:06:10  timbl
+# Fixed DATE-TIMEs to be always 15char and punctuation bug in some datetimes
+#
+# Revision 1.13  2003/06/03 17:35:38  connolly
 # added duration support
 #
 # Revision 1.12  2003/04/16 17:21:01  ryanlee
