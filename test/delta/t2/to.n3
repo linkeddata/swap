@@ -1,0 +1,45 @@
+# Test otology for deltas and sigmas
+#
+# diffing and patching
+#
+
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#>.
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#>.
+
+@keywords a, is, of.
+
+#@prefix bank: <http://www.w3.org/2000/10/swap/test/delta/bank#>.
+@prefix bank: <../bank.n3#>.
+
+[]	bank:accountNumber "1234567-0";
+	bank:accountHolder  [ bank:ssn "123456789" ];
+	bank:accountBank    [ bank:id "10-23-45"];
+	bank:accountBalance  "-3347.47".
+
+[]	bank:accountNumber "1234567-1";
+	bank:accountHolder  [ bank:ssn "123456789" ];
+	bank:accountBank    [ bank:id "10-23-45"];
+	bank:accountBalance  "40000".
+
+
+# Independent statement about in fact the same person
+#
+
+[]	bank:ssn "123456789";
+	bank:phoneNumber  "+1 202 555 1212";
+	bank:dateOfBirth "1966--6".
+
+# Someone whose SSN the bank does not know:
+
+[]	bank:accountNumber "555-1212-0";
+	bank:accountHolder  [ bank:dateOfBirth "1987-06-05" ];
+	bank:accountBank    [ bank:id "10-23-45"];
+	bank:accountBalance  "3333".
+
+
+
+
+
