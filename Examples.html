@@ -1,3 +1,5 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
+                      "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
 <head>
   <title>Examples - Getting ino the semantic web and RDF using N3</title>
@@ -22,17 +24,17 @@ http://www.w3.org/2000/10/swap/test/ if you are reading this on paper.)  These
 are designed as examples, to show how something can be done, not as working
 products.</p>
 
-<p>Remember, to convert an n3 file into RDF,  <code>cwm xxx.n3 -rdf </code>
-should do it  among other things.  I haven't exhaustively tested all
-combinations of n3 and RDF in all cases.</p>
+<p>Remember, to convert an RDF document from n3 syntax into xml syntax, 
+<code>cwm xxx.n3 -rdf </code> should do it  among other things.  I haven't
+exhaustively tested all combinations of n3 and RDF in all cases.</p>
 
 <h2 id="Merging">Merging graphs</h2>
 
 <p>When explaining why the semantic web needs to be a web not a tree, I used
 slides showing information in blue from one source (blue links) with that from
 another sources (red and green links).<img
-src="/2000/Talks/0906-xmlweb-tbl/arcs-3.gif"
-alt="blue, red and green arcs merged" width="30%" align="right"></p>
+src="/2000/Talks/0906-xmlweb-tbl/arcs-3.gif" alt="blue, red and green arcs
+merged" width="30%" align="right"></p>
 <ul>
   <li><a href="/2000/Talks/0906-xmlweb-tbl/slide6-0.html">The first
     diagram</a> shows some information maybe from someone's personal
@@ -57,7 +59,7 @@ like:</p>
   <li>The green arcs (<a href="test/meet/green.n3">in N3</a>, <a
     href="test/meet/green.rdf">in XML</a>)</li>
   <li>The merged graph (<a href="test/meet/white.n3">in N3</a> made by<code>
-    cwm red.n3 blue.n3 green.n3 &gt; white.n3</code>, <a
+    cwm red.n3 blue.n3 green.n3 > white.n3</code>, <a
     href="test/meet/white.rdf">in XML</a>)</li>
 </ul>
 
@@ -147,8 +149,7 @@ definition of transitivity.</p>
     new otherwise.</li>
 </ul>
 
-<p>
-<math xmlns="http://www.w3.org/1998/Math/MathML">
+<p><math>
   <mtable>
   </mtable>
 </math>
