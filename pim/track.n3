@@ -24,27 +24,19 @@
              problem from an opening message or a description of
           a resolution from a closing message""". 
 
-#:resolution a r:Property;
-#    s:range log:String;
-#    s:comment "A summary of the resolution of the issue - from the closing document.". 
-
-#:note a r:Property;
-#    s:range :Issue;
-#    s:comment "Comments about this eg for the use of group secretary". 
-
 # State changes
 
-:opens a r:Property; s:domain doc:Work; r:range t:Issue;
+:acceptance a r:Property; s:domain doc:Work; r:range t:Issue;
     s:label "opens";
     s:comment "This document is the one which opens this issue".
 
-:closes a r:Property; s:domain doc:Work; r:range t:Issue;
+:resolution a r:Property; s:domain doc:Work; r:range t:Issue;
     s:comment """This document closes (resolves) the issue, which must have been open""".
 
-:rejects a r:Property s:domain doc:Work; r:range t:Issue;
+:rejection a r:Property s:domain doc:Work; r:range t:Issue;
     s:comment """This document rejects the issue, which must have been open""".
 
-:annotates a r:Property s:domain doc:Work; r:range t:Issue;
+:annotation a r:Property s:domain doc:Work; r:range t:Issue;
     s:comment  """No semantics apart from human understanding. no state change""".
 
 #ends
