@@ -25,7 +25,7 @@ DIV.version {
 
   seq-number: 1; 
   ball-radius: 0.1em
-  extrapage: 1
+  extrapage: 0
   showurl: 1
 
   paper {
@@ -34,7 +34,7 @@ DIV.version {
 
   option {
   /*    twoup: 1   let this be on cmd line */
-    scaleimage: 2
+  /*    scaleimage: 2 */
     toc: bh 
     frame: 0
     grayscale: 1
@@ -62,12 +62,13 @@ DIV.version {
     passes: 2;
   }
   toc {
-    level: 3;
+    level: 2;
   }
 
   titlepage {
     margin-top: 7cm
-    content: "<DIV align=center> <H1>Semantic Web<BR>Tutorial Using N3</H1><H2>Tim Berners-Lee<BR>Dan Connolly<BR>Sandro Hawke<BR></H2><H2>For Presentaton<BR>May 20, 2003</H2><H3>http://www.w3.org/2000/10/swap/doc</H3></DIV>"
+    /* insert  "APPENDIX TO<BR>" by hand before building appendix...?   */
+    content: "<DIV align=center> <H1>Semantic Web<BR>Tutorial Using N3</H1><H2>Tim Berners-Lee<BR>Dan Connolly<BR>Sandro Hawke<BR></H2><H2>For Presentaton<BR>May 20, 2003</H2><H3>http://www.w3.org/2000/10/swap/doc/</H3></DIV>"
   }
 
 }
