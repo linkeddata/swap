@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/python /devel/WWW/2000/10/swap/cwm.py
 """
 $Id$
 
@@ -341,7 +341,7 @@ class RDFStore(notation3.RDFSink) :
         self.forAll  = engine.internURI(Logic_NS + "forAll")
         self.implies = engine.internURI(Logic_NS + "implies")
         self.asserts = engine.internURI(Logic_NS + "asserts")
-        self.truth = engine.internURI(Logic_NS + "truth")
+        self.Truth = engine.internURI(Logic_NS + "Truth")
         self.type = engine.internURI(notation3.RDF_type_URI)
         self.subExpression = engine.internURI(Logic_NS + "subExpression")
         
@@ -353,6 +353,12 @@ class RDFStore(notation3.RDFSink) :
 
 
 # Input methods:
+
+    def loadURI(self, uri):
+        p = notation3.SinkParser(self,  uri)
+        p.load(uri)
+        del(p)
+
 
     def bind(self, prefix, nsPair):
         if prefix:   #  Ignore binding to empty prefix
@@ -417,7 +423,7 @@ class RDFStore(notation3.RDFSink) :
                 mp = r
         if mp is None: return
         
-        if chatty: print "# Most popular Namesapce in %s is %s with %i" % (`context`, `mp`, best)
+        if chatty < 20: print "# Most popular Namesapce in %s is %s with %i" % (`context`, `mp`, best)
         mpPair = (RESOURCE, mp.uriref(None)+"#")
         defns = self.namespaces.get("", None)
         if defns :
@@ -771,7 +777,7 @@ class RDFStore(notation3.RDFSink) :
                 template = t[SUBJ]
                 conclusion = t[OBJ]
 
-                if chatty: print"\n\n=================== IMPLIES ============\n"
+                if chatty >30: print"\n\n=================== IMPLIES ============\n"
 
                 # When the template refers to itself, the thing we are
                 # are looking for will refer to the context we are searching
@@ -780,34 +786,35 @@ class RDFStore(notation3.RDFSink) :
 
                 unmatched, _templateVariables = self.nestedContexts(template)
                 _substitute([( template, workingContext)], unmatched)
-                if chatty:
-                    print "# Template", setToString(unmatched)
+                if chatty >20:
+                    print "# IMPLIES Template", setToString(unmatched)
                     for v in _variables: print "    %s" % `v`[-8:]
-#                for v in _variables: _templateVariables.remove(v)
 
                 conclusions, _outputVariables = self.nestedContexts(conclusion)
                 _substitute([( conclusion, targetContext)], conclusions)                
 
-                if chatty:
+                if chatty > 20:
                     print "# IMPLIES rule, %i terms in template %s (%i t,%i e) => %s (%i t, %i e)" % (
                         len(template.occursAs[CONTEXT]),
                         `template`[-8:], len(unmatched), len(_templateVariables),
                         `conclusion`[-8:], len(conclusions), len(_outputVariables))
+                if chatty > 80:
                     for v in _variables:
                         print "    Variable: ", `v`[-8:]
 
                 found = match(unmatched, _variables, _templateVariables,
                               conclude, ( self, conclusions, targetContext, _outputVariables))
                 _total = _total + found
-#                print "# Found %i matches for %s => %s" % (found, `template`[-8:], `conclusion`[-8:])
+                if chatty > 40:
+                    print "# Found %i matches for %s => %s" % (found, `template`[-8:], `conclusion`[-8:])
         
             else:
                 c = None
                 if t[PRED] is self.asserts and t[SUBJ] is filterContext: c=t[OBJ]
-                elif t[PRED] is self.type and t[OBJ] is self.truth: c=t[SUBJ]
+                elif t[PRED] is self.type and t[OBJ] is self.Truth: c=t[SUBJ]
 # We could shorten the rule format if forAll(x,y) asserted truth of y too, but this messes up
 # { x foo y } forAll x,y; log:implies {...}. where truth is NOT asserted. This line would do it:
-#                elif t[PRED] is self.forAll and t[SUBJ] is self.truth: c=t[SUBJ]  # DanC suggestion
+#                elif t[PRED] is self.forAll and t[SUBJ] is self.Truth: c=t[SUBJ]  # DanC suggestion
                 if c:
                     _vs = _variables[:]
                     for s in filterContext.occursAs[CONTEXT]: # find forAlls pointing downward
@@ -817,7 +824,7 @@ class RDFStore(notation3.RDFSink) :
 
 
 
-#        print "#  Total %i matches in filter %s" % ( _total, filterContext)
+        print "#  Total %i rule matches rules in %s" % ( _total, filterContext)
         return _total
 
     def genid(self,context):        
@@ -868,11 +875,12 @@ def quadToString(q):
 
 def conclude(bindings, param):  # Returns number of statements added to store
     store, conclusions, targetContext, oes = param
-    if chatty: print "\n#Concluding tenttatively..."
+    if chatty: print "\n#Concluding tenttatively...", bindingsToString(bindings)
 
-    _substitute(bindings, conclusions)
+    myConclusions = conclusions[:]
+    _substitute(bindings, myConclusions)
     # Does this conclusion exist already in the database?
-    found = match(conclusions[:], [], oes[:], justOne=1)  # Find first occurrence
+    found = match(myConclusions[:], [], oes[:], justOne=1)  # Find first occurrence
     if found:
         if chatty: print "    .... forget it, conclusion already in store."
         return 0
@@ -884,7 +892,7 @@ def conclude(bindings, param):  # Returns number of statements added to store
         g = store.genid(targetContext)
         bindings2.append((i,g))
     total = 0
-    for q in conclusions:
+    for q in myConclusions:
         q2 = _lookupQuad(bindings2, q)
         total = total + store.storeQuad(q2)
         if chatty: print "# *** Conclude: ", quadToString(q2)
@@ -916,7 +924,7 @@ def _lookup(bindings, value):
 
     
 def doNothing(bindings, param):
-    if chatty: print "Success! found it!"
+    if chatty>99: print "Success! found it!"
     return 1                    # Return count of calls only
 
 INFINITY = 1000000000           # @@ larger than any number occurences
@@ -946,10 +954,10 @@ newBindings  matches found and not yet applied - used in recursion
     shortest = INFINITY # List to search for one of the variables
     shortest_t = None
     
-    if chatty:
-        print "\n## match: called %i terms, %i bindings, terms & new bindings:" % (len(unmatched),len(bindings))
+    if chatty > 50:
+        print "\n## match: called %i terms, %i bindings:" % (len(unmatched),len(bindings))
         print bindingsToString(newBindings)
-        print setToString(unmatched)
+        if chatty > 90: print setToString(unmatched)
     
     for pair in newBindings:   # Take care of business left over from recursive call
         if pair[0] in variables:
@@ -1007,9 +1015,10 @@ newBindings  matches found and not yet applied - used in recursion
     if chatty:
         print "# Searching %i with %s in slot %i." %(shortest, `quad[shortest_p]`[-8:],shortest_p)
         print "#    for ", quadToString(quad)
-        print "#    where variables are"
-        for i in variables + existentials:
-            print "#         ", `i`[-8:] 
+        if chatty > 75:
+            print "#    where variables are"
+            for i in variables + existentials:
+                print "#         ", `i`[-8:] 
 
     for s in quad[shortest_p].occursAs[shortest_p]:
         for p in consts:
@@ -1367,6 +1376,7 @@ def doCommand():
             elif arg == "-ugly": _doneOutput = 1
             elif _lhs == "-base": option_baseURI = _uri
             elif arg == "-rdf": option_rdf = 1
+            elif arg == "-n3": option_rdf = 0
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-bySubject": _doneOutput = 1
             elif _lhs == "-outURI": option_outURI = _uri
@@ -1447,7 +1457,7 @@ def doCommand():
             elif arg == "-rdf": option_rdf = 1
             elif arg == "-n3": option_rdf = 0
             
-            elif arg == "-chatty": chatty = 1
+            elif arg == "-chatty": cwm.chatty = 1
 
             elif arg == "-reify":
                 if not option_pipe:
@@ -1478,9 +1488,7 @@ def doCommand():
             elif arg[:7] == "-apply=":
                 filterContext = (myEngine.internURI(_uri))
                 print "# Input rules to apply from ", _uri
-                p = notation3.SinkParser(_store,  _uri)
-                p.load(_uri)
-                del(p)
+                _store.loadURI(_uri)
                 _store.applyRules(workingContext, filterContext);
 
             elif _lhs == "-filter":
@@ -1489,16 +1497,22 @@ def doCommand():
                 _playContext = myEngine.internURI(_playURI)
                 _store.moveContext(workingContext, _playContext)
                 print "# Input filter ", _uri
-                p = notation3.SinkParser(_store,  _uri)
-                p.load(_uri)
-                del(p)
-                _store.applyRules(_playContext, filterContext, workingContext);
+                _store.loadURI(_uri)
+                _store.applyRules(_playContext, filterContext, workingContext)
 
             elif arg == "-rules":
-                _store.applyRules(workingContext, workingContext);
+                _store.applyRules(workingContext, workingContext)
+
+            elif arg == "-think":
+                while _store.applyRules(workingContext, workingContext) > 0:
+                    pass
 
             elif arg == "-size":
                 print "# Size of store: %i statements." %(_store.size,)
+
+            elif arg == "-no":  # suppress output
+                _doneOutput = 1
+                
             elif arg[:8] == "-outURI=": pass
             else: print "Unknown option", arg
 
