@@ -57,7 +57,7 @@ bind default <http://example.org/payPalStuff?>.
 bind q: <http://example.org/>.
 bind m: <>.
 bind n: <http://example.org/base/>.
-bind : <http://void-prefix.example.org/>.
+bind : <s1.n3>.   # Test schema 
 bind w3c: <http://www.w3.org/2000/10/org>.
 
 <#QA> :includes 
