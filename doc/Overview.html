@@ -30,23 +30,26 @@ understand how RDF is useful in practice.</p>
 
 <pre>
 SECTION 1: Triples, Queries, and Rules
-* simple assertions of triples (, ; . strings numbers :foo <foo> has is/of)
+* Making Statements; simple assertions of triples (, ; . strings numbers :foo <foo> has is/of)
      show comparable versions in diagram, prolog, rdf/xml [via cwm?]
-* queries using --filter and  {...}=>{...}  
+
+* Asking Questions; queries using --filter and  {...}=>{...}  
     examples using website metadata, friendships   [real or toy?]
-* rules using {...}=>{...}  
-* installing cwm, running cwm, using the cwm-demo web form [ for break ]
+* Providing Rules: using {...}=>{...}  
+* Making It Go: installing cwm, running cwm, using the cwm-demo web form [ for break ]
 
 SECTION 2: Shared Meaning, More Syntactic Sugar
 * shared meaning via URIs
 * vocabulary/ontology design
     example using rules to do ontology mapping      [real or toy?]
     rdfs semantics with rules
-* [], (), ., _:foo, ^^
+* [], (), ., _:foo, ( ^^ not implemented )
 * log:semantics teaser
 
-SECTION 3: Logic Programming with cwm/n3
-* builtins (procedural attachments, shortcuts)
+SECTION 3: Declarative Logic Programming with cwm/n3
+* builtins,  standard libary
+     Using Builtins -- they only go on the left hand side
+                    -- they take a list if they need more args
      do crypto, database access, web access elsewhere
      math, os, string, time
      chaff?
@@ -60,7 +63,8 @@ SECTION 4: Two Serious Examples
 OMIT:
 * more-than-horn expresivity (open disjunction & negation)
 * existentials in rule consequent ("every person has a father, who is
-a person.")
+a person.").   point this out as dangerous?   point it out as turing
+complete?
 * datatype usage
 
 Advice:
