@@ -465,12 +465,13 @@ class RDFXMLParser(RDFHandler):
 
 """
 
-    def __init__(self, sink, thisURI, formulaURI=None, flags=""):
+    def __init__(self, sink, thisURI, formulaURI=None, flags="", why=None):
         RDFHandler.__init__(self, sink, thisURI, formulaURI=formulaURI, flags=flags)
         p = xml.sax.make_parser()
         p.setFeature(feature_namespaces, 1)
         p.setContentHandler(self)
         self._p = p
+	self.reason = why
 
     def feed(self, data):
         self._p.feed(data)

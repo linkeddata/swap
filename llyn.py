@@ -141,7 +141,7 @@ import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 from diag import progress, progressIndent, verbosity
-from thing import BuiltIn, LightBuiltIn, \
+from thing import Namespace, BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Anonymous, Term, List, EmptyList
 
@@ -169,6 +169,7 @@ from why import Because, BecauseBuiltIn, BecauseOfRule
 
 STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
 META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"
+reason=Namespace("http://www.w3.org/2000/10/swap/reason#")
 
 META_mergedWith = META_NS_URI + "mergedWith"
 META_source = META_NS_URI + "source"
@@ -244,7 +245,7 @@ def compareURI(self, other):
             for i in range(ls):
                 diff = s[i].compareSubjPredObj(o[i])
                 if diff != 0: return diff
-            raise RuntimeError("Identical formulae not interned!")
+            raise RuntimeError("Identical formulae not interned! Length %i: %s" % (ls, `s`))
         else:
             return 1
     if isinstance(other, Formula):
@@ -390,6 +391,24 @@ class Formula(Fragment):
 	for s in self.statements:
 	    yield s
 
+    def newBlankNode(self):
+	"""Create or reuse, in the default store, a new unnamed node within the given
+	formula as context, and return it for future use"""
+	return self.store.newBlankNode(self)
+    
+    def newExistential(self, uri=None):
+	"""Create or reuse, in the default store, a new named variable
+	existentially qualified within the given
+	formula as context, and return it for future use"""
+	return self.store.newExistential(self, uri)
+    
+    def newUniversal(self, uri=None):
+	"""Create or reuse, in the default store, a named variable
+	universally qualified within the given
+	formula as context, and return it for future use"""
+	return self.store.newUniversal(self, uri)
+
+
     def statementsMatching(self, pred=None, subj=None, obj=None):
         """Return a READ-ONLY list of StoredStatement objects matching the parts given
 	
@@ -476,7 +495,8 @@ class Formula(Fragment):
         return self.store.remove((self, pred, subj, obj))
     
     def close(self):
-        """No more to add. Please interned value"""
+        """No more to add. Please return interned value.
+	NOTE You must now use the interned one, not the original!"""
         return self.store.endFormulaNested(self)
 
     def reopen(self):
@@ -491,26 +511,6 @@ class Formula(Fragment):
         self.store.dumpNested(self, _outSink)
         return buffer.getvalue()   # Do we need to explicitly close it or will it be GCd?
 
-
-    def explanation(self, ko=None):
-	"""Produce a justification for this formula into the output formula
-	
-	Creates an output formula if necessary.
-	returns it.
-	(This is different from the reason.explain(ko) which returns the reason)"""
-	if ko == None: ko = self.store.newFormula()
-	for s in self.statements:
-	    reason = s.why
-	    statementAsFormula = self.store.newFormula()
-	    statementAsFormula.add(subj=s[SUBJ], pred=s[PRED], obj=s[OBJ])
-	    statementAsFormula.close()
-	    ko.add(subj=reason, pred=reason.gives, obj=statementAsFormula)
-	    if reason != None:
-		ko.add(subj=self, pred=reason.because, obj=reason)
-		reason.explain(ko)
-	    else:
-		progress("Statement has no reason recorded "+`s`)
-	return ko
 
 
     def outputStrings(self, channel=None, relation=None):
@@ -555,6 +555,12 @@ class StoredStatement:
 
 #   The order of statements is only for cannonical output
 #   We cannot override __cmp__ or the object becomes unhashable, and can't be put into a dictionary.
+
+    def asFormula(self, store):
+	"""The formula which conatins only a statement like this"""
+	statementAsFormula = store.newFormula()   # @@@CAN WE DO THIS BY CLEVER SUBCLASSING? statement subclass of f?
+	statementAsFormula.add(subj=self[SUBJ], pred=self[PRED], obj=self[OBJ])
+	return statementAsFormula.close()  # probably slow - much slower than statement subclass of formula
 
 
     def compareSubjPredObj(self, other):
@@ -1075,7 +1081,37 @@ class RDFStore(RDFSink) :
         if crypto:
 	    import cwm_crypto  # Cryptography
 	    cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
-        
+
+    def newLiteral(self, str):
+	"Interned version: generat new literal object as stored in this store"
+	return self.intern(RDFSink.newLiteral(self, str))
+	
+    def newFormula(self, uri=None):
+	return self.intern(RDFSink.newFormula(self, uri))
+
+    def newSymbol(self, uri):
+	return self.intern(RDFSink.newSymbol(self, uri))
+
+    def newBlankNode(self, context):
+	"""Create or reuse, in the default store, a new unnamed node within the given
+	formula as context, and return it for future use"""
+	return self.intern(RDFSink.newBlankNode(self, context))
+    
+    def newExistential(self, context, uri=None):
+	"""Create or reuse, in the default store, a new named variable
+	existentially qualified within the given
+	formula as context, and return it for future use"""
+	return self.intern(RDFSink.newExistential(self, context, uri))
+    
+    def newUniversal(self, context, uri=None):
+	"""Create or reuse, in the default store, a named variable
+	universally qualified within the given
+	formula as context, and return it for future use"""
+	return self.intern(RDFSink.newUniversal(self, context, uri))
+
+
+
+###################
 
     def reset(self, metaURI): # Set the metaURI
         self._experience = self.intern((FORMULA, metaURI + "_formula"))
@@ -1143,6 +1179,9 @@ class RDFStore(RDFSink) :
         This is the way they are actually made.
         """
 
+	if isinstance(pair, Term): return pair # Already interned.  @@Could mask bugs
+	if type(pair) is not type((1,2)):
+	    raise RuntimeError("Eh?  can't intern "+`pair`)
         typ, urirefString = pair
 
         if typ == LITERAL:
@@ -1373,6 +1412,10 @@ class RDFStore(RDFSink) :
             progress("storeQuad (size before %i) "%self.size +`q`)
         
         context, pred, subj, obj = q
+	assert isinstance(context, Formula), "Should be a Formula:"+`context`
+	assert isinstance(pred, Term), "Should be a term:"+`pred`
+	assert isinstance(subj, Term), "Should be a term:"+`subj`
+	assert isinstance(obj, Term), "Should be a term:"+`obj`
         if context.statementsMatching(pred, subj, obj):
             if verbosity() > 97:  progress("storeQuad duplicate suppressed"+`q`)
             return 0  # Return no change in size of store
@@ -1635,7 +1678,7 @@ class RDFStore(RDFSink) :
         """ Returns an N3 list as a Python sequence"""
         if x.asList() != None:
             if x is self.nil: return []
-#            if @@@ this is not in the queue, must be in the store @@@@
+#            if @@@ this is not in the queue, must be in the store 
             if queue != None:
                 f = None
                 r = None

@@ -44,9 +44,10 @@ Agenda:<br>
 <a href="llyn.html">llyn</a><br>
 </td><td width="25%" valign=top><a href="notation3.html">notation3</a><br>
 <a href="string.html">string</a><br>
-</td><td width="25%" valign=top><a href="toXML.html">toXML</a><br>
-<a href="uripath.html">uripath</a><br>
-</td><td width="25%" valign=top></td></tr></table></td></tr></table>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+<a href="toXML.html">toXML</a><br>
+</td><td width="25%" valign=top><a href="uripath.html">uripath</a><br>
+</td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
 <td colspan=3 valign=bottom>&nbsp;<br>
@@ -74,6 +75,7 @@ Agenda:<br>
 --filter=foo&nbsp;&nbsp;Read&nbsp;rules&nbsp;from&nbsp;foo,&nbsp;apply&nbsp;to&nbsp;store,&nbsp;REPLACING&nbsp;store&nbsp;with&nbsp;conclusions<br>
 --rules&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Apply&nbsp;rules&nbsp;in&nbsp;store&nbsp;to&nbsp;store,&nbsp;adding&nbsp;conclusions&nbsp;to&nbsp;store<br>
 --think&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as&nbsp;-rules&nbsp;but&nbsp;continue&nbsp;until&nbsp;no&nbsp;more&nbsp;rule&nbsp;matches&nbsp;(or&nbsp;forever!)<br>
+--why&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Replace&nbsp;the&nbsp;store&nbsp;with&nbsp;an&nbsp;explanation&nbsp;of&nbsp;its&nbsp;contents<br>
 --flatten&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;turn&nbsp;formulas&nbsp;into&nbsp;triples&nbsp;using&nbsp;LX&nbsp;vocabulary<br>
 --unflatten&nbsp;&nbsp;&nbsp;turn&nbsp;described-as-true&nbsp;LX&nbsp;sentences&nbsp;into&nbsp;formulas<br>
 --think=foo&nbsp;&nbsp;&nbsp;as&nbsp;-apply=foo&nbsp;but&nbsp;continue&nbsp;until&nbsp;no&nbsp;more&nbsp;rule&nbsp;matches&nbsp;(or&nbsp;forever!)<br>
@@ -94,8 +96,14 @@ Examples:<br>
 &nbsp;&nbsp;cwm&nbsp;foo.n3&nbsp;--flat&nbsp;--n3=spart<br>
 &nbsp;<br>
 See&nbsp;<a href="http://www.w3.org/2000/10/swap/doc/cwm">http://www.w3.org/2000/10/swap/doc/cwm</a>&nbsp;&nbsp;for&nbsp;more&nbsp;documentation.</tt></dd></dl>
+ <dl><dt><a name="-getParser"><strong>getParser</strong></a>(format, inputURI, formulaURI, flags)</dt><dd><tt>Return&nbsp;something&nbsp;which&nbsp;can&nbsp;load&nbsp;from&nbsp;a&nbsp;URI&nbsp;in&nbsp;the&nbsp;given&nbsp;format,&nbsp;while<br>
+writing&nbsp;to&nbsp;the&nbsp;given&nbsp;store.</tt></dd></dl>
+ <dl><dt><a name="-need"><strong>need</strong></a>(object)</dt><dd><tt>Update&nbsp;the&nbsp;given&nbsp;repository&nbsp;object&nbsp;from&nbsp;the&nbsp;other&nbsp;one&nbsp;if&nbsp;the<br>
+other&nbsp;one&nbsp;has&nbsp;been&nbsp;changed&nbsp;since&nbsp;they&nbsp;were&nbsp;last&nbsp;synchronized.<br>
+If&nbsp;both&nbsp;have&nbsp;been&nbsp;touched,&nbsp;raise&nbsp;an&nbsp;error.</tt></dd></dl>
  <dl><dt><a name="-reformat"><strong>reformat</strong></a>(str, thisURI)</dt></dl>
  <dl><dt><a name="-test"><strong>test</strong></a>()</dt></dl>
+ <dl><dt><a name="-touch"><strong>touch</strong></a>(object)</dt><dd><tt>Indicate&nbsp;that&nbsp;this&nbsp;object&nbsp;has&nbsp;been&nbsp;modified;&nbsp;for&nbsp;use&nbsp;by&nbsp;<a href="#-need">need</a>()</tt></dd></dl>
 </td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">

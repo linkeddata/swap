@@ -17,7 +17,7 @@ TT { font-family: lucidatypewriter, lucida console, courier }
 This&nbsp;module&nbsp;implements&nbsp;basic&nbsp;sources&nbsp;and&nbsp;sinks&nbsp;for&nbsp;RDF&nbsp;data.<br>
 It&nbsp;defines&nbsp;a&nbsp;stream&nbsp;interface&nbsp;for&nbsp;such&nbsp;data.<br>
 It&nbsp;has&nbsp;a&nbsp;command&nbsp;line&nbsp;interface,&nbsp;can&nbsp;work&nbsp;as&nbsp;a&nbsp;web&nbsp;query&nbsp;engine,<br>
-and&nbsp;has&nbsp;built&nbsp;in&nbsp;<a href="#-test">test</a>(),&nbsp;all&nbsp;of&nbsp;which&nbsp;demosntrate&nbsp;how&nbsp;it&nbsp;is&nbsp;used.<br>
+and&nbsp;has&nbsp;built&nbsp;in&nbsp;test(),&nbsp;all&nbsp;of&nbsp;which&nbsp;demosntrate&nbsp;how&nbsp;it&nbsp;is&nbsp;used.<br>
 &nbsp;<br>
 To&nbsp;make&nbsp;a&nbsp;new&nbsp;RDF&nbsp;processor,&nbsp;subclass&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.<br>
 &nbsp;<br>
@@ -172,7 +172,7 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 
 <dl><dt><a name="Reifier-makeComment"><strong>makeComment</strong></a>(self, str)</dt></dl>
 
-<dl><dt><a name="Reifier-makeStatement"><strong>makeStatement</strong></a>(self, tuple)</dt></dl>
+<dl><dt><a name="Reifier-makeStatement"><strong>makeStatement</strong></a>(self, tuple, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="Reifier-startDoc"><strong>startDoc</strong></a>(self)</dt></dl>
 
@@ -226,8 +226,10 @@ or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;u
 <td colspan=2>&nbsp;</td></tr>
 <tr><td>&nbsp;&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="SinkParser-__init__"><strong>__init__</strong></a>(self, sink, thisDoc, baseURI<font color="#909090">=None</font>, bindings<font color="#909090">={}</font>, genPrefix<font color="#909090">=''</font>, metaURI<font color="#909090">=None</font>, formulaURI<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;note:&nbsp;namespace&nbsp;names&nbsp;should&nbsp;*not*&nbsp;end&nbsp;in&nbsp;#;<br>
+<dl><dt><a name="SinkParser-__init__"><strong>__init__</strong></a>(self, sink, thisDoc, baseURI<font color="#909090">=None</font>, bindings<font color="#909090">={}</font>, genPrefix<font color="#909090">=''</font>, metaURI<font color="#909090">=None</font>, formulaURI<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;note:&nbsp;namespace&nbsp;names&nbsp;should&nbsp;*not*&nbsp;end&nbsp;in&nbsp;#;<br>
 the&nbsp;#&nbsp;will&nbsp;get&nbsp;added&nbsp;during&nbsp;qname&nbsp;processing</tt></dd></dl>
+
+<dl><dt><a name="SinkParser-anonymousNode"><strong>anonymousNode</strong></a>(self, ln)</dt><dd><tt>Remember&nbsp;or&nbsp;generate&nbsp;a&nbsp;term&nbsp;for&nbsp;one&nbsp;of&nbsp;these&nbsp;_:&nbsp;anonymous&nbsp;nodes</tt></dd></dl>
 
 <dl><dt><a name="SinkParser-bind"><strong>bind</strong></a>(self, qn, nsPair)</dt></dl>
 
@@ -357,7 +359,7 @@ Adapted&nbsp;from&nbsp;Dan's&nbsp;ToRDFParser(Parser);<br>&nbsp;</tt></td></tr>
 
 <dl><dt><a name="ToN3-makeComment"><strong>makeComment</strong></a>(self, str)</dt></dl>
 
-<dl><dt><a name="ToN3-makeStatement"><strong>makeStatement</strong></a>(self, triple)</dt></dl>
+<dl><dt><a name="ToN3-makeStatement"><strong>makeStatement</strong></a>(self, triple, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="ToN3-representationOf"><strong>representationOf</strong></a>(self, context, pair)</dt><dd><tt>&nbsp;&nbsp;Representation&nbsp;of&nbsp;a&nbsp;thing&nbsp;in&nbsp;the&nbsp;output&nbsp;stream<br>
 &nbsp;<br>
@@ -431,29 +433,6 @@ is&nbsp;again&nbsp;acceptable.&nbsp;Remember&nbsp;to&nbsp;end&nbsp;the&nbsp;docu
 
 </td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#eeaa77">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
-    
-<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
-<td width="100%"><dl><dt><a name="-convert"><strong>convert</strong></a>(form, env)</dt><dd><tt>&nbsp;raises&nbsp;KeyError&nbsp;if&nbsp;the&nbsp;form&nbsp;data&nbsp;is&nbsp;missing&nbsp;required&nbsp;fields.</tt></dd></dl>
- <dl><dt><a name="-doCommand"><strong>doCommand</strong></a>()</dt><dd><tt>Command&nbsp;line&nbsp;RDF/N3&nbsp;tool<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
-&nbsp;&lt;command&gt;&nbsp;&lt;options&gt;&nbsp;&lt;inputURIs&gt;<br>
-&nbsp;<br>
-&nbsp;-rdf1out&nbsp;&nbsp;&nbsp;Output&nbsp;in&nbsp;RDF&nbsp;M&amp;S&nbsp;1.0&nbsp;insead&nbsp;of&nbsp;n3&nbsp;(only&nbsp;works&nbsp;with&nbsp;-pipe&nbsp;at&nbsp;the&nbsp;moment)<br>
-&nbsp;-help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;this&nbsp;message<br>
-&nbsp;-chatty&nbsp;&nbsp;&nbsp;&nbsp;Verbose&nbsp;output&nbsp;of&nbsp;questionable&nbsp;use<br>
-&nbsp;<br>
-See&nbsp;also:&nbsp;cwm</tt></dd></dl>
- <dl><dt><a name="-dummy"><strong>dummy</strong></a>()</dt></dl>
- <dl><dt><a name="-serveRequest"><strong>serveRequest</strong></a>(env)</dt></dl>
- <dl><dt><a name="-showForm"><strong>showForm</strong></a>()</dt></dl>
- <dl><dt><a name="-stringToN3"><strong>stringToN3</strong></a>(str)</dt></dl>
- <dl><dt><a name="-stripCR"><strong>stripCR</strong></a>(str)</dt></dl>
- <dl><dt><a name="-test"><strong>test</strong></a>()</dt></dl>
-</td></tr></table>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
@@ -467,8 +446,8 @@ See&nbsp;also:&nbsp;cwm</tt></dd></dl>
 <strong>DAML_equivalentTo</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#equivalentTo')<br>
 <strong>DAML_equivalentTo_URI</strong> = 'http://www.daml.org/2001/03/daml+oil#equivalentTo'<br>
 <strong>Escapes</strong> = {'"': '"', r'\': r'\', 'a': '<font color="#c040c0">\x07</font>', 'b': '<font color="#c040c0">\x08</font>', 'f': '<font color="#c040c0">\x0c</font>', 'n': '<font color="#c040c0">\n</font>', 'r': '<font color="#c040c0">\r</font>', 't': '<font color="#c040c0">\t</font>', 'v': '<font color="#c040c0">\x0b</font>'}<br>
-<strong>FORMULA</strong> = 1<br>
 <strong>LITERAL</strong> = 2<br>
+<strong>LOG_implies_URI</strong> = 'http://www.w3.org/2000/10/swap/log#implies'<br>
 <strong>List_NS</strong> = 'http://www.daml.org/2001/03/daml+oil#'<br>
 <strong>Logic_NS</strong> = 'http://www.w3.org/2000/10/swap/log#'<br>
 <strong>N3CommentCharacter</strong> = '#'<br>

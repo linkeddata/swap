@@ -27,6 +27,7 @@ from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
 
 
+rdf=Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 reason=Namespace("http://www.w3.org/2000/10/swap/reason#")
 
 class Reason:
@@ -51,7 +52,7 @@ class Because(Reason):
     
     A nested reason can also be given.
     """
-    def __init(self, str, because=None):
+    def __init__(self, str, because=None):
 	Reason.__init__(self)
 	self._string = str
 	self._reason = because
@@ -62,8 +63,9 @@ class Because(Reason):
 	Returns the value of this object as interned in the store.
 	"""
 	if self.me == None:
-	    self.me = ko.bNode()
-	ko.add(subj=self.me, pred=reason.comment, obj=ko.fromPython(self._string))
+	    self.me = ko.newBlankNode()
+	ko.add(subj=self.me, pred=rdf.type, obj=reason.Parsing)
+	ko.add(subj=self.me, pred=reason.comment, obj=ko.store._fromPython(ko, self._string))
 	return self.me
 
 class BecauseOfRule(Reason):
@@ -77,22 +79,25 @@ class BecauseOfRule(Reason):
 
     def explain(self, ko):
 	"""Describe this reason to an RDF store
-	Returns the value of this object as interned in the store.
+	Returns the value of this reason as interned in the store.
 	"""
 	if self.me == None:
-	    self.me = ko.bNode()
+	    self.me = ko.newBlankNode()	
+	    ko.add(subj=self.me, pred=rdf.type, obj=reason.Inference) 
 	for var, val in self._bindings:
 	    b = ko.bNode()
 	    ko.add(subj=self.me, pred=reason.binding, obj=b)
 	    ko.add(subj=b, pred=reason.variable, obj=var)
 	    ko.add(subj=b, pred=reason.boundTo, obj=val)
-	ko.add(subj=self.me, pred=reason.rule, obj=self._rule)
-	if rule.why != None:
-	    rule.why.explain(ko)
-	for s in evidence:
-	    ko.add(subj=self.me, pred=reason.rule, obj=self._rule)
+	if self._rule.why != None:
+	    si = explainStatement(self._rule, ko)
+	    ko.add(subj=self.me, pred=reason.rule, obj=si)
+	else:
+	    progress("No reason for rule "+`self._rule`)
+	for s in self._evidence:
 	    if s.why != None:
-		s.why.explain(ko)
+		si = explainStatement(s, ko)
+		ko.add(subj=self.me, pred=reason.evidence, obj=si)
 	return self.me
 
 	
@@ -116,6 +121,42 @@ class BecauseBuiltIn(Reason):
 	self._predicate = pred
 	self._object = obj
 	self._reason = because
+	
+###################################### Explanations of things
+#
+# Routine extending class Formula (how do in Python?)
+#
+def explanation(self, ko=None):
+    """Produce a justification for this formula into the output formula
+    
+    Creates an output formula if necessary.
+    returns it.
+    (This is different from the reason.explain(ko) which returns the reason)"""
+    if ko == None: ko = self.store.newFormula()
+    qed = ko.newBlankNode()
+    ko.add(subj=ko, pred=reason.proves, obj=self) 
+    ko.add(subj=ko, pred=reason.because, obj=qed) 
+    ko.add(subj=qed, pred=rdf.type, obj=reason.Conjunction) 
+    ko.add(subj=qed, pred=reason.gives, obj=self) 
+    for s in self.statements:
+	si = explainStatement(s,  ko)
+	ko.add(subj=qed, pred=reason.given, obj=si)
+    return ko
+
+
+def explainStatement(s, ko):
+    """Explain a statement.
+    
+    Returns the statement as a formula, having explained that statement."""
+    r = s.why
+    if r != None:
+	statementAsFormula = s.asFormula(ko.store)
+	ri = r.explain(ko)
+	ko.add(subj=ri, pred=reason.gives, obj=statementAsFormula)
+	return statementAsFormula
+    else:
+	progress("Statement has no reason recorded "+`s`)
+	return None
 
 
 # ends

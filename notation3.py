@@ -66,7 +66,7 @@ from uripath import refTo, join
 import uripath
 import RDFSink
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
+from RDFSink import  LITERAL, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
 
 from why import BecauseOfData
@@ -91,7 +91,7 @@ DAML_equivalentTo = ( SYMBOL, DAML_equivalentTo_URI )
 
 from RDFSink import N3_first, N3_rest, N3_nil, N3_List, N3_Empty
 
-
+LOG_implies_URI = "http://www.w3.org/2000/10/swap/log#implies"
 
 option_noregen = 0   # If set, do not regenerate genids on output
 
@@ -125,8 +125,8 @@ class SinkParser:
         self._genPrefix = genPrefix
 	self.keywords = ['a', 'this', 'bind', 'has', 'is', 'of' ]
 	self.keywordsSet = 0    # When and only when they have been set can others be considerd qnames
-        self._anonymousNodes = []   # List of anon nodes already declared
-	self._reason = None	# Why the parser w
+        self._anonymousNodes = {}   # Dict of anon nodes already declared  ln : Term
+	self._reason = why	# Why the parser w
 	self._reason2 = None	# Why these triples
         if baseURI: self._baseURI = baseURI
         else: self._baseURI = thisDoc
@@ -392,6 +392,14 @@ class SinkParser:
 	    res.append(obj)
 	return j
 
+    def anonymousNode(self, ln):
+	"""Remember or generate a term for one of these _: anonymous nodes"""
+	term = self._anonymousNodes.get(ln, None)
+	if term != None: return term
+	term = self._sink.newExistential(self._context, self._genPrefix + ln)
+	self._anonymousNodes[ln] = term
+	return term
+
     def node(self, str, i, res, subjectAlready=None):
 	"""Parse the <node> production.
 	Space is now skipped once at the beginning
@@ -507,15 +515,6 @@ class SinkParser:
 	if subj is None:   # If this can be a named node, then check for a name.
             j = self.uri_ref2(str, i, res)
             if j >= 0:
-                if res[-1][0] == ANONYMOUS:
-                    x = SYMBOL , self._genPrefix + res[-1][1] # ANONYMOUS node
-                    if x not in self._anonymousNodes:
-                        self._anonymousNodes.append(x)
-                        self.makeStatement((self._formula, # Make declaration at outermost level
-                            (SYMBOL, N3_forSome_URI), #pred
-                            self._formula,  #subj    Scope of universal quantification is whole document
-                            x))                      # declare it as anonymous only once
-                    res[-1] = x
                 return j
 
         return -1
@@ -605,11 +604,11 @@ class SinkParser:
 		    ns = self._bindings[pfx]
 		except KeyError:
                     if pfx == "_":   # Magic prefix added 2001/05/30, can be overridden
-                        res.append(( ANONYMOUS, ln))
+                        res.append(self.anonymousNode(ln))
                         return j
 		    raise BadSyntax(self._thisDoc, self.lines, str, i, "Prefix %s not bound" % (pfx))
-            res.append(( SYMBOL, ns + ln)) # @@@ "#" CONVENTION
-            if not string.find(ns, "#"):print"Warning: no # on NS %s,"%(ns,)
+            res.append(self._sink.newSymbol(ns + ln)) # @@@ "#" CONVENTION
+            if not string.find(ns, "#"):progress("Warning: no # on NS %s," % ns)
 	    return j
 
         v = []
@@ -730,7 +729,7 @@ class SinkParser:
 
                 j, s = self.strconst(str, i, delim)
 
-                res.append((LITERAL, s))
+                res.append(self._sink.newLiteral(s))
 		return j
 	    else:
 		return -1
@@ -751,7 +750,7 @@ class SinkParser:
 
                 j, s = self.strconst(str, i, delim)
 
-                res.append((LITERAL, s))
+                res.append(self._sink.newLiteral(s))
 		return j
 	    else:
 		return -1
@@ -933,7 +932,7 @@ t   "this" and "()" special syntax should be suppresed.
 #	self.genPrefix = genPrefix  # Prefix for generated URIs on output
 	self.stack = [ 0 ]      # List mode?
 	self.noLists = noLists  # Suppress generation of lists?
-	self._anonymousNodes = [] # For "a" flag
+	self._anonymousNodes = {} # For "a" flag
 
         if "l" in self._flags: self.noLists = 1
 	
@@ -1172,6 +1171,8 @@ t   "this" and "()" special syntax should be suppresed.
 
             if pred == ( SYMBOL,  DAML_equivalentTo_URI ) and "t" not in self._flags:
                 self._write(" = ")
+#            elif pred == ( SYMBOL,  LOG_implies_URI ) and "t" not in self._flags:
+#                self._write(" => ")
             elif pred == ( SYMBOL, RDF_type_URI )  and "t" not in self._flags:
                 self._write(" a ")
             else :
@@ -1337,7 +1338,7 @@ class Reifier(RDFSink.RDFSink):
 #        self._genPrefix = genPrefix
         self._flat = flat      # Just flatten things not in this context
 	contextURI = inputContextURI + "__reified"
-	self._formula = (FORMULA, contextURI) # Formula node is what the document parses to @@kludge
+	self._formula = sink.newFormula(contextURI) # Formula node is what the document parses to @@kludge
         self._context = self._formula
 
         if self._genPrefix == None:
