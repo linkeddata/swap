@@ -41,4 +41,18 @@ def progressIndent(delta):
     chatty_level = chatty_level + delta
     return chatty_level
     
-    
+def printState(prefix="#trace# "):
+    """Output the (caller's) function name and local variables
+    """
+    import sys
+    frame = sys._getframe(1)    # caller's state
+    sys.stderr.write(prefix+
+                     str(frame.f_code.co_name)+" "+
+                     str(frame.f_locals['self'])+"\n")
+    for varname in frame.f_locals.keys():
+        if varname == "self": continue
+        sys.stderr.write("%s    %-8s: %s\n" %
+                         (prefix, varname, frame.f_locals[varname]))
+    sys.stderr.write(prefix+"\n")
+   
+

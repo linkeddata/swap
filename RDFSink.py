@@ -298,5 +298,82 @@ class RDFStructuredOutput(RDFSink):
     def endBagObject(self, pred, subj):    # Remove context
         pass
     
-  
+
+from diag import printState
+class TracingRDFSink:
+    """An implementation of the RDFSink interface which helps me
+    understand it, especially how it gets used by parsers vs. by an
+    RDF store.    [ -sandro ]
+
+    Set .backing to be some other RDFSink if you want to get proper
+    results while tracing.
+
+    Try:
+
+    bash-2.04$ python cwm.py test/rules12.n3 --language=trace
+    bash-2.04$ python cwm.py --pipe test/rules12.n3 --language=trace
+    bash-2.04$ python cwm.py test/rules12.n3 --bySubject --language=trace
+
+    ... and see the different outputs
+
+    """
+
+    # These ones get called normally on a Sink...
+    
+    def __init__(self, outURI, base=None, flags=None):
+        printState()
+        self.backing = None
+
+    def makeComment(self, comment):
+        printState()
+        if self.backing: self.backing.makeComment(comment)
+
+    def startDoc(self):
+        printState()
+        if self.backing: self.backing.startDoc()
+
+    def setDefaultNamespace(self, ns):
+        printState()
+        if self.backing: self.backing.setDefaultNamespace(ns)
+
+    def bind(self, prefix, uri):
+        printState()
+        if self.backing: self.backing.bind(prefix, uri)
+
+    def makeStatement(self, tuple, why=None):
+        printState()
+        if self.backing: self.backing.makeStatement(tuple, why)
+
+    def endDoc(self, rootFormulaPair="<<strangely omitted>>"):
+        printState()
+        if self.backing: self.backing.endDoc(rootFormulaPair)
+
+    # These ones get called when there's nesting, pretty-printed...
+
+    def startBagSubject(self, context):
+        printState()
+        if self.backing: self.backing.startBagSubject(context)
+
+    def endBagSubject(self, subj):
+        printState()
+        if self.backing: self.backing.endBagSubject(subj)
+
+    def startBagObject(self, triple):
+        printState()
+        if self.backing: self.backing.startBagObject(triple)
+
+    def endBagObject(self, pred, subj):
+        printState()
+        if self.backing: self.backing.endBagObject(pred, subj)
+
+    # These are called by "cwm --pipe", they *need* backing to work.
+
+    def newFormula(self, uri=None):
+        printState()
+        return self.backing.newFormula(uri)
+
+    def newSymbol(self, uri):
+        printState()
+        return self.backing.newSymbol(uri)
+
 # ends
