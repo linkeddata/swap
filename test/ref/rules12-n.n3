@@ -28,8 +28,8 @@
         } .
     {
         :_gs1     :ancestor :_gs2 .
-        :_gs3     :ancestor :_gs1 .
+        :_gs2     :ancestor :_gs3 .
         
-        }     log:implies {:_gs3     :ancestor :_gs2 .
+        }     log:implies {:_gs1     :ancestor :_gs3 .
         } .
     
