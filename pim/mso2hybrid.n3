@@ -1,0 +1,86 @@
+#  Convertions MS: to cal:
+#
+# See <http://www.twinsun.com/tz/tz-link.htm>
+#
+@prefix ms: <http://www.w3.org/2000/10/swap/pim/mso.n3#> .
+@prefix util: <http://www.w3.org/2000/10/swap/util.n3#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix os: <http://www.w3.org/2000/10/swap/os#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix time: <http://www.w3.org/2000/10/swap/time#> .
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix cal: <http://ilrt.org/discovery/2001/06/schemas/ical-full/hybrid.rdf#>.
+
+@prefix : <#>.
+
+
+this log:forAll :d, :e, :e2, :i, :p, :s, :s2, :tz, :tz2, :tzo, :x, :y, :z.
+
+#  Microsoft Outlook uses these strange strings
+
+"Eastern Daylight Time"
+	:tzCode "EDT";
+	:tzOffset "-05:00";
+	:tzid "/softwarestudio.org/Olson_20011030_5/America/New_York".   
+# @@ etc etc!  Source of this stuff? See TZONE
+
+
+
+
+{:x ms:IsRecurring "0"} log:implies { :x a cal:VEVENT }.
+
+# Direct translations:
+
+{ :x ms:Subject :y } log:implies { :x cal:SUMMARY :y }.
+
+# Note most have an end but few a start!
+
+{   :x ms:End :y; ms:Duration :d.
+    (:y "(....-..-..T..:..:..).*") string:scrape :e.
+    (:y "....-..-..T..:..:..(.*)") string:scrape [:tzid :tz].
+    (:e "Z") string:concatenation [time:inSeconds :z].
+    :s2 time:inSeconds [is math:difference of
+	(:z [is math:product of (:d "60")])].
+    (:s2 "([^Z]*)") string:scrape :s.
+} log:implies {
+    :x  cal:DTEND [rdf:value :e; cal:TZID :tz];
+	cal:DTSTART [rdf:value :s; cal:TZID :tz].
+}.
+
+####################### Recurring Appointments
+
+# Conversion of numeric pattern types into rdf types for sanity:
+# See <http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cdo/html/
+#	_olemsg_recurrencetype_property_recurrencepattern_object_.asp>
+
+					# Function of:
+ms:Daily :numericPatternType "0". 	# Interval
+ms:Weekly :numericPatternType "1". 	# DayOfWeekMask, Interval
+ms:Monthly :numericPatternType "2". 	# DayOfMonth, Interval
+ms:MonthlyNth :numericPatternType "3". 	# DayOfWeekMask,Instance, Interval
+ms:Yearly   :numericPatternType "5". 	# DayOfMonth, Interval, MonthOfYear
+ms:YearlyNth :numericPatternType "6". 	# DayOfWeekMask, Instance, Interval,
+					#     MonthOfYear
+
+{:p ms:RecurrenceType [is :numericPatternType of :c]} log:implies {:p a :c}.
+
+#{ :x a ms:Daily; ms:Interval :i; ms:PatternStartDate :s.
+#  (((:today.time:inSeconds - :x.ms:PatternStartDate.time:inSeconds)
+#	/ "86400") math:mod :i) math:equals "0".
+#    :secs is math:difference of (:today.time:inSeconds
+#			 :x.ms:PatternStartDate.time:inSeconds).
+#    :days is math:intergerDividend of (:secs "86400").
+#    "0" is math:modulu (:days :i).
+    
+
+# http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cdo/html/_olemsg_recurrencepattern_object.asp
+
+
+
+
+#ends
+
