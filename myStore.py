@@ -4,21 +4,31 @@ $Id$
 
 Process-global store
 
-Global variables are often a bad idea. However, the majority of cwm applications
-involve just one RDF store. One store can contain many formulae.
-The main thing which these formulae of the same store share is the index with which names 
-and strings are interned.  Within a store, you can compare things by comparing
-memory addresses rather than the whole tring, uri or list.
+Global variables are often a bad idea. However, the majority of cwm
+applications involve just one RDF store. One store can contain many
+formulae.  The main thing which these formulae of the same store share
+is the index with which names and strings are interned.  Within a
+store, you can compare things by comparing memory addresses rather
+than the whole tring, uri or list.
 
-Therefore, it is normal to just use one store.
-When you do this, the store paremeter to most methods beceomes unnecessary, and you get a simpler API.
-That is what this module does. If you import it, you will get
-a global store. This will not stop you using other stores.
+Therefore, it is normal to just use one store.  When you do this, the
+store paremeter to most methods beceomes unnecessary, and you get a
+simpler API.  That is what this module does. If you import it, you
+will get a global store. This will not stop you using other stores.
 
-You also get the Namespace() class which allows you to generate symbols easily
+You also get the Namespace() class which allows you to generate
+symbols easily
 
 History:
     Spilt of from  thing.py 2003-08-19
+
+$Log$
+Revision 1.3  2004-01-28 23:03:00  connolly
+- added unit tests to confirm that symbol functions take ustrings
+- wrapped some comments at 79 chars
+  per http://www.python.org/doc/essays/styleguide.html
+
+
 """
 
 # Allow a strore provdier to register:
@@ -49,13 +59,27 @@ def _checkStore(s=None):
 
 
 def symbol(uri):
-    """Create or reuse, in the default store, an interned version of the given symbol
-    and return it for future use"""
+    """Create or reuse an interned version of the given symbol
+    in the default store. and return it for future use
+
+    >>> x = symbol(u'http://example.org/#Andr\\xe9')
+    >>> y = symbol(u'http://example.org/#Andr\\xe9')
+    >>> x is y
+    1
+    """
     return _checkStore().newSymbol(uri)
     
 def literal(str, dt=None, lang=None):
-    """Create or reuse, in the default store, an interned version of the given literal string
-    and return it for future use"""
+    """Create or reuse, in the default store, an interned version of
+    the given literal string and return it for future use
+
+    >>> x = literal("#Andr\\xe9")
+    >>> y = literal("#Andr\\xe9")
+    >>> x is y
+    1
+
+    """
+    
     return _checkStore().newLiteral(str, dt, lang)
 
 def formula():
@@ -103,9 +127,9 @@ class Namespace(object):
     """A shortcut for getting a symbols as interned by the default store
 
       >>> RDF = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
-      >>> RDF.type
-      'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
-      >>> RDF.type is RDF.type
+      >>> x = RDF.type
+      >>> y = RDF.type
+      >>> x is y
       1
 
     """
@@ -132,3 +156,14 @@ class Namespace(object):
 	return  _checkStore(self.store).intern((SYMBOL, self._name + lname))
 
 
+
+def _test():
+    import llyn
+    store = llyn.RDFStore()
+    setStore(store)
+    
+    import doctest, myStore
+    return doctest.testmod(myStore)
+     
+if __name__ == "__main__":
+    _test()
