@@ -15,7 +15,7 @@ import types
 import string
 
 import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
-from diag import progress, progressIndent, verbosity, tracking
+from diag import progress, verbosity, tracking
 from term import   Literal, Symbol, Fragment, FragmentNil, \
     Anonymous, Term, CompoundTerm, List, EmptyList, NonEmptyList
 from formula import Formula, compareTerm, StoredStatement
@@ -380,16 +380,15 @@ class Serializer:
     def dumpFormulaContents(self, context, sink, sorting):
         """ Iterates over statements in formula, bunching them up into a set
         for each subject.
-        We dump "this" first before everything else
         """
         if sorting: context.statements.sort(StoredStatement.compareSubjPredObj)
 # @@ necessary?
 	self.dumpVariables(context, sink, sorting, pretty=1)
 
-	statements = context.statementsMatching(subj=context)  # context is subject
-        if statements:
-	    progress("@@ Statement with context as subj?!", statements,)
-            self._dumpSubject(context, context, sink, sorting, statements)
+#	statements = context.statementsMatching(subj=context)  # context is subject
+#        if statements:
+#	    progress("@@ Statement with context as subj?!", statements,)
+#            self._dumpSubject(context, context, sink, sorting, statements)
 
         currentSubject = None
         statements = []

@@ -104,7 +104,7 @@ class BI_product(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
         t = 1
         for x in subj_py: t *= numeric(x)
-        return tidy(t)
+        return t
 
 class BI_factors(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, obj_py): 

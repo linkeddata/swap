@@ -7,7 +7,6 @@ import sys
 import os, traceback
 
 def progress(*args):
-#    global chatty_level  # verbosity indent level
     level = len(traceback.extract_stack())
     sys.stderr.write(" "*level)
     for a in args:
@@ -15,11 +14,9 @@ def progress(*args):
     sys.stderr.write("\n")
 
 global chatty_flag # verbosity debug flag
-chatty_flag  =0
+#chatty_flag  =0
 chatty_flag = int(os.environ.get("CWM_VERBOSITY", 0))
 
-global chatty_level  # verbosity indent level
-chatty_level = 0
 
 global tracking
 tracking = 0  # Are we keeping reason information for proof generation?
@@ -36,10 +33,6 @@ def verbosity():
     global chatty_flag
     return chatty_flag
 
-def progressIndent(delta):
-    global chatty_level
-    chatty_level = chatty_level + delta
-    return chatty_level
     
 def printState(prefix="#trace# "):
     """Output the (caller's) function name and local variables

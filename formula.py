@@ -40,7 +40,7 @@ import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
-from diag import progress, progressIndent, verbosity, tracking
+from diag import progress, verbosity, tracking
 from term import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Anonymous, Term, CompoundTerm, List, EmptyList, NonEmptyList

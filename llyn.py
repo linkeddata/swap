@@ -139,7 +139,7 @@ import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 import diag  # problems importing the tracking flag, and chatty_flag must be explicit it seems diag.tracking
-from diag import progress, progressIndent, verbosity
+from diag import progress, verbosity
 from term import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Anonymous, Term,\
@@ -918,20 +918,6 @@ def _indent(str):
         s = s[:-4]
     return s
 
-class BuiltInFailed(Exception):
-    def __init__(self, info, item):
-        progress("@@@@@@@@@ BUILTIN FAILED")
-        self._item = item
-        self._info = info
-        
-    def __str__(self):
-        reason = _indent(self._info[1].__str__())
-#        return "reason=" + reason
-        return ("Error during built-in operation\n%s\nbecause:\n%s" % (
-            `self._item`,
-#            `self._info`))
-            `reason`))
-    
 class DocumentAccessError(IOError):
     def __init__(self, uri, info):
         self._uri = uri

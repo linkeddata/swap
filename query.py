@@ -8,6 +8,8 @@ from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, List_NS
 from RDFSink import RDF_NS_URI
 
+from thing import merge, intersection, minus, indentString
+
 import diag
 from diag import chatty_flag, tracking, progress
 from term import BuiltIn, LightBuiltIn, \
@@ -21,6 +23,7 @@ from why import Because, BecauseBuiltIn, BecauseOfRule, \
 
 import types
 import sys
+# from sets import Set  # only in python 2.3 and following
 
 INFINITY = 1000000000           # @@ larger than any number occurences
 
@@ -92,34 +95,121 @@ class InferenceTask:
 	if targetContext is None: targetContext = workingContext # return new data to store
 	if ruleFormula is None: self.ruleFormula = workingContext # apply own rules
 	else: self.ruleFormula = ruleFormula
-	
+	self.ruleFor = {}
+	self.hasMetaRule = 0
+
 	self.workingContext, self.targetContext, self.mode, self.repeat = workingContext, targetContext, mode, repeat
 	self.store = self.workingContext.store
 
-    def analyse(self):
+    def runSmart(self):
+	"""Run the rules by mapping rule interactions first"""
 	rules= self.ruleFor.values()
 	for r1 in rules:
+	    vars1 = r1.templateExistentials + r1.variablesUsed
 	    for r2 in rules:
+		vars2 = r2.templateExistentials + r2.variablesUsed
 		for s1 in r1.conclusion.statements:
 		    for s2 in r2.template.statements:
 			for p in PRED, SUBJ, OBJ:
-			    if ((s1[p] not in r1.variables)
-				and (s2[p] not in r2.variables)
+			    if ((s1[p] not in vars1
+				    and not isinstance(s1[p], CompoundTerm))
+				and (s2[p] not in vars2
+				    and not isinstance(s2[p], CompoundTerm))
 				and (s1[p] is not s2[p])):
-				    progress("...can't effect")
 				    break
 			else:
-			    r1.affects[r2] = 1
-			    if verbosity > 40: progress("%s can affect %s because %s can trigger %s" %
+			    r1.affects[r2] = 1 # save transfer binding here?
+			    if diag.chatty_flag > 20: progress(
+				"%s can affect %s because %s can trigger %s" %
 					    (`r1`, `r2`, `s1`, `s2`))
 			    break # can affect
+
 		    else:  # that statement couldn't but
+			if diag.chatty_flag > 95:
+			    progress("...&&&& couldn't beccause of ",s1,s2,p)
 			continue # try next one
 		    break # can
+
+	# Calculate transitive closure of "affects"
+	for r1 in rules:
+	    r1.traceForward(r1)  # could lazy eval
+
+	for r1 in rules:
+	    r1.indirectlyAffects.sort()
+	    r1.indirectlyAffectedBy.sort()
+	    
+	# Print the affects matrix
+	if diag.chatty_flag > 30:
+	    str = "%4s:" % "Aff"
+	    for r2 in rules:
+		str+= "%4s" % `r2`
+	    progress(str)
+	    for r1 in rules:
+		str= "%4s:" % `r1`
+		for r2 in rules:
+		    if r2.affects.get(r1, 0): str+= "%4s" % "X"
+		    elif r1 in r2.indirectlyAffects: str +="%4s" % "-"
+		    else: str+= "%4s" % " "
+		progress(str)
+	    
+	# Find cyclic subsystems
+	# These are connected sets within which you can get from any node back to itself
+	pool = rules[:]
+	pool.sort()  # Sorted list, can use merge, intersection, etc
+	cyclics = []
+	while pool:
+	    r1 = pool[0]
+	    if r1 not in r1.indirectlyAffects:
+		cyclic = [ r1 ]
+		pool.remove(r1)
+	    else:
+		if diag.chatty_flag > 90:
+		    progress("%s indirectly affects %s and is affected by %s" %
+			(r1, r1.indirectlyAffects, r1.indirectlyAffectedBy))
+		cyclic = intersection(r1.indirectlyAffects, r1.indirectlyAffectedBy)
+		pool = minus(pool, cyclic)
+	    cyclics.append(CyclicSetOfRules(cyclic))
+	    
+
+	# Because the cyclic subsystems contain any loops, we know
+	# there are no cycles between them. Therefore, there is a partial
+	# ordering.  If we order them in that way, then we can resolve each
+	# one just once without violating
+
+	pool = cyclics[:]
+	seq = []
+	while pool:
+	    cy = pool[0] #  pick random one
+	    seq = partialOrdered(cy, pool) + seq
+
+	if diag.chatty_flag > -1:
+	    progress("In order:" + `seq`)
+
+	# TEMPORARY: test that
+	n = len(seq)
+	for i in range(n):
+	    for j in range(i-1):
+		if compareCyclics(seq[i], seq[j]) < 0:
+		    raise RuntimeError("Should not be:  %s < %s" %(seq[i], seq[j]))
+	total = 0
+	for cy in seq:
+	    total += cy.run()
+	if diag.chatty_flag > 9:
+	    progress("Grand total %i facts found" % total)
+	return total
+
 
     def run(self):
 	"""Perform task.
 	Return number of  new facts"""
+	self.gatherRules(self.ruleFormula)
+	if self.hasMetaRule: return self.runLaborious()
+	return self.runSmart()
+
+    def runLaborious(self):
+	"""Perform task.
+	Return number of  new facts.
+	Start again if new rule mayhave been generated."""
 	grandtotal = 0
 	iterations = 0
 	self.ruleFor = {}
@@ -132,12 +222,13 @@ class InferenceTask:
 	    iterations = iterations + 1
 	    for rule in self.ruleFor.values():
 		found = rule.once()
-		if (diag.chatty_flag >40):
-		    progress( "Found %i new stmts on for rule %s" % (found, rule))
+		if (diag.chatty_flag >50):
+		    progress( "Laborious: Found %i new stmts on for rule %s" % (found, rule))
 		_total = _total+found
 		if found and (rule.meta or self.targetContext._closureMode):
 		    needToCheckForRules = 1
-	    if diag.chatty_flag > 5: progress("Total of %i new statements on iteration %i." %
+	    if diag.chatty_flag > 5: progress(
+		"Total of %i new statements on iteration %i." %
 		    (_total, iterations))
 	    if _total == 0: break
 	    grandtotal= grandtotal + _total
@@ -156,33 +247,105 @@ class InferenceTask:
 	    if (isinstance(subj, Formula)
 		and isinstance(obj, Formula)):
 		v2 = universals + ruleFormula.universals() # Note new variables can be generated
-		self.ruleFor[s] = Rule(self, s,  v2)
-		if (diag.chatty_flag >10):
-		    progress( "Found rule for statement %s " % (s))
+		r = Rule(self, s,  v2)
+		self.ruleFor[s] = r
+		if r.meta: self.hasMetaRule = 1
+		if (diag.chatty_flag >30):
+		    progress( "Found rule %r for statement %s " % (r, s))
 
-	for F in ruleFormula.each(pred=self.store.implies, obj=self.store.Truth): #@@ take out when truth in
+	for F in ruleFormula.each(pred=self.store.implies, obj=self.store.Truth): #@@ take out when --closure=T ??
 	    self.gatherRules(F)  #See test/rules13.n3, test/schema-rules.n3 etc
 
-#	    else:   # does anyone really use this? If so, watch that universal vaibles are different
-#		if pred is workingContext.store.type and obj is workingContext.store.Truth:
-#		    rules.extend(self.gatherRules(subj, workingContext, targetContext, mode))
 
+def partialOrdered(cy1, pool):
+    """Return sequence conforming to the partially order in a set of cyclic subsystems
+    
+    Basially, we find the dependencies of a node and remove them from the pool.
+    Then, any node in the pool can be done earlier, because has no depndency from those done.
+    """
+    seq = []
+    r1 = cy1[0]
+    for r2 in  r1.affects:
+	if r2 not in cy1:  # An external dependency
+	    cy2 = r2.cycle
+	    if cy2 in pool:
+		seq = partialOrdered(cy2, pool) + seq
+    pool.remove(cy1)
+    return [cy1] + seq
 
+class CyclicSetOfRules:
+    """A set of rules which are connected
+    """
+    def __init__(self, rules):
+	self.rules = rules
+	for r1 in rules:
+	    r1.cycle = self
+
+    def __getitem__(self, i):
+	return self.rules[i]
+
+    def __repr__(self):
+	return `self.rules`
+
+    def run(self):
+	"Run a cyclic subset of the rules"
+	if diag.chatty_flag > 20:
+	    progress()
+	    progress("Running cyclic system %s" % (self))
+	if len(self.rules) == 1:
+	    rule = self.rules[0]
+	    if not rule.affects.get(rule, 0):
+#		rule.already = None # Suppress recording of previous answers
+		# - no, needed to remove dup bnodes as in test/includes/quant-implies.n3 --think
+		# When Rule.once is smarter about not iterating over things not mentioned elsewhere,
+		# can remove this.
+		return rule.once()
+		
+	agenda = self.rules[:]
+	total = 0
+	for r1 in self.rules:
+	    af = r1.affects.keys()
+	    af.sort()
+	    r1.affectsInCyclic = intersection(self.rules, af)
+	while agenda:
+	    rule = agenda[0]
+	    agenda = agenda[1:]
+	    found = rule.once()
+	    if diag.chatty_flag > 20: progress("Rule %s gave %i. Affects:%s." %(
+			rule, found, rule.affectsInCyclic))
+	    if found:
+		total = total + found
+		for r2 in rule.affectsInCyclic:
+		    if r2 not in agenda:
+			if diag.chatty_flag > 30: progress("...rescheduling", r2)
+			agenda.append(r2)
+	if diag.chatty_flag > 20: progress("Cyclic subsystem exhausted")
+	return total
+	
+    
+nextRule = 0
 class Rule:
 
-    def __init__(self, task, rule, _variables,):
+    def __init__(self, task, statement, _variables,):
 	"""Try a rule
 	
 	Beware lists are corrupted. Already list is updated if present.
 	"""
+	global nextRule
 	self.task = task
-	self.template = rule[SUBJ]
-	self.conclusion = rule[OBJ]
+	self.template = statement[SUBJ]
+	self.conclusion = statement[OBJ]
 	self.store = self.template.store
-	self.rule = rule
+	self.statement = statement
+	self.number = nextRule = nextRule+1
 	self.meta = self.conclusion.contains(pred=self.conclusion.store.implies) #generate rules?
 	if task.repeat: self.already = []
 	else: self.already = None
+	self.affects = {}
+	self.indirectlyAffects = []
+	self.indirectlyAffectedBy = []
+	self.affectsInCyclic = []
+	self.cycle = None
 	
 	# When the template refers to itself, the thing we are
 	# are looking for will refer to the context we are searching
@@ -205,8 +368,10 @@ class Rule:
 	    if x not in self.variablesUsed:
 		self.templateExistentials.append(x)
 	if diag.chatty_flag >20:
-	    progress("\nNew Rule ============ (mode=%s) looking for:" % task.mode)
-	    progress( setToString(self.unmatched))
+	    progress("New Rule %s ============ looking for:" % `self` )
+	    for s in self.template.statements: progress("    ", `s`)
+	    progress("=>")
+	    for s in self.conclusion.statements: progress("    ", `s`)
 	    progress("Universals declared in outer " + seqToString(_variables))
 	    progress(" mentioned in template       " + seqToString(variablesMentioned))
 	    progress(" also used in conclusion     " + seqToString(self.variablesUsed))
@@ -216,7 +381,7 @@ class Rule:
     def once(self):
     # The smartIn context was the template context but it has been mapped to the workingContext.
 	if diag.chatty_flag >20:
-	    progress("\n=================== tryRule ============ " )
+	    progress("Trying rule %s ===================" % self )
 	    progress( setToString(self.unmatched))
 	task = self.task
 	query = Query(self.store,
@@ -228,7 +393,7 @@ class Rule:
 			conclusion = self.conclusion,
 			targetContext = task.targetContext,
 			already = self.already,
-			rule = self.rule,
+			rule = self.statement,
 			smartIn = [task.workingContext],    # (...)
 			meta = task.workingContext,
 			mode = task.mode)
@@ -238,16 +403,29 @@ class Rule:
 	    progress("Rule try generated %i new statements" % total)
 	return total
     
-    
+    def __repr__(self):
+	if self in self.affects: return "R"+`self.number`+ "*"
+	return "R"+`self.number`
+
+    def compareByAffects(other):
+	if other in self.indirectlyAffects: return -1  # Do me earlier
+	if other in self.indirectlyAffectedBy: return 1
+	return 0
+	
+
+    def traceForward(self, r1):
+	for r2 in r1.affects:
+	    if r2 not in self.indirectlyAffects:
+		self.indirectlyAffects.append(r2)
+		r2.indirectlyAffectedBy.append(self)
+		self.traceForward(r2)
+#	    else:
+#		self.__setattr__("leadsToCycle", 1)
     
 def testIncludes(f, g, _variables=[],  bindings={}):
     """Return whether or nor f contains a top-level formula equvalent to g.
     Just a test: no bindings returned."""
-    if diag.chatty_flag >30: progress("\n\n=================== testIncludes ============")
-
-    # When the template refers to itself, the thing we are
-    # are looking for will refer to the context we are searching
-
+    if diag.chatty_flag >30: progress("testIncludes ============")
     if not(isinstance(f, Formula) and isinstance(g, Formula)): return 0
 
     assert f.canonical is f
@@ -268,9 +446,9 @@ def testIncludes(f, g, _variables=[],  bindings={}):
 	progress( "# testIncludes BUILTIN, %i terms in template %s, %i unmatched, %i template variables" % (
 	    len(g.statements),
 	    `g`[-8:], len(unmatched), len(templateExistentials)))
-    if diag.chatty_flag > 80:
-	for v in _variables:
-	    progress( "    Variable: " + `v`[-8:])
+	if diag.chatty_flag > 80:
+	    for v in _variables:
+		progress( "    Variable: " + `v`[-8:])
 
     result = Query(f.store,
 		unmatched=unmatched,
@@ -280,7 +458,6 @@ def testIncludes(f, g, _variables=[],  bindings={}):
 		justOne=1, mode="").resolve()
 
     if diag.chatty_flag >30: progress("=================== end testIncludes =" + `result`)
-#        diag.chatty_flag = diag.chatty_flag-100
     return result
 
 
@@ -372,7 +549,7 @@ class Query:
 	if self.justOne: return 1   # If only a test needed
 	assert type(bindings) is type({})
 
-        if diag.chatty_flag >60: progress( "\nConcluding tentatively..." + bindingsToString(bindings))
+        if diag.chatty_flag >60: progress( "Concluding tentatively..." + bindingsToString(bindings))
 
         if self.already != None:
             if bindings in self.already:
@@ -404,14 +581,12 @@ class Query:
         vars = self.conclusion.existentials() + poss  # Terms with arbitrary identifiers
 #        clashes = self.occurringIn(targetContext, vars)    Too slow to do every time; play safe
 	if diag.chatty_flag > 25:
-	    progress("Variables regenerated: universal " + `poss`
-		+ " existential: " +`self.conclusion.existentials()`)
 	    s=""
 	for v in poss:
 	    v2 = self.targetContext.newUniversal()
 	    b2[v] =v2   # Regenerate names to avoid clash
 	    if diag.chatty_flag > 25: s = s + ",uni %s -> %s" %(v, v2)
-        for v in self.conclusion.existentials():
+	for v in self.conclusion.existentials():
 	    if v not in exout:
 		v2 = self.targetContext.newBlankNode()
 		b2[v] =v2   # Regenerate names to avoid clash
@@ -419,11 +594,12 @@ class Query:
 	    else:
 		if diag.chatty_flag > 25: s = s + (", (%s is existential in kb)"%v)
 	if diag.chatty_flag > 25:
-	    progress(s)
+	    progress("Variables regenerated: universal " + `poss`
+		+ " existential: " +`self.conclusion.existentials()` + s)
 	
 
-        if diag.chatty_flag>10:
-            progress("Concluding definitively" + bindingsToString(b2) )
+        if diag.chatty_flag>19:
+            progress("Concluding DEFINITELY" + bindingsToString(b2) )
         before = self.store.size
         self.targetContext.loadFormulaWithSubsitution(
 		    self.conclusion, b2, why=reason)
@@ -442,7 +618,6 @@ class Query:
                                     # Existentials or any kind of variable in subexpression
                bindings = {},       # Bindings discovered so far
                newBindings = {},    # New bindings not yet incorporated
-               level = 0,           # Nesting level for diagnostic indentation only
 	       evidence = []):	    # List of statements supporting the bindings so far
         """ Iterate on the remaining query items
     bindings      collected matches already found
@@ -457,8 +632,8 @@ class Query:
 	assert type(newBindings) is type({})
         if diag.chatty_flag > 59:
             progress( "QUERY2: called %i terms, %i bindings %s, (new: %s)" %
-                      (len(queue),len(bindings),bindingsToString(bindings),
-                       bindingsToString(newBindings)))
+                      (len(queue),len(bindings), `bindings`,
+                       `newBindings`))
             if diag.chatty_flag > 90: progress( queueToString(queue))
 
         for pair in newBindings.items():   # Take care of business left over from recursive call
@@ -502,8 +677,8 @@ class Query:
             item = queue[best]
             queue.remove(item)
             if diag.chatty_flag>49:
-                progress( "Looking at " + `item`
-                         + "\nwith vars("+seqToString(variables)+")"
+                progress( "Looking at " + `item`)
+                progress( "...with vars("+seqToString(variables)+")"
                          + " ExQuVars:("+seqToString(existentials)+")")
             con, pred, subj, obj = item.quad
             state = item.state
@@ -539,8 +714,7 @@ class Query:
                             newItem.setup(allvars, smartIn = query.smartIn + [subj],
 				    unmatched=more_unmatched, mode=query.mode)
                         if diag.chatty_flag > 40:
-                                progress(
-                                          "**** Includes: Adding %i new terms and %s as new existentials."%
+                                progress("**** Includes: Adding %i new terms and %s as new existentials."%
                                           (len(more_unmatched),
                                            seqToString(more_variables)))
                         item.state = S_DONE
@@ -601,7 +775,7 @@ class Query:
                 queue.append(item)
             # And loop back to take the next item
 
-        if diag.chatty_flag>50: progress("QUERY MATCH COMPLETE with bindings: " + bindingsToString(bindings))
+        if diag.chatty_flag>50: progress("QUERY MATCH COMPLETE with bindings: " + `bindings`)
         return query.conclude(bindings,  evidence=evidence)  # No terms left .. success!
 
 
@@ -829,7 +1003,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    # otherwise waiting for enough constants to run
 	    return []   # Keep going
         except (IOError, SyntaxError):
-            raise BuiltInFailed(sys.exc_info(), self ),None
+            raise BuiltInFailed(sys.exc_info(), self, pred ),None
         
     def tryDeepSearch(self):
         """Search the store, matching nested compound structures
@@ -988,6 +1162,24 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                 self.state, self.short,
                 quadToString(self.quad, self.neededToRun, self.searchPattern))
 
+
+##############
+# Compare two cyclic subsystem sto see which should be done first
+
+def compareCyclics(self,other):
+    """Note the set indirectly affected is the same for any member of a cyclic subsystem"""
+    progress("Comparing %s to %s" % (self[0], other[0]))
+    if other[0] in self[0].indirectlyAffects:
+	progress("less, do earlier")
+	return -1  # Do me earlier
+    if other[0] in self[0].indirectlyAffectedBy:
+	progress("more, do me later")
+	return 1
+    progress("same")
+    return 0
+	
+
+
 #############  Substitution functions    
 
 
@@ -1043,6 +1235,8 @@ def quadToString(q, neededToRun=[[],[],[],[]], pattern=[1,1,1,1]):
                                             `q[OBJ]`,qm[OBJ])
 
 def seqToString(set):
+#    return `set`
+    
     str = ""
     for x in set[:-1]:
         str = str + `x` + ","
@@ -1051,11 +1245,28 @@ def seqToString(set):
     return str
 
 def bindingsToString(bindings):
+#    return `bindings`
+
     str = ""
     for x, y in bindings.items():
         str = str + (" %s->%s " % ( `x`, `y`))
     return str
 
+class BuiltInFailed(Exception):
+    def __init__(self, info, item, pred):
+        progress("@@@@@@@@@ BUILTIN %s FAILED" % pred, `info`)
+        self._item = item
+        self._info = info
+	self._pred = pred
+        
+    def __str__(self):
+        reason = indentString(self._info[1].__str__())
+#        return "reason=" + reason
+        return ("Error during built-in operation\n%s\nbecause:\n%s" % (
+            `self._item`,
+#            `self._info`))
+            `reason`))
+    
 
 
 # ends
