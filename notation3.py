@@ -84,7 +84,7 @@ ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
 # This is the hash on namespace URIs
 
 # Should the internal representation of lists be with DAML:first and :rest?
-DAML_LISTS = 0    # Don't do these - do the funny compact ones
+DAML_LISTS = 1    # Else don't do these - do the funny compact ones- not a good idea after all
 
 RDF_type = ( RESOURCE , RDF_type_URI )
 DAML_equivalentTo = ( RESOURCE, DAML_equivalentTo_URI )
@@ -244,7 +244,7 @@ class SinkParser:
         self._sink.startDoc()
 
     def endDoc(self):
-        self._sink.endDoc()
+        self._sink.endDoc(self._formula)
 
     def makeStatement(self, quadruple):
 #        print "# Parser output: ", `triple`
@@ -625,95 +625,73 @@ class SinkParser:
 	    if str[i]=='"':
 		if str[i:i+3] == '"""': delim = '"""'
 		else: delim = '"'
+
                 i = i + len(delim)
+                # @@I18n  This is NOT internationalised. Should have unicode escaping too.
+                j = i
+#                ustr = u""   # Empty unicode string
+                ustr = ""   # Empty string should be unicode @@I18n
+                startline = self.lines # Reember where for error messages
+                while str[j:j+len(delim)] != delim:
+                    ch = str[j:j+1]
+                    j = j + 1
+#                    uch = u""
+                    uch = ""
+                    if ch == "":
+                        raise BadSyntax(self._thisDoc, self.lines, str, i, "unterminated string literal")
+                    if ch == "\r": continue   # Strip carriage returns
+                    if ch == "\n":
+                        if delim == '"': raise BadSyntax(self._thisDoc, startline, str, i, "newline found in string literal")
+                        self.lines = self.lines + 1
+                        
+                    if ch == "\\":
+                        ch = str[j:j+1]  # Will be empty if string ends
+                        j = j + 1
+                        if ch == "":
+                            raise BadSyntax(self._thisDoc, startline, str, i, "unterminated string literal (2)")
+                        k = string.find('abfrtvn\\"', ch)
+                        if k >= 0:
+                            uch = '\a\b\f\r\t\v\n\\"'[k]
+                        else:
+                            k = string.find("01234567", ch)
+                            if k >=0:
+                                count = 0
+                                value = k
+                                while count < 2:  # Get two more characters
+                                    ch = str[j:j+1]
+                                    j = j + 1
+                                    if ch == "":
+                                        raise BadSyntax(self._thisDoc, startline, str, i, "unterminated string literal")
+                                    k = string.find("01234567", ch)
+                                    if k <0:
+                                        raise BadSyntax(self._thisDoc, startline, str, i, "bad string literal octal escape")
+                                    value = value * 8 + k
+                                    count = count + 1
+                                uch = unichr(value)
+                            else:
+                                if ch == "u":
+                                    count = 0
+                                    value = 0
+                                    while count < 4:  # Get two more characters
+                                        ch = str[j:j+1]
+                                        j = j + 1
+                                        if ch == "":
+                                            raise BadSyntax(self._thisDoc, startline, str, i, "unterminated string literal(3)")
+                                        k = string.find("0123456789abcdef", ch)
+                                        if k <=0:
+                                            raise BadSyntax(self._thisDoc, startline, str, i, "bad string literal hex escape")
+                                        value = value * 16 + k
+                                        count = count + 1
+                                    uch = unicode.ntou (value) # @@I18n Need n->unicode mapping @@@@
+                                    
+# @@I18n                    if uch == u"": uch = ch  # coerce
+                    if uch == "": uch = ch  # coerce
+                    ustr = ustr + uch
 
-                j, str = self.strconst(str, i, delim)
-
-                res.append((LITERAL, str))
-		return j
+                res.append((LITERAL, ustr))
+		return j+len(delim)
 	    else:
 		return -1
-
-    def strconst(self, str, i, delim):
-        """parse an N3 string constant delimited by delim.
-        return index, val
-        """
-
-        j = i
-        ustr = u""   # Empty unicode string
-        startline = self.lines # Reember where for error messages
-        while j<len(str):
-            i = j + len(delim)
-            if str[j:i] == delim: # done.
-                return i, ustr
-
-            if str[j] == '"':
-                ustr = ustr + '"'
-                j = j + 1
-                continue
-            
-            m = re.search(r'[\\\r\n\"]', str[j:])
-            assert m # we at least have to find a quote
-
-            i = j+m.start()
-            ustr = ustr + str[j:i]
-
-            ch = str[i]
-            if ch == '"':
-                j = i
-                continue
-            elif ch == "\r":   # Strip carriage returns
-                j = i+1
-                continue
-            elif ch == "\n":
-                if delim == '"':
-                    raise BadSyntax(self._thisDoc, startline, str, i,
-                                    "newline found in string literal")
-                self.lines = self.lines + 1
-                ustr = ustr + ch
-                j = i + 1
-
-            elif ch == "\\":
-                j = i + 1
-                ch = str[j:j+1]  # Will be empty if string ends
-                if not ch:
-                    raise BadSyntax(self._thisDoc, startline, str, i,
-                                    "unterminated string literal (2)")
-                k = string.find('abfrtvn\\"', ch)
-                if k >= 0:
-                    uch = '\a\b\f\r\t\v\n\\"'[k]
-                    ustr = ustr + uch
-                    j = j + 1
-                elif ch == "u":
-                    j, ch = self.uEscape(str, j+1, startline)
-                    ustr = ustr + ch
-                else:
-                    raise BadSyntax(self._thisDoc, self.lines, str, i,
-                                    "bad escape")
-
-        raise BadSyntax(self._thisDoc, self.lines, str, i,
-                        "unterminated string literal")
-
-
-    def uEscape(self, str, i, startline):
-        j = i
-        count = 0
-        value = 0
-        while count < 4:  # Get 4 more characters
-            ch = str[j:j+1]
-            j = j + 1
-            if ch == "":
-                raise BadSyntax(self._thisDoc, startline, str, i,
-                                "unterminated string literal(3)")
-            k = string.find("0123456789abcdef", ch)
-            if k < 0:
-                raise BadSyntax(self._thisDoc, startline, str, i,
-                                "bad string literal hex escape")
-            value = value * 16 + k
-            count = count + 1
-        uch = unichr(value)
-        return j, uch
-
 
     def genid(self, type):  # Generate existentially quantified variable id
         subj = type , self._genPrefix + `self._nextId` # ANONYMOUS node
@@ -768,7 +746,6 @@ class BadSyntax(SyntaxError):
 	       % (self.lines +1, self._uri, self._why, pre, str[i-40:i], str[i:i+40], post)
 
 
-
 def stripCR(str):
     res = ""
     for ch in str:
@@ -804,7 +781,7 @@ class ToRDF(RDFSink.RDFSink):
     def startDoc(self):
         pass
 
-    def endDoc(self):
+    def endDoc(self, rootFormulaPair=None):
         self.flushStart()  # Note: can't just leave empty doc if not started: bad XML
 	if self._subj:
 	    self._wr.endElement()  # </rdf:Description>
@@ -1222,7 +1199,7 @@ t   "this" and "()" special syntax should be suppresed.
         self._subj = None
         self._nextId = 0
 
-    def endDoc(self):
+    def endDoc(self, rootFormulaPair=None):
 	self._endStatement()
 	self._write("\n")
 	if not self._quiet: self._write("#ENDS\n")
@@ -1264,26 +1241,15 @@ t   "this" and "()" special syntax should be suppresed.
     def startAnonymous(self,  triple, isList=0):
         if isList and not self.noLists:
             wasList = self.stack[-1]
-            if 1:  # Always expect DAML lists on output:
-                if wasList and (triple[PRED]==N3_rest) :   # rest p of existing list
-                    self.stack.append(2)    # just a rest - no parens         
-                    self._subj = triple[OBJ]
-                else:
-                    self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
-                    self.stack.append(1)    # New list
-                    self._write(" (")
-                    self.indent = self.indent + 1
-                self._pred = N3_first
-            else: # not DAML_LISTS
-                if wasList :   # rest p of existing list
-                    self.stack.append(2)    # just a rest - no parens         
-                    self._subj = triple[PRED]
-                else:
-                    self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
-                    self.stack.append(1)    # New list
-                    self._write(" (")
-                    self.indent = self.indent + 1
-                self._pred = N3_first
+            if wasList and (triple[PRED]==N3_rest) :   # rest p of existing list
+                self.stack.append(2)    # just a rest - no parens         
+                self._subj = triple[OBJ]
+            else:
+                self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
+                self.stack.append(1)    # New list
+                self._write(" (")
+                self.indent = self.indent + 1
+            self._pred = N3_first
 
         else:
             self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
@@ -1491,47 +1457,7 @@ t   "this" and "()" special syntax should be suppresed.
 #   Utilities
 #
 
-Escapes = {'a':  '\a',
-           'b':  '\b',
-           'f':  '\f',
-           'r':  '\r',
-           't':  '\t',
-           'v':  '\v',
-           'n':  '\n',
-           '\\': '\\',
-           '"':  '"'}
-
 def stringToN3(str):
-    res = ''
-    if len(str) > 20 and (string.find(str, "\n") >=0 \
-                          or string.find(str, '"') >=0):
-        delim= '"""'
-        forbidden = ur'[\\\"\a\b\f\r\v\u0080-\uffff]'    # (allow tabs too now)
-    else:
-        delim = '"'
-        forbidden = ur'[\\\"\a\b\f\r\v\t\n\u0080-\uffff]'
-        
-    i = 0
-    while i < len(str):
-        m = re.search(forbidden, str[i:])
-        if not m:
-            break
-
-        j = i + m.start()
-        res = res + str[i:j]
-        ch = m.group(0)
-        if ch == '"' and delim == '"""':
-            res = res + ch
-        else:
-            k = string.find('\a\b\f\r\t\v\n\\"', ch)
-            if k >= 0: res = res + "\\" + 'abfrtvn\\"'[k]
-            else:
-                res = res + ('\\u%04x' % ord(ch))
-        i = j + 1
-
-    return delim + res + str[i:] + delim
-
-def dummy():
         res = ""
         if len(str) > 20 and (string.find(str, "\n") >=0 or string.find(str, '"') >=0):
                 delim= '"""'
@@ -1545,8 +1471,7 @@ def dummy():
                 if ch == '"' and delim == '"""' and i+1 < len(str) and str[i+1] != '"':
                     j=-1   # Single quotes don't need escaping in long format
                 if j>=0: ch = "\\" + '\\"abfrvtn'[j]
-                elif ch not in "\n\t" and (ch < " " or ch > "}"):
-                    ch = "[[" + `ch` + "]]" #[2:-1] # Use python
+                elif ch not in "\n\t" and (ch < " " or ch > "}") : ch= 'x'+`ch`[1:-1] # Use python
                 res = res + ch
         return delim + res + delim
 
@@ -1611,7 +1536,7 @@ class Reifier(RDFSink.RDFSink):
         return self.sink.startDoc()
 
     def endDoc(self):
-        return self.sink.endDoc()
+        return self.sink.endDoc(self._formula)
 
 ######################################################### Tests
   

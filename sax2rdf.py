@@ -89,6 +89,7 @@ class RDFHandler(xml.sax.ContentHandler):
         self._thisURI = thisURI
         self._state = STATE_NOT_RDF  # Maybe should ignore RDF poutside <rdf:RDF>??
         self._context = FORMULA, thisURI + "#_formula"  # Context of current statements, change in bags
+        self._formula = self._context  # Root formula
         self._subject = None
         self._predicate = None
         self._items = [] # for <rdf:li> containers
@@ -453,9 +454,9 @@ class RDFHandler(xml.sax.ContentHandler):
         self.flush()
         # print '\nend tag: </' + tag + '>'
 
-    def endDocument(self):
+    def endDocument(self, f=None):
         self.flush()
-        self.sink.endDoc()
+        self.sink.endDoc(self._formula)
 
 
 class RDFXMLParser(RDFHandler):
@@ -491,7 +492,7 @@ class RDFXMLParser(RDFHandler):
     def close(self):
         self._p.reset()
         self.flush()
-        self.sink.endDoc()
+        self.sink.endDoc(self._formula)
 
 class BadSyntax(SyntaxError):
     def __init__(self, info, message):

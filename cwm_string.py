@@ -92,18 +92,22 @@ class BI_concat(LightBuiltIn, ReverseFunction):
         if thing.verbosity() > 80: progress("Concat input:"+`obj_py`)
         str = ""
         for x in obj_py:
-            if not isString(x): return None # Can't
+            if type(x) != type(''):
+                if thing.verbosity > 10: progress("@@@@@ string:concat: not a string", `x`)
+                return None # Can't
             str = str + x 
-        return store._fromPython(str)
+        return store._fromPython(context, str)
 
 class BI_concatenation(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py):
         if thing.verbosity() > 80: progress("Concatenation input:"+`subj_py`)
         str = ""
         for x in subj_py:
-            if not isString(x): return None # Can't
+            if type(x) != type(''):
+                if thing.verbosity > 10: progress("@@@@@ string:concatenation: not a string", `x`)
+                return None # Can't
             str = str + x 
-        return store._fromPython(str)
+        return store._fromPython(context, str)
 
 class BI_scrape(LightBuiltIn, Function):
     """a built-in for scraping using regexps.
@@ -122,15 +126,11 @@ class BI_scrape(LightBuiltIn, Function):
         patc = re.compile(pat)
         m = patc.search(str)
         if m:
-            return store._fromPython(m.group(1))
+            return store._fromPython(context, m.group(1))
         else:
             return None
 
 #  Register the string built-ins with the store
-
-def isString(x):
-    # in 2.2, evidently we can test for isinstance(types.StringTypes)
-    return type(x) is type('') or type(x) is type(u'')
 
 def register(store):
     str = store.internURI(STRING_NS_URI[:-1])
