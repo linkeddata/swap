@@ -13,16 +13,19 @@ __all__ = [
     "kb",
     "expr",
     "logic",
-    "fol",
+#    "fol",
     "rdf",
     "namespace",
-    "uri",
-    "defaultns",
+#    "uri",
+#    "defaultns",
     "ns",
     ] 
 
 # $Log$
-# Revision 1.9  2003-02-14 17:21:59  sandro
+# Revision 1.10  2003-08-26 11:15:55  sandro
+# rolled defaultns.py into namespace.py
+#
+# Revision 1.9  2003/02/14 17:21:59  sandro
 # Switched to import-as-needed for LX languages and engines
 #
 # Revision 1.8  2003/02/13 19:54:33  sandro
