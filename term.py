@@ -100,7 +100,9 @@ class Term:
         if p >= 0: return s[p+1:]
         return s
 
-
+    def debugString(self, already):
+	return `self`  # unless more eleborate in superclass
+	
     def representation(self, base=None):
         """The string represnting this in N3 """
         return "<" + self.uriref(base) + ">"
@@ -118,7 +120,10 @@ class Term:
     
     def substitution(self, bindings, why=None):
 	"Return this or a version of me with subsitution made"
-	assert type(bindings) is types.DictType
+	return bindings.get(self, self)
+
+    def substituteEquals(self, bindings, newRedirections):
+	"Return this or a version of me with substitution made"
 	return bindings.get(self, self)
 
     def occurringIn(self, vars):
@@ -305,7 +310,7 @@ class List(CompoundTerm):
 	return res
 
     def substitution(self, bindings, why=None):
-	"Return this or a version of me with subsitution made"
+	"Return this or a version of me with variable substitution made"
 	if self.occurringIn(bindings.keys()) == []:
 	    return self # phew!
 	s = self.asSequence()
@@ -313,13 +318,29 @@ class List(CompoundTerm):
 	tail = self.store.nil
 	for x in s:
 	    tail = tail.prepend(x.substitution(bindings, why=why))
+	if verbosity() > 90:
+	    progress("Substition of variables %s in list %s" % (bindings, self))
+	    progress("...yields NEW %s = %s" % (tail, tail.value()))
+	return tail
+	    
+    def substituteEquals(self, bindings, newBindings):
+	"Return this or a version of me with substitution of equals made"
+	if verbosity() > 100: progress("SubstituteEquals list %s with %s" % (self, bindings))
+	if self.occurringIn(bindings.keys()) == []:
+	    return self # phew!
+	s = self.asSequence()
+	s.reverse()
+	tail = self.store.nil
+	for x in s:
+	    tail = tail.prepend(x.substituteEquals(bindings, newBindings))
+	newBindings[self] = tail # record a new equality
+	if verbosity() > 90: progress("SubstitueEquals list CHANGED %s -> %s" % (self, tail))
 	return tail
 	    
 
     def occurringIn(self, vars):
 	"Which variables in the list occur in this list?"
 	set = []
-	if verbosity() > 98: progress("----occuringIn: ", `self`)
 	x = self
 	while not isinstance(x, EmptyList):
 	    y = x.first
@@ -363,15 +384,21 @@ class NonEmptyList(List):
 			existentials2.remove(var)
 		b2.update(nb)
 		nbs2 = self.rest.unify(other.rest, vars2, existentials2, b2)
-	    if nbs == 0: return 0
+	    if nbs2 == 0: return 0
 	    for nb2, reason2 in nbs2:
 		nb3 = nb2.copy()
 		nb3.update(nb)
 		res.append((nb3, None))
 	return res
 
-    def __repr__(self):
-	return "(" + `self.first` + "...)"
+    def debugString(self, already):
+	s = `self`+" is ("
+	for i in self:
+	    s = s + i.debugString(already) + " "
+	return s + ")"
+	
+#    def __repr__(self):
+#	return "(" + `self.first` + "...)"
 
 class EmptyList(List):
         
@@ -382,7 +409,11 @@ class EmptyList(List):
         return List_NS + "nil"
 
     def substitution(self, bindings, why=None):
-	"Return this or a version of me with subsitution made"
+	"Return this or a version of me with substitution made"
+	return self
+
+    def substituteEquals(self, bindings, newBindings):
+	"Return this or a version of me with substitution of equals made"
 	return self
 
     def __repr__(self):
@@ -473,6 +504,10 @@ class Literal(Term):
         return "md5:" + b16
 
     def substitution(self, bindings, why=None):
+	"Return this or a version of me with subsitution made"
+	return self
+
+    def substituteEquals(self, bindings, newBindings):
 	"Return this or a version of me with subsitution made"
 	return self
 

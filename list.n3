@@ -1,0 +1,23 @@
+#   n3 definition of some liste functions
+#
+# $Id$
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix doc: <http://www.w3.org/2000/01/pim/doc#>.
+@prefix ont: <http://www.daml.org/2000/10/daml-ont#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix : <#>.
+
+list:in a rdf:Property, ont:UniqueProperty;
+    rdfs:label "in";
+    rdfs:comment """
+If the object is a list and the subject is in that list, then this is strue.
+""";
+    rdfs:isDefinedBy <>.
+
+
+# ends
+

@@ -13,6 +13,19 @@
         <verb12 rdf:resource="test#obj12"/>
     </rdf:Description>
 
+    <rdf:Description rdf:about="test#a_threebrackets">
+        <owl:equivalentTo rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rdf:first rdf:resource="test#fff"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </owl:equivalentTo>
+    </rdf:Description>
+
     <rdf:Description rdf:about="test#emptyList">
         <owl:equivalentTo rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
     </rdf:Description>
@@ -81,7 +94,7 @@
         <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
     </rdf:Description>
 
-    <rdf:Description rdf:about="run#li14">
+    <rdf:Description rdf:about="run#li17">
         <verb1 rdf:resource="test#object1"/>
     </rdf:Description>
 
@@ -93,7 +106,7 @@
         </rdf:rest>
     </rdf:Description>
 
-    <rdf:Description rdf:about="run#li16">
+    <rdf:Description rdf:about="run#li19">
         <verb2 rdf:resource="test#object2"/>
     </rdf:Description>
 

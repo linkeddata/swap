@@ -13,30 +13,8 @@
 @prefix dpo: <http://www.daml.org/2001/03/daml+oil#>.
 @prefix owl: <http://www.w3.org/2002/07/owl#>.
 
-# Other interesting unimplemented syntaxes ...
-#[ log:first :a;
-#  ont:rest thatWhich has ont:first :b; 
-#  ont:rest thatWhich has ont:first :c; 
-#  ont:rest thatWhich has ont:first :d; 
-#  ont:rest thatWhich has ont:first :e ];
-#
-# etc
-#
-#( :a :b :c :d :e )
-#_________________________________________
-# cwm output from one version:
-#:threeItems = ( :b :c :d ) .
-#
-#:nested =( :first :second ( :left3 :right3 ) :fourth )  .
-#
-#:emptyList = ( ) .
-#
-#:listOf2Empties = (()()) .
-#
-#:twoAnons = ([a :mother][a :father]).
-#
 
-# :a_threebrackets = ( ( ( :fff ) ) ) .
+ :a_threebrackets = ( ( ( :fff ) ) ) .
 
 [ :anonVerb12 :anonObj12 ] :verb12 :obj12.
 

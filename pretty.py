@@ -40,7 +40,7 @@ FLOAT_DATATYPE = "http://www.w3.org/2001/XMLSchema#double"
 
 
 class Serializer:
-    """A serializer to serialize th formula F into the given
+    """A serializer to serialize the formula F into the given
     abstract syntax sink
     """
     def __init__(self, F, sink, flags="", sorting=0):
@@ -139,16 +139,30 @@ class Serializer:
 	    uri = self.store.namespaces[pfx]
 	    sink.bind(pfx, uri)
 
+
+    def _listsWithinLists(self, L, lists):
+	if L not in lists:
+	    lists.append(L)
+	for i in L:
+	    if isinstance(i, NonEmptyList):
+		self._listsWithinLists(i, lists)
+
     def dumpLists(self):
 	context = self.context
 	sink = self.sink
-	for l in context.lists:
+	lists = []
+	for s in context.statements:
+	    for x in s.predicate(), s.subject(), s.object():
+		if isinstance(x, NonEmptyList):
+		    self._listsWithinLists(x, lists)
+		    
+	for l in lists:
 	    list = l
 	    while not isinstance(list, EmptyList):
 		self._outputStatement(sink, (context, self.store.forSome, context, list))
 		list = list.rest
 
-	for l in context.lists:
+	for l in lists:
 	    list = l
 	    while not isinstance(list, EmptyList):
 		self._outputStatement(sink, (context, self.store.first, list, list.first))
@@ -277,6 +291,7 @@ class Serializer:
 	    self._occurringAs[OBJ][x] = y
 
     def _scan(self, x, context=None):
+	assert self.context._redirections.get(x, None) == None, "Should not be redirected: "+`x`
 	if verbosity() > 98: progress("scanning %s in context %s" %(`x`, `context`),
 			x.generated(), self._inContext.get(x, "--"))
 	if isinstance(x, NonEmptyList):
@@ -409,7 +424,7 @@ class Serializer:
      The list of statements must be sorted if sorting is true.     
         """
         _anon, _incoming = self._topology(subj, context)    # Is anonymous?
-        if _anon and  _incoming == 1 and not isinstance(subj, Formula): return           # Forget it - will be dealt with in recursion
+        if _anon and  _incoming == 1 and not isinstance(subj, Formula): return   # Forget it - will be dealt with in recursion
 
 	if isinstance(subj, List): li = subj
 	else: li = None
@@ -426,14 +441,6 @@ class Serializer:
             if subj is context:
                 pass
             else:     #  Could have alternative syntax here
-
-#                for s in statements:  # Find at least one we will print
-#                    context, pre, sub, obj = s.quad
-#                    if sub is obj: break  # Ok, we will do it
-#                    _anon, _incoming = self._topology(obj, context)
-#                    if not((pre is self.store.forSome) and sub is context and _anon):
-#                        break # We will print it
-#                else: return # Nothing to print - so avoid printing [].
 
                 if sorting: statements.sort(StoredStatement.comparePredObj)    # @@ Needed now Fs are canonical?
 
@@ -469,57 +476,39 @@ class Serializer:
 
                 
     def dumpStatement(self, sink, triple, sorting):
-        # triple = s.quad
+	"Dump one statement, including structure within object" 
+
         context, pre, sub, obj = triple
-        if (sub is obj and not isinstance(sub, Formula))  \
+        if (sub is obj and not isinstance(sub, CompoundTerm))  \
            or (isinstance(obj, EmptyList)) \
            or isinstance(obj, Literal):
             self._outputStatement(sink, triple) # Do 1-loops simply
             return
 
-        _anon, _incoming = self._topology(obj, context)
-        _se = isinstance(obj, Formula) and obj is not context
-        li = isinstance(obj, List) and not isinstance(obj, EmptyList)
-#	if context.statementsMatching(subj=obj) == []: li = None # Nothing to print inside [ ]
 
-        if _anon and (_incoming == 1 or li or _se):  # Embedded anonymous node in N3
-
-            _isSubject = context.any(pred=obj) # Has any properties in this context? 
-	    # was: _isSubject = len(context.each(pred=obj)_index.get((obj, None, None), []))
-	    # Has properties in this context?
-	    #@@@@@ comments don't match code
-            
-            if _isSubject > 0 or not _se :   #   Do [ ] if nothing else as placeholder.
-
-                sink.startAnonymous(self.extern(triple), li)
-                if not li or not isinstance(obj, EmptyList):   # nil gets no contents
-                    if li:
-                        if verbosity()>90:
-                            progress("List found as object of dumpStatement " + `obj`)
-                        self.dumpStatement(sink, (context, self.store.first, obj, obj.first), sorting)
-			self.dumpStatement(sink, (context, self.store.rest, obj, obj.rest), sorting)
-                    ss = context.statementsMatching(subj=obj)
-                    if sorting: ss.sort(StoredStatement.comparePredObj)
-                    for t in ss:
-                        self.dumpStatement(sink, t.quad, sorting)
-      
-                    if _se > 0:
-                        sink.startBagNamed(context.asPair(),obj.asPair()) # @@@@@@@@@  missing "="
-                        self.dumpFormulaContents(obj, sink, sorting)  # dump contents of anonymous bag
-                        sink.endBagObject(pre.asPair(), sub.asPair())
-                        
-                sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
-
-            else:  # _isSubject == 0 and _se
-                sink.startBagObject(self.extern(triple))
-                self.dumpFormulaContents(obj, sink, sorting)  # dump contents of anonymous bag
-                sink.endBagObject(pre.asPair(), sub.asPair())
-            return # Arc is done
-
-        if _se:
+        if isinstance(obj, Formula):
             sink.startBagObject(self.extern(triple))
             self.dumpFormulaContents(obj, sink, sorting)  # dump contents of anonymous bag
             sink.endBagObject(pre.asPair(), sub.asPair())
+            return
+
+	if isinstance(obj, NonEmptyList):
+	    if verbosity()>90:
+		progress("List found as object of dumpStatement " + `obj` + context.debugString())
+	    sink.startAnonymous(self.extern(triple), isList=1)
+	    self.dumpStatement(sink, (context, self.store.first, obj, obj.first), sorting)
+	    self.dumpStatement(sink, (context, self.store.rest, obj, obj.rest), sorting)
+	    sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
+	    return
+
+        _anon, _incoming = self._topology(obj, context)
+        if _anon and _incoming == 1:  # Embedded anonymous node in N3
+	    sink.startAnonymous(self.extern(triple))
+	    ss = context.statementsMatching(subj=obj)
+	    if sorting: ss.sort(StoredStatement.comparePredObj)
+	    for t in ss:
+		self.dumpStatement(sink, t.quad, sorting)
+	    sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
             return
 
         self._outputStatement(sink, triple)

@@ -66,6 +66,12 @@
     test:arguments     """list/unify1.n3 --think --data""".
 
 
+:t2005 a test:CwmTest;
+    test:shortFileName "append-out.n3";
+    test:description   "Iterative ops on lists";
+    test:arguments     """list/append.n3 --think --data""".
+
+
 	
 
 #ends

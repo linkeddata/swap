@@ -1,0 +1,162 @@
+
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module pretty</title>
+<style type="text/css"><!--
+TT { font-family: lucidatypewriter, lucida console, courier }
+--></style></head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>pretty</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/pretty.py">/devel/WWW/2000/10/swap/pretty.py</a></font></td></tr></table>
+    <p><tt><br>
+$Id$<br>
+&nbsp;<br>
+Printing&nbsp;of&nbsp;N3&nbsp;and&nbsp;RDF&nbsp;formulae<br>
+&nbsp;<br>
+20003-8-20&nbsp;split&nbsp;offf&nbsp;from&nbsp;llyn.py<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;or&nbsp;was&nbsp;<a href="http://www.w3.org/2000/10/swap/pretty.py">http://www.w3.org/2000/10/swap/pretty.py</a></tt></p>
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="diag.html">diag</a><br>
+</td><td width="25%" valign=top><a href="string.html">string</a><br>
+</td><td width="25%" valign=top><a href="types.html">types</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="pretty.html#Serializer">Serializer</a>
+</font></dt></dl>
+ 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Serializer">class <strong>Serializer</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>A&nbsp;serializer&nbsp;to&nbsp;serialize&nbsp;the&nbsp;formula&nbsp;F&nbsp;into&nbsp;the&nbsp;given<br>
+abstract&nbsp;syntax&nbsp;sink<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Serializer-__init__"><strong>__init__</strong></a>(self, F, sink, flags<font color="#909090">=''</font>, sorting<font color="#909090">=0</font>)</dt></dl>
+
+<dl><dt><a name="Serializer-_dumpSubject"><strong>_dumpSubject</strong></a>(self, subj, context, sink, sorting, statements<font color="#909090">=[]</font>)</dt><dd><tt>&nbsp;Dump&nbsp;the&nbsp;infomation&nbsp;about&nbsp;one&nbsp;top&nbsp;level&nbsp;subject<br>
+&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&nbsp;&nbsp;This&nbsp;outputs&nbsp;arcs&nbsp;leading&nbsp;away&nbsp;from&nbsp;a&nbsp;node,&nbsp;and&nbsp;where&nbsp;appropriate<br>
+recursively&nbsp;descends&nbsp;the&nbsp;tree,&nbsp;by&nbsp;dumping&nbsp;the&nbsp;object&nbsp;nodes<br>
+(and&nbsp;in&nbsp;the&nbsp;case&nbsp;of&nbsp;a&nbsp;compact&nbsp;list,&nbsp;the&nbsp;predicate&nbsp;(rest)&nbsp;node).<br>
+It&nbsp;does&nbsp;NOTHING&nbsp;for&nbsp;anonymous&nbsp;nodes&nbsp;which&nbsp;don't&nbsp;occur&nbsp;explicitly&nbsp;as&nbsp;subjects.<br>
+&nbsp;<br>
+The&nbsp;list&nbsp;of&nbsp;statements&nbsp;must&nbsp;be&nbsp;sorted&nbsp;if&nbsp;sorting&nbsp;is&nbsp;true.</tt></dd></dl>
+
+<dl><dt><a name="Serializer-_listsWithinLists"><strong>_listsWithinLists</strong></a>(self, L, lists)</dt></dl>
+
+<dl><dt><a name="Serializer-_outputStatement"><strong>_outputStatement</strong></a>(self, sink, quad)</dt></dl>
+
+<dl><dt><a name="Serializer-_scan"><strong>_scan</strong></a>(self, x, context<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="Serializer-_scanObj"><strong>_scanObj</strong></a>(self, context, x)</dt></dl>
+
+<dl><dt><a name="Serializer-_subFormulae"><strong>_subFormulae</strong></a>(self, F, path<font color="#909090">=[]</font>)</dt><dd><tt>Returns&nbsp;a&nbsp;sequence&nbsp;of&nbsp;the&nbsp;all&nbsp;the&nbsp;formulae&nbsp;nested&nbsp;within&nbsp;this&nbsp;one.<br>
+&nbsp;<br>
+slow...&nbsp;only&nbsp;used&nbsp;in&nbsp;pretty&nbsp;print&nbsp;functions.</tt></dd></dl>
+
+<dl><dt><a name="Serializer-_topology"><strong>_topology</strong></a>(self, x, context)</dt><dd><tt>&nbsp;Can&nbsp;be&nbsp;output&nbsp;as&nbsp;an&nbsp;anonymous&nbsp;node&nbsp;in&nbsp;N3.&nbsp;Also&nbsp;counts&nbsp;incoming&nbsp;links.<br>
+Output&nbsp;tuple&nbsp;parts:<br>
+&nbsp;<br>
+1.&nbsp;True&nbsp;iff&nbsp;can&nbsp;be&nbsp;represented&nbsp;as&nbsp;anonymous&nbsp;node&nbsp;in&nbsp;N3,&nbsp;[]&nbsp;or&nbsp;{}<br>
+2.&nbsp;Number&nbsp;of&nbsp;incoming&nbsp;links:&nbsp;&gt;0&nbsp;means&nbsp;occurs&nbsp;as&nbsp;object&nbsp;or&nbsp;pred,&nbsp;0&nbsp;means&nbsp;as&nbsp;only&nbsp;as&nbsp;subject.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;1&nbsp;means&nbsp;just&nbsp;occurs&nbsp;once<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&gt;1&nbsp;means&nbsp;occurs&nbsp;too&nbsp;many&nbsp;times&nbsp;to&nbsp;be&nbsp;anon<br>
+&nbsp;<br>
+Returns&nbsp;&nbsp;number&nbsp;of&nbsp;incoming&nbsp;links&nbsp;(1&nbsp;or&nbsp;2)&nbsp;including&nbsp;forSome&nbsp;link<br>
+or&nbsp;zero&nbsp;if&nbsp;self&nbsp;can&nbsp;NOT&nbsp;be&nbsp;represented&nbsp;as&nbsp;an&nbsp;anonymous&nbsp;node.<br>
+Paired&nbsp;with&nbsp;this&nbsp;is&nbsp;whether&nbsp;this&nbsp;is&nbsp;a&nbsp;subexpression.</tt></dd></dl>
+
+<dl><dt><a name="Serializer-dumpBySubject"><strong>dumpBySubject</strong></a>(self, sorting<font color="#909090">=1</font>)</dt><dd><tt>&nbsp;Dump&nbsp;by&nbsp;order&nbsp;of&nbsp;subject&nbsp;except&nbsp;forSome's&nbsp;first&nbsp;for&nbsp;n3=a&nbsp;mode</tt></dd></dl>
+
+<dl><dt><a name="Serializer-dumpChronological"><strong>dumpChronological</strong></a>(self)</dt><dd><tt>Fast&nbsp;as&nbsp;possible.&nbsp;Only&nbsp;dumps&nbsp;data.&nbsp;No&nbsp;formulae&nbsp;or&nbsp;universals.</tt></dd></dl>
+
+<dl><dt><a name="Serializer-dumpFormulaContents"><strong>dumpFormulaContents</strong></a>(self, context, sink, sorting)</dt><dd><tt>&nbsp;Iterates&nbsp;over&nbsp;statements&nbsp;in&nbsp;formula,&nbsp;bunching&nbsp;them&nbsp;up&nbsp;into&nbsp;a&nbsp;set<br>
+for&nbsp;each&nbsp;subject.<br>
+We&nbsp;dump&nbsp;"this"&nbsp;first&nbsp;before&nbsp;everything&nbsp;else</tt></dd></dl>
+
+<dl><dt><a name="Serializer-dumpLists"><strong>dumpLists</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Serializer-dumpNested"><strong>dumpNested</strong></a>(self)</dt><dd><tt>&nbsp;Iterates&nbsp;over&nbsp;all&nbsp;URIs&nbsp;ever&nbsp;seen&nbsp;looking&nbsp;for&nbsp;statements</tt></dd></dl>
+
+<dl><dt><a name="Serializer-dumpPrefixes"><strong>dumpPrefixes</strong></a>(self, sink, counts<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="Serializer-dumpStatement"><strong>dumpStatement</strong></a>(self, sink, triple, sorting)</dt><dd><tt>Dump&nbsp;one&nbsp;statement,&nbsp;including&nbsp;structure&nbsp;within&nbsp;object</tt></dd></dl>
+
+<dl><dt><a name="Serializer-dumpVariables"><strong>dumpVariables</strong></a>(self, context, sink, sorting<font color="#909090">=1</font>, pretty<font color="#909090">=0</font>, dataOnly<font color="#909090">=0</font>)</dt><dd><tt>Dump&nbsp;the&nbsp;forAlls&nbsp;and&nbsp;the&nbsp;forSomes&nbsp;at&nbsp;the&nbsp;top&nbsp;of&nbsp;a&nbsp;formula</tt></dd></dl>
+
+<dl><dt><a name="Serializer-extern"><strong>extern</strong></a>(self, t)</dt></dl>
+
+<dl><dt><a name="Serializer-selectDefaultPrefix"><strong>selectDefaultPrefix</strong></a>(self, context)</dt><dd><tt>&nbsp;Symbol&nbsp;whose&nbsp;fragments&nbsp;have&nbsp;the&nbsp;most&nbsp;occurrences.<br>
+we&nbsp;suppress&nbsp;the&nbsp;RDF&nbsp;namespace&nbsp;itself&nbsp;because&nbsp;the&nbsp;XML&nbsp;syntax&nbsp;has&nbsp;problems&nbsp;with&nbsp;it<br>
+being&nbsp;default&nbsp;as&nbsp;it&nbsp;is&nbsp;used&nbsp;for&nbsp;attributes.</tt></dd></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'A serializer to serialize the formula F into the given<font color="#c040c0">\n</font>    abstract syntax sink<font color="#c040c0">\n</font>    '<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+
+<dl><dt><strong>__module__</strong> = 'pretty'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+
+</td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><strong>ALL4</strong> = (0, 1, 2, 3)<br>
+<strong>ANONYMOUS</strong> = 3<br>
+<strong>CONTEXT</strong> = 0<br>
+<strong>DAML_equivalentTo_URI</strong> = 'http://www.w3.org/2002/07/owl#equivalentTo'<br>
+<strong>FLOAT_DATATYPE</strong> = 'http://www.w3.org/2001/XMLSchema#double'<br>
+<strong>FORMULA</strong> = 1<br>
+<strong>INTEGER_DATATYPE</strong> = 'http://www.w3.org/2001/XMLSchema#integer'<br>
+<strong>LITERAL</strong> = 2<br>
+<strong>List_NS</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'<br>
+<strong>Logic_NS</strong> = 'http://www.w3.org/2000/10/swap/log#'<br>
+<strong>META_NS_URI</strong> = 'http://www.w3.org/2000/10/swap/meta#'<br>
+<strong>N3_Empty</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Empty')<br>
+<strong>N3_List</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#List')<br>
+<strong>N3_first</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#first')<br>
+<strong>N3_nil</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#nil')<br>
+<strong>N3_rest</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest')<br>
+<strong>OBJ</strong> = 3<br>
+<strong>OWL_NS</strong> = 'http://www.w3.org/2002/07/owl#'<br>
+<strong>PARTS</strong> = (1, 2, 3)<br>
+<strong>PRED</strong> = 1<br>
+<strong>RDF_NS_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'<br>
+<strong>RDF_type_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'<br>
+<strong>STRING_NS_URI</strong> = 'http://www.w3.org/2000/10/swap/string#'<br>
+<strong>SUBJ</strong> = 2<br>
+<strong>SYMBOL</strong> = 0<br>
+<strong>__file__</strong> = './pretty.pyc'<br>
+<strong>__name__</strong> = 'pretty'<br>
+<strong>cvsRevision</strong> = '$Revision$'<br>
+<strong>forAllSym</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>
+<strong>forSomeSym</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
+<strong>tracking</strong> = 0</td></tr></table>
+</body></html>

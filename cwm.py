@@ -638,6 +638,11 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 		workingContext.close()
 		workingContext = workingContext.collector.explanation()
 
+            elif arg == "-dump":
+                need(_store); touch(_store)
+		workingContext = workingContext.canonicalize()
+		progress("\nDump of working formula:\n" + workingContext.debugString())
+		
             elif arg == "-purge":
                 need(_store); touch(_store)
 		workingContext = workingContext.canonicalize()

@@ -1,0 +1,158 @@
+
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module myStore</title>
+<style type="text/css"><!--
+TT { font-family: lucidatypewriter, lucida console, courier }
+--></style></head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>myStore</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/myStore.py">/devel/WWW/2000/10/swap/myStore.py</a></font></td></tr></table>
+    <p><tt>$Id$<br>
+&nbsp;<br>
+Process-global&nbsp;store<br>
+&nbsp;<br>
+Global&nbsp;variables&nbsp;are&nbsp;often&nbsp;a&nbsp;bad&nbsp;idea.&nbsp;However,&nbsp;the&nbsp;majority&nbsp;of&nbsp;cwm&nbsp;applications<br>
+involve&nbsp;just&nbsp;one&nbsp;RDF&nbsp;store.&nbsp;One&nbsp;store&nbsp;can&nbsp;contain&nbsp;many&nbsp;formulae.<br>
+The&nbsp;main&nbsp;thing&nbsp;which&nbsp;these&nbsp;formulae&nbsp;of&nbsp;the&nbsp;same&nbsp;store&nbsp;share&nbsp;is&nbsp;the&nbsp;index&nbsp;with&nbsp;which&nbsp;names&nbsp;<br>
+and&nbsp;strings&nbsp;are&nbsp;interned.&nbsp;&nbsp;Within&nbsp;a&nbsp;store,&nbsp;you&nbsp;can&nbsp;compare&nbsp;things&nbsp;by&nbsp;comparing<br>
+memory&nbsp;addresses&nbsp;rather&nbsp;than&nbsp;the&nbsp;whole&nbsp;tring,&nbsp;uri&nbsp;or&nbsp;list.<br>
+&nbsp;<br>
+Therefore,&nbsp;it&nbsp;is&nbsp;normal&nbsp;to&nbsp;just&nbsp;use&nbsp;one&nbsp;store.<br>
+When&nbsp;you&nbsp;do&nbsp;this,&nbsp;the&nbsp;store&nbsp;paremeter&nbsp;to&nbsp;most&nbsp;methods&nbsp;beceomes&nbsp;unnecessary,&nbsp;and&nbsp;you&nbsp;get&nbsp;a&nbsp;simpler&nbsp;API.<br>
+That&nbsp;is&nbsp;what&nbsp;this&nbsp;module&nbsp;does.&nbsp;If&nbsp;you&nbsp;import&nbsp;it,&nbsp;you&nbsp;will&nbsp;get<br>
+a&nbsp;global&nbsp;store.&nbsp;This&nbsp;will&nbsp;not&nbsp;stop&nbsp;you&nbsp;using&nbsp;other&nbsp;stores.<br>
+&nbsp;<br>
+You&nbsp;also&nbsp;get&nbsp;the&nbsp;<a href="#Namespace">Namespace</a>()&nbsp;class&nbsp;which&nbsp;allows&nbsp;you&nbsp;to&nbsp;generate&nbsp;symbols&nbsp;easily<br>
+&nbsp;<br>
+History:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;Spilt&nbsp;of&nbsp;from&nbsp;&nbsp;thing.py&nbsp;2003-08-19</tt></p>
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="__builtin__.html#object">__builtin__.object</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="myStore.html#Namespace">Namespace</a>
+</font></dt></dl>
+</dd>
+</dl>
+ 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Namespace">class <strong>Namespace</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>A&nbsp;shortcut&nbsp;for&nbsp;getting&nbsp;a&nbsp;symbols&nbsp;as&nbsp;interned&nbsp;by&nbsp;the&nbsp;default&nbsp;store<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;RDF&nbsp;=&nbsp;<a href="#Namespace">Namespace</a>('<a href="http://www.w3.org/1999/02/22-rdf-syntax-ns">http://www.w3.org/1999/02/22-rdf-syntax-ns</a>#')<br>
+&gt;&gt;&gt;&nbsp;RDF.type<br>
+'<a href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">http://www.w3.org/1999/02/22-rdf-syntax-ns#type</a>'<br>
+&gt;&gt;&gt;&nbsp;RDF.type&nbsp;is&nbsp;RDF.type<br>
+1<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Namespace-__getattr__"><strong>__getattr__</strong></a>(self, lname)</dt><dd><tt>get&nbsp;the&nbsp;lname&nbsp;Symbol&nbsp;in&nbsp;this&nbsp;namespace.<br>
+&nbsp;<br>
+lname&nbsp;--&nbsp;an&nbsp;XML&nbsp;name&nbsp;(limited&nbsp;to&nbsp;URI&nbsp;characters)<br>
+I&nbsp;hope&nbsp;this&nbsp;is&nbsp;only&nbsp;called&nbsp;*after*&nbsp;the&nbsp;ones&nbsp;defines&nbsp;above&nbsp;have&nbsp;been&nbsp;checked</tt></dd></dl>
+
+<dl><dt><a name="Namespace-__init__"><strong>__init__</strong></a>(self, name, store<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="Namespace-sym"><strong>sym</strong></a>(self, lname)</dt><dd><tt>For&nbsp;getting&nbsp;a&nbsp;symbol&nbsp;for&nbsp;an&nbsp;expression,&nbsp;rather&nbsp;than&nbsp;a&nbsp;constant.<br>
+For,&nbsp;and&nbsp;from,&nbsp;pim/toIcal.py</tt></dd></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+
+<dl><dt><strong>__doc__</strong> = "A shortcut for getting a symbols as interned by ...ype'<font color="#c040c0">\n</font>      &gt;&gt;&gt; RDF.type is RDF.type<font color="#c040c0">\n</font>      1<font color="#c040c0">\n\n</font>    "<dd><tt>str(<a href="__builtin__.html#object">object</a>)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;<a href="__builtin__.html#object">object</a>.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;<a href="__builtin__.html#object">object</a>.</tt></dl>
+
+<dl><dt><strong>__module__</strong> = 'myStore'<dd><tt>str(<a href="__builtin__.html#object">object</a>)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;<a href="__builtin__.html#object">object</a>.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;<a href="__builtin__.html#object">object</a>.</tt></dl>
+
+<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Namespace' objects&gt;</dl>
+
+<hr>
+Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><a name="Namespace-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#Namespace-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="Namespace-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#Namespace-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
+
+<dl><dt><a name="Namespace-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#Namespace-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
+
+<dl><dt><a name="Namespace-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
+
+<dl><dt><a name="Namespace-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#Namespace-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
+
+<dl><dt><a name="Namespace-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#Namespace-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
+
+<dl><dt><a name="Namespace-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#Namespace-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
+<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;<dd><tt>the&nbsp;<a href="__builtin__.html#object">object</a>'s&nbsp;class</tt></dl>
+
+<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object at 0xbf74c&gt;<dd><tt>T.<a href="#Namespace-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
+
+</td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt><a name="-_checkStore"><strong>_checkStore</strong></a>(s<font color="#909090">=None</font>)</dt><dd><tt>Check&nbsp;that&nbsp;an&nbsp;explict&nbsp;or&nbsp;implicit&nbsp;stroe&nbsp;exists</tt></dd></dl>
+ <dl><dt><a name="-bNode"><strong>bNode</strong></a>(str, context)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;new&nbsp;unnamed&nbsp;node&nbsp;within&nbsp;the&nbsp;given<br>
+formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+ <dl><dt><a name="-existential"><strong>existential</strong></a>(str, context, uri)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;new&nbsp;named&nbsp;variable<br>
+existentially&nbsp;qualified&nbsp;within&nbsp;the&nbsp;given<br>
+formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+ <dl><dt><a name="-formula"><strong>formula</strong></a>()</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;new&nbsp;empty&nbsp;formula&nbsp;(triple&nbsp;people&nbsp;think:&nbsp;triple&nbsp;store)<br>
+and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+ <dl><dt><a name="-literal"><strong>literal</strong></a>(str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;an&nbsp;interned&nbsp;version&nbsp;of&nbsp;the&nbsp;given&nbsp;literal&nbsp;string<br>
+and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+ <dl><dt><a name="-load"><strong>load</strong></a>(uri<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>, formulaURI<font color="#909090">=None</font>, remember<font color="#909090">=1</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
+&nbsp;<br>
+uri:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;None,&nbsp;load&nbsp;from&nbsp;standard&nbsp;input.<br>
+remember:&nbsp;if&nbsp;1,&nbsp;store&nbsp;as&nbsp;metadata&nbsp;the&nbsp;relationship&nbsp;between&nbsp;this&nbsp;URI&nbsp;and&nbsp;this&nbsp;formula.<br>
+&nbsp;<br>
+Returns:&nbsp;&nbsp;top-level&nbsp;formula&nbsp;of&nbsp;the&nbsp;parsed&nbsp;document.<br>
+Raises:&nbsp;&nbsp;&nbsp;IOError,&nbsp;SyntaxError,&nbsp;DocumentError</tt></dd></dl>
+ <dl><dt><a name="-loadMany"><strong>loadMany</strong></a>(uris)</dt><dd><tt>Load&nbsp;a&nbsp;number&nbsp;of&nbsp;resources&nbsp;into&nbsp;the&nbsp;same&nbsp;formula<br>
+&nbsp;<br>
+Returns:&nbsp;&nbsp;top-level&nbsp;formula&nbsp;of&nbsp;the&nbsp;parsed&nbsp;information.<br>
+Raises:&nbsp;&nbsp;&nbsp;IOError,&nbsp;SyntaxError,&nbsp;DocumentError</tt></dd></dl>
+ <dl><dt><a name="-setStore"><strong>setStore</strong></a>(s)</dt><dd><tt>Set&nbsp;the&nbsp;process-global&nbsp;default&nbsp;store&nbsp;to&nbsp;be&nbsp;used&nbsp;when&nbsp;an&nbsp;explicit&nbsp;store&nbsp;is&nbsp;not</tt></dd></dl>
+ <dl><dt><a name="-setStoreClass"><strong>setStoreClass</strong></a>(c)</dt><dd><tt>Set&nbsp;the&nbsp;process-global&nbsp;class&nbsp;to&nbsp;be&nbsp;used&nbsp;to&nbsp;generate&nbsp;a&nbsp;new&nbsp;store&nbsp;if&nbsp;needed</tt></dd></dl>
+ <dl><dt><a name="-symbol"><strong>symbol</strong></a>(uri)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;an&nbsp;interned&nbsp;version&nbsp;of&nbsp;the&nbsp;given&nbsp;symbol<br>
+and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+ <dl><dt><a name="-universal"><strong>universal</strong></a>(str, context, uri)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;named&nbsp;variable<br>
+universally&nbsp;qualified&nbsp;within&nbsp;the&nbsp;given<br>
+formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><strong>__file__</strong> = './myStore.pyc'<br>
+<strong>__name__</strong> = 'myStore'<br>
+<strong>store</strong> = None<br>
+<strong>storeClass</strong> = None</td></tr></table>
+</body></html>

@@ -150,10 +150,12 @@ class Formula(Fragment, CompoundTerm):
 	return self.store.newBlankNode(self, uri,  why=why)
     
     def declareUniversal(self, v):
+	if verbosity() > 90: progress("Declare universal:", v)
 	if v not in self._universalVariables:
 	    self._universalVariables.append(v)
 	
     def declareExistential(self, v):
+	if verbosity() > 90: progress("Declare existential:", v)
 	if v not in self._existentialVariables:
 	    self._existentialVariables.append(v)
 	
@@ -289,6 +291,13 @@ class Formula(Fragment, CompoundTerm):
 	store.copyFormulaRecursive(self, y, bindings, why=why)
 	return y.canonicalize()
 
+    def substituteEquals(self, bindings, newBindings):
+	"""Return this or a version of me with subsitution made
+	
+	Subsitution of = for = does NOT happen inside a formula,
+	as the formula is a form of quotation."""
+	return self
+
     def occurringIn(self, vars):
 	"Which variables in the list occur in this?"
 	set = []
@@ -386,32 +395,6 @@ class Formula(Fragment, CompoundTerm):
         self.store.dumpNested(self, _outSink)
         return buffer.getvalue()   # Do we need to explicitly close it or will it be GCd?
 
-    def debugString(self, already=[]):
-	"""A simple dump of a formula in debug form.
-	
-	This formula is dumped, using ids for nested formula.
-	Then, each nested formula mentioned is dumped."""
-	str = `self`+" is {"
-	for vv, ss in ((self.universals(), "@forAll"),(self.existentials(), "@forSome")):
-	    if vv != []:
-		str = str + " " + ss + " " + `vv[0]`
-		for v in vv[1:]:
-		    str = str + ", " + `v`
-		str = str + "."
-	todo = []
-	for s in self.statements:
-	    subj, pred, obj = s.spo
-	    str = str + "\n%28s  %20s %20s ." % (`subj`, `pred`, `obj`)
-	    for p in PRED, SUBJ, OBJ:
-		if (isinstance(s[p], Formula)
-		    and s[p] not in already and s[p] not in todo and s[p] is not self):
-		    todo.append(s[p])
-	str = str+ "}.\n"
-	already = already + todo + [ self ]
-	for f in todo:
-	    str = str + "        " + f.debugString(already)
-	return str
-
     def outputStrings(self, channel=None, relation=None):
         """Fetch output strings from store, sort and output
 
@@ -474,39 +457,13 @@ class Formula(Fragment, CompoundTerm):
 	for s in self.statementsMatching(pred=pred, subj=subj)[:]:
 	    yield s[OBJ]
 
-    def _checkList(self,  L, rest):
-        """Check whether this new list (given as bnode) causes other things to become lists.
-	Set up redirection so the list is used from now on instead of the bnode.	
-	Internal function."""
-	self._redirection[L] = rest
-	self._existentialVariables.remove(L)
-        if verbosity() > 80: progress("\tChecking new list was %s, now %s = %s"%(`L`, `rest`, `rest.value()`))
-        possibles = self.statementsMatching(pred=self.store.rest, obj=L)  # What has this as rest?
-        for s in possibles[:]:
-            L2 = s[SUBJ]
-            ff = self.statementsMatching(pred=self.store.first, subj=L2)
-            if ff != []:
-                first = ff[0][OBJ]
-		self.removeStatement(s) 
-		self.removeStatement(ff[0])
-		list = rest.prepend(first)
-		self._checkList(L2, list)
 
-	ss = self.statementsMatching(obj=L)
-	for s in ss:
-	    c1, p1, s1, o1 = s.quad
-	    self.removeStatement(s)
-	    self.add(pred=p1, subj=s1, obj=rest)
-
-	ss = self.statementsMatching(subj=L)
-	for s in ss:
-	    c1, p1, s1, o1 = s.quad
-	    self.removeStatement(s)
-	    self.add(pred=p1, subj=rest, obj=o1)
+#################################################################################
 
 
 class StoredStatement:
-
+    """A statememnt as an element of a formula
+    """
     def __init__(self, q):
         self.quad = q
 
@@ -571,6 +528,9 @@ class StoredStatement:
     def object(self):
 	"""Return the object of the statement"""
 	return self.quad[OBJ]
+
+    def spo(self):
+	return (self.quad[SUBJ], self.quad[PRED], self.quad[OBJ])
 
     def __len__(self):
 	return 1

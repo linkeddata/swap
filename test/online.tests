@@ -1,0 +1,21 @@
+# List of regression tests - subset which need online connection to run
+#
+#
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+@prefix dc:  <http://purl.org/dc/elements/1.1/>. # yuk - under protest - no hash
+
+
+:t1100 a test:CwmTest;
+    test:shortFileName "defdoc1-out.n3";
+    test:description   "Look up values in local definitive document (ONLINE)";
+    test:arguments     "--mode=rs dbork/defdoc1.n3 --think".
+
+:t1102 a test:CwmTest;
+    test:shortFileName	"defdoc2-out.n3";
+    test:description	"Look up values in 2 definitive documents (ONLINE)";
+    test:arguments	"--mode=rs dbork/defdoc2.n3 --think".
+
+
+#ends

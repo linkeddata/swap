@@ -141,14 +141,14 @@
 
 
 :t1017 a test:CwmTest;
-    test:shortFileName "lists-simple.n3";
+    test:shortFileName "lists.n3";
     test:description   "parsing and generation of N3 list syntax";
-    test:arguments     """-n3 lists-simple.n3""".
+    test:arguments     """-n3 lists.n3""".
 
 
 :t1018 a test:CwmTest;
     test:shortFileName "lists-simple-1.rdf";
-    test:description   "conversion of N3 list syntax to RDF";
+    test:description   "conversion of subset of N3 list syntax to RDF";
     test:arguments     """-n3 lists-simple.n3 -rdf""".
 
 #:t1018b1 a test:CwmTest;
@@ -450,15 +450,6 @@
     test:description   "os:argv argument other values";
     test:arguments     """os/argv.n3 --think --with boof""".
 
-:t1100 a test:CwmTest;
-    test:shortFileName "defdoc1-out.n3";
-    test:description   "Look up values in local definitive document (ONLINE)";
-    test:arguments     "--mode=rs dbork/defdoc1.n3 --think".
-
-:t1102 a test:CwmTest;
-    test:shortFileName	"defdoc2-out.n3";
-    test:description	"Look up values in 2 definitive documents";
-    test:arguments	"--mode=rs dbork/defdoc2.n3 --think".
 
 #:t3001 a test:CwmTest;
 #    test:shortFileName "lbase-to-otter";

@@ -5,16 +5,7 @@
 @prefix : <test#> .
 @prefix ont: <http://www.w3.org/2000/10/swap/log#> .
 
-# Other interesting unimplemented syntaxes ...
-#[ log:first :a;
-#  ont:rest thatWhich has ont:first :b; 
-#  ont:rest thatWhich has ont:first :c; 
-#  ont:rest thatWhich has ont:first :d; 
-#  ont:rest thatWhich has ont:first :e ];
-#
-# etc
-#
-#( :a :b :c :d :e )
+
 
 :threeItems = ( :b :c :d ) .
 
@@ -25,6 +16,17 @@
 :listOf2Empties = (()()) .
 
 :twoAnons = ([a :mother][a :father]).
+
+() :verb0 :object0.
+( "subj1" ) :verb1 :object1.
+( "subj2a" "subj2b" ) :verb2 :object2.
+
+
+# N3 only:
+
+( 1 ) <#linksEqualLists> ( 1 ) .
+
+
 
 :twoFormulae = ({:a a :mother} {:b a :father}).
 

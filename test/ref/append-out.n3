@@ -1,0 +1,32 @@
+     @prefix : <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    :A0     :RESULT  (
+        "only"  ) .
+    
+    :A1     :RESULT  (
+        1 
+        2  ) .
+    
+    :B0     :append  (
+        () 
+        "onlyB"  );
+         rdf:first "onlyB";
+         rdf:rest () .
+      ( "only"  )
+         :append  (
+        () 
+        "only"  ) .
+      ( 1 
+        2  )
+         :append  (
+         (
+            1  )
+        2  ) .
+      ( 2  )
+         :append  (
+        () 
+        2  ) .
+    

@@ -270,14 +270,14 @@ class IndexedFormula(Formula):
         Formula.__init__(self, resource, fragid)
         self.descendents = None   # Placeholder for list of closure under subcontext
 	self.collector = None # Object collecting evidence, if any 
-	self._redirection = {}
+	self._redirections = {}
+	self._newRedirections = {}  # not subsituted yet
 	self._index = {}
 	self._index[(None,None,None)] = self.statements
 
 	self._closureMode = ""
 	self._closureAgenda = []
 	self._closureAlready = []
-	self.lists = []  # Made later when we compactLists
 
 
     def statementsMatching(self, pred=None, subj=None, obj=None):
@@ -381,22 +381,25 @@ class IndexedFormula(Formula):
 	Works in place. Strips out the reifications fo the lists,
 	and converts any statements which refer to the list to refer to the object."""
 	assert self.canonical == None
+	return
+	
+	#@@@@@@@@@@@@@@@@@ remove the rest
 	if verbosity() > 90:
 	    progress("Comapcting lists:"+`self`)
 	
-	if self._redirection == {}: return
+	if self._redirections == {}: return
 
 	for s in self.statements[:]:
 	    context, pred, subj, obj = s.quad
 	    try:
-		subj = self._redirection[subj]
+		subj = self._redirections[subj]
 		if pred is self.store.first or pred is self.store.rest:
 		    self.removeStatement(s)
 		    if verbosity()>80: progress(" \tList compact: removing", s)
 		    assert false
 		    if pred is self.store.first: # nested list
 			try:
-			    nested = self._redirection[obj]
+			    nested = self._redirections[obj]
 			    rest = subj.rest
 			    del(rest._prec[obj])
 			    rest._prec[nested] = subj
@@ -405,28 +408,18 @@ class IndexedFormula(Formula):
 			    pass
 		    continue   # Just strip the first and rest out
 		else:
-		    self.lists.append(subj)
-		    try:
-			obj = self._redirection[obj]
-			self.lists.append(obj)
-		    except:
-			pass
+		    pass
 	    except KeyError:
-		try:
-		    obj = self._redirection[obj]
-		    self.lists.append(obj)
-		except:
-		    continue
-	    
+		pass
 	    if verbosity()>80: progress(" \tList compact: replacing", s)
 	    assert false
 	    self.removeStatement(s)
 	    self.add(subj=subj, pred=pred, obj=obj)
 
-#	for v in self._redirection.keys():
+#	for v in self._redirections.keys():
 #	    if verbosity()>80: progress(" \tList compact: removing existential", v)
 #	    self._existentialVariables.remove(v)
-	self._redirection = {}
+#	self._redirections = {}
 		    
 
     def add(self, subj, pred, obj, why=None):
@@ -438,41 +431,41 @@ class IndexedFormula(Formula):
 	"""
         if self.canonical != None:
             raise RuntimeError("Attempt to add statement to canonical formula "+`self`)
-
 	store = self.store
-	triple = [ pred, subj, obj ]
-	for i in 0, 1, 2:
-	    if not isinstance(triple[i], Term): triple[i] = store.intern(triple[i])
-	    try:
-		x = self._redirection[triple[i]]  # redirect to list value
-		if verbosity()>90: progress("\tRedirecting %s to %s" %( triple[i], x))
-		triple[i] = x
-		if not ((pred is self.store.first) or (pred is self.store.rest)) or i!=1:
-		    self.lists.append(triple[i])
-	    except KeyError:
-		pass
 	
-	pred = triple[0]
-	subj = triple[1]
-	obj = triple[2]
+	if not isinstance(subj, Term): subj = store.intern(subj)
+	if not isinstance(pred, Term): pred = store.intern(pred)
+	if not isinstance(obj, Term): subj = store.intern(obj)
+	newBindings = {}
+
+#	Smushing of things which are equal into a single node
+#	Even if we do not do this with owl:equivalentTo, we do with lists
+
+	subj = subj.substituteEquals(self._redirections, newBindings)
+	pred = pred.substituteEquals(self._redirections, newBindings)
+	obj = obj.substituteEquals(self._redirections, newBindings)
+	    
         if verbosity() > 50:
-            progress("add quad (size before %i) %s: %s " % (self.store.size, self,  `triple`) )
+            progress("Add statement (size before %i) to %s: {%s %s %s}" % (
+		self.store.size, self,  subj, pred, obj) )
         if self.statementsMatching(pred, subj, obj):
-            if verbosity() > 97:  progress("storeQuad duplicate suppressed"+`triple`)
+            if verbosity() > 97:
+		progress("Add duplicate SUPPRESSED %s: {%s %s %s}" % (
+		    self,  subj, pred, obj) )
             return 0  # Return no change in size of store
+	    
 	assert not isinstance(pred, Formula) or pred.canonical is pred, "pred Should be closed"+`pred`
 	assert (not isinstance(subj, Formula)
 		or subj is self
-		or subj.canonical is subj), "subj Should be closed or this"+`subj`
+		or subj.canonical is subj), "subj Should be closed or self"+`subj`
 	assert not isinstance(obj, Formula) or obj.canonical is obj, "obj Should be closed"+`obj`
-
-        store.size = store.size+1
 
 # We collapse lists from the declared daml first,rest structure into List objects.
 # To do this, we need a bnode with (a) a first; (b) a rest, and (c) the rest being a list.
-# We trigger List collapse on any of these three becoming true.
+# We trigger list collapse on any of these three becoming true.
 # @@@ we don't reverse this on remove statement.  Remove statement is really not a user call.
 
+#	newBindings = {}
 	if subj in self._existentialVariables:
 	    if pred is store.rest and isinstance(obj, List):
 		ss = self.statementsMatching(pred=store.first, subj=subj)
@@ -481,7 +474,8 @@ class IndexedFormula(Formula):
 		    self.removeStatement(s)
 		    first = s[OBJ]
 		    list = obj.prepend(first)
-		    self._checkList(subj, list)
+		    self._noteNewList(subj, list, newBindings)
+		    self.substituteEqualsInPlace(newBindings)
 		    return 1  # Added a statement but ... it is hidden in lists
     
 	    elif pred is store.first:
@@ -489,10 +483,19 @@ class IndexedFormula(Formula):
 		if ss:
 		    s = ss[0]
 		    rest = s[OBJ]
-		    list = rest.prepend(obj)
-		    self.removeStatement(s)
-		    self._checkList(subj, list)
-		    return 1
+		    if isinstance(rest, List):
+			list = rest.prepend(obj)
+			self.removeStatement(s)
+			self._noteNewList(subj, list, newBindings)
+			self.substituteEqualsInPlace(newBindings)
+			return 1
+#########
+	if newBindings != {}:
+	    progress("&&&&&&& doing new bindings", newBindings)
+	    self.substituteEqualsInPlace(newBindings)
+#######
+
+        store.size = store.size+1
 
         s = StoredStatement((self, pred, subj, obj))
 	
@@ -551,7 +554,8 @@ class IndexedFormula(Formula):
 
         return 1  # One statement has been added  @@ ignore closure extras from closure
 		    # Obsolete this return value? @@@ 
-    
+
+		
     def removeStatement(self, s):
 	"""Removes a statement The formula must be open.
 	
@@ -702,32 +706,6 @@ class IndexedFormula(Formula):
         self.store.dumpNested(self, _outSink)
         return buffer.getvalue()   # Do we need to explicitly close it or will it be GCd?
 
-    def debugString(self, already=[]):
-	"""A simple dump of a formula in debug form.
-	
-	This formula is dumped, using ids for nested formula.
-	Then, each nested formula mentioned is dumped."""
-	str = `self`+" is {"
-	for vv, ss in ((self.universals(), "@forAll"),(self.existentials(), "@forSome")):
-	    if vv != []:
-		str = str + " " + ss + " " + `vv[0]`
-		for v in vv[1:]:
-		    str = str + ", " + `v`
-		str = str + "."
-	todo = []
-	for s in self.statements:
-	    con, pred, subj, obj = s.quad
-	    str = str + "\n%28s  %20s %20s ." % (`subj`, `pred`, `obj`)
-	    for p in PRED, SUBJ, OBJ:
-		if (isinstance(s[p], Formula)
-		    and s[p] not in already and s[p] not in todo and s[p] is not self):
-		    todo.append(s[p])
-	str = str+ "}.\n"
-	already = already + todo + [ self ]
-	for f in todo:
-	    str = str + "        " + f.debugString(already)
-	return str
-
     def outputStrings(self, channel=None, relation=None):
         """Fetch output strings from store, sort and output
 
@@ -757,37 +735,46 @@ class IndexedFormula(Formula):
 	return  f.store.testIncludes(f, g, _variables=_variables, smartIn=smartIn, bindings=bindings)
 
 
-    def generated(self):
-	"""Yes, any identifier you see for this is arbitrary."""
-        return 1
+    def debugString(self, already=[]):
+	"""A simple dump of a formula in debug form.
+	
+	This formula is dumped, using ids for nested formula.
+	Then, each nested formula mentioned is dumped."""
+	red = ""
+	if self._redirections != {}: red = " redirections:" + `self._redirections`
+	str = `self`+ red + " is {"
+	for vv, ss in ((self.universals(), "@forAll"),(self.existentials(), "@forSome")):
+	    if vv != []:
+		str = str + " " + ss + " " + `vv[0]`
+		for v in vv[1:]:
+		    str = str + ", " + `v`
+		str = str + "."
+	todo = []
+	for s in self.statements:
+	    subj, pred, obj = s.spo()
+	    str = str + "\n%28s  %20s %20s ." % (`subj`, `pred`, `obj`)
+	    for p in PRED, SUBJ, OBJ:
+		if (isinstance(s[p], CompoundTerm)
+		    and s[p] not in already and s[p] not in todo and s[p] is not self):
+		    todo.append(s[p])
+	str = str+ "}.\n"
+	already = already + todo + [ self ]
+	for f in todo:
+	    str = str + "        " + f.debugString(already)
+	return str
 
-    def asPair(self):
-	"""Return an old representation. Obsolete"""
-        return (FORMULA, self.uriref())
-
-    def subjects(self, pred=None, obj=None):
-        """Obsolete - use each(pred=..., obj=...)"""
-	for s in self.statementsMatching(pred=pred, obj=obj)[:]:
-	    yield s[SUBJ]
-
-    def predicates(self, subj=None, obj=None):
-        """Obsolete - use each(subj=..., obj=...)"""
-	for s in self.statementsMatching(subj=subj, obj=obj)[:]:
-	    yield s[PRED]
-
-    def objects(self, pred=None, subj=None):
-        """Obsolete - use each(subj=..., pred=...)"""
-	for s in self.statementsMatching(pred=pred, subj=subj)[:]:
-	    yield s[OBJ]
-
-    def _checkList(self,  L, rest):
-        """Check whether this new list (given as bnode) causes other things to become lists.
+    def _noteNewList(self,  bnode, list, newBindings):
+        """Note that we have a new list.
+	
+	Check whether this new list (given as bnode) causes other things to become lists.
 	Set up redirection so the list is used from now on instead of the bnode.	
 	Internal function."""
-	self._redirection[L] = rest
-	self._existentialVariables.remove(L)
-        if verbosity() > 80: progress("\tChecking new list was %s, now %s = %s"%(`L`, `rest`, `rest.value()`))
-        possibles = self.statementsMatching(pred=self.store.rest, obj=L)  # What has this as rest?
+        if verbosity() > 80: progress("New list was %s, now %s = %s"%(`bnode`, `list`, `list.value()`))
+	if isinstance(bnode, List): return  ##@@@@@ why is this necessary? weid.
+	newBindings[bnode] = list
+        if verbosity() > 80: progress("...New list newBindings %s"%(`newBindings`))
+	self._existentialVariables.remove(bnode)
+        possibles = self.statementsMatching(pred=self.store.rest, obj=bnode)  # What has this as rest?
         for s in possibles[:]:
             L2 = s[SUBJ]
             ff = self.statementsMatching(pred=self.store.first, subj=L2)
@@ -795,23 +782,65 @@ class IndexedFormula(Formula):
                 first = ff[0][OBJ]
 		self.removeStatement(s) 
 		self.removeStatement(ff[0])
-		list = rest.prepend(first)
-		self._checkList(L2, list)
+		list2 = list.prepend(first)
+		self._noteNewList(L2, list2, newBindings)
+	return
 
-	ss = self.statementsMatching(obj=L)
-	for s in ss:
-	    c1, p1, s1, o1 = s.quad
-	    self.removeStatement(s)
-	    self.add(pred=p1, subj=s1, obj=rest)
-
-	ss = self.statementsMatching(subj=L)
-	for s in ss:
-	    c1, p1, s1, o1 = s.quad
-	    self.removeStatement(s)
-	    self.add(pred=p1, subj=rest, obj=o1)
-
-
+    def substituteEqualsInPlace(self, redirections):
+	"""Slow ... does not use indexes"""
+	bindings = redirections
+	while bindings != {}:
+	    self._redirections.update(bindings)
+	    newBindings = {}
+	    for s in self.statements[:]:  # take a copy!
+		changed = 0
+		quad = [self, s[PRED], s[SUBJ], s[OBJ]]
+		for p in PRED, SUBJ, OBJ:
+		    x = s[p]
+		    y = x.substituteEquals(bindings, newBindings)
+		    if verbosity()>120: progress(
+			    "&&&&&& CHECKING %s in place for %s" %(x, redirections))
+		    if y is not x:
+			if verbosity()>90: progress("Substituted %s -> %s in place" %(x, y))
+			changed = 1
+			quad[p] = y
+		if changed:
+		    self.removeStatement(s)
+		    self.add(subj=quad[SUBJ], pred=quad[PRED], obj=quad[OBJ])
+	    bindings = newBindings
+	    if verbosity()>70: progress("Substitions %s generated %s" %(bindings, newBindings))
+	return
 	
+	
+	# @@@@ Junk, or  - a faster way with indexes when bindings are few and stroe is large.
+	# no way alas of using indexes for lists.
+	ss = self.statementsMatching(obj=bnode)
+	for s in ss:
+	    c1, p1, s1, o1 = s.quad
+	    self.removeStatement(s)
+	    self.add(pred=p1, subj=s1, obj=newList)
+	    mentioned = 1
+	    
+	ss = self.statementsMatching(subj=bnode)
+	for s in ss:
+	    c1, p1, s1, o1 = s.quad
+	    self.removeStatement(s)
+	    self.add(pred=p1, subj=newList, obj=o1)
+	    mentioned = 1
+
+	for i in range(len(self.lists)):
+	    progress("&&&&&&&&&& checking %s for %s" % (self.lists[i].value(), `bnode`))
+	    x = self.lists[i].substituteEquals({bnode: newList})
+	    if x is not self.lists[i]:
+		self.lists[i] = x
+		mentioned =1
+		progress("&&&&&&&&&&", self.lists[i].value())
+#		raise gotit_now_subsitutethatone
+	if mentioned and newList not in self.lists:
+	    self._noteListMentioed(newList)
+
+
+
 def comparePair(self, other):
     for i in 0,1:
         x = compareTerm(self[i], other[i])
@@ -1252,9 +1281,6 @@ class RDFStore(RDFSink) :
 	self.first = rdf.internFrag("first", BI_first)
         self.rest = rdf.internFrag("rest", BI_rest)
         self.nil = self.intern(N3_nil, FragmentNil)
-#        self.nil._asList = EmptyList(self, None, None)
-#        self.nil = EmptyList(self, None, None)
-#        self.only = self.intern(N3_only)
         self.Empty = self.intern(N3_Empty)
         self.List = self.intern(N3_List)
 
@@ -1480,7 +1506,6 @@ class RDFStore(RDFSink) :
 
 	if isinstance(what, Term): return what # Already interned.  @@Could mask bugs
 	if type(what) is not types.TupleType:
-#	    progress("llyn1450 @@@ interning ", `what`)
 	    if isinstance(what, tuple(types.StringTypes)):
 		return self.newLiteral(what, dt, lang)
 	    progress("llyn1450 @@@ interning non-string", `what`)
@@ -1528,7 +1553,6 @@ class RDFStore(RDFSink) :
                 else: raise RuntimeError, "did not expect other type:"+`typ`
         return result
 
-     
     def newList(self, value):
 	return nil.newList(value)
 
@@ -1731,7 +1755,7 @@ class RDFStore(RDFSink) :
         if G == None:
 	    G = F
 	assert not G.canonical # Must be open to add stuff
-	if F._redirection != {}: F.compactLists()
+	if F._redirections != {}: F.compactLists()
         if verbosity() > 45: progress("think: rules from %s added to %s" %(F, G))
         bindingsFound = {}  # rule: list bindings already found
         while 1:
@@ -2023,14 +2047,12 @@ class Query:
 	Returns the number of statements added."""
 	if self.justOne: return 1   # If only a test needed
 	assert type(bindings) is type({})
-#        store, workingContext, conclusion, targetContext,  already, rule = param
 
         if verbosity() >60: progress( "\nConcluding tentatively..." + bindingsToString(bindings))
 
         if self.already != None:
             if bindings in self.already:
                 if verbosity() > 30: progress("@@Duplicate result: ", bindingsToString(bindings))
-                # raise foo
                 return 0
             if verbosity() > 30: progress("Not duplicate: ", bindingsToString(bindings))
             self.already.append(bindings)   # A list of dicts
@@ -2045,34 +2067,42 @@ class Query:
 	    if val in es:
 		exout.append(val)
 		if verbosity() > 25:
-		    progress("Matches we found which is just existential: %s -> %s" % (var, val))
-		self.targetContext.add(subj=self.targetContext, pred=self.store.forSome, obj=val, why=reason)
+		    progress("Match found to that which is only an existential: %s -> %s" % (var, val))
+		self.targetContext.declareExistential(val)
 
         b2 = bindings.copy()
 	b2[self.conclusion] = self.targetContext
-	assert type(b2) is type({})
         ok = self.targetContext.universals()  # It is actually ok to share universal variables with other stuff
         poss = self.conclusion.universals()[:]
         for x in poss[:]:
             if x in ok: poss.remove(x)
+
         vars = self.conclusion.existentials() + poss  # Terms with arbitrary identifiers
 #        clashes = self.occurringIn(targetContext, vars)    Too slow to do every time; play safe
 	if verbosity() > 25:
-	    s = "Universals in conclusion but not in target regenerated:" + `vars`
-        for v in vars:
+	    progress("Variables regenerated: universal " + `poss`
+		+ " existential: " +`self.conclusion.existentials()`)
+	    s=""
+	for v in poss:
+	    v2 = self.targetContext.newUniversal()
+	    b2[v] =v2   # Regenerate names to avoid clash
+	    if verbosity() > 25: s = s + ",uni %s -> %s" %(v, v2)
+        for v in self.conclusion.existentials():
 	    if v not in exout:
-		v2 = self.store.newInterned(ANONYMOUS)
+		v2 = self.targetContext.newBlankNode()
 		b2[v] =v2   # Regenerate names to avoid clash
-		if verbosity() > 25: s = s + ", %s -> %s" %(v, v2)
+		if verbosity() > 25: s = s + ",exi %s -> %s" %(v, v2)
 	    else:
 		if verbosity() > 25: s = s + (", (%s is existential in kb)"%v)
-	if len(vars) >0 and verbosity() > 25:
+	if verbosity() > 25:
 	    progress(s)
 	
 
         if verbosity()>10:
             progress("Concluding definitively" + bindingsToString(b2) )
         before = self.store.size
+	if verbosity() > 120:
+		    progress("&&&&&&&& existentials: %s" % (self.targetContext._existentialVariables))
         self.store.copyFormulaRecursive(
 		    self.conclusion, self.targetContext, b2, why=reason)
         if verbosity()>30:
@@ -2506,13 +2536,14 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         nbs = []
         if self.short == INFINITY:
             if verbosity() > 36:
-                progress( "  Can't deep search for %s" % `self`)
+                progress( "Can't deep search for %s" % `self`)
         else:
             if verbosity() > 36:
-                progress( "  Searching (S=%i) %i for %s" %(self.state, self.short, `self`))
+                progress( "Searching (S=%i) %i for %s" %(self.state, self.short, `self`))
             for s in self.myIndex :  # for everything matching what we know,
                 nb = {}
                 reject = 0
+		if verbosity() > 106: progress("...checking %s" % self)
                 for p in PRED, SUBJ, OBJ:
                     if self.searchPattern[p] == None: # Need to check
 			x = self.quad[p]
@@ -2522,8 +2553,11 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			    nbs1 = x.unify(s.quad[p], self.query.variables,
 				self.query.existentials, {})  # Bindings have all been bound
 			    if verbosity() > 70:
-				progress( "  Searching deep %s result binding %s" %(self, nbs1))
-			    if nbs1 == 0: return 0 # No way
+				progress( "Searching deep %s result binding %s" %(self, nbs1))
+			    if nbs1 == 0:
+				if verbosity() > 106: progress("......fail: %s" % self)
+				break  # reject this statement
+#				return 0 # No way
 			    if len(nbs1) > 1:
 				raise RuntimeError("Not implemented this hook yet - call timbl")
 			    nb1, rea = nbs1[0]
@@ -2535,7 +2569,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 					del nb1[binding[0]] # duplicate  
 				    else: # don't bind same to var to 2 things!
 					reject = 1
-					break
+					break # reject
 			else:
 			    nb.update(nb1)
 			    continue
