@@ -342,7 +342,7 @@ rdf/xml files. Note that this requires rdflib.
 
         if option_pipe:
             _store = _outSink
-	    workingContext = _outSink
+	    workingContext = _outSink #.newFormula()
         else:
 	    if "u" in option_flags["think"]:
 		_store = llyn.RDFStore(argv=option_with, crypto=option_crypto)

@@ -238,6 +238,13 @@ class TripleMaker:
         a = formula.newSymbol(sym)
         formula.declareUniversal(a)
         self.addNode(a)
+
+    def bind(self, prefix, uri):
+        if prefix == "":
+            self.store.setDefaultNamespace(uri)
+        else:
+            self.store.bind(prefix, uri)
+
     
         
         

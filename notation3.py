@@ -1554,7 +1554,7 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 		    return "<#" + value[j+1:] + ">" #   use local frag id (@@ lone word?)
         
 	if "r" not in self._flags and self.base != None:
-	    value = refTo(self.base, value)
+	    value = hexify(refTo(self.base, value))
 	elif "u" in self._flags: value = backslashUify(value)
 	else: value = hexify(value)
 
@@ -1563,30 +1563,157 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 def nothing():
     pass
 
-class tmToN3:
+import triple_maker as tm
+
+LIST = 10000
+QUESTION = 10001
+class tmToN3(RDFSink.RDFSink):
     """
 
 
     """
-    def __init__(self, write):
-        self._write = writeEncoded
-        self._writeRaw = write
+    def __init__(self, write, base=None, genPrefix = None, noLists=0 , quiet=0, flags=""):
+        gp = genPrefix
+	if gp == None:
+	    gp = "#_g"
+	    if base!=None: 
+		try:
+		    gp = uripath.join(base, "#_g")
+		except ValueError:
+		    pass # bogus: base eg
+	RDFSink.RDFSink.__init__(self, gp)
+	self._write = self.writeEncoded
+	self._writeRaw = write
+	self._quiet = quiet or "q" in flags
+	self._flags = flags
+	self._subj = None
+	self.prefixes = {}      # Look up prefix conventions
+	self.defaultNamespace = None
+	self.indent = 1         # Level of nesting of output
+	self.base = base
+#	self.nextId = 0         # Regenerate Ids on output
+	self.regen = {}         # Mapping of regenerated Ids
+#	self.genPrefix = genPrefix  # Prefix for generated URIs on output
+	self.noLists = noLists  # Suppress generation of lists?
+	self._anodeName = {} # For "a" flag
+	self._anodeId = {} # For "a" flag - reverse mapping
+
+        if "l" in self._flags: self.noLists = 1
     
     def writeEncoded(self, str):
 	"""Write a possibly unicode string out to the output"""
 	return self._writeRaw(str.encode('utf-8'))
+
+    def _newline(self, extra=0):
+        self._write("\n"+ "    " * (self.indent+extra))
+        
+    def bind(self, prefixString, uri):
+        """ Just accepting a convention here """
+        assert ':' in uri # absolute URI references only
+        if "p" in self._flags: return  # Ignore the prefix system completely
+        if not prefixString:
+            return self.setDefaultNamespace(uri)
+        
+        if (uri == self.defaultNamespace
+            and "d" not in self._flags): return # don't duplicate ??
+        self.endStatement()
+        self.prefixes[uri] = prefixString
+        self._write(" @prefix %s: <%s> ." % (prefixString, refTo(self.base, uri)) )
+        self._newline()
+
+    def setDefaultNamespace(self, uri):
+        if "d" in self._flags or "p" in self._flags: return  # Ignore the prefix system completely
+        self.endStatement()
+        self.defaultNamespace = uri
+	if self.base:  # Sometimes there is none, and nowadays refTo is intolerant
+	    x = refTo(self.base, uri)
+	else:
+	    x = uri
+        self._write(" @prefix : <%s> ." % x )
+        self._newline()
     
     def start(self):
         pass
         self._parts = [0]
         self._types = [None]
+        self._nodeEnded = False
 
     def end(self):
         self._write('\n\n#End')
 
     def addNode(self, node):
-        pass
+        self._parts[-1] += 1
+        if node is not None:
+            self._realEnd()
+            if self._types == LITERAL:
+                lit, dt, lang = node
+                singleLine = "n" in self._flags
+                if dt != None and "n" not in self._flags:
+                    dt_uri = dt		 
+                    if (dt_uri == INTEGER_DATATYPE):
+                        self._write(str(long(lit)))
+                        return
+                    if (dt_uri == FLOAT_DATATYPE):
+                        self._write(str(float(lit)))    # numeric value python-normalized
+                        return
+                    if (dt_uri == DECIMAL_DATATYPE):
+                        self._write(str(Decimal(lit)))
+                        return
+                st = stringToN3(lit, singleLine= singleLine, flags=self._flags)
+                if lang != None: st = st + "@" + lang
+                if dt != None: st = st + "^^" + self.symbolString(dt)
+                self._write(st)
+            elif self._types == SYMBOL:
+                self._write(self.symbolString(node) + ' ')
 
+            elif self._types == QUESTION:
+                self._write('?' + node + ' ')
+
+    def _realEnd(self):
+        if self._nodeEnded:
+            self._nodeEnded = False
+            if self._parts[-1] == 1:
+                self._write(' . \n')
+            elif self._parts[-1] == 2:
+                self._write(';\n')
+            elif self._parts[-1] == 3:
+                self._write(',\n')
+            else:
+                pass
+    
+    def symbolString(self, value):
+        j = string.rfind(value, "#")
+	if j<0 and "/" in self._flags:
+	    j=string.rfind(value, "/")   # Allow "/" namespaces as a second best
+	
+        if (j>=0
+            and "p" not in self._flags):   # Suppress use of prefixes?
+#            and value[j+1:].find(".") <0 ): # Can't use prefix if localname includes "."
+#            print "|%s|%s|"%(self.defaultNamespace, value[:j+1])
+	    for ch in value[j+1:]:  #  Examples: "."   ";"  we can't have in qname
+		if ch in _notNameChars:
+		    if verbosity() > 0:
+			progress("Cannot have character %i in local name." % ord(ch))
+		    break
+	    else:
+		namesp = value[:j+1]
+		if (self.defaultNamespace
+		    and self.defaultNamespace == namesp
+		    and "d" not in self._flags):
+		    return ":"+value[j+1:]
+		self.countNamespace(namesp)
+		prefix = self.prefixes.get(namesp, None) # @@ #CONVENTION
+		if prefix != None : return prefix + ":" + value[j+1:]
+	    
+		if value[:j] == self.base:   # If local to output stream,
+		    return "<#" + value[j+1:] + ">" #   use local frag id (@@ lone word?)
+        
+	if "r" not in self._flags and self.base != None:
+	    value = refTo(self.base, value)
+	elif "u" in self._flags: value = backslashUify(value)
+	else: value = hexify(value)
+
+        return "<" + value + ">"    # Everything else
     def IsOf(self):
         self._write('is ')
         self._predIsOfs[-1] = FRESH
@@ -1602,6 +1729,7 @@ class tmToN3:
         
     def endStatement(self):
         self._parts[-1] = 0
+        self._nodeEnded = True
 
     def addLiteral(self, lit, dt=None, lang=None):
         self._types = LITERAL
@@ -1612,6 +1740,7 @@ class tmToN3:
         self.addNode(sym)
     
     def beginFormula(self):
+        self._realEnd()
         self._parts.append(0)
         self._write('{')
 
@@ -1622,11 +1751,14 @@ class tmToN3:
         self.addNode(None)
 
     def beginList(self):
+        self._realEnd()
         self._parts.append(-1)
+        self._write('(')
 
     def endList(self):
         self._parts.pop()
         self._types = LIST
+        self._write(') ')
         self.addNode(None)
 
     def addAnonymous(self, Id):
@@ -1643,6 +1775,7 @@ class tmToN3:
         
     
     def beginAnonymous(self):
+        self._realEnd()
         self._parts.append(0)
         self._write('[')
         
@@ -1651,7 +1784,7 @@ class tmToN3:
         self._parts.pop()
         self._write(']')
         self._types = None
-        self.addNone(None)
+        self.addNode(None)
 
     def declareExistential(self, sym):
         self._write('@forSome ' + sym + ' . ')
@@ -1745,12 +1878,17 @@ def backslashUify(ustr):
     return str
 
 def hexify(ustr):
-    """Use URL encoding to return an ASCII string corresponding to the given unicode"""
+    """Use URL encoding to return an ASCII string corresponding to the given UTF8 string
+
+    >>> hexify("http://example/a b")
+    'http://example/a%20b'
+    
+    """   #"
 #    progress("String is "+`ustr`)
 #    s1=ustr.encode('utf-8')
     str  = ""
     for ch in ustr:  # .encode('utf-8'):
-	if ord(ch) > 126:
+	if ord(ch) > 126 or ord(ch) < 33 :
 	    ch = "%%%02X" % ord(ch)
 	else:
 	    ch = "%c" % ord(ch)
@@ -1779,3 +1917,12 @@ def dummy():
 
 
 #ends
+
+
+def _test():
+    import doctest
+    doctest.testmod()
+
+
+if __name__ == '__main__':
+    _test()

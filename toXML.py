@@ -268,7 +268,7 @@ z  - Allow relative URIs for namespaces
 		attrs = []  # Literal
 		if type(v) is type((1,1)):
 		    v, dt, lang = v
-		    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt.uriref()))
+		    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt))
 		    if lang != None: attrs.append((XML_NS_URI+' lang', lang))
 		self._xwr.startElement(RDF_NS_URI+'Description',
 				    [], self.prefixes)
@@ -294,7 +294,7 @@ z  - Allow relative URIs for namespaces
 	v = obj[1]
 	if obj[0] == LITERAL_DT:
 	    v, dt = v
-	    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt.uriref()))
+	    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt))
 	elif obj[0] == LITERAL_LANG:
 	    v, lang = v
 	    if lang != None: attrs.append((XML_NS_URI+' lang', lang))
@@ -678,7 +678,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
 
     def end(self):
         assert len(self.lists) == 0
-        assert len(self.bNodes) == 0
+        #assert len(self.bNodes) == 0
         self._closeSubject()
         self._xwr.endElement()
         self._docOpen = 0
@@ -693,7 +693,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
 
     def addNode(self, node, nameLess = 0):
         if self._modes[-1] == tm.ANONYMOUS and node is not None and self._parts[-1] == tm.NOTHING:
-            raise ValueError('You put a dot in a bNode')
+            raise ValueError('You put a dot in a bNode:' + `node`)
         if self._modes[-1] == tm.FORMULA or self._modes[-1] == tm.ANONYMOUS:
             self._parts[-1] = self._parts[-1] + 1
             if self._parts[-1] > 3:
@@ -729,13 +729,24 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
                         
                 if nameLess:
                     node = "NameLess"
-                self._triples[-1][self._parts[-1]] = node
+                try:
+                    self._triples[-1][self._parts[-1]] = node
+                except:
+                    print self._parts, " - ", self._triples
+                    raise
         if self._modes[-1] == tm.ANONYMOUS and self._pathModes[-1] == True:
             self.endStatement()
             self.endAnonymous()
-        if self._modes[-1] == tm.LIST:
+        if self._modes[-1] == tm.LIST and nameLess == 0:
+            self._modes[-1] = tm.FORMULA
             self.beginAnonymous()
+            self.lists[-1] += 1
+            self._modes[-1] = tm.ANONYMOUS
+            self.addSymbol(List_NS + "first")
             self.addNode(node)
+            self.endStatement()
+            self.addNode(None)
+            self.addSymbol(List_NS + "rest")
             self._modes[-1] = tm.LIST
 
     def nodeIDize(self, argument):
@@ -859,11 +870,15 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
         self._modes.append(tm.LIST)
 
     def endList(self):
+        self._modes[-1] = tm.ANONYMOUS
         self.addSymbol(RDF_NS_URI + 'nil')
         a = self.lists.pop()
         for x in range(a):
+            if self._parts[-1] != tm.PREDICATE:
+                self._modes[-1] = tm.ANONYMOUS
             self.endAnonymous()
         self._modes.pop()
+        print '_______________', self._modes
 
     def addAnonymous(self, Id):
         #print '\\\\\\\\', Id
@@ -893,6 +908,7 @@ class tmToRDF(RDFSink.RDFStructuredOutput):
 
     def endAnonymous(self):
         if self._modes[-1] != tm.ANONYMOUS:
+            self._parts[-1] = tm.SUBJECT
             #self.endStatement()
             return
         if self._parts[-1] != tm.NOTHING:

@@ -20,7 +20,7 @@
 @prefix : <#>.
 @prefix foo: <#>.
 
-this log:forAll :a, :c, :d, :k, :l, :p, :s, :t, :x, :y, :z.
+@forAll :a, :c, :d, :k, :l, :p, :s, :t, :x, :y, :z.
 
 # Select subclasses of TaxCategories.
 #  Must be at least one entry, and must have a label
@@ -58,13 +58,19 @@ q:UnclassifiedOutgoing a :toBeDisplayed.
 # Each line:
 
 {  
-    [] a :y; q:payee :p; q:amount :x; q:date :d; q:toAccount [s:label :a].
+    [] a :y;
+	q:payee :p;
+	q:amount :x;
+	q:date :d;
+	log:uri ?URI;
+	q:toAccount [s:label :a].
     :p log:notEqualTo "Check".
     :p log:notEqualTo "Check - Ecp".
     :y a :toBeDisplayed; s:label :l.
     ( :l :d ) string:concatenation :k.
-    (  "<tr class='"  :a "'><td class='date'>" (:d "^([^T]*)")!string:scrape
-#       "</td><td class='cat'>" :l
+    (  "<tr class='"  :a
+	 "'><td class='date'><a href='" ?URI "'>" (:d "^([^T]*)")!string:scrape
+#       "</a></td><td class='cat'>" :l
        "</td><td class='payee'>" :p
 #       "</td><td class='to'>" :a
        "</td><td class='amount'>" :x "</td></tr>\n") string:concatenation :s

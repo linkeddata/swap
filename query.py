@@ -5,6 +5,8 @@
 
 QL_NS = "http://www.w3.org/2004/ql#"
 
+from set_importer import Set, ImmutableSet
+
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, List_NS
@@ -87,7 +89,7 @@ class InferenceTask:
 		workingContext,    # Data we assume 
 		ruleFormula = None,    # Where to find the rules
 		targetContext = None,   # Where to put the conclusions
-		universals = [],        # Inherited from higher contexts
+		universals = Set(),        # Inherited from higher contexts
 		mode="",		# modus operandi
 		why=None,			# Trace reason for all this
 		repeat = 0):		# do it until finished
@@ -113,9 +115,9 @@ class InferenceTask:
 	"""Run the rules by mapping rule interactions first"""
 	rules= self.ruleFor.values()
 	for r1 in rules:
-	    vars1 = r1.templateExistentials + r1.variablesUsed
+	    vars1 = r1.templateExistentials | r1.variablesUsed
 	    for r2 in rules:
-		vars2 = r2.templateExistentials + r2.variablesUsed
+		vars2 = r2.templateExistentials | r2.variablesUsed
 		for s1 in r1.conclusion.statements:
 		    for s2 in r2.template.statements:
 			for p in PRED, SUBJ, OBJ:
@@ -252,14 +254,14 @@ class InferenceTask:
 
 
     def gatherRules(self, ruleFormula):
-	universals = [] # @@ self.universals??
+	universals = Set() # @@ self.universals??
 	for s in ruleFormula.statementsMatching(pred=self.store.implies):
 	    r = self.ruleFor.get(s, None)
 	    if r != None: continue
 	    con, pred, subj, obj  = s.quad
 	    if (isinstance(subj, Formula)
 		and isinstance(obj, Formula)):
-		v2 = universals + ruleFormula.universals() # Note new variables can be generated
+		v2 = universals | ruleFormula.universals() # Note new variables can be generated
 		r = Rule(self, antecedent=subj, consequent=obj, statement=s,  variables=v2)
 		self.ruleFor[s] = r
 		if r.meta: self.hasMetaRule = 1
@@ -271,7 +273,7 @@ class InferenceTask:
 
     def gatherQueries(self, ruleFormula):
 	"Find a set of rules in N3QL"
-	universals = [] # @@ self.universals??
+	universals = Set() # @@ self.universals??
 	ql_select = self.store.newSymbol(QL_NS + "select")
 	ql_where = self.store.newSymbol(QL_NS + "where")
 	for s in ruleFormula.statementsMatching(pred=ql_select):
@@ -283,7 +285,7 @@ class InferenceTask:
 	    
 	    if (isinstance(selectClause, Formula)
 		and isinstance(whereClause, Formula)):
-		v2 = universals + ruleFormula.universals() # Note new variables can be generated
+		v2 = universals | ruleFormula.universals() # Note new variables can be generated
 		r = Rule(self, antecedent=whereClause, consequent=selectClause,
 				statement=s,  variables=v2)
 		self.ruleFor[s] = r
@@ -391,20 +393,20 @@ class Rule:
 	# target context when the conclusion is drawn.
     
     
-	if self.template.universals() != []:
+	if self.template.universals() != Set():
 	    raise RuntimeError("""Cannot query for universally quantified things.
 	    As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
 	    This/these were: %s\n""" % self.template.universals())
     
 	self.unmatched = self.template.statements[:]
-	self.templateExistentials = self.template.existentials()[:]
+	self.templateExistentials = self.template.existentials().copy()
 	_substitute({self.template: task.workingContext}, self.unmatched)
     
 	variablesMentioned = self.template.occurringIn(variables)
 	self.variablesUsed = self.conclusion.occurringIn(variablesMentioned)
 	for x in variablesMentioned:
 	    if x not in self.variablesUsed:
-		self.templateExistentials.append(x)
+		self.templateExistentials.add(x)
 	if diag.chatty_flag >20:
 	    progress("New Rule %s ============ looking for:" % `self` )
 	    for s in self.template.statements: progress("    ", `s`)
@@ -425,8 +427,8 @@ class Rule:
 	query = Query(self.store,
 			unmatched = self.unmatched[:],
 			template = self.template,
-			variables = self.variablesUsed[:],
-			existentials = self.templateExistentials[:],
+			variables = self.variablesUsed.copy(),
+			existentials = self.templateExistentials.copy(),
 			workingContext = task.workingContext,
 			conclusion = self.conclusion,
 			targetContext = task.targetContext,
@@ -462,7 +464,7 @@ class Rule:
 #	    else:
 #		self.__setattr__("leadsToCycle", 1)
     
-def testIncludes(f, g, _variables=[],  bindings={}):
+def testIncludes(f, g, _variables=Set(),  bindings={}):
     """Return whether or nor f contains a top-level formula equvalent to g.
     Just a test: no bindings returned."""
     if diag.chatty_flag >30: progress("testIncludes ============")
@@ -475,7 +477,7 @@ def testIncludes(f, g, _variables=[],  bindings={}):
     templateExistentials = g.existentials()
     _substitute({g: f}, unmatched)
     
-    if g.universals() != []:
+    if g.universals() != Set():
 	raise RuntimeError("""Cannot query for universally quantified things.
 	As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
 	This/these were: %s\n""" % g.universals())
@@ -493,8 +495,8 @@ def testIncludes(f, g, _variables=[],  bindings={}):
     result = Query(f.store,
 		unmatched=unmatched,
 		template = g,
-		variables=[],
-		existentials=_variables + templateExistentials,
+		variables=Set(),
+		existentials=_variables | templateExistentials,
 		justOne=1, mode="").resolve()
 
     if diag.chatty_flag >30: progress("=================== end testIncludes =" + `result`)
@@ -533,8 +535,8 @@ class Query:
 	       store,
                unmatched=[],           # Tuple of interned quads we are trying to match CORRUPTED
 	       template = None,		# Actually, must have one
-               variables=[],           # List of variables to match and return CORRUPTED
-               existentials=[],        # List of variables to match to anything
+               variables=Set(),           # List of variables to match and return CORRUPTED
+               existentials=Set(),        # List of variables to match to anything
                                     # Existentials or any kind of variable in subexpression
 	       workingContext = None,
 	       conclusion = None,
@@ -573,7 +575,7 @@ class Query:
 	self.lastCheckedNumberOfRedirections = 0
         for quad in unmatched:
             item = QueryItem(self, quad)
-            if item.setup(allvars=variables+existentials, unmatched=unmatched, smartIn=smartIn, mode=mode) == 0:
+            if item.setup(allvars=variables|existentials, unmatched=unmatched, smartIn=smartIn, mode=mode) == 0:
                 if diag.chatty_flag > 80: progress("match: abandoned, no way for "+`item`)
                 self.noWay = 1
 		return  # save time
@@ -623,10 +625,10 @@ class Query:
 	else:
 	    reason = None
 
-	es, exout = self.workingContext.existentials(), []
+	es, exout = self.workingContext.existentials(), Set()
 	for var, val in bindings.items():
 	    if val in es:   #  Take time for large number of bnodes?
-		exout.append(val)
+		exout.add(val)
 		if diag.chatty_flag > 25:
 		    progress("Match found to that which is only an existential: %s -> %s" % (var, val))
 		if self.workingContext is not self.targetContext:
@@ -635,15 +637,18 @@ class Query:
         b2 = bindings.copy()
 	b2[self.conclusion] = self.targetContext
         ok = self.targetContext.universals()  # It is actually ok to share universal variables with other stuff
-        poss = self.conclusion.universals()[:]
-        for x in poss[:]:
+        poss = self.conclusion.universals().copy()
+        for x in poss.copy():
             if x in ok: poss.remove(x)
+        poss_sorted = list(poss)
+        poss_sorted.sort()
+        #progress(poss)
 
 #        vars = self.conclusion.existentials() + poss  # Terms with arbitrary identifiers
 #        clashes = self.occurringIn(targetContext, vars)    Too slow to do every time; play safe
 	if diag.chatty_flag > 25:
 	    s=""
-	for v in poss:
+	for v in poss_sorted:
 	    v2 = self.targetContext.newUniversal()
 	    b2[v] =v2   # Regenerate names to avoid clash
 	    if diag.chatty_flag > 25: s = s + ",uni %s -> %s" %(v, v2)
@@ -759,9 +764,9 @@ class Query:
                         and isinstance(obj, Formula)):
 
                         more_unmatched = obj.statements[:]
-			more_variables = obj.variables()[:]
+			more_variables = obj.variables().copy()
 
-			if obj.universals() != []:
+			if obj.universals() != Set():
 			    raise RuntimeError("""Cannot query for universally quantified things.
 	    As of 2003/07/28 forAll x ...x cannot be on object of log:includes.
 	    This/these were: %s\n""" % obj.universals())
@@ -769,8 +774,8 @@ class Query:
 
                         _substitute({obj: subj}, more_unmatched)
                         _substitute(bindings, more_unmatched)
-                        existentials = existentials + more_variables
-                        allvars = variables + existentials
+                        existentials = existentials | more_variables
+                        allvars = variables | existentials
                         for quad in more_unmatched:
                             newItem = QueryItem(query, quad)
                             queue.append(newItem)
@@ -818,7 +823,7 @@ class Query:
                         newItem = i.clone()
                         q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
 		    
-                    found = query.unify(q2, variables[:], existentials[:],
+                    found = query.unify(q2, variables.copy(), existentials.copy(),
                                           bindings.copy(), nb, evidence = evidence + [reason])
 		    if diag.chatty_flag > 80: progress(
 			"Nested query returns %i fo %r" % (found, nb))
@@ -912,7 +917,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         x.neededToRun = []
         x.searchPattern = self.searchPattern[:]
         for p in ALL4:   # Deep copy!  Prevent crosstalk
-            x.neededToRun.append(self.neededToRun[p][:])
+            x.neededToRun.append(self.neededToRun[p].copy())  
         x.myIndex = self.myIndex
         return x
 
@@ -963,18 +968,18 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			self.quad = (authFormula, pred, subj, obj)
 			con = authFormula
 
-        self.neededToRun = [ [], [], [], [] ]  # for each part of speech
+        self.neededToRun = [ Set(), Set(), Set(), Set() ]  # for each part of speech
         self.searchPattern = [con, pred, subj, obj]  # What do we search for?
         hasUnboundCoumpundTerm = 0
         for p in PRED, SUBJ, OBJ :
             x = self.quad[p]
             if x in allvars:   # Variable
-                self.neededToRun[p] = [x]
+                self.neededToRun[p] = Set([x])
                 self.searchPattern[p] = None   # can bind this
             elif isinstance(x, Formula) or isinstance(x, List): # expr
                 ur = x.occurringIn(allvars)
                 self.neededToRun[p] = ur
-                if ur != []:
+                if ur != Set():
                     hasUnboundCoumpundTerm = 1     # Can't search directly
 		    self.searchPattern[p] = None   # can bind this if we recurse
 		    
@@ -1008,8 +1013,8 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	rea = None  # Reason for believing this item is true
 
 	try:
-	    if self.neededToRun[SUBJ] == []:
-		if self.neededToRun[OBJ] == []:   # bound expression - we can evaluate it
+	    if self.neededToRun[SUBJ] == Set():
+		if self.neededToRun[OBJ] == Set():   # bound expression - we can evaluate it
 		    if pred.eval(subj, obj,  queue, bindings.copy(), proof, self.query):
 			self.state = S_SATISFIED # satisfied
                         if diag.chatty_flag > 80: progress("Builtin buinary relation operator succeeds")
@@ -1023,7 +1028,13 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		else: 
 		    if isinstance(pred, Function):
 			if diag.chatty_flag > 97: progress("Builtin function call %s(%s)"%(pred, subj))
-			result = pred.evalObj(subj, queue, bindings.copy(), proof, self.query)
+			try:
+                            result = pred.evalObj(subj, queue, bindings.copy(), proof, self.query)
+                        except:
+                            progress("You got a ``" + str(sys.exc_info()[1]) + "'' on " + `subj.value()`)
+                            if "h" in self.query.mode:
+                                raise
+                            result = None
 			if result != None:
 			    self.state = S_DONE
 			    rea=None
@@ -1035,10 +1046,16 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                         else:
 			    if heavy: return 0
 	    else:
-		if (self.neededToRun[OBJ] == []):
+		if (self.neededToRun[OBJ] == Set()):
 		    if isinstance(pred, ReverseFunction):
 			if diag.chatty_flag > 97: progress("Builtin Rev function call %s(%s)"%(pred, obj))
-			result = pred.evalSubj(obj, queue, bindings.copy(), proof, self.query)
+                        try:
+                            result = pred.evalSubj(obj, queue, bindings.copy(), proof, self.query)
+                        except:
+                            progress("You got a ``" + str(sys.exc_info()[1]) + "'' on " + `subj.value()`)
+                            if "h" in self.query.mode:
+                                raise
+                            result = None                            
 			if result != None:
 			    self.state = S_DONE
 			    rea=None
@@ -1093,7 +1110,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                 for p in PRED, SUBJ, OBJ:
                     if self.searchPattern[p] == None: # Need to check
 			x = self.quad[p]
-			if self.neededToRun[p] == [x]:   # Normal case
+			if self.neededToRun[p] == Set([x]):   # Normal case
 			    nb1 = {x: s.quad[p]}
 			else:  # Deep case
 			    nbs1 = x.unify(s.quad[p], self.query.variables,
@@ -1145,14 +1162,14 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
     def canRun(self):
         "Is this built-in ready to run?"
 
-        if (self.neededToRun[SUBJ] == []):
-            if (self.neededToRun[OBJ] == []): return 1
+        if (self.neededToRun[SUBJ] == Set()):
+            if (self.neededToRun[OBJ] == Set()): return 1
             else:
                 pred = self.quad[PRED]
                 return (isinstance(pred, Function)
                           or pred is self.store.includes)  # Can use variables
         else:
-            if (self.neededToRun[OBJ] == []):
+            if (self.neededToRun[OBJ] == Set()):
                 return isinstance(self.quad[PRED], ReverseFunction)
 
 
@@ -1180,7 +1197,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                 if q[p] is var and self.searchPattern[p]==None:
                     self.searchPattern[p] = val # const now
                     changed = 1
-                    self.neededToRun[p] = [] # Now it is definitely all bound
+                    self.neededToRun[p].clear() # Now it is definitely all bound
             if changed:
                 q[p] = q[p].substitution(newBindings, why=becauseSubexpression)   # possibly expensive
 		if self.searchPattern[p] != None: self.searchPattern[p] = q[p]
@@ -1191,7 +1208,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
             for p in PRED, SUBJ, OBJ:
                 x = self.quad[p]
                 if isinstance(x, Formula):
-                    if self.neededToRun[p]!= []:
+                    if self.neededToRun[p]!= Set():
                         self.short = INFINITY  # Forget it
                         break
             else:
@@ -1293,7 +1310,7 @@ def quadToString(q, neededToRun=[[],[],[],[]], pattern=[1,1,1,1]):
 
 def seqToString(set):
 #    return `set`
-    
+    set = list(set)
     str = ""
     for x in set[:-1]:
         str = str + `x` + ","

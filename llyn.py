@@ -45,6 +45,8 @@ ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
 from __future__ import generators
 # see http://www.amk.ca/python/2.2/index.html#SECTION000500000000000000000
 
+from set_importer import Set, ImmutableSet
+
 import types
 import string
 import re
@@ -370,12 +372,12 @@ class IndexedFormula(Formula):
 	    if pred is self.store.forAll:
 		if obj not in self._universalVariables:
 		    if diag.chatty_flag > 50: progress("\tUniversal ", obj)
-		    self._universalVariables.append(obj)
+		    self._universalVariables.add(obj)
 		return 1
 	    if pred is self.store.forSome:
 		if obj not in self._existentialVariables:
 		    if diag.chatty_flag > 50: progress("\tExistential ", obj)
-		    self._existentialVariables.append(obj)
+		    self._existentialVariables.add(obj)
 		return 1
 	    raise ValueError("You cannot use 'this' except as subject of forAll or forSome")
 
@@ -462,9 +464,6 @@ class IndexedFormula(Formula):
                 progress("End formula -- @@ Knowledge base mode, ignoring c'n:"+`F`)
             return F
  
-	F.existentialDict = {}
-	for existentialVariable in F.existentials():
-            F.existentialDict[existentialVariable] = 1
         fl = F.statements
         l = len(fl), len(F.universals()), len(F.existentials())   # The number of statements
         possibles = store._formulaeOfLength.get(l, None)  # Formulae of same length
@@ -478,9 +477,9 @@ class IndexedFormula(Formula):
 
         fl.sort(StoredStatement.compareSubjPredObj)
 	fe = F.existentials()
-	fe.sort(Term.compareAnyTerm)
+	#fe.sort(Term.compareAnyTerm)
 	fu = F.universals ()
-	fu.sort(Term.compareAnyTerm)
+	#fu.sort(Term.compareAnyTerm)
 
         for G in possibles:
             gl = G.statements
@@ -490,18 +489,20 @@ class IndexedFormula(Formula):
 	    gl.sort(StoredStatement.compareSubjPredObj)
             for se, oe, in  ((fe, G.existentials()),
 			     (fu, G.universals())):
-		lse = len(se)
-		loe = len(oe)
-		if lse > loe: return 1
-		if lse < loe: return -1
-		oe.sort(Term.compareAnyTerm)
-		for i in range(lse):
-		    if se[i] is not oe[i]:
-			break # mismatch
-		else:
-		    continue # match
-		break
-
+                if se != oe:
+                    break
+##		lse = len(se)
+##		loe = len(oe)
+##		if lse > loe: return 1
+##		if lse < loe: return -1
+##		oe.sort(Term.compareAnyTerm)
+##		for i in range(lse):
+##		    if se[i] is not oe[i]:
+##			break # mismatch
+##		else:
+##		    continue # match
+##		break
+            
             for i in range(l[0]):
                 for p in PRED, SUBJ, OBJ:
                     if (fl[i][p] is not gl[i][p]
@@ -599,10 +600,10 @@ class IndexedFormula(Formula):
 	red = ""
 	if self._redirections != {}: red = " redirections:" + `self._redirections`
 	str = `self`+ red + " is {"
-	for vv, ss in ((self.universals(), "@forAll"),(self.existentials(), "@forSome")):
-	    if vv != []:
-		str = str + " " + ss + " " + `vv[0]`
-		for v in vv[1:]:
+	for vv, ss in ((self.universals().copy(), "@forAll"),(self.existentials().copy(), "@forSome")):
+	    if vv != Set():
+		str = str + " " + ss + " " + `vv.pop()`
+		for v in vv:
 		    str = str + ", " + `v`
 		str = str + "."
 	todo = []
@@ -631,8 +632,7 @@ class IndexedFormula(Formula):
 	if isinstance(bnode, List): return  ##@@@@@ why is this necessary? weid.
 	newBindings[bnode] = list
         if diag.chatty_flag > 80: progress("...New list newBindings %s"%(`newBindings`))
-	if bnode in self._existentialVariables:
-	    self._existentialVariables.remove(bnode)
+	self._existentialVariables.discard(bnode)
         possibles = self.statementsMatching(pred=self.store.rest, obj=bnode)  # What has this as rest?
         for s in possibles[:]:
             L2 = s[SUBJ]
@@ -725,12 +725,11 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
 	has a base, which may be irrelevant. Eg see roadmap-test in retest.sh
 	"""
 	store = self.store
-	try:
-            if ':' not in object:
-                progress("Warning: taking log:uri of non-abs: %s" % object)
-                return None
-        except (TypeError, AttributeError):
+        if ':' not in object:
+            progress("Warning: taking log:uri of non-abs: %s" % object)
             return None
+        #except (TypeError, AttributeError):
+        #    return None
         return store.intern((SYMBOL, object))
 
 
@@ -1283,7 +1282,7 @@ class RDFStore(RDFSink) :
 	    if type(what) is types.IntType:
 		return self.newLiteral(`what`,  self.integer)
 	    if type(what) is types.FloatType:
-		return self.newLiteral(`what`,  self.float)
+		return self.newLiteral(repr(what),  self.float)
 	    if isinstance(what,Decimal):
                 return self.newLiteral(str(what), self.decimal)
 	    if type(what) is types.ListType: #types.SequenceType:
@@ -1497,7 +1496,7 @@ class RDFStore(RDFSink) :
 		if x in uu or isinstance(x, Formula):
 		    context.removeStatement(s)
 		    break
-	context._universalVariables =[]  # Cheat! @ use API
+	context._universalVariables.clear()  # Cheat! @ use API
 
 
 

@@ -81,12 +81,10 @@ class BI_rounded(LightBuiltIn, Function):
 
 class BI_sum(LightBuiltIn, Function):
     def evaluateObject(self,  subj_py):
-        try:
-            t = 0
-            for x in subj_py: t += numeric(x)
-            return t
-        except ValueError:
-            return None
+        t = 0
+        for x in subj_py: t += numeric(x)
+        return t
+
 
 class BI_sumOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, obj_py): 

@@ -4,7 +4,7 @@
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix rules: <rules12.n3#> .
     
-    @forSome <#_g0>,
+     @forSome <#_g0>,
                 <#_g1>,
                 <#_g2>,
                 <run#li3>,
@@ -48,10 +48,10 @@
     ex:Car     a daml:Class;
          daml:comment "no car is a person" .
     
-    <#_g0>     a daml:Class;
+    <#_g2>     a daml:Class;
          daml:complementOf ex:Person .
     
-    ex:Car     daml:subClassOf <#_g0> .
+    ex:Car     daml:subClassOf <#_g2> .
     
     ex:Female     a daml:Class;
          daml:disjointFrom ex:Male;
@@ -83,11 +83,11 @@
     
     ex:TallThing     a daml:Class .
     
-    <#_g2>     a daml:Restriction;
+    <#_g0>     a daml:Restriction;
          daml:onProperty ex:height;
          daml:toValue ex:tall .
     
-    ex:TallThing     daml:restrictedBy <#_g2> .
+    ex:TallThing     daml:restrictedBy <#_g0> .
     
     ex:Woman     a daml:Class;
          daml:subClassOf ex:Female,
