@@ -1,107 +1,64 @@
-"""URI Class
+"""Classes for Abstracting URIs and the Web
 
 """
 __version__ = "$Revision$"
 # $Id$
 
-import urlparse
+class Resource:
+    """A Resource is a thing which is directly identified by a URI.
+    The term "resource", like the term "mother" has far more meaning
+    connoting a relationship than a class.  A Resource can be anything,
+    but not via an HTTP URI.
 
-interned = { }
-
-class URI(str):
-    """A URI is a string which conforms to RFC 2396 syntax; this
-    class gives us easy access to its the syntactic elements.
-
-    It might be nice to have a mutable version, which allowed things
-    like u.scheme="https", but for now interning is more important.
-
-    >>> from LX.URI import URI
-    >>> u = URI("http://www.w3.org/People/Sandro/#hours")
-    >>> print u
-    http://www.w3.org/People/Sandro/#hours
-    >>> print `u`
-    <URI ('http', 'www.w3.org', '/People/Sandro/', '', '', 'hours')>
-    >>> u2 = URI("http://www.w3.org/People/Sandro/#hours")
-    >>> u2 == u
-    1
-    >>> u2 is u
-    1
-    >>> print u[2:4]
-    tp
-    >>> u.startswith("ht")
-    1
-
+    >>> import LX.uri
+    >>> x = LX.uri.Resource("http://example.com")
+    >>> print x
+    <http://example.com>
+    >>> print x.uri
+    http://example.com
+    >>> print LX.uri.Resource("http://example.com#foo")
+    [ lx:uri "http://example.com#foo" ]
     """
-
-    def __new__(cls, uri, base=None):
-        if base is not None:
-            uri = urlparse.urljoin(base, uri, allow_fragments=1)
-        global interned
-        try:
-            return interned[uri]
-        except KeyError:
-            self = str.__new__(cls, uri)
-            self.tuple = urlparse.urlparse(uri, allow_fragments=1)
-            interned[uri] = self
-            return self
-        
-    def __init__(self, uri="", base=None):
-        pass
-
+    def __init__(self, uri):
+        self.uri = uri
     def __str__(self):
-        # return self makes python core dump.   so this is a workaround...
-        return intern(self+"")
+        if self.uri.count("#"):
+            return '[ lx:uri "%s" ]' % self.uri
+        else:
+            return '<' + self.uri + '>'
+
+class DescribedThing:
+    """A DescribedThing is something which is indirectly associated
+    with a URI.  The utility of DescribedThing is that it can be a
+    physical object, RDF class, etc, even for HTTP URIs.
     
-    def __repr__(self):
-        return "<"+self.__class__.__name__+" "+str(self.tuple)+">"
+    >>> import LX.uri
+    >>> x = LX.uri.DescribedThing("http://example.com")
+    >>> print x
+    [ web:uriOfDescription "http://example.com" ]
+    >>> print x.uriOfDescription
+    http://example.com
+    >>> print LX.uri.DescribedThing("http://example.com#foo")
+    <http://example.com#foo>
+    """
+    def __init__(self, uri):
+        self.uriOfDescription = uri
+    def __str__(self):
+        if self.uriOfDescription.count("#"):
+            return '<' + self.uriOfDescription + '>'
+        else:
+            return '[ web:uriOfDescription "%s" ]' % self.uriOfDescription
 
-    def get_racine(self):
-        try:
-            pos = index(self.uri, "#")
-            return self.uri[0:pos]
-        except ValueError:
-            return
-    racine = property(get_racine)
-        
-    def get_scheme(self):
-        return self.tuple[0]
-    scheme = property(get_scheme)
-
-    def get_netloc(self):
-        return self.tuple[0]
-    netloc = property(get_netloc)
- 
-    def get_path(self):
-        return self.tuple[0]
-    path = property(get_path)
-
-    def get_params(self):
-        return self.tuple[0]
-    params = property(get_params)
-
-    def get_query(self):
-        return self.tuple[0]
-    query = property(get_query)
-
-    def get_fragment(self):
-        return self.tuple[0]
-    fragment = property(get_fragment)
-
-
-    
-
+         
 def _test():
-    import doctest, LX.URI
-    return doctest.testmod(LX.URI) 
+    import doctest, LX.uri
+    return doctest.testmod(LX.uri) 
 
 if __name__ == "__main__": _test()
 
 # $Log$
-# Revision 1.4  2003-03-18 18:25:32  timbl
-# Add nodeID attribute to rdf/xml parsing
-#
-# Revision 1.1  2003/02/21 22:12:33  sandro
-# first cut
+# Revision 1.5  2003-03-20 23:50:21  timbl
+# Attempt to restore uri.py to what it was befroe being overwritten by URI.py. Do NOT use URI.py
 #
 # Revision 1.3  2003/02/14 19:39:03  sandro
 # adopted smart <...> syntax
