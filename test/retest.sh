@@ -32,6 +32,7 @@ cwm_test daml-ont.n3 "Convert some RDF/XML into RDF/N3" daml-pref.n3 -rdf daml-o
 
 cwm_test strquot.n3 "N3 string quoting" -n3 strquot.n3
 
+#oops... misleading test case name.
 cwm_test equiv-syntax.n3 "conversion of N3 = to RDF" -n3 equiv-syntax.n3 -rdf
 
 cwm_test lists-simple.n3 "parsing and generation of N3 list () syntax" -n3 lists-simple.n3
@@ -60,7 +61,10 @@ cwm_test schema1.n3 "Schema validity" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -
 cwm_test schema2.n3 "Schema validity using filtering out essential output" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think -filter=schema-filter.n3
 
 # $Log$
-# Revision 1.8  2001-05-21 13:04:02  timbl
+# Revision 1.9  2001-05-21 14:35:47  connolly
+# sorted @prefix directives by prefix on output
+#
+# Revision 1.8  2001/05/21 13:04:02  timbl
 # version field expansion deletion was expanded -- now fixed
 #
 # Revision 1.7  2001/05/21 11:27:48  timbl

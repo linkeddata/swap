@@ -542,13 +542,20 @@ class RDFStore(notation3.RDFSink) :
             del self.namespaces[oldp]
         self.prefixes[mpPair] = ""
         self.namespaces[""] = mpPair
-        
+
+
+    def dumpPrefixes(self, sink):
+        prefixes = self.namespaces.keys()   #  bind in same way as input did FYI
+        prefixes.sort()
+        for pfx in prefixes:
+            sink.bind(pfx, self.namespaces[pfx])
+
+
 # Output methods:
 
     def dumpChronological(self, context, sink):
         sink.startDoc()
-        for c in self.prefixes.items():   #  bind in same way as input did FYI
-            sink.bind(c[1], c[0])
+        self.sumpPrefixes(sink)
 #        print "# There are %i statements in %s" % (len(context.occursAs[CONTEXT]), `context` )
         for s in context.occursAs[CONTEXT]:
             self._outputStatement(sink, s)
@@ -569,8 +576,7 @@ class RDFStore(notation3.RDFSink) :
 
         self.selectDefaultPrefix(context)        
         sink.startDoc()
-        for c in self.prefixes.items() :   #  bind in same way as input did FYI
-            sink.bind(c[1], c[0])
+        self.dumpPrefixes(sink)
 
         for r in self.engine.resources.values() :  # First the bare resource
             for s in r.occursAs[SUBJ] :
@@ -728,8 +734,7 @@ class RDFStore(notation3.RDFSink) :
         """
         self.selectDefaultPrefix(context)        
         sink.startDoc()
-        for c in self.prefixes.items() :   #  bind in same way as input did FYI
-            sink.bind(c[1], c[0])
+        self.dumpPrefixes(sink)
         self.dumpNestedStatements(context, sink)
         sink.endDoc()
 
