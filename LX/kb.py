@@ -101,6 +101,14 @@ class KB(list):
     def getInterpretations(self, term):
         return self.__interpretation[term]
 
+    def constantFor(self, interpretation):
+        try:
+            return self.__revInterpretation[interpretation][0]
+        except KeyError:
+            c = LX.logic.Constant(str(interpretation))
+            self.interpret(c, interpretation)
+            return c
+
     def asFormulaString(self):
         scope = defaultScope.copy()
         result = ""
@@ -251,7 +259,10 @@ if __name__ == "__main__": _test()
 
  
 # $Log$
-# Revision 1.8  2003-02-13 19:48:31  sandro
+# Revision 1.9  2003-02-14 00:36:37  sandro
+# added constantFor() method
+#
+# Revision 1.8  2003/02/13 19:48:31  sandro
 # a little more thinking/comment about interpretations
 #
 # Revision 1.7  2003/02/01 05:58:10  sandro
