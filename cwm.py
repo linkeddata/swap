@@ -95,7 +95,7 @@ steps, in order left to right:
 --n3          Input & Output in N3 from now on. (Default)
 --rdf=flags   Input & Output ** in RDF and set given RDF flags
 --n3=flags    Input & Output in N3 and set N3 flags
---ntriples    Input & Output in NTriples (equiv --n3=uspartan -bySubject -quiet)
+--ntriples    Input & Output in NTriples (equiv --n3=uspartane -bySubject -quiet)
 --language=x  Input & Output in "x" (rdf, n3, etc)  --rdf same as: --language=rdf
 --languageOptions=y     --n3=sp same as:  --language=n3 --languageOptions=sp
 --ugly        Store input and regurgitate, data only, fastest *
@@ -243,8 +243,8 @@ rdf/xml files. Note that this requires rdflib.
                 option_flags["think"] = _rhs
             elif _lhs == "-closure":
 		pass
-	    elif _lhs == "-solve":
-                sys.argv[argnum+1:argnum+1] = ['-think', '-filter=' + _rhs]
+	    #elif _lhs == "-solve":
+            #    sys.argv[argnum+1:argnum+1] = ['-think', '-filter=' + _rhs]
             elif _lhs == "-language":
                 option_format = _rhs
                 if option_first_format == None: option_first_format = option_format
@@ -264,7 +264,7 @@ rdf/xml files. Note that this requires rdflib.
             elif arg == "-strings": option_outputStyle = "-no"
             elif arg == "-triples" or arg == "-ntriples":
                 option_format = "n3"
-                option_flags["n3"] = "uspartan"
+                option_flags["n3"] = "uspartane"
                 option_outputStyle = "-bySubject"
                 option_quiet = 1
             elif _lhs == "-outURI": option_outURI = _uri
@@ -377,6 +377,27 @@ rdf/xml files. Note that this requires rdflib.
         option_quiet = 0
         _outURI = _baseURI
         option_baseURI = _baseURI     # To start with
+        
+        def filterize():
+            """implementation of --filter
+            for the --filter command, so we don't have it printed twice
+            """
+            global workingContext
+            global r
+            workingContext = workingContext.canonicalize()
+            if tracking: 
+                r = BecauseOfCommandLine(sys.argv[0]) # @@ add user, host, pid, date time? Privacy!
+            else:
+                r = None
+            
+            filterContext = _store.load(_uri, why=r, referer="")
+            _newContext = _store.newFormula()
+            if diag.tracking: proof = FormulaReason(_newContext)
+            applyRules(workingContext, filterContext, _newContext)
+            workingContext.close()
+            workingContext = _newContext
+
+                
         for arg in sys.argv[1:]:  # Command line options after script name
             if arg.startswith("--"): arg = arg[1:]   # Chop posix-style double dash to one
             _equals = string.find(arg, "=")
@@ -476,18 +497,10 @@ rdf/xml files. Note that this requires rdflib.
                 patch(workingContext, filterContext);
 
             elif _lhs == "-filter":
-		workingContext = workingContext.canonicalize()
-		if tracking: 
-		    r = BecauseOfCommandLine(sys.argv[0]) # @@ add user, host, pid, date time? Privacy!
-		else:
-		    r = None
-                
-                filterContext = _store.load(_uri, why=r, referer="")
-		_newContext = _store.newFormula()
-		if diag.tracking: proof = FormulaReason(_newContext)
-                applyRules(workingContext, filterContext, _newContext)
-		workingContext.close()
-                workingContext = _newContext
+                # --solve is a combination of --think and --filter.
+                #This would have required having the filter code copied (bad for maitnance)
+                # so a subfunction (defined above) will be used instead
+		filterize()
 
             elif _lhs == "-query":
 		workingContext = workingContext.canonicalize()
@@ -535,13 +548,17 @@ rdf/xml files. Note that this requires rdflib.
                 think(workingContext, filterContext, mode=option_flags["think"]);
 
             elif arg[:7] == "-solve=":
-                pass
+                # --solve is a combination of --think and --filter.
+                #This would have required having the filter code copied (bad for maitnance)
+                # so a subfunction (defined above) will be used instead
+                think(workingContext, mode=option_flags["think"])
+                filterize()
+                
             elif _lhs == "-engine":
                 option_engine = _rhs
                 
             elif arg == "-think":  
                 think(workingContext, mode=option_flags["think"])
-
 
             elif arg == "-lxkbdump":  # just for debugging
                 raise NotImplementedError

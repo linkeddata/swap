@@ -13,7 +13,8 @@ DOC=doc/CwmHelp.htm
 
 TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/ql/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/cwm/detailed.tests test/ntriples/detailed.tests test/delta/detailed.tests test/syntax/detailed.tests test/reify/detailed.tests test/testmeta.n3 test/retest.py
 
-TARNAME = cwm-0.8.0
+VERSION = 0.8.0
+TARNAME = cwm-$(VERSION)
 
 TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3
 
@@ -85,6 +86,11 @@ setup_tarball: $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) # tested filelist
 	python setup.py sdist
 	python setup.py bdist_rpm
 	rm -rf swap
+	cp dist/cwm-$(VERSION).tar.gz .
+	head -n -1 .htaccess > ,htaccess
+	echo 'RewriteRule ^cwm.tar.gz$ ' $(TARNAME) '[L]' >> ,htaccess
+	mv ,htaccess .htaccess
+	cvs add $(TARNAME).tar.gz	
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py
 	$(PYTHON) rdfn3_yappstest.py <$(TESTIN) >,xxx.kif

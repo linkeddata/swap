@@ -34,7 +34,7 @@ if exists(swap_dir):
 # Install SWAP
 from distutils.core import setup
 #from swap import __version__
-__version__='0.8.0-plus'
+__version__='0.8.1'
 setup(
     name = 'cwm',
     version = __version__,
@@ -46,6 +46,7 @@ setup(
     url = "http://www.w3.org/2000/10/swap/",
     package_dir = {'swap': 'swap'},
     packages = ['swap'],
+    py_modules = ['cwm'],
     scripts = ['cwm.py'],
    )
     # todo, figure out which other modules are in public APIs

@@ -1105,6 +1105,7 @@ class ToN3(RDFSink.RDFSink):
         
 a   Anonymous nodes should be output using the _: convention (p flag or not).
 d   Don't use default namespace (empty prefix)
+e   escape literals --- use \u notation
 i   Use identifiers from store - don't regen on output
 l   List syntax suppression. Don't use (..)
 n   No numeric syntax - use strings typed with ^^ syntax
@@ -1467,7 +1468,7 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
         if ty == LITERAL:
 	    singleLine = "n" in self._flags
 	    if type(value) is not types.TupleType:  # simple old-fashioned string
-		return stringToN3(value, singleLine=singleLine)
+		return stringToN3(value, singleLine=singleLine, flags = self._flags)
 	    s, dt, lang = value
 	    if dt != None and "n" not in self._flags:
 		dt_uri = dt.uriref()		 
@@ -1477,7 +1478,7 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 		    return str(float(s))    # numeric value python-normalized
 		if (dt_uri == DECIMAL_DATATYPE):
 		    return str(decimal(s))
-	    st = stringToN3(s, singleLine= singleLine)
+	    st = stringToN3(s, singleLine= singleLine, flags=self._flags)
 	    if lang != None: st = st + "@" + lang
 	    if dt != None: return st + "^^" + self.representationOf(context, dt.asPair())
 	    return st
@@ -1524,7 +1525,7 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
         
 	if "r" not in self._flags and self.base != None:
 	    value = refTo(self.base, value)
-	if "u" in self._flags: value = backslashUify(value)
+	elif "u" in self._flags: value = backslashUify(value)
 	else: value = hexify(value)
 
         return "<" + value + ">"    # Everything else
@@ -1549,7 +1550,7 @@ Escapes = {'a':  '\a',
 forbidden1 = re.compile(ur'[\\\"\a\b\f\r\v\u0080-\uffff]')
 forbidden2 = re.compile(ur'[\\\"\a\b\f\r\v\t\n\u0080-\uffff]')
 #"
-def stringToN3(str, singleLine=0):
+def stringToN3(str, singleLine=0, flags=""):
     res = ''
     if (len(str) > 20 and
         str[-1] <> '"' and
@@ -1577,8 +1578,11 @@ def stringToN3(str, singleLine=0):
             k = string.find('\a\b\f\r\t\v\n\\"', ch)
             if k >= 0: res = res + "\\" + 'abfrtvn\\"'[k]
             else:
+                if 'e' in flags:
 #                res = res + ('\\u%04x' % ord(ch))
-                res = res + ('\\u%04X' % ord(ch))  # http://www.w3.org/TR/rdf-testcases/#ntriples
+                    res = res + ('\\u%04X' % ord(ch))  # http://www.w3.org/TR/rdf-testcases/#ntriples
+                else:
+                    res = res + ch
         i = j + 1
 
     return delim + res + str[i:] + delim

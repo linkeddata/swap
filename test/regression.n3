@@ -104,8 +104,8 @@
 
 :t1009 a test:CwmTest;
     test:referenceOutput <ref/strquot.n3>;
-    test:description   "N3 string quoting";
-    test:arguments     """-n3 strquot.n3""".
+    test:description   "N3 string quoting with escaping";
+    test:arguments     """-n3=e strquot.n3""".
 
 # Now in i18n/detailed.tests
 #
@@ -116,6 +116,10 @@
 #
 #until i18n/detailed.tests are fully functional, the below will stay where it is
 
+:t1009aa a test:CwmTest;
+    test:referenceOutput <ref/strquot_a.n3>;
+    test:description   "N3 string quoting with utf-8 literals";
+    test:arguments     """-n3 strquot.n3""".
 
 :t1009b a test:CwmTest;
     test:referenceOutput <xml-syntax/non-ascii-pred.rdf>;
@@ -280,6 +284,10 @@
     test:description   "Schema validity using filtering out essential output";
     test:arguments     """daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think -filter=schema-filter.n3""".
 
+:t1029a a test:CwmTest;
+    test:referenceOutput <ref/schema2.n3>;
+    test:description   "the --solve= option";
+    test:arguments     """daml-ex.n3 invalid-ex.n3 schema-rules.n3 --solve=schema-filter.n3""".
 
 :t1030 a test:CwmTest;
     test:referenceOutput <ref/underbarscope-out.n3>;

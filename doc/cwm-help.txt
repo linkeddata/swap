@@ -12,7 +12,7 @@ steps, in order left to right:
 --n3          Input &amp; Output in N3 from now on. (Default)
 --rdf=flags   Input &amp; Output ** in RDF and set given RDF flags
 --n3=flags    Input &amp; Output in N3 and set N3 flags
---ntriples    Input &amp; Output in NTriples (equiv --n3=uspartan -bySubject -quiet)
+--ntriples    Input &amp; Output in NTriples (equiv --n3=uspartane -bySubject -quiet)
 --language=x  Input &amp; Output in "x" (rdf, n3, etc)  --rdf same as: --language=rdf
 --languageOptions=y     --n3=sp same as:  --language=n3 --languageOptions=sp
 --ugly        Store input and regurgitate, data only, fastest *
@@ -31,8 +31,10 @@ steps, in order left to right:
 --engine=otter use otter (in your $PATH) instead of llyn for linking, etc
 --why         Replace the store with an explanation of its contents
 --mode=flags  Set modus operandi for inference (see below)
---flatten     turn formulas into triples using LX vocabulary
---unflatten   turn described-as-true LX sentences into formulas
+--reify       Replace the statements in the store with statements describing them.
+--dereify     Undo the effects of --reify
+--flatten     Reify only nested subexpressions (not top level) so that no {} remain.
+--unflatten   Undo the effects of --flatten
 --think=foo   as -apply=foo but continue until no more rule matches (or forever!)
 --purge       Remove from store any triple involving anything in class log:Chaff
 --data	      Remove all except plain RDF triples (formulae, forAll, etc)
@@ -85,6 +87,7 @@ Flags for N3 output are as follows:-
         
 a   Anonymous nodes should be output using the _: convention (p flag or not).
 d   Don't use default namespace (empty prefix)
+e   escape literals --- use \u notation
 i   Use identifiers from store - don't regen on output
 l   List syntax suppression. Don't use (..)
 n   No numeric syntax - use strings typed with ^^ syntax

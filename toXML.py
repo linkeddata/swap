@@ -450,7 +450,7 @@ class XMLWriter:
 	    else:
 		break
 	while i<len(uriref):
-            if not isXMLChar(uriref[i], NCNameStartChar):
+            if (not isXMLChar(uriref[i], NCNameStartChar)) or uriref[i-1] == ':':
                 i = i+1
             else:
                 break
@@ -462,6 +462,7 @@ class XMLWriter:
                 return self.figurePrefix(uriref, rawAttrs, prefixes)
             raise RuntimeError("this graph cannot be serialized in RDF/XML")
 	ln = uriref[i:]
+	#progress(ln)
 	ns = uriref[:i]
 	self.counter.countNamespace(ns)
 #        print "@@@ ns=",`ns`, "@@@ prefixes =", `prefixes`
