@@ -1190,6 +1190,20 @@ class ToN3(RDFSink):
 
       Adapted from Dan's ToRDFParser(Parser);
     """
+
+    flagDocumentation = """Flags for N3 output are as follows:-
+        
+a   Anonymous nodes should be output using the _: convention (p flag or not).
+p   Prefix suppression - don't use them, always URIs in <> instead of qnames.
+q   Quiet - don't make comments about the environment in which processing was done.
+r   Relative URI suppression. Always use absolute URIs.
+s   Subject must be explicit for every statement. Don't use ";" shorthand.
+t   "this" and "()" special syntax should be suppresed.
+"""
+
+
+
+
 #   A word about regenerated Ids.
 #
 # Within the program, the URI of a resource is kept the same, and in fact
@@ -1222,16 +1236,6 @@ class ToN3(RDFSink):
     _namechars = string.lowercase + string.uppercase + string.digits + '_'
     _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
 
-    def flagDocumentation(self):
-        return """Flags for N3 output are as follows:-
-        
-a   Anonymous nodes should be output using the _: convention (p flag or not).
-p   Prefix suppression - don't use them, always URIs in <> instead of qnames.
-q   Quiet - don't make comments about the environment in which processing was done.
-r   Relative URI suppression. Always use absolute URIs.
-s   Subject must be explicit for every statement. Don't use ";" shorthand.
-t   "this" and "()" special syntax should be suppresed.
-"""
     
     def newId(self):
         nextId = nextId + 1
@@ -1435,9 +1439,9 @@ t   "this" and "()" special syntax should be suppresed.
                   self._newline(1)   # Indent predicate from subject
             else: self._write("    ")
 
-            if pred == ( RESOURCE,  DAML_equivalentTo_URI ) :
+            if pred == ( RESOURCE,  DAML_equivalentTo_URI ) and "t" not in self._flags:
                 self._write(" = ")
-            elif pred == ( RESOURCE, RDF_type_URI ) :
+            elif pred == ( RESOURCE, RDF_type_URI )  and "t" not in self._flags:
                 self._write(" a ")
             else :
 #               self._write( " >- %s -> " % self.representationOf(context, pred))
