@@ -19,16 +19,20 @@ from LX.operator import *
 from LX.term import *
 from LX.formula import *
 from LX.kb import *
+from LX.describer import *
 
 from LX.namespace import *
-rdfns  = HardNamespace("http://www.w3.org/1999/02/22-rdf-syntax-ns",
-                        ["type", "nil", "first", "rest"])
-lxns   = SoftNamespace("http://www.w3.org/1999/02/22-rdf-syntax-ns")
+rdfns  = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns",
+                   ["type", "nil", "first", "rest"])
+lxns   = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns", strict=0)
 
 
 
 # $Log$
-# Revision 1.1  2002-08-29 11:00:46  sandro
+# Revision 1.2  2002-08-29 16:39:55  sandro
+# fixed various early typos and ommissions; working on logic bug which is manifesting in description loops
+#
+# Revision 1.1  2002/08/29 11:00:46  sandro
 # initial version, mostly written or heavily rewritten over the past
 # week (not thoroughly tested)
 #

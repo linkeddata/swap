@@ -7,7 +7,9 @@ __version__ = "$Revision$"
 # $Id$
 
 import LX
+from LX.ladder import Ladder
 from LX import rdfns, lxns
+from LX import Triple
 
 def flatten(kb, toKB):
     """Return a formula which expresses the same knowledge, but using
@@ -15,8 +17,10 @@ def flatten(kb, toKB):
     """
     d = LX.CombinedDescriber([FormulaDescriber(), URIRefDescriber(),
                               LX.ListDescriber()])
+    ladder = Ladder(("kb", toKB))
+    ladder = ladder.set("trace", 1)
     for f in kb:
-        term = d.describe(f, toKB)
+        term = d.describe(f, ladder)
         toKB.add(Triple(term, rdfns.type, lxns.TrueSentence))
 
 def unflatten(f):
@@ -33,9 +37,12 @@ def unflatten(f):
 
 class URIRefDescriber:
 
-    def describe(object, ladder):
+    def describe(self, object, ladder):
+        if isinstance(object, LX.Operator):
+            print "Describing an operator...   Ignoring for now..."
+            return ladder.kb.newExistential()
         if not isinstance(object, LX.URIRef):
-            raise DescriptionFailed, 'not a uriref term'
+            raise LX.DescriptionFailed, 'not a uriref term'
         if ladder.has("term"):
             term = ladder.term
         else:
@@ -55,19 +62,20 @@ class FormulaDescriber:
         LX.DISJUNCTION:   [ lxns.Disjunction,   lxns.disjLeft,   lxns.disjRight   ],
         LX.NEGATION:      [ lxns.Negation,      lxns.negated ],
         # @@@ hrrrm, should the quants be done so class info isn't needed?   .univar, .exivar, quantified
-        LX.UNIVERSALQUANTIFICATION: [ lxns.UniversalQuantification, lxns.variable, lxns.subformula ],
-        LX.EXISTENTIALQUANTIFICATION: [ lxns.ExistentialQuantification, lxns.variable, lxns.subformula ],
+        LX.UNIVERSAL_QUANTIFICATION: [ lxns.UniversalQuantification, lxns.variable, lxns.subformula ],
+        LX.EXISTENTIAL_QUANTIFICATION: [ lxns.ExistentialQuantification, lxns.variable, lxns.subformula ],
+        LX.ATOMIC_SENTENCE: [ lxns.Triple, lxns.subjectTerm, lxns.predicateTerm, lxns.objectTerm ]
         }
     
-    def describe(object, ladder):
+    def describe(self, object, ladder):
         if not isinstance(object, LX.Formula):
-            raise DescriptionFailed, 'not a formula'
+            raise LX.DescriptionFailed, 'not a formula'
         if ladder.has("term"):
             term = ladder.term
         else:
             term = ladder.kb.newExistential()
 
-        entry = nameTable[object.operator]
+        entry = self.nameTable[object.operator]
 
         if ladder.has("verbose"):
             ladder.kb.add(Triple(term, rdfns.type, entry[0]))
@@ -77,7 +85,10 @@ class FormulaDescriber:
 
 
 # $Log$
-# Revision 1.1  2002-08-29 11:00:46  sandro
+# Revision 1.2  2002-08-29 16:39:55  sandro
+# fixed various early typos and ommissions; working on logic bug which is manifesting in description loops
+#
+# Revision 1.1  2002/08/29 11:00:46  sandro
 # initial version, mostly written or heavily rewritten over the past
 # week (not thoroughly tested)
 #

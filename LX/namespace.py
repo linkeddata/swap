@@ -13,7 +13,7 @@ class Namespace:
 
 
     """
-    def __init__(self, uri, initialNames=[], strict=True, shortForm=None):
+    def __init__(self, uri, initialNames=[], strict=1, shortForm=None):
         """Provide the namespace URI (without the trailing #)
 
         If "strict", then names must be added (here or with add())
@@ -24,7 +24,7 @@ class Namespace:
         self.strict = strict
         self.shortForm = shortForm
         for name in initialNames:
-            add(name)
+            self.add(name)
 
     def add(self, name):
         self.__dict__[name] = LX.URIRef(self.uri + "#" + name)
@@ -40,7 +40,10 @@ class Namespace:
 
 
 # $Log$
-# Revision 1.1  2002-08-29 11:00:46  sandro
+# Revision 1.2  2002-08-29 16:39:55  sandro
+# fixed various early typos and ommissions; working on logic bug which is manifesting in description loops
+#
+# Revision 1.1  2002/08/29 11:00:46  sandro
 # initial version, mostly written or heavily rewritten over the past
 # week (not thoroughly tested)
 #

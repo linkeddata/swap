@@ -14,13 +14,23 @@ class Term:
     def __str__(self):
         return serialize(self)
 
+class Variable(Term):
+    def __init__(self, name=None):
+        self.name = name
+
+class ExiVar(Variable):
+    pass
+
+class UniVar(Variable):
+    pass
+             
 class Function(Term):
     pass
 
 class Symbol(Term):      # or is this a zero-arity Function?  
     pass
     
-class Constant(Symbol):
+class Constant(Symbol):     
     pass
     
 class URIRef(Constant):
@@ -46,7 +56,10 @@ class String(Constant):
 
 
 # $Log$
-# Revision 1.1  2002-08-29 11:00:46  sandro
+# Revision 1.2  2002-08-29 16:39:55  sandro
+# fixed various early typos and ommissions; working on logic bug which is manifesting in description loops
+#
+# Revision 1.1  2002/08/29 11:00:46  sandro
 # initial version, mostly written or heavily rewritten over the past
 # week (not thoroughly tested)
 #
