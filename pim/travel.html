@@ -4,13 +4,16 @@
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <title>Semantic Web Application Integration: Travel Tools</title>
-  <meta name="generator" content="amaya 5.3, see http://www.w3.org/Amaya/" />
+  <link rel="stylesheet" href="../doc/style.css" />
+<style type="text/css">
+.mechanics { background-color: #b6b6b6; }
+</style>
 </head>
 
 <body>
 <div class="noprint">
-<a href="../../../../">W3C</a> * <a href="../../../01/sw/">SWAD</a> * <a
-href="../">SWAP</a>
+<a href="../../../../">W3C</a> | <a href="../../../01/sw/">SWAD</a> | <a
+href="../">SWAP</a> | <a href="../doc/">Tutorial</a>
 </div>
 
 <h1>Semantic Web Application Integration: Travel Tools</h1>
@@ -34,22 +37,22 @@ tasks:</p>
 <ul>
 <li><a href="#map-viz">plot an itinerary on a map</a></li>
 <li><a href="#ical-evo">import travel itineraries into my iCalendar-happy desktop PIM</a></li>
+<li><a href="#plain-text-sum">produce a brief summary of an itinerary for use in plain text email</a></li>
 <li><a href="#ckcn">check proposed work travel itineraries against family constraints</a></li>
 <li><a href="#pda-in">import travel itineraries into my PDA calendar</a></li>
-<li>produce a brief summary of an itinerary for use in plain text email</li>
 <li>tell me when my travel schedule brings me unusually near a friend/colleague</li>
 <li>produce animated views of my travel schedule or past trips</li>
 <li>find conflicts between teleconferences and flights</li>
 </ul>
 
 
-<h2 id="grokLeg">Step 1: Grok Legacy Data</h2>
+<h2 id="grokLeg">Working with legacy data</h2>
 
 <p>While more and more of the data in our lives is available
 in the Semantic Web, there will always be a place for mechanisms
 that extract the statements implicit in legacy data.</p>
 
-</p>The data comes from the travel agency like this, probably
+<p>The data comes from the travel agency like this, probably
 dumped from their database system:</p>
 
 <pre>07 APR 03 - MONDAY
@@ -61,7 +64,7 @@ AR DALLAS FT WORTH 1116A NON-STOP</pre>
 
 <p>I hope that before too long they'll dump it from their
 database directly into RDF
-or perhaps in XML using some travel industry vocabulary, but<p>
+or perhaps in XML using some travel industry vocabulary, but</p>
 
 <ul>
 
@@ -78,7 +81,7 @@ processes</li>
 href="/2001/07dc-bos/grokNavItin.pl">grokNavItin.pl</a>) to extract
 statements from the data:</p>
 
-<p><img src="grokLeg.png" alt="itin.txt -> itin.n3/rdf" /></p>
+<p><img src="grokLeg.png" alt="itin.txt -&gt; itin.n3/rdf" /></p>
 
 <p>The output of the perl script, <tt>itin.nt</tt>,
 is in <a
@@ -112,7 +115,7 @@ to pretty-print it in N3. The result look like this:</p>
 <h3>Choosing a Vocabulary: Build Or Buy?</h3>
 
 
-<p>The import script does not only bridges the syntactic
+<p>The import script not only bridges the syntactic
 gap between the legacy data and RDF, but it also translates
 the vocabulary of terms used in the data into URI space.
 This raises the classic build-or-buy choice:</p>
@@ -126,7 +129,7 @@ such as the <a
 href="http://www.cyc.com/cyc-2-1/vocab/transportation-vocab.html">cyc
 ontology of common sense transportation terms</a>.</dd>
 
-<dt>build a vocabulary just for this purpose<dt>
+<dt>build a vocabulary just for this purpose</dt>
 <dd>A special-purpose vocabulary isolates the data
 from risks of version skew and such.</dd>
 </dl>
@@ -143,7 +146,7 @@ custom terms were needed:</p>
 
 <div align="center"><img alt="travel terms" src="travelFig.png" />
 
-<div class="noprint mechanics" class="tech-details">if your desktop is SVG-happy, <a href="travelFig.svg">travelFig.svg</a> is
+<div class="noprint mechanics" >if your desktop is SVG-happy, <a href="travelFig.svg">travelFig.svg</a> is
 nicer. I drew it with dia; you can play <a
 href="travelFig.xml">travelFig.xml</a>, the source. I'm working on <a
 href="/2002/03owlt/umlp/dia2owl.xsl">dia2owl.xsl</a>, which converts it to
@@ -233,11 +236,11 @@ in RDF/XML the results of reaching out with the rules; i.e. the
 itinerary including the lat/long info. Then we use the (<em>little
 documented</em>) <tt>cwm --strings</tt> output mode to generate two
 files, <tt>itin-arcs</tt> and <tt>itin-markers</tt>, as input to <a
-href="http://xplanet.sourceforge.net/">xplanet</a>:
+href="http://xplanet.sourceforge.net/">xplanet</a>:</p>
 
 <div class="figure" align="center">
 
-<p><img alt="map viz toolchain" src="mapVizFig.png" />
+<img alt="map viz toolchain" src="mapVizFig.png" />
 </div>
 
 
@@ -249,7 +252,7 @@ machine a fairly deep understanding of the itinerary:</p>
 <p><img alt="MCI to YMX and back for Extreme 2002"
 src="../../../../2003/04dc-mia/itin-mia.png" /></p>
 
-<div class="noprint">more details are in the <a href="../../../../2003/04dc-mia/Makefile">Makefile</a></div>
+<div class="noprint mechanics">more details are in the <a href="../../../../2003/04dc-mia/Makefile">Makefile</a></div>
 </div>
 
 
@@ -259,7 +262,7 @@ src="../../../../2003/04dc-mia/itin-mia.png" /></p>
 <p>In fact, the published RDF/XML version of the itinerary is joined
 not only with latitude/longitude data, but also timezone data, and
 elaborated via <a href="itin2ical.n3">itin2ical.n3</a> rules into <a href="../../../../2002/12/cal/">an RDF
-representation of the standard iCalendar syntax</a>.
+representation of the standard iCalendar syntax</a>.</p>
 
 <pre>
 
@@ -293,15 +296,41 @@ href="toIcal.py">toIcal.py</a></tt>, using the
 cwm API, to generate iCalendar syntax.</p>
 
 <div class="figure" align="center">
-<p><img alt="calendar integration toolchain" src="calIntFig.png" />
+<img alt="calendar integration toolchain" src="calIntFig.png" />
 </div>
 
 <p>We can import the resulting iCalendar file into an of
 a number of interoperable tools, such as Ximian Evolution:</p>
 
 <div class="figure" align="center">
-<p><img alt="evo screenshot" src="calIntShot.png" />
+<img alt="evo screenshot" src="calIntShot.png" />
 </div>
+
+
+<h2 id="plain-text-sum">Plain Text Summaries</h2>
+
+<p>All this rich integration is great when the tools are all working
+and you have plenty of bandwidth and all that, but sometimes, plain
+text is necessary and sufficient for the task at hand. For example, if
+I get mail asking when I arrive at the meeting site, mailing back a
+map is probably overkill, and I can't be 100% sure their desktop is
+iCalendar-happy.</p>
+
+<p>The <tt>cwm --strings</tt> output mode can
+be really handy in these cases; we can use a few
+<a href="../../../../2002/10dc-uk/itinBrief.n3">itinBrief.n3</a> rules
+ala...</p>
+
+<pre>python cwm.py itinBrief.n3 itin.nt --think --strings</pre>
+
+<p>to get a summary ala...</p>
+
+<pre>
+2003-04-07 09:40 - 11:16 MCI->DFW Monday AMERICAN AIRLINES #3199
+2003-04-07 12:03 - 15:49 DFW->MIA Monday AMERICAN AIRLINES #68
+2003-04-10 19:12 - 21:32 MIA->ORD Thursday AMERICAN AIRLINES #1477
+2003-04-10 22:33 - 23:54 ORD->MCI Thursday AMERICAN AIRLINES #1081
+</pre>
 
 
 <h2 id="ckcn">Checking Constraints</h2>
@@ -336,7 +365,7 @@ higher than my confidence in eyeballing it:</p>
 <p>... and look for <tt>&lt;#leavesDaysTooSoon&gt;</tt> in the output.</p>
 
 <div class="noprint mechanics">
-<p>More details: <a href="/2001/08swws67/">SWWS stuff</a>.</p>
+<p>More details: <a href="../../../../2001/08swws67/">SWWS stuff</a>.</p>
 </div>
 
 <h2 id="pda-in">Conversion for PDA import</h2>
@@ -361,7 +390,8 @@ use some outdated vocabulary.
 </div>
 
 
-<p><em>[@@image of palm pilot showing flight in the datebook]</em></p>
+<div class="noprint"><em>[@@TODO: image of palm pilot showing flight
+in the datebook]</em></div>
 
 
 <div class="noprint">
