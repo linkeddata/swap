@@ -138,22 +138,22 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 
     def flushStart(self):
         if not self._docOpen:
-            if self.prefixes.get((SYMBOL, RDF_NS_URI), ":::") == ":::":
+            if self.prefixes.get(RDF_NS_URI, ":::") == ":::":
                 if self.namespaces.get("rdf", ":::") ==":::":
-                    self.bind("rdf", (SYMBOL, RDF_NS_URI))
-            if self.prefixes.get((SYMBOL, Logic_NS), ":::") == ":::":
+                    self.bind("rdf", RDF_NS_URI)
+            if self.prefixes.get(Logic_NS, ":::") == ":::":
                 if self.namespaces.get("log", ":::") ==":::":
-                    self.bind("log", (SYMBOL, Logic_NS))
+                    self.bind("log", Logic_NS)
             ats = []
             ps = self.prefixes.values()
             ps.sort()    # Cannonicalize output somewhat
             if self.defaultNamespace and "d" not in self._flags:
-                ats.append(('xmlns',self.defaultNamespace[1]))
+                ats.append(('xmlns',self.defaultNamespace))
             for pfx in ps:
 #                if pfx:
-                    ats.append(('xmlns:'+pfx, self.namespaces[pfx][1]))
+                    ats.append(('xmlns:'+pfx, self.namespaces[pfx]))
 #                else:
-#                    ats.append(('xmlns', self.namespaces[pfx][1]))
+#                    ats.append(('xmlns', self.namespaces[pfx]))
             self._wr.startElement(RDF_NS_URI+'RDF', ats, self.prefixes)
             self._subj = None
             self._nextId = 0
@@ -342,7 +342,7 @@ class XMLWriter:
 	ln = uriref[i:]
 	ns = uriref[:i]
 #        print "@@@ ns=",ns, "@@@ prefixes =", prefixes
-        prefix = prefixes.get((SYMBOL, ns), ":::")
+        prefix = prefixes.get(ns, ":::")
         attrs = []
         for a, v in rawAttrs:   # Caller can set default namespace
             if a == "xmlns": self.currentNS = v
@@ -361,7 +361,7 @@ class XMLWriter:
                 continue
             ans = at[:i]
             lan = at[i+1:]
-            prefix = prefixes.get((SYMBOL, ans),":::")
+            prefix = prefixes.get(ans,":::")
             if prefix == ":::":
                 print ("#@@@@@ tag %s: atr %s has no prefiex :-(" %
                        (uriref, at, `prefixes`))

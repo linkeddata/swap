@@ -140,7 +140,7 @@ import md5, binascii  # for building md5 URIs
 import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
-from diag import progress, progressIndent, verbosity
+from diag import progress, progressIndent, verbosity, tracking
 from thing import Namespace, BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Anonymous, Term, List, EmptyList
@@ -245,6 +245,9 @@ def compareURI(self, other):
             for i in range(ls):
                 diff = s[i].compareSubjPredObj(o[i])
                 if diff != 0: return diff
+	    for f in self, other:
+		if f.cannonical is not f:
+		    progress("@@@@@ Comparing formula NOT CANNONICAL", `f`)
             raise RuntimeError("Identical formulae not interned! Length %i: %s" % (ls, `s`))
         else:
             return 1
@@ -269,7 +272,7 @@ def compareURI(self, other):
 
 def compareFormulae(self, other):
     """ This algorithm checks for equality in the sense of structural equivalence, and
-    also provides an ordering which allows is to render a graph in a canonical way.
+    also provides an ordering which allows is to render a graph in a cannonical way.
     This is a form of unification.
 
     The steps are as follows:
@@ -339,6 +342,7 @@ class Formula(Fragment):
 #        self.statements = []
         self.descendents = None   # Placeholder for list of closure under subcontext
         self.cannonical = None # Set to self if this has been checked for duplicates
+	self.collector = None # Object collecting evidence, if any 
 
     def generated(self):
 	"""Yes, any identifier you see for this is arbitrary."""
@@ -406,6 +410,8 @@ class Formula(Fragment):
 	formula as context, and return it for future use"""
 	return self.store.newUniversal(self, uri, why=why)
 
+    def newFormula(self, uri=None):
+	return self.store.newFormula(uri)
 
     def statementsMatching(self, pred=None, subj=None, obj=None):
         """Return a READ-ONLY list of StoredStatement objects matching the parts given
@@ -479,7 +485,8 @@ class Formula(Fragment):
 	"""
 	hits = self._index.get((pred, subj, obj), [])
 	if not hits: return None
-	assert len(hits) == 1, "There should only be one match for %s %s %s." %(subj, pred, obj)
+	assert len(hits) == 1, """There should only be one match for (%s %s %s).
+	    Found: %s""" %(subj, pred, obj, self.each(subj, pred, obj))
 	s = hits[0]
 	if pred == None: return s[PRED]
 	if subj == None: return s[SUBJ]
@@ -541,9 +548,8 @@ def comparePair(self, other):
 
 class StoredStatement:
 
-    def __init__(self, q, why=None):
+    def __init__(self, q):
         self.quad = q
-	self.why = why
 
     def __getitem__(self, i):   # So that we can index the stored thing directly
         return self.quad[i]
@@ -811,7 +817,7 @@ def loadToStore(store, uri=None, contentType=None, formulaURI=None, remember=1):
             netStream = urllib.urlopen(addr)
             if buffer.find('xmlns="') >=0 or buffer.find('xmlns:') >=0:
                 guess = 'application/xml'
-            elif buffer[0] == "#" or buffer[0:7] == "@prefix":
+            elif buffer[0:1] == "#" or buffer[0:7] == "@prefix":
                 guess = 'application/n3'
             if verbosity() > 29: progress("    guess " + guess)
     except (IOError, OSError):
@@ -830,6 +836,7 @@ def loadToStore(store, uri=None, contentType=None, formulaURI=None, remember=1):
         p.feed(netStream.read())
         Fpair = p.endDoc()
     F = store.intern(Fpair)
+    F = F.close()
     if remember: store.storeQuad((store._experience,
                      store.semantics, store.intern((SYMBOL, addr)), F))
     return F 
@@ -909,7 +916,7 @@ class BI_parsedAsN3(HeavyBuiltIn, Function):
             p.endDoc()
             del(p)
             F = store.intern((FORMULA, inputURI+ "#_formula"))
-            return F
+            return F.close()
     
 class BI_cufi(HeavyBuiltIn, Function):
     """ Deductive Closure
@@ -926,6 +933,7 @@ class BI_cufi(HeavyBuiltIn, Function):
             F = store.newInterned(FORMULA)
             store.copyContext(subj, F)
             store.think(F)
+	    F = F.close()
             store.storeQuad((store._experience, store.cufi, subj, F))  # Cache for later
             return F
     
@@ -1084,6 +1092,22 @@ class RDFStore(RDFSink) :
     def newSymbol(self, uri):
 	return self.intern(RDFSink.newSymbol(self, uri))
 
+	progress("@@@ newSymbol: "+ uri)
+	print "uri >>>%s<<<" %uri
+	pair = RDFSink.newSymbol(self, uri)
+	x = self.intern(pair)
+	print "x >>>%s<<<<" % `x`
+	print type(x), x.uriref()
+	if not isinstance(x, Term): print "@@@@@@ WEIRD"
+	print "pair>>>%s<<<>>>%s<<<"%(pair)
+#	return (SYMBOL, uri) no crash
+	if uri[-1:] == "#": pass
+#	    assert 1==2 
+#	return (SYMBOL, uri)  # crash
+	progress("@@@ newSymboldone: "+ `x`)
+	return (SYMBOL, uri)  # crash
+	return x
+
     def newBlankNode(self, context, why=None):
 	"""Create or reuse, in the default store, a new unnamed node within the given
 	formula as context, and return it for future use"""
@@ -1238,9 +1262,6 @@ class RDFStore(RDFSink) :
                                             ( `F`, len(F.statements)))
         for s in F.statements[:]:   # Take copy
             self.removeStatement(s)
-#        for p in ALL4:
-#            if F.occursAs[p] != []:
-#                raise RuntimeError("Attempt to delete Formula in use "+`F`, F.occursAs)
         self.formulae.remove(F)
 
     def endFormula(self, F):
@@ -1326,6 +1347,7 @@ class RDFStore(RDFSink) :
         if verbosity() > 70:
             progress("  "*level, "endFormulaNested:"+`F`+ `bindings`)
 
+	
         if F.cannonical != None:
             return F.cannonical
         subs = []   # Immediate subformulae
@@ -1361,9 +1383,10 @@ class RDFStore(RDFSink) :
         del(p)
 	return F
 
-    def bind(self, prefix, nsPair):
+    def bind(self, prefix, uri):
+	assert type(uri) is type("")
         if prefix != "":   #  Ignore binding to empty prefix
-            return RDFSink.bind(self, prefix, nsPair) # Otherwise, do as usual.
+            return RDFSink.bind(self, prefix, uri) # Otherwise, do as usual.
     
     def makeStatement(self, tuple, why=None):
 	"""Add a quad to the store, each part of the quad being in pair form."""
@@ -1413,6 +1436,11 @@ class RDFStore(RDFSink) :
             return 0  # Return no change in size of store
         if context.cannonical != None:
             raise RuntimeError("Attempt to add statement to cannonical formula "+`context`)
+	assert not isinstance(pred, Formula) or pred.cannonical is pred, "pred Should be closed"+`pred`
+	assert (not isinstance(subj, Formula)
+		or subj is context
+		or subj.cannonical is subj), "subj Should be closed or this"+`subj`
+	assert not isinstance(obj, Formula) or obj.cannonical is obj, "obj Should be closed"+`obj`
 
 # We collapse lists from there declared daml first,rest structure into List objects.
 # To do this, we need (a) a first; (b) a rest, and (c) the rest being a list.
@@ -1432,8 +1460,12 @@ class RDFStore(RDFSink) :
                     subj._asList = rest._asList.precededBy(obj)
                     self.checkList(context, subj)
 
-        s = StoredStatement(q, why)
-#	if why == None: raise RunTimeError("@@@@@@@@@@@")
+        s = StoredStatement(q)
+	
+	if tracking:
+	    if (why == None): raise RunTimeError("Tracking errors but no reason given for"+`s`)
+	    if context.collector:
+		context.collector.newStatement(s, why)
 
 
         # Build 8 indexes.
@@ -1521,7 +1553,7 @@ class RDFStore(RDFSink) :
             progress("# Most popular Namesapce in %s is %s with %i" % (`context`, `mp`, best))
 
         if mp is None: return counts
-        self.defaultNamespace = (SYMBOL, mp.uriref()+"#")
+        self.defaultNamespace = mp.uriref()+"#"
         return counts
 
         
@@ -1535,16 +1567,16 @@ class RDFStore(RDFSink) :
         prefixes.sort()
 #	if counts:
 #	    for pfx in prefixes:
-#		nsPair = self.namespaces[pfx]
-#		r = self.intern((nsPair[0], nsPair[1][:-1]))  # Remove trailing slash
+#		uri = self.namespaces[pfx]
+#		r = self.intern((SYMBOL, uri[:-1]))  # Remove trailing slash
 #		n = counts.get(r, -1)
 #		if verbosity()>20: progress("   Prefix %s has %i" % (pfx, n))
 #		if n > 0:
-#		    sink.bind(pfx, nsPair)	    
+#		    sink.bind(pfx, uri)	    
 #	else:
 	for pfx in prefixes:
-	    nsPair = self.namespaces[pfx]
-	    sink.bind(pfx, nsPair)
+	    uri = self.namespaces[pfx]
+	    sink.bind(pfx, uri)
 
     def dumpChronological(self, context, sink):
         sink.startDoc()
@@ -2020,9 +2052,11 @@ class RDFStore(RDFSink) :
                          % ( _total, filterContext))
         return _total
 
-    # Beware lists are corrupted. Already list is updated if present.
     def tryRule(self, rule, workingContext, targetContext, _variables, already=None):
-
+	"""Try a rule
+	
+	Beware lists are corrupted. Already list is updated if present.
+	"""
         template = rule[SUBJ]
         conclusion = rule[OBJ]
 
@@ -2053,7 +2087,7 @@ class RDFStore(RDFSink) :
     # The smartIn context was the template context but it has been mapped to the workingContext.
         return self.match(unmatched, variablesUsed, templateExistentials, [workingContext],
                           self.conclude,
-                          ( self, conclusion, targetContext,  # _outputVariables,
+                          ( self, workingContext, conclusion, targetContext,  # _outputVariables,
                             already, rule),
 			    meta=workingContext)
 
@@ -2304,10 +2338,11 @@ class RDFStore(RDFSink) :
         if verbosity()>99: progress( " "*level, "doNothing: Success! found it!")
         return 1                    # Return count of calls only
 
-    # Whether we do a smart match determines whether we will be able to conclude
-    # things which in fact we knew already thanks to the builtins.
-    def conclude(self, bindings, param, level=0, evidence=[]):  # Returns number of statements added to store
-        store, conclusion, targetContext,  already, rule = param
+    def conclude(self, bindings, param, level=0, evidence=[]):
+	"""Callback rountine for when a match found in a query
+
+	Returns the number of statements added."""
+        store, workingContext, conclusion, targetContext,  already, rule = param
         if verbosity() >60: progress( "\n#Concluding tentatively..." + bindingsToString(bindings))
 
         if already != None:
@@ -2318,50 +2353,44 @@ class RDFStore(RDFSink) :
             if verbosity() > 30: progress("Not duplicate: ", bindingsToString(bindings))
             already.append(bindings)   # A list of lists
 
+	es, exout = workingContext.existentials(), []
+	for var, val in bindings:
+	    if val in es:
+		exout.append(val)
+	if len(exout) >0 and verbosity() > 25:
+	    progress("Matches we found which are just existentials:", exout)
+
         b2 = bindings + [(conclusion, targetContext)]
         ok = targetContext.universals()  # It is actually ok to share universal variables with other stuff
         poss = conclusion.universals()
         for x in poss[:]:
             if x in ok: poss.remove(x)
         vars = conclusion.existentials() + poss  # Terms with arbitrary identifiers
-#        clashes = self.occurringIn(targetContext, vars)    Too slow to do every time
-#        for v in clashes:
+#        clashes = self.occurringIn(targetContext, vars)    Too slow to do every time; play safe
+	if verbosity() > 25:
+	    s = "Universals in conclusion but not in target regenerated:" % ((vars,))
         for v in vars:
-            b2.append((v, store.newInterned(ANONYMOUS))) # Regenerate names to avoid clash
+	    if v not in exout:
+		v2 = store.newInterned(ANONYMOUS)
+		b2.append((v, v2)) # Regenerate names to avoid clash
+		if verbosity() > 25: s = s + ", %s -> %s" %(v, v2)
+	    else:
+		s = s + (", (%s is existential in kb)"%v)
+	if len(vars) >0 and verbosity() > 25:
+	    progress(s)
+	
+
         if verbosity()>10:
             progress( "Concluding definitively" + bindingsToString(b2) )
         before = self.size
 	reason = BecauseOfRule(rule, bindings=bindings, evidence=evidence)
         self.copyContextRecursive(conclusion, targetContext, b2, reason)
+	for e in exout:
+	    targetContext.add(subj=targetContext, pred=self.forSome, obj=e)
         if verbosity()>30:
             progress( "  Size of store changed from %i to %i"%(before, self.size))
         return self.size - before
 
-#        myConclusions = conclusions[:]
-#        _substitute(bindings, myConclusions)
-#        # Does this conclusion exist already in the database?
-#        found = self.match(myConclusions[:],
-#                           [], oes[:], smartIn=[targetContext],
-#                           hypothetical=1,
-#                           justOne=1,
-#                           level = level + 8)  # Find first occurrence, SMART
-#        if found:
-#            if verbosity()>00:
-#                progress( "Concluding: Forget it, already had info" + bindingsToString(bindings))
-#                progress("Already list: ", already) 
-#                
-#            if already != None: raise RunTimeError, "Already in store but bindings new?" 
-#            return 0
-#        if verbosity()>20:
-#            progress( "Concluding definitively" + bindingsToString(bindings))
-#        
-#
-#        total = 0
-#        for q in myConclusions:
-#            q2 = _lookupQuad(bindings2, q)
-#            total = total + store.storeQuad(q2)
-#            if verbosity()>10: progress( "        *** Conclude: " + quadToString(q2))
-#        return total
 
 ##################################################################################
 
@@ -2640,7 +2669,9 @@ class QueryItem:
                     result = pred.evaluateObject(self.store, con, subj, subj_py)
                     if result != None:
                         self.state = S_FAIL
-                        return [([ (obj, result)], BecauseBuiltIn(result, pred, obj))]
+			rea=None
+			if tracking: rea = BecauseBuiltIn(subj, pred, result)
+                        return [([ (obj, result)], rea)]
         else:
             if (self.neededToRun[OBJ] == []):
                 if isinstance(pred, ReverseFunction):
@@ -2648,7 +2679,9 @@ class QueryItem:
                     result = pred.evaluateSubject(self.store, con, obj, obj_py)
                     if result != None:
                         self.state = S_FAIL
-                        return [([ (subj, result)], BecauseBuiltIn(subj, pred, result))]
+			rea=None
+			if tracking: rea = BecauseBuiltIn(result, pred, obj)
+                        return [([ (subj, result)], rea)]
         if verbosity() > 30:
             progress("Builtin could not give result"+`self`)
 

@@ -143,7 +143,7 @@ class RDFSink:
         
         pass
 
-    def bind(self, prefix, nsPair):
+    def bind(self, prefix, uri):
 	"""Pass on a binding hint for later use in output
 
 	This really is just a hint. The parser calls bind to pass on the prefix which
@@ -151,8 +151,8 @@ class RDFSink:
 	of the same namespace. Otherwise, output processors will have to invent
 	or avoid useing namespaces, which will look ugly
 	"""
-
-        if ':' not in nsPair[1]:
+	assert type(uri) is type("")
+        if ':' not in uri:
             # can't raise exceptions inside SAX callback
             print "must be absolute", nsPair
             import traceback
@@ -161,16 +161,16 @@ class RDFSink:
             print "@@@@"
         
         # If we don't have a prefix for this ns...
-        if not self.prefixes.get(nsPair, None):
+        if not self.prefixes.get(uri, None):
             if not self.namespaces.get(prefix,None):   # For conventions
-                self.prefixes[nsPair] = prefix
-                self.namespaces[prefix] = nsPair
+                self.prefixes[uri] = prefix
+                self.namespaces[prefix] = uri
                 #@@progress?
                 #if chatty: print "# RDFSink: Bound %s to %s" % (prefix, nsPair[1])
             else:
-                self.bind(prefix+"g1", nsPair) # Recurive
+                self.bind(prefix+"_", uri) # Recurive
 
-    def setDefaultNamespace(self, nsPair):
+    def setDefaultNamespace(self, uri):
 	"""Pass on a binding hint for later use in output
 
 	This really is just a hint. The parser calls this to pass on the default namespace which
@@ -178,7 +178,8 @@ class RDFSink:
 	of the same namespace. Otherwise, output processors will have to invent
 	or avoid useing namespaces, which will look ugly.
 	"""
-        self.defaultNamespace = nsPair
+	assert type(uri) is type("")
+        self.defaultNamespace = uri
   
     def makeComment(self, str):
 	"""This passes on a comment line which of course has no semantics.
@@ -197,7 +198,7 @@ class RDFSink:
 	    self.declaredRunNamespace = 1
 	    ns =  self._genPrefix
 	    hash = ns.find("#")
-	    self.bind("run", (SYMBOL, ns[:hash+1]))
+	    self.bind("run", ns[:hash+1])
         return subj
 
     def setGenPrefix(self, genPrefix):

@@ -62,7 +62,7 @@ class RDFXMLParser(xmllib.XMLParser):
         self._root = self._generate("doc")
         self._cursor = self._root
         self._children = None
-        self.sink.bind("x", (SYMBOL, NS))
+        self.sink.bind("x", NS)
         self.unordered = 0
 
 

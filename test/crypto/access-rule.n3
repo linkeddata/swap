@@ -56,7 +56,7 @@ this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z
 #  What do we belive is a request?
 #  We trust the command line in defining what is a request.
 
-{  "1" os:argv [ is log:uri of [ log:semantics :F ]].
+{  "1"!os:argv!os:baseAbsolute^log:uri log:semantics :F.
    :F log:includes { :str acc:endorsement[acc:signature :sig; acc:key :k]}.
    :k crypto:verify ([is crypto:md5 of :str] :sig).
    :str log:parsedAsN3:G } log:implies { :G acc:requestSupportedBy :k }.

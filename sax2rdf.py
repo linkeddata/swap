@@ -55,8 +55,7 @@ import xml.sax._exceptions
 from xml.sax.handler import feature_namespaces
 
 import RDFSink
-from RDFSink import FORMULA, LITERAL, SYMBOL, ANONYMOUS, NODE_MERGE_URI
-SYMBOL=RDFSink.SYMBOL #@@misnomer
+from RDFSink import FORMULA,  ANONYMOUS, NODE_MERGE_URI
 
 # States:
 
@@ -76,7 +75,6 @@ DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
 
 from diag import verbosity, progress
 
-RDF_IS = SYMBOL, NODE_MERGE_URI   # Used with quoting
 
 _nextId = 0        # For generation of arbitrary names for anonymous nodes
 
@@ -89,10 +87,10 @@ class RDFHandler(xml.sax.ContentHandler):
 	self.flags = flags
         self._stack =[]  # Stack of states
         self._nsmap = [] # stack of namespace bindings
-
+	self._delayedStatement = None
         self.sink = sink
         self._thisURI = thisURI
-        self._state = STATE_OUTERMOST  # Maybe should ignore RDF poutside <rdf:RDF>??
+        self._state = STATE_OUTERMOST  # Maybe should ignore RDF outside <rdf:RDF>??
         if formulaURI==None:
             self._context = FORMULA, thisURI + "#_formula"  # Context of current statements, change in bags
         else:
@@ -103,27 +101,15 @@ class RDFHandler(xml.sax.ContentHandler):
         self._items = [] # for <rdf:li> containers
         self._genPrefix = uripath.join(thisURI, "#_rdfxg")    # allow parameter override?
 	self.sink.setGenPrefix(self._genPrefix)
-
         self._litDepth = 0
+	self.merge = self.sink.newSymbol(NODE_MERGE_URI)
         self.sink.startDoc()
         version = "$Id$"
         self.sink.makeComment("RDF parsed by "+version[1:-1])
 
-	if "D" in self.flags:
-	    self.sink.bind("", (SYMBOL, self._thisURI+"#"))
+	if "D" in self.flags:  # Assume default namespace declaration
+	    self.sink.bind("", self._thisURI+"#")
 	    self._nsmap = [ { "": "#"} ]
-
-
-#@@    def load(self, uri, _baseURI=""):
-#        if uri:
-#            _inputURI = urlparse.urljoin(_baseURI, uri) # Make abs from relative
-#            netStream = urllib.urlopen(_inputURI)
-#            self.feed(netStream.read())     # @ May be big - buffered in memory!
-#            self.close()
-#        else:
-#            _inputURI = urlparse.urljoin(_baseURI, "STDIN") # Make abs from relative
-#            self.feed(sys.stdin.read())     # May be big - buffered in memory!
-#            self.close()
 
 
     def characters(self, data):
@@ -205,9 +191,9 @@ class RDFHandler(xml.sax.ContentHandler):
             self._subject = self.sink.newBlankNode(self._context) #for debugging: encode file/line info?
         for pred, obj in properties:
             self.sink.makeStatement(( self._context,
-                                      (SYMBOL, pred),
+                                      self.sink.newSymbol(pred),
                                       self._subject,
-                                      (LITERAL, obj) ))
+                                      self.sink.newLiteral(obj) ))
 
             
 
@@ -223,9 +209,9 @@ class RDFHandler(xml.sax.ContentHandler):
             if c == None: raise roof
             assert self._subject != None
             self.sink.makeStatement((  c,
-                                       (SYMBOL, RDF_NS_URI+"type"),
+                                       self.sink.newSymbol(RDF_NS_URI+"type"),
                                        self._subject,
-                                       (SYMBOL, tagURI) ))
+                                       self.sink.newSymbol(tagURI) ))
         self._state = STATE_DESCRIPTION
                 
 
@@ -247,7 +233,7 @@ class RDFHandler(xml.sax.ContentHandler):
         b[prefix] = uri
         self._nsmap.append(b)
 
-        self.sink.bind(prefix, (SYMBOL, uri))
+        self.sink.bind(prefix, uri)
 
     def endPrefixMapping(self, prefix):
         del self._nsmap[-1]
@@ -261,9 +247,9 @@ class RDFHandler(xml.sax.ContentHandler):
         tagURI = ((name[0] or "") + name[1]).encode('utf-8')
 
         if verbosity() > 80:
-	    indent = "-" * len(self._stack) 
+	    indent = "- " * len(self._stack) 
             if not attrs:
-                progress(indent+'# State =', self._state, ', start tag: <' + tagURI + '>')
+                progress(indent+'# State was', self._state, ', start tag: <' + tagURI + '>')
             else:
                 str = '# State =%s, start tag= <%s ' %( self._state, tagURI)
                 for name, value in attrs.items():
@@ -271,7 +257,10 @@ class RDFHandler(xml.sax.ContentHandler):
                 progress(indent + str + '>')
 
 
-        self._stack.append([self._state, self._context, self._predicate, self._subject])
+        self._stack.append([self._state, self._context, self._predicate,
+				self._subject, self._delayedStatement])
+				
+	self._delayedStatement = None
 
         if self._state == STATE_OUTERMOST:
             if tagURI == RDF_NS_URI + "RDF":
@@ -293,10 +282,10 @@ class RDFHandler(xml.sax.ContentHandler):
             #  http://www.w3.org/2000/03/rdf-tracking/#rdf-containers-syntax-ambiguity
             if tagURI == RDF_NS_URI + "li":
                 item = self._items[-1] + 1
-                self._predicate = SYMBOL, ("%s_%s" % (RDF_NS_URI, item))
+                self._predicate = self.sink.newSymbol("%s_%s" % (RDF_NS_URI, item))
                 self._items[-1] = item
             else:
-                self._predicate = SYMBOL, tagURI
+                self._predicate = self.sink.newSymbol(tagURI)
 
             self._state = STATE_VALUE  # May be looking for value but see parse type
             self.testdata = ""         # Flush value data
@@ -331,10 +320,13 @@ class RDFHandler(xml.sax.ContentHandler):
                             s = self._subject
                             self.idAboutAttr(attrs)  # set subject and context for nested description
 			    self._subject = self.sink.newFormula()  # Forget anonymous genid - context is subect
-                            if self._predicate == (SYMBOL, NODE_MERGE_URI): # magic :-(
+                            if self._predicate is self.merge: # magic :-(
 				self._stack[-1][3] = self._subject  # St C P S retrofit subject of outer level!
+				self._delayedStatement = 1 # flag
+				progress("@@@ set up 1")
                             else:
-                                self.sink.makeStatement(( c, self._predicate, s, self._subject))
+				self._delayedStatement = c, self._predicate, s, self._subject
+#                                self.sink.makeStatement(( c, self._predicate, s, self._subject))
                             self._context = self._subject
                             self._subject = None
                             self._state = STATE_NO_SUBJECT  # Inside quote, there is no subject
@@ -369,11 +361,11 @@ class RDFHandler(xml.sax.ContentHandler):
                                       pair )) 
             self.idAboutAttr(attrs)  # set subject (the next item) and context 
             self.sink.makeStatement(( c,
-                                      (SYMBOL, DPO_NS + "first"),
+                                      self.sink.newSymbol(DPO_NS + "first"),
                                       pair,
                                       self._subject)) # new item
             
-            self._stack[-1][2] = SYMBOL, DPO_NS + "rest"  # Leave dangling link   #@check
+            self._stack[-1][2] = self.sink.newSymbol(DPO_NS + "rest")  # Leave dangling link   #@check
             self._stack[-1][3] = pair  # Underlying state tracks tail of growing list
 
          
@@ -403,7 +395,15 @@ class RDFHandler(xml.sax.ContentHandler):
 
 
     def endElementNS(self, name, qname):
-        
+	"""Handle end element event
+	"""
+        if verbosity() > 80:
+	    indent = "- " * len(self._stack) 
+	    progress(indent+'# End %s, State was'%name[1], self._state, ", delayed was ", `self._delayedStatement`)
+
+	if self._delayedStatement == 1:
+		if verbosity() > 80: progress("Delayed subject "+`self._subject`)
+		self._stack[-1][3] = self._stack[-1][3].close()
         if self._state == STATE_LITERAL:
             self._litDepth = self._litDepth - 1
             if self._litDepth == 0:
@@ -426,9 +426,9 @@ class RDFHandler(xml.sax.ContentHandler):
             
         elif self._state == STATE_LIST:
             self.sink.makeStatement(( self._context,
-                                      (SYMBOL, DPO_NS + "rest"),
+                                      self.sink.newSymbol(DPO_NS + "rest"),
                                       self._subject,
-                                      (SYMBOL, DPO_NS + "nil") ))
+                                      self.sink.newSymbol(DPO_NS + "nil") ))
         elif self._state == STATE_DESCRIPTION:
             self._items.pop()
         elif self._state == STATE_NOVALUE or \
@@ -438,12 +438,35 @@ class RDFHandler(xml.sax.ContentHandler):
             pass
         else:
             raise RuntimeError, ("Unknown RDF parser state '%s' in end tag" % self._state, self._stack)
+	    
+#	c1 = self._context
+#	if self._subject is c1 and self_context is not c1:
+#	    self._subject = self._subject.close() # close before use
 
         l =  self._stack.pop() #
         self._state = l[0]
         self._context = l[1]
         self._predicate = l[2]
         self._subject = l[3]
+
+	if self._delayedStatement != None:
+	    if self._delayedStatement == 1:
+		pass
+#		progress("Delayed subject "+`self._subject`)
+#		self._subject = self._subject.close()
+	    else:
+		c, p, s, o = self._delayedStatement
+		o = o.close()
+		self.sink.makeStatement((c, p, s, o))
+		self._delayedStatement = None
+
+	self._delayedStatement = l[4]
+
+#	if self._delayedStatement != None:
+#	    if self._delayedStatement == 1:
+#		progress("@@@@@@@@@@222 Delayed subject "+`self._subject`)
+#		self._subject = self._subject.close()
+
         self.flush()
         # print '\nend tag: </' + tag + '>'
 

@@ -12,10 +12,14 @@ PD=$W/2001/02pd
 
 include $(PD)/GVDOT.mak
 
-.SUFFIXES: .response .request .public .private
+.SUFFIXES: .check .proof .response .request .public .private
 
 .request.response:
 	$(CWM) access-rule.n3 --think --purge --with $< > $@
+
+.request.proof:
+	$(CWM) access-rule.n3 --think --purge --filter=result-filter.n3 \
+		 --why --with $< > $@
 
 .private.public:
 	$(CWM) $< access-onlyPublic.n3 --think --purge > $@
@@ -76,8 +80,16 @@ access-1.request : access-tiina.private access-sign-request.n3
 	$(CWM) access-tiina.private access-sign-request.n3 --think --purge --with http://www.w3.org/Member > $@
 
 # The response to the request is generated in the server by access-rule.n3 
-# It checks that the chain of authority has been satisfied by appropriate signed statements.
+# It checks that the chain of authority has been satisfied by appropriate
+# signed statements. Note the "GoodRequest" conclusion.
+
 access-1.response : access-1.request access-rule.n3 access-tiina.public access-tiina.cert access-elisa.cert access-master.public
+
+# In practice, the web server would not search for reasosn for
+# admitting someone. Life is too short.  It will only validate the
+# reasoning someone else has found. So, Tiina generates a proof that
+# her request is good:
+
 
 ######################### Makefile diagram
 

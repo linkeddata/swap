@@ -263,14 +263,15 @@ class SinkParser:
         ns = join(self._baseURI, ns)
         assert ':' in ns # must be absolute
 	self._bindings[t[0][0]] = ns
-	self.bind(t[0][0], (SYMBOL, ns))
+	self.bind(t[0][0], ns)
 	return j
 
-    def bind(self, qn, nsPair):
+    def bind(self, qn, uri):
+	assert type(uri) is type("")
         if qn == "":
-            self._sink.setDefaultNamespace(nsPair)
+            self._sink.setDefaultNamespace(uri)
         else:
-            self._sink.bind(qn, nsPair)
+            self._sink.bind(qn, uri)
 
     def startDoc(self):
         self._sink.startDoc()
@@ -467,7 +468,7 @@ class SinkParser:
 
             self._context = self._parentContext
 	    self._parentContext = oldParentContext
-            res.append(subj)
+            res.append(subj.close())   # Must not actually use the formula until it has been closed
             return j
 
         if ch == "(":
@@ -946,31 +947,31 @@ t   "this" and "()" special syntax should be suppresed.
 #        nextId = nextId + 1
 #        return nextId - 1
 
-    def setDefaultNamespace(self, nsPair):
-        return self.bind("", nsPair)
+    def setDefaultNamespace(self, uri):
+        return self.bind("", uri)
     
-    def bind(self, prefixString, nsPair):
+    def bind(self, prefixString, uri):
         """ Just accepting a convention here """
-        assert ':' in nsPair[1] # absolute URI references only
+        assert ':' in uri # absolute URI references only
         if "p" in self._flags: return  # Ignore the prefix system completely
         if not prefixString:
             raise RuntimError("Please use setDefaultNamespace instead")
         
-        if (nsPair == self.defaultNamespace
+        if (uri == self.defaultNamespace
             and "d" not in self._flags): return # don't duplicate ??
         self._endStatement()
-        self.prefixes[nsPair] = prefixString
-        self._write(" @prefix %s: <%s> ." % (prefixString, refTo(self.base, nsPair[1])) )
+        self.prefixes[uri] = prefixString
+        self._write(" @prefix %s: <%s> ." % (prefixString, refTo(self.base, uri)) )
         self._newline()
 
-    def setDefaultNamespace(self, nsPair):
+    def setDefaultNamespace(self, uri):
         if "d" in self._flags or "p" in self._flags: return  # Ignore the prefix system completely
         self._endStatement()
-        self.defaultNamespace = nsPair
+        self.defaultNamespace = uri
 	if self.base:  # Sometimes there is none, and nowadays refTo is intolerant
-	    x = refTo(self.base, nsPair[1])
+	    x = refTo(self.base, uri)
 	else:
-	    x = nsPair[1]
+	    x = uri
         self._write(" @prefix : <%s> ." % x )
         self._newline()
        
@@ -1235,12 +1236,12 @@ t   "this" and "()" special syntax should be suppresed.
         if (j>=0
             and "p" not in self._flags   # Suppress use of prefixes?
             and value[j+1:].find(".") <0 ): # Can't use prefix if localname includes "."
-#            print "|%s|%s|"%(self.defaultNamespace[1], value[:j+1])
+#            print "|%s|%s|"%(self.defaultNamespace, value[:j+1])
             if (self.defaultNamespace
-                and self.defaultNamespace[1] == value[:j+1]
+                and self.defaultNamespace == value[:j+1]
                 and "d" not in self._flags):
                 return ":"+value[j+1:]
-            prefix = self.prefixes.get((SYMBOL, value[:j+1]), None) # @@ #CONVENTION
+            prefix = self.prefixes.get(value[:j+1], None) # @@ #CONVENTION
             if prefix != None : return prefix + ":" + value[j+1:]
         
             if value[:j] == self.base:   # If local to output stream,
@@ -1334,7 +1335,7 @@ class Reifier(RDFSink.RDFSink):
         RDFSink.RDFSink.__init__(self)
         self._sink = sink
         self._ns = "http://www.w3.org/2000/10/swap/model.n3#"
-        self._sink.bind("n3", (SYMBOL, self._ns))
+        self._sink.bind("n3", self._ns)
 #        self._nextId = 1
 #        self._genPrefix = genPrefix
         self._flat = flat      # Just flatten things not in this context
@@ -1345,8 +1346,8 @@ class Reifier(RDFSink.RDFSink):
         if self._genPrefix == None:
             self._genPrefix = string.split(contextURI,"#")[0] + "#_rei"
         
-    def bind(self, prefix, nsPair):
-        self._sink.bind(prefix, nsPair)
+    def bind(self, prefix, uri):
+        self._sink.bind(prefix, uri)
                
     def makeStatement(self, tuple, why=None):  # Quad of (type, value) pairs
         _statementURI = self._genPrefix + `self._nextId`

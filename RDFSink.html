@@ -81,7 +81,7 @@ identifiers<br>&nbsp;</tt></td></tr>
 will&nbsp;use&nbsp;one;&nbsp;otherwise,&nbsp;it&nbsp;will&nbsp;use&nbsp;the&nbsp;name&nbsp;of&nbsp;an&nbsp;imaginary&nbsp;temporary&nbsp;file<br>
 in&nbsp;the&nbsp;current&nbsp;directory.</tt></dd></dl>
 
-<dl><dt><a name="RDFSink-bind"><strong>bind</strong></a>(self, prefix, nsPair)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
+<dl><dt><a name="RDFSink-bind"><strong>bind</strong></a>(self, prefix, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
 &nbsp;<br>
 This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;bind&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;prefix&nbsp;which<br>
 it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
@@ -125,7 +125,7 @@ If&nbsp;you&nbsp;have&nbsp;added&nbsp;stuff&nbsp;to&nbsp;a&nbsp;document,&nbsp;t
 then&nbsp;want&nbsp;to&nbsp;add&nbsp;more,&nbsp;call&nbsp;this&nbsp;to&nbsp;get&nbsp;back&nbsp;into&nbsp;the&nbsp;sate&nbsp;that&nbsp;makeSatement<br>
 is&nbsp;again&nbsp;acceptable.&nbsp;Remember&nbsp;to&nbsp;end&nbsp;the&nbsp;document&nbsp;again&nbsp;when&nbsp;done.</tt></dd></dl>
 
-<dl><dt><a name="RDFSink-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, nsPair)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
+<dl><dt><a name="RDFSink-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
 &nbsp;<br>
 This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;this&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;default&nbsp;namespace&nbsp;which<br>
 it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
@@ -193,7 +193,7 @@ Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink</a>:<br>
 will&nbsp;use&nbsp;one;&nbsp;otherwise,&nbsp;it&nbsp;will&nbsp;use&nbsp;the&nbsp;name&nbsp;of&nbsp;an&nbsp;imaginary&nbsp;temporary&nbsp;file<br>
 in&nbsp;the&nbsp;current&nbsp;directory.</tt></dd></dl>
 
-<dl><dt><a name="RDFStructuredOutput-bind"><strong>bind</strong></a>(self, prefix, nsPair)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
+<dl><dt><a name="RDFStructuredOutput-bind"><strong>bind</strong></a>(self, prefix, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
 &nbsp;<br>
 This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;bind&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;prefix&nbsp;which<br>
 it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
@@ -237,7 +237,7 @@ If&nbsp;you&nbsp;have&nbsp;added&nbsp;stuff&nbsp;to&nbsp;a&nbsp;document,&nbsp;t
 then&nbsp;want&nbsp;to&nbsp;add&nbsp;more,&nbsp;call&nbsp;this&nbsp;to&nbsp;get&nbsp;back&nbsp;into&nbsp;the&nbsp;sate&nbsp;that&nbsp;makeSatement<br>
 is&nbsp;again&nbsp;acceptable.&nbsp;Remember&nbsp;to&nbsp;end&nbsp;the&nbsp;document&nbsp;again&nbsp;when&nbsp;done.</tt></dd></dl>
 
-<dl><dt><a name="RDFStructuredOutput-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, nsPair)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
+<dl><dt><a name="RDFStructuredOutput-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
 &nbsp;<br>
 This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;this&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;default&nbsp;namespace&nbsp;which<br>
 it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>

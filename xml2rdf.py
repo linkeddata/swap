@@ -237,7 +237,7 @@ class RDFXMLParser(xmllib.XMLParser):
   #              print "### Namespaces: ", `nslist`
                 for prefix, nsURI in nslist:
                     if nsURI:
-                        self.sink.bind(prefix, (RESOURCE, nsURI))
+                        self.sink.bind(prefix, nsURI)
                     
             else:
                 pass                    # Some random XML

@@ -166,7 +166,7 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="Reifier-__init__"><strong>__init__</strong></a>(self, sink, inputContextURI, flat<font color="#909090">=0</font>, genPrefix<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="Reifier-bind"><strong>bind</strong></a>(self, prefix, nsPair)</dt></dl>
+<dl><dt><a name="Reifier-bind"><strong>bind</strong></a>(self, prefix, uri)</dt></dl>
 
 <dl><dt><a name="Reifier-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair<font color="#909090">=None</font>)</dt></dl>
 
@@ -207,7 +207,7 @@ If&nbsp;you&nbsp;have&nbsp;added&nbsp;stuff&nbsp;to&nbsp;a&nbsp;document,&nbsp;t
 then&nbsp;want&nbsp;to&nbsp;add&nbsp;more,&nbsp;call&nbsp;this&nbsp;to&nbsp;get&nbsp;back&nbsp;into&nbsp;the&nbsp;sate&nbsp;that&nbsp;makeSatement<br>
 is&nbsp;again&nbsp;acceptable.&nbsp;Remember&nbsp;to&nbsp;end&nbsp;the&nbsp;document&nbsp;again&nbsp;when&nbsp;done.</tt></dd></dl>
 
-<dl><dt><a name="Reifier-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, nsPair)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
+<dl><dt><a name="Reifier-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
 &nbsp;<br>
 This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;this&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;default&nbsp;namespace&nbsp;which<br>
 it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
@@ -231,7 +231,7 @@ the&nbsp;#&nbsp;will&nbsp;get&nbsp;added&nbsp;during&nbsp;qname&nbsp;processing<
 
 <dl><dt><a name="SinkParser-anonymousNode"><strong>anonymousNode</strong></a>(self, ln)</dt><dd><tt>Remember&nbsp;or&nbsp;generate&nbsp;a&nbsp;term&nbsp;for&nbsp;one&nbsp;of&nbsp;these&nbsp;_:&nbsp;anonymous&nbsp;nodes</tt></dd></dl>
 
-<dl><dt><a name="SinkParser-bind"><strong>bind</strong></a>(self, qn, nsPair)</dt></dl>
+<dl><dt><a name="SinkParser-bind"><strong>bind</strong></a>(self, qn, uri)</dt></dl>
 
 <dl><dt><a name="SinkParser-checkDot"><strong>checkDot</strong></a>(self, str, i)</dt></dl>
 
@@ -343,7 +343,7 @@ Adapted&nbsp;from&nbsp;Dan's&nbsp;ToRDFParser(Parser);<br>&nbsp;</tt></td></tr>
 
 <dl><dt><a name="ToN3-_newline"><strong>_newline</strong></a>(self, extra<font color="#909090">=0</font>)</dt></dl>
 
-<dl><dt><a name="ToN3-bind"><strong>bind</strong></a>(self, prefixString, nsPair)</dt><dd><tt>&nbsp;Just&nbsp;accepting&nbsp;a&nbsp;convention&nbsp;here</tt></dd></dl>
+<dl><dt><a name="ToN3-bind"><strong>bind</strong></a>(self, prefixString, uri)</dt><dd><tt>&nbsp;Just&nbsp;accepting&nbsp;a&nbsp;convention&nbsp;here</tt></dd></dl>
 
 <dl><dt><a name="ToN3-endAnonymous"><strong>endAnonymous</strong></a>(self, subject, verb)</dt></dl>
 
@@ -366,7 +366,7 @@ Adapted&nbsp;from&nbsp;Dan's&nbsp;ToRDFParser(Parser);<br>&nbsp;</tt></td></tr>
 Regenerates&nbsp;genids&nbsp;if&nbsp;required.<br>
 Uses&nbsp;prefix&nbsp;dictionary&nbsp;to&nbsp;use&nbsp;qname&nbsp;syntax&nbsp;if&nbsp;possible.</tt></dd></dl>
 
-<dl><dt><a name="ToN3-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, nsPair)</dt></dl>
+<dl><dt><a name="ToN3-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, uri)</dt></dl>
 
 <dl><dt><a name="ToN3-startAnonymous"><strong>startAnonymous</strong></a>(self, triple, isList<font color="#909090">=0</font>)</dt></dl>
 

@@ -1,8 +1,8 @@
-#Processed by Id: cwm.py,v 1.93 2002/05/14 22:11:04 timbl Exp 
+#Processed by Id: cwm.py,v 1.111 2002/12/07 01:16:18 timbl Exp 
         #    using base file:/devel/WWW/2000/10/swap/test/crypto/
         
 #  Notation3 generation by
-#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
+#       notation3.py,v 1.123 2002/12/07 23:43:28 timbl Exp
 
 #   Base was: file:/devel/WWW/2000/10/swap/test/crypto/
      @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
@@ -25,7 +25,7 @@ Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
 MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
 OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
 \"""     a :RequestKey;
-         :authorityName <Tiina>;
+         :authorityName "Tiina";
          :junk "327462sjsdfjsakdhfkjsafd32164321" .
     
 """     :endorsement  [
@@ -38,12 +38,12 @@ OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
 NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
 """;
              :signature """
-MTUzNjQ0MTA5OTAxNjI5Njk1ODc4NTM4NjM2MTU0NDMzOTY4MDEyMzc4NzI1ODM4NzczMzY5MzU3
-NTIzMzg0NTAxNTE3MDAyNjEyNDEwMzQzMzQzMDY0Njg1MzI3OTg1NTcyNjA4Nzc5NDcyMjg4NDYw
-MzM4MDQ4MTQyMDQwMDUyMzA1MTgzMDU4MDQyODk1NjgxMzY3NzgxMjkxNTA3MTg2MzMyNzQ0MTM1
-NzA3MTY4MzI3NTIwMDc4OTE1MTA3OTUzNDM2NDY0NDg1NzMxMTU4NjUxMjk1OTcxOTI2MjE0Nzc0
-Nzk2NTUyODE5NTc0MjM0MDIxOTkyNDE2MTA3Nzc2NzgxNjE0NzMzMDk2NjkwOTI1MzA3MTk3OTA5
-ODExMTc2MjEwODExMzI4NTg1NjMxMjQx
+MjY1NDE3NTEzNzc2NDU1OTM2MDYzNDg0MzE5ODUzMDMyOTI2MDYxMzU0MDY2OTkwMjQwMjc1MTA2
+MTU4ODI4ODA2MzA1NzIxNjMxMzk5OTQ1ODU1NjU3OTAwMTk1NjIyMTYzMzU1MjU2MTAwMTU0NjU1
+MDQzMzUzODcxMzI4MTgwMTgwOTM2OTA5MDk5OTk3NDg4OTUxNzU5NTc2NDgyNjExMDkzNzA3NDkx
+MjM0MDU2MzAyMzk4ODkwOTM1ODI4Nzk5MDczNTI1OTM1ODk4MDQ4Njg4MTU1MjYxMDUxODM3MDc1
+MTcyMzcyODg5ODUxODg4NzUyMDEwMDYwMTAwODI0MTcxMTkzNTM1NzcwOTgzOTQ0MjAzMzcxNTc4
+MDE4NDMxMjUyMjg2MzkwMzc1NTkyNTg1
 """ ] .
     
 #ENDS

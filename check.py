@@ -48,7 +48,12 @@ def valid(f, level=0):
     fyi("target"+`f`, level)
 
     r = proof.any(subj=f, pred=reason.because)
-    if r == None: return fail("No reason for"+`r`)
+    if r == None:
+	v = verbosity()
+	setVerbosity(0)
+	str = f.n3String()
+	setVerbosity(v)
+	return fail("No reason for "+`f` + " :\n\n"+str +"\n\n", level=level)
     t = proof.any(subj=r, pred=rdf.type)
     fyi("Validating a "+`t`, level=level)
     
@@ -62,7 +67,7 @@ def valid(f, level=0):
 	g = parse(u)
 	setVerbosity(v)
 #	except:
-#	    return fail("Can't retreive/parse <%s>." %u)
+#	    return fail("Can't retreive/parse <%s>." %u, level)
 	for sf in f.statements:
 	    for sg in g.statements:
 		bindings = [(f, g)]
@@ -85,12 +90,12 @@ def valid(f, level=0):
 
 	rule = proof.any(subj=r, pred=reason.rule)
 	if not valid(rule, level+1):
-	    return fail("No justification for rule")
+	    return fail("No justification for rule"+`rule`, level)
 	for s in rule.statements:
 	    if s[PRED] is log.implies:
 		ruleStatement = s
 		break
-	else: return fail("Rule has %s instead of log:implies as predicate.")
+	else: return fail("Rule has %s instead of log:implies as predicate.", level)
 	evidenceStatements = []
 	for e in evidence: evidenceStatements.append(statementFromFormula(e))
 	for s in ruleStatement[SUBJ]: # Antecedent

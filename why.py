@@ -61,6 +61,58 @@ class Reason:
 	Returns the value of this object as interned in the store.
 	"""
 	raise RuntimeErrot("What, no explain method for this class?")
+	
+	
+class FormulaReason(Reason):
+    """A Formula reason reproduces the information ina formula
+    but includes reason information.  There is a link each way (formula,
+    collector) with the actual formla. Beware that when a new formula is
+    interned, the collector must be informed that its identity has changed.
+    The collector is also informed of each statement added."""
+    def __init__(self):
+	Reason.__init__(self, formula=None)
+	self._string = str
+	self._reason = because
+	self.statementReasons = []
+	self.formula = formula
+	if formula != None:
+	    formula.collector = self
+	return
+
+    def	newStatement(s, why):
+	self.statementReasons.append((s[SUBJ], s[PRED], s[OBJ], why))
+
+    def explanation(self, ko=None):
+	"""Produce a justification for this formula into the output formula
+	
+	Creates an output formula if necessary.
+	returns it.
+	(NB: This is different from reason.explain(ko) which returns the reason)"""
+	if ko == None: ko = self.formula.store.newFormula()
+	qed = ko.newBlankNode(why= dontAsk)
+    #    ko.add(subj=ko, pred=reason.proves, obj=self.formula, why=dontAsk) 
+    #   ko.add(obj=ko, pred=reason.proof, subj=self.formula, why=dontAsk) 
+	ko.add(subj=self.formula, pred=rdf.type, obj=reason.QED, why=dontAsk) 
+	ko.add(subj=self.formula, pred=reason.because, obj=qed, why=dontAsk) 
+	ko.add(subj=qed, pred=rdf.type, obj=reason.Conjunction, why=dontAsk) 
+    #    ko.add(subj=qed, pred=reason.gives, obj=self.formula, why=dontAsk)
+	ko.add(obj=qed, pred=reason.because, subj=self.formula, why=dontAsk)
+    
+    
+	for subj, pred, obj, rea in self.statementReasons:
+	    if pred is not self.store.forAll and pred is not self.store.forSome:
+		si = explainStatement(s,  ko)
+		if si == None:
+		    progress("ooops .. no explain for statement", s)
+		    continue
+		ko.add(subj=qed, pred=reason.given, obj=si, why=dontAsk)
+	return ko
+
+
+class StatementReason(Reason):
+    pass
+
+
 
 class Because(Reason):
     """For the reason given on the string.
@@ -84,6 +136,7 @@ class Because(Reason):
 	return me
 
 dontAsk = Because("Generating explanation")
+
 
 class BecauseOfRule(Reason):
     def __init__(self, rule, bindings, evidence, because=None):
@@ -111,7 +164,45 @@ class BecauseOfRule(Reason):
 	else:
 	    progress("No reason for rule "+`self._rule`)
 	for s in self._evidence:
-	    if s.why != None:
+	    if isinstance(s, BecauseBuiltIn):
+		fact = s.explain(ko)
+		ko.add(subj=me, pred=reason.given, obj=si, why= dontAsk)
+	    elif s.why != None:
+		si = explainStatement(s, ko)
+		ko.add(subj=me, pred=reason.given, obj=si, why= dontAsk)
+	return me
+
+	
+class BecauseRuleApplication(Reason):
+    def __init__(self, because=None):
+	Reason.__init__(self)
+	self._bindings = bindings
+	self._rule = rule
+	self._evidence = [] # Set of statements with reasons
+	self._reason = because
+	return
+
+    def explain(self, ko):
+	"""Describe this reason to an RDF store
+	Returns the value of this reason as interned in the store.
+	"""
+	me = self.meIn(ko)
+	ko.add(subj=me, pred=rdf.type, obj=reason.Inference123, why=dontAsk) 
+	for var, val in self._bindings:
+	    b = ko.newBlankNode(why= dontAsk)
+	    ko.add(subj=me, pred=reason.binding, obj=b, why= dontAsk)
+	    ko.add(subj=b, pred=reason.variable, obj=var,why= dontAsk)
+	    ko.add(subj=b, pred=reason.boundTo, obj=val, why= dontAsk)
+	if self._rule.why != None:
+	    si = explainStatement(self._rule, ko)
+	    ko.add(subj=me, pred=reason.rule, obj=si, why= dontAsk)
+	else:
+	    progress("No reason for rule "+`self._rule`)
+	for s in self._evidence:
+	    if isinstance(s, BecauseBuiltIn):
+		fact = s.explain(ko)
+		ko.add(subj=me, pred=reason.given, obj=si, why= dontAsk)
+	    elif s.why != None:
 		si = explainStatement(s, ko)
 		ko.add(subj=me, pred=reason.given, obj=si, why= dontAsk)
 	return me
@@ -144,47 +235,29 @@ class BecauseOfCommandLine(Because):
     """Becase the command line given in the string"""
     pass
     
-class BecauseBuiltIn(Reason):
+class BecauseBuiltIn:
     """Because the built-in function given concluded so.
     A nested reason for running the function can also be given"""
     def __init__(self, subj, pred, obj, because=None):
-	Reason.__init__(self)
+#	Reason.__init__(self)
 	self._subject = subj
 	self._predicate = pred
 	self._object = obj
 	self._reason = because
 	
+    def explain(self, ko):
+	"This is just a plain fact - or was at the time."
+	fact = ko.newFormula()
+	fact.add(subj=self._subject, pred=self._predicate, obj=self._object, why=dontAsk)
+	fact = fact.close()
+	ko.add(subj=fact, pred=rdf.type, obj=reason.Fact)
+	return fact
+
 ###################################### Explanations of things
 #
 # Routine extending class Formula (how to extend a class in Python?)
 # 
 #
-def explanation(self, ko=None):
-    """Produce a justification for this formula into the output formula
-    
-    Creates an output formula if necessary.
-    returns it.
-    (NB: This is different from reason.explain(ko) which returns the reason)"""
-    if ko == None: ko = self.store.newFormula()
-    qed = ko.newBlankNode(why= dontAsk)
-#    ko.add(subj=ko, pred=reason.proves, obj=self, why=dontAsk) 
-#   ko.add(obj=ko, pred=reason.proof, subj=self, why=dontAsk) 
-    ko.add(subj=self, pred=rdf.type, obj=reason.QED, why=dontAsk) 
-    ko.add(subj=self, pred=reason.because, obj=qed, why=dontAsk) 
-    ko.add(subj=qed, pred=rdf.type, obj=reason.Conjunction, why=dontAsk) 
-#    ko.add(subj=qed, pred=reason.gives, obj=self, why=dontAsk)
-    ko.add(obj=qed, pred=reason.because, subj=self, why=dontAsk)
-
-
-    for s in self.statements:
-	if s[PRED] is not self.store.forAll and s[PRED] is not self.store.forSome:
-	    si = explainStatement(s,  ko)
-	    if si == None:
-		progress("ooops .. no explain for statement", s)
-		continue
-	    ko.add(subj=qed, pred=reason.given, obj=si, why=dontAsk)
-    return ko
-
 
 def explainStatement(s, ko):
     """Explain a statement.

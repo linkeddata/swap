@@ -10,7 +10,7 @@
     xmlns:rcs="http://www.w3.org/2001/03swell/rcs#"
     xmlns:string="http://www.w3.org/2000/10/swap/string#"
     xmlns:v="http://www.w3.org/2000/10/swapt/test/smush-schema#"
-    xmlns:vg1="http://www.w3.org/2000/10/swapt/test/smush-query#"
+    xmlns:v_="http://www.w3.org/2000/10/swapt/test/smush-query#"
     xmlns:web="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 
     <Q1Answer web:about="http://www.mozilla.org/">

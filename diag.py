@@ -21,6 +21,9 @@ chatty_flag = int(os.environ.get("CWM_VERBOSITY", 0))
 global chatty_level  # verbosity indent level
 chatty_level = 0
 
+global tracking
+tracking = 0  # Are we keeping reason information for proof generation?
+
 def setVerbosity(x):
     global chatty_flag
     chatty_flag = x

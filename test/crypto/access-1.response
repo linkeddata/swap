@@ -1,8 +1,8 @@
-#Processed by Id: cwm.py,v 1.93 2002/05/14 22:11:04 timbl Exp 
+#Processed by Id: cwm.py,v 1.111 2002/12/07 01:16:18 timbl Exp 
         #    using base file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3
         
 #  Notation3 generation by
-#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
+#       notation3.py,v 1.123 2002/12/07 23:43:28 timbl Exp
 
 #   Base was: file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3
      @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
@@ -30,7 +30,7 @@ Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
 MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
 OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
 """     a :RequestKey;
-             :authorityName <md5:Tiina>;
+             :authorityName "Tiina";
              :junk "327462sjsdfjsakdhfkjsafd32164321" .
         
         }     :certSupportedBy """

@@ -91,7 +91,7 @@ TimBL&nbsp;added&nbsp;RDF&nbsp;stream&nbsp;model.</tt></p>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="ToRDF-__init__"><strong>__init__</strong></a>(self, outFp, thisURI, base<font color="#909090">=None</font>, flags<font color="#909090">=''</font>)</dt></dl>
+<dl><dt><a name="ToRDF-__init__"><strong>__init__</strong></a>(self, outFp, thisURI, base<font color="#909090">=None</font>, flags<font color="#909090">=''</font>)</dt><dd><tt>#@&nbsp;Not&nbsp;actually&nbsp;complete,&nbsp;and&nbsp;can&nbsp;encode&nbsp;anyway</tt></dd></dl>
 
 <dl><dt><a name="ToRDF-endAnonymous"><strong>endAnonymous</strong></a>(self, subject, verb)</dt></dl>
 
@@ -154,7 +154,7 @@ Methods inherited from <a href="RDFSink.html#RDFStructuredOutput">RDFSink.RDFStr
 
 <hr>
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>
-<dl><dt><a name="ToRDF-bind"><strong>bind</strong></a>(self, prefix, nsPair)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
+<dl><dt><a name="ToRDF-bind"><strong>bind</strong></a>(self, prefix, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
 &nbsp;<br>
 This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;bind&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;prefix&nbsp;which<br>
 it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
@@ -163,9 +163,9 @@ or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;u
 
 <dl><dt><a name="ToRDF-genId"><strong>genId</strong></a>(self)</dt></dl>
 
-<dl><dt><a name="ToRDF-newBlankNode"><strong>newBlankNode</strong></a>(self, context)</dt></dl>
+<dl><dt><a name="ToRDF-newBlankNode"><strong>newBlankNode</strong></a>(self, context, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="ToRDF-newExistential"><strong>newExistential</strong></a>(self, context, uri<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="ToRDF-newExistential"><strong>newExistential</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="ToRDF-newFormula"><strong>newFormula</strong></a>(self, uri<font color="#909090">=None</font>)</dt></dl>
 
@@ -173,7 +173,7 @@ or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;u
 
 <dl><dt><a name="ToRDF-newSymbol"><strong>newSymbol</strong></a>(self, uri)</dt></dl>
 
-<dl><dt><a name="ToRDF-newUniversal"><strong>newUniversal</strong></a>(self, context, uri<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="ToRDF-newUniversal"><strong>newUniversal</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="ToRDF-reopen"><strong>reopen</strong></a>(self)</dt><dd><tt>Un-End&nbsp;a&nbsp;document<br>
 &nbsp;<br>
@@ -181,7 +181,7 @@ If&nbsp;you&nbsp;have&nbsp;added&nbsp;stuff&nbsp;to&nbsp;a&nbsp;document,&nbsp;t
 then&nbsp;want&nbsp;to&nbsp;add&nbsp;more,&nbsp;call&nbsp;this&nbsp;to&nbsp;get&nbsp;back&nbsp;into&nbsp;the&nbsp;sate&nbsp;that&nbsp;makeSatement<br>
 is&nbsp;again&nbsp;acceptable.&nbsp;Remember&nbsp;to&nbsp;end&nbsp;the&nbsp;document&nbsp;again&nbsp;when&nbsp;done.</tt></dd></dl>
 
-<dl><dt><a name="ToRDF-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, nsPair)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
+<dl><dt><a name="ToRDF-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
 &nbsp;<br>
 This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;this&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;default&nbsp;namespace&nbsp;which<br>
 it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
@@ -247,6 +247,14 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 <dl><dt><strong>dataEsc</strong> = &lt;_sre.SRE_Pattern object&gt;</dl>
 
 </td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt><a name="-xmldata"><strong>xmldata</strong></a>(write, str, markupChars)</dt></dl>
+</td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>
