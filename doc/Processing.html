@@ -74,7 +74,7 @@ reading it out. This means that the order of the results will be different
 (sorted) and the comments will be lost. There is actually
 a<code>--pipe</code> option which preserves comments and order, but it only
 works with flat RDF files, not with rules and other things which need
-formulae. <strong>Hint</strong>: if the comment you are about to write is
+formulae. <strong>Tip</strong>: if the comment you are about to write is
 about one of the things your RDF file is about, make it a rdfs:comment
 property and it will be carried through the system -- who knows who will find
 it useful later?)</p>
@@ -87,15 +87,26 @@ it useful later?)</p>
 do with plain XML documents) is that merging data is trivial.</p>
 
 <p></p>
-<pre>cwm --rdf foo.rdf --n3 bar.n3 &gt; both.n3</pre>
+<pre>cwm <a href="../test/meet/blue.n3">blue.n3</a> <a href="../test/meet/red.n3">red.n3</a> <a href="../test/meet/green.n3">green.n3</a>  &gt; <a href="../test/meet/white.n3">white.n3</a></pre>
 
 <p></p>
 
-<p>reads one xml file and one n3 file, and then outputs the results in N3 to
-both.n3.</p>
-<ul>
-  <li>see also - color example@@</li>
-</ul>
+<p>reads three n3 files, and then outputs the results in N3 to white.n3.</p>
+
+<p>This is particulaly useful if the  files have used the same URIs for the
+same concepts. Suppose the first has that someone is attending a meeting
+which has a given home page.</p>
+
+<p><img src="arcs-1.gif" alt="stack" /></p>
+
+<p>and the second (red) has some information about the meeting, and a third
+(green) has some information about the meeting's home page. Merging the three
+gives us an interconnected web, including the fact that the attendee is
+actuallt chairing the meeting.</p>
+
+<p><img src="arcs-3.gif" alt="stack" /></p>
+
+<p></p>
 
 <h3><a name="Deducing" id="Deducing">Deducing more data</a></h3>
 
@@ -202,7 +213,7 @@ out the essence of what is needed. Commands like</p>
 
 <h2><a name="Report" id="Report">Report Generation</a></h2>
 
-<p>All the examples above proves data and leave the result in N3. It is easy
+<p>All the examples above process data and leave the result in N3. It is easy
 of course to generate RDF/XML, too.</p>
 
 <p>What do you do to generate something else, maybe an XHTML page, or an SVG
