@@ -8,11 +8,12 @@
     xmlns:log="http://www.w3.org/2000/10/swap/log#">
 
     <rdfs:Class rdf:about="#Animal">
-        <daml:restrictedBy rdf:parseType="Resource">
-            <rdf:type rdf:resource="http://www.daml.org/2001/03/daml+oil#Restriction"/>
-            <daml:onProperty rdf:resource="#parent"/>
-            <daml:cardinality>2</daml:cardinality>
-        </daml:restrictedBy>
+        <restrictedBy xmlns="http://www.daml.org/2000/12/daml+oil#"
+            rdf:parseType="Resource">
+            <rdf:type rdf:resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <onProperty rdf:resource="#parent"/>
+            <cardinality>2</cardinality>
+        </restrictedBy>
         <rdfs:label>Animal</rdfs:label>
     </rdfs:Class>
 </rdf:RDF>

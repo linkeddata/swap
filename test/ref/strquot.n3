@@ -17,6 +17,6 @@ How much should be there?
 in python is sufficiently deployed
 (e.g. python on tux doesn't grok,
 nor does pythonwin on TimBL's laptop).
-$Id$
+
 """ .
     

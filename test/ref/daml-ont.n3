@@ -289,5 +289,5 @@ cf OIL AND""";
     
     <daml-ont.rdf>     a daml:Ontology;
          daml:imports <http://www.w3.org/2000/01/rdf-schema>;
-         daml:versionInfo "$Id$" .
+         daml:versionInfo "" .
     

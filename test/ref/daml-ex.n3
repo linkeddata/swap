@@ -98,5 +98,5 @@
     <daml-ex.rdf>     a :Ontology;
          :comment "An example ontology";
          :imports <http://www.daml.org/2000/10/daml-ont>;
-         :versionInfo "$Id$" .
+         :versionInfo "" .
     
