@@ -35,7 +35,14 @@ $X.checked: $X.nt $X.nt2 $X.cant
 #	$P $CAL/fromIcal.py --base=$PUBURL $X.ics  > $X.rdf
 $X.nt:  $X.rdf
 	$P $C --rdf $X.rdf --ntriples > $X.nt
-$X.delta:  $X.rdf previous/$X.rdf
+
+previous/$X.rdf: previous
+
+previous:
+	echo "try, e.g.: ln -s ../280 previous"
+	exit 1
+
+$X.delta:  $X.rdf previous/$X.rdf 
 	$P $S/diff.py -f previous/$X.rdf -t $X.rdf \
 		--meta=../../assumptions.n3 > $X.delta
 $X.nt2: previous/$X.rdf $X.delta
