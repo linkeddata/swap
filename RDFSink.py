@@ -108,8 +108,9 @@ class RDFSink:
 
 	self._genPrefix = genPrefix
 	if genPrefix == None:
-	    ns = uripath.join(uripath.base(), ".run-") + `time.time()` + "#"  # add PID?
-	    self._genPrefix = ns + "#_g"
+            # add PID?
+	    ns = uripath.join(uripath.base(), ".run-" + `time.time()` + "#_g" )
+	    self._genPrefix = ns
 	    self.usingRunNamespace = 1
 	self._nextId = 0
 
@@ -152,7 +153,7 @@ class RDFSink:
 
         if ':' not in nsPair[1]:
             # can't raise exceptions inside SAX callback
-            print nsPair
+            print "must be absolute", nsPair
             import traceback
             for ln in traceback.format_stack():
                 print ln
@@ -188,14 +189,14 @@ class RDFSink:
 	
     def genId(self):
 	subj = self._genPrefix
-	if subj == None: subj = "#_h"
+	assert subj # don't mask bugs
         subj = subj + `self._nextId`
         self._nextId = self._nextId + 1
-	if self.usingRunNamespace == 1 and self.declaredRunNamespace == 0:
+	if self.usingRunNamespace and not self.declaredRunNamespace:
 	    self.declaredRunNamespace = 1
-	    ns =  self._genPrefix[1]
+	    ns =  self._genPrefix
 	    hash = ns.find("#")
-	    self.bind("run", ns[:hash+1])
+	    self.bind("run", (SYMBOL, ns[:hash+1]))
         return subj
 
     def setGenPrefix(self, genPrefix):
