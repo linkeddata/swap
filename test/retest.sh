@@ -19,7 +19,7 @@ function cwm_test () {
   echo Test    cwm $args
   # Hmm... this suggests a --nocomments flag on cwm  its -quiet
 #  (python ../cwm.py $args | sed -e 's/^ *#.*//' | sed -e 's/\$[I]d:\$//g' > temp/$case) || echo CRASH $case
-  (python ../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' > temp/$case) || echo CRASH $case
+  (python2 ../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' > temp/$case) || echo CRASH $case
   diff -Bbwu ref/$case temp/$case >diffs/$case
   if [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case; else echo Pass $case; fi
 }
@@ -27,6 +27,8 @@ function cwm_test () {
 cwm_test animal.n3 "Parse a small RDF file, generate N3" -rdf animal.rdf -n3
 
 cwm_test animal-1.rdf "Parse a small RDF file and regenerate RDF" -rdf animal.rdf
+
+cwm_test reluri-1.rdf "test generation of relative URIs" reluri-1.n3 --rdf
 
 cwm_test contexts-1.n3 "Parse and generate simple contexts" contexts.n3
 
@@ -86,7 +88,10 @@ cwm_test bi-t9.n3 "Filter event by date using strcmp BI's" includes/t9br.n3 -thi
 
 
 # $Log$
-# Revision 1.11  2001-06-13 23:58:48  timbl
+# Revision 1.12  2001-06-25 06:35:51  connolly
+# fixed some bugs in def relativeURI(base, uri):
+#
+# Revision 1.11  2001/06/13 23:58:48  timbl
 # Fixed bug in log:includes that bindings were not taken into target of includes
 #
 # Revision 1.10  2001/05/30 22:03:40  timbl

@@ -1025,8 +1025,9 @@ def relativeURI(base, uri):
     if uri[i:i+1] =="#": return uri[i:]  # fragment of base
     while i>0 and uri[i-1] != '/' : i=i-1  # scan for slash
 
-    if i == 0: return uri  # No way.
-    if string.find(base, "//", i)>0: return uri # An unshared "//"
+    if i < 3: return uri  # No way.
+    if string.find(base, "//", i-2)>0 \
+       or string.find(uri, "//", i-2)>0: return uri # An unshared "//"
     if string.find(base, ":", i)>0: return uri  # An unshared ":"
     n = string.count(base, "/", i)
     return ("../" * n) + uri[i:]
