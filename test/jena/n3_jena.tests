@@ -1,0 +1,146 @@
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+@prefix dc:  <http://purl.org/dc/elements/1.1/>. # yuk - under protest - no hash
+@prefix n3test: <http://www.w3.org/2004/11/n3test#> .
+@prefix grammar: <http://www.w3.org/2000/10/swap/grammar/> .
+
+#:jena_10001 a n3test:PositiveParserTest;
+#        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-01.n3?rev=1.2> ;
+#        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-01.nt?rev=1.2> ;
+#        n3test:description "Test basic ways of writing statements" .
+
+:jena_10002 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-02.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-02.nt?rev=1.1> ;
+        n3test:description "Test compounds in anon nodes" .
+
+:jena_10003 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-03.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-03.nt?rev=1.1> ;
+        n3test:description "Test anon nodes" .
+
+:jena_10004 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-04.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-04.nt?rev=1.1> ;
+        n3test:description "Test shared bNode" .
+
+:jena_10005 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-05.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-05.nt?rev=1.1> ;
+        n3test:description "Tests <> as a prefix and as a triple node" .
+
+:jena_10006 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-06.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-06.nt?rev=1.1> ;
+        n3test:description "Tests <#> as a prefix and a triple node" .
+
+:jena_10007 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-07.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-07.nt?rev=1.1> ;
+        n3test:description "Tests reverse properties" .
+
+:jena_10008 a n3test:NegativeParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-08.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-08.nt?rev=1.1> ;
+        n3test:description "newline conversion. Will fail on cwm" .
+
+:jena_10009 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-09.n3?rev=1.2> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-09.nt?rev=1.3> ;
+        n3test:description "Lists" .
+
+:jena_10010 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-10.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-10.nt?rev=1.2> ;
+        n3test:description "Test named anon nodes. Will fail on cwm" .
+
+:jena_10011 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-11.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-11.nt?rev=1.1> ;
+        n3test:description "Test the syntactic items for abbreviation." .
+
+:jena_10012 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-12.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-12.nt?rev=1.1> ;
+        n3test:description "Test defining _ as a prefix. Undecided" .
+
+:jena_10013 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-13.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-13.nt?rev=1.1> ;
+        n3test:description "Test redefining a prefix" .
+
+:jena_10014 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-14.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-14.nt?rev=1.1> ;
+        n3test:description """Test the "is ... of" constuct""" .
+
+:jena_10015 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-15.n3?rev=1.2> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-15.nt?rev=1.2> ;
+        n3test:description "Forward paths. Note that `.' is depricated" .
+
+:jena_10016 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-16.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-16.nt?rev=1.1> ;
+        n3test:description "Backward paths" .
+
+:jena_10017 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-17.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-17.nt?rev=1.1> ;
+        n3test:description "Mixed paths and paths as objects" .
+
+:jena_10018 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-18.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-18.nt?rev=1.3> ;
+        n3test:description "Mixed lists and paths" .
+
+:jena_10019 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-19.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-19.nt?rev=1.3> ;
+        n3test:description "Named DAML lists. Will fail on cwm." .
+
+:jena_10020 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-20.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-20.nt?rev=1.3> ;
+        n3test:description "Named DAML lists. Will fail on cwm." .
+
+:jena_10021 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-21.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-21.nt?rev=1.1> ;
+        n3test:description "Datatypes" .
+
+:jena_10022 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-22.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-22.nt?rev=1.1> ;
+        n3test:description "Language tags" .
+
+:jena_10023 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-23.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-23.nt?rev=1.1> ;
+        n3test:description "XML literals" .
+
+:jena_10024 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-24.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-24.nt?rev=1.2> ;
+        n3test:description "Language tags and datatypes. This test is invalid by the grammar" .
+
+:jena_10025 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-25.n3?rev=1.3> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-25.nt?rev=1.2> ;
+        n3test:description "Numerical formats" .
+
+:jena_10026 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-26.n3?rev=1.2> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-26.nt?rev=1.1> ;
+        n3test:description "Some i18n" .
+
+:jena_10027 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-27.n3?rev=1.2> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-27.nt?rev=1.1> ;
+        n3test:description "More i18n. What is the status of this?" .
+
+:jena_10028 a n3test:PositiveParserTest;
+        n3test:inputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-28.n3?rev=1.1> ;
+        n3test:outputDocument <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-28.nt?rev=1.1> ;
+        n3test:description "Strange xsd:interges and xsd:doubles" .
