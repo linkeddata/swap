@@ -26,6 +26,43 @@ products.</p>
 should do it  among other things.  I haven't exhaustively tested all
 combinations of n3 and RDF in all cases.</p>
 
+<h2 id="Merging">Merging graphs</h2>
+
+<p>When explaining why the semantic web needs to be a web not a tree, I used
+slides showing information in blue from one source (blue links) with that from
+another sources (red and green links).<img
+src="/2000/Talks/0906-xmlweb-tbl/arcs-3.gif"
+alt="blue, red and green arcs merged" width="30%" align="right"></p>
+<ul>
+  <li><a href="/2000/Talks/0906-xmlweb-tbl/slide6-0.html">The first
+    diagram</a> shows some information maybe from someone's personal
+    information that they will attend an event which has a given home page. It
+    also has the person's email address and given name.</li>
+  <li><a href="/2000/Talks/0906-xmlweb-tbl/slide7-0.html">The second diagram
+    </a>shows how information about the meeting has been read from another
+    source, and also privacy policy link has been picked up from the meeting
+    page indicating what the privacy policy is.</li>
+</ul>
+
+<p>The key point, of course, is that URIs are used to identify the overlap
+concepts such as  the person, meeting and its home page.  This allows the
+graphs to be merged. It is a simple RDF example, let's see what it looks
+like:</p>
+<ul>
+  <li>The blue arcs (<a href="meet/blue.n3">in N3</a>, <a
+    href="meet/blue.rdf">in XML</a> made by <code>cwm -rdf
+  blue.n3</code>)</li>
+  <li>The red arcs (<a href="meet/red.n3">in N3</a>, <a href="meet/red.rdf">in
+    XML</a>)</li>
+  <li>The green arcs (<a href="meet/green.n3">in N3</a>, <a
+    href="meet/green.rdf">in XML</a>)</li>
+  <li>The merged graph (<a href="meet/white.n3">in N3</a> made by<code> cwm
+    red.n3 blue.n3 green.n3 &gt; white.n3</code>, <a href="meet/white.rdf">in
+    XML</a>)</li>
+</ul>
+
+<p></p>
+
 <h2 id="Ontologies">Ontologies in DAML</h2>
 
 <p>These examples do not contain rules, just ontology information in DAML.
@@ -34,7 +71,7 @@ relationships between them. Here are two fairly large examples from
 biochemistry. They seem to have been generated using the OILED software.  The
 owners of these ontologies retain all rights, so you should
 <strong>not</strong> copy them for the purposes of making your own ontology.
-They are just here as examples.</p>
+They are just here as examples:</p>
 
 <h3 id="TAMBIS">TAMBIS</h3>
 
@@ -87,7 +124,7 @@ every term it uses is actually mentioned in the schema for that namespace.</p>
 possible conclusions, then filters out any conclusions of invalidity.</p>
 
 <p>The rules are by no means complete, and this is by no means the only way to
-do validation. A special-purpose program would be more efficient of cource.
+do validation. A special-purpose program would be more efficient of course.
 However, this demonstrates how easy it is when data is a semantic form to
 process it using a general purpose engine.</p>
 
@@ -161,7 +198,7 @@ instructive.</p>
 typically in order to test the software, but you can use them to test your
 understanding.</p>
 <ul>
-  <li><a href="test/s1.n3 ">s1.n3 </a>  some simple schema information</li>
+  <li><a href="test/s1.n3 ">s1.n3</a>  some simple schema information</li>
   <li>animal.rdf  a little DAML ontology about an animal - from a DAML
     discussion</li>
   <li>double-conclusion.n3  Testing that a reasoner wouldn't draw duplicate

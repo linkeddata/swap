@@ -2,7 +2,7 @@
 <rdf:RDF
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"  
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:daml="http://www.daml.org/2000/10/daml-ont#"
+	xmlns:daml="http://www.daml.org/2000/12/daml+oil#"
 	xmlns="bar#">
     <rdfs:Class rdf:ID="Animal">
       <rdfs:label>Animal</rdfs:label>

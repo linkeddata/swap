@@ -49,8 +49,7 @@
 {  :x daml:first ko:means; daml:rest ( :y :z ) .
     :y :inN3 :y3. :z :inN3 :z3 . } log:implies {
 
-	{ :y3 log:MEANS :z3 }
-# 	log:subExpression :y3, :z3; log:forSome :y3, :z3; 
+	{ :y3 log:IFF :z3 } 
 					is :inN3 of :x }. 
 
 # Variables are themselves - although note the forall we have to deduce above.
@@ -80,7 +79,7 @@
 	:x :inN3 :x3; } log:implies {  :s :inN3 :x3 .  :x3 log:FORALL_LIST :l }.
 
 
-# Expland forall lists only:
+# Expand forall lists only:
 
 {:x log:FORALL_LIST[daml:first :y; daml:rest :z]}log:implies{
 	:x log:FORALL :y.
@@ -89,14 +88,31 @@
 
 # Convert operators - use the same id
 
-# a:and a :KIFBinaryOperator.
-a:or a :KIFBinaryOperator .
+#
+# Unary operators become RDF class assertions
 
-{ 	:s a :KIFBinaryOperator .
-	( :s :x :y ).
+a:not 		a :KIFUnaryOperator .
+a:no_repeats_list a :KifUnaryOperator .
+
+
+{ 	:z a :KIFUnaryOperator .
 	:x :inN3 :x3.
-	:y :inN3 :y3. } log:implies
-		{ :s :inN3 [ :op :s; :left :x3; :right :y3 ] }.
+	:s daml:first :z; daml:rest (:x) } log:implies
+		{ :s :inN3 { :x3 a :z } }.
+
+# Binary operators become properties in quotes
+
+# a:and 	a :KIFBinaryOperator.
+a:or 		a :KIFBinaryOperator .
+a:item 	a :KIFBinaryOperator .
+a:exists 	a :KIFBinaryOperator .
+
+{ 	:z a :KIFBinaryOperator .
+	:x :inN3 :x3.
+	:y :inN3 :y3.
+	:s daml:first :z; daml:rest ( :x :y )} log:implies
+		{ :s :inN3 { :x3 :z :y3 } }.
+#		{ :s :inN3 [ :op s:; :left :x; :right :y }.
 
 { 	:s daml:first a:and; daml:rest ( :x :y ).
 	:x :inN3 :x3.
@@ -118,4 +134,4 @@ log:implies a log:Chaff .    #  Drop all rules!! (hence uppercase IMPLIES genera
 log:Chaff is rdf:type of :inN3, :isVarIn, :KIFBinaryOperator, ko:Constant,
 	:AxiomVar, :isVarInAxiom.
 
-#     :inN3,	
+#ENDS	

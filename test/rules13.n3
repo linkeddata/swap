@@ -1,7 +1,7 @@
 #    Test filter in N3
 #
 bind log: <http://www.w3.org/2000/10/swap/log.n3> .
-bind daml: <http://www.daml.org/2000/10/daml-ont> .
+bind daml: <http://www.daml.org/2000/12/daml+oil> .
 bind : <> .
 bind rules: <> .
 

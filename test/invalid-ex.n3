@@ -2,7 +2,7 @@
 #  but with invalid things
 
      @prefix ex: <http://www.daml.org/2000/10/daml-ex#> .
-     @prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
+     @prefix daml: <http://www.daml.org/2000/12/daml+oil#> .
      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 

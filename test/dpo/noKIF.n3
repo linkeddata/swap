@@ -2,6 +2,7 @@
 #
 #  Strategy:  Recursively decorate the KIF formula with :inN3 translations
 #   Decorate the axiom itself with :axiomInN3
+#  Remove all the bits we don;t need
 #
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
@@ -18,7 +19,8 @@
 
 log:implies a log:Chaff .  # Remove all original rules
 
-ko:Axiom a log:Chaff .  
+# ko:Axiom a log:Chaff .    # Leave to leave a note of axoim numbers
+
 ko:implies a log:Chaff .
 ko:means a log:Chaff .
 ko:Constant a log:Chaff .

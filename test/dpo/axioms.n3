@@ -1,9 +1,2267 @@
 #Processed by Id: cwm.py,v 1.27 2001/02/05 19:58:24 timbl Exp 
-        #    using base file:/afs/w3.org/pub/WWW/2000/10/swap/test/dpo/axioms0.n3
+        #    using base file:/devel/WWW/2000/10/swap/test/dpo/axioms0.n3
         
 #  Notation3 generation by
-#       notation3.py,v 1.53 2001/02/05 01:13:24 timbl Exp
+#       notation3.py,v 1.54 2001/02/12 18:38:31 timbl Exp
 
-#   Base was: file:/afs/w3.org/pub/WWW/2000/10/swap/test/dpo/axioms0.n3
+#   Base was: file:/devel/WWW/2000/10/swap/test/dpo/axioms0.n3
+     @prefix v: <vars#> .
+     @prefix ko: <kif-ops#> .
+     @prefix : <http://www.daml.org/2000/12/daml+oil#> .
+    
+    <#Ax001>     =  (
+        ko:means 
+         (
+            <#Type> 
+            v:s 
+            v:o  )
+         (
+            <#PropertyValue> 
+            <#type> 
+            v:s 
+            v:o  ) ) .
+    
+    <#Ax002>     =  (
+        ko:means 
+         (
+            <#no_repeats_list> 
+            v:l  )
+         (
+            <#or> 
+             (
+                ko:equals 
+                v:l 
+                <#nil>  )
+             (
+                <#exists> 
+                 (
+                    v:x  )
+                 (
+                    ko:equals 
+                    v:l 
+                     (
+                        <#listof> 
+                        v:x  ) ) )
+             (
+                <#and> 
+                 (
+                    <#not> 
+                     (
+                        <#item> 
+                         (
+                            <#rest> 
+                            v:l  )
+                         (
+                            <#first> 
+                            v:l  ) ) )
+                 (
+                    <#no_repeats_list> 
+                     (
+                        <#rest> 
+                        v:l  ) ) ) ) ) .
+    
+    <#Ax003>     =  (
+        <#Type> 
+        <#Resource> 
+        <#Class>  ) .
+    
+    <#Ax004>     =  (
+        ko:implies 
+         (
+            <#Type> 
+            v:p 
+            <#Property>  )
+         (
+            <#Type> 
+            v:p 
+            <#Resource>  ) ) .
+    
+    <#Ax005>     =  (
+        ko:implies 
+         (
+            <#PropertyValue> 
+            v:p 
+            v:s 
+            v:o  )
+         (
+            <#Type> 
+            v:p 
+            <#Property>  ) ) .
+    
+    <#Ax006>     =  (
+        ko:implies 
+         (
+            <#Type> 
+            v:c 
+            <#Class>  )
+         (
+            <#Type> 
+            v:c 
+            <#Resource>  ) ) .
+    
+    <#Ax007>     =  (
+        <#not> 
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:x 
+                <#Property>  )
+             (
+                <#Type> 
+                v:x 
+                <#Class>  ) ) ) .
+    
+    <#Ax008>     =  (
+        ko:implies 
+         (
+            <#Type> 
+            v:a 
+            <#FunctionalProperty>  )
+         (
+            <#Type> 
+            v:a 
+            <#Property>  ) ) .
+    
+    <#Ax009>     =  (
+        ko:implies 
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:fp 
+                <#FunctionalProperty>  )
+             (
+                <#PropertyValue> 
+                v:fp 
+                v:s 
+                v:v1  )
+             (
+                <#PropertyValue> 
+                v:fp 
+                v:s 
+                v:v2  ) )
+         (
+            ko:equals 
+            v:v1 
+            v:v2  ) ) .
+    
+    <#Ax010>     =  (
+        <#Type> 
+        <#Literal> 
+        <#Class>  ) .
+    
+    <#Ax011>     =  (
+        ko:implies 
+         (
+            <#Type> 
+            v:s 
+            <#Statement>  )
+         (
+            <#Type> 
+            v:s 
+            <#Resource>  ) ) .
+    
+    <#Ax012>     =  (
+        ko:implies 
+         (
+            <#Type> 
+            <#Statement> 
+            v:st  )
+         (
+            <#exists> 
+             (
+                v:p 
+                v:s 
+                v:o  )
+             (
+                <#and> 
+                 (
+                    <#PropertyValue> 
+                    <#Predicate> 
+                    v:st 
+                    v:p  )
+                 (
+                    <#PropertyValue> 
+                    <#Subject> 
+                    v:st 
+                    v:r  )
+                 (
+                    <#PropertyValue> 
+                    <#Object> 
+                    v:st 
+                    v:o  ) ) ) ) .
+    
+    <#Ax013>     =  (
+        ko:implies 
+         (
+            <#Type> 
+            v:c 
+            <#Container>  )
+         (
+            <#Type> 
+            v:c 
+            <#Resource>  ) ) .
+    
+    <#Ax014>     =  (
+        ko:implies 
+         (
+            <#Type> 
+            v:c 
+            <#Container>  )
+         (
+            <#List> 
+            v:c  ) ) .
+    
+    <#Ax015>     =  (
+        ko:implies 
+         (
+            <#Type> 
+            v:c 
+            <#Container>  )
+         (
+            <#or> 
+             (
+                <#Type> 
+                v:c 
+                <#Bag>  )
+             (
+                <#Type> 
+                v:c 
+                <#Seq>  )
+             (
+                <#Type> 
+                v:c 
+                <#Alt>  ) ) ) .
+    
+    <#Ax016>     =  (
+        ko:implies 
+         (
+            <#Type> 
+            v:b 
+            <#Bag>  )
+         (
+            <#Type> 
+            v:b 
+            <#Container>  ) ) .
+    
+    <#Ax017>     =  (
+        ko:implies 
+         (
+            <#Type> 
+            v:s 
+            <#Seq>  )
+         (
+            <#Type> 
+            v:s 
+            <#Container>  ) ) .
+    
+    <#Ax018>     =  (
+        <#not> 
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:x 
+                <#Bag>  )
+             (
+                <#Type> 
+                v:x 
+                <#Seq>  ) ) ) .
+    
+    <#Ax019>     =  (
+        ko:implies 
+         (
+            <#Type> 
+            v:a 
+            <#Alt>  )
+         (
+            <#Type> 
+            v:a 
+            <#Container>  ) ) .
+    
+    <#Ax020>     =  (
+        ko:implies 
+         (
+            <#Type> 
+            v:c 
+            <#ContainerMembershipProperty>  )
+         (
+            <#Type> 
+            v:c 
+            <#Property>  ) ) .
+    
+    <#Ax021>     =  (
+        <#Type> 
+        <#type> 
+        <#Property>  ) .
+    
+    <#Ax022>     =  (
+        ko:implies 
+         (
+            <#Type> 
+            v:r 
+            v:c  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:r 
+                <#Resource>  )
+             (
+                <#Type> 
+                v:c 
+                <#Class>  ) ) ) .
+    
+    <#Ax023>     =  (
+        <#Type> 
+        <#Subject> 
+        <#FunctionalProperty>  ) .
+    
+    <#Ax024>     =  (
+        ko:implies 
+         (
+            <#PropertyValue> 
+            <#Subject> 
+            v:st 
+            v:sb  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:st 
+                <#Statement>  )
+             (
+                <#Type> 
+                v:sb 
+                <#Resource>  ) ) ) .
+    
+    <#Ax025>     =  (
+        <#Type> 
+        <#Predicate> 
+        <#FunctionalProperty>  ) .
+    
+    <#Ax026>     =  (
+        ko:implies 
+         (
+            <#PropertyValue> 
+            <#Predicate> 
+            v:st 
+            v:p  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:st 
+                <#Statement>  )
+             (
+                <#Type> 
+                v:p 
+                <#Property>  ) ) ) .
+    
+    <#Ax027>     =  (
+        <#Type> 
+        <#Object> 
+        <#FunctionalProperty>  ) .
+    
+    <#Ax028>     =  (
+        ko:implies 
+         (
+            <#PropertyValue> 
+            <#Object> 
+            v:st 
+            v:o  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:st 
+                <#Statement>  )
+             (
+                <#or> 
+                 (
+                    <#Type> 
+                    v:o 
+                    <#Resource>  )
+                 (
+                    <#Type> 
+                    v:o 
+                    <#Literal>  ) ) ) ) .
+    
+    <#Ax029>     =  (
+        <#Type> 
+        <#value> 
+        <#Property>  ) .
+    
+    <#Ax030>     =  (
+        ko:implies 
+         (
+            <#PropertyValue> 
+            <#value> 
+            v:sv 
+            v:v  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:sv 
+                <#Resource>  )
+             (
+                <#or> 
+                 (
+                    <#Type> 
+                    v:v 
+                    <#Resource>  )
+                 (
+                    <#Type> 
+                    v:v 
+                    <#Literal>  ) ) ) ) .
+    
+    <#Ax031>     =  (
+        <#Type> 
+        <#FunctionalProperty> 
+        <#_1>  ) .
+    
+    <#Ax032>     =  (
+        ko:implies 
+         (
+            <#PropertyValue> 
+            <#_1> 
+            v:c 
+            v:o  )
+         (
+            <#Type> 
+            <#Collection> 
+            v:c  ) ) .
+    
+    <#Ax033>     =  (
+        <#PropertyValue> 
+        <#subClassOf> 
+        <#ConstraintResource> 
+        <#Resource>  ) .
+    
+    <#Ax034>     =  (
+        ko:means 
+         (
+            <#Type> 
+            v:cp 
+            <#ConstraintProperty>  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:cp 
+                <#ConstraintResource>  )
+             (
+                <#Type> 
+                v:cp 
+                <#Property>  ) ) ) .
+    
+    <#Ax035>     =  (
+        <#Type> 
+        <#subClassOf> 
+        <#Property>  ) .
+    
+    <#Ax036>     =  (
+        ko:implies 
+         (
+            <#PropertyValue> 
+            <#subClassOf> 
+            v:csub 
+            v:csuper  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:csub 
+                <#Class>  )
+             (
+                <#Type> 
+                v:csuper 
+                <#Class>  )
+             (
+                ko:notequals 
+                v:csub 
+                v:csuper  )
+             (
+                <#forall> 
+                 (
+                    v:x  )
+                 (
+                    ko:implies 
+                     (
+                        <#Type> 
+                        v:x 
+                        v:csub  )
+                     (
+                        <#Type> 
+                        v:x 
+                        v:csuper  ) ) ) ) ) .
+    
+    <#Ax037>     =  (
+        <#Type> 
+        <#subPropertyOf> 
+        <#Property>  ) .
+    
+    <#Ax038>     =  (
+        ko:implies 
+         (
+            <#PropertyValue> 
+            <#subPropertyOf> 
+            v:subP 
+            v:superP  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:subP 
+                <#Property>  )
+             (
+                <#Type> 
+                v:superP 
+                <#Property>  )
+             (
+                <#forall> 
+                 (
+                    v:o 
+                    v:v  )
+                 (
+                    ko:implies 
+                     (
+                        <#PropertyValue> 
+                        v:subP 
+                        v:o 
+                        v:v  )
+                     (
+                        <#PropertyValue> 
+                        v:superP 
+                        v:o 
+                        v:v  ) ) ) ) ) .
+    
+    <#Ax039>     =  (
+        <#Type> 
+        <#seeAlso> 
+        <#Property>  ) .
+    
+    <#Ax040>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#seeAlso> 
+        <#Resource>  ) .
+    
+    <#Ax041>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#seeAlso> 
+        <#Resource>  ) .
+    
+    <#Ax042>     =  (
+        <#PropertyValue> 
+        <#subPropertyOf> 
+        <#isDefinedBy> 
+        <#seeAlso>  ) .
+    
+    <#Ax043>     =  (
+        <#Type> 
+        <#comment> 
+        <#Property>  ) .
+    
+    <#Ax044>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#comment> 
+        <#Literal>  ) .
+    
+    <#Ax045>     =  (
+        <#Type> 
+        <#label> 
+        <#Property>  ) .
+    
+    <#Ax046>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#label> 
+        <#Literal>  ) .
+    
+    <#Ax047>     =  (
+        <#PropertyValue> 
+        <#subClassOf> 
+        <#ConstraintProperty> 
+        <#Property>  ) .
+    
+    <#Ax048>     =  (
+        <#Type> 
+        <#range> 
+        <#ConstraintProperty>  ) .
+    
+    <#Ax049>     =  (
+        <#Type> 
+        <#range> 
+        <#FunctionalProperty>  ) .
+    
+    <#Ax050>     =  (
+        ko:implies 
+         (
+            <#PropertyValue> 
+            <#range> 
+            v:p 
+            v:r  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:p 
+                <#Property>  )
+             (
+                <#Type> 
+                v:r 
+                <#Class>  )
+             (
+                <#forall> 
+                 (
+                    v:x 
+                    v:y  )
+                 (
+                    ko:implies 
+                     (
+                        <#PropertyValue> 
+                        v:p 
+                        v:x 
+                        v:y  )
+                     (
+                        <#Type> 
+                        v:y 
+                        v:r  ) ) ) ) ) .
+    
+    <#Ax051>     =  (
+        <#Type> 
+        <#domain> 
+        <#ConstraintProperty>  ) .
+    
+    <#Ax052>     =  (
+        ko:implies 
+         (
+            <#PropertyValue> 
+            <#domain> 
+            v:p 
+            v:d  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:p 
+                <#Property>  )
+             (
+                <#Type> 
+                v:d 
+                <#Class>  )
+             (
+                <#forall> 
+                 (
+                    v:x 
+                    v:y  )
+                 (
+                    ko:implies 
+                     (
+                        <#PropertyValue> 
+                        v:p 
+                        v:x 
+                        v:y  )
+                     (
+                        <#Type> 
+                        v:x 
+                        v:d  ) ) ) ) ) .
+    
+    <#Ax053>     =  (
+        ko:implies 
+         (
+            <#Type> 
+            v:c 
+            <#Class>  )
+         (
+            <#forall> 
+             (
+                v:nc 
+                v:l  )
+             (
+                ko:implies 
+                 (
+                    <#and> 
+                     (
+                        <#PropertyValue> 
+                        <#complementOf> 
+                        v:c 
+                        v:nc  )
+                     (
+                        <#Type> 
+                        v:l 
+                        <#List>  )
+                     (
+                        <#PropertyValue> 
+                        <#item> 
+                        v:l 
+                        v:c  )
+                     (
+                        <#PropertyValue> 
+                        <#item> 
+                        v:l 
+                        v:nc  )
+                     (
+                        <#forall> 
+                         (
+                            v:x  )
+                         (
+                            ko:implies 
+                             (
+                                <#PropertyValue> 
+                                <#item> 
+                                v:l 
+                                v:x  )
+                             (
+                                <#or> 
+                                 (
+                                    ko:equals 
+                                    v:x 
+                                    v:c  )
+                                 (
+                                    ko:equals 
+                                    v:x 
+                                    v:nc  ) ) ) ) )
+                 (
+                    <#PropertyValue> 
+                    <#unionOf> 
+                    <#Thing> 
+                    v:l  ) ) ) ) .
+    
+    <#Ax054>     =  (
+        <#PropertyValue> 
+        <#complementOf> 
+        <#Thing> 
+        <#Nothing>  ) .
+    
+    <#Ax055>     =  (
+        <#Type> 
+        <#Disjoint> 
+        <#Class>  ) .
+    
+    <#Ax056>     =  (
+        ko:means 
+         (
+            <#Type> 
+            v:l 
+            <#Disjoint>  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:l 
+                <#List>  )
+             (
+                <#forall> 
+                 (
+                    v:c  )
+                 (
+                    ko:implies 
+                     (
+                        <#PropertyValue> 
+                        <#Item> 
+                        v:c 
+                        v:l  )
+                     (
+                        <#Type> 
+                        v:c 
+                        <#Class>  ) ) )
+             (
+                <#forall> 
+                 (
+                    v:c1 
+                    v:c2  )
+                 (
+                    ko:implies 
+                     (
+                        <#and> 
+                         (
+                            <#PropertyValue> 
+                            <#item> 
+                            v:c1 
+                            v:l  )
+                         (
+                            <#PropertyValue> 
+                            <#item> 
+                            v:c2 
+                            v:l  )
+                         (
+                            <#not> 
+                             (
+                                ko:equals 
+                                v:c1 
+                                v:c2  ) ) )
+                     (
+                        <#PropertyValue> 
+                        <#disjointWith> 
+                        v:c1 
+                        v:c2  ) ) ) ) ) .
+    
+    <#Ax057>     =  (
+        <#Type> 
+        <#Restriction> 
+        <#Class>  ) .
+    
+    <#Ax058>     =  (
+        <#subClassOf> 
+        <#NonNegativeInteger> 
+        <#Integer>  ) .
+    
+    <#Ax059>     =  (
+        <#Type> 
+        <#TransitiveProperty> 
+        <#Class>  ) .
+    
+    <#Ax060>     =  (
+        ko:means 
+         (
+            <#Type> 
+            v:p 
+            <#TransitiveProperty>  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:p 
+                <#Property>  )
+             (
+                <#forall> 
+                 (
+                    v:x 
+                    v:y 
+                    v:z  )
+                 (
+                    ko:implies 
+                     (
+                        <#and> 
+                         (
+                            <#PropertyValue> 
+                            v:p 
+                            v:x 
+                            v:y  )
+                         (
+                            <#PropertyValue> 
+                            v:p 
+                            v:y 
+                            v:z  ) )
+                     (
+                        <#PropertyValue> 
+                        v:p 
+                        v:x 
+                        v:z  ) ) ) ) ) .
+    
+    <#Ax061>     =  (
+        <#Type> 
+        <#UniqueProperty> 
+        <#Class>  ) .
+    
+    <#Ax062>     =  (
+        ko:means 
+         (
+            <#Type> 
+            v:p 
+            <#UniqueProperty>  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:p 
+                <#Property>  )
+             (
+                <#forall> 
+                 (
+                    v:x 
+                    v:y 
+                    v:z  )
+                 (
+                    ko:implies 
+                     (
+                        <#and> 
+                         (
+                            <#PropertyValue> 
+                            v:p 
+                            v:x 
+                            v:y  )
+                         (
+                            <#PropertyValue> 
+                            v:p 
+                            v:x 
+                            v:z  ) )
+                     (
+                        ko:equals 
+                        v:y 
+                        v:z  ) ) ) ) ) .
+    
+    <#Ax063>     =  (
+        <#Type> 
+        <#UnambiguousProperty> 
+        <#Class>  ) .
+    
+    <#Ax064>     =  (
+        ko:means 
+         (
+            <#Type> 
+            v:p 
+            <#UnambiguousProperty>  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:p 
+                <#Property>  )
+             (
+                <#forall> 
+                 (
+                    v:x 
+                    v:y 
+                    v:v  )
+                 (
+                    ko:implies 
+                     (
+                        <#and> 
+                         (
+                            <#PropertyValue> 
+                            v:p 
+                            v:x 
+                            v:v  )
+                         (
+                            <#PropertyValue> 
+                            v:p 
+                            v:y 
+                            v:v  ) )
+                     (
+                        ko:equals 
+                        v:x 
+                        v:y  ) ) ) ) ) .
+    
+    <#Ax065>     =  (
+        <#PropertyValue> 
+        <#subClassOf> 
+        <#List> 
+        <#Seq>  ) .
+    
+    <#Ax066>     =  (
+        <#Type> 
+        <#Ontology> 
+        <#Class>  ) .
+    
+    <#Ax067>     =  (
+        <#Type> 
+        <#equivalentTo> 
+        <#Property>  ) .
+    
+    <#Ax068>     =  (
+        ko:means 
+         (
+            <#PropertyValue> 
+            <#equivalentTo> 
+            v:x 
+            v:y  )
+         (
+            ko:equals 
+            v:x 
+            v:y  ) ) .
+    
+    <#Ax069>     =  (
+        <#PropertyValue> 
+        <#subPropertyOf> 
+        <#sameClassAs> 
+        <#equivalentTo>  ) .
+    
+    <#Ax070>     =  (
+        <#PropertyValue> 
+        <#subPropertyOf> 
+        <#sameClassAs> 
+        <#subClassOf>  ) .
+    
+    <#Ax071>     =  (
+        <#PropertyValue> 
+        <#subPropertyOf> 
+        <#samePropertyAs> 
+        <#equivalentTo>  ) .
+    
+    <#Ax072>     =  (
+        <#PropertyValue> 
+        <#subPropertyOf> 
+        <#samePropertyAs> 
+        <#subPropertyOf>  ) .
+    
+    <#Ax073>     =  (
+        <#Type> 
+        <#disjointWith> 
+        <#Property>  ) .
+    
+    <#Ax074>     =  (
+        ko:means 
+         (
+            <#PropertyValue> 
+            <#disjointWith> 
+            v:c1 
+            v:c2  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:c1 
+                <#Class>  )
+             (
+                <#Type> 
+                v:c2 
+                <#Class>  )
+             (
+                <#not> 
+                 (
+                    <#exists> 
+                     (
+                        v:x  )
+                     (
+                        <#and> 
+                         (
+                            <#Type> 
+                            v:x 
+                            v:c1  )
+                         (
+                            <#Type> 
+                            v:x 
+                            v:c2  ) ) ) ) ) ) .
+    
+    <#Ax075>     =  (
+        <#Type> 
+        <#unionOf> 
+        <#Property>  ) .
+    
+    <#Ax076>     =  (
+        ko:means 
+         (
+            <#PropertyValue> 
+            <#unionOf> 
+            v:c1 
+            v:l  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:c1 
+                <#Class>  )
+             (
+                <#Type> 
+                v:l 
+                <#List>  )
+             (
+                <#forall> 
+                 (
+                    v:x  )
+                 (
+                    ko:implies 
+                     (
+                        <#PropertyValue> 
+                        <#item> 
+                        v:x 
+                        v:l  )
+                     (
+                        <#Type> 
+                        v:x 
+                        <#Class>  ) ) )
+             (
+                <#forall> 
+                 (
+                    v:x  )
+                 (
+                    ko:means 
+                     (
+                        <#Type> 
+                        v:x 
+                        v:c1  )
+                     (
+                        <#exists> 
+                         (
+                            v:c2  )
+                         (
+                            <#and> 
+                             (
+                                <#PropertyValue> 
+                                <#item> 
+                                v:c2 
+                                v:l  )
+                             (
+                                <#Type> 
+                                v:x 
+                                v:c2  ) ) ) ) ) ) ) .
+    
+    <#Ax077>     =  (
+        <#Type> 
+        <#disjointUnionOf> 
+        <#Property>  ) .
+    
+    <#Ax078>     =  (
+        ko:means 
+         (
+            <#PropertyValue> 
+            <#disjointUnionOf> 
+            v:c 
+            v:l  )
+         (
+            <#and> 
+             (
+                <#PropertyValue> 
+                <#unionOf> 
+                v:c 
+                v:l  )
+             (
+                <#Type> 
+                v:l 
+                <#Disjoint>  ) ) ) .
+    
+    <#Ax079>     =  (
+        <#Type> 
+        <#intersectionOf> 
+        <#Property>  ) .
+    
+    <#Ax080>     =  (
+        ko:means 
+         (
+            <#PropertyValue> 
+            <#intersectionOf> 
+            v:c1 
+            v:l  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:c1 
+                <#Class>  )
+             (
+                <#Type> 
+                v:l 
+                <#List>  )
+             (
+                <#forall> 
+                 (
+                    v:x  )
+                 (
+                    ko:implies 
+                     (
+                        <#PropertyValue> 
+                        <#item> 
+                        v:x 
+                        v:l  )
+                     (
+                        <#Type> 
+                        v:x 
+                        <#Class>  ) ) )
+             (
+                <#forall> 
+                 (
+                    v:x  )
+                 (
+                    ko:means 
+                     (
+                        <#Type> 
+                        v:x 
+                        v:c1  )
+                     (
+                        <#forall> 
+                         (
+                            v:c2  )
+                         (
+                            ko:implies 
+                             (
+                                <#PropertyValue> 
+                                <#item> 
+                                v:c2 
+                                v:l  )
+                             (
+                                <#Type> 
+                                v:x 
+                                v:c2  ) ) ) ) ) ) ) .
+    
+    <#Ax081>     =  (
+        <#Type> 
+        <#complementOf> 
+        <#Property>  ) .
+    
+    <#Ax082>     =  (
+        ko:means 
+         (
+            <#PropertyValue> 
+            <#complementOf> 
+            v:c1 
+            v:c2  )
+         (
+            <#and> 
+             (
+                <#PropertyValue> 
+                <#disjointWith> 
+                v:c1 
+                v:c2  )
+             (
+                <#forall> 
+                 (
+                    v:x  )
+                 (
+                    <#or> 
+                     (
+                        <#Type> 
+                        v:x 
+                        v:c1  )
+                     (
+                        <#Type> 
+                        v:x 
+                        v:c2  ) ) ) ) ) .
+    
+    <#Ax083>     =  (
+        <#Type> 
+        <#oneOf> 
+        <#Property>  ) .
+    
+    <#Ax084>     =  (
+        ko:means 
+         (
+            <#PropertyValue> 
+            <#oneOf> 
+            v:c 
+            v:l  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:c 
+                <#Class>  )
+             (
+                <#Type> 
+                v:l 
+                <#List>  )
+             (
+                <#forall> 
+                 (
+                    v:x  )
+                 (
+                    ko:means 
+                     (
+                        <#Type> 
+                        v:x 
+                        v:c  )
+                     (
+                        <#PropertyValue> 
+                        <#item> 
+                        v:l 
+                        v:x  ) ) ) ) ) .
+    
+    <#Ax085>     =  (
+        <#Type> 
+        <#onProperty> 
+        <#Property>  ) .
+    
+    <#Ax086>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#onProperty> 
+        <#Restriction>  ) .
+    
+    <#Ax087>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#onProperty> 
+        <#Property>  ) .
+    
+    <#Ax088>     =  (
+        <#Type> 
+        <#toClass> 
+        <#Property>  ) .
+    
+    <#Ax089>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#toClass> 
+        <#Restriction>  ) .
+    
+    <#Ax090>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#toClass> 
+        <#Class>  ) .
+    
+    <#Ax091>     =  (
+        ko:implies 
+         (
+            <#and> 
+             (
+                <#PropertyValue> 
+                <#onProperty> 
+                v:r 
+                v:p  )
+             (
+                <#PropertyValue> 
+                <#toClass> 
+                v:r 
+                v:c  ) )
+         (
+            <#forall> 
+             (
+                v:i  )
+             (
+                ko:means 
+                 (
+                    <#Type> 
+                    v:i 
+                    v:r  )
+                 (
+                    <#forall> 
+                     (
+                        v:j  )
+                     (
+                        ko:implies 
+                         (
+                            <#PropertyValue> 
+                            v:p 
+                            v:i 
+                            v:j  )
+                         (
+                            <#Type> 
+                            v:j 
+                            v:c  ) ) ) ) ) ) .
+    
+    <#Ax092>     =  (
+        <#Type> 
+        <#hasValue> 
+        <#Property>  ) .
+    
+    <#Ax093>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#hasValue> 
+        <#Restriction>  ) .
+    
+    <#Ax094>     =  (
+        ko:implies 
+         (
+            <#and> 
+             (
+                <#PropertyValue> 
+                <#onProperty> 
+                v:r 
+                v:p  )
+             (
+                <#PropertyValue> 
+                <#hasValue> 
+                v:r 
+                v:v  ) )
+         (
+            <#forall> 
+             (
+                v:i  )
+             (
+                ko:means 
+                 (
+                    <#Type> 
+                    v:i 
+                    v:r  )
+                 (
+                    <#PropertyValue> 
+                    v:p 
+                    v:i 
+                    v:v  ) ) ) ) .
+    
+    <#Ax095>     =  (
+        <#Type> 
+        <#hasClass> 
+        <#Property>  ) .
+    
+    <#Ax096>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#hasClass> 
+        <#Restriction>  ) .
+    
+    <#Ax097>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#hasClass> 
+        <#Class>  ) .
+    
+    <#Ax098>     =  (
+        ko:implies 
+         (
+            <#and> 
+             (
+                <#PropertyValue> 
+                <#onProperty> 
+                v:r 
+                v:p  )
+             (
+                <#PropertyValue> 
+                <#hasClass> 
+                v:r 
+                v:c  ) )
+         (
+            <#forall> 
+             (
+                v:i  )
+             (
+                ko:means 
+                 (
+                    <#Type> 
+                    v:i 
+                    v:r  )
+                 (
+                    <#exists> 
+                     (
+                        v:j  )
+                     (
+                        <#and> 
+                         (
+                            <#PropertyValue> 
+                            v:p 
+                            v:i 
+                            v:j  )
+                         (
+                            <#Type> 
+                            v:j 
+                            v:c  ) ) ) ) ) ) .
+    
+    <#Ax099>     =  (
+        <#Type> 
+        <#minCardinality> 
+        <#Property>  ) .
+    
+    <#Ax100>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#minCardinality> 
+        <#Restriction>  ) .
+    
+    <#Ax101>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#minCardinality> 
+        <#NonNegativeInteger>  ) .
+    
+    <#Ax102>     =  (
+        ko:implies 
+         (
+            <#and> 
+             (
+                <#PropertyValue> 
+                <#onProperty> 
+                v:r 
+                v:p  )
+             (
+                <#PropertyValue> 
+                <#minCardinality> 
+                v:r 
+                v:n  ) )
+         (
+            <#forall> 
+             (
+                v:i  )
+             (
+                ko:means 
+                 (
+                    <#Type> 
+                    v:i 
+                    v:r  )
+                 (
+                    <#exists> 
+                     (
+                        v:vl  )
+                     (
+                        <#and> 
+                         (
+                            <#no_repeats_list> 
+                            v:vl  )
+                         (
+                            <#forall> 
+                             (
+                                v:v  )
+                             (
+                                ko:implies 
+                                 (
+                                    <#PropertyValue> 
+                                    <#item> 
+                                    v:vl 
+                                    v:v  )
+                                 (
+                                    <#PropertyValue> 
+                                    v:p 
+                                    v:i 
+                                    v:v  ) ) )
+                         (
+                            ko:greaterThanOrEqualTo 
+                             (
+                                <#length> 
+                                v:vl  )
+                            v:n  ) ) ) ) ) ) .
+    
+    <#Ax103>     =  (
+        <#Type> 
+        <#maxCardinality> 
+        <#Property>  ) .
+    
+    <#Ax104>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#maxCardinality> 
+        <#Restriction>  ) .
+    
+    <#Ax105>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#maxCardinality> 
+        <#NonNegativeInteger>  ) .
+    
+    <#Ax106>     =  (
+        ko:implies 
+         (
+            <#and> 
+             (
+                <#PropertyValue> 
+                <#onProperty> 
+                v:r 
+                v:p  )
+             (
+                <#PropertyValue> 
+                <#maxCardinality> 
+                v:r 
+                v:n  ) )
+         (
+            <#forall> 
+             (
+                v:i  )
+             (
+                ko:means 
+                 (
+                    <#Type> 
+                    v:i 
+                    v:r  )
+                 (
+                    <#forall> 
+                     (
+                        v:vl  )
+                     (
+                        ko:implies 
+                         (
+                            <#and> 
+                             (
+                                <#no_repeats_list> 
+                                v:vl  )
+                             (
+                                <#forall> 
+                                 (
+                                    v:v  )
+                                 (
+                                    ko:means 
+                                     (
+                                        <#PropertyValue> 
+                                        <#item> 
+                                        v:vl 
+                                        v:v  )
+                                     (
+                                        <#PropertyValue> 
+                                        v:p 
+                                        v:i 
+                                        v:v  ) ) ) )
+                         (
+                            ko:equalsLessThanFixMe 
+                             (
+                                <#length> 
+                                v:vl  )
+                            v:n  ) ) ) ) ) ) .
+    
+    <#Ax107>     =  (
+        <#Type> 
+        <#cardinality> 
+        <#Property>  ) .
+    
+    <#Ax108>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#cardinality> 
+        <#Restriction>  ) .
+    
+    <#Ax109>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#cardinality> 
+        <#NonNegativeInteger>  ) .
+    
+    <#Ax110>     =  (
+        ko:implies 
+         (
+            <#and> 
+             (
+                <#PropertyValue> 
+                <#onProperty> 
+                v:r 
+                v:p  )
+             (
+                <#PropertyValue> 
+                <#cardinality> 
+                v:r 
+                v:n  ) )
+         (
+            <#forall> 
+             (
+                v:i  )
+             (
+                ko:means 
+                 (
+                    <#Type> 
+                    v:i 
+                    v:r  )
+                 (
+                    <#forall> 
+                     (
+                        v:vl  )
+                     (
+                        ko:implies 
+                         (
+                            <#and> 
+                             (
+                                <#no_repeats_list> 
+                                v:vl  )
+                             (
+                                <#forall> 
+                                 (
+                                    v:v  )
+                                 (
+                                    ko:means 
+                                     (
+                                        <#PropertyValue> 
+                                        <#item> 
+                                        v:vl 
+                                        v:v  )
+                                     (
+                                        <#PropertyValue> 
+                                        v:p 
+                                        v:i 
+                                        v:v  ) ) ) )
+                         (
+                            ko:equals 
+                             (
+                                <#length> 
+                                v:vl  )
+                            v:n  ) ) ) ) ) ) .
+    
+    <#Ax111>     =  (
+        <#Type> 
+        <#hasClassQ> 
+        <#Property>  ) .
+    
+    <#Ax112>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#hasClassQ> 
+        <#Restriction>  ) .
+    
+    <#Ax113>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#hasClassQ> 
+        <#Class>  ) .
+    
+    <#Ax114>     =  (
+        <#Type> 
+        <#minCardinalityQ> 
+        <#Property>  ) .
+    
+    <#Ax115>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#minCardinalityQ> 
+        <#Restriction>  ) .
+    
+    <#Ax116>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#minCardinalityQ> 
+        <#NonNegativeInteger>  ) .
+    
+    <#Ax117>     =  (
+        ko:implies 
+         (
+            <#and> 
+             (
+                <#PropertyValue> 
+                <#onProperty> 
+                v:r 
+                v:p  )
+             (
+                <#PropertyValue> 
+                <#minCardinalityQ> 
+                v:r 
+                v:n  )
+             (
+                <#PropertyValue> 
+                <#hasClassQ> 
+                v:r 
+                v:c  ) )
+         (
+            <#forall> 
+             (
+                v:i  )
+             (
+                ko:means 
+                 (
+                    <#Type> 
+                    v:i 
+                    v:r  )
+                 (
+                    <#exists> 
+                     (
+                        v:vl  )
+                     (
+                        <#and> 
+                         (
+                            <#no_repeats_list> 
+                            v:vl  )
+                         (
+                            <#forall> 
+                             (
+                                v:v  )
+                             (
+                                ko:implies 
+                                 (
+                                    <#PropertyValue> 
+                                    <#item> 
+                                    v:vl 
+                                    v:v  )
+                                 (
+                                    <#and> 
+                                     (
+                                        <#PropertyValue> 
+                                        v:p 
+                                        v:i 
+                                        v:v  )
+                                     (
+                                        <#Type> 
+                                        v:v 
+                                        v:c  ) ) )
+                             (
+                                ko:greaterThanOrEqualTo 
+                                 (
+                                    <#length> 
+                                    v:vl  )
+                                v:n  ) ) ) ) ) ) ) .
+    
+    <#Ax118>     =  (
+        <#Type> 
+        <#maxCardinalityQ> 
+        <#Property>  ) .
+    
+    <#Ax119>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#maxCardinalityQ> 
+        <#Restriction>  ) .
+    
+    <#Ax120>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#maxCardinalityQ> 
+        <#NonNegativeInteger>  ) .
+    
+    <#Ax121>     =  (
+        ko:implies 
+         (
+            <#and> 
+             (
+                <#PropertyValue> 
+                <#onProperty> 
+                v:r 
+                v:p  )
+             (
+                <#PropertyValue> 
+                <#maxCardinalityQ> 
+                v:r 
+                v:n  )
+             (
+                <#PropertyValue> 
+                <#hasClassQ> 
+                v:r 
+                v:c  ) )
+         (
+            <#forall> 
+             (
+                v:i  )
+             (
+                ko:means 
+                 (
+                    <#Type> 
+                    v:i 
+                    v:r  )
+                 (
+                    <#forall> 
+                     (
+                        v:vl  )
+                     (
+                        ko:implies 
+                         (
+                            <#and> 
+                             (
+                                <#no_repeats_list> 
+                                v:vl  )
+                             (
+                                <#forall> 
+                                 (
+                                    v:v  )
+                                 (
+                                    ko:means 
+                                     (
+                                        <#PropertyValue> 
+                                        <#item> 
+                                        v:vl 
+                                        v:v  )
+                                     (
+                                        <#and> 
+                                         (
+                                            <#PropertyValue> 
+                                            v:p 
+                                            v:i 
+                                            v:v  )
+                                         (
+                                            <#Type> 
+                                            v:v 
+                                            v:c  ) ) ) ) )
+                         (
+                            ko:equalsLessThanFixMe 
+                             (
+                                <#length> 
+                                v:vl  )
+                            v:n  ) ) ) ) ) ) .
+    
+    <#Ax122>     =  (
+        <#Type> 
+        <#cardinalityQ> 
+        <#Property>  ) .
+    
+    <#Ax123>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#cardinalityQ> 
+        <#Restriction>  ) .
+    
+    <#Ax124>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#cardinalityQ> 
+        <#NonNegativeInteger>  ) .
+    
+    <#Ax125>     =  (
+        ko:implies 
+         (
+            <#and> 
+             (
+                <#PropertyValue> 
+                <#onProperty> 
+                v:r 
+                v:p  )
+             (
+                <#PropertyValue> 
+                <#cardinalityQ> 
+                v:r 
+                v:n  )
+             (
+                <#PropertyValue> 
+                <#hasClassQ> 
+                v:r 
+                v:c  ) )
+         (
+            <#forall> 
+             (
+                v:i  )
+             (
+                ko:means 
+                 (
+                    <#Type> 
+                    v:i 
+                    v:r  )
+                 (
+                    <#forall> 
+                     (
+                        v:vl  )
+                     (
+                        ko:implies 
+                         (
+                            <#and> 
+                             (
+                                <#no_repeats_list> 
+                                v:vl  )
+                             (
+                                <#forall> 
+                                 (
+                                    v:v  )
+                                 (
+                                    ko:means 
+                                     (
+                                        <#PropertyValue> 
+                                        <#item> 
+                                        v:vl 
+                                        v:v  )
+                                     (
+                                        <#and> 
+                                         (
+                                            <#PropertyValue> 
+                                            v:p 
+                                            v:i 
+                                            v:v  )
+                                         (
+                                            <#Type> 
+                                            v:v 
+                                            v:c  ) ) ) ) )
+                         (
+                            ko:equals 
+                             (
+                                <#length> 
+                                v:vl  )
+                            v:n  ) ) ) ) ) ) .
+    
+    <#Ax126>     =  (
+        <#Type> 
+        <#inverseOf> 
+        <#Property>  ) .
+    
+    <#Ax127>     =  (
+        ko:means 
+         (
+            <#PropertyValue> 
+            <#inverseOf> 
+            v:p1 
+            v:p2  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:p1 
+                <#Property>  )
+             (
+                <#Type> 
+                v:p2 
+                <#Property>  )
+             (
+                <#forall> 
+                 (
+                    v:x1 
+                    v:x2  )
+                 (
+                    ko:means 
+                     (
+                        <#PropertyValue> 
+                        v:p1 
+                        v:x1 
+                        v:x2  )
+                     (
+                        <#PropertyValue> 
+                        v:p2 
+                        v:x2 
+                        v:x1  ) ) ) ) ) .
+    
+    <#Ax128>     =  (
+        <#Type> 
+        <#first> 
+        <#FunctionalProperty>  ) .
+    
+    <#Ax129>     =  (
+        ko:means 
+         (
+            <#PropertyValue> 
+            <#first> 
+            v:l 
+            v:x  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:l 
+                <#List>  )
+             (
+                <#PropertyValue> 
+                <#_1> 
+                v:l 
+                v:x  ) ) ) .
+    
+    <#Ax130>     =  (
+        <#Type> 
+        <#rest> 
+        <#FunctionalProperty>  ) .
+    
+    <#Ax131>     =  (
+        ko:means 
+         (
+            <#PropertyValue> 
+            <#rest> 
+            v:l 
+            v:r  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:l 
+                <#List>  )
+             (
+                <#Type> 
+                v:r 
+                <#List>  )
+             (
+                <#exists> 
+                 (
+                    v:x  )
+                 (
+                    ko:equals 
+                    v:l 
+                     (
+                        <#cons> 
+                        v:x 
+                        v:r  ) ) ) ) ) .
+    
+    <#Ax132>     =  (
+        <#Type> 
+        <#item> 
+        <#Property>  ) .
+    
+    <#Ax133>     =  (
+        ko:means 
+         (
+            <#PropertyValue> 
+            <#item> 
+            v:l 
+            v:x  )
+         (
+            <#and> 
+             (
+                <#Type> 
+                v:l 
+                <#List>  )
+             (
+                <#or> 
+                 (
+                    <#PropertyValue> 
+                    <#first> 
+                    v:l 
+                    v:x  )
+                 (
+                    <#exists> 
+                     (
+                        v:r  )
+                     (
+                        <#and> 
+                         (
+                            <#PropertyValue> 
+                            <#rest> 
+                            v:l 
+                            v:r  )
+                         (
+                            <#PropertyValue> 
+                            <#item> 
+                            v:r 
+                            v:x  ) ) ) ) ) ) .
+    
+    <#Ax134>     =  (
+        <#Type> 
+        <#versionInfo> 
+        <#Property>  ) .
+    
+    <#Ax135>     =  (
+        <#Type> 
+        <#imports> 
+        <#Property>  ) .
+    
+    <#Ax136>     =  (
+        <#Type> 
+        <#nil> 
+        <#List>  ) .
+    
+    <#Ax137>     =  (
+        <#not> 
+         (
+            <#PropertyValue> 
+            <#item> 
+            <#nil> 
+            v:x  ) ) .
+    
+    <#Th10>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#disjointWith> 
+        <#Class>  ) .
+    
+    <#Th11>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#unionOf> 
+        <#Class>  ) .
+    
+    <#Th12>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#unionOf> 
+        <#List>  ) .
+    
+    <#Th13>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#disjointUnionOf> 
+        <#Class>  ) .
+    
+    <#Th14>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#disjointUnionOf> 
+        <#Disjoint>  ) .
+    
+    <#Th15>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#intersectionOf> 
+        <#Class>  ) .
+    
+    <#Th16>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#intersectionOf> 
+        <#List>  ) .
+    
+    <#Th17>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#complementOf> 
+        <#Class>  ) .
+    
+    <#Th18>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#complementOf> 
+        <#Class>  ) .
+    
+    <#Th19>     =  (
+        <#PropertyValue> 
+        <#complementOf> 
+        <#Thing> 
+        <#Nothing>  ) .
+    
+    <#Th1>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#range> 
+        <#Property>  ) .
+    
+    <#Th20>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#oneOf> 
+        <#Class>  ) .
+    
+    <#Th21>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#oneOf> 
+        <#List>  ) .
+    
+    <#Th22>     =  (
+        ko:implies 
+         (
+            <#and> 
+             (
+                <#PropertyValue> 
+                <#qualifiedBy> 
+                v:c1 
+                v:q  )
+             (
+                <#PropertyValue> 
+                <#onProperty> 
+                v:q 
+                v:p  )
+             (
+                <#PropertyValue> 
+                <#hasValue> 
+                v:q 
+                v:c2  ) )
+         (
+            <#PropertyValue> 
+            <#minCardinality> 
+            v:p 
+            <#1>  ) ) .
+    
+    <#Th23>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#inverseOf> 
+        <#Property>  ) .
+    
+    <#Th24>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#inverseOf> 
+        <#Property>  ) .
+    
+    <#Th25>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#rest> 
+        <#List>  ) .
+    
+    <#Th26>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#rest> 
+        <#List>  ) .
+    
+    <#Th27>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#item> 
+        <#List>  ) .
+    
+    <#Th2>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#range> 
+        <#Class>  ) .
+    
+    <#Th3>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#domain> 
+        <#Property>  ) .
+    
+    <#Th4>     =  (
+        <#PropertyValue> 
+        <#range> 
+        <#domain> 
+        <#Class>  ) .
+    
+    <#Th5>     =  (
+        <#PropertyValue> 
+        <#subClassOf> 
+        <#Disjoint> 
+        <#List>  ) .
+    
+    <#Th6>     =  (
+        <#PropertyValue> 
+        <#subClassOf> 
+        <#TransitiveProperty> 
+        <#Property>  ) .
+    
+    <#Th7>     =  (
+        <#PropertyValue> 
+        <#subClassOf> 
+        <#UniqueProperty> 
+        <#Property>  ) .
+    
+    <#Th8>     =  (
+        <#PropertyValue> 
+        <#subClassOf> 
+        <#UnambiguousProperty> 
+        <#Property>  ) .
+    
+    <#Th9>     =  (
+        <#PropertyValue> 
+        <#domain> 
+        <#disjointWith> 
+        <#Class>  ) .
     
  #ENDS

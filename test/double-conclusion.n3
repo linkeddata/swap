@@ -10,7 +10,7 @@
 #
 #
 @prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
-@prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
+@prefix daml: <http://www.daml.org/2000/12/daml+oil#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 @prefix : <#> .       # For our use

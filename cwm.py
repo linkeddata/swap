@@ -4,7 +4,7 @@ $Id$
 
 Closed World Machine
 
-(also, in Wales, a valley)
+(also, in Wales, a valley  - a partially closed world perhaps?)
 
 This is an engine which knows a certian amount of stuff and can manipulate it.
 It is a query engine, not an inference engine: that is, it will apply rules
@@ -17,16 +17,21 @@ Date: 2000/07/17 21:46:13
 Agenda:
 =======
 
- - filter out duplicate conclusions - BUG!
+ - BUG: a [ b c ] d.   gets improperly output. See anon-pred
+ - BUG: {} is a context but that is lost on output!!!
+     occursAs[CONTEXT] not enough. See foo2.n3 - change existential representation :-( to make context a real conjunction again?
+    (the forSome triple is special in that you can't remove it and reduce info)
+ - filter out duplicate conclusions - BUG! - DONE
  - run hhtp daemon/client sending changes to database
- - act as client/server for distributed
+ - act as client/server for distributed system
  - Bultins - says, startsWith,
  - postgress underlying database?
  -    
  -    standard mappping of SQL database into the web in N3/RDF
  -    
  - logic API as requested DC 2000/12/10
- - sucking in the schema (http library?); to know about r1 see r2
+ - Jena-like API x=model.createResource(); addProperty(DC.creator, "Brian", "en")
+ - sucking in the schema (http library?) --schemas ; to know about r1 see r2; daml:import
  - schema validation - done partly but no "no schema for xx predicate".
  -   syntax for "all she wrote" - schema is complete and definitive
  - metaindexes - "to know more about x please see r" - described by
@@ -40,14 +45,25 @@ Agenda:
  - Validation:  validate domain and range constraints against closuer of classes and
    mutually disjoint classes.
 - represent URIs bound to same equivalence closuse object?
-
-
+- says(expr1, expr2)      >=  dixitInterAlia
+- indirectlyImplies(expr1, expr2)   
+- startsWith(x,y)
+- URIof(x, str)
 - Translation;  Try to represent the space (or a context) using a subset of namespaces
 
 - Other forms of context - explanation of derivation by rule or merging of contexts
+- operators on numbers
+- operators (union, intersection, subtraction) of context
+- cwm -diff using above! for test result comparison
 
+- Optimizations:
+    - Remember previous bindings found for this rule(?)
+    - Notice disjoint graphs & explicitly form cross-product of subresults
 
-
+- test rdf praser against Dave Becket's test suite http://ilrt.org/people/cmdjb/
+- Introduce this or $ to indicate the current context
+- Introduce a difference between <> and $  in that <> log:parsesTo $ .
+    serialised subPropertyOf serialisedAs
 
 Done
 ====
