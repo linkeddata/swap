@@ -12,66 +12,129 @@ formula_list(usable).
 %   owl_cardinality
 %
 
-all RESTRICTION PROPERTY CARDINALITY INST (
-   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
-     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
-     rdf(RESTRICTION, owl_cardinality, CARDINALITY) &
-     rdf(INST, rdf_type, RESTRICTION) )
-   ->
-   % there is a set with that cardinality
-   % and it matches the values  of rdf(INST, PROPERTY...)
-   ( exists LIST ( all VAL (
-     ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
-       CARDINALITY=card(LIST) 
-   )))
+%%% all RESTRICTION PROPERTY CARDINALITY INST (
+%%%    ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+%%%      rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+%%%      rdf(RESTRICTION, owl_cardinality, CARDINALITY) &
+%%%      rdf(INST, rdf_type, RESTRICTION) )
+%%%    ->
+%%%    % there is a set with that cardinality
+%%%    % and it matches the values  of rdf(INST, PROPERTY...)
+%%%    ( exists LIST ( all VAL (
+%%%      ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
+%%%        CARDINALITY=card(LIST) 
+%%%    )))
+%%% ).
+%%% 
+%%% all RESTRICTION PROPERTY MINCARDINALITY INST (
+%%%    ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+%%%      rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+%%%      rdf(RESTRICTION, owl_minCardinality, MINCARDINALITY) &
+%%%      rdf(INST, rdf_type, RESTRICTION) )
+%%%    ->
+%%%    % there is a set with that cardinality
+%%%    % and it matches the values  of rdf(INST, PROPERTY...)
+%%%    ( exists LIST ( all VAL (
+%%%      ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
+%%%      lte(MINCARDINALITY, card(LIST))
+%%%    )))
+%%% ).
+%%% 
+%%% all RESTRICTION PROPERTY MAXCARDINALITY INST (
+%%%    ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+%%%      rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+%%%      rdf(RESTRICTION, owl_maxCardinality, MAXCARDINALITY) &
+%%%      rdf(INST, rdf_type, RESTRICTION) )
+%%%    ->
+%%%    % there is a set with that cardinality
+%%%    % and it matches the values  of rdf(INST, PROPERTY...)
+%%%    ( exists LIST ( all VAL (
+%%%      ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
+%%%      lte(card(LIST), MAXCARDINALITY)
+%%%    )))
+%%% ).
+%%% 
+
+all SET (
+    -(exists ELEM item(ELEM, SET))
+    <->
+    card(SET)=base
 ).
 
-all RESTRICTION PROPERTY MINCARDINALITY INST (
-   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
-     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
-     rdf(RESTRICTION, owl_minCardinality, MINCARDINALITY) &
-     rdf(INST, rdf_type, RESTRICTION) )
-   ->
-   % there is a set with that cardinality
-   % and it matches the values  of rdf(INST, PROPERTY...)
-   ( exists LIST ( all VAL (
-     ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
-     $LE(MINCARDINALITY, card(LIST))
-   )))
-).
-
-all RESTRICTION PROPERTY MAXCARDINALITY INST (
-   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
-     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
-     rdf(RESTRICTION, owl_maxCardinality, MAXCARDINALITY) &
-     rdf(INST, rdf_type, RESTRICTION) )
-   ->
-   % there is a set with that cardinality
-   % and it matches the values  of rdf(INST, PROPERTY...)
-   ( exists LIST ( all VAL (
-     ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
-     $LE(card(LIST), MAXCARDINALITY)
-   )))
+all SET SUBSET (
+  subset(SET, SUBSET) <-> (all E (item(E, SUBSET) -> item(E, SET)))
 ).
 
 all ELEM SET (
    item(ELEM, SET) 
   ->
    (exists SUBSET (
+     subset(SET, SUBSET) &
      -item(ELEM, SUBSET) &
-     $SUM(card(SUBSET),1)=card(SET)
+     succ(card(SUBSET))=card(SET)
    ))
 ).
 
-all SET (
-    -(exists ELEM item(ELEM, SET))
-    <->
-    card(SET)=0
+all A B SET (
+    item(A, SET) &
+    item(B, SET) &
+    card(SET) = succ(base)
+   ->
+    A=B
 ).
 
+all ELEM SET (
+   -item(ELEM, SET)
+   ->
+   (exists SUPERSET (
+      item(ELEM, SUPERSET) &
+      subset(SUPERSET, SET) &
+      succ(card(SET))=card(SUPERSET)
+   ))
+).
+
+% nah, how do you say teh card >= the number of distinct objects?
+
+all A B SET (
+    item(A, SET) &
+    item(B, SET) &
+    A != B
+   ->
+   (exists SUBSET (
+     -item(A, SUBSET) &
+     item(B, SUBSET) &
+     subset(SET, SUBSET) &
+     succ(card(SUBSET))=card(SET)
+   ))
+).
+
+%all A B SET (
+%   -item(A, SET) &
+%  ->
+%   -(exists SET2 (
+%      item(A, SET2) &
+%      (all X (item(X, SET) -> item(X,SET2)) ) &
+%      card(SET)=card(SET2)
+%    ))
+%).
+      
+all x x=x.
+
+all X (
+  lt(X, succ(X))
+).
+
+all X (
+  -lt(X,X)
+).
+
+
+
+
+
 % $Log$
-% Revision 1.7  2003-08-08 15:01:28  sandro
-% a failed experiment #2
+% Revision 1.8  2003-08-08 15:01:37  sandro
+% a failed experiment #3
 %
 % Revision 1.4  2003/08/01 16:27:35  sandro
 % modified to run in swap/surnia instead of swap
