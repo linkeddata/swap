@@ -892,6 +892,7 @@ class ToN3(RDFSink.RDFSink):
         
 a   Anonymous nodes should be output using the _: convention (p flag or not).
 d   Don't use default namespace (empty prefix)
+i   Use identifiers from store - don't regen on output
 l   List syntax suppression. Don't use (..)
 p   Prefix suppression - don't use them, always URIs in <> instead of qnames.
 q   Quiet - don't make comments about the environment in which processing was done.
@@ -1222,7 +1223,7 @@ t   "this" and "()" special syntax should be suppresed.
             return "_:a" + str    # Must start with alpha as per NTriples spec.
 
         if ((type == ANONYMOUS)
-            and not option_noregen ):
+            and not option_noregen and "i" not in self._flags ):
                 x = self.regen.get(value, None)
                 if x == None:
 		    x = self.genId()

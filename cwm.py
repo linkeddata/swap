@@ -568,6 +568,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
             elif arg == "-rules":
                 need(_store); touch(_store)
+		workingContext.reopen()
                 _store.applyRules(workingContext, workingContext)
 
             elif arg[:7] == "-think=":
@@ -681,7 +682,8 @@ def need(object):
         if hasattr(lxkb, "touched"):
             if object is _store:
                 #print "# copying lxkb to _store"
-                _store.deleteFormula(workingContext)
+		workingContext.reopen()
+                _store.deleteFormula(workingContext)   ##@@@@ very slow
                 LX.engine.llynInterface.addLXKB(_store, workingContext, lxkb)
                 del(lxkb.touched)
             else:

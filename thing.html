@@ -107,8 +107,6 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">Fragment</a>:<br>
-<dl><dt><a name="Anonymous-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="Anonymous-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="Anonymous-uriref"><strong>uriref</strong></a>(self)</dt></dl>
@@ -155,8 +153,6 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">Fragment</a>:<br>
-<dl><dt><a name="BuiltIn-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BuiltIn-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -213,8 +209,6 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#List">List</a>:<br>
 <dl><dt><a name="EmptyList-__init__"><strong>__init__</strong></a>(self, store, first, rest)</dt></dl>
 
-<dl><dt><a name="EmptyList-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="EmptyList-precededBy"><strong>precededBy</strong></a>(self, first)</dt></dl>
 
 <hr>
@@ -243,8 +237,6 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 <tr><td>&nbsp;&nbsp;</td>
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="Fragment-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
-
-<dl><dt><a name="Fragment-asList"><strong>asList</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="Fragment-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
@@ -307,8 +299,6 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 <hr>
 Methods inherited from <a href="thing.html#Fragment">Fragment</a>:<br>
 <dl><dt><a name="FragmentNil-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
-
-<dl><dt><a name="FragmentNil-asList"><strong>asList</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="FragmentNil-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
@@ -403,8 +393,6 @@ Methods inherited from <a href="thing.html#BuiltIn">BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">Fragment</a>:<br>
-<dl><dt><a name="HeavyBuiltIn-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="HeavyBuiltIn-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -464,8 +452,6 @@ Methods inherited from <a href="thing.html#BuiltIn">BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">Fragment</a>:<br>
-<dl><dt><a name="LightBuiltIn-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="LightBuiltIn-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -500,8 +486,6 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 <tr><td>&nbsp;&nbsp;</td>
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="List-__init__"><strong>__init__</strong></a>(self, store, first, rest)</dt></dl>
-
-<dl><dt><a name="List-asList"><strong>asList</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="List-precededBy"><strong>precededBy</strong></a>(self, first)</dt></dl>
 
@@ -580,12 +564,6 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 
 <hr>
 Methods inherited from <a href="thing.html#Term">Term</a>:<br>
-<dl><dt><a name="Literal-asList"><strong>asList</strong></a>(self)</dt><dd><tt>The&nbsp;interned&nbsp;<a href="#List">List</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;if&nbsp;this&nbsp;is&nbsp;in&nbsp;fact&nbsp;a&nbsp;list,&nbsp;else&nbsp;None.<br>
-&nbsp;<br>
-Lists&nbsp;are&nbsp;interned&nbsp;because&nbsp;they&nbsp;are&nbsp;a&nbsp;form&nbsp;of&nbsp;literal&nbsp;in&nbsp;that<br>
-equal&nbsp;lists&nbsp;are&nbsp;identical.<br>
-(override&nbsp;me!)</tt></dd></dl>
-
 <dl><dt><a name="Literal-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
 
 </td></tr></table> 
@@ -724,12 +702,6 @@ Methods inherited from <a href="thing.html#Term">Term</a>:<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
 @@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
 
-<dl><dt><a name="Symbol-asList"><strong>asList</strong></a>(self)</dt><dd><tt>The&nbsp;interned&nbsp;<a href="#List">List</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;if&nbsp;this&nbsp;is&nbsp;in&nbsp;fact&nbsp;a&nbsp;list,&nbsp;else&nbsp;None.<br>
-&nbsp;<br>
-Lists&nbsp;are&nbsp;interned&nbsp;because&nbsp;they&nbsp;are&nbsp;a&nbsp;form&nbsp;of&nbsp;literal&nbsp;in&nbsp;that<br>
-equal&nbsp;lists&nbsp;are&nbsp;identical.<br>
-(override&nbsp;me!)</tt></dd></dl>
-
 <dl><dt><a name="Symbol-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
@@ -756,12 +728,6 @@ It&nbsp;is&nbsp;interned&nbsp;for&nbsp;speed&nbsp;of&nbsp;processing&nbsp;by&nbs
 <dl><dt><a name="Term-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
 @@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
-
-<dl><dt><a name="Term-asList"><strong>asList</strong></a>(self)</dt><dd><tt>The&nbsp;interned&nbsp;<a href="#List">List</a>&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;if&nbsp;this&nbsp;is&nbsp;in&nbsp;fact&nbsp;a&nbsp;list,&nbsp;else&nbsp;None.<br>
-&nbsp;<br>
-Lists&nbsp;are&nbsp;interned&nbsp;because&nbsp;they&nbsp;are&nbsp;a&nbsp;form&nbsp;of&nbsp;literal&nbsp;in&nbsp;that<br>
-equal&nbsp;lists&nbsp;are&nbsp;identical.<br>
-(override&nbsp;me!)</tt></dd></dl>
 
 <dl><dt><a name="Term-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>

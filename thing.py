@@ -203,14 +203,6 @@ class Term:
     def generated(self):
         """Boolean Is this thing a genid - is its name arbitrary? """
         return 0    # unless overridden
-
-    def asList(self):
-	"""The interned List object if this is in fact a list, else None.
-	
-	Lists are interned because they are a form of literal in that
-	equal lists are identical.
-	(override me!)"""
-        return None
   
     def asPair(self):
 	"""Representation in an earlier format, being phased out 2002/08
@@ -266,11 +258,7 @@ class Fragment(Term):
         Term.__init__(self, resource.store)
         self.resource = resource
         self.fragid = fragid
-        self._asList = None      # This is not a list as far as we know
-
-    def asList(self):  # Is this a list? (override me!)
-        return self._asList
-  
+   
     def uriref(self):
         return self.resource.uri + "#" + self.fragid
 
@@ -336,9 +324,6 @@ class List(Term):
 
     def uriref(self):
         return "http://list.example.org/list"+ `self._id` # @@@@@ Temp. Kludge!! Use run id maybe!
-
-    def asList(self):
-        return self    # Allows a list to be used as a Term which is should be really
 
     def precededBy(self, first):
         x = self._prec.get(first, None)
