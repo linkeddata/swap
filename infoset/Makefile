@@ -14,6 +14,7 @@ include $(PD)GVDOT.mak
 
 PYTHON=python
 CWM=$W/2000/10/swap/cwm.py
+SWELL=$W/2001/03swell
 
 .SUFFIXES: .rdf .n3
 
@@ -34,8 +35,10 @@ infoset.rdf: infoset.n3 infoset-labels.n3 style.n3 $(PD)rdf2dot.xsl
 	$(PYTHON) $(CWM) infoset.n3 infoset-labels.n3 style.n3 -think -purge -bySubject -rdf >$@
 
 
-infoset-diagram.rdf: infoset-daml.n3 infosetUtil.n3 style-arcprop.n3 $(PD)rdf2dot.xsl
-	$(PYTHON) $(CWM) infoset-daml.n3 infosetUtil.n3 style-arcprop.n3 -think -purge -bySubject -base=bogus: -rdf >$@
+INFS=$(SWELL)/lists.n3 $(SWELL)/listsAx.n3 $(SWELL)/finiteSets.n3 \
+	infoset-daml.n3 infosetUtil.n3 style-arcprop.n3 
+infoset-diagram.rdf: $(INFS) $(PD)rdf2dot.xsl
+	$(PYTHON) $(CWM) $(INFS) -think -purge -bySubject -base=bogus: -rdf >$@
 
 
 #swws.dot: swws.rdf

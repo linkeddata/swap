@@ -8,14 +8,17 @@
  I've transcribed the sense of the spec using DAML+OIL plus
  just one horn-clause rule.""".
 
-@prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
-@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix dl: <http://www.w3.org/2001/03swell/lists#>.
+@prefix sws: <http://www.w3.org/2001/03swell/finiteSet#>.
 @prefix : <http://www.w3.org/2001/05id/infoset#> . #@@ move this there.
 @prefix w: <w3c-webmaster@@#>.
 
 <> w:nspolicy
 """
+@@revisit this...
 This RDF schema's namespace name
 
  http://www.w3.org/2001/04/infoset#
@@ -36,14 +39,31 @@ This RDF schema's namespace name
 """.
 
 @prefix iu: <infosetUtil#>.
-@prefix dl: <mid:damlList#>. #@@
+@prefix dl: <http://www.w3.org/2001/03swell/lists#>.
+
+:InformationItem rdfs:label "Information Item".
+:itemName rdfs:label "item name";
+  rdfs:subPropertyOf rdfs:label;
+  rdfs:domain
+    [ dpo:onProperty rdfs:subClassOf;
+      dpo:hasValue :InformationItem ].
+
+:Property rdfs:label "property";
+  rdfs:subClassOf dpo:UniqueProperty;
+  rdfs:comment "all infoset properties are unique/many-to-one/functional".
+:propertyName rdfs:label "property name";
+  rdfs:subPropertyOf rdfs:label;
+  rdfs:comment "section 2. Information Items.";
+  rdfs:comment "@@isDefinedBy?";
+  rdfs:domain :Property.
 
 
-:Document iu:itemName "Document";
+
+:Document :itemName "Document";
   rdfs:comment "2.1. The Document Information Item";
   rdfs:subClassOf [
     dpo:onProperty :children;
-    dpo:toClass iu:DocChildren;
+    dpo:toClass :_DocChildren;
   ];
 
   rdfs:subClassOf [
@@ -53,12 +73,12 @@ This RDF schema's namespace name
 
   rdfs:subClassOf [
     dpo:onProperty :notations;
-    dpo:toClass [ iu:setOf :Notation ]
+    dpo:toClass [ sws:setOf :Notation ]
   ];
 
   rdfs:subClassOf [
     dpo:onProperty :unparsedEntities;
-    dpo:toClass [ iu:setOf :UnparsedEntity ]
+    dpo:toClass [ sws:setOf :UnparsedEntity ]
   ];
 
   rdfs:subClassOf [
@@ -88,8 +108,8 @@ This RDF schema's namespace name
     dpo:toClass :Version;
   ].
 
-iu:DocChildren rdfs:label "Doc Items...";
-  iu:listOf [
+:_DocChildren rdfs:label "(E|P|C|D)*";
+  dl:listOf [
     dpo:disjointUnionOf (
       :Element # exactly one; see rule below
       :ProcessingInstruction
@@ -100,31 +120,31 @@ iu:DocChildren rdfs:label "Doc Items...";
 :Version rdfs:label "Version";
   dpo:disjointUnionOf (iu:NoValue iu:VersionNum).
 
-:children iu:propertyName "children".
+:children :propertyName "children".
 
-:documentElement iu:propertyName "document element".
+:documentElement :propertyName "document element".
 
-:notations iu:propertyName "notations".
+:notations :propertyName "notations".
 
-:unparsedEntities iu:propertyName "unparsed entities".
+:unparsedEntities :propertyName "unparsed entities".
 
-:baseURI iu:propertyName "base URI".
+:baseURI :propertyName "base URI".
 
-:systemIdentifier iu:propertyName "system identifier".
+:systemIdentifier :propertyName "system identifier".
 
-:characterEncodingScheme iu:propertyName "character encoding scheme".
+:characterEncodingScheme :propertyName "character encoding scheme".
 
-:standalone iu:propertyName "standalone".
+:standalone :propertyName "standalone".
 :yes rdfs:label "yes".
 :no rdfs:label "no".
 :noValue rdfs:label "no value".
 
-:version iu:propertyName "version".
+:version :propertyName "version".
 
-:Element     iu:itemName "Element";
+:Element :itemName "Element";
   rdfs:subClassOf [
     dpo:onProperty :namespaceName;
-    dpo:toClass iu:NamespaceName;
+    dpo:toClass :NamespaceName;
   ];
 
   rdfs:subClassOf [
@@ -144,17 +164,17 @@ iu:DocChildren rdfs:label "Doc Items...";
 
   rdfs:subClassOf [
     dpo:onProperty :attributes;
-    dpo:toClass [ iu:setOf :Attribute ];
+    dpo:toClass [ sws:setOf :Attribute ];
   ];
 
   rdfs:subClassOf [
     dpo:onProperty :namespaceAttributes;
-    dpo:toClass [ iu:setOf :Attribute ];
+    dpo:toClass [ sws:setOf :Attribute ];
   ];
 
   rdfs:subClassOf [
     dpo:onProperty :inScopeNamespaces;
-    dpo:toClass [ iu:setOf :Namespace ];
+    dpo:toClass [ sws:setOf :Namespace ];
   ];
 
   rdfs:subClassOf [
@@ -169,19 +189,19 @@ iu:DocChildren rdfs:label "Doc Items...";
   ];
   .
 
-:namespaceName iu:propertyName "namespace name".
-iu:NamespaceName rdfs:label "Namespace Name";
+:namespaceName :propertyName "namespace name".
+:NamespaceName rdfs:label "Namespace Name";
   dpo:disjointUnionOf (
     iu:NoValue #@@REVIEW: hmm... the "" URIreference
-    iu:AbsoluteURI
+    iu:AbsoluteURIref
   ).
 
-:localName iu:propertyName "local name".
+:localName :propertyName "local name".
 
-:prefix iu:propertyName "prefix".
+:prefix :propertyName "prefix".
 
 iu:Content rdfs:label "Content";
-  iu:listOf [
+  dl:listOf [
     dpo:disjointUnionOf (
       :Element
       :ProcessingInstruction
@@ -190,19 +210,19 @@ iu:Content rdfs:label "Content";
       :Comment
       ) ].
 
-:attributes iu:propertyName "attributes".
-:namespaceAttributes iu:propertyName "namespace attributes".
+:attributes :propertyName "attributes".
+:namespaceAttributes :propertyName "namespace attributes".
 
-:inScopeNamespaces iu:propertyName "in-scope namespaces";
+:inScopeNamespaces :propertyName "in-scope namespaces";
   rdfs:comment """@@not captured:
 "This set always
              contains an item with the prefix xml which is implicitly bound to the namespace
              name http://www.w3.org/XML/1998/namespace."
 """.
 
-:parent iu:propertyName "parent".
+:parent :propertyName "parent".
 
-:Attribute iu:itemName "Attribute";
+:Attribute :itemName "Attribute";
   rdfs:subClassOf [
     dpo:onProperty :namespaceName;
     dpo:toClass iu:NamespaceName;
@@ -239,11 +259,11 @@ iu:Content rdfs:label "Content";
   ];
   .
 
-:normalizedValue iu:propertyName "normalized value".
+:normalizedValue :propertyName "normalized value".
 
-:specified iu:propertyName "specified".
+:specified :propertyName "specified".
 
-:attributeType iu:propertyName "attribute type".
+:attributeType :propertyName "attribute type".
 
 iu:AttributeType rdfs:label "Attribute Type";
   <dpo_oneOf> ( # @@elide this... too slow
@@ -271,9 +291,9 @@ iu:AttributeType rdfs:label "Attribute Type";
 :CDATA rdfs:label "CDATA".
 :ENUMERATION rdfs:label "ENUMERATION".
 
-:ownerElement iu:propertyName "owner element".
+:ownerElement :propertyName "owner element".
 
-:ProcessingInstruction iu:itemName "Processing Instruction";
+:ProcessingInstruction :itemName "Processing Instruction";
   rdfs:subClassOf [
     dpo:onProperty :target;
     dpo:toClass iu:Name;
@@ -297,29 +317,30 @@ iu:AttributeType rdfs:label "Attribute Type";
   ];
   .
 
-:target iu:propertyName "target".
-:content iu:propertyName "content".
+:target :propertyName "target".
+:content :propertyName "content".
 
-:Namespace iu:itemName "Namespace";
+:Namespace :itemName "Namespace";
   rdfs:comment "@@more...".
 
-:Character iu:itemName "Character";
+:Character :itemName "Character";
   rdfs:comment "@@more...".
 
 
-:Comment     iu:itemName "Comment";
+:Comment :itemName "Comment";
   rdfs:comment "@@more...".
 
-:DocumentTypeDeclaration iu:itemName "Document Type Declaration";
+:DocumentTypeDeclaration :itemName "Document Type Declaration";
   rdfs:comment "@@more...".
 
-:Notation iu:itemName "Notation";
+:Notation :itemName "Notation";
   rdfs:comment "@@more...".
 
-:UnparsedEntity iu:itemName "Unparsed Entity";
+:UnparsedEntity :itemName "Unparsed Entity";
   rdfs:comment "@@more...".
 
-:allDeclarationsProcessed iu:propertyName "all declarations processed";
+:allDeclarationsProcessed :propertyName "all declarations processed";
+  rdfs:comment "@@REVIEW: this a property of a run of a parser, not a property of a document.";
   rdfs:range iu:Boolean.
   
 
