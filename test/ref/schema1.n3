@@ -1,67 +1,11 @@
-#Processed by Id: cwm.py,v 1.26 2001/02/05 01:13:24 timbl Exp 
-        #    using base file:/devel/WWW/2000/10/swap/test/
-        
-#  Notation3 generation by
-#       notation3.py,v 1.53 2001/02/05 01:13:24 timbl Exp
-
-#   Base was: file:/devel/WWW/2000/10/swap/test/
-     @prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
-     @prefix : <http://www.daml.org/2000/10/daml-ex#> .
-     @prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
      @prefix v: <schema-rules.n3#> .
+     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-    {
-        {
-            <#_gs3>     :ancestor <#_gs4> .
-            <#_gs4>     :ancestor <#_gs5> .
-            
-            }     log:implies {<#_gs3>     :ancestor <#_gs5> .
-            } .
-        
-        }     a <#_gs2>;
-         log:forAll <#_gs3>,
-                <#_gs4>,
-                <#_gs5> .
-    {
-        {
-            <#_gs34>     :descendant <#_gs35> .
-            <#_gs35>     :descendant <#_gs36> .
-            
-            }     log:implies {<#_gs34>     :descendant <#_gs36> .
-            } .
-        
-        }     a <#_gs33>;
-         log:forAll <#_gs34>,
-                <#_gs35>,
-                <#_gs36> .
-    {
-        {
-            <#_gs65>     rdfs:subPropertyOf <#_gs66> .
-            <#_gs66>     rdfs:subPropertyOf <#_gs67> .
-            
-            }     log:implies {<#_gs65>     rdfs:subPropertyOf <#_gs67> .
-            } .
-        
-        }     a <#_gs64>;
-         log:forAll <#_gs65>,
-                <#_gs66>,
-                <#_gs67> .
-    {
-        {
-            <#_gs96>     rdfs:subClassOf <#_gs97> .
-            <#_gs97>     rdfs:subClassOf <#_gs98> .
-            
-            }     log:implies {<#_gs96>     rdfs:subClassOf <#_gs98> .
-            } .
-        
-        }     a <#_gs95>;
-         log:forAll <#_gs96>,
-                <#_gs97>,
-                <#_gs98> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix : <daml-ex.n3#> .
     
-    <>     daml:imports <daml-ex.n3>;
-         log:forAll v:c1,
+    this     log:forAll v:c1,
                 v:c2,
                 v:c,
                 v:p1,
@@ -70,35 +14,187 @@
                 v:x,
                 v:y,
                 v:z;
-         log:forSome <daml-ex.n3#_g9> .
+         log:forSome :_g0 .
+    {
+        {
+            <#_gs14>     rdfs:subPropertyOf <#_gs15> .
+            <#_gs15>     rdfs:subPropertyOf <#_gs16> .
+            
+            }     log:implies {<#_gs14>     rdfs:subPropertyOf <#_gs16> .
+            } .
+        
+        }     a log:Truth;
+         log:forAll <#_gs14>,
+                <#_gs15>,
+                <#_gs16> .
+    {
+        {
+            <#_gs20>     rdfs:subClassOf <#_gs21> .
+            <#_gs21>     rdfs:subClassOf <#_gs22> .
+            
+            }     log:implies {<#_gs20>     rdfs:subClassOf <#_gs22> .
+            } .
+        
+        }     a log:Truth;
+         log:forAll <#_gs20>,
+                <#_gs21>,
+                <#_gs22> .
+    {
+        {
+            <#_gs2>     :ancestor <#_gs3> .
+            <#_gs3>     :ancestor <#_gs4> .
+            
+            }     log:implies {<#_gs2>     :ancestor <#_gs4> .
+            } .
+        
+        }     a log:Truth;
+         log:forAll <#_gs2>,
+                <#_gs3>,
+                <#_gs4> .
+    {
+        {
+            <#_gs8>     :descendant <#_gs9> .
+            <#_gs9>     :descendant <#_gs10> .
+            
+            }     log:implies {<#_gs8>     :descendant <#_gs10> .
+            } .
+        
+        }     a log:Truth;
+         log:forAll <#_gs10>,
+                <#_gs8>,
+                <#_gs9> .
     
-    <STDOUT>     a daml:Ontology;
+    :Adam     a daml:Person;
+         daml:comment "Adam is a person.";
+         daml:label "Adam" .
+    
+    :Animal     a daml:Class;
+         daml:comment """This class of animals is illustrative of a number of
+	ontological idioms.""";
+         daml:label "Animal" .
+    
+    :Car     a daml:Class;
+         daml:comment "no car is a person";
+         daml:subClassOf :_g0;
+         rdfs:subClassOf :_g0 .
+    
+    :Female     a daml:Class;
+         daml:disjointFrom :Male;
+         daml:subClassOf :Animal;
+         rdfs:subClassOf :Animal .
+    
+    :Height     a daml:Class;
+         daml:oneOf  (
+        :short 
+        :medium 
+        :tall  ) .
+    
+    :Male     a daml:Class;
+         daml:subClassOf :Animal;
+         rdfs:subClassOf :Animal .
+    
+    :Man     a daml:Class;
+         daml:subClassOf :Male,
+                :Person;
+         rdfs:subClassOf :Animal,
+                :Male,
+                :Person .
+    
+    :Person     a daml:Class;
+         daml:comment "every person is a man or a woman";
+         daml:disjointUnionOf  (
+        :Man 
+        :Woman  );
+         daml:restrictedBy  [
+             a daml:Restriction;
+             daml:onProperty :parent;
+             daml:toClass :Person ];
+         daml:subClassOf :Animal;
+         rdfs:subClassOf :Animal .
+    
+    :TallMan     a daml:Class;
+         daml:intersectionOf  (
+        :TallThing 
+        :Man  ) .
+    
+    :TallThing     a daml:Class;
+         daml:restrictedBy  [
+             a daml:Restriction;
+             daml:onProperty :height;
+             daml:toValue :tall ] .
+    
+    :Woman     a daml:Class;
+         daml:subClassOf :Female,
+                :Person;
+         rdfs:subClassOf :Animal,
+                :Female,
+                :Person .
+    
+    :_g0     a daml:Class;
+         daml:complementOf :Person .
+    
+    :ancestor     a daml:TransitiveProperty;
+         daml:label "ancestor" .
+    
+    :child     a daml:Property;
+         daml:inverseOf :parent .
+    
+    :descendant     a daml:TransitiveProperty .
+    
+    :father     a daml:Property;
+         daml:cardinality "1";
+         daml:range :Man;
+         daml:subProperty :parent;
+         rdfs:range :Man .
+    
+    :height     a daml:Property;
+         daml:domain :Person;
+         daml:range :Height;
+         rdfs:domain :Person;
+         rdfs:range :Height .
+    
+    :mom     a daml:Property;
+         = :mother .
+    
+    :mother     a daml:UniqueProperty;
+         daml:range :Woman;
+         daml:subProperty :parent;
+         rdfs:range :Woman .
+    
+    :occupation     a daml:Property;
+         daml:maxCardinality "1" .
+    
+    :parent     a daml:Property;
+         daml:cardinality "2";
+         daml:domain :Animal;
+         rdfs:domain :Animal .
+    
+    <daml-ex.n3>     a daml:Ontology;
          daml:comment "An example ontology";
          daml:imports <http://www.daml.org/2000/10/daml-ont>;
          daml:versionInfo "$Id$" .
-    
-    <daml-ex.n3#_g9>     a daml:Class;
-         daml:complementOf :Person .
     
     <invalid-ex.n3#alex>     :father <invalid-ex.n3#joe> .
     
     <invalid-ex.n3#bill>     :mother <invalid-ex.n3#joe> .
     
-    <invalid-ex.n3#disjointTest>     a v:schemaInconsistency,
-                :Animal,
+    <invalid-ex.n3#disjointTest>     a :Animal,
                 :Female,
                 :Male,
                 :Man,
                 :Person,
-                :Woman .
+                :Woman,
+                v:schemaInconsistency .
     
-    <invalid-ex.n3#joe>     a v:schemaInconsistency,
-                :Animal,
+    <invalid-ex.n3#joe>     a :Animal,
                 :Female,
                 :Male,
                 :Man,
                 :Person,
-                :Woman .
+                :Woman,
+                v:schemaInconsistency .
+    
+    <invalid-ex.n3>     daml:imports <daml-ex.n3> .
     {
         v:p1     = v:p2 .
         v:x     v:p1 v:y .
@@ -156,113 +252,6 @@
     v:schemaInconsistency     daml:subPropertyOf log:Falsehood;
          rdfs:subPropertyOf log:Falsehood .
     
-    :Adam     a daml:Person;
-         daml:comment "Adam is a person.";
-         daml:label "Adam" .
-    
-    :Animal     a daml:Class;
-         daml:comment """This class of animals is illustrative of a number of
-	ontological idioms.""";
-         daml:label "Animal" .
-    
-    :Car     a daml:Class;
-         daml:comment "no car is a person";
-         daml:subClassOf <daml-ex.n3#_g9>;
-         rdfs:subClassOf <daml-ex.n3#_g9> .
-    
-    :Female     a daml:Class;
-         daml:disjointFrom :Male;
-         daml:subClassOf :Animal;
-         rdfs:subClassOf :Animal .
-    
-    :Height     a daml:Class;
-         daml:oneOf  [
-             daml:first :short;
-             daml:rest  [
-                 daml:first :medium;
-                 daml:rest  [
-                     daml:first :tall;
-                     daml:rest daml:null ] ] ] .
-    
-    :Male     a daml:Class;
-         daml:subClassOf :Animal;
-         rdfs:subClassOf :Animal .
-    
-    :Man     a daml:Class;
-         daml:subClassOf :Male,
-                :Person;
-         rdfs:subClassOf :Male,
-                :Person .
-    
-    :Person     a daml:Class;
-         daml:comment "every person is a man or a woman";
-         daml:disjointUnionOf  [
-             daml:first :Man;
-             daml:rest  [
-                 daml:first :Woman;
-                 daml:rest daml:null ] ];
-         daml:restrictedBy  [
-             a daml:Restriction;
-             daml:onProperty :parent;
-             daml:toClass :Person ];
-         daml:subClassOf :Animal;
-         rdfs:subClassOf :Animal .
-    
-    :TallMan     a daml:Class;
-         daml:intersectionOf  [
-             daml:first :TallThing;
-             daml:rest  [
-                 daml:first :Man;
-                 daml:rest daml:null ] ] .
-    
-    :TallThing     a daml:Class;
-         daml:restrictedBy  [
-             a daml:Restriction;
-             daml:onProperty :height;
-             daml:toValue :tall ] .
-    
-    :Woman     a daml:Class;
-         daml:subClassOf :Female,
-                :Person;
-         rdfs:subClassOf :Female,
-                :Person .
-    
-    :ancestor     a daml:TransitiveProperty;
-         daml:label "ancestor" .
-    
-    :child     a daml:Property;
-         daml:inverseOf :parent .
-    
-    :descendant     a daml:TransitiveProperty .
-    
-    :father     a daml:Property;
-         daml:cardinality "1";
-         daml:range :Man;
-         daml:subProperty :parent;
-         rdfs:range :Man .
-    
-    :height     a daml:Property;
-         daml:domain :Person;
-         daml:range :Height;
-         rdfs:domain :Person;
-         rdfs:range :Height .
-    
-    :mom     a daml:Property;
-         = :mother .
-    
-    :mother     a daml:UniqueProperty;
-         daml:range :Woman;
-         daml:subProperty :parent;
-         rdfs:range :Woman .
-    
-    :occupation     a daml:Property;
-         daml:maxCardinality "1" .
-    
-    :parent     a daml:Property;
-         daml:cardinality "2";
-         daml:domain :Animal;
-         rdfs:domain :Animal .
-    
     daml:domain     = rdfs:domain .
     
     daml:range     = rdfs:range .
@@ -275,4 +264,3 @@
     
     rdfs:subPropertyOf     a daml:TransitiveProperty .
     
- #ENDS

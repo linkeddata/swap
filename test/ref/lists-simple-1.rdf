@@ -1,11 +1,10 @@
 
-<!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/lists-simple.n3-->
 
 
-<rdf:RDF xmlns:t="file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/test#"
+<rdf:RDF xmlns:t="file:/cygdrive/c/devel/WWW/2000/10/swap/test/test#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns="http://www.daml.org/2001/03/daml+oil#"
-    xmlns:ont="http://www.w3.org/2000/10/swap/log.n3#">
+    xmlns:ont="http://www.w3.org/2000/10/swap/log#">
 
     <rdf:Description rdf:about="test#emptyList">
         <equivalentTo rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>

@@ -1,112 +1,104 @@
-
-        #    using base file:/devel/WWW/2000/10/swap/test/
-        
-
-
-
-
-     @prefix ex: <http://www.daml.org/2000/10/daml-ex#> .
-     @prefix ont: <http://www.daml.org/2000/10/daml-ont#> .
-     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix ex: <http://www.daml.org/2001/03/daml-ex#> .
+     @prefix rdfs: <http://www.w3.org/2001/03/rdf-schema#> .
      @prefix : <daml-ont.rdf#> .
+     @prefix dpo: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix daml: <http://www.daml.org/2001/03/daml-ont#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    <>     a ont:Ontology;
-         ont:imports <http://www.w3.org/2000/01/rdf-schema>;
-         ont:versionInfo "$Id$" .
+    :Class     a daml:Class;
+         daml:sameClassAs s:Class .
     
-    :Class     a ont:Class;
-         ont:sameClassAs rdfs:Class .
-    
-    :Disjoint     a ont:Class;
-         ont:comment """for type(L, Disjoint) read: the classes in L are
+    :Disjoint     a daml:Class;
+         daml:comment """for type(L, Disjoint) read: the classes in L are
   pairwise disjoint.
 
   i.e. if type(L, Disjoint), and C1 in L and C2 in L, then disjointWith(C1, C2).
   """;
-         ont:label "Disjoint";
-         ont:subClassOf :List .
+         daml:label "Disjoint";
+         daml:subClassOf :List .
     
-    :Empty     a ont:Class;
-         ont:asClass :Nothing .
+    :Empty     a daml:Class;
+         daml:asClass :Nothing .
     
-    :List     a ont:Class;
-         ont:subClassOf rdf:Seq .
+    :List     a daml:Class;
+         daml:subClassOf rdf:Seq .
     
-    :Literal     a ont:Class;
-         ont:sameClassAs rdfs:Literal .
+    :Literal     a daml:Class;
+         daml:sameClassAs s:Literal .
     
-    :Nothing     a ont:Class;
-         ont:comment "the class with no things in it.";
-         ont:complementOf :Thing .
+    :Nothing     a daml:Class;
+         daml:comment "the class with no things in it.";
+         daml:complementOf :Thing .
     
-    :Ontology     a ont:Class;
-         ont:comment """An Ontology is a document that describes
+    :Ontology     a daml:Class;
+         daml:comment """An Ontology is a document that describes
 	a vocabulary of terms for communication between
 	(human and) automated agents.
   """;
-         ont:label "Ontology" .
+         daml:label "Ontology" .
     
-    :Property     a ont:Class;
-         ont:sameClassAs rdf:Property .
+    :Property     a daml:Class;
+         daml:sameClassAs rdf:Property .
     
-    :Qualification     a ont:Class .
+    :Qualification     a daml:Class .
     
-    :Restriction     a ont:Class .
+    :Restriction     a daml:Class .
     
-    :Thing     a ont:Class;
-         ont:comment "The most general class in DAML.";
-         ont:label "Thing" .
+    :Thing     a daml:Class;
+         daml:comment "The most general class in DAML.";
+         daml:label "Thing" .
     
-    :TransitiveProperty     a ont:Class .
+    :TransitiveProperty     a daml:Class .
     
-    :UnambiguousProperty     a ont:Class;
-         ont:comment """if P is an UnambiguousProperty, then
+    :UnambiguousProperty     a daml:Class;
+         daml:comment """if P is an UnambiguousProperty, then
 	if P(x, y) and P(z, y) then x=z.
 	aka injective.
-	e.g. if nameOfMonth(m, "Feb")
-	and nameOfMonth(n, "Feb") then m and n are the same month.
+	e.g. if nameOfMonth(m, \"Feb\")
+	and nameOfMonth(n, \"Feb\") then m and n are the same month.
   """;
-         ont:label "UnambiguousProperty";
-         ont:subClassOf :Property .
+         daml:label "UnambiguousProperty";
+         daml:subClassOf :Property .
     
-    :UniqueProperty     a ont:Class;
-         ont:comment """compare with maxCardinality=1; e.g. integer successor:
+    :UniqueProperty     a daml:Class;
+         daml:comment """compare with maxCardinality=1; e.g. integer successor:
 	if P is a UniqueProperty, then
 	if P(x, y) and P(x, z) then y=z.
 	aka functional.
   """;
-         ont:label "UniqueProperty";
-         ont:subClassOf :Property .
+         daml:label "UniqueProperty";
+         daml:subClassOf :Property .
     
-    :cardinality     a ont:Property;
-         ont:comment """for cardinality(P, N) read: P has cardinality N; i.e.
+    :cardinality     a daml:Property;
+         daml:comment """for cardinality(P, N) read: P has cardinality N; i.e.
     everything x in the domain of P has N things y such that P(x, y).
   """;
-         ont:domain :Property;
-         ont:label "cardinality" .
+         daml:domain :Property;
+         daml:label "cardinality" .
     
-    :comment     a ont:Property;
-         ont:samePropertyAs rdfs:comment .
+    :comment     a daml:Property;
+         daml:samePropertyAs s:comment .
     
-    :complementOf     a ont:Property;
-         ont:comment """
+    :complementOf     a daml:Property;
+         daml:comment """
     for complementOf(X, Y) read: X is the complement of Y; if something is in Y,
     then it's not in X, and vice versa.
 cf OIL NOT""";
-         ont:domain :Class;
-         ont:range :Class .
+         daml:domain :Class;
+         daml:range :Class .
     
-    :default     a ont:Property;
-         ont:comment """default(X, Y) suggests that Y be considered a/the default
+    :default     a daml:Property;
+         daml:comment """default(X, Y) suggests that Y be considered a/the default
 	value for the X property. This can be considered
 	documentation (ala label, comment) but we don't specify
 	any logical impact.
   """;
-         ont:label "default" .
+         daml:label "default" .
     
-    :disjointUnionOf     a ont:Property;
-         ont:comment """
+    :disjointUnionOf     a daml:Property;
+         daml:comment """
 
     for disjointUnionOf(X, Y) read: X is the disjoint union of the classes in
     the list Y: (a) for any c1 and c2 in Y, disjointWith(c1, c2),
@@ -115,125 +107,125 @@ cf OIL NOT""";
 
     cf OIL disjoint-covered
   """;
-         ont:domain :Class;
-         ont:label "disjointUnionOf";
-         ont:range :List .
+         daml:domain :Class;
+         daml:label "disjointUnionOf";
+         daml:range :List .
     
-    :disjointWith     a ont:Property;
-         ont:comment """for disjointWith(X, Y) read: X and Y have no members
+    :disjointWith     a daml:Property;
+         daml:comment """for disjointWith(X, Y) read: X and Y have no members
 	in common.
   """;
-         ont:domain :Class;
-         ont:label "disjointWith";
-         ont:range :Class .
+         daml:domain :Class;
+         daml:label "disjointWith";
+         daml:range :Class .
     
-    :domain     a ont:Property;
-         ont:samePropertyAs rdfs:domain .
+    :domain     a daml:Property;
+         daml:samePropertyAs s:domain .
     
-    :equivalentTo     a ont:Property;
-         ont:comment """for equivalentTo(X, Y), read X is an equivalent term to Y.
+    :equivalentTo     a daml:Property;
+         daml:comment """for equivalentTo(X, Y), read X is an equivalent term to Y.
   """ .
     
-    :first     a ont:Property;
-         ont:domain :List .
+    :first     a daml:Property;
+         daml:domain :List .
     
-    :hasValue     a ont:Property;
-         ont:comment """for hasValue(Q, C), read: Q is a hasValue
+    :hasValue     a daml:Property;
+         daml:comment """for hasValue(Q, C), read: Q is a hasValue
    qualification to C.""";
-         ont:domain :Qualification;
-         ont:label "hasValue";
-         ont:range :Class .
+         daml:domain :Qualification;
+         daml:label "hasValue";
+         daml:range :Class .
     
-    :imports     a ont:Property;
-         ont:comment """for imports(X, Y) read: X imports Y;
+    :imports     a daml:Property;
+         daml:comment """for imports(X, Y) read: X imports Y;
 	i.e. X asserts the* contents of Y by reference;
 	i.e. if imports(X, Y) and you believe X and Y says something,
 	then you should believe it.
 
-	Note: "the contents" is, in the general case,
+	Note: \"the contents\" is, in the general case,
 	an il-formed definite description. Different
 	interactions with a resource may expose contents
 	that vary with time, data format, preferred language,
-	requestor credentials, etc. So for "the contents",
-	read "any contents".
+	requestor credentials, etc. So for \"the contents\",
+	read \"any contents\".
   """;
-         ont:label "imports" .
+         daml:label "imports" .
     
-    :intersectionOf     a ont:Property;
-         ont:comment """
+    :intersectionOf     a daml:Property;
+         daml:comment """
     for intersectionOf(X, Y) read: X is the intersection of the classes in the list Y;
     i.e. if something is in all the classes in Y, then it's in X, and vice versa.
 cf OIL AND""";
-         ont:domain :Class;
-         ont:range :List .
+         daml:domain :Class;
+         daml:range :List .
     
-    :inverseOf     a ont:Property;
-         ont:comment """for inverseOf(R, S) read: R is the inverse of S; i.e.
+    :inverseOf     a daml:Property;
+         daml:comment """for inverseOf(R, S) read: R is the inverse of S; i.e.
      if R(x, y) then S(y, x) and vice versa.""";
-         ont:domain :Property;
-         ont:range :Property .
+         daml:domain :Property;
+         daml:range :Property .
     
-    :isDefinedBy     a ont:Property;
-         ont:samePropertyAs rdfs:isDefinedBy;
-         ont:subPropertyOf :seeAlso .
+    :isDefinedBy     a daml:Property;
+         daml:samePropertyAs s:isDefinedBy;
+         daml:subPropertyOf :seeAlso .
     
-    :item     a ont:Property;
-         ont:comment """for item(L, I) read: I is an item in L; either first(L, I)
+    :item     a daml:Property;
+         daml:comment """for item(L, I) read: I is an item in L; either first(L, I)
     or item(R, I) where rest(L, R).""";
-         ont:domain :List .
+         daml:domain :List .
     
-    :label     a ont:Property;
-         ont:samePropertyAs rdfs:label .
+    :label     a daml:Property;
+         daml:samePropertyAs s:label .
     
-    :maxCardinality     a ont:Property;
-         ont:comment """for maxCardinality(P, N) read: P has maximum cardinality N; i.e.
+    :maxCardinality     a daml:Property;
+         daml:comment """for maxCardinality(P, N) read: P has maximum cardinality N; i.e.
     everything x in the domain of P has at most N things y such that P(x, y).
   """;
-         ont:domain :Property;
-         ont:label "maxCardinality" .
+         daml:domain :Property;
+         daml:label "maxCardinality" .
     
-    :minCardinality     a ont:Property;
-         ont:comment """for minCardinality(P, N) read: P has minimum cardinality N; i.e.
+    :minCardinality     a daml:Property;
+         daml:comment """for minCardinality(P, N) read: P has minimum cardinality N; i.e.
     everything x in the domain of P has at least N things y such that P(x, y).
   """;
-         ont:domain :Property .
+         daml:domain :Property .
     
-    :onProperty     a ont:Property;
-         ont:comment """for onProperty(R, P), read:
+    :onProperty     a daml:Property;
+         daml:comment """for onProperty(R, P), read:
    R is a restriction/qualification on P.""";
-         ont:domain :Qualification,
+         daml:domain :Qualification,
                 :Restriction;
-         ont:range :Property .
+         daml:range :Property .
     
-    :oneOf     a ont:Property;
-         ont:comment """for oneOf(C, L) read everything in C is one of the
+    :oneOf     a daml:Property;
+         daml:comment """for oneOf(C, L) read everything in C is one of the
      things in L;
      This lets us define classes by enumerating the members.
   """;
-         ont:domain :Class;
-         ont:range :List .
+         daml:domain :Class;
+         daml:range :List .
     
-    :qualifiedBy     a ont:Property;
-         ont:comment """for qualifiedBy(C, Q), read: C is qualified by Q; i.e. the
+    :qualifiedBy     a daml:Property;
+         daml:comment """for qualifiedBy(C, Q), read: C is qualified by Q; i.e. the
 	qualification Q applies to C;
 
         if onProperty(Q, P) and hasValue(Q, C2)
         then for every i in C, there is some V
 	so that type(V, C2) and P(i, V).
   """;
-         ont:domain :Class;
-         ont:label "qualifiedBy";
-         ont:range :Qualification .
+         daml:domain :Class;
+         daml:label "qualifiedBy";
+         daml:range :Qualification .
     
-    :range     a ont:Property;
-         ont:samePropertyAs rdfs:range .
+    :range     a daml:Property;
+         daml:samePropertyAs s:range .
     
-    :rest     a ont:Property;
-         ont:domain :List;
-         ont:range :List .
+    :rest     a daml:Property;
+         daml:domain :List;
+         daml:range :List .
     
-    :restrictedBy     a ont:Property;
-         ont:comment """for restrictedBy(C, R), read: C is restricted by R; i.e. the
+    :restrictedBy     a daml:Property;
+         daml:comment """for restrictedBy(C, R), read: C is restricted by R; i.e. the
 	restriction R applies to c;
 
         if onProperty(R, P) and toValue(R, V)
@@ -242,57 +234,60 @@ cf OIL AND""";
         if onProperty(R, P) and toClass(R, C2)
         then for every i in C and for all j, if P(i, j) then type(j, C2).
   """;
-         ont:domain :Class;
-         ont:label "restrictedBy";
-         ont:range :Restriction .
+         daml:domain :Class;
+         daml:label "restrictedBy";
+         daml:range :Restriction .
     
-    :sameClassAs     a ont:Property;
-         ont:subPropertyOf :equivalentTo,
+    :sameClassAs     a daml:Property;
+         daml:subPropertyOf :equivalentTo,
                 :subClassOf .
     
-    :samePropertyAs     a ont:Property;
-         ont:subPropertyOf :equivalentTo,
+    :samePropertyAs     a daml:Property;
+         daml:subPropertyOf :equivalentTo,
                 :subPropertyOf .
     
-    :seeAlso     a ont:Property;
-         ont:samePropertyAs rdfs:seeAlso .
+    :seeAlso     a daml:Property;
+         daml:samePropertyAs s:seeAlso .
     
-    :subClassOf     a ont:Property;
-         ont:samePropertyAs rdfs:subClassOf .
+    :subClassOf     a daml:Property;
+         daml:samePropertyAs s:subClassOf .
     
-    :subPropertyOf     a ont:Property;
-         ont:samePropertyAs rdfs:subPropertyOf;
-         ont:subPropertyOf rdfs:subPropertyOf .
+    :subPropertyOf     a daml:Property;
+         daml:samePropertyAs s:subPropertyOf;
+         daml:subPropertyOf s:subPropertyOf .
     
-    :toClass     a ont:Property;
-         ont:comment "for toClass(R, C), read: R is a restriction to C.";
-         ont:domain :Restriction;
-         ont:range :Class .
+    :toClass     a daml:Property;
+         daml:comment "for toClass(R, C), read: R is a restriction to C.";
+         daml:domain :Restriction;
+         daml:range :Class .
     
-    :toValue     a ont:Property;
-         ont:comment "for toValue(R, V), read: R is a restriction to V.";
-         ont:domain :Restriction;
-         ont:range :Class .
+    :toValue     a daml:Property;
+         daml:comment "for toValue(R, V), read: R is a restriction to V.";
+         daml:domain :Restriction;
+         daml:range :Class .
     
-    :type     a ont:Property;
-         ont:samePropertyAs rdf:type .
+    :type     a daml:Property;
+         daml:samePropertyAs rdf:type .
     
-    :unionOf     a ont:Property;
-         ont:comment """
+    :unionOf     a daml:Property;
+         daml:comment """
     for unionOf(X, Y) read: X is the union of the classes in the list Y;
     i.e. if something is in any of the classes in Y, it's in X, and vice versa.
     cf OIL OR""";
-         ont:domain :Class;
-         ont:label "unionOf";
-         ont:range :List .
+         daml:domain :Class;
+         daml:label "unionOf";
+         daml:range :List .
     
-    :value     a ont:Property;
-         ont:samePropertyAs rdf:value .
+    :value     a daml:Property;
+         daml:samePropertyAs rdf:value .
     
-    :versionInfo     a ont:Property;
-         ont:comment """generally, a string giving information about this
+    :versionInfo     a daml:Property;
+         daml:comment """generally, a string giving information about this
 	version; e.g. RCS/CVS keywords
   """;
-         ont:label "versionInfo" .
+         daml:label "versionInfo" .
     
- #ENDS
+    <daml-ont.rdf>     a daml:Ontology;
+         daml:imports <http://www.w3.org/2000/01/rdf-schema>;
+         daml:versionInfo "$Id$" .
+    

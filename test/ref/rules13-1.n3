@@ -1,13 +1,25 @@
-
-        #    using base file:/devel/WWW/2000/10/swap/test/rules13.n3
-        
-
-
-
-
-     @prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
-     @prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
+     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
      @prefix : <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    
+    this     log:forAll :p,
+                :x,
+                :y;
+         log:forSome {:p     a daml:TransitiveProperty .
+        },
+                {{
+            {
+                :x     :p :y .
+                :y     :p :z .
+                
+                }     log:implies {:x     :p :z .
+                } .
+            
+            }     a log:Truth;
+             log:forAll :x,
+                    :y,
+                    :z .
+        } .
     
     :_g0 :- {
         :p     a daml:TransitiveProperty .
@@ -71,40 +83,21 @@
         } .
     {
         {
+            :_gs2     :ancestor :_gs3 .
             :_gs3     :ancestor :_gs4 .
-            :_gs4     :ancestor :_gs5 .
             
-            }     log:implies {:_gs3     :ancestor :_gs5 .
+            }     log:implies {:_gs2     :ancestor :_gs4 .
             } .
         
-        }     a :_gs2;
-         log:forAll :_gs3,
-                :_gs4,
-                :_gs5 .
+        }     a log:Truth;
+         log:forAll :_gs2,
+                :_gs3,
+                :_gs4 .
     
     :ancestor     a daml:TransitiveProperty .
     
-    :granpa     :ancestor :pa .
+    :granpa     :ancestor :bill,
+                :pa .
     
     :pa     :ancestor :bill .
     
-    <>     log:forAll :p,
-                :x,
-                :y;
-         log:forSome {:p     a daml:TransitiveProperty .
-        },
-                {{
-            {
-                :x     :p :y .
-                :y     :p :z .
-                
-                }     log:implies {:x     :p :z .
-                } .
-            
-            }     a log:Truth;
-             log:forAll :x,
-                    :y,
-                    :z .
-        } .
-    
- #ENDS
