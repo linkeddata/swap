@@ -24,6 +24,7 @@ steps, in order left to right:
 &lt;uri>         Load document. URI may be relative to current directory.
 
 --apply=foo   Read rules from foo, apply to store, adding conclusions to store
+--patch=foo   Read patches from foo, applying insertions and deletions to store
 --filter=foo  Read rules from foo, apply to store, REPLACING store with conclusions
 --rules       Apply rules in store to store, adding conclusions to store
 --think       as -rules but continue until no more rule matches (or forever!)
@@ -93,7 +94,7 @@ u   Use \u for unicode escaping in URIs instead of utf-8 %XX
 
 Flags to control RDF/XML output (after --rdf=) areas follows:
         
-b  - Don't use nodeids for Bnodes
+b  - Don't use nodeIDs for Bnodes
 c  - Don't use elements as class names
 d  - Default namespace supressed.
 r  - Relative URI suppression. Always use absolute URIs.

@@ -34,7 +34,7 @@ and the redfoot/rdflib interface, a python RDF API:
 Copyright ()  2000-2004 World Wide Web Consortium, (Massachusetts Institute
 of Technology, European Research Consortium for Informatics and Mathematics,
 Keio University). All Rights Reserved. This work is distributed under the
-W3C® Software License [1] in the hope that it will be useful, but WITHOUT
+W3C Software License [1] in the hope that it will be useful, but WITHOUT
 ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
  FOR A PARTICULAR PURPOSE.
 """
@@ -72,6 +72,7 @@ from formula import Formula, StoredStatement
 
 from query import think, applyRules, testIncludes
 import webAccess
+from webAccess import DocumentAccessError
 
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
@@ -265,7 +266,7 @@ class IndexedFormula(Formula):
 	
 	if not isinstance(subj, Term): subj = store.intern(subj)
 	if not isinstance(pred, Term): pred = store.intern(pred)
-	if not isinstance(obj, Term): subj = store.intern(obj)
+	if not isinstance(obj, Term): obj = store.intern(obj)
 	newBindings = {}
 
 #	Smushing of things which are equal into a single node
@@ -550,15 +551,6 @@ class IndexedFormula(Formula):
 	    self._closureAgenda.append(x)
 
 
-    def n3String(self, flags=""):
-        "Dump the formula to an absolute string in N3"
-        buffer=StringIO.StringIO()
-#      _outSink = ToRDF(buffer, _outURI, flags=flags)
-        _outSink = notation3.ToN3(buffer.write,
-                                      quiet=1, flags=flags)
-        self.store.dumpNested(self, _outSink)
-        return buffer.getvalue()   # Do we need to explicitly close it or will it be GCd?
-
     def outputStrings(self, channel=None, relation=None):
         """Fetch output strings from store, sort and output
 
@@ -831,17 +823,6 @@ class BI_semanticsOrError(BI_semantics):
     
 
 
-class DocumentAccessError(IOError):
-    def __init__(self, uri, info):
-        self._uri = uri
-        self._info = info
-        
-    def __str__(self):
-        # See C:\Python16\Doc\ref\try.html or URI to that effect
-#        reason = `self._info[0]` + " with args: " + `self._info[1]`
-        reason = indentString(self._info[1].__str__())
-        return ("Unable to access document <%s>, because:\n%s" % ( self._uri, reason))
-    
 class BI_content(HeavyBuiltIn, Function):
     def evalObj(self, subj, queue, bindings, proof, query):
         store = subj.store
@@ -980,8 +961,6 @@ class RDFStore(RDFSink) :
 	self.reset(meta)
 
 
-
-
         # Constants, as interned:
         
         self.forSome = self.symbol(forSomeSym)
@@ -989,6 +968,8 @@ class RDFStore(RDFSink) :
 	self.float  = self.symbol(FLOAT_DATATYPE)
         self.forAll  = self.symbol(forAllSym)
         self.implies = self.symbol(Logic_NS + "implies")
+        self.insertion = self.symbol(Logic_NS + "insertion")
+        self.deletion  = self.symbol(Logic_NS + "deletion")
         self.means = self.symbol(Logic_NS + "means")
         self.asserts = self.symbol(Logic_NS + "asserts")
         
@@ -1145,6 +1126,8 @@ class RDFStore(RDFSink) :
 	    store._experience.add(
 		    store.intern((SYMBOL, addr)), store.semantics, F,
 		    why=BecauseOfExperience("load document"))
+	    return F
+	    
 	return webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, why)  
 
     

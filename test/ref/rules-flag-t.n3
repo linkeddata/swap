@@ -12,7 +12,7 @@
     {
         :p     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> daml:TransitiveProperty .
         
-        }     log:implies {<run#+g4>     log:forAll :x,
+        }     log:implies {<run#_g4>     log:forAll :x,
                     :y,
                     :z .
         {

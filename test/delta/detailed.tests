@@ -1,0 +1,20 @@
+# List of regression tests
+#
+#      Internationalization tests
+#
+# Note: Command lines must be for running in the directory above.
+#
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+
+
+
+
+:t001 a test:CwmTest;
+
+    test:referenceOutput <t2/smushed-regen.ref.ntriples>;
+    test:description   "Reconsitute file from patch.";
+    test:arguments     "delta/t2/from-smushed.n3 --patch=delta/t2/smushed-patch.n3 --ntriples".
+	
+#ends

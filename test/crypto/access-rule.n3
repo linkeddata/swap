@@ -69,7 +69,7 @@ this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z
 #  but here we use the web.  A credential is a document which
 #  provides evidence in support of the request.
 
-{:G acc:requestSupportedBy :k; log:includes {:G acc:forDocument :d}} log:implies {:G acc:forDocument :d}.
+{:G acc:requestSupportedBy :k; log:includes {[] acc:forDocument :d}} log:implies {:G acc:forDocument :d}.
 
 {:G acc:requestSupportedBy :k; log:includes {:G acc:credential :d}} log:implies {:G acc:credential :d}.
 

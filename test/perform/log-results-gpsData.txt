@@ -1,11 +1,42 @@
+This is what started a test/perform area:
+the crazy time to load a graoph with a lot of bnodes.
+
 $ time cwm prefixes.n3 gpsData.n3 > gpsData2.n3 
 
 real    24m34.350s
 user    11m9.210s
 sys     0m4.870s
-$ cp gpsData.n3 $SWAP/test/perform
+
 $ date
 Fri Feb 13 08:12:58 EST 2004
 $ cwm --revision
    cwm= $Revision$ llyn= $Revision$ 
 $ 
+______________________
+$ time cwm --chatty=20 gpsData.n3 > /dev/null
+    Recieved Content-type: 'text/plain' for file:/devel/WWW/2000/10/swap/test/perform/gpsData.n3 
+    Given Content-type: 'application/n3' for file:/devel/WWW/2000/10/swap/test/perform/gpsData.n3 
+   Begining output. 
+
+real    5m21.257s
+user    4m7.680s
+sys     0m1.640s
+
+$ cwm --revision
+   cwm= $Revision$ llyn= $Revision$ 
+$ 
+Onlby parsing:
+$ time cwm --chatty=20 gpsData.n3 --no       
+    Recieved Content-type: 'text/plain' for file:/devel/WWW/2000/10/swap/test/perform/gpsData.n3 
+    Given Content-type: 'application/n3' for file:/devel/WWW/2000/10/swap/test/perform/gpsData.n3 
+   Begining output. 
+
+real    0m12.081s
+user    0m9.310s
+sys     0m0.370s
+$date
+Sat Mar  6 23:01:21 EST 2004
+
+
+________________________________________
+

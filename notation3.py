@@ -496,7 +496,8 @@ class SinkParser:
 	"""Remember or generate a term for one of these _: anonymous nodes"""
 	term = self._anonymousNodes.get(ln, None)
 	if term != None: return term
-	term = self._store.newExistential(self._context, self._genPrefix + ln, why=self._reason2)
+	term = self._store.newBlankNode(self._context, why=self._reason2)
+#	term = self._store.newExistential(self._context, self._genPrefix + ln, why=self._reason2)
 	self._anonymousNodes[ln] = term
 	return term
 
@@ -1141,7 +1142,8 @@ u   Use \u for unicode escaping in URIs instead of utf-8 %XX
 #	self.genPrefix = genPrefix  # Prefix for generated URIs on output
 	self.stack = [ 0 ]      # List mode?
 	self.noLists = noLists  # Suppress generation of lists?
-	self._anonymousNodes = [] # For "a" flag
+	self._anodeName = {} # For "a" flag
+	self._anodeId = {} # For "a" flag - reverse mapping
 
         if "l" in self._flags: self.noLists = 1
 	
@@ -1225,7 +1227,21 @@ u   Use \u for unicode escaping in URIs instead of utf-8 %XX
         if ("a" in self._flags and
             triple[PRED] == (SYMBOL, N3_forSome_URI) and
             triple[CONTEXT] == triple[SUBJ]):   # We assume the output is flat @@@
-            self._anonymousNodes.append(triple[OBJ])
+	    ty, value = triple[OBJ]
+	    i = len(value)
+	    while i > 0 and value[i-1] not in _notNameChars+"_": i = i - 1
+	    str2 = value[i:]
+	    if self._anodeName.get(str2, None) != None:
+		j = 1
+		while 1:
+		    str3 = str2 + `j`
+		    if self._anodeName.get(str3, None) == None: break
+		    j = j +1
+		str2 = str3
+	    if str2[0] in "0123456789": str2 = "a"+str2
+	    if diag.chatty_flag > 60: progress("Anode %s  means %s" % (str2, value)) 
+	    self._anodeName[str2] = value
+	    self._anodeId[value] = str2
             return
 
         self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])        
@@ -1427,18 +1443,9 @@ u   Use \u for unicode escaping in URIs instead of utf-8 %XX
 	    if dt != None: return str + "^^" + self.representationOf(context, dt.asPair())
 	    return str
 
-        if pair in self._anonymousNodes:   # "a" flags only
-            i = value.find(self._genPrefix + "g")  # One of our conversions?
-            if i >= 0:
-                str = value[i+len(self._genPrefix)+1:]
-            else:
-                if verbosity()>10: progress("#@@@@@ Ooops ---  anon "+
-		    value+"\n with genPrefix "+self._genPrefix+"\n")
-                i = len(value)
-                while i > 0 and value[i-1] not in _notNameChars: i = i - 1
-                str = value[i:]
-	    while str.startswith("_"): str = str[1:] # Strip that leading "_" which ntriples doesn't allow
-            return "_:a" + str    # Must start with alpha as per NTriples spec.
+	aid = self._anodeId.get(pair[1], None)
+	if aid != None:  # "a" flag only
+            return "_:" + aid    # Must start with alpha as per NTriples spec.
 
         if ((ty == ANONYMOUS)
             and not option_noregen and "i" not in self._flags ):

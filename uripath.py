@@ -103,7 +103,7 @@ def join(here, there):
         return there
 
     bcolonl = find(here, ':')
-    assert(bcolonl >= 0) # else it's not absolute
+    assert(bcolonl >= 0), "Base uri '%s' is not absolute" % here # else it's not absolute
 
     # join('mid:foo@example', '../foo') bzzt
     if here[bcolonl+1:bcolonl+2] <> '/':
@@ -389,7 +389,13 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.15  2004-01-28 22:22:10  connolly
+# Revision 1.16  2004-03-21 04:24:35  timbl
+# (See doc/changes.html)
+# on xml output, nodeID was incorrectly spelled.
+# update.py provides cwm's --patch option.
+# diff.py as independent progrem generates patch files for cwm --patch
+#
+# Revision 1.15  2004/01/28 22:22:10  connolly
 # tested that IRIs work in uripath.join()
 #
 # Revision 1.14  2003/10/20 17:31:55  timbl

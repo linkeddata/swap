@@ -162,11 +162,11 @@ def compareCanonicalGraphs(g1, g2):
     while 1:
 	if i1 == len(g1):
 	    inserted = inserted + g2[i2:]
-	    if verbose: stderr.write("All other %i triples were inserted." % (len(g2)-i2))
+	    if verbose: stderr.write("All other %i triples were inserted.\n" % (len(g2)-i2))
 	    break
 	if i2 == len(g2):
 	    deleted = deleted + g1[i1:]
-	    if verbose: stderr.write("All other %i triples were deleted." % (len(g1)-i1))
+	    if verbose: stderr.write("All other %i triples were deleted.\n" % (len(g1)-i1))
 	    break
 	d = cmp(g1[i1], g2[i2]) # 1-2
 	if d==0:
@@ -185,7 +185,11 @@ def compareCanonicalGraphs(g1, g2):
 	print "- %s %s %s." % triple
     for triple in inserted:
 	print "+ %s %s %s." % triple
-    return len(deleted) + len(inserted)
+    number = len(deleted) + len(inserted)
+    if verbose:
+	if number == 0: stderr.write("FILES MATCH.\n")
+	else: stderr.write("FILES DIFFER.  (%i statements by our count)\n"% number)
+    return number
 
 def canonicalize(g):
     "Do our best with this algo"

@@ -1,12 +1,15 @@
 #! /usr/bin/python
 """
-Find differences between two RDF graphs
+Find differences between two RDF graphs, using
+functional and inverse functional properties to identify parts bnodes
+in the patch file.
 
--f uri     from-file
--d uri     file against which to check fro differences
--h         print this help message
--v         verbose mode 
+--from    -f uri     from-file
+--to      -t uri     file against which to check for differences
+--help    -h         print this help message
+--verbose -v         verbose mode 
 
+If from-file but not to-file is given, from-file is smushed and output
 Uris are relative to present working directory.
 $Id$
 http://www.w3.org/2000/10/swap/diff.py
@@ -31,7 +34,7 @@ import notation3    	# N3 parsers and generators
 
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, Logic_NS
 import uripath
-from uripath import join
+from uripath import base
 from myStore import  Namespace
 import myStore
 from notation3 import RDF_NS_URI
@@ -41,65 +44,6 @@ from llyn import Formula, CONTEXT, PRED, SUBJ, OBJ
 OWL = Namespace("http://www.w3.org/2002/07/owl#")
 RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 LOG = Namespace("http://www.w3.org/2000/10/swap/log#")
-def tryNode(x, f, already=[]):
-    """The nailing of a term x within a graph f is the set s of statements
-    taken from f such that when one is given s, one can uniquely determine the identity of x.
-    
-    returns EITHER a sequence of possible branches. A possible branch give sthe statement
-	    by which, if the otherend was nailed, x would be.
-	OR a statement which nails x 
-	or None - impossible, sorry.
-    Possible future enhancements:  Multi-field keys -- connects to multi-property functions.
-    """
-    if not x.generated():
-	return []
-    possible = []
-    ss = f.statementsMatching(subj=x)
-    for t in ss:
-	if meta.contains(subj=t[PRED], pred=rdf.type, obj=owl.InverseFunctionalProperty):
-	    y = t[OBJ]
-	    if not y.generated(): return t # success
-	    if y not in already:
-		possible.append((OBJ, t, None)) # Could nail it by this branch
-    ss = f.statementsMatching(obj=x)
-    for t in ss:
-	if meta.contains(subj=t[PRED], pred=rdf.type, obj=owl.FunctionalProperty):
-	    y = t[SUBJ]
-	    if not y.generated(): return t
-	    if y not in already:
-		possible.append((SUBJ, t, None)) # Could nail it by this branch
-    if possible == []: return None # Failed to nail it
-    return possible
-
-def tryPossibles(node, f, tree, already=[]):
-    """ The tree is a list of branches, each branch being (direction, statement and subtree).
-    If subtree is None, the tree has not been elaborated.
-    A tree element is a statement and another list, or s statement and unnailed node.
-    Returns a path of statements, or None if no path, or 1 if tree just elaborated.
-    """
-    for i in range(len(tree)):
-	dirn, statement, node = tree[i]
-	if node == None: # Not elaborated yet? 
-	    x = statement[dirn] # far end of link
-	    if not x.generated():
-		return [ statement ]   # Success!
-	    branch = tryNode(x, f, already)
-	    if branch == None:
-		pass
-	    elif type(branch) == type([]):
-		tree2.append((dir, statement, branch))
-	    else:
-		return [statement, branch]
-	else:
-	    branch = tryPossibles(statement[dirn], f, node, already + [ statement[dirn] ])
-	    if branch == None:
-		pass
-	    elif branch == 1:
-		tree2.append((dirn, statement, node))
-	    else:
-		branch.append(statement)
-		return branch
-    return 1
 
 
 def lookUp(predicates):
@@ -110,8 +54,10 @@ def lookUp(predicates):
 	if verbose: progress("Predicate: %s" % `pred`)
 	u = pred.uriref()
 	hash = u.find("#")
-	if hash <0: progress("Warning: Predicate <%s> looks like web resource not Property" % u)
-	else: schemas.add(u[:hash])
+	if hash <0:
+	    if verbose: progress("Warning: Predicate <%s> looks like web resource not Property" % u)
+	else:
+	    schemas.add(u[:hash])
     if verbose:
 	for r in schemas:
 	    progress("Schema: ", r) 
@@ -129,7 +75,7 @@ def nailFormula(f):
     sofar = {}
     bnodes = Set()
     for node in nodes:
-	if node.generated():
+	if node.generated() or node in f.existentials():
 	    bnodes.add(node)
 	    if verbose: progress("Blank node: %s" % `node`)
 	else:
@@ -163,7 +109,7 @@ def nailFormula(f):
 		    if not x.generated(): continue  # Only anchor bnodes
 		    if y not in loose:  # y is the possible anchor
 			defi = (x, inverse, pred, y)
-			progress("   Defi is ", defi)
+			if verbose: progress("   Defi is ", defi)
 			if x in loose:   # this node
 			    if verbose: progress("Nailed %s as %s%s%s" % (x, y, char, pred))
 			    loose.discard(x)
@@ -171,24 +117,23 @@ def nailFormula(f):
 			else:
 			    if verbose: progress("Re-Nailed %s as %s%s%s" % (x, y, char, pred))
 			definitions.append(defi)
-#			progress("   Definition[x] is now", definition[x])
+#			if verbose: progress("   Definition[x] is now", definition[x])
 			if inverse: equivalentSet = Set(f.each(obj=y, pred=pred))
 			else: equivalentSet = Set(f.each(subj=y, pred=pred))
 			if len(equivalentSet) > 1: equivs.add(equivalentSet)
 
 	if not newNailed:
-	    progress("Failed for", loose)
-	    break
-    progress("Graph 1 is solid.")
+	    if verbose: progress("Failed for", loose)
+	    raise ValueError("Graph insufficiently labelled for nodes: %s" % loose)
+    if verbose: progress("Graph is solid.")
     f.reopen()
     for es in equivs:
-	progress("Equivalent: ", es)
+	if verbose: progress("Equivalent: ", es)
 	prev = None
 	for x in es:
 	    if prev:
 		f.add(x, OWL.sameAs, prev)
 	    prev = x
-#    f = f.close()
     return bnodes, definitions
 
 def removeCommon(f, g, match):
@@ -205,22 +150,21 @@ def removeCommon(f, g, match):
 	else: og = o
 	gsts = g.statementsMatching(subj=sg, pred=p, obj=og)
 	if len(gsts) == 1:
-	    progress("Statement in both", st)
+	    if verbose: progress("Statement in both", st)
 	    common_g.add(gsts[0])
 	else:
 	    only_f.add(st)
-    progress("Common parts removed, leaves %i in f and %i in g" %(len(f), len(g)))
     return only_f, Set(g.statements)-common_g
 
 def patches(delta, f, only_f, originalBnodes, definitions, deleting=0):
     """Generate patches in patch formula, for the remaining statements in f
-    giveb the bnodes and definitions for f."""
+    given the bnodes and definitions for f."""
     todo = only_f.copy()
     if deleting:
-	patchVerb = LOG.deletes
+	patchVerb = LOG.deletion
     else:
-	patchVerb = LOG.inserts
-    progress("Patch:", patchVerb)
+	patchVerb = LOG.insertion
+    if verbose: progress("Patch:", patchVerb)
     while todo:
 
 	# find a contiguous subgraph defined in the given graph
@@ -231,14 +175,14 @@ def patches(delta, f, only_f, originalBnodes, definitions, deleting=0):
 	newStatements = Set()
 	for seed in todo: break # pick one #@2 fn?
 	statementsToDo = Set([seed])
-	progress("Seed:", seed)
+	if verbose: progress("Seed:", seed)
 	subgraph = statementsToDo
 	while statementsToDo or bnodesToDo:
 	    for st in statementsToDo:
 		s, p, o = st.spo()
 		for x in s, p, o:
 		    if x.generated() and x not in bnodes: # and x not in commonBnodes:
-			progress("   Bnode ", x)
+			if verbose: progress("   Bnode ", x)
 			bnodesToDo.add(x)
 			bnodes.add(x)
 		rhs.add(s, p, o)
@@ -251,12 +195,12 @@ def patches(delta, f, only_f, originalBnodes, definitions, deleting=0):
 		for z in ss:
 		    if z in only_f:
 			newStatements.add(z)
-		progress("    New statements from %s: %s" % (x, newStatements))
+		if verbose: progress("    New statements from %s: %s" % (x, newStatements))
 		statementsToDo = statementsToDo | newStatements
 		subgraph = subgraph |newStatements
 	    bnodesToDo = Set()
 
-	progress("Subgraph of %i statements:\n\t%s\n" %(len(subgraph), subgraph))
+	if verbose: progress("Subgraph of %i statements:\n\t%s\n" %(len(subgraph), subgraph))
 	todo = todo - subgraph
 	
 	
@@ -296,16 +240,16 @@ def differences(f, g):
 	if x in match: continue # done already
 #       for x in bnodes:
 	if x in f._redirections:
-	    progress("Redirected %s to %s. Ignoring" % (x, f._redirections[x]))
+	    if verbose: progress("Redirected %s to %s. Ignoring" % (x, f._redirections[x]))
 	    unmatched.discard(x)
 	    continue
 
-	progress("Definition %s = inverse:%i pred=%s y=%s", (x, inverse, pred, y))
+	if verbose: progress("Definition %s = inverse:%i pred=%s y=%s", (x, inverse, pred, y))
 
 	if y.generated():
 	    yg = match.get(y, None)
 	    if yg == None:
-		progress("Had definition for %s in terms of %s which is not matched"%(x,y))
+		if verbose: progress("Had definition for %s in terms of %s which is not matched"%(x,y))
 		continue
 	else:
 	    yg = y
@@ -322,18 +266,20 @@ def differences(f, g):
 	    break
 	if verbose:
 	    progress("Found match for %s in %s " % (x,z))
-	    match[x] = z
+	match[x] = z
 	unmatched.discard(x)
 
     if len(unmatched) > 0:
-	progress("Failed to match all nodes")
-	raise RuntimError("bnode match by canonicalization not implemented yet")
+	if verbose: progress("Failed to match all nodes")
+	raise RuntimeError(
+	    "bnode match by canonicalization not implemented yet. Failed to match:",
+	    unmatched)
 
     # Find common parts
     only_f, only_g = removeCommon(f,g, match)
 
     delta = f.newFormula()
-    if len(f) == 0 and len(g) == 0:
+    if len(only_f) == 0 and len(only_g) == 0:
 	return delta
 
     f = f.close()    #  We are not going to mess with them any more
@@ -341,19 +287,14 @@ def differences(f, g):
     
     definitions.reverse()  # go back down list
 
-#    progress("f left:- %s\ng left:- %s\n" % (f.n3String(), g.n3String()))
-    # Find contiguous bits to express as differences:
-
     common = Set([match[x] for x in match])
-#    common = common & g_bnodes
-    progress("Comon nodes (in g)", common)
+
+    if verbose: progress("Comon nodes (in g)", common)
     patches(delta, f, only_f, Set(), definitions, deleting=1)
     patches(delta, g, only_g, common, g_definitions, deleting=0)
     
-
-#@@@@
     return delta
-#    print f.n3String()
+
 	
      
 def getParts(f, meta=None):
@@ -385,8 +326,8 @@ def main():
     global verbose
     verbose = 0
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hf:d:iv",
-	    ["help", "from=", "diff=" "ignoreErrors", "verbose"])
+        opts, args = getopt.getopt(sys.argv[1:], "hf:t:v",
+	    ["help", "from=", "to=", "verbose"])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
@@ -398,29 +339,31 @@ def main():
             sys.exit()
         if o in ("-v", "--verbose"):
 	    verbose = 1
-        if o in ("-i", "--ignoreErrors"):
-	    ploughOn = 1
 	if o in ("-f", "--from"):
 	    testFiles.append(a)
-	if o in ("-d", "--diff"):
+	if o in ("-t", "--to"):
 	    diffFiles.append(a)
 
     
 
 #    if testFiles == []: testFiles = [ "/dev/stdin" ]
-    if testFiles == [] or diffFiles == []:
+    if testFiles == []:
 	usage()
 	sys.exit(2)
     graph = loadFiles(testFiles)
+    version = "$Id$"[1:-1]
+    if diffFiles == []:
+	nailFormula(graph)
+	if verbose: print "# Smush by " + version
+	print graph.close().n3String(base=base(), flags="a")
+	sys.exit(0)
+	
     graph2 = loadFiles(diffFiles)
-#    nailFormula(graph2)    # Smush equal nodes in g 
     delta = differences(graph, graph2)
-    if verbose: print "# Defferences by $Id$"
-    print delta.close().n3String("i")
+    if verbose: print "# Differences by " + version
+    print delta.close().n3String(base=base())
     sys.exit(len(delta))
     
-
-
 	
 		
 if __name__ == "__main__":

@@ -108,28 +108,23 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 
     _valChars = string.lowercase + string.uppercase + string.digits + "_ !#$%&().,+*/"
     #@ Not actually complete, and can encode anyway
-    def __init__(self, outFp, thisURI, base=None, flags=""):
+    def __init__(self, outFp, thisURI=None, base=None, flags=""):
         RDFSink.RDFSink.__init__(self)
 	if outFp == None:
 	    self._xwr = XMLWriter(dummyWrite, self)
 	else:
 	    dummyEnc, dummyDec, dummyReader, encWriter = codecs.lookup('utf-8')
 	    z = encWriter(outFp)
-    #	z = encWriter(sys.stdout)
-    #	progress("&&&& Instance of encWriter is", z)
 	    zw = z.write
-    #	progress("&&&& writer of encWriter is", zw)
-    #	zw(u"This \u00BE was sent to zw")
 	    self._xwr = XMLWriter(zw, self)
-    #	progress("&&&& _xwr, and XMLWriter,  is", self._xwr)
 	self._subj = None
 	self._base = base
 	self._formula = None   # Where do we get this from? The outermost formula
 	if base == None: self._base = thisURI
 	self._thisDoc = thisURI
 	self._flags = flags
-	self._nodeId = {}
-	self._nextNodeId = 0
+	self._nodeID = {}
+	self._nextnodeID = 0
 	self._docOpen = 0  # Delay doc open <rdf:RDF .. till after binds
 
     #@@I18N
@@ -143,10 +138,13 @@ class ToRDF(RDFSink.RDFStructuredOutput):
         pass
 
     flagDocumentation = """
-        Flags to control RDF/XML output (after --rdf=) areas follows:
+Flags to control RDF/XML output (after --rdf=) areas follows:
         
-        c  - Don't use elements as class names
-        d  - Don't use default namespace
+b  - Don't use nodeIDs for Bnodes
+c  - Don't use elements as class names
+d  - Default namespace supressed.
+r  - Relative URI suppression. Always use absolute URIs.
+z  - Allow relative URIs for namespaces
 
 """
 
@@ -160,6 +158,12 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 
     def makeComment(self, str):
         self._xwr.makeComment(str)
+
+    def referenceTo(self, uri):
+	"Conditional relative URI"
+	if "r" in self._flags or self._base == None:
+	    return uri
+	return refTo(self._base, uri)
 
     def flushStart(self):
         if not self._docOpen:
@@ -175,13 +179,13 @@ class ToRDF(RDFSink.RDFStructuredOutput):
             if self.defaultNamespace and "d" not in self._flags:
 		if "z" in self._flags:
 		    ats.append(('xmlns',
-			refTo(self._base,self.defaultNamespace)))
+			self.referenceTo(self.defaultNamespace)))
 		else:
 		    ats.append(('xmlns',self.defaultNamespace))
             for pfx in ps:
 		nsvalue = self.namespaces[pfx]
 		if "z" in self._flags:
-		    nsvalue = refTo(self._base, nsvalue)
+		    nsvalue = self.referenceTo( nsvalue)
 		ats.append(('xmlns:'+pfx, nsvalue))
 
             self._xwr.startElement(RDF_NS_URI+'RDF', ats, self.prefixes)
@@ -197,12 +201,11 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 		progress("Ignoring universal quantification of ", obj)
 		return
 	    elif pred == (SYMBOL, N3_forSome_URI):
-		nid = self._nodeId.get(obj, None)
-		if nid == None:
-		    self._nextNodeId += 1
-		    nid = 'b'+`self._nextNodeId`
-		    self._nodeId[obj] = nid
-		progress("Noting existential quantification of %s as nodeid %s "%(obj, nid))
+		nid = self._nodeID.get(obj, None)
+		if nid == None and not("b" in self._flags):
+		    self._nextnodeID += 1
+		    nid = 'b'+`self._nextnodeID`
+		    self._nodeID[obj] = nid
 		return
 	    
 	if subj[0] not in (SYMBOL, ANONYMOUS, LITERAL):
@@ -212,8 +215,8 @@ class ToRDF(RDFSink.RDFStructuredOutput):
         self.flushStart()
 	if self._formula == None:
 	    self._formula = context   # Asssume first statement is in outermost context @@
-	predn = refTo(self._base, pred[1])
-	subjn = refTo(self._base, subj[1])
+	predn = self.referenceTo( pred[1])
+	subjn = self.referenceTo( subj[1])
 
 	if self._subj != subj:
 	    if self._subj:
@@ -225,13 +228,13 @@ class ToRDF(RDFSink.RDFStructuredOutput):
                  self._xwr.startElement(obj[1], [(RDF_NS_URI+" about", subjn),], self.prefixes)
                  return
 	    if subj[0] == SYMBOL or subj[0] == ANONYMOUS:
-		nid = self._nodeId.get(subj, None)
+		nid = self._nodeID.get(subj, None)
 		if nid == None:
 		    self._xwr.startElement(RDF_NS_URI+'Description',
 					[(RDF_NS_URI+" about", subjn),], self.prefixes)
 		else:
 		    self._xwr.startElement(RDF_NS_URI+'Description',
-					[(RDF_NS_URI+" nodeid", nid),], self.prefixes)
+					[(RDF_NS_URI+" nodeID", nid),], self.prefixes)
 	    elif subj[0] == LITERAL:
 		v = subj[1]
 		attrs = []  # Literal
@@ -247,12 +250,12 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 	    else:
 		raise RuntimeError("Unexpected subject", `subj`)
 	if obj[0] != LITERAL:
-	    nid = self._nodeId.get(obj, None)
+	    nid = self._nodeID.get(obj, None)
 	    if nid == None:
-		objn = refTo(self._base, obj[1])
+		objn = self.referenceTo( obj[1])
 		self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' resource', objn)], self.prefixes)
 	    else:
-		self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' nodeid', nid)], self.prefixes)		
+		self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' nodeID', nid)], self.prefixes)		
 	    return
 	attrs = []  # Literal
 	v = obj[1]
@@ -273,14 +276,14 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 	if self._subj != subj:
 	    if self._subj:
 		self._xwr.endElement()
-	    nid = self._nodeId.get(subj, None)
+	    nid = self._nodeID.get(subj, None)
 	    if nid == None:
-		subjn = refTo(self._base, subj[1])
+		subjn = self.referenceTo( subj[1])
 		self._xwr.startElement(RDF_NS_URI + 'Description',
 				    ((RDF_NS_URI+' about', subjn),), self.prefixes)
 	    else:
 		self._xwr.startElement(RDF_NS_URI + 'Description',
-				    ((RDF_NS_URI+' nodeid', nid),), self.prefixes)
+				    ((RDF_NS_URI+' nodeID', nid),), self.prefixes)
 	    self._subj = subj
 
         self._xwr.startElement(pred[1], [(RDF_NS_URI+' parseType','Resource')], self.prefixes)  # @@? Parsetype RDF
@@ -337,15 +340,15 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 	if self._subj != subj:
 	    if self._subj:
 		self._xwr.endElement()
-	    nid = self._nodeId.get(subj, None)
+	    nid = self._nodeID.get(subj, None)
 	    if nid == None:
-		progress("@@@@@@Start anonymous node but not nodeid?", subj)
-		subjn = refTo(self._base, subj[1])
+		progress("@@@@@@Start anonymous node but not nodeID?", subj)
+		subjn = self.referenceTo( subj[1])
 		self._xwr.startElement(RDF_NS_URI + 'Description',
 				    ((RDF_NS_URI+' about', subjn),), self.prefixes)
 	    else:
 		self._xwr.startElement(RDF_NS_URI + 'Description',
-				    ((RDF_NS_URI+' nodeid', nid),), self.prefixes)
+				    ((RDF_NS_URI+' nodeID', nid),), self.prefixes)
 	    self._subj = subj
 
 #        log_quote = self.prefixes[(SYMBOL, Logic_NS)] + ":Quote"  # Qname yuk

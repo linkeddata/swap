@@ -82,10 +82,6 @@ class InferenceTask:
     
 	A rule here is defined by log:implies, which associates the template (premise, precondidtion,
 	antecedent) to the conclusion (postcondition).
-        
-	To verify that for all x, f(s) one can either find that asserted explicitly,
-	or find an example for some specific value of x.  Here, we deliberately
-	chose only to do the first.
 	"""
 	
 	if diag.chatty_flag >20:
@@ -96,7 +92,8 @@ class InferenceTask:
 	self.ruleFor = {}
 	self.hasMetaRule = 0
 
-	self.workingContext, self.targetContext, self.mode, self.repeat = workingContext, targetContext, mode, repeat
+	self.workingContext, self.targetContext, self.mode, self.repeat = \
+	    workingContext, targetContext, mode, repeat
 	self.store = self.workingContext.store
 
     def runSmart(self):
@@ -330,10 +327,12 @@ class CyclicSetOfRules:
 nextRule = 0
 class Rule:
 
-    def __init__(self, task, statement, _variables,):
+    def __init__(self, task, statement, _variables):
 	"""Try a rule
 	
 	Beware lists are corrupted. Already list is updated if present.
+	The idea is that, for a rule which may be tried many times, the constant 
+	processing is done in this rather than in Query().
 	"""
 	global nextRule
 	self.task = task
@@ -442,7 +441,7 @@ def testIncludes(f, g, _variables=[],  bindings={}):
     if g.universals() != []:
 	raise RuntimeError("""Cannot query for universally quantified things.
 	As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
-	This/these were: %s\n""" % x)
+	This/these were: %s\n""" % g.universals())
 
     if bindings != {}: _substitute(bindings, unmatched)
 
@@ -507,7 +506,7 @@ class Query:
 	       rule = None,		    # The rule statement
                smartIn = [],        # List of contexts in which to use builtins
                justOne = 0,         # Flag: Stop when you find the first one
-	       mode = "rs",	    # Character flags modifying modus operandi
+	       mode = "",	    # Character flags modifying modus operandi
 	    meta = None):	    # Context to check for useful info eg remote stuff
 
         
@@ -845,8 +844,7 @@ class Query:
         if diag.chatty_flag > 10: progress("====> bindings from remote query:"+`nbs`)
 	return nbs   # No bindings for testing
 
-
-
+	     
 class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logical...
     """One line in a query being resolved.
     
@@ -1042,7 +1040,6 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                 progress( "Searching (S=%i) %i for %s" %(self.state, self.short, `self`))
             for s in self.myIndex :  # for everything matching what we know,
                 nb = {}
-                reject = 0
 		if diag.chatty_flag > 106: progress("...checking %r" % s)
                 for p in PRED, SUBJ, OBJ:
                     if self.searchPattern[p] == None: # Need to check
@@ -1067,7 +1064,6 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 				    if oldbinding[1] is binding[1]:
 					del nb1[binding[0]] # duplicate  
 				    else: # don't bind same to var to 2 things!
-					reject = 1
 					break # reject
 			else:
 			    nb.update(nb1)

@@ -354,7 +354,7 @@ class AnonymousNode(Node):
 
     def uriref(self):
 	if self._diagnosticURI: return self._diagnosticURI
-	return runNamespace() + "+g" + `self.serial`
+	return runNamespace() + "_g" + `self.serial`
 #	return runNamespace() + "_b" + `id(self)`
 	
     def generated(self):
@@ -656,6 +656,9 @@ class Literal(Term):
 
     def __int__(self):
 	return int(self.string)
+
+    def __float__(self):
+	return float(self.string)
 
     def occurringIn(self, vars):
 	return []

@@ -8,7 +8,7 @@
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 
     <rdf:Description rdf:about="file:/devel/WWW/2000/10/swap/test/norm/av.n3">
-        <digraph rdf:nodeid="b1"/>
+        <digraph rdf:nodeID="b1"/>
     </rdf:Description>
 
     <rdfs:Class rdf:about="http://example.com/AV#AV">
@@ -99,12 +99,12 @@
         <shape>box</shape>
     </AV:AV>
 
-    <rdf:Description rdf:nodeid="b1">
+    <rdf:Description rdf:nodeID="b1">
         <label>AV Diagram</label>
-        <subgraph rdf:nodeid="b2"/>
+        <subgraph rdf:nodeID="b2"/>
     </rdf:Description>
 
-    <rdf:Description rdf:nodeid="b2">
+    <rdf:Description rdf:nodeID="b2">
         <hasEdgeProperty rdf:resource="http://example.com/AV#dottedEdge"/>
         <hasEdgeProperty rdf:resource="http://example.com/AV#solidEdge"/>
         <hasNode rdf:resource="http://example.com/AV#ab"/>

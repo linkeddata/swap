@@ -458,14 +458,20 @@ class Formula(AnonymousNode, CompoundTerm):
 	return F
 
 
-    def n3String(self, flags=""):
+    def n3String(self, base=None, flags=""):
         "Dump the formula to an absolute string in N3"
         buffer=StringIO.StringIO()
-#      _outSink = ToRDF(buffer, _outURI, flags=flags)
         _outSink = notation3.ToN3(buffer.write,
-                                      quiet=1, flags=flags)
+                                      quiet=1, base=base, flags=flags)
         self.store.dumpNested(self, _outSink)
-        return buffer.getvalue()   # Do we need to explicitly close it or will it be GCd?
+        return buffer.getvalue()
+
+    def rdfString(self, base=None, flags=""):
+        "Dump the formula to an absolute string in RDF/XML"
+        buffer=StringIO.StringIO()
+        _outSink = ToRDF(buffer, _outURI, base=base, flags=flags)
+        self.store.dumpNested(self, _outSink)
+        return buffer.getvalue()
 
     def outputStrings(self, channel=None, relation=None):
         """Fetch output strings from store, sort and output

@@ -1,7 +1,5 @@
      @prefix : <#> .
     
-    this     <http://www.w3.org/2000/10/swap/log#forSome> :_gbnode1 .
-    
     "86%"     :is :TooDamp .
     
     34     :is :TooHot .

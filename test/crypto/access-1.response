@@ -1,16 +1,28 @@
-#Processed by Id: cwm.py,v 1.128 2003/04/02 03:42:04 timbl Exp 
+#Processed by Id: cwm.py,v 1.146 2004/03/06 20:39:37 timbl Exp 
         #    using base file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3
         
 #  Notation3 generation by
-#       notation3.py,v 1.136 2003/04/02 03:42:05 timbl Exp
+#       notation3.py,v 1.152 2004/03/06 20:39:38 timbl Exp
 
 #   Base was: file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3
-     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
-     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix : <#> .
+     @prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
-     @prefix root: <#> .
-     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     log:forAll :F,
+                :G,
+                :d,
+                :k,
+                :k2,
+                :k3,
+                :kp,
+                :q,
+                :request,
+                :sig,
+                :str,
+                :x,
+                :y,
+                :z .
     
     """
 MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
@@ -19,60 +31,18 @@ ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
 NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
 NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
 MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
-"""     a :MasterKey .
+"""     a acc:MasterKey .
     
-    <>     root:description <http://www.w3.org/2002/Talks/04-sweb/slide22-1.html> .
+    <>     :description <http://www.w3.org/2002/Talks/04-sweb/slide22-1.html> .
     {
-        """
-MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
-NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
-NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
-Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
-MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
-OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
-"""     a :RequestKey;
-             :authorityName "Tiina";
-             :junk "327462sjsdfjsakdhfkjsafd32164321" .
         
-        }     :certSupportedBy """
-ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
-NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
-OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
-MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
-OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
-NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
-""" .
-    {
-        """
-ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
-NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
-OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
-MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
-OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
-NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
-"""     a :MemberKey;
-             :authorityName "Elisa";
-             :junk "327462sjsdfjsakdhfkjsafd32164321" .
+          [      acc:credential <access-elisa.cert>,
+                        <access-tiina.cert>;
+                 acc:forDocument <http://www.w3.org/Member>;
+                 acc:junk "32746213462187364732164732164321" ].
         
-        }     :certSupportedBy """
-MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
-MTAzMTYwODQxNjk4MjI4NTMyMjMxMDY5MjQ3NzI0NzMzMzc0MjYxMDQxMDc0MDA1MzkzNzgyMjc2
-ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
-NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
-NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
-MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
-""" .
-    {
-        this     :credential <access-elisa.cert>,
-                    <access-tiina.cert>;
-             :forDocument <http://www.w3.org/Member>;
-             :junk "32746213462187364732164732164321" .
-        
-        }     a :GoodRequest;
-         :credential <access-elisa.cert>,
-                <access-tiina.cert>;
-         :forDocument <http://www.w3.org/Member>;
-         :requestSupportedBy """
+        }     acc:forDocument <http://www.w3.org/Member>;
+         acc:requestSupportedBy """
 MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
 NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
 NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2

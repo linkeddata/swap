@@ -23,7 +23,13 @@ History:
     Spilt off from  thing.py 2003-08-19
 
 $Log$
-Revision 1.6  2004-03-09 23:55:50  connolly
+Revision 1.7  2004-03-21 04:24:35  timbl
+(See doc/changes.html)
+on xml output, nodeID was incorrectly spelled.
+update.py provides cwm's --patch option.
+diff.py as independent progrem generates patch files for cwm --patch
+
+Revision 1.6  2004/03/09 23:55:50  connolly
 updated load to track change in llyn
 
 Revision 1.5  2004/03/06 20:39:38  timbl
@@ -128,7 +134,7 @@ def universal(str, context, uri):
     formula as context, and return it for future use"""
     return _checkStore().newUniversal(context, uri)
 
-def load(uri=None, contentType=None, formulaURI=None, remember=1):
+def load(uri=None, openFormula=None, contentType=None, remember=1):
     """Get and parse document.  Guesses format if necessary.
 
     uri:      if None, load from standard input.
@@ -137,8 +143,8 @@ def load(uri=None, contentType=None, formulaURI=None, remember=1):
     Returns:  top-level formula of the parsed document.
     Raises:   IOError, SyntaxError, DocumentError
     """
-    return _checkStore().load(uri, contentType=contentType,
-                              asIfFrom=formulaURI, remember=remember)
+    return _checkStore().load(uri, openFormula=openFormula, contentType=contentType,
+			remember=remember)
 
 def loadMany(uris, openFormula=None):
     """Load a number of resources into the same formula

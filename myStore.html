@@ -34,18 +34,27 @@ History:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Spilt&nbsp;off&nbsp;from&nbsp;&nbsp;thing.py&nbsp;2003-08-19<br>
 &nbsp;<br>
 $Log$
-Revision 1.5  2004-03-06 20:39:38  timbl
-See http://www.w3.org/2000/10/swap/doc/changes.html for details
-- Regresssion test incorporates the RDF Core Positive Parser Tests except XMLLiteral & reification
-- xml:base support was added in the parser.
-- Use the --rdf=R flag to allow RDF to be parsed even when there is no enveloping <rdf:RDF> tag
-- nodeid generated on RDF output
-- Automatically generated terms with no URIs sort after anything which has a URI.
-- Namespace prefix smarts on output - default ns used for that most frequently used.
-- suppresses namespace prefix declarations which are not actually needed in the output.
-- Cwm will also make up prefixes when it needs them for a namespace, and none of the input data uses one.-
-- Will not use namespace names for URIs which do not have a "#". Including a "/" in the flags overrides.
+Revision 1.6  2004-03-21 04:24:35  timbl
+(See doc/changes.html)
+on xml output, nodeID was incorrectly spelled.
+update.py provides cwm's --patch option.
+diff.py as independent progrem generates patch files for cwm --patch
 <br>
+Revision&nbsp;1.6&nbsp;&nbsp;2004/03/09&nbsp;23:55:50&nbsp;&nbsp;connolly<br>
+updated&nbsp;load&nbsp;to&nbsp;track&nbsp;change&nbsp;in&nbsp;llyn<br>
+&nbsp;<br>
+Revision&nbsp;1.5&nbsp;&nbsp;2004/03/06&nbsp;20:39:38&nbsp;&nbsp;timbl<br>
+See&nbsp;<a href="http://www.w3.org/2000/10/swap/doc/changes.html">http://www.w3.org/2000/10/swap/doc/changes.html</a>&nbsp;for&nbsp;details<br>
+-&nbsp;Regresssion&nbsp;test&nbsp;incorporates&nbsp;the&nbsp;RDF&nbsp;Core&nbsp;Positive&nbsp;Parser&nbsp;Tests&nbsp;except&nbsp;XMLLiteral&nbsp;&amp;&nbsp;reification<br>
+-&nbsp;xml:base&nbsp;support&nbsp;was&nbsp;added&nbsp;in&nbsp;the&nbsp;parser.<br>
+-&nbsp;Use&nbsp;the&nbsp;--rdf=R&nbsp;flag&nbsp;to&nbsp;allow&nbsp;RDF&nbsp;to&nbsp;be&nbsp;parsed&nbsp;even&nbsp;when&nbsp;there&nbsp;is&nbsp;no&nbsp;enveloping&nbsp;&lt;rdf:RDF&gt;&nbsp;tag<br>
+-&nbsp;nodeid&nbsp;generated&nbsp;on&nbsp;RDF&nbsp;output<br>
+-&nbsp;Automatically&nbsp;generated&nbsp;terms&nbsp;with&nbsp;no&nbsp;URIs&nbsp;sort&nbsp;after&nbsp;anything&nbsp;which&nbsp;has&nbsp;a&nbsp;URI.<br>
+-&nbsp;<a href="#Namespace">Namespace</a>&nbsp;prefix&nbsp;smarts&nbsp;on&nbsp;output&nbsp;-&nbsp;default&nbsp;ns&nbsp;used&nbsp;for&nbsp;that&nbsp;most&nbsp;frequently&nbsp;used.<br>
+-&nbsp;suppresses&nbsp;namespace&nbsp;prefix&nbsp;declarations&nbsp;which&nbsp;are&nbsp;not&nbsp;actually&nbsp;needed&nbsp;in&nbsp;the&nbsp;output.<br>
+-&nbsp;Cwm&nbsp;will&nbsp;also&nbsp;make&nbsp;up&nbsp;prefixes&nbsp;when&nbsp;it&nbsp;needs&nbsp;them&nbsp;for&nbsp;a&nbsp;namespace,&nbsp;and&nbsp;none&nbsp;of&nbsp;the&nbsp;input&nbsp;data&nbsp;uses&nbsp;one.-<br>
+-&nbsp;Will&nbsp;not&nbsp;use&nbsp;namespace&nbsp;names&nbsp;for&nbsp;URIs&nbsp;which&nbsp;do&nbsp;not&nbsp;have&nbsp;a&nbsp;"#".&nbsp;Including&nbsp;a&nbsp;"/"&nbsp;in&nbsp;the&nbsp;flags&nbsp;overrides.<br>
+&nbsp;<br>
 Revision&nbsp;1.4&nbsp;&nbsp;2004/01/29&nbsp;21:10:39&nbsp;&nbsp;timbl<br>
 ooops&nbsp;-&nbsp;ref&nbsp;to&nbsp;SYMBOL<br>
 &nbsp;<br>
@@ -157,7 +166,7 @@ the&nbsp;given&nbsp;literal&nbsp;string&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nb
 &gt;&gt;&gt;&nbsp;y&nbsp;=&nbsp;<a href="#-literal">literal</a>("#Andr\xe9")<br>
 &gt;&gt;&gt;&nbsp;x&nbsp;is&nbsp;y<br>
 1</tt></dd></dl>
- <dl><dt><a name="-load"><strong>load</strong></a>(uri<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>, formulaURI<font color="#909090">=None</font>, remember<font color="#909090">=1</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
+ <dl><dt><a name="-load"><strong>load</strong></a>(uri<font color="#909090">=None</font>, openFormula<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>, remember<font color="#909090">=1</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
 &nbsp;<br>
 uri:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;None,&nbsp;load&nbsp;from&nbsp;standard&nbsp;input.<br>
 remember:&nbsp;if&nbsp;1,&nbsp;store&nbsp;as&nbsp;metadata&nbsp;the&nbsp;relationship&nbsp;between&nbsp;this&nbsp;URI&nbsp;and&nbsp;this&nbsp;formula.<br>
@@ -187,7 +196,7 @@ formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
     
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
-<td width="100%"><strong>__file__</strong> = './myStore.pyc'<br>
+<td width="100%"><strong>__file__</strong> = './myStore.py'<br>
 <strong>__name__</strong> = 'myStore'<br>
 <strong>store</strong> = None<br>
 <strong>storeClass</strong> = None</td></tr></table>

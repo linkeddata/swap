@@ -13,6 +13,7 @@ is or was http://www.w3.org/2000/10/swap/pim/day.py
 # Regular python library
 import os, sys, time
 from math import sin, cos, tan, sqrt
+from urllib import urlopen
 
 # SWAP  http://www.w3.org/2000/10/swap
 from myStore import Namespace, formula, symbol, intern, bind, load
@@ -88,7 +89,31 @@ class Map:
 	
 	self.page_x = int(subtended_x * self.pixels_per_m/0.9)
 	self.page_y = int(subtended_y * self.pixels_per_m/0.9)
+
+	map_wid = subtended_x /0.9
+	map_ht  = subtended_y /0.9
+
+	tigerURI = ("http://tiger.census.gov/cgi-bin/mapper/map.gif?"
+		+"&lat=%f&lon=%f&ht=%f&wid=%f&"
+		+"&on=CITIES&on=majroads&on=miscell&on=places&on=railroad&on=shorelin&on=streets"
+		+"&on=interstate&on=statehwy&on=states&on=ushwy&on=water"
+		+"&tlevel=-&tvar=-&tmeth=i&mlat=&mlon=&msym=bigdot&mlabel=&murl=&conf=mapnew.con"
+		+"&iht=%i&iwd=%i")  % (self.midla, self.midlo, map_ht, map_wid, self.page_y, self.page_x)
+
+	progress("Getting Tiger map ", tigerURI)
+	gifStream = urlopen(tigerURI)
+	gifData = gifStream.read()
+	gifStream.close
+	progress("Saving tiger map")
+	saveStream = open("tiger.gif", "w")
+	saveStream.write(gifData)
+	saveStream.close()
 	
+#	tigerURI = ("http://tiger.census.gov/cgi-bin/mapper/map.gif?&lat=%f&lon=%f&ht=%f"
+#	    +"&wid=%f&&on=majroads&on=miscell&tlevel=-&tvar=-&tmeth=i&mlat=&mlon=&msym=bigdot&mlabel=&murl="
+#	    +"&conf=mapnew.con&iht=%i&iwd=%i" ) % (self.midla, self.midlo,  maxla-minla, maxlo-minlo, self.page_y, self.page_x)
+
+
 	self.wr("""<?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!DOCTYPE svg PUBLIC '-//W3C//DTD SVG 1.0//EN'
  'http://www.w3.org/TR/2001/REC-SVG-20010904/DTD/svg10.dtd'>
@@ -100,6 +125,7 @@ class Map:
     xmlns:xlink='http://www.w3.org/1999/xlink'>
  <g>
  <rect x='0' y='0' width='%ipx' height='%ipx' style='fill:#ddffbb'/>
+ <image width="100%%" height="100%%"  xlink:href="tiger.gif"/>
  """  %   (self.page_x,self.page_y, self.page_x,self.page_y))  #"
  
 

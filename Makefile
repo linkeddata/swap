@@ -28,8 +28,8 @@ tested : package
 	(cd test; make all)
 	echo "Test worked, now can make release"
 
-doc.made : cwm.py notation3.py
-	(cd doc; make all)
+doc.made : cwm.py notation3.py sax2rdf.py toXML.py
+	(cd doc; make)
 
 release : tested doc.made message.txt
 	cvs commit -F message.txt
