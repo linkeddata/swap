@@ -1,4 +1,4 @@
 @prefix : <http://yosi.us/unlambda#> .
 @keywords a, of, is .
-(((s i) i) ((s i) i)) a NeedsEval .
-#(((s k) s) s) a NeedsEval .
+(((s i) i) ((s i) i)) a RootExpression .
+#(((s k) s) s) a RootExpression .

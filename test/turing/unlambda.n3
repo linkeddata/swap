@@ -5,6 +5,8 @@
 #
 #
 
+{?x a RootExpression} => {?x a NeedsEval} .
+
 {(?x ?y) a NeedsEval}
 =>
 {?x a NeedsEval .
@@ -49,14 +51,14 @@
  ?y s ?b .
  ?z ?b ?a .
 } =>
-{(?y ?z) a NeedsApply .
- (?y ?x) a NeedsApply } .
+{(?y ?x) a NeedsEval .
+ (?z ?x) a NeedsEval } .
 
 {(?a ?x) a NeedsApply .
  ?y s ?b .
  ?z ?b ?a .
- (?y ?z) apply ?r .
- (?y ?x) apply ?s .
+ (?y ?x) eval ?r .
+ (?z ?x) eval ?s .
 }
 =>
 {(?r ?s) a NeedsEval} .
@@ -64,8 +66,8 @@
 {(?a ?x) a NeedsApply .
  ?y s ?b .
  ?z ?b ?a .
- (?y ?x) apply ?r .
- (?z ?x) apply ?s .
+ (?y ?x) eval ?r .
+ (?z ?x) eval ?s .
  (?r ?s) eval ?w }
 =>
 {(?a ?x) apply ?w} .
@@ -73,3 +75,8 @@
 {(i ?x) apply ?x}
 <= 
 {(i ?x) a NeedsApply} .
+
+
+{(v ?x) apply v}
+<=
+{(v ?x a NeedsApply} .
