@@ -6,6 +6,7 @@
 
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix str: <http://www.w3.org/2000/10/swap/string#>.
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#>.
 
 @prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#>.
 
@@ -20,7 +21,39 @@
 @prefix      : <http://www.w3.org/2000/10/swap/pim/cityLookup#>.
 @prefix cityl: <http://www.w3.org/2000/10/swap/pim/cityLookup#>.
 
+
+# http://www.wunderground.com/cgi-bin/findweather/getForecast?query=66210
+{
+  ?PLACE usps:zipCode ?ZIP
+} => { ?PLACE :formVal ?ZIP }.
+
 # http://www.wunderground.com/cgi-bin/findweather/getForecast?query=Budapest%2C+Hungary
+
+{
+  ?PLACE con:phone [ log:uri ?TXT ].
+  (?TXT "\\+1-(\\d\\d\\d)-\\d\\d\\d-\\d\\d\\d\\d") str:scrape ?ACODE.
+  (?TXT "\\+1-\\d\\d\\d-(\\d\\d\\d)-\\d\\d\\d\\d") str:scrape ?EXCH.
+  ?PG log:uri [ is str:concatenation of (
+    "http://www.primeris.com/fonefind/findome.php?npa=" ?ACODE
+    "&nxx=" ?EXCH )].
+}
+ =>
+{ ?PLACE :phonePage ?PG }.
+
+{
+  ?PLACE :phonePage [ log:content ?TXT ].
+  (?TXT "<TR><TD>\\d+<TD>\\d+<TD>(\\w+)<TD>")
+	 str:scrape ?CITYNAME.
+  (?TXT "<TR><TD>\\d+<TD>\\d+<TD>\\w+<TD><A HREF='images/npamap/(\\w\\w).gif'>\\w+</A>")
+	 str:scrape ?STATECODE. #@@ map to upper case
+} =>
+{
+  ?PLACE k:inRegion [
+    map:cityName ?CITYNAME;
+    k:inRegion [ usps:stateAbbr ?STATECODE ]
+  ].
+}.
+
 
 {
  ?CITY k:inRegion ?AREA.
@@ -118,7 +151,13 @@
 #  k:inRegion [ map:countryName "Hungary" ] ].
 
 # $Log$
-# Revision 1.7  2004-05-03 14:30:54  connolly
+# Revision 1.8  2004-07-04 19:07:04  connolly
+# in order to map phone numbers to timezones,
+# map phone numbers to cities via primeris.com.
+# Hmm... is the mapping from states to area codes 1-1?
+#  no... arizona, for one. sigh.
+#
+# Revision 1.7  2004/05/03 14:30:54  connolly
 # scrape new page layout
 #
 # Revision 1.6  2004/04/14 16:01:06  connolly
