@@ -14,7 +14,7 @@ bind rules: <> .
 {
   {
     { <#x> <#p> <#y>. <#y> <#p> <#z>. } log:implies { <#x> <#p> <#z>. }
-  } a log:truth; log:forAll <#x> , <#y> , <#z>.
+  } a log:Truth; log:forAll <#x> , <#y> , <#z>.
 } .
 
 
