@@ -1,0 +1,54 @@
+# This mostly finds bugs in cwm. It doesn't
+# really work.
+
+@prefix test: <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#>.
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+@prefix   : <rdfcore#>.
+@prefix rt: <rdfcore#>.
+
+this log:forAll :T, :IN, :EXPECTED, :F, :G.
+
+{ <../../rdf-tests/rdfcore/Manifest.rdf> log:semantics [ log:includes {
+    :T a test:PositiveParserTest; test:status "APPROVED";
+      test:inputDocument :IN;
+      test:outputDocument :EXPECTED
+  } ].
+
+} log:implies { :T :in :IN; :expected :EXPECTED. }.
+
+
+{ :T :in :IN; :expected :EXPECTED.
+
+  :IN log:semanticsOrError :F.
+  :F log:rawType log:Literal.
+} log:implies {
+  :cwm :failsParsingInput :T.
+}.
+
+{ :T :in :IN; :expected :EXPECTED.
+
+  :IN log:semanticsOrError :F.
+  :F log:rawType log:Formula.
+  :EXPECTED log:semanticsOrError :G.
+  :G log:rawType log:Formula.
+
+} log:implies {
+  :T :inF :F; :expectedF :G.
+}.
+
+{ :T :inF :F; :expectedF :F.  :F log:includes :G.  :G log:includes :F.
+} log:implies {  :cwm :passes :T. }.
+
+
+{ :T :inF :F; :expectedF :G.  :F log:notIncludes :G.} log:implies {
+  :cwm :failsIf :T.}.
+
+{ :T :inF :F; :expectedF :G. :G log:notIncludes :F. } log:implies {
+  :cwm :failsOnlyIf :T. }.
+
+
+# $Log$
+# Revision 1.1  2003-02-03 15:52:27  connolly
+# does not really work, but I want to archive it anyway
+#
