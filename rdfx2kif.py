@@ -21,12 +21,12 @@ References
 import os, sys
 
 import KIFSink
-#import sax2rdf backing out to older RDF parser
-import xml2rdf
+import sax2rdf
+import xml2rdf # if you want the older RDF parser that doesn't require python2
 
 def convert(text, addr, outFp):
     gen = KIFSink.Sink(outFp)
-    p = xml2rdf.RDFXMLParser(gen, addr)
+    p = sax2rdf.RDFXMLParser(gen, addr)
     gen.startDoc()
     p.feed(text)
     gen.endDoc()
@@ -39,7 +39,10 @@ if __name__ == '__main__':
     
 
 #$Log$
-#Revision 1.2  2001-09-19 18:47:57  connolly
+#Revision 1.3  2001-11-13 23:24:49  connolly
+#back to modern RDF parser...
+#
+#Revision 1.2  2001/09/19 18:47:57  connolly
 #factored RDFSink.py out of notation3.py
 #
 #introduced SYMBOL to replace notation3.RESOURCE
