@@ -198,16 +198,16 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         for argnum in range(1,len(sys.argv)):  # Command line options after script name
             arg = sys.argv[argnum]
             if arg.startswith("--"): arg = arg[1:]   # Chop posix-style double dash to one
-            _equals = string.find(arg, "=")
+#            _equals = string.find(arg, "=")
             _lhs = ""
             _rhs = ""
-            if _equals >=0:
-                _lhs = arg[:_equals]
-                _rhs = arg[_equals+1:]
+            try:
+                [_lhs,_rhs]=arg.split('=',1)
 		try:
 		    _uri = join(option_baseURI, _rhs)
 		except ValueError:
 		    _uri = _rhs
+            except ValueError: pass
             if arg == "-ugly": option_outputStyle = arg
             elif _lhs == "-base": option_baseURI = _uri
             elif arg == "-rdf":

@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <title>Cwm features wished for and done</title>
-  <meta name="generator" content="amaya 7.1, see http://www.w3.org/Amaya/" />
+  <meta name="generator" content="amaya 8.5, see http://www.w3.org/Amaya/" />
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -23,7 +24,23 @@ Comparing Formats</p>
 href="../../../../DesignIssues/Notation3.html"><img alt="n3"
 src="../../../../RDF/icons/n3_small" /></a></p>
 
-<h2>release to come ???</h2>
+<h2>Release 0.7.3</h2>
+
+<h4>HTTP errors</h4>
+
+<p>Cwm now correctly identifies HTTP 404 errors, throwing an exception, and
+does not try to parse the returned (HTML) file.</p>
+
+<h4>Reflexive statements now work</h4>
+
+<p>An n3 statement which references the same universal quantifier twice now
+does the right thing.</p>
+
+<p style="text-align: right"><a
+href="../../../../DesignIssues/Notation3.html"><img alt="kln3"
+src="../../../../RDF/icons/n3_small" /></a></p>
+
+<h2>Release 0.7.2</h2>
 
 <p></p>
 
@@ -33,23 +50,23 @@ src="../../../../RDF/icons/n3_small" /></a></p>
 
 <p>The <code>--patch=<em>patchfile</em></code> command line argument allows a
 patch file to be applied to the knowledge base (current working formula). See
-the  <a href="../../../../DesignIssues/Diff">Diff, Patch, Update and Sync</a>
+the <a href="../../../../DesignIssues/Diff">Diff, Patch, Update and Sync</a>
 note in the <em>Design Issues</em> series on the motivation for exchanging
 difference files, and how they work. Diff files can in certain specific
 circumstances (a well-labeled graph) be produced by the diff.py program
-included with this distribution.  The new tests are in
+included with this distribution. The new tests are in
 $SWAP/test/delta/detailed.tests</p>
 
 <h4>Internationization undefined, Numerics canonicalized</h4>
 
 <p>The i18n/detailed.tests have been removed from the test harness. They were
-not right, and URI/ IRI issues are not clear yet.  It is not clear whether
-cwm should URI-canonicalize, or IRI-canonicalize. (My instinct is that it
-should - Tim).</p>
+not right, and URI/ IRI issues are not clear yet. It is not clear whether cwm
+should URI-canonicalize, or IRI-canonicalize. (My instinct is that it should
+- Tim).</p>
 
 <p>Cwm does not canonicalize numerical (xsd:double and xsd:integer) values on
-N3 output. It uses python's str(float(s)) and str(int(s)).   The effect is to
-reduce some over-precision in the output. </p>
+N3 output. It uses python's str(float(s)) and str(int(s)). The effect is to
+reduce some over-precision in the output.</p>
 
 <p></p>
 
@@ -151,7 +168,7 @@ work toward a more community-supported platform with time.</p>
     including a suitable test in the regression tests. This test currently
     includes all the n3 format files detailed.tests in subdirectories of
     $SWAP/test.</li>
-  <li>New mailing lists have been made. 
+  <li>New mailing lists have been made.
     <dl>
       <dt><a
       href="http://lists.w3.org/Archives/Public/public-cwm-announce">public-cwm-announce</a></dt>
@@ -192,7 +209,7 @@ work toward a more community-supported platform with time.</p>
     F is a formula to cause the content of F to be loaded into the knowledge
     base.</li>
   <li>The ordering of terms has been fixed so that all constants literals,
-    lsits amd formula should all appear before any symbols in a listing. 
+    lsits amd formula should all appear before any symbols in a listing.
     <p>(code is formula.compareTerm())</p>
   </li>
 </ol>
@@ -215,7 +232,7 @@ here.</p>
   <li><strong>Lists</strong> are handled differently internally. This is a
     bit of a an experiment. Instead of being stored in their first/rest forms
     in the graph, complete lists are stored as List objects. Thse are first
-    class objects. . 
+    class objects. .
     <ul>
       <li>You can match against lists. Unification of formlae will catch
         identical lists such as ( &lt;a&gt; &lt;b&gt; ) matching against (
