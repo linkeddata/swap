@@ -45,4 +45,13 @@ xmlContent-diagram.rdf: $(INFS2) $(PD)rdf2dot.xsl
 #	sabcmd ../../02pd/rdf2dot.xsl swws.rdf >$@
 
 
+#####
+# trying to recreate figure
+# E Schema Components Diagram (non-normative)
+# http://www.w3.org/TR/xmlschema-1/#component-diagram
+
+xmlSchemaComponents.rdf: structures.xml grokSchema.xsl
+	$(XSLTPROC) --novalid grokSchema.xsl structures.xml >$@
+
+
 #ends
