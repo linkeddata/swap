@@ -121,6 +121,14 @@ class BI_integerQuotient(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
         if len(subj_py) == 2: return int(subj_py[0]) / int(subj_py[1])
 
+class BI_bit(LightBuiltIn, Function):
+    """@@needs a test."""
+    def evaluateObject(self, subj_py): 
+        if len(subj_py) == 2:
+            x = subj_py[0]
+            b = subj_py[1]
+            return (x >> b) & 1
+
 class BI_quotientOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self,  obj_py): 
         obsolete()
@@ -206,6 +214,7 @@ def register(store):
     str.internFrag('sumOf', BI_sumOf)
     str.internFrag('differenceOf', BI_differenceOf)
     str.internFrag('factors', BI_factors)
+    str.internFrag('bit', BI_bit)
     str.internFrag('quotientOf', BI_quotientOf)
     str.internFrag('remainderOf', BI_remainderOf)
     str.internFrag('exponentiationOf', BI_exponentiationOf)
