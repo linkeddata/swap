@@ -1,0 +1,11 @@
+#Processed by Id: cwm.py,v 1.61 2001/07/20 04:46:40 connolly Exp 
+        #    using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/amp-in-url.rdf
+        
+#  Notation3 generation by
+#       notation3.py,v 1.85 2001/07/26 04:45:47 connolly Exp
+
+#   Base was: file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/amp-in-url.rdf
+    
+    <http://example/q?abc=1&def=2>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> "xxx" .
+    
+#ENDS
