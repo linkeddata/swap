@@ -256,7 +256,7 @@ def title(content, attrs=None):
     return Element('title', content=content, attrs=attrs)
 
 def div(content, attrs=None):
-    return Element('span', content=content, attrs=attrs)
+    return Element('div', content=content, attrs=attrs)
 
 def stylelink(href):
     return Element("link", attrs={
@@ -264,6 +264,30 @@ def stylelink(href):
         "type":"text/css",
         "href":href})
 
+def htable(content=None, attrs=None):
+    return Element('table', content=content, attrs=attrs)
+
+def tr(content=None, attrs=None):
+    return Element('tr', content=content, attrs=attrs)
+
+def td(content=None, attrs=None):
+    return Element('td', content=content, attrs=attrs)
+
+# could we have the automatic for all the elements and their
+# standard attributes...???   Need to use DTD....
+#
+#   See Lars's
+# http://www.garshol.priv.no/download/software/xmlproc/dtd-parser-doco.html
+#
+#  elements = {
+#    'a': InLine(['class', 'id', 'href', 'rel', 'rev']), ...
+#    'em': ['class', 'id', 'href', 'rel', 'rev'],
+#    }
+
+def a(content, href=None, attrs=None):
+    e =  Element("a", content, attrs=attrs)
+    if href: e.attrs.setdefault('href', href)
+    return e
 
 def prefixEveryLine(prefix, s):
     extra = ""
@@ -277,6 +301,9 @@ if __name__ =='__main__':
     print doctest.testmod(html) 
 
 # $Log$
-# Revision 1.1  2003-01-29 18:28:37  sandro
+# Revision 1.2  2003-02-14 00:44:24  sandro
+# added some more functions: htable, tr, td, a
+#
+# Revision 1.1  2003/01/29 18:28:37  sandro
 # first version, passes doctests, [warning: excessive tool-building]
 #
