@@ -1,5 +1,9 @@
 # $Id$
 
+# The year being processed, typically this year
+
+YYYY=2004
+
 PERL=perl
 PYTHON=python
 
@@ -10,6 +14,7 @@ PD=$(W)/2001/02pd
 SWAP=..
 PIMTEST=$(SWAP)/test/pim
 CWM=$(SWAP)/cwm.py
+CAL=$W/2002/12/cal
 
 # iLife import/export
 #
@@ -17,6 +22,7 @@ ICAL=$(HOME)/Library/Calendars
 ITUNES=$(HOME)/Music/iTunes/iTunes\ Music
 IPHOTO=$(HOME)/Pictures/iPhoto\ Library
 SLIFE=$(HOME)/Documents/SemLife
+DOCYYYY=$(HOME)/Documents/$(YYYY)
 
 include $(UMLP)/XSLTPROC.mak
 
@@ -74,19 +80,20 @@ calIntFig.png: calIntFig.dot
 
 # Semantic Web Life
 
-slife: $(SLIFE)/PhotoMeta.n3 $(ICAL)/Photos.ics
+slife: $(DOCYYYY)/PhotoMeta.n3 $(ICAL)/Photos.ics
 
 $(SLIFE):
 	mkdir $(SLIFE)
 
-$(SLIFE)/PhotoMeta.n3 : $(SLIFE)
-	jhead -n3 $(IPHOTO)/????/??/??/*.{JPG,jpg} > $@
+$(DOCYYYY)/PhotoMeta.n3 : $(SLIFE)
+	jhead -n3 $(IPHOTO)/$(YYYY)/??/??/*.{JPG,jpg} > $@
 
-$(SLIFE)/PhotoCalendar.cal3: $(SLIFE)/PhotoMeta.n3 PhotoEvent.n3
-	$(PYTHON) $(CWM) $(SLIFE)/PhotoMeta.n3 --filter=PhotoEvent.n3 --ugly > $@
+$(SLIFE)/PhotoCalendar.cal3: $(DOCYYYY)/PhotoMeta.n3 PhotoEvent.n3
+	$(PYTHON) $(CWM) $(HOME)/Documents/????/PhotoMeta.n3 \
+		--filter=PhotoEvent.n3 --ugly > $@
 
 $(ICAL)/Photos.ics: $(SLIFE)/PhotoCalendar.cal3 toIcal.py
-	PYTHONPATH=.. $(PYTHON) toIcal.py $(SLIFE)/PhotoCalendar.cal3 > $@
+	PYTHONPATH=..:$(CAL) $(PYTHON) toIcal.py $(SLIFE)/PhotoCalendar.cal3 > $@
 
 clean:
 	$(RM) $(PIMTEST)/testCal.rdf $(PIMTEST)/testTasks.rdf ,chi.rdf ical.n3 ical.rdf

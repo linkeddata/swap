@@ -1,6 +1,6 @@
 #  n3
 #
-#  Find unclassified trans   if argv(1)
+#  Find unclassified transactions in the file whose name is argv(1)
 #
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
@@ -15,7 +15,7 @@
 @prefix : <foo#>.
 @prefix foo: <foo#>.
 
-this log:forAll :a, :d, :p, :t, :x, :y, :z.
+@forAll :a, :d, :p, :t, :x, :y, :z.
 
 
 {   [is log:semantics of [ log:uri [is os:baseAbsolute of [is os:argv of "1" ]]]]
