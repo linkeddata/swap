@@ -1,0 +1,18 @@
+     @prefix : <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    
+    this     log:forAll :x .
+    
+    :me     a :Found;
+         :hairColor "red" .
+    
+    :something     :suggests {:me     :height "6foot2inches" .
+        } .
+    {
+        :something     :suggests {:x     :height "6foot2inches" .
+            } .
+        :x     :hairColor "red" .
+        
+        }     log:implies {:x     a :Found .
+        } .
+    
