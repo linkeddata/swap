@@ -515,8 +515,18 @@ of what these things mean.</p>
   <dt><a name="N3" id="N3" href="/DesignIssues/Notation3">N3</a></dt>
     <dd>Notation3, a quick-writing notation for jotting down or reading RDF
       semantic web information.</dd>
+  <dt><a name="object" id="object">object</a></dt>
+    <dd>Of the three parts of a statement, the object is one of the two
+      things related by the predicicate. Often, it is the value of some
+      property, such as the color of a car. See also: subject, predicate.</dd>
+  <dt><a name="predicate" id="predicate">predicate</a></dt>
+    <dd>Of the three parts of a statement, the predicate, or verb, is the
+      resource, specifically the Property, which defines what the statement
+      means. See also: subject, object.</dd>
   <dt><a href="#Properties" name="Property" id="Property">Property</a></dt>
-    <dd>A sort of relationship between two things; a binary relation.</dd>
+    <dd>A sort of relationship between two things; a binary relation. A
+      Property can be used as the <a href="#predicate">predicate</a> in a <a
+      href="#Statement">statement</a>.</dd>
   <dt><a name="rule" id="rule">rule</a></dt>
     <dd>A loose term for a Statement that an engine has been programmed to
       process. Different engines have different sets fo rules.  cwm rules are
@@ -529,17 +539,22 @@ of what these things mean.</p>
   <dt><a name="Statement" id="Statement">Statement</a></dt>
     <dd>A subject, prediate and object which assert meaning defined by the
       particular prediate used.</dd>
+  <dt><a name="subject" id="subject">subject</a></dt>
+    <dd>Of the three parts of a statement, the subject is one of the two
+      things related by the predicicate. Often, it indicates the thing being
+      described, such as a car whos color and length are being given. See
+      also: object, predicate</dd>
   <dt><a name="Thing" id="Thing">Thing</a></dt>
     <dd>In DAML, a generic name for anything - abstract, animate, inanimate,
       whatever. The class which anything is in. (In RDF parlance,
       confusingly, rdf:Resource.) Idenified by a URI with or without a "#" in
       it.</dd>
-  <dt>Truth</dt>
+  <dt><a name="Truth" id="Truth">Truth</a></dt>
     <dd>In the log: namespace, a Class of all formulae which are true.</dd>
-  <dt>type</dt>
+  <dt><a name="type" id="type">type</a></dt>
     <dd>A particular property used to assert that a thing is in a certian
       Class.  The relationship between a thing and any Class it is in.</dd>
-  <dt>URI</dt>
+  <dt><a name="URI" id="URI">URI</a></dt>
     <dd>Universal Resource Identifier. The way of identifying anything
       (including Classes, Properties or individual things of any sort). Not
       everything has a URI, as you can talk about something by just using its
