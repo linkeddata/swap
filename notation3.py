@@ -97,6 +97,13 @@ N3CommentCharacter = "#"     # For unix script #! compatabilty
 
 ########################################## Parse string to sink
 #
+# Regular expressions:
+eol = re.compile(r'[ \t]*(#[^\n]*)?\r?\n')	# end  of line, poss. w/comment
+eof = re.compile(r'[ \t]*(#[^\n]*)?$')      	# end  of file, poss. w/comment
+ws = re.compile(r'[ \t]*')			# Whitespace not including newline @@(whatabout unicode NL? ask MartinD)
+interesting = re.compile(r'[\\\r\n\"]')
+
+
 
 class SinkParser:
     def __init__(self, sink, thisDoc, baseURI=None, bindings = {},
@@ -551,15 +558,18 @@ class SinkParser:
             return -1
 
     def skipSpace(self, str, i):
+	"""Skip white space, newlines and comments.
+	return -1 if EOF, else position of first non-ws character"""
 	while 1:
-            while i<len(str) and str[i] in string.whitespace:
-                if str[i] == "\n": self.lines = self.lines + 1
-                i = i + 1
-            if i == len(str): return -1
-            if str[i] == N3CommentCharacter:     # "#"?
-                while i<len(str) and str[i] != "\n":
-                    i = i + 1
-            else: break
+            m = eol.match(str, i)
+	    if m == None: break
+	    self.lines = self.lines + 1
+	    i = m.end()   # Point to first character unmatched
+	m = ws.match(str, i)
+	if m != None:
+	    i = m.end()
+	m = eof.match(str, i)
+	if m != None: return -1
 	return i
 
     def variable(self, str, i, res):
@@ -572,8 +582,12 @@ class SinkParser:
         if str[j:j+1] != "?": return -1
         j=j+1
         i = j
-	while i <len(str) and str[i] in _namechars:
+	while i <len(str) and str[i] in _namechars: #@@ check for intial alpha
             i = i+1
+	if self._parentContext == None:
+	    raise BadSyntax(self._thisDoc, self.lines, str, i,
+			    "?xxx syntax used for variable in outermost level: impossible.")
+	var = self.sink.newUniversal(str[j:1], self._parentContext)
         res.append( str[j:i])
 #        print "Variable found: <<%s>>" % str[j:i]
         return i
@@ -660,7 +674,6 @@ class SinkParser:
                 ustr = ustr + '"'
                 j = j + 1
                 continue
-            interesting = re.compile(r'[\\\r\n\"]')
             m = interesting.search(str, j)  # was str[j:].
 	    # Note for pos param to work, MUST be compiled  ... re bug?
 #	    print "Matched >>>>", m.group(0), "<<< in string >>>>>", m.string, "<<<<<<"
@@ -729,16 +742,6 @@ class SinkParser:
         return j, uch
 
 
-#    def genid(self, type):  # Generate existentially quantified variable id
-#	return self._sink.genid(self._context, type)
-
-#        subj = type , self._genPrefix + `self._nextId` # ANONYMOUS node
-#        self._nextId = self._nextId + 1
-#        self.makeStatement((self._context, # quantifiers - use inverse?
-#                            (SYMBOL, N3_forSome_URI), #pred
-#                            self._context,  #subj
-#                            subj))                      # obj
-#        return subj
 
     def operator(self, str, i, res):
 	j = self.tok('+', str, i)
@@ -774,14 +777,16 @@ class BadSyntax(SyntaxError):
     def __str__(self):
 	str = self._str
 	i = self._i
-
-	if i>60: pre="..."
+	st = 0
+	if i>60:
+	    pre="..."
+	    st = i - 60
 	else: pre=""
 	if len(str)-i > 60: post="..."
 	else: post=""
 
 	return 'Line %i of <%s>: Bad syntax (%s) at ^ in:\n"%s%s^%s%s"' \
-	       % (self.lines +1, self._uri, self._why, pre, str[i-60:i], str[i:i+60], post)
+	       % (self.lines +1, self._uri, self._why, pre, str[st:i], str[i:i+60], post)
 
 
 
