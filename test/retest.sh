@@ -50,7 +50,8 @@ cwm_test lists-simple-1.rdf "conversion of N3 list () syntax to RDF" -n3 lists-s
 # Should work - tim
 
 # The prefix file is to give cwm a hint for output. It saves hints across files.
-cwm_test daml-ont.n3 "Convert DAML schema into N3" daml-pref.n3 -rdf daml-ont.rdf -n3
+# cwm_test daml-ont.n3 "Convert DAML schema into N3" daml-pref.n3 -rdf daml-ont.rdf -n3
+# This seems to be a duplicate of a test above.
 
 cwm_test daml-ex.n3 "Try the examples" daml-pref.n3 -rdf daml-ex.rdf -n3
 
@@ -107,7 +108,10 @@ cwm_test environ.n3 "Read operating system environment variable" os/environ.n3 -
 
 
 # $Log$
-# Revision 1.20  2001-09-19 19:14:28  timbl
+# Revision 1.21  2001-11-15 22:11:24  timbl
+# --string added, list output bugs fixed, quotation choices changed on output, log:includes hudes handles quantified variables better
+#
+# Revision 1.20  2001/09/19 19:14:28  timbl
 # new schemas for builtins etc
 #
 # Revision 1.19  2001/09/17 02:59:32  timbl

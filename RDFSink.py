@@ -112,7 +112,7 @@ class RDFSink:
     def startAnonymousNode(self, subj):
         pass
     
-    def endAnonymousNode(self):    # Remove default subject
+    def endAnonymousNode(self, endAnonymousNode):    # Remove default subject, restore to subj
         pass
 
     def startBagSubject(self, context):

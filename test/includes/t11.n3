@@ -70,7 +70,7 @@ this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
 #  If there is no schema found, then we flag a problem
 
 { :p a :UsedProperty .
-  :p log:semantics [log:notIncludes { :p s:isDefinedBy :x }]
+  :p log:semantics [log:notIncludes { :p s:isDefinedBy [] }]
 } log:implies {:p a :ERROR_CANT_GET_SCHEMA}.
 
 

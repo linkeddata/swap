@@ -29,6 +29,9 @@ Agenda:
 
 import string
 import urlparse
+import thing
+from thing import compareURI
+
 # import re
 # import StringIO
 
@@ -39,7 +42,7 @@ urlparse.uses_relative.append("md5") #@@kludge/patch
 
 import notation3    # N3 parsers and generators, and RDF generator
 
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE
+from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE, SYMBOL, Logic_NS
 
 from llyn import RDFStore  # A store with query functiuonality
 from thing import progress
@@ -226,7 +229,31 @@ def reformat(str, thisURI):
     
 
 
-              
+##############################################  String output
+
+
+def comparePair(self, other):
+    for i in 0,1:
+        x = compareURI(self[i], other[i])
+        if x != 0:
+            return x
+
+def outputStrings(store, formula, seed=None, relation=None):
+    """Fetch output strings from store, sort and output
+
+    To output a string, associate (using the given relation) with a key
+    such that the order of the keys is the order in which you want the corresponding
+    strings output.
+    """
+    import sys
+#    if seed == None: seed = store.intern((SYMBOL, Logic_NS + "OutputKey"))
+    if relation == None: relation = store.intern((SYMBOL, Logic_NS + "outputString"))
+    pairs = store.each((formula, relation, None, None))  # List of things of (subj, obj) pairs
+    pairs.sort(comparePair)
+    for key, str in pairs:
+        sys.stdout.write(str.string)
+
+    
             
 
 #################################################  Command line
@@ -247,6 +274,7 @@ def doCommand():
 --bySubject Store input and regurgitate in subject order *
 --no        No output *
             (default is to store and pretty print with anonymous nodes) *
+--strings   Dump :s to stdout ordered by :k whereever { :k log:outputString :s }
 --apply=foo Read rules from foo, apply to store, adding conclusions to store
 --filter=foo Read rules from foo, apply to store, REPLACING store with conclusions
 --rules     Apply rules in store to store, adding conclusions to store
@@ -331,6 +359,8 @@ Examples:
             elif arg == "-quiet": option_quiet = 1
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-bySubject": option_outputStyle = arg
+            elif arg == "-no": option_outputStyle = "-no"
+            elif arg == "-strings": option_outputStyle = "-no"
             elif arg == "-triples" or arg == "-ntriples":
                 option_format = "n3"
                 option_n3_flags = "spart"
@@ -369,13 +399,13 @@ Examples:
 
 #  Fix the output sink
         
-	if option_format == "rdf":
+        if option_format == "rdf":
             _outSink = notation3.ToRDF(sys.stdout, _outURI, base=option_baseURI, flags=option_rdf_flags)
         else:
             _outSink = notation3.ToN3(sys.stdout.write, base=option_baseURI,
                                       quiet=option_quiet, flags=option_n3_flags)
         version = "$Id$"
-	if not option_quiet:
+        if not option_quiet and option_outputStyle != "-no":
             _outSink.makeComment("Processed by " + version[1:-1]) # Strip $ to disarm
             _outSink.makeComment("    using base " + option_baseURI)
         if option_reify: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula")
@@ -523,6 +553,10 @@ Examples:
             elif arg == "-size":
                 progress("Size of store: %i statements." %(_store.size,))
 
+            elif arg == "-strings":  # suppress output
+                outputStrings(_store, workingContext) 
+                option_outputStyle = "-no"
+                
             elif arg == "-no":  # suppress output
                 option_outputStyle = arg
                 

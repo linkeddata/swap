@@ -875,7 +875,7 @@ class ToRDF(RDFSink.RDFSink):
 
 # Below we do anonymous top level node - arrows only leave this circle
 
-    def startAnonymousNode(self, subj):
+    def startAnonymousNode(self, subj, li=0):
         self.flushStart()
         if self._subj:
             self._wr.endElement()
@@ -884,7 +884,7 @@ class ToRDF(RDFSink.RDFSink):
         self._subj = subj    # The object is not the subject context
 #        self._pred = None
 
-    def endAnonymousNode(self):    # Remove context
+    def endAnonymousNode(self, subj=None):    # Remove context
     	self._wr.endElement()
 	self._subj = None
 #        self._pred = None
@@ -1286,23 +1286,26 @@ t   "this" and "()" special syntax should be suppresed.
 
 # Below we do anonymous top level node - arrows only leave this circle
 
-    def startAnonymousNode(self, subj):
-        self.stack.append(0)
-	if self._subj:
-	    self._write(" .")
-	self._newline()
+    def startAnonymousNode(self, subj, isList=0):
+        self.stack.append(isList)
+        if self._subj:
+            self._write(" .")
+        self._newline()
         self.indent = self.indent + 1
-        self._write("  [ ")
+        if isList: self._write("  ( ")
+        else: self._write("  [ ")
         self._subj = subj    # The object is not the subject context
         self._pred = None
 
 
-    def endAnonymousNode(self):    # Remove default subject
-        self.stack.pop()
-        self._write(" ].")
+    def endAnonymousNode(self, subj=None):    # Remove default subject
+        isList = self.stack.pop()
+        if isList: self._write(" )")
+        else: self._write(" ]")
+        if not subj: self._write(".")
         self.indent = self.indent - 1
         self._newline()
-        self._subj = None
+        self._subj = subj
         self._pred = None
 
 # Below we notate a nested bag of statements
@@ -1467,7 +1470,7 @@ t   "this" and "()" special syntax should be suppresed.
 
 def stringToN3(str):
         res = ""
-        if len(str) > 20 and string.find(str, "\n") >=0:
+        if len(str) > 20 and (string.find(str, "\n") >=0 or string.find(str, '"') >=0):
                 delim= '"""'
                 forbidden = "\\\"\a\b\f\r\v"    # (allow tabs too now)
         else:
@@ -1476,6 +1479,8 @@ def stringToN3(str):
         for i in range(len(str)):
                 ch = str[i]
                 j = string.find(forbidden, ch)
+                if ch == '"' and delim == '"""' and i+1 < len(str) and str[i+1] != '"':
+                    j=-1   # Single quotes don't need escaping in long format
                 if j>=0: ch = "\\" + '\\"abfrvtn'[j]
                 elif ch not in "\n\t" and (ch < " " or ch > "}") : ch= 'x'+`ch`[1:-1] # Use python
                 res = res + ch
