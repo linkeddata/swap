@@ -7,7 +7,7 @@
 
 @prefix : <#>.
 
-this log:forAll :X, :Y, :Z.
+this log:forAll :X, :Y, :Z, :P.
 
 { :X :P :Y. :X = :Z.
   :P log:notEqualTo log:forAll, log:forSome
@@ -22,8 +22,7 @@ this log:forAll :X, :Y, :Z.
   :P log:notEqualTo log:forAll, log:forSome
 } log:implies { :X :P :Z }.
 
-{ :X = :Y } log:implies { :Y = :X }.
 
-:bob :likes :jane.
-:jane = :theGirl.
-:bob = :theGuy.
+# test case...
+# :bob :likes :jane.
+# :jane = :theGirl.
