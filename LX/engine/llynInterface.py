@@ -15,7 +15,6 @@ from llyn import PRED, SUBJ, OBJ, CONTEXT
 import RDFSink
 import LX.logic
 import LX.expr
-import LX.uri
 
 
 ################################################################
@@ -190,7 +189,10 @@ def addLXFormula(store, context, expr, terms={}, kb=None):
 
 
 # $Log$
-# Revision 1.5  2003-08-20 09:26:49  sandro
+# Revision 1.6  2003-08-28 11:56:04  sandro
+# remove import of LX.uri
+#
+# Revision 1.5  2003/08/20 09:26:49  sandro
 # update --flatten code path to work again, using newer URI strategy
 #
 # Revision 1.4  2003/02/14 22:21:10  sandro
