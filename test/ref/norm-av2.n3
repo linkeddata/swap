@@ -1,22 +1,22 @@
 
 
 
-<rdf:RDF xmlns="file:/devel/WWW/2000/10/swap/test/norm/AV#"
+<rdf:RDF xmlns="http://example.com/AV#"
     xmlns:gv="http://www.w3.org/2001/02pd/gv#"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 
     <rdf:Description rdf:about="file:/devel/WWW/2000/10/swap/test/#_g7">
-        <gv:hasEdgeProperty rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#dottedEdge"/>
-        <gv:hasEdgeProperty rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#solidEdge"/>
-        <gv:hasNode rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#ab"/>
-        <gv:hasNode rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#cable"/>
-        <gv:hasNode rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#catv"/>
-        <gv:hasNode rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#dvd"/>
-        <gv:hasNode rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#splitter"/>
-        <gv:hasNode rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#tv"/>
-        <gv:hasNode rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#vcr"/>
+        <gv:hasEdgeProperty rdf:resource="http://example.com/AV#dottedEdge"/>
+        <gv:hasEdgeProperty rdf:resource="http://example.com/AV#solidEdge"/>
+        <gv:hasNode rdf:resource="http://example.com/AV#ab"/>
+        <gv:hasNode rdf:resource="http://example.com/AV#cable"/>
+        <gv:hasNode rdf:resource="http://example.com/AV#catv"/>
+        <gv:hasNode rdf:resource="http://example.com/AV#dvd"/>
+        <gv:hasNode rdf:resource="http://example.com/AV#splitter"/>
+        <gv:hasNode rdf:resource="http://example.com/AV#tv"/>
+        <gv:hasNode rdf:resource="http://example.com/AV#vcr"/>
         <gv:label></gv:label>
     </rdf:Description>
 
@@ -25,95 +25,95 @@
         <gv:subgraph rdf:resource="file:/devel/WWW/2000/10/swap/test/#_g7"/>
     </rdf:Description>
 
-    <AV rdf:about="file:/devel/WWW/2000/10/swap/test/norm/AV#splitter">
-        <output rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#ab"/>
-        <solidEdge rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#ab"/>
+    <rdf:Description rdf:about="file:/devel/WWW/2000/10/swap/test/norm/av.n3">
+        <gv:digraph rdf:resource="file:/devel/WWW/2000/10/swap/test/#_g6"/>
+    </rdf:Description>
+
+    <AV rdf:about="http://example.com/AV#splitter">
+        <output rdf:resource="http://example.com/AV#ab"/>
+        <solidEdge rdf:resource="http://example.com/AV#ab"/>
         <title>Splitter</title>
         <gv:color>black</gv:color>
         <gv:label>Splitter</gv:label>
         <gv:shape>box</gv:shape>
     </AV>
 
-    <AV rdf:about="file:/devel/WWW/2000/10/swap/test/norm/AV#ab">
-        <output rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#selector"/>
-        <solidEdge rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#selector"/>
+    <AV rdf:about="http://example.com/AV#ab">
+        <output rdf:resource="http://example.com/AV#selector"/>
+        <solidEdge rdf:resource="http://example.com/AV#selector"/>
         <title>A/B Switch</title>
         <gv:color>black</gv:color>
         <gv:label>A/B Switch</gv:label>
         <gv:shape>box</gv:shape>
     </AV>
 
-    <rdfs:Property rdf:about="file:/devel/WWW/2000/10/swap/test/norm/AV#output">
+    <rdfs:Property rdf:about="http://example.com/AV#output">
     </rdfs:Property>
 
-    <AV rdf:about="file:/devel/WWW/2000/10/swap/test/norm/AV#cable">
-        <output rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#vcr"/>
-        <solidEdge rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#vcr"/>
+    <AV rdf:about="http://example.com/AV#cable">
+        <output rdf:resource="http://example.com/AV#vcr"/>
+        <solidEdge rdf:resource="http://example.com/AV#vcr"/>
         <title>Cable Box</title>
         <gv:color>black</gv:color>
         <gv:label>Cable Box</gv:label>
         <gv:shape>box</gv:shape>
     </AV>
 
-    <rdfs:Property rdf:about="file:/devel/WWW/2000/10/swap/test/norm/AV#title">
+    <rdfs:Property rdf:about="http://example.com/AV#title">
     </rdfs:Property>
 
-    <AV rdf:about="file:/devel/WWW/2000/10/swap/test/norm/AV#tv">
+    <AV rdf:about="http://example.com/AV#tv">
         <title>TV</title>
         <gv:color>black</gv:color>
         <gv:label>TV</gv:label>
         <gv:shape>box</gv:shape>
     </AV>
 
-    <AV rdf:about="file:/devel/WWW/2000/10/swap/test/norm/AV#dvd">
-        <output rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#selector"/>
-        <solidEdge rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#selector"/>
+    <AV rdf:about="http://example.com/AV#dvd">
+        <output rdf:resource="http://example.com/AV#selector"/>
+        <solidEdge rdf:resource="http://example.com/AV#selector"/>
         <title>DVD</title>
         <gv:color>black</gv:color>
         <gv:label>DVD</gv:label>
         <gv:shape>box</gv:shape>
     </AV>
 
-    <AV rdf:about="file:/devel/WWW/2000/10/swap/test/norm/AV#selector">
-        <output rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#tv"/>
-        <solidEdge rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#tv"/>
+    <AV rdf:about="http://example.com/AV#selector">
+        <output rdf:resource="http://example.com/AV#tv"/>
+        <solidEdge rdf:resource="http://example.com/AV#tv"/>
         <title>Signal Selector</title>
         <gv:color>black</gv:color>
         <gv:label>Signal Selector</gv:label>
         <gv:shape>box</gv:shape>
     </AV>
 
-    <AV rdf:about="file:/devel/WWW/2000/10/swap/test/norm/AV#vcr">
-        <output rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#ab"/>
-        <solidEdge rdf:resource="file:/devel/WWW/2000/10/swap/test/norm/AV#ab"/>
+    <AV rdf:about="http://example.com/AV#vcr">
+        <output rdf:resource="http://example.com/AV#ab"/>
+        <solidEdge rdf:resource="http://example.com/AV#ab"/>
         <title>VCR</title>
         <gv:color>black</gv:color>
         <gv:label>VCR</gv:label>
         <gv:shape>box</gv:shape>
     </AV>
 
-    <AV rdf:about="file:/devel/WWW/2000/10/swap/test/norm/AV#catv">
+    <AV rdf:about="http://example.com/AV#catv">
         <title>CATV</title>
         <gv:color>black</gv:color>
         <gv:label>CATV</gv:label>
         <gv:shape>box</gv:shape>
     </AV>
 
-    <rdfs:Class rdf:about="file:/devel/WWW/2000/10/swap/test/norm/AV#AV">
+    <rdfs:Class rdf:about="http://example.com/AV#AV">
     </rdfs:Class>
 
-    <rdfs:Property rdf:about="file:/devel/WWW/2000/10/swap/test/norm/AV#input">
+    <rdfs:Property rdf:about="http://example.com/AV#input">
     </rdfs:Property>
 
-    <rdf:Description rdf:about="file:/devel/WWW/2000/10/swap/test/norm/AV#solidEdge">
+    <rdf:Description rdf:about="http://example.com/AV#solidEdge">
         <gv:style>solid</gv:style>
     </rdf:Description>
 
-    <rdf:Description rdf:about="file:/devel/WWW/2000/10/swap/test/norm/AV#dottedEdge">
+    <rdf:Description rdf:about="http://example.com/AV#dottedEdge">
         <gv:style>dotted</gv:style>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="file:/devel/WWW/2000/10/swap/test/norm/av.n3">
-        <gv:digraph rdf:resource="file:/devel/WWW/2000/10/swap/test/#_g6"/>
     </rdf:Description>
 </rdf:RDF>

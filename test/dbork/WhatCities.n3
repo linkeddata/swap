@@ -1,0 +1,20 @@
+#  Definitive document handling - demo
+#
+#   cwm --mode=rse defdoc3.n3 --think
+#
+@prefix : <#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix state: <data/USRegionState.n3#> .
+@prefix city: <data/USCity.n3#> .
+
+# Question: What cities are in states bordering Massachusetts?
+
+{  ?m  state:code "MA".
+   ?s  state:borderstate ?m.
+   ?c  city:state  ?s.
+   ?c  city:name ?n
+} => {
+   ?n a :Name_Of_A_City_In_A_State_Bordering_Massachusetts
+}.
+
+# ends	

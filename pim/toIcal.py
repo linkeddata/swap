@@ -403,7 +403,7 @@ class CalWr:
                                ICAL.categories, ICAL.organizer, 
                                ICAL.attendee, ICAL.valarm,
                                ICAL.status,
-                               ICAL.rrule) and \
+                               ICAL.rrule, ICAL.url) and \
                str(s[1])[0:2] != "x:": 
                 progress("@@skipping ", s[PRED], " of [", '@@txt', "] = [", \
                                  s[OBJ], "]")
@@ -631,6 +631,8 @@ class CalWr:
         if sym:
             w = self._w
             uri = sym.uriref() #@@need to encode non-ascii chars
+				# iCal won't take spaces.
+	    uri = hexify(uri)
             w("%s;VALUE=URI:%s%s" % (pn.upper(), uri, CRLF))
 
 
@@ -680,6 +682,20 @@ class CalWr:
                 else:
                     progress("@@no ical:dateTime or ical:date for ", when)
     #enddef timeProp
+
+def hexify(ustr):
+    """Use URL encoding to return an ASCII string corresponding to the given unicode"""
+#    progress("String is "+`ustr`)
+#    s1=ustr.encode('utf-8')
+    str  = ""
+    for ch in ustr:  # .encode('utf-8'):
+	if ord(ch) > 126 or ord(ch) <33:
+	    ch = "%%%02X" % ord(ch)
+	else:
+	    ch = "%c" % ord(ch)
+	str = str + ch
+    return str
+    
 
 import sys, os
 import uripath
@@ -732,7 +748,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.10  2004-02-03 22:55:33  timbl
+# Revision 2.11  2004-02-04 17:57:07  timbl
+# Passes regresion tests. see admin/N3-Bugs.ics for oustanding bugs
+#
+# Revision 2.10  2004/02/03 22:55:33  timbl
 # mmm
 #
 # Revision 2.9  2004/02/02 19:38:56  timbl

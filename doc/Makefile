@@ -31,7 +31,7 @@ SCHEMAS= ../log.n3 ../crypto.n3 ../list.n3 ../math.n3 ../os.n3 ../string.n3 ../t
 
 
 all:	CwmBuiltins.html formats-example1 CwmHelp.html
-	touch all
+	echo all done
 
 CwmBuiltins.html : $(SCHEMAS)
 	$(PYTHON) $(CWM) $(SCHEMAS) schema2html.n3 --think --strings > $@

@@ -1,4 +1,4 @@
-@prefix : <AV#> .
+@prefix : <http://example.com/AV#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix gv: <http://www.w3.org/2001/02pd/gv#>.

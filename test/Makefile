@@ -17,7 +17,7 @@ all : pyc-check $(CODE) $(TESTS)
 
 fast : $(CODE) regression.n3
 	PYTHONPATH=`/bin/pwd`/.. $P retest.py -n -f regression.n3
-	touch fast
+
 
 pyc-check : $(CODE)
 	rm ../*.pyc
