@@ -15,8 +15,8 @@
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
 
 
-@prefix      : <cityLookup#>.
-@prefix cityl: <cityLookup#>.
+@prefix      : <http://www.w3.org/2000/10/swap/pim/cityLookup#>.
+@prefix cityl: <http://www.w3.org/2000/10/swap/pim/cityLookup#>.
 
 # http://www.wunderground.com/cgi-bin/findweather/getForecast?query=Budapest%2C+Hungary
 
@@ -64,7 +64,10 @@
   k:inRegion [ map:countryName "Hungary" ] ].
 
 # $Log$
-# Revision 1.3  2003-04-14 21:19:34  connolly
+# Revision 1.4  2003-07-07 16:10:16  connolly
+# documented nearestAirport property; cleaned up parse errors in contact.n3; used doc:persistencePolicy in contact; fixed typo in doc
+#
+# Revision 1.3  2003/04/14 21:19:34  connolly
 # 4Apr refactor
 #
 # Revision 1.2  2003/03/10 23:57:42  connolly

@@ -1,11 +1,12 @@
 
-<!-- Processed by Id: cwm.py,v 1.97 2002/07/06 12:52:02 timbl Exp -->
+<!-- Processed by Id: cwm.py,v 1.129 2003/04/08 16:12:43 timbl Exp -->
 <!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/pim/contact.n3-->
 
 
 <rdf:RDF xmlns="http://www.w3.org/2000/10/swap/pim/contact#"
     xmlns:con="http://www.w3.org/2000/10/swap/pim/contact#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc#"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
     xmlns:mso="file:/home/connolly/w3ccvs/WWW/2000/10/swap/MSOutlookContacts.n3#"
     xmlns:ont="http://www.daml.org/2001/03/daml+oil#"
@@ -20,18 +21,37 @@
         <ont:equivalentTo rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#publicHomePage"/>
     </rdf:Property>
 
+    <rdf:Description rdf:about="contact">
+        <doc:rules rdf:resource="contact-rules"/>
+    </rdf:Description>
+
     <rdf:Description rdf:about="">
         <dc:description>
  To illustrate with examples the creation of a schema of RDF properties
  and classes, but using abstract things for people, rather than strings, etc.
- If you have an "Assistant's phone number", thenreally you have an assitant who has
+ If you have an "Assistant's phone number", then really you have an assitant who has
  a phone number - and that is much more useful in general.
  For example, when data about you and your assietnt in merged,
  you will end up with an "assistant's email" and the like.
 </dc:description>
         <dc:description>
 $Log$
-Revision 1.5  2002-07-18 05:30:49  connolly
+Revision 1.6  2003-07-07 16:10:16  connolly
+documented nearestAirport property; cleaned up parse errors in contact.n3; used doc:persistencePolicy in contact; fixed typo in doc
+
+Revision 1.20  2003/06/18 19:12:14  timbl
+draft
+
+Revision 1.19  2003/02/14 11:56:47  timbl
+bug fixes to tax rules
+
+Revision 1.18  2002/11/24 03:12:03  timbl
+base can be None in uripath:refTo
+
+Revision 1.17  2002/10/07 20:50:00  timbl
+(timbl) Changed through Jigsaw.
+
+Revision 1.13  2002/07/18 05:30:49  connolly
 remove dependency on 2001/03swell/rcs stuff; fix pointer to outlook contacts
 
 Revision 1.12  2002/03/19 18:55:57  connolly
@@ -73,11 +93,11 @@ updated ont: to March 2001 DAML namespace.
 </dc:description>
         <dc:description>$Id$</dc:description>
         <dc:title>Contact: Utility concepts for everyday life</dc:title>
-        <_nspolicy rdf:parseType="Resource">
+        <doc:persistencePolicy rdf:parseType="Resource">
             <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#_SubjectToChange"/>
             <dc:description>If you change this, you have to tell the W3C SemWeb AD
    folk, including Dan Connolly; so agreed 5 Jun 2001</dc:description>
-        </_nspolicy>
+        </doc:persistencePolicy>
     </rdf:Description>
 
     <rdf:Description rdf:about="#vcard_list">
@@ -99,17 +119,9 @@ vCard.Business.URL, vCard.Business.Zipcode</ont:equivalentTo>
     <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Address">
     </rdfs:Class>
 
-    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#City">
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
-    </rdf:Description>
-
     <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/pim/contact#ContactLocation">
         <rdfs:comment>A place with address, phone number, fax, etc</rdfs:comment>
     </rdfs:Class>
-
-    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Country">
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
-    </rdf:Description>
 
     <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Data">
     </rdfs:Class>
@@ -122,43 +134,19 @@ vCard.Business.URL, vCard.Business.Zipcode</ont:equivalentTo>
     </rdfs:Class>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Person">
+        <rdfs:comment>A person in the normal sense of the word.</rdfs:comment>
         <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#SocialEntity"/>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#PostalCode">
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
     </rdf:Description>
 
     <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/pim/contact#SocialEntity">
         <rdfs:comment>The sort of thing which can have a phone number.</rdfs:comment>
     </rdfs:Class>
 
-    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#StateOrProvince">
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Street">
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Street2">
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Street3">
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
-    </rdf:Description>
-
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#_SubjectToChange">
         <rdfs:label>subject to change</rdfs:label>
     </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#_addressProperty">
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#_nspolicy">
-        <rdfs:isDefinedBy rdf:resource="http://www.w3.org/1999/10/nsuri"/>
-        <rdfs:label>namespace policy</rdfs:label>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#address">
@@ -174,8 +162,12 @@ vCard.Business.URL, vCard.Business.Zipcode</ont:equivalentTo>
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#child">
     </rdf:Property>
 
-    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#company">
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#city">
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#country">
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#departmentName">
@@ -188,7 +180,7 @@ vCard.Business.URL, vCard.Business.Zipcode</ont:equivalentTo>
     <ont:UnambiguousProperty rdf:about="http://www.w3.org/2000/10/swap/pim/contact#emailAddress">
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#SocialEntity"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#_EmailAddress"/>
-        <_example rdf:parseType="log:Quote">
+        <_example rdf:parseType="Quote">
             <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#_Dan">
                 <emailAddress>connolly@w3.org</emailAddress>
             </rdf:Description>
@@ -200,6 +192,7 @@ vCard.Business.URL, vCard.Business.Zipcode</ont:equivalentTo>
     </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#fax">
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#ContactLocation"/>
     </rdf:Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#firstName">
@@ -227,6 +220,11 @@ vCard.Business.URL, vCard.Business.Zipcode</ont:equivalentTo>
     <ont:UnambiguousProperty rdf:about="http://www.w3.org/2000/10/swap/pim/contact#homePageAddress">
     </ont:UnambiguousProperty>
 
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#knownAs">
+        <rdfs:comment>A person may be known as various strings.
+For example, an email friendly name string.</rdfs:comment>
+    </rdf:Property>
+
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#lastName">
         <ont:equivalentTo rdf:resource="../MSOutlookContacts.n3#Last_Name"/>
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
@@ -236,7 +234,7 @@ vCard.Business.URL, vCard.Business.Zipcode</ont:equivalentTo>
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#SocialEntity"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Mailbox"/>
         <_addressProperty rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#mailboxURI"/>
-        <_example rdf:parseType="log:Quote">
+        <_example rdf:parseType="Quote">
             <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#_Dan">
                 <mailbox rdf:resource="mailto:connolly@w3.org"/>
             </rdf:Description>
@@ -246,27 +244,53 @@ vCard.Business.URL, vCard.Business.Zipcode</ont:equivalentTo>
     <ont:UnambiguousProperty rdf:about="http://www.w3.org/2000/10/swap/pim/contact#mailboxURI">
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#SocialEntity"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#_URI"/>
-        <_example rdf:parseType="log:Quote">
+        <_example rdf:parseType="Quote">
             <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#_Dan">
                 <mailboxURI>mailto:connolly@w3.org</mailboxURI>
             </rdf:Description>
         </_example>
     </ont:UnambiguousProperty>
 
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#middleInitial">
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
+    </rdf:Description>
+
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#middleName">
         <ont:equivalentTo rdf:resource="../MSOutlookContacts.n3#Middle_Name"/>
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#mobile">
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#ContactLocation"/>
+    </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#motherTongue">
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#LanguageCode"/>
     </rdf:Property>
 
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#nearestAirport">
+        <rdfs:comment>?X nearestAirport ?Y locates ?X in an international
+   context; for example, for the purpose of organizing a face-to-face
+   meeting of a W3C working group. This property is intended to mitigate
+   privacy risks of giving out detailed contact info.</rdfs:comment>
+        <rdfs:label>nearest airport</rdfs:label>
+        <rdfs:seeAlso rdf:resource="http://lists.w3.org/Archives/Public/www-webont-wg/2001Nov/0006.html"/>
+        <rdfs:seeAlso rdf:resource="http://www.perceive.net/pages/page/articles/year/2002/month/12#9"/>
+        <rdfs:seeAlso rdf:resource="http://www.w3.org/2001/sw/Europe/200303/geo/intro.html"/>
+        <rdfs:seeAlso rdf:resource="http://www.w3.org/2001/sw/WebOnt/webont-airports.rdf"/>
+        <rdfs:seeAlso rdf:resource="http://www.w3.org/2001/tag/ilist#httpRange-14"/>
+    </rdf:Property>
+
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#office">
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#ContactLocation"/>
     </rdf:Property>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#organization">
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
+    </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#personalSuffix">
         <ont:equivalentTo rdf:resource="../MSOutlookContacts.n3#Suffix"/>
@@ -279,7 +303,12 @@ vCard.Business.URL, vCard.Business.Zipcode</ont:equivalentTo>
     </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#phone">
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#ContactLocation"/>
     </rdf:Property>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#postalCode">
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
+    </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#publicHomePage">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#homePage"/>
@@ -290,8 +319,32 @@ vCard.Business.URL, vCard.Business.Zipcode</ont:equivalentTo>
         <rdfs:label>sort name</rdfs:label>
     </rdf:Property>
 
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#stateOrProvince">
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#street">
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#street2">
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#street3">
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
+    </rdf:Description>
+
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#vacationHome">
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#ContactLocation"/>
     </rdf:Property>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#zip">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#postalCode"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/doc#persistencePolicy">
+        <rdfs:seeAlso rdf:resource="http://www.w3.org/1999/10/nsuri"/>
+    </rdf:Description>
 </rdf:RDF>

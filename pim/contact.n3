@@ -5,7 +5,7 @@
 dc:description """
  To illustrate with examples the creation of a schema of RDF properties
  and classes, but using abstract things for people, rather than strings, etc.
- If you have an "Assistant's phone number", thenreally you have an assitant who has
+ If you have an "Assistant's phone number", then really you have an assitant who has
  a phone number - and that is much more useful in general.
  For example, when data about you and your assietnt in merged,
  you will end up with an "assistant's email" and the like.
@@ -21,12 +21,12 @@ dc:description """
 @prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
 @prefix doc:  <http://www.w3.org/2000/10/swap/pim/doc#> .
 
-<> :_nspolicy [ a :_SubjectToChange;
+<> doc:persistencePolicy [ a :_SubjectToChange;
    dc:description """If you change this, you have to tell the W3C SemWeb AD
    folk, including Dan Connolly; so agreed 5 Jun 2001""" ].
 
-:_nspolicy a rdf:Property; rdfs:label "namespace policy";
-	rdfs:isDefinedBy <http://www.w3.org/1999/10/nsuri>. # @@move these :_ things there.
+doc:persistencePolicy
+	rdfs:seeAlso <http://www.w3.org/1999/10/nsuri>.
 :_SubjectToChange rdfs:label "subject to change". 
 
 
@@ -83,6 +83,15 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 :sortName a rdf:Property; rdfs:label "sort name";
   rdfs:comment "re-arranged for lexicographic ordering; ala Doe, John".
 
+:nearestAirport a rdf:Property; rdfs:label "nearest airport";
+  rdfs:comment """?X nearestAirport ?Y locates ?X in an international
+   context; for example, for the purpose of organizing a face-to-face
+   meeting of a W3C working group. This property is intended to mitigate
+   privacy risks of giving out detailed contact info.""";
+  rdfs:seeAlso <http://lists.w3.org/Archives/Public/www-webont-wg/2001Nov/0006.html>, <http://www.w3.org/2001/sw/WebOnt/webont-airports.rdf>,
+<http://www.perceive.net/pages/page/articles/year/2002/month/12#9>,
+<http://www.w3.org/2001/sw/Europe/200303/geo/intro.html>,
+<http://www.w3.org/2001/tag/ilist#httpRange-14>.
 
 :knownAs a rdf:Property;
     rdfs:comment """A person may be known as various strings.
@@ -213,10 +222,6 @@ For example, an email friendly name string.""".
 :_addressProperty a rdf:Property.
 :mailbox :_addressProperty :mailboxURI.
 
-#@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
-this log:forAll :x, :p, :y.
-
-{ :x [ is :_addressProperty of :p] [ is log:uri of :y] } log:implies { :x :p :y }.
 
 #  { :ent :mailboxURI [ log:equalTo [ is log:concat of ( "mailto:" [ :_uriEncode :addr ] ) ] ] } log:implies { :ent :emailAddress :addr }. # only goes one way because we could use PUT to HTTP resources to deliver mail.
 
@@ -290,7 +295,10 @@ mso:WebPage  a rdf:Property;
 
 <> dc:description """
 $Log$
-Revision 1.20  2003-06-18 19:12:14  timbl
+Revision 1.21  2003-07-07 16:10:16  connolly
+documented nearestAirport property; cleaned up parse errors in contact.n3; used doc:persistencePolicy in contact; fixed typo in doc
+
+Revision 1.20  2003/06/18 19:12:14  timbl
 draft
 
 Revision 1.19  2003/02/14 11:56:47  timbl
