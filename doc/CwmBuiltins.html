@@ -98,17 +98,29 @@ in question.
 Do not confuse with daml:EquivalentTo.
 A cwm built-in logical operator, RDF graph level.
 </td></tr>
-  <tr><td class='ln'>forAll</td><td class='comment'>A is true for any object in place of B.</td></tr>
+  <tr><td class='ln'>forAll</td><td class='comment'>A is true for any object in place of B.
+	This is NOT a real rdf property in its behaviour - a pseudoproperty.
+	For examplem substitution is not permitted on its object.</td></tr>
   <tr><td class='ln'>forSome</td><td class='comment'>A is true for some object for which here we use B. This
         is NOT a real rdf property in its behaviour - a pseudoproperty.
 	For example, removal of it from a formula does nor
 	preserve truth, and substitution is not permitted on its object.</td></tr>
   <tr><td class='ln'>implies</td><td class='comment'>Logical implication. 
-This is the relation between the antecedent and conclusion of a rule.
-Used by cwm as the basic hook for adding inference to RDF.</td></tr>
+This is the relation between the antecedent (subject) and
+conclusion (object) of a rule.
+For every subsitution of variable names for symbols or literals
+which maps the antecedent to a fromula which knowledge base
+log:includes, the same substitution is applied to the 
+conclusion to generate the result.
+ 
+Used by cwm as the basic hook for adding inference to RDF.
+See the manual to define what the knowledge base is and
+where the results go. See also log:conclusion.</td></tr>
   <tr><td class='ln'>includes</td><td class='comment'>One formula is subset of other.
 That is, the two graphs can be matched by finding the
-mapping between blank nodes.
+mapping between varibles in one and variables in the other.
+Variable subsitution is applied recursively to nested formulae.
+[Note forAll and forSome psuedo-statements themselves].
 The information in the subject formula supports the object formula.
 Understood natively by cwm in the antecendent of a rule.</td></tr>
   <tr><td class='ln'>n3String</td><td class='comment'>The subject formula, expressed as N3, gives this string.</td></tr>
@@ -116,7 +128,7 @@ Understood natively by cwm in the antecendent of a rule.</td></tr>
 Do not confuse with daml:EquivalentTo.
 A cwm built-in logical operator.
 </td></tr>
-  <tr><td class='ln'>notIncludes</td><td class='comment'>The object formula is NOT a subset of subject. Understood natively by cwm.</td></tr>
+  <tr><td class='ln'>notIncludes</td><td class='comment'>The object formula is NOT a subset of subject. Understood natively by cwm. (See includes)</td></tr>
   <tr><td class='ln'>outputString</td><td class='comment'>The subject is a key and the object is a string,
 where the strings are to be output in the order of the keys.
 See cwm --strings in cwm --help.
