@@ -3,19 +3,20 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <title>Reaching out onto the Web</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body xml:lang="en" lang="en">
+
 <div class="noprint">
-<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a>
-| <a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
-								    href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> | Reaching Out Onto the Web</p>
+<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a> |
+<a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
+href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
+Reaching Out Onto the Web</p>
 </div>
 
-<h1>Reaching out onto the Web</a></h1>
+<h1>Reaching out onto the Web</h1>
 
 <p>So what is this Semantic <em>Web</em>, anyway? Where does the <em>Web</em>
 come in? So far you've shown us just a language for writing data.</p>
@@ -35,10 +36,10 @@ seperate sets of data.</p>
 
 <p>The basic function which connects RDF to the web is <code><dfn><a
 name="semantics" id="semantics">log:semantics</a></dfn></code>. The
-log;semantics of a document is the formula which one gets by parsing a
-semantic web document. As it is a built-in function, when cwm needs to
-evaluate it it will pick up the document (N3 or RDF/XML) and parse it,
-returning the formula<a href="#L4808"><sup>1</sup></a>..</p>
+<code>log:semantics</code> of a document is the formula which one gets by
+parsing a semantic web document. As it is a built-in function, when cwm needs
+to evaluate it it will pick up the document (N3 or RDF/XML) and parse it,
+returning the formula<a href="#L4808"><sup>1</sup></a>.</p>
 
 <p></p>
 <pre>{ &lt;foo.rdf&gt; log:semantics ?f } =&gt; { ?f a :InterestingFormula}.</pre>
@@ -53,8 +54,8 @@ the first. This the same pattern matching which happens with
 match.</p>
 
 <p>So let's say we we have a concept of a semantic web home page for a
-person. We decide that our policy os that if someone's home page says that
-they are a begtarian, then we believe that they are a vegetarian.</p>
+person. We decide on the policy that if someone's home page says that they
+are a vegtarian, then we believe that they are a vegetarian.</p>
 <pre>this log:forAll :x.
 {:x :homePage log:includes { :x a :Vegetarian }}=&gt; { :x a :Vegetarian}.</pre>
 
@@ -66,12 +67,12 @@ document. The definition of ?x is that it is quantified in the scope of not
 the immediate formula but the next enclosing formula. So we can't use it at
 different levels of nesting. We are not asking whether the home page includes
 "For all x, x is vegetarian". This is an example of how one must be explicit
-about the scope of variables when they are used at more than one level..</p>
+about the scope of variables when they are used at more than one level. </p>
 
 <h3><a name="Implementi" id="Implementi">Implementing defaults and
 <code>log:notIncludes</code></a></h3>
 
-<p>Because the document is a finite size, you can test for what it does
+<p>Because a formula is a finite size, you can test for what it does
 <em>not</em> say, with <code>log:notIncludes.</code> Here, we have a rule
 that is the specification for a car doesn't say what color it is then it is
 black.</p>
@@ -89,16 +90,16 @@ one with a value for the color.</p>
 
 <p>This is a way to do defaults. Notation3 as it is doesn't have defaults,
 because on the web, you can't say "if nothing says it is another color". You
-can never know in the whole web whether anyone has given a color. Also, ifwe
-start to just loosley talka bout defaults in the sense of "if you don't
-already know a color", then different agents will end up drawing different
-conclusions from the same data, which is not a good foundation for a scalable
-web. So, you handle defaults by first running rules to work out everything
-which is specified, and then on the result of that do a
+can never know in the whole web whether anyone has given a color. Also, if we
+start to just looslely talk about defaults in the sense of <em> if you don't
+already know a color</em>, then different agents will end up drawing
+different conclusions from the same data, which is not a good foundation for
+a scalable web. So, you handle defaults by first running rules to work out
+everything which is specified, and then on the result of that do a
 <code>notIncldues</code> rule like that above to implement the default
 values.</p>
 
-<h2>Thinking inside thinking with log:conclusion</h2>
+<h2>Thinking inside thinking with <code>log:conclusion</code></h2>
 
 <p>To do some inference within another set of rules, a useful relationship is
 that between a formula, and the result of thinking about it - running any
@@ -131,6 +132,13 @@ the web as a set of interwoven formulae.</p>
 <p>It is possible also to get a little more involved, using the following
 functions which separate the looking up from the parsing.</p>
 <dl>
+  <dt><code>log:uri</code></dt>
+    <dd>The uri of a resource. <code><br />
+      &lt;http://example.org/&gt; log:uri "http://example.org/".</code> <br />
+      Normal logic processing doesn't look at URIs but in some cases one
+      needs to. This is a level-breaker: it lets an N3 system look at its
+      infrastructure. It is a function which cwm can evaluate either way:
+      resource to URI or URI to resource.</dd>
   <dt><code>log:content</code></dt>
     <dd>For a document, the string which was returned as the document
       contents when the URI of the resource was looked up.</dd>
@@ -139,12 +147,6 @@ functions which separate the looking up from the parsing.</p>
       document.</dd>
   <dt><code>log:N3String</code></dt>
     <dd>For a formula, a string which expressed that formula in N3.</dd>
-  <dt>log:uri</dt>
-    <dd>The uri of a resource. <code>&lt;http://example.org/&gt; log:uri
-      "http://example.org/".</code> Normal logic processing doesn't look at
-      URIs but in some cases one needs to. This is a level-breaker: it lets
-      an N3 system look at its infrastructure. It is a function which cwm can
-      evaluate either way: resource to URI or URI to resource.</dd>
   <dt></dt>
     <dd></dd>
 </dl>
@@ -160,7 +162,7 @@ the digital signature of a string before accepting the data encoded in it.</p>
 
 <p>There is some properties for which there is just a well-defined set of
 values. The state codes of the US states is an example. There are 50 states,
-and each has one state code and one state name. One you know them, you know
+and each has one state code and one state name. Once you know them, you know
 them. Once you know where to look them up, you can resolve any query about
 them. That's got to be useful. It is represented by giving, somewhere, a
 <code>log:definitiveDocument</code> for a the property. This is metadata -
@@ -170,8 +172,7 @@ metadata, and how it will use it.</p>
 <p>This behaviour is controlable in cwm by the --mode flags. By default cwm
 won't doing anything about it at all. See:</p>
 <ul>
-  <li><a href="cwm.html#Mode">Cwm's --mode flags</a>
-    <a></a></li>
+  <li><a href="cwm.html#Mode">Cwm's --mode flags</a> <a></a></li>
 </ul>
 
 <p></p>
@@ -202,14 +203,13 @@ expressing query involving US state information.</p>
 # Question: What cities are in states bordering Massachusetts?
 
 {"MA"^state:code.state:borderstate^city:state city:name ?n}
-   =&gt;{    ?n a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS }.
-</pre>
+   =&gt;{    ?n a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS }.</pre>
 
 <p>Its a rather random example (think of a better one? let us know! ;-), to
 look up the states bordering Massachusetts, and specifcially the names of
 major cities in that state. Massachusetts is identified as the state with
-state code "MA". So is we load this in cwm with --think?  Nothing.  Cwm just
-prints out the file reformatted.  Now run it in remote query mode with schema
+state code "MA". So is we load this in cwm with --think? Nothing. Cwm just
+prints out the file reformatted. Now run it in remote query mode with schema
 fetch:</p>
 
 <p></p>
@@ -224,14 +224,13 @@ fetch:</p>
     
     "Avon"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
 
-    ...
-</pre>
+    ...</pre>
 
 <p>and so on.</p>
 
 <p></p>
 
-<p>To do more fancy things, you can run cwm in a mode which loads the </p>
+<p>To do more fancy things, you can run cwm in a mode which loads the</p>
 
 <p></p>
 
@@ -261,11 +260,9 @@ protocol headers which convey time-related information.</p>
 <hr />
 
 <div class="noprint">
-
 <p>Tim BL, with his director hat off</p>
 
 <p>$Id$</p>
 </div>
-
 </body>
 </html>
