@@ -14,10 +14,16 @@
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 :Issue a s:Class.
 
-:description a r:Property;
-    s:range log:String. 
 :title a r:Property;
     s:comment "Short title, less than one line".
+
+:description a r:Property;
+    s:range log:String;
+    s:comment "The description of the problem or issue raised". 
+
+:resolution a r:Property;
+    s:range log:String;
+    s:comment "A summary of the resolution of the issue.". 
 
 :notes a r:Property;
     s:comment "Comments about this eg for the use of group secretary". 
