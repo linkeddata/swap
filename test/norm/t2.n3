@@ -4,7 +4,8 @@
 @prefix m: <http://nwalsh.com/rdf/movies#> .
 @prefix xmb: <file:/home/ndw/.xmlMemo.rdf#> .
 
-xmb:movie-dieanotherday2002 m:cast "Emilio EchevarrÃ­a"  .
+xmb:movie-dieanotherday2002 m:cast "Emilio Echevarr\u00eda"  .
+xmb:movie-dieanotherday2002 m:cast "Emilio EchevarrÃa"  .
 
 #ends
 
