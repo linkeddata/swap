@@ -1,0 +1,29 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+<> dc:description """substitution of equals for equals, 3 cases""",
+ "$Id$".
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+@prefix : <#>.
+
+this log:forAll :X, :Y, :Z.
+
+{ :X :P :Y. :X = :Z.
+  :P log:notEqualTo log:forAll, log:forSome
+} log:implies
+ { :Z :P :Y }.
+
+{ :X :P :Y. :P = :Q.
+  :P log:notEqualTo log:forAll, log:forSome
+} log:implies { :X :Q :Y }.
+
+{ :X :P :Y. :Y = :Z.
+  :P log:notEqualTo log:forAll, log:forSome
+} log:implies { :X :P :Z }.
+
+{ :X = :Y } log:implies { :Y = :X }.
+
+:bob :likes :jane.
+:jane = :theGirl.
+:bob = :theGuy.
