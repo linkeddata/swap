@@ -13,6 +13,8 @@ DOC=doc/CwmHelp.htm
 
 TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/ql/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/cwm/detailed.tests test/ntriples/detailed.tests test/delta/detailed.tests test/syntax/detailed.tests test/reify/detailed.tests test/testmeta.n3
 
+TARNAME = cwm-0.7.3+
+
 .SUFFIXES: .html .py .g .rdf .n3
 
 .g.py:
@@ -31,6 +33,9 @@ tested : package
 	(cd test; make pre-release)
 	echo "Test worked, now can make release"
 
+filelist: $(SOURCES) $(TESTS)
+	(cd test; $(MAKE) filelist)
+
 doc.made : cwm.py notation3.py sax2rdf.py toXML.py
 	(cd doc; make)
 
@@ -44,7 +49,7 @@ package: math.rdf maths.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf
 # Can't make dependencies on *.py :-(
 
 # cwm.py notation3.py llyn.py  RDFSink.py toXML.py
-cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) tested
+cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) tested filelist
 	cvs -q update
 	tar -czf  cwm.tar.gz $(HTMLS) $(SOURCES) $(TESTS) `cat test/testfilelist | sed -e 's/^/test\//'`
 	rm -rf cwm
@@ -53,8 +58,11 @@ cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) tested
 	cd cwm/test && $(MAKE)
 	cd cwm && rm -rf *
 	cd cwm && tar -xzf ../cwm.tar.gz
+	mv cwm $(TARNAME)
 	rm cwm.tar.gz
-	tar -czf cwm.tar.gz cwm
+	tar -czf $(TARNAME).tar.gz $(TARNAME)
+	mv $(TARNAME) cwm
+	ln -s $(TARNAME).tar.gz cwm.tar.gz
 #LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply/*.py *.py
 
 

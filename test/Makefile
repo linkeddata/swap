@@ -25,13 +25,12 @@ TESTS=online.tests rdfcore-tests.n3 $(OFFLINETESTS)
 post-install : pyc-check $(CODE) $(OFFLINETESTS)
 	PYTHONPATH=`/bin/pwd`/.. $P retest.py -c $(OFFLINETESTS)
 
-pre-release : filelist
-#pyc-check $(CODE) $(TESTS)
-#	PYTHONPATH=`/bin/pwd`/.. $P retest.py -c $(TESTS)
+pre-release : pyc-check $(CODE) $(TESTS)
+	PYTHONPATH=`/bin/pwd`/.. $P retest.py -c $(TESTS)
 
 
-filelist : pyc-check $(CODE) $(TESTS)
-	export CWM_LIST_FILES=1; PYTHONPATH=`/bin/pwd`/.. $P retest.py --cwm=./file_list.py -c $(TESTS)
+filelist : pyc-check $(CODE) $(OFFLINETESTS)
+	export CWM_LIST_FILES=1; PYTHONPATH=`/bin/pwd`/.. $P retest.py --cwm=./file_list.py -c $(OFFLINETESTS)
 	sort testfilelist > testfilelist3
 	uniq testfilelist3 > testfilelist
 	rm testfilelist3

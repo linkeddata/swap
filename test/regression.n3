@@ -414,6 +414,10 @@ test:CwmTest;
     test:description   "log:resolvesTo with RDF/xml syntax";
     test:arguments     """resolves-rdf.n3 -think""".
 
+:t1048a a test:CwmTest;
+	test:referenceOutput <includes/xsd.ref>;
+	test:description "Cwm builtins should support most xsd datatypes";
+	test:arguments  "includes/xsd.n3 --think --strings".
 
 :t1049 a test:CwmTest;
     test:referenceOutput <ref/sameDan.n3>;
