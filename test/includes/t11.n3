@@ -3,9 +3,9 @@
  
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix daml:  <http://www.daml.org/2000/10/daml-ont#> .
-@prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
-@prefix ex:   <http://www.daml.org/2000/10/daml-ex#> .
+# @prefix daml:  <http://www.daml.org/2000/10/daml-ont#> .
+# @prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+# @prefix ex:   <http://www.daml.org/2000/10/daml-ex#> .
 @prefix log:  <http://www.w3.org/2000/10/swap/log#> .
 
 @prefix : <foo.n3#>.  # Local stuff
@@ -24,19 +24,6 @@ this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
 { <t10a.n3> log:resolvesTo :F.
   :F log:includes { :s :p :o}   } log:implies { :p a :UsedProperty } .
 
-{ :p a :UsedProperty.
-  :p log:resolvesTo :S.
-  :S log:includes { :p s:isDefinedBy :s1 }} log:implies {:p :SCHEMA :s1}.
-
-{  :p a :UsedProperty.
-   :p log:resolvesTo :H.
-   :H log:includes { :p a rdf:Property }
-} log:impliesXX { :p a :defined_as_property_in_ns_doc1 }.
-
-{ <foo.n3#is> log:resolvesTo :H.
-  :H log:includes { :p s:isDefinedBy :x }} log:impliesXX { :p a :defined_in_schema2 .
-    :p  :is_defined_in2 :x.
-    :H :is :whatFooIsResolvedTo2 }.
 
 #  The RDF and RDFS specs imply this algorithm for the definitive schema corresponding
 #  to a Property :p.  (From Ralph Swick, whiteboard conversation)
@@ -49,23 +36,43 @@ this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
     :p  :schema :x.
 }.
 
+# We may need the schema as a forumula two:
+
+{     :p :schema [ log:resolvesTo :F ] } log:implies { :p :schemaFormula :F }. 
+
+#  If there is no schema found, then we flag a problem
+#
+{ :p a :UsedProperty .
+  :p log:resolvesTo [log:notIncludes { :p s:isDefinedBy :x }]
+} log:implies {:p a :ERROR_CANT_GET_SCHEMA}.
+
 
 # Now we can find the schema, we can check whether the property is indeed
 # mentioned in the schema.
-# Exactly what we require of @@@
+# Exactly what we require of a schema is a good question.
+#  One answer is that
+#   (a)when the schema is found and combined with well-known general rules
+#      wiht inference that you can show that eachof the predictes used is
+#      indeed defined as a property. This gets rid of spelling errors etc.
+#   (b)when the document is combined with the above, no condradiction
+#      can be found from anything being (eg) member of disjoint sets.
 
 {     :p :schema :s.
-      :s log:resolvesTo [:notIncludes { :p a s:Property }].
+      :s log:resolvesTo [log:includes { :p a rdf:Property }].
 } log:implies {
-      :p a :SPELLING_MISTAKE_MAYBE.  # ;-)
+      :p a :schema_defined_property4.  #
 }.
 
 
+{     :p :schema :s.
+      :s log:resolvesTo [log:notIncludes { :p a rdf:Property }].
+} log:implies {
+      :p a :ERROR_SPELLING_MISTAKE_MAYBE.  # ;-)
+}.
 
-
-{ :p a :defined_in_schema.  :p a :UsedProperty } log:implies { :p a :UsedAndDefined }.
 
 log:implies a log:Chaff.  #  Clear out rules on -purge
+
 
 ########################### Old stuff:
 
@@ -81,6 +88,17 @@ log:implies a log:Chaff.  #  Clear out rules on -purge
 #   :H log:includes { foo:is a rdf:Property }
 #} log:implies { foo:is a :defined_as_prop_in_schema }.
 
+#{  :p a :UsedProperty.
+#   :p log:resolvesTo :H.
+#   :H log:includes { :p a rdf:Property }
+#} log:implies { :p a :defined_as_property_in_ns_doc1 }.
+
+#{ <foo.n3#is> log:resolvesTo :H.
+#  :H log:includes { :p s:isDefinedBy :x }} log:impliesXX { :p a :defined_in_schema2 .
+#    :p  :is_defined_in2 :x.
+#    :H :is :whatFooIsResolvedTo2 }.
+
+# { :p a :defined_in_schema.  :p a :UsedProperty } log:implies { :p a :UsedAndDefined }.
 
 
  

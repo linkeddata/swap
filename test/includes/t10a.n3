@@ -16,7 +16,10 @@
 #
 
 
- :theSky :is :blue . 
+ :theSky :is :blue .       # A valid statement.
  
+ :theSky :blue :is .       # Predicate defined by schema but not a Property.
 
+ :theSky :isjunk :blue .   # Not a schema-valid Property
+ 
 #ends
