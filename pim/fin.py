@@ -82,10 +82,17 @@ def internalCheck():
     while len(transactions) > 0:
 	x = transactions.pop()
 	date = str(kb.the(subj=x, pred=qu.date))
+	if len(kb.each(subj=x, pred=qu.amount)) != 1:
+	    progress("Ignoring !=1 amount transaction %s" % x)
+	    continue
 	amount = float(str(kb.the(subj=x, pred=qu.amount)))
 	for y in transactions:
 	    datey = str(kb.the(subj=y, pred=qu.date))
 	    if date[0:10] == datey[0:10]:  # precision one day
+		if len(kb.each(subj=y, pred=qu.amount)) != 1:
+		    progress("Ignoring III double amount transaction %s" % y)
+		    transactions.remove(y)
+		    continue
 		if abs(amount + float(str(kb.the(subj=y, pred=qu.amount)))) < 0.001 : # Floating point ~=
 		    transactions.remove(y)
 		    break
@@ -177,11 +184,13 @@ def doCommand(year, inputURI="/dev/stdin"):
 	unclassified = kb.each(pred=rdf_type, obj=qu_Unclassified)
 	for t in classified: assert t not in unclassified, "Can't be classified and unclassified!"+`t`
 	for s in classified + unclassified:
-	    progress( "Transaction ", `s`)
+#	    progress( "Transaction ", `s`)
 	    t_ok, c_ok = 0, 0
 	    date = kb.any(subj=s, pred=qu_date).__str__()
-	    progress( "date", date)
-	    if date == None: raise ValueError("No date for transaction %s" % s)
+	    if date == "None":
+#		raise ValueError("No date for transaction %s" % s)
+		progress("No date for transaction %s -- ignoring\n" % s)
+		continue
 	    year = int(date[0:4])
 #	    print year, yearInQuestion, `s`
 	    if  int(year) != int(yearInQuestion): continue
@@ -190,7 +199,12 @@ def doCommand(year, inputURI="/dev/stdin"):
 	    payees = kb.each(subj=s, pred=qu_payee)
 	    if str(payees[0]) == "Check" and len(payees) >1: payee = payees[1]
 	    else: payee = payees[0]
-	    
+	    amounts = kb.each(subj=s, pred=qu_amount)
+	    if len(amounts) >1:
+		progress("More than one amount %s for transaction %s -- ignoring!@@\n"
+			% (amounts,s))
+		continue
+
 	    amount = float(kb.the(subj=s, pred=qu_amount).__str__())
 #	    print "%s  %40s  %10s month %i" %(date, payee, `amount`, month)
 
@@ -364,9 +378,9 @@ def doCommand(year, inputURI="/dev/stdin"):
 
 	# Output totals
 	
-	ko = store.intern(thing.formula())		# New formula  @@@ - yuk API!
+	ko = kb.newFormula()	
 	for c in quCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing]:
-	    ko.add(subj=c, pred=qu.total, obj=store.intern(thing.literal("%7.2f" % totals.get(c,0))))
+	    ko.add(subj=c, pred=qu.total, obj=("%7.2f" % totals.get(c,0)))
 	ko.close()
 	
 	fo = open("totals.n3", "w")
