@@ -1,9 +1,7 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-                      "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
 <head>
   <title>Examples - Getting ino the semantic web and RDF using N3</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+  <meta http-equiv="Content-Type" content="text/html">
   <link href="/StyleSheets/base.css" rel="stylesheet" type="text/css">
   <link href="/StyleSheets/base.css" rel="stylesheet" type="text/css">
 </head>
@@ -24,17 +22,17 @@ http://www.w3.org/2000/10/swap/test/ if you are reading this on paper.)  These
 are designed as examples, to show how something can be done, not as working
 products.</p>
 
-<p>Remember, to convert an RDF document from n3 syntax into xml syntax, 
-<code>cwm xxx.n3 -rdf </code> should do it  among other things.  I haven't
-exhaustively tested all combinations of n3 and RDF in all cases.</p>
+<p>Remember, to convert an n3 file into RDF,  <code>cwm xxx.n3 -rdf </code>
+should do it  among other things.  I haven't exhaustively tested all
+combinations of n3 and RDF in all cases.</p>
 
 <h2 id="Merging">Merging graphs</h2>
 
 <p>When explaining why the semantic web needs to be a web not a tree, I used
 slides showing information in blue from one source (blue links) with that from
 another sources (red and green links).<img
-src="/2000/Talks/0906-xmlweb-tbl/arcs-3.gif" alt="blue, red and green arcs
-merged" width="30%" align="right"></p>
+src="/2000/Talks/0906-xmlweb-tbl/arcs-3.gif"
+alt="blue, red and green arcs merged" width="30%" align="right"></p>
 <ul>
   <li><a href="/2000/Talks/0906-xmlweb-tbl/slide6-0.html">The first
     diagram</a> shows some information maybe from someone's personal
@@ -51,46 +49,21 @@ concepts such as  the person, meeting and its home page.  This allows the
 graphs to be merged. It is a simple RDF example, let's see what it looks
 like:</p>
 <ul>
-  <li>The blue arcs (<a href="test/meet/blue.n3">in N3</a>, <a
-    href="test/meet/blue.rdf">in XML</a> made by <code>cwm -rdf
-    blue.n3</code>)</li>
-  <li>The red arcs (<a href="test/meet/red.n3">in N3</a>, <a
-    href="test/meet/red.rdf">in XML</a>)</li>
-  <li>The green arcs (<a href="test/meet/green.n3">in N3</a>, <a
-    href="test/meet/green.rdf">in XML</a>)</li>
-  <li>The merged graph (<a href="test/meet/white.n3">in N3</a> made by<code>
-    cwm red.n3 blue.n3 green.n3 > white.n3</code>, <a
-    href="test/meet/white.rdf">in XML</a>)</li>
+  <li>The blue arcs (<a href="meet/blue.n3">in N3</a>, <a
+    href="meet/blue.rdf">in XML</a> made by <code>cwm -rdf
+  blue.n3</code>)</li>
+  <li>The red arcs (<a href="meet/red.n3">in N3</a>, <a href="meet/red.rdf">in
+    XML</a>)</li>
+  <li>The green arcs (<a href="meet/green.n3">in N3</a>, <a
+    href="meet/green.rdf">in XML</a>)</li>
+  <li>The merged graph (<a href="meet/white.n3">in N3</a> made by<code> cwm
+    red.n3 blue.n3 green.n3 &gt; white.n3</code>, <a href="meet/white.rdf">in
+    XML</a>)</li>
 </ul>
 
 <p></p>
 
 <h2 id="Ontologies">Ontologies in DAML</h2>
-
-<p></p>
-
-<h3 id="Family">Family relationships - GEDCOM</h3>
-
-<p></p>
-
-<p>Here is an ontology for geneology, (where from?). Thanks to <a
-href="http://www.agfa.com/w3c/jdroo/">Jos De Roo</a><a></a> for <a
-href="http://lists.w3.org/Archives/Public/www-rdf-logic/2001Mar/0018.html">putting
-this into N3</a><a></a>.</p>
-<ul>
-  <li>Some rules relating relationships. One's father's sister is ones' aunt,
-    and so on. (<a
-    href="test/gedcom/gedcom-relations.n3">gedcom/gedcom-relations.n3</a><a></a>)</li>
-  <li>Some data of some imaginary families (<a
-    href="test/gedcom/gedcom-facts.n3">gedcom/gedcom-facts.n3</a><a></a>);</li>
-  <li>The same data after processing by the rules, with each person's extended
-    family relationships calculated (<a
-    href="test/gedcom/lots.n3">gedcom/lots.n3</a>)</li>
-  <li><a href="test/gedcom/Makefile ">gedcom/Makefile </a>shows (for unix
-    people) the commands to buld them
-    <p></p>
-  </li>
-</ul>
 
 <p></p>
 
@@ -132,6 +105,37 @@ href="http://www.biopathways.org/">biopathways consortium</a>.</p>
   <li><a href="test/pathway/pathway.rdf">pathway/pathway.rdf</a> result
     regenerated in RDF</li>
 </ul>
+
+<p></p>
+
+<h2 id="Simple">Simple Rules examples</h2>
+
+<p></p>
+
+<h3 id="Family">Family relationships - GEDCOM</h3>
+
+<p></p>
+
+<p>Here is an ontology for geneology, (where from?). Thanks to <a
+href="http://www.agfa.com/w3c/jdroo/">Jos De Roo</a><a></a> for <a
+href="http://lists.w3.org/Archives/Public/www-rdf-logic/2001Mar/0018.html">putting
+this into N3</a><a></a>.</p>
+<ul>
+  <li>Some rules relating relationships. One's father's sister is ones' aunt,
+    and so on. (<a
+    href="test/gedcom/gedcom-relations.n3">gedcom/gedcom-relations.n3</a><a></a>)</li>
+  <li>Some data of some imaginary families (<a
+    href="test/gedcom/gedcom-facts.n3">gedcom/gedcom-facts.n3</a><a></a>);</li>
+  <li>The same data after processing by the rules, with each person's extended
+    family relationships calculated (<a
+    href="test/gedcom/lots.n3">gedcom/lots.n3</a>)</li>
+  <li><a href="test/gedcom/Makefile ">gedcom/Makefile </a>shows (for unix
+    people) the commands to buld them
+    <p></p>
+  </li>
+</ul>
+
+<p></p>
 
 <h2 id="Schema">Schema validation</h2>
 
@@ -180,7 +184,8 @@ definition of transitivity.</p>
     new otherwise.</li>
 </ul>
 
-<p><math>
+<p>
+<math xmlns="http://www.w3.org/1998/Math/MathML">
   <mtable>
   </mtable>
 </math>
