@@ -17,7 +17,7 @@ TT { font-family: lucidatypewriter, lucida console, courier }
 This&nbsp;module&nbsp;implements&nbsp;basic&nbsp;sources&nbsp;and&nbsp;sinks&nbsp;for&nbsp;RDF&nbsp;data.<br>
 It&nbsp;defines&nbsp;a&nbsp;stream&nbsp;interface&nbsp;for&nbsp;such&nbsp;data.<br>
 It&nbsp;has&nbsp;a&nbsp;command&nbsp;line&nbsp;interface,&nbsp;can&nbsp;work&nbsp;as&nbsp;a&nbsp;web&nbsp;query&nbsp;engine,<br>
-and&nbsp;has&nbsp;built&nbsp;in&nbsp;test(),&nbsp;all&nbsp;of&nbsp;which&nbsp;demosntrate&nbsp;how&nbsp;it&nbsp;is&nbsp;used.<br>
+and&nbsp;has&nbsp;built&nbsp;in&nbsp;<a href="#-test">test</a>(),&nbsp;all&nbsp;of&nbsp;which&nbsp;demosntrate&nbsp;how&nbsp;it&nbsp;is&nbsp;used.<br>
 &nbsp;<br>
 To&nbsp;make&nbsp;a&nbsp;new&nbsp;RDF&nbsp;processor,&nbsp;subclass&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.<br>
 &nbsp;<br>
@@ -434,6 +434,30 @@ is&nbsp;again&nbsp;acceptable.&nbsp;Remember&nbsp;to&nbsp;end&nbsp;the&nbsp;docu
 <dl><dt><a name="ToN3-setGenPrefix"><strong>setGenPrefix</strong></a>(self, genPrefix)</dt></dl>
 
 </td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt><a name="-convert"><strong>convert</strong></a>(form, env)</dt><dd><tt>&nbsp;raises&nbsp;KeyError&nbsp;if&nbsp;the&nbsp;form&nbsp;data&nbsp;is&nbsp;missing&nbsp;required&nbsp;fields.</tt></dd></dl>
+ <dl><dt><a name="-doCommand"><strong>doCommand</strong></a>()</dt><dd><tt>Command&nbsp;line&nbsp;RDF/N3&nbsp;tool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&lt;command&gt;&nbsp;&lt;options&gt;&nbsp;&lt;inputURIs&gt;<br>
+&nbsp;<br>
+&nbsp;-rdf1out&nbsp;&nbsp;&nbsp;Output&nbsp;in&nbsp;RDF&nbsp;M&amp;S&nbsp;1.0&nbsp;insead&nbsp;of&nbsp;n3&nbsp;(only&nbsp;works&nbsp;with&nbsp;-pipe&nbsp;at&nbsp;the&nbsp;moment)<br>
+&nbsp;-help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;this&nbsp;message<br>
+&nbsp;-chatty&nbsp;&nbsp;&nbsp;&nbsp;Verbose&nbsp;output&nbsp;of&nbsp;questionable&nbsp;use<br>
+&nbsp;<br>
+See&nbsp;also:&nbsp;cwm</tt></dd></dl>
+ <dl><dt><a name="-dummy"><strong>dummy</strong></a>()</dt></dl>
+ <dl><dt><a name="-hexify"><strong>hexify</strong></a>(ustr)</dt><dd><tt>Use&nbsp;URL&nbsp;encoding&nbsp;to&nbsp;return&nbsp;an&nbsp;ASCII&nbsp;string&nbsp;corresponding&nbsp;to&nbsp;the&nbsp;given&nbsp;unicode</tt></dd></dl>
+ <dl><dt><a name="-serveRequest"><strong>serveRequest</strong></a>(env)</dt></dl>
+ <dl><dt><a name="-showForm"><strong>showForm</strong></a>()</dt></dl>
+ <dl><dt><a name="-stringToN3"><strong>stringToN3</strong></a>(str, singleLine<font color="#909090">=0</font>)</dt><dd><tt>#"</tt></dd></dl>
+ <dl><dt><a name="-stripCR"><strong>stripCR</strong></a>(str)</dt></dl>
+ <dl><dt><a name="-test"><strong>test</strong></a>()</dt></dl>
+</td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>

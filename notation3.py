@@ -76,6 +76,7 @@ from RDFSink import Logic_NS
 import diag
 
 from why import BecauseOfData, FormulaReason
+from webAccess import urlopenForRDF
 
 N3_forSome_URI = RDFSink.forSomeSym
 N3_forAll_URI = RDFSink.forAllSym
@@ -201,7 +202,7 @@ class SinkParser:
             _inputURI = uripath.join(baseURI, uri) # Make abs from relative
 	    inputResource = self._sink.newSymbol(_inputURI)
             self._sink.makeComment("Taking input from " + _inputURI)
-            stream = urllib.urlopen(_inputURI)
+            stream = urlopenForRDF(_inputURI)
 	    if diag.tracking: self._reason2 = BecauseOfData(inputResource, because=self._reason) 
         else:
             self._sink.makeComment("Taking input from standard input")

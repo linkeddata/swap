@@ -33,9 +33,10 @@ N3-Bugs.ics: ,bugsToDo.cal3 $(SWAP)/pim/toIcal.py
 ,bugsToDo.cal3: ,n3bugs.rdf $(SWAP)/util/bugstatus.n3
 	$(CWM) $(SWAP)/util/bugstatus.n3 --think --n3 --data >$@
 
+# was: $(GET) -H Accept:\ application/rdf+xm
 
 ,n3bugs.rdf:
-	$(GET) -H Accept:\ application/rdf+xml 'http://www.w3.org/Search/Mail/Public/advanced_search?keywords=n3bugs&resultsperpage=1000&sortby=date&index-grp=Public%2FFULL&index-type=t&type-index=www-archive' >$@
+	$(CWM) 'http://www.w3.org/Search/Mail/Public/advanced_search?keywords=n3bugs&resultsperpage=1000&sortby=date&index-grp=Public%2FFULL&index-type=t&type-index=www-archive' >$@
 
 #ends
 

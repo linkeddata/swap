@@ -8,7 +8,8 @@ RC=../../rdf-tests/rdfcore
 CODE=retest.py ../cwm.py ../notation3.py ../xml2rdf.py ../query.py ../llyn.py
 # etc ...
 
-TESTS=regression.n3 list/detailed.tests online.tests norm/detailed.tests
+TESTS=regression.n3 list/detailed.tests online.tests \
+	norm/detailed.tests cwm/detailed.tests i18n/detailed.tests
 
 all : pyc-check $(CODE) $(TESTS)
 	PYTHONPATH=`/bin/pwd`/.. $P retest.py -c $(TESTS)

@@ -94,10 +94,12 @@
     test:description   "N3 string quoting";
     test:arguments     """-n3 strquot.n3""".
 
-:t1009a a test:CwmTest;
-    test:referenceOutput <ref/hiragana.n3>;
-    test:description   "N3 string, qname and IRI with utf-8 non-ascii characters";
-    test:arguments     "i18n/hiragana.n3".
+# Now in i18n/detailed.tests
+#
+#:t1009a a test:CwmTest;
+#    test:referenceOutput <ref/hiragana.n3>;
+#    test:description   "N3 string, qname and IRI with utf-8 non-ascii characters";
+#    test:arguments     "i18n/hiragana.n3".
 
 :t1010 a test:CwmTest;
     test:referenceOutput <ref/path1.n3>;
