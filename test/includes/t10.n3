@@ -37,11 +37,11 @@ this log:forAll :d, :x, :y, :F, :G.
 #
 #  This illustrates the inabilaty of cwm to do backward chaining
 #
-
-{ :d log:semantics :F .
-  :F  log:includes :G } log:implies  {  :doc local:says :G }. 
-
-{ <t10a.n3> local:says { :theSky :is :blue } } log:implies {:test_SURPRISE a :success}.
+#
+#{ :d log:semantics :F .
+#  :F  log:includes :G } log:implies  {  :doc local:says :G }. 
+#
+#{ <t10a.n3> local:says { :theSky :is :blue } } log:implies {:test_SURPRISE a :success}.
 
 
 # Not to mention:
