@@ -2922,7 +2922,3 @@ if __name__ == '__main__':
     else:
         doCommand()
 
-    serveRequest(os.environ)
-    else:
-        doCommand()
-
