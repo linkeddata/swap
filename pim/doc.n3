@@ -46,7 +46,7 @@ OpenSourceLicense s:subClassOf doc:Work;
     s:comment   """Class of licenses which can be called Open Soutrce
                 according to opensource.org""".
 
-doc:persitenceyPolicy a r:Property;
+doc:persitencePolicy a r:Property;
     s:comment   """Publishers policy regarding the peristence of the mapping
                 between URI and its meaning and/or representation in bits.""";
     s:domain    doc:Work;
