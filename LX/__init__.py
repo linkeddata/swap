@@ -13,16 +13,20 @@ __all__ = [
     "kb",
     "expr",
     "logic",
-#    "fol",
     "rdf",
     "namespace",
-#    "uri",
-#    "defaultns",
-#    "ns",
+    "loader",
+    "nodepath",
+    "sniff",
+    "ladder",
+    "describer",
     ] 
 
 # $Log$
-# Revision 1.11  2003-09-04 03:14:01  sandro
+# Revision 1.12  2003-09-17 18:01:30  sandro
+# more complete module list
+#
+# Revision 1.11  2003/09/04 03:14:01  sandro
 # remove reference to ns.py
 #
 # Revision 1.10  2003/08/26 11:15:55  sandro
