@@ -160,7 +160,7 @@ set up a shorthand prefix for the long part - the part we call the
 dc and title, and you don't use the &lt;angle brackets&gt; around the whole
 thing. This is much quicker. This is how you will see and write almost all
 your predicates in N3. Once set up, a prefix can be used for the rest of the
-file (* may change).</p>
+file.</p>
 
 <p>There are an increasingly large number of RDF vocabularies for you to
 refer to - check the <a href="/RDF/">RDF home page</a> and things linked from
@@ -175,7 +175,7 @@ save space, I will just assume the prefixes</p>
 @prefix owl:  &lt;http://www.w3.org/2002/
                          07/owl#&gt; .</pre>
 
-<p>These are the RDF, RDF schema, and experimental DAML ontology namespaces,
+<p>These are the RDF, RDF schema, and OWL namespaces,
 respectively. They give us the core terms which we can bootstrap ourselves
 into the semantic web. I am also going to assume that the empty prefix stands
 for the document we are writing, which we can say in N3 as</p>
@@ -195,7 +195,7 @@ just data themselves.</p>
 
 <p>Things like dc:title above are RDF <dfn><a id="Properties1"
 name="Properties1">Properties</a></dfn>. When you want to define a new
-vocabulary, or ontology, you define new classes of things and new properties.
+vocabulary you define new classes of things and new properties.
 When you say what type of thing something is, you say a <dfn><a id="Class2"
 name="Class2">Class</a></dfn> it belongs to.</p>
 
@@ -212,8 +212,9 @@ So we can define a class of person</p>
 in many classes. There doesn't have to be any hierarchical relationship --
 think of Person, AnimateObject, Animal, TallPerson, Friend, and so on. If
 there is a relationship between two classes you can state it - check out the
-properties (of classes) in RDF Schema and the the <a
-href="http://www.daml.org/">DAML ontology</a> vocabularies.</p>
+properties (of classes) in the 
+<a href="http://www.w3.org/TR/rdf-schema/">RDF Schema</a> and <a
+href="http://www.w3.org/TR/owl-guide/">OWL</a> vocabularies.</p>
 <pre>:Woman a rdfs:Class; rdfs:subClassOf :Person .<br />
 </pre>
 
@@ -253,38 +254,57 @@ of data. When you define your own vocabulary which includes synonyms, do
 record the equivalence because this, likewise, will help present and future
 processors process your and others' data in meaningful ways.</p>
 
-<h4>Choosing a namespace and publishing a schema</h4>
+<h4>Choosing a namespace and publishing your vocabulary</h4>
 
-<p>A document which defines properties and classes is called a schema. It
-defines the meaning of identifiers in a particular namespace. The namespace
-URI can be anything which you control: which you can guarantee no one will
-reuse for something else. One way is just to send an email about the
-namespace. Then look at the headers, and find the <code>Message-Id:</code>
-header which gives the unique identifier he mailer created for the mail
-message, and use that. Another way is to put a document in a bit of very well
-maintained web space which no one can take away from you. Or of course if you
-are just playing with it, use a file (say <code>mydb.n3</code>) in the same
-directory as the rest of your work, and the namespace identifier you can use
-is just &lt;<code>mydb.n3#&gt;</code>.</p>
+<p>Good on-line documentation for vocabulary terms helps people read
+and write RDF data.  Writers need to see how a term is
+supposed to be used; readers need to see what it is supposed to mean.
+People developing software which uses the terms need to know in 
+particular detail exactly what each URI means.
+</p>
 
-<p>When use a web document to contain information in N3 about the terms you
-define (good practice!) then the namespace will end in a hash.</p>
+<p>If you document your vocabulary using the <a
+href="http://www.w3.org/TR/rdf-schema/">RDF Schema</a> and <a
+href="http://www.w3.org/TR/owl-guide/">OWL</a> vocabularies, then
+your documentation will be machine-readable in a variety of
+interesting and useful ways, as mentioned above and covered
+in more detail in <a href="doc/ontologies">Defining Your Terms</a>.  This kind
+of RDF-documentation-in-RDF is sometimes called a "schema" or an "ontology."
+</p>
 
-<p>You don't have to make your schema available to the world, but it helps
-machine process documents written with your vocabulary if you do. It
-especially helps if the email message or web page is written in RDF (in XML
-or in N3) and contains the schema information, as a program can associate the
-two easily, if it finds the mail or looks up the web page. If you do this,
-the namespace will be the document URI followed by a <code>#.</code></p>
+<p>The easiest way to help people find your documentation is to make
+the URIs you create as vocabulary terms also work in a web browser.
+This happens automatically if you follow the naming convention we use
+here, where the vocabulary definition document has a URI like
+<code>http://example.com/terms</code> and it refers to its terms like
+<code>&lt;#Woman&gt;</code>.   With the @prefix declaration above, this gives
+the URI <code>http://example.com/terms#Woman</code> which should work
+in any browser to display the definition document.</p>
 
-<p>This is a big topic - see for example further reading</p>
-<ul>
-  <li>W3C Namespace policy</li>
-  <li>W3C draft persistence policy</li>
-  <li><a href="/Provider/Style/URI">Cool URIs don't change</a></li>
-</ul>
+<p>Ideally, you should publish your documentation on the web using a
+server and portion of URI-space which are owned by an organization which can
+commit to maintaining them well into the future.  That way, many years
+down the road, RDF data using your terms will still be
+documented and potentially understandable.  
+The convention of putting the current year into the
+URI can help with stability; some day people may be tempted to re-use
+<code>http://example.com/food-vocabulary</code>, but they will
+probably only touch
+<code>http://example.com/2003/food-vocabulary</code>, when they really
+mean to upgrade the documentation there.  In some circumstances you
+can also achieve increased stability by using a specialized domain
+name which may be insulated from possible organizational renaming and
+trademark issues.</p>
 
-<p></p>
+<p>Of course if you are just playing around, you can use a file (say
+<code>mydb.n3</code>) in the same directory as the rest of your work.  
+When you do that, your can simply use &lt;<code>mydb.n3#&gt;</code> as
+your namespace identifier, because in N3 (as in HTML), the URIs can
+be specified relative to the current location.</p>
+
+<div class="noprint">
+
+<h3>More</h3>
 
 <p>Now you know all you need to start creating your own vocabularies, or
 ontologies, and you have pointers to where to look for the richer ways of
@@ -292,7 +312,6 @@ defining them.You don't have to go any further, as what you have now will
 allow you to create new applications, and create schemas, data files, and
 programs which interchange and manipulate data for the semantic web.</p>
 
-<h3>More</h3>
 
 <p>At this point, you should be getting the hang of it and be writing stuff.
 To give you some more ideas, though, there is a <a href="Examples">longer
@@ -304,7 +323,6 @@ language, explaining how to process you data and involve other data on the
 Web. In that case, next bit is about: <a href="doc/Shortcuts.html">Shortcuts
 and long cuts</a></p>
 
-<div class="noprint">
 <hr />
 
 <h2 id="References">References</h2>
