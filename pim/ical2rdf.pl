@@ -33,8 +33,14 @@
 
 use strict;
 
+# from
+# search.cpan.org: Getopt::Long - Extended processing of command line options
+# http://search.cpan.org/author/JV/Getopt-Long/lib/Getopt/Long.pm#Options_with_values
+use Getopt::Long;
+my($X_ns);
+GetOptions ('xnames=s' => \$X_ns);
+
 my($ICal_ns) = 'http://www.w3.org/2000/10/swap/pim/ical#';
-my($X_ns); #@@TODO get this from command-line or from PRODID.
 
 my(@stack);
 my($intag);
@@ -236,8 +242,9 @@ sub startDoc{
   xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
   xmlns='%s'
   xmlns:i='%s'
+  xmlns:x='%s'
 ><%s rdf:about=''>",
-	 $ICal_ns, $ICal_ns, $n);
+	 $ICal_ns, $ICal_ns, $X_ns, $n);
 }
 
 sub asContent{
@@ -299,7 +306,11 @@ sub testCamelCase{
 # @@TODO: params
 
 # $Log$
-# Revision 1.5  2002-09-03 17:20:41  connolly
+# Revision 1.6  2002-12-13 18:55:21  connolly
+# added --xnames option to give namespace
+# for X- properties
+#
+# Revision 1.5  2002/09/03 17:20:41  connolly
 # handle individual vevents
 #
 # Revision 1.4  2002/07/18 05:26:36  connolly
