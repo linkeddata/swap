@@ -76,8 +76,46 @@ ProperInterval s:subClassOf Interval.
 } => { ?T a ProperInterval }.
 
 
-#@@@@@@@@ stopped here.
+####
+# 2.2.  Before:
 
+#	(A T1,T2)[before(T1,T2) 
+#	    <--> (E t1,t2)[ends(t1,T1) & begins(t2,T2) & before(t1,t2)]]
+
+{ ?T1 before ?T2 }
+ => { [ ends ?T1 ] before [ begins ?T2 ] }.
+{ [ ?ends ?T1] before [ begins ?T2 ] }
+ => { ?T1 before ?T2 }.
+
+#The before relation is anti-reflexive, anti-symmetric and transitive.
+{ ?T1 before ?T2 } => { ?T1 owl:differentFrom ?T2 }.
+{ ?T1 before ?T2 } => { ?T2 [ log:negative before ] ?T1 }.
+before a owl:TransitiveProperty.
+
+# The end of an interval is not before the beginning of the interval.
+{ ?t1 begins ?T. ?t2 ends ?T } => { ?t2 [ log:negative before ] ?t1 }.
+
+#The beginning of a proper interval is before the end of the interval.
+{ ?T a ProperInterval; is begins of ?t1; is ends of ?t2.
+} => { ?t1 before ?t2 }.
+
+#The converse of this is a theorem.
+{ ?t1 begins ?T. ?t2 ends ?T. ?t1 before ?t2.
+} => { ?T a ProperInterval }.
+
+#If one instant is before another, there is a time between them.
+{ ?t1 a Instant. ?t2 a Instant. ?t1 before ?t2.
+} => { [] timeBetween (?t1 ?t2 ) }.
+
+#2.2-8
+{ ?t inside ?T. ?t1 begins ?T. ?t2 ends ?T. }
+ => { ?t1 before ?t. ?t before ?t2 }.
+
+#2.2-9
+{ ?T1 after ?T2 } log:means { ?T2 before ?T1 }.
+
+# 2.3.  Interval Relations
+#@@
 
 ############
 # RDFS rules
@@ -94,6 +132,10 @@ s:range s:domain s:Property.
   ?X ?P ?Z.
   ?Y ?P ?Z.
 } => { ?X = ?Y }.
+
+{ ?P a owl:TransitiveProperty.
+  ?S ?P [ ?P ?O ].
+ => { ?S ?P ?O }.
 
 # log:
 { ?F log:means ?G } => { ?F => ?G. ?G => ?F }.
