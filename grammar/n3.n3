@@ -76,7 +76,7 @@ propertylisttail bnf:mustBeOneSequence (
 	).
 
 objectlist bnf:mustBeOneSequence (
-		( object  [ zeroOrMore [ 
+		( object  [ bnf:zeroOrMore [ 
 				bnf:mustBeOneSequence (
 					( comma )
 					( objectlist )
@@ -94,7 +94,7 @@ verb bnf:mustBeOneSequence (
 		( "<=" ) 
 	).
 
-prop bnf:mustBe (node).
+prop bnf:mustBeOneSequence ((node)).
 
 subject bnf:mustBeOneSequence ((item)).
 
@@ -156,19 +156,32 @@ qname 		bnf:matches  	"(([a-zA-Z_][a-zA-Z0-9_]*)?:)?([a-zA-Z_][a-zA-Z0-9_]*)?";
 langcode	bnf:matches  	"[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?";
 		bnf:canStartWith 	"a".
 
-traverse	bnf:matches	"!";
+traverse	bnf:matches		"!";
 		bnf:canStartWith	"!".
 
-uparrow		bnf:matches 	"\\^";
+uparrow		bnf:mustBeOneSequence (( "^"));
 		bnf:canStartWith	"^".
+
+semicolon	bnf:mustBeOneSequence (( ";"));
+		bnf:canStartWith	";".
+
+comma		bnf:mustBeOneSequence (( ","));
+		bnf:canStartWith	",".
+
+period		bnf:mustBeOneSequence (( "."));
+		bnf:canStartWith	".".
 
 
 #____________________________________________________
 
-#  Axioms reducing the shortcut BNF terms to bnf:canBeSequence.
+#  Axioms reducing the shortcut BNF terms to bnf:musBeOneSequence.
 
-#{ ?x bnf:oneOrMore ?y } => { ?x bnf:canBeSequence ( ?y [ bnf:zeroOrMore ?y ] )  }.
-
+{ ?x bnf:zeroOrMore ?y } => {
+    ?x bnf:mustBeOneSequence (
+		( bnf:void )
+		( ?y ?x )
+	) 
+}.
 
 { ?x bnf:commaSeparatedPeriodTerminatedListOf ?y } =>
 {

@@ -1,0 +1,93 @@
+# Convert BNF in RDF to HTML
+
+#
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix bnf: <http://www.w3.org/2000/10/swap/grammar/bnf#>.
+@prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#>.
+@prefix : <http://www.w3.org/2000/10/swap/grammar/bnf2html#>.
+@prefix h: <http://www.w3.org/2000/10/swap/grammar/bnf2html#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@keywords a, is, of.
+
+
+
+
+("0" 0) log:outputString 
+"""<html>
+<head>
+   <title>BNF</title>
+</head>
+<body>
+  <h1>BNF</h1>
+  <dl>
+""".
+
+("_" 9) log:outputString """
+</dl>
+</html>
+""".
+
+
+
+#  Find all possible sequences for each term
+#
+{ ?x bnf:mustBeOneSequence ?y} => { ?x optionTail ?y; a Production}.
+
+{ ?x bnf:matches [] } => { ?x a Production}.
+
+{?x optionTail [rdf:first ?y; rdf:rest ?z]} => {
+	?x 	bnf:canBeSequence ?y;
+		optionTail ?z.
+	?y a Sequence}.
+
+# Label every tailing subseqeunce
+
+{ ?seq a Sequence } => { ?seq a SequenceTail }.
+{ ?seq a SequenceTail; rdf:rest ?s2 } => { ?s2 a SequenceTail }.
+
+# Literal labels are just quoted  @@ escaped
+
+{ ?seq a SequenceTail; rdf:first ?x.
+	?x log:rawType log:Literal.
+	( "\"" ?x "\"" ) string:concatenation ?lab
+} => { ?x label ?lab }.
+	
+{ 	?x a Production.
+  	?x log:uri ?u.
+  	(?u ".*#(.*)") string:scrape ?lab.
+  	( "    <dt><a name='" ?lab "'>" ?lab "</a></dt><dd>\n" ) string:concatenation ?start.
+  } =>  {
+	?x label ?lab.
+	(?lab 0) log:outputString ?start.
+	(?lab 9) log:outputString "</dd>\n".
+}.  
+
+() seqlabel "".
+bnf:void label "void".
+
+# This one takes forever:
+{ 	?seq a SequenceTail; rdf:first ?x; rdf:rest ?tail.
+	?x label ?lab1.
+	?tail seqlabel ?lab2.
+	(?lab1 " " ?lab2) string:concatenation ?str
+} => { ?seq seqlabel  ?str }.
+
+{?x label ?lab; bnf:canBeSequence [seqlabel ?seqlab].
+("\t<p>" ?seqlab "</p>\n" ) string:concatenation ?para
+} => {(?lab 5) log:outputString ?para}.
+
+
+{ 	[] a Production;
+	   label ?lab;
+	   bnf:matches ?regexp.
+	( "\t<p><em>" ?regexp "</p></em>\n") string:concatenation ?regpara.
+}=>{
+	(?lab 6) log:outputString ?regpara.
+	
+}.
+
+
+
+#end
