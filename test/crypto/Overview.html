@@ -22,10 +22,10 @@ information is beleived and on what basis.</p>
 <p><img src="make.jpg" alt="See Makefile for text version"></p>
 
 <p>The other files are listed below.  The  <a href="Makefile">Makefile
-</a>describes how they used.  The .n3 file extension is used only for source
-rule files.  Files which are generated automatically are given other
-extensions, like .private, .public, .cert, .request, .response even though
-they are still all in n3.</p>
+</a>describes how they used (<a href="make.svg">diagram in SVG</a>).  The .n3
+file extension is used only for source rule files.  Files which are generated
+automatically are given other extensions, like .private, .public, .cert,
+.request, .response even though they are still all in n3.</p>
 
 <p></p>
 
@@ -34,68 +34,88 @@ href="?N=D">Name</a>       <a href="?M=A">Last modified</a>       <a
 href="?S=A">Size</a>  <a href="?D=A">Description</a></p>
 
 <p>The makefile is the place to start</p>
-<pre>
-<img src="/icons/back.gif" alt="[DIR]" height="22" width="20">
+<pre><img src="/icons/back.gif" alt="[DIR]" height="22" width="20">
+
 
  <a href="../">Parent Directory</a>        14-May-2002 19:59      -  
 <img src="/icons/unknown.gif" alt="[   ]" height="22" width="20">
 
+
  <a href="Makefile">Makefile</a>                See how the files are built.
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
+
 
  <a href="acc.n3">acc.n3</a>                  Schema for access control terms
 <img src="/icons/unknown.gif" alt="[   ]" height="22" width="20">
 
+
  <a href="access-1.request">access-1.request</a>        The request from a web client
 <img src="/icons/unknown.gif" alt="[   ]" height="22" width="20">
+
 
  <a href="access-1.response">access-1.response</a>       The response from this system
 <img src="/icons/unknown.gif" alt="[   ]" height="22" width="20">
 
+
  <a href="access-elisa.cert">access-elisa.cert</a>       Elisa corp's certificate, signed by Alan
 <img src="/icons/unknown.gif" alt="[   ]" height="22" width="20">
+
 
  <a href="access-elisa.private">access-elisa.private</a>    Elisa corp's secret file with private and public keys
 <img src="/icons/unknown.gif" alt="[   ]" height="22" width="20">
 
+
  <a href="access-elisa.public">access-elisa.public</a>     Only the public key information
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
+
 
  <a href="access-gen-elisa.n3">access-gen-elisa.n3</a>     N3 rule file to generate access-elisa.private
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
 
+
  <a href="access-gen-master.n3">access-gen-master.n3</a>    N3 rule file to generate access-master.private
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
+
 
  <a href="access-gen-tiina.n3">access-gen-tiina.n3</a>     N3 rule file to generate access-tiina.private
 <img src="/icons/unknown.gif" alt="[   ]" height="22" width="20">
 
+
  <a href="access-master.private">access-master.private</a>   Master keys held by Alan Kotok
 <img src="/icons/unknown.gif" alt="[   ]" height="22" width="20">
+
 
  <a href="access-master.public">access-master.public</a>    public key only of Alan's keys
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
 
+
  <a href="access-onlyPublic.n3">access-onlyPublic.n3</a>    N3 rules for removing any acc:Secret information
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
+
 
  <a href="access-rule.n3">access-rule.n3</a>          The rule defining access to the web site
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
 
+
  <a href="access-sign-cert.n3">access-sign-cert.n3</a>     Rule file for signing Tiina's certificate.
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
+
 
  <a href="access-sign-member-cert.n3">access-sign-member-cert.n3</a>  Rule file Alan uses to sign member certificates.
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
 
+
  <a href="access-sign-request.n3">access-sign-request.n3</a>  Rule file Tiina uses to sign the request
 <img src="/icons/unknown.gif" alt="[   ]" height="22" width="20">
+
 
  <a href="access-tiina.cert">access-tiina.cert</a>       Tiina's certifiacet as employee of Elisa
 <img src="/icons/unknown.gif" alt="[   ]" height="22" width="20">
 
+
  <a href="access-tiina.private">access-tiina.private</a>    Tiina's private keys - a file she keeps secret
 <img src="/icons/unknown.gif" alt="[   ]" height="22" width="20">
+
 
  <a href="access-tiina.public">access-tiina.public</a>     The publci part of Tiina's key
 
@@ -104,27 +124,33 @@ OTHER TESTS of the crypto builtins:
 
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
 
+
  <a href="crypto-test-out.n3">crypto-test-out.n3</a>      What you would expect from crypto-test.n3
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
+
 
  <a href="crypto-test.n3">crypto-test.n3</a>          A simple first test
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
 
+
  <a href="hash-data.txt">hash-data.txt</a>           data for test-hash.n3
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
+
 
  <a href="hash-out.n3">hash-out.n3</a>             expected output  
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
 
+
  <a href="test-hash.n3">test-hash.n3</a>            test hashes, does not need public key.  
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
+
 
  <a href="test-n3String.n3">test-n3String.n3</a>        test of a log:n3String function  
 <img src="/icons/text.gif" alt="[TXT]" height="22" width="20">
 
+
  <a href="test-parsedAsN3.n3">test-parsedAsN3.n3</a>      test of a log:parsedAsN3 function
-    <a href="Myfile.txt">Myfile.txt</a>              05-May-2002 02:46     1k  
-</pre>
+    <a href="Myfile.txt">Myfile.txt</a>              05-May-2002 02:46     1k  </pre>
 <hr>
 </body>
 </html>
