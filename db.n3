@@ -7,7 +7,7 @@
 @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix db: <http://www.w3.org/2000/10/swap/db#> .
-@prefix soc: <http://www.w3.org/2000/10/swap/pim/soc#>.
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#>.
 @prefix con: <http://www.w3.org/2000/10/swap/pim/contact#>.
 @prefix dc: <http://purl.org/dc/elements/1.1/>.  # @@ no #
 
@@ -34,7 +34,7 @@ db:databaseSchema a rdf:Property;
     rdfs:range db:DatabaseDocument.
 
 db:DatabaseDocument a rdfs:Class;
-    rdfs:subClassOf soc:Work;
+    rdfs:subClassOf doc:Work;
     rdfs:label "database document";
     rdfs:comment """The resource on the web which describes a database, though not
     the one which contains all the data.
@@ -53,7 +53,7 @@ db:Table a rdfs:Class;
     set of things each of which is described by a row in the database table""".
 
 db:TableDocument a rdfs:Class;
-    rdfs:subClassOf soc:Work;
+    rdfs:subClassOf doc:Work;
     rdfs:label "table document";
     rdfs:comment """The resource on the web which describes a Table, though not
     the one which contains all the data.
@@ -79,7 +79,7 @@ db:tableData a rdf:Property;
     rdfs:label "table data";
     rdfs:comment "The document which gives the data in this table";
     rdfs:domain db:Table;
-    rdfs:range soc:Work.
+    rdfs:range doc:Work.
 
 db:Column a rdfs:Class; rdfs:subClassOf rdf:Property;
     rdfs:label "column";
@@ -106,7 +106,7 @@ whose URI is formed by concatenating the URI of the table, a slash, and
 the URI-encoded value of the primary key value for that row.
 """.
 
-db:RowDocument a rdfs:Class; rdfs:subClassOf soc:Work;
+db:RowDocument a rdfs:Class; rdfs:subClassOf doc:Work;
     rdfs:label "row document";
     rdfs:comment """A row document exists for each row of a table which 
 has a primary key.  Its URI is formed by convention by concatenating the
