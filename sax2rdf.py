@@ -166,10 +166,10 @@ class RDFHandler(xml.sax.ContentHandler):
                 if ln == "ID":
                     if self._subject:
                         print "# oops - subject already", self._subject
-                        raise syntaxError # ">1 subject"
+                        raise BadSyntax(sys.exc_info(), ">1 subject")
                     self._subject = self.uriref("#" + value)
                 elif ln == "about":
-                    if self._subject: raise syntaxError # ">1 subject"
+                    if self._subject: raise BadSyntax(sys.exc_info(), ">1 subject")
                     self._subject = self.uriref(value)
                 elif ln == "aboutEachPrefix":
                     if value == " ":  # OK - a trick to make NO subject
@@ -186,8 +186,7 @@ class RDFHandler(xml.sax.ContentHandler):
                     pass  #later
                 else:
                     if not ns:
-                        print "#@@@@@@@@@@@@ No namespace on property attribute", ln
-                        raise self.syntaxError 
+                        raise BadSyntax(sys.exc_info(), "No namespace on property attribute %s" % ln)
                     properties.append((uri, value))# If no uri, syntax error @@
 #                    self.sink.makeComment("xml2rdf: Ignored attribute "+uri)
             else:  # Property attribute propAttr #6.10
