@@ -14,7 +14,7 @@ Arguments
 
 For example:
 cwm n3.n3 bnf-rules.n3 --think --purge --data > n3-selectors.n3
-PYTHONPATH=$SWAP python check-grammar.py n3-selectors.n3  \
+PYTHONPATH=$SWAP python predictiveParser.py n3-selectors.n3  \
     http://www.w3.org/2000/10/swap/grammar/n3#document  n3.n3
     
 A yacc file is also generated, whose name is the first argument plus "-yacc.y".
@@ -26,6 +26,9 @@ W3C open source licence. Enjoy. Tim BL
 
 __version__ = "$Id$"
 
+# SWAP
+import webAccess
+import uripath
 import llyn
 from myStore import load, Namespace
 from term import Literal
@@ -33,10 +36,11 @@ import diag
 from diag import progress
 diag.chatty_flag=10
 
+# Standard python
 from sys import argv, exit, stderr
 from time import clock
 import re
-
+from codecs import utf_8_encode
 
 
 
@@ -208,7 +212,7 @@ quotedString = re.compile("[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"")  # See n3.n3
 tripleQuotedString = re.compile("[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\"")
 
 class PredictiveParser:
-    "A parser for N3 or derived languages"
+    """A parser for N3 or derived languages"""
 
     def __init__(parser, sink, top,  branchTable, tokenRegexps):
 	parser.sink = sink
@@ -220,11 +224,11 @@ class PredictiveParser:
 	parser.verb = 0  # Verbosity
 	
     def token(parser, str, i):
-	"The Tokenizer: Returns (token type, start of token)
+	"""The Tokenizer: Returns (token type, start of token)
 	
 	"0" means numeric
 	"a" means alphanumeric
-	"
+	"""
     
 	while 1:
 	    m = whiteSpace.match(str, i)
@@ -366,7 +370,9 @@ yacc.close()
 
 if len(argv) <= 3: exit(0)
 parseFile = argv[3]
-ip = open(parseFile)
+
+ip = webAccess.urlopenForRDF(uripath.join(uripath.base(), parseFile), None)
+
 str = ip.read()
 sink = g.newFormula()
 p = PredictiveParser(sink=sink, top=document, branchTable= branchTable,
