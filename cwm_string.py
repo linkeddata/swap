@@ -71,15 +71,11 @@ class BI_StartsWith(LightBuiltIn):
 
 class BI_Contains(LightBuiltIn):
     def evaluate(self, store, context, subj, subj_py, obj, obj_py):
-        for x in subj.string: 
-           if x == obj.string: return 1
-        else: return 0
+        return string.find(subj.string, obj.string) >= 0
 
 class BI_DoesNotContain(LightBuiltIn): # Converse of the above
     def evaluate(self, store, context, subj, subj_py, obj, obj_py):
-        for x in subj.string: 
-           if x == obj.string: return 0
-        else: return 1
+        return string.find(subj.string, obj.string) < 0
 
 class BI_equalIgnoringCase(LightBuiltIn):
     def evaluate(self, store, context, subj, subj_py, obj, obj_py):
