@@ -86,6 +86,9 @@ OBJ = 3
 PARTS =  PRED, SUBJ, OBJ
 ALL4 = CONTEXT, PRED, SUBJ, OBJ
 
+# Should the internal representation of lists be with DAML:first and :rest?
+DAML_LISTS = 0    # Don't do these - do the funny compact ones
+
 # The parser outputs quads where each item is a pair   type, value
 
 RESOURCE = 0        # which or may not have a fragment
@@ -106,6 +109,7 @@ List_NS = DPO_NS     # We have to pick just one all te time
 # For lists:
 N3_first = (RESOURCE, List_NS + "first")
 N3_rest = (RESOURCE, List_NS + "rest")
+# N3_only = (RESOURCE, List_NS + "only")
 N3_nil = (RESOURCE, List_NS + "nil")
 N3_List = (RESOURCE, List_NS + "List")
 N3_Empty = (RESOURCE, List_NS + "Empty")
@@ -337,9 +341,9 @@ class SinkParser:
     def endDoc(self):
         self._sink.endDoc()
 
-    def makeStatement(self, triple):
+    def makeStatement(self, quadruple):
 #        print "# Parser output: ", `triple`
-        self._sink.makeStatement(triple)
+        self._sink.makeStatement(quadruple)
 
 
 
@@ -496,7 +500,7 @@ class SinkParser:
 
         j = self.tok('(', str, i)    # List abbreviated syntax?
         if j>=0:
-            tail = None  # remember value to return
+            previous = None  # remember value to return
             while 1:
                 i = self.skipSpace(str, j)
                 if i<0: raise BadSyntax(self.lines, str, i, "needed ')', found end.")                    
@@ -507,17 +511,27 @@ class SinkParser:
                 j = self.object(str,i, item)
                 if j<0: raise BadSyntax(self.lines, str, i, "expected item in list or ')'")
                 this = self.genid(RESOURCE)
-                if tail:
-                    self.makeStatement((self._context, N3_rest, tail, this ))
-                else:
-                    head = this
-                tail = this
-                self.makeStatement((self._context, N3_first, this, item[0] ))           # obj
+                if DAML_LISTS:
+                    if previous:
+                        self.makeStatement((self._context, N3_rest, previous, this ))
+                    else:
+                        head = this
+                    self.makeStatement((self._context, N3_first, this, item[0] ))
+                else:  # compact lists
+                    if previous:
+                        self.makeStatement((self._context, this, previous, previousvalue ))
+                    else: # First time though
+                        head = this
+                previous = this
+                previousvalue = item[0]
 
-            if not tail:
+            if not previous:
                 res.append(N3_nil)
                 return j
-            self.makeStatement((self._context, N3_rest, tail, N3_nil ))           # obj
+            if DAML_LISTS:
+                self.makeStatement((self._context, N3_rest, previous, N3_nil ))           # obj
+            else:
+                self.makeStatement((self._context, N3_nil, previous, previousvalue ))           # obj                
             res.append(head)
             return j
 
@@ -1297,15 +1311,18 @@ t   "this" and "()" special syntax should be suppresed.
 
     def makeStatement(self, triple):
         if self.stack[-1]:
-            if triple[PRED] == N3_first:
+            if 1:  # DAML_LISTS
+                if triple[PRED] == N3_first:
+                    self._write(self.representationOf(triple[CONTEXT], triple[OBJ])+" ")
+                elif triple[PRED] == RDF_type and triple[OBJ] == N3_List:
+                    pass  # We knew
+                elif triple[PRED] == RDF_type and triple[OBJ] == N3_Empty:
+                    pass  # not how we would have put it but never mind
+                elif triple[PRED] != N3_rest:
+                    print "####@@@@@@ ooops:", triple
+                    raise intenalError # Should only see first and rest in list mode
+            else: # compact lists
                 self._write(self.representationOf(triple[CONTEXT], triple[OBJ])+" ")
-            elif triple[PRED] == RDF_type and triple[OBJ] == N3_List:
-                pass  # We knew
-            elif triple[PRED] == RDF_type and triple[OBJ] == N3_Empty:
-                pass  # not how we would have put it but never mind
-            elif triple[PRED] != N3_rest:
-                print "####@@@@@@ ooops:", triple
-                raise intenalError # Should only see first and rest in list mode
             return
         
         if ("a" in self._flags and
@@ -1321,15 +1338,27 @@ t   "this" and "()" special syntax should be suppresed.
     def startAnonymous(self,  triple, isList=0):
         if isList and not self.noLists:
             wasList = self.stack[-1]
-            if wasList and triple[PRED]==N3_rest:   # rest p of existing list
-                self.stack.append(2)    # just a rest - no parens
-                self._subj = triple[OBJ]
-            else:
-                self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
-                self.stack.append(1)    # New list
-                self._write(" (")
-                self.indent = self.indent + 1
-            self._pred = N3_first
+            if 1:  # Always expect DAML lists on output:
+                if wasList and (triple[PRED]==N3_rest) :   # rest p of existing list
+                    self.stack.append(2)    # just a rest - no parens         
+                    self._subj = triple[OBJ]
+                else:
+                    self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
+                    self.stack.append(1)    # New list
+                    self._write(" (")
+                    self.indent = self.indent + 1
+                self._pred = N3_first
+            else: # not DAML_LISTS
+                if wasList :   # rest p of existing list
+                    self.stack.append(2)    # just a rest - no parens         
+                    self._subj = triple[PRED]
+                else:
+                    self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
+                    self.stack.append(1)    # New list
+                    self._write(" (")
+                    self.indent = self.indent + 1
+                self._pred = N3_first
+
         else:
             self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
             self.stack.append(0)

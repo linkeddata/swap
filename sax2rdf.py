@@ -3,7 +3,10 @@
   A parser for RDF/XML built on the sax2 interface;
   derived from a parser for RDF/XML built on the xmllib XML parser.
 
-  To do: Passing on namesapce bindings! (dwc: @@huh?)
+  To do: Passing on namesapce bindings!
+       (dwc: @@huh?)
+       (tbl: The bind call in the RDF stream API is used to pass
+        on the prefixes found, as hints only for generating readable output code)
 
   - Add parsing of RDF bags
 
@@ -43,6 +46,8 @@ import xml.sax # PyXML stuff
                # and suggests TimBL try the win32 distribution from
                # the PyXML sourceforge project
                # http://prdownloads.sourceforge.net/pyxml/PyXML-0.6.5.win32-py2.1.exe
+               # TimBL points outhe does not use windows env't but cygwin and
+               #   giuesses he should compile python2-xml for cygwin.
 from xml.sax.handler import feature_namespaces
 
 import notation3 # http://www.w3.org/2000/10/swap/notation3.py
