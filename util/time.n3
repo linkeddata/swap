@@ -8,7 +8,7 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 
 <> dc:source <http://www.cs.rochester.edu/~ferguson/daml/daml-time-nov2002.txt>;
-   Owl:versionInfo "$Id$".
+   owl:versionInfo "$Id$".
 
 <http://www.cs.rochester.edu/~ferguson/daml/daml-time-nov2002.txt>
   dc:title "A DAML Ontology of Time";
@@ -126,7 +126,7 @@ intEqual a owl:SymmetricProperty;
 
 ###
 #2.4.  Optional Extensions:
-# skipped
+#@@ skipped
 
 # int-during is used in 2.5
 # I think iCalendar assumes TotalOrder and No-Pts-at-Inf
@@ -137,6 +137,78 @@ atTime s:range Instant.  # 2.5-1
 during s:range Interval. # 2.5-2
 { ?e during ?T. ?t inside ?T } => { ?e atTime ?t }. # 2.5-3
 { ?e during ?T. ?T1 intDuring ?T } => { ?e during ?T1 }.
+
+#hmm...
+#(A s,p)[tseqp(s,p) <--> tseq(s) & (A t)[member(t,s) --> p(t)]]
+# not traditional FOL
+
+#@@skipping lots.
+
+
+# 3.1.  Temporal Units:
+# This development assumes ordinary arithmetic is available.
+
+Qty owl:unionOf ( Real [ owl:oneOf (infinity) ] ).
+
+duration a owl:FunctionalProperty;
+  s:domain [ is log:crossProduct of (Interval TemproalUnit) ];
+  s:range Qty.
+
+#e.g        duration([5:14,5:17), *Minute*) = 3
+
+durationProperty
+  s:domain TemporalUnit;
+  s:range [ s:subClassOf owl:FunctionalProperty ].
+
+#@@hmm... second 3.3-1
+Second  durationProperty seconds; intervalClass Seconds.
+Minute durationProperty minutes; intervalClass Minutes.
+Hour durationProperty hours; intervalClass Hours.
+Day durationProperty days; intervalClass Days.
+Week durationProperty weeks; intervalClass Weeks.
+Month durationProperty months; intervalClass Months.
+Year durationProperty years; intervalClass Years.
+
+{ ?UNIT durationProperty ?P.
+  (?T ?UNIT) duration ?x } => { ?T ?P ?x }.
+{ ?UNIT durationProperty ?P.
+  ?T ?P ?x } => { (?T ?UNIT) duration ?x }.
+
+{ ?T minutes ?x } log:means { ?T seconds [ is math:product of (60 ?x) ] }.
+{ ?T hours   ?x } log:means { ?T minutes [ is math:product of (60 ?x) ] }.
+{ ?T days    ?x } log:means { ?T hours   [ is math:product of (24 ?x) ] }.
+{ ?T weeks   ?x } log:means { ?T days    [ is math:product of ( 7 ?x) ] }.
+{ ?T years   ?x } log:means { ?T months  [ is math:product of (12 ?x) ] }.
+
+
+
+# 3.2.  Concatenation and Hath
+
+#@@ 3.2-1 just some of its theorems:
+
+{ ?x concatenation ?S } => { [] member ?S; intStarts ?x }.
+{ ?x concatenation ?S } => { [] member ?S; intFinishes ?x }.
+
+# 3.2-2
+# 3.2-3
+
+hath s:domain [ is log:crossProduct of (Integer TemporalUnit) ];
+   s:range ProperInterval.
+
+{ ?U intervalClass ?C.
+  (?T ?U) duration 1 } log:means
+  { ?T a ?C. ?U intervalClass ?C.}.
+
+{ ?S s:subClassOf [ is intervalClass of ?u ].
+  ?x concatenation ?S.
+  ?S card N } => { (?N ?u) hath ?x }.
+
+{ (?N ?u) hath ?x } =>
+  { ?u intervalClass [
+       is s:subClassOf of [ card ?N; is concatenation of ?x ]
+    ] }.
+
+#@@ continue with 3.3.1-7, 3.3.8-12
 
 ############
 # RDFS rules
@@ -158,7 +230,7 @@ s:range s:domain s:Property.
 } => { ?X = ?Y }.
 
 { ?P a owl:TransitiveProperty.
-  ?S ?P [ ?P ?O ].
+  ?S ?P [ ?P ?O ] }
  => { ?S ?P ?O }.
 
 # log:
