@@ -1,0 +1,185 @@
+#    This is a copy of the dublin core element list.
+#   At the time I could not find a schema for it, so this is
+# derived from http://purl.org/dc/documents/rec-dces-19990702.htm
+#
+#   I am not sure which string I shoul dmake the rdfs:label.
+#  This is not any definitive output of the Dublin Core!
+# It is just a test/demo schema.
+#
+#  $Id$
+
+@prefix : <#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+# This is a reasonable definition of Title.
+
+:Title a rdfs:Property;
+  rdfs:label  "A name given to the resource";
+  rdfs:comment
+          """Typically, a Title will be a name by which the resource is
+          formally known.""";
+               = dc:Title .
+
+# This unfortunately allows one to stick anything (name, home page, email...)in this field making it
+# fairly useless for processing. I would prefer an astarct person with vcard-like properties
+
+:Creator a rdfs:Property;
+  rdfs:label    "An entity primarily responsible for making the content of the resource.";
+  rdfs:comment     """Examples of a Creator include a person, an organisation,
+               or a service. Typically, the name of a Creator should be used to
+               indicate the entity.""";
+              = dc:Creator .
+  
+# Again, rather vague.
+:Subject = :Keywords; a rdfs:Property;
+
+  rdfs:label  "The topic of the content of the resource.";
+  rdfs:comment     """Typically, a Subject will be expressed as keywords,
+               key phrases or classification codes that describe a topic
+               of the resource.
+               Recommended best practice is to select a value from a
+               controlled vocabulary or formal classification scheme.""";
+              = dc:Subject; = dc:Keywords.
+
+# Like title, intended foir human readers, and fine.              
+:Description a rdfs:Property;
+  rdfs:label  "An account of the content of the resource.";
+  rdfs:comment  """Description may include but is not limited to: an abstract,
+               table of contents, reference to a graphical representation
+               of content or a free-text account of the content.""";
+      = dc:Description .
+
+# Like Creator, this doens't allow you toi hang data off the Publisher if they are
+# just a string!  I'd prefer   dc:Publisher [ dc:Name "Oxford University Press" ] .
+
+:Publisher a rdfs:Property;
+  rdfs:label  "An entity responsible for making the resource available";
+  rdfs:comment     """Examples of a Publisher include a person, an organisation,
+               or a service.
+               Typically, the name of a Publisher should be used to
+               indicate the entity.""".
+
+Contributor  a rdfs:Property;
+
+  rdfs:label  "An entity responsible for making contributions to the
+               content of the resource.";
+               
+  rdfs:comment     """Examples of a Contributor include a person, an organisation,
+               or a service.
+               Typically, the name of a Contributor should be used to
+               indicate the entity.""" .
+
+# Another "Typically"... shjould be constrained to what event and what dat format IMHO
+:Date a rdfs:Property;
+
+  rdfs:label  "A date associated with an event in the life cycle of the
+               resource.";
+               
+  rdfs:comment     """Typically, Date will be associated with the creation or
+               availability of the resource.  Recommended best practice
+               for encoding the date value is defined in a profile of
+               ISO 8601 [W3CDTF] and follows the YYYY-MM-DD format.""" .
+  
+:Type a rdfs:Property;
+
+  rdfs:label        "Resource Type";
+  rdfs:label   "The nature or genre of the content of the resource.";
+  rdfs:comment     """Type includes terms describing general categories, functions,
+               genres, or aggregation levels for content. Recommended best
+               practice is to select a value from a controlled vocabulary
+               (for example, the working draft list of Dublin Core Types 
+               [DCT1]). To describe the physical or digital manifestation
+               of the resource, use the FORMAT element.""" .
+
+:Format a rdfs:Property;
+
+  rdfs:label  "The physical or digital manifestation of the resource.";
+  rdfs:comment """Typically, Format may include the media-type or dimensions of
+               the resource. Format may be used to determine the software, 
+               hardware or other equipment needed to display or operate the 
+               resource. Examples of dimensions include size and duration.
+               Recommended best practice is to select a value from a
+               controlled vocabulary (for example, the list of Internet Media
+               Types [MIME] defining computer media formats).""".
+
+# This of course hsould be the URI, which would be used in N3 to refer to it anyway.
+# In practice we need much documentmangement stuff for URIs.
+
+:Identifier a rdfs:Property;
+
+  rdfs:label        "Resource Identifier";
+  rdfs:label  "An unambiguous reference to the resource within a given context.";
+  rdfs:Comment """Recommended best practice is to identify the resource by means
+               of a string or number conforming to a formal identification
+               system. 
+               Example formal identification systems include the Uniform
+               Resource Identifier (URI) (including the Uniform Resource
+               Locator (URL)), the Digital Object Identifier (DOI) and the
+               International Standard Book Number (ISBN).""".
+
+# Interesting. of course, should be identified with a URI.
+
+:Source a rdfs:Property;
+
+  rdfs:label	"Source";
+  rdfs:label   """A Reference to a resource from which the present resource
+               is derived.""";
+  rdfs:comment     """The present resource may be derived from the Source resource
+               in whole or in part.  Recommended best practice is to reference 
+               the resource by means of a string or number conforming to a 
+               formal identification system.""" .
+
+
+# We are talking natural language here ;-)
+# Another SHOULD ("recommended best practice") which SHOULD be a MUST!
+:Language a rdfs:Property;
+  rdfs:label        "Language";
+  rdfs:label  "A language of the intellectual content of the resource.";
+  rdfs:comment     """Recommended best practice for the values of the Language
+               element is defined by RFC 1766 [RFC1766] which includes
+               a two-letter Language Code (taken from the ISO 639
+               standard [ISO639]), followed optionally, by a two-letter
+               Country Code (taken from the ISO 3166 standard [ISO3166]). 
+               For example, 'en' for English, 'fr' for French, or
+               'en-uk' for English used in the United Kingdom.""".
+  
+# Hmmmm. seems to contain both the relationship and the identifier of the
+# thing refered to. Not ideal. Not reusable.
+:Relation a rdfs:Property;
+  rdfs:label        "Relation";
+  rdfs:label  "A reference to a related resource.";
+  rdfs:comment  """Recommended best practice is to reference the resource by means
+               of a string or number conforming to a formal identification
+               system.""";
+  = dc:Relation.
+               
+
+:Coverage a rdfs:Property;
+
+  rdfs:label  "The extent or scope of the content of the resource.";
+  rdfs:comment     """Coverage will typically include spatial location (a place name
+               or geographic coordinates), temporal period (a period label,
+               date, or date range) or jurisdiction (such as a named
+               administrative entity).
+               Recommended best practice is to select a value from a
+               controlled vocabulary (for example, the Thesaurus of Geographic
+               Names [TGN]) and that, where appropriate, named places or time
+               periods be used in preference to numeric identifiers such as
+               sets of coordinates or date ranges.""";
+    = dc:Coverage .
+
+# Cool would be the URI of the licence specifying IPR.
+:Rights a rdfs:Property;
+  rdfs:label  "Information about rights held in and over the resource.";
+  rdfs:comment    """Typically, a Rights element will contain a rights
+              management statement for the resource, or reference
+              a service providing such information. Rights information
+              often encompasses Intellectual Property Rights (IPR),
+              Copyright, and various Property Rights.
+              If the Rights element is absent, no assumptions can be made
+              about the status of these and other rights with respect to
+              the resource.""";
+  = dc:Rights .
+
+# ENDS
