@@ -114,6 +114,8 @@ k:Massachusetts-State  usps:stateAbbr "MA". "MA" :lower "ma".
 }
   log:implies { ?WHERE :formVal ?CODE }.
 
+# ORD finds Ord, Nebraska as well as the airport
+{ ?WHERE :formVal "ORD" } => { ?WHERE :formVal "Chicago" }.
 
 #http://www.vicinity.com/myblast/map.mb?CMD=LFILL&&CT=47.43000031:19.18000031:90000&
 
@@ -169,7 +171,10 @@ k:Massachusetts-State  usps:stateAbbr "MA". "MA" :lower "ma".
 #  k:inRegion [ map:countryName "Hungary" ] ].
 
 # $Log$
-# Revision 1.9  2004-07-09 03:55:43  connolly
+# Revision 1.10  2004-11-13 20:01:59  connolly
+# special case for ORD/Chicago
+#
+# Revision 1.9  2004/07/09 03:55:43  connolly
 # deal with lowercase state codes in phone lookup
 #
 # Revision 1.8  2004/07/04 19:07:04  connolly
