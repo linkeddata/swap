@@ -1,0 +1,9 @@
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+
+{ ?p a owl:FunctionalProperty.
+  ?x ?p ?y.
+  ?x ?p ?z.
+} => {
+  ?y owl:sameIndividualAs ?z
+}.
+
