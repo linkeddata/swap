@@ -160,6 +160,8 @@ class Decimal:
             a.magnitude = self.magnitude - other.magnitude
             a.normalize()
         self.normalize()
+        if a == NotImplemented:
+            raise RuntimeError
         return a
     def __divmod__(self, other):
         """x.__divmod__(y) <==> divmod(x, y)

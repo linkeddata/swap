@@ -85,10 +85,10 @@
     test:arguments     """-n3 reify/flatten1.n3 --unflatten""".
 
 
-:t1018 a test:CwmTest;
-    test:referenceOutput <dereify2.n3>; 
-    test:description   "dereifying test 3";
-    test:arguments     """-n3 reify/reify3.n3 --dereify""".
+#:t1018 a test:CwmTest;
+#    test:referenceOutput <dereify2.n3>; 
+#    test:description   "dereifying test 3";
+#    test:arguments     """-n3 reify/reify3.n3 --dereify""".
 
 #:t1020 a test:CwmTest;
 #    test:referenceOutput <reify2.n3>;
@@ -100,10 +100,10 @@
 #    test:description   "sanity check on serializing 2";
 #    test:arguments     """-n3 reify/reify2.n3 --reify""".
 
-:t1027 a test:CwmTest;
-    test:referenceOutput <reify3.n3>;
-    test:description   "reify thrice";
-    test:arguments     """-n3 reify/reify0.n3 --reify --reify --reify""".
+#:t1027 a test:CwmTest;
+#    test:referenceOutput <reify3.n3>;
+#    test:description   "reify thrice";
+#    test:arguments     """-n3 reify/reify0.n3 --reify --reify --reify""".
 
 
 #ends

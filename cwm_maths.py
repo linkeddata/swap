@@ -105,7 +105,7 @@ class BI_factors(LightBuiltIn, ReverseFunction):
         return tidy(t)
 
 class BI_quotient(LightBuiltIn, Function):
-    def evaluateObject(self, subj_py): 
+    def evaluateObject(self, subj_py):
         t = None
         if len(subj_py) == 2: t = float(subj_py[0]) / float(subj_py[1])
         return tidy(t)

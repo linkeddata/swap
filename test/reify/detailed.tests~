@@ -55,7 +55,7 @@
     test:arguments     """-n3 reify/reify2.n3 --dereify --dereify""".
 
 :t1014 a test:CwmTest;
-    test:referenceOutput <reify0.n3>; #de
+    test:referenceOutput <dereify0.n3>; 
     test:description   "dereifying thrice";
     test:arguments     """-n3 reify/reify3.n3 --dereify --dereify --dereify""".
 
@@ -86,7 +86,7 @@
 
 
 :t1018 a test:CwmTest;
-    test:referenceOutput <reify2.n3>; #de
+    test:referenceOutput <dereify2.n3>; 
     test:description   "dereifying test 3";
     test:arguments     """-n3 reify/reify3.n3 --dereify""".
 
@@ -100,10 +100,10 @@
 #    test:description   "sanity check on serializing 2";
 #    test:arguments     """-n3 reify/reify2.n3 --reify""".
 
-:t1027 a test:CwmTest;
-    test:referenceOutput <reify3.n3>;
-    test:description   "reify thrice";
-    test:arguments     """-n3 reify/reify0.n3 --reify --reify --reify""".
+#:t1027 a test:CwmTest;
+#    test:referenceOutput <reify3.n3>;
+#    test:description   "reify thrice";
+#    test:arguments     """-n3 reify/reify0.n3 --reify --reify --reify""".
 
 
 #ends

@@ -118,8 +118,11 @@ class BI_factors(LightBuiltIn, ReverseFunction):
         return t
 
 class BI_quotient(LightBuiltIn, Function):
-    def evaluateObject(self, subj_py): 
-        if len(subj_py) == 2: return numeric(subj_py[0]).__truediv__(numeric(subj_py[1]))
+    def evaluateObject(self, subj_py):
+        if len(subj_py) == 2:
+            if isinstance(numeric(subj_py[0]), long):
+                return numeric(subj_py[1]).__rtruediv__(numeric(subj_py[0]))
+            return numeric(subj_py[0]).__truediv__(numeric(subj_py[1]))
 
 class BI_integerQuotient(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
