@@ -1,0 +1,16 @@
+# see http://lists.w3.org/Archives/Public/www-archive/2002Aug/0016.html
+# cwm sbp1.n3 --think
+# Should give:
+#    <http://example.com/x>     <http://example.com/y> <http://example.com/z> .
+
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+@prefix string:  <http://www.w3.org/2000/10/swap/string#> .
+
+this log:forAll :p, :q, :r, :s .
+{ ("@prefix : <http://example.com/>. :x :y :z " ".") string:concatenation [ log:parsedAsN3 :s ] .
+   :s log:includes { :p :q :r }
+} log:implies {
+	 :p :q :r
+} .
+
+#
