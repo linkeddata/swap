@@ -1,18 +1,19 @@
 
-<!-- Processed by Id: cwm.py,v 1.46 2001/05/21 14:35:47 connolly Exp -->
-<!--     using base file:/afs/w3.org/pub/WWW/2000/10/swap/pim/doc.n3-->
+<!-- Processed by Id: cwm.py,v 1.96 2002/06/07 20:07:17 timbl Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/pim/doc.n3-->
 
 
-<r:RDF xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:s="http://www.w3.org/2000/01/rdf-schema#"
+<r:RDF xmlns="http://www.w3.org/2000/10/swap/pim/doc#"
+    xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc#"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
-    xmlns="http://www.w3.org/2000/10/swap/pim/doc#">
+    xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#">
 
     <r:Description r:about="">
         <version>$Id: </version>
     </r:Description>
 
-    <r:Description r:about="http://www.w3.org/2000/10/swap/pim/contacts.n3#OpenSourceLicense">
+    <r:Description r:about="http://www.w3.org/2000/10/swap/pim/doc#OpenSourceLicense">
         <s:comment>Class of licenses which can be called Open Soutrce
                 according to opensource.org</s:comment>
         <s:subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
@@ -76,9 +77,16 @@
         <s:range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
     </r:Property>
 
-    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#persitenceyPolicy">
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#persitencePolicy">
         <s:comment>Publishers policy regarding the peristence of the mapping
                 between URI and its meaning and/or representation in bits.</s:comment>
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <s:range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#subLicense">
+        <s:comment>For any licence, a sublicense is a licensing offering a subset of the rights.  If A doc:sublicense B then anything under licence A can be released under
+licence B.</s:comment>
         <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
         <s:range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
     </r:Property>

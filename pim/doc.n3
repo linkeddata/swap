@@ -19,7 +19,8 @@
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
 @prefix :    <http://www.w3.org/2000/10/swap/pim/contacts.n3#> .
 
-<> doc:version "$Id: " .
+<>  doc:version "$Id$";
+    doc:ipr <../LICENSE.n3>.
 
 
 doc:Work a s:Class;
@@ -39,6 +40,12 @@ doc:derivedFrom a r:Property;
 
 doc:ipr a r:Property;
     s:comment   "Terms and interllectual property rights licencing condidtions.";
+    s:domain    doc:Work;
+    s:range     doc:Work .
+
+doc:subLicense a r:Property; s:comment 
+"""For any licence, a sublicense is a licensing offering a subset of the rights.  If A doc:sublicense B then anything under licence A can be released under
+licence B.""";
     s:domain    doc:Work;
     s:range     doc:Work .
 
