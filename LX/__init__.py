@@ -24,12 +24,15 @@ from LX.describer import *
 from LX.namespace import *
 rdfns  = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns",
                    ["type", "nil", "first", "rest"])
-lxns   = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns", strict=0)
+lxns   = Namespace("http://www.w3.org/2002/08/LX/RDF/v2", strict=0)
 
 
 
 # $Log$
-# Revision 1.2  2002-08-29 16:39:55  sandro
+# Revision 1.3  2002-08-29 21:02:13  sandro
+# passes many more tests, esp handling of variables
+#
+# Revision 1.2  2002/08/29 16:39:55  sandro
 # fixed various early typos and ommissions; working on logic bug which is manifesting in description loops
 #
 # Revision 1.1  2002/08/29 11:00:46  sandro

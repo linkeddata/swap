@@ -11,17 +11,24 @@ from LX.ladder import Ladder
 from LX import rdfns, lxns
 from LX import Triple
 
-def flatten(kb, toKB):
+def flatten(kb, toKB, indirect=0):
     """Return a formula which expresses the same knowledge, but using
     only RDF triples and the LX-Layering vocabulary.
+
+    if "indirect" then even plain triples get described as true;
+    otherwise they just get copied over.
+    
     """
     d = LX.CombinedDescriber([FormulaDescriber(), URIRefDescriber(),
-                              LX.ListDescriber()])
+                              VariableDescriber(), LX.ListDescriber()])
     ladder = Ladder(("kb", toKB))
-    ladder = ladder.set("trace", 1)
+    # ladder = ladder.set("trace", 1)
     for f in kb:
-        term = d.describe(f, ladder)
-        toKB.add(Triple(term, rdfns.type, lxns.TrueSentence))
+        if f.operator is LX.ATOMIC_SENTENCE and not indirect:
+            toKB.add(f)
+        else:
+            term = d.describe(f, ladder)
+            toKB.add(Triple(term, rdfns.type, lxns.TrueSentence))
 
 def unflatten(f):
     """Return a formula which expresses the same knowledge, but any
@@ -35,12 +42,30 @@ def unflatten(f):
     raise RuntimeError, "Not Implemented"
 
 
+class VariableDescriber:
+
+    def describe(self, object, ladder):
+        if not isinstance(object, LX.Variable):
+            raise LX.DescriptionFailed, 'not a variable term'
+        if ladder.has("term"):
+            raise (DescriptionFailed,
+                       'Cannot describe variable as some term w/out eq')
+        else:
+            #@@@   keep a global map to exivars?
+            #term = ladder.kb.newExistential()
+            term = object
+            
+        if ladder.has("verbose"):
+            ladder.kb.add(Triple(term, rdfns.type, lxns.Variable))
+        return term
+        
+    
 class URIRefDescriber:
 
     def describe(self, object, ladder):
-        if isinstance(object, LX.Operator):
-            print "Describing an operator...   Ignoring for now..."
-            return ladder.kb.newExistential()
+        #if isinstance(object, LX.Operator):
+        #    print "Describing an operator...   Ignoring for now..."
+        #    return ladder.kb.newExistential()
         if not isinstance(object, LX.URIRef):
             raise LX.DescriptionFailed, 'not a uriref term'
         if ladder.has("term"):
@@ -61,9 +86,8 @@ class FormulaDescriber:
         LX.CONJUNCTION:   [ lxns.Conjunction,   lxns.conjLeft,   lxns.conjRight   ],
         LX.DISJUNCTION:   [ lxns.Disjunction,   lxns.disjLeft,   lxns.disjRight   ],
         LX.NEGATION:      [ lxns.Negation,      lxns.negated ],
-        # @@@ hrrrm, should the quants be done so class info isn't needed?   .univar, .exivar, quantified
-        LX.UNIVERSAL_QUANTIFICATION: [ lxns.UniversalQuantification, lxns.variable, lxns.subformula ],
-        LX.EXISTENTIAL_QUANTIFICATION: [ lxns.ExistentialQuantification, lxns.variable, lxns.subformula ],
+        LX.UNIVERSAL_QUANTIFICATION: [ lxns.UniversalQuantification, lxns.univar, lxns.subformula ],
+        LX.EXISTENTIAL_QUANTIFICATION: [ lxns.ExistentialQuantification, lxns.exivar, lxns.subformula ],
         LX.ATOMIC_SENTENCE: [ lxns.Triple, lxns.subjectTerm, lxns.predicateTerm, lxns.objectTerm ]
         }
     
@@ -86,7 +110,10 @@ class FormulaDescriber:
         return term
 
 # $Log$
-# Revision 1.3  2002-08-29 17:10:38  sandro
+# Revision 1.4  2002-08-29 21:02:13  sandro
+# passes many more tests, esp handling of variables
+#
+# Revision 1.3  2002/08/29 17:10:38  sandro
 # fixed description bug; flatten runs and may even be correct
 #
 # Revision 1.2  2002/08/29 16:39:55  sandro
