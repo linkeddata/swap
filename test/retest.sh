@@ -17,7 +17,7 @@ function cwm_test () {
   echo TEST $case: $desc
   echo TEST cwm $args
   # Hmm... this suggests a --nocomments flag on cwm
-  (python ../cwm.py $args | perl -ne 'print unless /^\s*#/ || /\$Id/' > temp/$case) || echo CRASH $case
+  (python ../cwm.py $args | perl -ne 'print unless /^\s*#/ || /\$Id/ || /Id:/' > temp/$case) || echo CRASH $case
   diff -bwu ref/$case temp/$case >diffs/$case
   if [ -s diffs/$case ]; then echo FAIL: $case: see diffs/$case; else echo PASS $case; fi
 }
@@ -55,7 +55,10 @@ cwm_test schema1.n3 "Schema validity" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -
 cwm_test schema2.n3 "@@test case description?" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think -filter=schema-filter.n3
 
 # $Log$
-# Revision 1.4  2001-05-09 15:06:36  connolly
+# Revision 1.5  2001-05-10 06:04:23  connolly
+# remove more Id stuff
+#
+# Revision 1.4  2001/05/09 15:06:36  connolly
 # fixed string parsing, updated DAML+OIL namespace; added tests for string parsing and bits of N3 syntax that depend on the choice of DAML namespace
 #
 # Revision 1.3  2001/05/08 05:37:46  connolly
