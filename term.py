@@ -712,9 +712,17 @@ class EmptyList(List):
     def newList(self, value):
         x = self
         l = len(value)
-        while l > 0:
-            l = l - 1
-            x = x.prepend(value[l])
+        if l == 0:
+            return x
+        try:
+            value[0]
+        except TypeError:
+            for a in value:
+                x = x.prepend(a)
+        else:
+            while l > 0:
+                l = l - 1
+                x = x.prepend(value[l])
         return x
 
     def unify(self, other, vars, existentials, bindings):

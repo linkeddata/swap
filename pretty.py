@@ -17,7 +17,7 @@ import string
 import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
 from diag import progress, verbosity, tracking
 from term import   Literal, Symbol, Fragment, AnonymousVariable, FragmentNil, \
-     Term, CompoundTerm, List, EmptyList, NonEmptyList
+     Term, CompoundTerm, List, EmptyList, NonEmptyList, N3Set
 from formula import Formula, StoredStatement
 
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
@@ -175,7 +175,7 @@ class Serializer:
 	if L not in lists:
 	    lists.append(L)
 	for i in L:
-	    if isinstance(i, NonEmptyList):
+	    if isinstance(i, NonEmptyList) or isinstance(i, N3Set):
 		self._listsWithinLists(i, lists)
 
     def dumpLists(self):
@@ -186,11 +186,18 @@ class Serializer:
 	for s in context.statements:
 
 	    for x in s.predicate(), s.subject(), s.object():
-		if isinstance(x, NonEmptyList):
+		if isinstance(x, NonEmptyList) or isinstance(x, N3Set):
 		    self._listsWithinLists(x, lists)
 		    
 	for l in lists:
-	    list = l
+            if isinstance(l, N3Set):
+                a = context.newBlankNode()
+                list = self.store.newList(l)
+                self._outputStatement(sink, (context, self.store.forSome, context, a))
+                l._list = list
+                l._node = a
+            else:
+                list = l
 	    while not isinstance(list, EmptyList):
                 if list not in listList:
                     self._outputStatement(sink, (context, self.store.forSome, context, list))
@@ -199,12 +206,14 @@ class Serializer:
         listList = {}
 	for l in lists:
 	    list = l
+	    if isinstance(l, N3Set):
+                list = l._list
+                self._outputStatement(sink, (context, self.store.owlOneOf, l._node, list))
 	    while (not isinstance(list, EmptyList)) and list not in listList:
 		self._outputStatement(sink, (context, self.store.first, list, list.first))
 		self._outputStatement(sink, (context, self.store.rest,  list, list.rest))
 		listList[list] = 1
 		list = list.rest
-
 
     def dumpChronological(self):
 	"Fast as possible. Only dumps data. No formulae or universals."
@@ -216,14 +225,20 @@ class Serializer:
 	uu = context.universals()
 
 	self.dumpLists()
-	
+
+	def fixSet(x):
+            try:
+                return x._node
+            except AttributeError:
+                return x
+            
         for s in context.statements:
 	    for p in SUBJ, PRED, OBJ:
 		x = s[p]
 		if isinstance(x, Formula) or x in uu:
 		    break
 	    else:
-		self._outputStatement(sink, s.quad)
+		self._outputStatement(sink, [fixSet(x) for x in s.quad])
 		    
         sink.endDoc()
 
@@ -285,13 +300,19 @@ class Serializer:
 
 	ss = context.statements[:]
 	ss.sort(StoredStatement.compareSubjPredObj)
+	def fixSet(x):
+            try:
+                return x._node
+            except AttributeError:
+                return x
+    
         for s in ss:
 	    for p in SUBJ, PRED, OBJ:
 		x = s[p]
 		if isinstance(x, Formula) or x in uu:
 		    break
 	    else:
-		self._outputStatement(sink, s.quad)
+		self._outputStatement(sink, [fixSet(x) for x in s.quad])
 		    
 	if 0:  # Doesn't work as ther ei snow no list of bnodes
 	    rs = self.store.resources.values()
@@ -452,6 +473,9 @@ class Serializer:
 	    else:
 		_anon = 2	# always anonymous, represented as itself
 		_isExistential = 1
+	elif isinstance(x, N3Set):
+            _anon = 2
+            _isExistential = 1
 	elif not x.generated():
 	    _anon = 0	# Got a name, not anonymous
         else:  # bnode
@@ -537,6 +561,10 @@ class Serializer:
 
 	if isinstance(subj, List): li = subj
 	else: li = None
+	if isinstance(subj, N3Set):
+            se = subj
+            li = self.store.newList(se)
+	else: se = None
 	
         if isinstance(subj, Formula) and subj is not context:
             sink.startBagSubject(subj.asPair())
@@ -553,7 +581,16 @@ class Serializer:
 
                 if sorting: statements.sort(StoredStatement.comparePredObj)    # @@ Needed now Fs are canonical?
 
-                if li != None and not isinstance(li, EmptyList):
+                if se is not None:
+                    a = self.context.newBlankNode()
+                    sink.startAnonymousNode(a.asPair())
+                    self.dumpStatement(sink, (context, self.store.owlOneOf, a, li), sorting)
+                    for s in statements:  #   "[] color blue."  might be nicer. @@@  Try it?
+                        m = s.quad[0:2] + (a, s.quad[3])
+                        self.dumpStatement(sink, m, sorting)
+                    sink.endAnonymousNode()
+                    return 
+                elif li != None and not isinstance(li, EmptyList):
                     for s in statements:
                         p = s.quad[PRED]
                         if p is not self.store.first and p is not self.store.rest:
@@ -610,6 +647,14 @@ class Serializer:
 	    self.dumpStatement(sink, (context, self.store.rest, obj, obj.rest), sorting)
 	    sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
 	    return
+
+	if isinstance(obj, N3Set):
+            a = self.context.newBlankNode()
+            tempList = self.store.newList(obj)
+            sink.startAnonymous(self.extern((triple[CONTEXT], triple[PRED], triple[SUBJ], a)))
+            self.dumpStatement(sink, (context, self.store.owlOneOf, a, tempList), sorting)
+            sink.endAnonymous(sub.asPair(), pre.asPair())
+            return
 
         _anon, _incoming = self._topology(obj, context)
         if _anon and _incoming == 1:  # Embedded anonymous node in N3

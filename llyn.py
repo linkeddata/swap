@@ -1073,6 +1073,7 @@ class RDFStore(RDFSink) :
         self.Chaff = self.symbol(Logic_NS + "Chaff")
 	self.docRules = self.symbol("http://www.w3.org/2000/10/swap/pim/doc#rules")
 	self.imports = self.symbol("http://www.w3.org/2002/07/owl#imports")
+	self.owlOneOf = self.symbol('http://www.w3.org/2002/07/owl#oneOf')
 
 # List stuff - beware of namespace changes! :-(
 
@@ -1121,7 +1122,7 @@ class RDFStore(RDFSink) :
     def newSymbol(self, uri):
 	return self.intern(RDFSink.newSymbol(self, uri))
 
-    def newSet(self, iterator=[]):
+    def newSet(self, iterator=[], context=None):
         new_set = N3Set(iterator)
         Term.__init__(new_set, self)
         return new_set
