@@ -1554,7 +1554,7 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 		    return "<#" + value[j+1:] + ">" #   use local frag id (@@ lone word?)
         
 	if "r" not in self._flags and self.base != None:
-	    value = refTo(self.base, value)
+	    value = hexify(refTo(self.base, value))
 	elif "u" in self._flags: value = backslashUify(value)
 	else: value = hexify(value)
 
@@ -1878,17 +1878,17 @@ def backslashUify(ustr):
     return str
 
 def hexify(ustr):
-    """Use URL encoding to return an ASCII string corresponding to the given unicode
+    """Use URL encoding to return an ASCII string corresponding to the given UTF8 string
 
     >>> hexify("http://example/a b")
     'http://example/a%20b'
     
-    """
+    """   #"
 #    progress("String is "+`ustr`)
 #    s1=ustr.encode('utf-8')
     str  = ""
     for ch in ustr:  # .encode('utf-8'):
-	if ord(ch) > 126:
+	if ord(ch) > 126 or ord(ch) < 33 :
 	    ch = "%%%02X" % ord(ch)
 	else:
 	    ch = "%c" % ord(ch)
