@@ -1,8 +1,8 @@
-#Processed by Id: cwm.py,v 1.146 2004/03/06 20:39:37 timbl Exp 
+#Processed by Id: cwm.py,v 1.149 2004/05/12 01:27:06 timbl Exp 
         #    using base file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3
         
 #  Notation3 generation by
-#       notation3.py,v 1.152 2004/03/06 20:39:38 timbl Exp
+#       notation3.py,v 1.154 2004/05/12 01:27:08 timbl Exp
 
 #   Base was: file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3
      @prefix : <#> .

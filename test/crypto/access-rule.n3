@@ -32,7 +32,6 @@ this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z
 #  acc:requestSupportedBy means that it correctly claimed to be
 #        signed by the given key.
 
-{ :request a acc:GoodRequest } is log:implies of
 {
     :request acc:forDocument :d;
              acc:requestSupportedBy :k.
@@ -43,7 +42,7 @@ this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z
     []       acc:certSupportedBy [a acc:MasterKey];    # Certificate
              log:includes { :k2 a acc:MemberKey }.
 
-}.
+} => { :request a acc:GoodRequest }.
 
 #  What is a Master key?
 #
@@ -71,7 +70,7 @@ this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z
 
 {:G acc:requestSupportedBy :k; log:includes {[] acc:forDocument :d}} log:implies {:G acc:forDocument :d}.
 
-{:G acc:requestSupportedBy :k; log:includes {:G acc:credential :d}} log:implies {:G acc:credential :d}.
+{:G acc:requestSupportedBy :k; log:includes {[] acc:credential :d}} log:implies {:G acc:credential :d}.
 
 # What do we belive from a signed credential?
 #
@@ -84,8 +83,4 @@ this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z
    :k crypto:verify ([is crypto:md5 of :str] :sig).
    :str log:parsedAsN3 :G } log:implies { :G acc:certSupportedBy :k }.
 
-# For purging
-
-log:implies a log:Chaff .
-log:forAll a log:Chaff .
 

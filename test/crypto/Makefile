@@ -16,7 +16,7 @@ include $(PD)/GVDOT.mak
 .SUFFIXES: .checked .proof .response .request .public .private
 
 .request.response:
-	$(CWM) access-rule.n3 --think --purge --with $< > $@
+	$(CWM) access-rule.n3 --think --purge-rules --with $< > $@
 
 .request.proof:
 	$(CWM) access-rule.n3 --think --purge --filter=result-filter.n3 \
