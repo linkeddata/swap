@@ -24,7 +24,7 @@
              problem from an opening message or a description of
           a resolution from a closing message""". 
 
-# State changes
+# State changes are made by relating a message to the issue with these:
 
 :acceptance a r:Property; s:domain t:Issue; r:range doc:Work;
     s:label "acceptance";
@@ -44,6 +44,7 @@
 
 #  Assigns?  Reassigns?
 #  Subsumed by? 
+#  Objection?  Minority report  Cancelation?
 
 #ends
 
