@@ -1,0 +1,38 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+<> dc:description """
+ $Id$
+ palm datebook to ical
+""".
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+
+@prefix pd: <http://www.w3.org/2000/08/palm56/datebook#> .
+@prefix ical: <http://ilrt.org/discovery/2001/06/schemas/ical-full/hybrid.rdf#>.
+
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+@prefix v: <?>.
+@prefix : <pd2ical#>.
+@prefix p2i: <pd2ical#>.
+
+this log:forAll v:e, v:i, v:date, v:desc, v:cal.
+
+{ <> dc:description [] } log:implies { [] a ical:VCALENDAR. }.
+
+{ v:e pd:date [] } log:implies { v:e :asIcal [] }.
+
+{
+  v:cal a ical:VCALENDAR.
+  v:e  :asIcal v:i;
+       pd:date v:date;
+       pd:description v:desc }
+  log:implies
+  {
+    v:cal ical:VEVENT-PROP v:i.
+    v:i ical:SUMMARY v:desc;
+        ical:DTSTART [ a ical:DATE; rdf:value v:date ].
+ }.
+
+
+{ v:e :asIcal v:i; pd:note v:desc }
+  log:implies { v:i ical:DESCRIPTION v:desc }.
