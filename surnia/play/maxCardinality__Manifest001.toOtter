@@ -1,0 +1,57 @@
+set(auto).
+clear(sigint_interact).
+include('otter/owlAx-card.otter').
+formula_list(usable).
+rdf(s, rdf_type, owl_Restriction).
+rdf(s, owl_maxCardinality, lit2).
+rdf('foo:zero', 'foo:succ', lit1).
+rdf(lit1, 'foo:succ', lit2).
+rdf(s, owl_onProperty, ns6_prop).
+rdf(ns6_sb1, rdf_type, s).
+rdf(ns6_sb1, ns6_prop, ns6_ob1).
+rdf(ns6_sb1, ns6_prop, ns6_ob2).
+rdf(ns6_sb1, ns6_prop, ns6_ob3).
+rdf(ns6_ob1, owl_differentFrom, ns6_ob2).
+rdf(ns6_ob1, owl_differentFrom, ns6_ob3).
+rdf(ns6_ob2, owl_differentFrom, ns6_ob3).
+rdf(ns6_prop, rdf_type, owl_ObjectProperty).
+
+%-   proven in .8s
+%(
+% $T
+%  &  item(ns6_ob1, pset(s,ns6_sb1))
+%  &  item(ns6_ob2, pset(s,ns6_sb1))
+%  &  item(ns6_ob3, pset(s,ns6_sb1))
+%  &  maxCardinality(pset(s,ns6_sb1), i2)
+%).
+
+%-  proven in 1.7s
+%(
+% $T
+%  &  ns6_ob1 != ns6_ob2
+%   &  ns6_ob2 != ns6_ob3
+%   &  ns6_ob1 != ns6_ob3
+%).
+
+% final result proven then in 0.8s., or 0.8 without group 1
+%   1.2s without 3rd clause
+%   1.5s without 2nd
+%    BUT without 1st asserted, we get....    a looooon wait.
+
+all X Y (
+   rdf(X, owl_differentFrom, Y)
+   ->
+   -(X=Y)
+).
+
+all X Y (
+   rdf(X, owl_differentFrom, Y)
+   ->
+   -(Y=X)
+).
+
+%all X Y (
+%   X!=Y <-> Y!=X
+%).
+
+end_of_list.
