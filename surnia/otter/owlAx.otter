@@ -6,6 +6,12 @@
 
 formula_list(usable).
 
+%   Note on "BIDIR"   These are all "->" which logically
+%   could/should be "<->", although the reverse arrows
+%   seems generally unneeded.
+
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
 %   rdf_nil
@@ -37,6 +43,7 @@ formula_list(usable).
 %
 %   owl_intersectionOf
 %
+%   not really full semantics
 
 all INST CLASS LIST (
    rdf(INST, rdf_type, CLASS) &
@@ -60,6 +67,7 @@ all INST (instanceOfAll(INST, rdf_nil)).
 %
 %   owl_unionOf
 %
+%   not really full semantics
 
 all INST CLASS LIST (
    rdf(INST, rdf_type, CLASS) &
@@ -80,14 +88,52 @@ all INST (-instanceOfAny(INST, rdf_nil)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
+%   owl_oneOf
+%
+%     thing a Foo.  Foo owl_oneOf ( a b c ... )
+%   to be in the class means to be equal to one of the list members
+
+all CLASS LIST (
+   rdf(CLASS, owl_oneOf, LIST)
+   ->    % BIDIR
+   (all INST (
+      rdf(INST, rdf_type, CLASS) <-> inList(INST, LIST)
+   ))
+).
+
+all MEMBER LIST HEAD TAIL (
+   (rdf(LIST, rdf_first, HEAD) &
+    rdf(LIST, rdf_rest, TAIL) &
+    ( rdf(MEMBER, owl_sameAs, HEAD) | 
+      inList(MEMBER, TAIL) ))
+  ->
+   inList(MEMBER, LIST)
+).
+all MEMBER (-inList(MEMBER, rdf_nil)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 %   owl_equivalentClass
 %
 
 all C1 C2 (
    rdf(C1, owl_equivalentClass, C2)
-   <-> 
+   ->     % BIDIR 
    (all INST (
      rdf(INST, rdf_type, C1) <-> rdf(INST, rdf_type, C2) 
+   ))
+).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rdfs_subClassOf
+%
+
+all C1 C2 (
+   rdf(C1, rdfs_subClassOf, C2)
+   ->     % BIDIR 
+   (all INST (
+     rdf(INST, rdf_type, C1) -> rdf(INST, rdf_type, C2) 
    ))
 ).
 
@@ -99,7 +145,7 @@ all C1 C2 (
 
 all C1 C2 (
    rdf(C1, owl_complementOf, C2)
-   <-> 
+   ->     % BIDIR 
    (all INST (
      rdf(INST, rdf_type, C1) <-> -rdf(INST, rdf_type, C2) 
    ))
@@ -114,7 +160,7 @@ all C1 C2 (
 
 all C1 C2 (
    rdf(C1, owl_disjointWith, C2)
-   <-> 
+   ->     % BIDIR 
    (all INST (
      - (rdf(INST, rdf_type, C1) & rdf(INST, rdf_type, C2))
    ))
@@ -209,7 +255,7 @@ all RESTRICTION PROPERTY VALUE INST (
 
 all PROPERTY (
    rdf(PROPERTY, rdf_type, owl_FunctionalProperty)
-   <->
+   <->     % BIDIR         TRY for FP004 !
    ( all INST VAL1 VAL2 (
      ( rdf(INST, PROPERTY, VAL1) &
        rdf(INST, PROPERTY, VAL2) )
@@ -226,7 +272,7 @@ all PROPERTY (
 
 all PROPERTY (
    rdf(PROPERTY, rdf_type, owl_InverseFunctionalProperty)
-   <->
+   ->     % BIDIR
    ( all INST1 INST2 VAL (
      ( rdf(INST1, PROPERTY, VAL) &
        rdf(INST2, PROPERTY, VAL) )
@@ -246,7 +292,7 @@ all THING (
 
 all THING1 THING2 (
    rdf(THING1, owl_sameAs, THING2) 
-   <->
+   ->     % BIDIR
    (all X Y (
       ( rdf(X, Y, THING1) <-> rdf(X, Y, THING2) ) &
       ( rdf(X, THING1, Y) <-> rdf(X, THING2, Y) ) &
@@ -261,11 +307,39 @@ all THING1 THING2 (
 
 all PRED1 PRED2 (
    rdf(PRED1, owl_equivalentProperty, PRED2)
-   <->
+   ->     % BIDIR
    (all SUBJ OBJ (
       ( rdf(SUBJ, PRED1, OBJ) <-> rdf(SUBJ, PRED2, OBJ) )
    ))
 ).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rdfs_subPropertyOf
+%
+
+all PRED1 PRED2 (
+   rdf(PRED1, rdfs_subPropertyOf, PRED2)
+   ->     % BIDIR
+   (all SUBJ OBJ (
+      ( rdf(SUBJ, PRED1, OBJ) -> rdf(SUBJ, PRED2, OBJ) )
+   ))
+).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rdfs_range
+%
+
+all PRED CLASS (
+   rdf(PRED, rdfs_range, CLASS) 
+   <->      % maybe needed for FunctionalProperty004
+   (all SUBJ OBJ (
+     rdf(SUBJ, PRED, OBJ) -> rdf(OBJ, rdf_type, CLASS)
+   ))
+).
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -274,20 +348,64 @@ all PRED1 PRED2 (
 
 all PRED1 PRED2 (
    rdf(PRED1, owl_inverseOf, PRED2)
-   <->
+   ->     % BIDIR
    (all SUBJ OBJ (
       ( rdf(SUBJ, PRED1, OBJ) <-> -rdf(SUBJ, PRED2, OBJ) )
    ))
 ).
 
+% should be a theorem....
+rdf(owl_InverseOf, rdf_type, owl_SymmetricProperty).
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 %   owl_SymmetricProperty
+
+(all P (
+   rdf(P, rdf_type, owl_SymmetricProperty)
+   ->     % BIDIR
+   (all X Y (
+      rdf(X, P, Y) <-> rdf(Y, P, X)
+   ))
+)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 %   owl_TransitiveProperty
+%
+
+(all P (
+   rdf(P, rdf_type, owl_TransitiveProperty)
+   ->    % BIDIR
+   (all X Y Z (
+      ( rdf(X, P, Y) & rdf(Y, P, Z) )
+      <->
+      rdf(X, P, Z)
+   ))
+)).
 
 
 
-%   rdfs_range
-%   rdfs_domain
-%   rdfs_subPropertyOf
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Special Axiom on Inverse Cardinality
+%
+%   (I'd think this would be a theorem, but it doesn't seem to be,
+%   even with all the arrows bidirectional...)
+%
+
+all P1 P2 (
+   ( rdf(P1, owl_inverseOf, P2) &
+     rdf(P1, rdf_type, owl_FunctionalProperty) )
+   ->
+   rdf(P2, rdf_type, owl_InverseFunctionalProperty)
+).
+
+all P1 P2 (
+   ( rdf(P1, owl_inverseOf, P2) &
+     rdf(P1, rdf_type, owl_InverseFunctionalProperty) )
+   ->
+   rdf(P2, rdf_type, owl_FunctionalProperty)
+).
+    
