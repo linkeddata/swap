@@ -1,87 +1,41 @@
 #  Tracking of issues in a very simple form
 # Just use your own properties to add your own functionality
 #
-#  IJ TBL  20002/01
 #
 
-@prefix : <track#>.
-@prefix  t: <track#>.
+# Anything can raise an issue
 
-@prefix r:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+{
+   [] tr:effectiveDate :d; tr:raises :i.
+} log:implies {
+   [] tr:asOf :d; tr:forIssue :i; tr:stateIs :s
+}.
 
-@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
-@prefix log: <http://www.w3.org/2000/10/swap/log#> .
-@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
+# Rule: Everything remains at rest unless a force acts upon it.
 
-:Issue a s:Class.
+tr:successor rdf:Property; label "next";
+    rdfs:comment """The successor of a document in a series
+for example of meeting minutes is the minutes of the next
+meeting, in the sense that if you go through that chain,
+you won't skip any of the formal record.  The effective (meeting) date of the
+document must be later the date of the prior document.
+"""
 
-:title a r:Property;
-    s:domain t:Issue;
-    s:range log:String;
-    s:comment "Short title, less than one line".
+{[] tr:asOf :m1; tr:forIssue :i; tr:stateIs :s.
+ :m2 tr:successor :m2.
+ :m2 not:Includes { :i [] [] }.
+ :m2 not:Includes { [] [] :i }.
+} log:implies {
+ [] tr:asOf :m2; tr:forIssue :i; tr:stateIs :s.
+}
 
-:summary a r:Property;
-    s:domain t:Issue;
-    s:range log:String;
-    s:comment """A summary of a message eg a description of a 
-             problem from an opening message or a description of
-          a resolution from a closing message""".
+# Rule:  Transisions
 
-:source a r:Property;
-    s:domain t:Issue;
-    s:range  doc:Work;
-    s:comment """The source of the issue (e.g., URI to mail message where raised)""".
+{ 
 
-:documentConcerned a r:Property;
-    s:domain t:Issue;
-    s:range  doc:Work;
-    s:comment """The spec that has this problem""".
 
-#Need better way to talk about a W3C Working Group. I presume
-#this would be a subclass of contact:SocialEntity.
+#
 
-:onBehalfOf a r:Property;
-    s:domain t:Issue;
-    s:range  contact:SocialEntity;
-    s:comment """The entity who raised the issue, who could be a Working Group, Person, Member organization, Liaison, etc.""".
-
-# State changes are made by relating a message to the issue with these:
-
-:acceptance a r:Property; s:domain t:Issue; r:range doc:Work;
-    s:label "acceptance";
-    s:comment """The document which accepts the this issue, creating it as
- an issue. That document is expected (today) to include information about where
-it was raised (URI), who raised it (the issue author), and on what date.""".
-
-:resolution a r:Property; s:domain t:Issue; r:range doc:Work;
-    s:comment """This document closes (resolves) the issue, which must have been open""".
-
-:rejection a r:Property; s:domain t:Issue; r:range doc:Work;
-    s:comment """This document rejects the issue, which must have been open""".
-
-:annotation a r:Property; s:domain t:Issue; r:range doc:Work;
-    s:comment  """No semantics apart from human understanding. no state change""".
-
-:reopener a r:Property; s:domain t:Issue; r:range doc:Work;
-    s:comment  """A closed issue is re-openned.""".
-
-# IMPORTANT: 
-# Need at least two dates:
-#  - Date of the state transition.
-#  - Date of the message sent (e.g., message raised on this date.
-# It's likely that given the diversity of messages, this would
-# be hard to figure out by machine with certainty.
-# Need date on accept, resolve, reject, reopener...
-
-# Probably want "raisedBy" in addition to "onBehalfOf"
-
-# - Assigns?  Reassigns?
-# - Subsumed by? 
-# - Objection?  Minority report  Cancelation?
-# - Original source of the problem info?
-# - Grouping property (e.g., this issue is part of 
-#   the group of issues related to the second last call)
 #
 
 #ends
