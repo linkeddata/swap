@@ -26,10 +26,10 @@ from term import BuiltIn, LightBuiltIn, \
     Literal, Symbol, Fragment, FragmentNil, Term,\
     CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode
 
-NOTHING   = 0
-SUBJECT   = 1
-PREDICATE = 2
-OBJECT    = 3
+NOTHING   = -1
+SUBJECT   = 0
+PREDICATE = 1
+OBJECT    = 2
 
 FORMULA = 0
 LIST    = 1
@@ -38,6 +38,11 @@ ANONYMOUS = 2
 NO = 0
 STALE = 1
 FRESH = 2
+
+def swap(List, a, b):
+    q = List[a]
+    List[a] = List[b]
+    List[b] = q
 
 class TripleMaker:
     """This is the example of the new interface.
@@ -57,30 +62,51 @@ class TripleMaker:
         self.lists = []
         self._modes = [FORMULA]
         self.bNodes = []
-        self._predIsOfs = [False]
+        self._predIsOfs = [NO]
+        self._pathModes = [False]
 
     def addNode(self, node):
-        if self._modes[-1] == FORMULA
+        if self._modes[-1] == FORMULA or self._modes[-1] == ANONYMOUS
             self._parts[-1] = self._parts[-1] + 1
             if self._parts[-1] > 3:
                 raise ValueError('Try ending the statement')
             if node is not None
-                self.triples[-1][self._parts[-1] - 1] = node
+                self.triples[-1][self._parts[-1]] = node
                 if self._parts[-1] == PREDICATE and self._predIsOfs[-1] == STALE:
                     self._predIsOfs[-1] = NO
+        if self._modes[-1] == ANONYMOUS and self._pathModes[-1] == True:
+            self.endStatement()
+            self.endAnonymous()
 
-    def IsOf():
+    def IsOf(self):
         self._predIsOfs[-1] = FRESH
+
+    def forewardPath(self):
+        a = self.triples[-1][self._parts[-1]]
+        self._parts[-1] = self._parts[-1] - 1
+        self.beginAnonymous()
+        self.addNode(a)
+        self._predIsOfs[-1] = FRESH
+        self._pathModes[-1] = True
+        
+    def backwardPath(self):
+        a = self.triples[-1][self._parts[-1]]
+        self._parts[-1] = self._parts[-1] - 1
+        self.beginAnonymous()
+        self.addNode(a)
+        self._pathModes[-1] = True
 
     def endStatement(self):
         if self._parts[-1] != 3:
             raise ValueError('try adding more to the statement')
         formula = self.formulas[-1]
+
+        if self._pathModes[-1]:
+            swap(self.triples[-1], PREDICATE, OBJECT)
         if self._predIsOfs[-1]:
-            obj, pred, subj = self.triples[-1]
-            self._predIsOfs[-1] = STALE
-        else:
-            subj, pred, obj = self.triples[-1]
+            swap(self.triples[-1], SUBJECT, OBJECT)
+        subj, pred, obj = self.triples[-1]
+        
         formula.add(subj, pred, obj)
         self._parts[-1] = NOTHING
         if self._modes[-1] == ANONYMOUS:
@@ -91,7 +117,7 @@ class TripleMaker:
         self.addNode(a)
 
     def addSymbol(self, sym):
-        a = sef.store.newSymbol(sym)
+        a = self.store.newSymbol(sym)
         self.addNode(a)
     
     def beginFormula(self):
@@ -100,6 +126,8 @@ class TripleMaker:
         self._modes.append(FORMULA)
         self._triples.append([None, None, None])
         self._parts.append(NOTHING)
+        self._predIsOfs.append(NO)
+        self._pathModes.append(False)
 
     def endFormula(self):
         a = self.formulas.pop().close()
@@ -107,6 +135,8 @@ class TripleMaker:
         self._triples.pop()
         self._parts.pop()
         self.addNode(a)
+        self._predIsOfs.pop()
+        self._pathModes.pop()
 
     def beginList(self):
         a = []
@@ -127,6 +157,8 @@ class TripleMaker:
         self._modes.append(ANONYMOUS)
         self._triples.append([a, None, None])
         self._parts.append(SUBJECT)
+        self._predIsOfs.append(NO)
+        self._pathModes.append(False)
         
 
     def endAnonymous(self):
@@ -135,5 +167,20 @@ class TripleMaker:
         self._triples.pop()
         self._parts.pop()
         self.addNode(a)
+        self._predIsOfs.pop()
+        self._pathModes.pop()
+
+    def declareExistential(self, sym):
+        formula = self.formulas[-1]
+        a = formula.newSymbol(sym)
+        formula.declareExistential(a)
+
+    def declareUniversal(self, sym):
+        formula = self.formulas[-1]
+        a = formula.newSymbol(sym)
+        formula.declareUniversal(a)
+    
+        
+        
     
 
