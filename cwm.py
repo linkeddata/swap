@@ -244,11 +244,11 @@ class Resource(Thing):
         else:
             return self.uri
 
-    def internFrag(r,fragid, type):   # type was only Fragment before
-            f = r.fragments.get(fragid, None)
-            if f: return f
-            f = type(r, fragid)
-            r.fragments[fragid] = f
+    def internFrag(self, fragid, thetype):   # type was only Fragment before
+            f = self.fragments.get(fragid, None)
+            if f: return f    # (Could check that types match just to be sure)
+            f = thetype(self, fragid)
+            self.fragments[fragid] = f
             return f
                 
     def internAnonymous(r, fragid):
@@ -299,8 +299,9 @@ class Anonymous(Fragment):
         return (ANONYMOUS, self.uriref())
         
 class Formula(Fragment):
-    def __init__(self, resource, fragid):
-        Fragment.__init__(self, resource, fragid)
+
+#    def __init__(self, resource, fragid):
+#        Fragment.__init__(self, resource, fragid)
 
     def generated(self):
         return 1
@@ -335,7 +336,11 @@ class Literal(Thing):
 #        return  LITERAL_URI_prefix + uri_encode(self.representation())
 
 
-
+class BuiltIn(Fragment):
+    """ A binary operator can calculate truth value given 2 arguments"""
+#    def __init__(self, resource, fragid):
+#        Fragment.init(self, resource, fragid)
+     
 def uri_encode(str):
         """ untested - this must be in a standard library somewhere
         """
@@ -369,7 +374,6 @@ class Engine:
         type, uriref = pair
         if type == LITERAL:
             uriref2 = LITERAL_URI_prefix + uriref # @@@ encoding at least hashes?
-#            return Literal(uriref)  # No interning for literals (?@@? Prevents == rats)
             r = self.resources.get(uriref2, None)
             if r: return r
             r = Literal(uriref)
@@ -389,10 +393,11 @@ class Engine:
         
         else :      # This has a fragment and a resource
             r = self.internURI(uriref[:hash])
-            if type == RESOURCE:  return r.internFrag(uriref[hash+1:], Fragment)
-            if type == FORMULA:  return r.internFrag(uriref[hash+1:], Formula)
+            if type == RESOURCE: return r.internFrag(uriref[hash+1:], Fragment)
+            if type == FORMULA: return r.internFrag(uriref[hash+1:], Formula)
             else: raise shouldntBeHere    # Source code did not expect other type
 
+theEngine = Engine()   # The global engine - fed up with passing around pointers
 
 ######################################################## Storage
 # The store uses an index in the interned resource objects.
@@ -413,7 +418,122 @@ class StoredStatement:
                 return compareURI(self.triple[p],other.triple[p])
         progress("Problem with duplicates: '%s' and '%s'" % (quadToString(self.triple),quadToString(other.triple)))
         raise internalerror # SHould never have two identical distinct
-        
+
+##################################################################################
+#
+#   Built in classes
+#
+# These are resources in the store which have processing capability.
+# Each one has to have its own class.
+#
+# First, the template classes:
+#
+class BuiltIn(Fragment):
+    pass
+
+class LightBuiltIn(BuiltIn):
+    pass
+
+class HeavyBuiltIn(BuiltIn):
+    pass
+
+class Function:
+    def __init__(self):
+        pass
+    
+    def evaluate(self, subj, obj):    # For inheritance only
+        return (obj == self.evaluateObject(subj))
+
+    def evaluateObject(self,subj):
+        raise function_has_no_evaluate_object_method #  Ooops - you can't inherit this.
+
+class ReverseFunction:
+    def __init__(self):
+        pass
+
+    def evaluate(self,subj, obj):    # For inheritance only
+        return (subj == self.evaluateSubject(obj))
+
+    def evaluateSubject(self,obj):
+        raise function_has_no_evaluate_subject_method #  Ooops - you can't inherit this.
+
+#   Light Built-in classes
+class BI_GreaterThan(LightBuiltIn):
+    def evaluate(self,subj, obj):
+        return (subj.string > obj.string)
+
+class BI_NotGreaterThan(LightBuiltIn):
+    def evaluate(self,subj, obj):
+        return (subj.string <= obj.string)
+
+class BI_LessThan(LightBuiltIn):
+    def evaluate(self,subj, obj):
+        return (subj.string < obj.string)
+
+class BI_NotLessThan(LightBuiltIn):
+    def evaluate(self,subj, obj):
+        return (subj.string >= obj.string)
+
+class BI_StartsWith(LightBuiltIn):
+    def evaluate(self,subj, obj):
+        return subj.string.startswith(obj.string)
+
+# Equivalence relations
+
+class BI_EqualTo(LightBuiltIn,Function, ReverseFunction):
+    def evaluate(self,subj, obj):
+        return (subj == obj)
+
+    def evaluateObject(self,subj):
+        return subj
+
+    def evaluateSubject(self,obj):
+        return obj
+
+# Functions 
+    
+    
+class BI_uri(LightBuiltIn, Function, ReverseFunction):
+
+    def evaluateObject(self,subj):    
+        return theEngine.intern((LITERAL, subj.uriref))
+
+    def evaluateSubject(self,obj):    
+        return theEngine.intern((RESOURCE, subj.string))
+
+class BI_racine(LightBuiltIn, Function):
+
+    def evaluateObject(self,subj):
+        if isinstance(subj, Fragment):
+            return subj.resource
+        else:
+            return subj
+
+# Heavy Built-ins
+
+
+class BI_directlyIncludes(HeavyBuiltIn):
+    def evaluate2(self, store, subj, obj, variables):
+        return store.testIncludes(subj, obj, variables)
+    
+class BI_notDirectlyIncludes(HeavyBuiltIn):
+    def evaluate2(self, store, subj, obj, variables):
+        return not store.testIncludes(subj, obj, variables)
+    
+
+class BI_includes(HeavyBuiltIn):
+    pass    # Implemented specially inline in the code below by query queue expansion.
+    
+class BI_notIncludes(HeavyBuiltIn):
+    def evaluate2(self, store, subj, obj, variables):
+        if isinstance(subj, Formula) and isinstance(obj, Formula):
+            return not store.testIncludes(subj, obj, variables)
+        return 0   # Can't say it *doesn't* include it if it ain't a formula
+    
+
+#@@@@@@@@@@@@@@@@@ more...
+
+
 class RDFStore(notation3.RDFSink) :
     """ Absorbs RDF stream and saves in triple store
     """
@@ -427,24 +547,42 @@ class RDFStore(notation3.RDFSink) :
         else: self._genPrefix = "#_gs"
 
         # Constants, as interned:
+        
         self.forSome = engine.internURI(Logic_NS + "forSome")
 #        self.subExpression = engine.internURI(Logic_NS + "subExpression")
         self.forAll  = engine.internURI(Logic_NS + "forAll")
         self.implies = engine.internURI(Logic_NS + "implies")
-        self.includes = engine.internURI(Logic_NS + "includes")
-        self.directlyIncludes = engine.internURI(Logic_NS + "directlyIncludes")
-        self.notIncludes = engine.internURI(Logic_NS + "notIncludes")
-        self.notDirectlyIncludes = engine.internURI(Logic_NS + "notDirectlyIncludes")
         self.asserts = engine.internURI(Logic_NS + "asserts")
-        self.greaterThan = engine.internURI(Logic_NS + "greaterThan")
-        self.notGreaterThan = engine.internURI(Logic_NS + "notGreaterThan")
-        self.lessThan = engine.internURI(Logic_NS + "lessThan")
-        self.notLessThan = engine.internURI(Logic_NS + "notLessThan")
-        self.startsWith = engine.internURI(Logic_NS + "startsWith")
-        self.equivalentTo = engine.internURI(notation3.DAML_equivalentTo_URI)
+        
+# Light Builtins:
+        log = engine.internURI(Logic_NS[:-1])   # The resource without the hash
+        daml = engine.internURI(notation3.DAML_NS[:-1])   # The resource without the hash
+
+        self.greaterThan =      log.internFrag("greaterThan", BI_GreaterThan)
+        self.notGreaterThan =   log.internFrag("notGreaterThan", BI_NotGreaterThan)
+        self.lessThan =         log.internFrag("lessThan", BI_LessThan)
+        self.notLessThan =      log.internFrag("notLessThan", BI_NotLessThan)
+        self.startsWith =       log.internFrag("startsWith", BI_StartsWith)
+
+# Functions:        
+
+        self.racine =           log.internFrag("racine", BI_racine)  # Strip fragment identifier from string
+
+# Bidirectional things:
+        self.uri =              log.internFrag("uri", BI_uri)
+        self.equalTo =     log.internFrag("equalTo", BI_EqualTo)
+
+# Heavy relational operators:
+
+        self.includes =         log.internFrag( "includes", BI_includes)
+        self.directlyIncludes = log.internFrag("directlyIncludes", BI_directlyIncludes)
+        self.notIncludes =      log.internFrag("notIncludes", BI_notIncludes)
+        self.notDirectlyIncludes = log.internFrag("notDirectlyIncludes", BI_notDirectlyIncludes)
+
+# Constants:
+
         self.Truth = engine.internURI(Logic_NS + "Truth")
         self.type = engine.internURI(notation3.RDF_type_URI)
-        self.uri = engine.internURI(Logic_NS + "uri")
         self.Chaff = engine.internURI(Logic_NS + "Chaff")
 
 
@@ -524,7 +662,7 @@ class RDFStore(notation3.RDFSink) :
                         total = total + (f.occurrences(PRED,context)+
                                          f.occurrences(SUBJ,context)+
                                          f.occurrences(OBJ,context))
-                if total > best :
+                if total > best or (total == best and `mp` > `r`) :  # Must be repeatable for retests
                     best = total
                     mp = r
         if mp is None: return
@@ -1036,6 +1174,9 @@ class RDFStore(notation3.RDFSink) :
         # When the template refers to itself, the thing we are
         # are looking for will refer to the context we are searching
 
+        if not(isinstance(workingContext, Formula) and isinstance(template, Formula)): return 0
+
+
         unmatched, _templateVariables = self.nestedContexts(template)
         _substitute([( template, workingContext)], unmatched)
 
@@ -1047,8 +1188,9 @@ class RDFStore(notation3.RDFSink) :
             for v in _variables:
                 print "    Variable: ", `v`[-8:]
 
-        return self.match(unmatched, [], _variables + _templateVariables, smartIn, justOne=1)
-
+        result = self.match(unmatched, [], _variables + _templateVariables, smartIn, justOne=1)
+        if chatty >30: print"=================== end includes =", result
+        return result
  
     def genid(self,context, type=RESOURCE):        
         self._nextId = self._nextId + 1
@@ -1110,10 +1252,9 @@ class RDFStore(notation3.RDFSink) :
 # which, like those involving recursive queries or net access, will be slower than a query term,
 # and so should be left till last.
 #   I feel that it should be possible to argue about built-ins just like anything else,
-# so we donot exclude these things from the query system.
-
-    def test45(self, test436):
-        return 0
+# so we do not exclude these things from the query system. We therefore may have both light and
+# heavy built-ins which still have too many variables to calculate at this stage.
+# When we do the variable substitution for new bindings, these can be reconsidered.
 
     def  match(self,                 # Neded for getting interned constants
                unmatched,           # Tuple of interned quads we are trying to match CORRUPTED
@@ -1133,184 +1274,231 @@ class RDFStore(notation3.RDFSink) :
         """
         if action == None: action=self.doNothing
         
-    # Scan terms to see what sort of a problem we have:
-    #
-    # We prefer terms with a single variable to those with two.
-    # (Those with none we immediately check and therafter ignore)
-    # Secondarily, we prefer short searches to long ones.
-
-        total = 0           # Number of matches found (recursively)
-        fewest = 5          # Variables to find
-        shortest = INFINITY # List to search for one of the variables
-        shortest_t = None
-        
         if chatty > 50:
-            print "\n## match: called %i terms, %i bindings:" % (len(unmatched),len(bindings))
+            print "## match: called %i terms, %i bindings:" % (len(unmatched),len(bindings))
             print bindingsToString(newBindings)
             if chatty > 90: print setToString(unmatched)
+
+        queue = []   #  Unmatched with more info, in order
+        for quad in unmatched:
+            item = (99, 9999, [], [], quad) 
+            queue.append(item)
+        return self.query(queue, variables, existentials, smartIn, action, param, bindings, newBindings, justOne)
+
+
+
+    def  query(self,                # Neded for getting interned constants
+               queue,               # Ordered queue of items we are trying to match CORRUPTED
+               variables,           # List of variables to match and return
+               existentials,        # List of variables to match to anything
+                                    # Existentials or any kind of variable in subexpression
+               smartIn = [],        # List of contexts in which to use builtins - typically the top one
+               action = None,       # Action routine return subtotal of actions
+               param = None,        # a tuple, see the call itself and conclude()
+               bindings = [],       # Bindings discovered so far
+               newBindings = [],    # Bindings JUST discovered - to be folded in
+               justOne = 0):        # Flag: Stop when you find the first one
+
+        """ Apply action(bindings, param) to succussful matches
+    bindings      collected matches already found
+    newBindings  matches found and not yet applied - used in recursion
+        """
+        if action == None: action=self.doNothing
+        total = 0
         
+        if chatty > 50:
+            print "\n## query: called %i terms, %i bindings:" % (len(queue),len(bindings))
+            print "  new: ", bindingsToString(newBindings)
+            if chatty > 90: print queueToString(queue)
+
         for pair in newBindings:   # Take care of business left over from recursive call
+            if chatty>40: progress("New binding:  %s -> %s" % (x2s(pair[0]), x2s(pair[1])))
             if pair[0] in variables:
-                variables.remove(pair[0])  
+                variables.remove(pair[0])
                 bindings.append(pair)  # Record for posterity
             else:
                 existentials.remove(pair[0]) # Can't match anything anymore, need exact match
-        _substitute(newBindings, unmatched)     # Replace variables with values
 
-        if len(unmatched) == 0:
+        for item in queue[:]:                   # (Copy for loop)
+            state, short, consts, vars, quad = item
+            for var, val in newBindings:
+                for p in vars:  # consts
+                    if quad[p] == var:
+                        state = 99
+                        quad = _lookupQuad([(var,val)], quad)  # Quicker to do above but how in python?
+                        break     # Done all 4
+            if state == 99:    # Has fewer variables now .. this is progress
+                queue.remove(item)
+                item = state, short, consts, vars, quad
+                queue.append(item)  # Needs attention - put onto end
+
+
+        if len(queue) == 0:
+
             if chatty>50: print "# Match found with bindings: ", bindingsToString(bindings)
             return action(bindings, param)  # No terms left .. success!
 
-        
-        for quad in unmatched:
-            found = 0       # Count where variables are
-            short_p = -1
-            short = INFINITY
-            for p in ALL4:
-                r = quad[p]
-                if r in variables + existentials:     #  @@@@@ This test takes too much time
-                    found = found + 1
-                    lastVar = p
-                else:
-                    length = len(r.occursAs[p])
-                    if length < short:
-                        short_p = p
-                        short = length
-#        if quad[p] in self.builtIns:
-#            if (quad[PRED] is self.equivalentTo and
-#                found == 1 and
-#                (short_p == SUBJ or short_p == OBJ)
-#                     @@@ deal with assigning to variable?
 
-# In some circumstances we can simply calculate whether a statement is true: LOGICAL OPERATORS:
-            if quad[CONTEXT] in smartIn:
-                if found == 0:   # no variables: constant expression
-                    result = "nope"
-                    if quad[PRED] is self.equivalentTo: result = (quad[SUBJ] is quad[OBJ])
-                    elif isinstance(quad[SUBJ],Literal) and isinstance(quad[OBJ],Literal):
-                        if quad[PRED] is self.greaterThan : result=( quad[SUBJ].string > quad[OBJ].string) # @@ other datatypes!
-                        elif quad[PRED] is self.lessThan : result=( quad[SUBJ].string < quad[OBJ].string)
-                        elif quad[PRED] is self.notLessThan : result=( quad[SUBJ].string >= quad[OBJ].string)
-                        elif quad[PRED] is self.notGreaterThan : result=( quad[SUBJ].string <= quad[OBJ].string)
-                        elif quad[PRED] is self.startsWith : result=quad[SUBJ].string.startswith(quad[OBJ].string)
-                    if result != "nope":
-                        unmatched.remove(quad)  # Done that.
-                        if result: return self.match(unmatched[:], variables[:], existentials[:], smartIn, action, param,
-                                          bindings[:], []) # No new bindings but success in calculated logical operator
+#        queue.sort()  # Should sort by first thing ie state
+
+        while len(queue) > 0:
+
+            if chatty > 70:
+                print "\n## query iterating called %i terms, %i bindings:" % (len(queue),len(bindings))
+                print " bindings currently:", bindingsToString(newBindings)
+            if chatty > 79: print queueToString(queue)
+
+
+            item = queue.pop()     # Take last.  Could search here instead of keeping queue in order
+            state, short, consts, vars, quad = item
+            con, pred, subj, obj = quad
+            if state == 99:   # Haven't looked at it yet
+
+                # First, check how many variables in this term
+                short = INFINITY    
+                consts = []         # Parts of speech to test for match
+                vars = []           # Parts of speech which are variables
+                for p in ALL4 :
+                    if quad[p] in variables + existentials:
+                        vars.append(p)
+                    else:
+                        length = len(quad[p].occursAs[p])   # The length of search we would have to do
+                        if length < short:
+                            short = length
+                            consts = [ p ] + consts    # consts[0] reserved for shortest search
+                        else:
+                            consts = consts + [ p ]
+                            
+                # Next, check for "light" (quick) built-in functions
+                if con in smartIn and isinstance(pred, LightBuiltIn):
+                    if len(vars) == 0:   # no variables: constant expression - we can definitely evaluate it
+                        if pred.evaluate(subj, obj):
+                            return self.query(queue, variables, existentials, smartIn, action, param,
+                                          bindings, []) # No new bindings but success in calculated logical operator
                         else: return 0   # We absoluteley know this won't match with this in it
+                    elif len(vars) == 1 :  # The statement has one variable - try functions
+                        if vars[0] == OBJ and isinstance(pred, Function):
+                            return self.query(queue, variables, existentials, smartIn, action, param,
+                                                      bindings, [ (obj, pred.evaluateObject(subj))])
+                        elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
+                            return self.query(queue, variables, existentials, smartIn, action, param,
+                                                      bindings, [ (subj, pred.evaluateSubject(obj))])
+                    # Now we have a light builtin needs search, otherwise waiting for enough constants to run
+                    state = 50
 
-# Built-in Monadic Functions are statements were the object can be calculated from the subject or vice-versa:
-                elif found == 1 :  # The statement has one variable
-                    nb = []
-                    if lastVar == SUBJ:
-                        if quad[PRED] is self.equivalentTo:
-                            nb.append(( quad[SUBJ], quad[OBJ]))
-                        elif quad[PRED] is self.uri and  isinstance(quad[OBJ], Literal):
-                            # @@@ Check must absolute - or don't bind. if not.?? Use base of context? No. ?
-                            nb.append(( quad[SUBJ], self.engine.internURI(quad[OBJ].string)))
-                    if lastVar == OBJ:
-                        if quad[PRED] is self.equivalentTo:
-                            nb.append(( quad[OBJ], quad[SUBJ]))
-                        elif quad[PRED] is self.uri:
-                            nb.append(( quad[OBJ], self.engine.intern((LITERAL, quad[SUBJ].representation)) ))
-                    if nb != []:
-                        unmatched.remove(quad)  # We have resolved this one
-                        if chatty > 30: progress("Monadic function binds %s as %s" %
-                                                 `nb[0][0]`[-10:],`nb[0][1]`[-10:])
-                        return self.match(unmatched[:], variables[:], existentials[:], smartIn, action, param,
-                                                  bindings[:], nb)
+                else:   # Not a light builtin
+                    if short == 0:  # Skip search if no possibilities!
+                        if not isinstance(pred, HeavyBuiltIn): return 0  # No way
+                        
+                    state = 60   # Not a light built in, not searched. Try it when it comes around.
 
-            if (found < fewest or
-                found == fewest and short < shortest) : # We find better.
-                    fewest = found
-                    shortest = short
-                    shortest_p = short_p
-                    shortest_t = quad
-        
-        # Now we have identified the  list to search
 
-        if fewest == 4:
-            raise notimp
-            return 0    # Can't handle something with no constants at all.
-                        # Not a closed world problem - and this is a cwm!
-                        # Actually, it could be a valid problem -but pathalogical.
+            elif state == 50 or state == 60: #  Not searched yet
 
-        quad = shortest_t
-        unmatched.remove(quad)  # We will resolve this one now if possible
+                if len(vars) == 4:
+                    raise notimp # Can't handle something with no constants at all.
+                    return 0    
+                                # Not a closed world problem - and this is a cwm!
+                                # Actually, it could be a valid problem -but pathalogical.
+                shortest_p = consts[0]
+                if chatty > 36:
+                    print "# Searching %i with %s in slot %i." %(
+                        len(quad[shortest_p].occursAs[shortest_p]),
+                        x2s(quad[shortest_p]),
+                        shortest_p)
+                    print "#    for ", quadToString(quad)
+                    if chatty > 75:
+                        print "#    where variables are"
+                        for i in variables + existentials:
+                            print "#         ", `i`[-8:-1] 
 
-        consts = []   # Parts of speech to test for match
-        vars = []   # Parts of speech which are variables
-        for p in ALL4 :
-            if quad[p] in variables + existentials:
-                vars.append(p)
-            elif p != shortest_p :
-                consts.append(p)
+                matches = 0
+#                zzz = quad[shortest_p].occursAs[shortest_p]
+#                if len(zzz) == 2 and `zzz[0].triple[2]`.endswith("Woman>") : raise whacko
+                for s in quad[shortest_p].occursAs[shortest_p]:
+                    for p in consts:
+                        if s.triple[p] is not quad[p]:
+                            if chatty>78: print "   Rejecting ", quadToString(s.triple), "\n      for ", quadToString(quad)
+                            break
+                    else:  # found match
+                        nb = []
+                        for p in vars:
+                            nb.append(( quad[p], s.triple[p]))
+                        total = total + self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
+                                              bindings[:], nb)
+                        matches = matches + 1
+                        if justOne and total: return total
 
-        if chatty > 36:
-            print "# Searching %i with %s in slot %i." %(shortest, `quad[shortest_p]`[-8:],shortest_p)
-            print "#    for ", quadToString(quad)
-            if chatty > 75:
-                print "#    where variables are"
-                for i in variables + existentials:
-                    print "#         ", `i`[-8:] 
+                if state == 50: state = 20
+                else: # State was 60 (not light, may be heavy)
+                    state = 0  # Not found and if not hevay (below) drop it
 
-        matches = 0
-        for s in quad[shortest_p].occursAs[shortest_p]:
-            for p in consts:
-                if s.triple[p] is not quad[p]:
-                    if chatty>78: print "   Rejecting ", quadToString(s.triple), "\n      for ", quadToString(quad)
-                    break
-            else:  # found match
-                nb = []
-                for p in vars:
-                    nb.append(( quad[p], s.triple[p]))
-                total = total + self.match(unmatched[:], variables[:], existentials[:], smartIn, action, param,
-                                      bindings[:], nb)
-                matches = matches + 1
-                
-# If we have searched in vain for explicit knowledge we can still in some circumstances calculate it:
-#  @@@ why the difference between existentials and variables below?
 # notIncludes has to be a recursive call, but log:includes just extends the search
+                    if quad[CONTEXT] in smartIn and isinstance(pred, HeavyBuiltIn):
+                        state = 10   # Heavy, man
+                        if len(vars)==0:
+                            if quad[PRED] is self.includes:
+                                if (isinstance(quad[SUBJ], Formula)
+                                    and isinstance(quad[OBJ], Formula)):
 
-        if (matches == 0 and quad[CONTEXT] in smartIn
-            and isinstance(quad[SUBJ], Formula)
-            and isinstance(quad[OBJ], Formula)):
-            if quad[PRED] is self.includes:
-                more_unmatched, more_variables = self.nestedContexts(quad[OBJ])
-                _substitute([( quad[OBJ], quad[SUBJ])], more_unmatched)
-                if chatty > 40: progress("Includes: Adding %i new terms and %s as new variables."%
-                                         (len(more_unmatched),setToString(more_variables)))
-                total = total + self.match(unmatched+more_unmatched, variables+more_variables, existentials[:], smartIn, action, param,
-                                  bindings[:], []) # No new bindings but lots more to search!
-            elif ((quad[PRED] is self.directlyIncludes and self.testIncludes(quad[SUBJ], quad[OBJ], variables))
-                or(quad[PRED] is self.notIncludes and (isinstance(quad[SUBJ], Formula)
-                                                       and not self.testIncludes(quad[SUBJ], quad[OBJ], existentials, smartIn)))
-                or(quad[PRED] is self.notDirectlyIncludes and (isinstance(quad[SUBJ], Formula)
-                                                       and not self.testIncludes(quad[SUBJ], quad[OBJ], variables)))):
-                total = total + self.match(unmatched[:], variables[:], existentials[:], smartIn, action, param,
-                                  bindings[:], []) # No new bindings but success in calculated logical operator
-                    
-#@@@@@ The problem is that we do the expensive function even when there may be a local
-# search which it also depends on which we have not done.  Need to modify the algroithm, think of a clean way.
+                                    more_unmatched, more_variables = self.nestedContexts(quad[OBJ])
+                                    _substitute([( quad[OBJ], quad[SUBJ])], more_unmatched)
+                                    for quad in more_unmatched:
+                                        item = 99, 0, [], [], quad
+                                        queue.append(item)
+                                    existentials = existentials + more_variables
+                                    if chatty > 40: progress(" **** Includes: Adding %i new terms and %s as new existentials."%
+                                                             (len(more_unmatched),setToString(more_variables)))
+                                    return self.query(queue, variables, existentials, smartIn, action, param,
+                                                      bindings[:], []) # No new bindings but lots more to search!
+                                else:  # Not forumla
+                                    return total  # Not going to work if not forumlae
+                            else:
 
-# USE THIS PLACE LATER for heavy monadic fucntions parsesTo  which fetches from net, etc.
-# Built-in Monadic Functions are statements were the object can be calcualted from the subject or vice-versa:
-#        elif len(vars) == 1 :  # The statement has one variable
-#            nb = []
-#            if var[0] == SUBJ:
-#                if quad[PRED] is self.equivalentTo:
-#                    nb.append(( quad[SUBJ], quad[OBJ]))
-#                 elif quad[PRED] is self.uri and  isinstance(quad[OBJ], Literal):
-#                    nb.append(( quad[SUBJ], self.engine.internURI(quad[OBJ].string)))
-#            if var[0] == OBJ:
-#                if quad[PRED] is self.parsesTo:
-#                    nb.append(( quad[OBJ], quad[SUBJ]))
-#                 elif quad[PRED] is self.uri:
-#                    nb.append(( quad[OBJ], self.engine.intern((LITERAL, quad[SUBJ].representation)) ))
-#            if nb != []:
-#                total = total + self.match(unmatched[:], variables[:], existentials[:], smartIn, action, param,
-#                                          bindings[:], nb)
+                                if pred.evaluate2(self, subj, obj, variables[:]):
+                                    if chatty > 80: progress("Heavy predicate succeeds")
+                                    return self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
+                                                  bindings, []) # No new bindings but success in calculated logical operator
+                                else:
+                                    if chatty > 80: progress("Heavy predicate fails")
+                                    return total   # We absoluteley know this won't match with this in it
+                        elif len(vars) == 1 :  # The statement has one variable - try functions
+                            if vars[0] == OBJ and isinstance(pred, Function):
+                                return self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
+                                                          bindings, [ (obj, pred.evaluateObject(subj))])
+                            elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
+                                return self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
+                                                          bindings, [ (subj, pred.evaluateSubject(obj))])
+                    # Now we have a heavy builtin  waiting for enough constants to run
+                        state = 10
+                    else: # Not heavy, failed to find any.
+                        if chatty > 80: progress("Not builtin, search done, %i found." % total)
+                        return total
+                        
 
+            else: # State was not a known one
+                progress( "@@@@@@@@@ State is %s, q length %i" % (state, len(queue)))
+                item = state, short, consts, vars, quad
+                progress("@@ Current item: %s" % itemToString(item))
+                progress(queueToString(queue))
+                raise internalError # We have something in an unknown state in the queue
+
+# Reinsert into queue, so that the easiest tasks are later on:                    
+# We prefer terms with a single variable to those with two.
+# (Those with none we immediately check and therafter ignore)
+# Secondarily, we prefer short searches to long ones.
+            i = 0
+            while (i <len(queue)
+                   and (state > queue[i][0]
+                        or state == queue[i][0] and (len(consts) > len(queue[i][2])
+                                                     or len(consts) == len(queue[i][2]) and short < queue[i][1]))):
+                i = i + 1
+            item = state, short, consts, vars, quad
+            queue[i:i] = [ item ]
+            # And loop back to take the next item
+
+        if queue != []:
+            raise canNotResolve  # we have ended up with an impossible combination of things it seems
         return total
          
     def doNothing(self, bindings, param):
@@ -1350,7 +1538,7 @@ class RDFStore(notation3.RDFSink) :
 def bindingsToString(bindings):
     str = ""
     for x, y in bindings:
-        str = str + " %s --> %s," % ( `x`[-10:], `y`[-10:])
+        str = str + " %s->%s" % ( x2s(x), x2s(y))
     return str + "\n"
 
 def setToString(set):
@@ -1359,10 +1547,24 @@ def setToString(set):
         str = str+ "        " + quadToString(q) + "\n"
     return str
 
-def quadToString(q):
-    return "<%s> ::  <%s <%s <%s ." %(
-        `q[CONTEXT]`[-10:], `q[SUBJ]`[-10:], `q[PRED]`[-10:], `q[OBJ]`[-10:])
+def queueToString(queue):
+    str = ""
+    for item in queue:
+        str = str + "    "+ itemToString(item) + "\n"
+    return str
 
+def itemToString(item):
+    state, short, consts, vars, quad = item
+    return "%3i)  %s  consts=%s  vars=%s short=%i" % (state, quadToString(quad), `consts`, `vars`, short )
+
+def quadToString(q):
+    return "%s ::  %8s %8s %8s ." %(x2s(q[CONTEXT]), x2s(q[SUBJ]), x2s(q[PRED]), x2s(q[OBJ]))
+
+def x2s(x):
+    s = `x`[1:-1]
+    p = string.find(s,'#')
+    if p >= 0: return s[p+1:]
+    else: return s
 
 def _substitute(bindings, list):
     for i in range(len(list)):
@@ -1797,7 +1999,8 @@ Examples:
         if option_pipe:
             _store = _outSink
         else:
-            myEngine = Engine()
+#            myEngine = Engine()
+            myEngine = theEngine      # Use one global one
             _store = RDFStore(myEngine, _outURI+"#_gs")
             workingContext = myEngine.intern((FORMULA, _outURI+ "#_formula"))   #@@@ Hack - use metadata
             _meta = myEngine.intern((FORMULA, _runURI))

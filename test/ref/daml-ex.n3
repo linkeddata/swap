@@ -1,102 +1,103 @@
-     @prefix : <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix : <daml-ex.rdf#> .
      @prefix daml: <http://www.daml.org/2001/03/daml-ont#> .
+     @prefix dpo: <http://www.daml.org/2001/03/daml+oil#> .
      @prefix ex: <http://www.daml.org/2001/03/daml-ex#> .
      @prefix exg1: <#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
-    <daml-ex.rdf#Adam>     a :Person;
-         :comment "Adam is a person.";
-         :label "Adam" .
+    :Adam     a dpo:Person;
+         dpo:comment "Adam is a person.";
+         dpo:label "Adam" .
     
-    <daml-ex.rdf#Animal>     a :Class;
-         :comment """This class of animals is illustrative of a number of
+    :Animal     a dpo:Class;
+         dpo:comment """This class of animals is illustrative of a number of
 	ontological idioms.""";
-         :label "Animal" .
+         dpo:label "Animal" .
     
-    <daml-ex.rdf#Car>     a :Class;
-         :comment "no car is a person";
-         :subClassOf  [
-             a :Class;
-             :complementOf <daml-ex.rdf#Person> ] .
+    :Car     a dpo:Class;
+         dpo:comment "no car is a person";
+         dpo:subClassOf  [
+             a dpo:Class;
+             dpo:complementOf :Person ] .
     
-    <daml-ex.rdf#Female>     a :Class;
-         :disjointFrom <daml-ex.rdf#Male>;
-         :subClassOf <daml-ex.rdf#Animal> .
+    :Female     a dpo:Class;
+         dpo:disjointFrom :Male;
+         dpo:subClassOf :Animal .
     
-    <daml-ex.rdf#Height>     a :Class;
-         :oneOf  (
-        <daml-ex.rdf#short> 
-        <daml-ex.rdf#medium> 
-        <daml-ex.rdf#tall>  ) .
+    :Height     a dpo:Class;
+         dpo:oneOf  (
+        :short 
+        :medium 
+        :tall  ) .
     
-    <daml-ex.rdf#Male>     a :Class;
-         :subClassOf <daml-ex.rdf#Animal> .
+    :Male     a dpo:Class;
+         dpo:subClassOf :Animal .
     
-    <daml-ex.rdf#Man>     a :Class;
-         :subClassOf <daml-ex.rdf#Male>,
-                <daml-ex.rdf#Person> .
+    :Man     a dpo:Class;
+         dpo:subClassOf :Male,
+                :Person .
     
-    <daml-ex.rdf#Person>     a :Class;
-         :comment "every person is a man or a woman";
-         :disjointUnionOf  (
-        <daml-ex.rdf#Man> 
-        <daml-ex.rdf#Woman>  );
-         :restrictedBy  [
-             a :Restriction;
-             :onProperty <daml-ex.rdf#parent>;
-             :toClass <daml-ex.rdf#Person> ];
-         :subClassOf <daml-ex.rdf#Animal> .
+    :Person     a dpo:Class;
+         dpo:comment "every person is a man or a woman";
+         dpo:disjointUnionOf  (
+        :Man 
+        :Woman  );
+         dpo:restrictedBy  [
+             a dpo:Restriction;
+             dpo:onProperty :parent;
+             dpo:toClass :Person ];
+         dpo:subClassOf :Animal .
     
-    <daml-ex.rdf#TallMan>     a :Class;
-         :intersectionOf  (
-        <daml-ex.rdf#TallThing> 
-        <daml-ex.rdf#Man>  ) .
+    :TallMan     a dpo:Class;
+         dpo:intersectionOf  (
+        :TallThing 
+        :Man  ) .
     
-    <daml-ex.rdf#TallThing>     a :Class;
-         :restrictedBy  [
-             a :Restriction;
-             :onProperty <daml-ex.rdf#height>;
-             :toValue <daml-ex.rdf#tall> ] .
+    :TallThing     a dpo:Class;
+         dpo:restrictedBy  [
+             a dpo:Restriction;
+             dpo:onProperty :height;
+             dpo:toValue :tall ] .
     
-    <daml-ex.rdf#Woman>     a :Class;
-         :subClassOf <daml-ex.rdf#Female>,
-                <daml-ex.rdf#Person> .
+    :Woman     a dpo:Class;
+         dpo:subClassOf :Female,
+                :Person .
     
-    <daml-ex.rdf#ancestor>     a :TransitiveProperty;
-         :label "ancestor" .
+    :ancestor     a dpo:TransitiveProperty;
+         dpo:label "ancestor" .
     
-    <daml-ex.rdf#child>     a :Property;
-         :inverseOf <daml-ex.rdf#parent> .
+    :child     a dpo:Property;
+         dpo:inverseOf :parent .
     
-    <daml-ex.rdf#descendant>     a :TransitiveProperty .
+    :descendant     a dpo:TransitiveProperty .
     
-    <daml-ex.rdf#father>     a :Property;
-         :cardinality "1";
-         :range <daml-ex.rdf#Man>;
-         :subProperty <daml-ex.rdf#parent> .
+    :father     a dpo:Property;
+         dpo:cardinality "1";
+         dpo:range :Man;
+         dpo:subProperty :parent .
     
-    <daml-ex.rdf#height>     a :Property;
-         :domain <daml-ex.rdf#Person>;
-         :range <daml-ex.rdf#Height> .
+    :height     a dpo:Property;
+         dpo:domain :Person;
+         dpo:range :Height .
     
-    <daml-ex.rdf#mom>     a :Property;
-         = <daml-ex.rdf#mother> .
+    :mom     a dpo:Property;
+         = :mother .
     
-    <daml-ex.rdf#mother>     a :UniqueProperty;
-         :range <daml-ex.rdf#Woman>;
-         :subProperty <daml-ex.rdf#parent> .
+    :mother     a dpo:UniqueProperty;
+         dpo:range :Woman;
+         dpo:subProperty :parent .
     
-    <daml-ex.rdf#occupation>     a :Property;
-         :maxCardinality "1" .
+    :occupation     a dpo:Property;
+         dpo:maxCardinality "1" .
     
-    <daml-ex.rdf#parent>     a :Property;
-         :cardinality "2";
-         :domain <daml-ex.rdf#Animal> .
+    :parent     a dpo:Property;
+         dpo:cardinality "2";
+         dpo:domain :Animal .
     
-    <daml-ex.rdf>     a :Ontology;
-         :comment "An example ontology";
-         :imports <http://www.daml.org/2000/10/daml-ont>;
-         :versionInfo "" .
+    <daml-ex.rdf>     a dpo:Ontology;
+         dpo:comment "An example ontology";
+         dpo:imports <http://www.daml.org/2000/10/daml-ont>;
+         dpo:versionInfo "" .
     
