@@ -91,6 +91,8 @@
 } => { ?CITY :weatherPage ?PG; geo:lat ?LAT; geo:long ?LON }.
 
 #<font size="-1">Local Time: <b> 3:29 PM EST on February 22, 2004</b> [America/New_York] </font>
+# oops... changed...
+# http://www.wunderground.com/picktimezone.asp?tz=Europe/Brussels
 {
  ?PG log:uri [ is str:concatenation of (
   "http://www.wunderground.com/cgi-bin/findweather/getForecast?query="
@@ -98,7 +100,7 @@
 
 
  ?PG log:content ?TXT.
- (?TXT "Local Time: <b>[^<]+</b> \\[([^]]+)\\]") str:scrape ?TZN.
+ (?TXT "/picktimezone.asp\\?tz=([A-Za-z_/]+)") str:scrape ?TZN.
  ?TZ log:uri [
    is str:concatenation of
    ("http://www.w3.org/2002/12/cal/tzd/" ?TZN "#tz")
@@ -116,7 +118,10 @@
 #  k:inRegion [ map:countryName "Hungary" ] ].
 
 # $Log$
-# Revision 1.6  2004-04-14 16:01:06  connolly
+# Revision 1.7  2004-05-03 14:30:54  connolly
+# scrape new page layout
+#
+# Revision 1.6  2004/04/14 16:01:06  connolly
 # kludge for United Kingdom
 #
 # Revision 1.5  2004/02/22 20:50:06  connolly
