@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+       "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <title>Cwm -- how to make a new release</title>
+  <meta name="generator" content="amaya 8.5, see http://www.w3.org/Amaya/" />
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div class="noprint">
+<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a> |
+<a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
+href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
+Comparing Formats</p>
+</div>
+
+<h1><a href="cwm">Cwm </a>How to make a release</h1>
+
+<p style="text-align: right"><a
+href="../../../../DesignIssues/Notation3.html"><img alt="n3"
+src="../../../../RDF/icons/n3_small" /></a></p>
+
+<h2>Dealing with the testing suite</h2>
+
+<h4>Make a test for your particular bug</h4>
+
+<p>The test case should be something.n3, where something is replaced by
+something more descriptive. Put it in the directory in testing where is most
+belongs. </p>
+<ol>
+  <li>Edit test/regression.n3, list/detailed.tests online.tests
+    math/detailed.tests norm/detailed.tests or cwm/detailed.tests, whichever
+    the test best belongs in, putting the test in the same general area of
+    the things in its catagory. Chose a refererence file
+  (something-ref.n3)</li>
+  <li>touch the reference file</li>
+  <li>run make in the test directory --- your new regression test will
+  fail</li>
+  <li>It gives you a cp command to run to make the test succeed. Run that
+    command.</li>
+</ol>
+
+<h4>Run make test</h4>
+
+<p>$ cd test</p>
+
+<p>$ make</p>
+
+<p>Insure that everything passes. If not, lather, rinse, repeat.</p>
+
+<h2>Sync with CVS</h2>
+
+<h4>Add all the necesarry files</h4>
+
+<p>you added your testing files, as well as possibly adding other files. The
+command to run is:</p>
+
+<p>$ cvs add &lt;file or directory name&gt;</p>
+
+<p>note that add, unlike every other cvs command, is not recursive, so you
+need to add every directory and file individually</p>
+
+<h4>Commit your changes</h4>
+
+<p>the command is</p>
+
+<p>$ cvs commit</p>
+
+<p>if not given a file, will do the entire current directory. If it complains
+about a conflict, deal with the confict.</p>
+
+<h2>make a release</h2>
+
+<h4>Insure you know what you are releasing</h4>
+
+<p>cd swap</p>
+
+<p>cvs -q -n update # are you in sync? Check for C and ? in column 1 C means
+conflicy ? means a file CVS doesn't know about</p>
+
+<p>cvs update</p>
+
+<h4>All of the usual changes needed to release</h4>
+<ol>
+  <li>Update changes.html</li>
+  <li>If new release #, then cvs tag rel-x-y-z</li>
+  <li>Make a message.txt file (see Makefil;e) for cvs checkin message</li>
+  <li>run the command
+    <p>$ make release</p>
+  </li>
+  <li>Mail public-cwm-announce</li>
+  <li>Mail to public-cwm-bugs with "[closed] " in front of the subject line
+    "Re:" explaining the bug fixed, point to new test</li>
+  <li>in swap/admin, make to get new bug list (check with danc if doesn't
+    work)</li>
+</ol>
+
+<p></p>
+
+<p></p>
+
+<div class="noprint">
+<hr />
+
+<p>$Id$</p>
+</div>
+</body>
+</html>
