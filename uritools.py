@@ -9,7 +9,7 @@ http://www.ietf.org/rfc/rfc2396.txt
 
 __version__ = "$Id$"
 
-from string import find, rfind
+from string import find, rfind, index
 
 
 def splitFrag(uriref, punct=0):
@@ -86,9 +86,61 @@ def pathJoin(here, there):
     return here[:slashr+1] + path + frag
 
 
+def pathTo(src, dest):
+    """compute a path from one URI to another
+
+    both src and dest are absolute URI references
+    """
+
+    scolon = index(src, ':')
+    dcolon = index(dest, ':')
+
+    # pathTo("foo:xyz", "bar:abc") => "bar:abc"
+    if src[scolon+1:scolon+3] == '//' and \
+       src[:scolon+3] <> dest[:dcolon+3]: return dest
+
+
+    src, dummy = splitFrag(src)
+    
+    # http://example/x/y/z - http://example/x/abc = ../abc
+    slashr = rfind(src, '/', scolon+3)
+    dots = ''
+    while slashr > scolon:
+        if src[:slashr] == dest[:slashr]:
+            return dots + dest[slashr+1:]
+
+        i = rfind(src, '/', scolon+3, slashr)
+        if i >= i: slashr = i
+        else: break
+
+        if dots: dots = '../' + dots
+        else: dots = '../'
+
+    return dest
 
 
 def test():
+    cases = (("foo:xyz", "bar:abc", "bar:abc"),
+             ('http://example/x/y/z', 'http://example/x/abc', '../abc'),
+             ('http://example2/x/y/z', 'http://example/x/abc', 'http://example/x/abc'),
+             ('http://ex/x/y/z', 'http://ex/r', '../../r'),
+             ('http://ex/x/y', 'http://ex/x/q/r', 'q/r'),
+             ('http://ex/x/y', 'http://ex/x/q/r#s', 'q/r#s'),
+             ('http://ex/x/y', 'http://ex/x/q/r#s/t', 'q/r#s/t'),
+             ('http://ex/x/y', 'ftp://ex/x/q/r', 'ftp://ex/x/q/r'),
+             ('http://ex/x/y', 'http://ex/x/y', 'y'),
+             ('http://ex/x/y/', 'http://ex/x/y/', ''),
+             ('http://ex/x/y/', 'http://ex/x/y/z/', 'z/'),
+             )
+
+    for inp1, inp2, exp in cases:
+        print "pathTo input", inp1, " -> ", inp2
+        act = pathTo(inp1, inp2)
+        print "result:", act, " =?= ", exp
+        assert act == exp
+        assert pathJoin(inp1, act) == inp2
+        print "pass"
+        
     cases = (
         ("abc#def", "abc", "def"),
         ("abc", "abc", None),
@@ -177,3 +229,9 @@ def test():
 
 if __name__ == '__main__':
     test()
+
+
+# $Log$
+# Revision 1.2  2002-02-18 07:33:51  connolly
+# pathTo seems to work
+#
