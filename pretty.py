@@ -52,6 +52,8 @@ class Serializer:
 	self.flags = flags
 	self.sorting = sorting
 	self._inContext ={}
+	self._loopCheck = {}
+	self._inLoop = {}
 	self._occurringAs = [{}, {}, {}, {}]
 	self._topology_returns = {}
 
@@ -377,8 +379,34 @@ class Serializer:
 #		    else:
 #			progress("&&&&&&&&& yyyy  %s has class %s " %(`y`, `y.__class__`))
 		    if x is not y: self._scan(y, x)
+            self._breakloops(x)
 		
-
+    def _breakloops(self, context):
+        _done = {}
+        for x in self._occurringAs[SUBJ]:
+            if x in _done:
+                continue
+            if not (isinstance(x, AnonymousVariable) and not ((isinstance(x, Fragment) and x.generated()))):
+                _done[x] = True
+                continue
+            _done[x] = x
+            a = True
+            y = x
+            while a is not None:
+                a = context._index.get((None, None, y), None)
+                if a is None or len(a) == 0:
+                    a = None
+                if a is not None:
+                    #print a
+                    y = a[0][SUBJ]
+                    if _done.get(y, None) is x:
+                        self._inLoop[x] = 1
+                        a = None
+                    if not (isinstance(y, AnonymousVariable) and not ((isinstance(y, Fragment) and y.generated()))):
+                        _done[y] = True
+                        a = None
+                    else:
+                        _done[y] = x
 
     def _topology(self, x, context): 
         """ Can be output as an anonymous node in N3. Also counts incoming links.
@@ -407,6 +435,7 @@ class Serializer:
         _loop = context.any(subj=x, obj=x)  # does'nt count as incomming
 	_asPred = self._occurringAs[PRED].get(x, 0)
 	_asObj = self._occurringAs[OBJ].get(x, 0)
+	_inLoop = self._inLoop.get(x, 0)
         if isinstance(x, Literal):
             _anon = 0     #  Never anonymous, always just use the string
 	elif isinstance(x, Formula):
@@ -423,7 +452,7 @@ class Serializer:
         else:  # bnode
 	    ctx = self._inContext.get(x, "weird")
 	    _anon = ctx == "weird" or (ctx is context and
-			_asObj < 2 and _asPred == 0 and
+			_asObj < 2 and _asPred == 0 and _inLoop == 0 and
 			(not _loop) and
 			_isExistential)
 	    if verbosity() > 97:
@@ -589,15 +618,19 @@ class Serializer:
 
         self._outputStatement(sink, triple)
 
-	
+BNodePossibles = None	
 def canItbeABNode(formula, symbol):   # @@@@ Really slow -tbl @@@ send me an e-mail with a run of myProfiler proving it. -Yosi
     def returnFunc():
+        if BNodePossibles is not None:
+            return symbol in BNodePossibles
         for quad in formula.statements:
             for s in PRED, SUBJ, OBJ:
                 if isinstance(quad[s], Formula):
-                    if quad[s].doesNodeAppear(symbol):
-                        return 0
-        return 1
+                    if BNodePossibles is None:
+                        BNodePossible = quad[s].doNodesAppear(formula.existentials())
+                    else:
+                        BNodePossible.update(quad[s].doNodesAppear(formula.existentials()))
+        return symbol in BNodePossibles
     return returnFunc
 
 ##    toplayer = 1
