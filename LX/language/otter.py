@@ -7,7 +7,8 @@ __version__ = "$Revision$"
 
 import cStringIO
 import LX
-import LX.fol
+import LX.kb
+import LX.logic
 
 def quant(text, expr, nameTable, operators, prec, linePrefix):
     # could use gatherLeft
@@ -16,13 +17,13 @@ def quant(text, expr, nameTable, operators, prec, linePrefix):
     return text+left+" ("+right+")"
     
 operators = {
-    LX.fol.FORALL:    [ 1000, quant, "all " ],
-    LX.fol.EXISTS:    [ 1000, quant, "exists " ],
-    LX.fol.IMPLIES:   [ 800, "xfx", " -> " ],
-    LX.fol.MEANS:     [ 800, "xfx", " <-> " ],
-    LX.fol.OR:        [ 790, "xfy", " | " ],
-    LX.fol.AND:       [ 780, "xfy", " & " ],
-    LX.fol.NOT:       [ 710, "fx", " -" ],
+    LX.logic.FORALL:    [ 1000, quant, "all " ],
+    LX.logic.EXISTS:    [ 1000, quant, "exists " ],
+    LX.logic.IMPLIES:   [ 800, "xfx", " -> " ],
+    LX.logic.MEANS:     [ 800, "xfx", " <-> " ],
+    LX.logic.OR:        [ 790, "xfy", " | " ],
+    LX.logic.AND:       [ 780, "xfy", " & " ],
+    LX.logic.NOT:       [ 710, "fx", " -" ],
     }
 
 def univar(count):
@@ -72,7 +73,7 @@ def prename(f, names, counter):
     if f.isAtomic():
         #print "What to do with:", f
         result = None
-        if isinstance(f, LX.fol.Constant):
+        if isinstance(f, LX.logic.Constant):
             s = str(f)
             try:
                 (pre,post) = s.split("#")
@@ -89,11 +90,11 @@ def prename(f, names, counter):
                 # still stricter, mace is a pain
                 #result = "const"+str(constCount);
                 #constCount += 1
-        elif isinstance(f, LX.fol.UniVar):
+        elif isinstance(f, LX.logic.UniVar):
             result = univar(counter["u"])
             counter["x"].append(result)
             counter["u"] += 1
-        elif isinstance(f, LX.fol.ExiVar):
+        elif isinstance(f, LX.logic.ExiVar):
             result = exivar(+counter["e"])
             counter["e"] += 1
         names[f] = result
@@ -115,7 +116,7 @@ class Serializer:
         counter = { "u":0, "e":0, "x":[] }
         if expr.exivars:
             formula = expr.asFormula()
-        if isinstance(expr, LX.KB):
+        if isinstance(expr, LX.kb.KB):
             result = ""
             for f in expr:
                 # Let's do separate namings for each formula, although
@@ -134,6 +135,7 @@ class Serializer:
                 result += ".\n"
             result = result[:-1]
             self.stream.write(result)
+            self.stream.write("\n")
         else:
             prename(formula, names, counter)
             self.stream.write(formula.serializeWithOperators(names, operators))
@@ -145,7 +147,10 @@ def serialize(kb):
     return str.getvalue()
 
 # $Log$
-# Revision 1.5  2003-01-29 20:59:33  sandro
+# Revision 1.6  2003-02-14 00:36:08  sandro
+# added newline; changed for reorg elsewhere
+#
+# Revision 1.5  2003/01/29 20:59:33  sandro
 # Moved otter language support back from engine/otter to language/otter
 # Changed cwm.py to use this, and [ --engine=otter --think ] instead of
 # --check.
