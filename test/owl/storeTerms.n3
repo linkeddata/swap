@@ -1,0 +1,6 @@
+@prefix p: <prodDesc#>.
+
+@prefix st: <storeTerms#>.
+
+st:widget a p:Product;
+  p:obsoletes st:gadget.

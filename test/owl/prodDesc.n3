@@ -1,0 +1,5 @@
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix p: <prodDesc#>.
+
+p:Product a s:Class.
+p:obsoletes s:domain p:Product.
