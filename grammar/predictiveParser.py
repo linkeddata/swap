@@ -5,43 +5,52 @@ This is is a generic parser for a set of N3-like languages.
 It is directly driven by the context-free grammar (CFG) in RDF.
 It was made to mutually test the CFG against the test files.
 
-Arguments
-1.  An RDF file to read in which contains the grammar, as annotated
-     by the rules.
-2. The URI of the CFG production as which the document is to be parsed.
-    The program checks that a predictive parser *can* be built from the CFG given.
-3. To actually parse a file, include a URI as third parameter.
+Options
+
+--parse=uri   This is the document to be parsed. Optional.
+
+--as=uri      This is the URI of the production as which the document
+	      is to be parsed.
+	      default: http://www.w3.org/2000/10/swap/grammar/n3#document
+
+--grammar=uri This is the RDF augmented grammar.  Default is the
+	      as= production's URI with the hash stripped.
+
+--yacc=file   If this is given a yacc format grammar will be generated
+              and written to the given file.
+	      
+(Abbreviated options -p, -a, -g, -y)
 
 For example:
 cwm n3.n3 bnf-rules.n3 --think --purge --data > n3-selectors.n3
-PYTHONPATH=$SWAP python predictiveParser.py n3-selectors.n3  \
-    http://www.w3.org/2000/10/swap/grammar/n3#document  n3.n3
+PYTHONPATH=$SWAP python predictiveParser.py --grammar=n3-selectors.n3  \
+    --as=http://www.w3.org/2000/10/swap/grammar/n3#document  --parse=n3.n3
     
-A yacc file is also generated, whose name is the first argument plus "-yacc.y".
- This has not been tested.
 The parser is N3-specific only because of the built-in tokenizer.
-This program is or was http://www.w3.org/2000/10/swap/grammar/check-grammar.py
+This program is or was http://www.w3.org/2000/10/swap/grammar/predictiveParser.py
 W3C open source licence. Enjoy. Tim BL
 """
 
 __version__ = "$Id$"
 
-# SWAP
-from swap import webAccess
-from swap import uripath
-from swap import llyn
-from swap.myStore import load, Namespace
-from swap.term import Literal
-from swap import diag
-from swap.diag import progress, chatty_flag
+# SWAP http://www.w3.org/2000/10/swap
+from swap import webAccess, uripath, llyn, myStore, term, diag
+from myStore import load, Namespace
+from term import Literal
+from diag import progress, chatty_flag
+
 #diag.chatty_flag=0
 
 # Standard python
-from sys import argv, exit, stderr
+import sys, getopt
+from sys import exit, stderr
 from time import clock
 import re
 from codecs import utf_8_encode
 
+BNF = Namespace("http://www.w3.org/2000/10/swap/grammar/bnf#")
+#RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+    
 
 
 branchTable = {}
@@ -207,11 +216,6 @@ whiteSpace = re.compile(r'[ \t]*((#[^\n]*)?\r?\n)?')
 singleCharacterSelectors = "\t\r\n !\"#$%&'()*.,+/;<=>?[\\]^`{|}~"
 notQNameChars = singleCharacterSelectors + "@"  # Assume anything else valid qname :-/
 notNameChars = notQNameChars + ":"  # Assume anything else valid name :-/
-#quotedString = re.compile(r'"([^\n"\\]|(\\[\\"a-z]))*"')   # @@@ Missing: \U escapes etc
-#quotedString = re.compile(r'"[^\n"\\]+"')   # @@@ Missing: \U escapes etc"
-#quotedString = re.compile("[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"")  # See n3.n3
-# was tripleQuotedString = re.compile(r'""".*"""')	# @@@ Missing: any control on the content.
-# tripleQuotedString = re.compile("[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\"")
 
 class PredictiveParser:
     """A parser for N3 or derived languages"""
@@ -233,7 +237,6 @@ class PredictiveParser:
 	Make sure we count all lines
 	"""
 	parser.lineNumber+= buffer[parser.startOfLine:here].count("\n")
-#	progress(">>>>%s<<<<<" % buffer[parser.startOfLine:here])
 	parser.startOfLine = here
 
     def token(parser, str, i):
@@ -247,11 +250,10 @@ class PredictiveParser:
 	    m = whiteSpace.match(str, i)
 	    if m == None or m.end() == i: break
 	    i = m.end()
-	    parser.countLines(str, i)
+	parser.countLines(str, i)
 	if i == len(str):
 	    return "",  i # eof
 	
-	parser.countLines(str, i)
 	if parser.verb: progress( "%i) Looking at:  ...%s$%s..." % (
 	    parser.lineNumber, str[i-10:i],str[i:i+10]))
 	for double in "=>", "<=", "^^":
@@ -280,7 +282,7 @@ class PredictiveParser:
 	word = str[i:j]
 	if parser.keywordMode:
 	    parser.keywords.append(word)
-	if word in parser.keywords:
+	elif word in parser.keywords:
 	    if word == "keywords" :
 		parser.keywords = []	# Special
 		parser.keywordMode = 1
@@ -338,67 +340,117 @@ def _test():
     import doctest, predictiveParser
     doctest.testmod(uripath)
 
-############################### Test Program
+def usage():
+    sys.stderr.write(__doc__)
 
-# The Grammar formula
+############################### Program
 
-grammarFile = argv[1].split("#")[0]
-progress("Loading " + grammarFile)
-start = clock()
-g = load(grammarFile)
-taken = clock() - start
-progress("Loaded %i statements in %fs, ie %f/s." %
-    (len(g), taken, len(g)/taken))
+def main():
+    global already, agenda, errors
+    parseAs = None
+    grammarFile = None
+    parseFile = None
+    yaccFile = None
+    global verbose
+    global g
+    verbose = 0
+    lumped = 1
 
-document = g.newSymbol(argv[2])
-
-BNF = Namespace("http://www.w3.org/2000/10/swap/grammar/bnf#")
-#RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-
-already = []
-agenda = []
-errors = []
-doProduction(document)
-while agenda:
-    x = agenda[0]
-    agenda = agenda[1:]
-    already.append(x)
-    doProduction(x)
-    
-if errors != []:
-    progress("###### FAILED with %i errors." % len(errors))
-    for s in errors: progress ("\t%s" % s)
-    exit(-2)
-else:
-    progress( "Ok for predictive parsing")
-
-#if parser.verb: progress "Branch table:", branchTable
-if chatty_flag:
-    progress( "Literal terminals: %s" %  literalTerminals.keys())
-    progress("Token regular expressions:")
-    for r in tokenRegexps:
-	progress( "\t%s matches %s" %(r, tokenRegexps[r].pattern) )
-
-yacc=open(argv[1]+"-yacc.y", "w")
-yaccConvert(yacc, document, tokenRegexps)
-#while agenda:
-#    x = agenda[0]
-#    agenda = agenda[1:]
-#    already.append(x)
-#    yaccProduction(yacc, x, tokenRegexps)
-yacc.close()
-
-if len(argv) <= 3: exit(0)
-parseFile = argv[3]
-
-ip = webAccess.urlopenForRDF(uripath.join(uripath.base(), parseFile), None)
-
-str = ip.read()
-sink = g.newFormula()
-p = PredictiveParser(sink=sink, top=document, branchTable= branchTable,
-	tokenRegexps= tokenRegexps)
-p.parse(str)
-progress("Parsed <%s> OK" % parseFile)
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "ha:v:p:g:y:",
+	    ["help", "as=",  "verbose=", "parse=", "grammar=", "yacc="])
+    except getopt.GetoptError:
+        usage()
+        sys.exit(2)
+    output = None
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            usage()
+            sys.exit()
+        if o in ("-v", "--verbose"):
+	    verbose =int(a)
+	    diag.chatty_flag = int(a)
+	if o in ("-a", "--as"):
+	    parseAs = uripath.join(uripath.base(), a)
+	if o in ("-p", "--parse"):
+	    parseFile = uripath.join(uripath.base(), a)
+	if o in ("-g", "--grammar"):
+	    grammarFile = uripath.join(uripath.base(), a)
+	if o in ("-y", "--yacc"):
+	    yaccFile = uripath.join(uripath.base(), a)[5:]  # strip off file:
 
     
+
+#    if testFiles == []: testFiles = [ "/dev/stdin" ]
+    if not parseAs:
+	usage()
+	sys.exit(2)
+    parseAs = uripath.join(uripath.base(), parseAs)
+    if not grammarFile:
+	grammarFile = parseAs.split("#")[0]   # strip off fragid
+    else:
+	grammarFile = uripath.join(uripath.base(), grammarFile)
+
+
+    
+    # The Grammar formula
+    progress("Loading " + grammarFile)
+    start = clock()
+    g = load(grammarFile)
+    taken = clock() - start
+    progress("Loaded %i statements in %fs, ie %f/s." %
+	(len(g), taken, len(g)/taken))
+    
+    document = g.newSymbol(parseAs)
+    
+    already = []
+    agenda = []
+    errors = []
+    doProduction(document)
+    while agenda:
+	x = agenda[0]
+	agenda = agenda[1:]
+	already.append(x)
+	doProduction(x)
+	
+    if errors != []:
+	progress("###### FAILED with %i errors." % len(errors))
+	for s in errors: progress ("\t%s" % s)
+	exit(-2)
+    else:
+	progress( "Ok for predictive parsing")
+    
+    #if parser.verb: progress "Branch table:", branchTable
+    if verbose:
+	progress( "Literal terminals: %s" %  literalTerminals.keys())
+	progress("Token regular expressions:")
+	for r in tokenRegexps:
+	    progress( "\t%s matches %s" %(r, tokenRegexps[r].pattern) )
+    
+    if yaccFile:
+	yacc=open(yaccFile, "w")
+	yaccConvert(yacc, document, tokenRegexps)
+	yacc.close()
+    
+    if parseFile == None: exit(0)
+
+    
+    ip = webAccess.urlopenForRDF(parseFile, None)
+    
+    str = ip.read()
+    sink = g.newFormula()
+    p = PredictiveParser(sink=sink, top=document, branchTable= branchTable,
+	    tokenRegexps= tokenRegexps)
+    p.parse(str)
+    progress("Parsed <%s> OK" % parseFile)
+    sys.exit(0)   # didn't crash
+    
+###########################################################################
+
+	
+		
+if __name__ == "__main__":
+    main()
+
+
 #ends
