@@ -1,17 +1,12 @@
-"""
-Main LX package import point.
-
-We import most modules here, so users can just use LX.Foo instead of
-LX.foo.Foo.  That means we have to be more careful about naming
-conflicts, but it also gives us more freedom to move code between
-files without affecting the API.
+""" LX is a package of modules for handling semantic web stuff, with
+an emphasis on going beyind RDF and handling more expressive logic
+languages (FOL), and various inference engines and syntaxes.
 
 """
 __version__ = "$Revision$"
 # $Id$
 
-# To allow "from LX import *", though I'm not sure when one would
-# want that.
+# Needed by test.py, and probably random python utils.
 __all__ = [
     "language",
     "engine",
@@ -25,23 +20,11 @@ __all__ = [
     "defaultns",
     ] 
 
-# Let people use LX.Expr instead of LX.expr.Expr, etc, while
-# having these parts in separate files
-#
-# This has the side-effect of meaning if you import any one module
-# from LX, you are importing them all, since python runs all the
-# __init__.py code first.  oops.   What to do?
-#from LX.uri import *
-#from LX.kb import *
-#from LX.expr import *
-#from LX.logic import *
-#from LX.describer import *
-#from LX.namespace import *
-#from LX.rdf import *
-#from LX.defaultns import *
-
 # $Log$
-# Revision 1.7  2003-02-13 19:47:48  sandro
+# Revision 1.8  2003-02-13 19:54:33  sandro
+# cleaned up docs to match moving import-all stuff to all.py
+#
+# Revision 1.7  2003/02/13 19:47:48  sandro
 # reformate a little
 #
 # Revision 1.6  2003/02/13 19:24:21  sandro
