@@ -396,8 +396,10 @@ class SqlDBAlgae(RdfDBAlgae):
             oAlias = None;
 
             if (s._const()):
-                uri = s._uri()
+                uri = s._URI()
                 if (uri):
+                    #if (uri.endswith("#item")):
+                    #    uri = uri[:-5]
                     sAlias = self._bindTableToConstant(sTable, s)
                 else:
                     raise RuntimeError, "not implemented"
@@ -481,23 +483,27 @@ class SqlDBAlgae(RdfDBAlgae):
         return binding
 
     def _bindTableToConstant (self, table, qp):
+        uri = qp._URI()
+        #if (uri.endswith("#item")):
+        #    uri = uri[:-5]
+        #    assert (0, "don't go there")
         try:
-            self.symbolBindings[qp._URI()]
+            self.symbolBindings[uri]
         except KeyError, e:
-            self.symbolBindings[qp._URI()] = {}
+            self.symbolBindings[uri] = {}
         try:
-            binding = self.symbolBindings[qp._URI()][table]
+            binding = self.symbolBindings[uri][table]
         except KeyError, e:
             try:
                 maxForTable = self.tableBindings[table]
             except KeyError, e:
                 maxForTable = self.tableBindings[table] = 0
             binding = table+"_"+repr(maxForTable)
-            self.symbolBindings[qp._URI()][table] = binding
+            self.symbolBindings[uri][table] = binding
             self.tableBindings[table] = self.tableBindings[table] + 1
 
             self.tableAliases.append([table, binding])
-            for where in self._decomposeUniques(qp._URI(), binding, table):
+            for where in self._decomposeUniques(uri, binding, table):
                 self._addWhere(where, qp)
         return binding
 
@@ -537,19 +543,20 @@ class SqlDBAlgae(RdfDBAlgae):
             rvalue = self.CGI_escape(str(values[field]))
 	    segments.append(lvalue+"="+rvalue)
         value = string.join(segments, '&')
-        return self.baseUri.uri+table+"."+value;
+        return self.baseUri.uri+table+'#'+value; # '.'+value+"#item"
 
     def _decomposeUniques(self, uri, tableAs, table):
         m = self.predicateRE.match(uri)
+	assert m, "Oops    term=%s doesn't match %s" %(uri, self.predicateRE.pattern)
         table1 = m.group("table")
         field = m.group("field")
         if (table1 != table):
             raise RuntimeError, "\""+uri+"\" not based on "+self.baseUri.uri+table
         recordId = self.CGI_unescape(field)
-        specifiers = strings.split(recordId, '&')
+        specifiers = string.split(recordId, '&')
         constraints = [];
         for specifier in specifiers:
-            field, value = split (specifier, '=')
+            field, value = string.split(specifier, '=')
             field = self.unescapeName(field)
             field = self.unescapeName(field)
             constraints.append(tableAs+"."+field+"=\""+value+"\"")
@@ -838,16 +845,16 @@ class SqlDBAlgae(RdfDBAlgae):
         else:
             return ret
 
-    def unescapeName(toEscape):
+    def unescapeName(self, toEscape):
         a = toEscape
-        re.sub("\_e", "=", z)
+        # re.sub("\_e", "=", a)
         a = re.sub("\_e", "\=", a)
         a = re.sub("\_a", "\&", a)
         a = re.sub("\_h", "\-", a)
         a = re.sub("\_d", "\.", a)
         a = re.sub("\_p", "\%", a)
         a = re.sub("\_u", "_", a)
-        a = CGI_unescape(a)
+        a = self.CGI_unescape(a)
         return a
 
     def CGI_escape(self, toEscape):
@@ -856,7 +863,7 @@ class SqlDBAlgae(RdfDBAlgae):
         a = re.sub("\"", "\&quot\;", a)
         return a
 
-    def CGI_unescape(toEscape):
+    def CGI_unescape(self, toEscape):
         a = toEscape
         a = re.sub("\&amp\;", "&", a)
         a = re.sub("\&quot\;", "\"", a)

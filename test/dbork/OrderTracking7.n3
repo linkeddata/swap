@@ -1,0 +1,65 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+#@prefix db: 		<http://localhost/SqlDB#>.
+# Tables:
+@prefix Orders: 	<sql://rdftest@swada.w3.org/OrderTracking/Orders#>.
+@prefix Products: 	<sql://rdftest@swada.w3.org/OrderTracking/Products#>.
+@prefix Customers: 	<sql://rdftest@swada.w3.org/OrderTracking/Customers#>.
+@prefix Addresses: 	<sql://rdftest@swada.w3.org/OrderTracking/Addresses#>.
+
+@prefix : <#>.
+
+this log:forAll :o, :d, :p, :productName, :c, :first, :last, :billAddr, :billStreet, :billCity, :billState .
+
+<sql://rdftest@swada.w3.org/OrderTracking/> is log:definitiveService of
+	Orders:id, Orders:customer, Orders:product, Orders:orderDate, 
+	Products:id, Products:name, 
+	Customers:id, Customers:familyName, Customers:givenName, Customers:billingAddress, 
+	Addresses:id, Addresses:street, Addresses:city, Addresses:state.
+
+Orders:product log:pointsAt Products:id .
+Orders:customer log:pointsAt Customers:id .
+Customers:billingAddress log:pointsAt Addresses:id .
+
+{
+ <sql://rdftest@swada.w3.org/OrderTracking/Orders#id=3183> Orders:customer :c .
+ <sql://rdftest@swada.w3.org/OrderTracking/Orders#id=3183> Orders:product :p .
+ <sql://rdftest@swada.w3.org/OrderTracking/Orders#id=3183> Orders:orderDate :d .
+
+ :p Products:name :productName .
+
+ :c Customers:familyName :first .
+ :c Customers:givenName :last .
+ :c Customers:billingAddress :billAddr .
+
+ :billAddr Addresses:street :billStreet .
+ :billAddr Addresses:city :billCity .
+ :billAddr Addresses:state :billState .
+} log:implies {
+
+ "RESULT" :prodName :productName .
+ "RESULT" :fistName :first .
+ "RESULT" :lastName :last .
+ "RESULT" :Street :billStreet .
+ "RESULT" :City :billCity .
+ "RESULT" :State :billState .
+
+}.
+
+# SQL query (so nicely formatted):
+# SELECT Products_0.id AS p_id,
+#          Products_0.name AS productName_name,
+#        Addresses_0.id AS billAddr_id,
+#          Addresses_0.city AS billCity_city,
+#          Addresses_0.state AS billState_state,
+#          Addresses_0.street AS billStreet_street,
+#        Customers_0.id AS c_id,
+#          Customers_0.familyName AS first_familyName,
+#          Customers_0.givenName AS last_givenName,
+#        Orders_0.id AS o_id,
+#          Orders_0.orderDate AS d_orderDate
+# FROM Products AS Products_0, Addresses AS Addresses_0, Customers AS Customers_0, Orders AS Orders_0
+# WHERE Customers_0.billingAddress=Addresses_0.id
+#   AND Orders_0.customer=Customers_0.id
+#   AND Orders_0.product=Products_0.id
+
