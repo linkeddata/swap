@@ -1,0 +1,19 @@
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+@prefix : <#>.
+
+# :s2 :p2 :o2.
+this log:forAll :x, :s, :p, :o.
+
+this a :input.
+
+
+:theSky :is :blue.
+
+#{ :x a :input.
+#  :x log:includes { :s :p :o } } log:implies { :output :has [ :subj :s; :predicate :p; :object :o]}.
+
+{ <#_formula> log:includes { :s :p :o } } log:implies { :output :has [ :subj :s; :predicate :p; :object :o]}.
+
+# <#_formula>
+#ends

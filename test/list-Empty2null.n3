@@ -1,0 +1,15 @@
+# Test list syntax - convert [ a log:Empty] into log:null 
+#
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <#> .
+
+this log:forAll :x .
+
+# There is only one empty list, called null:
+
+{ :x a log:Empty } log:implies { :x = log:null } .   
+
+
+#ENDS
+

@@ -28,7 +28,7 @@ this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G.
   :S log:includes { :p s:isDefinedBy :s1 }} log:implies {:p a :consistentProperty}.
 
 { :p a rdf:Property.
-  :p log:resolvesTo :S.
- } log:implies {:S a :schemaFormula }.
+#  :p log:resolvesTo :S.
+ } log:implies {:p a :schemaFormula }.
 
 #ends

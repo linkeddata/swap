@@ -60,8 +60,32 @@ cwm_test schema1.n3 "Schema validity" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -
 
 cwm_test schema2.n3 "Schema validity using filtering out essential output" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think -filter=schema-filter.n3
 
+echo " ########### Test builtins:"
+
+cwm_test bi-t1.n3 "Simple use of log:includes" includes/t1.n3 -think
+
+cwm_test bi-t2.n3 "Simple use of log:includes" includes/t2.n3 -think
+
+cwm_test bi-t3.n3 "Simple use of log:includes" includes/t3.n3 -think
+
+cwm_test bi-t4.n3 "Simple use of log:includes - negative test" includes/t4.n3 -think
+
+cwm_test bi-t5.n3 "Simple use of log:includes" includes/t5.n3 -think
+
+cwm_test bi-t6.n3 "Simple use of log:includes" includes/t6.n3 -think
+
+cwm_test bi-t7.n3 "Simple use of log:includes" includes/t7.n3 -think
+
+cwm_test bi-t8.n3 "Simple use of string built-ins" includes/t8.n3 -think
+
+cwm_test bi-t9.n3 "Filter event by date using strcmp BI's" includes/t9br.n3 -think
+
+
 # $Log$
-# Revision 1.9  2001-05-21 14:35:47  connolly
+# Revision 1.10  2001-05-30 22:03:40  timbl
+# mmm
+#
+# Revision 1.9  2001/05/21 14:35:47  connolly
 # sorted @prefix directives by prefix on output
 #
 # Revision 1.8  2001/05/21 13:04:02  timbl
