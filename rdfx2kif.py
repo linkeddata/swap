@@ -21,11 +21,12 @@ References
 import os, sys
 
 import KIFSink
-import sax2rdf
+#import sax2rdf backing out to older RDF parser
+import xml2rdf
 
 def convert(text, addr, outFp):
     gen = KIFSink.Sink(outFp)
-    p = sax2rdf.RDFXMLParser(gen, addr)
+    p = xml2rdf.RDFXMLParser(gen, addr)
     gen.startDoc()
     p.feed(text)
     gen.endDoc()
@@ -38,6 +39,12 @@ if __name__ == '__main__':
     
 
 #$Log$
-#Revision 1.1  2001-09-11 16:30:57  connolly
+#Revision 1.2  2001-09-19 18:47:57  connolly
+#factored RDFSink.py out of notation3.py
+#
+#introduced SYMBOL to replace notation3.RESOURCE
+#introduced forSomeSym, forAllSym to replace N3_forSome_URI, N3_forAll_URI
+#
+#Revision 1.1  2001/09/11 16:30:57  connolly
 #for sharing with dmiles
 #

@@ -51,7 +51,9 @@ import xml.sax # PyXML stuff
 import xml.sax._exceptions
 from xml.sax.handler import feature_namespaces
 
-import notation3 # http://www.w3.org/2000/10/swap/notation3.py
+import RDFSink
+from RDFSink import FORMULA, LITERAL
+RESOURCE=RDFSink.SYMBOL #@@misnomer
 
 # States:
 
@@ -63,11 +65,7 @@ STATE_VALUE =       "plain value"
 STATE_NOVALUE =     "no value"
 STATE_LIST =        "within list"
 
-FORMULA = notation3.FORMULA
-RESOURCE = notation3.RESOURCE
-LITERAL = notation3.LITERAL
-
-RDF_NS_URI = notation3.RDF_NS_URI # As per the spec
+RDF_NS_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#" # As per the spec
 RDF_Specification = "http://www.w3.org/TR/REC-rdf-syntax/" # Must come in useful :-)
 DAML_ONT_NS = "http://www.daml.org/2000/10/daml-ont#"  # DAML early version
 DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
@@ -195,7 +193,7 @@ class RDFHandler(xml.sax.ContentHandler):
             generatedId = self._genPrefix + `self._nextId`  #
             self._nextId = self._nextId + 1
             self.sink.makeStatement(( self._context,
-                                      (RESOURCE, notation3.N3_forSome_URI),
+                                      (RESOURCE, RDFSink.forSomeSym),
                                       self._context,
                                       (RESOURCE, generatedId) )) #  Note this is anonymous node
             return generatedId
@@ -458,6 +456,8 @@ class RDFXMLParser(RDFHandler):
 
 def test(args = None):
     import sys, getopt
+    import notation3
+    
     from time import time
 
     if not args:

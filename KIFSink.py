@@ -19,15 +19,16 @@ __version__="$Id$"
 from string import rfind, split
 import re
 
-import notation3 #@@ better name for the KB parse/sink interface?
+import RDFSink
+from RDFSink import FORMULA, SYMBOL, LITERAL, forSomeSym, forAllSym
 
-class Sink(notation3.RDFSink):
+class Sink(RDFSink.RDFSink):
     def __init__(self, write):
-        notation3.RDFSink.__init__(self)
+        RDFSink.RDFSink.__init__(self)
         self._write = write
 
     def bind(self, pfx, nspr):
-        notation3.RDFSink.bind(self, pfx, nspr)
+        RDFSink.RDFSink.bind(self, pfx, nspr)
 
         x, ns = nspr
         w = self._write
@@ -53,12 +54,12 @@ class Sink(notation3.RDFSink):
         if self._scope <> c[1]:
             self._setScope(c[1])
 
-        if s == (notation3.FORMULA, self._scope):
-            if p[1] == notation3.N3_forSome_URI:
-                if o[0] is notation3.RESOURCE:
+        if s == (FORMULA, self._scope):
+            if p[1] == forSomeSym:
+                if o[0] is SYMBOL:
                     self._ex.append(o[1])
                 return
-            elif p[1] == notation3.N3_forAll_URI:
+            elif p[1] == forAllSym:
                 self._uv.append(o[1])
                 return
 
@@ -123,7 +124,7 @@ class Sink(notation3.RDFSink):
         
     def _writeTerm(self, t, vmap, level):
         w = self._write
-        if t[0] is notation3.RESOURCE:
+        if t[0] is SYMBOL:
             nvl = vmap.get(t[1], None)
 
             if nvl:
@@ -134,10 +135,10 @@ class Sink(notation3.RDFSink):
                 w("%s " % n)
             else:
                 w("%s " % self.withPrefix(t))
-        elif t[0] is notation3.FORMULA:
+        elif t[0] is FORMULA:
             w("^ ")
             self._writeScope(t[1], vmap, level + 1)
-        elif t[0] is notation3.LITERAL:
+        elif t[0] is LITERAL:
             lit = re.sub(r'[\"\\]', escchar, t[1]) # escape newlines? hmm...
             w('"%s"' % lit)
         else:
@@ -183,7 +184,13 @@ def _moreVarNames(outermap, uris, level):
 
 
 # $Log$
-# Revision 1.4  2001-09-11 19:24:22  connolly
+# Revision 1.5  2001-09-19 18:47:57  connolly
+# factored RDFSink.py out of notation3.py
+#
+# introduced SYMBOL to replace notation3.RESOURCE
+# introduced forSomeSym, forAllSym to replace N3_forSome_URI, N3_forAll_URI
+#
+# Revision 1.4  2001/09/11 19:24:22  connolly
 # fixed string quoting
 # escape just specials in words
 # added Open Source license details, log at end

@@ -111,15 +111,22 @@ import urlparse
 import re
 import StringIO
 
-import notation3    # N3 parsers and generators, and RDF generator
-# import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
-
 import urllib # for hasContent
 import md5, binascii  # for building md5 URIs
 urlparse.uses_fragment.append("md5") #@@kludge/patch
 urlparse.uses_relative.append("md5") #@@kludge/patch
 
-from thing import *
+import notation3    # N3 parsers and generators, and RDF generator
+# import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
+
+from thing import * #@@BLARGH! I hate this idiom. --DWC
+
+import RDFSink
+from RDFSink import Logic_NS
+from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
+
+from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE
+RESOURCE = RDFSink.SYMBOL # @@misnomer
 
 LITERAL_URI_prefix = "data:application/n3;"
 
@@ -132,38 +139,12 @@ RDF_type_URI = notation3.RDF_type_URI # "http://www.w3.org/1999/02/22-rdf-syntax
 DAML_equivalentTo_URI = notation3.DAML_equivalentTo_URI
 
 
-Logic_NS = notation3.Logic_NS
-
-N3_forSome_URI = Logic_NS + "forSome"
-#N3_subExpression_URI = Logic_NS + "subExpression"
-N3_forAll_URI = Logic_NS + "forAll"
-
 STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
 META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"
 
 META_mergedWith = META_NS_URI + "mergedWith"
 META_source = META_NS_URI + "source"
 META_run = META_NS_URI + "run"
-
-# The statement is stored as a quad - affectionately known as a triple ;-)
-
-CONTEXT = notation3.CONTEXT
-PRED = notation3.PRED  # offsets when a statement is stored as a Python tuple (p, s, o, c)
-SUBJ = notation3.SUBJ
-OBJ = notation3.OBJ
-
-PARTS =  PRED, SUBJ, OBJ
-ALL4 = CONTEXT, PRED, SUBJ, OBJ
-
-# The parser outputs quads where each item is a pair   type, value
-
-RESOURCE = notation3.RESOURCE        # which or may not have a fragment
-FORMULA = notation3.FORMULA          # A set of statements    
-LITERAL = notation3.LITERAL          # string etc - maps to data:
-ANONYMOUS = notation3.ANONYMOUS     # existentially qualified unlabelled resource
-VARIABLE = notation3.VARIABLE
-
-
 
 doMeta = 0  # wait until we have written the code! :-)
 
@@ -404,12 +385,12 @@ class BI_n3ExprFor(HeavyBuiltIn, Function):
 
     
 ###################################################################################        
-class RDFStore(notation3.RDFSink) :
+class RDFStore(RDFSink.RDFSink) :
     """ Absorbs RDF stream and saves in triple store
     """
 
     def __init__(self, genPrefix=None, metaURI=None):
-        notation3.RDFSink.__init__(self)
+        RDFSink.RDFSink.__init__(self)
 
         self.resources = {}    # Hash table of URIs for interning things
         self._experience = None
@@ -421,9 +402,9 @@ class RDFStore(notation3.RDFSink) :
 
         # Constants, as interned:
         
-        self.forSome = self.internURI(Logic_NS + "forSome")
+        self.forSome = self.internURI(RDFSink.forSomeSym)
 #        self.subExpression = self.internURI(Logic_NS + "subExpression")
-        self.forAll  = self.internURI(Logic_NS + "forAll")
+        self.forAll  = self.internURI(RDFSink.forAllSym)
         self.implies = self.internURI(Logic_NS + "implies")
         self.asserts = self.internURI(Logic_NS + "asserts")
         
@@ -554,7 +535,7 @@ class RDFStore(notation3.RDFSink) :
 
     def bind(self, prefix, nsPair):
         if prefix:   #  Ignore binding to empty prefix
-            return notation3.RDFSink.bind(self, prefix, nsPair) # Otherwise, do as usual.
+            return RDFSink.RDFSink.bind(self, prefix, nsPair) # Otherwise, do as usual.
     
     def makeStatement(self, tuple):
         q = ( self.intern(tuple[CONTEXT]),

@@ -62,47 +62,32 @@ import urlparse
 import urllib
 import re
 
+import RDFSink
+from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
+from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE
+from RDFSink import Logic_NS
+
+N3_forSome_URI = RDFSink.forSomeSym
+N3_forAll_URI = RDFSink.forAllSym
+RESOURCE=RDFSink.SYMBOL # @@misnomer
+
 # Magic resources we know about
 
 RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 RDF_NS_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 DAML_NS=DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
 DAML_equivalentTo_URI = DPO_NS+"equivalentTo"
-Logic_NS = "http://www.w3.org/2000/10/swap/log#"
-Old_Logic_NS = "http://www.w3.org/2000/10/swap/log.n3#"
 parsesTo_URI = Logic_NS + "parsesTo"
 RDF_spec = "http://www.w3.org/TR/REC-rdf-syntax/"
 
 ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
 # This is the hash on namespace URIs
 
-# The statement is stored as a quad - affectionately known as a triple ;-)
-
-CONTEXT = 0
-PRED = 1  # offsets when a statement is stored as a Python tuple (p, s, o, c)
-SUBJ = 2
-OBJ = 3
-
-PARTS =  PRED, SUBJ, OBJ
-ALL4 = CONTEXT, PRED, SUBJ, OBJ
-
 # Should the internal representation of lists be with DAML:first and :rest?
 DAML_LISTS = 0    # Don't do these - do the funny compact ones
 
-# The parser outputs quads where each item is a pair   type, value
-
-RESOURCE = 0        # which or may not have a fragment
-FORMULA = 1         # A { } set of statements
-LITERAL = 2         # string etc - maps to data:
-ANONYMOUS = 3       # existentially qualified unlabelled resource
-VARIABLE = 4        # 
-
 RDF_type = ( RESOURCE , RDF_type_URI )
 DAML_equivalentTo = ( RESOURCE, DAML_equivalentTo_URI )
-
-N3_forSome_URI = Logic_NS + "forSome"
-#N3_subExpression_URI = Logic_NS + "subExpression"
-N3_forAll_URI = Logic_NS + "forAll"
 
 List_NS = DPO_NS     # We have to pick just one all te time
 
@@ -120,85 +105,6 @@ chatty = 0   # verbosity flag
 option_noregen = 0   # If set, do not regenerate genids on output
 
 N3CommentCharacter = "#"     # For unix script #! compatabilty
-
-################################################################### Sinks
-#
-# This is the interface which connects modules in RDF processing.
-#
-
-
-class RDFSink:
-
-    """  Dummy RDF sink prints calls
-
-    This is a superclass for other RDF processors which accept RDF events
-    -- maybe later Swell events.  Adapted from printParser.
-    An RDF stream is defined by startDoc, bind, makeStatement, endDoc methods.
-    """
-    
-#  Keeps track of prefixes
-# there are some things which are in the superclass for commonality 
-
-    def __init__(self):
-        self.prefixes = { }     # Convention only - human friendly to track these
-        self.namespaces = {}    # reverse mapping of prefixes
-
-    def bind(self, prefix, nsPair):
-        if nsPair[1] == Old_Logic_NS:
-            sys.stderr.write("# **** Warning: The N3 logic namespace has changed. Take the '.n3' out!\n")
-            nsPair = RESOURCE, Logic_NS    # Temporary hack
-        if not self.prefixes.get(nsPair, None):  # If we don't have a prefix for this ns
-            if not self.namespaces.get(prefix,None):   # For conventions
-                self.prefixes[nsPair] = prefix
-                self.namespaces[prefix] = nsPair
-                if chatty: print "# RDFSink: Bound %s to %s" % (prefix, nsPair[1])
-            else:
-                self.bind(prefix+"g1", nsPair) # Recurive
-        
-    def makeStatement(self, tuple):  # Quad of (type, value) pairs
-        pass
-
-# These simple versions may be inherited by the reifier for example
-
-    def startAnonymous(self,  triple, isList=0):
-        return self.makeStatement(triple)
-    
-    def endAnonymous(self, subject, verb):    # Remind me where we are
-        pass
-    
-    def startAnonymousNode(self, subj):
-        pass
-    
-    def endAnonymousNode(self):    # Remove default subject
-        pass
-
-    def startBagSubject(self, context):
-        pass
-
-    def endBagSubject(self, subj):    # Remove context
-        pass
-     
-    def startBagNamed(self, context, subj):
-        pass
-
-    def endBagNamed(self, subj):    # Remove context
-        pass
-     
-    def startBagObject(self, triple):
-        return self.makeStatement(triple)
-
-    def endBagObject(self, pred, subj):    # Remove context
-        pass
-    
-    def makeComment(self, str):
-        print "sink: comment: ", str 
-
-    def startDoc(self):
-        print "\nsink: start."
-
-    def endDoc(self):
-        print "sink: end.\n"
-
 
 ########################################## Parse string to sink
 #
@@ -853,13 +759,13 @@ def stripCR(str):
     global _namechars	
     _namechars = string.lowercase + string.uppercase + string.digits + '_-'
 	    
-class ToRDF(RDFSink):
+class ToRDF(RDFSink.RDFSink):
     """keeps track of most recent subject, reuses it"""
 
     _valChars = string.lowercase + string.uppercase + string.digits + "_ !#$%&().,+*/"
     #@ Not actually complete, and can encode anyway
     def __init__(self, outFp, thisURI, base=None, flags=""):
-        RDFSink.__init__(self)
+        RDFSink.RDFSink.__init__(self)
         dummyEnc, dummyDec, dummyReader, encWriter = codecs.lookup('utf-8')
 	self._wr = XMLWriter(encWriter(outFp))
 	self._subj = None
@@ -1214,7 +1120,7 @@ def xmldata(write, str, markupChars):
         write("&#%d;" % (ord(str[j]),))
         i = j + 1
     
-class ToN3(RDFSink):
+class ToN3(RDFSink.RDFSink):
     """keeps track of most recent subject and predicate reuses them
 
       Adapted from Dan's ToRDFParser(Parser);
@@ -1581,10 +1487,10 @@ def stringToN3(str):
 #   sink = notation3.Reifier(sink, outputContextURI, flat)
 
 
-class Reifier(RDFSink):
+class Reifier(RDFSink.RDFSink):
 
     def __init__(self, sink, contextURI, flat=0, genPrefix=None):
-        RDFSink.__init__(self)
+        RDFSink.RDFSink.__init__(self)
         self.sink = sink
         self._ns = "http://www.w3.org/2000/10/swap/model.n3#"
         self.sink.bind("n3", (RESOURCE, self._ns))
