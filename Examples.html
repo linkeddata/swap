@@ -26,6 +26,43 @@ products.</p>
 should do it  among other things.  I haven't exhaustively tested all
 combinations of n3 and RDF in all cases.</p>
 
+<h2 id="Ontologies">Ontologies in DAML</h2>
+
+<p>These examples do not contain rules, just ontology information in DAML.
+DAML allows you to describe the properties and class you create and the
+relationships between them. Here are two fairly large examples from
+biochemistry. They seem to have been generated using the OILED software.  The
+owners of these ontologies retain all rights, so you should
+<strong>not</strong> copy them for the purposes of making your own ontology.
+They are just here as examples.</p>
+
+<h3 id="TAMBIS">TAMBIS</h3>
+
+<p>The tambis ontology was provided as an example by Ian Horrocks.  Files in
+<code>test/tambis</code></p>
+<ul>
+  <li>tambis/tambis-full.daml was the original file;</li>
+  <li>tambis/tambis-no-ents.daml has the XML entities expanded, but with
+    universally quanitified variables still unidentified;</li>
+  <li>tambis/tambis-forSome.n3 has existential variables declared as such (by
+    a hack)</li>
+  <li>tambis/tambis.n3 is what the ontology looks like in N3</li>
+</ul>
+
+<h3 id="BioPathWay">BioPathWays</h3>
+
+<p>Eric Neumann kindly provided a sketch ontology from the <a
+href="http://www.biopathways.org/">biopathways consortium</a>.</p>
+<ul>
+  <li>pathway/Makefile has the recipes, very similar to above for Tambis</li>
+  <li>pathway/pathway.daml original file in RDF</li>
+  <li>pathway/pathway.noents  with XML entities expanded</li>
+  <li><a href="test/pathway/pathway.n3">pathway/pathway.n3</a> result in
+  N3</li>
+  <li><a href="test/pathway/pathway.rdf">pathway/pathway.rdf</a> result
+    regenerated in RDF</li>
+</ul>
+
 <h2 id="Schema">Schema validation</h2>
 
 <p>In the semantic web, there are many different forms of document validity.

@@ -785,7 +785,9 @@ class ToRDF(RDFSink):
 
     def startAnonymousNode(self, subj):
         self.flushStart()
-#        self._wr.endElement()  eh?!!
+        if self._subj:
+            self._wr.endElement()
+            self._subj = None
         self._wr.startElement(RDF_NS_URI+'Description', [], self.prefixes)
         self._subj = subj    # The object is not the subject context
         self._pred = None

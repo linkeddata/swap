@@ -1634,278 +1634,302 @@
     </b:Class>
 
     <rdf:Property about="part_of">
-        <rdf:Description>
+    </rdf:Property>
+
+    <rdf:Description>
+        <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Disjoint"/>
+        <first resource="metal"/>
+        <rest parseType="Resource">
             <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Disjoint"/>
-            <first resource="metal"/>
-            <rest parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Disjoint"/>
-                <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
-                <first resource="non_metal"/>
-            </rest>
-        </rdf:Description>
-        <rdf:Description>
+            <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
+            <first resource="non_metal"/>
+        </rest>
+    </rdf:Description>
+
+    <rdf:Description>
+        <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Disjoint"/>
+        <first resource="chromosome"/>
+        <rest parseType="Resource">
             <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Disjoint"/>
-            <first resource="chromosome"/>
-            <rest parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Disjoint"/>
-                <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
-                <first resource="plasmid"/>
-            </rest>
-        </rdf:Description>
-        <rdf:Description>
+            <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
+            <first resource="plasmid"/>
+        </rest>
+    </rdf:Description>
+
+    <rdf:Description>
+        <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Disjoint"/>
+        <first resource="dna"/>
+        <rest parseType="Resource">
             <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Disjoint"/>
-            <first resource="dna"/>
-            <rest parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Disjoint"/>
-                <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
-                <first resource="rna"/>
-            </rest>
-        </rdf:Description>
-        <rdf:Description>
+            <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
+            <first resource="rna"/>
+        </rest>
+    </rdf:Description>
+
+    <rdf:Description>
+        <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Disjoint"/>
+        <first resource="small_molecule"/>
+        <rest parseType="Resource">
             <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Disjoint"/>
-            <first resource="small_molecule"/>
-            <rest parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Disjoint"/>
+            <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
+            <first resource="macromolecule"/>
+        </rest>
+    </rdf:Description>
+
+    <rdf:Description>
+        <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Disjoint"/>
+        <first parseType="Resource">
+            <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+            <oneOf parseType="Resource">
+                <first resource="compartment_A"/>
                 <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
-                <first resource="macromolecule"/>
-            </rest>
-        </rdf:Description>
-        <rdf:Description>
+            </oneOf>
+        </first>
+        <rest parseType="Resource">
             <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Disjoint"/>
             <first parseType="Resource">
                 <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
                 <oneOf parseType="Resource">
-                    <first resource="compartment_A"/>
+                    <first resource="compartment_B"/>
                     <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
                 </oneOf>
             </first>
+            <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
+        </rest>
+    </rdf:Description>
+
+    <b:Class about="physical_structure">
+    </b:Class>
+
+    <b:Class about="plasmid">
+        <b:subClassOf resource="dna_structure"/>
+    </b:Class>
+
+    <feature_type xmlns="c:"
+        about="polyA_signal">
+    </feature_type>
+
+    <feature_type xmlns="c:"
+        about="polyA_site">
+    </feature_type>
+
+    <rdf:Property about="polymer_of">
+        <inverseOf resource="forms_polymer"/>
+        <b:range resource="small_molecule"/>
+    </rdf:Property>
+
+    <feature_type xmlns="c:"
+        about="precursor_RNA">
+    </feature_type>
+
+    <feature_type xmlns="c:"
+        about="prim_transcript">
+    </feature_type>
+
+    <feature_type xmlns="c:"
+        about="primer">
+    </feature_type>
+
+    <feature_type xmlns="c:"
+        about="primer_bind">
+    </feature_type>
+
+    <b:Class about="process">
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <onProperty resource="has_child"/>
+            <hasValue resource="process"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <onProperty resource="has_role"/>
+            <hasValue resource="role"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <hasValue resource="biological_function"/>
+            <onProperty resource="has_part"/>
+        </b:subClassOf>
+        <b:subClassOf resource="transformation"/>
+    </b:Class>
+
+    <rdf:Property about="produced_by">
+    </rdf:Property>
+
+    <b:Class about="prosthetic_group">
+        <intersectionOf parseType="Resource">
+            <first parseType="Resource">
+                <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+                <complementOf resource="metal_ion"/>
+            </first>
             <rest parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Disjoint"/>
-                <first parseType="Resource">
-                    <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-                    <oneOf parseType="Resource">
-                        <first resource="compartment_B"/>
-                        <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
-                    </oneOf>
-                </first>
-                <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
-            </rest>
-        </rdf:Description>
-        <b:Class about="physical_structure">
-        </b:Class>
-        <b:Class about="plasmid">
-            <b:subClassOf resource="dna_structure"/>
-        </b:Class>
-        <feature_type xmlns="c:"
-            about="polyA_signal">
-        </feature_type>
-        <feature_type xmlns="c:"
-            about="polyA_site">
-        </feature_type>
-        <rdf:Property about="polymer_of">
-            <inverseOf resource="forms_polymer"/>
-            <b:range resource="small_molecule"/>
-        </rdf:Property>
-        <feature_type xmlns="c:"
-            about="precursor_RNA">
-        </feature_type>
-        <feature_type xmlns="c:"
-            about="prim_transcript">
-        </feature_type>
-        <feature_type xmlns="c:"
-            about="primer">
-        </feature_type>
-        <feature_type xmlns="c:"
-            about="primer_bind">
-        </feature_type>
-        <b:Class about="process">
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <onProperty resource="has_child"/>
-                <hasValue resource="process"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <onProperty resource="has_role"/>
-                <hasValue resource="role"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <hasValue resource="biological_function"/>
-                <onProperty resource="has_part"/>
-            </b:subClassOf>
-            <b:subClassOf resource="transformation"/>
-        </b:Class>
-        <rdf:Property about="produced_by">
-        </rdf:Property>
-        <b:Class about="prosthetic_group">
-            <intersectionOf parseType="Resource">
-                <first parseType="Resource">
-                    <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-                    <complementOf resource="metal_ion"/>
-                </first>
-                <rest parseType="Resource">
-                    <first parseType="Resource">
-                        <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                        <hasValue resource="protein"/>
-                        <onProperty resource="strongly_bound_to"/>
-                    </first>
-                    <rest parseType="Resource">
-                        <first resource="cofactor"/>
-                        <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
-                    </rest>
-                </rest>
-            </intersectionOf>
-        </b:Class>
-        <b:Class about="protein">
-            <intersectionOf parseType="Resource">
                 <first parseType="Resource">
                     <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                    <hasValue resource="amino_acid"/>
+                    <hasValue resource="protein"/>
+                    <onProperty resource="strongly_bound_to"/>
+                </first>
+                <rest parseType="Resource">
+                    <first resource="cofactor"/>
+                    <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
+                </rest>
+            </rest>
+        </intersectionOf>
+    </b:Class>
+
+    <b:Class about="protein">
+        <intersectionOf parseType="Resource">
+            <first parseType="Resource">
+                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+                <hasValue resource="amino_acid"/>
+                <onProperty resource="polymer_of"/>
+            </first>
+            <rest parseType="Resource">
+                <first parseType="Resource">
+                    <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+                    <toClass resource="amino_acid"/>
                     <onProperty resource="polymer_of"/>
                 </first>
                 <rest parseType="Resource">
                     <first parseType="Resource">
                         <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                        <toClass resource="amino_acid"/>
-                        <onProperty resource="polymer_of"/>
+                        <hasValue resource="messenger_rna"/>
+                        <onProperty resource="translated_from"/>
                     </first>
                     <rest parseType="Resource">
-                        <first parseType="Resource">
-                            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                            <hasValue resource="messenger_rna"/>
-                            <onProperty resource="translated_from"/>
-                        </first>
-                        <rest parseType="Resource">
-                            <first resource="macromolecule"/>
-                            <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
-                        </rest>
+                        <first resource="macromolecule"/>
+                        <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
                     </rest>
                 </rest>
-            </intersectionOf>
-            <b:subClassOf parseType="Resource">
+            </rest>
+        </intersectionOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+            <unionOf parseType="Resource">
+                <first parseType="Resource">
+                    <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+                    <cardinality>1</cardinality>
+                    <hasValue resource="accession_number"/>
+                    <onProperty resource="has_accession_number"/>
+                </first>
+                <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
+            </unionOf>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+            <unionOf parseType="Resource">
+                <first parseType="Resource">
+                    <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+                    <minCardinality>1</minCardinality>
+                    <onProperty resource="has_species"/>
+                    <hasValue resource="species"/>
+                </first>
+                <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
+            </unionOf>
+        </b:subClassOf>
+    </b:Class>
+
+    <b:Class about="protein_tagging">
+        <b:subClassOf resource="biological_function"/>
+    </b:Class>
+
+    <feature_type xmlns="c:"
+        about="rRNA">
+    </feature_type>
+
+    <b:Class about="reaction">
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <minCardinality>1</minCardinality>
+            <hasValue resource="chemical"/>
+            <onProperty resource="upstream"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <minCardinality>1</minCardinality>
+            <hasValue resource="chemical"/>
+            <onProperty resource="downstream"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <hasValue resource="chemical"/>
+            <onProperty resource="downstream"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <onProperty resource="has_part"/>
+            <hasValue resource="reaction"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <minCardinality>0</minCardinality>
+            <onProperty resource="has_part"/>
+            <hasValue resource="reaction"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <hasValue resource="chemical"/>
+            <onProperty resource="upstream"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <onProperty resource="delta_H"/>
+            <hasValue resource="parameter"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <onProperty resource="delta_S"/>
+            <hasValue resource="parameter"/>
+        </b:subClassOf>
+        <b:subClassOf resource="transformation"/>
+    </b:Class>
+
+    <b:Class about="receptor">
+        <b:subClassOf resource="signal_transduction"/>
+    </b:Class>
+
+    <b:Class about="receptor_signalling_protein">
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <onProperty resource="has_function"/>
+            <hasValue resource="signal_transduction"/>
+        </b:subClassOf>
+        <b:subClassOf resource="protein"/>
+    </b:Class>
+
+    <b:Class about="record">
+        <b:subClassOf resource="format_component"/>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <hasValue resource="field"/>
+            <onProperty resource="has_content"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <hasValue parseType="Resource">
                 <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-                <unionOf parseType="Resource">
-                    <first parseType="Resource">
-                        <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                        <cardinality>1</cardinality>
-                        <hasValue resource="accession_number"/>
-                        <onProperty resource="has_accession_number"/>
-                    </first>
-                    <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
-                </unionOf>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-                <unionOf parseType="Resource">
-                    <first parseType="Resource">
-                        <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                        <minCardinality>1</minCardinality>
-                        <onProperty resource="has_species"/>
-                        <hasValue resource="species"/>
-                    </first>
-                    <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
-                </unionOf>
-            </b:subClassOf>
-        </b:Class>
-        <b:Class about="protein_tagging">
-            <b:subClassOf resource="biological_function"/>
-        </b:Class>
-        <feature_type xmlns="c:"
-            about="rRNA">
-        </feature_type>
-        <b:Class about="reaction">
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <minCardinality>1</minCardinality>
-                <hasValue resource="chemical"/>
-                <onProperty resource="upstream"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <minCardinality>1</minCardinality>
-                <hasValue resource="chemical"/>
-                <onProperty resource="downstream"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <hasValue resource="chemical"/>
-                <onProperty resource="downstream"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <onProperty resource="has_part"/>
-                <hasValue resource="reaction"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <minCardinality>0</minCardinality>
-                <onProperty resource="has_part"/>
-                <hasValue resource="reaction"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <hasValue resource="chemical"/>
-                <onProperty resource="upstream"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <onProperty resource="delta_H"/>
-                <hasValue resource="parameter"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <onProperty resource="delta_S"/>
-                <hasValue resource="parameter"/>
-            </b:subClassOf>
-            <b:subClassOf resource="transformation"/>
-        </b:Class>
-        <b:Class about="receptor">
-            <b:subClassOf resource="signal_transduction"/>
-        </b:Class>
-        <b:Class about="receptor_signalling_protein">
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <onProperty resource="has_function"/>
-                <hasValue resource="signal_transduction"/>
-            </b:subClassOf>
-            <b:subClassOf resource="protein"/>
-        </b:Class>
-        <b:Class about="record">
-            <b:subClassOf resource="format_component"/>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <hasValue resource="field"/>
-                <onProperty resource="has_content"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <hasValue parseType="Resource">
-                    <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-                    <oneOf parseType="Resource">
-                        <first resource="ACCESSION"/>
+                <oneOf parseType="Resource">
+                    <first resource="ACCESSION"/>
+                    <rest parseType="Resource">
+                        <first resource="DEFINITION"/>
                         <rest parseType="Resource">
-                            <first resource="DEFINITION"/>
+                            <first resource="FEATURES"/>
                             <rest parseType="Resource">
-                                <first resource="FEATURES"/>
+                                <first resource="KEYWORDS"/>
                                 <rest parseType="Resource">
-                                    <first resource="KEYWORDS"/>
+                                    <first resource="LOCUS"/>
                                     <rest parseType="Resource">
-                                        <first resource="LOCUS"/>
+                                        <first resource="ORIGIN"/>
                                         <rest parseType="Resource">
-                                            <first resource="ORIGIN"/>
+                                            <first resource="REFERENCE"/>
                                             <rest parseType="Resource">
-                                                <first resource="REFERENCE"/>
+                                                <first resource="SEGMENT"/>
                                                 <rest parseType="Resource">
-                                                    <first resource="SEGMENT"/>
+                                                    <first resource="SEQUENCE"/>
                                                     <rest parseType="Resource">
-                                                        <first resource="SEQUENCE"/>
+                                                        <first resource="SOURCE"/>
                                                         <rest parseType="Resource">
-                                                            <first resource="SOURCE"/>
-                                                            <rest parseType="Resource">
-                                                                <first resource="VERSION"/>
-                                                                <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
-                                                            </rest>
+                                                            <first resource="VERSION"/>
+                                                            <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
                                                         </rest>
                                                     </rest>
                                                 </rest>
@@ -1915,353 +1939,412 @@
                                 </rest>
                             </rest>
                         </rest>
-                    </oneOf>
-                </hasValue>
-                <onProperty resource="inc:has_name"/>
-            </b:subClassOf>
-        </b:Class>
-        <b:Class about="regulation">
-            <b:subClassOf resource="biological_function"/>
-        </b:Class>
-        <feature_type xmlns="c:"
-            about="rep_origin">
-        </feature_type>
-        <feature_type xmlns="c:"
-            about="repeat_region">
-        </feature_type>
-        <feature_type xmlns="c:"
-            about="repeat_unit">
-        </feature_type>
-        <b:Class about="ribonucleotide">
-            <b:subClassOf resource="nucleotide"/>
-        </b:Class>
-        <b:Class about="ribosomal_rna">
-            <b:subClassOf resource="rna"/>
-        </b:Class>
-        <b:Class about="ribosomal_rna_function">
-            <b:subClassOf resource="biological_function"/>
-        </b:Class>
-        <b:Class about="ribozyme">
-            <intersectionOf parseType="Resource">
-                <first parseType="Resource">
-                    <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                    <onProperty resource="polymer_of"/>
-                    <hasValue resource="ribonucleotide"/>
-                </first>
-                <rest parseType="Resource">
-                    <first parseType="Resource">
-                        <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                        <onProperty resource="polymer_of"/>
-                        <toClass resource="ribonucleotide"/>
-                    </first>
-                    <rest parseType="Resource">
-                        <first parseType="Resource">
-                            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                            <onProperty resource="catalyses"/>
-                            <hasValue resource="covalent_reaction"/>
-                        </first>
-                        <rest parseType="Resource">
-                            <first resource="rna"/>
-                            <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
-                        </rest>
                     </rest>
-                </rest>
-            </intersectionOf>
-        </b:Class>
-        <b:Class about="rna">
-            <intersectionOf parseType="Resource">
+                </oneOf>
+            </hasValue>
+            <onProperty resource="inc:has_name"/>
+        </b:subClassOf>
+    </b:Class>
+
+    <b:Class about="regulation">
+        <b:subClassOf resource="biological_function"/>
+    </b:Class>
+
+    <feature_type xmlns="c:"
+        about="rep_origin">
+    </feature_type>
+
+    <feature_type xmlns="c:"
+        about="repeat_region">
+    </feature_type>
+
+    <feature_type xmlns="c:"
+        about="repeat_unit">
+    </feature_type>
+
+    <b:Class about="ribonucleotide">
+        <b:subClassOf resource="nucleotide"/>
+    </b:Class>
+
+    <b:Class about="ribosomal_rna">
+        <b:subClassOf resource="rna"/>
+    </b:Class>
+
+    <b:Class about="ribosomal_rna_function">
+        <b:subClassOf resource="biological_function"/>
+    </b:Class>
+
+    <b:Class about="ribozyme">
+        <intersectionOf parseType="Resource">
+            <first parseType="Resource">
+                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+                <onProperty resource="polymer_of"/>
+                <hasValue resource="ribonucleotide"/>
+            </first>
+            <rest parseType="Resource">
                 <first parseType="Resource">
                     <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
                     <onProperty resource="polymer_of"/>
-                    <hasValue resource="ribonucleotide"/>
+                    <toClass resource="ribonucleotide"/>
                 </first>
                 <rest parseType="Resource">
                     <first parseType="Resource">
                         <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                        <onProperty resource="polymer_of"/>
-                        <toClass resource="ribonucleotide"/>
+                        <onProperty resource="catalyses"/>
+                        <hasValue resource="covalent_reaction"/>
                     </first>
                     <rest parseType="Resource">
-                        <first resource="nucleic_acid"/>
+                        <first resource="rna"/>
                         <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
                     </rest>
                 </rest>
-            </intersectionOf>
-        </b:Class>
-        <b:Class about="role">
-            <b:subClassOf resource="mental_structure"/>
-            <b:subClassOf parseType="Resource">
+            </rest>
+        </intersectionOf>
+    </b:Class>
+
+    <b:Class about="rna">
+        <intersectionOf parseType="Resource">
+            <first parseType="Resource">
                 <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <onProperty resource="is_part_of"/>
-                <hasValue resource="process"/>
-            </b:subClassOf>
-        </b:Class>
-        <feature_type xmlns="c:"
-            about="satellite">
-        </feature_type>
-        <feature_type xmlns="c:"
-            about="scRNA">
-        </feature_type>
-        <b:Class about="selector">
-            <b:subClassOf resource="modifier"/>
-        </b:Class>
-        <b:Class about="sequence_entry">
-            <b:subClassOf resource="format_component"/>
-        </b:Class>
-        <feature_type xmlns="c:"
-            about="sig_peptide">
-        </feature_type>
-        <b:Class about="signal_transduction">
-            <b:subClassOf resource="biological_function"/>
-        </b:Class>
-        <b:Class about="signal_transduction_pathway">
-            <b:subClassOf resource="biopathway"/>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <onProperty resource="has_function"/>
-                <hasValue resource="signal_transduction"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <onProperty resource="has_child"/>
-                <hasValue resource="signal_transduction_pathway"/>
-            </b:subClassOf>
-        </b:Class>
-        <selector xmlns="c:"
-            about="single">
-        </selector>
-        <b:Class about="single_stranded_dna">
-            <intersectionOf parseType="Resource">
+                <onProperty resource="polymer_of"/>
+                <hasValue resource="ribonucleotide"/>
+            </first>
+            <rest parseType="Resource">
                 <first parseType="Resource">
                     <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                    <hasValue resource="deoxynucleotide"/>
+                    <onProperty resource="polymer_of"/>
+                    <toClass resource="ribonucleotide"/>
+                </first>
+                <rest parseType="Resource">
+                    <first resource="nucleic_acid"/>
+                    <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
+                </rest>
+            </rest>
+        </intersectionOf>
+    </b:Class>
+
+    <b:Class about="role">
+        <b:subClassOf resource="mental_structure"/>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <onProperty resource="is_part_of"/>
+            <hasValue resource="process"/>
+        </b:subClassOf>
+    </b:Class>
+
+    <feature_type xmlns="c:"
+        about="satellite">
+    </feature_type>
+
+    <feature_type xmlns="c:"
+        about="scRNA">
+    </feature_type>
+
+    <b:Class about="selector">
+        <b:subClassOf resource="modifier"/>
+    </b:Class>
+
+    <b:Class about="sequence_entry">
+        <b:subClassOf resource="format_component"/>
+    </b:Class>
+
+    <feature_type xmlns="c:"
+        about="sig_peptide">
+    </feature_type>
+
+    <b:Class about="signal_transduction">
+        <b:subClassOf resource="biological_function"/>
+    </b:Class>
+
+    <b:Class about="signal_transduction_pathway">
+        <b:subClassOf resource="biopathway"/>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <onProperty resource="has_function"/>
+            <hasValue resource="signal_transduction"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <onProperty resource="has_child"/>
+            <hasValue resource="signal_transduction_pathway"/>
+        </b:subClassOf>
+    </b:Class>
+
+    <selector xmlns="c:"
+        about="single">
+    </selector>
+
+    <b:Class about="single_stranded_dna">
+        <intersectionOf parseType="Resource">
+            <first parseType="Resource">
+                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+                <hasValue resource="deoxynucleotide"/>
+                <onProperty resource="polymer_of"/>
+            </first>
+            <rest parseType="Resource">
+                <first parseType="Resource">
+                    <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+                    <toClass resource="deoxynucleotide"/>
                     <onProperty resource="polymer_of"/>
                 </first>
                 <rest parseType="Resource">
-                    <first parseType="Resource">
-                        <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                        <toClass resource="deoxynucleotide"/>
-                        <onProperty resource="polymer_of"/>
-                    </first>
-                    <rest parseType="Resource">
-                        <first parseType="Resource">
-                            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                            <hasValue parseType="Resource">
-                                <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-                                <oneOf parseType="Resource">
-                                    <first resource="single"/>
-                                    <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
-                                </oneOf>
-                            </hasValue>
-                            <onProperty resource="has_strandedness"/>
-                        </first>
-                        <rest parseType="Resource">
-                            <first resource="dna"/>
-                            <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
-                        </rest>
-                    </rest>
-                </rest>
-            </intersectionOf>
-        </b:Class>
-        <b:Class about="small_molecule">
-            <b:subClassOf resource="chemical"/>
-        </b:Class>
-        <b:Class about="small_nuclear_rna_function">
-            <b:subClassOf resource="biological_function"/>
-        </b:Class>
-        <b:Class about="small_nucleolar_rna_function">
-            <b:subClassOf resource="biological_function"/>
-        </b:Class>
-        <feature_type xmlns="c:"
-            about="snRNA">
-        </feature_type>
-        <feature_type xmlns="c:"
-            about="source2">
-        </feature_type>
-        <b:Class about="species">
-            <equivalentTo parseType="Resource">
-                <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-                <intersectionOf parseType="Resource">
                     <first parseType="Resource">
                         <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
                         <hasValue parseType="Resource">
                             <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
                             <oneOf parseType="Resource">
-                                <first resource="ORGANISM"/>
+                                <first resource="single"/>
                                 <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
                             </oneOf>
                         </hasValue>
-                        <onProperty resource="has_content"/>
+                        <onProperty resource="has_strandedness"/>
                     </first>
                     <rest parseType="Resource">
-                        <first resource="record"/>
+                        <first resource="dna"/>
                         <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
                     </rest>
-                </intersectionOf>
-            </equivalentTo>
-            <b:subClassOf resource="organism_classification"/>
-        </b:Class>
-        <feature_type xmlns="c:"
-            about="stem_loop">
-        </feature_type>
-        <b:Class about="storage_protein">
-            <b:subClassOf resource="biological_function"/>
-        </b:Class>
-        <rdf:Property about="strongly_binds">
-            <inverseOf resource="strongly_bound_to"/>
-            <b:subPropertyOf resource="binds"/>
-        </rdf:Property>
-        <rdf:Property about="strongly_bound_to">
-        </rdf:Property>
-        <b:Class about="structural_protein">
-            <b:subClassOf resource="biological_function"/>
-        </b:Class>
-        <b:Class about="sub_feature_type">
-            <b:subClassOf resource="format_component"/>
-        </b:Class>
-        <b:Class about="sub_record">
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <hasValue parseType="Resource">
-                    <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-                    <oneOf parseType="Resource">
-                        <first resource="AUTHORS"/>
+                </rest>
+            </rest>
+        </intersectionOf>
+    </b:Class>
+
+    <b:Class about="small_molecule">
+        <b:subClassOf resource="chemical"/>
+    </b:Class>
+
+    <b:Class about="small_nuclear_rna_function">
+        <b:subClassOf resource="biological_function"/>
+    </b:Class>
+
+    <b:Class about="small_nucleolar_rna_function">
+        <b:subClassOf resource="biological_function"/>
+    </b:Class>
+
+    <feature_type xmlns="c:"
+        about="snRNA">
+    </feature_type>
+
+    <feature_type xmlns="c:"
+        about="source2">
+    </feature_type>
+
+    <b:Class about="species">
+        <equivalentTo parseType="Resource">
+            <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+            <intersectionOf parseType="Resource">
+                <first parseType="Resource">
+                    <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+                    <hasValue parseType="Resource">
+                        <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+                        <oneOf parseType="Resource">
+                            <first resource="ORGANISM"/>
+                            <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
+                        </oneOf>
+                    </hasValue>
+                    <onProperty resource="has_content"/>
+                </first>
+                <rest parseType="Resource">
+                    <first resource="record"/>
+                    <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
+                </rest>
+            </intersectionOf>
+        </equivalentTo>
+        <b:subClassOf resource="organism_classification"/>
+    </b:Class>
+
+    <feature_type xmlns="c:"
+        about="stem_loop">
+    </feature_type>
+
+    <b:Class about="storage_protein">
+        <b:subClassOf resource="biological_function"/>
+    </b:Class>
+
+    <rdf:Property about="strongly_binds">
+        <inverseOf resource="strongly_bound_to"/>
+        <b:subPropertyOf resource="binds"/>
+    </rdf:Property>
+
+    <rdf:Property about="strongly_bound_to">
+    </rdf:Property>
+
+    <b:Class about="structural_protein">
+        <b:subClassOf resource="biological_function"/>
+    </b:Class>
+
+    <b:Class about="sub_feature_type">
+        <b:subClassOf resource="format_component"/>
+    </b:Class>
+
+    <b:Class about="sub_record">
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <hasValue parseType="Resource">
+                <rdf:type resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+                <oneOf parseType="Resource">
+                    <first resource="AUTHORS"/>
+                    <rest parseType="Resource">
+                        <first resource="JOURNAL"/>
                         <rest parseType="Resource">
-                            <first resource="JOURNAL"/>
+                            <first resource="ORGANISM"/>
                             <rest parseType="Resource">
-                                <first resource="ORGANISM"/>
-                                <rest parseType="Resource">
-                                    <first resource="TITLE"/>
-                                    <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
-                                </rest>
+                                <first resource="TITLE"/>
+                                <rest resource="http://www.daml.org/2000/12/daml+oil#nil"/>
                             </rest>
                         </rest>
-                    </oneOf>
-                </hasValue>
-                <onProperty resource="inc:has_name"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <onProperty resource="is_part_of"/>
-                <toClass resource="record"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <cardinality>1</cardinality>
-                <onProperty resource="is_part_of"/>
-                <hasValue resource="record"/>
-            </b:subClassOf>
-            <b:subClassOf resource="record"/>
-        </b:Class>
-        <feature_type xmlns="c:"
-            about="tRNA">
-        </feature_type>
-        <feature_type xmlns="c:"
-            about="terminator">
-        </feature_type>
-        <feature_type xmlns="c:"
-            about="three_UTR">
-        </feature_type>
-        <feature_type xmlns="c:"
-            about="three_clip">
-        </feature_type>
-        <b:Class about="tissue">
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <hasValue resource="organ"/>
-                <onProperty resource="part_of"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <hasValue resource="age"/>
-                <onProperty resource="has_state"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <hasValue resource="developmental_stage"/>
-                <onProperty resource="has_state"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <hasValue resource="biological_system"/>
-                <onProperty resource="part_of"/>
-            </b:subClassOf>
-            <b:subClassOf resource="physical_structure"/>
-        </b:Class>
-        <rdf:Property about="transcribed_from">
-            <inverseOf resource="transcribed_to"/>
-        </rdf:Property>
-        <rdf:Property about="transcribed_to">
-        </rdf:Property>
-        <b:Class about="transcription_factor_binding">
-            <b:subClassOf resource="binding"/>
-        </b:Class>
-        <b:Class about="transfer_rna">
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <hasValue resource="dna"/>
-                <onProperty resource="transcribed_from"/>
-            </b:subClassOf>
-            <b:subClassOf resource="rna"/>
-        </b:Class>
-        <b:Class about="transfer_rna_function">
-            <b:subClassOf resource="biological_function"/>
-        </b:Class>
-        <b:Class about="transformation">
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <hasValue resource="http://www.daml.org/2000/12/daml+oil#Thing"/>
-                <onProperty resource="upstream"/>
-            </b:subClassOf>
-            <b:subClassOf parseType="Resource">
-                <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-                <onProperty resource="downstream"/>
-                <hasValue resource="http://www.daml.org/2000/12/daml+oil#Thing"/>
-            </b:subClassOf>
-        </b:Class>
-        <feature_type xmlns="c:"
-            about="transit_peptide">
-        </feature_type>
-        <rdf:Property about="translated_from">
-            <inverseOf resource="translated_to"/>
-        </rdf:Property>
-        <rdf:Property about="translated_to">
-        </rdf:Property>
-        <b:Class about="transporter">
-            <b:subClassOf resource="biological_function"/>
-        </b:Class>
-        <feature_type xmlns="c:"
-            about="transposon">
-        </feature_type>
-        <b:Class about="tumor_suppressor">
-            <b:subClassOf resource="regulation"/>
-        </b:Class>
-        <b:Class about="two_component_response_regulator">
-            <b:subClassOf resource="signal_transduction"/>
-        </b:Class>
-        <b:Class about="two_component_sensor_molecule">
-            <b:subClassOf resource="signal_transduction"/>
-        </b:Class>
-        <rdf:Property about="unique_id">
-        </rdf:Property>
-        <feature_type xmlns="c:"
-            about="unsure">
-        </feature_type>
-        <rdf:Property about="upstream">
-        </rdf:Property>
-        <feature_type xmlns="c:"
-            about="variation">
-        </feature_type>
-        <feature_type xmlns="c:"
-            about="inc:exon">
-        </feature_type>
-        <feature_type xmlns="c:"
-            about="inc:gene">
-        </feature_type>
-        <rdf:Property about="inc:has_name">
-        </rdf:Property>
-        <feature_type xmlns="c:"
-            about="inc:intron">
-        </feature_type>
+                    </rest>
+                </oneOf>
+            </hasValue>
+            <onProperty resource="inc:has_name"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <onProperty resource="is_part_of"/>
+            <toClass resource="record"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <cardinality>1</cardinality>
+            <onProperty resource="is_part_of"/>
+            <hasValue resource="record"/>
+        </b:subClassOf>
+        <b:subClassOf resource="record"/>
+    </b:Class>
+
+    <feature_type xmlns="c:"
+        about="tRNA">
+    </feature_type>
+
+    <feature_type xmlns="c:"
+        about="terminator">
+    </feature_type>
+
+    <feature_type xmlns="c:"
+        about="three_UTR">
+    </feature_type>
+
+    <feature_type xmlns="c:"
+        about="three_clip">
+    </feature_type>
+
+    <b:Class about="tissue">
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <hasValue resource="organ"/>
+            <onProperty resource="part_of"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <hasValue resource="age"/>
+            <onProperty resource="has_state"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <hasValue resource="developmental_stage"/>
+            <onProperty resource="has_state"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <hasValue resource="biological_system"/>
+            <onProperty resource="part_of"/>
+        </b:subClassOf>
+        <b:subClassOf resource="physical_structure"/>
+    </b:Class>
+
+    <rdf:Property about="transcribed_from">
+        <inverseOf resource="transcribed_to"/>
     </rdf:Property>
+
+    <rdf:Property about="transcribed_to">
+    </rdf:Property>
+
+    <b:Class about="transcription_factor_binding">
+        <b:subClassOf resource="binding"/>
+    </b:Class>
+
+    <b:Class about="transfer_rna">
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <hasValue resource="dna"/>
+            <onProperty resource="transcribed_from"/>
+        </b:subClassOf>
+        <b:subClassOf resource="rna"/>
+    </b:Class>
+
+    <b:Class about="transfer_rna_function">
+        <b:subClassOf resource="biological_function"/>
+    </b:Class>
+
+    <b:Class about="transformation">
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <hasValue resource="http://www.daml.org/2000/12/daml+oil#Thing"/>
+            <onProperty resource="upstream"/>
+        </b:subClassOf>
+        <b:subClassOf parseType="Resource">
+            <rdf:type resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <onProperty resource="downstream"/>
+            <hasValue resource="http://www.daml.org/2000/12/daml+oil#Thing"/>
+        </b:subClassOf>
+    </b:Class>
+
+    <feature_type xmlns="c:"
+        about="transit_peptide">
+    </feature_type>
+
+    <rdf:Property about="translated_from">
+        <inverseOf resource="translated_to"/>
+    </rdf:Property>
+
+    <rdf:Property about="translated_to">
+    </rdf:Property>
+
+    <b:Class about="transporter">
+        <b:subClassOf resource="biological_function"/>
+    </b:Class>
+
+    <feature_type xmlns="c:"
+        about="transposon">
+    </feature_type>
+
+    <b:Class about="tumor_suppressor">
+        <b:subClassOf resource="regulation"/>
+    </b:Class>
+
+    <b:Class about="two_component_response_regulator">
+        <b:subClassOf resource="signal_transduction"/>
+    </b:Class>
+
+    <b:Class about="two_component_sensor_molecule">
+        <b:subClassOf resource="signal_transduction"/>
+    </b:Class>
+
+    <rdf:Property about="unique_id">
+    </rdf:Property>
+
+    <feature_type xmlns="c:"
+        about="unsure">
+    </feature_type>
+
+    <rdf:Property about="upstream">
+    </rdf:Property>
+
+    <feature_type xmlns="c:"
+        about="variation">
+    </feature_type>
+
+    <feature_type xmlns="c:"
+        about="inc:exon">
+    </feature_type>
+
+    <feature_type xmlns="c:"
+        about="inc:gene">
+    </feature_type>
+
+    <rdf:Property about="inc:has_name">
+    </rdf:Property>
+
+    <feature_type xmlns="c:"
+        about="inc:intron">
+    </feature_type>
 </rdf:RDF>

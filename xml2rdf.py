@@ -66,11 +66,11 @@ class RDFXMLParser(xmllib.XMLParser):
 
     def handle_xml(self, encoding, standalone):
         self.flush()
-        print 'xml: encoding =',encoding,'standalone =',standalone
+        #self.sink.makeComment('xml parse: encoding ='+`encoding`+'standalone ='+`standalone`)
 
     def handle_doctype(self, tag, pubid, syslit, data):
         self.flush()
-        print 'DOCTYPE:',tag, `data`
+        #self.sink.makeComment('DOCTYPE:' +tag + `data`)
 
     def handle_data(self, data):
         if self._state == STATE_VALUE:
