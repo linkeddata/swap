@@ -50,12 +50,12 @@ import sys
 
 # from llyn import RDFStore  # A store with query functiuonality
 import llyn
-import LX
-import LX.kb
-import LX.engine
-import LX.language
-import LX.engine.llynInterface
-import RDFSink
+#import LX
+#import LX.kb
+#import LX.engine
+#import LX.language
+#import LX.engine.llynInterface
+#import RDFSink
 
 cvsRevision = "$Revision$"
 
@@ -337,7 +337,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 		_store = llyn.RDFStore( _outURI+"#_g", argv=option_with, crypto=option_crypto)
 	    myStore.setStore(_store)
 
-        lxkb = LX.kb.KB()      # set up a parallel store for LX-based operations
+#        lxkb = LX.kb.KB()      # set up a parallel store for LX-based operations
 
 	becauseCwm = None
 	if diag.tracking:
@@ -450,14 +450,14 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
             elif arg[:7] == "-apply=":
 		workingContext = workingContext.canonicalize()
-                need(_store); touch(_store)
+                #  need(_store); touch(_store)
                 filterContext = _store.load(_uri)
 		workingContext.reopen()
                 applyRules(workingContext, filterContext);
 
             elif arg[:7] == "-patch=":
 		workingContext = workingContext.canonicalize()
-                need(_store); touch(_store)
+                #  need(_store); touch(_store)
                 filterContext = _store.load(_uri)
 		workingContext.reopen()
                 patch(workingContext, filterContext);
@@ -468,7 +468,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 		    r = BecauseOfCommandLine(sys.argv[0]) # @@ add user, host, pid, date time? Privacy!
 		else:
 		    r = None
-                need(_store); touch(_store)
+                #  need(_store); touch(_store)
                 filterContext = _store.load(_uri, why=r)
 		_newContext = _store.newFormula()
 		if diag.tracking: proof = FormulaReason(_newContext)
@@ -477,32 +477,32 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 workingContext = _newContext
 
             elif arg == "-why":
-                need(_store); touch(_store)
+                #  need(_store); touch(_store)
 		workingContext.close()
 		workingContext = workingContext.collector.explanation()
 
             elif arg == "-dump":
-                need(_store); touch(_store)
+                #  need(_store); touch(_store)
 		workingContext = workingContext.canonicalize()
 		progress("\nDump of working formula:\n" + workingContext.debugString())
 		
             elif arg == "-purge":
-                need(_store); touch(_store)
+                #  need(_store); touch(_store)
 		workingContext.reopen()
                 _store.purge(workingContext)
 		
             elif arg == "-purge-rules" or arg == "-data":
-                need(_store); touch(_store)
+                #  need(_store); touch(_store)
 		workingContext.reopen()
                 _store.purgeExceptData(workingContext)
 
             elif arg == "-rules":
-                need(_store); touch(_store)
+                #  need(_store); touch(_store)
 		workingContext.reopen()
                 applyRules(workingContext, workingContext)
 
             elif arg[:7] == "-think=":
-                need(_store); touch(_store)
+                #  need(_store); touch(_store)
                 filterContext = _store.load(_uri)
                 if verbosity() > 4: progress( "Input rules to --think from " + _uri)
 		workingContext.reopen()
@@ -513,19 +513,19 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 
             elif arg == "-think":
                 if option_engine=="llyn":
-                    need(_store); touch(_store)
+                    #  need(_store); touch(_store)
                     think(workingContext, mode=option_flags["think"])
                 else:
-                    need(lxkb);
+                    #  need(lxkb);
                     LX.engine.think(engine=option_engine, kb=lxkb)
                     touch(lxkb)
 
             elif arg == "-lxkbdump":  # just for debugging
-                need(lxkb)
+                #  need(lxkb)
                 print lxkb
 
             elif arg == "-lxfdump":   # just for debugging
-                need(lxkb)
+                #  need(lxkb)
                 print lxkb.asFormula()
 
             elif _lhs == "-prove":
@@ -544,15 +544,15 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 print targetkb
 
             elif arg == "-flatten":
-                need(lxkb); touch(lxkb)
+                #  need(lxkb); touch(lxkb)
                 lxkb.reifyAsTrueNonRDF()
                 
             elif arg == "-reify":
-                need(lxkb); touch(lxkb)
+                #  need(lxkb); touch(lxkb)
                 lxkb.reifyAsTrue()
 
             elif arg == "-dereify":
-                need(lxkb); touch(lxkb)
+                #  need(lxkb); touch(lxkb)
                 lxkb.dereifyTrue()
 
             elif arg == "-size":
@@ -560,7 +560,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 		    %(_store.size, workingContext.size()))
 
             elif arg == "-strings":  # suppress output
-                need(_store)
+                #  need(_store)
                 workingContext.outputStrings() 
                 option_outputStyle = "-no"
                 
@@ -583,10 +583,10 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             #       the kb, not just the triples one at a time, and
             #   (2) does it use lxkb or llyn ?
             if hasattr(_outSink, "serializeKB"):
-                need(lxkb)
+                #  need(lxkb)
                 _outSink.serializeKB(lxkb)
             else:
-                need(_store)
+#                #  #  need(_store)
                 if verbosity()>5: progress("Begining output.")
                 if option_outputStyle == "-ugly":
 		    workingContext = workingContext.close()
@@ -603,41 +603,41 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
 # These could well be methods using instance variables instead of
 # functions using globals.
-
-def touch(object):
-    """Indicate that this object has been modified; for use by need()"""
-    object.touched = 1
-
-def need(object):
-    """Update the given repository object from the other one if the
-    other one has been changed since they were last synchronized.
-    If both have been touched, raise an error.
-    """ 
-    if hasattr(_store, "touched"):
-        if hasattr(lxkb, "touched"):
-            raise RuntimeError, "Both _store and lxkb were touched"
-        else:
-            if object is lxkb:
-                #print "# copying _store to lxkb"
-                lxkb.clear()
-                LX.engine.llynInterface.toLX(_store, workingContext, kb=lxkb,
-                                             kbMode=1)
-                del(_store.touched)
-            else:
-                pass   # lxkb is out of date, but not needed yet
-    else:
-        if hasattr(lxkb, "touched"):
-            if object is _store:
-                #print "# copying lxkb to _store"
-		workingContext.reopen()
-                _store.deleteFormula(workingContext)   ##@@@@ very slow
-                LX.engine.llynInterface.addLXKB(_store, workingContext, lxkb)
-                del(lxkb.touched)
-            else:
-                pass  # _store is out of date, but not needed yet
-        else:
-            pass   # neither was touched, nothing to do!
-
+#
+#def touch(object):
+#    """Indicate that this object has been modified; for use by #  #  need()"""
+#    object.touched = 1
+#
+#def #  need(object):
+#    """Update the given repository object from the other one if the
+#    other one has been changed since they were last synchronized.
+#    If both have been touched, raise an error.
+#    """ 
+#    if hasattr(_store, "touched"):
+#        if hasattr(lxkb, "touched"):
+#            raise RuntimeError, "Both _store and lxkb were touched"
+#        else:
+#            if object is lxkb:
+#                #print "# copying _store to lxkb"
+#                lxkb.clear()
+#                LX.engine.llynInterface.toLX(_store, workingContext, kb=lxkb,
+#                                             kbMode=1)
+#                del(_store.touched)
+#            else:
+#                pass   # lxkb is out of date, but not needed yet
+#    else:
+#        if hasattr(lxkb, "touched"):
+#            if object is _store:
+#                #print "# copying lxkb to _store"
+#		workingContext.reopen()
+#                _store.deleteFormula(workingContext)   ##@@@@ very slow
+#                LX.engine.llynInterface.addLXKB(_store, workingContext, lxkb)
+#                del(lxkb.touched)
+#            else:
+#                pass  # _store is out of date, but not needed yet
+#        else:
+#            pass   # neither was touched, nothing to do!
+#
 
 ############################################################ Main program
     

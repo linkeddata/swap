@@ -703,8 +703,12 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
 	has a base, which may be irrelevant. Eg see roadmap-test in retest.sh
 	"""
 	store = self.store
-	if ':' not in object:
-	    progress("Warning: taking log:uri of non-abs: %s" % object)
+	try:
+            if ':' not in object:
+                progress("Warning: taking log:uri of non-abs: %s" % object)
+                return None
+        except TypeError:
+            return None
         return store.intern((SYMBOL, object))
 
 

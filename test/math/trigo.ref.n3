@@ -1,6 +1,7 @@
      @prefix : <#> .
     
-    -0.707     a :TestValue;
+    -0.707     a :NonPiTestValue,
+                :TestValue;
          :ACOS 2.35604349019;
          :ASIN -0.785247163395;
          :ATAN -0.615408517629;
@@ -11,7 +12,8 @@
          :TAN -0.854325697329;
          :TANH -0.608792164283 .
     
-    0.23     a :TestValue;
+    0.23     a :NonPiTestValue,
+                :TestValue;
          :ACOS 1.33871864393;
          :ASIN 0.232077682863;
          :ATAN 0.226068387994;
@@ -22,7 +24,8 @@
          :TAN 0.234143362351;
          :TANH 0.226028352279 .
     
-    1.23     a :TestValue;
+    1.23     a :NonPiTestValue,
+                :TestValue;
          :ATAN 0.888173774378;
          :COS 0.334237727125;
          :COSH 1.85676105699;
@@ -31,17 +34,16 @@
          :TAN 2.81981573427;
          :TANH 0.842579325659 .
     
-    3.14159265359     a :Pi,
-                :TestValue;
+    3.14159265359     a :TestValue;
          :ATAN 1.26262725568;
          :COS -1.0;
          :COSH 11.5919532755;
-         :SIN 1.22460635382e-16;
          :SINH 11.5487393573;
          :TAN -1.22460635382e-16;
          :TANH 0.996272076221 .
     
-    0     a :TestValue;
+    0     a :NonPiTestValue,
+                :TestValue;
          :ACOS 1.57079632679;
          :ASIN 0.0;
          :ATAN 0.0;

@@ -20,8 +20,17 @@ TESTS=regression.n3 list/detailed.tests online.tests \
 all : pyc-check $(CODE) $(TESTS)
 	PYTHONPATH=`/bin/pwd`/.. $P retest.py -c $(TESTS)
 
+
+filelist : pyc-check $(CODE) $(TESTS)
+	export CWM_LIST_FILES=1; PYTHONPATH=`/bin/pwd`/.. $P retest.py --cwm=./file_list.py -c $(TESTS)
+	sort testfilelist > testfilelist3
+	uniq testfilelist3 > testfilelist
+	rm testfilelist3
+
+
 mellow : pyc-check $(CODE) $(TESTS) 
 	PYTHONPATH=`/bin/pwd`/.. $P retest.py --ignoreErrors -c $(TESTS)
+
 
 fast : $(CODE) regression.n3
 	PYTHONPATH=`/bin/pwd`/.. $P retest.py -n -f regression.n3
