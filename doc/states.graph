@@ -1,0 +1,67 @@
+#   State diagram for llyn.py
+
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc.n3#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix rm:    <http://www.w3.org/2001/04/roadmap/vocab#>.   #  @@@@@@@@@@@@@
+@prefix gv: <http://www.w3.org/2001/02pd/gv#>.
+@prefix : <http://www.w3.org/2001/04/roadmap/about#>.
+@prefix w:  <http://www.w3.org/2001/04/roadmap/w3c#>.
+
+<> gv:digraph :theGraph.
+
+:theGraph
+	gv:label "Cwm -- Llyn -- state transisions fo query lines";
+	gv:rankdir "TB";
+	gv:fontname "Helvetica";
+	gv:fontsize "12".
+
+<> is :description of <../llyn.py>.
+
+
+:start gv:label "start"; gv:shape "plaintext"; :to :s99.
+
+:s99 gv:label "99\\nUnexamined"; :description "State unknown - to be [re]calculated";
+    :to :s60, :s55, :s50, :s7, :s5;
+    :onCall :done.   #  @@@ a bug, I think - need to also search.
+
+:s60 gv:label "60\\nNot light\\nnot searched";
+    :to :s5, :s7, :s14, :s55;  :onSearch :done, :s15; :onBind :s99.
+
+:s55 gv:label "55 List\\nNot searched";
+     :to :s5, :s7, :s14; :onSearch :s7; :onBind :s99.
+
+:s50 gv:label "50 Light\\nnot searched\\ncant run";
+    :onSearch :s20; :onBind :s99.
+
+:s20 gv:label "20 Light\\ncant run\\nsearch done";
+    :onBind :s99.
+
+:s15  gv:label "15 Heavy\\nsearch done\\nReady to run";
+    :to :s10; :onCall :done.
+
+:s14  gv:label "14 Heavy\\nsearch done\\nno vars except maybe in forumlae";
+    :onCall :done;  :to :s9, :s10; :onBind :s99.
+
+:s10  gv:label "10 Heavy\\nsearch done\\ntoo many vars";
+    :onBind :s15.
+
+:s9  gv:label  "9 Heavy\\nsearch done\\nwaiting for vars in formulae";
+    :onBind :s15.
+
+:s7 gv:label "7 List\\nsearch done\\nunbound vars";
+    :onBind :s5.
+
+:s5 gv:label "5 List\\nsearch done\\nlist all bound".
+#    :to :done.      # Another terminal state.
+
+:done gv:label "done"; gv:shape "plaintext".
+
+:onSearch a gv:EdgeProperty; gv:label "search"; gv:color "red".
+:onBind   a gv:EdgeProperty; gv:label "bind";   gv:color "blue".
+:onCall    a gv:EdgeProperty; gv:label "run builtin"; gv:color "green".
+:to       a gv:EdgeProperty; gv:color "black".
+
+:theGraph gv:hasNode  :start, :s99, :s60, :s55, :s50, :s20, :s15, :s14, :s10, :s9, :s7, :s5, :done. 
+
+
+# end
