@@ -1000,8 +1000,12 @@ t   "this" and "()" special syntax should be suppresed.
     def __init__(self, write, base=None, genPrefix = None, noLists=0 , quiet=0, flags=""):
 	gp = genPrefix
 	if gp == None:
-	    if base==None: gp = "#_g"
-	    else: gp = uripath.join(base, "#_g")
+	    gp = "#_g"
+	    if base!=None: 
+		try:
+		    gp = uripath.join(base, "#_g")
+		except ValueError:
+		    pass # bogus: base eg
 	RDFSink.RDFSink.__init__(self, gp)
 	self._write = write
 	self._quiet = quiet or "q" in flags

@@ -386,7 +386,10 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             if _equals >=0:
                 _lhs = arg[:_equals]
                 _rhs = arg[_equals+1:]
-                _uri = join(option_baseURI, _rhs)
+		try:
+		    _uri = join(option_baseURI, _rhs)
+		except ValueError:
+		    _uri = _rhs
             if arg == "-test":
                 option_test = 1
                 _gotInput = 1
@@ -550,8 +553,10 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             if _equals >=0:
                 _lhs = arg[:_equals]
                 _rhs = arg[_equals+1:]
+	    try:
                 _uri = join(option_baseURI, _rhs)
-                
+	    except ValueError:
+		_uri =_rhs
             if arg[0] != "-":
                 _inputURI = join(option_baseURI, arg)
                 assert ':' in _inputURI
