@@ -1,5 +1,5 @@
 # Test whether a schema mentions the predicates used in this data
-#  Thi involves searching in files for statements being present or absent.
+#  This involves searching in files for statements being present or absent.
  
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -18,17 +18,29 @@
 #
 
 
-this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G.
+this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
 
 { <t10a.n3> log:resolvesTo :F.
-  :F log:includes { :s :p :o}   } log:implies { :p a rdf:Property } .
+  :F log:includes { :s :p :o}   } log:implies { :p a :UsedProperty } .
 
-{ :p a rdf:Property.
+{ :p a :UsedProperty.
   :p log:resolvesTo :S.
-  :S log:includes { :p s:isDefinedBy :s1 }} log:implies {:p a :consistentProperty}.
+  :S log:includes { :p s:isDefinedBy :s1 }} log:implies {:p a :ConsistentProperty}.
 
-{ :p a rdf:Property.
-#  :p log:resolvesTo :S.
- } log:implies {:p a :schemaFormula }.
+{ :p a :UsedProperty.
+  :p log:resolvesTo :H.
+ } log:implies {:H a :schemaFormula }.
 
+{ foo:is log:resolvesTo :H.
+#   :h log:includes { foo:is a rdf:Property }
+} log:implies { :H a :success }.
+
+{ <foo.n3#is> log:resolvesTo :H.
+  :H log:includes { :p s:isDefinedBy :x }} log:implies { :p a :defined_in_schema.
+    :H :is :whatFooIsResolvedTo }.
+
+{ :p a :defined_in_schema.  :p a :UsedProperty } log:implies { :p a :UsedAndDefined }.
+
+
+ 
 #ends
