@@ -25,7 +25,6 @@ from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, List_NS
 from RDFSink import RDF_NS_URI
 from RDFSink import RDF_type_URI
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 
 cvsRevision = "$Revision$"
 

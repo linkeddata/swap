@@ -34,12 +34,6 @@ urlparse.uses_relative.append("md5") #@@kludge/patch
 
 import notation3    # N3 parsers and generators, and RDF generator
 
-#from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE
-
-# from llyn import RDFStore  # A store with query functiuonality
-
-
-
               
             
         
