@@ -169,7 +169,7 @@ and you can build your own for your own applications very simply.</p>
 save space, I will just assume the prefixes</p>
 <pre>@prefix rdf:  &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
 @prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
-@prefix ont:  &lt;http://www.daml.org/2000/10/daml-ont#&gt; .</pre>
+@prefix ont:  &lt;http://www.daml.org/2001/03/daml-ont#&gt; .</pre>
 
 <p>These are the RDF, RDF schema, and experimental DAML ontology namespaces,
 respectively.  They give us the core terms which we can bootstrap ourselves
@@ -333,9 +333,9 @@ rules.</p>
 just a statement of the form that some engine is programmed to process. For
 the simplest sort of rule, all you need is one property:
 <code>log:implies</code>. (One engine which is progrmmed to process this is <a
-href="Overview.html">cwm</a>). The namespace for the logical and rather
-experimental things which we introduce now are as in</p>
-<pre>@prefix log: &lt;http://www.w3.org/2000/10/swap/log.n3#&gt; .</pre>
+href="Overview.html">cwm</a>. Another is Euler.). The namespace for the
+logical and rather experimental things which we introduce now are as in</p>
+<pre>@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .</pre>
 
 <p>A simple rule, then, is,</p>
 
@@ -354,26 +354,25 @@ can be applied to any identifiers. We nee a way of saying this.  A given
 context is true even if the given identifier is replaced -- consistently
 throughout hte context -- with any other identifier. This is represented by
 (guess what!) a property of the context.</p>
-<pre>&lt;&gt; log:forAll :x, :y.
+<pre>this log:forAll :x, :y.
 { :x :parent :y .} log:implies { y: :child .} .</pre>
 
-<p>Read this something like: "This document is true for any values of x and y.
-If x is the parent of y then y is the child of x."</p>
+<p>Read this something like: "This is true for any values of x and y. If x is
+the parent of y then y is the child of x."  The this refers to the formula
+whose {braces} immediately enclosing it - or the forumula expressed by the
+document if at the outer level.</p>
 
 <p>In fact you can use an ontology property to declare that parent and child
 are inverse.</p>
 <pre>:parent ont:inverse :child .</pre>
 
 <p>A machine can then infer the same thing given a generic rule</p>
-<pre>&lt;&gt; log:forAll :p, :q .
+<pre>this log:forAll :p, :q .
 
 {  :p ont:inverse :q . } log:implies
 
-{
-  {
+{ this log:forAll :x, :y.
     { :x :p :y. } log:implies { :y :q :x. }
-  } a log:Truth;
-				log:forAll :x, :y.
 } .</pre>
 
 <p>The outer rule is that if p is the inverse of q, then the inside rule is a
