@@ -154,6 +154,10 @@ class Namespace(object):
         """
         return _checkStore().intern((SYMBOL, self._name+lname))
 
+    def sym(self, lname):
+	"""For getting a symbol for an expression, rather than a constant.
+	For, and from, pim/toIcal.py"""
+	return  _checkStore().intern((SYMBOL, self._name + lname))
 
 ########################################  Storage URI Handling
 #

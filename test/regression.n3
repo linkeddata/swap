@@ -219,6 +219,11 @@
     test:description   "Iterative ops on lists";
     test:arguments     """list/gk3.n3 -think""".
 
+:t1032a a test:CwmTest;
+    test:shortFileName "li-double.n3";
+    test:description   "Query with list with the same var in >once";
+    test:arguments     """list/double.n3 -think""".
+
 
 #        Test builtins:
 
