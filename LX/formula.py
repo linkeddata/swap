@@ -81,6 +81,16 @@ class Conditional(Formula):
     def __new__(self, left, right):
         return Formula([LX.IMPLIES, left, right])
 
+class Biconditional(Formula):
+
+    def __new__(self, left, right):
+        return Formula([LX.MEANS, left, right])
+
+class Negation(Formula):
+
+    def __new__(self, f):
+        return Formula([LX.NEGATION, f])
+    
 class UniversalQuantification(Formula):
 
     def __new__(self, var, child):
@@ -93,7 +103,11 @@ class ExistentialQuantification(Formula):
 
 
 # $Log$
-# Revision 1.1  2002-08-29 11:00:46  sandro
+# Revision 1.2  2002-10-02 20:40:56  sandro
+# make --flatten recognize log:means as the biconditional and
+# log:Falsehood for a formula as its negation.
+#
+# Revision 1.1  2002/08/29 11:00:46  sandro
 # initial version, mostly written or heavily rewritten over the past
 # week (not thoroughly tested)
 #

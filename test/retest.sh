@@ -11,6 +11,8 @@ mkdir -p diffs
 tests=0
 passes=0
 
+REFWD=file:/devel/WWW/2000/10/swap/test
+WD=file:`/bin/pwd`
 function cwm_test () {
   case=$1; desc=$2
   shift; shift;
@@ -20,7 +22,7 @@ function cwm_test () {
   echo Test $case: $desc
   echo "   "    cwm $args
 
-  if !(python ../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' > temp/$case);
+  if !(python ../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' -e "s;$WD;$REFWD;g" > temp/$case);
   then echo CRASH $case;
   elif ! diff -Bbwu ref/$case temp/$case >diffs/$case;
   then echo DIFF FAILS: less diffs/$case;
@@ -190,6 +192,9 @@ cwm_test flatten-terse-rules12.n3 " " rules12.n3 --flatten --apply=flatten-terse
 
 cwm_test flatten-terse-rules13.n3 " " rules13.n3 --flatten --apply=flatten-terser.n3 --purge
 
+cwm_test flatten-Falsehood.n3 " " flatten-Falsehood.n3 --flatten
+
+cwm_test flatten-means.n3 " " flatten-means.n3 --flatten
 
 # echo  "Test applications"
 
@@ -198,7 +203,11 @@ echo "Loopback parser tests:"
 ./n3-xml-test.sh `cat tests-work.txt`
 
 # $Log$
-# Revision 1.41  2002-08-29 21:45:15  sandro
+# Revision 1.42  2002-10-02 20:40:56  sandro
+# make --flatten recognize log:means as the biconditional and
+# log:Falsehood for a formula as its negation.
+#
+# Revision 1.41  2002/08/29 21:45:15  sandro
 # added first test suite for --flatten
 #
 # Revision 1.40  2002/08/16 22:30:49  timbl
