@@ -1,9 +1,5 @@
 #!/usr/bin/perl
 #
-# OBSOLETE in favor of
-# http://www.w3.org/2002/12/cal/icalrdf.pl
-# as of 2002/12/20 06:52:50
-#
 # usage: perl ical2rdf.pl something.ics >something.rdf
 #
 # copyright (c) W3C (MIT, INRIA, Keio)
@@ -36,6 +32,9 @@
 # see change log at end of file.
 
 use strict;
+
+warn("OBSOLETE in favor of http://www.w3.org/2002/12/cal/icalrdf.pl as of 2002/12/20 06:52:50");
+
 
 # from
 # search.cpan.org: Getopt::Long - Extended processing of command line options
@@ -355,7 +354,10 @@ sub testCamelCase{
 # @@TODO: params
 
 # $Log$
-# Revision 1.9  2005-02-11 18:32:18  connolly
+# Revision 1.10  2005-02-11 18:33:28  connolly
+# obsolete warning at runtime as well as in the code
+#
+# Revision 1.9  2005/02/11 18:32:18  connolly
 # forward pointer to newer work
 #
 # Revision 1.8  2004/10/28 17:42:00  timbl
