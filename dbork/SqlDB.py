@@ -102,9 +102,10 @@ class LiteralQueryPiece(ConstantQueryPiece):
     
 class VariableQueryPiece(QueryPiece):
     ""
-    def __init__(self, symbol, index):
+    def __init__(self, symbol, index, existential):
         QueryPiece.__init__(self, symbol)
         self.varIndex = index
+        self.existential = existential
     def symbol(self):
         return self.datum
     def getVarIndex(self):
@@ -140,7 +141,45 @@ class ResultSet:
         self.varIndex = {}
         self.indexVar = []
         self.results = []
-    def buildQuerySets(self, sentences, variables, existentials):
+    def myIntern(self, q, index, variables, existentials):
+        try:
+            existentials.index(q)
+            symbol = q.fragid
+            try:
+                index = self.varIndex[symbol]
+            except KeyError, e:
+                index = self.varIndex[symbol] = len(self.indexVar)
+                self.indexVar.append(symbol)
+            return (VariableQueryPiece(symbol, index, 1))
+        except ValueError, e:
+            try:
+                variables.index(q)
+                symbol = q.fragid
+                try:
+                    index = self.varIndex[symbol]
+                except KeyError, e:
+                    index = self.varIndex[symbol] = len(self.indexVar)
+                    self.indexVar.append(symbol)
+                return (VariableQueryPiece(symbol, index, 0))
+            except ValueError, e:
+                try:
+                    return (LiteralQueryPiece(q.string))
+                except AttributeError, e:
+                    try:
+                        return (UriQueryPiece(q.uriref()))
+                    except Exception, e:
+                        raise RuntimeError, "what's a \""+q+"\"?"
+        
+    def buildQuerySetsFromCwm(self, sentences, variables, existentials):
+        set = []
+        for sentence in sentences:
+            sentStruc = []
+            set.append(sentStruc)
+            sentStruc.append(self.myIntern(sentence.quad[1], 0, variables, existentials))
+            sentStruc.append(self.myIntern(sentence.quad[2], 1, variables, existentials))
+            sentStruc.append(self.myIntern(sentence.quad[3], 2, variables, existentials))
+        return SetQueryPiece(set)
+    def buildQuerySetsFromArray(self, sentences):
         # /me thinks that one may group by ^existentials
         set = []
         for sentence in sentences:
@@ -155,7 +194,7 @@ class ResultSet:
                     except KeyError, e:
                         index = self.varIndex[symbol] = len(self.indexVar)
                         self.indexVar.append(symbol)
-                    sentStruc.append(VariableQueryPiece(symbol, index))
+                    sentStruc.append(VariableQueryPiece(symbol, index, 0))
                 else:
                     m = RE_URI.match(word)
                     if (m):
@@ -202,7 +241,7 @@ class SqlDBAlgae(RdfDBAlgae):
         self.baseUri = baseURI
         self.structure = tableDescModule._AllTables
         self.predicateRE = re.compile(baseURI+
-                                      "(?P<table>\w+)\.(?P<field>[\w\d\%\=\&]+)$")
+                                      "(?P<table>\w+)\#(?P<field>[\w\d\%\=\&]+)$")
 
     def _processRow(self, row, statements, implQuerySets, resultSet, messages, flags):
         #for iC in range(len(implQuerySets)):
@@ -223,7 +262,7 @@ class SqlDBAlgae(RdfDBAlgae):
 
         query = self._buildQuery(implQuerySets, asz, wheres, selectPunct, selects, labels)
         messages.append("query SQLselect \"\"\""+query+"\"\"\" .")
-        connection = MySQLdb.connect("localhost", "SqlDB", "SqlDB", "w3c")
+        connection = MySQLdb.connect("localhost", "root", "", "w3c")
         cursor = connection.cursor()
         cursor.execute(query)
 
@@ -420,6 +459,8 @@ class SqlDBAlgae(RdfDBAlgae):
         #	    push (@$segments, CORE::join (',', @$groupBy));
         #	}
         #    }
+
+        # /me thinks that one may group by ^existentials
         return string.join(segments, '')
 
     def _buildResults(self, cursor, selects, implQuerySets, row, statements):
@@ -516,19 +557,17 @@ class SqlDBAlgae(RdfDBAlgae):
         return a
 
 if __name__ == '__main__':
-    s = [["<http://localhost/SqlDB#uris.uri>", "?urisRow", "<http://www.w3.org/Member/Overview.html>"], 
-         ["<http://localhost/SqlDB#uris.acl>", "?urisRow", "?aacl"], 
-         ["<http://localhost/SqlDB#acls.acl>", "?acl", "?aacl"], 
-         ["<http://localhost/SqlDB#acls.access>", "?acl", "?access"], 
-         ["<http://localhost/SqlDB#ids.value>", "?u1", "\"eric\""], 
-         ["<http://localhost/SqlDB#idInclusions.id>", "?g1", "?u1"], 
-         ["<http://localhost/SqlDB#idInclusions.groupId>", "?g1", "?accessor"], 
-         ["<http://localhost/SqlDB#acls.id>", "?acl", "?accessor"]]
-    variables = ["?urisRow", "?aacl", "?acl", "?access", "?u1", "?g1", "?accessor"]
-    existentials = []
+    s = [["<http://localhost/SqlDB/uris#uri>", "?urisRow", "<http://www.w3.org/Member/Overview.html>"], 
+         ["<http://localhost/SqlDB/uris#acl>", "?urisRow", "?aacl"], 
+         ["<http://localhost/SqlDB/acls#acl>", "?acl", "?aacl"], 
+         ["<http://localhost/SqlDB/acls#access>", "?acl", "?access"], 
+         ["<http://localhost/SqlDB/ids#value>", "?u1", "\"eric\""], 
+         ["<http://localhost/SqlDB/idInclusions#id>", "?g1", "?u1"], 
+         ["<http://localhost/SqlDB/idInclusions#groupId>", "?g1", "?accessor"], 
+         ["<http://localhost/SqlDB/acls#id>", "?acl", "?accessor"]]
     rs = ResultSet()
-    qp = rs.buildQuerySets(s, variables, existentials)
-    a = SqlDBAlgae("http://localhost/SqlDB#", "AclSqlObjects")
+    qp = rs.buildQuerySetsFromArray(s)
+    a = SqlDBAlgae("http://localhost/SqlDB/", "AclSqlObjects")
     messages = []
     nextResults, nextStatements = a._processRow([], [], qp, rs, messages, {})
     rs.results = nextResults
@@ -541,4 +580,25 @@ if __name__ == '__main__':
         for statement in solutions:
             print ShowStatement(statement)
         print "} ."
+
+blah = """
+testing with `python2.2 ./cwm.py test/dbork/aclQuery.n3` -think
+
+aclQuery -- :acl acls:access :access .
+sentences[1].quad -- (attrib,      s,   p,      o)
+                     (0_work, access, acl, access)
+p.uriref() -- 'file:/home/eric/WWW/2000/10/swap/test/dbork/aclQuery.n3#acl'
+s.uriref() -- 'http://localhost/SqlDB/acls#access'
+o.uriref() -- 'file:/home/eric/WWW/2000/10/swap/test/dbork/aclQuery.n3#access'
+existentials[1] == sentences[1].quad[2] -- 1
+
+n
+s
+b 576
+c
+s
+b 2352
+c
+s
+"""
 
