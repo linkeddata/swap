@@ -69,6 +69,10 @@
     test:description   "N3 string quoting";
     test:arguments     """-n3 strquot.n3""".
 
+:t1009a a test:CwmTest;
+    test:shortFileName "hiragana.n3";
+    test:description   "N3 string, qname and IRI with utf-8 non-ascii characters";
+    test:arguments     "i18n/hiragana.n3".
 
 :t1010 a test:CwmTest;
     test:shortFileName "path1.n3";

@@ -1,0 +1,13 @@
+     @prefix : <#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+      [      :script "\u3072\u3089\u304C\u306A";
+             s:label "Martin J D\u00FCrst" ].
+    
+      [      :related :%E3%81%B2%E3%82%89%E3%81%8C%E3%81%AA;
+             s:label "A test with a non-ascii qname" ].
+    
+      [      :related :D%C3%BCrst;
+             s:label "A test with a non-ascii fragid" ].
+    

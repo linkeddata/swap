@@ -5,11 +5,11 @@
 
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix rdft: <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#>.
-@prefix : <#>.
+@prefix : <http://www.w3.org/2000/10/swap/test/triage#> .
 
-#{ ?x a rdft:PositiveParserTest; rdft:outputDocument ?d.
-#  ?d.log:semantics log:includes { [] rdf:predicate [] }.
-#} => { ?x a :ReificationTest, :BoringTest }.
+{ ?x a rdft:PositiveParserTest; rdft:outputDocument ?d.
+  ?d.log:semantics log:includes { [] rdf:predicate [] }.
+} => { ?x a :ReificationTest, :BoringTest }.
 
 { ?x a rdft:PositiveParserTest; rdft:inputDocument ?i.
   ?i.log:content string:contains "parseType=\"Literal\"".

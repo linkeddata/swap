@@ -11,7 +11,7 @@ nor does pythonwin on TimBL's laptop).
 
 """ .
     
-    :martin     :surname "D\u00fcrst" .
+    :martin     :surname "D\u00FCrst" .
     
     :x     :prop "simple string" .
     

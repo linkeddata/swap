@@ -31,11 +31,12 @@ import urllib
 # From PYTHONPATH equivalent to http://www.w3.org/2000/10/swap
 
 import llyn
-from thing import load, Namespace
+from thing import load, loadMany, Namespace
 
 rdf = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 test = Namespace("http://www.w3.org/2000/10/swap/test.n3#")
 rdft = Namespace("http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#")
+triage = Namespace("http://www.w3.org/2000/10/swap/test/triage#")
 
 import getopt
 import sys
@@ -133,31 +134,42 @@ def main():
     
     #def basicTest(case, desc, args)
 
+    kb = loadMany(testFiles)
     testData = []
     RDFTestData  = []
-    for fn in testFiles:
-	print "Loading tests from", fn
-	kb=load(fn)
+#    for fn in testFiles:
+#	print "Loading tests from", fn
+#	kb=load(fn)
     
-	for t in kb.each(pred=rdf.type, obj=test.CwmTest):
-	    case = str(kb.the(t, test.shortFileName))
-	    description = str(kb.the(t, test.description))
-	    arguments = str(kb.the(t, test.arguments))
-	    environment = kb.the(t, test.environment)
-	    if environment == None: env=""
-	    else: env = str(environment) + " "
-	    testData.append((t.uriref(), case, description, env, arguments))
+    for t in kb.each(pred=rdf.type, obj=test.CwmTest):
+	case = str(kb.the(t, test.shortFileName))
+	description = str(kb.the(t, test.description))
+	arguments = str(kb.the(t, test.arguments))
+	environment = kb.the(t, test.environment)
+	if environment == None: env=""
+	else: env = str(environment) + " "
+	testData.append((t.uriref(), case, description, env, arguments))
 
-	for t in kb.each(pred=rdf.type, obj=rdft.PositiveParserTest):
-	    case = "rdft_" + t.fragid + ".nt" # Hack - temp file name
-	    description = str(kb.the(t, rdft.description))
+    for t in kb.each(pred=rdf.type, obj=rdft.PositiveParserTest):
+	case = "rdft_" + t.fragid + ".nt" # Hack - temp file name
+	description = str(kb.the(t, rdft.description))
 #	    if description == None: description = case + " (no description)"
-	    inputDocument = kb.the(t, rdft.inputDocument).uriref()
-	    outputDocument = kb.the(t, rdft.outputDocument).uriref()
-	    status = kb.the(t, rdft.status).string
-	    if status != "APPROVED":
-		if verbose: print "@@@ Not approved: "+ inputDocument
-		continue
+	inputDocument = kb.the(t, rdft.inputDocument).uriref()
+	outputDocument = kb.the(t, rdft.outputDocument).uriref()
+	status = kb.the(t, rdft.status).string
+	good = 1
+	if status != "APPROVED":
+	    if verbose: print "\tNot approved: "+ inputDocument[-40:]
+	    good = 0
+	categories = kb.each(t, rdf.type)
+	for cat in categories:
+	    if cat is triage.ReificationTest:
+		if verbose: print "\tNot supported (reification): "+ inputDocument[-40:]
+		good = 0
+	    if cat is triage.ParseTypeLiteralTest:
+		if verbose: print "\tNot supported (Parse type literal): "+ inputDocument[-40:]
+		good = 0
+	if good:
 	    RDFTestData.append((t.uriref(), case, description,  inputDocument, outputDocument))
 
 
@@ -206,14 +218,14 @@ def main():
 	assert case and description and inputDocument and outputDocument
 	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
 			WD, REFWD)
-	
+	cant = "python ../cant.py"
 	if 1:
 	    execute("""python ../cwm.py --quiet --rdf=T %s --ntriples | %s > ,temp/%s""" %
-		(inputDocument, cleanup , case))
+		(inputDocument, cant , case))
 	    ref = ",temp/%s.ref" % case
-	    execute("""cat %s | %s > %s""" % (localize(outputDocument), cleanup, ref))
+	    execute("""cat %s | %s > %s""" % (localize(outputDocument), cant, ref))
 	    if diff(case, ref):
-		problem("######### from positive parser test %s: cwm %s" %( case,  inputDocument))
+		problem("  from positive parser test %s running\n\tcwm %s\n" %( case,  inputDocument))
 
 	passes = passes + 1
 
