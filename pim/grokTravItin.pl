@@ -19,6 +19,7 @@ my($Verbose) = 1;
 $| = 1;
 
 my($rdfNS) = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
+my($rdfsNS) = "http://www.w3.org/2000/01/rdf-schema#";
 my($dcNS) = "http://purl.org/dc/elements/1.1/";
 my($kNS) = "http://opencyc.sourceforge.net/daml/cyc.daml#";
 my($dtNS) = "http://www.w3.org/2001/XMLSchema#";
@@ -53,184 +54,227 @@ my(%monthNameToNum);
 		   'DEC', 12
 		  );
 
+# from
+# search.cpan.org: Getopt::Long - Extended processing of command line options
+# http://search.cpan.org/author/JV/Getopt-Long/lib/Getopt/Long.pm#Options_with_values
+use Getopt::Long;
+my($aboutMeDoc, $nameInDoc);
+GetOptions ('aboutMe=s' => \$aboutMeDoc,
+	    'localName=s' => \$nameInDoc);
 
-&grok();
+
+&grok($aboutMeDoc, $nameInDoc);
 
 sub grok{
+  my($aboutMeDoc, $nameInDoc) = @_;
+
   my($state) = 'start';
   my($agency, $traveller);
   my($calday);
   my($event, $trip, $firstEvent);
   $firstEvent = 0;
 
-  $trip = genSym("trip");
+  $trip = introduce("thisTrip");
   makeStatement("", $rdfNS . "type", $kNS . "ItineraryDocument");
   makeStatement("", $kNS . "containsInformationAbout-Focally", $trip);
 
-  while(<>){
-
-  REDO:
-    if($state eq 'start'){
-
-
-      # skipping these:
-      #e.g.        617 451-4200 TEL
-      #e.g. >  CUSTOMER NBR: 6160150001     TBZTQY         PAGE: 01
-      #e.g. >  REF: 6264400
-
-
-      #e.g. >  SALES PERSON: 53     ITINERARY            DATE: 15 JUN
-      #     >01
-      if(/ITINERARY\s+DATE: (\d\d) (\w+)/){
-	my($dd, $mon) = ($1, $2);
-	my($line);
-	$line = <>;
-	if($line =~ /(\d\d)/){
-	  my($yy) = $1;
-
-	  makeStatement("", $rdfNS . "type", $kNS . "ItineraryDocument");
-	  makeStatement("", $dcNS . "date", '', &fmtDate($dd, $mon, $yy));
-	}
-	else{
-	  warn "cannot find year.";
-	}
-      }
-
-      #e.g. >  FOR: CONNOLLY/DANIEL
-      elsif(m,FOR:\s+(\w+)/(\w+),){
-	my($fam, $given) = ($1, $2, $3);
-
-	$traveller = genSym("traveller$given");
-
-	makeStatement($trip, $kNS . "passenger", $traveller);
-	makeStatement($traveller, $kNS . "nameOfAgent", '', "$fam, $given");
-      }
-
-
-      #e.g. >  11 JUL 01  -  WEDNESDAY
-      elsif(/(\d\d) (\w+) (\d\d)\s+-\s+([A-Z]+)/){
-	my($dd, $mon, $yy, $dow) = ($1, $2, $3, $4);
-	print STDERR "ala 11 JUL 01  -  WEDNESDAY: $dd, $mon, $yy, $dow\n";
-	$calday = theDay($dd, $mon, $yy, $dow);
-
-	$state = 'inDay';
-      }
-
-      #e.g. >  SUNDAY, 13 JANUARY
-      elsif(/([SMTWF][A-Z]+), (\d\d) ([A-Z]+)/){
-	my($dow, $dd, $mon)  = ($1, $2, $3);
-
-	print STDERR "@@ kludged date to 2002. $dow $dd $mon\n";
-	$calday = theDay($dd, $mon, 02, $dow);
-
-	$state = 'inDay';
-      }
-
-      else{
-	warn "state $state. skipping: $_" if $Verbose;
-      }
-    }
-
-    elsif($state eq 'inDay'){
-
-      #e.g. >     AIR   AMERICAN AIRLINES    FLT:1364   ECONOMY
-      if(/\bAIR\b/ && /FLT:(\d+)\s+(\w+)/){
-	my($flightNum, $flightClassName) = ($1, $2);
-	s/^>\s*//;
-	s/FLT:.*//;
-	s/\s*AIR\s*//;
-	s/\s+$//;
-	my($carrierName) = $_;
-
-	$event = genSym("flt$flightNum");
-	makeStatement($trip, $kNS . "subEvents", $event);
-	makeStatement($trip, $kNS . "firstSubEvents", $event) unless $firstEvent++;
-	makeStatement($event, $kNS . "startingDate", $calday);
-	makeStatement($event, $tNS . "flightNumber", '', $flightNum);
-
-	my($carrier);
-
-	$carrier = the($kNS . 'nameOfAgent', $carrierName, $carrierName);
-	makeStatement($carrier, $rdfNS . 'type', $kNS . 'AirlineCompany');
-	makeStatement($event, $tNS . "carrier", $carrier);
-
-	my($fltcls);
-	$fltcls = the($rdfNS . 'value', $flightClassName, $flightClassName);
-	makeStatement($event, $rdfNS . "type", $fltcls);
-	$state = 'inEvent';
-      }
-      # sometimes we switch days in flight...
-      elsif(/\bAR /){
-	$state = 'inEvent';
-	goto REDO;
-      }
-      else{
-	warn "inDay $calday; unknown event type? $_" if $Verbose;
-      }
-    }
-    elsif($state eq 'inEvent'){
-
-      #e.g. >    LV KANSAS CITY INTL          144P           EQP: MD-80
-      while(s/(LV|AR) ((\S|( [a-zA-Z]))+) \s*(\w\w\w)?\s*(\d\d?)(\d\d)(A|P|N)//){
-	my($dir, $airportName, $st, $hh, $mm, $ap) = ($1, $2, $5, $6, $7, $8);
-	$hh += 12 if $ap eq 'P' && $hh < 12;
-	$hh = 0 if ($ap eq 'A' && $hh == 12);
-	my($place, $ti, $code);
-
-	if($code = $AirportCodes{$airportName}){
-	  $place = theAirport($code, $airportName);
-	}else{
-	  die "unknown airport: ", $airportName;
-	}
-
-	$ti = sprintf("%02d:%02d", $hh, $mm);
-	if($dir eq 'LV'){
-	  makeStatement($event, $kNS . 'fromLocation', $place);
-	  makeStatement($event, $tNS . 'departureTime', '', $ti);
-	}else{
-	  makeStatement($event, $kNS . 'toLocation', $place);
-	  makeStatement($event, $tNS . 'arrivalTime', '', $ti);
-	  makeStatement($event, $kNS . "endingDate", $calday);
-	}
-
-      }
-
-      #e.g. >       CONNOLLY/DANIEL   SEAT- 9B   AA-XDW5282
-      if(/SEAT- *(\w+)/){
-	my($seatName) = ($1);
-	my($sa);
-	$sa = genSym("seat");
-	makeStatement($event, "@@#seatNum", '', $seatName);
-      }
-
-      elsif(/\bAIR\b/){
-	$state = 'inDay';
-	goto REDO;
-      }
-      elsif(/(\d\d) (\w+) (\d\d)\s+-\s+(\w+)/ # 16 JAN 02 - WEDNESDAY
-	   || /[SMTWF]\w+, \d\d? \w+/ # SUNDAY, 13 JANUARY
-	   ){
-	$state = 'start';
-	goto REDO;
-      }
-      else{
-	warn "state: $state not matched: $_"  if $Verbose;
-      }
-    }
+  if($aboutMeDoc){
+    makeStatement("", $rdfsNS . "seeAlso", $aboutMeDoc);
     
-    else{
-      die "unknown state";
+    if($nameInDoc){
+      $traveller = "$aboutMeDoc#$nameInDoc";
     }
   }
+  $traveller = introduce("thisPassenger") unless $traveller;
 
+  makeStatement($trip, $kNS . "passengers", $traveller);
+
+  while(<>){
+
+    REDO:
+      if($state eq 'start'){
+	  
+	  
+	  # skipping these:
+	  #e.g.        617 451-4200 TEL
+	  #e.g. >  CUSTOMER NBR: 6160150001     TBZTQY         PAGE: 01
+	  #e.g. >  REF: 6264400
+	  
+	  
+	  #e.g. >  SALES PERSON: 53     ITINERARY            DATE: 15 JUN
+	  #     >01
+	  if(/ITINERARY\s+DATE: (\d\d) (\w+)/){
+	      my($dd, $mon) = ($1, $2);
+	      my($line);
+	      $line = <>;
+	      if($line =~ /(\d\d)/){
+		  my($yy) = $1;
+		  
+		  makeStatement("", $rdfNS . "type", $kNS . "ItineraryDocument");
+		  makeStatement("", $dcNS . "date", '', &fmtDate($dd, $mon, $yy));
+	      }
+	      else{
+		  warn "cannot find year.";
+	      }
+	  }
+	  
+	  #e.g. >  FOR: CONNOLLY/DANIEL
+	  elsif(m,FOR:\s+(\w+)/(\w+),){
+	      my($fam, $given) = ($1, $2, $3);
+	      
+	      makeStatement($traveller, $kNS . "nameOfAgent", '', "$fam, $given");
+	  }
+	  
+	  
+	  #e.g. >  11 JUL 01  -  WEDNESDAY
+	  elsif(/(\d\d?) (\w+) (\d\d)?(\d\d)\s*-\s*([A-Za-z]+)/){
+	      my($dd, $mon, $cc, $yy, $dow) = ($1, $2, $3, $4, $5);
+	      print STDERR "ala 11 JUL 01  -  WEDNESDAY: $dd, $mon, $yy, $dow\n";
+	      $calday = theDay($dd, $mon, $yy, $dow);
+	      
+	      $state = 'inDay';
+	  }
+	  
+	  #e.g. >  SUNDAY, 13 JANUARY
+	  elsif(/([SMTWF][A-Z]+), (\d\d) ([A-Z]+)/){
+	      my($dow, $dd, $mon)  = ($1, $2, $3);
+	      
+	      print STDERR "@@ kludged date to 2002. $dow $dd $mon\n";
+	      $calday = theDay($dd, $mon, 02, $dow);
+	      
+	      $state = 'inDay';
+	  }
+	  
+	  else{
+	      warn "state $state. skipping: $_" if $Verbose;
+	  }
+      }
+      
+      elsif($state eq 'inDay'){
+	  
+	  #e.g. >     AIR   AMERICAN AIRLINES    FLT:1364   ECONOMY
+	  #e.g. American Airlines FLT:592
+	  #e.g. American Airlines FLT:3093 Operated by American Eagle
+	  if(/FLT:\s*(\d+)\s+([A-Z][A-Z]+)?/){
+	      my($flightNum, $flightClassName) = ($1, $2);
+	      s/^>\s*//;
+	      s/FLT:.*//;
+	      s/\s*AIR\s*//;
+	      s/\s+$//;
+	      my($carrierName) = $_;
+	      
+	      $event = genSym("flt$flightNum");
+	      makeStatement($trip, $kNS . "subEvents", $event);
+	      makeStatement($trip, $kNS . "firstSubEvents", $event) unless $firstEvent++;
+	      makeStatement($event, $kNS . "startingDate", $calday);
+	      makeStatement($event, $tNS . "flightNumber", '', $flightNum);
+	      
+	      my($carrier);
+	      
+	      $carrier = the($kNS . 'nameOfAgent', $carrierName, $carrierName);
+	      makeStatement($carrier, $rdfNS . 'type', $kNS . 'AirlineCompany');
+	      makeStatement($event, $tNS . "carrier", $carrier);
+	      
+	      if($flightClassName){
+		  my($fltcls);
+		  $fltcls = the($rdfNS . 'value', $flightClassName, $flightClassName);
+		  makeStatement($event, $rdfNS . "type", $fltcls);
+	      }
+	      $state = 'inEvent';
+	  }
+	  # sometimes we switch days in flight...
+	  elsif(/\bAR /){
+	      $state = 'inEvent';
+	      goto REDO;
+	  }
+	  else{
+	      warn "inDay $calday; unknown event type? $_" if $Verbose;
+	  }
+      }
+      elsif($state eq 'inEvent'){
+	  
+	  # LV MCI at 1:20PM Arrive BOS at 5:20PM Non-Stop
+	  if(s/^LV (\w\w\w) at (\d\d?):(\d\d)(A|P|N)\S* Arrive (\w\w\w) at (\d\d?):(\d\d)(A|P|N)//){
+	      my($airLv, $hh, $mm, $ap, $airAr, $hh2, $mm2, $ap2) =
+		  ($1, $2, $3, $4, $5, $6, $7, $8);
+	      $hh += 12 if $ap eq 'P' && $hh < 12;
+	      $hh = 0 if ($ap eq 'A' && $hh == 12);
+	      $hh2 += 12 if $ap2 eq 'P' && $hh2 < 12;
+	      $hh2 = 0 if ($ap2 eq 'A' && $hh2 == 12);
+	      my($place, $ti);
+	      
+	      $place = theAirport($airLv);
+	      
+	      $ti = sprintf("%02d:%02d", $hh, $mm);
+	      makeStatement($event, $kNS . 'fromLocation', $place);
+	      makeStatement($event, $tNS . 'departureTime', '', $ti);
+	      makeStatement($event, $kNS . "startingDate", $calday);
+	      
+	      $place = theAirport($airAr);
+	      $ti = sprintf("%02d:%02d", $hh2, $mm2);
+	      makeStatement($event, $kNS . 'toLocation', $place);
+	      makeStatement($event, $tNS . 'arrivalTime', '', $ti);
+	      makeStatement($event, $kNS . "endingDate", $calday);
+	  }
+	  #e.g. >       CONNOLLY/DANIEL   SEAT- 9B   AA-XDW5282
+	  elsif(/SEAT- *(\w+)/){
+	      my($seatName) = ($1);
+	      my($sa);
+	      $sa = genSym("seat");
+	      makeStatement($event, "@@#seatNum", '', $seatName);
+	  }
+	  
+	  elsif(/\bFLT:/){
+	      $state = 'inDay';
+	      goto REDO;
+	  }
+	  elsif(/(\d\d?) (\w+) (\d\d)?(\d\d)\s*-\s*(\w+)/ # 16 JAN 02 - WEDNESDAY
+		# 7 March 2003-Friday
+		|| /[SMTWF]\w+, \d\d? \w+/ # SUNDAY, 13 JANUARY
+		){
+	      $state = 'start';
+	      goto REDO;
+	  }else{
+	      
+	      #e.g. >    LV KANSAS CITY INTL          144P           EQP: MD-80
+	      while(s/(LV|AR) ((\S|( [a-zA-Z]))+) \s*(\w\w\w)?\s*(\d\d?)(\d\d)(A|P|N)//){
+		  my($dir, $airportName, $st, $hh, $mm, $ap) = ($1, $2, $5, $6, $7, $8);
+		  $hh += 12 if $ap eq 'P' && $hh < 12;
+		  $hh = 0 if ($ap eq 'A' && $hh == 12);
+		  my($place, $ti, $code);
+		  
+		  if($code = $AirportCodes{$airportName}){
+		      $place = theAirport($code, $airportName);
+		  }else{
+		      die "unknown airport: ", $airportName;
+		  }
+		  
+		  $ti = sprintf("%02d:%02d", $hh, $mm);
+		  if($dir eq 'LV'){
+		      makeStatement($event, $kNS . 'fromLocation', $place);
+		      makeStatement($event, $tNS . 'departureTime', '', $ti);
+		  }else{
+		      makeStatement($event, $kNS . 'toLocation', $place);
+		      makeStatement($event, $tNS . 'arrivalTime', '', $ti);
+		      makeStatement($event, $kNS . "endingDate", $calday);
+		  }
+		  
+	      }
+	  }
+      }
+      else{
+	  die "unknown state";
+      }
+  }
+  
   makeStatement($trip, $kNS . "lastSubEvents", $event) if $event;
-
+  
 }
 
 
 sub fmtDate{
   my($dd, $mon, $yy) = @_;
-  $mon = substr($mon, 0, 3);
+  $mon = uc(substr($mon, 0, 3));
   my($mm);
   $mm = $monthNameToNum{$mon};
   die "bad month: $mon" unless $mm >= 1 && $mm <= 12;
@@ -246,7 +290,7 @@ sub theDay{
   $day = fmtDate($dd, $mon, $yy);
   $d = the($dtNS . 'date', $day, "day$dow$dd");
 
-  if($dow =~ /^MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY$/){
+  if($dow =~ /^MONDAY|TUESDAY|WEDNESDAY|THURSDAY|FRIDAY|SATURDAY|SUNDAY$/i){
     $dow = ucfirst(lc($dow));
     makeStatement($d, $rdfNS . 'type', $kNS . $dow);
     makeStatement($kNS . $dow, $rdfNS . 'type', $kNS . 'DayOfWeekType'); #@@ not yet a published part of opencyc, but mentioned in comments.
@@ -274,6 +318,15 @@ sub makeStatement{
 sub bind{
   my($pfx, $ns) = @_;
   printf("\@prefix %s: <%s>.\n", $pfx, $ns);
+}
+
+sub introduce{
+  my($id, $cls) = @_;
+
+  my($it) = "#$id";
+  makeStatement($it, $rdfNS . 'type', $cls) if $cls;
+
+  return $it;
 }
 
 sub genSym{
@@ -304,7 +357,7 @@ sub theAirport{
 
   my($apt) = "http://www.daml.org/cgi-bin/airport?" . $iata;
 
-  makeStatement($apt, $kNS . "nameString", '', $name);
+  makeStatement($apt, $kNS . "nameString", '', $name) if $name;
   makeStatement($apt, $rdfNS . "type", $kNS . "Airport-Physical");
   makeStatement($apt, $aNS . "iataCode", '', $iata);
 
@@ -340,12 +393,16 @@ DTW DETROIT METRO
 AMS AMSTERDAM
 GLA GLASGOW
 YYZ TORONTO ON
+MAN MANCHESTER UK
+SNA JOHN WAYNE INTL
 EODATA
+
+    # SNA confirmed via http://www.ocair.com/
 
     #
     foreach $ln (split(/\n/, $data)){
       my($code, $name) = split(/ /, $ln, 2);
-      print STDERR "[$ln] [$code] [$name]\n";
+      #print STDERR "[$ln] [$code] [$name]\n";
       $ret{$name} = $code;
     }
 
@@ -354,7 +411,11 @@ EODATA
 
 
 # $Log$
-# Revision 1.9  2002-10-18 20:45:14  connolly
+# Revision 1.10  2003-02-26 23:45:51  connolly
+# support link to foafwho file via seeAlso
+# and explicit name for traveller
+#
+# Revision 1.9  2002/10/18 20:45:14  connolly
 # well-known airport names rather than bnodes
 #
 # Revision 1.8  2002/09/27 21:16:04  connolly
