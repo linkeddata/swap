@@ -1,0 +1,76 @@
+/* this style sheet defines the basic style for financial report pages */
+/* you can point to this by adding:
+
+     <LINK rel="Stylesheet" href="report.css">
+
+
+   in the HEAD of your HTML document */
+
+body {
+  font-family: sans-serif;
+  color: black;
+  background: white;
+}
+
+a:link, a:active {
+  color: #00e;
+  background: transparent;
+}
+
+a:visited {
+  color: #529;
+  background: transparent;
+}
+
+div.intro {
+  margin-left: 5%;
+  margin-right: 5%;
+  font-style: italic
+}
+
+pre {
+  font-family: monospace
+}
+
+a:link img, a:visited img {
+   border-style: none
+}
+
+a img { color: white; }        /* hide the border in Netscape 4 */
+@media all {                   /* hide from Netscape 4 */
+  a img { color: inherit; }    /* undo the rule above */
+}
+
+ul.toc {
+  list-style: disc;
+  list-style: none;
+}
+
+div.issue {
+  padding: 0.5em;
+  border: none;
+  margin-right: 5%;
+}
+
+.CHECKING { background: #ddffdd; }
+.SAVINGS { background: #bbffbb; }
+.CREDITLINE { background: #ddeedd; }
+.SCUDDER  { background: #ccccff; }
+.DEFAULT { background: #eee4bb ;}
+.Split { color: #333333; background: #ffffff; text-treatment: slant;}
+.hideme { display: none }
+
+h2  { margin-left: 12pt; background: #006666; color: #FFFFFF; font-size: 12pt}
+table { margin-left: 100; font-size: 9pt; width: 85%;}
+table.wide { margin-left: 20; font-size: 9pt; width: 95%;}
+
+
+
+th { margin-left: 12pt; text-align: right; background: #ffffff; }
+td { margin-left: 12pt; }
+td.date { width: 6em; }
+td.amount { width: 6em; text-align: right;  } /* font-family: monospace; */
+td.amt { text-align: right;  } /* font-family: monospace; */
+td.total { font-weight: bold; text-align: right;  } /* font-family: monospace; */
+
+# ends

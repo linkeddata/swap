@@ -231,12 +231,13 @@ def doCommand(year, inputURI="/dev/stdin"):
 #		    print "@@@@@ INTERNAL", "%s  %40s  %10s month %i" %(date, payee, `amount`, month)
     
 
-	print '<html xmlsns="http://www.w3.org/@@@@xhtml">'
+	print '<html xmlns="http://www.w3.org/1999/xhtml">'
 	print """<head>
 	    <title>Annual Summary by month</title>
 	    <link rel="Stylesheet" href="report.css">
 	</head>
 	<body>
+	    <img src="sand-dollar.gif" alt="dollar" align="right"/>
 	"""
 	
         version = "$Id$"

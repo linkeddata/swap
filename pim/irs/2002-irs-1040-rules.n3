@@ -494,8 +494,8 @@ tf:line74 form:form tf:form; form:line "74"; a form:NumericField;
 #
 # Medical and dental epenses:
 sa:line1 form:form sa:form; form:line "1"; a form:NumericField; s:label "Medical and dental expenses".
-sa:line2 form:form sa:form; form:line "2"; a form:Calculated; s:label "1040 line 34 (Adjusted gross income)".
-	{ ?z tf:line34 ?x2 } => { ?z sa:line2 ?x2 }.
+sa:line2 form:form sa:form; form:line "2"; a form:Calculated; s:label "1040 36 (Adjusted gross income)".
+	{ ?z tf:line36 ?x2 } => { ?z sa:line2 ?x2 }.
 sa:line3 form:form sa:form; form:line "3"; a form:Calculated; s:label "Multiply line 2 above by 0.075".
 	{ (?z!sa:line2 "0.075")!math:product math:rounded ?p }
 		 => { ?z sa:line3 ?p }.
@@ -591,18 +591,21 @@ saws:line2 form:form saws:form; form:line "2";
 	=> { ?my saws:line2 ?s282. }.
 
 saws:line3 form:form saws:form; form:line "3";
-	 a form:Calculated; s:label """Is the amount on line 2 less than the amount on line 1?	No. STOP [this worksheet] Your deduction is not limited.
-	 Enter the amount from line 1 above on Schedule A, line 28.	Yes. Subtract line 2 from line 1""".
-
-	{ ?my!saws:line2 math:lessThan ?my!saws:line1.
-	  ?my saws:line1 ?a28} =>  { ?my sa:line28 ?a28 }.  # (stop! ;-)
+	 a form:Calculated; s:label """Is the amount on line 2 less
+	than the amount on line 1? 
+	No. STOP [this worksheet] Your deduction is not limited.
+	Enter the amount from line 1 above on Schedule A, line 28.
+	Yes. Subtract line 2 from line 1""".
 
 	{ ?my!saws:line2 math:notLessThan ?my!saws:line1.
+	  ?my saws:line1 ?a28} =>  { ?my sa:line28 ?a28 }.  # (stop! ;-)
+
+	{ ?my!saws:line2 math:lessThan ?my!saws:line1.
 	   (?my!saws:line1 ?my!saws:line2) math:difference ?a283} =>  { ?my saws:line3 ?a283 }.
 
 saws:line4 form:form saws:form; form:line "4";
 	 a form:Calculated; s:label "Multiply line 3 above by 80% (.80)".
-	{ (?my!saws:line3 "0.80") math:product :p284 } => { ?my saws:line4 ?p284 }.
+	{ (?my!saws:line3 "0.80") math:product ?p284 } => { ?my saws:line4 ?p284 }.
  
 saws:line5 form:form saws:form; form:line "5";
 	 a form:Calculated; s:label "Enter the amount from Form 1040, line 36".

@@ -61,10 +61,12 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
     is rdfs:domain of :personalTitle,
 	:firstName,
 	:middleName,
+	:middleInitial,
 	:lastName,
 	:personalSuffix,
 	:organization,         # SocialEntity, was company
-	:departmentName .
+	:departmentName ;
+	rdfs:comment """A person in the normal sense of the word.""".
 
 
 :personalTitle = 	mso:Title .
@@ -82,7 +84,8 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 For example, an email friendly name string.""".
 
 :ContactLocation a rdfs:Class;
-    rdfs:comment  "A place with address, phone number, fax, etc".
+    rdfs:comment  "A place with address, phone number, fax, etc";
+	is rdfs:domain of :phone, :fax.
 
 :office a rdf:Property;
     rdfs:domain :Person; rdfs:range :ContactLocation.
@@ -90,14 +93,21 @@ For example, an email friendly name string.""".
     rdfs:domain :Person; rdfs:range :ContactLocation.
 :vacationHome a rdf:Property;
     rdfs:domain :Person; rdfs:range :ContactLocation.
+:mobile a rdf:Property;
+    rdfs:domain :Person; rdfs:range :ContactLocation.
 
 :address a rdf:Property; rdfs:domain :ContactLocation; rdfs:range :Address.
+
 :Address a rdfs:Class;
-    is rdfs:domain of :Street, :Street2, :Street3,
-		:City, :StateOrProvince, :PostalCode, :Country .
+    is rdfs:domain of :street, :street2, :street3,
+		:city, :stateOrProvince, :postalCode, :country .
+
+
+:zip rdfs:subClassOf :postalCode.
 
 :phone a rdf:Property.
 :fax a rdf:Property .
+
 
 
 ##################### Rules for conversion
@@ -218,7 +228,9 @@ this log:forAll :x, :p, :y.
 :Male a rdfs:Class; ont:complementOf :Female.
 
 
-#  mso:Government_ID_Number  a rdf:Property .   # Let's keep to the topic now.
+#mso:Government_ID_Number  a rdf:Property .   # Let's keep to the topic now.
+#	rdfs:subClassOf gen:ssn.
+#
 #  mso:Hobby  a rdf:Property .   # Let's keep to the topic now.
 #  mso:Initials  a rdf:Property .  # Do WE HAVE to have this?! ;-)
 #  mso:Internet_Free_Busy  a rdf:Property .  # MSO specific I guess
@@ -273,7 +285,10 @@ mso:WebPage  a rdf:Property;
 
 <> dc:description """
 $Log$
-Revision 1.18  2002-11-24 03:12:03  timbl
+Revision 1.19  2003-02-14 11:56:47  timbl
+bug fixes to tax rules
+
+Revision 1.18  2002/11/24 03:12:03  timbl
 base can be None in uripath:refTo
 
 Revision 1.17  2002/10/07 20:50:00  timbl
