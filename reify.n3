@@ -1,0 +1,124 @@
+# Reification of N3 (or RDF) in a useful fashion
+#
+#
+
+@prefix : <http://www.w3.org/2000/10/swap/reify#>.
+@prefix rei: <http://www.w3.org/2000/10/swap/reify#>.
+
+# Each element of the language are described as a bnode
+#
+#
+#  see why.py, check.py etc
+
+:Term a rdf:Class;
+	s:label "RDF Term".
+
+:RDFTerm a s:subClassOf :Term.
+
+:Symbol s:subClassOf :RDFTerm;
+	s:label "RDF symbol, identified by a URI".
+
+:uri a rdf:Property; s:label "symbol URI";
+	a owl:FunctionalProperty, owl:InverseFunctionalProperty;
+	s:comment
+	"""The URI of the symbol is all that is needed to identify it""".
+
+:Literal s:subClassOf :RDFTerm;
+	s:label "Literal";
+	s:comment
+	"""Literals are identified by their string value, their
+	datatype (or absence thereof) and their language code
+	(or absencethereof). As we are modeling RDF in RDF,
+	we can just use a literal the value of a literal.
+	""".
+
+
+:value a rdf:Property;
+	s:label "Value";
+	s:domain :Literal;
+	a owl:DataProperty;
+	s:comment "The value of a literal".
+
+:Formula s:subClassOf :Term;
+	s:label "Formula";
+	s:comment 
+	"""A formula is identified by an unordered set of statements,
+	with a sets of existentially and universally quantified symbols.
+	For example, 
+		[ :forAll  ( [:uri <#x>] [:uri <#y>]);
+		  :forSome ( [:uri <#a>] [:uri <#b>]);
+		  :statements ( :s1 :s2 :s3 )
+		]
+	is equivalent to e.g. in loose math
+		forall x,y,x there exists a,b,c such that s1 and s2 and s3
+	That is, the universals are always outside the existentials.
+	""".
+
+:forAll a rdf:Property;
+	s:label "for all";
+	s:domain :Formula;
+	s:range	 rdf:List.
+
+:forSome a rdf:Property;
+	s:label "for all";
+	s:domain :Formula;
+	s:range	 rdf:List.
+
+:statements a rdf:Property;
+	s:label "statements";
+	s:domain :Formula;
+	s:range  :StatementList;
+	s:comment
+	"""The order of the statements is irrelevant.
+	They are given as a rdf:List because rdf:Lists exist,
+	and we want a closed set.
+	""".
+
+:Statement a s:Class;
+	s:label "Statement";
+	s:comment
+	"""A statement is the unit of information.
+	It expresses a binary relation.
+	Its significance is determined by the realtion,
+	generally referred to as its predicate.
+	""".
+
+:subj	 a rdf:Property;
+	s:label "subject";
+	s:domain :Statement;
+	s:range :Term. # For RDF 1.0, :Symbol
+
+:pred   a rdf:Property;
+	s:label "predicate";
+	s:domain :Statement;
+	s:range :Term.  # For RDF 1.0,  :Symbol
+
+:obj    a rdf:Property;
+	s:label "object";
+	s:domain :Statement;
+	s:range :Term.	# For RDF 1.0, :RDFTerm
+
+
+#_____________________________________________ OLD
+#
+#:PlainLiteral s:subClassOf :Literal;
+#	s:label "Plain Literal";
+#	s:comment """A Literal with explicitly absent langauge code and
+#	datatype.
+#	""".
+#:NO_DATATYPE a xsi:DataType. # Used to mark the absence of any other datatype
+#
+#
+#{ ?x a :PlainLiteral } => { ?x :datatype :NO_DATATYPE; :lang  }.
+
+#:Variable s:subClassOf :Symbol;
+#	s:label "Variable";
+#	s:comment """A variable is a symbol which is
+#	subject to a quantification.  This is a tip.
+#	There is nothing fundamentally different 
+#	about a variable. In fact, there is no reason
+#	to have it here."""
+
+
+
+
