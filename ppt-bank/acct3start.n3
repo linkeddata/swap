@@ -1,0 +1,4 @@
+@prefix my: <acct3#>.
+@prefix : <checking#>.
+
+my:account a :Account; :balance "10.00".

@@ -1,0 +1,41 @@
+@prefix bk: <banking#>.
+@prefix ck: <checking#>.
+@prefix : <checking#>.
+
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix lst: <http://www.daml.org/2001/03/daml+oil#>.
+
+this log:forAll :acct, :draft, :tot, :b0, :tt, :a1, :doc, :l.
+
+
+{
+  :acct
+    bk:statements [ lst:first :doc ];
+    bk:transAfter [ :amt :tt; :more () ].
+
+  :doc log:semantics [ log:includes
+        { :acct :balance :b0 }
+      ].
+
+  ( :b0 :tt ) math:sum :tot.
+}
+  log:implies { :acct :balance :tot }.
+
+{ :acct bk:transactions :l }
+  log:implies {
+    :acct bk:transAfter [ :amt "0"; :more :l ]
+  }.
+
+{
+  :acct bk:transAfter [ :amt :b0; :more [ lst:first :doc; lst:rest :l ]].
+  :doc log:semantics [
+    log:includes { :doc a ck:Check; ck:amount :a1; :account :acct }
+  ].
+  (:b0 [ math:negation :a1]) math:sum :tot.
+ }
+  log:implies { :acct bk:transAfter [ :amt :tot; :more :l ] }.
+
+:xyz :foo ("1").
+
+{ :xyz :foo [ lst:rest :l] } log:implies { :xyz :snort :l }.
