@@ -62,6 +62,7 @@ def isString(x):
 
 def numeric(s):
     if type(s) == types.IntType or type(s) is types.FloatType: return s
+    assert type(s) is type('') or type(s) is type(u'')
     if s.find('.') < 0 and s.find('e') < 0 : return int(s)
     return float(s)
 
