@@ -1507,7 +1507,7 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 #            and value[j+1:].find(".") <0 ): # Can't use prefix if localname includes "."
 #            print "|%s|%s|"%(self.defaultNamespace, value[:j+1])
 	    for ch in value[j+1:]:  #  Examples: "."   ";"  we can't have in qname
-		if ch in _notQNameChars:
+		if ch in _notNameChars:
 		    if verbosity() > 0:
 			progress("Cannot have character %i in local name." % ord(ch))
 		    break
