@@ -20,7 +20,7 @@ rcs:id "$Id$". # see changelog at the bottom.
 
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . # type, Property
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix ont:  <http://www.daml.org/2001/03/daml-ont#> .
+@prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
 
 <> :_nspolicy [ a :_SubjectToChange;
    dc:description """If you change this, you have to tell the W3C SemWeb AD
@@ -195,9 +195,10 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 :_addressProperty a rdf:Property.
 :mailbox :_addressProperty :mailboxURI.
 
-#  this log:forAll :x, :ap, :uri.
-#
-#  { :x [ :addressProperty :ap] [ log:uri :uri] } log:means { :x :ap :uri }.
+this log:forAll :x, :p, :y.
+
+{ :x [ is :_addressProperty of :p] [ is log:uri of :y] } log:implies { :x :p :y }.
+
 #  { :ent :mailboxURI [ log:equalTo [ is log:concat of ( "mailto:" [ :_uriEncode :addr ] ) ] ] } log:implies { :ent :emailAddress :addr }. # only goes one way because we could use PUT to HTTP resources to deliver mail.
 
 #  mso:E-mail_Display_Name  a rdf:Property .   # Seems redundant and useless IMHO
@@ -231,28 +232,28 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 
 :description a rdf:Property .
 
-#  mso:Office_Location  a rdf:Property .
-#  mso:Organizational_ID_Number  a rdf:Property .
-#  mso:PO_Box  a rdf:Property .
-#  mso:Priority  a rdf:Property .
-#  mso:Private  a rdf:Property .
-#  mso:Profession  a rdf:Property .
-#  mso:Referred_By  a rdf:Property .
-#  mso:Sensitivity  a rdf:Property .
+#  mso:Office_Location  a rdfs:Property .
+#  mso:Organizational_ID_Number  a rdfs:Property .
+#  mso:PO_Box  a rdfs:Property .
+#  mso:Priority  a rdfs:Property .
+#  mso:Private  a rdfs:Property .
+#  mso:Profession  a rdfs:Property .
+#  mso:Referred_By  a rdfs:Property .
+#  mso:Sensitivity  a rdfs:Property .
 
-:partner rdfs:hasSubProperty mso:Spouse .
+:partner is rdfs:subPropertyOf of mso:Spouse .
 
-mso:Spouse  a rdf:Property;  .
-#  mso:User_1  a rdf:Property .   # Use new pererties and namespaces!
-#  mso:User_2  a rdf:Property .
-#  mso:User_3  a rdf:Property .
-#  mso:User_4  a rdf:Property .
+mso:Spouse  a rdfs:Property;  .
+#  mso:User_1  a rdfs:Property .   # Use new pererties and namespaces!
+#  mso:User_2  a rdfs:Property .
+#  mso:User_3  a rdfs:Property .
+#  mso:User_4  a rdfs:Property .
 
 mso:WebPage  a rdf:Property;
 = :publicHomePage .              # I have many home pages, some for me some for others
 :publicHomePage rdfs:subPropertyOf :homePage.
-:homePage :_addressProperty :homePageAddress.
-
+:homePage a ont:UnambiguousProperty;
+  :_addressProperty :homePageAddress.
 
 ####################################### Calendaring -- Time ###########
 #
@@ -267,7 +268,16 @@ mso:WebPage  a rdf:Property;
 
 <> rcs:log """
 $Log$
-Revision 1.7  2001-11-01 16:04:34  timbl
+Revision 1.8  2001-11-05 16:28:37  connolly
+fixed daml+ont address
+
+added addressProperty rule. (should go elsewhere?)
+
+fixed partner/spouse relationship.
+
+futzed with homePage stuff a bit.
+
+Revision 1.7  2001/11/01 16:04:34  timbl
 fixes
 
 Revision 1.6  2001/06/13 23:58:48  timbl
