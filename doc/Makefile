@@ -55,20 +55,32 @@ formats-examplex1.ps: formats-example1.dot
 
 states.svg: states.graph
 
-print: tutorial.pdf tutorial.ps
+print: tutorial.pdf tutorial.ps appendix.pdf appendix.ps
 
 #@@cwm.html -- remove junk
 #@@CwmBuiltins.html -- reformat
-TUTFILES=Overview.html ../Primer.html formats.html CwmInstall.html CwmHelp.html Shortcuts.html ontologies.html Rules.html Processing.html Built-In.html rule-systems.html Glossary.html
+TUTFILES=Overview.html ../Primer.html Shortcuts.html ontologies.html Rules.html Processing.html Built-In.html rule-systems.html Glossary.html
+TUTFIGS=../../../../DesignIssues/diagrams/arcs-1.gif ../../../../DesignIssues/diagrams/arcs-3.gif
+
+APPENDICES=formats.html CwmInstall.html CwmHelp.html
+APPFIGS=formats-examplex1.ps
 
 HTML2PS=html2ps # debian package originally from http://www.tdb.uu.se/~jan/html2ps.html
 # user guide http://www.tdb.uu.se/~jan/html2psug.html
-tutorial.ps: $(TUTFILES) print.css formats-examplex1.ps
+
+tutorial.ps: $(TUTFILES) print.css formats-examplex1.ps $(TUTDIAGS)
 	$(HTML2PS) -f print.css -o $@ $(TUTFILES)
 
 PS2PDF=ps2pdf # ghostscript? acroread?
 tutorial.pdf: tutorial.ps
 	$(PS2PDF) tutorial.ps
+
+appendix.ps: $(APPENDICES) print.css $(APPFIGS)
+	$(HTML2PS) -f print.css -o $@ $(APPENDICES)
+
+#@@factor out .ps.pdf rule
+appendix.pdf: appendix.ps
+	$(PS2PDF) appendix.ps
 
 cwm-help.txt : ../cwm.py ../notation3.py
 	cwm --help | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' > cwm-help.txt
