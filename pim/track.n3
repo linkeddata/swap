@@ -60,7 +60,7 @@ it was raised (URI), who raised it (the issue author), and on what date.""".
 :rejection a r:Property; s:domain t:Issue; r:range doc:Work;
     s:comment """This document rejects the issue, which must have been open""".
 
-:annotation a r:Property s:domain t:Issue; r:range doc:Work;
+:annotation a r:Property; s:domain t:Issue; r:range doc:Work;
     s:comment  """No semantics apart from human understanding. no state change""".
 
 :reopener a r:Property s:domain t:Issue; r:range doc:Work;
