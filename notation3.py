@@ -55,9 +55,6 @@ RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#Type"
 DAML_equivalentTo_URI = "http://www.daml.org/2000/10/daml-ont#equivalentTo"
 Logic_NS = "http://www.w3.org/2000/10/swap/log.n3#"
 
-N3_forSome_URI = Logic_NS + "forSome"
-N3_subExpression_URI = Logic_NS + "subExpression"
-N3_forAll_URI = Logic_NS + "forAll"
 
 ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
 # This is the hash on namespace URIs
@@ -81,6 +78,14 @@ VARIABLE = 4        #
 
 RDF_type = ( RESOURCE , RDF_type_URI )
 DAML_equivalentTo = ( RESOURCE, DAML_equivalentTo_URI )
+
+N3_forSome_URI = Logic_NS + "forSome"
+N3_subExpression_URI = Logic_NS + "subExpression"
+N3_forAll_URI = Logic_NS + "forAll"
+# For lists:
+N3_first = (RESOURCE, Logic_NS + "first")
+N3_rest = (RESOURCE, Logic_NS + "rest")
+N3_null = (RESOURCE, Logic_NS + "null")
 
 
 chatty = 0   # verbosity flag
@@ -363,13 +368,7 @@ class SinkParser:
 	    j = self.tok('{', str, i)
 	    if j>=0:
                 oldContext = self._context
-                subj = RESOURCE , self._genPrefix + `self._nextId` # ANONYMOUS - Call out???
-                self._nextId = self._nextId + 1
-     #           print "#### CONTEXT", oldContext, "HAS SUBCONTEXT", subj
-                self.makeStatement((oldContext, # quantifiers - use inverse?
-                                    (RESOURCE, N3_forSome_URI), #pred
-                                    oldContext,  #subj
-                                    subj))                      # obj
+                subj = self.genid()
                 self.makeStatement((oldContext, # lexical nesting
                                     (RESOURCE, N3_subExpression_URI), #pred
                                     oldContext,  #subj
@@ -389,6 +388,33 @@ class SinkParser:
 
                 self._context = oldContext # restore
                 res.append(subj)
+                return j
+
+	    j = self.tok('(', str, i)    # List abbreviated syntax?
+	    if j>=0:
+                tail = None  # remember value to return
+                while 1:
+                    i = self.skipSpace(str, j)
+                    if i<0: raise BadSyntax(str, i, "needed ')', found end.")                    
+                    j = self.tok(')', str,i)
+                    if j >=0: break
+
+                    item = []
+                    j = self.node(str,i, item)
+                    if j<0: raise BadSyntax(str, i, "expected item in list or ')'")
+                    this = self.genid()
+                    if tail:
+                        self.makeStatement((self._context, N3_rest, tail, this ))
+                    else:
+                        head = this
+                    tail = this
+                    self.makeStatement((self._context, N3_first, this, item[0] ))           # obj
+
+                if not tail:
+                    res.append(N3_null)
+                    return j
+                self.makeStatement((self._context, N3_rest, tail, N3_null ))           # obj
+                res.append(head)
                 return j
 
             return -1
@@ -576,6 +602,15 @@ class SinkParser:
 		return j+len(delim)
 	    else:
 		return -1
+
+    def genid(self):  # Generate existentially quantified variable id
+        subj = RESOURCE , self._genPrefix + `self._nextId` # ANONYMOUS node
+        self._nextId = self._nextId + 1
+        self.makeStatement((self._context, # quantifiers - use inverse?
+                            (RESOURCE, N3_forSome_URI), #pred
+                            self._context,  #subj
+                            subj))                      # obj
+        return subj
 
     def operator(self, str, i, res):
 	j = self.tok('+', str, i)
