@@ -541,30 +541,57 @@ class SinkParser:
             return j+1
 
         if ch == "{":
-	    j=i+1
-            oldParentContext = self._parentContext
-	    self._parentContext = self._context
-            parentAnonymousNodes = self._anonymousNodes
-            self._anonymousNodes = {}
-            if subj is None: subj = self._store.newFormula()
-            self._context = subj
-            
-            while 1:
-                i = self.skipSpace(str, j)
-                if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "needed '}', found end.")
-                
-		if str[i:i+1] == "}":
-		    j = i+1
-		    break
-                
-                j = self.directiveOrStatement(str,i)
-                if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected statement or '}'")
+            ch2 = str[i+1:i+2]
+            if ch2 == '$':
+                i += 1
+                j = i + 1
+                List = []
+                first_run = True
+                while 1:
+                    i = self.skipSpace(str, j)
+                    if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "needed '$}', found end.")                    
+                    if str[i:i+2] == '$}':
+                        j = i+2
+                        break
 
-            self._anonymousNodes = parentAnonymousNodes
-            self._context = self._parentContext
-	    self._parentContext = oldParentContext
-            res.append(subj.close())   # Must not actually use the formula until it has been closed
-            return j
+                    if not first_run:
+                        if str[i:i+1] == ',':
+                            i+=1
+                        elif False:
+                            raise BadSyntax(self._thisDoc, self.lines, str, i, "expected: ','")
+                    else: first_run = False
+
+                    item = []
+                    j = self.item(str,i, item) #@@@@@ should be path, was object
+                    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected item in set or '$}'")
+                    List.append(self._store.intern(item[0]))
+                res.append(self._store.newSet(List, self._context))
+                return j
+            else:
+                j=i+1
+                oldParentContext = self._parentContext
+                self._parentContext = self._context
+                parentAnonymousNodes = self._anonymousNodes
+                self._anonymousNodes = {}
+                if subj is None: subj = self._store.newFormula()
+                self._context = subj
+                
+                while 1:
+                    i = self.skipSpace(str, j)
+                    if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "needed '}', found end.")
+                    
+                    if str[i:i+1] == "}":
+                        j = i+1
+                        break
+                    
+                    j = self.directiveOrStatement(str,i)
+                    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected statement or '}'")
+
+                self._anonymousNodes = parentAnonymousNodes
+                self._context = self._parentContext
+                self._parentContext = oldParentContext
+                res.append(subj.close())   # Must not actually use the formula until it has been closed
+                return j
 
         if ch == "(":
             thing_type = self._store.newList

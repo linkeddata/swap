@@ -68,7 +68,8 @@ class TripleMaker:
         self._triples = [[None, None, None]]
         self.lists = []
         self._modes = [FORMULA]
-        self.bNodes = {}
+        self.bNodes = []
+        self.addedBNodes = {}
         self._predIsOfs = [NO]
         self._pathModes = [False]
         self.store.startDoc()
@@ -143,6 +144,7 @@ class TripleMaker:
                 else:
                     raise ValueError("This is useless!")
             else:
+                print 'I got here!!!!!!!!!!!!!!!!!!!!!!!!!!!'
                 formula.add(subj, pred, obj)
         self._parts[-1] = NOTHING
         if self._modes[-1] == ANONYMOUS and self._pathModes[-1]:
@@ -193,11 +195,11 @@ class TripleMaker:
         function to call
 
         """
-        if Id not in self.bNodes:
+        if Id not in self.addedBNodes:
             a = self.formulas[-1].newBlankNode()
-            self.bNodes[Id] = a
+            self.addedBNodes[Id] = a
         else:
-            a = self.bNodes[Id]
+            a = self.addedBNodes[Id]
         self.addNode(a)
         
     

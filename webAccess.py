@@ -157,9 +157,14 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
 	p = notation3.SinkParser(store, F,  thisDoc=asIfFrom,flags=flags, why=why)
 #        from grammar import yosiParser
 #        p = yosiParser.SinkParser(store, F,  thisDoc=asIfFrom,flags=flags, why=why)
+#        from n3p import n3p_tm
+#        import triple_maker
+#        tm = triple_maker.TripleMaker(F)
+#        p = n3p_tm.n3p_tm(asIfFrom, tm)
 	p.startDoc()
 	p.feed(buffer)
 	p.endDoc()
+        
     if not openFormula:
 	F = F.close()
     return F 
