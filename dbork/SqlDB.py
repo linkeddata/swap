@@ -439,7 +439,6 @@ class SqlDBAlgae(RdfDBAlgae):
             for var in self.orderedVars:
                 varInfo = self.vars[var][0]
                 queryPiece, field, table, var, pk, dummy, fieldz = varInfo
-                var = answerRow[iSelect]
                 valueHash = {}
                 if (field):
                     str = answerRow[iSelect]
