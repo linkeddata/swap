@@ -18,9 +18,9 @@
 
 <p>This is a collection of examples to accompany the <a
 href="Primer.html">Primer. </a> (The files have URIs starting
-http://www.w3.org/2000/10/swap/test/ if you are reading this on paper.)  These
-are designed as examples, to show how something can be done, not as working
-products.</p>
+http://www.w3.org/2000/10/swap/test/ if you are reading this on paper.) 
+These are designed as examples, to show how something can be done, not as
+working products.</p>
 
 <p>Remember, to convert an RDF document from n3 syntax into xml syntax,
 <code>cwm xxx.n3 -rdf </code> should do it  among other things.  I haven't
@@ -29,15 +29,15 @@ exhaustively tested all combinations of n3 and RDF in all cases.</p>
 <h2 id="Merging">Merging graphs</h2>
 
 <p>When explaining why the semantic web needs to be a web not a tree, I used
-slides showing information in blue from one source (blue links) with that from
-another sources (red and green links).<img
+slides showing information in blue from one source (blue links) with that
+from another sources (red and green links).<img
 src="/2000/Talks/0906-xmlweb-tbl/arcs-3.gif"
 alt="blue, red and green arcs merged" width="30%" align="right"></p>
 <ul>
   <li><a href="/2000/Talks/0906-xmlweb-tbl/slide6-0.html">The first
     diagram</a> shows some information maybe from someone's personal
-    information that they will attend an event which has a given home page. It
-    also has the person's email address and given name.</li>
+    information that they will attend an event which has a given home page.
+    It also has the person's email address and given name.</li>
   <li><a href="/2000/Talks/0906-xmlweb-tbl/slide7-0.html">The second
     diagram</a>shows how information about the meeting has been read from
     another source, and also privacy policy link has been picked up from the
@@ -81,8 +81,8 @@ this into N3</a><a></a>.</p>
     href="test/gedcom/gedcom-relations.n3">gedcom/gedcom-relations.n3</a><a></a>)</li>
   <li>Some data of some imaginary families (<a
     href="test/gedcom/gedcom-facts.n3">gedcom/gedcom-facts.n3</a><a></a>);</li>
-  <li>The same data after processing by the rules, with each person's extended
-    family relationships calculated (<a
+  <li>The same data after processing by the rules, with each person's
+    extended family relationships calculated (<a
     href="test/gedcom/lots.n3">gedcom/lots.n3</a>)</li>
   <li><a href="test/gedcom/Makefile ">gedcom/Makefile</a>shows (for unix
     people) the commands to buld them
@@ -95,9 +95,9 @@ this into N3</a><a></a>.</p>
 <h3 id="TAMBIS">TAMBIS</h3>
 
 <blockquote>
-  <p><i>The owners of the next two ontologies retain all rights, so you should
-  </i><strong><i>not</i></strong><i> copy them for the purposes of making your
-  own ontology.</i></p>
+  <p><i>The owners of the next two ontologies retain all rights, so you
+  should </i><strong><i>not</i></strong><i> copy them for the purposes of
+  making your own ontology.</i></p>
 </blockquote>
 
 <p>These examples do not contain rules, just ontology information in DAML.
@@ -135,8 +135,9 @@ href="http://www.biopathways.org/">biopathways consortium</a>.</p>
 
 <p>In the semantic web, there are many different forms of document validity.
 One useful form is to check that the document doesn't violate any rules
-associated with the vocabularies it uses, and that for each namespace it uses,
-every term it uses is actually mentioned in the schema for that namespace.</p>
+associated with the vocabularies it uses, and that for each namespace it
+uses, every term it uses is actually mentioned in the schema for that
+namespace.</p>
 <ul>
   <li><a href="test/daml-ex.n3 ">daml-ex.n3</a>  An example schema using
   DAML</li>
@@ -154,28 +155,30 @@ every term it uses is actually mentioned in the schema for that namespace.</p>
 <p>This combines the schema, the document and the rules, and draws all
 possible conclusions, then filters out any conclusions of invalidity.</p>
 
-<p>The rules are by no means complete, and this is by no means the only way to
-do validation. A special-purpose program would be more efficient of course.
-However, this demonstrates how easy it is when data is a semantic form to
-process it using a general purpose engine.</p>
+<p>The rules are by no means complete, and this is by no means the only way
+to do validation. A special-purpose program would be more efficient of
+course. However, this demonstrates how easy it is when data is a semantic
+form to process it using a general purpose engine.</p>
+
+<p>(update Mar 2002: see <a href="util/validate.n3">validate.n3</a>)</p>
 
 <h2 id="Rules">Rules making rules</h2>
 
-<p>The a transitive property, like ancestor, is one such that if Fred is Joe's
-ancenstor, and Joe is Bill's ancenstor, then Fred is Bill's ancenstor.  That
-(for all Fred, Joe and Bill)  is a  rule for "ancenstor", and the fact that
-that is true for any transitive property in place of "ancenstor" is the
+<p>The a transitive property, like ancestor, is one such that if Fred is
+Joe's ancenstor, and Joe is Bill's ancenstor, then Fred is Bill's ancenstor. 
+That (for all Fred, Joe and Bill)  is a  rule for "ancenstor", and the fact
+that that is true for any transitive property in place of "ancenstor" is the
 definition of transitivity.</p>
 <ul>
-  <li><a href="test/rules12.n3">rules12.n3</a> has the "implies" rules to draw
-    the above conclusion in two stages, first concluding a specific rule for
-    ancenstor from the general rule for transitivity, and secondly using it in
-    the specific case of Fred and company.</li>
+  <li><a href="test/rules12.n3">rules12.n3</a> has the "implies" rules to
+    draw the above conclusion in two stages, first concluding a specific rule
+    for ancenstor from the general rule for transitivity, and secondly using
+    it in the specific case of Fred and company.</li>
   <li><a href="test/rules13.n3">rules13.n3</a> has hte same, but uses
-    "log:means" (a bidirectional implication) to indicate that transitivity is
-    that and only that. "Means" is not a primitive for cwm, so it is defined
-    in terms of log:implies. This doesn't then acheive anything spectacularly
-    new otherwise.</li>
+    "log:means" (a bidirectional implication) to indicate that transitivity
+    is that and only that. "Means" is not a primitive for cwm, so it is
+    defined in terms of log:implies. This doesn't then acheive anything
+    spectacularly new otherwise.</li>
 </ul>
 
 <p>
@@ -188,17 +191,17 @@ definition of transitivity.</p>
 <h2>KIF to RDF: Converting axioms</h2>
 
 <p>There were some axioms for RDF and RDFS and DAML prodcued by Deborah
-McGuiness and Fikes for the DAML work, in KIF.  KIF list syntax is pretty like
-N3 list syntax so a sed file converts the KIF to N3 list syntax. Then, a bunch
-of rules decorate the lists with their equivalent in N3.  The result is quite
-a mess, but all the intermediate results are labelled as "log:Chaff".  This
-magic class has the feature in cwm that -purge removes any statements from the
-store which mention (as subject, verb or object) anything which is in class
-Chaff.</p>
+McGuiness and Fikes for the DAML work, in KIF.  KIF list syntax is pretty
+like N3 list syntax so a sed file converts the KIF to N3 list syntax. Then, a
+bunch of rules decorate the lists with their equivalent in N3.  The result is
+quite a mess, but all the intermediate results are labelled as "log:Chaff". 
+This magic class has the feature in cwm that -purge removes any statements
+from the store which mention (as subject, verb or object) anything which is
+in class Chaff.</p>
 
 <p>The process is very recursive, and so uses the -think option on cwm, which
-iterates over all rules. It takes (2001/02) a long time, partly beccause it is
-not directed in its simple-minded approach, and partly because it is not
+iterates over all rules. It takes (2001/02) a long time, partly beccause it
+is not directed in its simple-minded approach, and partly because it is not
 optimised.  The rules are by no means complete, so the axoim set is not
 translated in its entirity. This example is unfinished but still may be
 instructive.</p>
@@ -224,20 +227,21 @@ instructive.</p>
     log:Chaff.</li>
 </ul>
 
-<h2><a name="Integratin">Integrating applications: Roadmaps, Organizations and
-diagrams</a></h2>
+<h2><a name="Integratin">Integrating applications: Roadmaps, Organizations
+and diagrams</a></h2>
 
-<p>Many see the semantic web's impact on the industry as a tool for Enterprise
-Application Integration.  That is, just as the web integrates human-oriented
-information systems, so the Semantic Web integrates applications in which data
-has well-defined meaning. Here are some files which represent data which deal
-with technical architecture and the organizational structure around W3C.
-Imagine that these had been produced from specific applications for technical
-design and organizational management. Now it happens that there is a need bit
-of free softrware called GRphviz which is a tool for drawing diagrams. Putting
-all three together we can draw digrams of relationships between technical
-architecure and consortium organization. We can also make rule files to
-extract subsets of this data when focussing on a specific problem or area.</p>
+<p>Many see the semantic web's impact on the industry as a tool for
+Enterprise Application Integration.  That is, just as the web integrates
+human-oriented information systems, so the Semantic Web integrates
+applications in which data has well-defined meaning. Here are some files
+which represent data which deal with technical architecture and the
+organizational structure around W3C. Imagine that these had been produced
+from specific applications for technical design and organizational
+management. Now it happens that there is a need bit of free softrware called
+GRphviz which is a tool for drawing diagrams. Putting all three together we
+can draw digrams of relationships between technical architecure and
+consortium organization. We can also make rule files to extract subsets of
+this data when focussing on a specific problem or area.</p>
 <ul>
   <li>How the data is processed - <a
     href="../../../2001/04/roadmap/about.svg">diagram</a></li>
@@ -247,8 +251,8 @@ extract subsets of this data when focussing on a specific problem or area.</p>
   <li>Organizational  <a
     href="../../../2001/04/roadmap/structure.svg">diagram</a><a></a>, <a
     href="../../../2001/04/roadmap/structure.n3">data</a><a></a></li>
-  <li>Subsets: technical architecture planned for: web services, semantic web,
-    both</li>
+  <li>Subsets: technical architecture planned for: web services, semantic
+    web, both</li>
 </ul>
 
 <h2><a name="Following">Following links: Schema validation II</a></h2>
@@ -274,8 +278,8 @@ schema.</p>
 <p>Note how, when check.n3 follows a URI to a schema, it doesn't jsut believe
 it - it looks objectively at what it says.  People early on with the Semantic
 Web were always afraid that inconsistencies could be sown which would trip up
-browsing agents. It is fundamental that you don't beleive everying on the Web.
-</p>
+browsing agents. It is fundamental that you don't beleive everying on the
+Web.</p>
 
 <p></p>
 <hr>
