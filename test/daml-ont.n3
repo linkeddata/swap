@@ -1,12 +1,12 @@
 # Base URI of process is file:///dev/swap/test/
 # Input from  file:/dev/swap/test/daml-pref.n3
-# Input from  http://www.daml.org/2000/10/daml-ont
+# Input from  http://www.daml.org/2001/03/daml-ont
 
 #  Notation3 generation by
 #  $Id$
 
-     @prefix : <http://www.daml.org/2000/10/daml-ont#> .
-     @prefix ont: <http://www.daml.org/2000/10/daml-ont#> .
+     @prefix : <http://www.daml.org/2001/03/daml-ont#> .
+     @prefix ont: <http://www.daml.org/2001/03/daml-ont#> .
      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
     

@@ -5,8 +5,8 @@
 #  Notation3 generation by
 #       notation3.py,v 1.36 2000/12/09 03:44:18 timbl Exp
 
-     @prefix ex: <http://www.daml.org/2000/10/daml-ex#> .
-     @prefix ont: <http://www.daml.org/2000/12/daml+oil#> .
+     @prefix ex: <http://www.daml.org/2001/03/daml-ex#> .
+     @prefix ont: <http://www.daml.org/2001/03/daml+oil#> .
      @prefix : <http://www.w3.org/2000/01/rdf-schema#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
     

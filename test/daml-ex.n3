@@ -1,6 +1,6 @@
 # Base URI of process is file:///devel/WWW/2000/10/swap/test/
 # Input from  file:/devel/WWW/2000/10/swap/test/daml-pref.n3
-# Input from  http://www.daml.org/2000/10/daml-ex
+# Input from  http://www.daml.org/2001/03/daml-ex
 # flushed data: '\012    '
 # flushed data: '\012    '
 # flushed data: '\012    '
@@ -8,15 +8,15 @@
 #  Notation3 generation by
 #  $Id$
 
-     @prefix ex: <http://www.daml.org/2000/10/daml-ex#> .
-     @prefix : <http://www.daml.org/2000/12/daml+oil#> .
+     @prefix ex: <http://www.daml.org/2001/03/daml-ex#> .
+     @prefix : <http://www.daml.org/2001/03/daml+oil#> .
      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
     
     <file:/devel/WWW/2000/10/swap/test/STDOUT>     a :Ontology;
          :versionInfo "$Id$";
          :comment "An example ontology";
-         :imports <http://www.daml.org/2000/10/daml-ont> .
+         :imports <http://www.daml.org/2001/03/daml-ont> .
     
     ex:Man     a :Class;
          :subClassOf ex:Person,
