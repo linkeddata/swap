@@ -57,9 +57,13 @@ class TripleMaker:
 
 
     """
-    def __init__(self, formula):
+    def __init__(self, formula=None, store=None):
+        if formula is None:
+            formula = store.newFormula
+        if store is None:
+            store = formula.store
         self.formulas = [formula]
-        self.store = formula.store
+        self.store = store
         self.forSome = formula.newSymbol(N3_forSome_URI)
         self.forAll  = formula.newSymbol(N3_forAll_URI)
 
@@ -69,7 +73,7 @@ class TripleMaker:
         self.lists = []
         self._modes = [FORMULA]
         self.bNodes = []
-        self.addedBNodes = {}
+        self.addedBNodes = [{}]
         self._predIsOfs = [NO]
         self._pathModes = [False]
         self.store.startDoc()
@@ -95,7 +99,7 @@ class TripleMaker:
         if self._modes[-1] == ANONYMOUS and self._pathModes[-1] == True:
             self.endStatement()
             self.endAnonymous()
-        if self._modes[-1] == LIST:
+        elif self._modes[-1] == LIST:
             self.lists[-1].append(node)
 
     def IsOf(self):
@@ -116,8 +120,11 @@ class TripleMaker:
         self._pathModes[-1] = True
         
     def backwardPath(self):
-        a = self._triples[-1][self._parts[-1]]
-        self._parts[-1] = self._parts[-1] - 1
+        if self._modes[-1] == LIST:
+            a = self.lists[-1].pop()
+        else:
+            a = self._triples[-1][self._parts[-1]]
+            self._parts[-1] = self._parts[-1] - 1
         self.beginAnonymous()
         self.addNode(a)
         self._pathModes[-1] = True
@@ -134,6 +141,7 @@ class TripleMaker:
                 swap(self._triples[-1], PREDICATE, OBJECT)
             if self._predIsOfs[-1]:
                 swap(self._triples[-1], SUBJECT, OBJECT)
+                self._predIsOfs[-1] = STALE 
             subj, pred, obj = self._triples[-1]
 
             if subj == '@this':
@@ -144,13 +152,25 @@ class TripleMaker:
                 else:
                     raise ValueError("This is useless!")
             else:
-                print 'I got here!!!!!!!!!!!!!!!!!!!!!!!!!!!'
+                #print 'I got here!!!!!!!!!!!!!!!!!!!!!!!!!!!'
                 formula.add(subj, pred, obj)
+            if self._predIsOfs[-1]:
+                swap(self._triples[-1], SUBJECT, OBJECT)
         self._parts[-1] = NOTHING
         if self._modes[-1] == ANONYMOUS and self._pathModes[-1]:
             self._parts[-1] = SUBJECT
 
     def addLiteral(self, lit, dt=None, lang=None):
+        if dt:
+            if dt[:2] == '_:':
+                if dt not in self.addedBNodes[-1]:
+                    a = self.formulas[-1].newBlankNode()
+                    self.addedBNodes[-1][dt] = a
+                    dt = a
+                else:
+                    dt = self.addedBNodes[-1][dt]
+            else:
+                dt = self.store.newSymbol(dt)
         a = self.store.intern(lit, dt, lang)
         self.addNode(a)
 
@@ -161,6 +181,7 @@ class TripleMaker:
     def beginFormula(self):
         a = self.store.newFormula()
         self.formulas.append(a)
+        self.addedBNodes.append({})
         self._modes.append(FORMULA)
         self._triples.append([None, None, None])
         self._parts.append(NOTHING)
@@ -171,6 +192,7 @@ class TripleMaker:
         if self._parts[-1] != NOTHING:
             self.endStatement()
         a = self.formulas.pop().close()
+        self.addedBNodes.pop()
         self._modes.pop()
         self._triples.pop()
         self._parts.pop()
@@ -195,11 +217,11 @@ class TripleMaker:
         function to call
 
         """
-        if Id not in self.addedBNodes:
+        if Id not in self.addedBNodes[-1]:
             a = self.formulas[-1].newBlankNode()
-            self.addedBNodes[Id] = a
+            self.addedBNodes[-1][Id] = a
         else:
-            a = self.addedBNodes[Id]
+            a = self.addedBNodes[-1][Id]
         self.addNode(a)
         
     

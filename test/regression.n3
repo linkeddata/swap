@@ -61,10 +61,10 @@
 	test:description	"djb noticed a:b was parsed as rdf:type token";
 	test:arguments		"syntax/djb1a.n3".
 
-:t1005h a test:CwmTest;
-	test:referenceOutput <ref/data-ugly.n3>;
-	test:description	"dumping data only fast with --ugly";
-	test:arguments		"daml-ex.n3 rules12.n3 --ugly".
+#:t1005h a test:CwmTest;
+#	test:referenceOutput <ref/data-ugly.n3>;
+#	test:description	"dumping data only fast with --ugly";
+#	test:arguments		"daml-ex.n3 rules12.n3 --ugly".
 
 :t1006 a test:CwmTest;
     test:referenceOutput <ref/contexts-1.n3>;

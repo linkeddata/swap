@@ -59,7 +59,7 @@
 
 # A nested rule
 
-{ :x is math:sum of (3 (8 3).math:difference ) } 
+{ :x is math:sum of (3 (8 3)!math:difference ) } 
    => { :x :valueOf "3 + (8 - 3)" } .
 
 # Getting the amount of members in a list
@@ -78,9 +78,9 @@
 
 # Big test
 
-{ (	("7" "2").math:quotient  
-   	(("7" "2").math:remainder  "10000000").math:exponentiation
-   	("a" "b" "c" "d" "e").math:memberCount
+{ (	("7" "2")!math:quotient  
+   	(("7" "2")!math:remainder  "10000000")!math:exponentiation
+   	("a" "b" "c" "d" "e")!math:memberCount
   ) math:sum ?x } => 
 { ?x :valueOf "(7 / 2) + ((7 % 2)^10000000) + 5 [should be 9.5]" } .
 
@@ -99,7 +99,7 @@
   (:x [ is math:difference of (:y :x)]) math:sum :y } => {:x :worksWith :y}.
  
 { ?x a :testValue. ?y a :testValue.
-  ?z is math:sum of (?x (?y ?x).math:difference).
+  ?z is math:sum of (?x (?y ?x)!math:difference).
   ?z math:notEqualTo :y } => {(?x ?y) :SumDifferenceFAILS ?z}.
 
 { ?x a :testValue. ?y a :testValue.

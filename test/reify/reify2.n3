@@ -139,9 +139,9 @@
                                  [
                                          :value "http://example.com/swap/test/reify/reify0.n3#b" ]
                                  [
-                                         :value "http://example.com/swap/test/reify/reify0.n3#a" ]
+                                         :value "http://example.com/swap/test/reify/reify0.n3#p" ]
                                  [
-                                         :value "http://example.com/swap/test/reify/reify0.n3#p" ] ) ] ];
+                                         :value "http://example.com/swap/test/reify/reify0.n3#a" ] ) ] ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#universals" ];
                          :subject <#_g0> ]
@@ -508,9 +508,9 @@
                                  [
                                          :value "http://example.com/swap/test/reify/reify0.n3#y" ]
                                  [
-                                         :value "http://example.com/swap/test/reify/reify0.n3#z" ]
+                                         :value "http://example.com/swap/test/reify/reify0.n3#x" ]
                                  [
-                                         :value "http://example.com/swap/test/reify/reify0.n3#x" ] ) ] ];
+                                         :value "http://example.com/swap/test/reify/reify0.n3#z" ] ) ] ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#universals" ];
                          :subject <#_g37> ]

@@ -12,7 +12,7 @@ $Id$
 from term import BuiltIn, LightBuiltIn, LabelledNode, \
     HeavyBuiltIn, Function, ReverseFunction, AnonymousNode, \
     Literal, Symbol, Fragment, FragmentNil, Term,\
-    CompoundTerm, List, EmptyList, NonEmptyList
+    CompoundTerm, List, EmptyList, NonEmptyList, N3Set
 from formula import Formula, StoredStatement
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4, RDF_type_URI
 import uripath
@@ -505,7 +505,10 @@ def dereification(x, f, sink, bnodes={}, xList=[]):
     if y != None: return y
     
     y = f.the(subj=x, pred=rei["items"])
-    if y != None: return sink.newList([dereification(z, f, sink, bnodes, xList) for z in y])
+    if y != None:
+        if isinstance(y, N3Set):
+            return sink.store.newSet([dereification(z, f, sink, bnodes, xList) for z in y])
+        return sink.newList([dereification(z, f, sink, bnodes, xList) for z in y])
     
     y = f.the(subj=x, pred=rei["statements"])
     if y != None:

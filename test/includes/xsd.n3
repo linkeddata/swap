@@ -5,4 +5,4 @@
 @forAll :s, :x .
 
 
-{("CASH"^^xsd:string " IS "^^xsd:Name ("2"^^xsd:integer "3"^^xsd:unsignedShort).math:product "\n") string:concatenation  :s}  => {"Here we go"^^xsd:string log:outputString :s} .
+{("CASH"^^xsd:string " IS "^^xsd:Name ("2"^^xsd:integer "3"^^xsd:unsignedShort)!math:product "\n") string:concatenation  :s}  => {"Here we go"^^xsd:string log:outputString :s} .

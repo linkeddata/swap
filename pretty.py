@@ -540,9 +540,23 @@ class Serializer:
             self._dumpFormula(node)
             tm.endFormula()
         elif _anon:
+            tm.startAnonymous()
+            self._dumpSubject(context, node)
+            tm.endAnonymous()
+        elif isinstance(node, Literal):
+            tm.addLiteral(node)
+        elif isinstance(node, Symbol):
+            tm.addSymbol(node)
+        else:
             pass
         
-    def _dumbFormula(self, node):
+    def _dumpFormula(self, node):
+        pass
+
+    def _dumpSubject(self, formula, node):
+        pass
+
+    def _dumpPredicate(self, formula, subject, node):
         pass
 
     def dumpFormulaContents(self, context, sink, sorting, equals=0):

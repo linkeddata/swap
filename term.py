@@ -502,7 +502,9 @@ class N3Set(ImmutableSet, CompoundTerm): #,
 	
 	[ reify:items ( [ reify:value "foo"]  .... ) ]
 	"""
-	elements = sink.store.newSet([ x.reification(sink, bnodeMap, why) for x in self])
+	m = [ x.reification(sink, bnodeMap, why) for x in self]
+	m.sort(Term.compareAnyTerm)
+	elements = sink.store.newSet(m)
 	b = sink.newBlankNode()
 	sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"items"), obj=elements, why=why)
 	return b
