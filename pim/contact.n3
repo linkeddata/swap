@@ -79,7 +79,7 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 
 :knownAs a rdf:Property;
     rdfs:comment """A person may be known as various strings.
-For example, an email freindly name string.""".
+For example, an email friendly name string.""".
 
 :ContactLocation a rdfs:Class;
     rdfs:comment  "A place with address, phone number, fax, etc".
@@ -273,7 +273,7 @@ mso:WebPage  a rdf:Property;
 
 <> dc:description """
 $Log$
-Revision 1.15  2002-10-07 19:41:24  timbl
+Revision 1.16  2002-10-07 19:41:37  timbl
 (timbl) Changed through Jigsaw.
 
 Revision 1.13  2002/07/18 05:30:49  connolly
