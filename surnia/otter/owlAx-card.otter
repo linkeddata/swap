@@ -104,6 +104,15 @@ all LIST CARD CARDMINUSONE (
    ))
 ).
 
+all LIST A B (
+   inList(A, LIST) &
+   inList(B, LIST) & 
+   cardinality(LIST, one)
+   ->
+   rdf(A, owl_sameAs, B)
+).
+
+%    very hard to generalize that.....
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -203,7 +212,10 @@ all THING1 THING2 (
 
 
 % $Log$
-% Revision 1.2  2003-07-31 21:45:56  sandro
+% Revision 1.3  2003-08-01 04:24:32  sandro
+% intermediate; about to play with paramodulation
+%
+% Revision 1.2  2003/07/31 21:45:56  sandro
 % in progress, working on test 008, then back to 001.
 %
 % Revision 1.1  2003/07/31 20:56:30  sandro

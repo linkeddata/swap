@@ -8,7 +8,10 @@ formula_list(usable).
 
 inList(a, list).
 inList(b, list).
-cardinality(list, one).
+inList(c, list).
+inList(d, list).
+cardinality(list, two).
 
 -rdf(a, owl_sameAs, b).
+-rdf(a, owl_sameAs, c).
 

@@ -30,4 +30,7 @@ all MEMBER LIST HEAD TAIL (
 all MEMBER (-inList(MEMBER, rdf_nil)).
 
 
-% $Log $
+% $Log$
+% Revision 1.2  2003-08-01 04:24:32  sandro
+% intermediate; about to play with paramodulation
+%

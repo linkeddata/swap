@@ -9,6 +9,7 @@
 include('util/owlAx-unionOf.otter').
 include('util/owlAx-oneOf.otter').
 include('util/owlAx-equivProp.otter').
+include('util/owlAx-card.otter').
 
 formula_list(usable).
 
@@ -228,6 +229,7 @@ all RESTRICTION PROPERTY VALUE INST (
    rdf(INST, PROPERTY, VALUE)
 ).
    
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %   owl_FunctionalProperty
@@ -478,10 +480,13 @@ all P1 P2 (
   -> 
   ( rdf(INST, rdf_type, FIRST) | rdf(INST, rdf_type, SECOND) )
 )).
-   
+
 
 % $Log$
-% Revision 1.13  2003-07-31 04:35:07  sandro
+% Revision 1.14  2003-08-01 04:24:32  sandro
+% intermediate; about to play with paramodulation
+%
+% Revision 1.13  2003/07/31 04:35:07  sandro
 % Added a way for certain tests to use subset of the full set of
 % axioms; I'm starting to hit a wall where adding the details needed
 % to pass one test makes the others become too slow.   Sometimes we

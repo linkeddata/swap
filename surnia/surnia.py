@@ -76,15 +76,22 @@ axiomTag['http://www.w3.org/2002/03owlt/equivalentProperty/Manifest004#test']="-
 #axiomTag['http://www.w3.org/2002/03owlt/FunctionalProperty/Manifest004#test']="-funcProp"
 #axiomTag['http://www.w3.org/2002/03owlt/InverseFunctionalProperty/Manifest004#test']="-funcProp"
 
+#axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest001#test']='-card'
+#axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest002#test']='-card'
+#axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest003#test']='-card'
+#axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest004#test']='-card'
+
+
 maxSeconds = 1
 
 skip = {
-    'http://www.w3.org/2002/03owlt/I5.2/Manifest002#test': "no DT theory",
-    'http://www.w3.org/2002/03owlt/equivalentClass/Manifest004#test': "no DT theory",
-    'http://www.w3.org/2002/03owlt/cardinality/Manifest001#test': "no DT theory",
-    'http://www.w3.org/2002/03owlt/cardinality/Manifest002#test': "no DT theory",
-    'http://www.w3.org/2002/03owlt/cardinality/Manifest003#test': "no DT theory",
-    'http://www.w3.org/2002/03owlt/cardinality/Manifest004#test': "no DT theory",
+#    'http://www.w3.org/2002/03owlt/I5.2/Manifest002#test': "no DT theory",
+#    'http://www.w3.org/2002/03owlt/equivalentClass/Manifest004#test': "no DT theory",
+#    'http://www.w3.org/2002/03owlt/cardinality/Manifest001#test': "no DT theory",
+#    'http://www.w3.org/2002/03owlt/cardinality/Manifest002#test': "no DT theory",
+#    'http://www.w3.org/2002/03owlt/cardinality/Manifest003#test': "no DT theory",
+#    'http://www.w3.org/2002/03owlt/cardinality/Manifest004#test': "no DT theory",
+    'http://www.w3.org/2002/03owlt/description-logic/Manifest903#test': "loop",
     }
 
 maxFailed = 999999
