@@ -103,4 +103,13 @@ doc:mayControl a r:Property;
     s:range     doc:Work .
 
 
+# Machine-readable semantics
+#
+#   Eg  <contact>  doc:rules <contact-rules>.
+#
+
+doc:rules a r:Property;
+	s:range :Work;
+	s:domain :Work.
+
 #ENDS
