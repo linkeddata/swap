@@ -1,19 +1,31 @@
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
-@prefix db <http://localhost/SqlDB#>.
+
+#@prefix db: 		<http://localhost/SqlDB#>.
+# Tables:
+@prefix acls: 		<http://localhost/SqlDB/acls#>.
+@prefix uris: 		<http://localhost/SqlDB/uris#>.
+@prefix ids: 		<http://localhost/SqlDB/ids#>.
+@prefix idInclusions:	<http://localhost/SqlDB/idInclusions#>.
+
 @prefix : <#>.
 @prefix v: <#>.
 
-this log:forAll :urisRow, aacl, :acl, :access, :u1, :g1, :accessor .
+this log:forAll :urisRow, :aacl, :acl, :access, :u1, :g1, :accessor .
+
+<http://dummyserver.w3.org/foo.mdb/acl> is log:authoritativeServer of
+	acls:acl, acls:access, acls:id, ids:value, idInclusions:id, 
+	idInclusions:groupId.
 {
- :urisRow db:uris.uri "http://www.w3.org/Member/Overview.html" .
- :urisRow db:uris.acl :aacl .
- :acl db:acls.acl :aacl .
- :acl db:acls.access :access .
- :u1 db:ids.value "eric" .
- :g1 db:idInclusions.id :u1 .
- :g1 db:idInclusions.groupId :accessor .
- :acl db:acls.id :accessor .
+ :urisRow uris:uri "http://www.w3.org/Member/Overview.html" .
+ :urisRow uris:acl :aacl .
+ :acl acls:acl :aacl .
+ :acl acls:access :access .
+ :u1 ids:value "eric" .
+ :g1 idInclusions:id :u1 .
+ :g1 idInclusions:groupId :accessor .
+ :acl acls:id :accessor .
 } log:implies {
 
-:aacl :RESULT :u1
+ :aacl :RESULT :u1
+
 }.
