@@ -387,7 +387,13 @@ class KB(list, pluggable.Store):
 
             #print "PreFill-SPO", subj, pred, obj
 
-            k = self.nickname(pred)
+            try:
+                k = self.nickname(pred)
+            except LX.namespace.NoShortNameDeclared:
+                # we *could* make one up, but the user wouldn't
+                # know what it was anyway, so what's the point?
+                # ... don't bother to record this.
+                continue
             
             subjNode = self.nodes.setdefault(subj, LX.nodepath.Node(self, subj))
             objNode = self.nodes.setdefault(obj, LX.nodepath.Node(self, obj))
@@ -417,7 +423,10 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
  
 # $Log$
-# Revision 1.21  2003-09-06 04:49:24  sandro
+# Revision 1.22  2003-09-08 17:31:07  sandro
+# handle case where no namespace-prefix is declared
+#
+# Revision 1.21  2003/09/06 04:49:24  sandro
 # just in debugging comments
 #
 # Revision 1.20  2003/09/04 15:23:18  sandro
