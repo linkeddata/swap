@@ -17,6 +17,11 @@ global chatty_flag # verbosity debug flag
 #chatty_flag  =0
 chatty_flag = int(os.environ.get("CWM_VERBOSITY", 0))
 
+global print_all_file_names
+print_all_file_names = int(os.environ.get("CWM_LIST_FILES", 0))
+global file_list
+file_list = []
+
 
 global tracking
 tracking = 0  # Are we keeping reason information for proof generation?

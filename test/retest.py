@@ -13,6 +13,7 @@ Options:
 --verbose	-v      Print what you are doing as you go
 --ignoreErrors  -i	Print error message but plough on though more tests if errors found
 			(Summary error still raised when all tests ahve been tried)
+--cwm=../cwm.py         Cwm command is ../cwm
 --help          -h      Print this message and exit
 
 You must specify some test definitions, and normal or proofs or both,
@@ -35,7 +36,9 @@ import urllib
 import llyn
 from myStore import load, loadMany, Namespace
 from uripath import refTo, base
+import diag
 from diag import progress
+
 
 rdf = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 test = Namespace("http://www.w3.org/2000/10/swap/test.n3#")
@@ -74,6 +77,11 @@ def diff(case, ref=None, prog="diff -Bbwu"):
     global verbose
     if ref == None:
 	ref = "ref/%s" % case
+    if diag.print_all_file_names:  #for use in listing all files used in testing
+        a = open('testfilelist','a')
+        a.write(ref)
+        a.write('\n')
+        a.close()
     diffcmd = """%s %s ,temp/%s >,diffs/%s""" %(prog, ref, case, case)
     if verbose: print "  ", diffcmd
     result = system(diffcmd)
@@ -135,13 +143,18 @@ def main():
     normal = 1
     chatty = 0
     proofs = 0
+    cwm_command='../cwm.py'
     global ploughOn # even if error
     ploughOn = 0
     global verbose
     verbose = 0
+    if diag.print_all_file_names:
+        a = file('testfilelist','w')
+        a.write('')
+        a.close()
     try:
         opts, testFiles = getopt.getopt(sys.argv[1:], "hs:ncipf:v",
-	    ["help", "start=", "testsFrom=", "normal", "chatty", "ignoreErrors", "proofs", "verbose"])
+	    ["help", "start=", "testsFrom=", "normal", "chatty", "ignoreErrors", "proofs", "verbose","cwm="])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
@@ -165,6 +178,8 @@ def main():
 	    chatty = 1
 	if o in ("-p", "--proofs"):
 	    proofs = 1
+	if o in ("--cwm", "--the_end"):
+            cwm_command=a
 
     
     assert system("mkdir -p ,temp") == 0
@@ -259,25 +274,25 @@ def main():
 	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d'""" % (WD, REFWD)
 	
 	if normal:
-	    execute("""CWM_RUN_NS="run#" %spython ../cwm.py --quiet %s | %s > ,temp/%s""" %
-		(env, arguments, cleanup , case))	
+	    execute("""CWM_RUN_NS="run#" %spython %s --quiet %s | %s > ,temp/%s""" %
+		(env, cwm_command, arguments, cleanup , case))	
 	    if diff(case, refFile):
 		problem("######### from normal case %s: %scwm %s" %( case, env, arguments))
 		continue
 
 	if chatty:
-	    execute("""%spython ../cwm.py --chatty=100  %s  &> /dev/null""" %
-		(env, arguments))	
+	    execute("""%spython %s --chatty=100  %s  &> /dev/null""" %
+		(env, cwm_command, arguments))	
 
 	if proofs:
-	    execute("""%spython ../cwm.py --quiet %s --base=a --why  > ,proofs/%s""" %
-		(env, arguments, case))
+	    execute("""%spython %s --quiet %s --base=a --why  > ,proofs/%s""" %
+		(env, cwm_command, arguments, case))
 	    execute("""python ../check.py < ,proofs/%s | %s > ,temp/%s""" %
 		(case, cleanup , case))	
 	    if diff(case, refFile):
 		problem("######### from proof case %s: %scwm %s" %( case, env, arguments))
 	passes = passes + 1
-
+	
     for u, case, description,  inputDocument, outputDocument in RDFTestData:
 	tests = tests + 1
 	if tests < start: continue
@@ -288,8 +303,8 @@ def main():
 	assert case and description and inputDocument and outputDocument
 #	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
 #			WD, REFWD)
-	execute("""python ../cwm.py --quiet --rdf=RT %s --ntriples  > ,temp/%s""" %
-	    (inputDocument, case))
+	execute("""python %s --quiet --rdf=RT %s --ntriples  > ,temp/%s""" %
+	    (cwm_command, inputDocument, case))
 	if rdfcompare3(case, localize(outputDocument)):
 	    problem("  from positive parser test %s running\n\tcwm %s\n" %( case,  inputDocument))
 

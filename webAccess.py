@@ -2,6 +2,7 @@
 """
 $Id$
 
+
 Web access functionality building on urllib
 
 """
@@ -19,6 +20,9 @@ from OrderedSequence import indentString
 
 HTTP_Content_Type = 'content-type' #@@ belongs elsewhere?
 
+print_all_file_names = diag.print_all_file_names   # for listing test files
+
+
 
 def urlopenForRDF(addr):
     """A version of urllib.urlopen() which asks for RDF by preference
@@ -28,7 +32,10 @@ def urlopenForRDF(addr):
     z = urllib2.Request(addr)
     z.add_header('Accept', 'text/rdf+n3, application/rdf+xml')
 #    z.add_header('Accept', 'text/plain q=0.1')
-    return urllib2.urlopen(z)
+    q =  urllib2.urlopen(z)
+    if print_all_file_names:
+        diag.file_list.append(addr)
+    return q
 
 def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
 		flags="", why=None):

@@ -33,7 +33,7 @@
 { ?x a TestValue; math:cos ?y} => {?x COS ?y}.
 { ?x a TestValue; is math:cos of ?y} => {?x ACOS ?y}.
 
-{ ?x a TestValue; math:tan ?y} => {?x TAN ?y}.
+{ ?x a NonPiTestValue; math:tan ?y} => {?x TAN ?y}.
 { ?x a TestValue; is math:tan of ?y} => {?x ATAN ?y}.
 
 { ?x a TestValue; math:sinh ?y} => {?x SINH ?y}.

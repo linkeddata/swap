@@ -422,7 +422,7 @@ def dereification(x, f, sink, bnodes={}):
 	ulist = f.the(subj=uset, pred=f.newSymbol(owlOneOf))
 	progress("existentials %s =  %s"%(ulist, ulist.value()))
 	for v in ulist:
-	    progress("Varibale is ", v)
+	    progress("Variable is ", v)
 	    z.declareExistential(f.newSymbol(v.value()))
 	yy = f.the(subj=y, pred=f.newSymbol(owlOneOf))
 	progress("Statements:  set=%s, list=%s = %s" %(y,yy, yy.value()))
