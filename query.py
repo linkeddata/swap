@@ -30,7 +30,7 @@ INFINITY = 1000000000           # @@ larger than any number occurences
 
 # State values as follows, high value=try first:
 S_UNKNOWN = 	99  # State unknown - to be [re]calculated by setup.
-S_FAIL =   	80  # Have exhausted all possible ways to saitsfy this item. stop now.
+S_DONE =   	80  # Have exhausted all possible ways to saitsfy this item. return now.
 S_LIGHT_UNS_GO= 70  # Light, not searched yet, but can run
 S_LIGHT_GO =  	65  # Light, can run  Do this!
 S_NOT_LIGHT =   60  # Not a light built-in, haven't searched yet.
@@ -38,12 +38,9 @@ S_LIGHT_EARLY=	50  # Light built-in, not enough constants to calculate, haven't 
 S_NEED_DEEP=	45  # Can't search because of unbound compound term, could do recursive unification
 S_HEAVY_READY=	40  # Heavy built-in, search done, but formula now has no vars left. Ready to run.
 S_LIGHT_WAIT=	30  # Light built-in, not enough constants to calculate, search done.
-S_HEAVY_WAIT=	20  # Heavy built-in, too many variables in args to calculate, search failed.
-S_HEAVY_WAIT_F=	19  # Heavy built-in, too many vars within formula args to calculate, search failed.
+S_HEAVY_WAIT=	20  # Heavy built-in, too many variables in args to calculate, search done.
 S_REMOTE =	10  # Waiting for local query to be resolved as much as possible
-S_LIST_UNBOUND = 7  # List defining statement, search failed, unbound variables in list.?? no
-S_LIST_BOUND =	 5  # List defining statement, search failed, list is all bound.
-S_DONE =	 0  # Item has been staisfied, and is no longer a constraint
+S_SATISFIED =	 0  # Item has been staisfied, and is no longer a constraint, continue with others
 
 
 def think(knowledgeBase, ruleFormula=None, mode=""):
@@ -700,12 +697,14 @@ class Query:
                          + " ExQuVars:("+seqToString(existentials)+")")
             con, pred, subj, obj = item.quad
             state = item.state
-            if state == S_FAIL:
+            if state == S_DONE:
                 return total # Forget it -- must be impossible
-            if state == S_LIGHT_UNS_GO or state == S_LIGHT_GO:
-		item.state = S_LIGHT_EARLY   # Assume can't run
+            if state == S_LIGHT_UNS_GO:
+		item.state = S_LIGHT_EARLY   # Unsearched, try builtin
                 nbs = item.tryBuiltin(queue, bindings, heavy=0, evidence=evidence)
-		# progress("llyn.py 2706:   nbs = %s" % nbs)
+            elif state == S_LIGHT_GO:
+		item.state = S_DONE   # Searched.
+                nbs = item.tryBuiltin(queue, bindings, heavy=0, evidence=evidence)
             elif state == S_LIGHT_EARLY or state == S_NOT_LIGHT or state == S_NEED_DEEP: #  Not searched yet
                 nbs = item.tryDeepSearch()
             elif state == S_HEAVY_READY:  # not light, may be heavy; or heavy ready to run
@@ -735,10 +734,10 @@ class Query:
                                 progress("**** Includes: Adding %i new terms and %s as new existentials."%
                                           (len(more_unmatched),
                                            seqToString(more_variables)))
-                        item.state = S_DONE
+                        item.state = S_SATISFIED
                     else:
                         progress("Include can only work on formulae "+`item`) #@@ was RuntimeError exception
-                        item.state = S_FAIL
+                        item.state = S_DONE
                     nbs = []
                 else:
 		    item.state = S_HEAVY_WAIT  # Assume can't resolve
@@ -750,7 +749,7 @@ class Query:
 			items.append(i)
 			queue.remove(i)
 		nbs = query.remoteQuery(items)
-		item.state = S_DONE  # do not put back on list
+		item.state = S_SATISFIED  # do not put back on list
             elif state ==S_HEAVY_WAIT or state == S_LIGHT_WAIT: # Can't
                 if diag.chatty_flag > 49 :
                     progress("@@@@ Warning: query can't find term which will work.")
@@ -782,9 +781,9 @@ class Query:
                         return total
 # NO - more to do return total # The called recursive calls above will have generated the output @@@@ <====XXXX
 	    if diag.chatty_flag > 80: progress("Item state %i, returning total %i" % (item.state, total))
-            if item.state == S_FAIL:
+            if item.state == S_DONE:
 		return total
-            if item.state != S_DONE:   # state 0 means leave me off the list
+            if item.state != S_SATISFIED:   # state 0 means leave me off the list
                 queue.append(item)
             # And loop back to take the next item
 
@@ -949,7 +948,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         else:
             self.state = S_NOT_LIGHT   # Not a light built in, not searched.
         if diag.chatty_flag > 80: progress("setup:" + `self`)
-        if self.state == S_FAIL: return 0
+        if self.state == S_DONE: return 0
         return []
 
 
@@ -967,7 +966,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    if self.neededToRun[SUBJ] == []:
 		if self.neededToRun[OBJ] == []:   # bound expression - we can evaluate it
 		    if pred.eval(subj, obj,  queue, bindings.copy(), proof, self.query):
-			self.state = S_DONE # satisfied
+			self.state = S_SATISFIED # satisfied
                         if diag.chatty_flag > 80: progress("Builtin buinary relation operator succeeds")
 			if tracking:
 			    rea = BecauseBuiltIn(subj, pred, obj, proof)
@@ -980,7 +979,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if diag.chatty_flag > 97: progress("Builtin function call %s(%s)"%(pred, subj))
 			result = pred.evalObj(subj, queue, bindings.copy(), proof, self.query)
 			if result != None:
-			    self.state = S_FAIL
+			    self.state = S_DONE
 			    rea=None
 			    if tracking: rea = BecauseBuiltIn(subj, pred, result, proof)
 			    return [({obj: result}, rea)]
@@ -991,7 +990,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    if isinstance(pred, ReverseFunction):
 			result = pred.evalSubj(obj, queue, bindings.copy(), proof, self.query)
 			if result != None:
-			    self.state = S_FAIL
+			    self.state = S_DONE
 			    rea=None
 			    if tracking:
 				rea = BecauseBuiltIn(result, pred, obj, proof)
@@ -1002,7 +1001,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    if isinstance(pred, FiniteProperty):
 			result = pred.ennumerate()
 			if result != 0:
-			    self.state = S_FAIL
+			    self.state = S_DONE
 			    rea=None
 			    if tracking:
 				rea = BecauseBuiltIn(result, pred, obj, proof)
@@ -1038,7 +1037,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
             for s in self.myIndex :  # for everything matching what we know,
                 nb = {}
                 reject = 0
-		if diag.chatty_flag > 106: progress("...checking %s" % self)
+		if diag.chatty_flag > 106: progress("...checking %r" % s)
                 for p in PRED, SUBJ, OBJ:
                     if self.searchPattern[p] == None: # Need to check
 			x = self.quad[p]
@@ -1082,7 +1081,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	elif self.service:
 	    self.state = S_REMOTE    #  Search done, need to synchronize with other items
         elif not isinstance(pred, HeavyBuiltIn):
-            self.state = S_FAIL  # Done with this one: Do new bindings & stop
+            self.state = S_DONE  # Done with this one: Do new bindings & stop
         elif self.canRun():
             self.state = S_HEAVY_READY
         else:
@@ -1149,24 +1148,17 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                                            self.searchPattern[OBJ])
             if self.short == 0:
                 self.searchDone()
-
+	else:
+	    self.short = 7700+self.state  # Should not be used
+	    self.myIndex = None
         if isinstance(self.quad[PRED], BuiltIn):
             if self.canRun():
                 if self.state == S_LIGHT_EARLY: self.state = S_LIGHT_UNS_GO
                 elif self.state == S_LIGHT_WAIT: self.state = S_LIGHT_GO
                 elif self.state == S_HEAVY_WAIT: self.state = S_HEAVY_READY
-        elif (self.state == S_LIST_UNBOUND
-              and self.neededToRun[SUBJ] == []
-              and self.neededToRun[OBJ] == []):
-            self.state = S_LIST_BOUND
-	if self.state == S_LIST_BOUND and self.searchPattern[SUBJ] != None:  # @@@@@@ 20030807
-	    if diag.chatty_flag > 50:
-		progress("Rejecting list already searched and now bound", self)
-	    self.state = S_FAIL    # see test/list-bug1.n3
-	    return []  #@@@@ guess 20030807
         if diag.chatty_flag > 90:
             progress("...bound becomes ", `self`)
-        if self.state == S_FAIL: return 0
+        if self.state == S_DONE: return 0
         return [] # continue
 
     def __repr__(self):
