@@ -12,7 +12,8 @@
 @prefix string: <http://www.w3.org/2000/10/swap/string#> .
 @prefix time: <http://www.w3.org/2000/10/swap/time#> .
 @prefix math: <http://www.w3.org/2000/10/swap/math#> .
-@prefix cal: <http://ilrt.org/discovery/2001/06/schemas/ical-full/hybrid.rdf#>.
+#@prefix cal: <http://ilrt.org/discovery/2001/06/schemas/ical-full/hybrid.rdf#>.
+@prefix cal: <http://www.w3.org/2000/10/swap/pim/ical#>
 
 # Vocabs from teleconferce.n3:
 #
