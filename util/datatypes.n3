@@ -1,0 +1,230 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+<> dc:title "An RDF model of XML Schema datatypes";
+  dc:description "unfinished",
+    "$Id$";
+  dc:source [ = <http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/>;
+    dc:description "Schema part 2 - Datatypes spec";
+    dc:relation <http://www.w3.org/TR/xmlschema-2/> ].
+
+@prefix dt: <http://www.w3.org/2000/10/XMLSchema#> .
+
+@prefix r:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+
+
+@prefix ont: <http://www.daml.org/2001/03/daml+oil#> .
+
+@prefix dtm: <http://www.w3.org/2000/10/swap/util/datatypes#>.
+@prefix    : <http://www.w3.org/2000/10/swap/util/datatypes#>.
+
+@prefix ex: <http://example/vocab#>.
+
+####
+# Datatypes are properties
+
+:Datatype s:label "Datatype";
+  s:subClassOf r:Property;
+  s:seeAlso <http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/#dt-datatype>;
+  is r:type of
+    dt:string,
+    dt:boolean,
+    dt:decimal,
+    dt:float,
+    dt:double,
+    dt:duration,
+    dt:dateTime,
+    dt:time,
+    dt:date,
+    dt:gYearMonth,
+    dt:gYear,
+    dt:gMonthDay,
+    dt:gDay,
+    dt:gMonth,
+    dt:hexBinary,
+    dt:base64Binary,
+    dt:anyURI,
+    # dt:QName # omitted due to ambiguity
+    # dt:NOTATION # omitted; DTD support not merited
+    dt:normalizedString,
+    dt:token,
+    dt:language,
+    # NMTOKEN
+    # NMTOKENS
+    dt:Name,
+    dt:NCName,
+    # ID
+    # IDREF
+    # IDREFS
+    #  ENTITY
+    # ENTITIES
+    dt:integer,
+    dt:nonPositiveInteger,
+    dt:negativeInteger,
+    dt:long,
+    dt:int,
+    dt:short,
+    dt:byte,
+    dt:nonNegativeInteger,
+    dt:unsignedLong,
+    dt:unsignedInt,
+    dt:unsignedShort,
+    dt:unsignedByte,
+    dt:positiveInteger.
+
+
+####
+# specification of essential characteristics of datatypes...
+:Datatype
+  s:subClassOf ont:UnambiguousProperty;
+  is s:domain of :valueSpace, :lexicalSpace.
+
+:valueSpace s:label "value space";
+  s:seeAlso <http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/#dt-value-space>;
+  s:subPropertyOf s:domain.
+
+:lexicalSpace s:label "lexical space";
+  s:seeAlso <http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/#dt-lexical-space>;
+  s:subPropertyOf s:range.
+
+####
+# a little test...
+
+_:x dt:date "2001-70-01"; ex:weather ex:sunny.
+_:y dt:date "2001-70-01"; ex:winningTeam ex:tigers.
+
+
+####
+# a hook for relating literal-valued RDF properties to
+# datatypes...
+
+:rangeSyntax a r:Property;
+  s:range :Datatype.
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+this log:forAll :P, :L, :DT.
+
+{ [] :P :L.
+  :P :rangeSyntax :DT.
+} log:implies { [] :DT :L }.
+
+:rangeSyntax s:comment { # example...
+  { ex:age :rangeSyntax dt:integer.
+    ex:jenny ex:age "10" }
+    log:implies { [] dt:integer "10" } }.
+
+
+####
+# derived types
+
+:baseType s:label "base type";
+  s:seeAlso <http://www.w3.org/TR/2001/REC-xmlschema-2-20010502/#dt-basetype>;
+  s:subPropertyOf s:subPropertyOf.
+
+# built-ins
+dt:integer :baseType dt:decimal.
+
+####
+# a little bit of validation support...
+# this doesn't catch stuff like "10 years"
+# because the "10..." part matches.
+
+@prefix str: <http://www.w3.org/2000/10/swap/string#> .
+
+#@@need to think more about how facets fit in before
+# I'm sure dt:pattern can/should be used this way.
+
+dt:boolean :lexicalSpace [ dt:pattern "(true)|(false)|0|1" ].
+dt:decimal :lexicalSpace [ dt:pattern "([+-])?\\d+(\\.\\d*)?" ].
+
+this log:forAll :V, :L, :DT, :PAT, :PATTEST.
+{ [] :DT :L.
+  :DT :lexicalSpace [ dt:pattern :PAT ].
+
+  :PATTEST is str:concatenation of ("^((" :PAT ")?)").
+
+  (:L :PATTEST) str:scrape ""
+} log:implies {
+  :DT :lexicalSpaceExceededBy :L
+}.
+
+{ :V :DT :L.
+  :DT :lexicalSpaceExceededBy :L
+} log:implies { :V :bogusLexicalForm (:DT :L) }.
+
+ex:age :rangeSyntax dt:decimal.
+ex:fred ex:age "ten", "10years", "10", "10.", "10.0", "10.0 years", "y10".
+
+
+######
+# refinement: 3-tuple ness: lexical space, value space are unique.
+
+:lexicalSpace
+  a ont:UniqueProperty.
+
+:valueSpace
+  a ont:UniqueProperty.
+
+:Datatype
+  s:comment "TODO: facets aren't formalized",
+     """the 3-tuple-ness could be formalized as:
+         if the value space, the lexical space, and the facets are the same,
+         then the datatypes are the same""".
+
+######
+# Next level of refinement...
+
+:lexicalSpace
+  s:range :LiteralSet.
+
+:valueSpace
+  s:comment """A value space is the set of values for a given datatype.
+    Each value in the value space of a datatype is denoted by one
+    or more literals in its lexical space.""".
+
+this log:forAll :V.
+
+{ :V a [ is :valueSpace of :DT ] } log:implies
+  { :V :DT [ a [ is :lexicalSpace of :DT ] ] }.
+
+
+:LiteralSet s:subClassOf :Set;
+  s:subClassOf [ ont:onProperty s:subClassOf;
+                 ont:toClass s:Literal ];
+
+  s:range :Set.
+
+
+####
+# diversion... specification of :Set
+
+this log:forAll :A, :B.
+
+# equality of sets is defined extensionally...
+{ :A a :Set. :B a :Set. } log:implies {
+  { :A s:subClassOf :B. :B s:subClassOf :A. }
+    log:means { :A = :B }
+}.
+
+#
+###
+
+
+###
+# a bit of RDFS...
+
+this log:forAll :S, :C.
+
+{ :S a [ s:subClassOf :C ] } log:implies { :S a :C }.
+
+####
+# a bit of DAML+OIL...
+this log:forAll :S, :T, :P, :O.
+
+{ :S :P :O.
+  :T :P :O.
+  :P a ont:UnambiguousProperty }
+  log:implies { :S = :T }.
+{ :S = :T. :T :P :O } log:implies { :S :P :O }.
+
