@@ -18,7 +18,7 @@ import urllib # for hasContent
 import md5, binascii  # for building md5 URIs
 
 from term import LightBuiltIn, ReverseFunction, Function
-from decimal import decimal
+from decimal import Decimal
 
 LITERAL_URI_prefix = "data:text/rdf+n3;"
 
@@ -114,7 +114,7 @@ class BI_concatenation(LightBuiltIn, Function):
         str = ""
         for x in subj_py:
             if not isString(x):
-                if type(x) == type(long()) or isinstance(x, decimal):
+                if type(x) == type(long()) or isinstance(x, Decimal):
                     x = make_string(x)
                 else:
                     x = `x`

@@ -1,6 +1,6 @@
 """Decimal datatype
 
-This is an implementation of the decimal XML schema datatype in python
+This is an implementation of the Decimal XML schema datatype in python
 
 magnitude is the log10 of the number we multiply it by to get an integer
 
@@ -10,8 +10,8 @@ $Id$
 from types import IntType, FloatType, LongType, StringTypes
 from math import log10
 
-class decimal:
-    """make a new decimal
+class Decimal:
+    """make a new Decimal
 
     Argument can be string, int, long, or float
     float is not recommended
@@ -20,7 +20,7 @@ class decimal:
     _limit = 16
     
     def normalize(self):
-        """convert this decimal into some sort of canonical form
+        """convert this Decimal into some sort of canonical form
 
 
         """
@@ -37,11 +37,11 @@ class decimal:
         
     
     def __init__(self, other=0):
-        """How to get a new decimal
+        """How to get a new Decimal
 
         What happened?
         """
-        if isinstance(other, decimal):
+        if isinstance(other, Decimal):
             self.value = other.value
             self.magnitude = other.magnitude
             return
@@ -55,8 +55,8 @@ class decimal:
             self.magnitude = 0
             self.normalize()
             return
-        elif hasattr(other,'__decimal__') and callable(getattr(other, '__decimal__')):
-            a = other.__decimal__()
+        elif hasattr(other,'__Decimal__') and callable(getattr(other, '__Decimal__')):
+            a = other.__Decimal__()
             self.value = a.value
             self.magnitude = a.magnitude
             self.normalize()
@@ -115,7 +115,7 @@ class decimal:
     def __add__(self, other):
         """x.__add__(y) <==> x+y
         """
-#        if not isinstance(other, decimal):
+#        if not isinstance(other, Decimal):
 #            other = self.__class__(other)
         if other.magnitude < self.magnitude:
             return other.__add__(self)
@@ -131,7 +131,7 @@ class decimal:
     def __cmp__(self, other):
         """x.__cmp__(y) <==> cmp(x,y)
         """
-        if not isinstance(other, decimal):
+        if not isinstance(other, Decimal):
             other = self.__class__(other)
         if other.magnitude < self.magnitude:
             return -other.__cmp__(self)
@@ -172,7 +172,7 @@ class decimal:
     def __floordiv__(self, other):
         """x.__floordiv__(y) <==> x//y
         """
-#        if not isinstance(other, decimal):
+#        if not isinstance(other, Decimal):
 #            other = self.__class__(other)
         if other.magnitude < self.magnitude:
             return other.__rfloordiv__(self)
@@ -210,7 +210,7 @@ class decimal:
     def __mod__(self, other):
         """x.__mod__(y) <==> x%y
         """
-#        if not isinstance(other, decimal):
+#        if not isinstance(other, Decimal):
 #            other = self.__class__(other)
         if other.magnitude < self.magnitude:
             return other.__rmod__(self)
@@ -225,7 +225,7 @@ class decimal:
     def __mul__(self, other):
         """x.__mul__(y) <==> x*y
         """
-#        if not isinstance(other, decimal):
+#        if not isinstance(other, Decimal):
 #            other = self.__class__(other)
         a = self.__class__()
         a.value = self.value * other.value
@@ -251,7 +251,7 @@ class decimal:
 
         If the exponent is not an integer, we will simply convert things to floats first
         """
-        if not isinstance(other, decimal):
+        if not isinstance(other, Decimal):
             other = self.__class__(other)
         while other.magnitude < 0:
             other.value = other.value*10
@@ -283,7 +283,7 @@ class decimal:
     def __rdiv__(self, other):
         """x.__rdiv__(y) <==> y/x
         """
-        if not isinstance(other, decimal):
+        if not isinstance(other, Decimal):
             other = self.__class__(other)
         return other.__div__(self)
     def __rdivmod__(self, other):
@@ -297,7 +297,7 @@ class decimal:
     def __rfloordiv__(self, other):
         """x.__rfloordiv__(y) <==> y//x
         """
-#        if not isinstance(other, decimal):
+#        if not isinstance(other, Decimal):
 #            other = self.__class__(other)
         if other.magnitude < self.magnitude:
             return other.__floordiv__(self)
@@ -312,7 +312,7 @@ class decimal:
     def __rmod__(self, other):
         """x.__rmod__(y) <==> y%x
         """
-        if not isinstance(other, decimal):
+        if not isinstance(other, Decimal):
             other = self.__class__(other)
         if other.magnitude < self.magnitude:
             return other.__mod__(self)
@@ -387,19 +387,19 @@ class decimal:
     def __truediv__(self, other):
         """x.__truediv__(y) <==> x/y
         """
-        return self.__div__(other)
+        return self.__div__(self.__class__(other))
 
 def n_root(base, power):
-    """Find the nth root of a decimal
+    """Find the nth root of a Decimal
     """
     print 'trying to compute ', base, ' ** 1/ ', power
-    accuracy = decimal(1)
-    n = 10 #decimal._limit
+    accuracy = Decimal(1)
+    n = 10 #Decimal._limit
     while n > 0:
         accuracy = accuracy / 10
         n = n-1
-    oldguess = decimal(0)
-    guess = decimal('.00000002')
+    oldguess = Decimal(0)
+    guess = Decimal('.00000002')
     counter = 0
     while 1:
         oldguess = guess
@@ -413,6 +413,6 @@ def n_root(base, power):
 #            print guess
             break
 #    print guess
-    answer = decimal(1) / decimal(guess)
+    answer = Decimal(1) / Decimal(guess)
     print answer
     return answer

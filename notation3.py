@@ -85,7 +85,7 @@ N3_forAll_URI = RDFSink.forAllSym
 
 from RDFSink import RDF_type_URI, RDF_NS_URI, DAML_sameAs_URI, parsesTo_URI
 from RDFSink import RDF_spec, List_NS, uniqueURI
-from decimal import decimal
+from decimal import Decimal
 
 ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
 # This is the hash on namespace URIs
@@ -1477,7 +1477,7 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 		if (dt_uri == FLOAT_DATATYPE):
 		    return str(float(s))    # numeric value python-normalized
 		if (dt_uri == DECIMAL_DATATYPE):
-		    return str(decimal(s))
+		    return str(Decimal(s))
 	    st = stringToN3(s, singleLine= singleLine, flags=self._flags)
 	    if lang != None: st = st + "@" + lang
 	    if dt != None: return st + "^^" + self.representationOf(context, dt.asPair())

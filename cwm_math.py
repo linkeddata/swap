@@ -21,7 +21,7 @@ __version__ = '$Revision$'
 import sys, string, re, urllib
 
 from term import LightBuiltIn, Function, ReverseFunction
-from decimal import decimal
+from decimal import Decimal
 import types
 
 # from RDFSink import DAML_LISTS, RDF_type_URI, DAML_sameAs_URI
@@ -67,9 +67,9 @@ def numeric(s):
     if type(s) == types.IntType or \
        type(s) == types.LongType or \
        type(s) is types.FloatType or \
-       isinstance(s,decimal): return s
+       isinstance(s,Decimal): return s
     if s.find('.') < 0 and s.find('e') < 0 : return long(s)
-    return decimal(s)
+    return Decimal(s)
 
 class BI_absoluteValue(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):

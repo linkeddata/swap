@@ -74,7 +74,7 @@ from formula import Formula, StoredStatement
 from query import think, applyRules, testIncludes
 import webAccess
 from webAccess import DocumentAccessError
-from decimal import decimal
+from decimal import Decimal
 
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
@@ -1225,7 +1225,7 @@ class RDFStore(RDFSink) :
             return self.newLiteral(x)
         elif type(x) is types.LongType or type(x) is types.IntType:
             return self.newLiteral(str(x), self.integer)
-        elif isinstance(x, decimal):
+        elif isinstance(x, Decimal):
             return self.newLiteral(str(x), self.decimal)
         elif type(x) is types.FloatType:
 	    if `x`.lower() == "nan":  # We can get these form eg 2.math:asin
@@ -1257,7 +1257,7 @@ class RDFStore(RDFSink) :
 		return self.newLiteral(`what`,  self.integer)
 	    if type(what) is types.FloatType:
 		return self.newLiteral(`what`,  self.float)
-	    if isinstance(what,decimal):
+	    if isinstance(what,Decimal):
                 return self.newLiteral(str(what), self.decimal)
 	    if type(what) is types.ListType: #types.SequenceType:
 		return self.newList(what)

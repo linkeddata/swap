@@ -34,9 +34,12 @@ TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3
 #all: yappstest yappsdoc math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf
 
 
-tested : package
+tested :  updated package
 	(cd test; make pre-release)
 	echo "Test worked, now can make release"
+
+updated :
+	cvs -q update -d
 
 filelist: $(SOURCES) $(TESTS)
 	(cd test; $(MAKE) filelist)
@@ -50,7 +53,6 @@ release : doc.made cwm.tar.gz message.txt
 
 
 package: math.rdf maths.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf times.rdf LICENSE.rdf  $(HTMLS)
-	cvs -q update -d
 
 # Can't make dependencies on *.py :-(
 
@@ -74,7 +76,7 @@ cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
 	cvs add $(TARNAME).tar.gz
 #LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply/*.py *.py
 
-setup_tarball: $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
+setup_tarball: $(SOURCES) tested $(HTMLS) $(TESTS) $(TARBALL_STUFF) filelist
 	-rm -rf swap
 	mkdir swap
 	cd swap; for A in $(SOURCES); do ln "../$$A"; done

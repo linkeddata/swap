@@ -32,7 +32,7 @@ import md5, binascii  # for building md5 URIs
 
 from uripath import refTo
 from RDFSink import runNamespace
-from decimal import decimal  # for xsd:decimal
+from decimal import Decimal  # for xsd:decimal
 
 LITERAL_URI_prefix = "data:text/rdf+n3;"
 
@@ -690,7 +690,7 @@ class FragmentNil(EmptyList, Fragment):
 #
 #		L I T E R A L S
 
-typeMap = { "decimal": decimal,
+typeMap = { "decimal": Decimal,
                 "integer": long,
                     "nonPositiveInteger": long,
                         "negativeInteger": long,
@@ -761,7 +761,7 @@ class Literal(Term):
 	return float(self.string)
 
     def __decimal__(self):
-        return decimal(self.string)
+        return Decimal(self.string)
 
     def occurringIn(self, vars):
 	return []

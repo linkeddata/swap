@@ -1,6 +1,6 @@
 # List of regression tests
 #
-#      Internationalization tests
+#      Math tests
 #
 # Note: Command lines must be for running in the directory above.
 #
@@ -26,4 +26,8 @@
     test:description   "Various trig builtins";
     test:arguments     """math/long.n3""".
 
+:t10396 a test:CwmTest;
+    test:referenceOutput <../ref/dec-div.ref.n3>;
+    test:description   "A bug was found in division with decimals";
+    test:arguments     """datatypes/dec-div.n3  --think""".
 #ends
