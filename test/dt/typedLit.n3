@@ -1,0 +1,53 @@
+@prefix : <#>.
+:jenny :age 10.
+
+:jenny :heightInches float"61.25".
+
+:car :plateNumber string"YMX-BZ3".
+:switch :status boolean"true".
+:account :blance decimal"100.45".
+:computation :result float"10.6e7".
+:comp :result double"10.6e75677".
+:meeting :duration duration"P2H".
+:mtg :startTime dateTime"2002-08-06T15:52:59Z".
+:class :scheduledTime time"15:00". #@@not sure about time syntax
+:conference :when date"2000-08-05".
+:spec :lastCallScheduledFor gYearMonth"2002-02".
+:war :ended gYear"1865".
+:jenny :birthday gMonthDay"10-12". #@@not sure about gMonthDay syntax
+:bill :due gDay"15". #@@ not sure about gDay syntax
+:season :starts gMonth"4". #@@ not sure about gMonth syntax
+:key :fingerprint hexBinary"FA56".
+:img :data base64Binary"ls4lijs4lij4lij".
+:attr :val anyURI"../foo".
+# dt:QName # omitted due to ambiguity
+# dt:NOTATION # omitted; DTD support not merited
+:obscure :case normalizedString"abc def".
+:sentence :verb token"run".
+:doc :language language"en".
+# NMTOKEN # omitted; DTD support not merited
+# NMTOKENS # omitted; DTD support not merited
+:tag :name Name"h1".
+:prop :name NCName"fnort".
+# ID
+# IDREF
+# IDREFS
+#  ENTITY
+# ENTITIES
+:city :population integer"20000".
+:account :balance nonPositiveInteger"0".
+:thingy :temp negativeInteger"-200".
+:comp :result long"4000000000".
+:thing :key int"32768".
+:obj :prop short"127".
+:byteseq :first byte"34".
+:something :prop3 nonNegativeInteger"10".
+:x :y unsignedLong"20".
+:xx :yy unsignedInt"40".
+:xxx :yyy unsignedShort"44".
+:xxxx :yyyy unsignedByte"129".
+:xxxxx :zz positiveInteger"12".
+
+#@@ does the schema WG publish any test data?
+
+
