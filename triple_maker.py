@@ -148,8 +148,8 @@ class TripleMaker:
         if self._modes[-1] == ANONYMOUS and self._pathModes[-1]:
             self._parts[-1] = SUBJECT
 
-    def addLiteral(self, lit):
-        a = self.store.intern(lit)
+    def addLiteral(self, lit, dt=None, lang=None):
+        a = self.store.intern(lit, dt, lang)
         self.addNode(a)
 
     def addSymbol(self, sym):
@@ -188,6 +188,15 @@ class TripleMaker:
         self._parts.pop()
         self.addNode(a)
 
+    def addAnonymous(self, Id):
+        if Id not in bNodes:
+            a = self.formulas[-1].newBlankNode()
+            bNodes[Id] = a
+        else:
+            a = bNodes[Id]
+        self.addNode(a)
+        
+    
     def beginAnonymous(self):
         a = self.formulas[-1].newBlankNode()
         self.bNodes.append(a)
@@ -208,7 +217,6 @@ class TripleMaker:
         self._predIsOfs.pop()
         self._pathModes.pop()
         self.addNode(a)
-        return a
 
     def declareExistential(self, sym):
         formula = self.formulas[-1]
