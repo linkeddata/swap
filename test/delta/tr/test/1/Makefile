@@ -17,7 +17,7 @@ X=tr
 	$P $(CANT) < $< > $@
 
 #.rdf.delta:
-#	$P $S/diff.py -f previous/$< -t $< > $>
+#	$P $S/delta.py -f previous/$< -t $< > $>
 #.delta.nt2:
 #	$P $C previous/tim-other.rdf --patch=$< --ntriples > 
 #	$P $C 
@@ -37,7 +37,7 @@ previous:
 	exit 1
 
 $X.delta:  $X.rdf previous/$X.rdf ../../assumptions.n3
-	$P $S/diff.py -f previous/$X.rdf -t $X.rdf \
+	$P $S/delta.py -f previous/$X.rdf -t $X.rdf \
 		--meta=../../assumptions.n3 > $X.delta
 $X.nt2: previous/$X.rdf $X.delta
 	$P $C previous/$X.rdf --patch=$X.delta --ntriples > $X.nt2 
