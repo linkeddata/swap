@@ -3,7 +3,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <title>Ontologies</title>
+  <title>Vocabulary Documentation</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -13,13 +13,61 @@
 <p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a> |
 <a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
 href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
-Ontologies</p>
+Vocabulary Documentation</p>
 </div>
 
-<h1>Ontologies</h1>
+<h1>Vocabulary Documentation</h1>
 
-<p>An <em>ontology</em> is a precise specification of a vocabulary. It
-typically consists of the set of vocabulary terms along with human-readable
+<p>As we read and write N3, communicating in RDF, we need to share an
+understanding of what each URI means.  We often pick URIs which offer
+clues about meaning, such as
+<code>http://www.w3.org/2000/10/swap/test/demo1/biology#Dog</code>,
+but the text of the URI still gives only a clue.  Would a wolf qualify
+as a one of these?  How about a Dingo?  We can't tell just by looking
+at the name.  It's even possible the URI text is misleading, and the
+intended meaning has nothing to do with dogs.</p>
+
+<p>A good technique for addressing these issues is to <a
+href="../Primer#publish">publish</a> a document which 
+carefully describes the intended meaning
+of each term.  If this description is done carefully enough, following
+a precise structure, software can help us understand what the terms
+mean, check for some kinds of errors, and sometimes even dynamically
+update itself to use and recognize new URIs.</p>
+
+<p>There is a vocabulary of about fifty terms (URIs) being developed by
+W3C Working Groups to support this kind of precise documentation.
+About a dozen of the terms are part of the
+<a href="http://www.w3.org/TR/rdf-schema/">RDF Vocabulary
+Description Language 1.0: RDF Schema</a>, for which we use the
+"rdfs:" namespace abbreviation.   The others are part of the 
+<a href="http://www.w3.org/TR/owl-features/">OWL Web Ontology
+Language</a>.  
+All fifty are all listed and
+cross referenced in the <a
+href="http://www.w3.org/TR/owl-guide/#TermIndex">OWL Guide Appendix</a>
+.</p>
+
+<hr>
+
+<strong>@@@ Old Material</strong>
+
+
+
+
+
+
+<p>In RDF, URIs are used a lot like was use words and phrases in natural
+language.  Each URI has something it stands in place of, represents,
+refers to, or denotes.  
+
+<p>Each URI 
+
+<p>An <em>ontology</em> or is a precise but sometimes incomplete
+specification of a vocabulary. It often consists of both human-readable
+documentation and machine-readable declarations.
+
+the set of vocabulary terms along with human-readable
 definitions of each term and machine-readable declarations about how the
 terms relate to each other. An ontology embodies a conceptualization of some
 subject area; to understand someone, you need to understand both their
