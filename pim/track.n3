@@ -17,9 +17,12 @@
 :title a r:Property;
     s:comment "Short title, less than one line".
 
-:description a r:Property;
+:summary a r:Property;
+    s:domain doc:Work;
     s:range log:String;
-    s:comment "The description of the problem or issue raised". 
+    s:comment """A summary of a message eg a description of a 
+             problem from an opening message or a description of
+          a resolution from a closing message""". 
 
 :resolution a r:Property;
     s:range log:String;
