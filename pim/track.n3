@@ -26,17 +26,17 @@
 
 # State changes
 
-:acceptance a r:Property; s:domain doc:Work; r:range t:Issue;
-    s:label "opens";
-    s:comment "This document is the one which opens this issue".
+:acceptance a r:Property; s:domain t:Issue; r:range doc:Work;
+    s:label "acceptance";
+    s:comment "The document which accepts the this issue, creating it as an issue".
 
-:resolution a r:Property; s:domain doc:Work; r:range t:Issue;
+:resolution a r:Property; s:domain t:Issue; r:range doc:Work;
     s:comment """This document closes (resolves) the issue, which must have been open""".
 
-:rejection a r:Property s:domain doc:Work; r:range t:Issue;
+:rejection a r:Property s:domain t:Issue; r:range doc:Work;
     s:comment """This document rejects the issue, which must have been open""".
 
-:annotation a r:Property s:domain doc:Work; r:range t:Issue;
+:annotation a r:Property s:domain t:Issue; r:range doc:Work;
     s:comment  """No semantics apart from human understanding. no state change""".
 
 #ends
