@@ -299,6 +299,11 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         #from thing import chatty
         #import sax2rdf
 
+        # These would just be attributes if this were an object
+        global _store
+        global workingContext
+        global lxkb
+        
         option_need_rdf_sometime = 0  # If we don't need it, don't import it
                                # (to save errors where parsers don't exist)
         
@@ -312,8 +317,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         option_outputStyle = "-best"
         _gotInput = 0     #  Do we not need to take input from stdin?
         option_meta = 0
-        option_rdf_flags = ""  # Random flags affecting parsing/output
-        option_n3_flags = ""  # Random flags affecting parsing/output
+        option_flags = { "rdf":"", "n3":"" }    # Random flags affecting parsing/output
         option_quiet = 0
         option_with = None  # Command line arguments made available to N3 processing
 
@@ -352,7 +356,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             elif _lhs == "-rdf":
                 option_format = "rdf"
 		if option_first_format == None: option_first_format = option_format 
-                option_rdf_flags = _rhs
+                option_flags["rdf"] = _rhs
                 option_need_rdf_sometime = 1
             elif arg == "-n3":
 		option_format = "n3"
@@ -360,7 +364,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             elif _lhs == "-n3":
                 option_format = "n3"
 		if option_first_format == None: option_first_format = option_format 
-                option_n3_flags = _rhs
+                option_flags["n3"] = _rhs
             elif arg == "-quiet": option_quiet = 1
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-crypto": option_crypto = 1
@@ -369,7 +373,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             elif arg == "-strings": option_outputStyle = "-no"
             elif arg == "-triples" or arg == "-ntriples":
                 option_format = "n3"
-                option_n3_flags = "spart"
+                option_flags["n3"] = "spart"
                 option_outputStyle = "-bySubject"
                 option_quiet = 1
             elif _lhs == "-outURI": option_outURI = _uri
@@ -417,15 +421,15 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
         #  Fix the output sink
         if option_format == "rdf":
-            _outSink = toXML.ToRDF(sys.stdout, _outURI, base=option_baseURI, flags=option_rdf_flags)
+            _outSink = toXML.ToRDF(sys.stdout, _outURI, base=option_baseURI, flags=option_flags["rdf"])
         else:
             _outSink = notation3.ToN3(sys.stdout.write, base=option_baseURI,
-                                      quiet=option_quiet, flags=option_n3_flags)
+                                      quiet=option_quiet, flags=option_flags["n3"])
         version = "$Id$"
         if not option_quiet and option_outputStyle != "-no":
             _outSink.makeComment("Processed by " + version[1:-1]) # Strip $ to disarm
             _outSink.makeComment("    using base " + option_baseURI)
-        if option_reify: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula")
+        #if option_reify: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula")
         if option_flat: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula", flat=1)
 
         if option_pipe:
@@ -441,13 +445,12 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
             _store.reset(_metaURI+"#_experience")     # Absolutely need this for remembering URIs loaded
             history = None
-	
+        lxkb = LX.KB()      # set up a parallel store for LX-based operations
 
         if not _gotInput: # default input
             _inputURI = _baseURI # Make abs from relative
-	    if option_first_format == "rdf" :
-		p = sax2rdf.RDFXMLParser(_store, _inputURI, formulaURI=workingContextURI, flags=option_rdf_flags)
-	    else: p = notation3.SinkParser(_store,  _inputURI, formulaURI=workingContextURI)
+            if option_first_format is None: option_first_format = option_format
+            p = getParser(option_first_format, _inputURI, workingContextURI, option_flags)
             p.load("", baseURI=_baseURI)
             del(p)
             if not option_pipe:
@@ -457,9 +460,8 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
         #  Take commands from command line: Second Pass on command line:
 
-        option_format = "n3"      # Use RDF rather than XML
-        option_rdf_flags = ""
-        option_n3_flags = ""
+        option_format = "n3"      # Use RDF/n3 rather than RDF/XML 
+        option_flags = { "rdf":"", "n3":"" } 
         option_quiet = 0
         _outURI = _baseURI
         option_baseURI = _baseURI     # To start with
@@ -476,9 +478,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             if arg[0] != "-":
                 _inputURI = join(option_baseURI, arg)
                 assert ':' in _inputURI
-                if option_format == "rdf" :
-                    p = sax2rdf.RDFXMLParser(_store, _inputURI, formulaURI=workingContextURI, flags=option_rdf_flags)
-                else: p = notation3.SinkParser(_store,  _inputURI, formulaURI=workingContextURI)
+                p = getParser(option_format, _inputURI, workingContextURI, option_flags)
                 if not option_pipe: workingContext.reopen()
                 p.load(_inputURI)
                 del(p)
@@ -513,19 +513,13 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             elif arg == "-rdf": option_format = "rdf"
             elif _lhs == "-rdf":
                 option_format = "rdf"
-                option_rdf_flags = _rhs
+                option_flags["rdf"] = _rhs
             elif arg == "-n3": option_format = "n3"
             elif _lhs == "-n3":
                 option_format = "n3"
-                option_n3_flags = _rhs
+                option_flags["n3"] = _rhs
             elif arg == "-quiet" : option_quiet = 1            
             elif _lhs == "-chatty": setVerbosity(int(_rhs))
-
-            elif arg == "-reify":
-                pass
-
-            elif arg == "-flat":  # reify only nested expressions, not top level
-                pass
 
             elif option_pipe: ############## End of pipable options
                 print "# Command line error: %s illegal option with -pipe", arg
@@ -533,7 +527,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
             elif arg == "-triples" or arg == "-ntriples":
                 option_format = "n3"
-                option_n3_flags = "spart"
+                option_flags["n3"] = "spart"
                 option_outputStyle = "-bySubject"
                 option_quiet = 1
 
@@ -541,12 +535,14 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 option_outputStyle = arg            
 
             elif arg[:7] == "-apply=":
+                need(_store); touch(_store)
                 filterContext = (_store.intern((FORMULA, _uri+ "#_formula")))
                 if verbosity() > 4: progress( "Input rules to --apply from " + _uri)
                 _store.loadURI(_uri)
                 _store.applyRules(workingContext, filterContext);
 
             elif _lhs == "-filter":
+                need(_store); touch(_store)
                 filterContext = _store.intern((FORMULA, _uri+ "#_formula"))
                 _newURI = join(_baseURI, "_w_"+`_genid`)  # Intermediate
                 _genid = _genid + 1
@@ -566,65 +562,49 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 #                    history = s
 
             elif arg == "-purge":
+                need(_store); touch(_store)
                 _store.purge(workingContext)
 		
             elif arg == "-purge-rules":
+                need(_store); touch(_store)
                 _store.purgeSymbol(workingContext)
 
             elif arg == "-rules":
+                need(_store); touch(_store)
                 _store.applyRules(workingContext, workingContext)
 
             elif arg[:7] == "-think=":
+                need(_store); touch(_store)
                 filterContext = (_store.intern((FORMULA, _uri+ "#_formula")))
                 if verbosity() > 4: progress( "Input rules to --think from " + _uri)
                 _store.loadURI(_uri)
                 _store.think(workingContext, filterContext);
+
             elif arg == "-think":
+                need(_store); touch(_store)
                 _store.think(workingContext)
 
-            elif arg == "-otter":
-                # hack instead of using _output, because I haven't figured out
-                # how 
-                kb = LX.KB()
-                _store.toLX(workingContext, kb=kb)
+            elif arg == "-otterDump":
+                need(lxkb)
                 s = LX.language.otter.Serializer()
                 s.addAbbreviation("rdf_", "http://www.w3.org/1999/02/22-rdf-syntax-ns")
                 s.addAbbreviation("daml_", "http://www.daml.org/2001/03/daml+oil")
                 s.addAbbreviation("", workingContext.resource.uri)
-                print s.serialize(kb)
-                sys.exit(1)
-
-            elif arg == "-flattenAndDump":
-                full = LX.KB()
-                flat = LX.KB()
-                _store.toLX(workingContext, kb=full)
-                LX.rdf.flatten(full, flat)
-                s = LX.language.ntriples.Serializer()
-                s.addAbbreviation("rdf_", "http://www.w3.org/1999/02/22-rdf-syntax-ns")
-                s.addAbbreviation("daml_", "http://www.daml.org/2001/03/daml+oil")
-                s.addAbbreviation("", workingContext.resource.uri)
-                print s.serialize(flat)
-                sys.exit(1)
+                print s.serialize(lxkb)
 
             elif arg == "-flatten":
-                full = LX.KB()
-                flat = LX.KB()
-                _store.toLX(workingContext, kb=full)
-                LX.rdf.flatten(full, flat)
-                _store.deleteFormula(workingContext)
-                # instead of this (which doesnt work): _store.clear()
-                _store.addLXKB(workingContext, flat)
-
-            elif arg == "-unflatten":
-                flat = _store.toLX()
-                full = LX.rdf.unflatten(flat)
-                _store.clear()
-                _store.addLXKB(full)
+                need(lxkb); touch(lxkb)
+                lxkb.reifyAsTrueNonRDF()
+                
+            elif arg == "-reify":
+                need(lxkb); touch(lxkb)
+                lxkb.reifyAsTrue()
 
             elif arg == "-size":
                 progress("Size: %i statements in store, %i in working formula." %(_store.size, workingContext.size()))
 
             elif arg == "-strings":  # suppress output
+                need(_store)
                 workingContext.outputStrings() 
                 option_outputStyle = "-no"
                 
@@ -642,6 +622,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         # Squirt it out if not piped
 
         if not option_pipe:
+            need(_store)
             if verbosity()>5: progress("Begining output.")
             if option_outputStyle == "-ugly":
                 _store.dumpChronological(workingContext, _outSink)
@@ -652,8 +633,56 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             else:  # "-best"
                 _store.dumpNested(workingContext, _outSink)
 
-    
-        
+# These could well be methods using instance variables instead of
+# functions using globals.
+
+def getParser(format, inputURI, formulaURI, flags):
+    """Return something which can load from a URI in the given format, while
+    writing to the given store.
+    """
+    if format == "rdf" :
+        touch(_store)
+        return sax2rdf.RDFXMLParser(_store, inputURI, formulaURI=formulaURI,
+                                    flags=flags[format])
+    elif format == "n3":
+        touch(_store)
+        return notation3.SinkParser(_store, inputURI, formulaURI=formulaURI)
+    else:
+        raise RuntimeError, "unknown input format: "+str(format)
+
+def touch(object):
+    """Indicate that this object has been modified; for use by need()"""
+    object.touched = 1
+
+def need(object):
+    """Update the given repository object from the other one if the
+    other one has been changed since they were last synchronized.
+    If both have been touched, raise an error.
+    """ 
+    if hasattr(_store, "touched"):
+        if hasattr(lxkb, "touched"):
+            raise RuntimeError, "Both _store and lxkb were touched"
+        else:
+            if object is lxkb:
+                #print "# copying _store to lxkb"
+                lxkb.clear()
+                _store.toLX(workingContext, kb=lxkb)
+                del(_store.touched)
+            else:
+                pass   # lxkb is out of date, but not needed yet
+    else:
+        if hasattr(lxkb, "touched"):
+            if object is _store:
+                #print "# copying lxkb to _store"
+                _store.deleteFormula(workingContext)
+                _store.addLXKB(workingContext, lxkb)
+                del(lxkb.touched)
+            else:
+                pass  # _store is out of date, but not needed yet
+        else:
+            pass   # neither was touched, nothing to do!
+
+
 ############################################################ Main program
     
 if __name__ == '__main__':

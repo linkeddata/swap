@@ -1028,6 +1028,8 @@ class RDFStore(RDFSink.RDFSink) :
             result = Literal(self, urirefString)
             self.resources[uriref2] = result
         else:
+            if not (type(urirefString) is type("")):
+                raise TypeError, type(urirefString)
             assert type(urirefString) is type("") # caller %xx-ifies unicode
             assert ':' in urirefString, "must be absolute: %s" % urirefString
 
@@ -1352,7 +1354,11 @@ class RDFStore(RDFSink.RDFSink) :
                     if isinstance(term, LX.URIRef):
                         sym = self.intern((RDFSink.SYMBOL, term.value),)
                     elif isinstance(term, LX.Variable):
-                        sym = self.intern((RDFSink.SYMBOL, term.value),)
+                        if term.value is None:
+                            #@ Bug, but why do we have Nones here?
+                            sym = self.intern((RDFSink.SYMBOL, "foo:bar#baz"),)
+                        else:
+                            sym = self.intern((RDFSink.SYMBOL, term.value),)
                     else:
                         msg = "Conversion of %s's not implemented" % term.__class__
                         raise RuntimeError, msg
@@ -1773,8 +1779,8 @@ class RDFStore(RDFSink.RDFSink) :
         # taking them away -- something that's a variable in one scope
         # being inappropriately called a variable in another scope;
         # probably!   Need some stacking structure to solve this.
-        for v in formula.existentials(): self.toLXVar(v, vars)
-        for v in formula.universals():   self.toLXVar(v, vars)
+        for v in formula.existentials(): self.toLXVar(v, vars, makeWith=LX.ExiVar)
+        for v in formula.universals():   self.toLXVar(v, vars, makeWith=LX.UniVar)
         if kb is None or formula.existentials() or formula.universals():
             deferAddingToKB = 1
         else:
@@ -1819,11 +1825,11 @@ class RDFStore(RDFSink.RDFSink) :
         elif deferAddingToKB:
             kb.add(result)
 
-    def toLXVar(self, term, vars):
+    def toLXVar(self, term, vars, makeWith=LX.Variable):
         try:
             return vars[term]
         except KeyError:
-            v = LX.Variable(uriref=term.uriref())
+            v = makeWith(uriref=term.uriref())
             vars[term] = v
             return v
 

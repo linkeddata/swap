@@ -29,6 +29,10 @@ class Formula(tuple):
     
     """
 
+    def __init__(self, *args):
+        self.openVars()     # used for the side-effect of checking types
+
+
     def __and__(self, other):    return Formula([LX.AND, self, other])
     def __or__(self, other):     return Formula([LX.OR,  self, other])
     def __rshift__(self, other): return Formula([LX.IMPLIES, self, other])
@@ -37,12 +41,31 @@ class Formula(tuple):
     def __str__(self):
         return serialize(self)
 
-    def collectLeft(self, op):
-        if self[0] is op:
-            leftList, right = self[2].collectLeft(op)
-            return ([self[1]]+leftList, right)
-        else:
-            return ([], self)
+    def collectLeft(self):
+        """Return a pair (leftTermList, finalRightChild) from
+        a nested structure like a Quantification
+        """
+        left = self[1]    
+        right = self[2]
+        leftList = [left]
+        if left.operator is self.operator:
+            moreLeftList, right = right.collectLeft()
+            leftList.extend(moreLeftList)
+        return leftList, right
+
+    def collectedOperands(self):
+        """Return a list of all the operands to all the children
+        of this formula which are connected by the same operator.
+        This make a binary tree look like an n-ary tree, all the
+        operands to nested conjunctions and disjunctions come back at once.
+
+        Might be interesting to try doing via 'yeild'.
+        """
+        result = []
+        for child in self.operands:
+            if child.operator is self.operator:
+                result.extend(child.collectedOperands())
+        return result
 
     # convertToKB   (with narrowed scopes?)
 
@@ -54,6 +77,62 @@ class Formula(tuple):
         return self[1:]
     operands = property(getOperands)
 
+    varClass = { LX.ALL: LX.UniVar,
+                 LX.EXISTS: LX.ExiVar }
+
+    def isSentence(self):
+        return len(self.openVars()) == 0
+    
+    def openVars(self):
+        """Return the unquantified variables in this formula"""
+        if self.operator in (LX.ALL, LX.EXISTS):
+            var = self[1]
+            varClass = self.varClass[self.operator]
+            result = self[2] .openVars()
+            if not isinstance(var, varClass):
+                msg = "found a %s expecting a %s" % (var.__class__, varClass)
+                raise TypeError, msg
+            if var not in result:
+                # maybe this should only be a warning?
+                raise RuntimeError, "Variable does not occur in child"
+            result.remove(var)
+        elif self.operator is LX.ATOMIC_SENTENCE:
+            result = []
+            for operand in self.operands:
+                result.extend(operand.openVars())
+        else:
+            result = []
+            for operand in self.operands:
+                result.extend(operand.openVars())
+
+        return result
+
+    def nameVars(self, nameOverridesTable={}, namesUsedOutside=()):
+        """Make the names dict have a name for each variable which is
+        unique in its scope in this formula.
+        """
+        if self.operator in (LX.ALL, LX.EXISTS):
+            var = self[1]
+            # varClass = self.varClass[self.operator]
+            name = var.getName()
+            if name in namesUsedOutside:
+                # We could do:   and name not in self.openVars()
+                # to allow:  all x ( P(x) & all x ( Q(x) ) )
+                # which makes sense, but is too confusing for humans
+                for x in xrange(2, 100000000):
+                    newname = "%s_%d" % (name, x)
+                    if newname not in namesUsedOutside:
+                        break
+                nameOverridesTable[var] = newname
+            self.nameVars(nameOverridesTable, namesUsedOutside+(newname,))
+        elif self.operator is LX.ATOMIC_SENTENCE:
+            pass   # there wont be any quantifications in here
+        else:
+            for operand in self.operands:
+                operand.nameVars(names)
+
+        
+        
 
 
 # This is kind of backwards; Formula should dispatch to Triple, so that
@@ -94,16 +173,26 @@ class Negation(Formula):
 class UniversalQuantification(Formula):
 
     def __new__(self, var, child):
+        assert(isinstance(var, LX.UniVar))
         return Formula([LX.ALL, var, child])
 
 class ExistentialQuantification(Formula):
 
     def __new__(self, var, child):
+        assert(isinstance(var, LX.ExiVar))
         return Formula([LX.EXISTS, var, child])
 
 
 # $Log$
-# Revision 1.2  2002-10-02 20:40:56  sandro
+# Revision 1.3  2002-10-02 22:56:35  sandro
+# Switched cwm main-loop to keeping state in llyn AND/OR an LX.formula,
+# as needed by each command-line option.  Also factored out common
+# language code in main loop, so cwm can handle more than just "rdf" and
+# "n3".  New functionality is not thoroughly tested, but old functionality
+# is and should be fine.  Also did a few changes to LX variable
+# handling.
+#
+# Revision 1.2  2002/10/02 20:40:56  sandro
 # make --flatten recognize log:means as the biconditional and
 # log:Falsehood for a formula as its negation.
 #

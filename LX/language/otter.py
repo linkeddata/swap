@@ -11,6 +11,11 @@ import LX.language.abstract
 
 class Serializer(LX.language.abstract.Serializer):
 
+    def __init__(self):
+        LX.language.abstract.Serializer.__init__(self)
+        self.overrideTerms = {}
+        self.recursing = 0
+        
     opTable = {
         # Parts of this table are in the otter user manual
         LX.IMPLIES:   [ 800, "xfx", " -> " ],
@@ -20,22 +25,31 @@ class Serializer(LX.language.abstract.Serializer):
         LX.NOT:       [ 710, "fx", " -" ],
         }
 
+    quantOpName = { LX.ALL: "all",
+                    LX.EXISTS: "exists" }
+        
+
     def serializeFormula(self, f, parentPrecedence=9999, linePrefix=""):
-        # print "Otter SerializeFormula "+`f`
-        if f[0] == LX.ALL:
-            assert(len(f) == 3)
-            vars, child = f.collectLeft(LX.ALL)
-            val = ("all " +
+        if not self.recursing:
+            f.nameVars(self.overrideTerms)
+            self.recursing = 1
+        if f[0] in (LX.ALL, LX.EXISTS):
+            val = (self.quantOpName[f.operator] + " " +
                    " ".join([self.serializeTerm(x, 9999) for x in vars]) +
                    " (" + self.serializeFormula(child, 9999, linePrefix) + ")")
+
             if parentPrecedence < 1000: val = "("+val+")"
             return val
-        if f[0] == LX.EXISTS:
-            assert(len(f) == 3)
-            return ("(exists " + self.serializeTerm(f[1], 9999) +
-                    " (" + self.serializeFormula(f[2], 9999, linePrefix) + "))")
         return LX.language.abstract.Serializer.serializeFormula(self, f, parentPrecedence)
+
+    def serializeTerm(self, t, parentPrecedence):
+        try:
+            return self.overrideTerms[t]
+        except KeyError:
+            return LX.language.abstract.Serializer.serializeTerm(self, f, parentPrecedence)
+
         
+
 
 defaultSerializer = Serializer()
 defaultSerializer.addAbbreviation("rdf_", "http://www.w3.org/1999/02/22-rdf-syntax-ns")
@@ -60,7 +74,15 @@ if __name__ =='__main__':
     test()
 
 # $Log$
-# Revision 1.1  2002-08-29 11:00:46  sandro
+# Revision 1.2  2002-10-02 22:56:35  sandro
+# Switched cwm main-loop to keeping state in llyn AND/OR an LX.formula,
+# as needed by each command-line option.  Also factored out common
+# language code in main loop, so cwm can handle more than just "rdf" and
+# "n3".  New functionality is not thoroughly tested, but old functionality
+# is and should be fine.  Also did a few changes to LX variable
+# handling.
+#
+# Revision 1.1  2002/08/29 11:00:46  sandro
 # initial version, mostly written or heavily rewritten over the past
 # week (not thoroughly tested)
 #
