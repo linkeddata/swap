@@ -6,6 +6,12 @@ YAPPS=yapps2.py
 
 TESTIN=test/sameDan.n3
 
+.SUFFIXES: .g .py
+
+.g.py:
+	$(PYTHON) $(YAPPS) $< $@
+
+
 all: test doc
 
 test: rdfn3_yapps.py rdfn3_yappstest.py
