@@ -1,0 +1,35 @@
+# $Id$
+
+@prefix eg: <http://example/vocab#>.
+@prefix owl: <@@owl#>.
+@prefix rdf: <@@rdf#>.
+@prefix rdfs: <@@rdfs#>.
+
+eg:C1 owl:intersectionOf _:these.
+_:these rdf:first eg:A.
+_:these rdf:first eg:B.
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <#>.
+
+
+this log:forAll :S, :P, :O, :C, :X, :Y.
+
+owl:intersectionOf rdfs:range owl:List.
+owl:List rdfs:subClassOf [ owl:onProperty rdf:first;
+  owl:maxCardinality "1" ].
+
+## a bit of RDFS
+{ [] [ rdfs:range :C ] :O } log:implies { :O a :C }.
+
+{ :S [ rdfs:subPropertyOf :P ] :O } log:implies { :S :P :O }.
+
+{ :S a [ rdfs:subClassOf :C ] } log:implies { :S a :C }.
+
+## a bit of owl
+{ :S = :O } log:implies { :S owl:sameAs :O }.
+owl:sameAs rdfs:subPropertyOf owl:sameClassAs.
+
+{ :S a :C; :P :X, :Y.
+  :C owl:onProperty :P; owl:maxCardinality "1" }
+  log:implies { :X = :Y }.

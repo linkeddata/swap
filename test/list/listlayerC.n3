@@ -1,0 +1,4 @@
+@prefix eg: <http://example/vocab#>.
+
+eg:A owl:sameAs eg:B.
+eg:A owl:sameClassAs eg:B.
