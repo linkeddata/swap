@@ -70,6 +70,12 @@ PS2PDF=ps2pdf # ghostscript? acroread?
 tutorial.pdf: tutorial.ps
 	$(PS2PDF) tutorial.ps
 
+cwm-help.txt : ../cwm.py ../notation3.py
+	cwm --help > cwm-help.txt
+
+CwmHelp.html : CwmHelp-template.html cwm-help.txt
+	sed -e '/<pre>/rcwm-help.txt' < CwmHelp-template.html > CwmHelp.html
+
 
 clean:
 	$(RM) swws.{rdf,dot,ps,svg,png}

@@ -1,28 +1,3 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head>
-  <title>Cwm command line arguments</title>
-  <meta name="generator" content="amaya 7.1, see http://www.w3.org/Amaya/" />
-  <link href="style.css" rel="stylesheet" type="text/css" />
-</head>
-
-<body>
-
-<div class="noprint">
-<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a> |
-<a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
-href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
-Comparing Formats</p>
-</div>
-
-<h1>Cwm Command Line arguments</h1>
-
-<p>You can get a list of these by typing cwm --help</p>
-
-<p></p>
-<pre>
 Command line RDF/N3 tool
         
  <command> <options> <inputURIs>
@@ -109,15 +84,3 @@ t   "this" and "()" special syntax should be suppresed.
 	D  - Assume default namespace decalred as local document is assume xmlns=""
 
 
-
-</pre>
-
-<p></p>
-
-<div class="noprint">
-<hr />
-
-<p>$Id$</p>
-</div>
-</body>
-</html>
