@@ -193,20 +193,27 @@ which tells the web site how to trust a request.</p>
 #  but here we use the web.  A credential is a document which
 #  provides evidence in support of the request.
 
-{:G acc:requestSupportedBy :k; log:includes {:G acc:forDocument :d}} log:implies {:G acc:forDocument :d}.
+{:G acc:requestSupportedBy :k; log:includes {:G acc:forDocument :d}} =&gt;
+   {:G acc:forDocument :d}.
 
-{:G acc:requestSupportedBy :k; log:includes {:G acc:credential :d}} log:implies {:G acc:credential :d}.
+{:G acc:requestSupportedBy :k; log:includes {:G acc:credential :d}} =&gt;
+   {:G acc:credential :d}.
 
 # What do we belive from a signed credential.
 #
 # In this case, just note that a key supports the signed formula.
-# The fact of this support is used in eth access rule above.
+# The fact of this support is used in the access rule above.
 # We don't actually beleive everything the certificate says.
 
 {  [] acc:credential [ log:semantics :F ].
    :F log:includes { :str acc:endorsement[acc:signature :sig; acc:key :k]}.
    :k crypto:verify ([is crypto:md5 of :str] :sig).
    :str log:parsedAsN3 :G } log:implies { :G acc:certSupportedBy :k }.</pre>
+
+<p></p>
+
+<p>The important thing is that we are really trusting very specific
+information from different sources.</p>
 
 <p></p>
 
