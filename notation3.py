@@ -164,6 +164,7 @@ class SinkParser:
         self._contextStack = []      # For nested conjunctions { ... }
         self._varPrefix = varPrefix
         self._nextId = 0
+        self.lines = 0              # for error handling
         self._genPrefix = genPrefix
 
         if not self._baseURI: self._baseURI = self._thisDoc
@@ -200,7 +201,7 @@ class SinkParser:
             i = self.directiveOrStatement(str,j)
             if i<0:
                 print "# next char: ", `str[j]` 
-                raise BadSyntax(str, j, "expected directive or statement")
+                raise BadSyntax(self.lines, str, j, "expected directive or statement")
 
     def directiveOrStatement(self, str,h):
     
@@ -251,12 +252,12 @@ class SinkParser:
 	
 	t = []
 	i = self.qname(str, j, t)
-	if i<0: raise BadSyntax(str, j, "expected qname after bind or prefix")
+	if i<0: raise BadSyntax(self.lines, str, j, "expected qname after bind or prefix")
 	j = self.uri_ref2(str, i, t)
-	if j<0: raise BadSyntax(str, i, "expected uriref2 after bind _qname_")
+	if j<0: raise BadSyntax(self.lines, str, i, "expected uriref2 after bind _qname_")
 
         ns = t[1][1] + delim
-        if string.find(ns,"##")>=0: raise BadSyntax(str, j-2, "trailing # illegal on bind: use @prefix")
+        if string.find(ns,"##")>=0: raise BadSyntax(self.lines, str, j-2, "trailing # illegal on bind: use @prefix")
 	self._bindings[t[0][0]] = ns
 	self.bind(t[0][0], (RESOURCE, ns))
 	return j
@@ -285,7 +286,7 @@ class SinkParser:
 
 	j = self.property_list(str, i, r[0])
 
-	if j<0: raise BadSyntax(str, i, "expected propertylist")
+	if j<0: raise BadSyntax(self.lines, str, i, "expected propertylist")
 
 	return j
 
@@ -306,16 +307,16 @@ class SinkParser:
 	j = self.tok('has', str, i)
 	if j>=0:
 	    i = self.prop(str, j, r)
-	    if i < 0: raise BadSyntax(str, j, "expected prop")
+	    if i < 0: raise BadSyntax(self.lines, str, j, "expected prop")
 	    res.append(('->', r[0]))
 	    return i
 	else:
 	    j = self.tok('is', str, i)
 	    if j>=0:
 		i = self.prop(str, j, r)
-		if i < 0: raise BadSyntax(str, j, "expected prop")
+		if i < 0: raise BadSyntax(self.lines, str, j, "expected prop")
 		j = self.tok('of', str, i)
-		if j<0: raise BadSyntax(str, i, "expected 'of' after prop")
+		if j<0: raise BadSyntax(self.lines, str, i, "expected 'of' after prop")
 		res.append(('<-', r[0]))
 		return j
 	    else:
@@ -339,16 +340,16 @@ class SinkParser:
 			    if j>=0:
 				i = self.prop(str, j, r)
 				j = self.tok('->', str, i)
-				if j<0: raise BadSyntax(str, i, "-> expected")
+				if j<0: raise BadSyntax(self.lines, str, i, "-> expected")
 				res.append(('->', r[0]))
 				return j
 			    else:
 				j = self.tok('<-', str, i)
 				if j>=0:
 				    i = self.prop(str, j, r)
-				    if i<0: raise BadSyntax(str, j, "bad verb syntax")
+				    if i<0: raise BadSyntax(self.lines, str, j, "bad verb syntax")
 				    j = self.tok('<-', str, i)
-				    if j<0: raise BadSyntax(str, i, "<- expected")
+				    if j<0: raise BadSyntax(self.lines, str, i, "<- expected")
 				    res.append(('<-', r[0]))
 				    return j
 				else:
@@ -375,9 +376,9 @@ class SinkParser:
         if j>=0:
             if subj is None: subj=self.genid()
             i = self.property_list(str, j, subj)
-            if i<0: raise BadSyntax(str, j, "property_list expected")
+            if i<0: raise BadSyntax(self.lines, str, j, "property_list expected")
             j = self.tok(']', str, i)
-            if j<0: raise BadSyntax(str, i, "']' expected")
+            if j<0: raise BadSyntax(self.lines, str, i, "']' expected")
             res.append(subj)
             return j
 
@@ -390,13 +391,13 @@ class SinkParser:
             
             while 1:
                 i = self.skipSpace(str, j)
-                if i<0: raise BadSyntax(str, i, "needed '}', found end.")
+                if i<0: raise BadSyntax(self.lines, str, i, "needed '}', found end.")
                 
                 j = self.tok('}', str,i)
                 if j >=0: break
                 
                 j = self.directiveOrStatement(str,i)
-                if j<0: raise BadSyntax(str, i, "expected statement or '}'")
+                if j<0: raise BadSyntax(self.lines, str, i, "expected statement or '}'")
 
             self._context = oldContext # restore
             res.append(subj)
@@ -407,13 +408,13 @@ class SinkParser:
             tail = None  # remember value to return
             while 1:
                 i = self.skipSpace(str, j)
-                if i<0: raise BadSyntax(str, i, "needed ')', found end.")                    
+                if i<0: raise BadSyntax(self.lines, str, i, "needed ')', found end.")                    
                 j = self.tok(')', str,i)
                 if j >=0: break
 
                 item = []
                 j = self.object(str,i, item)
-                if j<0: raise BadSyntax(str, i, "expected item in list or ')'")
+                if j<0: raise BadSyntax(self.lines, str, i, "expected item in list or ')'")
                 this = self.genid()
                 if tail:
                     self.makeStatement((self._context, N3_rest, tail, this ))
@@ -437,7 +438,7 @@ class SinkParser:
             if j >=0:
                 res = []
                 i = self.node(str, j, res, subj)
-                if i<0: raise BadSyntax(str, j, "bad {} or () or [] node after :- ")
+                if i<0: raise BadSyntax(self.lines, str, j, "bad {} or () or [] node after :- ")
                 continue
                 
 	    v = []
@@ -447,7 +448,7 @@ class SinkParser:
 	    else:
 		objs = []
 		i = self.object_list(str, j, objs)
-		if i<0: raise BadSyntax(str, j, "object_list expected")
+		if i<0: raise BadSyntax(self.lines, str, j, "object_list expected")
 		for obj in objs:
 		    dir, sym = v[0]
 		    if dir == '->':
@@ -477,7 +478,7 @@ class SinkParser:
             j = self.tok(']', str, i)
             if j>=0: return i # Can omit . before these
 
-            raise BadSyntax(str, i, "expected '.' or '}' or ']' at end of statement")
+            raise BadSyntax(self.lines, str, i, "expected '.' or '}' or ']' at end of statement")
             return i
 
 
@@ -498,7 +499,7 @@ class SinkParser:
 		try:
 		    ns = self._bindings[pfx]
 		except KeyError:
-		    raise BadSyntax(str, i, "prefix not bound")
+		    raise BadSyntax(self.lines, str, i, "prefix not bound")
             res.append(( RESOURCE, ns + ln)) # @@@ "#" CONVENTION
             if not string.find(ns, "#"):print"Warning: no # on NS %s,"%(ns,)
 	    return j
@@ -526,13 +527,14 @@ class SinkParser:
                     res.append((RESOURCE , uref))
                     return i+1
                 i = i + 1
-            raise BadSyntax(str, j, "unterminated URI reference")
+            raise BadSyntax(self.lines, str, j, "unterminated URI reference")
         else:
             return -1
 
     def skipSpace(self, str, i):
 	while 1:
             while i<len(str) and str[i] in string.whitespace:
+                if str[i] == "\n": self.lines = self.lines + 1
                 i = i + 1
             if i == len(str): return -1
             if str[i] == N3CommentCharacter:     # "#"?
@@ -614,10 +616,67 @@ class SinkParser:
 	    if str[i]=='"':
 		if str[i:i+3] == '"""': delim = '"""'
 		else: delim = '"'
+
                 i = i + len(delim)
-                j = string.find(str, delim, i)
-                if j<0: raise BadSyntax(str, i, "unterminated string literal")
-                res.append((LITERAL, stripCR(str[i:j]))) # @@@@@ ^decoding escapes
+                # @@I18n  This is NOT internationalised. Should have unicode escaping too.
+                j = i
+                ustr = u""   # Empty unicode string
+                startline = self.lines # Reember where for error messages
+                while str[j:j+len(delim)] != delim:
+                    ch = str[j:j+1]
+                    j = j + 1
+                    uch = u""
+                    if ch == "":
+                        raise BadSyntax(self.lines, str, i, "unterminated string literal")
+                    if ch == "\r": continue   # Strip carriage returns
+                    if ch == "\n":
+                        if delim == '"': raise BadSyntax(startline, str, i, "newline found in string literal")
+                        self.lines = self.lines + 1
+                        
+                    if ch == "\\":
+                        j = j + 1
+                        ch = str[j:j+1]  # Will be empty if string ends
+                        if ch == "":
+                            raise BadSyntax(startline, str, i, "unterminated string literal (2)")
+                        k = string.find('abfrtvn\\"', ch)
+                        if k >= 0:
+                            uch = '\a\b\f\r\t\v\n\\"'[k]
+                        else:
+                            k = string.find("01234567", ch)
+                            if k >=0:
+                                count = 0
+                                value = k
+                                while count < 2:  # Get two more characters
+                                    ch = str[j:j+1]
+                                    j = j + 1
+                                    if ch == "":
+                                        raise BadSyntax(startline, str, i, "unterminated string literal")
+                                    k = string.find("01234567", ch)
+                                    if k <=0:
+                                        raise BadSyntax(startline, str, i, "bad string literal octal escape")
+                                    value = value * 8 + k
+                                    count = count + 1
+                                uch = struct.pack("B", value) # Unsigned binary byte @@I18n
+                            else:
+                                if ch == "u":
+                                    count = 0
+                                    value = 0
+                                    while count < 4:  # Get two more characters
+                                        ch = str[j:j+1]
+                                        j = j + 1
+                                        if ch == "":
+                                            raise BadSyntax(startline, str, i, "unterminated string literal(3)")
+                                        k = string.find("0123456789abcdef", ch)
+                                        if k <=0:
+                                            raise BadSyntax(startline, str, i, "bad string literal hex escape")
+                                        value = value * 16 + k
+                                        count = count + 1
+                                    uch = unicode.ntou (value) # @@I18n Need n->unicode mapping @@@@
+                                    
+                    if uch == u"": uch = ch  # coerce
+                    ustr = ustr + uch
+
+                res.append((LITERAL, ustr))
 		return j+len(delim)
 	    else:
 		return -1
@@ -655,10 +714,11 @@ class SinkParser:
 	    return -1
 
 class BadSyntax:
-    def __init__(self, str, i, why):
+    def __init__(self, lines, str, i, why):
 	self._str = str
 	self._i = i
 	self._why = why
+	self.lines = lines
 
     def __str__(self):
 	str = self._str
@@ -669,8 +729,8 @@ class BadSyntax:
 	if len(str)-i > 30: post="..."
 	else: post=""
 
-	return 'bad syntax (%s) at: "%s%s^%s%s"' \
-	       % (self._why, pre, str[i-30:i], str[i:i+30], post)
+	return 'Line %i: Bad syntax (%s) at ^ in: "%s%s^%s%s"' \
+	       % (self.lines +1, self._why, pre, str[i-30:i], str[i:i+30], post)
 
 
 def stripCR(str):
@@ -1185,13 +1245,13 @@ class ToN3(RDFSink):
         self.indent = self.indent - 1
      
     def startBagNamed(self, context, subj):
-	if self._subj != subj:
-	    self._endStatement()
-	    if self.indent == 1:  # Top level only - extra newline
+        if self._subj != subj:
+            self._endStatement()
+            if self.indent == 1:  # Top level only - extra newline
                 self._newline()
-	    self._write(self.representationOf(context, subj))
-	    self._subj = subj
-	    self._pred = None
+            self._write(self.representationOf(context, subj))
+            self._subj = subj
+            self._pred = None
 
         if self._pred is not None:
             self._write(";")
@@ -1200,7 +1260,7 @@ class ToN3(RDFSink):
         self.indent = self.indent + 1
         self._write(" :- {")
         self._newline()
-	self._subj = None
+        self._subj = None
         self._pred = None
 
     def endBagNamed(self, subj):    # Remove context
@@ -1217,7 +1277,7 @@ class ToN3(RDFSink):
         self.stack.append(0)
         self.indent = self.indent + 1
         self._write("{")
-	self._subj = None
+        self._subj = None
         self._pred = None
 
     def endBagObject(self, pred, subj):    # Remove context
@@ -1233,18 +1293,18 @@ class ToN3(RDFSink):
 
         if self.stack[-1]: return  # If we are in list mode, don't need to.
         
-	if self._subj != subj:
-	    self._endStatement()
-	    if self.indent == 1:  # Top level only - extra newline
+        if self._subj != subj:
+            self._endStatement()
+            if self.indent == 1:  # Top level only - extra newline
                 self._newline()
-	    self._write(self.representationOf(context, subj))
-	    self._subj = subj
-	    self._pred = None
+            self._write(self.representationOf(context, subj))
+            self._subj = subj
+            self._pred = None
 
-	if self._pred != pred:
-	    if self._pred:
-		  self._write(";")
-		  self._newline(1)   # Indent predicate from subject
+        if self._pred != pred:
+            if self._pred:
+                  self._write(";")
+                  self._newline(1)   # Indent predicate from subject
             else: self._write("    ")
 
             if pred == ( RESOURCE,  DAML_equivalentTo_URI ) :
@@ -1252,13 +1312,13 @@ class ToN3(RDFSink):
             elif pred == ( RESOURCE, RDF_type_URI ) :
                 self._write(" a ")
             else :
-#	        self._write( " >- %s -> " % self.representationOf(context, pred))
+#               self._write( " >- %s -> " % self.representationOf(context, pred))
                 self._write( " %s " % self.representationOf(context, pred))
                 
-	    self._pred = pred
-	else:
-	    self._write(",")
-	    self._newline(3)    # Same subject and pred => object list
+            self._pred = pred
+        else:
+            self._write(",")
+            self._newline(3)    # Same subject and pred => object list
 
     def _endStatement(self):
         if self._subj:
@@ -1306,20 +1366,20 @@ class ToN3(RDFSink):
 #
 
 def stringToN3(str):
-	res = ""
-	if len(str) > 20 and string.find(str, "\n") >=0:
-		delim= '"""'
-		forbidden = "\\\"\a\b\f\r\t\v"
-	else:
-		delim = '"'
-		forbidden = "\\\"\a\b\f\r\t\v\n"
-	for i in range(len(str)):
-		ch = str[i]
-		j = string.find(forbidden, ch)
-		if j>=0: ch = "\\" + '\"abfrtvn'[j]
-		elif ch < " " or ch > "}" : ch= 'x'+`ch`[1:-1] # Use python
-		res = res + ch
-	return delim + res + delim
+        res = ""
+        if len(str) > 20 and string.find(str, "\n") >=0:
+                delim= '"""'
+                forbidden = "\\\"\a\b\f\r\t\v"
+        else:
+                delim = '"'
+                forbidden = "\\\"\a\b\f\r\t\v\n"
+        for i in range(len(str)):
+                ch = str[i]
+                j = string.find(forbidden, ch)
+                if j>=0: ch = "\\" + '\"abfrtvn'[j]
+                elif ch < " " or ch > "}" : ch= 'x'+`ch`[1:-1] # Use python
+                res = res + ch
+        return delim + res + delim
 
 
 #########################################################
