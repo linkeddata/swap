@@ -1,3 +1,11 @@
+# USAGE:
+#
+# cd swap
+# make TESTIN=test/dt/typedLit.n3 yappstest
+# look at the resulting ,xxx.kif
+#
+# see also: swap/util/datatypes.n3
+
 @prefix : <#>.
 :jenny :age 10.
 
