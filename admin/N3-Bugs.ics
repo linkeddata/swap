@@ -1,7 +1,7 @@
 BEGIN:VCALENDAR
 BEGIN:VTODO
 URL;VALUE=URI:http://www.w3.org/mid/000101c1756a$b49aedc0$eb13940a@CREST
-SUMMARY:Namespaces wihtout "#" Was: Few CWM Bugs
+SUMMARY:Namespaces wihtout &quot\;#&quot\; Was: Few CWM Bugs
 DTSTART:20011124T203500Z
 END:VTODO
 BEGIN:VTODO
@@ -195,7 +195,7 @@ DTSTART:20031017T154030Z
 END:VTODO
 BEGIN:VTODO
 URL;VALUE=URI:http://www.w3.org/mid/1068065188.16909.42.camel@seabright
-SUMMARY:Getting error "Please use setDefaultNamespace" with --pipe
+SUMMARY:Getting error &quot\;Please use setDefaultNamespace&quot\; with --pipe
 DTSTART:20031105T204628Z
 END:VTODO
 BEGIN:VTODO
@@ -289,7 +289,7 @@ DTSTART:20030321T124700Z
 END:VTODO
 BEGIN:VTODO
 URL;VALUE=URI:http://www.w3.org/mid/3AFAB222.5C46CDEB@w3.org
-SUMMARY:pls ground parseType="Quote" in URI space
+SUMMARY:pls ground parseType=&quot\;Quote&quot\; in URI space
 DTSTART:20010510T152210Z
 END:VTODO
 BEGIN:VTODO
