@@ -575,7 +575,9 @@ class BI_concat(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, store, context, obj, obj_py):
         progress("##### list input to concat:"+`obj_py`)
         str = ""
-        for x in obj_py: str = str + x 
+        for x in obj_py:
+            if type(x) != type(''): return None # Can't
+            str = str + x 
         return store._fromPython(str)
 
 
@@ -1914,16 +1916,18 @@ class RDFStore(notation3.RDFSink) :
         i = len(queue) - 1
         while i >= 0:  # A valid index into q
             state, short, consts, vars, boundLists, quad = queue[i]
+            changed = 0
             for var, val in newBindings:
                 for p in vars + boundLists:  # any variables, even list IDs, can be bound
                     if quad[p] is var:
                         state = 99
+                        changed = 1
                         quad = _lookupQuad([(var,val)], quad)  # Quicker to do above but how in python?
                         break     # Done all 4
                 if (quad[OBJ] is var  # No vars now in daml:first
                     and (PRED in boundLists or quad[PRED] is self.nil)): # and this is a list with no vars in daml:rest   @@@@??? 
                     self._noteBoundList(quad[SUBJ], queue)  # The list is now bound, so propagate this up
-            if state == 99:   # Has fewer variables now .. this is progress
+            if changed:   # Has fewer variables now .. this is progress
                 queue[i:i+1] = []  # Take it out from where it was and 
                 queue.append((state, short, consts, vars, boundLists, quad)) # put it on the top
             i = i - 1
