@@ -292,14 +292,15 @@ allow you to create new applications, and create schemas, data files, and
 programs which interchange and manipulate data for the semantic web.</p>
 <hr>
 
-<h2>Contexts</h2>
+<h2>Formulae</h2>
 
 <p>The schemas you write, and the data files you (or your programs) write are
 all simple sets of RDF statements.  They can all be drawn as simple circle and
 arrow diagrams.</p>
 
 <p>Let's call a set of RDF statements a <dfn><a
-name="context">context</a></dfn>. In a context,</p>
+name="context">formula</a></dfn>.  The formula a statement is in is its
+<dfn>context</dfn>. In a formula,</p>
 <ul>
   <li>The statements are all independent, in that you can remove any of the
     statements and the rest are still true</li>
@@ -308,23 +309,23 @@ name="context">context</a></dfn>. In a context,</p>
     than you can be a person twice.</li>
 </ul>
 
-<p>Sometimes, we need to talk about more than one context.  For example, if
+<p>Sometimes, we need to talk about more than one formula.  For example, if
 either one statement or another is true, then we can't put them in the same
-context.</p>
+formula.</p>
 
-<p>In N3 a context can be represented by enclosing all the statements it
+<p>In N3 a formula can be represented by enclosing all the statements it
 encloses in curly braces { }. (In RDF/XML, contexts are declared using the
 <code>bagid</code> attribute on a collection of statements) .</p>
 <pre>&lt;x.rdf&gt; :says {  :pat a :Person . } .</pre>
 
-<p>The context in braces acts just like an identifier in the rest of the
+<p>The formula in braces acts just like an identifier in the rest of the
 syntax.  It is like a literal expression in that it is defined only by its
 contents. This example just declares that  the document <code>x.rdf</code>
-expresses the hypothetical context in which it is stated that pat is a person:
+expresses the hypothetical formula in which it is stated that pat is a person:
 the statement above doesn't state that pat is a person. (There is a problem
 with the XML serialization of this.)</p>
 
-<p>The main reason I can think of for writing contexts is when writing
+<p>The main reason I can think of for writing formulae is for writing
 rules.</p>
 
 <h2>Rules</h2>
@@ -351,16 +352,16 @@ give</p>
 
 <p>This rule is simple and useful, but in practice them more powerful rules
 can be applied to any identifiers. We nee a way of saying this.  A given
-context is true even if the given identifier is replaced -- consistently
-throughout the context -- with any other identifier. This is represented by
-(guess what!) a property of the context.</p>
+formula is true even if the given identifier is replaced -- consistently
+throughout the context -- with any other identifier. This is represented by  a
+magic "log:forAll" property of the formula.</p>
 <pre>this log:forAll :x, :y.
-{ :x :parent :y .} log:implies { y: :child .} .</pre>
+{:x :parent :y} log:implies {:y :child :x}.</pre>
 
 <p>Read this something like: "This is true for any values of x and y. If x is
-the parent of y then y is the child of x."  The this refers to the formula
-whose {braces} immediately enclosing it - or as in this case the forumula
-expressed by the document if at the outer level.</p>
+the parent of y then y is the child of x."  The <em>this</em> refers to the
+formula whose {braces} immediately enclosing it - or as in this case the
+forumula expressed by the document if at the outer level.</p>
 
 <p>In fact you can use an ontology property to declare that parent and child
 are inverse.</p>
@@ -371,9 +372,9 @@ are inverse.</p>
 
 {  :p ont:inverse :q . } log:implies
 
-{ this log:forAll :x, :y.
-    { :x :p :y. } log:implies { :y :q :x. }
-} .</pre>
+  { this log:forAll :x, :y.
+      { :x :p :y. } log:implies { :y :q :x. }
+  } .</pre>
 
 <p>The outer rule is that if p is the inverse of q, then the inside rule is a
 true one. The inner rule is that if x is the p of y, then y is the q x. The
@@ -395,9 +396,11 @@ what these things mean.</p>
 <dl>
   <dt><a href="#Class">Class</a></dt>
     <dd>A set of Things;  a one-parameter predicate; a unary relation.</dd>
-  <dt><a href="#context">Context</a></dt>
+  <dt><a href="#context">Formula</a></dt>
     <dd>An (unordered) set of statements.  You can write one out in N3 using
       {braces}.</dd>
+  <dt>context</dt>
+    <dd>The relationship between a statement and a formula containing it.</dd>
   <dt>cwm</dt>
     <dd>(From: Closed world machine; valley.) A bit of code for playing with
       this stuff, as grep is for regular expressions. Sucks in RDF in XML or
