@@ -11,6 +11,8 @@ see log at end
 rcsId = "$Id$"
 
 
+from string import find
+
 # SPARK Scanning, Parsing, and Rewriting Kit
 # http://www.cpsc.ucalgary.ca/~aycock/spark/
 # cf
@@ -28,7 +30,8 @@ class AutoN3Parser(spark.GenericASTBuilder):
     def p_document(self, args):
         ''' document ::=
             document ::= directive document
-            document ::= statements document
+            document ::= statements
+            document ::= statements . document
         '''
 
     def p_directive(self, args):
@@ -46,10 +49,10 @@ class AutoN3Parser(spark.GenericASTBuilder):
 
     def p_term(self, args):
         '''
-        term ::= a
-        term ::= this
-        term ::= qname
         term ::= uriref
+        term ::= qname
+        term ::= this
+        term ::= shorthand
         term ::= strlit1
         term ::= strlit2
         term ::= strlit3
@@ -61,6 +64,12 @@ class AutoN3Parser(spark.GenericASTBuilder):
         term ::= { statements }
         '''
 
+    def p_keyword(self, args):
+        '''
+        shorthand ::= a
+        shorthand ::= =
+        '''
+        
     def p_predicates(self, args):
         '''
         predicates ::= pred objects
@@ -92,7 +101,7 @@ class AutoN3Parser(spark.GenericASTBuilder):
         return token.type
 
     def error(self, token):
-        print "@@parse error:", token.type, token.attr
+        print "@@parse error at line", token.lineno, ":", token.type, token.attr
         raise SystemExit
     
     def resolve(self, list):
@@ -159,80 +168,59 @@ class Scanner0(spark.GenericScanner):
         spark.GenericScanner.__init__(self)
 
     def t_whitespace(self, s):
-        r' \s+ ' #@@TODO: line counting
-        pass
+        r' \s+ '
+        self._ln = self._ln + countNewlines(s)
 
     def t_comment(self, s):
         r' \#.*\n '
-        pass
+        self._ln = self._ln + countNewlines(s)
 
     def t_prefix(self, s):
         r' @prefix '
-        self.rv.append(Token(type='prefix'))
+        self.rv.append(Token(lineno=self._ln, type='prefix'))
 
     def t_this(self, s):
         r' this '
-        self.rv.append(Token(type=s))
+        self.rv.append(Token(lineno=self._ln, type=s))
 
     def t_a(self, s):
         r' a\b ' #@@matches axy:def?
-        self.rv.append(Token(type=s))
+        self.rv.append(Token(lineno=self._ln, type=s))
 
     def t_is(self, s):
         r' is\b ' #@@matches axy:def?
-        self.rv.append(Token(type=s))
+        self.rv.append(Token(lineno=self._ln, type=s))
 
     def t_of(self, s):
         r' of\b ' #@@matches axy:def?
-        self.rv.append(Token(type=s))
+        self.rv.append(Token(lineno=self._ln, type=s))
 
     def t_uriref(self, s):
         r' <[^ >]*> '
-        self.rv.append(Token(type='uriref', attr=s[1:-1]))
+        self.rv.append(Token(lineno=self._ln, type='uriref', attr=s[1:-1]))
 
     def t_strlit1(self, s):
         r' "([^\"\\\n]|\\[\\\"nrt])*" '
-        self.rv.append(Token(type='strlit1', attr=s))
+        self.rv.append(Token(lineno=self._ln, type='strlit1', attr=s))
+        self.line = self.line + countNewlines(s)
     
     def t_strlit2(self, s):
         r" '([^\'\\\n]|\\[\\\'nrt])*' "
-        self.rv.append(Token(type='strlit2', attr=s))
+        self.rv.append(Token(lineno=self._ln, type='strlit2', attr=s))
+        self.line = self.line + countNewlines(s)
     
-    def t_period(self, s):
-        r' \. '
-        self.rv.append(Token(type=s))
+    def t_punct(self, s):
+        r' [\(\)\[\]=\.{};,] '
+        self.rv.append(Token(lineno=self._ln, type=s))
     
-    def t_comma(self, s):
-        r' , '
-        self.rv.append(Token(type=s))
-    
-    def t_semi(self, s):
-        r' ; '
-        self.rv.append(Token(type=s))
-    
-    def t_lbrace(self, s):
-        r' \{ '
-        self.rv.append(Token(type=s))
-    
-    def t_rbrace(self, s):
-        r' \} '
-        self.rv.append(Token(type=s))
-    
-    def t_rbracket(self, s):
-        r' \[ '
-        self.rv.append(Token(type=s))
-    
-    def t_lbracket(self, s):
-        r' \] '
-        self.rv.append(Token(type=s))
-
     def tokenize(self, input):
         self.rv = []
+        self._ln = 1
         spark.GenericScanner.tokenize(self, input)
         return self.rv
 
     def error(self, s):
-        print "@@huh?", s
+        print "syntax error: bad token at line", self._ln
         
 
 class Scanner(Scanner0):
@@ -240,15 +228,28 @@ class Scanner(Scanner0):
     """
     def t_qname(self, s):
         r' [a-zA-Z0-9_-]*:[a-zA-Z0-9_-]* '
-        self.rv.append(Token(type='qname', attr=s)) # split at :?
+
+        # split at :?
+        self.rv.append(Token(lineno=self._ln, type='qname', attr=s))
 
     def t_strlit3(self, s):
         r' """([^\"\\]|\\[\\\"nrt])*""" ' #@@not right
-        self.rv.append(Token(type='strlit3', attr=s))
+        self.line = self.line + countNewlines(s)
+        self.rv.append(Token(lineno=self._ln, type='strlit3', attr=s))
 
-    
+
+def countNewlines(s):
+    i=-1
+    l=0
+    while 1:
+        i = find(s, "\n", i+1)
+        if i<0: break
+        l = l + 1
+    return l
+
 class Token:
-    def __init__(self, type, attr=None):
+    def __init__(self, lineno, type, attr=None):
+        self.lineno = lineno
         self.type = type
         self.attr = attr
 
@@ -285,7 +286,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.1  2001-08-28 05:10:31  connolly
+# Revision 1.2  2001-08-28 21:54:44  connolly
+# line numbering, =, run-on fix
+#
+# Revision 1.1  2001/08/28 05:10:31  connolly
 # bijan pointed me to this SPARK toolkit, which is nicely self-contained.
 #
 # So I've taken another whack at N3 syntax.
