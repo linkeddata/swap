@@ -2344,7 +2344,26 @@ class RDFStore(RDFSink.RDFSink) :
         return action(bindings, param, level)  # No terms left .. success!
 
     def remoteQuery(self, items, variables, existentials):
-	progress("Whee! time to call EricP's code!\nRemote Query:", items, variables, existentials)
+        import SqlDB
+        from SqlDB import ResultSet, SqlDBAlgae
+	# progress("Whee! time to call EricP's code!\nRemote Query:", items, variables, existentials)
+
+        rs = ResultSet()
+        qp = rs.buildQuerySetsFromCwm(items, variables, existentials)
+        a = SqlDBAlgae("http://localhost/SqlDB/", "AclSqlObjects")
+        messages = []
+        nextResults, nextStatements = a._processRow([], [], qp, rs, messages, {})
+        rs.results = nextResults
+        def df(datum):
+            return re.sub("http://localhost/SqlDB#", "sql:", datum)
+        print string.join(messages, "\n")
+        print "query matrix \"\"\""+rs.toString({'dataFilter' : None})+"\"\"\" .\n"
+        for solutions in nextStatements:
+            print "query solution {"
+            for statement in solutions:
+                print ShowStatement(statement)
+            print "} ."
+
 	binding = []
 	for i in range(len(variables)):
 	    v = variables[i]
