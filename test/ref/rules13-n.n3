@@ -1,0 +1,81 @@
+
+
+
+
+
+
+
+
+
+
+
+
+     @prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
+     @prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
+     @prefix : <rules13.n3#> .
+    
+    <>     log:forAll :p;
+         log:forSome :_g0;
+         log:subExpression :_g0;
+         log:forSome :_g1;
+         log:subExpression :_g1;
+         log:forAll :x,
+                :y .
+    {
+        {
+            :x     :ancestor :y .
+            :y     :ancestor :z .
+            
+            }     log:implies {:x     :ancestor :z .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :x,
+                :y,
+                :z .
+    
+    :_g0     log:means :_g1;
+         log:implies :_g1;
+         = {
+        :p     a daml:TransitiveProperty .
+        
+        } .
+    
+    :_g1     log:implies :_g0;
+         log:means :_g0;
+         = {
+        {
+            {
+                :x     :p :y .
+                :y     :p :z .
+                
+                }     log:implies {:x     :p :z .
+                } .
+            
+            }     a log:Truth;
+             log:forAll :x,
+                    :y,
+                    :z .
+        
+        } .
+    {
+        :x     log:means :y .
+        
+        }     log:implies {:x     log:implies :y .
+        :y     log:implies :x .
+        } .
+    {
+        :x     log:implies :y .
+        :y     log:implies :x .
+        
+        }     log:implies {:x     log:means :y .
+        } .
+    
+    :ancestor     a daml:TransitiveProperty .
+    
+    :granpa     :ancestor :pa,
+                :bill .
+    
+    :pa     :ancestor :bill .
+    
+ #ENDS

@@ -1,0 +1,21 @@
+
+
+
+
+
+
+
+
+
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix : <animal.rdf#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    
+    :Animal     a rdfs:Class;
+         rdfs:label "Animal";
+         <barrestrictedBy>  [
+             a <barRestriction>;
+             <baronProperty> :parent;
+             <barcardinality> "2" ] .
+    
+ #ENDS
