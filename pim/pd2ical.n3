@@ -15,14 +15,14 @@
 @prefix : <pd2ical#>.
 @prefix p2i: <pd2ical#>.
 
-this log:forAll v:e, v:i, v:date, v:desc, v:cal.
+this log:forAll v:e, v:i, v:date, v:desc.
+this log:forSome v:cal.
 
-{ <> dc:description [] } log:implies { [] a ical:VCALENDAR. }.
+v:cal a ical:VCALENDAR.
 
 { v:e pd:date [] } log:implies { v:e :asIcal [] }.
 
 {
-  v:cal a ical:VCALENDAR.
   v:e  :asIcal v:i;
        pd:date v:date;
        pd:description v:desc }
