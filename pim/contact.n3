@@ -26,7 +26,7 @@ rcs:id "$Id$". # see changelog at the bottom.
    dc:description """If you change this, you have to tell the W3C SemWeb AD
    folk, including Dan Connolly; so agreed 5 Jun 2001""" ].
 
-:_nspolicy a rdfs:Property; rdfs:label "namespace policy";
+:_nspolicy a rdf:Property; rdfs:label "namespace policy";
 	rdfs:isDefinedBy <http://www.w3.org/1999/10/nsuri>. # @@move these :_ things there.
 :_SubjectToChange rdfs:label "subject to change".
 
@@ -56,7 +56,7 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 
 @prefix mso: <MSOutlookContacts.n3#> .
 
-:SocialEntity a rdf:Class;
+:SocialEntity a rdfs:Class;
     rdfs:comment  "The sort of thing which can have a phone number.".
 
 :Person rdfs:subClassOf :SocialEntity;
@@ -74,18 +74,18 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 :middleName = 		mso:Middle_Name .
 :familyName = 		mso:Last_Name .
 :personalSuffix = 	mso:Suffix .
-:fullName a rdfs:Property; rdfs:label "full name".
-:sortName a rdfs:Property; rdfs:label "sort name";
+:fullName a rdf:Property; rdfs:label "full name".
+:sortName a rdf:Property; rdfs:label "sort name";
   rdfs:comment "re-arranged for lexicographic ordering; ala Doe, John".
 
-:ContactLocation a Class;
+:ContactLocation a rdfs:Class;
     rdfs:comment  "A place with address, phone number, fax, etc".
 
-:office a rdfs:Property;
+:office a rdf:Property;
     rdfs:domain :Person; rdfs:range :ContactLocation.
-:home a rdfs:Property;
+:home a rdf:Property;
     rdfs:domain :Person; rdfs:range :ContactLocation.
-:vacationHome a rdfs:Property;
+:vacationHome a rdf:Property;
     rdfs:domain :Person; rdfs:range :ContactLocation.
 
 :Address a rdfs:Class.
@@ -107,73 +107,73 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 
 # MSO stuff:
 
-#  mso:Title  a rdfs:Property .
-#  mso:First_Name  a rdfs:Property .
-#  mso:Middle_Name  a rdfs:Property .
-#  mso:Last_Name  a rdfs:Property .
-#  mso:Suffix  a rdfs:Property .
-#  mso:Company  a rdfs:Property .
-#  mso:Department  a rdfs:Property .
-#  mso:Job_Title  a rdfs:Property .
-#  mso:Business_Street  a rdfs:Property .
-#  mso:Business_Street_2  a rdfs:Property .
-#  mso:Business_Street_3  a rdfs:Property .
-#  mso:Business_City  a rdfs:Property .
-#  mso:Business_State  a rdfs:Property .
-#  mso:Business_Postal_Code  a rdfs:Property .
-#  mso:Business_Country  a rdfs:Property .
-#  mso:Home_Street  a rdfs:Property .
-#  mso:Home_Street_2  a rdfs:Property .
-#  mso:Home_Street_3  a rdfs:Property .
-#  mso:Home_City  a rdfs:Property .
-#  mso:Home_State  a rdfs:Property .
-#  mso:Home_Postal_Code  a rdfs:Property .
-#  mso:Home_Country  a rdfs:Property .
-#  mso:Other_Street  a rdfs:Property .
-#  mso:Other_Street_2  a rdfs:Property .
-#  mso:Other_Street_3  a rdfs:Property .
-#  mso:Other_City  a rdfs:Property .
-#  mso:Other_State  a rdfs:Property .
-#  mso:Other_Postal_Code  a rdfs:Property .
-#  mso:Other_Country  a rdfs:Property .
-#  mso:Assistant's_Phone  a rdfs:Property .
-#  mso:Business_Fax  a rdfs:Property .
-#  mso:Business_Phone  a rdfs:Property .
-#  mso:Business_Phone_2  a rdfs:Property .
-#  mso:Callback  a rdfs:Property .
-#  mso:Car_Phone  a rdfs:Property .
-#  mso:Company_Main_Phone  a rdfs:Property .
-#  mso:Home_Fax  a rdfs:Property .
-#  mso:Home_Phone  a rdfs:Property .
-#  mso:Home_Phone_2  a rdfs:Property .
-#  mso:ISDN  a rdfs:Property .
-#  mso:Mobile_Phone  a rdfs:Property .
-#  mso:Other_Fax  a rdfs:Property .
-#  mso:Other_Phone  a rdfs:Property .
-#  mso:Pager  a rdfs:Property .
-#  mso:Primary_Phone  a rdfs:Property .
-#  mso:Radio_Phone  a rdfs:Property .
-#  mso:TTY/TDD_Phone  a rdfs:Property .
-#  mso:Telex  a rdfs:Property .
-#  mso:Account  a rdfs:Property .
-#  mso:Anniversary  a rdfs:Property .  # Assume we mean anniversay of celebration of union
-#  mso:Assistant's_Name  a rdfs:Property .
-#  mso:Billing_Information  a rdfs:Property .
+#  mso:Title  a rdf:Property .
+#  mso:First_Name  a rdf:Property .
+#  mso:Middle_Name  a rdf:Property .
+#  mso:Last_Name  a rdf:Property .
+#  mso:Suffix  a rdf:Property .
+#  mso:Company  a rdf:Property .
+#  mso:Department  a rdf:Property .
+#  mso:Job_Title  a rdf:Property .
+#  mso:Business_Street  a rdf:Property .
+#  mso:Business_Street_2  a rdf:Property .
+#  mso:Business_Street_3  a rdf:Property .
+#  mso:Business_City  a rdf:Property .
+#  mso:Business_State  a rdf:Property .
+#  mso:Business_Postal_Code  a rdf:Property .
+#  mso:Business_Country  a rdf:Property .
+#  mso:Home_Street  a rdf:Property .
+#  mso:Home_Street_2  a rdf:Property .
+#  mso:Home_Street_3  a rdf:Property .
+#  mso:Home_City  a rdf:Property .
+#  mso:Home_State  a rdf:Property .
+#  mso:Home_Postal_Code  a rdf:Property .
+#  mso:Home_Country  a rdf:Property .
+#  mso:Other_Street  a rdf:Property .
+#  mso:Other_Street_2  a rdf:Property .
+#  mso:Other_Street_3  a rdf:Property .
+#  mso:Other_City  a rdf:Property .
+#  mso:Other_State  a rdf:Property .
+#  mso:Other_Postal_Code  a rdf:Property .
+#  mso:Other_Country  a rdf:Property .
+#  mso:Assistant's_Phone  a rdf:Property .
+#  mso:Business_Fax  a rdf:Property .
+#  mso:Business_Phone  a rdf:Property .
+#  mso:Business_Phone_2  a rdf:Property .
+#  mso:Callback  a rdf:Property .
+#  mso:Car_Phone  a rdf:Property .
+#  mso:Company_Main_Phone  a rdf:Property .
+#  mso:Home_Fax  a rdf:Property .
+#  mso:Home_Phone  a rdf:Property .
+#  mso:Home_Phone_2  a rdf:Property .
+#  mso:ISDN  a rdf:Property .
+#  mso:Mobile_Phone  a rdf:Property .
+#  mso:Other_Fax  a rdf:Property .
+#  mso:Other_Phone  a rdf:Property .
+#  mso:Pager  a rdf:Property .
+#  mso:Primary_Phone  a rdf:Property .
+#  mso:Radio_Phone  a rdf:Property .
+#  mso:TTY/TDD_Phone  a rdf:Property .
+#  mso:Telex  a rdf:Property .
+#  mso:Account  a rdf:Property .
+#  mso:Anniversary  a rdf:Property .  # Assume we mean anniversay of celebration of union
+#  mso:Assistant's_Name  a rdf:Property .
+#  mso:Billing_Information  a rdf:Property .
 
-:birthday a rdfs:Property; =  mso:Birthday; rdfs:range :Date .
+:birthday a rdf:Property; =  mso:Birthday; rdfs:range :Date .
 
-:Data a Class.    # See ... ICalendar, etc etc
+:Data a rdfs:Class.    # See ... ICalendar, etc etc
 
-#  mso:Categories  a rdfs:Property .   # replace with RDF individual classes.
-#  mso:Children  a rdfs:Property .
+#  mso:Categories  a rdf:Property .   # replace with RDF individual classes.
+#  mso:Children  a rdf:Property .
 #		replace with :child
 
 :child a rdf:Property .
 # { :x :child :y } log:implies {{ :x a :Person } means { y a :person } }
 
-#  mso:Directory_Server  a rdfs:Property .
+#  mso:Directory_Server  a rdf:Property .
 
-#  mso:E-mail_Address  a rdfs:Property    # Problmem: not as a URI
+#  mso:E-mail_Address  a rdf:Property    # Problmem: not as a URI
 :mailbox a ont:UnambiguousProperty;
   rdfs:domain :SocialEntity;
   rdfs:range :Mailbox;
@@ -192,7 +192,7 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
   :_example { :_Dan :mailboxURI "mailto:connolly@w3.org" }.
 
 # move these rules to a transcription of the mailto: URI scheme spec.
-:_addressProperty a rdfs:Property.
+:_addressProperty a rdf:Property.
 :mailbox :_addressProperty :mailboxURI.
 
 #  this log:forAll :x, :ap, :uri.
@@ -200,55 +200,55 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 #  { :x [ :addressProperty :ap] [ log:uri :uri] } log:means { :x :ap :uri }.
 #  { :ent :mailboxURI [ log:equalTo [ is log:concat of ( "mailto:" [ :_uriEncode :addr ] ) ] ] } log:implies { :ent :emailAddress :addr }. # only goes one way because we could use PUT to HTTP resources to deliver mail.
 
-#  mso:E-mail_Display_Name  a rdfs:Property .   # Seems redundant and useless IMHO
+#  mso:E-mail_Display_Name  a rdf:Property .   # Seems redundant and useless IMHO
 
-#  mso:E-mail_2_Address  a rdfs:Property .    # Just have multiple email addresses.
-#  mso:E-mail_2_Display_Name  a rdfs:Property . # One thing which RDF simplifies
-#  mso:E-mail_3_Address  a rdfs:Property .
-#  mso:E-mail_3_Display_Name  a rdfs:Property .
+#  mso:E-mail_2_Address  a rdf:Property .    # Just have multiple email addresses.
+#  mso:E-mail_2_Display_Name  a rdf:Property . # One thing which RDF simplifies
+#  mso:E-mail_3_Address  a rdf:Property .
+#  mso:E-mail_3_Display_Name  a rdf:Property .
 
-#  mso:Gender  a rdfs:Property .
+#  mso:Gender  a rdf:Property .
 # Replace with:
 
-:Male a Class; ont:complementOf :Female.
+:Male a rdfs:Class; ont:complementOf :Female.
 
 
-#  mso:Government_ID_Number  a rdfs:Property .   # Let's keep to the topic now.
-#  mso:Hobby  a rdfs:Property .   # Let's keep to the topic now.
-#  mso:Initials  a rdfs:Property .  # Do WE HAVE to have this?! ;-)
-#  mso:Internet_Free_Busy  a rdfs:Property .  # MSO specific I guess
-#  mso:Keywords  a rdfs:Property .
-#  mso:Language  a rdfs:Property .    # Hmmm. interesting See I18n. Try:
+#  mso:Government_ID_Number  a rdf:Property .   # Let's keep to the topic now.
+#  mso:Hobby  a rdf:Property .   # Let's keep to the topic now.
+#  mso:Initials  a rdf:Property .  # Do WE HAVE to have this?! ;-)
+#  mso:Internet_Free_Busy  a rdf:Property .  # MSO specific I guess
+#  mso:Keywords  a rdf:Property .
+#  mso:Language  a rdf:Property .    # Hmmm. interesting See I18n. Try:
 
 :motherTongue a rdf:Property; rdfs:domain :Person; rdfs:range :LanguageCode .
 
 :LanguageCode a rdfs:Class. # A ISO langiuage 1 or 2 part string: a  datatype
 
-#  mso:Location  a rdfs:Property .
-#  mso:Manager's_Name  a rdfs:Property .
-#  mso:Mileage  a rdfs:Property .
-#  mso:Notes  a rdfs:Property .
+#  mso:Location  a rdf:Property .
+#  mso:Manager's_Name  a rdf:Property .
+#  mso:Mileage  a rdf:Property .
+#  mso:Notes  a rdf:Property .
 
 :description a rdf:Property .
 
-#  mso:Office_Location  a rdfs:Property .
-#  mso:Organizational_ID_Number  a rdfs:Property .
-#  mso:PO_Box  a rdfs:Property .
-#  mso:Priority  a rdfs:Property .
-#  mso:Private  a rdfs:Property .
-#  mso:Profession  a rdfs:Property .
-#  mso:Referred_By  a rdfs:Property .
-#  mso:Sensitivity  a rdfs:Property .
+#  mso:Office_Location  a rdf:Property .
+#  mso:Organizational_ID_Number  a rdf:Property .
+#  mso:PO_Box  a rdf:Property .
+#  mso:Priority  a rdf:Property .
+#  mso:Private  a rdf:Property .
+#  mso:Profession  a rdf:Property .
+#  mso:Referred_By  a rdf:Property .
+#  mso:Sensitivity  a rdf:Property .
 
-:partner hasSubProperty mso:Spouse .
+:partner rdfs:hasSubProperty mso:Spouse .
 
-mso:Spouse  a rdfs:Property;  .
-#  mso:User_1  a rdfs:Property .   # Use new pererties and namespaces!
-#  mso:User_2  a rdfs:Property .
-#  mso:User_3  a rdfs:Property .
-#  mso:User_4  a rdfs:Property .
+mso:Spouse  a rdf:Property;  .
+#  mso:User_1  a rdf:Property .   # Use new pererties and namespaces!
+#  mso:User_2  a rdf:Property .
+#  mso:User_3  a rdf:Property .
+#  mso:User_4  a rdf:Property .
 
-mso:WebPage  a rdfs:Property;
+mso:WebPage  a rdf:Property;
 = :publicHomePage .              # I have many home pages, some for me some for others
 :publicHomePage rdfs:subPropertyOf :homePage.
 :homePage :_addressProperty :homePageAddress.
@@ -267,7 +267,10 @@ mso:WebPage  a rdfs:Property;
 
 <> rcs:log """
 $Log$
-Revision 1.6  2001-06-13 23:58:48  timbl
+Revision 1.7  2001-11-01 16:04:34  timbl
+fixes
+
+Revision 1.6  2001/06/13 23:58:48  timbl
 Fixed bug in log:includes that bindings were not taken into target of includes
 
 Revision 1.5  2001/06/05 23:12:42  connolly
