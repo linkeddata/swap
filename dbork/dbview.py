@@ -49,7 +49,17 @@ REFERENCES
   Python Database API v2.0
   http://www.python.org/topics/database/DatabaseAPI-2.0.html
 
+  MySQL Reference Manual for version 4.0.2-alpha.
+  generated on 7 March 2002
+  http://www.mysql.com/documentation/mysql/bychapter/manual_toc.html
+
+ 
 SEE ALSO
+
+[SWDB]
+ Relational Databases on the Semantic Web
+ Id: RDB-RDF.html,v 1.17 2002/03/06 20:43:13 timbl
+ http://www.w3.org/DesignIssues/RDB-RDF.html
 
 earlier dev notes, links, ...
  http://ilrt.org/discovery/chatlogs/rdfig/2002-02-27#T18-29-01
@@ -65,7 +75,7 @@ import MySQLdb # MySQL for Python
                # http://sourceforge.net/projects/mysql-python
                # any Python Database API-happy implementation will do.
 
-import RDFSink
+from RDFSink import SYMBOL, LITERAL
 import notation3 # @@move RDF/XML writer out of notation3
 
 import BaseHTTPServer
@@ -77,7 +87,9 @@ import cgi # for URL-encoded query parsing
 class DBViewServer(BaseHTTPServer.HTTPServer):
     """Export an SQL database, read-only, into HTTP/RDF.
 
-    see http://www.w3.org/DesignIssues/RDB-RDF.html
+    @@integration with http://www.w3.org/DesignIssues/RDB-RDF.html
+    in progress.
+    
     databasename is
       'http://%s:%s%s%s' % (addr[0], addr[1], home, dbName)
     e.g.
@@ -214,7 +226,7 @@ def asSQL(fields, tables, keys, joins, condextra = ''):
     
 
 def askdb(db, dbaddr, sink, fields, tables, keys, joins, condextra):
-    """ask a query of a database; return an RDF formula.
+    """ask a query of a database; output results as RDF formula to sink.
 
     db is a python DB API database object
     dbaddr is a URI for the database (see DBViewServer above for details)
@@ -239,7 +251,9 @@ def askdb(db, dbaddr, sink, fields, tables, keys, joins, condextra):
 
     # using table names as namespace names seems to be aesthetic...
     for n in tables:
-        sink.bind(n, (RDFSink.SYMBOL, "%s/%s#" % (dbaddr, n)))
+        sink.bind(n, (SYMBOL, "%s/%s#" % (dbaddr, n)))
+    # and suggest a prefix for the table classes...
+    sink.bind('tables', (SYMBOL, "%s#" % (dbaddr,)))
 
 
     while 1:
@@ -273,12 +287,12 @@ def askdb(db, dbaddr, sink, fields, tables, keys, joins, condextra):
                         pass
                     else:
                         kv = row[col+kc]
-                        uri = "%s/%s/%s" % (dbaddr, tbl, kv)
+                        uri = "%s/%s/%s#item" % (dbaddr, tbl, kv) # cf [SWDB]
                 except KeyError:
                     # no, no key supplied for this class/table
                     pass
 
-                if uri: subj = (RDFSink.SYMBOL, uri)
+                if uri: subj = (SYMBOL, uri)
                 else:   subj = something(sink, fmla, tbl)
 
                 # remember this for joins...
@@ -286,19 +300,19 @@ def askdb(db, dbaddr, sink, fields, tables, keys, joins, condextra):
                 
                 # subj rdf:type _tableClass_.
                 sink.makeStatement((fmla,
-                                    (RDFSink.SYMBOL, RDF.type),
+                                    (SYMBOL, RDF.type),
                                     subj,
-                                    (RDFSink.SYMBOL, "%s/%s" % (dbaddr, tbl))
+                                    (SYMBOL, "%s#%s" % (dbaddr, tbl))
                                     ))
 
 
                 for fld in fields[ti]:
                     cell = row[col]
                     # @@our mysql implementation happens to use iso8859-1
-                    ol = (RDFSink.LITERAL, str(cell).decode('iso8859-1'))
+                    ol = (LITERAL, str(cell).decode('iso8859-1'))
 
                     # ok... now we have subj, pred and obj...
-                    prop = (RDFSink.SYMBOL, "%s/%s#%s" % (dbaddr, tbl, fld))
+                    prop = (SYMBOL, "%s/%s#%s" % (dbaddr, tbl, fld))
                     sink.makeStatement((fmla, prop, subj, ol))
 
                     col = col + 1
@@ -306,7 +320,7 @@ def askdb(db, dbaddr, sink, fields, tables, keys, joins, condextra):
                 # now relate it to other things...
                 for j in range(ti):
                     if joins[ti][j] and things[j]:
-                        prop = (RDFSink.SYMBOL, "%s/%s#%s" %
+                        prop = (SYMBOL, "%s/%s#%s" %
                                 (dbaddr, tables[ti], joins[ti][j]))
                         sink.makeStatement((fmla, prop, subj, things[j]))
                         
@@ -315,9 +329,9 @@ g=0
 def something(sink, scope=None, hint='gensym'):
     global g
     g=g+1
-    term = (RDFSink.SYMBOL, '#%s%s' % (hint, g))
+    term = (SYMBOL, '#%s%s' % (hint, g))
     #if scope: sink.makeStatement((scope,
-    #(RDFSink.SYMBOL, RDFSink.forSomeSym),
+    #(SYMBOL, RDFSink.forSomeSym),
     #scope, term))
     return term
 
@@ -335,47 +349,85 @@ class Namespace:
     def __str__(self): return self.nsname
     def sym(self, lname): return self.nsname + lname
 
-SwDB = Namespace("http://www.w3.org/2000/10/swap/dbork/sqldb@@#")
+SwDB = Namespace("http://www.w3.org/2000/10/swap/db#")
+  # in particular: db.n3,v 1.5 2002/03/06 23:12:00
 RDFS = Namespace("http://www.w3.org/2000/01/rdf-schema#")
 RDF  = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 DAML = Namespace("http://www.daml.org/2001/03/daml+oil#")
 
 
-def aboutDB(db, dbaddr, sink):
+def aboutDB(db, dbdocaddr, sink):
+    """describe a database into a sink.
+
+    We have a need for arbitrary names that don't clash
+    with table and column names. We chose names with '.'
+    at the end (or beginning?), taking advantage of:
+
+      You cannot use the `.' character in names because
+      it is used to extend the format by which you can refer
+      to columns.
+
+      -- 6.1.2 Database, Table, Index, Column, and Alias Names
+      http://www.mysql.com/documentation/mysql/bychapter/manual_Reference.html#Legal_names
+
+    """
+
     fmla = something(sink, None, 'aboutDB')
 
-    sink.bind('db', (RDFSink.SYMBOL, str(SwDB)))
-    sink.bind('rdfs', (RDFSink.SYMBOL, str(RDFS)))
-    sink.bind('rdf', (RDFSink.SYMBOL, str(RDF)))
-    
+    sink.bind('db', (SYMBOL, str(SwDB)))
+    sink.bind('rdfs', (SYMBOL, str(RDFS)))
+    sink.bind('rdf', (SYMBOL, str(RDF)))
+
+    dbaddr = "%s#.database" % dbdocaddr
+
+    # <personell#.database> db:databaseSchema <personell>.
+    sink.makeStatement((fmla,
+                        (SYMBOL, SwDB.databaseSchema),
+                        (SYMBOL, dbaddr),
+                        (SYMBOL, dbdocaddr),
+                        ))
+
+    sink.makeStatement((fmla,
+                        (SYMBOL, SwDB.formService),
+                        (SYMBOL, dbdocaddr),
+                        (SYMBOL, "%s%s" % (dbdocaddr, DBViewHandler.QPath)),
+                        ))
+
     c = db.cursor()
-    c.execute("show tables") # http://www.mysql.com/documentation/mysql/bychapter/manual_MySQL_Database_Administration.html#SHOW
+    c.execute("show tables") # mysql-specific?   http://www.mysql.com/documentation/mysql/bychapter/manual_MySQL_Database_Administration.html#SHOW
+
     while 1:
         row = c.fetchone()
         if not row: break
 
         tbl = row[0]
 
-        tblI = "%s/%s" % (dbaddr, tbl)
+        tblI = "%s#%s" % (dbdocaddr, tbl)
+        tbldocI = "%s/%s" % (dbdocaddr, tbl)
         
         sink.makeStatement((fmla,
-                            (RDFSink.SYMBOL, SwDB.table),
-                            (RDFSink.SYMBOL, dbaddr),
-                            (RDFSink.SYMBOL, tblI),
+                            (SYMBOL, SwDB.table),
+                            (SYMBOL, dbaddr),
+                            (SYMBOL, tblI),
                             ))
         sink.makeStatement((fmla,
-                            (RDFSink.SYMBOL, RDFS.label),
-                            (RDFSink.SYMBOL, tblI),
-                            (RDFSink.LITERAL, tbl)
+                            (SYMBOL, SwDB.tableSchema),
+                            (SYMBOL, tblI),
+                            (SYMBOL, tbldocI),
+                            ))
+        sink.makeStatement((fmla,
+                            (SYMBOL, RDFS.label),
+                            (SYMBOL, tblI),
+                            (LITERAL, tbl)
                             ))
 
 
 def aboutTable(db, dbaddr, sink, tbl):
     fmla = something(sink, None, 'aboutTable')
 
-    sink.bind('db', (RDFSink.SYMBOL, str(SwDB)))
-    sink.bind('rdfs', (RDFSink.SYMBOL, str(RDFS)))
-    sink.bind('rdf', (RDFSink.SYMBOL, str(RDF)))
+    sink.bind('db', (SYMBOL, str(SwDB)))
+    sink.bind('rdfs', (SYMBOL, str(RDFS)))
+    sink.bind('rdf', (SYMBOL, str(RDF)))
     
     c = db.cursor()
     c.execute("show columns from %s" % tbl)
@@ -385,30 +437,32 @@ def aboutTable(db, dbaddr, sink, tbl):
 
         colName, ty, nullable, isKey, dunno, dunno = row
         
-        tblI = "%s/%s" % (dbaddr, tbl)
+        tblI = "%s#%s" % (dbaddr, tbl)
         colI = "%s/%s#%s" % (dbaddr, tbl, colName)
         
         sink.makeStatement((fmla,
-                            (RDFSink.SYMBOL, SwDB.column),
-                            (RDFSink.SYMBOL, tblI),
-                            (RDFSink.SYMBOL, colI),
+                            (SYMBOL, SwDB.column),
+                            (SYMBOL, tblI),
+                            (SYMBOL, colI),
                             ))
-        sink.makeStatement((fmla,
-                            (RDFSink.SYMBOL, RDFS.domain),
-                            (RDFSink.SYMBOL, colI),
-                            (RDFSink.SYMBOL, tblI),
-                            ))
-        sink.makeStatement((fmla,
-                            (RDFSink.SYMBOL, RDFS.label),
-                            (RDFSink.SYMBOL, colI),
-                            (RDFSink.LITERAL, colName)
-                            ))
+
         if isKey == 'PRI':
             sink.makeStatement((fmla,
-                                (RDFSink.SYMBOL, RDF.type),
-                                (RDFSink.SYMBOL, colI),
-                                (RDFSink.SYMBOL, DAML.UnambiguousProperty),
+                                (SYMBOL, SwDB.primaryKey),
+                                (SYMBOL, tblI),
+                                (SYMBOL, colI),
                                 ))
+
+        sink.makeStatement((fmla,
+                            (SYMBOL, RDFS.domain),
+                            (SYMBOL, colI),
+                            (SYMBOL, tblI),
+                            ))
+        sink.makeStatement((fmla,
+                            (SYMBOL, RDFS.label),
+                            (SYMBOL, colI),
+                            (LITERAL, colName)
+                            ))
 
         # could expose nullable as DAML.minCardinality
         # could expose type as RDFS.range
@@ -584,13 +638,17 @@ def testQ():
 
 if __name__ == '__main__':
     #testSvc()
+    testQ()
     testShow()
     #testUI()
-    #testQ()
 
 
 # $Log$
-# Revision 1.12  2002-03-06 17:24:39  connolly
+# Revision 1.13  2002-03-07 00:24:43  connolly
+# stop conflating stuff, per designissues thingy.
+# lightly tested...
+#
+# Revision 1.12  2002/03/06 17:24:39  connolly
 # add pointer to msql doc for mysql-specific schema-interrogation stuff
 #
 # Revision 1.11  2002/03/06 17:20:18  timbl
