@@ -140,7 +140,7 @@ def main():
 		sys.exit(-1)
 
 	if proofs:
-	    execute("""%spython ../cwm.py --quiet %s --why  > ,proofs/%s""" %
+	    execute("""%spython ../cwm.py --quiet %s --base=a --why  > ,proofs/%s""" %
 		(env, arguments, case))
 	    execute("""python ../check.py < ,proofs/%s | %s > ,temp/%s""" %
 		(case, cleanup , case))	

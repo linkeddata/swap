@@ -12,6 +12,7 @@ from thing import load, Namespace
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ
 from diag import verbosity, setVerbosity, progress
 from sys import argv, exit
+import sys
 
 import llyn # Chosen engine registers itself
 
@@ -40,6 +41,7 @@ def parse(resourceURI):
     global parsed
     f = parsed.get(resourceURI, None)
     if f == None:
+	setVerbosity(90) #@@
 	f = load(resourceURI)
 	parsed[resourceURI] = f
     return f
@@ -52,7 +54,7 @@ def statementFromFormula(f):
 	    s = x
     return s
 
-def valid(r, level=0):
+def valid(proof, r, level=0):
     """Check whether this reason is valid. Returns the formula proved or None is not"""
     f = proof.any(r,reason.gives)
     if f != None:
@@ -82,7 +84,7 @@ def valid(r, level=0):
 	    g = parse(u)
 	    setVerbosity(v)
 	except:
-	    return fail("Can't retreive/parse <%s>." %u, level)
+	    return fail("Can't retreive/parse <%s> because:\n  %s." %(u, sys.exc_info()[1].__str__()), level)
 	if f != None:  # Additional intermediate check not essential
 	    for sf in f.statements:
 		for sg in g.statements:
@@ -105,7 +107,7 @@ def valid(r, level=0):
 	    bindings.append((var, val))
 
 	rule = proof.any(subj=r, pred=reason.rule)
-	if not valid(rule, level):
+	if not valid(proof, rule, level):
 	    return fail("No justification for rule "+`rule`, level)
 	for s in proof.the(rule, reason.gives).statements:
 	    if s[PRED] is log.implies:
@@ -114,7 +116,7 @@ def valid(r, level=0):
 	else: return fail("Rule has %s instead of log:implies as predicate.", level)
 	evidenceStatements = []
 	for e in evidence:
-	    f2 = valid(e, level)
+	    f2 = valid(proof, e, level)
 	    if f2 == None:
 		return fail("Evidence %s was not proved."%(e))
 	    evidenceStatements.append(f2)
@@ -135,7 +137,7 @@ def valid(r, level=0):
 			    level=level)
 
 	for e in evidence:
-	    if not valid(e, level):
+	    if not valid(proof, e, level):
 		return fail("Evidence could not be proved: " + `e`, level=level)
 	fyi("Rule %s conditions met" % ruleStatement, level=level)
 
@@ -153,7 +155,7 @@ def valid(r, level=0):
 	components = proof.each(subj=r, pred=reason.component)
 	proved = []
 	for e in components:
-	    if not valid(e, level):
+	    if not valid(proof, e, level):
 		return fail("In Conjunction %s, evidence %s could not be proved."%(r,e), level=level)
 	    proved.append(proof.the(subj=e, pred=reason.gives))
 	
@@ -165,7 +167,7 @@ def valid(r, level=0):
 	return f
     elif t is reason.Extraction:
 	r2 = proof.the(r, reason.because)
-	f2 = valid(r2, level)
+	f2 = valid(proof, r2, level)
 	if f2 == None:
 	    return fail("Extraction: validation of source forumla failed.", level)
 	v = verbosity()
@@ -182,7 +184,9 @@ def valid(r, level=0):
 
 # Main program 
 
-def main():	    
+def main():
+    global chatty
+    global parsed
     parsed = {}
     setVerbosity(0)
     chatty=60
@@ -195,7 +199,7 @@ def main():
     proof2 = proof.the(pred=rdf.type, obj=reason.Proof)  # the thing to be proved
     
     
-    proved = valid(proof2)
+    proved = valid(proof, proof2)
     if proved != None:
 	fyi("Proof looks OK.")
 	setVerbosity(0)
@@ -205,6 +209,7 @@ def main():
     exit(-1)
 
 if __name__ == "__main__":
+    """This trick prevents the pydoc from actually running the script"""
     main()
 #ends
 

@@ -2761,7 +2761,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		ur = []
 		ee = self.store.listElements(x, unmatched)
 		for e in ee: 
-		    if e in allvars: ur.append(e)
+		    if e in allvars and e not in ur: ur.append(e)
                 self.neededToRun[p] = ur
             elif isinstance(x, Formula): # expr
                 ur = self.store.occurringIn(x, allvars)

@@ -285,8 +285,15 @@ def doCommand():
 	    print "<th><a href='year-chron.html#m%s'>%s</a></th>" %(("0"+`month+1`)[-2:], monthName[month]),
 	print "</tr>"
 	for cat in quCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing]:
+	    label = meta.the(subj=cat, pred=rdfs.label)
+	    if label == None:
+		label = `cat`
+		sys.stderr.write("@@ No label for "+`cat` +"\n")
+	    else:
+		label = str(label)
+	    anchor = cat.fragid
 	    try:
-		print tableRow(`cat`, `cat`, totals[cat], byMonth.get(cat, [0] * 12))
+		print tableRow(anchor, anchor, totals[cat], byMonth.get(cat, [0] * 12))
 	    except KeyError:
 		continue
 

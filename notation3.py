@@ -61,6 +61,9 @@ import codecs # python 2-ism; for writing utf-8 in RDF/xml output
 import urllib
 import re
 import thing
+
+from diag import verbosity, setVerbosity
+
 from uripath import refTo, join
 
 import uripath
@@ -938,7 +941,7 @@ t   "this" and "()" special syntax should be suppresed.
 #	self.genPrefix = genPrefix  # Prefix for generated URIs on output
 	self.stack = [ 0 ]      # List mode?
 	self.noLists = noLists  # Suppress generation of lists?
-	self._anonymousNodes = {} # For "a" flag
+	self._anonymousNodes = [] # For "a" flag
 
         if "l" in self._flags: self.noLists = 1
 	
@@ -1218,7 +1221,7 @@ t   "this" and "()" special syntax should be suppresed.
             if i >= 0:
                 str = value[i+len(self._genPrefix)+1:]
             else:
-                sys.stderr.write("#@@@@@ Ooops ---  anon "+
+                if verbosity()>10: progress("#@@@@@ Ooops ---  anon "+
 		    value+"\n with genPrefix "+self._genPrefix+"\n")
                 i = len(value)
                 while i > 0 and value[i-1] in _namechars: i = i - 1
@@ -1359,7 +1362,7 @@ class Reifier(RDFSink.RDFSink):
         N3_NS = "http://www.w3.org/2000/10/swap/model.n3#"
         name = "context", "predicate", "subject", "object"
 
-        if thing.verbosity() > 50: progress("Reifying in  contexts stg with context %s."%(self._context,tuple[CONTEXT]))
+        if verbosity() > 50: progress("Reifying in  contexts stg with context %s."%(self._context,tuple[CONTEXT]))
         if self._flat and tuple[CONTEXT] == self._context:
             return self._sink.makeStatement(tuple)   # In same context: does not need reifying
 

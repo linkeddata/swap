@@ -189,6 +189,23 @@
     test:arguments     """underbarscope.n3 --think""".
 
 
+#	Test output flags
+
+:t10301a a test:CwmTest;
+    test:shortFileName "animal-ntriples.n3";
+    test:description	"Test the --ntriples output flag";
+    test:arguments	"--rdf animal.rdf --ntriples".
+
+:t10301b a test:CwmTest;
+    test:shortFileName "rules-flag-a.n3";
+    test:description	"Test the --n3=a output flag";
+    test:arguments	"rules12.n3 --n3=a".
+
+:t10301c a test:CwmTest;
+    test:shortFileName "rules-flag-t.n3";
+    test:description	"Test the --n3=t output flag";
+    test:arguments	"rules12.n3 --n3=t".
+
 #        Test list handling
 
 :t1031 a test:CwmTest;
