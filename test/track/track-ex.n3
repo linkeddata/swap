@@ -5,6 +5,7 @@
 #
 
 @prefix : <http://www.w3.org/2000/10/swap/pim/track#>.
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
 
 :wgMediaType-1 a :Issue;
      :title "Should W3C WGs define their own media types?";
