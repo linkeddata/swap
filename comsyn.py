@@ -1,4 +1,6 @@
 """
+(rename to miniRDF.py?)
+
 An RDF Compact Syntax, suitable for transmitting an
 RDF graph (optionally with variables) inside a URI.
 
@@ -87,6 +89,23 @@ default ?x to mustbind, _x to dontbind, ??x to maybind.
 nesting / parsetype=quote?
     easy with    quote(expr)
 
+
+urp --  ( ) shouldnt introduce a new subject;
+        Resource(...) should do that.
+
+             sandro.knows=Resource(nick='DanC')
+                          HasURI('...')
+                             <-> Resource(uri=...)
+                                [ messes with local names ]
+       Statement(sandro.knows=dan).type=true
+
+       MinRDF    TinyRDF    OneLineRDF
+
+       '31'@xsd_int
+       xx'31'
+
+       +-/*^ when - isnt swallowed, etc.
+            age=3*42/7;  ???   maybe
 
 """
 __version__ = "$Revision$"
@@ -245,6 +264,9 @@ sys.exit()
 
 class Parser(pluggable.Parser):
 
+    languages=["MiniRDF"]
+    requiredSinkType='triples, owns it nodes'       #hack
+
     def parse(self, stream, host):
         self.sink = host.pluginManager.get("store", rdfpath.Store)
         x = ply.yacc.parse(stream)
@@ -287,7 +309,10 @@ class xxxSerializer:
         pass
 
 # $Log$
-# Revision 1.1  2003-05-02 06:06:58  sandro
+# Revision 1.2  2003-08-01 15:35:27  sandro
+# added some comments
+#
+# Revision 1.1  2003/05/02 06:06:58  sandro
 # compact syntax for rdf; notes and partial impl
 #
 # Revision 1.8  2003/02/14 19:40:32  sandro

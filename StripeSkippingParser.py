@@ -15,6 +15,8 @@ front.
       Tree elements have first/rest which are trees or leaves.
 
       Nah, use literals directly...
+
+  DO use   <author><sandro/></author>
    
 """
 __version__ = "$Revision$"
@@ -140,6 +142,8 @@ class docHandler(xml.sax.ContentHandler):
         #for char in content:
         #    self.gotIndividual(self.sink.termFor(char))
         self.gotIndividual(self.sink.termFor(content))
+        # append it to the string buffer, which gets
+        # converted at the end or next individual.
 
     def gotIndividual(self, term):
         if self.awaitingFirstValue:
@@ -170,7 +174,10 @@ if __name__ == '__main__':
 #    doctest.testmod(sys.modules[__name__])
 
 # $Log$
-# Revision 1.2  2003-04-04 12:52:10  sandro
+# Revision 1.3  2003-08-01 15:35:03  sandro
+# added some comments
+#
+# Revision 1.2  2003/04/04 12:52:10  sandro
 # added quoting of newlines
 # made characters be RDF literals, grouped together
 #
