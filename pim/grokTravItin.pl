@@ -172,7 +172,7 @@ sub grok{
       #e.g. >    LV KANSAS CITY INTL          144P           EQP: MD-80
       while(s/(LV|AR) ((\S|( [a-zA-Z]))+) \s*(\w\w\w)?\s*(\d\d?)(\d\d)(A|P|N)//){
 	my($dir, $airportName, $st, $hh, $mm, $ap) = ($1, $2, $5, $6, $7, $8);
-	$hh += 12 if $ap eq 'P';
+	$hh += 12 if $ap eq 'P' && $hh < 12;
 	$hh = 0 if ($ap eq 'A' && $hh == 12);
 	my($place, $ti, $code);
 	$place = the($kNS . "nameString", $airportName, $airportName);
@@ -191,6 +191,7 @@ sub grok{
 	}else{
 	  makeStatement($event, $kNS . 'toLocation', $place);
 	  makeStatement($event, $tNS . 'arrivalTime', '', $ti);
+	  makeStatement($event, $kNS . "endingDate", $calday);
 	}
 
       }
@@ -301,7 +302,10 @@ sub the{
 
 sub airportNames{
   my($data, $ln, %ret);
-  
+
+  # good place to look these up is
+  # http://www.ar-group.com/icaoiata.htm , linked from
+  # http://www.daml.org/2001/10/html/
   $data = <<EODATA;
 AHO ALGHERO
 BOS BOSTON
@@ -323,6 +327,7 @@ BRS BRISTOL
 DTW DETROIT METRO
 AMS AMSTERDAM
 GLA GLASGOW
+YYZ TORONTO ON
 EODATA
 
     #
@@ -337,7 +342,10 @@ EODATA
 
 
 # $Log$
-# Revision 1.7  2002-09-22 21:56:46  connolly
+# Revision 1.8  2002-09-27 21:16:04  connolly
+# handle overnight flights
+#
+# Revision 1.7  2002/09/22 21:56:46  connolly
 # handle overnight flights; for TAG trip, WebOnt trip
 #
 # Revision 1.6  2002/09/11 13:36:44  connolly

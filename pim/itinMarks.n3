@@ -16,13 +16,17 @@ dc:relation <airportLookup.n3>.
 @prefix : <itinMarks#>.
 
 this log:forAll :LAT1, :LON1, :IATA, :TXT, :T1, :T2,
-  :YMD, :DOW, :DOWN, :DDD, :P, :Q, :PN, :C.
+  :YMD, :DOW, :DOWN, :DDD, :P, :Q, :PN, :C, :R.
 
 
 # report lat/long of flights...
 :ArLv is rdf:type of k:fromLocation, k:toLocation.
-k:fromLocation :label "lv"; :timeProp trav:departureTime.
-k:toLocation :label "ar"; :timeProp trav:arrivalTime.
+k:fromLocation :label "lv";
+  :timeProp trav:departureTime;
+  :dayProp k:startingDate.
+k:toLocation :label "ar";
+  :timeProp trav:arrivalTime;
+  :dayProp k:endingDate.
 
 k:Sunday
   :dayColor "red".
@@ -55,10 +59,10 @@ k:Saturday
  log:implies { :IATA log:outputString :TXT }.
 
 
-{ :P a :ArLv; :label :PN; :timeProp :Q.
+{ :P a :ArLv; :label :PN; :timeProp :Q; :dayProp :R.
 
   [ k:subEvents [
-      k:startingDate [ a :DOW ];
+      :R [ a :DOW ];
       :Q :T1;
       :P [
         apt:latitude :LAT1;
