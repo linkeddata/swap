@@ -355,6 +355,7 @@ class RDFStore(notation3.RDFSink) :
     def storeQuad(self, q):
         """ Effectively intern quads, in that dupliates are eliminated.
         """
+        #  Check whether this quad already exists
 	short = 1000000 #@@
 	for p in ALL4:
             l = len(q[p].occursAs[p])
@@ -362,12 +363,12 @@ class RDFStore(notation3.RDFSink) :
                 short = l
                 p_short = p
         for t in q[p_short].occursAs[p_short]:
-            if t.triple == q: return t
+            if t.triple == q: return 0
 
 	s = StoredStatement(q)
         for p in ALL4: s.triple[p].occursAs[p].append(s)
         self.size = self.size+1
-        return s
+        return 1
 
     def startDoc(self):
         pass
@@ -1052,6 +1053,7 @@ def doCommand():
             (default is to store and pretty print with anonymous nodes) *
 
  -apply=foo Read rules from foo, apply to store, adding conclusions to store
+ -reify     Replace the statements in the store with statements describing them.
  -help      print this message
  -chatty    Verbose output of questionable use
  
@@ -1067,6 +1069,7 @@ def doCommand():
         option_rdf1out = 0  # Output in RDF M&S 1.0 instead of N3
         option_bySubject= 0 # Store and regurgitate in subject order *
         option_inputs = []
+        option_reify = 0    # Flag: reify on output  (process?)
         _doneOutput = 0
         _gotInput = 0     #  Do we not need to take input from stdin? 
         chatty = 0          # not too verbose please
@@ -1082,6 +1085,7 @@ def doCommand():
             elif arg == "-rdf1out": option_rdf1out = 1
             elif arg == "-chatty": chatty = 1
             elif arg[:7] == "-apply=": pass
+            elif arg == "-reify": pass
             elif arg == "-help":
                 print doCommand.__doc__
                 return
@@ -1153,7 +1157,7 @@ def doCommand():
 
             elif _lhs == "-filter":
                 filterContext = myEngine.internURI(_uri)
-                _playURI = urlparse.urljoin(_baseURI, "$PLAY$")  # Intermediate
+                _playURI = urlparse.urljoin(_baseURI, "PLAY")  # Intermediate
                 _playContext = myEngine.internURI(_playURI)
                 _store.moveContext(workingContext, _playContext)
                 print "# Input filter ", _uri
@@ -1165,6 +1169,14 @@ def doCommand():
             elif arg == "-rules":
                 _store.applyRules(workingContext, workingContext);
 
+            elif arg == "-reify":
+                _playURI = urlparse.urljoin(_baseURI, "PLAY")  # Intermediate
+                _playContext = myEngine.internURI(_playURI)
+                _store.moveContext(workingContext, _playContext)
+
+                _store.dumpBySubject(_playContext,
+                                     notation3.Reifier(_store, _outURI))                
+                
             elif arg == "-help":
                 print doCommand.__doc__
 

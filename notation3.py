@@ -1001,7 +1001,62 @@ class ToN3(RDFSink):
 
         return "<" + value + ">"    # Everything else
 
+#########################################################
+#
+#    Reifier
+#
+# Use:
+#   sink = notation3.Reifier(sink, outputURI)
 
+
+class Reifier(RDFSink):
+
+    def __init__(self, sink, context, genPrefix=None):
+        RDFSink.__init__(self)
+        self.sink = sink
+        self._ns = "http://www.w3.org/2000/10/swap/model.n3#"
+        self.sink.bind("n3", (RESOURCE, self._ns))
+        self._nextId = 1
+        self._context = context
+        self._genPrefix = genPrefix
+        if self._genPrefix == None:
+            self._genPrefix = self._context + "#_g"
+        
+    def bind(self, prefix, nsPair):
+        self.sink.bind(prefix, nsPair)
+               
+    def makeStatement(self, tuple):  # Quad of (type, value) pairs
+        _statementURI = self._genPrefix + `self._nextId`
+        self._nextId = self._nextId + 1
+        N3_NS = "http://www.w3.org/2000/10/swap/model.n3#"
+        name = "context", "predicate", "subject", "object"
+
+        self.sink.makeStatement(( (RESOURCE, self._context), # quantifiers - use inverse?
+                                  (RESOURCE, N3_forSome_URI),
+                                  (RESOURCE, self._context),
+                                  (RESOURCE, _statementURI) )) #  Note this is anonymous
+        
+        self.sink.makeStatement(( (RESOURCE, self._context), # Context
+                              (RESOURCE, self._ns+"statement"), #Predicate
+                              tuple[CONTEXT], # Subject
+                              (RESOURCE, _statementURI) ))  # Object
+
+        for i in PARTS:
+            self.sink.makeStatement((
+                (RESOURCE, self._context), # Context
+                (RESOURCE, self._ns+name[i]), #Predicate
+                (RESOURCE, _statementURI), # Subject
+                tuple[i] ))  # Object
+
+
+    def makeComment(self, str):
+        return self.sink.makeComment(str) 
+
+    def startDoc(self):
+        return self.sink.startDoc()
+
+    def endDoc(self):
+        return self.sink.endDoc()
 
 ######################################################### Tests
   

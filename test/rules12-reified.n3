@@ -1,0 +1,66 @@
+# Base URI of process is file:///devel/WWW/2000/10/swap/test/
+# Input from  file:/devel/WWW/2000/10/swap/test/rules12.n3
+
+#  Notation3 generation by
+#  $Id$
+
+     @prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
+     @prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
+     @prefix mech: <file:/devel/WWW/2000/10/swap/test/s1.n3#> .
+     @prefix : <file:/devel/WWW/2000/10/swap/test/STDOUT> .
+     @prefix n3: <http://www.w3.org/2000/10/swap/model.n3#> .
+     @prefix rules: <file:/devel/WWW/2000/10/swap/test/rules12.n3#> .
+    
+    <file:/devel/WWW/2000/10/swap/test/PLAY> n3:statement  [ 
+             n3:predicate log:forAll;
+             n3:subject <file:/devel/WWW/2000/10/swap/test/PLAY>;
+             n3:object rules:p ],
+                 [ 
+             n3:predicate log:forSome;
+             n3:subject <file:/devel/WWW/2000/10/swap/test/PLAY>;
+             n3:object rules:_g0 ],
+                 [ 
+             n3:predicate log:forSome;
+             n3:subject <file:/devel/WWW/2000/10/swap/test/PLAY>;
+             n3:object rules:_g1 ],
+                 [ 
+             n3:predicate log:forSome;
+             n3:subject <file:/devel/WWW/2000/10/swap/test/PLAY>;
+             n3:object rules:_g3 ],
+                 [ 
+             n3:predicate log:forSome;
+             n3:subject <file:/devel/WWW/2000/10/swap/test/PLAY>;
+             n3:object rules:_g4 ],
+                 [ 
+             n3:predicate log:forSome;
+             n3:subject <file:/devel/WWW/2000/10/swap/test/PLAY>;
+             n3:object rules:_g5 ],
+                 [ 
+             n3:predicate log:forSome;
+             n3:subject <file:/devel/WWW/2000/10/swap/test/PLAY>;
+             n3:object rules:_g6 ],
+                 [ 
+             n3:predicate log:implies;
+             n3:subject rules:_g3;
+             n3:object rules:_g4 ],
+                 [ 
+             n3:predicate log:implies;
+             n3:subject rules:_g0;
+             n3:object rules:_g1 ],
+                 [ 
+             n3:predicate rules:ancestor;
+             n3:subject rules:granpa;
+             n3:object rules:pa ],
+                 [ 
+             n3:predicate rules:ancestor;
+             n3:subject rules:pa;
+             n3:object rules:bill ],
+                 [ 
+             n3:predicate <http://www.w3.org/1999/02/22-rdf-syntax-ns#Type>;
+             n3:subject rules:ancestor;
+             n3:object daml:TransitiveProperty ],
+                 [ 
+             n3:predicate log:means;
+             n3:subject rules:_g5;
+             n3:object rules:_g6 ] .
+    
