@@ -1,15 +1,6 @@
 #!/usr/bin/env python
 """
 
-     Special hack to support things like --filter=f where
-     we have an optional parameter in the midst of extra arguments.
-       ...  in1 in2 --filter in3 --filter=f1 in4 ...
-     if the option contains a "=" it must match a method name
-     with EQ appended  ( handle__x__y__filterEQ__z ) which
-     must take exactly one argument.   So filter and filterEQ may
-     be different options.   It's safe to add an EQ version to any
-     option which takes only one parameter
-     
 """
 import sys
 import inspect
@@ -20,7 +11,34 @@ class Error(RuntimeError):
 
 class ArgHandler:
     """A replacement for getopt which supports interleaving
-    flags with other arguments and is very simple to use."""
+    flags with other arguments and is very simple to use.
+
+         from ArgHandler import ArgHandler;
+
+         class MyArgHandler(ArgHandler):
+
+             def handle__H__hello(self):
+                 print "Hello, World!"
+
+             def handle__xx(self, foo, baz=3, buz=4):
+                 spiff=5
+                 print "Hello, World!"
+
+         if __name__ == "__main__":
+             a = MyArgHandler(revision="$Id$")
+             a.run()
+
+     Special hack to support things like --filter=f where
+     we have an optional parameter in the midst of extra arguments.
+       ...  in1 in2 --filter in3 --filter=f1 in4 ...
+     if the option contains a "=" it must match a method name
+     with EQ appended  ( handle__x__y__filterEQ__z ) which
+     must take exactly one argument.   So filter and filterEQ may
+     be different options.   It's safe to add an EQ version to any
+     option which takes only one parameter
+     
+
+    """
 
     def __init__(self, **attrs):
         """Accept arbitrary keyword arguments and just store
@@ -146,9 +164,12 @@ class ArgHandler:
            raise Error, "unknown argument: \"%s\"" % arg
         if len(matches) == 1:
             return last_match
-        if len(matches) > 1:
-           raise Error, ("ambiguous argument, might be: \"%s\"..." %
+        if len(matches) > 4:
+           raise Error, ("ambiguous option might be: \"%s\"..." %
                        '", "'.join(matches[0:3]))
+        if len(matches) > 1:
+           raise Error, ("ambiguous option might be: \"%s\"" %
+                       '", "'.join(matches))
 
     def buildArgs(self, member):
        """Call getNext as long as it's not a flag to fill in the
@@ -277,7 +298,10 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
 
 # $Log$
-# Revision 1.3  2003-04-02 19:43:41  sandro
+# Revision 1.4  2003-04-02 19:52:33  sandro
+# a bit of docs
+#
+# Revision 1.3  2003/04/02 19:43:41  sandro
 # nearly all works
 #
 # Revision 1.2  2003/04/02 18:06:13  sandro
