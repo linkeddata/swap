@@ -1,0 +1,138 @@
+#Processed by Id: cwm.py,v 1.93 2002/05/14 22:11:04 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/crypto.n3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/crypto.n3
+     @prefix : <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix dpo: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    :CanEncrypt     s:comment "PublicKeyObjects which are cabable of encrypting things";
+         s:isSubClassOf :PublicKeyObject .
+    
+    :CanSign     s:comment """PublicKeyObjects which are cabable of signing things.
+True if the algorithm is capable of signing data; returns false otherwise.
+To test if a given key object can sign data, use CanSign and HasPrivate. """;
+         s:isSubClassOf :PublicKeyObject .
+    
+    :HAVAL128     a dpo:UniqueProperty,
+                rdf:Property;
+         s:domain string:String;
+         s:label "HAVAL hash (128 bit)";
+         s:range string:String .
+    
+    :HAVAL160     a dpo:UniqueProperty,
+                rdf:Property;
+         s:domain string:String;
+         s:label "HAVAL hash (160 bit)";
+         s:range string:String .
+    
+    :HAVAL192     a dpo:UniqueProperty,
+                rdf:Property;
+         s:domain string:String;
+         s:label "HAVAL hash (192 bit)";
+         s:range string:String .
+    
+    :HAVAL224     a dpo:UniqueProperty,
+                rdf:Property;
+         s:domain string:String;
+         s:label "HAVAL hash (224 bit)";
+         s:range string:String .
+    
+    :HAVAL256     a dpo:UniqueProperty,
+                rdf:Property;
+         s:domain string:String;
+         s:label "HAVAL hash (256 bit)";
+         s:range string:String .
+    
+    :HasPrivate     s:comment """
+Some keys have private parts, some don't.  This is the class of those which do.
+""";
+         s:isSubClassOf :PublicKeyObject .
+    
+    :HashFunction     a s:Class;
+         s:comment """
+The crypographic hash functions are (being functions) unique and 
+(the whole point of being hash functions) are, when secure, assumed
+unambiguous. That is, you have the right hash you ahve the right document.
+Currently (2001/9)only SHA is given that property.
+""";
+         s:label "Any crypographic hash function" .
+    
+    :MD2     a dpo:UniqueProperty,
+                rdf:Property;
+         s:domain string:String;
+         s:label "MD2 hash";
+         s:range string:String .
+    
+    :MD4     a dpo:UniqueProperty,
+                rdf:Property;
+         s:domain string:String;
+         s:label "MD4 hash";
+         s:range string:String .
+    
+    :MD5     a dpo:UniqueProperty,
+                rdf:Property;
+         s:domain string:String;
+         s:label "MD5 hash";
+         s:range string:String .
+    
+    :PublicKeyObject     a s:Class;
+         s:comment """An object corresponding to a key for some algorithm.
+    The object can hold a private and optionally a private key.""" .
+    
+    :RIPEMD     a dpo:UniqueProperty,
+                rdf:Property;
+         s:domain string:String;
+         s:label "RIPEMD hash";
+         s:range string:String .
+    
+    :RSA     s:SubClassOf :PublicKeyObject .
+    
+    :RSA_     a dpo:UniqueProperty,
+                rdf:Property;
+         s:domain string:String;
+         s:label "RSA key generator";
+         s:range string:String .
+    
+    :RSA_validSignature     a dpo:UnambiguousProperty,
+                dpo:UniqueProperty,
+                rdf:Property;
+         s:domain string:String;
+         s:label "validated RSA signature";
+         s:range string:String .
+    
+    :SHA     a dpo:UnambiguousProperty,
+                dpo:UniqueProperty,
+                rdf:Property;
+         s:domain string:String;
+         s:label "SHA hash";
+         s:range string:String .
+    
+    :md5     a rdf:Property .
+    
+    :publicKey     a s:Property;
+         s:comment " A public key object that doesn't contain the private key data";
+         s:domain :PublicKeyObject;
+         s:range :PublicKeyObject .
+    
+    :size     a s:Property;
+         s:comment """The maximum size of a string that can be encrypted or signed,
+measured in bits. String data is treated in big-endian format; the most significant
+byte comes first. (This seems to be a de facto standard for cryptographical
+software.) If the size is not a multiple of 8, then some of the high order
+bits of the first byte must be zero. Usually it's simplest to just divide the
+size by 8 and round down""";
+         s:domain :PublicKeyObject;
+         s:range log:Number .
+    
+    :verify     a rdf:Property .
+    
+    :verifyBoolean     a rdf:Property .
+    
+#ENDS

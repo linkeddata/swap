@@ -1,0 +1,65 @@
+#Processed by Id: cwm.py,v 1.93 2002/05/14 22:11:04 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/string.n3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/string.n3
+     @prefix : <http://www.w3.org/2000/10/swap/string#> .
+     @prefix dpo: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    :String     a s:Class;
+         dpo:sameClassAs s:Literal .
+    
+    :concat     a dpo:UnambiguousProperty;
+         dpo:inverse :concatenation;
+         s:definedBy <http://www.w3.org/2000/10/swap/string>;
+         s:domain :String;
+         s:label "is concatenation of";
+         s:range dpo:List .
+    
+    :concatenation     a dpo:UniqueProperty;
+         s:definedBy <http://www.w3.org/2000/10/swap/string>;
+         s:domain dpo:List;
+         s:label "is the concatenation of the strings in";
+         s:range :String .
+    
+    :endsWith     a dpo:Property;
+         s:definedBy <http://www.w3.org/2000/10/swap/string>;
+         s:domain :String;
+         s:label "ends with";
+         s:range :String .
+    
+    :greaterThan     a dpo:Property;
+         s:definedBy <http://www.w3.org/2000/10/swap/string>;
+         s:domain :String;
+         s:label "is greater than";
+         s:range :String .
+    
+    :lessThan     a dpo:Property;
+         s:definedBy <http://www.w3.org/2000/10/swap/string>;
+         s:domain :String;
+         s:label "is less than";
+         s:range :String .
+    
+    :notGreaterThan     a dpo:Property;
+         s:definedBy <http://www.w3.org/2000/10/swap/string>;
+         s:domain :String;
+         s:label "is not greater than";
+         s:range :String .
+    
+    :notLessThan     a dpo:Property;
+         s:definedBy <http://www.w3.org/2000/10/swap/string>;
+         s:domain :String;
+         s:label "is not less than";
+         s:range :String .
+    
+    :startsWith     a dpo:Property;
+         s:definedBy <http://www.w3.org/2000/10/swap/string>;
+         s:domain :String;
+         s:label "starts with";
+         s:range :String .
+    
+#ENDS

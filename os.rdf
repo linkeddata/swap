@@ -1,0 +1,50 @@
+#Processed by Id: cwm.py,v 1.93 2002/05/14 22:11:04 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/os.n3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/os.n3
+     @prefix : <http://www.w3.org/2000/10/swap/os#> .
+     @prefix doc: <http://www.w3.org/2000/01/pim/doc#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix ont: <http://www.daml.org/2000/10/daml-ont#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    :argv     a ont:UniqueProperty,
+                rdf:Property;
+         rdfs:comment """
+    The object is looked up as the literal string which was given
+as the nth command line argument. For example, cwm uses a "-with" argument
+to indicate that the following args should be passed to the RDF system.
+
+Example:
+    cwm foo.n3 -think -with bar baz
+    when processing,   {"1" os:argv "bar". "2" os:arv "baz"} will be true.
+    
+    The os:argv property allows one to make statements whose interpretation
+is relative to the conditions pertaining at the time of execution. Beware
+of writing axioms about these, in making optimizations for example about
+reuse of information between runs.  The uniqueness of this property pertains
+to one run of a program.  The ont:UniqueProperty may be removed if it
+messes up more complex processing.""";
+         rdfs:isDefinedBy <>;
+         rdfs:label "command line argument value" .
+    
+    :environ     a ont:UniqueProperty,
+                rdf:Property;
+         rdfs:comment """
+The os:environ property of a string is the value corresponding to
+the string when looked up in the curent environment.  This is
+not, of course, something of global significance: it is only
+used in local processing for passing parameters into a semantic web
+processor.
+
+os:environ is a built-in function in cwm, and corresponds
+to Python's os.environ[] .
+""";
+         rdfs:isDefinedBy <>;
+         rdfs:label "environment value" .
+    
+#ENDS

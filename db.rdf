@@ -1,0 +1,127 @@
+#Processed by Id: cwm.py,v 1.93 2002/05/14 22:11:04 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/db.n3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/db.n3
+     @prefix : <http://www.w3.org/2000/10/swap/db#> .
+     @prefix con: <http://www.w3.org/2000/10/swap/pim/contact#> .
+     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix dc: <http://purl.org/dc/elements/1.1/> .
+     @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    <>     <http://purl.org/dc/elements/1.1/creator>  [
+             con:mailbox <mailto:timbl@w3.org> ],
+                 [
+             con:mailbox <mailto:connolly@w3.org> ];
+         <http://purl.org/dc/elements/1.1/description> """
+Note that table documents are namespace documents: when you
+define a prefix to correspond to the table document's URI with a hash on,
+then the table document automatically an RDF schema for the namespace. 
+""";
+         <http://purl.org/dc/elements/1.1/title> "Database terms for the Sematic Web";
+         doc:version "$Id$" .
+    
+    :Column     a rdfs:Class;
+         rdfs:comment "A property corresponding to a database column name.";
+         rdfs:label "column";
+         rdfs:subClassOf rdf:Property .
+    
+    :Database     a rdfs:Class;
+         rdfs:comment " ";
+         rdfs:label "database" .
+    
+    :DatabaseDocument     a rdfs:Class;
+         rdfs:comment """The resource on the web which describes a database, though not
+    the one which contains all the data.
+    Convention: Any database <xxx#f> has a databaseDocumemnt <xxx>.""";
+         rdfs:label "database document";
+         rdfs:subClassOf doc:Work .
+    
+    :RowDocument     a rdfs:Class;
+         rdfs:comment """A row document exists for each row of a table which 
+has a primary key.  Its URI is formed by convention by concatenating the
+the URI of the table, a slash, and the URI-encoded value of the
+primary key value for that row. 
+
+The row document gives the value of each cell in the row.
+It identifies the row with a local <#item> URI.
+It must also identify <#item> as being of rdf$type of the Table.
+""";
+         rdfs:label "row document";
+         rdfs:subClassOf doc:Work .
+    
+    :Table     a rdfs:Class;
+         rdfs:comment """A Table is a class which has in it a finite
+    set of things each of which is described by a row in the database table""";
+         rdfs:label "Table";
+         rdfs:subClassOf rdfs:Class .
+    
+    :TableDocument     a rdfs:Class;
+         rdfs:comment """The resource on the web which describes a Table, though not
+    the one which contains all the data.
+    Convention: Any table <xxx#f> has a tabledocumemnt <xxx>.
+
+   The table document defines a set of db:Column's, one for each column
+   of the table.  It is definitive, in that any column in the table MUST
+   be described in the table document.
+
+   The table document must also give the database document for the databse the table
+   is in.  It is sufficent to quote the URI of the database, as the database document's
+   URI follows from the convention.
+   This allows a client application to find the other properties of the database.
+""";
+         rdfs:label "table document";
+         rdfs:subClassOf doc:Work .
+    
+    :column     a rdf:Property;
+         rdfs:comment """The relationship between a table and one of its columns.
+
+The fact that a table has a db:column in this sense assures that certain conventions
+are followed.
+1. For any Column <xxx#f> there is always a corresponding table document <xxx>
+    which defines it (i.e. says something about it, at least that it is a colmn of the
+    table).
+""";
+         rdfs:domain :Table;
+         rdfs:label "column";
+         rdfs:range :Column .
+    
+    :databaseSchema     a rdf:Property;
+         rdfs:comment "The document which describes the form of this database";
+         rdfs:domain :Database;
+         rdfs:label "database schema";
+         rdfs:range :DatabaseDocument .
+    
+    :primaryKey     a daml:UniqueProperty;
+         rdfs:comment """
+The fact that a table has primary key means that a row document exists
+whose URI is formed by concatenating the URI of the table, a slash, and
+the URI-encoded value of the primary key value for that row.
+""";
+         rdfs:range daml:UnambiguousProperty;
+         rdfs:subPropertyOf :column .
+    
+    :table     a rdf:Property;
+         rdfs:comment "A table in the database";
+         rdfs:domain :Database;
+         rdfs:label "table";
+         rdfs:range :Table .
+    
+    :tableData     a rdf:Property;
+         rdfs:comment "The document which gives the data in this table";
+         rdfs:domain :Table;
+         rdfs:label "table data";
+         rdfs:range doc:Work .
+    
+    :tableSchema     a rdf:Property;
+         rdfs:comment "The document which describes the form of this table";
+         rdfs:domain :Table;
+         rdfs:label "table schema";
+         rdfs:range :TableDocument .
+    
+#ENDS
