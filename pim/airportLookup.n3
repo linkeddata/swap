@@ -18,22 +18,20 @@ this log:forAll :LAT1, :LON1, :LAT2, :LON2, :NUM, :YMD,
   :K, :TXT, :IT, :P, :Q, :X, :Y.
 
 
-# well-known airports...
-{ :X a :Y; #@@kludge...
-    log:uri [ str:startsWith "http://www.daml.org/cgi-bin/airport?" ] }
- log:implies { :X a :AirportKnownToDAML }.
-
-{ :X apt:iataCode :K.
-  :Y log:uri [ is str:concatenation of
-               ("http://www.daml.org/cgi-bin/airport?" :K) ];
+{
+  ?WHERE apt:iataCode ?CCC.
+  ?PG log:uri [ is str:concatenation of
+               ("http://www.daml.org/cgi-bin/airport?" ?CCC) ];
 }
-  log:implies { :Y a apt:Airport; apt:iataCode :K; = :X }.
+  log:implies {
+   ?WHERE :airportInfo ?PG
+}.
 
 # we only want to look up certain airports...
-{ [ k:toLocation :X ]. }
- log:implies { :X a :InterestingPlace }.
-{ [ k:fromLocation :X ]. }
- log:implies { :X a :InterestingPlace }.
+{ [] k:toLocation ?WHERE. }
+ log:implies { ?WHERE a :InterestingPlace }.
+{ [] k:fromLocation ?WHERE. }
+ log:implies { ?WHERE a :InterestingPlace }.
 
 
 # believe what daml.org says about airport latitutde/longitudes...
@@ -49,14 +47,14 @@ this log:forAll :LAT1, :LON1, :LAT2, :LON2, :NUM, :YMD,
 
 {
   :P a :AirportProperty.
-  [ a :AirportKnownToDAML, :InterestingPlace;
-    log:semantics [
+  ?WHERE a :InterestingPlace; apt:iataCode :K; :airportInfo ?PG.
+  ?PG log:semantics [
       log:includes {
-        :IT :P :X.
+        [] apt:iataCode :K; :P :X.
       }
-    ] ].
+    ].
 } log:implies {
-  :IT a apt:Airport; :P :X.
+  ?WHERE :P :X.
 }.
 
 
