@@ -51,7 +51,7 @@ class Host:
         # we don't need to keep track of a current Store, current Parser,
         # or any of that, because hotswap does it for us, while letting them
         # be swapped.
-        pass
+        self.pluginManager = hotswap.PluginManager()
     
     def trace(self, message, subsystem=None):
         # look at who caller is, too
@@ -72,10 +72,13 @@ class Host:
     def load(self, source):
         " or is load() an option on a store/kb?    Hrmph. "
         parser = hotswap.get(pluggable.Parser)
-        store = hotswap.get(pluggable.Store)
-        parser.setSink(store)
+        #  parser should ask host.pluginManager for "store"
+        #store = hotswap.get(pluggable.Store)
+        #parser.setSink(store)
         stream = self.open(source)
         parser.parse(stream, host=self)
+
+    
         
 
 ################################################################
@@ -268,7 +271,10 @@ if __name__ == "__main__":
     pump.pump(store, ser)
     
 # $Log$
-# Revision 1.6  2003-04-28 19:17:52  sandro
+# Revision 1.7  2003-08-01 15:42:51  sandro
+# ?
+#
+# Revision 1.6  2003/04/28 19:17:52  sandro
 # testing cvs!
 #
 # Revision 1.5  2003/04/25 19:55:53  sandro
