@@ -113,6 +113,7 @@ class CalWr:
         # 4.8.2.4 Date/Time Start
         self.timeProp(sts, "dtstart", event)
         self.timeProp(sts, "dtend", event)
+        self.textProp(sts, "duration", event)
         self.timeProp(sts, "dtstamp", event)
         self.timeProp(sts, "lastModified", event) #@@ last-modified
         txt = self.textProp(sts, "summary", event)
@@ -123,7 +124,7 @@ class CalWr:
 
         other = sts.statementsMatching(None, event, None)
         for s in other:
-            if s[PRED] not in (ICAL.dtstart, ICAL.dtend,
+            if s[PRED] not in (ICAL.dtstart, ICAL.dtend, ICAL.duration,
                                ICAL.lastModified, ICAL.dtstamp,
                                ICAL.uid,
                                ICAL.summary, ICAL.description,
@@ -221,7 +222,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.12  2003-04-16 17:21:01  ryanlee
+# Revision 1.13  2003-06-03 17:35:38  connolly
+# added duration support
+#
+# Revision 1.12  2003/04/16 17:21:01  ryanlee
 # more rfc2445 fixes in textProp
 #
 # Revision 1.11  2003/03/24 20:18:01  ryanlee
