@@ -59,7 +59,11 @@ testTypes = [
 
 # from some config info, telling us how long we should try on
 # some test, ...?
-maxSecondsTable = { }
+fudge = 2.5
+maxSecondsTable = {
+    'http://www.w3.org/2002/03owlt/AllDifferent/Manifest001#test': (9 * fudge),
+    'http://www.w3.org/2002/03owlt/FunctionalProperty/Manifest004#test': (72 * fudge),
+    }
 maxSeconds = 1
 
 skip = [
@@ -82,6 +86,9 @@ def run(store, test, name, input, entailed, expected):
 
     localMaxSeconds=maxSecondsTable.get(str(test), maxSeconds)
 
+    if localMaxSeconds != maxSeconds:
+        print (" [special time limit: %ds]" % localMaxSeconds),
+    
     try:
         result = OwlAxiomReasoner.checkConsistency(
                      input,
