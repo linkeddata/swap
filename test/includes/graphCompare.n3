@@ -6,38 +6,25 @@
 {
   ?F1 log:uri "1".os:argv.os:baseAbsolute.
   ?F2 log:uri "2".os:argv.os:baseAbsolute.
-  ?F1 log:semantics ?FMLA1.
-  ?F2 log:semantics ?FMLA2.
-
-} => {
- ?FMLA1 :_from ?F1.
- ?FMLA2 :_from ?F2.
- ?FMLA1 :comparingAgainst ?FMLA2
- }.
+} => { ?F1 :testingAgainst ?F2 }.
 
 {
-  ?G1 :comparingAgainst ?G2.
+  [ log:semantics ?G1] :testingAgainst [log:semantics ?G2].
   ?G1 log:includes ?G2.
   ?G2 log:includes ?G1.
 } => { :thisTest a :Success }.
 
 
 {
-  ?G1 :comparingAgainst ?G2.
+  ?F1 :testingAgainst ?F2.
+  ?F1 log:semantics ?G1. ?F2 log:semantics ?G2.
   ?G1 log:notIncludes ?G2.
-
-  ?G1 :_from ?F1.
-  ?G2 :_from ?F2.
-
 } => { ?F1 :notIncludes ?F2 }.
 
 {
-  ?G1 :comparingAgainst ?G2.
+  ?F1 :testingAgainst ?F2.
+  ?F1 log:semantics ?G1. ?F2 log:semantics ?G2.
   ?G2 log:notIncludes ?G1.
-
-  ?G1 :_from ?F1.
-  ?G2 :_from ?F2.
-
 } => { ?F2 :notIncludes ?F1 }.
 
 
