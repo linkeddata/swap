@@ -243,6 +243,8 @@ rdf/xml files. Note that this requires rdflib.
                 option_flags["think"] = _rhs
             elif _lhs == "-closure":
 		pass
+	    elif _lhs == "-solve":
+                sys.argv[argnum+1:argnum+1] = ['-think', '-filter=' + _rhs]
             elif _lhs == "-language":
                 option_format = _rhs
                 if option_first_format == None: option_first_format = option_format
@@ -532,6 +534,8 @@ rdf/xml files. Note that this requires rdflib.
 		workingContext.reopen()
                 think(workingContext, filterContext, mode=option_flags["think"]);
 
+            elif arg[:7] == "-solve=":
+                pass
             elif _lhs == "-engine":
                 option_engine = _rhs
                 

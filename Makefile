@@ -28,6 +28,8 @@ TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3
 .py.html:
 	pydoc -w `echo $< | sed -e 's/\.py//'`
 
+.DELETE_ON_ERROR : swap
+
 #all: yappstest yappsdoc math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf
 
 
@@ -70,7 +72,7 @@ cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
 	cvs add $(TARNAME).tar.gz
 #LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply/*.py *.py
 
-setup_tarball: $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
+setup_tarball: $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist swap
 	cvs -q update
 	rm -rf swap || true
 	mkdir swap
@@ -81,7 +83,7 @@ setup_tarball: $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
 	for A in $(SOURCES); do echo swap/"$$A" >> MANIFEST; done
 	cat test/testfilelist | sed -e 's/^/test\//' >> MANIFEST
 	python setup.py sdist
-#	rm -rf swap
+	rm -rf swap
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py
 	$(PYTHON) rdfn3_yappstest.py <$(TESTIN) >,xxx.kif

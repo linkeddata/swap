@@ -1,6 +1,6 @@
 """Check a proof
 
-This is a simple proof checker.  It hasn't itself been prooved,
+This is a simple proof checker.  It hasn't itself been proved,
 and there are probably lots of ways to fool it especially as a deliberate
 malicious attack. That is because there are simple things I may have forgotten
 to check.
@@ -51,7 +51,7 @@ def parse(resourceURI):
 def statementFromFormula(f):
     "Check just one statement and return it"
     if len(f) > 1:
-	raise RuntimeError("I think this was supposed tro be a single statement")
+	raise RuntimeError("I think this was supposed tro be a single statement: %s" % f.statements)
     return f.statements[0]
 
 def valid(proof, r, level=0):
@@ -201,6 +201,7 @@ def valid(proof, r, level=0):
 def main():
     global chatty
     global parsed
+    print proof, type(proof)
     parsed = {}
     setVerbosity(0)
     chatty=60
