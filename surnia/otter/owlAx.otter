@@ -10,6 +10,7 @@ include('otter/owlAx-unionOf.otter').
 include('otter/owlAx-oneOf.otter').
 include('otter/owlAx-equivProp.otter').
 include('otter/owlAx-card.otter').
+include('otter/owlAx-cardeq.otter').
 
 formula_list(usable).
 
@@ -35,7 +36,9 @@ formula_list(usable).
 % (all X (-rdf(X, rdf_type, owl_Nothing))).
 
 -(exists c (rdf(c, rdf_type, owl_Nothing))).
+rdf(owl_Nothing, rdf_type, owl_Class).
 
+% if something else is like this, it's equiv owl_Nothing?
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -185,6 +188,7 @@ all RESTRICTION PROPERTY BASECLASS INST VALUE (
      <->
      rdf(VALUE, rdf_type, BASECLASS)  )
 ).
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -483,7 +487,10 @@ all P1 P2 (
 
 
 % $Log$
-% Revision 1.15  2003-08-01 16:27:35  sandro
+% Revision 1.16  2003-08-08 20:59:32  sandro
+% 76% !
+%
+% Revision 1.15  2003/08/01 16:27:35  sandro
 % modified to run in swap/surnia instead of swap
 %
 % Revision 1.14  2003/08/01 04:24:32  sandro

@@ -1,0 +1,49 @@
+set(auto).
+clear(sigint_interact).
+% include('otter/owlAx-litecard.otter').
+formula_list(usable).
+rdf(ns23_c, rdf_type, owl_Class).
+rdf(s, rdf_type, owl_Restriction).
+rdf(s, owl_onProperty, ns23_p).
+rdf(s, owl_cardinality, lit1).
+rdf('foo:zero', 'foo:succ', lit1).
+rdf(ns23_c, rdfs_subClassOf, s).
+rdf(ns23_p, rdf_type, owl_ObjectProperty).
+
+-(exists t (exists u (
+  rdf(ns23_c, rdf_type, owl_Class) 
+& rdf(u, rdf_type, owl_Restriction) 
+& rdf(u, owl_onProperty, ns23_p) 
+& rdf(u, owl_maxCardinality, lit1) 
+& rdf('foo:zero', 'foo:succ', lit1)
+& rdf(ns23_c, rdfs_subClassOf, u)
+& rdf(t, rdf_type, owl_Restriction)
+& rdf(t, owl_onProperty, ns23_p) 
+& rdf(t, owl_minCardinality, lit1)
+& rdf(ns23_c, rdfs_subClassOf, t)
+))).
+
+all PROP CLASS CARD (
+   (exists R (
+     rdf(R, owl_onProperty, PROP) &
+     rdf(R, owl_cardinality, CARD) &
+     rdf(CLASS, rdfs_subClassOf, R) 
+   ))
+   <->
+   (exists R1 R2 (
+     rdf(R1, owl_onProperty, PROP) &
+     rdf(R1, owl_maxCardinality, CARD) &
+     rdf(R2, owl_onProperty, PROP) &
+     rdf(R2, owl_minCardinality, CARD) &
+     rdf(CLASS, rdfs_subClassOf, R1) &
+     rdf(CLASS, rdfs_subClassOf, R2) 
+   ))
+).
+
+all INST PROP (
+   rdf(INST, owl_onProperty, PROP)
+   ->
+   rdf(INST, rdf_type, owl_Restriction)
+).
+
+end_of_list.

@@ -1,0 +1,27 @@
+set(auto).
+clear(sigint_interact).
+include('otter/owlAx-litecard.otter').
+formula_list(usable).
+
+rdf(ns13_p, rdf_type, owl_ObjectProperty).
+rdf(ns13_p, rdf_type, owl_ObjectProperty).
+
+rdf(ns13_Nothing, rdf_type, owl_Class). 
+
+rdf(t, rdf_type, owl_Restriction).
+rdf(t, owl_onProperty, ns13_p).
+rdf(t, owl_minCardinality, lit1).
+rdf('foo:zero', 'foo:succ', lit1).
+rdf(ns13_Nothing, rdfs_subClassOf, t).
+
+rdf(s, rdf_type, owl_Restriction).
+rdf(s, owl_onProperty, ns13_p).
+rdf(s, owl_maxCardinality, 'foo:zero').
+rdf(ns13_Nothing, rdfs_subClassOf, s).
+ 
+%-((rdf(ns13_Nothing, rdf_type, owl_Class) &
+% rdf(ns13_Nothing, owl_equivalentClass, owl_Nothing))).
+
+rdf(x, rdf_type, ns13_Nothing).
+
+end_of_list.

@@ -1,0 +1,13 @@
+Loading http://www.w3.org/2002/03owlt/editors-draft/draft/Manifest.rdf...   Done.
+
+Trying each NotOwlFeatureTest ...
+
+http://www.w3.org/2002/03owlt/I3.2/Manifest001#test skipped, unsupported test type
+http://www.w3.org/2002/03owlt/I3.2/Manifest002#test skipped, unsupported test type
+http://www.w3.org/2002/03owlt/I3.2/Manifest003#test skipped, unsupported test type
+http://www.w3.org/2002/03owlt/I3.4/Manifest001#test skipped, unsupported test type
+http://www.w3.org/2002/03owlt/I4.1/Manifest001#test skipped, unsupported test type
+
+Trying each PositiveEntailmentTest ...
+
+http://www.w3.org/2002/03owlt/AllDifferent/Manifest001#test  [special time limit: 30s]

@@ -71,17 +71,18 @@ maxSecondsTable = {
 
 axiomTag = { }
 #axiomTag['http://www.w3.org/2002/03owlt/unionOf/Manifest002#test']="-unionOf"
-#axiomTag['http://www.w3.org/2002/03owlt/oneOf/Manifest003#test']="-oneOf"
+axiomTag['http://www.w3.org/2002/03owlt/oneOf/Manifest003#test']="-oneOf"
 axiomTag['http://www.w3.org/2002/03owlt/equivalentProperty/Manifest002#test']="-equivProp"
 axiomTag['http://www.w3.org/2002/03owlt/equivalentProperty/Manifest003#test']="-equivProp"
 axiomTag['http://www.w3.org/2002/03owlt/equivalentProperty/Manifest004#test']="-equivProp"
 #axiomTag['http://www.w3.org/2002/03owlt/FunctionalProperty/Manifest004#test']="-funcProp"
 #axiomTag['http://www.w3.org/2002/03owlt/InverseFunctionalProperty/Manifest004#test']="-funcProp"
 
-axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest001#test']='-card'
-axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest002#test']='-card'
-axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest003#test']='-card'
-axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest004#test']='-card'
+
+axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest001#test']='-cardeq'
+axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest002#test']='-cardeq'
+axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest003#test']='-cardeq'
+# axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest004#test']='-cardeq'
 axiomTag['http://www.w3.org/2002/03owlt/maxCardinality/Manifest001#test']='-card'
 
 maxSeconds = 1
