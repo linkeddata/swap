@@ -26,6 +26,26 @@
                 :x,
                 :y .
     {
+        
+          [      :semanticsOK  [
+                 ];
+                 :usedAsPropertyIn  [
+                     a :targetDocument ];
+                 log:racine :x ].
+        
+        }     log:implies {:x     a :targetDocument .
+        } .
+    {
+        
+          [      :semanticsOK  [
+                 ];
+                 :usedAsClassIn  [
+                     a :targetDocument ];
+                 log:racine :x ].
+        
+        }     log:implies {:x     a :targetDocument .
+        } .
+    {
         "TARGET"     os:environ <valc.n3#_g1> .
         this     log:forSome <valc.n3#_g1> .
         :d     log:uri <valc.n3#_g1> .
