@@ -17,7 +17,7 @@
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
-@prefix :    <http://www.w3.org/2000/10/swap/pim/contacts.n3#> .
+@prefix :    <http://www.w3.org/2000/10/swap/pim/contact#> .
 
 <>  doc:version "$Id$";
     doc:ipr <../LICENSE.n3>.
