@@ -129,8 +129,22 @@ class BI_scrape(LightBuiltIn, Function):
         str, pat = subj_py
         patc = re.compile(pat)
         m = patc.search(str)
+
         if m:
+            if verbosity() > 80: progress("scrape matched:"+m.group(1))
             return m.group(1)
+        if verbosity() > 80: progress("scrape didn't match")
+
+
+class BI_format(LightBuiltIn, Function):
+    """a built-in for string formatting,
+    ala python % or C's sprintf or common-lisp's format
+    takes a list; the first item is the format string, and the rest are args.
+    see also: test/@@
+    """
+    
+    def evaluateObject(self, subj_py):
+        return subj_py[0] % tuple(subj_py[1:])
 
 class BI_matches(LightBuiltIn):
     def eval(self,  subj, obj, queue, bindings, proof):
@@ -160,6 +174,7 @@ def register(store):
     str.internFrag("concat", BI_concat)
     str.internFrag("concatenation", BI_concatenation)
     str.internFrag("scrape", BI_scrape)
+    str.internFrag("format", BI_format)
     str.internFrag("matches", BI_matches)
     str.internFrag("notMatches", BI_matches)
     str.internFrag("contains", BI_Contains)
