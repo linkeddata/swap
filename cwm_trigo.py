@@ -53,8 +53,11 @@ def isString(x):
 #
 #
 # Light Built-in classes - these are all reverse functions
-
-# sinus, cosinus
+#
+# cosine, arc cosine, hyperbolic or not
+# sine, arc sine, hyperbolic or not
+# tangent, arc tangent, arc tangent (y/x)
+#
 
 def numeric(s):
     if type(s) == types.IntType or type(s) is types.FloatType: return s
@@ -67,7 +70,7 @@ class BI_acos(LightBuiltIn, Function):
 	Return the arc cosine of x.
 	"""
     def evaluateObject(self, subj_py):
-	return acos(numeric(subj_py))
+		return acos(numeric(subj_py))
 
 class BI_asin(LightBuiltIn, Function):
 	"""
@@ -75,7 +78,7 @@ class BI_asin(LightBuiltIn, Function):
 	Return the arc sine of x.
 	"""
     def evaluateObject(self, subj_py):
-	return asin(numeric(subj_py))
+		return asin(numeric(subj_py))
 
 class BI_atan(LightBuiltIn, Function):
 	"""
@@ -83,7 +86,7 @@ class BI_atan(LightBuiltIn, Function):
 	Return the arc tangent of x.
 	"""
     def evaluateObject(self, subj_py):
-	return atan(numeric(subj_py))
+		return atan(numeric(subj_py))
 
 class BI_atan2(LightBuiltIn, Function):
 	"""
@@ -100,7 +103,7 @@ class BI_cos(LightBuiltIn, Function):
 	Return the cosine of x.
 	"""
     def evaluateObject(self, subj_py):
-	return cos(numeric(subj_py))
+		return cos(numeric(subj_py))
 
 class BI_cosh(LightBuiltIn, Function):
 	"""
@@ -108,23 +111,18 @@ class BI_cosh(LightBuiltIn, Function):
 	Return the hyperbolic cosine of x.
 	"""
     def evaluateObject(self, subj_py):
-	return cosh(numeric(subj_py))
+		return cosh(numeric(subj_py))
 
-class BI_degrees(LightBuiltIn, Function):
+class BI_degrees(LightBuiltIn, Function, ReverseFunction):
 	"""
 	degrees (x)
 	Converts angle x from radians to degrees.
+	Convert angle x from degrees to radians.
 	"""
     def evaluateObject(self, subj_py):
-	return degrees(numeric(subj_py))
-
-class BI_radians(LightBuiltIn, Function):
-	"""
-	radians (x)
-	Converts angle x from degrees to radians.
-	"""
-    def evaluateObject(self, subj_py):
-	return radians(numeric(subj_py))
+		return degrees(numeric(subj_py))
+	def evaluateSubject(self, obj_py): 
+		return radians(numeric(obj_py))
 
 class BI_sin(LightBuiltIn, Function):
 	"""
@@ -132,7 +130,7 @@ class BI_sin(LightBuiltIn, Function):
 	Return the sine of x.
 	"""
     def evaluateObject(self, subj_py):
-	return sin(numeric(subj_py))
+		return sin(numeric(subj_py))
 
 class BI_sinh(LightBuiltIn, Function):
 	"""
@@ -140,7 +138,7 @@ class BI_sinh(LightBuiltIn, Function):
 	Return the hyperbolic sine of x.
 	"""
     def evaluateObject(self, subj_py):
-	return sinh(numeric(subj_py))
+		return sinh(numeric(subj_py))
 
 class BI_tan(LightBuiltIn, Function):
 	"""
@@ -148,7 +146,7 @@ class BI_tan(LightBuiltIn, Function):
 	Return the tan of x.
 	"""
     def evaluateObject(self, subj_py):
-	return tan(numeric(subj_py))
+		return tan(numeric(subj_py))
 
 class BI_tanh(LightBuiltIn, Function):
 	"""
@@ -156,7 +154,7 @@ class BI_tanh(LightBuiltIn, Function):
 	Return the hyperbolic tangent of x.
 	"""
     def evaluateObject(self, subj_py):
-	return tanh(numeric(subj_py))
+		return tanh(numeric(subj_py))
 
 #  Register the string built-ins with the store
 
@@ -169,7 +167,6 @@ def register(store):
     str.internFrag('cos', BI_cos)
     str.internFrag('cosh', BI_cosh)
     str.internFrag('degrees', BI_degrees)
-    str.internFrag('radians', BI_radians)
     str.internFrag('sin', BI_sin)
     str.internFrag('sinh', BI_sinh)
     str.internFrag('tan', BI_tan)
