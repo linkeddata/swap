@@ -1,0 +1,111 @@
+@keywords is, a, of.
+@prefix : <http://www.w3.org/2000/10/swap/util/time#>.
+@prefix l: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+<> dc:source <http://www.cs.rochester.edu/~ferguson/daml/daml-time-nov2002.txt>;
+   owl:versionInfo "$Id$".
+
+<http://www.cs.rochester.edu/~ferguson/daml/daml-time-nov2002.txt>
+  dc:title "A DAML Ontology of Time";
+  dc:creator "Jerry R. Hobbs";
+  dc:date "November 2002".
+
+# 2.1.  Instants and Intervals
+
+#instant s:subClassOf temporal-entity.
+Instant s:subClassOf TemporalEntity.
+Interval s:subClassOf TemporalEntity.
+
+#(A T)[temporal-entity(T) --> [instant(T) v interval(T)]]
+#hmm... why? seems to me a conference is a TemporalEntity
+TemporalEntity s:subClassOf [owl:unionOf (Instant Interval) ].
+
+#begins(t,T) --> instant(t) & temporal-entity(T)
+begins s:domain Instant; s:range TemporalEntity.
+ends s:domain Instant; s:range TemporalEntity.
+
+{ ?t a Instant } log:means { ?t begins ?t }.
+{ ?t a Instant } log:means { ?t ends ?t }.
+
+#temporal-entity(T) & begins(t1,T) & begins(t2,T) --> t1=t2
+begins a owl:InverseFunctionalProperty.
+ends a owl:InverseFunctionalProperty.
+
+# inside(t,T) --> instant(t) & interval(T)
+inside s:range Instant; s:domain Interval.
+
+# (A t,T)[begins-or-in(t,T) <--> [begins(t,T) v inside(t,T)]]
+begins s:subPropertyOf beginsOrIn.
+inside s:subPropertyOf beginsOrIn.
+{ ?t beginsOrIn ?T. ?t [ log:negative begins ] ?T } => { ?t inside ?T }.
+{ ?t beginsOrIn ?T. ?t [ log:negative inside ] ?T } => { ?t begins ?T }.
+
+
+#        time-between(T,t1,t2)
+#            --> temporal-entity(T) & instant(t1) & instant(t2)
+timeBetween s:domain TemporalEntity;
+  s:range [ is log:crossProduct of (Instant Instant) ].
+
+#        (A t1,t2)[t1 =/= t2 --> 
+#                  (A T)[time-between(T,t1,t2) 
+#                        <--> begins(t1,T) & ends(t2,T)]]
+{ ?t1 owl:differentFrom ?t2.
+  ?T timeBetween (?t1 ?t2)
+} => { ?t1 begins ?T. ?t2 ends ?T }.
+
+{ ?t1 begins ?T. ?t2 ends ?T.
+  ?t1 owl:differentFrom ?t2.
+} => { ?T timeBetween (?t1 ?t2) }.
+
+#        (A T)[proper-interval(T) 
+#              <--> interval(T) 
+#                   & (A t1,t2)[begins(t1,T) & ends(t2,T) --> t1 =/= t2]]
+ProperInterval s:subClassOf Interval.
+{ ?T a ProperInterval;
+     is begins of ?t1;
+     is begins of ?t2 } => { ?t1 owl:differentFrom ?t2 }.
+{ ?T a Interval;
+     is begins of ?t1;
+     is begins of ?t2.
+  ?t1 owl:differentFrom ?t2 
+} => { ?T a ProperInterval }.
+
+
+#@@@@@@@@ stopped here.
+
+
+############
+# RDFS rules
+s:domain s:domain s:Property.
+s:range s:domain s:Property.
+
+{ ?S [ s:domain ?C ] [] } => { ?S a ?C }.
+{ [] [ s:range ?C ] ?O } => { ?O a ?C }.
+{ ?S [ s:subPropertyOf ?P] ?O } => { ?S ?P ?O }.
+{ ?S a [ s:subClassOf ?C ] } => { ?S a ?C }.
+
+# OWL
+{ ?P a owl:InverseFunctionalProperty.
+  ?X ?P ?Z.
+  ?Y ?P ?Z.
+} => { ?X = ?Y }.
+
+# log:
+{ ?F log:means ?G } => { ?F => ?G. ?G => ?F }.
+
+# log extensions
+owl:differentFrom log:negative owl:sameAs.
+
+log:crossProduct a owl:InverseFunctionalProperty.
+
+{ [ l:first ?X; l:rest () ]
+   a [ is log:crossProduct of [ l:first ?C; l:rest () ] ]} =>
+  { ?X a ?C. }.
+{ [ l:first ?X; l:rest ?LX ]
+   a [ is log:crossProduct of [ l:first ?C; l:rest ?LC ] ]} =>
+  { ?X a ?C. ?LX a [ is log:crossProduct of ?LC ] }.
