@@ -1,14 +1,14 @@
-#Processed by Id: cwm.py,v 1.113 2002/12/27 21:49:05 timbl Exp 
+#Processed by Id: cwm.py,v 1.114 2002/12/30 15:00:33 timbl Exp 
         #    using base file:/devel/WWW/2000/10/swap/test/reason/foo
         
 #  Notation3 generation by
-#       notation3.py,v 1.125 2002/12/27 21:49:07 timbl Exp
+#       notation3.py,v 1.126 2002/12/31 05:50:30 timbl Exp
 
 #   Base was: file:/devel/WWW/2000/10/swap/test/reason/foo
      @prefix : <http://www.w3.org/2000/10/swap/reason#> .
      @prefix foo: <t5.n3#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix run: <.run-1041253334.392421p11894#> .
+     @prefix run: <.run-1041516826.629769p21358#> .
     
     this     log:forSome <#_g0> .
       [      a :Conjunction,

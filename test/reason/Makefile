@@ -9,7 +9,7 @@ SWAP=../..
 .n3.result:
 	python $(SWAP)/cwm.py $< --think --base=foo > $@
 .proof.checked:
-	python $(SWAP)/check.py $< > $@
+	python $(SWAP)/check.py < $< > $@
 
 all : t1.checked t2.checked t3.checked t4.checked t5.checked
 
