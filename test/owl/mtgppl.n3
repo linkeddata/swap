@@ -1,0 +1,128 @@
+# $Id$
+# see changelog at end
+
+@prefix      : <mtgppl#>.
+@prefix mtest: <mtgppl#>.
+@prefix mtg:   <http://example/meetingVocab#>.
+@prefix foaf:  <http://xmlns.com/foaf/0.1/>.
+@prefix k:     <http://opencyc.sourceforge.net/daml/cyc.daml#>.
+@prefix s:     <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix r:     <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix owl:   <http://www.w3.org/2002/07/owl#>.
+
+
+@prefix l:  <http://www.daml.org/2001/03/daml+oil#>. #@@update cwm to owl
+@prefix eq: <http://www.daml.org/2001/03/daml+oil#>.
+
+########
+#
+# meeting record, formalized.
+# can you see the problem?
+#
+
+:thisMtg
+  mtg:attendees (
+    [ foaf:surname "Smith" ]
+    [ foaf:surname "Jones" ]
+  ).
+
+:thisMtg
+  k:subEvents :agendumA.
+
+:agendumA
+  k:subEvents :actionA1.
+
+:actionA1 mtg:owner [ foaf:surname "Doe" ].
+
+#######
+#
+# a bit about foaf
+#
+
+# In our model of the world, a person has just one surname.
+foaf:surname a owl:FunctionalProperty.
+
+
+######
+#
+# a bit about meetings
+
+mtg:owner s:subPropertyOf k:socialParticipants.
+
+{ ?E mtg:attendees ?L;
+    k:socialParticipants ?WHO } => { ?L l:item ?WHO }.
+
+####
+# cyc stuff
+
+{ ?E k:subEvents [ k:socialParticipants ?WHO ] }
+  => { ?E k:socialParticipants ?WHO }.
+
+k:subEvents a owl:TransitiveProperty.
+
+######
+#
+# a bit of RDFS
+
+{ ?S [ s:subPropertyOf ?P ] ?O } => { ?S ?P ?O }.
+{ ?S a [ s:subClassOf ?C ] } => { ?S a ?C }.
+
+#######
+#
+# a bit about owl
+
+#@@ = should be owl:sameAs instead of daml:equivalentTo
+
+owl:FunctionalProperty s:subClassOf r:Property.
+
+owl:differentFrom a owl:SymmetricProperty.
+
+{ ?P a owl:FunctionalProperty.
+  ?X ?P ?Y.
+  ?X ?P ?Z } => { ?Y = ?Z }.
+
+{ ?P a owl:FunctionalProperty.
+  ?A ?P ?X.
+  ?B ?P ?Y.
+  ?X owl:differentFrom ?Y } => { ?A owl:differentFrom ?B }.
+
+
+{ ?P a owl:TransitiveProperty.
+  ?S ?P [ ?P ?O ] } => { ?S ?P ?O }.
+
+{ ?P a owl:SymmetricProperty.
+  ?S ?P ?O } => { ?O ?P ?S }.
+
+{ ?C owl:oneOf ?L.
+  ?L l:item ?X } => { ?X a ?C }.
+
+owl:Nothing owl:complementOf owl:Thing;
+  owl:oneOf ().
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+this log:forAll :XX.
+
+{ :XX a owl:Nothing } =>{ { :XX a owl:Nothing } a :_ProofOfInconsistency }.
+
+
+#
+# literals
+#
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+
+{ ?P a r:Property.  ?Q a r:Property. [] ?P ?X. [] ?Q ?Y. #@@ kludge
+  ?X str:lessThan ?Y } => { ?X owl:differentFrom ?Y }.
+
+#
+# lists
+#
+{ [ l:item ?X;
+    l:first [ owl:differentFrom ?X ];
+    l:rest ?L ] } => { ?L l:item ?X }.
+
+#
+# $Log$
+# Revision 1.1  2003-04-17 02:00:03  connolly
+# dunno how to fit meeting attendee/action rules into owl
+#
+#
