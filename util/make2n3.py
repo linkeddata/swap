@@ -101,7 +101,7 @@ def convert(path):
 
 	m = rule.match(line)
 	if m:
-	    subj = "[make:source ext:%s; make:destination ext:%s]" %(
+	    subj = """[make:fromExt "%s"; make:toExt "%s"]""" %(
 			m.group(1), m.group(2))
 	    if comment != "": print comment
 	    continue
