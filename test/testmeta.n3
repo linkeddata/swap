@@ -148,7 +148,6 @@
     <n3parser.tests#n3_20003> a :knownError . 
     <n3parser.tests#n3_20004> a :knownError . 
     <n3parser.tests#n3_20005> a :knownError . 
-n3_20003
 
 
 #ENDS

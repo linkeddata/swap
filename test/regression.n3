@@ -102,6 +102,12 @@
     test:description   "Convert some RDF/XML into RDF/N3";
     test:arguments     """daml-pref.n3 -rdf daml-ont.rdf -n3""".
 
+:t1008a a test:CwmTest;
+    test:referenceOutput <ref/colon-in-uri.n3>;
+    test:description   "When rdf/xml localnames are not valid qNames";
+    test:arguments     """--rdf syntax/colon-in-uri.rdf --n3""".
+
+
 :t1009 a test:CwmTest;
     test:referenceOutput <ref/strquot.n3>;
     test:description   "N3 string quoting with escaping";
