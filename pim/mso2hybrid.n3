@@ -1,4 +1,4 @@
-#  Convertions MS: to cal:
+#  Convertion: Microsoft Outlook(tm) vocab to common calendar
 #
 # See <http://www.twinsun.com/tz/tz-link.htm>
 #
@@ -31,11 +31,11 @@ this log:forAll :d, :e, :e2, :i, :p, :s, :s2, :tz, :tz2, :tzo, :x, :y, :z.
 
 
 
-{:x ms:IsRecurring "0"} log:implies { :x a cal:VEVENT }.
+{:x ms:IsRecurring "0"} log:implies { :x a cal:Vevent }.
 
 # Direct translations:
 
-{ :x ms:Subject :y } log:implies { :x cal:SUMMARY :y }.
+{ :x ms:Subject :y } log:implies { :x cal:summary :y }.
 
 # Note most have an end but few a start!
 
@@ -47,8 +47,8 @@ this log:forAll :d, :e, :e2, :i, :p, :s, :s2, :tz, :tz2, :tzo, :x, :y, :z.
 	(:z [is math:product of (:d "60")])].
     (:s2 "([^Z]*)") string:scrape :s.
 } log:implies {
-    :x  cal:DTEND [rdf:value :e; cal:TZID :tz];
-	cal:DTSTART [rdf:value :s; cal:TZID :tz].
+    :x  cal:dtend [rdf:value :e; cal:tzid :tz];
+	cal:dtstart [rdf:value :s; cal:tzid :tz].
 }.
 
 ####################### Recurring Appointments
