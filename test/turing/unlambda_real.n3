@@ -1,0 +1,128 @@
+@prefix : <http://yosi.us/unlambda#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@keywords a, of, is .
+#
+#
+#
+
+{?x a RootExpression} => {(1 ?x) a NeedsEval} .
+{?x a RootExpression .
+ (1 ?x) eval (?nn ?r)}
+=>
+{?x eval ?r} .
+
+{(?n1 (?x ?y)) a NeedsEval .
+# ?n1 math:lessThan 6 .
+ (?n1 1) math:sum ?n2}
+=>
+{(?n2 ?x) a NeedsEval} .
+
+{(?n1 ?x) a NeedsEval . ?x log:rawType log:Other . } => {(?n1 ?x) eval (?n1 ?x)} .
+{(?n1 ?x) a NeedsEval . ?x log:rawType log:Literal . } => {(?n1 ?x) eval (?n1 ?x)} .
+#There are very few non-compound things
+#
+{(?n1 (?x ?y)) a NeedsEval .
+# ?n1 math:lessThan 6 .
+ (?n1 1) math:sum ?n2 .
+ (?n2 ?x) eval (?n3 ?a) .
+ (?n3 1) math:sum ?n4}
+=>
+{(?n4 ?y) a NeedsEval} .
+
+
+{(?n1 (?x ?y)) a NeedsEval .
+# ?n1 math:lessThan 6 .
+ (?n1 1) math:sum ?n2 .
+ (?n3 1) math:sum ?n4 .
+ (?n2 ?x) eval (?n3 ?a) .
+ (?n4 ?y) eval (?n5 ?b) .
+ (?n5 1) math:sum ?n6 .
+} 
+=>
+{(?n6 (?a ?b)) a NeedsApply} .
+
+{(?n1 (?x ?y)) a NeedsEval .
+# ?n1 math:lessThan 6 .
+ (?n1 1) math:sum ?n2 .
+ (?n3 1) math:sum ?n4 .
+ (?n5 1) math:sum ?n6 .
+ (?n2 ?x) eval (?n3 ?a) .
+ (?n4 ?y) eval (?n5 ?b) .
+ (?n6 (?a ?b)) apply (?n7 ?c) . }
+=>
+{(?n1 (?x ?y)) eval (?n7 ?c) } .
+
+
+{(?n1 (k ?x)) apply (?n1 (k ?x))}
+<= 
+{(?n1 (k ?x)) a NeedsApply .
+# ?n1 math:lessThan 6 .
+} .
+
+{(?n2 ((k ?y) ?x)) apply (?n3 ?y)}
+<=
+{(?n2 ((k ?y) ?x)) a NeedsApply .
+# ?n2 math:lessThan 6 .
+ (?n2 1) math:sum ?n3} .
+
+{(?n1 (s ?x)) apply (?n1 (s ?x))}
+<= 
+{ 
+#?n1 math:lessThan 6 .
+(?n1 (s ?x)) a NeedsApply} .
+
+{(?n2 ((s ?y) ?x)) apply (?n2 ((s ?y) ?x))}
+<=
+{
+# ?n2 math:lessThan 6 .
+(?n2 ((s ?y) ?x)) a NeedsApply} .
+
+
+{(?n1 (((s ?y) ?z) ?x)) a NeedsApply .
+# ?n1 math:lessThan 6 .
+ (?n1 1) math:sum ?n2 
+} =>
+{(?n2 (?y ?x)) a NeedsApply } .
+
+{(?n1 (((s ?y) ?z) ?x)) a NeedsApply .
+# ?n1 math:lessThan 6 .
+ (?n2 (?y ?x)) apply (?n3 ?r) .
+ (?n3 1) math:sum ?n4 .
+} =>
+{(?n4 (?z ?x)) a NeedsApply } .
+
+{(?n1 (((s ?y) ?z) ?x)) a NeedsApply .
+# ?n1 math:lessThan 6 .
+ (?n2 (?y ?x)) apply (?n3 ?r) .
+ (?n4 (?z ?x)) apply (?n5 ?s) .
+ (?n5 1) math:sum ?n6 .
+}
+=>
+{(?n6 (?r ?s)) a NeedsApply} .
+
+{(?n1 (((s ?y) ?z) ?x)) a NeedsApply .
+# ?n1 math:lessThan 50 .
+ (?n2 (?y ?x)) apply (?n3 ?r) .
+ (?n4 (?z ?x)) apply (?n5 ?s) .
+ (?n6 (?r ?s)) apply ?w }
+=>
+{(?n1 (((s ?y) ?z) ?x)) apply ?w} .
+
+{(?n1 (i ?x)) apply (?n2 ?x)}
+<= 
+{(?n1 (i ?x)) a NeedsApply .
+# ?n1 math:lessThan 6 .
+ (?n1 1) math:sum ?n2} .
+
+{(?n1 (?s ?x)) a NeedsApply .
+ ?s log:rawType log:Literal .
+ (?n1 1) math:sum ?n2}
+=>
+{?n1 log:outputString ?s .
+ (?n1 (?s ?x)) apply (?n2 ?x)} .
+
+
+{(v ?x) apply v}
+<=
+{(v ?x) a NeedsApply} .
