@@ -80,6 +80,7 @@ sub readLabels{
     if(m,<(\w+:)?(\w+)>([^>]+)</(\w+)>,){
       my($pfx, $n, $d) = ($1, $2, $3);
       $d =~ s/&#38;/&/g;
+      $d =~ s/&amp;/&/g;
 
       print STDERR "@@ $n `$d' [ $schema{$n} ]\n";
 
@@ -93,7 +94,10 @@ sub readLabels{
 }
 
 # $Log$
-# Revision 1.2  2002-06-12 15:41:05  connolly
+# Revision 1.3  2003-04-14 17:29:02  connolly
+# 25Dec: markup tweak
+#
+# Revision 1.2  2002/06/12 15:41:05  connolly
 # tweak of 16 Apr
 #
 # Revision 1.1  2002/01/21 23:16:49  connolly
