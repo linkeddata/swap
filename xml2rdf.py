@@ -15,13 +15,13 @@ import urllib   # Opening resources in load()
 import string
 # States:
 
-STATE_NOT_RDF = "not RDF"   # Before <rdf:RDF>
-STATE_NO_SUBJECT = "no context"  # @@@@@@@@@ use numbers for speed
+STATE_NOT_RDF =     "not RDF"     # Before <rdf:RDF>
+STATE_NO_SUBJECT =  "no context"  # @@@@@@@@@ use numbers for speed
 STATE_DESCRIPTION = "Description (have subject)" #
-STATE_LITERAL = "within literal"
-STATE_VALUE = "plain value"
-STATE_NOVALUE = "no value"
-STATE_LIST =    "within list"
+STATE_LITERAL =     "within literal"
+STATE_VALUE =       "plain value"
+STATE_NOVALUE =     "no value"
+STATE_LIST =        "within list"
 
 RESOURCE = notation3.RESOURCE
 LITERAL = notation3.LITERAL
@@ -44,7 +44,7 @@ class RDFXMLParser(xmllib.XMLParser):
         self.sink = sink
         self._thisURI = thisURI
         self._state = STATE_NOT_RDF  # Maybe should ignore RDF poutside <rdf:RDF>??
-        self._context = thisURI         # Context of current statements, change in bags
+        self._context = thisURI + "#_formula"  # Context of current statements, change in bags
         self._subject = None
         self._predicate = None
         self._genPrefix = "#_g"    # @@@ allow parameter override
@@ -135,7 +135,7 @@ class RDFXMLParser(xmllib.XMLParser):
                 ln = name
                 ns = None
 #               raise NoNS   # @@@ Actually, XML spec says we should get these: parser is wrong
-            if ns == RDF_NS_URI or ns == None:   # These should have none but RDF_NS is common :-(
+            if ns == RDF_NS_URI or ns == None:   # Opinions vary sometimes none but RDF_NS is common :-(
                 
                 if ln == "ID":
                     if self._subject:
@@ -257,6 +257,9 @@ class RDFXMLParser(xmllib.XMLParser):
                 if name == "ID":
                     print "# Warning: ID=%s on statement ignored" %  (value) # I consider these a bug
                 elif name == "parseType":
+                    nslist = self._XMLParser__namespaces.items()  # Get namespaces (this is a qname)
+                    for t, d, nst in self.stack:     # Hack - look inside parser - Yuk@@
+                        nslist = nslist + d.items()
                     if value == "Literal":
                         self._state = STATE_LITERAL # That's an XML subtree not a string
                         
@@ -270,27 +273,26 @@ class RDFXMLParser(xmllib.XMLParser):
                                                   (RESOURCE, self._subject) ))
                         self._state = STATE_DESCRIPTION  # Nest description
                         
-                    elif value == "Quote":
-                        c = self._context
-                        s = self._subject
-                        self.idAboutAttr(attrs)  # set subject and context for nested description
-                        if self._predicate == RDF_NS_URI+"is": # magic :-(
-                            self._subject = s  # Forget anonymous genid - context is subect
-                            print "#@@@@@@@@@@@@@ decided subject is ",`s`[-10:-1]
-                        else:
-                            self.sink.makeStatement(( (RESOURCE, c),
-                                                  (RESOURCE, self._predicate),
-                                                  (RESOURCE, s),
-                                                  (RESOURCE, self._subject) ))
-                        self._context = self._subject
-                        self._subject = None
-                        self._state = STATE_NO_SUBJECT  # Nest context
+                    elif value[-6:] == ":quote":
+                        for p, nsURI in nslist:
+                            if p == pref and  nsURI == Logic_NS: 
+                                c = self._context
+                                s = self._subject
+                                self.idAboutAttr(attrs)  # set subject and context for nested description
+                                if self._predicate == RDF_NS_URI+"is": # magic :-(
+                                    self._subject = s  # Forget anonymous genid - context is subect
+                                    print "#@@@@@@@@@@@@@ decided subject is ",`s`[-10:-1]
+                                else:
+                                    self.sink.makeStatement(( (RESOURCE, c),
+                                                          (RESOURCE, self._predicate),
+                                                          (RESOURCE, s),
+                                                          (RESOURCE, self._subject) ))
+                                self._context = self._subject
+                                self._subject = None
+                                self._state = STATE_NO_SUBJECT  # Nest context
                         
                     elif value[-11:] == ":collection":  # Is this a daml:collection qname?
                         pref = value[:-11]
-                        nslist = self._XMLParser__namespaces.items()
-                        for t, d, nst in self.stack:     # Hack - look inside parser
-                            nslist = nslist + d.items()
                         for p, nsURI in nslist:
                             if p == pref and  (nsURI == DAML_ONT_NS
                                                or nsURI == DPO_NS): 
