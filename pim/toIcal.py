@@ -76,8 +76,10 @@ class CalWr:
         w("BEGIN:%s%s" % (name, CRLF))
 
         className, props, subs = decls[name]
-        
-        for prop in props.keys():
+
+        propNames = props.keys()
+        propNames.sort()
+        for prop in propNames:
             predName, valueType = props[prop][:2]
             val  = sts.any(comp, ICAL.sym(predName))
             if val:
@@ -117,20 +119,28 @@ class CalWr:
                           str(valueType) + " on " + str(prop)
 
 
+        compToDo = []
         for sub in sts.each(subj = comp, pred = ICAL.component):
             for subName in subs.keys():
                 className, p, s = subs[subName]
                 if sts.statementsMatching(RDF.type, sub, ICAL.sym(className)):
-                    self.doComponent(sts, sub, subName, subs)
+                    compToDo.append((sts, sub, subName, subs))
                     break
             else:
                 raise ValueError, "no component class found"
+
+        # compToDo.sort(key=compKey) # darn... only in python 2.4
+        compToDo.sort(componentOrder)
+        for sts, sub, subName, subs in compToDo:
+            self.doComponent(sts, sub, subName, subs)
 
 
         # timezone standard/daylight components use a different structure
         # hmm... is this a good idea?
         if name == 'VTIMEZONE':
-            for part in subs.keys():
+            partNames = subs.keys()
+            partNames.sort()
+            for part in partNames:
                 n, p, c = subs[part]
                 sub = sts.any(subj = comp, pred=ICAL.sym(n))
                 if sub:
@@ -208,7 +218,7 @@ class CalWr:
         w(propName + ":")
         freq = sts.any(r, ICAL.freq)
         if freq: w("FREQ=%s" % freq)
-        else: warn("no freq in recur")
+        else: raise ValueError, "no freq in recur"
         
         when = sts.any(r, ICAL.until)
         if when: w(";UNTIL=%s" % mkDATE(when))
@@ -252,6 +262,47 @@ class CalWr:
         w(":" + address + "\n")
 
 
+def componentOrder(a, b):
+    return cmp(compKey(a), compKey(b))
+
+
+def compKey(item):
+    """extract a sort key from a component item
+    
+    >>> from myStore import formula, literal, symbol, existential
+    >>> f=formula()
+    >>> e1=symbol("http://example#e1")
+    >>> w1=existential("t", f, None)
+    >>> e2=symbol("http://example#e2")
+    >>> w2=existential("t", f, None)
+    >>> f.add(e1, ICAL.uid, literal("abcdef"))
+    1
+    >>> f.add(e1, ICAL.dtstart, w1)
+    1
+    >>> f.add(e2, ICAL.dtstart, w2)
+    1
+    >>> f.add(w1, ICAL.date, literal("2002-12-23"))
+    1
+    >>> f.add(w2, ICAL.dateTime, literal("2002-12-23T12:32:31Z"))
+    1
+    >>> compKey((f, e1, 'dummy', []))
+    ('abcdef', '2002-12-23')
+    >>> compKey((f, e2, 'dummy', []))
+    (None, '2002-12-23T12:32:31Z')
+    """
+
+    sts, sub, subName, subs = item
+    uid = sts.any(sub, ICAL.uid)
+    if uid: uid = str(uid)
+    when = sts.any(sub, ICAL.dtstart)
+    if when:
+        whenV = sts.any(when, ICAL.date)
+        if whenV: when = str(whenV)
+        else:
+            whenV = sts.any(when, ICAL.dateTime)
+            if whenV: when = str(whenV)
+    return (uid, when)
+
 
 def mkTEXT(val):
     # @@TODO: wrap at 75 cols
@@ -276,18 +327,6 @@ def mkDATE(val):
     """
     
     return translate(str(val), maketrans("", ""), "-:")
-
-
-def wrapString(self, str, slen):
-    """ helper function to wrap a string iCal-style
-    """
-
-    x = ''
-    while(len(str) > slen):
-        x += str[0:slen-1] + CRLF + ' '
-        str = str[slen-1:]
-    x += str
-    return x
 
 
 def tzid(tzp):
@@ -328,9 +367,9 @@ def main(args):
     c.export(sts, addr)
 
 
-def test():
-    import doctest, toIcal
-    doctest.testmod(toIcal)
+def _test():
+    import doctest
+    doctest.testmod()
 
 def progress(*args):
     for i in args:
@@ -343,14 +382,21 @@ def debug(*args):
         sys.stderr.write(str(i))
     sys.stderr.write("\n")
 
-import sys
 
 if __name__ == '__main__':
-    main(sys.argv)
+    if '--test' in sys.argv: _test()
+    else: main(sys.argv)
 
 
 # $Log$
-# Revision 2.23  2004-11-13 17:02:58  connolly
+# Revision 2.24  2005-02-17 23:02:27  connolly
+# - sort components by uid, dtstart
+# - sort properties by name
+# - added --test arg to run doctest tests
+# - pychecker fixes: warn() not imported,
+# - got rid of wrapString() deadcode (though there's an @@ in mkTEXT)
+#
+# Revision 2.23  2004/11/13 17:02:58  connolly
 # fixed punctuation of UNTIL; factored out mkDATE
 # added --test option for doctest style testing
 #
