@@ -49,6 +49,7 @@ ns = {
     "http://www.w3.org/2000/01/rdf-schema":"rdfs",
     "http://www.w3.org/2000/10/swap/log": "log",
     "http://www.daml.org/2001/03/daml+oil": "daml",
+    "http://www.w3.org/2002/07/owl": "owl",
     "http://www.w3.org/2002/03owlt/ontAx": "ontAx",
     }
 
@@ -92,6 +93,8 @@ class Serializer:
         counter = { "u":0, "e":0, "x":[] }
         if expr.exivars:
             formula = expr.asFormula()
+            expr = None
+            # IF THIS IS TOO UGLY FOR YOU, ... SKOLEMIZE FIRST or something....
         if isinstance(expr, LX.kb.KB):
             result = ""
             for f in expr:
@@ -121,6 +124,7 @@ class Serializer:
         else:
             self.prename(formula, names, counter)
             self.stream.write(formula.serializeWithOperators(names, operators))
+            self.stream.write(".\n")
 
     def prename(self, f, names, counter):
         global ns
@@ -135,13 +139,13 @@ class Serializer:
                 s = str(f)
                 try:
                     (pre,post) = s.split("#")
-                    result = ns[pre]+"_"+post
+                    result = ns[pre]+"_"+escapeUnlessSafe(post)
                     self.nsused[ns[pre]] = pre
                 except KeyError:
                     ns[pre] = "ns"+str(len(ns))
                     self.nsused[ns[pre]] = pre
                     # self.makeComment("autoprefix %s %s" % (ns[pre], pre))
-                    result = ns[pre]+"_"+post
+                    result = ns[pre]+"_"+escapeUnlessSafe(post)
                 except ValueError:
                     ee = escapeUnlessSafe(s)
                     if s == ee:
@@ -179,7 +183,10 @@ def serialize(kb):
     return str.getvalue()
 
 # $Log$
-# Revision 1.8  2003-02-14 19:40:32  sandro
+# Revision 1.9  2003-07-23 19:43:02  sandro
+# tweaks to work with surnia
+#
+# Revision 1.8  2003/02/14 19:40:32  sandro
 # working lbase -> otter translation, with regression test
 #
 # Revision 1.7  2003/02/14 17:21:59  sandro

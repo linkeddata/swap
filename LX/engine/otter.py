@@ -35,12 +35,11 @@ def think(kb=None):
         print "# for details try:  cat ,lx.engine.otter.fromOtter"
         print "# Done running Otter [ Inferences NOT incorporated back into cwm ]"
 
-def run(string, fileBase=",lx.engine.otter"):
+def run(string, fileBase=",lx.engine.otter", includes=None, maxSeconds=1):
     """Run otter on this formula/kb and see what it does.
 
     >>> from LX.engine.otter import *
     >>> run("a & -a.")
-    leaving ,lx.engine.otter.fromOtter
     ['maxproofs']
     """
     if not isinstance(string, str):
@@ -49,14 +48,19 @@ def run(string, fileBase=",lx.engine.otter"):
     out = fileBase+".fromOtter"
     f=open(filename, "w")
     f.write("set(auto).\n")
-    f.write("set(prolog_style_variables).\n")
+    #f.write("set(prolog_style_variables).\n")
     f.write("clear(control_memory).\n")
+
+    if includes:
+        for i in includes:
+            f.write("include('%s').\n" % i)
+    
     f.write("formula_list(usable).\n")
     f.write(string)
     # if not string.endswith("."): f.write(".")
     f.write("\nend_of_list.")
     f.close()
-    return runOtter(filename, out)
+    return runOtter(filename, out, maxSeconds=maxSeconds)
 
 def runOtter(toOtterFilename, fromOtterFilename=None, maxSeconds=1):
     """
@@ -133,7 +137,7 @@ def runOtter(toOtterFilename, fromOtterFilename=None, maxSeconds=1):
             raise SOSEmpty, message
         raise AbnormalRun, message
     #os.unlink(fromOtterFilename)     # or maybe sometimes you want it left around?
-    print "leaving", fromOtterFilename
+    #print "leaving", fromOtterFilename
     return result
 
 template = """
