@@ -13,7 +13,7 @@ DOC=doc/CwmHelp.htm
 
 TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/ql/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/cwm/detailed.tests test/ntriples/detailed.tests test/delta/detailed.tests test/syntax/detailed.tests test/reify/detailed.tests test/testmeta.n3 test/retest.py
 
-TARNAME = cwm-0.8
+TARNAME = cwm-0.8.0
 
 TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3
 
@@ -83,6 +83,7 @@ setup_tarball: $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) # tested filelist
 	for A in $(SOURCES); do echo swap/"$$A" >> MANIFEST; done
 	cat test/testfilelist | sed -e 's/^/test\//' >> MANIFEST
 	python setup.py sdist
+	python setup.py bdist_rpm
 	rm -rf swap
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py
