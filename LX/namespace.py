@@ -11,6 +11,26 @@ __version__ = "$Revision$"
 #import LX.uri
 import LX.logic
 
+class NamespaceCluster:
+    """
+    Use like ns.rdf.type 
+    """
+    def inverseLookup(self, term):
+        uri = term.uri
+        for (key, value) in self.__dict__.iteritems():
+            if uri.startswith(value.uri):
+                rest = uri[len(value.uri):]
+                if not value.strict:
+                    return (key, rest)
+                print "REST", rest
+                if rest in value.__dict__:
+                    return (key, rest)
+                else:
+                    print "NamespaceCluster inverselookup not-matched due to strict"
+        raise KeyError
+                    
+            
+
 class Namespace:
     """
     
@@ -39,29 +59,33 @@ class Namespace:
         before being used.   shortForm is the conventional short form,
         which need not be unique.
         """
-        self.uri = uri
+        if uri.endswith("#") or uri.endswith("/") or uri.endswith("?"):
+            self.uri = uri
+        else:
+            self.uri = uri+"#"
         self.strict = strict
         self.shortForm = shortForm
         for name in initialNames:
             self.add(name)
 
     def add(self, name):
-        # self.__dict__[name] = LX.uri.DescribedThing(self.uri + "#" + name)
-        self.__dict__[name] = LX.logic.ConstantForURI(self.uri + "#" + name)
+        self.__dict__[name] = LX.logic.ConstantForURI(self.uri + name)
 
     def __getattr__(self, name):
         if self.strict:
             msg = ("No name %s declared for namespace %s (in strict mode)" %
                    (name, self.uri))
             raise AttributeError, msg
-        #result = LX.uri.DescribedThing(self.uri + "#" + name)
-        result = LX.logic.ConstantForURI(self.uri + "#" + name)
+        result = LX.logic.ConstantForURI(self.uri + name)
         self.__dict__[name] = result
         return result
 
 
 # $Log$
-# Revision 1.5  2003-08-20 09:26:48  sandro
+# Revision 1.6  2003-08-22 20:49:07  sandro
+# generalized ns and reconstructor, for second use (2003/08/owl-systems)
+#
+# Revision 1.5  2003/08/20 09:26:48  sandro
 # update --flatten code path to work again, using newer URI strategy
 #
 # Revision 1.4  2003/02/14 19:39:03  sandro

@@ -6,6 +6,8 @@ quantification and binary predicates.
 __version__ = "$Revision$"
 # $Id$
 
+import re
+
 import LX
 from LX.ladder import Ladder
 from LX.defaultns import rdfns, lxns
@@ -20,10 +22,17 @@ def flatten(kb, toKB, indirect=0):
     otherwise they just get copied over.
     
     """
-    d = CombinedDescriber([FormulaDescriber(), URIRefDescriber(),
-                              VariableDescriber(), ListDescriber()])
+    d = CombinedDescriber([FormulaDescriber(),
+                           VariableDescriber(),  # must be before uriref
+                           URIRefDescriber(),
+                           ListDescriber()])
     ladder = Ladder(("kb", toKB))
     ladder = ladder.set("trace", 1)
+    # ladder = ladder.set("verbose", 1)
+    if kb.univars:
+        term = d.describe(kb.asFormula(), ladder)
+        toKB.add(term, rdfns.type, lxns.TrueSentence)
+        return
     for f in kb:
         if f.function is LX.logic.RDF and not indirect:
             toKB.add(f)
@@ -46,6 +55,26 @@ class Reconstructed:
         self.fromTerm=fromTerm
         self.args=[]
         self.op=None
+    def dump(self, done):
+        if done.has_key(self):
+            print "[loop]"
+            return
+        done[self] = 1
+        print "[ ",
+        for (key, value) in self.__dict__.iteritems():
+            if key is "fromTerm": continue
+            if key is "args": continue
+            if key is "op": continue
+            print key,
+            if isinstance(value, Reconstructed):
+                value.dump(done)
+            else:
+                print "<"+str(value)+">"
+        try:
+            print '"'+'"^^<'.join(LX.logic.valuesForConstants[self.fromTerm])+'>',
+        except KeyError:
+            pass
+        print " ]",
 
 # could construct this from class info...
 decode = {
@@ -64,31 +93,60 @@ decode = {
     lxns.subjectTerm:[ 0, LX.logic.RDF ],
     lxns.predicateTerm:[ 1, LX.logic.RDF ],
     lxns.objectTerm:[ 2, LX.logic.RDF ],
-    lxns.denotation: [ None, None, "uri" ],
+    lxns.denotation: "uri",
     }
 
-def reconstruct(kb, keys, recons):
+def reconstruct(kb, keys, recons, byClass=None, class_=Reconstructed, cluster=None):
+    """
+
+    keys is a map from predicates to something which says how to handle
+    triples using that predicate during reconstruction.  Specifically:
+       - a string means: use that string as the property name
+       - a pair of (number, object) means set the reconstructed object's
+         arg[number] to the value, and set its "op" to the object.
+    """
+
+    localKeys = {}
+    nameTable = {
+        ("legal",): re.compile(r"^[a-zA-Z0-9_]+$"),
+        ("hint",): re.compile(r"(?:\/|#)([a-zA-Z0-9_]*)/?$")
+        }
+    
     for f in kb:
         if f.function != LX.logic.RDF:
+            raise RuntimeError, "Not pure-RDF KB!"
             continue
         (subj, pred, obj) = f.args
-        try:
-            k = keys[pred]
-        except KeyError:
-            continue
-        subjRecon = recons.setdefault(subj, Reconstructed(subj))
-        objRecon = recons.setdefault(obj, Reconstructed(obj))
-        index = k[0]
-        if index is None:
-            setattr(subjRecon, k[2], objRecon)
+        subjRecon = recons.setdefault(subj, apply(class_,[subj]))
+        if pred == rdfns.type and byClass is not None:
+            byClass.setdefault(obj, []).append(subjRecon)
+        if keys is not None:
+            try:
+                k = keys[pred]
+            except KeyError:
+                print "ignoring triple, pred", pred
+                continue
+        elif cluster is not None:
+            try:
+                k = "_".join(cluster.inverseLookup(pred))
+            except KeyError:
+                print "ignoring triple, pred not in any NS", pred
+                continue
         else:
+            k = localKeys.setdefault(pred, pred.getNameInScope(nameTable))
+            
+        objRecon = recons.setdefault(obj, apply(class_,[obj]))
+        if isinstance(k, type("x")) or k[0] is None:
+            setattr(subjRecon, k, objRecon)
+        else:
+            index = k[0]
             if index>=len(subjRecon.args):
                 subjRecon.args.extend( (None,) * (1+index-len(subjRecon.args) ))
             subjRecon.args[index] = objRecon
             was = subjRecon.__dict__.get("op",None)
             assert(was is None or was is k[1])
             subjRecon.op = k[1]
-    
+
 def dereify(kb):
     """a "remove" flag would be nice, but what about structure sharing?
 
@@ -155,6 +213,7 @@ def asExpr(r, map):
 
 ################################################################
 
+vars = { }
 class VariableDescriber:
 
     def describe(self, object, ladder):
@@ -165,8 +224,16 @@ class VariableDescriber:
                        'Cannot describe variable as some term w/out eq')
         else:
             #@@@   keep a global map to exivars?
-            term = ladder.kb.newExistential()
-            # term = object
+            global vars
+            try:
+                term=vars[object]
+            except KeyError:
+                if isinstance(object, LX.logic.ExiVar):
+                    type = lxns.exivar
+                elif isinstance(object, LX.logic.UniVar):
+                    type = lxns.exivar
+                term=vars.setdefault(object, ladder.kb.newExistential())
+                # ladder.kb.add(term, rdfns
             
         if ladder.has("verbose"):
             ladder.kb.add(term, rdfns.type, lxns.Variable)
@@ -244,7 +311,10 @@ def denotation(triple, index):
     return LX.uri.Resource(u)
     
 # $Log$
-# Revision 1.10  2003-08-20 11:50:58  sandro
+# Revision 1.11  2003-08-22 20:49:07  sandro
+# generalized ns and reconstructor, for second use (2003/08/owl-systems)
+#
+# Revision 1.10  2003/08/20 11:50:58  sandro
 # --dereify implemented (linear time algorithm)
 #
 # Revision 1.9  2003/08/20 09:26:48  sandro
