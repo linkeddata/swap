@@ -23,7 +23,9 @@ dc:description """
 
 <> doc:persistencePolicy [ a :_SubjectToChange;
    dc:description """If you change this, you have to tell the W3C SemWeb AD
-   folk, including Dan Connolly; so agreed 5 Jun 2001""" ].
+   folk, including Dan Connolly; so agreed 5 Jun 2001.
+   TimBl takes this as being met by a mail to sw-team.""" ];
+   doc:creator <http://www.w3.org/People/Berners-Lee/card#i>.
 
 doc:persistencePolicy
 	rdfs:seeAlso <http://www.w3.org/1999/10/nsuri>.
@@ -75,31 +77,41 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 
 
 :personalTitle = 	mso:Title .
-:givenName = 		mso:First_Name .
+:firstName = 		mso:First_Name .   #  @@@ not in general
 :middleName = 		mso:Middle_Name .
-:familyName = 		mso:Last_Name .
+:lastName = 		mso:Last_Name .	    # @@@ not in general - culture dependent
 :personalSuffix = 	mso:Suffix .
+
 :fullName a rdf:Property; rdfs:label "full name".
+
 :sortName a rdf:Property; rdfs:label "sort name";
-  rdfs:comment "re-arranged for lexicographic ordering; ala Doe, John".
+   rdfs:comment "re-arranged for lexicographic ordering; ala Doe, John".
 
 :nearestAirport a rdf:Property; rdfs:label "nearest airport";
-  rdfs:comment """?X nearestAirport ?Y locates ?X in an international
+   rdfs:comment """?X nearestAirport ?Y locates ?X in an international
    context; for example, for the purpose of organizing a face-to-face
    meeting of a W3C working group. This property is intended to mitigate
    privacy risks of giving out detailed contact info.""";
-  rdfs:seeAlso <http://lists.w3.org/Archives/Public/www-webont-wg/2001Nov/0006.html>, <http://www.w3.org/2001/sw/WebOnt/webont-airports.rdf>,
-<http://www.perceive.net/pages/page/articles/year/2002/month/12#9>,
-<http://www.w3.org/2001/sw/Europe/200303/geo/intro.html>,
-<http://www.w3.org/2001/tag/ilist#httpRange-14>.
+
+  rdfs:seeAlso <http://lists.w3.org/Archives/Public/www-webont-wg/2001Nov/0006.html>,
+	<http://www.w3.org/2001/sw/WebOnt/webont-airports.rdf>,
+	<http://www.perceive.net/pages/page/articles/year/2002/month/12#9>,
+	<http://www.w3.org/2001/sw/Europe/200303/geo/intro.html>,
+	<http://www.w3.org/2001/tag/ilist#httpRange-14>.
 
 :knownAs a rdf:Property;
-    rdfs:comment """A person may be known as various strings.
-For example, an email friendly name string.""".
+    	rdfs:comment """A person may be known as various strings.
+	For example, an email friendly name string.
+	If you have an email from someone using a string as the human-readable phrase,
+	then it is reasonable to assume that there are :knownAs that.""".
 
 :ContactLocation a rdfs:Class;
     rdfs:comment  "A place with address, phone number, fax, etc";
 	is rdfs:domain of :phone, :fax.
+
+# Probably reasonable to assume that a person has only one office, home
+# etc - so you can convert from things like mso:OfficePhone and officeStreet
+# to assume teh phone is at the same office as the address.
 
 :office a rdf:Property;
     rdfs:domain :Person; rdfs:range :ContactLocation.
@@ -282,20 +294,14 @@ mso:WebPage  a rdf:Property;
   :_addressProperty :homePageAddress.
 :homePageAddress a ont:UnambiguousProperty.
 
-####################################### Calendaring -- Time ###########
-#
-# Exploring the next direction of human resource expenditure...
-#See:
-# xmlschema dates
-# iCalendar and my partial analysis of it
-# shoul dthis be a separate spec?
-# This is date book as opposde to address book.
-# (and agenda? - nothat need sful workflow tretment...
-#
+
 
 <> dc:description """
 $Log$
-Revision 1.21  2003-07-07 16:10:16  connolly
+Revision 1.22  2003-08-01 20:09:20  timbl
+Minor fixes
+
+Revision 1.21  2003/07/07 16:10:16  connolly
 documented nearestAirport property; cleaned up parse errors in contact.n3; used doc:persistencePolicy in contact; fixed typo in doc
 
 Revision 1.20  2003/06/18 19:12:14  timbl
