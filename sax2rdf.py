@@ -353,7 +353,7 @@ class RDFHandler(xml.sax.ContentHandler):
                 self._predicate = self.sink.newSymbol(tagURI)
 
             self._state = STATE_VALUE  # May be looking for value but see parse type
-	    self._dataType = None
+	    self._datatype = None
 	    self._language = None
             self.testdata = ""         # Flush value data
             
