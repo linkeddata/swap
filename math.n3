@@ -1,0 +1,107 @@
+# Schema for CWM's mathematical built-ins, SBP 2001-12
+#
+# $Id$
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+
+math:StrictProperty a rdfs:Class; rdfs:label "StrictProperty".
+#   daml:intersectionOf (daml:UnambiguousProperty daml:UniqueProperty) .
+#   This would be very restrictive - only for 1:1 relationships. 
+#   Also note daml:UnambiguousProperty daml:UniqueProperty are in terms of daml:equivalentTo
+#   not math:equalTo
+
+math:Value a rdfs:Class; rdfs:label "Value"; 
+   rdfs:subClassOf string:String; 
+   rdfs:comment "The class of things that are numeric float values as in Python." .
+
+math:Function a rdfs:Class; rdfs:subPropertyOf rdf:Property;
+   rdfs:label "Function";
+   rdfs:comment "A math:Function is unique in terms of math:EqualTo. "
+
+math:ReverseFunction a rdfs:Class; rdfs:subPropertyOf rdf:Property;
+   rdfs:comment "A math:ReverseFunction is unambiguous in terms of math:EqualTo. "
+
+math:LogicalOperator a rdfs:Class; rdfs:subClassOf math:Function, math:ReverseFunction;
+   rdfs:comment """a logical operator allows evaluation eihter way, or testing relationship
+         between two values""".
+
+math:List a rdfs:Class; rdfs:label "List"; 
+   rdfs:subClassOf daml:List; 
+   rdfs:comment """The class of things that are DAML lists were all of the 
+      members are math:Value items.""" .
+
+math:TwoMemberedList a rdfs:Class; rdfs:label "TwoMemberedList"; 
+   rdfs:subClassOf math:List; 
+   rdfs:comment 
+     "This is the class of things that are math lists with only two members." .
+
+# Reverse functions:
+
+math:differenceOf a :ReverseFunction; rdfs:label "differenceOf"; 
+   rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
+   rdfs:comment "The difference of the list members" .
+
+math:factors a :ReverseFunction; rdfs:label "factors"; 
+   rdfs:domain math:Value; rdfs:range math:List;
+   daml:inverse math:product; 
+   rdfs:comment "A list of values which multiply to produce the subject." .
+
+math:quotientOf a :ReverseFunction; rdfs:label "quotientOf"; 
+   rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
+   rdfs:comment "The quotient of the list members" .
+
+math:remainderOf a :ReverseFunction; rdfs:label "remainderOf"; 
+   rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
+   rdfs:comment "The remainder of the list members" .
+
+math:negationOf a :Function, :ReverseFunction;
+   rdfs:label "negation"; 
+   rdfs:domain math:Value; rdfs:range math:Value; 
+   rdfs:comment "The subject is the negotation of the object" .
+
+math:exponentiationOf a :ReverseFunction; rdfs:label "exponentiationOf"; 
+   rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
+   rdfs:comment "For exponOf(x, (y, z)), x = y^z" .
+
+math:memberCount a :Function; rdfs:label "memberCount"; 
+   rdfs:domain math:List; rdfs:range math:Value; 
+   rdfs:comment "The number of items in a list" .
+
+
+# Logical operators:
+
+math:greaterThan a :StrictProperty; rdfs:label "greaterThan"; 
+#   rdfs:subPropertyOf string:greaterThan;     No, basically no relation - tbl
+   rdfs:comment "Is greater than";
+   rdfs:domain math:Value; rdfs:range math:Value .
+
+math:notGreaterThan a :StrictProperty; rdfs:label "notGreaterThan"; 
+#   rdfs:subPropertyOf string:notGreaterThan;  No, basically no relation -tbl
+   rdfs:comment "Is not greater than";
+   rdfs:domain math:Value; rdfs:range math:Value .
+
+math:lessThan a :StrictProperty; rdfs:label "lessThan"; 
+#   rdfs:subPropertyOf string:lessThan;   No, basically no relation
+   rdfs:comment "Numerically less than";
+   rdfs:domain math:Value; rdfs:range math:Value .
+
+math:notlessThan a :StrictProperty; rdfs:label "notlessThan"; 
+   rdfs:subPropertyOf string:notlessThan; 
+   rdfs:comment "Is not less than";
+   rdfs:domain math:Value; rdfs:range math:Value .
+
+math:equalTo a :StrictProperty; rdfs:label "equalTo"; 
+   rdfs:comment "Numerically equal to";
+   rdfs:domain math:Value; rdfs:range math:Value .
+
+math:notEqualTo a :StrictProperty; rdfs:label "notEqualTo"; 
+   rdfs:comment "Not equal to";
+   rdfs:domain math:Value; rdfs:range math:Value .
+
+#ends
+
