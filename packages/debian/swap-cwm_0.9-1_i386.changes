@@ -1,0 +1,20 @@
+Format: 1.7
+Date: Sun,  9 Jun 2002 11:37:57 +0100
+Source: swap-cwm
+Binary: swap-cwm
+Architecture: source all
+Version: 0.9-1
+Distribution: unstable
+Urgency: low
+Maintainer: Dan Brickley <danbri@w3.org>
+Changed-By: Dan Brickley <danbri@w3.org>
+Description: 
+ swap-cwm   - RDF and Semantic Web engine for Python
+Changes: 
+ swap-cwm (0.9-1) unstable; urgency=low
+ .
+   * Initial Release, test packaging by danbri.
+Files: 
+ 17b7a58e58e0f7d052eb04d8275b06df 239 interpreters optional swap-cwm_0.9-1.dsc
+ a24b75602aa481befd1f119c6d51ea36 348614 interpreters optional swap-cwm_0.9-1.tar.gz
+ dc8d9dd2c0ef64356135da3522f038cc 69414 interpreters optional swap-cwm_0.9-1_all.deb

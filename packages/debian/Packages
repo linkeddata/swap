@@ -1,0 +1,13 @@
+Package: swap-cwm
+Priority: optional
+Section: interpreters
+Installed-Size: 252
+Maintainer: Dan Brickley <danbri@w3.org>
+Architecture: all
+Version: 0.9-1
+Depends: python
+Filename: ./swap-cwm_0.9-1_all.deb
+Size: 69414
+MD5sum: dc8d9dd2c0ef64356135da3522f038cc
+Description: RDF and Semantic Web engine for Python
+
