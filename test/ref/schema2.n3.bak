@@ -1,0 +1,19 @@
+#Processed by Id: cwm.py,v 1.26 2001/02/05 01:13:24 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.53 2001/02/05 01:13:24 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/
+     @prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
+     @prefix ex: <http://www.daml.org/2000/10/daml-ex#> .
+     @prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
+     @prefix : <schema-rules.n3#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    <invalid-ex.n3#disjointTest>     a :schemaInconsistency .
+    
+    <invalid-ex.n3#joe>     a :schemaInconsistency .
+    
+ #ENDS

@@ -1,0 +1,108 @@
+
+        #    using base file:/devel/WWW/2000/10/swap/test/
+        
+
+
+
+
+     @prefix : <daml-ex.rdf#> .
+     @prefix ex: <http://www.daml.org/2000/10/daml-ex#> .
+     @prefix ont: <http://www.daml.org/2000/10/daml-ont#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    
+    <>     a ont:Ontology;
+         ont:comment "An example ontology";
+         ont:imports <http://www.daml.org/2000/10/daml-ont>;
+         ont:versionInfo "$Id$" .
+    
+    :Adam     a ont:Person;
+         ont:comment "Adam is a person.";
+         ont:label "Adam" .
+    
+    :Animal     a ont:Class;
+         ont:comment """This class of animals is illustrative of a number of
+	ontological idioms.""";
+         ont:label "Animal" .
+    
+    :Car     a ont:Class;
+         ont:comment "no car is a person";
+         ont:subClassOf  [
+             a ont:Class;
+             ont:complementOf :Person ] .
+    
+    :Female     a ont:Class;
+         ont:disjointFrom :Male;
+         ont:subClassOf :Animal .
+    
+    :Height     a ont:Class;
+         ont:oneOf  (
+        :short 
+        :medium 
+        :tall  ) .
+    
+    :Male     a ont:Class;
+         ont:subClassOf :Animal .
+    
+    :Man     a ont:Class;
+         ont:subClassOf :Male,
+                :Person .
+    
+    :Person     a ont:Class;
+         ont:comment "every person is a man or a woman";
+         ont:disjointUnionOf  (
+        :Man 
+        :Woman  );
+         ont:restrictedBy  [
+             a ont:Restriction;
+             ont:onProperty :parent;
+             ont:toClass :Person ];
+         ont:subClassOf :Animal .
+    
+    :TallMan     a ont:Class;
+         ont:intersectionOf  (
+        :TallThing 
+        :Man  ) .
+    
+    :TallThing     a ont:Class;
+         ont:restrictedBy  [
+             a ont:Restriction;
+             ont:onProperty :height;
+             ont:toValue :tall ] .
+    
+    :Woman     a ont:Class;
+         ont:subClassOf :Female,
+                :Person .
+    
+    :ancestor     a ont:TransitiveProperty;
+         ont:label "ancestor" .
+    
+    :child     a ont:Property;
+         ont:inverseOf :parent .
+    
+    :descendant     a ont:TransitiveProperty .
+    
+    :father     a ont:Property;
+         ont:cardinality "1";
+         ont:range :Man;
+         ont:subProperty :parent .
+    
+    :height     a ont:Property;
+         ont:domain :Person;
+         ont:range :Height .
+    
+    :mom     a ont:Property;
+         = :mother .
+    
+    :mother     a ont:UniqueProperty;
+         ont:range :Woman;
+         ont:subProperty :parent .
+    
+    :occupation     a ont:Property;
+         ont:maxCardinality "1" .
+    
+    :parent     a ont:Property;
+         ont:cardinality "2";
+         ont:domain :Animal .
+    
+ #ENDS
