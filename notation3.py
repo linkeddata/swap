@@ -25,7 +25,18 @@ T: more cool things:
  - sucking in the schema (http library?)
  - metaindexes - "to know more about x please see r" - described by
  - equivalence handling inc. equivalence of equivalence
- 
+ - @@ regeneration of genids on output.
+- regression test! 
+ Shakedown:
+ - Find all synonyms of synonym
+ - Find closure for all synonyms
+ - Find superclass closure?
+ - Use unambiguous property to infer synomnyms
+
+Validation:  validate domain and range constraints against closuer of classes and
+   mutually disjoint classes.
+
+Translation;  Try to represent the space (or a context) using a subset of namespaces
 
 """
 
@@ -33,6 +44,11 @@ import string
 import urlparse
 import re
 
+
+PRED = 0  # offsets when a statement is stored as a Python triple (p, s, o)
+SUBJ = 1
+OBJ = 2
+PARTS = [ PRED, SUBJ, OBJ]
 
 class Parser:
     def __init__(self, baseURI, thisDoc, genBase, bindings = {}):
@@ -44,6 +60,7 @@ class Parser:
 	self._nextID = 0
 	self._thisDoc = intern(thisDoc)
 	self.context = self._thisDoc    # For storing with triples
+
 
     def feed(self, str):
 	"""if BadSyntax is raised, the string
@@ -63,7 +80,7 @@ class Parser:
 		    raise BadSyntax(str, i, "expected directive or statement")
 	    str = str[j:]
 
-    def makeStatement(self, context, subj, pred, obj):
+    def makeStatement(self, context, triple):
 	pass
 
     #@@I18N
@@ -192,7 +209,7 @@ class Parser:
 	    return j
 
 
-    def genURI(self):
+    def genURI(self):  # @@ genids should be regenerated on output
 	self._nextID = self._nextID + 1
 	return intern(self._genBase + `self._nextID`)
 
@@ -210,9 +227,9 @@ class Parser:
 		for obj in objs:
 		    dir, sym = v[0]
 		    if dir == '->':
-			self.makeStatement(self.context, subj, sym, obj)
+			self.makeStatement(self.context, (sym, subj, obj))
 		    else:
-			self.makeStatement(self.context, obj, sym, subj)
+			self.makeStatement(self.context, (sym, obj, sym))
 
 		j = self.tok(';', str, i)
 		if j<0:
@@ -240,7 +257,7 @@ class Parser:
 		    ns = self._bindings[pfx]
 		except KeyError:
 		    raise BadSyntax(str, i, "prefix not bound")
-	    res.append(intern("%s#%s" % (ns.uriref(), ln)))
+	    res.append(internFrag(ns, ln))
 	    return j
 	else:
 	    j = self.skipSpace(str, i)
@@ -397,8 +414,8 @@ class SinkParser(Parser):
     def endDoc(self):
         self._sink.endDoc()
 
-    def makeStatement(self, context, subj, pred, obj):
-        self._sink.makeStatement(context, subj, pred, obj)
+    def makeStatement(self, context, triple):
+        self._sink.makeStatement(context, triple)
 
 #####
 # Symbol support
@@ -442,16 +459,14 @@ def intern_old(str):
 
 class Thing:
     def __init__(self):
-        self.asSubject = []  #  List of statements in store        
-        self.asVerb = []  #  List of statements in store
-        self.asObject = []  #  List of statements in store        
+        self.occursAs = [], [], []  #  List of statements in store by part of speech       
             
     def __repr__(self):   # only used for debugging I think
         return self.representation()
 
-    def representation(self, prefixes = {}):
+    def representation(self, prefixes = {}, base=None):
         """ in N3 """
-        return "<" + self.uriref() + ">"
+        return "<" + self.uriref(base) + ">"
 
     def generated(self):
         """  Is this thing a genid - is its name arbitrary? """
@@ -461,15 +476,15 @@ class Thing:
         """ Can be output as an anonymous node in N3
         """
         return (self.generated() and  # The URI is irrelevant
-            len(self.asObject) == 1 and  # This is only incoming arrow
-            len(self.asVerb) == 0 )    # It is not used as a verb itself
+            len(self.occursAs[OBJ]) == 1 and  # This is only incoming arrow
+            len(self.occursAs[PRED]) == 0 )    # It is not used as a verb itself
 
     def equivalent(self, x):
         """ Find one reason for beliveing them equivalent
 
         Could search from subject, verb, or object, or find shortest. 
         """
-        for s in DAML_equivalentTo.asVerb.items():
+        for s in DAML_equivalentTo.occursAs[PRED].items():
             if ((s.object is self and s.subject is x) or
                 (s.subject is self and s.object is x)):
                 return s
@@ -485,11 +500,29 @@ class Resource(Thing):
         self.uri = uri
         self.fragments = {}
 
-    def uriref(self):
-        return self.uri
+    def uriref(self, base):
+        if base is self :  # @@@@@@@ Really should generate relative URI!
+            return ""
+        else:
+            return self.uri
 
+def mostPopular():
+        """ Resource whose fragments have the most occurrences
+        """
+        best = 0
+        mp = None
+        for r in Resource.table.values() :
+            total = 0
+            for f in r.fragments.values():
+                total = total + len(f.occursAs[SUBJ]) + len(f.occursAs[PRED]) + len(f.occursAs[OBJ])
+            if total > best :
+                best = total
+                mp = r
+        return mp
+        
+    
 class Fragment(Thing):
-    """    A Thing which DOES have a fragment
+    """    A Thing which DOES have a fragment id in its URI
     """
     def __init__(self, resource, fragid):
         Thing.__init__(self)
@@ -497,16 +530,16 @@ class Fragment(Thing):
         self.resource = resource
         self.fragid = fragid
 
-    def uriref(self):
-        return self.resource.uriref() + "#" + self.fragid
+    def uriref(self, base):
+        return self.resource.uriref(base) + "#" + self.fragid
 
-    def representation(self, prefixes = {}):
+    def representation(self, prefixes = {}, base=None):
         """ Optimize output if prefixes available
         """
         try:
             return prefixes[self.resource] + ":" + self.fragid;
         except KeyError:
-            return  "<" + self.uriref() + ">"
+            return  "<" + self.uriref(base) + ">"
 
     def generated(self):
          """ A generated identifier?
@@ -533,10 +566,10 @@ class Literal(Thing):
     def __repr__(self):
         return self.string
 
-    def representation(self, prefixes = {}):
+    def representation(self, prefixes = {}, base=None):
         return '"' + self.string + '"'
 
-    def uriref(self):      # Unused at present but interesting! 2000/10/14
+    def uriref(self, base=None):      # Unused at present but interesting! 2000/10/14
         return  Literal_URI_Prefix + uri_encode(self.representation())
 
 def uri_encode(str):
@@ -569,12 +602,15 @@ This is the way they are actually made.
             return r
   
     else :      # This has a fragment and a resource
-        r = intern(uriref[:hash]) # 
+        r = intern(uriref[:hash])
+        return internFrag(r,uriref[hash+1:])
+
+def internFrag(r,fragid):
         try:
-            return r.fragments[uriref[hash+1:]]
+            return r.fragments[fragid]
         except KeyError:
-            f = Fragment(r, uriref[hash+1:])
-            r.fragments[uriref[hash+1:]] = f
+            f = Fragment(r, fragid)
+            r.fragments[fragid] = f
             return f
             
 
@@ -582,21 +618,11 @@ RDF_type = intern("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
 DAML_equivalentTo = intern("http://www.daml.org/2000/10/daml-ont#equivalentTo")
 
 
-class PrintingParser(Parser):
-    """ Obsolete - use SinkParser(RDFSink(...)) """
-    
-    def makeStatement(self, context, subj, pred, obj):
-	if isinstance(obj, Symbol):
-	    print "** %s(%s, %s)" % (pred, subj, obj)
-	else:
-	    print "** %s(%s, %s)" % (pred, subj, repr(obj))
-
-
+######################################################### Tests
+  
 def test():
     import sys
-
- ##################################################### Tests
-    
+  
     t0 = """bind x: <http://example.org/x-ns/>
 	    bind dc: <http://purl.org/dc/elements/1.1/>"""
 
@@ -638,16 +664,40 @@ bind default <http://example.org/default>
 bind pp: <http://example.org/payPalStuff?>
 bind default <http://example.org/payPalStuff?>
 
-<> a pp:Check; pp:payee :tim; pp:amount "$10.00"; dc:author :dan; dc:date "2000/10/7" ;  is pp:part of [ a pp:Transaction; = :t1 ]
+<> a pp:Check; pp:payee :tim; pp:amount "$10.00";
+dc:author :dan; dc:date "2000/10/7" ;  is pp:part of [ a pp:Transaction; = :t1 ]
 """
 
-#   p=PrintingParser('http://example.org/base/', 'file:notation3.py',
-#		     'data:#')
+# Janets chart:
+    t4="""
+bind q: <http://example.org/>
+bind m: <>
+bind n: <http://example.org/base/>
+bind : <http://void-prefix.example.org/>
+bind w3c: <http://www.w3.org/2000/10/org>
+
+<#QA> :includes 
+ [  = w3c:internal ; :includes <#TAB> , <#interoperability> ,
+     <#validation> , w3c:wai , <#i18n> , <#translation> ,
+     <#readability_elegance>, w3c:feedback_accountability ],
+ [ = <#conformance>;
+     :includes <#products>, <#content>, <#services> ],
+ [ = <#support>; :includes
+     <#tools>, <#tutorials>, <#workshops>, <#books_materails>,
+     <#certification> ] 
+
+<#internal> q:supports <#conformance>  
+<#support> q:supports <#conformance>
+
+"""
+
+
+    testString[0] = t0 + t1 + t2 + t3 + t4
 
     p=SinkParser(RDFSink(),'http://example.org/base/', 'file:notation3.py',
 		     'data:#')
 
-    r=SinkParser(SinkToN3(sys.stdout.write), 'http://example.org/base/', 'file:notation3.py',
+    r=SinkParser(SinkToN3(sys.stdout.write, intern('file:output')), 'http://example.org/base/', 'file:notation3.py',
 		  '#_')
 
     p.startDoc()
@@ -679,15 +729,12 @@ bind default <http://example.org/payPalStuff?>
     p = SinkParser(store, 'http://example.org/base/', 'file:notation3.py',
 		     'file:notation3.py#_')
     p.startDoc()
-    p.feed(t0)
-    p.feed(t1)
-    p.feed(t2)
-    p.feed(t3)
+    p.feed(testString[0])
     p.endDoc()
 
     print "\n\n------------------ dumping chronologically:"
 
-    store.dumpChronological(SinkToN3(sys.stdout.write))
+    store.dumpChronological(SinkToN3(sys.stdout.write, intern('file://dev/mta0')))
 
     print "\n\n---------------- dumping in subject order:"
 
@@ -695,18 +742,20 @@ bind default <http://example.org/payPalStuff?>
 
     print "\n\n---------------- dumping nested:"
 
-    store.dumpNested(SinkToN3(sys.stdout.write))
+    store.dumpNested(SinkToN3(sys.stdout.write, intern('file:notation3.py')))
 
-#    r=ToRDFParser(sys.stdout, 'http://example.org/base/', 'file:notation3.py',
-#		  'data:#')
-#    r=ToN3Parser(sys.stdout, 'http://example.org/base/', 'file:notation3.py',
-#		  '#_')
+    print "Regression test"
+    
+    buffer=StringWriter()
+    r=SinkParser(SinkToN3(buffer.write, intern('file:output')),
+                 'http://example.org/base/', 'file:notation3.py',)))
 
-#    r.feed(t0)
-#    r.feed(t2)
-#    r.feed(t3)
-#    r.endDoc()
-
+    store.dumpNested(SinkToN3(buffer.write, intern('file:notation3.py')))
+    testString[1]=buffer.result()
+    buffer.clear()
+    
+                 
+                
 
 
 ################################################################### Sinks
@@ -718,21 +767,27 @@ class RDFSink:
     This is a superclass for other RDF processors which accept RDF events
     -- maybe later Swell events.  Adapted from printParser
     """
+#  Keeps track of prefixes
+	    
 
     def __init__(self):
-        print "\nsink: created."
+        self.prefixes = { }     # Convention only - human friendly
+        self.namespaces = {}    # Both ways
 
-    def bind(self, qname, resource):
-        print 'sink: bind "%s" %s' % (qname, `resource`)
+    def bind(self, prefix, ns):
+        if not self.prefixes.get(ns, None):  # If
+            if not self.namespaces.get(prefix,None):   # For conventions
+                self.prefixes[ns] = prefix
+                self.namespaces[prefix] = ns
+                print "RDFSink: Bound %s to %s" % (prefix, `ns`)
+            else:
+                self.bind(prefix+"1", ns)
         
-    def makeStatement(self, context, subj, pred, obj):
-	if isinstance(obj, Symbol):
-	    print "sink: %s(%s, %s)" % (pred, subj, obj)
-	else:
-	    print "sink: %s(%s, %s)" % (pred, subj, repr(obj))
+    def makeStatement(self, context, tuple):
+        pass
 
     def startDoc(self):
-          print "sink: start.\n"
+        print "sink: start.\n"
 
     def endDoc(self):
         print "sink: end.\n"
@@ -765,7 +820,8 @@ class ToRDF(RDFSink):
 	self._subj = None
 	self._wr.endElement()
 
-    def makeStatement(self, context, subj, pred, obj):
+    def makeStatement(self, context, tuple):
+        pred, subj, obj = tuple
 	predn = relativeTo(self._thisDoc, pred)
 	subjn = relativeTo(self._thisDoc, subj)
 
@@ -786,7 +842,7 @@ class ToRDF(RDFSink):
 	ln = predn[i:]
 	ns = predn[:i]
 
-	if isinstance(obj, Symbol):
+	if not isinstance(obj, Literal): 
 	    objn = relativeTo(self._thisDoc, obj)
 	    self._wr.emptyElement(ln,
 				 (('xmlns', ns),
@@ -872,11 +928,12 @@ class SinkToN3(RDFSink):
       Adapted from ToRDFParser(Parser);
     """
 
-    def __init__(self, write):
+    def __init__(self, write, base=None):
 	self._write = write
 	self._subj = None
 	self.prefixes = {}      # Look up prefix conventions
-	self.indent = 0         # Level of nesting of output
+	self.indent = 1         # Level of nesting of output
+	self.base = base
 
     #@@I18N
     _namechars = string.lowercase + string.uppercase + string.digits + '_'
@@ -903,13 +960,13 @@ class SinkToN3(RDFSink):
 
     def makeStatement(self, context, subj, pred, obj):
         self._makeSubjPred(context, subj, pred)        
-        self._write(obj.representation(self.prefixes));
+        self._write(obj.representation(self.prefixes, self.base));
         
-# Below is for writing an anonymous node which is the object of an arc        
+# Below is for writing an anonymous node which is the object of only one arc        
     def startAnonymous(self, context, subj, pred, obj):
         self._makeSubjPred(context, subj, pred)
         self.indent = self.indent + 1
-        self._write(" [\n"+ "    " * self.indent + "    ")
+        self._write(" [ \n"+ "    " * self.indent + "    ")
         self._subj = obj    # The object is not the subject context
         self._pred = None
 
@@ -924,9 +981,10 @@ class SinkToN3(RDFSink):
     def startAnonymousNode(self, subj):
 	if self._subj:
 	    self._write(" .\n")
-        self._write("[\n"+ "    " * self.indent + "    ")
+        self._write("\n  [ "+ "    " * self.indent)
         self._subj = subj    # The object is not the subject context
         self._pred = None
+        if `subj` == "<#_1>" : raise theroof
 
     def endAnonymousNode(self):    # Remove context
         self._write(" ].\n")
@@ -939,7 +997,7 @@ class SinkToN3(RDFSink):
 	    if self._subj:
 		  self._write(" .\n")
 		  self._write("    " * self.indent)
-	    self._write(subj.representation(self.prefixes))
+	    self._write(subj.representation(self.prefixes, self.base))
 	    self._subj = subj
 	    self._pred = None
 
@@ -952,17 +1010,25 @@ class SinkToN3(RDFSink):
             elif pred is RDF_type :
                 self._write(" a ")
             else :
-#	        self._write( " >- %s -> " % (pred.representation(self.prefixes)))
-                self._write( " %s : " % (pred.representation(self.prefixes)))
+#	        self._write( " >- %s -> " % (pred.representation(self.prefixes,base)))
+                self._write( " %s : " % (pred.representation(self.prefixes,self.base)))
 
 	    self._pred = pred
 	else:
-	    self._write(",")    # Same subject and pred => object list
+	    self._write(",\n" + "    " * (self.indent+3))    # Same subject and pred => object list
 
- 
+class StringWriter:
 
+    def __init__(self)
+        buffer = ""
 
-############################################################## Storage
+    def write(self, str)
+        buffer = buffer + str     #  No idea how to make this efficient in python
+
+    def result()
+        return buffer
+
+######################################################## Storage
 # The store uses an index in the actual resource objects.
 #
 
@@ -972,44 +1038,52 @@ class RDFStore(RDFSink) :
 
     def __init__(self):
         self.statements = []    # Unordered
-        self.prefixes = { }     # Convention only - human friendly
-        self.namespaces = {}    # Both ways
+        RDFSink.__init__(self)
+
     def startDoc(self):
         pass
 
     def endDoc(self):
-        pass
+        mp = mostPopular()
+        print "*********** Most popular Namesapce is " , `mp`
+        defns = self.namespaces.get("", None)
+        if defns :
+            del self.namespaces[""]
+            del self.prefixes[defns]
+        if self.prefixes.has_key(mp) :
+            oldp = self.prefixes[mp]
+            del self.prefixes[mp]
+            del self.namespaces[oldp]
+        self.prefixes[mp] = ""
+        self.namespaces[""] = mp
+        
 
-    def makeStatement(self, context, subj, verb, obj):
-        s = RDFTriple(context, subj, verb, obj) # @@ duplicate check?
+    def makeStatement(self, context, tuple):
+        s = RDFTriple(context, tuple) # @@ duplicate check?
+        self.statements.append(s)
 
-    def bind(self, prefix, ns):
-        if not self.prefixes.get(ns, None):  # If
-            if not self.namespaces.get(prefix,None):   # For conventions
-                self.prefixes[ns] = prefix
-                self.namespaces[prefix] = ns
-                print "RDFStore: Bound %s to %s" % (prefix, `ns`)
-            else:
-                self.bind(prefix+"1", ns)
+# Output methods:
 
     def dumpChronological(self, sink):
         for c in self.prefixes.items():   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
         for s in self.statements :
-            sink.makeStatement(s.context, s.subject, s.verb, s.object)
+            sink.makeStatement(s.context, s.triple)
 
     def dumpBySubject(self, sink):
         for c in self.prefixes.items() :   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
 
         for r in Resource.table.values() :  # First the bare resource
-            for s in r.asSubject :
-                sink.makeStatement(s.context, s.subject, s.verb, s.object)
+            for s in r.occursAs[SUBJ] :
+                sink.makeStatement(s.context, s.triple)
             for f in r.fragments.values() :  # then anything in its namespace
-                for s in f.asSubject :
-                    sink.makeStatement(s.context, s.subject, s.verb, s.object)
+                for s in f.occursAs[SUBJ] :
+                    sink.makeStatement(s.context, s.triple)
 
     def dumpNested(self, sink):
+        """ Iterates over all URIs ever seen looking for statements
+        """
         for c in self.prefixes.items() :   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
 
@@ -1023,51 +1097,150 @@ class RDFStore(RDFSink) :
         """ Take care of top level anonymous nodes
         """
         if (subj.generated() and  # The URI is irrelevant
-                len(subj.asObject) == 0 and  # There is no incoming arrow
-                len(subj.asVerb) == 0 ):    # It is not used as a verb itself
-            sink.startAnonymousNode(subj)
-            for s in subj.asSubject :
-                self.coolMakeStatement(sink, s.context, s.subject, s.verb, s.object)
-            sink.endAnonymousNode()
+                len(subj.occursAs[OBJ]) == 0 and  # There is no incoming arrow
+                len(subj.occursAs[PRED]) == 0 ):    # It is not used as a verb itself
+            if len(subj.occursAs[SUBJ]) > 0 :   # Ignore if actually no statements for this thing
+                sink.startAnonymousNode(subj)
+                for s in subj.occursAs[SUBJ] :
+                    self.coolMakeStatement(sink, s.triple)
+                sink.endAnonymousNode()
         else:
-            for s in subj.asSubject :
-                self.coolMakeStatement(sink, s.context, s.subject, s.verb, s.object)
+            for s in subj.occursAs[SUBJ] :
+                self.coolMakeStatement(sink, s.triple)
 
-    def coolMakeStatement(self, sink, context, subject, verb, object):
+    def coolMakeStatement(self, sink, context, triple):
      
         if subject is object:
-            sink.makeStatement(context, subject, verb, object)
+            sink.makeStatement(context, triple)
         else:
             if not subject.n3_anonymous():
-                self.coolMakeStatement2(sink, context, subject, verb, object)
+                self.coolMakeStatement2(sink, context, triple)
                 
-    def coolMakeStatement2(self, sink, context, subject, verb, object):
+    def coolMakeStatement2(self, sink, context, triple):
      
         if object.n3_anonymous():  # Can be represented as anonymous node in N3
-            sink.startAnonymous(context, subject, verb, object)
-#            print object.asSubject, "\n",  object.asVerb, "\n", object.asObject
+            sink.startAnonymous(context, triple)
             for t in object.asSubject:
-                self.coolMakeStatement2(sink, t.context, t.subject, t.verb, t.object)
+                self.coolMakeStatement2(sink, t.context, triple)
             sink.endAnonymous(subject, verb) # Restore context
         else:    
-            sink.makeStatement(context, subject, verb, object)
+            sink.makeStatement(context, triple)
                 
+
+
             
 class RDFTriple:
-
-    index = {}
     
-    def __init__(self, context, subject, verb, object):
+    def __init__(self, context, triple):
         self.context = context
-        self.subject = subject
-        self.verb    = verb
-        self.object  = object
-        subject.asSubject.append(self)   # Resource index
-        verb.asVerb.append(self)
-        object.asObject.append(self)
+        self.triple = triple
+        triple[SUBJ].occursAs[SUBJ].append(self)   # Resource index
+        triple[PRED].occursAs[PRED].append(self)   # Resource index
+        triple[OBJ].occursAs[OBJ].append(self)     # Resource index
         
 
+############################################################## Query engine
+
+# Template matching in a graph
+
     
+
+INFINITY = 1000000000           # @@ larger than any number occurences
+def match (unmatched, action, param )
+
+# Scan terms to see what sort of a problem we have:
+#
+# We prefer terms with a single variable to those with two.
+# (Those with none we immediately check and therafter ignore)
+# Secondarily, we prefer short searches to long ones.
+
+        total = 0           # Number of matches found (recursively)
+        shortest = INFINITY
+        shortest_t = None
+        found_single = 0   # Singles are better than doubles
+        unmatched2 = unmatched[:] # Copy
+        
+        for t in unmatched:
+            vars = []       # Count where variables are
+            q = []          # Count where constants are
+            short_p = -1
+            short = INFINITY
+            for p in PRED, SUBJ, OBJ:
+                r = t.triple[p]
+                if r isInstanceOf(Variable):
+                    vars.append(r)
+                else:
+                    if r.occurs[p]< short:
+                        short_p = p
+                        short = r.occurs[p]
+                        consts.append(p)
+
+            if short == 0 return 0 # No way we can satisfy that one - quick "no"
+
+            if len(vars) == 0: # This is an independant constant triple
+                          # It has to match or the whole thing fails
+                 
+                for s in r.occursAs[short_p]:
+                    if (s.triple[q[0]] is t.triple[q[0]]
+                        and s.triple[q[1]] is t.triple[q[1]]:
+                            unmatched2.remove(t)  # Ok - we believe it - ignore it
+                    else: # no match for a constant term: query fails
+                        return 0
+                
+            elif len(vars) == 1: # We have a single variable.
+            if if not found_single or short < shortest :
+                shortest = short
+                shortest_p = short_p
+                shortest_t = t
+                found_single = 1
+                
+            else:   # Has two variables
+            if not found_single and short < shortest :
+                shortest = short
+                shortest_p = short_p
+                shortest_t = t
+
+        if len(unmatched) == 0:
+            print "Found for bindings: ", bindings
+            action(bindings, param)  # No terms left .. success!
+            return 1
+
+        # Now we have identified the best statement to search for
+        t = shortest_t
+        parts_to_search = [ PRED, SUBJ, OBJ ]
+        unmatched2.remove(t)  # We will resolve this one now
+
+        q = []   # Parts of speech to test for match
+        v = []   # Parts of speech which are variables
+        for p in [PRED, SUBJ, OBJ] :
+            if isInstanceOf(t.triple[p], Variable):
+                parts_to_search.remove(p)
+                v.append(p)
+            elif p != shortest_p :
+                q.append(p) = p
+
+        if found_single:        # One variable, two constants - must search
+            for s in t.occursAs[shortest_p]:
+                if s.triple[q[0]] is t.triple[q[0]]: # Found this one
+                    unmatched3 = unmatched2[:]
+                    replace_variable(s.triple[pv], s.triple[pv],unmatched2)
+                    bindings = bindings + [ s.triple[pv], s.triple[pv] ] 
+                    total = total + match(unmatched3, bindings, action)
+            
+        else: # Two variables, one constant. Every one in occurrence list will be good
+            for s in t.occursAs[shortest_p]:
+                unmatched3 = unmatched2[:]
+                for v1 in v:
+                    replace_variable(t.triple[v1], s.triple[v1],unmatched3)
+                    bindings = bindings + [ t.triple[v1], s.triple[v1]]
+                total = total + matches(unmatched3, bindings, action, param)
+            
+        return total
+         
+                            
+                    
+            
+        
 ############################################################## Web service
 
 import random
@@ -1115,7 +1288,7 @@ def convert(form, env):
 
     if form.has_key('genspace'):
 	genspace = form['genspace'].value
-    else: genspace = thisMessage + '#'
+    else: genspace = thisMessage + '#_'
 
     if form.has_key('baseURI'):	baseURI = form['baseURI'].value
     elif env.has_key('HTTP_REFERER'): baseURI = env['HTTP_REFERER']
