@@ -1,0 +1,21 @@
+
+@prefix : <http://example.com/exon/#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@keywords is, a, of, this.
+
+# Now I want to find which exons in the 2nd transcript
+# are not part of the first transcript; the answer should be <#ATP1B4_e2>
+# I've tried the following rule, but it doesn't seem to work...
+
+this log:forAll e, t1, t2, F.
+
+{      <exdata.n3> log:semantics F.
+   F  log:includes { t1  a :Transcript; :hasExon e.
+		     t2  a :Transcript }.
+   F  log:notIncludes { t2 :hasExon e. }.
+} =>  { e a RESULT }.
+
+#
+
+
+

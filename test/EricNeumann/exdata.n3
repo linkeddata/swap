@@ -1,0 +1,35 @@
+
+@prefix : <http://example.com/exon/#>.
+@keywords is, a, of.
+
+# Problem 1
+# The basic gene logic is:
+# <#aGene> :hasTxVariant [:representedBy <#aTranscript> ] .
+# <#aTranscript> :hasExon <#aExon> . 
+# probably should be an ordered sequence of exons, but OK for now...
+#
+# The Gene definition is as follows...
+
+<#ATP1B4> a :Gene;
+	:chr "chrX";
+	:hasTxVariant [ :representedBy <#gi13560662> ], [ :representedBy
+<#gi13560664> ];
+	:strand "+" .
+
+# Its 4 exon segments are... 
+
+<#ATP1B4_e1> a :Exon; :startsAt "23897840"; :stopsAt "23897903" .
+<#ATP1B4_e2> a :Exon; :startsAt "23902084"; :stopsAt "23902334" .
+<#ATP1B4_e3> a :Exon; :startsAt "23902084"; :stopsAt "23902346" .
+<#ATP1B4_e4> a :Exon; :startsAt "23906218"; :stopsAt "23906347" .
+
+# The Gene's 2 transcripts which us built out of different exon
+# subsets...
+
+<#gi13560662> a :Transcript;
+	:hasCds [ :startsAt "23897840"; :stopsAt "23915296" ];
+	:hasExon <#ATP1B4_e1> , <#ATP1B4_e3>, <#ATP1B4_e4> .
+
+<#gi13560664> a :Transcript;
+	:hasCds [ :startsAt "23897840"; :stopsAt "23915296" ];
+	:hasExon <#ATP1B4_e1> , <#ATP1B4_e2>, <#ATP1B4_e4> .
