@@ -1,3 +1,5 @@
+% $Id$
+
 % set(auto).
 
 % check for internal consistency with something like
@@ -409,3 +411,7 @@ all P1 P2 (
    rdf(P2, rdf_type, owl_FunctionalProperty)
 ).
     
+% $Log$
+% Revision 1.3  2003-07-30 02:26:40  sandro
+% added Id and Log cvs keywords
+%
