@@ -526,11 +526,13 @@ rdf/xml files. Note that this requires rdflib.
                 
                 
             elif arg == "-reify":
-                raise NotImplementedError
+                import reify
+                workingContext = reify.reify(workingContext)
                 
 
             elif arg == "-dereify":
-                raise NotImplementedError                
+                import reify
+                workingContext = reify.dereify(workingContext)                
                 
 
             elif arg == "-size":

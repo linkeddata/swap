@@ -1268,7 +1268,7 @@ class RDFStore(RDFSink) :
         return result
 
     def newList(self, value):
-	return nil.newList(value)
+	return self.nil.newList(value)
 
 #    def deleteFormula(self,F):
 #        if diag.chatty_flag > 30: progress("Deleting formula %s %ic" %

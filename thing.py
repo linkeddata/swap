@@ -519,7 +519,7 @@ class EmptyList(List):
     def __repr__(self):
 	return "()"
 	
-    def newList(value):
+    def newList(self, value):
         x = self
         l = len(value)
         while l > 0:
