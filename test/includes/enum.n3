@@ -1,0 +1,36 @@
+@prefix log:  <http://www.w3.org/2000/10/swap/log.n3#> .
+
+@prefix : <#>.
+
+:p1 :s1 :o1.
+:p2 :s2 :o2.
+<> log:forAll :p2, :s2, :o2.
+
+{ <> log:includes
+   { :p :s :o.
+     this log:forAll :p, :s, :o. }}
+ log:implies { <#x> a :Found }.
+
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+<> dc:description """this breaks
+  cwm.py,v 1.41 2001/05/10 13:13:29 timbl
+as follows:
+        Traceback (innermost last):
+  File "../../cwm.py", line 1941, in ?
+    doCommand()
+  File "../../cwm.py", line 1899, in doCommand
+    step = _store.applyRules(workingContext, workingContext)
+  File "../../cwm.py", line 955, in applyRules
+    found = self.tryRule(s, workingContext, targetContext, _variables)
+  File "../../cwm.py", line 1023, in tryRule
+    self.conclude, ( self, conclusions, targetContext, _outputVariables))
+  File "../../cwm.py", line 1267, in match
+    bindings[:], []) # No new bindings but success in calculated logical operator
+  File "../../cwm.py", line 1254, in match
+    bindings[:], nb)
+  File "../../cwm.py", line 1144, in match
+    existentials.remove(pair[0]) # Can't match anything anymore, need exact match
+ValueError: list.remove(x): x not in list
+
+$Id$
+""".
