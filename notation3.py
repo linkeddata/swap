@@ -791,7 +791,7 @@ class SinkParser:
 	    if ch in "-+0987654321":
 		m = number_syntax.match(str, i)
 		if m == None:
-		    raise BadSyntax(self._thisDoc, startline, str, i,
+		    raise BadSyntax(self._thisDoc, self.lines, str, i,
 				"Bad number syntax")
 		j = m.end()
 		if m.group(2) != None or  m.group(3) != None: # includes decimal exponent

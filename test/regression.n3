@@ -381,8 +381,18 @@
 
 :t1049 a test:CwmTest;
     test:shortFileName "sameDan.n3";
-    test:description   "dealing with multiple descriptions of the same thing using log:lessThan, log:uri, daml:equivalentTo";
+    test:description   "Smushing multiple descriptions of the same thing using log:lessThan, log:uri, daml:equivalentTo";
     test:arguments     """sameDan.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge""".
+
+#:t10495 a test:CwmTest;
+#    test:shortFileName "sameDan5.n3";
+#    test:description   "Smushing multiple descriptions of the same thing using  owl:equivalentTo and --closure=e";
+#    test:arguments     """--closure=e sameDan.n3 on-add/unique.n3 --think --data""".
+
+:t10497 a test:CwmTest;
+    test:shortFileName "smush6.n3";
+    test:description   "Smushing things which are = using --closure=e";
+    test:arguments     """--closure=e on-add/smush.n3 --data""".
 
 
 :t1050 a test:CwmTest;

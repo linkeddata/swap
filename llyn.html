@@ -1798,11 +1798,6 @@ r&nbsp;ask&nbsp;it&nbsp;to&nbsp;follow&nbsp;doc:rules</tt></dd></dl>
 
 <dl><dt><a name="IndexedFormula-checkClosureOfSymbol"><strong>checkClosureOfSymbol</strong></a>(self, y)</dt></dl>
 
-<dl><dt><a name="IndexedFormula-compactLists"><strong>compactLists</strong></a>(self)</dt><dd><tt>For&nbsp;any&nbsp;lists&nbsp;expressed&nbsp;longhand,&nbsp;convert&nbsp;to&nbsp;objects.<br>
-&nbsp;<br>
-Works&nbsp;in&nbsp;place.&nbsp;Strips&nbsp;out&nbsp;the&nbsp;reifications&nbsp;fo&nbsp;the&nbsp;lists,<br>
-and&nbsp;converts&nbsp;any&nbsp;statements&nbsp;which&nbsp;refer&nbsp;to&nbsp;the&nbsp;list&nbsp;to&nbsp;refer&nbsp;to&nbsp;the&nbsp;object.</tt></dd></dl>
-
 <dl><dt><a name="IndexedFormula-contains"><strong>contains</strong></a>(self, pred<font color="#909090">=None</font>, subj<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;boolean&nbsp;true&nbsp;iff&nbsp;formula&nbsp;contains&nbsp;statement(s)&nbsp;matching&nbsp;the&nbsp;parts&nbsp;given<br>
 &nbsp;<br>
 For&nbsp;example:<br>
@@ -1837,7 +1832,10 @@ strings&nbsp;output.</tt></dd></dl>
 
 <dl><dt><a name="IndexedFormula-removeStatement"><strong>removeStatement</strong></a>(self, s)</dt><dd><tt>Removes&nbsp;a&nbsp;statement&nbsp;The&nbsp;formula&nbsp;must&nbsp;be&nbsp;open.<br>
 &nbsp;<br>
-This&nbsp;implementation&nbsp;is&nbsp;alas&nbsp;slow,&nbsp;as&nbsp;removal&nbsp;of&nbsp;items&nbsp;from&nbsp;tha&nbsp;hash&nbsp;is&nbsp;slow.</tt></dd></dl>
+This&nbsp;implementation&nbsp;is&nbsp;alas&nbsp;slow,&nbsp;as&nbsp;removal&nbsp;of&nbsp;items&nbsp;from&nbsp;tha&nbsp;hash&nbsp;is&nbsp;slow.<br>
+Also,&nbsp;truth&nbsp;mainainance&nbsp;is&nbsp;not&nbsp;done.&nbsp;&nbsp;You&nbsp;can't&nbsp;undeclare&nbsp;things&nbsp;equal.<br>
+This&nbsp;is&nbsp;really&nbsp;a&nbsp;low-level&nbsp;method,&nbsp;used&nbsp;within&nbsp;<a href="#IndexedFormula-add">add</a>()&nbsp;and&nbsp;for&nbsp;cleaning&nbsp;up&nbsp;the&nbsp;store<br>
+to&nbsp;save&nbsp;space&nbsp;in&nbsp;purge()&nbsp;etc.</tt></dd></dl>
 
 <dl><dt><a name="IndexedFormula-reopen"><strong>reopen</strong></a>(self)</dt><dd><tt>Make&nbsp;a&nbsp;formula&nbsp;which&nbsp;was&nbsp;once&nbsp;closed&nbsp;oopen&nbsp;for&nbsp;input&nbsp;again.<br>
 &nbsp;<br>
@@ -2178,8 +2176,6 @@ open&nbsp;to&nbsp;possibly&nbsp;clashing&nbsp;in&nbsp;pathalogical&nbsp;cases.</
 
 <dl><dt><a name="RDFStore-copyFormula"><strong>copyFormula</strong></a>(self, old, new, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="RDFStore-deleteFormula"><strong>deleteFormula</strong></a>(self, F)</dt></dl>
-
 <dl><dt><a name="RDFStore-dumpBySubject"><strong>dumpBySubject</strong></a>(self, context, sink, sorting<font color="#909090">=1</font>)</dt><dd><tt>&nbsp;Dump&nbsp;by&nbsp;order&nbsp;of&nbsp;subject&nbsp;except&nbsp;forSome's&nbsp;first&nbsp;for&nbsp;n3=a&nbsp;mode</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-dumpChronological"><strong>dumpChronological</strong></a>(self, context, sink)</dt><dd><tt>Fast&nbsp;as&nbsp;possible.&nbsp;Only&nbsp;dumps&nbsp;data.&nbsp;No&nbsp;formulae&nbsp;or&nbsp;universals.</tt></dd></dl>
@@ -2253,8 +2249,6 @@ any&nbsp;mentions&nbsp;of&nbsp;that&nbsp;term&nbsp;to&nbsp;be&nbsp;removed&nbsp;
 <dl><dt><a name="RDFStore-purgeExceptData"><strong>purgeExceptData</strong></a>(self, context)</dt><dd><tt>Remove&nbsp;anything&nbsp;which&nbsp;can't&nbsp;be&nbsp;expressed&nbsp;in&nbsp;plain&nbsp;RDF</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-purgeSymbol"><strong>purgeSymbol</strong></a>(self, context, subj)</dt><dd><tt>Purge&nbsp;all&nbsp;triples&nbsp;in&nbsp;which&nbsp;a&nbsp;symbol&nbsp;occurs.</tt></dd></dl>
-
-<dl><dt><a name="RDFStore-removeStatement"><strong>removeStatement</strong></a>(self, s)</dt><dd><tt>Remove&nbsp;statement&nbsp;from&nbsp;store</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-reopen"><strong>reopen</strong></a>(self, F)</dt></dl>
 
@@ -2419,6 +2413,7 @@ Could&nbsp;be&nbsp;speeded&nbsp;up&nbsp;by&nbsp;hanging&nbsp;the&nbsp;cached&nbs
 <strong>__file__</strong> = './llyn.pyc'<br>
 <strong>__name__</strong> = 'llyn'<br>
 <strong>becauseSubexpression</strong> = &lt;why.BecauseSubexpression instance&gt;<br>
+<strong>chatty_flag</strong> = 0<br>
 <strong>cvsRevision</strong> = '$Revision$'<br>
 <strong>doMeta</strong> = 0<br>
 <strong>forAllSym</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>

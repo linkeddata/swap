@@ -291,7 +291,7 @@ class Serializer:
 	    self._occurringAs[OBJ][x] = y
 
     def _scan(self, x, context=None):
-	assert self.context._redirections.get(x, None) == None, "Should not be redirected: "+`x`
+#	assert self.context._redirections.get(x, None) == None, "Should not be redirected: "+`x`
 	if verbosity() > 98: progress("scanning %s in context %s" %(`x`, `context`),
 			x.generated(), self._inContext.get(x, "--"))
 	if isinstance(x, NonEmptyList):

@@ -139,7 +139,7 @@ import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
-from diag import progress, progressIndent, verbosity, tracking
+from diag import progress, progressIndent, verbosity, tracking, chatty_flag
 from term import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Anonymous, Term, CompoundTerm, List, EmptyList, NonEmptyList
@@ -230,7 +230,7 @@ def dereference(x, mode="", workingContext=None):
     if hasattr(x, "_semantics"): return x._semantics
 
     inputURI = x.uriref()
-    if verbosity() > 20: progress("Web: Looking up %s" % x)
+    if chatty_flag > 20: progress("Web: Looking up %s" % x)
     if "E" not in mode: F = x.store.load(inputURI)
     else:
 	try:
@@ -241,13 +241,13 @@ def dereference(x, mode="", workingContext=None):
     if F != None:
 	if "m" in mode:
 	    workingContext.reopen()
-	    if verbosity() > 45: progress("Web: dereferenced %s  added to %s" %(
+	    if chatty_flag > 45: progress("Web: dereferenced %s  added to %s" %(
 			x, workingContext))
 	    workingContext.store.copyFormula(F, workingContext)
 	if "x" in mode:   # capture experience
 	    workingContext.add(r, x.store.semantics, F)
     setattr(x, "_semantics", F)
-    if verbosity() > 25: progress("Web: Dereferencing %s gave %s" %(x, F))
+    if chatty_flag > 25: progress("Web: Dereferencing %s gave %s" %(x, F))
     return F
 		
 
@@ -375,53 +375,6 @@ class IndexedFormula(Formula):
 	return len(res), res
 
 
-    def compactLists(self):
-	"""For any lists expressed longhand, convert to objects.
-	
-	Works in place. Strips out the reifications fo the lists,
-	and converts any statements which refer to the list to refer to the object."""
-	assert self.canonical == None
-	return
-	
-	#@@@@@@@@@@@@@@@@@ remove the rest
-	if verbosity() > 90:
-	    progress("Comapcting lists:"+`self`)
-	
-	if self._redirections == {}: return
-
-	for s in self.statements[:]:
-	    context, pred, subj, obj = s.quad
-	    try:
-		subj = self._redirections[subj]
-		if pred is self.store.first or pred is self.store.rest:
-		    self.removeStatement(s)
-		    if verbosity()>80: progress(" \tList compact: removing", s)
-		    assert false
-		    if pred is self.store.first: # nested list
-			try:
-			    nested = self._redirections[obj]
-			    rest = subj.rest
-			    del(rest._prec[obj])
-			    rest._prec[nested] = subj
-			    subj.first = nested  # Patch list! (yuk! = but avoids recusrive subst.)
-			except:
-			    pass
-		    continue   # Just strip the first and rest out
-		else:
-		    pass
-	    except KeyError:
-		pass
-	    if verbosity()>80: progress(" \tList compact: replacing", s)
-	    assert false
-	    self.removeStatement(s)
-	    self.add(subj=subj, pred=pred, obj=obj)
-
-#	for v in self._redirections.keys():
-#	    if verbosity()>80: progress(" \tList compact: removing existential", v)
-#	    self._existentialVariables.remove(v)
-#	self._redirections = {}
-		    
-
     def add(self, subj, pred, obj, why=None):
 	"""Add a triple to the formula.
 	
@@ -445,11 +398,11 @@ class IndexedFormula(Formula):
 	pred = pred.substituteEquals(self._redirections, newBindings)
 	obj = obj.substituteEquals(self._redirections, newBindings)
 	    
-        if verbosity() > 50:
+        if chatty_flag > 50:
             progress("Add statement (size before %i) to %s: {%s %s %s}" % (
 		self.store.size, `self`,  `subj`, `pred`, `obj`) )
         if self.statementsMatching(pred, subj, obj):
-            if verbosity() > 97:
+            if chatty_flag > 97:
 		progress("Add duplicate SUPPRESSED %s: {%s %s %s}" % (
 		    self,  subj, pred, obj) )
             return 0  # Return no change in size of store
@@ -465,7 +418,6 @@ class IndexedFormula(Formula):
 # We trigger list collapse on any of these three becoming true.
 # @@@ we don't reverse this on remove statement.  Remove statement is really not a user call.
 
-#	newBindings = {}
 	if subj in self._existentialVariables:
 	    if pred is store.rest and isinstance(obj, List):
 		ss = self.statementsMatching(pred=store.first, subj=subj)
@@ -489,6 +441,20 @@ class IndexedFormula(Formula):
 			self._noteNewList(subj, list, newBindings)
 			self.substituteEqualsInPlace(newBindings)
 			return 1
+
+	if "e" in self._closureMode:
+	    if pred is store.equivalentTo:
+		if subj is obj: return # ignore a = a
+		if ((subj in self.existentials() and obj not in self.existentials())
+		    or (subj.generated() and not obj.generated())
+		    or compareTerm(obj, subj) < 0): var, val = subj, obj
+		else: var, val = obj, subj
+		newBindings[var] = val
+		if chatty_flag > 90: progress("Equality: %s = %s" % (`var`, `val`))
+		self.substituteEqualsInPlace(newBindings)
+		return 1
+
+
 #########
 	if newBindings != {}:
 	    self.substituteEqualsInPlace(newBindings)
@@ -509,12 +475,12 @@ class IndexedFormula(Formula):
 	if subj is self:  # Catch variable declarations
 	    if pred is self.store.forAll:
 		if obj not in self._universalVariables:
-		    if verbosity() > 50: progress("\tUniversal ", obj)
+		    if chatty_flag > 50: progress("\tUniversal ", obj)
 		    self._universalVariables.append(obj)
 		return 1
 	    if pred is self.store.forSome:
 		if obj not in self._existentialVariables:
-		    if verbosity() > 50: progress("\tExistential ", obj)
+		    if chatty_flag > 50: progress("\tExistential ", obj)
 		    self._existentialVariables.append(obj)
 		return 1
 
@@ -559,10 +525,13 @@ class IndexedFormula(Formula):
 	"""Removes a statement The formula must be open.
 	
 	This implementation is alas slow, as removal of items from tha hash is slow.
+	Also, truth mainainance is not done.  You can't undeclare things equal.
+	This is really a low-level method, used within add() and for cleaning up the store
+	to save space in purge() etc.
 	"""
 	assert self.canonical == None, "Cannot remove statement from canonnical"+`self`
         self.store.size = self.store.size-1
-	if verbosity() > 97:  progress("removing %s" % (s))
+	if chatty_flag > 97:  progress("removing %s" % (s))
 	context, pred, subj, obj = s.quad
         self.statements.remove(s)
         self._index[(None, None, obj)].remove(s)
@@ -587,11 +556,9 @@ class IndexedFormula(Formula):
         """
 	store = F.store
 	if F.canonical != None:
-            if verbosity() > 70:
+            if chatty_flag > 70:
                 progress("End formula -- @@ already canonical:"+`F`)
             return F.canonical
-
-	F.compactLists()
 	
         fl = F.statements
         l = len(fl), len(F.universals()), len(F.existentials())   # The number of statements
@@ -599,7 +566,7 @@ class IndexedFormula(Formula):
 
         if possibles == None:
             store._formulaeOfLength[l] = [F]
-            if verbosity() > 70:
+            if chatty_flag > 70:
                 progress("End formula - first of length", l, F)
             F.canonical = F
             return F
@@ -639,14 +606,14 @@ class IndexedFormula(Formula):
                     continue
                 break
             else: #match
-                if verbosity() > 20: progress(
+                if chatty_flag > 20: progress(
 		    "** End Formula: Smushed new formula %s giving old %s" % (F, G))
 		del(F)  # Make sure it ain't used again
                 return G
         possibles.append(F)
 #        raise oops
         F.canonical = F
-        if verbosity() > 70:
+        if chatty_flag > 70:
             progress("End formula, a fresh one:"+`F`)
         return F
 
@@ -769,10 +736,10 @@ class IndexedFormula(Formula):
 	Check whether this new list (given as bnode) causes other things to become lists.
 	Set up redirection so the list is used from now on instead of the bnode.	
 	Internal function."""
-        if verbosity() > 80: progress("New list was %s, now %s = %s"%(`bnode`, `list`, `list.value()`))
+        if chatty_flag > 80: progress("New list was %s, now %s = %s"%(`bnode`, `list`, `list.value()`))
 	if isinstance(bnode, List): return  ##@@@@@ why is this necessary? weid.
 	newBindings[bnode] = list
-        if verbosity() > 80: progress("...New list newBindings %s"%(`newBindings`))
+        if chatty_flag > 80: progress("...New list newBindings %s"%(`newBindings`))
 	self._existentialVariables.remove(bnode)
         possibles = self.statementsMatching(pred=self.store.rest, obj=bnode)  # What has this as rest?
         for s in possibles[:]:
@@ -797,42 +764,18 @@ class IndexedFormula(Formula):
 		quad = [self, s[PRED], s[SUBJ], s[OBJ]]
 		for p in PRED, SUBJ, OBJ:
 		    x = s[p]
+#		    progress("&&&&&&& trying ", x, "with", bindings, ", redirections=", self._redirections)
 		    y = x.substituteEquals(bindings, newBindings)
 		    if y is not x:
-			if verbosity()>90: progress("Substituted %s -> %s in place" %(x, y))
+			if chatty_flag>90: progress("Substituted %s -> %s in place" %(x, y))
 			changed = 1
 			quad[p] = y
 		if changed:
 		    self.removeStatement(s)
 		    self.add(subj=quad[SUBJ], pred=quad[PRED], obj=quad[OBJ])
 	    bindings = newBindings
-	    if verbosity()>70: progress("Substitions %s generated %s" %(bindings, newBindings))
+	    if chatty_flag>70: progress("Substitions %s generated %s" %(bindings, newBindings))
 	return
-	
-	
-	# @@@@ Junk, or  - a faster way with indexes when bindings are few and stroe is large.
-	# no way alas of using indexes for lists.
-	ss = self.statementsMatching(obj=bnode)
-	for s in ss:
-	    c1, p1, s1, o1 = s.quad
-	    self.removeStatement(s)
-	    self.add(pred=p1, subj=s1, obj=newList)
-	    mentioned = 1
-	    
-	ss = self.statementsMatching(subj=bnode)
-	for s in ss:
-	    c1, p1, s1, o1 = s.quad
-	    self.removeStatement(s)
-	    self.add(pred=p1, subj=newList, obj=o1)
-	    mentioned = 1
-
-	for i in range(len(self.lists)):
-	    x = self.lists[i].substituteEquals({bnode: newList})
-	    if x is not self.lists[i]:
-		self.lists[i] = x
-		mentioned =1
-	if mentioned and newList not in self.lists:
-	    self._noteListMentioed(newList)
 
 
 
@@ -923,7 +866,7 @@ class BI_rawType(LightBuiltIn, Function):
         elif isinstance(subj, List): y = store.List
         #@@elif context.listValue.get(subj, None): y = store.List
         else: y = store.Other  #  None?  store.Other?
-        if verbosity() > 91:
+        if chatty_flag > 91:
             progress("%s  rawType %s." %(`subj`, y))
         return y
         
@@ -991,13 +934,13 @@ class BI_semantics(HeavyBuiltIn, Function):
         else: doc = subj
         F = store.any((store._experience, store.semantics, doc, None))
         if F != None:
-            if verbosity() > 10: progress("Already read and parsed "+`doc`+" to "+ `F`)
+            if chatty_flag > 10: progress("Already read and parsed "+`doc`+" to "+ `F`)
             return F
 
-        if verbosity() > 10: progress("Reading and parsing " + doc.uriref())
+        if chatty_flag > 10: progress("Reading and parsing " + doc.uriref())
         inputURI = doc.uriref()
         F = self.store.load(inputURI)
-        if verbosity()>10: progress("    semantics: %s" % (F))
+        if chatty_flag>10: progress("    semantics: %s" % (F))
 	if diag.tracking:
 	    proof.append(F.collector)
         return F.canonicalize()
@@ -1009,14 +952,14 @@ class BI_semanticsOrError(BI_semantics):
         store = subj.store
         x = store.any((store._experience, store.semanticsOrError, subj, None))
         if x != None:
-            if verbosity() > 10: progress(`store._experience`+`store.semanticsOrError`+": Already found error for "+`subj`+" was: "+ `x`)
+            if chatty_flag > 10: progress(`store._experience`+`store.semanticsOrError`+": Already found error for "+`subj`+" was: "+ `x`)
             return x
         try:
             return BI_semantics.evalObj(self, subj, queue, bindings, proof, query)
         except (IOError, SyntaxError, DocumentAccessError, xml.sax._exceptions.SAXParseException):
             message = sys.exc_info()[1].__str__()
             result = store.intern((LITERAL, message))
-            if verbosity() > 0: progress(`store.semanticsOrError`+": Error trying to resolve <" + `subj` + ">: "+ message) 
+            if chatty_flag > 0: progress(`store.semanticsOrError`+": Error trying to resolve <" + `subj` + ">: "+ message) 
             store.storeQuad((store._experience,
                              store.semanticsOrError,
                              subj,
@@ -1069,9 +1012,9 @@ class BI_content(HeavyBuiltIn, Function):
         else: doc = subj
         C = store.any((store._experience, store.content, doc, None))
         if C != None:
-            if verbosity() > 10: progress("already read " + `doc`)
+            if chatty_flag > 10: progress("already read " + `doc`)
             return C
-        if verbosity() > 10: progress("Reading " + `doc`)
+        if chatty_flag > 10: progress("Reading " + `doc`)
         inputURI = doc.uriref()
         try:
             netStream = urllib.urlopen(inputURI)
@@ -1093,7 +1036,7 @@ class BI_parsedAsN3(HeavyBuiltIn, Function):
         if isinstance(subj, Literal):
             F = store.any((store._experience, store.parsedAsN3, subj, None))
             if F != None: return F
-            if verbosity() > 10: progress("parsing " + subj.string[:30] + "...")
+            if chatty_flag > 10: progress("parsing " + subj.string[:30] + "...")
 
             inputURI = subj.asHashURI() # iffy/bogus... rather asDataURI? yes! but make more efficient
             p = notation3.SinkParser(store, inputURI)
@@ -1118,7 +1061,7 @@ class BI_conclusion(HeavyBuiltIn, Function):
 	    assert subj.canonical != None
             F = self.store.any((store._experience, store.cufi, subj, None))  # Cached value?
             if F != None:
-		if verbosity() > 10: progress("Bultin: " + `subj`+ " cached log:conclusion " + `F`)
+		if chatty_flag > 10: progress("Bultin: " + `subj`+ " cached log:conclusion " + `F`)
 		return F
 
             F = self.store.newInterned(FORMULA)
@@ -1127,7 +1070,7 @@ class BI_conclusion(HeavyBuiltIn, Function):
 		F.collector = reason
 		proof.append(reason)
 	    else: reason = None
-            if verbosity() > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
+            if chatty_flag > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
             self.store.copyFormula(subj, F, why=reason) # leave open
             self.store.think(F)
 	    F = F.close()
@@ -1143,7 +1086,7 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
     modulo non-duplication of course"""
     def evalObj(self, subj, queue, bindings, proof, query):
 	subj_py = subj.value()
-        if verbosity() > 50:
+        if chatty_flag > 50:
             progress("Conjunction input:"+`subj_py`)
             for x in subj_py:
                 progress("    conjunction input formula %s has %i statements" % (x, x.size()))
@@ -1158,7 +1101,7 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
         for x in subj_py:
             if not isinstance(x, Formula): return None # Can't
             self.store.copyFormula(x, F, why=reason)
-            if verbosity() > 74:
+            if chatty_flag > 74:
                 progress("    Formula %s now has %i" % (`F`,len(F.statements)))
         return F.canonicalize()
 
@@ -1171,7 +1114,7 @@ class BI_n3String(LightBuiltIn, Function):      # Light? well, I suppose so.
     If we *did* have a canonical form it would be great for signature
     A canonical form is possisble but not simple."""
     def evalObj(self, store, context, subj, queue, bindings, proof, query):
-        if verbosity() > 50:
+        if chatty_flag > 50:
             progress("Generating N3 string for:"+`subj`)
         if isinstance(subj, Formula):
             return store.intern((LITERAL, subj.n3String()))
@@ -1236,6 +1179,8 @@ class RDFStore(RDFSink) :
         log.internFrag("uri", BI_uri)
         log.internFrag("equalTo", BI_EqualTo)
         log.internFrag("notEqualTo", BI_notEqualTo)
+
+	self.equivalentTo = self.symbol(OWL_NS + "equivalentTo")
 
 # Heavy relational operators:
 
@@ -1361,46 +1306,46 @@ class RDFStore(RDFSink) :
 		if remember:
 		    F = store._experience.the(source, store.semantics)
 		    if F != None:
-			if verbosity() > 40: progress("Using cached semantics for",addr)
+			if chatty_flag > 40: progress("Using cached semantics for",addr)
 			return F 
 		    
-		if verbosity() > 40: progress("Taking input from " + addr)
+		if chatty_flag > 40: progress("Taking input from " + addr)
 		netStream = urllib.urlopen(addr)
-		if verbosity() > 60:
+		if chatty_flag > 60:
 		    progress("   Headers for %s: %s\n" %(addr, netStream.headers.items()))
 		if contentType == None: ct=netStream.headers.get(HTTP_Content_Type, None)
 	    else:
-		if verbosity() > 40: progress("Taking input from standard input")
+		if chatty_flag > 40: progress("Taking input from standard input")
 		addr = uripath.join(baseURI, "STDIN") # Make abs from relative
 		netStream = sys.stdin
     
-	#    if verbosity() > 19: progress("HTTP Headers:" +`netStream.headers`)
+	#    if chatty_flag > 19: progress("HTTP Headers:" +`netStream.headers`)
 	#    @@How to get at all headers??
 	#    @@ Get sensible net errors and produce dignostics
     
 	    guess = ct
 	    buffer = netStream.read()
-	    if verbosity() > 9: progress("Content-type: " + `ct` + " for "+addr)
+	    if chatty_flag > 9: progress("Content-type: " + `ct` + " for "+addr)
 	    if ct == None or (ct.find('xml') < 0 and ct.find('rdf') < 0) :   # Rats - nothing to go on
                 # can't be XML if it starts with these...
 		if buffer[0:1] == "#" or buffer[0:7] == "@prefix":
 		    guess = 'application/n3'
                 elif buffer.find('xmlns="') >=0 or buffer.find('xmlns:') >=0:
 		    guess = 'application/xml'
-		if verbosity() > 29: progress("    guess " + guess)
+		if chatty_flag > 29: progress("    guess " + guess)
 	except (IOError, OSError):  
 	    raise DocumentAccessError(addr, sys.exc_info() )
 	    
 	# Hmmm ... what about application/rdf; n3 or vice versa?
 	if guess.find('xml') >= 0 or guess.find('rdf') >= 0:
-	    if verbosity() > 49: progress("Parsing as RDF")
+	    if chatty_flag > 49: progress("Parsing as RDF")
 	    import sax2rdf, xml.sax._exceptions
 	    p = sax2rdf.RDFXMLParser(store, addr)
 #	    Fpair = p.loadStream(netStream)
 	    p.feed(buffer)
 	    Fpair = p.close()
 	else:
-	    if verbosity() > 49: progress("Parsing as N3")
+	    if chatty_flag > 49: progress("Parsing as N3")
 	    p = notation3.SinkParser(store, addr, formulaURI=formulaURI, why=why)
 	    p.startDoc()
 	    p.feed(buffer)
@@ -1447,7 +1392,7 @@ class RDFStore(RDFSink) :
 	    fragid = uriRefString[hash+1:]
 	    f = r.fragments.get(fragid, None)
 	    if f == None: return uriRefString
-	    if verbosity() > 70:
+	    if chatty_flag > 70:
 		progress("llyn.genid Rejecting Id already used: "+uriRefString)
 		
     def checkNewId(self, urirefString):
@@ -1552,19 +1497,19 @@ class RDFStore(RDFSink) :
     def newList(self, value):
 	return nil.newList(value)
 
-    def deleteFormula(self,F):
-        if verbosity() > 30: progress("Deleting formula %s %ic" %
-                                            ( `F`, len(F.statements)))
-        for s in F.statements[:]:   # Take copy
-            self.removeStatement(s)
+#    def deleteFormula(self,F):
+#        if chatty_flag > 30: progress("Deleting formula %s %ic" %
+#                                            ( `F`, len(F.statements)))
+#        for s in F.statements[:]:   # Take copy
+#            self.removeStatement(s)
 
 
     def reopen(self, F):
         if F.canonical == None:
-            if verbosity() > 50:
+            if chatty_flag > 50:
                 progress("reopen formula -- @@ already open: "+`F`)
             return F # was open
-        if verbosity() > 70:
+        if chatty_flag > 70:
             progress("reopen formula:"+`F`)
 	key = len(F.statements), len(F.universals()), len(F.existentials()) 
         self._formulaeOfLength[key].remove(F)  # Formulae of same length
@@ -1584,7 +1529,7 @@ class RDFStore(RDFSink) :
               self.intern(tuple[SUBJ]),
               self.intern(tuple[OBJ]) )
         if q[PRED] is self.forSome and isinstance(q[OBJ], Formula):
-            if verbosity() > 97:  progress("Makestatement suppressed")
+            if chatty_flag > 97:  progress("Makestatement suppressed")
             return  # This is implicit, and the same formula can be used un >1 place
         self.storeQuad(q, why)
                     
@@ -1693,22 +1638,22 @@ class RDFStore(RDFSink) :
 	"""
 	total = 0
 	for t in context.statementsMatching(subj=subj)[:]:
-		    self.removeStatement(t)    # SLOW
+		    context.removeStatement(t)    # SLOW
 		    total = total + 1
 	for t in context.statementsMatching(pred=subj)[:]:
-		    self.removeStatement(t)    # SLOW
+		    context.removeStatement(t)    # SLOW
 		    total = total + 1
 	for t in context.statementsMatching(obj=subj)[:]:
-		    self.removeStatement(t)    # SLOW
+		    context.removeStatement(t)    # SLOW
 		    total = total + 1
-	if verbosity() > 30:
+	if chatty_flag > 30:
 	    progress("Purged %i statements with %s" % (total,`subj`))
 	return total
 
 
-    def removeStatement(self, s):
-        "Remove statement from store"
- 	return s[CONTEXT].removeStatement(s)
+#    def removeStatement(self, s):
+#        "Remove statement from store"
+# 	return s[CONTEXT].removeStatement(s)
 
     def purgeExceptData(self, context):
 	"""Remove anything which can't be expressed in plain RDF"""
@@ -1720,7 +1665,10 @@ class RDFStore(RDFSink) :
 		    context.removeStatement(s)
 		    break
 	context._universalVariables =[]  # Cheat! @ use API
-		    
+
+
+#########################################################################
+#		    
 #   Iteratively apply rules to a formula
 
     def think(self, knowledgeBase, rules=None, mode=""):
@@ -1736,14 +1684,15 @@ class RDFStore(RDFSink) :
 	    rules = knowledgeBase
 	assert knowledgeBase.canonical == None , "Must be open to add stuff:"+ `knowledgeBase `
 
-        if verbosity() > 45: progress("think: rules from %s added to %s" %(knowledgeBase, rules))
+        if chatty_flag > 45: progress("think: rules from %s added to %s" %(knowledgeBase, rules))
         bindingsFound = {}  # rule: list bindings already found
         while 1:
             iterations = iterations + 1
-            step = self.applyRules(knowledgeBase, rules, alreadyDictionary=bindingsFound, mode=mode)
+            step = self.applyRules(knowledgeBase, rules,
+			alreadyDictionary=bindingsFound, mode=mode)
             if step == 0: break
             grandtotal= grandtotal + step
-        if verbosity() > 5: progress("Grand total of %i new statements in %i iterations." %
+        if chatty_flag > 5: progress("Grand total of %i new statements in %i iterations." %
                  (grandtotal, iterations))
         return grandtotal
 
@@ -1787,7 +1736,7 @@ class RDFStore(RDFSink) :
                 v2 = universals + filterContext.universals() # Note new variables can be generated
                 found = self.tryRule(s, workingContext, targetContext, v2,
                                      already=already, mode=mode)
-                if (verbosity() >40):
+                if (chatty_flag >40):
                     progress( "Found %i new stmts on for rule %s" % (found, s))
                 _total = _total+found
             else:
@@ -1802,7 +1751,7 @@ class RDFStore(RDFSink) :
 						      mode=mode)
 
 
-        if verbosity() > 4:
+        if chatty_flag > 4:
                 progress("Total %i new statements from rules in %s"
                          % ( _total, filterContext))
         return _total
@@ -1837,7 +1786,7 @@ class RDFStore(RDFSink) :
         for x in variablesMentioned:
             if x not in variablesUsed:
                 templateExistentials.append(x)
-        if verbosity() >20:
+        if chatty_flag >20:
             progress("\n=================== tryRule ============ (mode=%s) looking for:" %mode)
             progress( setToString(unmatched))
             progress("Universals declared in outer " + seqToString(_variables))
@@ -1860,7 +1809,7 @@ class RDFStore(RDFSink) :
 			mode=mode)
 
 	total = query.resolve()
-	if verbosity() > 20:
+	if chatty_flag > 20:
 	    progress("tryRule generated %i new statements" % total)
 	return total
 
@@ -1869,7 +1818,7 @@ class RDFStore(RDFSink) :
     def testIncludes(self, f, g, _variables=[], smartIn=[], bindings={}):
 	"""Return whether or nor f contains a top-level formula equvalent to g.
 	Just a test: no bindings returned."""
-        if verbosity() >30: progress("\n\n=================== testIncludes ============")
+        if chatty_flag >30: progress("\n\n=================== testIncludes ============")
 
         # When the template refers to itself, the thing we are
         # are looking for will refer to the context we are searching
@@ -1890,11 +1839,11 @@ class RDFStore(RDFSink) :
 
         if bindings != {}: _substitute(bindings, unmatched)
 
-        if verbosity() > 20:
+        if chatty_flag > 20:
             progress( "# testIncludes BUILTIN, %i terms in template %s, %i unmatched, %i template variables" % (
                 len(g.statements),
                 `g`[-8:], len(unmatched), len(templateExistentials)))
-        if verbosity() > 80:
+        if chatty_flag > 80:
             for v in _variables:
                 progress( "    Variable: " + `v`[-8:])
 
@@ -1904,8 +1853,8 @@ class RDFStore(RDFSink) :
 		    existentials=_variables + templateExistentials,
 		    smartIn=smartIn, justOne=1, mode="").resolve()
 
-        if verbosity() >30: progress("=================== end testIncludes =" + `result`)
-#        verbosity() = verbosity()-100
+        if chatty_flag >30: progress("=================== end testIncludes =" + `result`)
+#        chatty_flag = chatty_flag-100
         return result
  
     def newInterned(self, type):        
@@ -1935,27 +1884,6 @@ class RDFStore(RDFSink) :
 # heavy built-ins which still have too many variables to calculate at this stage.
 # When we do the variable substitution for new bindings, these can be reconsidered.
 
-#
-#  Lists
-#     List links can be resolved either of two ways.  Firstly, they can be matched against
-# links in the store, which process can only, as far as I can see, start from the nil end
-# and work back up.  This gives you a list which is not a variable, and whose contents
-# are defined in the store.  This may then match against other parts of the template
-# and be resolved usual, or be presented to a built-in function which succeeds.
-#    Secondly, the list links may not themselves be found, but the first (obj) part of
-# each may be resolved. This gives us, at the head, a list which is a variable. This
-# means that its contents are defined in the query queue.  This is still interesting
-# as a built-in function, as in  v:x st:concat ("hot" "house") .  For that purpose,
-# a queue element which defines a list which contains no variables is put into a special
-# state when a search fails for it. (It would otherwise cause the query to fail.)
-
-#   The list can be built hypothetically and acted on.  An alternative way of looking
-# at this is that all list statements "are true" in that they define the resource. That
-# resource is then used for nothing else. Yes, we can search to see whether list is in the
-# store, as there may be a statemnt aboiut it, but built-ins can work on hypothetical lists.
-
-
-
 
 
 class Query:
@@ -1979,9 +1907,9 @@ class Query:
 	    meta = None):	    # Context to check for useful info eg remote stuff
 
         
-        if verbosity() > 50:
+        if chatty_flag > 50:
             progress( "Query: created with %i terms. (justone=%i)" % (len(unmatched), justOne))
-            if verbosity() > 80: progress( setToString(unmatched))
+            if chatty_flag > 80: progress( setToString(unmatched))
 	    if verbosity > 90: progress(
 		"    Smart in: ", smartIn)
 
@@ -2008,7 +1936,7 @@ class Query:
         for quad in unmatched:
             item = QueryItem(self, quad)
             if item.setup(allvars=variables+existentials, unmatched=unmatched, smartIn=smartIn, mode=mode) == 0:
-                if verbosity() > 80: progress("match: abandoned, no way for "+`item`)
+                if chatty_flag > 80: progress("match: abandoned, no way for "+`item`)
                 self.noWay = 1
 		return  # save time
             self.queue.append(item)
@@ -2027,13 +1955,13 @@ class Query:
 	if self.justOne: return 1   # If only a test needed
 	assert type(bindings) is type({})
 
-        if verbosity() >60: progress( "\nConcluding tentatively..." + bindingsToString(bindings))
+        if chatty_flag >60: progress( "\nConcluding tentatively..." + bindingsToString(bindings))
 
         if self.already != None:
             if bindings in self.already:
-                if verbosity() > 30: progress("@@Duplicate result: ", bindingsToString(bindings))
+                if chatty_flag > 30: progress("@@Duplicate result: ", bindingsToString(bindings))
                 return 0
-            if verbosity() > 30: progress("Not duplicate: ", bindingsToString(bindings))
+            if chatty_flag > 30: progress("Not duplicate: ", bindingsToString(bindings))
             self.already.append(bindings)   # A list of dicts
 
 	if diag.tracking:
@@ -2045,7 +1973,7 @@ class Query:
 	for var, val in bindings.items():
 	    if val in es:
 		exout.append(val)
-		if verbosity() > 25:
+		if chatty_flag > 25:
 		    progress("Match found to that which is only an existential: %s -> %s" % (var, val))
 		self.targetContext.declareExistential(val)
 
@@ -2058,31 +1986,31 @@ class Query:
 
         vars = self.conclusion.existentials() + poss  # Terms with arbitrary identifiers
 #        clashes = self.occurringIn(targetContext, vars)    Too slow to do every time; play safe
-	if verbosity() > 25:
+	if chatty_flag > 25:
 	    progress("Variables regenerated: universal " + `poss`
 		+ " existential: " +`self.conclusion.existentials()`)
 	    s=""
 	for v in poss:
 	    v2 = self.targetContext.newUniversal()
 	    b2[v] =v2   # Regenerate names to avoid clash
-	    if verbosity() > 25: s = s + ",uni %s -> %s" %(v, v2)
+	    if chatty_flag > 25: s = s + ",uni %s -> %s" %(v, v2)
         for v in self.conclusion.existentials():
 	    if v not in exout:
 		v2 = self.targetContext.newBlankNode()
 		b2[v] =v2   # Regenerate names to avoid clash
-		if verbosity() > 25: s = s + ",exi %s -> %s" %(v, v2)
+		if chatty_flag > 25: s = s + ",exi %s -> %s" %(v, v2)
 	    else:
-		if verbosity() > 25: s = s + (", (%s is existential in kb)"%v)
-	if verbosity() > 25:
+		if chatty_flag > 25: s = s + (", (%s is existential in kb)"%v)
+	if chatty_flag > 25:
 	    progress(s)
 	
 
-        if verbosity()>10:
+        if chatty_flag>10:
             progress("Concluding definitively" + bindingsToString(b2) )
         before = self.store.size
         self.targetContext.loadFormulaWithSubsitution(
 		    self.conclusion, b2, why=reason)
-        if verbosity()>30:
+        if chatty_flag>30:
             progress("Size of store changed from %i to %i."%(before, self.store.size))
         return self.store.size - before
 
@@ -2110,14 +2038,14 @@ class Query:
         total = 0
 	assert type(bindings) is type({})
 	assert type(newBindings) is type({})
-        if verbosity() > 59:
+        if chatty_flag > 59:
             progress( "QUERY2: called %i terms, %i bindings %s, (new: %s)" %
                       (len(queue),len(bindings),bindingsToString(bindings),
                        bindingsToString(newBindings)))
-            if verbosity() > 90: progress( queueToString(queue))
+            if chatty_flag > 90: progress( queueToString(queue))
 
         for pair in newBindings.items():   # Take care of business left over from recursive call
-            if verbosity()>95: progress("    new binding:  %s -> %s" % (`pair[0]`, `pair[1]`))
+            if chatty_flag>95: progress("    new binding:  %s -> %s" % (`pair[0]`, `pair[1]`))
             if pair[0] in variables:
                 variables.remove(pair[0])
                 bindings.update({pair[0]: pair[1]})  # Record for posterity
@@ -2137,7 +2065,7 @@ class Query:
 
         while len(queue) > 0:
 
-            if (verbosity() > 90):
+            if (chatty_flag > 90):
                 progress( "query iterating with %i terms, %i bindings: %s; %i new bindings: %s ." %
                           (len(queue),
                            len(bindings),bindingsToString(bindings),
@@ -2156,7 +2084,7 @@ class Query:
                 i = i - 1                
             item = queue[best]
             queue.remove(item)
-            if verbosity()>49:
+            if chatty_flag>49:
                 progress( "Looking at " + `item`
                          + "\nwith vars("+seqToString(variables)+")"
                          + " ExQuVars:("+seqToString(existentials)+")")
@@ -2193,7 +2121,7 @@ class Query:
                             queue.append(newItem)
                             newItem.setup(allvars, smartIn = query.smartIn + [subj],
 				    unmatched=more_unmatched, mode=query.mode)
-                        if verbosity() > 40:
+                        if chatty_flag > 40:
                                 progress(
                                           "**** Includes: Adding %i new terms and %s as new existentials."%
                                           (len(more_unmatched),
@@ -2215,16 +2143,16 @@ class Query:
 		nbs = query.remoteQuery(items)
 		item.state = S_DONE  # do not put back on list
             elif state == S_LIST_UNBOUND: # Lists with unbound vars
-                if verbosity()>70:
+                if chatty_flag>70:
                         progress("List left unbound, returing")
                 return total   # forget it  (this right?!@@)
             elif state == S_LIST_BOUND: # bound list
-                if verbosity()>60: progress(
+                if chatty_flag>60: progress(
 		    "QUERY FOUND MATCH (dropping lists) with bindings: "
 		    + bindingsToString(bindings))
                 return total + query.conclude(bindings, evidence=evidence)  # No non-list terms left .. success!
             elif state ==S_HEAVY_WAIT or state == S_LIGHT_WAIT: # Can't
-                if verbosity() > 49 :
+                if chatty_flag > 49 :
                     progress("@@@@ Warning: query can't find term which will work.")
                     progress( "   state is %s, queue length %i" % (state, len(queue)+1))
                     progress("@@ Current item: %s" % `item`)
@@ -2233,7 +2161,7 @@ class Query:
                 return 0  # Forget it
             else:
                 raise RuntimeError, "Unknown state " + `state`
-            if verbosity() > 90: progress("    nbs=" + `nbs`)
+            if chatty_flag > 90: progress("    nbs=" + `nbs`)
             if nbs == 0: return total
             elif nbs != []:
                 total = 0
@@ -2256,7 +2184,7 @@ class Query:
                 queue.append(item)
             # And loop back to take the next item
 
-        if verbosity()>50: progress("QUERY MATCH COMPLETE with bindings: " + bindingsToString(bindings))
+        if chatty_flag>50: progress("QUERY MATCH COMPLETE with bindings: " + bindingsToString(bindings))
         return query.conclude(bindings,  evidence=evidence)  # No terms left .. success!
 
 
@@ -2274,7 +2202,7 @@ class Query:
         # QueryPiece qp stores query tree.
         qp = rs.buildQuerySetsFromCwm(items, query.variables, query.existentials)
         # Extract access info from the first item.
-	if verbosity() > 90:
+	if chatty_flag > 90:
 	    progress("    Remote service %s" %items[0].service.uri)
         (user, password, host, database) = re.match("^mysql://(?:([^@:]+)(?::([^@]+))?)@?([^/]+)/([^/]+)/$",
                                                     items[0].service.uri).groups()
@@ -2290,8 +2218,8 @@ class Query:
         messages = []
         nextResults, nextStatements = a._processRow([], [], qp, rs, messages, {})
         # rs.results = nextResults # Store results as initial state for next use of rs.
-        if verbosity() > 90: progress(string.join(messages, "\n"))
-        if verbosity() > 90: progress("query matrix \"\"\""+rs.toString({'dataFilter' : None})+"\"\"\" .\n")
+        if chatty_flag > 90: progress(string.join(messages, "\n"))
+        if chatty_flag > 90: progress("query matrix \"\"\""+rs.toString({'dataFilter' : None})+"\"\"\" .\n")
 
 	nbs = []
 	reason = Because("Remote query") # could be messages[0] which is the query
@@ -2305,7 +2233,7 @@ class Query:
                 boundRow[v] = interned  # bindings
             nbs.append((boundRow, reason))
 
-        if verbosity() > 10: progress("====> bindings from remote query:"+`nbs`)
+        if chatty_flag > 10: progress("====> bindings from remote query:"+`nbs`)
 	return nbs   # No bindings for testing
 
 
@@ -2358,7 +2286,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		schema = dereference(pred, mode, self.query.workingContext)
 		if schema != None:
 		    if "a" in mode:
-			if verbosity() > 95:
+			if chatty_flag > 95:
 			    progress("Axiom processing for %s" % (pred))
 			ns = pred.resource
 			rules = schema.any(subj=ns, pred=self.store.docRules)
@@ -2371,7 +2299,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    if uri[:4] == "mysql:":
 			j = uri.rfind("/")
 			if j>0: self.service = meta.newSymbol(uri[:j])
-	    if verbosity() > 90 and self.service:
+	    if chatty_flag > 90 and self.service:
 		progress("We have a Remote service %s for %s." %(self.service, pred))
 	    if not self.service:
 		authDoc = None
@@ -2380,7 +2308,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		if authDoc == None and self.query.meta != None:
 		    authDoc = self.query.meta.any(pred=self.store.definitiveDocument, subj=pred)
 		if authDoc != None:
-		    if verbosity() > 90:
+		    if chatty_flag > 90:
 			progress("We have a definitive document %s for %s." %(authDoc, pred))
 		    authFormula = dereference(authDoc, mode, self.query.workingContext)
 		    if authFormula != None:
@@ -2413,7 +2341,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                     hasUnboundCoumpundTerm = 1     # Can't search directly
 		    self.searchPattern[p] = None   # can bind this if we recurse
 		    
-	    if verbosity() > 98: progress("        %s needs to run: %s"%(`x`, `self.neededToRun[p]`))
+	    if chatty_flag > 98: progress("        %s needs to run: %s"%(`x`, `self.neededToRun[p]`))
                 
 #        if hasUnboundCoumpundTerm:
 #            self.short = INFINITY   # can't search
@@ -2430,7 +2358,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    self.state = S_NEED_DEEP   # Put off till later than non-deep ones
         else:
             self.state = S_NOT_LIGHT   # Not a light built in, not searched.
-        if verbosity() > 80: progress("setup:" + `self`)
+        if chatty_flag > 80: progress("setup:" + `self`)
         if self.state == S_FAIL: return 0
         return []
 
@@ -2450,7 +2378,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		if self.neededToRun[OBJ] == []:   # bound expression - we can evaluate it
 		    if pred.eval(subj, obj,  queue, bindings.copy(), proof, self.query):
 			self.state = S_DONE # satisfied
-                        if verbosity() > 80: progress("Builtin buinary relation operator succeeds")
+                        if chatty_flag > 80: progress("Builtin buinary relation operator succeeds")
 			if diag.tracking:
 			    rea = BecauseBuiltIn(subj, pred, obj, proof)
 			    evidence = evidence + [rea]
@@ -2459,7 +2387,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    else: return 0   # We absoluteley know this won't match with this in it
 		else: 
 		    if isinstance(pred, Function):
-			if verbosity() > 97: progress("Builtin function call %s(%s)"%(pred, subj))
+			if chatty_flag > 97: progress("Builtin function call %s(%s)"%(pred, subj))
 			result = pred.evalObj(subj, queue, bindings.copy(), proof, self.query)
 			if result != None:
 			    self.state = S_FAIL
@@ -2491,7 +2419,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			    return [({subj: result}, rea)]
                         else:
 			    if heavy: return 0
-	    if verbosity() > 30:
+	    if chatty_flag > 30:
 		progress("Builtin could not give result"+`self`)
     
 	    # Now we have a light builtin needs search,
@@ -2512,15 +2440,15 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	"""
         nbs = []
         if self.short == INFINITY:
-            if verbosity() > 36:
+            if chatty_flag > 36:
                 progress( "Can't deep search for %s" % `self`)
         else:
-            if verbosity() > 36:
+            if chatty_flag > 36:
                 progress( "Searching (S=%i) %i for %s" %(self.state, self.short, `self`))
             for s in self.myIndex :  # for everything matching what we know,
                 nb = {}
                 reject = 0
-		if verbosity() > 106: progress("...checking %s" % self)
+		if chatty_flag > 106: progress("...checking %s" % self)
                 for p in PRED, SUBJ, OBJ:
                     if self.searchPattern[p] == None: # Need to check
 			x = self.quad[p]
@@ -2529,12 +2457,11 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			else:  # Deep case
 			    nbs1 = x.unify(s.quad[p], self.query.variables,
 				self.query.existentials, {})  # Bindings have all been bound
-			    if verbosity() > 70:
+			    if chatty_flag > 70:
 				progress( "Searching deep %s result binding %s" %(self, nbs1))
 			    if nbs1 == 0:
-				if verbosity() > 106: progress("......fail: %s" % self)
+				if chatty_flag > 106: progress("......fail: %s" % self)
 				break  # reject this statement
-#				return 0 # No way
 			    if len(nbs1) > 1:
 				raise RuntimeError("Not implemented this hook yet - call timbl")
 			    nb1, rea = nbs1[0]
@@ -2570,7 +2497,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
             self.state = S_HEAVY_READY
         else:
             self.state = S_HEAVY_WAIT
-        if verbosity() > 90:
+        if chatty_flag > 90:
             progress("...searchDone, now ",self)
         return
     
@@ -2600,7 +2527,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    None	Binding done, see item.state 
 	"""
         con, pred, subj, obj = self.quad
-        if verbosity() > 90:
+        if chatty_flag > 90:
             progress(" binding ", `self` + " with "+ `newBindings`)
         q=[con, pred, subj, obj]
         for p in ALL4:
@@ -2643,11 +2570,11 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
               and self.neededToRun[OBJ] == []):
             self.state = S_LIST_BOUND
 	if self.state == S_LIST_BOUND and self.searchPattern[SUBJ] != None:  # @@@@@@ 20030807
-	    if verbosity() > 50:
+	    if chatty_flag > 50:
 		progress("Rejecting list already searched and now bound", self)
 	    self.state = S_FAIL    # see test/list-bug1.n3
 	    return []  #@@@@ guess 20030807
-        if verbosity() > 90:
+        if chatty_flag > 90:
             progress("...bound becomes ", `self`)
         if self.state == S_FAIL: return 0
         return [] # continue
@@ -2678,7 +2605,7 @@ def lookupQuad(bindings, q):
 
 def lookupQuadRecursive(bindings, q, why=None):
 	context, pred, subj, obj = q
-	if verbosity() > 99: progress("\tlookupQuadRecursive:", q)
+	if chatty_flag > 99: progress("\tlookupQuadRecursive:", q)
 	return (
             context.substitution(bindings),
             pred.substitution(bindings),

@@ -1,0 +1,26 @@
+# Color the map of australia
+#
+# usage:
+#	time cwm colour-oz.ne --think
+#
+# Russel & Norvig p284
+#
+@prefix i: <#>.
+@prefix : <#>.
+
+
+:Red :differentColor :Blue, :Green.
+:Blue :differentColor :Red, :Green.
+:Green :differentColor :Red, :Blue.
+
+{ ?wa :differentColor ?nt, ?sa.
+  ?nt :differentColor ?q, ?sa.
+  ?q  :differentColor ?nsw, ?sa.
+  ?nsw :differentColor ?v, ?sa.
+  ?v :differentColor ?sa.
+} =>  { ( ?wa ?nt ?q ?nsw ?v ?sa ) a :ValidColoring }.
+
+
+#ends
+
+

@@ -1,0 +1,48 @@
+#  Smushing things which are =
+#
+
+
+
+@prefix : <#>.
+
+#  Smush to labaleled nodes:
+
+:a :colour :Grey.
+:b a :Hatchback.
+:a = :b.
+
+# Two blank nodes:
+# A scholar and a gentleman.
+
+[ a :Scholar ] = [ a :Gentleman ] .
+
+
+:c :color :Gray.
+
+:color = :colour.
+:Grey = :Gray.
+
+#
+#  Sush a blank node with labelled node
+
+<smush.n3>  =  [ a :testFile ].
+
+
+#  Smush an existential 
+
+_:bnode1 :called "Bnode1".
+
+_:bnode1 = :node1 .
+
+
+# Smush with Literals and Lists
+
+:theTemperature = 34.
+"86%" = :theHumidity.
+
+:theTemperature :is :TooHot.
+:theHumidity :is :TooDamp.
+
+# :isa =  rdf:type.
+
+#ends
