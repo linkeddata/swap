@@ -67,6 +67,28 @@ class BI_StartsWith(LightBuiltIn):
     def evaluate(self, store, context, subj, subj_py, obj, obj_py):
         return subj.string.startswith(obj.string)
 
+# Added, SBP 2001-11:-
+
+class BI_Contains(LightBuiltIn):
+    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+        for x in subj.string: 
+           if x == obj.string: return 1
+        else: return 0
+
+class BI_DoesNotContain(LightBuiltIn): # Converse of the above
+    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+        for x in subj.string: 
+           if x == obj.string: return 0
+        else: return 1
+
+class BI_equalIgnoringCase(LightBuiltIn):
+    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+        return (string.lower(subj.string) == string.lower(obj.string))
+
+class BI_notEqualIgnoringCase(LightBuiltIn):
+    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+        return (string.lower(subj.string) != string.lower(obj.string))
+
 #  String Constructors - more light built-ins
 
 class BI_concat(LightBuiltIn, ReverseFunction):
@@ -99,5 +121,9 @@ def register(store):
     str.internFrag("startsWith", BI_StartsWith)
     str.internFrag("concat", BI_concat)
     str.internFrag("concatenation", BI_concatenation)
+    str.internFrag("contains", BI_Contains)
+    str.internFrag("doesNotContain", BI_DoesNotContain)
+    str.internFrag("equalIgnoringCase", BI_equalIgnoringCase)
+    str.internFrag("notEqualIgnoringCase", BI_notEqualIgnoringCase)
 
     
