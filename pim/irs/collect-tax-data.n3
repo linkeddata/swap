@@ -8,6 +8,7 @@
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix string: <http://www.w3.org/2000/10/swap/string#>.
 @prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix os: <http://www.w3.org/2000/10/swap/os#>.
 @prefix q:  <http://www.w3.org/2000/10/swap/pim/qif#>.
 
 @prefix form: <http://www.w3.org/2000/10/swap/pim/form#>.
@@ -29,8 +30,8 @@
 this log:forAll :line, :cat, :value, :aValue.
 {
  <file:///devel/WWW/2000/10/swap/pim/irs/2002-irs-1040-rules.n3>!log:semantics 		log:includes { :line a form:NumericField }.
-  <cat-to-tax.n3>!log:semantics log:notIncludes { :line q:isTotalOf [] }.
-  <tax-input.n3>!log:semantics log:notIncludes { <f1040.n3> :line [] }.
+  "TAX_IN"!os:argv^log:uri!log:semantics log:notIncludes { :line q:isTotalOf [] }.
+  "TAX_IN"!os:argv^log:uri!log:semantics log:notIncludes { <f1040.n3> :line [] }.
 } => {
 	<f1040.n3> :line "0.00".
 }.
@@ -38,22 +39,23 @@ this log:forAll :line, :cat, :value, :aValue.
 #  Where Checkboxes are not set to "1", record zero:
 {
  <file:///devel/WWW/2000/10/swap/pim/irs/2002-irs-1040-rules.n3>!log:semantics 		log:includes { :line a form:CheckBox }.
-  <tax-input.n3>!log:semantics log:notIncludes { <f1040.n3> :line [] }.
+  "TAX_IN"!os:argv^log:uri!log:semantics log:notIncludes { <f1040.n3> :line [] }.
 } => {
 	<f1040.n3> :line "0".
 }.
 
 # Pick up explicitly given data:
 {
-  <tax-input.n3>!log:semantics log:includes { <f1040.n3> :line :value }.
+  "TAX_IN"!os:argv^log:uri!log:semantics log:includes { <f1040.n3> :line :value }.
 } => {
 	<f1040.n3> :line :value.
 }.
 
 # Pick up calculated category totals from totals file:
 {
-  <cat-to-tax.n3>!log:semantics log:includes { :line q:isTotalOf :cat }.
-  <totals.n3>!log:semantics log:includes { :cat q:total :value }.
+  "TAX_IN"!os:argv^log:uri!log:semantics log:includes { :line q:isTotalOf :cat }.
+#  "TAX_TOTALS"!os:argv!
+   "totals.n3"!os:baseAbsolute^log:uri!log:semantics log:includes { :cat q:total :value }.
   :value math:absoluteValue :aValue.
 } => {
 	<f1040.n3> :line :aValue.
