@@ -130,14 +130,14 @@ the&nbsp;closure&nbsp;under&nbsp;the&nbsp;operation&nbsp;of&nbsp;looking&nbsp;up
 &nbsp;i&nbsp;&nbsp;&nbsp;any&nbsp;owl:imports&nbsp;documents<br>
 &nbsp;r&nbsp;&nbsp;&nbsp;any&nbsp;doc:rules&nbsp;documents<br>
 &nbsp;<br>
+&nbsp;e&nbsp;&nbsp;&nbsp;Smush&nbsp;together&nbsp;any&nbsp;nodes&nbsp;which&nbsp;are&nbsp;=&nbsp;(owl:sameAs)<br>
+&nbsp;<br>
 See&nbsp;<a href="http://www.w3.org/2000/10/swap/doc/cwm">http://www.w3.org/2000/10/swap/doc/cwm</a>&nbsp;&nbsp;for&nbsp;more&nbsp;documentation.</tt></dd></dl>
  <dl><dt><a name="-getParser"><strong>getParser</strong></a>(format, inputURI, formulaURI, flags)</dt><dd><tt>Return&nbsp;something&nbsp;which&nbsp;can&nbsp;load&nbsp;from&nbsp;a&nbsp;URI&nbsp;in&nbsp;the&nbsp;given&nbsp;format,&nbsp;while<br>
 writing&nbsp;to&nbsp;the&nbsp;given&nbsp;store.</tt></dd></dl>
  <dl><dt><a name="-need"><strong>need</strong></a>(object)</dt><dd><tt>Update&nbsp;the&nbsp;given&nbsp;repository&nbsp;object&nbsp;from&nbsp;the&nbsp;other&nbsp;one&nbsp;if&nbsp;the<br>
 other&nbsp;one&nbsp;has&nbsp;been&nbsp;changed&nbsp;since&nbsp;they&nbsp;were&nbsp;last&nbsp;synchronized.<br>
 If&nbsp;both&nbsp;have&nbsp;been&nbsp;touched,&nbsp;raise&nbsp;an&nbsp;error.</tt></dd></dl>
- <dl><dt><a name="-reformat"><strong>reformat</strong></a>(str, thisURI)</dt></dl>
- <dl><dt><a name="-test"><strong>test</strong></a>()</dt></dl>
  <dl><dt><a name="-touch"><strong>touch</strong></a>(object)</dt><dd><tt>Indicate&nbsp;that&nbsp;this&nbsp;object&nbsp;has&nbsp;been&nbsp;modified;&nbsp;for&nbsp;use&nbsp;by&nbsp;<a href="#-need">need</a>()</tt></dd></dl>
 </td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">

@@ -9,59 +9,63 @@
 </head>
 
 <body xml:lang="en" lang="en">
-<p><a href="/">W3C</a> | <a href="/2001/sw/">Semantic
-Web</a> | <a href="../">SWAP</a></p>
+<p><a href="/">W3C</a> | <a href="/2001/sw/">Semantic Web</a> | <a
+href="../">SWAP</a></p>
 
 <h1>Cwm</h1>
-<div class="nav" style="text-align:center">
-<a href="#Closed">Features</a> | <a href="#disc">Discussion</a>
-| <a href="#Related">Related Work</a> | <a href="#dev">Development</a> | <a href="#acks">Acks</a></div>
 
-<p>Cwm is a general-purpose data processor for the semantic web,
-somewhat like sed, awk, etc. for text files or XSLT for XML.  It is a
-forward chaining reasoner which can be used for querying, checking,
-transforming and filtering information. Its core language is RDF,
-extended to include rules, and it uses RDF/XML or RDF/N3
-(see <a href="../Primer">Notation3 Primer</a>)
+<div class="nav" style="text-align:center">
+<a href="#Closed">Features</a> | <a href="#disc">Discussion</a> | <a
+href="#Related">Related Work</a> | <a href="#dev">Development</a> | <a
+href="#acks">Acks</a></div>
+
+<p>Cwm is a general-purpose data processor for the semantic web, somewhat
+like sed, awk, etc. for text files or XSLT for XML. It is a forward chaining
+reasoner which can be used for querying, checking, transforming and filtering
+information. Its core language is RDF, extended to include rules, and it uses
+RDF/XML or RDF/N3 (see <a href="../Primer">Notation3 Primer</a>)
 serializations as required.</p>
 
-<p>Cwm is <a href="../#L88">written in
-python</a>; it is part of <a href="../">SWAP</a>, a Semantic Web
-Application Platform.</p>
-
+<p>Cwm is <a href="../#L88">written in python</a>; it is part of <a
+href="../">SWAP</a>, a Semantic Web Application Platform.</p>
 
 <h2 id="Closed">Features and Tutorial</h2>
 
-<p>The <a id="Tutorial" href="./">Semantic Web Tutorial Using N3</a>
-covers features such as:</p>
-
-
-<ul >
-  <li><a href="../../../../2003/Talks/0520-www-tf1-a4-commandline/slide2-0.html">Loading files in RDF/XML and/or N3</a>,
-  generating RDF or N3 files from the result.</li>
+<p>The <a id="Tutorial" href="./">Semantic Web Tutorial Using N3</a> covers
+features such as:</p>
+<ul>
+  <li><a
+    href="../../../../2003/Talks/0520-www-tf1-a4-commandline/slide2-0.html">Loading
+    files in RDF/XML and/or N3</a>, generating RDF or N3 files from the
+    result.</li>
   <li>Pretty printing data so that anonymous nodes are used creatively to
     minimize the number of explicit existentials (generated Ids).</li>
-  <li><a href="../../../../2003/Talks/0520-www-tf1-b3-rules/slide1-0.html">Applying rules written in N3 to the data</a></li>
-  <li><a href="../../../../2003/Talks/0520-www-tf1-b3-rules/slide19-0.html">Filtering the data to the result of a particular query</a></li>
-  <li>Generating arbitrary formats (<a href="../../../../2003/Talks/0520-www-tf1-b3-rules/slide26-0.html">using --strings</a>)</li>
-  <li>Using an <a href="Built-in">internal knowledge of functions</a> to resolve them within a
-    query, including: 
+  <li><a
+    href="../../../../2003/Talks/0520-www-tf1-b3-rules/slide1-0.html">Applying
+    rules written in N3 to the data</a></li>
+  <li><a
+    href="../../../../2003/Talks/0520-www-tf1-b3-rules/slide19-0.html">Filtering
+    the data to the result of a particular query</a></li>
+  <li>Generating arbitrary formats (<a
+    href="../../../../2003/Talks/0520-www-tf1-b3-rules/slide26-0.html">using
+    --strings</a>)</li>
+  <li>Using an <a href="Built-in">internal knowledge of functions</a> to
+    resolve them within a query, including: 
     <ul>
       <li>Simple math and string operations</li>
       <li>Getting and parsing documents from the web</li>
       <li>Accessing command line arguments and environment variables</li>
-      <li><a href="Trust">Cryptography</a>: hashing, generating keys, signing things and checking
-        signatures.</li>
+      <li><a href="Trust">Cryptography</a>: hashing, generating keys, signing
+        things and checking signatures.</li>
     </ul>
   </li>
-
- 
 </ul>
 
-<p id="Command">See also: <a href="CwmHelp">Cwm command line arguments reference</a>.</p>
+<p id="Command">See also: <a href="CwmHelp">Cwm command line arguments
+reference</a>.</p>
 
-<p>Other features are in development, and haven't been documented as thoroughly:</p>
-
+<p>Other features are in development, and haven't been documented as
+thoroughly:</p>
 <ul>
   <li>Accessing the web to directly or indirectly resolve a query, including: 
     <ul>
@@ -72,12 +76,10 @@ covers features such as:</p>
   </li>
 </ul>
 
-
-
-<p id="Installing">See <a href="CwmInstall">Installing Cwm</a> to get
-it running for the first time. <em>Installation is not very mature; <a
-href="http://esw.w3.org/topic/CwmTips">CwmTips</a> is a community
-resource for living with cwm</em>.</p>
+<p id="Installing">See <a href="CwmInstall">Installing Cwm</a> to get it
+running for the first time. <em>Installation is not very mature; <a
+href="http://esw.w3.org/topic/CwmTips">CwmTips</a> is a community resource
+for living with cwm</em>.</p>
 
 <h3><a name="Environmen" id="Environmen">Environment Variables</a></h3>
 <dl>
@@ -85,7 +87,6 @@ resource for living with cwm</em>.</p>
     <dd>rdflib2rdf or sax2rdf (default). Affects the choice of RDF parser
       module used by cwm.</dd>
 </dl>
-
 
 <h3><a name="Security" id="Security">Security Issues</a></h3>
 
@@ -116,13 +117,15 @@ things to watch are:</p>
     risk.</li>
 </ul>
 
-
 <h2 id="disc">Discussion -- places to talk about this</h2>
 <ul>
   <li>The RDF Interest group</li>
-  <li><a href="irc://irc.freenode.net/rdfig">#rdfig irc channel</a>
-with <a href="http://rdfig.xmlhack.com/">scratchpad/weblog</a></li>
-  <li>report bugs to Tim, Dan, and/or Sandro with copy to <a href="mailto:www-archive+n3bugs@w3.org">www-archive+n3bugs@w3.org</a> which gives us an <a href="http://www.w3.org/Search/Mail/Public/advanced_search?keywords=n3bugs&amp;hdr-1-name=subject&amp;hdr-1-query=&amp;hdr-2-name=from&amp;hdr-2-query=&amp;hdr-3-name=message-id&amp;hdr-3-query=&amp;resultsperpage=50&amp;sortby=date&amp;index-grp=Public%2FFULL&amp;index-type=t&amp;type-index=www-archive">archive</a></li>
+  <li><a href="irc://irc.freenode.net/rdfig">#rdfig irc channel</a> with <a
+    href="http://rdfig.xmlhack.com/">scratchpad/weblog</a></li>
+  <li>report bugs to Tim, Dan, and/or Sandro with copy to <a
+    href="mailto:www-archive+n3bugs@w3.org">www-archive+n3bugs@w3.org</a>
+    which gives us an <a
+    href="http://www.w3.org/Search/Mail/Public/advanced_search?keywords=n3bugs&amp;hdr-1-name=subject&amp;hdr-1-query=&amp;hdr-2-name=from&amp;hdr-2-query=&amp;hdr-3-name=message-id&amp;hdr-3-query=&amp;resultsperpage=50&amp;sortby=date&amp;index-grp=Public%2FFULL&amp;index-type=t&amp;type-index=www-archive">archive</a></li>
 </ul>
 
 <h3 id="name">About the name <em>cwm</em></h3>
@@ -134,9 +137,8 @@ openings - like a valley.</p>
 
 <h2 id="Related">Related Work</h2>
 
-  <p>see also Sean Palmer's <a
-  href="http://infomesh.net/2001/cwm/">guide to cwm</a> -- sometimes
-  it is more up to date than this!</p>
+<p>see also Sean Palmer's <a href="http://infomesh.net/2001/cwm/">guide to
+cwm</a> -- sometimes it is more up to date than this!</p>
 
 <p><a id="Check" name="Check">Check out other programs which use the same
 formats</a>:</p>
@@ -160,15 +162,11 @@ formats</a>:</p>
     N3 -capable semantic web code Haskell by Graham Kline (2003/6)</li>
 </ul>
 
-
-
-
 <h2 id="dev">Development</h2>
 
-<p>This <a href="http://dev.w3.org/cvsweb/2000/10/swap/">swap code</a>
-is open source and available for those that want to play with it, but
-comes with no warranty.</p>
-
+<p>This <a href="http://dev.w3.org/cvsweb/2000/10/swap/">swap code</a> is
+open source and available for those that want to play with it, but comes with
+no warranty.</p>
 <dl>
   <dt>Using CVS</dt>
     <dd>from the <a href="http://dev.w3.org/cvsweb/">public w3c CVS
@@ -186,15 +184,13 @@ $ <span style="color: #007F00">cvs -d:pserver:anonymous@dev.w3.org:/sources/publ
       system.</dd>
 </dl>
 
-
-
 <h3>Test Driven Development (Don't trust the docs ;-)</h3>
 
 <p>The best test of works is what has been tested. So the list of files in
 the <a href="../test/regression.n3">regression test</a> defines the set of
-features which are generally checked on each checkin. Cwm developers
-agree that all the tests have to pass before code is checked in. To
-run the tests, do <tt>make</tt> in the <tt>swap/test</tt> directory.</p>
+features which are generally checked on each checkin. Cwm developers agree
+that all the tests have to pass before code is checked in. To run the tests,
+do <tt>make</tt> in the <tt>swap/test</tt> directory.</p>
 
 <h3>Code Overview</h3>
 
@@ -259,7 +255,8 @@ documents.</p>
 
 <p><em>5Aug2002, DanC</em></p>
 <ul>
-  <li>relative URI stuff is all over the map. move to uripath.py <em>done, pretty much</em></li>
+  <li>relative URI stuff is all over the map. move to uripath.py <em>done,
+    pretty much</em></li>
   <li>why is verbosity() in thing? that seems to be the only part of the
     thing module that llyn uses</li>
   <li>use Namespace() class; N3_forAll_URI = RDFSink.forAllSym -&gt;
@@ -293,13 +290,13 @@ documents.</p>
 
 <h2 id="acks">Acknowledgements</h2>
 
-<p>Thanks to Dan Connolly for writing the first code and thereby <a href="./#L88">introducing
-me to Python</a>, and to him and Sean Palmer and Mark Nottingham for writing
-code. Thanks to Sean for his <a
+<p>Thanks to Dan Connolly for writing the first code and thereby <a
+href="./#L88">introducing me to Python</a>, and to him and Sean Palmer and
+Mark Nottingham for writing code. Eric Prud'hommeaux wrote the remote
+database query and mySQL interface. Sandro Hawke has made various
+contributions.  Thanks to Sean for his <a
 href="http://infomesh.net/2001/cwm/">guide</a> to cwm. Thanks for all on
-#RDFIG for being everything which #RDFIG..</p>
-
-
+#RDFIG for being everything which is #RDFIG..</p>
 <hr />
 <address>
   Tim BL, with his director hat off<br />

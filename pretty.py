@@ -374,15 +374,23 @@ class Serializer:
 	counts = self.selectDefaultPrefix(context)        
         self.sink.startDoc()
         self.dumpPrefixes(self.sink, counts)
-        self.dumpFormulaContents(context, self.sink, sorting=1)
+        self.dumpFormulaContents(context, self.sink, sorting=1, equals=1)
         self.sink.endDoc()
 
-    def dumpFormulaContents(self, context, sink, sorting):
+    def dumpFormulaContents(self, context, sink, sorting, equals=0):
         """ Iterates over statements in formula, bunching them up into a set
         for each subject.
         """
-        if sorting: context.statements.sort(StoredStatement.compareSubjPredObj)
-# @@ necessary?
+
+	allStatements = context.statements[:]
+	if equals:
+	    for x, y in context._redirections.items():
+		if not x.generated() and x not in context.variables():
+		    allStatements.append(StoredStatement(
+			(context, context.store.sameAs, x, y)))
+        allStatements.sort(StoredStatement.compareSubjPredObj)
+#        context.statements.sort(StoredStatement.compareSubjPredObj)
+	# @@ necessary?
 	self.dumpVariables(context, sink, sorting, pretty=1)
 
 #	statements = context.statementsMatching(subj=context)  # context is subject
@@ -392,7 +400,7 @@ class Serializer:
 
         currentSubject = None
         statements = []
-        for s in context.statements:
+        for s in allStatements:
             con, pred, subj, obj =  s.quad
             if subj is con: continue # Done them above
             if currentSubject == None: currentSubject = subj

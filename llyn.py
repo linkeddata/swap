@@ -372,6 +372,10 @@ class IndexedFormula(Formula):
 # We trigger list collapse on any of these three becoming true.
 # @@@ we don't reverse this on remove statement.  Remove statement is really not a user call.
 
+# (Not clear: how t smush symbols without smushing variables. Need separate pytyhon class
+# for variables I guess as everyone has been saying.
+# When that happens, expend smushing to symbols.)
+
 	if subj in self._existentialVariables:
 	    if pred is store.rest and isinstance(obj, List):
 		ss = self.statementsMatching(pred=store.first, subj=subj)
@@ -713,7 +717,6 @@ class IndexedFormula(Formula):
 		quad = [self, s[PRED], s[SUBJ], s[OBJ]]
 		for p in PRED, SUBJ, OBJ:
 		    x = s[p]
-#		    progress("&&&&&&& trying ", x, "with", bindings, ", redirections=", self._redirections)
 		    y = x.substituteEquals(bindings, newBindings)
 		    if y is not x:
 			if diag.chatty_flag>90: progress("Substituted %s -> %s in place" %(x, y))

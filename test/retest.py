@@ -1,10 +1,12 @@
 #! /bin/python
 """Regression test harness for new versions of cwm
 
+python retrest.py   <options>  <inputURIs>
 Options:
 
 --testsFrom=uri -f uri  Take test definitions from these files (in RDF/XML or N3 format)
---normal        -n      Do normal tests, checking output
+			Or just by themselves at end of command line after options
+--normal        -n      Do normal tests, checking output NOW DEFAULT - NOT NEEDED
 --chatty        -c	Do tests with debug --chatty=100 (flag just check doesn't crash)
 --proof         -p      Do tests generating and cheking a proof
 --start=13      -s 13   Skip the first 12 tests
@@ -107,9 +109,8 @@ def rdfcompare(case, ref=None):
     return result
 
 def main():
-    testFiles = []
     start = 1
-    normal = 0
+    normal = 1
     chatty = 0
     proofs = 0
     global ploughOn # even if error
@@ -117,7 +118,7 @@ def main():
     global verbose
     verbose = 0
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hs:ncipf:v",
+        opts, testFiles = getopt.getopt(sys.argv[1:], "hs:ncipf:v",
 	    ["help", "start=", "testsFrom=", "normal", "chatty", "ignoreErrors", "proofs", "verbose"])
     except getopt.GetoptError:
         # print help information and exit:
@@ -143,6 +144,7 @@ def main():
 	if o in ("-p", "--proofs"):
 	    proofs = 1
 
+    
     assert system("mkdir -p ,temp") == 0
     assert system("mkdir -p ,diffs") == 0
     if proofs: assert system("mkdir -p ,proofs") == 0
@@ -165,13 +167,23 @@ def main():
 #	kb=load(fn)
     
     for t in kb.each(pred=rdf.type, obj=test.CwmTest):
-	case = str(kb.the(t, test.shortFileName))
+	u = t.uriref()
+	ref = kb.the(t, test.referenceOutput)
+	if ref == None:
+	    case = str(kb.the(t, test.shortFileName))
+	    refFile = "ref/%s" % case
+	else:
+	    refFile = refTo(base(), ref.uriref())
+	    hash = u.rfind("#")
+	    slash = u.rfind("/")
+	    assert hash >0 and slash > 0
+	    case = u[slash+1:hash] + "_" + u[hash+1:] + ".out" # Make up temp filename
 	description = str(kb.the(t, test.description))
 	arguments = str(kb.the(t, test.arguments))
 	environment = kb.the(t, test.environment)
 	if environment == None: env=""
 	else: env = str(environment) + " "
-	testData.append((t.uriref(), case, description, env, arguments))
+	testData.append((t.uriref(), case, refFile, description, env, arguments))
 
     for t in kb.each(pred=rdf.type, obj=rdft.PositiveParserTest):
 	case = "rdft_" + t.fragid + ".nt" # Hack - temp file name
@@ -203,7 +215,7 @@ def main():
     rdfTests = len(RDFTestData)
     if verbose: print "RDF parser tests: %i" % rdfTests
 
-    for u, case, description, env, arguments in testData:
+    for u, case, refFile, description, env, arguments in testData:
 	tests = tests + 1
 	if tests < start: continue
 	
@@ -217,7 +229,7 @@ def main():
 	if normal:
 	    execute("""CWM_RUN_NS="run#" %spython ../cwm.py --quiet %s | %s > ,temp/%s""" %
 		(env, arguments, cleanup , case))	
-	    if diff(case):
+	    if diff(case, refFile):
 		problem("######### from normal case %s: %scwm %s" %( case, env, arguments))
 		continue
 
@@ -230,7 +242,7 @@ def main():
 		(env, arguments, case))
 	    execute("""python ../check.py < ,proofs/%s | %s > ,temp/%s""" %
 		(case, cleanup , case))	
-	    if diff(case):
+	    if diff(case, refFile):
 		problem("######### from proof case %s: %scwm %s" %( case, env, arguments))
 	passes = passes + 1
 

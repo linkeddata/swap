@@ -122,8 +122,8 @@ class InferenceTask:
 			    break # can affect
 
 		    else:  # that statement couldn't but
-			if diag.chatty_flag > 95:
-			    progress("...&&&& couldn't beccause of ",s1,s2,p)
+			if diag.chatty_flag > 96:
+			    progress("...couldn't beccause of ",s1,s2,p)
 			continue # try next one
 		    break # can
 
