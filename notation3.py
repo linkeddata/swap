@@ -52,13 +52,24 @@ import string
 import urlparse
 import re
 
+# The statement is stored as a quad - affectionately known as a triple ;-)
 
 CONTEXT = 0
 PRED = 1  # offsets when a statement is stored as a Python tuple (p, s, o, c)
 SUBJ = 2
 OBJ = 3
 
-PARTS = [ PRED, SUBJ, OBJ]
+PARTS =  PRED, SUBJ, OBJ
+ALL4 = CONTEXT, PRED, SUBJ, OBJ
+
+# The parser outputs quads where each item is a pair   type, value
+
+RESOURCE = 0        # which or may not have a fragment
+LITERAL = 2         # string etc - maps to data:
+ANONYMOUS = 3       # existentially qualified unlabelled resource
+VARIABLE = 4        # 
+
+
 
 chatty = 0   # verbosity flag
 
@@ -66,17 +77,24 @@ option_noregen = 0   # If set, do not regenerate genids on output
 
 N3CommentCharacter = "#"     # For unix script #! compatabilty
 
-class Parser:
-    def __init__(self, thisDoc, baseURI="", bindings = {}, varPrefix = "_v"):
+class SinkParser:
+    def __init__(self, sink, thisDoc, baseURI="", bindings = {},
+                 genPrefix = "", varPrefix = ""):
 	""" note: namespace names should *not* end in #;
 	the # will get added during qname processing """
-	if baseURI == "" : self._baseURI = thisDoc
-	else: self._baseURI = baseURI
+        self._sink = sink
     	self._bindings = bindings
-	self._thisDoc = intern(thisDoc)
-	self.context = self._thisDoc    # For storing with triples
-        self.contextStack = []      # For nested conjunctions { ... }
-        self.varPrefix = varPrefix
+	self._thisDoc = thisDoc
+        self._baseURI = baseURI
+	self._context = RESOURCE , self._thisDoc    # For storing with triples
+        self._contextStack = []      # For nested conjunctions { ... }
+        self._varPrefix = varPrefix
+        self._nextId = 0
+        self._genPrefix = genPrefix
+
+        if not self._baseURI: self._baseURI = self._thisDoc
+        if not self._genPrefix: self._genPrefix = self._thisDoc + "#_g"
+        if not self._varprefix: self._varPrefix = self._thisDoc + "#_v"
 
     def feed(self, str):
 	"""if BadSyntax is raised, the string
@@ -107,8 +125,6 @@ class Parser:
             
 	    return j
 
-    def makeStatement(self, triple):
-	pass
 
     #@@I18N
     _namechars = string.lowercase + string.uppercase + string.digits + '_'
@@ -142,12 +158,24 @@ class Parser:
 	j = self.uri_ref2(str, i, t)
 	if j<0: raise BadSyntax(str, i, "expected uriref2 after bind _qname_")
 
-	self._bindings[t[0][0]] = t[1]
-	self.bind(t[0][0], t[1])
+	self._bindings[t[0][0]] = t[1][1]
+	self.bind(t[0][0], t[1] [1])
 	return j
 
-    def bind(self, qn, resource):
-        pass                            # Hook for subclasses
+    def bind(self, qn, uriref):
+        self._sink.bind(qn, uriref)
+
+    def startDoc(self):
+        self._sink.startDoc()
+
+    def endDoc(self):
+        self._sink.endDoc()
+
+    def makeStatement(self, triple):
+        print "## Paser output: ", `triple`
+        self._sink.makeStatement(triple)
+
+
 
     def statement(self, str, i):
 	r = []
@@ -237,7 +265,8 @@ class Parser:
 	else:
 	    j = self.tok('[', str, i)
 	    if j>=0:
-                subj = internAnonymous(self._thisDoc)
+                subj = ANONYMOUS , self._genPrefix + `self._nextId`
+                self._nextId = self._nextId + 1  # intern
                 i = self.property_list(str, j, subj)
                 if i<0: raise BadSyntax(str, j, "property_list expected")
                 j = self.tok(']', str, i)
@@ -248,7 +277,8 @@ class Parser:
 	    j = self.tok('{', str, i)
 	    if j>=0:
                 oldContext = self.context
-                subj = internAnonymous(self._thisDoc)
+                subj = ANONYMOUS , self._genPrefix + `self._nextId`
+                self._nextId = self._nextId + 1  # intern
                 self.context = subj
                 
                 while 1:
@@ -299,10 +329,15 @@ class Parser:
 
     def checkDot(self, str, i):
             j = self.tok('.', str, i)
-            if j<0:
-                print "N3: expected '.' in %s^%s" %(str[i-30:i], str[i:i+30])
-                return i
-            return j
+            if j >=0: return j
+            
+            j = self.tok('}', str, i)
+            if j>=0: return i # Can omit . before these
+            j = self.tok(']', str, i)
+            if j>=0: return i # Can omit . before these
+
+            print "# N3: expected '.' in %s^%s" %(str[i-30:i], str[i:i+30])
+            return i
 
 
     def uri_ref2(self, str, i, res):
@@ -318,13 +353,15 @@ class Parser:
 		    ns = self._bindings[pfx]
 		except KeyError:
 		    raise BadSyntax(str, i, "prefix not bound")
-	    res.append(internFrag(ns, ln))
+#	    res.append(internFrag(ns, ln))
+            res.append( RESOURCE, `ns`+ "#" + ln)
 	    return j
 
         v = []
         j = self.variable(str,i,v)
         if j>0:
-            res.append(internVariable(self._thisDoc,v[0]))
+#            res.append(internVariable(self._thisDoc,v[0]))
+            res.append(VARIABLE, v[0])
             return j
         
         j = self.skipSpace(str, i)
@@ -336,18 +373,12 @@ class Parser:
             st = i
             while i < len(str):
                 if str[i] == ">":
-                    uref = str[st:i]
-                    if uref == '':
-                        sym = self._thisDoc
-                    else:
-                        if self._baseURI:
-                            uref=urlparse.urljoin(self._baseURI, uref)
-                        #@@else: if it's not absolute, BadSyntax
-                        sym = intern(uref)
-                    res.append(sym)
+                    uref = str[st:i] # the join should dealt with "":
+                    uref = urlparse.urljoin(self._baseURI, str[st:i])
+                    res.append(RESOURCE , uref)
                     return i+1
                 i = i + 1
-            raise BadSyntax(str, o, "unterminated URI reference")
+            raise BadSyntax(str, j, "unterminated URI reference")
         else:
             return -1
 
@@ -437,7 +468,7 @@ class Parser:
 		st = i
 		while i < len(str):
 		    if str[i] == '"':
-			res.append(Literal(str[st:i]))
+			res.append(LITERAL, str[st:i])
 			return i+1
 		    i = i + 1
 		raise BadSyntax(str, i, "unterminated string literal")
@@ -487,47 +518,10 @@ class BadSyntax:
 
 
 
-class SinkParser(Parser):
-    """Parses notation3 and outputs RDF stream to sink"""
 
-    def __init__(self, sink, thisDoc, baseURI="", bindings = {}):
-	Parser.__init__(self, thisDoc, baseURI, bindings)
-	self._sink = sink
 
-    def bind(self, qn, uriref):
-        self._sink.bind(qn, uriref)                            # Hook for subclasses
 
-    def startDoc(self):
-        self._sink.startDoc()
 
-    def endDoc(self):
-        self._sink.endDoc()
-
-    def makeStatement(self, triple):
-        self._sink.makeStatement(triple)
-
-#####
-# Symbol support
-# taken from imap_sort.py
-class Symbol:
-    symtab = {}
-
-    def __init__(self, name):
-	self._name = name
-
-    def __str__(self):
-	return self._name
-
-    def __repr__(self):
-	return self._name
-
-def intern_old(str):
-    try:
-	return Symbol.symtab[str]
-    except KeyError:
-	sym = Symbol(str)
-	Symbol.symtab[str] = sym
-	return sym
 
 
 ########################################################  URI Handling
@@ -546,9 +540,10 @@ def intern_old(str):
 # but we can figure out what to optimize later.  The target for now
 # is being able to find synonyms and so translate documents.
 
+        
 class Thing:
     def __init__(self):
-#      self.occursAs = [], [], [], []  #  List of statements in store by part of speech       
+      self.occursAs = [], [], [], []  #  List of statements in store by part of speech       
             
     def __repr__(self):   # only used for debugging I think
         return self.representation()
@@ -568,36 +563,22 @@ class Thing:
             self.occurrences(OBJ,context) == 1 and  # This is only incoming arrow
             self.occurrences(PRED, context) == 0 )    # It is not used as a verb itself
 
-    def equivalent(self, x):  # not used yet @@
-        """ Find one reason for beliveing them equivalent
-
-        Could search from subject, verb, or object, or find shortest. 
-        """
-        for s in DAML_equivalentTo.occursAs[PRED].items():
-            if ((s.object is self and s.subject is x) or
-                (s.subject is self and s.object is x)):
-                return s
-        return None
     
-# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-# Use  store.occurrences[thing][context][occurrence]   dict, list, list
-    def occurrences(self, x, p, context):
+    def occurrences(self, p, context):
         """ Count the times a thing occurs in a statement in given context
         """
-        if context == None:
-            return len(self.occurrences[x][p])
+        if context == None:   # meaning any
+            return len(self.occursAs[p])
         else:
             n = 0
-            for s in self.occurrences[x][p]:
+            for s in self.occursAs[p]:
                 if s.triple[CONTEXT] is context:
                     n = n+1
             return n
-        
+
 class Resource(Thing):
     """   A Thing which has no fragment
     """
-    table = {} # Table of resources
-    nextId = 0
     
     def __init__(self, uri):
         Thing.__init__(self)
@@ -688,7 +669,16 @@ def uri_encode(str):
             else:
                 result.append(str[i])
         return result
+
+####################################### Engine
     
+class Engine:
+    """ The root of the references in the system -a set of things and stores
+    """
+
+    def __init__(self)
+        resources = {}    # Hash table of URIs for interning things
+        
         
 def intern(uriref):
     """  Returns either a Fragment or a Resource as appropriate
@@ -1275,6 +1265,7 @@ class RDFStore(RDFSink) :
         
 
 # Record that x has occured in part of speech p in statement in context c
+# in c.contains[x][p]
     def index(self, statement, x, p):
         l = context.contains.get(x, None)
         if l : l[p].append(x)
@@ -1284,7 +1275,7 @@ class RDFStore(RDFSink) :
             context.contains[x] = l
 
     def stored(self, thing):
-            """ Intern thing """"
+            """ Intern thing so we can hang more data of it """"
             st = self.things.get(thing, None)
             if st return st
             self.things[thing] = StoredThing(thing)
@@ -1304,8 +1295,9 @@ class RDFStore(RDFSink) :
         for r in Resource.table.values() :
             total = 0
             for f in r.fragments.values():
-                total = total + (f.occurrences(SUBJ,context) +
-                                 f.occurrences(PRED,context) +f.occurrences(OBJ, context))
+                total = total + (len(context.contains[f][PRED])+
+                                 len(context.contains[f][SUBJ])+
+                                 len(context.contains[f][OBJ]) )
             if total > 3 and chatty:
                 print "#   Resource %s has %i occurrences in %s" % (`r`, total, `context`)
             if total > best :
