@@ -4,7 +4,10 @@
   dc:description "$Id$",
 """
 $Log$
-Revision 1.3  2004-01-29 23:53:45  connolly
+Revision 1.4  2004-01-31 00:10:04  connolly
+thread closing support
+
+Revision 1.3  2004/01/29 23:53:45  connolly
 use cwm to grab mail headers
 
 Revision 1.2  2004/01/29 21:10:11  timbl
@@ -37,8 +40,10 @@ hmm... remote query...
 @prefix cal: <http://www.w3.org/2002/12/cal/ical#> .
 
 :cwm :bugListName "www-archive";
-  :bugKeyWord "n3bugs".
+  :bugKeyWord "n3bugs";
+  :bugCache <../admin/,n3bugs.rdf>.
 
+{
 {
   ?PROJECT :bugListName ?LIST;
    :bugKeyWord ?KWORD.
@@ -53,6 +58,10 @@ hmm... remote query...
  => { ?PROJECT :bugMailFolder ?KB }.
 
 { ?PROJECT :bugMailFolder [ log:semantics ?BUGS ] }
+  => { ?PROJECT :bugMail ?BUGS }.
+} a :DeadCode.
+
+{ ?PROJECT :bugCache [ log:semantics ?BUGS ] }
   => { ?PROJECT :bugMail ?BUGS }.
 
 @prefix apple: <http://www.w3.org/2002/12/cal/prod/Apple_Comp_628d9d8459c556fa#>.
@@ -72,13 +81,18 @@ this log:forAll :MSG, :SUBJ, :DATE.
   ?PROJECT :calendar ?CAL;
     :bugMail ?BUGSTATUSKB.
 
-  (?BUGSTATUSKB [ is log:semantics of <reqThreads.n3> ] ) log:conjunction [
-    log:conclusion [
+  (?BUGSTATUSKB [ is log:semantics of <reqThreads.n3>] ) log:conjunction [
+    log:conclusion ?F ].
+} => { ?PROJECT :bugThreads ?F }.
+
+{
+  ?PROJECT :calendar ?CAL;
+    :bugThreads [
       log:includes {
         [] req:threadRoot :MSG.
         :MSG email:subject :SUBJ.
         :MSG email:date_iso :DATE.
-      } ] ].
+      } ].
 
   :MSG log:uri ?MSGURI.
   (?MSGURI "mid:(.*)") str:scrape ?MID.
@@ -87,6 +101,8 @@ this log:forAll :MSG, :SUBJ, :DATE.
   ].
 }
   => {
+ :MSG :archive ?MSG_ARCHIVE.
+
  ?CAL cal:component [
     a cal:Vtodo; #@@ not in the rdf calendar schema; i.e. no TODO tests
     cal:summary :SUBJ;
@@ -94,6 +110,22 @@ this log:forAll :MSG, :SUBJ, :DATE.
     cal:dtstart [cal:dateTime :DATE];
  ]
  }.
+
+{
+  ?CAL cal:component ?TODO.
+
+  ?TODO cal:url [ is :archive of :MSG ].
+
+  ?PROJECT :calendar ?CAL;
+    :bugThreads [
+      log:includes {
+        :MSG req:threadTail [].
+      } ].
+}
+=> {
+  ?TODO cal:status "COMPLETED".
+}.
+
 
 
 
