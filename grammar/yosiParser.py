@@ -8,7 +8,9 @@ import re
 import dekeywordizer
 import deprefixizer
 import tokenizer
-import triple_maker
+#import triple_maker
+import toXML
+import notation3
 import diag
 
 from RDFSink import RDF_type_URI, RDF_NS_URI, DAML_sameAs_URI, parsesTo_URI
@@ -84,7 +86,9 @@ class SinkParser:
 		self._formula = store.newFormula()
 	else:
 	    self._formula = openFormula
-	self._tripleMaker = triple_maker.TripleMaker(self._formula)
+	import sys
+	#self._tripleMaker = toXML.tmToRDF(sys.stdout, "foo:", base="file:/home/syosi/CVS-local/WWW/2000/10/swap/test/")#triple_maker.TripleMaker(self._formula)
+        self._tripleMaker = notation3.tmToN3(sys.stdout.write, genPrefix="foo:", base="file:/home/syosi/CVS-local/WWW/2000/10/swap/test/")
 	self._bindings[''] =  self._baseURI + '#'
 
     def startDoc(self):
@@ -100,17 +104,16 @@ class SinkParser:
         y = dekeywordizer.dekeywordize(z, bareNameOnly)
         x = deprefixizer.deprefixize(y, self._baseURI, self._bindings,
                                     qName,
-                                    explicitURI)
+                                    explicitURI,
+                                    self._tripleMaker.bind)
         self._parse(x)
-        for prefix, uri in self._bindings.items():
-            if prefix == '':
-                self._store.setDefaultNamespace(uri)
-            else:
-                self._store.bind(prefix,uri)
+#        for prefix, uri in self._bindings.items():
+#            self._tripleMaker.bind(prefix,uri)
 
     def _parse(self, x):
         tm = self._tripleMaker
         bNodes = {}
+        nextBNode = 0
         forMode = 0
         prevString = 0
         for token in x:
@@ -190,12 +193,8 @@ class SinkParser:
                 elif variable.match(token):
                     tm.addQuestionMarkedSymbol(self._baseURI + '#' + token[1:])
                 elif token[:2] == '_:':
-                    __str = token[2:]
-                    if __str not in bNodes:
-                        tm.beginAnonymous()
-                        bNodes[__str] = tm.endAnonymous()
-                    else:
-                        tm.addNode(bNodes[__str])
+                    tm.addAnonymous(token)
+        
                 else:
                     raise ValueError(token)
             elif forMode == 1:

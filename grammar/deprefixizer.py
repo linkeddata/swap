@@ -9,7 +9,7 @@ import uripath
 def absolutize(uri, baseURI):
     return uripath.join(baseURI, uri)
 
-def deprefixize(inTokens, baseURI, prefixMap, qName, uri):
+def deprefixize(inTokens, baseURI, prefixMap, qName, uri, fn=None):
     """remove @keywords designations
 
 
@@ -47,6 +47,8 @@ def deprefixize(inTokens, baseURI, prefixMap, qName, uri):
             if not uri.match(token):
                 raise ValueError('Expected: uri')
             prefixMap[prefixMode] = absolutize(token[1:-1], baseURI)
+            if fn:
+                fn(prefixMode, absolutize(token[1:-1], baseURI))
             prefixMode = 2
 
 #if __name__ == '__main__':
