@@ -170,10 +170,8 @@ data about data. You have a lot of control over where cwm will look for
 metadata, and how it will use it.</p>
 
 <p>This behaviour is controlable in cwm by the --mode flags. By default cwm
-won't doing anything about it at all. See:</p>
-<ul>
-  <li><a href="cwm.html#Mode">Cwm's --mode flags</a> <a></a></li>
-</ul>
+won't doing anything about it at all. (See:<a href="cwm.html#Mode"> Cwm's
+--mode flags</a> in manual page)</p>
 
 <p></p>
 
@@ -181,11 +179,11 @@ won't doing anything about it at all. See:</p>
 causes it to check for metadata in the working formula - the current
 dataset.</p>
 
-<p>The s flag makes cwm also check for schemas. It does this only when trying
-to resolve a query. If the predicate is from a namespace it doesn't know, it
-will go to theweb to see what it can learn. Unless the e flag is set, then it
-won't mind if there are any errors in this proces, it will just abandon
-it.</p>
+<p>The <strong>s</strong> flag makes cwm also check for schemas. It does this
+only when trying to resolve a query. If the predicate is from a namespace it
+doesn't know, it will go to theweb to see what it can learn. Unless the
+<strong>e </strong>flag is set, then it won't mind if there are any errors in
+this proces, it will just abandon it.</p>
 
 <p>Most vocabularies, ontologies, have all kinds of metadata which helps a
 query engine resolve questions posed using those terms. Much of the
@@ -208,9 +206,9 @@ expressing query involving US state information.</p>
 <p>Its a rather random example (think of a better one? let us know! ;-), to
 look up the states bordering Massachusetts, and specifcially the names of
 major cities in that state. Massachusetts is identified as the state with
-state code "MA". So is we load this in cwm with --think? Nothing. Cwm just
-prints out the file reformatted. Now run it in remote query mode with schema
-fetch:</p>
+state code "MA". So what happens if we load this into cwm and do a --think?
+Nothing. Cwm just prints out the file reformatted. Now run it in remote query
+mode with schema fetch:</p>
 
 <p></p>
 <pre>cwm http://www.w3.org/2000/10/swap/test/dbork/defdoc2.n3 --mode=rse --think</pre>
