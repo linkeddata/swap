@@ -171,10 +171,10 @@ metadata, and how it will use it.</p>
 
 <p>This behaviour is controllable in cwm by the --mode flags. By default cwm
 won't doing anything about it at all. (See:<a href="cwm.html#Mode">Cwm's
---mode flags</a> in manual page).  When cwm runs with r and s  mode flags,
-and it finds in the query it i strying to match a statement whose predicate
-has a definitive document, then it will read the document, and search it
-(alone) to resolve that query.</p>
+--mode flags</a> in manual page). When cwm runs with r and s mode flags, and
+it finds in the query it i strying to match a statement whose predicate has a
+definitive document, then it will read the document, and search it (alone) to
+resolve that query.</p>
 
 <p></p>
 
@@ -260,6 +260,13 @@ expiry date was given, and so on, and the reader is welcome to experiment
 with such schemes where they are needed. Cwm does not currently( 2003/2)
 provide the functionality of looking inside the HTTP response to extract the
 protocol headers which convey time-related information.</p>
+
+<h4>References</h4>
+
+<p><a
+href="http://lists.w3.org/Archives/Public/www-rdf-rules/2003Nov/0157.html">Gerd
+ points</a> to ..."Local Closed World" as a term for what definitiveDocument
+and log:notIncludes. are doing.</p>
 <hr />
 
 <div class="noprint">
