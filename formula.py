@@ -97,6 +97,7 @@ class Formula(AnonymousNode, CompoundTerm):
 	self.statements = []
 	self._existentialVariables = []
 	self._universalVariables = []
+	self.stayOpen = 0   # If set, works as a knowledegbase, never canonicalized.
 
     def __repr__(self):
 	if self.statements == []:

@@ -53,7 +53,7 @@ from diag import progress
 import RDFSink
 
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
+from RDFSink import FORMULA, LITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS, NODE_MERGE_URI
 
 from isXML import isXMLChar, NCNameChar, NCNameStartChar, setXMLVersion, getXMLVersion
@@ -154,6 +154,7 @@ z  - Allow relative URIs for namespaces
 """
 
     def endDoc(self, rootFormulaPair=None):
+	if self.stayOpen: return # Ignore close if stayOpen is set, (for concatenation)
         self.flushStart()  # Note: can't just leave empty doc if not started: bad XML
 	if self._subj:
 	    self._xwr.endElement()  # </rdf:Description>
@@ -224,7 +225,7 @@ z  - Allow relative URIs for namespaces
                     #progress("object is now", obj, nid)
 		return
 	    
-	if subj[0] not in (SYMBOL, ANONYMOUS, LITERAL):
+	if subj[0] not in (SYMBOL, ANONYMOUS, LITERAL, LITERAL_DT, LITERAL_LANG):
 	    progress("Warning:  because subject is not symbol, bnode or literal, Ignoring ", tuple)
 	    return
 
@@ -276,7 +277,7 @@ z  - Allow relative URIs for namespaces
 		self._xwr.endElement()
 	    else:
 		raise RuntimeError("Unexpected subject", `subj`)
-	if obj[0] != LITERAL:
+	if obj[0] not in (LITERAL, LITERAL_DT, LITERAL_LANG):
 	    nid = self._nodeID.get(obj, None)
 	    if nid == None:
 		objn = self.referenceTo( obj[1])
@@ -288,11 +289,14 @@ z  - Allow relative URIs for namespaces
 	    else:
 		self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' nodeID', nid)], self.prefixes)		
 	    return
+
 	attrs = []  # Literal
 	v = obj[1]
-	if type(v) is type((1,1)):
-	    v, dt, lang = v
+	if obj[0] == LITERAL_DT:
+	    v, dt = v
 	    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt.uriref()))
+	elif obj[0] == LITERAL_LANG:
+	    v, lang = v
 	    if lang != None: attrs.append((XML_NS_URI+' lang', lang))
 	nid = self._nodeID.get(pred, None)
 	if nid is None:

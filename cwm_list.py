@@ -12,7 +12,8 @@ See cwm.py and the os module in python
 """
 
 
-from term import LightBuiltIn, Function, ReverseFunction,\
+from term import LightBuiltIn, Function, ReverseFunction, MultipleFunction,\
+    MultipleReverseFunction, \
     List, EmptyList, NonEmptyList
 
 from diag import verbosity, progress
@@ -50,15 +51,31 @@ class BI_last(LightBuiltIn, Function):
 	    if isinstance(x, EmptyList): return last.first
 
 
-class BI_in(LightBuiltIn):
+class BI_in(LightBuiltIn, MultipleReverseFunction):
     """Is the subject in the object?
-    Thsi is a wimpy implementation, because the built-in 
-    system can only return single values right now.  It ought to be
-    able in the future return all subjects wjich are in the object."""
+    Returnes a sequence of values."""
     def eval(self, subj, obj, queue, bindings, proof, query):
 	if not isinstance(obj, List): return None
 	return subj in obj
         
+
+    def evalSubj(self, obj, queue, bindings, proof, query):
+	if not isinstance(obj, NonEmptyList): return None
+	rea = None
+	return obj  # [({subj:x}, rea) for x in obj]
+
+class BI_member(LightBuiltIn, MultipleFunction):
+    """Is the subject in the object?
+    Returnes a sequence of values."""
+    def eval(self, subj, obj, queue, bindings, proof, query):
+	if not isinstance(subj, List): return None
+	return obj in subj
+
+    def evalObj(self,subj, queue, bindings, proof, query):
+	if not isinstance(subj, NonEmptyList): return None
+	rea = None
+	return subj # [({obj:x}, rea) for x in subj]
+
 
 class BI_append(LightBuiltIn, Function):
     """Takes a list of lists, and appends them together.
@@ -84,6 +101,7 @@ def register(store):
 
     ns = store.symbol(ListOperationsNamespace[:-1])
     ns.internFrag("in", BI_in)
+    ns.internFrag("member", BI_member)
     ns.internFrag("last", BI_last)
     ns.internFrag("append", BI_append)
 # ends

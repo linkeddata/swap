@@ -15,7 +15,7 @@ from OrderedSequence import merge, intersection, minus, indentString
 import diag
 from diag import chatty_flag, tracking, progress
 from term import BuiltIn, LightBuiltIn, \
-    HeavyBuiltIn, Function, ReverseFunction, \
+    HeavyBuiltIn, Function, ReverseFunction, MultipleFunction, MultipleReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil,  Term, \
     CompoundTerm, List, EmptyList, NonEmptyList
 from formula import StoredStatement, Formula
@@ -1028,19 +1028,26 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			    self.state = S_DONE
 			    rea=None
 			    if tracking: rea = BecauseBuiltIn(subj, pred, result, proof)
-			    return [({obj: result}, rea)]
+			    if isinstance(pred, MultipleFunction):
+				return [({obj:x}, rea) for x in result]
+			    else:
+				return [({obj: result}, rea)]
                         else:
 			    if heavy: return 0
 	    else:
 		if (self.neededToRun[OBJ] == []):
 		    if isinstance(pred, ReverseFunction):
+			if diag.chatty_flag > 97: progress("Builtin Rev function call %s(%s)"%(pred, obj))
 			result = pred.evalSubj(obj, queue, bindings.copy(), proof, self.query)
 			if result != None:
 			    self.state = S_DONE
 			    rea=None
 			    if tracking:
 				rea = BecauseBuiltIn(result, pred, obj, proof)
-			    return [({subj: result}, rea)]
+			    if isinstance(pred, MultipleReverseFunction):
+				return [({subj:x}, rea) for x in result]
+			    else:
+				return [({subj: result}, rea)]
                         else:
 			    if heavy: return 0
 		else:
@@ -1051,7 +1058,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			    rea=None
 			    if tracking:
 				rea = BecauseBuiltIn(result, pred, obj, proof)
-			    return [({subj: result}, rea)]
+			    return result  # Generates its own list of (list of bindings, reason)s
                         else:
 			    if heavy: return 0
 	    if diag.chatty_flag > 30:

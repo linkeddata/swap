@@ -365,8 +365,8 @@ rdf/xml files. Note that this requires rdflib.
 				remember = 0,
 				referer = "",
 				why = becauseCwm)
-	    workingContext.reopen()
-	    workingContext.stayOpen = 1 # Never canonicalize this. Never share it.
+		workingContext.reopen()
+	workingContext.stayOpen = 1 # Never canonicalize this. Never share it.
 	
 	if diag.tracking:
 	    proof = FormulaReason(workingContext)
@@ -622,12 +622,14 @@ rdf/xml files. Note that this requires rdflib.
 
         # Squirt it out if not piped
 
-        if not option_pipe:
+	workingContext.stayOpen = 0  # End its use as an always-open knoweldge base
+        if option_pipe:
+	    workingContext.endDoc()
+        else:
             if hasattr(_outSink, "serializeKB"):
                 raise NotImplementedError
             else:
                 if verbosity()>5: progress("Begining output.")
-		workingContext.stayOpen = 0  # End its use as an always-open knoweldge base
 		workingContext = workingContext.close()
 		assert workingContext.canonical != None
 

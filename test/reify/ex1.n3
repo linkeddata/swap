@@ -1,0 +1,5 @@
+@keywords a.
+@forAll :x.
+  @forSome :c.
+    :c a car.
+    {x a car } => {x a vehicle}.

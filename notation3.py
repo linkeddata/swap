@@ -71,7 +71,7 @@ from uripath import refTo, join
 import uripath
 import RDFSink
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import  LITERAL, ANONYMOUS, SYMBOL
+from RDFSink import  LITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
 import diag
 
@@ -1140,6 +1140,7 @@ s   Subject must be explicit for every statement. Don't use ";" shorthand.
 t   "this" and "()" special syntax should be suppresed.
 u   Use \u for unicode escaping in URIs instead of utf-8 %XX
 v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSome".
+/   If namespace has no # in it, assume it ends at the last slash if outputting.
 """
 # "
 
@@ -1202,8 +1203,8 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
         """ Just accepting a convention here """
         assert ':' in uri # absolute URI references only
         if "p" in self._flags: return  # Ignore the prefix system completely
-        if not prefixString:
-            raise RuntimError("Please use setDefaultNamespace instead")
+#        if not prefixString:
+#            raise RuntimError("Please use setDefaultNamespace instead")
         
         if (uri == self.defaultNamespace
             and "d" not in self._flags): return # don't duplicate ??
@@ -1238,6 +1239,7 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
     def endDoc(self, rootFormulaPair=None):
 	self._endStatement()
 	self._write("\n")
+	if self.stayOpen: return  #  fo concatenation
 	if not self._quiet: self._write("#ENDS\n")
 	return  # No formula returned - this is not a store
 
@@ -1489,13 +1491,15 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 
         ty, value = pair
 
+        singleLine = "n" in self._flags
         if ty == LITERAL:
-	    singleLine = "n" in self._flags
-	    if type(value) is not types.TupleType:  # simple old-fashioned string
-		return stringToN3(value, singleLine=singleLine, flags = self._flags)
-	    s, dt, lang = value
-	    if dt != None and "n" not in self._flags:
-		dt_uri = dt.uriref()		 
+	    return stringToN3(value, singleLine=singleLine, flags = self._flags)
+
+        if ty == LITERAL_DT:
+	    s, dt = value
+	    if "n" not in self._flags:
+		dt_uri = dt
+#		dt_uri = dt.uriref()		 
 		if (dt_uri == INTEGER_DATATYPE):
 		    return str(long(s))
 		if (dt_uri == FLOAT_DATATYPE):
@@ -1503,9 +1507,11 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 		if (dt_uri == DECIMAL_DATATYPE):
 		    return str(Decimal(s))
 	    st = stringToN3(s, singleLine= singleLine, flags=self._flags)
-	    if lang != None: st = st + "@" + lang
-	    if dt != None: return st + "^^" + self.representationOf(context, dt.asPair())
-	    return st
+	    return st + "^^" + self.representationOf(context, (SYMBOL, dt))
+
+        if ty == LITERAL_LANG:
+	    s, lang = value
+	    return stringToN3(s, singleLine= singleLine, flags=self._flags)+ "@" + lang
 
 	aid = self._anodeId.get(pair[1], None)
 	if aid != None:  # "a" flag only

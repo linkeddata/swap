@@ -82,12 +82,12 @@ from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, List_NS
 from RDFSink import RDF_NS_URI
 
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
+from RDFSink import FORMULA, LITERAL, LITERAL_DT, LITERAL_LANG, ANONYMOUS, SYMBOL
 
 from pretty import Serializer
 from OrderedSequence import indentString
 
-LITERAL_URI_prefix = "data:text/rdf+n3;"
+LITERAL_URI_prefix = "data:application/rdf+n3-literal;"
 Delta_NS = "http://www.w3.org/2004/delta#"
 cvsRevision = "$Revision$"
 
@@ -162,8 +162,6 @@ class IndexedFormula(Formula):
 	self._closureAgenda = []
 	self._closureAlready = []
 	
-	self.stayOpen = 0   # If set, works as a knowledegbase, never canonicalized.
-
 
     def statementsMatching(self, pred=None, subj=None, obj=None):
         """Return a READ-ONLY list of StoredStatement objects matching the parts given
@@ -1112,6 +1110,8 @@ class RDFStore(RDFSink) :
 	key = (str, dt, lang)
 	result = self.resources.get(key, None)
 	if result != None: return result
+#	if dt is not None: dt = self.newSymbol(dt)
+	assert dt is None or isinstance(dt, Fragment)
 	result = Literal(self, str, dt, lang)
 	self.resources[key] = result
 	return result
@@ -1294,6 +1294,10 @@ class RDFStore(RDFSink) :
 
         if typ == LITERAL:
 	    return self.newLiteral(urirefString, dt, lang)
+        if typ == LITERAL_DT:
+	    return self.newLiteral(urirefString[0], self.intern(SYMBOL, urirefString[1]))
+        if typ == LITERAL_LANG:
+	    return self.newLiteral(urirefString[0], None, urirefString[1])
         else:
             assert ':' in urirefString, "must be absolute: %s" % urirefString
 

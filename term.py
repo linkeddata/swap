@@ -34,12 +34,12 @@ from uripath import refTo
 from RDFSink import runNamespace
 from decimal import Decimal  # for xsd:decimal
 
-LITERAL_URI_prefix = "data:text/rdf+n3;"
+LITERAL_URI_prefix = "data:application/rdf+n3-literal;"
 
 
 from RDFSink import List_NS
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL, RDF_type_URI
+from RDFSink import FORMULA, LITERAL, LITERAL_LANG, LITERAL_DT, ANONYMOUS, SYMBOL, RDF_type_URI
 from RDFSink import Logic_NS
 
 from OrderedSequence import merge, intersection, minus
@@ -97,7 +97,10 @@ class Term:
         """
         s = self.uriref()
         p = string.rfind(s, "#")
-	if p<0: p=string.rfind(s, "/")   # Allow "/" namespaces as a second best
+	if p<0:  # No hash, use slash
+	    p=s.rfind("/", 0, len(s)-2)   # Allow "/" namespaces as a second best, not a trailing one
+#	    if p == len(s) - 1:   # trailing slash? use a previous one
+#		p = s.rfind("/", 0, p-1)
         if (p>=0 and s[p+1:].find(".") <0 ): # Can't use prefix if localname includes "."
             prefix = self.store.prefixes.get(s[:p+1], None) # @@ #CONVENTION
             if prefix != None : return prefix + ":" + s[p+1:]
@@ -752,6 +755,7 @@ class Literal(Term):
         Term.__init__(self, store)
         self.string = str    #  n3 notation EXcluding the "  "
 	self.datatype = dt
+	assert dt is None or isinstance(dt, Fragment)
 	self.lang=lang
 
     def __str__(self):
@@ -774,10 +778,12 @@ class Literal(Term):
 #        return self.string
 
     def asPair(self):
-	if self.datatype == None and self.lang == None: 
-	    return (LITERAL, self.string)  # obsolete
-	return LITERAL, ( self.string, self.datatype, self.lang )
-
+	if self.datatype:
+	    return LITERAL_DT, (self.string, self.datatype.uriref())
+	if self.lang:
+	    return LITERAL_LANG, (self.string, self.lang)
+	return (LITERAL, self.string)
+	    
     def classOrder(self):
 	return	1
 
@@ -993,6 +999,29 @@ class ReverseFunction(BuiltIn):
 	calls a simpler one which uses python conventions"""
 	return self.store._fromPython(self.evaluateSubject(obj.value()))
 
+class MultipleFunction(Function):
+    """Multiple return values.
+    The preconditions are the same as for Function, that the subject must be bound.
+    The result is different, as multiple versions are returned. Example: member of list.
+    """
+    def evalSubj(self, obj,  queue, bindings, proof, query):
+	"""This function which has access to the store, unless overridden,
+	calls a simpler one which uses python conventions.
+	The python one returns a list of function values.
+	This returns a 'new bindings' structure (nbs) which is a sequence of
+	(bindings, reason) pairs."""
+
+	return self.store._fromPython(self.evaluateSubject(obj.value()))
+#	results = self.store._fromPython(self.evaluateSubject(obj.value()))
+#	return [ ({subj: x}, None) for x in results]
+    
+class MultipleReverseFunction(ReverseFunction):
+    """Multiple return values"""
+    def evalObj(self, subj,  queue, bindings, proof, query):
+	return self.store._fromPython(self.evaluateObject(obj.value()))
+#	results = self.store._fromPython(self.evaluateObject(obj.value()))
+#	return [ ({subj: x}, None) for x in results]
+    
 class FiniteProperty(BuiltIn, Function, ReverseFunction):
     """A finite property has a finite set of pairs of (subj, object) values
     

@@ -13,7 +13,7 @@ from rdflib.StringInputSource import StringInputSource
 from rdflib.URIRef import URIRef
 from rdflib.BNode import BNode
 from rdflib.Literal import Literal
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
+from RDFSink import FORMULA, ANONYMOUS, SYMBOL
 import diag
 from diag import progress
 

@@ -1,9 +1,14 @@
 #!/usr/bin/python
 """RDFSink -- RDF parser/serializer/store interface
 
+This is a simple API for a push-stream of RDF data. It doesn't use
+a particular classof obejcts, but just uses python pairs.
+It is kinda crude but it does allow for example data to be squirted efficiently 
+between modules which use different python classes for RDF.
+
 HISTORY
 
-This module is being factored out of notation3.py
+This module was factored out of notation3.py
 
 REFERENCES
   Python Style Guide
@@ -37,7 +42,9 @@ ALL4 = CONTEXT, PRED, SUBJ, OBJ
 SYMBOL = 0          # URI which or may not have a fragment.
                     # (formerly: RESOURCE)
 FORMULA = 1         # A { } set of statements. (identifier is arbitrary)
-LITERAL = 2         # string etc - maps to data: @@??
+LITERAL = 2         # string, untyped RDF literal.  x[1] is a string or unicode string
+LITERAL_DT = 21     # typed RDF literal x[1] is a pair (string, datatype URI)
+LITERAL_LANG = 22   # Language RDF literal x[1] is a pair (string, langauge)
 ANONYMOUS = 3       # As SYMBOL except actual symbol is arbitrary, can be regenerated
 
 
@@ -149,6 +156,7 @@ class RDFSink:
 	    self._genPrefix = runNamespace()  + "_g"
 	    self.usingRunNamespace = 1
 	self._nextId = 0
+	self.stayOpen = 0	# Delay close because more data coming if >0
 
 
     def startDoc(self):
@@ -258,8 +266,12 @@ class RDFSink:
 	    self._genPrefix = genPrefix
 
     def newLiteral(self, str, dt=None, lang=None):
-	if dt != None: raise ValueError("This sink cannot accept datatyped values")
-	if lang != None: raise ValueError("This sink cannot accept values with languages")
+	if dt != None:
+	    return (LITERAL_DT, (str, dt))
+	    # raise ValueError("This sink cannot accept datatyped values")
+	if lang != None:
+	    return (LITERAL_LANG, (str, lang))
+	    # raise ValueError("This sink cannot accept values with languages")
 	return (LITERAL, str)
 
     def newSymbol(self, uri):
