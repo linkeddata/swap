@@ -1,0 +1,141 @@
+#Processed by Id: cwm.py,v 1.96 2002/06/07 20:07:17 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/time.n3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/time.n3
+     @prefix : <http://www.w3.org/2000/10/swap/time#> .
+     @prefix doc: <http://www.w3.org/2000/01/pim/doc#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix ont: <http://www.daml.org/2000/10/daml-ont#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    :ISOTime     a rdfs:Class .
+    
+    :day     a ont:UniqueProperty,
+                rdf:Property;
+         rdfs:comment """
+For a date-time, its time:inSeconds is the (string represntation of)
+the two-digitday of the month.
+
+Cwm implements this as a function.
+""";
+         rdfs:domain :ISOTime;
+         rdfs:isDefinedBy <>;
+         rdfs:label "day" .
+    
+    :dayOfWeek     a ont:UniqueProperty,
+                rdf:Property;
+         rdfs:comment """
+For a date-time, its time:dayOfWeek is the (string reopresntation of)
+the day number within the week, Sunday being 0.
+
+Currently the result is a sinbgle digit string but don't count on it
+being anything other than a valid integer represetnation.
+
+Cwm implements this as a function.
+""";
+         rdfs:domain :ISOTime;
+         rdfs:isDefinedBy <>;
+         rdfs:label "day of week" .
+    
+    :gmTime     a ont:UniqueProperty,
+                rdf:Property;
+         rdfs:comment """
+For a date-time format string, its time:gmtime is the 
+result of formatting the Universal Time of processing
+in the format given.   If teh fiormat string has zero length,
+then the ISOdate standrad format is used. 
+[ is time:gmtime of ""]  the therefore the current date time.
+It will end with "Z" as a timezone code.
+
+Cwm implements this as a function.
+""";
+         rdfs:isDefinedBy <>;
+         rdfs:label "Universal Time";
+         rdfs:range :format .
+    
+    :hour     a ont:UniqueProperty,
+                rdf:Property;
+         rdfs:comment """
+For a date-time, its time:inSeconds is the two-digit hour in the 24 hour clock.
+
+Cwm implements this as a function.
+""";
+         rdfs:domain :ISOTime;
+         rdfs:isDefinedBy <>;
+         rdfs:label "hour" .
+    
+    :inSeconds     a ont:UnambiguousProperty,
+                ont:UniqueProperty,
+                rdf:Property;
+         rdfs:comment """
+For a date-time, its time:inSeconds is the (string reopresntation of)
+the floating point number of seconds since the beginning of the era
+on the given system. Don't assume a particular value, always test for it.
+
+Cwm implements this as a bidirectional function: you can calculae the
+ISO date from the seconds since the beginning of the era, or vice-versa.
+""";
+         rdfs:domain :ISOTime;
+         rdfs:isDefinedBy <>;
+         rdfs:label "in era seconds" .
+    
+    :minute     a ont:UniqueProperty,
+                rdf:Property;
+         rdfs:comment """
+For a date-time, its time:minute is the two-digit number of seconds.
+
+Cwm implements this as a function.
+""";
+         rdfs:domain :ISOTime;
+         rdfs:isDefinedBy <>;
+         rdfs:label "minute" .
+    
+    :month     a ont:UniqueProperty,
+                rdf:Property;
+         rdfs:comment """
+For a date-time, its time:inSeconds is the two-digit month.
+
+Cwm implements this as a function.
+""";
+         rdfs:domain :ISOTime;
+         rdfs:isDefinedBy <>;
+         rdfs:label "month" .
+    
+    :second     a ont:UniqueProperty,
+                rdf:Property;
+         rdfs:comment """
+For a date-time, its time:second is the two-digit number of seconds.
+Cwm implements this as a function.
+""";
+         rdfs:domain :ISOTime;
+         rdfs:isDefinedBy <>;
+         rdfs:label "second" .
+    
+    :timeZone     a ont:UniqueProperty,
+                rdf:Property;
+         rdfs:comment """
+For a date-time, its time:timeZone is the trailing timezone offset
+part, e.g.  "-05:00".
+Cwm implements this as a function.
+""";
+         rdfs:domain :ISOTime;
+         rdfs:isDefinedBy <>;
+         rdfs:label "timezone offset" .
+    
+    :year     a ont:UniqueProperty,
+                rdf:Property;
+         rdfs:comment """
+For a date-time, its time:inSeconds is the (string reopresntation of)
+the four-digit year.
+
+Cwm implements this as a function.
+""";
+         rdfs:domain :ISOTime;
+         rdfs:isDefinedBy <>;
+         rdfs:label "year" .
+    
+#ENDS

@@ -49,8 +49,7 @@ time:month a rdf:Property,
 	ont:UniqueProperty;
     rdfs:label "month";
     rdfs:comment """
-For a date-time, its time:inSeconds is the (string reopresntation of)
-the two-digit year.
+For a date-time, its time:inSeconds is the two-digit month.
 
 Cwm implements this as a function.
 """;
@@ -130,6 +129,22 @@ Cwm implements this as a function.
 
 ########### Actual time access routines
 
+
+time:gmTime a rdf:Property,
+	ont:UniqueProperty;
+    rdfs:label "Universal Time";
+    rdfs:comment """
+For a date-time format string, its time:gmtime is the 
+result of formatting the Universal Time of processing
+in the format given.   If teh fiormat string has zero length,
+then the ISOdate standrad format is used. 
+[ is time:gmtime of ""]  the therefore the current date time.
+It will end with "Z" as a timezone code.
+
+Cwm implements this as a function.
+""";
+    rdfs:range time:format;
+    rdfs:isDefinedBy <>.
 
 time:gmTime a rdf:Property,
 	ont:UniqueProperty;
