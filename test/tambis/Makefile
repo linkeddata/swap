@@ -1,6 +1,7 @@
 # Generate different forms for an ontology from OILED
 #
-C=python ../../cwm.py
+PYTHON=python
+C=$(PYTHON) ../../cwm.py
 
 tambis.rdf: tambis.n3
 	$C tambis.n3 -rdf > tambis.rdf
