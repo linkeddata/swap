@@ -3,61 +3,61 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-  <title>Semantic Web Travel Tools</title>
+  <title>Semantic Web Application Integration: Travel Tools</title>
   <meta name="generator" content="amaya 5.3, see http://www.w3.org/Amaya/" />
 </head>
 
 <body>
-<p><a href="../../../../">W3C</a> * <a href="../../../01/sw/">SWAD</a> * <a
-href="../">SWAP</a></p>
+<div class="noprint">
+<a href="../../../../">W3C</a> * <a href="../../../01/sw/">SWAD</a> * <a
+href="../">SWAP</a>
+</div>
 
-<h1>Semantic Web Travel Tools</h1>
+<h1>Semantic Web Application Integration: Travel Tools</h1>
 
-<p><em>The bane of my existence is doing things I know the computer could do
-for me.</em> When I got my proposed July 2001 travel itinerary in email, I
-just couldn't bear the thought of manually copying and pasting each field
-from the iterary into my calendar:</p>
-<ol>
-  <li>I'd probably make a mistake, so I'd never trust the results. I'd always
-    have to check the travel itinerary again. <em>Never mind the fact that I
-    can't make and follow links from calendar entries to mail messages;
-    that's for another day...</em></li>
-  <li>I might not agree to the proposed itinerary, in which case I'd have to
-    decline it and start over when the revision comes in. I might just be
-    able to key in the diffs, but that's even more error prone.</li>
-</ol>
+<p><em>The bane of my existence is doing things I know the computer
+could do for me.</em> When I got my proposed July 2001 travel
+itinerary in email, I just couldn't bear the thought of manually
+copying and pasting each field from the iterary into my calendar.  I
+started putting the Semantic Web approach to application integration
+to work.</p>
 
-<p>I'm pleased to report that with these semantic web travel tools, my
-computer handles these tasks for me:</p>
+<p>The Semantic Web approach to application integration emphasizes
+data about real-world things like people, places, and events over
+document structure. Documents are important real-world things too, of
+course. And Semantic Web data formats benefit from the
+internationalization support in XML and the growing infrastructure of
+tools. But most XML schemas are too constrained, syntactically, and
+not constrained enough, semantically, to accomplish these integration
+tasks:</p>
 
 <ul>
 <li>import travel itineraries into my PDA calendar</li>
 <li>import travel itineraries into my iCalendar-happy desktop PIM</li>
 <li>produce a brief summary of an itinerary for use in plain text email</li>
-<li>plot my itinerary on a map</li>
+<li>plot an itinerary on a map</li>
 <li>check proposed work travel itineraries against family constraints</li>
-</ul>
-
-<p>and I hope to automate various related tasks any time now:</p>
-
-<ul>
 <li>tell me when my travel schedule brings me unusually near a friend/colleague</li>
 <li>produce animated views of my travel schedule or past trips</li>
-<li>compute conflicts between teleconferences and flights</li>
+<li>find conflicts between teleconferences and flights</li>
 </ul>
 
 
 <h2>Step 1: Grok Legacy Data</h2>
 
-<p>The data comes from the travel agency like this, probably
+<p>While more and more of the data in our lives is available
+in the Semantic Web, there will always be a place for mechanisms
+that extract the statements implicit in legacy data.</p>
+
+</p>The data comes from the travel agency like this, probably
 dumped from their database system:</p>
 
-<pre>&gt;  11 JUL 01  -  WEDNESDAY
-&gt;     AIR   AMERICAN AIRLINES    FLT:1364   ECONOMY
-&gt;           LV KANSAS CITY INTL             144P           EQP: MD-80
-&gt;           DEPART: TERMINAL BUILDING A                    01HR 31MIN
-&gt;           AR CHICAGO OHARE                315P           NON-STOP
-&gt;           ARRIVE: TERMINAL 3    </pre>
+<pre>07 APR 03 - MONDAY
+AIR AMERICAN AIRLINES FLT:3199 ECONOMY
+OPERATED BY AMERICAN AIRLINES
+LV KANSAS CITY INTL 940A EQP: MD-80
+DEPART: TERMINAL BUILDING B 01HR 36MIN
+AR DALLAS FT WORTH 1116A NON-STOP</pre>
 
 <p>I hope that before too long they'll dump it from their
 database directly into RDF
@@ -68,30 +68,104 @@ or perhaps in XML using some travel industry vocabulary, but<p>
 <li>before they'll do so, somebody will have to show them why it's
 valuable</li>
 
-<li>with 10 years experience in building text-munging tools,
-reverse-engineering the structure of their data using a nasty perl
-script is an easier way to scratch the itch than begging them to do it
-The Right Way.</li>
+<li>sometimes, for the short term, reverse-engineering the structure
+of their data is cheaper than getting them to change their
+processes</li>
 
 </ul>
 
-<p>So step one goes like this:</p>
+<p>So I wrote a perl script (<a
+href="/2001/07dc-bos/grokNavItin.pl">grokNavItin.pl</a>) to extract
+statements from the data:</p>
 
-<table>
-<tr><th>Input</th><th>Processing</th></th>Output</th></tr>
-<tr><td>itinerary.txt</td><td>perl grokTravitin.pl</td><td>itinerary.nt</td></tr>
-</table>
+<p><img src="grokLeg.png" alt="itin.txt -> itin.n3/rdf" /></p>
 
-<p>The perl script writes the output in an RDF dialect called
-<a href="@@">n-triples</a>, a line-oriented serialization developed in the RDF
-Core working group for testing parsers.</p>
+<p>The output of the perl script, <tt>itin.nt</tt>,
+is in <a
+href="http://www.w3.org/TR/rdf-testcases/#ntriples">n-triples</a>, a
+line-oriented serialization developed in the RDF Core working group
+for testing parsers. For visual inspection and debugging, we use cwm
+to pretty-print it in N3. The result look like this:</p>
 
-<p>@@@@@@@@@@@@</p>
+<pre>
+    :_gflt3199_3     a :_gECONOMY_5;
+         k:endingDate :_gdayMONDAY07_2;
+         k:fromLocation &lt;http://www.daml.org/cgi-bin/airport?MCI&gt;;
+         k:startingDate :_gdayMONDAY07_2;
+         k:toLocation &lt;http://www.daml.org/cgi-bin/airport?DFW&gt;;
+         t:arrivalTime "11:16";
+         t:carrier :_gAMERICANAIRLINES_4;
+         t:departureTime "09:40";
+         t:flightNumber "3199" .
 
-<p>So I wrote a little perl script (<a
-href="/2001/07dc-bos/grokNavItin.pl">grokNavItin.pl</a>) to convert the
-travel itinerary, which had obviously been dumped from a relational
-database...</p>
+    :_gAMERICANAIRLINES_4     a k:AirlineCompany;
+         k:nameOfAgent "AMERICAN AIRLINES" .
+    
+    :_gECONOMY_5     r:value "ECONOMY" .
+
+    :_gdayMONDAY07_2     a k:Monday;
+         dt:date "2003-04-07" .
+    
+
+</pre>
+
+<h3>Choosing a Vocabulary: Build Or Buy?</h3>
+
+
+<p>The import script does not only bridges the syntactic
+gap between the legacy data and RDF, but it also translates
+the vocabulary of terms used in the data into URI space.
+This raises the classic build-or-buy choice:</p>
+
+<dl>
+<dt>use (buy) an existing, general-purpose vocabulary</dt>
+
+<dd>If we can accept the risk of putting word's into the source's
+mouth, we can benefit from an economy of scale of shared vocabulary
+such as the <a
+href="http://www.cyc.com/cyc-2-1/vocab/transportation-vocab.html">cyc
+ontology of common sense transportation terms</a>.</dd>
+
+<dt>build a vocabulary just for this purpose<dt>
+<dd>A special-purpose vocabulary isolates the data
+from risks of version skew and such.</dd>
+</dl>
+
+<p>Early versions of the import script used a special-purpose
+vocabulary; rules to relate this vocabulary to other
+vocabularies were developed one at a time. But eventually
+a pattern of using the general purpose cyc ontology
+emerged, and the expected benefit of maintaining the
+special-purpose ontology was dominated by the cost.
+More recent versions convert directly to terms
+in shared ontologies:</p>
+
+<p><img alt="travel terms" src="travelFig.png" /></p>
+
+<blockquote>if your desktop is SVG-happy, <a href="travelFig.svg">travelFig.svg</a> is
+nicer. I drew it with dia; you can play <a
+href="travelFig.xml">travelFig.xml</a>, the source. I'm working on <a
+href="/2002/03owlt/umlp/dia2owl.xsl">dia2owl.xsl</a>, which converts it to
+RDF/S: <a href="travelFig.rdf">travelFig.rdf</a>.
+</blockquote>
+
+
+(The opencyc project
+released a version in DAML/RDF). I needed a few extra terms:
+<code>departureTime</code>, <code>flightNumber</code>, ...; see <a
+href="travelTerms">travelTerms</a>, in <a href="travelTerms.rdf">RDF/xml</a>,
+<a href="travelTerms.rdf">RDF/n3</a>.</p>
+
+
+<p>Here's a UML diagram of some of the terms::</p>
+
+
+<p><em>[@@figure of (some of the) travelTerms? use dia? use
+sniffSchema.n3?]</em></p>
+
+<p><em>[@@some figures? SVG view of Makefiles, showing data flow thru
+tools?]</em></p>
+
 
 
 <p>... into RDF. Then I wrote <a href="/2001/07dc-bos/itin2datebook.n3">some
@@ -123,31 +197,6 @@ are a bit tedious...</p>
 
 <p>More details: <a href="/2001/08swws67/">SWWS stuff</a>.</p>
 
-<p>I have since revised the little perl script; rather than hoping/pretending
-that our travel agent would use an RDF vocabulary, <a
-href="grokTravItin.pl">grokTravItin.pl</a> uses terms from the <a
-href="http://www.cyc.com/cyc-2-1/vocab/transportation-vocab.html">cyc
-ontology of common sense transportation terms</a>. (The opencyc project
-released a version in DAML/RDF). I needed a few extra terms:
-<code>departureTime</code>, <code>flightNumber</code>, ...; see <a
-href="travelTerms">travelTerms</a>, in <a href="travelTerms.rdf">RDF/xml</a>,
-<a href="travelTerms.rdf">RDF/n3</a>.</p>
-
-<p>Here's a UML diagram of some of the terms::</p>
-
-<p><img alt="travel terms" src="travelFig.png" /></p>
-
-<p>if your desktop is SVG-happy, <a href="travelFig.svg">travelFig.svg</a> is
-nicer. I drew it with dia; you can play <a
-href="travelFig.xml">travelFig.xml</a>, the source. I'm working on <a
-href="/2002/03owlt/umlp/dia2owl.xsl">dia2owl.xsl</a>, which converts it to
-RDF/S: <a href="travelFig.rdf">travelFig.rdf</a>.</p>
-
-<p><em>[@@figure of (some of the) travelTerms? use dia? use
-sniffSchema.n3?]</em></p>
-
-<p><em>[@@some figures? SVG view of Makefiles, showing data flow thru
-tools?]</em></p>
 
 <h2>Evolution Import</h2>
 
@@ -259,6 +308,7 @@ capitalization]</em>:</p>
     its source.</li>
 </ul>
 
+
 <p>Some principles:</p>
 
 <blockquote>
@@ -283,6 +333,19 @@ capitalization]</em>:</p>
   <li>www-rdf-interest (for RDFS/UML stuff)</li>
   <li>IETF calsched WG (working on XML versions of ical)</li>
 </ul>
+
+<hr />
+<h2>Fodder</h2>
+<ol>
+  <li>I'd probably make a mistake, so I'd never trust the results. I'd always
+    have to check the travel itinerary again. <em>Never mind the fact that I
+    can't make and follow links from calendar entries to mail messages;
+    that's for another day...</em></li>
+  <li>I might not agree to the proposed itinerary, in which case I'd have to
+    decline it and start over when the revision comes in. I might just be
+    able to key in the diffs, but that's even more error prone.</li>
+</ol>
+
 <hr />
 <address>
   <p><a href="../../../../People/Connolly/">Dan Connolly</a>, Jun 2002<br />
