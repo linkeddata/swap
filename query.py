@@ -1057,14 +1057,15 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			    if len(nbs1) > 1:
 				raise RuntimeError("Not implemented this hook yet - call timbl")
 			    nb1, rea = nbs1[0]
-			    # @@@@ substitute into other parts of triple @@@@@@@
+			if diag.chatty_flag > 120:
+                            progress("nb1 = %s" % `nb1`)
+                            progress("nb  = %s" % `nb`)
 			for binding in nb1.items():
-			    for oldbinding in nb.items():
-				if oldbinding[0] is binding[0]:
-				    if oldbinding[1] is binding[1]:
-					del nb1[binding[0]] # duplicate  
-				    else: # don't bind same to var to 2 things!
-					break # reject
+                            if binding[0] in nb.keys():
+                                if nb[binding[0]] is binding[1]:
+                		    del nb1[binding[0]] # duplicate  
+                                else: # don't bind same to var to 2 things!
+                                    break # reject
 			else:
 			    nb.update(nb1)
 			    continue
