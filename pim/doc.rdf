@@ -1,0 +1,95 @@
+
+<!-- Processed by Id: cwm.py,v 1.46 2001/05/21 14:35:47 connolly Exp -->
+<!--     using base file:/afs/w3.org/pub/WWW/2000/10/swap/pim/doc.n3-->
+
+
+<r:RDF xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns="http://www.w3.org/2000/10/swap/pim/doc#">
+
+    <r:Description r:about="">
+        <version>$Id: </version>
+    </r:Description>
+
+    <r:Description r:about="http://www.w3.org/2000/10/swap/pim/contacts.n3#OpenSourceLicense">
+        <s:comment>Class of licenses which can be called Open Soutrce
+                according to opensource.org</s:comment>
+        <s:subClassOf r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Description>
+
+    <s:Class r:about="http://www.w3.org/2000/10/swap/pim/doc#Work">
+        <s:comment>An abstract information thing of value, typically intellectual property</s:comment>
+    </s:Class>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#adminPage">
+        <s:comment>A web page allowing a human user to administer this work,
+            for example changing access control, version control information etc.</s:comment>
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#creator">
+        <s:comment>The person (not string) who created this.</s:comment>
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <s:range r:resource="http://www.w3.org/2000/10/swap/pim/contacts.n3#SocialEntity"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#dependsOn">
+        <s:comment>The meaning or value of this work depends on that of that work.</s:comment>
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <s:range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#derivedFrom">
+        <s:comment>A work wholey or partly used in the creation of this one.</s:comment>
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <s:range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#ipr">
+        <s:comment>Terms and interllectual property rights licencing condidtions.</s:comment>
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <s:range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#mayControl">
+        <s:comment>This may change that access control for that</s:comment>
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/contacts.n3#SocialEntity"/>
+        <s:range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#mayRead">
+        <s:comment>This may access that for read -- compare 'r' unix</s:comment>
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/contacts.n3#SocialEntity"/>
+        <s:range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#mayWrite">
+        <s:comment>This may access that to modify it -- compare 'w' unix</s:comment>
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/contacts.n3#SocialEntity"/>
+        <s:range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#obsoletes">
+        <s:comment>This work is more upto date than that and makes it obsolete.</s:comment>
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <s:range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#persitenceyPolicy">
+        <s:comment>Publishers policy regarding the peristence of the mapping
+                between URI and its meaning and/or representation in bits.</s:comment>
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <s:range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#version">
+        <s:comment>This version of this document (eg number, date, etc). A string</s:comment>
+    </r:Property>
+
+    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/doc#versionOf">
+        <s:comment>This work is a a specific version of the follwing generic document</s:comment>
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+        <s:range r:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
+    </r:Property>
+</r:RDF>

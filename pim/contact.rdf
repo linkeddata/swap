@@ -1,0 +1,180 @@
+
+<!-- Processed by Id: cwm.py,v 1.46 2001/05/21 14:35:47 connolly Exp -->
+<!--     using base file:/afs/w3.org/pub/WWW/2000/10/swap/pim/contact.n3-->
+
+
+<rdf:RDF xmlns:mso="file:/afs/w3.org/pub/WWW/2000/10/swap/pim/MSOutlookContacts.n3#"
+    xmlns:ont="http://www.daml.org/2000/10/daml-ont#"
+    xmlns="file:/afs/w3.org/pub/WWW/2000/10/swap/pim/contact.n3#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+
+    <rdfs:Property rdf:about="MSOutlookContacts.n3#Spouse">
+    </rdfs:Property>
+
+    <rdfs:Property rdf:about="MSOutlookContacts.n3#WebPage">
+        <equivalentTo xmlns="http://www.daml.org/2001/03/daml+oil#"
+            rdf:resource="#publicHomePage"/>
+    </rdfs:Property>
+
+    <rdfs:Class rdf:about="#Address">
+    </rdfs:Class>
+
+    <rdf:Description rdf:about="#City">
+        <rdfs:domain rdf:resource="#address"/>
+    </rdf:Description>
+
+    <Class rdf:about="#ContactLocation">
+        <rdfs:comment>A place with address, phone number, fax, etc</rdfs:comment>
+    </Class>
+
+    <rdf:Description rdf:about="#Country">
+        <rdfs:domain rdf:resource="#address"/>
+    </rdf:Description>
+
+    <Class rdf:about="#Data">
+    </Class>
+
+    <rdfs:Class rdf:about="#LanguageCode">
+    </rdfs:Class>
+
+    <Class rdf:about="#Male">
+        <ont:complementOf rdf:resource="#Female"/>
+    </Class>
+
+    <rdf:Description rdf:about="#Person">
+        <rdfs:subClassOf rdf:resource="#SocialEntity"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#PostalCode">
+        <rdfs:domain rdf:resource="#address"/>
+    </rdf:Description>
+
+    <rdf:Class rdf:about="#SocialEntity">
+        <rdfs:comment>The sort of thing which can have a phone number.</rdfs:comment>
+    </rdf:Class>
+
+    <rdf:Description rdf:about="#StateOrProvince">
+        <rdfs:domain rdf:resource="#address"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#Street2">
+        <rdfs:domain rdf:resource="#address"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#Street3">
+        <rdfs:domain rdf:resource="#address"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#Street">
+        <rdfs:domain rdf:resource="#address"/>
+    </rdf:Description>
+
+    <rdf:Property rdf:about="#address">
+        <rdfs:domain rdf:resource="#ContactLocation"/>
+        <rdfs:range rdf:resource="#Address"/>
+    </rdf:Property>
+
+    <rdfs:Property rdf:about="#birthday">
+        <equivalentTo xmlns="http://www.daml.org/2001/03/daml+oil#"
+            rdf:resource="MSOutlookContacts.n3#Birthday"/>
+        <rdfs:range rdf:resource="#Date"/>
+    </rdfs:Property>
+
+    <rdf:Property rdf:about="#child">
+    </rdf:Property>
+
+    <rdf:Description rdf:about="#company">
+        <rdfs:domain rdf:resource="#Person"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#departmentName">
+        <rdfs:domain rdf:resource="#Person"/>
+    </rdf:Description>
+
+    <rdf:Property rdf:about="#description">
+    </rdf:Property>
+
+    <rdf:Property rdf:about="#fax">
+    </rdf:Property>
+
+    <rdf:Description rdf:about="#firstName">
+        <equivalentTo xmlns="http://www.daml.org/2001/03/daml+oil#"
+            rdf:resource="MSOutlookContacts.n3#First_Name"/>
+        <rdfs:domain rdf:resource="#Person"/>
+    </rdf:Description>
+
+    <rdfs:Property rdf:about="#home">
+        <rdfs:domain rdf:resource="#Person"/>
+        <rdfs:range rdf:resource="#ContactLocation"/>
+    </rdfs:Property>
+
+    <rdf:Description rdf:about="#lastName">
+        <equivalentTo xmlns="http://www.daml.org/2001/03/daml+oil#"
+            rdf:resource="MSOutlookContacts.n3#Last_Name"/>
+        <rdfs:domain rdf:resource="#Person"/>
+    </rdf:Description>
+
+    <rdfs:Property rdf:about="#mailbox">
+        <rdfs:domain rdf:resource="#SocialEntity"/>
+        <rdfs:domain rdf:resource="#mboxURI"/>
+    </rdfs:Property>
+
+    <rdf:Description rdf:about="#middleName">
+        <equivalentTo xmlns="http://www.daml.org/2001/03/daml+oil#"
+            rdf:resource="MSOutlookContacts.n3#Middle_Name"/>
+        <rdfs:domain rdf:resource="#Person"/>
+    </rdf:Description>
+
+    <rdf:Property rdf:about="#motherTongue">
+        <rdfs:domain rdf:resource="#Person"/>
+        <rdfs:range rdf:resource="#LanguageCode"/>
+    </rdf:Property>
+
+    <rdfs:Property rdf:about="#office">
+        <rdfs:domain rdf:resource="#Person"/>
+        <rdfs:range rdf:resource="#ContactLocation"/>
+    </rdfs:Property>
+
+    <rdf:Description rdf:about="#partner">
+        <hasSubProperty rdf:resource="MSOutlookContacts.n3#Spouse"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#personalSuffix">
+        <equivalentTo xmlns="http://www.daml.org/2001/03/daml+oil#"
+            rdf:resource="MSOutlookContacts.n3#Suffix"/>
+        <rdfs:domain rdf:resource="#Person"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#personalTitle">
+        <equivalentTo xmlns="http://www.daml.org/2001/03/daml+oil#"
+            rdf:resource="MSOutlookContacts.n3#Title"/>
+        <rdfs:domain rdf:resource="#Person"/>
+    </rdf:Description>
+
+    <rdf:Property rdf:about="#phone">
+    </rdf:Property>
+
+    <rdfs:Property rdf:about="#vacationHome">
+        <rdfs:domain rdf:resource="#Person"/>
+        <rdfs:range rdf:resource="#ContactLocation"/>
+    </rdfs:Property>
+
+    <rdf:Description rdf:about="#vcard_list">
+        <equivalentTo xmlns="http://www.daml.org/2001/03/daml+oil#"> vCard.Cellular, vCard.Company, vCard.Department, 
+vCard.DisplayName,
+vCard.Email,
+vCard.FirstName, 
+vCard.Gender, vCard.Home.City, vCard.Home.Country, 
+vCard.Home.Fax, vCard.Home.Phone, vCard.Home.State, 
+vCard.Home.StreetAddress, vCard.Home.Zipcode, vCard.Homepage, 
+vCard.JobTitle, vCard.LastName, vCard.MiddleName, 
+vCard.Notes, vCard.Office,  # ??? Office what? Number?
+vCard.Pager, 
+vCard.Business.City, vCard.Business.Country, vCard.Business.Fax, 
+vCard.Business.Phone, vCard.Business.State, vCard.Business.StreetAddress, 
+vCard.Business.URL, vCard.Business.Zipcode</equivalentTo>
+    </rdf:Description>
+</rdf:RDF>
