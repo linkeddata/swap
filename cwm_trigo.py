@@ -19,7 +19,7 @@ __author__ = 'Karl Dubost'
 __cvsid__ = '$Id$'
 __version__ = '$Revision$'
 
-import sys, string, re, urllib, math
+from math import sin, acos, asin, atan, atan2, cos, cosh, degrees, radians, sinh, tan, tanh
 
 from term import LightBuiltIn, Function, ReverseFunction
 import types
@@ -29,9 +29,9 @@ import types
 MATH_NS_URI = 'http://www.w3.org/2000/10/swap/math#'
 
 from diag import progress
-import sys, traceback
 
 def obsolete():
+    import traceback
     progress("Warning: Obsolete math built-in used.")
     traceback.print_stack()
 
@@ -81,6 +81,7 @@ class BI_atan2(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
         if len(subj_py) == 2:
 	    return atan2(numeric(subj_py[0]),numeric(subj_py[1]))
+        else: return None
 
 class BI_cos(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
@@ -129,4 +130,4 @@ def register(store):
     str.internFrag('tanh', BI_tanh)
  
 if __name__=="__main__": 
-   print string.strip(__doc__)
+   print __doc__.strip()
