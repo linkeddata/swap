@@ -39,7 +39,9 @@ href="../">SWAP</a>, a Semantic Web Application Platform.</p>
   <li><a href="changes.html">Change log</a></li>
 </ul>
 
-<p>Mail lists:</p>
+<h2 id="disc">Discussion -- places to talk about this</h2>
+
+<p></p>
 <dl>
   <dt><a
   href="http://lists.w3.org/Archives/Public/public-cwm-announce">public-cwm-announce</a></dt>
@@ -58,6 +60,15 @@ href="../">SWAP</a>, a Semantic Web Application Platform.</p>
   href="http://lists.w3.org/Archives/Public/pub;ic-www-talk/">public-cwm-talk</a></dt>
     <dd>Discussion by users and/or developers of the use and abuse of project
       software.</dd>
+  <dt>RDF Interest group</dt>
+    <dd><ul>
+        <li><a
+          href="http://lists.w3.org/Archives/Public/www-rdf-interest/">The
+          RDF Interest group discussion list</a></li>
+        <li><a href="irc://irc.freenode.net/rdfig">#rdfig irc channel</a>
+          with <a href="http://rdfig.xmlhack.com/">scratchpad/weblog</a></li>
+      </ul>
+    </dd>
   <dt></dt>
 </dl>
 
@@ -109,14 +120,6 @@ thoroughly:</p>
     </ul>
   </li>
 </ul>
-<dl>
-  <dt id="Installing"><a href="CwmInstall">Installing Cwm</a></dt>
-    <dd>How to get it running for the first time. <em>Installation is not
-      very mature; <a href="http://esw.w3.org/topic/CwmTips">CwmTips</a> is a
-      community Wiki resource for living with cwm</em>.</dd>
-  <dt><a href="changes.html">Changes</a></dt>
-    <dd>List of major changes.</dd>
-</dl>
 
 <h3><a name="Environmen" id="Environmen">Environment Variables</a></h3>
 <dl>
@@ -152,17 +155,6 @@ things to watch are:</p>
   <li>This code is not guaranteed anyway, or made for production use. It is
     designed for prototyping new semantic web applications. Use at your own
     risk.</li>
-</ul>
-
-<h2 id="disc">Discussion -- places to talk about this</h2>
-<ul>
-  <li>The RDF Interest group</li>
-  <li><a href="irc://irc.freenode.net/rdfig">#rdfig irc channel</a> with <a
-    href="http://rdfig.xmlhack.com/">scratchpad/weblog</a></li>
-  <li>report bugs to Tim, Dan, and/or Sandro with copy to <a
-    href="mailto:www-archive+n3bugs@w3.org">www-archive+n3bugs@w3.org</a>
-    which gives us an <a
-    href="http://www.w3.org/Search/Mail/Public/advanced_search?keywords=n3bugs&amp;hdr-1-name=subject&amp;hdr-1-query=&amp;hdr-2-name=from&amp;hdr-2-query=&amp;hdr-3-name=message-id&amp;hdr-3-query=&amp;resultsperpage=50&amp;sortby=date&amp;index-grp=Public%2FFULL&amp;index-type=t&amp;type-index=www-archive">archive</a></li>
 </ul>
 
 <h3 id="name">About the name <em>cwm</em></h3>
@@ -227,18 +219,23 @@ $ <span style="color: #007F00">cvs -d:pserver:anonymous@dev.w3.org:/sources/publ
 the <a href="../test/regression.n3">regression test</a> defines the set of
 features which are generally checked on each checkin. Cwm developers agree
 that all the tests have to pass before code is checked in. To run the tests,
-do <tt>make</tt> in the <tt>swap/test</tt> directory.</p>
+do <tt>make</tt> in the <tt>swap/test</tt> directory. We reckon to add a test
+for a new bug, so that bugs don't recur in future versions.</p>
 
 <h3>Code Overview</h3>
 
 <h4>llyn.py - The Store</h4>
 
-<p>An in-memory store which does the inference.</p>
+<p>An in-memory store which does the inference. See the <a href="">Formula
+class methods</a> for a more or less conventional RDF API. A Forumula is a
+set of statements.</p>
 
-<h4 id="L133">notation3.py - Serializing/deserializaing RDF</h4>
+<p></p>
+
+<h4 id="L133">notation3.py - Serializing/deserializaing RDF/N3</h4>
 
 <p>Originally written by Dan Connolly, uses a basic RDF stream parser
-interface</p>
+interface, migrating to API</p>
 <ul>
   <li>Parses N3</li>
   <li>Generates N3</li>
@@ -269,7 +266,8 @@ generators. <strong>Defunct. Now use sax parser and sax2rdf.py.</strong></p>
 
 <h4>cwm_xxx.py - builtin modules</h4>
 
-<p>These are quite easy to add to</p>
+<p>These are quite easy to add to. Look at a few and clone a similar one to
+the one you have made.</p>
 
 <h3><a id="Design" name="Design">Design issues</a></h3>
 
@@ -292,9 +290,9 @@ documents.</p>
 
 <p>Thanks to Dan Connolly for writing the first code and thereby <a
 href="./#L88">introducing me to Python</a>, and to him and Sean Palmer and
-Mark Nottingham for writing code. Eric Prud'hommeaux wrote the remote
-database query and mySQL interface. Sandro Hawke has made various
-contributions. Thanks to Sean for his <a
+Mark Nottingham for writing built-in function modules. Eric Prud'hommeaux
+wrote the remote database query and mySQL interface. Sandro Hawke has made
+various contributions. Thanks to Sean for his <a
 href="http://infomesh.net/2001/cwm/">guide</a> to cwm. Thanks for all on
 #RDFIG for being everything which is #RDFIG.</p>
 
@@ -302,6 +300,8 @@ href="http://infomesh.net/2001/cwm/">guide</a> to cwm. Thanks for all on
 Advanced Research Projects Agency (DARPA) and Air Force Research Laboratory,
 Air Force Materiel Command, USAF, under agreement number F30602-00-2-0593,
 "Semantic Web Development".</p>
+
+<p><a href="cwm-historical.html">Historical stuff from this page</a></p>
 <hr />
 <address>
   Tim BL, with his director hat off<br />
