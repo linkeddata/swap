@@ -11,7 +11,7 @@
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
-
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
 :Issue a s:Class.
 
 :description a r:Property;
