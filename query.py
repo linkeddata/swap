@@ -191,6 +191,8 @@ class InferenceTask:
 	    for j in range(i-1):
 		if compareCyclics(seq[i], seq[j]) < 0:
 		    raise RuntimeError("Should not be:  %s < %s" %(seq[i], seq[j]))
+
+	# Run the rules
 	total = 0
 	for cy in seq:
 	    total += cy.run()
@@ -527,6 +529,7 @@ class Query:
 	self.template = template  # For looking for lists
 	self.meta = meta
 	self.mode = mode
+	self.lastCheckedNumberOfRedirections = 0
         for quad in unmatched:
             item = QueryItem(self, quad)
             if item.setup(allvars=variables+existentials, unmatched=unmatched, smartIn=smartIn, mode=mode) == 0:
@@ -540,23 +543,38 @@ class Query:
 	if hasattr(self, "noWay"): return 0
         return self.unify(self.queue, self.variables, self.existentials)
 
-
+    def checkRedirectsInAlready(self):
+	"""Kludge"""
+	n = len(self.targetContext._redirections)
+	if n  > self.lastCheckedNumberOfRedirections:
+	    self.lastCheckedNumberOfRedirections = n
+	    self.redirect(self.targetContext._redirections)
+	    
+    def redirect(self, redirections):
+	for bindings in self.already:
+	    for var, value in bindings.items():
+		try:
+		    x = redirections[value]
+		except:
+		    pass
+		else:
+		    if diag.chatty_flag>29: progress("Redirecting binding %r to %r" % (value, x))
+		    bindings[var] = x
 
     def conclude(self, bindings, evidence = []):
 	"""When a match found in a query, add conclusions to target formula.
 
 	Returns the number of statements added."""
 	if self.justOne: return 1   # If only a test needed
-	assert type(bindings) is type({})
 
-        if diag.chatty_flag >60: progress( "Concluding tentatively..." + bindingsToString(bindings))
-
+        if diag.chatty_flag >60: progress( "Concluding tentatively...%r" % bindings)
         if self.already != None:
+	    self.checkRedirectsInAlready() # @@@ KLUDGE - use delegation and notification systme instead
             if bindings in self.already:
-                if diag.chatty_flag > 30: progress("@@Duplicate result: ", bindingsToString(bindings))
+                if diag.chatty_flag > 30: progress("@@ Duplicate result: %r" %  bindings)
                 return 0
-            if diag.chatty_flag > 30: progress("Not duplicate: ", bindingsToString(bindings))
-            self.already.append(bindings)   # A list of dicts
+            if diag.chatty_flag > 30: progress("Not duplicate: %r" % bindings)
+            self.already.append(bindings)
 
 	if tracking:
 	    reason = BecauseOfRule(self.rule, bindings=bindings, evidence=evidence)
@@ -578,7 +596,7 @@ class Query:
         for x in poss[:]:
             if x in ok: poss.remove(x)
 
-        vars = self.conclusion.existentials() + poss  # Terms with arbitrary identifiers
+#        vars = self.conclusion.existentials() + poss  # Terms with arbitrary identifiers
 #        clashes = self.occurringIn(targetContext, vars)    Too slow to do every time; play safe
 	if diag.chatty_flag > 25:
 	    s=""
@@ -601,11 +619,11 @@ class Query:
         if diag.chatty_flag>19:
             progress("Concluding DEFINITELY" + bindingsToString(b2) )
         before = self.store.size
-        self.targetContext.loadFormulaWithSubsitution(
+        delta = self.targetContext.loadFormulaWithSubsitution(
 		    self.conclusion, b2, why=reason)
         if diag.chatty_flag>30:
-            progress("Size of store changed from %i to %i."%(before, self.store.size))
-        return self.store.size - before
+            progress("Added %i, nominal size of store changed from %i to %i."%(delta, before, self.store.size))
+        return delta #  self.store.size - before
 
 
 ##################################################################################
@@ -733,15 +751,6 @@ class Query:
 			queue.remove(i)
 		nbs = query.remoteQuery(items)
 		item.state = S_DONE  # do not put back on list
-            elif state == S_LIST_UNBOUND: # Lists with unbound vars
-                if diag.chatty_flag>70:
-                        progress("List left unbound, returing")
-                return total   # forget it  (this right?!@@)
-            elif state == S_LIST_BOUND: # bound list
-                if diag.chatty_flag>60: progress(
-		    "QUERY FOUND MATCH (dropping lists) with bindings: "
-		    + bindingsToString(bindings))
-                return total + query.conclude(bindings, evidence=evidence)  # No non-list terms left .. success!
             elif state ==S_HEAVY_WAIT or state == S_LIGHT_WAIT: # Can't
                 if diag.chatty_flag > 49 :
                     progress("@@@@ Warning: query can't find term which will work.")
@@ -752,10 +761,9 @@ class Query:
                 return 0  # Forget it
             else:
                 raise RuntimeError, "Unknown state " + `state`
-            if diag.chatty_flag > 90: progress("    nbs=" + `nbs`)
+            if diag.chatty_flag > 90: progress("nbs=" + `nbs`)
             if nbs == 0: return total
             elif nbs != []:
-                total = 0
 #		if nbs != 0 and nbs != []: pass
 		# progress("llyn.py 2738:   nbs = %s" % nbs)
                 for nb, reason in nbs:
@@ -765,12 +773,17 @@ class Query:
                         newItem = i.clone()
                         q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
 		    
-                    total = total + query.unify(q2, variables[:], existentials[:],
+                    found = query.unify(q2, variables[:], existentials[:],
                                           bindings.copy(), nb, evidence = evidence + [reason])
-                    if query.justOne and total:
+		    if diag.chatty_flag > 80: progress(
+			"Nested query returns %i fo %r" % (found, nb))
+                    total = total + found
+		    if query.justOne and total:
                         return total
-		return total # The called recursive calls above will have generated the output
-            if item.state == S_FAIL: return total
+# NO - more to do return total # The called recursive calls above will have generated the output @@@@ <====XXXX
+	    if diag.chatty_flag > 80: progress("Item state %i, returning total %i" % (item.state, total))
+            if item.state == S_FAIL:
+		return total
             if item.state != S_DONE:   # state 0 means leave me off the list
                 queue.append(item)
             # And loop back to take the next item

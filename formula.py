@@ -292,7 +292,8 @@ class Formula(Fragment, CompoundTerm):
 	return y.canonicalize()
 
     def loadFormulaWithSubsitution(self, old, bindings={}, why=None):
-	"""Load information from another formula, subsituting as we go"""
+	"""Load information from another formula, subsituting as we go
+	returns number of statements added (roughly)"""
         total = 0
 	for v in old.universals():
 	    self.declareUniversal(bindings.get(v, v))
@@ -301,7 +302,7 @@ class Formula(Fragment, CompoundTerm):
 	bindings2 = bindings.copy()
 	bindings2[old] = self
         for s in old.statements[:] :   # Copy list!
-	    self.add(subj=s[SUBJ].substitution(bindings2),
+	    total += self.add(subj=s[SUBJ].substitution(bindings2),
 		    pred=s[PRED].substitution(bindings2),
 		    obj=s[OBJ].substitution(bindings2),
 		    why=why)

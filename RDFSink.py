@@ -43,16 +43,17 @@ ANONYMOUS = 3       # As SYMBOL except actual symbol is arbitrary, can be regene
 Logic_NS = "http://www.w3.org/2000/10/swap/log#"
 # For some graphs you can express with NTriples, there is no RDF syntax. The 
 # following allows an anonymous node to be merged with another node.
-# It really is the same node, at the ntriples level, do not confuse with daml:equivalentTO
+# It really is the same node, at the ntriples level, do not confuse with daml:sameAs
 NODE_MERGE_URI = Logic_NS + "is"  # Pseudo-property indicating node merging
 forSomeSym = Logic_NS + "forSome"
 forAllSym = Logic_NS + "forAll"
+
 
 RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 RDF_NS_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 # DAML_NS=DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
 OWL_NS = "http://www.w3.org/2002/07/owl#"
-DAML_equivalentTo_URI = OWL_NS+"equivalentTo"
+DAML_sameAs_URI = OWL_NS+"sameAs"
 parsesTo_URI = Logic_NS + "parsesTo"
 RDF_spec = "http://www.w3.org/TR/REC-rdf-syntax/"
 
