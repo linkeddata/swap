@@ -28,6 +28,10 @@ stop!).</p>
 for identifiers, so that the semantics of symbols can be shared with other
 applications and other agents acrosss the world.</p>
 
+<p>Notaion3 is a langauge for interchange which is designed to span and
+integrate many levels, from data tranfer to the expression of logic, proof
+and trust.</p>
+
 <h3>A data language</h3>
 
 <p>The first task of N3 was to allow data - pure facts -to be written down
@@ -56,7 +60,10 @@ as much as possible on the Web.</p>
 
 <p>One aim of N3 was to make a transition to the expressive power of various
 languages to include rules and queries, in as seamless a way as reasonable
-from the data representation language.</p>
+from the data representation language.  Axioms of the RDFS and OWL layers can
+be represented in N3, not because the logic is a FOL whose expressivity
+incldes OWL, but rather because the quoting and substitution used by cwm's
+log:includes allows any syntactic transform to be expressed.  </p>
 
 <h3>Quoting</h3>
 
@@ -89,26 +96,33 @@ which will make the re-usable out of context.</p>
 
 <h2>Cwm requirements</h2>
 
-<p>Cwm was designed to show what could be done by webizing knowledge
-representation ideas, implementing as much of the Semantic Web layer cake as
+<p>Cwm is designed to implement as much of the Semantic Web layer cake as
 possible to show (a) that it could be done and (b) what the semantic web was
-about. It is not designed to be particulaly efficient, to scale well for
-large datasets or large rulesets. There are a host of interesting algorithms
-which have been used in existing systems including databases including the
-SQL world, forward and backward chaining inference systems, including Prolog
-all the logic programming world, and KIF and the Knowledge Representation
-world. The idea is not that the cwm inference engine is special, rather that
-it not: you can take any inference system and webize it:</p>
+about.</p>
+
+<p>It is not designed to be particulaly efficient, to scale well for large
+datasets or large rulesets. There are a host of interesting algorithms which
+have been used in existing systems including databases including the SQL
+world, forward and backward chaining inference systems, including Prolog all
+the logic programming world, and KIF and the Knowledge Representation world.
+The idea is not that the cwm inference engine is special, rather that it not
+special: you can take any inference system and webize it, and make a semantic
+web agent.  Webizing involves:</p>
 <ul>
   <li>Fix the language so that the identifiers use namespaces (or something)
     to actually be URIs;</li>
   <li>Fix the software so that URIs can be used as URIs not just as
-    identifiers but as URIs. Each URI scheme has different properties and
-    making the software aware of them and capable of implementing them makes
-    it a true Semantic Web application, not just a Semantic application.</li>
+    identifiers but as URIs.</li>
 </ul>
 
-<p>So the cwm should be able to:</p>
+<p></p>
+<ul>
+  <li>Each URI scheme has different properties and making the software aware
+    of them and capable of implementing them makes it a true Semantic Web
+    application, not just a Semantic application.</li>
+</ul>
+
+<p>So goals for cwm include the ability to:</p>
 <ul>
   <li>look up documents on the web;</li>
   <li>look inside semantic web documents on eth web without beliveing
@@ -119,6 +133,8 @@ it not: you can take any inference system and webize it:</p>
     <p></p>
   </li>
 </ul>
+
+<p></p>
 <hr />
 
 <p></p>
