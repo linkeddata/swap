@@ -20,10 +20,10 @@ this log:forAll :P, :C, :X, :T.
 # declare the properties I'm using...
 # thanks to the DAML validator for keeping me honest.
 #  http://www.daml.org/validator/
-ss:label a s:Property; s:label "label?".
-ss:intersectsDomainOf a s:Property; s:label "intersects domain of".
-ss:domainIntersects a s:Property; s:label "domain intersects".
-ss:rangeIntersects a s:Property; s:label "range intersects".
+ss:label a r:Property; s:label "label?".
+ss:intersectsDomainOf a r:Property; s:label "intersects domain of".
+ss:domainIntersects a r:Property; s:label "domain intersects".
+ss:rangeIntersects a r:Property; s:label "range intersects".
 
 { [] :P []. } log:implies { :P a r:Property }.
 { [] a :C } log:implies { :C a s:Class }.
