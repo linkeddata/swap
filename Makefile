@@ -6,7 +6,27 @@ YAPPS=yapps2.py
 
 TESTIN=test/sameDan.n3
 
-.SUFFIXES: .g .py .html .rdf .n3
+HTMLS=RDFSink.html cwm.html cwm_crypto.html cwm_math.html cwm_os.html cwm_string.html cwm_time.html diag.html llyn.html notation3.html sax2rdf.html tab2n3.html thing.html toXML.html uripath.html xml2infoset.html
+
+#xml2rdf.html
+#de-cr.html
+#SemEnglish.html
+#converter-cgi.html
+#gram2html.html
+#isodate.html
+#kifForm.html
+#n3spark.html
+#rdf2dot.html
+#rdfn3_yapps.html
+#rdfn3_yappstest.html
+#rdfx2kif.html
+#spark.html
+#timegm.html
+#xmllib.html
+#yapps2.html
+#yappsrt.html
+
+.SUFFIXES: .html .py .g .rdf .n3
 
 .g.py:
 	$(PYTHON) $(YAPPS) $< $@
@@ -15,9 +35,12 @@ TESTIN=test/sameDan.n3
 	$(PYTHON) cwm.py $<  --rdf > $@
 	cvs commit -m "Automatic: see Makefile" $@
 
+.py.html:
+	pydoc -w `echo $< | sed -e 's/\.py//'`
+
 #all: yappstest yappsdoc math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf
 
-all: math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf LICENSE.rdf cwm.tar.Z
+all: math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf LICENSE.rdf cwm.tar.Z $(HTMLS)
 
 # Can't make dependencies on *.py :-(
 

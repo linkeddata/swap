@@ -427,6 +427,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         else:
             _metaURI = join(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
             _store = llyn.RDFStore( _outURI+"#_g", metaURI=_metaURI, argv=option_with, crypto=option_crypto)
+	    thing.setStore(_store)
             workingContextURI = _outURI+ "#0_work"
             workingContext = _store.intern((FORMULA, workingContextURI))   #@@@ Hack - use metadata
 #  Metadata context - storing information about what we are doing

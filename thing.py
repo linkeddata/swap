@@ -2,7 +2,7 @@
 """
 $Id$
 
-Interning of URIs and strings for stporage in SWAP store
+Interning of URIs and strings for storage in SWAP store
 
 Includes:
  - template classes for builtins
@@ -37,10 +37,6 @@ ALL4 = CONTEXT, PRED, SUBJ, OBJ
 # But you should not assume that ... use RDFSink.new*()
 
 
-#####
-# @@ dead code?
-doMeta = 0  # wait until we have written the code! :-)
-
 INFINITY = 1000000000           # @@ larger than any number occurences
 
 
@@ -57,13 +53,72 @@ QUAD = 5
 #  Keep a cache of subcontext closure:
 subcontext_cache_context = None
 subcontext_cache_subcontexts = None
-#
-####
+
+# Allow a strore provdier to register:
+
+store = None
+storeClass = None
+
+def setStoreClass(c):
+    """Set the process-global class to be used to generate a new store if needed"""
+    global storeClass
+    storeClass = c
+
+def setStore(s):
+    """Set the process-global default store to be used when an explicit store is not"""
+    global store
+    store = s
+
+def _checkStore(s=None):
+    """Check that an explict or implicit stroe exists"""
+    global store, storeClass
+    if s != None: return s
+    if store != None: return store
+    assert storeClass!= None, "Some storage module must register with thing.py before you can use it"
+    store = storeClass() # Make new one
+    return store
+
+
+
+def symbol(uri):
+    """Create or reuse, in the default store, an interned version of the given symbol
+    and return it for future use"""
+    return self._checkStore().newSymbol(uri)
+    
+def literal(str):
+    """Create or reuse, in the default store, an interned version of the given literal string
+    and return it for future use"""
+    return self._checkStore().newLiteral(str)
+
+def formula():
+    """Create or reuse, in the default store, a new empty formula (triple people think: triple store)
+    and return it for future use"""
+    return self._checkStore().newForumula()
+
+def bNode(str, context):
+    """Create or reuse, in the default store, a new unnamed node within the given
+    formula as context, and return it for future use"""
+    return self._checkStore().newLiteral(context)
+
+def existential(str, context, uri):
+    """Create or reuse, in the default store, a new named variable
+    existentially qualified within the given
+    formula as context, and return it for future use"""
+    return self._checkStore().newLiteral(context)
+
+def universal(str, context, uri):
+    """Create or reuse, in the default store, a named variable
+    universally qualified within the given
+    formula as context, and return it for future use"""
+    return self._checkStore().newLiteral(context)
+
+
+
 
 ########################################  Storage URI Handling
 #
-#  In general an RDf resource - here a Thing, has a uriRef rather
-# than just a URI.  It has subclasses of Resource and Fragment.
+#  In general an RDf resource - here a Term, has a uriRef rather
+# than just a URI.  It has subclasses of Symbol and Fragment.
 # (@@ use/mention error -- DWC)
 #
 # (libwww equivalent HTParentAnchor and HTChildAnchor IIRC)
@@ -78,17 +133,22 @@ subcontext_cache_subcontexts = None
 # but we can figure out what to optimize later.  The target for now
 # is being able to find synonyms and so translate documents.
 
-        
-class Thing:
-    def __init__(self, store):
-      self.store = store
-      store.initThing(self)
 
-#      self.occursAs = None    # Store must set this quad up      
-#      self.occursAs = [], [], [], []    # These are special cases of indexes
-      #  List of statements in store by part of speech       
+        
+class Term:
+    """The Term object represents an RDF term.
+    
+    It is interned for speed of processing by the store.
+    """
+    def __init__(self, store=None):
+        self.store = _checkStore(store)
+        store.initTerm(self)
+
             
-    def __repr__(self):   # only used for debugging - can be ambiguous!  @@ use namespaces
+    def __repr__(self):
+	"""This method only used for debugging output - it can be ambiguous,
+	as it is is deliberately short to make debug printout readable.
+	@@@ It would be better if it used namespace prefixed."""
         s = self.uriref()
         p = string.find(s,'#')
         if p >= 0: return s[p+1:]
@@ -97,27 +157,36 @@ class Thing:
         return s
 
     def representation(self, base=None):
-        """ in N3 """
+        """The string represnting this in N3 """
         return "<" + self.uriref(base) + ">"
 
     def generated(self):
-        """  Is this thing a genid - is its name arbitrary? """
+        """Boolean Is this thing a genid - is its name arbitrary? """
         return 0    # unless overridden
 
-    def asList(self):  # Is this a list? (override me!)
+    def asList(self):
+	"""The interned List object if this is in fact a list, else None.
+	
+	Lists are interned because they are a form of literal in that
+	equal lists are identical.
+	(override me!)"""
         return None
   
     def asPair(self):
+	"""Representation in an earlier format, being phased out 2002/08
+	
+	The first part of the pair is a constant number represnting the type
+	see RDFSink.py.  the second is the value -- uri for symbols, string for literals"""
         return (SYMBOL, self.uriref())
     
 
 
-class Resource(Thing):
-    """   A Thing which has no fragment
+class Symbol(Term):
+    """   A Term which has no fragment
     """
     
-    def __init__(self, store, uri):
-        Thing.__init__(self, store)
+    def __init__(self, uri, store=None):
+        Term.__init__(self, store)
         assert string.find(uri, "#") < 0, "no fragments allowed: %s" % uri
         assert ':' in uri, "must be absolute: %s" % uri
         self.uri = uri
@@ -150,11 +219,11 @@ class Resource(Thing):
                 
                 
 
-class Fragment(Thing):
-    """    A Thing which DOES have a fragment id in its URI
+class Fragment(Term):
+    """    A Term which DOES have a fragment id in its URI
     """
     def __init__(self, resource, fragid):
-        Thing.__init__(self, resource.store)
+        Term.__init__(self, resource.store)
         self.resource = resource
         self.fragid = fragid
         self._asList = None      # This is not a list as far as we know
@@ -215,10 +284,10 @@ class Anonymous(Fragment):
 
 _nextList = 0
 
-class List(Thing):
+class List(Term):
     def __init__(self, store, first, rest):  # Do not use directly
         global _nextList
-        Thing.__init__(self, store)
+        Term.__init__(self, store)
         self.first = first
         self.rest = rest
         self._prec = {}
@@ -229,7 +298,7 @@ class List(Thing):
         return "http://list.example.org/list"+ `self._id` # @@@@@ Temp. Kludge!! Use run id maybe!
 
     def asList(self):
-        return self    # Allows a list to be used as a Thing which is should be really
+        return self    # Allows a list to be used as a Term which is should be really
 
     def precededBy(self, first):
         x = self._prec.get(first, None)
@@ -251,17 +320,17 @@ class EmptyList(List):
 
 
         
-class Literal(Thing):
-    """ A Literal is a data resource to make it clean
+class Literal(Term):
+    """ A Literal is a representation of an RDF literal
 
     really, data:application/n3;%22hello%22 == "hello" but who
     wants to store it that way?  Maybe we do... at least in theory and maybe
-    practice but, for now, we keep them in separate subclases of Thing.
+    practice but, for now, we keep them in separate subclases of Term.
     """
 
 
     def __init__(self, store, string):
-        Thing.__init__(self, store)
+        Term.__init__(self, store)
         self.string = string    #  n3 notation EXcluding the "  "
 
     def __str__(self):
@@ -290,9 +359,9 @@ class Literal(Thing):
 
     def uriref(self):
         # Unused at present but interesting! 2000/10/14
-        # used in test/sameThing.n3 testing 2001/07/19
+        # used in test/sameTerm.n3 testing 2001/07/19
         return self.asHashURI() #something of a kludge?
-        #return  LITERAL_URI_prefix + uri_encode(self.representation())
+        #return  LITERAL_URI_prefix + uri_encode(self.representation())    # tbl preferred
 
 
      
@@ -321,20 +390,35 @@ def uri_encode(str):
 # First, the template classes:
 #
 class BuiltIn(Fragment):
-    """ A binary operator can calculate truth value given 2 arguments"""
+    """This class is a supercalss to any builtin predicate in cwm.
+    
+    A binary operator can calculate truth value given 2 arguments"""
     def __init__(self, resource, fragid):
         Fragment.__init__(self, resource, fragid)
 
 
 class LightBuiltIn(BuiltIn):
+    """A light built-in is fast and is calculated immediately before searching the store.
+    
+    Make your built-in a subclass of either this or HeavyBultIn to tell cwm when to
+    run it.  Going out onto the web or net counts as heavy."""
     pass
 
 class HeavyBuiltIn(BuiltIn):
+    """A heavy built-in is fast and is calculated late, after searching the store
+    to see if the answer is already in it.
+    
+    Make your built-in a subclass of either this or LightBultIn to tell cwm when to
+    run it.  Going out onto the web or net counts as Heavy."""
     pass
 
 # A function can calculate its object from a given subject.
 #  Example: Joe mother Jane .
 class Function:
+    """A function is a builtin which can calculate its object given its subject.
+    
+    To get cwm to invoke it this way, your built-in must be a subclass of Function.
+    I may make changes to clean up the parameters of these methods below some day. -tbl"""
     def __init__(self):
         pass
     
@@ -354,6 +438,14 @@ class Function:
 
 # A function can calculate its object from a given subject
 class ReverseFunction:
+    """A reverse function is a builtin which can calculate its subject given its object.
+    
+    To get cwm to invoke it this way, your built-in must be a subclass of ReverseFunction.
+    If a function (like log:uri for example) is a two-way  (1:1) builtin, it should be declared
+    a subclass of Function and ReverseFunction. Then, cwm will call it either way as needed
+    in trying to resolve a query.
+    
+    I may make changes to clean up the parameters of these methods below some day. -tbl"""
     def __init__(self):
         pass
 
@@ -368,4 +460,4 @@ class ReverseFunction:
         raise reverse_function_has_no_evaluate_subject_method #  Ooops - you can't inherit this.
 
 #  For examples of use, see, for example, cwm_string.py
-    
+

@@ -137,7 +137,7 @@ import notation3    # N3 parsers and generators, and RDF generator
 from diag import progress, progressIndent, verbosity
 from thing import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
-    Literal, Resource, Fragment, FragmentNil, Anonymous, Thing, List, EmptyList
+    Literal, Symbol, Fragment, FragmentNil, Anonymous, Term, List, EmptyList
 
 import RDFSink
 from RDFSink import Logic_NS
@@ -276,6 +276,8 @@ def compareFormulae(self, other):
        of appearances is created.  Note that because we are comparing statements without
        variables, two may be equal, in which case the same (first) statement number
        is used whichever statement the variable was in fact in. Ooops
+       
+    NOT WRITTEN
     """
     pass
 
@@ -294,14 +296,35 @@ def compareFormulae(self, other):
 #	return x
 
 
+class DataObject:
+    """The info about a term in the context of a specific formula
+    It is created by being passed the formula and the term, and is
+    then accessed like a python dictionary of sequences of values. Example:
+    
+    F = myWorkingFormula
+    x = F.theObject(pred=rdfType obj=fooCar)
+    for y in x[color][label]
+    """
+    def __init__(context, term):
+	self.context = context
+	self.term = term
+	
+    def __getItem__(pred):   #   Use . or [] ?
+	values = context.objects(pred=pred, subj=self.term)
+	for v in value:
+	    yield DataObject(self.context, v)
+
 ###################################### Forumula
 #
 # A Formula is a set of triples.
 
 class Formula(Fragment):
-    """A formula of a set of RDF statements, triples. these are actually
-    instances of StoredStatement.  Other systems such as jena and redland use the term "Model"
-    for this.  Cwm and N3 extend RDF to allow a literal formula as an item in a triple.
+    """A formula of a set of RDF statements, triples.
+    
+    The triples are actually instances of StoredStatement.
+    Other systems such as jena and redland use the term "Model" for this.
+    For rdflib, this is known as a TripleStore.
+    Cwm and N3 extend RDF to allow a literal formula as an item in a triple.
     """
     def __init__(self, resource, fragid):
         Fragment.__init__(self, resource, fragid)
@@ -310,13 +333,18 @@ class Formula(Fragment):
         self.cannonical = None # Set to self if this has been checked for duplicates
 
     def generated(self):
+	"""Yes, any identifier you see for this is arbitrary."""
         return 1
 
     def asPair(self):
+	"""Old representation."""
         return (FORMULA, self.uriref())
 
     def existentials(self):
-        "we may move to an internal storage rather than these statements"
+        """Return a list of existential variables with this scope.
+	
+	Implementation:
+	we may move to an internal storage rather than these pseudo-statements"""
         exs = []
         ss = self._index.get((self.store.forSome, self, None),[])
         for s in ss:
@@ -325,7 +353,9 @@ class Formula(Fragment):
         return exs
 
     def universals(self):
-        "we may move to an internal storage rather than these statements"
+        """Return a list of variables universally quantified within this scope.
+
+	We may move to an internal storage rather than these statements."""
         exs = []
         ss = self._index.get((self.store.forAll, self, None),[])
         for s in ss:
@@ -334,6 +364,7 @@ class Formula(Fragment):
         return exs
     
     def variables(self):
+        """Return a list of all variables quantified within this scope."""
         return self.existentials() + self.universals()
 
 #   TRAP:  If we define __len__, then the "if F" will fail if len(F)==0 !!!
@@ -875,6 +906,8 @@ class RDFStore(RDFSink.RDFSink) :
         self.size = 0
         self.argv = argv     # List of command line arguments for N3 scripts
 
+
+
         # Constants, as interned:
         
         self.forSome = self.internURI(RDFSink.forSomeSym)
@@ -974,7 +1007,7 @@ class RDFStore(RDFSink.RDFSink) :
         return self.intern((SYMBOL,str))
     
     def intern(self, pair):
-        """find-or-create a Fragment or a Resource or Literal as appropriate
+        """find-or-create a Fragment or a Symbol or Literal as appropriate
 
         returns URISyntaxError if, for example, the URIref has
         two #'s.
@@ -998,7 +1031,7 @@ class RDFStore(RDFSink.RDFSink) :
             if hash < 0 :     # This is a resource with no fragment
                 result = self.resources.get(urirefString, None)
                 if result != None: return result
-                result = Resource(self, urirefString)
+                result = Symbol(urirefString, self)
                 self.resources[urirefString] = result
             
             else :      # This has a fragment and a resource
@@ -1017,8 +1050,8 @@ class RDFStore(RDFSink.RDFSink) :
                 else: raise RuntimeError, "did not expect other type:"+`typ`
         return result
 
-    def initThing(self, x):
-        """ The store initialized the pointers in a new Thing
+    def initTerm(self, x):
+        """ The store initialized the pointers in a new Term
         """
 
 #        x.occursAs = [], [], [], []    # These are special cases of indexes
@@ -1283,7 +1316,7 @@ class RDFStore(RDFSink.RDFSink) :
 #
     def selectDefaultPrefix(self, context):
 
-        """ Resource whose fragments have the most occurrences.
+        """ Symbol whose fragments have the most occurrences.
         we suppress the RDF namespace itself because the XML syntax has problems with it
         being default as it is used for attributes."""
 
@@ -1314,35 +1347,35 @@ class RDFStore(RDFSink.RDFSink) :
         if verbosity() > 20:
             progress("# Most popular Namesapce in %s is %s with %i" % (`context`, `mp`, best))
 
-        if mp is None: return
+        if mp is None: return counts
         self.defaultNamespace = (SYMBOL, mp.uriref()+"#")
-        return
+        return counts
 
         
-        mpPair = (SYMBOL, mp.uriref()+"#")
-        defns = self.namespaces.get("", None)
-        if defns != None:
-            del self.namespaces[""]
-            del self.prefixes[defns]
-        if self.prefixes.has_key(mpPair) :
-            oldp = self.prefixes[mpPair]
-            del self.prefixes[mpPair]
-            del self.namespaces[oldp]
-        self.prefixes[mpPair] = ""
-        self.namespaces[""] = mpPair
 
 
-    def dumpPrefixes(self, sink):
-        if self.defaultNamespace != None:
-            sink.setDefaultNamespace(self.defaultNamespace)
+    def dumpPrefixes(self, sink, counts=None):
+#        if self.defaultNamespace != None:
+	if self.defaultNamespace != None:
+	    sink.setDefaultNamespace(self.defaultNamespace)
         prefixes = self.namespaces.keys()   #  bind in same way as input did FYI
         prefixes.sort()
-        for pfx in prefixes:
-            sink.bind(pfx, self.namespaces[pfx])
+#	if counts:
+#	    for pfx in prefixes:
+#		nsPair = self.namespaces[pfx]
+#		r = self.intern((nsPair[0], nsPair[1][:-1]))  # Remove trailing slash
+#		n = counts.get(r, -1)
+#		if verbosity()>20: progress("   Prefix %s has %i" % (pfx, n))
+#		if n > 0:
+#		    sink.bind(pfx, nsPair)	    
+#	else:
+	for pfx in prefixes:
+	    nsPair = self.namespaces[pfx]
+	    sink.bind(pfx, nsPair)
 
     def dumpChronological(self, context, sink):
         sink.startDoc()
-        self.dumpPrefixes(sink)
+        self.dumpPrefixes(sink, None)
 #        print "# There are %i statements in %s" % (len(context.statements), `context` )
         for s in context.statements:
             self._outputStatement(sink, s.quad)
@@ -1361,9 +1394,9 @@ class RDFStore(RDFSink.RDFSink) :
     def dumpBySubject(self, context, sink, sorting=1):
         """ Dump by order of subject except forSome's first for n3=a mode"""
         
-        self.selectDefaultPrefix(context)        
+        counts = self.selectDefaultPrefix(context)        
         sink.startDoc()
-        self.dumpPrefixes(sink)
+        self.dumpPrefixes(sink, counts)
 
         statements = context.statementsMatching(self.forSome, context, None)
         if sorting: statements.sort(StoredStatement.compareObj)
@@ -1508,9 +1541,9 @@ class RDFStore(RDFSink.RDFSink) :
     def dumpNested(self, context, sink):
         """ Iterates over all URIs ever seen looking for statements
         """
-        self.selectDefaultPrefix(context)        
+        counts = self.selectDefaultPrefix(context)        
         sink.startDoc()
-        self.dumpPrefixes(sink)
+        self.dumpPrefixes(sink, counts)
         self.dumpFormulaContents(context, sink, sorting=1)
         sink.endDoc()
 
@@ -2121,7 +2154,7 @@ class RDFStore(RDFSink.RDFSink) :
         poss = conclusion.universals()
         for x in poss[:]:
             if x in ok: poss.remove(x)
-        vars = conclusion.existentials() + poss  # Things with arbitrary identifiers
+        vars = conclusion.existentials() + poss  # Terms with arbitrary identifiers
 #        clashes = self.occurringIn(targetContext, vars)    Too slow to do every time
 #        for v in clashes:
         for v in vars:
@@ -2269,6 +2302,7 @@ class RDFStore(RDFSink.RDFSink) :
 			items.append(i)
 			queue.remove(i)
 		nbs = self.remoteQuery(items, variables, existentials)
+		item.state = S_DONE  # do not put back on list
             elif state == S_LIST_UNBOUND: # Lists with unbound vars
                 if verbosity()>50:
                         progress( " "*level+ "List left unbound, returing")
@@ -2308,10 +2342,16 @@ class RDFStore(RDFSink.RDFSink) :
         if verbosity()>50: progress( " "*level+"QUERY MATCH COMPLETE with bindings: " + bindingsToString(bindings))
         return action(bindings, param, level)  # No terms left .. success!
 
-    def remoteQuery(items, variables, existentials):
-	progress("Remote Query:", items, variables, existentials)
-	pass
-	return 0   # No bindings for testing
+    def remoteQuery(self, items, variables, existentials):
+	progress("Whee! time to call EricP's code!\nRemote Query:", items, variables, existentials)
+	binding = []
+	for i in range(len(variables)):
+	    v = variables[i]
+	    value = "value" + `i`
+	    binding = binding + [ (v, self.intern((LITERAL, value))) ]
+	bindings = [ binding ] 
+	progress("====> bindings from remote query:"+`bindings`)
+	return bindings   # No bindings for testing
 
 
 class QueryItem:
@@ -2349,6 +2389,7 @@ class QueryItem:
         con, pred, subj, obj = self.quad
 	if meta:
 	    self.service = meta.any(pred=self.store.authoritativeService, subj=pred)
+	    if verbosity() > 90 and self.service: progress("Ooooo. we have a remote service for "+`pred`)
         self.neededToRun = [ [], [], [], [] ]  # for each part of speech
         self.searchPattern = [con, pred, subj, obj]  # What do we search for?
         hasUnboundFormula = 0

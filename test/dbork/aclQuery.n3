@@ -12,9 +12,9 @@
 
 this log:forAll :urisRow, :aacl, :acl, :access, :u1, :g1, :accessor .
 
-<http://dummyserver.w3.org/foo.mdb/acl> is log:authoritativeServer of
+<http://dummyserver.w3.org/foo.mdb/acl> is log:authoritativeService of
 	acls:acl, acls:access, acls:id, ids:value, idInclusions:id, 
-	idInclusions:groupId.
+	idInclusions:groupId, uris:acl, uris:uri.
 {
  :urisRow uris:uri "http://www.w3.org/Member/Overview.html" .
  :urisRow uris:acl :aacl .

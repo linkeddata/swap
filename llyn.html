@@ -151,7 +151,8 @@ research&nbsp;version.&nbsp;Written&nbsp;in&nbsp;C.&nbsp;Of&nbsp;te&nbsp;order&n
     
 <tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl>
-<dt><font face="helvetica, arial"><a href="exceptions.html#Exception">exceptions.Exception</a>
+<dt><font face="helvetica, arial"><a href="llyn.html#DataObject">DataObject</a>
+</font></dt><dt><font face="helvetica, arial"><a href="exceptions.html#Exception">exceptions.Exception</a>
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="llyn.html#BuiltInFailed">BuiltInFailed</a>
@@ -1350,6 +1351,38 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="DataObject">class <strong>DataObject</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;info&nbsp;about&nbsp;a&nbsp;term&nbsp;in&nbsp;the&nbsp;context&nbsp;of&nbsp;a&nbsp;specific&nbsp;formula<br>
+It&nbsp;is&nbsp;created&nbsp;by&nbsp;being&nbsp;passed&nbsp;the&nbsp;formula&nbsp;and&nbsp;the&nbsp;term,&nbsp;and&nbsp;is<br>
+then&nbsp;accessed&nbsp;like&nbsp;a&nbsp;python&nbsp;dictionary&nbsp;of&nbsp;sequences&nbsp;of&nbsp;values.&nbsp;Example:<br>
+&nbsp;<br>
+F&nbsp;=&nbsp;myWorkingFormula<br>
+x&nbsp;=&nbsp;F.theObject(pred=rdfType&nbsp;obj=fooCar)<br>
+for&nbsp;y&nbsp;in&nbsp;x[color][label]<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="DataObject-__getItem__"><strong>__getItem__</strong></a>(pred)</dt></dl>
+
+<dl><dt><a name="DataObject-__init__"><strong>__init__</strong></a>(context, term)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'The info about a term in the context of a specif...ype obj=fooCar)<font color="#c040c0">\n</font>    for y in x[color][label]<font color="#c040c0">\n</font>    '<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+
+<dl><dt><strong>__module__</strong> = 'llyn'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="DocumentAccessError">class <strong>DocumentAccessError</strong></a>(<a href="exceptions.html#IOError">exceptions.IOError</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
@@ -1618,7 +1651,7 @@ for&nbsp;each&nbsp;subject.<br>
 
 <dl><dt><a name="RDFStore-dumpNested"><strong>dumpNested</strong></a>(self, context, sink)</dt><dd><tt>&nbsp;Iterates&nbsp;over&nbsp;all&nbsp;URIs&nbsp;ever&nbsp;seen&nbsp;looking&nbsp;for&nbsp;statements</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-dumpPrefixes"><strong>dumpPrefixes</strong></a>(self, sink)</dt></dl>
+<dl><dt><a name="RDFStore-dumpPrefixes"><strong>dumpPrefixes</strong></a>(self, sink, counts<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="RDFStore-dumpStatement"><strong>dumpStatement</strong></a>(self, sink, triple, sorting)</dt></dl>
 
@@ -1845,7 +1878,9 @@ The&nbsp;steps&nbsp;are&nbsp;as&nbsp;follows:<br>
 3.&nbsp;If&nbsp;the&nbsp;formulae&nbsp;are&nbsp;still&nbsp;the&nbsp;same,&nbsp;then&nbsp;for&nbsp;each&nbsp;variable,&nbsp;a&nbsp;list<br>
 &nbsp;&nbsp;&nbsp;of&nbsp;appearances&nbsp;is&nbsp;created.&nbsp;&nbsp;Note&nbsp;that&nbsp;because&nbsp;we&nbsp;are&nbsp;comparing&nbsp;statements&nbsp;without<br>
 &nbsp;&nbsp;&nbsp;variables,&nbsp;two&nbsp;may&nbsp;be&nbsp;equal,&nbsp;in&nbsp;which&nbsp;case&nbsp;the&nbsp;same&nbsp;(first)&nbsp;statement&nbsp;number<br>
-&nbsp;&nbsp;&nbsp;is&nbsp;used&nbsp;whichever&nbsp;statement&nbsp;the&nbsp;variable&nbsp;was&nbsp;in&nbsp;fact&nbsp;in.&nbsp;Ooops</tt></dd></dl>
+&nbsp;&nbsp;&nbsp;is&nbsp;used&nbsp;whichever&nbsp;statement&nbsp;the&nbsp;variable&nbsp;was&nbsp;in&nbsp;fact&nbsp;in.&nbsp;Ooops<br>
+&nbsp;&nbsp;&nbsp;<br>
+NOT&nbsp;WRITTEN</tt></dd></dl>
  <dl><dt><a name="-comparePair"><strong>comparePair</strong></a>(self, other)</dt></dl>
  <dl><dt><a name="-compareURI"><strong>compareURI</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
 This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
@@ -1919,7 +1954,7 @@ The&nbsp;fact&nbsp;that&nbsp;the&nbsp;sequences&nbsp;are&nbsp;sorted&nbsp;makes&
 <strong>S_NOT_LIGHT</strong> = 60<br>
 <strong>S_REMOTE</strong> = 10<br>
 <strong>S_UNKNOWN</strong> = 99<br>
-<strong>__file__</strong> = './llyn.py'<br>
+<strong>__file__</strong> = './llyn.pyc'<br>
 <strong>__name__</strong> = 'llyn'<br>
 <strong>cvsRevision</strong> = '$Revision$'<br>
 <strong>doMeta</strong> = 0<br>
