@@ -292,6 +292,9 @@ class Literal(Thing):
         Thing.__init__(self, store)
         self.string = string    #  n3 notation EXcluding the "  "
 
+    def __str__(self):
+        return self.string
+    
     def __repr__(self):
         return '"' + self.string[0:8] + '"'
 #        return self.string
