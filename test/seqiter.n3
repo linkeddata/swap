@@ -1,0 +1,37 @@
+# $Id$
+# from discussion:
+# * em wanders by and wonders if anyone has an example of iterating
+#   over a :Seq in n3
+#  -- http://ilrt.org/discovery/chatlogs/rdfig/2002-06-19#T21-32-23
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix str: <http://www.w3.org/2000/10/swap/string#> .
+
+
+@prefix : <seqiter#>.
+@prefix si: <seqiter#>.
+
+this log:forAll :SEQ, :X, :P, :Q, :N, :NN.
+
+
+{ :SEQ rdf:_1 :X } log:implies { :X a :IterationCandidate }.
+
+{
+  :SEQ rdf:_1 [];
+       :P [];
+       :Q :X.
+
+  ([ is log:uri of :P ]
+   "http://www.w3.org/1999/02/22-rdf-syntax-ns#_(\\d+)" )
+    str:scrape :N.
+
+  (:N "1") math:sum :NN.
+
+  :Q log:uri [
+    is str:concatenation of ("http://www.w3.org/1999/02/22-rdf-syntax-ns#_"
+                             :NN)].
+ } log:implies { :X a :IterationCandidate}.
+
+
