@@ -427,12 +427,22 @@ class BI_content(HeavyBuiltIn, Function): #@@DWC: Function?
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
         C = store.any((store._experience, store.content, doc, None))
-        if C: return C
+        if C:
+            if thing.verbosity() > 10: progress("already read " + `doc`)
+            return C
         if thing.verbosity() > 10: progress("Reading " + `doc`)
         inputURI = doc.uriref()
-        netStream = urllib.urlopen(inputURI)
+        try:
+            netStream = urllib.urlopen(inputURI)
+        except IOError:
+            return None
+        
         str = netStream.read() # May be big - buffered in memory!
         C = store.intern((LITERAL, str))
+        store.storeQuad((store._experience,
+                         store.content,
+                         doc,
+                         C))
         return C
 
 
