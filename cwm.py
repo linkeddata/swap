@@ -102,6 +102,10 @@ import StringIO
 import notation3    # N3 parsers and generators, and RDF generator
 import xml2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
+
+LITERAL_URI_prefix = "data:application/n3;"
+
+
 # Magic resources we know about
 
 RDF_type_URI = notation3.RDF_type_URI # "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
@@ -312,7 +316,7 @@ class Literal(Thing):
     wants to store it that way?  Maybe we do... at least in theory and maybe
     practice but, for now, we keep them in separate subclases of Thing.
     """
-    Literal_URI_Prefix = "data:application/n3;"
+
 
     def __init__(self, string):
         Thing.__init__(self)
@@ -327,8 +331,8 @@ class Literal(Thing):
     def representation(self, base=None):
         return '"' + self.string + '"'   # @@@ encode quotes; @@@@ strings containing \n
 
-    def uriref(self, base=None):      # Unused at present but interesting! 2000/10/14
-        return  Literal_URI_Prefix + uri_encode(self.representation())
+#    def uriref(self, base=None):      # Unused at present but interesting! 2000/10/14
+#        return  LITERAL_URI_prefix + uri_encode(self.representation())
 
 
 
@@ -358,14 +362,20 @@ class Engine:
         return self.intern((RESOURCE,str))
     
     def intern(self, pair):
-        """  Returns either a Fragment or a Resource as appropriate
+        """  Returns either a Fragment or a Resource or Literal as appropriate
 
     This is the way they are actually made.
     """
         type, uriref = pair
         if type == LITERAL:
-            return Literal(uriref)  # No interning for literals (?@@? Prevents == rats)
-
+            uriref2 = LITERAL_URI_prefix + uriref # @@@ encoding at least hashes?
+#            return Literal(uriref)  # No interning for literals (?@@? Prevents == rats)
+            r = self.resources.get(uriref2, None)
+            if r: return r
+            r = Literal(uriref)
+            self.resources[uriref2] = r
+            return r
+        
 #        print " ... interning <%s>" % `uriref`
         hash = len(uriref)-1
         while (hash >= 0) and not (uriref[hash] == "#"):
@@ -506,15 +516,16 @@ class RDFStore(notation3.RDFSink) :
         mp = None
         for r in self.engine.resources.values() :
             total = 0
-            for f in r.fragments.values():
-                anon, inc, se = self._topology(f, context)
-                if not anon:
-                    total = total + (f.occurrences(PRED,context)+
-                                     f.occurrences(SUBJ,context)+
-                                     f.occurrences(OBJ,context))
-            if total > best :
-                best = total
-                mp = r
+            if isinstance(r, Resource):
+                for f in r.fragments.values():
+                    anon, inc, se = self._topology(f, context)
+                    if not anon:
+                        total = total + (f.occurrences(PRED,context)+
+                                         f.occurrences(SUBJ,context)+
+                                         f.occurrences(OBJ,context))
+                if total > best :
+                    best = total
+                    mp = r
         if mp is None: return
         
         if chatty > 20:
@@ -1246,8 +1257,10 @@ class RDFStore(notation3.RDFSink) :
         if matches == 0 and quad[CONTEXT] in smartIn:
             if ((quad[PRED] is self.includes and self.testIncludes(quad[SUBJ], quad[OBJ], existentials, smartIn))
                 or(quad[PRED] is self.directlyIncludes and self.testIncludes(quad[SUBJ], quad[OBJ], variables))
-                or(quad[PRED] is self.notIncludes and not self.testIncludes(quad[SUBJ], quad[OBJ], existentials, smartIn))
-                or(quad[PRED] is self.notDirectlyIncludes and not self.testIncludes(quad[SUBJ], quad[OBJ], variables))):
+                or(quad[PRED] is self.notIncludes and (isinstance(quad[SUBJ], Formula)
+                                                       and not self.testIncludes(quad[SUBJ], quad[OBJ], existentials, smartIn)))
+                or(quad[PRED] is self.notDirectlyIncludes and (isinstance(quad[SUBJ], Formula)
+                                                       and not self.testIncludes(quad[SUBJ], quad[OBJ], variables)))):
                 total = total + self.match(unmatched[:], variables[:], existentials[:], smartIn, action, param,
                                   bindings[:], []) # No new bindings but success in calculated logical operator
                     
