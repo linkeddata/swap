@@ -4,33 +4,29 @@
 converter from RSS events to palm.
 
 Invoke ala:
-
-python cwm.py esw2pd.n3 --think --purge --rdf=d >,palmStuff.rdf
+d='http://www.w3.org/2000/06/webdata/xslt?xslfile=http://www.w3.org/2001/sw/Europe/events/home2rss.xsl&xmlfile=http://www.w3.org/2001/sw/Europe/events/Overview.html'
+python cwm.py esw2pd.n3 --rdf $d --think --purge --rdf=dc >,palmStuff.rdf
 """,
 "$Id$";
   dc:source <http://ilrt.org/discovery/chatlogs/rdfig/2002-07-31#T17-05-30>.
+
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 
 @prefix : <#>.
 
-this log:forAll :WHAT, :WHEN, :DESC.
+this log:forAll :S, :P, :O.
 
 @prefix ev: <http://purl.org/rss/1.0/modules/event/>.
 @prefix rss: <http://purl.org/rss/1.0/>.
 
 @prefix pd: <http://www.w3.org/2000/08/palm56/datebook#>.
 
-{ <http://www.w3.org/2000/06/webdata/xslt?xslfile=http://www.w3.org/2001/sw/Europe/events/home2rss.xsl&xmlfile=http://www.w3.org/2001/sw/Europe/events/Overview.html> log:semantics [ log:includes {
-    [ ev:startdate :WHEN;
-      rss:title :WHAT;
-      rss:description :DESC;
-    ] } ]
-} log:implies {
-  [ pd:description :WHAT;
-    pd:note :DESC;
-    pd:date :WHEN
-  ]
-}.
+ev:startdate s:subPropertyOf pd:date.
+rss:title s:subPropertyOf pd:description.
+rss:description s:subPropertyOf pd:note.
+
+{ :S [ is s:subPropertyOf of :P ] :O } log:implies { :S :P :O }.
 
 log:implies a log:Chaff. # @@ I hate this kludge.
