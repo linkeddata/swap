@@ -1,0 +1,437 @@
+     @prefix : <http://www.w3.org/2000/10/swap/log#> .
+     @prefix qu: <#> .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :includes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testa2     a qu:success .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :includes {this     :forAll  [
+                     qu:bar qu:baz ] .
+            } .
+        
+        }     :implies {qu:testb3d     a qu:FAILURE .
+        } .
+    {
+        {
+            this     :forAll  [
+                     qu:bar qu:baz ] .
+            
+            }     :includes {this     :forAll  [
+                     qu:bar qu:baz ] .
+            } .
+        
+        }     :implies {qu:testc3d     a qu:success .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :notIncludes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testa2nd     a qu:FAILURE .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :notIncludes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testb2nd     a qu:FAILURE .
+        } .
+    {
+        {
+            this     :forAll  [
+                     qu:bar qu:baz ] .
+            
+            }     :notIncludes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testc2nd     a qu:FAILURE .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :notIncludes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testa1nd     a qu:success .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :notIncludes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testb1nd     a qu:success .
+        } .
+    {
+        {
+            this     :forAll  [
+                     qu:bar qu:baz ] .
+            
+            }     :notIncludes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testc1nd     a qu:FAILURE .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :includes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testa1     a qu:success .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :notIncludes {this     :forAll  [
+                     qu:bar qu:baz ] .
+            } .
+        
+        }     :implies {qu:testa3nd     a qu:success .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :notIncludes {this     :forAll  [
+                     qu:bar qu:baz ] .
+            } .
+        
+        }     :implies {qu:testb3nd     a qu:success .
+        } .
+    {
+        {
+            this     :forAll  [
+                     qu:bar qu:baz ] .
+            
+            }     :notIncludes {this     :forAll  [
+                     qu:bar qu:baz ] .
+            } .
+        
+        }     :implies {qu:testc3nd     a qu:FAILURE .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :includes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testb1     a qu:FAILURE .
+        } .
+    {
+        {
+            this     :forAll  [
+                     qu:bar qu:baz ] .
+            
+            }     :includes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testc1     a qu:success .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :includes {this     :forAll  [
+                     qu:bar qu:baz ] .
+            } .
+        
+        }     :implies {qu:testa3     a qu:FAILURE .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :includes {this     :forAll  [
+                     qu:bar qu:baz ] .
+            } .
+        
+        }     :implies {qu:testb3     a qu:FAILURE .
+        } .
+    {
+        {
+            this     :forAll  [
+                     qu:bar qu:baz ] .
+            
+            }     :includes {this     :forAll  [
+                     qu:bar qu:baz ] .
+            } .
+        
+        }     :implies {qu:testc3     a qu:success .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :notIncludes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testa2n     a qu:FAILURE .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :notIncludes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testb2n     a qu:FAILURE .
+        } .
+    {
+        {
+            this     :forAll  [
+                     qu:bar qu:baz ] .
+            
+            }     :notIncludes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testc2n     a qu:FAILURE .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :notIncludes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testa1n     a qu:FAILURE .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :includes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testb2     a qu:success .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :notIncludes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testb1n     a qu:success .
+        } .
+    {
+        {
+            this     :forAll  [
+                     qu:bar qu:baz ] .
+            
+            }     :notIncludes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testc1n     a qu:FAILURE .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :notIncludes {this     :forAll  [
+                     qu:bar qu:baz ] .
+            } .
+        
+        }     :implies {qu:testa3n     a qu:success .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :notIncludes {this     :forAll  [
+                     qu:bar qu:baz ] .
+            } .
+        
+        }     :implies {qu:testb3n     a qu:success .
+        } .
+    {
+        {
+            this     :forAll  [
+                     qu:bar qu:baz ] .
+            
+            }     :notIncludes {this     :forAll  [
+                     qu:bar qu:baz ] .
+            } .
+        
+        }     :implies {qu:testc3n     a qu:FAILURE .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :includes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testa2d     a qu:success .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :includes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testb2d     a qu:success .
+        } .
+    {
+        {
+            this     :forAll  [
+                     qu:bar qu:baz ] .
+            
+            }     :includes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testc2d     a qu:success .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :includes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testa1d     a qu:FAILURE .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :includes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testb1d     a qu:FAILURE .
+        } .
+    {
+        {
+            this     :forAll  [
+                     qu:bar qu:baz ] .
+            
+            }     :includes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testc2     a qu:success .
+        } .
+    {
+        {
+            this     :forAll  [
+                     qu:bar qu:baz ] .
+            
+            }     :includes {
+              [      qu:bar qu:baz ].
+            } .
+        
+        }     :implies {qu:testc1d     a qu:success .
+        } .
+    {
+        {
+            
+              [      qu:bar qu:baz ].
+            
+            }     :includes {this     :forAll  [
+                     qu:bar qu:baz ] .
+            } .
+        
+        }     :implies {qu:testa3d     a qu:FAILURE .
+        } .
+    
+    qu:testa1     a qu:success .
+    
+    qu:testa1nd     a qu:success .
+    
+    qu:testa2     a qu:success .
+    
+    qu:testa2d     a qu:success .
+    
+    qu:testa3n     a qu:success .
+    
+    qu:testa3nd     a qu:success .
+    
+    qu:testb1     a qu:FAILURE .
+    
+    qu:testb1nd     a qu:success .
+    
+    qu:testb2     a qu:success .
+    
+    qu:testb2d     a qu:success .
+    
+    qu:testb3n     a qu:success .
+    
+    qu:testb3nd     a qu:success .
+    
+    qu:testc1     a qu:success .
+    
+    qu:testc1nd     a qu:FAILURE .
+    
+    qu:testc2     a qu:success .
+    
+    qu:testc2d     a qu:success .
+    
+    qu:testc3     a qu:success .
+    
+    qu:testc3d     a qu:success .
+    
+    :implies     a :Chaff .
+    
