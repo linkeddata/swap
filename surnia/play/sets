@@ -1,0 +1,80 @@
+set(auto).
+formula_list(usable).
+
+all A S (
+   item(A, S)
+   ->
+   (exists T (
+     -item(A, T) &
+     (all B (
+        A != B -> (item(B, T) <-> item(B, S))
+     )) &
+     card(S)=succ(card(T))
+   ))
+).
+
+card(nil) = zero.
+all X -item(X, nil).
+all X lte(card(X), zero).
+
+all X Y (
+   X=succ(Y) -> lt(Y, X)
+).
+all X Y Z (
+   lt(X, Y) & lt(Y, Z) -> lt(X, Z)
+).
+
+all X Y (
+  lt(X, Y) -> X != Y
+).
+all X Y (
+  lt(X, Y) | X=Y <-> lte(X, Y)
+).
+all X (
+   number(X) -> (succ(X) & number(succ(X)))
+).
+number(zero).
+
+
+lt(succ(zero), zero).
+
+-(
+all A B S (
+   item(A, S)
+   ->
+   lt(zero, card(S))
+)).
+
+all A B S (
+   item(A, S) &
+   item(B, S) &
+   (A != B)
+   ->
+   lt(succ(zero), card(S))
+).
+
+all A B C S (
+   item(A, S) &
+   item(B, S) &
+   A != B &
+   item(C, S) &
+   A != B &
+   B != C
+   ->
+   lt(succ(succ(zero)), card(S))
+).
+
+
+
+
+item(a, s).
+item(b, s).
+item(c, s).
+a != b.
+a != c.
+b != c.
+
+
+%# card(s) = zero.
+
+% because 

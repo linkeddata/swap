@@ -1,79 +1,62 @@
 % $Id$
 
-set(auto).
-
-% we need inList
-include('otter/owlAx-oneOf.otter').
-
-% we need SOMETHING of sameAs/differentFrom, ...
-
 formula_list(usable).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% maybe good to have around.  hrm.
+all X (X=X).
+
+% Needed if you uncomment the recursive versions below...
 %
-%  A little number theory
-%
+% all SUB SUPER (
+%    subset(SUPER, SUB) 
+%   <->
+%    (all X (item(X, SUB) -> item(X, SUPER)))
+% ).
 
-% nothing is less than zero
-all X -(lt(X, i0)).
+%  for folks who really ONLY want owlAx-card
 
-% succ is 1:1
-all X Y (succ(X)=succ(Y) -> X=Y).
-
-% definition of Less Than
-
-all HIGH LOW (
-   lt(LOW, HIGH) 
-   <->
-   ( HIGH=succ(LOW) 
-     |
-     ( exists MIDDLE (
-         lt(LOW,MIDDLE) & lt(MIDDLE,HIGH)
-     ))
-   )
+all X Y (
+   rdf(X, owl_differentFrom, Y)
+   ->
+   -(X=Y)
 ).
 
 all X Y (
-  lt(X, Y) -> X != Y
+   rdf(X, owl_differentFrom, Y)
+   ->
+   -(Y=X)
 ).
-
-% define Less-Than-Or-Equal-To
-%all X Y (
-%  lt(X, Y) | X=Y <-> lte(X, Y)
-%).
-
-all X ( X=X ).
-
-% threorem 
-%lt(succ(anotherZero), succ(i0)).
-%-(
-%   anotherZero = i0
-%).
-
-
-i1 = succ(i0).
-i2 = succ(i1).
-i3 = succ(i2).
-i4 = succ(i3).
- 
-% TEST
-j1 = succ(i0).
-j2 = succ(j1).
-j3 = succ(j2).
-j4 = succ(j3).
-%lt(i4,j4).
-%lt(j4,i4).
-%i0 = succ(iNeg1). 
-%  not working....lt(x,i1) & x != i1.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-%  Some axioms about cardinality of sets, but I haven't figured
-%  out how to do this recursively, so it's instantiated for each
-%  cardinality.    That's not as bad as it seems, since the recursion
-%  might well be too slow for large sets anyway.
+%   A (very) little number theory
+%
 
+all X Y Z (
+   rdf(X, 'foo:succ', Y) &
+   rdf(X, 'foo:succ', Z) 
+  ->
+   Y=Z
+).
+
+all X Y Z (
+   rdf(X, 'foo:succ', Y) &
+   rdf(Z, 'foo:succ', Y) 
+  ->
+   X=Z
+).
+
+
+'foo:zero'=i0.
+rdf('foo:zero', 'foo:succ', i1).
+rdf(i1, 'foo:succ', i2).
+rdf(i2, 'foo:succ', i3).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 % MaxCardinality
+%
 
 all S (
    maxCardinality(S, i0)
@@ -91,10 +74,27 @@ all S (
    maxCardinality(S, i2)
    <->
    -(exists A B C ( A!=B & A!=C & B!=C & 
+                    B!=A & C!=A & C!=B &   % performance hint
                     item(A, S) & item(B, S) & item(C, S)))
 ).
 
+    
+
+
+%% TEST passed
+%maxCardinality(dogs, i2).
+%item(taiko, dogs).
+%item(tsuzumi, dogs).
+%item(dirtmaster, dogs).
+%taiko!=tsuzumi.
+%tsuzumi!=dirtmaster.
+%
+%taiko!=dirtmaster.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
 % MinCardinality 
+%
 
 all S (
    minCardinality(S, i0)
@@ -112,86 +112,118 @@ all S (
    (exists A B ( A!=B & item(A, S) & item(B, S)))
 ).
 
+all S (
+   minCardinality(S, i2)
+   <->
+   (exists A B ( A!=B & item(A, S) & item(B, S)))
+).
 
-% TEST
-minCardinalty(kids, i2).
-
--(
-all KID (item(KID, kids) -> (KID=a | KID=b))
+all S (
+   minCardinality(S, i3)
+   <->
+   (exists A B C ( A!=B & B!=C & A!=C & 
+                   item(A, S) & item(B, S) & item(C, S)))
 ).
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%
+%%%   I think this is correct, but it's much slower in 
+%%%   my tests so far.  
+%%%
+%%%   ... and I'm less confident it's correct, so leave it
+%%%   commented out for now.
+%%%
+%%%   (it probably needs at least some number theory axioms)
+%%%
+%?%  all S N LESSER (
+%?%     rdf(LESSER, 'foo:succ', N)
+%?%    ->
+%?%     ( minCardinality(S, N) 
+%?%      <->
+%?%       (exists SUBSET A (
+%?%         item(A, S) &
+%?%         minCardinality(SUBSET, LESSER) &
+%?%         -item(A, SUBSET) & 
+%?%         subset(S, SUBSET) 
+%?%       ))
+%?%     )
+%?%  ).
+
+% TEST
+%minCardinality(sons, i1).
+%-(exists X (item(X, sons))).
+
+% TEST
+% minCardinality(foo, i2).
+% -minCardinality(foo, i1).
+
+% TEST THEOREM
+% -(
+% all X (minCardinality(X, i3) -> minCardinality(X, i2))
+% ).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
-%   owl_cardinality
+%   owl_[min/max]cardinality
 %
 
-%%% all RESTRICTION PROPERTY CARDINALITY INST (
-%%%    ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
-%%%      rdf(RESTRICTION, owl_onProperty, PROPERTY) &
-%%%      rdf(RESTRICTION, owl_cardinality, CARDINALITY) &
-%%%      rdf(INST, rdf_type, RESTRICTION) )
-%%%    ->
-%%%    % there is a set with that cardinality
-%%%    % and it matches the values  of rdf(INST, PROPERTY...)
-%%%    ( exists LIST ( all VAL (
-%%%      ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
-%%%        CARDINALITY=card(LIST) 
-%%%    )))
-%%% ).
-%%% 
-%%% all RESTRICTION PROPERTY MINCARDINALITY INST (
-%%%    ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
-%%%      rdf(RESTRICTION, owl_onProperty, PROPERTY) &
-%%%      rdf(RESTRICTION, owl_minCardinality, MINCARDINALITY) &
-%%%      rdf(INST, rdf_type, RESTRICTION) )
-%%%    ->
-%%%    % there is a set with that cardinality
-%%%    % and it matches the values  of rdf(INST, PROPERTY...)
-%%%    ( exists LIST ( all VAL (
-%%%      ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
-%%%      lte(MINCARDINALITY, card(LIST))
-%%%    )))
-%%% ).
-%%% 
-%%% all RESTRICTION PROPERTY MAXCARDINALITY INST (
-%%%    ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
-%%%      rdf(RESTRICTION, owl_onProperty, PROPERTY) &
-%%%      rdf(RESTRICTION, owl_maxCardinality, MAXCARDINALITY) &
-%%%      rdf(INST, rdf_type, RESTRICTION) )
-%%%    ->
-%%%    % there is a set with that cardinality
-%%%    % and it matches the values  of rdf(INST, PROPERTY...)
-%%%    ( exists LIST ( all VAL (
-%%%      ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
-%%%      lte(card(LIST), MAXCARDINALITY)
-%%%    )))
-%%% ).
-%%% 
-
-
-% Cardinality Zero
-
-
-% Cardinality < One
-
-one = succ(zero).
-
-all S (
-  lt(one, cardinality(S))
-  ->
-  (exists A B (
-    item(A, S) &
-    item(B, S) &
-    A != B
-  ))
+all RESTRICTION PROPERTY CARDINALITY INST (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_cardinality, CARDINALITY) &
+     rdf(INST, rdf_type, RESTRICTION) )
+   ->
+   % there is a set with that cardinality
+   % and it matches the values  of rdf(INST, PROPERTY...)
+   ( exists SET ( all VAL (
+     ( rdf(INST, PROPERTY, VAL) -> item(VAL, SET) ) &
+       minCardinality(SET, CARDINALITY) &
+       maxCardinality(SET, CARDINALITY)
+   )))
 ).
 
+all RESTRICTION PROPERTY CARDINALITY INST (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_maxCardinality, CARDINALITY) &
+     rdf(INST, rdf_type, RESTRICTION) )
+   ->
+   % there is a set with that cardinality
+   % and it matches the values  of rdf(INST, PROPERTY...)
+   ( exists SET ( all VAL (
+     ( rdf(INST, PROPERTY, VAL) -> item(VAL, SET) ) &
+       maxCardinality(SET, CARDINALITY)
+   )))
+%% for debugging, we want to know the name of the set...
+%   ( all VAL (
+%     ( rdf(INST, PROPERTY, VAL) -> item(VAL, pset(RESTRICTION,INST)) ) &
+%       maxCardinality(pset(RESTRICTION,INST), CARDINALITY)
+%   ))
+).
+
+all RESTRICTION PROPERTY CARDINALITY INST (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_minCardinality, CARDINALITY) &
+     rdf(INST, rdf_type, RESTRICTION) )
+   ->
+   % there is a set with that cardinality
+   % and it matches the values  of rdf(INST, PROPERTY...)
+   ( exists SET ( all VAL (
+     ( rdf(INST, PROPERTY, VAL) -> item(VAL, SET) ) &
+       minCardinality(SET, CARDINALITY)
+   )))
+).
 
 
 	
 % $Log$
-% Revision 1.9  2003-08-08 16:16:21  sandro
+% Revision 1.10  2003-08-08 18:53:32  sandro
+% a cardinality test is working!
+%
+% Revision 1.9  2003/08/08 16:16:21  sandro
 % getting closer...
 %
 % Revision 1.8  2003/08/08 15:01:37  sandro

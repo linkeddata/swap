@@ -65,6 +65,7 @@ maxSecondsTable = {
     'http://www.w3.org/2002/03owlt/AllDifferent/Manifest001#test': 3 * fudge,
     'http://www.w3.org/2002/03owlt/FunctionalProperty/Manifest004#test': (5 * fudge),
     'http://www.w3.org/2002/03owlt/InverseFunctionalProperty/Manifest004#test': (5 * fudge),
+    'http://www.w3.org/2002/03owlt/maxCardinality/Manifest001#test': (110 * fudge),
     }
 
 axiomTag = { }
@@ -80,7 +81,7 @@ axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest001#test']='-card'
 axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest002#test']='-card'
 axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest003#test']='-card'
 axiomTag['http://www.w3.org/2002/03owlt/cardinality/Manifest004#test']='-card'
-
+axiomTag['http://www.w3.org/2002/03owlt/maxCardinality/Manifest001#test']='-card'
 
 maxSeconds = 1
 

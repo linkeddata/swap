@@ -36,7 +36,9 @@ rdf(ns6_prop, rdf_type, owl_ObjectProperty).
 % final result proven then in 0.8s., or 0.8 without group 1
 %   1.2s without 3rd clause
 %   1.5s without 2nd
-%    BUT without 1st asserted, we get....    a looooon wait.
+%    BUT without 1st asserted, we get....    1:58 !!!
+%  (13 steps, vs 12.)
+ns6_ob1 != ns6_ob2.    % 60 times longer.
 
 all X Y (
    rdf(X, owl_differentFrom, Y)
