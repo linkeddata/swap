@@ -86,6 +86,12 @@ a:AHO a k:Airport-Physical;
 a:PIT a k:Airport-Physical;
   k:nameString "PITTSBURGH";
   :timeZone ny:tz.
+a:PHL a k:Airport-Physical;
+  k:nameString "Philadelphia, PA";
+  :timeZone ny:tz.
+a:ATL a k:Airport-Physical;
+  k:nameString "Atlanta, GA";
+  :timeZone ny:tz.
 a:YMX a k:Airport-Physical;
   k:nameString "MONTREAL DORVALQC";
   :timeZone ny:tz.
