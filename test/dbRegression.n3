@@ -11,21 +11,21 @@
 :d1001 a test:CwmTest;
     test:shortFileName "dbork-OrderTracking0.n3";
     test:description   "SELECT from tables in sample database called OrderTracking";
-    test:arguments     """dbork/OrderTracking0.n3 -think""".
+    test:arguments     """dbork/OrderTracking0.n3 --mode=r --think""".
 
 :d1002 a test:CwmTest;
     test:shortFileName "dbork-OrderTracking1.n3";
     test:description   "automatic JOIN from OrderTracking database";
-    test:arguments     """dbork/OrderTracking1.n3 -think""".
+    test:arguments     """dbork/OrderTracking1.n3 --mode=r --think""".
 
 :d1003 a test:CwmTest;
     test:shortFileName "dbork-OrderTracking1-noExtKeys.n3";
     test:description   "manual JOIN from OrderTracking database";
-    test:arguments     """dbork/OrderTracking1-noExtKeys.n3 -think""".
+    test:arguments     """dbork/OrderTracking1-noExtKeys.n3 --mode=r --think""".
 
 :d1004 a test:CwmTest;
     test:shortFileName "dbork-OrderTracking1-sameFragName.n3";
     test:description   "test for name collisions in database table names";
-    test:arguments     """dbork/OrderTracking1-sameFragName.n3 -think""".
+    test:arguments     """dbork/OrderTracking1-sameFragName.n3 --mode=r --think""".
 
 #ends

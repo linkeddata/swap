@@ -12,7 +12,8 @@
 Options:
 
 --testsFrom=uri -f uri  Take test definitions from these files (in RDF/XML or N3 format)
---normal        -n      Do normal tests
+--normal        -n      Do normal tests, checking output
+--chatty        -c	Do tests with debug --chatty=100 (flag just check doesn't crash)
 --proof         -p      Do tests generating and cheking a proof
 --start=13      -s 13   Skip the first 12 tests
 --verbose	-v      Print what you are doing as you go
@@ -68,12 +69,13 @@ def main():
     testFiles = []
     start = 1
     normal = 0
+    chatty = 0
     proofs = 0
     global verbose
     verbose = 0
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hs:npf:v",
-	    ["help", "start=", "testsFrom=", "normal", "proofs", "verbose"])
+        opts, args = getopt.getopt(sys.argv[1:], "hs:ncpf:v",
+	    ["help", "start=", "testsFrom=", "normal", "chatty", "proofs", "verbose"])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
@@ -91,6 +93,8 @@ def main():
 	    testFiles.append(a)
 	if o in ("-n", "--normal"):
 	    normal = 1
+	if o in ("-c", "--chatty"):
+	    chatty = 1
 	if o in ("-p", "--proofs"):
 	    proofs = 1
 
@@ -140,6 +144,10 @@ def main():
 	    if diff(case):
 		print "######### from normal case %s: %scwm %s" %( case, env, arguments)
 		sys.exit(-1)
+
+	if chatty:
+	    execute("""%spython ../cwm.py --chatty=100  %s  &> /dev/null""" %
+		(env, arguments))	
 
 	if proofs:
 	    execute("""%spython ../cwm.py --quiet %s --base=a --why  > ,proofs/%s""" %
