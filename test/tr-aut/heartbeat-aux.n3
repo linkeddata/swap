@@ -1,0 +1,37 @@
+# $Id$
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+
+@prefix : <heartbeat#>.
+@keywords is, of, a.
+
+@prefix org: <http://www.w3.org/2001/04/roadmap/org#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>. #@@ missing #
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
+
+
+@forAll DOC, WHEN, PG, GROUP.
+
+{ ?F a TRKB;
+     log:includes {
+       [] org:deliveredBy [ contact:homePage PG ]
+  }
+} => {
+  [] contact:homePage PG
+}.
+
+{ ?F a TRKB;
+    log:includes {
+     DOC dc:date WHEN;
+           org:deliveredBy [ contact:homePage PG ]
+	 }.
+   ?GRP contact:homePage PG
+} => {
+   ?GRP published WHEN
+}.
+
+{
+      ?P a InterestingPeriod; start ?PS.
+      ?GRP published ?WHEN.
+      ?WHEN str:notLessThan ?PS.
+} => { ?GRP publishedInRecent ?P }.
