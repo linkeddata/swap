@@ -1,3 +1,6 @@
 <Files ~ ".*\.n3$">
    ForceType 'text/rdf-n3'
 </Files>
+
+# $Id$
+# cf http://httpd.apache.org/docs/mod/mod_mime.html#forcetype
