@@ -1,0 +1,23 @@
+# see <http://rdfstore.sourceforge.net/2002/06/24/rdf-query/query-use-cases.html>.
+# Use case: Look up RSS data from web - latest from XMLkack.com
+
+#
+#  cwm t06.n3 --think --purge-rules
+#
+#
+
+@prefix rss: <http://purl.org/rss/1.0/>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <#>.
+
+
+this log:forAll :t, :l.
+
+{
+    <http://xmlhack.com/rss10.php>.log:semantics log:includes {
+        [] a rss:item; rss:title :t; rss:link :l }
+} => {
+     [] :title :t; :link :l
+}.
+
+#ends
