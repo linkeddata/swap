@@ -1,7 +1,7 @@
 # Test data in notation3 http://www.w3.org/DesignIssues/Notation3.html
 #    
 @prefix u: <http://www.example.org/utilities#> .
-@prefix default <#> .
+@prefix : <#> .
 
 :assumption = { :fred u:knows :john .
                 :john u:knows :mary .} .

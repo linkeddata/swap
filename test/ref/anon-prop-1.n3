@@ -1,0 +1,8 @@
+     @prefix : <#> .
+    
+    this     <http://www.w3.org/2000/10/swap/log#forSome> :_g0 .
+    
+    :_g0     :propProp "red" .
+    
+    :anySubj     :_g0 :anyObj .
+    

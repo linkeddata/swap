@@ -11,7 +11,7 @@
     xmlns:vg1="http://www.w3.org/2000/10/swapt/test/smush-query#"
     xmlns:web="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 
-    <Q1Answer web:about="http://www.mozilla.org/sdf">
+    <Q1Answer web:about="http://www.mozilla.org/">
     </Q1Answer>
 
     <Q1Answer web:about="http://www.w3.org/RDF/">

@@ -66,6 +66,7 @@ cwm_test schema1.n3 "Schema validity" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -
 
 cwm_test schema2.n3 "Schema validity using filtering out essential output" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think -filter=schema-filter.n3
 
+echo
 echo "        Test builtins:"
 
 cwm_test bi-t1.n3 "Simple use of log:includes" includes/t1.n3 -think
@@ -76,7 +77,8 @@ cwm_test bi-t3.n3 "Simple use of log:includes" includes/t3.n3 -think
 
 cwm_test bi-t4.n3 "Simple use of log:includes - negative test" includes/t4.n3 -think
 
-cwm_test bi-t5.n3 "Simple use of log:includes" includes/t5.n3 -think
+# Drop this until/unless we have formulae compare (by internment?) .  The graph isomorphism prob.
+#cwm_test bi-t5.n3 "Simple use of log:includes" includes/t5.n3 -think
 
 cwm_test bi-t6.n3 "Simple use of log:includes" includes/t6.n3 -think
 
@@ -85,6 +87,10 @@ cwm_test bi-t7.n3 "Simple use of log:includes" includes/t7.n3 -think
 cwm_test bi-t8.n3 "Simple use of string built-ins" includes/t8.n3 -think
 
 cwm_test bi-t9.n3 "Filter event by date using strcmp BI's" includes/t9br.n3 -think
+
+cwm_test bi-t10.n3 "log:resolvesTo and log:includes" includes/t10.n3 -think
+
+cwm_test bi-concat.n3 "Test string concatetnation built-in" includes/concat.n3 -think
 
 cwm_test resolves-rdf.n3 "log:resolvesTo with RDF/xml syntax" resolves-rdf.n3 -think
 
@@ -95,7 +101,10 @@ cwm_test smush.rdf "Data aggregation challenge from Jan 2001" --rdf smush-exampl
 
 
 # $Log$
-# Revision 1.17  2001-08-30 21:29:16  connolly
+# Revision 1.18  2001-09-07 02:07:52  timbl
+# string.concatenation
+#
+# Revision 1.17  2001/08/30 21:29:16  connolly
 # resolves-rdf.n3 case
 #
 # Revision 1.16  2001/08/27 12:45:57  timbl

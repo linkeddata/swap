@@ -1,0 +1,157 @@
+     @prefix : <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    
+    :TEST13     a :success .
+    
+    this     log:forAll :x,
+                :y,
+                :z .
+    {
+        ""     log:concat  (
+             ) .
+        
+        }     log:implies {:test13a     a :success .
+        } .
+    {
+        :x     log:concat  (
+            "World" 
+             [
+                     log:concat  (
+                    "W" 
+                    "i" 
+                    "d" 
+                    "e"  ) ]
+            "Web"  ) .
+        
+        }     log:implies {:www     :is :x .
+        } .
+    {
+        :www     :is "WorldWideWeb" .
+        
+        }     log:implies {:test13d     a :success .
+        } .
+    {
+        :x     log:concat  (
+            "World" 
+            "Wide" 
+            "Web" 
+             ) .
+        
+        }     log:implies {:www2     :is :x .
+        } .
+    {
+        :www2     :is "WorldWideWeb" .
+        
+        }     log:implies {:test13e     a :success .
+        } .
+    {
+        :x     log:concat  (
+             ) .
+        
+        }     log:implies {:emptyString     :is :x .
+        } .
+    {
+        :x     log:concat  (
+            "World" 
+            :y 
+            "Web"  ) .
+        :y     log:concat  (
+            "W" 
+            "I" 
+            "D" 
+            "E"  ) .
+        
+        }     log:implies {:www3     :is :x .
+        } .
+    {
+        :www3     :is "WorldWIDEWeb" .
+        
+        }     log:implies {:test13f     a :success .
+        } .
+    {
+        ""     log:equalTo  [
+                 log:concat  (
+                 ) ] .
+        
+        }     log:implies {:test13g     a :success .
+        } .
+    {
+        "one"     log:equalTo  [
+                 log:concat  (
+                 ) ] .
+        
+        }     log:implies {:test13a_bis     a :FAILURE .
+        } .
+    {
+        ""     log:equalTo  [
+                 log:concat  (
+                "one" 
+                 ) ] .
+        
+        }     log:implies {:test13b_bis     a :FAILURE .
+        } .
+    {
+        :emptyString     :is "" .
+        
+        }     log:implies {:test13b     a :success .
+        } .
+    {
+        "one"     log:equalTo  [
+                 log:concat  (
+                "World" 
+                "Wide" 
+                "Web" 
+                 ) ] .
+        
+        }     log:implies {:test13c_bis     a :FAILURE .
+        } .
+    {
+        :test13a     a :success .
+        :test13b     a :success .
+        :test13c     a :success .
+        :test13d     a :success .
+        :test13e     a :success .
+        :test13f     a :success .
+        :test13g     a :success .
+        
+        }     log:implies {:TEST13     a :success .
+        } .
+    {
+        :x     log:concat  (
+            "foo" 
+             ) .
+        
+        }     log:implies {:fooString     :is :x .
+        } .
+    {
+        :fooString     :is "foo" .
+        
+        }     log:implies {:test13c     a :success .
+        } .
+    
+    :emptyString     :is "" .
+    
+    :fooString     :is "foo" .
+    
+    :test13a     a :success .
+    
+    :test13b     a :success .
+    
+    :test13c     a :success .
+    
+    :test13d     a :success .
+    
+    :test13e     a :success .
+    
+    :test13f     a :success .
+    
+    :test13g     a :success .
+    
+    :www2     :is "WorldWideWeb" .
+    
+    :www3     :is "WorldWIDEWeb" .
+    
+    :www     :is "WorldWideWeb" .
+    
+    log:implies     a log:Chaff .
+    
