@@ -325,9 +325,9 @@ class CalWr:
         # a value type, but not as a property name. It's a grab-bag
         # for concepts like foaf:homePage, dc:related (which
         # is another grab bag) etc.
-        self.refProp(sts, comp, "url")
+        self.refProp(sts, comp, "URL")
 
-        w("END:TODO"+CRLF)
+        w("END:VTODO"+CRLF)
 
         
     def exportEvent(self, sts, event):
@@ -724,7 +724,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.2  2004-01-29 15:20:05  connolly
+# Revision 2.3  2004-01-29 19:41:57  timbl
+# minor fixes
+#
+# Revision 2.2  2004/01/29 15:20:05  connolly
 # - added some Vtodo support (@@owe tests; struggling with cal test harness)
 # - added uri property support (@@I18N bugs)
 # - updated to thing API changes (which turns out to be obsolete. oops)
