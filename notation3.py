@@ -786,12 +786,10 @@ class SinkParser:
         return index, val
         """
 
-#	print "STR >>>>>>>", str[:i],"<HERE>", str[i:], "<<<<<<< STR", i
-
 
         j = i
         ustr = u""   # Empty unicode string
-        startline = self.lines # Reember where for error messages
+        startline = self.lines # Remember where for error messages
         while j<len(str):
             i = j + len(delim)
             if str[j:i] == delim: # done.
@@ -809,7 +807,15 @@ class SinkParser:
 #	    print ">>>>>>>", m.string[:j+m.start()], "|||||||", m.string[j+m.start(): j+m.end()], "<<<<<<<"
 
             i = m.start()
-            ustr = ustr + str[j:i]
+	    try:
+		ustr = ustr + str[j:i]
+	    except UnicodeError:
+		err = ""
+		for c in str[j:i]:
+		    err = err + (" %02x" % ord(c))
+		raise BadSyntax(self._thisDoc, startline, str, j,
+				"Unicode error appending characters %s to string" % err)
+		
 #	    print "@@@ i = ",i, " j=",j, "m.end=", m.end()
 
             ch = str[i]

@@ -118,6 +118,9 @@ Methods inherited from <a href="thing.html#Term">Term</a>:<br>
 <dl><dt><a name="Anonymous-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
+<dl><dt><a name="Anonymous-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
@@ -180,6 +183,9 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BuiltIn-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
@@ -226,6 +232,9 @@ The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="EmptyList-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
+
+<dl><dt><a name="EmptyList-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
 
 <dl><dt><a name="EmptyList-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>The&nbsp;string&nbsp;represnting&nbsp;this&nbsp;in&nbsp;N3</tt></dd></dl>
 
@@ -275,6 +284,9 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="Fragment-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
@@ -323,6 +335,9 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="FragmentNil-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -390,6 +405,9 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="Function-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
@@ -455,6 +473,9 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="HeavyBuiltIn-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
@@ -519,6 +540,9 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="LightBuiltIn-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
@@ -557,6 +581,9 @@ The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="List-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
+
+<dl><dt><a name="List-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
 
 <dl><dt><a name="List-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>The&nbsp;string&nbsp;represnting&nbsp;this&nbsp;in&nbsp;N3</tt></dd></dl>
 
@@ -608,6 +635,9 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 <hr>
 Methods inherited from <a href="thing.html#Term">Term</a>:<br>
 <dl><dt><a name="Literal-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
+
+<dl><dt><a name="Literal-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -738,6 +768,9 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="ReverseFunction-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
@@ -782,6 +815,9 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 
 <dl><dt><a name="Symbol-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
 
+<dl><dt><a name="Symbol-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <dl><dt><a name="Symbol-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>The&nbsp;string&nbsp;represnting&nbsp;this&nbsp;in&nbsp;N3</tt></dd></dl>
 
 </td></tr></table> 
@@ -807,6 +843,9 @@ The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <dl><dt><a name="Term-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
+
+<dl><dt><a name="Term-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
 
 <dl><dt><a name="Term-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>The&nbsp;string&nbsp;represnting&nbsp;this&nbsp;in&nbsp;N3</tt></dd></dl>
 

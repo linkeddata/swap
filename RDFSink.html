@@ -87,6 +87,11 @@ it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint
 of&nbsp;the&nbsp;same&nbsp;namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent<br>
 or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly</tt></dd></dl>
 
+<dl><dt><a name="RDFSink-checkNewId"><strong>checkNewId</strong></a>(self, uri)</dt><dd><tt>The&nbsp;store&nbsp;can&nbsp;override&nbsp;this&nbsp;to&nbsp;raise&nbsp;an&nbsp;exception&nbsp;if&nbsp;the<br>
+id&nbsp;is&nbsp;not&nbsp;in&nbsp;fact&nbsp;new.&nbsp;This&nbsp;is&nbsp;useful&nbsp;because&nbsp;it&nbsp;is&nbsp;usfeul<br>
+to&nbsp;generate&nbsp;IDs&nbsp;with&nbsp;useful&nbsp;diagnostic&nbsp;ways&nbsp;but&nbsp;this&nbsp;lays&nbsp;them<br>
+open&nbsp;to&nbsp;possibly&nbsp;clashing&nbsp;in&nbsp;pathalogical&nbsp;cases.</tt></dd></dl>
+
 <dl><dt><a name="RDFSink-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair)</dt><dd><tt>End&nbsp;a&nbsp;document<br>
 &nbsp;<br>
 Call&nbsp;this&nbsp;once&nbsp;only&nbsp;at&nbsp;the&nbsp;end&nbsp;of&nbsp;parsing&nbsp;so&nbsp;that&nbsp;the&nbsp;receiver&nbsp;can&nbsp;wrap<br>
@@ -198,6 +203,11 @@ This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;c
 it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
 of&nbsp;the&nbsp;same&nbsp;namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent<br>
 or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly</tt></dd></dl>
+
+<dl><dt><a name="RDFStructuredOutput-checkNewId"><strong>checkNewId</strong></a>(self, uri)</dt><dd><tt>The&nbsp;store&nbsp;can&nbsp;override&nbsp;this&nbsp;to&nbsp;raise&nbsp;an&nbsp;exception&nbsp;if&nbsp;the<br>
+id&nbsp;is&nbsp;not&nbsp;in&nbsp;fact&nbsp;new.&nbsp;This&nbsp;is&nbsp;useful&nbsp;because&nbsp;it&nbsp;is&nbsp;usfeul<br>
+to&nbsp;generate&nbsp;IDs&nbsp;with&nbsp;useful&nbsp;diagnostic&nbsp;ways&nbsp;but&nbsp;this&nbsp;lays&nbsp;them<br>
+open&nbsp;to&nbsp;possibly&nbsp;clashing&nbsp;in&nbsp;pathalogical&nbsp;cases.</tt></dd></dl>
 
 <dl><dt><a name="RDFStructuredOutput-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair)</dt><dd><tt>End&nbsp;a&nbsp;document<br>
 &nbsp;<br>

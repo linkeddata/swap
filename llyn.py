@@ -1034,7 +1034,8 @@ class BI_n3String(LightBuiltIn, Function):      # Light? well, I suppose so.
             return store.intern((LITERAL, subj.n3String()))
 
     
-###################################################################################        
+################################################################################################
+
 class RDFStore(RDFSink) :
     """ Absorbs RDF stream and saves in triple store
     """
@@ -1274,6 +1275,13 @@ class RDFStore(RDFSink) :
 	return F
 
 
+    def dereference(self, x):
+	"""Dereference a URI by looking up the ncorresponding document on the web
+	
+	We could store this information in the experience store but for speed
+	I'm going to hang it on the resource object, as it means fewer hash table
+	lookups."""
+
     def genId(self):
 	"""Generate a new identifier
 	
@@ -1307,7 +1315,7 @@ class RDFStore(RDFSink) :
 	else:
 	    r = self.resources.get(urirefString[:hash], None)
 	    if r == None: return
-            f = r.fragments.get(uriref[hash+1:], None)
+            f = r.fragments.get(urirefString[hash+1:], None)
             if f == None: return
 	raise RuntimeError("Ooops! Attempt to create new identifier hits on one already used: %s"%(urirefString))
 	return
