@@ -100,7 +100,8 @@ def testDBView(fp, host, port, user, passwd):
           ('email', 'given', 'family', 'city', 'state', 'country', 'URL', 'last'),
           ('users', 'techplenary2002'),
           'users.id=techplenary2002.id')
-
+    sink.endDoc()
+    
 def test():
     import sys
     from string import atoi
