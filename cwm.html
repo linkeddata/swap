@@ -1,0 +1,111 @@
+
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module cwm</title>
+<style type="text/css"><!--
+TT { font-family: lucidatypewriter, lucida console, courier }
+--></style></head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>cwm</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/cwm.py">/devel/WWW/2000/10/swap/cwm.py</a></font></td></tr></table>
+    <p><tt><br>
+$Id$<br>
+&nbsp;<br>
+Closed&nbsp;World&nbsp;Machine<br>
+&nbsp;<br>
+(also,&nbsp;in&nbsp;Wales,&nbsp;a&nbsp;valley&nbsp;&nbsp;-&nbsp;topologiclly&nbsp;a&nbsp;partially&nbsp;closed&nbsp;world&nbsp;perhaps?)<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;an&nbsp;application&nbsp;which&nbsp;knows&nbsp;a&nbsp;certian&nbsp;amount&nbsp;of&nbsp;stuff&nbsp;and&nbsp;can&nbsp;manipulate&nbsp;it.<br>
+It&nbsp;uses&nbsp;llyn,&nbsp;a&nbsp;(forward&nbsp;chaining)&nbsp;query&nbsp;engine,&nbsp;not&nbsp;an&nbsp;(backward&nbsp;chaining)&nbsp;inference&nbsp;engine:<br>
+that&nbsp;is,&nbsp;it&nbsp;will&nbsp;apply&nbsp;all&nbsp;rules&nbsp;it&nbsp;can&nbsp;but&nbsp;won't&nbsp;figure&nbsp;out&nbsp;which&nbsp;ones&nbsp;to&nbsp;apply&nbsp;to&nbsp;prove&nbsp;something.&nbsp;<br>
+&nbsp;<br>
+&nbsp;<br>
+<a href="http://www.w3.org/DesignIssues/Notation3">http://www.w3.org/DesignIssues/Notation3</a><br>
+Date:&nbsp;2000/07/17&nbsp;21:46:13&nbsp;&nbsp;<br>
+&nbsp;<br>
+Agenda:<br>
+=======<br>
+&nbsp;<br>
+&nbsp;<br>
+&nbsp;-&nbsp;Use&nbsp;conventional&nbsp;python&nbsp;command&nbsp;line&nbsp;parsing<br>
+&nbsp;<br>
+&nbsp;-&nbsp;get&nbsp;rid&nbsp;of&nbsp;other&nbsp;globals&nbsp;(DWC&nbsp;30Aug2001)</tt></p>
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="llyn.html">llyn</a><br>
+<a href="notation3.html">notation3</a><br>
+</td><td width="25%" valign=top><a href="string.html">string</a><br>
+<a href="toXML.html">toXML</a><br>
+</td><td width="25%" valign=top><a href="uripath.html">uripath</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt><a name="-doCommand"><strong>doCommand</strong></a>()</dt><dd><tt>Command&nbsp;line&nbsp;RDF/N3&nbsp;tool<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;&lt;command&gt;&nbsp;&lt;options&gt;&nbsp;&lt;inputURIs&gt;<br>
+&nbsp;<br>
+--pipe&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Don't&nbsp;store,&nbsp;just&nbsp;pipe&nbsp;out&nbsp;*<br>
+&nbsp;<br>
+--rdf&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;**&nbsp;in&nbsp;RDF&nbsp;M&amp;S&nbsp;1.0&nbsp;insead&nbsp;of&nbsp;n3&nbsp;from&nbsp;now&nbsp;on<br>
+--n3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;N3&nbsp;from&nbsp;now&nbsp;on<br>
+--rdf=flags&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;**&nbsp;in&nbsp;RDF&nbsp;and&nbsp;set&nbsp;given&nbsp;RDF&nbsp;flags<br>
+--n3=flags&nbsp;&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;N3&nbsp;and&nbsp;set&nbsp;N3&nbsp;flags<br>
+--ntriples&nbsp;&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;NTriples&nbsp;(equiv&nbsp;--n3=spart&nbsp;-bySubject&nbsp;-quiet)<br>
+--ugly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Store&nbsp;input&nbsp;and&nbsp;regurgitate&nbsp;*<br>
+--bySubject&nbsp;&nbsp;&nbsp;Store&nbsp;input&nbsp;and&nbsp;regurgitate&nbsp;in&nbsp;subject&nbsp;order&nbsp;*<br>
+--no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;output&nbsp;*<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(default&nbsp;is&nbsp;to&nbsp;store&nbsp;and&nbsp;pretty&nbsp;print&nbsp;with&nbsp;anonymous&nbsp;nodes)&nbsp;*<br>
+--strings&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dump&nbsp;:s&nbsp;to&nbsp;stdout&nbsp;ordered&nbsp;by&nbsp;:k&nbsp;whereever&nbsp;{&nbsp;:k&nbsp;log:outputString&nbsp;:s&nbsp;}<br>
+&nbsp;<br>
+--apply=foo&nbsp;&nbsp;&nbsp;Read&nbsp;rules&nbsp;from&nbsp;foo,&nbsp;apply&nbsp;to&nbsp;store,&nbsp;adding&nbsp;conclusions&nbsp;to&nbsp;store<br>
+--filter=foo&nbsp;&nbsp;Read&nbsp;rules&nbsp;from&nbsp;foo,&nbsp;apply&nbsp;to&nbsp;store,&nbsp;REPLACING&nbsp;store&nbsp;with&nbsp;conclusions<br>
+--rules&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Apply&nbsp;rules&nbsp;in&nbsp;store&nbsp;to&nbsp;store,&nbsp;adding&nbsp;conclusions&nbsp;to&nbsp;store<br>
+--think&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as&nbsp;-rules&nbsp;but&nbsp;continue&nbsp;until&nbsp;no&nbsp;more&nbsp;rule&nbsp;matches&nbsp;(or&nbsp;forever!)<br>
+--think=foo&nbsp;&nbsp;&nbsp;as&nbsp;-apply=foo&nbsp;but&nbsp;continue&nbsp;until&nbsp;no&nbsp;more&nbsp;rule&nbsp;matches&nbsp;(or&nbsp;forever!)<br>
+--purge&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Remove&nbsp;from&nbsp;store&nbsp;any&nbsp;triple&nbsp;involving&nbsp;anything&nbsp;in&nbsp;class&nbsp;log:Chaff<br>
+--purge-rules&nbsp;Remove&nbsp;from&nbsp;store&nbsp;any&nbsp;triple&nbsp;involving&nbsp;log:implies<br>
+--crypto&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Enable&nbsp;processing&nbsp;of&nbsp;crypto&nbsp;builtin&nbsp;functions.&nbsp;Requires&nbsp;python&nbsp;crypto.<br>
+--help&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;this&nbsp;message<br>
+--revision&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;CVS&nbsp;revision&nbsp;numbers&nbsp;of&nbsp;major&nbsp;modules<br>
+--chatty=50&nbsp;&nbsp;&nbsp;Verbose&nbsp;output&nbsp;of&nbsp;questionable&nbsp;use,&nbsp;range&nbsp;0-99<br>
+--with&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Pass&nbsp;any&nbsp;further&nbsp;arguments&nbsp;to&nbsp;the&nbsp;N3&nbsp;store&nbsp;as&nbsp;os:argv&nbsp;values<br>
+&nbsp;<br>
+&nbsp;<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;*&nbsp;mutually&nbsp;exclusive<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;**&nbsp;doesn't&nbsp;work&nbsp;for&nbsp;complex&nbsp;cases&nbsp;:-/<br>
+Examples:<br>
+&nbsp;&nbsp;cwm&nbsp;--rdf&nbsp;foo.rdf&nbsp;--n3&nbsp;--pipe&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Convert&nbsp;from&nbsp;rdf/xml&nbsp;to&nbsp;rdf/n3<br>
+&nbsp;&nbsp;cwm&nbsp;foo.n3&nbsp;bar.n3&nbsp;--think&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Combine&nbsp;data&nbsp;and&nbsp;find&nbsp;all&nbsp;deductions<br>
+&nbsp;&nbsp;cwm&nbsp;foo.n3&nbsp;--flat&nbsp;--n3=spart<br>
+&nbsp;<br>
+See&nbsp;<a href="http://www.w3.org/2000/10/swap/doc/cwm">http://www.w3.org/2000/10/swap/doc/cwm</a>&nbsp;&nbsp;for&nbsp;more&nbsp;documentation.</tt></dd></dl>
+ <dl><dt><a name="-reformat"><strong>reformat</strong></a>(str, thisURI)</dt></dl>
+ <dl><dt><a name="-test"><strong>test</strong></a>()</dt></dl>
+</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><strong>ANONYMOUS</strong> = 3<br>
+<strong>FORMULA</strong> = 1<br>
+<strong>LITERAL</strong> = 2<br>
+<strong>Logic_NS</strong> = 'http://www.w3.org/2000/10/swap/log#'<br>
+<strong>SYMBOL</strong> = 0<br>
+<strong>__file__</strong> = './cwm.pyc'<br>
+<strong>__name__</strong> = 'cwm'<br>
+<strong>cvsRevision</strong> = '$Revision$'</td></tr></table>
+</body></html>

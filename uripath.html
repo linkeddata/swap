@@ -1,0 +1,91 @@
+
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module uripath</title>
+<style type="text/css"><!--
+TT { font-family: lucidatypewriter, lucida console, courier }
+--></style></head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>uripath</strong></big></big> (version $Id$)</font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/uripath.py">/devel/WWW/2000/10/swap/uripath.py</a></font></td></tr></table>
+    <p><tt>Uniform&nbsp;Resource&nbsp;Identifier&nbsp;(URI)&nbsp;manipulation,<br>
+above&nbsp;the&nbsp;access&nbsp;layer<br>
+&nbsp;<br>
+cf.<br>
+&nbsp;<br>
+*&nbsp;URI&nbsp;API&nbsp;design&nbsp;[was:&nbsp;URI&nbsp;Test&nbsp;Suite]&nbsp;Dan&nbsp;Connolly&nbsp;(Sun,&nbsp;Aug&nbsp;12&nbsp;2001)<br>
+<a href="http://lists.w3.org/Archives/Public/uri/2001Aug/0021.html">http://lists.w3.org/Archives/Public/uri/2001Aug/0021.html</a><br>
+&nbsp;<br>
+<a href="http://www.w3.org/DesignIssues/Model.html">http://www.w3.org/DesignIssues/Model.html</a><br>
+&nbsp;<br>
+<a href="http://www.ietf.org/rfc/rfc2396.txt">http://www.ietf.org/rfc/rfc2396.txt</a><br>
+&nbsp;<br>
+The&nbsp;name&nbsp;of&nbsp;this&nbsp;module&nbsp;and&nbsp;the&nbsp;functions&nbsp;are&nbsp;somewhat<br>
+arbitrary;&nbsp;they&nbsp;hark&nbsp;to&nbsp;other&nbsp;parts&nbsp;of&nbsp;the&nbsp;python<br>
+library;&nbsp;e.g.&nbsp;uripath.<a href="#-join">join</a>()&nbsp;is&nbsp;somewhat&nbsp;like&nbsp;os.path.<a href="#-join">join</a>().</tt></p>
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="os.html">os</a><br>
+</td><td width="25%" valign=top><a href="re.html">re</a><br>
+</td><td width="25%" valign=top><a href="string.html">string</a><br>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt><a name="-_fixslash"><strong>_fixslash</strong></a>(str)</dt><dd><tt>&nbsp;Fix&nbsp;windowslike&nbsp;filename&nbsp;to&nbsp;unixlike&nbsp;-&nbsp;(#ifdef&nbsp;WINDOWS)</tt></dd></dl>
+ <dl><dt><a name="-base"><strong>base</strong></a>()</dt><dd><tt>The&nbsp;base&nbsp;URI&nbsp;for&nbsp;this&nbsp;process&nbsp;-&nbsp;the&nbsp;Web&nbsp;equiv&nbsp;of&nbsp;cwd<br>
+&nbsp;<br>
+Relative&nbsp;or&nbsp;abolute&nbsp;unix-standard&nbsp;filenames&nbsp;parsed&nbsp;relative&nbsp;to<br>
+this&nbsp;yeild&nbsp;the&nbsp;URI&nbsp;of&nbsp;the&nbsp;file.<br>
+If&nbsp;we&nbsp;had&nbsp;a&nbsp;reliable&nbsp;way&nbsp;of&nbsp;getting&nbsp;a&nbsp;computer&nbsp;name,<br>
+we&nbsp;should&nbsp;put&nbsp;it&nbsp;in&nbsp;the&nbsp;hostname&nbsp;just&nbsp;to&nbsp;prevent&nbsp;ambiguity</tt></dd></dl>
+ <dl><dt><a name="-join"><strong>join</strong></a>(here, there)</dt><dd><tt>join&nbsp;an&nbsp;absolute&nbsp;URI&nbsp;and&nbsp;URI&nbsp;reference<br>
+&nbsp;<br>
+here&nbsp;must&nbsp;be&nbsp;an&nbsp;absolute&nbsp;URI.<br>
+there&nbsp;must&nbsp;be&nbsp;a&nbsp;URI&nbsp;reference<br>
+&nbsp;<br>
+Raise&nbsp;ValueError&nbsp;if&nbsp;there&nbsp;uses&nbsp;relative&nbsp;path<br>
+syntax&nbsp;but&nbsp;here&nbsp;has&nbsp;no&nbsp;hierarchical&nbsp;path.</tt></dd></dl>
+ <dl><dt><a name="-refTo"><strong>refTo</strong></a>(base, uri)</dt><dd><tt>Your&nbsp;regular&nbsp;relative&nbsp;URI&nbsp;algorithm&nbsp;--&nbsp;never&nbsp;trust&nbsp;anyone&nbsp;else's&nbsp;;-)<br>
+This&nbsp;one&nbsp;checks&nbsp;that&nbsp;it&nbsp;uses&nbsp;a&nbsp;root-realtive&nbsp;one&nbsp;where&nbsp;that&nbsp;is&nbsp;all&nbsp;they&nbsp;share.<br>
+Now&nbsp;uses&nbsp;root-relative&nbsp;where&nbsp;no&nbsp;path&nbsp;is&nbsp;shared.<br>
+This&nbsp;is&nbsp;a&nbsp;matter&nbsp;of&nbsp;taste&nbsp;but&nbsp;tends&nbsp;to&nbsp;give&nbsp;more&nbsp;resilience&nbsp;IMHO&nbsp;--&nbsp;and&nbsp;shorter&nbsp;paths</tt></dd></dl>
+ <dl><dt><a name="-refTo_DanC"><strong>refTo_DanC</strong></a>(src, dest)</dt><dd><tt>compute&nbsp;a&nbsp;path&nbsp;from&nbsp;one&nbsp;URI&nbsp;to&nbsp;another<br>
+&nbsp;<br>
+both&nbsp;src&nbsp;and&nbsp;dest&nbsp;are&nbsp;absolute&nbsp;URI&nbsp;references</tt></dd></dl>
+ <dl><dt><a name="-splitFrag"><strong>splitFrag</strong></a>(uriref)</dt><dd><tt>split&nbsp;a&nbsp;URI&nbsp;reference&nbsp;between&nbsp;the&nbsp;fragment&nbsp;and&nbsp;the&nbsp;rest.<br>
+&nbsp;<br>
+Punctuation&nbsp;is&nbsp;thrown&nbsp;away.<br>
+&nbsp;<br>
+e.g.&nbsp;<a href="#-splitFrag">splitFrag</a>("abc#def")&nbsp;=&nbsp;("abc",&nbsp;"def")<br>
+and&nbsp;<a href="#-splitFrag">splitFrag</a>("abcdef")&nbsp;=&nbsp;("abcdef",&nbsp;None)</tt></dd></dl>
+ <dl><dt><a name="-splitFragP"><strong>splitFragP</strong></a>(uriref, punct<font color="#909090">=0</font>)</dt><dd><tt>split&nbsp;a&nbsp;URI&nbsp;reference&nbsp;before&nbsp;the&nbsp;fragment<br>
+&nbsp;<br>
+Punctuation&nbsp;is&nbsp;kept.<br>
+&nbsp;<br>
+e.g.&nbsp;<a href="#-splitFrag">splitFrag</a>("abc#def")&nbsp;=&nbsp;("abc",&nbsp;"#def")<br>
+and&nbsp;<a href="#-splitFrag">splitFrag</a>("abcdef")&nbsp;=&nbsp;("abcdef",&nbsp;"")</tt></dd></dl>
+ <dl><dt><a name="-test"><strong>test</strong></a>()</dt></dl>
+</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><strong>__file__</strong> = './uripath.pyc'<br>
+<strong>__name__</strong> = 'uripath'<br>
+<strong>__version__</strong> = '$Id$'<br>
+<strong>commonHost</strong> = &lt;_sre.SRE_Pattern object&gt;</td></tr></table>
+</body></html>

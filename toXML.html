@@ -1,0 +1,291 @@
+
+<!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<html><head><title>Python: module toXML</title>
+<style type="text/css"><!--
+TT { font-family: lucidatypewriter, lucida console, courier }
+--></style></head><body bgcolor="#f0f0f8">
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
+<tr bgcolor="#7799ee">
+<td valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>toXML</strong></big></big></font></td
+><td align=right valign=bottom
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/toXML.py">/devel/WWW/2000/10/swap/toXML.py</a></font></td></tr></table>
+    <p><tt>$Id$<br>
+&nbsp;<br>
+&nbsp;<br>
+This&nbsp;module&nbsp;implements&nbsp;basic&nbsp;sources&nbsp;and&nbsp;sinks&nbsp;for&nbsp;RDF&nbsp;data.<br>
+It&nbsp;defines&nbsp;a&nbsp;stream&nbsp;interface&nbsp;for&nbsp;such&nbsp;data.<br>
+It&nbsp;has&nbsp;a&nbsp;command&nbsp;line&nbsp;interface,&nbsp;can&nbsp;work&nbsp;as&nbsp;a&nbsp;web&nbsp;query&nbsp;engine,<br>
+and&nbsp;has&nbsp;built&nbsp;in&nbsp;test(),&nbsp;all&nbsp;of&nbsp;which&nbsp;demosntrate&nbsp;how&nbsp;it&nbsp;is&nbsp;used.<br>
+&nbsp;<br>
+To&nbsp;make&nbsp;a&nbsp;new&nbsp;RDF&nbsp;processor,&nbsp;subclass&nbsp;RDFSink.<br>
+&nbsp;<br>
+See&nbsp;also:<br>
+&nbsp;<br>
+Notation&nbsp;3<br>
+<a href="http://www.w3.org/DesignIssues/Notation3">http://www.w3.org/DesignIssues/Notation3</a><br>
+&nbsp;<br>
+Closed&nbsp;World&nbsp;Machine&nbsp;-&nbsp;and&nbsp;RDF&nbsp;Processor<br>
+http;//www.w3.org/2000/10/swap/cwm<br>
+&nbsp;<br>
+To&nbsp;DO:&nbsp;See&nbsp;also&nbsp;"@@"&nbsp;in&nbsp;comments<br>
+&nbsp;<br>
+Internationlization:<br>
+-&nbsp;Decode&nbsp;incoming&nbsp;N3&nbsp;file&nbsp;as&nbsp;unicode<br>
+-&nbsp;Encode&nbsp;outgoing&nbsp;file<br>
+-&nbsp;unicode&nbsp;\u&nbsp;&nbsp;(??)&nbsp;escapes&nbsp;in&nbsp;parse<br>
+-&nbsp;unicode&nbsp;\u&nbsp;&nbsp;(??)&nbsp;escapes&nbsp;in&nbsp;string&nbsp;output<br>
+&nbsp;<br>
+Note&nbsp;currently&nbsp;unicode&nbsp;strings&nbsp;work&nbsp;in&nbsp;this&nbsp;code<br>
+but&nbsp;fail&nbsp;when&nbsp;they&nbsp;are&nbsp;output&nbsp;into&nbsp;the&nbsp;python&nbsp;debugger<br>
+interactive&nbsp;window.<br>
+&nbsp;<br>
+______________________________________________<br>
+&nbsp;<br>
+Module&nbsp;originally&nbsp;by&nbsp;Dan&nbsp;Connolly.<br>
+TimBL&nbsp;added&nbsp;RDF&nbsp;stream&nbsp;model.</tt></p>
+
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#aa55cc">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="RDFSink.html">RDFSink</a><br>
+<a href="codecs.html">codecs</a><br>
+</td><td width="25%" valign=top><a href="re.html">re</a><br>
+<a href="string.html">string</a><br>
+</td><td width="25%" valign=top><a href="thing.html">thing</a><br>
+<a href="urllib.html">urllib</a><br>
+</td><td width="25%" valign=top><a href="urlparse.html">urlparse</a><br>
+</td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="RDFSink.html#RDFStructuredOutput">RDFSink.RDFStructuredOutput</a>(<a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="toXML.html#ToRDF">ToRDF</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="toXML.html#XMLWriter">XMLWriter</a>
+</font></dt></dl>
+ 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="ToRDF">class <strong>ToRDF</strong></a>(<a href="RDFSink.html#RDFStructuredOutput">RDFSink.RDFStructuredOutput</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>keeps&nbsp;track&nbsp;of&nbsp;most&nbsp;recent&nbsp;subject,&nbsp;reuses&nbsp;it<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="toXML.html#ToRDF">ToRDF</a></dd>
+<dd><a href="RDFSink.html#RDFStructuredOutput">RDFSink.RDFStructuredOutput</a></dd>
+<dd><a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="ToRDF-__init__"><strong>__init__</strong></a>(self, outFp, thisURI, base<font color="#909090">=None</font>, flags<font color="#909090">=''</font>)</dt></dl>
+
+<dl><dt><a name="ToRDF-endAnonymous"><strong>endAnonymous</strong></a>(self, subject, verb)</dt></dl>
+
+<dl><dt><a name="ToRDF-endAnonymousNode"><strong>endAnonymousNode</strong></a>(self, subj<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="ToRDF-endBagObject"><strong>endBagObject</strong></a>(self, pred, subj)</dt></dl>
+
+<dl><dt><a name="ToRDF-endBagSubject"><strong>endBagSubject</strong></a>(self, subj)</dt></dl>
+
+<dl><dt><a name="ToRDF-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="ToRDF-flushStart"><strong>flushStart</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ToRDF-makeComment"><strong>makeComment</strong></a>(self, str)</dt></dl>
+
+<dl><dt><a name="ToRDF-makeStatement"><strong>makeStatement</strong></a>(self, tuple)</dt></dl>
+
+<dl><dt><a name="ToRDF-startAnonymous"><strong>startAnonymous</strong></a>(self, tuple, isList<font color="#909090">=0</font>)</dt></dl>
+
+<dl><dt><a name="ToRDF-startAnonymousNode"><strong>startAnonymousNode</strong></a>(self, subj, li<font color="#909090">=0</font>)</dt></dl>
+
+<dl><dt><a name="ToRDF-startBagObject"><strong>startBagObject</strong></a>(self, tuple)</dt></dl>
+
+<dl><dt><a name="ToRDF-startBagSubject"><strong>startBagSubject</strong></a>(self, context)</dt></dl>
+
+<dl><dt><a name="ToRDF-startDoc"><strong>startDoc</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'keeps track of most recent subject, reuses it'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+
+<dl><dt><strong>__module__</strong> = 'toXML'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+
+<dl><dt><strong>_rdfns</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+
+<dl><dt><strong>_valChars</strong> = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_ !#$%&amp;().,+*/'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+
+<dl><dt><strong>flagDocumentation</strong> = "<font color="#c040c0">\n</font>        Flags to control RDF/XML output (after ... names<font color="#c040c0">\n</font>        d  - Don't use default namespace<font color="#c040c0">\n\n</font>"<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+
+<hr>
+Methods inherited from <a href="RDFSink.html#RDFStructuredOutput">RDFSink.RDFStructuredOutput</a>:<br>
+<dl><dt><a name="ToRDF-endBagNamed"><strong>endBagNamed</strong></a>(self, subj)</dt></dl>
+
+<dl><dt><a name="ToRDF-startBagNamed"><strong>startBagNamed</strong></a>(self, context, subj)</dt></dl>
+
+<hr>
+Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>
+<dl><dt><a name="ToRDF-bind"><strong>bind</strong></a>(self, prefix, nsPair)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
+&nbsp;<br>
+This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;bind&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;prefix&nbsp;which<br>
+it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
+of&nbsp;the&nbsp;same&nbsp;namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent<br>
+or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly</tt></dd></dl>
+
+<dl><dt><a name="ToRDF-genId"><strong>genId</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ToRDF-newBlankNode"><strong>newBlankNode</strong></a>(self, context)</dt></dl>
+
+<dl><dt><a name="ToRDF-newExistential"><strong>newExistential</strong></a>(self, context, uri<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="ToRDF-newFormula"><strong>newFormula</strong></a>(self, uri<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="ToRDF-newLiteral"><strong>newLiteral</strong></a>(self, str)</dt></dl>
+
+<dl><dt><a name="ToRDF-newSymbol"><strong>newSymbol</strong></a>(self, uri)</dt></dl>
+
+<dl><dt><a name="ToRDF-newUniversal"><strong>newUniversal</strong></a>(self, context, uri<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="ToRDF-reopen"><strong>reopen</strong></a>(self)</dt><dd><tt>Un-End&nbsp;a&nbsp;document<br>
+&nbsp;<br>
+If&nbsp;you&nbsp;have&nbsp;added&nbsp;stuff&nbsp;to&nbsp;a&nbsp;document,&nbsp;thought&nbsp;you&nbsp;were&nbsp;done,&nbsp;and<br>
+then&nbsp;want&nbsp;to&nbsp;add&nbsp;more,&nbsp;call&nbsp;this&nbsp;to&nbsp;get&nbsp;back&nbsp;into&nbsp;the&nbsp;sate&nbsp;that&nbsp;makeSatement<br>
+is&nbsp;again&nbsp;acceptable.&nbsp;Remember&nbsp;to&nbsp;end&nbsp;the&nbsp;document&nbsp;again&nbsp;when&nbsp;done.</tt></dd></dl>
+
+<dl><dt><a name="ToRDF-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, nsPair)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
+&nbsp;<br>
+This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;this&nbsp;to&nbsp;pass&nbsp;on&nbsp;the&nbsp;default&nbsp;namespace&nbsp;which<br>
+it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output<br>
+of&nbsp;the&nbsp;same&nbsp;namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent<br>
+or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt></dd></dl>
+
+<dl><dt><a name="ToRDF-setGenPrefix"><strong>setGenPrefix</strong></a>(self, genPrefix)</dt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="XMLWriter">class <strong>XMLWriter</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>&nbsp;taken&nbsp;from<br>
+Id:&nbsp;tsv2xml.py,v&nbsp;1.1&nbsp;2000/10/02&nbsp;19:41:02&nbsp;connolly&nbsp;Exp&nbsp;connolly<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="XMLWriter-__init__"><strong>__init__</strong></a>(self, outFp, squeaky<font color="#909090">=0</font>)</dt></dl>
+
+<dl><dt><a name="XMLWriter-closeTag"><strong>closeTag</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="XMLWriter-data"><strong>data</strong></a>(self, str)</dt></dl>
+
+<dl><dt><a name="XMLWriter-emptyElement"><strong>emptyElement</strong></a>(self, n, attrs<font color="#909090">=[]</font>, prefixes<font color="#909090">={}</font>)</dt></dl>
+
+<dl><dt><a name="XMLWriter-endDocument"><strong>endDocument</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="XMLWriter-endElement"><strong>endElement</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="XMLWriter-figurePrefix"><strong>figurePrefix</strong></a>(self, uriref, rawAttrs, prefixes)</dt></dl>
+
+<dl><dt><a name="XMLWriter-flushClose"><strong>flushClose</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="XMLWriter-indent"><strong>indent</strong></a>(self, extra<font color="#909090">=0</font>)</dt></dl>
+
+<dl><dt><a name="XMLWriter-makeComment"><strong>makeComment</strong></a>(self, str)</dt></dl>
+
+<dl><dt><a name="XMLWriter-newline"><strong>newline</strong></a>(self, howmany<font color="#909090">=1</font>)</dt></dl>
+
+<dl><dt><a name="XMLWriter-startElement"><strong>startElement</strong></a>(self, n, attrs<font color="#909090">=[]</font>, prefixes<font color="#909090">={}</font>)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = ' taken from<font color="#c040c0">\n</font>    Id: tsv2xml.py,v 1.1 2000/10/02 19:41:02 connolly Exp connolly<font color="#c040c0">\n</font>    '<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+
+<dl><dt><strong>__module__</strong> = 'toXML'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+
+<dl><dt><strong>_namechars</strong> = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+
+<dl><dt><strong>attrEsc</strong> = &lt;_sre.SRE_Pattern object&gt;</dl>
+
+<dl><dt><strong>dataEsc</strong> = &lt;_sre.SRE_Pattern object&gt;</dl>
+
+</td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#55aa55">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><strong>ADDED_HASH</strong> = '#'<br>
+<strong>ALL4</strong> = (0, 1, 2, 3)<br>
+<strong>ANONYMOUS</strong> = 3<br>
+<strong>CONTEXT</strong> = 0<br>
+<strong>DAML_LISTS</strong> = 1<br>
+<strong>DAML_NS</strong> = 'http://www.daml.org/2001/03/daml+oil#'<br>
+<strong>DAML_equivalentTo</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#equivalentTo')<br>
+<strong>DAML_equivalentTo_URI</strong> = 'http://www.daml.org/2001/03/daml+oil#equivalentTo'<br>
+<strong>DPO_NS</strong> = 'http://www.daml.org/2001/03/daml+oil#'<br>
+<strong>FORMULA</strong> = 1<br>
+<strong>LITERAL</strong> = 2<br>
+<strong>List_NS</strong> = 'http://www.daml.org/2001/03/daml+oil#'<br>
+<strong>Logic_NS</strong> = 'http://www.w3.org/2000/10/swap/log#'<br>
+<strong>N3_Empty</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#Empty')<br>
+<strong>N3_List</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#List')<br>
+<strong>N3_first</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#first')<br>
+<strong>N3_forAll_URI</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>
+<strong>N3_forSome_URI</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
+<strong>N3_nil</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#nil')<br>
+<strong>N3_rest</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#rest')<br>
+<strong>NODE_MERGE_URI</strong> = 'http://www.w3.org/2000/10/swap/log#is'<br>
+<strong>OBJ</strong> = 3<br>
+<strong>PARTS</strong> = (1, 2, 3)<br>
+<strong>PRED</strong> = 1<br>
+<strong>RDF_NS_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'<br>
+<strong>RDF_spec</strong> = 'http://www.w3.org/TR/REC-rdf-syntax/'<br>
+<strong>RDF_type</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type')<br>
+<strong>RDF_type_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'<br>
+<strong>SUBJ</strong> = 2<br>
+<strong>SYMBOL</strong> = 0<br>
+<strong>__file__</strong> = './toXML.pyc'<br>
+<strong>__name__</strong> = 'toXML'<br>
+<strong>_namechars</strong> = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-'<br>
+<strong>option_noregen</strong> = 0<br>
+<strong>parsesTo_URI</strong> = 'http://www.w3.org/2000/10/swap/log#parsesTo'</td></tr></table>
+</body></html>
