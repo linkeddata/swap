@@ -17,6 +17,7 @@ $Id$
 
 @prefix cal: <http://www.w3.org/2002/12/cal/ical#>.
 @prefix t:   <http://www.w3.org/2000/10/swap/pim/travelTerms#> .
+@prefix apt: <http://www.daml.org/2001/10/html/airport-ont#>.
 
 @prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#>.
 
@@ -24,15 +25,6 @@ $Id$
 @prefix ic: <itin2ical#>.
 
 @prefix a: <http://www.daml.org/cgi-bin/airport?>. #hmm... ?MCI is a document *and* an airport?
-@prefix chi: <http://www.w3.org/2002/12/cal/tzd/America/Chicago#>.
-@prefix ny: <http://www.w3.org/2002/12/cal/tzd/America/New_York#>.
-@prefix la: <http://www.w3.org/2002/12/cal/tzd/America/Los_Angeles#>.
-@prefix den: <http://www.w3.org/2002/12/cal/tzd/America/Denver#>.
-@prefix paris: <http://www.w3.org/2002/12/cal/tzd/Europe/Paris#>.
-@prefix london: <http://www.w3.org/2002/12/cal/tzd/Europe/London#>.
-@prefix zurich: <http://www.w3.org/2002/12/cal/tzd/Europe/Zurich#>.
-@prefix budapest: <http://www.w3.org/2002/12/cal/tzd/Europe/Budapest#>.
-@prefix ams: <http://www.w3.org/2002/12/cal/tzd/Europe/Amsterdam#>.
 
 
 # use cityLookup.n3 to map IATA codes to timezones; we no longer keep
@@ -71,14 +63,13 @@ $Id$
 }.
 
 
-{ :FLT
-    t:carrier [ k:nameOfAgent :CARRIER_NAME ];
-    t:flightNumber :NUM;
-    k:fromLocation [ k:nameString :FROM_NAME; ];
-    k:toLocation [ k:nameString :TO_NAME; ].
-  :SUM is str:concatenation of
-    (:CARRIER_NAME " #" :NUM " from " :FROM_NAME " to " :TO_NAME).
+{ ?FLT
+    t:carrier [ k:nameOfAgent ?CARRIER_NAME ];
+    t:flightNumber ?NUM;
+    k:toLocation [ apt:iataCode ?TO_NAME ].
+  ?TXT is str:concatenation of
+    ("#" ?NUM " to " ?TO_NAME " on " ?CARRIER_NAME).
 }
  log:implies {
-  :FLT cal:summary :SUM.
+  ?FLT cal:summary ?TXT.
 }.
