@@ -28,3 +28,5 @@
         }     log:implies {:testf_2     a :FAILURE .
         } .
     
+    :testf_1     a :success .
+    

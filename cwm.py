@@ -397,6 +397,8 @@ class Engine:
             if type == FORMULA: return r.internFrag(uriref[hash+1:], Formula)
             else: raise shouldntBeHere    # Source code did not expect other type
 
+######################################################## An global instance of a store 
+
 theEngine = Engine()   # The global engine - fed up with passing around pointers
 
 ######################################################## Storage
@@ -523,15 +525,52 @@ class BI_notDirectlyIncludes(HeavyBuiltIn):
 
 class BI_includes(HeavyBuiltIn):
     pass    # Implemented specially inline in the code below by query queue expansion.
+
+#class BI_statement(BI_includes):
+#    """ A constructor which enumerates the statements in a formula:  F includes f."""
+# @@ No machinery for returning multiple values as yet.
+#    def evaluate2(self, store, subj, obj, variables):
+#        list = obj.occursAs[PRED]
+#        if len(list) != 1 return 0  # f2 is not a statement
+#        return BI_includes.evaluate2(self, store, subj, obj, variables) 
+#
+#    def evaluateObject2(self, store, subj):
+#        list = obj.occursAs[PRED]
+#        for s in list:
+#            con, pred, subj, obj = s.triple
+#            bindings = []
+#            for p in PARTS:  # s o p not c
+#                if quad[p] in variables:
+                
+            
     
 class BI_notIncludes(HeavyBuiltIn):
     def evaluate2(self, store, subj, obj, variables):
         if isinstance(subj, Formula) and isinstance(obj, Formula):
             return not store.testIncludes(subj, obj, variables)
         return 0   # Can't say it *doesn't* include it if it ain't a formula
-    
 
-#@@@@@@@@@@@@@@@@@ more...
+class BI_resolvesTo(HeavyBuiltIn, Function):
+    def evaluateObject2(self, store, subj):
+        if isinstance(subj, Fragment): doc = subj.resource
+        else: doc = subj
+        F = store.any((theMeta, store.resolvesTo, doc, None))
+        if F: return F
+        if chatty > 10: progress("Reading and parsing " + `doc`)
+        inputURI = doc.uriref()
+#                if option_format == "rdf" : p = xml2rdf.RDFXMLParser(_store,  _inputURI)
+# @@@ Only handles N3 - should handle anything especially RDF/XML.
+        p = notation3.SinkParser(store,  inputURI)
+        p.load(inputURI)
+        del(p)
+        F = theEngine.intern((FORMULA, inputURI+ "#_formula"))
+        return F
+    
+    def evaluate2(self, store, subj, obj, variables):
+        F = self.evaluateObject2(store, subj)
+        return (F == obj) # @@@@@@@@@@@@@@@@@@@@@@@@@@@@ do structual equivalnce thing
+
+
 
 
 class RDFStore(notation3.RDFSink) :
@@ -579,6 +618,10 @@ class RDFStore(notation3.RDFSink) :
         self.notIncludes =      log.internFrag("notIncludes", BI_notIncludes)
         self.notDirectlyIncludes = log.internFrag("notDirectlyIncludes", BI_notDirectlyIncludes)
 
+#Heavy functions:
+
+        self.resolvesTo =       log.internFrag("resolvesTo", BI_resolvesTo)
+        
 # Constants:
 
         self.Truth = engine.internURI(Logic_NS + "Truth")
@@ -1256,6 +1299,50 @@ class RDFStore(notation3.RDFSink) :
 # heavy built-ins which still have too many variables to calculate at this stage.
 # When we do the variable substitution for new bindings, these can be reconsidered.
 
+# Utilities to search the store:
+
+    def any(self, quad):             # Returns first match for one variable
+        variables = []
+        q2 = [ quad[0], quad[1], quad[2], quad[3]]  # tuple to list
+        for p in ALL4:
+            if quad[p] == None:
+                v = self.engine.intern((RESOURCE, "internaluseonly:#var"+`p`))
+                variables.append(v)
+                q2[p] = v
+        unmatched = [ ( q2[0], q2[1], q2[2], q2[3])]
+        listOfBindings = []
+        count = self.match(unmatched, variables, [], action=self.collectBindings, param=listOfBindings, justOne=1)
+        if listOfBindings == []: return None
+#        progress("#@@@ any findss %s " % listOfBindings)
+
+        return listOfBindings[0][0][1]  # First result, first variable, value.
+
+
+    def every(self, quad):             # Returns a list of lists of values
+        variables = []
+        q2 = [ quad[0], quad[1], quad[2], quad[3]]  # tuple to list
+        for p in ALL4:
+            if quad[p] == None:
+                v = self.engine.intern((RESOURCE, "internaluseonly:#var"+`p`))
+                variables.append(v)
+                q2[p] = v
+            else:
+                q2[p] = quad[p]
+        unmatched = [ ( q2[0], q2[1], q2[2], q2[3])]
+        listOfBindings = []
+        count = match(self, unmatched, variables, [], action=collectBindings, param=listOfBindings, justOne=0)
+        results = []
+        for bindings in listOfBindings:
+            res = []
+            for var, val in bindings:
+                res.append(val)
+            results.append(res)
+        return results
+
+
+
+# Generic match routine, outer level:
+        
     def  match(self,                 # Neded for getting interned constants
                unmatched,           # Tuple of interned quads we are trying to match CORRUPTED
                variables,           # List of variables to match and return
@@ -1436,24 +1523,25 @@ class RDFStore(notation3.RDFSink) :
 # notIncludes has to be a recursive call, but log:includes just extends the search
                     if quad[CONTEXT] in smartIn and isinstance(pred, HeavyBuiltIn):
                         state = 10   # Heavy, man
-                        if len(vars)==0:
-                            if quad[PRED] is self.includes:
-                                if (isinstance(quad[SUBJ], Formula)
-                                    and isinstance(quad[OBJ], Formula)):
+                        if quad[PRED] is self.includes:
+                            if (isinstance(quad[SUBJ], Formula)
+                                and isinstance(quad[OBJ], Formula)):
 
-                                    more_unmatched, more_variables = self.nestedContexts(quad[OBJ])
-                                    _substitute([( quad[OBJ], quad[SUBJ])], more_unmatched)
-                                    for quad in more_unmatched:
-                                        item = 99, 0, [], [], quad
-                                        queue.append(item)
-                                    existentials = existentials + more_variables
-                                    if chatty > 40: progress(" **** Includes: Adding %i new terms and %s as new existentials."%
-                                                             (len(more_unmatched),setToString(more_variables)))
-                                    return self.query(queue, variables, existentials, smartIn, action, param,
-                                                      bindings[:], []) # No new bindings but lots more to search!
-                                else:  # Not forumla
-                                    return total  # Not going to work if not forumlae
-                            else:
+                                more_unmatched, more_variables = self.nestedContexts(quad[OBJ])
+                                _substitute([( quad[OBJ], quad[SUBJ])], more_unmatched)
+                                for quad in more_unmatched:
+                                    item = 99, 0, [], [], quad
+                                    queue.append(item)
+                                existentials = existentials + more_variables
+                                if chatty > 40: progress(" **** Includes: Adding %i new terms and %s as new existentials."%
+                                                         (len(more_unmatched),setToString(more_variables)))
+                                return self.query(queue, variables, existentials, smartIn, action, param,
+                                                  bindings[:], []) # No new bindings but lots more to search!
+                            else:  # Not forumla
+                                if len(vars) == 0: return total  # Not going to work if not forumlae ever
+                                # otherwise might work if vars 
+
+                        elif len(vars)==0:  # Deal with others
 
                                 if pred.evaluate2(self, subj, obj, variables[:]):
                                     if chatty > 80: progress("Heavy predicate succeeds")
@@ -1465,10 +1553,10 @@ class RDFStore(notation3.RDFSink) :
                         elif len(vars) == 1 :  # The statement has one variable - try functions
                             if vars[0] == OBJ and isinstance(pred, Function):
                                 return self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
-                                                          bindings, [ (obj, pred.evaluateObject(subj))])
+                                                          bindings, [ (obj, pred.evaluateObject2(self, subj))])
                             elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
                                 return self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
-                                                          bindings, [ (subj, pred.evaluateSubject(obj))])
+                                                          bindings, [ (subj, pred.evaluateSubject2(self, obj))])
                     # Now we have a heavy builtin  waiting for enough constants to run
                         state = 10
                     else: # Not heavy, failed to find any.
@@ -1535,6 +1623,35 @@ class RDFStore(notation3.RDFSink) :
             if chatty>75: print "# *** Conclude: ", quadToString(q2)
         return total
 
+# An action routine for collecting bindings:
+
+    def collectBindings(self, bindings, param):  # Returns number of bindings found and collects them
+        param = param + bindings
+        return len(bindings)
+    
+
+
+def _substitute(bindings, list):
+    for i in range(len(list)):
+        q = list[i]
+        list[i] = _lookupQuad(bindings, q)
+                            
+def _lookupQuad(bindings, q):
+	context, pred, subj, obj = q
+	return (
+            _lookup(bindings, context),
+            _lookup(bindings, pred),
+            _lookup(bindings, subj),
+            _lookup(bindings, obj) )
+
+def _lookup(bindings, value):
+    for left, right in bindings:
+        if left == value: return right
+    return value
+
+
+#   DIAGNOSTIC STRING OUTPUT
+#
 def bindingsToString(bindings):
     str = ""
     for x, y in bindings:
@@ -1555,35 +1672,22 @@ def queueToString(queue):
 
 def itemToString(item):
     state, short, consts, vars, quad = item
-    return "%3i)  %s  consts=%s  vars=%s short=%i" % (state, quadToString(quad), `consts`, `vars`, short )
+    return "%3i)  %s  consts=%s  vars=%s short=%i" % (state, quadToString(quad, vars), `consts`, `vars`, short )
 
-def quadToString(q):
-    return "%s ::  %8s %8s %8s ." %(x2s(q[CONTEXT]), x2s(q[SUBJ]), x2s(q[PRED]), x2s(q[OBJ]))
+def quadToString(q, vars=[]):
+    qm=["","","",""]
+    for p in ALL4:
+        if p in vars: qm[p]= "?"
+    return "%s%s ::  %8s%s %8s%s %8s%s ." %(x2s(q[CONTEXT]), qm[CONTEXT],
+                                            x2s(q[SUBJ]),qm[SUBJ],
+                                            x2s(q[PRED]),qm[PRED],
+                                            x2s(q[OBJ]),qm[OBJ])
 
 def x2s(x):
     s = `x`[1:-1]
     p = string.find(s,'#')
     if p >= 0: return s[p+1:]
     else: return s
-
-def _substitute(bindings, list):
-    for i in range(len(list)):
-        q = list[i]
-        list[i] = _lookupQuad(bindings, q)
-                            
-def _lookupQuad(bindings, q):
-	context, pred, subj, obj = q
-	return (
-            _lookup(bindings, context),
-            _lookup(bindings, pred),
-            _lookup(bindings, subj),
-            _lookup(bindings, obj) )
-
-def _lookup(bindings, value):
-    for left, right in bindings:
-        if left == value: return right
-    return value
-
 
 
 
@@ -1979,10 +2083,12 @@ Examples:
 
 #  Metadata context - storing information about what we are doing
 
-	_metaURI = urlparse.urljoin(option_baseURI, "META/")  # Reserrved URI @@
-	_runURI = _metaURI+`time.time()`
+	_metaURI = urlparse.urljoin(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
+	global theMeta   # A global fourmula including first-hand knowledge from what happens
+	theMeta = theEngine.intern((FORMULA, _metaURI + "_forumla"))
 	history = None
-
+	
+#  Fix the output sink
         
 	if option_format == "rdf":
             _outSink = notation3.ToRDF(sys.stdout, _outURI, base=option_baseURI, flags=option_rdf_flags)
@@ -2003,7 +2109,6 @@ Examples:
             myEngine = theEngine      # Use one global one
             _store = RDFStore(myEngine, _outURI+"#_gs")
             workingContext = myEngine.intern((FORMULA, _outURI+ "#_formula"))   #@@@ Hack - use metadata
-            _meta = myEngine.intern((FORMULA, _runURI))
 
         if not _gotInput: #@@@@@@@@@@ default input
             _inputURI = _baseURI # Make abs from relative
@@ -2045,9 +2150,9 @@ Examples:
                     _step  = _step + 1
                     s = _metaURI + `_step`  #@@ leading 0s to make them sort?
                     if doMeta and history:
-                        _store.storeQuad((_meta, META_mergedWith, s, history))
-                        _store.storeQuad((_meta, META_source, s, inputContext))
-                        _store.storeQuad((_meta, META_run, s, run))
+                        _store.storeQuad((theMeta, META_mergedWith, s, history))
+                        _store.storeQuad((theMeta, META_source, s, inputContext))
+                        _store.storeQuad((theMeta, META_run, s, run))
                         history = s
                     else:
                         history = inputContext
@@ -2122,9 +2227,9 @@ Examples:
                 if doMeta:
                     _step  = _step + 1
                     s = _metaURI + `_step`  #@@ leading 0s to make them sort?
-                    _store.storeQuad(_meta, META_basis, s, history)
-                    _store.storeQuad(_meta, META_filter, s, inputContext)
-                    _store.storeQuad(_meta, META_run, s, run)
+                    _store.storeQuad(theMeta, META_basis, s, history)
+                    _store.storeQuad(theMeta, META_filter, s, inputContext)
+                    _store.storeQuad(theMeta, META_run, s, run)
                     history = s
 
             elif arg == "-purge":
