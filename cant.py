@@ -54,7 +54,10 @@ W3C open source licence <http://www.w3.org/Consortium/Legal/copyright-software.h
 import os
 import sys
 import urllib
-import uripath  # http://www.w3.org/2000/10/swap/
+try:
+    from swap import uripath  # http://www.w3.org/2000/10/swap/
+except ImportError:
+    import uripath
 from sys import stderr, exit
 import uripath
 

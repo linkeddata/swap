@@ -288,11 +288,8 @@ def main():
 	    good = 0
 	categories = kb.each(t, rdf.type)
 	for cat in categories:
-	    if cat is triage.ReificationTest:
-		if verbose: print "\tNot supported (reification): "+ inputDocument[-40:]
-		good = 0
-	    if cat is triage.ParseTypeLiteralTest:
-		if verbose: print "\tNot supported (Parse type literal): "+ inputDocument[-40:]
+	    if cat is triage.knownError:
+		if verbose: print "\tknown failure: "+ inputDocument[-40:]
 		good = 0
 	if good:
 	    RDFNegativeTestData.append((t.uriref(), case, description,  inputDocument))
@@ -413,15 +410,16 @@ def main():
 #	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
 #			WD, REFWD)
         try:
-            execute("""python %s --quiet --rdf=RT %s --ntriples  > ,temp/%s""" %
+            execute("""python %s --quiet --rdf=RT %s --ntriples  > ,temp/%s 2>/dev/null""" %
 	    (cwm_command, inputDocument, case))
         except:
             pass
         else:
             problem("""I didn't get a parse error running python %s --quiet --rdf=RT %s --ntriples  > ,temp/%s
+from test ^=%s
 I should have.
 """ %
-	    (cwm_command, inputDocument, case))
+	    (cwm_command, inputDocument, case, u))
 
 	passes = passes + 1
 

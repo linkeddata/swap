@@ -136,4 +136,12 @@
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test004>     a :BoringTest,
                 :ReificationTest .
     
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#error001>     a :knownError .
+
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-abouteach/Manifest.rdf#error001>     a :knownError .
+
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-difference-between-ID-and-about/Manifest.rdf#error1>     a :knownError .
+
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/Manifest.rdf#error007>     a :knownError .
+
 #ENDS

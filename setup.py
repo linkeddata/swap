@@ -47,7 +47,7 @@ setup(
     package_dir = {'swap': 'swap'},
     packages = ['swap'],
     py_modules = ['cwm'],
-    scripts = ['cwm.py'],
+    scripts = ['cwm.py', 'delta.py', 'cant.py'],
    )
     # todo, figure out which other modules are in public APIs
     # --danbri

@@ -27,13 +27,13 @@ W3C open source licence. Enjoy. Tim BL
 __version__ = "$Id$"
 
 # SWAP
-import webAccess
-import uripath
-import llyn
-from myStore import load, Namespace
-from term import Literal
-import diag
-from diag import progress, chatty_flag
+from swap import webAccess
+from swap import uripath
+from swap import llyn
+from swap.myStore import load, Namespace
+from swap.term import Literal
+from swap import diag
+from swap.diag import progress, chatty_flag
 #diag.chatty_flag=0
 
 # Standard python

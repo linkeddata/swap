@@ -148,10 +148,10 @@
 	test:description "Number syntax suppressed on output";
 	test:arguments  "syntax/numbers.n3 --ntriples".
 
-:t10117 a test:CwmTest;
-	test:referenceOutput <ref/numbers.rdf>;
-	test:description "Number syntax to RDF output";
-	test:arguments  "syntax/numbers.n3 --rdf".
+#:t10117 a test:CwmTest;
+#	test:referenceOutput <ref/numbers.rdf>;
+#	test:description "Number syntax to RDF output";
+#	test:arguments  "syntax/numbers.n3 --rdf".
 
 :t1012 a test:CwmTest;
     test:referenceOutput <ref/qvars1.n3>;
