@@ -101,21 +101,21 @@ BORING = [			# Example value:
    "ConversationTopic",     #         "Andrew Layman" ; # r
    "UnRead",                #                         "0" ; # r
 #  ms:FullName                       "Andrew Layman" ; # rw
-   "OutlookInternalVersion",         "93821" ; # r
+   "OutlookInternalVersion",      #   "93821" , # r
 #  CreationTime                   "2001-04-10T20:33:41Eastern Daylight Time
 #   "FileAs",                         "Layman, Andrew" ; # rw
 #  ms:Email1EntryID                  "x\000x\000" ; # r    @@@@@@@@@@@@
 #  ms:Sensitivity                    "0" ; # rw
 #  ms:Initials                       "A.L." ; # rw
 #  ms:Subject                        "Andrew Layman" ; # rw
-  "LastFirstNoSpace",               "LaymanAndrew" ; # r
+  "LastFirstNoSpace",              # "LaymanAndrew" ; # r
 #  ms:Email1DisplayName              "Andrew Layman (E-mail)" ; # r
 #  ms:Importance                     "1" ; # r
 #  ms:SelectedMailingAddress         "0" ; # r
-  "NoAging",                        "0" ; # r
-  ms:Email3DisplayName              "Andrew Layman (E-mail 3)" ; # r
-  ms:OutlookVersion                 "9.0" #  ConversationIndex  cannot be rea	    
-	    
+  "NoAging"                       # "0" ; # r
+#  ms:Email3DisplayName,             # "Andrew Layman (E-mail 3)" ; # r
+#  ms:OutlookVersion                 "9.0" #  ConversationIndex  cannot be rea	    
+	    ]
 	    
 BORING = [ ]
 OTHERS = ["Size", "OutlookInternalVersion", "NetMeetingAutoStart", "OutlookVersion",
@@ -161,8 +161,8 @@ def main():
 	print "@prefix", PREFIX, "<http://www.w3.org/2000/10/swap/pim/mso.n3#>."
 	print "@prefix util: <http://www.w3.org/2000/10/swap/util.n3#>."
 	print
-#	print "# Calendar:"
-#	oapp.getFolder(outlook.constants.olFolderCalendar, [])
+	print "# Calendar:"
+	oapp.getFolder(outlook.constants.olFolderCalendar, [])
 	
 	print "# Contacts:"
 	oapp.getFolder(outlook.constants.olFolderContacts, [
@@ -229,6 +229,7 @@ def _toString(x):
 	to turn everything into a string without Python encoding.
 	"""
 	if type(x) is type(' '): return stringToN3(stripCR(x))
+	if type(x) is type(u' '): return stringToN3(stripCR(x))  # @@ sure?
 	if type(x) is type(6): return '"'+`x`+'"'
 	y = `x`
 	if y[:5]=="<time":  # Must be better way
@@ -262,15 +263,15 @@ class outlookToN3(outlook.Application):
 		# Result is of type MAPIFolder
 		cal = _mapi.GetDefaultFolder(what)
 		print "\n# Folder %i:" % what
-		self._getItem(cal)
+		folderId = self._getItem(cal)
 		
 		list = cal.Items
 		n = len(list)
-		if n>0 : print " util:item "
 		for i in range(n):
 			item = list[i+1] # GetFirst()
-			self._getItem(item)
-			if i<n-1: print ","
+			id = self._getItem(item)
+			print " <uuid:%s>  util:item <uuid:%s>." % (folderId, id)
+#			if i<n-1: print ","
 		print "."
 			
 	def _getItem(self, item, indent=0):
@@ -340,7 +341,7 @@ class outlookToN3(outlook.Application):
 					if not _w : tail = "# r"
 		if id : print " ."
 		else: print " ] . "
-		
+		return id
 	
 
 
