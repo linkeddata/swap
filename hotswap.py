@@ -109,7 +109,7 @@ def Collection(location):
     >>> p = Collection("hotswap")
     
     """
-    if re.match(r"^[a-zA-Z0-9_.]+$", location):
+    if re.match(r"^[-a-zA-Z0-9_.]+$", location):
         return Module(location)
     raise Error, "unknown location syntax"
 
@@ -142,9 +142,9 @@ class Module:
     def open(self):
         try:
             mod = __import__(self.location)
-        except ImportError:
-            raise Error, ("Python can't import %s.\nsys.path is currently: %s\n" %
-                          ( self.location, sys.path))
+        except ImportError, e:
+            raise Error, ("Python can't import %s.\nsys.path is currently: %s\nImportError was: %s" %
+                          ( self.location, sys.path, str(e)))
         components = self.location.split('.')
         for comp in components[1:]:
             mod = getattr(mod, comp)
@@ -199,7 +199,8 @@ class PluginManager:
             else:
                 i += 1
 
-    def get(self, service, interfaces=None, properties={}):
+    def get(self, service, interfaces=None, properties={},
+            initargs=[], initkwargs={}):
         """Return the appropriate service provider.
         
         Return the current instance charged with handling the
@@ -273,12 +274,14 @@ class PluginManager:
         
         # construct a new instance, copied from any existing one
         if current is None:
-            new = apply(matchingClass, [])
+            new = apply(matchingClass, initargs, initkwargs)
         else:
             try:
-                new = apply(matchingClass, [], { "copyFrom": current })
+               kw = initkwargs
+               kw["copyFrom"] = current
+               new = apply(matchingClass, initargs, kw)
             except TypeError:
-                raise CantTransfer, "Can't switch service '%s' to class %s\nbecause it lacks a copyFrom constructor parameter" % (service, str(matchingClass))
+                raise CantTransfer, "Can't switch service '%s' to class %s\nperhaps it lacks a copyFrom constructor parameter" % (service, str(matchingClass))
 
         # save and return it
         self.services[service] = new
@@ -325,9 +328,13 @@ def get(*arg1, **arg2):
         features={ "interfaces":[...],
                    lambda( ... ) : return value
                    "foo": "bar" }
+
         initargs=[a, b, c]
         initkwargs={...}
-        
+
+           **  The initargs are used even if copyFrom is used, so
+               that non-optional parameters don't cause errors.
+           
     THIS IS NOT QUITE WHAT IS CURRENTLY IMPLEMENTED!!
 
     the current version is too clever about using kwargs.
@@ -343,7 +350,12 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
 
 # $Log$
-# Revision 1.2  2003-04-03 05:14:55  sandro
+# Revision 1.3  2003-04-25 19:54:13  sandro
+# allowing dash in filenames, even though "import x-y" doesnt work so well
+# implemented initargs/initkwargs
+# made importerror print the original error
+#
+# Revision 1.2  2003/04/03 05:14:55  sandro
 # passes two simple tests
 #
 # Revision 1.1  2003/04/03 04:51:49  sandro
