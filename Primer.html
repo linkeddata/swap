@@ -48,14 +48,15 @@ expressing a relation between the two. In fact you can write</p>
 <pre>&lt;#pat&gt; &lt;#child&gt; &lt;#al&gt; .</pre>
 
 <p>alternatively, to make it more readable, as either</p>
-<pre>&lt;#pat&gt; has &lt;#child&gt; of &lt;#al&gt; .</pre>
+<pre>&lt;#pat&gt; has &lt;#child&gt; &lt;#al&gt; .</pre>
 
 <p>or</p>
 <pre>&lt;#al&gt; is &lt;#child&gt; of &lt;#pat&gt; .</pre>
 
-<p>There are two shortcuts for when you have several statements about the same
-subject: a semicolon ";" introduces another property of the same subject, and
-a comma introduces another object with  the same predicate and subject.</p>
+<p>There are two shortcuts for when you have several statements about the
+same subject: a semicolon ";" introduces another property of the same
+subject, and a comma introduces another object with  the same predicate and
+subject.</p>
 <pre>&lt;#pat&gt; &lt;#child&gt;  &lt;#al&gt;, &lt;#chaz&gt;, &lt;#mo&gt; ;
        &lt;#age&gt;    "24" ;
        &lt;#eyecolor&gt; "blue" .</pre>
@@ -100,15 +101,16 @@ give the properties .  You represent this by square brackets with the
 properties inside.</p>
 <pre>&lt;#pat&gt; &lt;#child&gt; [ &lt;#age&gt; "4" ] , [ &lt;age&gt; "3" ].</pre>
 
-<p>You could read this as #pat has a #child which has #age of "4" and a #child
-which has an #age of "3".  There are two important things to remember</p>
+<p>You could read this as #pat has a #child which has #age of "4" and a
+#child which has an #age of "3".  There are two important things to
+remember</p>
 <ul>
   <li>The identifiers are just identifiers - the fact that the letters p a t
     are used doesn't tell anyone or any machine that we are talking about
     anyone whose name is "Pat" -- unless we say &lt;#pat&gt; &lt;#name&gt;
-    "Pat". The same applies to the verbs - never take the actual letters c h i
-    l d as telling you what it means - we will find out how to do that
-  later.</li>
+    "Pat". The same applies to the verbs - never take the actual letters c h
+    i l d as telling you what it means - we will find out how to do that
+    later.</li>
   <li>The square brackets declare that something exists with the given
     properties, but don't give you a way to refer to it elsewhere in this or
     another document.</li>
@@ -121,8 +123,8 @@ as</p>
   [ &lt;#name&gt; "Jo" ; &lt;#age&gt;  "5";  &lt;#eyecolor&gt; "green" ].</pre>
 
 <p>There are many ways of combining square brackets - but you can figure that
-out from the examples later on. There is not much left learn about using N3 to
-express data, so let us move on.</p>
+out from the examples later on. There is not much left learn about using N3
+to express data, so let us move on.</p>
 
 <h2 id="Sharing">Sharing concepts</h2>
 
@@ -130,28 +132,28 @@ express data, so let us move on.</p>
 something you can do in english (or occasionally in math) but when we really
 communicate using the concept "title", (such in a library of congress catalog
 card or a web page), we rely on a shared concept of "title".  On the semantic
-web, we share quite precisely by using exactly the same URI for the concept of
-title.</p>
+web, we share quite precisely by using exactly the same URI for the concept
+of title.</p>
 
 <p>I could try to give the title of an N3 document by</p>
 <pre>&lt;&gt; &lt;#title&gt;  "A simple example of N3".</pre>
 
-<p>(The &lt;&gt; being an empty URI reference always refers to the document it
-is written in.) The &lt;#title&gt; refers to the concept of #title as defined
-by the document itself.  This won't mean much to the reader. However, a group
-of people created a list of properties called the <a
+<p>(The &lt;&gt; being an empty URI reference always refers to the document
+it is written in.) The &lt;#title&gt; refers to the concept of #title as
+defined by the document itself.  This won't mean much to the reader. However,
+a group of people created a list of properties called the <a
 href="http://purl.oclc.org/dc/">Dublin Core</a>, among which is their idea of
 title, which they gave the identifier</p>
 
-<p>&lt;http://purl.org/dc/elements/1.1/title&gt;. So we can make a much better
-defined statement if we say</p>
+<p>&lt;http://purl.org/dc/elements/1.1/title&gt;. So we can make a much
+better defined statement if we say</p>
 <pre>&lt;&gt; &lt;http://purl.org/dc/elements/1.1/title&gt;
  "Primer - Getting into the Semantic Web and RDF using N3".</pre>
 
-<p>That of course would be a bit verbose - imagine using such long identifiers
-for everything like #age and #eyecolor above. So N3 allows you to set up a
-shorthand prefix for the long part. This is called a namespace identifier, and
-you set it up using "@prefix" like this:</p>
+<p>That of course would be a bit verbose - imagine using such long
+identifiers for everything like #age and #eyecolor above. So N3 allows you to
+set up a shorthand prefix for the long part. This is called a namespace
+identifier, and you set it up using "@prefix" like this:</p>
 <pre>@prefix dc:  &lt;http://purl.org/dc/elements/1.1/&gt; .
 &lt;&gt; dc:title  "Primer - Getting ino the semantic web and RDF using N3".</pre>
 
@@ -161,9 +163,9 @@ thing.  This is much quicker.  This is how you will see and write almost all
 your predicates in N3.  Once set up, a prefix can be used for the rest of the
 file (* may change).</p>
 
-<p>There are an increasingly large number of RDF vocabularies for you to refer
-to - check the<a href="/RDF/"> RDF home page</a> and things linked from it -
-and you can build your own for your own applications very simply.</p>
+<p>There are an increasingly large number of RDF vocabularies for you to
+refer to - check the<a href="/RDF/"> RDF home page</a> and things linked from
+it - and you can build your own for your own applications very simply.</p>
 
 <p>From now, on we are going to use some well known namesapaces, and so to
 save space, I will just assume the prefixes</p>
@@ -208,18 +210,18 @@ So we can define a class of person</p>
 <p>In the same document, we could introduce an actual person</p>
 <pre>:Pat a :Person.</pre>
 
-<p>Classes just tell you about the thing which is in them. An object can be in
-many classes.  There doesn't have to be any hierarchical relationship -- think
-of Person, AnimateObject, Animal, TallPerson, Friend, and so on.  If there is
-a relationship between two classes you can state it - check out the properties
-(of classes) in RDF Schema and the the <a href="http://www.daml.org/">DAML
-ontology</a> vocabularies.</p>
+<p>Classes just tell you about the thing which is in them. An object can be
+in many classes.  There doesn't have to be any hierarchical relationship --
+think of Person, AnimateObject, Animal, TallPerson, Friend, and so on.  If
+there is a relationship between two classes you can state it - check out the
+properties (of classes) in RDF Schema and the the <a
+href="http://www.daml.org/">DAML ontology</a> vocabularies.</p>
 <pre>:Woman a rdfs:Class; subPropertyOf :Person .</pre>
 
 <p></p>
 
-<p>A property is something which is used to declare a relationship between two
-things.</p>
+<p>A property is something which is used to declare a relationship between
+two things.</p>
 <pre>:sister a rdfs:Property.</pre>
 
 <p>Sometimes when a relationship exists between two things, you immediately
@@ -232,8 +234,8 @@ specifies one.</p>
 
 <p>Note the class identifiers start with capitals and properties with lower
 case letters. This is not a rule, but it is a good convention to stick to.
-Note also that because the domain of  rdfs:range and rdfs:domain themselves is
-rdf:Property, it follows that :sister is a rdfs:Property without it being
+Note also that because the domain of  rdfs:range and rdfs:domain themselves
+is rdf:Property, it follows that :sister is a rdfs:Property without it being
 stated explicitly.</p>
 
 <h4>Equivalence</h4>
@@ -242,16 +244,16 @@ stated explicitly.</p>
 not you realized it when you started, is in fact exactly the same as one in
 another vocabulary.  This is a really useful titbit of information for any
 machine or person dealing with the information!  The property of equivalence
-between two terms is so useful and fundamental that N3 has a special shorthand
-for it, "=".</p>
+between two terms is so useful and fundamental that N3 has a special
+shorthand for it, "=".</p>
 
 <p>:</p>
 <pre>:Woman = foo:FemaleAdult .
 :Title a rdfs:Class; = dc:Title .</pre>
 
-<p>Tip: Use other people's vocabularies when you can - it helps interchange of
-data.  When you define your own vocabulary which includes synonyms, do record
-the equivalence because this, likewise, will help present and future
+<p>Tip: Use other people's vocabularies when you can - it helps interchange
+of data.  When you define your own vocabulary which includes synonyms, do
+record the equivalence because this, likewise, will help present and future
 processors process your and others' data in meaningful ways.</p>
 
 <h4>Choosing a namespace and publishing a schema</h4>
@@ -263,20 +265,20 @@ reuse for something else. One way is just to send an email about the
 namespace. Then look at the headers, and find the <code>Message-Id:</code>
 header which gives the unique identifier he mailer created for the mail
 message, and use that. Another way is to put a document in a bit of very well
-maintained web space which no one can take away from you.  Or of course if you
-are just playing with it, use a file (say <code>mydb.n3</code>) in the same
-directory as the rest of your work, and the namespace identifier you can use
-is just &lt;<code>mydb.n3#&gt;</code>.</p>
+maintained web space which no one can take away from you.  Or of course if
+you are just playing with it, use a file (say <code>mydb.n3</code>) in the
+same directory as the rest of your work, and the namespace identifier you can
+use is just &lt;<code>mydb.n3#&gt;</code>.</p>
 
 <p>When use a web document to contain information in N3 about the terms you
 define (good practice!) then the namespace will end in a hash.</p>
 
 <p>You don't have to make your schema available to the world, but it helps
 machine process documents written with your vocabulary if you do.  It
-especially helps if the email message or web page is written in RDF (in XML or
-in N3) and contains the schema information, as a program can associate the two
-easily, if it finds the mail or looks up the web page.  If you do this, the
-namespace will be the document URI followed by a <code>#.</code></p>
+especially helps if the email message or web page is written in RDF (in XML
+or in N3) and contains the schema information, as a program can associate the
+two easily, if it finds the mail or looks up the web page.  If you do this,
+the namespace will be the document URI followed by a <code>#.</code></p>
 
 <p>This is a big topic - see for example further reading</p>
 <ul>
@@ -295,8 +297,8 @@ programs which interchange and manipulate data for the semantic web.</p>
 <h2>Formulae</h2>
 
 <p>The schemas you write, and the data files you (or your programs) write are
-all simple sets of RDF statements.  They can all be drawn as simple circle and
-arrow diagrams.</p>
+all simple sets of RDF statements.  They can all be drawn as simple circle
+and arrow diagrams.</p>
 
 <p>Let's call a set of RDF statements a <dfn><a
 name="context">formula</a></dfn>.  The formula a statement is in is its
@@ -321,9 +323,9 @@ encloses in curly braces { }. (In RDF/XML, contexts are declared using the
 <p>The formula in braces acts just like an identifier in the rest of the
 syntax.  It is like a literal expression in that it is defined only by its
 contents. This example just declares that  the document <code>x.rdf</code>
-expresses the hypothetical formula in which it is stated that pat is a person:
-the statement above doesn't state that pat is a person. (There is a problem
-with the XML serialization of this.)</p>
+expresses the hypothetical formula in which it is stated that pat is a
+person: the statement above doesn't state that pat is a person. (There is a
+problem with the XML serialization of this.)</p>
 
 <p>The main reason I can think of for writing formulae is for writing
 rules.</p>
@@ -333,8 +335,8 @@ rules.</p>
 <p>A rule tells of a conclusion which one can draw from a premise.  A rule is
 just a statement of the form that some engine is programmed to process. For
 the simplest sort of rule, all you need is one property:
-<code>log:implies</code>. (One engine which is progrmmed to process this is <a
-href="Overview.html">cwm</a>. Another is Euler.). The namespace for the
+<code>log:implies</code>. (One engine which is progrmmed to process this is
+<a href="Overview.html">cwm</a>. Another is Euler.). The namespace for the
 logical and rather experimental things which we introduce now are as in</p>
 <pre>@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .</pre>
 
@@ -353,8 +355,8 @@ give</p>
 <p>This rule is simple and useful, but in practice them more powerful rules
 can be applied to any identifiers. We nee a way of saying this.  A given
 formula is true even if the given identifier is replaced -- consistently
-throughout the context -- with any other identifier. This is represented by  a
-magic "log:forAll" property of the formula.</p>
+throughout the context -- with any other identifier. This is represented by 
+a magic "log:forAll" property of the formula.</p>
 <pre>this log:forAll :x, :y.
 {:x :parent :y} log:implies {:y :child :x}.</pre>
 
@@ -391,8 +393,8 @@ you.</p>
 
 <h2>Glossary</h2>
 
-<p>These are not formal definitions - just phrases to help you get the hang of
-what these things mean.</p>
+<p>These are not formal definitions - just phrases to help you get the hang
+of what these things mean.</p>
 <dl>
   <dt><a href="#Class">Class</a></dt>
     <dd>A set of Things;  a one-parameter predicate; a unary relation.</dd>
@@ -411,16 +413,17 @@ what these things mean.</p>
     <dd>A loose term for a Statement that an engine has been programmed to
       process.  Different engines have different sets fo rules.</dd>
   <dt>Resource</dt>
-    <dd>That identified by a Universal Resource Identifier (without a "#"). If
-      the URI starts "http:", then the resource is some form of generic
+    <dd>That identified by a Universal Resource Identifier (without a "#").
+      If the URI starts "http:", then the resource is some form of generic
       document.</dd>
   <dt>Statement</dt>
     <dd>A subject, prediate and object which assert meaning defined by the
       particular prediate used.</dd>
   <dt>Thing</dt>
     <dd>In DAML, a generic name for anything - abstract, animate, inanimate,
-      whatever. The class which anything is in. (In RDF parlance, confusingly,
-      rdf:Resource.)  Idenified by a URI with or without a "#" in it.</dd>
+      whatever. The class which anything is in. (In RDF parlance,
+      confusingly, rdf:Resource.)  Idenified by a URI with or without a "#"
+      in it.</dd>
   <dt>Truth</dt>
     <dd>In the log: namespace, a Class of all contexts which are true.</dd>
   <dt>type</dt>
@@ -430,8 +433,8 @@ what these things mean.</p>
     <dd>Universal Resource Identifier. The way of identifying anything
       (including Classes, Properties or individual things of any sort).   Not
       everything has a URI, as you can talk about something by just using its
-      properties. But using a URI allows other documents and systems to easily
-      reuse your information.</dd>
+      properties. But using a URI allows other documents and systems to
+      easily reuse your information.</dd>
 </dl>
 
 <p>@@@@</p>
