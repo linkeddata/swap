@@ -255,6 +255,7 @@ mso:WebPage  a rdf:Property;
 :publicHomePage rdfs:subPropertyOf :homePage.
 :homePage a ont:UnambiguousProperty;
   :_addressProperty :homePageAddress.
+:homePageAddress a ont:UnambiguousProperty.
 
 ####################################### Calendaring -- Time ###########
 #
@@ -269,7 +270,10 @@ mso:WebPage  a rdf:Property;
 
 <> rcs:log """
 $Log$
-Revision 1.11  2001-11-05 17:04:37  connolly
+Revision 1.12  2002-03-19 18:55:57  connolly
+homePageAddress is unambiguous too.
+
+Revision 1.11  2001/11/05 17:04:37  connolly
 commented out rules
 
 Revision 1.10  2001/11/05 16:43:02  connolly
