@@ -7,6 +7,11 @@
 @prefix : <track#>.
 @prefix  t: <track#>.
 
+@prefix r:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
+
 :Issue a s:Class.
 
 :description a rdf:Property;
@@ -21,4 +26,7 @@
 
 :closes a rdf:Property; s:domain doc:Work; r:range t:Issue.
 
-:rejects
+:rejects a rdf:Property s:domain doc:Work; r:range t:Issue.
+
+#ends
+
