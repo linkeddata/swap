@@ -648,7 +648,8 @@ class SinkParser:
                 return i, ustr
 
             if str[j] == '"':
-                uchr = uchr + '"'
+                ustr = ustr + '"'
+                j = j + 1
                 continue
             
             m = re.search(r'[\\\r\n\"]', str[j:])

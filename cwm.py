@@ -252,7 +252,7 @@ def outputStrings(store, formula, seed=None, relation=None):
     pairs = store.each((formula, relation, None, None))  # List of things of (subj, obj) pairs
     pairs.sort(comparePair)
     for key, str in pairs:
-        sys.stdout.write(str.string)
+        sys.stdout.write(str.string.encode('utf-8'))
 
     
             
