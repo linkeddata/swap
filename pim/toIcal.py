@@ -164,28 +164,33 @@ class CalWr:
         """ helper function to output general date value"""
         w = self._w
 
-        whenV = sts.any(when, ICAL.dateTime)
+        whenV = sts.any(when, ICAL.date)
         if whenV:
             whenV = translate(str(whenV), maketrans("", ""), "-:")
-            whenTZ = sts.any(when, ICAL.tzid)
-            if whenTZ:
-                w("%s;VALUE=DATE-TIME;TZID=%s:%s%s" %  
-                  (propName, str(whenTZ), whenV, CRLF))
-            else:
-                z = ""
-                if whenV[-1:] == "Z":
-                    z = "Z"
-                    whenV = whenV[:-1]
-                whenV = (whenV + "000000")[:15] # Must include seconds
-                w("%s:%s%s%s" % (propName, whenV, z, CRLF))
+            w("%s;VALUE=DATE:%s%s" % (propName, whenV, CRLF))
         else:
-            whenV = sts.any(when, ICAL.date)
-            if whenV:
-                whenV = translate(str(whenV), maketrans("", ""), "-:")
-                w("%s;VALUE=DATE:%s%s" % (propName, whenV, CRLF))
+            for tzp in sts.each(pred=RDF.type, obj=ICAL.Vtimezone):
+                whenV = sts.any(when, tzp)
+                if whenV:
+                    whenV = translate(str(whenV), maketrans("", ""), "-:")
+                    whenTZ = tzid(tzp)
+                    w("%s;VALUE=DATE-TIME;TZID=%s:%s%s" %  
+                      (propName, str(whenTZ), whenV, CRLF))
+                    break
             else:
-                raise ValueError, "no ical:dateTime or ical:date for %s = %s" \
-                      % (propName ,  when)
+                whenV = sts.any(when, ICAL.dateTime)
+                if whenV:
+                    whenV = translate(str(whenV), maketrans("", ""), "-:")
+                    z = ""
+                    if whenV[-1:] == "Z":
+                        z = "Z"
+                        whenV = whenV[:-1]
+                    whenV = (whenV + "000000")[:15] # Must include seconds
+                    w("%s:%s%s%s" % (propName, whenV, z, CRLF))
+                else:
+                    raise ValueError, \
+                          "no ical:dateTime or ical:date for %s = %s" \
+                          % (propName ,  when)
 
     def doDuration(self, sts, r, propName, predName):
         w = self._w
@@ -273,6 +278,17 @@ def wrapString(self, str, slen):
     return x
 
 
+def tzid(tzp):
+    """convert timezones from RdfCalendar norms to iCalendar norms
+
+    ASSUME we're using one of the 2002/12/cal timezones. @@
+    """
+    
+    rel = tzp.uriref2("http://www.w3.org/2002/12/cal/tzd/")
+    short= uripath.splitFrag(rel)[0]
+    return "/softwarestudio.org/Olson_20011030_5/" + short
+
+
 import sys, os
 import uripath
 
@@ -313,7 +329,11 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.20  2004-04-15 22:39:46  connolly
+# Revision 2.21  2004-09-08 15:46:05  connolly
+# - update to using timezones as properties
+# - kinda kludge converting timezone URIs to tzids
+#
+# Revision 2.20  2004/04/15 22:39:46  connolly
 # integrated patch from SeanP:
 # - adds support for list of float/int/text (e.g. GEO)
 # - refactor doTEXT etc. as mkTEXT, doSIMPLE
