@@ -167,6 +167,107 @@ def askdb(db, dbaddr, sink, fields, tables, condition):
         sink.endAnonymousNode()
 
 
+def asSQL(fields, tables, joins, condextra):
+    fldnames = [ "%s.%s" % (f[0], f[1]) for f in fields ]
+
+    cond = ''
+    if joins:
+        joinexprs = [ "%s.%s = %s.%s" % (j[0][0], j[0][1], j[1][0], j[1][1])
+                      for j in joins ]
+        cond = join(joinexprs, ' AND ')
+    if condextra:
+        if cond:
+            cond = cond + ' AND ' + condextra
+        else:
+            cond = condextra
+
+    return 'select %s from %s where %s;' % (join(fldnames, ','),
+                                            join(tables, ','),
+                                            cond)
+
+    
+def askdb2(db, dbaddr, sink, fields, tables, keys, joins, condextra):
+    fmla = something(None, None, 'F')
+    c = db.cursor()
+
+    fields = list(fields) # odd... tuples don't do index()
+
+    q = asSQL(fields, tables, joins, condextra)
+    
+    c.execute(q)
+
+
+    # we assume table names are also
+    # XML names (e.g. no colons) and
+    # URI path segments (e.g. no non-ascii chars)
+    for n in tables:
+        sink.bind(n, (RDFSink.SYMBOL, "%s/%s#" % (dbaddr, n)))
+
+
+    while 1:
+	row=c.fetchone()
+	if not row:
+            break
+
+        things = {}
+
+	#@@subj = something(sink, fmla, 'ans')
+        #sink.startAnonymousNode(subj)
+
+	col = 0
+	for cell in row:
+            # @@our mysql implementation happens to use iso8859-1
+            ol = (RDFSink.LITERAL, str(cell).decode('iso8859-1'))
+
+            tbl, fld = fields[col]
+
+            # figure out the subject of this cell-statement...
+            # all the property-fields from the same table-class
+            # share a subject... do we already have it...?
+            try:
+                subj = things[tbl]
+            except KeyError:
+                # no... make up something in this table/class.
+                # do we know a unique name for it?
+                # i.e. ... is the table/class keyed?
+
+                uri = None
+                try:
+                    kn = keys[tbl]
+
+                    # yes...
+                    # does this query return the key value?
+                    try:
+                        kc = fields.index((tbl, kn))
+                    except ValueError:
+                        # no...
+                        pass
+                    else:
+                        kv = row[kc]
+                        uri = "%s/%s/%s" % (dbaddr, tbl, kv)
+                except KeyError:
+                    # no, no key supplied for this class/table
+                    pass
+
+                if uri: subj = (RDFSink.SYMBOL, uri)
+                else:   subj = something(sink, fmla, tbl)
+
+                # subj rdf:type _tableClass_.
+                sink.makeStatement((fmla,
+                                    (RDFSink.SYMBOL, notation3.RDF_type_URI),
+                                    subj,
+                                    (RDFSink.SYMBOL, "%s/%s" % (dbaddr, tbl))
+                                    ))
+
+                things[tbl] = subj
+
+            # ok... now we know what the relevant subject is...
+	    prop = (RDFSink.SYMBOL, "%s/%s#%s" % (dbaddr, tbl, fld))
+            sink.makeStatement((fmla, prop, subj, ol))
+
+	    col = col + 1
+
+
 ###############
 # Forms UI
 
@@ -199,11 +300,12 @@ def queryUI(write, n, qpath, dbName):
 def parseQuery(qs):
     """Parse url-encoded SQL query string
 
-    return fields, tables, keyJoins, condition
+    return fields, tables, keys, keyJoins, condition
        (ala: select fields from tables where keyJoins and condition)
-    where tables is a list of table names
-    fields is a list of (tableName, fieldName) pairs,
-    and keyJoins is a list of ((tn, fn), (tn, fn)) pairs.
+    where fields is a list of (tableName, fieldName) pairs,
+      tables is a list of table names
+      keys is a dictionary that maps tables to given primary key fields
+      and keyJoins is a list of ((tn, fn), (tn, fn)) pairs.
     
     qs is an URL-encoded query string, ala the form above"""
 
@@ -257,7 +359,7 @@ def parseQuery(qs):
                 keyJoins.append(((tables[i-1], f),
                                  (tables[j-1], keys[tables[j-1]]) ))
 
-    return fields, tables, keyJoins, condition
+    return fields, tables, keys, keyJoins, condition
 
 
 #################
@@ -309,18 +411,41 @@ def testCLI():
 
     testDBView(sys.stdout, host, atoi(port), user, passwd)
 
+
 def testUI():
     import sys
     queryUI(sys.stdout.write, 3, '/', "niftydb")
 
 
 def testQ():
-    path='/administration/dbq?name1=users&fields1=name%2Cemail%2Ccity&key1=id&name2=techplenary2002&fields2=&key2=&kj2_1=id&name3=&fields3=&key3=&kj3_1=&kj3_2=&name4=&fields4=&key4=&kj4_1=&kj4_2=&kj4_3='
+    import sys
+    
+    host, port, user, passwd = sys.argv[1:5]
+    port = int(port)
+    
+    path='/administration/dbq?name1=users&fields1=family%2Cemail%2Ccity%2Cid&key1=id&name2=techplenary2002&fields2=plenary%2Cmeal_choice&key2=&kj2_1=id&name3=&fields3=&key3=&kj3_1=&kj3_2=&name4=&fields4=&key4=&kj4_1=&kj4_2=&kj4_3='
 
     path, fields = split(path, '?')
     print "CGI parse:", cgi.parse_qs(fields)
     
-    print "SQL parse:", parseQuery(fields)
+    fields, tables, keys, joins, cond = parseQuery(fields)
+    print "SQL parse:", fields, tables, keys, joins, cond
+
+    print "as SQL:", asSQL(fields, tables, joins, cond)
+    
+    sink = notation3.ToRDF(sys.stdout, 'stdout:')
+
+    db=MySQLdb.connect(host=host, port=port,
+                       user=user, passwd=passwd,
+                       db='administration')
+
+    dbaddr='http://example/administration'
+    
+    askdb2(db, dbaddr, sink,
+           fields, tables, keys, joins, cond)
+
+    sink.endDoc()
+
 
 if __name__ == '__main__':
     #testCLI()
@@ -329,7 +454,12 @@ if __name__ == '__main__':
     testQ()
     
 # $Log$
-# Revision 1.7  2002-03-06 00:03:16  connolly
+# Revision 1.8  2002-03-06 03:44:05  connolly
+# the multi-table case is starting to work...
+# I haven't captured the joined relationships yet...
+# I'm thinking about turning the fields structure inside out...
+#
+# Revision 1.7  2002/03/06 00:03:16  connolly
 # starting to work out the forms UI...
 #
 # Revision 1.6  2002/03/05 22:16:24  connolly
