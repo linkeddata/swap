@@ -56,7 +56,7 @@ div.issue {
 h2  { margin-left: 12pt; background: #00eeee; color: black; font-size: 18pt;
 	text-align: right;}
 table { margin-left: 10em;  width: 85%;}
-table.wide { margin-left: 2em; font-size: 9pt; width: 95%;}
+table.wide { margin-left: 2%; font-size: 9pt; width: 95%;}
 
 .ns  { text-align: left;  font-family: monospace; vertical-align:top; }
 
