@@ -1,0 +1,24 @@
+#  Tracking of issues in a very simple form
+# Just use your own properties to add your own functionality
+#
+#  IJ TBL  20002/01
+#
+
+@prefix : <track#>.
+@prefix  t: <track#>.
+
+:Issue a s:Class.
+
+:description a rdf:Property;
+    s:range log:String. 
+:title a rdf:Property;
+    s:comment "Short title, less than one line".
+
+
+:opens a rdf:Property; s:domain doc:Work; r:range t:Issue;
+    s:label "opens";
+    s:comment ".
+
+:closes a rdf:Property; s:domain doc:Work; r:range t:Issue.
+
+:rejects
