@@ -9,7 +9,10 @@
 @prefix math: <http://www.w3.org/2000/10/swap/math#> .
 @prefix string: <http://www.w3.org/2000/10/swap/string#> .
 
-math:StrictProperty a rdfs:Class; rdfs:label "StrictProperty".
+math:StrictProperty a rdfs:Class;
+    rdfs:label "StrictProperty";
+    rdfs:subClassOf rdf:Property.
+
 #   daml:intersectionOf (daml:UnambiguousProperty daml:UniqueProperty) .
 #   This would be very restrictive - only for 1:1 relationships. 
 #   Also note daml:UnambiguousProperty daml:UniqueProperty are in terms of daml:equivalentTo
@@ -19,11 +22,13 @@ math:Value a rdfs:Class; rdfs:label "Value";
    rdfs:subClassOf string:String; 
    rdfs:comment "The class of things that are numeric float values as in Python." .
 
-math:Function a rdfs:Class; rdfs:subPropertyOf rdf:Property;
+math:Function a rdfs:Class;
+   rdfs:subClassOf rdf:Property;
    rdfs:label "Function";
    rdfs:comment "A math:Function is unique in terms of math:EqualTo. ".
 
-math:ReverseFunction a rdfs:Class; rdfs:subPropertyOf rdf:Property;
+math:ReverseFunction a rdfs:Class;
+   rdfs:subClassOf rdf:Property;
    rdfs:comment "A math:ReverseFunction is unambiguous in terms of math:EqualTo. ".
 
 math:LogicalOperator a rdfs:Class; rdfs:subClassOf math:Function, math:ReverseFunction;
