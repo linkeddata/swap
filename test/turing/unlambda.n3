@@ -1,19 +1,29 @@
 @prefix : <http://yosi.us/unlambda#> .
-@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+#@prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @keywords a, of, is .
 #
 #
 #
 
+#
+# Begin defining what needs to be eval'ed
 {?x a RootExpression} => {?x a NeedsEval} .
 
+#recursive step of eval #1
 {(?x ?y) a NeedsEval}
 =>
 {?x a NeedsEval .
  ?y a NeedsEval} .
 
-{?x a NeedsEval; log:rawType log:Other} => {?x eval ?x} .
+#{?x a NeedsEval; log:rawType log:Other} => {?x eval ?x} .
+#base case of eval
+{k a NeedsEval} => {k eval k} .
+{s a NeedsEval} => {s eval s} .
+{v a NeedsEval} => {v eval v} .
+{i a NeedsEval} => {i eval i} .
 
+#
+# Eval calls apply
 { (?x ?y) a NeedsEval .
  ?x eval ?a .
  ?y eval ?b .
@@ -21,6 +31,8 @@
 =>
 {(?a ?b) a NeedsApply} .
 
+#
+#Eval gets the return value from apply, and returns it
 {(?x ?y) a NeedsEval .
  ?x eval ?a .
  ?y eval ?b .
@@ -28,35 +40,50 @@
 =>
 {(?x ?y) eval ?c } .
 
-
+#
+#apply (k x)
 {(k ?x) apply (k ?x)}
 <= 
 {(k ?x) a NeedsApply} .
 
+
+#apply ((k y) x) ==> y
+#
 {((k ?y) ?x) apply ?y}
 <=
 {((k ?y) ?x) a NeedsApply} .
 
+# apply (s x)
+#
 {(s ?x) apply (s ?x)}
 <= 
 {(s ?x) a NeedsApply} .
 
+# apply ((s y) x)
+#
 {((s ?y) ?x) apply ((s ?y) ?x)}
 <=
 {((s ?y) ?x) a NeedsApply } .
 
+# apply (((s z) y) x)
+# calls (z x) and (y x)
 {(((s ?y) ?z) ?x) a NeedsApply .
 } =>
 {(?y ?x) a NeedsEval .
  (?z ?x) a NeedsEval } .
 
+# apply (((s z) y) x)
+# gets (z x) and (y x)
+# and calls ((z x) (y x))
 {(((s ?y) ?z) ?x) a NeedsApply .
  (?y ?x) eval ?r .
  (?z ?x) eval ?s .
 }
 =>
 {(?r ?s) a NeedsEval} .
-
+# apply (((s z) y) x)
+# gets ((z x) (y x))
+# and returns it
 {(((s ?y) ?z) ?x) a NeedsApply .
  (?y ?x) eval ?r .
  (?z ?x) eval ?s .
@@ -64,11 +91,14 @@
 =>
 {(((s ?y) ?z) ?x) apply ?w} .
 
+# (i x) ==> x
+#
 {(i ?x) apply ?x}
 <= 
 {(i ?x) a NeedsApply} .
 
-
+# (v x) ==> v
+#
 {(v ?x) apply v}
 <=
 {(v ?x) a NeedsApply} .
