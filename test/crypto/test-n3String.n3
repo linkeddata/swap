@@ -1,5 +1,5 @@
 # Just test log:n3String
-@prefix : <#> .
+@prefix : <http://example.com/bar#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#>.
 @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
@@ -8,8 +8,8 @@
 
 this log:forAll :s.
 
-{ { this acc:forDocument <http://www.w3.org/Member>;
-                 acc:credential <access-tina-cert.n3>;
+{ { :foo	 acc:forDocument <http://www.w3.org/Member>;
+                 acc:credential <http://example.net/access-tina-cert.n3>;
                  acc:junk "32746213462187364732164732164321"  } log:n3String :s
 } log:implies { :s a :result }.
 

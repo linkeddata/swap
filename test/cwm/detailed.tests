@@ -13,6 +13,7 @@
 
 :cwm001 a test:CwmTest;
     test:referenceOutput <fam-thinkwith.ref>;
+    test:addressesProblemRaisedBy <>.
     test:description   "Use think=rules.n3 to iterate using separate rules";
     test:arguments     """cwm/fam.n3 --think=cwm/fam-rules.n3""".
 

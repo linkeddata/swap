@@ -1,0 +1,27 @@
+# List of regression tests
+#
+#      Cryptographic and related tests
+#
+# Note: Command lines must be for running in the directory above.
+#
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+@prefix dc:  <http://purl.org/dc/elements/1.1/>. # yuk - under protest - no hash
+
+
+:t001 a test:CwmTest;
+    test:referenceOutput <test-n3String.ref.n3>;
+    test:description   "Basic test that log:n3String works";
+    test:arguments     """crypto/test-n3String.n3 --think""".
+ 
+:t003 a test:CwmTest;
+    test:referenceOutput <test-parsedAsN3.ref.n3>;
+    test:description   "Basic test that log:parsedAsN3 works";
+    test:arguments     """crypto/test-parsedAsN3.n3 --think""".
+ 
+ 
+
+
+
+#ends
