@@ -135,11 +135,17 @@ class Thing:
     def __repr__(self):   # only used for debugging I think
         return self.representation()
 
-    # Use the URI to allow sorted listings - for connonnicalization if nothing else
+    # Use the URI to allow sorted listings - for cannonnicalization if nothing else
+    #  Put a type declaration before anything else
     def __cmp__(self, other):
+        _type = "<" + notation3.RDF_type_URI + ">"
         if self is other: return 0  # duh
         s = self.representation()
+        if s == _type:
+            return -1
         o = other.representation()
+        if o == _type:
+            return 1
         if s < o :
 #            print s,  "LESS THAN", o
             return -1
@@ -328,6 +334,14 @@ class StoredStatement:
 
     def __init__(self, q):
         self.triple = q
+
+#   The order of statements is only for cannonical output
+    def __cmp__(self, other):
+        if self is other: return 0        
+        for p in [CONTEXT, SUBJ, PRED, OBJ]: # Note NOT internal order
+            delta = self.triple[p].__cmp__(other.triple[p])
+            if delta: return delta
+        raise internalerror # SHould never have two identical distinct
         
 class RDFStore(notation3.RDFSink) :
     """ Absorbs RDF stream and saves in triple store
@@ -619,7 +633,7 @@ class RDFStore(notation3.RDFSink) :
                 self._dumpSubject(f, context, sink)
 
 
-    def _dumpSubject(self, subj, context, sink):
+    def _dumpSubject(self, subj, context, sink, sorting=1):
         """ Take care of top level anonymous nodes
         """
         if 0: print "...%s occurs %i as context, %i as pred, %i as subj, %i as obj" % (
@@ -643,6 +657,7 @@ class RDFStore(notation3.RDFSink) :
 
             elif _isSubject > 0 :     #  Could have alternative syntax here 
                 sink.startAnonymousNode(subj.asPair())
+                if sorting: subj.occursAs[SUBJ].sort()    # Order only for output
                 for s in subj.occursAs[SUBJ]:
                     if s.triple[CONTEXT] is context:
                         self.makeTopStatement(sink, s)
@@ -658,7 +673,7 @@ class RDFStore(notation3.RDFSink) :
             else:  # Does not occur as subject or as bag or as object
                 print "\n# Ooops .. <%s>", `subj`
                 raise theRoof # What is this node doing anyway?
-
+        if sorting: subj.occursAs[SUBJ].sort()
         for s in subj.occursAs[SUBJ]:
             con, pred, subj, obj = s.triple
             if con is context:
