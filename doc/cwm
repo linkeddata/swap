@@ -109,7 +109,7 @@ guaranteed but is open source and available if you want to play.</p>
       web, but this is not a practical way to install the system.</dd>
 </dl>
 
-<h3 id="Closed">Features</h3>
+<h2 id="Closed">Features</h2>
 
 <p>This is a general purpose command-line application, in which triples are
 stored in/against the particular context in which they were read, eg RDF file
