@@ -21,14 +21,14 @@ threshold = 1 # Bytes: ignore below this size
 chunking = 120	# Number of perpendicular things we like in a region
 #	strokeColor  fillColor
 style =  [
-	("#FDD",		"#400"),  	# red
-	("#FED",		"#420"),	# Orange
-	("#FFD",		"#440"),
-	("#DFD",		"#040"),
-	("#DFF",		"#044"),
-	("#DDF",		"#004"),
+	("#F88",		"#400"),  	# red
+	("#FC8",		"#420"),	# Orange
+	("#FF8",		"#440"),
+	("#8F8",		"#040"),
+	("#8FF",		"#044"),
+	("#88F",		"#004"),
 	("#FFF",		"#002"),
-	("#FDD",		"#400"),
+	("#F88",		"#400"),
 	("#FFF",		"none")
 	]
 	
@@ -55,7 +55,7 @@ class File:
 	try:
 	    s = os.lstat(path)  # unix only
 	except OSError:
-	    if verbose >= 0: deb(" "*level + "Error checking %s\n" % path)
+	    if verbose >= 0: deb(" "*self.level + "Error checking %s\n" % path)
 	    self.size = 0
 	else:
 	    if verbose: deb( " "*self.level + "Checking %s, mode=%6o, size=%i\n" %(path, s.st_mode, s.st_size))
@@ -108,11 +108,12 @@ class File:
 
     def label(self, x, y, dx, dy, flipped, opacity=1.0):
 	fillColor, strokeColor = style[self.level]
+	# Figure out max font size will fit in
 	if flipped:
-	    em1 = (dy/len(self.name))
+	    em1 = (dy/len(self.name)) * 1.6
 	    em2 = (dx/2)
 	else:
-	    em1 = (dx/len(self.name))
+	    em1 = (dx/len(self.name)) * 1.6
 	    em2 = (dy/2)
 	em = min(em1, em2)
 	strokeWidth = em/200
@@ -120,28 +121,19 @@ class File:
 	    svg("""<g transform="translate(%f,%f)">
 	<text transform="rotate(-90deg)" x="0" y="0" opacity="%1.1f" 
 	    fill="%s" stroke="%s" font-size="%f" stroke-width="%f">%s</text></g>\n""" #"
-		%(y+(dy/2)+ (0.3*em), x+dy-em, opacity,  strokeColor, strokeColor, em,  strokeWidth, self.name))
+		%(y+(dy/2)+ (0.3*em), x+dx-em, opacity,  strokeColor, strokeColor, em,  strokeWidth, escape(self.name)))
 	else:
 	    svg("""<text x="%f" y="%f" opacity="%1.1f" fill="%s" stroke="%s" font-size="%f" stroke-width="%f">%s</text>\n""" 
-		%(x+(em/2), y+(dy/2)+ (0.3*em),  opacity, strokeColor, strokeColor, em,  strokeWidth, self.name))
+		%(x+(em/2), y+(dy/2)+ (0.3*em),  opacity, strokeColor, strokeColor, em,  strokeWidth, escape(self.name)))
 	
-    def discreteLabel(self, x, y, dx, dy, flipped):
-	fillColor, strokeColor = style[self.level]
-	if flipped:
-	    em1 = (dy/len(self.name))
-	    em2 = (dx/4)
-	else:
-	    em1 = (dx/len(self.name))
-	    em2 = (dy/4)
-	em = min(em1, em2)
-	strokeWidth = em/200
-	if flipped:
-	    svg("""<g transform="rotate(-90deg)"><text transform="translate(%f,%f)" x="0" y="0" opacity="0.2" fill="%s" stroke="%s" font-size="%f" stroke-width="%f">%s</text></g>\n""" #"
-		%(y+dy-em, x+em,  strokeColor, strokeColor, em,  strokeWidth, self.name))
-	else:
-	    svg("""<text x="%f" y="%f" opacity="0.2" fill="%s" stroke="%s" font-size="%f" stroke-width="%f">%s</text>\n""" #"
-		%(x+em, y+dy-em,  strokeColor, strokeColor, em,  strokeWidth, self.name))
-	
+def escape(s):
+    res = ""
+    for ch in s:
+	if ch == "&": ch = "&amp;"
+	elif ch == "<": ch = "&lt;"
+	elif ch == ">": ch = "&gt;"
+	res += ch
+    return res
 
 try: start = sys.argv[1]
 except IndexError: start = "."
@@ -149,7 +141,8 @@ except IndexError: start = "."
 svg("<svg>\n")
 top = File(start)
 x = top.measure()
-print "Total size", x
+threshold = x/1000.0  # say ... try that
+deb("Total size %f; ignoring things les than %f\n" %(x, threshold))
 top.layout(0, 0, 600, 800)
 svg("</svg>\n")
 
