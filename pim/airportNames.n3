@@ -1,13 +1,14 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 
 <> dc:description """OBSOLETE!!!""",
-  dc:relation <grokTravItin.pl>;
 """map navigant (sabre?) airport names to IATA-based
 daml.org names; relate to opencyc:fromLocation and opencyc:toLocation""",
 "@@TODO: constraint the premise of the mapping rule a bit?",
-"$Id$".
+"$Id$";
+dc:relation <grokTravItin.pl>.
 
 @prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#> .
+@prefix apt: <http://www.daml.org/2001/10/html/airport-ont#>.
 
 @prefix a: <http://www.daml.org/cgi-bin/airport?>. #hmm... ?MCI is a document *and* an airport?
 a:MCI k:nameString "KANSAS CITY INTL".
@@ -25,6 +26,7 @@ a:FCO k:nameString "ROME FIUMICINO".
 a:AHO k:nameString "ALGHERO".
 a:PIT k:nameString "PITTSBURGH".
 a:YMX k:nameString "MONTREAL DORVALQC".
+a:PHX k:nameString "PHOENIX".
 
 
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
@@ -39,3 +41,10 @@ k:nameString :determines k:fromLocation, k:toLocation.
 { :P :determines :Q.
   :X :Q [ :P [ is :P of :Y ] ].
 } log:implies { :X :Q :Y }.
+
+@prefix str: <http://www.w3.org/2000/10/swap/string#> .
+
+{ :X k:nameString []; log:uri :Y.
+  (:Y "http://www.daml.org/cgi-bin/airport\\?(.*)") str:scrape :Q
+}
+  log:implies { :X apt:iataCode :Q }.
