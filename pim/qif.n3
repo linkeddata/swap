@@ -11,9 +11,14 @@
 <> doc:version "$Id: " .
 
 
+q:Transaction a s:Class.
+
 q:Bank a s:Class.
+
 q:Cat a s:Class; s:label "caetgory".
+q:category a r:Property; s:label ""; s:domain q:Transaction.
 
-q:category a r:Property.
-
+q:amount a r:Property; s:label "amount"; s:domain q:Transaction.
+q:date   a r:Property; s:label "date"; s:domain q:Transaction.
+q:payee  a r:Property; s:label "payee"; s:domain q:Transaction.
 #ENDS
