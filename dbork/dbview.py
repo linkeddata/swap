@@ -83,7 +83,7 @@ import BaseHTTPServer
 import cgi # for URL-encoded query parsing
 
 
-RDF_MediaType = "application/rdf+xml" #@@ cf. RDF Core
+RDF_MediaType = "text/xml" #@@ cf. RDF Core
                            #"what mime type to use for RDF?" issue...
 
 
@@ -130,10 +130,10 @@ class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         #DEBUG "which get?", self.path, s._home + s._dbName + self.UIPath
 
-        dbdocaddr = s._home + s._dbName
+        dbdocpath = s._home + s._dbName
 
-        if self.path[:len(dbdocaddr)] == dbdocaddr:
-            rest = self.path[len(dbdocaddr):]
+        if self.path[:len(dbdocpath)] == dbdocpath:
+            rest = self.path[len(dbdocpath):]
 
             if rest == '':
                 self.describeDB()
@@ -210,7 +210,7 @@ class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         self.end_headers()
 
         s = self.server
-        dbdocaddr = s._home + s._dbName
+        dbdocaddr = s._base
         
         sink = notation3.ToRDF(self.wfile, dbdocaddr)
 
@@ -225,7 +225,7 @@ class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         self.end_headers()
 
         s = self.server
-        dbdocaddr = s._home + s._dbName
+        dbdocaddr = s._base
         
         sink = notation3.ToRDF(self.wfile, dbdocaddr)
 
@@ -240,7 +240,7 @@ class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         self.end_headers()
 
         s = self.server
-        dbaddr = s._home + s._dbName
+        dbaddr = s._base
         
         sink = notation3.ToRDF(self.wfile, dbaddr)
 
@@ -779,7 +779,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.16  2002-03-08 06:45:24  connolly
+# Revision 1.17  2002-03-16 05:59:43  connolly
+# xml mime type more convenient; fixed buggy namespace bindings
+#
+# Revision 1.16  2002/03/08 06:45:24  connolly
 # fixed bug with empty where clause
 # added --testSQL
 # handle NULL values by not asserting anything. Hmm...
