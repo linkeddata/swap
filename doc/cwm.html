@@ -111,6 +111,13 @@ or N3 { expression }. The features at the moment include</p>
         signatures.</li>
     </ul>
   </li>
+  <li>Accessing the web to directly or indirectly resolve a query, including:
+    <ul>
+      <li>Getting schemas for terms in the query</li>
+      <li>Using metadata to point to definitive documents</li>
+      <li>Looking up data in local or remote SQL servers</li>
+    </ul>
+  </li>
 </ul>
 
 <p>Cwm will run as a command, and is designed to be usable as a simple data
@@ -131,7 +138,8 @@ are processed in order from left to right.</p>
   <dt>--rdf</dt>
     <dd>input/output format XML/RDF format from now on</dd>
   <dt>--rdf=flags</dt>
-    <dd>as above but sets flags as to how RDF is written</dd>
+    <dd>as above but sets flags as to how RDF is written. Use cwm --help for
+      list of flags</dd>
   <dt>--n3</dt>
     <dd>input/output is Notation3 from now on.</dd>
   <dt>--n3=flags</dt>
@@ -159,8 +167,8 @@ are processed in order from left to right.</p>
   <dt>--think</dt>
     <dd>Do --rules and go on doing it until no more is generated.</dd>
   <dt>--mode=flags</dt>
-    <dd>When doing inference, do interesting things according to these
-    flags</dd>
+    <dd>When doing inference, do interesting things according to <a
+      href="#Mode">these flags</a></dd>
   <dt>--purge</dt>
     <dd>Removes any triple containing a term that is declared to be of
       rdf:type log:Chaff</dd>
@@ -182,7 +190,7 @@ The default base URI of the process is the file URI of a file in the current
 working directory, so a local filename will be a valid relative URI. This is
 how URIs were supposed to work.</p>
 
-<h3>Mode flags</h3>
+<h3><a name="Mode" id="Mode">Mode flag</a>s</h3>
 <dl>
   <dt>r</dt>
     <dd>This must be present for cwm to go out onto the net at all. It
@@ -209,7 +217,7 @@ how URIs were supposed to work.</p>
 <h2>Environment Variables</h2>
 <dl>
   <dt>CWM_RDF_PARSER</dt>
-    <dd>rdflin2rdf or sax2rdf (default).  Affects the choice of RDF parser
+    <dd>rdflin2rdf or sax2rdf (default). Affects the choice of RDF parser
       module used by cwm.</dd>
 </dl>
 
@@ -228,7 +236,8 @@ values found. The following is an example:</p>
 @prefix mech: &lt;s1.n3#&gt; .
 
 this log:forAll &lt;#x&gt; , &lt;#y&gt; .
-{ &lt;#x&gt; mech:includes &lt;#y&gt; } log:implies { &lt;#y&gt; mech:partOf &lt;#x&gt; } .</pre>
+{ &lt;#x&gt; mech:includes &lt;#y&gt; } log:implies { &lt;#y&gt; mech:partOf &lt;#x&gt; } .
+</pre>
 
 <p>The @prefix directives define the prefixes log: and mech: as representing
 namespaces. The this log:forAll line declares #x and #y, two local
