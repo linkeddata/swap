@@ -537,7 +537,7 @@ class CalWr:
             if outtype == E_PARAM:
                 v = ";" + pref + "=" + val 
             elif outtype == E_PROP:
-                v = pref + ":" + val + "\n"
+                v = pref + ":" + val + CRLF
             w(self.wrapString(v, 75)) #@@magic number. move to top. does it come from the RFC?
         #enddef egWrite
 
@@ -725,7 +725,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.4  2004-01-29 21:09:16  timbl
+# Revision 2.5  2004-01-29 21:28:13  timbl
+# Changed ONE newline to a CRLF, suspect many more should be changed. iCal needs both
+#
+# Revision 2.4  2004/01/29 21:09:16  timbl
 # Added DTSTART and UID to events. iCal needs DTSTART it seems. Fixed VALUE=URI format.
 #
 # Revision 2.3  2004/01/29 19:41:57  timbl
