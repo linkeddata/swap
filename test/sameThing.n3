@@ -1,0 +1,52 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
+@prefix rcs: <http://www.w3.org/2001/03swell/rcs#>.
+
+<> dc:description """rules for determining when two terms denote
+the same thing.""";
+  rcs:id "$Id$";
+  dc:creator [ 
+	contact:fullName "Dan Connolly";
+	contact:homePage <http://www.w3.org/People/Connolly/>;
+	contact:mailbox <mailto:connolly@w3.org>
+	];
+  dc:rights "copyright (c) 2001 W3C (MIT, Keio, INRIA)".
+
+@prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <#>.
+
+# These should be derivable from the axiomatic semantics for DAML+OIL
+
+this log:forAll :x, :y, :z, :p, :q.
+
+{ :x :p :y. :x = :z. } log:implies { :z :p :y }.
+{ :x :p :y. :p = :q. } log:implies { :x :q :y }.
+{ :x :p :y. :y = :z. } log:implies { :x :p :z }.
+
+{  :p a ont:UniqueProperty. } log:implies
+ { { :x :p :y. :x :p :z. } log:implies  { :y = :z } }.
+
+{  :p a ont:UnambiguousProperty. } log:implies
+ { { :x :p :z. :y :p :z. } log:implies  { :x = :y } }.
+
+# now we get into cwm mechanics...
+
+this log:forAll :s1, :s2.
+
+{ :x = :y.
+  :x log:uri :s1.
+  :y log:uri :s2.
+  :s1 log:lessThan :s2.
+}
+  log:implies {
+   :y a log:Chaff.
+   :s2 :forgottenInFavorOf :s1
+  }.
+
+# now the test data...
+
+contact:mailbox a ont:UnambiguousProperty.
+
+[ contact:mailbox <mailto:connolly@w3.org> ] :hairColor :red.
+[ contact:mailbox <mailto:connolly@w3.org> ] :birthPlace :KC.
