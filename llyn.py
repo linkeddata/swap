@@ -1312,7 +1312,7 @@ class RDFStore(RDFSink.RDFSink) :
     def purge(self, context, boringClass=None):
         if not boringClass:
             boringClass = self.Chaff
-        for s in self._index.get((context, self.type, None, boringClass),[]):
+        for s in self._index.get((context, self.type, None, boringClass),[])[:]:
             con, pred, subj, obj = s.triple  # subj is a member of boringClass
             total = 0
             for p in (PRED, SUBJ, OBJ):
@@ -1321,7 +1321,8 @@ class RDFStore(RDFSink.RDFSink) :
                         self.removeStatement(t)
                         total = total + 1
 
-            if thing.verbosity() > 30: progress("Purged %i statements with...%s" % (total,`subj`[-20:]))
+            if thing.verbosity() > 30:
+                progress("Purged %i statements with %s" % (total,`subj`))
 
 
     def removeStatement(self, s):
@@ -1813,8 +1814,7 @@ class RDFStore(RDFSink.RDFSink) :
     60  Not a light built-in, haven't searched yet.
     50  Light built-in, not enough constants to calculate, haven't searched yet.
     20  Light built-in, not enough constants to calculate, search done.
-    15  Heavy built-in, search failed, but formula now has no vars left. Ready to run.
-    14  Heavy built-in, search failed, no vars, except maybe embedded in formula arguments.
+    35  Heavy built-in, search failed, but formula now has no vars left. Ready to run.
     10  Heavy built-in, too many variables in args to calculate, search failed.
      9  Heavy built-in, too many variables within formula args to calculate, search failed.
      7  List defining statement, search failed, unbound variables in list.?? no
@@ -1900,7 +1900,7 @@ class RDFStore(RDFSink.RDFSink) :
                 nbs = item.tryLight(queue)
             elif state == 50 or state == 60: #  Not searched yet
                 nbs = item.trySearch()
-            elif state == 15:  # not light, may be heavy; or heavy ready to run
+            elif state == 35:  # not light, may be heavy; or heavy ready to run
                 if pred is self.includes:
                     if (isinstance(subj, Formula)
                         and isinstance(obj, Formula)):
@@ -2056,7 +2056,9 @@ class QueryItem:
                     if result != None:
                         self.state = 80
                         return [[ (subj, result)]]
-        raise RuntimeError("Weird ... Light failed "+`self`)
+        if thing.verbosity() > 30:
+            progress("Builtin could not give result"+`self`)
+
         # Now we have a light builtin needs search, otherwise waiting for enough constants to run
         return []   # Keep going
         
@@ -2101,7 +2103,7 @@ class QueryItem:
         elif not isinstance(pred, HeavyBuiltIn):
             self.state = 80  # Done with this one: Do new bindings then stop
         elif self.canRun():
-            self.state = 15
+            self.state = 35
         else:
             self.state = 10
         return
@@ -2149,7 +2151,8 @@ class QueryItem:
                             self.state = 80  # Do this then stop - that is all
                             return [[ (subj, result)]]
                         else: return 0
-            raise RuntimeError("Weird. builtin should not have been called"+`self`)
+            if thing.verbosity() > 30:
+                progress("Builtin could not give result"+`self`)
         except (IOError, SyntaxError):
             raise BuiltInFailed(sys.exc_info(), self ),None
 
@@ -2194,7 +2197,7 @@ class QueryItem:
             if self.canRun():
                 if self.state == 50: self.state = 70
                 elif self.state == 20: self.state = 65
-                elif self.state == 10: self.state = 15
+                elif self.state == 10: self.state = 35
         if thing.verbosity() > 90:
             progress("...bound becomes ", `self`)
         if self.state == 80: return 0
