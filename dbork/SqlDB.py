@@ -543,7 +543,7 @@ class SqlDBAlgae(RdfDBAlgae):
 	    lvalue = CGI_escape(field)
             rvalue = CGI_escape(str(values[field]))
 	    segments.append(lvalue+"."+rvalue)
-        value = string.join(segments, '&')
+        value = string.join(segments, '.')
         return self.baseUri.uri+table+'#'+value; # '.'+value+"#item"
 
     def _decomposeUniques(self, uri, tableAs, table):
@@ -554,14 +554,14 @@ class SqlDBAlgae(RdfDBAlgae):
         if (table1 != table):
             raise RuntimeError, "\""+uri+"\" not based on "+self.baseUri.uri+table
         recordId = CGI_unescape(field)
-        specifiers = string.split(recordId, '&')
+        parts = string.split(recordId, '.')
         constraints = [];
-        for specifier in specifiers:
-            print "@@specifier:", specifier
-            field, value = string.split(specifier, '.') #@@ catch ValueError and report as URI syntax error?
+        while parts:
+            field, value = parts[:2]
             field = unescapeName(field)
             value = unescapeName(value)
             constraints.append(tableAs+"."+field+"=\""+value+"\"")
+            del parts[:2]
         return constraints
 
     def _buildQuery (self, implQuerySets):
