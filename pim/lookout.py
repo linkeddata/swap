@@ -172,13 +172,14 @@ class outlookToN3(outlook.Application):
 		for k in range(len(gkeys)):
 			key = gkeys[k]
 			_w = (key in pkeys)		# Is this writable?
-			if not _w : print "              # Read only:"
-			if key == "End":
-				pass  # Breakpoint me! @@ ;-)
-			x = item.__getattr__(key)
-			if x != "":
-				print "%-32s  %s" % (key, _toString(x)),
-				if k < len(keys)-1: print ";\n    ",
+			if not _w : pass # print "              # Read only:", key
+			else:
+				if key == "End":
+					pass  # Breakpoint me! @@ ;-)
+				x = item.__getattr__(key)
+				if x != "":
+					print "%-32s  %s" % (key, _toString(x)),
+					if k < len(gkeys)-1: print ";\n    ",
 		print " . ]"
 		
 	def incomingCall(self, name, num, isotime):
