@@ -28,6 +28,7 @@ Agenda:
 
 """emacs got confused by long string above@@"""
 
+
 import string
 import urlparse
 import thing
@@ -45,9 +46,12 @@ import notation3    # N3 parsers and generators, and RDF generator
 
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE, SYMBOL, Logic_NS
 
-from llyn import RDFStore  # A store with query functiuonality
+# from llyn import RDFStore  # A store with query functiuonality
+import llyn
+
 from thing import progress
 
+cvsRevision = "$Revision$"
 
 
 ######################################################### Tests  
@@ -166,7 +170,7 @@ bind default <>
 
     progress( "----------------------- Test store:")
 
-    store = RDFStore()
+    store = llyn.RDFStore()
 
     thisDoc = store.internURI(thisURI)    # Store used interned forms of URIs
     thisContext = store.intern((FORMULA, thisURI+ "#_formula"))    # @@@ Store used interned forms of URIs
@@ -283,6 +287,7 @@ def doCommand():
 --reify     Replace the statements in the store with statements describing them.
 --flat      Reify only nested subexpressions (not top level) so that no {} remain.
 --help      print this message
+--revision  print CVS revision numbers of major modules
 --chatty=50 Verbose output of questionable use, range 0-99
 --with      Pass any further arguments to the N3 store as os:argv values
  
@@ -322,6 +327,7 @@ Examples:
         option_with = None  # Command line arguments made available to N3 processing
 
         _step = 0           # Step number used for metadata
+        _genid = 0
 
         hostname = "localhost" # @@@@@@@@@@@ Get real one
         
@@ -381,6 +387,9 @@ Examples:
                 print notation3.ToN3.flagDocumentation
                 print notation3.ToRDF.flagDocumentation
                 return
+            elif arg == "-revision":
+                progress( "cwm=",cvsRevision, "llyn=", llyn.cvsRevision)
+                return
             elif arg == "-with":
                 option_with = sys.argv[argnum+1:] # The rest of the args are passed to n3
                 break
@@ -424,7 +433,7 @@ Examples:
             _store = _outSink
         else:
             _metaURI = urlparse.urljoin(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
-            _store = RDFStore( _outURI+"#_gs", metaURI=_metaURI, argv=option_with)
+            _store = llyn.RDFStore( _outURI+"#_gs", metaURI=_metaURI, argv=option_with)
             workingContextURI = _outURI+ "#0_work"
             workingContext = _store.intern((FORMULA, workingContextURI))   #@@@ Hack - use metadata
 #  Metadata context - storing information about what we are doing
@@ -485,8 +494,9 @@ Examples:
                 _gotInput = 1
 
             elif arg == "-help":
-                print doCommand.__doc__
-
+                pass  # shouldn't happen
+            elif arg == "-revision":
+                pass
             elif arg == "-test": test()
             elif _lhs == "-base":
                 option_baseURI = _uri
@@ -536,12 +546,16 @@ Examples:
 
             elif _lhs == "-filter":
                 filterContext = _store.intern((FORMULA, _uri+ "#_formula"))
-                _playURI = urlparse.urljoin(_baseURI, "PLAY")  # Intermediate
-                _playContext = _store.intern((FORMULA, _playURI+ "#_formula"))
-                _store.moveContext(workingContext, _playContext)
+                _newURI = urlparse.urljoin(_baseURI, "_w_"+`self._genid`)  # Intermediate
+                self._genid = self._genid + 1
+                _newContext = _store.intern((FORMULA, _newURI+ "#_formula"))
+#                _store.moveContext(workingContext, _newContext)
 #                print "# Input filter ", _uri
                 _store.loadURI(_uri)
-                _store.applyRules(_playContext, filterContext, workingContext)
+                _store.applyRules(workingContext, filterContext, _newContext)
+                workingContext = _newContext
+                workingContextURI = _newURI
+
 
 #                if doMeta:
 #                    _step  = _step + 1
