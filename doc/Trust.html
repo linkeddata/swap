@@ -56,6 +56,8 @@ membership. In this case, Kari is the AC rep for W3C member <em>Elisa
 Communications</em>. Alan delgates to Kari the right to say who, as a emploee
 of Elisa, get access to the W3C Member Site.</p>
 
+<h3>Master Key</h3>
+
 <p>Alan's authority to define who is a W3C is represented by a digital key.
 he generates it using the command</p>
 <pre>cwm access-gen-master.n3 --think --purge &gt; access-master.private</pre>
@@ -99,11 +101,18 @@ we don't want another person to know.</p>
 <p>The log:Chaff part is to label those bits which are for deletion by the
 --purge command, just to leave the key file clean of stuff we don't want.</p>
 
-<p></p>
+<p>Kari also generates a key, which represents the authority has as Elisa's
+representative. he does this in an identical fashion, using
+access-gen-elisa.n3. The actual passing of authority happens when Kari gives
+the public part of his key to Alan, in some way secure enough for Alan to be
+sure enough it , and Alan then signs something to the effect that it is
+indeed Kari's key as AC rep for Eliza. </p>
 
 <p></p>
 
-<p>Here is the complete data flow,</p>
+<p></p>
+
+<p>Here is the complete data flow in summary.</p>
 
 <p></p>
 
@@ -114,19 +123,38 @@ we don't want another person to know.</p>
 
 <p></p>
 
-<p>The bit at the bottom shows how the picture itself (make.svg) was
-generated from the Makefile - by turning into RDF of course.  Some people
-have actually started to se RDF just because of the diagram drawing facility.
- But we hope by this stage that you will have a longer term and wider vision
-of the value of Semantic Web.</p>
+<p>The bit at the bottom shows how the picture itself, <code>make.svg</code>,
+was generated from the Makefile - via RDF of course.  Some people have
+actually started to use RDF just because of the diagram drawing facility, but
+we hope by this stage that you will have a longer term and wider vision of
+the value of Semantic Web!</p>
 
 <p></p>
 
 <p></p>
-
-<p>@@@</p>
 
 <h2>Conclusion</h2>
+
+<p></p>
+
+<p>You will notice that in this example we didn't use a PKI cerificates
+looked up in a x.509 hierarchy. </p>
+
+<p>We could have.  We would have used an RDF interface to PKI.</p>
+
+<p>There are two interesting reasons not to.  One is that in designing the
+system fram scratch we defined exactly how it works. We defined what
+information Alan signed about Kari, without involvng any other information
+actually identifying Kari as an individual person in the world.  We don't
+need to know Kari's social security number with the Finnish government. The
+key represents Kari in the role he plays in this system. Because we are using
+RDF, we can put whatever information into the certificate we like. We don't
+have to worry about extending the certificate format. Because what we are
+doing concerns and represents the realtionships between the involved social
+entities without any external authority, it is more weblike in nature: we are
+freer to model the actual social trust system we use.</p>
+
+<p>The other interesting point is that the finish system is in fact the</p>
 
 <p></p>
 
