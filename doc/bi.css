@@ -55,10 +55,10 @@ div.issue {
 
 h2  { margin-left: 12pt; background: #00eeee; color: black; font-size: 18pt;
 	text-align: right;}
-table { margin-left: 100;  width: 85%;}
-table.wide { margin-left: 20; font-size: 9pt; width: 95%;}
+table { margin-left: 10em;  width: 85%;}
+table.wide { margin-left: 2em; font-size: 9pt; width: 95%;}
 
-.ns  { text-align: left;  font-family: monospace; align: top;  }
+.ns  { text-align: left;  font-family: monospace;  }
 
 th { margin-left: 12pt; text-align: right; background: #ffffff; }
 td { margin-left: 12pt; border: 4pt; border-color: #555555;
