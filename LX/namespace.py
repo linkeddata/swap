@@ -106,7 +106,8 @@ class Namespace:
 
 ns = NamespaceCluster()
 ns.rdf  = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns",
-                   ["type", "nil", "first", "rest", "XMLLiteral"])
+                   ["type", "nil", "first", "rest", "XMLLiteral",
+                    "Property"])
 ns.rdfs = Namespace("http://www.w3.org/2000/01/rdf-schema",
                    ["Resource", "Class", "Datatype", "seeAlso",
                     "label", "comment", "subClassOf", "isDefinedBy",
@@ -126,7 +127,10 @@ if __name__ == "__main__":
 
 
 # $Log$
-# Revision 1.13  2003-09-08 17:30:44  sandro
+# Revision 1.14  2003-09-10 20:13:25  sandro
+# added rdf:Property
+#
+# Revision 1.13  2003/09/08 17:30:44  sandro
 # added missing exception class
 #
 # Revision 1.12  2003/09/06 04:49:00  sandro
