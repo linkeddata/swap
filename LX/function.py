@@ -1,0 +1,7 @@
+
+
+
+
+def Function:
+
+    def isFirstOrderConnective()

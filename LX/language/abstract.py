@@ -1,5 +1,6 @@
 """
 
+All this has been integrated into expr.py, I think....
 
 """
 __version__ = "$Revision$"
@@ -47,17 +48,28 @@ class Serializer:
         return result
 
     def serializeFormula(self, f, parentPrecedence=9999, linePrefix=""):
+        """Return a string corresponding to the given formula.
+
+        Suitable for recursive use.  If told that the parent's
+        operator has a higher precedence [looseness] than the operator
+        (if any) here, it can skip outer parentheses.
+
+        When newlines are needed, the linePrefix is used.
+
+        @@@ line width?
+        """
+        
         #print "Abstract SerializeFormula "+`f`
 
-        if f[0] == LX.ATOMIC_SENTENCE:
-            result = "rdf("
-            for term in f[1:]:
-                result = result + self.serializeTerm(term, 9999) + ", "
-                #result = result + "[[" +`term`+"]]   "
-            result = result[0:-2] + ")"
-            return result
+        #        if f[0] == LX.ATOMIC_SENTENCE:
+        #            result = "rdf("
+        #            for term in f[1:]:
+        #                result = result + self.serializeTerm(term, 9999) + ", "
+        #                #result = result + "[[" +`term`+"]]   "
+        #            result = result[0:-2] + ")"
+        #            return result
         
-        op = self.opTable[f[0]]
+        op = self.opTable[f.function]
         prec = op[0]
         form = op[1]
         text = op[2]
@@ -67,24 +79,24 @@ class Serializer:
         if prec >= parentPrecedence:
             prefix = "("; suffix = ")"
         if form == "xfx" or form == "xfy" or form == "yfx":
-            assert(len(f) == 3)
-            left = self.serializeFormula(f[1], prec, linePrefix)
-            right = self.serializeFormula(f[2], prec, linePrefix)
+            assert(len(f.all) == 3)
+            left = self.serializeFormula(f.all[1], prec, linePrefix)
+            right = self.serializeFormula(f.all[2], prec, linePrefix)
             if 1 or (len(left) + len(right) < 50):
                 result = prefix + left + text + right + suffix
             else:
                 linePrefix = "  " + linePrefix
-                left = self.serializeFormula(f[1], prec, linePrefix)
-                right = self.serializeFormula(f[2], prec, linePrefix)
+                left = self.serializeFormula(f.all[1], prec, linePrefix)
+                right = self.serializeFormula(f.all[2], prec, linePrefix)
                 result = (prefix + "\n" + linePrefix + left + text +
                           "\n" + linePrefix + right + suffix)
         elif form == "fxy":
             assert(len(f) == 3)
-            result = (prefix + text + self.serializeFormula(f[1], prec, linePrefix)
-                      + " " + self.serializeFormula(f[2], prec, linePrefix) + suffix)
+            result = (prefix + text + self.serializeFormula(f.all[1], prec, linePrefix)
+                      + " " + self.serializeFormula(f.all[2], prec, linePrefix) + suffix)
         elif form == "fx" or form == "fy":
-            assert(len(f) == 2)
-            result = prefix + text + self.serializeFormula(f[1], prec, linePrefix)
+            assert(len(f.all) == 2)
+            result = prefix + text + self.serializeFormula(f.all[1], prec, linePrefix)
         else:
             raise RuntimeError, "unknown form in opTable"
         return result
@@ -105,7 +117,15 @@ class Serializer:
 
     
 # $Log$
-# Revision 1.3  2002-10-02 22:56:35  sandro
+# Revision 1.4  2003-01-29 06:09:18  sandro
+# Major shift in style of LX towards using expr.py.  Added some access
+# to otter, via --check.  Works as described in
+# http://lists.w3.org/Archives/Public/www-archive/2003Jan/0024
+# I don't like this UI; I imagine something more like --engine=otter
+# --think, and --language=otter (instead of --otterDump).
+# No tests for any of this.
+#
+# Revision 1.3  2002/10/02 22:56:35  sandro
 # Switched cwm main-loop to keeping state in llyn AND/OR an LX.formula,
 # as needed by each command-line option.  Also factored out common
 # language code in main loop, so cwm can handle more than just "rdf" and

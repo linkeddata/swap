@@ -44,10 +44,10 @@ class ListDescriber:
         else:
             term = ladder.kb.newExistential()
             
-        ladder.kb.add(LX.Triple(term, LX.rdfns.first,
-                                ladder.describer.describe(first, ladder)))
-        ladder.kb.add(LX.Triple(term, LX.rdfns.rest,
-                                ladder.describer.describe(rest, ladder)))
+        ladder.kb.add(term, LX.rdfns.first,
+                      ladder.describer.describe(first, ladder))
+        ladder.kb.add(term, LX.rdfns.rest,
+                      ladder.describer.describe(rest, ladder))
         return term
 
 class CombinedDescriber:
@@ -99,7 +99,15 @@ def _test():
 if __name__ == "__main__": _test()
 
 # $Log$
-# Revision 1.4  2002-10-03 16:13:02  sandro
+# Revision 1.5  2003-01-29 06:09:18  sandro
+# Major shift in style of LX towards using expr.py.  Added some access
+# to otter, via --check.  Works as described in
+# http://lists.w3.org/Archives/Public/www-archive/2003Jan/0024
+# I don't like this UI; I imagine something more like --engine=otter
+# --think, and --language=otter (instead of --otterDump).
+# No tests for any of this.
+#
+# Revision 1.4  2002/10/03 16:13:02  sandro
 # some minor changes to LX-formula stuff, but it's still broken in ways
 # that don't show up on the regression test.
 #

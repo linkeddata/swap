@@ -172,19 +172,26 @@ class CompoundExpr(Expr):
                                linePrefix="",
                                width=80):
 
-        op = operators[self.__function]
-        prec = op[0]
-        form = op[1]
-        text = op[2]
-        prefix = ""; suffix = ""
+        try:
+            op = operators[self.__function]
+            prec = op[0]
+            form = op[1]
+            text = op[2]
+            prefix = ""; suffix = ""
+        except KeyError:
+            return self.getNameInScope(nameTable)
 
         # my first attempt at writing this, so I'm not thinking about
         # the difference between "x" and "y", so we'll get some extra
-        # parens
+        # parens.    It's pretty lousy code right now, but it's important
+        # to do someday because it's damn hard to read complex expressions
+        # and this should provide pretty-printing.
         
         if prec >= parentLooseness:
             prefix = "("; suffix = ")"
-        if form == "xfx" or form == "xfy" or form == "yfx":
+        if callable(form):
+            result = prefix+apply(form, [text, self, nameTable, operators, prec, linePrefix])+suffix
+        elif form == "xfx" or form == "xfy" or form == "yfx":
             assert(len(self.__args) == 2)
             left = self.__args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
             right = self.__args[1].serializeWithOperators(nameTable, operators, prec, linePrefix)
@@ -311,7 +318,15 @@ if __name__ == "__main__": _test()
 
 
 # $Log$
-# Revision 1.5  2003-01-08 12:38:38  sandro
+# Revision 1.6  2003-01-29 06:09:18  sandro
+# Major shift in style of LX towards using expr.py.  Added some access
+# to otter, via --check.  Works as described in
+# http://lists.w3.org/Archives/Public/www-archive/2003Jan/0024
+# I don't like this UI; I imagine something more like --engine=otter
+# --think, and --language=otter (instead of --otterDump).
+# No tests for any of this.
+#
+# Revision 1.5  2003/01/08 12:38:38  sandro
 # Added serializeWithOperators(), taken from the old language/abstract.py
 #
 # Revision 1.4  2002/10/03 16:13:02  sandro

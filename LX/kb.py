@@ -6,6 +6,11 @@ __version__ = "$Revision$"
 # $Id$
 
 import LX
+import re
+defaultScope = {
+    ("legal",): re.compile(r"^[a-zA-Z0-9_]+$"),
+    ("hint",): re.compile(r"(?:\/|#)([a-zA-Z0-9_]*)/?$")
+    }
 
 class KB(list):
     """A Knowledge Base, a list of implicitely conjoined sentences.
@@ -31,11 +36,52 @@ class KB(list):
         self.exivars = []
         self.univars = []
         self.exIndex = 0
+        self.interpretation = { }
 
     def clear(self):
         self.__init__()
         self[:] = []
-        
+
+    def __str__(self):
+        scope = defaultScope.copy()
+        result = "\nKB Contents:"
+        result+= "\n  exivars: "+", ".join(map(LX.expr.getNameInScope, self.exivars, [scope] * len(self.exivars)))
+        result+= "\n  univars: "+", ".join(map(LX.expr.getNameInScope, self.univars, [scope] * len(self.univars)))
+        result+= "\n  interpretation: "
+        for (key,valueList) in self.interpretation.iteritems():
+            result+="\n     %s -->  %s"%(key.getNameInScope(scope), ", ".join(valueList))
+        result+= "\n  formulas: "
+        result+= "\n     "
+        result+= "\n     ".join(map(LX.expr.getNameInScope, self, [scope] * len(self)))
+        result+= "\n"
+        #result+= "\n  asFormulaString: "+self.asFormulaString()+"\n"
+        #result+= "\n  asFormula:       "+str(self.asFormula())+"\n"
+        return result
+    
+    def interpret(self, term, object):
+        try:
+            self.interpretation[term].append(object)
+        except KeyError:
+            self.interpretation[term] = [object]
+
+    def asFormulaString(self):
+        scope = defaultScope.copy()
+        result = ""
+        if self.exivars: result += "exists "+" ".join(map(LX.expr.getNameInScope, self.exivars, [scope] * len(self.exivars)))
+        if self.univars: result += "all "   +" ".join(map(LX.expr.getNameInScope, self.univars, [scope] * len(self.univars)))
+        result += " (" + " &\n    ".join(map(LX.expr.getNameInScope, self, [scope] * len(self))) + ")"
+        return result
+
+    def asFormula(self):
+        result = self[0]
+        for s in self[1:]:
+            result = LX.fol.AND(result, s)
+        for v in self.univars:
+            result = LX.fol.FORALL(v, result)
+        for v in self.exivars:
+            result = LX.fol.EXISTS(v, result)
+        return result
+       
     def prep(kb):
         """return a KB if possible, perhaps just the argument; throw
         an error we can't make a KB out of this thing"""
@@ -45,8 +91,13 @@ class KB(list):
         raise RuntimeError, "Not convertable to a KB"
     prep = staticmethod(prep)
 
-    def add(self, formula):
-        assert(isinstance(formula, LX.Formula))
+    def add(self, formula, p=None, o=None):
+        if (p):
+            self.append(LX.fol.RDF(s,p,o))
+            return
+        # assert(isinstance(formula, LX.Formula))
+        assert(LX.fol.isFirstOrderFormula(formula))
+        # could check that all its openVars are in are vars
         self.append(formula)
 
     def addFrom(self, kb):
@@ -57,11 +108,8 @@ class KB(list):
         self.exIndex = self.exIndex + kb.exIndex
 
     def newExistential(self, name=None):
-        if name is None:
-            name = "g" + str(self.exIndex)
-            self.exIndex = self.exIndex + 1
-        # @@@ check to make sure name not used!
-        v = LX.ExiVar(name)
+        if name is None: name = "g"
+        v = LX.fol.ExiVar(name)
         self.exivars.append(v)
         return v
 
@@ -91,12 +139,17 @@ class KB(list):
         self.clear()
         self.addFrom(flat)
 
+    def serializeWithOperators(self, scope, ops):
+        result = ""
+        for f in self:
+            result = result + f.serializeWithOperators(scope, ops) + ".\n"
+        result = result[0:-1]
+        return result
+
     def isSelfConsistent(self):
         # should also try mace, icgns, etc...
-        s = LX.language.otter.Serializer()
-        str = s.serialize(self)
         try:
-            proof = LX.engine.otter.run(str)
+            proof = LX.engine.otter.run(self)
             return 0
         except LX.engine.otter.SOSEmpty:
             return 1
@@ -104,6 +157,9 @@ class KB(list):
 
     def load(self, uri, allowedLanguages=["*"]):
         """NOT IMPLEMENTED: Add the formal meaning of identified document.
+
+        @@@   languageOverrides={}
+           a mapping from string->string, overriding self-identificat.
 
         In the simplest case, this might mean opening a local file,
         which we know to contain n3, read the contents, and parse them
@@ -140,7 +196,7 @@ class KB(list):
                  expression's meaning and separable metadata. 
 
         """
-        
+
 def _test():
     import doctest, expr
     return doctest.testmod(expr) 
@@ -149,7 +205,15 @@ if __name__ == "__main__": _test()
 
  
 # $Log$
-# Revision 1.4  2002-10-03 16:13:02  sandro
+# Revision 1.5  2003-01-29 06:09:18  sandro
+# Major shift in style of LX towards using expr.py.  Added some access
+# to otter, via --check.  Works as described in
+# http://lists.w3.org/Archives/Public/www-archive/2003Jan/0024
+# I don't like this UI; I imagine something more like --engine=otter
+# --think, and --language=otter (instead of --otterDump).
+# No tests for any of this.
+#
+# Revision 1.4  2002/10/03 16:13:02  sandro
 # some minor changes to LX-formula stuff, but it's still broken in ways
 # that don't show up on the regression test.
 #

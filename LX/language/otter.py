@@ -30,9 +30,6 @@ class Serializer(LX.language.abstract.Serializer):
         
 
     def serializeFormula(self, f, parentPrecedence=9999, linePrefix=""):
-        if not self.recursing:
-            f.nameVars(self.overrideTerms)
-            self.recursing = 1
         if f[0] in (LX.ALL, LX.EXISTS):
             val = (self.quantOpName[f.operator] + " " +
                    " ".join([self.serializeTerm(x, 9999) for x in f.openVars()]) +
@@ -74,7 +71,15 @@ if __name__ =='__main__':
     test()
 
 # $Log$
-# Revision 1.3  2002-10-03 16:13:03  sandro
+# Revision 1.4  2003-01-29 06:09:18  sandro
+# Major shift in style of LX towards using expr.py.  Added some access
+# to otter, via --check.  Works as described in
+# http://lists.w3.org/Archives/Public/www-archive/2003Jan/0024
+# I don't like this UI; I imagine something more like --engine=otter
+# --think, and --language=otter (instead of --otterDump).
+# No tests for any of this.
+#
+# Revision 1.3  2002/10/03 16:13:03  sandro
 # some minor changes to LX-formula stuff, but it's still broken in ways
 # that don't show up on the regression test.
 #

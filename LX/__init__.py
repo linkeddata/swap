@@ -27,9 +27,24 @@ rdfns  = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns",
 lxns   = Namespace("http://www.w3.org/2002/08/LX/RDF/v2", strict=0)
 
 
+class URIRef2(str):
+    def __str__(self):
+        return "<"+self+">"
+
+class StrLit(str):
+    def __str__(self):
+        return "\""+self+"\""
 
 # $Log$
-# Revision 1.3  2002-08-29 21:02:13  sandro
+# Revision 1.4  2003-01-29 06:09:18  sandro
+# Major shift in style of LX towards using expr.py.  Added some access
+# to otter, via --check.  Works as described in
+# http://lists.w3.org/Archives/Public/www-archive/2003Jan/0024
+# I don't like this UI; I imagine something more like --engine=otter
+# --think, and --language=otter (instead of --otterDump).
+# No tests for any of this.
+#
+# Revision 1.3  2002/08/29 21:02:13  sandro
 # passes many more tests, esp handling of variables
 #
 # Revision 1.2  2002/08/29 16:39:55  sandro

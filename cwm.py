@@ -54,6 +54,7 @@ import llyn
 import LX
 import LX.rdf
 import LX.engine.llynInterface 
+import LX.engine.otter
 
 cvsRevision = "$Revision$"
 
@@ -590,13 +591,20 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 need(_store); touch(_store)
                 _store.think(workingContext)
 
+            elif arg == "-lxkbdump":
+                need(lxkb)
+                print lxkb
+
+            elif arg == "-lxfdump":
+                need(lxkb)
+                print lxkb.asFormula()
+
             elif arg == "-otterDump":
                 need(lxkb)
-                s = LX.language.otter.Serializer()
-                s.addAbbreviation("rdf_", "http://www.w3.org/1999/02/22-rdf-syntax-ns")
-                s.addAbbreviation("daml_", "http://www.daml.org/2001/03/daml+oil")
-                s.addAbbreviation("", workingContext.resource.uri)
-                print s.serialize(lxkb)
+                # s.addAbbreviation("rdf_", "http://www.w3.org/1999/02/22-rdf-syntax-ns")
+                # s.addAbbreviation("daml_", "http://www.daml.org/2001/03/daml+oil")
+                # s.addAbbreviation("", workingContext.resource.uri)
+                print LX.engine.otter.serialize(lxkb)
 
             elif arg == "-check":
                 need(lxkb)
@@ -604,8 +612,25 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 # is tautological?
                 if lxkb.isSelfConsistent():
                     print "Consistency proven."
+                    print "for details try:  cat ,lx.engine.otter.fromOtter"
                 else:
                     print "Contradiction found."
+                    print "for details try:  cat ,lx.engine.otter.fromOtter"
+
+            elif _lhs == "-prove":
+
+                # code copied from -filter without really being understood  -sdh
+                _tmpstore = llyn.RDFStore( _outURI+"#_g", metaURI=_metaURI, argv=option_with, crypto=option_crypto)
+
+                tmpContext = _tmpstore.intern((FORMULA, _uri+ "#_formula"))
+                _newURI = join(_baseURI, "_w_"+`_genid`)  # Intermediate
+                _genid = _genid + 1
+                _newContext = _tmpstore.intern((FORMULA, _newURI+ "#_formula"))
+                _tmpstore.loadURI(_uri)
+
+                targetkb = LX.KB()
+                LX.engine.llynInterface.toLX(_tmpstore, _newContext, kb=targetkb, kbMode=1)
+                print targetkb
 
             elif arg == "-flatten":
                 need(lxkb); touch(lxkb)
@@ -682,7 +707,8 @@ def need(object):
             if object is lxkb:
                 #print "# copying _store to lxkb"
                 lxkb.clear()
-                LX.engine.llynInterface.toLX(_store, workingContext, kb=lxkb)
+                LX.engine.llynInterface.toLX(_store, workingContext, kb=lxkb,
+                                             kbMode=1)
                 del(_store.touched)
             else:
                 pass   # lxkb is out of date, but not needed yet

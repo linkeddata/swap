@@ -1,7 +1,7 @@
 import popen2, time, select, signal, os, string
 import tempfile
 import sys
-
+import LX.fol
 
 class Error(RuntimeError):
     pass
@@ -23,15 +23,148 @@ class SOSEmpty(NoProofFound):
     for a proof"""
     pass
 
+def quant(text, expr, nameTable, operators, prec, linePrefix):
+    # could use gatherLeft
+    left = expr.args[0].serializeWithOperators(nameTable, operators, 9999, linePrefix)
+    right = expr.args[1].serializeWithOperators(nameTable, operators, 9999, linePrefix)
+    return text+left+" ("+right+")"
+    
+operators = {
+    LX.fol.FORALL:    [ 1000, quant, "all " ],
+    LX.fol.EXISTS:    [ 1000, quant, "exists " ],
+    LX.fol.IMPLIES:   [ 800, "xfx", " -> " ],
+    LX.fol.MEANS:     [ 800, "xfx", " <-> " ],
+    LX.fol.OR:        [ 790, "xfy", " | " ],
+    LX.fol.AND:       [ 780, "xfy", " & " ],
+    LX.fol.NOT:       [ 710, "fx", " -" ],
+    }
+
+def univar(count):
+    try:
+        return ["A", "B", "C", "D", "E", "F", "G", "H"][count]
+    except IndexError:
+        pass
+    return "X"+str(count-8)
+
+def exivar(count):
+    try:
+        return ["s", "t", "u"][count]
+    except IndexError:
+        pass
+    return "s"+str(count-3)
+
+# Obviously there should be some more general mechanism here, but
+# in some ways (like using "_" for prefixing) this is otter specific....
+
+ns = {
+    "http://www.w3.org/1999/02/22-rdf-syntax-ns": "rdf",
+    "http://www.w3.org/2000/01/rdf-schema":"rdfs",
+    "http://www.w3.org/2000/10/swap/log": "log",
+    "http://www.daml.org/2001/03/daml+oil": "daml",
+    "http://www.w3.org/2002/03owlt/ontAx": "ontAx",
+    }
+
+# borrowed & modified from urllib.py
+safe = ('ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        'abcdefghijklmnopqrstuvwxyz'
+        '0123456789' '_')
+
+def alnumEscape(s):
+    res = list(s)
+    for i in range(len(res)):
+        c = res[i]
+        if c not in safe:
+            res[i] = '_%02X' % ord(c)
+    return ''.join(res)
+
+constCount = 0
+
+def prename(f, names, counter):
+    global ns
+    global constCount
+    if names.has_key(f): return
+    if f.isAtomic():
+        #print "What to do with:", f
+        result = None
+        if isinstance(f, LX.fol.Constant):
+            s = str(f)
+            try:
+                (pre,post) = s.split("#")
+                result = ns[pre]+"_"+post
+            except KeyError:
+                ns[pre] = "ns"+str(len(ns))
+                print "# autoprefix %s %s" % (ns[pre], pre)
+                result = ns[pre]+"_"+post
+            except ValueError:
+                # original...
+                result = "'<"+str(f)+">'"
+                # stricter, for mace
+                #   result = "uri_"+alnumEscape(str(f))
+                # still stricter, mace is a pain
+                #result = "const"+str(constCount);
+                #constCount += 1
+        elif isinstance(f, LX.fol.UniVar):
+            result = univar(counter["u"])
+            counter["x"].append(result)
+            counter["u"] += 1
+        elif isinstance(f, LX.fol.ExiVar):
+            result = exivar(+counter["e"])
+            counter["e"] += 1
+        names[f] = result
+    else:
+        for t in f.args:
+            prename(t, names, counter)
+        
+def serialize(expr):
+    #  "asFormula()" used until we have    asIfInwarded  or something
+    #print expr
+    #print "---------------"
+    names = {}
+    counter = { "u":0, "e":0, "x":[] }
+    if expr.exivars:
+        formula = expr.asFormula()
+    if isinstance(expr, LX.KB):
+        result = ""
+        for f in expr:
+            # Let's do separate namings for each formula, although
+            # this is a bit questionable.  (ns stuff is global, still).
+            names = {}
+            counter = { "u":0, "e":0, "x":[] }
+            prename(f, names, counter)
+            if (counter["x"]):
+                result += "\nall "
+                for x in counter["x"]:
+                    result += x+" "
+                result += "(\n   "
+            result += f.serializeWithOperators(names, operators)
+            if (counter["x"]):
+                result += "\n)"
+            result += ".\n"
+        result = result[:-1]
+        return result
+    else:
+        prename(formula, names, counter)
+        return(formula.serializeWithOperators(names, operators))
+
 def run(string, fileBase=",lx.engine.otter"):
-    # change to also take KB/Sentence some day
+    """Run otter on this formula/kb and see what it does.
+
+    >>> from LX.engine.otter import *
+    >>> run("a & -a.")
+    leaving ,lx.engine.otter.fromOtter
+    ['maxproofs']
+    """
+    if not isinstance(string, str):
+        string = serialize(string)
     filename = fileBase+".toOtter"
     out = fileBase+".fromOtter"
     f=open(filename, "w")
-    f.write("set(auto).")
+    f.write("set(auto).\n")
+    f.write("set(prolog_style_variables).\n")
     f.write("clear(control_memory).\n")
     f.write("formula_list(usable).\n")
     f.write(string)
+    if not string.endswith("."): f.write(".")
     f.write("\nend_list.")
     f.close()
     return runOtter(filename, out)
@@ -149,3 +282,4 @@ end_of_list.
 #      return proofs
 #  
 #  
+

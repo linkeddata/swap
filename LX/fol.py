@@ -13,13 +13,8 @@ class Variable(LX.expr.AtomicExpr):
     This is the kind of variable that can range over first-order
     kind of stuff, not predicates, functions, etc.
 
-    The uriref really belongs in metadata -- it's the name some people
-    are using to talk about this variable; those people should keep
-    track of it, I think, not us.
     """
-    def __init__(self, name=None, uriref=None):
-        self.name = name
-        self.value = uriref
+    pass
 
 class ExiVar(Variable):
     pass
@@ -97,14 +92,14 @@ class ExistentialQuantifier(Quantifier):
 
     def checkArgs(self, args):
         assert(len(args) == 2)
-        assert(isInstance(args[0], LX.expr.ExiVar))
+        assert(isinstance(args[0], ExiVar))
         assert(isFirstOrderFormula(args[1]))
 
-class UniveralQuantifier(Quantifier):
+class UniversalQuantifier(Quantifier):
 
     def checkArgs(self, args):
         assert(len(args) == 2)
-        assert(isInstance(args[0], LX.expr.UniVar))
+        assert(isinstance(args[0], UniVar))
         assert(isFirstOrderFormula(args[1]))
 
 
@@ -180,6 +175,8 @@ def isFirstOrderFormula(expr):
     """Check whether this is a "Formula".
 
     Return false if it's not a Formula *or* it's not first-order.
+
+    or raise exception if not a formula...???
     """
     if expr.isAtomic():
         if isinstance(expr, Proposition):
@@ -192,7 +189,13 @@ def isFirstOrderFormula(expr):
                 if not isFirstOrderTerm(arg): return 0
             return 1
         else:
-            if isinstance(expr.function, Connective):
+            if isinstance(expr.function, ExistentialQuantifier):
+                assert(isinstance(expr.args[0], ExiVar))
+                return isFirstOrderFormula(expr.args[1])
+            elif isinstance(expr.function, UniversalQuantifier):
+                assert(isinstance(expr.args[0], UniVar))
+                return isFirstOrderFormula(expr.args[1])
+            elif isinstance(expr.function, Connective):
                 for arg in expr.args:
                     if not isFirstOrderFormula(arg): return 0
                 return 1
@@ -227,8 +230,18 @@ def getOpenVariables(expr):
 
 AND = BinaryConnective("and")
 OR = BinaryConnective("or")
-LX.expr.opTable["and"] = AND
-LX.expr.opTable["or"] = OR
+MEANS = BinaryConnective("means")
+IMPLIES = BinaryConnective("implies")
+NOT = UnaryConnective("not")
+FORALL = UniversalQuantifier("forall")
+EXISTS = ExistentialQuantifier("exists")
+
+LX.expr.pythonOperators["and"] = AND
+LX.expr.pythonOperators["or"] = OR
+
+# this is our special predicate!  Oh yeah!
+RDF = Predicate("rdf")
+
 
 def _test():
     import doctest, fol
@@ -238,7 +251,15 @@ def _test():
 if __name__ == "__main__": _test()
 
 # $Log$
-# Revision 1.2  2002-10-03 16:13:02  sandro
+# Revision 1.3  2003-01-29 06:09:18  sandro
+# Major shift in style of LX towards using expr.py.  Added some access
+# to otter, via --check.  Works as described in
+# http://lists.w3.org/Archives/Public/www-archive/2003Jan/0024
+# I don't like this UI; I imagine something more like --engine=otter
+# --think, and --language=otter (instead of --otterDump).
+# No tests for any of this.
+#
+# Revision 1.2  2002/10/03 16:13:02  sandro
 # some minor changes to LX-formula stuff, but it's still broken in ways
 # that don't show up on the regression test.
 #
