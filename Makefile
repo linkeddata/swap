@@ -78,3 +78,26 @@ SemEnglish.html: SemEnglish.g gram2html.py
 log.rdf: log.n3
 	$(PYTHON) cwm.py log.n3 --rdf > log.rdf
 
+
+#######
+
+GET=GET
+
+# cf
+# W3C mailing list search results in RDF
+#http://lists.w3.org/Archives/Public/www-rdf-interest/2003Jul/0206.html
+
+bugstatus: bugsToDo.ics
+
+CWM=$(PYTHON) cwm.py
+
+bugsToDo.ics: bugsToDo.cal3
+	PYTHONPATH=. $(PYTHON) pim/toIcal.py bugsToDo.cal3 >$@
+
+
+bugsToDo.cal3: n3bugs.rdf util/bugstatus.n3
+	$(CWM) util/bugstatus.n3 --think --n3 --data >$@
+
+
+n3bugs.rdf:
+	GET -H Accept:\ application/rdf+xml 'http://www.w3.org/Search/Mail/Public/advanced_search?keywords=n3bugs&resultsperpage=1000&sortby=date&index-grp=Public%2FFULL&index-type=t&type-index=www-archive' >$@
