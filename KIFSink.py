@@ -1,5 +1,18 @@
-"""KIFSink.n3 -- a KIF sink for cwm
+"""KIFSink.py -- a KIF sink for swap/cwm
 
+Share and Enjoy. Open Source license:
+Copyright (c) 2001 W3C (MIT, INRIA, Keio)
+http://www.w3.org/Consortium/Legal/copyright-software-19980720
+$Id$
+see log at end
+
+References
+
+  Knowledge Interchange Format
+  draft proposed American National Standard (dpANS)
+  NCITS.T2/98-004
+  http://logic.stanford.edu/kif/dpans.html
+  Thu, 25 Jun 1998 22:31:37 GMT
 """
 __version__="$Id$"
 
@@ -18,7 +31,7 @@ class Sink(notation3.RDFSink):
 
         x, ns = nspr
         w = self._write
-        w('(prefix "%s" "%s")\n' % (pfx, ns))
+        w('(prefix-kludge "%s" "%s")\n' % (pfx, ns))
         
     def startDoc(self):
         self._ex = []
@@ -125,7 +138,8 @@ class Sink(notation3.RDFSink):
             w("^ ")
             self._writeScope(t[1], vmap, level + 1)
         elif t[0] is notation3.LITERAL:
-            w('"%s"' % t[1]) #@@ quoting
+            lit = re.sub(r'[\"\\]', escchar, t[1]) # escape newlines? hmm...
+            w('"%s"' % lit)
         else:
             raise RuntimeError, "not implemented"
         
@@ -141,7 +155,8 @@ class Sink(notation3.RDFSink):
         return uri2word(i)
 
 def uri2word(i):
-    return re.sub(r'[^a-zA-Z0-9]', escchar, i)
+    # special ::= " | # | ' | ( | ) | , | \ | ^ | ` | :
+    return re.sub(r'[\"\#\'\(\)\,\\\^\`\:]', escchar, i)
 
 def escchar(matchobj):
     return "\\%s" % matchobj.group(0)
@@ -166,3 +181,10 @@ def _moreVarNames(outermap, uris, level):
                 break
     return m
 
+
+# $Log$
+# Revision 1.4  2001-09-11 19:24:22  connolly
+# fixed string quoting
+# escape just specials in words
+# added Open Source license details, log at end
+#
