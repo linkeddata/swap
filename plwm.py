@@ -4,12 +4,85 @@
      plwm (pronounced plume) is a plugable rewrite of cwm.  it should
      be a drop-in replacement, eventually renamed cwm.py.
 
+     does --n3  mean the new default language is n3, or the new
+     default parser is Notation3 ?   I think it's the language,
+     which means (1) you need a parser which can handle it, and
+     (2) you need to tell the parser that's the language.
+     
 """
 
-import ArgHandler;
-import plugins;
+import sys
+import ArgHandler
+import hotswap
+
+# Import ourself, so our classes are known as plwm.Foo, not
+# just __main__.Foo.   This is important since hotswap 
+# compares class names to determine interface conformance.
+import plwm
 
 class NotImplented(RuntimeError):
+    pass
+
+################################################################
+##
+##  The basic interfaces implemented by the hotswap modules
+##  we load and use.
+##
+
+class Store:
+    """
+    A passive repository for structured data.   See KB.
+    """
+    pass
+
+class Opener:
+    """
+    A general communications driver which can establish
+    read and write connections to various external storage
+    and processing facilities.
+    """
+    pass
+
+class Engine:
+    """
+    A server (passive) object which works with a Store, potentially
+    doing complex queries and inference.  See KB.
+    """
+    pass
+
+class KB:
+    """
+    The combination of a Store and an Engine.  Sometimes it makes more
+    sense to treat the pair as one unit; sometimes it makes to
+    consider them separately.  
+    """
+    pass
+
+class Parser:
+    """
+    An active (client) object which reads from a stream (produced
+    by an Opener) and writes to a Store.
+    """
+    pass
+
+class Serializer:
+    """
+    A passive (server) object which receives content like a Store but
+    instead of keeping it, write it out to an output stream.
+    """
+    pass
+
+class Pump:
+    """
+    An active (client) object which queries a KB and sends the results
+    to a Receiver (Store or Serializer).
+    """
+    pass
+
+class Receiver:
+    """
+    Something to which you can send structured information.
+    """
     pass
 
 ################################################################
@@ -148,32 +221,50 @@ class MyArgHandler(ArgHandler.ArgHandler):
         raise NotImplemented
 
     def handle__preplug(self, location):
-        """prepend this location to the list of plugins
+        """prepend this location to the list of hotswap modules
         """
-        plugins.prepend(location)
+        hotswap.prepend(location)
 
     def handle__postplug(self, location):
-        """append this location to the list of plugins
+        """append this location to the list of hotswap modules
         """
-        plugins.append(location)
+        hotswap.append(location)
 
     def handle__unplug(self, location):
-        """remove this location from the list of plugins
+        """remove this location from the list of hotswap modules
         """
-        plugins.remove(location)
+        hotswap.remove(location)
+
+    def handleExtraArgument(self, arg):
+        parser = hotswap.get(plwm.Parser)
+        ih = hotswap.get(plwm.Opener)
+        store = hotswap.get(plwm.Store)
+        stream = ih.open(arg)
+        parser.parse(stream, store)
+
+    def handleNoArgs(self):
+        self.handleExtraArgument("-")
 
 ################################################################
     
 if __name__ == "__main__":
+    # should pass some extra help text...
     a = MyArgHandler(program="plwm",
                      version="$Id$",
                      uri="http://www.w3.org/2000/10/swap/doc/cwm")
-    a.run()
-else:
-    raise RuntimeError, "this is not a module"
+
+    try:
+        a.run()
+    except hotswap.NoMatchFound, e:
+        print e
+        sys.exit(1)
+
 
 # $Log$
-# Revision 1.2  2003-04-02 20:53:13  sandro
+# Revision 1.3  2003-04-03 04:51:49  sandro
+# fairly stable in skeletal state
+#
+# Revision 1.2  2003/04/02 20:53:13  sandro
 # Added skeletal plugin manager
 #
 # Revision 1.1  2003/04/02 20:43:22  sandro
