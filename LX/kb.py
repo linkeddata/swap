@@ -1,4 +1,11 @@
 """Provides the KB class.
+
+Should be called KB.py, ... but we can't rename like that without
+messing up windows CVS users.
+
+KB() should perhaps be available just from "import LX", but I don't
+know how to make that work without loop problems.
+
 """
 __version__ = "$Revision$"
 # $Id$
@@ -12,6 +19,8 @@ import urllib
 import LX.language
 import pluggable
 import LX.nodepath
+import LX.loader
+from LX.namespace import ns
 
 class UnsupportedDatatype(RuntimeError):
     pass
@@ -56,6 +65,7 @@ class KB(list, pluggable.Store):
         self.nodesAreCurrent = 1
         self.nicknames = { }
         self.firstOrder = 0
+        self.reporter = LX.reporter.theNullReporter
 
     def clear(self):
         self.__init__()
@@ -121,20 +131,18 @@ class KB(list, pluggable.Store):
                 #self.addSupportingTheory(e)
             return
         try:
-            pair = LX.logic.valuesForConstants[term]
-        except KeyError:
+            lexrep = term.lexrep
+            dturi = term.datatype
+        except AttributeError:
             return
 
-        (lexrep, dturi) = pair
+        pair = (lexrep, dturi)
 
         if pair in self.__datatypeValuesChecked: return
 
         #print "DTURI", dturi
-        if dturi == "::native":
-            # ignore for now....
-            return
         
-        if dturi == "http://www.w3.org/2001/XMLSchema#nonNegativeInteger":
+        if dturi == ns.xsd.nonNegativeInteger:
             val = int(lexrep)
             assert(val != 0)   # would have been handled in LX.logic
             assert(val > 0)
@@ -268,74 +276,16 @@ class KB(list, pluggable.Store):
         for uri in loadable.keys():
             self.load(uri)
             
-
-    def load(self, uri, allowedLanguages=["*"]):
-        """Add the formal meaning of identified document.
-
-        ONLY BARELY IMPLEMENTED.   Intended to work in a
-        blindfold-like manner; just works for hard coded languages
-        right now.
-
-        @@@   languageOverrides={}
-           a mapping from string->string, overriding self-identificat.
-
-        In the simplest case, this might mean opening a local file,
-        which we know to contain n3, read the contents, and parse them
-        directly to the kb.
-
-        In a more complex case, we do an HTTP GET to obtain the
-        document, using allowedLanguages to help guide our content
-        negotiation, get some content, figure out what language is
-        actually used, [recursively] load that language's definition,
-        use that definition to build a parser for the original content,
-        and parse it.
-
-        We end up with a logical formula which might or might not be
-        RDF (depending on how the language definition is written), but
-        we can convert it, of course.  If we want to load from an
-        untrusted source, load to a temporary kb first, reify it to
-        the main KB, then apply your trust rules.
-
-        See Blindfold.
-
-        Does something like:
-
-           1.  Identify the language
-                 from content-type, other headers, embedded emacs magic strings,
-                 suffixes, 
-                 and perhaps a pre-arranged list of allowed languages.
-           2.  Look up its definition
-                 from an allowed set of language definitions, and/or the web
-           3.  Parse it, collecting the semantics
-                 perhaps by compiling a parser for it
-           4.  return the logic sentence it claims
-                 with some latitude as to form; the sentence only guarantees
-                 to be inconsistent (T=F) or to entail only the intended
-                 expression's meaning and separable metadata. 
-
-        """
-        #print "LOADING",uri
-        stream=urllib.urlopen(uri)
-        stream.info().uri = uri
-        language=sniff.sniffLanguage(stream)
-        #print "LANGUAGE",language
-
-        # generalize this!   first one which can handle this lang!
-        
-        if language=="http://www.w3.org/1999/02/22-rdf-syntax-ns#RDF":
-            language="rdflib"
-        if language=="application/rdf":
-            language="rdflib"
-        
-        parser=LX.language.getParser(language=language)
-        parser.parse(stream, self) 
-
+    def load(self, uri):
+        loader=LX.loader.Loader(self, uri, reporter=self.reporter)
+        loader.run()
+    
     def __getattr__(self, name):
         """
         >>> import LX.kb
         >>> kb=LX.kb.KB()
         >>> kb.rdf_type.fromTerm
-        LX.logic.ConstantForURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type)
+        LX.logic.URIConstant("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
         """
 
         # is it a namespace-underscore-name name?
@@ -427,7 +377,10 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
  
 # $Log$
-# Revision 1.23  2003-09-10 20:12:56  sandro
+# Revision 1.24  2003-09-17 17:55:57  sandro
+# moved load() code over to loader.py; changed to accomodate changes in logic.py
+#
+# Revision 1.23  2003/09/10 20:12:56  sandro
 # store in either RDF(s,p,o) or p(s,o)
 #
 # Revision 1.22  2003/09/08 17:31:07  sandro
