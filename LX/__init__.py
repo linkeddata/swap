@@ -13,21 +13,30 @@ __version__ = "$Revision$"
 # To allow "from LX import *", though I'm not sure when one would
 # want that.
 __all__ = ["language", "engine", "kb", "expr", "logic", "fol", "rdf",
-           "namespace", "uri" ] 
+           "namespace", "uri", "defaultns" ] 
 
 # Let people use LX.Expr instead of LX.expr.Expr, etc, while
 # having these parts in separate files
-from LX.uri import *
-from LX.kb import *
-from LX.expr import *
-from LX.logic import *
-from LX.describer import *
-from LX.namespace import *
-from LX.rdf import *
-
+#
+# This has the side-effect of meaning if you import any one module
+# from LX, you are importing them all, since python runs all the
+# __init__.py code first.  oops.   What to do?
+#from LX.uri import *
+#from LX.kb import *
+#from LX.expr import *
+#from LX.logic import *
+#from LX.describer import *
+#from LX.namespace import *
+#from LX.rdf import *
+#from LX.defaultns import *
 
 # $Log$
-# Revision 1.5  2003-02-13 17:20:19  sandro
+# Revision 1.6  2003-02-13 19:24:21  sandro
+# Stopped importing everything, since doing so meant that any use of
+# anything in LX/* meant important everything.  We'll need to use LX.all
+# or some such if we want them all into one namespace.
+#
+# Revision 1.5  2003/02/13 17:20:19  sandro
 # moved URI-related stuff over to uri.py
 #
 # Revision 1.4  2003/01/29 06:09:18  sandro
