@@ -63,8 +63,8 @@ this log:forAll :a,:b,:c,:d,:e,:f,:g,:h,:i,:j,:k,:l,:m,
 } log:implies {
    [	a cal:Vevent;
 	cal:summary :n;
-	cal:dtstart [rdf:value :s];
-  	cal:dtend   [rdf:value :e];
+	cal:dtstart [cal:value :s];
+  	cal:dtend   [cal:value :e];
 	cal:uid  :u
     ]
 }.
