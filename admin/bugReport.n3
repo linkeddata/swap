@@ -16,8 +16,8 @@
     a cal:Vtodo;
     cal:url ?PG;
     cal:dtstart [ cal:dateTime ?WHEN ].
-  (?WHEN "1") str:concatenation ?KS.
-  (?WHEN "9") str:concatenation ?KE.
+  (?WHEN ?PG "1") str:concatenation ?KS.
+  (?WHEN ?PG "5") str:concatenation ?KE.
   ("<li>" ?WHEN " raised: <a href='" [is log:uri of ?PG]
        "'>" ?DESC "</a>") str:concatenation ?TXT.
 } => {
@@ -30,17 +30,19 @@
   ?E cal:summary ?DESC;
     a cal:Vtodo;
     cal:url ?PG;
-    cal:completed [ cal:dateTime ?WHEN2 ].
+    cal:completed [ cal:dateTime ?WHEN ].
+  (?WHEN ?PG "7") str:concatenation ?K.
   ("<li>" ?WHEN2 " <a href='" [is log:uri of ?PG]
        "'>" ?DESC "</a> closed.</li>\n") str:concatenation ?TXT.
-} => { ?WHEN2 log:outputString ?TXT }.
+} => { ?K log:outputString ?TXT }.
 
 {
   ?E cal:summary ?DESC;
     a cal:Vtodo;
+    cal:url ?PG;
     cal:dtstart [ cal:dateTime ?WHEN1 ];
     cal:completed [ cal:dateTime ?WHEN2 ].
-  (?WHEN1 "2") str:concatenation ?K.
+  (?WHEN1 ?PG "2") str:concatenation ?K.
   ("<br /><b>closed: " ?WHEN2 "</b>") str:concatenation ?TXT.
 } => { ?K log:outputString ?TXT }.
 
