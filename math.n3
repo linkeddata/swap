@@ -21,10 +21,10 @@ math:Value a rdfs:Class; rdfs:label "Value";
 
 math:Function a rdfs:Class; rdfs:subPropertyOf rdf:Property;
    rdfs:label "Function";
-   rdfs:comment "A math:Function is unique in terms of math:EqualTo. "
+   rdfs:comment "A math:Function is unique in terms of math:EqualTo. ".
 
 math:ReverseFunction a rdfs:Class; rdfs:subPropertyOf rdf:Property;
-   rdfs:comment "A math:ReverseFunction is unambiguous in terms of math:EqualTo. "
+   rdfs:comment "A math:ReverseFunction is unambiguous in terms of math:EqualTo. ".
 
 math:LogicalOperator a rdfs:Class; rdfs:subClassOf math:Function, math:ReverseFunction;
    rdfs:comment """a logical operator allows evaluation eihter way, or testing relationship
