@@ -12,22 +12,36 @@
 
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
+
 :Issue a s:Class.
 
 :title a r:Property;
+    s:domain t:Issue;
+    s:range log:String;
     s:comment "Short title, less than one line".
 
 :summary a r:Property;
-    s:domain doc:Work;
+    s:domain t:Issue;
     s:range log:String;
     s:comment """A summary of a message eg a description of a 
              problem from an opening message or a description of
           a resolution from a closing message""".
 
+:source a r:Property;
+    s:domain t:Issue;
+    s:range  doc:Work;
+    s:comment """The source of the issue (e.g., URI to mail message where raised)""".
+
 :documentConcerned a r:Property;
     s:domain t:Issue;
     s:range  doc:Work;
-    s:comment """The spec which has this problem""".
+    s:comment """The spec that has this problem""".
+
+:onBehalfOf a r:Property;
+    s:domain t:Issue;
+    s:range  contact:SocialEntity;
+    s:comment """The entity who raised the issue, who could be a Working Group, Person, Member organization, Liaison, etc.""".
 
 # State changes are made by relating a message to the issue with these:
 
