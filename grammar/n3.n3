@@ -1,0 +1,227 @@
+# Notation3 
+# BNF without tokenization
+#
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix bnf: <http://www.w3.org/2000/10/swap/grammar/bnf#>.
+@prefix : <http://www.w3.org/2000/10/swap/grammar/n3#>.
+@prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@keywords a, is, of.
+
+
+
+# The N3 Full Grammar
+
+n3document a :Used;
+	bnf:mustBeOneSequence(
+	
+		( void ) 
+		(
+			[ bnf:zeroOrMore declaration ]
+			[ bnf:zeroOrMore  universal ]
+			[ bnf:zeroOrMore existential ]
+			[ bnf:zeroOrMore [ bnf:mustBeOneSequence((statement period)) ] ]
+		)
+	).
+
+formulacontent bnf:mustBeOneSequence ((
+		[ bnf:zeroOrMore declaration ]
+		[ bnf:zeroOrMore  universal ]
+		[ bnf:zeroOrMore existential ]
+		statementlist
+	)).
+
+
+universal bnf:mustBeOneSequence (
+		(
+			"@forAll"
+			[ bnf:commaSeparatedPeriodTerminatedListOf symbol ]
+		)).
+
+existential bnf:mustBeOneSequence(
+		(	 "@forSome" 
+			 [ bnf:commaSeparatedPeriodTerminatedListOf symbol ]
+		)).
+
+
+symbol bnf:mustBeOneSequence (
+		(explicituri)
+		(qname)
+	).
+
+qname bnf:mustBeOneSequence(
+		( prefix colon localname )
+		( localname )
+	).
+
+declaration bnf:mustBeOneSequence(
+		( "@prefix" qname explicituri period )
+		( "@keywords" [ commaSeparatedPeriodTerminatedListOf barename ] )
+	).
+
+
+statement bnf:mustBeOneSequence(( subject propertylist )).
+
+
+propertylist bnf:mustBeOneSequence (
+		( void )
+		( verb objectlist propertylisttail )
+	).
+
+propertylisttail bnf:mustBeOneSequence (
+		( void )
+		( semicolon propertylist )
+	).
+
+objectlist bnf:mustBeOneSequence (
+		( object  [ zeroOrMore [ 
+				bnf:mustBeOneSequence (
+					( comma )
+					( objectlist )
+				) ]
+			  ] )).
+
+
+verb bnf:mustBeOneSequence (
+		( prop )
+		( "@has" prop )
+		( "@is" prop "@of" )
+		( "@a" )
+		( "=" )
+		( "=>" )
+		( "<=" ) 
+	).
+
+prop bnf:mustBe (node).
+
+subject bnf:mustBeOneSequence ((item)).
+
+object bnf:mustBeOneSequence ((item)).
+
+item bnf:mustBeOneSequence(
+		(path)
+#		( node "@of" path )     # Not implemented, just an idea
+	).
+
+
+path bnf:mustBeOneSequence(
+		( node nodetail )
+	).
+
+pathtail bnf:mustBeOneSequence(
+		( void )
+		( traverse path )
+		( uparrow path )
+	).
+
+
+node bnf:mustBeOneSequence (
+		(symbol)
+		(anonnode)
+		(variable)
+		(numericliteral)
+		(string)
+		("@this")	  #  Deprocated.  Was allowed for this log:forAll x
+).
+
+anonnode bnf:mustBeOneSequence (
+		( "[" propertylist "]"  )
+		( "{" formulacontent "}" )
+		(  "("  itemlist ")"  )
+	).
+
+itemlist bnf:zeroOrMore item.
+ 
+prefix bnf:mustBeOneSequence (
+		( alphanumeric )
+		( "_" )
+	).
+
+#   TOKENS
+
+alphanumeric 	bnf:matches  	"[a-zA-Z][a-zA-Z0-9_]*";
+		bnf:canStartWith	"a".
+
+numericiteral	bnf:matches	"""[-+]?[0-9]+(\\.[0-9]+)?(e[-+]?[0-9]+)?""";
+		bnf:canStartWith 	"0", "-", "+".
+
+explicituri 	bnf:matches 	"<[^>].*>";
+		bnf:canStartWith 	"<".
+
+qname 		bnf:matches  	"(([a-zA-Z_][a-zA-Z0-9_]*)?:)?([a-zA-Z_][a-zA-Z0-9_]*)?";
+		bnf:canStartWith 	"a", "_".  # @@ etc
+
+langcode	bnf:matches  	"[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?";
+		bnf:canStartWith 	"a".
+
+traverse	bnf:matches	"!";
+		bnf:canStartWith	"!".
+
+uparrow		bnf:matches 	"\\^";
+		bnf:canStartWith	"^".
+
+
+#_____________________________________
+
+# Shorthand expansion into BNF
+
+{ ?x bnf:zeroOrMore ?y } => {
+    ?x bnf:mustBeOneSequence (
+		( void )
+		( ?y ?x )
+	) 
+}.
+
+{ ?x bnf:mustBe ?y } => {?x bnf:mustBeOneSequence ((?y))}.
+
+# Axioms relating the definite (open world) form to the indefinte (closed world) 
+#(better words?) form:
+
+{ ?x bnf:mustBe ?y } => { ?x bnf:mustBeOneSequence (( ?y )) }.
+
+{ ?x bnf:mustBeOneSequence ?options.
+  ?y list:in  ?options } =>  { ?x bnf:canBeSeQuence ?y }.
+
+#______________________________________________________________
+
+#  Axioms reducing the shortcut BNF terms to bnf:canBeSequence.
+
+#{ ?x bnf:oneOrMore ?y } => { ?x bnf:canBeSequence ( ?y [ bnf:zeroOrMore ?y ] )  }.
+
+
+{ ?x bnf:commaSeparatedPeriodTerminatedListOf ?y } =>
+{
+	?x bnf:mustBeOneSequence (
+		( period )
+		( comma ?y ?x )
+	)
+}.
+
+
+# Rules for determining branching
+
+{ 	?x bnf:canBeSequence [rdf:first [bnf:canStartWith ?y]].
+} => {
+	?x selector ( ?y ?s ); bnf:canStartWith ?y.
+}.
+
+
+{   	?x a Used; bnf:canBeSequence ?s.
+} => {
+	?y a Used.
+	?s a UsedSequence.
+	?s a UsedTail.
+}.
+
+{ ?y list:in [a UsedSequence].} => {?y a Used}.
+
+{ ?s a UsedTail; rdf:first ?x; rdf:rest ?r } => {?r a UsedTail}.
+
+{ ?s a UsedTail; rdf:first ?x; rdf:rest [ rdf:first ?y ] } => { ?x canPrecede ?y }.
+
+{ ?x bnf:canBeSequence [ list:last ?y ]; canPrecede ?z} => { ?y canPrecede ?z }.
+
+
+
+#ends

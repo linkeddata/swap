@@ -1,0 +1,49 @@
+#
+# Baccus - Naur Form (BNF) vocabulary
+#
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix bnf: <http://www.w3.org/2000/10/swap/grammar/bnf#>.
+@prefix : <http://www.w3.org/2000/10/swap/grammar/n3#>.
+@prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#>.
+@keywords a, is, of.
+
+<> doc:rules <bnf-rules.n3>.
+
+bnf:canBeSequence
+	rdfs:domain bnf:Term; rdfs:range bnf:SequenceOfProductions;
+	rdfs:comment
+"""If you use bnf:canBeSequence to define a BNF vocabulary, then the reader
+has to assume that all possible productions are in the BNF file (or, generally,
+in the N3 formula) you are dealing with.
+Other possible vocabularies would explicitly list the "canBeSequence as a set of
+bnf:mustBeOneSequence"
+""".
+
+#bnf:canBe rdfs:domain bnf:Term; rdfs:range bnf:Production.
+bnf:zeroOrMore  rdfs:domain bnf:Term; rdfs:range bnf:Production.
+
+bnf:mustBeOneSequence
+	rdfs:domain bnf:Production; rdfs:range bnf:ListOfSequencesOfProductions;
+	rdfs:comment
+
+"""This is the core property you need to define a BNF production.
+It defines the list of the only sequences to which a given 
+term may expand.  Each seuence is just a list of other productions in order.
+""".
+
+bnf:Token rdfs:subClassOf bnf:Production;
+	rdfs:comment "A terminal, aka atomic, production, defined as string or regexp".
+
+bnf:matches	rdfs:domain bnf:Token;
+		rdfs:range  bnf:RegularExpression;
+		rdfs:comment "The regexp which a token must match".
+
+bnf:canStartWith rdf:domain bnf:Production;
+		rdf:range bnf:String.
+
+
+#ends

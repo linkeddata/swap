@@ -1,0 +1,79 @@
+#
+# Baccus - Naur Form (BNF) vocabulary
+#
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix bnf: <http://www.w3.org/2000/10/swap/grammar/bnf#>.
+@prefix : <http://www.w3.org/2000/10/swap/grammar/bnf-rules#>.
+@prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#>.
+@prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#>.
+@prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#>.
+@keywords a, is, of.
+
+#_____________________________________
+
+# Shorthand expansion into BNF
+
+{ ?x bnf:zeroOrMore ?y } => {
+    ?x bnf:mustBeOneSequence (
+		( void )
+		( ?y ?x )
+	) 
+}.
+
+{ ?x bnf:mustBe ?y } => {?x bnf:mustBeOneSequence ((?y))}.
+
+# Axioms relating the definite (open world) form to the indefinte (closed world) 
+#(better words?) form:
+
+{ ?x bnf:mustBe ?y } => { ?x bnf:mustBeOneSequence (( ?y )) }.
+
+{ ?x bnf:mustBeOneSequence ?y} => { ?x optionTail ?y }.
+
+{?x optionTail [rdf:first ?y; rdf:rest ?z]} => {?x bnf:canBeSeQuence ?y;optionTail ?z}.
+
+
+#______________________________________________________________
+
+#  Axioms reducing the shortcut BNF terms to bnf:canBeSequence.
+
+#{ ?x bnf:oneOrMore ?y } => { ?x bnf:canBeSequence ( ?y [ bnf:zeroOrMore ?y ] )  }.
+
+
+{ ?x bnf:commaSeparatedPeriodTerminatedListOf ?y } =>
+{
+	?x bnf:mustBeOneSequence (
+		( period )
+		( comma ?y ?x )
+	)
+}.
+
+
+# Rules for determining branching
+
+{ 	?x bnf:canBeSequence [rdf:first [bnf:canStartWith ?y]].
+} => {
+	?x selector ( ?y ?s ); bnf:canStartWith ?y.
+}.
+
+
+{   	?x a Used; bnf:canBeSequence ?s.
+} => {
+	?y a Used.
+	?s a UsedSequence.
+	?s a UsedTail.
+}.
+
+{ ?y list:in [a UsedSequence].} => {?y a Used}.
+
+{ ?s a UsedTail; rdf:first ?x; rdf:rest ?r } => {?r a UsedTail}.
+
+{ ?s a UsedTail; rdf:first ?x; rdf:rest [ rdf:first ?y ] } => { ?x canPrecede ?y }.
+
+{ ?x bnf:canBeSequence [ list:last ?y ]; canPrecede ?z} => { ?y canPrecede ?z }.
+
+
+
+#ends
