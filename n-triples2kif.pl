@@ -117,6 +117,7 @@ sub term{
   }
   elsif($t =~ s/^_://){
     if($t =~ /^[a-zA-Z0-9]+$/){
+      $t = "ex" . $t.
       $t = "?" . $t;
       push(@Ex, $t) unless grep($_ eq $t, @Ex);
       return $t;
@@ -132,7 +133,10 @@ sub term{
     
 
 # $Log$
-# Revision 1.1  2001-06-07 19:22:43  connolly
+# Revision 1.2  2001-06-07 19:48:34  connolly
+# handle _:1 -> ?ex1
+#
+# Revision 1.1  2001/06/07 19:22:43  connolly
 # works, at least on the RDF schema for DAML
 #
 
