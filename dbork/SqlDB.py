@@ -140,7 +140,8 @@ class ResultSet:
         self.varIndex = {}
         self.indexVar = []
         self.results = []
-    def buildQuerySets(self, sentences):
+    def buildQuerySets(self, sentences, variables, existentials):
+        # /me thinks that one may group by ^existentials
         set = []
         for sentence in sentences:
             sentStruc = []
@@ -528,8 +529,10 @@ if __name__ == '__main__':
          ["<http://localhost/SqlDB#idInclusions.id>", "?g1", "?u1"], 
          ["<http://localhost/SqlDB#idInclusions.groupId>", "?g1", "?accessor"], 
          ["<http://localhost/SqlDB#acls.id>", "?acl", "?accessor"]]
+    variables = ["?urisRow", "?aacl", "?acl", "?access", "?u1", "?g1", "?accessor"]
+    existentials = []
     rs = ResultSet()
-    qp = rs.buildQuerySets(s)
+    qp = rs.buildQuerySets(s, variables, existentials)
     a = SqlDBAlgae("http://localhost/SqlDB#", "AclSqlObjects")
     messages = []
     nextResults, nextStatements = a._processRow([], [], qp, rs, messages, {})
