@@ -399,8 +399,12 @@ class ReverseFunction:
     
 # Use this with diagnostics so that it can be changed as necessary
 # For example, sometimes want on stdout maybe or in a scroll window....
-def progress(str):
-    sys.stderr.write(  str + "\n")
+def progress(*args):
+    import sys
+    for a in args:
+        sys.stderr.write("%s " % (a,))
+    sys.stderr.write("\n")
+#        sys.stderr.write(  str + "\n")
 
 global chatty_flag   # verbosity debug flag
 
