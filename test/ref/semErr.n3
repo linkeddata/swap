@@ -1,0 +1,12 @@
+     @prefix : <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    
+    this     log:forAll :X .
+    
+    :test     a :Pass .
+    {
+        </dev/null>     log:semanticsOrError :X .
+        
+        }     log:implies {:test     a :Pass .
+        } .
+    
