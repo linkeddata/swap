@@ -1,0 +1,40 @@
+# Generate events from photos
+
+
+
+@prefix exif: <http://www.w3.org/2000/10/swap/pim/exif#>.
+@prefix file: <http://www.w3.org/2000/10/swap/pim/file#>.
+@prefix cal: <http://www.w3.org/2002/12/cal/ical#> .
+@prefix apple: <http://www.w3.org/2002/12/cal/prod/Apple_Comp_628d9d8459c556fa#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix time: <http://www.w3.org/2000/10/swap/time#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+
+@prefix : <#>.
+@keywords is, a , of.
+
+# @@ use photo date if it exists
+
+{} => {myPhotoCalender a cal:Vcalendar. }. # Make it a rule
+
+
+# Does it really need some norminal kludged end time?
+{   ?PHOTO file:date ?DATE;  log:uri 	?URI.
+
+    (?DATE.time:inSeconds  600)   math:sum  ?END!time:inSeconds. 
+
+} => {
+    ?PHOTO :event [
+	is cal:component of myPhotoCalender;
+	a cal:Vevent;
+        cal:dtstart  [cal:dateTime ?DATE];
+        cal:dtend  [cal:dateTime ?END];
+        cal:summary "Photo";
+        cal:url ?PHOTO
+     ]
+}.
+

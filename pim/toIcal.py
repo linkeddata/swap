@@ -385,6 +385,7 @@ class CalWr:
         self.exportGeneral(E_PROP, sts, event, ICAL.location, "LOCATION")
         self.exportGeneral(E_PROP, sts, event, ICAL.priority, "PRIORITY")
         self.exportGeneral(E_PROP, sts, event, ICAL.status, "STATUS")
+        self.refProp(sts, event, "url")
         self.recurProp(sts, "rrule", event)
 
         self.exportXFields(sts, event)
@@ -731,7 +732,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.9  2004-02-02 19:38:56  timbl
+# Revision 2.10  2004-02-03 22:55:33  timbl
+# mmm
+#
+# Revision 2.9  2004/02/02 19:38:56  timbl
 # re-fix after spurious clash
 #
 # Revision 2.8  2004/02/02 16:46:50  connolly
