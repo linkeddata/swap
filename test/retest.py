@@ -151,7 +151,7 @@ def main():
     chatty = 0
     proofs = 0
     cwm_command='../cwm.py'
-    python_command='python2.4'
+    python_command='python'
     global ploughOn # even if error
     ploughOn = 0
     global verbose
