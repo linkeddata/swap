@@ -1,0 +1,2587 @@
+
+<!-- Processed by Id: cwm.py,v 1.115 2003/01/10 17:13:13 timbl Exp -->
+<!--     using base file:/tux/u3/henri/WWW/2002/01/tr-automation/-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2001/02pd/rec54#"
+    xmlns:contact="http://www.w3.org/2000/10/swap/pim/contact#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:mat="http://www.w3.org/2002/05/matrix/vocab#"
+    xmlns:org="http://www.w3.org/2001/04/roadmap/org#"
+    xmlns:os="http://www.w3.org/2000/10/swap/os#"
+    xmlns:rcs="http://www.w3.org/2001/03swell/rcs#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rec="http://www.w3.org/2001/02pd/rec54#"
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:trp="file:/tux/u3/henri/WWW/2002/01/tr-automation/tr-process#">
+
+    <ActivityStatement rdf:about="http://www.w3.org/2001/di/Activity">
+    </ActivityStatement>
+
+    <ActivityStatement rdf:about="http://www.w3.org/2001/sw/Activity">
+    </ActivityStatement>
+
+    <ActivityStatement rdf:about="http://www.w3.org/2002/mmi/Activity">
+    </ActivityStatement>
+
+    <ActivityStatement rdf:about="http://www.w3.org/2002/ws/Activity">
+    </ActivityStatement>
+
+    <ActivityStatement rdf:about="http://www.w3.org/DOM/Activity">
+    </ActivityStatement>
+
+    <ActivityStatement rdf:about="http://www.w3.org/Encryption/2001/Activity">
+    </ActivityStatement>
+
+    <ActivityStatement rdf:about="http://www.w3.org/Graphics/Activity">
+    </ActivityStatement>
+
+    <ActivityStatement rdf:about="http://www.w3.org/International/Activity">
+    </ActivityStatement>
+
+    <ActivityStatement rdf:about="http://www.w3.org/MarkUp/Activity">
+    </ActivityStatement>
+
+    <ActivityStatement rdf:about="http://www.w3.org/Math/Activity">
+    </ActivityStatement>
+
+    <ActivityStatement rdf:about="http://www.w3.org/Privacy/Activity">
+    </ActivityStatement>
+
+    <ActivityStatement rdf:about="http://www.w3.org/QA/Activity">
+    </ActivityStatement>
+
+    <ActivityStatement rdf:about="http://www.w3.org/Signature/Activity">
+    </ActivityStatement>
+
+    <ActivityStatement rdf:about="http://www.w3.org/Style/Activity">
+    </ActivityStatement>
+
+    <rdf:Description rdf:about="http://www.w3.org/Submission/2002/03/">
+        <dc:title>Extensible User Interface Protocol (XUP) Submission</dc:title>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/Submission/2002/04/">
+        <dc:title>Web Service Choreography Interface (WSCI) 1.0 Submission</dc:title>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/Submission/2002/05/">
+        <dc:title>XMCL Submission</dc:title>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/Submission/2002/06/">
+        <dc:title>ODRL Submission</dc:title>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/Submission/2002/07/">
+        <dc:title>SRML Submission</dc:title>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/Submission/2002/08/">
+        <dc:title>EGIX Submission</dc:title>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/Submission/2003/01/">
+        <dc:title>XAdES Submission</dc:title>
+    </rdf:Description>
+
+    <FirstEdition rdf:about="http://www.w3.org/TR/1998/REC-MathML-19980407">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#REC"/>
+        <dc:date>1998-04-07</dc:date>
+        <dc:title>Mathematical Markup Language (MathML) 1.0 Specification</dc:title>
+    </FirstEdition>
+
+    <FirstEdition rdf:about="http://www.w3.org/TR/1998/REC-xml-19980210">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#REC"/>
+        <dc:date>1998-02-10</dc:date>
+        <dc:title>XML 1.0 Recommendation</dc:title>
+    </FirstEdition>
+
+    <FirstEdition rdf:about="http://www.w3.org/TR/1999/REC-WebCGM-19990121">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#REC"/>
+        <dc:date>1999-01-21</dc:date>
+        <dc:title>WebCGM Profile Recommendation</dc:title>
+    </FirstEdition>
+
+    <FirstEdition rdf:about="http://www.w3.org/TR/2000/REC-xhtml1-20000126">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#REC"/>
+        <dc:date>2000-01-26</dc:date>
+        <dc:title>XHTML™ 1.0: The Extensible HyperText Markup Language - A Reformulation of HTML 4 in XML 1.0</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xhtml1"/>
+    </FirstEdition>
+
+    <CR rdf:about="http://www.w3.org/TR/2002/CR-css-mobile-20020725">
+        <dc:date>2002-07-25</dc:date>
+        <dc:title>CSS Mobile Profile 1.0</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css-mobile"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ted Wugofski</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Doug Dominiak</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Peter Stark</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tapas Roy</contact:fullName>
+        </editor>
+        <implementationFeedbackDue>2003-01-25</implementationFeedbackDue>
+    </CR>
+
+    <CR rdf:about="http://www.w3.org/TR/2002/CR-css-tv-20020807">
+        <dc:date>2002-08-07</dc:date>
+        <dc:title>CSS TV Profile 1.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-css-tv-20020515"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css-tv"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Sean Hayes</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Glenn Adams</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tantek Çelik</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Håkon Wium Lie</contact:fullName>
+        </editor>
+        <implementationFeedbackDue>2003-02-07</implementationFeedbackDue>
+    </CR>
+
+    <CR rdf:about="http://www.w3.org/TR/2002/CR-css3-mediaqueries-20020708">
+        <dc:date>2002-07-08</dc:date>
+        <dc:title>Media Queries</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css3-mediaqueries/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Håkon Wium Lie</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tantek Çelik</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Daniel Glazman</contact:fullName>
+        </editor>
+        <implementationFeedbackDue>2003-01-31</implementationFeedbackDue>
+    </CR>
+
+    <CR rdf:about="http://www.w3.org/TR/2002/CR-soap12-part0-20021219">
+        <dc:date>2002-12-19</dc:date>
+        <dc:title>SOAP Version 1.2 Part 0: Primer</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-soap12-part0-20020626"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/soap12-part0/"/>
+        <cites rdf:resource="http://www.w3.org/2002/ws/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Nilo Mitra</contact:fullName>
+        </editor>
+        <implementationFeedbackDue>2003-01-24</implementationFeedbackDue>
+    </CR>
+
+    <CR rdf:about="http://www.w3.org/TR/2002/CR-soap12-part1-20021219">
+        <dc:date>2002-12-19</dc:date>
+        <dc:title>SOAP Version 1.2 Part 1: Messaging Framework</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-soap12-part1-20020626"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/soap12-part1/"/>
+        <cites rdf:resource="http://www.w3.org/2002/ws/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Martin Gudgin</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Marc Hadley</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Noah Mendelsohn</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jean-Jacques Moreau</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Henrik Frystyk Nielsen</contact:fullName>
+        </editor>
+        <implementationFeedbackDue>2003-01-24</implementationFeedbackDue>
+    </CR>
+
+    <CR rdf:about="http://www.w3.org/TR/2002/CR-soap12-part2-20021219">
+        <dc:date>2002-12-19</dc:date>
+        <dc:title>SOAP Version 1.2 Part 2: Adjuncts</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-soap12-part2-20020626"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/soap12-part2/"/>
+        <cites rdf:resource="http://www.w3.org/2002/ws/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Martin Gudgin</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Marc Hadley</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Noah Mendelsohn</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jean-Jacques Moreau</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Henrik Frystyk Nielsen</contact:fullName>
+        </editor>
+        <implementationFeedbackDue>2003-01-24</implementationFeedbackDue>
+    </CR>
+
+    <CR rdf:about="http://www.w3.org/TR/2002/CR-speech-grammar-20020626">
+        <dc:date>2002-06-26</dc:date>
+        <dc:title>Speech Recognition Grammar Specification Version 1.0</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/speech-grammar"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Andrew Hunt</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Scott McGlashan</contact:fullName>
+        </editor>
+        <implementationFeedbackDue>2002-08-30</implementationFeedbackDue>
+    </CR>
+
+    <CR rdf:about="http://www.w3.org/TR/2002/CR-xforms-20021112/">
+        <dc:date>2002-11-12</dc:date>
+        <dc:title>XForms 1.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-xforms-20020821/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xforms/"/>
+        <cites rdf:resource="http://www.w3.org/MarkUp/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Roland Merrick</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>T. V. Raman</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Micah Dubinko</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Leigh L. Klotz</contact:fullName>
+        </editor>
+        <implementationFeedbackDue>2003-03-05</implementationFeedbackDue>
+    </CR>
+
+    <CR rdf:about="http://www.w3.org/TR/2002/CR-xinclude-20020917">
+        <dc:date>2002-09-17</dc:date>
+        <dc:title>XML Inclusions (XInclude) Version 1.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/CR-xinclude-20020221/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xinclude/"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jonathan Marsh</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>David Orchard</contact:fullName>
+        </editor>
+        <implementationFeedbackDue>2002-11-01</implementationFeedbackDue>
+    </CR>
+
+    <CR rdf:about="http://www.w3.org/TR/2002/CR-xml-names11-20021218/">
+        <dc:date>2002-12-18</dc:date>
+        <dc:title>Namespaces in XML 1.1</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-xml-names11-20020905"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xml-names11/"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Dave Hollander</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Andrew Layman</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Richard Tobin</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tim Bray</contact:fullName>
+        </editor>
+        <implementationFeedbackDue>2003-02-14</implementationFeedbackDue>
+    </CR>
+
+    <CR rdf:about="http://www.w3.org/TR/2002/CR-xml11-20021015">
+        <dc:date>2002-10-15</dc:date>
+        <dc:title>Extensible Markup Language (XML) 1.1</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-xml11-20020425/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xml11/"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>John Cowan</contact:fullName>
+        </editor>
+        <implementationFeedbackDue>2003-02-14</implementationFeedbackDue>
+    </CR>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-ATAG10-TECHS-20021029/">
+        <dc:date>2002-10-29</dc:date>
+        <dc:title>Techniques for Authoring Tool Accessibility Guidelines
+1.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2000/NOTE-ATAG10-TECHS-20000504"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/ATAG10-TECHS/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jutta Treviranus</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Charles McCathieNevile</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jan Richards</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Gregory Rosmaita</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-DOM-Level-3-AS-20020725">
+        <dc:date>2002-07-25</dc:date>
+        <dc:title>Document Object Model (DOM) Level 3 Abstract Schemas
+Specification</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/DOM-Level-3-AS"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ben Chang</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Elena Litani</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Joe Kesselman</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Rezaur Rahman</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-EGIX-20021220/">
+        <dc:date>2002-12-20</dc:date>
+        <dc:title>Embedding Glyph Identifiers in XML Documents</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/EGIX"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>KAWAMATA Akira</contact:fullName>
+        </editor>
+        <fromSubmission rdf:resource="http://www.w3.org/Submission/2002/08/"/>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-SRML-20021218">
+        <dc:date>2002-12-18</dc:date>
+        <dc:title>SRML - Simulation Reference Markup Language</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/SRML"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Steven W. Reichenthal</contact:fullName>
+        </editor>
+        <fromSubmission rdf:resource="http://www.w3.org/Submission/2002/07/"/>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-UAAG10-TECHS-20021217/">
+        <dc:date>2002-12-17</dc:date>
+        <dc:title>Techniques for User Agent Accessibility Guidelines
+1.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-UAAG10-TECHS-20021016/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/UAAG10-TECHS/"/>
+        <cites rdf:resource="http://www.w3.org/WAI/Technical/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ian Jacobs</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jon Gunderson</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Eric Hansen</contact:fullName>
+        </editor>
+        <mat:hasTranslations rdf:resource="http://www.w3.org/WAI/UA/UAAG-translations"/>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-mmi-framework-20021202/">
+        <dc:date>2002-12-02</dc:date>
+        <dc:title>W3C Multimodal Interaction Framework</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/mmi-framework/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>James A. Larson</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>T.V. Raman</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-mmi-use-cases-20021204/">
+        <dc:date>2002-12-04</dc:date>
+        <dc:title>Multimodal Interaction Use Cases</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/mmi-use-cases/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Dave Raggett</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Emily Candell</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-odrl-20020919/">
+        <dc:date>2002-09-19</dc:date>
+        <dc:title>Open Digital Rights Language (ODRL) Version 1.1</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/odrl"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Renato Iannella</contact:fullName>
+        </editor>
+        <fromSubmission rdf:resource="http://www.w3.org/Submission/2002/06/"/>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-photo-rdf-20020419">
+        <dc:date>2002-04-19</dc:date>
+        <dc:title>Describing and retrieving photos using RDF and HTTP</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/photo-rdf/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Bert Bos</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Yves Lafon</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-qaframe-ops-extech-20021202/">
+        <dc:date>2002-12-02</dc:date>
+        <dc:title>QA Framework: Operational Examples &#38; Techniques</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-qaframe-ops-extech-20020515/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/qaframe-ops-extech/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Lofton Henderson</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Lynne Rosenthal</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Dimitris Dimitriadis</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Kirill Gavrylyuk</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-soap12-email-20020703">
+        <dc:date>2002-07-03</dc:date>
+        <dc:title>SOAP Version 1.2 Email Binding</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/NOTE-soap12-email-20020626"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/soap12-email"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Highland Mary Mountain</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jacek Kopecky</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Stuart Williams</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Glen Daniels</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Noah Mendelsohn</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-wsci-20020808">
+        <dc:date>2002-08-08</dc:date>
+        <dc:title>Web Service Choreography Interface (WSCI) 1.0</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/wsci"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Assaf Arkin</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Sid Askary</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Scott Fordin</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Wolfgang Jekeli</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Kohsuke Kawaguchi</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>David Orchard</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Stefano Pogliani</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Karsten Riemer</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Susan Struble</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Pal Takacsi-Nagy</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ivana Trickovic</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Sinisa Zimek</contact:fullName>
+        </editor>
+        <fromSubmission rdf:resource="http://www.w3.org/Submission/2002/04/"/>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-xhtml-media-types-20020801">
+        <dc:date>2002-08-01</dc:date>
+        <dc:title>XHTML Media Types</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/NOTE-xhtml-media-types-20020430"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xhtml-media-types"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Masayasu Ishikawa</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-xhtml1-schema-20020902/">
+        <dc:date>2002-09-02</dc:date>
+        <dc:title>XHTML 1.0 in XML Schema</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xhtml1-schema/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Masayasu Ishikawa</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-xmcl-20020919/">
+        <dc:date>2002-09-19</dc:date>
+        <dc:title>XMCL - the eXtensible Media Commerce Language</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xmcl/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jeffrey Ayars</contact:fullName>
+        </editor>
+        <fromSubmission rdf:resource="http://www.w3.org/Submission/2002/05/"/>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2002/NOTE-xup-20020528">
+        <dc:date>2002-05-28</dc:date>
+        <dc:title>XUP - Extensible User Interface Protocol</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xup/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jin Yu</contact:fullName>
+        </editor>
+        <fromSubmission rdf:resource="http://www.w3.org/Submission/2002/03/"/>
+    </NOTE>
+
+    <REC rdf:about="http://www.w3.org/TR/2002/REC-P3P-20020416/">
+        <dc:date>2002-04-16</dc:date>
+        <dc:title>The Platform for Privacy Preferences 1.0 (P3P1.0)
+Specification</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/P3P/"/>
+        <cites rdf:resource="http://www.w3.org/Privacy/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Massimo Marchiori</contact:fullName>
+        </editor>
+    </REC>
+
+    <REC rdf:about="http://www.w3.org/TR/2002/REC-UAAG10-20021217/">
+        <dc:date>2002-12-17</dc:date>
+        <dc:title>User Agent Accessibility Guidelines 1.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/PR-UAAG10-20021016/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/UAAG10/"/>
+        <cites rdf:resource="http://www.w3.org/WAI/Technical/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ian Jacobs</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jon Gunderson</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Eric Hansen</contact:fullName>
+        </editor>
+        <mat:hasErrata rdf:resource="http://www.w3.org/WAI/UA/UAAG-errata"/>
+        <mat:hasTranslations rdf:resource="http://www.w3.org/WAI/UA/UAAG-translations"/>
+    </REC>
+
+    <REC rdf:about="http://www.w3.org/TR/2002/REC-xhtml1-20020801">
+        <dc:date>2002-08-01</dc:date>
+        <dc:title>XHTML™ 1.0 The Extensible HyperText Markup Language (Second Edition)</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2001/WD-xhtml1-20011004/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xhtml1"/>
+        <cites rdf:resource="http://www.w3.org/MarkUp/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Steven Pemberton</contact:fullName>
+        </editor>
+        <previousEdition rdf:resource="http://www.w3.org/TR/2000/REC-xhtml1-20000126"/>
+    </REC>
+
+    <REC rdf:about="http://www.w3.org/TR/2002/REC-xml-exc-c14n-20020718/">
+        <dc:date>2002-07-18</dc:date>
+        <dc:title>Exclusive XML Canonicalization Version 1.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/PR-xml-exc-c14n-20020524/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xml-exc-c14n"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>John Boyer</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Donald E. Eastlake 3rd</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Joseph Reagle</contact:fullName>
+        </editor>
+    </REC>
+
+    <REC rdf:about="http://www.w3.org/TR/2002/REC-xmldsig-filter2-20021108/">
+        <dc:date>2002-11-08</dc:date>
+        <dc:title>XML-Signature XPath Filter 2.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/PR-xmldsig-filter2-20020827/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xmldsig-filter2/"/>
+        <cites rdf:resource="http://www.w3.org/Signature/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>John Boyer</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Merlin Hughes</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Joseph Reagle</contact:fullName>
+        </editor>
+        <mat:hasErrata rdf:resource="http://www.w3.org/2002/11/xpath-filter2-errata.html"/>
+        <mat:hasTranslations rdf:resource="http://www.w3.org/Signature/2002/02/xmldsig-translations"/>
+    </REC>
+
+    <REC rdf:about="http://www.w3.org/TR/2002/REC-xmlenc-core-20021210/">
+        <dc:date>2002-12-10</dc:date>
+        <dc:title>XML Encryption Syntax and Processing</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/PR-xmlenc-core-20021003/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xmlenc-core/"/>
+        <cites rdf:resource="http://www.w3.org/Encryption/2001/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Donald Eastlake</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Joseph Reagle</contact:fullName>
+        </editor>
+        <mat:hasErrata rdf:resource="http://www.w3.org/Encryption/2002/12-xmlenc-errata"/>
+        <mat:hasTranslations rdf:resource="http://www.w3.org/Encryption/2002/12-xmlenc-translations"/>
+    </REC>
+
+    <REC rdf:about="http://www.w3.org/TR/2002/REC-xmlenc-decrypt-20021210">
+        <dc:date>2002-12-10</dc:date>
+        <dc:title>Decryption Transform for XML Signature</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/PR-xmlenc-decrypt-20021003"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xmlenc-decrypt"/>
+        <cites rdf:resource="http://www.w3.org/Encryption/2001/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Merlin Hughes</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Takeshi Imamura</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Hiroshi Maruyama</contact:fullName>
+        </editor>
+        <mat:hasErrata rdf:resource="http://www.w3.org/Encryption/2002/12-xmlenc-decrypt-errata"/>
+        <mat:hasTranslations rdf:resource="http://www.w3.org/Encryption/2002/12-xmlenc-translations"/>
+    </REC>
+
+    <Retired rdf:about="http://www.w3.org/TR/2002/WD-DOM-Level-3-ASLS-20020725">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#Superseded"/>
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2002-07-25</dc:date>
+        <dc:title>Document Object Model (DOM) Level 3 Abstract Schemas and Load and
+      Save Specification</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-DOM-Level-3-ASLS-20020409"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/DOM-Level-3-ASLS/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ben Chang</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Elena Litani</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jeroen van Rotterdam</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Johnny Stenback</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Andy Heninger</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Joe Kesselman</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Rezaur Rahman</contact:fullName>
+        </editor>
+    </Retired>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2002/WD-DOM-Level-3-XPath-20020328">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2002-03-28</dc:date>
+        <dc:title>Document Object Model (DOM) Level 3 XPath
+Specification</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/DOM-Level-3-XPath/"/>
+        <cites rdf:resource="http://www.w3.org/DOM/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ray Whitmer</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2002-05-01</lastCallFeedBackDue>
+    </LastCall>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-EARL10-20021206/">
+        <dc:date>2002-12-06</dc:date>
+        <dc:title>Evaluation and Report Language (EARL) 1.0</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/EARL10/"/>
+        <cites rdf:resource="http://www.w3.org/WAI/Technical/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Wendy Chisholm</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Sean B. Palmer</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-MathML2-20021219/">
+        <dc:date>2002-12-19</dc:date>
+        <dc:title>Mathematical Markup Language (MathML) Version 2.0 (2nd
+Edition)</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2001/REC-MathML2-20010221"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/2002/WD-MathML2-20021219/"/>
+        <cites rdf:resource="http://www.w3.org/Math/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>David Carlisle</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Patrick Ion</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Robert Miner</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Nico Poppelier</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-P3P-preferences-20020415">
+        <dc:date>2002-04-15</dc:date>
+        <dc:title>A P3P Preference Exchange Language 1.0 (APPEL1.0)</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/P3P-preferences"/>
+        <cites rdf:resource="http://www.w3.org/Privacy/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Marc Langheinrich</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-SVG12-20021115/">
+        <dc:date>2002-11-15</dc:date>
+        <dc:title>Scalable Vector Graphics (SVG) 1.2</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/SVG12"/>
+        <cites rdf:resource="http://www.w3.org/Graphics/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Dean Jackson</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-SVG2Reqs-20020422/">
+        <dc:date>2002-04-22</dc:date>
+        <dc:title>SVG 1.1/1.2/2.0 Requirements</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/SVG2Reqs"/>
+        <cites rdf:resource="http://www.w3.org/Graphics/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Dean Jackson</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-WCAG20-20020822/">
+        <dc:date>2002-08-22</dc:date>
+        <dc:title>Web Content Accessibility Guidelines 2.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2001/WD-WCAG20-20010824/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/WCAG20/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ben Caldwell</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Wendy Chisholm</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jason White</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Gregg Vanderheiden</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-XHTMLplusMathMLplusSVG-20020809/">
+        <dc:date>2002-08-09</dc:date>
+        <dc:title>An XHTML + MathML + SVG Profile</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-XHTMLplusMathMLplusSVG-20020430/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/XHTMLplusMathMLplusSVG/"/>
+        <cites rdf:resource="http://www.w3.org/MarkUp/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Masayasu Ishikawa</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-acdi-20021018/">
+        <dc:date>2002-10-18</dc:date>
+        <dc:title>Authoring Challenges for Device Independence</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/acdi/"/>
+        <cites rdf:resource="http://www.w3.org/2001/di/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Rhys Lewis</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-ccxml-20021011/">
+        <dc:date>2002-10-11</dc:date>
+        <dc:title>Voice Browser Call Control: CCXML Version 1.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-ccxml-20020221/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/ccxml/"/>
+        <cites rdf:resource="http://www.w3.org/Voice/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>RJ Auburn</contact:fullName>
+        </editor>
+    </WD>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2002/WD-charmod-20020430/">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2002-04-30</dc:date>
+        <dc:title>Character Model for the World Wide Web 1.0</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/charmod/"/>
+        <cites rdf:resource="http://www.w3.org/International/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Martin J. Dürst</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>François Yergeau</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Richard Ishida</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Misha Wolf</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Asmus Freytag</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tex Texin</contact:fullName>
+        </editor>
+    </LastCall>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-css-style-attr-20020515">
+        <dc:date>2002-05-15</dc:date>
+        <dc:title>Syntax of CSS rules in HTML's "style" attribute</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css-style-attr"/>
+        <cites rdf:resource="http://www.w3.org/Style/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tantek Çelik</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Bert Bos</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Marc Attinasi</contact:fullName>
+        </editor>
+    </WD>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2002/WD-css3-background-20020802">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2002-08-02</dc:date>
+        <dc:title>CSS3 module: Backgrounds</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css3-background/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tim Boland</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Bert Bos</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2002-08-30</lastCallFeedBackDue>
+    </LastCall>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-css3-border-20021107">
+        <dc:date>2002-11-07</dc:date>
+        <dc:title>CSS3 module: Border</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css3-border"/>
+        <cites rdf:resource="http://www.w3.org/Style/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tapas Roy</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-css3-box-20021024">
+        <dc:date>2002-10-24</dc:date>
+        <dc:title>CSS3 module: The box model</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2001/WD-css3-box-20010726/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css3-box"/>
+        <cites rdf:resource="http://www.w3.org/Style/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Bert Bos</contact:fullName>
+        </editor>
+    </WD>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2002/WD-css3-fonts-20020802">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2002-08-02</dc:date>
+        <dc:title>CSS3 module: Fonts</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css3-fonts/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Michel Suignard</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Chris Lilley</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2002-08-30</lastCallFeedBackDue>
+    </LastCall>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-css3-linebox-20020515">
+        <dc:date>2002-05-15</dc:date>
+        <dc:title>CSS3 module: line</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css3-linebox"/>
+        <cites rdf:resource="http://www.w3.org/Style/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Michel Suignard</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Eric A. Meyer</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-css3-lists-20021107">
+        <dc:date>2002-11-07</dc:date>
+        <dc:title>CSS3 module: Lists</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-css3-lists-20020220"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css3-lists"/>
+        <cites rdf:resource="http://www.w3.org/Style/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ian Hickson</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tantek Çelı̇k</contact:fullName>
+        </editor>
+    </WD>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2002/WD-css3-ruby-20021024">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2002-10-24</dc:date>
+        <dc:title>CSS3 module: Ruby</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2001/WD-css3-ruby-20010216/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css3-ruby/"/>
+        <cites rdf:resource="http://www.w3.org/Style/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Michel Suignard</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2002-11-27</lastCallFeedBackDue>
+    </LastCall>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-css3-ui-20020802">
+        <dc:date>2002-08-02</dc:date>
+        <dc:title>CSS3 module: Basic User Interface</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css3-ui"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tantek Çelik</contact:fullName>
+        </editor>
+    </WD>
+
+    <Retired rdf:about="http://www.w3.org/TR/2002/WD-css3-userint-20020802">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#Superseded"/>
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2002-08-02</dc:date>
+        <dc:title>User Interface for CSS3</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2000/WD-css3-userint-20000216"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css3-userint"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tantek Çelik</contact:fullName>
+        </editor>
+    </Retired>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2002/WD-css3-webfonts-20020802">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2002-08-02</dc:date>
+        <dc:title>CSS3 module: Web Fonts</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css3-webfonts"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Michel Suignard</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Chris Lilley</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2002-08-30</lastCallFeedBackDue>
+    </LastCall>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-di-dco-20021213/">
+        <dc:date>2002-12-13</dc:date>
+        <dc:title>Delivery Context Overview for Device Independence</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/di-dco/"/>
+        <cites rdf:resource="http://www.w3.org/2001/di/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Roger Gimson</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-hlink-20020913/">
+        <dc:date>2002-09-13</dc:date>
+        <dc:title>HLink: Link recognition for the XHTML Family</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/hlink/"/>
+        <cites rdf:resource="http://www.w3.org/MarkUp/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Steven Pemberton</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Masayasu Ishikawa</contact:fullName>
+        </editor>
+    </WD>
+
+    <Superseded rdf:about="http://www.w3.org/TR/2002/WD-owl-absyn-20020729/">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2002-07-29</dc:date>
+        <dc:title>OWL Web Ontology Language 1.0 Abstract Syntax</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/owl-absyn/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Peter F. Patel-Schneider</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ian Horrocks</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Frank van Harmelen</contact:fullName>
+        </editor>
+    </Superseded>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-patent-policy-20030319">
+        <dc:date>2003-03-19</dc:date>
+        <dc:title>Patent Policy Working Group Royalty-Free Patent
+Policy</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-patent-policy-20021114"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/patent-policy/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Daniel J. Weitzner</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-qaframe-test-20021220/">
+        <dc:date>2002-12-20</dc:date>
+        <dc:title>QA Framework: Test Guidelines</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/qaframe-test/"/>
+        <cites rdf:resource="http://www.w3.org/QA/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Kirill Gavrylyuk</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Dimitris Dimitriadis</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Lofton Henderson</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Mark Skall</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Peter Fawcett</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-query-datamodel-20021115/">
+        <dc:date>2002-11-15</dc:date>
+        <dc:title>XQuery 1.0 and XPath 2.0 Data Model</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-query-datamodel-20020816/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/query-datamodel/"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Mary Fernández</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ashok Malhotra</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jonathan Marsh</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Marton Nagy</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Norman Walsh</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-query-semantics-20021115/">
+        <dc:date>2002-11-15</dc:date>
+        <dc:title>XQuery 1.0 and XPath 2.0 Formal Semantics</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-query-semantics-20020816/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/query-semantics/"/>
+        <cites rdf:resource="http://www.w3.org/Style/Activity"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Denise Draper</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Michael Rys</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jérôme Siméon</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Philip Wadler</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Peter Fankhauser</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Mary Fernández</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ashok Malhotra</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Kristoffer Rose</contact:fullName>
+        </editor>
+    </WD>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2002/WD-soap12-af-20020924">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2002-09-24</dc:date>
+        <dc:title>SOAP 1.2 Attachment Feature</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-soap12-af-20020814"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/soap12-af"/>
+        <cites rdf:resource="http://www.w3.org/2002/ws/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Henrik Frystyk Nielsen</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Hervé Ruellan</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2002-10-15</lastCallFeedBackDue>
+    </LastCall>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2002/WD-soap12-testcollection-20020626">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2002-06-26</dc:date>
+        <dc:title>SOAP Version 1.2 Specification Assertions and Test
+Collection</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/soap12-testcollection"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Hugo Haas</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Oisin Hurley</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Anish Karmarkar</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jeff Mischkinsky</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Mark Jones</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Lynne Thompson</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Richard Martin</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2002-07-19</lastCallFeedBackDue>
+    </LastCall>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2002/WD-speech-synthesis-20021202/">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2002-12-02</dc:date>
+        <dc:title>Speech Synthesis Markup Language Version 1.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-speech-synthesis-20020405/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/speech-synthesis"/>
+        <cites rdf:resource="http://www.w3.org/Voice/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Daniel C. Burnett</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Mark R. Walker</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Andrew Hunt</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2003-01-15</lastCallFeedBackDue>
+    </LastCall>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-vbi-reqs-20020808/">
+        <dc:date>2002-08-08</dc:date>
+        <dc:title>Voice Browser Interoperation: Requirements</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/vbi-reqs"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Kenneth G. Rehor</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-wcag2-req-20020426">
+        <dc:date>2002-04-26</dc:date>
+        <dc:title>Requirements for WCAG 2.0</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/wcag2-req/"/>
+        <cites rdf:resource="http://www.w3.org/WAI/Technical/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Gregg Vanderheiden</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Wendy Chisholm</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-ws-arch-20021114/">
+        <dc:date>2002-11-14</dc:date>
+        <dc:title>Web Services Architecture</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/ws-arch/"/>
+        <cites rdf:resource="http://www.w3.org/2002/ws/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Michael Champion</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Chris Ferris</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Eric Newcomer</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>David Orchard</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-ws-arch-scenarios-20020730/">
+        <dc:date>2002-07-30</dc:date>
+        <dc:title>Web Services Architecture Usage Scenarios</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/ws-arch-scenarios/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Hugo Haas</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>David Orchard</contact:fullName>
+        </editor>
+    </WD>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2002/WD-ws-desc-reqs-20021028">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2002-10-28</dc:date>
+        <dc:title>Web Services Description Requirements</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-ws-desc-reqs-20020429"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/ws-desc-reqs"/>
+        <cites rdf:resource="http://www.w3.org/2002/ws/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jeffrey C. Schlimmer</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2002-12-31</lastCallFeedBackDue>
+    </LastCall>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-ws-desc-usecases-20020604">
+        <dc:date>2002-06-04</dc:date>
+        <dc:title>Web Service Description Usage Scenarios</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/ws-desc-usecases"/>
+        <cites rdf:resource="http://www.w3.org/2002/ws/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Waqar Sadiq</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Sandeep Kumar</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-ws-gloss-20021114/">
+        <dc:date>2002-11-14</dc:date>
+        <dc:title>Web Services Glossary</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/ws-gloss/"/>
+        <cites rdf:resource="http://www.w3.org/2002/ws/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Allen Brown</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Hugo Haas</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-ws-i18n-scenarios-20021220/">
+        <dc:date>2002-12-20</dc:date>
+        <dc:title>Web Services Internationalization Usage Scenarios</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/ws-i18n-scenarios/"/>
+        <cites rdf:resource="http://www.w3.org/International/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Kentaroh Noji</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Martin J. DÃ¼rst</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Addison Phillips</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Takao Suzuki</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tex Texin</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-wsa-reqs-20021114">
+        <dc:date>2002-11-14</dc:date>
+        <dc:title>Web Services Architecture Requirements</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-wsa-reqs-20021011"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/wsa-reqs"/>
+        <cites rdf:resource="http://www.w3.org/2002/ws/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Daniel Austin</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Abbie Barbir</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Christopher Ferris</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Sharad Garg</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-xag-20021003">
+        <dc:date>2002-10-03</dc:date>
+        <dc:title>XML Accessibility Guidelines</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2001/WD-xmlgl-20010829"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xag"/>
+        <cites rdf:resource="http://www.w3.org/WAI/Technical/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Daniel Dardailler</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Sean B. Palmer</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Charles McCathieNevile</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-xframes-20020806">
+        <dc:date>2002-08-06</dc:date>
+        <dc:title>XFrames</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xframes"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Steven Pemberton</contact:fullName>
+        </editor>
+    </WD>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2002/WD-xhtml-m12n-schema-20021209">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2002-12-09</dc:date>
+        <dc:title>Modularization of XHTML in XML Schema</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-xhtml-m12n-schema-20020815"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xhtml-m12n-schema"/>
+        <cites rdf:resource="http://www.w3.org/MarkUp/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Daniel Austin</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Shane McCarron</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Masayasu Ishikawa</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2003-01-31</lastCallFeedBackDue>
+    </LastCall>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-xml-names11-req-20020403/">
+        <dc:date>2002-04-03</dc:date>
+        <dc:title>Namespaces in XML 1.1 Requirements</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xml-names11-req/"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jonathan Marsh</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-xmlp-reqs-20020626">
+        <dc:date>2002-06-26</dc:date>
+        <dc:title>XML Protocol (XMLP) Requirements</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xmlp-reqs"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Henrik Frystyk Nielsen</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Bob Lojek</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Mark Nottingham</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Waqar Sadiq</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Stuart Williams</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Amr Yassin</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Vidur Apparao</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Alex Ceponkus</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Paul Cotton</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>David Ezell</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>David Fallside</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Martin Gudgin</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Oisin Hurley</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>John Ibbotson</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>R. Alexander Milowski</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Kevin Mitchell</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jean-Jacques Moreau</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Eric Newcomer</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-xmlp-scenarios-20020626">
+        <dc:date>2002-06-26</dc:date>
+        <dc:title>SOAP Version 1.2 Usage Scenarios</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xmlp-scenarios"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>John Ibbotson</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-xmlquery-use-cases-20021115/">
+        <dc:date>2002-11-15</dc:date>
+        <dc:title>XML Query Use Cases</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-xmlquery-use-cases-20020816"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xmlquery-use-cases"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Peter Fankhauser</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Daniela Florescu</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Massimo Marchiori</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jonathan Robie</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Don Chamberlin</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-xpath20-20021115">
+        <dc:date>2002-11-15</dc:date>
+        <dc:title>XML Path Language (XPath) 2.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-xpath20-20020816"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xpath20"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Michael Kay</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Anders Berglund</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jonathan Robie</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jérôme Siméon</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Scott Boag</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Don Chamberlin</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Mary F. Fernandez</contact:fullName>
+        </editor>
+    </WD>
+
+    <Retired rdf:about="http://www.w3.org/TR/2002/WD-xptr-20020816/">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#Superseded"/>
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2002-08-16</dc:date>
+        <dc:title>XML Pointer Language (XPointer)</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2001/CR-xptr-20010911/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xptr/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Paul Grosso</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Eve Maler</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jonathan Marsh</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Norman Walsh</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Steven DeRose</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ron Daniel Jr.</contact:fullName>
+        </editor>
+    </Retired>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-xptr-xpointer-20021219/">
+        <dc:date>2002-12-19</dc:date>
+        <dc:title>XPointer xpointer() Scheme</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-xptr-xpointer-20020710/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xptr-xpointer/"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Steven DeRose</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Eve Maler</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ron Daniel Jr.</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-xquery-20021115/">
+        <dc:date>2002-11-15</dc:date>
+        <dc:title>XQuery 1.0: An XML Query Language</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-xquery-20020816/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xquery"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Scott Boag</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jérôme Siméon</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Don Chamberlin</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Mary F. Fernandez</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Daniela Florescu</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jonathan Robie</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-xquery-operators-20021115/">
+        <dc:date>2002-11-15</dc:date>
+        <dc:title>XQuery 1.0 and XPath 2.0 Functions and Operators</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-xquery-operators-20020816/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xquery-operators/"/>
+        <cites rdf:resource="http://www.w3.org/Style/Activity"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ashok Malhotra</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ashok Malhotra</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jim Melton</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jonathan Robie</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Norman Walsh</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jim Melton</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jonathan Robie</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Norman Walsh</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2002/WD-xslt20-20021115/">
+        <dc:date>2002-11-15</dc:date>
+        <dc:title>XSL Transformations (XSLT) Version 2.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-xslt20-20020816/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xslt20"/>
+        <cites rdf:resource="http://www.w3.org/Style/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Michael Kay</contact:fullName>
+        </editor>
+    </WD>
+
+    <CR rdf:about="http://www.w3.org/TR/2003/CR-voicexml20-20030220/">
+        <dc:date>2003-02-20</dc:date>
+        <dc:title>Voice Extensible Markup Language (VoiceXML) Version 2.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2003/CR-voicexml20-20030128/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/voicexml20"/>
+        <cites rdf:resource="http://www.w3.org/Voice/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Scott McGlashan</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Bruce Lucas</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Brad Porter</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ken Rehor</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Daniel C. Burnett</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jerry Carter</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jim Ferrans</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Andrew Hunt</contact:fullName>
+        </editor>
+        <implementationFeedbackDue>2003-04-10</implementationFeedbackDue>
+    </CR>
+
+    <CR rdf:about="http://www.w3.org/TR/2003/CR-xml-events-20030207">
+        <dc:date>2003-02-07</dc:date>
+        <dc:title>XML Events</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-xml-events-20020812"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xml-events"/>
+        <cites rdf:resource="http://www.w3.org/MarkUp/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Shane McCarron</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Steven Pemberton</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>T. V. Raman</contact:fullName>
+        </editor>
+        <implementationFeedbackDue>2003-03-05</implementationFeedbackDue>
+    </CR>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2003/NOTE-EMMAreqs-20030113">
+        <dc:date>2003-01-13</dc:date>
+        <dc:title>Requirements for EMMA</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/EMMAreqs"/>
+        <cites rdf:resource="http://www.w3.org/2002/mmi/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Stéphane H. Maes</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Stephen Potter</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2003/NOTE-XAdES-20030220/">
+        <dc:date>2003-02-20</dc:date>
+        <dc:title>XML Advanced Electronic Signatures (XAdES)</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/XAdES/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Juan Carlos Cruellas</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Gregor Karlinger</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Krishna Sankar</contact:fullName>
+        </editor>
+        <fromSubmission rdf:resource="http://www.w3.org/Submission/2003/01/"/>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2003/NOTE-chips-20030128/">
+        <dc:date>2003-01-28</dc:date>
+        <dc:title>Common HTTP Implementation Problems</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/chips"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Olivier Théreaux</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2003/NOTE-cuap-20030128">
+        <dc:date>2003-01-28</dc:date>
+        <dc:title>Common User Agent Problems</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2001/NOTE-cuap-20010206"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/cuap"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Karl Dubost</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2003/NOTE-inkreqs-20030122/">
+        <dc:date>2003-01-22</dc:date>
+        <dc:title>Requirements for the Ink Markup Language</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/inkreqs/"/>
+        <cites rdf:resource="http://www.w3.org/2002/mmi/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Yi-Min Chee</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Sai Prasad</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2003/NOTE-lbase-20030123">
+        <dc:date>2003-01-23</dc:date>
+        <dc:title>LBase: Semantics for Languages of the Semantic Web</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/lbase"/>
+        <cites rdf:resource="http://www.w3.org/2001/sw/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>R.V.Guha</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Patrick Hayes</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2003/NOTE-mmi-reqs-20030108/">
+        <dc:date>2003-01-08</dc:date>
+        <dc:title>Multimodal Interaction Requirements</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/mmi-reqs/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Stéphane H. Maes</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Vijay Saraswat</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <NOTE rdf:about="http://www.w3.org/TR/2003/NOTE-soap12-n11n-20030328/">
+        <dc:date>2003-03-28</dc:date>
+        <dc:title>SOAP Version 1.2 Message Normalization</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/soap12-n11n/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Martin Gudgin</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Marc Hadley</contact:fullName>
+        </editor>
+    </NOTE>
+
+    <REC rdf:about="http://www.w3.org/TR/2003/REC-DOM-Level-2-HTML-20030107">
+        <dc:date>2003-01-09</dc:date>
+        <dc:title>Document Object Model (DOM) Level 2 HTML
+Specification</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/PR-DOM-Level-2-HTML-20021108"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/DOM-Level-2-HTML/"/>
+        <cites rdf:resource="http://www.w3.org/DOM/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Johnny Stenback</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Philippe Le Hégaret</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Arnaud Le Hors</contact:fullName>
+        </editor>
+        <mat:hasTranslations rdf:resource="http://www.w3.org/2000/11/DOM-Level-2-translations"/>
+    </REC>
+
+    <REC rdf:about="http://www.w3.org/TR/2003/REC-SVG11-20030114/">
+        <dc:date>2003-01-14</dc:date>
+        <dc:title>Scalable Vector Graphics (SVG) 1.1 Specification</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/PR-SVG11-20021115/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/SVG11/"/>
+        <cites rdf:resource="http://www.w3.org/Graphics/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jon Ferraiolo</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>藤沢 淳</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Dean Jackson</contact:fullName>
+        </editor>
+        <mat:hasErrata rdf:resource="http://www.w3.org/2003/01/REC-SVG11-20030114-errata"/>
+        <mat:hasTranslations rdf:resource="http://www.w3.org/Graphics/SVG/svg-updates/translations"/>
+    </REC>
+
+    <REC rdf:about="http://www.w3.org/TR/2003/REC-SVGMobile-20030114/">
+        <dc:date>2003-01-14</dc:date>
+        <dc:title>
+      Mobile SVG Profiles: SVG Tiny and SVG Basic
+    </dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/PR-SVGMobile-20021115/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/SVGMobile/"/>
+        <cites rdf:resource="http://www.w3.org/Graphics/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tolga Capin</contact:fullName>
+        </editor>
+        <mat:hasErrata rdf:resource="http://www.w3.org/2003/01/REC-SVGMobile-20030114-errata"/>
+        <mat:hasTranslations rdf:resource="http://www.w3.org/Graphics/SVG/svg-updates/translations"/>
+    </REC>
+
+    <REC rdf:about="http://www.w3.org/TR/2003/REC-xptr-element-20030325/">
+        <dc:date>2003-03-25</dc:date>
+        <dc:title>XPointer element() Scheme</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/PR-xptr-element-20021113/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xptr-element/"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Paul Grosso</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Eve Maler</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jonathan Marsh</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Norman Walsh</contact:fullName>
+        </editor>
+        <mat:hasErrata rdf:resource="http://www.w3.org/2003/03/REC-xptr-20030325-errata"/>
+        <mat:hasTranslations rdf:resource="http://www.w3.org/2003/03/xptr-translations"/>
+    </REC>
+
+    <REC rdf:about="http://www.w3.org/TR/2003/REC-xptr-framework-20030325/">
+        <dc:date>2003-03-25</dc:date>
+        <dc:title>XPointer Framework</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/PR-xptr-framework-20021113/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xptr-framework/"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Paul Grosso</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Eve Maler</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jonathan Marsh</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Norman Walsh</contact:fullName>
+        </editor>
+        <mat:hasErrata rdf:resource="http://www.w3.org/2003/03/REC-xptr-20030325-errata"/>
+        <mat:hasTranslations rdf:resource="http://www.w3.org/2003/03/xptr-translations"/>
+    </REC>
+
+    <REC rdf:about="http://www.w3.org/TR/2003/REC-xptr-xmlns-20030325/">
+        <dc:date>2003-03-25</dc:date>
+        <dc:title>XPointer xmlns() Scheme</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/PR-xptr-xmlns-20021113/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xptr-xmlns/"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Steven J. DeRose</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ron Daniel Jr.</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Eve Maler</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jonathan Marsh</contact:fullName>
+        </editor>
+        <mat:hasErrata rdf:resource="http://www.w3.org/2003/03/REC-xptr-20030325-errata"/>
+        <mat:hasTranslations rdf:resource="http://www.w3.org/2003/03/xptr-translations"/>
+    </REC>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-ATAG20-20030314/">
+        <dc:date>2003-03-14</dc:date>
+        <dc:title>Authoring Tool Accessibility Guidelines 2.0</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/ATAG20/"/>
+        <cites rdf:resource="http://www.w3.org/WAI/Technical/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jutta Treviranus</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Charles McCathieNevile</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jan Richards</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Matt May</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-ATAG20-TECHS-20030314/">
+        <dc:date>2003-03-14</dc:date>
+        <dc:title>Implementation Techniques for Authoring Tool Accessibility Guidelines 2.0</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/ATAG20-TECHS/"/>
+        <cites rdf:resource="http://www.w3.org/WAI/Technical/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jutta Treviranus</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Charles McCathieNevile</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jan Richards</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Matt May</contact:fullName>
+        </editor>
+    </WD>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2003/WD-CCPP-struct-vocab-20030325/">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2003-03-25</dc:date>
+        <dc:title>Composite Capability/Preference Profiles (CC/PP): Structure
+and Vocabularies</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-CCPP-struct-vocab-20021108/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/CCPP-struct-vocab/"/>
+        <cites rdf:resource="http://www.w3.org/2001/di/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Graham Klyne</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Mark H. Butler</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Luu Tran</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Franklin Reynolds</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Chris Woodrow</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Hidetaka Ohto</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Johan Hjelm</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2003-04-08</lastCallFeedBackDue>
+    </LastCall>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-CSS21-20030128">
+        <dc:date>2003-01-28</dc:date>
+        <dc:title>Cascading Style Sheets, Level 2 revision 1</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-CSS21-20020802"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/CSS21"/>
+        <cites rdf:resource="http://www.w3.org/Style/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Bert Bos</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tantek Çelik</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ian Hickson</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Håkon Wium Lie</contact:fullName>
+        </editor>
+        <mat:hasTranslations rdf:resource="http://www.w3.org/Style/css2-updates/translations.html"/>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-DOM-Level-3-Core-20030226">
+        <dc:date>2003-02-26</dc:date>
+        <dc:title>Document Object Model (DOM) Level 3 Core
+Specification</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-DOM-Level-3-Core-20021022"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/DOM-Level-3-Core/"/>
+        <cites rdf:resource="http://www.w3.org/DOM/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Arnaud Le Hors</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Mike Champion</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Steve Byrne</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Philippe Le Hégaret</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Lauren Wood</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Gavin Nicol</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jonathan Robie</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-DOM-Level-3-Events-20030221">
+        <dc:date>2003-02-21</dc:date>
+        <dc:title>Document Object Model (DOM) Level 3 Events
+Specification</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-DOM-Level-3-Events-20020712"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/DOM-Level-3-Events/"/>
+        <cites rdf:resource="http://www.w3.org/DOM/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Philippe Le Hégaret</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tom Pixley</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-DOM-Level-3-LS-20030226">
+        <dc:date>2003-02-26</dc:date>
+        <dc:title>Document Object Model (DOM) Level 3 Load and Save
+Specification</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-DOM-Level-3-LS-20020725"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/DOM-Level-3-LS"/>
+        <cites rdf:resource="http://www.w3.org/DOM/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Johnny Stenback</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Andy Heninger</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-DOM-Level-3-Val-20030205">
+        <dc:date>2003-02-05</dc:date>
+        <dc:title>Document Object Model (DOM) Level 3 Validation
+Specification</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-DOM-Level-3-Val-20021008"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/DOM-Level-3-Val"/>
+        <cites rdf:resource="http://www.w3.org/DOM/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ben Chang</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Joe Kesselman</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Rezaur Rahman</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-SVGPrintReqs-20030218/">
+        <dc:date>2003-02-18</dc:date>
+        <dc:title>SVG Printing Requirements</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/SVGPrintReqs"/>
+        <cites rdf:resource="http://www.w3.org/Graphics/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jun Fujisawa</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Lee Klosterman</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Craig Brown</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Alex Danilo</contact:fullName>
+        </editor>
+    </WD>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2003/WD-css3-color-20030214">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2003-02-14</dc:date>
+        <dc:title>CSS3 module: Color</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-css3-color-20020418"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css3-color"/>
+        <cites rdf:resource="http://www.w3.org/Style/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Tantek Çelik</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Chris Lilley</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2003-02-28</lastCallFeedBackDue>
+    </LastCall>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2003/WD-css3-text-20030226">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2003-02-26</dc:date>
+        <dc:title>CSS3 module: text</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-css3-text-20021024"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/css3-text"/>
+        <cites rdf:resource="http://www.w3.org/International/Activity"/>
+        <cites rdf:resource="http://www.w3.org/Style/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Michel Suignard</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2003-03-05</lastCallFeedBackDue>
+    </LastCall>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-owl-features-20030210/">
+        <dc:date>2003-02-10</dc:date>
+        <dc:title>Web Ontology Language (OWL): Overview</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-owl-features-20020729/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/owl-features/"/>
+        <cites rdf:resource="http://www.w3.org/2001/sw/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Deborah L. McGuinness</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Frank van Harmelen</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-owl-guide-20030210/">
+        <dc:date>2003-02-10</dc:date>
+        <dc:title>Web Ontology Language (OWL) Guide Version 1.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-owl-guide-20021104/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/owl-guide/"/>
+        <cites rdf:resource="http://www.w3.org/2001/sw/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Michael K. Smith</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Chris Welty</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Deborah McGuinness</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-owl-ref-20030221/">
+        <dc:date>2003-02-21</dc:date>
+        <dc:title>Web Ontology Language (OWL) Reference Version 1.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-owl-ref-20021112/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/owl-ref/"/>
+        <cites rdf:resource="http://www.w3.org/2001/sw/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Mike Dean</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Guus Schreiber</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-owl-semantics-20030203/">
+        <dc:date>2003-02-03</dc:date>
+        <dc:title>Web Ontology Language (OWL) Abstract Syntax and Semantics </dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-owl-semantics-20021108/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/owl-semantics/"/>
+        <cites rdf:resource="http://www.w3.org/2001/sw/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Peter F. Patel-Schneider</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Patrick Hayes</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ian Horrocks</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-owl-test-20030217/">
+        <dc:date>2003-02-17</dc:date>
+        <dc:title>Web Ontology Language (OWL) Test Cases</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-owl-test-20021024/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/owl-test/"/>
+        <cites rdf:resource="http://www.w3.org/2001/sw/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jeremy J. Carroll</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jos De Roo</contact:fullName>
+        </editor>
+    </WD>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2003/WD-qaframe-intro-20030210/">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2003-02-10</dc:date>
+        <dc:title>QA Framework: Introduction</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-qaframe-intro-20021108/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/qaframe-intro/"/>
+        <cites rdf:resource="http://www.w3.org/QA/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Lofton Henderson</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Kirill Gavrylyuk</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Dimitris Dimitriadis</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Lynne Rosenthal</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2003-03-14</lastCallFeedBackDue>
+    </LastCall>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2003/WD-qaframe-ops-20030210/">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2003-02-10</dc:date>
+        <dc:title>QA Framework: Operational Guidelines</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-qaframe-ops-20021108/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/qaframe-ops/"/>
+        <cites rdf:resource="http://www.w3.org/QA/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Lofton Henderson</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Dominique Hazaël-Massieux</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Kirill Gavrylyuk</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Dimitris Dimitriadis</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Lynne Rosenthal</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2003-03-14</lastCallFeedBackDue>
+    </LastCall>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2003/WD-qaframe-spec-20030210/">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2003-02-10</dc:date>
+        <dc:title>QA Framework: Specification Guidelines</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-qaframe-spec-20021108/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/qaframe-spec/"/>
+        <cites rdf:resource="http://www.w3.org/QA/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Dominique Hazaël-Massieux</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Lofton Henderson</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Lynne Rosenthal</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Dimitris Dimitriadis</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Kirill Gavrylyuk</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2003-03-14</lastCallFeedBackDue>
+    </LastCall>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2003/WD-rdf-concepts-20030123/">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2003-01-23</dc:date>
+        <dc:title>Resource Description Framework (RDF): Concepts and Abstract
+    Syntax</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-rdf-concepts-20021108/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/rdf-concepts/"/>
+        <cites rdf:resource="http://www.w3.org/2001/sw/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Graham Klyne</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jeremy J. Carroll</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2003-02-21</lastCallFeedBackDue>
+    </LastCall>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2003/WD-rdf-mt-20030123/">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2003-01-23</dc:date>
+        <dc:title>RDF Semantics</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-rdf-mt-20021112/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/rdf-mt/"/>
+        <cites rdf:resource="http://www.w3.org/2001/sw/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Patrick Hayes</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2003-02-21</lastCallFeedBackDue>
+    </LastCall>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2003/WD-rdf-primer-20030123/">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2003-01-23</dc:date>
+        <dc:title>RDF Primer</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-rdf-primer-20021111/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/rdf-primer/"/>
+        <cites rdf:resource="http://www.w3.org/2001/sw/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Frank Manola</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Eric Miller</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2003-02-21</lastCallFeedBackDue>
+    </LastCall>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2003/WD-rdf-schema-20030123/">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2003-01-23</dc:date>
+        <dc:title>RDF Vocabulary Description Language 1.0: RDF Schema</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-rdf-schema-20021112/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/rdf-schema"/>
+        <cites rdf:resource="http://www.w3.org/2001/sw/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Dan Brickley</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>R.V. Guha</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2003-02-21</lastCallFeedBackDue>
+    </LastCall>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2003/WD-rdf-syntax-grammar-20030123">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2003-01-23</dc:date>
+        <dc:title>RDF/XML Syntax Specification (Revised)</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-rdf-syntax-grammar-20021108"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/rdf-syntax-grammar"/>
+        <cites rdf:resource="http://www.w3.org/2001/sw/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Dave Beckett</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2003-02-21</lastCallFeedBackDue>
+    </LastCall>
+
+    <LastCall rdf:about="http://www.w3.org/TR/2003/WD-rdf-testcases-20030123/">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2003-01-23</dc:date>
+        <dc:title>RDF Test Cases</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-rdf-testcases-20021112/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/rdf-testcases"/>
+        <cites rdf:resource="http://www.w3.org/2001/sw/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jan Grant</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Dave Beckett</contact:fullName>
+        </editor>
+        <lastCallFeedBackDue>2003-02-21</lastCallFeedBackDue>
+    </LastCall>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-wcag2-tech-req-20030207/">
+        <dc:date>2003-02-07</dc:date>
+        <dc:title>Requirements for WCAG 2.0 Checklists and Techniques</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/wcag2-tech-req/"/>
+        <cites rdf:resource="http://www.w3.org/WAI/Technical/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Michael Cooper</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-webarch-20030326/">
+        <dc:date>2003-03-26</dc:date>
+        <dc:title>Architecture of the World Wide Web</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-webarch-20021115/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/webarch/"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ian Jacobs</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-webont-req-20030203/">
+        <dc:date>2003-02-03</dc:date>
+        <dc:title>Web Ontology Language (OWL) Use Cases and Requirements</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-webont-req-20020708/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/webont-req/"/>
+        <cites rdf:resource="http://www.w3.org/2001/sw/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jeff Heflin</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-wsdl12-20030303">
+        <dc:date>2003-03-03</dc:date>
+        <dc:title>Web Services Description Language (WSDL) Version 1.2</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2003/WD-wsdl12-20030124"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/wsdl12"/>
+        <cites rdf:resource="http://www.w3.org/2002/ws/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Roberto Chinnici</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Martin Gudgin</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jean-Jacques Moreau</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Sanjiva Weerawarana</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-wsdl12-bindings-20030124">
+        <dc:date>2003-01-24</dc:date>
+        <dc:title>Web Services Description Language (WSDL) Version 1.2:
+Bindings</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-wsdl12-bindings-20020709"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/wsdl12-bindings"/>
+        <cites rdf:resource="http://www.w3.org/2002/ws/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jean-Jacques Moreau</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jeffrey Schlimmer</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-xhtml2-20030131">
+        <dc:date>2003-01-31</dc:date>
+        <dc:title>XHTML 2.0</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2002/WD-xhtml2-20021218"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xhtml2"/>
+        <cites rdf:resource="http://www.w3.org/MarkUp/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Jonny Axelsson</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Beth Epperson</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Shane McCarron</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ann Navarro</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Steven Pemberton</contact:fullName>
+        </editor>
+    </WD>
+
+    <Retired rdf:about="http://www.w3.org/TR/2003/WD-xmlp-am-20030220/">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#WD"/>
+        <dc:date>2003-02-20</dc:date>
+        <dc:title>XML Protocol Abstract Model</dc:title>
+        <doc:obsoletes rdf:resource="http://www.w3.org/TR/2001/WD-xmlp-am-20010709/"/>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xmlp-am/"/>
+        <cites rdf:resource="http://www.w3.org/2002/ws/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Stuart Williams</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Mark Jones</contact:fullName>
+        </editor>
+    </Retired>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-xmlquery-full-text-requirements-20030214/">
+        <dc:date>2003-02-14</dc:date>
+        <dc:title>XQuery and XPath Full-Text Requirements</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xmlquery-full-text-requirements/"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Stephen Buxton</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Michael Rys</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-xmlquery-full-text-use-cases-20030214/">
+        <dc:date>2003-02-14</dc:date>
+        <dc:title>XQuery and XPath Full-Text Use Cases </dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xmlquery-full-text-use-cases"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Sihem Amer-Yahia</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Pat Case</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-xmlschema-11-req-20030121/">
+        <dc:date>2003-01-21</dc:date>
+        <dc:title>Requirements for XML Schema 1.1</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xmlschema-11-req/"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Charles Campbell</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Ashok Malhotra</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Priscilla Walmsley</contact:fullName>
+        </editor>
+    </WD>
+
+    <WD rdf:about="http://www.w3.org/TR/2003/WD-xmlschema-ref-20030109/">
+        <dc:date>2003-01-09</dc:date>
+        <dc:title>XML Schema: Component Designators</dc:title>
+        <doc:versionOf rdf:resource="http://www.w3.org/TR/xmlschema-ref/"/>
+        <cites rdf:resource="http://www.w3.org/XML/Activity"/>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Mary Holstege</contact:fullName>
+        </editor>
+        <editor rdf:parseType="Resource">
+            <contact:fullName>Asir S. Vedamuthu</contact:fullName>
+        </editor>
+    </WD>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/CCPP-struct-vocab/">
+        <formerShortname>CCPP-struct</formerShortname>
+        <formerShortname>CCPP-vocab</formerShortname>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/DOM-Level-3-AS">
+        <supersedes rdf:resource="http://www.w3.org/TR/DOM-Level-3-ASLS/"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/DOM-Level-3-ASLS/">
+        <formerShortname>DOM-Level-3-CMLS</formerShortname>
+        <formerShortname>DOM-Level-3-Content-Models-and-Load-Save</formerShortname>
+    </rdf:Description>
+
+    <FirstEdition rdf:about="http://www.w3.org/TR/REC-CSS1-961217">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#REC"/>
+        <dc:date>1996-12-17</dc:date>
+        <dc:title>Cascading Style Sheets, level 1 Recommandation</dc:title>
+    </FirstEdition>
+
+    <FirstEdition rdf:about="http://www.w3.org/TR/REC-html40-971218">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/rec54#REC"/>
+        <dc:date>1997-12-18</dc:date>
+        <dc:title>HTML 4.0 Recommendation</dc:title>
+    </FirstEdition>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/css3-color">
+        <formerShortname>css3-iccprof</formerShortname>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/css3-text">
+        <formerShortname>i18n-format</formerShortname>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/css3-ui">
+        <supersedes rdf:resource="http://www.w3.org/TR/css3-userint"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/owl-semantics/">
+        <supersedes rdf:resource="http://www.w3.org/TR/owl-absyn/"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/query-semantics/">
+        <formerShortname>query-algebra</formerShortname>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/soap12-part1/">
+        <formerShortname>soap12</formerShortname>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/speech-grammar">
+        <formerShortname>grammar-spec</formerShortname>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/xforms/">
+        <formerShortname>xforms-datamodel</formerShortname>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/xml-events">
+        <formerShortname>xhtml-events</formerShortname>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/xmlp-reqs">
+        <formerShortname>xp-reqs</formerShortname>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/xptr-element/">
+        <supersedes rdf:resource="http://www.w3.org/TR/xptr/"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/xptr-framework/">
+        <supersedes rdf:resource="http://www.w3.org/TR/xptr/"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/xptr-xmlns/">
+        <supersedes rdf:resource="http://www.w3.org/TR/xptr/"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/TR/xptr-xpointer/">
+        <supersedes rdf:resource="http://www.w3.org/TR/xptr/"/>
+    </rdf:Description>
+
+    <ActivityStatement rdf:about="http://www.w3.org/Voice/Activity">
+    </ActivityStatement>
+
+    <ActivityStatement rdf:about="http://www.w3.org/WAI/Technical/Activity">
+    </ActivityStatement>
+
+    <ActivityStatement rdf:about="http://www.w3.org/XML/Activity">
+    </ActivityStatement>
+</rdf:RDF>
