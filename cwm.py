@@ -756,6 +756,7 @@ def getParser(format, inputURI, formulaURI, flags):
         touch(_store)
         return notation3.SinkParser(_store, inputURI, formulaURI=formulaURI, why=r)
     else:
+        need(lxkb)
         touch(lxkb)
         return LX.language.getParser(language=format,
                                      sink=lxkb,
