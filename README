@@ -34,10 +34,10 @@ If a test fails: There are three possiblilities:
 		This is highly unlikely.
 
 
-== What's New In this Release (1.0) ==
+== What's New In this Release (1.0rc2) ==
 For a complete list of changes, look at doc/changes.html
 
-Release 1.0
+Release 1.0rc2
 
 ==General bugfixes
 Fixes in decimal support
