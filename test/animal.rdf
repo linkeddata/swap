@@ -1,0 +1,11 @@
+<rdf:RDF xmlns:rdfs="foo"  xmlns="bar">
+    <rdfs:Class rdf:ID="Animal">
+      <rdfs:label>Animal</rdfs:label>
+      <restrictedBy>
+        <Restriction>
+          <onProperty rdf:resource="#parent"/>
+          <cardinality>2</cardinality>
+        </Restriction>
+      </restrictedBy>
+    </rdfs:Class>
+</rdf:RDF>

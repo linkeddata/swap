@@ -1,0 +1,117 @@
+# Base URI of process is file:///devel/WWW/2000/10/swap/test/
+# Input from  file:/devel/WWW/2000/10/swap/test/daml-pref.n3
+# Input from  http://www.daml.org/2000/10/daml-ex
+# flushed data: '\012    '
+# flushed data: '\012    '
+# flushed data: '\012    '
+
+#  Notation3 generation by
+#  $Id$
+
+     @prefix ex: <http://www.daml.org/2000/10/daml-ex#> .
+     @prefix : <http://www.daml.org/2000/10/daml-ont#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    
+    <file:/devel/WWW/2000/10/swap/test/STDOUT>     a :Ontology;
+         :versionInfo "$Id$";
+         :comment "An example ontology";
+         :imports <http://www.daml.org/2000/10/daml-ont> .
+    
+    ex:Man     a :Class;
+         :subClassOf ex:Person,
+                ex:Male .
+    
+    ex:TallThing     a :Class;
+         :restrictedBy  [
+             a :Restriction;
+             :onProperty ex:height;
+             :toValue ex:tall ] .
+    
+    ex:Woman     a :Class;
+         :subClassOf ex:Person,
+                ex:Female .
+    
+    ex:ancestor     a :TransitiveProperty;
+         :label "ancestor" .
+    
+    ex:mother     a :UniqueProperty;
+         :subProperty ex:parent;
+         :range ex:Woman .
+    
+    ex:Female     a :Class;
+         :subClassOf ex:Animal;
+         :disjointFrom ex:Male .
+    
+    ex:Height     a :Class;
+         :oneOf  [
+             :first ex:short;
+             :rest  [
+                 :first ex:medium;
+                 :rest  [
+                     :first ex:tall;
+                     :rest :null ] ] ] .
+    
+    ex:father     a :Property;
+         :subProperty ex:parent;
+         :range ex:Man;
+         :cardinality "1" .
+    
+    ex:occupation     a :Property;
+         :maxCardinality "1" .
+    
+    ex:TallMan     a :Class;
+         :intersectionOf  [
+             :first ex:TallThing;
+             :rest  [
+                 :first ex:Man;
+                 :rest :null ] ] .
+    
+    ex:Animal     a :Class;
+         :label "Animal";
+         :comment """This class of animals is illustrative of a number of
+	ontological idioms.""" .
+    
+    ex:descendant     a :TransitiveProperty .
+    
+    ex:Male     a :Class;
+         :subClassOf ex:Animal .
+    
+    ex:child     a :Property;
+         :inverseOf ex:parent .
+    
+    ex:mom     a :Property;
+         = ex:mother .
+    
+    ex:Adam     a :Person;
+         :label "Adam";
+         :comment "Adam is a person." .
+    
+    ex:Person     a :Class;
+         :subClassOf ex:Animal;
+         :restrictedBy  [
+             a :Restriction;
+             :onProperty ex:parent;
+             :toClass ex:Person ];
+         :comment "every person is a man or a woman";
+         :disjointUnionOf  [
+             :first ex:Man;
+             :rest  [
+                 :first ex:Woman;
+                 :rest :null ] ] .
+    
+    ex:height     a :Property;
+         :domain ex:Person;
+         :range ex:Height .
+    
+    ex:Car     a :Class;
+         :comment "no car is a person";
+         :subClassOf  [
+             a :Class;
+             :complementOf ex:Person ] .
+    
+    ex:parent     a :Property;
+         :domain ex:Animal;
+         :cardinality "2" .
+    
+ #ENDS
