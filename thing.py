@@ -202,6 +202,8 @@ class Resource(Thing):
     def internFrag(self, fragid, thetype):   # type was only Fragment before
             f = self.fragments.get(fragid, None)
             if f:
+                if not isinstance(f, thetype):
+                    raise RuntimeError("Oops.. %s existsnot with type %s"%(f, thetype))
                 return f    # (Could check that types match just to be sure)
             f = thetype(self, fragid)
             self.fragments[fragid] = f
@@ -271,7 +273,28 @@ class Formula(Fragment):
 
     def asPair(self):
         return (FORMULA, self.uriref())
-        
+
+    def existentials(self):
+        "we may move to an internal storage rather than these statements"
+        exs = []
+        ss = self.store._index.get((self, self.store.forSome, self, None),[])
+        for s in ss:
+            exs.append(s[OBJ])
+        if verbosity() > 90: progress("Existentials in %s: %s" % (self, exs))
+        return exs
+
+    def universals(self):
+        "we may move to an internal storage rather than these statements"
+        exs = []
+        ss = self.store._index.get((self, self.store.forAll, self, None),[])
+        for s in ss:
+            exs.append(s[OBJ])
+        if verbosity() > 90: progress("Universals in %s: %s" % (self, exs))
+        return exs
+    
+    def variables(self):
+        return self.existentials() + self.universals()
+    
 #################################### Lists
 #
 #  The statement  x p l   where l is a list is shorthand for
@@ -444,12 +467,17 @@ class ReverseFunction:
 # For example, sometimes want on stdout maybe or in a scroll window....
 def progress(*args):
     import sys
+    global chatty_level  # verbosity indent level
+    sys.stderr.write(" "*chatty_level)
     for a in args:
         sys.stderr.write("%s " % (a,))
     sys.stderr.write("\n")
 #        sys.stderr.write(  str + "\n")
 
 global chatty_flag   # verbosity debug flag
+global chatty_level  # verbosity indent level
+
+chatty_level = 0
 
 def setVerbosity(x):
     global chatty_flag
@@ -458,3 +486,8 @@ def setVerbosity(x):
 def verbosity():
     global chatty_flag
     return chatty_flag
+
+def progressIndent(delta):
+    global chatty_level
+    chatty_level = chatty_level + delta
+    return chatty_level

@@ -123,7 +123,7 @@ import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 import thing
-from thing import  progress, BuiltIn, LightBuiltIn, HeavyBuiltIn, Function, ReverseFunction, \
+from thing import  progress, progressIndent, BuiltIn, LightBuiltIn, HeavyBuiltIn, Function, ReverseFunction, \
      Formula, Literal, Resource, Fragment, FragmentNil, compareURI, Thing, List, EmptyList
 
 import RDFSink
@@ -668,6 +668,9 @@ class RDFStore(RDFSink.RDFSink) :
                                               len(F.occursAs[OBJ])))
         for s in F.occursAs[CONTEXT][:]:   # Take copy
             self.removeStatement(s)
+        for p in ALL4:
+            if F.occursAs[p] != []:
+                raise RuntimeError("Attempt to delete Formula in use "+`F`, F.occursAs)
 
     def endFormula(self, F):
         """If this formula already exists, return the master version.
@@ -684,12 +687,12 @@ class RDFStore(RDFSink.RDFSink) :
 
     
         if possibles == None:
-            self._formulaeOfLength[l] = []
-            possibles = self._formulaeOfLength[l]
+            self._formulaeOfLength[l] = [F]
             return F
+
         for G in possibles:
             gl = G.occursAs[CONTEXT]
-            gl.sort(StoredStatement.__cmp_cannonical__)   #  needed cannonical?!
+#            gl.sort(StoredStatement.__cmp_cannonical__)   #  needed cannonical?!
             if len(gl) != l: raise RuntimeError("@@Length is %i instead of %i" %(len(gl), l))
             for i in range(l):
                 for p in CONTEXT, PRED, SUBJ, OBJ:
@@ -701,32 +704,61 @@ class RDFStore(RDFSink.RDFSink) :
                 break
             else: #match
                 if thing.verbosity() > 40: progress("** Smushed new formula %s giving old %s" % (F, G))
-                return F  # @@@@@@@@@@@@
-                self.deleteFormula(F)
+                self.replaceWith(F,G)
                 return G
         possibles.append(F)
+#        raise oops
         F.cannonical = F
         return F
-    
-    def endFormulaNested(self, F):
-        if thing.verbosity() > 80: progress("endFormulaNested:"+`F`)
+
+    def reopen(self, F):
+        if not F.cannonical: return F # was open
+        self._formulaeOfLength[len(F.occursAs[CONTEXT])].remove(F)  # Formulae of same length
+        F.cannonical = None
+        return F
+
+    def replaceWith(self,old, new):
+        if thing.verbosity() > 30:
+            progress("Smush: Replacing %s %ic %ip %is %io with %s" %
+                        ( `old`,
+                          len(old.occursAs[CONTEXT]),
+                          len(old.occursAs[PRED]),
+                          len(old.occursAs[SUBJ]),
+                          len(old.occursAs[OBJ]),
+                          `new`))
+        bindings = [ (old, new) ]
+        for p in ALL4:
+            for s in old.occursAs[p][:]:  # copy
+                if thing.verbosity() > 95: progress(".......removed", s.triple)
+                q2 = _lookupQuad(bindings, s.triple)
+                self.removeStatement(s)
+                self.storeQuad(q2)
+                if thing.verbosity() > 95: progress(".......restored", q2)
+        return new
+
+    def endFormulaNested(self, F, bindings = [], level=0):
+        """Cannonicalize this after cannonicalizing any subformulae recusrively
+        Note the subs must be done first. Also not that we can't assume statements
+        or formulae are valid after a call to this, unless we track the
+        changes which are kept in a shared list, bindings. """
+        if thing.verbosity() > 80:
+            progress("  "*level, "endFormulaNested:"+`F`+ `bindings`)
+
         if F.cannonical:
             return F.cannonical
-        new = [None, None, None, None]
+        subs = []   # Immediate subformulae
         for s in F.occursAs[CONTEXT]:
-            changed = 0
             for p in PRED, SUBJ, OBJ:
                 x = s[p]
-                new[p] = x
                 if isinstance(x, Formula) and x is not F:
-                    y = self.endFormulaNested(x)
-                    if y is not x:
-                        new[p] = y
-                        changed = 1
-            if changed:
-                self.removeStatement(s)
-                self.storeQuad((new[0], new[1], new[2], new[3]))
-        return self.endFormula(F)
+                    if x not in subs: subs.append(x)
+        for x in subs:
+            self.endFormulaNested( _lookup(bindings, x), bindings, level=level+1)
+
+        new = self.endFormula(F)
+        if new is not F:
+            bindings.append((F, new))
+        return new
 
 # Input methods:
 
@@ -745,6 +777,8 @@ class RDFStore(RDFSink.RDFSink) :
               self.intern(tuple[PRED]),
               self.intern(tuple[SUBJ]),
               self.intern(tuple[OBJ]) )
+        if q[PRED] is self.forSome and isinstance(q[OBJ], Formula):
+            return  # This is implicit, and the same formula can be used un >1 place
         self.storeQuad(q)
                     
     def makeComment(self, str):
@@ -813,6 +847,8 @@ class RDFStore(RDFSink.RDFSink) :
         
         self.size = self.size+1
         context, pred, subj, obj = q
+        if context.cannonical:
+            raise RuntimeError("Attempt to add statement to cannonical formula "+`context`)
 
 # We collapse lists from there declared daml first,rest structure into List objects.
 # To do this, we need (a) a first; (b) a rest, and (c) the rest being a list.
@@ -1001,6 +1037,8 @@ class RDFStore(RDFSink.RDFSink) :
 
         1. True iff can be represented as anonymous node in N3, [] or {}
         2. Number of incoming links: >0 means occurs as object or pred, 0 means as only as subject.
+            1 means just occurs once
+            >1 means occurs too many times to be anon
         
         Returns  number of incoming links (1 or 2) including forSome link
         or zero if self can NOT be represented as an anonymous node.
@@ -1011,11 +1049,12 @@ class RDFStore(RDFSink.RDFSink) :
         _elsewhere = 0
         _isExistential = len(self._index.get((context, self.forSome, context, x),[]))
         _asObj = len(self._index.get((context, None, None, x),[])) - _isExistential
+        _loop = len(self._index.get((context, None, x, x),[]))  # does'es count as incomming
         
         if isinstance(x, Literal):
             anon = 0     #  Never anonymous, always just use the string
         if x.asList() != None or isinstance(x, Formula):
-            _anon = 1    # Always represent it just as itself
+            _anon = 2    # Always represent it just as itself
         else:
             contextClosure = self.subContexts(context)[:]
             contextClosure.remove(context)
@@ -1025,13 +1064,13 @@ class RDFStore(RDFSink.RDFSink) :
                         or self._index.get((sc, x, None, None),None)):
                     _elsewhere = 1  # Occurs in a subformula - can't be anonymous!
                     break
-            _anon = (_asObj < 2) and ( _asPred == 0) and _isExistential and not _elsewhere
+            _anon = (_asObj < 2) and ( _asPred == 0) and (_loop ==0) and _isExistential and not _elsewhere
 
         if thing.verbosity() > 98:
-            progress( "\nTopology <%s in <%sanon=%i ob=%i, pr=%i ex=%i elsewhere=%i"%(
-            `x`[-8:], `context`[-8:], _anon, _asObj, _asPred,  _isExistential, _elsewhere))
+            progress( "Topology %s in %s is: anon=%i ob=%i, loop=%i pr=%i ex=%i elsewhere=%i"%(
+            `x`[-8:], `context`[-8:], _anon, _asObj, _loop, _asPred,  _isExistential, _elsewhere))
 
-        return ( _anon, _asObj+_asPred)  
+        return ( _anon, _asObj+_asPred )  
 
 
     
@@ -1124,7 +1163,7 @@ class RDFStore(RDFSink.RDFSink) :
      It does NOTHING for anonymous nodes which don't occur explicitly as subjects.
         """
         _anon, _incoming = self._topology(subj, context)    # Is anonymous?
-        if _anon and  _incoming == 1: return           # Forget it - will be dealt with in recursion
+        if _anon and  _incoming == 1 and not isinstance(subj, Formula): return           # Forget it - will be dealt with in recursion
 
         if isinstance(subj, Formula) and subj is not context:
             sink.startBagSubject(subj.asPair())
@@ -1179,19 +1218,17 @@ class RDFStore(RDFSink.RDFSink) :
     def dumpStatement(self, sink, triple, sorting=0):
         # triple = s.triple
         context, pre, sub, obj = triple
-        if sub is obj  or (isinstance(obj.asList(), EmptyList)) or isinstance(obj, Literal):
+        if (sub is obj and not isinstance(sub, Formula))  or (isinstance(obj.asList(), EmptyList)) or isinstance(obj, Literal):
             self._outputStatement(sink, triple) # Do 1-loops simply
             return
 
         _anon, _incoming = self._topology(obj, context)
         _se = isinstance(obj, Formula) and obj is not context
-        if 0: sink.makeComment("...%s anon=%i, incoming=%i, se=%i" % (
-            `obj`[-8:], _anon, _incoming, _se))
         
         if ((pre is self.forSome) and sub is context and _anon):
             return # implicit forSome
         li = (obj.asList() != None)
-        if _anon and (_incoming == 1 or li):  # Embedded anonymous node in N3
+        if _anon and (_incoming == 1 or li or _se):  # Embedded anonymous node in N3
             _isSubject = len(self._index.get((context, obj, None, None), [])) # Has properties in this context?
 
 #            if _isContext > 0 and _isSubject > 0: raise CantDoThat # Syntax problem!@@@
@@ -1238,14 +1275,25 @@ class RDFStore(RDFSink.RDFSink) :
 #  Note when we move things, then the store may shrink as they may
 # move on top of existing entries and we don't allow duplicates.
 #
-    def moveContext(self, old, new):
+    def moveContext(self, old, new, bindings=None):
+        self.reopen(new)    # If cannonical, uncannonicalize #@@ error prone if any references
+        if bindings == None:
+            bindings = [(old, new)]
         for s in old.occursAs[CONTEXT][:] :   # Copy list!
+            q = s.triple
             self.removeStatement(s)
-            for p in CONTEXT, PRED, SUBJ, OBJ:
-                x = s.triple[p]
-                if x is old:
-                    s.triple = s.triple[:p] + (new,) + s.triple[p+1:]
-            self.storeQuad(s.triple)
+            del(s)
+            self.storeQuad(_lookupQuad(bindings, q))
+
+    def copyContextRecursive(self, old, new, bindings):
+        total = 0
+        for s in old.occursAs[CONTEXT][:] :   # Copy list!
+#            q = s.triple
+#            self.removeStatement(s)
+            q2 = _lookupQuadRecursive(bindings, s.triple)
+            if thing.verbosity() > 30: progress("    Conclude: "+`q2`) 
+            total = total -1 + self.storeQuad(q2)
+        return total
                 
     def copyContext(self, old, new):
         for s in old.occursAs[CONTEXT][:] :   # Copy list!
@@ -1329,13 +1377,7 @@ class RDFStore(RDFSink.RDFSink) :
 
         # Execute a filter:
         
-        _variables = universals[:] # Rule-wide or wider universals
         _total = 0
-        for s in filterContext.occursAs[CONTEXT]:
-            t = s.triple
-            if t[PRED] is self.forAll and t[SUBJ] is filterContext:
-                _variables.append(t[OBJ])
-#        print "\n\n# APPLY RULES TO %s, (%i vars)" % (filterContext, len(_variables),), _variables
         
         for s in filterContext.occursAs[CONTEXT]:
             t = s.triple
@@ -1347,7 +1389,8 @@ class RDFStore(RDFSink.RDFSink) :
                     if already == None:
                         alreadyDictionary[s] = []
                         already = alreadyDictionary[s]
-                found = self.tryRule(s, workingContext, targetContext, _variables[:],
+                v2 = universals + filterContext.universals() # Note new variables can be generated
+                found = self.tryRule(s, workingContext, targetContext, v2,
                                      already=already)
                 if (thing.verbosity() >40):
                     progress( "Found %i new stmts on for rule %s" % (found, quadToString(t)))
@@ -1358,13 +1401,10 @@ class RDFStore(RDFSink.RDFSink) :
                 elif t[PRED] is self.type and t[OBJ] is self.Truth: c=t[SUBJ]
 # We could shorten the rule format if forAll(x,y) asserted truth of y too, but this messes up
 # { x foo y } forAll x,y; log:implies {...}. where truth is NOT asserted. This line would do it:
-                elif t[PRED] is self.forAll and t[SUBJ] is self.Truth: c=t[SUBJ]  # DanC suggestion @@
+#                elif t[PRED] is self.forAll and t[SUBJ] is filterContext: c=t[SUBJ]  # DanC suggestion @@
                 if c:
-                    _vs = _variables[:]
-                    for s in filterContext.occursAs[CONTEXT]: # find forAlls pointing downward
-                        if s.triple[PRED] is self.forAll and s.triple[SUBJ] is c:
-                            _vs.append(s.triple[OBJ])
-                    _total = _total + self.applyRules(workingContext, c, targetContext, _vs)  # Nested rules
+                    _total = _total + self.applyRules(workingContext, c, targetContext,
+                                                      universals=universals + filterContext.universals())  # Nested rules
 
 
         if thing.verbosity() > 4: progress("Total %i new statements from rules in %s" % ( _total, filterContext))
@@ -1398,13 +1438,14 @@ class RDFStore(RDFSink.RDFSink) :
             progress(" also used in conclusion " + seqToString(variablesUsed))
             progress("Existentials        " + seqToString(templateExistentials))
 
-        conclusions, _outputVariables = self.nestedContexts(conclusion)
-        _substitute([( conclusion, targetContext)], conclusions)                
+#        conclusions, _outputVariables = self.nestedContexts(conclusion)
+#        _substitute([( conclusion, targetContext)], conclusions)                
 
     # The smartIn context was the template context but it has been mapped to the workingContext.
         return self.match(unmatched, variablesUsed, templateExistentials, [workingContext],
                           self.conclude,
-                          ( self, conclusions, targetContext, _outputVariables, already))
+                          ( self, conclusion, targetContext,  # _outputVariables,
+                            already))
 
 
 
@@ -1657,7 +1698,7 @@ class RDFStore(RDFSink.RDFSink) :
 
 # Generic match routine, outer level:  Prepares query
         
-    def  match(self,                 # Neded for getting interned constants
+    def match(self,                 # Neded for getting interned constants
                unmatched,           # Tuple of interned quads we are trying to match CORRUPTED
                variables,           # List of variables to match and return CORRUPTED
                existentials,        # List of variables to match to anything
@@ -1700,45 +1741,62 @@ class RDFStore(RDFSink.RDFSink) :
     # Whether we do a smart match determines whether we will be able to conclude
     # things which in fact we knew already thanks to the builtins.
     def conclude(self, bindings, param, level=0):  # Returns number of statements added to store
-        store, conclusions, targetContext, oes, already = param
+        store, conclusion, targetContext,  already = param
         if thing.verbosity() >60: progress( "\n#Concluding tentatively..." + bindingsToString(bindings))
 
         if already != None:
             if bindings in already:
-                if thing.verbosity() > 30: progress("@@Dup: ", bindingsToString(bindings))
+                if thing.verbosity() > 30: progress("@@Duplicate result: ", bindingsToString(bindings))
                 # raise foo
                 return 0
             if thing.verbosity() > 30: progress("-- ok: ", bindingsToString(bindings))
             already.append(bindings)   # A list of lists
-        
-        myConclusions = conclusions[:]
-        _substitute(bindings, myConclusions)
-        # Does this conclusion exist already in the database?
-        found = self.match(myConclusions[:],
-                           [], oes[:], smartIn=[targetContext],
-                           hypothetical=1,
-                           justOne=1,
-                           level = level + 8)  # Find first occurrence, SMART
-        if found:
-            if thing.verbosity()>00:
-                progress( "Concluding: Forget it, already had info" + bindingsToString(bindings))
-                progress("Already list: ", already) 
-                
+
+        b2 = bindings[:]
+        b2.append((conclusion, targetContext))
+        ok = targetContext.universals()  # It is actually ok to share universal variables with other stuff
+        poss = conclusion.universals()
+        for x in poss[:]:
+            if x in ok: poss.remove(x)
+        vars = conclusion.existentials() + poss  # Things with arbitrary identifiers
+        clashes = self.occurringIn(targetContext, vars)
+        for v in clashes:
+            b2.append((v, store.genid(RESOURCE))) # Regenerate names to avoid clash
+        if thing.verbosity()>20:
+            progress( "Concluding definitively" + bindingsToString(b2))
+        before = self.size
+        self.copyContextRecursive(conclusion, targetContext, b2)
+        return self.size - before
+
+#        myConclusions = conclusions[:]
+#        _substitute(bindings, myConclusions)
+#        # Does this conclusion exist already in the database?
+#        found = self.match(myConclusions[:],
+#                           [], oes[:], smartIn=[targetContext],
+#                           hypothetical=1,
+#                           justOne=1,
+#                           level = level + 8)  # Find first occurrence, SMART
+#        if found:
+#            if thing.verbosity()>00:
+#                progress( "Concluding: Forget it, already had info" + bindingsToString(bindings))
+#                progress("Already list: ", already) 
+#                
 #            if already != None: raise RunTimeError, "Already in store but bindings new?" 
-            return 0
+#            return 0
         if thing.verbosity()>20:
             progress( "Concluding definitively" + bindingsToString(bindings))
         
         # Regenerate a new form with its own existential variables
         # because we can't reuse the subexpression identifiers.
         # We don't want clashes with existing variables or constants!
-        bindings2 = []
-        for i in oes:
-            if isinstance(i, Formula):
-                g = store.genid(FORMULA)  #  Generate with same type as original
-            else:
-                g = store.genid(RESOURCE)  #  Generate with same type as original
-            bindings2.append((i,g))
+#        bindings2 = []
+#        for i in oes:
+#            if isinstance(i, Formula):
+#                g = store.genid(FORMULA)  #  Generate with same type as original
+#            else:
+#                g = store.genid(RESOURCE)  #  Generate with same type as original
+#            bindings2.append((i,g))
+
         total = 0
         for q in myConclusions:
             q2 = _lookupQuad(bindings2, q)
@@ -1981,9 +2039,7 @@ class QueryItem:
                 subj_py = self.store._toPython(subj, queue)
                 if pred.evaluate(self.store, con, subj, subj_py, obj, obj_py):
                     self.state = 0 # satisfied
-                    return [] #self.query(queue, variables, existentials, smartIn, action, param, bindings, [], justOne)
-                  # No new bindings but success in calculated logical operator
-                                                #    and so, one less query line.
+                    return []   # No new bindings but success in calculated logical operator
                 else: return 0   # We absoluteley know this won't match with this in it
             else: 
                 if isinstance(pred, Function):
@@ -2170,6 +2226,14 @@ def _lookupQuad(bindings, q):
             _lookup(bindings, subj),
             _lookup(bindings, obj) )
 
+def _lookupQuadRecursive(bindings, q):
+	context, pred, subj, obj = q
+	return (
+            _lookupRecursive(bindings, context),
+            _lookupRecursive(bindings, pred),
+            _lookupRecursive(bindings, subj),
+            _lookupRecursive(bindings, obj) )
+
 def _lookup(bindings, value):
     for left, right in bindings:
         if left == value: return right
@@ -2188,7 +2252,7 @@ def _lookupRecursive(bindings, x, old=None, new=None):
     oc = store.occurringIn(x, vars)
     if oc == []: return x # phew!
     y = store.genid(FORMULA)
-    if thing.verbosity() > 90: progress("lookupRecursive "+`x`)
+    if thing.verbosity() > 90: progress("lookupRecursive "+`x`+" becomes new "+`y`)
     for s in x.occursAs[CONTEXT]:
         store.storeQuad((y,
                          _lookupRecursive(bindings, s[PRED], x, y),

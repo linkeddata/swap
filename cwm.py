@@ -252,7 +252,7 @@ def outputStrings(store, formula, seed=None, relation=None):
     pairs = store.each((formula, relation, None, None))  # List of things of (subj, obj) pairs
     pairs.sort(comparePair)
     for key, str in pairs:
-        sys.stdout.write(str.string.encode('utf-8'))
+        sys.stdout.write(str.string)
 
     
             
@@ -427,7 +427,7 @@ Examples:
             workingContext = _store.intern((FORMULA, _outURI+ "#_formula"))   #@@@ Hack - use metadata
 #  Metadata context - storing information about what we are doing
 
-            _store.reset(_metaURI)     # Absolutely need this for remembering URIs loaded
+            _store.reset(_metaURI+"#_experience")     # Absolutely need this for remembering URIs loaded
             history = None
 	
 
