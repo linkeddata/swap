@@ -23,12 +23,12 @@ Comparing Formats</p>
 href="../../../../DesignIssues/Notation3.html"><img alt="n3"
 src="../../../../RDF/icons/n3_small" /></a></p>
 
-<h2>Release 0.7.1,   2004-03-04</h2>
+<h2>Release 0.7.1, 2004-03-04</h2>
 
 <h4>RDF Parser improved</h4>
 
 <p>The cwm regresssion test now incorporates the RDF Core Positive Parser
-Tests except for those  which deal with reification or with XML literals. In
+Tests except for those which deal with reification or with XML literals. In
 the process, xml:base supposrt was added in the parser.</p>
 
 <p><a
@@ -38,7 +38,7 @@ new test</a> found in the updated core tests requires RDF to be parsed even
 when there is no enveloping &lt;rdf:RDF&gt; tag, even if the outermost
 element is a typed node production, and so not something in the RDF namespace
 at all. This makes rdf much less self-describing, and makes it more dangerous
-that one might parse say an HTML file as RDF by accident. Use with care.  If
+that one might parse say an HTML file as RDF by accident. Use with care. If
 need this feature, use the --rdf=R flag.</p>
 
 <p>The RDF core tests are done with --rdf=RT to make the parser parse naked
@@ -88,7 +88,19 @@ notorious miscreatnts here are Dublin Core and FOAF. If you use these
 namespaces, you may want to do this, or you may want to encourage the authors
 to change to use a "#".</p>
 
-<p></p>
+<h4>ValueError: You cannot use 'this' except as subject of forAll or
+forSome</h4>
+
+<p>The "this" syntax in a formula refers to the formula itself.  It was used
+for thr pseudo-statements   this log:forSome x, and this log;forAll y. </p>
+
+<p>In a few rare cases it actually was used to refer logically to the formula
+itself. A classic is of course { this a log:falseHood }.  I decided that this
+was going to make more problems than it would solve.  The psudostatements
+have gone anway (in response to popular request), they became just syntax.
+And the  @forAll syntax has been introduced as the way to go. So with this
+release, while you can still like many N3 files use this to qualify
+variables, you can't use it for anything else.</p>
 
 <h3>Release 0.7, 2004-02-04</h3>
 

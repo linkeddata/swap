@@ -93,7 +93,7 @@ tutorial-book.pdf: $(TUTFILES) $(TUTFIGS) tutorial-bookstyle
 	echo htmldoc doesn't have a noprint thingy. Lose.
 	$(HTMLDOC) --batch tutorial-bookstyle -f $@ $(TUTFILES)
 
-cwm-help.txt : ../cwm.py ../notation3.py
+cwm-help.txt : ../cwm.py ../notation3.py ../sax2rdf.py ../toXML.py
 	$(PYTHON) $(CWM) --help | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' > cwm-help.txt
 
 CwmHelp.html : CwmHelp-template.html cwm-help.txt

@@ -91,10 +91,13 @@ t   "this" and "()" special syntax should be suppresed.
 u   Use \u for unicode escaping in URIs instead of utf-8 %XX
 
 
-        Flags to control RDF/XML output (after --rdf=) areas follows:
+Flags to control RDF/XML output (after --rdf=) areas follows:
         
-        c  - Don't use elements as class names
-        d  - Don't use default namespace
+b  - Don't use nodeids for Bnodes
+c  - Don't use elements as class names
+d  - Default namespace supressed.
+r  - Relative URI suppression. Always use absolute URIs.
+z  - Allow relative URIs for namespaces
 
 
 
