@@ -105,6 +105,16 @@
 	n3test:outputDocument <n3/n3parser.tests_n3_10020.nt> ;
     n3test:inputDocument  <syntax/this-rules.n3> .
 
+:n3_10025 a n3test:PositiveParserTest;
+    n3test:description    "The = keyword";
+#	n3test:outputDocument <n3/n3parser.tests_n3_10020.nt> ;
+    n3test:inputDocument  <syntax/equals1.n3> .
+
+:n3_10025 a n3test:PositiveParserTest;
+    n3test:description    "The = keyword";
+#	n3test:outputDocument <n3/n3parser.tests_n3_10020.nt> ;
+    n3test:inputDocument  <syntax/equals2.n3> .
+
 :n3_20000 a n3test:NegativeParserTest;
     n3test:description    "something that isn't n3";
     n3test:inputDocument  <tests-work.txt> .
