@@ -1,0 +1,88 @@
+<> a <http://www.w3.org/2000/10/swap/log#N3Document> .
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+
+
+<> dc:title "An RDF Schema for United States Postal Addressing Standards";
+  dc:source [ = <http://pe.usps.gov/cpim/ftp/pubs/Pub28/pub28.pdf>
+  dc:title "Postal Addressing Standards Publication 28";
+  dc:date "November 2000";
+  ],
+  [ = <http://pe.usps.gov/cpim/ftp/pubs/Pub63/Pub63.pdf>;
+    dc:title "Publication 63 - Designing Flat Mail";
+  ].
+
+@prefix r: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
+
+@prefix p: <http://www.w3.org/2000/10/swap/pim/usps#>.
+
+p:MailingLocation a s:Class; s:label "Mailing Location";
+  = <http://www.cyc.com/cyc-2-1/vocab/geography-vocab.html#MailingLocation>;
+  s:subClassOf <http://www.cyc.com/cyc-2-1/vocab/geography-vocab.html#ContactLocation>.
+
+p:deliveryAddress a r:Property; s:label "delivery address";
+  s:isDefinedBy <>;
+  s:domain p:MailingLocation;
+  s:comment """unique w.r.t. zip; i.e. a deliveryAddress and a zip
+     uniquely determine an object""".
+
+p:zipCode a r:Property; s:label "zip code";
+  s:comment "hmm... regex pattern?".
+
+p:cityName a r:Property; s:label "city name";
+  s:domain p:City;
+  s:comment "range is string; should be <13 chars".
+
+p:stateAbbr s:label "state abbreviation";
+  a ont:UniqueProperty, ont:UnambiguousProperty;
+  s:comment "cf. Appendix B. Two-Letter State and Possession Abbreviations";
+  s:domain p:State.
+
+p:State s:label "State";
+  s:comment "includes military thingies and territories, I think.";
+  s:subClassOf <http://www.cyc.com/cyc-2-1/vocab/geography-vocab.html#CountrySubsidiary>;
+  is s:subClassOf of <http://www.cyc.com/cyc-2-1/vocab/geography-vocab.html#State-UnitedStates>.
+
+p:City s:label "City";
+  s:subClassOf <http://www.cyc.com/cyc-2-1/vocab/geography-vocab.html#UrbanArea>;
+  s:comment "Hmm... does Shawnee Mission, KS have its own government?";
+  s:comment "see also census places@@".
+
+p:MailPiece a s:Class.
+
+p:to a r:Property; s:label "to";
+  s:domain p:MailPiece.
+
+p:at a r:Property; s:label "at";
+  s:domain p:MailPiece;
+  s:range p:MailingLocation.
+
+p:returnTo a r:Property; s:label "return to";
+  s:domain p:MailPiece;
+  s:comment """range is SocialEntity or something;
+    hm... what property relates SocialEntity to a name
+    used in a mailing address? Does the USPS really
+    talk about SocialEntities, or should I just
+    make one property that combines p:returnTo and c:called?""".
+
+p:returnAt a r:Property; s:label "return at";
+  s:domain p:MailPiece;
+  s:range p:MailingLocation.
+
+
+p:from a r:Property; s:label "from";
+  s:domain p:MailPiece.
+
+#########
+# this stuff I sorta made up...
+
+p:postmark a r:Property;
+  s:label "postmark";
+  s:range p:PostmarkProperty;
+  s:domain p:PostOffice;
+  s:comment "e.g. POSTOFFICE p:postmark P. LETTER P '2001-12-17'".
+
+p:PostmarkProperty s:subClassOf r:Property.
+
+
