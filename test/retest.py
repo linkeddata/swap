@@ -21,6 +21,7 @@ Example:    python retest.py -n -f regression.n3
  $Id$
 This is or was http://www.w3.org/2000/10/swap/test/retest.py
 W3C open source licence <http://www.w3.org/Consortium/Legal/copyright-software.html>.
+
 """
 from os import system
 import os
