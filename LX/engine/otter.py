@@ -58,7 +58,9 @@ def run(string, fileBase=",lx.engine.otter", includes=None, maxSeconds=1):
     f=open(filename, "w")
     f.write("set(auto).\n")
     #f.write("set(prolog_style_variables).\n")
-    f.write("clear(control_memory).\n")
+
+    #  this is needed for completeness, but slows things down a lot
+    #f.write("clear(control_memory).\n")
 
     if includes:
         for i in includes:

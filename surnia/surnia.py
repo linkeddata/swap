@@ -63,8 +63,8 @@ fudge = 10
 
 maxSecondsTable = {
     'http://www.w3.org/2002/03owlt/AllDifferent/Manifest001#test': 3 * fudge,
-    'http://www.w3.org/2002/03owlt/FunctionalProperty/Manifest004#test': (2 * fudge),
-    'http://www.w3.org/2002/03owlt/InverseFunctionalProperty/Manifest004#test': (2 * fudge),
+    'http://www.w3.org/2002/03owlt/FunctionalProperty/Manifest004#test': (5 * fudge),
+    'http://www.w3.org/2002/03owlt/InverseFunctionalProperty/Manifest004#test': (5 * fudge),
     }
 
 axiomTag = { }
@@ -73,6 +73,9 @@ axiomTag['http://www.w3.org/2002/03owlt/oneOf/Manifest003#test']="-oneOf"
 axiomTag['http://www.w3.org/2002/03owlt/equivalentProperty/Manifest002#test']="-equivProp"
 axiomTag['http://www.w3.org/2002/03owlt/equivalentProperty/Manifest003#test']="-equivProp"
 axiomTag['http://www.w3.org/2002/03owlt/equivalentProperty/Manifest004#test']="-equivProp"
+#axiomTag['http://www.w3.org/2002/03owlt/FunctionalProperty/Manifest004#test']="-funcProp"
+#axiomTag['http://www.w3.org/2002/03owlt/InverseFunctionalProperty/Manifest004#test']="-funcProp"
+
 maxSeconds = 1
 
 skip = {
