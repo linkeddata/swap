@@ -151,7 +151,7 @@ class Because(Reason):
 	"""
 	me = self.meIn(ko)
 	ko.add(subj=me, pred=rdf.type, obj=reason.Parsing, why=dontAsk)
-	ko.add(subj=me, pred=reason.comment, obj=ko.store._fromPython(ko, self._string), why=dontAsk)
+	ko.add(subj=me, pred=reason.comment, obj=ko.newLiteral(self._string), why=dontAsk)
 	return me
 
 dontAsk = Because("Generating explanation")
@@ -183,8 +183,8 @@ class BecauseOfRule(Reason):
 	    
 	for s in self._evidence:
 	    if isinstance(s, BecauseBuiltIn):
-		fact = s.explain(ko)
-		ko.add(subj=me, pred=reason.givenBuiltin, obj=fact, why= dontAsk)
+		e = s.explain(ko)
+		ko.add(subj=me, pred=reason.evidence, obj=e, why= dontAsk)
 	    else:
 		e = explainStatement(s, ko)
 		ko.add(me, reason.evidence, e, why= dontAsk)
@@ -193,14 +193,16 @@ class BecauseOfRule(Reason):
 
 
 def explainStatement(s, ko):
-    statementFormula = s.context()
-    statementFormulaReason = proofOf.get(statementFormula, None)
+    f = s.context()
+    statementFormulaReason = proofOf.get(f, None)
     if statementFormulaReason == None:
-	progress("Ooops, no proof for statement formula", s)
+	progress("Ooops, no proof for formula %s needed for statement %s" % (f,s))
+	raise RuntimeError("see above")
     else:
 	statementReason = statementFormulaReason.reasonForStatement.get(s, None)
 	if statementReason == None:
 	    progress("Ooops, formula has no reason for statement,", s)
+	    raise RuntimeError("see above")
 	    return None
 	else:
 	    ri = statementReason.explain(ko)
@@ -250,11 +252,11 @@ class BecauseOfCommandLine(Because):
     """Becase the command line given in the string"""
     pass
     
-class BecauseBuiltIn:
+class BecauseBuiltIn(Reason):
     """Because the built-in function given concluded so.
     A nested reason for running the function can also be given"""
     def __init__(self, subj, pred, obj, because=None):
-#	Reason.__init__(self)
+	Reason.__init__(self)
 	self._subject = subj
 	self._predicate = pred
 	self._object = obj
@@ -262,11 +264,13 @@ class BecauseBuiltIn:
 	
     def explain(self, ko):
 	"This is just a plain fact - or was at the time."
+	me = self.meIn(ko)
 	fact = ko.newFormula()
 	fact.add(subj=self._subject, pred=self._predicate, obj=self._object, why=dontAsk)
 	fact = fact.close()
-	ko.add(subj=fact, pred=rdf.type, obj=reason.Fact)
-	return fact
+	ko.add(me, rdf.type, reason.Fact, why=dontAsk)
+	ko.add(me, reason.gives, fact, why=dontAsk)
+	return me
 
 ###################################### Explanations of things
 #

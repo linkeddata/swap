@@ -103,14 +103,14 @@ def decToBin(i): # int to string
 #  Hash Constructors - light built-ins
 
 class BI_md5(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py): 
+    def evaluateObject(self, subj_py): 
         m = md5.new(subj_py).digest() 
-        return store._fromPython(context, binascii.hexlify(m))
+        return  binascii.hexlify(m)
 
 class BI_sha(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py): 
+    def evaluateObject(self, subj_py): 
         m = sha.new(subj_py).digest() 
-        return store._fromPython(context, binascii.hexlify(m))
+        return binascii.hexlify(m)
 
 # Create a new RSA key
 
@@ -121,35 +121,33 @@ class BI_keyLength(LightBuiltIn, Function, ReverseFunction):
       ReverseFunction.__init__(self)
       self.do = 1
 
-   def evaluateSubject(self, store, context, obj, obj_py): 
+   def evaluateSubject(self,  obj_py): 
       """Generates an RSA keypair, and spews it out as plain text.
          Has the limitation that it will *only* ever let you generate 
          one key pair (per iteration), in order to work around a bug."""
       if self.do: 
          randfunc, self.do = randpool.RandomPool(int(obj_py)), 0
-#         print "#@@@@@@@@@@@@@@@@@@@@@@@@ HERE"
          RSAKey = RSA.generate(int(obj_py), randfunc.getBytes)
-#         print "#@@@@@@@@@@@@@@@@@@@@@@@@ THERE"
          TextKey = keyToQuo(RSAKey)
-         if TextKey != 'N.': return store._fromPython(context, TextKey)
+         if TextKey != 'N.': return TextKey
 
-   def evaluateObject(self, store, context, subj, subj_py): 
+   def evaluateObject(self,  subj_py): 
       RSAKey = quoToKey(subj_py)
       size = str(len(decToBin(RSAKey.n)))
-      return store.intern((LITERAL, size))
+      return self.store.intern((LITERAL, size))
 
 class BI_sign(LightBuiltIn, Function): 
-   def evaluateObject(self, store, context, subj, subj_py): 
+   def evaluateObject(self, subj_py): 
       """Sign a hash with a key, and get a signature back."""
       import time
       hash, keypair = subj_py
       RSAKey = quoToKey(keypair)
       signature = RSAKey.sign(hash, str(time.time())) # sign the hash with the key
       signature = baseEncode(str(signature[0]))
-      return store.intern((LITERAL, signature))
+      return self.store.intern((LITERAL, signature))
 
 class BI_verify(LightBuiltIn): 
-   def evaluate(self, store, context, subj, subj_py, obj, obj_py): 
+   def evaluate(self, subj_py, obj_py): 
       """Verify a hash/signature."""
       keypair, (hash, signature) = subj_py, obj_py
       RSAKey = quoToKey(keypair) # Dequote the key
@@ -157,7 +155,7 @@ class BI_verify(LightBuiltIn):
       return RSAKey.verify(hash, signature)
 
 class BI_verifyBoolean(LightBuiltIn, Function): 
-   def evaluateObject(self, store, context, subj, subj_py): 
+   def evaluateObject(self, subj_py): 
       """Verify a hash/signature."""
       keypair, hash, signature = subj_py
       RSAKey = quoToKey(keypair) # Dequote the key
@@ -166,7 +164,7 @@ class BI_verifyBoolean(LightBuiltIn, Function):
       return store.intern((LITERAL, str(result)))
 
 class BI_publicKey(LightBuiltIn, Function): 
-   def evaluateObject(self, store, context, subj, subj_py): 
+   def evaluateObject(self, subj_py): 
       """Generate a quopri public key from a keypair."""
       keypair = quoToKey(subj_py) # Dequote the key
       publickey = keypair.publickey() # Get the public key

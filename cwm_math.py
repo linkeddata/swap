@@ -31,6 +31,7 @@ MATH_NS_URI = 'http://www.w3.org/2000/10/swap/math#'
 
 def tidy(x):
     #DWC bugfix: "39.03555" got changed to "393555"
+    if x == None: return None
     s = str(x)
     if s[-2:] == '.0': s=s[:-2]
     return s
@@ -58,88 +59,89 @@ def isString(x):
 
 
 class BI_absoluteValue(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evalObj(self, subj, queue, bindings):
         if isinstance(subj, Literal):
             t = abs(float(subj.string))
-            if t is not None: return store.intern((LITERAL, tidy(t)))
+            if t is not None: return self.store.intern((LITERAL, tidy(t)))
 
 class BI_rounded(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evalObj(self, subj, queue, bindings):
         if isinstance(subj, Literal):
             t = round(float(subj.string))
-            if t is not None: return store.intern((LITERAL, tidy(t)))
+            if t is not None: return self.store.intern((LITERAL, tidy(t)))
 
 class BI_sum(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py): 
+    def evaluateObject(self,  subj_py): 
         t = 0
         for x in subj_py:
             if not isString(x): return None
             t += float(x)
-        return store.intern((LITERAL, tidy(t)))
+        return tidy(t)
 
 class BI_sumOf(LightBuiltIn, ReverseFunction):
-    def evaluateSubject(self, store, context, obj, obj_py): 
+    def evaluateSubject(self, obj_py): 
         t = 0
         for x in obj_py: t += float(x)
-        return store.intern((LITERAL, tidy(t)))
+        return tidy(t)
 
 
 class BI_difference(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py): 
+    def evaluateObject(self, subj_py): 
         t = None
         if len(subj_py) == 2: t = float(subj_py[0]) - float(subj_py[1])
-        if t is not None: return store.intern((LITERAL, tidy(t)))
+        return tidy(t)
 
 class BI_differenceOf(LightBuiltIn, ReverseFunction):
-    def evaluateSubject(self, store, context, obj, obj_py): 
+    def evaluateSubject(self,  obj_py): 
         t = None
         if len(obj_py) == 2: t = float(obj_py[0]) - float(obj_py[1])
-        if t is not None: return store.intern((LITERAL, tidy(t)))
+        return tidy(t)
 
 class BI_product(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py): 
+    def evaluateObject(self, subj_py): 
         t = 1
         for x in subj_py: t *= float(x)
-        return store.intern((LITERAL, tidy(t)))
+        return tidy(t)
 
 class BI_factors(LightBuiltIn, ReverseFunction):
-    def evaluateSubject(self, store, context, obj, obj_py): 
+    def evaluateSubject(self, obj_py): 
         t = 1
         for x in obj_py: t *= float(x)
-        return store.intern((LITERAL, tidy(t)))
+        return tidy(t)
 
 class BI_quotient(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py): 
+    def evaluateObject(self, subj_py): 
         t = None
         if len(subj_py) == 2: t = float(subj_py[0]) / float(subj_py[1])
-        if t is not None: return store.intern((LITERAL, tidy(t)))
+        return tidy(t)
 
 class BI_quotientOf(LightBuiltIn, ReverseFunction):
-    def evaluateSubject(self, store, context, obj, obj_py): 
+    def evaluateSubject(self,  obj_py): 
         t = None
         if len(obj_py) == 2: t = float(obj_py[0]) / float(obj_py[1])
-        if t is not None: return store.intern((LITERAL, tidy(t)))
+        return tidy(t)
 
 # remainderOf and negationOf
 
 class BI_remainder(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py): 
+    def evaluateObject(self, subj_py): 
         t = None
         if len(subj_py) == 2: t = float(subj_py[0]) % float(subj_py[1])
-        if t is not None: return store.intern((LITERAL, tidy(t)))
+        return tidy(t)
 
 class BI_remainderOf(LightBuiltIn, ReverseFunction):
-    def evaluateSubject(self, store, context, obj, obj_py): 
+    def evaluateSubject(self,  obj_py): 
         t = None
         if len(obj_py) == 2: t = float(obj_py[0]) % float(obj_py[1])
-        if t is not None: return store.intern((LITERAL, tidy(t)))
+        return tidy(t)
 
 class BI_negation(LightBuiltIn, Function, ReverseFunction):
-    def evaluateSubject(self, store, context, obj, obj_py): 
+    def evalSubj(self, obj, queue, bindings): 
         if isinstance(obj, Literal):
             t = -float(obj.string)
             if t is not None: return store.intern((LITERAL, tidy(t)))
-    def evaluateObject(self, store, context, subj, subj_py):
+
+    def evalObj(self, subj, queue, bindings):
         if isinstance(subj, Literal):
             t = -float(subj.string)
             if t is not None: return store.intern((LITERAL, tidy(t)))
@@ -147,50 +149,51 @@ class BI_negation(LightBuiltIn, Function, ReverseFunction):
 # Power
 
 class BI_exponentiation(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py): 
+    def evaluateObject(self, subj_py): 
         t = None
         if len(subj_py) == 2: t = float(subj_py[0]) ** float(subj_py[1])
-        if t is not None: return store.intern((LITERAL, tidy(t)))
+        return tidy(t)
 
 class BI_exponentiationOf(LightBuiltIn, ReverseFunction):
-    def evaluateSubject(self, store, context, obj, obj_py): 
+
+    def evaluateSubject(self, obj_py): 
         t = None
         if len(obj_py) == 2: t = float(obj_py[0]) ** float(obj_py[1])
-        if t is not None: return store.intern((LITERAL, tidy(t)))
+        return tidy(t)
 
 # Math greater than and less than etc., modified from cwm_string.py
 # These are truth testing things  - Binary logical operators
 
 class BI_greaterThan(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self, subj, obj, queue, bindings):
         return (float(subj.string) > float(obj.string))
 
 class BI_notGreaterThan(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self, subj, obj, queue, bindings):
         return (float(subj.string) <= float(obj.string))
 
 class BI_lessThan(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self, subj, obj, queue, bindings):
         return (float(subj.string) < float(obj.string))
 
 class BI_notLessThan(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self, subj, obj, queue, bindings):
         return (float(subj.string) >= float(obj.string))
 
 class BI_equalTo(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self, subj, obj, queue, bindings):
         return (float(subj.string) == float(obj.string))
 
 class BI_notEqualTo(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self, subj, obj, queue, bindings):
         return (float(subj.string) != float(obj.string))
 
 # memberCount - this is a proper forward function
 
 class BI_memberCount(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py): 
+    def evaluateObject(self, subj_py): 
         t = len(subj_py)
-        return store.intern((LITERAL, tidy(t)))
+        return tidy(t)
 
 #  Register the string built-ins with the store
 

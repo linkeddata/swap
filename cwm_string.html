@@ -39,7 +39,7 @@ See&nbsp;cwm.py</tt></p>
     
 <tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl>
-<dt><font face="helvetica, arial"><a href="thing.html#Function">thing.Function</a>
+<dt><font face="helvetica, arial"><a href="thing.html#Function">thing.Function</a>(<a href="thing.html#BuiltIn">thing.BuiltIn</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="cwm_string.html#BI_concatenation">BI_concatenation</a>(<a href="thing.html#LightBuiltIn">thing.LightBuiltIn</a>, <a href="thing.html#Function">thing.Function</a>)
@@ -67,7 +67,7 @@ See&nbsp;cwm.py</tt></p>
 </font></dt><dt><font face="helvetica, arial"><a href="cwm_string.html#BI_scrape">BI_scrape</a>(<a href="thing.html#LightBuiltIn">thing.LightBuiltIn</a>, <a href="thing.html#Function">thing.Function</a>)
 </font></dt></dl>
 </dd>
-<dt><font face="helvetica, arial"><a href="thing.html#ReverseFunction">thing.ReverseFunction</a>
+<dt><font face="helvetica, arial"><a href="thing.html#ReverseFunction">thing.ReverseFunction</a>(<a href="thing.html#BuiltIn">thing.BuiltIn</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="cwm_string.html#BI_concat">BI_concat</a>(<a href="thing.html#LightBuiltIn">thing.LightBuiltIn</a>, <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>)
@@ -92,7 +92,7 @@ See&nbsp;cwm.py</tt></p>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_Contains-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_Contains-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -109,8 +109,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_Contains-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_Contains-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -126,10 +124,9 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_Contains-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_Contains-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_Contains-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
@@ -152,7 +149,7 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_ContainsIgnoringCase-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_ContainsIgnoringCase-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -169,8 +166,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_ContainsIgnoringCase-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_ContainsIgnoringCase-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -186,10 +181,9 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_ContainsIgnoringCase-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_ContainsIgnoringCase-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_ContainsIgnoringCase-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
@@ -212,7 +206,7 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_DoesNotContain-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_DoesNotContain-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -229,8 +223,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_DoesNotContain-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_DoesNotContain-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -246,10 +238,9 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_DoesNotContain-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_DoesNotContain-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_DoesNotContain-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
@@ -272,7 +263,7 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_EndsWith-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_EndsWith-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -289,8 +280,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_EndsWith-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_EndsWith-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -306,10 +295,9 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_EndsWith-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_EndsWith-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_EndsWith-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
@@ -332,7 +320,7 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_GreaterThan-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_GreaterThan-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -349,8 +337,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_GreaterThan-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_GreaterThan-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -366,10 +352,9 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_GreaterThan-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_GreaterThan-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_GreaterThan-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
@@ -392,7 +377,7 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_LessThan-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_LessThan-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -409,8 +394,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_LessThan-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_LessThan-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -426,10 +409,9 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_LessThan-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_LessThan-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_LessThan-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
@@ -452,7 +434,7 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_NotGreaterThan-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_NotGreaterThan-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -469,8 +451,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_NotGreaterThan-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_NotGreaterThan-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -486,10 +466,9 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_NotGreaterThan-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_NotGreaterThan-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_NotGreaterThan-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
@@ -512,7 +491,7 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_NotLessThan-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_NotLessThan-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -529,8 +508,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_NotLessThan-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_NotLessThan-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -546,10 +523,9 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_NotLessThan-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_NotLessThan-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_NotLessThan-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
@@ -572,7 +548,7 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_StartsWith-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_StartsWith-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -589,8 +565,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_StartsWith-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_StartsWith-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -606,10 +580,9 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_StartsWith-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_StartsWith-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_StartsWith-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
@@ -633,7 +606,7 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_concat-evaluateSubject"><strong>evaluateSubject</strong></a>(self, store, context, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_concat-evaluateSubject"><strong>evaluateSubject</strong></a>(self, obj_py)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -650,8 +623,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_concat-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_concat-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -667,19 +638,19 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_concat-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_concat-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_concat-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>:<br>
-<dl><dt><a name="BI_concat-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_concat-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
-<dl><dt><a name="BI_concat-evaluate2"><strong>evaluate2</strong></a>(self, subj, obj, bindings)</dt></dl>
+<dl><dt><a name="BI_concat-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -700,7 +671,7 @@ Methods inherited from <a href="thing.html#ReverseFunction">thing.ReverseFunctio
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_concatenation-evaluateObject"><strong>evaluateObject</strong></a>(self, store, context, subj, subj_py)</dt></dl>
+<dl><dt><a name="BI_concatenation-evaluateObject"><strong>evaluateObject</strong></a>(self, subj_py)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -717,8 +688,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_concatenation-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_concatenation-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -734,19 +703,19 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_concatenation-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_concatenation-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_concatenation-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_concatenation-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_concatenation-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
-<dl><dt><a name="BI_concatenation-evaluate2"><strong>evaluate2</strong></a>(self, subj, obj, bindings)</dt></dl>
+<dl><dt><a name="BI_concatenation-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -766,7 +735,7 @@ Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_equalIgnoringCase-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_equalIgnoringCase-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -783,8 +752,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_equalIgnoringCase-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_equalIgnoringCase-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -800,10 +767,9 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_equalIgnoringCase-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_equalIgnoringCase-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_equalIgnoringCase-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
@@ -826,7 +792,7 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_matches-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_matches-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -843,8 +809,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_matches-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_matches-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -860,10 +824,9 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_matches-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_matches-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_matches-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
@@ -886,7 +849,7 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_notEqualIgnoringCase-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_notEqualIgnoringCase-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -903,8 +866,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_notEqualIgnoringCase-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_notEqualIgnoringCase-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -920,10 +881,9 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_notEqualIgnoringCase-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_notEqualIgnoringCase-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_notEqualIgnoringCase-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
@@ -946,7 +906,7 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_notMatches-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_notMatches-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -963,8 +923,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_notMatches-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_notMatches-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -980,10 +938,9 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_notMatches-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_notMatches-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_notMatches-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
@@ -1013,7 +970,7 @@ Hmm...&nbsp;negative&nbsp;tests&nbsp;don't&nbsp;seem&nbsp;to&nbsp;work.<br>&nbsp
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_scrape-evaluateObject"><strong>evaluateObject</strong></a>(self, store, context, subj, subj_py)</dt></dl>
+<dl><dt><a name="BI_scrape-evaluateObject"><strong>evaluateObject</strong></a>(self, subj_py)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -1033,8 +990,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_scrape-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_scrape-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -1050,19 +1005,19 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_scrape-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_scrape-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_scrape-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_scrape-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_scrape-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
-<dl><dt><a name="BI_scrape-evaluate2"><strong>evaluate2</strong></a>(self, subj, obj, bindings)</dt></dl>
+<dl><dt><a name="BI_scrape-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">

@@ -188,11 +188,13 @@ class Term:
     def __repr__(self):
 	"""This method only used for debugging output - it can be ambiguous,
 	as it is is deliberately short to make debug printout readable.
-	@@@ It would be better if it used namespace prefixed."""
+	"""
         s = self.uriref()
-        p = string.find(s,'#')
-        if p >= 0: return s[p+1:]
-        p = string.find(s,'/')
+        p = string.rfind(s, "#")
+	if p<0: p=string.rfind(s, "/")   # Allow "/" namespaces as a second best
+        if (p>=0 and s[p+1:].find(".") <0 ): # Can't use prefix if localname includes "."
+            prefix = self.store.prefixes.get(s[:p+1], None) # @@ #CONVENTION
+            if prefix != None : return prefix + ":" + s[p+1:]
         if p >= 0: return s[p+1:]
         return s
 
@@ -425,7 +427,14 @@ class BuiltIn(Fragment):
     def __init__(self, resource, fragid):
         Fragment.__init__(self, resource, fragid)
 
-
+#    def eval(self, subj, obj, queue, bindings):
+#	"""This function which has access to the store, unless overridden,
+#	calls a simpler one which uses python conventions.
+#	
+#	To reduce confusion, the inital ones called with the internals available
+#	use abreviations "eval", "subj" etc while the python-style ones use evaluate, subject, etc."""
+#	return self.evaluate(self.store._toPython(subj, queue), (self.store._toPython(obj, queue)))
+	
 class LightBuiltIn(BuiltIn):
     """A light built-in is fast and is calculated immediately before searching the store.
     
@@ -443,7 +452,7 @@ class HeavyBuiltIn(BuiltIn):
 
 # A function can calculate its object from a given subject.
 #  Example: Joe mother Jane .
-class Function:
+class Function(BuiltIn):
     """A function is a builtin which can calculate its object given its subject.
     
     To get cwm to invoke it this way, your built-in must be a subclass of Function.
@@ -451,42 +460,49 @@ class Function:
     def __init__(self):
         pass
     
-    def evaluate(self, store, context,  subj, subj_py, obj, obj_py):    # For inheritance only
-        x = self.evaluateObject( store, context, subj, subj_py)
-        return (obj is x)
 
-    def evaluateObject(self, store, context, subj, subj_py):
-        raise function_has_no_evaluate_object_method #  Ooops - you can't inherit this.
-
-# This version is used by heavy functions:
-
-    def evaluate2(self, subj, obj, bindings):
-        F = self.evaluateObject2(subj)
-        return (F is obj) # @@@@@@@@@@@@@@@@@@@@@@@@@@@@ do structual equivalnce thing
+    def evalObj(self, subj, queue, bindings):
+	"""This function which has access to the store, unless overridden,
+	calls a simpler one which uses python conventions"""
+	return self.store._fromPython(self.evaluateObject(self.store._toPython(subj, queue)), queue)
 
 
-# A function can calculate its object from a given subject
-class ReverseFunction:
+# This version is used by functions by default:
+
+#    def evaluate(self, subject, object):
+#        F = self.evaluateObject(subject)
+#        return (F == object)
+
+    def eval(self, subj, obj, queue, bindings):
+	F = self.evalObj(subj, queue, bindings)
+	return F is obj
+
+class ReverseFunction(BuiltIn):
     """A reverse function is a builtin which can calculate its subject given its object.
     
     To get cwm to invoke it this way, your built-in must be a subclass of ReverseFunction.
     If a function (like log:uri for example) is a two-way  (1:1) builtin, it should be declared
     a subclass of Function and ReverseFunction. Then, cwm will call it either way as needed
     in trying to resolve a query.
-    
-    I may make changes to clean up the parameters of these methods below some day. -tbl"""
+    """
     def __init__(self):
         pass
 
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):    # For inheritance only
-        return (subj is self.evaluateSubject(store, context, obj, obj_py))
 
-    def evaluate2(self, subj, obj, bindings):
-        F = self.evaluateObject2(obj)
-        return (F is subj) # @@@@@@@@@@@@@@@@@@@@@@@@@@@@ do structual equivalnce thing
+#    def evaluate(self, subject, object):
+#	"""Simple comparison if none other defined"""
+#        F = self.evaluateObject(object)
+#        return (F == subject)
 
-    def evaluateSubject(self, store, context, obj, obj_py):
-        raise reverse_function_has_no_evaluate_subject_method #  Ooops - you can't inherit this.
+    def eval(self, subj, obj, queue, bindings):
+	F = self.evalSubj(obj, queue, bindings)
+	return F is subj
 
-#  For examples of use, see, for example, cwm_string.py
+
+    def evalSubj(self, obj,  queue, bindings):
+	"""This function which has access to the store, unless overridden,
+	calls a simpler one which uses python conventions"""
+	return self.store._fromPython(self.evaluateSubject(self.store._toPython(obj, queue)), queue)
+
+#  For examples of use, see, for example, cwm_*.py
 

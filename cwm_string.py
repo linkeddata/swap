@@ -48,70 +48,70 @@ STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
 #   Light Built-in classes
 
 class BI_GreaterThan(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self,  subj, obj, queue, bindings):
         return (subj.string > obj.string)
 
 class BI_NotGreaterThan(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self,  subj, obj, queue, bindings):
         return (subj.string <= obj.string)
 
 class BI_LessThan(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self,  subj, obj, queue, bindings):
         return (subj.string < obj.string)
 
 class BI_NotLessThan(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self,  subj, obj, queue, bindings):
         return (subj.string >= obj.string)
 
 class BI_StartsWith(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self,  subj, obj, queue, bindings):
         return subj.string.startswith(obj.string)
 
 class BI_EndsWith(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self,  subj, obj, queue, bindings):
         return subj.string.endswith(obj.string)
 
 # Added, SBP 2001-11:-
 
 class BI_Contains(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self,  subj, obj, queue, bindings):
         return string.find(subj.string, obj.string) >= 0
 
 class BI_ContainsIgnoringCase(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self,  subj, obj, queue, bindings):
         return string.find(string.lower(subj.string), string.lower(obj.string)) >= 0
 
 class BI_DoesNotContain(LightBuiltIn): # Converse of the above
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self,  subj, obj, queue, bindings):
         return string.find(subj.string, obj.string) < 0
 
 class BI_equalIgnoringCase(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self,  subj, obj, queue, bindings):
         return (string.lower(subj.string) == string.lower(obj.string))
 
 class BI_notEqualIgnoringCase(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self,  subj, obj, queue, bindings):
         return (string.lower(subj.string) != string.lower(obj.string))
 
 #  String Constructors - more light built-ins
 
 class BI_concat(LightBuiltIn, ReverseFunction):
-    def evaluateSubject(self, store, context, obj, obj_py):
+    def evaluateSubject(self, obj_py):
         if verbosity() > 80: progress("Concat input:"+`obj_py`)
         str = ""
         for x in obj_py:
             if not isString(x): return None # Can't
             str = str + x 
-        return store._fromPython(context, str)
+        return str
 
 class BI_concatenation(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self, subj_py):
         if verbosity() > 80: progress("Concatenation input:"+`subj_py`)
         str = ""
         for x in subj_py:
             if not isString(x): return None # Can't
             str = str + x 
-        return store._fromPython(context, str)
+        return str
 
 class BI_scrape(LightBuiltIn, Function):
     """a built-in for scraping using regexps.
@@ -123,23 +123,21 @@ class BI_scrape(LightBuiltIn, Function):
     Hmm... negative tests don't seem to work.
     """
     
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self, subj_py):
         if verbosity() > 80: progress("scrape input:"+`subj_py`)
 
         str, pat = subj_py
         patc = re.compile(pat)
         m = patc.search(str)
         if m:
-            return store._fromPython(context, m.group(1))
-        else:
-            return None
+            return m.group(1)
 
 class BI_matches(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self,  subj, obj, queue, bindings):
         return (re.compile(obj.string).search(subj.string))
 
 class BI_notMatches(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self,  subj, obj, queue, bindings):
         return (not re.compile(obj.string).search(subj.string))
 
 

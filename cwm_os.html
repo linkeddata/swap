@@ -36,7 +36,7 @@ See&nbsp;cwm.py&nbsp;and&nbsp;the&nbsp;os&nbsp;module&nbsp;in&nbsp;python</tt></
     
 <tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl>
-<dt><font face="helvetica, arial"><a href="thing.html#Function">thing.Function</a>
+<dt><font face="helvetica, arial"><a href="thing.html#Function">thing.Function</a>(<a href="thing.html#BuiltIn">thing.BuiltIn</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="cwm_os.html#BI_argv">BI_argv</a>(<a href="thing.html#LightBuiltIn">thing.LightBuiltIn</a>, <a href="thing.html#Function">thing.Function</a>)
@@ -54,7 +54,7 @@ See&nbsp;cwm.py&nbsp;and&nbsp;the&nbsp;os&nbsp;module&nbsp;in&nbsp;python</tt></
 </font></dt><dt><font face="helvetica, arial"><a href="cwm_os.html#BI_environ">BI_environ</a>(<a href="thing.html#LightBuiltIn">thing.LightBuiltIn</a>, <a href="thing.html#Function">thing.Function</a>)
 </font></dt></dl>
 </dd>
-<dt><font face="helvetica, arial"><a href="thing.html#ReverseFunction">thing.ReverseFunction</a>
+<dt><font face="helvetica, arial"><a href="thing.html#ReverseFunction">thing.ReverseFunction</a>(<a href="thing.html#BuiltIn">thing.BuiltIn</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="cwm_os.html#BI_baseRelative">BI_baseRelative</a>(<a href="thing.html#LightBuiltIn">thing.LightBuiltIn</a>, <a href="thing.html#Function">thing.Function</a>, <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>)
@@ -82,7 +82,7 @@ See&nbsp;cwm.py&nbsp;and&nbsp;the&nbsp;os&nbsp;module&nbsp;in&nbsp;python</tt></
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_argv-evaluateObject"><strong>evaluateObject</strong></a>(self, store, context, subj, subj_py)</dt></dl>
+<dl><dt><a name="BI_argv-evaluateObject"><strong>evaluateObject</strong></a>(self, subj_py)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -99,8 +99,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_argv-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_argv-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -116,19 +114,19 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_argv-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_argv-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_argv-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_argv-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_argv-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
-<dl><dt><a name="BI_argv-evaluate2"><strong>evaluate2</strong></a>(self, subj, obj, bindings)</dt></dl>
+<dl><dt><a name="BI_argv-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -153,7 +151,7 @@ exist&nbsp;for&nbsp;the&nbsp;same&nbsp;absolute&nbsp;URI.&nbsp;See&nbsp;uripath.
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_baseAbsolute-evaluateObject"><strong>evaluateObject</strong></a>(self, store, context, subj, subj_py)</dt></dl>
+<dl><dt><a name="BI_baseAbsolute-evaluateObject"><strong>evaluateObject</strong></a>(self, subj_py)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -173,8 +171,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_baseAbsolute-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_baseAbsolute-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -190,19 +186,19 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_baseAbsolute-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_baseAbsolute-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_baseAbsolute-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_baseAbsolute-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_baseAbsolute-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
-<dl><dt><a name="BI_baseAbsolute-evaluate2"><strong>evaluate2</strong></a>(self, subj, obj, bindings)</dt></dl>
+<dl><dt><a name="BI_baseAbsolute-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -226,9 +222,9 @@ It&nbsp;is&nbsp;a&nbsp;reverse&nbsp;function&nbsp;too,&nbsp;as&nbsp;you&nbsp;can
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_baseRelative-evaluateObject"><strong>evaluateObject</strong></a>(self, store, context, subj, subj_py)</dt></dl>
+<dl><dt><a name="BI_baseRelative-evaluateObject"><strong>evaluateObject</strong></a>(self, subj_py)</dt></dl>
 
-<dl><dt><a name="BI_baseRelative-evaluateSubject"><strong>evaluateSubject</strong></a>(self, store, context, subj, subj_py)</dt></dl>
+<dl><dt><a name="BI_baseRelative-evaluateSubject"><strong>evaluateSubject</strong></a>(self, subj_py)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -248,8 +244,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_baseRelative-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_baseRelative-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -265,19 +259,24 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_baseRelative-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_baseRelative-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_baseRelative-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_baseRelative-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_baseRelative-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
-<dl><dt><a name="BI_baseRelative-evaluate2"><strong>evaluate2</strong></a>(self, subj, obj, bindings)</dt></dl>
+<dl><dt><a name="BI_baseRelative-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>:<br>
+<dl><dt><a name="BI_baseRelative-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -300,7 +299,7 @@ Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_environ-evaluateObject"><strong>evaluateObject</strong></a>(self, store, context, subj, subj_py)</dt></dl>
+<dl><dt><a name="BI_environ-evaluateObject"><strong>evaluateObject</strong></a>(self, subj_py)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -317,8 +316,6 @@ Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
-<dl><dt><a name="BI_environ-asList"><strong>asList</strong></a>(self)</dt></dl>
-
 <dl><dt><a name="BI_environ-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -334,30 +331,21 @@ context.</tt></dd></dl>
 <hr>
 Methods inherited from <a href="thing.html#Term">thing.Term</a>:<br>
 <dl><dt><a name="BI_environ-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
-as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
-@@@&nbsp;It&nbsp;would&nbsp;be&nbsp;better&nbsp;if&nbsp;it&nbsp;used&nbsp;namespace&nbsp;prefixed.</tt></dd></dl>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.</tt></dd></dl>
 
-<dl><dt><a name="BI_environ-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format<br>
+<dl><dt><a name="BI_environ-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_environ-evaluate"><strong>evaluate</strong></a>(self, store, context, subj, subj_py, obj, obj_py)</dt></dl>
+<dl><dt><a name="BI_environ-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
 
-<dl><dt><a name="BI_environ-evaluate2"><strong>evaluate2</strong></a>(self, subj, obj, bindings)</dt></dl>
+<dl><dt><a name="BI_environ-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table></td></tr></table>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#eeaa77">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
-    
-<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
-<td width="100%"><dl><dt><a name="-isString"><strong>isString</strong></a>(x)</dt></dl>
- <dl><dt><a name="-register"><strong>register</strong></a>(store)</dt></dl>
-</td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>

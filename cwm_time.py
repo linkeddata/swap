@@ -39,121 +39,116 @@ DAY = 24 * 60 * 60
 class BI_inSeconds(LightBuiltIn, Function, ReverseFunction):
     """For a time string, the number of seconds from the era start as an integer-representing string.
     """
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self, subj_py):
         try:
-            return store._fromPython(context, str(isodate.parse(subj_py)))
+            return str(isodate.parse(subj_py))
         except:
             return None
 
-    def evaluateSubject(self, store, context, obj, obj_py):
-	return store._fromPython(context, isodate.fullString(int(obj_py)))
+    def evaluateSubject(self, obj_py):
+	return isodate.fullString(int(obj_py))
 
 class BI_equalTo(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def evaluate(self, subj_py, obj_py):
 	try:
 	    return isodate.parse(subj_py) == isodate.parse(obj_py)
         except:
             return None
 
 class BI_year(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self, subj_py):
         try:
-            return store._fromPython(context, subj_py[:4])
+            return subj_py[:4]
         except:
             return None
 
 class BI_month(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self, subj_py):
         try:
-            return store._fromPython(context, subj_py[5:7])
+            return subj_py[5:7]
         except:
             return None
 
 class BI_day(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self, subj_py):
         try:
-            return store._fromPython(context, subj_py[8:10])
+            return subj_py[8:10]
         except:
             return None
 
 class BI_date(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self, subj_py):
         try:
-            return store._fromPython(context, subj_py[:10])
+            return subj_py[:10]
         except:
             return None
 
 class BI_hour(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self, subj_py):
         try:
-            return store._fromPython(context, subj_py[11:13])
+            return subj_py[11:13]
         except:
             return None
 
 class BI_minute(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self, subj_py):
         try:
-            return store._fromPython(context, subj_py[14:16])
+            return subj_py[14:16]
         except:
             return None
 
 class BI_second(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self, subj_py):
         try:
-            return store._fromPython(context, subj_py[17:19])
+            return subj_py[17:19]
         except:
             return None
 
 tzone = re.compile(r'.*([-+]\d{1,2}:\d{2,2})')
 class BI_timeZone(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self,  subj_py):
 	m = tzone.match(subj_py)
 	if m == None: return None
-	return store._fromPython(context, m.group(1))
+	return m.group(1)
 
 class BI_dayOfWeek(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self,  subj_py):
 	weekdayZero = time.gmtime(0)[6]
-	return store._fromPython(context,
-		(weekdayZero + int(isodate.parse(subj_py)/DAY)) % 7 )
+	return (weekdayZero + int(isodate.parse(subj_py)/DAY)) % 7 
 
 
 #
 class BI_format(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self, subj_py):
 	"""params are ISO time string, format string. Returns reformatted. Ignores TZ@@"""
         if verbosity() > 80: progress("strTime:format input:"+`subj_py`)
         str, format = subj_py
         try:
-            return store._fromPython(context, 
-              time.strftime(format, time.gmtime(isodate.parse(str))))
+            return  time.strftime(format, time.gmtime(isodate.parse(str)))
         except:
             return None
 
 #
 class BI_gmTime(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self,  subj_py):
 	"""Subject is  (empty string for standard formatting or) format string.
 	Returns formatted."""
         if verbosity() > 80: progress("time:gmTime input:"+`subj_py`)
         format = subj_py
 	if format =="" : format="%Y-%M-%dT%H:%m:%SZ"
         try:
-            return store._fromPython(context, 
-		time.strftime(format, time.gmtime(time.time())))
+            return time.strftime(format, time.gmtime(time.time()))
         except:
             return isodate.asString(time())
 
 class BI_localTime(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self, subj_py):
 	"""Subject is format string or empty string for std formatting.
 	Returns reformatted. @@@@ Ignores TZ"""
         if verbosity() > 80: progress("time:localTime input:"+`subj_py`)
         format = subj_py
-	if format =="" : return store._fromPython(context,
-		    isodate.asString(time.time()))
-	return store._fromPython(context, 
-              time.strftime(format, time.localtime(time.time())))
+	if format =="" : return   isodate.asString(time.time())
+	return   time.strftime(format, time.localtime(time.time()))
 
 
 
@@ -162,23 +157,21 @@ class BI_localTime(LightBuiltIn, Function):
 #  these ise Integer time in seconds from epoch.
 #
 class BI_formatSeconds(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self,  subj_py):
 	"""params are epoch-seconds time string, format string. Returns reformatted"""
         if verbosity() > 80: progress("strTime:format input:"+`subj_py`)
         str, format = subj_py
         try:
-            return store._fromPython(context, 
-              time.strftime(format, time.gmtime(int(str))))
+            return  time.strftime(format, time.gmtime(int(str)))
         except:
             return None
 
 class BI_parseToSeconds(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self,   subj_py):
         if verbosity() > 80: progress("strTime:parse input:"+`subj_py`)
         str, format = subj_py
         try:
-            return store._fromPython(context, 
-              calendar.timegm(time.strptime(str, format)))
+            return  calendar.timegm(time.strptime(str, format))
         except:
             return None
 

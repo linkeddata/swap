@@ -1,4 +1,11 @@
+"""Check a proof
 
+This is a simple proof checker.  It hasn't itself been prooved,
+and there are probably lots of ways to fool it especially as a deliberate
+malicious attack. That is because there are simple things I may have forgotten
+to check.
+
+"""
 # check that proof
 
 from thing import load, Namespace
@@ -41,20 +48,29 @@ def statementFromFormula(f):
     s = None
     for x in f.statements:
 	if x[PRED] not in (log.forAll, log.forSome):
-	    if s != None: raise RuntimeError("Statement formula has >1 statement")
+	    if s != None: return None
 	    s = x
     return s
 
 def valid(r, level=0):
     """Check whether this reason is valid. Returns the formula proved or None is not"""
     f = proof.any(r,reason.gives)
-    fyi("Reason for %s is %s."%(f, r), level)
+    if f != None:
+	s = statementFromFormula(f)
+	if s != None:
+	    fs = " proof of {%s %s %s}" % (s.subject(), s.predicate(), s.object())
+	else:
+	    fs = " proof of %s" % f
+    else:
+	fs = ""
+#    fyi("Reason for %s is %s."%(f, r), level)
 
     if r == None:
 	str = f.n3String()
 	return fail("No reason for "+`f` + " :\n\n"+str +"\n\n", level=level)
     t = proof.any(subj=r, pred=rdf.type)
-    fyi("Validating a "+`t`, level=level)
+    fyi("%s %s %s"%(t,r,fs), level=level)
+    level = level + 1
     
     if t is reason.Parsing:
 	res = proof.any(subj=r, pred=reason.source)
@@ -89,8 +105,8 @@ def valid(r, level=0):
 	    bindings.append((var, val))
 
 	rule = proof.any(subj=r, pred=reason.rule)
-	if not valid(rule, level+1):
-	    return fail("No justification for rule"+`rule`, level)
+	if not valid(rule, level):
+	    return fail("No justification for rule "+`rule`, level)
 	for s in proof.the(rule, reason.gives).statements:
 	    if s[PRED] is log.implies:
 		ruleStatement = s
@@ -98,7 +114,7 @@ def valid(r, level=0):
 	else: return fail("Rule has %s instead of log:implies as predicate.", level)
 	evidenceStatements = []
 	for e in evidence:
-	    f2 = valid(e, level+1)
+	    f2 = valid(e, level)
 	    if f2 == None:
 		return fail("Evidence %s was not proved."%(e))
 	    evidenceStatements.append(f2)
@@ -119,7 +135,7 @@ def valid(r, level=0):
 			    level=level)
 
 	for e in evidence:
-	    if not valid(e, level+1):
+	    if not valid(e, level):
 		return fail("Evidence could not be proved: " + `e`, level=level)
 	fyi("Rule %s conditions met" % ruleStatement, level=level)
 
@@ -137,21 +153,27 @@ def valid(r, level=0):
 	components = proof.each(subj=r, pred=reason.component)
 	proved = []
 	for e in components:
-	    if not valid(e, level+1):
+	    if not valid(e, level):
 		return fail("In Conjunction %s, evidence %s could not be proved."%(r,e), level=level)
 	    proved.append(proof.the(subj=e, pred=reason.gives))
 	
 	return f
 	
+    elif t is reason.Fact:
+	con, pred, subj, obj = statementFromFormula(f).quad
+	fyi("Function: @@ Taking for granted that {%s %s %s}" % (subj, pred, obj), level=level)
+	return f
     elif t is reason.Extraction:
 	r2 = proof.the(r, reason.because)
-	f2 = valid(r2, level+1)
+	f2 = valid(r2, level)
 	if f2 == None:
-	    return fail("Extraction: validation of source forumla failed.")
-#	setchatty
+	    return fail("Extraction: validation of source forumla failed.", level)
+	v = verbosity()
+	setVerbosity(0)
 	if not f2.includes(f):
 	    return fail("""Extraction %s not included in formula  %s.\n______________\n%s\n______________not included in formula ______________\n%s"""
-		    %(f, f2, f.n3String(), f2.n3String()), level=level)
+		    %(f, f2, f.debugString(), f2. debugString()), level=level)
+	setVerbosity(v)
 	return f
 
     s = ""
@@ -162,7 +184,7 @@ def valid(r, level=0):
 	    
 parsed = {}
 setVerbosity(0)
-
+chatty=60
 inputURI = argv[1]
 fyi("Reading proof from "+inputURI)
 proof = load(inputURI)

@@ -33,10 +33,8 @@ OS_NS_URI = "http://www.w3.org/2000/10/swap/os#"
 #
 # Not fatal if not defined
 class BI_environ(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
-        if verbosity() > 80: progress("os:environ input:"+`subj_py`+ " has value "+os.environ[subj_py])
-        if isString(subj_py):
-            return store._fromPython(context, os.environ.get(subj_py, None))
+    def evaluateObject(self,  subj_py):
+        if isString(subj_py): return os.environ.get(subj_py, None)
         progress("os:environ input is not a string: "+`subj_py`)
 
 class BI_baseAbsolute(LightBuiltIn, Function):
@@ -45,40 +43,40 @@ class BI_baseAbsolute(LightBuiltIn, Function):
     process base URI (typically, current working directory).
     It is not a reverse function, because sereral different relativisations
     exist for the same absolute URI. See uripath.py."""
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self, subj_py):
         if verbosity() > 80: progress("os:baseAbsolute input:"+`subj_py`)
         if isString(subj_py):
-            return store._fromPython(context, uripath.join(uripath.base(), subj_py))
+            return uripath.join(uripath.base(), subj_py)
         progress("Warning: os:baseAbsolute input is not a string: "+`subj_py`)
 
 class BI_baseRelative(LightBuiltIn, Function, ReverseFunction):
     """The baseRelative of a URI is its expression relation to the process base URI.
     It is 1:1, being an arbitrary cannonical form.
     It is a reverse function too, as you can always work the other way."""
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self, subj_py):
         if verbosity() > 80: progress("os:baseRelative input:"+`subj_py`)
         if isString(subj_py):
-            return store._fromPython(context, uripath.refTo(uripath.base(), subj_py))
+            return uripath.refTo(uripath.base(), subj_py)
         progress("Warning: os:baseRelative input is not a string: "+`subj_py`)
 
-    def evaluateSubject(self, store, context, subj, subj_py):
-	return BI_baseAbsolute.evaluateObject(self, store, context, subj, subj_py)
+    def evaluateSubject(self, subj_py):
+	return BI_baseAbsolute.evaluateObject(self, subj_py)
 
 # Command line argument: read-only
 #  The command lines are passed though cwm using "--with" and into the RDFStore when init'ed.
 # Not fatal if not defined
 class BI_argv(LightBuiltIn, Function):
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self,  subj_py):
         if verbosity() > 80: progress("os:argv input:"+`subj_py`)
-        if isString(subj_py) and store.argv:  # Not None or []
+        if isString(subj_py) and self.store.argv:  # Not None or []
             try:
                 argnum = int(subj_py) -1
             except ValueError:
                 if verbosity() > 30:
                     progress("os:argv input is not a number: "+`subj_py`)
                 return None
-            if argnum < len(store.argv):
-                return store._fromPython(context, store.argv[argnum])
+            if argnum < len(self.store.argv):
+                return self.store.argv[argnum]
 
 def isString(x):
     # in 2.2, evidently we can test for isinstance(types.StringTypes)

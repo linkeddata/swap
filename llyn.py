@@ -520,7 +520,21 @@ class Formula(Fragment):
         self.store.dumpNested(self, _outSink)
         return buffer.getvalue()   # Do we need to explicitly close it or will it be GCd?
 
-
+    def debugString(self, already=[]):
+	"""A simple dump of a formula in debug form."""
+	str = `self`+" is {"
+	todo = []
+	for s in self.statements:
+	    con, pred, subj, obj = s.quad
+	    str = str + "\n%28s  %20s %20s ." % (subj, pred, obj)
+	    for p in PRED, SUBJ, OBJ:
+		if isinstance(s[p], Formula) and s[p] not in already:
+		    todo.append(s[p])
+	str = str+ "}.\n"
+	already = already + todo + [ self ]
+	for f in todo:
+	    str = str + "        " + f.debugString(already)
+	return str
 
     def outputStrings(self, channel=None, relation=None):
         """Fetch output strings from store, sort and output
@@ -683,30 +697,33 @@ class StoredStatement:
 # Equivalence relations
 
 class BI_EqualTo(LightBuiltIn,Function, ReverseFunction):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self,  subj, obj, queue, bindings):
         return (subj is obj)   # Assumes interning
 
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evalObj(self, subj, queue, bindings):
         return subj
 
-    def evaluateSubject(self, store, context, obj, obj_py):
+    def evalSubj(self, obj, queue, bindings):
         return obj
 
 class BI_notEqualTo(LightBuiltIn):
-    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+    def eval(self, subj, obj, queue, bindings):
         return (subj is not obj)   # Assumes interning
 
 
 # Functions 
     
 class BI_uri(LightBuiltIn, Function, ReverseFunction):
-    def evaluateObject(self, store, context, subj, subj_py):
+
+#    def evaluateObject(self, subject):
+#	return subject.uriref()
+    def evalObj(self, subj, q,b):
 	type, value = subj.asPair()
 	if type == SYMBOL:     #    or type == ANONYMOUS: 
-	# @@@@@@ Should not allow anonymous, but test/forgetDups.n3 uses it
-	    return store.intern((LITERAL, value))
+         # @@@@@@ Should not allow anonymous, but test/forgetDups.n3 uses it
+	    return self.store.intern((LITERAL, value))
 
-    def evaluateSubject(self, store, context, obj, obj_py):
+    def evaluateSubject(self, object):
 	"""Return the object which has this string as its URI
 	
         #@@hm... check string for URI syntax?
@@ -714,12 +731,13 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
 	Note that relative URIs can be OK as the whole process
 	has a base, which may be irrelevant. Eg see roadmap-test in retest.sh
 	"""
-	if ':' not in obj_py:
+	store = self.store
+	if ':' not in object:
 	    progress("Warning: taking log:uri of non-abs: %s" % obj_py)
-        if type(obj_py) is type(""):
-	    return store.intern((SYMBOL, obj_py))
-        elif type(obj_py) is type(u""):
-	    uri = obj_py.encode('utf-8') #@@ %xx-lify
+        if type(object) is type(""):
+	    return store.intern((SYMBOL, object))
+        elif type(object) is type(u""):
+	    uri = object.encode('utf-8') #@@ %xx-lify
 	    return store.intern((SYMBOL, uri))
 
 
@@ -727,9 +745,9 @@ class BI_rawUri(BI_uri):
     """This is like  uri except that it allows you to get the internal
     identifiers for anonymous nodes and formuale etc."""
      
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evalObj(self, subj, queue, bindings):
 	type, value = subj.asPair()
-	return store.intern((LITERAL, value))
+	return self.store.intern((LITERAL, value))
 
 
 class BI_rawType(LightBuiltIn, Function):
@@ -739,7 +757,8 @@ class BI_rawType(LightBuiltIn, Function):
     eg see test/includes/check.n3 
     """
 
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evalObj(self, subj,  queue, bindings):
+	store = self.store
         if isinstance(subj, Literal): y = store.Literal
         elif isinstance(subj, Formula): y = store.Formula
         elif context.listValue.get(subj, None): y = store.List
@@ -751,7 +770,7 @@ class BI_rawType(LightBuiltIn, Function):
 
 class BI_racine(LightBuiltIn, Function):    # The resource whose URI is the same up to the "#" 
 
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evalObj(self, subj,  queue, bindings):
         if isinstance(subj, Fragment):
             return subj.resource
         else:
@@ -770,7 +789,15 @@ class BI_racine(LightBuiltIn, Function):    # The resource whose URI is the same
     
 
 class BI_includes(HeavyBuiltIn):
-    pass    # Implemented specially inline in the code below by query queue expansion.
+    """Check that one formula does include the other.
+    This limits the ability to bind a variable by searching inside another
+    context. This is quite a limitation in some ways. @@ fix
+    """
+    def eval(self, subj, obj, queue, bindings):
+        store = subj.store
+        if isinstance(subj, Formula) and isinstance(obj, Formula):
+            return store.testIncludes(subj, obj, [], bindings=bindings) # No (relevant) variables
+        return 0
             
     
 class BI_notIncludes(HeavyBuiltIn):
@@ -788,7 +815,7 @@ class BI_notIncludes(HeavyBuiltIn):
     As for the subject, it does make sense for the opposite reason.  If F(x)
     includes G for all x, then G would have to be infinite.  
     """
-    def evaluate2(self, subj, obj, bindings):
+    def eval(self, subj, obj, queue, bindings):
         store = subj.store
         if isinstance(subj, Formula) and isinstance(obj, Formula):
             return not store.testIncludes(subj, obj, [], bindings=bindings) # No (relevant) variables
@@ -798,7 +825,7 @@ class BI_semantics(HeavyBuiltIn, Function):
     """ The semantics of a resource are its machine-readable meaning, as an
     N3 forumula.  The URI is used to find a represnetation of the resource in bits
     which is then parsed according to its content type."""
-    def evaluateObject2(self, subj):
+    def evalObj(self, subj, queue, bindings):
         store = subj.store
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
@@ -816,14 +843,14 @@ class BI_semantics(HeavyBuiltIn, Function):
     
 class BI_semanticsOrError(BI_semantics):
     """ Either get and parse to semantics or return an error message on any error """
-    def evaluateObject2(self, subj):
+    def evalObj(self, subj,  queue, bindings):
         store = subj.store
         x = store.any((store._experience, store.semanticsOrError, subj, None))
         if x != None:
             if verbosity() > 10: progress(`store._experience`+`store.semanticsOrError`+": Already found error for "+`subj`+" was: "+ `x`)
             return x
         try:
-            return BI_semantics.evaluateObject2(self, subj)
+            return BI_semantics.evalObj(self, subj)
         except (IOError, SyntaxError):
             message = sys.exc_info()[1].__str__()
             result = store.intern((LITERAL, message))
@@ -927,8 +954,8 @@ class DocumentAccessError(IOError):
         reason = _indent(self._info[1].__str__())
         return ("Unable to access document <%s>, because:\n%s" % ( self._uri, reason))
     
-class BI_content(HeavyBuiltIn, Function): #@@DWC: Function?
-    def evaluateObject2(self, subj):
+class BI_content(HeavyBuiltIn, Function):
+    def evalObj(self, subj, queue, bindings):
         store = subj.store
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
@@ -953,7 +980,7 @@ class BI_content(HeavyBuiltIn, Function): #@@DWC: Function?
 
 
 class BI_parsedAsN3(HeavyBuiltIn, Function):
-    def evaluateObject2(self, subj):
+    def evalObj(self, subj, queue, bindings):
         store = subj.store
         if isinstance(subj, Literal):
             F = store.any((store._experience, store.parsedAsN3, subj, None))
@@ -973,38 +1000,38 @@ class BI_cufi(HeavyBuiltIn, Function):
 
     Closure under Forward Inference, equivalent to cwm's --think function
     conclusion  might be a better word than cufi."""
-    def evaluateObject2(self, subj):
+    def evalObj(self, subj, queue, bindings):
         store = subj.store
         if isinstance(subj, Formula):
-            F = store.any((store._experience, store.cufi, subj, None))  # Cached value?
+            F = self.store.any((store._experience, store.cufi, subj, None))  # Cached value?
             if F != None: return F
 
             if verbosity() > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
-            F = store.newInterned(FORMULA)
-            store.copyContext(subj, F)
-            store.think(F)
+            F = self.store.newInterned(FORMULA)
+            self.store.copyContext(subj, F)
+            self.store.think(F)
 	    F = F.close()
-            store.storeQuad((store._experience, store.cufi, subj, F))  # Cache for later
+            self.store.storeQuad((store._experience, store.cufi, subj, F))  # Cache for later
             return F
     
 class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
     """ The conjunction of a set of formulae is the set of statements which is
     just the union of the sets of statements
     modulo non-duplication of course"""
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evaluateObject(self, subj_py):
         if verbosity() > 50:
             progress("Conjunction input:"+`subj_py`)
             for x in subj_py:
                 progress("    conjunction input formula %s has %i statements" % (x, x.size()))
 #        F = conjunctionCache.get(subj_py, None)
 #        if F != None: return F
-        F = store.newInterned(FORMULA)
+        F = self.store.newInterned(FORMULA)
         for x in subj_py:
             if not isinstance(x, Formula): return None # Can't
-            store.copyContext(x, F)
+            self.store.copyContext(x, F)
             if verbosity() > 74:
                 progress("    Formula %s now has %i" % (x2s(F),len(F.statements)))
-        return store.endFormula(F)
+        return self.store.endFormula(F)
 
 class BI_n3String(LightBuiltIn, Function):      # Light? well, I suppose so.
     """ The n3 string for a formula is what you get when you
@@ -1014,9 +1041,9 @@ class BI_n3String(LightBuiltIn, Function):      # Light? well, I suppose so.
     parse back using parsedAsN3 to exaclty the same original formula.
     If we *did* have a cannonical form it would be great for signature
     A cannonical form is possisble but not simple."""
-    def evaluateObject(self, store, context, subj, subj_py):
+    def evalObj(self, store, context, subj, queue, bindings):
         if verbosity() > 50:
-            progress("Generating N3 string for:"+`subj_py`)
+            progress("Generating N3 string for:"+`subj`)
         if isinstance(subj, Formula):
             return store.intern((LITERAL, subj.n3String()))
 
@@ -1577,12 +1604,12 @@ class RDFStore(RDFSink) :
             if verbosity() > 25: progress("    Count is %3i for %s" %(count, r.uriref()))
             if (r.uri != RDF_NS_URI[:-1]
                 and (count > best or
-                     (count == best and `mp` > `r`))) :  # Must be repeatable for retests
+                     (count == best and mp.uriref() > r.uriref()))) :  # Must be repeatable for retests
                 best = count
                 mp = r
 
         if verbosity() > 20:
-            progress("# Most popular Namesapce in %s is %s with %i" % (`context`, `mp`, best))
+            progress("# Most popular Namespace in %s is %s with %i" % (`context`, `mp`, best))
 
         if mp is None: return counts
         self.defaultNamespace = mp.uriref()+"#"
@@ -1722,7 +1749,7 @@ class RDFStore(RDFSink) :
 
         if verbosity() > 98:
             progress( "Topology %s in %s is: anon=%i ob=%i, loop=%i pr=%i ex=%i elsewhere=%i"%(
-            `x`[-8:], `context`[-8:], _anon, _asObj, _loop, _asPred,  _isExistential, _elsewhere))
+            `x`, `context`, _anon, _asObj, _loop, _asPred,  _isExistential, _elsewhere))
 
         return ( _anon, _asObj+_asPred )  
 
@@ -1752,21 +1779,22 @@ class RDFStore(RDFSink) :
 
         return x    # If not a list, return unchanged
 
-    def _fromPython(self, context, x):
+    def _fromPython(self, x, queue):
+	"""Takem a python string, seq etc and represent as a llyn object"""
         if isString(x):
             return self.intern((LITERAL, x))
         elif type(x) == type(2):
             return self.intern((LITERAL, `x`))    # @@ Add literal numeric type to N3?
         elif type(x) == type([]):
+#	    progress("x is >>>%s<<<" % x)
 	    raise RuntimeError("Internals generating lists not supported yet")
-            g = store.nil
+            g = self.nil
             y = x[:]
             y.reverse()
             for e in y:
-                g1 = store.newInterned(ANONYMOUS)
-                self.storeQuad((context, self.forSome, context, g1))
-                self.storeQuad((context, self.first, g1, self._fromPython(context, e)))
-                self.storeQuad((context, self.rest, g1, g))
+                g1 = self.newBnode()
+                queue.append(QueryItem((context, self.first, g1, self._fromPython(e, queue))))
+                queue.append(QueryItem((context, self.rest, g1, g)))
                 g = g1
             return g
         return x
@@ -2344,7 +2372,7 @@ class Query:
 
         
         if verbosity() > 50:
-            progress( "Query: created with %i terms." % (len(unmatched)))
+            progress( "Query: created with %i terms. (justone=%i)" % (len(unmatched), justOne))
             if verbosity() > 80: progress( setToString(unmatched))
 	    if verbosity > 90: progress(
 		"    Smart in: ", smartIn)
@@ -2442,7 +2470,7 @@ class Query:
 ##################################################################################
 
 
-    def  query2(query,
+    def query2(query,
                queue,               # Set of items we are trying to match CORRUPTED
                variables,           # List of variables to match and return CORRUPTED
                existentials,        # List of variables to match to anything
@@ -2469,6 +2497,7 @@ class Query:
                 variables.remove(pair[0])
                 bindings.append(pair)  # Record for posterity
             else:      # Formulae aren't needed as existentials, unlike lists. hmm.
+		if diag.tracking: bindings.append(pair)  # Record for proof only
                 if not isinstance(pair[0], Formula): # Hack - else rules13.n3 fails @@
                     existentials.remove(pair[0]) # Can't match anything anymore, need exact match
 
@@ -2509,11 +2538,12 @@ class Query:
             if state == S_FAIL:
                 return total # Forget it -- must be impossible
             if state == S_LIGHT_UNS_GO or state == S_LIGHT_GO:
-                nbs = item.tryLight(queue)
+		item.state = S_LIGHT_EARLY   # Assume can't run
+                nbs = item.tryLight(queue, bindings, heavy=0)
             elif state == S_LIGHT_EARLY or state == S_NOT_LIGHT: #  Not searched yet
                 nbs = item.trySearch()
             elif state == S_HEAVY_READY:  # not light, may be heavy; or heavy ready to run
-                if pred is query.store.includes:
+                if pred is query.store.includes and not diag.tracking:  # don't optimize when tracking
                     if (isinstance(subj, Formula)
                         and isinstance(obj, Formula)):
 
@@ -2536,7 +2566,8 @@ class Query:
                         raise RuntimeError("Include can only work on formulae "+`item`)
                     nbs = []
                 else:
-                    nbs = item.tryHeavy(queue, bindings)
+		    item.state = S_HEAVY_WAIT  # Assume can't resolve
+                    nbs = item.tryLight(queue, bindings, heavy=1)
             elif state == S_REMOTE: # Remote query -- need to find all of them
 		items = [item]
 		for i in queue[:]:
@@ -2713,46 +2744,52 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 
 
 
-    def tryLight(self, queue):                    
+    def tryLight(self, queue, bindings, heavy):                    
         """check for "light" (quick) built-in functions.
         Return codes:  0 - give up;  1 - continue,
                 [...] list of binding lists"""
         con, pred, subj, obj = self.quad
 
-        self.state = S_LIGHT_EARLY   # Assume can't run
-        if (self.neededToRun[SUBJ] == []):
-            if (self.neededToRun[OBJ] == []):   # bound expression - we can evaluate it
-                obj_py = self.store._toPython(obj, queue)
-                subj_py = self.store._toPython(subj, queue)
-                if pred.evaluate(self.store, con, subj, subj_py, obj, obj_py):
-                    self.state = S_DONE # satisfied
-                    return []   # No new bindings but success in logical operator
-                else: return 0   # We absoluteley know this won't match with this in it
-            else: 
-                if isinstance(pred, Function):
-                    subj_py = self.store._toPython(subj, queue)
-                    result = pred.evaluateObject(self.store, con, subj, subj_py)
-                    if result != None:
-                        self.state = S_FAIL
-			rea=None
-			if diag.tracking: rea = BecauseBuiltIn(subj, pred, result)
-                        return [([ (obj, result)], rea)]
-        else:
-            if (self.neededToRun[OBJ] == []):
-                if isinstance(pred, ReverseFunction):
-                    obj_py = self.store._toPython(obj, queue)
-                    result = pred.evaluateSubject(self.store, con, obj, obj_py)
-                    if result != None:
-                        self.state = S_FAIL
-			rea=None
-			if diag.tracking: rea = BecauseBuiltIn(result, pred, obj)
-                        return [([ (subj, result)], rea)]
-        if verbosity() > 30:
-            progress("Builtin could not give result"+`self`)
-
-        # Now we have a light builtin needs search,
-        # otherwise waiting for enough constants to run
-        return []   # Keep going
+	try:
+	    if self.neededToRun[SUBJ] == []:
+		if self.neededToRun[OBJ] == []:   # bound expression - we can evaluate it
+		    if pred.eval(subj, obj,  queue, bindings):
+			self.state = S_DONE # satisfied
+                        if verbosity() > 80: progress("Heavy predicate succeeds")
+			if diag.tracking:
+			    rea = BecauseBuiltIn(subj, pred, obj)
+			    return [([], rea)]  # Involves extra recursion just to track reason
+			return []   # No new bindings but success in logical operator
+		    else: return 0   # We absoluteley know this won't match with this in it
+		else: 
+		    if isinstance(pred, Function):
+			result = pred.evalObj(subj, queue, bindings[:])
+			if result != None:
+			    self.state = S_FAIL
+			    rea=None
+			    if diag.tracking: rea = BecauseBuiltIn(subj, pred, result)
+			    return [([ (obj, result)], rea)]
+                        else:
+			    if heavy: return 0
+	    else:
+		if (self.neededToRun[OBJ] == []):
+		    if isinstance(pred, ReverseFunction):
+			result = pred.evalSubj(obj, queue, bindings[:])
+			if result != None:
+			    self.state = S_FAIL
+			    rea=None
+			    if diag.tracking: rea = BecauseBuiltIn(result, pred, obj)
+			    return [([ (subj, result)], rea)]
+                        else:
+			    if heavy: return 0
+	    if verbosity() > 30:
+		progress("Builtin could not give result"+`self`)
+    
+	    # Now we have a light builtin needs search,
+	    # otherwise waiting for enough constants to run
+	    return []   # Keep going
+        except (IOError, SyntaxError):
+            raise BuiltInFailed(sys.exc_info(), self ),None
         
     def trySearch(self):
         """Search the store
@@ -2821,44 +2858,6 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         else:
             if (self.neededToRun[OBJ] == []):
                 return isinstance(self.quad[PRED], ReverseFunction)
-        
-    def  tryHeavy(self, queue, bindings):
-        """Deal with heavy built-in functions."""
-        con, pred, subj, obj = self.quad
-        try:
-            self.state = S_HEAVY_WAIT  # Assume can't resolve
-            if self.neededToRun[SUBJ] == []:
-                if self.neededToRun[OBJ] == []: # Binary operators?
-                    result = pred.evaluate2(subj, obj, bindings[:])
-                    if result:
-                        if verbosity() > 80:
-                                progress("Heavy predicate succeeds")
-                        self.state = S_DONE  #  0 done
-                        return []
-                    else:
-                        if verbosity() > 80:
-                                progress("Heavy predicate fails")
-                        return 0   # It won't match with this in it
-                else:   # The statement has one variable - try functions
-                    if isinstance(pred, Function):
-                        result = pred.evaluateObject2(subj)
-                        if result == None: return 0
-                        else:
-                            self.state = S_FAIL
-                            return [([ (obj, result)], BecauseBuiltIn(result, pred, obj))]
-            else:
-                if (self.neededToRun[OBJ] == []
-                    and isinstance(pred, ReverseFunction)):
-                        obj_py = self.store._toPython(obj, queue)
-                        result = pred.evaluateSubject2(self.store, obj, obj_py)
-                        if result != None:  # There is some such result
-                            self.state = S_FAIL  # Do this then stop - that is all
-                            return [([ (subj, result, pred)], BecauseBuiltIn(subj, pred, result))]
-                        else: return 0
-            if verbosity() > 30:
-                progress("Builtin could not give result"+`self`)
-        except (IOError, SyntaxError):
-            raise BuiltInFailed(sys.exc_info(), self ),None
 
 
     def bindNew(self, newBindings):

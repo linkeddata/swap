@@ -388,9 +388,9 @@ class SinkParser:
 	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "EOF found in middle of path syntax")
 	    pred = res.pop()
 	    if ch == "!":
-		self._sink.makeStatement((self._context, pred, subj, obj)) 
+		self.makeStatement((self._context, pred, subj, obj)) 
 	    else:
-		self._sink.makeStatement((self._context, pred, obj, subj)) 
+		self.makeStatement((self._context, pred, obj, subj)) 
 	    res.append(obj)
 	return j
 
@@ -435,7 +435,7 @@ class SinkParser:
                 else:
                     raise BadSyntax(self._thisDoc, self.lines, str, i, "object_list expected after [= ")
 
-            if subj is None: subj=self._sink.newBlankNode(self._context)
+            if subj is None: subj=self._sink.newBlankNode(self._context, why=self._reason2)
 
             i = self.property_list(str, j, subj)
             if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "property_list expected")
