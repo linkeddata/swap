@@ -1,9 +1,9 @@
-# Notation3 
-# BNF without tokenization
+# Notation3 in Notation3
+# Context Free Grammar without tokenization
 #
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
-@prefix bnf: <http://www.w3.org/2000/10/swap/grammar/bnf#>.
+@prefix cfg: <http://www.w3.org/2000/10/swap/grammar/bnf#>.
 @prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#>.
 @prefix : <http://www.w3.org/2000/10/swap/grammar/n3#>.
 @prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#>.
@@ -31,7 +31,7 @@
 #  (possible ending characters of one and beginning characters overlap)
 #
 
-<> bnf:syntaxFor [ bnf:internetMediaType 
+<> cfg:syntaxFor [ cfg:internetMediaType 
 		<http://www.w3.org/2003/mediatypes#application/n3>].
 
 # <> rdfsem:semanticsFor ""   .....
@@ -40,79 +40,94 @@
 #
 # The N3 Full Grammar
 
+
+language a cfg:Language;
+	cfg:document	document;
+	cfg:whiteSpace	"@@@@@".
+
+
 document a rul:Used;
-	bnf:mustBeOneSequence(
+	cfg:mustBeOneSequence(
 	
 		(
-			[ bnf:zeroOrMore declaration ]
-			[ bnf:zeroOrMore universal ]
-			[ bnf:zeroOrMore existential ]
+#			[ cfg:zeroOrMore declaration ]
+#			[ cfg:zeroOrMore universal ]
+#			[ cfg:zeroOrMore existential ]
 			statements_optional
-			bnf:eof
+			cfg:eof
 		)
 	).
 
-statements_optional bnf:mustBeOneSequence (() ( statement "." statements_optional ) ).
+statements_optional cfg:mustBeOneSequence (() ( statement "." statements_optional ) ).
 
 # Formula does NOT need period on last statement
 
-formulacontent bnf:mustBeOneSequence (
+formulacontent cfg:mustBeOneSequence (
 		( ) 
-		( [ bnf:zeroOrMore declaration ]
-		[ bnf:zeroOrMore  universal ]
-		[ bnf:zeroOrMore existential ]
+		(
+#		 [ cfg:zeroOrMore declaration ]
+#		 [ cfg:zeroOrMore  universal ]
+#		 [ cfg:zeroOrMore existential ]
 		statementlist
 	)).
 
 
-statementlist bnf:mustBeOneSequence (
+statementlist cfg:mustBeOneSequence (
 		( )
 		( statement statementtail )
 	).
 
-statementtail bnf:mustBeOneSequence (
+statementtail cfg:mustBeOneSequence (
 		( )
 		( "." statementlist )
 	).
 
-universal bnf:mustBeOneSequence (
+
+statement  cfg:mustBeOneSequence (
+		(declaration)
+		(universal)
+		(existential)
+		(simpleStatement)
+	).
+
+universal cfg:mustBeOneSequence (
 		(
 			"@forAll"
-			[ bnf:commaSeparatedPeriodTerminatedListOf symbol ]
+			[ cfg:commaSeparatedListOf symbol ]
 		)).
 
-existential bnf:mustBeOneSequence(
+existential cfg:mustBeOneSequence(
 		(	 "@forSome" 
-			 [ bnf:commaSeparatedPeriodTerminatedListOf symbol ]
+			 [ cfg:commaSeparatedListOf symbol ]
 		)).
 
 
-declaration bnf:mustBeOneSequence(
-		( "@prefix" qname explicituri "." )
-		( "@keywords" [ bnf:commaSeparatedPeriodTerminatedListOf barename ] )
+declaration cfg:mustBeOneSequence(
+		( "@prefix" qname explicituri  )
+		( "@keywords" [ cfg:commaSeparatedListOf barename ] )
 	).
 
 
-statement bnf:mustBeOneSequence(( subject propertylist )).
+simpleStatement cfg:mustBeOneSequence(( subject propertylist )).
 
-propertylist bnf:mustBeOneSequence (
+propertylist cfg:mustBeOneSequence (
 		( )
 		( verb  object objecttail propertylisttail )
 	).
 
-propertylisttail bnf:mustBeOneSequence (
+propertylisttail cfg:mustBeOneSequence (
 		( )
 		( ";" propertylist )
 	).
 
 
-objecttail bnf:mustBeOneSequence (
+objecttail cfg:mustBeOneSequence (
 		( )
 		( ","   object objecttail )
 	).
 
 
-verb bnf:mustBeOneSequence (
+verb cfg:mustBeOneSequence (
 		( path )
 		( "@has" path )
 		( "@is" path "@of" )
@@ -122,24 +137,24 @@ verb bnf:mustBeOneSequence (
 		( "<=" ) 
 	).
 
-prop bnf:mustBeOneSequence ((node)).
+# prop cfg:mustBeOneSequence ((node)).
 
-subject bnf:mustBeOneSequence ((path)).
+subject cfg:mustBeOneSequence ((path)).
 
-object bnf:mustBeOneSequence ((path)).
+object cfg:mustBeOneSequence ((path)).
 
-path bnf:mustBeOneSequence(
+path cfg:mustBeOneSequence(
 		( node pathtail )
 	).
 
-pathtail bnf:mustBeOneSequence(
+pathtail cfg:mustBeOneSequence(
 		(  )
 		( "!" path )
 		( "^" path )
 	).
 
 
-node bnf:mustBeOneSequence (
+node cfg:mustBeOneSequence (
 		( symbol )
 		( "{" formulacontent "}" )
 		( variable )
@@ -151,44 +166,44 @@ node bnf:mustBeOneSequence (
 ).
 
 
-pathlist bnf:mustBeOneSequence (() (path pathlist)).
+pathlist cfg:mustBeOneSequence (() (path pathlist)).
 
-symbol bnf:mustBeOneSequence (
+symbol cfg:mustBeOneSequence (
 		(explicituri)
 		(qname)
 	).
 
 
-literal bnf:mustBeOneSequence(( string dtlang)).
+literal cfg:mustBeOneSequence(( string dtlang)).
 
-dtlang bnf:mustBeOneSequence(  ()  ("@" langcode)  ("^^" symbol)).
+dtlang cfg:mustBeOneSequence(  ()  ("@" langcode)  ("^^" symbol)).
 
 
 #______________________________________________________________________
 #
 #   TERMINALS
 
-numericliteral	bnf:matches	"""[-+]?[0-9]+(\\.[0-9]+)?(e[-+]?[0-9]+)?""";
-		bnf:canStartWith 	"0", "-", "+".
+numericliteral	cfg:matches	"""[-+]?[0-9]+(\\.[0-9]+)?(e[-+]?[0-9]+)?""";
+		cfg:canStartWith 	"0", "-", "+".
 
-explicituri 	bnf:matches 	"<[^>]*>";
-		bnf:canStartWith 	"<".
+explicituri 	cfg:matches 	"<[^>]*>";
+		cfg:canStartWith 	"<".
 
-qname 		bnf:matches  	"(([a-zA-Z_][a-zA-Z0-9_]*)?:)?([a-zA-Z_][a-zA-Z0-9_]*)?";
-		bnf:canStartWith 	"a", "_", ":".  # @@ etc unicode
+qname 		cfg:matches  	"(([a-zA-Z_][a-zA-Z0-9_]*)?:)?([a-zA-Z_][a-zA-Z0-9_]*)?";
+		cfg:canStartWith 	"a", "_", ":".  # @@ etc unicode
 
-barename 	bnf:matches  	"[a-zA-Z_][a-zA-Z0-9_]*";  # subset of qname
-		bnf:canStartWith 	"a", "_".  # @@ etc
+barename 	cfg:matches  	"[a-zA-Z_][a-zA-Z0-9_]*";  # subset of qname
+		cfg:canStartWith 	"a", "_".  # @@ etc
 
-variable 	bnf:matches  	"\\?[a-zA-Z_][a-zA-Z0-9_]*";  # ? barename
-		bnf:canStartWith 	"?".  #
+variable 	cfg:matches  	"\\?[a-zA-Z_][a-zA-Z0-9_]*";  # ? barename
+		cfg:canStartWith 	"?".  #
 
 # Maybe dtlang should just be part of string regexp?
 # Whitespace is not allowed
 
 # was: "[a-zA-Z][a-zA-Z0-9]*(-[a-zA-Z0-9]+)?";
-langcode	bnf:matches  	"[a-z]+(-[a-z0-9]+)*"; # http://www.w3.org/TR/rdf-testcases/#language
-		bnf:canStartWith 	"a".
+langcode	cfg:matches  	"[a-z]+(-[a-z0-9]+)*"; # http://www.w3.org/TR/rdf-testcases/#language
+		cfg:canStartWith 	"a".
 
 
 #               raw regexp single quoted would be   "([^"]|(\\"))*"
@@ -203,31 +218,49 @@ langcode	bnf:matches  	"[a-z]+(-[a-z0-9]+)*"; # http://www.w3.org/TR/rdf-testcas
 # After that we have to prefix with one or three opening \"  which
 # the python regexp doesn't have them.
 #
-# string3		bnf:matches		"\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\"".
-# string1		bnf:matches		"\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"".
+# string3		cfg:matches		"\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\"".
+# string1		cfg:matches		"\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\"".
 
-string		bnf:matches		"(\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\")|(\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\")";
-		bnf:canStartWith 	"\"".
+string		cfg:matches		"(\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\")|(\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\")";
+		cfg:canStartWith 	"\"".
 
 #____________________________________________________
 
-#  Axioms reducing the shortcut BNF terms to bnf:musBeOneSequence.
+#  Axioms reducing the shortcut CFG terms to cfg:musBeOneSequence.
 
-{ ?x bnf:zeroOrMore ?y } => {?x bnf:mustBeOneSequence ( () (?y ?x) ) }.
+{ ?x cfg:zeroOrMore ?y } => {?x cfg:mustBeOneSequence ( () (?y ?x) ) }.
 
 
-{ ?x bnf:commaSeparatedPeriodTerminatedListOf ?y } =>
+{ ?x cfg:commaSeparatedPeriodTerminatedListOf ?y } =>
 {
-	?x bnf:mustBeOneSequence (
+	?x cfg:mustBeOneSequence (
 		( "." )
-		( ?y [bnf:CSLTail ?y]  )
+		( ?y [cfg:CSLTail ?y]  )
 	)
 }.
 
-{ ?x bnf:CSLTail ?y } =>
+{ ?x cfg:CSLTail ?y } =>
 {
-	?x bnf:mustBeOneSequence (
+	?x cfg:mustBeOneSequence (
 		( "." )
+		( "," ?y ?x )
+	)
+}.
+
+# Without the period
+
+{ ?x cfg:commaSeparatedListOf ?y } =>
+{
+	?x cfg:mustBeOneSequence (
+		(  )
+		( ?y [cfg:CSLTail2 ?y]  )
+	)
+}.
+
+{ ?x cfg:CSLTail2 ?y } =>
+{
+	?x cfg:mustBeOneSequence (
+		( )
 		( "," ?y ?x )
 	)
 }.
@@ -235,14 +268,14 @@ string		bnf:matches		"(\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\"
 
 #  labelling of things which do not have explicit URIs:
 
-{ ?x bnf:zeroOrMore [ bnf:label ?y].
-	( ?y "_s" ) string:concatenation ?str } => { ?x bnf:label ?str }.
+{ ?x cfg:zeroOrMore [ cfg:label ?y].
+	( ?y "_s" ) string:concatenation ?str } => { ?x cfg:label ?str }.
 
-{ ?x bnf:commaSeparatedPeriodTerminatedListOf [ bnf:label ?y].
-	( ?y "_csl" ) string:concatenation ?str } => { ?x bnf:label ?str }.
+{ ?x cfg:commaSeparatedPeriodTerminatedListOf [ cfg:label ?y].
+	( ?y "_csl" ) string:concatenation ?str } => { ?x cfg:label ?str }.
 
-{ ?x bnf:CSLTail [ bnf:label ?y].
-	( ?y "_necsl" ) string:concatenation ?str } => { ?x bnf:label ?str }.
+{ ?x cfg:CSLTail [ cfg:label ?y].
+	( ?y "_necsl" ) string:concatenation ?str } => { ?x cfg:label ?str }.
 
 
 #ends
