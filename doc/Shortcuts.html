@@ -35,8 +35,8 @@ with up till now, this would look something like</p>
 
 <p>which reads "that which is the zipcode of that which is the address of
 that which is the home of that which is the assistant of that which is the
-mother of :George", which isn't very conventient to read or write. And this
-is when in an object-oriented langauge, you would just cascade methods or
+mother of :George", which isn't very convenient to read or write. And this is
+when in an object-oriented language, you would just cascade methods or
 attributes on properties using ".".</p>
 
 <p>To make it easier in N3 there is a shortcut for the above would just be
@@ -60,7 +60,7 @@ english you can read the "." as " 's".</p>
 if :me.con:mailbox means my mailbox, then
 &lt;mailto:ora@lassila.com&gt;^con:mailbox is that which has
 &lt;mailto:ora@lassila.com&gt; as a mailbox. This backward traversal is less
-usual - you can't do it object-oriented programming langauges -- but
+usual - you can't do it object-oriented programming languages -- but
 sometimes its what you need.</p>
 
 <p>Note that there isn't necessarily only one match for a path - often there
@@ -87,8 +87,8 @@ output a file will turn it into the form of N3 you already know.</p>
 <h2 id="Lists">Lists</h2>
 
 <p>A common need is to represent an ordered collection of things. This is
-done in RDF as a rdf:Collection. In N3, the list is represented by sepetating
-the objects with whitespace and surrounding them with parenthases. Examples
+done in RDF as a rdf:Collection. In N3, the list is represented by separating
+the objects with whitespace and surrounding them with parentheses. Examples
 are:</p>
 <pre>( "Monday" "Tuesday" "Wednesday" )
 
@@ -101,7 +101,7 @@ are:</p>
 
 <p>These lists are actually shorthand for statements which knit blank nodes
 together using <code>rdf:first</code> and <code>rdf:rest</code>.
-<code>rdf:first</code> is the relationship betwen a list and its first
+<code>rdf:first</code> is the relationship between a list and its first
 component. <code>rdf:rest</code> if the relationship between a list and the
 list of everything except its first element. <code>rdf:nil</code> is the name
 for the empty list. Therefore,</p>
@@ -114,9 +114,9 @@ for the empty list. Therefore,</p>
                         rdf:rest rdf:nil ]]]</pre>
 
 <p>One of the common uses of lists is as parameter to a relationship which
-ihas more than one argment.</p>
+has more than one argument.</p>
 <pre>(  "Dear " ?name " "," )   
-             string:conatenation   ?salutation.</pre>
+             string:concatenation   ?salutation.</pre>
 
 <p></p>
 
@@ -124,9 +124,48 @@ ihas more than one argment.</p>
 the three strings "Dear", whatever ?name is, and a comma. This will be used
 with built-in functions which we will discuss later.</p>
 
-<div class="noprint">
-<br />
+<h3>Getting rid of the leading ":" with @<a name="keywords"
+id="keywords">keywords</a></h3>
 
+<p>In the examples, often we have been using terms in the default namespace,
+like :me  or :father or :People.  The ":" is there because we don't want to
+get confused with keywords which are part of the syntax, like  <em>a</em>,
+<em>is</em>, <em>of</em>, and <em>prefix</em>.  Further, we want to be able
+to add more keywords later to extend the syntax, and you don't want to find
+that your files which happened to use that word as a name are all out of
+date.</p>
+
+<p>The solution is that if you really want to be able to write N3 without
+that leading ":", then you can declare which keywords you are going to use. 
+When you have done that, then everything which is <em>not</em> in the list is
+allowed without a colon, and will be taken as a name.  To actually use the
+keyword, you have to use an explicit "@" as you have been doing with "prefix"
+all along.</p>
+
+<p>Here is an example in which all they keywords are removed, so "@" is used
+all the time:</p>
+<pre>@keywords.
+@prefix : &lt;#&gt;.
+me @a Person.
+Jo @a Person; @is sister @of me.
+Jo father Alan; mother Flo.
+Alan father Zak; brother Ed, Julian.</pre>
+
+<p>Here is an example in which the normal keywords used are all declared.</p>
+<pre>@keywords a, is, of, this.
+@prefix : &lt;#&gt;.
+me a Person.
+Jo a Person; is sister of me.
+Jo father Alan; mother Flo.
+Alan father Zak; brother Ed, Julian.</pre>
+
+<p>Note that is you have declared something a keyword, then you can still use
+the "@" in front of it if you want to, as in "@prefix" above. </p>
+
+<p>Obviously, you can't declared <em>a</em> to be a keyword, and then call
+your variables <em>a</em>, <em>b</em> and <em>c</em>!</p>
+
+<div class="noprint">
 <hr />
 
 <p>Tim BL, with his director hat off</p>
