@@ -39,7 +39,7 @@ this log:forAll :d, :x, :y, :F, :G.
 { :d log:resolvesTo :F .
   :F  log:includes :G } log:implies  {  :doc :says :G }. 
 
-{ <t10a.n3> :says { :theSky :is :blue } } log:implies {test_SURPRISE a :success}.
+{ <t10a.n3> :says { :theSky :is :blue } } log:implies {:test_SURPRISE a :success}.
 
 
 # Not to mention:

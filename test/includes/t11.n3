@@ -24,6 +24,8 @@ this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
 { <t10a.n3> log:resolvesTo :F.
   :F log:includes { :s :p :o}   } log:implies { :p a :UsedProperty } .
 
+# Debug:
+{ <foo.n3> log:resolvesTo :F. } log:implies { :WE :FOUND :F }.
 
 #  The RDF and RDFS specs imply this algorithm for the definitive schema corresponding
 #  to a Property :p.  (From Ralph Swick, whiteboard conversation)
