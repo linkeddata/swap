@@ -25,7 +25,7 @@ information where available.</p>
   <dt><a href="#Class" name="Class1" id="Class1">Class</a></dt>
     <dd>A set of <a href="#Thing">Things</a>; a one-parameter predicate; a
       unary relation.</dd>
-  <dt>DAML</dt>
+  <dt><a name="DAML" id="DAML">DAML</a></dt>
     <dd>Darpa Agent Markup Langauge. This is DARPA's name for the US
       govenment funded projects which led to, among other things, OWL. The <a
       href="http://www.daml.org/">DAML site</a> has useful pointers and
@@ -42,17 +42,18 @@ information where available.</p>
     <dd>(From: Closed world machine; valley.) A bit of code for playing with
       this stuff, as grep is for regular expressions. Sucks in RDF in XML or
       N3, processes rules, and spits it out again.</dd>
-  <dt>existential variable</dt>
+  <dt><a name="existentia" id="existentia">existential variable</a></dt>
     <dd>A term in a language (such as N3) which stands in place of a normal
       symbol, allowing one to consider a formula being true for some symbol
       being put consistently in place of the variable.</dd>
   <dt><a name="filter" id="filter" href="#filter1">filter</a></dt>
     <dd>A set of <a href="#rule">rules</a> which are used to select certain
       data from a larger amount of information.</dd>
-  <dt>Formula</dt>
-    <dd>A set of statements, with a list of universally quanitified variables
-      and a list of existentially quantified variables.  In N3, a literal
-      formula if representated by braces {}.</dd>
+  <dt><a name="Formula1" id="Formula1">Formula</a></dt>
+    <dd>A set of <a href="#Statement">statements</a>, with a list of
+      universally quanitified variables and a list of existentially
+      quantified variables. In N3, a literal formula if representated by
+      braces {}.</dd>
   <dt><a name="N3" id="N3" href="/DesignIssues/Notation3">N3</a></dt>
     <dd>Notation3, a quick notation for jotting down or reading RDF semantic
       web information, and experimenting with more advanced sematic web
@@ -82,7 +83,7 @@ information where available.</p>
     <dd>That identified by a Universal Resource Identifier (without a "#").
       If the URI starts "http:", then the resource is some form of generic
       document.</dd>
-  <dt><a name="Statement" id="Statement">Statement</a></dt>
+  <dt><a name="Statement" id="Statement1">Statement</a></dt>
     <dd>A subject, predicate and object which assert meaning defined by the
       particular predicate used.</dd>
   <dt><a name="subject" id="subject">subject</a></dt>
@@ -100,7 +101,7 @@ information where available.</p>
   <dt><a name="type" id="type">type</a></dt>
     <dd>A particular property used to assert that a thing is in a certain
       Class. The relationship between a thing and any Class it is in.</dd>
-  <dt>universal variable</dt>
+  <dt><a name="universal" id="universal">universal variable</a></dt>
     <dd>A term in a language (such as N3) which stands in place of a normal
       symbol, allowing one to consider a formula being true for any symbol
       being put consistently in place of the variable.</dd>
@@ -110,8 +111,9 @@ information where available.</p>
       everything has a URI, as you can talk about something by just using its
       properties. But using a URI allows other documents and systems to
       easily reuse your information.</dd>
-  <dt>variable</dt>
-    <dd>Either a universal variable or an existential variable.</dd>
+  <dt><a name="variable" id="variable">variable</a></dt>
+    <dd>Either a <a href="#universal">universal variable</a> or an <a
+      href="#existentia">existential variable</a>.</dd>
   <dt></dt>
 </dl>
 
@@ -122,7 +124,6 @@ information where available.</p>
   <li><a href="/DesignIssues/Notation3.html">Notation3 - Design Issues
     article</a></li>
 </ul>
-
 
 <p>Tim BL, with his director hat off</p>
 
