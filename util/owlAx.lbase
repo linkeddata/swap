@@ -1,7 +1,7 @@
 ?class(?object) iff rdf:type(?object, ?class).
 
-
+# comment!
 
 owl:FunctionalProperty(?p) and ?p(?x,?y) and ?p(?x, ?z) 
-   implies owl:sameIndividualAs(?y, ?z).
+   implies owl:sameAs(?y, ?z).
 

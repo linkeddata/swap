@@ -4,6 +4,6 @@
   ?x ?p ?y.
   ?x ?p ?z.
 } => {
-  ?y owl:sameIndividualAs ?z
+  ?y owl:sameAs ?z
 }.
 
