@@ -210,9 +210,9 @@ def asFormula(self, store):
     uu = store.occurringIn(statementAsFormula, kb.universals())
     ee = store.occurringIn(statementAsFormula, kb.existentials())
     for v in uu:
-	statementAsFormula.add(subj= statementAsFormula, pred=log.forAll, obj=v, why=dontAsk)
+	statementAsFormula.add(subj= statementAsFormula, pred=log.forAll222, obj=v, why=dontAsk)
     for v in ee:
-	statementAsFormula.add(subj= statementAsFormula, pred=log.forSome, obj=v, why=dontAsk)
+	statementAsFormula.add(subj= statementAsFormula, pred=log.forSome222, obj=v, why=dontAsk)
     return statementAsFormula.close()  # probably slow - much slower than statement subclass of formula
 
 
