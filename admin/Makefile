@@ -19,7 +19,7 @@ CAL=$W/2002/12/cal
 # W3C mailing list search results in RDF
 #http://lists.w3.org/Archives/Public/www-rdf-interest/2003Jul/0206.html
 
-bugstatus: N3-Bugs.ics
+bugstatus: N3-Bugs.ics bugStatus.html
 
 CWM=PYTHONPATH=$(SWAP) $(PYTHON) $(SWAP)/cwm.py
 
