@@ -93,7 +93,7 @@ sub statement{
 
 sub term{
   my($t, $litOK) = @_;
-  
+
   if($t =~ s/^<//){
     if($t =~ s/>$//){
 
@@ -106,8 +106,8 @@ sub term{
       return undef
     }
   }
-  elsif($litOK && $t =~ s/^\"//){
-    if($t =~ s/\"$//){
+  elsif($t =~ s/^\"//){
+    if($litOK && $t =~ s/\"$//){
       #@@string unquoting
       return "\"$t\"";
     }
@@ -115,10 +115,9 @@ sub term{
       return undef;
     }
   }
-  elsif($t =~ s/^_://){
+  elsif($t =~ s/^\_\://){
     if($t =~ /^[a-zA-Z0-9]+$/){
-      $t = "x" . $t.
-      $t = "?" . $t;
+      $t = '?x' . "$t";
       push(@Ex, $t) unless grep($_ eq $t, @Ex);
       return $t;
     }
@@ -133,7 +132,10 @@ sub term{
     
 
 # $Log$
-# Revision 1.3  2001-06-07 19:49:48  connolly
+# Revision 1.4  2001-06-07 20:03:37  connolly
+# debugged sneaky ; vs . thing
+#
+# Revision 1.3  2001/06/07 19:49:48  connolly
 # rather: _:1 -> ?x1 to match the test data I already generated
 #
 # Revision 1.2  2001/06/07 19:48:34  connolly
