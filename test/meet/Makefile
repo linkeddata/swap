@@ -19,5 +19,5 @@ red.rdf : red.n3
 blue.rdf : blue.n3
 	$C blue.n3 -rdf > blue.rdf
 
-green.rdf : blue.n3
+green.rdf : green.n3
 	$C green.n3 -rdf > green.rdf
