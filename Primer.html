@@ -57,7 +57,10 @@ a comma introduces another object with  the same predicate and subject.</p>
 <pre>&lt;#pat&gt; &lt;#child&gt;  &lt;#al&gt;, &lt;#chaz&gt;, &lt;#mo&gt; ;
        &lt;#age&gt;    "24" ;
        &lt;#eyecolor&gt; "blue" .</pre>
-<pre>So for example the data in hte table</pre>
+
+<p>So, for example, the data in the table</p>
+<pre>
+</pre>
 
 <table border="1">
   <tbody>
@@ -106,7 +109,8 @@ which has an #age of "3".  There are two important things to remember</p>
     i l d as telling you what it means - we will find out how to do that
     later.</li>
   <li>The square brackets declare that something exists with the given
-    properties, but don't give</li>
+    properties, but don't give you a way to refer to it elsewhere in this or
+    anohter document.</li>
 </ul>
 
 <p>If we actually wany to use a name, we could have written the table above
@@ -131,10 +135,10 @@ title.</p>
 <p>I could try to give the title of an N3 document by</p>
 <pre>&lt;&gt; &lt;#title&gt;  "A simple example of N3".</pre>
 
-<p>(The &lt;&gt; being a blank URI just refers to the document it is written
-in.) The &lt;#title&gt; refers to the concept of #title as defined by the
-document itself.  This won't mean much to the reader. However, a group of
-people created a list of properties called the Dublin Core, among which is
+<p>(The &lt;&gt; being an empty URI reference always refers to the document it
+is written in.) The &lt;#title&gt; refers to the concept of #title as defined
+by the document itself.  This won't mean much to the reader. However, a group
+of people created a list of properties called the Dublin Core, among which is
 their idea of title, which they gave the identifier</p>
 
 <p>&lt;http://purl.org/dc/elements/1.1/title&gt;. So we can make a much better
@@ -183,10 +187,11 @@ just data themselves.</p>
 
 <p></p>
 
-<p>Things like dc:title above are RDF <dfn>Properties</dfn>.  When you want to
-define a new vocabulary, or ontology, you define new classes of things and new
-properties. When you say what type of thing something is, you say a
-<dfn>Class</dfn> it belongs to.</p>
+<p>Things like dc:title above are RDF <dfn><a
+name="Properties">Properties</a></dfn>.  When you want to define a new
+vocabulary, or ontology, you define new classes of things and new properties.
+When you say what type of thing something is, you say a <dfn><a
+name="Class">Class</a></dfn> it belongs to.</p>
 
 <p>The property which tells you what type something is is rdf:Type which can
 be abbreviated to N3 to just <code>a</code>. So we can define a class of
@@ -285,8 +290,8 @@ programs which interchange and manipulate data for the semantic web.</p>
 all simple collections of RDF statements.  They can all be drawn as simple
 circle and arrow diagrams.</p>
 
-<p>Let's call a collection in which RDF statements occur a <dfn>context</dfn>.
-In a context,</p>
+<p>Let's call a collection in which RDF statements occur a <dfn><a
+name="context">context</a></dfn>. In a context,</p>
 <ul>
   <li>The statements are all independent, in that you can remove any of the
     statements and the rest are still true</li>
@@ -367,51 +372,43 @@ would execute them when.  I expect there will be many different engines which
 make those decisions differently. Check the documentation of software near
 you.</p>
 
-<h2 id="Mapping">Mapping into other languages</h2>
-
-<p>If you want to convert N3 into a logic language or thinbk of it in a logic
-language, here is some explanation in those terms.</p>
-
-<p>The forAll statements obviously declare variables which are universally
-quantifieied: the context is true for any value of the variable.  Similarly,
-forSome gives an existential quantification: there exists some value of the
-variable for which the context is true. The square bracket notation is short
-for "forSome".</p>
-<pre>{ &lt;#g&gt; &lt;#loves&gt; &lt;#you&gt; } log:forSome &lt;#g&gt; .</pre>
-
-<p>is equivalent to</p>
-<pre>[ &lt;#loves&gt; &lt;#you&gt; ] .</pre>
-
-<p>If both universal and existential quantification are specified for the same
-context, then the scope of the universal quantification is outside the scope
-of the existentials:</p>
-<pre>{ &lt;#g&gt; &lt;#loves&gt; &lt;#h&gt; } log:forAll &lt;#h&gt;; log:forSome &lt;#g&gt;.</pre>
-
-<p>and</p>
-<pre>{ &lt;#g&gt; &lt;#loves&gt; &lt;#h&gt; } log:forSome &lt;#g&gt;; log:forAll &lt;#gh&gt;.</pre>
-
-<p>and</p>
-<pre>[ &lt;#loves&gt; &lt;#h&gt; ] log:forAll &lt;#h&gt;.</pre>
-
 <p></p>
-
-<p>are of course equiavlent and all mean</p>
-<pre>{{ &lt;#g&gt; &lt;#loves&gt; &lt;#h&gt; } log:forSome &lt;#g&gt;} log:forAll &lt;#h&gt;.</pre>
-
-<p>("Every has someone who loves them" rather than "Somebody loves
-everybody")</p>
-
-<p>which you might thing of</p>
-
-<p>&forall;h(&exist;g(loves(g,h)) </p>
 
 <h2>Glossary</h2>
 
-<p>vocabulary, ontology, all hte daml and rdf terms, context</p>
+<p>These are not formal definitions - just phrases to help you get the hang of
+what these things mean.</p>
+<dl>
+  <dt><a href="#Class">Class</a></dt>
+    <dd>A set of Things;  a one-parameter predicate; a unary relation.</dd>
+  <dt><a href="#context">Context</a></dt>
+    <dd>An (unordered) set of statements.  You can write one out in N3 using
+      {braces}.</dd>
+  <dt><a href="#Properties">Property</a></dt>
+    <dd>A sort of relationship between two things; a binary relation.</dd>
+  <dt>Statement</dt>
+    <dd>A subject, prediate and object which assert meaning defined by the
+      particular prediate used.</dd>
+  <dt>Thing</dt>
+    <dd>In DAML, a generic name for anything - abstract, animate, inanimate,
+      whatever. The class which anything is in. (In RDF parlance,
+    Resource.)</dd>
+  <dt>Truth</dt>
+    <dd>In the log: namespace, a Class of all contexts which are true.</dd>
+  <dt>type</dt>
+    <dd>A particular property used to assert that a thing is in a certian
+      Class.</dd>
+  <dt>URI</dt>
+    <dd>Universal Resource Identifier. The way of identifying anything
+      (including Classes, Properties or individual things of any sort).   Not
+      everything has a URI, as you can talk about something by just using its
+      properties. But using a URI allows other documents and systems to easily
+      reuse your information.</dd>
+</dl>
 
 <p>@@@@</p>
 
-<p>References</p>
+<h2 id="References">References</h2>
 <ul>
   <li><a href="/DesignIssues/Notation3.html">Notation3 - Design Issues
     article</a></li>
