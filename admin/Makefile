@@ -23,6 +23,9 @@ bugstatus: N3-Bugs.ics
 
 CWM=PYTHONPATH=$(SWAP) $(PYTHON) $(SWAP)/cwm.py
 
+bugStatus.html: ,bugsToDo.cal3 bugReport.n3
+	PYTHONPATH=$(SWAP) $(PYTHON) $(SWAP)/cwm.py ,bugsToDo.cal3 bugReport.n3 --think --strings >$@
+
 N3-Bugs.ics: ,bugsToDo.cal3 $(SWAP)/pim/toIcal.py
 	PYTHONPATH=$(SWAP):$(CAL) $(PYTHON) $(SWAP)/pim/toIcal.py ,bugsToDo.cal3 >$@
 

@@ -1,0 +1,48 @@
+@prefix cal: <http://www.w3.org/2002/12/cal/ical#> .
+@prefix bst: <bugstatus#> .
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+"0" log:outputString """<html xmlns="http://www.w3.org/1999/xhtml">
+<head><title>Bug Status</title></head>
+<body><h1>Bug Status</h1>
+<ul>
+""".
+
+"99" log:outputString """</ul></body></html>""".
+
+{
+  ?E cal:summary ?DESC;
+    a cal:Vtodo;
+    cal:url ?PG;
+    cal:dtstart [ cal:dateTime ?WHEN ].
+  (?WHEN "1") str:concatenation ?KS.
+  (?WHEN "9") str:concatenation ?KE.
+  ("<li>" ?WHEN " raised: <a href='" [is log:uri of ?PG]
+       "'>" ?DESC "</a>") str:concatenation ?TXT.
+} => {
+ ?KS log:outputString ?TXT.
+ ?KE log:outputString "</li>\n".
+ }.
+
+
+{
+  ?E cal:summary ?DESC;
+    a cal:Vtodo;
+    cal:url ?PG;
+    cal:completed [ cal:dateTime ?WHEN2 ].
+  ("<li>" ?WHEN2 " <a href='" [is log:uri of ?PG]
+       "'>" ?DESC "</a> closed.</li>\n") str:concatenation ?TXT.
+} => { ?WHEN2 log:outputString ?TXT }.
+
+{
+  ?E cal:summary ?DESC;
+    a cal:Vtodo;
+    cal:dtstart [ cal:dateTime ?WHEN1 ];
+    cal:completed [ cal:dateTime ?WHEN2 ].
+  (?WHEN1 "2") str:concatenation ?K.
+  ("<br /><b>closed: " ?WHEN2 "</b>") str:concatenation ?TXT.
+} => { ?K log:outputString ?TXT }.
+
+
+
