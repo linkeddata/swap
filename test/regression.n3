@@ -1,0 +1,377 @@
+# List of regression tests
+#
+# - was in bash script retest.sh
+#
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+
+
+:t1001 a test:CwmTest;
+    test:shortFileName "animal.n3";
+    test:description   "Parse a small RDF file, generate N3";
+    test:arguments     """-rdf animal.rdf -n3""".
+
+
+:t1002 a test:CwmTest;
+    test:shortFileName "animal-1.rdf";
+    test:description   "Parse a small RDF file and regenerate RDF";
+    test:arguments     """-rdf animal.rdf""".
+
+
+:t1003 a test:CwmTest;
+    test:shortFileName "in-xml-t.n3";
+    test:description   "Parse RDF embedded in foreign XML";
+    test:arguments     """--rdf=T xml-syntax/in-xml.xml -n3""".
+
+
+:t1004 a test:CwmTest;
+    test:shortFileName "in-xml.n3";
+    test:description   "Ignore RDF embedded in foreign XML";
+    test:arguments     """--rdf xml-syntax/in-xml.xml -n3""".
+
+
+:t1005 a test:CwmTest;
+    test:shortFileName "reluri-1.rdf";
+    test:description   "test generation of relative URIs";
+    test:arguments     """reluri-1.n3 --rdf""".
+
+
+:t1006 a test:CwmTest;
+    test:shortFileName "contexts-1.n3";
+    test:description   "Parse and generate simple contexts";
+    test:arguments     """contexts.n3""".
+
+
+:t1007 a test:CwmTest;
+    test:shortFileName "anon-prop-1.n3";
+    test:description   "Parse and regen anonymous property";
+    test:arguments     """anon-prop.n3""".
+
+
+:t1008 a test:CwmTest;
+    test:shortFileName "daml-ont.n3";
+    test:description   "Convert some RDF/XML into RDF/N3";
+    test:arguments     """daml-pref.n3 -rdf daml-ont.rdf -n3""".
+
+
+:t1009 a test:CwmTest;
+    test:shortFileName "strquot.n3";
+    test:description   "N3 string quoting";
+    test:arguments     """-n3 strquot.n3""".
+
+
+:t1010 a test:CwmTest;
+    test:shortFileName "path1.n3";
+    test:description   "Path syntax, simple";
+    test:arguments     """syntax/path1.n3""".
+
+
+:t1011 a test:CwmTest;
+    test:shortFileName "path2.n3";
+    test:description   "Path syntax, more";
+    test:arguments     """syntax/path2.n3""".
+
+
+:t1012 a test:CwmTest;
+    test:shortFileName "qvars1.n3";
+    test:description   "Quick variable syntax, simple";
+    test:arguments     """syntax/qvars1.n3""".
+
+
+:t1013 a test:CwmTest;
+    test:shortFileName "qvars2.n3";
+    test:description   "Quick variable syntax, more";
+    test:arguments     """syntax/qvars2.n3""".
+
+
+:t1014 a test:CwmTest;
+    test:shortFileName "lstring-out.n3";
+    test:description   "N3 string nested triple quoting";
+    test:arguments     """--n3 syntax/lstring.n3""".
+
+
+:t1015 a test:CwmTest;
+    test:shortFileName "equiv-syntax.n3";
+    test:description   "conversion of N3 = to RDF";
+    test:arguments     """-n3 equiv-syntax.n3 -rdf""".
+
+
+:t1016 a test:CwmTest;
+    test:shortFileName "daml-ont-piped.n3";
+    test:description   "Pipe mode for flat n3 to n3";
+    test:arguments     """daml-ont.n3 --pipe""".
+
+
+:t1017 a test:CwmTest;
+    test:shortFileName "lists-simple.n3";
+    test:description   "parsing and generation of N3 list syntax";
+    test:arguments     """-n3 lists-simple.n3""".
+
+
+:t1018 a test:CwmTest;
+    test:shortFileName "lists-simple-1.rdf";
+    test:description   "conversion of N3 list syntax to RDF";
+    test:arguments     """-n3 lists-simple.n3 -rdf""".
+
+
+:t1019 a test:CwmTest;
+    test:shortFileName "prefix1.rdf";
+    test:description   "Avoiding default namespace on attrs";
+    test:arguments     """-rdf norm/fix.rdf""".
+
+
+:t1020 a test:CwmTest;
+    test:shortFileName "prefix2.rdf";
+    test:description   "Avoiding default namespace on attrs";
+    test:arguments     """-rdf norm/fix.rdf -rdf=d""".
+
+
+:t1021 a test:CwmTest;
+    test:shortFileName "prefix3.rdf";
+    test:description   "Avoiding default namespace on attrs";
+    test:arguments     """-rdf norm/fix.rdf -rdf=p""".
+
+
+:t1022 a test:CwmTest;
+    test:shortFileName "daml-ex.n3";
+    test:description   "Try the examples";
+    test:arguments     """daml-pref.n3 -rdf daml-ex.rdf -n3""".
+
+
+#        Test log:implies rules:
+
+:t1023 a test:CwmTest;
+    test:shortFileName "rules12-1.n3";
+    test:description   "log:implies Rules - try one iteration first.";
+    test:arguments     """rules12.n3 -rules""".
+
+
+:t1024 a test:CwmTest;
+    test:shortFileName "rules12-n.n3";
+    test:description   "log:implies rules, iterating";
+    test:arguments     """rules12.n3 -think""".
+
+
+:t1025 a test:CwmTest;
+    test:shortFileName "rules13-1.n3";
+    test:description   "log:implies rules more complex, with means, once";
+    test:arguments     """rules13.n3 -rules""".
+
+
+:t1026 a test:CwmTest;
+    test:shortFileName "rules13-n.n3";
+    test:description   "log:implies rules more complex, with means, many times";
+    test:arguments     """rules13.n3 -think""".
+
+
+:t1027 a test:CwmTest;
+    test:shortFileName "two-route.n3";
+    test:description   "test different rules giving same result";
+    test:arguments     """two-route.n3 -think""".
+
+
+:t1028 a test:CwmTest;
+    test:shortFileName "schema1.n3";
+    test:description   "Schema validity 1";
+    test:arguments     """daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think""".
+
+
+:t1029 a test:CwmTest;
+    test:shortFileName "schema2.n3";
+    test:description   "Schema validity using filtering out essential output";
+    test:arguments     """daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think -filter=schema-filter.n3""".
+
+
+:t1030 a test:CwmTest;
+    test:shortFileName "underbarscope-out.n3";
+    test:description   "The scope of _:me should be the document";
+    test:arguments     """underbarscope.n3 --think""".
+
+
+#        Test list handling
+
+:t1031 a test:CwmTest;
+    test:shortFileName "li-r1.n3";
+    test:description   "Inference using lists";
+    test:arguments     """list/r1.n3 -think""".
+
+
+:t1032 a test:CwmTest;
+    test:shortFileName "li-gk3.n3";
+    test:description   "Iterative ops on lists";
+    test:arguments     """list/gk3.n3 -think""".
+
+
+#        Test builtins:
+
+:t1033 a test:CwmTest;
+    test:shortFileName "bi-t1.n3";
+    test:description   "Simple use of log:includes";
+    test:arguments     """includes/t1.n3 -think""".
+
+
+:t1034 a test:CwmTest;
+    test:shortFileName "bi-t2.n3";
+    test:description   "Simple use of log:includes";
+    test:arguments     """includes/t2.n3 -think""".
+
+
+:t1035 a test:CwmTest;
+    test:shortFileName "bi-t3.n3";
+    test:description   "Simple use of log:includes";
+    test:arguments     """includes/t3.n3 -think""".
+
+
+:t1036 a test:CwmTest;
+    test:shortFileName "bi-t4.n3";
+    test:description   "Simple use of log:includes - negative test";
+    test:arguments     """includes/t4.n3 -think""".
+
+
+:t1037 a test:CwmTest;
+    test:shortFileName "bi-t6.n3";
+    test:description   "Simple use of log:includes";
+    test:arguments     """includes/t6.n3 -think""".
+
+
+:t1038 a test:CwmTest;
+    test:shortFileName "bi-t7.n3";
+    test:description   "Simple use of log:includes";
+    test:arguments     """includes/t7.n3 -think""".
+
+
+:t1039 a test:CwmTest;
+    test:shortFileName "bi-t8.n3";
+    test:description   "Simple use of string built-ins";
+    test:arguments     """includes/t8.n3 -think""".
+
+
+:t1040 a test:CwmTest;
+    test:shortFileName "bi-t9.n3";
+    test:description   "Filter event by date using strcmp BI's";
+    test:arguments     """includes/t9br.n3 -think""".
+
+
+:t1041 a test:CwmTest;
+    test:shortFileName "bi-t10.n3";
+    test:description   "log:resolvesTo and log:includes";
+    test:arguments     """includes/t10.n3 -think""".
+
+
+:t1042 a test:CwmTest;
+    test:shortFileName "bi-t11.n3";
+    test:description   "log:resolvesTo and log:includes - schema checking";
+    test:arguments     """includes/t11.n3 -think""".
+
+
+:t1043 a test:CwmTest;
+    test:shortFileName "endsWith-out.n3";
+    test:description   "string:endsWith";
+    test:arguments     """string/endsWith.n3 -rules""".
+
+
+:t1044 a test:CwmTest;
+    test:shortFileName "bi-quant.n3";
+    test:description   "log:includes handling of univ./exist. quantifiers";
+    test:arguments     """includes/quantifiers.n3 -think""".
+
+
+:t1045 a test:CwmTest;
+    test:shortFileName "bi-quant-imp.n3";
+    test:description   "log:implies handling of quantifiers";
+    test:arguments     """includes/quant-implies.n3 --think""".
+
+
+:t1046 a test:CwmTest;
+    test:shortFileName "bi-concat.n3";
+    test:description   "Test string concatetnation built-in";
+    test:arguments     """includes/concat.n3 -think""".
+
+
+:t1047 a test:CwmTest;
+    test:shortFileName "bi-uri-startswith.n3";
+    test:description   "Dan's bug case with uri and startswith";
+    test:arguments     """includes/uri-startswith.n3 -think""".
+
+
+:t1048 a test:CwmTest;
+    test:shortFileName "resolves-rdf.n3";
+    test:description   "log:resolvesTo with RDF/xml syntax";
+    test:arguments     """resolves-rdf.n3 -think""".
+
+
+:t1049 a test:CwmTest;
+    test:shortFileName "sameDan.n3";
+    test:description   "dealing with multiple descriptions of the same thing using log:lessThan, log:uri, daml:equivalentTo";
+    test:arguments     """sameDan.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge""".
+
+
+:t1050 a test:CwmTest;
+    test:shortFileName "timet1.n3";
+    test:description   "basic ISo time handling functions";
+    test:arguments     """time/t1.n3 --think --purge""".
+
+
+:t1051 a test:CwmTest;
+    test:shortFileName "smush.rdf";
+    test:description   "Data aggregation challenge from Jan 2001";
+    test:arguments     """--rdf smush-examples.rdf --n3 smush-schema.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge --filter=smush-query.n3 --rdf""".
+
+
+:t1052 a test:CwmTest;
+    test:shortFileName "vblsNotURIs-out.n3";
+    test:description   "Should not get URIs of anonymous nodes";
+    test:arguments     """--rdf animal.rdf --n3 vblsNotURIs.n3 --think""".
+
+
+:t1053 a test:CwmTest;
+    test:shortFileName "n3ExprFor-out.n3";
+    test:description   "Parsing strings with n3ExprFor";
+    test:arguments     """includes/n3ExprFor.n3 --think""".
+
+
+:t1054 a test:CwmTest;
+    test:shortFileName "environ.n3";
+    test:description   "Read operating system environment variable";
+    test:environment	"TEST_PARAMETER_1=TEST_VALUE_1";
+    test:arguments     """os/environ.n3 -think""".
+
+:t1055 a test:CwmTest;
+    test:shortFileName	"roadmap-test.dot";
+    test:description	"using notIncludes and --strings to make a graphviz file";
+    test:environment	"TARGET=roadmap/test.graph";
+    test:arguments	"""roadmap/todot.n3 --think --strings""".
+
+
+:t1056 a test:CwmTest;
+    test:shortFileName "conjunction.n3";
+    test:description   "log:conjunction of formulae";
+    test:arguments     """includes/conjunction.n3 --think""".
+
+
+:t1057 a test:CwmTest;
+    test:shortFileName "conclusion.n3";
+    test:description   "log:conclusion deductive closure";
+    test:arguments     """includes/conclusion.n3 --think""".
+
+
+:t1058 a test:CwmTest;
+    test:shortFileName "argv-1.n3";
+    test:description   "os:argv argument values";
+    test:arguments     """os/argv.n3 --think --with foo bar baz""".
+
+
+:t1059 a test:CwmTest;
+    test:shortFileName "argv-2.n3";
+    test:description   "os:argv argument other values";
+    test:arguments     """os/argv.n3 --think --with boof""".
+
+# Test proof generation -- see also the -p option of retest.py
+
+#:t1060 a test:CwmTest;
+#    test:shortFileName "reason-t5.n3";
+#    test:description   "Proof for one simple rule";
+#    test:arguments     """reason/t5.n3 --think --base=foo --why""".
+
+#ends
