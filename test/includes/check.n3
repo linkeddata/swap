@@ -1,0 +1,77 @@
+# Test whether a schema mentions the predicates used in this data
+#  This involves searching in files for statements being present or absent.
+ 
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+# @prefix daml:  <http://www.daml.org/2000/10/daml-ont#> .
+# @prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+# @prefix ex:   <http://www.daml.org/2000/10/daml-ex#> .
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+@prefix os:  <http://www.w3.org/2000/10/swap/os#> .
+
+@prefix : <foo.n3#>.  # Local stuff
+
+@prefix foo: <foo.n3#>.  # Local stuff
+
+# Usage:   cwm t11.n3 -think
+#
+# Output should conclude all test* a :success and no failures.
+#
+
+
+this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
+
+{ :x os:environ "HOME" } log:implies { :HOME :is :x }.
+{ [ log:uri [is os:environ of "TARGET" ]] log:resolvesTo :F } log:implies { :F a :target }.
+
+{ :F a :target .
+  :F log:includes { :s :p :o}   } log:implies { :p a :UsedAsProperty } .
+
+
+#  The RDFS spec implies the following algorithm for the definitive schema corresponding
+#  to a Property :p.  (From Ralph Swick, whiteboard conversation)
+#  Maybe we should simplify it to the schema being the result of dereferencing the Property?
+#  I think the counterexample is the dublin core, but it may not work anyway.
+
+{ :p a :UsedAsProperty .
+  :p log:resolvesTo [log:includes { :p s:isDefinedBy :s }] } log:implies {:p :schema :s}.
+
+
+# We may need the schema as a formula two:
+
+{     :p :schema [ log:resolvesTo :F ] } log:implies { :p :schemaFormula :F }. 
+
+#  If there is no schema found, then we flag a problem
+
+{ :p a :UsedAsProperty .
+  :p log:resolvesTo [log:notIncludes { :p s:isDefinedBy :x }]
+} log:implies {:p a :ERROR_CANT_GET_SCHEMA}.
+
+
+{ :p a :UsedAsProperty .
+  :p log:resolvesTo :F.
+  :F log:includes { :p s:isDefinedBy :s }.
+  :s log:resolvesTo :G } log:implies { :p :schemaFormula :G }.
+
+# FYI
+{:p :schemaFormula :F.
+ :F log:includes { :p a rdf:Property }}log:implies { :p a :Property_declared } .
+
+
+# It is an error, we say, for something to be used as a Property but
+# not *explicitly* declared as such in the schema:
+
+{:p :schemaFormula :F.
+ :F log:notIncludes { :p a rdf:Property }}log:implies { :p a :ERROR_PROPERTY_NOT_DECLARED } .
+ 
+
+#   (b)when the document is combined with the above, no condradiction
+#      can be found from anything being (eg) member of disjoint sets.
+#
+
+log:implies a log:Chaff.  #  Clear out rules on -purge
+
+
+
+ 
+#ends

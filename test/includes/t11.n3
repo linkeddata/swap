@@ -21,19 +21,19 @@
 
 this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
 
-# <foo.n3> log:resolvesTo :F .
-#   :F log:includes { :blue a rdf:Property }} log:implies { :includesTest a :FAILURE}.
-#
-#{ <foo.n3> log:resolvesTo :F .  
-# :F log:notIncludes { :blue a rdf:Property }} log:implies { :includesTest2 a :success}.
-#
-#{ <foo.n3> log:resolvesTo :F .
-#   :F log:includes { :is a rdf:Property }} log:implies { :includesTest3 a :success}.
-#
-#{ <foo.n3> log:resolvesTo :F .  
-# :F log:notIncludes { :is a rdf:Property }} log:implies { :includesTest4 a :FAILURE}.
-#
-#
+{<foo.n3> log:resolvesTo :F .
+   :F log:includes { :blue a rdf:Property }} log:implies { :includesTest a :FAILURE}.
+
+{ <foo.n3> log:resolvesTo :F .  
+ :F log:notIncludes { :blue a rdf:Property }} log:implies { :includesTest2 a :success}.
+
+{ <foo.n3> log:resolvesTo :F .
+   :F log:includes { :is a rdf:Property }} log:implies { :includesTest3 a :success}.
+
+{ <foo.n3> log:resolvesTo :F .  
+ :F log:notIncludes { :is a rdf:Property }} log:implies { :includesTest4 a :FAILURE}.
+
+
 { <t10a.n3> log:resolvesTo :F.
   :F log:includes { :s :p :o}   } log:implies { :p a :UsedProperty } .
 #
@@ -63,7 +63,7 @@ this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
   :p log:resolvesTo [log:includes { :p s:isDefinedBy :s }] } log:implies {:p :schema :s}.
 
 
-# We may need the schema as a formula two:
+# We may need the schema as a formula too:
 
 {     :p :schema [ log:resolvesTo :F ] } log:implies { :p :schemaFormula :F }. 
 
@@ -81,10 +81,13 @@ this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
   :F log:includes { :p s:isDefinedBy :s }.
   :s log:resolvesTo :G } log:implies { :p :schemaFormula :G }.
 
-#
+# FYI
 {:p :schemaFormula :F.
  :F log:includes { :p a rdf:Property }}log:implies { :p a :Property_declared } .
- 
+
+# It is an error, we say, for something to be used as a Property but
+# not *explicitly* declared as such in the schema:
+
 {:p :schemaFormula :F.
  :F log:notIncludes { :p a rdf:Property }}log:implies { :p a :ERROR_PROPERTY_NOT_DECLARED } .
  
