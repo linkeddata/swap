@@ -1,0 +1,81 @@
+#   n3 definition of some logical terms
+#
+# these raise the level above ontology
+# $Id$
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix doc: <http://www.w3.org/2000/01/pim/doc#>.
+#bind ont: <http://www.daml.org/2000/10/daml-ont> .	 # contains aliases for the above
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <#>.
+
+log:N3Document a rdfs:Class;
+
+	rdfs:comment	"""A document which, which parsed as Notation3
+as defined in general by http://www.w3.org/DesignIssues/Notation3.html
+and this schema, conveys the intent of the author by the semantics defined
+on those specifications, and the semantics defined by the specifications
+of any identifiers used in the document.
+""" .
+
+log:Formula a rdfs:Class.
+log:String  a rdfs:Class.
+
+#   The following are inherent in the translation of N3 syntax to quad representation:
+
+log:forSome a rdf:Property;  #@@@@@ buggy!
+	rdfs:comment "A is true for some objectfor which here we use B. This concept is buggy." ;
+	rdfs:domain log:Formula.
+
+
+log:forAll a rdf:Property;
+    rdfs:comment "A is true for any object in place of B" .
+
+
+################## The following are used for inference
+
+
+log:Truth a rdf:Class;
+    rdfs:comment """Something which is true: belive it as you would belive this.
+	       Understood natively by cwm in that it will execute rules in a formula
+         declared a Truth within a formula it is already taking rules from.""".
+
+#log:Falsehood a rdf:Class;
+#	rdfs:comment "Something which is not true. Not the complement of True!";
+#	rdfs:domain log:context.
+#
+
+log:implies a rdfs:Property;
+    rdfs:comment "Logical implication. Understood natively by cwm.";
+    rdfs:range log:Formula;
+    rdfs:isDefinedBy <>;
+    rdfs:range log:Formula.
+
+log:resolvesTo a rdf:Property;
+    rdfs:domain doc:Work;
+    rdfs:range  log:Formula;
+    rdfs:label  "forumla";
+    rdfs:comment """This connects a document and the formula it parses to.
+        Cwm knows how to go get a document and parse it in order to evaluate this.""".
+
+################# Simple Builtins:
+#
+#
+log:uri a rdf:Property;
+    rdfs:description """This allows one to look at the actual string of the URI
+        which identifies this.""";
+    rdfs:range log:String.
+
+############# Rules
+# Rule names may change.
+# Conversion between falsehood and implication:
+#rule1 log:forAll :x, :y, :z; =
+#{
+#    { :x log:implies :y } log:means {  { :x a :Truth . :y a :Falsehood.} a:Falsehood}.
+#} .
+#
+# etc etc
+
+# ends
+
