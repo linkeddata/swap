@@ -4,6 +4,8 @@
 #
 #  To do: Passing on namesapce bindings!
 #
+#  - Add parsing of RDF bags
+#
 # parses DAML_ONT_NS or DPO_NS lists, generates DPO_NS
 
 import xmllib  # Comes with python 1.5 and greater
@@ -191,7 +193,7 @@ class RDFXMLParser(xmllib.XMLParser):
             elif ( tagURI == RDF_NS_URI + "Bag" or  # 6.4 container :: bag | sequence | alternative
                    tagURI == RDF_NS_URI + "Alt" or
                    tagURI == RDF_NS_URI + "Seq"):
-                raise unimplemented
+                raise unimplemented  # Don't parse bags yet sorry
             else:  # Unknown tag within STATE_NO_SUBJECT: typedNode #6.13
                 c = self._context   # (Might be change in idAboutAttr)
                 self.idAboutAttr(attrs)
