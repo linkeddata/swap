@@ -8,9 +8,7 @@ __version__ = "$Revision$"
 
 import LX
 from LX.ladder import Ladder
-from LX import rdfns, lxns
-from LX import Triple
-import LX.fol
+from LX.defaultns import rdfns, lxns
 
 def flatten(kb, toKB, indirect=0):
     """Return a formula which expresses the same knowledge, but using
@@ -25,7 +23,7 @@ def flatten(kb, toKB, indirect=0):
     ladder = Ladder(("kb", toKB))
     ladder = ladder.set("trace", 1)
     for f in kb:
-        if f.function is LX.fol.RDF and not indirect:
+        if f.function is LX.RDF and not indirect:
             toKB.add(f)
         else:
             term = d.describe(f, ladder)
@@ -46,7 +44,7 @@ def unflatten(f):
 class VariableDescriber:
 
     def describe(self, object, ladder):
-        if not isinstance(object, LX.fol.Variable):
+        if not isinstance(object, LX.Variable):
             raise LX.DescriptionFailed, 'not a variable term'
         if ladder.has("term"):
             raise (DescriptionFailed,
@@ -82,14 +80,14 @@ class URIRefDescriber:
 class FormulaDescriber:
 
     nameTable = {
-        LX.fol.IMPLIES:   [ lxns.Conditional,   lxns.condLeft,   lxns.condRight   ],
-        LX.fol.MEANS: [ lxns.Biconditional, lxns.bicondLeft, lxns.bicondRight ],
-        LX.fol.AND:   [ lxns.Conjunction,   lxns.conjLeft,   lxns.conjRight   ],
-        LX.fol.OR:   [ lxns.Disjunction,   lxns.disjLeft,   lxns.disjRight   ],
-        LX.fol.NOT:      [ lxns.Negation,      lxns.negated ],
-        LX.fol.FORALL: [ lxns.UniversalQuantification, lxns.univar, lxns.subformula ],
-        LX.fol.EXISTS: [ lxns.ExistentialQuantification, lxns.exivar, lxns.subformula ],
-        LX.fol.RDF: [ lxns.Triple, lxns.subjectTerm, lxns.predicateTerm, lxns.objectTerm ]
+        LX.logic.IMPLIES:   [ lxns.Conditional,   lxns.condLeft,   lxns.condRight   ],
+        LX.logic.MEANS: [ lxns.Biconditional, lxns.bicondLeft, lxns.bicondRight ],
+        LX.logic.AND:   [ lxns.Conjunction,   lxns.conjLeft,   lxns.conjRight   ],
+        LX.logic.OR:   [ lxns.Disjunction,   lxns.disjLeft,   lxns.disjRight   ],
+        LX.logic.NOT:      [ lxns.Negation,      lxns.negated ],
+        LX.logic.FORALL: [ lxns.UniversalQuantification, lxns.univar, lxns.subformula ],
+        LX.logic.EXISTS: [ lxns.ExistentialQuantification, lxns.exivar, lxns.subformula ],
+        LX.logic.RDF: [ lxns.Triple, lxns.subjectTerm, lxns.predicateTerm, lxns.objectTerm ]
         }
     
     def describe(self, object, ladder):
@@ -111,21 +109,6 @@ class FormulaDescriber:
         return term
 
 # This implements http://www.w3.org/2002/12/rdf-identifiers/
-
-class WebLocation:
-    def __init__(self, uri):
-        self.uri = uri
-    def __str__(self):
-        return '[ web:uri "%s" ]' % self.uri
-    
-class Thing:
-    def __init__(self, uri):
-        self.uriOfDescription = uri
-    def __str__(self):
-        return '[ web:uriOfDescription "%s" ]' % self.uriOfDescription
-
-
-rdf_type = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 def denotation(triple, index):
     """
     Return the object denoted by triple[index], where string
@@ -136,15 +119,19 @@ def denotation(triple, index):
     http://www.w3.org/2002/12/rdf-identifiers/
     """
     u = triple[index]
-    if index == 1: return Thing(u)
+    if index == 1: return DescribedThing(u)
     if u.find("#") >= 0:
-        return Thing(u)
-    if index == 2 and triple[1] == rdf_type: return Thing(u)
+        return DescribedThing(u)
+    if index == 2 and triple[1] == rdfns.type.uri: return DescribedThing(u)
     return WebLocation(u)
     
 # $Log$
-# Revision 1.6  2003-02-01 05:58:10  sandro
-# intermediate lbase support; getting there but buggy; commented out some fol chreccks
+# Revision 1.7  2003-02-13 19:49:30  sandro
+# changed some names to match other reorg; probably broken
+#
+# Revision 1.6  2003/02/01 05:58:10  sandro
+# intermediate lbase support; getting there but buggy; commented out
+# some fol checks 
 #
 # Revision 1.5  2003/01/29 06:09:18  sandro
 # Major shift in style of LX towards using expr.py.  Added some access
