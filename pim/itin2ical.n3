@@ -24,7 +24,7 @@ $Id$
 
 this log:forAll :FLT, :CARRIER_NAME, :NUM, :SUM,
     :YYMMDD, :HH_MM, :HH_MM2, :DTSTART, :DTEND, :TZ, :TZ2,
-    :WHERE, :FROM_NAME, :TO_NAME.
+    :WHERE, :FROM_NAME, :TO_NAME, :UID.
 
 # airports with the same nameString have the same timezone
 { :WHERE a k:Airport-Physical;
@@ -100,9 +100,12 @@ a:YVR a k:Airport-Physical;
     (:YYMMDD "T" :HH_MM ":00"). #@@ extra punct in dates
   :DTEND is str:concatenation of
     (:YYMMDD "T" :HH_MM2 ":00").
+
+  ( :FLT!log:rawUri "@uri-2-mid.w3.org") str:concatenation :UID. #@@hmm... kludge?
 }
  log:implies {
   :FLT a cal:Vevent;
+    cal:uid :UID;
     cal:summary :SUM;
     cal:dtstart [ cal:tzid :TZ; cal:dateTime :DTSTART ];
     cal:dtend [ cal:tzid :TZ2; cal:dateTime :DTEND ];
