@@ -196,7 +196,7 @@ class RDFHandler(xml.sax.ContentHandler):
             self._nextId = self._nextId + 1
             self.sink.makeStatement(( self._context,
                                       (RESOURCE, notation3.N3_forSome_URI),
-                                      (RESOURCE, self._context),
+                                      self._context,
                                       (RESOURCE, generatedId) )) #  Note this is anonymous node
             return generatedId
 
