@@ -1,0 +1,20 @@
+# check tests
+
+@prefix log:  <http://www.w3.org/2000/10/swap/log#>.
+@prefix string:  <http://www.w3.org/2000/10/swap/string#>.
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdft: <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#>.
+@prefix : <#>.
+
+#{ ?x a rdft:PositiveParserTest; rdft:outputDocument ?d.
+#  ?d.log:semantics log:includes { [] rdf:predicate [] }.
+#} => { ?x a :ReificationTest, :BoringTest }.
+
+{ ?x a rdft:PositiveParserTest; rdft:inputDocument ?i.
+  ?i.log:content string:contains "parseType=\"Literal\"".
+} => { ?x a :ParseTypeLiteralTest, :BoringTest }.
+
+
+#ends
+
