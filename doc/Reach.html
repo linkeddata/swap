@@ -67,7 +67,7 @@ document. The definition of ?x is that it is quantified in the scope of not
 the immediate formula but the next enclosing formula. So we can't use it at
 different levels of nesting. We are not asking whether the home page includes
 "For all x, x is vegetarian". This is an example of how one must be explicit
-about the scope of variables when they are used at more than one level. </p>
+about the scope of variables when they are used at more than one level.</p>
 
 <h3><a name="Implementi" id="Implementi">Implementing defaults and
 <code>log:notIncludes</code></a></h3>
@@ -91,7 +91,7 @@ one with a value for the color.</p>
 <p>This is a way to do defaults. Notation3 as it is doesn't have defaults,
 because on the web, you can't say "if nothing says it is another color". You
 can never know in the whole web whether anyone has given a color. Also, if we
-start to just looslely talk about defaults in the sense of <em> if you don't
+start to just looslely talk about defaults in the sense of <em>if you don't
 already know a color</em>, then different agents will end up drawing
 different conclusions from the same data, which is not a good foundation for
 a scalable web. So, you handle defaults by first running rules to work out
@@ -170,19 +170,19 @@ data about data. You have a lot of control over where cwm will look for
 metadata, and how it will use it.</p>
 
 <p>This behaviour is controlable in cwm by the --mode flags. By default cwm
-won't doing anything about it at all. (See:<a href="cwm.html#Mode"> Cwm's
+won't doing anything about it at all. (See:<a href="cwm.html#Mode">Cwm's
 --mode flags</a> in manual page)</p>
 
 <p></p>
 
-<p>The<strong> r </strong>flag is necessary for any of this to work. This
+<p>The<strong>r</strong>flag is necessary for any of this to work. This
 causes it to check for metadata in the working formula - the current
 dataset.</p>
 
 <p>The <strong>s</strong> flag makes cwm also check for schemas. It does this
 only when trying to resolve a query. If the predicate is from a namespace it
 doesn't know, it will go to theweb to see what it can learn. Unless the
-<strong>e </strong>flag is set, then it won't mind if there are any errors in
+<strong>e</strong>flag is set, then it won't mind if there are any errors in
 this proces, it will just abandon it.</p>
 
 <p>Most vocabularies, ontologies, have all kinds of metadata which helps a
@@ -241,7 +241,9 @@ needing to think about trust. Fortunately, you already have some of the
 tools: you can write rules which keep track of data from different places
 separately. Now all you need is some crypto ....</p>
 
+<div class="noprint">
 <p>Next: Web of Trust</p>
+</div>
 <hr />
 
 <h2>Footnotes</h2>
