@@ -344,7 +344,7 @@ def dereference(x, mode="", workingContext=None):
 	    F = None
     if F != None and "m" in mode:
 	workingContext.reopen()
-	if verbosity() > 45: progress("Web: Dereferencing %s gives %s, added to %F" %(
+	if verbosity() > 45: progress("Web: Dereferencing %s gives %s, added to %s" %(
 		    x, F, workingContext))
 	workingContext.store.copyContext(F, workingContext)
     setattr(x, "_semantics", F)
@@ -359,8 +359,8 @@ def dereference(x, mode="", workingContext=None):
 class Formula(Fragment):
     """A formula of a set of RDF statements, triples.
     
-    The triples are actually instances of StoredStatement.
-    Other systems such as jena and redland use the term "Model" for this.
+    (The triples are actually instances of StoredStatement.)
+    Other systems such as jena and redland use the term "Model" for Formula.
     For rdflib, this is known as a TripleStore.
     Cwm and N3 extend RDF to allow a literal formula as an item in a triple.
     
@@ -380,6 +380,12 @@ class Formula(Fragment):
         self.cannonical = None # Set to self if this has been checked for duplicates
 	self.collector = None # Object collecting evidence, if any 
 	self._listValue = {}
+	self.statements = []
+	self._index = {}
+	self._index[(None,None,None)] = self.statements
+	self.closureMode = ""
+	self.closureAlready = []
+
 
     def existentials(self):
         """Return a list of existential variables with this formula as scope.
@@ -590,7 +596,36 @@ class Formula(Fragment):
 	The trouble is, the parsers close it at the moment automatically. To be fixed."""
         return self.store.reopen(self)
 
+    def setClosureMode(self, x):
+	self.closureMode = x
+
+    def checkClosure(self, subj, pred, obj):
+	"""Check the closure of the formula given new contents
+	
+	The s p o flags cause llyn to follow those parts of the new statement.
+	i asks it to follow owl:imports
+	r ask it to follow doc:rules
+	"""
+	if "s" in self.closureMode: self.checkClosureOfSymbol(subj)
+	if "p" in self.closureMode: self.checkClosureOfSymbol(pred)
+	if "o" in self.closureMode: self.checkClosureOfSymbol(obj)
+	if ("r" in self.closureMode and
+	    pred is self.store.docRules and
+	    subj in self.closureAlready):
+	    self.checkClosureOfSymbol(obj)
+	if ("i" in self.closureMode and
+	    pred is self.store.imports and
+	    subj in self.closureAlready):
+	    self.checkClosureOfSymbol(obj)
     
+    def checkClosureOfSymbol(self, x):
+	if isinstance(x, Fragment): x = x.resource
+	if not isinstance(x, Symbol):return
+	if x != None and x not in self.closureAlready:
+	    self.closureAlready.append(x)
+	    dereference(x, "m", self)
+
+
     def n3String(self, flags=""):
         "Dump the formula to an absolute string in N3"
         buffer=StringIO.StringIO()
@@ -1170,7 +1205,7 @@ class RDFStore(RDFSink) :
     def clear(self):
         "Remove all formulas from the store     @@@ DOESN'T ACTUALLY DO IT/BROKEN"
         self.resources = {}    # Hash table of URIs for interning things
-        self.formulae = []     # List of all formulae        
+#        self.formulae = []     # List of all formulae        
         self._experience = None   #  A formula of all the things program run knows from direct experience
         self._formulaeOfLength = {} # A dictionary of all the constant formuale in the store, lookup by length.
         self.size = 0
@@ -1252,7 +1287,8 @@ class RDFStore(RDFSink) :
         self.Falsehood = self.internURI(Logic_NS + "Falsehood")
         self.type = self.internURI(RDF_type_URI)
         self.Chaff = self.internURI(Logic_NS + "Chaff")
-
+	self.docRules = self.internURI("http://www.w3.org/2000/10/swap/pim/doc#rules")
+#	self.imports = self.internURI("
 
 # List stuff - beware of namespace changes! :-(
 
@@ -1513,18 +1549,15 @@ class RDFStore(RDFSink) :
                 else: raise RuntimeError, "did not expect other type:"+`typ`
         return result
 
-    def initTerm(self, x):
-        """ The store initialized the pointers in a new Term
-        """
-
-#        x.occursAs = [], [], [], []    # These are special cases of indexes
-
-        if isinstance(x, Formula):
-             x.statements = []
-             x._index = {}
-             x._index[(None,None,None)] = x.statements
-             self.formulae.append(x)
-        return x
+#    def initTerm(self, x):
+#        """ The store initialized the pointers in a new Term
+#        """
+#
+##        x.occursAs = [], [], [], []    # These are special cases of indexes
+#
+#        if isinstance(x, Formula):
+##             self.formulae.append(x)
+#        return x
      
     def internList(self, value):
         x = nil
@@ -1539,7 +1572,7 @@ class RDFStore(RDFSink) :
                                             ( `F`, len(F.statements)))
         for s in F.statements[:]:   # Take copy
             self.removeStatement(s)
-        self.formulae.remove(F)
+#        self.formulae.remove(F)
 
     def endFormula(self, F):
         """If this formula already exists, return the master version.
@@ -1579,7 +1612,6 @@ class RDFStore(RDFSink) :
                 break
             else: #match
                 if verbosity() > 20: progress("** Smushed new formula %s giving old %s" % (F, G))
-#                self.replaceWith(F,G)
                 if verbosity() > 70:
                     progress("End formula -- found match! ", F, G)
                 return G
@@ -1600,25 +1632,6 @@ class RDFStore(RDFSink) :
         self._formulaeOfLength[len(F.statements)].remove(F)  # Formulae of same length
         F.cannonical = None
         return F
-
-    def replaceWith(self,old, new):
-	"""Replace all occurrences of old with new in self
-	"""
-        if verbosity() > 30:
-            progress("Smush: Replacing %s (%i statements) with %s" %
-                        ( `old`,
-                          len(old.statements),
-                          `new`))
-        bindings = [ (old, new) ]
-        for F in self.formulae[:]:
-            for s in F.statements[:]:
-                if verbosity() > 95: progress(".......removed", s.quad)
-                q2 = lookupQuad(bindings, s.quad)
-		why = s.why
-                self.removeStatement(s)
-                self.storeQuad(q2, why)
-                if verbosity() > 95: progress(".......restored", q2)
-        return new
 
 
     def bind(self, prefix, uri):
@@ -1658,9 +1671,9 @@ class RDFStore(RDFSink) :
         """ intern quads, in that dupliates are eliminated.
 
 	subject, predicate and object are terms - or atomic values to be interned.
-        Builds the indxes and does stuff for lists.         
+        Builds the indexes and does stuff for lists.         
         """
-        if verbosity() > 29:
+        if verbosity() > 50:
             progress("storeQuad (size before %i) "%self.size +`q`)
         
         context, pred, subj, obj = q
@@ -1742,8 +1755,18 @@ class RDFStore(RDFSink) :
         else: list.append(s)
 
 
-        return 1  # One statement has been added
+	if context.closureMode != "":
+	    context.checkClosure(subj, pred, obj)
 
+        return 1  # One statement has been added  @@ ignore closure extras from closure
+		    # Obsolete this return value @@@ 
+
+    def crawl(s):
+	"Crawl the web to find the definitions of terms used"
+	for p in PRED, SUBJ, OBJ:
+	    if mask(p):
+		if isinstance(p, Fragment):
+		    p = p.resource
 
     def startDoc(self):
         pass
@@ -2917,6 +2940,8 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		schema = dereference(pred, mode, self.query.workingContext)
 		if schema != None:
 		    if "a" in mode:
+			if verbosity() > 95:
+			    progress("Axiom processing for %s" % (pred))
 			ns = pred.resource
 			rules = schema.any(subj=ns, pred=self.store.docRules)
 			rulefile = dereference(rulefile, "m", self.query.workingContext)

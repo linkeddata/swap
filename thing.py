@@ -199,7 +199,7 @@ class Term:
     """
     def __init__(self, store=None):
         self.store = _checkStore(store)
-        store.initTerm(self)
+ #       store.initTerm(self)
 
             
     def qname(self):
