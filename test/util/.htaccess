@@ -1,0 +1,3 @@
+<Files ~ "\.n3$">
+   ForceType 'text/rdf-n3'
+</Files>
