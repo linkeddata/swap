@@ -51,7 +51,7 @@ import re
 
 # Magic resources we know about
 
-RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#Type"
+RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 DAML_equivalentTo_URI = "http://www.daml.org/2000/10/daml-ont#equivalentTo"
 DAML_NS = "http://www.daml.org/2000/10/daml-ont#"
 Logic_NS = "http://www.w3.org/2000/10/swap/log.n3#"
@@ -689,6 +689,9 @@ class ToRDF(RDFSink):
 	self._subj = None
 	self._wr.endElement()
 
+    def makeComment(self, str):
+        self._wr.makeComment(str)
+        
     def makeStatement(self,  tuple):
         context, pred, subj, obj = tuple # Context is ignored
 	predn = relativeTo(self._thisDoc, pred)
@@ -821,49 +824,79 @@ class XMLWriter:
     Id: tsv2xml.py,v 1.1 2000/10/02 19:41:02 connolly Exp connolly
     """
 
-    def __init__(self, outFp):
+    def __init__(self, outFp, squeaky=0):
 	self._outFp = outFp
+	self._wr = outFp.write
 	self._elts = []
-
+	self.squeaky = squeaky  # No, not squeaky clean output
+	self.tab = 4        # Number of spaces to indent per level
+        self.needClose = 0  # Means we need a ">" but save till later
+    
     #@@ on __del__, close all open elements?
 
+    def newline(self, howmany=1):
+        self._wr("\n\n\n\n"[:howmany])
+        self.indent()
+
+    def indent(self, extra=0):
+        self._wr(' ' * ((len(self._elts)+extra) * self.tab))
+        self.flushClose()
+        
+    def closeTag(self):
+        if self.squeaky:
+            self.needClose =1
+        else:
+            self._wr(">")
+            
+    def flushClose(self):
+        if self.needClose:
+            self._wr(">")
+            self.needClose = 0
+
+    def makeComment(self, str):
+        self.newline()
+        self._wr("<!-- " + str + "-->") # @@
+        
     def startElement(self, n, attrs = ()):
-	o = self._outFp
-
-	o.write("<%s" % (n,))
-
+	self.newline(3-len(self._elts))    # Newlines separate higher levels
+	self._wr("<%s" % (n,))
 	self._attrs(attrs)
-
 	self._elts.append(n)
-
-	o.write("\n%s>" % (' ' * (len(self._elts) * 2) ))
+	self.closeTag()
 
     def _attrs(self, attrs):
 	o = self._outFp
 	for n, v in attrs:
 	    #@@BUG: need to escape markup chars in v
-	    o.write("\n%s%s=\"%s\"" \
-		    % ((' ' * (len(self._elts) * 2 + 3) ),
-		       n, v))
+            self.newline()
+	    o.write("    %s=\"%s\"" % (n, v))
 
     def emptyElement(self, n, attrs):
+        self.newline()
 	self._outFp.write("<%s" % (n,))
 	self._attrs(attrs)
-	self._outFp.write("\n%s/>" % (' ' * (len(self._elts) * 2) ))
+        self.closeTag()
 
     def endElement(self):
-	n = self._elts[-1]
-	del self._elts[-1]
-#	self._outFp.write("</%s\n%s>" % (n, (' ' * (len(self._elts) * 2) )))
-	self._outFp.write("</%s>\n%s" % (n, (' ' * (len(self._elts) * 2) )))
-# Why was the newline before the > initially, danc? 
+
+	n = self._elts.pop()
+        self.newline()
+	self._outFp.write("</%s" % n)
+
+	if self.squeaky:   # squeaky clean output has no whitespace content but looks weird
+            self.newline()
+            self._outFp.write(">")
+	else:
+            self._outFp.write(">")
+            self.newline()
+
 
     markupChar = re.compile(r"[\n\r<>&]")
 
     def data(self, str):
 	#@@ throw an exception if the element stack is empty
 	o = self._outFp
-
+        self.flushClose()
 	i = 0
 	while i < len(str):
 	    m = self.markupChar.search(str, i)

@@ -78,7 +78,7 @@ class RDFXMLParser(xmllib.XMLParser):
         data = self.testdata
         if data:
             self.testdata = ""
-            print '# flushed data:', `data`
+#            print '# flushed data:', `data`
 
     def handle_cdata(self, data):
         self.flush()
@@ -165,7 +165,7 @@ class RDFXMLParser(xmllib.XMLParser):
                 if c == None: raise roof
                 if self._subject == None:raise roof
                 self.sink.makeStatement((  (RESOURCE, c),
-                                      (RESOURCE, RDFNS+"Type"),
+                                      (RESOURCE, RDFNS+"type"),
                                       (RESOURCE, self._subject),
                                       (RESOURCE, tagURI) ))
                 self._state = STATE_DESCRIPTION

@@ -10,6 +10,8 @@
 #  Set of requirements http://lists.w3.org/Archives/Public/uri/2000Sep/0020.html
 # - This contains that (eg image) as part of the document, not as reference.  See LinkLaw.hrml
 #
+#  Other related schemata:
+# http://www.daml.org/2000/04/maillog2rdf/email#     ( .rdf and .html)
 
 <> doc:version "$Id: " .
 

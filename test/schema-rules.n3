@@ -73,6 +73,7 @@ rdfs:subClassOf 		a daml:TransitiveProperty .
 
 
 # Implication of Range and domain
+#  From domain to range
 
 { 	<#p> rdfs:domain <#c>.
 	<#x> <#p> <#y> . } log:implies  { <#x> a <#c> } .
