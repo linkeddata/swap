@@ -132,8 +132,15 @@ href="/TR/xquery-operators/#func-numeric-unary-minus">op:numeric-unary-minus
 Values</a><br />
 </h3>
 
-<p>The math: vocabulary has these and also their nergatibes (notEqualTo
-etc)</p>
+<p>The math: vocabulary has these and also their nergatibes </p>
+
+<p></p>
+
+<p>??? --  notEqualTo</p>
+
+<p>??? -- notLessThan</p>
+
+<p>??? -- notGreaterThan</p>
 
 <p>5.3.1 <a
 href="/TR/xquery-operators/#func-numeric-equal">op:numeric-equal</a> --
@@ -150,13 +157,24 @@ href="/TR/xquery-operators/#func-numeric-greater-than">op:numeric-greater-than</
 <h3>5.4 <a href="/TR/xquery-operators/#d1e982">Functions on Numeric
 Values</a></h3>
 
-<p><br />
-</p>
+<p>The exact definitions of these functions may vary from the ones cwm uses.
+Cwm just uses python's built-in round on doubles. </p>
+
+<p>@@There are open issues about the return type.  Currently the spec says
+double is returned, which seems to me to be crazy when the whole point of the
+function is to get an int.  It could be a size problem - python probably just
+uses variable length ints when necessary. </p>
+
+<p>These XQ functions round up  given k + 0.5 , some people prefer to round
+to the nearest even integer to prevent consistent bias upward to the
+average.</p>
+
+<p></p>
 
 <p>5.4.1 <a href="/TR/xquery-operators/#func-floor">fn:floor</a><br />
 5.4.2 <a href="/TR/xquery-operators/#func-ceiling">fn:ceiling</a><br />
-5.4.3 <a href="/TR/xquery-operators/#func-round">fn:round</a><br />
-</p>
+5.4.3 <a href="/TR/xquery-operators/#func-round">fn:round </a>  --
+math:rounded</p>
 
 <p></p>
 
