@@ -419,6 +419,11 @@ test:CwmTest;
 	test:description "Cwm builtins should support most xsd datatypes";
 	test:arguments  "includes/xsd.n3 --think --strings".
 
+:t1048b a test:CwmTest;
+	test:referenceOutput <includes/uri-object-invalid.n3>;
+	test:description "Cwm builtins should support most xsd datatypes";
+	test:arguments  "includes/uri-object-invalid.n3 --think" .
+
 :t1049 a test:CwmTest;
     test:referenceOutput <ref/sameDan.n3>;
     test:description   "Smushing multiple descriptions of the same thing using log:lessThan, log:uri, daml:equivalentTo";

@@ -709,7 +709,7 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
             if ':' not in object:
                 progress("Warning: taking log:uri of non-abs: %s" % object)
                 return None
-        except TypeError:
+        except (TypeError, AttributeError):
             return None
         return store.intern((SYMBOL, object))
 
