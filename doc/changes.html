@@ -435,83 +435,9 @@ checking out with the tag oldLists .</p>
 
 <p></p>
 
-<h2>To Do:</h2>
-
 <p></p>
 
-<p>Performance: Make test/perform test suite with standard tests for</p>
-
-<h3>Syntax</h3>
-
-<p>RDF Output - bnodes</p>
-
-<p>RDF Output - Collections</p>
-
-<p>RDF Output: On lists, use exietnstials or bnodes not symbols</p>
-
-<p>N3 syntax - transision from <code>this log:forAll</code> to
-<code>@forAll</code>. Same for <code>forSome.</code></p>
-
-<p>N3 syntax - test set syntax (,) (&lt;a&gt;,) (&lt;a&gt;, &lt;b&gt;)</p>
-
-<p>Extended RDF output syntax for formulae (how? have RDF Core locked
-<em>all</em> the exits? Prevents RDF2 not superset of RDF/XML1)</p>
-
-<h3>Query/Inference</h3>
-
-<p>Unify nested formulae</p>
-
-<p>Built-ins for lists. in (needs muli value function, below); append,
-prepend, second..seventh, last, concat.</p>
-
-<p>Sets, plus builtins, plus syntax??</p>
-
-<p>Builtin-s extracting closed world data: s=Q(F, y, G) is set of x such that
-formula F.substite((y, x)) log:includes G.</p>
-
-<p>Symbols used as variables as separate python class - save some time
-checking occurrences</p>
-
-<p>Paramodulation - smushing built into store. reuse redirection used for
-lists?</p>
-
-<p>Builtin operations:</p>
-<ul>
-  <li>Return many bindings from builtin eg list:in, os:argv</li>
-  <li>Fairly complete XQ functions and operators implementations (use same
-    URIs?)</li>
-  <li>Extract datatype, language and string from a literal.</li>
-</ul>
-
-<p>Remove all vestiges of the old pair represetation of symbols.</p>
-
-<p>Implement backward chainer (like Euler) on the same store. Allow forward
-and backward chainers to interact, share built-ins.</p>
-
-<h3>Store</h3>
-
-<p>Implement versions of the store based on Redland, Jena, etc.</p>
-
-<p>Implement rete method. Rules with state as objects. <em>&lt;= student
-project?</em></p>
-
-<p></p>
-
-<h3>Net</h3>
-
-<p>Implement <strong>persistent cache</strong> - make an ontology (based very
-stongly on HTTP headers) for recording the results of an HTTP (etc) get.
-Store metadata about fetched ontologies. Build an index into the persistent
-cache for offline working. Functions: find the closure of these documents
-under eg --closure=ptr and make sure than they are all in my persistent
-cache. Allow environment variable to specify persistent cache mode (default:
-ontologies only, write to cache when online and expiry check fails, read from
-cache when offline). Provide pcache.urlopen() as a transparent extension of
-urlopen()</p>
-
-<p></p>
-
-<h3>Features done</h3>
+<h3>Features done earlier</h3>
 
 <p>Done ==== - sucking in the schema (http library?)</p>
 
@@ -550,13 +476,13 @@ real conjunction again? (the forSome triple is special in that you can't
 remove it and reduce info) - filter out duplicate conclusions</p>
 
 <p>- BUG! - DONE - Validation: validate domain and range constraints against
-closuer of classes and mutually disjoint classes.</p>
+closure of classes and mutually disjoint classes.</p>
 
 <p>- Use unambiguous property to infer synomnyms (see sameDan.n3 test case in
 test/retest.sh)</p>
 
 <p>- schema validation - done partly but no "no schema for xx predicate".
-ULTINS WE HAVE DONE</p>
+ULTILS WE HAVE DONE</p>
 
 <p>- includes(expr1, expr2) (cf &gt;= , dixitInterAlia )</p>
 
