@@ -41,7 +41,8 @@ from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
 
-from diag import chatty_flag, progress
+import diag
+from diag import progress
 
 
 import sys
@@ -145,7 +146,7 @@ class Term:
 	    Return [( {var1: val1, var2: val2,...}, reason), ...] if match
 	"""
 	assert type(bindings) is types.DictType
-	if chatty_flag > 97: progress("Unifying symbol %s with %s vars=%s, so far=%s"%
+	if diag.chatty_flag > 97: progress("Unifying symbol %s with %s vars=%s, so far=%s"%
 					(self, other,vars, bindings))
 	try:
 	    x = bindings[self]
@@ -153,7 +154,7 @@ class Term:
 	except KeyError:	    
 	    if self is other: return [ ({}, None)]
 	    if self in vars+existentials:
-		if chatty_flag > 80: progress("Unifying term MATCHED %s to %s"%(self,other))
+		if diag.chatty_flag > 80: progress("Unifying term MATCHED %s to %s"%(self,other))
 		return [ ({self: other}, None) ]
 	    return 0
 	
@@ -207,7 +208,7 @@ class Symbol(Term):
 	if hasattr(self, "_semantics"): return self._semantics
     
 	inputURI = self.uriref()
-	if chatty_flag > 20: progress("Web: Looking up %s" % self)
+	if diag.chatty_flag > 20: progress("Web: Looking up %s" % self)
 	if "E" not in mode: F = self.store.load(inputURI)
 	else:
 	    try:
@@ -218,13 +219,13 @@ class Symbol(Term):
 	if F != None:
 	    if "m" in mode:
 		workingContext.reopen()
-		if chatty_flag > 45: progress("Web: dereferenced %s  added to %s" %(
+		if diag.chatty_flag > 45: progress("Web: dereferenced %s  added to %s" %(
 			    self, workingContext))
 		workingContext.store.copyFormula(F, workingContext)
 	    if "x" in mode:   # capture experience
 		workingContext.add(r, self.store.semantics, F)
 	setattr(self, "_semantics", F)
-	if chatty_flag > 25: progress("Web: Dereferencing %s gave %s" %(self, F))
+	if diag.chatty_flag > 25: progress("Web: Dereferencing %s gave %s" %(self, F))
 	return F
 		
 
@@ -355,14 +356,14 @@ class List(CompoundTerm):
 	tail = self.store.nil
 	for x in s:
 	    tail = tail.prepend(x.substitution(bindings, why=why))
-	if chatty_flag > 90:
+	if diag.chatty_flag > 90:
 	    progress("Substition of variables %s in list %s" % (bindings, self))
 	    progress("...yields NEW %s = %s" % (tail, tail.value()))
 	return tail
 	    
     def substituteEquals(self, bindings, newBindings):
 	"Return this or a version of me with substitution of equals made"
-	if chatty_flag > 100: progress("SubstituteEquals list %s with %s" % (self, bindings))
+	if diag.chatty_flag > 100: progress("SubstituteEquals list %s with %s" % (self, bindings))
 	if self.occurringIn(bindings.keys()) == []:
 	    return self # phew!
 	s = self.asSequence()
@@ -371,7 +372,7 @@ class List(CompoundTerm):
 	for x in s:
 	    tail = tail.prepend(x.substituteEquals(bindings, newBindings))
 	newBindings[self] = tail # record a new equality
-	if chatty_flag > 90: progress("SubstitueEquals list CHANGED %s -> %s" % (self, tail))
+	if diag.chatty_flag > 90: progress("SubstitueEquals list CHANGED %s -> %s" % (self, tail))
 	return tail
 	    
 
@@ -398,7 +399,7 @@ class NonEmptyList(List):
 
     def unify(self, other, vars, existentials,  bindings):
 	"""See Term.unify()"""
-	if chatty_flag > 90:
+	if diag.chatty_flag > 90:
 	    progress("Unifying list %s with %s vars=%s, so far=%s"%
 		    (self.value(), other.value(),vars, bindings))
 	if not isinstance(other, NonEmptyList): return 0

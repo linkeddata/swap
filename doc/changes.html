@@ -17,7 +17,30 @@ href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
 Comparing Formats</p>
 </div>
 
-<h1>Cwm Changes 2003/08</h1>
+<h1>Cwm Changes</h1>
+
+<p></p>
+
+<p>Changes 2003-09</p>
+<ol>
+  <li>More on-added functionality: --closure=e <strong>smushes</strong> nodes
+    which are = into one. That is any time the working formula (knowledge
+    base) has a triple added where a = b, the store with "e" in the closure
+    mode will replace all occurrences of b with a. When chosing which of the
+    two to use as the node, the preference will be to literals or lists or
+    formulae, then to symbols with URIs (lexically lowest prefered, e.g.
+    &lt;a&gt; rather than &lt;b&gt;), then blank nodes. It will remember the
+    quality. </li>
+  <li>--closure=T makes the adding of a triple {<em>F</em> a log:Truth} where
+    F is a formula to cause the content of F to be loaded into the knowledge
+    base.</li>
+  <li>The ordering of terms has been fixed so that all constants literals,
+    lsits amd formula should all appear before any symbols in a listing. 
+    <p>(code is formula.compareTerm())</p>
+  </li>
+</ol>
+
+<h2>Cwm Changes 2003/08</h2>
 
 <p>At this point cwm made a number of changes at once, so we document them
 here.</p>
@@ -94,11 +117,11 @@ here.</p>
     change. Pretty printing should be faster now - for some runs it was
     taking a lot longer than the parsing and inference steps. It had never
     been designed for speed, but it was getting ridiculous.</li>
-  <li>2003-08-30 List processing improved.  test/list/append.n3 works,
-    reverse.n3 doesn't yet.  substituteEquals supported by all Terms, does
+  <li>2003-08-30 List processing improved. test/list/append.n3 works,
+    reverse.n3 doesn't yet. substituteEquals supported by all Terms, does
     substituton of equals, used in compbaintion with F._redirection which is
     a dictionary of aliases. Preparing for handling of equality and smushing
-    of nodes. </li>
+    of nodes.</li>
 </ol>
 
 <h3>For python cwm developers</h3>

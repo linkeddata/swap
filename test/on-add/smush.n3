@@ -37,11 +37,22 @@ _:bnode1 = :node1 .
 
 # Smush with Literals and Lists
 
+# vary order of declaration, type of thing
+
 :theTemperature = 34.
+:theTemperature :is :TooHot.
+
+:theHumidity :is :TooDamp.
 "86%" = :theHumidity.
 
-:theTemperature :is :TooHot.
-:theHumidity :is :TooDamp.
+
+:vision :is :OkVision.
+:vision = ( 20 20 ).
+
+( 1 2 3 ) = :firstThree .
+:firstThree :is :ListOfThreeNumbers. 
+
+
 
 # :isa =  rdf:type.
 

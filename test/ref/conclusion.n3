@@ -141,67 +141,16 @@
         {
             v:p     a dpo:TransitiveProperty .
             
-            }     log:implies {{
-                {
-                    v:x     v:p v:y .
-                    v:y     v:p v:z .
-                    
-                    }     log:implies {v:x     v:p v:z .
-                    } .
-                
-                }     a log:Truth;
-                 log:forAll v:x,
+            }     log:implies {this     log:forAll v:x,
                         v:y,
                         v:z .
+            {
+                v:x     v:p v:y .
+                v:y     v:p v:z .
+                
+                }     log:implies {v:x     v:p v:z .
+                } .
             } .
-        {
-            {
-                v:x     :ancestor v:y .
-                v:y     :ancestor v:z .
-                
-                }     log:implies {v:x     :ancestor v:z .
-                } .
-            
-            }     a log:Truth;
-             log:forAll v:x,
-                    v:y,
-                    v:z .
-        {
-            {
-                v:x     :descendant v:y .
-                v:y     :descendant v:z .
-                
-                }     log:implies {v:x     :descendant v:z .
-                } .
-            
-            }     a log:Truth;
-             log:forAll v:x,
-                    v:y,
-                    v:z .
-        {
-            {
-                v:x     s:subClassOf v:y .
-                v:y     s:subClassOf v:z .
-                
-                }     log:implies {v:x     s:subClassOf v:z .
-                } .
-            
-            }     a log:Truth;
-             log:forAll v:x,
-                    v:y,
-                    v:z .
-        {
-            {
-                v:x     s:subPropertyOf v:y .
-                v:y     s:subPropertyOf v:z .
-                
-                }     log:implies {v:x     s:subPropertyOf v:z .
-                } .
-            
-            }     a log:Truth;
-             log:forAll v:x,
-                    v:y,
-                    v:z .
         {
             v:c1     s:subClassOf v:c2 .
             v:x     a v:c1 .
@@ -233,6 +182,30 @@
             }     log:implies {v:x     v:p2 v:y .
             } .
         {
+            v:x     :ancestor v:y .
+            v:y     :ancestor v:z .
+            
+            }     log:implies {v:x     :ancestor v:z .
+            } .
+        {
+            v:x     :descendant v:y .
+            v:y     :descendant v:z .
+            
+            }     log:implies {v:x     :descendant v:z .
+            } .
+        {
+            v:x     s:subClassOf v:y .
+            v:y     s:subClassOf v:z .
+            
+            }     log:implies {v:x     s:subClassOf v:z .
+            } .
+        {
+            v:x     s:subPropertyOf v:y .
+            v:y     s:subPropertyOf v:z .
+            
+            }     log:implies {v:x     s:subPropertyOf v:z .
+            } .
+        {
             v:x     a v:y,
                         v:z .
             v:y     dpo:disjointFrom v:z .
@@ -244,14 +217,14 @@
         this     log:forSome <#_g1>,
                     <#_g2>,
                     <#_g3> .
-        <../daml-ex.n3>     log:semantics <#_g1> .
-        <../invalid-ex.n3>     log:semantics <#_g2> .
-        <../schema-rules.n3>     log:semantics <#_g3> .
           ( <#_g1> 
             <#_g2> 
             <#_g3>  )
              log:conjunction  [
                  log:conclusion foo:G ] .
+        <../daml-ex.n3>     log:semantics <#_g1> .
+        <../invalid-ex.n3>     log:semantics <#_g2> .
+        <../schema-rules.n3>     log:semantics <#_g3> .
         
         }     log:implies {foo:result     foo:is foo:G .
         } .

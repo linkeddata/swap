@@ -17,6 +17,9 @@
     "one"     a :SUCCESS .
     
     "two"     a :SUCCESS .
+      ( "one" 
+        "two"  )
+         a :whatever .
     {
         
           ( :a 
@@ -26,7 +29,4 @@
         }     log:implies {:a     a :SUCCESS .
         :b     a :SUCCESS .
         } .
-      ( "one" 
-        "two"  )
-         a :whatever .
     

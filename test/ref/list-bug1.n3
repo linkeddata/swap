@@ -3,6 +3,9 @@
     
     this     log:forAll :x,
                 :y .
+      ( <a> 
+        <b>  )
+         a <twoer> .
     
     <a>     :RESULT <b> .
     {
@@ -13,7 +16,4 @@
         
         }     log:implies {:x     :RESULT :y .
         } .
-      ( <a> 
-        <b>  )
-         a <twoer> .
     

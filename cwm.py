@@ -61,190 +61,6 @@ import RDFSink
 cvsRevision = "$Revision$"
 
 
-######################################################### Tests  
-  
-def test():
-    import sys
-    testString = []
-    
-    t0 = """bind x: <http://example.org/x-ns/> .
-	    bind dc: <http://purl.org/dc/elements/1.1/> ."""
-
-    t1="""[ >- x:firstname -> "Ora" ] >- dc:wrote ->
-    [ >- dc:title -> "Moby Dick" ] .
-     bind default <http://example.org/default>.
-     <uriPath> :localProp defaultedName .
-     
-"""
-    t2="""
-[ >- x:type -> x:Receipt;
-  >- x:number -> "5382183";
-  >- x:for -> [ >- x:USD -> "2690" ];
-  >- x:instrument -> [ >- x:type -> x:visa ] ]
-
->- x:inReplyTo ->
-
-[ >- x:type -> x:jobOrder;
-  >- x:number -> "025709";
- >- x:from ->
-
- [
-  >- x:homePage -> <http://www.topnotchheatingandair.com/>;
-  >- x:est -> "1974";
-  >- x:address -> [ >- x:street -> "23754 W. 82nd Terr.";
-      >- x:city -> "Lenexa";
-      >- x:state -> "KS";
-      >- x:zip -> "66227"];
-  >- x:phoneMain -> <tel:+1-913-441-8900>;
-  >- x:fax -> <tel:+1-913-441-8118>;
-  >- x:mailbox -> <mailto:info@topnotchheatingandair.com> ]
-].    
-
-<http://www.davelennox.com/residential/furnaces/re_furnaces_content_body_elite90gas.asp>
- >- x:describes -> [ >- x:type -> x:furnace;
- >- x:brand -> "Lennox";
- >- x:model -> "G26Q3-75"
- ].
-"""
-    t3="""
-bind pp: <http://example.org/payPalStuff?>.
-bind default <http://example.org/payPalStuff?>.
-
-<> a pp:Check; pp:payee :tim; pp:amount "$10.00";
-  dc:author :dan; dc:date "2000/10/7" ;
-  is pp:part of [ a pp:Transaction; = :t1 ] .
-"""
-
-# Janet's chart:
-    t4="""
-bind q: <http://example.org/>.
-bind m: <>.
-bind n: <http://example.org/base/>.
-bind : <http://void-prefix.example.org/>.
-bind w3c: <http://www.w3.org/2000/10/org>.
-
-<#QA> :includes 
- [  = w3c:internal ; :includes <#TAB> , <#interoperability> ,
-     <#validation> , w3c:wai , <#i18n> , <#translation> ,
-     <#readability_elegance>, w3c:feedback_accountability ],
- [ = <#conformance>;
-     :includes <#products>, <#content>, <#services> ],
- [ = <#support>; :includes
-     <#tools>, <#tutorials>, <#workshops>, <#books_materails>,
-     <#certification> ] .
-
-<#internal> q:supports <#conformance> .  
-<#support> q:supports <#conformance> .
-
-"""
-
-    t5 = """
-
-bind u: <http://www.example.org/utilities>
-bind default <>
-
-:assumption = { :fred u:knows :john .
-                :john u:knows :mary .} .
-
-:conclusion = { :fred u:knows :mary . } .
-
-"""
-    thisURI = "file:notation3.py"
-
-    testString.append(  t0 + t1 + t2 + t3 + t4 )
-#    testString.append(  t5 )
-
-#    p=notation3.SinkParser(RDFSink(),'http://example.org/base/', 'file:notation3.py',
-#		     'data:#')
-
-    r=notation3.SinkParser(notation3.ToN3(sys.stdout.write, base='file:output'),
-                  thisURI,'http://example.org/base/',)
-    r.startDoc()
-    
-    progress( "=== test stringing: ===== STARTS\n " + t0 + "\n========= ENDS\n")
-    r.feed(t0)
-
-    progress( "=== test stringing: ===== STARTS\n " + t1 + "\n========= ENDS\n")
-    r.feed(t1)
-
-    progress( "=== test stringing: ===== STARTS\n " + t2 + "\n========= ENDS\n")
-    r.feed(t2)
-
-    progress( "=== test stringing: ===== STARTS\n " + t3 + "\n========= ENDS\n")
-    r.feed(t3)
-
-    r.endDoc()
-
-    progress( "----------------------- Test store:")
-
-    store = llyn.RDFStore()
-
-    thisDoc = store.internURI(thisURI)    # Store used interned forms of URIs
-    thisContext = store.intern((FORMULA, thisURI+ "#_formula"))    # @@@ Store used interned forms of URIs
-
-    # (sink,  thisDoc,  baseURI, bindings)
-    p = notation3.SinkParser(store,  thisURI, 'http://example.org/base/')
-    p.startDoc()
-    p.feed(testString[0])
-    p.endDoc()
-
-    progress( "\n\n------------------ dumping chronologically:")
-
-    store.dumpChronological(thisContext, notation3.ToN3(sys.stdout.write, base=thisURI))
-
-    progress( "\n\n---------------- dumping in subject order:")
-
-    store.dumpBySubject(thisContext, notation3.ToN3(sys.stdout.write, base=thisURI))
-
-    progress( "\n\n---------------- dumping nested:")
-
-    store.dumpNested(thisContext, notation3.ToN3(sys.stdout.write, base=thisURI))
-
-    progress( "Regression test **********************************************")
-
-    
-    testString.append(reformat(testString[-1], thisURI))
-
-    if testString[-1] == testString[-2]:
-        progress( "\nRegression Test succeeded FIRST TIME- WEIRD!!!!??!!!!!\n")
-        return
-    
-    testString.append(reformat(testString[-1], thisURI))
-
-    if testString[-1] == testString[-2]:
-        progress( "\nRegression Test succeeded SECOND time!!!!!!!!!\n")
-    else:
-        progress( "Regression Test Failure: ===================== LEVEL 1:")
-        progress( testString[1])
-        progress( "Regression Test Failure: ===================== LEVEL 2:")
-        progress( testString[2])
-        progress( "\n============================================= END")
-
-    testString.append(reformat(testString[-1], thisURI))
-    if testString[-1] == testString[-2]:
-        progress( "\nRegression Test succeeded THIRD TIME. This is not exciting.\n")
-
-    
-                
-def reformat(str, thisURI):
-    if 0:
-        progress( "Regression Test: ===================== INPUT:")
-        progress( str)
-        progress( "================= ENDs")
-    buffer=StringIO.StringIO()
-    r=notation3.SinkParser(notation3.ToN3(buffer.write, base=thisURI), thisURI)
-    r.startDoc()
-    r.feed(str)
-    r.endDoc()
-
-    return buffer.getvalue()    # Do we need to explicitly close it or will it be GCd?
-    
-
-
-##############################################  String output
-
-
-
 
     
             
@@ -330,6 +146,8 @@ the closure under the operation of looking up:
  t   the object of an rdf:type statement added
  i   any owl:imports documents
  r   any doc:rules documents
+ 
+ e   Smush together any nodes which are = (owl:equivalentTo)
 
 See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 """
@@ -348,7 +166,6 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         
         option_pipe = 0     # Don't store, just pipe though
         option_inputs = []
-        option_test = 0     # Do simple self-test
         option_reify = 0    # Flag: reify on output  (process?)
         option_flat = 0    # Flag: reify on output  (process?)
 	option_crypto = 0  # Flag: make cryptographic algorithms available
@@ -391,10 +208,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 		    _uri = join(option_baseURI, _rhs)
 		except ValueError:
 		    _uri = _rhs
-            if arg == "-test":
-                option_test = 1
-                _gotInput = 1
-            elif arg == "-ugly": option_outputStyle = arg
+            if arg == "-ugly": option_outputStyle = arg
             elif _lhs == "-base": option_baseURI = _uri
             elif arg == "-rdf":
                 option_format = "rdf"
@@ -477,7 +291,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         #  Base defauts
         if option_baseURI == _baseURI:  # Base not specified explicitly - special case
             if _outURI == _baseURI:      # Output name not specified either
-                if _gotInput == 1 and not option_test:  # But input file *is*, 
+                if _gotInput == 1:  # But input file *is*, 
                     _outURI = option_inputs[0]        # Just output to same URI
                     option_baseURI = _outURI          # using that as base.
 
@@ -573,7 +387,6 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 pass  # shouldn't happen
             elif arg == "-revision":
                 pass
-            elif arg == "-test": test()
             elif _lhs == "-base":
                 option_baseURI = _uri
                 if verbosity() > 10: progress("Base now "+option_baseURI)

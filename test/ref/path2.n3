@@ -9,6 +9,15 @@
                 <#_g1>,
                 <#_g2>,
                 <#_g3> .
+      ( "1" 
+        "2"  )
+         math:sum  [
+             a :THREE ] .
+      ( <#_g3> 
+         [
+                 <d> <c> ] )
+         <#relatedTo>  (
+        <#_g1>  ) .
     
     <a>     <b> <#_g3> .
     
@@ -27,13 +36,4 @@
              lang:eng "Help!" ],
                  [
              lang:fr "foo" ] .
-      ( "1" 
-        "2"  )
-         math:sum  [
-             a :THREE ] .
-      ( <#_g3> 
-         [
-                 <d> <c> ] )
-         <#relatedTo>  (
-        <#_g1>  ) .
     

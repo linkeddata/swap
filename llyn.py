@@ -138,8 +138,8 @@ import md5, binascii  # for building md5 URIs
 import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
-import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
-from diag import progress, progressIndent, verbosity, tracking, chatty_flag
+import diag  # problems importing the tracking flag, and chatty_flag must be explicit it seems diag.tracking
+from diag import progress, progressIndent, verbosity
 from term import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Anonymous, Term,\
@@ -350,11 +350,11 @@ class IndexedFormula(Formula):
 	pred = pred.substituteEquals(self._redirections, newBindings)
 	obj = obj.substituteEquals(self._redirections, newBindings)
 	    
-        if chatty_flag > 50:
+        if diag.chatty_flag > 50:
             progress("Add statement (size before %i) to %s: {%s %s %s}" % (
 		self.store.size, `self`,  `subj`, `pred`, `obj`) )
         if self.statementsMatching(pred, subj, obj):
-            if chatty_flag > 97:
+            if diag.chatty_flag > 97:
 		progress("Add duplicate SUPPRESSED %s: {%s %s %s}" % (
 		    self,  subj, pred, obj) )
             return 0  # Return no change in size of store
@@ -402,10 +402,14 @@ class IndexedFormula(Formula):
 		    or compareTerm(obj, subj) < 0): var, val = subj, obj
 		else: var, val = obj, subj
 		newBindings[var] = val
-		if chatty_flag > 90: progress("Equality: %s = %s" % (`var`, `val`))
+		if diag.chatty_flag > 90: progress("Equality: %s = %s" % (`var`, `val`))
 		self.substituteEqualsInPlace(newBindings)
 		return 1
 
+	if "T" in self._closureMode:
+	    if pred is store.type and obj is store.Truth:
+		assert isinstance(subj, Formula), "What are we doing concluding %s is true?" % subj
+		self.loadFormulaWithSubsitution(subj)
 
 #########
 	if newBindings != {}:
@@ -427,12 +431,12 @@ class IndexedFormula(Formula):
 	if subj is self:  # Catch variable declarations
 	    if pred is self.store.forAll:
 		if obj not in self._universalVariables:
-		    if chatty_flag > 50: progress("\tUniversal ", obj)
+		    if diag.chatty_flag > 50: progress("\tUniversal ", obj)
 		    self._universalVariables.append(obj)
 		return 1
 	    if pred is self.store.forSome:
 		if obj not in self._existentialVariables:
-		    if chatty_flag > 50: progress("\tExistential ", obj)
+		    if diag.chatty_flag > 50: progress("\tExistential ", obj)
 		    self._existentialVariables.append(obj)
 		return 1
 
@@ -483,7 +487,7 @@ class IndexedFormula(Formula):
 	"""
 	assert self.canonical == None, "Cannot remove statement from canonnical"+`self`
         self.store.size = self.store.size-1
-	if chatty_flag > 97:  progress("removing %s" % (s))
+	if diag.chatty_flag > 97:  progress("removing %s" % (s))
 	context, pred, subj, obj = s.quad
         self.statements.remove(s)
         self._index[(None, None, obj)].remove(s)
@@ -508,7 +512,7 @@ class IndexedFormula(Formula):
         """
 	store = F.store
 	if F.canonical != None:
-            if chatty_flag > 70:
+            if diag.chatty_flag > 70:
                 progress("End formula -- @@ already canonical:"+`F`)
             return F.canonical
 	
@@ -518,7 +522,7 @@ class IndexedFormula(Formula):
 
         if possibles == None:
             store._formulaeOfLength[l] = [F]
-            if chatty_flag > 70:
+            if diag.chatty_flag > 70:
                 progress("End formula - first of length", l, F)
             F.canonical = F
             return F
@@ -558,14 +562,14 @@ class IndexedFormula(Formula):
                     continue
                 break
             else: #match
-                if chatty_flag > 20: progress(
+                if diag.chatty_flag > 20: progress(
 		    "** End Formula: Smushed new formula %s giving old %s" % (F, G))
 		del(F)  # Make sure it ain't used again
                 return G
         possibles.append(F)
 #        raise oops
         F.canonical = F
-        if chatty_flag > 70:
+        if diag.chatty_flag > 70:
             progress("End formula, a fresh one:"+`F`)
         return F
 
@@ -644,15 +648,6 @@ class IndexedFormula(Formula):
         for key, str in pairs:
             channel.write(str.string.encode('utf-8'))
 
-    def includes(f, g, _variables=[], smartIn=[], bindings={}):
-	"""Does this formula include the information in the other?
-	
-	smartIn gives a list of formulae for which builtin functions should operate
-	   in the consideration of what "includes" means.
-	bindings is for use within a query.
-	"""
-	return  testIncludes(f, g, _variables=_variables, smartIn=smartIn, bindings=bindings)
-
 
     def debugString(self, already=[]):
 	"""A simple dump of a formula in debug form.
@@ -688,10 +683,10 @@ class IndexedFormula(Formula):
 	Check whether this new list (given as bnode) causes other things to become lists.
 	Set up redirection so the list is used from now on instead of the bnode.	
 	Internal function."""
-        if chatty_flag > 80: progress("New list was %s, now %s = %s"%(`bnode`, `list`, `list.value()`))
+        if diag.chatty_flag > 80: progress("New list was %s, now %s = %s"%(`bnode`, `list`, `list.value()`))
 	if isinstance(bnode, List): return  ##@@@@@ why is this necessary? weid.
 	newBindings[bnode] = list
-        if chatty_flag > 80: progress("...New list newBindings %s"%(`newBindings`))
+        if diag.chatty_flag > 80: progress("...New list newBindings %s"%(`newBindings`))
 	if bnode in self._existentialVariables:
 	    self._existentialVariables.remove(bnode)
         possibles = self.statementsMatching(pred=self.store.rest, obj=bnode)  # What has this as rest?
@@ -720,14 +715,14 @@ class IndexedFormula(Formula):
 #		    progress("&&&&&&& trying ", x, "with", bindings, ", redirections=", self._redirections)
 		    y = x.substituteEquals(bindings, newBindings)
 		    if y is not x:
-			if chatty_flag>90: progress("Substituted %s -> %s in place" %(x, y))
+			if diag.chatty_flag>90: progress("Substituted %s -> %s in place" %(x, y))
 			changed = 1
 			quad[p] = y
 		if changed:
 		    self.removeStatement(s)
 		    self.add(subj=quad[SUBJ], pred=quad[PRED], obj=quad[OBJ])
 	    bindings = newBindings
-	    if chatty_flag>70: progress("Substitions %s generated %s" %(bindings, newBindings))
+	    if diag.chatty_flag>70: progress("Substitions %s generated %s" %(bindings, newBindings))
 	return
 
 
@@ -819,7 +814,7 @@ class BI_rawType(LightBuiltIn, Function):
         elif isinstance(subj, List): y = store.List
         #@@elif context.listValue.get(subj, None): y = store.List
         else: y = store.Other  #  None?  store.Other?
-        if chatty_flag > 91:
+        if diag.chatty_flag > 91:
             progress("%s  rawType %s." %(`subj`, y))
         return y
         
@@ -842,7 +837,7 @@ class BI_includes(HeavyBuiltIn):
     def eval(self, subj, obj, queue, bindings, proof, query):
         store = subj.store
         if isinstance(subj, Formula) and isinstance(obj, Formula):
-            return testIncludes(subj, obj, [], bindings=bindings) # No (relevant) variables
+            return testIncludes(subj, obj, bindings=bindings) # No (relevant) variables
         return 0
             
     
@@ -864,7 +859,7 @@ class BI_notIncludes(HeavyBuiltIn):
     def eval(self, subj, obj, queue, bindings, proof, query):
         store = subj.store
         if isinstance(subj, Formula) and isinstance(obj, Formula):
-            return not testIncludes(subj, obj, [], bindings=bindings) # No (relevant) variables
+            return not testIncludes(subj, obj,  bindings=bindings) # No (relevant) variables
         return 0   # Can't say it *doesn't* include it if it ain't a formula
 
 class BI_semantics(HeavyBuiltIn, Function):
@@ -877,13 +872,13 @@ class BI_semantics(HeavyBuiltIn, Function):
         else: doc = subj
         F = store.any((store._experience, store.semantics, doc, None))
         if F != None:
-            if chatty_flag > 10: progress("Already read and parsed "+`doc`+" to "+ `F`)
+            if diag.chatty_flag > 10: progress("Already read and parsed "+`doc`+" to "+ `F`)
             return F
 
-        if chatty_flag > 10: progress("Reading and parsing " + doc.uriref())
+        if diag.chatty_flag > 10: progress("Reading and parsing " + doc.uriref())
         inputURI = doc.uriref()
         F = self.store.load(inputURI)
-        if chatty_flag>10: progress("    semantics: %s" % (F))
+        if diag.chatty_flag>10: progress("    semantics: %s" % (F))
 	if diag.tracking:
 	    proof.append(F.collector)
         return F.canonicalize()
@@ -895,14 +890,14 @@ class BI_semanticsOrError(BI_semantics):
         store = subj.store
         x = store.any((store._experience, store.semanticsOrError, subj, None))
         if x != None:
-            if chatty_flag > 10: progress(`store._experience`+`store.semanticsOrError`+": Already found error for "+`subj`+" was: "+ `x`)
+            if diag.chatty_flag > 10: progress(`store._experience`+`store.semanticsOrError`+": Already found error for "+`subj`+" was: "+ `x`)
             return x
         try:
             return BI_semantics.evalObj(self, subj, queue, bindings, proof, query)
         except (IOError, SyntaxError, DocumentAccessError, xml.sax._exceptions.SAXParseException):
             message = sys.exc_info()[1].__str__()
             result = store.intern((LITERAL, message))
-            if chatty_flag > 0: progress(`store.semanticsOrError`+": Error trying to resolve <" + `subj` + ">: "+ message) 
+            if diag.chatty_flag > 0: progress(`store.semanticsOrError`+": Error trying to resolve <" + `subj` + ">: "+ message) 
             store.storeQuad((store._experience,
                              store.semanticsOrError,
                              subj,
@@ -955,9 +950,9 @@ class BI_content(HeavyBuiltIn, Function):
         else: doc = subj
         C = store.any((store._experience, store.content, doc, None))
         if C != None:
-            if chatty_flag > 10: progress("already read " + `doc`)
+            if diag.chatty_flag > 10: progress("already read " + `doc`)
             return C
-        if chatty_flag > 10: progress("Reading " + `doc`)
+        if diag.chatty_flag > 10: progress("Reading " + `doc`)
         inputURI = doc.uriref()
         try:
             netStream = urllib.urlopen(inputURI)
@@ -979,7 +974,7 @@ class BI_parsedAsN3(HeavyBuiltIn, Function):
         if isinstance(subj, Literal):
             F = store.any((store._experience, store.parsedAsN3, subj, None))
             if F != None: return F
-            if chatty_flag > 10: progress("parsing " + subj.string[:30] + "...")
+            if diag.chatty_flag > 10: progress("parsing " + subj.string[:30] + "...")
 
             inputURI = subj.asHashURI() # iffy/bogus... rather asDataURI? yes! but make more efficient
             p = notation3.SinkParser(store, inputURI)
@@ -1004,7 +999,7 @@ class BI_conclusion(HeavyBuiltIn, Function):
 	    assert subj.canonical != None
             F = self.store.any((store._experience, store.cufi, subj, None))  # Cached value?
             if F != None:
-		if chatty_flag > 10: progress("Bultin: " + `subj`+ " cached log:conclusion " + `F`)
+		if diag.chatty_flag > 10: progress("Bultin: " + `subj`+ " cached log:conclusion " + `F`)
 		return F
 
             F = self.store.newFormula()
@@ -1013,7 +1008,7 @@ class BI_conclusion(HeavyBuiltIn, Function):
 		F.collector = reason
 		proof.append(reason)
 	    else: reason = None
-            if chatty_flag > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
+            if diag.chatty_flag > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
             self.store.copyFormula(subj, F, why=reason) # leave open
             think(F)
 	    F = F.close()
@@ -1029,7 +1024,7 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
     modulo non-duplication of course"""
     def evalObj(self, subj, queue, bindings, proof, query):
 	subj_py = subj.value()
-        if chatty_flag > 50:
+        if diag.chatty_flag > 50:
             progress("Conjunction input:"+`subj_py`)
             for x in subj_py:
                 progress("    conjunction input formula %s has %i statements" % (x, x.size()))
@@ -1044,7 +1039,7 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
         for x in subj_py:
             if not isinstance(x, Formula): return None # Can't
             self.store.copyFormula(x, F, why=reason)
-            if chatty_flag > 74:
+            if diag.chatty_flag > 74:
                 progress("    Formula %s now has %i" % (`F`,len(F.statements)))
         return F.canonicalize()
 
@@ -1057,7 +1052,7 @@ class BI_n3String(LightBuiltIn, Function):      # Light? well, I suppose so.
     If we *did* have a canonical form it would be great for signature
     A canonical form is possisble but not simple."""
     def evalObj(self, store, context, subj, queue, bindings, proof, query):
-        if chatty_flag > 50:
+        if diag.chatty_flag > 50:
             progress("Generating N3 string for:"+`subj`)
         if isinstance(subj, Formula):
             return store.intern((LITERAL, subj.n3String()))
@@ -1249,46 +1244,46 @@ class RDFStore(RDFSink) :
 		if remember:
 		    F = store._experience.the(source, store.semantics)
 		    if F != None:
-			if chatty_flag > 40: progress("Using cached semantics for",addr)
+			if diag.chatty_flag > 40: progress("Using cached semantics for",addr)
 			return F 
 		    
-		if chatty_flag > 40: progress("Taking input from " + addr)
+		if diag.chatty_flag > 40: progress("Taking input from " + addr)
 		netStream = urllib.urlopen(addr)
-		if chatty_flag > 60:
+		if diag.chatty_flag > 60:
 		    progress("   Headers for %s: %s\n" %(addr, netStream.headers.items()))
 		if contentType == None: ct=netStream.headers.get(HTTP_Content_Type, None)
 	    else:
-		if chatty_flag > 40: progress("Taking input from standard input")
+		if diag.chatty_flag > 40: progress("Taking input from standard input")
 		addr = uripath.join(baseURI, "STDIN") # Make abs from relative
 		netStream = sys.stdin
     
-	#    if chatty_flag > 19: progress("HTTP Headers:" +`netStream.headers`)
+	#    if diag.chatty_flag > 19: progress("HTTP Headers:" +`netStream.headers`)
 	#    @@How to get at all headers??
 	#    @@ Get sensible net errors and produce dignostics
     
 	    guess = ct
 	    buffer = netStream.read()
-	    if chatty_flag > 9: progress("Content-type: " + `ct` + " for "+addr)
+	    if diag.chatty_flag > 9: progress("Content-type: " + `ct` + " for "+addr)
 	    if ct == None or (ct.find('xml') < 0 and ct.find('rdf') < 0) :   # Rats - nothing to go on
                 # can't be XML if it starts with these...
 		if buffer[0:1] == "#" or buffer[0:7] == "@prefix":
 		    guess = 'application/n3'
                 elif buffer.find('xmlns="') >=0 or buffer.find('xmlns:') >=0:
 		    guess = 'application/xml'
-		if chatty_flag > 29: progress("    guess " + guess)
+		if diag.chatty_flag > 29: progress("    guess " + guess)
 	except (IOError, OSError):  
 	    raise DocumentAccessError(addr, sys.exc_info() )
 	    
 	# Hmmm ... what about application/rdf; n3 or vice versa?
 	if guess.find('xml') >= 0 or guess.find('rdf') >= 0:
-	    if chatty_flag > 49: progress("Parsing as RDF")
+	    if diag.chatty_flag > 49: progress("Parsing as RDF")
 	    import sax2rdf, xml.sax._exceptions
 	    p = sax2rdf.RDFXMLParser(store, addr)
 #	    Fpair = p.loadStream(netStream)
 	    p.feed(buffer)
 	    Fpair = p.close()
 	else:
-	    if chatty_flag > 49: progress("Parsing as N3")
+	    if diag.chatty_flag > 49: progress("Parsing as N3")
 	    p = notation3.SinkParser(store, addr, formulaURI=formulaURI, why=why)
 	    p.startDoc()
 	    p.feed(buffer)
@@ -1335,7 +1330,7 @@ class RDFStore(RDFSink) :
 	    fragid = uriRefString[hash+1:]
 	    f = r.fragments.get(fragid, None)
 	    if f == None: return uriRefString
-	    if chatty_flag > 70:
+	    if diag.chatty_flag > 70:
 		progress("llyn.genid Rejecting Id already used: "+uriRefString)
 		
     def checkNewId(self, urirefString):
@@ -1441,7 +1436,7 @@ class RDFStore(RDFSink) :
 	return nil.newList(value)
 
 #    def deleteFormula(self,F):
-#        if chatty_flag > 30: progress("Deleting formula %s %ic" %
+#        if diag.chatty_flag > 30: progress("Deleting formula %s %ic" %
 #                                            ( `F`, len(F.statements)))
 #        for s in F.statements[:]:   # Take copy
 #            self.removeStatement(s)
@@ -1449,10 +1444,10 @@ class RDFStore(RDFSink) :
 
     def reopen(self, F):
         if F.canonical == None:
-            if chatty_flag > 50:
+            if diag.chatty_flag > 50:
                 progress("reopen formula -- @@ already open: "+`F`)
             return F # was open
-        if chatty_flag > 70:
+        if diag.chatty_flag > 70:
             progress("reopen formula:"+`F`)
 	key = len(F.statements), len(F.universals()), len(F.existentials()) 
         self._formulaeOfLength[key].remove(F)  # Formulae of same length
@@ -1472,7 +1467,7 @@ class RDFStore(RDFSink) :
               self.intern(tuple[SUBJ]),
               self.intern(tuple[OBJ]) )
         if q[PRED] is self.forSome and isinstance(q[OBJ], Formula):
-            if chatty_flag > 97:  progress("Makestatement suppressed")
+            if diag.chatty_flag > 97:  progress("Makestatement suppressed")
             return  # This is implicit, and the same formula can be used un >1 place
         self.storeQuad(q, why)
                     
@@ -1589,7 +1584,7 @@ class RDFStore(RDFSink) :
 	for t in context.statementsMatching(obj=subj)[:]:
 		    context.removeStatement(t)    # SLOW
 		    total = total + 1
-	if chatty_flag > 30:
+	if diag.chatty_flag > 30:
 	    progress("Purged %i statements with %s" % (total,`subj`))
 	return total
 
@@ -1614,48 +1609,6 @@ class RDFStore(RDFSink) :
 class URISyntaxError(ValueError):
     """A parameter is passed to a routine that requires a URI reference"""
     pass
-
-
-#   DIAGNOSTIC STRING OUTPUT
-#
-def bindingsToString(bindings):
-    str = ""
-    for x, y in bindings.items():
-        str = str + (" %s->%s " % ( `x`, `y`))
-    return str
-
-def setToString(set):
-    str = ""
-    for q in set:
-        str = str+ "        " + quadToString(q) + "\n"
-    return str
-
-def seqToString(set):
-    str = ""
-    for x in set[:-1]:
-        str = str + `x` + ","
-    for x in set[-1:]:
-        str = str+ `x`
-    return str
-
-def queueToString(queue):
-    str = ""
-    for item in queue:
-        str = str  +  `item` + "\n"
-    return str
-
-
-def quadToString(q, neededToRun=[[],[],[],[]], pattern=[1,1,1,1]):
-    qm=[" "," "," "," "]
-    for p in ALL4:
-        n = neededToRun[p]
-        if n == []: qm[p]=""
-        else: qm[p] = "(" + `n`[1:-1] + ")"
-        if pattern[p]==None: qm[p]=qm[p]+"?"
-    return "%s%s ::  %8s%s %8s%s %8s%s." %(`q[CONTEXT]`, qm[CONTEXT],
-                                            `q[SUBJ]`,qm[SUBJ],
-                                            `q[PRED]`,qm[PRED],
-                                            `q[OBJ]`,qm[OBJ])
 
 
 

@@ -10,7 +10,6 @@
 this log:forAll <#p> .
 
 {  <#p> a daml:TransitiveProperty . } :means
-
 {
   { this log:forAll <#x> , <#y> , <#z>.
     { <#x> <#p> <#y>. <#y> <#p> <#z>. } log:implies { <#x> <#p> <#z>. }

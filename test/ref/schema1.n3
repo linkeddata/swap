@@ -165,67 +165,16 @@
     {
         v:p     a daml:TransitiveProperty .
         
-        }     log:implies {{
-            {
-                v:x     v:p v:y .
-                v:y     v:p v:z .
-                
-                }     log:implies {v:x     v:p v:z .
-                } .
-            
-            }     a log:Truth;
-             log:forAll v:x,
+        }     log:implies {this     log:forAll v:x,
                     v:y,
                     v:z .
+        {
+            v:x     v:p v:y .
+            v:y     v:p v:z .
+            
+            }     log:implies {v:x     v:p v:z .
+            } .
         } .
-    {
-        {
-            v:x     :ancestor v:y .
-            v:y     :ancestor v:z .
-            
-            }     log:implies {v:x     :ancestor v:z .
-            } .
-        
-        }     a log:Truth;
-         log:forAll v:x,
-                v:y,
-                v:z .
-    {
-        {
-            v:x     :descendant v:y .
-            v:y     :descendant v:z .
-            
-            }     log:implies {v:x     :descendant v:z .
-            } .
-        
-        }     a log:Truth;
-         log:forAll v:x,
-                v:y,
-                v:z .
-    {
-        {
-            v:x     rdfs:subClassOf v:y .
-            v:y     rdfs:subClassOf v:z .
-            
-            }     log:implies {v:x     rdfs:subClassOf v:z .
-            } .
-        
-        }     a log:Truth;
-         log:forAll v:x,
-                v:y,
-                v:z .
-    {
-        {
-            v:x     rdfs:subPropertyOf v:y .
-            v:y     rdfs:subPropertyOf v:z .
-            
-            }     log:implies {v:x     rdfs:subPropertyOf v:z .
-            } .
-        
-        }     a log:Truth;
-         log:forAll v:x,
-                v:y,
-                v:z .
     {
         v:c1     rdfs:subClassOf v:c2 .
         v:x     a v:c1 .
@@ -255,6 +204,30 @@
         v:x     v:p1 v:y .
         
         }     log:implies {v:x     v:p2 v:y .
+        } .
+    {
+        v:x     :ancestor v:y .
+        v:y     :ancestor v:z .
+        
+        }     log:implies {v:x     :ancestor v:z .
+        } .
+    {
+        v:x     :descendant v:y .
+        v:y     :descendant v:z .
+        
+        }     log:implies {v:x     :descendant v:z .
+        } .
+    {
+        v:x     rdfs:subClassOf v:y .
+        v:y     rdfs:subClassOf v:z .
+        
+        }     log:implies {v:x     rdfs:subClassOf v:z .
+        } .
+    {
+        v:x     rdfs:subPropertyOf v:y .
+        v:y     rdfs:subPropertyOf v:z .
+        
+        }     log:implies {v:x     rdfs:subPropertyOf v:z .
         } .
     {
         v:x     a v:y,

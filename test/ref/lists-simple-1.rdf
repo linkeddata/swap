@@ -9,6 +9,31 @@
     xmlns:t="file:/devel/WWW/2000/10/swap/test/test#">
 
     <rdf:Description>
+        <rdf:first>subj1</rdf:first>
+        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="run#li17">
+        <verb1 rdf:resource="test#object1"/>
+    </rdf:Description>
+
+    <rdf:Description>
+        <rdf:first>subj2a</rdf:first>
+        <rdf:rest rdf:parseType="Resource">
+            <rdf:first>subj2b</rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </rdf:rest>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="run#li19">
+        <verb2 rdf:resource="test#object2"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil">
+        <verb0 rdf:resource="test#object0"/>
+    </rdf:Description>
+
+    <rdf:Description>
         <anonVerb12 rdf:resource="test#anonObj12"/>
         <verb12 rdf:resource="test#obj12"/>
     </rdf:Description>
@@ -87,30 +112,5 @@
                 <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
             </rdf:rest>
         </owl:equivalentTo>
-    </rdf:Description>
-
-    <rdf:Description>
-        <rdf:first>subj1</rdf:first>
-        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="run#li17">
-        <verb1 rdf:resource="test#object1"/>
-    </rdf:Description>
-
-    <rdf:Description>
-        <rdf:first>subj2a</rdf:first>
-        <rdf:rest rdf:parseType="Resource">
-            <rdf:first>subj2b</rdf:first>
-            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-        </rdf:rest>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="run#li19">
-        <verb2 rdf:resource="test#object2"/>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil">
-        <verb0 rdf:resource="test#object0"/>
     </rdf:Description>
 </rdf:RDF>

@@ -198,17 +198,18 @@
     test:description   "log:implies rules, iterating";
     test:arguments     """rules12.n3 -think""".
 
-
-:t1025 a test:CwmTest;
-    test:shortFileName "rules13-1.n3";
-    test:description   "log:implies rules more complex, with means, once";
-    test:arguments     """rules13.n3 -rules""".
+# Removed, because the set of things done on --rules is rather indeterminate
+# in the case of a file in which ne rule can lead to another.
+#:t1025 a test:CwmTest;
+#    test:shortFileName "rules13-1.n3";
+#    test:description   "log:implies rules more complex, with means, once";
+#    test:arguments     """--closure=T rules13.n3 --rules""".
 
 
 :t1026 a test:CwmTest;
     test:shortFileName "rules13-n.n3";
-    test:description   "log:implies rules more complex, with means, many times";
-    test:arguments     """rules13.n3 -think""".
+    test:description   "log:implies and log:Truth rules, with means, many times";
+    test:arguments     """--closure=T rules13.n3 --think --data""".
 
 
 :t1027 a test:CwmTest;
@@ -220,7 +221,7 @@
 :t1028 a test:CwmTest;
     test:shortFileName "schema1.n3";
     test:description   "Schema validity 1";
-    test:arguments     """daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think""".
+    test:arguments     """--closure=T daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think""".
 
 
 :t1029 a test:CwmTest;

@@ -9,8 +9,7 @@
     
     :ancestor     a daml:TransitiveProperty .
     
-    :granpa     :ancestor :bill,
-                :pa .
+    :granpa     :ancestor :pa .
     
     :pa     :ancestor :bill .
     {

@@ -166,13 +166,11 @@ we&nbsp;may&nbsp;move&nbsp;to&nbsp;an&nbsp;internal&nbsp;storage&nbsp;rather&nbs
 
 <dl><dt><a name="Formula-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Yes,&nbsp;any&nbsp;identifier&nbsp;you&nbsp;see&nbsp;for&nbsp;this&nbsp;is&nbsp;arbitrary.</tt></dd></dl>
 
-<dl><dt><a name="Formula-includes"><strong>includes</strong></a>(f, g, _variables<font color="#909090">=[]</font>, smartIn<font color="#909090">=[]</font>, bindings<font color="#909090">=[]</font>)</dt><dd><tt>Does&nbsp;this&nbsp;formula&nbsp;include&nbsp;the&nbsp;information&nbsp;in&nbsp;the&nbsp;other?<br>
+<dl><dt><a name="Formula-includes"><strong>includes</strong></a>(f, g, _variables<font color="#909090">=[]</font>, bindings<font color="#909090">=[]</font>)</dt><dd><tt>Does&nbsp;this&nbsp;formula&nbsp;include&nbsp;the&nbsp;information&nbsp;in&nbsp;the&nbsp;other?<br>
 &nbsp;<br>
-smartIn&nbsp;gives&nbsp;a&nbsp;list&nbsp;of&nbsp;formulae&nbsp;for&nbsp;which&nbsp;builtin&nbsp;functions&nbsp;should&nbsp;operate<br>
-&nbsp;&nbsp;&nbsp;in&nbsp;the&nbsp;consideration&nbsp;of&nbsp;what&nbsp;"includes"&nbsp;means.<br>
 bindings&nbsp;is&nbsp;for&nbsp;use&nbsp;within&nbsp;a&nbsp;query.</tt></dd></dl>
 
-<dl><dt><a name="Formula-loadFormulaWithSubsitution"><strong>loadFormulaWithSubsitution</strong></a>(self, old, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Load&nbsp;information&nbsp;from&nbsp;another&nbsp;formula,&nbsp;subsituting&nbsp;as&nbsp;we&nbsp;go</tt></dd></dl>
+<dl><dt><a name="Formula-loadFormulaWithSubsitution"><strong>loadFormulaWithSubsitution</strong></a>(self, old, bindings<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Load&nbsp;information&nbsp;from&nbsp;another&nbsp;formula,&nbsp;subsituting&nbsp;as&nbsp;we&nbsp;go</tt></dd></dl>
 
 <dl><dt><a name="Formula-n3String"><strong>n3String</strong></a>(self, flags<font color="#909090">=''</font>)</dt><dd><tt>Dump&nbsp;the&nbsp;formula&nbsp;to&nbsp;an&nbsp;absolute&nbsp;string&nbsp;in&nbsp;N3</tt></dd></dl>
 
@@ -288,6 +286,10 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="Formula-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="Formula-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>

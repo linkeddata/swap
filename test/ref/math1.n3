@@ -52,30 +52,30 @@
     8     :valueOf "3 + (8 - 3)",
                 "3 + 5",
                 "3 + 5 = 8" .
+      ( "1.0e7" 
+        "3.1415926"  )
+         :SumDifferenceFAILS 3.1415925994515419 .
+      ( "1.0e7" 
+        3.1415926  )
+         :SumDifferenceFAILS 3.1415925994515419 .
+      ( "1729" 
+        "3.1415926"  )
+         :SumDifferenceFAILS 3.1415925999999672 .
+      ( "1729" 
+        3.1415926  )
+         :SumDifferenceFAILS 3.1415925999999672 .
+      ( 1.0e7 
+        "3.1415926"  )
+         :SumDifferenceFAILS 3.1415925994515419 .
+      ( 1.0e7 
+        3.1415926  )
+         :SumDifferenceFAILS 3.1415925994515419 .
+      ( 1729 
+        "3.1415926"  )
+         :SumDifferenceFAILS 3.1415925999999672 .
+      ( 1729 
+        3.1415926  )
+         :SumDifferenceFAILS 3.1415925999999672 .
     
     :test10     a :success .
-      ( "1.0e7" 
-        "3.1415926"  )
-         :SumDifferenceFAILS 3.1415925994515419 .
-      ( "1.0e7" 
-        3.1415926  )
-         :SumDifferenceFAILS 3.1415925994515419 .
-      ( "1729" 
-        "3.1415926"  )
-         :SumDifferenceFAILS 3.1415925999999672 .
-      ( "1729" 
-        3.1415926  )
-         :SumDifferenceFAILS 3.1415925999999672 .
-      ( 1.0e7 
-        "3.1415926"  )
-         :SumDifferenceFAILS 3.1415925994515419 .
-      ( 1.0e7 
-        3.1415926  )
-         :SumDifferenceFAILS 3.1415925994515419 .
-      ( 1729 
-        "3.1415926"  )
-         :SumDifferenceFAILS 3.1415925999999672 .
-      ( 1729 
-        3.1415926  )
-         :SumDifferenceFAILS 3.1415925999999672 .
     

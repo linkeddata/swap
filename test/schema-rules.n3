@@ -48,11 +48,10 @@ daml:domain = rdfs:domain .
 
 {  <#p> a daml:TransitiveProperty . } log:implies
 
-{
-  {
-    { <#x> <#p> <#y>. <#y> <#p> <#z>. } log:implies { <#x> <#p> <#z>. }
-  } a log:Truth; log:forAll <#x> , <#y> , <#z>.
-} .
+{ this log:forAll <#x> , <#y> , <#z>.
+  
+    { <#x> <#p> <#y>. <#y> <#p> <#z>. } log:implies { <#x> <#p> <#z>}
+ } .
 
 
 rdfs:subPropertyOf 	a daml:TransitiveProperty .
