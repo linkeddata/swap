@@ -706,6 +706,10 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 need(lxkb); touch(lxkb)
                 lxkb.reifyAsTrue()
 
+            elif arg == "-dereify":
+                need(lxkb); touch(lxkb)
+                lxkb.dereifyTrue()
+
             elif arg == "-size":
                 progress("Size: %i statements in store, %i in working formula." %(_store.size, workingContext.size()))
 

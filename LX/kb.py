@@ -296,6 +296,9 @@ class KB(list):
         self.clear()
         self.addFrom(flat)
 
+    def dereifyTrue(self):
+        LX.rdf.dereify(self)
+
     def reifyAsTrueNonRDF(self):
         flat = KB()
         LX.rdf.flatten(self, flat, indirect=0)
@@ -421,7 +424,10 @@ if __name__ == "__main__": _test()
 
  
 # $Log$
-# Revision 1.13  2003-08-20 09:26:48  sandro
+# Revision 1.14  2003-08-20 11:50:58  sandro
+# --dereify implemented (linear time algorithm)
+#
+# Revision 1.13  2003/08/20 09:26:48  sandro
 # update --flatten code path to work again, using newer URI strategy
 #
 # Revision 1.12  2003/08/01 15:27:21  sandro

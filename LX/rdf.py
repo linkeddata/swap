@@ -25,7 +25,7 @@ def flatten(kb, toKB, indirect=0):
     ladder = Ladder(("kb", toKB))
     ladder = ladder.set("trace", 1)
     for f in kb:
-        if f.getFunction() is LX.logic.RDF and not indirect:
+        if f.function is LX.logic.RDF and not indirect:
             toKB.add(f)
         else:
             term = d.describe(f, ladder)
@@ -39,9 +39,121 @@ def unflatten(f):
     The triples used to make those descriptions are optionally removed
     from the result, depending on the kind of inference required.
     """
-    
     raise RuntimeError, "Not Implemented"
 
+class Reconstructed:
+    def __init__(self, fromTerm):
+        self.fromTerm=fromTerm
+        self.args=[]
+        self.op=None
+
+# could construct this from class info...
+decode = {
+    lxns.condLeft: [ 0, LX.logic.IMPLIES ],
+    lxns.condRight:[ 1, LX.logic.IMPLIES ],
+    lxns.bicondLeft: [ 0, LX.logic.MEANS],
+    lxns.bicondRight:[ 1, LX.logic.MEANS ],
+    lxns.conjLeft: [ 0, LX.logic.AND ],
+    lxns.conjRight: [ 1, LX.logic.AND ],
+    lxns.disjLeft: [ 0, LX.logic.OR ],
+    lxns.disjRight: [ 1, LX.logic.OR ],
+    lxns.negated:[ 0, LX.logic.NOT ],
+    lxns.subformula:[ 1, None ],
+    lxns.univar:[ 0, LX.logic.FORALL ],
+    lxns.exivar:[ 0, LX.logic.EXISTS ],
+    lxns.subjectTerm:[ 0, LX.logic.RDF ],
+    lxns.predicateTerm:[ 1, LX.logic.RDF ],
+    lxns.objectTerm:[ 2, LX.logic.RDF ],
+    lxns.denotation: [ None, None, "uri" ],
+    }
+
+def reconstruct(kb, keys, recons):
+    for f in kb:
+        if f.function != LX.logic.RDF:
+            continue
+        (subj, pred, obj) = f.args
+        try:
+            k = keys[pred]
+        except KeyError:
+            continue
+        subjRecon = recons.setdefault(subj, Reconstructed(subj))
+        objRecon = recons.setdefault(obj, Reconstructed(obj))
+        index = k[0]
+        if index is None:
+            setattr(subjRecon, k[2], objRecon)
+        else:
+            if index>=len(subjRecon.args):
+                subjRecon.args.extend( (None,) * (1+index-len(subjRecon.args) ))
+            subjRecon.args[index] = objRecon
+            was = subjRecon.__dict__.get("op",None)
+            assert(was is None or was is k[1])
+            subjRecon.op = k[1]
+    
+def dereify(kb):
+    """a "remove" flag would be nice, but what about structure sharing?
+
+
+    (doesn't belong here; this has nothing to do with RDF...   except
+    that RDF makes this necessary!)
+
+    To do this with linear time, we need to traverse the KB first,
+    constructing python objects for each subject in each triple of
+    interest to us.  It should work fine....
+"""
+    recons = { }
+    reconstruct(kb, decode, recons)
+    for f in kb:
+        if f.function != LX.logic.RDF:
+            continue
+        (subj, pred, obj) = f.args
+        if pred is rdfns.type and obj is lxns.TrueSentence:
+            kb.add(asExpr(recons[subj], { }))
+    
+def asExpr(r, map):
+    """Turn a Reconstructed into an Expr, possibly overridden by map (to allow for scoping)
+    """
+    
+    try:
+        return map[r]
+    except KeyError:
+        pass
+    
+    if r.op:
+        if r.op == LX.logic.FORALL:
+            t=r.args[0]
+            v=LX.logic.UniVar()
+            newmap=map.copy()
+            newmap[t] = v
+            result=LX.expr.CompoundExpr(r.op, v, asExpr(r.args[0], newmap))
+            print "Result", result
+            return result
+        if r.op == LX.logic.EXISTS:
+            t=r.args[0]
+            v=LX.logic.ExiVar()
+            newmap=map.copy()
+            newmap[t] = v
+            result=LX.expr.CompoundExpr(r.op, v, asExpr(r.args[0], newmap))
+            print "Result", result
+            return result
+        e = [r.op]
+        for t in r.args:
+            e.append(asExpr(t, map))
+        result = apply(LX.expr.CompoundExpr, e)
+        print "Result", result
+        return result
+
+    if hasattr(r, "uri"):
+        uri = str(r.uri.fromTerm)
+        print "URI", uri
+        result= LX.logic.ConstantForURI(uri)
+        print "Result", result
+        return result
+
+    result=LX.logic.Constant()         # constant with URI?  Odd for RDF.
+    print "Result", result
+    return result
+
+################################################################
 
 class VariableDescriber:
 
@@ -102,7 +214,7 @@ class FormulaDescriber:
         else:
             term = ladder.kb.newExistential()
 
-        entry = self.nameTable[object.getFunction()]
+        entry = self.nameTable[object.function]
 
         if ladder.has("verbose"):
             ladder.kb.add(term, rdfns.type, entry[0])
@@ -132,7 +244,10 @@ def denotation(triple, index):
     return LX.uri.Resource(u)
     
 # $Log$
-# Revision 1.9  2003-08-20 09:26:48  sandro
+# Revision 1.10  2003-08-20 11:50:58  sandro
+# --dereify implemented (linear time algorithm)
+#
+# Revision 1.9  2003/08/20 09:26:48  sandro
 # update --flatten code path to work again, using newer URI strategy
 #
 # Revision 1.8  2003/02/14 17:21:59  sandro
