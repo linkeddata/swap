@@ -1,0 +1,19 @@
+#Processed by Id: cwm.py,v 1.126 2003/02/14 17:48:08 sandro Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/nodeID/ex1.rdf
+        
+#  Notation3 generation by
+#       notation3.py,v 1.133 2003/02/02 16:09:09 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/nodeID/ex1.rdf
+     @prefix : <http://www.w3.org/2000/10/swap/log#> .
+     @prefix dc: <http://purl.org/dc/elements/1.1/> .
+     @prefix ex: <http://example.org/stuff/1.0/> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    
+    <http://www.w3.org/TR/rdf-syntax-grammar>     ex:editor  [
+             ex:fullName "Dave Beckett";
+             ex:homePage <http://purl.org/net/dajobe/>;
+             is ex:creator of <http://www.w3.org/TR/rdf-syntax-grammar> ];
+         dc:title "RDF/XML Syntax Specification (Revised)" .
+    
+#ENDS
