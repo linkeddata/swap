@@ -1,0 +1,73 @@
+#Processed by Id: cwm.py,v 1.82 2001/11/15 22:11:23 timbl Exp 
+        #    using base file:/cygdrive/c/devel/WWW/2000/10/swap/test/wsdl/ex2.n3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.98 2001/11/15 22:11:24 timbl Exp
+
+#   Base was: file:/cygdrive/c/devel/WWW/2000/10/swap/test/wsdl/ex2.n3
+     @prefix : <http://schemas.xmlsoap.org/wsdl#> .
+     @prefix es: <http://www.snowboard-info.com/EndorsementSearch.wsdl> .
+     @prefix esxsd: <http://schemas.snowboard-info.com/EndorsementSearch.xsd> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix sb: <http://schemas.xmlsoap.org/wsdl/soap#> .
+    
+    <http://www.snowboard-info.com/EndorsementSearch.wsdl#EndorsementSearchService>     a :service;
+         :documentation "snowboarding-info.com Endorsement Service";
+         :hasPort <http://www.snowboard-info.com/EndorsementSearch.wsdl#GetEndorsingBoarderPort>;
+         :name <http://namespaces.snowboard-info.com#EndorsementSearchService> .
+    
+    <http://www.snowboard-info.com/EndorsementSearch.wsdl#EndorsementSearchSoapBinding>     a :binding;
+         :hasBinding  [
+             a sb:binding;
+             sb:style sb:document;
+             sb:transport <http://schemas.xmlsoap.org/soap/http> ];
+         :hasOperation <http://www.w3.org/2001/03/GetEndorsingBoarder>;
+         :name <http://namespaces.snowboard-info.com#EndorsementSearchSoapBinding>;
+         :type <http://www.snowboard-info.com/EndorsementSearch.wsdl#GetEndorsingBoarderPortType> .
+    
+    <http://www.snowboard-info.com/EndorsementSearch.wsdl#GetEndorsingBoarderPort>     a :port;
+         :binding <http://www.snowboard-info.com/EndorsementSearch.wsdl#EndorsementSearchSoapBinding>;
+         sb:address <http://www.snowboard-info.com/EndorsementSearch> .
+    
+    <http://www.snowboard-info.com/EndorsementSearch.wsdl#GetEndorsingBoarderPortType>     a :portType;
+         :hasOperation  [
+             a :operation;
+             :name <http://namespaces.snowboard-info.com#GetEndorsingBoarder>;
+             :input <http://www.snowboard-info.com/EndorsementSearch.wsdl#GetEndorsingBoarderRequest>;
+             :output <http://www.snowboard-info.com/EndorsementSearch.wsdl#GetEndorsingBoarderResponse>;
+             :fault <http://www.snowboard-info.com/EndorsementSearch.wsdl#GetEndorsingBoarderFault> ];
+         :name <http://namespaces.snowboard-info.com#GetEndorsingBoarderPortType> .
+    
+    <http://www.snowboard-info.com/EndorsementSearch.wsdl#GetEndorsingBoarderRequest>     a :message;
+         :hasPart  [
+             a :part;
+             :name <http://namespaces.snowboard-info.com#body>;
+             :element <http://schemas.snowboard-info.com/EndorsementSearch.xsd#GetEndorsingBoarder> ];
+         :name <http://namespaces.snowboard-info.com#GetEndorsingBoarderRequest> .
+    
+    <http://www.snowboard-info.com/EndorsementSearch.wsdl#GetEndorsingBoarderResponse>     a :message;
+         :hasPart  [
+             a :part;
+             :name <http://namespaces.snowboard-info.com#body>;
+             :element <http://schemas.snowboard-info.com/EndorsementSearch.xsd#GetEndorsingBoarderResponse> ];
+         :name <http://namespaces.snowboard-info.com#GetEndorsingBoarderResponse> .
+    
+    <http://www.snowboard-info.com/EndorsementSearch>     a sb:location .
+    
+    <http://www.w3.org/2001/03/GetEndorsingBoarder>     a :operation;
+         :fault  [
+             a sb:body;
+             sb:use sb:literal;
+             sb:namespace <http://schemas.snowboard-info.com/EndorsementSearch.xsd> ];
+         :input  [
+             a sb:body;
+             sb:use sb:literal;
+             sb:namespace <http://schemas.snowboard-info.com/EndorsementSearch.xsd> ];
+         :output  [
+             a sb:body;
+             sb:use sb:literal;
+             sb:namespace <http://schemas.snowboard-info.com/EndorsementSearch.xsd> ];
+         sb:operation  [
+             sb:soapAction <http://www.snowboard-info.com/EndorsementSearch> ] .
+    
+#ENDS
