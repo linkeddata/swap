@@ -140,7 +140,19 @@ public key.  This  ensordsement information is the certificate.</p>
 certificate from Kari about that key.</p>
 
 <p>Then the time comes that Tiina wants to access the member site. She makes
-up a request for teh web page, and signs it with her private key.</p>
+up a request for the web page, and signs it with her private key.</p>
+<pre>cwm access-tiina.private access-sign-request.n3 \
+ --think --purge --with http://www.w3.org/Member &gt; access-1.request</pre>
+
+<p>The with command passes in the URI of the page she would like to
+access.</p>
+
+<p>The crux of this whole system is the file <code>access-rule.n3</code>
+which tells the web site how to trust a request.</p>
+
+<p></p>
+
+<p></p>
 
 <p>Here is the complete data flow in summary.</p>
 
