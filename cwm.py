@@ -55,6 +55,7 @@ import LX
 import LX.rdf
 import LX.engine.llynInterface 
 import LX.engine.otter
+import LX.language.htables
 
 cvsRevision = "$Revision$"
 
@@ -266,6 +267,8 @@ def doCommand():
 --rdf=flags   Input & Output ** in RDF and set given RDF flags
 --n3=flags    Input & Output in N3 and set N3 flags
 --ntriples    Input & Output in NTriples (equiv --n3=spart -bySubject -quiet)
+--language=x  Input & Output in "x" (rdf, n3, etc)  --rdf same as: --language=rdf
+--languageOptions=y     --n3=sp same as:  --language=n3 --languageOptions=sp
 --ugly        Store input and regurgitate *
 --bySubject   Store input and regurgitate in subject order *
 --no          No output *
@@ -377,6 +380,11 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 option_format = "n3"
 		if option_first_format == None: option_first_format = option_format 
                 option_flags["n3"] = _rhs
+            elif _lhs == "-language":
+                option_format = _rhs
+                if option_first_format == None: option_first_format = option_format
+            elif _lhs == "-languageOptions":
+                option_flags[option_format] = _lhs
             elif arg == "-quiet": option_quiet = 1
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-crypto": option_crypto = 1
@@ -440,9 +448,19 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         #  Fix the output sink
         if option_format == "rdf":
             _outSink = toXML.ToRDF(sys.stdout, _outURI, base=option_baseURI, flags=option_flags["rdf"])
-        else:
+        elif option_format == "n3":
             _outSink = notation3.ToN3(sys.stdout.write, base=option_baseURI,
                                       quiet=option_quiet, flags=option_flags["n3"])
+        elif option_format == "otter":
+            #  hm.  why does TimBL use sys.stdout.write, above?  performance at the
+            #  cost of flexibility?
+            myflags = option_flags.get("otter", "")
+            _outSink = LX.engine.otter.Serializer(sys.stdout, flags=myflags)
+        elif option_format == "htables":
+            myflags = option_flags.get("htables", "")
+            _outSink = LX.language.htables.Serializer(sys.stdout, flags=myflags)
+        else:
+            raise RuntimeError, "unknown output format: "+str(option_format)
         version = "$Id$"
         if not option_quiet and option_outputStyle != "-no":
             _outSink.makeComment("Processed by " + version[1:-1]) # Strip $ to disarm
@@ -530,6 +548,11 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             elif _lhs == "-n3":
                 option_format = "n3"
                 option_flags["n3"] = _rhs
+            elif _lhs == "-language":
+                option_format = _rhs
+                if option_first_format == None: option_first_format = option_format
+            elif _lhs == "-languageOptions":
+                option_flags[option_format] = _lhs
             elif arg == "-quiet" : option_quiet = 1            
             elif _lhs == "-chatty": setVerbosity(int(_rhs))
 	    elif arg[:7] == "-track=":
@@ -662,16 +685,24 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         # Squirt it out if not piped
 
         if not option_pipe:
-            need(_store)
-            if verbosity()>5: progress("Begining output.")
-            if option_outputStyle == "-ugly":
-                _store.dumpChronological(workingContext, _outSink)
-            elif option_outputStyle == "-bySubject":
-                _store.dumpBySubject(workingContext, _outSink)
-            elif option_outputStyle == "-no":
-                pass
-            else:  # "-best"
-                _store.dumpNested(workingContext, _outSink)
+            # we're really checking two things:
+            #   (1) does the sink really want to take control, being given
+            #       the kb, not just the triples one at a time, and
+            #   (2) does it use lxkb or llyn ?
+            if hasattr(_outSink, "serializeKB"):
+                need(lxkb)
+                _outSink.serializeKB(lxkb)
+            else:
+                need(_store)
+                if verbosity()>5: progress("Begining output.")
+                if option_outputStyle == "-ugly":
+                    _store.dumpChronological(workingContext, _outSink)
+                elif option_outputStyle == "-bySubject":
+                    _store.dumpBySubject(workingContext, _outSink)
+                elif option_outputStyle == "-no":
+                    pass
+                else:  # "-best"
+                    _store.dumpNested(workingContext, _outSink)
 
 # These could well be methods using instance variables instead of
 # functions using globals.
