@@ -1,0 +1,13 @@
+    
+    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3>     <http://purl.org/dc/elements/1.1/description> "testing string parsing in N3.\nHmm... how much of this is in the primer?\nHow much should be there?\n@@ Holding off on unicode until support\nin python is sufficiently deployed\n(e.g. python on tux doesn't grok,\nnor does pythonwin on TimBL's laptop).\n$Id$\n" .
+    
+    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3#martin>     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3#surname> "D\u00FCrst" .
+    
+    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3#x>     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3#prop> "simple string" .
+    
+    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3#y>     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3#prop> "triple quoted\nstring with newlines in it." .
+    
+    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3#z>     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3#prop> "string with \" escaped quote marks" .
+    
+    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3#zz>     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3#escapes> "\\\"\a\b\f\r\t\v" .
+    

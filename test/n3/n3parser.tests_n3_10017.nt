@@ -1,0 +1,101 @@
+    
+    _:li3     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#b> .
+    
+    _:li3     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:li2 .
+    
+    _:li2     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#c> .
+    
+    _:li2     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:li1 .
+    
+    _:li1     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#d> .
+    
+    _:li1     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+    
+    _:li9     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#first> .
+    
+    _:li9     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:li8 .
+    
+    _:li8     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#second> .
+    
+    _:li8     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:li7 .
+    
+    _:li7     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:li5 .
+    
+    _:li7     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:li6 .
+    
+    _:li6     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#fourth> .
+    
+    _:li6     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+    
+    _:li5     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#left3> .
+    
+    _:li5     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:li4 .
+    
+    _:li4     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#right3> .
+    
+    _:li4     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+    
+    _:li11     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+    
+    _:li11     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:li10 .
+    
+    _:li10     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+    
+    _:li10     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+    
+    _:li13     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:L17C14 .
+    
+    _:li13     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:li12 .
+    
+    _:li12     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> _:L17C25 .
+    
+    _:li12     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+    
+    _:li14     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "subj1" .
+    
+    _:li14     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+    
+    _:li16     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "subj2a" .
+    
+    _:li16     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:li15 .
+    
+    _:li15     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "subj2b" .
+    
+    _:li15     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+    
+    _:li17     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> "1"^^<http://www.w3.org/2001/XMLSchema#integer> .
+    
+    _:li17     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+    
+    _:li19     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/.run-1100818951.269227p32593#_g5> .
+    
+    _:li19     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> _:li18 .
+    
+    _:li18     <http://www.w3.org/1999/02/22-rdf-syntax-ns#first> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/.run-1100818951.269227p32593#_g6> .
+    
+    _:li18     <http://www.w3.org/1999/02/22-rdf-syntax-ns#rest> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+    
+    <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil>     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#verb0> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#object0> .
+    
+    _:li14     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#verb1> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#object1> .
+    
+    _:li16     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#verb2> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#object2> .
+    
+    _:li17     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/lists.n3#linksEqualLists> _:li17 .
+    
+    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#emptyList>     <http://www.w3.org/2002/07/owl#sameAs> <http://www.w3.org/1999/02/22-rdf-syntax-ns#nil> .
+    
+    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#listOf2Empties>     <http://www.w3.org/2002/07/owl#sameAs> _:li11 .
+    
+    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#nested>     <http://www.w3.org/2002/07/owl#sameAs> _:li9 .
+    
+    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#threeItems>     <http://www.w3.org/2002/07/owl#sameAs> _:li3 .
+    
+    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#twoAnons>     <http://www.w3.org/2002/07/owl#sameAs> _:li13 .
+    
+    <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#twoFormulae>     <http://www.w3.org/2002/07/owl#sameAs> _:li19 .
+    
+    _:L17C14     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#mother> .
+    
+    _:L17C25     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/test#father> .
+    
