@@ -1,0 +1,28 @@
+%
+% Otter finds a 36-step proof that if two members of a set of
+% cardinality 2 are distinct, another member of the set must be the same
+% as one of those first two.  
+% (in 2 seconds)   
+%
+set(auto).
+include('util/owlAx-card.otter').
+formula_list(usable).
+
+rdf(l1, rdf_first, a).
+rdf(l1, rdf_rest, l2).
+
+rdf(l2, rdf_first, b).
+rdf(l2, rdf_rest, l3).
+
+rdf(l3, rdf_first, c).
+rdf(l3, rdf_rest, l4).
+
+rdf(l4, rdf_first, d).
+rdf(l4, rdf_rest, rdf_nil).
+
+cardinality(l1, two).
+
+-rdf(a, owl_sameAs, b).
+
+-( rdf(c, owl_sameAs, a) | rdf(c, owl_sameAs, b) ).
+
