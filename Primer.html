@@ -114,8 +114,73 @@ remember</p>
     "Pat".  The same applies to the verbs - never take the actual letters c h
     i l d as telling you what it means - we will find out how to do that
     later.</li>
-  <li></li>
+  <li>The square brackets declare that something exists with hte given
+    properties, but don't give </li>
 </ul>
+
+<p>If we actually wany to use a name, we could have written the table above
+as</p>
+<pre>  [ &lt;#name&gt; "Pat"   &lt;#age&gt; "24";  &lt;#eyecolor&gt; "blue"  .].
+  [ &lt;#name&gt; "Al"    &lt;#age&gt;  "3";  &lt;#eyecolor&gt; "green" .].
+  [ &lt;#name&gt; "Jo"    &lt;#age&gt;  "5";  &lt;#eyecolor&gt; "green" .].</pre>
+
+<p>There are many ways of combining square brackets - but you can figure that
+out from the examples later on. There is not much left learn about using N3 to
+express data, so let us move on.</p>
+
+<h2 id="Sharing">Sharing concepts</h2>
+
+<p>The semnctic web can't define in one document what something means. That's
+something you can do in english (or occasionally in math) but when we really
+communicate using the concept "title", (such in a library of congress catalog
+card or a web page), we rely on a shared concept of "title".  On the semantic
+web, we share quite precicely by using exactly the same URI for the concept of
+title.</p>
+
+<p>I could try to give the title of an N3 document by</p>
+<pre>&lt;&gt; &lt;#title&gt;  "A simple example of N3".
+
+</pre>
+
+<p>The &lt;&gt; being a blank URI just refers to the document it is written
+in. The &lt;#title&gt; refers to the concept of #title as defined by the
+document itself.  This won't mean much to the reader. However, a group of
+people created a list of properties called the Dublin Core, among which is
+thier idea of title, which they gave the identifier</p>
+
+<p>&lt;@@@@@@@@@#title&gt;. So we can make a much better defined statement if
+we say </p>
+<pre>&lt;&gt; &lt;@@@@@@@@@@@@@@@@#title&gt;  "A simple example of N3".
+
+
+</pre>
+
+<p>That of course would be a bit verbose - imagine using such long identifiers
+for everything like #age and #eyecolor above. So N3 allows you to set up a
+shorthand prefix for the long part. This is called a namespace identifier, and
+you set it up using "@prefix" like this:</p>
+<pre>@prefix dc:  &lt;@@@@@@@@@@@&gt; .
+&lt;&gt; dc:title  "A simple example of N3".
+
+</pre>
+
+<p>Note that when you use a prefix, you use a colon instead of a hash between
+dc and title, and you don't use the &lt;angle brackets&gt; around the whole
+thing.  This is much quicker.  This is how you will see and write almost all
+your predicates in N3.  Once set up, a prefix can be used for the rest of the
+file (* may change).</p>
+
+<p>There are an increasingly large number of RDF vocabularies for you to refer
+to - check the RDF home page - and you can build your own nes for your own
+applications very simply.</p>
+
+<h2>Making vocabularies</h2>
+
+<p>... equivalance! =</p>
+
+<h2>Contexts</h2>
+
+<h2>Rules</h2>
 
 <p></p>
 
