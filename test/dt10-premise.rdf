@@ -1,0 +1,20 @@
+
+<!-- Processed by Id: cwm.py,v 1.83 2002/01/04 16:16:10 timbl Exp -->
+<!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/dt10-premise.n3-->
+
+
+<rdf:RDF xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/dt10-premise.n3#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:ex="http://example/vocab#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+    <rdf:Description>
+        <rdf:type rdf:resource="#Film"/>
+        <dc:title>10</dc:title>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#mary">
+        <ex:age>10</ex:age>
+    </rdf:Description>
+</rdf:RDF>

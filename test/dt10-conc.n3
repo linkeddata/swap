@@ -1,0 +1,5 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix ex: <http://example/vocab#>.
+
+_:x dc:title _:y.
+_:z ex:age _:y.

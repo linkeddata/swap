@@ -1,0 +1,13 @@
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <#>.
+
+<dt10-premise.rdf> :testConclusion <dt10-conc.nt>.
+
+this log:forAll :premise, :conc.
+
+{ :premise :testConclusion :conc.
+  [ is log:semantics of :premise ]
+   log:includes [ is log:semantics of :conc ] }
+  log:implies { <#ThisReasoner> <#follows> <#S> }.
