@@ -8,14 +8,17 @@
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
 @prefix :  <http://www.w3.org/2000/10/swap/pim/qif#> .
 
-<> doc:version "$Id: " .
+<> doc:version "$Id";
+  s:seeAlso <qif2n3.py>, <http://dev.w3.org/cvsweb/2000/quacken/>,
+	<http://dev.w3.org/cvsweb/~checkout~/2000/quacken/vocab.n3?rev=1.1>,
+        <http://www.intuit.com/support/quicken/2002/win/1177.html>.
 
 
 q:Transaction a s:Class.
 
 q:Bank a s:Class.  # should be Bank_transaction probably
 
-q:Cat a s:Class; s:label "caetgory".
+q:Cat a s:Class; s:label "category".
 q:category a r:Property; s:label ""; s:domain q:Transaction.
 
 q:amount a r:Property; s:label "amount"; s:domain q:Transaction.
