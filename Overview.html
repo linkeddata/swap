@@ -6,9 +6,9 @@
 </head>
 
 <body>
-<h1>Semantic Web Area for Play!</h1>
+<h1>Semantic Web Area for Play</h1>
 
-<p></p>
+<p>or if you like Semantic Web Application Platform...</p>
 
 <h2 id="Motivation">Motivation</h2>
 
@@ -28,20 +28,54 @@
 
 <p></p>
 
-<p>The bits are now as follows.</p>
+<p>The bits are now as follows. There is NO guarantee or support or anything
+for these.</p>
 
 <p>Pyton modules</p>
 
 <h3 id="L133">Serializing/deserializaing RDF: notation3.py</h3>
 
-<p>USes a basic RDF stream parser interface</p>
+<p>Originally written by Dan Connolly, uses a basic RDF stream parser
+interface</p>
 <ul>
   <li>Parses N3</li>
   <li>Generates RDF</li>
   <li>Generates N3</li>
 </ul>
 
+<p>The command line form  (alias n3 python notation3.py; n3 -help) allows RDF
+to be parsed and re-output.</p>
+
+<p>The module will also run as a CGI script to convert N3 to RDF M&amp;S 1.0 -
+by DanC magic.</p>
+<ul>
+  <li>Source</li>
+</ul>
+
 <p></p>
+
+<h3 id="Closed">Closed World Machine : cwm.py</h3>
+
+<p>(pronounced roughly: coom as in room) This is a triple store, in which
+triples are stored in/against the particular context in which they were read,
+eg RDF file or N3 { expression }. The features at the moment include</p>
+<ul>
+  <li>Loading N3 files.</li>
+  <li>Applying rules written in N3 to the data.</li>
+  <li>Generating RDF or N3 files from the result.</li>
+  <li>Pretty printing data so that anonymous nodes are used creatively to
+    minimize the number of explicit existentials (generated Ids).</li>
+</ul>
+
+<p></p>
+
+<p>Cwm will run as a unix command, and is designed to be usable as a simple
+data manipulator for RDF on the lines of sed, awk, etc or xsl.</p>
+
+<p>In progress.</p>
+<ul>
+  <li>Source</li>
+</ul>
 
 <h2>Design issues</h2>
 <ul>
@@ -50,5 +84,11 @@
 </ul>
 
 <p>The </p>
+
+<p></p>
+
+<p>Tim BL</p>
+
+<p>$Id$</p>
 </body>
 </html>
