@@ -16,33 +16,130 @@
 
 <p>An <em>ontology</em> is a precise specification of a vocabulary.
 It typically consists of the set of vocabulary terms along with
-declarations about how the terms relate to each other.</p>
-
-<p>For people familiar with object-oriented analysis and design,
-ontology design is a fairly small step &mdash a step away program
-mechanics and into purely abstract information structures.  
+human-readable definitions of each term and machine-readable
+declarations about how the terms relate to each other.  An ontology
+embodies a conceptualization of some subject area; to understand
+someone, you need to understand both their grammar and all the
+ontologies they are using.
 </p>
+
+<p>The process of developing an ontology is usually similar to the process of
+object-oriented analysis and design: you figure out the classes of
+objects in some subject area, then consider how instances of those
+classes relate to each other and what they have in common.</p>
+
+<p>With RDF ontologies, however, this analysis usually remains
+separated from any programming language.  The features of inheritence
+and type-checking remain, however, and can be of great value.</p>
 
 <p>With RDF, we currently have four ontology languages.  In order of
 increasing expressive power:</p>
 
 <ul>
+
 <li><a href="http://www.w3.org/TR/rdf-schema/">RDFS</a> is quite
-simple, perhaps too simple.</li>
-<li><a href="http://www.w3.org/TR/2003/WD-owl-features-20030210/#s2.1">OWL Lite</a> may strike the right balance for many applications.
+simple, but may be all you need.  </li>
+
+<li><a
+       href="http://www.w3.org/TR/2003/WD-owl-features-20030210/#s2.1">OWL
+       Lite</a> is very strict and precise, but not very expressive.
+       For many modeling tasks, it's a good place to start. 
 </li>
-<li><a href="http://www.w3.org/TR/2003/WD-owl-features-20030210/#s2.2">OWL DL</a> offers all the standard Description Logic features</li>
-<li>OWL Full removes a few restrictions of OWL DL, making reasoning
-have weaker tractability guarantees.  (Obsoleting <a href="http://www.daml.org/2001/03/daml+oil-index.html">DAML+OIL</a>.)</li>
+
+<li><a
+       href="http://www.w3.org/TR/2003/WD-owl-features-20030210/#s2.2">OWL
+       DL</a> is strict like OWL DL, but offers all the standard
+       Description Logic (DL) features.</li>
+
+<li>OWL Full removes many restrictions of OWL DL, making reasoning
+       potentially intractable.  (This replaces <a href="http://www.daml.org/2001/03/daml+oil-index.html">DAML+OIL</a>.)</li>
+
 </ul>
 
-<h2>Classes, Properties, Individuals</h2>
+<h2>Classes, Properties, Individuals, and Datatype Values</h2>
 
-@review and more details
+<p>In ontology development, it helps to divide the world into four
+different kinds of things:
+</p>
 
-<h2>Disjoint classes, Distinct individuals; what the reasoner can do for you</h2>
+<li>An <strong>individual</strong> is something in the domain of
+discourse, like a specific person, an inventory item, or a city.  This
+roughly corresponds to "objects" in object-oriented programming.
+<ul class="example">
+<li>Arnold Schwarzenegger</li>
+<li>Budapest</li>
+<li>The Sun</li>
+<li>The French Revolution</li>
+<li>http://www.w3.org/ (the W3C front page)</li>
+</ul></div>
+</li>
 
-<h2>Cardinality Constraints; more things the reasoner can do</h2>
+<li>A <strong>data value</strong> is something which can be fully
+represented by a sequence of characters.  These correspond to values of
+primitive types in many programming languages.  There is some
+flexibility about whether to model some things as individuals or a
+data values, especially when you have the option of defining a new
+datatype.  
+<ul class="example">
+<li>the integer 17</li>
+<li>the string "Hello, World"</li>
+<li>the floating point number 3.771</li>
+<li>the date January 17, 1985</li>
+</ul>
+</li>
+
+<li>A <strong>class</strong> is a grouping of individuals to reflect
+something they have in common.  Classes may overlap arbitrarily.  In
+some ontology languages classes may contain data values and other
+classes (or even themselves!), but it usually makes sense to restrict
+ourselves to classes of individuals as required by OWL DL and OWL
+Lite.
+<ul class="example">
+<li>Human</li>
+<li>Valid XHTML Document</li>
+<li>Member of the United Nations</li>
+<li>ActiveCustomer</li>
+</ul>
+</li>
+
+<li>A <strong>property</strong> relates an individual to something
+else, the value of that property for that individual.  In the more
+restrictive languages, we have "data-valued properties" which have values
+which are datatype values, and "individual-valued properties" which have values
+which are individuals.
+<ul class="example">
+<li>date_of_birth</li>
+<li>lastName</li>
+<li>mayor</li>
+<li>purchaseMade</li>
+</ul>
+</li>
+
+<h2>Subclass Reasoning</h2>
+
+<pre>
+Man subclassOf Human
+YoungMan subclassOf Man</pre>
+
+<h3>OWL Inference</h3>
+
+<pre>
+Joe is a YoungMan -->  Joe is a Man, Joe is a Human
+
+Joe is a YoungMMMan -->  [okay] </pre>
+
+<h3>"Lint" Processing</h3>
+
+<pre>
+Joe is a YoungMan -->  [okay]
+
+Joe is a YoungMMMan -->  Warning: No Such Class </pre>
+
+<h2>Domain, Range, Cardinality</h2>
+
+<h2>Sameness</h2>
+
+<h2>Difference</h2>
 
 
 
