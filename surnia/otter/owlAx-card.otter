@@ -1,0 +1,183 @@
+% $Id$
+
+% we need inList
+include('util/owlAx-oneOf.otter').
+
+% we need SOMETHING of sameAs/differentFrom, ...
+
+formula_list(usable).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_cardinality
+%
+
+all RESTRICTION PROPERTY CARDINALITY INST (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_cardinality, CARDINALITY) &
+     rdf(INST, rdf_type, RESTRICTION) )
+   ->
+   % there is a set with that cardinality
+   % and it matches the values  of rdf(INST, PROPERTY...)
+   ( exists LIST ( all VAL (
+     ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
+     cardinality(LIST, CARDINALITY)
+   )))
+).
+
+% the cardinality of a list is the number of DISTINCT members
+% in it.
+
+cardinality(rdf_nil, 'foo:zero').
+
+all LIST CARD HEAD (
+   ( cardinality(LIST, CARD) &
+     rdf(LIST, rdf_first, HEAD) )
+   ->
+    -rdf(CARD, owl_sameAs, 'foo:zero')
+).
+
+rdf('foo:zero', 'foo:succ', one).
+rdf(one, 'foo:succ', two).
+rdf(two, 'foo:succ', three).
+
+% The List-of-One Lemma:
+(all LIST HEAD (
+   ( rdf(LIST, rdf_first, HEAD) &
+     rdf(LIST, rdf_rest, rdf_nil) )
+   -> 
+   cardinality(LIST, one)
+)).
+
+% The List-of-Two Lemma:
+(all LIST L2 HEAD SECOND (
+   ( rdf(LIST, rdf_first, HEAD) &
+     rdf(LIST, rdf_rest, L2) &
+     rdf(L2, rdf_first, SECOND) &
+     rdf(L2, rdf_rest, rdf_nil) )
+   -> 
+   (
+     (cardinality(LIST, one) & rdf(HEAD, owl_sameAs, SECOND))
+     |
+     (cardinality(LIST, two) & -rdf(HEAD, owl_sameAs, SECOND))
+   )
+)).
+
+
+
+% if the first element is distinct from everything else in
+% the list, then the cardinality of the tail is one less than
+% the cardinality of the whole list; otherwise, the cardinalities
+% are the same.
+
+all LIST HEAD TAIL (
+   ( rdf(LIST, rdf_first, HEAD) &
+     rdf(LIST, rdf_rest, TAIL) )
+   ->
+   ( -inList(HEAD, TAIL) 
+     <->
+     ( all CARD CARDMINUSONE (
+         rdf(CARDMINUSONE, 'foo:succ', CARD)
+         -> 
+          ( cardinality(TAIL, CARDMINUSONE)
+            <-> 
+            cardinality(LIST, CARD)
+          )
+     ))
+   )
+).
+
+all LIST HEAD TAIL (
+   ( rdf(LIST, rdf_first, HEAD) &
+     rdf(LIST, rdf_rest, TAIL) )
+   ->
+   ( inList(HEAD, TAIL) 
+     <->
+     ( all CARD (
+         cardinality(TAIL, CARD)
+         <-> 
+         cardinality(LIST, CARD)
+     ))
+   )
+).
+  
+all LIST HEAD TAIL (
+   ( rdf(LIST, rdf_first, HEAD) &
+     rdf(LIST, rdf_rest, TAIL) )
+   ->
+   ( inList(HEAD, TAIL) 
+     <->
+     ( all CARD (
+         cardinality(TAIL, CARD)
+         <-> 
+         cardinality(LIST, CARD)
+     ))
+   )
+).
+  
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%    integers
+%
+
+all I J K (
+   lt(I,J) & lt(J,K) -> lt(I,K)
+).
+all I J (
+   rdf(I, 'foo:succ', J) -> lt(I, J)
+).
+all I J (
+   lt(I, J) -> -rdf(I, owl_sameAs, J)
+).
+all I J K (
+   ( rdf(I, 'foo:succ', J) &
+     rdf(I, 'foo:succ', K) )
+   -> 
+   rdf(J, owl_sameAs, K)
+).
+all I J K (
+   ( rdf(I, 'foo:succ', J) &
+     rdf(K, 'foo:succ', J) )
+   -> 
+   rdf(I, owl_sameAs, K)
+).
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_sameAs
+%
+
+% identity
+all X (
+   rdf(X, owl_sameAs, X)
+).
+
+% symmetry
+all X Y (
+   rdf(X, owl_sameAs, Y) -> rdf(Y, owl_sameAs, X)
+).
+
+% transitivity
+all X Y Z (
+   (rdf(X, owl_sameAs, Y) & rdf(Y, owl_sameAs, Z))
+   -> 
+   rdf(X, owl_sameAs, Z)
+).
+
+% substitutivity
+all THING1 THING2 (
+   rdf(THING1, owl_sameAs, THING2) 
+   ->     % BIDIR   
+   (all X Y (
+      ( rdf(X, Y, THING1) <-> rdf(X, Y, THING2) ) &
+      ( rdf(X, THING1, Y) <-> rdf(X, THING2, Y) ) &
+      ( rdf(THING1, X, Y) <-> rdf(THING2, X, Y) ) 
+   ))
+).
+
+
+% $Log$
+% Revision 1.1  2003-07-31 20:56:30  sandro
+% still in progress, but passing surnia-test-003
+%
