@@ -3,7 +3,6 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <title>Primer - Processing Semantic Web data using N3</title>
   <link href="/People/Berners-Lee/general.css" rel="stylesheet"
   type="text/css" />
@@ -107,8 +106,8 @@ deduced from it, and you would like it added to the data set.</p>
 Joe, and Bob is the brother of Fred; we also describe the logical rule for
 the uncle relationship:</p>
 <pre>@prefix : &lt;uncle#&gt;.
-:Fred is :father of :Joe.
-:Bob is :brother of :Fred.
+:Joe has :father :Fred.
+:Fred has :brother :Bob.
 
 @prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .
 this log:forAll :who1, :who2.
@@ -122,8 +121,6 @@ with the command line option <code>--think.</code></p>
 <p></p>
 
 <p>@@- adding effective focal length to a photograph</p>
-
-<p>@@ finding the contiguous united states</p>
 
 <p>Delivery of packet in the USA has often one price within the
 <em>contiguous United States</em>. How could we find those? Well, the test
