@@ -1,6 +1,9 @@
+yacc: Warning. Token 'XMLSTRUCTURE' defined, but not used.
+yacc: Warning. There is 1 unused token.
+yacc: Generating SLR parsing table...
 
-<!-- Processed by Id: cwm.py,v 1.121 2003/02/02 16:09:06 timbl Exp -->
-<!--     using base file:/devel/WWW/2000/10/swap/string.n3-->
+<!-- Processed by Id: cwm.py,v 1.124 2003/02/14 00:55:50 sandro Exp -->
+<!--     using base file:/home/sandro/WWW/2000/10/swap/string.n3-->
 
 
 <rdf:RDF xmlns="http://www.w3.org/2000/10/swap/string#"
