@@ -38,6 +38,7 @@
   </rdfs:comment>
 
   <rdfs:subClassOf>
+    <rdf:Description>
     <daml:intersectionOf rdf:parseType="daml:collection">
 	<daml:Restriction>
 		<daml:onProperty rdf:resource="#queryPremise"/>
@@ -49,6 +50,7 @@
 		<daml:cardinality> 1 </daml:cardinality>
 	</daml:Restriction>
     </daml:intersectionOf>
+    </rdf:Description>
   </rdfs:subClassOf>
 </daml:Class>
 
@@ -115,6 +117,7 @@
 
 <daml:Class rdf:ID="VariableBinding">
   <rdfs:subClassOf>
+    <rdf:Description>
     <daml:intersectionOf rdf:parseType="daml:collection">
       	<daml:Restriction>
         	<daml:onProperty rdf:resource="#var"/>
@@ -136,6 +139,7 @@
         	<daml:cardinality> 1 </daml:cardinality>
       	</daml:Restriction>
     </daml:intersectionOf>
+    </rdf:Description>
   </rdfs:subClassOf>
 </daml:Class>
 
@@ -213,6 +217,7 @@
 
 <daml:Class rdf:ID="Triple">
   <rdfs:subClassOf>
+    <rdf:Description>
     <daml:intersectionOf rdf:parseType="daml:collection">
 	<daml:Restriction>
 		<daml:onProperty rdf:resource="#predicate"/>
@@ -229,6 +234,7 @@
 		<daml:cardinality> 1 </daml:cardinality>
 	</daml:Restriction>
     </daml:intersectionOf>
+    </rdf:Description>
   </rdfs:subClassOf>
 </daml:Class>
 
@@ -351,6 +357,7 @@
 
 <daml:Class rdf:ID="QualifiedName">
   <rdfs:subClassOf>
+    <rdf:Description>
     <daml:intersectionOf rdf:parseType="daml:collection">
 	<daml:Restriction>
 		<daml:onProperty rdf:resource="#nsName"/>
@@ -362,6 +369,7 @@
 		<daml:cardinality> 1 </daml:cardinality>
 	</daml:Restriction>
     </daml:intersectionOf>
+    </rdf:Description>
   </rdfs:subClassOf>
 </daml:Class>
 
