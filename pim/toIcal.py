@@ -179,7 +179,8 @@ class CalWr:
                 whenV = translate(str(whenV), maketrans("", ""), "-:")
                 w("%s;VALUE=DATE:%s%s" % (propName, whenV, CRLF))
             else:
-                raise ValueError, "no ical:dateTime or ical:date for " + str(when)
+                raise ValueError, "no ical:dateTime or ical:date for %s = %s" \
+                      % (propName ,  when)
 
     def doDuration(self, sts, r, propName, predName):
         w = self._w
@@ -293,7 +294,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.15  2004-03-09 23:29:40  connolly
+# Revision 2.16  2004-03-10 00:04:55  connolly
+# slightly nicer error message
+#
+# Revision 2.15  2004/03/09 23:29:40  connolly
 # removed non-ascii chars from copyright blurb
 # reformatted changelog to 79chars
 #
