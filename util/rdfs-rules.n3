@@ -1,65 +1,115 @@
-#    Schema validation rules in N3
-#    See validate.n3
-#
-#   There is not on the semantic web a single meaning of
-# the term "schema valid", as one can make different choices
-# about what information is used for validation, and what lengths
-# are gone to to try to find inconsitencies. In general, one cannot
-# for any set of rules, just prove that a document does not violate
-# a given set of constraints.  However, we can set the bar at a
-# particular height. For example
-#  - Retrieve schemata for any namesapces used in the target
-#  - apply a given set of rules (a certian limite number of times?)
-#  - check the result has no inconsistencies.
-#
-# The basic strategy is that which ontology systems seem to assume:
-# Find all classes to which everything belongs, and deduce things from that.
-#
-@prefix log: <http://www.w3.org/2000/10/swap/log#> .
-@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix c: <http://www.w3.org/2000/10/swap/pim/contact#>.
+@prefix tr: <http://www.w3.org/2001/02pd/rec54#>.
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#">.
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
-@prefix : <validate#> .       # For our use
-@prefix v: <validate.n3#> .	# Hint for others use
-
-
-this log:forAll <#p>, <#p1>, <#p2>,	# Properties
-	 <#c>, <#c1>, <#c2>.   # Classes
-
-<> doc:version "$Id$".
-
-# Transitivity (note DAML stuff repeats this effectively as it declares them transitive)
-
-{ <#x> rdfs:subPropertyOf <#y>. <#y> rdfs:subPropertyOf <#z>. } log:implies { <#x> rdfs:subPropertyOf <#z>. }
-{ <#x> rdfs:subClassOf <#y>. <#y> rdfs:subClassOf <#z>. } log:implies { <#x> rdfs:subClassOf <#z>. }
-
-
-# Implication of subclass:
+<>
+  dc:description """a transcription of the RDF Schema
+	closure rules from the RDF model theory spec.""",
+        "$Id$";
+  dc:source [ = <http://www.w3.org/TR/2002/WD-rdf-mt-20020214/>;
+    a tr:WD;
+    dc:date "2002-02-14";
+    dc:title "RDF Model Theory";
+    doc:versionOf <http://www.w3.org/TR/rdf-mt/>;
+    tr:editor [ c:fullName "Patrick Hayes" ]
+  ];
+  doc:obsoletes <../../../../2001/05ve/rdfs.n3>;
+  rdfs:seeAlso <http://www.agfa.com/w3c/euler/rdfs-rules.n3>.
 
 
-{ 	<#x> a <#c1>.
-	<#c1> rdfs:subClassOf <#c2> . } log:implies  { <#x> a <#c2> } .
+rdfs:Resource rdf:type rdfs:Class.
+rdfs:Literal rdf:type rdfs:Class.
+rdfs:Class rdf:type rdfs:Class.
+rdf:Property rdf:type rdfs:Class.
 
-# Implication of subPropertyOf:
-
-
-{ 	<#p1> has rdfs:range <#c>.
-	<#p2> rdfs:subPropertyOf <#p1> . } log:implies  { <#p2> has rdfs:range <#c> } .
-
-
-# Implication of Range and domain
-#  From domain to range
-
-{ 	<#p> rdfs:domain <#c>.
-	<#x> <#p> <#y> . } log:implies  { <#x> a <#c> } .
-
-{ 	<#p> rdfs:range <#c>.
-	<#x> <#p> <#y> . } log:implies  { <#y> a <#c> } .
+rdf:type rdf:type rdf:Property.
+rdf:type rdfs:domain rdfs:Resource.
+rdf:type rdfs:range rdfs:Class.
 
 
+rdfs:domain rdf:type rdf:Property.
+rdfs:domain rdfs:domain rdf:Property.
+rdfs:domain rdfs:range rdfs:Class.
 
-# ends
+
+rdfs:range rdf:type rdf:Property.
+rdfs:range rdfs:domain rdf:Property.
+rdfs:range rdfs:range rdfs:Class.
 
 
+rdfs:subPropertyOf rdf:type rdf:Property.
+rdfs:subPropertyOf rdfs:domain rdf:Property.
+rdfs:subPropertyOf rdfs:range rdf:Property.
 
+
+rdfs:subClassOf rdf:type rdf:Property.
+rdfs:subClassOf rdfs:domain rdfs:Class.
+rdfs:subClassOf rdfs:range rdfs:Class.
+
+# Apply the following rules recursively to generate all legal RDF triples (i.e. until none of the rules apply or the graph is unchanged.) Here, xxx, yyy and zzz stand for any uriref, bNode or literal, aaa for any uriref, and uuu for any uriref or bNode (but not a literal).
+
+@prefix : <rdfs-rules#>.
+@prefix rr: <rdfs-rules#>. # hint
+
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+this log:forAll :xxx, :yyy, :zzz, :aaa, :uuu.
+this log:forAll :bbb, :ccc. #@@not delcared in prose.
+
+#rdf1
+
+{ :xxx :aaa :yyy } log:implies { :aaa rdf:type rdf:Property }.
+
+#rdfs2
+
+{ :xxx :aaa :yyy.
+  :aaa rdfs:domain :zzz } log:implies { :xxx rdf:type :zzz }.
+
+#rdfs3
+
+{ :xxx :aaa :uuu.
+  :aaa rdfs:range :zzz. } log:implies { :uuu rdf:type :zzz }.
+
+#rdfs4a
+
+{ :xxx :aaa :yyy} log:implies { :xxx rdf:type rdfs:Resource }. #@@hmm...
+
+#rdfs4b
+{ :xxx :aaa :uuu} log:implies { :uuu rdf:type rdfs:Resource }.
+
+#rdfs5 @@hmm... why is this here?
+
+{ :aaa rdfs:subPropertyOf :bbb.
+  :bbb rdfs:subPropertyOf :ccc. } log:implies { :aaa rdfs:subPropertyOf :ccc }.
+
+#rdfs6
+
+{ :xxx :aaa :yyy.
+  :aaa rdfs:subPropertyOf :bbb } log:implies { :xxx :bbb :yyy }.
+
+#rdfs7 @@hmm... these rdfs:Resource rules seem superfluous
+
+{ :xxx rdf:type rdfs:Class } log:implies { :xxx rdfs:subClassOf rdfs:Resource }.
+
+#rdfs8
+
+{ :xxx rdfs:subClassOf :yyy.
+  :yyy rdfs:subClassOf :zzz. } log:implies { :xxx rdfs:subClassOf :zzz }.
+
+#rdfs9
+
+{ :xxx rdfs:subClassOf :yyy.
+  :aaa rdf:type :xxx } log:implies { :aaa rdf:type :yyy }.
+
+
+<> dc:description """
+$Log$
+Revision 1.4  2002-04-11 19:43:27  connolly
+copy of v1.1; timbl clobbered it
+
+Revision 1.1  2002/03/15 17:42:37  connolly
+per spec
+
+""".
