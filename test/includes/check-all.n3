@@ -35,7 +35,8 @@ this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
 log:Chaff is rdf:type of
     log:forAll,
     log:implies,   #  Clear out rules on -purge
-    :within, :schemaFormula, :schema,
+    :within, :schemaFormula, :schema, :declaredInDirectSchema,
+    :predicateSemanticsOrError, :semanticsOK,
 #    :targetDocument,
     :usedAsPropertyIn.
  
