@@ -1,10 +1,10 @@
 #  Manipulate calendar and contact information
 #
-#  Usage:    make PW=<mypassword> teleconference.n3
+#  Usage:    make PW=<mypassword> 
 #
 P=python
-C=/devel/WWW/2000/10/swap/cwm.py
-W=/devel/WWW
+W=../../../../..
+C=$W/2000/10/swap/cwm.py
 PIM=$W/2000/10/swap/pim
 CALFOLDER=/Users/timbl/evolution/local/calendar
 

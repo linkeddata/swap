@@ -134,17 +134,16 @@ research&nbsp;version.&nbsp;Written&nbsp;in&nbsp;C.&nbsp;Of&nbsp;te&nbsp;order&n
 <font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
-<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="LX.html">LX</a><br>
-<a href="RDFSink.html">RDFSink</a><br>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="RDFSink.html">RDFSink</a><br>
 <a href="StringIO.html">StringIO</a><br>
-</td><td width="25%" valign=top><a href="binascii.html">binascii</a><br>
-<a href="md5.html">md5</a><br>
+<a href="binascii.html">binascii</a><br>
+</td><td width="25%" valign=top><a href="md5.html">md5</a><br>
 <a href="notation3.html">notation3</a><br>
-</td><td width="25%" valign=top><a href="re.html">re</a><br>
-<a href="string.html">string</a><br>
+<a href="re.html">re</a><br>
+</td><td width="25%" valign=top><a href="string.html">string</a><br>
 <a href="sys.html">sys</a><br>
-</td><td width="25%" valign=top><a href="time.html">time</a><br>
-<a href="uripath.html">uripath</a><br>
+<a href="time.html">time</a><br>
+</td><td width="25%" valign=top><a href="uripath.html">uripath</a><br>
 <a href="urllib.html">urllib</a><br>
 </td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -1634,12 +1633,6 @@ Returns&nbsp;&nbsp;number&nbsp;of&nbsp;incoming&nbsp;links&nbsp;(1&nbsp;or&nbsp;
 or&nbsp;zero&nbsp;if&nbsp;self&nbsp;can&nbsp;NOT&nbsp;be&nbsp;represented&nbsp;as&nbsp;an&nbsp;anonymous&nbsp;node.<br>
 Paired&nbsp;with&nbsp;this&nbsp;is&nbsp;whether&nbsp;this&nbsp;is&nbsp;a&nbsp;subexpression.</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-addLXFormula"><strong>addLXFormula</strong></a>(self, context, lxFormula, terms<font color="#909090">={}</font>)</dt><dd><tt>Add&nbsp;an&nbsp;LX.<a href="#Formula">Formula</a>&nbsp;to&nbsp;the&nbsp;store.<br>
-&nbsp;<br>
-terms&nbsp;maps&nbsp;from&nbsp;LX.Term&nbsp;to&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>&nbsp;pairs</tt></dd></dl>
-
-<dl><dt><a name="RDFStore-addLXKB"><strong>addLXKB</strong></a>(self, context, kb)</dt><dd><tt>Add&nbsp;all&nbsp;the&nbsp;formulas&nbsp;in&nbsp;an&nbsp;LX.KB&nbsp;to&nbsp;the&nbsp;store</tt></dd></dl>
-
 <dl><dt><a name="RDFStore-any"><strong>any</strong></a>(self, q)</dt><dd><tt>&nbsp;&nbsp;Quad&nbsp;contains&nbsp;one&nbsp;None&nbsp;as&nbsp;wildcard.&nbsp;Returns&nbsp;first&nbsp;value<br>
 matching&nbsp;in&nbsp;that&nbsp;position.</tt></dd></dl>
 
@@ -1703,9 +1696,19 @@ This&nbsp;is&nbsp;the&nbsp;way&nbsp;they&nbsp;are&nbsp;actually&nbsp;made.</tt><
 
 <dl><dt><a name="RDFStore-internURI"><strong>internURI</strong></a>(self, str)</dt></dl>
 
-<dl><dt><a name="RDFStore-load"><strong>load</strong></a>(self, uri<font color="#909090">=None</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
-Returns&nbsp;top-level&nbsp;formula&nbsp;of&nbsp;the&nbsp;parsed&nbsp;document.<br>
-raises&nbsp;<a href="exceptions.html#IOError">IOError</a>,&nbsp;SyntaxError,&nbsp;DocumentError</tt></dd></dl>
+<dl><dt><a name="RDFStore-load"><strong>load</strong></a>(self, uri<font color="#909090">=None</font>, formulaURI<font color="#909090">=None</font>, remember<font color="#909090">=1</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
+&nbsp;<br>
+uri:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;None,&nbsp;load&nbsp;from&nbsp;standard&nbsp;input.<br>
+remember:&nbsp;if&nbsp;1,&nbsp;store&nbsp;as&nbsp;metadata&nbsp;the&nbsp;relationship&nbsp;between&nbsp;this&nbsp;URI&nbsp;and&nbsp;this&nbsp;formula.<br>
+&nbsp;<br>
+Returns:&nbsp;&nbsp;top-level&nbsp;formula&nbsp;of&nbsp;the&nbsp;parsed&nbsp;document.<br>
+Raises:&nbsp;&nbsp;&nbsp;<a href="exceptions.html#IOError">IOError</a>,&nbsp;SyntaxError,&nbsp;DocumentError</tt></dd></dl>
+
+<dl><dt><a name="RDFStore-loadMany"><strong>loadMany</strong></a>(self, uris)</dt><dd><tt>Get,&nbsp;parse&nbsp;and&nbsp;merge&nbsp;serveral&nbsp;documents,&nbsp;given&nbsp;a&nbsp;list&nbsp;of&nbsp;URIs.&nbsp;<br>
+&nbsp;<br>
+Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
+Returns&nbsp;top-level&nbsp;formula&nbsp;which&nbsp;is&nbsp;the&nbsp;parse&nbsp;result.<br>
+Raises&nbsp;<a href="exceptions.html#IOError">IOError</a>,&nbsp;SyntaxError</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-loadURI"><strong>loadURI</strong></a>(self, uri)</dt></dl>
 
@@ -1766,17 +1769,6 @@ Builds&nbsp;the&nbsp;indxes&nbsp;and&nbsp;does&nbsp;stuff&nbsp;for&nbsp;lists.</
 <dl><dt><a name="RDFStore-testIncludes"><strong>testIncludes</strong></a>(self, workingContext, template, _variables<font color="#909090">=[]</font>, smartIn<font color="#909090">=[]</font>, bindings<font color="#909090">=[]</font>)</dt></dl>
 
 <dl><dt><a name="RDFStore-think"><strong>think</strong></a>(self, F, G<font color="#909090">=None</font>)</dt></dl>
-
-<dl><dt><a name="RDFStore-toLX"><strong>toLX</strong></a>(self, formula, maxDepth<font color="#909090">=4</font>, kb<font color="#909090">=None</font>, vars<font color="#909090">=None</font>)</dt><dd><tt>Convert&nbsp;a&nbsp;llyn.formula&nbsp;to&nbsp;an&nbsp;LX.<a href="#Formula">Formula</a>&nbsp;and&nbsp;return&nbsp;it,&nbsp;or<br>
-to&nbsp;one&nbsp;or&nbsp;more&nbsp;LX.Formulas&nbsp;and&nbsp;add&nbsp;them&nbsp;to&nbsp;an&nbsp;LX.KB;&nbsp;also&nbsp;convert<br>
-a&nbsp;non-formula&nbsp;into&nbsp;an&nbsp;LX.Term.<br>
-&nbsp;<br>
-If&nbsp;a&nbsp;kb&nbsp;is&nbsp;specified,&nbsp;the&nbsp;conjoined&nbsp;parts&nbsp;of&nbsp;the&nbsp;formula&nbsp;(or<br>
-just&nbsp;the&nbsp;formula&nbsp;itself,&nbsp;if&nbsp;there&nbsp;are&nbsp;no&nbsp;conjoined&nbsp;parts)&nbsp;will<br>
-be&nbsp;added&nbsp;to&nbsp;it,&nbsp;instead&nbsp;of&nbsp;being&nbsp;returned.&nbsp;&nbsp;For&nbsp;document<br>
-top-level&nbsp;formulas&nbsp;this&nbsp;is&nbsp;often&nbsp;the&nbsp;appropriate&nbsp;usage.</tt></dd></dl>
-
-<dl><dt><a name="RDFStore-toLXVar"><strong>toLXVar</strong></a>(self, term, vars)</dt></dl>
 
 <dl><dt><a name="RDFStore-tryRule"><strong>tryRule</strong></a>(self, s, workingContext, targetContext, _variables, already<font color="#909090">=None</font>)</dt><dd><tt>#&nbsp;Beware&nbsp;lists&nbsp;are&nbsp;corrupted.&nbsp;Already&nbsp;list&nbsp;is&nbsp;updated&nbsp;if&nbsp;present.</tt></dd></dl>
 
@@ -1939,7 +1931,7 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
  <dl><dt><a name="-isString"><strong>isString</strong></a>(x)</dt></dl>
- <dl><dt><a name="-loadToStore"><strong>loadToStore</strong></a>(store, uri<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
+ <dl><dt><a name="-loadToStore"><strong>loadToStore</strong></a>(store, uri<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>, formulaURI<font color="#909090">=None</font>, remember<font color="#909090">=1</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
 Returns&nbsp;top-level&nbsp;formula&nbsp;of&nbsp;the&nbsp;parsed&nbsp;document.<br>
 raises&nbsp;<a href="exceptions.html#IOError">IOError</a>,&nbsp;SyntaxError</tt></dd></dl>
  <dl><dt><a name="-merge"><strong>merge</strong></a>(a, b)</dt><dd><tt>Merge&nbsp;sorted&nbsp;sequences<br>

@@ -57,8 +57,12 @@ Agenda:
  - Find closure for all synonyms
  - Find superclass closure?
 - represent URIs bound to same equivalence closure object?
+ - proof generation
+
+- dynamic bultins - ontology for adding python.
 
 BULTINS WE NEED
+    - {x log:entails y } <=>  { x!log:conclusion log:includes y}.    [is log:conclusion of x] log:includes y
     - usesNamespace(x,y)   # find transitive closure for validation  - awful function in reality
     - delegation of query to remote database (cwm or rdbms)
     - F impliesUnderThink G.  (entails? leadsTo? conclusion?)
@@ -105,7 +109,7 @@ Done
  - Use unambiguous property to infer synomnyms
    (see sameDan.n3 test case in test/retest.sh)
  - schema validation - done partly but no "no schema for xx predicate".
-BULTINS WE HAVE DONE
+ ULTINS WE HAVE DONE
     - includes(expr1, expr2)      (cf >= ,  dixitInterAlia )
     - indirectlyImplies(expr1, expr2)   
     - startsWith(x,y)
@@ -141,8 +145,8 @@ from thing import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Anonymous, Term, List, EmptyList
 
-import RDFSink
-from RDFSink import Logic_NS
+#import RDFSink
+from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import N3_nil, N3_first, N3_rest, DAML_NS, N3_Empty, N3_List
 from RDFSink import RDF_NS_URI
@@ -756,7 +760,7 @@ class BI_semanticsOrError(BI_semantics):
 
 HTTP_Content_Type = 'content-type' #@@ belongs elsewhere?
 
-def loadToStore(store, uri=None, contentType=None):
+def loadToStore(store, uri=None, contentType=None, formulaURI=None, remember=1):
     """Get and parse document.  Guesses format if necessary.
     Returns top-level formula of the parsed document.
     raises IOError, SyntaxError
@@ -800,14 +804,15 @@ def loadToStore(store, uri=None, contentType=None):
         Fpair = p.loadStream(netStream)
     else:
         if verbosity() > 49: progress("Parsing as N3")
-        p = notation3.SinkParser(store, addr)
+        p = notation3.SinkParser(store, addr, formulaURI=formulaURI)
         p.startDoc()
         p.feed(netStream.read())
         Fpair = p.endDoc()
     F = store.intern(Fpair)
-    store.storeQuad((store._experience,
+    if remember: store.storeQuad((store._experience,
                      store.semantics, store.intern((SYMBOL, addr)), F))
     return F 
+
 
 def _indent(str):
     """ Return a string indented by 4 spaces"""
@@ -940,7 +945,7 @@ class BI_n3String(LightBuiltIn, Function):      # Light? well, I suppose so.
 
     
 ###################################################################################        
-class RDFStore(RDFSink.RDFSink) :
+class RDFStore(RDFSink) :
     """ Absorbs RDF stream and saves in triple store
     """
 
@@ -953,7 +958,7 @@ class RDFStore(RDFSink.RDFSink) :
         self.size = 0
         
     def __init__(self, genPrefix=None, metaURI=None, argv=None, crypto=0):
-        RDFSink.RDFSink.__init__(self, genPrefix=genPrefix)
+        RDFSink.__init__(self, genPrefix=genPrefix)
         self.clear()
         self.argv = argv     # List of command line arguments for N3 scripts
 
@@ -968,8 +973,8 @@ class RDFStore(RDFSink.RDFSink) :
 
         # Constants, as interned:
         
-        self.forSome = self.internURI(RDFSink.forSomeSym)
-        self.forAll  = self.internURI(RDFSink.forAllSym)
+        self.forSome = self.internURI(forSomeSym)
+        self.forAll  = self.internURI(forAllSym)
         self.implies = self.internURI(Logic_NS + "implies")
         self.means = self.internURI(Logic_NS + "means")
         self.asserts = self.internURI(Logic_NS + "asserts")
@@ -1055,13 +1060,54 @@ class RDFStore(RDFSink.RDFSink) :
         self._experience = self.intern((FORMULA, metaURI + "_formula"))
 	assert isinstance(self._experience, Formula)
 
-    def load(self, uri=None):
+    def load(self, uri=None, formulaURI=None, remember=1):
 	"""Get and parse document.  Guesses format if necessary.
-	Returns top-level formula of the parsed document.
-	raises IOError, SyntaxError, DocumentError
-	"""
-	return loadToStore(self, uri)
 
+	uri:      if None, load from standard input.
+	remember: if 1, store as metadata the relationship between this URI and this formula.
+	
+	Returns:  top-level formula of the parsed document.
+	Raises:   IOError, SyntaxError, DocumentError
+	"""
+	return loadToStore(self, uri, formulaURI=formulaURI, remember=remember)
+
+
+    def loadMany(self, uris):
+	"""Get, parse and merge serveral documents, given a list of URIs. 
+	
+	Guesses format if necessary.
+	Returns top-level formula which is the parse result.
+	Raises IOError, SyntaxError
+	"""
+	assert type(uris) is type([])
+	F = self.load(uris[0], remember=0)
+	f = F.uriref()
+	for u in uris[1:]:
+	    F.reopen()
+	    self.load(u, formulaURI=f, remember=0)
+	return F
+
+
+    def genId(self):
+	"""Generate a new identifier
+	
+	This uses the inherited class, but also checks that we haven't for some pathalogical reason
+	ended up generating the same one as for example in another run of the same system. 
+	"""
+	while 1:
+	    uriRefString = RDFSink.genId(self)
+            hash = string.rfind(uriRefString, "#")
+            if hash < 0 :     # This is a resource with no fragment
+		return uriRefString # ?!
+	    resid = uriRefString[:hash]
+	    r = self.resources.get(resid, None)
+	    if r == None: return uriRefString
+	    fragid = uriRefString[hash+1:]
+	    f = r.fragments.get(fragid, None)
+	    if f == None: return uriRefString
+	    if verbosity() > 70:
+		progress("llyn.genid Rejecting Id already used: "+uriRefString)
+		
 
     def internURI(self, str):
         assert type(str) is type("") # caller %xx-ifies unicode
@@ -1220,7 +1266,7 @@ class RDFStore(RDFSink.RDFSink) :
         return new
 
     def endFormulaNested(self, F, bindings = [], level=0, notThis=0):
-        """Cannonicalize this (unloess notThis set) after cannonicalizing any subformulae recusrively
+        """Cannonicalize this (unless notThis set) after cannonicalizing any subformulae recursively
         Note the subs must be done first. Also note that we can't assume statements
         or formulae are valid after a call to this, unless we track the
         changes which are kept in a shared list, bindings. """
@@ -1263,10 +1309,10 @@ class RDFStore(RDFSink.RDFSink) :
 
     def bind(self, prefix, nsPair):
         if prefix != "":   #  Ignore binding to empty prefix
-            return RDFSink.RDFSink.bind(self, prefix, nsPair) # Otherwise, do as usual.
+            return RDFSink.bind(self, prefix, nsPair) # Otherwise, do as usual.
     
     def makeStatement(self, tuple):
-	"""Add a qud to the store, each part of the quad being in pair form."""
+	"""Add a quad to the store, each part of the quad being in pair form."""
         q = ( self.intern(tuple[CONTEXT]),
               self.intern(tuple[PRED]),
               self.intern(tuple[SUBJ]),
@@ -1281,7 +1327,9 @@ class RDFStore(RDFSink.RDFSink) :
 
 
     def any(self, q):
-        """  Quad contains one None as wildcard. Returns first value
+        """Query the store for the first match.
+	
+	Quad contains one None as wildcard. Returns first value
         matching in that position.
 	"""
         list = q[CONTEXT].statementsMatching(q[PRED], q[SUBJ], q[OBJ])

@@ -154,23 +154,32 @@ def refTo(base, uri):
     >>> refTo('file:/ex/x/y', 'file:/ex/x/q/r#s')
     'q/r#s'
     
+    >>> refTo(None, 'http://ex/x/y')
+    'http://ex/x/y'
+
     >>> refTo('http://ex/x/y', 'http://ex/x/y')
     ''
+    
     
     This one checks that it uses a root-realtive one where that is
     all they share.  Now uses root-relative where no path is shared.
     This is a matter of taste but tends to give more resilience IMHO
     -- and shorter paths
 
+    Note that base may be None, meaning no base.  In some situations, there
+    just ain't a base. Slife. In these cases, relTo returns the absolute value.
+    The axiom abs(,rel(b,x))=x still holds.
+    This saves people having to set the base to "bogus:".
 
     >>> refTo('http://ex/x/y/z', 'http://ex/r')
     '/r'
 
     """
 
-    assert base # don't mask bugs
+#    assert base # don't mask bugs -danc # not a bug. -tim
+    if not base: return uri
     if base == uri: return ""
-
+    
     # Find how many path segments in common
     i=0
     while i<len(uri) and i<len(base):
@@ -352,7 +361,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.7  2002-09-04 05:03:07  connolly
+# Revision 1.8  2002-11-24 03:12:02  timbl
+# base can be None in uripath:refTo
+#
+# Revision 1.7  2002/09/04 05:03:07  connolly
 # convertet unittests to use python doctest and unittest modules; cleaned up docstrings a bit
 #
 # Revision 1.6  2002/09/04 04:07:50  connolly

@@ -44,8 +44,9 @@ all: math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf LICENSE.rdf c
 
 # Can't make dependencies on *.py :-(
 
-cwm.tar.Z: cwm.py notation3.py llyn.py  RDFSink.py toXML.py
-	tar -cf cwm.tar *.py
+# cwm.py notation3.py llyn.py  RDFSink.py toXML.py
+cwm.tar.Z::
+	tar -cf cwm.tar *.py LX/*.py LX/*/*.py  LX/*/*.P
 	compress -f cwm.tar
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py

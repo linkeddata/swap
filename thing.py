@@ -94,7 +94,7 @@ def literal(str):
 def formula():
     """Create or reuse, in the default store, a new empty formula (triple people think: triple store)
     and return it for future use"""
-    return _checkStore().newForumula()
+    return _checkStore().newFormula()
 
 def bNode(str, context):
     """Create or reuse, in the default store, a new unnamed node within the given
@@ -133,8 +133,8 @@ class Namespace(object):
         self._name = name
         self._seen = {}
 
-    def name(self):
-        return self._name
+#    def name(self):				No, org.name must  be a symol in the namespace!
+#        return self._name
     
     def __getattr__(self, lname):
         """get the lname Symbol in this namespace.

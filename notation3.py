@@ -962,7 +962,11 @@ t   "this" and "()" special syntax should be suppresed.
         if "d" in self._flags or "p" in self._flags: return  # Ignore the prefix system completely
         self._endStatement()
         self.defaultNamespace = nsPair
-        self._write(" @prefix : <%s> ." % (refTo(self.base, nsPair[1])) )
+	if self.base:  # Sometimes there is none, and nowadays refTo is intolerant
+	    x = refTo(self.base, nsPair[1])
+	else:
+	    x = nsPair[1]
+        self._write(" @prefix : <%s> ." % x )
         self._newline()
        
 

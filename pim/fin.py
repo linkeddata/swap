@@ -282,7 +282,7 @@ def doCommand():
 		
 	print "<h2>Personal categories and month</h2><table class='wide'><tr><th></th><th>Year</th>"
 	for month in range(12):
-	    print "<th><a href='year-chron.html#m%s'>%s</a></th>" %(("0"+`month+1`)[0:2], monthName[month]),
+	    print "<th><a href='year-chron.html#m%s'>%s</a></th>" %(("0"+`month+1`)[-2:], monthName[month]),
 	print "</tr>"
 	for cat in quCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing]:
 	    try:
@@ -306,7 +306,8 @@ def doCommand():
 <svg xmlns="http://www.w3.org/2000/svg"
      xmlns:l="http://www.w3.org/1999/xlink">
 """)
-	minheight = 15 # for text
+#"
+	lineheight = 15 # for text
 	upperBound = abs(income)
 	if abs(outgoings) > upperBound: upperBound = abs(outgoings)
 	
@@ -318,6 +319,7 @@ def doCommand():
 	    chart.write("""    <rect stroke="#ddffdd" fill="none" y="%ipx" x="50px" width="600px"
 	    height="0px"/>
 """ %(dh-y))
+#"
 	    y = y + 10000 * scale
 
 	vc = []
@@ -334,7 +336,7 @@ def doCommand():
 	    volatility = meta.the(subj=c, pred=qu.volatility)
 	    if volatility == None:
 		volatility = 50
-		sys.stderr.write("No volatility for "+ `cat` +"\n")
+		sys.stderr.write("No volatility for "+ cat.uriref() +"\n")
 	    else:
 		volatility = int(str(volatility))
 	    vc.append((volatility, label, c))
@@ -361,21 +363,43 @@ def doCommand():
         <rect stroke="black" fill="none" y="%ipx" x="%ipx" width="200px"
 	    height="%ipx" style="stroke: black; fill: %s"/></a>
 """ %(`c`, dh-round(top*scale), offset[out], height, color[out]))
-
-	    if  height > minheight:
+#"
+	    if  height > lineheight:
 		text = label
-		if height > (3*minheight):
-		    text = text + (" \n$%7.2f" % tot) 
-		chart.write("""    <text  y="%ipx" x="%ipx" width="160px"
-	    height="%ipx" style="background: #eeeeff">%s</text>
-""" %(dh-round((bottom+top)*scale/2 - minheight/2), offset[out]+20, height-40, text)) 
+		text2 = " \n%7i" % round(abs(tot))
 		
+		middle = dh-round((bottom+top)*scale/2 - lineheight/2)
+		if height > (3*lineheight):
+		    chart.write("""    <text  y="%ipx" x="%ipx" width="160px"
+	    height="%ipx" style="background: #eeeeff">%s</text>
+""" %(middle - (lineheight/2), offset[out]+20, height-40, text)) 
+#"	
+		    chart.write("""    <text  y="%ipx" x="%ipx" width="160px"
+	    height="%ipx" style="text-anchor:finish; background: #eeeeff">%s</text>
+""" %(middle + (lineheight/2), offset[out]+20, height-40, text2)) 
+#"
+		else:
+		    if len(text) < 15: text = text + " " + text2
+		    chart.write("""    <text  y="%ipx" x="%ipx" width="160px"
+	    height="%ipx" style="background: #eeeeff">%s</text>
+""" %(middle, offset[out]+20, height-40, text)) 
+#"	
 	
 	chart.write("""</svg>\n""")
 	chart.close()
 
 
-
+	# Output totals
+	
+	ko = store.intern(thing.formula())		# New formula  @@@ - yuk API!
+	for c in quCategories + [ qu.UnclassifiedIncome, qu.UnclassifiedOutgoing]:
+	    ko.add(subj=c, pred=qu.total, obj=store.intern(thing.literal(`totals.get(c,0)`)))
+	ko.close()
+	
+	fo = open("totals.n3", "w")
+	fo.write(ko.n3String())
+	fo.close
+	
 	internalCheck()
 
 	

@@ -199,9 +199,9 @@ For example, an email friendly name string.""".
 :mailbox :_addressProperty :mailboxURI.
 
 #@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
-#this log:forAll :x, :p, :y.
+this log:forAll :x, :p, :y.
 
-#{ :x [ is :_addressProperty of :p] [ is log:uri of :y] } log:implies { :x :p :y }.
+{ :x [ is :_addressProperty of :p] [ is log:uri of :y] } log:implies { :x :p :y }.
 
 #  { :ent :mailboxURI [ log:equalTo [ is log:concat of ( "mailto:" [ :_uriEncode :addr ] ) ] ] } log:implies { :ent :emailAddress :addr }. # only goes one way because we could use PUT to HTTP resources to deliver mail.
 
@@ -273,7 +273,10 @@ mso:WebPage  a rdf:Property;
 
 <> dc:description """
 $Log$
-Revision 1.17  2002-10-07 20:50:00  timbl
+Revision 1.18  2002-11-24 03:12:03  timbl
+base can be None in uripath:refTo
+
+Revision 1.17  2002/10/07 20:50:00  timbl
 (timbl) Changed through Jigsaw.
 
 Revision 1.13  2002/07/18 05:30:49  connolly

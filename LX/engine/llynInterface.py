@@ -11,7 +11,8 @@ def _test():
 if __name__ == "__main__": _test()
 
 import llyn
-from llyn import PRED, SUBJ, OBJ, RDFSink, CONTEXT
+from llyn import PRED, SUBJ, OBJ,  CONTEXT # RDFSink,
+import RDFSink
 import LX
 
 
@@ -149,6 +150,9 @@ def addLXFormula(store, context, lxFormula, terms={}):
 
 
 # $Log$
-# Revision 1.1  2002-10-03 16:15:51  sandro
+# Revision 1.2  2002-11-24 03:12:02  timbl
+# base can be None in uripath:refTo
+#
+# Revision 1.1  2002/10/03 16:15:51  sandro
 # code moved out of cwm's llyn.py
 #
