@@ -1,0 +1,21 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+<> dc:description """functional, i.e. unambiguous, properties""",
+ "$Id$".
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+@prefix ont: <http://www.daml.org/2001/03/daml+oil#>.
+
+#@prefix ont: <http://www.w3.org/2002/07/owl>.
+
+@prefix : <#>.
+
+this log:forAll :X, :Y, :Z, :P.
+
+{ :P a ont:UnambiguousProperty.
+  :X :P :Y.
+  :Z :P :Y.
+} log:implies { :X = :Z }.
+
+
