@@ -1,0 +1,243 @@
+@prefix : <xmlSchemaComponents.rdf#>. #@@
+@prefix xu: <util@@#>. #@@
+
+@prefix r: <bogus@@#>.
+
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xs: <http://www.w3.org/2001/XMLSchema> .
+@prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
+    
+
+:TODO :includes {
+    :a-annotation s:range :Annotation.
+    :ag-annotation s:range :Annotation.
+    :amg-annotation s:range :Annotation;
+	a xu:OptionalProperty.
+    :annotations s:range :Annotation. #@@ set of.
+    :ct-annotations s:range :Annotation. #@@ set of
+    :e-annotation a xu:OptionalProperty, ont:UniqueProperty;
+	s:range :Annotation.
+    :mg-annotation a xu:OptionalProperty, ont:UniqueProperty;
+	s:range :Annotation.
+    :n-annotation a xu:OptionalProperty, ont:UniqueProperty;
+	s:range :Annotation.
+    :rc-annotation a xu:OptionalProperty, ont:UniqueProperty;
+	s:range :Annotation.
+    :st-annotation a xu:OptionalProperty, ont:UniqueProperty;
+	s:range :Annotation.
+    :w-annotation a xu:OptionalProperty, ont:UniqueProperty;
+	s:range :Annotation.
+}.    
+    
+    
+    
+
+
+    :a-name s:range xu:NCName.
+    
+    :a-scope s:range [
+      ont:unionOf ( [ont:oneOf (:global)]
+                    :Complex_Type_Definition)
+      ].
+    
+    :a-simple_type_definition s:range :Simple_Type_Definition.
+    
+    :a-target_namespace  s:range xu:NSName;
+	a xu:AbsentProperty. #@@ { :anElt xu:hasNo :a-target_namespace }
+    
+    :a-value_constraint a xu:OptionalProperty;
+         s:range [
+           xu:pairA xu:Value;
+           xu:pairB [ ont:oneOf (:default :fixed) ]
+         ].
+    
+    :ag-attribute_declarations s:range :Attribute_Use. #@@set of?
+
+    
+    :ag-attribute_wildcard s:range :Wildcard;
+	a xu:OptionalProperty.
+    
+    :ag-name s:range xu:NCName.
+    
+    :ag-target_namespace  s:range xu:NSName;
+	a xu:AbsentProperty.
+
+    :application_information s:range xu:Element. #@@xc: sequence of.
+    
+    :attribute s:range :Attribute_Declaration.
+    
+    :attribute_declarations s:range :Attribute_Declaration. #@@ set of
+    
+    :attribute_group_definitions s:range :Attribute_Group_Definition. #@@set of
+    
+    :attributes s:range xu:AttributeInfoItem. #@@ sequence of
+    
+    :au-value_constraint #@@
+         s:comment """Optional.  A pair
+consisting of a value and one of default, fixed.""".
+    
+    :c-name s:range xu:NCName.
+    
+    :c-target_namespace  s:range xu:NSName;
+	a xu:AbsentProperty.
+    
+    :class_exemplar a xu:OptionalProperty, xu:UniqueProperty;
+	s:range :Element_Declaration.
+    
+    :compositor s:range [ ont:oneOf (:all :choice :sequence)].
+    
+    :content_type #@@
+         s:comment """One of empty, a simple type definition or a pair
+consisting of a content model (I.e. a ) and one of mixed, element-only.
+   """.
+    
+    :ct-abstract s:range xu:Boolean.
+    
+    :ct-attribute_declarations s:range :Attribute_Use. #@@ set of
+    
+    :ct-attribute_wildcard a xu:OptionalProperty, ont:UniqueProperty;
+	s:range :Wildcard.
+    
+    :ct-base_type_definition #@@
+         s:comment """
+    Either a simple type definition or a complex type definition.
+   """.
+    
+    :ct-exact
+         s:comment """
+    A subset of {extension, restriction}.
+   """. #@@
+    
+    :ct-final s:comment """
+    A subset of {extension, restriction}.
+   """. #@@
+    
+    :ct-name s:range xu:NCName.
+    
+    :ct-target_namespace  s:range xu:NSName;
+	a xu:AbsentProperty.
+    
+    :derivation_method s:range [ ont:oneOf (:extension :restriction) ].
+    
+    :e-abstract s:range xu:Boolean.
+    
+    :e-exact s:range [ xu:subSetOf (:substitution :extension :restriction)].
+	 #@@hmm... subSetOf -> PowerSetOf?
+    
+    :e-final s:range [ xu:subSetOf (:extension :restriction) ].
+    
+    :e-name s:range xu:NCName.
+    
+    :e-scope a xu:OptionalProperty, ont:UniqueProperty;
+         s:comment """Optional.  Either global or a complex type
+definition.""".#@@
+    
+    :e-target_namespace  s:range xu:NSName;
+	a xu:AbsentProperty.
+    
+    :e-value_constraint a xu:OptionalProperty;
+         s:comment """Optional.  A
+pair consisting of a value and one of default, fixed.""". #@@
+    
+    :element_declarations s:range :Element_Declaration. #@@ set of
+    
+    :facets
+         s:comment """A set of constraining
+facets.""". #@@
+    
+    :fields #@@
+         s:comment """
+    A non-empty list of restricted XPath () expressions.""".
+    
+    :fundamental_facets
+         s:comment """A set of
+fundamental facets.""". #@@
+    
+    :identity-constraint_definitions s:range :Identity-constraint_Definition. #@@ set of
+    
+    :identity-constraint_name s:range [ont:oneOf (:key :keyref :unique )].
+    
+    :mg-name s:range xu:NCName.
+    
+    :mg-target_namespace  s:range xu:NSName;
+	a xu:AbsentProperty.
+    
+    :model_group s:range :Model_Group.
+    
+    :model_group_definitions s:range :Model_Group_Definition. #@@set of
+    
+    :n-name s:range xu:NCName.
+    
+    :n-target_namespace  s:range xu:NSName;
+	a xu:AbsentProperty.
+    
+    :namespace_constraint s:comment """
+    One of any; a pair of not and a namespace name
+or absent; or a set whose
+members are either namespace names or absent.
+   """. #@@
+    
+    :nillable s:range xu:Boolean.
+    
+    :notation_declarations s:range :Notation_Declaration. #@@ set of
+    
+    :p-max_occurs
+         s:comment """Either a non-negative integer
+or unbounded.""". #@@
+    
+    :p-min_occurs
+         s:comment """A non-negative
+integer.""". #@@
+    
+    :particles s:range :Particle. #@@ list of
+    
+    :process_contents s:range [ ont:oneOf (:skip :lax :strict) ].
+    
+    :public_identifier s:range xu:PublicIdentifier. #@@barnacle
+    
+    :referenced_key
+         s:comment """
+    Required if @@ is keyref, forbidden
+otherwise.  An identity-constraint definition with 
+equal to key or unique.
+   """. #@@
+    
+    :required s:range xu:Boolean.
+    
+    :selector
+         s:comment """
+    A restricted XPath () expression.""". #@@
+    
+    :st-base_type_definition s:range :Simple_Type_Definition.
+#@@which may be the simple ur-type definition.
+    
+    :st-final s:range [ xu:subSetOf (:extension :list :restriction :union) ].
+    
+    :st-name s:range xu:NCName.
+    
+    :st-target_namespace  s:range xu:NSName;
+	a xu:AbsentProperty.
+    
+    :system_identifier a xu:OptionalProperty;
+	s:range xu:URIReference;
+         s:comment """
+    Optional if @@ is present.  A URI reference.
+   """.
+    
+    :term
+         s:comment "One of a model group, a wildcard, or an  element declaration.". #@@
+    
+    :type_definition
+         s:comment """Either a simple type
+definition or a complex type definition.""". #@@
+    
+    :type_definitions  s:range :Complex_Type_Definition.
+	#@@"A set of named simple and complex type definitions."
+    
+    :user_information s:range xu:ElementInfoItem. #@@ sequence of
+    
+    :variety s:range [ ont:oneOf (:atomic :list :union) ].
+	#@@ atomic, list, union further props
+
+    
+

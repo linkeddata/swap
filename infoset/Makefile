@@ -50,8 +50,13 @@ xmlContent-diagram.rdf: $(INFS2) $(PD)rdf2dot.xsl
 # E Schema Components Diagram (non-normative)
 # http://www.w3.org/TR/xmlschema-1/#component-diagram
 
+xmlSchemaComponents: xmlSchemaComponents-diagram.svg xmlSchemaComponents-diagram.ps
+
 xmlSchemaComponents.rdf: structures.xml grokSchema.xsl
 	$(XSLTPROC) --novalid grokSchema.xsl structures.xml >$@
+
+xmlSchemaComponents-diagram.rdf: xmlSchemaComponents.rdf style.n3 xmlSchemaRanges.n3
+	$(PYTHON) $(CWM) style.n3 xmlSchemaRanges.n3 --rdf xmlSchemaComponents.rdf --base=bogus: --think --rdf --bySubject > $@
 
 
 #ends

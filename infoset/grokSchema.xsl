@@ -35,15 +35,17 @@ $Id$</address>
 
   <xsl:variable name="componentID" select='@ref'/>
 
-  <s:Class r:ID='{$componentID}'>
-    <s:label><xsl:value-of select='@name'/></s:label>
-  </s:Class>
+  <xsl:if test='not($componentID = "intro-terminology")'>
+    <s:Class r:ID='{$componentID}'>
+      <s:label><xsl:value-of select='@name'/></s:label>
+    </s:Class>
 
-  <xsl:for-each select='proplist/propdef'>
-    <xsl:call-template name='eachProp'>
-      <xsl:with-param name="domain" select='$componentID'/>
-    </xsl:call-template>
-  </xsl:for-each>
+    <xsl:for-each select='proplist/propdef'>
+      <xsl:call-template name='eachProp'>
+        <xsl:with-param name="domain" select='$componentID'/>
+      </xsl:call-template>
+    </xsl:for-each>
+  </xsl:if>
 
 </xsl:template>
 
@@ -53,8 +55,8 @@ $Id$</address>
   <xsl:message>@@found property defintion: <xsl:value-of select='@name'/></xsl:message>
 
   <r:Property r:ID='{@id}'>
-    <s:label><xsl:value-of select='@name'/></s:label>
-    <s:comment><xsl:value-of select='.'/></s:comment>
+    <s:label><xsl:value-of select='normalize-space(@name)'/></s:label>
+    <s:comment><xsl:value-of select='normalize-space(.)'/></s:comment> <!-- @@copy nested XML markup? -->
     <s:domain r:resource='{concat("#", $domain)}'/>
   </r:Property>
 
@@ -67,7 +69,10 @@ $Id$</address>
 
 <!--
 $Log$
-Revision 1.1  2002-07-09 17:38:50  connolly
+Revision 1.2  2002-07-09 21:12:44  connolly
+checkpoint: XML Schema diagram sorta works
+
+Revision 1.1  2002/07/09 17:38:50  connolly
 starting to work
 
 -->

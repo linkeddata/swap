@@ -1,0 +1,609 @@
+%!PS-Adobe-2.0
+%%Creator: dot version 1.7.5 (Mon Jun 25 21:31:03 MDT 2001)
+%%For: (connolly) Dan Connolly,,+1-913-491-0501,
+%%Title: id2592400
+%%Pages: (atend)
+%%BoundingBox: 36 36 1511 462
+%%EndComments
+%%BeginProlog
+save
+/DotDict 200 dict def
+DotDict begin
+
+%%BeginResource: procset
+/coord-font-family /Times-Roman def
+/default-font-family /Times-Roman def
+/coordfont coord-font-family findfont 8 scalefont def
+
+/InvScaleFactor 1.0 def
+/set_scale {
+	dup 1 exch div /InvScaleFactor exch def
+	dup scale
+} bind def
+
+% styles
+/solid { } bind def
+/dashed { [9 InvScaleFactor mul dup ] 0 setdash } bind def
+/dotted { [1 InvScaleFactor mul 6 InvScaleFactor mul] 0 setdash } bind def
+/invis {/fill {newpath} def /stroke {newpath} def /show {pop newpath} def} bind def
+/bold { 2 setlinewidth } bind def
+/filled { } bind def
+/unfilled { } bind def
+/rounded { } bind def
+/diagonals { } bind def
+
+% hooks for setting color 
+/nodecolor { sethsbcolor } bind def
+/edgecolor { sethsbcolor } bind def
+/graphcolor { sethsbcolor } bind def
+/nopcolor {pop pop pop} bind def
+
+/beginpage {	% i j npages
+	/npages exch def
+	/j exch def
+	/i exch def
+	/str 10 string def
+	npages 1 gt {
+		gsave
+			coordfont setfont
+			0 0 moveto
+			(() show i str cvs show (,) show j str cvs show ()) show
+		grestore
+	} if
+} bind def
+
+/set_font {
+	findfont exch
+	scalefont setfont
+} def
+
+% draw aligned label in bounding box aligned to current point
+% alignfactor tells what fraction to place on the left.
+% -.5 is centered.
+/alignedtext {			% text labelwidth fontsz alignfactor
+	/alignfactor exch def
+	/fontsz exch def
+	/width exch def
+	/text exch def
+	gsave
+		% even if node or edge is dashed, don't paint text with dashes
+		[] 0 setdash
+		currentpoint newpath moveto
+		text stringwidth pop
+		alignfactor mul fontsz -.3 mul rmoveto
+		text show
+	grestore
+} def
+
+/boxprim {				% xcorner ycorner xsize ysize
+		4 2 roll
+		moveto
+		2 copy
+		exch 0 rlineto
+		0 exch rlineto
+		pop neg 0 rlineto
+		closepath
+} bind def
+
+/ellipse_path {
+	/ry exch def
+	/rx exch def
+	/y exch def
+	/x exch def
+	matrix currentmatrix
+	newpath
+	x y translate
+	rx ry scale
+	0 0 1 0 360 arc
+	setmatrix
+} bind def
+
+/endpage { showpage } bind def
+
+/layercolorseq
+	[	% layer color sequence - darkest to lightest
+		[0 0 0]
+		[.2 .8 .8]
+		[.4 .8 .8]
+		[.6 .8 .8]
+		[.8 .8 .8]
+	]
+def
+
+/setlayer {/maxlayer exch def /curlayer exch def
+	layercolorseq curlayer get
+	aload pop sethsbcolor
+	/nodecolor {nopcolor} def
+	/edgecolor {nopcolor} def
+	/graphcolor {nopcolor} def
+} bind def
+
+/onlayer { curlayer ne {invis} if } def
+
+/onlayers {
+	/myupper exch def
+	/mylower exch def
+	curlayer mylower lt
+	curlayer myupper gt
+	or
+	{invis} if
+} def
+
+/curlayer 0 def
+
+%%EndProlog
+%%BeginSetup
+14 default-font-family set_font
+1 setmiterlimit
+% /arrowlength 10 def
+% /arrowwidth 5 def
+
+% make sure pdfmark is harmless for PS-interpreters other than Distiller
+/pdfmark where {pop} {userdict /pdfmark /cleartomark load put} ifelse
+% make '<<' and '>>' safe on PS Level 1 devices
+/languagelevel where {pop languagelevel}{1} ifelse
+2 lt {
+    userdict (<<) cvn ([) cvn load put
+    userdict (>>) cvn ([) cvn load put
+} if
+
+%%EndResource
+%%EndSetup
+%%Page: 1 1
+%%PageBoundingBox: 36 36 1511 462
+%%PageOrientation: Portrait
+gsave
+35 35 1476 427 boxprim clip newpath
+36 36 translate
+0 0 1 beginpage
+0 0 translate 0 rotate
+[ /CropBox [36 36 1511 462] /PAGES pdfmark
+0.000 0.000 0.000 graphcolor
+14.00 /Times-Roman set_font
+gsave 10 dict begin
+8 213 moveto (XML Infoset $Date$) 245 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Annotation
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+66 127 42 18 ellipse_path
+fill
+66 127 42 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+66 128 moveto (Annotation) 63 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+1110 373 70 18 ellipse_path
+fill
+1110 373 70 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+1110 374 moveto (Attribute Declaration) 119 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+1389 373 77 18 ellipse_path
+fill
+1389 373 77 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+1389 374 moveto (Simple Type Definition) 133 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition
+newpath 1180 373 moveto
+1217 373 1263 373 1303 373 curveto
+stroke
+newpath 1302 371 moveto
+1312 373 lineto
+1302 376 lineto
+closepath
+fill
+gsave 10 dict begin
+1246 382 moveto (type definition) 82 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Simple_Type_Definition
+newpath 1439 387 moveto
+1458 398 1442 409 1389 409 curveto
+1342 409 1324 400 1334 390 curveto
+stroke
+newpath 1329 390 moveto
+1339 387 lineto
+1332 394 lineto
+closepath
+fill
+gsave 10 dict begin
+1389 418 moveto (base type definition) 110 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Group_Definition
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+390 291 85 18 ellipse_path
+fill
+390 291 85 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+390 292 moveto (Attribute Group Definition) 150 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Use
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+785 343 48 18 ellipse_path
+fill
+785 343 48 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+785 344 moveto (Attribute Use) 75 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Group_Definition -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Use
+newpath 446 305 moveto
+463 308 481 312 494 314 curveto
+558 322 665 332 729 338 curveto
+stroke
+newpath 728 335 moveto
+738 339 lineto
+728 340 lineto
+closepath
+fill
+gsave 10 dict begin
+584 342 moveto (attribute uses) 74 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Wildcard
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+785 239 36 18 ellipse_path
+fill
+785 239 36 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+785 240 moveto (Wildcard) 51 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Group_Definition -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Wildcard
+newpath 468 284 moveto
+532 278 619 269 674 262 curveto
+692 259 720 254 743 249 curveto
+stroke
+newpath 742 247 moveto
+752 247 lineto
+743 252 lineto
+closepath
+fill
+gsave 10 dict begin
+584 290 moveto (attribute wildcard) 98 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Use -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration
+newpath 832 347 moveto
+886 353 973 360 1035 366 curveto
+stroke
+newpath 1034 363 moveto
+1044 367 lineto
+1034 368 lineto
+closepath
+fill
+gsave 10 dict begin
+959 373 moveto (attribute declaration) 112 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+390 230 82 18 ellipse_path
+fill
+390 230 82 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+390 231 moveto (Complex Type Definition) 144 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Use
+newpath 473 229 moveto
+536 230 621 232 674 239 curveto
+686 240 684 261 692 269 curveto
+708 284 735 306 756 321 curveto
+stroke
+newpath 757 319 moveto
+763 327 lineto
+754 322 lineto
+closepath
+fill
+gsave 10 dict begin
+584 248 moveto (attribute uses) 74 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Wildcard
+newpath 441 216 moveto
+454 212 467 209 476 206 curveto
+483 204 488 198 494 198 curveto
+554 195 615 189 674 198 curveto
+695 201 726 213 750 223 curveto
+stroke
+newpath 751 221 moveto
+759 227 lineto
+749 225 lineto
+closepath
+fill
+gsave 10 dict begin
+584 207 moveto (attribute wildcard) 98 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+390 142 68 18 ellipse_path
+fill
+390 142 68 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+390 143 moveto (Element Declaration) 115 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration
+newpath 434 156 moveto
+451 167 436 178 390 178 curveto
+349 178 333 169 341 160 curveto
+stroke
+newpath 337 160 moveto
+346 156 lineto
+340 164 lineto
+closepath
+fill
+gsave 10 dict begin
+390 187 moveto (substitution group affiliation) 160 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Identity-constraint_Definition
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+785 135 92 18 ellipse_path
+fill
+785 135 92 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+785 136 moveto (Identity-constraint Definition) 164 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Identity-constraint_Definition
+newpath 458 141 moveto
+520 140 612 138 683 137 curveto
+stroke
+newpath 683 135 moveto
+693 137 lineto
+683 140 lineto
+closepath
+fill
+gsave 10 dict begin
+584 149 moveto (identity-constraint definitions) 166 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+785 81 48 18 ellipse_path
+fill
+785 81 48 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+785 82 moveto (Model Group) 75 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Particle
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+1110 81 31 18 ellipse_path
+fill
+1110 81 31 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+1110 82 moveto (Particle) 42 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Particle
+newpath 833 81 moveto
+898 81 1010 81 1070 81 curveto
+stroke
+newpath 1068 79 moveto
+1078 81 lineto
+1068 84 lineto
+closepath
+fill
+gsave 10 dict begin
+959 90 moveto (particles) 47 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group_Definition
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+390 88 78 18 ellipse_path
+fill
+390 88 78 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+390 89 moveto (Model Group Definition) 136 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group_Definition -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group
+newpath 469 87 moveto
+545 86 659 83 728 82 curveto
+stroke
+newpath 727 80 moveto
+737 82 lineto
+727 85 lineto
+closepath
+fill
+gsave 10 dict begin
+584 95 moveto (model group) 71 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Notation_Declaration
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+390 34 69 18 ellipse_path
+fill
+390 34 69 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+390 35 moveto (Notation Declaration) 117 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+66 181 32 18 ellipse_path
+fill
+66 181 32 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+66 182 moveto (Schema) 44 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Declaration
+newpath 70 199 moveto
+78 229 97 286 126 298 curveto
+366 395 638 376 896 387 curveto
+938 388 981 389 1022 387 curveto
+1029 386 1037 385 1046 384 curveto
+stroke
+newpath 1043 382 moveto
+1053 383 lineto
+1043 387 lineto
+closepath
+fill
+gsave 10 dict begin
+584 390 moveto (attribute declarations) 117 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Attribute_Group_Definition
+newpath 79 198 moveto
+91 213 110 234 126 240 curveto
+174 256 253 270 311 280 curveto
+stroke
+newpath 309 277 moveto
+319 281 lineto
+309 282 lineto
+closepath
+fill
+gsave 10 dict begin
+206 284 moveto (attribute group definitions) 146 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Complex_Type_Definition
+newpath 95 189 moveto
+106 192 118 194 126 196 curveto
+175 204 252 213 310 220 curveto
+stroke
+newpath 308 217 moveto
+318 221 lineto
+308 222 lineto
+closepath
+fill
+gsave 10 dict begin
+206 226 moveto (type definitions) 87 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Element_Declaration
+newpath 98 177 moveto
+149 170 250 159 319 150 curveto
+stroke
+newpath 318 148 moveto
+328 149 lineto
+318 153 lineto
+closepath
+fill
+gsave 10 dict begin
+206 182 moveto (element declarations) 115 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Model_Group_Definition
+newpath 90 169 moveto
+97 165 104 161 108 157 curveto
+117 150 116 133 126 131 curveto
+176 119 255 106 313 98 curveto
+stroke
+newpath 311 96 moveto
+321 97 lineto
+311 101 lineto
+closepath
+fill
+gsave 10 dict begin
+206 140 moveto (model group definitions) 134 14.00 -0.50 alignedtext
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#key-schema -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlSchemaComponents.rdf#Notation_Declaration
+newpath 90 169 moveto
+97 166 104 163 108 157 curveto
+122 134 102 89 126 79 curveto
+174 59 256 47 316 40 curveto
+stroke
+newpath 314 38 moveto
+324 39 lineto
+314 43 lineto
+closepath
+fill
+gsave 10 dict begin
+206 88 moveto (notation declarations) 116 14.00 -0.50 alignedtext
+end grestore
+endpage
+grestore
+%%PageTrailer
+%%EndPage: 1
+%%Trailer
+%%Pages: 1
+end
+restore
+%%EOF

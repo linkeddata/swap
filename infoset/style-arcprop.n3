@@ -11,6 +11,7 @@
 @prefix is: <http://www.w3.org/2001/05id/infoset#> .
 @prefix xc: <xmlContent#>.
 @prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix sws: <http://www.w3.org/2001/03swell/finiteSet#>.
 
 # NOTE rdf2dot.xsl needs namespace URIs absolutized @@
 
@@ -29,10 +30,10 @@ this log:forAll :n1, :n2, :p, :s, :s2, :CR, :CD.
 { :n1 s:label :s } log:implies { :n1 dot:label :s }.
 s:Class s:label "Class".
 
-{ :n1 rdfs:subClassOf is:InformationItem; rdfs:label :s }
+{ :n1 s:subClassOf is:InformationItem; s:label :s }
    log:implies { :n1 dot:shape "diamond" }.
 
-{ :CR s:subClassOf rdfs:Literal; s:label :s. }
+{ :CR s:subClassOf s:Literal; s:label :s. }
   log:implies { :CR dot:shape "box" }.
 
 { :p s:domain :CD; s:range :CR; s:label :s. }
