@@ -15,6 +15,8 @@ TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/ql/detail
 
 TARNAME = cwm-0.7.3-plus
 
+TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3
+
 .SUFFIXES: .html .py .g .rdf .n3
 
 .g.py:
@@ -49,9 +51,9 @@ package: math.rdf maths.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf
 # Can't make dependencies on *.py :-(
 
 # cwm.py notation3.py llyn.py  RDFSink.py toXML.py
-cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) tested filelist
+cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
 	cvs -q update
-	tar -czf  cwm.tar.gz $(HTMLS) $(SOURCES) $(TESTS) `cat test/testfilelist | sed -e 's/^/test\//'`
+	tar -czf  cwm.tar.gz $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) `cat test/testfilelist | sed -e 's/^/test\//'`
 	rm -rf cwm
 	mkdir cwm
 	cd cwm && tar -xzf ../cwm.tar.gz
