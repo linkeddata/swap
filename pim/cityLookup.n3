@@ -1,0 +1,58 @@
+# notes as this was developed...
+# http://ilrt.org/discovery/chatlogs/rdfig/2003-03-10#T22-49-48
+#
+# $Id$
+# see log at end
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+
+@prefix map: <http://www.w3.org/2000/10/swap/pim/earthMap#>.
+@prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#>.
+
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+
+
+@prefix      : <cityLookup#>.
+@prefix cityl: <cityLookup#>.
+
+# http://www.wunderground.com/cgi-bin/findweather/getForecast?query=Budapest%2C+Hungary
+
+{
+ ?CITY k:inRegion ?AREA.
+
+ ?PG log:uri [ is str:concatenation of (
+  "http://www.wunderground.com/cgi-bin/findweather/getForecast?query="
+  [ is map:cityName of ?CITY ]
+  "%2C"
+  [ is map:countryName of ?AREA ]
+ )].
+}
+  log:implies { ?CITY :weatherPage ?PG }.
+
+
+#http://www.vicinity.com/myblast/map.mb?CMD=LFILL&&CT=47.43000031:19.18000031:90000&
+
+{
+ ?CITY :weatherPage [ log:content ?TXT ].
+ (?TXT "CMD=LFILL&&CT=([^:]+):") str:scrape ?LAT.
+ (?TXT "CMD=LFILL&&CT=[^:]+:([^:]+):") str:scrape ?LON.
+} => { ?CITY geo:lat ?LAT; geo:long ?LON }.
+
+
+# test case
+
+[ map:cityName "Budapest";
+  k:inRegion [ map:countryName "Hungary" ] ].
+
+#@@
+
+{ ?X log:uri "http://example#foo" } log:implies { :t1 a :OK }.
+{ ?X log:uri [ is str:concatenation of
+    ("http://example#" "foo")] } log:implies { :t2 a :OK }.
+
+
+# $Log$
+# Revision 1.1  2003-03-10 22:51:38  connolly
+# got one case to work
+#
