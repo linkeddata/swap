@@ -1,10 +1,19 @@
+#makeReport.n3 
+#
+#An n3 file that takes the output of tester.py, which contains a wealth of information about 
+# n3 parser tests and what passes what, and makes a pretty html table of it.
+#
+
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix string: <http://www.w3.org/2000/10/swap/string#> .
 @prefix n3test: <http://www.w3.org/2004/11/n3test#> .
-@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#>.
+@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#>. # for md5
+@prefix time: <http://www.w3.org/2000/10/swap/time#>.  # for localTime
 
 
-
+#
+#We start out with the header of the document. None of this is ever different.
+#
 "A" log:outputString
 """<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
@@ -22,19 +31,29 @@ pre {	border : 1px solid black;
 	width: 60%; 
 	background-color: grey; }
   </style>
-  <title>N3 test result report:</title>
+  <title>N3 test result report:
 """ .
 
+#
+# When I ran the file .
+{"" time:localTime ?x} log:implies
+{"AB" log:outputString ?x} .
+
+#
+# The head of the page. This is the end of fixed stuff
 "B" log:outputString
 """
+  </title>
  </head>
  <body>
   <h1>
-This is a test for now
+Notation3 Parser Test Results
   </h1>
 """ .
 
-
+#
+#The beginning of the table, including its first two column headings
+#
 "C" log:outputString
 """
   <table border="1">
@@ -51,11 +70,17 @@ Class
      </td>
 """ .
 
+#
+# A column for every parser.
+#
 {?parser a n3test:N3Parser; n3test:command ?y . 
 	("D" ?y) string:concatenation ?x . 
 	("<td class=\"pretty\">" ?y "</td>") string:concatenation ?z} log:implies
 {?x log:outputString ?z} .
 
+#
+# The end of the table header, and beginning of the table body
+#
 "E" log:outputString
 """
     <tr>
@@ -63,6 +88,9 @@ Class
    <tbody>
 """ .
 
+#
+#A row for every file. We will have to be careful to sort by file, then command
+#
 {?file a n3test:Input; log:uri ?uri;
 	n3test:description ?a;
 	n3test:expected ?b .
@@ -84,6 +112,9 @@ Class
 {?x log:outputString ?z .
  ?y log:outputString "</tr>"} .
 
+#
+# The rule if there is no reference file given, yet the parser succeeded
+#
 {?parser a n3test:N3Parser; 
 	n3test:command ?y; 
 	n3test:parses ?file .
@@ -92,6 +123,9 @@ Class
 	("""<td class="partial">&nbsp;</td>""") string:concatenation ?z . } log:implies
 {?x log:outputString ?z } .
 
+#
+# The rule if the parser passed.
+#
 {?parser a n3test:N3Parser; 
 	n3test:command ?y; 
 	n3test:parses ?file .
@@ -104,6 +138,10 @@ Class
 	("""<td class="pass">&nbsp;</td>""") string:concatenation ?z . } log:implies
 {?x log:outputString ?z } .
 
+#
+# The rule if the parser passed, but the reference file does not match the output
+# A link is made to the diff, using md5
+#
 {?parser a n3test:N3Parser; 
 	n3test:command ?y; 
 	n3test:parses ?file .
@@ -118,6 +156,9 @@ Class
 	("<td class=\"partial\"><a href=\"#a" ?c "\">diff</a></td>") string:concatenation ?z . } log:implies
 {?x log:outputString ?z } .
 
+#
+#Finally, if the parser crashed on the file
+#
 {?parser a n3test:N3Parser; 
 	n3test:command ?y; 
 	n3test:failsParsing ?file .
@@ -125,12 +166,17 @@ Class
 	("""<td class="failure">&nbsp</td>""") string:concatenation ?z . } log:implies
 {?x log:outputString ?z } .
 
+# The end of the table
+#
 "R" log:outputString
 """
    </tbody>
   </table>
 """ .
 
+#
+# The diffs. They were cleaned up for inclusion in html already.
+#
 {?parser a n3test:N3Parser;  
 	n3test:parses ?file .
 	?file ?parser ?q .
@@ -146,6 +192,9 @@ Class
 	("<div class=\"diff\" id=\"a" ?c "\"> diff from " ?n " to " ?o " <pre>" ?diff "</pre></div>") string:concatenation ?z . } log:implies
 {?x log:outputString ?z } .
 
+#
+# The end of the file
+# 
 "ZZZZZZ" log:outputString
 """
  </body>
