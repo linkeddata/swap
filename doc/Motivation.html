@@ -14,9 +14,9 @@
 
 <h1>Motivations for N3</h1>
 
-<p>The N3 language  -- and the SWAP code such as Cwm which expeiments with it
-and  demonsrtates it -- were motivated by a desire to show the semantic web
-working in a practical, tryable prototype, with the  minimum of fuss and
+<p>The N3 language -- and the SWAP code such as Cwm which expeiments with it
+and demonsrtates it -- were motivated by a desire to show the semantic web
+working in a practical, tryable prototype, with the minimum of fuss and
 clutter. Mimumum fuss includes an absense of extra features: this suggests a
 tactic of reusing existing features as far as possible - to push the bounds
 of one style or pattern until it is demonstrably unrerasonable, (and then to
@@ -32,18 +32,18 @@ applications and other agents acrosss the world.</p>
 
 <p>The first task of N3 was to allow data - pure facts -to be written down
 simply and easily in a text file -- or in an IRC chat channel, for that
-matter.    RDF had evolved as a way of expressing any data, be it tables,
-trees or mixtures of the above in a circles and arrows, but the XML format
-was too verbose for use in conversaion, on a whiteboard.</p>
+matter. RDF had evolved as a way of expressing any data, be it tables, trees
+or mixtures of the above in a circles and arrows, but the XML format was too
+verbose for use in conversaion, on a whiteboard.</p>
 
 <p>The ";" and "," syntaxes followed from an observation that often many
 values were given for the same predicate on the same subject, and much data
-was given for the same subject.  </p>
+was given for the same subject.</p>
 
 <p>Most of the informatuion in most real systems is data (although the
-balance between data and rules varies widely).  Even the ontology layer (OWL)
-is expressable using the data langauge.  So RDF schemas and ontologies
-(unlike SGML and XML DTDs) are expressed in the same language.</p>
+balance between data and rules varies widely). Even the ontology layer (OWL)
+is expressable using the data langauge. So RDF schemas and ontologies (unlike
+SGML and XML DTDs) are expressed in the same language.</p>
 
 <p>A goal of N3 was not only to make a concise and usable language for data,
 but also to show how much could be done by using that data language.</p>
@@ -63,8 +63,8 @@ from the data representation language.</p>
 <p>On this Web of information, much of that information is about other
 information. Indeed, the first driver for a common language for data was data
 about information resources (hence the now rather outdated name <em>Resource
-Description Framework</em>). In this environment,  attempts to avoid paradox
-by avoidiung  data refering to data are not going to work. An alternative
+Description Framework</em>). In this environment, attempts to avoid paradox
+by avoidiung data refering to data are not going to work. An alternative
 approach is to embrace quoting - to be able to make comments in one document
 about other documents without imposing any acyclic requirement on the whole
 gobal system.</p>
@@ -79,9 +79,9 @@ actually said and what you would now infer from what it said.</p>
 <h3>Re-use</h3>
 
 <p>The interesting thing about Semantic Web data -- and rules -- is that it
-can be re-used in ways not designed by its originator.  This works better for
+can be re-used in ways not designed by its originator. This works better for
 modular and declarative information than for monolithic or procedurual
-information.  Therefore, N3 is <em>not</em> required to be so much as as
+information. Therefore, N3 is <em>not</em> required to be so much as as
 scripting language (although [1]) as to be able to express rules in a way
 which will make the re-usable out of context.</p>
 
@@ -89,7 +89,7 @@ which will make the re-usable out of context.</p>
 
 <h2>Cwm requirements</h2>
 
-<p>Cwm was designed to show what could be done by webizing  knowledge
+<p>Cwm was designed to show what could be done by webizing knowledge
 representation ideas, implementing as much of the Semantic Web layer cake as
 possible to show (a) that it could be done and (b) what the semantic web was
 about. It is not designed to be particulaly efficient, to scale well for
@@ -97,13 +97,13 @@ large datasets or large rulesets. There are a host of interesting algorithms
 which have been used in existing systems including databases including the
 SQL world, forward and backward chaining inference systems, including Prolog
 all the logic programming world, and KIF and the Knowledge Representation
-world.  The idea is not that the cwm inference engine is special, rather that
-it not:  you can take any inference system and webize it:</p>
+world. The idea is not that the cwm inference engine is special, rather that
+it not: you can take any inference system and webize it:</p>
 <ul>
   <li>Fix the language so that the identifiers use namespaces (or something)
     to actually be URIs;</li>
   <li>Fix the software so that URIs can be used as URIs not just as
-    identifiers but as URIs.  Each URI scheme has different properties and
+    identifiers but as URIs. Each URI scheme has different properties and
     making the software aware of them and capable of implementing them makes
     it a true Semantic Web application, not just a Semantic application.</li>
 </ul>
@@ -113,17 +113,15 @@ it not:  you can take any inference system and webize it:</p>
   <li>look up documents on the web;</li>
   <li>look inside semantic web documents on eth web without beliveing
   them;</li>
-  <li>create and verify digital signatures of documents.
-    </li>
+  <li>create and verify digital signatures of documents.</li>
 </ul>
+<hr />
 
-    <hr />
-    <p></p>
+<p></p>
 
-    <h2>Footnotes</h2>
-    <p></p>
-  
+<h2>Footnotes</h2>
 
+<p></p>
 
 <p>[1] The Haystack project at MIT/LCS takes an N3-like language and extends
 it to a complete procedural programming language.</p>
