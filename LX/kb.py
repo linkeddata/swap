@@ -385,6 +385,8 @@ class KB(list, pluggable.Store):
                 except ValueError:
                     raise RuntimeError, "Not pure-RDF KB!"
 
+            #print "PreFill-SPO", subj, pred, obj
+
             k = self.nickname(pred)
             
             subjNode = self.nodes.setdefault(subj, LX.nodepath.Node(self, subj))
@@ -403,7 +405,6 @@ class KB(list, pluggable.Store):
         try:
             nick = "_".join(self.ns.inverseLookup(term))
         except KeyError, e:
-            # print "Term: ", term
             raise KeyError(term)
         self.nicknames[term] = nick
         return nick
@@ -416,7 +417,10 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
  
 # $Log$
-# Revision 1.20  2003-09-04 15:23:18  sandro
+# Revision 1.21  2003-09-06 04:49:24  sandro
+# just in debugging comments
+#
+# Revision 1.20  2003/09/04 15:23:18  sandro
 # make load() able to look at the URI, and grok more mime types
 #
 # Revision 1.19  2003/09/04 07:14:12  sandro
