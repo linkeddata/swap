@@ -541,6 +541,8 @@ class SinkParser:
 	    j=i+1
             oldParentContext = self._parentContext
 	    self._parentContext = self._context
+            parentAnonymousNodes = self._anonymousNodes
+            self._anonymousNodes = {}
             if subj is None: subj = self._store.newFormula()
             self._context = subj
             
@@ -555,6 +557,7 @@ class SinkParser:
                 j = self.directiveOrStatement(str,i)
                 if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected statement or '}'")
 
+            self._anonymousNodes = parentAnonymousNodes
             self._context = self._parentContext
 	    self._parentContext = oldParentContext
             res.append(subj.close())   # Must not actually use the formula until it has been closed

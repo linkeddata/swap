@@ -1,25 +1,8 @@
+@prefix : <#> .
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
 
+@forSome :x .
 
-@prefix log: <http://www.w3.org/2000/10/swap/log#> .
-@prefix : <#>.
-
-@forAll :x.
-
-
-:me <#hairColor> "red".
-<#something> <#suggests> { :me <#height> "6foot2inches" }.
-
-
-
-{ :x <#hairColor> "red".
-  <#something> <#suggests> { :x <#height> "6foot2inches" }
-}
-  log:implies { :x a :Found }.
-
-#  { @forSome :y.
-#    :y <#hairColor> "red".
-#  <#something> <#suggests> { :x <#height> "6foot2inches" }
-#}
-#  log:implies { :x a :Found2 }.
-
-  
+_:a a :Thing1 .
+:x log:notEqualTo _:a .
+{_:a log:equalTo :x} log:implies {<> a :Success} .

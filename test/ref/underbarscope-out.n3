@@ -1,18 +1,16 @@
      @prefix : <#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    @forAll :x .
+     @forSome :x .
     
-    :me     a :Found;
-         :hairColor "red" .
+    <>     a :Success .
     
-    :something     :suggests {:me     :height "6foot2inches" .
-        } .
+    :x     log:notEqualTo  [
+             a :Thing1 ] .
     {
-        :something     :suggests {:x     :height "6foot2inches" .
-            } .
-        :x     :hairColor "red" .
         
-        }     log:implies {:x     a :Found .
+          [      log:equalTo :x ].
+        
+        }     log:implies {<>     a :Success .
         } .
     
