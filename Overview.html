@@ -47,15 +47,50 @@ out the whole tree to develop.</p>
 <p>Set up an alias (.bat file, etc) to make the cwm command  cwm="python
 /wherever/cwm.py"</p>
 
-<h3>Ontologies</h3>
+<h3>Other utilities in python</h3>
+<ul>
+  <li>onnvert Quicken(tm) dat ainto RDF</li>
+</ul>
 
-<p>See also cwm built-ins</p>
+<h2>Ontologies</h2>
+
+<p>These are lists of RDF terms (properties and classes) which we have used
+for putting together test and demo applications, and organizing our dailiy
+lives.  Most are defined in n3, many have xml versions. If you don't have it
+in XML, use cwm  to transcode it.</p>
+
+<h3>cwm built-ins</h3>
+
+<p>For cwm these are magic - these are properties which cwm can infer or
+which allow cwm to infer things. They are like built-in functions in a
+programming language.  Not every N3 processor handles the same built-ins.</p>
 <ul>
   <li>Logic - as used by cwm</li>
   <li>String - built in</li>
   <li>Math - builtin</li>
-  <li>FVXVXVcrypto </li>
+  <li>crypto</li>
 </ul>
+
+<h3>Utility ontologies</h3>
+<ul>
+  <li><a href="pim/contact.n3">contact information - address book
+    etc</a><a></a></li>
+  <li><a href="pim/doc.n3">document management - versioning
+  etc</a><a></a></li>
+  <li>circles and arrows diagrams</li>
+  <li>issue tracking</li>
+  <li>organizational structure</li>
+  <li>roadmap project dependencies</li>
+</ul>
+
+<h3>Basic RDF ontologies</h3>
+
+<p>Not here, but things everyone needs</p>
+<ul>
+  <li>The RDF schema vocabulary</li>
+  <li>The DAML+OIL web ontology vocabulary</li>
+</ul>
+<hr>
 
 <h2 id="Motivation">History: Motivation</h2>
 
@@ -97,6 +132,12 @@ persuade him to write web software!</p>
 <ul>
   <li>The RDF Interest group</li>
   <li>#RDFIG irc channel</li>
+</ul>
+
+<p>Acknowledgements</p>
+<ul>
+  <li>Tim Berners-Lee</li>
+  <li>Dan onnolly</li>
 </ul>
 <hr>
 
