@@ -23,8 +23,10 @@ my($dcNS) = "http://purl.org/dc/elements/1.1/";
 my($kNS) = "http://opencyc.sourceforge.net/daml/cyc.daml#";
 my($dtNS) = "http://www.w3.org/2001/XMLSchema#";
 my($tNS) = "http://www.w3.org/2000/10/swap/pim/travelTerms#";
+my($aNS) = "http://www.daml.org/2001/10/html/airport-ont#";
 
 my(%Things);
+my(%AirportCodes) = &airportNames();
 
 &bind("r", $rdfNS);
 &bind("dt", $dtNS); # datatypes
@@ -166,9 +168,15 @@ sub grok{
 	my($dir, $airportName, $st, $hh, $mm, $ap) = ($1, $2, $5, $6, $7, $8);
 	$hh += 12 if $ap eq 'P';
 	$hh = 0 if ($ap eq 'A' && $hh == 12);
-	my($place, $ti);
+	my($place, $ti, $code);
 	$place = the($kNS . "nameString", $airportName, $airportName);
 	makeStatement($place, $rdfNS . "type", $kNS . "Airport-Physical");
+
+	if($code = $AirportCodes{$airportName}){
+	  makeStatement($place, $aNS . "iataCode", '', $code);
+	}else{
+	  die "unknown airport: ", $airportName;
+	}
 
 	$ti = sprintf("%02d:%02d", $hh, $mm);
 	if($dir eq 'LV'){
@@ -285,8 +293,44 @@ sub the{
   return $ret;
 }
 
+sub airportNames{
+  my($data, $ln, %ret);
+  
+  $data = <<EODATA;
+AHO ALGHERO
+BOS BOSTON
+CDG PARIS DE GAULLE
+DCA WASHINGTON REAGAN
+DFW DALLAS FT WORTH
+EWR NEWARK
+FCO ROME FIUMICINO
+LHR LONDON HEATHROW
+MCI KANSAS CITY INTL
+NCE NICE
+ORD CHICAGO OHARE
+PIT PITTSBURGH
+SFO SAN FRANCISCO
+STL ST LOUIS INTL
+YMX MONTREAL DORVALQC
+YVR VANCOUVER BC
+EODATA
+
+    #
+    foreach $ln (split(/\n/, $data)){
+      my($code, $name) = split(/ /, $ln, 2);
+      print STDERR "[$ln] [$code] [$name]\n";
+      $ret{$name} = $code;
+    }
+
+  return %ret;
+}
+
+
 # $Log$
-# Revision 1.4  2002-07-23 23:09:45  connolly
+# Revision 1.5  2002-08-28 20:26:49  connolly
+# moved airport code lookup to grokTravItin.pl; airportNames is now obsolete
+#
+# Revision 1.4  2002/07/23 23:09:45  connolly
 # deal with a little > fluff
 #
 # Revision 1.3  2002/06/12 20:36:15  connolly

@@ -23,6 +23,12 @@ this log:forAll :LAT1, :LON1, :LAT2, :LON2, :NUM, :YMD,
     log:uri [ str:startsWith "http://www.daml.org/cgi-bin/airport?" ] }
  log:implies { :X a :AirportKnownToDAML }.
 
+{ :X apt:iataCode :K.
+  :Y log:uri [ is str:concatenation of
+               ("http://www.daml.org/cgi-bin/airport?" :K) ];
+}
+  log:implies { :Y a apt:Airport; apt:iataCode :K; = :X }.
+
 # we only want to look up certain airports...
 { [ k:toLocation :X ]. }
  log:implies { :X a :InterestingPlace }.
@@ -54,3 +60,11 @@ this log:forAll :LAT1, :LON1, :LAT2, :LON2, :NUM, :YMD,
 }.
 
 
+this log:forAll :P, :Q, :X, :Y.
+
+# same IATA code -> same fromLocation, toLocation
+#special case of UnambiguousProperty and =, perhaps
+apt:iataCode :determines k:fromLocation, k:toLocation.
+{ :P :determines :Q.
+  :X :Q [ :P [ is :P of :Y ] ].
+} log:implies { :X :Q :Y }.

@@ -1,6 +1,8 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 
-<> dc:description """map navigant (sabre?) airport names to IATA-based
+<> dc:description """OBSOLETE!!!""",
+  dc:relation <grokTravItin.pl>;
+"""map navigant (sabre?) airport names to IATA-based
 daml.org names; relate to opencyc:fromLocation and opencyc:toLocation""",
 "@@TODO: constraint the premise of the mapping rule a bit?",
 "$Id$".
