@@ -90,9 +90,8 @@ propertylist bnf:mustBeOneSequence (
 
 propertylisttail bnf:mustBeOneSequence (
 		( )
-		( ";" verb object objecttail propertylisttail )
+		( ";" propertylist )
 	).
-
 
 objecttail bnf:mustBeOneSequence (
 		( )
@@ -171,10 +170,8 @@ langcode	bnf:matches  	"[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?";
 		bnf:canStartWith 	"a".
 
 
-#               raw regexp single quoted would be   "([^"]|(\\"))*"
-# @@@ triple-quoted version too
-
-string		bnf:matches		"""("([^"]|(\\\\"))*")""".
+string		bnf:matches		"(\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\")|(\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\")";
+		bnf:canStartWith 	"\"".
 
 #____________________________________________________
 

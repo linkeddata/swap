@@ -146,13 +146,10 @@
   <dl>
 """ .
       ( ";" 
-        n3:verb 
-        n3:object 
-        n3:objecttail 
-        n3:propertylisttail  )
+        n3:propertylist  )
          a :Sequence,
                 :SequenceTail;
-         :seqlabel """<b><code>";"</code></b> <a href='#verb'>verb</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a>""" .
+         :seqlabel """<b><code>";"</code></b> <a href='#propertylist'>propertylist</a>""" .
       ( "<="  )
          a :Sequence,
                 :SequenceTail;
@@ -519,7 +516,7 @@
 """ .
       ( "propertylisttail" 
         5  )
-         log:outputString """		<p><b><code>";"</code></b> <a href='#verb'>verb</a> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a> <a href='#propertylisttail'>propertylisttail</a></p>
+         log:outputString """		<p><b><code>";"</code></b> <a href='#propertylist'>propertylist</a></p>
 """,
                 """		<p><em>void</em></p>
 """ .
@@ -1496,35 +1493,23 @@
          bnf:canBeSequence (),
                  (
         ";" 
-        n3:verb 
-        n3:object 
-        n3:objecttail 
-        n3:propertylisttail  );
+        n3:propertylist  );
          bnf:label "propertylisttail";
          bnf:mustBeOneSequence  (
         () 
          (
             ";" 
-            n3:verb 
-            n3:object 
-            n3:objecttail 
-            n3:propertylisttail  ) );
+            n3:propertylist  ) );
          :optionTail (),
                  (
         () 
          (
             ";" 
-            n3:verb 
-            n3:object 
-            n3:objecttail 
-            n3:propertylisttail  ) ),
+            n3:propertylist  ) ),
                  (
          (
             ";" 
-            n3:verb 
-            n3:object 
-            n3:objecttail 
-            n3:propertylisttail  ) );
+            n3:propertylist  ) );
          :reference "<a href='#propertylisttail'>propertylisttail</a>" .
     
     n3:qname     a :Production;

@@ -25,7 +25,7 @@
 
 # __________________________________________________________________
 #
-# The N3 Full Grammar
+# The N3 Rukes Grammar
 
 n3document a rul:Used;
 	bnf:mustBeOneSequence(
@@ -102,7 +102,7 @@ propertylist bnf:mustBeOneSequence (
 
 propertylisttail bnf:mustBeOneSequence (
 		( )
-		( ";" verb object objecttail propertylisttail )
+		( ";" propertylist )
 	).
 
 
@@ -193,10 +193,8 @@ langcode	bnf:matches  	"[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?";
 		bnf:canStartWith 	"a".
 
 
-#               raw regexp single quoted would be   "([^"]|(\\"))*"
-# @@@ triple-quoted version too
-
-string		bnf:matches		"""("([^"]|(\\\\"))*")""".
+string		bnf:matches		"(\"\"\"[^\"\\\\]*(?:(?:\\\\.|\"(?!\"\"))[^\"\\\\]*)*\"\"\")|(\"[^\"\\\\]*(?:\\\\.[^\"\\\\]*)*\")";
+		bnf:canStartWith 	"\"".
 
 
 #____________________________________________________
