@@ -114,6 +114,8 @@ status-formal.rdf: $(TEAM)/connolly.html $(SW)/schedScrape.xsl
 
 </pre>
 
+<p><em>[@@TODO: move vcal2xml.pl into swap/pim]</em></p>
+
 <p>Finally, check rules ala:</p>
 <pre>evoMissing.n3: status2evo.n3 status-formal.rdf ,evocal.rdf
    $(PYTHON) $(CWM) status2evo.n3 --think &gt;$@
