@@ -1165,12 +1165,7 @@ class XMLWriter:
 	#@@ throw an exception if the element stack is empty
 	o = self._outFp
         self.flushClose()
-        try:
-            xmldata(o.write, str, self.dataEsc)
-        except:
-            print "@@problem writing", str
-            print "@@to", o
-            x=1/0
+        xmldata(o.write, str, self.dataEsc)
 	self.noWS = 1  # Suppress whitespace - we are in data
 
     def endDocument(self):
