@@ -1,0 +1,36 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+<> dc:description """
+converter from RSS events to palm.
+
+Invoke ala:
+
+python cwm.py esw2pd.n3 --think --purge --rdf=d >,palmStuff.rdf
+""",
+"$Id$";
+  dc:source <http://ilrt.org/discovery/chatlogs/rdfig/2002-07-31#T17-05-30>.
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+@prefix : <#>.
+
+this log:forAll :WHAT, :WHEN, :DESC.
+
+@prefix ev: <http://purl.org/rss/1.0/modules/event/>.
+@prefix rss: <http://purl.org/rss/1.0/>.
+
+@prefix pd: <http://www.w3.org/2000/08/palm56/datebook#>.
+
+{ <http://www.w3.org/2000/06/webdata/xslt?xslfile=http://www.w3.org/2001/sw/Europe/events/home2rss.xsl&xmlfile=http://www.w3.org/2001/sw/Europe/events/Overview.html> log:semantics [ log:includes {
+    [ ev:startdate :WHEN;
+      rss:title :WHAT;
+      rss:description :DESC;
+    ] } ]
+} log:implies {
+  [ pd:description :WHAT;
+    pd:note :DESC;
+    pd:date :WHEN
+  ]
+}.
+
+log:implies a log:Chaff. # @@ I hate this kludge.
