@@ -1,6 +1,8 @@
      @prefix : <#> .
      @prefix dc: <http://purl.org/dc/elements/1.1/> .
     
+    :martin     :surname "D\u00fcrst" .
+    
     :x     :prop "simple string" .
     
     :y     :prop """triple quoted

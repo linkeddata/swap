@@ -7,7 +7,7 @@ string with newlines in it.""".
 
 <#zz> <#escapes> "\\\"\a\b\f\r\t\v".
 
-#@@ <#martin> <#surname> "D\u00fcrst".
+<#martin> <#surname> "D\u00fcrst".
 
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 <> dc:description """testing string parsing in N3.

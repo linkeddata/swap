@@ -1,0 +1,12 @@
+<!-- test handling of non-ascii characters in string values -->
+<!-- $Id$ -->
+
+<rdf:RDF
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"  
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+        >
+ <rdf:Description>
+            <rdfs:label>Martin J Dürst</rdfs:label>
+ </rdf:Description>
+</rdf:RDF>
+
