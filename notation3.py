@@ -61,6 +61,7 @@ import codecs # python 2-ism; for writing utf-8 in RDF/xml output
 import urlparse
 import urllib
 import re
+import thing
 
 import RDFSink
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
@@ -1589,17 +1590,20 @@ def dummy():
 
 class Reifier(RDFSink.RDFSink):
 
-    def __init__(self, sink, contextURI, flat=0, genPrefix=None):
+    def __init__(self, sink, inputContextURI, flat=0, genPrefix=None):
         RDFSink.RDFSink.__init__(self)
         self.sink = sink
         self._ns = "http://www.w3.org/2000/10/swap/model.n3#"
         self.sink.bind("n3", (SYMBOL, self._ns))
         self._nextId = 1
-        self._context = (FORMULA, contextURI)
         self._genPrefix = genPrefix
         self._flat = flat      # Just flatten things not in this context
+	contextURI = inputContextURI + "__reified"
+	self._formula = (FORMULA, contextURI) # Formula node is what the document parses to @@kludge
+        self._context = self._formula
+
         if self._genPrefix == None:
-            self._genPrefix = string.split(contextURI,"#")[0] + "#_s"
+            self._genPrefix = string.split(contextURI,"#")[0] + "#_rei"
         
     def bind(self, prefix, nsPair):
         self.sink.bind(prefix, nsPair)
@@ -1638,7 +1642,7 @@ class Reifier(RDFSink.RDFSink):
     def startDoc(self):
         return self.sink.startDoc()
 
-    def endDoc(self):
+    def endDoc(self, rootFormulaPair=None):
         return self.sink.endDoc(self._formula)
 
 ######################################################### Tests

@@ -30,8 +30,8 @@ TODO:
 """
 
 import sys, time, re, operator
-#import calendar # timegm
-import timegm
+import calendar # timegm - from python 
+
 from types import StringType, UnicodeType, IntType, FloatType
 
 __version__ = "0.6"
@@ -80,7 +80,7 @@ def parse(s):
         a = r.groupdict('0')
     except:
         raise ValueError, 'invalid date string format:'+s
-    d = timegm.timegm((   int(a['year']), 
+    d = calendar.timegm((   int(a['year']), 
                         int(a['month']) or 1, 
                         int(a['day']) or 1, 
                         int(a['hour']), 

@@ -1,65 +1,73 @@
-#Processed by Id: cwm.py,v 1.93 2002/05/14 22:11:04 timbl Exp 
-        #    using base file:/devel/WWW/2000/10/swap/string.n3
-        
-#  Notation3 generation by
-#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
 
-#   Base was: file:/devel/WWW/2000/10/swap/string.n3
-     @prefix : <http://www.w3.org/2000/10/swap/string#> .
-     @prefix dpo: <http://www.daml.org/2001/03/daml+oil#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
-    
-    :String     a s:Class;
-         dpo:sameClassAs s:Literal .
-    
-    :concat     a dpo:UnambiguousProperty;
-         dpo:inverse :concatenation;
-         s:definedBy <http://www.w3.org/2000/10/swap/string>;
-         s:domain :String;
-         s:label "is concatenation of";
-         s:range dpo:List .
-    
-    :concatenation     a dpo:UniqueProperty;
-         s:definedBy <http://www.w3.org/2000/10/swap/string>;
-         s:domain dpo:List;
-         s:label "is the concatenation of the strings in";
-         s:range :String .
-    
-    :endsWith     a dpo:Property;
-         s:definedBy <http://www.w3.org/2000/10/swap/string>;
-         s:domain :String;
-         s:label "ends with";
-         s:range :String .
-    
-    :greaterThan     a dpo:Property;
-         s:definedBy <http://www.w3.org/2000/10/swap/string>;
-         s:domain :String;
-         s:label "is greater than";
-         s:range :String .
-    
-    :lessThan     a dpo:Property;
-         s:definedBy <http://www.w3.org/2000/10/swap/string>;
-         s:domain :String;
-         s:label "is less than";
-         s:range :String .
-    
-    :notGreaterThan     a dpo:Property;
-         s:definedBy <http://www.w3.org/2000/10/swap/string>;
-         s:domain :String;
-         s:label "is not greater than";
-         s:range :String .
-    
-    :notLessThan     a dpo:Property;
-         s:definedBy <http://www.w3.org/2000/10/swap/string>;
-         s:domain :String;
-         s:label "is not less than";
-         s:range :String .
-    
-    :startsWith     a dpo:Property;
-         s:definedBy <http://www.w3.org/2000/10/swap/string>;
-         s:domain :String;
-         s:label "starts with";
-         s:range :String .
-    
-#ENDS
+<!-- Processed by Id: cwm.py,v 1.96 2002/06/07 20:07:17 timbl Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/string.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/string#"
+    xmlns:dpo="http://www.daml.org/2001/03/daml+oil#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:string="http://www.w3.org/2000/10/swap/string#">
+
+    <s:Class rdf:about="http://www.w3.org/2000/10/swap/string#String">
+        <dpo:sameClassAs rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </s:Class>
+
+    <dpo:UnambiguousProperty rdf:about="http://www.w3.org/2000/10/swap/string#concat">
+        <dpo:inverse rdf:resource="http://www.w3.org/2000/10/swap/string#concatenation"/>
+        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <s:label>is concatenation of</s:label>
+        <s:range rdf:resource="http://www.daml.org/2001/03/daml+oil#List"/>
+    </dpo:UnambiguousProperty>
+
+    <dpo:UniqueProperty rdf:about="http://www.w3.org/2000/10/swap/string#concatenation">
+        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <s:domain rdf:resource="http://www.daml.org/2001/03/daml+oil#List"/>
+        <s:label>is the concatenation of the strings in</s:label>
+        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </dpo:UniqueProperty>
+
+    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#endsWith">
+        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <s:label>ends with</s:label>
+        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </dpo:Property>
+
+    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#greaterThan">
+        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <s:label>is greater than</s:label>
+        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </dpo:Property>
+
+    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#lessThan">
+        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <s:label>is less than</s:label>
+        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </dpo:Property>
+
+    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#notGreaterThan">
+        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <s:label>is not greater than</s:label>
+        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </dpo:Property>
+
+    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#notLessThan">
+        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <s:label>is not less than</s:label>
+        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </dpo:Property>
+
+    <dpo:Property rdf:about="http://www.w3.org/2000/10/swap/string#startsWith">
+        <s:definedBy rdf:resource="http://www.w3.org/2000/10/swap/string"/>
+        <s:domain rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+        <s:label>starts with</s:label>
+        <s:range rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </dpo:Property>
+</rdf:RDF>

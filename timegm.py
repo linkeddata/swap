@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
 """ As provided by Guido in response to a question on c.l.p """
-
+#  Not needed --- now since pyuthon 2 this exists in the calendar module
+#
 
 def timegm(tmtuple):
 	''' returns epoch seconds from a GMT time tuple. '''

@@ -1,18 +1,26 @@
 #   n3 definition of some time and date functions
 #
+#  Based on orginal cwm_date and cwm_time by Mark Nottingham
+# http://www.mnot.com/python
+# These use isodate.py and timegm.py, by mnot.
+# Released with permission under W3C code licence.
+#
+# Schema (c) TimBL, #C code licence.
+# 
 # $Id$
 
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix doc: <http://www.w3.org/2000/01/pim/doc#>.
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#>.
 @prefix ont: <http://www.daml.org/2000/10/daml-ont#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 
 @prefix time: <http://www.w3.org/2000/10/swap/time#>.
 @prefix : <#>.
 
+<> <http://www.w3.org/2000/10/swap/pim/doc.n3#@@> <http://www.w3.org/Consortium/Legal/copyright-software-19980720>.
 
-# This is a class fo strings which are the lexical representations of datetimes
+# This is a class for strings which are the lexical representations of datetimes
 # 
 time:ISOTime a rdfs:Class.  # What string to be subclass of? @@ use schema date
 

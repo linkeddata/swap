@@ -13,8 +13,9 @@ import thing
 import notation3    # N3 parsers and generators, and RDF generator
 import isodate	    # Local, by mnot. implements <http://www.w3.org/TR/NOTE-datetime>
 
-from thing import LightBuiltIn, Function, ReverseFunction, progress
-import time, calendar
+
+from thing import LightBuiltIn, Function, ReverseFunction, progress # here
+import time, calendar # Python standard distribution
 
 
 #TIME_NS_URI = "http://www.mnot.net/2002/02/25/time#"
@@ -154,7 +155,7 @@ class BI_parseToSeconds(LightBuiltIn, Function):
         str, format = subj_py
         try:
             return store._fromPython(context, 
-              timegm.timegm(time.strptime(str, format)))
+              calendar.timegm(time.strptime(str, format)))
         except:
             return None
 

@@ -1,131 +1,149 @@
-#Processed by Id: cwm.py,v 1.93 2002/05/14 22:11:04 timbl Exp 
-        #    using base file:/devel/WWW/2000/10/swap/math.n3
-        
-#  Notation3 generation by
-#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
 
-#   Base was: file:/devel/WWW/2000/10/swap/math.n3
-     @prefix : <http://www.w3.org/2000/10/swap/math#> .
-     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
-    
-    :Function     a rdfs:Class;
-         rdfs:comment "A math:Function is unique in terms of math:EqualTo. ";
-         rdfs:label "Function";
-         rdfs:subClassOf rdf:Property .
-    
-    :List     a rdfs:Class;
-         rdfs:comment """The class of things that are DAML lists were all of the 
-      members are math:Value items.""";
-         rdfs:label "List";
-         rdfs:subClassOf daml:List .
-    
-    :LogicalOperator     a rdfs:Class;
-         rdfs:comment """a logical operator allows evaluation eihter way, or testing relationship
-         between two values""";
-         rdfs:subClassOf :Function,
-                :ReverseFunction .
-    
-    :ReverseFunction     a rdfs:Class;
-         rdfs:comment "A math:ReverseFunction is unambiguous in terms of math:EqualTo. ";
-         rdfs:subClassOf rdf:Property .
-    
-    :StrictProperty     a rdfs:Class;
-         rdfs:label "StrictProperty";
-         rdfs:subClassOf rdf:Property .
-    
-    :TwoMemberedList     a rdfs:Class;
-         rdfs:comment "This is the class of things that are math lists with only two members.";
-         rdfs:label "TwoMemberedList";
-         rdfs:subClassOf :List .
-    
-    :Value     a rdfs:Class;
-         rdfs:comment "The class of things that are numeric float values as in Python.";
-         rdfs:label "Value";
-         rdfs:subClassOf string:String .
-    
-    :differenceOf     a :ReverseFunction;
-         rdfs:comment "The difference of the list members";
-         rdfs:domain :Value;
-         rdfs:label "differenceOf";
-         rdfs:range :TwoMemberedList .
-    
-    :equalTo     a :StrictProperty;
-         rdfs:comment "Numerically equal to";
-         rdfs:domain :Value;
-         rdfs:label "equalTo";
-         rdfs:range :Value .
-    
-    :exponentiationOf     a :ReverseFunction;
-         rdfs:comment "For exponOf(x, (y, z)), x = y^z";
-         rdfs:domain :Value;
-         rdfs:label "exponentiationOf";
-         rdfs:range :TwoMemberedList .
-    
-    :factors     a :ReverseFunction;
-         daml:inverse :product;
-         rdfs:comment "A list of values which multiply to produce the subject.";
-         rdfs:domain :Value;
-         rdfs:label "factors";
-         rdfs:range :List .
-    
-    :greaterThan     a :StrictProperty;
-         rdfs:comment "Is greater than";
-         rdfs:domain :Value;
-         rdfs:label "greaterThan";
-         rdfs:range :Value .
-    
-    :lessThan     a :StrictProperty;
-         rdfs:comment "Numerically less than";
-         rdfs:domain :Value;
-         rdfs:label "lessThan";
-         rdfs:range :Value .
-    
-    :memberCount     a :Function;
-         rdfs:comment "The number of items in a list";
-         rdfs:domain :List;
-         rdfs:label "memberCount";
-         rdfs:range :Value .
-    
-    :negationOf     a :Function,
-                :ReverseFunction;
-         rdfs:comment "The subject is the negotation of the object";
-         rdfs:domain :Value;
-         rdfs:label "negation";
-         rdfs:range :Value .
-    
-    :notEqualTo     a :StrictProperty;
-         rdfs:comment "Not equal to";
-         rdfs:domain :Value;
-         rdfs:label "notEqualTo";
-         rdfs:range :Value .
-    
-    :notGreaterThan     a :StrictProperty;
-         rdfs:comment "Is not greater than";
-         rdfs:domain :Value;
-         rdfs:label "notGreaterThan";
-         rdfs:range :Value .
-    
-    :notlessThan     a :StrictProperty;
-         rdfs:comment "Is not less than";
-         rdfs:domain :Value;
-         rdfs:label "notlessThan";
-         rdfs:range :Value;
-         rdfs:subPropertyOf string:notlessThan .
-    
-    :quotientOf     a :ReverseFunction;
-         rdfs:comment "The quotient of the list members";
-         rdfs:domain :Value;
-         rdfs:label "quotientOf";
-         rdfs:range :TwoMemberedList .
-    
-    :remainderOf     a :ReverseFunction;
-         rdfs:comment "The remainder of the list members";
-         rdfs:domain :Value;
-         rdfs:label "remainderOf";
-         rdfs:range :TwoMemberedList .
-    
-#ENDS
+<!-- Processed by Id: cwm.py,v 1.96 2002/06/07 20:07:17 timbl Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/math.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/math#"
+    xmlns:daml="http://www.daml.org/2001/03/daml+oil#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:math="http://www.w3.org/2000/10/swap/math#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:string="http://www.w3.org/2000/10/swap/string#">
+
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/math#Function">
+        <rdfs:comment>A math:Function is unique in terms of math:EqualTo. </rdfs:comment>
+        <rdfs:label>Function</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/math#List">
+        <rdfs:comment>The class of things that are DAML lists were all of the 
+      members are math:Value items.</rdfs:comment>
+        <rdfs:label>List</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.daml.org/2001/03/daml+oil#List"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/math#LogicalOperator">
+        <rdfs:comment>a logical operator allows evaluation eihter way, or testing relationship
+         between two values</rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/10/swap/math#Function"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/10/swap/math#ReverseFunction"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/math#ReverseFunction">
+        <rdfs:comment>A math:ReverseFunction is unambiguous in terms of math:EqualTo. </rdfs:comment>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/math#StrictProperty">
+        <rdfs:label>StrictProperty</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/math#TwoMemberedList">
+        <rdfs:comment>This is the class of things that are math lists with only two members.</rdfs:comment>
+        <rdfs:label>TwoMemberedList</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/10/swap/math#List"/>
+    </rdfs:Class>
+
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/math#Value">
+        <rdfs:comment>The class of things that are numeric float values as in Python.</rdfs:comment>
+        <rdfs:label>Value</rdfs:label>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/10/swap/string#String"/>
+    </rdfs:Class>
+
+    <ReverseFunction rdf:about="http://www.w3.org/2000/10/swap/math#differenceOf">
+        <rdfs:comment>The difference of the list members</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>differenceOf</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#TwoMemberedList"/>
+    </ReverseFunction>
+
+    <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#equalTo">
+        <rdfs:comment>Numerically equal to</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>equalTo</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </StrictProperty>
+
+    <ReverseFunction rdf:about="http://www.w3.org/2000/10/swap/math#exponentiationOf">
+        <rdfs:comment>For exponOf(x, (y, z)), x = y^z</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>exponentiationOf</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#TwoMemberedList"/>
+    </ReverseFunction>
+
+    <ReverseFunction rdf:about="http://www.w3.org/2000/10/swap/math#factors">
+        <daml:inverse rdf:resource="http://www.w3.org/2000/10/swap/math#product"/>
+        <rdfs:comment>A list of values which multiply to produce the subject.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>factors</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#List"/>
+    </ReverseFunction>
+
+    <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#greaterThan">
+        <rdfs:comment>Is greater than</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>greaterThan</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </StrictProperty>
+
+    <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#lessThan">
+        <rdfs:comment>Numerically less than</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>lessThan</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </StrictProperty>
+
+    <Function rdf:about="http://www.w3.org/2000/10/swap/math#memberCount">
+        <rdfs:comment>The number of items in a list</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#List"/>
+        <rdfs:label>memberCount</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </Function>
+
+    <Function rdf:about="http://www.w3.org/2000/10/swap/math#negationOf">
+        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/math#ReverseFunction"/>
+        <rdfs:comment>The subject is the negotation of the object</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>negation</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </Function>
+
+    <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notEqualTo">
+        <rdfs:comment>Not equal to</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>notEqualTo</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </StrictProperty>
+
+    <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notGreaterThan">
+        <rdfs:comment>Is not greater than</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>notGreaterThan</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </StrictProperty>
+
+    <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notlessThan">
+        <rdfs:comment>Is not less than</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>notlessThan</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/string#notlessThan"/>
+    </StrictProperty>
+
+    <ReverseFunction rdf:about="http://www.w3.org/2000/10/swap/math#quotientOf">
+        <rdfs:comment>The quotient of the list members</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>quotientOf</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#TwoMemberedList"/>
+    </ReverseFunction>
+
+    <ReverseFunction rdf:about="http://www.w3.org/2000/10/swap/math#remainderOf">
+        <rdfs:comment>The remainder of the list members</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+        <rdfs:label>remainderOf</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#TwoMemberedList"/>
+    </ReverseFunction>
+</rdf:RDF>

@@ -12,11 +12,12 @@ TESTIN=test/sameDan.n3
 	$(PYTHON) $(YAPPS) $< $@
 
 .n3.rdf:
-	$(PYTHON) cwm.py $< > $@
+	$(PYTHON) cwm.py $<  --rdf > $@
+	cvs commit -m "Automatic: see Makefile" $@
 
 #all: yappstest yappsdoc math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf
 
-all: math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf
+all: math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf LICENSE.rdf
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py
 	$(PYTHON) rdfn3_yappstest.py <$(TESTIN) >,xxx.n3
