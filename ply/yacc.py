@@ -1242,7 +1242,7 @@ def slr_parse_table():
     n_srconflict = 0
     n_rrconflict = 0
 
-    print "yacc: Generating SLR parsing table..."
+    #print "yacc: Generating SLR parsing table..."
     if yaccdebug:
         _vf.write("\n\nParsing method: SLR\n\n")
         
