@@ -13,15 +13,18 @@ import string
 import os
 import re
 
+PREFIX="/sw"
+
 version = "$Id$"[1:-1]
-macros = { "N": "Package", "n":"Package",  "v":"Version", "r": "Revision" }
+macros = { "N": "Package", "n":"Package",  "v":"Version", "r": "Revision",
+	    "p": "_prefix", "P": "_prefix"}
 
 comment = re.compile(r'^(.*?)#.*$')
-header = re.compile(r'^([-A-Za-z0-9]*): *(.*) *$')
+header = re.compile(r'^ *([-A-Za-z0-9]*): *(.*) *$')
 contact = re.compile(r'([-A-Za-z0-9]+) +([-A-Za-z0-9-]+) *<([-_A-Za-z0-9@\.+]*)>')
 contact2 = re.compile(r'None *<([-_A-Za-z0-9@\.+]*)>')
 contact3 = re.compile(r'^.*(.*?) *<([-_A-Za-z0-9@\.+]*)>')  # @@@@@@@ I18n
-qualified = re.compile(r'(.*)(\(.*\))')
+qualified = re.compile(r'(.*)(\(.*\)) *')
 blank = re.compile(r'[ \t]*')
 
 import  notation3
@@ -29,6 +32,16 @@ import  notation3
 def ss(str):
     """Format string for output"""
     return notation3.stringToN3(str)
+
+def makeId(str):
+    res = ""
+    for c in str.strip():
+	x = string.find("-.", c)
+	if x <0:
+	    res=res+c
+	else:
+	    res=res+"_" # @@ loose info
+    return res
 
 def expand(str, dict):
     str = str.strip()
@@ -57,6 +70,7 @@ def makePackageList(str, dict):
     m = qualified.match(str)
     if m:
         str = m.group(1)   # strip off qualifications @@@@@@@@ losing info here
+#	print "@@@@@@@@@@@@@@@@@@@ CUT OUT QUALIFIER IN ", str
 
     str = expand(str,dict)
 
@@ -86,7 +100,7 @@ def convert(path):
     print "# Start info from", path
     global nochange
     global verbose
-    current = {}
+    current = { "_prefix": PREFIX}
     currentPackage = None
     dict = {}
 
@@ -131,25 +145,26 @@ def convert(path):
 		i = j+3  # skip <<\n
 		multiline = 1
 
-		print "    " + property + ss(value) +';'
-	        continue
+#		print "    " + property + " " + ss(value) +';'
+#	        continue
 
 	    # RFC822-style line wrap
-	    while buf[i:i+1] !="" and buf[i:i+1] in " \t":
-		j = buf.find("\n", i)
-		if j <0: break
-		e = j
-		if e>i and buf[e-1]=='\r':
-		    e = e-1
-		line = line + buf[i:e]
-		i = j+1
-	
-		k = line.find("#") # Chop comments
-		if k >= 0:
-		    comment = comment + line[k:]
-		    line = line[:k]
-		m = header.match(line)
-		value = m.group(2)
+	    else:
+		while buf[i:i+1] !="" and buf[i:i+1] in " \t":
+		    j = buf.find("\n", i)
+		    if j <0: break
+		    e = j
+		    if e>i and buf[e-1]=='\r':
+			e = e-1
+		    line = line + buf[i:e]
+		    i = j+1
+	    
+		    k = line.find("#") # Chop comments
+		    if k >= 0:
+			comment = comment + line[k:]
+			line = line[:k]
+		    m = header.match(line)
+		    value = m.group(2)
 
 	    current[head] = value    # track things like package, version, revision
 
@@ -158,6 +173,19 @@ def convert(path):
 		    print ". # End of ", currentPackage
 		print """%s  fink:packageName "%s";""" % (makePackageList(value,current), value)
 		currentPackage = value
+		continue
+
+	    if head == "Version":
+		versionId = makePackageList(current["Package"], current) + "_v" + makeId(value)
+		print "        fink:specificVersion %s ." % versionId
+		print "%s fink:version %s;" %(versionId, ss(value)) 
+		continue
+
+	    if head == "Revision":
+		revisionId = versionId + "_r" + makeId(value)
+		print "        fink:specificRevision %s ." % revisionId
+		print "%s fink:revision %s;" %(revisionId, ss(value))
+		print "    fink:infoFrom <%s>; " % path
 		continue
 
 	    if head in [ "Depends", "BuildDepends", "Recommends", "Conflicts", "Replaces"]:
@@ -205,27 +233,21 @@ def convert(path):
     print "# End of info from", path
     print
 
-def do(path):
-    """ Path can be directory"""
+def do(path, explicit=1):
+    """Convert file of tree of files.
+    
+    Path can be directory.  If explicitly named, files are done anyway"""
     global doall
     global recursive
     global verbose
-#    print "TEST = ", ss("foo\\bar")
-#    print "TEST = ", ss("foohgHDSFGKDgfKJHFGGHJDfhSGDFSDG\\haksdhfjasdhfkashdjkfbar\nnewline")
-#    print "TEST = ", ss("""perl -pi -e '$i=qw(%i);s/\\@PREFIX\\@/$i/' Makefile
-#mkdir -p %i/bin
-#mkdir -p %i/share
-#mkdir -p %i/man/man6
-#make install 
-#mv %i/man %i/share/man""")
 
     if verbose: sys.stderr.write("fink2n3: converting " + path + "\n")
     if os.path.isdir(path) and (path[:7] != "binary-" or doall):
         if recursive:
             for name in os.listdir(path):
-                do(path + "/" + name)
+                do(path + "/" + name, explicit=0)
     else:
-        if doall or path[-5:] == ".info":
+        if doall or explicit or path[-5:] == ".info":
             convert(path)
         else:
 	    if verbose:
