@@ -24,6 +24,7 @@ import ArgHandler
 from rdflib.Namespace import Namespace
 from rdflib.constants import TYPE
 from rdflib.TripleStore import TripleStore
+from rdflib.BNode import BNode
 import OwlAxiomReasoner
 import time
 
@@ -31,8 +32,10 @@ import time
 
 FOAF = Namespace("http://xmlns.com/foaf/0.1/")
 OTEST = Namespace("http://www.w3.org/2002/03owlt/testOntology#")
+TRES = Namespace("http://www.w3.org/2003/08/owl-systems/testRes#")
 RTEST = Namespace("http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#")
 DC = Namespace("http://purl.org/dc/elements/1.0/")
+RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 OWL = Namespace("http://www.w3.org/2002/07/owl#")
 
 
@@ -100,7 +103,7 @@ skip = {
 maxFailed = 999999
 failed = 0
 
-def run(store, test, name, input, entailed, expected):
+def run(store, test, name, input, entailed, expected, resultStore):
 
     global failed
     dtlist = []
@@ -131,19 +134,26 @@ def run(store, test, name, input, entailed, expected):
         print "skipped; uses unsupported datatype", dt
         return
 
+    this = BNode()
+    resultStore.add((this, RDF["type"], TRES["TestRun"]))
+    resultStore.add((this, TRES["test"], test))
+
     if result == expected:
         dur = end-start
         print "PASSED %ss" % dur
+        resultStore.add((this, RDF["type"], TRES["PassingRun"]))
     else:
         if result == "Unknown":
             print "(...unknown...)"
+            resultStore.add((this, RDF["type"], TRES["IncompleteRun"]))
         else:
             print "Failed, '%s' when expecting '%s'" % (result, expected)
+            resultStore.add((this, RDF["type"], TRES["FailingRun"]))
         #print "   Input document: ", idoc
         failed += 1
         #print "   failed %d (max %d)" % (failed, maxFailed)
                     
-def runTests(store):
+def runTests(store, resultStore):
     for testType in (testTypes):
         print
         print "Trying each",testType,"..."
@@ -182,17 +192,17 @@ def runTests(store):
             if testType == "PositiveEntailmentTest":
                 pdoc = only(store.objects(s, RTEST["premiseDocument"]))
                 cdoc = only(store.objects(s, RTEST["conclusionDocument"]))
-                run(store, s, name, pdoc, cdoc, "Inconsistent")
+                run(store, s, name, pdoc, cdoc, "Inconsistent", resultStore)
             elif testType == "NegativeEntailmentTest":
                 pdoc = only(store.objects(s, RTEST["premiseDocument"]))
                 cdoc = only(store.objects(s, RTEST["conclusionDocument"]))
-                run(store, s, name, pdoc, cdoc, "Consistent")
+                run(store, s, name, pdoc, cdoc, "Consistent", resultStore)
             elif testType == "InconsistencyTest":
                 idoc = only(store.objects(s, RTEST["inputDocument"]))
-                run(store, s, name, idoc, None, "Inconsistent")
+                run(store, s, name, idoc, None, "Inconsistent", resultStore)
             elif testType == "ConsistencyTest":
                 idoc = only(store.objects(s, RTEST["inputDocument"]))
-                run(store, s, name, idoc, None, "Consistent")
+                run(store, s, name, idoc, None, "Consistent", resultStore)
             else:
                 print "skipped, unsupported test type"
 
@@ -231,10 +241,13 @@ class MyArgHandler(ArgHandler.ArgHandler):
         print "Loading %s..." % testURI,
         store.load(testURI)
         print "  Done."
+        resultStore = TripleStore()
         try:
-            runTests(store)
+            runTests(store, resultStore)
         except KeyboardInterrupt, k:
             print "KeyboardInterrupt"
+        print "Writing test results in RDF..."
+        resultStore.save("surnia-test-results.rdf")
 
     def handle__maxSeconds(self, timeLimit=1):
         """Time limit for each run of the underlying reasoner.
