@@ -200,7 +200,7 @@ class CalWr:
         freq = sts.any(r, ICAL.freq)
         if freq: w("FREQ=%s" % freq)
         ival = sts.any(r, ICAL.interval)
-        if freq: w(";INTERVAL=%s" % ival)
+        if ival: w(";INTERVAL=%s" % ival)
         by = sts.any(r, ICAL.byday)
         if by: w(";BYDAY=%s" % by)
         by = sts.any(r, ICAL.bymonth)
@@ -294,7 +294,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.17  2004-03-13 00:01:37  connolly
+# Revision 2.18  2004-03-30 00:17:41  connolly
+# found bug in INTERVAL handling while porting to rdflib
+#
+# Revision 2.17  2004/03/13 00:01:37  connolly
 # fixed the punctuation of RECUR values
 #
 # Revision 2.16  2004/03/10 00:04:55  connolly
