@@ -1,5 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/REC-html401/loose.dtd">
 <html>
 <head>
   <title>Semantic Web Application Platform</title>
@@ -14,180 +12,20 @@ Web</a></p>
 
 <p></p>
 
-<h1>Semantic Web Area for Play</h1>
+<h1>RDF &amp; Semantic Web Primer using N3</h1>
 
 <p></p>
 
-<p>or, if you like, <em>Semantic Web Application Platform</em>...  visiting
-RDF and all points west.</p>
+<p>The world of the semantic web, as based on RDF, is really simple at the
+base.  This articile shows you how to get started.  It uses a simplified
+teaching language which is basically equivalent to RDF in its XML syntax, but
+easier to scribble when getting started.</p>
 
-<h2 id="Motivation">Motivation</h2>
-
-<p>These are a few things I put together to</p>
-<ul>
-  <li>Resolve the fact that I had no code development environment</li>
-  <li>Check out python</li>
-  <li>Investigate the questions of the real RDF model particularly with
-    respect to
-    <ul>
-      <li>alternative quick scribbling (wiki wiki?) syntax - notation3</li>
-      <li>managing several bags of RDF data, not covered by the RDF spec</li>
-      <li>relationships between this and rule languages</li>
-    </ul>
-  </li>
-  <li>Generate some tools for munging RDF</li>
-</ul>
+<h2 id="L553">Subject, verb and object</h2>
 
 <p></p>
 
-<p>The bits are now as follows. There is NO guarantee or support or anything
-for these.</p>
-
-<h2 id="Python">Python modules</h2>
-
-<h3 id="L133">Serializing/deserializaing RDF: notation3.py</h3>
-
-<p>Originally written by Dan Connolly, uses a basic RDF stream parser
-interface</p>
-<ul>
-  <li>Parses N3</li>
-  <li>Generates RDF</li>
-  <li>Generates N3</li>
-</ul>
-
-<p>The command line form  (alias n3 python notation3.py; n3 -help) allows RDF
-to be parsed and re-output.</p>
-
-<p>The module will also run as a CGI script to convert N3 to RDF M&amp;S 1.0 -
-by DanC magic.</p>
-<ul>
-  <li><a href="notation3.py">Source</a></li>
-</ul>
-
 <p></p>
-
-<h3 id="L311">xml2rdf.py   Parsing RDF</h3>
-
-<p>Based on Python's xmllib, this parser is ocmpatible with the RDF stream
-interface of, notation3.py.  It completes the square of parsers and
-generators.</p>
-<ul>
-  <li>Parses RDF</li>
-</ul>
-
-<p>It has a command line mode for self-test purposes.</p>
-<ul>
-  <li><a href="xml2rdf.py">Source</a></li>
-</ul>
-
-<p></p>
-
-<h3 id="Closed">Closed World Machine : cwm.py</h3>
-
-<p>This is a triple store, in which triples are stored in/against the
-particular context in which they were read, eg RDF file or N3 { expression }.
-The features at the moment include</p>
-<ul>
-  <li>Loading files in RDF and/or N3</li>
-  <li>Applying rules written in N3 to the data.</li>
-  <li>Filtering the data to the result of a particular query</li>
-  <li>Generating RDF or N3 files from the result.</li>
-  <li>Pretty printing data so that anonymous nodes are used creatively to
-    minimize the number of explicit existentials (generated Ids).</li>
-</ul>
-
-<p></p>
-
-<p>Cwm will run as a unix command, and is designed to be usable as a simple
-data manipulator for RDF on the lines of sed, awk, etc or xsl.</p>
-
-<p>In progress.</p>
-<ul>
-  <li><a href="cwm.py">Source</a></li>
-</ul>
-
-<h4 id="Command">Command line parameters</h4>
-
-<p>Some, marked (flag), can occur anywhere on the command line.  The others
-are processed in order from left to right.</p>
-<dl>
-  <dt>-help</dt>
-    <dd>generate a <em>maybe</em> more up to date list of parameters</dd>
-  <dt>-pipe</dt>
-    <dd>don't store, just process serially. (doesn't lose comment lines!)
-      (flag)</dd>
-  <dt>-rdf</dt>
-    <dd>input format RDF format from now on</dd>
-  <dt>-rdf1out</dt>
-    <dd>output format is RDF. (flag)</dd>
-  <dt><em>uri</em></dt>
-    <dd>load the resource. Parsed relative to the local directory, so a
-      filename will work.</dd>
-  <dt>-size</dt>
-    <dd>Output the current size of the store.</dd>
-  <dt>-apply=<em>uri</em></dt>
-    <dd>Apply the rules in a given resource, once each, to the store, the
-      conclusions being added to the store.</dd>
-  <dt>-filter=<em>uri</em></dt>
-    <dd>Apply the rules in a given resource, once each, to the store,
-      replacing the original contents of the store with those things concluded
-      from the rules.</dd>
-  <dt>-rules</dt>
-    <dd>Apply any rules in the store to the store itself, conclusions being
-      added to the store.</dd>
-  <dt>-ugly</dt>
-    <dd>Dump the store in a more or less random order. This tends to be messy,
-      as related information is not grouped. </dd>
-  <dt>-bySubject</dt>
-    <dd>Dump the store grouping statements by subject. This tends to be better
-      than -ugly, but the default is to make the output as readable as
-      possible using anonymous nodes wherever possible, and is therefore
-      recommended. (flag)</dd>
-</dl>
-
-<p>Note that where a <em>uri </em>is given, this can be a filename of course.
-The default base URI of the process is the file URI of a file in the current
-working directory, so a local filename will be a valid relative URI. This is
-how URIs were supposed to work.</p>
-
-<h4 id="Rule">Rule file format</h4>
-
-<p>A rule file is simply a notation3 file. A rule is a statement which asserts
-an implication using log:imples (where the namespace must be
-http://www.w3.org/2000/10/swap/log.n3#) between premise and a conclusion. The
-premise is simply a template: cwm will search for all combinations of
-statements in the store which match the template.  Variables must be
-explicitly connected to the enclosing context (often, the document) by a
-"log:forAll" statement. For each match, a conclusion is formed by taking the
-conclusion and in it replacing any variables which have been matched with the
-values found. The following is an example:</p>
-<pre>@prefix log: &lt;http://www.w3.org/2000/10/swap/log.n3#&gt; .
-@prefix mech: &lt;s1.n3#&gt; .
-
-&lt;&gt; log:forAll &lt;#x&gt; , &lt;#y&gt; .
-{ &lt;#x&gt; mech:includes &lt;#y&gt; } log:implies { &lt;#y&gt; mech:partOf &lt;#x&gt; } .</pre>
-
-<p>The @prefix directives define the prefixes log: and mech: as representing
-namespaces.   The &lt;&gt; log:forAll line declares #x and #y, two local
-identifiers, as being univerlly quantified variables in the context of this
-document (&lt;&gt;).</p>
-
-<h2>Design issues</h2>
-
-<p>The code above investigated and raised issues discussed in the following
-documents.</p>
-<ul>
-  <li><a href="/DesignIssues/Notation3.html">Notation 3 - an alternative RDF
-    syntax</a></li>
-  <li><a href="/DesignIssues/Anonymous.html">Quantification implicit in
-    anonymous nodes</a></li>
-</ul>
-
-<p>not to mention</p>
-<ul>
-  <li>RDFM&amp;S and schema issues</li>
-  <li>The question of quoting and BagIDs etc</li>
-</ul>
 <hr>
 
 <p></p>
