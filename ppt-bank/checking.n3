@@ -1,6 +1,7 @@
 # $Id$
 #
 # a papertrail bank.
+# cf http://www.w3.org/DesignIssues/PaperTrail.html
 #
 # USAGE:
 #  python ../cwm.py checking.n3 bankSW.n3 --think --data >,statement.n3
