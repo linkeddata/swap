@@ -3,11 +3,11 @@
 # these raise the level above ontology
 # $Id$
 
-bind rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns> . # Unused
-bind rdfs: <http://www.w3.org/2000/01/rdf-schema> .	 # unused
-bind ont: <http://www.daml.org/2000/10/daml-ont> .	 # contains aliases for the above
-bind log: <> .
-bind : <> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+#bind ont: <http://www.daml.org/2000/10/daml-ont> .	 # contains aliases for the above
+@prefix log: <http://www.w3.org/2000/10/swap/log.n3#>.
+@prefix : <#>.
 
 log:N3Document a rdfs:Class;
 	rdfs:comment	"""A document which, which parsed as Notation3
@@ -20,14 +20,14 @@ of any identifiers used in the document.
 #   The following are inherent in the translation of N3 syntax to quad representation:
 
 log:forSome a rdf:Property;
-	rdfs:comment "A is true for some objectfor which here we use B" .
-	rdfs:domain: log:context;
+	rdfs:comment "A is true for some objectfor which here we use B" ;
+	rdfs:domain log:context.
 
 log:subExpression a rdf:Property;
-	rdfs:comment "B is lexically nested within A. The information
+	rdfs:comment """B is lexically nested within A. The information
 	is in B is part of the information in A.  Lexically scoped varibles are
 	inherited from A to B.
-	"""
+	""".
 
 log:forAll a rdf:Property;
 	rdfs:comment "A is true for any object in place of B" .
@@ -37,12 +37,12 @@ log:forAll a rdf:Property;
 
 
 log:Truth a rdf:Class;
-	rdfs:comment "Something which is true: belive it as you would belive this.
-	Understood natively by cwm."
+	rdfs:comment """Something which is true: belive it as you would belive this.
+	Understood natively by cwm.""".
 
 log:Falsehood a rdf:Class;
-	rdfs:comment "Something which is not true. Not the complement of True!"
-	rdfs:domain log:context;
+	rdfs:comment "Something which is not true. Not the complement of True!";
+	rdfs:domain log:context.
 
 log:implies a rdfs:Property;
 	rdfs:comment "Logical implication. Understood natively by cwm." .
@@ -52,7 +52,7 @@ log:implies a rdfs:Property;
 # Conversion between falsehood and implication:
 rule1 log:forAll :x, :y, :z; =
 {
-    { :x log:implies :y } means {  { :x a :Truth . y: a :falsehood.} a:falsehood}.
+    { :x log:implies :y } log:means {  { :x a :Truth . :y a :Falsehood.} a:Falsehood}.
 } .
 
 # etc etc
