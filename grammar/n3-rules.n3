@@ -88,11 +88,11 @@ declaration bnf:mustBeOneSequence(
 statement bnf:mustBeOneSequence(( subject propertylist )).
 
 rule bnf:mustBeOneSequence (
-	"{" formulacontent "}" "=>" "{" formulacontent "}"
+	( "{" formulacontent "}" "=>" "{" formulacontent "}" )
 	).
 
 rule_safe bnf:mustBeOneSequence (
-	"{" formulacontent "}" "=>" "{" formula_safe "}"
+	( "{" formulacontent "}" "=>" "{" formula_safe "}" )
 	).
 
 propertylist bnf:mustBeOneSequence (
