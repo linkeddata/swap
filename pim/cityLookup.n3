@@ -13,7 +13,9 @@
 @prefix usps: <http://www.w3.org/2000/10/swap/pim/usps#> .
 
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+@prefix cal: <http://www.w3.org/2002/12/cal/ical#>.
 
+@prefix apt: <http://www.daml.org/2001/10/html/airport-ont#>.
 
 @prefix      : <http://www.w3.org/2000/10/swap/pim/cityLookup#>.
 @prefix cityl: <http://www.w3.org/2000/10/swap/pim/cityLookup#>.
@@ -43,6 +45,11 @@
 }
   log:implies { ?CITY :formVal ?N }.
 
+{
+ ?WHERE apt:iataCode ?CODE.
+}
+  log:implies { ?WHERE :formVal ?CODE }.
+
 
 #http://www.vicinity.com/myblast/map.mb?CMD=LFILL&&CT=47.43000031:19.18000031:90000&
 
@@ -58,13 +65,50 @@
 } => { ?CITY :weatherPage ?PG; geo:lat ?LAT; geo:long ?LON }.
 
 
+# http://mappoint.msn.com/map.aspx?L=USA&C=40.75013351,-73.99700928&A=70
+{
+ ?PG log:uri [ is str:concatenation of (
+  "http://www.wunderground.com/cgi-bin/findweather/getForecast?query="
+  [ is :formVal of ?CITY ] ) ].
+
+
+ ?PG log:content ?TXT.
+ (?TXT "L=USA&C=([^,]+),") str:scrape ?LAT.
+ (?TXT "L=USA&C=[^,]+,([^&]+)&") str:scrape ?LON.
+} => { ?CITY :weatherPage ?PG; geo:lat ?LAT; geo:long ?LON }.
+
+#<font size="-1">Local Time: <b> 3:29 PM EST on February 22, 2004</b> [America/New_York] </font>
+{
+ ?PG log:uri [ is str:concatenation of (
+  "http://www.wunderground.com/cgi-bin/findweather/getForecast?query="
+  [ is :formVal of ?CITY ] ) ].
+
+
+ ?PG log:content ?TXT.
+ (?TXT "Local Time: <b>[^<]+</b> \\[([^]]+)\\]") str:scrape ?TZN.
+ ?TZ log:uri [
+   is str:concatenation of
+   ("http://www.w3.org/2002/12/cal/tzd/" ?TZN "#tz")
+  ].
+
+} => {
+ ?TZ a cal:Vtimezone, k:SpatialThing.
+ ?CITY :weatherPage ?PG; k:inRegion ?TZ.
+ }.
+
+
 # test case
 
 [ map:cityName "Budapest";
   k:inRegion [ map:countryName "Hungary" ] ].
 
 # $Log$
-# Revision 1.4  2003-07-07 16:10:16  connolly
+# Revision 1.5  2004-02-22 20:50:06  connolly
+#  - scrape US-specific lat/lon pattern
+#  - scrape time zone names as well as lat/lon
+#  - look up airport codes as well as city names
+#
+# Revision 1.4  2003/07/07 16:10:16  connolly
 # documented nearestAirport property; cleaned up parse errors in contact.n3; used doc:persistencePolicy in contact; fixed typo in doc
 #
 # Revision 1.3  2003/04/14 21:19:34  connolly
