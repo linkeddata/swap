@@ -2,6 +2,7 @@
 #
 # This is only 
 bind ont: <http://www.daml.org/2000/10/daml-ont> .
+bind test: <> .
 
 bind : <> .
 

@@ -1,0 +1,10 @@
+# Test data -- use with filer f11.n3
+#
+
+bind test: <s1.n3> .
+bind ex:  <http://www.example.org/>.
+
+ex:car test:includes ex:engine .
+ex:engine test:includes ex:camshaft .
+ex:train test:includes ex:engine .
+
