@@ -23,10 +23,6 @@
     
     ss:intersectsDomainOf     s:subPropertyOf s:seeAlso .
     
-    rdf:value     a rdf:Property;
-         ss:label "value";
-         ss:rangeIntersects s:Literal .
-    
     x:evolutionAlarmUid     a rdf:Property;
          ss:label "evolutionAlarmUid";
          ss:rangeIntersects s:Literal .
@@ -260,6 +256,10 @@
     :valarm     a rdf:Property;
          ss:domainIntersects :Vevent;
          ss:label "valarm" .
+    
+    :value     a rdf:Property;
+         ss:label "value";
+         ss:rangeIntersects s:Literal .
     
     :version     a rdf:Property;
          ss:domainIntersects :Vcalendar;

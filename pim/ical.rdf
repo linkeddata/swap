@@ -24,11 +24,6 @@
         <s:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#seeAlso"/>
     </rdf:Description>
 
-    <rdf:Property rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#value">
-        <ss:label>value</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
     <rdf:Property rdf:about="http://www.w3.org/2000/01/foo-X@@#evolutionAlarmUid">
         <ss:label>evolutionAlarmUid</ss:label>
         <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
@@ -308,6 +303,11 @@
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#valarm">
         <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
         <ss:label>valarm</ss:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#value">
+        <ss:label>value</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#version">

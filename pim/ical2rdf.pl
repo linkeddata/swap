@@ -65,9 +65,6 @@ my(@component) = ("Vevent" , "Vtodo" , "Vjournal" , "Vfreebusy"
 
 # VERSION: likewise, kinda worthless.
 
-# RRULE: @@parse the value
-
-
 while(1){
   while(($line = <>) =~ s/^\s+//){  # continuation lines
     $field .= $line;
@@ -160,7 +157,7 @@ while(1){
 	$v =~ s/^MAILTO:/mailto:/; #fix borkenness
 
 	printf(" rdf:parseType='Resource'>\n");
-	printf "<rdf:value rdf:resource='%s'/>\n", asAttr($v);
+	printf "<value rdf:resource='%s'/>\n", asAttr($v);
 
 	my($an);
 	foreach $an (keys %attrs){
@@ -186,7 +183,7 @@ while(1){
 	}
 	else{
 	  #warn "no iprop for $n; using rdf:value";
-	  printf("<rdf:value>%s</rdf:value>\n", asContent($v));
+	  printf("<value>%s</value>\n", asContent($v));
 	}
 
 
@@ -294,7 +291,10 @@ sub testCamelCase{
 # @@TODO: params
 
 # $Log$
-# Revision 1.1  2002-07-17 20:34:55  connolly
+# Revision 1.2  2002-07-17 20:59:40  connolly
+# using ical:value in stead of rdf:value
+#
+# Revision 1.1  2002/07/17 20:34:55  connolly
 # moving from palmagent
 #
 # Revision 1.6  2002/07/16 05:02:23  connolly
