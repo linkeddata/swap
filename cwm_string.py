@@ -67,6 +67,10 @@ class BI_StartsWith(LightBuiltIn):
     def evaluate(self, store, context, subj, subj_py, obj, obj_py):
         return subj.string.startswith(obj.string)
 
+class BI_EndsWith(LightBuiltIn):
+    def evaluate(self, store, context, subj, subj_py, obj, obj_py):
+        return subj.string.endswith(obj.string)
+
 # Added, SBP 2001-11:-
 
 class BI_Contains(LightBuiltIn):
@@ -144,6 +148,7 @@ def register(store):
     str.internFrag("lessThan", BI_LessThan)
     str.internFrag("notLessThan", BI_NotLessThan)
     str.internFrag("startsWith", BI_StartsWith)
+    str.internFrag("endsWith", BI_EndsWith)
     str.internFrag("concat", BI_concat)
     str.internFrag("concatenation", BI_concatenation)
     str.internFrag("scrape", BI_scrape)
