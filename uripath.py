@@ -79,7 +79,7 @@ def join(here, there):
     >>> join('mid:foo@example', '../foo')
     Traceback (most recent call last):
         raise ValueError, here
-    ValueError: mid:foo@example
+    ValueError: Base <mid:foo@example> has no slash after colon - with relative <../foo>.
 
     """
 
@@ -159,7 +159,16 @@ def refTo(base, uri):
 
     >>> refTo('http://ex/x/y', 'http://ex/x/y')
     ''
-    
+
+    Note the relationship between refTo and join:
+    join(x, refTo(x, y)) == y
+    which points out certain strings which cannot be URIs. e.g.
+    >>> x='http://ex/x/y';y='http://ex/x/q:r';join(x, refTo(x, y)) == y
+    0
+
+    So 'http://ex/x/q:r' is not a URI. Use 'http://ex/x/q%3ar' instead:
+    >>> x='http://ex/x/y';y='http://ex/x/q%3ar';join(x, refTo(x, y)) == y
+    1
     
     This one checks that it uses a root-realtive one where that is
     all they share.  Now uses root-relative where no path is shared.
@@ -268,8 +277,13 @@ class Tests(unittest.TestCase):
                   'file://meetings.example.com/cal#m1', 'file://meetings.example.com/cal#m1'),
                  ('file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/reluri-1.n3', 'file://meetings.example.com/cal#m1', 'file://meetings.example.com/cal#m1'),
                  ('file:/some/dir/foo', 'file:/some/dir/#blort', './#blort'),
-                 ('file:/some/dir/foo', 'file:/some/dir/#', './#')
-                 
+                 ('file:/some/dir/foo', 'file:/some/dir/#', './#'),
+
+                 # From Graham Klyne Thu, 20 Feb 2003 18:08:17 +0000
+                 ("http://example/x/y%2Fz", "http://example/x/abc", "abc"),
+                 ("http://example/x/y/z", "http://example/x%2Fabc", "/x%2Fabc"),
+                 ("http://example/x/y%2Fz", "http://example/x%2Fabc", "/x%2Fabc"),
+                 ("http://example/x%2Fy/z", "http://example/x%2Fy/abc", "abc")
                  )
 
         for inp1, inp2, exp in cases:
@@ -361,7 +375,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.9  2002-12-25 20:01:32  timbl
+# Revision 1.10  2003-02-24 15:06:38  connolly
+# some more tests from Graham
+#
+# Revision 1.9  2002/12/25 20:01:32  timbl
 # some --flatten tests fail. --why fails. Formulae must be closed to be referenced in a add()
 #
 # Revision 1.8  2002/11/24 03:12:02  timbl
