@@ -1,0 +1,8 @@
+@prefix : <#> .
+     
+@forSome :_g0 .
+     
+:I :am :_g0 .
+     
+:_g0 :named "yosi" .
+{ :_g0 :is :happy } => {:_g0 :is :happy } .
