@@ -1,0 +1,1069 @@
+
+<!-- Processed by Id: cwm.py,v 1.38 2001/05/09 20:11:39 timbl Exp -->
+<!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/-->
+
+
+<rdf:RDF xmlns:log="http://www.w3.org/2000/10/swap/log.n3#"
+    xmlns:dot="http://www.w3.org/2001/02pd/gv#"
+    xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc.n3#"
+    xmlns:v="http://www.w3.org/2001/04/roadmap/var#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://www.w3.org/2001/04/infoset#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/">
+        <log:forAll rdf:resource="http://www.w3.org/2001/04/roadmap/var#n1"/>
+        <log:forAll rdf:resource="http://www.w3.org/2001/04/roadmap/var#n2"/>
+        <log:forAll rdf:resource="http://www.w3.org/2001/04/roadmap/var#p"/>
+        <log:forAll rdf:resource="http://www.w3.org/2001/04/roadmap/var#s"/>
+        <log:forAll rdf:resource="http://www.w3.org/2001/04/roadmap/var#CR"/>
+        <log:forAll rdf:resource="http://www.w3.org/2001/04/roadmap/var#CD"/>
+        <doc:cvsversion>$Id$</doc:cvsversion>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g0"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g1"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g2"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g3"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g4"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g5"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g6"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g7"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g8"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g9"/>
+        <dot:digraph rdf:resource="http://www.w3.org/2001/04/roadmap/var#theGraph"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g11"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g12"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g13"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g14"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs1"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs2"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs3"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs4"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs5"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs6"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs7"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs8"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs9"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs10"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs11"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs12"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs13"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs14"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs15"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs16"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs17"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs18"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs19"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs20"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs21"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs22"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs23"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs24"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs25"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs26"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs27"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs28"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs29"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs30"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs31"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs30">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>target</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs8">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>content</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs9">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>namespaceAttributes</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs4">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>baseURI</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs5">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>characterCode</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs6">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>characterEncodingScheme</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs7">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>children</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs31">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>version</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs1">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>allDeclarationsProcessed</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs2">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>attributes</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs3">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>attributeType</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs25">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>publicIdentifier</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs24">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>prefix</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs27">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>specified</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs26">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>references</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs21">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>notations</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs20">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>notationName</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs23">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>parent</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs22">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>ownerElement</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs29">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>systemIdentifier</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs28">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>standalone</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs18">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>normalizedValue</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs19">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>notation</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs10">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>declarationBaseURI</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs11">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>documentElement</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs12">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>elementContentWhitespace</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs13">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>unparsedEntities</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs14">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>inScopeNamespaces</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs15">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>localName</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs16">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>name</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs17">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>namespaceName</dot:label>
+        <dot:color>red</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g2">
+        <log:implies rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g3"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g0">
+        <log:implies rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g1"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g6">
+        <log:implies rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g7"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g4">
+        <log:implies rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g5"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g8">
+        <log:implies rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g9"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g13">
+        <log:implies rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g14"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g11">
+        <log:implies rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/style-arcprop.n3#_g12"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/roadmap/var#theGraph">
+        <dot:label>XML Infoset $Date$</dot:label>
+        <dot:rankdir>LR</dot:rankdir>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#Document"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#Element"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#AttributeSet"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#Attribute"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#Character"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#Integer"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#InfoItemSeq"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#UnparsedEntitySet"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#NamespaceSet"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#UnparsedEntity"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#Notation"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#NotationSet"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#References"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#Standalone"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#ProcessingInstruction"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#InfoItemSet"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#UnexpandedEntityReference"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#Comment"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#DocumentTypeDeclaration"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#Namespace"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#Unknown"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/04/infoset#NoValue"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#children">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#InfoItemSeq"/>
+        <rdfs:label>children</rdfs:label>
+        <dot:label>children</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#notations">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#NotationSet"/>
+        <rdfs:label>notations</rdfs:label>
+        <dot:label>notations</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#attributes">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Element"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#AttributeSet"/>
+        <rdfs:label>attributes</rdfs:label>
+        <dot:label>attributes</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#notationName">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#UnparsedEntity"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <rdfs:label>notationName</rdfs:label>
+        <dot:label>notationName</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#InfoItemSeq">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#References"/>
+        <rdfs:label>InfoItemSeq</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>InfoItemSeq</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#References">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:label>References</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>References</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Boolean">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:label>Boolean</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>Boolean</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#prefix">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <rdfs:label>prefix</rdfs:label>
+        <dot:label>prefix</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#InfoItemSet">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag"/>
+        <rdfs:label>InfoItemSet</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>InfoItemSet</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#publicIdentifier">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <rdfs:label>publicIdentifier</rdfs:label>
+        <dot:label>publicIdentifier</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_ENUMERATION">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <rdfs:label>ENUMERATION</rdfs:label>
+        <dot:label>ENUMERATION</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#NotationSet">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItemSet"/>
+        <rdfs:label>NotationSet</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>NotationSet</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#UnparsedEntity">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:label>UnparsedEntity</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>UnparsedEntity</dot:label>
+        <_gs19 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Notation"/>
+        <_gs20 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#baseURI">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <rdfs:label>baseURI</rdfs:label>
+        <dot:label>baseURI</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#standalone">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Standalone"/>
+        <rdfs:label>standalone</rdfs:label>
+        <dot:label>standalone</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#ProcessingInstruction">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:label>ProcessingInstruction</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>ProcessingInstruction</dot:label>
+        <_gs30 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Attribute">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:label>Attribute</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>Attribute</dot:label>
+        <_gs3 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <_gs18 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <_gs22 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Element"/>
+        <_gs26 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#References"/>
+        <_gs27 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#UnparsedEntitySet">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItemSet"/>
+        <rdfs:label>UnparsedEntitySet</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>UnparsedEntitySet</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#systemIdentifier">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <rdfs:label>systemIdentifier</rdfs:label>
+        <dot:label>systemIdentifier</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_CDATA">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <rdfs:label>CDATA</rdfs:label>
+        <dot:label>CDATA</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_IDREFS">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <rdfs:label>IDREFS</rdfs:label>
+        <dot:label>IDREFS</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#InfoItem">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:label>InfoItem</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>InfoItem</dot:label>
+        <_gs4 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <_gs7 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#InfoItemSeq"/>
+        <_gs8 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <_gs10 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <_gs15 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <_gs16 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <_gs17 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <_gs23 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <_gs24 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <_gs25 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <_gs29 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#normalizedValue">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:label>normalizedValue</rdfs:label>
+        <dot:label>normalizedValue</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#namespaceAttributes">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Element"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#AttributeSet"/>
+        <rdfs:label>namespaceAttributes</rdfs:label>
+        <dot:label>namespaceAttributes</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_NMTOKENS">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <rdfs:label>NMTOKENS</rdfs:label>
+        <dot:label>NMTOKENS</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Namespace">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:label>Namespace</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>Namespace</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#allDeclarationsProcessed">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+        <rdfs:label>allDeclarationsProcessed</rdfs:label>
+        <dot:label>allDeclarationsProcessed</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Element">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:label>Element</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>Element</dot:label>
+        <_gs2 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#AttributeSet"/>
+        <_gs9 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#AttributeSet"/>
+        <_gs14 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#NamespaceSet"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Boolean_false">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+        <rdfs:label>false</rdfs:label>
+        <dot:label>false</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_ENTITIES">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <rdfs:label>ENTITIES</rdfs:label>
+        <dot:label>ENTITIES</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Boolean_true">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+        <rdfs:label>true</rdfs:label>
+        <dot:label>true</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#notation">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#UnparsedEntity"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Notation"/>
+        <rdfs:label>notation</rdfs:label>
+        <dot:label>notation</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#target">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#ProcessingInstruction"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:label>target</rdfs:label>
+        <dot:label>target</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#elementContentWhitespace">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Character"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+        <rdfs:label>elementContentWhitespace</rdfs:label>
+        <dot:label>elementContentWhitespace</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Standalone_yes">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#Standalone"/>
+        <rdfs:label>yes</rdfs:label>
+        <dot:label>yes</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#name">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:label>name</rdfs:label>
+        <dot:label>name</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Integer">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:label>Integer</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>Integer</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#documentElement">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Element"/>
+        <rdfs:label>documentElement</rdfs:label>
+        <dot:label>documentElement</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#AttributeType">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:label>AttributeType</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>AttributeType</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#characterEncodingScheme">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:label>characterEncodingScheme</rdfs:label>
+        <dot:label>characterEncodingScheme</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#version">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <rdfs:label>version</rdfs:label>
+        <dot:label>version</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#content">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:label>content</rdfs:label>
+        <dot:label>content</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_NOTATION">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <rdfs:label>NOTATION</rdfs:label>
+        <dot:label>NOTATION</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#NoValue">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Standalone"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Notation"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#References"/>
+        <rdfs:label>NoValue</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>NoValue</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#NamespaceSet">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItemSet"/>
+        <rdfs:label>NamespaceSet</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>NamespaceSet</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#AttributeSet">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItemSet"/>
+        <rdfs:label>AttributeSet</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>AttributeSet</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Notation">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:label>Notation</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>Notation</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Comment">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:label>Comment</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>Comment</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Standalone_no">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#Standalone"/>
+        <rdfs:label>no</rdfs:label>
+        <dot:label>no</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#ownerElement">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Element"/>
+        <rdfs:label>ownerElement</rdfs:label>
+        <dot:label>ownerElement</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#UnexpandedEntityReference">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:label>UnexpandedEntityReference</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>UnexpandedEntityReference</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Unknown_unknown">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#Unknown"/>
+        <rdfs:label>unknown</rdfs:label>
+        <dot:label>unknown</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Document">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:label>Document</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>Document</dot:label>
+        <_gs1 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+        <_gs6 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <_gs11 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Element"/>
+        <_gs13 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#UnparsedEntitySet"/>
+        <_gs21 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#NotationSet"/>
+        <_gs28 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Standalone"/>
+        <_gs31 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#DocumentTypeDeclaration">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:label>DocumentTypeDeclaration</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>DocumentTypeDeclaration</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#inScopeNamespaces">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Element"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#NamespaceSet"/>
+        <rdfs:label>inScopeNamespaces</rdfs:label>
+        <dot:label>inScopeNamespaces</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Standalone">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:label>Standalone</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>Standalone</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#specified">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+        <rdfs:label>specified</rdfs:label>
+        <dot:label>specified</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#attributeType">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <rdfs:label>attributeType</rdfs:label>
+        <dot:label>attributeType</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#references">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Attribute"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#References"/>
+        <rdfs:label>references</rdfs:label>
+        <dot:label>references</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Literal">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:label>Literal</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>Literal</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#declarationBaseURI">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <rdfs:label>declarationBaseURI</rdfs:label>
+        <dot:label>declarationBaseURI</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_ID">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <rdfs:label>ID</rdfs:label>
+        <dot:label>ID</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_IDREF">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <rdfs:label>IDREF</rdfs:label>
+        <dot:label>IDREF</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_NMTOKEN">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <rdfs:label>NMTOKEN</rdfs:label>
+        <dot:label>NMTOKEN</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Character">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:label>Character</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>Character</dot:label>
+        <_gs5 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Integer"/>
+        <_gs12 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#localName">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <rdfs:label>localName</rdfs:label>
+        <dot:label>localName</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#AttributeType_ENTITY">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <rdfs:label>ENTITY</rdfs:label>
+        <dot:label>ENTITY</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#Unknown">
+        <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#AttributeType"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Boolean"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Notation"/>
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#References"/>
+        <rdfs:label>Unknown</rdfs:label>
+        <dot:color>skyblue1</dot:color>
+        <v:style>filled</v:style>
+        <dot:label>Unknown</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#characterCode">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Character"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Integer"/>
+        <rdfs:label>characterCode</rdfs:label>
+        <dot:label>characterCode</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#parent">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:label>parent</rdfs:label>
+        <dot:label>parent</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#unparsedEntities">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#Document"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#UnparsedEntitySet"/>
+        <rdfs:label>unparsedEntities</rdfs:label>
+        <dot:label>unparsedEntities</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#NoValue_noValue">
+        <rdf:type rdf:resource="http://www.w3.org/2001/04/infoset#Unknown"/>
+        <rdfs:label>noValue</rdfs:label>
+        <dot:label>noValue</dot:label>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2001/04/infoset#namespaceName">
+        <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2001/04/infoset#InfoItem"/>
+        <rdfs:range rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+        <rdfs:label>namespaceName</rdfs:label>
+        <dot:label>namespaceName</dot:label>
+        <dot:color>khaki2</dot:color>
+        <dot:shape>box</dot:shape>
+        <dot:style>filled</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#subClassOf">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:color>skyblue2</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#subPropertyOf">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:color>khaki2</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#Literal">
+        <rdfs:subClassOf rdf:resource="http://www.w3.org/2001/04/infoset#Literal"/>
+    </rdf:Description>
+</rdf:RDF>

@@ -1,0 +1,301 @@
+/* transformed by by Id: rdf2dot.xsl,v 1.10 2001/05/09 20:29:01 connolly Exp  */
+digraph N628 {
+label="XML Infoset $Date$";
+rankdir="LR";
+"http://www.w3.org/2001/04/infoset#InfoItem" [color="skyblue1",
+label="InfoItem",
+];
+"http://www.w3.org/2001/04/infoset#InfoItem" -> "http://www.w3.org/2001/04/infoset#Literal" [ /* edge attributes */
+label="baseURI",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#InfoItem" -> "http://www.w3.org/2001/04/infoset#InfoItemSeq" [ /* edge attributes */
+label="children",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#InfoItem" -> "http://www.w3.org/2000/01/rdf-schema#Literal" [ /* edge attributes */
+label="content",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#InfoItem" -> "http://www.w3.org/2001/04/infoset#Literal" [ /* edge attributes */
+label="declarationBaseURI",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#InfoItem" -> "http://www.w3.org/2000/01/rdf-schema#Literal" [ /* edge attributes */
+label="localName",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#InfoItem" -> "http://www.w3.org/2000/01/rdf-schema#Literal" [ /* edge attributes */
+label="name",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#InfoItem" -> "http://www.w3.org/2001/04/infoset#Literal" [ /* edge attributes */
+label="namespaceName",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#InfoItem" -> "http://www.w3.org/2001/04/infoset#InfoItem" [ /* edge attributes */
+label="parent",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#InfoItem" -> "http://www.w3.org/2001/04/infoset#Literal" [ /* edge attributes */
+label="prefix",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#InfoItem" -> "http://www.w3.org/2001/04/infoset#Literal" [ /* edge attributes */
+label="publicIdentifier",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#InfoItem" -> "http://www.w3.org/2001/04/infoset#Literal" [ /* edge attributes */
+label="systemIdentifier",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Document" [color="skyblue1",
+label="Document",
+];
+"http://www.w3.org/2001/04/infoset#Document" -> "http://www.w3.org/2001/04/infoset#InfoItem" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#Document" -> "http://www.w3.org/2001/04/infoset#Boolean" [ /* edge attributes */
+label="allDeclarationsProcessed",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Document" -> "http://www.w3.org/2000/01/rdf-schema#Literal" [ /* edge attributes */
+label="characterEncodingScheme",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Document" -> "http://www.w3.org/2001/04/infoset#Element" [ /* edge attributes */
+label="documentElement",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Document" -> "http://www.w3.org/2001/04/infoset#UnparsedEntitySet" [ /* edge attributes */
+label="unparsedEntities",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Document" -> "http://www.w3.org/2001/04/infoset#NotationSet" [ /* edge attributes */
+label="notations",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Document" -> "http://www.w3.org/2001/04/infoset#Standalone" [ /* edge attributes */
+label="standalone",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Document" -> "http://www.w3.org/2001/04/infoset#Literal" [ /* edge attributes */
+label="version",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Boolean" [color="skyblue1",
+label="Boolean",
+];
+"http://www.w3.org/2001/04/infoset#Element" [color="skyblue1",
+label="Element",
+];
+"http://www.w3.org/2001/04/infoset#Element" -> "http://www.w3.org/2001/04/infoset#InfoItem" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#Element" -> "http://www.w3.org/2001/04/infoset#AttributeSet" [ /* edge attributes */
+label="attributes",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Element" -> "http://www.w3.org/2001/04/infoset#AttributeSet" [ /* edge attributes */
+label="namespaceAttributes",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Element" -> "http://www.w3.org/2001/04/infoset#NamespaceSet" [ /* edge attributes */
+label="inScopeNamespaces",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#AttributeSet" [color="skyblue1",
+label="AttributeSet",
+];
+"http://www.w3.org/2001/04/infoset#AttributeSet" -> "http://www.w3.org/2001/04/infoset#InfoItemSet" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#Attribute" [color="skyblue1",
+label="Attribute",
+];
+"http://www.w3.org/2001/04/infoset#Attribute" -> "http://www.w3.org/2001/04/infoset#InfoItem" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#Attribute" -> "http://www.w3.org/2001/04/infoset#AttributeType" [ /* edge attributes */
+label="attributeType",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Attribute" -> "http://www.w3.org/2000/01/rdf-schema#Literal" [ /* edge attributes */
+label="normalizedValue",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Attribute" -> "http://www.w3.org/2001/04/infoset#Element" [ /* edge attributes */
+label="ownerElement",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Attribute" -> "http://www.w3.org/2001/04/infoset#References" [ /* edge attributes */
+label="references",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Attribute" -> "http://www.w3.org/2001/04/infoset#Boolean" [ /* edge attributes */
+label="specified",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#AttributeType" [color="skyblue1",
+label="AttributeType",
+];
+"http://www.w3.org/2001/04/infoset#Literal" [color="skyblue1",
+label="Literal",
+];
+"http://www.w3.org/2001/04/infoset#Character" [color="skyblue1",
+label="Character",
+];
+"http://www.w3.org/2001/04/infoset#Character" -> "http://www.w3.org/2001/04/infoset#InfoItem" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#Character" -> "http://www.w3.org/2001/04/infoset#Integer" [ /* edge attributes */
+label="characterCode",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Character" -> "http://www.w3.org/2001/04/infoset#Boolean" [ /* edge attributes */
+label="elementContentWhitespace",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Integer" [color="skyblue1",
+label="Integer",
+];
+"http://www.w3.org/2001/04/infoset#Integer" -> "http://www.w3.org/2000/01/rdf-schema#Literal" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2000/01/rdf-schema#Literal" [];
+"http://www.w3.org/2000/01/rdf-schema#Literal" -> "http://www.w3.org/2001/04/infoset#Literal" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#InfoItemSeq" [color="skyblue1",
+label="InfoItemSeq",
+];
+"http://www.w3.org/2001/04/infoset#InfoItemSeq" -> "http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#InfoItemSeq" -> "http://www.w3.org/2001/04/infoset#References" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#UnparsedEntitySet" [color="skyblue1",
+label="UnparsedEntitySet",
+];
+"http://www.w3.org/2001/04/infoset#UnparsedEntitySet" -> "http://www.w3.org/2001/04/infoset#InfoItemSet" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#NamespaceSet" [color="skyblue1",
+label="NamespaceSet",
+];
+"http://www.w3.org/2001/04/infoset#NamespaceSet" -> "http://www.w3.org/2001/04/infoset#InfoItemSet" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#UnparsedEntity" [color="skyblue1",
+label="UnparsedEntity",
+];
+"http://www.w3.org/2001/04/infoset#UnparsedEntity" -> "http://www.w3.org/2001/04/infoset#InfoItem" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#UnparsedEntity" -> "http://www.w3.org/2001/04/infoset#Notation" [ /* edge attributes */
+label="notation",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#UnparsedEntity" -> "http://www.w3.org/2001/04/infoset#Literal" [ /* edge attributes */
+label="notationName",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#Notation" [color="skyblue1",
+label="Notation",
+];
+"http://www.w3.org/2001/04/infoset#Notation" -> "http://www.w3.org/2001/04/infoset#InfoItem" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#NotationSet" [color="skyblue1",
+label="NotationSet",
+];
+"http://www.w3.org/2001/04/infoset#NotationSet" -> "http://www.w3.org/2001/04/infoset#InfoItemSet" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#References" [color="skyblue1",
+label="References",
+];
+"http://www.w3.org/2001/04/infoset#Standalone" [color="skyblue1",
+label="Standalone",
+];
+"http://www.w3.org/2001/04/infoset#ProcessingInstruction" [color="skyblue1",
+label="ProcessingInstruction",
+];
+"http://www.w3.org/2001/04/infoset#ProcessingInstruction" -> "http://www.w3.org/2001/04/infoset#InfoItem" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#ProcessingInstruction" -> "http://www.w3.org/2000/01/rdf-schema#Literal" [ /* edge attributes */
+label="target",
+color="red",
+];
+"http://www.w3.org/2001/04/infoset#InfoItemSet" [color="skyblue1",
+label="InfoItemSet",
+];
+"http://www.w3.org/2001/04/infoset#InfoItemSet" -> "http://www.w3.org/1999/02/22-rdf-syntax-ns#Bag" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#UnexpandedEntityReference" [color="skyblue1",
+label="UnexpandedEntityReference",
+];
+"http://www.w3.org/2001/04/infoset#UnexpandedEntityReference" -> "http://www.w3.org/2001/04/infoset#InfoItem" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#Comment" [color="skyblue1",
+label="Comment",
+];
+"http://www.w3.org/2001/04/infoset#Comment" -> "http://www.w3.org/2001/04/infoset#InfoItem" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#DocumentTypeDeclaration" [color="skyblue1",
+label="DocumentTypeDeclaration",
+];
+"http://www.w3.org/2001/04/infoset#DocumentTypeDeclaration" -> "http://www.w3.org/2001/04/infoset#InfoItem" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#Namespace" [color="skyblue1",
+label="Namespace",
+];
+"http://www.w3.org/2001/04/infoset#Namespace" -> "http://www.w3.org/2001/04/infoset#InfoItem" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#Unknown" [color="skyblue1",
+label="Unknown",
+];
+"http://www.w3.org/2001/04/infoset#Unknown" -> "http://www.w3.org/2001/04/infoset#AttributeType" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#Unknown" -> "http://www.w3.org/2001/04/infoset#Literal" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#Unknown" -> "http://www.w3.org/2001/04/infoset#Boolean" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#Unknown" -> "http://www.w3.org/2001/04/infoset#Notation" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#Unknown" -> "http://www.w3.org/2001/04/infoset#References" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#NoValue" [color="skyblue1",
+label="NoValue",
+];
+"http://www.w3.org/2001/04/infoset#NoValue" -> "http://www.w3.org/2001/04/infoset#AttributeType" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#NoValue" -> "http://www.w3.org/2001/04/infoset#Literal" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#NoValue" -> "http://www.w3.org/2001/04/infoset#Boolean" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#NoValue" -> "http://www.w3.org/2001/04/infoset#Standalone" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#NoValue" -> "http://www.w3.org/2001/04/infoset#Notation" [ /* edge attributes */
+color="skyblue2",
+];
+"http://www.w3.org/2001/04/infoset#NoValue" -> "http://www.w3.org/2001/04/infoset#References" [ /* edge attributes */
+color="skyblue2",
+];
+}
