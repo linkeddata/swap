@@ -85,6 +85,11 @@ N3_forSome_URI = Logic_NS + "forSome"
 N3_subExpression_URI = Logic_NS + "subExpression"
 N3_forAll_URI = Logic_NS + "forAll"
 
+META_NS_URI = "http://www.w3.org/2000/01/swap/meta.n3#"
+META_mergedWith = META_NS_URI + "mergedWith"
+META_source = META_NS_URI + "source"
+META_run = META_NS_URI + "run"
+
 # The statement is stored as a quad - affectionately known as a triple ;-)
 
 CONTEXT = notation3.CONTEXT
@@ -1438,6 +1443,7 @@ Examples:
             myEngine = Engine()
             _store = RDFStore(myEngine, _outURI+"#_gs")
             workingContext = myEngine.internURI(_outURI)
+            _meta = myEngine.internURI(_metaURI)
 
         if not _gotInput: #@@@@@@@@@@ default input
             _inputURI = _baseURI # Make abs from relative
@@ -1477,9 +1483,9 @@ Examples:
                     _step  = _step + 1
                     s = _metaURI + `_step`  #@@ leading 0s to make them sort?
                     if history:
-                        _store.storeQuad(_meta, META_MergedWith, s, history)
-                        _store.storeQuad(_meta, META_Source, s, inputContext)
-                        _store.storeQuad(_meta, META_Run, s, run)
+                        _store.storeQuad(_meta, META_mergedWith, s, history)
+                        _store.storeQuad(_meta, META_source, s, inputContext)
+                        _store.storeQuad(_meta, META_run, s, run)
                         history = s
                     else:
                         history = inputContext

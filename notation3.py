@@ -607,7 +607,7 @@ class SinkParser:
                 i = i + len(delim)
                 j = string.find(str, delim, i)
                 if j<0: raise BadSyntax(str, i, "unterminated string literal")
-                res.append((LITERAL, str[i:j])) # @@@@@ ^decoding escapes
+                res.append((LITERAL, stripCR(str[i:j]))) # @@@@@ ^decoding escapes
 		return j+len(delim)
 	    else:
 		return -1
@@ -663,7 +663,12 @@ class BadSyntax:
 	       % (self._why, pre, str[i-30:i], str[i:i+30], post)
 
 
-
+def stripCR(str):
+    res = ""
+    for ch in str:
+        if ch != "\r":
+            res = res + ch
+    return res
 
 
 ########################## RDF 1.0 Syntax generator
@@ -760,8 +765,8 @@ class ToRDF(RDFSink):
 				 (('about', subjn),), self.prefixes)
 	    self._subj = subj
 
-        self._wr.startElement(pred[1], [], self.prefixes)  # @@? Parsetype RDF
-	    
+        self._wr.startElement(pred[1], [('parseType','Resource')], self.prefixes)  # @@? Parsetype RDF
+
         self._subj = obj    # The object is now the current subject
 
 
