@@ -144,12 +144,12 @@ cr:publicKey a s:Property;
 #    s:label "RSA key generator";
 #    s:domain string:String;    # Actually a number in dcimal, length of ky in octets
 #    s:range  string:String.    # The key generated
-
-cr:RSA_validSignature a rdf:Property;   # Must be an internal built-in
-    a dpo:UnambiguousProperty, dpo:UniqueProperty;  # Assume unbreakable.
-    s:label "validated RSA signature";
-    s:domain string:String;   # A signed string, typically the hash of the document contents
-    s:range string:String.   # The signature
+#
+#cr:RSA_validSignature a rdf:Property;   # Must be an internal built-in
+#    a dpo:UnambiguousProperty, dpo:UniqueProperty;  # Assume unbreakable.
+#    s:label "validated RSA signature";
+#    s:domain string:String;   # A signed string, typically the hash of the document contents
+#    s:range string:String.   # The signature
 
 cr:sign a rdf:Property;
     s:label "sign";
