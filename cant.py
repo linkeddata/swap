@@ -11,7 +11,7 @@ Can have any number of --from <file> parameters, in which case files are
 merged. If none are given, /dev/stdin is used.
 
 This is an independent n-triples cannonicalizer. It uses heuristics, and
-will not work on all graphs. It is designed for testing:  the output and
+will not terminate on all graphs. It is designed for testing:  the output and
 the reference output are both canonicalized and compared.
 
 It uses the very simple NTriples format. It is designed to be independent
@@ -106,14 +106,14 @@ def main():
     graph = []
     if testFiles == []: testFiles = [ "/dev/stdin" ]
     for fn in testFiles:
-	if verbose: stderr.write("Loading data from %s" % fn)
+	if verbose: stderr.write("Loading data from %s\n" % fn)
 
 	uri = uripath.join(WD, fn)
 	inStream = urllib.urlopen(uri)
 	while 1:
 	    line = inStream.readline()
 	    if line == "": break
-	    if verbose: stderr.write("%s\n" % line)
+#	    if verbose: stderr.write("%s\n" % line)
 	    m = comment.match(line)
 	    if m != None: continue
 	    m = statement.match(line)
@@ -121,9 +121,9 @@ def main():
 		stderr.write("Syntax error: "+line+"\n")
 		exit(-1)
 	    triple = m.group(1), m.group(2), m.group(3)
-	    if verbose: stderr.write( "-> %s  %s  %s ." % (triple[0], triple[1], triple[2]))
+	    if verbose: stderr.write( "Triple: %s  %s  %s.\n" % (triple[0], triple[1], triple[2]))
 	    graph.append(triple)
-    if verbose: stderr.write("%i statements in graph" % (len(graph)))
+    if verbose: stderr.write("\nThere are %i statements in graph\n" % (len(graph)))
     g = canonicalize(graph)
     serialize(g)
     
@@ -146,10 +146,16 @@ def serialize(graph):
 	    print x,
 	print "."
 
-def compare(a,b, level = 0):
+def compareFirst(a,b):
     "Compare consistently nested lists of strings"
+    d = cmp(`a[0]`, `b[0]`)
     if verbose:
-	stderr.write("  "*level + "@@@@@@@@@ compare %s and %s\n" % (`a`,`b`))
+	if d<0: stderr.write("Comparing:  %s]\n  LESS THAN %s\n" % (`a`,`b`))
+	elif d>0: stderr.write("Comparing:  %s]\n  LESS THAN %s\n" % (`b`,`a`))
+	else: stderr.write("Comparing:  %s]\n     EQUALS %s\n" % (`b`,`a`))
+    return d
+    
+    #@@@@@@@@@@@@
     if a==None and b == None: return 0
     if a == None: return -1
     if b == None: return 1
@@ -204,34 +210,34 @@ def canon(graph, c0=0):
 		b = bnodes[triple[i]]
 		signature[b].append((i, pat))
 
+    if verbose: stderr.write("\n")
     n = nextBnode
     s = []
     for i in range(n):
-	signature[i].sort(compare)   # Signature is now intrinsic to the local environment of that bnode.
-	if verbose: stderr.write( " %3i) %s\n" % (i, signature[i]))
+	signature[i].sort()   # Signature is now intrinsic to the local environment of that bnode.
+	if verbose: stderr.write( "Bnode %3i) %s\n\n" % (i, signature[i]))
 	s.append((signature[i], i))
-    s.sort()
+    s.sort(compareFirst)
     
     dups = 0
     c = c0
+    if verbose: stderr.write("\nIn order\n")
     for i in range(n):
+	sig, original = s[i]
+	if verbose: stderr.write("%3i) Orig: %i Sig:%s\n" %(i, original, sig))
 	if i != n-1 and s[i][0] == s[i+1][0]:
-	    if verbose: stderr.write( "@@@ %3i]  %i and %i have same signature: \n\t%s\nand\t%s\n" % (
+	    if verbose: stderr.write(
+	     "@@@ %3i]  %i and %i have same signature: \n\t%s\nand\t%s\n" % (
 		    i, s[i][1], s[i+1][1], s[i][0], s[i+1][0]))
 	    dups = dups + 1
 	elif i != 0 and s[i][0] == s[i-1][0]:
 	    if verbose: stderr.write( "@@@ %3i]  %i and %i have same signature: \n\t%s\nand\t%s\n" % (
 		    i, s[i][1], s[i-1][1], s[i][0], s[i-1][0]))
 	else:
-	    canonical[i] = c
-	    if verbose: stderr.write( "\t#%i canonicalized #%i\n" %(s[i][1], c))
+	    canonical[original] = c
+	    if verbose: stderr.write( "\tBnode#%i canonicalized to new fixed C%i\n" %(s[i][1], c))
 	    c = c + 1
 	    
-    if verbose: stderr.write( "@@@ %i duplicate sigs out of %i\n" %(dups, n))
-
-#    if dups > 0:
-#	exit(-2)
-
     newGraph = []
     for j in range(len(graph)):
 	triple = graph[j]
@@ -245,6 +251,7 @@ def canon(graph, c0=0):
 		    x = "__:c" + str(c1) # New name
 	    newTriple.append(x)
 	newGraph.append((newTriple[0], newTriple[1], newTriple[2]))
+    if verbose: stderr.write("Iteration complete with %i duplicate signatures\n\n" %dups)
     return dups, newGraph, c
 
 
