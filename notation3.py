@@ -61,8 +61,9 @@ import re
 
 RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 DAML_equivalentTo_URI = "http://www.daml.org/2000/10/daml-ont#equivalentTo"
-N3_forSome_URI = "http://www.w3.org/2000/10/swap/logic#forSome"
-N3_forAll_URI = "http://www.w3.org/2000/10/swap/logic#forAll"
+Logic_NS = "http://www.w3.org/2000/10/swap/log.n3"
+N3_forSome_URI = Logic_NS + "#forSome"
+N3_forAll_URI = Logic_NS + "#forAll"
 
 # The statement is stored as a quad - affectionately known as a triple ;-)
 
@@ -323,8 +324,8 @@ class SinkParser:
 	else:
 	    j = self.tok('[', str, i)
 	    if j>=0:
-                subj = ANONYMOUS , self._genPrefix + `self._nextId`
-                self._nextId = self._nextId + 1  # intern
+                subj = RESOURCE , self._genPrefix + `self._nextId`  #
+                self._nextId = self._nextId + 1
                 self.makeStatement(((RESOURCE, self._thisDoc), # quantifiers - use inverse?
                                     (RESOURCE, N3_forSome_URI),
                                     (RESOURCE, self._thisDoc),
@@ -338,9 +339,14 @@ class SinkParser:
 
 	    j = self.tok('{', str, i)
 	    if j>=0:
-                oldContext = self.context
-                subj = ANONYMOUS , self._genPrefix + `self._nextId`
+                oldContext = self._context
+                subj = RESOURCE , self._genPrefix + `self._nextId` # ANONYMOUS
                 self._nextId = self._nextId + 1  # intern
+                self.makeStatement(((RESOURCE, self._thisDoc), # quantifiers - use inverse?
+                                    (RESOURCE, N3_forSome_URI), #pred
+                                    (RESOURCE, self._thisDoc),  #subj
+                                    subj))                      # obj
+
                 self.context = subj
                 
                 while 1:
@@ -353,7 +359,7 @@ class SinkParser:
                     j = self.directiveOrStatement(str,i)
                     if j<0: raise BadSyntax(str, i, "expected statement or '}'")
 
-                self.context = oldContext # restore
+                self._context = oldContext # restore
                 res.append(subj)
                 return j
 
@@ -701,7 +707,7 @@ bind default <>
     print "----------------------- Test store:"
 
     testEngine = Engine()
-    thisDoc = testEngine.intern(thisURI)    # Store used interned forms of URIs
+    thisDoc = testEngine.intern((RESOURCE, thisURI))    # Store used interned forms of URIs
 
     store = RDFStore(testEngine)
     # (sink,  thisDoc,  baseURI, bindings)
@@ -934,16 +940,20 @@ class SinkToN3(RDFSink):
         self._endStatement()
         self.prefixes[nsPair] = prefixString
         self._write(" bind %s: <%s> .\n" % (prefixString, nsPair[1]) )
+        self._write("    " * self.indent)
+
 
     def startDoc(self):
  
         self._write("\n#  Start notation3 generation\n")
         self._write("#  $Id$\n\n")
+        self._write("    " * self.indent)
         self._subj = None
         self._nextId = 0
 
     def endDoc(self):
 	self._endStatement()
+	self._write("\n")
 
     def makeStatement(self, triple):
         self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])        
@@ -1099,13 +1109,31 @@ class Thing:
         """  Is this thing a genid - is its name arbitrary? """
         return 0    # unless overridden
 
-    def n3_anonymous(self, context):
+    def n3_anonymous(self, context): 
         """ Can be output as an anonymous node in N3
+        Returns number of incoming links (1 or 2) including forSome link
+        or zero if self can NOT be represented as an anonymous node.
         """
-        return (self.generated() and  # The URI is irrelevant
-            self.occurrences(OBJ,context) == 1 and  # This is only incoming arrow
-            self.occurrences(PRED, context) == 0 )    # It is not used as a verb itself
+        incoming = self.occurrences(OBJ,context)
+        if incoming > 2:
+#            print "## Anon: %s has %i incoming nodes" % (`self`, incoming)
+            return 0  # Not an anonymous node
 
+        if self.occurrences(PRED, context) >0:
+#            print "## Anon: %s has %i pred occurrences" % (`self`, self.occurrences(PRED, context))
+            return 0 # Occurs as a predicate => needs a name in N3
+        
+        for s in self.occursAs[OBJ]:
+            con, pred, subj, obj = s.triple
+            if con is context and subj is context:
+#                print "## Anon - what about", `pred`
+                if pred.uriref(None)==N3_forSome_URI:
+#                    print "## Anon: %s has %i incoming and passes" % (`self`, incoming)
+                    return incoming
+            
+#        print "## Anon: %s has no existential" % (`self`,)
+        return 0  # No existential found
+    
     def asPair(self):
         return (RESOURCE, self.uriref(None))
     
@@ -1278,7 +1306,7 @@ class Engine:
 
 
 ######################################################## Storage
-# The store uses an index in the interened resource objects.
+# The store uses an index in the interned resource objects.
 #
 #   store.occurs[context, thing][partofspeech]   dict, list, ???
 
@@ -1295,16 +1323,24 @@ class RDFStore(RDFSink) :
     def __init__(self, engine):
         RDFSink.__init__(self)
         self.engine = engine
+        self.forSome = engine.intern((RESOURCE, N3_forSome_URI))
+        self.forAll = engine.intern((RESOURCE, N3_forAll_URI))
 
 # Input methods:
 
+    def bind(self, prefix, nsPair):
+        if prefix:   #  Ignore binding to empty prefix
+            return RDFSink.bind(self, prefix, nsPair) # Otherwise, do as usual.
+    
     def makeStatement(self, tuple):
         q = ( self.engine.intern(tuple[CONTEXT]),
               self.engine.intern(tuple[PRED]),
               self.engine.intern(tuple[SUBJ]),
               self.engine.intern(tuple[OBJ]) )
         s = StoredStatement(q)
+#        print "### Storing : ", s.triple
         for p in ALL4: s.triple[p].occursAs[p].append(s)
+#        print "### %i now in %s"% (len(s.triple[CONTEXT].occursAs[CONTEXT]),`s.triple[CONTEXT]` )
                     
     def startDoc(self):
         pass
@@ -1346,16 +1382,20 @@ class RDFStore(RDFSink) :
 # Manipulation methods:
 
     def moveContext(self, old, new):
-        for s in old.occursAs[CONTEXT] :
-            t = s.triple
-#            print "Quad:", `s.triple`, "Old, new:",`old`, `new`
-            s.triple = new, t[PRED], t[SUBJ], t[OBJ]
+        for s in old.occursAs[CONTEXT][:] :   # Copy list!
+            con, pred, subj, obj = s.triple
+            if pred is self.forAll or pred is self.forSome:
+                if subj is old: subj = new # Move quantifier pointers too
+            s.triple = new, pred, subj, obj
+#            print  "Old, new:",`old`, `new`, "Quad:", `s.triple`
+#            print "Quantifiers: ", `self.forAll`, `self.forSome`
+ 
             old.occursAs[CONTEXT].remove(s)
+            new.occursAs[CONTEXT].append(s)
             
             
     def copyContext(self, old, new):
-        for s in self.statements :
-            if s.triple[CONTEXT] == old:
+        for s in old.occursAs[CONTEXT][:] :  # Copy list!
                 self.makeStatement((new, s.triple[PRED], s.triple[SUBJ], s.triple[OBJ]))
             
 # Output methods:
@@ -1364,8 +1404,8 @@ class RDFStore(RDFSink) :
         sink.startDoc()
         for c in self.prefixes.items():   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
+#        print "# There are %i statements in %s" % (len(context.occursAs[CONTEXT]), `context` )
         for s in context.occursAs[CONTEXT]:
-#        for s in self.statements :
             self._outputStatement(sink, s)
         sink.endDoc()
 
@@ -1407,7 +1447,7 @@ class RDFStore(RDFSink) :
         sink.startDoc()
         for c in self.prefixes.items() :   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
-        print "# RDFStore: Done bindings, doing arcs:" 
+
         for r in self.engine.resources.values() :  # First the bare resource
             self._dumpSubject(r, context, sink)
             for f in r.fragments.values() :  # then anything in its namespace
@@ -1422,43 +1462,58 @@ class RDFStore(RDFSink) :
             `subj`, subj.occurrences(CONTEXT, None),
             subj.occurrences(PRED,context), subj.occurrences(SUBJ,context),
             subj.occurrences(OBJ, context))
-        if (subj.generated() and  # The URI is irrelevant
-                subj.occurrences(OBJ,context) == 0 and  # There is no incoming arrow
-                subj.occurrences(PRED,context) == 0 ):    # It is not used as a verb itself
+        incoming = subj.n3_anonymous(context)
+        if incoming == 1:    # Can be root anonymous node
             if subj.occurrences(SUBJ,context) > 0 :   # Ignore if actually no statements for this thing
                 sink.startAnonymousNode(subj.asPair())
                 for s in subj.occursAs[SUBJ]:
                     if s.triple[CONTEXT] is context:
                         self.coolMakeStatement(sink, s)
                 sink.endAnonymousNode()
-            if subj.occurrences(CONTEXT, None) > 0:  # @@@ only dumps of no statemenst about it
+            if subj.occurrences(CONTEXT, None) > 0:  # @@@ How represent the empty bag in the model?
                 sink.startBag(subj)
                 raise theRoof
                 self.dumpNested(subj, sink)  # dump contents of anonymous bag
                 sink.endBag(subj)
-
+        elif incoming == 2:
+            pass   # forget it - this will be comvered in the recursion
         else:
             for s in subj.occursAs[SUBJ]:
-                if s.triple[CONTEXT] is context:
-                    self.coolMakeStatement(sink, s)
+                con, pred, subj, obj = s.triple
+                if con is context:
+                        self.coolMakeStatement(sink, s)
 
+    def implicitExistential(self, s):
+        con, pred, subj, obj = s.triple
+        x = (pred is self.forSome and
+                subj is con and
+                obj.n3_anonymous(con))   # Involved extra search -could simplify
+        return x
+                
     def coolMakeStatement(self, sink, s):
-        triple = s.triple
-        if triple[SUBJ] is triple[OBJ]:
-            self.outputStatement(s)
-        else:
-            if not triple[SUBJ].n3_anonymous(triple[CONTEXT]):  # Don't repeat
-                self.coolMakeStatement2(sink, s)
+        """ Filter then recursively dump
+        """
+        con, pred, subj, obj = s.triple
+        if not self.implicitExistential(s): # weed out existential links to anonymous nodes
+            if subj is obj:
+                self._outputStatement(sink, s) # Do loops anyway
+            else:
+ #               if not subj.n3_anonymous(con) != 1 :  # Don't repeat
+                    self.coolMakeStatement2(sink, s)
                 
     def coolMakeStatement2(self, sink, s):
         triple = s.triple
-        if triple[OBJ].n3_anonymous(triple[CONTEXT]):  # Can be represented as anonymous node in N3
-            sink.startAnonymous( self.extern(triple))
-            for t in triple[OBJ].occursAs[SUBJ]:
-                if t.triple[CONTEXT] is triple[CONTEXT]:
+        con, pre, sub, obj = triple
+        if obj.n3_anonymous(con) == 2:  # Embedded anonymous node in N3
+            sink.startAnonymous(self.extern(triple))
+            for t in obj.occursAs[SUBJ]:
+                if t.triple[CONTEXT] is con:
                     self.coolMakeStatement2(sink, t)
-            sink.endAnonymous(triple[SUBJ].asPair(), triple[PRED].asPair) # Restore context
-        else:    
+            sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
+        else:
+            if self.implicitExistential(s):
+                print "### implicit existential", `triple`
+                return # Existential will be implicit.
             self._outputStatement(sink, s)
                 
 
@@ -1490,10 +1545,12 @@ def match (unmatched,       # Tuple of tuples we are trying to match
 # Secondarily, we prefer short searches to long ones.
 
         total = 0           # Number of matches found (recursively)
-        shortest = INFINITY
+        fewest = 5          # Variables to find
+        shortest = INFINITY # List to search for one of the variables
         shortest_t = None
         found_single = 0   # Singles are better than doubles
         unmatched2 = unmatched[:] # Copy so we can remove() while iterating :-(
+        print "## match: called with %i terms" % (len(unmatched),)
 
         for pair in newBindings:
             valiables.remove(pair[0])
@@ -1518,8 +1575,8 @@ def match (unmatched,       # Tuple of tuples we are trying to match
                         consts.append(p)
 
             if short == 0: return 0 # No way we can satisfy that one - quick "no"
-
-            if len(vars) == 0: # This is an independant constant triple
+            found = len(vars)
+            if found == 0: # This is an independant constant triple
                           # It has to match or the whole thing fails
                  
                 for s in r.occursAs[short_p]:
@@ -1528,20 +1585,14 @@ def match (unmatched,       # Tuple of tuples we are trying to match
                             unmatched2.remove(t)  # Ok - we believe it - ignore it
                     else: # no match for a constant term: query fails
                         return 0
-                
-            elif len(vars) == 1: # We have a single variable.
-                if not found_single or short < shortest :
-                    shortest = short
-                    shortest_p = short_p
-                    shortest_t = t
-                    found_single = 1
-                
-            else:   # Has two variables
-                if not found_single and short < shortest :
-                    shortest = short
-                    shortest_p = short_p
-                    shortest_t = t
 
+            if (found < fewest or
+                found == fewest and short < shortest) : # We find better.
+                    fewest = found
+                    shortest = short
+                    shortest_p = short_p
+                    shortest_t = t
+        
         if len(unmatched2) == 0:
             print "Found for bindings: ", bindings
             action(bindings, param)  # No terms left .. success!
@@ -1773,7 +1824,15 @@ def doCommand():
             inputContext = myEngine.intern((RESOURCE, _inputURI))
             _sink.moveContext(inputContext,outputContext)  # Move input data to output context
 
+        N3_forAll = myEngine.intern(( RESOURCE, N3_forAll_URI)) # @@@@@ What about forSome? @@
+        N3_implies = myEngine.intern(( RESOURCE, Logic_NS + "#implies"))
+        N3_forSome = myEngine.intern(( RESOURCE, N3_forSome_URI)) # Unused at the moment?
+        
+        filterContexts = []
         for filter in option_filters:
+
+            # Parse a filter:
+            
             _inputURI = urlparse.urljoin(_baseURI, filter) # Make abs from relative
             filterContext = (myEngine.intern((RESOURCE, _inputURI)))
             filterContexts.append(filterContext)
@@ -1785,25 +1844,30 @@ def doCommand():
             p.endDoc()
             del(p)
 
+            # Execute a filter:
+            
             _variables = []
             for s in filterContext.occursAs[CONTEXT]:
-                if s[PRED] == N3_forAll and s[SUBJ] == filterContext:
-                    _variables.append(s[OBJ])
+                t = s.triple
+                if t[PRED] == N3_forAll and t[SUBJ] == filterContext:
+                    _variables.append(t[OBJ])
+            print "# We have %i variables" % (len(_variables),), _variables
+            
             for s in filterContext.occursAs[CONTEXT]:
-                if s[PRED] == N3_implies:
-                    template = s[SUBJ]
-                    conclusion = s[OBJ]
+                t = s.triple
+                if t[PRED] == N3_implies:
+                    template = t[SUBJ]
+                    conclusion = t[OBJ]
                     unmatched = []
+                    print "# We have %i variables" % (len(template.occursAs[CONTEXT]),)
                     for arc in template.occursAs[CONTEXT]:
+                        print "############################### yesy"
                         unmatched.append(arc)
                     
-                    found = match(unmatched, _variables, conclude, ( store, conclusion, outputContext))
+                    found = match(unmatched, _variables, conclude, ( _sink, conclusion, outputContext))
                     print "# Found %i matches for %s." % (found, filter)
-                    #Forget varibles as a class, only in context.
-                    
-                
             
-            
+ 
             
 #@@@@@@@@@@@ problem of deciding which contexts to dump and dumping > 1
                 #@@@ or of merging contexts
