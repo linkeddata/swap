@@ -238,6 +238,7 @@ prefixes = {
     'rdf':'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
     'rdfs':'http://www.w3.org/2000/01/rdf-schema#',
     'Lbase':'http://www.w3.org/TR/2003/NOTE-lbase-20030123-ns#',
+    'owl':'http://www.w3.org/2002/07/owl#',
     }
 def p_term_simple1(t):
     '''term : CONSTANT'''
@@ -453,7 +454,10 @@ class Serializer:
         pass
 
 # $Log$
-# Revision 1.8  2003-02-14 19:40:32  sandro
+# Revision 1.9  2003-07-12 09:49:10  sandro
+# added owl to (static) list of namespaces
+#
+# Revision 1.8  2003/02/14 19:40:32  sandro
 # working lbase -> otter translation, with regression test
 #
 # Revision 1.7  2003/02/14 17:21:59  sandro
