@@ -26,18 +26,6 @@
         }     log:implies {:test10a     a :success .
         } .
     {
-        :F     log:includes :G .
-        :d     log:semantics :F .
-        
-        }     log:implies {:doc     local:says :G .
-        } .
-    {
-        <t10a.n3>     local:says {:theSky     :is :blue .
-            } .
-        
-        }     log:implies {:test_SURPRISE     a :success .
-        } .
-    {
         :F     log:includes {:theSky     :is :green .
             } .
         <t10a.n3>     log:semantics :F .
