@@ -1,0 +1,31 @@
+% $Id$
+formula_list(usable).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_unionOf
+%
+
+all INST CLASS LIST (
+   rdf(CLASS, owl_unionOf, LIST)
+   ->
+   ( rdf(INST, rdf_type, CLASS) 
+     <->
+     instanceOfAny(INST, LIST)
+   )
+).
+
+all INST LIST HEAD TAIL (
+   ( rdf(LIST, rdf_first, HEAD) &
+     rdf(LIST, rdf_rest, TAIL) )
+   ->
+   ( instanceOfAny(INST, LIST)		
+     <->
+     ( rdf(INST, rdf_type, HEAD) |
+       instanceOfAny(INST, TAIL) )
+   )
+).
+
+all INST (-instanceOfAny(INST, rdf_nil)).
+
+% $Log $

@@ -1,0 +1,44 @@
+% We can easily prove a more general version of the test case using
+% a subset of the main axiom file...
+%set(auto).          %%uncomment to prove
+
+formula_list(usable).
+
+%-                 %%uncomment to prove
+(all ns53_Human ns53_Animal ns53_John ns53_Stone ns53_A ns53_B (
+  ( exists s (exists t (exists u (exists s0 (exists s1 ((((((((((((((((((rdf(s1, rdf_type, rdf_List) & rdf(s1, rdf_first, ns53_Human)) & rdf(s0, rdf_type, rdf_List)) & rdf(s1, rdf_rest, s0)) & rdf(s0, rdf_first, ns53_Animal)) & rdf(s0, rdf_rest, rdf_nil)) & rdf(ns53_A, owl_unionOf, s1)) & rdf(u, rdf_type, rdf_List)) & rdf(u, rdf_first, ns53_Animal)) & rdf(t, rdf_type, rdf_List)) & rdf(u, rdf_rest, t)) & rdf(t, rdf_first, ns53_Human)) & rdf(s, rdf_type, rdf_List)) & rdf(t, rdf_rest, s)) & rdf(s, rdf_first, ns53_Stone)) & rdf(s, rdf_rest, rdf_nil)) & rdf(ns53_B, owl_unionOf, u)) & rdf(ns53_John, rdf_type, ns53_A)))))))
+  )
+  ->
+  rdf(ns53_John, rdf_type, ns53_B)
+)).
+
+
+%%uncomment all below to prove ; it should be an excerpt of the 
+%%main file
+
+%all INST CLASS LIST (
+%   rdf(CLASS, owl_unionOf, LIST)
+%   ->
+%   ( rdf(INST, rdf_type, CLASS) 
+%     <->
+%     instanceOfAny(INST, LIST)
+%   )
+%).
+%
+%all INST LIST HEAD TAIL (
+%   ( rdf(LIST, rdf_first, HEAD) &
+%     rdf(LIST, rdf_rest, TAIL) )
+%   ->
+%   ( instanceOfAny(INST, LIST)		
+%     <->
+%     ( rdf(INST, rdf_type, HEAD) |
+%       instanceOfAny(INST, TAIL) )
+%   )
+%).
+%
+%all INST (-instanceOfAny(INST, rdf_nil)).
+%
+%-(exists c (rdf(rdf_nil, rdf_rest, c))).
+%-(exists c (rdf(rdf_nil, rdf_first, c))).
+%
+end_of_list.

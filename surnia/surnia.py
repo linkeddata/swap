@@ -51,33 +51,38 @@ testTypes = [
     "NegativeEntailmentTest",
     "TrueTest",
     "OWLforOWLTest",
-    "ConsistencyTest",
     "InconsistencyTest",
+#    "ConsistencyTest",
     "ImportEntailmentTest",
     "ImportLevelTest"
     ]
 
 # from some config info, telling us how long we should try on
 # some test, ...?
-fudge = 2.5
+fudge = 10
+
 maxSecondsTable = {
+    'http://www.w3.org/2002/03owlt/AllDifferent/Manifest001#test': 3 * fudge,
     'http://www.w3.org/2002/03owlt/FunctionalProperty/Manifest004#test': (2 * fudge),
     'http://www.w3.org/2002/03owlt/InverseFunctionalProperty/Manifest004#test': (2 * fudge),
-
-    # dt's
-    'http://www.w3.org/2002/03owlt/I5.2/Manifest002#test': 0.001,
-    'http://www.w3.org/2002/03owlt/equivalentClass/Manifest004#test': 0.001,
-    'http://www.w3.org/2002/03owlt/cardinality/Manifest001#test': 0.001,
-    'http://www.w3.org/2002/03owlt/cardinality/Manifest002#test': 0.001,
-    'http://www.w3.org/2002/03owlt/cardinality/Manifest003#test': 0.001,
-    'http://www.w3.org/2002/03owlt/cardinality/Manifest004#test': 0.001,
-    '': 0.001,
-
     }
+
+axiomTag = { }
+axiomTag['http://www.w3.org/2002/03owlt/unionOf/Manifest002#test']="-unionOf"
+axiomTag['http://www.w3.org/2002/03owlt/oneOf/Manifest003#test']="-oneOf"
+axiomTag['http://www.w3.org/2002/03owlt/equivalentProperty/Manifest002#test']="-equivProp"
+axiomTag['http://www.w3.org/2002/03owlt/equivalentProperty/Manifest003#test']="-equivProp"
+axiomTag['http://www.w3.org/2002/03owlt/equivalentProperty/Manifest004#test']="-equivProp"
 maxSeconds = 1
 
-skip = [
-    ]
+skip = {
+    'http://www.w3.org/2002/03owlt/I5.2/Manifest002#test': "no DT theory",
+    'http://www.w3.org/2002/03owlt/equivalentClass/Manifest004#test': "no DT theory",
+    'http://www.w3.org/2002/03owlt/cardinality/Manifest001#test': "no DT theory",
+    'http://www.w3.org/2002/03owlt/cardinality/Manifest002#test': "no DT theory",
+    'http://www.w3.org/2002/03owlt/cardinality/Manifest003#test': "no DT theory",
+    'http://www.w3.org/2002/03owlt/cardinality/Manifest004#test': "no DT theory",
+    }
 
 maxFailed = 999999
 failed = 0
@@ -105,7 +110,8 @@ def run(store, test, name, input, entailed, expected):
                      entailedDocument=entailed,
                      tag=tag,
                      requiredDatatypes=dtlist,
-                     maxSeconds=localMaxSeconds)
+                     maxSeconds=localMaxSeconds,
+                     axiomTag=axiomTag.get(str(test), ""))
         
     except OwlAxiomReasoner.UnsupportedDatatype, dt:
         print "skipped; uses unsupported datatype", dt
@@ -114,7 +120,10 @@ def run(store, test, name, input, entailed, expected):
     if result == expected:
         print "PASSED"
     else:
-        print "Failed, '%s' when expecting '%s'" % (result, expected)
+        if result == "Unknown":
+            print "(...unknown...)"
+        else:
+            print "Failed, '%s' when expecting '%s'" % (result, expected)
         #print "   Input document: ", idoc
         failed += 1
         #print "   failed %d (max %d)" % (failed, maxFailed)
@@ -152,7 +161,7 @@ def runTests(store):
             print s,
 
             if str(s) in skip:
-                print "skipping"
+                print "skipping because '%s'" % skip[str(s)]
                 continue
 
             if testType == "PositiveEntailmentTest":

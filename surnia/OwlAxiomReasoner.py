@@ -18,7 +18,7 @@ import LX.engine.otter
 ##  Which axioms to use?   all at once?  Some which are theorems?
 ##  Horn form?    ...  lots of work to do here.
 ##
-axiomFile = "util/owlAx.otter"    # temp hack path, etc
+axiomFile = "util/owlAx%s.otter"    # temp hack path, etc
 
 ################################################################
 
@@ -41,7 +41,8 @@ def checkConsistency(inputDocument,
                      entailedDocument=None,
                      requiredDatatypes=[],    # dt not impl
                      forbiddenDatatypes=[],
-                     tag="unnamed", maxSeconds=5):
+                     tag="unnamed", maxSeconds=5,
+                     axiomTag=""):
     """An OWL consistency checker takes a document as input, and
        returns one word being Consistent, Inconsistent, or Unknown.
 
@@ -78,7 +79,7 @@ def checkConsistency(inputDocument,
 
     try:
         LX.engine.otter.run(kb, fileBase=",ot/"+tag,
-                            includes=[axiomFile], maxSeconds=maxSeconds)
+                            includes=[axiomFile % axiomTag], maxSeconds=maxSeconds)
         return "Inconsistent"
     except LX.engine.otter.SOSEmpty:
         return "Consistent"

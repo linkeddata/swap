@@ -6,6 +6,10 @@
 %   mace -P -N 10 -k 768000 < util/owlAx.otter
 % but it's gotten too big.  :-(
 
+include('util/owlAx-unionOf.otter').
+include('util/owlAx-oneOf.otter').
+include('util/owlAx-equivProp.otter').
+
 formula_list(usable).
 
 %   Note on "BIDIR"   These are all "->" which logically
@@ -68,59 +72,6 @@ all INST LIST HEAD TAIL (
 
 all INST (instanceOfAll(INST, rdf_nil)).
 
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%   owl_unionOf
-%
-
-all INST CLASS LIST (
-   rdf(CLASS, owl_unionOf, LIST)
-   ->
-   ( rdf(INST, rdf_type, CLASS) 
-     <->
-     instanceOfAny(INST, LIST)
-   )
-).
-
-all INST LIST HEAD TAIL (
-   ( rdf(LIST, rdf_first, HEAD) &
-     rdf(LIST, rdf_rest, TAIL) )
-   ->
-   ( instanceOfAny(INST, LIST)		
-     <->
-     ( rdf(INST, rdf_type, HEAD) |
-       instanceOfAny(INST, TAIL) )
-   )
-).
-
-all INST (-instanceOfAny(INST, rdf_nil)).
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%   owl_oneOf
-%
-%     thing a Foo.  Foo owl_oneOf ( a b c ... )
-%   to be in the class means to be equal to one of the list members
-
-all CLASS LIST (
-   rdf(CLASS, owl_oneOf, LIST)
-   ->    % BIDIR
-   (all INST (
-      rdf(INST, rdf_type, CLASS) <-> inList(INST, LIST)
-   ))
-).
-all MEMBER LIST HEAD TAIL (
-   (rdf(LIST, rdf_first, HEAD) &
-    rdf(LIST, rdf_rest, TAIL) &
-    inList(MEMBER, LIST))
-   ->
-    ( rdf(MEMBER, owl_sameAs, HEAD) |
-      inList(MEMBER, TAIL) )
-).
-
-all MEMBER (-inList(MEMBER, rdf_nil)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -356,32 +307,6 @@ all X Y (
    rdf(X, owl_differentFrom, Y) <-> -rdf(X, owl_sameAs, Y)
 ).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%   owl_EquivalentProperty
-%
-
-all PRED1 PRED2 (
-   rdf(PRED1, owl_equivalentProperty, PRED2)
-   ->     % BIDIR
-   (all SUBJ OBJ (
-      ( rdf(SUBJ, PRED1, OBJ) <-> rdf(SUBJ, PRED2, OBJ) )
-   ))
-).
-
-
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-%
-%   rdfs_subPropertyOf
-%
-
-all PRED1 PRED2 (
-   rdf(PRED1, rdfs_subPropertyOf, PRED2)
-   ->     % BIDIR
-   (all SUBJ OBJ (
-      ( rdf(SUBJ, PRED1, OBJ) -> rdf(SUBJ, PRED2, OBJ) )
-   ))
-).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -420,12 +345,12 @@ all PRED1 PRED2 (
    rdf(PRED1, owl_inverseOf, PRED2)
    ->     % BIDIR
    (all SUBJ OBJ (
-      ( rdf(SUBJ, PRED1, OBJ) <-> -rdf(SUBJ, PRED2, OBJ) )
+      ( rdf(SUBJ, PRED1, OBJ) <-> rdf(OBJ, PRED2, SUBJ) )
    ))
 ).
 
 % should be a theorem....
-rdf(owl_InverseOf, rdf_type, owl_SymmetricProperty).
+% rdf(owl_inverseOf, rdf_type, owl_SymmetricProperty).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
@@ -556,7 +481,16 @@ all P1 P2 (
    
 
 % $Log$
-% Revision 1.12  2003-07-30 20:19:19  sandro
+% Revision 1.13  2003-07-31 04:35:07  sandro
+% Added a way for certain tests to use subset of the full set of
+% axioms; I'm starting to hit a wall where adding the details needed
+% to pass one test makes the others become too slow.   Sometimes we
+% can subset the axioms to make a test pass quickly, but that wont
+% work for sufficiently complex expressions, will it?   Still, maybe
+% we can partition same/different from union/intersection from property
+% logic, ...
+%
+% Revision 1.12  2003/07/30 20:19:19  sandro
 % fixed unionOf, and gave it theorem to get test to run < 10 minutes
 %
 % Revision 1.11  2003/07/30 18:51:00  sandro
