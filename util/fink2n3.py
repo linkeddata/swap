@@ -36,7 +36,7 @@ def expand(str, dict):
 	x = str.find("%")
 	if x < 0: break
 	try:
-	    str = str[:x] + dict[macros[str[x+1]]] + str[x+2:]
+	    str = str[:x] + dict[macros[str[x+1]]].strip() + str[x+2:]
 	except KeyError:
 	    print "@@@@@ dict is", dict
 	    print "@@@@@ macros are", macros
@@ -185,8 +185,7 @@ def convert(path):
 		    print """     %s [con:name "%s"; con:mailbox <mailto:%s>];"""%(
 			    property, m.group(1), m.group(2))
 		    continue
-		print "    " + property + " "+ss(value) + ';'
-		raise RuntimeError("Malformed maintainer contact "+value)
+		print """     %s [con:name %s];"""% (property, ss(value))
 		continue
 
 	    print "    " + property + " "+ss(value) + ';'
