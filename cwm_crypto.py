@@ -49,10 +49,11 @@ def keyToQuo(key, joi='\n\n'):
    """Returns a quoted printable version of a key - ee then m.
    Leading and trailing whitespace is allowed; stripped by quoToKey."""
    e, n = str(key.e), str(key.n) # Convert the ee and mod to strings
-   if not 'd' in dir(key): strkey = base64.encodestring('%s%s%s' % (e, joi, n))
-   else: 
+   if key.has_private():
       d, p, q = str(key.d), str(key.p), str(key.q)
       strkey = base64.encodestring(joi.join([e, n, d, p, q]))
+   else:
+      strkey = base64.encodestring('%s%s%s' % (e, joi, n))
    return '\n'+quopri.encodestring(strkey).strip()+'\n'
 
 def quoToKey(strkey, spl='\n\n'): 
@@ -121,7 +122,7 @@ class BI_keyLength(LightBuiltIn, Function, ReverseFunction):
          one key pair (per iteration), in order to work around a bug."""
       if self.do: 
          randfunc, self.do = randpool.RandomPool(int(obj_py)), 0
-         RSAKey = RSA.generate(int(obj_py), randfunc.getBytes)
+         RSAKey = RSA.generate(int(obj_py), randfunc.get_bytes)
          TextKey = keyToQuo(RSAKey)
          if TextKey != 'N.': return TextKey
 
@@ -142,6 +143,7 @@ class BI_verify(LightBuiltIn):
    def evaluate(self, subj_py, obj_py): 
       """Verify a hash/signature."""
       keypair, (hash, signature) = subj_py, obj_py
+      hash = hash.encode('ascii')
       RSAKey = quoToKey(keypair) # Dequote the key
       signature = (long(baseDecode(signature)),) # convert the signature back
       return RSAKey.verify(hash, signature)
@@ -150,6 +152,7 @@ class BI_verifyBoolean(LightBuiltIn, Function):
    def evaluateObject(self, subj_py): 
       """Verify a hash/signature."""
       keypair, hash, signature = subj_py
+      hash = hash.encode('ascii')
       RSAKey = quoToKey(keypair) # Dequote the key
       signature = (long(baseDecode(signature)),)
       result = RSAKey.verify(hash, signature)
