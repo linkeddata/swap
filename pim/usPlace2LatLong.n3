@@ -1,0 +1,59 @@
+<> a <http://www.w3.org/2000/10/swap/log#N3Document> .
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<> dc:title "U.S. Gazetteer rules: place names/zips to lat/long";
+  dc:description "$Id$";
+  dc:source <http://www.census.gov/cgi-bin/gazetteer>.
+
+@prefix r: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
+
+@prefix p: <http://www.w3.org/2000/10/swap/pim/usps#>.
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+
+@prefix : <?#>.
+
+this log:forAll :where, :cityN, :stN, :i, :pg, :txt.
+
+
+{ :where p:cityName :cityN;
+    [] [ p:stateAbbr :stN ].
+
+  #@@BUG: need to URI-encode :cityN and :stN
+
+  ("http://www.census.gov/cgi-bin/gazetteer?city=" :cityN "&state=" :stN )
+     str:concatenation :i.
+  :pg log:uri :i.
+}
+  log:implies {
+    :where :_latLongPage :pg.
+  }.
+
+{
+  :where :_latLongPage :pg.
+  :pg log:content :txt.
+  (:txt "Location: (\\d+\\.\\d+) ") str:scrape :latNum.
+  (:txt "Location: \\d+\\.\\d+ (\\w), ") str:scrape :latDir.
+  (:txt "Location: \\d+\\.\\d+ \\w, (\\d+\\.\\d+)") str:scrape :longNum.
+  (:txt "Location: \\d+\\.\\d+ \\w, \\d+\\.\\d+ (\\w)") str:scrape :longDir.
+
+}
+  log:implies {
+    :where :_latNum :latNum;
+	:_latDir :latDir;
+	:_longNum :longNum;
+	:_longDir :longDir.
+  }.
+this log:forAll :latNum, :latDir, :longNum, :longDir.
+
+
+# test data...
+     @prefix g: <http://www.cyc.com/cyc-2-1/vocab/spatial-vocab.html#> .
+      [      g:inRegion  [
+                 p:cityName "Wilder";
+                 g:inRegion  [
+                     p:stateAbbr "KY" ] ] ].
