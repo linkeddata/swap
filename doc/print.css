@@ -61,7 +61,7 @@ DIV.version {
 
   titlepage {
     margin-top: 7cm
-    content: "<DIV align=center> <H1>Semantic Web<BR>Tutorial Using N3</H1><H2>Tim Berners-Lee<BR>Dan Connolly<BR>Sandro Hawke<BR></H2><H2>For Presentaton<BR>May 20, 2003</H2></DIV>"
+    content: "<DIV align=center> <H1>Semantic Web<BR>Tutorial Using N3</H1><H2>Tim Berners-Lee<BR>Dan Connolly<BR>Sandro Hawke<BR></H2><H2>For Presentaton<BR>May 20, 2003</H2><H3>http://www.w3.org/2000/10/swap/doc</H3></DIV>"
   }
 
 }
