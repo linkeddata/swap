@@ -1,0 +1,13 @@
+# Schema for test data
+#
+# This is only 
+bind ont: <http://www.daml.org/2000/10/daml-ont> .
+
+bind : <> .
+
+:includes a ont:TransitiveProperty .
+
+:partOf a ont:TransitiveProperty; ont:inverseOf :includes .
+
+
+
