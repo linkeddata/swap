@@ -251,7 +251,6 @@ class ArgHandler:
                 doc = f.__doc__.split("\n\n", 2)
                 docs = doc[0]
         docs = re.sub("\\s*$", "", docs)
-        print docs, "K"
         return (optdesc, parmdesc, docs, sortKey)
 
     def peekThis(self):
@@ -304,7 +303,10 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
 
 # $Log$
-# Revision 1.5  2003-04-02 20:42:56  sandro
+# Revision 1.6  2003-04-02 20:55:20  sandro
+# remove a debugging print
+#
+# Revision 1.5  2003/04/02 20:42:56  sandro
 # pretty up help a bit
 #
 # Revision 1.4  2003/04/02 19:52:33  sandro
