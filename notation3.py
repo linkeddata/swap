@@ -54,7 +54,9 @@ import re
 RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#Type"
 DAML_equivalentTo_URI = "http://www.daml.org/2000/10/daml-ont#equivalentTo"
 Logic_NS = "http://www.w3.org/2000/10/swap/log.n3#"
+
 N3_forSome_URI = Logic_NS + "forSome"
+N3_subExpression_URI = Logic_NS + "subExpression"
 N3_forAll_URI = Logic_NS + "forAll"
 
 ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
@@ -362,9 +364,14 @@ class SinkParser:
 	    if j>=0:
                 oldContext = self._context
                 subj = RESOURCE , self._genPrefix + `self._nextId` # ANONYMOUS - Call out???
-                self._nextId = self._nextId + 1  # intern
+                self._nextId = self._nextId + 1
+     #           print "#### CONTEXT", oldContext, "HAS SUBCONTEXT", subj
                 self.makeStatement((oldContext, # quantifiers - use inverse?
                                     (RESOURCE, N3_forSome_URI), #pred
+                                    oldContext,  #subj
+                                    subj))                      # obj
+                self.makeStatement((oldContext, # lexical nesting
+                                    (RESOURCE, N3_subExpression_URI), #pred
                                     oldContext,  #subj
                                     subj))                      # obj
 
@@ -734,7 +741,7 @@ class ToRDF(RDFSink):
 
 
     def endBag(self, subj):    # Remove context
-        self._write(" }\n")
+        self._write(" } ")
         self._subj = subj
         self._pred = None
         self.indent = self.indent - 1
@@ -851,8 +858,8 @@ class ToN3(RDFSink):
         """ Just accepting a convention here """
         self._endStatement()
         self.prefixes[nsPair] = prefixString
-        self._write(" @prefix %s: <%s> .\n" % (prefixString, nsPair[1]) )
-        self._write("    " * self.indent)
+        self._write(" @prefix %s: <%s> ." % (prefixString, nsPair[1]) )
+        self._newline()
 
 
     def startDoc(self):
@@ -865,11 +872,16 @@ class ToN3(RDFSink):
 
     def endDoc(self):
 	self._endStatement()
-	self._write("\n")
+	self._write("\n #ENDS\n")
 
     def makeComment(self, str):
         for line in string.split(str, "\n"):
             self._write("#" + line + "\n")  # Newline order??@@
+        self._write("    " * self.indent + "    ")
+
+
+    def _newline(self, extra=0):
+        self._write("\n"+ "    " * (self.indent+extra))
 
     def makeStatement(self, triple):
         self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])        
@@ -880,7 +892,8 @@ class ToN3(RDFSink):
     def startAnonymous(self,  triple):
         self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
         self.indent = self.indent + 1
-        self._write(" [ \n"+ "    " * self.indent + "    ")
+        self._write(" [")
+        self._newline()
         self._subj = triple[OBJ]    # The object is now the current subject
         self._pred = None
 
@@ -894,13 +907,17 @@ class ToN3(RDFSink):
 
     def startAnonymousNode(self, subj):
 	if self._subj:
-	    self._write(" .\n")
-        self._write("\n  [ "+ "    " * self.indent)
+	    self._write(" .")
+	self._newline()
+        self.indent = self.indent + 1
+        self._write("  [ ")
         self._subj = subj    # The object is not the subject context
         self._pred = None
 
     def endAnonymousNode(self):    # Remove context
-        self._write(" ].\n")
+        self._write(" ].")
+        self.indent = self.indent - 1
+        self._newline()
         self._subj = None
         self._pred = None
 
@@ -912,12 +929,15 @@ class ToN3(RDFSink):
 	else:
 	    self._write(" = ")   # hack - for things with contentand properties!
         self.indent = self.indent + 1
-        self._write(" { \n"+ "    " * self.indent + "    ")
+        self._write("{")
+        self._newline()
 	self._subj = None
         self._pred = None
 
     def endBagSubject(self, subj):    # Remove context
-        self._write("    " * self.indent + " }\n")
+        self._endStatement()     # @@@@@@@@ remove in syntax change to implicit
+        self._newline()
+        self._write("}")
         self._subj = subj
         self._pred = None
         self.indent = self.indent - 1
@@ -925,30 +945,33 @@ class ToN3(RDFSink):
     def startBagObject(self, triple):
         self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
         self.indent = self.indent + 1
-        self._write(" { \n"+ "    " * self.indent + "    ")
+        self._write("{")
 	self._subj = None
         self._pred = None
 
     def endBagObject(self, pred, subj):    # Remove context
-        self._write(" }\n")
+        self._endStatement() # @@@@@@@@ remove in syntax change to implicit
+        self.indent = self.indent - 1
+        self._write("}")
+#        self._newline()
         self._subj = subj
         self._pred = pred
-        self.indent = self.indent - 1
      
     def _makeSubjPred(self, context, subj, pred):
         
 	if self._subj != subj:
 	    self._endStatement()
-	    if self.indent == 1:  # Top level only
-                self._write("\n")
-                self._write("    " * self.indent)
+	    if self.indent == 1:  # Top level only - extra newline
+                self._newline()
 	    self._write(self.representationOf(subj))
 	    self._subj = subj
 	    self._pred = None
 
 	if self._pred != pred:
 	    if self._pred:
-		  self._write(";\n" + "    " * self.indent+ "    ")
+		  self._write(";")
+		  self._newline(1)   # Indent predicate from subject
+            else: self._write("    ")
 
             if pred == ( RESOURCE,  DAML_equivalentTo_URI ) :
                 self._write(" = ")
@@ -960,12 +983,13 @@ class ToN3(RDFSink):
                 
 	    self._pred = pred
 	else:
-	    self._write(",\n" + "    " * (self.indent+3))    # Same subject and pred => object list
+	    self._write(",")
+	    self._newline(3)    # Same subject and pred => object list
 
     def _endStatement(self):
         if self._subj:
-            self._write(" .\n")
-            self._write("    " * self.indent)
+            self._write(" .")
+            self._newline()
             self._subj = None
 
     def representationOf(self, pair):

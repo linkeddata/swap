@@ -129,7 +129,13 @@ class RDFXMLParser(xmllib.XMLParser):
                     self._subject = None
                 else: raise ooops # can't do about each prefix yet
             if name == "bagid":
+                c = self._context
                 self._context = self.uriref("#" + value)
+                if 0: self.sink.makeStatement((  # Note lexical nesting
+                    (RESOURCE, c),                                 
+                    (RESOURCE, notation3.N3_subExpression_URI),
+                    (RESOURCE, c),
+                    (RESOURCE, self._context) ))
 
         if self._subject == None:
             self._subject = self._genPrefix + `self._nextId`  #

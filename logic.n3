@@ -7,6 +7,7 @@ bind rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns> . # Unused
 bind rdfs: <http://www.w3.org/2000/01/rdf-schema> .	 # unused
 bind ont: <http://www.daml.org/2000/10/daml-ont> .	 # contains aliases for the above
 bind log: <> .
+bind : <> .
 
 log:context a rdfs:Class;
 	rdfs:comment "An unordered conjunction of log statements" 
@@ -24,5 +25,18 @@ log:truth a rdf:Class;
 log:falsehood a rdf:Class;
 	rdfs:comment "Something which is not true."
 	rdfs:domain log:context;
+
+log:implies a rdfs:Property;
+	rdfs:comment "Logical implication" .
+
+############# Rules
+
+ 
+rule1 log:forAll :x, :y, :z; =
+{
+    { :x log:implies :y } means {  { :x a :truth . y: a :falsehood.} a:falsehood}.
+} .
+
+# etc etc
 
 # ends
