@@ -30,7 +30,7 @@
 
 
 
-:twoFormulae = ($ {:a a :mother} {:b a :father}  $}.
+:twoFormulae = {$ {:a a :mother} {:b a :father}  $}.
 
 
 :setOfLists =   {$  ( 1 2 ) () ( 3 4 5 ) $}.
