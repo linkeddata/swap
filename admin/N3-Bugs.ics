@@ -1,5 +1,10 @@
 BEGIN:VCALENDAR
 BEGIN:VTODO
+DTSTART:20040130T084441Z
+SUMMARY:Documentation has broken link
+URL;VALUE=URI:http://www.w3.org/mid/Pine.LNX.4.55.0401300339530.27388@homer.w3.org
+END:VTODO
+BEGIN:VTODO
 DTSTART:20040129T153219Z
 SUMMARY:bug status in .n3, .ics
 URL;VALUE=URI:http://www.w3.org/mid/1075390339.8147.392.camel@dirk.dm93.org
