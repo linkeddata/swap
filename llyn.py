@@ -127,6 +127,8 @@ import string
 import re
 import StringIO
 import sys
+import time
+import uripath
 
 import urllib # for log:content
 import md5, binascii  # for building md5 URIs
@@ -373,9 +375,11 @@ class Formula(Fragment):
         """ How many statements? """
         return len(self.statements)
 
-#    def __len__(self):
-#        """ How many statements? """
-#        return len(self.statements)
+    def __len__(self):
+        """ How many statements? """
+#	progress("@@@ "+`self`+" has "+`len(self.statements)`+" statements")
+#	raise RuntimeError("This should not be called until we are sure code does not accidentally")
+        return len(self.statements)
 
     def __iter__(self):
 	for s in self.statements:
@@ -421,6 +425,26 @@ class Formula(Fragment):
 	if subj == None: return s[SUBJ]
 	if obj == None: return s[OBJ]
 	raise parameterError("You must give one wildcard")
+
+    def each(self, subj=None, pred=None, obj=None):
+        """Return a list of values value filing the blank in the called parameters
+	
+	colors = f.each(pred=pantoneColor, subj=myCar)
+	redCar = f.any(pred=pantoneColor, obj=red)
+	
+	Note difference from store.any!!
+	Note SPO order not PSO!!
+	"""
+	hits = self._index.get((pred, subj, obj), [])
+	if hits == []: return []
+	if pred == None: wc = PRED
+	elif subj == None: wc = SUBJ
+	elif obj == None: wc = OBJ
+	else: raise parameterError("You must give one wildcard None for any")
+	res = []
+	for s in hits:
+	    res.append(s[wc])   # should use yeild @@ when we are ready
+	return res
 
     def the(self, subj=None, pred=None, obj=None):
         """Return None or the value filing the blank in the called parameters
@@ -553,7 +577,21 @@ class StoredStatement:
             if o is other.quad[CONTEXT]: return 1
         return compareURI(s,o)
 
-
+    def context(self):
+	"""Return the context of the statement"""
+	return self.quad[CONTEXT]
+    
+    def predicate(self):
+	"""Return the predicate of the statement"""
+	return self.quad[PRED]
+    
+    def subject(self):
+	"""Return the subject of the statement"""
+	return self.quad[SUBJ]
+    
+    def object(self):
+	"""Return the object of the statement"""
+	return self.quad[OBJ]
     
 ###############################################################################################
 #
@@ -718,19 +756,30 @@ class BI_semanticsOrError(BI_semantics):
 
 HTTP_Content_Type = 'content-type' #@@ belongs elsewhere?
 
-def loadToStore(store, addr):
-    """raises IOError, SyntaxError
+def loadToStore(store, uri=None, contentType=None):
+    """Get and parse document.  Guesses format if necessary.
+    Returns top-level formula of the parsed document.
+    raises IOError, SyntaxError
     """
     try:
-        netStream = urllib.urlopen(addr)
-        ct=netStream.headers.get(HTTP_Content_Type, None)
+	baseURI = uripath.base()
+	ct = contentType
+        if uri != None:
+            addr = uripath.join(baseURI, uri) # Make abs from relative
+            if verbosity() > 40: progress("Taking input from " + addr)
+            netStream = urllib.urlopen(addr)
+	    if contentType == None: ct=netStream.headers.get(HTTP_Content_Type, None)
+        else:
+            if verbosity() > 40: progress("Taking input from standard input")
+            addr = uripath.join(baseURI, "STDIN") # Make abs from relative
+	    netStream = sys.stdin
+
     #    if verbosity() > 19: progress("HTTP Headers:" +`netStream.headers`)
     #    @@How to get at all headers??
     #    @@ Get sensible net errors and produce dignostics
 
         guess = ct
         if verbosity() > 29: progress("Content-type: " + ct + " for "+addr)
-#        if ct.find('text/plain') >=0 :   # Rats - nothing to go on
         if ct.find('xml') < 0 and ct.find('rdf') < 0 :   # Rats - nothing to go on
             buffer = netStream.read(500)
             netStream.close()
@@ -748,17 +797,17 @@ def loadToStore(store, addr):
         if verbosity() > 49: progress("Parsing as RDF")
         import sax2rdf, xml.sax._exceptions
         p = sax2rdf.RDFXMLParser(store, addr)
-        p.loadStream(netStream)
+        Fpair = p.loadStream(netStream)
     else:
         if verbosity() > 49: progress("Parsing as N3")
         p = notation3.SinkParser(store, addr)
         p.startDoc()
         p.feed(netStream.read())
-        p.endDoc()
+        Fpair = p.endDoc()
+    F = store.intern(Fpair)
     store.storeQuad((store._experience,
-                     store.semantics,
-                     store.intern((SYMBOL, addr)),
-                     store.intern((FORMULA, addr + "#_formula" ))))
+                     store.semantics, store.intern((SYMBOL, addr)), F))
+    return F 
 
 def _indent(str):
     """ Return a string indented by 4 spaces"""
@@ -908,6 +957,15 @@ class RDFStore(RDFSink.RDFSink) :
         self.clear()
         self.argv = argv     # List of command line arguments for N3 scripts
 
+	run = uripath.join(uripath.base(), ".RUN/") + `time.time()`  # Reserrved URI @@
+
+        if metaURI != None: meta = metaURI
+	else: meta = run + "meta#formula"
+	self.reset(meta)
+
+
+
+
         # Constants, as interned:
         
         self.forSome = self.internURI(RDFSink.forSomeSym)
@@ -992,17 +1050,18 @@ class RDFStore(RDFSink.RDFSink) :
 	    import cwm_crypto  # Cryptography
 	    cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
         
-        if metaURI != None:
-            self.reset(metaURI)
-
-# Internment of URIs and strings (was in Engine).
-
-# We ought to intern formulae too but it ain't as simple as that.
-# - comparing foumale is graph isomorphism complete.
-# - formulae grow with addStatement() and would have to be re-interned
 
     def reset(self, metaURI): # Set the metaURI
         self._experience = self.intern((FORMULA, metaURI + "_formula"))
+	assert isinstance(self._experience, Formula)
+
+    def load(self, uri=None):
+	"""Get and parse document.  Guesses format if necessary.
+	Returns top-level formula of the parsed document.
+	raises IOError, SyntaxError, DocumentError
+	"""
+	return loadToStore(self, uri)
+
 
     def internURI(self, str):
         assert type(str) is type("") # caller %xx-ifies unicode
@@ -1033,6 +1092,7 @@ class RDFStore(RDFSink.RDFSink) :
 
             hash = string.rfind(urirefString, "#")
             if hash < 0 :     # This is a resource with no fragment
+		assert typ == SYMBOL, "If URI <%s>has no hash, must be symbol" % urirefString
                 result = self.resources.get(urirefString, None)
                 if result != None: return result
                 result = Symbol(urirefString, self)
@@ -1197,8 +1257,9 @@ class RDFStore(RDFSink.RDFSink) :
 
     def loadURI(self, uri):
         p = notation3.SinkParser(self,  uri)
-        p.load(uri)
+        F = p.load(uri)
         del(p)
+	return F
 
     def bind(self, prefix, nsPair):
         if prefix != "":   #  Ignore binding to empty prefix
@@ -1568,13 +1629,13 @@ class RDFStore(RDFSink.RDFSink) :
         for s in context.statements:
             con, pred, subj, obj =  s.quad
             if subj is con: continue # Done them above
-            if not currentSubject: currentSubject = subj
+            if currentSubject == None: currentSubject = subj
             if subj != currentSubject:
                 self._dumpSubject(currentSubject, context, sink, sorting, statements)
                 statements = []
                 currentSubject = subj
             statements.append(s)
-        if currentSubject:
+        if currentSubject != None:
             self._dumpSubject(currentSubject, context, sink, sorting, statements)
 
 
@@ -1841,7 +1902,7 @@ class RDFStore(RDFSink.RDFSink) :
                 c = None
 #                if pred is self.asserts and subj is filterContext: c=obj
                 if pred is self.type and obj is self.Truth: c=subj
-                if c:
+                if c != None:
                     _total = _total + self.applyRules(workingContext,
                                                       c, targetContext,
                                                       universals=universals
@@ -2408,7 +2469,7 @@ class QueryItem:
         Returns, [] normally or 0 if there is no way this query will work.
         Only called on virgin query item."""
         con, pred, subj, obj = self.quad
-	if meta:
+	if meta != None:
 	    self.service = meta.any(pred=self.store.authoritativeService, subj=pred)
 	    if verbosity() > 90 and self.service: progress("Ooooo. we have a remote service for "+`pred`)
         self.neededToRun = [ [], [], [], [] ]  # for each part of speech

@@ -141,10 +141,10 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 <font color="#000000" face="helvetica, arial"><a name="RDFHandler">class <strong>RDFHandler</strong></a>(<a href="xml.sax.handler.html#ContentHandler">xml.sax.handler.ContentHandler</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2>&nbsp;</td></tr>
+<td colspan=2><tt>RDF&nbsp;Parser&nbsp;using&nbsp;SAX&nbsp;API&nbsp;for&nbsp;XML&nbsp;parsing<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="RDFHandler-__init__"><strong>__init__</strong></a>(self, sink, thisURI, formulaURI<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="RDFHandler-__init__"><strong>__init__</strong></a>(self, sink, thisURI, formulaURI<font color="#909090">=None</font>, flags<font color="#909090">=''</font>)</dt></dl>
 
 <dl><dt><a name="RDFHandler-_obj"><strong>_obj</strong></a>(self, tagURI, attrs)</dt></dl>
 
@@ -174,7 +174,10 @@ set&nbsp;up&nbsp;a&nbsp;new&nbsp;binding.</tt></dd></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = None</dl>
+<dl><dt><strong>__doc__</strong> = 'RDF Parser using SAX API for XML parsing<font color="#c040c0">\n</font>'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
 
 <dl><dt><strong>__module__</strong> = 'sax2rdf'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
 &nbsp;<br>
@@ -256,7 +259,7 @@ the&nbsp;element.</tt></dd></dl>
 <font color="#000000" face="helvetica, arial"><a name="RDFXMLParser">class <strong>RDFXMLParser</strong></a>(<a href="sax2rdf.html#RDFHandler">RDFHandler</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2>&nbsp;</td></tr>
+<td colspan=2><tt>XML/RDF&nbsp;parser&nbsp;based&nbsp;on&nbsp;sax&nbsp;XML&nbsp;interface<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="sax2rdf.html#RDFXMLParser">RDFXMLParser</a></dd>
@@ -265,21 +268,29 @@ the&nbsp;element.</tt></dd></dl>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="RDFXMLParser-__init__"><strong>__init__</strong></a>(self, sink, thisURI, formulaURI<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="RDFXMLParser-__init__"><strong>__init__</strong></a>(self, sink, thisURI, formulaURI<font color="#909090">=None</font>, flags<font color="#909090">=''</font>)</dt></dl>
 
 <dl><dt><a name="RDFXMLParser-close"><strong>close</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="RDFXMLParser-feed"><strong>feed</strong></a>(self, data)</dt></dl>
 
-<dl><dt><a name="RDFXMLParser-load"><strong>load</strong></a>(self, uri, baseURI<font color="#909090">=''</font>)</dt></dl>
+<dl><dt><a name="RDFXMLParser-load"><strong>load</strong></a>(self, uri, baseURI<font color="#909090">=''</font>)</dt><dd><tt>Parse&nbsp;a&nbsp;document&nbsp;identified&nbsp;bythe&nbsp;URI,&nbsp;return&nbsp;the&nbsp;top&nbsp;level&nbsp;formula</tt></dd></dl>
 
 <dl><dt><a name="RDFXMLParser-loadStream"><strong>loadStream</strong></a>(self, stream)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = None</dl>
+<dl><dt><strong>__doc__</strong> = 'XML/RDF parser based on sax XML interface'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
 
 <dl><dt><strong>__module__</strong> = 'sax2rdf'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+
+<dl><dt><strong>flagDocumentation</strong> = '<font color="#c040c0">\n</font>    Flags to control RDF/XML INPUT (after --rdf...e decalred as local document is assume xmlns=""<font color="#c040c0">\n\n</font>'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
 &nbsp;<br>
 Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
 If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
@@ -382,6 +393,14 @@ the&nbsp;element.</tt></dd></dl>
 
 </td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt><a name="-test"><strong>test</strong></a>(args<font color="#909090">=None</font>)</dt></dl>
+</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
@@ -402,9 +421,10 @@ the&nbsp;element.</tt></dd></dl>
 <strong>STATE_NOT_RDF</strong> = 'not RDF'<br>
 <strong>STATE_NOVALUE</strong> = 'no value'<br>
 <strong>STATE_NO_SUBJECT</strong> = 'no context'<br>
+<strong>STATE_OUTERMOST</strong> = 'outermost level'<br>
 <strong>STATE_VALUE</strong> = 'plain value'<br>
 <strong>SYMBOL</strong> = 0<br>
-<strong>__file__</strong> = './sax2rdf.pyc'<br>
+<strong>__file__</strong> = './sax2rdf.py'<br>
 <strong>__name__</strong> = 'sax2rdf'<br>
 <strong>_nextId</strong> = 0<br>
 <strong>feature_namespaces</strong> = 'http://xml.org/sax/features/namespaces'</td></tr></table>

@@ -4,6 +4,7 @@ For example, sometimes want on stdout maybe or in a scroll window....
 """
 
 import sys
+import os
 
 def progress(*args):
     global chatty_level  # verbosity indent level
@@ -13,9 +14,11 @@ def progress(*args):
     sys.stderr.write("\n")
 #        sys.stderr.write(  str + "\n")
 
-global chatty_flag   # verbosity debug flag
-global chatty_level  # verbosity indent level
+global chatty_flag # verbosity debug flag
+chatty_flag  =0
+chatty_flag = int(os.environ.get("CWM_VERBOSITY", 0))
 
+global chatty_level  # verbosity indent level
 chatty_level = 0
 
 def setVerbosity(x):

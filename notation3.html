@@ -237,7 +237,7 @@ the&nbsp;#&nbsp;will&nbsp;get&nbsp;added&nbsp;during&nbsp;qname&nbsp;processing<
 
 <dl><dt><a name="SinkParser-directiveOrStatement"><strong>directiveOrStatement</strong></a>(self, str, h)</dt></dl>
 
-<dl><dt><a name="SinkParser-endDoc"><strong>endDoc</strong></a>(self)</dt></dl>
+<dl><dt><a name="SinkParser-endDoc"><strong>endDoc</strong></a>(self)</dt><dd><tt>Signal&nbsp;end&nbsp;fo&nbsp;document&nbsp;and&nbsp;stop&nbsp;parsing.&nbsp;returns&nbsp;formula</tt></dd></dl>
 
 <dl><dt><a name="SinkParser-feed"><strong>feed</strong></a>(self, str)</dt><dd><tt>if&nbsp;<a href="#BadSyntax">BadSyntax</a>&nbsp;is&nbsp;raised,&nbsp;the&nbsp;string<br>
 passed&nbsp;in&nbsp;the&nbsp;exception&nbsp;object&nbsp;is&nbsp;the<br>
@@ -249,7 +249,11 @@ parser,&nbsp;it&nbsp;should&nbsp;be&nbsp;straightforward&nbsp;to&nbsp;recover.</
 
 <dl><dt><a name="SinkParser-item"><strong>item</strong></a>(self, str, i, res)</dt></dl>
 
-<dl><dt><a name="SinkParser-load"><strong>load</strong></a>(self, uri, baseURI<font color="#909090">=''</font>)</dt></dl>
+<dl><dt><a name="SinkParser-load"><strong>load</strong></a>(self, uri, baseURI<font color="#909090">=''</font>)</dt><dd><tt>Parses&nbsp;a&nbsp;document&nbsp;of&nbsp;the&nbsp;given&nbsp;URI&nbsp;and&nbsp;returns&nbsp;its&nbsp;top&nbsp;level&nbsp;formula</tt></dd></dl>
+
+<dl><dt><a name="SinkParser-loadBuf"><strong>loadBuf</strong></a>(self, buf)</dt><dd><tt>Parses&nbsp;a&nbsp;buffer&nbsp;and&nbsp;returns&nbsp;its&nbsp;top&nbsp;level&nbsp;formula</tt></dd></dl>
+
+<dl><dt><a name="SinkParser-loadStream"><strong>loadStream</strong></a>(self, stream)</dt></dl>
 
 <dl><dt><a name="SinkParser-makeStatement"><strong>makeStatement</strong></a>(self, quadruple)</dt></dl>
 

@@ -11,21 +11,23 @@ TT { font-family: lucidatypewriter, lucida console, courier }
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>uripath</strong></big></big> (version $Id$)</font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/uripath.py">/devel/WWW/2000/10/swap/uripath.py</a></font></td></tr></table>
-    <p><tt>Uniform&nbsp;Resource&nbsp;Identifier&nbsp;(URI)&nbsp;manipulation,<br>
+    <p><tt>Uniform&nbsp;Resource&nbsp;Identifier&nbsp;(URI)&nbsp;path&nbsp;manipulation,<br>
 above&nbsp;the&nbsp;access&nbsp;layer<br>
-&nbsp;<br>
-cf.<br>
-&nbsp;<br>
-*&nbsp;URI&nbsp;API&nbsp;design&nbsp;[was:&nbsp;URI&nbsp;Test&nbsp;Suite]&nbsp;Dan&nbsp;Connolly&nbsp;(Sun,&nbsp;Aug&nbsp;12&nbsp;2001)<br>
-<a href="http://lists.w3.org/Archives/Public/uri/2001Aug/0021.html">http://lists.w3.org/Archives/Public/uri/2001Aug/0021.html</a><br>
-&nbsp;<br>
-<a href="http://www.w3.org/DesignIssues/Model.html">http://www.w3.org/DesignIssues/Model.html</a><br>
-&nbsp;<br>
-<a href="http://www.ietf.org/rfc/rfc2396.txt">http://www.ietf.org/rfc/rfc2396.txt</a><br>
 &nbsp;<br>
 The&nbsp;name&nbsp;of&nbsp;this&nbsp;module&nbsp;and&nbsp;the&nbsp;functions&nbsp;are&nbsp;somewhat<br>
 arbitrary;&nbsp;they&nbsp;hark&nbsp;to&nbsp;other&nbsp;parts&nbsp;of&nbsp;the&nbsp;python<br>
-library;&nbsp;e.g.&nbsp;uripath.<a href="#-join">join</a>()&nbsp;is&nbsp;somewhat&nbsp;like&nbsp;os.path.<a href="#-join">join</a>().</tt></p>
+library;&nbsp;e.g.&nbsp;uripath.<a href="#-join">join</a>()&nbsp;is&nbsp;somewhat&nbsp;like&nbsp;os.path.<a href="#-join">join</a>().<br>
+&nbsp;<br>
+REFERENCES<br>
+&nbsp;<br>
+&nbsp;&nbsp;Uniform&nbsp;Resource&nbsp;Identifiers&nbsp;(URI):&nbsp;Generic&nbsp;Syntax<br>
+&nbsp;&nbsp;<a href="http://www.ietf.org/rfc/rfc2396.txt">http://www.ietf.org/rfc/rfc2396.txt</a><br>
+&nbsp;<br>
+&nbsp;&nbsp;The&nbsp;Web&nbsp;Model:&nbsp;Information&nbsp;hiding&nbsp;and&nbsp;URI&nbsp;syntax&nbsp;(Jan&nbsp;98)<br>
+&nbsp;&nbsp;<a href="http://www.w3.org/DesignIssues/Model.html">http://www.w3.org/DesignIssues/Model.html</a><br>
+&nbsp;<br>
+&nbsp;&nbsp;URI&nbsp;API&nbsp;design&nbsp;[was:&nbsp;URI&nbsp;Test&nbsp;Suite]&nbsp;Dan&nbsp;Connolly&nbsp;(Sun,&nbsp;Aug&nbsp;12&nbsp;2001)<br>
+&nbsp;&nbsp;<a href="http://lists.w3.org/Archives/Public/uri/2001Aug/0021.html">http://lists.w3.org/Archives/Public/uri/2001Aug/0021.html</a></tt></p>
 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -36,7 +38,128 @@ library;&nbsp;e.g.&nbsp;uripath.<a href="#-join">join</a>()&nbsp;is&nbsp;somewha
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="os.html">os</a><br>
 </td><td width="25%" valign=top><a href="re.html">re</a><br>
 </td><td width="25%" valign=top><a href="string.html">string</a><br>
-</td><td width="25%" valign=top></td></tr></table></td></tr></table>
+</td><td width="25%" valign=top><a href="unittest.html">unittest</a><br>
+</td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ee77aa">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="unittest.html#TestCase">unittest.TestCase</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="uripath.html#Tests">Tests</a>
+</font></dt></dl>
+</dd>
+</dl>
+ 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Tests">class <strong>Tests</strong></a>(<a href="unittest.html#TestCase">unittest.TestCase</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2>&nbsp;</td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="Tests-testPaths"><strong>testPaths</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Tests-testRFCCases"><strong>testRFCCases</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Tests-testSplit"><strong>testSplit</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = None</dl>
+
+<dl><dt><strong>__module__</strong> = 'uripath'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+
+<hr>
+Methods inherited from <a href="unittest.html#TestCase">unittest.TestCase</a>:<br>
+<dl><dt><a name="Tests-_TestCase__exc_info"><strong>_TestCase__exc_info</strong></a> = __exc_info(self)</dt><dd><tt>Return&nbsp;a&nbsp;version&nbsp;of&nbsp;sys.exc_info()&nbsp;with&nbsp;the&nbsp;traceback&nbsp;frame<br>
+minimised;&nbsp;usually&nbsp;the&nbsp;top&nbsp;level&nbsp;of&nbsp;the&nbsp;traceback&nbsp;frame&nbsp;is&nbsp;not<br>
+needed.</tt></dd></dl>
+
+<dl><dt><a name="Tests-__call__"><strong>__call__</strong></a>(self, result<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="Tests-__init__"><strong>__init__</strong></a>(self, methodName<font color="#909090">='runTest'</font>)</dt><dd><tt>Create&nbsp;an&nbsp;instance&nbsp;of&nbsp;the&nbsp;class&nbsp;that&nbsp;will&nbsp;use&nbsp;the&nbsp;named&nbsp;test<br>
+method&nbsp;when&nbsp;executed.&nbsp;Raises&nbsp;a&nbsp;ValueError&nbsp;if&nbsp;the&nbsp;instance&nbsp;does<br>
+not&nbsp;have&nbsp;a&nbsp;method&nbsp;with&nbsp;the&nbsp;specified&nbsp;name.</tt></dd></dl>
+
+<dl><dt><a name="Tests-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Tests-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Tests-assertEqual"><strong>assertEqual</strong></a> = failUnlessEqual(self, first, second, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;if&nbsp;the&nbsp;two&nbsp;objects&nbsp;are&nbsp;unequal&nbsp;as&nbsp;determined&nbsp;by&nbsp;the&nbsp;'!='<br>
+operator.</tt></dd></dl>
+
+<dl><dt><a name="Tests-assertEquals"><strong>assertEquals</strong></a> = failUnlessEqual(self, first, second, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;if&nbsp;the&nbsp;two&nbsp;objects&nbsp;are&nbsp;unequal&nbsp;as&nbsp;determined&nbsp;by&nbsp;the&nbsp;'!='<br>
+operator.</tt></dd></dl>
+
+<dl><dt><a name="Tests-assertNotEqual"><strong>assertNotEqual</strong></a> = failIfEqual(self, first, second, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;if&nbsp;the&nbsp;two&nbsp;objects&nbsp;are&nbsp;equal&nbsp;as&nbsp;determined&nbsp;by&nbsp;the&nbsp;'=='<br>
+operator.</tt></dd></dl>
+
+<dl><dt><a name="Tests-assertNotEquals"><strong>assertNotEquals</strong></a> = failIfEqual(self, first, second, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;if&nbsp;the&nbsp;two&nbsp;objects&nbsp;are&nbsp;equal&nbsp;as&nbsp;determined&nbsp;by&nbsp;the&nbsp;'=='<br>
+operator.</tt></dd></dl>
+
+<dl><dt><a name="Tests-assertRaises"><strong>assertRaises</strong></a> = failUnlessRaises(self, excClass, callableObj, *args, **kwargs)</dt><dd><tt>Fail&nbsp;unless&nbsp;an&nbsp;exception&nbsp;of&nbsp;class&nbsp;excClass&nbsp;is&nbsp;thrown<br>
+by&nbsp;callableObj&nbsp;when&nbsp;invoked&nbsp;with&nbsp;arguments&nbsp;args&nbsp;and&nbsp;keyword<br>
+arguments&nbsp;kwargs.&nbsp;If&nbsp;a&nbsp;different&nbsp;type&nbsp;of&nbsp;exception&nbsp;is<br>
+thrown,&nbsp;it&nbsp;will&nbsp;not&nbsp;be&nbsp;caught,&nbsp;and&nbsp;the&nbsp;test&nbsp;case&nbsp;will&nbsp;be<br>
+deemed&nbsp;to&nbsp;have&nbsp;suffered&nbsp;an&nbsp;error,&nbsp;exactly&nbsp;as&nbsp;for&nbsp;an<br>
+unexpected&nbsp;exception.</tt></dd></dl>
+
+<dl><dt><a name="Tests-assert_"><strong>assert_</strong></a> = failUnless(self, expr, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;the&nbsp;test&nbsp;unless&nbsp;the&nbsp;expression&nbsp;is&nbsp;true.</tt></dd></dl>
+
+<dl><dt><a name="Tests-countTestCases"><strong>countTestCases</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Tests-debug"><strong>debug</strong></a>(self)</dt><dd><tt>Run&nbsp;the&nbsp;test&nbsp;without&nbsp;collecting&nbsp;errors&nbsp;in&nbsp;a&nbsp;TestResult</tt></dd></dl>
+
+<dl><dt><a name="Tests-defaultTestResult"><strong>defaultTestResult</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Tests-fail"><strong>fail</strong></a>(self, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;immediately,&nbsp;with&nbsp;the&nbsp;given&nbsp;message.</tt></dd></dl>
+
+<dl><dt><a name="Tests-failIf"><strong>failIf</strong></a>(self, expr, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;the&nbsp;test&nbsp;if&nbsp;the&nbsp;expression&nbsp;is&nbsp;true.</tt></dd></dl>
+
+<dl><dt><a name="Tests-failIfEqual"><strong>failIfEqual</strong></a>(self, first, second, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;if&nbsp;the&nbsp;two&nbsp;objects&nbsp;are&nbsp;equal&nbsp;as&nbsp;determined&nbsp;by&nbsp;the&nbsp;'=='<br>
+operator.</tt></dd></dl>
+
+<dl><dt><a name="Tests-failUnless"><strong>failUnless</strong></a>(self, expr, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;the&nbsp;test&nbsp;unless&nbsp;the&nbsp;expression&nbsp;is&nbsp;true.</tt></dd></dl>
+
+<dl><dt><a name="Tests-failUnlessEqual"><strong>failUnlessEqual</strong></a>(self, first, second, msg<font color="#909090">=None</font>)</dt><dd><tt>Fail&nbsp;if&nbsp;the&nbsp;two&nbsp;objects&nbsp;are&nbsp;unequal&nbsp;as&nbsp;determined&nbsp;by&nbsp;the&nbsp;'!='<br>
+operator.</tt></dd></dl>
+
+<dl><dt><a name="Tests-failUnlessRaises"><strong>failUnlessRaises</strong></a>(self, excClass, callableObj, *args, **kwargs)</dt><dd><tt>Fail&nbsp;unless&nbsp;an&nbsp;exception&nbsp;of&nbsp;class&nbsp;excClass&nbsp;is&nbsp;thrown<br>
+by&nbsp;callableObj&nbsp;when&nbsp;invoked&nbsp;with&nbsp;arguments&nbsp;args&nbsp;and&nbsp;keyword<br>
+arguments&nbsp;kwargs.&nbsp;If&nbsp;a&nbsp;different&nbsp;type&nbsp;of&nbsp;exception&nbsp;is<br>
+thrown,&nbsp;it&nbsp;will&nbsp;not&nbsp;be&nbsp;caught,&nbsp;and&nbsp;the&nbsp;test&nbsp;case&nbsp;will&nbsp;be<br>
+deemed&nbsp;to&nbsp;have&nbsp;suffered&nbsp;an&nbsp;error,&nbsp;exactly&nbsp;as&nbsp;for&nbsp;an<br>
+unexpected&nbsp;exception.</tt></dd></dl>
+
+<dl><dt><a name="Tests-id"><strong>id</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Tests-run"><strong>run</strong></a>(self, result<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="Tests-setUp"><strong>setUp</strong></a>(self)</dt><dd><tt>Hook&nbsp;method&nbsp;for&nbsp;setting&nbsp;up&nbsp;the&nbsp;test&nbsp;fixture&nbsp;before&nbsp;exercising&nbsp;it.</tt></dd></dl>
+
+<dl><dt><a name="Tests-shortDescription"><strong>shortDescription</strong></a>(self)</dt><dd><tt>Returns&nbsp;a&nbsp;one-line&nbsp;description&nbsp;of&nbsp;the&nbsp;test,&nbsp;or&nbsp;None&nbsp;if&nbsp;no<br>
+description&nbsp;has&nbsp;been&nbsp;provided.<br>
+&nbsp;<br>
+The&nbsp;default&nbsp;implementation&nbsp;of&nbsp;this&nbsp;method&nbsp;returns&nbsp;the&nbsp;first&nbsp;line&nbsp;of<br>
+the&nbsp;specified&nbsp;test&nbsp;method's&nbsp;docstring.</tt></dd></dl>
+
+<dl><dt><a name="Tests-tearDown"><strong>tearDown</strong></a>(self)</dt><dd><tt>Hook&nbsp;method&nbsp;for&nbsp;deconstructing&nbsp;the&nbsp;test&nbsp;fixture&nbsp;after&nbsp;testing&nbsp;it.</tt></dd></dl>
+
+<hr>
+Data and non-method functions inherited from <a href="unittest.html#TestCase">unittest.TestCase</a>:<br>
+<dl><dt><strong>failureException</strong> = &lt;class exceptions.AssertionError&gt;<dd><tt>Assertion&nbsp;failed.</tt></dl>
+
+</td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
 <td colspan=3 valign=bottom>&nbsp;<br>
@@ -44,6 +167,7 @@ library;&nbsp;e.g.&nbsp;uripath.<a href="#-join">join</a>()&nbsp;is&nbsp;somewha
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl><dt><a name="-_fixslash"><strong>_fixslash</strong></a>(str)</dt><dd><tt>&nbsp;Fix&nbsp;windowslike&nbsp;filename&nbsp;to&nbsp;unixlike&nbsp;-&nbsp;(#ifdef&nbsp;WINDOWS)</tt></dd></dl>
+ <dl><dt><a name="-_test"><strong>_test</strong></a>()</dt></dl>
  <dl><dt><a name="-base"><strong>base</strong></a>()</dt><dd><tt>The&nbsp;base&nbsp;URI&nbsp;for&nbsp;this&nbsp;process&nbsp;-&nbsp;the&nbsp;Web&nbsp;equiv&nbsp;of&nbsp;cwd<br>
 &nbsp;<br>
 Relative&nbsp;or&nbsp;abolute&nbsp;unix-standard&nbsp;filenames&nbsp;parsed&nbsp;relative&nbsp;to<br>
@@ -53,30 +177,59 @@ we&nbsp;should&nbsp;put&nbsp;it&nbsp;in&nbsp;the&nbsp;hostname&nbsp;just&nbsp;to
  <dl><dt><a name="-join"><strong>join</strong></a>(here, there)</dt><dd><tt>join&nbsp;an&nbsp;absolute&nbsp;URI&nbsp;and&nbsp;URI&nbsp;reference<br>
 &nbsp;<br>
 here&nbsp;must&nbsp;be&nbsp;an&nbsp;absolute&nbsp;URI.<br>
-there&nbsp;must&nbsp;be&nbsp;a&nbsp;URI&nbsp;reference<br>
+there&nbsp;must&nbsp;be&nbsp;a&nbsp;URI&nbsp;reference.<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#-join">join</a>('<a href="http://example/x/y/z">http://example/x/y/z</a>',&nbsp;'../abc')<br>
+'<a href="http://example/x/abc">http://example/x/abc</a>'<br>
 &nbsp;<br>
 Raise&nbsp;ValueError&nbsp;if&nbsp;there&nbsp;uses&nbsp;relative&nbsp;path<br>
-syntax&nbsp;but&nbsp;here&nbsp;has&nbsp;no&nbsp;hierarchical&nbsp;path.</tt></dd></dl>
- <dl><dt><a name="-refTo"><strong>refTo</strong></a>(base, uri)</dt><dd><tt>Your&nbsp;regular&nbsp;relative&nbsp;URI&nbsp;algorithm&nbsp;--&nbsp;never&nbsp;trust&nbsp;anyone&nbsp;else's&nbsp;;-)<br>
-This&nbsp;one&nbsp;checks&nbsp;that&nbsp;it&nbsp;uses&nbsp;a&nbsp;root-realtive&nbsp;one&nbsp;where&nbsp;that&nbsp;is&nbsp;all&nbsp;they&nbsp;share.<br>
-Now&nbsp;uses&nbsp;root-relative&nbsp;where&nbsp;no&nbsp;path&nbsp;is&nbsp;shared.<br>
-This&nbsp;is&nbsp;a&nbsp;matter&nbsp;of&nbsp;taste&nbsp;but&nbsp;tends&nbsp;to&nbsp;give&nbsp;more&nbsp;resilience&nbsp;IMHO&nbsp;--&nbsp;and&nbsp;shorter&nbsp;paths</tt></dd></dl>
- <dl><dt><a name="-refTo_DanC"><strong>refTo_DanC</strong></a>(src, dest)</dt><dd><tt>compute&nbsp;a&nbsp;path&nbsp;from&nbsp;one&nbsp;URI&nbsp;to&nbsp;another<br>
+syntax&nbsp;but&nbsp;here&nbsp;has&nbsp;no&nbsp;hierarchical&nbsp;path.<br>
 &nbsp;<br>
-both&nbsp;src&nbsp;and&nbsp;dest&nbsp;are&nbsp;absolute&nbsp;URI&nbsp;references</tt></dd></dl>
+&gt;&gt;&gt;&nbsp;<a href="#-join">join</a>('mid:foo@example',&nbsp;'../foo')<br>
+Traceback&nbsp;(most&nbsp;recent&nbsp;call&nbsp;last):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;raise&nbsp;ValueError,&nbsp;here<br>
+ValueError:&nbsp;mid:foo@example</tt></dd></dl>
+ <dl><dt><a name="-refTo"><strong>refTo</strong></a>(base, uri)</dt><dd><tt>figure&nbsp;out&nbsp;a&nbsp;relative&nbsp;URI&nbsp;reference&nbsp;from&nbsp;base&nbsp;to&nbsp;uri<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#-refTo">refTo</a>('<a href="http://example/x/y/z">http://example/x/y/z</a>',&nbsp;'<a href="http://example/x/abc">http://example/x/abc</a>')<br>
+'../abc'<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#-refTo">refTo</a>('file:/ex/x/y',&nbsp;'file:/ex/x/q/r#s')<br>
+'q/r#s'<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#-refTo">refTo</a>('<a href="http://ex/x/y">http://ex/x/y</a>',&nbsp;'<a href="http://ex/x/y">http://ex/x/y</a>')<br>
+''<br>
+&nbsp;<br>
+This&nbsp;one&nbsp;checks&nbsp;that&nbsp;it&nbsp;uses&nbsp;a&nbsp;root-realtive&nbsp;one&nbsp;where&nbsp;that&nbsp;is<br>
+all&nbsp;they&nbsp;share.&nbsp;&nbsp;Now&nbsp;uses&nbsp;root-relative&nbsp;where&nbsp;no&nbsp;path&nbsp;is&nbsp;shared.<br>
+This&nbsp;is&nbsp;a&nbsp;matter&nbsp;of&nbsp;taste&nbsp;but&nbsp;tends&nbsp;to&nbsp;give&nbsp;more&nbsp;resilience&nbsp;IMHO<br>
+--&nbsp;and&nbsp;shorter&nbsp;paths<br>
+&nbsp;<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#-refTo">refTo</a>('<a href="http://ex/x/y/z">http://ex/x/y/z</a>',&nbsp;'<a href="http://ex/r">http://ex/r</a>')<br>
+'/r'</tt></dd></dl>
  <dl><dt><a name="-splitFrag"><strong>splitFrag</strong></a>(uriref)</dt><dd><tt>split&nbsp;a&nbsp;URI&nbsp;reference&nbsp;between&nbsp;the&nbsp;fragment&nbsp;and&nbsp;the&nbsp;rest.<br>
 &nbsp;<br>
 Punctuation&nbsp;is&nbsp;thrown&nbsp;away.<br>
 &nbsp;<br>
-e.g.&nbsp;<a href="#-splitFrag">splitFrag</a>("abc#def")&nbsp;=&nbsp;("abc",&nbsp;"def")<br>
-and&nbsp;<a href="#-splitFrag">splitFrag</a>("abcdef")&nbsp;=&nbsp;("abcdef",&nbsp;None)</tt></dd></dl>
+e.g.<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#-splitFrag">splitFrag</a>("abc#def")<br>
+('abc',&nbsp;'def')<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#-splitFrag">splitFrag</a>("abcdef")<br>
+('abcdef',&nbsp;None)</tt></dd></dl>
  <dl><dt><a name="-splitFragP"><strong>splitFragP</strong></a>(uriref, punct<font color="#909090">=0</font>)</dt><dd><tt>split&nbsp;a&nbsp;URI&nbsp;reference&nbsp;before&nbsp;the&nbsp;fragment<br>
 &nbsp;<br>
 Punctuation&nbsp;is&nbsp;kept.<br>
 &nbsp;<br>
-e.g.&nbsp;<a href="#-splitFrag">splitFrag</a>("abc#def")&nbsp;=&nbsp;("abc",&nbsp;"#def")<br>
-and&nbsp;<a href="#-splitFrag">splitFrag</a>("abcdef")&nbsp;=&nbsp;("abcdef",&nbsp;"")</tt></dd></dl>
- <dl><dt><a name="-test"><strong>test</strong></a>()</dt></dl>
+e.g.<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#-splitFragP">splitFragP</a>("abc#def")<br>
+('abc',&nbsp;'#def')<br>
+&nbsp;<br>
+&gt;&gt;&gt;&nbsp;<a href="#-splitFragP">splitFragP</a>("abcdef")<br>
+('abcdef',&nbsp;'')</tt></dd></dl>
 </td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">

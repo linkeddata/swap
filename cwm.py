@@ -437,14 +437,14 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             _store = _outSink
             workingContextURI = None
         else:
-            _metaURI = join(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
-            _store = llyn.RDFStore( _outURI+"#_g", metaURI=_metaURI, argv=option_with, crypto=option_crypto)
+#            _metaURI = join(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
+            _store = llyn.RDFStore( _outURI+"#_g", argv=option_with, crypto=option_crypto)
 	    thing.setStore(_store)
             workingContextURI = _outURI+ "#0_work"
             workingContext = _store.intern((FORMULA, workingContextURI))   #@@@ Hack - use metadata
             #  Metadata context - storing information about what we are doing
 
-            _store.reset(_metaURI+"#_experience")     # Absolutely need this for remembering URIs loaded
+#            _store.reset(_metaURI+"#_experience")     # Absolutely need this for remembering URIs loaded
             history = None
         lxkb = LX.KB()      # set up a parallel store for LX-based operations
 
@@ -485,15 +485,15 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 del(p)
                 if not option_pipe:
                     inputContext = _store.intern((FORMULA, _inputURI+ "#_formula"))
-                    _step  = _step + 1
-                    s = _metaURI + `_step`  #@@ leading 0s to make them sort?
+#                    _step  = _step + 1
+#                    s = _metaURI + `_step`  #@@ leading 0s to make them sort?
                     #if doMeta and history:
                     #   _store.storeQuad((_store._experience, META_mergedWith, s, history))
                     #   _store.storeQuad((_store._experience, META_source, s, inputContext))
                     #   _store.storeQuad((_store._experience, META_run, s, run))
                     #   history = s
                     #else:
-                    history = inputContext
+#                    history = inputContext
                 _gotInput = 1
 
             elif arg == "-help":

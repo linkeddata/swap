@@ -34,6 +34,10 @@ cwm_test animal.n3 "Parse a small RDF file, generate N3" -rdf animal.rdf -n3
 
 cwm_test animal-1.rdf "Parse a small RDF file and regenerate RDF" -rdf animal.rdf
 
+cwm_test in-xml-t.n3 "Parse RDF embedded in foreign XML" --rdf=T xml-syntax/in-xml.xml -n3
+ 
+cwm_test in-xml.n3 "Ignore RDF embedded in foreign XML" --rdf xml-syntax/in-xml.xml -n3
+ 
 cwm_test reluri-1.rdf "test generation of relative URIs" reluri-1.n3 --rdf
 
 cwm_test contexts-1.n3 "Parse and generate simple contexts" contexts.n3
@@ -129,6 +133,8 @@ cwm_test endsWith-out.n3 "string:endsWith" string/endsWith.n3 -rules
 
 cwm_test bi-quant.n3 "log:includes handling of univ./exist. quantifiers" includes/quantifiers.n3 -think
 
+cwm_test bi-quant-imp.n3 "log:implies handling of quantifiers" includes/quant-implies.n3 --think
+
 cwm_test bi-concat.n3 "Test string concatetnation built-in" includes/concat.n3 -think
 
 cwm_test bi-uri-startswith.n3 "Dan's bug case with uri and startswith" includes/uri-startswith.n3 -think
@@ -203,7 +209,10 @@ echo "Loopback parser tests:"
 ./n3-xml-test.sh `cat tests-work.txt`
 
 # $Log$
-# Revision 1.42  2002-10-02 20:40:56  sandro
+# Revision 1.43  2002-10-08 20:59:09  timbl
+# minor api changes probably
+#
+# Revision 1.42  2002/10/02 20:40:56  sandro
 # make --flatten recognize log:means as the biconditional and
 # log:Falsehood for a formula as its negation.
 #

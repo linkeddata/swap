@@ -109,6 +109,10 @@ class RDFHandler(xml.sax.ContentHandler):
         version = "$Id$"
         self.sink.makeComment("RDF parsed by "+version[1:-1])
 
+	if "D" in self.flags:
+	    self.sink.bind("", (SYMBOL, self._thisURI+"#"))
+	    self._nsmap = [ { "": "#"} ]
+
 
 #@@    def load(self, uri, _baseURI=""):
 #        if uri:
@@ -188,8 +192,11 @@ class RDFHandler(xml.sax.ContentHandler):
                     pass  #later
                 else:
                     if not ns:
-                        raise BadSyntax(sys.exc_info(), "No namespace on property attribute %s" % ln)
-                    properties.append((uri, value))# If no uri, syntax error @@
+                        if "L" not in self.flags:  # assume local?
+			    raise BadSyntax(sys.exc_info(), "No namespace on property attribute %s" % ln)
+			properties.append((self._thisURI + "#" + ln.encode('utf-8'), value))
+		    else:
+			properties.append((uri, value))# If no uri, syntax error @@
 #                    self.sink.makeComment("xml2rdf: Ignored attribute "+uri)
             else:  # Property attribute propAttr #6.10
                 properties.append((uri, value)) 
@@ -454,6 +461,8 @@ class RDFXMLParser(RDFHandler):
         
         T  - take foreign XML as transparent and parse any RDF in it
              (default it is to ignore unless rdf:RDF at top level)
+	L  - If non-rdf attributes have no namespace prefix, assume in local <#> namespace
+	D  - Assume default namespace decalred as local document is assume xmlns=""
 
 """
 
@@ -468,13 +477,15 @@ class RDFXMLParser(RDFHandler):
         self._p.feed(data)
 
     def load(self, uri, baseURI=""):
+	"""Parse a document identified bythe URI, return the top level formula"""
         if uri:
             _inputURI = uripath.join(baseURI, uri) # Make abs from relative
             f = urllib.urlopen(_inputURI)
         else:
             _inputURI = uripath.join(baseURI, "STDIN") # Make abs from relative
             f = sys.stdin
-        self.loadStream(f)
+        return self.loadStream(f)
+#	return self._formula
 
     def loadStream(self, stream):
         s = xml.sax.InputSource()
@@ -485,6 +496,7 @@ class RDFXMLParser(RDFHandler):
             # was: raise SyntaxError() which left no info as to what had happened
             raise SyntaxError("parsing XML: "+sys.exc_info()[1].__str__())   # Remove all XML diagnostic info?!? -tbl
         # self.close()  don't do a second time - see endDocument
+	return self._formula
 
     def close(self):
         self._p.reset()

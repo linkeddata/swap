@@ -19,6 +19,7 @@ import sys
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 import urllib # for hasContent
+import uripath # DanC's tested and correct one
 import md5, binascii  # for building md5 URIs
 
 from uripath import refTo
@@ -83,36 +84,65 @@ def _checkStore(s=None):
 def symbol(uri):
     """Create or reuse, in the default store, an interned version of the given symbol
     and return it for future use"""
-    return self._checkStore().newSymbol(uri)
+    return _checkStore().newSymbol(uri)
     
 def literal(str):
     """Create or reuse, in the default store, an interned version of the given literal string
     and return it for future use"""
-    return self._checkStore().newLiteral(str)
+    return _checkStore().newLiteral(str)
 
 def formula():
     """Create or reuse, in the default store, a new empty formula (triple people think: triple store)
     and return it for future use"""
-    return self._checkStore().newForumula()
+    return _checkStore().newForumula()
 
 def bNode(str, context):
     """Create or reuse, in the default store, a new unnamed node within the given
     formula as context, and return it for future use"""
-    return self._checkStore().newLiteral(context)
+    return _checkStore().newLiteral(context)
 
 def existential(str, context, uri):
     """Create or reuse, in the default store, a new named variable
     existentially qualified within the given
     formula as context, and return it for future use"""
-    return self._checkStore().newLiteral(context)
+    return _checkStore().newLiteral(context)
 
 def universal(str, context, uri):
     """Create or reuse, in the default store, a named variable
     universally qualified within the given
     formula as context, and return it for future use"""
-    return self._checkStore().newLiteral(context)
+    return _checkStore().newLiteral(context)
 
 
+
+class Namespace(object):
+    """A shortcut for getting a symbols as interned by the default store
+
+      >>> RDF = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+      >>> RDF.type
+      'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'
+      >>> RDF.type is RDF.type
+      1
+
+    """
+    
+    def __init__(self, name):
+        if ':' not in name:    #, "must be absolute: %s" % name
+	    base = uripath.base()
+	    name = uripath.join(base, name)
+        self._name = name
+        self._seen = {}
+
+    def name(self):
+        return self._name
+    
+    def __getattr__(self, lname):
+        """get the lname Symbol in this namespace.
+
+        lname -- an XML name (limited to URI characters)
+	I hope this is only called *after* the ones defines above have been checked
+        """
+        return _checkStore().intern((SYMBOL, self._name+lname))
 
 
 ########################################  Storage URI Handling
@@ -202,7 +232,7 @@ class Symbol(Term):
 
     def internFrag(self, fragid, thetype):   # type was only Fragment before
             f = self.fragments.get(fragid, None)
-            if f:
+            if f != None:
                 if not isinstance(f, thetype):
                     raise RuntimeError("Oops.. %s exists already but not with type %s"%(f, thetype))
                 return f    # (Could check that types match just to be sure)
@@ -212,7 +242,7 @@ class Symbol(Term):
                 
     def internAnonymous(r, fragid):
             f = r.fragments.get(fragid, None)
-            if f: return f
+            if f!= None: return f
             f = Anonymous(r, fragid)
             r.fragments[fragid] = f
             return f
@@ -335,7 +365,10 @@ class Literal(Term):
 
     def __str__(self):
         return self.string
-    
+
+    def __int__(self):
+	return int(self.string)
+
     def __repr__(self):
         return '"' + self.string[0:8] + '"'
 #        return self.string

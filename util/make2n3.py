@@ -162,7 +162,6 @@ def do(path):
 recursive = 0
 nochange = 1
 verbose = 0
-global verbose
 doall = 0
 files = []
 
