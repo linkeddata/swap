@@ -617,12 +617,14 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 option_outputStyle = arg            
 
             elif arg[:7] == "-apply=":
+		workingContext = workingContext.canonicalize()
                 need(_store); touch(_store)
                 filterContext = _store.load(_uri)
 		workingContext.reopen()
                 _store.applyRules(workingContext, filterContext);
 
             elif _lhs == "-filter":
+		workingContext = workingContext.canonicalize()
 		if tracking: 
 		    r = BecauseOfCommandLine(sys.argv[0]) # @@ add user, host, pid, date time? Privacy!
 		else:
@@ -642,10 +644,12 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
             elif arg == "-purge":
                 need(_store); touch(_store)
+		workingContext = workingContext.canonicalize()
                 _store.purge(workingContext)
 		
             elif arg == "-purge-rules" or arg == "-data":
                 need(_store); touch(_store)
+		workingContext = workingContext.canonicalize()
                 _store.purgeExceptData(workingContext)
 
             elif arg == "-rules":

@@ -10,11 +10,6 @@
                 :x,
                 :y .
     {
-        :sky     :color :blue,
-                    :green .
-        
-        }     a :result .
-    {
         
           ( {:sky     :color :blue .
                 }
@@ -24,4 +19,9 @@
         
         }     log:implies {:F     a :result .
         } .
+    {
+        :sky     :color :blue,
+                    :green .
+        
+        }     a :result .
     

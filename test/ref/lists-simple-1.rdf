@@ -4,6 +4,7 @@
 <rdf:RDF xmlns="file:/devel/WWW/2000/10/swap/test/test#"
     xmlns:dpo="http://www.daml.org/2001/03/daml+oil#"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:t="file:/devel/WWW/2000/10/swap/test/test#">
 
@@ -12,91 +13,91 @@
         <verb12 rdf:resource="test#obj12"/>
     </rdf:Description>
 
-    <rdf:Description>
-        <dpo:first>subj1</dpo:first>
-        <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+    <rdf:Description rdf:about="test#emptyList">
+        <owl:equivalentTo rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
     </rdf:Description>
 
-    <rdf:Description rdf:about="#_g16">
+    <rdf:Description rdf:about="test#listOf2Empties">
+        <owl:equivalentTo rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </owl:equivalentTo>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="test#nested">
+        <owl:equivalentTo rdf:parseType="Resource">
+            <rdf:first rdf:resource="test#first"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="test#second"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:parseType="Resource">
+                        <rdf:first rdf:resource="test#left3"/>
+                        <rdf:rest rdf:parseType="Resource">
+                            <rdf:first rdf:resource="test#right3"/>
+                            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                        </rdf:rest>
+                    </rdf:first>
+                    <rdf:rest rdf:parseType="Resource">
+                        <rdf:first rdf:resource="test#fourth"/>
+                        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                    </rdf:rest>
+                </rdf:rest>
+            </rdf:rest>
+        </owl:equivalentTo>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="test#threeItems">
+        <owl:equivalentTo rdf:parseType="Resource">
+            <rdf:first rdf:resource="test#b"/>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:resource="test#c"/>
+                <rdf:rest rdf:parseType="Resource">
+                    <rdf:first rdf:resource="test#d"/>
+                    <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+                </rdf:rest>
+            </rdf:rest>
+        </owl:equivalentTo>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="test#twoAnons">
+        <owl:equivalentTo rdf:parseType="Resource">
+            <rdf:first rdf:parseType="Resource">
+                <rdf:type rdf:resource="test#mother"/>
+            </rdf:first>
+            <rdf:rest rdf:parseType="Resource">
+                <rdf:first rdf:parseType="Resource">
+                    <rdf:type rdf:resource="test#father"/>
+                </rdf:first>
+                <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+            </rdf:rest>
+        </owl:equivalentTo>
+    </rdf:Description>
+
+    <rdf:Description>
+        <rdf:first>subj1</rdf:first>
+        <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="run#li14">
         <verb1 rdf:resource="test#object1"/>
     </rdf:Description>
 
     <rdf:Description>
-        <dpo:first>subj2a</dpo:first>
-        <dpo:rest rdf:parseType="Resource">
-            <dpo:first>subj2b</dpo:first>
-            <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-        </dpo:rest>
+        <rdf:first>subj2a</rdf:first>
+        <rdf:rest rdf:parseType="Resource">
+            <rdf:first>subj2b</rdf:first>
+            <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        </rdf:rest>
     </rdf:Description>
 
-    <rdf:Description rdf:about="#_g17">
+    <rdf:Description rdf:about="run#li16">
         <verb2 rdf:resource="test#object2"/>
     </rdf:Description>
 
-    <rdf:Description rdf:about="test#emptyList">
-        <dpo:equivalentTo rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="test#listOf2Empties">
-        <dpo:equivalentTo rdf:parseType="Resource">
-            <dpo:first rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-            <dpo:rest rdf:parseType="Resource">
-                <dpo:first rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-                <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-            </dpo:rest>
-        </dpo:equivalentTo>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="test#nested">
-        <dpo:equivalentTo rdf:parseType="Resource">
-            <dpo:first rdf:resource="test#first"/>
-            <dpo:rest rdf:parseType="Resource">
-                <dpo:first rdf:resource="test#second"/>
-                <dpo:rest rdf:parseType="Resource">
-                    <dpo:first rdf:parseType="Resource">
-                        <dpo:first rdf:resource="test#left3"/>
-                        <dpo:rest rdf:parseType="Resource">
-                            <dpo:first rdf:resource="test#right3"/>
-                            <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-                        </dpo:rest>
-                    </dpo:first>
-                    <dpo:rest rdf:parseType="Resource">
-                        <dpo:first rdf:resource="test#fourth"/>
-                        <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-                    </dpo:rest>
-                </dpo:rest>
-            </dpo:rest>
-        </dpo:equivalentTo>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="test#threeItems">
-        <dpo:equivalentTo rdf:parseType="Resource">
-            <dpo:first rdf:resource="test#b"/>
-            <dpo:rest rdf:parseType="Resource">
-                <dpo:first rdf:resource="test#c"/>
-                <dpo:rest rdf:parseType="Resource">
-                    <dpo:first rdf:resource="test#d"/>
-                    <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-                </dpo:rest>
-            </dpo:rest>
-        </dpo:equivalentTo>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="test#twoAnons">
-        <dpo:equivalentTo rdf:parseType="Resource">
-            <dpo:first rdf:parseType="Resource">
-                <rdf:type rdf:resource="test#mother"/>
-            </dpo:first>
-            <dpo:rest rdf:parseType="Resource">
-                <dpo:first rdf:parseType="Resource">
-                    <rdf:type rdf:resource="test#father"/>
-                </dpo:first>
-                <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-            </dpo:rest>
-        </dpo:equivalentTo>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="http://www.daml.org/2001/03/daml+oil#nil">
+    <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil">
         <verb0 rdf:resource="test#object0"/>
     </rdf:Description>
 </rdf:RDF>

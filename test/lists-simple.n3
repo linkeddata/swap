@@ -7,9 +7,11 @@
 @prefix : <test#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 
-# This is cheating a bit - in case output of first and rest is needed.
+# This is cheating a bit - in case output of
+# first and rest or equivalentTo is needed.
 
 @prefix dpo: <http://www.daml.org/2001/03/daml+oil#>.
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
 
 # Other interesting unimplemented syntaxes ...
 #[ log:first :a;

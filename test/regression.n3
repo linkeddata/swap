@@ -151,6 +151,15 @@
     test:description   "conversion of N3 list syntax to RDF";
     test:arguments     """-n3 lists-simple.n3 -rdf""".
 
+#:t1018b1 a test:CwmTest;
+#    test:shortFileName "list-bug1.n3";
+#    test:description   "List processing bug check 1";
+#    test:arguments     """list/list-bug1.n3 --think""".
+#
+#:t1018b2 a test:CwmTest;
+#    test:shortFileName "list-bug2.n3";
+#    test:description   "List processing bug check 2";
+#    test:arguments     """list/list-bug2.n3 --think""".
 
 :t1019 a test:CwmTest;
     test:shortFileName "prefix1.rdf";
@@ -172,8 +181,8 @@
 
 :t1022 a test:CwmTest;
     test:shortFileName "daml-ex.n3";
-    test:description   "Early DAML example in XML/RDF";
-    test:arguments     """daml-pref.n3 -rdf daml-ex.rdf -n3""".
+    test:description   "Early DAML (now OWL) example in XML/RDF";
+    test:arguments     """-rdf owl-ex.rdf -n3""".
 
 
 #        Test log:implies rules:
@@ -245,21 +254,21 @@
 
 #        Test list handling
 
-:t1031 a test:CwmTest;
-    test:shortFileName "li-r1.n3";
-    test:description   "Inference using lists";
-    test:arguments     """list/r1.n3 -think""".
+#:t1031 a test:CwmTest;
+#    test:shortFileName "li-r1.n3";
+#    test:description   "Inference using lists";
+#    test:arguments     """list/r1.n3 -think""".
 
 
-:t1032 a test:CwmTest;
-    test:shortFileName "li-gk3.n3";
-    test:description   "Iterative ops on lists";
-    test:arguments     """list/gk3.n3 -think""".
+#:t1032 a test:CwmTest;
+#    test:shortFileName "li-gk3.n3";
+#    test:description   "Iterative ops on lists";
+#    test:arguments     """list/gk3.n3 -think""".
 
-:t1032a a test:CwmTest;
-    test:shortFileName "li-double.n3";
-    test:description   "Query with list with the same var in >once";
-    test:arguments     """list/double.n3 -think""".
+#:t1032a a test:CwmTest;
+#    test:shortFileName "li-double.n3";
+#    test:description   "Query with list with the same var in >once";
+#    test:arguments     """list/double.n3 -think""".
 
 
 #        Test builtins:
@@ -355,7 +364,7 @@
 :t1046 a test:CwmTest;
     test:shortFileName "bi-concat.n3";
     test:description   "Test string concatetnation built-in";
-    test:arguments     """includes/concat.n3 -think""".
+    test:arguments     """includes/concat.n3 --think --data""".
 
 
 :t1047 a test:CwmTest;

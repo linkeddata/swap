@@ -68,8 +68,6 @@
 #        1         2         3         4         5         6         7         8
 
 @prefix rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix list:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-
 @prefix rdfs:     <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix log:      <http://www.w3.org/2000/10/swap/log#> .
 @prefix string:   <http://www.w3.org/2000/10/swap/string#> .
@@ -88,20 +86,22 @@
 #
 #   ?A rule:append ( [ ?H :: ?T ]  ?T1 )
 # =>
-#   ?A list:first ?H ;
-#      list:rest  [ rule:append ( ?T ?T1 ) ] .
+#   ?A rdf:first ?H ;
+#      rdf:rest  [ rule:append ( ?T ?T1 ) ] .
 #
-#   ?A rule:append ( list:nil ?T1 )
+#   ?A rule:append ( rdf:nil ?T1 )
 # =>
-#   ?A list:first ?T1 ;
-#      list:rest  list:nil .
+#   ?A rdf:first ?T1 ;
+#      rdf:rest  rdf:nil .
 #
 
 { 
-  ?A rule:append ( [ list:first ?H ; list:rest ?T ] ?Y ) .
-} =>  { 
-  ?A list:first ?H ;
-     list:rest  [ rule:append ( ?T ?Y ) ] .
+  ?A rule:append ( [ rdf:first ?H ; rdf:rest ?T ] ?T1 ) .
+}
+log:implies
+{ 
+  ?A rdf:first ?H ;
+     rdf:rest  [ rule:append ( ?T ?T1 ) ] .
 } .
 
 # The following rule, when enabled, causes a different error:
@@ -111,28 +111,30 @@
 #  ValueError: list.remove(x): x not in list
 #
 
-{ 
-  ?A rule:append ( () ?Z ) .
-} => { 
-  ?A list:first ?Z ;
-     list:rest  () .
-}.
+#{ 
+#  ?A rule:append ( rdf:nil ?T1 ) .
+#}
+#log:implies
+#{ 
+#  ?A rdf:first ?T1 ;
+#     rdf:rest  rdf:nil .
+#} .
 
 # Test cases
 
- :A3 rule:append ( ( "L11" "L12" "L13" ) "L14" ) .
+:A0 rule:append ( ()  "L1" )
 
-:A1 rule:append (  ("ele") "appendage" ) .
+#:A1 rule:append ( (  ) "L14" ) .
 
-# :A0 rule:append (  () "appendage" ) .
+#:A2 rule:append (  :A1 "L2" ) .
 
-rule:append a log:Chaff.
+#:A3 rule:append (  :A1 "L3" ) .
 
 #
 # I note that the notation
 #   [ ?H :: ?T ]
 # as a shorthand for:
-#   [ list:first ?H ; list:rest ?T ]
+#   [ rdf:first ?H ; rdf:rest ?T ]
 # or
 #   [ rdf:first ?H ; rdf:rest ?T ]
 # might be convenient.
@@ -144,7 +146,7 @@ rule:append a log:Chaff.
 #
 #--------+---------+---------+---------+---------+---------+---------+---------+
 # $Log$
-# Revision 1.2  2003-08-14 00:00:23  timbl
+# Revision 1.1  2003-08-14 00:00:23  timbl
 # Re-engineered in places - See doc changes.html
 #
 # Revision 1.1  2003/01/16 05:06:45  timbl

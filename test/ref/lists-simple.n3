@@ -1,15 +1,10 @@
      @prefix : <test#> .
      @prefix dpo: <http://www.daml.org/2001/03/daml+oil#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix owl: <http://www.w3.org/2002/07/owl#> .
     
       [      :anonVerb12 :anonObj12;
              :verb12 :obj12 ].
-    
-      ( "subj1"  )
-         :verb1 :object1 .
-      ( "subj2a" 
-        "subj2b"  )
-         :verb2 :object2 .
     
     :emptyList     = () .
     
@@ -35,6 +30,11 @@
                  a :mother ]
          [
                  a :father ] ) .
+      ( "subj1"  )
+         :verb1 :object1 .
+      ( "subj2a" 
+        "subj2b"  )
+         :verb2 :object2 .
     
     ()     :verb0 :object0 .
     

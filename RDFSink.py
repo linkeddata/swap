@@ -50,11 +50,14 @@ forAllSym = Logic_NS + "forAll"
 
 RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 RDF_NS_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-DAML_NS=DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
-DAML_equivalentTo_URI = DPO_NS+"equivalentTo"
+# DAML_NS=DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
+OWL_NS = "http://www.w3.org/2002/07/owl#"
+DAML_equivalentTo_URI = OWL_NS+"equivalentTo"
 parsesTo_URI = Logic_NS + "parsesTo"
 RDF_spec = "http://www.w3.org/TR/REC-rdf-syntax/"
-List_NS = DPO_NS     # We have to pick just one all the time
+
+#List_NS = DPO_NS     # We have to pick just one all the time
+List_NS = RDF_NS_URI     # From 20030808
 
 
 _Old_Logic_NS = "http://www.w3.org/2000/10/swap/log.n3#"
@@ -74,6 +77,7 @@ from time import time
 
 # SWAP modules:
 from diag import verbosity, progress
+from os import environ
 
 runNamespaceValue = None
 
@@ -82,7 +86,11 @@ def runNamespace():
     # @@@ include hostname (privacy?) (hash it?)
     global runNamespaceValue
     if runNamespaceValue == None:
-	runNamespaceValue = uripath.join(uripath.base(), ".run-" + `time()` + "p"+ `getpid()` +"#")
+	try:
+	    runNamespaceValue = environ["CWM_RUN_NS"]
+	except KeyError:
+	    runNamespaceValue = uripath.join(
+		uripath.base(), ".run-" + `time()` + "p"+ `getpid()` +"#")
     return runNamespaceValue
 
 class URISyntaxError(ValueError):

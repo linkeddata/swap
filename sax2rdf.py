@@ -75,10 +75,12 @@ STATE_LIST =        "within list"
 
 RDF_NS_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#" # As per the spec
 RDF_Specification = "http://www.w3.org/TR/REC-rdf-syntax/" # Must come in useful :-)
+
 DAML_ONT_NS = "http://www.daml.org/2000/10/daml-ont#"  # DAML early version
 DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
+OWL_NS = "http://www.w3.org/2002/07/owl#"   # OWL 
 
-List_NS = DPO_NS     # We have to pick just one all the time
+List_NS = RDF_NS_URI     # Changed 200308
 
 XML_NS_URI = "http://www.w3.org/XML/1998/namespace"
 

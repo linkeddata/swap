@@ -5,9 +5,6 @@
                 :y .
     
     <a>     :RESULT <b> .
-      ( <a> 
-        <b>  )
-         a <twoer> .
     {
         
           ( :x 
@@ -16,4 +13,7 @@
         
         }     log:implies {:x     :RESULT :y .
         } .
+      ( <a> 
+        <b>  )
+         a <twoer> .
     

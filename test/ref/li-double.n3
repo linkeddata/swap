@@ -10,11 +10,10 @@
     
     "Ostrich"     a :foobar .
     {
-        
+        :a     a :foobar .
           ( :a 
             :a  )
              string:concatenation :s .
-        :a     a :foobar .
         
         }     log:implies {"00"     log:outputString :s .
         } .

@@ -9,6 +9,7 @@ Includes:
 """
 
 
+from __future__ import generators  # for yield
 
 import string
 #import re
@@ -23,10 +24,12 @@ import uripath # DanC's tested and correct one
 import md5, binascii  # for building md5 URIs
 
 from uripath import refTo
+from RDFSink import runNamespace
 
 LITERAL_URI_prefix = "data:application/n3;"
 
 
+from RDFSink import List_NS
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
@@ -238,7 +241,33 @@ class Term:
 	see RDFSink.py.  the second is the value -- uri for symbols, string for literals"""
         return (SYMBOL, self.uriref())
     
+    def substitution(self, bindings, why=None):
+	"Return this or a version of me with subsitution made"
+	for left, right in bindings:
+	    if left is self: return right
+	return self
 
+    def occurringIn(self, vars):
+	if self in vars:
+	    return [self]
+	return []
+
+    def value(self):
+	"As a python value - by default, none exists, use self"
+	return self
+
+    def unify(self, other, vars, existentials,  bindings):
+	"""Unify this which may contain variables with the other,
+	    which may contain existentials but not variables.
+	    Return 0 if impossible.
+	    Return [(var1, val1), (var2,val2)...] if match"""
+	if verbosity() > 97: progress("Unifying symbol %s with %s vars=%s"%(self, other,vars))
+	if self is other: return bindings
+	if self in vars+existentials:
+	    if verbosity() > 80: progress("Unifying term MATCHED %s to %s"%(self,other))
+	    return bindings + [(self, other)]
+	return 0
+	
 
 class Symbol(Term):
     """   A Term which has no fragment
@@ -320,14 +349,10 @@ class Fragment(Term):
 	"""Describe myself in RDF to the given context
 	
 	[ reify:uri "http://example.org/#whatever"]
-	"""
+	"""  #"
 	b = sink.newBlankNode(why=why)
 	sink.add(subj=b, pred=reify.uri, obj=sink.newLiteral(self.uriref()), why=why)
 	return b
-
-class FragmentNil(Fragment):
-    pass
-
 
 class Anonymous(Fragment):
     def __init__(self, resource, fragid):
@@ -340,26 +365,33 @@ class Anonymous(Fragment):
         return (ANONYMOUS, self.uriref())
         
     
-#################################### Lists
+##########################################################################
 #
-#  The statement  x p l   where l is a list is shorthand for
-#  exists g such that x p g. g first; rest r.
+#		L I S T S
 #
 # Lists are interned, so python object comparison works for log:equalTo.
 # For this reason, do NOT use a regular init, always use rest.precededBy(first)
 # to generate a new list form an old, or nil.precededBy(first) for a singleton,
-# or internList(somePythonList)
+# or nil.newList(somePythonList)
 # This lists can only hold hashable objects - but we only use hashable objects
 #  in statements.
 # These don't have much to be said for them, compared with python lists,
 # except that (a) they are hashable, and (b) if you do your procesing using
-# first and rest a lot, you don't generate n(n+1)/2 lists when traversing.
-
+# first and rest a lot, you don't generate n(n+1)/2 list elements when traversing
+# (which you probably don't anyway using slices)
+#
+# Many different implementations are of course possible.
+#
 _nextList = 0
 
-from diag import progress
+from diag import verbosity, progress
 
-class List(Term):
+class CompoundTerm(Term):
+    """A compound term has occurrences of terms within it.
+    Examples: List, Formula"""
+    pass
+    
+class List(CompoundTerm):
     def __init__(self, store, first, rest):  # Do not use directly
         global _nextList
         Term.__init__(self, store)
@@ -370,17 +402,98 @@ class List(Term):
         _nextList = _nextList + 1
 
     def uriref(self):
-        return "http://list.example.org/list"+ `self._id` # @@@@@ Temp. Kludge!! Use run id maybe!
+        return runNamespace() + "li"+ `self._id`
 
     def precededBy(self, first):
         x = self._prec.get(first, None)
-        if x: return x
-        x = List(self.store, first, self)
+        if x != None: return x
+        x = NonEmptyList(self.store, first, self)
         self._prec[first] = x
         return x
 
+    def __iter__(self):
+	"""The internal method which allows one to iterate over the statements
+	as though a formula were a sequence.
+	"""
+	x = self
+	while x is not self.store.nil:
+	    yield x.first
+	    x = x.rest
+
     def value(self):
-        return [self.first] + self.rest.value()
+	res = []
+	for x in self:
+	    res.append(x.value())
+	return res
+
+    def substitution(self, bindings, why=None):
+	"Return this or a version of me with subsitution made"
+	vars = []
+	for left, right in bindings:
+	    vars.append(left)
+	if self.occurringIn(vars) == []:
+	    return self # phew!
+	s = self.asSequence()
+	s.reverse()
+	tail = self.store.nil
+	for x in s:
+	    tail = tail.precededBy(x.substitution(bindings, why=why))
+	return tail
+	    
+
+    def occurringIn(self, vars):
+	"Which variables in the list occur in this list?"
+	set = []
+	if verbosity() > 98: progress("----occuringIn: ", `self`)
+	x = self
+	while not isinstance(x, EmptyList):
+	    y = x.first
+	    x = x.rest
+	    set = merge(set, y.occurringIn(vars))
+	return set
+
+    def asSequence(self):
+	"Convert to a python sequence - NOT recursive"
+	res = []
+	x = self
+	while x is not self.store.nil:
+	    res.append(x.first)
+	    x = x.rest
+	return res
+
+class NonEmptyList(List):
+
+    def unify(self, other, vars, existentials,  bindings):
+	"""Unify this which may contain variables with the other,
+	    which may contain existentials but not variables.
+	    Return 0 if impossible.
+	    Return [(var1, val1), (var2,val2)...] if match"""
+	if verbosity() > 90: progress("Unifying list %s with %s vars=%s"%(self.value(), other.value(),vars))
+	if not isinstance(other, NonEmptyList): return 0
+	if other is self: return bindings
+	
+
+	lb = len(bindings)
+	nb = self.first.unify(other.first, vars, existentials, bindings)
+	if nb == 0: return 0
+	if len(nb) > lb:
+	    vars2 = vars[:]
+	    existentials2 = existentials[:]
+	    bindings2 = bindings[:]
+	    for var, val in nb[lb:]:
+		if var in vars2:
+		    vars2.remove(var)
+		    bindings2.append((var, val))
+		else:
+		    existentials2.remove(var)
+	    o = other.rest.substitution(nb)
+	    s = self.rest.substitution(nb)
+	    return s.unify(o, vars2, existentials2, bindings2)
+	else:
+	    return self.rest.unify(other.rest, vars, existentials,  bindings)
+	
+    def __repr__(self):
+	return "(" + `self.first` + "...)"
 
 class EmptyList(List):
         
@@ -388,16 +501,56 @@ class EmptyList(List):
         return []
     
     def uriref(self):
-        return notation3.N3_nil
+        return List_NS + "nil"
+
+    def substitution(self, bindings, why=None):
+	"Return this or a version of me with subsitution made"
+	return self
+
+    def __repr__(self):
+	return "()"
+	
+    def newList(value):
+        x = self
+        l = len(value)
+        while l > 0:
+            l = l - 1
+            x = x.precededBy(value[l])
+        return x
+
+    def unify(self, other, vars, existentials, bindings):
+	"""Unify this which may contain variables with the other,
+	    which may contain existentials but not variables.
+	    Return 0 if impossible.
+	    Return [(var1, val1), (var2,val2)...] if match"""
+	if self is other: return bindings
+	return 0
+	
+    def occurringIn(self, vars):
+	return []
+
+    def __repr__(self):
+	return "()"
 
 
-        
+class FragmentNil(EmptyList, Fragment):
+    " This is unique in being both a symbol and a list"
+    def __init__(self, resource, fragid):
+	Fragment.__init__(self, resource, fragid)
+	EmptyList.__init__(self, self.store, None, None)
+	self._asList = self
+
+##########################################################################
+#
+#		L I T E R A L S
+
 class Literal(Term):
     """ A Literal is a representation of an RDF literal
 
     really, data:application/n3;%22hello%22 == "hello" but who
     wants to store it that way?  Maybe we do... at least in theory and maybe
     practice but, for now, we keep them in separate subclases of Term.
+    An RDF literal has a value - by default a string, and a datattype, and a language
     """
 
 
@@ -412,6 +565,9 @@ class Literal(Term):
 
     def __int__(self):
 	return int(self.string)
+
+    def occurringIn(self, vars):
+	return []
 
     def __repr__(self):
         return '"' + self.string[0:8] + '"'
@@ -434,8 +590,19 @@ class Literal(Term):
         b16=binascii.hexlify(d)
         return "md5:" + b16
 
+    def substitution(self, bindings, why=None):
+	"Return this or a version of me with subsitution made"
+	return self
+
     def representation(self, base=None):
         return '"' + self.string + '"'   # @@@ encode quotes; @@@@ strings containing \n
+
+    def value(self):
+	if self.datatype == None: return self.string
+	if self.datatype is self.store.integer: return int(self.string)
+	if self.datatype is self.store.float: return float(self.string)
+	raise ValueError("Attempt to run built-in on unknown datatype %s of value %s." 
+			% (`x.datatype`, x.string))
 
     def uriref(self):
         # Unused at present but interesting! 2000/10/14
@@ -452,26 +619,37 @@ class Literal(Term):
 	sink.add(subj=b, pred=reify.value, obj=sink.newLiteral(self.string), why=why)
 	return b
 
+    def unify(self, other, vars, existentials, bindings):
+	"""Unify this which may contain variables with the other,
+	    which may contain existentials but not variables.
+	    Return 0 if impossible.
+	    Return [(var1, val1), (var2,val2)...] if match"""
+	if self is other: return bindings
+	return 0
+	
+
 class Integer(Literal):
     def __init__(self, store, str):
         Term.__init__(self, store)
-#        self.string = string    #  n3 notation EXcluding the "  "
 	self.datatype = store.integer
 	self.lang=None
-	self.value = int(str)
+	self._value = int(str)
 
     def __int__(self):
-	return self.value
+	return self._value
 
     def __str__(self):
-        return str(self.value)
+        return str(self._value)
 
     def __repr__(self):
-        return str(self.value)
+        return str(self._value)
 
     def representation(self, base=None):
-        return str(self.value)
-     
+	return str(self._value)
+
+    def value(self):
+	return self._value
+
 def uri_encode(str):
         """ untested - this must be in a standard library somewhere
         """
@@ -491,7 +669,7 @@ def uri_encode(str):
 #   Built-in master classes
 #
 # These are resources in the store which have processing capability.
-# Each one has to have its own class, and eachinherits from various of the generic
+# Each one has to have its own class, and each inherits from various of the generic
 # classes below, according to its capabilities.
 #
 # First, the template classes:
@@ -510,7 +688,7 @@ class BuiltIn(Fragment):
 	To reduce confusion, the inital ones called with the internals available
 	use abreviations "eval", "subj" etc while the python-style ones use evaluate, subject, etc."""
 	if hasattr(self, "evaluate"):
-	    return self.evaluate(self.store._toPython(subj, queue, query), (self.store._toPython(obj, queue, query)))
+	    return self.evaluate(subj.value(), obj.value())
 	elif isinstance(self, Function):
 		return Function.eval(self, subj, obj, queue, bindings, proof, query)
 	elif isinstance(self, ReverseFunction):
@@ -550,7 +728,7 @@ class Function(BuiltIn):
 	To reduce confusion, the inital ones called with the internals available
 	use abreviations "eval", "subj" etc while the python-style ones use "evaluate", "subject", etc."""
 
-	return self.store._fromPython(self.evaluateObject(self.store._toPython(subj, queue, query)), queue)
+	return self.store._fromPython(self.evaluateObject(subj.value()),  query)
 
 
 # This version is used by functions by default:
@@ -578,7 +756,38 @@ class ReverseFunction(BuiltIn):
     def evalSubj(self, obj,  queue, bindings, proof, query):
 	"""This function which has access to the store, unless overridden,
 	calls a simpler one which uses python conventions"""
-	return self.store._fromPython(self.evaluateSubject(self.store._toPython(obj, queue, query)), queue)
+	return self.store._fromPython(self.evaluateSubject(obj.value()), query)
 
 #  For examples of use, see, for example, cwm_*.py
+
+#################################
+#
+# Utilty routines
+
+def merge(a,b):
+    """Merge sorted sequences
+
+    The fact that the sequences are sorted makes this faster"""
+    i = 0
+    j = 0
+    m = len(a)
+    n = len(b)
+    result = []
+    while 1:
+        if i==m:   # No more of a, return rest of b
+            return result + b[j:]
+        if j==n:
+            return result + a[i:]
+        if a[i] < b[j]:
+            result.append(a[i])
+            i = i + 1
+        elif a[i] > b[j]:
+            result.append(b[j])
+            j = j + 1
+        else:  # a[i]=b[j]
+            result.append(a[i])
+            i = i + 1
+            j = j + 1
+        
+
 

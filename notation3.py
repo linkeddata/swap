@@ -326,7 +326,7 @@ class SinkParser:
 
     def endDoc(self):
 	"""Signal end of document and stop parsing. returns formula"""
-        self._sink.endDoc(self._formula)
+	self._sink.endDoc(self._formula)  # don't canonicalize yet
 	return self._formula
 
     def makeStatement(self, quadruple):
@@ -1102,7 +1102,8 @@ t   "this" and "()" special syntax should be suppresed.
                 elif triple[PRED] == RDF_type and triple[OBJ] == N3_Empty:
                     pass  # not how we would have put it but never mind
                 elif triple[PRED] != N3_rest:
-                    raise RuntimeError ("Should only see first and rest in list mode", triple)
+                    raise RuntimeError ("Should only see %s and %s in list mode" 
+					%(N3_first, N3_rest), triple)
             else: # compact lists
                 self._write(self.representationOf(triple[CONTEXT], triple[OBJ])+" ")
             return

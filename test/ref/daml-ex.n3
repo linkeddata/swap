@@ -1,12 +1,8 @@
-     @prefix : <daml-ex.rdf#> .
-     @prefix daml: <http://www.daml.org/2001/03/daml-ont#> .
-     @prefix dpo: <http://www.daml.org/2001/03/daml+oil#> .
-     @prefix ex: <http://www.daml.org/2001/03/daml-ex#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix : <#> .
+     @prefix dpo: <http://www.w3.org/2002/07/owl#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-     @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
-    <daml-ex.rdf>     a dpo:Ontology;
+    <>     a dpo:Ontology;
          dpo:comment "An example ontology";
          dpo:imports <http://www.daml.org/2000/10/daml-ont>;
          dpo:versionInfo "" .

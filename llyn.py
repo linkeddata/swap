@@ -116,10 +116,6 @@ Done
     - uri(x, str)
     - usesNamespace(x,y)   # find transitive closure for validation  - awful function in reality
 
-NOTES
-
-This is slow - Parka [guiFrontend PIQ] for example is faster but is propritary (patent pending). Jim Hendler owsns the
-research version. Written in C. Of te order of 30k lines
 """
 
 # emacsbug="""emacs got confused by long string above@@"""
@@ -135,6 +131,8 @@ import sys
 import time
 import uripath
 
+from thing import merge
+
 import urllib # for log:content
 import md5, binascii  # for building md5 URIs
 
@@ -145,12 +143,12 @@ import diag  # problems importing the tracking flag, must be explicit it seems d
 from diag import progress, progressIndent, verbosity, tracking
 from thing import Namespace, BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
-    Literal, Symbol, Fragment, FragmentNil, Anonymous, Term, List, EmptyList
+    Literal, Symbol, Fragment, FragmentNil, Anonymous, Term, CompoundTerm, List, EmptyList
 
 #import RDFSink
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import N3_nil, N3_first, N3_rest, DAML_NS, N3_Empty, N3_List
+from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, List_NS
 from RDFSink import RDF_NS_URI
 
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
@@ -190,7 +188,8 @@ S_LIGHT_UNS_GO= 70  # Light, not searched yet, but can run
 S_LIGHT_GO =  	65  # Light, can run  Do this!
 S_NOT_LIGHT =   60  # Not a light built-in, haven't searched yet.
 S_LIGHT_EARLY=	50  # Light built-in, not enough constants to calculate, haven't searched yet.
-S_HEAVY_READY=	40  # Heavy built-in, search failed, but formula now has no vars left. Ready to run.
+S_NEED_DEEP=	45  # Can't search because of unbound compound term, could do recursive unification
+S_HEAVY_READY=	40  # Heavy built-in, search done, but formula now has no vars left. Ready to run.
 S_LIGHT_WAIT=	30  # Light built-in, not enough constants to calculate, search done.
 S_HEAVY_WAIT=	20  # Heavy built-in, too many variables in args to calculate, search failed.
 S_HEAVY_WAIT_F=	19  # Heavy built-in, too many vars within formula args to calculate, search failed.
@@ -236,11 +235,27 @@ def compareURI(self, other):
     if isinstance(other, Literal):
         return 1
 
+    if isinstance(self, List):
+        if isinstance(other, List):
+	    s = self
+	    o = other
+	    while 1:
+		if isinstance(o, EmptyList): return -1
+		if isinstance(s, EmptyList): return 1
+		diff = compareURI(s.first, o.first)
+		if diff != 0: return diff
+		s = s.rest
+		o = o.rest
+        else:
+            return 1
+    if isinstance(other, List):
+        return -1
+
     if isinstance(self, Formula):
         if isinstance(other, Formula):
 	    for f in self, other:
-		if f.cannonical is not f:
-		    progress("@@@@@ Comparing formula NOT CANNONICAL", `f`)
+		if f.canonical is not f:
+		    progress("@@@@@ Comparing formula NOT canonical", `f`)
             s = self.statements
             o = other.statements
             ls = len(s)
@@ -261,7 +276,7 @@ def compareURI(self, other):
 		    diff = compareURI(se[i], oe[i])
 		    if diff != 0: return diff
 
-#		No need - cannonical formulae are always sorted
+#		No need - canonical formulae are always sorted
             s.sort(StoredStatement.compareSubjPredObj) # forumulae are all the same
             o.sort(StoredStatement.compareSubjPredObj)
             for i in range(ls):
@@ -292,7 +307,7 @@ def compareURI(self, other):
 
 def compareFormulae(self, other):
     """ This algorithm checks for equality in the sense of structural equivalence, and
-    also provides an ordering which allows is to render a graph in a cannonical way.
+    also provides an ordering which allows is to render a graph in a canonical way.
     This is a form of unification.
 
     The steps are as follows:
@@ -351,11 +366,14 @@ def dereference(x, mode="", workingContext=None):
 	except:
 	#except (IOError, SyntaxError, DocumentAccessError, xml.sax._exceptions.SAXParseException):
 	    F = None
-    if F != None and "m" in mode:
-	workingContext.reopen()
-	if verbosity() > 45: progress("Web: dereferenced %s  added to %s" %(
-		    x, workingContext))
-	workingContext.store.copyFormula(F, workingContext)
+    if F != None:
+	if "m" in mode:
+	    workingContext.reopen()
+	    if verbosity() > 45: progress("Web: dereferenced %s  added to %s" %(
+			x, workingContext))
+	    workingContext.store.copyFormula(F, workingContext)
+	if "x" in mode:   # capture experience
+	    workingContext.add(r, x.store.semantics, F)
     setattr(x, "_semantics", F)
     if verbosity() > 25: progress("Web: Dereferencing %s gave %s" %(x, F))
     return F
@@ -365,7 +383,7 @@ def dereference(x, mode="", workingContext=None):
 #
 # A Formula is a set of triples.
 
-class Formula(Fragment):
+class Formula(Fragment, CompoundTerm):
     """A formula of a set of RDF statements, triples.
     
     (The triples are actually instances of StoredStatement.)
@@ -386,7 +404,7 @@ class Formula(Fragment):
     def __init__(self, resource, fragid):
         Fragment.__init__(self, resource, fragid)
         self.descendents = None   # Placeholder for list of closure under subcontext
-        self.cannonical = None # Set to self if this has been checked for duplicates
+        self.canonical = None # Set to self if this has been checked for duplicates
 	self.collector = None # Object collecting evidence, if any 
 	self._listValue = {}
 	self.statements = []
@@ -398,6 +416,7 @@ class Formula(Fragment):
 	self._closureAlready = []
 	self._existentialVariables = []
 	self._universalVariables = []
+	self.lists = []  # Made later when we compactLists
 
 
     def existentials(self):
@@ -583,6 +602,104 @@ class Formula(Fragment):
         res = self._index.get((pred, subj, obj), [])
 	return len(res), res
 
+    def substitution(self, bindings, why=None):
+	"Return this or a version of me with subsitution made"
+	store = self.store
+	vars = []
+	for var, val in bindings:
+	    vars.append(var)
+	oc = self.occurringIn(vars)
+	if oc == []: return self # phew!
+
+	y = store.newInterned(FORMULA)
+	if verbosity() > 90: progress("substitution: formula"+`self`+" becomes new "+`y`,
+				    " because of ", oc)
+	store.copyFormulaRecursive(self, y, bindings, why=why)
+	return y.canonicalize() # intern
+
+    def occurringIn(self, vars):
+	"Which variables in the list occur in this?"
+	set = []
+	if verbosity() > 98: progress("----occuringIn: ", `self`)
+	for s in self.statements:
+	    for p in PRED, SUBJ, OBJ:
+		y = s[p]
+		if y is self:
+		    pass
+		else:
+		    set = merge(set, y.occurringIn(vars))
+	return set
+
+    def unify(self, other, vars, existentials, bindings):
+	"""Unify this which may contain variables with the other,
+	    which may contain existentials but not variables.
+	    Return 0 if impossible.
+	    Return [(var1, val1), (var2,val2)...] if match
+	"""
+
+	if not isinstance(other, Formula): return 0
+	if self is other: return bindings
+	if (len(self) != len(other)
+	    or self. _existentialVariables != other._existentialVariables
+	    or self. _universalVariables != other._existentialVariables
+	    ): return 0   #@@@@@ unify
+#	raise RuntimeError("Not implemented")
+	return 0    # @@@@@@@   FINISH THIS
+	
+
+
+    def compactLists(self):
+	"""For any lists expressed longhand, convert to objects.
+	
+	Works in place. Strips out the reifications fo the lists,
+	and converts any statements which refer to the list to refer to the object."""
+	assert self.canonical == None
+	if verbosity() > 90:
+	    progress("Comapcting lists:"+`self`)
+	
+	if self._listValue == {}: return
+	self.lists = []
+	for s in self.statements[:]:
+	    context, pred, subj, obj = s.quad
+	    try:
+		subj = self._listValue[subj]
+		if pred is self.store.first or pred is self.store.rest:
+		    self.removeStatement(s)
+		    if verbosity()>80: progress(" \tList compact: removing", s)
+		    if pred is self.store.first: # nested list
+			try:
+			    nested = self._listValue[obj]
+			    rest = subj.rest
+			    del(rest._prec[obj])
+			    rest._prec[nested] = subj
+			    subj.first = nested  # Patch list! (yuk! = but avoids recusrive subst.)
+			except:
+			    pass
+		    continue   # Just strip the first and rest out
+		else:
+		    self.lists.append(subj)
+		    try:
+			obj = self._listValue[obj]
+			self.lists.append(obj)
+		    except:
+			pass
+	    except KeyError:
+		try:
+		    obj = self._listValue[obj]
+		    self.lists.append(obj)
+		except:
+		    continue
+	    
+	    if verbosity()>80: progress(" \tList compact: replacing", s)
+	    self.removeStatement(s)
+	    self.add(subj=subj, pred=pred, obj=obj)
+
+	for v in self._listValue.keys():
+	    if verbosity()>80: progress(" \tList compact: removing existential", v)
+	    self._existentialVariables.remove(v)
+	self._listValue = {}
+		    
+
     def bind(self, prefix, uri):
 	"""Give a prefix and associated URI as a hint for output
 	
@@ -610,33 +727,39 @@ class Formula(Fragment):
         if self.statementsMatching(pred, subj, obj):
             if verbosity() > 97:  progress("storeQuad duplicate suppressed"+`q`)
             return 0  # Return no change in size of store
-        if self.cannonical != None:
-            raise RuntimeError("Attempt to add statement to cannonical formula "+`self`)
-	assert not isinstance(pred, Formula) or pred.cannonical is pred, "pred Should be closed"+`pred`
+        if self.canonical != None:
+            raise RuntimeError("Attempt to add statement to canonical formula "+`self`)
+	assert not isinstance(pred, Formula) or pred.canonical is pred, "pred Should be closed"+`pred`
 	assert (not isinstance(subj, Formula)
 		or subj is self
-		or subj.cannonical is subj), "subj Should be closed or this"+`subj`
-	assert not isinstance(obj, Formula) or obj.cannonical is obj, "obj Should be closed"+`obj`
+		or subj.canonical is subj), "subj Should be closed or this"+`subj`
+	assert not isinstance(obj, Formula) or obj.canonical is obj, "obj Should be closed"+`obj`
 
         store.size = store.size+1
 
 # We collapse lists from the declared daml first,rest structure into List objects.
-# To do this, we need (a) a first; (b) a rest, and (c) the rest being a list.
+# To do this, we need a bnode with (a) a first; (b) a rest, and (c) the rest being a list.
 # We trigger List collapse on any of these three becoming true.
 # @@@ we don't reverse this on remove statement.
 
-        if pred is store.rest and self.listValue(obj) != None:
-            first = self.the(pred=store.first, subj=subj)
-            if first != None and self.listValue(subj) == None:
-                self._listValue[subj] = self.listValue(obj).precededBy(first)
-                self._checkList(subj)
-
-        elif pred is store.first:
-            rest = self.the(pred=store.rest, subj=subj)
-            if rest !=None:
-                if content.listValue(rest) != None and self.listValue(subj) == None:
-                    self._listValue[subj] = self.listValue(rest).precededBy(obj)
-                    self._checkList(subj)
+	if subj in self._existentialVariables:
+	    if pred is store.rest:
+		rest = self.listValue(obj)
+		if rest != None:
+		    first = self.the(pred=store.first, subj=subj)
+		    if first != None and self.listValue(subj) == None:
+			list = rest.precededBy(first)
+			self._listValue[subj] = list
+			self._checkList(subj)
+    
+	    elif pred is store.first:
+		restbn = self.the(pred=store.rest, subj=subj)
+		if restbn !=None:
+		    rest =  self.listValue(restbn)
+		    if rest != None and self.listValue(subj) == None:
+			list = rest.precededBy(obj)
+			self._listValue[subj] = list
+			self._checkList(subj)
 
         s = StoredStatement(q)
 	
@@ -717,7 +840,84 @@ class Formula(Fragment):
     def close(self):
         """No more to add. Please return interned value.
 	NOTE You must now use the interned one, not the original!"""
-        return self.store.endFormula(self)
+        return self.canonicalize()
+
+    def canonicalize(F):
+        """If this formula already exists, return the master version.
+        If not, record this one and return it.
+        Call this when the formula is in its final form, with all its statements.
+        Make sure no one else has a copy of the pointer to the smushed one.
+	In canonical form,
+	 - the statments are ordered
+	 - the lists are all internalized as lists
+	 
+	Store dependency: Uses store._formulaeOfLength
+        """
+	store = F.store
+	if F.canonical != None:
+            if verbosity() > 70:
+                progress("End formula -- @@ already canonical:"+`F`)
+            return F.canonical
+
+	F.compactLists()
+	
+        fl = F.statements
+        l = len(fl), len(F.universals()), len(F.existentials())   # The number of statements
+        possibles = store._formulaeOfLength.get(l, None)  # Formulae of same length
+
+        if possibles == None:
+            store._formulaeOfLength[l] = [F]
+            if verbosity() > 70:
+                progress("End formula - first of length", l, F)
+            F.canonical = F
+            return F
+
+        fl.sort(StoredStatement.compareSubjPredObj)
+	fe = F.existentials()
+	fe.sort(compareURI)
+	fu = F.universals ()
+	fu.sort(compareURI)
+
+        for G in possibles:
+            gl = G.statements
+	    gkey = len(gl), len(G.universals()), len(G.existentials())
+            if gkey != l: raise RuntimeError("@@Key of %s is %s instead of %s" %(G, `gkey`, `l`))
+
+	    gl.sort(StoredStatement.compareSubjPredObj)
+            for se, oe, in  ((fe, G.existentials()),
+			     (fu, G.universals())):
+		lse = len(se)
+		loe = len(oe)
+		if lse > loe: return 1
+		if lse < loe: return -1
+		oe.sort(compareURI)
+		for i in range(lse):
+		    if se[i] is not oe[i]:
+			break # mismatch
+		else:
+		    continue # match
+		break
+
+            for i in range(l[0]):
+                for p in PRED, SUBJ, OBJ:
+                    if (fl[i][p] is not gl[i][p]
+                        and (fl[i][p] is not F or gl[i][p] is not G)): # Allow self-reference @@
+                        break # mismatch
+                else: #match one statement
+                    continue
+                break
+            else: #match
+                if verbosity() > 20: progress(
+		    "** End Formula: Smushed new formula %s giving old %s" % (F, G))
+		del(F)  # Make sure it ain't used again
+                return G
+        possibles.append(F)
+#        raise oops
+        F.canonical = F
+        if verbosity() > 70:
+            progress("End formula, a fresh one:"+`F`)
+        return F
+
 
     def reopen(self):
 	"""Make a formula which was once closed oopen for input again.
@@ -748,7 +948,7 @@ class Formula(Fragment):
 	if (("r" in self._closureMode and
 	      pred is self.store.docRules) or
 	    ("i" in self._closureMode and
-	      pred is self.store.imports)) and subj in self._closureAlready:
+	      pred is self.store.imports)):   # check subject? @@@  semantics?
 	    self.checkClosureDocument(obj)
 	if firstCall:
 	    while self._closureAgenda != []:
@@ -875,11 +1075,11 @@ class Formula(Fragment):
 	    yield s[OBJ]
 
     def _checkList(self,  L):
-        """Check whether this new list causes other things to become lists.
+        """Check whether this new list (given as bnode) causes other things to become lists.
 	
 	Internal function."""
-        if verbosity() > 80: progress("Checking new list ",`L`)
         rest = self.listValue(L)
+        if verbosity() > 80: progress("\tChecking new list was %s, now %s = %s"%(`L`, `rest`, `rest.value()`))
         possibles = self.statementsMatching(pred=self.store.rest, obj=L)  # What has this as rest?
         for s in possibles:
             L2 = s[SUBJ]
@@ -887,7 +1087,8 @@ class Formula(Fragment):
             if ff != []:
                 first = ff[0][OBJ]
                 if self.listValue(L2) == None:
-                    self._listValue[L2] = rest.precededBy(first)
+		    list = rest.precededBy(first)
+                    self._listValue[L2] = list
                     self._checkList(L2)
                 return
 
@@ -918,7 +1119,7 @@ class FormulaSimple(Formula):
     def __init__(self, resource, fragid):
         Fragment.__init__(self, resource, fragid)
         self.descendents = None   # Placeholder for list of closure under subcontext
-        self.cannonical = None # Set to self if this has been checked for duplicates
+        self.canonical = None # Set to self if this has been checked for duplicates
 	self.collector = None # Object collecting evidence, if any 
 	self._listValue = {}
 	self.statements = []
@@ -947,7 +1148,7 @@ class StoredStatement:
     def __repr__(self):
         return "{"+`self[CONTEXT]`+":: "+`self[SUBJ]`+" "+`self[PRED]`+" "+`self[OBJ]`+"}"
 
-#   The order of statements is only for cannonical output
+#   The order of statements is only for canonical output
 #   We cannot override __cmp__ or the object becomes unhashable, and can't be put into a dictionary.
 
 
@@ -1118,6 +1319,7 @@ class BI_rawType(LightBuiltIn, Function):
 	store = self.store
         if isinstance(subj, Literal): y = store.Literal
         elif isinstance(subj, Formula): y = store.Formula
+        elif isinstance(subj, List): y = store.List
         #@@elif context.listValue.get(subj, None): y = store.List
         else: y = store.Other  #  None?  store.Other?
         if verbosity() > 91:
@@ -1197,7 +1399,7 @@ class BI_semantics(HeavyBuiltIn, Function):
         if verbosity()>10: progress("    semantics: %s" % (F))
 	if diag.tracking:
 	    proof.append(F.collector)
-        return F
+        return F.canonicalize()
     
 class BI_semanticsOrError(BI_semantics):
     """ Either get and parse to semantics or return an error message on any error """
@@ -1304,12 +1506,16 @@ class BI_conclusion(HeavyBuiltIn, Function):
     """ Deductive Closure
 
     Closure under Forward Inference, equivalent to cwm's --think function.
+    This is a function, so the object is calculated from the subject.
     """
     def evalObj(self, subj, queue, bindings, proof, query):
         store = subj.store
         if isinstance(subj, Formula):
+	    assert subj.canonical != None
             F = self.store.any((store._experience, store.cufi, subj, None))  # Cached value?
-            if F != None: return F
+            if F != None:
+		if verbosity() > 10: progress("Bultin: " + `subj`+ " cached log:conclusion " + `F`)
+		return F
 
             F = self.store.newInterned(FORMULA)
 	    if diag.tracking:
@@ -1318,9 +1524,11 @@ class BI_conclusion(HeavyBuiltIn, Function):
 		proof.append(reason)
 	    else: reason = None
             if verbosity() > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
-            self.store.copyFormula(subj, F, why=reason)
+            self.store.copyFormula(subj, F, why=reason) # leave open
             self.store.think(F)
 	    F = F.close()
+	    assert subj.canonical != None
+	    
             self.store.storeQuad((store._experience, store.cufi, subj, F),
 		    why=BecauseOfExperience("conclusion"))  # Cache for later
             return F
@@ -1330,7 +1538,7 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
     just the union of the sets of statements
     modulo non-duplication of course"""
     def evalObj(self, subj, queue, bindings, proof, query):
-	subj_py = self.store._toPython(subj, queue, query)
+	subj_py = subj.value()
         if verbosity() > 50:
             progress("Conjunction input:"+`subj_py`)
             for x in subj_py:
@@ -1348,7 +1556,7 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
             self.store.copyFormula(x, F, why=reason)
             if verbosity() > 74:
                 progress("    Formula %s now has %i" % (x2s(F),len(F.statements)))
-        return self.store.endFormula(F)
+        return F.canonicalize()
 
 class BI_n3String(LightBuiltIn, Function):      # Light? well, I suppose so.
     """ The n3 string for a formula is what you get when you
@@ -1356,8 +1564,8 @@ class BI_n3String(LightBuiltIn, Function):      # Light? well, I suppose so.
     Note that there is no guarantee that two implementations will
     generate the same thing, but whatever they generate should
     parse back using parsedAsN3 to exaclty the same original formula.
-    If we *did* have a cannonical form it would be great for signature
-    A cannonical form is possisble but not simple."""
+    If we *did* have a canonical form it would be great for signature
+    A canonical form is possisble but not simple."""
     def evalObj(self, store, context, subj, queue, bindings, proof, query):
         if verbosity() > 50:
             progress("Generating N3 string for:"+`subj`)
@@ -1406,7 +1614,6 @@ class RDFStore(RDFSink) :
 # Register Light Builtins:
 
         log = self.internURI(Logic_NS[:-1])   # The resource without the hash
-        daml = self.internURI(DAML_NS[:-1])   # The resource without the hash
 
 # Functions:        
 
@@ -1417,7 +1624,7 @@ class RDFStore(RDFSink) :
         self.Literal =  log.internFrag("Literal", Fragment) # syntactic type possible value - a class
         self.List =     log.internFrag("List", Fragment) # syntactic type possible value - a class
         self.Formula =  log.internFrag("Formula", Fragment) # syntactic type possible value - a class
-        self.Other =    log.internFrag("Other", Fragment) # syntactic type possible value - a class (Use?)
+        self.Other =    log.internFrag("Other", Fragment) # syntactic type possible value - a class
 
         log.internFrag("conjunction", BI_conjunction)
         
@@ -1461,10 +1668,12 @@ class RDFStore(RDFSink) :
 
 # List stuff - beware of namespace changes! :-(
 
-        self.first = self.intern(N3_first)
-        self.rest = self.intern(N3_rest)
-        self.nil = self.intern(N3_nil)
-        self.nil._asList = EmptyList(self, None, None)
+	from cwm_list import BI_first, BI_rest
+        rdf = self.internURI(List_NS[:-1])
+	self.first = rdf.internFrag("first", BI_first)
+        self.rest = rdf.internFrag("rest", BI_rest)
+        self.nil = self.intern(N3_nil, FragmentNil)
+#        self.nil._asList = EmptyList(self, None, None)
 #        self.nil = EmptyList(self, None, None)
 #        self.only = self.intern(N3_only)
         self.Empty = self.intern(N3_Empty)
@@ -1476,12 +1685,14 @@ class RDFStore(RDFSink) :
         import cwm_math    # Mathematics
         import cwm_times    # time and date builtins
         import cwm_maths   # Mathematics, perl/string style
+	import cwm_list	   # List handling operations
         cwm_string.register(self)
         cwm_math.register(self)
         cwm_maths.register(self)
         cwm_os.register(self)
         cwm_time.register(self)
         cwm_times.register(self)
+	cwm_list.register(self)
         if crypto:
 	    import cwm_crypto  # Cryptography
 	    cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
@@ -1554,6 +1765,8 @@ class RDFStore(RDFSink) :
 		    
 		if verbosity() > 40: progress("Taking input from " + addr)
 		netStream = urllib.urlopen(addr)
+		if verbosity() > 60:
+		    progress("   Headers for %s: %s\n" %(addr, netStream.headers.items()))
 		if contentType == None: ct=netStream.headers.get(HTTP_Content_Type, None)
 	    else:
 		if verbosity() > 40: progress("Taking input from standard input")
@@ -1663,7 +1876,7 @@ class RDFStore(RDFSink) :
         return self.intern((SYMBOL,str), why=None)
     
     def intern(self, what, dt=None, lang=None, why=None, ):
-        """find-or-create a Fragment or a Symbol or Literal as appropriate
+        """find-or-create a Fragment or a Symbol or Literal or list as appropriate
 
         returns URISyntaxError if, for example, the URIref has
         two #'s.
@@ -1681,8 +1894,10 @@ class RDFStore(RDFSink) :
 		return self.newLiteral(`what`, INTEGER_DATATYPE)
 	    if type(what) is types.FloatType:
 		return self.newLiteral(`what`, FLOAT_DATATYPE)
-		
+	    if type(what) is types.SequenceType:
+		return self.newList(what)
 	    raise RuntimeError("Eh?  can't intern "+`what`)
+
         typ, urirefString = what
 
         if typ == LITERAL:
@@ -1719,13 +1934,8 @@ class RDFStore(RDFSink) :
         return result
 
      
-    def internList(self, value):
-        x = nil
-        l = len(value)
-        while l > 0:
-            l = l - 1
-            x = x.precededBy(value[l])
-        return x
+    def newList(self, value):
+	return nil.newList(value)
 
     def deleteFormula(self,F):
         if verbosity() > 30: progress("Deleting formula %s %ic" %
@@ -1734,78 +1944,11 @@ class RDFStore(RDFSink) :
             self.removeStatement(s)
 #        self.formulae.remove(F)
 
-    def endFormula(self, F):
-        """If this formula already exists, return the master version.
-        If not, record this one and return it.
-        Call this when the formula is in its final form, with all its statements.
-        Make sure no one else has a copy of the pointer to the smushed one.
-        """
-        if F.cannonical != None:
-            if verbosity() > 70:
-                progress("End formula -- @@ already cannonical:"+`F`)
-            return F.cannonical
-	collector = F.collector
 
-        fl = F.statements
-        l = len(fl), len(F.universals()), len(F.existentials())   # The number of statements
-        possibles = self._formulaeOfLength.get(l, None)  # Formulae of same length
 
-    
-        if possibles == None:
-            self._formulaeOfLength[l] = [F]
-            if verbosity() > 70:
-                progress("End formula - first of length", l, F)
-            F.cannonical = F
-            return F
-
-        fl.sort(StoredStatement.compareSubjPredObj)
-	fe = F.existentials()
-	fe.sort(compareURI)
-	fu = F.universals ()
-	fu.sort(compareURI)
-
-        for G in possibles:
-            gl = G.statements
-	    gkey = len(gl), len(G.universals()), len(G.existentials())
-            if gkey != l: raise RuntimeError("@@Key of %s is %s instead of %s" %(G, `gkey`, `l`))
-
-	    gl.sort(StoredStatement.compareSubjPredObj)
-            for se, oe, in  ((fe, G.existentials()),
-			     (fu, G.universals())):
-		lse = len(se)
-		loe = len(oe)
-		if lse > loe: return 1
-		if lse < loe: return -1
-		oe.sort(compareURI)
-		for i in range(lse):
-		    if se[i] is not oe[i]:
-			break # mismatch
-		else:
-		    continue # match
-		break
-
-            for i in range(l[0]):
-                for p in PRED, SUBJ, OBJ:
-                    if (fl[i][p] is not gl[i][p]
-                        and (fl[i][p] is not F or gl[i][p] is not G)): # Allow self-reference @@
-                        break # mismatch
-                else: #match one statement
-                    continue
-                break
-            else: #match
-                if verbosity() > 20: progress(
-		    "** End Formula: Smushed new formula %s giving old %s" % (F, G))
-		del(F)  # Make sure it ain't used again
-                return G
-        possibles.append(F)
-#        raise oops
-        F.cannonical = F
-        if verbosity() > 70:
-            progress("End formula, a fresh one:"+`F`)
-        return F
 
     def reopen(self, F):
-        if F.cannonical == None:
+        if F.canonical == None:
             if verbosity() > 50:
                 progress("reopen formula -- @@ already open: "+`F`)
             return F # was open
@@ -1813,7 +1956,7 @@ class RDFStore(RDFSink) :
             progress("reopen formula:"+`F`)
 	key = len(F.statements), len(F.universals()), len(F.existentials())  
         self._formulaeOfLength[key].remove(F)  # Formulae of same length
-        F.cannonical = None
+        F.canonical = None
         return F
 
 
@@ -1874,7 +2017,8 @@ class RDFStore(RDFSink) :
         pass
 
     def endDoc(self, rootFormulaPair):
-	self.endFormula(self.intern(rootFormulaPair)) # notThis=1
+#	self.canonicalize(self.intern(rootFormulaPair)) # notThis=1
+# No, leave the caller to explicitly canonicalize, as the caller has to get the new F back.
         return
         #        F =self.intern(rootFormulaPair)
         #        return F.close()
@@ -2093,10 +2237,17 @@ class RDFStore(RDFSink) :
             _anon = 0     #  Never anonymous, always just use the string
 	elif isinstance(x, Formula):
 	    _anon = 2	# always anonymous, represented as itself
+		
+	elif isinstance(x, List):
+	    if isinstance(x, EmptyList):
+		_anon = 0     #  Never anonymous, always just use the string
+	    else:
+		_anon = 2	# always anonymous, represented as itself
+		_isExistential = 1
 	elif not x.generated():
 	    _anon = 0	# Got a name, not anonymous
-        elif context.listValue(x) != None:
-            _anon = 2    # Always represent it just as itself
+#        elif context.listValue(x) != None:
+#            _anon = 2    # Always represent it just as itself
         else:
             contextClosure = context.subFormulae()[:]
             contextClosure.remove(context)
@@ -2106,49 +2257,18 @@ class RDFStore(RDFSink) :
 		    or sc.any(pred=x)):
                     _elsewhere = 1  # Occurs in a subformula - can't be anonymous!
                     break
+	    for list in context.lists:
+		for y in list:
+		    if x is y: _asObj += 1   # @@ optimize more?
             _anon = (_asObj < 2) and ( _asPred == 0) and (not _loop) and _isExistential and not _elsewhere
 
+		    
         if verbosity() > 98:
             progress( "Topology %s in %s is: anon=%i ob=%i, loop=%s pr=%i ex=%i elsewhere=%i"%(
             `x`, `context`, _anon, _asObj, _loop, _asPred,  _isExistential, _elsewhere))
 
         return ( _anon, _asObj+_asPred )  
 
-
-    
-
-    def _toPython(self, x, queue, query):
-        """#  Convert a data item in query with no unbound variables into a python equivalent 
-       Given the entries in a queue template, find the value of a list.
-       @@ slow
-       These methods are at the disposal of built-ins.
-"""
-        """ Returns an N3 list as a Python sequence"""
-        if verbosity() > 85: progress("#### Converting to python "+ x2s(x))
-        if isinstance(x, Literal):
-	    if x.datatype == None: return x.string
-	    if x.datatype is self.integer: return int(x.string)
-	    if x.datatype is self.float: return float(x.string)
-	    raise ValueError("Attempt to run built-in on unknown datatype %s of value %s." 
-			    % (`x.datatype`, x.string))
-	if x is self.nil: return []
-#       if this is not in the queue, must be in the store 
-#	What if it is defined partly in one and partly in the other - in both?  @@
-
-#        lv = query.workingContext.listValue(x)
-#	if lv != None:        # @@@@@@@  try it in each case :-(
-#	    raise RuntimeError("@@@ Hmm. it is classes as a list" + `x`) # @@ could use that -- faster?
-	elements = self.listElements(x, queue)
-	if elements == None:
-	    elements = self.listElements(x, query.workingContext)
-	if elements != None:
-	    list = []
-	    for e in elements:
-		list.append(self._toPython(e, queue, query))
-	    return list
-
-	
-        return x    # If not a list, return unchanged
 
     def _fromPython(self, x, queue):
 	"""Takem a python string, seq etc and represent as a llyn object"""
@@ -2157,27 +2277,16 @@ class RDFStore(RDFSink) :
         elif type(x) is types.IntType:
             return self.newLiteral(`x`, self.integer)
         elif type(x) is types.FloatType:
-#	    s = `x`
-#	    if s[-2:] == '.0': s=s[:-2]   # Tidy things which are ints back into floats
             return self.newLiteral(`x`, self.float)
         elif type(x) == type([]):
-#	    progress("x is >>>%s<<<" % x)
-	    raise RuntimeError("Internals generating lists not supported yet")
-            g = self.nil
-            y = x[:]
-            y.reverse()
-            for e in y:
-                g1 = self.newBnode()
-                queue.append(QueryItem((context, self.first, g1, self._fromPython(e, queue))))
-                queue.append(QueryItem((context, self.rest, g1, g)))
-                g = g1
-            return g
+	    return self.store.nil.newList(x)
         return x
 
-    def dumpNested(self, context, sink):
+    def dumpNested(self, context0, sink):
         """ Iterates over all URIs ever seen looking for statements
         """
-        counts = self.selectDefaultPrefix(context)        
+        context = context0.canonicalize()
+	counts = self.selectDefaultPrefix(context)        
         sink.startDoc()
         self.dumpPrefixes(sink, counts)
         self.dumpFormulaContents(context, sink, sorting=1)
@@ -2232,7 +2341,9 @@ class RDFStore(RDFSink) :
         _anon, _incoming = self._topology(subj, context)    # Is anonymous?
         if _anon and  _incoming == 1 and not isinstance(subj, Formula): return           # Forget it - will be dealt with in recursion
 
-	li = context.listValue(subj)
+	if isinstance(subj, List): li = subj
+	else: li = None
+	
         if isinstance(subj, Formula) and subj is not context:
             sink.startBagSubject(subj.asPair())
             self.dumpFormulaContents(subj, sink, sorting)  # dump contents of anonymous bag
@@ -2240,7 +2351,7 @@ class RDFStore(RDFSink) :
             # continue to do arcs
             
         elif _anon and (_incoming == 0 or 
-	    (li != None and not isinstance(li, EmptyList) and subj.generated())):    # Will be root anonymous node - {} or [] or ()
+	    (li != None and not isinstance(li, EmptyList))):    # Will be root anonymous node - {} or [] or ()
 		
             if subj is context:
                 pass
@@ -2254,9 +2365,9 @@ class RDFStore(RDFSink) :
 #                        break # We will print it
 #                else: return # Nothing to print - so avoid printing [].
 
-                if sorting: statements.sort(StoredStatement.comparePredObj)    # Order only for output
+                if sorting: statements.sort(StoredStatement.comparePredObj)    # @@ Needed now Fs are canonical?
 
-                if li != None and not isinstance(li, EmptyList) and subj.generated():   # The subject is a list
+                if li != None and not isinstance(li, EmptyList):
                     for s in statements:
                         p = s.quad[PRED]
                         if p is not self.first and p is not self.rest:
@@ -2265,11 +2376,9 @@ class RDFStore(RDFSink) :
                     else:
 			if subj.generated(): return # Nothing.
                     sink.startAnonymousNode(subj.asPair(), li)
-                    for s in statements:
-                        p = s.quad[PRED]
-                        if p is self.first or p is self.rest:
-                            self.dumpStatement(sink, s.quad, sorting) # Dump the rest outside the ()
-                    sink.endAnonymousNode(subj.asPair())
+		    self.dumpStatement(sink, (context, self.first, subj, subj.first), sorting)
+		    self.dumpStatement(sink, (context, self.rest, subj,  subj.rest), sorting)
+		    sink.endAnonymousNode(subj.asPair())
                     for s in statements:
                         p = s.quad[PRED]
                         if p is not self.first and p is not self.rest:
@@ -2300,17 +2409,8 @@ class RDFStore(RDFSink) :
 
         _anon, _incoming = self._topology(obj, context)
         _se = isinstance(obj, Formula) and obj is not context
-        li = 0
-#        if ((pre is self.forSome) and sub is context and _anon):
-#            return # implicit forSome
-        if (context.listValue(obj) != None) and obj is not self.nil and obj.generated():
-	    for s in context.statementsMatching(subj=obj):
-		p = s.quad[PRED]
-		if p is not self.first and p is not self.rest:
-		    if verbosity() > 90: progress("@ Is list, has values for", `p`)
-		    break # Can't print as object, just print it elsewhere.
-	    else:
-		    li = 1
+        li = isinstance(obj, List) and not isinstance(obj, EmptyList)
+#	if context.statementsMatching(subj=obj) == []: li = None # Nothing to print inside [ ]
 
         if _anon and (_incoming == 1 or li or _se):  # Embedded anonymous node in N3
 
@@ -2322,10 +2422,12 @@ class RDFStore(RDFSink) :
             if _isSubject > 0 or not _se :   #   Do [ ] if nothing else as placeholder.
 
                 sink.startAnonymous(self.extern(triple), li)
-                if not li or not isinstance(context.listValue(obj), EmptyList):   # nil gets no contents
+                if not li or not isinstance(obj, EmptyList):   # nil gets no contents
                     if li:
                         if verbosity()>90:
                             progress("List found as object of dumpStatement " + x2s(obj))
+                        self.dumpStatement(sink, (context, self.first, obj, obj.first), sorting)
+			self.dumpStatement(sink, (context, self.rest, obj, obj.rest), sorting)
                     ss = context.statementsMatching(subj=obj)
                     if sorting: ss.sort(StoredStatement.comparePredObj)
                     for t in ss:
@@ -2371,9 +2473,9 @@ class RDFStore(RDFSink) :
 	bindings2 = bindings + [(old, new)]
         for s in old.statements[:] :   # Copy list!
 	    self.storeQuad((new,
-                         _lookupRecursive(bindings2, s[PRED], why=why),
-                         _lookupRecursive(bindings2, s[SUBJ], why=why),
-                         _lookupRecursive(bindings2, s[OBJ],  why=why))
+                         s[PRED].substitution(bindings2),
+                         s[SUBJ].substitution(bindings2),
+			s[OBJ].substitution(bindings2))
 			 , why)
         return total
                 
@@ -2439,10 +2541,23 @@ class RDFStore(RDFSink) :
 #   Iteratively apply rules to a formula
 
     def think(self, F, G=None, mode=""):
+	"""Forward inference
+	
+	This is tricky in the case in which rules are added back into the
+	store. The store is used for read (normally canonical) and write
+	(normally open) at the samne time.
+	"""
         grandtotal = 0
         iterations = 0
-        if G == None: G = F
-        self.reopen(F)
+        if G == None:
+	    G = F
+	assert not G.canonical # Must be open to add stuff
+	if F._listValue != {}: F.compactLists()
+#        if F.canonical == None:  # Must be indexed
+#	    F = F.canonicalize()
+#	if G.canonical != None:	# Must be able to add
+#	    self.reopen(F)
+        if verbosity() > 45: progress("think: rules from %s added to %s" %(F, G))
         bindingsFound = {}  # rule: list bindings already found
         while 1:
             iterations = iterations + 1
@@ -2451,6 +2566,7 @@ class RDFStore(RDFSink) :
             grandtotal= grandtotal + step
         if verbosity() > 5: progress("Grand total of %i new statements in %i iterations." %
                  (grandtotal, iterations))
+	G = G.canonicalize()
         return grandtotal
 
 
@@ -2528,7 +2644,7 @@ class RDFStore(RDFSink) :
         # target context when the conclusion is drawn.
 
 
-	x = self.occurringIn(template, template.universals()[:])
+#	x = template.occurringIn(template.universals()[:])
 	if template.universals() != []:
 	    raise RuntimeError("""Cannot query for universally quantified things.
 	    As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
@@ -2538,8 +2654,8 @@ class RDFStore(RDFSink) :
 	templateExistentials = template.existentials()[:]
         _substitute([( template, workingContext)], unmatched)
 
-        variablesMentioned = self.occurringIn(template, _variables)
-        variablesUsed = self.occurringIn(conclusion, variablesMentioned)
+        variablesMentioned = template.occurringIn(_variables)
+        variablesUsed = conclusion.occurringIn(variablesMentioned)
         for x in variablesMentioned:
             if x not in variablesUsed:
                 templateExistentials.append(x)
@@ -2582,8 +2698,8 @@ class RDFStore(RDFSink) :
 
         if not(isinstance(f, Formula) and isinstance(g, Formula)): return 0
 
-	assert f.cannonical is f
-	assert g.cannonical is g
+	assert f.canonical is f
+	assert g.canonical is g
 
         unmatched = g.statements[:]
 	templateExistentials = g.existentials()
@@ -2618,34 +2734,35 @@ class RDFStore(RDFSink) :
         return self.intern((type, self.genId()))
 
  
-    def occurringIn(self, x, vars, level=0, context=None):
-        """ Figure out, given a set of variables which if any occur in a formula, list, etc
-         The result is returned as an ordered set so that merges can be done faster.
-        """
+#    def occurringIn(self, x, vars, level=0, context=None):
+#        """ Figure out, given a set of variables which if any occur in a formula, list, etc
+#         The result is returned as an ordered set so that merges can be done faster.
+#        """
 #	progress("  "*level+"@@@@ occurringIn x=%s, vars=%s:"%(x, vars))
-        if isinstance(x, Formula):
-            set = []
-            if verbosity() > 98: progress("  "*level+"----occuringIn: "+"  "*level+`x`)
-            for s in x.statements:
+#	raise Obsolete
+#        if isinstance(x, Formula):
+#            set = []
+#            if verbosity() > 98: progress("  "*level+"----occuringIn: "+"  "*level+`x`)
+#            for s in x.statements:
 #                if s[PRED] is not self.forSome:
-                    for p in PRED, SUBJ, OBJ:
-                        y = s[p]
-                        if y is x:
-                            pass
-                        else:
-                            set = merge(set, self.occurringIn(y, vars, level+1, context=x))
-            return set
-
-	assert context != None, "needs context param for this"
-        if context.listValue(x) != None and x.generated():
-            set = []
-            for y in context.listValue(x).value():
-                set = merge(set, self.occurringIn(y, vars, level+1, context=context))
-            return set
-        else:
-            if x in vars:
-                return [x]
-            return []
+#                    for p in PRED, SUBJ, OBJ:
+#                        y = s[p]
+#                        if y is x:
+#                            pass
+#                        else:
+#                            set = merge(set, self.occurringIn(y, vars, level+1, context=x))
+#            return set
+#
+#	assert context != None, "needs context param for this"
+#        if context.listValue(x) != None and x.generated():
+#            set = []
+#            for y in context.listValue(x).value():
+#                set = merge(set, self.occurringIn(y, vars, level+1, context=context))
+#            return set
+#        else:
+#            if x in vars:
+#                return [x]
+#            return []
 
 
         
@@ -2852,6 +2969,8 @@ class Query:
                 bindings.append(pair)  # Record for posterity
             else:      # Formulae aren't needed as existentials, unlike lists. hmm.
 		if diag.tracking: bindings.append(pair)  # Record for proof only
+		if pair[0] not in existentials:
+		    progress("@@@  Not in existentials or variables but now bound:", `pair[0]`)
                 if not isinstance(pair[0], Formula): # Hack - else rules13.n3 fails @@
                     existentials.remove(pair[0]) # Can't match anything anymore, need exact match
 
@@ -2895,8 +3014,8 @@ class Query:
 		item.state = S_LIGHT_EARLY   # Assume can't run
                 nbs = item.tryBuiltin(queue, bindings, heavy=0, evidence=evidence)
 		# progress("llyn.py 2706:   nbs = %s" % nbs)
-            elif state == S_LIGHT_EARLY or state == S_NOT_LIGHT: #  Not searched yet
-                nbs = item.trySearch()
+            elif state == S_LIGHT_EARLY or state == S_NOT_LIGHT or state == S_NEED_DEEP: #  Not searched yet
+                nbs = item.tryDeepSearch()
             elif state == S_HEAVY_READY:  # not light, may be heavy; or heavy ready to run
                 if pred is query.store.includes: # and not diag.tracking:  # don't optimize when tracking?
                     if (isinstance(subj, Formula)
@@ -3115,41 +3234,47 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 
         self.neededToRun = [ [], [], [], [] ]  # for each part of speech
         self.searchPattern = [con, pred, subj, obj]  # What do we search for?
-        hasUnboundFormula = 0
+        hasUnboundCoumpundTerm = 0
         for p in PRED, SUBJ, OBJ :
             x = self.quad[p]
-	    if x is con:  # "this" is special case.
-		self.neededToRun[p] = []
-		continue
+#	    if x is con:  # "this" is special case.
+#		self.neededToRun[p] = []
+#		continue
             if x in allvars:   # Variable
                 self.neededToRun[p] = [x]
                 self.searchPattern[p] = None   # can bind this
-            if self.query.template.listValue(x) != None and x is not self.store.nil:
-                self.searchPattern[p] = None   # can bind this
+#            if self.query.template.listValue(x) != None and x is not self.store.nil:
+#                self.searchPattern[p] = None   # can bind this
 #                ur = self.store.occurringIn(x, allvars)
-		ur = []
-		ee = self.store.listElements(x, unmatched)
-		for e in ee: 
-		    if e in allvars and e not in ur: ur.append(e)
-                self.neededToRun[p] = ur
-            elif isinstance(x, Formula): # expr
-                ur = self.store.occurringIn(x, allvars)
+#		ur = []
+#		ee = self.store.listElements(x, unmatched)
+#		for e in ee: 
+#		    if e in allvars and e not in ur: ur.append(e)
+#                self.neededToRun[p] = ur
+            elif isinstance(x, Formula) or isinstance(x, List): # expr
+                ur = x.occurringIn(allvars)
                 self.neededToRun[p] = ur
                 if ur != []:
-                    hasUnboundFormula = 1     # Can't search
+                    hasUnboundCoumpundTerm = 1     # Can't search directly
+		    self.searchPattern[p] = None   # can bind this if we recurse
+		    
 	    if verbosity() > 98: progress("        %s needs to run: %s"%(`x`, `self.neededToRun[p]`))
                 
-        if hasUnboundFormula:
-            self.short = INFINITY   # can't search
-        else:
-            self.short, self.myIndex = con.searchable(self.searchPattern[SUBJ],
+#        if hasUnboundCoumpundTerm:
+#            self.short = INFINITY   # can't search
+#        else:
+	self.short, self.myIndex = con.searchable(self.searchPattern[SUBJ],
                                            self.searchPattern[PRED],
                                            self.searchPattern[OBJ])
+#	if `pred`.endswith("first"):
+#	    progress("&&&&&& is predciate", pred, "a function?", pred.__class__, pred.__dict__)
         if con in smartIn and isinstance(pred, LightBuiltIn):
             if self.canRun(): self.state = S_LIGHT_UNS_GO  # Can't do it here
             else: self.state = S_LIGHT_EARLY # Light built-in, can't run yet, not searched
         elif self.short == 0:  # Skip search if no possibilities!
             self.searchDone()
+	elif hasUnboundCoumpundTerm:
+	    self.state = S_NEED_DEEP   # Put off till later than non-deep ones
         else:
             self.state = S_NOT_LIGHT   # Not a light built in, not searched.
         if verbosity() > 80: progress("setup:" + `self`)
@@ -3180,6 +3305,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    else: return 0   # We absoluteley know this won't match with this in it
 		else: 
 		    if isinstance(pred, Function):
+			if verbosity() > 97: progress("Builtin function call %s(%s)"%(pred, subj))
 			result = pred.evalObj(subj, queue, bindings[:], proof, self.query)
 			if result != None:
 			    self.state = S_FAIL
@@ -3222,7 +3348,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
             for s in self.myIndex :  # search the index
                 nb = []
                 reject = 0
-                for p in ALL4:
+                for p in ALL4:    #  @@@ all 4?!
                     if self.searchPattern[p] == None:
                         x = self.quad[p]
                         binding = ( x, s.quad[p])
@@ -3236,6 +3362,56 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                         if not duplicate:
                             nb.append(( self.quad[p], s.quad[p]))
                 if not reject:
+                    nbs.append((nb, s))  # Add the new bindings into the set
+
+        self.searchDone()  # State transitions
+        return nbs
+
+    def tryDeepSearch(self):
+        """Search the store, matching nested compound structures
+	
+	Returns lists of list of bindings, attempting if necessary to unify
+	any nested compound terms. Added 20030810, not sure whether it is worth the
+	execution time in practice. It could be left to a special magic built-in like "matches"
+	or something if it is only occasionnaly used.
+	
+	Used in state S_NEED_DEEP
+	"""
+        nbs = []
+        if self.short == INFINITY:
+            if verbosity() > 36:
+                progress( "  Can't deep search for %s" % `self`)
+        else:
+            if verbosity() > 36:
+                progress( "  Searching (S=%i) %i for %s" %(self.state, self.short, `self`))
+            for s in self.myIndex :  # for everything matching what we know,
+                nb = []
+                reject = 0
+                for p in PRED, SUBJ, OBJ:
+                    if self.searchPattern[p] == None: # Need to check
+			x = self.quad[p]
+			if self.neededToRun[p] == [x]:   # Normal case
+			    nb1 = [( x, s.quad[p])]
+			else:  # Deep case
+			    nb1 = x.unify(s.quad[p], self.query.variables,
+				self.query.existentials, [])  # Bindings have all been bound
+			    if verbosity() > 70:
+				progress( "  Searching deep %s result binding %s" %(self, nb1))
+			    if nb1 == 0: return 0 # No way
+			    # @@@@ substitute into other parts of triple @@@@@@@
+			for binding in nb1[:]:
+			    for oldbinding in nb:
+				if oldbinding[0] is binding[0]:
+				    if oldbinding[1] is binding[1]:
+					nb1.remove(binding) # duplicate  
+				    else: # don't bind same to var to 2 things!
+					reject = 1
+					break
+			else:
+			    nb = nb + nb1
+			    continue
+			break # reject
+                else:
                     nbs.append((nb, s))  # Add the new bindings into the set
 
         self.searchDone()  # State transitions
@@ -3283,7 +3459,12 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 
         The search may get easier, and builtins may become ready to run.
         Lists may either be matched against store by searching,
-        and/or may turn out to be bound and therefore ready to run."""
+        and/or may turn out to be bound and therefore ready to run.
+	
+	Return:
+	    0		No way can this item ever complete.
+	    None	Binding done, see item.state 
+	"""
         con, pred, subj, obj = self.quad
         if verbosity() > 90:
             progress(" binding ", `self` + " with "+ `newBindings`)
@@ -3299,12 +3480,12 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
                     changed = 1
                     self.neededToRun[p] = [] # Now it is definitely all bound
             if changed:
-                q[p] = _lookupRecursive(newBindings, q[p], why=becauseSubexpression)   # possibly expensive
+                q[p] = q[p].substitution(newBindings, why=becauseSubexpression)   # possibly expensive
 		if self.searchPattern[p] != None: self.searchPattern[p] = q[p]
                 
         self.quad = q[0], q[1], q[2], q[3]  # yuk
 
-        if self.state in [S_NOT_LIGHT, S_LIGHT_EARLY, 75]: # Not searched yet
+        if self.state in [S_NOT_LIGHT, S_LIGHT_EARLY, S_NEED_DEEP]: # Not searched yet
             for p in PRED, SUBJ, OBJ:
                 x = self.quad[p]
                 if isinstance(x, Formula):
@@ -3327,10 +3508,11 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
               and self.neededToRun[SUBJ] == []
               and self.neededToRun[OBJ] == []):
             self.state = S_LIST_BOUND
-	if self.state == S_LIST_BOUND and self.searchPattern[SUBJ] != None:
+	if self.state == S_LIST_BOUND and self.searchPattern[SUBJ] != None:  # @@@@@@ 20030807
 	    if verbosity() > 50:
 		progress("Rejecting list already searched and now bound", self)
 	    self.state = S_FAIL    # see test/list-bug1.n3
+	    return []  #@@@@ guess 20030807
         if verbosity() > 90:
             progress("...bound becomes ", `self`)
         if self.state == S_FAIL: return 0
@@ -3368,69 +3550,41 @@ def lookupQuadRecursive(bindings, q, why=None):
 	context, pred, subj, obj = q
 	if verbosity() > 99: progress("\tlookupQuadRecursive:", q)
 	return (
-            _lookupRecursive(bindings, context, why=why),
-            _lookupRecursive(bindings, pred, why=why),
-            _lookupRecursive(bindings, subj, why=why),
-            _lookupRecursive(bindings, obj, why=why) )
+            context.substitution(bindings),
+            pred.substitution(bindings),
+            subj.substitution(bindings),
+            obj.substitution(bindings) )
 
-def _lookupRecursive(bindings, x, why=None):
-    """ Subsitute into formula."""
-    vars = []
+#def _lookupRecursive(bindings, x, why=None):
+#    """ Subsitute into formula."""
+#    vars = []
 #    if x is old: return new
-    for left, right in bindings:
-        if left == x: return right
-        vars.append(left)
-    if not isinstance(x, Formula):
-        return x
-    store = x.store
-    oc = store.occurringIn(x, vars)
-    if oc == []: return x # phew!
-    y = store.newInterned(FORMULA)
-    if verbosity() > 90: progress("lookupRecursive: formula"+`x`+" becomes new "+`y`,
-				" because of ", oc)
-    store.copyFormulaRecursive(x, y, bindings, why=why)
+#    for left, right in bindings:
+#        if left is x: return right
+#        vars.append(left)
+#    if not isinstance(x, Formula) and not isinstance(x, List):
+#        return x
+#    oc = x.occurringIn(vars)
+#    if oc == []: return x # phew!
+#    return x.substitution(bindings)
+#
+#    y = store.newInterned(FORMULA)
+#    if verbosity() > 90: progress("lookupRecursive: formula"+`x`+" becomes new "+`y`,
+#				" because of ", oc)
+#    store.copyFormulaRecursive(x, y, bindings, why=why)
 #    for s in x.statements:
 #        store.storeQuad((y,
 #                         _lookupRecursive(bindings, s[PRED], x, y, why=why),
 #                         _lookupRecursive(bindings, s[SUBJ], x, y, why=why),
 #                         _lookupRecursive(bindings, s[OBJ], x, y, why=why))
 #			 , why)
-    return store.endFormula(y) # intern
+#    return store.canonicalize(y) # intern
 
 
 class URISyntaxError(ValueError):
     """A parameter is passed to a routine that requires a URI reference"""
     pass
 
-#################################
-#
-# Utilty routines
-
-def merge(a,b):
-    """Merge sorted sequences
-
-    The fact that the sequences are sorted makes this faster"""
-    i = 0
-    j = 0
-    m = len(a)
-    n = len(b)
-    result = []
-    while 1:
-        if i==m:   # No more of a, return rest of b
-            return result + b[j:]
-        if j==n:
-            return result + a[i:]
-        if a[i] < b[j]:
-            result.append(a[i])
-            i = i + 1
-        elif a[i] > b[j]:
-            result.append(b[j])
-            j = j + 1
-        else:  # a[i]=b[j]
-            result.append(a[i])
-            i = i + 1
-            j = j + 1
-        
 
 #   DIAGNOSTIC STRING OUTPUT
 #

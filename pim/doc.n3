@@ -20,6 +20,7 @@
 @prefix :    <http://www.w3.org/2000/10/swap/pim/contact#> .
 
 <>  doc:version "$Id$";
+    doc:creator <http://www.w3.org/People/Berners-Lee/card#i>;
     doc:ipr <../LICENSE.n3>.
 
 

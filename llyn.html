@@ -10,7 +10,7 @@ TT { font-family: lucidatypewriter, lucida console, courier }
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>llyn</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/llyn.py">/devel/WWW/2000/10/swap/llyn.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/Users/timbl/swap/llyn.py">/Users/timbl/swap/llyn.py</a></font></td></tr></table>
     <p><tt><br>
 $Id$<br>
 &nbsp;<br>
@@ -125,12 +125,7 @@ Done<br>
 &nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;indirectlyImplies(expr1,&nbsp;expr2)&nbsp;&nbsp;&nbsp;<br>
 &nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;startsWith(x,y)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;uri(x,&nbsp;str)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;usesNamespace(x,y)&nbsp;&nbsp;&nbsp;#&nbsp;find&nbsp;transitive&nbsp;closure&nbsp;for&nbsp;validation&nbsp;&nbsp;-&nbsp;awful&nbsp;function&nbsp;in&nbsp;reality<br>
-&nbsp;<br>
-NOTES<br>
-&nbsp;<br>
-This&nbsp;is&nbsp;slow&nbsp;-&nbsp;Parka&nbsp;[guiFrontend&nbsp;PIQ]&nbsp;for&nbsp;example&nbsp;is&nbsp;faster&nbsp;but&nbsp;is&nbsp;propritary&nbsp;(patent&nbsp;pending).&nbsp;Jim&nbsp;Hendler&nbsp;owsns&nbsp;the<br>
-research&nbsp;version.&nbsp;Written&nbsp;in&nbsp;C.&nbsp;Of&nbsp;te&nbsp;order&nbsp;of&nbsp;30k&nbsp;lines</tt></p>
+&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;usesNamespace(x,y)&nbsp;&nbsp;&nbsp;#&nbsp;find&nbsp;transitive&nbsp;closure&nbsp;for&nbsp;validation&nbsp;&nbsp;-&nbsp;awful&nbsp;function&nbsp;in&nbsp;reality</tt></p>
 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -158,6 +153,17 @@ research&nbsp;version.&nbsp;Written&nbsp;in&nbsp;C.&nbsp;Of&nbsp;te&nbsp;order&n
     
 <tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl>
+<dt><font face="helvetica, arial"><a href="thing.html#CompoundTerm">thing.CompoundTerm</a>(<a href="thing.html#Term">thing.Term</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="llyn.html#Formula">Formula</a>(<a href="thing.html#Fragment">thing.Fragment</a>, <a href="thing.html#CompoundTerm">thing.CompoundTerm</a>)
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="llyn.html#FormulaSimple">FormulaSimple</a>
+</font></dt></dl>
+</dd>
+</dl>
+</dd>
 <dt><font face="helvetica, arial"><a href="llyn.html#DataObject">DataObject</a>
 </font></dt><dt><font face="helvetica, arial"><a href="exceptions.html#Exception">exceptions.Exception</a>
 </font></dt><dd>
@@ -168,7 +174,7 @@ research&nbsp;version.&nbsp;Written&nbsp;in&nbsp;C.&nbsp;Of&nbsp;te&nbsp;order&n
 <dt><font face="helvetica, arial"><a href="thing.html#Fragment">thing.Fragment</a>(<a href="thing.html#Term">thing.Term</a>)
 </font></dt><dd>
 <dl>
-<dt><font face="helvetica, arial"><a href="llyn.html#Formula">Formula</a>
+<dt><font face="helvetica, arial"><a href="llyn.html#Formula">Formula</a>(<a href="thing.html#Fragment">thing.Fragment</a>, <a href="thing.html#CompoundTerm">thing.CompoundTerm</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="llyn.html#FormulaSimple">FormulaSimple</a>
@@ -339,8 +345,19 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_EqualTo-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
 <dl><dt><a name="BI_EqualTo-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="BI_EqualTo-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_EqualTo-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_EqualTo-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -351,7 +368,8 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>&nbsp;Deductive&nbsp;Closure<br>
 &nbsp;<br>
-Closure&nbsp;under&nbsp;Forward&nbsp;Inference,&nbsp;equivalent&nbsp;to&nbsp;cwm's&nbsp;--think&nbsp;function.<br>&nbsp;</tt></td></tr>
+Closure&nbsp;under&nbsp;Forward&nbsp;Inference,&nbsp;equivalent&nbsp;to&nbsp;cwm's&nbsp;--think&nbsp;function.<br>
+This&nbsp;is&nbsp;a&nbsp;function,&nbsp;so&nbsp;the&nbsp;object&nbsp;is&nbsp;calculated&nbsp;from&nbsp;the&nbsp;subject.<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#BI_conclusion">BI_conclusion</a></dd>
@@ -367,7 +385,7 @@ Methods defined here:<br>
 
 <hr>
 Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = " Deductive Closure<font color="#c040c0">\n\n</font>    Closure under Forward Inference, equivalent to cwm's --think function.<font color="#c040c0">\n</font>    "<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+<dl><dt><strong>__doc__</strong> = ' Deductive Closure<font color="#c040c0">\n\n</font>    Closure under Forward In...o the object is calculated from the subject.<font color="#c040c0">\n</font>    '<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
 &nbsp;<br>
 Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
 If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
@@ -415,8 +433,19 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_conclusion-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
 <dl><dt><a name="BI_conclusion-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="BI_conclusion-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_conclusion-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_conclusion-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -491,8 +520,19 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_conjunction-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
 <dl><dt><a name="BI_conjunction-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="BI_conjunction-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_conjunction-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_conjunction-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -562,8 +602,19 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_content-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
 <dl><dt><a name="BI_content-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="BI_content-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_content-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_content-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -631,8 +682,19 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_includes-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
 <dl><dt><a name="BI_includes-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="BI_includes-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_includes-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_includes-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -646,8 +708,8 @@ express&nbsp;it&nbsp;in&nbsp;the&nbsp;N3&nbsp;language&nbsp;without&nbsp;using&n
 Note&nbsp;that&nbsp;there&nbsp;is&nbsp;no&nbsp;guarantee&nbsp;that&nbsp;two&nbsp;implementations&nbsp;will<br>
 generate&nbsp;the&nbsp;same&nbsp;thing,&nbsp;but&nbsp;whatever&nbsp;they&nbsp;generate&nbsp;should<br>
 parse&nbsp;back&nbsp;using&nbsp;parsedAsN3&nbsp;to&nbsp;exaclty&nbsp;the&nbsp;same&nbsp;original&nbsp;formula.<br>
-If&nbsp;we&nbsp;*did*&nbsp;have&nbsp;a&nbsp;cannonical&nbsp;form&nbsp;it&nbsp;would&nbsp;be&nbsp;great&nbsp;for&nbsp;signature<br>
-A&nbsp;cannonical&nbsp;form&nbsp;is&nbsp;possisble&nbsp;but&nbsp;not&nbsp;simple.<br>&nbsp;</tt></td></tr>
+If&nbsp;we&nbsp;*did*&nbsp;have&nbsp;a&nbsp;canonical&nbsp;form&nbsp;it&nbsp;would&nbsp;be&nbsp;great&nbsp;for&nbsp;signature<br>
+A&nbsp;canonical&nbsp;form&nbsp;is&nbsp;possisble&nbsp;but&nbsp;not&nbsp;simple.<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#BI_n3String">BI_n3String</a></dd>
@@ -663,7 +725,7 @@ Methods defined here:<br>
 
 <hr>
 Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = ' The n3 string for a formula is what you get whe...   A cannonical form is possisble but not simple.'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+<dl><dt><strong>__doc__</strong> = ' The n3 string for a formula is what you get whe...    A canonical form is possisble but not simple.'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
 &nbsp;<br>
 Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
 If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
@@ -711,8 +773,19 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_n3String-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
 <dl><dt><a name="BI_n3String-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="BI_n3String-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_n3String-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_n3String-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -775,8 +848,19 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_notEqualTo-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
 <dl><dt><a name="BI_notEqualTo-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="BI_notEqualTo-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_notEqualTo-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_notEqualTo-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -854,8 +938,19 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_notIncludes-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
 <dl><dt><a name="BI_notIncludes-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="BI_notIncludes-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_notIncludes-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_notIncludes-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -925,8 +1020,19 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_parsedAsN3-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
 <dl><dt><a name="BI_parsedAsN3-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="BI_parsedAsN3-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_parsedAsN3-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_parsedAsN3-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -996,8 +1102,19 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_racine-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
 <dl><dt><a name="BI_racine-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="BI_racine-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_racine-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_racine-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -1072,8 +1189,19 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_rawType-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
 <dl><dt><a name="BI_rawType-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="BI_rawType-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_rawType-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_rawType-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -1158,8 +1286,19 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_rawUri-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
 <dl><dt><a name="BI_rawUri-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="BI_rawUri-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_rawUri-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_rawUri-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>:<br>
@@ -1239,8 +1378,19 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_semantics-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
 <dl><dt><a name="BI_semantics-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="BI_semantics-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_semantics-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_semantics-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -1314,8 +1464,19 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_semanticsOrError-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
 <dl><dt><a name="BI_semanticsOrError-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsOrError-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsOrError-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsOrError-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -1393,8 +1554,19 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_uri-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
 <dl><dt><a name="BI_uri-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="BI_uri-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_uri-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="BI_uri-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>:<br>
@@ -1499,7 +1671,7 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="Formula">class <strong>Formula</strong></a>(<a href="thing.html#Fragment">thing.Fragment</a>)</font></td></tr>
+<font color="#000000" face="helvetica, arial"><a name="Formula">class <strong>Formula</strong></a>(<a href="thing.html#Fragment">thing.Fragment</a>, <a href="thing.html#CompoundTerm">thing.CompoundTerm</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>A&nbsp;formula&nbsp;of&nbsp;a&nbsp;set&nbsp;of&nbsp;RDF&nbsp;statements,&nbsp;triples.<br>
@@ -1523,6 +1695,7 @@ only&nbsp;be&nbsp;used&nbsp;immediately&nbsp;after&nbsp;a&nbsp;<a href="#Formula
 <dd><a href="llyn.html#Formula">Formula</a></dd>
 <dd><a href="thing.html#Fragment">thing.Fragment</a></dd>
 <dd><a href="thing.html#Term">thing.Term</a></dd>
+<dd><a href="thing.html#CompoundTerm">thing.CompoundTerm</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
@@ -1533,7 +1706,7 @@ as&nbsp;though&nbsp;a&nbsp;formula&nbsp;were&nbsp;a&nbsp;sequence.</tt></dd></dl
 
 <dl><dt><a name="Formula-__len__"><strong>__len__</strong></a>(self)</dt><dd><tt>&nbsp;How&nbsp;many&nbsp;statements?</tt></dd></dl>
 
-<dl><dt><a name="Formula-_checkList"><strong>_checkList</strong></a>(self, L)</dt><dd><tt>Check&nbsp;whether&nbsp;this&nbsp;new&nbsp;list&nbsp;causes&nbsp;other&nbsp;things&nbsp;to&nbsp;become&nbsp;lists.<br>
+<dl><dt><a name="Formula-_checkList"><strong>_checkList</strong></a>(self, L)</dt><dd><tt>Check&nbsp;whether&nbsp;this&nbsp;new&nbsp;list&nbsp;(given&nbsp;as&nbsp;bnode)&nbsp;causes&nbsp;other&nbsp;things&nbsp;to&nbsp;become&nbsp;lists.<br>
 &nbsp;<br>
 Internal&nbsp;function.</tt></dd></dl>
 
@@ -1560,6 +1733,16 @@ To&nbsp;aboid&nbsp;confusion,&nbsp;use&nbsp;named&nbsp;parameters.</tt></dd></dl
 The&nbsp;store&nbsp;does&nbsp;not&nbsp;use&nbsp;prefixes&nbsp;internally,&nbsp;but&nbsp;keeping&nbsp;track<br>
 of&nbsp;those&nbsp;usedd&nbsp;in&nbsp;the&nbsp;input&nbsp;data&nbsp;makes&nbsp;for&nbsp;more&nbsp;human-readable&nbsp;output.</tt></dd></dl>
 
+<dl><dt><a name="Formula-canonicalize"><strong>canonicalize</strong></a>(F)</dt><dd><tt>If&nbsp;this&nbsp;formula&nbsp;already&nbsp;exists,&nbsp;return&nbsp;the&nbsp;master&nbsp;version.<br>
+If&nbsp;not,&nbsp;record&nbsp;this&nbsp;one&nbsp;and&nbsp;return&nbsp;it.<br>
+Call&nbsp;this&nbsp;when&nbsp;the&nbsp;formula&nbsp;is&nbsp;in&nbsp;its&nbsp;final&nbsp;form,&nbsp;with&nbsp;all&nbsp;its&nbsp;statements.<br>
+Make&nbsp;sure&nbsp;no&nbsp;one&nbsp;else&nbsp;has&nbsp;a&nbsp;copy&nbsp;of&nbsp;the&nbsp;pointer&nbsp;to&nbsp;the&nbsp;smushed&nbsp;one.<br>
+In&nbsp;canonical&nbsp;form,<br>
+&nbsp;-&nbsp;the&nbsp;statments&nbsp;are&nbsp;ordered<br>
+&nbsp;-&nbsp;the&nbsp;lists&nbsp;are&nbsp;all&nbsp;internalized&nbsp;as&nbsp;lists<br>
+&nbsp;<br>
+Store&nbsp;dependency:&nbsp;Uses&nbsp;store._formulaeOfLength</tt></dd></dl>
+
 <dl><dt><a name="Formula-checkClosure"><strong>checkClosure</strong></a>(self, subj, pred, obj)</dt><dd><tt>Check&nbsp;the&nbsp;closure&nbsp;of&nbsp;the&nbsp;formula&nbsp;given&nbsp;new&nbsp;contents<br>
 &nbsp;<br>
 The&nbsp;s&nbsp;p&nbsp;o&nbsp;flags&nbsp;cause&nbsp;llyn&nbsp;to&nbsp;follow&nbsp;those&nbsp;parts&nbsp;of&nbsp;the&nbsp;new&nbsp;statement.<br>
@@ -1572,6 +1755,11 @@ r&nbsp;ask&nbsp;it&nbsp;to&nbsp;follow&nbsp;doc:rules</tt></dd></dl>
 
 <dl><dt><a name="Formula-close"><strong>close</strong></a>(self)</dt><dd><tt>No&nbsp;more&nbsp;to&nbsp;add.&nbsp;Please&nbsp;return&nbsp;interned&nbsp;value.<br>
 NOTE&nbsp;You&nbsp;must&nbsp;now&nbsp;use&nbsp;the&nbsp;interned&nbsp;one,&nbsp;not&nbsp;the&nbsp;original!</tt></dd></dl>
+
+<dl><dt><a name="Formula-compactLists"><strong>compactLists</strong></a>(self)</dt><dd><tt>For&nbsp;any&nbsp;lists&nbsp;expressed&nbsp;longhand,&nbsp;convert&nbsp;to&nbsp;objects.<br>
+&nbsp;<br>
+Works&nbsp;in&nbsp;place.&nbsp;Strips&nbsp;out&nbsp;the&nbsp;reifications&nbsp;fo&nbsp;the&nbsp;lists,<br>
+and&nbsp;converts&nbsp;any&nbsp;statements&nbsp;which&nbsp;refer&nbsp;to&nbsp;the&nbsp;list&nbsp;to&nbsp;refer&nbsp;to&nbsp;the&nbsp;object.</tt></dd></dl>
 
 <dl><dt><a name="Formula-contains"><strong>contains</strong></a>(self, pred<font color="#909090">=None</font>, subj<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;boolean&nbsp;true&nbsp;iff&nbsp;formula&nbsp;contains&nbsp;statement(s)&nbsp;matching&nbsp;the&nbsp;parts&nbsp;given<br>
 &nbsp;<br>
@@ -1642,6 +1830,8 @@ See&nbsp;also:&nbsp;<a href="#Formula-universals">universals</a>()</tt></dd></dl
 
 <dl><dt><a name="Formula-objects"><strong>objects</strong></a>(self, pred<font color="#909090">=None</font>, subj<font color="#909090">=None</font>)</dt><dd><tt>Obsolete&nbsp;-&nbsp;use&nbsp;<a href="#Formula-each">each</a>(subj=...,&nbsp;pred=...)</tt></dd></dl>
 
+<dl><dt><a name="Formula-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt><dd><tt>Which&nbsp;variables&nbsp;in&nbsp;the&nbsp;list&nbsp;occur&nbsp;in&nbsp;this?</tt></dd></dl>
+
 <dl><dt><a name="Formula-outputStrings"><strong>outputStrings</strong></a>(self, channel<font color="#909090">=None</font>, relation<font color="#909090">=None</font>)</dt><dd><tt>Fetch&nbsp;output&nbsp;strings&nbsp;from&nbsp;store,&nbsp;sort&nbsp;and&nbsp;output<br>
 &nbsp;<br>
 To&nbsp;output&nbsp;a&nbsp;string,&nbsp;associate&nbsp;(using&nbsp;the&nbsp;given&nbsp;relation)&nbsp;with&nbsp;a&nbsp;key<br>
@@ -1690,6 +1880,8 @@ slow...typically&nbsp;only&nbsp;used&nbsp;in&nbsp;pretty&nbsp;print&nbsp;functio
 
 <dl><dt><a name="Formula-subjects"><strong>subjects</strong></a>(self, pred<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Obsolete&nbsp;-&nbsp;use&nbsp;<a href="#Formula-each">each</a>(pred=...,&nbsp;obj=...)</tt></dd></dl>
 
+<dl><dt><a name="Formula-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
 <dl><dt><a name="Formula-the"><strong>the</strong></a>(self, subj<font color="#909090">=None</font>, pred<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;None&nbsp;or&nbsp;the&nbsp;value&nbsp;filing&nbsp;the&nbsp;blank&nbsp;in&nbsp;the&nbsp;called&nbsp;parameters<br>
 &nbsp;<br>
 This&nbsp;is&nbsp;just&nbsp;like&nbsp;<a href="#Formula-any">any</a>()&nbsp;except&nbsp;it&nbsp;checks&nbsp;that&nbsp;there&nbsp;is&nbsp;only<br>
@@ -1697,6 +1889,11 @@ one&nbsp;answer&nbsp;in&nbsp;the&nbsp;store.&nbsp;It&nbsp;wise&nbsp;to&nbsp;use&
 &nbsp;<br>
 color&nbsp;=&nbsp;f.<a href="#Formula-the">the</a>(pred=pantoneColor,&nbsp;subj=myCar)<br>
 redCar&nbsp;=&nbsp;f.<a href="#Formula-the">the</a>(pred=pantoneColor,&nbsp;obj=red)</tt></dd></dl>
+
+<dl><dt><a name="Formula-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
 
 <dl><dt><a name="Formula-universals"><strong>universals</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;variables&nbsp;universally&nbsp;quantified&nbsp;with&nbsp;this&nbsp;formula&nbsp;as&nbsp;scope.<br>
 &nbsp;<br>
@@ -1737,6 +1934,8 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 <dl><dt><a name="Formula-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
 
+<dl><dt><a name="Formula-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
+
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
@@ -1768,6 +1967,7 @@ This&nbsp;version&nbsp;is&nbsp;simplified&nbsp;by&nbsp;having&nbsp;no&nbsp;index
 <dd><a href="llyn.html#Formula">Formula</a></dd>
 <dd><a href="thing.html#Fragment">thing.Fragment</a></dd>
 <dd><a href="thing.html#Term">thing.Term</a></dd>
+<dd><a href="thing.html#CompoundTerm">thing.CompoundTerm</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
@@ -1792,7 +1992,7 @@ as&nbsp;though&nbsp;a&nbsp;formula&nbsp;were&nbsp;a&nbsp;sequence.</tt></dd></dl
 
 <dl><dt><a name="FormulaSimple-__len__"><strong>__len__</strong></a>(self)</dt><dd><tt>&nbsp;How&nbsp;many&nbsp;statements?</tt></dd></dl>
 
-<dl><dt><a name="FormulaSimple-_checkList"><strong>_checkList</strong></a>(self, L)</dt><dd><tt>Check&nbsp;whether&nbsp;this&nbsp;new&nbsp;list&nbsp;causes&nbsp;other&nbsp;things&nbsp;to&nbsp;become&nbsp;lists.<br>
+<dl><dt><a name="FormulaSimple-_checkList"><strong>_checkList</strong></a>(self, L)</dt><dd><tt>Check&nbsp;whether&nbsp;this&nbsp;new&nbsp;list&nbsp;(given&nbsp;as&nbsp;bnode)&nbsp;causes&nbsp;other&nbsp;things&nbsp;to&nbsp;become&nbsp;lists.<br>
 &nbsp;<br>
 Internal&nbsp;function.</tt></dd></dl>
 
@@ -1819,6 +2019,16 @@ To&nbsp;aboid&nbsp;confusion,&nbsp;use&nbsp;named&nbsp;parameters.</tt></dd></dl
 The&nbsp;store&nbsp;does&nbsp;not&nbsp;use&nbsp;prefixes&nbsp;internally,&nbsp;but&nbsp;keeping&nbsp;track<br>
 of&nbsp;those&nbsp;usedd&nbsp;in&nbsp;the&nbsp;input&nbsp;data&nbsp;makes&nbsp;for&nbsp;more&nbsp;human-readable&nbsp;output.</tt></dd></dl>
 
+<dl><dt><a name="FormulaSimple-canonicalize"><strong>canonicalize</strong></a>(F)</dt><dd><tt>If&nbsp;this&nbsp;formula&nbsp;already&nbsp;exists,&nbsp;return&nbsp;the&nbsp;master&nbsp;version.<br>
+If&nbsp;not,&nbsp;record&nbsp;this&nbsp;one&nbsp;and&nbsp;return&nbsp;it.<br>
+Call&nbsp;this&nbsp;when&nbsp;the&nbsp;formula&nbsp;is&nbsp;in&nbsp;its&nbsp;final&nbsp;form,&nbsp;with&nbsp;all&nbsp;its&nbsp;statements.<br>
+Make&nbsp;sure&nbsp;no&nbsp;one&nbsp;else&nbsp;has&nbsp;a&nbsp;copy&nbsp;of&nbsp;the&nbsp;pointer&nbsp;to&nbsp;the&nbsp;smushed&nbsp;one.<br>
+In&nbsp;canonical&nbsp;form,<br>
+&nbsp;-&nbsp;the&nbsp;statments&nbsp;are&nbsp;ordered<br>
+&nbsp;-&nbsp;the&nbsp;lists&nbsp;are&nbsp;all&nbsp;internalized&nbsp;as&nbsp;lists<br>
+&nbsp;<br>
+Store&nbsp;dependency:&nbsp;Uses&nbsp;store._formulaeOfLength</tt></dd></dl>
+
 <dl><dt><a name="FormulaSimple-checkClosure"><strong>checkClosure</strong></a>(self, subj, pred, obj)</dt><dd><tt>Check&nbsp;the&nbsp;closure&nbsp;of&nbsp;the&nbsp;formula&nbsp;given&nbsp;new&nbsp;contents<br>
 &nbsp;<br>
 The&nbsp;s&nbsp;p&nbsp;o&nbsp;flags&nbsp;cause&nbsp;llyn&nbsp;to&nbsp;follow&nbsp;those&nbsp;parts&nbsp;of&nbsp;the&nbsp;new&nbsp;statement.<br>
@@ -1831,6 +2041,11 @@ r&nbsp;ask&nbsp;it&nbsp;to&nbsp;follow&nbsp;doc:rules</tt></dd></dl>
 
 <dl><dt><a name="FormulaSimple-close"><strong>close</strong></a>(self)</dt><dd><tt>No&nbsp;more&nbsp;to&nbsp;add.&nbsp;Please&nbsp;return&nbsp;interned&nbsp;value.<br>
 NOTE&nbsp;You&nbsp;must&nbsp;now&nbsp;use&nbsp;the&nbsp;interned&nbsp;one,&nbsp;not&nbsp;the&nbsp;original!</tt></dd></dl>
+
+<dl><dt><a name="FormulaSimple-compactLists"><strong>compactLists</strong></a>(self)</dt><dd><tt>For&nbsp;any&nbsp;lists&nbsp;expressed&nbsp;longhand,&nbsp;convert&nbsp;to&nbsp;objects.<br>
+&nbsp;<br>
+Works&nbsp;in&nbsp;place.&nbsp;Strips&nbsp;out&nbsp;the&nbsp;reifications&nbsp;fo&nbsp;the&nbsp;lists,<br>
+and&nbsp;converts&nbsp;any&nbsp;statements&nbsp;which&nbsp;refer&nbsp;to&nbsp;the&nbsp;list&nbsp;to&nbsp;refer&nbsp;to&nbsp;the&nbsp;object.</tt></dd></dl>
 
 <dl><dt><a name="FormulaSimple-contains"><strong>contains</strong></a>(self, pred<font color="#909090">=None</font>, subj<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;boolean&nbsp;true&nbsp;iff&nbsp;formula&nbsp;contains&nbsp;statement(s)&nbsp;matching&nbsp;the&nbsp;parts&nbsp;given<br>
 &nbsp;<br>
@@ -1901,6 +2116,8 @@ See&nbsp;also:&nbsp;<a href="#FormulaSimple-universals">universals</a>()</tt></d
 
 <dl><dt><a name="FormulaSimple-objects"><strong>objects</strong></a>(self, pred<font color="#909090">=None</font>, subj<font color="#909090">=None</font>)</dt><dd><tt>Obsolete&nbsp;-&nbsp;use&nbsp;<a href="#FormulaSimple-each">each</a>(subj=...,&nbsp;pred=...)</tt></dd></dl>
 
+<dl><dt><a name="FormulaSimple-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt><dd><tt>Which&nbsp;variables&nbsp;in&nbsp;the&nbsp;list&nbsp;occur&nbsp;in&nbsp;this?</tt></dd></dl>
+
 <dl><dt><a name="FormulaSimple-outputStrings"><strong>outputStrings</strong></a>(self, channel<font color="#909090">=None</font>, relation<font color="#909090">=None</font>)</dt><dd><tt>Fetch&nbsp;output&nbsp;strings&nbsp;from&nbsp;store,&nbsp;sort&nbsp;and&nbsp;output<br>
 &nbsp;<br>
 To&nbsp;output&nbsp;a&nbsp;string,&nbsp;associate&nbsp;(using&nbsp;the&nbsp;given&nbsp;relation)&nbsp;with&nbsp;a&nbsp;key<br>
@@ -1949,6 +2166,8 @@ slow...typically&nbsp;only&nbsp;used&nbsp;in&nbsp;pretty&nbsp;print&nbsp;functio
 
 <dl><dt><a name="FormulaSimple-subjects"><strong>subjects</strong></a>(self, pred<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Obsolete&nbsp;-&nbsp;use&nbsp;<a href="#FormulaSimple-each">each</a>(pred=...,&nbsp;obj=...)</tt></dd></dl>
 
+<dl><dt><a name="FormulaSimple-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
 <dl><dt><a name="FormulaSimple-the"><strong>the</strong></a>(self, subj<font color="#909090">=None</font>, pred<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;None&nbsp;or&nbsp;the&nbsp;value&nbsp;filing&nbsp;the&nbsp;blank&nbsp;in&nbsp;the&nbsp;called&nbsp;parameters<br>
 &nbsp;<br>
 This&nbsp;is&nbsp;just&nbsp;like&nbsp;<a href="#FormulaSimple-any">any</a>()&nbsp;except&nbsp;it&nbsp;checks&nbsp;that&nbsp;there&nbsp;is&nbsp;only<br>
@@ -1956,6 +2175,11 @@ one&nbsp;answer&nbsp;in&nbsp;the&nbsp;store.&nbsp;It&nbsp;wise&nbsp;to&nbsp;use&
 &nbsp;<br>
 color&nbsp;=&nbsp;f.<a href="#FormulaSimple-the">the</a>(pred=pantoneColor,&nbsp;subj=myCar)<br>
 redCar&nbsp;=&nbsp;f.<a href="#FormulaSimple-the">the</a>(pred=pantoneColor,&nbsp;obj=red)</tt></dd></dl>
+
+<dl><dt><a name="FormulaSimple-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd></dl>
 
 <dl><dt><a name="FormulaSimple-universals"><strong>universals</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;variables&nbsp;universally&nbsp;quantified&nbsp;with&nbsp;this&nbsp;formula&nbsp;as&nbsp;scope.<br>
 &nbsp;<br>
@@ -1983,6 +2207,8 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 
 <dl><dt><a name="FormulaSimple-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<dl><dt><a name="FormulaSimple-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -2048,7 +2274,11 @@ When&nbsp;a&nbsp;remote&nbsp;query&nbsp;is&nbsp;done,&nbsp;query&nbsp;lines&nbsp
 &nbsp;<br>
 The&nbsp;search&nbsp;may&nbsp;get&nbsp;easier,&nbsp;and&nbsp;builtins&nbsp;may&nbsp;become&nbsp;ready&nbsp;to&nbsp;run.<br>
 Lists&nbsp;may&nbsp;either&nbsp;be&nbsp;matched&nbsp;against&nbsp;store&nbsp;by&nbsp;searching,<br>
-and/or&nbsp;may&nbsp;turn&nbsp;out&nbsp;to&nbsp;be&nbsp;bound&nbsp;and&nbsp;therefore&nbsp;ready&nbsp;to&nbsp;run.</tt></dd></dl>
+and/or&nbsp;may&nbsp;turn&nbsp;out&nbsp;to&nbsp;be&nbsp;bound&nbsp;and&nbsp;therefore&nbsp;ready&nbsp;to&nbsp;run.<br>
+&nbsp;<br>
+Return:<br>
+&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;way&nbsp;can&nbsp;this&nbsp;item&nbsp;ever&nbsp;complete.<br>
+&nbsp;&nbsp;&nbsp;&nbsp;None&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Binding&nbsp;done,&nbsp;see&nbsp;item.state</tt></dd></dl>
 
 <dl><dt><a name="QueryItem-canRun"><strong>canRun</strong></a>(self)</dt><dd><tt>Is&nbsp;this&nbsp;built-in&nbsp;ready&nbsp;to&nbsp;run?</tt></dd></dl>
 
@@ -2066,6 +2296,15 @@ The&nbsp;mode&nbsp;is&nbsp;a&nbsp;set&nbsp;of&nbsp;character&nbsp;flags&nbsp;abo
 <dl><dt><a name="QueryItem-tryBuiltin"><strong>tryBuiltin</strong></a>(self, queue, bindings, heavy, evidence)</dt><dd><tt>Check&nbsp;for&nbsp;&nbsp;built-in&nbsp;functions&nbsp;to&nbsp;see&nbsp;whether&nbsp;it&nbsp;will&nbsp;resolve.<br>
 Return&nbsp;codes:&nbsp;&nbsp;0&nbsp;-&nbsp;give&nbsp;up;&nbsp;&nbsp;1&nbsp;-&nbsp;continue,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[...]&nbsp;list&nbsp;of&nbsp;binding&nbsp;lists</tt></dd></dl>
+
+<dl><dt><a name="QueryItem-tryDeepSearch"><strong>tryDeepSearch</strong></a>(self)</dt><dd><tt>Search&nbsp;the&nbsp;store,&nbsp;matching&nbsp;nested&nbsp;compound&nbsp;structures<br>
+&nbsp;<br>
+Returns&nbsp;lists&nbsp;of&nbsp;list&nbsp;of&nbsp;bindings,&nbsp;attempting&nbsp;if&nbsp;necessary&nbsp;to&nbsp;unify<br>
+any&nbsp;nested&nbsp;compound&nbsp;terms.&nbsp;Added&nbsp;20030810,&nbsp;not&nbsp;sure&nbsp;whether&nbsp;it&nbsp;is&nbsp;worth&nbsp;the<br>
+execution&nbsp;time&nbsp;in&nbsp;practice.&nbsp;It&nbsp;could&nbsp;be&nbsp;left&nbsp;to&nbsp;a&nbsp;special&nbsp;magic&nbsp;built-in&nbsp;like&nbsp;"matches"<br>
+or&nbsp;something&nbsp;if&nbsp;it&nbsp;is&nbsp;only&nbsp;occasionnaly&nbsp;used.<br>
+&nbsp;<br>
+Used&nbsp;in&nbsp;state&nbsp;S_NEED_DEEP</tt></dd></dl>
 
 <dl><dt><a name="QueryItem-trySearch"><strong>trySearch</strong></a>(self)</dt><dd><tt>Search&nbsp;the&nbsp;store<br>
 Returns&nbsp;lists&nbsp;of&nbsp;list&nbsp;of&nbsp;bindings</tt></dd></dl>
@@ -2139,11 +2378,6 @@ The&nbsp;list&nbsp;of&nbsp;statements&nbsp;must&nbsp;be&nbsp;sorted&nbsp;if&nbsp
 
 <dl><dt><a name="RDFStore-_outputStatement"><strong>_outputStatement</strong></a>(self, sink, quad)</dt></dl>
 
-<dl><dt><a name="RDFStore-_toPython"><strong>_toPython</strong></a>(self, x, queue, query)</dt><dd><tt>#&nbsp;&nbsp;Convert&nbsp;a&nbsp;data&nbsp;item&nbsp;in&nbsp;query&nbsp;with&nbsp;no&nbsp;unbound&nbsp;variables&nbsp;into&nbsp;a&nbsp;python&nbsp;equivalent&nbsp;<br>
-Given&nbsp;the&nbsp;entries&nbsp;in&nbsp;a&nbsp;queue&nbsp;template,&nbsp;find&nbsp;the&nbsp;value&nbsp;of&nbsp;a&nbsp;list.<br>
-@@&nbsp;slow<br>
-These&nbsp;methods&nbsp;are&nbsp;at&nbsp;the&nbsp;disposal&nbsp;of&nbsp;built-ins.</tt></dd></dl>
-
 <dl><dt><a name="RDFStore-_topology"><strong>_topology</strong></a>(self, x, context)</dt><dd><tt>&nbsp;Can&nbsp;be&nbsp;output&nbsp;as&nbsp;an&nbsp;anonymous&nbsp;node&nbsp;in&nbsp;N3.&nbsp;Also&nbsp;counts&nbsp;incoming&nbsp;links.<br>
 Output&nbsp;tuple&nbsp;parts:<br>
 &nbsp;<br>
@@ -2198,7 +2432,7 @@ open&nbsp;to&nbsp;possibly&nbsp;clashing&nbsp;in&nbsp;pathalogical&nbsp;cases.</
 for&nbsp;each&nbsp;subject.<br>
 We&nbsp;dump&nbsp;"this"&nbsp;first&nbsp;before&nbsp;everything&nbsp;else</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-dumpNested"><strong>dumpNested</strong></a>(self, context, sink)</dt><dd><tt>&nbsp;Iterates&nbsp;over&nbsp;all&nbsp;URIs&nbsp;ever&nbsp;seen&nbsp;looking&nbsp;for&nbsp;statements</tt></dd></dl>
+<dl><dt><a name="RDFStore-dumpNested"><strong>dumpNested</strong></a>(self, context0, sink)</dt><dd><tt>&nbsp;Iterates&nbsp;over&nbsp;all&nbsp;URIs&nbsp;ever&nbsp;seen&nbsp;looking&nbsp;for&nbsp;statements</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-dumpPrefixes"><strong>dumpPrefixes</strong></a>(self, sink, counts<font color="#909090">=None</font>)</dt></dl>
 
@@ -2208,11 +2442,6 @@ We&nbsp;dump&nbsp;"this"&nbsp;first&nbsp;before&nbsp;everything&nbsp;else</tt></
 
 <dl><dt><a name="RDFStore-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair)</dt></dl>
 
-<dl><dt><a name="RDFStore-endFormula"><strong>endFormula</strong></a>(self, F)</dt><dd><tt>If&nbsp;this&nbsp;formula&nbsp;already&nbsp;exists,&nbsp;return&nbsp;the&nbsp;master&nbsp;version.<br>
-If&nbsp;not,&nbsp;record&nbsp;this&nbsp;one&nbsp;and&nbsp;return&nbsp;it.<br>
-Call&nbsp;this&nbsp;when&nbsp;the&nbsp;formula&nbsp;is&nbsp;in&nbsp;its&nbsp;final&nbsp;form,&nbsp;with&nbsp;all&nbsp;its&nbsp;statements.<br>
-Make&nbsp;sure&nbsp;no&nbsp;one&nbsp;else&nbsp;has&nbsp;a&nbsp;copy&nbsp;of&nbsp;the&nbsp;pointer&nbsp;to&nbsp;the&nbsp;smushed&nbsp;one.</tt></dd></dl>
-
 <dl><dt><a name="RDFStore-extern"><strong>extern</strong></a>(self, t)</dt></dl>
 
 <dl><dt><a name="RDFStore-genId"><strong>genId</strong></a>(self)</dt><dd><tt>Generate&nbsp;a&nbsp;new&nbsp;identifier<br>
@@ -2220,14 +2449,12 @@ Make&nbsp;sure&nbsp;no&nbsp;one&nbsp;else&nbsp;has&nbsp;a&nbsp;copy&nbsp;of&nbsp
 This&nbsp;uses&nbsp;the&nbsp;inherited&nbsp;class,&nbsp;but&nbsp;also&nbsp;checks&nbsp;that&nbsp;we&nbsp;haven't&nbsp;for&nbsp;some&nbsp;pathalogical&nbsp;reason<br>
 ended&nbsp;up&nbsp;generating&nbsp;the&nbsp;same&nbsp;one&nbsp;as&nbsp;for&nbsp;example&nbsp;in&nbsp;another&nbsp;run&nbsp;of&nbsp;the&nbsp;same&nbsp;system.</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-intern"><strong>intern</strong></a>(self, what, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>find-or-create&nbsp;a&nbsp;<a href="thing.html#Fragment">Fragment</a>&nbsp;or&nbsp;a&nbsp;Symbol&nbsp;or&nbsp;Literal&nbsp;as&nbsp;appropriate<br>
+<dl><dt><a name="RDFStore-intern"><strong>intern</strong></a>(self, what, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>find-or-create&nbsp;a&nbsp;<a href="thing.html#Fragment">Fragment</a>&nbsp;or&nbsp;a&nbsp;Symbol&nbsp;or&nbsp;Literal&nbsp;or&nbsp;list&nbsp;as&nbsp;appropriate<br>
 &nbsp;<br>
 returns&nbsp;<a href="#URISyntaxError">URISyntaxError</a>&nbsp;if,&nbsp;for&nbsp;example,&nbsp;the&nbsp;URIref&nbsp;has<br>
 two&nbsp;#'s.<br>
 &nbsp;<br>
 This&nbsp;is&nbsp;the&nbsp;way&nbsp;they&nbsp;are&nbsp;actually&nbsp;made.</tt></dd></dl>
-
-<dl><dt><a name="RDFStore-internList"><strong>internList</strong></a>(self, value)</dt></dl>
 
 <dl><dt><a name="RDFStore-internURI"><strong>internURI</strong></a>(self, str, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -2270,6 +2497,8 @@ formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&
 
 <dl><dt><a name="RDFStore-newInterned"><strong>newInterned</strong></a>(self, type)</dt></dl>
 
+<dl><dt><a name="RDFStore-newList"><strong>newList</strong></a>(self, value)</dt></dl>
+
 <dl><dt><a name="RDFStore-newLiteral"><strong>newLiteral</strong></a>(self, str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt><dd><tt>Interned&nbsp;version:&nbsp;generat&nbsp;new&nbsp;literal&nbsp;object&nbsp;as&nbsp;stored&nbsp;in&nbsp;this&nbsp;store</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-newSymbol"><strong>newSymbol</strong></a>(self, uri)</dt></dl>
@@ -2277,9 +2506,6 @@ formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&
 <dl><dt><a name="RDFStore-newUniversal"><strong>newUniversal</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;named&nbsp;variable<br>
 universally&nbsp;qualified&nbsp;within&nbsp;the&nbsp;given<br>
 formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
-
-<dl><dt><a name="RDFStore-occurringIn"><strong>occurringIn</strong></a>(self, x, vars, level<font color="#909090">=0</font>, context<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Figure&nbsp;out,&nbsp;given&nbsp;a&nbsp;set&nbsp;of&nbsp;variables&nbsp;which&nbsp;if&nbsp;any&nbsp;occur&nbsp;in&nbsp;a&nbsp;formula,&nbsp;list,&nbsp;etc<br>
-The&nbsp;result&nbsp;is&nbsp;returned&nbsp;as&nbsp;an&nbsp;ordered&nbsp;set&nbsp;so&nbsp;that&nbsp;merges&nbsp;can&nbsp;be&nbsp;done&nbsp;faster.</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-purge"><strong>purge</strong></a>(self, context, boringClass<font color="#909090">=None</font>)</dt><dd><tt>Clean&nbsp;up&nbsp;intermediate&nbsp;results<br>
 &nbsp;<br>
@@ -2311,7 +2537,11 @@ Deprocated:&nbsp;use&nbsp;<a href="#Formula">Formula</a>.add()</tt></dd></dl>
 <dl><dt><a name="RDFStore-testIncludes"><strong>testIncludes</strong></a>(self, f, g, _variables<font color="#909090">=[]</font>, smartIn<font color="#909090">=[]</font>, bindings<font color="#909090">=[]</font>)</dt><dd><tt>Return&nbsp;whether&nbsp;or&nbsp;nor&nbsp;f&nbsp;contains&nbsp;a&nbsp;top-level&nbsp;formula&nbsp;equvalent&nbsp;to&nbsp;g.<br>
 Just&nbsp;a&nbsp;test:&nbsp;no&nbsp;bindings&nbsp;returned.</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-think"><strong>think</strong></a>(self, F, G<font color="#909090">=None</font>, mode<font color="#909090">=''</font>)</dt></dl>
+<dl><dt><a name="RDFStore-think"><strong>think</strong></a>(self, F, G<font color="#909090">=None</font>, mode<font color="#909090">=''</font>)</dt><dd><tt>Forward&nbsp;inference<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;tricky&nbsp;in&nbsp;the&nbsp;case&nbsp;in&nbsp;which&nbsp;rules&nbsp;are&nbsp;added&nbsp;back&nbsp;into&nbsp;the<br>
+store.&nbsp;The&nbsp;store&nbsp;is&nbsp;used&nbsp;for&nbsp;read&nbsp;(normally&nbsp;canonical)&nbsp;and&nbsp;write<br>
+(normally&nbsp;open)&nbsp;at&nbsp;the&nbsp;samne&nbsp;time.</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-tryRule"><strong>tryRule</strong></a>(self, rule, workingContext, targetContext, _variables, already<font color="#909090">=None</font>, mode<font color="#909090">=''</font>)</dt><dd><tt>Try&nbsp;a&nbsp;rule<br>
 &nbsp;<br>
@@ -2430,64 +2660,6 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 
 </td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#eeaa77">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
-    
-<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
-<td width="100%"><dl><dt><a name="-_indent"><strong>_indent</strong></a>(str)</dt><dd><tt>&nbsp;Return&nbsp;a&nbsp;string&nbsp;indented&nbsp;by&nbsp;4&nbsp;spaces</tt></dd></dl>
- <dl><dt><a name="-_lookup"><strong>_lookup</strong></a>(bindings, value)</dt></dl>
- <dl><dt><a name="-_lookupRecursive"><strong>_lookupRecursive</strong></a>(bindings, x, why<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Subsitute&nbsp;into&nbsp;formula.</tt></dd></dl>
- <dl><dt><a name="-_substitute"><strong>_substitute</strong></a>(bindings, list)</dt><dd><tt>Subsitustes&nbsp;IN-LINE&nbsp;into&nbsp;a&nbsp;list&nbsp;of&nbsp;quads</tt></dd></dl>
- <dl><dt><a name="-bindingsToString"><strong>bindingsToString</strong></a>(bindings)</dt><dd><tt>#&nbsp;&nbsp;&nbsp;DIAGNOSTIC&nbsp;STRING&nbsp;OUTPUT</tt></dd></dl>
- <dl><dt><a name="-compareFormulae"><strong>compareFormulae</strong></a>(self, other)</dt><dd><tt>&nbsp;This&nbsp;algorithm&nbsp;checks&nbsp;for&nbsp;equality&nbsp;in&nbsp;the&nbsp;sense&nbsp;of&nbsp;structural&nbsp;equivalence,&nbsp;and<br>
-also&nbsp;provides&nbsp;an&nbsp;ordering&nbsp;which&nbsp;allows&nbsp;is&nbsp;to&nbsp;render&nbsp;a&nbsp;graph&nbsp;in&nbsp;a&nbsp;cannonical&nbsp;way.<br>
-This&nbsp;is&nbsp;a&nbsp;form&nbsp;of&nbsp;unification.<br>
-&nbsp;<br>
-The&nbsp;steps&nbsp;are&nbsp;as&nbsp;follows:<br>
-1.&nbsp;If&nbsp;one&nbsp;forumula&nbsp;has&nbsp;more&nbsp;statments&nbsp;than&nbsp;the&nbsp;other,&nbsp;it&nbsp;is&nbsp;greater.<br>
-2.&nbsp;The&nbsp;variables&nbsp;of&nbsp;each&nbsp;are&nbsp;found.&nbsp;If&nbsp;they&nbsp;have&nbsp;different&nbsp;number&nbsp;of&nbsp;variables,<br>
-&nbsp;&nbsp;&nbsp;then&nbsp;the&nbsp;ine&nbsp;with&nbsp;the&nbsp;most&nbsp;is&nbsp;"greater".<br>
-3.&nbsp;The&nbsp;statements&nbsp;of&nbsp;both&nbsp;formulae&nbsp;are&nbsp;ordered,&nbsp;and&nbsp;the&nbsp;formulae&nbsp;compared&nbsp;statement<br>
-&nbsp;&nbsp;&nbsp;for&nbsp;statement&nbsp;ignoring&nbsp;variables.&nbsp;If&nbsp;this&nbsp;produced&nbsp;a&nbsp;difference,&nbsp;then<br>
-&nbsp;&nbsp;&nbsp;the&nbsp;one&nbsp;with&nbsp;the&nbsp;first&nbsp;largest&nbsp;statement&nbsp;is&nbsp;greater.<br>
-&nbsp;&nbsp;&nbsp;Note&nbsp;that&nbsp;this&nbsp;may&nbsp;involve&nbsp;a&nbsp;recursive&nbsp;comparison&nbsp;of&nbsp;subformulae.<br>
-3.&nbsp;If&nbsp;the&nbsp;formulae&nbsp;are&nbsp;still&nbsp;the&nbsp;same,&nbsp;then&nbsp;for&nbsp;each&nbsp;variable,&nbsp;a&nbsp;list<br>
-&nbsp;&nbsp;&nbsp;of&nbsp;appearances&nbsp;is&nbsp;created.&nbsp;&nbsp;Note&nbsp;that&nbsp;because&nbsp;we&nbsp;are&nbsp;comparing&nbsp;statements&nbsp;without<br>
-&nbsp;&nbsp;&nbsp;variables,&nbsp;two&nbsp;may&nbsp;be&nbsp;equal,&nbsp;in&nbsp;which&nbsp;case&nbsp;the&nbsp;same&nbsp;(first)&nbsp;statement&nbsp;number<br>
-&nbsp;&nbsp;&nbsp;is&nbsp;used&nbsp;whichever&nbsp;statement&nbsp;the&nbsp;variable&nbsp;was&nbsp;in&nbsp;fact&nbsp;in.&nbsp;Ooops<br>
-&nbsp;&nbsp;&nbsp;<br>
-NOT&nbsp;WRITTEN</tt></dd></dl>
- <dl><dt><a name="-comparePair"><strong>comparePair</strong></a>(self, other)</dt></dl>
- <dl><dt><a name="-compareURI"><strong>compareURI</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
-This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
-the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
-This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
-The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
-than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
-they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
-Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
-&nbsp;<br>
-@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
-a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
-This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
- <dl><dt><a name="-dereference"><strong>dereference</strong></a>(x, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;object,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
-&nbsp;<br>
-Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.<br>
-Could&nbsp;be&nbsp;speeded&nbsp;up&nbsp;by&nbsp;hanging&nbsp;the&nbsp;cached&nbsp;value&nbsp;as&nbsp;a&nbsp;python&nbsp;attribute&nbsp;on&nbsp;x</tt></dd></dl>
- <dl><dt><a name="-isString"><strong>isString</strong></a>(x)</dt></dl>
- <dl><dt><a name="-lookupQuad"><strong>lookupQuad</strong></a>(bindings, q)</dt><dd><tt>Return&nbsp;a&nbsp;subsituted&nbsp;quad</tt></dd></dl>
- <dl><dt><a name="-lookupQuadRecursive"><strong>lookupQuadRecursive</strong></a>(bindings, q, why<font color="#909090">=None</font>)</dt></dl>
- <dl><dt><a name="-merge"><strong>merge</strong></a>(a, b)</dt><dd><tt>Merge&nbsp;sorted&nbsp;sequences<br>
-&nbsp;<br>
-The&nbsp;fact&nbsp;that&nbsp;the&nbsp;sequences&nbsp;are&nbsp;sorted&nbsp;makes&nbsp;this&nbsp;faster</tt></dd></dl>
- <dl><dt><a name="-quadToString"><strong>quadToString</strong></a>(q, neededToRun<font color="#909090">=[[], [], [], []]</font>, pattern<font color="#909090">=[1, 1, 1, 1]</font>)</dt></dl>
- <dl><dt><a name="-queueToString"><strong>queueToString</strong></a>(queue, level<font color="#909090">=0</font>)</dt></dl>
- <dl><dt><a name="-seqToString"><strong>seqToString</strong></a>(set)</dt></dl>
- <dl><dt><a name="-setToString"><strong>setToString</strong></a>(set)</dt></dl>
- <dl><dt><a name="-x2s"><strong>x2s</strong></a>(x)</dt></dl>
-</td></tr></table>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
@@ -2496,8 +2668,7 @@ The&nbsp;fact&nbsp;that&nbsp;the&nbsp;sequences&nbsp;are&nbsp;sorted&nbsp;makes&
 <td width="100%"><strong>ALL4</strong> = (0, 1, 2, 3)<br>
 <strong>ANONYMOUS</strong> = 3<br>
 <strong>CONTEXT</strong> = 0<br>
-<strong>DAML_NS</strong> = 'http://www.daml.org/2001/03/daml+oil#'<br>
-<strong>DAML_equivalentTo_URI</strong> = 'http://www.daml.org/2001/03/daml+oil#equivalentTo'<br>
+<strong>DAML_equivalentTo_URI</strong> = 'http://www.w3.org/2002/07/owl#equivalentTo'<br>
 <strong>FLOAT_DATATYPE</strong> = 'http://www.w3.org/2001/XMLSchema#double'<br>
 <strong>FORMULA</strong> = 1<br>
 <strong>HTTP_Content_Type</strong> = 'content-type'<br>
@@ -2505,17 +2676,19 @@ The&nbsp;fact&nbsp;that&nbsp;the&nbsp;sequences&nbsp;are&nbsp;sorted&nbsp;makes&
 <strong>INTEGER_DATATYPE</strong> = 'http://www.w3.org/2001/XMLSchema#integer'<br>
 <strong>LITERAL</strong> = 2<br>
 <strong>LITERAL_URI_prefix</strong> = 'data:application/n3;'<br>
+<strong>List_NS</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'<br>
 <strong>Logic_NS</strong> = 'http://www.w3.org/2000/10/swap/log#'<br>
 <strong>META_NS_URI</strong> = 'http://www.w3.org/2000/10/swap/meta#'<br>
 <strong>META_mergedWith</strong> = 'http://www.w3.org/2000/10/swap/meta#mergedWith'<br>
 <strong>META_run</strong> = 'http://www.w3.org/2000/10/swap/meta#run'<br>
 <strong>META_source</strong> = 'http://www.w3.org/2000/10/swap/meta#source'<br>
-<strong>N3_Empty</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#Empty')<br>
-<strong>N3_List</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#List')<br>
-<strong>N3_first</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#first')<br>
-<strong>N3_nil</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#nil')<br>
-<strong>N3_rest</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#rest')<br>
+<strong>N3_Empty</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#Empty')<br>
+<strong>N3_List</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#List')<br>
+<strong>N3_first</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#first')<br>
+<strong>N3_nil</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#nil')<br>
+<strong>N3_rest</strong> = (0, 'http://www.w3.org/1999/02/22-rdf-syntax-ns#rest')<br>
 <strong>OBJ</strong> = 3<br>
+<strong>OWL_NS</strong> = 'http://www.w3.org/2002/07/owl#'<br>
 <strong>PARTS</strong> = (1, 2, 3)<br>
 <strong>PRED</strong> = 1<br>
 <strong>RDF_NS_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'<br>
@@ -2534,6 +2707,7 @@ The&nbsp;fact&nbsp;that&nbsp;the&nbsp;sequences&nbsp;are&nbsp;sorted&nbsp;makes&
 <strong>S_LIGHT_WAIT</strong> = 30<br>
 <strong>S_LIST_BOUND</strong> = 5<br>
 <strong>S_LIST_UNBOUND</strong> = 7<br>
+<strong>S_NEED_DEEP</strong> = 45<br>
 <strong>S_NOT_LIGHT</strong> = 60<br>
 <strong>S_REMOTE</strong> = 10<br>
 <strong>S_UNKNOWN</strong> = 99<br>

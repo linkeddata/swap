@@ -32,6 +32,7 @@ import urllib
 
 import llyn
 from thing import load, loadMany, Namespace
+from uripath import refTo, base
 
 rdf = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 test = Namespace("http://www.w3.org/2000/10/swap/test.n3#")
@@ -196,22 +197,24 @@ def main():
 
 
     testData.sort()
-    if verbose: print "Cwm tests: %i" % len(testData)
+    cwmTests = len(testData)
+    if verbose: print "Cwm tests: %i" % cwmTests
     RDFTestData.sort()
     if verbose: print "RDF parser tests: %i" % len(RDFTestData)
 
     for u, case, description, env, arguments in testData:
 	tests = tests + 1
 	if tests < start: continue
+	
+	urel = refTo(base(), u)
     
-    
-	print "%3i)  %s" %(tests, description)
+	print "%3i/%i %-30s  %s" %(tests, cwmTests, urel, description)
     #    print "      %scwm %s   giving %s" %(arguments, case)
 	assert case and description and arguments
 	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d'""" % (WD, REFWD)
 	
 	if normal:
-	    execute("""%spython ../cwm.py --quiet %s | %s > ,temp/%s""" %
+	    execute("""CWM_RUN_NS="run#" %spython ../cwm.py --quiet %s | %s > ,temp/%s""" %
 		(env, arguments, cleanup , case))	
 	    if diff(case):
 		problem("######### from normal case %s: %scwm %s" %( case, env, arguments))

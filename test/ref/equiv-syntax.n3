@@ -15,7 +15,7 @@ regarding which DAML+OIL namespace we use.
     </rdf:Description>
 
     <rdf:Description rdf:about="#x">
-        <equivalentTo xmlns="http://www.daml.org/2001/03/daml+oil#"
+        <equivalentTo xmlns="http://www.w3.org/2002/07/owl#"
             rdf:resource="#y"/>
     </rdf:Description>
 </rdf:RDF>

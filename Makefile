@@ -6,25 +6,8 @@ YAPPS=yapps2.py
 
 TESTIN=test/sameDan.n3
 
-HTMLS= check.html RDFSink.html cwm.html cwm_crypto.html cwm_math.html cwm_maths.html cwm_os.html cwm_string.html cwm_time.html cwm_times.html diag.html llyn.html notation3.html sax2rdf.html rdflib2rdf.html tab2n3.html thing.html toXML.html uripath.html xml2infoset.html why.html
+HTMLS= check.html RDFSink.html cwm.html cwm_crypto.html cwm_list.html cwm_math.html cwm_maths.html cwm_os.html cwm_string.html cwm_time.html cwm_times.html diag.html llyn.html notation3.html sax2rdf.html rdflib2rdf.html tab2n3.html thing.html toXML.html uripath.html xml2infoset.html why.html
 
-#xml2rdf.html
-#de-cr.html
-#SemEnglish.html
-#converter-cgi.html
-#gram2html.html
-#isodate.html
-#kifForm.html
-#n3spark.html
-#rdf2dot.html
-#rdfn3_yapps.html
-#rdfn3_yappstest.html
-#rdfx2kif.html
-#spark.html
-#timegm.html
-#xmllib.html
-#yapps2.html
-#yappsrt.html
 
 .SUFFIXES: .html .py .g .rdf .n3
 
@@ -53,7 +36,7 @@ package: math.rdf maths.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf
 # Can't make dependencies on *.py :-(
 
 # cwm.py notation3.py llyn.py  RDFSink.py toXML.py
-cwm.tgz:
+cwm.tgz:  $(HTMLS)
 	cvs update
 	tar -czf cwm.tgz *.py $(HTMLS) LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply/*.py *.py
 

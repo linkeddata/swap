@@ -16,10 +16,10 @@
     
     <#_g0>     <sameDan.n3#birthPlace> <sameDan.n3#KC>;
          <sameDan.n3#hairColor> <sameDan.n3#red>;
-         = <#_g0>;
          contact:fullName "Dan Connolly";
          contact:homePage <http://www.w3.org/People/Connolly/>;
-         contact:mailbox <mailto:connolly@w3.org> .
+         contact:mailbox <mailto:connolly@w3.org>;
+         = <#_g0> .
     
     <sameDan.n3>     dc:creator <#_g0>;
          dc:description """rules for determining when two terms denote
@@ -88,9 +88,9 @@ the same thing.""";
         }     log:implies {:x     = :y .
         } .
     {
-        :p     = :q;
-             log:notEqualTo log:forAll,
-                    log:forSome .
+        :p     log:notEqualTo log:forAll,
+                    log:forSome;
+             = :q .
         :x     :p :y .
         
         }     log:implies {:x     :q :y .

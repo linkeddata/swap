@@ -24,13 +24,12 @@
     
     "Wednesday"     :follows "Tuesday" .
     {
-        
+        :x     day:label :xl .
+        :y     day:label :yl .
           ( :x 
             "1"  )
              math:sum  [
                  math:equalTo :y ] .
-        :x     day:label :xl .
-        :y     day:label :yl .
         
         }     log:implies {:yl     :follows :xl .
         } .

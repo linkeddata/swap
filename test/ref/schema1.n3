@@ -245,16 +245,16 @@
         }     log:implies {v:y     a v:c .
         } .
     {
-        v:p1     = v:p2 .
-        v:x     v:p1 v:y .
-        
-        }     log:implies {v:x     v:p2 v:y .
-        } .
-    {
         v:p1     rdfs:range v:c .
         v:p2     rdfs:subPropertyOf v:p1 .
         
         }     log:implies {v:p2     rdfs:range v:c .
+        } .
+    {
+        v:p1     = v:p2 .
+        v:x     v:p1 v:y .
+        
+        }     log:implies {v:x     v:p2 v:y .
         } .
     {
         v:x     a v:y,

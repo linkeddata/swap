@@ -86,22 +86,22 @@
 #
 #   ?A rule:append ( [ ?H :: ?T ]  ?T1 )
 # =>
-#   ?A daml:first ?H ;
-#      daml:rest  [ rule:append ( ?T ?T1 ) ] .
+#   ?A rdf:first ?H ;
+#      rdf:rest  [ rule:append ( ?T ?T1 ) ] .
 #
-#   ?A rule:append ( daml:nil ?T1 )
+#   ?A rule:append ( rdf:nil ?T1 )
 # =>
-#   ?A daml:first ?T1 ;
-#      daml:rest  daml:nil .
+#   ?A rdf:first ?T1 ;
+#      rdf:rest  rdf:nil .
 #
 
 { 
-  ?A rule:append ( [ daml:first ?H ; daml:rest ?T ] ?T1 ) .
+  ?A rule:append ( [ rdf:first ?H ; rdf:rest ?T ] ?T1 ) .
 }
 log:implies
 { 
-  ?A daml:first ?H ;
-     daml:rest  [ rule:append ( ?T ?T1 ) ] .
+  ?A rdf:first ?H ;
+     rdf:rest  [ rule:append ( ?T ?T1 ) ] .
 } .
 
 # The following rule, when enabled, causes a different error:
@@ -112,12 +112,12 @@ log:implies
 #
 
 #{ 
-#  ?A rule:append ( daml:nil ?T1 ) .
+#  ?A rule:append ( rdf:nil ?T1 ) .
 #}
 #log:implies
 #{ 
-#  ?A daml:first ?T1 ;
-#     daml:rest  daml:nil .
+#  ?A rdf:first ?T1 ;
+#     rdf:rest  rdf:nil .
 #} .
 
 # Test cases
@@ -132,7 +132,7 @@ log:implies
 # I note that the notation
 #   [ ?H :: ?T ]
 # as a shorthand for:
-#   [ daml:first ?H ; daml:rest ?T ]
+#   [ rdf:first ?H ; rdf:rest ?T ]
 # or
 #   [ rdf:first ?H ; rdf:rest ?T ]
 # might be convenient.
@@ -144,7 +144,10 @@ log:implies
 #
 #--------+---------+---------+---------+---------+---------+---------+---------+
 # $Log$
-# Revision 1.1  2003-01-16 05:06:45  timbl
+# Revision 1.2  2003-08-14 00:00:23  timbl
+# Re-engineered in places - See doc changes.html
+#
+# Revision 1.1  2003/01/16 05:06:45  timbl
 # mm
 #
 # Revision 1.4  2002/12/19 17:45:08  graham

@@ -3,7 +3,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <title>Cwm command line arguments</title>
+  <title>Cwm features wished for and done</title>
   <meta name="generator" content="amaya 7.1, see http://www.w3.org/Amaya/" />
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
@@ -19,7 +19,7 @@ Comparing Formats</p>
 
 <h1>Cwm Changes 2003/08</h1>
 
-<p>At this point cwm made a number of changes at once, so we document htem
+<p>At this point cwm made a number of changes at once, so we document them
 here.</p>
 
 <p><small><code>@prefix test:
@@ -37,19 +37,30 @@ here.</p>
     in the graph, complete lists are stored as List objects. Thse are first
     class objects. . 
     <ul>
-      <li>Currently, <strong>you can no longer match against a list</strong>.
-        Unification of formlae will catch identical lists such as ( &lt;a&gt;
-        &lt;b&gt; ) matching against ( &lt;a&gt; &lt;b&gt; ) because Lists
-        are interned, but will currently NOT unify ( ?x ?y ) with ( &lt;a&gt;
-        &lt;b&gt; ). This is similar to the behaviour of formulae. Watch this
+      <li>You can match against lists. Unification of formlae will catch
+        identical lists such as ( &lt;a&gt; &lt;b&gt; ) matching against (
+        &lt;a&gt; &lt;b&gt; ) because Lists are interned, and also  unify (
+        ?x ?y ) with ( &lt;a&gt; &lt;b&gt; ). This does not work , however
+        with formulae. (It never did) behaviour of formulae. Watch this
         space, though,as this should change. (Tests which fail:
-        test/list/list-bug{1,2}.n3)</li>
-      <li>You should be able to generate lists from built-ins.</li>
+        test/list/detailed.n3)</li>
+      <li>The list-handling is not complete when constructing lists. (test
+        that fail: test/list/gk*.n3 -- soryy Graham!).  Lists generated are
+        currently not available to be queried.  rdf:first and rdf:rest are
+        built-in functions which work to dismantle lists, but currently
+        <strong>not to build them</strong>. or, that is, you can build them
+        but you can't directly query  them... watch this space. Hopefullythis
+        will be fixed, and the lists will behave just as thoug the actual
+        graph contained rdf:first and rdf:rest  triples (but be more
+        efficient).</li>
+      <li>You should be able to generate lists from built-ins if you are
+        making new built-in functions.  Just return a python sequence from
+        evaluateObject().</li>
       <li>The unification (query) engine was complicated by the fact that
         lists in the antecedent can be assumed as all lists exist by axiom.
         The last release of llyn had a bug (<code>test:t1018b2</code>) with
         that - and wrapping my head round that caused me to decide it was
-        time for the change.</li>
+        time for the change.  It is nowsimpler in that regard.</li>
       <li>In canonical comparisons, Lists are greater than literals and
         smaller than formulae. This may affect the ordering of cwm-generated
         files. Lists currently compare element by element, or if elements
@@ -61,23 +72,124 @@ here.</p>
     mentoin nested formulae. --purge-rules is now deprocated and does the
     same thing. (--purge-rules sed to be a just remove things menioning
     forAll or implies.)</li>
+</ol>
+
+<h3>For python cwm developers</h3>
+
+<p></p>
+<ol>
   <li>The store is being separated into components. llyn.py was too big. The
     idea is to be able to support a redland underlying store in the future.
     The unification engine which includes the built-in function operation now
     uses the store's api to access the store without peeking into
   internals.</li>
+  <li>It used to be that the universal and existential variables in a formula
+    were stored in forAll and forSome psudo-property triples. This was
+    basically a kludge. One had to be always aware that the pseudoproperties
+    didn't act like real ones (no substitution for = etc). So now the lists
+    of variables have goene into the formula objects. This should make it
+    much easir for people tofollow whatis happeningin the code, and removes
+    all kinds of special case code.</li>
+  <li></li>
 </ol>
 
+<h2>To Do:</h2>
+
+<p>RDF Output - bnodes</p>
+
+<p>RDF Output - Collections</p>
+
+<p>RDF Output: On lists, use exietnstial sor bnodes not symbols</p>
+
+<p>Unify nested lists, nested formulae</p>
+
+<p>Built-ins for lists</p>
+
+<p>Sets, plus builtins, plus syntax??</p>
+
+<p>Variables as separate python class</p>
+
 <p></p>
+
+<p>Builtin operations:</p>
+<ul>
+  <li>Return many bindings from builtin eg list:in, os:argv</li>
+</ul>
 
 <h2>Getting an old version</h2>
 
 <p></p>
 
-<p>You can get the old version before these changes using CVS, by checking
-out with the tag oldLists .  </p>
+<p>You can get the old version before these 2.0 changes using CVS, by
+checking out with the tag oldLists .</p>
 
-<p>cvs update -r oldLists</p>
+<p><code>cvs update -r oldLists</code></p>
+
+<p></p>
+
+<h3>Features done</h3>
+
+<p>Done ==== - sucking in the schema (http library?)</p>
+
+<p>--schemas ; - to know about r1 see r2;</p>
+
+<p>- split Query engine out as subclass of RDFStore? (DWC) SQL-equivalent
+client</p>
+
+<p>- split out separate modules: CGI interface, command-line stuff, built-ins
+(DWC 30Aug2001)</p>
+
+<p>- (test/retest.sh is another/better list of completed functionality
+--DWC)</p>
+
+<p>- BUG: a [ b c ] d. gets improperly output. See anon-pred</p>
+
+<p>- Separate the store hash table from the parser.</p>
+
+<p>- DONE - regeneration of genids on output.</p>
+
+<p>- DONE - repreentation of genids and foralls in model - regression test</p>
+
+<p>- DONE (once!) Manipulation: { } as notation for bag of statements - DONE
+- filter -DONE - graph match</p>
+
+<p>-DONE - recursive dump of nested bags</p>
+
+<p>- DONE - semi-reification - reifying only subexpressions</p>
+
+<p>- DONE - Bug :x :y :z as data should match [ :y :z ] as query. Fixed by
+stripping forSomes from top of query.</p>
+
+<p>- BUG: {} is a context but that is lost on output!!! statements not
+enough. See foo2.n3 - change existential representation :-( to make context a
+real conjunction again? (the forSome triple is special in that you can't
+remove it and reduce info) - filter out duplicate conclusions</p>
+
+<p>- BUG! - DONE - Validation: validate domain and range constraints against
+closuer of classes and mutually disjoint classes.</p>
+
+<p>- Use unambiguous property to infer synomnyms (see sameDan.n3 test case in
+test/retest.sh)</p>
+
+<p>- schema validation - done partly but no "no schema for xx predicate".
+ULTINS WE HAVE DONE</p>
+
+<p>- includes(expr1, expr2) (cf &gt;= , dixitInterAlia )</p>
+
+<p>- indirectlyImplies(expr1, expr2)</p>
+
+<p>- startsWith(x,y)</p>
+
+<p>- uri(x, str)</p>
+
+<p>- usesNamespace(x,y) # find transitive closure for validation - awful
+function in reality</p>
+
+<p></p>
+
+<p></p>
+
+<p></p>
 
 <p></p>
 
