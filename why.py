@@ -22,6 +22,8 @@ import md5, binascii  # for building md5 URIs
 from uripath import refTo
 from thing   import Namespace
 
+from diag import verbosity, progress
+
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
@@ -85,7 +87,7 @@ class BecauseOfRule(Reason):
 	    self.me = ko.newBlankNode()	
 	    ko.add(subj=self.me, pred=rdf.type, obj=reason.Inference) 
 	for var, val in self._bindings:
-	    b = ko.bNode()
+	    b = ko.newBlankNode()
 	    ko.add(subj=self.me, pred=reason.binding, obj=b)
 	    ko.add(subj=b, pred=reason.variable, obj=var)
 	    ko.add(subj=b, pred=reason.boundTo, obj=val)
@@ -140,6 +142,9 @@ def explanation(self, ko=None):
     ko.add(subj=qed, pred=reason.gives, obj=self) 
     for s in self.statements:
 	si = explainStatement(s,  ko)
+	if si == None:
+	    progress("ooops .. no explain for statement", s)
+	    continue
 	ko.add(subj=qed, pred=reason.given, obj=si)
     return ko
 
