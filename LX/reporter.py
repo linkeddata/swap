@@ -45,18 +45,20 @@ class printReporter:
         self.stream=stream
         self.level = 0
         self.indent = ".  "
+        self.before = ""
+        self.after = ""
         self.t0 = []
 
     def msg(self, string):
-        print >>self.stream, (self.indent*self.level) + string
+        print >>self.stream, self.before + (self.indent*self.level) + string + self.after
 
     def begin(self, string=""):
-        print >>self.stream, (self.indent*self.level) + "/  " + string
+        print >>self.stream, self.before + (self.indent*self.level) + "/  " + string + self.after
         self.level += 1
 
     def end(self, string=""):
         self.level -= 1
-        print >>self.stream, (self.indent*self.level) + "\\  " + string
+        print >>self.stream, self.before + (self.indent*self.level) + "\\  " + string + self.after
 
 
 class nullReporter:
@@ -76,6 +78,9 @@ theNullReporter = nullReporter()
 
 class timingPrintReporter(printReporter):
 
+   # Alas, I can't really do doctests on this, because the
+   # timing results keep changing...
+   
    def __init__(self, stream=stderr):
        printReporter.__init__(self, stream)
        self.t0 = []
@@ -91,13 +96,26 @@ class timingPrintReporter(printReporter):
        assert(len(self.t0) == self.level)
     
 
+class timingHTMLReporter(timingPrintReporter):
+
+   def __init__(self, stream=stderr):
+       timingPrintReporter.__init__(self, stream)
+       self.before="<p>"
+       self.after="</p>"
+
+       #  @@ BUG -- should do XML escaping on text as well
+    
+
 if __name__ == "__main__":
     import doctest, sys
     doctest.testmod(sys.modules[__name__])
 
 
 # $Log$
-# Revision 1.2  2003-09-16 17:49:35  sandro
+# Revision 1.3  2003-09-17 16:12:10  sandro
+# added HTML reporter
+#
+# Revision 1.2  2003/09/16 17:49:35  sandro
 # fixed bug in timing
 #
 # Revision 1.1  2003/09/16 16:50:30  sandro
