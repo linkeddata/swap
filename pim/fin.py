@@ -129,7 +129,7 @@ def internalCheck():
 	
     return unbalanced
 
-def doCommand():
+def doCommand(year, inputURI="/dev/stdin"):
         """Fin - financial summary
         
  <command> <options> <inputURIs>
@@ -143,67 +143,31 @@ def doCommand():
         import sys
         global sax2rdf
         import thing
+	from thing import load
 	global store
 	global kb
         #from thing import chatty
         #import sax2rdf
-
-        option_need_rdf_sometime = 0  # If we don't need it, don't import it
-                               # (to save errors where parsers don't exist)
-        
-        option_pipe = 0     # Don't store, just pipe though
-        option_inputs = []
-        option_test = 0     # Do simple self-test
-        option_reify = 0    # Flag: reify on output  (process?)
-        option_flat = 0    # Flag: reify on output  (process?)
-	option_crypto = 0  # Flag: make cryptographic algorithms available
-        option_outURI = None
-        option_outputStyle = "-best"
-        _gotInput = 0     #  Do we not need to take input from stdin?
-        option_meta = 0
-        option_quiet = 0
 
 
         
         # The base URI for this process - the Web equiv of cwd
 	_baseURI = uripath.base()
 	
-        option_format = "n3"      # set the default format
-        option_first_format = None
-        
         _outURI = _baseURI
         option_baseURI = _baseURI     # To start with - then tracks running base
-        for argnum in range(1,len(sys.argv)):  # Command line options after script name
-            arg = sys.argv[argnum]
-            if arg.startswith("--"): arg = arg[1:]   # Chop posix-style double dash to one
-            _equals = string.find(arg, "=")
-            _lhs = ""
-            _rhs = ""
-            if _equals >=0:
-                _lhs = arg[:_equals]
-                _rhs = arg[_equals+1:]
-                _uri = join(option_baseURI, _rhs)
-            elif arg[0] == "-": pass  # Other option
-            else :
-                option_inputs.append(join(option_baseURI, arg))
-                _gotInput = _gotInput + 1  # input filename
-            
 
-
-        option_format = "n3"
-        #  Fix the output sink
-        if option_format == "rdf":
-            _outSink = toXML.ToRDF(sys.stdout, _outURI, base=option_baseURI)
-        else:
-            _outSink = notation3.ToN3(sys.stdout.write, base=option_baseURI,
-                                      quiet=option_quiet)
+#        option_format = "n3"
+#        #  Fix the output sink
+#        if option_format == "rdf":
+#            _outSink = toXML.ToRDF(sys.stdout, _outURI, base=option_baseURI)
+#        else:
+#            _outSink = notation3.ToN3(sys.stdout.write, base=option_baseURI,
+#                                      quiet=option_quiet)
 
 # Load the data:
 
-	if _gotInput:
-	    kb=store.load(option_inputs[0])
-	else:
-	    kb=store.load()  # STDIN
+	kb=store.load(inputURI)
 	
 	print "Size of kb: ", len(kb)
 	
@@ -273,8 +237,8 @@ def doCommand():
 	"""
 	
         version = "$Id$"
-	if not option_quiet:
-            _outSink.makeComment("<address>Processed by " + version[1:-1]+"</address>") # Strip $ to disarm
+#	if not option_quiet:
+#	_outSink.makeComment("<address>Processed by " + version[1:-1]+"</address>") # Strip $ to disarm
 
 
 #   TABLE OF CATEGORY BY MONTH
@@ -452,6 +416,7 @@ def doCommand():
 ############################################################ Main program
     
 if __name__ == '__main__':
+    import getopt
     testFiles = []
     start = 1
     normal = 0
@@ -461,8 +426,8 @@ if __name__ == '__main__':
     global yearInQuestion
     verbose = 0
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hs:ncpf:v",
-	    ["help", "start=", "testsFrom=", "normal", "chatty", "proofs", "verbose"])
+        opts, args = getopt.getopt(sys.argv[1:], "hvy:i:",
+	    ["help",  "verbose", "year=", "input="])
     except getopt.GetoptError:
         # print help information and exit:
         print __doc__
@@ -476,6 +441,8 @@ if __name__ == '__main__':
 	    verbose = 1
         if o in ("-y", "--year"):
             yearInQuestion = a
+        if o in ("-i", "--input"):
+            inputURI = a
 
-    doCommand(year=yearInQuestion)
+    doCommand(year=yearInQuestion, inputURI=inputURI)
 

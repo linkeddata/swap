@@ -1206,8 +1206,8 @@ class RDFStore(RDFSink) :
 
 # Remote service flag in metadata:
 
-	self.authoritativeService = log.internFrag("authoritativeService", Fragment)
-	self.authoritativeDocument = log.internFrag("authoritativeDocument", Fragment)
+	self.definitiveService = log.internFrag("definitiveService", Fragment)
+	self.definitiveDocument = log.internFrag("definitiveDocument", Fragment)
 	self.pointsAt = log.internFrag("pointsAt", Fragment)
 
 # Constants:
@@ -2842,11 +2842,11 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    if "s" in mode:
 		schema = dereference(pred, critical = "e" in mode)
 		if schema != None:
-		    self.service = schema.any(pred=self.store.authoritativeService, subj=pred)
+		    self.service = schema.any(pred=self.store.definitiveService, subj=pred)
 		    if "m" in mode:   # @@@@ will do multiple times .. not good @@@ .. do in dereference
 			self.store.copyContext(meta, schema, why=reason)
 	    if self.service == None and self.query.meta != None:
-		self.service = self.query.meta.any(pred=self.store.authoritativeService, subj=pred)
+		self.service = self.query.meta.any(pred=self.store.definitiveService, subj=pred)
 		if self.service == None:
 		    uri = pred.uriref()
 		    if uri[:4] == "sql:":
@@ -2857,9 +2857,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    if not self.service:
 		authDoc = None
 		if schema != None:
-		    authDoc = schema.any(pred=self.store.authoritativeDocument, subj=pred)
+		    authDoc = schema.any(pred=self.store.definitiveDocument, subj=pred)
 		if authDoc == None and self.query.meta != None:
-		    authDoc = self.query.meta.any(pred=self.store.authoritativeDocument, subj=pred)
+		    authDoc = self.query.meta.any(pred=self.store.definitiveDocument, subj=pred)
 		if authDoc != None:
 		    if verbosity() > 90:
 			progress("We have a definitive document %s for %s." %(authDoc, pred))

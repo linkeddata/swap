@@ -1,8 +1,10 @@
-#   n3 definition of some logical terms
+#   n3 definition of some Semantic Web terms
 #
 # These raise the level above RDF's pure relational data,
 # and Web Ontology's ontological level, to allow rules to be expressed
-# and inference done.
+# and inference done. They connect the inference to the web,
+# allowing data to be fetched from resources elsewhere, and remote
+# servers to be queried.
 # 
 # $Id$
 
@@ -55,14 +57,17 @@ log:Other   a rdfs:Class.     # Not one of the above.
 
 #   The following are inherent in the translation of N3 syntax to quad representation:
 
-log:forSome a rdf:Property;  #@@@@@ buggy!  Not a real property. A psedoproperty
+log:forSome a rdf:SyntaxArc;  #@@@@@   NOT a real property. A psedoproperty
     rdfs:comment """A is true for some object for which here we use B. This
-                is NOT a real rdf property in its behaviour - a pseudoproperty.""" ;
+        is NOT a real rdf property in its behaviour - a pseudoproperty.
+	For example, removal of it from a formula does nor
+	preserve truth, and substitution is not permitted on its object.""" ;
 	   rdfs:domain log:Formula.
 
 
-log:forAll a rdf:Property;
-    rdfs:comment "A is true for any object in place of B" .
+log:forAll a log:SyntaxArc;
+    rdfs:label 	"for All";
+    rdfs:comment """A is true for any object in place of B.""".
 
 
 #########################################################
@@ -99,29 +104,28 @@ log:notIncludes a rdf:Property;
     rdfs:range log:Formula.
 
 
+# The following connect the inference engine to the web
+
+
 log:parsedAsN3 a rdf:Property;
     rdfs:comment "A string, parsed as N3, gives this formula.";
     rdfs:label "parses to";
     rdfs:domain log:String;
     rdfs:range log:Formula.
  
-log:semantics a rdf:Property;   # (was resolvesTo but we use role nouns by preference)
+log:semantics a rdf:Property;
     rdfs:domain doc:Work;
     rdfs:range  log:Formula;
     rdfs:label  "semantics";
     rdfs:comment """This connects a document and the formula it parses to.
         Cwm knows how to go get a document and parse it in order to evaluate this.""".
 
-log:semanticsOrError a rdf:Property;   #
+log:semanticsOrError a rdf:Property;
     rdfs:domain doc:Work;
     rdfs:label  "semantics or error message";
     rdfs:comment """This connects a document and either the formula it parses to,
         or an error message explaining what went wromg with trying. See semantics.
         Cwm knows how to go get a document and parse it in order to evaluate this.""".
-
-log:racine a rdf:Property;
-    rdfs:comment """For anything identified by a URI with a fragid, this is the
-        thing identified by the same URI without a hash or fragid""".
 
 log:content a rdf:Property;   # (was hasContent but we use role nouns by preference)
     rdfs:domain doc:Work;
@@ -160,6 +164,41 @@ it may for example indirectly invoke other documents, validate
 signatures, etc.
 """.
 
+############# Automatic processing steered by metadata
+
+log:definitiveDocument a rdf:Property;
+	rdfs:label "definitive document";
+	rdfs:domain rdf:Property;
+	rdfs:range doc:Work;
+	rdfs:comment
+"""	When document D is the definitiveDocument for property P,
+any statement X P Y is true iff and only if the semantics of document D
+include that statement.
+
+For example, there may be a definitive document for the zipcode of
+airports by airport code, and so on. This is useful to let a reasoner
+know that it can extend its query to the given document.
+(Cwm will do this if its mode includes "r").
+""".
+
+log:definitiveService a rdf:Property;
+	rdfs:label "definitive service";
+	rdfs:domain rdf:Property;
+#	rdfs:range doc:Work;
+	rdfs:comment
+"""	When service S is the definitiveService for property P,
+any statement X P Y is true iff and only if a query to S returns
+that it is.  The protocol for the service S depends on the scheme.
+For mysql protocol, the URI of the service is like
+sql://user:password@host.domain/database/.
+
+For example, there may be a definitive service for the zipcode of
+airports by airport code, and so on. This is useful to let a reasoner
+know that it can help resolve a query by delegating it to the service
+in question.
+(Cwm will do this if its mode includes "r").
+""".
+
 
 ################### String output
 
@@ -175,31 +214,29 @@ See cwm --strings in cwm --help.
 
 log:Chaff a rdfs:Class;
     rdfs:comment """Any statement mentioning anything in this class
-is considered boring and purged by the cwm --purge option.""".
+is considered boring and purged by the cwm --purge option.
+This is a convenience, and does not have any value when published as a
+general fact on the web.""".
 
  
 
 ################# Simple Builtins:
 #
-#
+
 log:uri a rdf:Property;
     rdfs:comment 
-"""This allows one to look at the actual string of the URI
-which identifies this.
+"""This allows one to look at the actual string of the URI which identifies this.
+
 Cwm can get the URI of a resource or get the resource from the URI.
 This is a level breaker, breaking the rule of not looking inside a
-URI.   Use to replace RDF's old "aboutEach" functionality.""";
+URI.   Use (eg with  string:match) to replace RDF's old "aboutEach" functionality.""";
     rdfs:range log:String.
 
-############# Rules
-# Rule names may change.
-# Conversion between falsehood and implication:
-#rule1 log:forAll :x, :y, :z; =
-#{
-#    { :x log:implies :y } log:means {  { :x a :Truth . :y a :Falsehood.} a:Falsehood}.
-#} .
-#
-# etc etc
+log:racine a rdf:Property;
+    rdfs:comment """For anything identified by a URI with a fragid, this is the
+        thing identified by the same URI without a hash or fragid""".
+
+
 
 # ends
 
