@@ -26,7 +26,7 @@ cwm.tar.Z: cwm.py notation3.py llyn.py  RDFSink.py toXML.py
 	compress -f cwm.tar
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py
-	$(PYTHON) rdfn3_yappstest.py <$(TESTIN) >,xxx.n3
+	$(PYTHON) rdfn3_yappstest.py <$(TESTIN) >,xxx.kif
 
 rdfn3_yapps.py: rdfn3.g
 	$(PYTHON) $(YAPPS) rdfn3.g $@

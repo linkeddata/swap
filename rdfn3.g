@@ -30,6 +30,8 @@ parser _Parser:
     token QNAME:    r'([a-zA-Z][a-zA-Z0-9_-]*)?:[a-zA-Z0-9_-]+'
     token EXVAR:    r'_:[a-zA-Z0-9_-]+'
     token UVAR:     r'\?[a-zA-Z0-9_-]+'
+    token INTLIT:   r'-?\d+'
+    token TYPEDLIT: r'(string|boolean|decimal|float|double|duration|dateTime|time|date|gYearMonth|gYear|gMonthDay|gDay|gMonth|hexBinary|base64Binary|anyURI|normalizedString|token|language|Name|NCName|integer|nonPositiveInteger|negativeInteger|long|int|short|byte|nonNegativeInteger|unsignedLong|unsignedInt|unsignedShort|unsignedByte|positiveInteger)"([^\"\\\n]|\\[\\\"nrt])*"'
     token STRLIT1:  r'"([^\"\\\n]|\\[\\\"nrt])*"'
     token STRLIT2:  r"'([^\'\\\n]|\\[\\\'nrt])*'"
     token STRLIT3:  r'"""([^\"\\]|\\[\\\"nrt])*"""' #@@not right
@@ -85,6 +87,8 @@ parser _Parser:
                 "this"        {{ return scp }}
               | EXVAR         {{ return self.lname(EXVAR) }}
               | UVAR          {{ return self.vname(UVAR) }}
+              | INTLIT        {{ return self.intLit(INTLIT) }}
+              | TYPEDLIT      {{ return self.typedLit(TYPEDLIT) }}
               | STRLIT3       {{ return self.strlit(STRLIT3, '"""') }}
               | STRLIT1       {{ return self.strlit(STRLIT1, '"') }}
               | STRLIT2       {{ return self.strlit(STRLIT2, "'") }}
@@ -115,6 +119,33 @@ def scanner(text):
 
 class BadSyntax(SyntaxError):
     pass
+
+# base types of XML Schema datatypes
+# this maps types either to the name
+# of a base type or to a python
+# value whose type can hold the values
+# of the XML Schema type.
+# e.g. int => 1
+#      long => 1L
+# hmm.. still thinking about datetime...
+base = {'normalizedString': 'string',
+        'token': 'string',
+        'language': 'string',
+        'Name': 'string',
+        'NCName': 'string',
+        'integer': 1L,
+        'nonPositiveInteger': 1L,
+        'negativeInteger' : 1L,
+        'long': 1L,
+        'int': 1,
+        'short': 1,
+        'byte': 1,
+        'nonNegativeInteger': 1L,
+	'unsignedLong': 1L,
+	'unsignedInt': 1L,
+	'unsignedShort': 1,
+	'unsignedByte': 1,
+	'positiveInteger': 1L}
 
 class Parser(_Parser):
     def __init__(self, scanner, sink, baseURI):
@@ -170,6 +201,26 @@ class Parser(_Parser):
 
     def strlit(self, str, delim):
         return RDFSink.LITERAL, str[1:-1] #@@BROKEN
+
+    def intLit(self, str):
+        try:
+            v = int(str)
+        except ValueError:
+            v = long(str)
+        return RDFSink.LITERAL, v #@@ other than LITERAL?
+
+    def typedLit(self, str):
+	qindex = index(str, '"')
+	ty = str[:qindex]
+	str = str[qindex+1:-1]
+        # convert to primitive type
+        ty = base.get(ty, ty)
+        if ty == 'string':
+            return RDFSink.LITERAL, str
+        elif type(ty) is type(''):
+            return RDFSink.LITERAL, (ty, str) #@@ other than LITERAL?
+        else:
+            return self.intLit(str)
 
     def bindListPrefix(self):
         self._sink.bind("l", (RDFSink.SYMBOL, notation3.N3_nil[1][:-3]))
@@ -235,7 +286,10 @@ def DEBUG(*args):
     sys.stderr.write("\n")
     
 # $Log$
-# Revision 1.15  2002-06-21 16:04:02  connolly
+# Revision 1.16  2002-08-07 16:01:23  connolly
+# working on datatypes
+#
+# Revision 1.15  2002/06/21 16:04:02  connolly
 # implemented list handling
 #
 # Revision 1.14  2002/01/12 23:37:14  connolly
