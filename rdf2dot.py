@@ -36,27 +36,27 @@ def rdf2dot(text, store, docAddr):
              )
     dotTop(text)
     for s in docRes.occursAs[cwm.SUBJ]:
-        if s.triple[cwm.PRED] is digraph:
-            print "@@digraph", s.triple[cwm.OBJ]
+        if s.quad[cwm.PRED] is digraph:
+            print "@@digraph", s.quad[cwm.OBJ]
             text("digraph ")
-            eachGraph(text, store, s.triple[cwm.OBJ], props)
+            eachGraph(text, store, s.quad[cwm.OBJ], props)
 
 def eachGraph(text, store, it, props, cluster=''):
     text(cluster + 'N' + `hash(it.uriref('foo@@:'))`) #@@??
     text(" {\n")
     for s in it.occursAs[cwm.SUBJ]:
-        p = s.triple[cwm.PRED]
+        p = s.quad[cwm.PRED]
         if p in props:
             text(p.fragid)
             text('="')
-            text(s.triple[cwm.OBJ].string) # @@ quoting
+            text(s.quad[cwm.OBJ].string) # @@ quoting
             text('";\n')
 
     for s in it.occursAs[cwm.SUBJ]:
-        p = s.triple[cwm.PRED]
+        p = s.quad[cwm.PRED]
         print "@@ graph prop:", p
         if p.uriref('foo@@:') == GV_ns+'hasNode': #@@ intern
-            eachNode(text, store, s.triple[cwm.OBJ], props)
+            eachNode(text, store, s.quad[cwm.OBJ], props)
 
     print "@@ carry on with subgraphs"
 
@@ -64,21 +64,21 @@ def eachNode(text, store, gnode, props):
     text('"' + gnode.uriref('foo@@:') + '" [')
 
     for s in gnode.occursAs[cwm.SUBJ]:
-        p = s.triple[cwm.PRED]
+        p = s.quad[cwm.PRED]
         if p in props:
             text(p.fragid)
             text('="')
-            text(s.triple[cwm.OBJ].string) # @@ quoting
+            text(s.quad[cwm.OBJ].string) # @@ quoting
             text('",\n')
     text("];\n")
 
     for s in gnode.occursAs[cwm.SUBJ]:
-        p = s.triple[cwm.PRED]
+        p = s.quad[cwm.PRED]
         for s2 in p.occursAs[cwm.SUBJ]:
-            if s2.triple[cwm.PRED] is store.type \
-               and s2.triple[cwm.OJB].uriref('foo@@:') is GV_ns+'EdgeProperty':
+            if s2.quad[cwm.PRED] is store.type \
+               and s2.quad[cwm.OJB].uriref('foo@@:') is GV_ns+'EdgeProperty':
                 text('"' + gnode.uriref('foo@@:') + " -> "
-                     + s2.triple[cwm.OBJ].uriref('foo@@:') + '"')
+                     + s2.quad[cwm.OBJ].uriref('foo@@:') + '"')
                 print "@@edge attributes..."
                 
                 

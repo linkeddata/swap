@@ -170,10 +170,10 @@ subcontext_cache_subcontexts = None
 class StoredStatement:
 
     def __init__(self, q):
-        self.triple = q
+        self.quad = q
 
     def __getitem__(self, i):   # So that we can index the stored thing directly
-        return self.triple[i]
+        return self.quad[i]
 
 #   The order of statements is only for cannonical output
 #   We cannot override __cmp__ or the object becomes unhashable, and can't be put into a dictionary.
@@ -181,9 +181,9 @@ class StoredStatement:
     def __cmp_cannonical__(self, other):
         if self is other: return 0
         for p in [CONTEXT, SUBJ, PRED, OBJ]: # Note NOT internal order
-            if self.triple[p] is not other.triple[p]:
-                return compareURI(self.triple[p],other.triple[p])
-        progress("Problem with duplicates: '%s' and '%s'" % (quadToString(self.triple),quadToString(other.triple)))
+            if self.quad[p] is not other.quad[p]:
+                return compareURI(self.quad[p],other.quad[p])
+        progress("Problem with duplicates: '%s' and '%s'" % (quadToString(self.quad),quadToString(other.quad)))
         raise RuntimeError, "should never have two identical distinct [@@]"
 
 
@@ -478,7 +478,7 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
             progress("Conjunction input:"+`subj_py`)
             for x in subj_py:
                 progress("    one input formula has %i statements"
-                         % len(store._index.get((x, None, None, None),[])))
+                         % len(x))
 #        F = conjunctionCache.get(subj_py, None)
 #        if F != None: return F
         F = store.genid(FORMULA)
@@ -729,8 +729,8 @@ class RDFStore(RDFSink.RDFSink) :
         bindings = [ (old, new) ]
         for p in ALL4:
             for s in old.occursAs[p][:]:  # copy
-                if thing.verbosity() > 95: progress(".......removed", s.triple)
-                q2 = _lookupQuad(bindings, s.triple)
+                if thing.verbosity() > 95: progress(".......removed", s.quad)
+                q2 = _lookupQuad(bindings, s.quad)
                 self.removeStatement(s)
                 self.storeQuad(q2)
                 if thing.verbosity() > 95: progress(".......restored", q2)
@@ -778,6 +778,7 @@ class RDFStore(RDFSink.RDFSink) :
               self.intern(tuple[SUBJ]),
               self.intern(tuple[OBJ]) )
         if q[PRED] is self.forSome and isinstance(q[OBJ], Formula):
+            if thing.verbosity() > 97:  progress("Makestatement suppressed")
             return  # This is implicit, and the same formula can be used un >1 place
         self.storeQuad(q)
                     
@@ -799,7 +800,7 @@ class RDFStore(RDFSink.RDFSink) :
         if list == None: return None
         for p in ALL4:
             if q[p] == None:
-                return list[0].triple[p]
+                return list[0].quad[p]
 
     def each(self, q):
         """Search store for all occurrences of a one-statement pattern       OBSOLETE
@@ -824,7 +825,7 @@ class RDFStore(RDFSink.RDFSink) :
         search.remove(p_short)
         for t in q[p_short].occursAs[p_short]:
             for p in search:
-                if q[p] != None and q[p] is not t.triple[p]:
+                if q[p] != None and q[p] is not t.quad[p]:
                     break
             else:  # no breaks
                 if len(variables) == 1:
@@ -843,7 +844,11 @@ class RDFStore(RDFSink.RDFSink) :
         """
         #  Check whether this quad already exists
 #        print "Before, Formula now has %i statements" % len(self._index[(q[CONTEXT],None,None,None)])
-        if self.contains(q): return 0  # Return no change in size of store
+        if self.contains(q):
+            if thing.verbosity() > 97:  progress("storeQuad duplicate suppressed"+`q`)
+            return 0  # Return no change in size of store
+        if thing.verbosity() > 97:
+            progress("storeQuad (size before %i) "%self.size +`q`)
         
         self.size = self.size+1
         context, pred, subj, obj = q
@@ -891,7 +896,8 @@ class RDFStore(RDFSink.RDFSink) :
                                 list.append(s)
 
 
-#        print "Exiting, Formula now has %i statements" % len(self._index[(context,None,None,None)])
+#        progress( "Exiting, Formula now has %i statements" %
+#                  len(self._index[(context,None,None,None)]))
         return 1  # One statement has been added
 
 
@@ -900,7 +906,7 @@ class RDFStore(RDFSink.RDFSink) :
 
     def endDoc(self, rootFormulaPair):
         self.endFormulaNested(self.intern(rootFormulaPair))
-        pass
+        return
 
 ##########################################################################
 #
@@ -909,10 +915,9 @@ class RDFStore(RDFSink.RDFSink) :
     def selectDefaultPrefix(self, context):
 
         """ Resource whose fragments have the most occurrences.
-        """
+        we suppress the RDF namespace itself because the XML syntax has problems with it
+        being default as it is used for attributes."""
 
-        best = 0
-        mp = None
         counts = {}   # Dictionary of how many times each
         closure = self.subContexts(context)    # This context and all subcontexts
         for con in closure:
@@ -927,19 +932,23 @@ class RDFStore(RDFSink.RDFSink) :
                             r = x.resource
                             total = counts.get(r, 0) + 1
                             counts[r] = total
-                            if total > best or (total == best and `mp` > `r`) :  # Must be repeatable for retests
-                                best = total
-                                mp = r
-
-        if thing.verbosity() > 25:
-            for r, count in counts.items():
-                if count > 0:
-                    progress("    Count is %3i for %s" %(count, `r`))
+        best = 0
+        mp = None
+        for r, count in counts.items():
+            if thing.verbosity() > 25: progress("    Count is %3i for %s" %(count, r.uriref()))
+            if (r.uriref != notation3.RDF_NS_URI[:-1]
+                and (count > best or
+                     (count == best and `mp` > `r`))) :  # Must be repeatable for retests
+                best = count
+                mp = r
 
         if thing.verbosity() > 20:
             progress("# Most popular Namesapce in %s is %s with %i" % (`context`, `mp`, best))
 
         if mp is None: return
+        self.defaultNamespace = (RESOURCE, mp.uriref(None)+"#")
+        return
+
         
         mpPair = (RESOURCE, mp.uriref(None)+"#")
         defns = self.namespaces.get("", None)
@@ -955,6 +964,8 @@ class RDFStore(RDFSink.RDFSink) :
 
 
     def dumpPrefixes(self, sink):
+        if self.defaultNamespace:
+            sink.setDefaultNamespace(self.defaultNamespace)
         prefixes = self.namespaces.keys()   #  bind in same way as input did FYI
         prefixes.sort()
         for pfx in prefixes:
@@ -965,7 +976,7 @@ class RDFStore(RDFSink.RDFSink) :
         self.dumpPrefixes(sink)
 #        print "# There are %i statements in %s" % (len(context.occursAs[CONTEXT]), `context` )
         for s in context.occursAs[CONTEXT]:
-            self._outputStatement(sink, s.triple)
+            self._outputStatement(sink, s.quad)
         sink.endDoc()
 
     def _outputStatement(self, sink, triple):
@@ -987,25 +998,25 @@ class RDFStore(RDFSink.RDFSink) :
 
         if sorting: context.occursAs[SUBJ].sort(StoredStatement.__cmp_cannonical__)
         for s in context.occursAs[SUBJ] :
-            if context is s.triple[CONTEXT]and s.triple[PRED] is self.forSome:
-                self._outputStatement(sink, s.triple)
+            if context is s.quad[CONTEXT]and s.quad[PRED] is self.forSome:
+                self._outputStatement(sink, s.quad)
 
         rs = self.resources.values()
         if sorting: rs.sort()
         for r in rs :  # First the bare resource
             if sorting: r.occursAs[SUBJ].sort(StoredStatement.__cmp_cannonical__)
             for s in r.occursAs[SUBJ] :
-                if context is s.triple[CONTEXT]:
-                    if not(context is s.triple[SUBJ]and s.triple[PRED] is self.forSome):
-                        self._outputStatement(sink, s.triple)
+                if context is s.quad[CONTEXT]:
+                    if not(context is s.quad[SUBJ]and s.quad[PRED] is self.forSome):
+                        self._outputStatement(sink, s.quad)
             if not isinstance(r, Literal):
                 fs = r.fragments.values()
                 if sorting: fs.sort
                 for f in fs :  # then anything in its namespace
                     for s in f.occursAs[SUBJ] :
-#                        print "...dumping %s in context %s" % (`s.triple[CONTEXT]`, `context`)
-                        if s.triple[CONTEXT] is context:
-                            self._outputStatement(sink, s.triple)
+#                        print "...dumping %s in context %s" % (`s.quad[CONTEXT]`, `context`)
+                        if s.quad[CONTEXT] is context:
+                            self._outputStatement(sink, s.quad)
         sink.endDoc()
 #
 #  Pretty printing
@@ -1131,12 +1142,19 @@ class RDFStore(RDFSink.RDFSink) :
     def dumpFormulaContents(self, context, sink, sorting=1):
         """ Iterates over statements in formula, bunching them up into a set
         for each subject.
+        @@@ Dump "this" first before everything else
         """
         if sorting: context.occursAs[CONTEXT].sort(StoredStatement.__cmp_cannonical__)
+
+        statements = context.matching((None, context, None))  # context is subject
+        if statements:
+            self._dumpSubject(context, context, sink, sorting, statements)
+
         currentSubject = None
         statements = []
         for s in context.occursAs[CONTEXT]:
-            con, pred, subj, obj =  s.triple
+            con, pred, subj, obj =  s.quad
+            if subj is con: continue # Done them above
             if not currentSubject: currentSubject = subj
             if subj != currentSubject:
                 self._dumpSubject(currentSubject, context, sink, sorting, statements)
@@ -1178,7 +1196,7 @@ class RDFStore(RDFSink.RDFSink) :
             else:     #  Could have alternative syntax here
 
                 for s in statements:  # Find at least one we will print
-                    context, pre, sub, obj = s.triple
+                    context, pre, sub, obj = s.quad
                     if sub is obj: break  # Ok, we will do it
                     _anon, _incoming = self._topology(obj, context)
                     if not((pre is self.forSome) and sub is context and _anon):
@@ -1193,30 +1211,30 @@ class RDFStore(RDFSink.RDFSink) :
 #                    self.dumpStatement(sink, (context, self.first, subj, li.first))
 #                    self.dumpStatement(sink, (context, self.rest, subj, li.rest)) # includes rest of list
                     for s in statements:
-                        p = s.triple[PRED]
+                        p = s.quad[PRED]
                         if p is self.first or p is self.rest:
-                            self.dumpStatement(sink, s.triple) # Dump the rest outside the ()
+                            self.dumpStatement(sink, s.quad) # Dump the rest outside the ()
                     sink.endAnonymousNode(subj.asPair())
                     for s in statements:
-                        p = s.triple[PRED]
+                        p = s.quad[PRED]
                         if p is not self.first and p is not self.rest:
-                            self.dumpStatement(sink, s.triple) # Dump the rest outside the ()
+                            self.dumpStatement(sink, s.quad) # Dump the rest outside the ()
                     return
                 else:
                     sink.startAnonymousNode(subj.asPair())
                     for s in statements:  #   [] color blue.  might be nicer. @@@$$$$  Try it!
-                        self.dumpStatement(sink, s.triple)
+                        self.dumpStatement(sink, s.quad)
                     sink.endAnonymousNode()
                     return  # arcs as subject done
 
 
         if sorting: statements.sort(StoredStatement.__cmp_cannonical__)
         for s in statements:
-            self.dumpStatement(sink, s.triple)
+            self.dumpStatement(sink, s.quad)
 
                 
     def dumpStatement(self, sink, triple, sorting=0):
-        # triple = s.triple
+        # triple = s.quad
         context, pre, sub, obj = triple
         if (sub is obj and not isinstance(sub, Formula))  or (isinstance(obj.asList(), EmptyList)) or isinstance(obj, Literal):
             self._outputStatement(sink, triple) # Do 1-loops simply
@@ -1244,8 +1262,8 @@ class RDFStore(RDFSink.RDFSink) :
 #                        self.dumpStatement(sink, (context, self.rest, obj, obj.asList().rest)) # includes rest of list
                     if sorting: obj.occursAs[SUBJ].sort(StoredStatement.__cmp_cannonical__)
                     for t in obj.occursAs[SUBJ]:
-                        if t.triple[CONTEXT] is context:
-                            self.dumpStatement(sink, t.triple)
+                        if t.quad[CONTEXT] is context:
+                            self.dumpStatement(sink, t.quad)
       
                     if _se > 0:
                         sink.startBagNamed(context.asPair(),obj.asPair()) # @@@@@@@@@  missing "="
@@ -1280,7 +1298,7 @@ class RDFStore(RDFSink.RDFSink) :
         if bindings == None:
             bindings = [(old, new)]
         for s in old.occursAs[CONTEXT][:] :   # Copy list!
-            q = s.triple
+            q = s.quad
             self.removeStatement(s)
             del(s)
             self.storeQuad(_lookupQuad(bindings, q))
@@ -1288,16 +1306,16 @@ class RDFStore(RDFSink.RDFSink) :
     def copyContextRecursive(self, old, new, bindings):
         total = 0
         for s in old.occursAs[CONTEXT][:] :   # Copy list!
-#            q = s.triple
+#            q = s.quad
 #            self.removeStatement(s)
-            q2 = _lookupQuadRecursive(bindings, s.triple)
+            q2 = _lookupQuadRecursive(bindings, s.quad)
             if thing.verbosity() > 30: progress("    Conclude: "+`q2`) 
             total = total -1 + self.storeQuad(q2)
         return total
                 
     def copyContext(self, old, new):
         for s in old.occursAs[CONTEXT][:] :   # Copy list!
-            q = s.triple
+            q = s.quad
             for p in CONTEXT, PRED, SUBJ, OBJ:
                 x = q[p]
                 if x is old:
@@ -1313,11 +1331,11 @@ class RDFStore(RDFSink.RDFSink) :
         if not boringClass:
             boringClass = self.Chaff
         for s in self._index.get((context, self.type, None, boringClass),[])[:]:
-            con, pred, subj, obj = s.triple  # subj is a member of boringClass
+            con, pred, subj, obj = s.quad  # subj is a member of boringClass
             total = 0
             for p in (PRED, SUBJ, OBJ):
                 for t in subj.occursAs[p][:]:  # Take copy as list changes
-                    if t.triple[CONTEXT] is context:
+                    if t.quad[CONTEXT] is context:
                         self.removeStatement(t)
                         total = total + 1
 
@@ -1326,7 +1344,8 @@ class RDFStore(RDFSink.RDFSink) :
 
 
     def removeStatement(self, s):
-        context, pred, subj, obj = s.triple
+        context, pred, subj, obj = s.quad
+        if thing.verbosity() > 97:  progress("removeStatement "+`s.quad`)
         for o1 in obj, None:
             for s1 in subj, None:
                 for p1 in pred, None:
@@ -1381,7 +1400,7 @@ class RDFStore(RDFSink.RDFSink) :
         _total = 0
         
         for s in filterContext.occursAs[CONTEXT]:
-            t = s.triple
+            t = s.quad
             if t[PRED] is self.implies:
                 if alreadyDictionary == None:
                     already = None
@@ -1413,7 +1432,7 @@ class RDFStore(RDFSink.RDFSink) :
 
     # Beware lists are corrupted. Already list is updated if present.
     def tryRule(self, s, workingContext, targetContext, _variables, already=None):
-        t = s.triple
+        t = s.quad
         template = t[SUBJ]
         conclusion = t[OBJ]
 
@@ -1514,8 +1533,8 @@ class RDFStore(RDFSink.RDFSink) :
         variables = []
         existentials = []
         for arc in con.occursAs[CONTEXT]:
-            context, pred, subj, obj = arc.triple
-            statements.append(arc.triple)
+            context, pred, subj, obj = arc.quad
+            statements.append(arc.quad)
             if subj is context and (pred is self.forSome or pred is self.forAll): # @@@@
                 variables.append(obj)   # Collect list of existentials
             if subj is context and pred is self.forSome: # @@@@
@@ -1525,13 +1544,13 @@ class RDFStore(RDFSink.RDFSink) :
         subformulae = []
         for arc in con.occursAs[CONTEXT]:
             for p in [ SUBJ, PRED, OBJ]:  # @ can remove PRED if formulae and predicates distinct
-                x = arc.triple[p]
+                x = arc.quad[p]
                 if isinstance(x, Formula) and x in existentials:  # x is a Nested context
                     if x not in subformulae: subformulae.append(x) # Only one copy of each please
                     
         for x in  subformulae:
             for a2 in con.occursAs[CONTEXT]:  # Rescan for variables
-                c2, p2, s2, o2 = a2.triple
+                c2, p2, s2, o2 = a2.quad
                 if  s2 is x and (p2 is self.forSome or p2 is self.forAll):
                     variables.append(o2)   # Collect list of existentials
             s, v = self.nestedContexts(x)
@@ -1554,9 +1573,9 @@ class RDFStore(RDFSink.RDFSink) :
         variables = []
 #        existentials = []
         for arc in con.occursAs[CONTEXT]:
-            context, pred, subj, obj = arc.triple
+            context, pred, subj, obj = arc.quad
             if not(subj is context and pred is self.forSome):
-                statements.append(arc.triple)
+                statements.append(arc.quad)
             else:
                 if thing.verbosity()>79: progress( " Stripped forSome %s" % x2s(obj))
 
@@ -1692,8 +1711,6 @@ class RDFStore(RDFSink.RDFSink) :
                 first = ff[0][OBJ]
                 if L2.asList() == None:
                     L2._asList = rest.precededBy(first)
-#                    self.removeStatement(ff[0])
-#                    self.removeStatement(s)
                     self.checkList(context, L2)
                 return
 
@@ -2076,7 +2093,7 @@ class QueryItem:
                 reject = 0
                 for p in ALL4:
                     if self.neededFor[p] == [self.quad[p]]:   # A regular variable
-                        binding = ( self.quad[p], s.triple[p])
+                        binding = ( self.quad[p], s.quad[p])
                         duplicate = 0
                         for oldbinding in nb:
                             if oldbinding[0] is self.quad[p]:
@@ -2085,7 +2102,7 @@ class QueryItem:
                                 else: # A clash - reject binding the same to var to 2 different things!
                                     reject = 1
                         if not duplicate:
-                            nb.append(( self.quad[p], s.triple[p]))
+                            nb.append(( self.quad[p], s.quad[p]))
                 if not reject:
                     nbs.append(nb)  # Add the new bindings into the set
 

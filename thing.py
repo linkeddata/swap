@@ -263,6 +263,10 @@ class Anonymous(Fragment):
         return (ANONYMOUS, self.uriref())
         
 class Formula(Fragment):
+    """A formula of a set of RDF statements, triples. these are actually
+    instances of StoredStatement.  Other systems such as jena use the term "Model"
+    for this.  Cwm and N3 extend RDF to allow a literal formula as an item in a triple.
+    """
     def __init__(self, resource, fragid):
         Fragment.__init__(self, resource, fragid)
         self.descendents = None   # Placeholder for list of closure under subcontext
@@ -294,6 +298,18 @@ class Formula(Fragment):
     
     def variables(self):
         return self.existentials() + self.universals()
+
+#   TRAP:  If we define __len__, then the "if F" will fail is len(F)==0 !!!
+#   Rats .. so much for making it more like a list!
+    def size(self):
+        """ How many statements? """
+        return len(self.store._index.get((self, None, None, None), []))
+
+    def matching(self, triple):
+        return self.store._index.get((self, triple[0], triple[1], triple[2]), [])
+    
+    def add(self, triple):
+        return self.store.storeQuad((self, triple[0], triple[1], triple[2]))
     
 #################################### Lists
 #

@@ -804,6 +804,14 @@ class ToRDF(RDFSink.RDFSink):
     def startDoc(self):
         pass
 
+    flagDocumentation = """
+        Flags to control RDF/XML output (after --rdf=) areas follows:
+        
+        c  - Don't use elements as class names
+        d  - Don't use default namespace
+
+"""
+
     def endDoc(self, rootFormulaPair=None):
         self.flushStart()  # Note: can't just leave empty doc if not started: bad XML
 	if self._subj:
@@ -826,11 +834,13 @@ class ToRDF(RDFSink.RDFSink):
             ats = []
             ps = self.prefixes.values()
             ps.sort()    # Cannonicalize output somewhat
+            if self.defaultNamespace and "d" not in self._flags:
+                ats.append(('xmlns',self.defaultNamespace[1]))
             for pfx in ps:
-                if pfx:
+#                if pfx:
                     ats.append(('xmlns:'+pfx, self.namespaces[pfx][1]))
-                else:
-                    ats.append(('xmlns', self.namespaces[pfx][1]))
+#                else:
+#                    ats.append(('xmlns', self.namespaces[pfx][1]))
             self._wr.startElement(RDF_NS_URI+'RDF', ats, self.prefixes)
             self._subj = None
             self._nextId = 0
@@ -1152,6 +1162,7 @@ class ToN3(RDFSink.RDFSink):
     flagDocumentation = """Flags for N3 output are as follows:-
         
 a   Anonymous nodes should be output using the _: convention (p flag or not).
+d   Don't use default namespace (empty prefix)
 l   List syntax suppression. Don't use (..)
 p   Prefix suppression - don't use them, always URIs in <> instead of qnames.
 q   Quiet - don't make comments about the environment in which processing was done.
@@ -1181,6 +1192,7 @@ t   "this" and "()" special syntax should be suppresed.
 	self._flags = flags
 	self._subj = None
 	self.prefixes = {}      # Look up prefix conventions
+	self.defaultNamespace = None
 	self.indent = 1         # Level of nesting of output
 	self.base = base
 	self.nextId = 0         # Regenerate Ids on output
@@ -1204,12 +1216,23 @@ t   "this" and "()" special syntax should be suppresed.
     def bind(self, prefixString, nsPair):
         """ Just accepting a convention here """
         if "p" in self._flags: return  # Ignore the prefix system completely
+        if not prefixString:
+            raise RuntimError("Please use setDefaultNamespace instead")
         
+        if (nsPair == self.defaultNamespace
+            and "d" not in self._flags): return # don't duplicate ??
         self._endStatement()
         self.prefixes[nsPair] = prefixString
         self._write(" @prefix %s: <%s> ." % (prefixString, relativeURI(self.base, nsPair[1])) )
         self._newline()
 
+    def setDefaultNamespace(self, nsPair):
+        if "d" in self._flags or "p" in self._flags: return  # Ignore the prefix system completely
+        self._endStatement()
+        self.defaultNamespace = nsPair
+        self._write(" @prefix : <%s> ." % (relativeURI(self.base, nsPair[1])) )
+        self._newline()
+       
 
     def startDoc(self):
  
@@ -1465,6 +1488,11 @@ t   "this" and "()" special syntax should be suppresed.
         if (j>=0
             and "p" not in self._flags   # Suppress use of prefixes?
             and value[j+1:].find(".") <0 ): # Can't use prefix is localname includes "."
+#            print "|%s|%s|"%(self.defaultNamespace[1], value[:j+1])
+            if (self.defaultNamespace
+                and self.defaultNamespace[1] == value[:j+1]
+                and "d" not in self._flags):
+                return ":"+value[j+1:]
             prefix = self.prefixes.get((RESOURCE, value[:j+1]), None) # @@ #CONVENTION
             if prefix != None : return prefix + ":" + value[j+1:]
         

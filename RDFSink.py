@@ -67,6 +67,7 @@ class RDFSink:
         self.prefixes = { }     # Convention only - human friendly to
                                 # track these.
         self.namespaces = {}    # reverse mapping of prefixes
+        self.defaultNamespace = None
 
     def startDoc(self):
         print "\nsink: start."
@@ -98,6 +99,9 @@ class RDFSink:
                 #if chatty: print "# RDFSink: Bound %s to %s" % (prefix, nsPair[1])
             else:
                 self.bind(prefix+"g1", nsPair) # Recurive
+
+    def setDefaultNamespace(self, nsPair):
+        self.defaultNamespace = nsPair
         
 
     #@@DWC: not sure what these are for.

@@ -379,6 +379,7 @@ Examples:
             elif arg == "-help":
                 print doCommand.__doc__
                 print notation3.ToN3.flagDocumentation
+                print notation3.ToRDF.flagDocumentation
                 return
             elif arg == "-with":
                 option_with = sys.argv[argnum+1:] # The rest of the args are passed to n3
@@ -424,7 +425,7 @@ Examples:
         else:
             _metaURI = urlparse.urljoin(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
             _store = RDFStore( _outURI+"#_gs", metaURI=_metaURI, argv=option_with)
-            workingContext = _store.intern((FORMULA, _outURI+ "#_formula"))   #@@@ Hack - use metadata
+            workingContext = _store.intern((FORMULA, _outURI+ "#0_work"))   #@@@ Hack - use metadata
 #  Metadata context - storing information about what we are doing
 
             _store.reset(_metaURI+"#_experience")     # Absolutely need this for remembering URIs loaded
