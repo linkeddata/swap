@@ -3,9 +3,8 @@
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <title>Semantic Web Travel Tools</title>
-  <meta name="generator" content="amaya 5.3, see http://www.w3.org/Amaya/" />
+  <meta name="generator" content="amaya 6.3, see http://www.w3.org/Amaya/" />
 </head>
 
 <body>
@@ -126,13 +125,11 @@ for import".</p>
 
 <p>Then, convert evo ical to RDF:</p>
 <pre>,evocal.rdf: $(HOME)/evolution/local/Calendar/calendar.ics $(PIM)/ical2rdf.pl
-$(PERL) $(PIM)/ical2rdf.pl $(HOME)/evolution/local/Calendar/calendar.ics &gt;$@
-</pre>
+$(PERL) $(PIM)/ical2rdf.pl $(HOME)/evolution/local/Calendar/calendar.ics &gt;$@</pre>
 
 <p>Finally, check rules ala:</p>
 <pre>evoMissing.n3: status2evo.n3 status-formal.rdf ,evocal.rdf
-   $(PYTHON) $(CWM) status2evo.n3 --think &gt;$@
-</pre>
+   $(PYTHON) $(CWM) status2evo.n3 --think &gt;$@</pre>
 
 <p>The rules look like <em>[@@TODO: update ical names w.r.t.
 capitalization]</em>:</p>
@@ -164,8 +161,7 @@ capitalization]</em>:</p>
        ical:UID :UID;
        ical:DTSTAMP :STAMP;
      ]
-}.
-</pre>
+}.</pre>
 
 <h2>Earlier work</h2>
 <ol>
@@ -199,6 +195,8 @@ capitalization]</em>:</p>
     seems to cite NIMA's <a
     href="http://www.nima.mil/gns/html/index.html">GEOnet Names Server</a> as
     its source.</li>
+  <li><a href="grokItinTable.xsl">grokItinTable.xsl</a> - convert AA.com
+    travel itinerary from (tidied) HTML to RDF</li>
 </ul>
 
 <p>Some principles:</p>
