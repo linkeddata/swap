@@ -41,8 +41,8 @@ class BI_inSeconds(LightBuiltIn, Function, ReverseFunction):
     """
     def evaluateObject(self, subj_py):
         try:
-            return double(isodate.parse(subj_py))
-        except:
+            return float(isodate.parse(subj_py))
+        except ValueError:
             return None
 
     def evaluateSubject(self, obj_py):
@@ -52,7 +52,7 @@ class BI_equalTo(LightBuiltIn):
     def evaluate(self, subj_py, obj_py):
 	try:
 	    return isodate.parse(subj_py) == isodate.parse(obj_py)
-        except:
+        except ValueError:
             return None
 
 class BI_year(LightBuiltIn, Function):
