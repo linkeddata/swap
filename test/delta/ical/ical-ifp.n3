@@ -1,0 +1,42 @@
+# Derived from meeting exsample in
+#   http://www.w3.org/2002/12/cal/test/20030115mtg.rdf
+#
+#  These are annotations of the iCal calendar properties
+# which are needed to be able to generate 'strong' diffs of calendar data.
+#
+#@prefix : <http://www.w3.org/2002/12/cal/ical#> .
+@prefix : <#> .
+@prefix x-lic:
+   <http://www.w3.org/2002/12/cal/prod/Apple_Comp_628d9d8459c556fa#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@keywords is, of, a.
+
+# Unabiguously identify a person, event:
+
+owl:InverseFunctionalProperty is rdf:type of
+	calAddress,		# Person
+	uid,			# event
+	tzid.			# timezone
+
+
+# Things which anything can only have one of:
+
+owl:FunctionalProperty is rdf:type of
+
+	action,
+	trigger,
+	duration,
+	dtstamp, dateTime, dtstart, tzid, duration, organizer, sequence,
+	summary,
+	uid,
+	daylight, standard, rrule,
+	byda, bymonth, freq, interval, 
+	tzname, tzoffsetfrom, tzoffsetto,
+	x-lic:location.
+
+# Does NOT include:  component, attendee, cn
+
+    
+#ENDS

@@ -1,0 +1,66 @@
+#Processed by Id: cwm.py,v 1.148 2004/03/21 04:24:32 timbl Exp 
+        #    using base http://www.w3.org/2002/12/cal/test/20030115mtg.rdf
+        
+#  Notation3 generation by
+#       notation3.py,v 1.153 2004/03/21 04:24:35 timbl Exp
+
+#   Base was: http://www.w3.org/2002/12/cal/test/20030115mtg.rdf
+     @prefix : <ical-ifp.n3#> .
+     @prefix x-lic:
+   <http://www.w3.org/2002/12/cal/prod/Apple_Comp_628d9d8459c556fa#> .
+    
+      [      a :Vcalendar;
+             :component  [
+                 a :Vevent;
+                 :attendee  [
+                     :calAddress <mailto:libby.miller@bristol.ac.uk>;
+                     :cn "Libby Miller" ];
+                 :component  [
+                     a :Valarm;
+                     :action "AUDIO";
+                     :attach <Ping>;
+                     :trigger  [
+                         :duration "-PT10M" ] ];
+                 :dtstamp  [
+                     :dateTime "2003-01-09T12:39:09Z" ];
+                 :dtstart  [
+                     :dateTime "2003-01-15T18:00:00";
+                     :tzid "/softwarestudio.org/Olson_20011030_5/Europe/London" ];
+                 :duration  [
+                     :duration "PT1H" ];
+                 :organizer  [
+                     :calAddress <mailto:pldms@mac.com>;
+                     :cn "Damian Steer" ];
+                 :sequence "2";
+                 :summary "IRC Meet";
+                 :uid "EB825E41-23CE-11D7-B93D-003065B0C95E" ],
+                     [
+                 a :Vtimezone;
+                 :daylight  [
+                     :dtstart  [
+                         :dateTime "1970-03-29T01:00:00" ];
+                     :rrule  [
+                         :byday "-1SU";
+                         :bymonth "3";
+                         :freq "YEARLY";
+                         :interval "1" ];
+                     :tzname "BST";
+                     :tzoffsetfrom "+0000";
+                     :tzoffsetto "+0100" ];
+                 :standard  [
+                     :dtstart  [
+                         :dateTime "1970-10-25T02:00:00" ];
+                     :rrule  [
+                         :byday "-1SU";
+                         :bymonth "10";
+                         :freq "YEARLY";
+                         :interval "1" ];
+                     :tzname "GMT";
+                     :tzoffsetfrom "+0100";
+                     :tzoffsetto "+0000" ];
+                 :tzid "/softwarestudio.org/Olson_20011030_5/Europe/London";
+                 x-lic:location "Europe/London" ];
+             :method "REQUEST";
+             :prodid "-//Apple Computer, Inc//iCal 1.0//EN" ].
+    
+#ENDS
