@@ -1,10 +1,10 @@
 
-<!-- Processed by Id: cwm.py,v 1.92 2002/03/22 21:36:00 timbl Exp -->
-<!--     using base file:/devel/WWW/2000/10/swap/log.n3-->
+<!-- Processed by Id: cwm.py,v 1.97 2002/07/06 12:52:02 timbl Exp -->
+<!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/log.n3-->
 
 
 <rdf:RDF xmlns="http://www.w3.org/2000/10/swap/log#"
-    xmlns:doc="http://www.w3.org/2000/01/pim/doc#"
+    xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc#"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
@@ -72,7 +72,7 @@ A cwm built-in function.
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#content">
         <rdfs:comment>This connects a document and a string that represents it.
         Cwm knows how to go get a document in order to evaluate this.</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/01/pim/doc#Work"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
         <rdfs:label>content</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#String"/>
     </rdf:Property>
@@ -143,7 +143,7 @@ Example: semanticsOrError returns either a Formula or a String.
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#semantics">
         <rdfs:comment>This connects a document and the formula it parses to.
         Cwm knows how to go get a document and parse it in order to evaluate this.</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/01/pim/doc#Work"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
         <rdfs:label>semantics</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#Formula"/>
     </rdf:Property>
@@ -152,7 +152,7 @@ Example: semanticsOrError returns either a Formula or a String.
         <rdfs:comment>This connects a document and either the formula it parses to,
         or an error message explaining what went wromg with trying. See semantics.
         Cwm knows how to go get a document and parse it in order to evaluate this.</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/01/pim/doc#Work"/>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/doc#Work"/>
         <rdfs:label>semantics or error message</rdfs:label>
     </rdf:Property>
 

@@ -47,7 +47,7 @@ SemEnglish.html: SemEnglish.g gram2html.py
 	$(PYTHON) gram2html.py SemEnglish.g "SemEnglish Grammar (from Seth)" >$@
 
 log.rdf: log.n3
-	cwm log.n3 -rdf > log.rdf
+	$(PYTHON) cwm.py log.n3 --rdf > log.rdf
 
 
 
