@@ -1,0 +1,80 @@
+#[1]http://www.anr.mcnc.org/~csc591w/cs591w/draft-ietf-spki-cert-examples-01.txt
+# 2.2 HTTP
+#  (tag (http http://acme.com/company-private/personnel ))
+# This <tag> gives the Subject permission to access the web page at the
+# given URI.  To give permission for an entire tree under a given URI,
+# one might use:
+#  (tag (http (* prefix http://acme.com/company-private/personnel/ )))
+# 2.4 Public Key Protected File System tags
+#  (tag (pkpfs <pathname> <access> ))
+# refers to a hypothetical distributed file system whose access is
+# controlled by public key challenge/response.  The <pathname> can be a
+# single pathname, a set of files (specified by normal "*" convention)
+# or a directory sub-structure (specified by (* prefix ...)).
+# This gives read and write access to all files starting with "spki.".
+
+#(cert
+# (issuer (hash sha1 |TLCgPLFlGTzgUbcaYLW8kGTEnUk=|))
+# (subject (hash sha1 |Ve1L/7MqiJcj+LSa/l10fl3tuTQ=|))
+# (propagate)
+#   (tag (http (* prefix http://acme.com/company-private/personnel/ )))
+#   (tag (pkpfs //ftp.clark.net/pub/cme/spki.* (* set read write)))
+# (not-before "1998-03-01_12:42:17")
+# (not-after "2012-01-01_00:00:00")
+#)
+
+# Maybe I could use the kestrel time ontology?
+# @prefix time: <http://www.kestrel.edu/DAML/2000/12/TIME.daml>
+
+@prefix s: <http://example/@@spki-vocab#>.
+@prefix sT: <http://example/@@spki-tag-vocab#>.
+@prefix sA: <http://example/@@spki-aux-vocab#>.
+
+
+@prefix : <http://example/stuff#>.
+
+:cert1
+ s:issuer [ s:sha1 "TLCgPLFlGTzgUbcaYLW8kGTEnUk="];
+ s:subject [ s:sha1 "Ve1L/7MqiJcj+LSa/l10fl3tuTQ="];
+ a s:propagate; #@@??
+  s:tag [ a sT:http;
+          s:prefix "http://acme.com/company-private/personnel/"];
+  s:tag [ a sT:pkpfs;
+          sA:path "//ftp.clark.net/pub/cme/spki.*";
+          sA:operations  (s:set s:read s:write) ];
+  s:not-before "1998-03-01_12:42:17";
+  s:not-after "2012-01-01_00:00:00".
+
+@prefix ex: <http://example/stuff#>.
+@prefix http: <http://example/@@http-vocab#>.
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix str: <http://www.w3.org/2000/10/swap/string#> .
+this log:forAll :r, :addr, :pat.
+
+:req1
+  http:requestURI "http://acme.com/company-private/personnel/";
+  sA:signedBy :uk1.
+
+:uk1 s:sha1 "Ve1L/7MqiJcj+LSa/l10fl3tuTQ=".
+
+
+{ :r http:requestURI :addr.
+  :t a sT:http; s:prefix :pat.
+  :addr str:startsWith :pat
+}
+  log:implies { :t sA:matches :r }.
+
+
+
+
+####
+# evaluation rule
+
+this log:forAll :cert, :req, :whoK, :CK, :f.
+
+ { :cert s:tag [ sA:matches :req ];
+         s:subject [ s:sha :f];
+         s:issuer ?CK.
+   :req sA:signedBy [ s:sha :f] }
+ log:implies { :CK sA:authorizes :req }.
