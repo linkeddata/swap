@@ -1,7 +1,7 @@
 <html>
 <head>
   <title>Examples - Getting ino the semantic web and RDF using N3</title>
-  <meta http-equiv="Content-Type" content="text/html">
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
   <link href="/StyleSheets/base.css" rel="stylesheet" type="text/css">
   <link href="/StyleSheets/base.css" rel="stylesheet" type="text/css">
 </head>
@@ -38,10 +38,10 @@ alt="blue, red and green arcs merged" width="30%" align="right"></p>
     diagram</a> shows some information maybe from someone's personal
     information that they will attend an event which has a given home page. It
     also has the person's email address and given name.</li>
-  <li><a href="/2000/Talks/0906-xmlweb-tbl/slide7-0.html">The second diagram
-    </a>shows how information about the meeting has been read from another
-    source, and also privacy policy link has been picked up from the meeting
-    page indicating what the privacy policy is.</li>
+  <li><a href="/2000/Talks/0906-xmlweb-tbl/slide7-0.html">The second
+    diagram</a>shows how information about the meeting has been read from
+    another source, and also privacy policy link has been picked up from the
+    meeting page indicating what the privacy policy is.</li>
 </ul>
 
 <p>The key point, of course, is that URIs are used to identify the overlap
@@ -49,16 +49,16 @@ concepts such as  the person, meeting and its home page.  This allows the
 graphs to be merged. It is a simple RDF example, let's see what it looks
 like:</p>
 <ul>
-  <li>The blue arcs (<a href="meet/blue.n3">in N3</a>, <a
-    href="meet/blue.rdf">in XML</a> made by <code>cwm -rdf
-  blue.n3</code>)</li>
-  <li>The red arcs (<a href="meet/red.n3">in N3</a>, <a href="meet/red.rdf">in
-    XML</a>)</li>
-  <li>The green arcs (<a href="meet/green.n3">in N3</a>, <a
-    href="meet/green.rdf">in XML</a>)</li>
-  <li>The merged graph (<a href="meet/white.n3">in N3</a> made by<code> cwm
-    red.n3 blue.n3 green.n3 &gt; white.n3</code>, <a href="meet/white.rdf">in
-    XML</a>)</li>
+  <li>The blue arcs (<a href="test/meet/blue.n3">in N3</a>, <a
+    href="test/meet/blue.rdf">in XML</a> made by <code>cwm -rdf
+    blue.n3</code>)</li>
+  <li>The red arcs (<a href="test/meet/red.n3">in N3</a>, <a
+    href="test/meet/red.rdf">in XML</a>)</li>
+  <li>The green arcs (<a href="test/meet/green.n3">in N3</a>, <a
+    href="test/meet/green.rdf">in XML</a>)</li>
+  <li>The merged graph (<a href="test/meet/white.n3">in N3</a> made by<code>
+    cwm red.n3 blue.n3 green.n3 &gt; white.n3</code>, <a
+    href="test/meet/white.rdf">in XML</a>)</li>
 </ul>
 
 <p></p>
