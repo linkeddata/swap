@@ -42,17 +42,20 @@ parser RDFN3Parser:
 
     rule directive : PREFIX QNAME URIREF STOP
 
+
+    # foos0 is mnemonic for 0 or more foos
+    # foos1      "          1 or more foos
+
     rule statement : term predicates0 STOP
-    rule statements0 : statements1
-                     | #empty
 
-    rule statements1 : term predicates0 (STOP term predicates0)*
-
-    rule predicates0 : predicates1
+    rule predicates0 : predicate predicates_rest
                      | # empty
 
-    rule predicates1 : predicate (";" predicate)*
+    rule predicates_rest : ";" predicates0
+                         | # empty
     rule predicate: verb objects1
+
+    rule semOpt : ";" | #empty
 
     rule verb : term | IS term OF  # earlier N3 specs had more sugar...
 
@@ -63,14 +66,27 @@ parser RDFN3Parser:
               | THIS
               | shorthand
               | STRLIT3 | STRLIT1 | STRLIT2
-              | LP term * RP               # list
-              | LB predicates0 RB          # something such that...
-              | LC statements0 RC          # conjunction
+              | list
+              | clause
+              | conjunction
 
     rule shorthand : A | "="
 
+    rule list : LP term * RP
+
+    rule clause: LB predicates0 RB
+
+    rule conjunction: LC statements0 RC
+
+    rule statements0: term predicates0 statements_rest
+                    | #empty
+    rule statements_rest : STOP statements0
+                         | # empty
 
 # $Log$
-# Revision 1.1  2001-08-31 17:51:08  connolly
+# Revision 1.2  2001-08-31 18:46:59  connolly
+# parses test/vocabCheck.n3
+#
+# Revision 1.1  2001/08/31 17:51:08  connolly
 # starting to work...
 #
