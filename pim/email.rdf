@@ -19,73 +19,99 @@
     xmlns:str="http://www.w3.org/2000/10/swap/string#">
 
     <r:Description r:about="">
+      <owl:versionInfo>$Id$</owl:versionInfo>
       <s:seeAlso r:resource="../util/sniffSchema.n3"/>
+      <s:seeAlso r:resource="http://www.faqs.org/rfcs/rfc822.html"/>
     </r:Description>
+
+    <owl:Class r:about="http://www.w3.org/2000/10/swap/pim/email#Message">
+      <s:label>Message</s:label>
+    </owl:Class>
+
+    <owl:Class r:about="http://www.w3.org/2000/10/swap/pim/email#Agent">
+      <s:label>Agent</s:label>
+      <s:comment>"AGENT (person,  system  or  process)" -- RFC822 4.4.2</s:comment>
+    </owl:Class>
+
+    <owl:Class r:about="http://www.w3.org/2000/10/swap/pim/email#Mailbox">
+      <s:label>Mailbox</s:label>
+    </owl:Class>
 
     <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#cc">
         <s:label>cc</s:label>
-        <s:comment>domain message? range agent?</s:comment>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
+	<s:range r:resource="http://www.w3.org/2000/10/swap/pim/email#Agent"/>
     </r:Property>
 
-    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#date">
+    <owl:FunctionalProperty r:about="http://www.w3.org/2000/10/swap/pim/email#date">
         <s:label>date</s:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
         <s:comment>unmodified date header field value</s:comment>
         <ss:rangeIntersects r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </r:Property>
+    </owl:FunctionalProperty>
 
-    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#date_iso">
+    <owl:FunctionalProperty r:about="http://www.w3.org/2000/10/swap/pim/email#date_iso">
         <s:label>date_iso</s:label>
         <s:comment>date header field converted to YYYY-MM-DDTHH:MM:SSZ form</s:comment>
         <ss:rangeIntersects r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </r:Property>
+    </owl:FunctionalProperty>
 
     <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#from">
         <s:label>from</s:label>
-        <s:comment>domain message? range agent?</s:comment>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
+	<s:range r:resource="http://www.w3.org/2000/10/swap/pim/email#Agent"/>
     </r:Property>
 
     <owl:InverseFunctionalProperty r:about="http://www.w3.org/2000/10/swap/pim/email#mbox">
         <s:label>mbox</s:label>
-        <s:comment>domain agent, range mailbox</s:comment>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Agent"/>
+	<s:range r:resource="http://www.w3.org/2000/10/swap/pim/email#Mailbox"/>
     </owl:InverseFunctionalProperty>
 
     <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#phrase">
         <s:label>phrase</s:label>
-        <s:comment>domain agent? note handling of non-ascii chars</s:comment>
-        <ss:rangeIntersects r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <s:comment>note handling of non-ascii chars</s:comment>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Agent"/>
+        <s:range r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
     </r:Property>
 
     <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#received_iso">
-        <ss:label>received_iso</ss:label>
+        <s:label>received_iso</s:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
         <ss:rangeIntersects r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
     </r:Property>
 
     <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#recipients">
-        <ss:label>recipients</ss:label>
+        <s:label>recipients</s:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
         <s:comment>@@not in RFC822. artificial. explain/motivate?</s:comment>
         <ss:rangeIntersects r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
     </r:Property>
 
     <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#references">
-        <ss:label>references</ss:label>
-        <s:comment>domain message, range message</s:comment>
+        <s:label>references</s:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
+	<s:range r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
     </r:Property>
 
     <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#senders">
-        <ss:label>senders</ss:label>
+        <s:label>senders</s:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
         <s:comment>@@not in RFC822. artificial. explain/motivate?</s:comment>
         <ss:rangeIntersects r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
     </r:Property>
 
     <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#subject">
-        <ss:label>subject</ss:label>
+        <s:label>subject</s:label>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
         <s:comment>domain message. note handling of non-ascii chars</s:comment>
-        <ss:rangeIntersects r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <s:range r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
     </r:Property>
 
     <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#to">
         <ss:label>to</ss:label>
-        <s:comment>domain message? range agent?</s:comment>
+	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
+	<s:range r:resource="http://www.w3.org/2000/10/swap/pim/email#Agent"/>
     </r:Property>
 
 
