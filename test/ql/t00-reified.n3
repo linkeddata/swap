@@ -1,0 +1,46 @@
+   @prefix : <http://www.w3.org/2004/06/rei#> .
+   @prefix owl: <http://www.w3.org/2002/07/owl#> .
+   @prefix t: <#> .
+  
+    [    a <http://www.w3.org/2000/10/swap/log#Truth>;
+       :existentials  [owl:oneOf  () ];
+       :statements  [
+         owl:oneOf  (
+         [     :object  [
+               :existentials  [
+                 owl:oneOf () ];
+               :statements  [
+                 owl:oneOf  (
+                 [   :object  [
+                       :items  (
+                       [:uri "file:/devel/WWW/2000/10/swap/test/ql/t00.n3#x" ]
+                       [:uri "file:/devel/WWW/2000/10/swap/test/ql/t00.n3#y" ] ) ];
+                     :predicate  [
+                       :uri "http://www.w3.org/2004/ql#is" ];
+                     :subject  [
+                       :uri "http://www.w3.org/2004/ql#result" ] ] ) ];
+               :universals  [owl:oneOf () ] ];
+             :predicate  [:uri "http://www.w3.org/2004/ql#select" ];
+             :subject  _:a ]
+
+         [     :object  [
+               :existentials  [owl:oneOf () ];
+               :statements  [
+                 owl:oneOf  (
+                 [
+                     :object  [:uri "http://www.example.com/foo#Librarian" ];
+                     :predicate  [:uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                     :subject  [:uri "file:/devel/WWW/2000/10/swap/test/ql/t00.n3#x" ] ]
+                 [
+                     :object  [:uri "file:/devel/WWW/2000/10/swap/test/ql/t00.n3#y" ];
+                     :predicate  [:uri "http://www.example.com/foo#hairColor" ];
+                     :subject  [:uri "file:/devel/WWW/2000/10/swap/test/ql/t00.n3#x" ] ] ) ];
+               :universals  [owl:oneOf () ] ];
+             :predicate  [:uri "http://www.w3.org/2004/ql#where" ];
+             :subject  _:a ] ) ];
+       :universals  [
+         owl:oneOf  (
+        "file:/devel/WWW/2000/10/swap/test/ql/t00.n3#x" 
+        "file:/devel/WWW/2000/10/swap/test/ql/t00.n3#y"  ) ] ].
+  
+#ENDS
