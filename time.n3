@@ -91,14 +91,22 @@ Cwm implements this as a function.
     rdfs:domain time:ISOTime;
     rdfs:isDefinedBy <>.
 
-time:second a rdf:Property,
-	ont:UniqueProperty;
-    rdfs:label "second";
-    rdfs:comment """
+time:second rdfs:comment """
 For a date-time, its time:second is the two-digit number of seconds.
-
 Cwm implements this as a function.
 """;
+    a rdf:Property, ont:UniqueProperty;
+    rdfs:label "second";
+    rdfs:domain time:ISOTime;
+    rdfs:isDefinedBy <>.
+
+time:timeZone rdfs:comment """
+For a date-time, its time:timeZone is the trailing timezone offset
+part, e.g.  "-05:00".
+Cwm implements this as a function.
+""";
+    a rdf:Property, ont:UniqueProperty;
+    rdfs:label "timezone offset";
     rdfs:domain time:ISOTime;
     rdfs:isDefinedBy <>.
 
@@ -120,8 +128,34 @@ Cwm implements this as a function.
     rdfs:domain time:ISOTime;
     rdfs:isDefinedBy <>.
 
+########### Actual time access routines
+
+
+time:gmTime a rdf:Property,
+	ont:UniqueProperty;
+    rdfs:label "Universal Time";
+    rdfs:comment """
+For a date-time format string, its time:gmtime is the 
+result of formatting the Universal Time of processing
+in the format given.   If teh fiormat string has zero length,
+then the ISOdate standrad format is used. 
+[ is time:gmtime of ""]  the therefore the current date time.
+It will end with "Z" as a timezone code.
+
+Cwm implements this as a function.
+""";
+    rdfs:range time:format;
+    rdfs:isDefinedBy <>.
+
+
+
 #@@@ To be aded  localtime, gmtime, ... format, parse...
     #@@ add pointers to examples in test/time  etc
+
+#     str.internFrag("timeZone", BI_timeZone)
+#    str.internFrag("gmTime", BI_gmTime)
+#    str.internFrag("localTime", BI_localTime)
+#    str.internFrag("format", BI_format)
 
 # ends
 
