@@ -4,39 +4,25 @@
 #  IJ TBL  20002/01
 #
 
-@prefix : <track#>.
-@prefix  t: <track#>.
+@prefix : <http://www.w3.org/2000/10/swap/pim/track#>.
 
-@prefix r:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+:wgMediaType-1 a :Issue;
+     :title "Should W3C WGs define their own media types?";
+     :summary "What are the general guidelines or policies (if any) for W3C working groups in defining their own media types?  Should they be defining them at all?";
+     :documentConcerned "http://www.w3.org/Guide/pubrules";
+     :acceptance "URL".
 
-@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
-@prefix log: <http://www.w3.org/2000/10/swap/log#> .
-:Issue a s:Class.
+:customMediaType-2 a :Issue;
+     :title "What commonality between W3C media types?";
+     :summary "For example, should all these custom XML types being registered be required to use the RFC 3023 +xml convention?  If so, should all the SHOULDs of section 7.1 be followed? etc..  The question isn't restricted to RFC 3023 issues though.   There may be value to other common features between types.";
+     :documentConcerned "http://www.w3.org/Guide/pubrules";
+     :acceptance "URL".
 
-:title a r:Property;
-    s:comment "Short title, less than one line".
-
-:description a r:Property;
-    s:range log:String;
-    s:comment "The description of the problem or issue raised". 
-
-:resolution a r:Property;
-    s:range log:String;
-    s:comment "A summary of the resolution of the issue - from the closing document.". 
-
-:notes a r:Property;
-    s:comment "Comments about this eg for the use of group secretary". 
-
-# State changes
-
-:opens a r:Property; s:domain doc:Work; r:range t:Issue;
-    s:label "opens";
-    s:comment "This document is the one which opens this issue".
-
-:closes a r:Property; s:domain doc:Work; r:range t:Issue.
-
-:rejects a r:Property s:domain doc:Work; r:range t:Issue.
-
+:nsAndMediaType-3 a :Issue;
+     :title "What is, or what should be, the relationship between a media type and an XML namespace?";
+     :summary "";
+     :documentConcerned "http://www.w3.org/TR/REC-xml-names/";
+     :acceptance "URL".
+     
 #ends
 
