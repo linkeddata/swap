@@ -1,0 +1,18 @@
+#  Generate master key
+
+@prefix : <#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#>.
+
+this log:forAll :x , :y.
+
+
+{ :x crypto:keyLength "1024";
+     crypto:publicKey :y } log:implies { :x a acc:RequestKeyPair.  :y a acc:RequestKey } .
+
+log:forAll a log:Chaff.
+log:implies a log:Chaff.
+
+# ends

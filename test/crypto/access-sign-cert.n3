@@ -1,0 +1,33 @@
+# Generate a signed certificate for soemone (tiina) in the organization
+#
+@prefix : <#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix os: <http://www.w3.org/2000/10/swap/os#> .
+@prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#>.
+@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+
+this log:forAll  :n, :k, :kp, :str, :tk, :tkp, :z.
+
+# Assume we have data from <access-member.private>  and, eg, <access-tiina.public>
+
+{ :n log:uri [ is os:argv of "1"].
+  :tk a acc:RequestKey.
+  {  :tk a acc:RequestKey;
+         acc:authorityName :n;
+         acc:junk "327462sjsdfjsakdhfkjsafd32164321"  } log:n3String :str.
+  :kp a acc:MemberKeyPair.
+  :k a acc:MemberKey.
+  ([is crypto:md5 of :str] :kp) crypto:sign :z } log:implies {
+		:str acc:endorsement[acc:signature :z; acc:key :k]} .
+  
+
+# For purging
+
+acc:RequestKey a log:Chaff.
+acc:MemberKeyPair a log:Chaff.
+acc:MemberKey a log:Chaff.
+log:implies a log:Chaff .
+log:forAll a log:Chaff .
+
+#ends
+

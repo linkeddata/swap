@@ -1,0 +1,28 @@
+# Generate a signed request for a document
+#
+@prefix : <#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix os: <http://www.w3.org/2000/10/swap/os#> .
+@prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#>.
+@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+
+this log:forAll  :d, :k, :kp, :str, :z.
+
+# Assume we have data from <access-tiina.private>
+
+{ :d log:uri [ is os:argv of "1"].
+  { this acc:forDocument :d;
+                 acc:credential <access-tiina.cert>;
+                 acc:junk "32746213462187364732164732164321"  } log:n3String :str.
+  :kp a acc:RequestKeyPair.
+  :k a acc:RequestKey.
+  ([is crypto:md5 of :str] :kp) crypto:sign :z } log:implies {
+             :str acc:endorsement[acc:signature :z; acc:key :k]} .
+  
+
+# For purging
+
+acc:RequestKey a log:Chaff.
+acc:RequestKeyPair a log:Chaff.
+log:implies a log:Chaff .
+log:forAll a log:Chaff .

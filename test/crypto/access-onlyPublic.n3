@@ -1,0 +1,27 @@
+#  Remove private part of key
+#
+#  Use with --purge!!
+
+@prefix : <#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#>.
+
+this log:forAll :x , :y.
+
+
+{  :x a acc:MasterKeyPair;
+      crypto:publicKey :y } log:implies {  :x a log:Chaff. :y a acc:MasterKey } .
+
+{  :x a acc:MemberKeyPair;
+      crypto:publicKey :y } log:implies {  :x a log:Chaff. :y a acc:MemberKey } .
+
+{  :x a acc:RequestKeyPair;
+      crypto:publicKey :y } log:implies {  :x a log:Chaff. :y a acc:RequestKey } .
+
+
+log:forAll a log:Chaff.
+log:implies a log:Chaff.
+
+# ends

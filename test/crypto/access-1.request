@@ -1,0 +1,42 @@
+#Processed by Id: cwm.py,v 1.92 2002/03/22 21:36:00 timbl Exp 
+        #    using base file:/cygdrive/c/devel/WWW/2000/10/swap/test/crypto/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.107 2002/03/22 21:36:00 timbl Exp
+
+#   Base was: file:/cygdrive/c/devel/WWW/2000/10/swap/test/crypto/
+     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/cygdrive/c/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+"""     :endorsement  [
+             :key """
+MjQ1OTMKCjQ1NzE0ODY3NjE0NzkzMzgwNjE4NjAzNDQyNTE0NTkzMjk3MjI1MTM1NjU1MjQ2MDA3
+MDU2NzkxNzk0NzA5NDk5MTAzNTI5NDg4OTY4OTM5OTAwODE3MzIzMzU1NjE3Mjg5NjQxNjM1NjI3
+NjM3NjMwMDczMDA3MzI4NjM3MTY5ODM2MTMwMjE1ODM2NDc2MjM3NTE1ODc0OTQxNDM2NTM2MjY4
+Njc1NTY5MTYyMzg2ODEzMzk1MzkxOTE4MDEwMjYzNzI0ODk5NzQ3NTc3ODI0MjIzNjY0NDM3MzYw
+Njc1MTk2MzUyMDg4MDk1MjExMjg0NzU5NzYyOTA4NzY1MDAxMTY4MDcyNTkzMzIzMTY3MTczNjk2
+NjA4NDE5MDg3MTA2MzM5MDcwODM3MTY1MTA4MjM5OQ=3D=3D
+""";
+             :signature """
+NDEzOTA3MzE1ODUzMDU4MTc5NDg5NTA0NzM0Mjk3NzgwMTkzMzYwMjc5MTI1ODUyMzI4NjQ1MTQ1
+MDg3Njg3NDE0OTUyMTM2NzI2NzAxMDg4NDU3Njg2Mjg4MDMwNTM2MzYxNjY2NDU1OTU4MTA4MjQ1
+OTcxMzYzNDcxMjI2NjIyMjA5MjkwNjk3OTMwNjkzMDMyMTQ3MTMxNzI1NjA2MjIxNTIzMzI5OTE2
+NjYwMDcxMTQyMzgwMTg5MTQ4MzM0MDA4MzA4MDAyMTgxNTk1MDEyNzY5MTc4NzE4ODMzMDkzODIw
+MTgwOTA0ODcwOTk1OTcwNDExMjk5NTUwOTc3NTAyMjAxNDQ3MDY0NjM2MTgyOTE3MTcwMDU3Mjkx
+NTE2Njk5Mjk3ODUyMTU3MTUwMDk3MDEx
+""" ] .
+    
+#ENDS
