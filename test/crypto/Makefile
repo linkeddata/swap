@@ -4,7 +4,7 @@
 #  All the files are in one directory. The .private files would
 #  in reality be kept secure by the relevant groups or people.
 #
-CWM=python ../../cwm.py
+CWM=python ../../cwm.py --crypto
 
 W=/devel/WWW
 RM=$W/2001/04/roadmap

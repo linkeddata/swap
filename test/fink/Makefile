@@ -4,7 +4,7 @@
 #     python fink2n3.py /var/dpkg/etc/avaliable
 #
 F=../../util/fink2n3.py
-#P=PYTHONPATH=../.. python
+#P=PYTHONPATH=../.. python   # Doesn't work with make - must be in environ
 P=python
 C=../../cwm.py
 
