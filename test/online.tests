@@ -17,5 +17,9 @@
     test:description	"Look up values in 2 definitive documents (ONLINE)";
     test:arguments	"--mode=rs dbork/defdoc2.n3 --think".
 
+:t1104 a test:CwmTest;
+    test:referenceOutput	<includes/404-ref.n3>;
+    test:description	"What happens when the document you want isn't there (ONLINE)";
+    test:arguments	"--mode=rs includes/404.n3 --think".
 
 #ends
