@@ -815,7 +815,6 @@ class RDFStore(notation3.RDFSink) :
                 for p in (PRED, SUBJ, OBJ):
                     for t in subj.occursAs[p][:]:  # Take copy as list changes
                         if t.triple[CONTEXT] is context:
-#                            print "     ", quadToString(t.triple)
                             self.removeStatement(t)
                             total = total + 1
 
@@ -944,6 +943,7 @@ class RDFStore(notation3.RDFSink) :
 #            print "%%%%%%", quadToString(arc.triple)
             if subj is context and (pred is self.forSome or pred is self.forAll): # @@@@
                 variables.append(obj)   # Collect list of existentials
+#                if obj is self.Truth: print "#@@@@@@@@@@@@@", quadToString(arc.triple)
             if subj is context and pred is self.forSome: # @@@@
                 existentials.append(obj)   # Collect list of existentials
 
@@ -951,11 +951,12 @@ class RDFStore(notation3.RDFSink) :
 #           if pred is self.subExpression and subj is con:
             for p in [ SUBJ, PRED, OBJ]:  # @ can remove PRED if contexts and predicates distinct
                 x = arc.triple[p]
-                if x.occursAs[CONTEXT] != [] and x in existentials:  # Nested context                    
+                if x.occursAs[CONTEXT] != [] and x in existentials:  # x is a Nested context                    
                     for a2 in con.occursAs[CONTEXT]:  # Rescan for variables
                         c2, p2, s2, o2 = a2.triple
-                        if  s2 is x and (pred is self.forSome or pred is self.forAll):
+                        if  s2 is x and (p2 is self.forSome or p2 is self.forAll):
                             variables.append(o2)   # Collect list of existentials
+#                            if o2 is self.Truth: print "#@@@@@@@@@@@@@", quadToString(a2.triple)
                     s, v = self.nestedContexts(x)
                     statements = statements + s
                     variables = variables + v
@@ -1012,23 +1013,29 @@ def _substitute(bindings, list):
 def _lookupQuad(bindings, q):
 	context, pred, subj, obj = q
 	return (
-            _lookup(bindings, context),  # target context not workingContext
+            _lookup(bindings, context),
             _lookup(bindings, pred),
             _lookup(bindings, subj),
             _lookup(bindings, obj) )
 
 def _lookup(bindings, value):
-    for pair in bindings:
-        if pair[0] == value: return pair[1]
+    for left, right in bindings:
+        if left == value: return right
     return value
 
 
 
 ############################################################## Query engine
-
+#
 # Template matching in a graph
+#
+# Optimizations we have NOT done:
+#   - storing the tree of matches so that we don't have to duplicate them another time
+#   - using that tree to check only whether new data would extend it (very cool - memory?)
+#      (this links to dynamic data, live variables.)
+#   - recognising in advance disjoint graph templates, doing cross product of separate searches
+#
 
-    
 def doNothing(bindings, param):
     if chatty>99: print "Success! found it!"
     return 1                    # Return count of calls only
@@ -1326,7 +1333,8 @@ def reformat(str, thisDoc):
             
         
 ############################################################## Web service
-
+# Author: DanC
+#
 import random
 import time
 import cgi
@@ -1397,7 +1405,7 @@ def showForm():
     print """Content-Type: text/html
 
 <html>
-<title>A Wiki RDF Service</title>
+<title>Notation3 to RDF Service</title>
 <body>
 
 <form method="GET">
@@ -1611,7 +1619,7 @@ Examples:
             elif arg == "-rdf": option_rdf = 1
             elif arg == "-n3": option_rdf = 0
             
-            elif arg == "-chatty": cwm.chatty = 1
+            elif arg == "-chatty": self.chatty = 1
 
             elif arg == "-reify":
                 if not option_pipe:
