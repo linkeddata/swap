@@ -834,7 +834,7 @@ class ToRDF(RDFSink):
     def endDoc(self):
         self.flushStart()  # Note: can't just leave empty doc if not started: bad XML
 	if self._subj:
-	    self._wr.endElement()
+	    self._wr.endElement()  # </rdf:Description>
 	self._subj = None
 	self._wr.endElement()  # </rdf:RDF>
 	self._wr.endDocument()
@@ -851,7 +851,9 @@ class ToRDF(RDFSink):
                 if self.namespaces.get("log", ":::") ==":::":
                     self.bind("log", (RESOURCE, Logic_NS))
             ats = []
-            for pfx in self.prefixes.values():
+            ps = self.prefixes.values()
+            ps.sort()    # Cannonicalize output somewhat
+            for pfx in ps:
                 if pfx:
                     ats.append(('xmlns:'+pfx, self.namespaces[pfx][1]))
                 else:
@@ -930,12 +932,12 @@ class ToRDF(RDFSink):
             self._subj = None
         self._wr.startElement(RDF_NS_URI+'Description', [], self.prefixes)
         self._subj = subj    # The object is not the subject context
-        self._pred = None
+#        self._pred = None
 
     def endAnonymousNode(self):    # Remove context
     	self._wr.endElement()
 	self._subj = None
-        self._pred = None
+#        self._pred = None
 
 # Below we notate a nested bag of statements - a context
 
@@ -950,14 +952,16 @@ class ToRDF(RDFSink):
         
         self._wr.startElement(Logic_NS+"is", [(RDF_NS_URI+' parseType', log_quote)], self.prefixes)
         self._subj = None
-        self._pred = None
+#        self._pred = None
 
 
     def endBagSubject(self, subj):    # Remove context
-        self._wr.endElement()
-        self._wr.endElement()
+        if self._subj:
+            self._wr.endElement()   # End description if any
+            self._subj = 0
+        self._wr.endElement()     # End quote
         self._subj = subj
-        self._pred = None
+#       self._pred = None
 
     def startBagObject(self, tuple):
         self.flushStart()
@@ -973,14 +977,17 @@ class ToRDF(RDFSink):
         log_quote = self.prefixes[(RESOURCE, Logic_NS)] + ":Quote"  # Qname yuk
         self._wr.startElement(pred[1], [(RDF_NS_URI+' parseType',log_quote)], self.prefixes)  # @@? Parsetype RDF
         self._subj = None
-        self._pred = None
+#        self._pred = None
 
 
     def endBagObject(self, pred, subj):    # Remove context
-        self._wr.endElement()
-        self._wr.endElement()
-        self._subj = pred
-        self._pred = subj     
+        if self._subj:
+            self._wr.endElement()        #  </description> if any
+            self._subj = None
+        self._wr.endElement()           # end quote
+        self._subj = pred   #@@@@@?
+#        print "\nEnd bag object, pred=", `pred`[-12:]
+#        self._pred = subj     
 
 def relativeTo(here, there):
     print "### Relative to ", here[1], there[1]

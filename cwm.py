@@ -1104,6 +1104,13 @@ class RDFStore(notation3.RDFSink) :
 #      (this links to dynamic data, live variables.)
 #   - recognising in advance disjoint graph templates, doing cross product of separate searches
 #
+# Built-Ins:
+#   The trick seems to be to figure out which built-ins are going to be faster to
+# calculate, and so should be resolved before query terms involving a search, and
+# which, like those involving recursive queries or net access, will be slower than a query term,
+# and so should be left till last.
+#   I feel that it should be possible to argue about built-ins just like anything else,
+# so we donot exclude these things from the query system.
 
     def test45(self, test436):
         return 0
@@ -1175,7 +1182,7 @@ class RDFStore(notation3.RDFSink) :
 #                (short_p == SUBJ or short_p == OBJ)
 #                     @@@ deal with assigning to variable?
 
-# In some circumstances we can simply calculate whether a statement is true:
+# In some circumstances we can simply calculate whether a statement is true: LOGICAL OPERATORS:
             if quad[CONTEXT] in smartIn:
                 if found == 0:   # no variables: constant expression
                     result = "nope"
