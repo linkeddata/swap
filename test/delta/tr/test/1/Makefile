@@ -36,7 +36,8 @@ $X.checked: $X.nt $X.nt2 $X.cant
 $X.nt:  $X.rdf
 	$P $C --rdf $X.rdf --ntriples > $X.nt
 $X.delta:  $X.rdf previous/$X.rdf
-	$P $S/diff.py -f previous/$X.rdf -t $X.rdf > $X.delta
+	$P $S/diff.py -f previous/$X.rdf -t $X.rdf \
+		--meta=../../assumptions.n3 > $X.delta
 $X.nt2: previous/$X.rdf $X.delta
 	$P $C previous/$X.rdf --patch=$X.delta --ntriples > $X.nt2 
 
