@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/local/bin/python2.2
 """toICal.py -- convert RDF to iCalendar syntax
 
 references:
@@ -19,7 +19,7 @@ NOTE: see earlier work:
 see changelog at end
 """
 
-from string import strip, maketrans, translate
+from string import strip, maketrans, translate, replace
 
 import RDFSink, llyn # from SWAP http://www.w3.org/2000/10/swap/
 from RDFSink import SYMBOL, FORMULA, SUBJ, PRED, OBJ
@@ -160,9 +160,15 @@ class CalWr:
         w = self._w
         txt  = sts.any(subj, ICAL.sym(pn))
         if txt is None: return txt
-        v = strip(str(txt))
-        w("%s:%s%s" % (pn.upper(), v, CRLF)) #@@linebreaks?
-        return v
+        v = strip(str(txt).replace(',','\\,'))
+        v.replace(';','\\;')
+        x = ''
+        while(len(v)>75):
+            x += v[0:74]+CRLF+' '
+            v = v[74:]
+        x += v
+        w("%s:%s%s" % (pn.upper(), x, CRLF)) #@@linebreaks?
+        return x
     
     def timeProp(self, sts, pn, subj):
         w = self._w
@@ -182,7 +188,7 @@ class CalWr:
                 whenV = sts.any(when, ICAL.date)
                 if whenV:
                     whenV = translate(str(whenV), maketrans("", ""), "-:")
-                    w("%s:VALUE=DATE;%s%s" % (pn.upper(), whenV, CRLF))
+                    w("%s;VALUE=DATE:%s%s" % (pn.upper(), whenV, CRLF))
                 else:
                     progress("@@no value for ", when)
 
@@ -215,7 +221,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.11  2003-03-24 20:18:01  ryanlee
+# Revision 1.12  2003-04-16 17:21:01  ryanlee
+# more rfc2445 fixes in textProp
+#
+# Revision 1.11  2003/03/24 20:18:01  ryanlee
 # first pass at making toIcal understand non-ascii characters
 #
 # Revision 1.10  2003/03/14 06:01:04  connolly
