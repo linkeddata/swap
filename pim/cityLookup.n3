@@ -7,8 +7,10 @@
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix str: <http://www.w3.org/2000/10/swap/string#>.
 
-@prefix map: <http://www.w3.org/2000/10/swap/pim/earthMap#>.
 @prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#>.
+
+@prefix map: <http://www.w3.org/2000/10/swap/pim/earthMap#>.
+@prefix usps: <http://www.w3.org/2000/10/swap/pim/usps#> .
 
 @prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
 
@@ -26,6 +28,19 @@
   [ is map:cityName of ?CITY ]
   "%2C"
   [ is map:countryName of ?AREA ]
+ )].
+}
+  log:implies { ?CITY :weatherPage ?PG }.
+
+
+{
+ ?CITY k:inRegion ?AREA.
+
+ ?PG log:uri [ is str:concatenation of (
+  "http://www.wunderground.com/cgi-bin/findweather/getForecast?query="
+  [ is map:cityName of ?CITY ]
+  "%2C"
+  [ is usps:stateAbbr of ?AREA ]
  )].
 }
   log:implies { ?CITY :weatherPage ?PG }.
@@ -53,6 +68,9 @@
 
 
 # $Log$
-# Revision 1.1  2003-03-10 22:51:38  connolly
+# Revision 1.2  2003-03-10 23:57:42  connolly
+# u.s. city support
+#
+# Revision 1.1  2003/03/10 22:51:38  connolly
 # got one case to work
 #
