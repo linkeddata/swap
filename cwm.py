@@ -554,7 +554,7 @@ class BI_resolvesTo(HeavyBuiltIn, Function):
     def evaluateObject2(self, store, subj):
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
-        F = store.any((theMeta, store.resolvesTo, doc, None))
+        F = store.any((experience, store.resolvesTo, doc, None))
         if F: return F
         if chatty > 10: progress("Reading and parsing " + `doc`)
         inputURI = doc.uriref()
@@ -2084,8 +2084,8 @@ Examples:
 #  Metadata context - storing information about what we are doing
 
 	_metaURI = urlparse.urljoin(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
-	global theMeta   # A global fourmula including first-hand knowledge from what happens
-	theMeta = theEngine.intern((FORMULA, _metaURI + "_forumla"))
+	global experience   # A global fourmula including first-hand knowledge from what happens
+	experience = theEngine.intern((FORMULA, _metaURI + "_forumla"))
 	history = None
 	
 #  Fix the output sink
@@ -2150,9 +2150,9 @@ Examples:
                     _step  = _step + 1
                     s = _metaURI + `_step`  #@@ leading 0s to make them sort?
                     if doMeta and history:
-                        _store.storeQuad((theMeta, META_mergedWith, s, history))
-                        _store.storeQuad((theMeta, META_source, s, inputContext))
-                        _store.storeQuad((theMeta, META_run, s, run))
+                        _store.storeQuad((experience, META_mergedWith, s, history))
+                        _store.storeQuad((experience, META_source, s, inputContext))
+                        _store.storeQuad((experience, META_run, s, run))
                         history = s
                     else:
                         history = inputContext
@@ -2227,9 +2227,9 @@ Examples:
                 if doMeta:
                     _step  = _step + 1
                     s = _metaURI + `_step`  #@@ leading 0s to make them sort?
-                    _store.storeQuad(theMeta, META_basis, s, history)
-                    _store.storeQuad(theMeta, META_filter, s, inputContext)
-                    _store.storeQuad(theMeta, META_run, s, run)
+                    _store.storeQuad(experience, META_basis, s, history)
+                    _store.storeQuad(experience, META_filter, s, inputContext)
+                    _store.storeQuad(experience, META_run, s, run)
                     history = s
 
             elif arg == "-purge":
