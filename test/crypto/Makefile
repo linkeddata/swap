@@ -5,6 +5,7 @@
 #  in reality be kept secure by the relevant groups or people.
 #
 CWM=python ../../cwm.py --crypto
+CHECK=python ../../check.py
 
 W=/devel/WWW
 RM=$W/2001/04/roadmap
@@ -12,7 +13,7 @@ PD=$W/2001/02pd
 
 include $(PD)/GVDOT.mak
 
-.SUFFIXES: .check .proof .response .request .public .private
+.SUFFIXES: .checked .proof .response .request .public .private
 
 .request.response:
 	$(CWM) access-rule.n3 --think --purge --with $< > $@
@@ -21,13 +22,18 @@ include $(PD)/GVDOT.mak
 	$(CWM) access-rule.n3 --think --purge --filter=result-filter.n3 \
 		 --base=foo --why --with $< > $@
 
+.proof.checked:
+	$(CHECK) < $< > $@
+
 .private.public:
 	$(CWM) $< access-onlyPublic.n3 --think --purge > $@
 
 #all: access-1.response
 #	touch all
 
-all: access-1.response
+some: access-1.response
+
+all: access-1.checked
 
 clean:
 #	rm *.response *.cert *.public 

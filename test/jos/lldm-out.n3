@@ -1,0 +1,491 @@
+#Processed by Id: cwm.py,v 1.128 2003/04/02 03:42:04 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/jos/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.136 2003/04/02 03:42:05 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/jos/
+     @prefix : <lldmP.n3#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix math: <http://www.w3.org/2000/10/swap/math#> .
+     @prefix owl: <http://www.w3.org/2002/07/owl#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix run: <.run-1049671598.194459p12946#> .
+     @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+    
+    this     log:forAll :m,
+                :x,
+                :y,
+                :z .
+    
+    <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L1>     a <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#Line>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#contains> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p1>,
+                <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p2>,
+                <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p5>,
+                <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p6>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#perpendicular> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L3>,
+                <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L4> .
+    
+    <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L3>     a <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#Line>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#contains> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p3>,
+                <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p5> .
+    
+    <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L4>     a <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#Line>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#contains> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p4>,
+                <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p6> .
+    
+    <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d>     a <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#LLDM> .
+    
+    <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d53>     a <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#Distance>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#op1> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d> .
+    
+    <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d54>     a <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#Distance>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#op2> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d> .
+    
+    <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#meas47>     a <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#LLDAlarm>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L1c> -0.061963775023832227;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L3c> 16.138461538461538;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d> -5.7941304360472685;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d53> 64.673863758291503;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d64> 70.467994194338772;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dL3m> -16.138461538461538;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dd13> -176.16669062071998;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dd24> -2658.30669062572;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ddL13> -16.200425313485372;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ddy13> -110.16669062071998;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ddy24> -2589.5066906257198;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dx12> -104.89999999999999;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dx51> -23.399765531524885;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dx53> -3.9997655315248872;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dx62> 24.741895537779016;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dx64> -4.3581044622209788;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dy12> 6.5;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dy13> -66.0;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dy24> -68.799999999999997;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dy53> -64.550062192989998;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dy64> -70.333101248769992;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p1x> "30.2";
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p1y> "23.3";
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p2x> "135.1";
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p2y> "16.8";
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p3x> "10.8";
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p3y> "89.3";
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p4x> "164.2";
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p4y> "85.6";
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p5x> 6.8002344684751135;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p5y> 24.749937807009999;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p6x> 159.84189553777901;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p6y> 15.26689875123;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL1dx51> "1.44993780701";
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL1dx62> "-1.53310124877";
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL1x1> "-1.87130600572";
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL1x2> "-8.37130600572";
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL3x3> "174.295384615";
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL3x4> "2649.93538462";
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#sdx53> 15.998124307174564;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#sdx64> 18.993074503630407;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#sdy53> 4166.7105291188764;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#sdy64> 4946.7451312697312;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ssd53> 4182.7086534260507;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ssd64> 4965.7382057733621 .
+    
+    <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p1>     a <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#Point>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#incident> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L1> .
+    
+    <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p2>     a <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#Point>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#incident> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L1> .
+    
+    <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p3>     a <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#Point>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#between2> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d53>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#incident> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L3> .
+    
+    <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p4>     a <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#Point>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#between2> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d64>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#incident> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L4> .
+    
+    <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p5>     a <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#Point>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#between1> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d53>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#incident> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L1>,
+                <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L3> .
+    
+    <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p6>     a <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#Point>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#between1> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d64>;
+         <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#incident> <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L1>,
+                <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L4> .
+    {
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d> :x .
+        :x     math:greaterThan "2.25" .
+        
+        }     log:implies {:m     a <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#LLDAlarm> .
+        } .
+    {
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d> :x .
+        :x     math:lessThan "-2.25" .
+        
+        }     log:implies {:m     a <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#LLDAlarm> .
+        } .
+    {
+        
+          ( :x 
+            "2"  )
+             math:exponentiation :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dx53> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#sdx53> :z .
+        } .
+    {
+        
+          ( :x 
+            "2"  )
+             math:exponentiation :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dx64> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#sdx64> :z .
+        } .
+    {
+        
+          ( :x 
+            "2"  )
+             math:exponentiation :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dy53> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#sdy53> :z .
+        } .
+    {
+        
+          ( :x 
+            "2"  )
+             math:exponentiation :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dy64> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#sdy64> :z .
+        } .
+    {
+        
+          ( :x 
+            "0.5"  )
+             math:exponentiation :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ssd53> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d53> :z .
+        } .
+    {
+        
+          ( :x 
+            "0.5"  )
+             math:exponentiation :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ssd64> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d64> :z .
+        } .
+    {
+        
+          ( "1" 
+            :x  )
+             math:quotient :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L1c> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dL3m> :z .
+        } .
+    {
+        
+          ( "0" 
+            :x  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dL3m> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L3c> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p1x> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p2x> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dx12> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p3x> :y;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p5x> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dx53> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:sum :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p1y> :y;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL1dx51> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p5y> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:quotient :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ddL13> :y;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ddy24> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p6x> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:sum :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p2y> :y;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL1dx62> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p6y> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:sum :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#sdx53> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#sdy53> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ssd53> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p4x> :y;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p6x> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dx64> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:sum :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#sdx64> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#sdy64> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ssd64> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d53> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d64> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#d> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p2x> :y;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p6x> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dx62> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p1y> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p2y> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dy12> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p1y> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p3y> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dy13> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p2y> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p4y> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dy24> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p3y> :y;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p5y> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dy53> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p4y> :y;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p6y> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dy64> :z .
+        } .
+    {
+        
+          ( :y 
+            :x  )
+             math:quotient :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dx12> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dy12> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L1c> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p1x> :y;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p5x> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dx51> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:product :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L1c> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p1x> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL1x1> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:product :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L1c> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p2x> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL1x2> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:product :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L3c> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p3x> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL3x3> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:product :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L3c> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p4x> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL3x4> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL1x1> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL3x3> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dd13> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dd13> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dy13> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ddy13> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL1x2> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL3x4> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dd24> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dd24> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dy24> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ddy24> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:difference :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L1c> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L3c> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ddL13> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:product :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L1c> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dx51> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL1dx51> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:product :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#L1c> :x;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#dx62> :y .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#pL1dx62> :z .
+        } .
+    {
+        
+          ( :x 
+            :y  )
+             math:quotient :z .
+        :m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ddL13> :y;
+             <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#ddy13> :x .
+        
+        }     log:implies {:m     <http://www.agfa.com/w3c/2002/10/medicad/op/lldm#p5x> :z .
+        } .
+    
+#ENDS

@@ -1,0 +1,2138 @@
+#Processed by Id: cwm.py,v 1.128 2003/04/02 03:42:04 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/crypto/foo
+        
+#  Notation3 generation by
+#       notation3.py,v 1.136 2003/04/02 03:42:05 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/crypto/foo
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+     @prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix n3: <http://www.w3.org/2000/10/swap/reify#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix root: <access-rule.n3#> .
+     @prefix run: <.run-1049493148.007484p12438#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     log:forSome <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g4>,
+                <#_g5>,
+                <#_g6> .
+    
+    <#_g0>     a :Parsing;
+         :source <access-1.request> .
+    
+    <#_g1>     a :Parsing;
+         :source <md5:e5b59d8b93971f88b6e1e04daa201615> .
+    
+    <#_g2>     a :Parsing;
+         :source <access-master.public> .
+    
+    <#_g3>     a :Parsing;
+         :source <access-elisa.cert> .
+      [      a :Conjunction,
+                    :Proof;
+             :component  [
+                 a :Extraction;
+                 :because  [
+                     a :Inference;
+                     :binding  [
+                         :boundTo  [
+                             n3:uri "md5:e5b59d8b93971f88b6e1e04daa201615#_formula" ];
+                         :variable  [
+                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/result-filter.n3#x" ] ];
+                     :evidence  [
+                         a :Extraction;
+                         :because  [
+                             a :Inference;
+                             :binding  [
+                                 :boundTo  [
+                                     n3:uri "md5:e5b59d8b93971f88b6e1e04daa201615#_formula" ];
+                                 :variable  [
+                                     n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#request" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:value """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" ];
+                                 :variable  [
+                                     n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#k" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "http://www.w3.org/Member" ];
+                                 :variable  [
+                                     n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#d" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:value """
+MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
+MTAzMTYwODQxNjk4MjI4NTMyMjMxMDY5MjQ3NzI0NzMzMzc0MjYxMDQxMDc0MDA1MzkzNzgyMjc2
+ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
+NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
+NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
+MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
+""" ];
+                                 :variable  [
+                                     n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L43C34" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "md5:b87c3149171c859c703e3a2fcf19eba9#_formula" ];
+                                 :variable  [
+                                     n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L43C5" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:uri "md5:c570323629f28c394b0b4ef2671baaed#_formula" ];
+                                 :variable  [
+                                     n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L40C5" ] ],
+                                     [
+                                 :boundTo  [
+                                     n3:value """
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+""" ];
+                                 :variable  [
+                                     n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#k2" ] ];
+                             :evidence  [
+                                 a :Extraction;
+                                 :because  [
+                                     a :Inference;
+                                     :binding  [
+                                         :boundTo  [
+                                             n3:uri "md5:e5b59d8b93971f88b6e1e04daa201615#_formula" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#G" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:value """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#k" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:uri "http://www.w3.org/Member" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#d" ] ];
+                                     :evidence  [
+                                         a :Extraction;
+                                         :because <#_g6>;
+                                         :gives {{
+                                            this     acc:credential <access-elisa.cert>,
+                                                        <access-tiina.cert>;
+                                                 acc:forDocument <http://www.w3.org/Member>;
+                                                 acc:junk "32746213462187364732164732164321" .
+                                            
+                                            }     acc:requestSupportedBy """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" .
+                                        } ],
+                                             [
+                                         a :Extraction;
+                                         :because <#_g1>;
+                                         :gives {{
+                                            this     acc:credential <access-elisa.cert>,
+                                                        <access-tiina.cert>;
+                                                 acc:forDocument <http://www.w3.org/Member>;
+                                                 acc:junk "32746213462187364732164732164321" .
+                                            
+                                            }     acc:forDocument <http://www.w3.org/Member> .
+                                        } ];
+                                     :rule  [
+                                         a :Extraction;
+                                         :because <#_g5>;
+                                         :gives {this     log:forAll root:G,
+                                                    root:d,
+                                                    root:k .
+                                        {
+                                            root:G     log:includes {root:G     acc:forDocument root:d .
+                                                };
+                                                 acc:requestSupportedBy root:k .
+                                            
+                                            }     log:implies {root:G     acc:forDocument root:d .
+                                            } .
+                                        } ] ];
+                                 :gives {{
+                                    this     acc:credential <access-elisa.cert>,
+                                                <access-tiina.cert>;
+                                         acc:forDocument <http://www.w3.org/Member>;
+                                         acc:junk "32746213462187364732164732164321" .
+                                    
+                                    }     acc:forDocument <http://www.w3.org/Member> .
+                                } ],
+                                     [
+                                 a :Extraction;
+                                 :because  [
+                                     a :Inference;
+                                     :binding  [
+                                         :boundTo  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-master.public#_formula" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L52C40" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:value """
+MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
+MTAzMTYwODQxNjk4MjI4NTMyMjMxMDY5MjQ3NzI0NzMzMzc0MjYxMDQxMDc0MDA1MzkzNzgyMjc2
+ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
+NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
+NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
+MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
+""" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#x" ] ];
+                                     :evidence  [
+                                         a :Fact;
+                                         :gives {<access-master.public>     log:semantics {"""
+MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
+MTAzMTYwODQxNjk4MjI4NTMyMjMxMDY5MjQ3NzI0NzMzMzc0MjYxMDQxMDc0MDA1MzkzNzgyMjc2
+ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
+NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
+NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
+MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
+"""     a acc:MasterKey .
+                                            } .
+                                        };
+                                         :proof  [
+                                             a :Conjunction;
+                                             :component  [
+                                                 a :Extraction;
+                                                 :because <#_g2>;
+                                                 :gives {"""
+MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
+MTAzMTYwODQxNjk4MjI4NTMyMjMxMDY5MjQ3NzI0NzMzMzc0MjYxMDQxMDc0MDA1MzkzNzgyMjc2
+ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
+NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
+NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
+MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
+"""     a acc:MasterKey .
+                                                } ];
+                                             :gives {"""
+MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
+MTAzMTYwODQxNjk4MjI4NTMyMjMxMDY5MjQ3NzI0NzMzMzc0MjYxMDQxMDc0MDA1MzkzNzgyMjc2
+ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
+NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
+NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
+MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
+"""     a acc:MasterKey .
+                                            } ] ],
+                                             [
+                                         a :Extraction;
+                                         :because <#_g2>;
+                                         :gives {"""
+MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
+MTAzMTYwODQxNjk4MjI4NTMyMjMxMDY5MjQ3NzI0NzMzMzc0MjYxMDQxMDc0MDA1MzkzNzgyMjc2
+ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
+NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
+NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
+MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
+"""     a acc:MasterKey .
+                                        } ];
+                                     :rule  [
+                                         a :Extraction;
+                                         :because <#_g5>;
+                                         :gives {this     log:forAll root:x .
+                                        {
+                                            this     log:forSome root:_L52C40 .
+                                            <access-master.public>     log:semantics root:_L52C40 .
+                                            root:_L52C40     log:includes {root:x     a acc:MasterKey .
+                                                } .
+                                            
+                                            }     log:implies {root:x     a acc:MasterKey .
+                                            } .
+                                        } ] ];
+                                 :gives {"""
+MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
+MTAzMTYwODQxNjk4MjI4NTMyMjMxMDY5MjQ3NzI0NzMzMzc0MjYxMDQxMDc0MDA1MzkzNzgyMjc2
+ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
+NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
+NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
+MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
+"""     a acc:MasterKey .
+                                } ],
+                                     [
+                                 a :Extraction;
+                                 :because  [
+                                     a :Inference;
+                                     :binding  [
+                                         :boundTo  [
+                                             n3:uri "md5:e5b59d8b93971f88b6e1e04daa201615#_formula" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L82C4" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L82C22" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert#_formula" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#F" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:value """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    \"""
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+\"""     a :MemberKey;
+         :authorityName "Elisa";
+         :junk "327462sjsdfjsakdhfkjsafd32164321" .
+    
+""" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#str" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert#_L31C23" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L83C42" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:value "b87c3149171c859c703e3a2fcf19eba9" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L84C22" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:value """
+MzgxODE0NzM2MDk4MDU3Njc0OTk2NTYwMzMwNjY4MDMwNTk5NjUyMDY2Mzk0OTQzMTE0MTMyMTA4
+MDY5NzM0MjQwNjAyOTU5ODA5NTcxMzk1NTU2NzQzNTIzMDE1ODI5MzI1MDA3NzgzNzE2ODA3MjQy
+NjAyNDMwMjc4MTEzNjY4OTYyNjg5MTU1MTA4MzI3ODQzNjI2NDU2OTQ5NDcwNDIxOTM2Njg0ODA2
+OTA1NzA1MDA5MzI2ODQ4MDczMTM5NDI5NzA4ODM1NzAwOTYwMDExMzgwNTQ1MDg5MDgwNDkyODA0
+ODk2NTUwMjk2MTk0MTIxMjIwMjA4NDcyNTM5MjgzMDkxOTA2NTQ3NTYyNjA5MjU2ODY4NTkyNTY5
+ODUwNDc5MDIxOTUyMDM4MDQ0MTk5NTI=3D
+""" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#sig" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:value """
+MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
+MTAzMTYwODQxNjk4MjI4NTMyMjMxMDY5MjQ3NzI0NzMzMzc0MjYxMDQxMDc0MDA1MzkzNzgyMjc2
+ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
+NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
+NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
+MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
+""" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#k" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:uri "md5:b87c3149171c859c703e3a2fcf19eba9#_formula" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#G" ] ];
+                                     :evidence  [
+                                         a :Extraction;
+                                         :because  [
+                                             a :Inference;
+                                             :binding  [
+                                                 :boundTo  [
+                                                     n3:uri "md5:e5b59d8b93971f88b6e1e04daa201615#_formula" ];
+                                                 :variable  [
+                                                     n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#G" ] ],
+                                                     [
+                                                 :boundTo  [
+                                                     n3:value """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" ];
+                                                 :variable  [
+                                                     n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#k" ] ],
+                                                     [
+                                                 :boundTo  [
+                                                     n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert" ];
+                                                 :variable  [
+                                                     n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#d" ] ];
+                                             :evidence  [
+                                                 a :Extraction;
+                                                 :because <#_g6>;
+                                                 :gives {{
+                                                    this     acc:credential <access-elisa.cert>,
+                                                                <access-tiina.cert>;
+                                                         acc:forDocument <http://www.w3.org/Member>;
+                                                         acc:junk "32746213462187364732164732164321" .
+                                                    
+                                                    }     acc:requestSupportedBy """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" .
+                                                } ],
+                                                     [
+                                                 a :Extraction;
+                                                 :because <#_g1>;
+                                                 :gives {{
+                                                    this     acc:credential <access-elisa.cert>,
+                                                                <access-tiina.cert>;
+                                                         acc:forDocument <http://www.w3.org/Member>;
+                                                         acc:junk "32746213462187364732164732164321" .
+                                                    
+                                                    }     acc:credential <access-elisa.cert> .
+                                                } ];
+                                             :rule  [
+                                                 a :Extraction;
+                                                 :because <#_g5>;
+                                                 :gives {this     log:forAll root:G,
+                                                            root:d,
+                                                            root:k .
+                                                {
+                                                    root:G     log:includes {root:G     acc:credential root:d .
+                                                        };
+                                                         acc:requestSupportedBy root:k .
+                                                    
+                                                    }     log:implies {root:G     acc:credential root:d .
+                                                    } .
+                                                } ] ];
+                                         :gives {{
+                                            this     acc:credential <access-elisa.cert>,
+                                                        <access-tiina.cert>;
+                                                 acc:forDocument <http://www.w3.org/Member>;
+                                                 acc:junk "32746213462187364732164732164321" .
+                                            
+                                            }     acc:credential <access-elisa.cert> .
+                                        } ],
+                                             [
+                                         a :Fact;
+                                         :gives {<access-elisa.cert>     log:semantics {this     log:forSome <access-elisa.cert#_L31C23> .
+                                            """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    \"""
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+\"""     a :MemberKey;
+         :authorityName "Elisa";
+         :junk "327462sjsdfjsakdhfkjsafd32164321" .
+    
+"""     acc:endorsement <access-elisa.cert#_L31C23> .
+                                            <access-elisa.cert#_L31C23>     acc:key """
+MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
+MTAzMTYwODQxNjk4MjI4NTMyMjMxMDY5MjQ3NzI0NzMzMzc0MjYxMDQxMDc0MDA1MzkzNzgyMjc2
+ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
+NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
+NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
+MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
+""";
+                                                 acc:signature """
+MzgxODE0NzM2MDk4MDU3Njc0OTk2NTYwMzMwNjY4MDMwNTk5NjUyMDY2Mzk0OTQzMTE0MTMyMTA4
+MDY5NzM0MjQwNjAyOTU5ODA5NTcxMzk1NTU2NzQzNTIzMDE1ODI5MzI1MDA3NzgzNzE2ODA3MjQy
+NjAyNDMwMjc4MTEzNjY4OTYyNjg5MTU1MTA4MzI3ODQzNjI2NDU2OTQ5NDcwNDIxOTM2Njg0ODA2
+OTA1NzA1MDA5MzI2ODQ4MDczMTM5NDI5NzA4ODM1NzAwOTYwMDExMzgwNTQ1MDg5MDgwNDkyODA0
+ODk2NTUwMjk2MTk0MTIxMjIwMjA4NDcyNTM5MjgzMDkxOTA2NTQ3NTYyNjA5MjU2ODY4NTkyNTY5
+ODUwNDc5MDIxOTUyMDM4MDQ0MTk5NTI=3D
+""" .
+                                            } .
+                                        };
+                                         :proof  [
+                                             a :Conjunction;
+                                             :component  [
+                                                 a :Extraction;
+                                                 :because <#_g3>;
+                                                 :gives {this     log:forSome <access-elisa.cert#_L31C23> .
+                                                <access-elisa.cert#_L31C23>     acc:key """
+MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
+MTAzMTYwODQxNjk4MjI4NTMyMjMxMDY5MjQ3NzI0NzMzMzc0MjYxMDQxMDc0MDA1MzkzNzgyMjc2
+ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
+NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
+NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
+MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
+""" .
+                                                } ],
+                                                     [
+                                                 a :Extraction;
+                                                 :because <#_g3>;
+                                                 :gives {this     log:forSome <access-elisa.cert#_L31C23> .
+                                                <access-elisa.cert#_L31C23>     acc:signature """
+MzgxODE0NzM2MDk4MDU3Njc0OTk2NTYwMzMwNjY4MDMwNTk5NjUyMDY2Mzk0OTQzMTE0MTMyMTA4
+MDY5NzM0MjQwNjAyOTU5ODA5NTcxMzk1NTU2NzQzNTIzMDE1ODI5MzI1MDA3NzgzNzE2ODA3MjQy
+NjAyNDMwMjc4MTEzNjY4OTYyNjg5MTU1MTA4MzI3ODQzNjI2NDU2OTQ5NDcwNDIxOTM2Njg0ODA2
+OTA1NzA1MDA5MzI2ODQ4MDczMTM5NDI5NzA4ODM1NzAwOTYwMDExMzgwNTQ1MDg5MDgwNDkyODA0
+ODk2NTUwMjk2MTk0MTIxMjIwMjA4NDcyNTM5MjgzMDkxOTA2NTQ3NTYyNjA5MjU2ODY4NTkyNTY5
+ODUwNDc5MDIxOTUyMDM4MDQ0MTk5NTI=3D
+""" .
+                                                } ],
+                                                     [
+                                                 a :Extraction;
+                                                 :because <#_g3>;
+                                                 :gives {this     log:forSome <access-elisa.cert#_L31C23> .
+                                                """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    \"""
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+\"""     a :MemberKey;
+         :authorityName "Elisa";
+         :junk "327462sjsdfjsakdhfkjsafd32164321" .
+    
+"""     acc:endorsement <access-elisa.cert#_L31C23> .
+                                                } ];
+                                             :existential "file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert#_L31C23";
+                                             :gives {this     log:forSome <access-elisa.cert#_L31C23> .
+                                            """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    \"""
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+\"""     a :MemberKey;
+         :authorityName "Elisa";
+         :junk "327462sjsdfjsakdhfkjsafd32164321" .
+    
+"""     acc:endorsement <access-elisa.cert#_L31C23> .
+                                            <access-elisa.cert#_L31C23>     acc:key """
+MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
+MTAzMTYwODQxNjk4MjI4NTMyMjMxMDY5MjQ3NzI0NzMzMzc0MjYxMDQxMDc0MDA1MzkzNzgyMjc2
+ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
+NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
+NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
+MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
+""";
+                                                 acc:signature """
+MzgxODE0NzM2MDk4MDU3Njc0OTk2NTYwMzMwNjY4MDMwNTk5NjUyMDY2Mzk0OTQzMTE0MTMyMTA4
+MDY5NzM0MjQwNjAyOTU5ODA5NTcxMzk1NTU2NzQzNTIzMDE1ODI5MzI1MDA3NzgzNzE2ODA3MjQy
+NjAyNDMwMjc4MTEzNjY4OTYyNjg5MTU1MTA4MzI3ODQzNjI2NDU2OTQ5NDcwNDIxOTM2Njg0ODA2
+OTA1NzA1MDA5MzI2ODQ4MDczMTM5NDI5NzA4ODM1NzAwOTYwMDExMzgwNTQ1MDg5MDgwNDkyODA0
+ODk2NTUwMjk2MTk0MTIxMjIwMjA4NDcyNTM5MjgzMDkxOTA2NTQ3NTYyNjA5MjU2ODY4NTkyNTY5
+ODUwNDc5MDIxOTUyMDM4MDQ0MTk5NTI=3D
+""" .
+                                            } ] ],
+                                             [
+                                         a :Extraction;
+                                         :because <#_g3>;
+                                         :gives {this     log:forSome <access-elisa.cert#_L31C23> .
+                                        """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    \"""
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+\"""     a :MemberKey;
+         :authorityName "Elisa";
+         :junk "327462sjsdfjsakdhfkjsafd32164321" .
+    
+"""     acc:endorsement <access-elisa.cert#_L31C23> .
+                                        } ],
+                                             [
+                                         a :Fact;
+                                         :gives {"""     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    \"""
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+\"""     a :MemberKey;
+         :authorityName "Elisa";
+         :junk "327462sjsdfjsakdhfkjsafd32164321" .
+    
+"""     crypto:md5 "b87c3149171c859c703e3a2fcf19eba9" .
+                                        } ],
+                                             [
+                                         a :Extraction;
+                                         :because <#_g3>;
+                                         :gives {this     log:forSome <access-elisa.cert#_L31C23> .
+                                        <access-elisa.cert#_L31C23>     acc:signature """
+MzgxODE0NzM2MDk4MDU3Njc0OTk2NTYwMzMwNjY4MDMwNTk5NjUyMDY2Mzk0OTQzMTE0MTMyMTA4
+MDY5NzM0MjQwNjAyOTU5ODA5NTcxMzk1NTU2NzQzNTIzMDE1ODI5MzI1MDA3NzgzNzE2ODA3MjQy
+NjAyNDMwMjc4MTEzNjY4OTYyNjg5MTU1MTA4MzI3ODQzNjI2NDU2OTQ5NDcwNDIxOTM2Njg0ODA2
+OTA1NzA1MDA5MzI2ODQ4MDczMTM5NDI5NzA4ODM1NzAwOTYwMDExMzgwNTQ1MDg5MDgwNDkyODA0
+ODk2NTUwMjk2MTk0MTIxMjIwMjA4NDcyNTM5MjgzMDkxOTA2NTQ3NTYyNjA5MjU2ODY4NTkyNTY5
+ODUwNDc5MDIxOTUyMDM4MDQ0MTk5NTI=3D
+""" .
+                                        } ],
+                                             [
+                                         a :Extraction;
+                                         :because <#_g3>;
+                                         :gives {this     log:forSome <access-elisa.cert#_L31C23> .
+                                        <access-elisa.cert#_L31C23>     acc:key """
+MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
+MTAzMTYwODQxNjk4MjI4NTMyMjMxMDY5MjQ3NzI0NzMzMzc0MjYxMDQxMDc0MDA1MzkzNzgyMjc2
+ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
+NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
+NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
+MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
+""" .
+                                        } ],
+                                             [
+                                         a :Fact;
+                                         :gives {"""     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    \"""
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+\"""     a :MemberKey;
+         :authorityName "Elisa";
+         :junk "327462sjsdfjsakdhfkjsafd32164321" .
+    
+"""     log:parsedAsN3 {"""
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+"""     a acc:MemberKey;
+                                                 acc:authorityName "Elisa";
+                                                 acc:junk "327462sjsdfjsakdhfkjsafd32164321" .
+                                            } .
+                                        } ];
+                                     :rule  [
+                                         a :Extraction;
+                                         :because <#_g5>;
+                                         :gives {this     log:forAll root:F,
+                                                    root:G,
+                                                    root:k,
+                                                    root:sig,
+                                                    root:str .
+                                        {
+                                            this     log:forSome root:_L82C22,
+                                                        root:_L82C4,
+                                                        root:_L84C22 .
+                                            root:F     log:includes {this     log:forSome root:_L83C42 .
+                                                root:_L83C42     acc:key root:k;
+                                                     acc:signature root:sig .
+                                                root:str     acc:endorsement root:_L83C42 .
+                                                } .
+                                            root:_L82C22     log:semantics root:F .
+                                            root:_L82C4     acc:credential root:_L82C22 .
+                                            root:k     crypto:verify  (
+                                                root:_L84C22 
+                                                root:sig  ) .
+                                            root:str     crypto:md5 root:_L84C22;
+                                                 log:parsedAsN3 root:G .
+                                            
+                                            }     log:implies {root:G     acc:certSupportedBy root:k .
+                                            } .
+                                        } ] ];
+                                 :gives {{
+                                    """
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+"""     a acc:MemberKey;
+                                         acc:authorityName "Elisa";
+                                         acc:junk "327462sjsdfjsakdhfkjsafd32164321" .
+                                    
+                                    }     acc:certSupportedBy """
+MTAyMTIxCgoyNjE5NzgxOTg0Mzg4MTk0OTAxMDgyNDIwNDM5NjcyMjYyMTU0MDk2MDM2Njk0NzA2
+MTAzMTYwODQxNjk4MjI4NTMyMjMxMDY5MjQ3NzI0NzMzMzc0MjYxMDQxMDc0MDA1MzkzNzgyMjc2
+ODcwMjI1MTE4NDEyNTU1MzczMzI1MzMwNDU5MzgwMDQ0OTY3MzI4MjcxMzY0NDkwNjM4NDI0MjQ4
+NTYxMTQxODE0MDIzMzYwOTcyNDk5MTMxMjIyNTcyNTE2Mzk3NDE5NzYyMzQ4NzQ3MzA0MTY3NDI4
+NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
+MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
+""" .
+                                } ],
+                                     [
+                                 a :Extraction;
+                                 :because  [
+                                     a :Inference;
+                                     :binding  [
+                                         :boundTo  [
+                                             n3:uri "md5:e5b59d8b93971f88b6e1e04daa201615#_formula" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L82C4" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L82C22" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert#_formula" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#F" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:value """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    \"""
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+\"""     a :RequestKey;
+         :authorityName "Tiina";
+         :junk "327462sjsdfjsakdhfkjsafd32164321" .
+    
+""" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#str" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert#_L31C23" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L83C42" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:value "c570323629f28c394b0b4ef2671baaed" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L84C22" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:value """
+MjY1NDE3NTEzNzc2NDU1OTM2MDYzNDg0MzE5ODUzMDMyOTI2MDYxMzU0MDY2OTkwMjQwMjc1MTA2
+MTU4ODI4ODA2MzA1NzIxNjMxMzk5OTQ1ODU1NjU3OTAwMTk1NjIyMTYzMzU1MjU2MTAwMTU0NjU1
+MDQzMzUzODcxMzI4MTgwMTgwOTM2OTA5MDk5OTk3NDg4OTUxNzU5NTc2NDgyNjExMDkzNzA3NDkx
+MjM0MDU2MzAyMzk4ODkwOTM1ODI4Nzk5MDczNTI1OTM1ODk4MDQ4Njg4MTU1MjYxMDUxODM3MDc1
+MTcyMzcyODg5ODUxODg4NzUyMDEwMDYwMTAwODI0MTcxMTkzNTM1NzcwOTgzOTQ0MjAzMzcxNTc4
+MDE4NDMxMjUyMjg2MzkwMzc1NTkyNTg1
+""" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#sig" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:value """
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+""" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#k" ] ],
+                                             [
+                                         :boundTo  [
+                                             n3:uri "md5:c570323629f28c394b0b4ef2671baaed#_formula" ];
+                                         :variable  [
+                                             n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#G" ] ];
+                                     :evidence  [
+                                         a :Extraction;
+                                         :because  [
+                                             a :Inference;
+                                             :binding  [
+                                                 :boundTo  [
+                                                     n3:uri "md5:e5b59d8b93971f88b6e1e04daa201615#_formula" ];
+                                                 :variable  [
+                                                     n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#G" ] ],
+                                                     [
+                                                 :boundTo  [
+                                                     n3:value """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" ];
+                                                 :variable  [
+                                                     n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#k" ] ],
+                                                     [
+                                                 :boundTo  [
+                                                     n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert" ];
+                                                 :variable  [
+                                                     n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#d" ] ];
+                                             :evidence  [
+                                                 a :Extraction;
+                                                 :because <#_g6>;
+                                                 :gives {{
+                                                    this     acc:credential <access-elisa.cert>,
+                                                                <access-tiina.cert>;
+                                                         acc:forDocument <http://www.w3.org/Member>;
+                                                         acc:junk "32746213462187364732164732164321" .
+                                                    
+                                                    }     acc:requestSupportedBy """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" .
+                                                } ],
+                                                     [
+                                                 a :Extraction;
+                                                 :because <#_g1>;
+                                                 :gives {{
+                                                    this     acc:credential <access-elisa.cert>,
+                                                                <access-tiina.cert>;
+                                                         acc:forDocument <http://www.w3.org/Member>;
+                                                         acc:junk "32746213462187364732164732164321" .
+                                                    
+                                                    }     acc:credential <access-tiina.cert> .
+                                                } ];
+                                             :rule  [
+                                                 a :Extraction;
+                                                 :because <#_g5>;
+                                                 :gives {this     log:forAll root:G,
+                                                            root:d,
+                                                            root:k .
+                                                {
+                                                    root:G     log:includes {root:G     acc:credential root:d .
+                                                        };
+                                                         acc:requestSupportedBy root:k .
+                                                    
+                                                    }     log:implies {root:G     acc:credential root:d .
+                                                    } .
+                                                } ] ];
+                                         :gives {{
+                                            this     acc:credential <access-elisa.cert>,
+                                                        <access-tiina.cert>;
+                                                 acc:forDocument <http://www.w3.org/Member>;
+                                                 acc:junk "32746213462187364732164732164321" .
+                                            
+                                            }     acc:credential <access-tiina.cert> .
+                                        } ],
+                                             [
+                                         a :Fact;
+                                         :gives {<access-tiina.cert>     log:semantics {this     log:forSome <access-tiina.cert#_L31C23> .
+                                            """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    \"""
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+\"""     a :RequestKey;
+         :authorityName "Tiina";
+         :junk "327462sjsdfjsakdhfkjsafd32164321" .
+    
+"""     acc:endorsement <access-tiina.cert#_L31C23> .
+                                            <access-tiina.cert#_L31C23>     acc:key """
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+""";
+                                                 acc:signature """
+MjY1NDE3NTEzNzc2NDU1OTM2MDYzNDg0MzE5ODUzMDMyOTI2MDYxMzU0MDY2OTkwMjQwMjc1MTA2
+MTU4ODI4ODA2MzA1NzIxNjMxMzk5OTQ1ODU1NjU3OTAwMTk1NjIyMTYzMzU1MjU2MTAwMTU0NjU1
+MDQzMzUzODcxMzI4MTgwMTgwOTM2OTA5MDk5OTk3NDg4OTUxNzU5NTc2NDgyNjExMDkzNzA3NDkx
+MjM0MDU2MzAyMzk4ODkwOTM1ODI4Nzk5MDczNTI1OTM1ODk4MDQ4Njg4MTU1MjYxMDUxODM3MDc1
+MTcyMzcyODg5ODUxODg4NzUyMDEwMDYwMTAwODI0MTcxMTkzNTM1NzcwOTgzOTQ0MjAzMzcxNTc4
+MDE4NDMxMjUyMjg2MzkwMzc1NTkyNTg1
+""" .
+                                            } .
+                                        };
+                                         :proof  [
+                                             a :Conjunction;
+                                             :component  [
+                                                 a :Extraction;
+                                                 :because <#_g4>;
+                                                 :gives {this     log:forSome <access-tiina.cert#_L31C23> .
+                                                <access-tiina.cert#_L31C23>     acc:key """
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+""" .
+                                                } ],
+                                                     [
+                                                 a :Extraction;
+                                                 :because <#_g4>;
+                                                 :gives {this     log:forSome <access-tiina.cert#_L31C23> .
+                                                <access-tiina.cert#_L31C23>     acc:signature """
+MjY1NDE3NTEzNzc2NDU1OTM2MDYzNDg0MzE5ODUzMDMyOTI2MDYxMzU0MDY2OTkwMjQwMjc1MTA2
+MTU4ODI4ODA2MzA1NzIxNjMxMzk5OTQ1ODU1NjU3OTAwMTk1NjIyMTYzMzU1MjU2MTAwMTU0NjU1
+MDQzMzUzODcxMzI4MTgwMTgwOTM2OTA5MDk5OTk3NDg4OTUxNzU5NTc2NDgyNjExMDkzNzA3NDkx
+MjM0MDU2MzAyMzk4ODkwOTM1ODI4Nzk5MDczNTI1OTM1ODk4MDQ4Njg4MTU1MjYxMDUxODM3MDc1
+MTcyMzcyODg5ODUxODg4NzUyMDEwMDYwMTAwODI0MTcxMTkzNTM1NzcwOTgzOTQ0MjAzMzcxNTc4
+MDE4NDMxMjUyMjg2MzkwMzc1NTkyNTg1
+""" .
+                                                } ],
+                                                     [
+                                                 a :Extraction;
+                                                 :because <#_g4>;
+                                                 :gives {this     log:forSome <access-tiina.cert#_L31C23> .
+                                                """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    \"""
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+\"""     a :RequestKey;
+         :authorityName "Tiina";
+         :junk "327462sjsdfjsakdhfkjsafd32164321" .
+    
+"""     acc:endorsement <access-tiina.cert#_L31C23> .
+                                                } ];
+                                             :existential "file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert#_L31C23";
+                                             :gives {this     log:forSome <access-tiina.cert#_L31C23> .
+                                            """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    \"""
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+\"""     a :RequestKey;
+         :authorityName "Tiina";
+         :junk "327462sjsdfjsakdhfkjsafd32164321" .
+    
+"""     acc:endorsement <access-tiina.cert#_L31C23> .
+                                            <access-tiina.cert#_L31C23>     acc:key """
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+""";
+                                                 acc:signature """
+MjY1NDE3NTEzNzc2NDU1OTM2MDYzNDg0MzE5ODUzMDMyOTI2MDYxMzU0MDY2OTkwMjQwMjc1MTA2
+MTU4ODI4ODA2MzA1NzIxNjMxMzk5OTQ1ODU1NjU3OTAwMTk1NjIyMTYzMzU1MjU2MTAwMTU0NjU1
+MDQzMzUzODcxMzI4MTgwMTgwOTM2OTA5MDk5OTk3NDg4OTUxNzU5NTc2NDgyNjExMDkzNzA3NDkx
+MjM0MDU2MzAyMzk4ODkwOTM1ODI4Nzk5MDczNTI1OTM1ODk4MDQ4Njg4MTU1MjYxMDUxODM3MDc1
+MTcyMzcyODg5ODUxODg4NzUyMDEwMDYwMTAwODI0MTcxMTkzNTM1NzcwOTgzOTQ0MjAzMzcxNTc4
+MDE4NDMxMjUyMjg2MzkwMzc1NTkyNTg1
+""" .
+                                            } ] ],
+                                             [
+                                         a :Extraction;
+                                         :because <#_g4>;
+                                         :gives {this     log:forSome <access-tiina.cert#_L31C23> .
+                                        """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    \"""
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+\"""     a :RequestKey;
+         :authorityName "Tiina";
+         :junk "327462sjsdfjsakdhfkjsafd32164321" .
+    
+"""     acc:endorsement <access-tiina.cert#_L31C23> .
+                                        } ],
+                                             [
+                                         a :Fact;
+                                         :gives {"""     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    \"""
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+\"""     a :RequestKey;
+         :authorityName "Tiina";
+         :junk "327462sjsdfjsakdhfkjsafd32164321" .
+    
+"""     crypto:md5 "c570323629f28c394b0b4ef2671baaed" .
+                                        } ],
+                                             [
+                                         a :Extraction;
+                                         :because <#_g4>;
+                                         :gives {this     log:forSome <access-tiina.cert#_L31C23> .
+                                        <access-tiina.cert#_L31C23>     acc:signature """
+MjY1NDE3NTEzNzc2NDU1OTM2MDYzNDg0MzE5ODUzMDMyOTI2MDYxMzU0MDY2OTkwMjQwMjc1MTA2
+MTU4ODI4ODA2MzA1NzIxNjMxMzk5OTQ1ODU1NjU3OTAwMTk1NjIyMTYzMzU1MjU2MTAwMTU0NjU1
+MDQzMzUzODcxMzI4MTgwMTgwOTM2OTA5MDk5OTk3NDg4OTUxNzU5NTc2NDgyNjExMDkzNzA3NDkx
+MjM0MDU2MzAyMzk4ODkwOTM1ODI4Nzk5MDczNTI1OTM1ODk4MDQ4Njg4MTU1MjYxMDUxODM3MDc1
+MTcyMzcyODg5ODUxODg4NzUyMDEwMDYwMTAwODI0MTcxMTkzNTM1NzcwOTgzOTQ0MjAzMzcxNTc4
+MDE4NDMxMjUyMjg2MzkwMzc1NTkyNTg1
+""" .
+                                        } ],
+                                             [
+                                         a :Extraction;
+                                         :because <#_g4>;
+                                         :gives {this     log:forSome <access-tiina.cert#_L31C23> .
+                                        <access-tiina.cert#_L31C23>     acc:key """
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+""" .
+                                        } ],
+                                             [
+                                         a :Fact;
+                                         :gives {"""     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    \"""
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+\"""     a :RequestKey;
+         :authorityName "Tiina";
+         :junk "327462sjsdfjsakdhfkjsafd32164321" .
+    
+"""     log:parsedAsN3 {"""
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+"""     a acc:RequestKey;
+                                                 acc:authorityName "Tiina";
+                                                 acc:junk "327462sjsdfjsakdhfkjsafd32164321" .
+                                            } .
+                                        } ];
+                                     :rule  [
+                                         a :Extraction;
+                                         :because <#_g5>;
+                                         :gives {this     log:forAll root:F,
+                                                    root:G,
+                                                    root:k,
+                                                    root:sig,
+                                                    root:str .
+                                        {
+                                            this     log:forSome root:_L82C22,
+                                                        root:_L82C4,
+                                                        root:_L84C22 .
+                                            root:F     log:includes {this     log:forSome root:_L83C42 .
+                                                root:_L83C42     acc:key root:k;
+                                                     acc:signature root:sig .
+                                                root:str     acc:endorsement root:_L83C42 .
+                                                } .
+                                            root:_L82C22     log:semantics root:F .
+                                            root:_L82C4     acc:credential root:_L82C22 .
+                                            root:k     crypto:verify  (
+                                                root:_L84C22 
+                                                root:sig  ) .
+                                            root:str     crypto:md5 root:_L84C22;
+                                                 log:parsedAsN3 root:G .
+                                            
+                                            }     log:implies {root:G     acc:certSupportedBy root:k .
+                                            } .
+                                        } ] ];
+                                 :gives {{
+                                    """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+"""     a acc:RequestKey;
+                                         acc:authorityName "Tiina";
+                                         acc:junk "327462sjsdfjsakdhfkjsafd32164321" .
+                                    
+                                    }     acc:certSupportedBy """
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+""" .
+                                } ],
+                                     [
+                                 a :Extraction;
+                                 :because  [
+                                     a :Parsing;
+                                     :source <md5:b87c3149171c859c703e3a2fcf19eba9> ];
+                                 :gives {"""
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5Nw=3D=3D
+"""     a acc:MemberKey .
+                                } ],
+                                     [
+                                 a :Extraction;
+                                 :because  [
+                                     a :Parsing;
+                                     :source <md5:c570323629f28c394b0b4ef2671baaed> ];
+                                 :gives {"""
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+"""     a acc:RequestKey .
+                                } ],
+                                     [
+                                 a :Extraction;
+                                 :because <#_g6>;
+                                 :gives {{
+                                    this     acc:credential <access-elisa.cert>,
+                                                <access-tiina.cert>;
+                                         acc:forDocument <http://www.w3.org/Member>;
+                                         acc:junk "32746213462187364732164732164321" .
+                                    
+                                    }     acc:requestSupportedBy """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" .
+                                } ];
+                             :rule  [
+                                 a :Extraction;
+                                 :because <#_g5>;
+                                 :gives {this     log:forAll root:d,
+                                            root:k,
+                                            root:k2,
+                                            root:request .
+                                {
+                                    this     log:forSome root:_L40C5,
+                                                root:_L43C34,
+                                                root:_L43C5 .
+                                    root:_L40C5     log:includes {root:k     a acc:RequestKey .
+                                        };
+                                         acc:certSupportedBy root:k2 .
+                                    root:_L43C34     a acc:MasterKey .
+                                    root:_L43C5     log:includes {root:k2     a acc:MemberKey .
+                                        };
+                                         acc:certSupportedBy root:_L43C34 .
+                                    root:request     acc:forDocument root:d;
+                                         acc:requestSupportedBy root:k .
+                                    
+                                    }     log:implies {root:request     a acc:GoodRequest .
+                                    } .
+                                } ] ];
+                         :gives {{
+                            this     acc:credential <access-elisa.cert>,
+                                        <access-tiina.cert>;
+                                 acc:forDocument <http://www.w3.org/Member>;
+                                 acc:junk "32746213462187364732164732164321" .
+                            
+                            }     a acc:GoodRequest .
+                        } ];
+                     :rule  [
+                         a :Extraction;
+                         :because  [
+                             a :Parsing;
+                             :source <result-filter.n3> ];
+                         :gives {this     log:forAll <result-filter.n3#x> .
+                        {
+                            <result-filter.n3#x>     a acc:GoodRequest .
+                            
+                            }     log:implies {<result-filter.n3#x>     a acc:GoodRequest .
+                            } .
+                        } ] ];
+                 :gives {{
+                    this     acc:credential <access-elisa.cert>,
+                                <access-tiina.cert>;
+                         acc:forDocument <http://www.w3.org/Member>;
+                         acc:junk "32746213462187364732164732164321" .
+                    
+                    }     a acc:GoodRequest .
+                } ];
+             :gives {{
+                this     acc:credential <access-elisa.cert>,
+                            <access-tiina.cert>;
+                     acc:forDocument <http://www.w3.org/Member>;
+                     acc:junk "32746213462187364732164732164321" .
+                
+                }     a acc:GoodRequest .
+            } ].
+    
+    <#_g4>     a :Parsing;
+         :source <access-tiina.cert> .
+    
+    <#_g5>     a :Parsing;
+         :source <access-rule.n3> .
+    
+    <#_g6>     a :Inference;
+         :binding  [
+             :boundTo  [
+                 n3:value """
+ODU1NjAyNjcyMzg1NzM1MjA0MDkwMTg3NTE2NjM3ODMxMTY5OTc3Mjg0MDQ1NDAwNzczNTYxNDQ0
+NTk3ODEzMjA2NjY5MDE4NDIxODg0MTkwOTMzNTQyMTY4NjIzMjI5MTUwMzgyMDQ0NTg1NjY3MjMy
+NzgzODgwNTAyMzEyOTU1ODUxOTg5MTYwODYxMTI1NTUyOTQyMTQwNDk2MTcxMDQyNzk0Nzc5MDcy
+OTgwNzg2OTEyODQ4NTU3ODE2MTY3Njg4NjczNjk0NjUzNDM1MTY5MTUwOTI0Mzc3NDc2MDgxNzU1
+NzY0NTQwMDgyNzY3NjA2Mzg5NDQxMDA2MzUwNTc0NjgzNTc2MzM1NTgwODIzNjk4NzQyOTI3MjE2
+ODc2ODIxOTY3NTM1MjYzNjQ4MDg1MjM=3D
+""" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#sig" ] ],
+                 [
+             :boundTo  [
+                 n3:value """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#k" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "md5:e5b59d8b93971f88b6e1e04daa201615#_formula" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#G" ] ],
+                 [
+             :boundTo  [
+                 n3:value "access-1.request" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L60C7" ] ],
+                 [
+             :boundTo  [
+                 n3:value "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L60C15" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L60C31" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request#_formula" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#F" ] ],
+                 [
+             :boundTo  [
+                 n3:value """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+""" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#str" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request#_L25C23" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L61C42" ] ],
+                 [
+             :boundTo  [
+                 n3:value "e5b59d8b93971f88b6e1e04daa201615" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L62C22" ] ],
+                 [
+             :boundTo  [
+                 n3:value """
+ODU1NjAyNjcyMzg1NzM1MjA0MDkwMTg3NTE2NjM3ODMxMTY5OTc3Mjg0MDQ1NDAwNzczNTYxNDQ0
+NTk3ODEzMjA2NjY5MDE4NDIxODg0MTkwOTMzNTQyMTY4NjIzMjI5MTUwMzgyMDQ0NTg1NjY3MjMy
+NzgzODgwNTAyMzEyOTU1ODUxOTg5MTYwODYxMTI1NTUyOTQyMTQwNDk2MTcxMDQyNzk0Nzc5MDcy
+OTgwNzg2OTEyODQ4NTU3ODE2MTY3Njg4NjczNjk0NjUzNDM1MTY5MTUwOTI0Mzc3NDc2MDgxNzU1
+NzY0NTQwMDgyNzY3NjA2Mzg5NDQxMDA2MzUwNTc0NjgzNTc2MzM1NTgwODIzNjk4NzQyOTI3MjE2
+ODc2ODIxOTY3NTM1MjYzNjQ4MDg1MjM=3D
+""" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#sig" ] ],
+                 [
+             :boundTo  [
+                 n3:value """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#k" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "md5:e5b59d8b93971f88b6e1e04daa201615#_formula" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#G" ] ],
+                 [
+             :boundTo  [
+                 n3:value "access-1.request" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L60C7" ] ],
+                 [
+             :boundTo  [
+                 n3:value "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L60C15" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L60C31" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request#_formula" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#F" ] ],
+                 [
+             :boundTo  [
+                 n3:value """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+""" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#str" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request#_L25C23" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L61C42" ] ],
+                 [
+             :boundTo  [
+                 n3:value "e5b59d8b93971f88b6e1e04daa201615" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L62C22" ] ],
+                 [
+             :boundTo  [
+                 n3:value """
+ODU1NjAyNjcyMzg1NzM1MjA0MDkwMTg3NTE2NjM3ODMxMTY5OTc3Mjg0MDQ1NDAwNzczNTYxNDQ0
+NTk3ODEzMjA2NjY5MDE4NDIxODg0MTkwOTMzNTQyMTY4NjIzMjI5MTUwMzgyMDQ0NTg1NjY3MjMy
+NzgzODgwNTAyMzEyOTU1ODUxOTg5MTYwODYxMTI1NTUyOTQyMTQwNDk2MTcxMDQyNzk0Nzc5MDcy
+OTgwNzg2OTEyODQ4NTU3ODE2MTY3Njg4NjczNjk0NjUzNDM1MTY5MTUwOTI0Mzc3NDc2MDgxNzU1
+NzY0NTQwMDgyNzY3NjA2Mzg5NDQxMDA2MzUwNTc0NjgzNTc2MzM1NTgwODIzNjk4NzQyOTI3MjE2
+ODc2ODIxOTY3NTM1MjYzNjQ4MDg1MjM=3D
+""" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#sig" ] ],
+                 [
+             :boundTo  [
+                 n3:value """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#k" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "md5:e5b59d8b93971f88b6e1e04daa201615#_formula" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#G" ] ],
+                 [
+             :boundTo  [
+                 n3:value "access-1.request" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L60C7" ] ],
+                 [
+             :boundTo  [
+                 n3:value "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L60C15" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L60C31" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request#_formula" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#F" ] ],
+                 [
+             :boundTo  [
+                 n3:value """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+""" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#str" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request#_L25C23" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L61C42" ] ],
+                 [
+             :boundTo  [
+                 n3:value "e5b59d8b93971f88b6e1e04daa201615" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L62C22" ] ],
+                 [
+             :boundTo  [
+                 n3:value """
+ODU1NjAyNjcyMzg1NzM1MjA0MDkwMTg3NTE2NjM3ODMxMTY5OTc3Mjg0MDQ1NDAwNzczNTYxNDQ0
+NTk3ODEzMjA2NjY5MDE4NDIxODg0MTkwOTMzNTQyMTY4NjIzMjI5MTUwMzgyMDQ0NTg1NjY3MjMy
+NzgzODgwNTAyMzEyOTU1ODUxOTg5MTYwODYxMTI1NTUyOTQyMTQwNDk2MTcxMDQyNzk0Nzc5MDcy
+OTgwNzg2OTEyODQ4NTU3ODE2MTY3Njg4NjczNjk0NjUzNDM1MTY5MTUwOTI0Mzc3NDc2MDgxNzU1
+NzY0NTQwMDgyNzY3NjA2Mzg5NDQxMDA2MzUwNTc0NjgzNTc2MzM1NTgwODIzNjk4NzQyOTI3MjE2
+ODc2ODIxOTY3NTM1MjYzNjQ4MDg1MjM=3D
+""" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#sig" ] ],
+                 [
+             :boundTo  [
+                 n3:value """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#k" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "md5:e5b59d8b93971f88b6e1e04daa201615#_formula" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#G" ] ],
+                 [
+             :boundTo  [
+                 n3:value "access-1.request" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L60C7" ] ],
+                 [
+             :boundTo  [
+                 n3:value "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L60C15" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L60C31" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request#_formula" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#F" ] ],
+                 [
+             :boundTo  [
+                 n3:value """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+""" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#str" ] ],
+                 [
+             :boundTo  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request#_L25C23" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L61C42" ] ],
+                 [
+             :boundTo  [
+                 n3:value "e5b59d8b93971f88b6e1e04daa201615" ];
+             :variable  [
+                 n3:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-rule.n3#_L62C22" ] ];
+         :evidence  [
+             a :Fact;
+             :gives {"1"     os:argv "access-1.request" .
+            } ],
+                 [
+             a :Fact;
+             :gives {"access-1.request"     os:baseAbsolute "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request" .
+            } ],
+                 [
+             a :Fact;
+             :gives {<access-1.request>     log:uri "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request" .
+            } ],
+                 [
+             a :Fact;
+             :gives {<access-1.request>     log:semantics {this     log:forSome <access-1.request#_L25C23> .
+                """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+"""     acc:endorsement <access-1.request#_L25C23> .
+                <access-1.request#_L25C23>     acc:key """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""";
+                     acc:signature """
+ODU1NjAyNjcyMzg1NzM1MjA0MDkwMTg3NTE2NjM3ODMxMTY5OTc3Mjg0MDQ1NDAwNzczNTYxNDQ0
+NTk3ODEzMjA2NjY5MDE4NDIxODg0MTkwOTMzNTQyMTY4NjIzMjI5MTUwMzgyMDQ0NTg1NjY3MjMy
+NzgzODgwNTAyMzEyOTU1ODUxOTg5MTYwODYxMTI1NTUyOTQyMTQwNDk2MTcxMDQyNzk0Nzc5MDcy
+OTgwNzg2OTEyODQ4NTU3ODE2MTY3Njg4NjczNjk0NjUzNDM1MTY5MTUwOTI0Mzc3NDc2MDgxNzU1
+NzY0NTQwMDgyNzY3NjA2Mzg5NDQxMDA2MzUwNTc0NjgzNTc2MzM1NTgwODIzNjk4NzQyOTI3MjE2
+ODc2ODIxOTY3NTM1MjYzNjQ4MDg1MjM=3D
+""" .
+                } .
+            };
+             :proof  [
+                 a :Conjunction;
+                 :component  [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives {this     log:forSome <access-1.request#_L25C23> .
+                    <access-1.request#_L25C23>     acc:key """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" .
+                    } ],
+                         [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives {this     log:forSome <access-1.request#_L25C23> .
+                    <access-1.request#_L25C23>     acc:signature """
+ODU1NjAyNjcyMzg1NzM1MjA0MDkwMTg3NTE2NjM3ODMxMTY5OTc3Mjg0MDQ1NDAwNzczNTYxNDQ0
+NTk3ODEzMjA2NjY5MDE4NDIxODg0MTkwOTMzNTQyMTY4NjIzMjI5MTUwMzgyMDQ0NTg1NjY3MjMy
+NzgzODgwNTAyMzEyOTU1ODUxOTg5MTYwODYxMTI1NTUyOTQyMTQwNDk2MTcxMDQyNzk0Nzc5MDcy
+OTgwNzg2OTEyODQ4NTU3ODE2MTY3Njg4NjczNjk0NjUzNDM1MTY5MTUwOTI0Mzc3NDc2MDgxNzU1
+NzY0NTQwMDgyNzY3NjA2Mzg5NDQxMDA2MzUwNTc0NjgzNTc2MzM1NTgwODIzNjk4NzQyOTI3MjE2
+ODc2ODIxOTY3NTM1MjYzNjQ4MDg1MjM=3D
+""" .
+                    } ],
+                         [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives {this     log:forSome <access-1.request#_L25C23> .
+                    """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+"""     acc:endorsement <access-1.request#_L25C23> .
+                    } ],
+                         [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives {this     log:forSome <access-1.request#_L25C23> .
+                    <access-1.request#_L25C23>     acc:key """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" .
+                    } ],
+                         [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives {this     log:forSome <access-1.request#_L25C23> .
+                    <access-1.request#_L25C23>     acc:signature """
+ODU1NjAyNjcyMzg1NzM1MjA0MDkwMTg3NTE2NjM3ODMxMTY5OTc3Mjg0MDQ1NDAwNzczNTYxNDQ0
+NTk3ODEzMjA2NjY5MDE4NDIxODg0MTkwOTMzNTQyMTY4NjIzMjI5MTUwMzgyMDQ0NTg1NjY3MjMy
+NzgzODgwNTAyMzEyOTU1ODUxOTg5MTYwODYxMTI1NTUyOTQyMTQwNDk2MTcxMDQyNzk0Nzc5MDcy
+OTgwNzg2OTEyODQ4NTU3ODE2MTY3Njg4NjczNjk0NjUzNDM1MTY5MTUwOTI0Mzc3NDc2MDgxNzU1
+NzY0NTQwMDgyNzY3NjA2Mzg5NDQxMDA2MzUwNTc0NjgzNTc2MzM1NTgwODIzNjk4NzQyOTI3MjE2
+ODc2ODIxOTY3NTM1MjYzNjQ4MDg1MjM=3D
+""" .
+                    } ],
+                         [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives {this     log:forSome <access-1.request#_L25C23> .
+                    """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+"""     acc:endorsement <access-1.request#_L25C23> .
+                    } ],
+                         [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives {this     log:forSome <access-1.request#_L25C23> .
+                    <access-1.request#_L25C23>     acc:key """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" .
+                    } ],
+                         [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives {this     log:forSome <access-1.request#_L25C23> .
+                    <access-1.request#_L25C23>     acc:signature """
+ODU1NjAyNjcyMzg1NzM1MjA0MDkwMTg3NTE2NjM3ODMxMTY5OTc3Mjg0MDQ1NDAwNzczNTYxNDQ0
+NTk3ODEzMjA2NjY5MDE4NDIxODg0MTkwOTMzNTQyMTY4NjIzMjI5MTUwMzgyMDQ0NTg1NjY3MjMy
+NzgzODgwNTAyMzEyOTU1ODUxOTg5MTYwODYxMTI1NTUyOTQyMTQwNDk2MTcxMDQyNzk0Nzc5MDcy
+OTgwNzg2OTEyODQ4NTU3ODE2MTY3Njg4NjczNjk0NjUzNDM1MTY5MTUwOTI0Mzc3NDc2MDgxNzU1
+NzY0NTQwMDgyNzY3NjA2Mzg5NDQxMDA2MzUwNTc0NjgzNTc2MzM1NTgwODIzNjk4NzQyOTI3MjE2
+ODc2ODIxOTY3NTM1MjYzNjQ4MDg1MjM=3D
+""" .
+                    } ],
+                         [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives {this     log:forSome <access-1.request#_L25C23> .
+                    """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+"""     acc:endorsement <access-1.request#_L25C23> .
+                    } ],
+                         [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives {this     log:forSome <access-1.request#_L25C23> .
+                    <access-1.request#_L25C23>     acc:key """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" .
+                    } ],
+                         [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives {this     log:forSome <access-1.request#_L25C23> .
+                    <access-1.request#_L25C23>     acc:signature """
+ODU1NjAyNjcyMzg1NzM1MjA0MDkwMTg3NTE2NjM3ODMxMTY5OTc3Mjg0MDQ1NDAwNzczNTYxNDQ0
+NTk3ODEzMjA2NjY5MDE4NDIxODg0MTkwOTMzNTQyMTY4NjIzMjI5MTUwMzgyMDQ0NTg1NjY3MjMy
+NzgzODgwNTAyMzEyOTU1ODUxOTg5MTYwODYxMTI1NTUyOTQyMTQwNDk2MTcxMDQyNzk0Nzc5MDcy
+OTgwNzg2OTEyODQ4NTU3ODE2MTY3Njg4NjczNjk0NjUzNDM1MTY5MTUwOTI0Mzc3NDc2MDgxNzU1
+NzY0NTQwMDgyNzY3NjA2Mzg5NDQxMDA2MzUwNTc0NjgzNTc2MzM1NTgwODIzNjk4NzQyOTI3MjE2
+ODc2ODIxOTY3NTM1MjYzNjQ4MDg1MjM=3D
+""" .
+                    } ],
+                         [
+                     a :Extraction;
+                     :because <#_g0>;
+                     :gives {this     log:forSome <access-1.request#_L25C23> .
+                    """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+"""     acc:endorsement <access-1.request#_L25C23> .
+                    } ];
+                 :existential "file:/devel/WWW/2000/10/swap/test/crypto/access-1.request#_L25C23";
+                 :gives {this     log:forSome <access-1.request#_L25C23> .
+                """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+"""     acc:endorsement <access-1.request#_L25C23> .
+                <access-1.request#_L25C23>     acc:key """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""";
+                     acc:signature """
+ODU1NjAyNjcyMzg1NzM1MjA0MDkwMTg3NTE2NjM3ODMxMTY5OTc3Mjg0MDQ1NDAwNzczNTYxNDQ0
+NTk3ODEzMjA2NjY5MDE4NDIxODg0MTkwOTMzNTQyMTY4NjIzMjI5MTUwMzgyMDQ0NTg1NjY3MjMy
+NzgzODgwNTAyMzEyOTU1ODUxOTg5MTYwODYxMTI1NTUyOTQyMTQwNDk2MTcxMDQyNzk0Nzc5MDcy
+OTgwNzg2OTEyODQ4NTU3ODE2MTY3Njg4NjczNjk0NjUzNDM1MTY5MTUwOTI0Mzc3NDc2MDgxNzU1
+NzY0NTQwMDgyNzY3NjA2Mzg5NDQxMDA2MzUwNTc0NjgzNTc2MzM1NTgwODIzNjk4NzQyOTI3MjE2
+ODc2ODIxOTY3NTM1MjYzNjQ4MDg1MjM=3D
+""" .
+                } ] ],
+                 [
+             a :Extraction;
+             :because <#_g0>;
+             :gives {this     log:forSome <access-1.request#_L25C23> .
+            """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+"""     acc:endorsement <access-1.request#_L25C23> .
+            } ],
+                 [
+             a :Fact;
+             :gives {"""     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+"""     crypto:md5 "e5b59d8b93971f88b6e1e04daa201615" .
+            } ],
+                 [
+             a :Extraction;
+             :because <#_g0>;
+             :gives {this     log:forSome <access-1.request#_L25C23> .
+            <access-1.request#_L25C23>     acc:signature """
+ODU1NjAyNjcyMzg1NzM1MjA0MDkwMTg3NTE2NjM3ODMxMTY5OTc3Mjg0MDQ1NDAwNzczNTYxNDQ0
+NTk3ODEzMjA2NjY5MDE4NDIxODg0MTkwOTMzNTQyMTY4NjIzMjI5MTUwMzgyMDQ0NTg1NjY3MjMy
+NzgzODgwNTAyMzEyOTU1ODUxOTg5MTYwODYxMTI1NTUyOTQyMTQwNDk2MTcxMDQyNzk0Nzc5MDcy
+OTgwNzg2OTEyODQ4NTU3ODE2MTY3Njg4NjczNjk0NjUzNDM1MTY5MTUwOTI0Mzc3NDc2MDgxNzU1
+NzY0NTQwMDgyNzY3NjA2Mzg5NDQxMDA2MzUwNTc0NjgzNTc2MzM1NTgwODIzNjk4NzQyOTI3MjE2
+ODc2ODIxOTY3NTM1MjYzNjQ4MDg1MjM=3D
+""" .
+            } ],
+                 [
+             a :Extraction;
+             :because <#_g0>;
+             :gives {this     log:forSome <access-1.request#_L25C23> .
+            <access-1.request#_L25C23>     acc:key """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" .
+            } ],
+                 [
+             a :Fact;
+             :gives {"""     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+"""     log:parsedAsN3 {this     acc:credential <access-elisa.cert>,
+                            <access-tiina.cert>;
+                     acc:forDocument <http://www.w3.org/Member>;
+                     acc:junk "32746213462187364732164732164321" .
+                } .
+            } ],
+                 [
+             a :Extraction;
+             :because <#_g0>;
+             :gives {this     log:forSome <access-1.request#_L25C23> .
+            """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+"""     acc:endorsement <access-1.request#_L25C23> .
+            } ],
+                 [
+             a :Extraction;
+             :because <#_g0>;
+             :gives {this     log:forSome <access-1.request#_L25C23> .
+            <access-1.request#_L25C23>     acc:signature """
+ODU1NjAyNjcyMzg1NzM1MjA0MDkwMTg3NTE2NjM3ODMxMTY5OTc3Mjg0MDQ1NDAwNzczNTYxNDQ0
+NTk3ODEzMjA2NjY5MDE4NDIxODg0MTkwOTMzNTQyMTY4NjIzMjI5MTUwMzgyMDQ0NTg1NjY3MjMy
+NzgzODgwNTAyMzEyOTU1ODUxOTg5MTYwODYxMTI1NTUyOTQyMTQwNDk2MTcxMDQyNzk0Nzc5MDcy
+OTgwNzg2OTEyODQ4NTU3ODE2MTY3Njg4NjczNjk0NjUzNDM1MTY5MTUwOTI0Mzc3NDc2MDgxNzU1
+NzY0NTQwMDgyNzY3NjA2Mzg5NDQxMDA2MzUwNTc0NjgzNTc2MzM1NTgwODIzNjk4NzQyOTI3MjE2
+ODc2ODIxOTY3NTM1MjYzNjQ4MDg1MjM=3D
+""" .
+            } ],
+                 [
+             a :Extraction;
+             :because <#_g0>;
+             :gives {this     log:forSome <access-1.request#_L25C23> .
+            <access-1.request#_L25C23>     acc:key """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" .
+            } ],
+                 [
+             a :Extraction;
+             :because <#_g0>;
+             :gives {this     log:forSome <access-1.request#_L25C23> .
+            """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+"""     acc:endorsement <access-1.request#_L25C23> .
+            } ],
+                 [
+             a :Extraction;
+             :because <#_g0>;
+             :gives {this     log:forSome <access-1.request#_L25C23> .
+            <access-1.request#_L25C23>     acc:signature """
+ODU1NjAyNjcyMzg1NzM1MjA0MDkwMTg3NTE2NjM3ODMxMTY5OTc3Mjg0MDQ1NDAwNzczNTYxNDQ0
+NTk3ODEzMjA2NjY5MDE4NDIxODg0MTkwOTMzNTQyMTY4NjIzMjI5MTUwMzgyMDQ0NTg1NjY3MjMy
+NzgzODgwNTAyMzEyOTU1ODUxOTg5MTYwODYxMTI1NTUyOTQyMTQwNDk2MTcxMDQyNzk0Nzc5MDcy
+OTgwNzg2OTEyODQ4NTU3ODE2MTY3Njg4NjczNjk0NjUzNDM1MTY5MTUwOTI0Mzc3NDc2MDgxNzU1
+NzY0NTQwMDgyNzY3NjA2Mzg5NDQxMDA2MzUwNTc0NjgzNTc2MzM1NTgwODIzNjk4NzQyOTI3MjE2
+ODc2ODIxOTY3NTM1MjYzNjQ4MDg1MjM=3D
+""" .
+            } ],
+                 [
+             a :Extraction;
+             :because <#_g0>;
+             :gives {this     log:forSome <access-1.request#_L25C23> .
+            <access-1.request#_L25C23>     acc:key """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" .
+            } ],
+                 [
+             a :Extraction;
+             :because <#_g0>;
+             :gives {this     log:forSome <access-1.request#_L25C23> .
+            """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
+                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
+         :forDocument <http://www.w3.org/Member>;
+         :junk "32746213462187364732164732164321" .
+    
+"""     acc:endorsement <access-1.request#_L25C23> .
+            } ],
+                 [
+             a :Extraction;
+             :because <#_g0>;
+             :gives {this     log:forSome <access-1.request#_L25C23> .
+            <access-1.request#_L25C23>     acc:signature """
+ODU1NjAyNjcyMzg1NzM1MjA0MDkwMTg3NTE2NjM3ODMxMTY5OTc3Mjg0MDQ1NDAwNzczNTYxNDQ0
+NTk3ODEzMjA2NjY5MDE4NDIxODg0MTkwOTMzNTQyMTY4NjIzMjI5MTUwMzgyMDQ0NTg1NjY3MjMy
+NzgzODgwNTAyMzEyOTU1ODUxOTg5MTYwODYxMTI1NTUyOTQyMTQwNDk2MTcxMDQyNzk0Nzc5MDcy
+OTgwNzg2OTEyODQ4NTU3ODE2MTY3Njg4NjczNjk0NjUzNDM1MTY5MTUwOTI0Mzc3NDc2MDgxNzU1
+NzY0NTQwMDgyNzY3NjA2Mzg5NDQxMDA2MzUwNTc0NjgzNTc2MzM1NTgwODIzNjk4NzQyOTI3MjE2
+ODc2ODIxOTY3NTM1MjYzNjQ4MDg1MjM=3D
+""" .
+            } ],
+                 [
+             a :Extraction;
+             :because <#_g0>;
+             :gives {this     log:forSome <access-1.request#_L25C23> .
+            <access-1.request#_L25C23>     acc:key """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
+""" .
+            } ];
+         :rule  [
+             a :Extraction;
+             :because <#_g5>;
+             :gives {this     log:forAll root:F,
+                        root:G,
+                        root:k,
+                        root:sig,
+                        root:str .
+            {
+                this     log:forSome root:_L60C15,
+                            root:_L60C31,
+                            root:_L60C7,
+                            root:_L62C22 .
+                "1"     os:argv root:_L60C7 .
+                root:F     log:includes {this     log:forSome root:_L61C42 .
+                    root:_L61C42     acc:key root:k;
+                         acc:signature root:sig .
+                    root:str     acc:endorsement root:_L61C42 .
+                    } .
+                root:_L60C31     log:semantics root:F;
+                     log:uri root:_L60C15 .
+                root:_L60C7     os:baseAbsolute root:_L60C15 .
+                root:k     crypto:verify  (
+                    root:_L62C22 
+                    root:sig  ) .
+                root:str     crypto:md5 root:_L62C22;
+                     log:parsedAsN3 root:G .
+                
+                }     log:implies {root:G     acc:requestSupportedBy root:k .
+                } .
+            } ],
+                 [
+             a :Extraction;
+             :because <#_g5>;
+             :gives {this     log:forAll root:F,
+                        root:G,
+                        root:k,
+                        root:sig,
+                        root:str .
+            {
+                this     log:forSome root:_L60C15,
+                            root:_L60C31,
+                            root:_L60C7,
+                            root:_L62C22 .
+                "1"     os:argv root:_L60C7 .
+                root:F     log:includes {this     log:forSome root:_L61C42 .
+                    root:_L61C42     acc:key root:k;
+                         acc:signature root:sig .
+                    root:str     acc:endorsement root:_L61C42 .
+                    } .
+                root:_L60C31     log:semantics root:F;
+                     log:uri root:_L60C15 .
+                root:_L60C7     os:baseAbsolute root:_L60C15 .
+                root:k     crypto:verify  (
+                    root:_L62C22 
+                    root:sig  ) .
+                root:str     crypto:md5 root:_L62C22;
+                     log:parsedAsN3 root:G .
+                
+                }     log:implies {root:G     acc:requestSupportedBy root:k .
+                } .
+            } ],
+                 [
+             a :Extraction;
+             :because <#_g5>;
+             :gives {this     log:forAll root:F,
+                        root:G,
+                        root:k,
+                        root:sig,
+                        root:str .
+            {
+                this     log:forSome root:_L60C15,
+                            root:_L60C31,
+                            root:_L60C7,
+                            root:_L62C22 .
+                "1"     os:argv root:_L60C7 .
+                root:F     log:includes {this     log:forSome root:_L61C42 .
+                    root:_L61C42     acc:key root:k;
+                         acc:signature root:sig .
+                    root:str     acc:endorsement root:_L61C42 .
+                    } .
+                root:_L60C31     log:semantics root:F;
+                     log:uri root:_L60C15 .
+                root:_L60C7     os:baseAbsolute root:_L60C15 .
+                root:k     crypto:verify  (
+                    root:_L62C22 
+                    root:sig  ) .
+                root:str     crypto:md5 root:_L62C22;
+                     log:parsedAsN3 root:G .
+                
+                }     log:implies {root:G     acc:requestSupportedBy root:k .
+                } .
+            } ],
+                 [
+             a :Extraction;
+             :because <#_g5>;
+             :gives {this     log:forAll root:F,
+                        root:G,
+                        root:k,
+                        root:sig,
+                        root:str .
+            {
+                this     log:forSome root:_L60C15,
+                            root:_L60C31,
+                            root:_L60C7,
+                            root:_L62C22 .
+                "1"     os:argv root:_L60C7 .
+                root:F     log:includes {this     log:forSome root:_L61C42 .
+                    root:_L61C42     acc:key root:k;
+                         acc:signature root:sig .
+                    root:str     acc:endorsement root:_L61C42 .
+                    } .
+                root:_L60C31     log:semantics root:F;
+                     log:uri root:_L60C15 .
+                root:_L60C7     os:baseAbsolute root:_L60C15 .
+                root:k     crypto:verify  (
+                    root:_L62C22 
+                    root:sig  ) .
+                root:str     crypto:md5 root:_L62C22;
+                     log:parsedAsN3 root:G .
+                
+                }     log:implies {root:G     acc:requestSupportedBy root:k .
+                } .
+            } ] .
+    
+#ENDS

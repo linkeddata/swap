@@ -83,6 +83,28 @@ def diff(case, ref=None):
 	return 1
     return result
 
+def rdfcompare2(case, ref1):
+	"""Comare ntriples files by canonicalizing and comparing text files"""
+	cant = "python ../cant.py"
+	ref = ",temp/%s.ref" % case
+	execute("""cat %s | %s > %s""" % (ref1, cant, ref))
+	return diff(case, ref)
+
+def rdfcompare(case, ref=None):
+    """   The jena.rdfcompare program writes its results to the standard output stream and sets
+	its exit code to 0 if the models are equal, to 1 if they are not and
+	to -1 if it encounters an error.</p>
+    """
+    global verbose
+    if ref == None:
+	ref = "ref/%s" % case
+    diffcmd = """java jena.rdfcompare %s ,temp/%s N-TRIPLE N-TRIPLE  >,diffs/%s""" %(ref, case, case)
+    if verbose: print "  ", diffcmd
+    result = system(diffcmd)
+    if result != 0:
+	raise problem("Comparison fails: result %s executing %s" %(result, diffcmd))
+    return result
+
 def main():
     testFiles = []
     start = 1
@@ -219,13 +241,10 @@ def main():
 	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
 			WD, REFWD)
 	cant = "python ../cant.py"
-	if 1:
-	    execute("""python ../cwm.py --quiet --rdf=T %s --ntriples | %s > ,temp/%s""" %
-		(inputDocument, cant , case))
-	    ref = ",temp/%s.ref" % case
-	    execute("""cat %s | %s > %s""" % (localize(outputDocument), cant, ref))
-	    if diff(case, ref):
-		problem("  from positive parser test %s running\n\tcwm %s\n" %( case,  inputDocument))
+	execute("""python ../cwm.py --quiet --rdf=T %s --ntriples | %s > ,temp/%s""" %
+	    (inputDocument, cant , case))
+	if rdfcompare2(case, localize(outputDocument)):
+	    problem("  from positive parser test %s running\n\tcwm %s\n" %( case,  inputDocument))
 
 	passes = passes + 1
 
