@@ -1,0 +1,135 @@
+%  prefix ns5_ <http://example.com#>
+%  prefix ns6_ <http://www.w3.org/TR/2003/NOTE-lbase-20030123-ns#>
+%  prefix rdf_ <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+%  prefix rdfs_ <http://www.w3.org/2000/01/rdf-schema#>
+
+all A B (
+   rdf(A, rdf_type, B) -> holds2(B, A)
+).
+holds2(rdf_Property, rdf_type).
+holds2(rdf_List, rdf_nil).
+
+all A B C D (
+   rdf(A, ns5_pair, B) = rdf(C, ns5_pair, D) <-> A = C & B = D
+).
+
+all A (
+   holds2(ns6_XMLThing, A) -> rdf(A, ns5_L2V, rdf_XMLLiteral) = holds2(ns5_XMLCanonical, A)
+).
+
+all A B (
+   holds2(ns6_XMLThing, A) & holds2(ns5_LanguageTag, B) -> rdf(rdf(A, ns5_pair, B), ns5_L2V, rdf_XMLLiteral) = holds2(ns5_XMLCanonical, rdf(A, ns5_withLang, B))
+).
+
+all A (
+   holds2(ns5_T, A)
+).
+
+all A (
+    -holds2(ns5_F, A)
+).
+
+all A B (
+   holds2(rdfs_Class, A) -> (holds2(A, B) <-> rdf(B, rdf_type, A))
+).
+
+all A B C D (
+   rdf(A, rdfs_range, B) & rdf(C, A, D) -> holds2(B, D)
+).
+
+all A B C D (
+   rdf(A, rdfs_domain, B) & rdf(C, A, D) -> holds2(B, C)
+).
+
+all A B C (
+   rdf(A, rdfs_subClassOf, B) <-> holds2(rdfs_Class, A) & (holds2(rdfs_Class, B) & (all C (holds2(A, C) -> holds2(B, C))))
+).
+
+all A B C D (
+   rdf(A, rdfs_subPropertyOf, B) <-> holds2(rdf_Property, A) & (holds2(rdf_Property, B) & (all C (all D (rdf(C, A, D) -> rdf(C, B, D)))))
+).
+
+all A (
+   holds2(rdfs_ContainerMembershipProperty, A) -> rdf(A, rdfs_subPropertyOf, rdfs_member)
+).
+
+all A (
+   holds2(rdf_XMLLiteral, A) -> holds2(rdfs_Literal, A)
+).
+
+all A (
+   holds2(ns6_String, A) -> holds2(rdfs_Literal, A)
+).
+
+all A (
+   holds2(ns5_LanguageTag, A) -> holds2(ns6_String, A)
+).
+
+all A B (
+   holds2(ns6_String, A) & holds2(ns5_LanguageTag, B) -> holds2(rdfs_Literal, rdf(A, ns5_pair, B))
+).
+holds2(rdfs_Datatype, rdf_XMLLiteral).
+
+all A (
+   holds2(ns6_NatNumber, A) -> holds2(rdfs_ContainerMembershipProperty, holds2(rdf_member, A))
+).
+holds2(rdfs_Class, ns5_T).
+holds2(rdfs_Class, rdf_Property).
+holds2(rdfs_Class, rdfs_Class).
+holds2(rdfs_Class, rdfs_Datatype).
+holds2(rdfs_Class, rdf_Seq).
+holds2(rdfs_Class, rdf_Bag).
+holds2(rdfs_Class, rdf_Alt).
+holds2(rdfs_Class, rdfs_Container).
+holds2(rdfs_Class, rdf_List).
+holds2(rdfs_Class, rdfs_ContainerMembershipProperty).
+holds2(rdfs_Class, rdf_Statement).
+holds2(rdf_Property, rdfs_domain).
+holds2(rdf_Property, rdfs_range).
+holds2(rdf_Property, rdfs_subClassOf).
+holds2(rdf_Property, rdfs_subPropertyOf).
+holds2(rdf_Property, rdfs_comment).
+holds2(rdf_Property, rdf_predicate).
+holds2(rdf_Property, rdf_subject).
+holds2(rdf_Property, rdf_object).
+holds2(rdf_Property, rdf_first).
+holds2(rdf_Property, rdf_rest).
+holds2(rdf_Property, rdfs_seeAlso).
+holds2(rdf_Property, rdfs_isDefinedBy).
+holds2(rdf_Property, rdfs_label).
+holds2(rdf_Property, rdf_value).
+rdf(rdfs_subPropertyOf, rdfs_domain, rdf_Property).
+rdf(rdfs_subClassOf, rdfs_domain, rdfs_Class).
+rdf(rdfs_domain, rdfs_domain, rdf_Property).
+rdf(rdfs_range, rdfs_domain, rdf_Property).
+rdf(rdf_subject, rdfs_domain, rdf_Statement).
+rdf(rdf_predicate, rdfs_domain, rdf_Statement).
+rdf(rdf_object, rdfs_domain, rdf_Statement).
+rdf(rdf_first, rdfs_domain, rdf_List).
+rdf(rdf_rest, rdfs_domain, rdf_List).
+rdf(rdfs_subPropertyOf, rdfs_range, rdf_Property).
+rdf(rdfs_subClassOf, rdfs_range, rdfs_Class).
+rdf(rdfs_domain, rdfs_range, rdfs_Class).
+rdf(rdfs_range, rdfs_range, rdfs_Class).
+rdf(rdf_type, rdfs_range, rdfs_Class).
+rdf(rdfs_comment, rdfs_range, rdfs_Literal).
+rdf(rdfs_label, rdfs_range, rdfs_Literal).
+rdf(rdf_rest, rdfs_range, rdf_List).
+rdf(rdfs_Datatype, rdfs_subClassOf, rdfs_Literal).
+rdf(rdf_Alt, rdfs_subClassOf, rdfs_Container).
+rdf(rdf_Bag, rdfs_subClassOf, rdfs_Container).
+rdf(rdf_Seq, rdfs_subClassOf, rdfs_Container).
+rdf(rdfs_ContainerMembershipProperty, rdfs_subClassOf, rdf_Property).
+rdf(rdfs_isDefinedBy, rdfs_subPropertyOf, rdfs_seeAlso).
+
+all A B (
+   holds2(rdfs_Datatype, A) -> (rdf(B, ns5_LegalLexicalForm, A) <-> holds2(A, rdf(B, ns5_L2V, A)))
+).
+
+all A B (
+   holds2(rdfs_Datatype, A) & (rdf(B, ns5_LegalLexicalForm, A) & holds2(A, B)) -> holds2(rdfs_Literal, B)
+).
+
+all A (
+   holds2(ns6_XMLThing, A) <-> rdf(A, ns5_LegalLexicalForm, rdf_XMLLiteral)
+).
