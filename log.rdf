@@ -1,5 +1,5 @@
 
-<!-- Processed by Id: cwm.py,v 1.79 2001/09/27 19:45:28 connolly Exp -->
+<!-- Processed by Id: cwm.py,v 1.82 2001/11/15 22:11:23 timbl Exp -->
 <!--     using base file:/cygdrive/c/devel/WWW/2000/10/swap/log.n3-->
 
 
@@ -7,6 +7,11 @@
     xmlns:doc="http://www.w3.org/2000/01/pim/doc#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/log#Chaff">
+        <rdfs:comment>Any statement mentioning anything in this class
+is considered boring and purged by the cwm --purge option.</rdfs:comment>
+    </rdfs:Class>
 
     <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/log#Formula">
     </rdfs:Class>
@@ -32,11 +37,39 @@ of any identifiers used in the document.
     <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/log#String">
     </rdfs:Class>
 
-    <rdf:Class rdf:about="http://www.w3.org/2000/10/swap/log#Truth">
+    <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/log#Truth">
         <rdfs:comment>Something which is true: belive it as you would belive this.
 	       Understood natively by cwm in that it will execute rules in a formula
          declared a Truth within a formula it is already taking rules from.</rdfs:comment>
-    </rdf:Class>
+    </rdfs:Class>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#conclusion">
+        <rdfs:comment>The conclusions which can be drawn from a formula.
+
+The object of this function is the set of conclusions which can be
+drawn from the formula on the right, by successively applying any
+rules it contains to the data it contains. This is equivalent to
+cwm's "--think" command line function.  It does use built-ins, to
+it may for example indirectly invoke other documents, validate
+signatures, etc.
+</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/log#Formula"/>
+        <rdfs:label>conclusion</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#Formula"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#conjunction">
+        <rdfs:comment>"A function to merge formulae: logical AND.
+
+The subject is a list of formulae.
+The object, which can be generated, is a formula containing a copy
+of each of the formulae in the list on the left.
+A cwm built-in function.
+</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/log#List"/>
+        <rdfs:label>conjunction</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#Formula"/>
+    </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#content">
         <rdfs:comment>This connects a document and a string that represents it.
@@ -87,6 +120,11 @@ A cwm built-in logical operator.
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#Formula"/>
     </rdf:Property>
 
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#racine">
+        <rdfs:comment>For anything identified by a URI with a fragid, this is the
+        thing identified by the same URI without a hash or fragid</rdfs:comment>
+    </rdf:Property>
+
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#rawType">
         <rdfs:comment>
 This is a low-level langauge type, one of log:Formula, log:Literal, 
@@ -103,10 +141,18 @@ List and Other are not stable and may change.
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#Formula"/>
     </rdf:Property>
 
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#semanticsOrError">
+        <rdfs:comment>This connects a document and either the formula it parses to,
+        or an error message explaining what went wromg with trying. See semantics.
+        Cwm knows how to go get a document and parse it in order to evaluate this.</rdfs:comment>
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/01/pim/doc#Work"/>
+        <rdfs:label>semantics or error message</rdfs:label>
+    </rdf:Property>
+
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#uri">
-        <rdfs:description>This allows one to look at the actual string of the URI
+        <rdfs:comment>This allows one to look at the actual string of the URI
 which identifies this.
-Cwm can get the URI of a resource or get the resource from the URI.</rdfs:description>
+Cwm can get the URI of a resource or get the resource from the URI.</rdfs:comment>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#String"/>
     </rdf:Property>
 </rdf:RDF>
