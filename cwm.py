@@ -43,6 +43,7 @@ import notation3    	# N3 parsers and generators
 import toXML 		#  RDF generator
 
 from why import BecauseOfCommandLine
+from query import think, applyRules, testIncludes
 
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL, Logic_NS
 import uripath
@@ -624,7 +625,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 need(_store); touch(_store)
                 filterContext = _store.load(_uri)
 		workingContext.reopen()
-                _store.applyRules(workingContext, filterContext);
+                applyRules(workingContext, filterContext);
 
             elif _lhs == "-filter":
 		workingContext = workingContext.canonicalize()
@@ -636,7 +637,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 filterContext = _store.load(_uri, why=r)
 		_newContext = _store.newFormula()
 		if diag.tracking: proof = FormulaReason(_newContext)
-                _store.applyRules(workingContext, filterContext, _newContext)
+                applyRules(workingContext, filterContext, _newContext)
 		workingContext.close()
                 workingContext = _newContext
 
@@ -663,14 +664,14 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             elif arg == "-rules":
                 need(_store); touch(_store)
 		workingContext.reopen()
-                _store.applyRules(workingContext, workingContext)
+                applyRules(workingContext, workingContext)
 
             elif arg[:7] == "-think=":
                 need(_store); touch(_store)
                 filterContext = _store.load(_uri)
                 if verbosity() > 4: progress( "Input rules to --think from " + _uri)
 		workingContext.reopen()
-                _store.think(workingContext, filterContext, mode=option_flags["think"]);
+                think(workingContext, filterContext, mode=option_flags["think"]);
 
             elif _lhs == "-engine":
                 option_engine = _rhs
@@ -678,7 +679,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             elif arg == "-think":
                 if option_engine=="llyn":
                     need(_store); touch(_store)
-                    _store.think(workingContext, mode=option_flags["think"])
+                    think(workingContext, mode=option_flags["think"])
                 else:
                     need(lxkb);
                     LX.engine.think(engine=option_engine, kb=lxkb)

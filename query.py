@@ -9,8 +9,17 @@ from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, List_N
 from RDFSink import RDF_NS_URI
 
 from diag import chatty_flag, tracking, progress
+from term import BuiltIn, LightBuiltIn, \
+    HeavyBuiltIn, Function, ReverseFunction, \
+    Literal, Symbol, Fragment, FragmentNil, Anonymous, Term, \
+    CompoundTerm, List, EmptyList, NonEmptyList
 from formula import StoredStatement, Formula
+from why import Because, BecauseBuiltIn, BecauseOfRule, \
+    BecauseOfExperience, becauseSubexpression, BecauseMerge ,report
 
+
+import types
+import sys
 
 INFINITY = 1000000000           # @@ larger than any number occurences
 
@@ -125,6 +134,7 @@ def tryRule(rule, workingContext, targetContext, _variables, already=None, mode=
     """
     template = rule[SUBJ]
     conclusion = rule[OBJ]
+    store = template.store
 
     # When the template refers to itself, the thing we are
     # are looking for will refer to the context we are searching
@@ -156,7 +166,8 @@ def tryRule(rule, workingContext, targetContext, _variables, already=None, mode=
 	progress("Existentials in template     " + seqToString(templateExistentials))
 
 # The smartIn context was the template context but it has been mapped to the workingContext.
-    query = Query(unmatched=unmatched,
+    query = Query(store,
+		    unmatched=unmatched,
 		    template = template,
 		    variables=variablesUsed,
 		    existentials=templateExistentials,
@@ -208,7 +219,8 @@ def testIncludes(f, g, _variables=[], smartIn=[], bindings={}):
 	for v in _variables:
 	    progress( "    Variable: " + `v`[-8:])
 
-    result = Query(unmatched=unmatched,
+    result = Query(f.store,
+		unmatched=unmatched,
 		template = g,
 		variables=[],
 		existentials=_variables + templateExistentials,
@@ -248,6 +260,7 @@ class Query:
     """A query holds a hypothesis/antecedent/template which is being matched aginst (unified with)
     the knowledge base."""
     def __init__(self,
+	       store,
                unmatched=[],           # Tuple of interned quads we are trying to match CORRUPTED
 	       template = None,		# Actually, must have one
                variables=[],           # List of variables to match and return CORRUPTED
@@ -277,7 +290,7 @@ class Query:
 #                    existentials.remove(x)
 
         self.queue = []   #  Unmatched with more info
-	self.store = workingContext.store
+	self.store = store
 	self.variables = variables
 	self.existentials = existentials
 	self.workingContext = workingContext
@@ -321,7 +334,7 @@ class Query:
             if chatty_flag > 30: progress("Not duplicate: ", bindingsToString(bindings))
             self.already.append(bindings)   # A list of dicts
 
-	if diag.tracking:
+	if tracking:
 	    reason = BecauseOfRule(self.rule, bindings=bindings, evidence=evidence)
 	else:
 	    reason = None
@@ -407,7 +420,7 @@ class Query:
                 variables.remove(pair[0])
                 bindings.update({pair[0]: pair[1]})  # Record for posterity
             else:      # Formulae aren't needed as existentials, unlike lists. hmm.
-		if diag.tracking: bindings.update({pair[0]: pair[1]})  # Record for proof only
+		if tracking: bindings.update({pair[0]: pair[1]})  # Record for proof only
 		if pair[0] not in existentials:
 		    progress("@@@  Not in existentials or variables but now bound:", `pair[0]`)
                 if not isinstance(pair[0], Formula): # Hack - else rules13.n3 fails @@
@@ -640,14 +653,14 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	if "r" in mode:
 	    schema = None
 	    if "s" in mode:
-		schema = dereference(pred, mode, self.query.workingContext)
+		schema = pred.dereference(mode, self.query.workingContext)
 		if schema != None:
 		    if "a" in mode:
 			if chatty_flag > 95:
 			    progress("Axiom processing for %s" % (pred))
 			ns = pred.resource
 			rules = schema.any(subj=ns, pred=self.store.docRules)
-			rulefile = dereference(rulefile, "m", self.query.workingContext)
+			rulefile = rulefile.dereference("m", self.query.workingContext)
 		    self.service = schema.any(pred=self.store.definitiveService, subj=pred)
 	    if self.service == None and self.query.meta != None:
 		self.service = self.query.meta.any(pred=self.store.definitiveService, subj=pred)
@@ -667,7 +680,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		if authDoc != None:
 		    if chatty_flag > 90:
 			progress("We have a definitive document %s for %s." %(authDoc, pred))
-		    authFormula = dereference(authDoc, mode, self.query.workingContext)
+		    authFormula = authDoc.dereference(mode, self.query.workingContext)
 		    if authFormula != None:
 			self.quad = (authFormula, pred, subj, obj)
 			con = authFormula
@@ -677,20 +690,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         hasUnboundCoumpundTerm = 0
         for p in PRED, SUBJ, OBJ :
             x = self.quad[p]
-#	    if x is con:  # "this" is special case.
-#		self.neededToRun[p] = []
-#		continue
             if x in allvars:   # Variable
                 self.neededToRun[p] = [x]
                 self.searchPattern[p] = None   # can bind this
-#            if self.query.template.listValue(x) != None and x is not self.store.nil:
-#                self.searchPattern[p] = None   # can bind this
-#                ur = self.store.occurringIn(x, allvars)
-#		ur = []
-#		ee = self.store.listElements(x, unmatched)
-#		for e in ee: 
-#		    if e in allvars and e not in ur: ur.append(e)
-#                self.neededToRun[p] = ur
             elif isinstance(x, Formula) or isinstance(x, List): # expr
                 ur = x.occurringIn(allvars)
                 self.neededToRun[p] = ur
@@ -700,9 +702,6 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    
 	    if chatty_flag > 98: progress("        %s needs to run: %s"%(`x`, `self.neededToRun[p]`))
                 
-#        if hasUnboundCoumpundTerm:
-#            self.short = INFINITY   # can't search
-#        else:
 	self.short, self.myIndex = con.searchable(self.searchPattern[SUBJ],
                                            self.searchPattern[PRED],
                                            self.searchPattern[OBJ])
@@ -736,7 +735,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    if pred.eval(subj, obj,  queue, bindings.copy(), proof, self.query):
 			self.state = S_DONE # satisfied
                         if chatty_flag > 80: progress("Builtin buinary relation operator succeeds")
-			if diag.tracking:
+			if tracking:
 			    rea = BecauseBuiltIn(subj, pred, obj, proof)
 			    evidence = evidence + [rea]
 #			    return [([], rea)]  # Involves extra recursion just to track reason
@@ -749,7 +748,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if result != None:
 			    self.state = S_FAIL
 			    rea=None
-			    if diag.tracking: rea = BecauseBuiltIn(subj, pred, result, proof)
+			    if tracking: rea = BecauseBuiltIn(subj, pred, result, proof)
 			    return [({obj: result}, rea)]
                         else:
 			    if heavy: return 0
@@ -760,7 +759,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if result != None:
 			    self.state = S_FAIL
 			    rea=None
-			    if diag.tracking:
+			    if tracking:
 				rea = BecauseBuiltIn(result, pred, obj, proof)
 			    return [({subj: result}, rea)]
                         else:
@@ -771,7 +770,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if result != 0:
 			    self.state = S_FAIL
 			    rea=None
-			    if diag.tracking:
+			    if tracking:
 				rea = BecauseBuiltIn(result, pred, obj, proof)
 			    return [({subj: result}, rea)]
                         else:

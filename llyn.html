@@ -14,7 +14,7 @@ TT { font-family: lucidatypewriter, lucida console, courier }
     <p><tt><br>
 $Id$<br>
 &nbsp;<br>
-RDF&nbsp;Store&nbsp;and&nbsp;<a href="#Query">Query</a>&nbsp;engine<br>
+RDF&nbsp;Store&nbsp;and&nbsp;Query&nbsp;engine<br>
 &nbsp;<br>
 Logic&nbsp;Lookup:&nbsp;Yet&nbsp;another&nbsp;Name<br>
 &nbsp;<br>
@@ -94,7 +94,7 @@ Done<br>
 ====<br>
 &nbsp;-&nbsp;sucking&nbsp;in&nbsp;the&nbsp;schema&nbsp;(http&nbsp;library?)&nbsp;--schemas&nbsp;;<br>
 &nbsp;-&nbsp;to&nbsp;know&nbsp;about&nbsp;r1&nbsp;see&nbsp;r2;<br>
-&nbsp;-&nbsp;split&nbsp;<a href="#Query">Query</a>&nbsp;engine&nbsp;out&nbsp;as&nbsp;subclass&nbsp;of&nbsp;<a href="#RDFStore">RDFStore</a>?&nbsp;(DWC)<br>
+&nbsp;-&nbsp;split&nbsp;Query&nbsp;engine&nbsp;out&nbsp;as&nbsp;subclass&nbsp;of&nbsp;<a href="#RDFStore">RDFStore</a>?&nbsp;(DWC)<br>
 &nbsp;&nbsp;&nbsp;&nbsp;SQL-equivalent&nbsp;client<br>
 &nbsp;-&nbsp;split&nbsp;out&nbsp;separate&nbsp;modules:&nbsp;CGI&nbsp;interface,&nbsp;command-line&nbsp;stuff,<br>
 &nbsp;&nbsp;&nbsp;built-ins&nbsp;(DWC&nbsp;30Aug2001)<br>
@@ -230,8 +230,7 @@ Done<br>
 </dd>
 </dl>
 </dd>
-<dt><font face="helvetica, arial"><a href="llyn.html#Query">Query</a>
-</font></dt><dt><font face="helvetica, arial"><a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>
+<dt><font face="helvetica, arial"><a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="llyn.html#RDFStore">RDFStore</a>
@@ -248,12 +247,6 @@ Done<br>
 </font></dt></dl>
 </dd>
 </dl>
-</dd>
-<dt><font face="helvetica, arial"><a href="formula.html#StoredStatement">formula.StoredStatement</a>
-</font></dt><dd>
-<dl>
-<dt><font face="helvetica, arial"><a href="llyn.html#QueryItem">QueryItem</a>
-</font></dt></dl>
 </dd>
 <dt><font face="helvetica, arial"><a href="exceptions.html#ValueError">exceptions.ValueError</a>(<a href="exceptions.html#StandardError">exceptions.StandardError</a>)
 </font></dt><dd>
@@ -303,6 +296,10 @@ Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_EqualTo-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="BI_EqualTo-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -396,6 +393,10 @@ use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_conclusion-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="BI_conclusion-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -488,6 +489,10 @@ use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_conjunction-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="BI_conjunction-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -575,6 +580,10 @@ use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_content-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="BI_content-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -660,6 +669,10 @@ Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_includes-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="BI_includes-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -756,6 +769,10 @@ use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_n3String-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="BI_n3String-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -836,6 +853,10 @@ Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_notEqualTo-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="BI_notEqualTo-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -931,6 +952,10 @@ Methods inherited from <a href="term.html#BuiltIn">term.BuiltIn</a>:<br>
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_notIncludes-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="BI_notIncludes-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -1018,6 +1043,10 @@ use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_parsedAsN3-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="BI_parsedAsN3-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -1105,6 +1134,10 @@ use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_racine-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="BI_racine-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -1197,6 +1230,10 @@ use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_rawType-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="BI_rawType-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -1299,6 +1336,10 @@ use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_rawUri-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="BI_rawUri-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -1396,6 +1437,10 @@ use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_semantics-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="BI_semantics-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -1487,6 +1532,10 @@ use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_semanticsOrError-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="BI_semanticsOrError-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -1582,6 +1631,10 @@ use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="BI_uri-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="BI_uri-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
 This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbsp;a&nbsp;arbitrary<br>
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
@@ -1856,7 +1909,7 @@ In&nbsp;this&nbsp;implementation,&nbsp;we&nbsp;use&nbsp;the&nbsp;length&nbsp;of&
 
 <dl><dt><a name="IndexedFormula-setClosureMode"><strong>setClosureMode</strong></a>(self, x)</dt></dl>
 
-<dl><dt><a name="IndexedFormula-statementsMatching"><strong>statementsMatching</strong></a>(self, pred<font color="#909090">=None</font>, subj<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;a&nbsp;READ-ONLY&nbsp;list&nbsp;of&nbsp;<a href="formula.html#StoredStatement">StoredStatement</a>&nbsp;objects&nbsp;matching&nbsp;the&nbsp;parts&nbsp;given<br>
+<dl><dt><a name="IndexedFormula-statementsMatching"><strong>statementsMatching</strong></a>(self, pred<font color="#909090">=None</font>, subj<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;a&nbsp;READ-ONLY&nbsp;list&nbsp;of&nbsp;StoredStatement&nbsp;objects&nbsp;matching&nbsp;the&nbsp;parts&nbsp;given<br>
 &nbsp;<br>
 For&nbsp;example:<br>
 for&nbsp;s&nbsp;in&nbsp;f.<a href="#IndexedFormula-statementsMatching">statementsMatching</a>(pred=pantoneColor):<br>
@@ -1973,6 +2026,10 @@ We&nbsp;may&nbsp;move&nbsp;to&nbsp;an&nbsp;internal&nbsp;storage&nbsp;rather&nbs
 
 <hr>
 Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
+<dl><dt><a name="IndexedFormula-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+&nbsp;<br>
+Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
+
 <dl><dt><a name="IndexedFormula-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
@@ -1997,147 +2054,6 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="Query">class <strong>Query</strong></a></font></td></tr>
-    
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>A&nbsp;query&nbsp;holds&nbsp;a&nbsp;hypothesis/antecedent/template&nbsp;which&nbsp;is&nbsp;being&nbsp;matched&nbsp;aginst&nbsp;(unified&nbsp;with)<br>
-the&nbsp;knowledge&nbsp;base.<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
-<td width="100%">Methods defined here:<br>
-<dl><dt><a name="Query-__init__"><strong>__init__</strong></a>(self, store, unmatched<font color="#909090">=[]</font>, template<font color="#909090">=None</font>, variables<font color="#909090">=[]</font>, existentials<font color="#909090">=[]</font>, workingContext<font color="#909090">=None</font>, conclusion<font color="#909090">=None</font>, targetContext<font color="#909090">=None</font>, already<font color="#909090">=None</font>, rule<font color="#909090">=None</font>, smartIn<font color="#909090">=[]</font>, justOne<font color="#909090">=0</font>, mode<font color="#909090">='rs'</font>, meta<font color="#909090">=None</font>)</dt></dl>
-
-<dl><dt><a name="Query-conclude"><strong>conclude</strong></a>(self, bindings, evidence<font color="#909090">=[]</font>)</dt><dd><tt>When&nbsp;a&nbsp;match&nbsp;found&nbsp;in&nbsp;a&nbsp;query,&nbsp;add&nbsp;conclusions&nbsp;to&nbsp;target&nbsp;formula.<br>
-&nbsp;<br>
-Returns&nbsp;the&nbsp;number&nbsp;of&nbsp;statements&nbsp;added.</tt></dd></dl>
-
-<dl><dt><a name="Query-remoteQuery"><strong>remoteQuery</strong></a>(query, items)</dt><dd><tt>Perform&nbsp;remote&nbsp;query&nbsp;as&nbsp;client&nbsp;on&nbsp;remote&nbsp;store<br>
-Currently&nbsp;&nbsp;this&nbsp;only&nbsp;goes&nbsp;to&nbsp;an&nbsp;SQL&nbsp;store,&nbsp;but&nbsp;should&nbsp;later&nbsp;use&nbsp;RDFQL/DAMLQL&nbsp;etc<br>
-in&nbsp;remote&nbsp;HTTP/SOAP&nbsp;call.</tt></dd></dl>
-
-<dl><dt><a name="Query-resolve"><strong>resolve</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="Query-unify"><strong>unify</strong></a>(query, queue, variables, existentials, bindings<font color="#909090">={}</font>, newBindings<font color="#909090">={}</font>, level<font color="#909090">=0</font>, evidence<font color="#909090">=[]</font>)</dt><dd><tt>&nbsp;Iterate&nbsp;on&nbsp;the&nbsp;remaining&nbsp;query&nbsp;items<br>
-bindings&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;collected&nbsp;matches&nbsp;already&nbsp;found<br>
-newBindings&nbsp;&nbsp;matches&nbsp;found&nbsp;and&nbsp;not&nbsp;yet&nbsp;applied&nbsp;-&nbsp;used&nbsp;in&nbsp;recursion<br>
-&nbsp;<br>
-You&nbsp;probably&nbsp;really&nbsp;need&nbsp;the&nbsp;state&nbsp;diagram&nbsp;to&nbsp;understand&nbsp;this<br>
-<a href="http://www.w3.org/2000/10/swap/doc/states.svg">http://www.w3.org/2000/10/swap/doc/states.svg</a><br>
-even&nbsp;if&nbsp;it&nbsp;is&nbsp;a&nbsp;bit&nbsp;out&nbsp;of&nbsp;date.</tt></dd></dl>
-
-<hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'A query holds a hypothesis/antecedent/template w...hed aginst (unified with)<font color="#c040c0">\n</font>    the knowledge base.'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
-
-</td></tr></table> 
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#ffc8d8">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="QueryItem">class <strong>QueryItem</strong></a>(<a href="formula.html#StoredStatement">formula.StoredStatement</a>)</font></td></tr>
-    
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2><tt>One&nbsp;line&nbsp;in&nbsp;a&nbsp;query&nbsp;being&nbsp;resolved.<br>
-&nbsp;<br>
-To&nbsp;a&nbsp;large&nbsp;extent,&nbsp;each&nbsp;line&nbsp;can&nbsp;keep&nbsp;track&nbsp;of&nbsp;its&nbsp;own&nbsp;state.<br>
-When&nbsp;a&nbsp;remote&nbsp;query&nbsp;is&nbsp;done,&nbsp;query&nbsp;lines&nbsp;to&nbsp;the&nbsp;same&nbsp;server&nbsp;have&nbsp;to&nbsp;be&nbsp;coordinated&nbsp;again.<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
-<td width="100%">Methods defined here:<br>
-<dl><dt><a name="QueryItem-__init__"><strong>__init__</strong></a>(self, query, quad)</dt></dl>
-
-<dl><dt><a name="QueryItem-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>Diagnostic&nbsp;string&nbsp;only</tt></dd></dl>
-
-<dl><dt><a name="QueryItem-bindNew"><strong>bindNew</strong></a>(self, newBindings)</dt><dd><tt>Take&nbsp;into&nbsp;account&nbsp;new&nbsp;bindings&nbsp;from&nbsp;query&nbsp;processing&nbsp;to&nbsp;date<br>
-&nbsp;<br>
-The&nbsp;search&nbsp;may&nbsp;get&nbsp;easier,&nbsp;and&nbsp;builtins&nbsp;may&nbsp;become&nbsp;ready&nbsp;to&nbsp;run.<br>
-Lists&nbsp;may&nbsp;either&nbsp;be&nbsp;matched&nbsp;against&nbsp;store&nbsp;by&nbsp;searching,<br>
-and/or&nbsp;may&nbsp;turn&nbsp;out&nbsp;to&nbsp;be&nbsp;bound&nbsp;and&nbsp;therefore&nbsp;ready&nbsp;to&nbsp;run.<br>
-&nbsp;<br>
-Return:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;0&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;way&nbsp;can&nbsp;this&nbsp;item&nbsp;ever&nbsp;complete.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;None&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Binding&nbsp;done,&nbsp;see&nbsp;item.state</tt></dd></dl>
-
-<dl><dt><a name="QueryItem-canRun"><strong>canRun</strong></a>(self)</dt><dd><tt>Is&nbsp;this&nbsp;built-in&nbsp;ready&nbsp;to&nbsp;run?</tt></dd></dl>
-
-<dl><dt><a name="QueryItem-clone"><strong>clone</strong></a>(self)</dt><dd><tt>Take&nbsp;a&nbsp;copy&nbsp;when&nbsp;for&nbsp;iterating&nbsp;on&nbsp;a&nbsp;query</tt></dd></dl>
-
-<dl><dt><a name="QueryItem-searchDone"><strong>searchDone</strong></a>(self)</dt><dd><tt>Search&nbsp;has&nbsp;been&nbsp;done:&nbsp;figure&nbsp;out&nbsp;next&nbsp;state.</tt></dd></dl>
-
-<dl><dt><a name="QueryItem-setup"><strong>setup</strong></a>(self, allvars, unmatched, smartIn<font color="#909090">=[]</font>, mode<font color="#909090">=''</font>)</dt><dd><tt>Check&nbsp;how&nbsp;many&nbsp;variables&nbsp;in&nbsp;this&nbsp;term,<br>
-and&nbsp;how&nbsp;long&nbsp;it&nbsp;would&nbsp;take&nbsp;to&nbsp;search<br>
-&nbsp;<br>
-Returns,&nbsp;[]&nbsp;normally&nbsp;or&nbsp;0&nbsp;if&nbsp;there&nbsp;is&nbsp;no&nbsp;way&nbsp;this&nbsp;query&nbsp;will&nbsp;work.<br>
-Only&nbsp;called&nbsp;on&nbsp;virgin&nbsp;query&nbsp;item.<br>
-The&nbsp;mode&nbsp;is&nbsp;a&nbsp;set&nbsp;of&nbsp;character&nbsp;flags&nbsp;about&nbsp;how&nbsp;we&nbsp;think.</tt></dd></dl>
-
-<dl><dt><a name="QueryItem-tryBuiltin"><strong>tryBuiltin</strong></a>(self, queue, bindings, heavy, evidence)</dt><dd><tt>Check&nbsp;for&nbsp;&nbsp;built-in&nbsp;functions&nbsp;to&nbsp;see&nbsp;whether&nbsp;it&nbsp;will&nbsp;resolve.<br>
-Return&nbsp;codes:&nbsp;&nbsp;0&nbsp;-&nbsp;give&nbsp;up;&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[]&nbsp;-&nbsp;success,&nbsp;no&nbsp;new&nbsp;bindings,&nbsp;(action&nbsp;has&nbsp;been&nbsp;called)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[...]&nbsp;list&nbsp;of&nbsp;binding&nbsp;lists,&nbsp;each&nbsp;a&nbsp;pair&nbsp;of&nbsp;bindings&nbsp;and&nbsp;reason.</tt></dd></dl>
-
-<dl><dt><a name="QueryItem-tryDeepSearch"><strong>tryDeepSearch</strong></a>(self)</dt><dd><tt>Search&nbsp;the&nbsp;store,&nbsp;matching&nbsp;nested&nbsp;compound&nbsp;structures<br>
-&nbsp;<br>
-Returns&nbsp;lists&nbsp;of&nbsp;list&nbsp;of&nbsp;bindings,&nbsp;attempting&nbsp;if&nbsp;necessary&nbsp;to&nbsp;unify<br>
-any&nbsp;nested&nbsp;compound&nbsp;terms.&nbsp;Added&nbsp;20030810,&nbsp;not&nbsp;sure&nbsp;whether&nbsp;it&nbsp;is&nbsp;worth&nbsp;the<br>
-execution&nbsp;time&nbsp;in&nbsp;practice.&nbsp;It&nbsp;could&nbsp;be&nbsp;left&nbsp;to&nbsp;a&nbsp;special&nbsp;magic&nbsp;built-in&nbsp;like&nbsp;"matches"<br>
-or&nbsp;something&nbsp;if&nbsp;it&nbsp;is&nbsp;only&nbsp;occasionnaly&nbsp;used.<br>
-&nbsp;<br>
-Used&nbsp;in&nbsp;state&nbsp;S_NEED_DEEP</tt></dd></dl>
-
-<hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'One line in a query being resolved.<font color="#c040c0">\n</font>    <font color="#c040c0">\n</font>    To ...he same server have to be coordinated again.<font color="#c040c0">\n</font>    '<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
-
-<dl><dt><strong>__module__</strong> = 'llyn'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
-
-<hr>
-Methods inherited from <a href="formula.html#StoredStatement">formula.StoredStatement</a>:<br>
-<dl><dt><a name="QueryItem-__getitem__"><strong>__getitem__</strong></a>(self, i)</dt></dl>
-
-<dl><dt><a name="QueryItem-__len__"><strong>__len__</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="QueryItem-asFormula"><strong>asFormula</strong></a>(self, why<font color="#909090">=None</font>)</dt><dd><tt>The&nbsp;formula&nbsp;which&nbsp;contains&nbsp;only&nbsp;a&nbsp;statement&nbsp;like&nbsp;this.<br>
-&nbsp;<br>
-When&nbsp;we&nbsp;split&nbsp;the&nbsp;statement&nbsp;up,&nbsp;we&nbsp;lose&nbsp;information&nbsp;in&nbsp;any&nbsp;existentials&nbsp;which&nbsp;are<br>
-shared&nbsp;with&nbsp;other&nbsp;statements.&nbsp;So&nbsp;we&nbsp;introduce&nbsp;a&nbsp;skolem&nbsp;constant&nbsp;to&nbsp;tie&nbsp;the<br>
-statements&nbsp;together.&nbsp;&nbsp;We&nbsp;don't&nbsp;have&nbsp;access&nbsp;to&nbsp;any&nbsp;enclosing&nbsp;formula&nbsp;<br>
-so&nbsp;we&nbsp;can't&nbsp;express&nbsp;its&nbsp;quantification.&nbsp;&nbsp;This&nbsp;@@&nbsp;not&nbsp;ideal.<br>
-&nbsp;<br>
-This&nbsp;extends&nbsp;the&nbsp;<a href="formula.html#StoredStatement">StoredStatement</a>&nbsp;class&nbsp;with&nbsp;functionality&nbsp;we&nbsp;only&nbsp;need&nbsp;with&nbsp;"why"&nbsp;module.</tt></dd></dl>
-
-<dl><dt><a name="QueryItem-comparePredObj"><strong>comparePredObj</strong></a>(self, other)</dt><dd><tt>Just&nbsp;compare&nbsp;P&nbsp;and&nbsp;OBJ,&nbsp;others&nbsp;the&nbsp;same</tt></dd></dl>
-
-<dl><dt><a name="QueryItem-compareSubjPredObj"><strong>compareSubjPredObj</strong></a>(self, other)</dt><dd><tt>Just&nbsp;compare&nbsp;SUBJ,&nbsp;Pred&nbsp;and&nbsp;OBJ,&nbsp;others&nbsp;the&nbsp;same<br>
-Avoid&nbsp;loops&nbsp;by&nbsp;spotting&nbsp;reference&nbsp;to&nbsp;containing&nbsp;formula</tt></dd></dl>
-
-<dl><dt><a name="QueryItem-context"><strong>context</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;context&nbsp;of&nbsp;the&nbsp;statement</tt></dd></dl>
-
-<dl><dt><a name="QueryItem-object"><strong>object</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;object&nbsp;of&nbsp;the&nbsp;statement</tt></dd></dl>
-
-<dl><dt><a name="QueryItem-predicate"><strong>predicate</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;predicate&nbsp;of&nbsp;the&nbsp;statement</tt></dd></dl>
-
-<dl><dt><a name="QueryItem-spo"><strong>spo</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="QueryItem-statements"><strong>statements</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="QueryItem-subject"><strong>subject</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;subject&nbsp;of&nbsp;the&nbsp;statement</tt></dd></dl>
-
-</td></tr></table> 
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#ffc8d8">
-<td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="RDFStore">class <strong>RDFStore</strong></a>(<a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
@@ -2148,21 +2064,10 @@ Avoid&nbsp;loops&nbsp;by&nbsp;spotting&nbsp;reference&nbsp;to&nbsp;containing&nb
 
 <dl><dt><a name="RDFStore-_fromPython"><strong>_fromPython</strong></a>(self, x, queue<font color="#909090">=None</font>)</dt><dd><tt>Takem&nbsp;a&nbsp;python&nbsp;string,&nbsp;seq&nbsp;etc&nbsp;and&nbsp;represent&nbsp;as&nbsp;a&nbsp;llyn&nbsp;object</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-any"><strong>any</strong></a>(self, q)</dt><dd><tt><a href="#Query">Query</a>&nbsp;the&nbsp;store&nbsp;for&nbsp;the&nbsp;first&nbsp;match.<br>
+<dl><dt><a name="RDFStore-any"><strong>any</strong></a>(self, q)</dt><dd><tt>Query&nbsp;the&nbsp;store&nbsp;for&nbsp;the&nbsp;first&nbsp;match.<br>
 &nbsp;<br>
 Quad&nbsp;contains&nbsp;one&nbsp;None&nbsp;as&nbsp;wildcard.&nbsp;Returns&nbsp;first&nbsp;value<br>
 matching&nbsp;in&nbsp;that&nbsp;position.</tt></dd></dl>
-
-<dl><dt><a name="RDFStore-applyRules"><strong>applyRules</strong></a>(self, workingContext, filterContext<font color="#909090">=None</font>, targetContext<font color="#909090">=None</font>, universals<font color="#909090">=[]</font>, alreadyDictionary<font color="#909090">=None</font>, mode<font color="#909090">=''</font>, why<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Apply&nbsp;rules&nbsp;in&nbsp;one&nbsp;context&nbsp;to&nbsp;the&nbsp;same&nbsp;or&nbsp;another<br>
-&nbsp;<br>
-A&nbsp;rule&nbsp;here&nbsp;is&nbsp;defined&nbsp;by&nbsp;log:implies,&nbsp;which&nbsp;associates&nbsp;the&nbsp;template&nbsp;(premise,&nbsp;precondidtion,<br>
-antecedent)&nbsp;to&nbsp;the&nbsp;conclusion&nbsp;(postcondition).<br>
-&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;This&nbsp;is&nbsp;just&nbsp;a&nbsp;database&nbsp;search,&nbsp;very&nbsp;SQL-like.<br>
-&nbsp;<br>
-To&nbsp;verify&nbsp;that&nbsp;for&nbsp;all&nbsp;x,&nbsp;f(s)&nbsp;one&nbsp;can&nbsp;either&nbsp;find&nbsp;that&nbsp;asserted&nbsp;explicitly,<br>
-or&nbsp;find&nbsp;an&nbsp;example&nbsp;for&nbsp;some&nbsp;specific&nbsp;value&nbsp;of&nbsp;x.&nbsp;&nbsp;Here,&nbsp;we&nbsp;deliberately<br>
-chose&nbsp;only&nbsp;to&nbsp;do&nbsp;the&nbsp;first.</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-bind"><strong>bind</strong></a>(self, prefix, uri)</dt></dl>
 
@@ -2229,8 +2134,6 @@ formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&
 
 <dl><dt><a name="RDFStore-newFormula"><strong>newFormula</strong></a>(self, uri<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="RDFStore-newInterned"><strong>newInterned</strong></a>(self, type)</dt></dl>
-
 <dl><dt><a name="RDFStore-newList"><strong>newList</strong></a>(self, value)</dt></dl>
 
 <dl><dt><a name="RDFStore-newLiteral"><strong>newLiteral</strong></a>(self, str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt><dd><tt>Interned&nbsp;version:&nbsp;generat&nbsp;new&nbsp;literal&nbsp;object&nbsp;as&nbsp;stored&nbsp;in&nbsp;this&nbsp;store</tt></dd></dl>
@@ -2263,19 +2166,6 @@ Builds&nbsp;the&nbsp;indexes&nbsp;and&nbsp;does&nbsp;stuff&nbsp;for&nbsp;lists.<
 Deprocated:&nbsp;use&nbsp;<a href="formula.html#Formula">Formula</a>.add()</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-symbol"><strong>symbol</strong></a>(self, str)</dt><dd><tt>Intern&nbsp;a&nbsp;URI&nbsp;for&nbsp;a&nbsp;symvol,&nbsp;returning&nbsp;a&nbsp;symbol&nbsp;object</tt></dd></dl>
-
-<dl><dt><a name="RDFStore-testIncludes"><strong>testIncludes</strong></a>(self, f, g, _variables<font color="#909090">=[]</font>, smartIn<font color="#909090">=[]</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Return&nbsp;whether&nbsp;or&nbsp;nor&nbsp;f&nbsp;contains&nbsp;a&nbsp;top-level&nbsp;formula&nbsp;equvalent&nbsp;to&nbsp;g.<br>
-Just&nbsp;a&nbsp;test:&nbsp;no&nbsp;bindings&nbsp;returned.</tt></dd></dl>
-
-<dl><dt><a name="RDFStore-think"><strong>think</strong></a>(self, knowledgeBase, rules<font color="#909090">=None</font>, mode<font color="#909090">=''</font>)</dt><dd><tt>Forward&nbsp;inference<br>
-&nbsp;<br>
-This&nbsp;is&nbsp;tricky&nbsp;in&nbsp;the&nbsp;case&nbsp;in&nbsp;which&nbsp;rules&nbsp;are&nbsp;added&nbsp;back&nbsp;into&nbsp;the<br>
-store.&nbsp;The&nbsp;store&nbsp;is&nbsp;used&nbsp;for&nbsp;read&nbsp;(normally&nbsp;canonical)&nbsp;and&nbsp;write<br>
-(normally&nbsp;open)&nbsp;at&nbsp;the&nbsp;samne&nbsp;time.&nbsp;&nbsp;It&nbsp;in&nbsp;fact&nbsp;has&nbsp;to&nbsp;be&nbsp;open.</tt></dd></dl>
-
-<dl><dt><a name="RDFStore-tryRule"><strong>tryRule</strong></a>(self, rule, workingContext, targetContext, _variables, already<font color="#909090">=None</font>, mode<font color="#909090">=''</font>)</dt><dd><tt>Try&nbsp;a&nbsp;rule<br>
-&nbsp;<br>
-Beware&nbsp;lists&nbsp;are&nbsp;corrupted.&nbsp;Already&nbsp;list&nbsp;is&nbsp;updated&nbsp;if&nbsp;present.</tt></dd></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -2343,16 +2233,9 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl><dt><a name="-_indent"><strong>_indent</strong></a>(str)</dt><dd><tt>&nbsp;Return&nbsp;a&nbsp;string&nbsp;indented&nbsp;by&nbsp;4&nbsp;spaces</tt></dd></dl>
- <dl><dt><a name="-_substitute"><strong>_substitute</strong></a>(bindings, list)</dt><dd><tt>Subsitustes&nbsp;IN-LINE&nbsp;into&nbsp;a&nbsp;list&nbsp;of&nbsp;quads</tt></dd></dl>
  <dl><dt><a name="-bindingsToString"><strong>bindingsToString</strong></a>(bindings)</dt><dd><tt>#&nbsp;&nbsp;&nbsp;DIAGNOSTIC&nbsp;STRING&nbsp;OUTPUT</tt></dd></dl>
  <dl><dt><a name="-comparePair"><strong>comparePair</strong></a>(self, other)</dt><dd><tt>Used&nbsp;only&nbsp;in&nbsp;outputString</tt></dd></dl>
- <dl><dt><a name="-dereference"><strong>dereference</strong></a>(x, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;object,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
-&nbsp;<br>
-Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.<br>
-Could&nbsp;be&nbsp;speeded&nbsp;up&nbsp;by&nbsp;hanging&nbsp;the&nbsp;cached&nbsp;value&nbsp;as&nbsp;a&nbsp;python&nbsp;attribute&nbsp;on&nbsp;x</tt></dd></dl>
  <dl><dt><a name="-isString"><strong>isString</strong></a>(x)</dt></dl>
- <dl><dt><a name="-lookupQuad"><strong>lookupQuad</strong></a>(bindings, q)</dt><dd><tt>Return&nbsp;a&nbsp;subsituted&nbsp;quad</tt></dd></dl>
- <dl><dt><a name="-lookupQuadRecursive"><strong>lookupQuadRecursive</strong></a>(bindings, q, why<font color="#909090">=None</font>)</dt></dl>
  <dl><dt><a name="-quadToString"><strong>quadToString</strong></a>(q, neededToRun<font color="#909090">=[[], [], [], []]</font>, pattern<font color="#909090">=[1, 1, 1, 1]</font>)</dt></dl>
  <dl><dt><a name="-queueToString"><strong>queueToString</strong></a>(queue)</dt></dl>
  <dl><dt><a name="-seqToString"><strong>seqToString</strong></a>(set)</dt></dl>
@@ -2371,7 +2254,6 @@ Could&nbsp;be&nbsp;speeded&nbsp;up&nbsp;by&nbsp;hanging&nbsp;the&nbsp;cached&nbs
 <strong>FLOAT_DATATYPE</strong> = 'http://www.w3.org/2001/XMLSchema#double'<br>
 <strong>FORMULA</strong> = 1<br>
 <strong>HTTP_Content_Type</strong> = 'content-type'<br>
-<strong>INFINITY</strong> = 1000000000<br>
 <strong>INTEGER_DATATYPE</strong> = 'http://www.w3.org/2001/XMLSchema#integer'<br>
 <strong>LITERAL</strong> = 2<br>
 <strong>LITERAL_URI_prefix</strong> = 'data:application/n3;'<br>
@@ -2395,21 +2277,6 @@ Could&nbsp;be&nbsp;speeded&nbsp;up&nbsp;by&nbsp;hanging&nbsp;the&nbsp;cached&nbs
 <strong>STRING_NS_URI</strong> = 'http://www.w3.org/2000/10/swap/string#'<br>
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
-<strong>S_DONE</strong> = 0<br>
-<strong>S_FAIL</strong> = 80<br>
-<strong>S_HEAVY_READY</strong> = 40<br>
-<strong>S_HEAVY_WAIT</strong> = 20<br>
-<strong>S_HEAVY_WAIT_F</strong> = 19<br>
-<strong>S_LIGHT_EARLY</strong> = 50<br>
-<strong>S_LIGHT_GO</strong> = 65<br>
-<strong>S_LIGHT_UNS_GO</strong> = 70<br>
-<strong>S_LIGHT_WAIT</strong> = 30<br>
-<strong>S_LIST_BOUND</strong> = 5<br>
-<strong>S_LIST_UNBOUND</strong> = 7<br>
-<strong>S_NEED_DEEP</strong> = 45<br>
-<strong>S_NOT_LIGHT</strong> = 60<br>
-<strong>S_REMOTE</strong> = 10<br>
-<strong>S_UNKNOWN</strong> = 99<br>
 <strong>__file__</strong> = './llyn.pyc'<br>
 <strong>__name__</strong> = 'llyn'<br>
 <strong>becauseSubexpression</strong> = &lt;why.BecauseSubexpression instance&gt;<br>

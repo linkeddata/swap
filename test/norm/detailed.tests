@@ -12,12 +12,12 @@
 :norm10 a test:CwmTest;
     test:shortFileName "norm-av1.n3";
     test:description   "Bug with RDF output in bySubject mode";
-    test:arguments     """av.n3 --think --base=bogus: --purge --rdf --bySubject""".
+    test:arguments     """norm/av.n3 --think --base=bogus: --purge --rdf --bySubject""".
 
 :norm11 a test:CwmTest;
     test:shortFileName "norm-av2.n3";
     test:description   "Bug with --chatty=200 after --base=bogus:";
-    test:arguments     """av.n3 --think --base=bogus: --purge --chatty=200--rdf --bySubject""".
+    test:arguments     """norm/av.n3 --think --base=bogus: --purge --chatty=200 --rdf --bySubject""".
 
 	
 

@@ -9,8 +9,8 @@ CODE=retest.py ../cwm.py ../notation3.py ../xml2rdf.py
 
 #TESTS=regression.n3 list/detailed.test
 
-all : $(CODE) regression.n3 list/detailed.tests
-	PYTHONPATH=`/bin/pwd`/.. $P retest.py -n -c -f regression.n3 -f list/detailed.tests
+all : $(CODE) regression.n3 list/detailed.tests online.tests norm/detailed.tests
+	PYTHONPATH=`/bin/pwd`/.. $P retest.py -n -c -f regression.n3 -f list/detailed.tests -f online.tests -f norm/detailed.tests
 	touch all
 
 fast : $(CODE) regression.n3

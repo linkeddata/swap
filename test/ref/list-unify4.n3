@@ -1,0 +1,28 @@
+     @prefix : <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix math: <http://www.w3.org/2000/10/swap/math#> .
+    
+    2     a :RESULT .
+    
+    :THIS_TEST     a :SUCCESS .
+      ( 1 
+        13  )
+         :crinks  (
+        2 
+        14  ) .
+      ( 1 
+        14  )
+         :crinks  (
+        2 
+        13  ) .
+      ( 1 
+        2  )
+         :crinks  (
+        7 
+        2  ) .
+      ( 1 
+        3  )
+         :crinks  (
+        999 
+        999  ) .
+    

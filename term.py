@@ -27,7 +27,6 @@ from __future__ import generators  # for yield
 import string, sys, types
 
 
-import urllib # for hasContent
 import uripath # DanC's tested and correct one
 import md5, binascii  # for building md5 URIs
 
@@ -41,6 +40,9 @@ from RDFSink import List_NS
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
+
+from diag import chatty_flag, progress
+
 
 import sys
 if sys.hexversion < 0x02020000:
@@ -143,7 +145,7 @@ class Term:
 	    Return [( {var1: val1, var2: val2,...}, reason), ...] if match
 	"""
 	assert type(bindings) is types.DictType
-	if verbosity() > 97: progress("Unifying symbol %s with %s vars=%s, so far=%s"%
+	if chatty_flag > 97: progress("Unifying symbol %s with %s vars=%s, so far=%s"%
 					(self, other,vars, bindings))
 	try:
 	    x = bindings[self]
@@ -151,10 +153,11 @@ class Term:
 	except KeyError:	    
 	    if self is other: return [ ({}, None)]
 	    if self in vars+existentials:
-		if verbosity() > 80: progress("Unifying term MATCHED %s to %s"%(self,other))
+		if chatty_flag > 80: progress("Unifying term MATCHED %s to %s"%(self,other))
 		return [ ({self: other}, None) ]
 	    return 0
 	
+
 
 class Symbol(Term):
     """   A Term which has no fragment
@@ -196,6 +199,34 @@ class Symbol(Term):
 	sink.add(subj=b, pred=uri, obj=sink.newLiteral(self.uriref()), why=why)
 	return b
                 
+    def dereference(self, mode="", workingContext=None):
+	"""dereference an identifier, finding the semantics of its schema if any
+	
+	Returns None if it cannot be retreived.
+	"""
+	if hasattr(self, "_semantics"): return self._semantics
+    
+	inputURI = self.uriref()
+	if chatty_flag > 20: progress("Web: Looking up %s" % self)
+	if "E" not in mode: F = self.store.load(inputURI)
+	else:
+	    try:
+		F = self.store.load(inputURI)
+	    except:
+	    #except (IOError, SyntaxError, DocumentAccessError, xml.sax._exceptions.SAXParseException):
+		F = None
+	if F != None:
+	    if "m" in mode:
+		workingContext.reopen()
+		if chatty_flag > 45: progress("Web: dereferenced %s  added to %s" %(
+			    self, workingContext))
+		workingContext.store.copyFormula(F, workingContext)
+	    if "x" in mode:   # capture experience
+		workingContext.add(r, self.store.semantics, F)
+	setattr(self, "_semantics", F)
+	if chatty_flag > 25: progress("Web: Dereferencing %s gave %s" %(self, F))
+	return F
+		
 
 class Fragment(Term):
     """    A Term which DOES have a fragment id in its URI
@@ -237,6 +268,14 @@ class Fragment(Term):
 	sink.add(subj=b, pred=uri, obj=sink.newLiteral(self.uriref()), why=why)
 	return b
 
+    def dereference(self, mode="", workingContext=None):
+	"""dereference an identifyer, finding the semantics of its schema if any
+	
+	Returns None if it cannot be retreived.
+	"""
+	return self.resource.dereference(mode, workingContext)
+		
+
 class Anonymous(Fragment):
     def __init__(self, resource, fragid):
         Fragment.__init__(self, resource, fragid)
@@ -266,8 +305,6 @@ class Anonymous(Fragment):
 # Many different implementations are of course possible.
 #
 _nextList = 0
-
-from diag import verbosity, progress
 
 class CompoundTerm(Term):
     """A compound term has occurrences of terms within it.
@@ -318,14 +355,14 @@ class List(CompoundTerm):
 	tail = self.store.nil
 	for x in s:
 	    tail = tail.prepend(x.substitution(bindings, why=why))
-	if verbosity() > 90:
+	if chatty_flag > 90:
 	    progress("Substition of variables %s in list %s" % (bindings, self))
 	    progress("...yields NEW %s = %s" % (tail, tail.value()))
 	return tail
 	    
     def substituteEquals(self, bindings, newBindings):
 	"Return this or a version of me with substitution of equals made"
-	if verbosity() > 100: progress("SubstituteEquals list %s with %s" % (self, bindings))
+	if chatty_flag > 100: progress("SubstituteEquals list %s with %s" % (self, bindings))
 	if self.occurringIn(bindings.keys()) == []:
 	    return self # phew!
 	s = self.asSequence()
@@ -334,7 +371,7 @@ class List(CompoundTerm):
 	for x in s:
 	    tail = tail.prepend(x.substituteEquals(bindings, newBindings))
 	newBindings[self] = tail # record a new equality
-	if verbosity() > 90: progress("SubstitueEquals list CHANGED %s -> %s" % (self, tail))
+	if chatty_flag > 90: progress("SubstitueEquals list CHANGED %s -> %s" % (self, tail))
 	return tail
 	    
 
@@ -361,7 +398,7 @@ class NonEmptyList(List):
 
     def unify(self, other, vars, existentials,  bindings):
 	"""See Term.unify()"""
-	if verbosity() > 90:
+	if chatty_flag > 90:
 	    progress("Unifying list %s with %s vars=%s, so far=%s"%
 		    (self.value(), other.value(),vars, bindings))
 	if not isinstance(other, NonEmptyList): return 0

@@ -50,20 +50,25 @@
     test:arguments     """list/double.n3 -think""".
 
 
-:t2000 a test:CwmTest;
+:t2004u1 a test:CwmTest;
     test:shortFileName "list-unify1.n3";
     test:description   "List unification 1";
     test:arguments     """list/unify1.n3 --think --data""".
 	
-:t2002 a test:CwmTest;
+:t2004u2 a test:CwmTest;
     test:shortFileName "list-unify2.n3";
     test:description   "List unification 2 - variable in list";
     test:arguments     """list/unify1.n3 --think --data""".
 	
-:t2004 a test:CwmTest;
-    test:shortFileName "list-unify1.n3";
+:t2004u3 a test:CwmTest;
+    test:shortFileName "list-unify3.n3";
     test:description   "List unification 3 - nested lists";
     test:arguments     """list/unify1.n3 --think --data""".
+
+:t2004u4 a test:CwmTest;
+    test:shortFileName "list-unify4.n3";
+    test:description   "List unification 4 - nested lists";
+    test:arguments     """list/unify4.n3 --think --data""".
 
 
 :t2005 a test:CwmTest;
