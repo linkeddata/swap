@@ -1,0 +1,59 @@
+<> a <http://www.w3.org/2000/10/swap/log#N3Document> .
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix r: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+<> dc:title "Earth Maps, Latitudes, and Longitudes: An RDF Schema";
+  dc:description """semantics partially grounded by n-triples2xplanet.pl
+	script""",
+	 "$Id$";
+  s:seeAlso <../n-triples2xplanet.pl>,
+	<http://www.w3.org/2001/sw/WebOnt/mapStyle.n3>,
+	<http://www.w3.org/2001/sw/WebOnt/xplanet-filter.n3>;
+	<http://www.w3.org/2001/sw/WebOnt/Makefile>;
+  dc:description """developed initially to map WebOnt WG folk
+	on the globe; refined a bit in the context of a 2nd
+	application: making maps from address books""";
+  s:seeAlso <usps.n3>;
+  dc:source <http://xplanet.sourceforge.net/>;
+  dc:subject
+    <http://directory.google.com/Top/Science/Social_Sciences/Geography/Cartography/>,
+   <http://dmoz.org/Science/Social_Sciences/Geography/Cartography/>.
+
+@prefix map: <http://www.w3.org/2000/10/swap/pim/earthMap#>.
+
+map:Marker a s:Class; s:label "Marker".
+
+map:label a r:Property; s:label "label";
+  s:domain map:Marker;
+  s:comment "label, for use in xplanet maps".
+map:align a r:Property; s:label "align";
+  s:domain map:Marker;
+  s:comment "marker alignment, for use in xplanet maps".
+map:color a r:Property; s:label "color";
+  s:domain map:Marker;
+  s:comment "marker color (name), for use in xplanet maps".
+
+
+
+map:x a r:Property; s:label "x", "x coordinate";
+  s:seeAlso <http://www.wikipedia.com/wiki/Longitude>.
+
+map:xDMSd a r:Property; s:label "xDMSd";
+  s:comment """x in D-M-Sd format, where D/M/S are decimal numerals
+	and d is a direction: E or W""".
+map:yDMSd a r:Property; s:label "yDMSd";
+  s:comment """y in D-M-Sd format, where D/M/S are decimal numerals
+	and d is a direction: N or S""".
+
+
+map:y a r:Property; s:label "y", "y coordinate";
+  s:seeAlso <http://www.wikipedia.com/wiki/Latitude>.
+
+
+
+<> s:seeAlso [ = <http://jan.ucc.nau.edu/~cvm/latlongdist.php>;
+	dc:title "Latitude/Longitude Distance Calculation";
+	dc:source [ = <http://www.mathforum.com/dr.math/problems/longandlat.html>;
+		dc:title "Using Longitude and Latitude to Determine Distance"]
+  ].

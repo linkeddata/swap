@@ -11,9 +11,11 @@
 @prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
 
 @prefix p: <http://www.w3.org/2000/10/swap/pim/usps#>.
+@prefix map: <http://www.w3.org/2000/10/swap/pim/earthMap#>.
 
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix str: <http://www.w3.org/2000/10/swap/string#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
 
 @prefix : <?#>.
 
@@ -30,25 +32,35 @@ this log:forAll :where, :cityN, :stN, :i, :pg, :txt.
   :pg log:uri :i.
 }
   log:implies {
-    :where :_latLongPage :pg.
+    :where a map:Marker; map:label :cityN;
+	:_latLongPage :pg
   }.
+
+[ :directionName "N";  :multiplier "1"].
+[ :directionName "S"; :multiplier "-1"].
+[ :directionName "E"; :multiplier "1"].
+[ :directionName "W"; :multiplier "-1"].
 
 {
   :where :_latLongPage :pg.
   :pg log:content :txt.
-  (:txt "Location: (\\d+\\.\\d+) ") str:scrape :latNum.
-  (:txt "Location: \\d+\\.\\d+ (\\w), ") str:scrape :latDir.
-  (:txt "Location: \\d+\\.\\d+ \\w, (\\d+\\.\\d+)") str:scrape :longNum.
-  (:txt "Location: \\d+\\.\\d+ \\w, \\d+\\.\\d+ (\\w)") str:scrape :longDir.
+  (:txt "Location: (\\d+\\.\\d+) ") str:scrape :latMag.
 
+  (:txt "Location: \\d+\\.\\d+ (\\w), ")
+	str:scrape [ is :directionName of [ :multiplier :latX]].
+
+  (:txt "Location: \\d+\\.\\d+ \\w, (\\d+\\.\\d+)") str:scrape :longMag.
+
+  (:txt "Location: \\d+\\.\\d+ \\w, \\d+\\.\\d+ (\\w)")
+	str:scrape [ is :directionName of [ :multiplier :longX]].
+
+  (:latMag :latX) math:product :lat.
+  (:longMag :longX) math:product :long.
 }
   log:implies {
-    :where :_latNum :latNum;
-	:_latDir :latDir;
-	:_longNum :longNum;
-	:_longDir :longDir.
+    :where map:x :long; map:y :lat; :_latMag :latMag; :_latX :latX.
   }.
-this log:forAll :latNum, :latDir, :longNum, :longDir.
+this log:forAll :lat, :latMag, :latX, :long, :longMag, :longX.
 
 
 # test data...
