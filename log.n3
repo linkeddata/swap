@@ -36,7 +36,7 @@ log:forAll a rdf:Property;
 ################## The following are used for inference
 
 
-log:Truth a rdf:Class;
+log:Truth a rdfs:Class;
     rdfs:comment """Something which is true: belive it as you would belive this.
 	       Understood natively by cwm in that it will execute rules in a formula
          declared a Truth within a formula it is already taking rules from.""".
@@ -95,6 +95,17 @@ log:semantics a rdf:Property;   # (was resolvesTo but we use role nouns by prefe
     rdfs:comment """This connects a document and the formula it parses to.
         Cwm knows how to go get a document and parse it in order to evaluate this.""".
 
+log:semanticsOrError a rdf:Property;   #
+    rdfs:domain doc:Work;
+    rdfs:label  "semantics or error message";
+    rdfs:comment """This connects a document and either the formula it parses to,
+        or an error message explaining what went wromg with trying. See semantics.
+        Cwm knows how to go get a document and parse it in order to evaluate this.""".
+
+log:racine a rdf:Property;
+    rdfs:comment """For anything identified by a URI with a fragid, this is the
+        thing identified by the same URI without a hash or fragid""".
+
 log:content a rdf:Property;   # (was hasContent but we use role nouns by preference)
     rdfs:domain doc:Work;
     rdfs:range  log:String;
@@ -132,13 +143,19 @@ it may for example indirectly invoke other documents, validate
 signatures, etc.
 """.
 
+################### Purge control
+
+log:Chaff a rdfs:Class;
+    rdfs:comment """Any statement mentioning anything in this class
+is considered boring and purged by the cwm --purge option.""".
+
  
 
 ################# Simple Builtins:
 #
 #
 log:uri a rdf:Property;
-    rdfs:description 
+    rdfs:comment 
 """This allows one to look at the actual string of the URI
 which identifies this.
 Cwm can get the URI of a resource or get the resource from the URI.""";

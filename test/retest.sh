@@ -107,6 +107,8 @@ cwm_test sameDan.n3 "dealing with multiple descriptions of the same thing using 
 
 cwm_test smush.rdf "Data aggregation challenge from Jan 2001" --rdf smush-examples.rdf --n3 smush-schema.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge --filter=smush-query.n3 --rdf
 
+cwm_test vblsNotURIs-out.n3 "Should not get URIs of anonymous nodes" --rdf animal.rdf --n3 vblsNotURIs.n3 --think
+
 TEST_PARAMETER_1=TEST_VALUE_1; export TEST_PARAMETER_1 
 cwm_test environ.n3 "Read operating system environment variable" os/environ.n3 -think
 
@@ -114,8 +116,8 @@ TARGET=roadmap/test.graph; export TARGET
 cwm_test roadmap-test.dot "using notIncludes and --strings to make a graphviz file"  roadmap/todot.n3 --think --strings
 
 # $Log$
-# Revision 1.24  2001-12-08 02:32:54  timbl
-# Add two-route.n3
+# Revision 1.25  2001-12-29 04:00:42  timbl
+# Minor fixes. See ./util for bits of validator
 #
 # Revision 1.23  2001/12/02 22:42:28  timbl
 # Added roadmap test

@@ -1,11 +1,12 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
 
 <> dc:description """test that log:uri only
-gives URIs that somebody actually used, not variable names""";
-"""
+gives URIs that somebody actually used, not variable names
+
 run it ala:
  python cwm.py --rdf test/animal.rdf --n3 test/vblsNotURIs.n3 --think
 """;
+   dc:version
 "$Id$".
 
 

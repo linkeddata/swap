@@ -484,7 +484,8 @@ class RDFXMLParser(RDFHandler):
         try:
             self._p.parse(s)
         except xml.sax._exceptions.SAXException, e:
-            raise SyntaxError()
+            # was: raise SyntaxError() which left no info as to what had happened
+            raise SyntaxError("parsing XML: "+sys.exc_info()[1].__str__())   # Remove all XML diagnostic info?!? -tbl
         self.close()
 
     def close(self):

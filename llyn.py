@@ -362,7 +362,7 @@ def loadToStore(store, addr):
             buffer = netStream.read(500)
             netStream.close()
             netStream = urllib.urlopen(addr)
-            if buffer.find('xmlns="') >=0:
+            if buffer.find('xmlns="') >=0 or buffer.find('xmlns:') >=0:
                 guess = 'application/xml'
             elif buffer[0] == "#" or buffer[0:7] == "@prefix":
                 guess = 'application/n3'
@@ -405,10 +405,11 @@ class BuiltInFailed(Exception):
     def __str__(self):
         reason = _indent(self._info[1].__str__())
 #        return "reason=" + reason
-        return ("Error during built-in operation\n  <%s>\n  in formula %s\n, because:\n%s" % (
+        return ("Error during built-in operation\n  <%s>\n  in formula %s,\nbecause:\n%s" % (
             itemToString(self._item),
             `self._item[QUAD][CONTEXT]`,
-            reason))
+#            `self._info`))
+            `reason`))
     
 class DocumentAccessError(IOError):
     def __init__(self, uri, info):
@@ -621,7 +622,7 @@ class RDFStore(RDFSink.RDFSink) :
             else :      # This has a fragment and a resource
                 resid = urirefString[:hash]
                 if string.find(resid, "#") >= 0:
-                    raise URISyntaxError
+                    raise URISyntaxError # Hash in document ID - can be from parsing XML as N3!
                 r = self.internURI(resid)
                 if typ == RESOURCE:
                     if urirefString == notation3.N3_nil[1]:  # Hack - easier if we have a different classs
@@ -2144,10 +2145,10 @@ class RDFStore(RDFSink.RDFSink) :
 
         if already != None:
             if bindings in already:
-                if thing.verbosity() > 20: progress("@@Dup: ", bindingsToString(bindings))
+                if thing.verbosity() > 30: progress("@@Dup: ", bindingsToString(bindings))
                 # raise foo
                 return 0
-            if thing.verbosity() > 20: progress("-- ok: ", bindingsToString(bindings))
+            if thing.verbosity() > 30: progress("-- ok: ", bindingsToString(bindings))
             already.append(bindings)   # A list of lists
         
         myConclusions = conclusions[:]
