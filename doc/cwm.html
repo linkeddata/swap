@@ -47,14 +47,6 @@ out the whole tree to develop.</p>
 
 <p></p>
 
-<h2 id="Python">Python modules</h2>
-
-<h3>Don't trust the doc</h3>
-
-<p>The best test of works is what has been tested.  So the list of files in
-the <a href="../test/retest.sh">regression test</a> defines the set of
-features which are generally checked on each checkin.</p>
-
 <h3 id="Closed">Closed World Machine : cwm.py</h3>
 
 <p>This is a general purpose command-line application, in which triples are
@@ -159,8 +151,46 @@ this log:forAll &lt;#x&gt; , &lt;#y&gt; .
 
 <p>The @prefix directives define the prefixes log: and mech: as representing
 namespaces.   The this log:forAll line declares #x and #y, two local
-identifiers, as being univerlly quantified variables in the context of this
+identifiers, as being universaly quantified variables in the context of this
 formula (this).</p>
+
+<h2>Built-in functions</h2>
+
+<p>Sean Palmer's guide is more up to date.</p>
+
+<h3>Logic</h3>
+
+<p>See the<a href="../log.n3"> schema</a></p>
+<dl>
+  <dt>implies</dt>
+    <dd>One formula implies anotehr, using log:forAll and log:forSome to
+      indicate variables.  This is the basic rule-building property. the left
+      hand side, the antecedant, can have built-in functions which are
+      evaluated, as follows.</dd>
+  <dt>includes</dt>
+    <dd>Within a query, F incldues G is true if statements in F allow G to be
+      deduced.  Variable substituion works across incldues.</dd>
+  <dt>notIncludes</dt>
+    <dd>Opposite of incldues. When no outstanding variables need to be
+      resolved, cwm can check to see whether F has statements to justify G,
+      and if not this binary operator succedes.</dd>
+  <dt>etc</dt>
+    <dd>...</dd>
+</dl>
+
+<h3>Math</h3>
+
+<h3>String</h3>
+
+<p></p>
+
+<h2 id="Python">Python modules</h2>
+
+<h3>Don't trust the doc</h3>
+
+<p>The best test of works is what has been tested.  So the list of files in
+the <a href="../test/retest.sh">regression test</a> defines the set of
+features which are generally checked on each checkin.</p>
 
 <h3 id="L133">Serializing/deserializaing RDF: notation3.py</h3>
 
