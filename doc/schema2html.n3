@@ -1,0 +1,42 @@
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+#@prefix daml:  <http://www.daml.org/2001/03/daml-ont#> .
+#@prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+#@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+@prefix string:  <http://www.w3.org/2000/10/swap/string#> .
+@prefix : <#>.
+
+"0" log:outputString
+"""<html>
+<head>
+    <title>Built-in properties in Cwm</title>
+    <link type="text/css" rel="stylesheet" href="bi.css" />
+<body><h1>Built-in functions</h1>
+
+""".
+
+{ 	?predicate  s:comment ?comment; log:uri ?uri.
+  	(?uri ".*#(.*)") string:scrape ?localname.
+  	(?uri "(.*)#.*") string:scrape ?ns.
+	(?ns  ".*/([^/]*)") string:scrape ?short.
+ 	("  <tr><td class='ln'>" ?localname
+	 "</td><td class='comment'>" ?comment
+	 "</td></tr>\n")
+		string:concatenation ?str
+} => {
+	?uri log:outputString ?str.
+	?ns  :shortName ?short.
+}.
+
+{  	?ns  :shortName ?short.
+ 	( "<h2> " ?short "</h2>\n<p class='ns'>@prefix " ?short
+	  ": &lt;" ?ns 
+	  "#&gt;.</p>\n<table>" ) string:concatenation ?str. 
+	( ?ns "~" ) string:concatenation ?end.
+} => {
+	?ns log:outputString ?str.
+	?end log:outputString "</table>".
+}.
+
+"~"  log:outputString "\n\n</body>\n</html>\n".
+

@@ -13,7 +13,6 @@
 <p><a href="/">W3C</a> | <a href="/2000/01/sw/Overview.html">Semantic Web</a>
 | <a href="Overview.html">SWAP</a></p>
 <br />
-<br />
 
 
 <h1><a name="Primer" id="Primer">Primer: Reaching out onto the Web</a></h1>
@@ -52,17 +51,16 @@ the second, there is a corresponding one in the first. This the same pattern
 matching which happens with rules.</p>
 
 <p>So let's say we we have a concept of a semantic web home page for a
-person.  Instead of believing anyone, we only believe that page about the
+person. Instead of believing anyone, we only believe that page about the
 person being a vegetarian.</p>
 <pre>this log:forAll :x.
-{:x.:homePage log:includes { :x a :Vegetarian }}=&gt; { :x a :Vegetarian}.
-</pre>
+{:x.:homePage log:includes { :x a :Vegetarian }}=&gt; { :x a :Vegetarian}.</pre>
 
 <h3><a name="Implementi" id="Implementi">Implementing defaults and
 <code>log:notIncludes</code></a></h3>
 
 <p>Because the document is a finite size, you can test for what it does
-<em>not</em> say, with <code>log:notIncludes.</code>  Here, we have a rule
+<em>not</em> say, with <code>log:notIncludes.</code> Here, we have a rule
 that is the specification for a car doesn't say what color it is then it is
 black.</p>
 <pre>this log:forAll :car.
@@ -71,13 +69,13 @@ black.</p>
 
 <p></p>
 
-<p>Note the use of [] here in the nested formula as a blank node.  </p>
+<p>Note the use of [] here in the nested formula as a blank node.</p>
 
-<p>This is a way to do defaults.   N3 as it is doesn't have defaults, because
-on the web, you can't say "if nothing says it is another color".  You can
+<p>This is a way to do defaults. N3 as it is doesn't have defaults, because
+on the web, you can't say "if nothing says it is another color". You can
 handle defaults by first running rules to work out everything which is
 specified, and then on the result of that do a <code>notIncldues</code> rule
-like that above to implement the default values.  </p>
+like that above to implement the default values.</p>
 
 <p>@@ examples</p>
 
@@ -87,12 +85,12 @@ like that above to implement the default values.  </p>
 <p></p>
 
 <p>The nice thing about log:semantics is it deals with all the web protocols
-in one simple function.  It is possible also to get a little more involved,
+in one simple function. It is possible also to get a little more involved,
 using the following functions which separate the looking up from the
 parsing.</p>
 <dl>
   <dt><code>log:content</code></dt>
-    <dd>For a document,  the string which was returned as the document
+    <dd>For a document, the string which was returned as the document
       contents when the URI of the resource was looked up.</dd>
   <dt><code>log:parsedAsN3</code></dt>
     <dd>For a string, the formula you get by parsing it as a Notation3
@@ -100,20 +98,24 @@ parsing.</p>
   <dt><code>log:N3String</code></dt>
     <dd>For a formula, a string which expressed that formula in N3.</dd>
   <dt>log:uri</dt>
-    <dd>The uri of a resource.  &lt;http://example.org/&gt; log:uri
-      "http://example.org/".  Normal logic processing doesn't look at URIs
-      but in some cases one needs to. This is a level-breaker: it lets an N3
-      system look at its infrastructure.   </dd>
+    <dd>The uri of a resource. &lt;http://example.org/&gt; log:uri
+      "http://example.org/". Normal logic processing doesn't look at URIs but
+      in some cases one needs to. This is a level-breaker: it lets an N3
+      system look at its infrastructure. It is a function which cwm can
+      evaluate either way: resource to URI or URI to resource.</dd>
   <dt></dt>
-    <dd> </dd>
+    <dd></dd>
 </dl>
 
 <p>One of the uses of this, as we will see in the next section, is to test
 the digital signature of a string before accepting the data encoded in it.</p>
 
 <h2><a name="Getting" id="Getting">Getting results from the web:</a>
-<code>log:definitiveService </code>and
-<code>log:definitiveDocument</code></h2>
+<code>log:definitiveService</code>and <code>log:definitiveDocument</code></h2>
+
+<p></p>
+
+<p>There is some relationships for which there is just a well-defined</p>
 
 <p></p>
 
