@@ -1,0 +1,14 @@
+     @prefix : <file:/devel/WWW/2000/10/swap/test/reason/t3.n3#> .
+     @prefix run: <file:/devel/WWW/2000/10/swap/test/reason/.run-1048018329.642301p26336#> .
+     @prefix run_: <file:/devel/WWW/2000/10/swap/test/reason/.run-1048018330.89429p26338#> .
+    
+    :a     :b :c .
+    
+    :a2     :b2 :c2 .
+    {
+        :a     :b :c .
+        
+        }     <http://www.w3.org/2000/10/swap/log#implies> {:a2     :b2 :c2 .
+        } .
+    
+

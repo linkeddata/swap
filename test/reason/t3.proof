@@ -1,0 +1,60 @@
+#Processed by Id: cwm.py,v 1.126 2003/02/14 17:48:08 sandro Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/reason/foo
+        
+#  Notation3 generation by
+#       notation3.py,v 1.133 2003/02/02 16:09:09 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/reason/foo
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+     @prefix run: <.run-1048018552.2804151p26463#> .
+    
+    this     <http://www.w3.org/2000/10/swap/log#forSome> <#_g0> .
+      [      a :Conjunction,
+                    :Proof;
+             :component  [
+                 a :Extraction;
+                 :because  [
+                     a :Inference;
+                     :evidence  [
+                         a :Extraction;
+                         :because <#_g0>;
+                         :gives {<t3.n3#a>     <t3.n3#b> <t3.n3#c> .
+                        } ];
+                     :rule  [
+                         a :Extraction;
+                         :because <#_g0>;
+                         :gives {{
+                            <t3.n3#a>     <t3.n3#b> <t3.n3#c> .
+                            
+                            }     <http://www.w3.org/2000/10/swap/log#implies> {<t3.n3#a2>     <t3.n3#b2> <t3.n3#c2> .
+                            } .
+                        } ] ];
+                 :gives {<t3.n3#a2>     <t3.n3#b2> <t3.n3#c2> .
+                } ],
+                     [
+                 a :Extraction;
+                 :because <#_g0>;
+                 :gives {<t3.n3#a>     <t3.n3#b> <t3.n3#c> .
+                } ],
+                     [
+                 a :Extraction;
+                 :because <#_g0>;
+                 :gives {{
+                    <t3.n3#a>     <t3.n3#b> <t3.n3#c> .
+                    
+                    }     <http://www.w3.org/2000/10/swap/log#implies> {<t3.n3#a2>     <t3.n3#b2> <t3.n3#c2> .
+                    } .
+                } ];
+             :gives {<t3.n3#a>     <t3.n3#b> <t3.n3#c> .
+            <t3.n3#a2>     <t3.n3#b2> <t3.n3#c2> .
+            {
+                <t3.n3#a>     <t3.n3#b> <t3.n3#c> .
+                
+                }     <http://www.w3.org/2000/10/swap/log#implies> {<t3.n3#a2>     <t3.n3#b2> <t3.n3#c2> .
+                } .
+            } ].
+    
+    <#_g0>     a :Parsing;
+         :source <t3.n3> .
+    
+#ENDS

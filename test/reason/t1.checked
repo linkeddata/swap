@@ -1,0 +1,7 @@
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+     @prefix run: <file:/devel/WWW/2000/10/swap/test/reason/.run-1041971532.211259p6385#> .
+     @prefix run_: <file:/devel/WWW/2000/10/swap/test/reason/.run-1048018324.9287111p26328#> .
+    
+    <file:/devel/WWW/2000/10/swap/test/reason/a>     <file:/devel/WWW/2000/10/swap/test/reason/b> <file:/devel/WWW/2000/10/swap/test/reason/c> .
+    
+
