@@ -1,0 +1,22 @@
+# Convert DAML ontologies to Graphiz-equivalent
+#
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix daml:  <http://www.daml.org/2000/10/daml-ont#> .
+@prefix ex:   <http://www.daml.org/2000/10/daml-ex#> .
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+@prefix viz: <#> .
+
+<> log:forAll :x, :y, :z .
+
+{ :x a daml:Class } log:implies { :x a viz:node ; viz:shape "circle"}.
+
+{ :x a daml:Property } log:implies { :x a viz:node ; viz:shape "square"}.
+
+{ :x  daml:subClassOf :y } log:implies { [viz:from :x; viz:to :y] }.
+
+
+
+#ENDS
