@@ -2,8 +2,7 @@
 @prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
 @prefix rcs: <http://www.w3.org/2001/03swell/rcs#>.
 
-<> dc:description """rules for determining when two terms denote
-the same thing.""";
+<> dc:description """substituion of equals for equals in triples, plus some rules for unambiguous/unique properties (@@that probably belong elsewhere)""";
   rcs:id "$Id$";
   dc:creator [ 
 	contact:fullName "Dan Connolly";

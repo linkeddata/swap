@@ -1,6 +1,8 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
+@prefix rcs: <http://www.w3.org/2001/03swell/rcs#>.
 
-<> dc:description """rules for forgetting things that are equal to other things""";
+<> dc:description """rules for forgetting things that are equal to other things. Usage: cwm ...data and rules... --think --apply=forgetDups.n3 --purge""";
   rcs:id "$Id$";
   dc:creator [ 
 	contact:fullName "Dan Connolly";
@@ -13,6 +15,7 @@
 
 
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <#>.
 
 this log:forAll :x, :y, :z, :p, :q.
 
