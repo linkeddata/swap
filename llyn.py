@@ -69,7 +69,7 @@ from diag import progress, verbosity
 from term import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Term,\
-    CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode
+    CompoundTerm, List, EmptyList, NonEmptyList, AnonymousNode, N3Set
 from OrderedSequence import merge
 from formula import Formula, StoredStatement
 import reify
@@ -1120,6 +1120,11 @@ class RDFStore(RDFSink) :
 
     def newSymbol(self, uri):
 	return self.intern(RDFSink.newSymbol(self, uri))
+
+    def newSet(self, iterator=[]):
+        new_set = N3Set(iterator)
+        Term.__init__(new_set, self)
+        return new_set
 
     def newBlankNode(self, context, uri=None, why=None):
 	"""Create or reuse, in the default store, a new unnamed node within the given

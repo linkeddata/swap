@@ -448,6 +448,50 @@ class CompoundTerm(Term):
     """A compound term has occurrences of terms within it.
     Examples: List, Formula"""
     pass
+
+class N3Set(ImmutableSet, CompoundTerm): #, 
+    """There can only be one of every N3Set
+
+    """
+    res = {}
+    def __init__(self, stuff=[]):
+        """something"""
+        ImmutableSet.__init__(self, stuff)
+    
+    def __new__(cls, stuff=[]):
+        new_set = ImmutableSet.__new__(cls, stuff)
+        new_set.__init__(stuff)
+        if new_set in cls.res:
+            return cls.res[new_set]
+        cls.res[new_set] = new_set
+        return new_set
+        
+    def uriref(self):
+        raise NotImplementedError
+
+    def substitution(self, bindings, why=None):
+	"Return this or a version of me with variable substitution made"
+	if self.occurringIn(bindings.keys()) == Set():
+	    return self # phew!
+
+	return self.__class__([x.substitution(bindings, why=why) for x in self])
+
+    def substituteEquals(self, bindings, newBindings):
+	"Return this or a version of me with substitution of equals made"
+	if diag.chatty_flag > 100: progress("SubstituteEquals list %s with %s" % (self, bindings))
+	if self.occurringIn(bindings.keys()) == Set():
+	    return self # phew!
+
+	new = self.__class__([x.substitution(bindings, why=why) for x in self])
+	newBindings[self] = new
+	return new
+
+    def occurringIn(self, vars):
+        union = Set.union
+        return reduce(union, [x.occurringIn(vars) for x in self], Set())
+
+    def asSequence(self):
+        return self
     
 class List(CompoundTerm):
     def __init__(self, store, first, rest):  # Do not use directly
