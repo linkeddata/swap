@@ -163,17 +163,14 @@ manipulator for RDF on the lines of sed, awk, etc or xsl.</p>
 
 <h4 id="Command">Command line parameters</h4>
 
-<p>Some, marked (flag), can occur anywhere on the command line. The others
-are processed in order from left to right. So the command line is like a
-small program, doing one thing after annother to the data. The input and
-output mode flags can be changed several times, and the value used is that in
-effect as the command line arguments are executed from left to right..</p>
+<p>Command line parameters (except --pipe) are processed in order
+ from left to right, like subcommands.
+So the command line is like a
+small program, doing one thing after annother to the data. The input/output mode flags and base URI can be changed several times, and the value used is that in
+effect as the command line arguments are executed from left to right.</p>
 <dl>
   <dt>--help</dt>
     <dd>generate a <strong>more up to date</strong> list of parameters!</dd>
-  <dt>--pipe</dt>
-    <dd>don't store, just process serially. (doesn't lose comment lines!)
-      (flag)</dd>
   <dt>--rdf</dt>
     <dd>input/output format XML/RDF format from now on</dd>
   <dt>--rdf=flags</dt>
@@ -186,6 +183,12 @@ effect as the command line arguments are executed from left to right..</p>
     flags</dd>
   <dt>--ntriples</dt>
     <dd>As for n3, but customized to produce the "ntriples" N3 subset.</dd>
+  <dt>--base=<em>uri</em></dt>
+    <dd>The base URI to be used for input or output, and parsing command line arguments.
+On input, relative URIs are resolved with respect to this base.
+On output, URIs are generated as relative to this base.
+If --base is not explicitly given, the default is the URI of the first input file.
+The <em>uri</em> can be relative - it will be interpreted relative to its previous value.</dd>
   <dt><em>uri</em></dt>
     <dd>load the resource. Parsed relative to the local directory, so a
       filename will work.</dd>
@@ -210,16 +213,26 @@ effect as the command line arguments are executed from left to right..</p>
     <dd>Removes any triple containing a term that is declared to be of
       rdf:type log:Chaff</dd>
   <dt>--ugly</dt>
-    <dd>Dump the store in a more or less random order. This tends to be
+    <dd>When outputting, dump the store in a more or less random order. This tends to be
       messy, as related information is not grouped.</dd>
   <dt>--bySubject</dt>
-    <dd>Dump the store grouping statements by subject. This tends to be
-      better than -ugly, but the default is to make the output as readable as
-      possible using anonymous nodes wherever possible, and is therefore
-      recommended. (flag)</dd>
+    <dd>When outputting, dump the store grouping statements by subject.
+      This can be useful when you will be processing the result
+      with, for example, XSLT.
+      This tends to be
+      more readable than -ugly, but not as good as
+      the default pretty printing which makes the output as
+      readable as possible using anonymous nodes wherever possible.</dd>
   <dt>--strings</dt>
     <dd>Output the objects of log:outputString statements, ordered by the
       subject</dd>
+  <dt>--pipe</dt>
+    <dd>don't store, just process serially.
+      This flag is used only with RDF graphs (no nested formulae) 
+      when translating notations. Only advantages are speed and teh presevation
+      of commemnt lines from the source into the translated output.
+      No other processing can be done.
+      Example:   cat foo.rdf | cwm --rdf --pipe --n3 | grep baz   </dd>
 </dl>
 
 <p>Note that where a <em>uri</em> is given, this can be a filename of course.
