@@ -52,6 +52,7 @@ then the ISOdate standrad format is used.
 It will end with "Z" as a timezone code.
 
 Cwm implements this as a function.
+Rules which use this function will of course NOT be repeatable.
 """;
          rdfs:isDefinedBy <>;
          rdfs:label "Universal Time";
@@ -82,6 +83,23 @@ ISO date from the seconds since the beginning of the era, or vice-versa.
          rdfs:domain :ISOTime;
          rdfs:isDefinedBy <>;
          rdfs:label "in era seconds" .
+    
+    :localTime     a ont:UniqueProperty,
+                rdf:Property;
+         rdfs:comment """
+For a date-time format string, its time:localTime is the 
+result of formatting the current time of processing and local timezone
+in the format given.   If the format string has zero length,
+then the ISOdate standrad format is used. 
+[ is time:localTime of ""]  the therefore the current date time.
+It will end with a numeric timezone code or "Z" for UTC (GMT).
+
+Cwm implements this as a function.
+Rules which use this function will of course NOT be repeatable.
+""";
+         rdfs:isDefinedBy <>;
+         rdfs:label "local time";
+         rdfs:range :format .
     
     :minute     a ont:UniqueProperty,
                 rdf:Property;

@@ -142,22 +142,24 @@ then the ISOdate standrad format is used.
 It will end with "Z" as a timezone code.
 
 Cwm implements this as a function.
+Rules which use this function will of course NOT be repeatable.
 """;
     rdfs:range time:format;
     rdfs:isDefinedBy <>.
 
-time:gmTime a rdf:Property,
+time:localTime a rdf:Property,
 	ont:UniqueProperty;
-    rdfs:label "Universal Time";
+    rdfs:label "local time";
     rdfs:comment """
-For a date-time format string, its time:gmtime is the 
-result of formatting the Universal Time of processing
-in the format given.   If teh fiormat string has zero length,
+For a date-time format string, its time:localTime is the 
+result of formatting the current time of processing and local timezone
+in the format given.   If the format string has zero length,
 then the ISOdate standrad format is used. 
-[ is time:gmtime of ""]  the therefore the current date time.
-It will end with "Z" as a timezone code.
+[ is time:localTime of ""]  the therefore the current date time.
+It will end with a numeric timezone code or "Z" for UTC (GMT).
 
 Cwm implements this as a function.
+Rules which use this function will of course NOT be repeatable.
 """;
     rdfs:range time:format;
     rdfs:isDefinedBy <>.
