@@ -1,3 +1,5 @@
+# $Id$
+
 @prefix owl: <http://www.daml.org/2001/03/daml+oil#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
@@ -15,20 +17,55 @@ this log:forSome :_g1 .
    owl:onProperty rdf:type .
 
 
+#####
+# background... some rules/axioms to define the DAML+OIL/owl terms...
+
 this log:forAll :s, :p, :o, :C, :C1, :C2, :F.
 
-{ :s a [ owl:hasClassQ :C; owl:maxCardinalityQ "0";    owl:onProperty :p ].
-  :o a :C }
-  log:implies { [ form:subject :s; form:predicate :p; form:object :o ] a log:Falsehood }.
 
+# some axioms about oneOf...
+# oneOf relates a class to a list of its members.
+# { x, y, z } is basically written [ owl:oneOf ( :x :y :z ) ].
+
+# First, the axiom of singletons:
+# for all :s, :s a { :s }.
 { [ list:first :s ]. } # cwm needs something to trigger from...
  log:implies { :s a [ owl:oneOf [ list:first :s; list:rest list:nil] ]. }.
 
+# next, since we don't have function symbols,
+# we need to say that any member of {x} is a member of {x}.
 { :C1 owl:oneOf [ list:first :o ].
   :C2 owl:oneOf [ list:first :o; list:rest list:nil ].
   :s a :C1 }
   log:implies { :s a :C2 }.
 
+# now an axiom obout hasClassQ...
+#
+# In general,
+# [ owl:hasClassQ :C; owl:maxCardinalityQ N;    owl:onProperty :p ]
+#  is the/a class of things with at most N different values
+#  from class :C
+#  of the property :p.
+# a (not so good) example: every person has at most 2 parents:
+#  :Person 
+#    owl:onProperty :parent.
+#    owl:maxCardinalityQ "2";
+#    owl:hasClassQ :Person;
+#
+# hence if N is zero and :o is a :C,
+# then :s is not related to :o by :p.
+#
+{ :s a [ owl:hasClassQ :C; owl:maxCardinalityQ "0";    owl:onProperty :p ].
+  :o a :C }
+  log:implies {
+   # cwm seems to have trouble with {}s nested in the conclusion, so
+   # I'm making up this funky form of reification...
+   [ form:subject :s; form:predicate :p; form:object :o ]
+    a log:Falsehood }.
+
+
+# Finally
+# if P and not(P), then P is Goofy!
 { :s :p :o.
   :F form:subject :s; form:predicate :p; form:object :o.
   :F a log:Falsehood }
