@@ -1,0 +1,235 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!-- saved from url=(0078)http://www.cs.man.ac.uk/~horrocks/daml+oil/Datatypes/daml+oil+concrete-ex.daml -->
+<HTML><HEAD>
+<META content="text/html; charset=iso-8859-1" http-equiv=Content-Type>
+<META content="MSHTML 5.00.2920.0" name=GENERATOR></HEAD>
+<BODY><XMP><rdf:RDF
+  xmlns:xsd ="http://www.w3.org/2000/10/XMLSchema-datatypes"
+  xmlns:xsi ="http:???"
+  xmlns:rdf ="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+  xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+  xmlns:daml="http://www.daml.org/2000/12/daml+oil#"
+  xmlns     ="http://www.daml.org/2000/12/daml+oil-ex#"
+>
+
+<daml:Ontology rdf:about="">
+  <daml:versionInfo>$Id$</daml:versionInfo>
+  <rdfs:comment>
+    An example ontology, with concrete data types, taken from
+    XML Schema
+  </rdfs:comment>
+  <daml:imports rdf:resource="http://www.daml.org/2000/12/daml+oil"/>
+</daml:Ontology>
+
+<xsd:simpleType name="over12">
+  <!-- over12 is an XMLS datatype based on positiveIntege -->
+  <!-- with the added restriction that values must be >= 13 -->
+  <xsd:restriction base="xsd:positiveInteger">
+  <xsd:minInclusive value="13"/>
+  </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="over17">
+  <!-- over17 is an XMLS datatype based on positiveIntege -->
+  <!-- with the added restriction that values must be >= 18 -->
+  <xsd:restriction base="xsd:positiveInteger">
+  <xsd:minInclusive value="18"/>
+  </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="over59">
+  <!-- over59 is an XMLS datatype based on positiveIntege -->
+  <!-- with the added restriction that values must be >= 59 -->
+  <xsd:restriction base="xsd:positiveInteger">
+  <xsd:minInclusive value="60"/>
+  </xsd:restriction>
+</xsd:simpleType>
+
+<xsd:simpleType name="clothingsize">
+  <!-- clothingsize is an XMLS union datatype -->
+  <!-- values of clothingsize may be either integers or strings -->
+  <xsd:union>
+     <xsd:simpleType>
+       <xsd:restriction base='integer'/>
+     </xsd:simpleType>
+     <xsd:simpleType>
+       <xsd:restriction base='string'/>
+     </xsd:simpleType>
+  </xsd:union>
+</xsd:simpleType>
+
+<daml:ConcreteProperty rdf:ID="shoesize">
+  <rdfs:comment>
+    shoesize is a ConcreteProperty whose range is xsd:decimal.
+    shoesize is also a UniqueProperty (can only have one shoesize)
+  </rdfs:comment>
+  <rdf:type rdf:resource="daml:UniqueProperty"/>
+  <rdfs:range rdf:resource="xsd:decimal"/>
+</daml:ConcreteProperty>
+
+<daml:ConcreteProperty rdf:ID="age">
+  <rdfs:comment>
+    age is a ConcreteProperty whose range is xsd:decimal.
+    age is also a UniqueProperty (can only have one age)
+  </rdfs:comment>
+  <rdf:type rdf:resource="daml:UniqueProperty"/>
+  <rdfs:range rdf:resource="xsd:nonNegativeInteger"/>
+</daml:ConcreteProperty>
+
+<daml:ConcreteProperty rdf:ID="shirtsize">
+  <rdfs:comment>
+    shirtsize is a ConcreteProperty whose range is clothingsize.
+  </rdfs:comment>
+  <rdfs:range rdf:resource="clothingsize"/>
+</daml:ConcreteProperty>
+
+<daml:ConcreteProperty rdf:ID="associatedData">
+  <rdfs:comment>
+    shirtsize is a ConcreteProperty without a range restriction.
+  </rdfs:comment>
+</daml:ConcreteProperty>
+
+<rdfs:Class rdf:ID="Person">
+  <rdfs:comment>
+  Persons have at most 1 item of associatedData
+  </rdfs:comment>
+   <rdfs:subClassOf>
+      <daml:Restriction>
+        <daml:onProperty rdf:resource="#associatedData"/>
+        <daml:maxCardinality>1</daml:maxCardinality>
+      </daml:Restriction>
+   </rdfs:subClassOf>
+</rdfs:Class>
+
+<rdfs:Class rdf:ID="Adult">
+  <rdfs:comment>
+  Adults are exactly those persons whose age is over17.
+  </rdfs:comment>
+  <daml:intersectionOf rdf:parseType="daml:collection">
+    <rdfs:Class rdf:about="#Person"/>
+    <daml:Restriction>
+      <daml:onProperty rdf:resource="#age"/>
+      <daml:hasClass rdf:resource="#over17"/>
+    </daml:Restriction>
+  </daml:intersectionOf>
+</rdfs:Class>
+
+<rdfs:Class rdf:ID="Senior">
+  <rdfs:comment>
+  Seniors are exactly those persons whose age is over59.
+  We may be able to infer that Senior is a subClassOf Adult (because all possible
+  values of over59 are also values of over17).
+  </rdfs:comment>
+  <daml:intersectionOf rdf:parseType="daml:collection">
+    <rdfs:Class rdf:about="#Person"/>
+    <daml:Restriction>
+      <daml:onProperty rdf:resource="#age"/>
+      <daml:hasClass rdf:resource="#over59"/>
+    </daml:Restriction>
+  </daml:intersectionOf>
+</rdfs:Class>
+
+<rdfs:Class rdf:ID="BigFoot">
+  <rdfs:comment>
+  BigFoots (BigFeet?) are exactly those persons whose shosize is over12.
+  </rdfs:comment>
+  <daml:intersectionOf rdf:parseType="daml:collection">
+    <rdfs:Class rdf:about="#Person"/>
+    <daml:Restriction>
+      <daml:onProperty rdf:resource="#shoesize"/>
+      <daml:hasClass rdf:resource="#over12"/>
+    </daml:Restriction>
+  </daml:intersectionOf>
+</rdfs:Class>
+
+<Person rdf:ID="Ian">
+  <rdfs:comment>
+  Ian is an instance of Person. Ian has shoesize 14 and age 37. From the
+  range restrictions we know that these are of type xsd:decimal and 
+  xsd:nonNegativeInteger respectively. Ian also has shirtsize 12, the type 
+  of which is the union type clothingsize; the discriminating type "string"
+  has been specified, so the value is to be taken as the string "12" rather
+  than the integer 12.
+  We may be able to infer that Ian is an instance of BigFoot (because 14 is 
+  a valid value for xsd:decimal).
+  </rdfs:comment>
+  <shoesize>14</shoesize>
+  <age>37</age>
+  <shirtsize xsi:type="xsd:string">12</shirtsize>
+</Person>
+
+<Person rdf:ID="Peter">
+  <rdfs:comment>
+  Peter is an instance of Person. Peter has shoesize 9.5 and age 46. From the
+  range restrictions we know that these are of type xsd:decimal and 
+  xsd:nonNegativeInteger respectively. Peter also has shirtsize 15, the type 
+  of which is the union type clothingsize; no discriminating type
+  has been specified, so the value may be either a string or an integer.
+  </rdfs:comment>
+  <shoesize>9.5</shoesize>
+  <age>46</age>
+  <shirtsize>15</shirtsize>
+</Person>
+
+<Person rdf:ID="Santa">
+  <rdfs:comment>
+  Santa is an instance of Person. Santa has two pieces of associatedData,
+  the types of which have been "inlined". One of these is the real number 
+  3.14159 and the other is the string "3.14159". We may be able to infer 
+  a logical inconsistency (because Persons can have at most 1 item of 
+  associatedData, and a value cannot be both a string and a real number).
+  </rdfs:comment>
+  <associatedData xsi:type="xsd:real">3.14159</associatedData>
+  <associatedData xsi:type="xsd:string">3.14159</associatedData>
+</Person>
+
+<rdfs:Class rdf:ID="AbstractHeight">
+  <rdfs:comment>
+    This is a DAML class whose members are exactly the DAML individuals whose
+    names are "short", "medium" and "tall".
+  </rdfs:comment>
+  <daml:oneOf rdf:parseType="daml:collection">
+    <Height rdf:ID="short"/>
+    <Height rdf:ID="medium"/>
+    <Height rdf:ID="tall"/>
+  </daml:oneOf>
+</rdfs:Class>
+
+<xsd:simpleType name="ConcreteHeight">
+  <!-- This is an XMLS datatype valid values for which are the strings -->
+  <!-- "short", "medium" and "tall". -->
+  <xsd:restriction base="string">
+    <xsd:enumeration value="short"/>
+    <xsd:enumeration value="medium"/>
+    <xsd:enumeration value="tall"/>
+  </xsd:restriction>
+</xsd:simpleType>
+
+<daml:AbstractProperty rdf:ID="hasAbstractHeight">
+  <rdfs:range rdf:resource="#AbstractHeight"/>
+</daml:AbstractProperty>
+
+<daml:ConcreteProperty rdf:ID="hasConcreteHeight">
+  <rdfs:range rdf:resource="#ConcreteHeight"/>
+</daml:ConcreteProperty>
+
+<rdfs:Class rdf:ID="AbstractTallThing">
+  <daml:sameClassAs>
+    <daml:Restriction>
+      <daml:onProperty rdf:resource="#hasAbstractHeight"/>
+      <daml:hasValue rdf:resource="#tall"/>
+    </daml:Restriction>
+  </daml:sameClassAs>
+</rdfs:Class>
+
+<rdfs:Class rdf:ID="ConcreteTallThing">
+  <daml:sameClassAs>
+    <daml:Restriction>
+      <daml:onProperty rdf:resource="#hasConcreteHeight"/>
+      <daml:hasValue>tall</daml:hasValue>
+    </daml:Restriction>
+  </daml:sameClassAs>
+</rdfs:Class>
+
+</rdf:RDF>
+</XMP></BODY></HTML>

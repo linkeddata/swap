@@ -13,7 +13,7 @@
 
 os:environ a rdf:Property;
     rdfs:label "environment value";
-    rdfs:description """
+    rdfs:comment """
 The os:environ property of a string is the value corresponding to
 the string when looked up in the curent environment.  This is
 not, of course, something of global significance: it is only

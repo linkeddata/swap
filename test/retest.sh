@@ -94,6 +94,8 @@ cwm_test bi-t11.n3 "log:resolvesTo and log:includes - schema checking" includes/
 
 cwm_test bi-concat.n3 "Test string concatetnation built-in" includes/concat.n3 -think
 
+cwm_test bi-uri-startswith.n3 "Dan's bug case with uri and startswith" includes/uri-startswith.n3 -think
+
 cwm_test resolves-rdf.n3 "log:resolvesTo with RDF/xml syntax" resolves-rdf.n3 -think
 
 cwm_test sameDan.n3 "dealing with multiple descriptions of the same thing using log:lessThan, log:uri, daml:equivalentTo" sameDan.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge
@@ -105,7 +107,10 @@ cwm_test environ.n3 "Read operating system environment variable" os/environ.n3 -
 
 
 # $Log$
-# Revision 1.19  2001-09-17 02:59:32  timbl
+# Revision 1.20  2001-09-19 19:14:28  timbl
+# new schemas for builtins etc
+#
+# Revision 1.19  2001/09/17 02:59:32  timbl
 # split up
 #
 # Revision 1.18  2001/09/07 02:07:52  timbl
