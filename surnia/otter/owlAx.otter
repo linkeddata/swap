@@ -73,24 +73,29 @@ all INST (instanceOfAll(INST, rdf_nil)).
 %
 %   owl_unionOf
 %
-%   not really full semantics
 
 all INST CLASS LIST (
-   rdf(INST, rdf_type, CLASS) &
    rdf(CLASS, owl_unionOf, LIST)
    ->
-   instanceOfAny(INST, LIST)
+   ( rdf(INST, rdf_type, CLASS) 
+     <->
+     instanceOfAny(INST, LIST)
+   )
 ).
 
 all INST LIST HEAD TAIL (
-   (rdf(LIST, rdf_first, HEAD) &
-    rdf(LIST, rdf_rest, TAIL) &
-    rdf(INST, rdf_type, HEAD) &
-    instanceOfAny(INST, TAIL))
-  ->
-   instanceOfAny(INST, LIST)
+   ( rdf(LIST, rdf_first, HEAD) &
+     rdf(LIST, rdf_rest, TAIL) )
+   ->
+   ( instanceOfAny(INST, LIST)		
+     <->
+     ( rdf(INST, rdf_type, HEAD) |
+       instanceOfAny(INST, TAIL) )
+   )
 ).
+
 all INST (-instanceOfAny(INST, rdf_nil)).
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -522,8 +527,39 @@ all P1 P2 (
    rdf(P2, rdf_type, owl_FunctionalProperty)
 ).
     
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   Some theorems for unionOf/002
+
+
+% theorem: union of 1
+(all INST CLASS LIST FIRST (
+  ( rdf(INST, rdf_type, CLASS) &
+    rdf(CLASS, owl_unionOf, LIST) &
+    rdf(LIST, rdf_first, FIRST) &
+    rdf(LIST, rdf_rest, rdf_nil) )
+  -> 
+  rdf(INST, rdf_type, FIRST)
+)).
+
+% theorem: union of 2
+(all INST CLASS LIST L2 FIRST SECOND (
+  ( rdf(INST, rdf_type, CLASS) &
+    rdf(CLASS, owl_unionOf, LIST) &
+    rdf(LIST, rdf_first, FIRST) &
+    rdf(LIST, rdf_rest, L2) &
+    rdf(L2, rdf_first, SECOND) &
+    rdf(L2, rdf_rest, rdf_nil) )
+  -> 
+  ( rdf(INST, rdf_type, FIRST) | rdf(INST, rdf_type, SECOND) )
+)).
+   
+
 % $Log$
-% Revision 1.11  2003-07-30 18:51:00  sandro
+% Revision 1.12  2003-07-30 20:19:19  sandro
+% fixed unionOf, and gave it theorem to get test to run < 10 minutes
+%
+% Revision 1.11  2003/07/30 18:51:00  sandro
 % fixed intersectionOf, removed some leftover comments
 %
 % Revision 1.10  2003/07/30 06:46:58  sandro
