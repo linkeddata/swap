@@ -32,10 +32,24 @@ String literals are disjoint from symbols:
   >>> n=StringLiteral("http://example/")
   >>> x is n
   0
+
+NOTE: this relies on python2.2-isms, esp
+
+  Overriding the __new__ method
+  in
+  Unifying types and classes in Python 2.2
+  Python Version: 2.2bc1
+  Guido van Rossum
+  Tue, 09 Jul 2002 13:49:57 GMT
+  http://www.python.org/2.2/descrintro.html#__new__
+
 """
 
 __version__ = '$Id$'
 
+__credits__ = """
+inspired by the node.py stuff from http://rdflib.net/
+"""
 
 class Symbol(str):
     """A symbol, or logical name, in the Semantic Web.
