@@ -4,7 +4,8 @@
 #
 #  It is hoped that the kludges in this program only echo the kludges in the
 # QIF specification. :-)
-## Open source. W3C licence.
+#
+# Open source. W3C licence.
 #
 
 import sys
@@ -114,9 +115,9 @@ def extract(path):
 
     while 1:
         line = input.readline()
-        if line=="": break # EOF
         if line [-1:] == "\n": line = line[:-1] # Strip triling LF
         while line [-1:] == "\r": line = line[:-1] # Strip triling CRs
+        if line=="": break # EOF
         attr = line[0]
         value = line[1:]
         if attr == "!":
@@ -157,8 +158,11 @@ def extract(path):
             if split:
                 print "]",
                 split = 0
-            if what == "Bank" or what == "CCard":
-                print "qu:toAccount ",toAccount,
+            if (what == "Bank" or what == "CCard"):
+		if toAccount!= None: #@@ mising from citibank download
+		    print "qu:toAccount ",toAccount,
+		else:
+		    print "qu:toAccount acc:Default",
             print "."
             inSentence = 0
         else:
@@ -221,9 +225,9 @@ def do(path):
 #        if recursive:
 #            for name in os.listdir(path):
 #                do(path + "/" + name)
-    else:
-        if path[-4:] == ".QIF" or path[-4:] == ".rqif":
-            extract(path) 
+#    else:
+    if path[-4:] == ".QIF" or path[-4:] == ".qif":
+	extract(path) 
         
 ######################################## Main program
 
