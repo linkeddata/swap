@@ -1,0 +1,8 @@
+#!/bin/bash
+
+res=/tmp/not-`date +%Y%m%d`-$$.n3
+echo '@prefix log: <http://www.w3.org/2000/10/swap/log#>.' > $res
+echo '{' >> $res
+cwm --rdf $1 --ntriples  >> $res
+echo '} a log:Falsehood.' >> $res
+echo $res
