@@ -4,7 +4,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <title>cwm - a general purpose data processor for the semantic web</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <link href="/StyleSheets/base.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -47,33 +46,19 @@ formats</a>:</p>
     10 Oct 2001 by Petr Cimprich )</li>
 </ul>
 
-<h2>Source</h2>
+<h2>Installing Cwm</h2>
 
-<p>This <a href="http://dev.w3.org/cvsweb/2000/10/swap/">swap code</a> is not
-guaranteed but is open source and available:</p>
-<dl>
-  <dt>Using CVS</dt>
-    <dd>from the <a href="http://dev.w3.org/cvsweb/">public w3c CVS
-      repository</a>.Check out *.py from the top level of the swap hierarchy
-      to use it, check out the whole tree to develop</dd>
-  <dt>From the web</dt>
-    <dd>Get the files one by one. <a href="/2000/10/swap/cwm.py">cwm.py</a>
-      is the main one. Save them into the same directory.</dd>
-</dl>
-
-<p>However you got the files,, set up an alias (.bat file, etc) to make the
-cwm command cwm="python /whereverYouPutThem/cwm.py"</p>
-
-<p>Have fun.</p>
+<p></p>
 
 <h3>Prerequisites</h3>
 <ul>
   <li><strong><a href="http://www.python.org/">Python</a></strong>. Currently
-    (2003/2) cwm needs Python2.2 or later. It comes with many systems. If you
-    don't have it, on debian type apt-get install python. Mac OSX comes witgh
-    it after 10.2. On earlier, get fink then type <a
+    (2003/2) cwm needs Python2.2 or later. Python comes with many systems. If
+    you don't have it, on debian type apt-get install python. Mac OSX comes
+    with it after 10.2. On earlier, get fink then type <a
     href="http://fink.sourceforge.net/"><code>fink</code></a> <code>install
-    python</code>. On cygwin, select python in the setup.exe installer..</li>
+    python</code>. On <a href="http://www.cygwin.com/">cygwin</a>, select
+    python in the setup.exe installer..</li>
   <li>If you are reading things in RDF/XML format, you will need the
     <strong>pyxml</strong> python extension. Under debian, type <code>apt-get
     install pyxml.</code> Otherwise, untar it and in the right directory type
@@ -91,13 +76,45 @@ cwm command cwm="python /whereverYouPutThem/cwm.py"</p>
 <p>You can do all this under MSWindows but the easiest thing is to install
 cygwin (a unix-like environment for Windows) and run everything in there.</p>
 
+<h3>Download</h3>
+
+<p>The python source files are available as a compressed tar file</p>
+<ul>
+  <li><a href="../cwm.tgz">cwm.tgz</a></li>
+</ul>
+
+<p>Get that, unwrap it in some suitable directory. </p>
+
+<p>Set up an alias (.bat file, etc) to make the cwm command. In bash this
+is:</p>
+
+<p> <code>cwm="python /whereverYouPutThem/cwm.py"</code></p>
+
+<p>You should be all set.</p>
+
+<h2>Source</h2>
+
+<p>This <a href="http://dev.w3.org/cvsweb/2000/10/swap/">swap code</a> is not
+guaranteed but is open source and available if you want to play.</p>
+<dl>
+  <dt>Using CVS</dt>
+    <dd>from the <a href="http://dev.w3.org/cvsweb/">public w3c CVS
+      repository</a>.  Check out the whole tree to develop.  This includes
+      the test data - if you don't need that, delete the test
+    subdirectory.</dd>
+  <dt>From the web</dt>
+    <dd>Get the files one by one. <a href="/2000/10/swap/cwm.py">cwm.py</a>
+      is the main application file. You can browse the source files on the
+      web, but this is not a practical way to install the system.</dd>
+</dl>
+
 <h3 id="Closed">Features</h3>
 
 <p>This is a general purpose command-line application, in which triples are
 stored in/against the particular context in which they were read, eg RDF file
 or N3 { expression }. The features at the moment include</p>
 <ul>
-  <li>Loading files in RDF and/or N3</li>
+  <li>Loading files in RDF/XML and/or N3</li>
   <li>Applying rules written in N3 to the data.</li>
   <li>Filtering the data to the result of a particular query</li>
   <li>Generating RDF or N3 files from the result.</li>
@@ -134,7 +151,7 @@ manipulator for RDF on the lines of sed, awk, etc or xsl.</p>
 are processed in order from left to right.</p>
 <dl>
   <dt>--help</dt>
-    <dd>generate a <strong>more up to date</strong> list of parameters</dd>
+    <dd>generate a <strong>more up to date</strong> list of parameters!</dd>
   <dt>--pipe</dt>
     <dd>don't store, just process serially. (doesn't lose comment lines!)
       (flag)</dd>
@@ -205,24 +222,24 @@ how URIs were supposed to work.</p>
   <dt>s</dt>
     <dd>For any predictate used in a query, cwm looks it up to see if any
       useful information can be obtained from its schema. This might be for
-      example, the pointer to a definitive document or a definitive service. 
+      example, the pointer to a definitive document or a definitive service.
       See <a href="Reach.html#Getting1">Getting results from the web:
       log:definitiveDocument and log:definitiveService</a></dd>
   <dt>e</dt>
     <dd>If cwm tries to look something up (schema, definitive document etc)
-      and can't,  this makes the error fatal. Otherwise, it just goes on.</dd>
+      and can't, this makes the error fatal. Otherwise, it just goes on.</dd>
   <dt>m</dt>
-    <dd>Schemas, and definitive documents, when read, are normally  kept in
-      separate metadata formuale, which cannot be seen by rules.   If the m
+    <dd>Schemas, and definitive documents, when read, are normally kept in
+      separate metadata formuale, which cannot be seen by rules. If the m
       flag is, set, these formulae are actually merged into the knowledge
-      base (formula) being queried  sWhen combined with --think, this could
-      of course load rules which load rules which load rules....</dd>
+      base (formula) being queried sWhen combined with --think, this could of
+      course load rules which load rules which load rules....</dd>
 </dl>
 
 <h2><a name="Environmen" id="Environmen">Environment Variables</a></h2>
 <dl>
   <dt>CWM_RDF_PARSER</dt>
-    <dd>rdflin2rdf or sax2rdf (default). Affects the choice of RDF parser
+    <dd>rdflib2rdf or sax2rdf (default). Affects the choice of RDF parser
       module used by cwm.</dd>
 </dl>
 
@@ -240,30 +257,13 @@ rules.</p>
 
 <h3><a name="Logic" id="Logic">Logic</a></h3>
 
-<p>See the <a href="../log.n3">schema</a></p>
+<p>See the <a href="../log.n3">schema.</a> This module has terms which cwm
+understands and which extend the power of the language from just a data
+language to a query language </p>
 
 <p><code>@prefix math: &lt;</code><a
-href="http://www.w3.org/2000/10/swap/log.n3"><code>http://www.w3.org/2000/10/swap/log</code></a>#<code>&gt;</code>
+href="../log.n3"><code>http://www.w3.org/2000/10/swap/log</code></a>#<code>&gt;</code>
 .</p>
-<dl>
-  <dt>log:implies</dt>
-    <dd>One formula implies another, using log:forAll and log:forSome to
-      indicate variables. This is the basic rule-building property. cwm looks
-      for log:implies rules when --rules or --think options are used. The
-      left hand side, the antecedent, can have built-in functions which are
-      evaluated, as follows.</dd>
-  <dt>log:includes</dt>
-    <dd>Within a query, F includes G is true if statements in F allow G to be
-      deduced. Variable substitution works across includes.</dd>
-  <dt>log:notIncludes</dt>
-    <dd>Opposite of includes. When no outstanding variables need to be
-      resolved, cwm can check to see whether F has statements to justify G,
-      and if not this binary operator succeeds. This is how you can make
-      defaults. Use this as a form of "not" which makes sense in on the
-    web.</dd>
-  <dt>etc</dt>
-    <dd>...</dd>
-</dl>
 
 <h3>Math</h3>
 
@@ -276,7 +276,7 @@ href="http://www.w3.org/2000/10/swap/math"><code>http://www.w3.org/2000/10/swap/
 
 <h3>String</h3>
 
-<p>Simple string functions</p>
+<p>Simple string functions. </p>
 
 <p><code>@prefix string: &lt;</code><a
 href="http://www.w3.org/2000/10/swap/string"><code>http://www.w3.org/2000/10/swap/string</code></a><code>#&gt;</code>
@@ -324,7 +324,7 @@ things to watch are:</p>
     the reverse engineering of the key.</li>
   <li>Ask a crypto specialist to look over your stuff</li>
   <li>Make the techniques, rules, code. public. Public debugging is valuable.
-    trying to hide it from attackers by keeping it secret doesn't pay.</li>
+    Trying to hide it from attackers by keeping it secret doesn't pay.</li>
   <li>This code is not guaranteed anyway, or made for production use. It is
     designed for prototyping new semantic web applications. Use at your own
     risk.</li>
@@ -349,7 +349,6 @@ features which are generally checked on each checkin.</p>
 interface</p>
 <ul>
   <li>Parses N3</li>
-  <li>Generates RDF</li>
   <li>Generates N3</li>
 </ul>
 
@@ -435,10 +434,11 @@ documents.</p>
 
 <h2>Acknowledgements</h2>
 
-<p>Thanks to Dan Connolly for writing the first code and introducing me to
-Python, and to him and Sean Palmer and Mark Nottingham for writing code.
-Thanks to Sean for his <a href="http://infomesh.net/2001/cwm/">guide</a> to
-cwm. Thanks for all on #RDFIG for being everything which #RDFIG is.</p>
+<p>Thanks to Dan Connolly for writing the first code and thereby introducing
+me to Python, and to him and Sean Palmer and Mark Nottingham for writing
+code. Thanks to Sean for his <a
+href="http://infomesh.net/2001/cwm/">guide</a> to cwm. Thanks for all on
+#RDFIG for being everything which #RDFIG..</p>
 
 <h2 id="Related">Related work</h2>
 
