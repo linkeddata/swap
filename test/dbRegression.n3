@@ -28,4 +28,9 @@
     test:description   "test for name collisions in database table names";
     test:arguments     """dbork/OrderTracking1-sameFragName.n3 --mode=r --think""".
 
+:d1005 a test:CwmTest;
+    test:shortFileName "dbork-OrderTracking6.n3";
+    test:description   "OrderTracking constraints with literals in object position";
+    test:arguments     """dbork/OrderTracking6.n3 --mode=r --think""".
+
 #ends
