@@ -1,0 +1,36 @@
+# Test list syntax
+#
+#  With no {} so it can be translated in DAML easily
+#
+
+bind t: <test> .
+bind : <test> .
+bind ont: <http://www.w3.org/2000/10/swap/log.n3> .
+
+# Other interesting unimplemented syntaxes ...
+#[ log:first :a;
+#  ont:rest thatWhich has ont:first :b; 
+#  ont:rest thatWhich has ont:first :c; 
+#  ont:rest thatWhich has ont:first :d; 
+#  ont:rest thatWhich has ont:first :e ];
+#
+# etc
+#
+#( :a :b :c :d :e )
+
+:threeItems = ( :b :c :d ) .
+
+:nested =( :first :second ( :left3 :right3 ) fourth )  .
+
+:emptyList = ( ) .
+
+:listOf2Empties = (()()) .
+
+:twoAnons = ([a :mother][a :father]).
+
+# Supressed: - see lists.n3 for version with this in
+# :twoFormulae = ({:a a :mother} {:b a :father}).
+
+
+#ENDS
+
