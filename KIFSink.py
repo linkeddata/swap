@@ -22,6 +22,8 @@ import re
 import RDFSink
 from RDFSink import FORMULA, SYMBOL, LITERAL, forSomeSym, forAllSym
 
+#from thing import progress
+
 class Sink(RDFSink.RDFSink):
     def __init__(self, write):
         RDFSink.RDFSink.__init__(self)
@@ -39,7 +41,7 @@ class Sink(RDFSink.RDFSink):
         self._uv = []
         self._conj = []
         self._map = {} # scopes to (ex, uv, conj) tuples
-        self._parents = {} # scopes to parent scopes
+        self._ancestors = []
         self._root = None # root scope
         self._scope = None # current scope
         self._depth = None # scope depth
@@ -49,6 +51,7 @@ class Sink(RDFSink.RDFSink):
             self._write(";; %s\n" % l)
         
     def makeStatement(self, cpso):
+        #progress("makestatment:", cpso)
         c, p, s, o = cpso
 
         if self._scope <> c[1]:
@@ -68,19 +71,22 @@ class Sink(RDFSink.RDFSink):
 
     def _setScope(self, c):
         if self._root is None:
+            #progress("setting root scope to...", c)
             self._root = self._scope = c
-            self._parent = None
+            self._ancestors = []
             self._ex, self._uv, self._conj = [], [], []
         else:
+            #progress("former scope size:", len(self._conj))
             self._map[self._scope] = (self._ex, self._uv, self._conj)
 
-            if c == self._parent: # popping out of a scope
-                self._parent = self._parents[self._scope]
+            if c in self._ancestors: # popping out...
+                self._ancestors.pop()
                 euc = self._map[c]
                 self._ex, self._uv, self._conj = euc
+                #progress("popping back to scope...", c, "conjuncts:", len(self._conj))
             else: # pushing into a new scope
-                self._parent = self._scope
-                self._parents[c] = self._scope # GC cycle?
+                #progress("pushing into scope...", c)
+                self._ancestors.append(self._scope)
                 self._ex, self._uv, self._conj = [], [], []
             self._scope = c
 
@@ -91,6 +97,7 @@ class Sink(RDFSink.RDFSink):
 
 
     def _writeScope(self, scope, outer={}, level=1):
+        #progress("writing scope...", scope)
         ex, uv, conj = self._map[scope]
         w = self._write
 
@@ -184,7 +191,10 @@ def _moreVarNames(outermap, uris, level):
 
 
 # $Log$
-# Revision 1.5  2001-09-19 18:47:57  connolly
+# Revision 1.6  2001-11-26 23:53:55  connolly
+# fixed bug with scopes nested more than one deep
+#
+# Revision 1.5  2001/09/19 18:47:57  connolly
 # factored RDFSink.py out of notation3.py
 #
 # introduced SYMBOL to replace notation3.RESOURCE
