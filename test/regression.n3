@@ -79,8 +79,13 @@
 
 :t1007a a test:CwmTest;
     test:referenceOutput <ref/bnode.n3>;
-    test:description   "Parse RDF/XML nodeID";
+    test:description   "Parse RDF/XML nodeID to N3";
     test:arguments     """--rdf nodeID/ex1.rdf --n3""".
+
+:t1007b a test:CwmTest;
+    test:referenceOutput <ref/bnode.n3>;
+    test:description   "Parse RDF/XML nodeID and regen RDF/XML";
+    test:arguments     """--rdf nodeID/ex1.rdf""".
 
 
 :t1008 a test:CwmTest;
