@@ -428,7 +428,7 @@ test:CwmTest;
 
 :t1048b a test:CwmTest;
 	test:referenceOutput <includes/uri-object-invalid.n3>;
-	test:description "Cwm builtins should support most xsd datatypes";
+	test:description "trying to match log:uri of a non-string simply matches None";
 	test:arguments  "includes/uri-object-invalid.n3 --think" .
 
 :t1049 a test:CwmTest;

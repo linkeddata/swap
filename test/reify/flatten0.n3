@@ -1,0 +1,43 @@
+     @prefix : </devel/WWW/2000/10/swap/test/reify/reify0.n3#> .
+     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix fla: <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    
+     @forAll :a,
+                :b,
+                :p .
+    
+    fla:ancestor     a daml:TransitiveProperty .
+    
+    fla:bill     fla:ancestor fla:pa .
+    
+    fla:pa     fla:ancestor fla:granpa .
+    {
+        :a     :means :b .
+        
+        }     log:implies {:a     log:implies :b .
+        :b     log:implies :a .
+        } .
+    {
+        :p     a daml:TransitiveProperty .
+        
+        }     :means {{
+             @forAll :x,
+                        :y,
+                        :z .
+            {
+                :x     :p :y .
+                :y     :p :z .
+                
+                }     log:implies {:x     :p :z .
+                } .
+            
+            }     a log:Truth .
+        } .
+    {
+        :a     log:implies :b .
+        :b     log:implies :a .
+        
+        }     log:implies {:a     :means :b .
+        } .
+    

@@ -259,9 +259,8 @@ class Serializer:
 	    else:
 		_anon = 0
 	    if not _anon:
-                if canItbeABNode(context, v):
-                    aWorks = 1
-		self._outputStatement(sink, (context, self.store.forSome, context, v), aWorks)
+		self._outputStatement(sink, (context, self.store.forSome, context, v), \
+                                      canItbeABNode(context, v))
 
     def dumpBySubject(self, sorting=1):
         """ Dump one formula only by order of subject except forSome's first for n3=a mode"""
@@ -385,12 +384,17 @@ class Serializer:
         or zero if self can NOT be represented as an anonymous node.
         Paired with this is whether this is a subexpression.
         """
-    # This function is called way too many times. My attempts to speed it up using a try / except
+    # This function takes way too long. My attempts to speed it up using a try / except
     # loop were clearly misguided, because this function does very little as is.
-    #Finding out what is calling wait() is far more importand. I suspect that try / excepts are
-    #part of the problem
+    # why does this take .08 seconds per function call to do next to nothing?
+##        try:
+##            return self._topology_returns[x]
+##        except KeyError:
+##            pass
 #	progress("&&&&&&&&& ", `self`,  self._occurringAs)
-        _isExistential = x in context.existentials()
+#        _isExistential = x in context.existentials()
+        _isExistential = context.existentialDict.get(x,0)
+#        return (0, 2)
         _loop = context.any(subj=x, obj=x)  # does'nt count as incomming
 	_asPred = self._occurringAs[PRED].get(x, 0)
 	_asObj = self._occurringAs[OBJ].get(x, 0)
@@ -422,7 +426,7 @@ class Serializer:
             progress( "Topology %s in %s is: anon=%i obj=%i, pred=%i loop=%s ex=%i "%(
             `x`, `context`,  _anon, _asObj, _asPred, _loop, _isExistential))
 
-        #self._topology_returns[(x,context)] = ( _anon, _asObj+_asPred )
+##        self._topology_returns[x] = ( _anon, _asObj+_asPred )
         return ( _anon, _asObj+_asPred )  
 
 
@@ -577,12 +581,14 @@ class Serializer:
 
 	
 def canItbeABNode(formula, symbol):
-    for quad in formula.statements:
-        for s in PRED, SUBJ, OBJ:
-            if isinstance(quad[s], Formula):
-                if quad[s].doesNodeAppear(symbol):
-                    return 0
-    return 1
+    def returnFunc():
+        for quad in formula.statements:
+            for s in PRED, SUBJ, OBJ:
+                if isinstance(quad[s], Formula):
+                    if quad[s].doesNodeAppear(symbol):
+                        return 0
+        return 1
+    return returnFunc
 
 ##    toplayer = 1
 ##    otherlayers = 1

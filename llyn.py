@@ -451,7 +451,10 @@ class IndexedFormula(Formula):
             if diag.chatty_flag > 70:
                 progress("End formula -- @@ already canonical:"+`F`)
             return F.canonical
-	
+
+	F.existentialDict = {}
+	for existentialVariable in F.existentials():
+            F.existentialDict[existentialVariable] = 1
         fl = F.statements
         l = len(fl), len(F.universals()), len(F.existentials())   # The number of statements
         possibles = store._formulaeOfLength.get(l, None)  # Formulae of same length
