@@ -109,11 +109,17 @@ guaranteed but is open source and available if you want to play.</p>
   <dt>Using CVS</dt>
     <dd>from the <a href="http://dev.w3.org/cvsweb/">public w3c CVS
       repository</a>. Check out the whole tree to develop. This includes the
-      test data - if you don't need that, delete the test subdirectory.</dd>
+      test data - if you don't need that, delete the test subdirectory. Make
+      a fresh directory where you want to put stuff from dev.w3.org.
+      <pre>$ <span style="color: #007F00">cvs -d:pserver:anonymous@dev.w3.org:/sources/public login</span>
+password? <span style="color: #007F00">anonymous</span>
+$ <span style="color: #007F00">cvs -d:pserver:anonymous@dev.w3.org:/sources/public get 2000/10/swap</span></pre>
+    </dd>
   <dt>From the web</dt>
     <dd>Get the files one by one. <a href="/2000/10/swap/cwm.py">cwm.py</a>
       is the main application file. You can browse the source files on the
-      web, but this is not a practical way to install the system.</dd>
+      web, but this is <strong>not</strong> a practical way to install the
+      system.</dd>
 </dl>
 
 <h2 id="Closed">Features</h2>
