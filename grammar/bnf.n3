@@ -42,8 +42,14 @@ bnf:matches	rdfs:domain bnf:Token;
 		rdfs:range  bnf:RegularExpression;
 		rdfs:comment "The regexp which a token must match".
 
-bnf:canStartWith rdf:domain bnf:Production;
-		rdf:range bnf:String.
+bnf:canStartWith rdfs:domain bnf:Production;
+		rdfs:range bnf:String.
 
+bnf:commaSeparatedPeriodTerminatedListOf
+	rdfs:domain bnf:Production;
+	rdfs:range bnf:Production.
 
+bnf:mustBe    
+	rdfs:domain bnf:Production;
+	rdfs:range bnf:Production.
 #ends
