@@ -310,7 +310,7 @@ class DataObject:
 	    yield DataObject(self.context, v)
 
 
-def dereference(x, critical=0):
+def dereference(x, mode="", workingContext=None):
     """dereference an object, finding the semantics of its schema if any
     
     Returns None if it cannot be retreived.
@@ -328,14 +328,19 @@ def dereference(x, critical=0):
 #
     inputURI = x.uriref()
     if verbosity() > 20: progress("Web: Looking up %s" % x)
-    if critical: F = x.store.load(inputURI)
+    if "e" in mode: F = x.store.load(inputURI)
     else:
 	try:
 	    F = x.store.load(inputURI)
 	except (IOError, SyntaxError, DocumentAccessError):
 	    F = None
+    if F != None and "m" in mode:
+	workingContext.reopen()
+	if verbosity() > 45: progress("Web: Dereferencing %s gives %s, added to %F" %(
+		    x, F, workingContext))
+	workingContext.store.copyContext(F, workingContext)
     setattr(x, "_semantics", F)
-    if verbosity() > 25: progress("Web: Dereferencing %s gives %s" %(x, F))
+    if verbosity() > 25: progress("Web: Dereferencing %s gave %s" %(x, F))
     return F
 		
 
@@ -2748,7 +2753,7 @@ class Query:
 
     def remoteQuery(query, items):
 	"""Perform remote query as client on remote store
-	Currently  this only goes to a local SQL store, but should later use RDFQL/DAMLQL etc
+	Currently  this only goes to an SQL store, but should later use RDFQL/DAMLQL etc
 	in remote HTTP/SOAP call."""
 	
         import SqlDB
@@ -2840,11 +2845,9 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	if "r" in mode:
 	    schema = None
 	    if "s" in mode:
-		schema = dereference(pred, critical = "e" in mode)
+		schema = dereference(pred, mode, self.query.workingContext)
 		if schema != None:
 		    self.service = schema.any(pred=self.store.definitiveService, subj=pred)
-		    if "m" in mode:   # @@@@ will do multiple times .. not good @@@ .. do in dereference
-			self.store.copyContext(meta, schema, why=reason)
 	    if self.service == None and self.query.meta != None:
 		self.service = self.query.meta.any(pred=self.store.definitiveService, subj=pred)
 		if self.service == None:
@@ -2863,12 +2866,10 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		if authDoc != None:
 		    if verbosity() > 90:
 			progress("We have a definitive document %s for %s." %(authDoc, pred))
-		    authFormula = dereference(authDoc, critical = "e" in mode)
+		    authFormula = dereference(authDoc, mode, self.query.workingContext)
 		    if authFormula != None:
 			self.quad = (authFormula, pred, subj, obj)
 			con = authFormula
-			if "m" in mode:
-			    self.store.copyContext(self.query.meta, authFormula)
 
         self.neededToRun = [ [], [], [], [] ]  # for each part of speech
         self.searchPattern = [con, pred, subj, obj]  # What do we search for?
