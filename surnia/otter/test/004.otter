@@ -2,7 +2,8 @@
 % Otter finds a 36-step proof that if two members of a set of
 % cardinality 2 are distinct, another member of the set must be the same
 % as one of those first two.  
-% (in 2 seconds)   
+% (in 2 seconds, although that grew to be a 51 step proof in 66
+% seconds with the inclusion of axiom 3.)
 %
 set(auto).
 include('util/owlAx-card.otter').

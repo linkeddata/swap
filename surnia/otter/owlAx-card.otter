@@ -8,6 +8,14 @@ include('util/owlAx-oneOf.otter').
 formula_list(usable).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+%   rdf_nil
+%
+
+-(exists c (rdf(rdf_nil, rdf_rest, c))).
+-(exists c (rdf(rdf_nil, rdf_first, c))).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
 %   owl_cardinality
 %
@@ -38,9 +46,71 @@ all LIST CARD HEAD (
     -rdf(CARD, owl_sameAs, 'foo:zero')
 ).
 
+% if the first element is distinct from everything else in
+% the list, then the cardinality of the tail is one less than
+% the cardinality of the whole list; otherwise, the cardinalities
+% are the same.
+
+% AXIOM 1
+
+all LIST HEAD TAIL (
+   ( rdf(LIST, rdf_first, HEAD) &
+     rdf(LIST, rdf_rest, TAIL) )
+   ->
+   ( -inList(HEAD, TAIL) 
+     <->
+     ( all CARD CARDMINUSONE (
+         rdf(CARDMINUSONE, 'foo:succ', CARD)
+         -> 
+          ( cardinality(TAIL, CARDMINUSONE)
+            <-> 
+            cardinality(LIST, CARD)
+          )
+     ))
+   )
+).
+
+% AXIOM 2
+
+all LIST HEAD TAIL (
+   ( rdf(LIST, rdf_first, HEAD) &
+     rdf(LIST, rdf_rest, TAIL) )
+   ->
+   ( inList(HEAD, TAIL) 
+     <->
+     ( all CARD (
+         cardinality(TAIL, CARD)
+         <-> 
+         cardinality(LIST, CARD)
+     ))
+   )
+).
+
+% AXIOM 3
+% this bit is missing even from the backward implications of
+% the other axioms, although I'd think it would be there.  I should
+% look at the clausal forms.
+
+all LIST CARD CARDMINUSONE (
+   ( cardinality(LIST, CARD) &
+     lt('foo:zero', CARD) &
+     rdf(CARDMINUSONE, 'foo:succ', CARD) )
+   ->
+   (exists HEAD TAIL (
+      rdf(LIST, rdf_first, HEAD) &
+      rdf(LIST, rdf_rest, TAIL) &
+      (inList(HEAD, TAIL) -> cardinality(TAIL, CARD)) &
+      (-inList(HEAD, TAIL) -> cardinality(TAIL, CARDMINUSONE))
+   ))
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
 rdf('foo:zero', 'foo:succ', one).
 rdf(one, 'foo:succ', two).
 rdf(two, 'foo:succ', three).
+rdf(three, 'foo:succ', four).
 
 % The List-of-One Lemma:
 (all LIST HEAD (
@@ -66,55 +136,7 @@ rdf(two, 'foo:succ', three).
 
 
 
-% if the first element is distinct from everything else in
-% the list, then the cardinality of the tail is one less than
-% the cardinality of the whole list; otherwise, the cardinalities
-% are the same.
 
-all LIST HEAD TAIL (
-   ( rdf(LIST, rdf_first, HEAD) &
-     rdf(LIST, rdf_rest, TAIL) )
-   ->
-   ( -inList(HEAD, TAIL) 
-     <->
-     ( all CARD CARDMINUSONE (
-         rdf(CARDMINUSONE, 'foo:succ', CARD)
-         -> 
-          ( cardinality(TAIL, CARDMINUSONE)
-            <-> 
-            cardinality(LIST, CARD)
-          )
-     ))
-   )
-).
-
-all LIST HEAD TAIL (
-   ( rdf(LIST, rdf_first, HEAD) &
-     rdf(LIST, rdf_rest, TAIL) )
-   ->
-   ( inList(HEAD, TAIL) 
-     <->
-     ( all CARD (
-         cardinality(TAIL, CARD)
-         <-> 
-         cardinality(LIST, CARD)
-     ))
-   )
-).
-  
-all LIST HEAD TAIL (
-   ( rdf(LIST, rdf_first, HEAD) &
-     rdf(LIST, rdf_rest, TAIL) )
-   ->
-   ( inList(HEAD, TAIL) 
-     <->
-     ( all CARD (
-         cardinality(TAIL, CARD)
-         <-> 
-         cardinality(LIST, CARD)
-     ))
-   )
-).
   
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -157,6 +179,9 @@ all X (
 all X Y (
    rdf(X, owl_sameAs, Y) -> rdf(Y, owl_sameAs, X)
 ).
+all X Y (
+   -rdf(X, owl_sameAs, Y) -> -rdf(Y, owl_sameAs, X)
+).
 
 % transitivity
 all X Y Z (
@@ -178,6 +203,9 @@ all THING1 THING2 (
 
 
 % $Log$
-% Revision 1.1  2003-07-31 20:56:30  sandro
+% Revision 1.2  2003-07-31 21:45:56  sandro
+% in progress, working on test 008, then back to 001.
+%
+% Revision 1.1  2003/07/31 20:56:30  sandro
 % still in progress, but passing surnia-test-003
 %

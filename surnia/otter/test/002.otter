@@ -1,0 +1,29 @@
+set(auto).
+include('util/owlAx-card.otter').
+formula_list(usable).
+
+rdf(l1, rdf_first, a).
+rdf(l2, rdf_first, b).
+rdf(l3, rdf_first, c).
+rdf(l4, rdf_first, d).
+rdf(l1, rdf_rest, l2).
+rdf(l2, rdf_rest, l3).
+rdf(l3, rdf_rest, l4).
+rdf(l4, rdf_rest, rdf_nil).
+
+-rdf(a, owl_sameAs, b).
+-rdf(a, owl_sameAs, c).
+-rdf(a, owl_sameAs, d).
+-rdf(b, owl_sameAs, c).
+-rdf(b, owl_sameAs, d).
+-rdf(c, owl_sameAs, d).
+
+rdf('foo:zero', 'foo:succ', lit1).
+rdf(lit1, 'foo:succ', lit2).
+rdf(lit2, 'foo:succ', lit3).
+rdf(lit3, 'foo:succ', lit4).
+rdf(lit4, 'foo:succ', lit5).
+
+% -lt(lit1, lit5).
+
+-cardinality(l1, lit4).

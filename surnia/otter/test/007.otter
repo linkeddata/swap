@@ -1,0 +1,26 @@
+set(auto).
+include('util/owlAx-card.otter').
+formula_list(usable).
+
+%rdf(s, rdf_type, owl_Restriction).
+%rdf(s, owl_onProperty, p).
+%rdf(s, owl_cardinality, lit1).
+%rdf('foo:zero', 'foo:succ', lit1).
+
+%rdf(x, rdf_type, s).
+
+% should turn into:
+
+all VAL (
+  ( rdf(x, p, VAL) -> inList(VAL, list) ) &
+  cardinality(list, one)
+).
+
+% then...
+
+rdf(x, p, y).
+rdf(x, p, z).
+
+
+-rdf(y, owl_sameAs, z).
+

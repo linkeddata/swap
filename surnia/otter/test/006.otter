@@ -1,0 +1,10 @@
+set(auto).
+include('util/owlAx-card.otter').
+formula_list(usable).
+
+-(
+    -cardinality(rdf_nil, one)
+).
+
+
+
