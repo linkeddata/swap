@@ -3,33 +3,14 @@ form of abstract syntax trees (ASTs).
 
 Expressions are always immutable.  If you want mutability, use a KB or
 copy to/from a python list.  Use == for comparison instead of "is";
-whether interning is done is an implementation issue.
+whether interning is done is an implementation issue.  Compound
+expressions are equal if their parts are equal; simple expressions can
+only be assumed to be equal if they are the same python object.  (But
+some subclasses might offer additional equality conditions.)
 
-The main hierarchy is:
-   Expr
-     CompoundExpr (an internal branch node in the AST)
-        These are classified in several ways, such as by the number
-        of arguments (operands) and the type of the function
-        (operator), but we don't use Python classes for this.
-        Still, it vaguely appears as if CompoundExpr's are grouped like
-          Formula (function isLogicalOperator)
-            isSentence (Formula with no free variables)
-          LogicFunction (Non-Boolean; NonPredicate)
-          
-     SimpleExpr   (a leaf node)
-       Proposition
-       SimpleValueExpr
-         Variable
-           ExiVar
-           UniVar
-         Constant
-           URIRef
-           String
-           Number
-           RDFLiteral [?]
-
-These are tightly linked to Functions, which are the essential part of
-CompoundExpr's.
+There's a fairly clear hierarchy split between CompoundExpr and
+SimpleExpr, but there are many classifications one could do of Expr's
+that do not fit a single hierarchy. 
 
 """
 __version__ = "$Revision$"
@@ -41,84 +22,38 @@ from string import split
 def virtual():
     raise RuntimeError, "Function should have been implemented in subclass"
 
-# Define these as names now; change the values down below, after some
-# class definitions
-AND = None
-OR = None
-IMPLIES = None
-NOT = None
+opTable = { }       # gets filled in later, using things not yet defined
 
 class Expr:
 
-    def isFormula(self):
-        """Is this a "logic formula", a predicate calculus expression?
+    def __and__(self, other):    return CompoundExpr(opTable["and"], self, other)
+    def __or__(self, other):     return CompoundExpr(opTable["or"],  self, other)
+    def __rshift__(self, other): return CompoundExpr(opTable[">>"], self, other)
+    def __neg__(self, other):    return CompoundExpr(opTable["-"],  self)
+    def __call__(self, *args):   return apply(CompoundExpr, (self,)+args)  # (need apply() the handle varargs)
 
-        >>> from LX.expr import *
-        >>> p = Proposition()
-        >>> p.isFormula()
-        1
-        >>> q = Proposition()
-        >>> f = p & q
-        >>> f.isFormula()
-        1
-        >>> a = Constant()
-        >>> a.isFormula()
-        0
-        >>> x = ExiVar()
-        >>> x.isFormula()     # see isFirstOrder()
-        0
-        >>> a = Constant()
-        >>> x(a).isFormula()
-        1
-        """
-        virtual()
-
-    def isSentence(self):
-        """Is this a "sentence" (or WFF), a formula with no free variables?
-
-        """
-        virtual()
-
-    def isFirstOrder(self):
-        """Are all functions (logical connectives and logic functions)
-        constants?
-
-        >>> from LX.expr import *
-        >>> p = Proposition()
-        >>> q = Proposition()
-        >>> pp = ConstantPredicate()
-        >>> a = Constant()
-        >>> (p & q).isFirstOrder()
-        1
-        >>> (p & q | pp(a)).isFirstOrder()
-        1
-        >>> x = ExiVar()
-        >>> g = p & x(a)
-        >>> g.isFirstOrder()
-        0
-        """
-        virtual()
-
-    def isRDF(self):
-        """Is this a sentence using only functions AND, EXISTS, binary
-        predicates, URIRefs, and RDFLiterals?
-        
-        """
-        virtual()
-
-    def __and__(self, other):    return CompoundExpr(AND, self, other)
-    def __or__(self, other):     return CompoundExpr(OR,  self, other)
-    def __rshift__(self, other): return CompoundExpr(IMPLIES, self, other)
-    def __neg__(self, other):    return CompoundExpr(NOT,  self)
-    def __call__(self, *args):   return apply(CompoundExpr, (self,)+args)
-
-    def isPredicate(self): return 0
-    
 class CompoundExpr(Expr):
+    """An internal branch node in an abstract syntax tree,
+    representing the application of some function (or operator or
+    connective) to one or more expressions.
+
+    """
 
     def __init__(self, function, *args):
-        assert(isinstance(function, SimpleValueExpr))
+        """Initialize the compound expression (immutably) with
+        a function expression and one or more argument expressions.
+
+        Why don't we allow nullary functions?  Because it confuses me
+        and I can't think of a reason for it.  Since functions can't
+        have side effects, the value of f() is always some constant,
+        so just use that constant.
+
+        Why do we allow CompoundExpr's to be the function?  Because
+        I'm brave, and I want to allow things like Currying.
+        """
+        assert(isinstance(function, Expr))
         self.__function = function
+        assert(len(args) >= 1) 
         for arg in args:
             assert(isinstance(function, Expr))
         if hasattr(function, "checkArgs"):
@@ -156,31 +91,7 @@ class CompoundExpr(Expr):
     def __str__(self):
         return str(self.function)+"("+", ".join(map(str, self.args))+")"
 
-    def getOpenVariables(self):
-        if function.isQuantifier():
-            # this kind of makes us thing we should be instantiating a subclass
-            raise RuntimeError, "Not Implemented"
-        else:
-            result = []
-            for child in self.all:
-                result.extend(child.getOpenVariables())
-            return result
 
-    def isFormula(self):
-        if self.function.isPredicate():
-            # trust that the function did type-checking on the way in...?
-            return 1
-        else:
-            return 0
-
-    def isFirstOrder(self):
-        if isinstance(self.function, Constant):
-            for arg in self.args:
-                if not arg.isFirstOrder(): return 0
-            return 1
-        else:
-            return 0
-            
 class SimpleExpr(Expr):
 
     def __init__(self, suggestedName="<unnamed>"):
@@ -189,22 +100,22 @@ class SimpleExpr(Expr):
     def __str__(self):
         return self.suggestedName
 
-    def getOpenVariables(self):
-        return []
+    def getLocallyUnambiguousName(self, nameTable):
+        try:
+            return nameTable[self]
+        except KeyError: pass
+        for extra in xrange(1, 100000000):
+            if extra == 1:
+                newName = self.suggestedName
+            else:
+                newName = self.suggestedName + str(extra)
+            if newName not in nameTable.values:      # @ linear performance hit
+                nameTable[self] = newName
+                return newName
+        raise RuntimeError, "wayyyyy to many similarly named expressions"
 
-    def isFirstOrder(self): return 1
 
-class Proposition(SimpleExpr):
-
-    def isFormula(self):
-        return 1
-
-class SimpleValueExpr(SimpleExpr):
-
-    def isFormula(self):
-        return 0
-
-class Variable(SimpleValueExpr):
+class Variable(SimpleExpr):
     """
 
     sometimes these things (maybe expr's on the whole!) have URIRefs
@@ -215,6 +126,7 @@ class Variable(SimpleValueExpr):
             a URIRef *is* and Expr, so we could get confused really
             easily.   What is the URIRef of a URIRef?)
 
+           **** URI GOES INTO METADATA
     """
     
     # @@@ what to do with the URIRef???
@@ -222,23 +134,16 @@ class Variable(SimpleValueExpr):
         self.name = name
         self.value = uriref
 
-    def getOpenVariables(self):
-        return [self]
-
-    def isPredicate(self):
-        """Variables are valid predicates (and functions) in HOL"""
-        return 1
-    
 class ExiVar(Variable):
     pass
 
 class UniVar(Variable):
     pass
              
-class Constant(SimpleValueExpr):
+class SimpleConstant(SimpleExpr):
     pass
 
-class URIRef(Constant):
+class URIRef(SimpleConstant):
     """We know a URIRef which identifies the same thing as this
     Constant.  Should we allow many of these, therefor?"""
 
@@ -250,7 +155,7 @@ class URIRef(Constant):
             self.racine = u; self.fragment = None
         self.value = u
 
-class String(Constant):
+class String(SimpleConstant):
 
     def __init__(self, u):
         self._u = u
@@ -259,26 +164,15 @@ class String(Constant):
         return self._u
 
     
-class RDFLiteral(Constant):
+class RDFLiteral(SimpleConstant):
 
     def __init__(self, text, lang=None, isXML=0):
         pass
 
-class ConstantPredicate(Constant):
+import LX.firstOrderLogic
 
-    def isPredicate(self):
-        return 1
-    
-
-class BinaryLogicalOperator(ConstantPredicate):
-
-    def checkArgs(self, args):
-        assert(len(args) == 2)
-        for arg in args:
-            assert(arg.isFormula())
-
-AND = BinaryLogicalOperator("and")
-OR = BinaryLogicalOperator("or")
+opTable["and"] = LX.firstOrderLogic.AND
+# ... or something.
 
 def _test_expr_setup():
     """
@@ -306,7 +200,10 @@ if __name__ == "__main__": _test()
 
 
 # $Log$
-# Revision 1.1  2002-08-31 19:43:23  sandro
+# Revision 1.2  2002-09-02 20:10:44  sandro
+# factored FOL code out of expr.py (and into firstOrderLogic.py), to try to keep it simple enough.  Lost propositions, doctests.
+#
+# Revision 1.1  2002/08/31 19:43:23  sandro
 # a new factoring, combining Term and Formula; not quite ready to replace the others, but passing its unit tests (I just discovered doctest)
 #
 # Revision 1.4  2002/08/29 21:56:54  sandro
