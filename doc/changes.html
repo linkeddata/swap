@@ -3,8 +3,9 @@
        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <title>Cwm features wished for and done</title>
-  <meta name="generator" content="amaya 7.1, see http://www.w3.org/Amaya/" />
+  <meta name="generator" content="amaya 8.5, see http://www.w3.org/Amaya/" />
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -23,42 +24,73 @@ Comparing Formats</p>
 href="../../../../DesignIssues/Notation3.html"><img alt="n3"
 src="../../../../RDF/icons/n3_small" /></a></p>
 
-<h2>Release 0.7.???</h2>
+<h2>Release 0.8</h2>
 
-<p></p>
+<p>This release has some bugfixes, as well as some changed and new
+functionality.</p>
 
-<p>2004/6/30</p>
+<h4>General bugfixes</h4>
 
-<p>N3QL support.  Initial support for <a
+<p>Cwm will now do the expected thing on log:uri if given an invalid URI
+string.</p>
+
+<p>An integer over the platforms native integer size will no longer crash
+Cwm.</p>
+
+<p>Cwm now understands most xsd datatyped for use in builtins.</p>
+
+<p>By setting the environment variable CWM_RDFLIB to 1, cwm will use rdflib
+to parse rdf/xml files. Note that this is unsupported, may break in the
+future, and requrires rdflib be installed. Rdflib supports some rdf features
+Cwm's parser does not, so this may be useful to you notwithstanding</p>
+
+<h4>BNodes scope changes</h4>
+
+<p>BNodes given names using the _: notation now have formula scope, not
+document scope.</p>
+
+<h4>Release / Test changes</h4>
+
+<p>Cwm is now released in a new file, cwm.tar.gz, which, while being a
+fraction of the size of the old cwm.tgz, still includes a complete set of
+tests. It was discovered that Cwm was not actually running all of its tests.
+This has been fixed, and the tests have been split into tests guarenteed to
+work in the .tar.gz file (offline) and those which will not.</p>
+
+<h4>N3QL support</h4>
+
+<p>N3QL support. Initial support for <a
 href="../../../../DesignIssues/N3QL.html">N3QL</a> query language handling in
 cwm. command line looks like: <code>cwm <em>myKB.n3</em>
---query=<em>myquery.n3ql</em></code>.  Initial test case in  <a
+--query=<em>myquery.n3ql</em></code>. Initial test case in <a
 href="../test/ql/detailed.tests">swap/test/ql/detailed.tests</a></p>
 
-<p></p>
-
-<p>2004/6/24:</p>
+<h4>N3 serialization changes</h4>
 
 <p>The default output form is <code>@forAll</code>, not <code>this
 log:forAll</code>, <code>@forSome</code>, not <code>this log:forSome</code>.
 Use --n3=v to force the old obsolete form for variable declations. The parser
 has for a long time and will for some time support both forms.</p>
 
-<p><code>cwm --reify</code> and <code>--dereify</code> introduced but not
-supported by tests.</p>
+<h4>Reification support</h4>
+
+<p>Reification, after being broken for almost a year, has been rewritten and
+is better than ever. The options, as always, are --reify and --dereify. The
+tests for this are now in. There is insufficient documentation for this
+feature, and it has not been completely tested, so there may yet be bugs in
+it. If there is demand for it, fixing the --flatten feature should be
+possible now.</p>
 
 <p>2004/6/23:</p>
+
+<h4>MIME type changes</h4>
 
 <p><strong>Mime type</strong> for Notation3 switched to text/rdf+n3. This
 could be a major change. The application for application/n3 never seemed to
 get anywhere with IANA anyway. Text has the advantage that browsers will by
 default dispaly it, and N3 is designed to be readable. Downside is that if it
-not ASCII, then you must include the charset specification in teh mime type.
+not ASCII, then you must include the charset specification in the mime type.
 This must be UTF-8, and notation3 is always utf-8.</p>
-
-<p><strong>reification()</strong> methods in term and subclasses updated
-without shortcuts, using yosi's code. Reification code and dereificatoin code
-is NOT supported yet.</p>
 
 <h2>Release 0.7.3</h2>
 
@@ -204,7 +236,7 @@ work toward a more community-supported platform with time.</p>
     including a suitable test in the regression tests. This test currently
     includes all the n3 format files detailed.tests in subdirectories of
     $SWAP/test.</li>
-  <li>New mailing lists have been made. 
+  <li>New mailing lists have been made.
     <dl>
       <dt><a
       href="http://lists.w3.org/Archives/Public/public-cwm-announce">public-cwm-announce</a></dt>
@@ -245,7 +277,7 @@ work toward a more community-supported platform with time.</p>
     F is a formula to cause the content of F to be loaded into the knowledge
     base.</li>
   <li>The ordering of terms has been fixed so that all constants literals,
-    lsits amd formula should all appear before any symbols in a listing. 
+    lsits amd formula should all appear before any symbols in a listing.
     <p>(code is formula.compareTerm())</p>
   </li>
 </ol>
@@ -268,7 +300,7 @@ here.</p>
   <li><strong>Lists</strong> are handled differently internally. This is a
     bit of a an experiment. Instead of being stored in their first/rest forms
     in the graph, complete lists are stored as List objects. Thse are first
-    class objects. . 
+    class objects. .
     <ul>
       <li>You can match against lists. Unification of formlae will catch
         identical lists such as ( &lt;a&gt; &lt;b&gt; ) matching against (
