@@ -3,7 +3,7 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <title>Reaching out onto the Web</title>
+  <title>Trust</title>
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -16,247 +16,31 @@ href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
 Reaching Out Onto the Web</p>
 </div>
 
-<h1>Reaching out onto the Web</h1>
+<h1>Trust</h1>
+
+<p>In the real world, you don't want a program doing things without being
+careful.  On eof the more difficult things is fguring out what rules you
+really use for deciding what data to trust.  The Semantic Web doesn't make
+that social problem much easier. When you have figured out a trust model, 
+the Semantic Web allows you to write it down. Not only that -- if we
+introdcue cryptographic built-in functions, we can actually make a system
+whcih will use public key cryptography to check the authenticity of data.</p>
+
+<p>This can of course get very big, and as complicated as your social or
+business environment. However, we can give a taste with a simple example.</p>
+
+<h2>Conclusion</h2>
+
+<p> </p>
+
+<p>@@ Small trusted codebase</p>
+
+<p></p>
+
+<p> </p>
 
 <p>So what is this Semantic <em>Web</em>, anyway? Where does the <em>Web</em>
 come in? So far you've shown us just a language for writing data.</p>
-
-<p>(You <em>do</em> need to know this bit!)</p>
-
-<h2><a name="Looking" id="Looking">Looking inside web resources:
-<code>log:semantics</code> and <code>log:includes</code></a></h2>
-
-<p>Life in the real world is full of data from different places. Rather than
-putting all the data into one big pot and believing it, rules often have to
-look specifically at which document said what.</p>
-
-<p>Cwm has built-in functions to allow it to interact with the web. The
-concept of a formula - a set of RDF statements - allows it to consider
-seperate sets of data.</p>
-
-<p>The basic function which connects RDF to the web is <code><dfn><a
-name="semantics" id="semantics">log:semantics</a></dfn></code>. The
-<code>log:semantics</code> of a document is the formula which one gets by
-parsing a semantic web document. As it is a built-in function, when cwm needs
-to evaluate it it will pick up the document (N3 or RDF/XML) and parse it,
-returning the formula<a href="#L4808"><sup>1</sup></a>.</p>
-
-<p></p>
-<pre>{ &lt;foo.rdf&gt; log:semantics ?f } =&gt; { ?f a :InterestingFormula}.</pre>
-
-<p></p>
-
-<p>Having got a formula, we can test what it says using
-<code>log:includes</code>. One formula <code>log:incldues</code> a second
-formula if for each statement in the second, there is a corresponding one in
-the first. This the same pattern matching which happens with
-<code>log:implies</code> rules: the names of variables do not have to
-match.</p>
-
-<p>So let's say we we have a concept of a semantic web home page for a
-person. We decide on the policy that if someone's home page says that they
-are a vegtarian, then we believe that they are a vegetarian.</p>
-<pre>this log:forAll :x.
-{:x :homePage log:includes { :x a :Vegetarian }}=&gt; { :x a :Vegetarian}.</pre>
-
-<p></p>
-
-<p>Why didn't we use the <code>?x</code> form there? Well, we have some
-nested formulae. The variable x is quantified in the scope of the whole
-document. The definition of ?x is that it is quantified in the scope of not
-the immediate formula but the next enclosing formula. So we can't use it at
-different levels of nesting. We are not asking whether the home page includes
-"For all x, x is vegetarian". This is an example of how one must be explicit
-about the scope of variables when they are used at more than one level.</p>
-
-<h3><a name="Implementi" id="Implementi">Implementing defaults and
-<code>log:notIncludes</code></a></h3>
-
-<p>Because a formula is a finite size, you can test for what it does
-<em>not</em> say, with <code>log:notIncludes.</code> Here, we have a rule
-that is the specification for a car doesn't say what color it is then it is
-black.</p>
-<pre>this log:forAll :car.
-{ :car.auto:specification log:notIncludes {:car auto:color []}}
-    =&gt; {:car auto:color auto:black}.</pre>
-
-<p></p>
-
-<p>Note the use of [] here in the nested formula as a blank node. If the spec
-said that a car had color green, then that would mean that the car had color
-something, so we would say that the formula included <code>:car auto:color
-[]</code> . A statement with a [] in it you can think of as weaker version of
-one with a value for the color.</p>
-
-<p>This is a way to do defaults. Notation3 as it is doesn't have defaults,
-because on the web, you can't say "if nothing says it is another color". You
-can never know in the whole web whether anyone has given a color. Also, if we
-start to just looslely talk about defaults in the sense of <em>if you don't
-already know a color</em>, then different agents will end up drawing
-different conclusions from the same data, which is not a good foundation for
-a scalable web. So, you handle defaults by first running rules to work out
-everything which is specified, and then on the result of that do a
-<code>notIncldues</code> rule like that above to implement the default
-values.</p>
-
-<h2>Thinking inside thinking with <code>log:conclusion</code></h2>
-
-<p>To do some inference within another set of rules, a useful relationship is
-that between a formula, and the result of thinking about it - running any
-rules in the formula on all the data, recursively just like cwm's
-<code>--think</code> command line option. This relationship is
-log:conclusion. To make the initial formula, you can use
-<code>log:conjunction</code> to merge a list of formulae.</p>
-<pre>{   ( &lt;input.data&gt;.log:semantics 
-      &lt;axioms.n3&gt;.log:semantics
-      &lt;system-rules.n3&gt;.log:semantics ) log:conjunction :f.
-    :f log:conclusion :g.
-    :g log:notIncludes {  :request a :ValidRequest }
-} =&gt; {
-    :request a InvalidRequest
-}.</pre>
-
-<p>This means: if what you get by taking the input data, the axioms and the
-system rules together and thinking about it doesn't tell you that the request
-is valid, then it is invalid.</p>
-
-<h2><a name="More" id="More">More peeking: <code>log:content</code>,
-<code>log:n3String</code>, <code>log:uri</code></a></h2>
-
-<p></p>
-
-<p>The nice thing about <code>log:semantics</code> is that it deals with all
-the web protocols in one simple function. This is a simple, clean, view of
-the web as a set of interwoven formulae.</p>
-
-<p>It is possible also to get a little more involved, using the following
-functions which separate the looking up from the parsing.</p>
-<dl>
-  <dt><code>log:uri</code></dt>
-    <dd>The uri of a resource. <code><br />
-      &lt;http://example.org/&gt; log:uri "http://example.org/".</code> <br />
-      Normal logic processing doesn't look at URIs but in some cases one
-      needs to. This is a level-breaker: it lets an N3 system look at its
-      infrastructure. It is a function which cwm can evaluate either way:
-      resource to URI or URI to resource.</dd>
-  <dt><code>log:content</code></dt>
-    <dd>For a document, the string which was returned as the document
-      contents when the URI of the resource was looked up.</dd>
-  <dt><code>log:parsedAsN3</code></dt>
-    <dd>For a string, the formula you get by parsing it as a Notation3
-      document.</dd>
-  <dt><code>log:N3String</code></dt>
-    <dd>For a formula, a string which expressed that formula in N3.</dd>
-  <dt></dt>
-    <dd></dd>
-</dl>
-
-<p>One of the uses of this, as we will see in the next section, is to test
-the digital signature of a string before accepting the data encoded in it.</p>
-
-<h2><a name="Getting1" id="Getting1">Getting results from the web:</a>
-<code>log:definitiveService</code> and
-<code>log:definitiveDocument</code></h2>
-
-<p></p>
-
-<p>There is some properties for which there is just a well-defined set of
-values. The state codes of the US states is an example. There are 50 states,
-and each has one state code and one state name. Once you know them, you know
-them. Once you know where to look them up, you can resolve any query about
-them. That's got to be useful. It is represented by giving, somewhere, a
-<code>log:definitiveDocument</code> for a the property. This is metadata -
-data about data. You have a lot of control over where cwm will look for
-metadata, and how it will use it.</p>
-
-<p>This behaviour is controlable in cwm by the --mode flags. By default cwm
-won't doing anything about it at all. (See:<a href="cwm.html#Mode">Cwm's
---mode flags</a> in manual page)</p>
-
-<p></p>
-
-<p>The<strong>r</strong>flag is necessary for any of this to work. This
-causes it to check for metadata in the working formula - the current
-dataset.</p>
-
-<p>The <strong>s</strong> flag makes cwm also check for schemas. It does this
-only when trying to resolve a query. If the predicate is from a namespace it
-doesn't know, it will go to theweb to see what it can learn. Unless the
-<strong>e</strong>flag is set, then it won't mind if there are any errors in
-this proces, it will just abandon it.</p>
-
-<p>Most vocabularies, ontologies, have all kinds of metadata which helps a
-query engine resolve questions posed using those terms. Much of the
-interesting semantic web development will be in seeeing what kind of metdata
-is most useful to leave, and how best to use it. The definitiveDocument
-property is a simple one, and the simplest way of using it is to let cwm pick
-it up either from the current store or a schema.</p>
-
-<p>For an example, look at this <a href="../test/dbork/defdoc2.n3">file</a>
-expressing query involving US state information.</p>
-<pre>@prefix : &lt;#&gt;. </pre>
-<pre>@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt;.
-@prefix state: &lt;data/USRegionState.n3#&gt; .
-@prefix city: &lt;data/USCity.n3#&gt;.
-# Question: What cities are in states bordering Massachusetts?
-
-{"MA"^state:code.state:borderstate^city:state city:name ?n}
-   =&gt;{    ?n a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS }.</pre>
-
-<p>Its a rather random example (think of a better one? let us know! ;-), to
-look up the states bordering Massachusetts, and specifcially the names of
-major cities in that state. Massachusetts is identified as the state with
-state code "MA". So what happens if we load this into cwm and do a --think?
-Nothing. Cwm just prints out the file reformatted. Now run it in remote query
-mode with schema fetch:</p>
-
-<p></p>
-<pre>cwm http://www.w3.org/2000/10/swap/test/dbork/defdoc2.n3 --mode=rse --think</pre>
-
-<p></p>
-
-<p>and -- voila -- we get:</p>
-<pre>    "Albany"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
-    
-    "Amherst"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
-    
-    "Avon"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
-
-    ...</pre>
-
-<p>and so on.</p>
-
-<p></p>
-
-<p>To do more fancy things, you can run cwm in a mode which loads the</p>
-
-<p></p>
-
-<p>By now you should know how to publish tables of useful infromation on the
-semantic web. You should know how to use published data and semantic web
-services and SQL servers to answer parts of your queries. You are starting to
-get into some useful scalable stuff, and the next thing you know you'll be
-needing to reign in your system before it explores the whole world. You'll be
-needing to think about trust. Fortunately, you already have some of the
-tools: you can write rules which keep track of data from different places
-separately. Now all you need is some crypto ....</p>
-
-<div class="noprint">
-<p>Next: Web of Trust</p>
-</div>
-<hr />
-
-<h2>Footnotes</h2>
-
-<p><a name="L4808" id="L4808">1.</a> Of course, the value of this function
-depends on the real world, which can change. Many systems either assume that
-other documents won't change, or accept that the information derived from
-them will change with them. It is would also possible to model the time at
-which a given representation of a document was returned by a server, and what
-expiry date was given, and so on, and the reader is welcome to experiment
-with such schemes where they are needed. Cwm does not currently( 2003/2)
-provide the functionality of looking inside the HTTP response to extract the
-protocol headers which convey time-related information.</p>
 <hr />
 
 <div class="noprint">
