@@ -4,7 +4,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <title>Primer - Getting into the semantic web and RDF using N3</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <link href="/People/Berners-Lee/general.css" rel="stylesheet"
   type="text/css" />
 </head>
@@ -31,11 +30,8 @@ in its XML syntax, but easier to scribble when getting started.</p>
 <p>In RDF, information is simply a collection of statements, each with a
 subject, verb and object - and nothing else. In N3, you can write an RDF
 triple just like that, with a period:</p>
-<pre>&lt;#pat&gt; &lt;#knows&gt; &lt;#jo&gt; .
+<pre>&lt;#pat&gt; &lt;#knows&gt; &lt;#jo&gt; .<br />
 </pre>
-<br />
-<br />
-
 
 <p>Everything, be it subject, verb, or object, is identified with a Universal
 Resource Identifier. This is something like &lt;http://www.w3.org/&gt; or
@@ -46,21 +42,17 @@ current document whatever it is.</p>
 <p>There is one exception that the object (only) can be a string representing
 a value:</p>
 <pre>&lt;#pat&gt; &lt;#knows&gt; &lt;#jo&gt; .
-&lt;#pat&gt; &lt;#age&gt; "24" .
-</pre>
+&lt;#pat&gt; &lt;#age&gt; "24" .</pre>
 
 <p>The verb "knows" is in RDF called a "property" and thought of as a noun
 expressing a relation between the two. In fact you can write</p>
-<pre>&lt;#pat&gt; &lt;#child&gt; &lt;#al&gt; .
-</pre>
+<pre>&lt;#pat&gt; &lt;#child&gt; &lt;#al&gt; .</pre>
 
 <p>alternatively, to make it more readable, as either</p>
-<pre>&lt;#pat&gt; has &lt;#child&gt; &lt;#al&gt; .
-</pre>
+<pre>&lt;#pat&gt; has &lt;#child&gt; &lt;#al&gt; .</pre>
 
 <p>or</p>
-<pre>&lt;#al&gt; is &lt;#child&gt; of &lt;#pat&gt; .
-</pre>
+<pre>&lt;#al&gt; is &lt;#child&gt; of &lt;#pat&gt; .</pre>
 
 <p>There are two shortcuts for when you have several statements about the
 same subject: a semicolon ";" introduces another property of the same
@@ -68,8 +60,7 @@ subject, and a comma introduces another object with the same predicate and
 subject.</p>
 <pre>&lt;#pat&gt; &lt;#child&gt;  &lt;#al&gt;, &lt;#chaz&gt;, &lt;#mo&gt; ;
        &lt;#age&gt;    "24" ;
-       &lt;#eyecolor&gt; "blue" .
-</pre>
+       &lt;#eyecolor&gt; "blue" .</pre>
 
 <p>So, for example, the data in the table</p>
 
@@ -101,15 +92,13 @@ subject.</p>
 <p>could be written</p>
 <pre>  &lt;#pat&gt;   &lt;#age&gt; "24";  &lt;#eyecolor&gt; "blue" .
   &lt;#al&gt;    &lt;#age&gt;  "3";  &lt;#eyecolor&gt; "green" .
-  &lt;#jo&gt;    &lt;#age&gt;  "5";  &lt;#eyecolor&gt; "green" .
-</pre>
+  &lt;#jo&gt;    &lt;#age&gt;  "5";  &lt;#eyecolor&gt; "green" .</pre>
 
 <p>Sometimes there are things involved in a statement don't actually have any
 identifier you want to give them - you know one exists but you only want to
 give the properties . You represent this by square brackets with the
 properties inside.</p>
-<pre>&lt;#pat&gt; &lt;#child&gt; [ &lt;#age&gt; "4" ] , [ &lt;#age&gt; "3" ].
-</pre>
+<pre>&lt;#pat&gt; &lt;#child&gt; [ &lt;#age&gt; "4" ] , [ &lt;#age&gt; "3" ].</pre>
 
 <p>You could read this as #pat has a #child which has #age of "4" and a
 #child which has an #age of "3". There are two important things to
@@ -130,8 +119,7 @@ remember</p>
 as</p>
 <pre>  [ &lt;#name&gt; "Pat"; &lt;#age&gt; "24";  &lt;#eyecolor&gt; "blue"  ].
   [ &lt;#name&gt; "Al" ; &lt;#age&gt;  "3";  &lt;#eyecolor&gt; "green" ].
-  [ &lt;#name&gt; "Jo" ; &lt;#age&gt;  "5";  &lt;#eyecolor&gt; "green" ].
-</pre>
+  [ &lt;#name&gt; "Jo" ; &lt;#age&gt;  "5";  &lt;#eyecolor&gt; "green" ].</pre>
 
 <p>There are many ways of combining square brackets - but you can figure that
 out from the examples later on. There is not much left learn about using N3
@@ -147,8 +135,7 @@ web, we share quite precisely by using exactly the same URI for the concept
 of title.</p>
 
 <p>I could try to give the title of an N3 document by</p>
-<pre>&lt;&gt; &lt;#title&gt;  "A simple example of N3".
-</pre>
+<pre>&lt;&gt; &lt;#title&gt;  "A simple example of N3".</pre>
 
 <p>(The &lt;&gt; being an empty URI reference always refers to the document
 it is written in.) The &lt;#title&gt; refers to the concept of #title as
@@ -160,16 +147,14 @@ title, which they gave the identifier</p>
 <p>&lt;http://purl.org/dc/elements/1.1/title&gt;. So we can make a much
 better defined statement if we say</p>
 <pre>&lt;&gt; &lt;http://purl.org/dc/elements/1.1/title&gt;
- "Primer - Getting into the Semantic Web and RDF using N3".
-</pre>
+ "Primer - Getting into the Semantic Web and RDF using N3".</pre>
 
 <p>That of course would be a bit verbose - imagine using such long
 identifiers for everything like #age and #eyecolor above. So N3 allows you to
 set up a shorthand prefix for the long part. This is called a namespace
 identifier, and you set it up using "@prefix" like this:</p>
 <pre>@prefix dc:  &lt;http://purl.org/dc/elements/1.1/&gt; .
-&lt;&gt; dc:title  "Primer - Getting into the semantic web and RDF using N3".
-</pre>
+&lt;&gt; dc:title  "Primer - Getting into the semantic web and RDF using N3".</pre>
 
 <p>Note that when you use a prefix, you use a colon instead of a hash between
 dc and title, and you don't use the &lt;angle brackets&gt; around the whole
@@ -185,19 +170,16 @@ it - and you can build your own for your own applications very simply.</p>
 save space, I will just assume the prefixes</p>
 <pre>@prefix rdf:  &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
 @prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
-@prefix ont:  &lt;http://www.daml.org/2001/03/daml-ont#&gt; .
-</pre>
+@prefix ont:  &lt;http://www.daml.org/2001/03/daml-ont#&gt; .</pre>
 
 <p>These are the RDF, RDF schema, and experimental DAML ontology namespaces,
 respectively. They give us the core terms which we can bootstrap ourselves
 into the semantic web. I am also going to assume that the empty prefix stands
 for the document we are writing, which we can say in N3 as</p>
-<pre>@prefix : &lt;#&gt; .
-</pre>
+<pre>@prefix : &lt;#&gt; .</pre>
 
 <p>This means we could have the example above as</p>
-<pre>:pat :child [ :age "4" ] , [ :age "3" ].
-</pre>
+<pre>:pat :child [ :age "4" ] , [ :age "3" ].</pre>
 <br />
 <br />
 
@@ -220,18 +202,11 @@ name="Class">Class</a></dfn> it belongs to.</p>
 <p>The property which tells you what type something is is
 <code>rdf:type</code> which can be abbreviated to N3 to just <code>a</code>.
 So we can define a class of person</p>
-<br />
-<br />
-
-<pre>:Person a rdfs:Class.
+<pre>:Person a rdfs:Class.<br />
 </pre>
-<br />
-<br />
-
 
 <p>In the same document, we could introduce an actual person</p>
-<pre>:Pat a :Person.
-</pre>
+<pre>:Pat a :Person.</pre>
 
 <p>Classes just tell you about the thing which is in them. An object can be
 in many classes. There doesn't have to be any hierarchical relationship --
@@ -239,16 +214,12 @@ think of Person, AnimateObject, Animal, TallPerson, Friend, and so on. If
 there is a relationship between two classes you can state it - check out the
 properties (of classes) in RDF Schema and the the <a
 href="http://www.daml.org/">DAML ontology</a> vocabularies.</p>
-<pre>:Woman a rdfs:Class; rdfs:subClassOf :Person .
+<pre>:Woman a rdfs:Class; rdfs:subClassOf :Person .<br />
 </pre>
-<br />
-<br />
-
 
 <p>A property is something which is used to declare a relationship between
 two things.</p>
-<pre>:sister a rdf:Property.
-</pre>
+<pre>:sister a rdf:Property.</pre>
 
 <p>Sometimes when a relationship exists between two things, you immediately
 know something about them, which you can express as a class. When the subject
@@ -257,8 +228,7 @@ id="domain">domain</a></dfn> of the property. When the object must be in a
 class, that class is called the <dfn><a name="range"
 id="range">range</a></dfn> of a property. A property can have many domains
 and ranges, but typically one specifies one.</p>
-<pre>:sister rdfs:domain :Person; rdfs:range :Woman.
-</pre>
+<pre>:sister rdfs:domain :Person; rdfs:range :Woman.</pre>
 
 <p>Note the class identifiers start with capitals and properties with lower
 case letters. This is not a rule, but it is a good convention to stick to.
@@ -275,8 +245,7 @@ machine or person dealing with the information! The property of equivalence
 between two terms is so useful and fundamental that N3 has a special
 shorthand for it, "=".</p>
 <pre>:Woman = foo:FemaleAdult .
-:Title a rdf:Property; = dc:title .
-</pre>
+:Title a rdf:Property; = dc:title .</pre>
 
 <p>Tip: Use other people's vocabularies when you can - it helps interchange
 of data. When you define your own vocabulary which includes synonyms, do
@@ -344,8 +313,7 @@ formula.</p>
 
 <p>In N3 a formula can be represented by enclosing all the statements it
 encloses in curly braces { } .</p>
-<pre>&lt;x.rdf&gt; :says {  :pat a :Person . } .
-</pre>
+<pre>&lt;x.rdf&gt; :says {  :pat a :Person . } .</pre>
 
 <p>The formula in braces acts just like an identifier in the rest of the
 syntax. It is like a literal expression in that it is defined only by its
@@ -365,24 +333,18 @@ the simplest sort of rule, all you need is one property:
 <code>log:implies</code>. (One engine which is programmed to process this is
 <a href="Overview.html">cwm</a>. Another is Euler.). The namespace for the
 logical and rather experimental things which we introduce now are as in</p>
-<pre>@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .
-</pre>
+<pre>@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .</pre>
 
-<p>A simple rule, then, is,</p>
-<br />
-<br />
-
-<pre>{ sensor:thermostat  math:greaterThan "30" . } log:implies { control:furnace control:setTo "1" . } .
-</pre>
+<p>A simple rule, then, is,<br />
+</p>
+<pre>{ sensor:thermostat  math:greaterThan "30" . } log:implies { control:furnace control:setTo "1" . } .</pre>
 
 <p>If a system is built which understands all the parts, this would allow it,
 give</p>
-<pre>sensor:thermostat  math:greaterThan "30" .
-</pre>
+<pre>sensor:thermostat  math:greaterThan "30" .</pre>
 
 <p>to conclude</p>
-<pre>control:furnace control:setTo "1".
-</pre>
+<pre>control:furnace control:setTo "1".</pre>
 
 <p>This rule is simple and useful, but in practice them more powerful rules
 can be applied to any identifiers. We nee a way of saying this. A given
@@ -390,8 +352,7 @@ formula is true even if the given identifier is replaced -- consistently
 throughout the context -- with any other identifier. This is represented by a
 magic "log:forAll" property of the formula.</p>
 <pre>this log:forAll :x, :y.
-{:x :parent :y} log:implies {:y :child :x}.
-</pre>
+{:x :parent :y} log:implies {:y :child :x}.</pre>
 
 <p>Read this something like: "This is true for any values of x and y. If x is
 the parent of y then y is the child of x." The <em>this</em> refers to the
@@ -400,8 +361,7 @@ formula expressed by the document if at the outer level.</p>
 
 <p>In fact you can use an ontology property to declare that parent and child
 are inverse.</p>
-<pre>:parent ont:inverse :child .
-</pre>
+<pre>:parent ont:inverse :child .</pre>
 
 <p>A machine can then infer the same thing given a generic rule</p>
 <pre>this log:forAll :p, :q .
@@ -410,8 +370,7 @@ are inverse.</p>
 
   { this log:forAll :x, :y.
       { :x :p :y. } log:implies { :y :q :x. }
-  } .
-</pre>
+  } .</pre>
 
 <p>The outer rule is that if p is the inverse of q, then the inside rule is a
 true one. The inner rule is that if x is the p of y, then y is the q x. The
@@ -424,10 +383,8 @@ expect there will be many different engines which make those decisions
 differently. Check the documentation of software near you.</p>
 
 <p>One program I hacked together is called <em>cwm</em>, (pronounced as in
-the welsh word with a short "oo"). Further examples will use that.</p>
-<br />
-<br />
-
+the welsh word with a short "oo"). Further examples will use that.<br />
+</p>
 
 <h2>Practical rules: Query information using a Filter</h2>
 <address>
@@ -435,9 +392,9 @@ the welsh word with a short "oo"). Further examples will use that.</p>
 </address>
 
 <p>Now that we know how to make a statements in N3, what can we do with them?
- One thing is to use them to add inferred knowledge to a store which already
+One thing is to use them to add inferred knowledge to a store which already
 contains data. Another thing is to extract useful information via a form of
-query called a <dfn><a name="filter1" id="filter1">filter</a></dfn>. </p>
+query called a <dfn><a name="filter1" id="filter1">filter</a></dfn>.</p>
 
 <p>In <a href="test/uncle.n3">uncle.n3</a> we state that Fred is the father
 Joe, and Bob is the brother of Fred; we also describe the logical rule for
@@ -448,8 +405,7 @@ the uncle relationship:</p>
 
 @prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .
 this log:forAll :who1, :who2.
-{ :who1 :father [ :brother :who2 ] } log:implies { :who1 :uncle :who2 }.
-</pre>
+{ :who1 :father [ :brother :who2 ] } log:implies { :who1 :uncle :who2 }.</pre>
 
 <p>This rule means "whenever someone's father has a brother, then the latter
 is their uncle". This rule, once is cwm's store, will cause <em><a
@@ -472,14 +428,12 @@ this log:forAll :p.
 
 # Is Bob an Uncle of Joe?
 
-{ :Joe :uncle :Bob } log:implies { :Joe :uncle :Bob }.
-</pre>
+{ :Joe :uncle :Bob } log:implies { :Joe :uncle :Bob }.</pre>
 
 <p>When we ask cwm to consider the implication it concludes:</p>
 <pre>&gt; python cwm.py uncle.n3 --think --filter=uncleF.n3
     :Joe     :uncle :Bob .
-    :uncle     a :RelationshipBetweeJoeAndBob .
-</pre>
+    :uncle     a :RelationshipBetweeJoeAndBob .</pre>
 
 <p>You can read the command line as <em>read uncle.n3 and the deduce any new
 information you can given any rules you have. Now just tell me the
