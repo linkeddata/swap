@@ -30,12 +30,20 @@ def doProduction(lhs):
 	raise RuntimeError("No definition of %s  in\n %s" %(`lhs`, `g`))
     options = rhs.value()
     print "Production %s :: %s" %(`lhs`, `options` )
-    
+    selectors = g.each(subj=lhs, pred=BNF.selector)
+    print "Selectors:", selectors
     for option in options:
 	print "  Option "+`option`
 	for part in option:
 #	    print "    Part: " + `part`
 	    if part not in already and part not in agenda: agenda.append(part)
+	for sel in selectors:
+	    str, branch = sel.value()
+	    print "Selector %s for %s" %(str, branch)
+	    if branch == rhs:
+		print "**** Selector %s for option %s" %(str, `branch`)
+    
+
 
 
 # The Grammar formula

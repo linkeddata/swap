@@ -19,6 +19,15 @@
 # - Use of dot for !
 # - datatypes and/or* languages in literals (*choice - follow RDF)
 
+# tokenizing:
+# Absorb anything until end of regexp, then stil white space
+#  period followed IMMEDIATELY by an opener or name char is taken as "!".
+#  Except after a "." used instead of in those circumstances,
+#	ws may be inserted between tokens.
+#  WS MUST be inserted between tokens where ambiguity would arise.
+#  (possible ending characters of one and beginning characters overlap)
+#
+
 <> bnf:syntaxFor [ bnf:internetMediaType 
 		<http://www.w3.org/2003/mediatypes#application/n3>].
 
@@ -29,14 +38,18 @@
 n3document a rul:Used;
 	bnf:mustBeOneSequence(
 	
-		( bnf:void ) 
 		(
 			[ bnf:zeroOrMore declaration ]
-			[ bnf:zeroOrMore  universal ]
+			[ bnf:zeroOrMore universal ]
 			[ bnf:zeroOrMore existential ]
-			[ bnf:zeroOrMore [ bnf:mustBeOneSequence((statement ".")) ] ]
+			statements_optional
+			bnf:eof
 		)
 	).
+
+statements_optional bnf:mustBeOneSequence (() ( statement "." statements_optional )).
+
+# Formula does NOT need period on last statement
 
 formulacontent bnf:mustBeOneSequence ((
 		[ bnf:zeroOrMore declaration ]
@@ -47,12 +60,12 @@ formulacontent bnf:mustBeOneSequence ((
 
 
 statementlist bnf:mustBeOneSequence (
-		( bnf:void )
+		( )
 		( statement statementtail )
 	).
 
 statementtail bnf:mustBeOneSequence (
-		( bnf:void)
+		( )
 		( "." statementlist )
 	).
 
@@ -88,18 +101,18 @@ statement bnf:mustBeOneSequence(( subject propertylist )).
 
 
 propertylist bnf:mustBeOneSequence (
-		( bnf:void )
+		( )
 		( verb  object objecttail propertylisttail )
 	).
 
 propertylisttail bnf:mustBeOneSequence (
-		( bnf:void )
+		( )
 		( ";" verb object objecttail propertylisttail )
 	).
 
 
 objecttail bnf:mustBeOneSequence (
-		(void)
+		( )
 		( ","   object objecttail )
 	).
 
@@ -131,7 +144,7 @@ path bnf:mustBeOneSequence(
 	).
 
 pathtail bnf:mustBeOneSequence(
-		( bnf:void )
+		(  )
 		( "!" path )
 		( "^" path )
 	).
@@ -152,7 +165,7 @@ anonnode bnf:mustBeOneSequence (
 		(  "("  itemlist ")"  )
 	).
 
-itemlist bnf:zeroOrMore item.
+itemlist bnf:mustBeOneSequence (() (item itemlist)).
  
 prefix bnf:mustBeOneSequence (
 		( alphanumeric )
@@ -192,12 +205,7 @@ string		bnf:matches		"""("([^"]|(\\\\"))*")""".
 
 #  Axioms reducing the shortcut BNF terms to bnf:musBeOneSequence.
 
-{ ?x bnf:zeroOrMore ?y } => {
-    ?x bnf:mustBeOneSequence (
-		( bnf:void )
-		( ?y ?x )
-	) 
-}.
+{ ?x bnf:zeroOrMore ?y } => {?x bnf:mustBeOneSequence ( () (?y ?x) ) }.
 
 
 { ?x bnf:commaSeparatedPeriodTerminatedListOf ?y } =>

@@ -20,7 +20,7 @@
 
 { ?x bnf:zeroOrMore ?y } => {
     ?x bnf:mustBeOneSequence (
-		( bnf:void )
+		( )
 		( ?y ?x )
 	) 
 }.
@@ -68,8 +68,8 @@ optionTail a log:Chaff.
 }.
 
 
-{ 	?x bnf:canBeSequence ( bnf:void );
-		canPrecede [bnf:canStartWith ?z]} =>  { ?x bnf:selector (?z ( bnf:void ))}.
+{ 	?x bnf:canBeSequence ();
+		canPrecede [bnf:canStartWith ?z]} =>  { ?x bnf:selector (?z ())}.
 
 
 {   	?x a Used; bnf:canBeSequence ?s.

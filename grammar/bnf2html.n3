@@ -80,14 +80,20 @@
 
 ############
 
-() seqlabel "".
+() seqlabel "<em>void</em>".
 
-bnf:void reference "<em>void</em>".
+bnf:eof  reference "<em>EOF</em>".
+
+# Start it, skipping use of the seqlabel of ():
+
+{ 	?seq a SequenceTail; rdf:first ?x; rdf:rest ().
+	?x reference ?lab1.
+} => { ?seq seqlabel  ?lab1 }.
 
 # This one takes forever:
 { 	?seq a SequenceTail; rdf:first ?x; rdf:rest ?tail.
 	?x reference ?lab1.
-	?tail seqlabel ?lab2.
+	?tail seqlabel ?lab2; rdf:rest [].  # Non-null
 	(?lab1 " " ?lab2) string:concatenation ?str
 } => { ?seq seqlabel  ?str }.
 
