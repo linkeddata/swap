@@ -9,6 +9,7 @@ CODE=retest.py ../cwm.py ../notation3.py ../query.py ../llyn.py
 # etc ...
 
 OFFLINETESTS=regression.n3 list/detailed.tests \
+	ql.detailed.tests \
 	math/detailed.tests \
 	norm/detailed.tests \
 	cwm/detailed.tests \
