@@ -66,6 +66,10 @@ it was raised (URI), who raised it (the issue author), and on what date.""".
 :reopener a r:Property; s:domain t:Issue; r:range doc:Work;
     s:comment  """A closed issue is re-openned.""".
 
+# IMPORTANT: Need date on accept, resolve, reject, reopener
+# messages since it may be difficult to get date out of
+# resource (e.g., may not always be in mail archives).
+
 # - Assigns?  Reassigns?
 # - Subsumed by? 
 # - Objection?  Minority report  Cancelation?
