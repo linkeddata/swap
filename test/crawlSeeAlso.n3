@@ -4,13 +4,41 @@
 # try
 # $ python cwm.py  --chatty=25 test/crawlSeeAlso.n3 --rdf http://rdfweb.org/people/danbri/rdfweb/webwho.xrdf  --think
 
+@prefix r: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+@prefix : <crawlSeeAlso#>.
+
+s:seeAlso a :InterestingProperty.
+
+#foaf:mbox a :InterestingProperty.
+#foaf:knows a :InterestingProperty.
+#foaf:depiction a :InterestingProperty.
+
+this log:forAll :S, :P, :O.
+
+
+{  <http://xmlns.com/foaf/0.1/index.rdf> log:semantics [
+     log:includes { :P a r:Property } ]
+} => { :P a :InterestingProperty }.
+
+
+
 
 { [] s:seeAlso [ log:semanticsOrError ?WHAT ].
 
   ?WHAT log:rawType log:Formula.
 
-  ?WHAT log:includes {  ?S ?P ?O }.
+  :P a :InterestingProperty.
+
+  ?WHAT log:includes {  :S :P :O }.
 }
-  => { ?S ?P ?O }.
+  => { :S :P :O }.
+
+# $Log$
+# Revision 1.2  2003-02-27 03:33:29  connolly
+# the ?S ?P ?O search didn't have any place to start.
+# we're grabbing :InterestingProperties from the foaf
+# schema now.
+#
