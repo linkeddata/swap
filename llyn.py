@@ -1147,11 +1147,13 @@ class RDFStore(RDFSink) :
         import cwm_os      # OS builtins
         import cwm_time    # time and date builtins
         import cwm_math    # Mathematics
+        import cwm_trigo   # Trignometry
         import cwm_times    # time and date builtins
         import cwm_maths   # Mathematics, perl/string style
 	import cwm_list	   # List handling operations
         cwm_string.register(self)
         cwm_math.register(self)
+        cwm_trigo.register(self)
         cwm_maths.register(self)
         cwm_os.register(self)
         cwm_time.register(self)
