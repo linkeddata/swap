@@ -225,6 +225,7 @@ class PredictiveParser:
 	parser.startOfLine = 0	# Offset in buffer
 	parser.keywords = [ "a", "is", "of", "this" ]
 	parser.verb = 1  # Verbosity
+	parser.keywordMode = 0  # In a keyword statement, adding keywords
 	
     def countLines(parser, buffer, here):
 	"""Count lines since called last time
@@ -232,6 +233,7 @@ class PredictiveParser:
 	Make sure we count all lines
 	"""
 	parser.lineNumber+= buffer[parser.startOfLine:here].count("\n")
+#	progress(">>>>%s<<<<<" % buffer[parser.startOfLine:here])
 	parser.startOfLine = here
 
     def token(parser, str, i):
@@ -249,12 +251,14 @@ class PredictiveParser:
 	if i == len(str):
 	    return "",  i # eof
 	
+	parser.countLines(str, i)
 	if parser.verb: progress( "%i) Looking at:  ...%s$%s..." % (
 	    parser.lineNumber, str[i-10:i],str[i:i+10]))
 	for double in "=>", "<=", "^^":
 	    if double == str[i:i+2]: return double, i
     
 	ch = str[i]
+	if ch == ".": parser.keywordMode = 0 # hack
 	if ch in singleCharacterSelectors:
 	    return ch, i
 	if ch in "+-0123456789":
@@ -264,7 +268,9 @@ class PredictiveParser:
             if i!=0 and whiteSpace.match(str[i-1]).end() == 0:
                 return ch, i
 	    while str[j] not in notNameChars: j = j + 1
-	    if str[i+1:j] == "keywords" : parser.keywords = [] # Special
+	    if str[i+1:j] == "keywords" :
+		parser.keywords = [] # Special
+		parser.keywordMode = 1
 	    return str[i:j], i # keyword
 	if ch == '"':  #"
 	    return '"', i #"
@@ -272,8 +278,12 @@ class PredictiveParser:
 	# Alphanumeric: keyword hacks
 	while str[j] not in notQNameChars: j = j+1
 	word = str[i:j]
+	if parser.keywordMode:
+	    parser.keywords.append(word)
 	if word in parser.keywords:
-	    if word == "keywords" : parser.keywords = []	# Special
+	    if word == "keywords" :
+		parser.keywords = []	# Special
+		parser.keywordMode = 1
 	    return "@" + word, i  # implicit keyword
 	return "a", i    # qname, langcode, or barename
 
