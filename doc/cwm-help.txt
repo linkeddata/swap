@@ -1,15 +1,15 @@
 Command line RDF/N3 tool
         
- <command> <options> <inputURIs>
+ &lt;command> &lt;options> &lt;inputURIs>
  
 --pipe        Don't store, just pipe out *
 
---rdf         Input & Output ** in RDF M&S 1.0 insead of n3 from now on
---n3          Input & Output in N3 from now on
---rdf=flags   Input & Output ** in RDF and set given RDF flags
---n3=flags    Input & Output in N3 and set N3 flags
---ntriples    Input & Output in NTriples (equiv --n3=spartan -bySubject -quiet)
---language=x  Input & Output in "x" (rdf, n3, etc)  --rdf same as: --language=rdf
+--rdf         Input &amp; Output ** in RDF M&amp;S 1.0 insead of n3 from now on
+--n3          Input &amp; Output in N3 from now on
+--rdf=flags   Input &amp; Output ** in RDF and set given RDF flags
+--n3=flags    Input &amp; Output in N3 and set N3 flags
+--ntriples    Input &amp; Output in NTriples (equiv --n3=spartan -bySubject -quiet)
+--language=x  Input &amp; Output in "x" (rdf, n3, etc)  --rdf same as: --language=rdf
 --languageOptions=y     --n3=sp same as:  --language=n3 --languageOptions=sp
 --ugly        Store input and regurgitate *
 --bySubject   Store input and regurgitate in subject order *
@@ -62,7 +62,7 @@ d   Don't use default namespace (empty prefix)
 i   Use identifiers from store - don't regen on output
 l   List syntax suppression. Don't use (..)
 n   No numeric syntax - use strings typed with ^^ syntax
-p   Prefix suppression - don't use them, always URIs in <> instead of qnames.
+p   Prefix suppression - don't use them, always URIs in &lt;> instead of qnames.
 q   Quiet - don't make comments about the environment in which processing was done.
 r   Relative URI suppression. Always use absolute URIs.
 s   Subject must be explicit for every statement. Don't use ";" shorthand.
@@ -80,7 +80,7 @@ t   "this" and "()" special syntax should be suppresed.
         S  - Strict spec. Unknown parse type treated as Literal instead of error.
         T  - take foreign XML as transparent and parse any RDF in it
              (default it is to ignore unless rdf:RDF at top level)
-	L  - If non-rdf attributes have no namespace prefix, assume in local <#> namespace
+	L  - If non-rdf attributes have no namespace prefix, assume in local &lt;#> namespace
 	D  - Assume default namespace decalred as local document is assume xmlns=""
 
 
