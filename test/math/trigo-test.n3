@@ -16,6 +16,7 @@ this log:forAll :x , :y , :z .
 
 #3.1415926535897931 a Pi.
 
+# test very simple
 { (0) math:asin :x } => { :x :valueOf "asin(0) = 0" } .
 { (1) math:acos :x } => { :x :valueOf "acos(1) = 0" } .
 
