@@ -1,0 +1,552 @@
+    
+    <http://www.daml.org/2001/03/daml+oil>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.daml.org/2001/03/daml+oil#Ontology> .
+    
+    <http://www.daml.org/2001/03/daml+oil>     <http://www.daml.org/2001/03/daml+oil#imports> <http://www.w3.org/2000/01/rdf-schema> .
+    
+    <http://www.daml.org/2001/03/daml+oil>     <http://www.daml.org/2001/03/daml+oil#versionInfo> "$Id$" .
+    
+    <http://www.daml.org/2001/03/daml+oil#first>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#first>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#List> .
+    
+    <http://www.daml.org/2001/03/daml+oil#UniqueProperty>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#UniqueProperty>     <http://www.w3.org/2000/01/rdf-schema#label> "UniqueProperty" .
+    
+    <http://www.daml.org/2001/03/daml+oil#UniqueProperty>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    compare with maxCardinality=1; e.g. integer successor:
+    if P is a UniqueProperty, then if P(x, y) and P(x, z) then y=z.
+    cf OIL FunctionalProperty.
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#UniqueProperty>     <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#subClassOf>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#subClassOf>     <http://www.daml.org/2001/03/daml+oil#samePropertyAs> <http://www.w3.org/2000/01/rdf-schema#subClassOf> .
+    
+    <http://www.daml.org/2001/03/daml+oil#unionOf>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#unionOf>     <http://www.w3.org/2000/01/rdf-schema#label> "unionOf" .
+    
+    <http://www.daml.org/2001/03/daml+oil#unionOf>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for unionOf(X, Y) read: X is the union of the classes in the list Y;
+    i.e. if something is in any of the classes in Y, it's in X, and vice versa.
+    cf OIL OR
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#unionOf>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#unionOf>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.daml.org/2001/03/daml+oil#List> .
+    
+    <http://www.daml.org/2001/03/daml+oil#hasClass>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#hasClass>     <http://www.w3.org/2000/01/rdf-schema#label> "hasClass" .
+    
+    <http://www.daml.org/2001/03/daml+oil#hasClass>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for onProperty(R, P) and hasClass(R, X), read:
+    i is in class R if and only if for some j, P(i, j) and type(j, X).
+    cf OIL HasValue
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#hasClass>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Restriction> .
+    
+    <http://www.daml.org/2001/03/daml+oil#hasClass>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#UnambiguousProperty>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#UnambiguousProperty>     <http://www.w3.org/2000/01/rdf-schema#label> "UnambiguousProperty" .
+    
+    <http://www.daml.org/2001/03/daml+oil#UnambiguousProperty>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    if P is an UnambiguousProperty, then if P(x, y) and P(z, y) then x=z.
+    aka injective. e.g. if firstBorne(m, Susan)
+    and firstBorne(n, Susan) then m and n are the same.
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#UnambiguousProperty>     <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.daml.org/2001/03/daml+oil#ObjectProperty> .
+    
+    <http://www.daml.org/2001/03/daml+oil#intersectionOf>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#intersectionOf>     <http://www.w3.org/2000/01/rdf-schema#label> "intersectionOf" .
+    
+    <http://www.daml.org/2001/03/daml+oil#intersectionOf>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for intersectionOf(X, Y) read: X is the intersection of the classes in the list Y;
+    i.e. if something is in all the classes in Y, then it's in X, and vice versa.
+    cf OIL AND
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#intersectionOf>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#intersectionOf>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.daml.org/2001/03/daml+oil#List> .
+    
+    <http://www.daml.org/2001/03/daml+oil#sameIndividualAs>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.daml.org/2001/03/daml+oil#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#sameIndividualAs>     <http://www.w3.org/2000/01/rdf-schema#label> "sameIndividualAs" .
+    
+    <http://www.daml.org/2001/03/daml+oil#sameIndividualAs>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for sameIndividualAs(a, b), read a is the same individual as b.
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#sameIndividualAs>     <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://www.daml.org/2001/03/daml+oil#equivalentTo> .
+    
+    <http://www.daml.org/2001/03/daml+oil#sameIndividualAs>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Thing> .
+    
+    <http://www.daml.org/2001/03/daml+oil#sameIndividualAs>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.daml.org/2001/03/daml+oil#Thing> .
+    
+    <http://www.daml.org/2001/03/daml+oil#minCardinality>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#minCardinality>     <http://www.w3.org/2000/01/rdf-schema#label> "minCardinality" .
+    
+    <http://www.daml.org/2001/03/daml+oil#minCardinality>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for onProperty(R, P) and minCardinality(R, n), read:
+    i is in class R if and only if there are at least n distinct j with P(i, j).
+    cf OIL MinCardinality
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#minCardinality>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Restriction> .
+    
+    <http://www.daml.org/2001/03/daml+oil#minCardinality>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2000/10/XMLSchema#nonNegativeInteger> .
+    
+    <http://www.daml.org/2001/03/daml+oil#item>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#item>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for item(L, I) read: I is an item in L; either first(L, I)
+    or item(R, I) where rest(L, R).
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#item>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#List> .
+    
+    <http://www.daml.org/2001/03/daml+oil#maxCardinalityQ>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#maxCardinalityQ>     <http://www.w3.org/2000/01/rdf-schema#label> "maxCardinality" .
+    
+    <http://www.daml.org/2001/03/daml+oil#maxCardinalityQ>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for onProperty(R, P), maxCardinalityQ(R, n) and hasClassQ(R, X), read:
+    i is in class R if and only if there are at most n distinct j with P(i, j)
+    and type(j, X).
+    cf OIL MaxCardinality
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#maxCardinalityQ>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Restriction> .
+    
+    <http://www.daml.org/2001/03/daml+oil#maxCardinalityQ>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2000/10/XMLSchema#nonNegativeInteger> .
+    
+    <http://www.daml.org/2001/03/daml+oil#value>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#value>     <http://www.daml.org/2001/03/daml+oil#samePropertyAs> <http://www.w3.org/1999/02/22-rdf-syntax-ns#value> .
+    
+    <http://www.daml.org/2001/03/daml+oil#ObjectProperty>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#ObjectProperty>     <http://www.w3.org/2000/01/rdf-schema#label> "ObjectProperty" .
+    
+    <http://www.daml.org/2001/03/daml+oil#ObjectProperty>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    if P is an ObjectProperty, and P(x, y), then y is an object.
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#ObjectProperty>     <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#cardinality>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#cardinality>     <http://www.w3.org/2000/01/rdf-schema#label> "cardinality" .
+    
+    <http://www.daml.org/2001/03/daml+oil#cardinality>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for onProperty(R, P) and cardinality(R, n), read:
+    i is in class R if and only if there are exactly n distinct j with P(i, j).
+    cf OIL Cardinality
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#cardinality>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Restriction> .
+    
+    <http://www.daml.org/2001/03/daml+oil#cardinality>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2000/10/XMLSchema#nonNegativeInteger> .
+    
+    <http://www.daml.org/2001/03/daml+oil#oneOf>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#oneOf>     <http://www.w3.org/2000/01/rdf-schema#label> "oneOf" .
+    
+    <http://www.daml.org/2001/03/daml+oil#oneOf>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+     for oneOf(C, L) read everything in C is one of the
+     things in L;
+     This lets us define classes by enumerating the members.
+     cf OIL OneOf
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#oneOf>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#oneOf>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.daml.org/2001/03/daml+oil#List> .
+    
+    <http://www.daml.org/2001/03/daml+oil#Restriction>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#Restriction>     <http://www.w3.org/2000/01/rdf-schema#label> "Restriction" .
+    
+    <http://www.daml.org/2001/03/daml+oil#Restriction>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    something is in the class R if it satisfies the attached restrictions, 
+    and vice versa.
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#Restriction>     <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.daml.org/2001/03/daml+oil#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#disjointWith>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#disjointWith>     <http://www.w3.org/2000/01/rdf-schema#label> "disjointWith" .
+    
+    <http://www.daml.org/2001/03/daml+oil#disjointWith>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for disjointWith(X, Y) read: X and Y have no members in common.
+    cf OIL Disjoint
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#disjointWith>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#disjointWith>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.daml.org/2001/03/daml+oil#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#equivalentTo>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.daml.org/2001/03/daml+oil#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#equivalentTo>     <http://www.w3.org/2000/01/rdf-schema#label> "equivalentTo" .
+    
+    <http://www.daml.org/2001/03/daml+oil#equivalentTo>     <http://www.daml.org/2001/03/daml+oil#comment> """
+    for equivalentTo(X, Y), read X is an equivalent term to Y.
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#TransitiveProperty>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#TransitiveProperty>     <http://www.w3.org/2000/01/rdf-schema#label> "TransitiveProperty" .
+    
+    <http://www.daml.org/2001/03/daml+oil#TransitiveProperty>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    if P is a TransitiveProperty, then if P(x, y) and P(y, z) then P(x, z).
+    cf OIL TransitiveProperty.
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#TransitiveProperty>     <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.daml.org/2001/03/daml+oil#ObjectProperty> .
+    
+    <http://www.daml.org/2001/03/daml+oil#Property>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#Property>     <http://www.daml.org/2001/03/daml+oil#sameClassAs> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#differentIndividualFrom>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.daml.org/2001/03/daml+oil#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#differentIndividualFrom>     <http://www.w3.org/2000/01/rdf-schema#label> "differentIndividualFrom" .
+    
+    <http://www.daml.org/2001/03/daml+oil#differentIndividualFrom>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for differentIndividualFrom(a, b), read a is not the same individual as b.
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#differentIndividualFrom>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Thing> .
+    
+    <http://www.daml.org/2001/03/daml+oil#differentIndividualFrom>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.daml.org/2001/03/daml+oil#Thing> .
+    
+    <http://www.daml.org/2001/03/daml+oil#Thing>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.daml.org/2001/03/daml+oil#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#Thing>     <http://www.w3.org/2000/01/rdf-schema#label> "Thing" .
+    
+    <http://www.daml.org/2001/03/daml+oil#Thing>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    The most general (object) class in DAML.
+    This is equal to the union of any class and its complement.
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#Thing>     <http://www.daml.org/2001/03/daml+oil#unionOf> _:0 .
+    
+    <http://www.daml.org/2001/03/daml+oil#List>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#List>     <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq> .
+    
+    <http://www.daml.org/2001/03/daml+oil#versionInfo>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#versionInfo>     <http://www.w3.org/2000/01/rdf-schema#label> "versionInfo" .
+    
+    <http://www.daml.org/2001/03/daml+oil#versionInfo>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    generally, a string giving information about this
+    version; e.g. RCS/CVS keywords
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#Datatype>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#Datatype>     <http://www.w3.org/2000/01/rdf-schema#label> "Datatype" .
+    
+    <http://www.daml.org/2001/03/daml+oil#Datatype>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    The class of all datatype classes
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#Datatype>     <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#nil>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.daml.org/2001/03/daml+oil#List> .
+    
+    <http://www.daml.org/2001/03/daml+oil#nil>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+     the empty list; this used to be called Empty.
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#inverseOf>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#inverseOf>     <http://www.w3.org/2000/01/rdf-schema#label> "inverseOf" .
+    
+    <http://www.daml.org/2001/03/daml+oil#inverseOf>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for inverseOf(R, S) read: R is the inverse of S; i.e.
+    if R(x, y) then S(y, x) and vice versa.
+    cf OIL inverseRelationOf
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#inverseOf>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#ObjectProperty> .
+    
+    <http://www.daml.org/2001/03/daml+oil#inverseOf>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.daml.org/2001/03/daml+oil#ObjectProperty> .
+    
+    <http://www.daml.org/2001/03/daml+oil#subPropertyOf>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#subPropertyOf>     <http://www.daml.org/2001/03/daml+oil#samePropertyAs> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> .
+    
+    <http://www.daml.org/2001/03/daml+oil#seeAlso>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#seeAlso>     <http://www.daml.org/2001/03/daml+oil#samePropertyAs> <http://www.w3.org/2000/01/rdf-schema#seeAlso> .
+    
+    <http://www.daml.org/2001/03/daml+oil#Class>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#Class>     <http://www.w3.org/2000/01/rdf-schema#label> "Class" .
+    
+    <http://www.daml.org/2001/03/daml+oil#Class>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    The class of all \"object\" classes
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#Class>     <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#type>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#type>     <http://www.daml.org/2001/03/daml+oil#samePropertyAs> <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> .
+    
+    <http://www.daml.org/2001/03/daml+oil#Ontology>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#Ontology>     <http://www.w3.org/2000/01/rdf-schema#label> "Ontology" .
+    
+    <http://www.daml.org/2001/03/daml+oil#Ontology>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    An Ontology is a document that describes
+    a vocabulary of terms for communication between
+    (human and) automated agents.
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#Nothing>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.daml.org/2001/03/daml+oil#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#Nothing>     <http://www.w3.org/2000/01/rdf-schema#label> "Nothing" .
+    
+    <http://www.daml.org/2001/03/daml+oil#Nothing>     <http://www.w3.org/2000/01/rdf-schema#comment> "the class with no things in it." .
+    
+    <http://www.daml.org/2001/03/daml+oil#Nothing>     <http://www.daml.org/2001/03/daml+oil#complementOf> <http://www.daml.org/2001/03/daml+oil#Thing> .
+    
+    <http://www.daml.org/2001/03/daml+oil#maxCardinality>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#maxCardinality>     <http://www.w3.org/2000/01/rdf-schema#label> "maxCardinality" .
+    
+    <http://www.daml.org/2001/03/daml+oil#maxCardinality>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for onProperty(R, P) and maxCardinality(R, n), read:
+    i is in class R if and only if there are at most n distinct j with P(i, j).
+    cf OIL MaxCardinality
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#maxCardinality>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Restriction> .
+    
+    <http://www.daml.org/2001/03/daml+oil#maxCardinality>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2000/10/XMLSchema#nonNegativeInteger> .
+    
+    <http://www.daml.org/2001/03/daml+oil#label>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#label>     <http://www.daml.org/2001/03/daml+oil#samePropertyAs> <http://www.w3.org/2000/01/rdf-schema#label> .
+    
+    <http://www.daml.org/2001/03/daml+oil#onProperty>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#onProperty>     <http://www.w3.org/2000/01/rdf-schema#label> "onProperty" .
+    
+    <http://www.daml.org/2001/03/daml+oil#onProperty>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for onProperty(R, P), read:
+    R is a restricted with respect to property P.
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#onProperty>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Restriction> .
+    
+    <http://www.daml.org/2001/03/daml+oil#onProperty>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#cardinalityQ>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#cardinalityQ>     <http://www.w3.org/2000/01/rdf-schema#label> "cardinality" .
+    
+    <http://www.daml.org/2001/03/daml+oil#cardinalityQ>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for onProperty(R, P), cardinalityQ(R, n) and hasClassQ(R, X), read:
+    i is in class R if and only if there are exactly n distinct j with P(i, j)
+    and type(j, X).
+    cf OIL Cardinality
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#cardinalityQ>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Restriction> .
+    
+    <http://www.daml.org/2001/03/daml+oil#cardinalityQ>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2000/10/XMLSchema#nonNegativeInteger> .
+    
+    <http://www.daml.org/2001/03/daml+oil#hasValue>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#hasValue>     <http://www.w3.org/2000/01/rdf-schema#label> "hasValue" .
+    
+    <http://www.daml.org/2001/03/daml+oil#hasValue>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for onProperty(R, P) and hasValue(R, V), read:
+    i is in class R if and only if P(i, V).
+    cf OIL HasFiller
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#hasValue>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Restriction> .
+    
+    <http://www.daml.org/2001/03/daml+oil#minCardinalityQ>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#minCardinalityQ>     <http://www.w3.org/2000/01/rdf-schema#label> "minCardinality" .
+    
+    <http://www.daml.org/2001/03/daml+oil#minCardinalityQ>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for onProperty(R, P), minCardinalityQ(R, n) and hasClassQ(R, X), read:
+    i is in class R if and only if there are at least n distinct j with P(i, j) 
+    and type(j, X).
+    cf OIL MinCardinality
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#minCardinalityQ>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Restriction> .
+    
+    <http://www.daml.org/2001/03/daml+oil#minCardinalityQ>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2000/10/XMLSchema#nonNegativeInteger> .
+    
+    <http://www.daml.org/2001/03/daml+oil#sameClassAs>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.daml.org/2001/03/daml+oil#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#sameClassAs>     <http://www.w3.org/2000/01/rdf-schema#label> "sameClassAs" .
+    
+    <http://www.daml.org/2001/03/daml+oil#sameClassAs>     <http://www.daml.org/2001/03/daml+oil#comment> """
+    for sameClassAs(X, Y), read X is an equivalent class to Y.
+    cf OIL Equivalent
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#sameClassAs>     <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://www.daml.org/2001/03/daml+oil#equivalentTo> .
+    
+    <http://www.daml.org/2001/03/daml+oil#sameClassAs>     <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://www.w3.org/2000/01/rdf-schema#subClassOf> .
+    
+    <http://www.daml.org/2001/03/daml+oil#sameClassAs>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#sameClassAs>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.daml.org/2001/03/daml+oil#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#range>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#range>     <http://www.daml.org/2001/03/daml+oil#samePropertyAs> <http://www.w3.org/2000/01/rdf-schema#range> .
+    
+    <http://www.daml.org/2001/03/daml+oil#isDefinedBy>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#isDefinedBy>     <http://www.daml.org/2001/03/daml+oil#samePropertyAs> <http://www.w3.org/2000/01/rdf-schema#isDefinedBy> .
+    
+    <http://www.daml.org/2001/03/daml+oil#isDefinedBy>     <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://www.daml.org/2001/03/daml+oil#seeAlso> .
+    
+    <http://www.daml.org/2001/03/daml+oil#samePropertyAs>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.daml.org/2001/03/daml+oil#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#samePropertyAs>     <http://www.w3.org/2000/01/rdf-schema#label> "samePropertyAs" .
+    
+    <http://www.daml.org/2001/03/daml+oil#samePropertyAs>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for samePropertyAs(P, R), read P is an equivalent property to R.
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#samePropertyAs>     <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://www.daml.org/2001/03/daml+oil#equivalentTo> .
+    
+    <http://www.daml.org/2001/03/daml+oil#samePropertyAs>     <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> <http://www.w3.org/2000/01/rdf-schema#subPropertyOf> .
+    
+    <http://www.daml.org/2001/03/daml+oil#Literal>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#Literal>     <http://www.daml.org/2001/03/daml+oil#sameClassAs> <http://www.w3.org/2000/01/rdf-schema#Literal> .
+    
+    <http://www.daml.org/2001/03/daml+oil#rest>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#rest>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#List> .
+    
+    <http://www.daml.org/2001/03/daml+oil#rest>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.daml.org/2001/03/daml+oil#List> .
+    
+    <http://www.daml.org/2001/03/daml+oil#imports>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#imports>     <http://www.w3.org/2000/01/rdf-schema#label> "imports" .
+    
+    <http://www.daml.org/2001/03/daml+oil#imports>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for imports(X, Y) read: X imports Y;
+    i.e. X asserts the* contents of Y by reference;
+    i.e. if imports(X, Y) and you believe X and Y says something,
+    then you should believe it.
+    Note: \"the contents\" is, in the general case,
+    an il-formed definite description. Different
+    interactions with a resource may expose contents
+    that vary with time, data format, preferred language,
+    requestor credentials, etc. So for \"the contents\",
+    read \"any contents\".
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#hasClassQ>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#hasClassQ>     <http://www.w3.org/2000/01/rdf-schema#label> "hasClassQ" .
+    
+    <http://www.daml.org/2001/03/daml+oil#hasClassQ>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    property for specifying class restriction with cardinalityQ constraints
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#hasClassQ>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Restriction> .
+    
+    <http://www.daml.org/2001/03/daml+oil#hasClassQ>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#complementOf>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#complementOf>     <http://www.w3.org/2000/01/rdf-schema#label> "complementOf" .
+    
+    <http://www.daml.org/2001/03/daml+oil#complementOf>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for complementOf(X, Y) read: X is the complement of Y; if something is in Y,
+    then it's not in X, and vice versa.
+    cf OIL NOT
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#complementOf>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#complementOf>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.daml.org/2001/03/daml+oil#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#toClass>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#toClass>     <http://www.w3.org/2000/01/rdf-schema#label> "toClass" .
+    
+    <http://www.daml.org/2001/03/daml+oil#toClass>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for onProperty(R, P) and toClass(R, X), read:
+    i is in class R if and only if for all j, P(i, j) implies type(j, X).
+    cf OIL ValueType
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#toClass>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Restriction> .
+    
+    <http://www.daml.org/2001/03/daml+oil#toClass>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#disjointUnionOf>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#disjointUnionOf>     <http://www.w3.org/2000/01/rdf-schema#label> "disjointUnionOf" .
+    
+    <http://www.daml.org/2001/03/daml+oil#disjointUnionOf>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    for disjointUnionOf(X, Y) read: X is the disjoint union of the classes in
+    the list Y: (a) for any c1 and c2 in Y, disjointWith(c1, c2),
+    and (b) unionOf(X, Y). i.e. if something is in any of the classes in Y, it's
+    in X, and vice versa.
+    cf OIL disjoint-covered
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#disjointUnionOf>     <http://www.w3.org/2000/01/rdf-schema#domain> <http://www.daml.org/2001/03/daml+oil#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#disjointUnionOf>     <http://www.w3.org/2000/01/rdf-schema#range> <http://www.daml.org/2001/03/daml+oil#List> .
+    
+    <http://www.daml.org/2001/03/daml+oil#DatatypeProperty>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/2000/01/rdf-schema#Class> .
+    
+    <http://www.daml.org/2001/03/daml+oil#DatatypeProperty>     <http://www.w3.org/2000/01/rdf-schema#label> "DatatypeProperty" .
+    
+    <http://www.daml.org/2001/03/daml+oil#DatatypeProperty>     <http://www.w3.org/2000/01/rdf-schema#comment> """
+    if P is a DatatypeProperty, and P(x, y), then y is a data value.
+  """ .
+    
+    <http://www.daml.org/2001/03/daml+oil#DatatypeProperty>     <http://www.w3.org/2000/01/rdf-schema#subClassOf> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#domain>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#domain>     <http://www.daml.org/2001/03/daml+oil#samePropertyAs> <http://www.w3.org/2000/01/rdf-schema#domain> .
+    
+    <http://www.daml.org/2001/03/daml+oil#comment>     <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> <http://www.w3.org/1999/02/22-rdf-syntax-ns#Property> .
+    
+    <http://www.daml.org/2001/03/daml+oil#comment>     <http://www.daml.org/2001/03/daml+oil#samePropertyAs> <http://www.w3.org/2000/01/rdf-schema#comment> .
+    
+    _:2     <http://www.daml.org/2001/03/daml+oil#complementOf> <http://www.daml.org/2001/03/daml+oil#Nothing> .
+    
+    _:0     <http://www.daml.org/2001/03/daml+oil#first> <http://www.daml.org/2001/03/daml+oil#Nothing> .
+    
+    _:0     <http://www.daml.org/2001/03/daml+oil#rest> _:1 .
+    
+    _:1     <http://www.daml.org/2001/03/daml+oil#first> _:2 .
+    
+    _:1     <http://www.daml.org/2001/03/daml+oil#rest> <http://www.daml.org/2001/03/daml+oil#nil> .
+    

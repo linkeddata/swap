@@ -1,0 +1,630 @@
+(exists (?x0 ?x2 ?x1 )
+ (and 
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Ontology)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#imports
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#versionInfo
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil
+     "$Id$")
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#first
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#first
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#List)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#UniqueProperty
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#UniqueProperty
+     "UniqueProperty")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#UniqueProperty
+     "\n    compare with maxCardinality=1; e.g. integer successor:\n    if P is a UniqueProperty, then if P(x, y) and P(x, z) then y=z.\n    cf OIL FunctionalProperty.\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subClassOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#UniqueProperty
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#subClassOf
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#samePropertyAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#subClassOf
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subClassOf)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#unionOf
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#unionOf
+     "unionOf")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#unionOf
+     "\n    for unionOf(X, Y) read: X is the union of the classes in the list Y;\n    i.e. if something is in any of the classes in Y, it's in X, and vice versa.\n    cf OIL OR\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#unionOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#unionOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#List)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#hasClass
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#hasClass
+     "hasClass")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#hasClass
+     "\n    for onProperty(R, P) and hasClass(R, X), read:\n    i is in class R if and only if for some j, P(i, j) and type(j, X).\n    cf OIL HasValue\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#hasClass
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Restriction)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#hasClass
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#UnambiguousProperty
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#UnambiguousProperty
+     "UnambiguousProperty")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#UnambiguousProperty
+     "\n    if P is an UnambiguousProperty, then if P(x, y) and P(z, y) then x=z.\n    aka injective. e.g. if firstBorne(m, Susan)\n    and firstBorne(n, Susan) then m and n are the same.\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subClassOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#UnambiguousProperty
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#ObjectProperty)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#intersectionOf
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#intersectionOf
+     "intersectionOf")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#intersectionOf
+     "\n    for intersectionOf(X, Y) read: X is the intersection of the classes in the list Y;\n    i.e. if something is in all the classes in Y, then it's in X, and vice versa.\n    cf OIL AND\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#intersectionOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#intersectionOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#List)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#sameIndividualAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#sameIndividualAs
+     "sameIndividualAs")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#sameIndividualAs
+     "\n    for sameIndividualAs(a, b), read a is the same individual as b.\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subPropertyOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#sameIndividualAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#equivalentTo)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#sameIndividualAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Thing)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#sameIndividualAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Thing)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#minCardinality
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#minCardinality
+     "minCardinality")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#minCardinality
+     "\n    for onProperty(R, P) and minCardinality(R, n), read:\n    i is in class R if and only if there are at least n distinct j with P(i, j).\n    cf OIL MinCardinality\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#minCardinality
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Restriction)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#minCardinality
+     http\:\/\/www\.w3\.org\/2000\/10\/XMLSchema\#nonNegativeInteger)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#item
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#item
+     "\n    for item(L, I) read: I is an item in L; either first(L, I)\n    or item(R, I) where rest(L, R).\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#item
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#List)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#maxCardinalityQ
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#maxCardinalityQ
+     "maxCardinality")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#maxCardinalityQ
+     "\n    for onProperty(R, P), maxCardinalityQ(R, n) and hasClassQ(R, X), read:\n    i is in class R if and only if there are at most n distinct j with P(i, j)\n    and type(j, X).\n    cf OIL MaxCardinality\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#maxCardinalityQ
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Restriction)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#maxCardinalityQ
+     http\:\/\/www\.w3\.org\/2000\/10\/XMLSchema\#nonNegativeInteger)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#value
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#samePropertyAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#value
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#value)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#ObjectProperty
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#ObjectProperty
+     "ObjectProperty")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#ObjectProperty
+     "\n    if P is an ObjectProperty, and P(x, y), then y is an object.\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subClassOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#ObjectProperty
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#cardinality
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#cardinality
+     "cardinality")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#cardinality
+     "\n    for onProperty(R, P) and cardinality(R, n), read:\n    i is in class R if and only if there are exactly n distinct j with P(i, j).\n    cf OIL Cardinality\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#cardinality
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Restriction)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#cardinality
+     http\:\/\/www\.w3\.org\/2000\/10\/XMLSchema\#nonNegativeInteger)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#oneOf
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#oneOf
+     "oneOf")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#oneOf
+     "\n     for oneOf(C, L) read everything in C is one of the\n     things in L;\n     This lets us define classes by enumerating the members.\n     cf OIL OneOf\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#oneOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#oneOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#List)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Restriction
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Restriction
+     "Restriction")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Restriction
+     "\n    something is in the class R if it satisfies the attached restrictions, \n    and vice versa.\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subClassOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Restriction
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#disjointWith
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#disjointWith
+     "disjointWith")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#disjointWith
+     "\n    for disjointWith(X, Y) read: X and Y have no members in common.\n    cf OIL Disjoint\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#disjointWith
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#disjointWith
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#equivalentTo
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#equivalentTo
+     "equivalentTo")
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#equivalentTo
+     "\n    for equivalentTo(X, Y), read X is an equivalent term to Y.\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#TransitiveProperty
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#TransitiveProperty
+     "TransitiveProperty")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#TransitiveProperty
+     "\n    if P is a TransitiveProperty, then if P(x, y) and P(y, z) then P(x, z).\n    cf OIL TransitiveProperty.\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subClassOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#TransitiveProperty
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#ObjectProperty)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Property
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#sameClassAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Property
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#differentIndividualFrom
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#differentIndividualFrom
+     "differentIndividualFrom")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#differentIndividualFrom
+     "\n    for differentIndividualFrom(a, b), read a is not the same individual as b.\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#differentIndividualFrom
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Thing)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#differentIndividualFrom
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Thing)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Thing
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Thing
+     "Thing")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Thing
+     "\n    The most general (object) class in DAML.\n    This is equal to the union of any class and its complement.\n  ")
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#unionOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Thing
+     ?x0)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#List
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subClassOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#List
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Seq)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#versionInfo
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#versionInfo
+     "versionInfo")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#versionInfo
+     "\n    generally, a string giving information about this\n    version; e.g. RCS/CVS keywords\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Datatype
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Datatype
+     "Datatype")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Datatype
+     "\n    The class of all datatype classes\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subClassOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Datatype
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#nil
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#List)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#nil
+     "\n     the empty list; this used to be called Empty.\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#inverseOf
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#inverseOf
+     "inverseOf")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#inverseOf
+     "\n    for inverseOf(R, S) read: R is the inverse of S; i.e.\n    if R(x, y) then S(y, x) and vice versa.\n    cf OIL inverseRelationOf\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#inverseOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#ObjectProperty)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#inverseOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#ObjectProperty)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#subPropertyOf
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#samePropertyAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#subPropertyOf
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subPropertyOf)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#seeAlso
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#samePropertyAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#seeAlso
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#seeAlso)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class
+     "Class")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class
+     "\n    The class of all \\\"object\\\" classes\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subClassOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#type
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#samePropertyAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#type
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Ontology
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Ontology
+     "Ontology")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Ontology
+     "\n    An Ontology is a document that describes\n    a vocabulary of terms for communication between\n    (human and) automated agents.\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Nothing
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Nothing
+     "Nothing")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Nothing
+     "the class with no things in it.")
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#complementOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Nothing
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Thing)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#maxCardinality
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#maxCardinality
+     "maxCardinality")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#maxCardinality
+     "\n    for onProperty(R, P) and maxCardinality(R, n), read:\n    i is in class R if and only if there are at most n distinct j with P(i, j).\n    cf OIL MaxCardinality\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#maxCardinality
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Restriction)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#maxCardinality
+     http\:\/\/www\.w3\.org\/2000\/10\/XMLSchema\#nonNegativeInteger)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#label
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#samePropertyAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#label
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#onProperty
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#onProperty
+     "onProperty")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#onProperty
+     "\n    for onProperty(R, P), read:\n    R is a restricted with respect to property P.\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#onProperty
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Restriction)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#onProperty
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#cardinalityQ
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#cardinalityQ
+     "cardinality")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#cardinalityQ
+     "\n    for onProperty(R, P), cardinalityQ(R, n) and hasClassQ(R, X), read:\n    i is in class R if and only if there are exactly n distinct j with P(i, j)\n    and type(j, X).\n    cf OIL Cardinality\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#cardinalityQ
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Restriction)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#cardinalityQ
+     http\:\/\/www\.w3\.org\/2000\/10\/XMLSchema\#nonNegativeInteger)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#hasValue
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#hasValue
+     "hasValue")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#hasValue
+     "\n    for onProperty(R, P) and hasValue(R, V), read:\n    i is in class R if and only if P(i, V).\n    cf OIL HasFiller\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#hasValue
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Restriction)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#minCardinalityQ
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#minCardinalityQ
+     "minCardinality")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#minCardinalityQ
+     "\n    for onProperty(R, P), minCardinalityQ(R, n) and hasClassQ(R, X), read:\n    i is in class R if and only if there are at least n distinct j with P(i, j) \n    and type(j, X).\n    cf OIL MinCardinality\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#minCardinalityQ
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Restriction)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#minCardinalityQ
+     http\:\/\/www\.w3\.org\/2000\/10\/XMLSchema\#nonNegativeInteger)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#sameClassAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#sameClassAs
+     "sameClassAs")
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#sameClassAs
+     "\n    for sameClassAs(X, Y), read X is an equivalent class to Y.\n    cf OIL Equivalent\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subPropertyOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#sameClassAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#equivalentTo)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subPropertyOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#sameClassAs
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subClassOf)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#sameClassAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#sameClassAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#range
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#samePropertyAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#range
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#isDefinedBy
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#samePropertyAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#isDefinedBy
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#isDefinedBy)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subPropertyOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#isDefinedBy
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#seeAlso)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#samePropertyAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#samePropertyAs
+     "samePropertyAs")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#samePropertyAs
+     "\n    for samePropertyAs(P, R), read P is an equivalent property to R.\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subPropertyOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#samePropertyAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#equivalentTo)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subPropertyOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#samePropertyAs
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subPropertyOf)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Literal
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#sameClassAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Literal
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Literal)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#rest
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#rest
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#List)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#rest
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#List)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#imports
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#imports
+     "imports")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#imports
+     "\n    for imports(X, Y) read: X imports Y;\n    i.e. X asserts the* contents of Y by reference;\n    i.e. if imports(X, Y) and you believe X and Y says something,\n    then you should believe it.\n    Note: \\\"the contents\\\" is, in the general case,\n    an il-formed definite description. Different\n    interactions with a resource may expose contents\n    that vary with time, data format, preferred language,\n    requestor credentials, etc. So for \\\"the contents\\\",\n    read \\\"any contents\\\".\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#hasClassQ
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#hasClassQ
+     "hasClassQ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#hasClassQ
+     "\n    property for specifying class restriction with cardinalityQ constraints\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#hasClassQ
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Restriction)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#hasClassQ
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#complementOf
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#complementOf
+     "complementOf")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#complementOf
+     "\n    for complementOf(X, Y) read: X is the complement of Y; if something is in Y,\n    then it's not in X, and vice versa.\n    cf OIL NOT\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#complementOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#complementOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#toClass
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#toClass
+     "toClass")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#toClass
+     "\n    for onProperty(R, P) and toClass(R, X), read:\n    i is in class R if and only if for all j, P(i, j) implies type(j, X).\n    cf OIL ValueType\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#toClass
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Restriction)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#toClass
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#disjointUnionOf
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#disjointUnionOf
+     "disjointUnionOf")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#disjointUnionOf
+     "\n    for disjointUnionOf(X, Y) read: X is the disjoint union of the classes in\n    the list Y: (a) for any c1 and c2 in Y, disjointWith(c1, c2),\n    and (b) unionOf(X, Y). i.e. if something is in any of the classes in Y, it's\n    in X, and vice versa.\n    cf OIL disjoint-covered\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#disjointUnionOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#range
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#disjointUnionOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#List)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#DatatypeProperty
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#Class)
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#label
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#DatatypeProperty
+     "DatatypeProperty")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#DatatypeProperty
+     "\n    if P is a DatatypeProperty, and P(x, y), then y is a data value.\n  ")
+  (PropertyValue http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#subClassOf
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#DatatypeProperty
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#domain
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#samePropertyAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#domain
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#domain)
+  (PropertyValue http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#type
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#comment
+     http\:\/\/www\.w3\.org\/1999\/02\/22\-rdf\-syntax\-ns\#Property)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#samePropertyAs
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#comment
+     http\:\/\/www\.w3\.org\/2000\/01\/rdf\-schema\#comment)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#complementOf
+     ?x2
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Nothing)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#first
+     ?x0
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#Nothing)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#rest
+     ?x0
+     ?x1)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#first
+     ?x1
+     ?x2)
+  (PropertyValue http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#rest
+     ?x1
+     http\:\/\/www\.daml\.org\/2001\/03\/daml\+oil\#nil)
+) )
