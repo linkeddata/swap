@@ -18,8 +18,9 @@
     s:range log:String. 
 :title a rdf:Property;
     s:comment "Short title, less than one line".
+
 :notes a rdf:Property;
-    s:comment "Commenst about this eg for the use of group secretary 
+    s:comment "Commenst about this eg for the use of group secretary". 
 
 # State changes
 
