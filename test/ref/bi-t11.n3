@@ -10,8 +10,8 @@
                 :d,
                 :o,
                 :p,
-                :s1,
                 :s,
+                :s1,
                 :x,
                 :y .
     
@@ -42,18 +42,32 @@
     
     log:implies     a log:Chaff .
     {
+        <foo.n3>     log:semantics :F .
         :F     log:includes {:blue     a rdf:Property .
             } .
-        <foo.n3>     log:semantics :F .
         
         }     log:implies {:includesTest     a :FAILURE .
         } .
     {
+        <foo.n3>     log:semantics :F .
         :F     log:includes {:is     a rdf:Property .
             } .
-        <foo.n3>     log:semantics :F .
         
         }     log:implies {:includesTest3     a :success .
+        } .
+    {
+        <foo.n3>     log:semantics :F .
+        :F     log:notIncludes {:blue     a rdf:Property .
+            } .
+        
+        }     log:implies {:includesTest2     a :success .
+        } .
+    {
+        <foo.n3>     log:semantics :F .
+        :F     log:notIncludes {:is     a rdf:Property .
+            } .
+        
+        }     log:implies {:includesTest4     a :FAILURE .
         } .
     {
         :F     log:includes {:p     a rdf:Property .
@@ -68,20 +82,6 @@
         <t10a.n3>     log:semantics :F .
         
         }     log:implies {:p     a :UsedProperty .
-        } .
-    {
-        :F     log:notIncludes {:blue     a rdf:Property .
-            } .
-        <foo.n3>     log:semantics :F .
-        
-        }     log:implies {:includesTest2     a :success .
-        } .
-    {
-        :F     log:notIncludes {:is     a rdf:Property .
-            } .
-        <foo.n3>     log:semantics :F .
-        
-        }     log:implies {:includesTest4     a :FAILURE .
         } .
     {
         :F     log:notIncludes {:p     a rdf:Property .

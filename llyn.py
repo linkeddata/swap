@@ -599,6 +599,7 @@ def _indent(str):
 
 class BuiltInFailed(Exception):
     def __init__(self, info, item):
+        progress("@@@@@@@@@ BUILTIN FAILED")
         self._item = item
         self._info = info
         
@@ -689,8 +690,7 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
         if thing.verbosity() > 50:
             progress("Conjunction input:"+`subj_py`)
             for x in subj_py:
-                progress("    one input formula has %i statements"
-                         % len(x))
+                progress("    conjunction input formula %s has %i statements" % (x, x.size()))
 #        F = conjunctionCache.get(subj_py, None)
 #        if F != None: return F
         F = store.genid(FORMULA)
@@ -1635,8 +1635,10 @@ class RDFStore(RDFSink.RDFSink) :
         _total = 0
         
         for s in filterContext.statements:
-            t = s.quad
-            if t[PRED] is self.implies:
+            con, pred, subj, obj  = s.quad
+            if (pred is self.implies
+                and isinstance(subj, Formula)
+                and isinstance(obj, Formula)):
                 if alreadyDictionary == None:
                     already = None
                 else:
@@ -1648,12 +1650,12 @@ class RDFStore(RDFSink.RDFSink) :
                 found = self.tryRule(s, workingContext, targetContext, v2,
                                      already=already)
                 if (thing.verbosity() >40):
-                    progress( "Found %i new stmts on for rule %s" % (found, quadToString(t)))
+                    progress( "Found %i new stmts on for rule %s" % (found, s))
                 _total = _total+found
             else:
                 c = None
-                if t[PRED] is self.asserts and t[SUBJ] is filterContext: c=t[OBJ]
-                elif t[PRED] is self.type and t[OBJ] is self.Truth: c=t[SUBJ]
+#                if pred is self.asserts and subj is filterContext: c=obj
+                if pred is self.type and obj is self.Truth: c=subj
 # We could shorten the rule format if forAll(x,y) asserted truth of y too, but this messes up
 # { x foo y } forAll x,y; log:implies {...}. where truth is NOT asserted. This line would do it:
 #                elif t[PRED] is self.forAll and t[SUBJ] is filterContext: c=t[SUBJ]  # DanC suggestion @@

@@ -14,6 +14,13 @@
                 :z;
          log:forSome <sameDan.n3#_g0> .
     
+    <sameDan.n3>     <http://purl.org/dc/elements/1.1/creator> <sameDan.n3#_g0>;
+         <http://purl.org/dc/elements/1.1/description> """rules for determining when two terms denote
+the same thing.""";
+         <http://purl.org/dc/elements/1.1/relation> <forgetDups.n3>;
+         <http://purl.org/dc/elements/1.1/rights> "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
+         rcs:id "" .
+    
     <sameDan.n3#_g0>     <sameDan.n3#birthPlace> <sameDan.n3#KC>;
          <sameDan.n3#hairColor> <sameDan.n3#red>;
          = <sameDan.n3#_g0>;
@@ -22,13 +29,6 @@
          contact:mailbox <mailto:connolly@w3.org> .
     
     <sameDan.n3#test1>     a <sameDan.n3#Success> .
-    
-    <sameDan.n3>     <http://purl.org/dc/elements/1.1/creator> <sameDan.n3#_g0>;
-         <http://purl.org/dc/elements/1.1/description> """rules for determining when two terms denote
-the same thing.""";
-         <http://purl.org/dc/elements/1.1/relation> <forgetDups.n3>;
-         <http://purl.org/dc/elements/1.1/rights> "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
-         rcs:id "" .
     
     <sameThing.n3>     <http://purl.org/dc/elements/1.1/creator> <sameDan.n3#_g0>;
          <http://purl.org/dc/elements/1.1/description> "substituion of equals for equals in triples, plus some rules for unambiguous/unique properties (@@that probably belong elsewhere)";

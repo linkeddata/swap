@@ -15,16 +15,20 @@
                 foo:x,
                 foo:y .
     
-    foo:result     foo:is {this     log:forAll v:c1,
+    foo:result     foo:is {this     log:forAll v:c,
+                    v:c1,
                     v:c2,
-                    v:c,
+                    v:p,
                     v:p1,
                     v:p2,
-                    v:p,
                     v:x,
                     v:y,
                     v:z;
              log:forSome :_g0 .
+        <../daml-ex.n3>     a dpo:Ontology;
+             dpo:comment "An example ontology";
+             dpo:imports <http://www.daml.org/2000/10/daml-ont>;
+             dpo:versionInfo "" .
         :Adam     a dpo:Person;
              dpo:comment "Adam is a person.";
              dpo:label "Adam" .
@@ -109,10 +113,7 @@
              dpo:cardinality "2";
              dpo:domain :Animal;
              s:domain :Animal .
-        <../daml-ex.n3>     a dpo:Ontology;
-             dpo:comment "An example ontology";
-             dpo:imports <http://www.daml.org/2000/10/daml-ont>;
-             dpo:versionInfo "" .
+        <../invalid-ex.n3>     dpo:imports <../daml-ex.n3> .
         <../invalid-ex.n3#alex>     :father <../invalid-ex.n3#joe> .
         <../invalid-ex.n3#bill>     :mother <../invalid-ex.n3#joe> .
         <../invalid-ex.n3#disjointTest>     a :Animal,
@@ -129,7 +130,6 @@
                     :Person,
                     :Woman,
                     v:schemaInconsistency .
-        <../invalid-ex.n3>     dpo:imports <../daml-ex.n3> .
         v:schemaInconsistency     dpo:subPropertyOf log:Falsehood;
              s:subPropertyOf log:Falsehood .
         dpo:domain     = s:domain .
@@ -209,18 +209,6 @@
             }     log:implies {v:x     a v:c2 .
             } .
         {
-            v:p1     = v:p2 .
-            v:x     v:p1 v:y .
-            
-            }     log:implies {v:x     v:p2 v:y .
-            } .
-        {
-            v:p1     s:range v:c .
-            v:p2     s:subPropertyOf v:p1 .
-            
-            }     log:implies {v:p2     s:range v:c .
-            } .
-        {
             v:p     s:domain v:c .
             v:x     v:p v:y .
             
@@ -231,6 +219,18 @@
             v:x     v:p v:y .
             
             }     log:implies {v:y     a v:c .
+            } .
+        {
+            v:p1     = v:p2 .
+            v:x     v:p1 v:y .
+            
+            }     log:implies {v:x     v:p2 v:y .
+            } .
+        {
+            v:p1     s:range v:c .
+            v:p2     s:subPropertyOf v:p1 .
+            
+            }     log:implies {v:p2     s:range v:c .
             } .
         {
             v:x     a v:y,

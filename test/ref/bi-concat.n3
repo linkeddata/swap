@@ -28,13 +28,13 @@
     
     :test13h     a :success .
     
+    :www     :is "WorldWideWeb" .
+    
     :www2     :is "WorldWideWeb" .
     
     :www3     :is "WorldWIDEWeb" .
     
     :www5     :is "WorldWideWeb" .
-    
-    :www     :is "WorldWideWeb" .
     
     log:implies     a log:Chaff .
     {
@@ -53,6 +53,11 @@
         }     log:implies {:test13c     a :success .
         } .
     {
+        :www     :is "WorldWideWeb" .
+        
+        }     log:implies {:test13d     a :success .
+        } .
+    {
         :www2     :is "WorldWideWeb" .
         
         }     log:implies {:test13e     a :success .
@@ -66,11 +71,6 @@
         :www5     :is "WorldWideWeb" .
         
         }     log:implies {:test13h     a :success .
-        } .
-    {
-        :www     :is "WorldWideWeb" .
-        
-        }     log:implies {:test13d     a :success .
         } .
     {
         :x     string:concat () .
