@@ -353,7 +353,7 @@ class Parser:
 	"""
 	xyz:def -> ('xyz', 'def')
 	def -> ('', 'def')                   @@@@
-	:def -> (None, 'def')
+	:def -> ('', 'def')    
 	"""
 
 	j = self.skipSpace(str, i)
@@ -371,7 +371,7 @@ class Parser:
 		    i = i + 1
 		else: break
 	else:
-	    ln = None
+            ln = ''   # Was:  None - TBL (why? useful?)
 
 	if i<len(str) and str[i] == ':':
 	    pfx = ln
@@ -934,9 +934,11 @@ class RDFSink:
 class ToRDF(RDFSink):
     """keeps track of most recent subject, reuses it"""
 
-    def __init__(self, outFp):
+    def __init__(self, outFp, thisURI):
+        RDFSink.__init__(self)
 	self._wr = XMLWriter(outFp)
 	self._subj = None
+	self._thisDoc = intern(thisURI)
 
     #@@I18N
     _namechars = string.lowercase + string.uppercase + string.digits + '_'
@@ -1532,11 +1534,24 @@ bind dc: &lt;http://purl.org/dc/elements/1.1/&gt;
 #################################################  Command line
     
 def doCommand():
+        """Command line RDF/N3 tool
+        
+ <command> <options> <inputURis>
+ -pipe      Don't store, just pipe out
+ -rdf1out   Output in RDF M&S 1.0 insead of n3
+ -ugly      Store input and regurgidate *
+ -bySubject Store inpyt and regurgitate in subject order *
+            (default is to pretty print anonymous nodes) *
+ -help      print this message
+ -chatty    Verbose output of questionable use
+ 
+"""
+        
         import urllib
-        option_ugly = 0     # Store and regurgitate with genids
+        option_ugly = 0     # Store and regurgitate with genids *
         option_pipe = 0     # Don't store, just pipe though
         option_rdf1out = 0  # Output in RDF M&S 1.0 instead of N3
-        option_bySubject= 0 # Store and regurgitate in subject order
+        option_bySubject= 0 # Store and regurgitate in subject order *
         option_inputs = []
         chatty = 0          # not too verbose please
         hostname = "localhost" # @@@@@@@@@@@ Get real one
@@ -1546,8 +1561,11 @@ def doCommand():
             elif arg == "-ugly": option_ugly = 1
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-bySubject": option_bySubject = 1
-            elif arg == "-rdf1out": option_rdfout = 1
+            elif arg == "-rdf1out": option_rdf1out = 1
             elif arg == "-chatty": chatty = 1
+            elif arg == "-help":
+                print self.__doc__
+                return
             elif arg[0] == "-": print "Unknown option", arg
             else : option_inputs.append(arg)
 
@@ -1558,7 +1576,7 @@ def doCommand():
 	
         _outURI = urlparse.urljoin(_baseURI, "STDOUT")
 	if option_rdf1out:
-            _outSink = ToRDF(sys.stdout)
+            _outSink = ToRDF(sys.stdout, _outURI)
         else:
             _outSink = SinkToN3(sys.stdout.write, _outURI)
 
