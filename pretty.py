@@ -528,6 +528,7 @@ class Serializer:
 
     def _dumpNode(self, node):
         tm = self.tm
+        _anon, _incoming = self._topology(node, context)
         if isinstance(node, List):
             tm.startList()
             [self._dumpNode(x) for x in node]
@@ -538,7 +539,11 @@ class Serializer:
             tm.startFormula()
             self._dumpFormula(node)
             tm.endFormula()
+        elif _anon:
+            pass
         
+    def _dumbFormula(self, node):
+        pass
 
     def dumpFormulaContents(self, context, sink, sorting, equals=0):
         """ Iterates over statements in formula, bunching them up into a set
