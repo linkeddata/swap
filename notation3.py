@@ -1,4 +1,4 @@
-#! /usr/bin/python
+#! /usr/bin/env python
 """
 $Id$
 
@@ -34,6 +34,8 @@ TBL: more cool things:
  - Find superclass closure?
  - Use unambiguous property to infer synomnyms
 
+ - Separate the store hash table from the parser. (Intern twice?!)
+ 
  Manipulation:
   { } as notation for bag of statements
   - filter 
@@ -51,9 +53,11 @@ import urlparse
 import re
 
 
-PRED = 0  # offsets when a statement is stored as a Python triple (p, s, o)
-SUBJ = 1
-OBJ = 2
+CONTEXT = 0
+PRED = 1  # offsets when a statement is stored as a Python tuple (p, s, o, c)
+SUBJ = 2
+OBJ = 3
+
 PARTS = [ PRED, SUBJ, OBJ]
 
 chatty = 0   # verbosity flag
@@ -63,7 +67,7 @@ option_noregen = 0   # If set, do not regenerate genids on output
 N3CommentCharacter = "#"     # For unix script #! compatabilty
 
 class Parser:
-    def __init__(self, thisDoc, baseURI="", bindings = {}):
+    def __init__(self, thisDoc, baseURI="", bindings = {}, varPrefix = "_v"):
 	""" note: namespace names should *not* end in #;
 	the # will get added during qname processing """
 	if baseURI == "" : self._baseURI = thisDoc
@@ -72,6 +76,7 @@ class Parser:
 	self._thisDoc = intern(thisDoc)
 	self.context = self._thisDoc    # For storing with triples
         self.contextStack = []      # For nested conjunctions { ... }
+        self.varPrefix = varPrefix
 
     def feed(self, str):
 	"""if BadSyntax is raised, the string
@@ -102,7 +107,7 @@ class Parser:
             
 	    return j
 
-    def makeStatement(self, context, triple):
+    def makeStatement(self, triple):
 	pass
 
     #@@I18N
@@ -141,7 +146,7 @@ class Parser:
 	self.bind(t[0][0], t[1])
 	return j
 
-    def bind(self, qname, resource):
+    def bind(self, qn, resource):
         pass                            # Hook for subclasses
 
     def statement(self, str, i):
@@ -275,9 +280,9 @@ class Parser:
 		for obj in objs:
 		    dir, sym = v[0]
 		    if dir == '->':
-			self.makeStatement(self.context, (sym, subj, obj))
+			self.makeStatement((self.context, sym, subj, obj))
 		    else:
-			self.makeStatement(self.context, (sym, obj, subj))
+			self.makeStatement((self.context, sym, obj, subj))
 
 		j = self.tok(';', str, i)
 		if j<0:
@@ -315,30 +320,36 @@ class Parser:
 		    raise BadSyntax(str, i, "prefix not bound")
 	    res.append(internFrag(ns, ln))
 	    return j
-	else:
-	    j = self.skipSpace(str, i)
-	    if j<0: return -1
-	    else: i=j
 
-	    if str[i]=="<":
-		i = i + 1
-		st = i
-		while i < len(str):
-		    if str[i] == ">":
-			uref = str[st:i]
-			if uref == '':
-			    sym = self._thisDoc
-			else:
-			    if self._baseURI:
-				uref=urlparse.urljoin(self._baseURI, uref)
-			    #@@else: if it's not absolute, BadSyntax
-			    sym = intern(uref)
-			res.append(sym)
-			return i+1
-		    i = i + 1
-		raise BadSyntax(str, o, "unterminated URI reference")
-	    else:
-		return -1
+        v = []
+        j = self.variable(str,i,v)
+        if j>0:
+            res.append(internVariable(self._thisDoc,v[0]))
+            return j
+        
+        j = self.skipSpace(str, i)
+        if j<0: return -1
+        else: i=j
+
+        if str[i]=="<":
+            i = i + 1
+            st = i
+            while i < len(str):
+                if str[i] == ">":
+                    uref = str[st:i]
+                    if uref == '':
+                        sym = self._thisDoc
+                    else:
+                        if self._baseURI:
+                            uref=urlparse.urljoin(self._baseURI, uref)
+                        #@@else: if it's not absolute, BadSyntax
+                        sym = intern(uref)
+                    res.append(sym)
+                    return i+1
+                i = i + 1
+            raise BadSyntax(str, o, "unterminated URI reference")
+        else:
+            return -1
 
     def skipSpace(self, str, i):
 	while 1:
@@ -350,6 +361,22 @@ class Parser:
                     i = i + 1
             else: break
 	return i
+
+    def variable(self, str, i, res):
+	"""	?abc -> 'abc'
+  	"""
+
+	j = self.skipSpace(str, i)
+	if j<0: return -1
+
+        if str[j:j+1] != "?": return -1
+        j=j+1
+        i = j
+	while i <len(str) and str[i] in self._namechars:
+            i = i+1
+        res.append( self.varPrefix + str[j:i])
+#        print "Variable found: <<%s>>" % str[j:i]
+        return i
 
     def qname(self, str, i, res):
 	"""
@@ -467,8 +494,8 @@ class SinkParser(Parser):
 	Parser.__init__(self, thisDoc, baseURI, bindings)
 	self._sink = sink
 
-    def bind(self, qname, uriref):
-        self._sink.bind(qname, uriref)                            # Hook for subclasses
+    def bind(self, qn, uriref):
+        self._sink.bind(qn, uriref)                            # Hook for subclasses
 
     def startDoc(self):
         self._sink.startDoc()
@@ -476,8 +503,8 @@ class SinkParser(Parser):
     def endDoc(self):
         self._sink.endDoc()
 
-    def makeStatement(self, context, triple):
-        self._sink.makeStatement(context, triple)
+    def makeStatement(self, triple):
+        self._sink.makeStatement(triple)
 
 #####
 # Symbol support
@@ -521,7 +548,7 @@ def intern_old(str):
 
 class Thing:
     def __init__(self):
-        self.occursAs = [], [], []  #  List of statements in store by part of speech       
+#      self.occursAs = [], [], [], []  #  List of statements in store by part of speech       
             
     def __repr__(self):   # only used for debugging I think
         return self.representation()
@@ -551,16 +578,18 @@ class Thing:
                 (s.subject is self and s.object is x)):
                 return s
         return None
-
-    def occurrences(self, p, context):
+    
+# @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+# Use  store.occurrences[thing][context][occurrence]   dict, list, list
+    def occurrences(self, x, p, context):
         """ Count the times a thing occurs in a statement in given context
         """
         if context == None:
-            return len(self.occursAs(p))
+            return len(self.occurrences[x][p])
         else:
             n = 0
-            for s in self.occursAs[p]:
-                if s.context is context:
+            for s in self.occurrences[x][p]:
+                if s.triple[CONTEXT] is context:
                     n = n+1
             return n
         
@@ -622,11 +651,8 @@ class Anonymous(Fragment):
         return 1
     
 class Variable(Fragment):
-    def __init__(self, resource):
-        Fragment.__init__(self, resource, "_v"+ `resource.newId()`)
-
-    def representation(self, base=None):
-        return ":" + self.fragid;
+    def __init__(self, resource, fragid):
+        Fragment.__init__(self, resource, fragid)
 
         
 class Literal(Thing):
@@ -663,12 +689,6 @@ def uri_encode(str):
                 result.append(str[i])
         return result
     
-class Variable(Thing):
-    def __init__(self, name):
-        self.name = name
-
-    def __repr__(self):
-        return "?" + self.name
         
 def intern(uriref):
     """  Returns either a Fragment or a Resource as appropriate
@@ -708,7 +728,7 @@ def internVariable(r, fragid):  #@@@ untested
         try:
             return r.fragments[fragid]
         except KeyError:
-            f = Variable(r)
+            f = Variable(r, fragid)
             r.fragments[f.fragid] = f
             return f
             
@@ -917,7 +937,7 @@ class RDFSink:
             else:
                 self.bind(prefix+"g1", ns) # Recurive
         
-    def makeStatement(self, context, tuple):
+    def makeStatement(self, tuple):
         pass
 
     def startDoc(self):
@@ -956,7 +976,7 @@ class ToRDF(RDFSink):
 	self._subj = None
 	self._wr.endElement()
 
-    def makeStatement(self, context, tuple):
+    def makeStatement(self,  tuple):
         pred, subj, obj = tuple
 	predn = relativeTo(self._thisDoc, pred)
 	subjn = relativeTo(self._thisDoc, subj)
@@ -1108,14 +1128,14 @@ class SinkToN3(RDFSink):
     def endDoc(self):
 	self._endStatement()
 
-    def makeStatement(self, context, triple):
-        self._makeSubjPred(context, triple[SUBJ], triple[PRED])        
+    def makeStatement(self, triple):
+        self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])        
         self._write(self.representationOf(triple[OBJ]))
 #        self._write(" (in %s) " % `context`)    #@@@@
         
 # Below is for writing an anonymous node which is the object of only one arc        
-    def startAnonymous(self, context, triple):
-        self._makeSubjPred(context, triple[SUBJ], triple[PRED])
+    def startAnonymous(self,  triple):
+        self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
         self.indent = self.indent + 1
         self._write(" [ \n"+ "    " * self.indent + "    ")
         self._subj = triple[OBJ]    # The object is now the current subject
@@ -1141,6 +1161,18 @@ class SinkToN3(RDFSink):
         self._subj = None
         self._pred = None
 
+# Below we notate a nested bag of statements
+
+    def startBag(self, context):
+        self.indent = self.indent + 1
+        self._write(" { \n"+ "    " * self.indent + "    ")
+
+    def endBag(self, subj):    # Remove context
+        self._write(" }\n")
+        self._subj = subj
+        self._pred = None
+        self.indent = self.indent - 1
+     
     def _makeSubjPred(self, context, subj, pred):
         
 	if self._subj is not subj:
@@ -1211,15 +1243,52 @@ class StringWriter:
 ######################################################## Storage
 # The store uses an index in the actual resource objects.
 #
+#   store.occurs[context, thing][partofspeech]   dict, list, ???
 
+class StoredThing:
+
+    def __init__(self, thing):
+        self.thing = thing
+        self.contains = {}   # First is dummy
+        # c.contains[p][PRED] is list of statements (c, p, * ,* ) 
+
+class StoredStatement:
+
+    def __init__(self, q)
+        self.triple = q
+        
 class RDFStore(RDFSink) :
     """ Absorbs RDF stream and saves in triple store
     """
 
     def __init__(self):
-        self.statements = []    # Unordered
         RDFSink.__init__(self)
+        self.storedThings = {}         # occurrences of [interned!] URIs in the store
 
+# Input methods:
+
+    def makeStatement(self, tuple):
+        q = None, None, None, None
+        for p in CONTEXT, PRED, SUBJ, OBJ : q[p] = stored(tuple[p])
+        statement = StoredStatement(q)
+        for p in PRED, SUBJ, OBJ: self.addIndex(statement, q[p], p)
+        
+
+# Record that x has occured in part of speech p in statement in context c
+    def index(self, statement, x, p):
+        l = context.contains.get(x, None)
+        if l : l[p].append(x)
+        else:
+            l = [], [], [], []
+            l[p] = [ statement ]
+            context.contains[x] = l
+
+    def stored(self, thing):
+            """ Intern thing """"
+            st = self.things.get(thing, None)
+            if st return st
+            self.things[thing] = StoredThing(thing)
+            
     def startDoc(self):
         pass
 
@@ -1254,22 +1323,18 @@ class RDFStore(RDFSink) :
         self.prefixes[mp] = ""
         self.namespaces[""] = mp
         
-# Input methods:
-
-    def makeStatement(self, context, tuple):
-        s = RDFTriple(context, tuple) # @@ duplicate check?
-        self.statements.append(s)
-
 # Manipulation methods:
 
     def moveContext(self, old, new):
         for s in self.statements :
-            if s.context == old: s.context = new
+            t = s.triple
+#            print "Quad:", `s.triple`, "Old, new:",`old`, `new`
+            if t[CONTEXT] == old: s.triple = new, t[PRED], t[SUBJ], t[OBJ]
             
     def copyContext(self, old, new):
         for s in self.statements :
-            if s.context == old:
-                self.makeStatement(new, s.triple)
+            if s.triple[CONTEXT] == old:
+                self.makeStatement((new, s.triple[PRED], s.triple[SUBJ], s.triple[OBJ]))
             
 # Output methods:
 
@@ -1280,7 +1345,7 @@ class RDFStore(RDFSink) :
         for c in self.prefixes.items():   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
         for s in self.statements :
-            sink.makeStatement(s.context, s.triple)
+            sink.makeStatement(s.triple)
         sink.endDoc()
 
     def dumpBySubject(self, context, sink):
@@ -1292,13 +1357,13 @@ class RDFStore(RDFSink) :
 
         for r in Resource.table.values() :  # First the bare resource
             for s in r.occursAs[SUBJ] :
-                if context is s.context:
-                    sink.makeStatement(s.context, s.triple)
+                if context is s.triple[CONTEXT]:
+                    sink.makeStatement(s.triple)
             for f in r.fragments.values() :  # then anything in its namespace
                 for s in f.occursAs[SUBJ] :
-#                    print "...dumping %s in context %s" % (`s.context`, `context`)
-                    if s.context is context:
-                        sink.makeStatement(s.context, s.triple)
+#                    print "...dumping %s in context %s" % (`s.triple[CONTEXT]`, `context`)
+                    if s.triple[CONTEXT] is context:
+                        sink.makeStatement(s.triple)
         sink.endDoc()
 #
 #  Pretty printing
@@ -1321,51 +1386,60 @@ class RDFStore(RDFSink) :
     def _dumpSubject(self, subj, context, sink):
         """ Take care of top level anonymous nodes
         """
+        print "%s occures %i as context, %i as pred, %i as subj, %i as obj" % (
+            `subj`, subj.occurrences(CONTEXT, None),
+            subj.occurrences(PRED,context), subj.occurrences(SUBJ,context),
+            subj.occurrences(OBJ, context))
         if (subj.generated() and  # The URI is irrelevant
                 subj.occurrences(OBJ,context) == 0 and  # There is no incoming arrow
                 subj.occurrences(PRED,context) == 0 ):    # It is not used as a verb itself
             if subj.occurrences(SUBJ,context) > 0 :   # Ignore if actually no statements for this thing
                 sink.startAnonymousNode(subj)
                 for s in subj.occursAs[SUBJ]:
-                    if s.context is context:
-                        self.coolMakeStatement(sink, context, s.triple)
+                    if s.triple[CONTEXT] is context:
+                        self.coolMakeStatement(sink, s.triple)
                 sink.endAnonymousNode()
+            if subj.occurrences(CONTEXT, None) > 0:  # @@@ only dumps of no statemenst about it
+                sink.startBag(subj)
+                raise theRoof
+                self.dumpNested(subj, sink)  # dump contents of anonymous bag
+                sink.endBag(subj)
+
         else:
             for s in subj.occursAs[SUBJ]:
-                if s.context is context:
-                    self.coolMakeStatement(sink, context, s.triple)
+                if s.triple[CONTEXT] is context:
+                    self.coolMakeStatement(sink, s.triple)
 
-    def coolMakeStatement(self, sink, context, triple):
+    def coolMakeStatement(self, sink, triple):
      
         if triple[SUBJ] is triple[OBJ]:
-            sink.makeStatement(context, triple)
+            sink.makeStatement(triple)
         else:
-            if not triple[SUBJ].n3_anonymous(context):
-                self.coolMakeStatement2(sink, context, triple)
+            if not triple[SUBJ].n3_anonymous(triple[CONTEXT]):  # Don't repeat
+                self.coolMakeStatement2(sink, triple)
                 
-    def coolMakeStatement2(self, sink, context, triple):
+    def coolMakeStatement2(self, sink, triple):
      
-        if triple[OBJ].n3_anonymous(context):  # Can be represented as anonymous node in N3
-            sink.startAnonymous(context, triple)
+        if triple[OBJ].n3_anonymous(triple[CONTEXT]):  # Can be represented as anonymous node in N3
+            sink.startAnonymous( triple)
             for t in triple[OBJ].occursAs[SUBJ]:
-                if t.context is context:
-                    self.coolMakeStatement2(sink, t.context, t.triple)
+                if t.triple[CONTEXT] is triple[CONTEXT]:
+                    self.coolMakeStatement2(sink, t.triple)
             sink.endAnonymous(triple[SUBJ], triple[PRED]) # Restore context
         else:    
-            sink.makeStatement(context, triple)
+            sink.makeStatement(triple)
                 
 
 
             
 class RDFTriple:
     
-    def __init__(self, context, triple):
-        self.context = context
+    def __init__(self, triple):
         self.triple = triple
         triple[SUBJ].occursAs[SUBJ].append(self)   # Resource index
         triple[PRED].occursAs[PRED].append(self)   # Resource index
         triple[OBJ].occursAs[OBJ].append(self)     # Resource index
-        
+        triple[CONTEXT].occursAs[CONTEXT].append(self) #
 
 ############################################################## Query engine
 
