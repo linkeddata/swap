@@ -185,7 +185,7 @@ and if data-valued, then what type?</li>
 </p>
 
 <pre>
-CREATE TEMPORARY TABLE resource ( 
+CREATE TABLE resource ( 
   id INT PRIMARY KEY,
   type INT,           # http://www.w3.org/1999/02/22-rdf-syntax-ns#type
   name varchar(255),  # http://www.example.org/PersonalNotes#name
@@ -212,12 +212,12 @@ there is no support for inheritance.
 </p>
 
 <pre>
-CREATE TEMPORARY TABLE human (  # http://www.example.org/BiologicalOrganisms#Human
+CREATE TABLE human (  # http://www.example.org/BiologicalOrganisms#Human
   id INT PRIMARY KEY,
   name varchar(255),  # http://www.example.org/PersonalNotes#name
   pet INT             # http://www.example.org/PersonalNotes#pet
 );
-CREATE TEMPORARY TABLE dog (  # http://www.example.org/BiologicalOrganisms#Dog
+CREATE TABLE dog (  # http://www.example.org/BiologicalOrganisms#Dog
   id INT PRIMARY KEY,
   name varchar(255)   # http://www.example.org/PersonalNotes#name
 );
@@ -238,19 +238,19 @@ mysql> select * from human, dog where human.pet=dog.id;
 <p>Here we can support duplicate values.</p>
 
 <pre>
-CREATE TEMPORARY TABLE name (  # http://www.example.org/PersonalNotes#name
+CREATE TABLE name (  # http://www.example.org/PersonalNotes#name
   subject INT NOT NULL,
   object varchar(255),
   INDEX(subject),
   UNIQUE INDEX(subject, object)
 );
-CREATE TEMPORARY TABLE pet (   # http://www.example.org/PersonalNotes#pet
+CREATE TABLE pet (   # http://www.example.org/PersonalNotes#pet
   subject INT NOT NULL,
   object INT,
   INDEX(subject),
   UNIQUE INDEX(subject, object)
 );
-CREATE TEMPORARY TABLE type (   # http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+CREATE TABLE type (   # http://www.w3.org/1999/02/22-rdf-syntax-ns#type
   subject INT NOT NULL,
   object INT,
   INDEX(subject),
@@ -292,7 +292,7 @@ mysql> select * from type;
 <p>If we redo our URIs table as a "resources" table, with literals as
 well as URIs, we have some more options.</p>
 <pre>
-CREATE TEMPORARY TABLE resources (
+CREATE TABLE resources (
   id INT AUTO_INCREMENT PRIMARY KEY,    # PRIMARY = UNIQUE and NOT NULL
   # either provide a uri
   uri BLOB, 
@@ -333,7 +333,7 @@ mysql> select * from resources;
 <p>Then we can have a simple table of triples:</p>
 
 <pre>
-CREATE TEMPORARY TABLE triples (
+CREATE TABLE triples (
   subject INT NOT NULL,
   predicate INT NOT NULL,
   object INT NOT NULL,
@@ -360,17 +360,22 @@ mysql> select * from triples;
 |       7 |         4 |     10 |
 +---------+-----------+--------+
 
-mysql> select s.uri, s.literal_value, 
-p.uri, o.uri, o.literal_value
-from triples, 
-resources as s, resources as p, resources as o
-where 
- s.id=triples.subject AND
- p.id=triples.predicate AND
- o.id=triples.object;
-
-    ** DOESNT WORK **   EricP?
-
+mysql> select s.id, s.uri, p.uri as "predicate", 
+       o.id, o.uri, o.literal_value as "lit"
+       from triples, resources as s, resources as p, resources as o
+       where s.id=triples.subject AND
+             p.id=triples.predicate AND
+             o.id=triples.object;
++----+------+-------------------------------------------------+----+--------------------------------------------------+---------------+
+| id | uri  | predicate                                       | id | uri                                              | lit           |
++----+------+-------------------------------------------------+----+--------------------------------------------------+---------------+
+|  6 | #pat | http://www.w3.org/1999/02/22-rdf-syntax-ns#type |  2 | http://www.example.org/BiologicalOrganisms#Human | NULL          |
+|  6 | #pat | http://www.example.org/PersonalNotes#name       |  8 | NULL                                             | Pat Smith     |
+|  6 | #pat | http://www.example.org/PersonalNotes#name       |  9 | NULL                                             | Patrick Smith |
+|  6 | #pat | http://www.example.org/PersonalNotes#pet        |  7 | NULL                                             | NULL          |
+|  7 | NULL | http://www.w3.org/1999/02/22-rdf-syntax-ns#type |  3 | http://www.example.org/BiologicalOrganisms#Dog   | NULL          |
+|  7 | NULL | http://www.example.org/PersonalNotes#name       | 10 | NULL                                             | Rover         |
++----+------+-------------------------------------------------+----+--------------------------------------------------+---------------+
 </pre>
 
 
