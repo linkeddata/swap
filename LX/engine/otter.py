@@ -24,6 +24,15 @@ class SOSEmpty(NoProofFound):
     for a proof"""
     pass
 
+def kill(pid):
+    #print "kill -TERM ", pid
+    os.kill(pid, signal.SIGTERM)
+    time.sleep(0.10)
+    #print "kill -KILL ", pid, child.pid
+    os.kill(pid, signal.SIGKILL)
+    os.kill(child.pid, signal.SIGKILL)
+    time.sleep(0.10)
+
 def think(kb=None):
     print "\n\n# Running Otter..."
     try:
@@ -102,13 +111,7 @@ def runOtter(toOtterFilename, fromOtterFilename=None, maxSeconds=1):
             else:
                 timeout = 1
                 try:
-                    #print "kill -TERM ", pid
-                    os.kill(pid, signal.SIGTERM)
-                    time.sleep(0.10)
-                    #print "kill -KILL ", pid, child.pid
-                    os.kill(pid, signal.SIGKILL)
-                    os.kill(child.pid, signal.SIGKILL)
-                    time.sleep(0.10)
+                    kill(pid)
                 except OSError, e:   # should only pass "No such process"
                     if (str(e) == "[Errno 3] No such process"):
                         pass
@@ -128,8 +131,15 @@ def runOtter(toOtterFilename, fromOtterFilename=None, maxSeconds=1):
             if line == "Search stopped because sos empty.\n":
                 sosEmpty = 1
         outputLog.close()
-    except KeyboardInterrupt:
-        print "Caught Interrupt, now what?"
+    except KeyboardInterrupt, k:
+        print
+        print "Caught Interrupt; killing sub-reasoner process"
+        try:
+            kill(pid)
+        except OSError:
+            pass
+        raise KeyboardInterrupt, k
+
     message = "During:\n   otter < %s > %s" % (toOtterFilename, fromOtterFilename)
     if result == []:
         if timeout:

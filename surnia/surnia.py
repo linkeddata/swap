@@ -216,7 +216,10 @@ class MyArgHandler(ArgHandler.ArgHandler):
         print "Loading %s..." % testURI,
         store.load(testURI)
         print "  Done."
-        runTests(store)
+        try:
+            runTests(store)
+        except KeyboardInterrupt, k:
+            print "KeyboardInterrupt"
 
     def handle__maxSeconds(self, timeLimit=1):
         """Time limit for each run of the underlying reasoner.
