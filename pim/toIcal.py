@@ -84,6 +84,8 @@ class CalWr:
             w("BEGIN:VEVENT"+CRLF)
             txt = self.textProp(kb, ctx, "summary", event)
             self.textProp(kb, ctx, "description", event)
+            self.textProp(kb, ctx, "location", event)
+            self.textProp(kb, ctx, "priority", event)
             uid = self.textProp(kb, ctx, "uid", event)
 
             # 4.8.2.4 Date/Time Start
@@ -93,7 +95,7 @@ class CalWr:
 
             other = ctx.statementsMatching(None, event, None)
             for s in other:
-                if str(s[PRED]) not in ('dtstart', 'dtend', 'uid', 'summary', 'description'):
+                if str(s[PRED]) not in ('dtstart', 'dtend', 'uid', 'summary', 'location', 'priority', 'description'):
                     progress("@@skipping ", s[PRED], " of [", txt, "] = [", \
                              s[OBJ], "]")
             w("END:VEVENT"+CRLF)
@@ -165,7 +167,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.4  2002-08-28 22:00:24  connolly
+# Revision 1.5  2002-09-22 21:53:44  connolly
+# handle location, priority
+#
+# Revision 1.4  2002/08/28 22:00:24  connolly
 # updated to diag interface
 #
 # Revision 1.3  2002/07/23 23:09:31  connolly
