@@ -217,7 +217,7 @@ class SinkParser:
 
 
     #@@I18N
-    _namechars = string.lowercase + string.uppercase + string.digits + '_'
+    _namechars = string.lowercase + string.uppercase + string.digits + '_-'
 
     def tok(self, tok, str, i):
         """tokenizer strips whitespace and comment"""
@@ -1507,23 +1507,19 @@ def convert(form, env):
 
     serviceDomain = 'w3.org' #@@ should compute this from env['SCRIPT_NAME']
          # or whatever; cf. CGI spec
-    thisMessage = 'mid:t%s-r%f@%s' % (time.time(), random.random(), serviceDomain)
 
     data = form['data'].value
 
-    if form.has_key('genspace'):
-	genspace = form['genspace'].value
-    else: genspace = thisMessage + '#_'
-
     if form.has_key('baseURI'):	baseURI = form['baseURI'].value
     elif env.has_key('HTTP_REFERER'): baseURI = env['HTTP_REFERER']
-    else: baseURI = None
+    else: baseURI = 'mid:' #@@
 
     # output is buffered so that we only send
     # 200 OK if all went well
     buf = StringIO.StringIO()
 
-    xlate = ToRDFParser(buf, baseURI, thisMessage, genspace)
+    gen = ToRDF(buf, baseURI)
+    xlate = SinkParser(gen, baseURI, baseURI)
     xlate.startDoc()
     xlate.feed(data)
     xlate.endDoc()
