@@ -42,17 +42,35 @@
 
 {
   ?PLACE :phonePage [ log:content ?TXT ].
-  (?TXT "<TR><TD>\\d+<TD>\\d+<TD>(\\w+)<TD>")
+  (?TXT "<TR><TD>\\d+<TD>\\d+<TD>([A-Za-z\\. ]+)<TD>")
 	 str:scrape ?CITYNAME.
-  (?TXT "<TR><TD>\\d+<TD>\\d+<TD>\\w+<TD><A HREF='images/npamap/(\\w\\w).gif'>\\w+</A>")
-	 str:scrape ?STATECODE. #@@ map to upper case
+  (?TXT "<TR><TD>\\d+<TD>\\d+<TD>[A-Za-z\\. ]+<TD><A HREF='images/npamap/(\\w\\w).gif'>[^<]+</A>")
+	 str:scrape ?STATECODEL.
 } =>
 {
   ?PLACE k:inRegion [
     map:cityName ?CITYNAME;
-    k:inRegion [ usps:stateAbbr ?STATECODE ]
+    :stateCodeLower ?STATECODEL
   ].
 }.
+
+
+{ ?WHERE :stateCodeLower [ is :lower of [ is usps:stateAbbr of ?STATE ]] }
+ => { ?WHERE k:inRegion ?STATE }.
+
+# states I visited on one of my trips...
+# hmm... surely this table is published by the post office...
+# @@TODO: str:lower built-in
+k:Kansas               usps:stateAbbr "KS". "KS" :lower "ks".
+k:Missouri             usps:stateAbbr "MO". "MO" :lower "mo".
+k:Illinois-State       usps:stateAbbr "IL". "IL" :lower "il".
+k:Indiana-State        usps:stateAbbr "IN". "IN" :lower "in".
+k:Ohio-State           usps:stateAbbr "OH". "OH" :lower "oh".
+k:Pennsylvania-State   usps:stateAbbr "PA". "PA" :lower "pa".
+k:New_York-State       usps:stateAbbr "NY". "NY" :lower "ny".
+k:New_Hampshire-State  usps:stateAbbr "NH". "NH" :lower "nh".
+k:Vermont-State        usps:stateAbbr "VT". "VT" :lower "vt".
+k:Massachusetts-State  usps:stateAbbr "MA". "MA" :lower "ma".
 
 
 {
@@ -151,7 +169,10 @@
 #  k:inRegion [ map:countryName "Hungary" ] ].
 
 # $Log$
-# Revision 1.8  2004-07-04 19:07:04  connolly
+# Revision 1.9  2004-07-09 03:55:43  connolly
+# deal with lowercase state codes in phone lookup
+#
+# Revision 1.8  2004/07/04 19:07:04  connolly
 # in order to map phone numbers to timezones,
 # map phone numbers to cities via primeris.com.
 # Hmm... is the mapping from states to area codes 1-1?
