@@ -1,8 +1,18 @@
 #   This is a set of datatypes for RDF/DAML/N3
-Schema part 2 - Datatypes spec http://www.w3.org/TR/xmlschema-2/
+# Schema part 2 - Datatypes spec http://www.w3.org/TR/xmlschema-2/
 #
 @prefix doc: <../pim/doc.n3> .
 @prefix dt: <dt.n3#> .
+@prefix xdt: <http://www.w3.org/2000/10/XMLSchema-datatypes> . #  no '#' :-( 
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ont:  <http://www.daml.org/2000/10/daml-ont#> .
+@prefix ex:   <http://www.daml.org/2000/10/daml-ex#> .
+@prefix daml: <http://www.daml.org/2000/12/daml+oil#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
+
+@prefix : <var#> .   # Used just for local variables
+
 
 <> doc:title "A set of data types for RDF, DAML and N3".
 
@@ -18,7 +28,7 @@ dt:Datatype a rdfs:Class.
 dt:valueSpace a rdf:Property;
 	rdfs:domain dt:Datatype;
 	rdfs:range dt:ValueSpace;
-	rdfs: comment """A value space is the set of values for a given datatype.
+	rdfs:comment """A value space is the set of values for a given datatype.
 	Each value in the value space of a datatype is denoted by one or more literals
 	in its lexical space.
 """.
@@ -28,8 +38,8 @@ dt:ValueSpace rdfs:subClassOf rdfs:Class.  # Not for the squeamish ;-) set?
 
 dt:lexicalSpace a rdf:Property;
 	rdfs:domain dt:Datatype;
-	rdfs:range dt:Literal;
-	rdfs:comment """A lexical space is the set of valid literals for a datatype."""
+	rdfs:range dt:Literal;	rdfs:comment """A lexical space is the set of valid literals for a datatype.""".
+
 dt:DataType daml:disjointUnionOf (
 	dt:Primitive
 	dt:Enumerated
@@ -44,12 +54,12 @@ dt:DataType daml:disjointUnionOf (
 dt:representation a daml:UnambiguousProperty.
 
 dt:canonicalRepresentation rdfs:subPropertyOf dt:representation;
-	a daml:uniqueProperty;
+	a daml:UniqueProperty;
 	rdfs:comment """A canonical lexical representation is
-a set of literals from among the valid set of literals for a datatype such that
-there is a one-to-one mapping between literals in the canonical lexical representation
-and values in the value space
-".
+	a set of literals from among the valid set of literals for a datatype such that
+	there is a one-to-one mapping between literals in the canonical lexical representation
+	and values in the value space
+""".
 
 dt:Facet
 	rdfs:subClassOf rdf:Property;  #@@??
@@ -58,37 +68,128 @@ dt:Facet
 	axes or dimensions.
 .  [One of the worst english definitions I have seen]""";
 
-	disjointUnionOf ( FundamentalFacet ConstrainingFacet ).
+	daml:disjointUnionOf ( dt:FundamentalFacet dt:ConstrainingFacet ).
 
 dt:FundamentalFact rdfs:comment """A fundamental facet is an abstract property which serves to semantically characterize the values in a value space
 """ .
 
-dt:equal rdfs:comment """Every value space supports the notion of equality".
-dt:notEqual rdfs:comment """either a is equal to b, [...], or a is not equal to b""".
+dt:equal a rdf:Property;
+	rdfs:comment """Every value space supports the notion of equality""".
+
+dt:notEqual a rdf:Property;
+	rdfs:comment """either a is equal to b, [...], or a is not equal to b""".
+
 #  Rules for facet 2.4.1.1  Equal
-<> forall :a, :b, :c.
+<> log:forAll :a, :b, :c.
 { :a dt:equal :b . :a dt:notEqual :b } a log:Falsehood.
-{ :a dt:equal b: } log:implies { b: dt:equal :a } .
+{ :a dt:equal :b } log:implies { :b dt:equal :a } .
 { :a dt:equal :a } a log:Truth .
-{ :a dt:equal b:   .   :b dt:equal :c } log:implies { a: dt:equal :c } .
+{ :a dt:equal :b   .   :b dt:equal :c } log:implies { :a dt:equal :c } .
 
 #  Missing: """ By definition, given value space A and value space B where A and B are
 # not related by restriction, for every pair of values a from A and b from B, a != b. """
-dt:BoundedValueSpace  rdfs:subClassOf  dt:OrderedValueSpace.
 
-dt:equal rdfs:domain foo:setOfMembersOfAllInstancesOf  dt:OrderedValueSpace . #@@@
-# where does it say how many datatypes something can have?
+dt:BoundedValueSpace
+	rdfs:subClassOf  dt:OrderedValueSpace.
 
-dt:ValueSpace disjointUnionOf ( dt:FiniteValueSpace dt:CountableInfiniteValueSpace) .
-dt:ValueSpace disjointUnionOf ( dt:NumericValueSpace  dt:NonNumericValueSpace).
-dt:NumericValueSpace rdfs:comment """A datatype is said to be numeric if its values are conceptually quantities (in some mathematical number system). 
+# dt:equal rdfs:domain foo:setOfMembersOfAllInstancesOf  dt:OrderedValueSpace . #@@@
+# where does it say how many datatypes something can have? (just one?)
+
+#Different ways of splitting the value spaces
+
+dt:ValueSpace
+	daml:disjointUnionOf (
+		dt:FiniteValueSpace
+		dt:CountableInfiniteValueSpace) .
+dt:ValueSpace
+	daml:disjointUnionOf (
+		dt:NumericValueSpace
+		dt:NonNumericValueSpace).
+
+dt:NumericValueSpace
+	rdfs:comment """A datatype is said to be numeric if its values are conceptually quantities (in some mathematical number system). 
 [sic] Does this mean anything?""" .
+
 ############# Constrianing facets:
-foobar a dt:length, dt:minLength, dt:maxLength, dt:pattern, dt:enumeration, dt:whitespace,
-dt:WhiteSpace daml:oneOf ( dt:preserve  dt:replace dt:collapse).
+
+dt:ConstrainingFacet is rdf:type of 
+	dt:length, dt:minLength, dt:maxLength,
+	dt:pattern,
+	dt:enumeration,
+	dt:whitespace.
+
+dt:WhiteSpace daml:oneOf ( dt:preserve  dt:replace dt:collapse);
+	is daml:range of dt:whitespace.
+
 # to 2.4.2.7 ish
 
-listOf
+dt:isListOf
+	a rdf:Property ;
+	rdfs:comment """Related a list class to its base class.""" .
+
+
+################## XML Schema Builtin DataTypes
+
+xdt:string a dt:Primitive;
+	rdfs:comment """The string datatype represents character strings in XML. 
+The value space of string is the set of finite-length sequences
+ of character <http://www.w3.org/TR/2000/WD-xml-2e-20000814>s
+ (as defined in [XML 1.0 Recommendation (Second Edition)]) that match the
+ Char <http://www.w3.org/TR/2000/WD-xml-2e-20000814> production
+ from [XML 1.0 Recommendation (Second Edition)]. A character <http://www.w3.org/TR/2000/WD-xml-2e-20000814> is an
+atomic unit of communication; it is not further specified except to note that
+every character <http://www.w3.org/TR/2000/WD-xml-2e-20000814> has a corresponding
+Universal Code Set code point ([ISO 10646], [Unicode] and [Unicode3]), which is an integer. 
+""".
+
+xdt:boolean a dt:Primitive;
+	rdfs:comment """boolean has the value space required to support the
+mathematical concept of binary-valued logic: {true, false}
+""" .
+
+xdt:float a dt:Primitive;
+	rdfs:comment """float corresponds to the IEEE single-precision 32-bit
+floating point type [IEEE 754-1985]. The basic value space of float consists of the
+values m × 2^e, where m is an integer whose absolute value is less than 2^24, and
+e is an integer between -149 and 104, inclusive. In addition to the basic value space 
+described above, the value space of float also contains the following special values:
+ positive and negative zero, positive negative infinity and not-a-number. 
+The order-relation on float is: x < y iff y - x is positive. 
+""" .
+
+xdt:double a dt:Primitive .
+
+xdt:decimal a dt:Primitive .
+
+xdt:timeDuration a dt:Primitive .
+
+xdt:recurringDuration a dt:Primitive.
+xdt:binary a dt:Primitive.
+xdt:uriReference a dt:Primitive.
+xdt:ID a dt:Primitive.
+xdt:IDREF a dt:Primitive.
+xdt:ENTITY a dt:Primitive.
+xdt:QName a dt:Primitive.
+xdt:Notation a dt:Primitive.   #@@@builtin deruved from Qname
+xdt: a dt:Primitive.
+xdt: a dt:Primitive.
+# @@@@ up to 3.3 roughly
+
+
+
+
+
+# # # # # #
+
+<> rdfs:comment """
+
+This document omits to express in RDF the following things:
+- the particular set of facets which the porimitiave types can have
+
+string
+
+""" .
+
 
  
 
