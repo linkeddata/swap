@@ -44,7 +44,8 @@ def think(kb=None):
         print "# for details try:  cat ,lx.engine.otter.fromOtter"
         print "# Done running Otter [ Inferences NOT incorporated back into cwm ]"
 
-def run(string, fileBase=",lx.engine.otter", includes=None, maxSeconds=1):
+def run(string, fileBase=",lx.engine.otter", includes=None, maxSeconds=1,
+        inputFileName=None, outputFileName=None):
     """Run otter on this formula/kb and see what it does.
 
     >>> from LX.engine.otter import *
@@ -53,8 +54,14 @@ def run(string, fileBase=",lx.engine.otter", includes=None, maxSeconds=1):
     """
     if not isinstance(string, str):
         string = LX.language.otter.serialize(string)
-    filename = fileBase+".toOtter"
-    out = fileBase+".fromOtter"
+    if inputFileName:
+        filename = inputFileName
+    else:
+        filename = fileBase+".toOtter"
+    if outputFileName:
+        out = outputFileName
+    else:
+        out = fileBase+".fromOtter"
     f=open(filename, "w")
     f.write("set(auto).\n")
     #f.write("set(prolog_style_variables).\n")
