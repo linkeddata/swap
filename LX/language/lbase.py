@@ -92,7 +92,7 @@ def t_QUOTEDSTRING(t):
 t_ignore = " \t"
 
 def t_newline(t):
-    r'\n+'
+    r'''((\#[^\n]*)?)\n+'''
     t.lineno += t.value.count("\n")
     
 def t_error(t):
@@ -454,7 +454,10 @@ class Serializer:
         pass
 
 # $Log$
-# Revision 1.9  2003-07-12 09:49:10  sandro
+# Revision 1.10  2003-07-12 09:58:33  sandro
+# added #comment support
+#
+# Revision 1.9  2003/07/12 09:49:10  sandro
 # added owl to (static) list of namespaces
 #
 # Revision 1.8  2003/02/14 19:40:32  sandro
