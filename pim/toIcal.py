@@ -55,8 +55,8 @@ class CalWr:
             # http://www.ietf.org/rfc/rfc2445.txt
 
             w("BEGIN:VCALENDAR" + CRLF) #hmm... SAX interface?
-            w("VERSION:2.0" + CRLF) #@@ grab these from the RDF?
             w("PRODID:%s%s" % (ProdID, CRLF) ) #@@grab?
+            w("VERSION:2.0" + CRLF) #@@ grab these from the RDF?
             w("CALSCALE:GREGORIAN" +CRLF) #@@ grab?
 
             #hmm... method? cf 3.2 Parameters
@@ -106,6 +106,8 @@ class CalWr:
         # 4.8.2.4 Date/Time Start
         self.timeProp(sts, "dtstart", event)
         self.timeProp(sts, "dtend", event)
+        self.timeProp(sts, "dtstamp", event)
+        self.timeProp(sts, "lastModified", event) #@@ last-modified
         txt = self.textProp(sts, "summary", event)
         self.textProp(sts, "description", event)
         self.textProp(sts, "location", event)
@@ -114,8 +116,13 @@ class CalWr:
 
         other = sts.statementsMatching(None, event, None)
         for s in other:
-            if s[PRED] not in (ICAL.dtstart, ICAL.dtend, ICAL.uid, ICAL.summary,
-                               ICAL.location, ICAL.priority, ICAL.description, RDF.type, ICAL.rrule):
+            if s[PRED] not in (ICAL.dtstart, ICAL.dtend,
+                               ICAL.lastModified, ICAL.dtstamp,
+                               ICAL.uid,
+                               ICAL.summary, ICAL.description,
+                               ICAL.location, ICAL.priority,
+                               RDF.type,
+                               ICAL.rrule):
                 progress("@@skipping ", s[PRED], " of [", txt, "] = [", \
                                  s[OBJ], "]")
         w("END:VEVENT"+CRLF)
@@ -152,30 +159,26 @@ class CalWr:
     
     def timeProp(self, sts, pn, subj):
         w = self._w
-	pni = ICAL.sym(pn)
-        when = sts.any(subj, pni)
-#	progress("Time: %s is %s" % (pni, when)) 
-        whenV = sts.any(when, ICAL.date) \
-                or sts.any(when, ICAL.dateTime)
-        if not whenV:
-            progress("@@no value for ", when)
-        whenTZ = sts.any(when, ICAL.tzid)
+        when = sts.any(subj, ICAL.sym(pn))
 
-        whenV = translate(str(whenV), maketrans("", ""), "-:")
-	if whenTZ:
-	    if len(whenV) == 8:
-		whenV = whenV + "T000000"
-	    else:
-		whenV = whenV+"000000"
-		whenV = whenV[:15] # 8 for date, 1 for T, 6 for time
-            w("%s;TZID=%s:%s%s" % (pn.upper(), str(whenTZ), whenV, CRLF))
-        else:
-	    if whenV[-1:] != "Z":
-		pass # local time. hmm...
-	    else:
-		whenV = whenV[:-1]+"000000"
-		whenV = whenV[:15] + "Z"
-            w("%s:%s%s" % (pn.upper(), str(whenV), CRLF))
+        if when:
+            whenV = sts.any(when, ICAL.dateTime)
+            if whenV:
+                whenV = translate(str(whenV), maketrans("", ""), "-:")
+                whenTZ = sts.any(when, ICAL.tzid)
+                if whenTZ:
+                    w("%s;VALUE=DATE-TIME;TZID=%s:%s%s" % (pn.upper(), str(whenTZ),
+                                           whenV, CRLF))
+                else:
+                    w("%s:VALUE=DATE-TIME;%s%s" % (pn.upper(), whenV, CRLF))
+            else:
+                whenV = sts.any(when, ICAL.date)
+                if whenV:
+                    whenV = translate(str(whenV), maketrans("", ""), "-:")
+                    w("%s:VALUE=DATE;%s%s" % (pn.upper(), whenV, CRLF))
+                else:
+                    progress("@@no value for ", when)
+
 
 import sys, os
 import uripath
@@ -205,7 +208,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.9  2003-03-14 03:17:23  connolly
+# Revision 1.10  2003-03-14 06:01:04  connolly
+# cleaned up DATE-TIME vs DATE stuff
+#
+# Revision 1.9  2003/03/14 03:17:23  connolly
 # oops! forgot begin/end around vtimezone.
 # clearly I don't have any good way to test this code.
 #
