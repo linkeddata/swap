@@ -1,0 +1,79 @@
+     @prefix : <http://www.w3.org/2002/08/LX/RDF/v2#> .
+     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix rules: <#> .
+    
+      [      a :TrueSentence;
+             :subformula  [
+                 :subformula  [
+                     :subformula  [
+                         :conjLeft  [
+                             :conjLeft  [
+                                 :conjLeft  [
+                                     :conjLeft  [
+                                         :conjLeft  [
+                                             :objectTerm  [
+                                                 :subformula  [
+                                                     :subformula  [
+                                                         :subformula  [
+                                                             :condLeft  [
+                                                                 :conjLeft  [
+                                                                     :objectTerm rules:y;
+                                                                     :predicateTerm rules:p;
+                                                                     :subjectTerm rules:x ];
+                                                                 :conjRight  [
+                                                                     :objectTerm rules:z;
+                                                                     :predicateTerm rules:p;
+                                                                     :subjectTerm rules:y ] ];
+                                                             :condRight  [
+                                                                 :objectTerm rules:z;
+                                                                 :predicateTerm rules:p;
+                                                                 :subjectTerm rules:x ] ];
+                                                         :univar rules:x ];
+                                                     :univar rules:y ];
+                                                 :univar rules:z ];
+                                             :predicate rules:means;
+                                             :subjectTerm  [
+                                                 :object daml:TransitiveProperty;
+                                                 :predicate <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>;
+                                                 :subjectTerm rules:p ] ];
+                                         :conjRight  [
+                                             :condLeft  [
+                                                 :objectTerm rules:b;
+                                                 :predicate rules:means;
+                                                 :subjectTerm rules:a ];
+                                             :condRight  [
+                                                 :conjLeft  [
+                                                     :condLeft rules:a;
+                                                     :condRight rules:b ];
+                                                 :conjRight  [
+                                                     :condLeft rules:b;
+                                                     :condRight rules:a ] ] ] ];
+                                     :conjRight  [
+                                         :object daml:TransitiveProperty;
+                                         :predicate <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>;
+                                         :subject rules:ancestor ] ];
+                                 :conjRight  [
+                                     :object rules:granpa;
+                                     :predicate rules:ancestor;
+                                     :subject rules:pa ] ];
+                             :conjRight  [
+                                 :object rules:pa;
+                                 :predicate rules:ancestor;
+                                 :subject rules:bill ] ];
+                         :conjRight  [
+                             :condLeft  [
+                                 :conjLeft  [
+                                     :condLeft rules:a;
+                                     :condRight rules:b ];
+                                 :conjRight  [
+                                     :condLeft rules:b;
+                                     :condRight rules:a ] ];
+                             :condRight  [
+                                 :objectTerm rules:b;
+                                 :predicate rules:means;
+                                 :subjectTerm rules:a ] ] ];
+                     :univar rules:p ];
+                 :univar rules:a ];
+             :univar rules:b ].
+    

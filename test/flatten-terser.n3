@@ -1,0 +1,18 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix lx: <http://www.w3.org/2002/08/LX/RDF/v2#> .
+@prefix : <http://example.com/#> .
+
+this log:forAll :T, :S, :X.
+
+{ :T lx:subjectTerm :S.  :S lx:denotation :X } 
+  log:implies 
+{ :T lx:subject :X.  :S a log:Chaff }.
+
+{ :T lx:predicateTerm :S.  :S lx:denotation :X } 
+  log:implies 
+{ :T lx:predicate :X.  :S a log:Chaff }.
+
+{ :T lx:objectTerm :S.  :S lx:denotation :X } 
+  log:implies 
+{ :T lx:object :X.  :S a log:Chaff }.
+

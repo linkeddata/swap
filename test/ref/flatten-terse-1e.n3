@@ -1,0 +1,10 @@
+     @prefix : <http://www.w3.org/2002/08/LX/RDF/v2#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    
+      [      a :TrueSentence;
+             :exivar <http://example.com/#X>;
+             :subformula  [
+                 :objectTerm <http://example.com/#X>;
+                 :predicate <http://example.com/#b>;
+                 :subject <http://example.com/#a> ] ].
+    

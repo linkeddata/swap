@@ -157,14 +157,51 @@ cwm_test argv-1.n3 "os:argv argument values"  os/argv.n3 --think --with foo bar 
 
 cwm_test argv-2.n3 "os:argv argument other values"  os/argv.n3 --think --with boof
 
+echo " "
+echo " Test --flatten:"
+
+cwm_test flatten-1g.n3 "one ground triple" flatten-1g.n3 --flatten
+
+cwm_test flatten-2g.n3 "two ground triples" flatten-2g.n3 --flatten
+
+cwm_test flatten-1u.n3 "one triple with univar" flatten-1u.n3 --flatten
+
+cwm_test flatten-1e.n3 "one triple with explicit univar" flatten-1e.n3 --flatten
+
+cwm_test flatten-1e2.n3 "one triple with implicit univar" flatten-1e2.n3 --flatten
+
+cwm_test flatten-Truth.n3 " " flatten-Truth.n3 --flatten
+
+cwm_test flatten-rule1.n3 " " flatten-rule1.n3 --flatten
+
+cwm_test flatten-rules12.n3 " " rules12.n3 --flatten
+
+cwm_test flatten-rules13.n3 " " rules13.n3 --flatten
+
+cwm_test flatten-terse-1e.n3 "tersified: one triple with explicit univar" flatten-1e.n3 --flatten --apply=flatten-terser.n3 --purge
+
+cwm_test flatten-terse-1e2.n3 "tersified: one triple with implicit univar" flatten-1e2.n3 --flatten --apply=flatten-terser.n3 --purge
+
+cwm_test flatten-terse-Truth.n3 " " flatten-Truth.n3 --flatten --apply=flatten-terser.n3 --purge
+
+cwm_test flatten-terse-rule1.n3 " " flatten-rule1.n3 --flatten --apply=flatten-terser.n3 --purge
+
+cwm_test flatten-terse-rules12.n3 " " rules12.n3 --flatten --apply=flatten-terser.n3 --purge
+
+cwm_test flatten-terse-rules13.n3 " " rules13.n3 --flatten --apply=flatten-terser.n3 --purge
+
+
 # echo  "Test applications"
 
-echo "Passed $passes out of $tests geneneraal regresssion tests."
+echo "Passed $passes out of $tests geneneral regresssion tests."
 echo "Loopback parser tests:"
 ./n3-xml-test.sh `cat tests-work.txt`
 
 # $Log$
-# Revision 1.40  2002-08-16 22:30:49  timbl
+# Revision 1.41  2002-08-29 21:45:15  sandro
+# added first test suite for --flatten
+#
+# Revision 1.40  2002/08/16 22:30:49  timbl
 # Add two tests for  quick variable ?x syntax. Passes text/retest.sh.
 #
 # Revision 1.39  2002/08/16 21:24:01  timbl
