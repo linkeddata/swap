@@ -308,8 +308,40 @@ tf:line42 form:form tf:form; form:line "42"; a form:Calculated;
 
 	Form 8615. Form 8615 must generally be used to figure the tax for any child who was	under age 14 at the end of 2002, and who had more than $1,500 of investment income,	such as taxable interest, ordinary dividends,	or capital gains (including capital gain distributions).	But if neither of the child's parents was alive on December 31, 2002, do	not use Form 8615 to figure the child's tax.""".
 
-	{ (?my!tf:line41 "0.40")!math:product math:rounded ?x }
-		=>  { ?my tf:line42 ?x }.
+##	{ (?my!tf:line41 "0.40")!math:product math:rounded ?x }
+##		=>  { ?my tf:line42 ?x }.
+
+# Tax tables missing from web forms but from IRC phone desk #3505107 2002-12-04 :
+#
+{ ?my!tf:line41 math:notGreaterThan "12000".
+  (?my!tf:line41 "0.10")!math:product math:rounded ?tax }
+=> { ?my tf:line42 ?tax }.
+
+# 240 is the 12000 times 5% - the difference between the levels
+
+{ ?my!tf:line41 math:greaterThan "12000"; math:notGreaterThan "46700".
+  ((?my!tf:line41 "0.15")!math:product "240")!math:difference math:rounded ?tax }
+=> { ?my tf:line42 ?tax }.
+
+{ ?my!tf:line41 math:greaterThan "46700"; math:notGreaterThan "112850".
+  ((?my!tf:line41 "0.27")!math:product "5844")!math:difference math:rounded ?tax }
+=> { ?my tf:line42 ?tax }.
+
+{ ?my!tf:line41 math:greaterThan "112850"; math:notGreaterThan "171950".
+  ((?my!tf:line41 "0.30")!math:product "9229.5")!math:difference math:rounded ?tax }
+=> { ?my tf:line42 ?tax }.
+
+{ ?my!tf:line41 math:greaterThan "171950"; math:notGreaterThan "307050".
+  ((?my!tf:line41 "0.35")!math:product "17827")!math:difference math:rounded ?tax }
+=> { ?my tf:line42 ?tax }.
+
+# 28880.8 = 11053.8 + 8597.5 + 3385.5 + 5604 + 240
+
+{ ?my!tf:line41 math:greaterThan "307050".
+  ((?my!tf:line41 "0.386")!math:product "28880.80")!math:difference math:rounded ?tax }
+=> { ?my tf:line42 ?tax }.
+
+##############
 		
 tf:line42a form:form tf:form; form:line "42a"; a form:CheckBox;
 	s:label "Tax (see page 36). Check if any tax is from Form(s) 8814".
@@ -616,13 +648,15 @@ de:form a form:Form; form:title "Deductions for Exemptions Worksheet".
 
 de:line1 form:form de:form; form:line "1"; a form:Calculated;  # @@@ calculated checkbox! :-/
 	s:label """Is the amount on Form 1040, line 36,
-more than the amount shown on line 4 below for your filing status?No. Multiply $3,000 by the total number of exemptions claimed on Form 1040,
-line 6d, and enter the result on line 40.Yes. Continue""".
+more than the amount shown on line 4 below for your filing status?
+No. STOP. Multiply $3,000 by the total number of exemptions claimed on Form 1040,
+line 6d, and enter the result on line 40.
+Yes. Continue""".
 
 	{ ?my!tf:line36 math:greaterThan ?my!de:line4 } => { ?my de:line1 "1" }. #yes
 	{ ?my!tf:line36 math:notGreaterThan ?my!de:line4.
 	   (?my!tf:line6d "3000") math:product ?t40 }
-		=> { ?my de:line1 "0"; tf:line40 ?t40 }. #no
+		=> { ?my de:line1 "0"; tf:line40 ?t40 }. #no STOP
 
 de:line2 form:form de:form; form:line "2"; a form:Calculated;
 	s:label """Multiply $3,000 by the total number of exemptions
@@ -661,14 +695,16 @@ de:line5 form:form de:form; form:line "5"; a form:Calculated;
 
 	{ ?my!de:line5 math:greaterThan ?my!de:limit } =>
 		{ ?my a de:YouCannotMakeADeductionForExemptions;
-		  	tf:line40 "0"; de:line9 "0" }. # @@ I assume that's what that means!?
+		  	tf:line40 "0"; de:line9 "0"; }. # @@ I assume that's what that means!?
+	{ ?my!de:line5 math:notGreaterThan ?my!de:limit } => { ?my de:go "1" }.
  
 de:line6 form:form de:form; form:line "6"; a form:Calculated;
 	s:label """Divide line 5 by $2,500 ($1,250 if married filing separately).
 	If the result is not a whole number, increase it to
 	the next higher whole number (for example, increase 0.0004 to 1)""".
 
-	 { ( ?my!de:line5 ?my!de:div ) math:quotient ?de6a.
+	 { ?my de:go "1".
+	   (?my!de:line5 ?my!de:div) math:quotient ?de6a.
 	    (?de6a "0.4999") math:sum ?de6b.
 	    ?de6b math:rounded ?de6c.
 	 } => { ?my de:line6 ?de6c }.
