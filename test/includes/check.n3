@@ -9,9 +9,9 @@
 @prefix log:  <http://www.w3.org/2000/10/swap/log#> .
 @prefix os:  <http://www.w3.org/2000/10/swap/os#> .
 
-@prefix : <foo.n3#>.  # Local stuff
+@prefix : <check.n3#>.  # Local stuff
 
-@prefix foo: <foo.n3#>.  # Local stuff
+@prefix check: <check.n3#>.  # Local stuff
 
 # Usage:   TARGET=myfile.n3 cwm check.n3 -think -purge
 #
@@ -20,16 +20,29 @@
 
 this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
 
-#  Some terms we will be using in this document:
+#  Some internal terms we will be using in this document:
 
 :usedAsPropertyIn a rdf:Property;
-    s:description "This term is used as a Property in the given document.".
+    s:comment "This term is used as a Property in the given document.";
+    a log:Chaff.  # Internal use only, may be purged.
 
 :within a rdf:Property;
-    s:description "relationship between a subforumula and the document it was found in".
+    s:comment "relationship between a subforumula and the document it was found in";
+    a log:Chaff.  # Internal use only, may be purged.
 
 :targetDocument a s:Class;
-    s:description "Documents which this run is checking for schema validity".
+    s:comment "Documents which this run is checking for schema validity";
+    a log:Chaff.  # Internal use only, may be purged.
+
+:schema a rdf:Property;
+    s:comment "The schema for a Property is the document which defines it.".
+
+
+:ERROR_NO_SCHEMA_OR_NOT_DECLARED a rdf:Property;
+    s:comment """The document used this as a predicate and there is no
+schema which declares it as a Property""".
+
+:ERROR_PROPERTY_NOT_DECLARED 	   a rdf:Property.
 
 # Target formulae are the top level formula we are pointed at,
 #  and any subformulae.
@@ -103,14 +116,16 @@ this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
 #   (b)when the document is combined with the above, no condradiction
 #      can be found from anything being (eg) member of disjoint sets.
 #
+# @@ to come.
+  
+################################################################### Clean up
 
-log:implies a log:Chaff.  #  Clear out rules on -purge
+{:d a :targetDocument. :F :within :d } log:implies { :F a log:Chaff }. # Clear our formulae
 
-{ :F a :target } log:implies { :F a log:Chaff }. # Clear our formulae
-
-log:Chaff is rdf:type of log:forAll,
-    :within,
-    :schemaFormula, :schema,
+log:Chaff is rdf:type of
+    log:forAll,
+    log:implies,   #  Clear out rules on -purge
+    :within, :schemaFormula, :schema,
     :targetDocument,
     :usedAsPropertyIn.
  
