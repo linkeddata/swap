@@ -26,7 +26,11 @@ update:
 	cd $(PACKAGE)-$(MAINVERSION)/lib; tar -zxvf ../../../../cwm.tgz
 	(cd ./debian-files && tar cf - .  --exclude CVS) | (cd  $(PACKAGE)-$(MAINVERSION)  && tar xf -)
 	(cd ../.. && tar cf - doc  --exclude CVS --exclude format ) | (cd $(PACKAGE)-$(MAINVERSION)/  && tar xf -)
+
 	cp setup.py $(PACKAGE)-$(MAINVERSION)
+
+	touch $(PACKAGE)-$(MAINVERSION)/lib/__init__.py 
+	
 	
 
 pyinstall: update

@@ -32,8 +32,9 @@ setup(
     maintainer_email = "timbl@w3.org",
     url = "http://www.w3.org/2000/10/swap/",
     package_dir = {'swap': 'swap-cwm-0.9/lib/swap'},
-    packages = ['swap.RDFSink']
-
+    packages = ['swap.cwm',
+		'swap.RDFSink',
+		'swap.llyn'],
     )
     # todo, figure out which other modules are in public APIs
     # --danbri
