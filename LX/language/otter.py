@@ -52,11 +52,20 @@ ns = {
     }
 
 # borrowed & modified from urllib.py
-safe = ('ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+verysafe = ('ABCDEFGHIJKLMNOPQRSTUVWXYZ'
         'abcdefghijklmnopqrstuvwxyz'
-        '0123456789' '_')
+        '0123456789')
 
-def alnumEscape(s):
+mostchars = ('ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+        'abcdefghijklmnopqrstuvwxyz'
+        '0123456789' ' ()[]:{}"<>/.,%')
+
+def escapeUnlessSafe(s, safe=verysafe):
+    """Encode one string in another, hex-escaping all unsafe chars.   We
+    use _xx instead of %xx because we want to even fit inside a C-identifier.
+
+    If your safechars has "_" in it, this is not reversable.
+    """
     res = list(s)
     for i in range(len(res)):
         c = res[i]
@@ -64,52 +73,17 @@ def alnumEscape(s):
             res[i] = '_%02X' % ord(c)
     return ''.join(res)
 
-constCount = 0
 
-def prename(f, names, counter):
-    global ns
-    global constCount
-    if names.has_key(f): return
-    if f.isAtomic():
-        #print "What to do with:", f
-        result = None
-        if isinstance(f, LX.logic.Constant):
-            s = str(f)
-            try:
-                (pre,post) = s.split("#")
-                result = ns[pre]+"_"+post
-            except KeyError:
-                ns[pre] = "ns"+str(len(ns))
-                ###print "# autoprefix %s %s" % (ns[pre], pre)    # @@@@@@
-                result = ns[pre]+"_"+post
-            except ValueError:
-                # original...
-                result = "'<"+str(f)+">'"
-                # stricter, for mace
-                #   result = "uri_"+alnumEscape(str(f))
-                # still stricter, mace is a pain
-                #result = "const"+str(constCount);
-                #constCount += 1
-        elif isinstance(f, LX.logic.UniVar):
-            result = univar(counter["u"])
-            counter["x"].append(result)
-            counter["u"] += 1
-        elif isinstance(f, LX.logic.ExiVar):
-            result = exivar(+counter["e"])
-            counter["e"] += 1
-        names[f] = result
-    else:
-        for t in f.args:
-            prename(t, names, counter)
-        
 class Serializer:
 
     def __init__(self, stream, flags=""):
         self.stream = stream
-        # no flags right now... 
+        self.mace = flags.count("m")
+        print "Flags:", self.mace, flags
+        self.constCount = 0
 
     def makeComment(self, comment):
-        self.stream.write("% "+comment+"\n")
+        self.stream.write("% "+comment.replace("\n","\\n")+"\n")
         
     def serializeKB(self, expr):
         names = {}
@@ -123,7 +97,7 @@ class Serializer:
                 # this is a bit questionable.  (ns stuff is global, still).
                 names = {}
                 counter = { "u":0, "e":0, "x":[] }
-                prename(f, names, counter)
+                self.prename(f, names, counter)
                 if (counter["x"]):
                     result += "\nall "
                     for x in counter["x"]:
@@ -137,8 +111,46 @@ class Serializer:
             self.stream.write(result)
             self.stream.write("\n")
         else:
-            prename(formula, names, counter)
+            self.prename(formula, names, counter)
             self.stream.write(formula.serializeWithOperators(names, operators))
+
+    def prename(self, f, names, counter):
+        global ns
+        if names.has_key(f): return
+        if f.isAtomic():
+            #print "What to do with:", f
+            result = None
+            if isinstance(f, LX.logic.Constant):
+                s = str(f)
+                try:
+                    (pre,post) = s.split("#")
+                    result = ns[pre]+"_"+post
+                except KeyError:
+                    ns[pre] = "ns"+str(len(ns))
+                    ###print "# autoprefix %s %s" % (ns[pre], pre)    # @@@@@@
+                    result = ns[pre]+"_"+post
+                except ValueError:
+                    if self.mace == 0:
+                        result = "'"+escapeUnlessSafe(str(f),safe=mostchars)+"'"
+                    elif self.mace == 1:
+                        result = "uri_"+escapeUnlessSafe(str(f))
+                        self.makeComment(result+" is "+str(f))
+                    else:    # mace mace
+                        result = "const"+str(self.constCount);
+                        self.constCount += 1
+                        self.makeComment(result+" is "+str(f))
+            elif isinstance(f, LX.logic.UniVar):
+                result = univar(counter["u"])
+                counter["x"].append(result)
+                counter["u"] += 1
+            elif isinstance(f, LX.logic.ExiVar):
+                result = exivar(+counter["e"])
+                counter["e"] += 1
+            names[f] = result
+        else:
+            for t in f.all:
+                self.prename(t, names, counter)
+
 
 def serialize(kb):
     str = cStringIO.StringIO()
@@ -147,7 +159,10 @@ def serialize(kb):
     return str.getvalue()
 
 # $Log$
-# Revision 1.6  2003-02-14 00:36:08  sandro
+# Revision 1.7  2003-02-14 17:21:59  sandro
+# Switched to import-as-needed for LX languages and engines
+#
+# Revision 1.6  2003/02/14 00:36:08  sandro
 # added newline; changed for reorg elsewhere
 #
 # Revision 1.5  2003/01/29 20:59:33  sandro

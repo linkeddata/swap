@@ -55,7 +55,7 @@ package: math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf LICENSE.r
 
 # cwm.py notation3.py llyn.py  RDFSink.py toXML.py
 cwm.tar.Z::
-	tar -cf cwm.tar *.py $(HTMLS) LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py
+	tar -cf cwm.tar *.py $(HTMLS) LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply/*.py
 	compress -f cwm.tar
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py

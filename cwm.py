@@ -53,11 +53,9 @@ import sys
 import llyn
 import LX
 import LX.kb
-# import LX.rdf
-import LX.engine.llynInterface 
-import LX.engine.otter
-import LX.language.htables
-import LX.language.lbase
+import LX.engine
+import LX.language
+import LX.engine.llynInterface
 import RDFSink
 
 cvsRevision = "$Revision$"
@@ -475,19 +473,14 @@ Mode flags affect inference extedning to the web:
                 # this is really what a store wants to dump to 
                 _outSink.backing = notation3.ToN3(sys.stdout.write, base=option_baseURI,
                                                   quiet=option_quiet, flags=option_flags["n3"])
-        elif option_format == "otter":
-            #  hm.  why does TimBL use sys.stdout.write, above?  performance at the
-            #  cost of flexibility?
-            myflags = option_flags.get("otter", "")
-            _outSink = LX.language.otter.Serializer(sys.stdout, flags=myflags)
-        elif option_format == "htables":
-            myflags = option_flags.get("htables", "")
-            _outSink = LX.language.htables.Serializer(sys.stdout, flags=myflags)
-        elif option_format == "lbase":
-            myflags = option_flags.get("lbase", "")
-            _outSink = LX.language.lbase.Serializer(sys.stdout, flags=myflags)
+
+                #  hm.  why does TimBL use sys.stdout.write, above?  performance at the                
         else:
-            raise RuntimeError, "unknown output format: "+str(option_format)
+            myflags = option_flags.get(option_format, "")
+            _outSink = LX.language.getSerializer(language=option_format,
+                                                 stream=sys.stdout,
+                                                 flags=myflags)
+
         version = "$Id$"
         if not option_quiet and option_outputStyle != "-no":
             _outSink.makeComment("Processed by " + version[1:-1]) # Strip $ to disarm
@@ -643,22 +636,13 @@ Mode flags affect inference extedning to the web:
                 option_engine = _rhs
                 
             elif arg == "-think":
-                if option_engine=="otter":
-                    need(lxkb); # touch(lxkb)    ###  If we modify it, uncomment this!
-                    print "\n\n# Running Otter..."
-                    try:
-                        proof = LX.engine.otter.run(lxkb)
-                        print "# Contradiction found."
-                        print "# for details try:  cat ,lx.engine.otter.fromOtter"
-                    except LX.engine.otter.SOSEmpty:
-                        print "# Consistency proven."
-                        print "# for details try:  cat ,lx.engine.otter.fromOtter"
-                    print "# Done running Otter [ Inferences NOT incorporated back into cwm ]"
-                elif option_engine=="llyn":
+                if option_engine=="llyn":
                     need(_store); touch(_store)
                     _store.think(workingContext, mode=option_flags["think"])
                 else:
-                    raise RuntimeError, "unknown engine: "+str(option_engine)
+                    need(lxkb);
+                    LX.engine.think(engine=option_engine, kb=lxkb)
+                    touch(lxkb)
 
             elif arg == "-lxkbdump":  # just for debugging
                 need(lxkb)
@@ -757,11 +741,11 @@ def getParser(format, inputURI, formulaURI, flags):
     elif format == "n3":
         touch(_store)
         return notation3.SinkParser(_store, inputURI, formulaURI=formulaURI, why=r)
-    elif format == "lbase":
-        touch(lxkb)
-        return LX.language.lbase.Parser(lxkb)
     else:
-        raise RuntimeError, "unknown input format: "+str(format)
+        touch(lxkb)
+        return LX.language.getParser(language=format,
+                                     sink=lxkb,
+                                     flags=flags)
 
 def touch(object):
     """Indicate that this object has been modified; for use by need()"""

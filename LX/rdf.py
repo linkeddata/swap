@@ -119,14 +119,19 @@ def denotation(triple, index):
     http://www.w3.org/2002/12/rdf-identifiers/
     """
     u = triple[index]
-    if index == 1: return DescribedThing(u)
+    if index == 1: return LX.uri.DescribedThing(u)
     if u.find("#") >= 0:
-        return DescribedThing(u)
-    if index == 2 and triple[1] == rdfns.type.uri: return DescribedThing(u)
-    return WebLocation(u)
+        return LX.uri.DescribedThing(u)
+    if index == 2 and hasattr(triple[1], "uriOfDescription"):
+        if triple[1].uriOfDescription == LX.ns.rdf.type.uriOfDescription:
+            return LX.uri.DescribedThing(u)
+    return LX.uri.Resource(u)
     
 # $Log$
-# Revision 1.7  2003-02-13 19:49:30  sandro
+# Revision 1.8  2003-02-14 17:21:59  sandro
+# Switched to import-as-needed for LX languages and engines
+#
+# Revision 1.7  2003/02/13 19:49:30  sandro
 # changed some names to match other reorg; probably broken
 #
 # Revision 1.6  2003/02/01 05:58:10  sandro

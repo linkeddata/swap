@@ -3,12 +3,22 @@
 __version__ = "$Revision$"
 # $Id$
 
-import LX
 import re
+
+import LX
+
 defaultScope = {
     ("legal",): re.compile(r"^[a-zA-Z0-9_]+$"),
     ("hint",): re.compile(r"(?:\/|#)([a-zA-Z0-9_]*)/?$")
     }
+
+def stdValuesFilter(obj):
+    if isinstance(obj, type("")): return 1
+    if isinstance(obj, type(1)): return 1
+    if isinstance(obj, type(0.1)): return 1
+    # we'd like this to only be acceptable as a predicate/function...
+    if obj == LX.ns.lx.uri: return 1
+    return 0
 
 class KB(list):
     """A Knowledge Base, a list of implicitely conjoined sentences.
@@ -101,11 +111,13 @@ class KB(list):
     def getInterpretations(self, term):
         return self.__interpretation[term]
 
-    def constantFor(self, interpretation):
+    def constantFor(self, interpretation, suggestedName="<default>"):
         try:
             return self.__revInterpretation[interpretation][0]
         except KeyError:
-            c = LX.logic.Constant(str(interpretation))
+            if suggestedName == "<default>":
+                suggestedName = str(interpretation)
+            c = LX.logic.Constant(suggestedName)
             self.interpret(c, interpretation)
             return c
 
@@ -166,7 +178,9 @@ class KB(list):
         return v
 
     def describeInterpretation(i, descriptionLadder=None):
-        """For all the exprs in the kb which are keys in i, "describe"
+        """BAD IDEA?
+
+        For all the exprs in the kb which are keys in i, "describe"
         them as the value.
 
         >>> import LX.kb
@@ -179,7 +193,39 @@ class KB(list):
         xxx kb.describeInterpretation( {b:[a,b]} )   loop check?!
         """
         raise RuntimeError, "Not Implemented"
-    
+
+    def narrow(acceptableValuesFilter=stdValuesFilter):
+        """For all interpretations in the KB which are not instances
+           of one of the types in leavingTypes, have it 'described' into
+           the KB.
+
+           Once we have done so, mark the interpretation as
+           DESCRIBED.
+
+           [ how?     undescInterp, descInterp  ]
+
+           how to keep in sync?      show which formulas are used?
+
+           is this the same as recog...?
+
+            [ sym, val, status.... ]
+
+           mark certain formulas as encoding certain facts!
+
+           LX.expr.Expr e
+
+           kb.descriptions([term, value], formula)
+              (formula may or may not be in KB)
+
+        """
+        raise RuntimeError, "not implemented"
+
+    def widen(acceptableValuesFilter=stdValuesFilter):
+        """For all constants, see if they are described as having some
+        fixed interpretation we should add to interpretations;  And
+        maybe we can trim out those formulas...."""
+        raise RuntimeError, "not implemented"
+        
     def reifyAsTrue(self):
         flat = KB()
         LX.rdf.flatten(self, flat, indirect=1)
@@ -259,7 +305,10 @@ if __name__ == "__main__": _test()
 
  
 # $Log$
-# Revision 1.9  2003-02-14 00:36:37  sandro
+# Revision 1.10  2003-02-14 17:21:59  sandro
+# Switched to import-as-needed for LX languages and engines
+#
+# Revision 1.9  2003/02/14 00:36:37  sandro
 # added constantFor() method
 #
 # Revision 1.8  2003/02/13 19:48:31  sandro

@@ -24,6 +24,17 @@ class SOSEmpty(NoProofFound):
     for a proof"""
     pass
 
+def think(kb=None):
+    print "\n\n# Running Otter..."
+    try:
+        proof = LX.engine.otter.run(kb)
+        print "# Contradiction found."
+        print "# for details try:  cat ,lx.engine.otter.fromOtter"
+    except LX.engine.otter.SOSEmpty:
+        print "# Consistency proven."
+        print "# for details try:  cat ,lx.engine.otter.fromOtter"
+        print "# Done running Otter [ Inferences NOT incorporated back into cwm ]"
+
 def run(string, fileBase=",lx.engine.otter"):
     """Run otter on this formula/kb and see what it does.
 
@@ -42,7 +53,7 @@ def run(string, fileBase=",lx.engine.otter"):
     f.write("clear(control_memory).\n")
     f.write("formula_list(usable).\n")
     f.write(string)
-    if not string.endswith("."): f.write(".")
+    # if not string.endswith("."): f.write(".")
     f.write("\nend_list.")
     f.close()
     return runOtter(filename, out)

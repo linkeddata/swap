@@ -1,15 +1,53 @@
-"""Docs
+"""
 
 
 """
 __version__ = "$Revision$"
 # $Id$
 
+__all__ = ["otter", "abstract", "htables", "lbase", "n3x"]
 
-__all__ = ["otter", "abstract", "htables"]
+import LX
 
+serializers = {
+    "otter":  { "module": "LX.language.otter",
+              },
+    "lbase":  { "module": "LX.language.lbase",
+              },
+    }
+
+parsers = {
+    "n3x":    { "module": "LX.language.n3",
+              },
+    "lbase":  { "module": "LX.language.lbase",
+              },
+    }
+
+def getSerializer(language=None, stream=None, flags=""):
+    if language in serializers:
+        ser = serializers[language]
+        moduleName = ser["module"]
+        __import__(moduleName)
+        return eval(moduleName+".Serializer(stream=stream, flags=flags)")
+    else:
+        have = ", ".join(serializers.keys())
+        raise RuntimeError, ("No such serializer: \"%s\"\nWe have: %s" %
+                             (language, have))
+
+def getParser(language=None, sink=None, flags=""):
+    if language in parsers:
+        ser = parsers[language]
+        moduleName = ser["module"]
+        __import__(moduleName)
+        return eval(moduleName+".Parser(sink=sink, flags=flags)")
+    else:
+        raise RuntimeError, "No such parser: \"%s\"\nWe have: %s" % (language, ", ".join(parsers.keys()))
+    
 # $Log$
-# Revision 1.3  2003-01-29 20:59:33  sandro
+# Revision 1.4  2003-02-14 17:21:59  sandro
+# Switched to import-as-needed for LX languages and engines
+#
+# Revision 1.3  2003/01/29 20:59:33  sandro
 # Moved otter language support back from engine/otter to language/otter
 # Changed cwm.py to use this, and [ --engine=otter --think ] instead of
 # --check.
