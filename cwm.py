@@ -656,21 +656,43 @@ class BI_resolvesTo(HeavyBuiltIn, Function):
         else: doc = subj
         F = store.any((store.engine._experience, store.resolvesTo, doc, None))
         if F: return F
+        
         if chatty > 10: progress("Reading and parsing " + `doc`)
         inputURI = doc.uriref()
-#                if option_format == "rdf" : p = sax2rdf.RDFXMLParser(_store,  _inputURI)
-# @@@ Only handles N3 - should handle anything especially RDF/XML.
-        p = notation3.SinkParser(store,  inputURI)
-        p.load(inputURI)
-        del(p)
-        F = store.engine.intern((FORMULA, inputURI+ "#_formula"))
-        return F
+        try:
+            loadToStore(store, inputURI)
+        except (IOError, SyntaxError):
+            return None
+        else:
+            if chatty>10: progress("resolvesTo FORMULA addr: %s" % (inputURI+ "#_formula"))
+            F = store.engine.intern((FORMULA, inputURI+ "#_formula"))
+            return F
     
     def evaluate2(self, store, subj, obj, variables, bindings):
         F = self.evaluateObject2(store, subj)
         return (F == obj) # @@@@@@@@@@@@@@@@@@@@@@@@@@@@ do structual equivalnce thing
 
 
+HTTP_Content_Type = 'content-type' #@@ belongs elsewhere?
+
+def loadToStore(store, addr):
+    """raises IOError, SyntaxError
+    """
+    
+    netStream = urllib.urlopen(addr)
+    ct=netStream.headers.get(HTTP_Content_Type, None)
+
+    if ct.find('xml') >= 0 or ct.find('rdf') >= 0:
+        import sax2rdf, xml.sax._exceptions
+        p = sax2rdf.RDFXMLParser(store, addr)
+        p.loadStream(netStream)
+    else:
+        p = notation3.SinkParser(store, addr)
+        p.startDoc()
+        p.feed(netStream.read())
+        p.endDoc()
+
+    
 class BI_hasContent(HeavyBuiltIn, Function): #@@DWC: Function?
     def evaluateObject2(self, store, subj):
         if isinstance(subj, Fragment): doc = subj.resource

@@ -48,6 +48,7 @@ import xml.sax # PyXML stuff
                # http://prdownloads.sourceforge.net/pyxml/PyXML-0.6.5.win32-py2.1.exe
                # TimBL points outhe does not use windows env't but cygwin and
                #   giuesses he should compile python2-xml for cygwin.
+import xml.sax._exceptions
 from xml.sax.handler import feature_namespaces
 
 import notation3 # http://www.w3.org/2000/10/swap/notation3.py
@@ -62,6 +63,7 @@ STATE_VALUE =       "plain value"
 STATE_NOVALUE =     "no value"
 STATE_LIST =        "within list"
 
+FORMULA = notation3.FORMULA
 RESOURCE = notation3.RESOURCE
 LITERAL = notation3.LITERAL
 
@@ -84,7 +86,7 @@ class RDFHandler(xml.sax.ContentHandler):
         self.sink = sink
         self._thisURI = thisURI
         self._state = STATE_NOT_RDF  # Maybe should ignore RDF poutside <rdf:RDF>??
-        self._context = thisURI + "#_formula"  # Context of current statements, change in bags
+        self._context = FORMULA, thisURI + "#_formula"  # Context of current statements, change in bags
         self._subject = None
         self._predicate = None
         self._items = [] # for <rdf:li> containers
@@ -163,7 +165,7 @@ class RDFHandler(xml.sax.ContentHandler):
                     else: raise ooops # can't do about each prefix yet
                 elif ln == "bagid":
                     c = self._context #@@dwc: this is broken, no?
-                    self._context = self.uriref("#" + value) #@@ non-ascii
+                    self._context = FORMULA, self.uriref("#" + value) #@@ non-ascii
                 elif ln == "parseType":
                     pass  #later - object-related
                 elif ln == "value":
@@ -183,7 +185,7 @@ class RDFHandler(xml.sax.ContentHandler):
         if self._subject == None:
             self._subject = self._generate()
         for pred, obj in properties:
-            self.sink.makeStatement(( (RESOURCE, self._context),
+            self.sink.makeStatement(( self._context,
                                       (RESOURCE, pred),
                                       (RESOURCE, self._subject),
                                       (LITERAL, obj) ))
@@ -192,7 +194,7 @@ class RDFHandler(xml.sax.ContentHandler):
     def _generate(self):
             generatedId = self._genPrefix + `self._nextId`  #
             self._nextId = self._nextId + 1
-            self.sink.makeStatement(( (RESOURCE, self._context),                                 
+            self.sink.makeStatement(( self._context,
                                       (RESOURCE, notation3.N3_forSome_URI),
                                       (RESOURCE, self._context),
                                       (RESOURCE, generatedId) )) #  Note this is anonymous node
@@ -209,7 +211,7 @@ class RDFHandler(xml.sax.ContentHandler):
             self.idAboutAttr(attrs)
             if c == None: raise roof
             if self._subject == None:raise roof
-            self.sink.makeStatement((  (RESOURCE, c),
+            self.sink.makeStatement((  c,
                                        (RESOURCE, RDF_NS_URI+"type"),
                                        (RESOURCE, self._subject),
                                        (RESOURCE, tagURI) ))
@@ -296,7 +298,7 @@ class RDFHandler(xml.sax.ContentHandler):
                         c = self._context
                         s = self._subject
                         self.idAboutAttr(attrs)  # set subject and context for nested description @@dwc thinks this is buggy
-                        self.sink.makeStatement(( (RESOURCE, c),
+                        self.sink.makeStatement(( c,
                                                   (RESOURCE, self._predicate),
                                                   (RESOURCE, s),
                                                   (RESOURCE, self._subject) ))
@@ -312,11 +314,11 @@ class RDFHandler(xml.sax.ContentHandler):
                                 self._subject = s  # Forget anonymous genid - context is subect
                                 print "#@@@@@@@@@@@@@ decided subject is ",`s`[-10:-1]
                             else:
-                                self.sink.makeStatement(( (RESOURCE, c),
+                                self.sink.makeStatement(( c,
                                                           (RESOURCE, self._predicate),
                                                           (RESOURCE, s),
                                                           (RESOURCE, self._subject) ))
-                            self._context = self._subject
+                            self._context = FORMULA, self._subject
                             self._subject = None
                             self._state = STATE_NO_SUBJECT  # Nest context
                         
@@ -330,13 +332,13 @@ class RDFHandler(xml.sax.ContentHandler):
                         #print "############ parsetype pref=",pref ,"nslist",nslist
 
                 elif name == "resource":
-                    self.sink.makeStatement(((RESOURCE, self._context),
+                    self.sink.makeStatement((self._context,
                                              (RESOURCE, self._predicate),
                                              (RESOURCE, self._subject),
                                              (RESOURCE, self.uriref(value)) ))
                     self._state = STATE_NOVALUE  # NOT looking for value
                 elif name == "value":
-                    self.sink.makeStatement(((RESOURCE, self._context),
+                    self.sink.makeStatement((self._context,
                                              (RESOURCE, self._predicate),
                                              (RESOURCE, self._subject),
                                              (LITERAL,  value) ))
@@ -351,12 +353,12 @@ class RDFHandler(xml.sax.ContentHandler):
             s = self._subject  # The tail of the list so far
             p = self._predicate
             pair = self._generate()        # The new pair
-            self.sink.makeStatement(( (RESOURCE, c),   # Link in new pair
+            self.sink.makeStatement(( c,   # Link in new pair
                                       (RESOURCE, p),
                                       (RESOURCE, s),
                                       (RESOURCE, pair) )) 
             self.idAboutAttr(attrs)  # set subject (the next item) and context 
-            self.sink.makeStatement(( (RESOURCE, c),
+            self.sink.makeStatement(( c,
                                       (RESOURCE, DPO_NS + "first"),
                                       (RESOURCE, pair),
                                       (RESOURCE, self._subject) )) # new item
@@ -370,7 +372,7 @@ class RDFHandler(xml.sax.ContentHandler):
             p = self._predicate
             s = self._subject
             self._obj(tagURI, attrs)   # Parse the object thing's attributes
-            self.sink.makeStatement(( (RESOURCE, c), # Link to new object
+            self.sink.makeStatement(( c, # Link to new object
                                       (RESOURCE, p),
                                       (RESOURCE, s),
                                       (RESOURCE, self._subject) ))
@@ -391,14 +393,14 @@ class RDFHandler(xml.sax.ContentHandler):
         
         if self._state == STATE_VALUE:
             buf = self.testdata
-            self.sink.makeStatement(( (RESOURCE, self._context),
+            self.sink.makeStatement(( self._context,
                                        (RESOURCE, self._predicate),
                                        (RESOURCE, self._subject),
                                        (LITERAL,  buf) ))
             self.testdata = ""
             
         elif self._state == STATE_LIST:
-            self.sink.makeStatement(( (RESOURCE, self._context),
+            self.sink.makeStatement(( self._context,
                                       (RESOURCE, DPO_NS + "rest"),
                                       (RESOURCE, self._subject),
                                       (RESOURCE, DPO_NS + "nil") ))
@@ -433,13 +435,18 @@ class RDFXMLParser(RDFHandler):
         if uri:
             _inputURI = urlparse.urljoin(_baseURI, uri) # Make abs from relative
             f = urllib.urlopen(_inputURI)
-            s = xml.sax.InputSource()
-            s.setByteStream(f)
         else:
             _inputURI = urlparse.urljoin(_baseURI, "STDIN") # Make abs from relative
             f = sys.stdin
+        self.loadStream(f)
 
-        self._p.parse(s)
+    def loadStream(self, stream):
+        s = xml.sax.InputSource()
+        s.setByteStream(stream)
+        try:
+            self._p.parse(s)
+        except xml.sax._exceptions.SAXException, e:
+            raise SyntaxError()
         self.close()
 
     def close(self):

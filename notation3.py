@@ -663,7 +663,7 @@ class SinkParser:
         i = j
 	while i <len(str) and str[i] in _namechars:
             i = i+1
-        res.append( self.varPrefix + str[j:i])
+        res.append( str[j:i])
 #        print "Variable found: <<%s>>" % str[j:i]
         return i
 
@@ -820,7 +820,7 @@ class SinkParser:
 	else:
 	    return -1
 
-class BadSyntax:
+class BadSyntax(SyntaxError):
     def __init__(self, lines, str, i, why):
 	self._str = str
 	self._i = i
