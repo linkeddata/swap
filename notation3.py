@@ -865,7 +865,8 @@ class ToN3(RDFSink):
     def startDoc(self):
  
         self._write("\n#  Notation3 generation by\n")
-        self._write("#  $Id$\n\n")
+        idstring = "$Id$" # CVS CHANGES THIS
+        self._write("#       " + idstring[5:-2] + "\n\n") # Strip $s in case result is checked in
         self._write("    " * self.indent)
         self._subj = None
         self._nextId = 0
