@@ -1,10 +1,18 @@
 #!/usr/bin/python
-"""Download GPS data from serial link
+"""Download GPS data from serial link to an RDF/N3 file.
+
+Options:
+ -d=xxx --device=xxx     Device GPS is attached to, eg /dev/cu.USA19H191P1.1  com1 etc
+ -o=xxx --output=xxx     Output filename required, default is gpsData.n3
+ -v     --verbose        Print data between reading GPS and writing file
+ -t     --tracks         Get tracks from the GPS
+ -w     --waypoints      Get waypoints from the GPS
+ -h     --help           Print this message
+ 
+If neither --tracks or --waypoints are asked for, nothing will happen.
 
 This is an RDF application.
-
 See also Morten F's http://www.wasab.dk/morten/2003/10/garmin2rdf.py
-
 $Id$
 """
 
@@ -22,7 +30,7 @@ import isodate  # for isodate.fullString
 
 # import toXML 		#  RDF generator
 
-# PyGarmon  http://www
+# PyGarmon  http://pygarmin.sourceforge.net/
 from garmin import Win32SerialLink, Garmin, UnixSerialLink, degrees, TimeEpoch, \
     TrackHdr
 
@@ -43,7 +51,7 @@ rdf_type = RDF.type
 
 #########  Get GPS Data
 
-def doCommand(serialDevice=None, outputURI=None, doWaypoints=1, doTracks=1, verbose=0):
+def doCommand(serialDevice=None, outputURI=None, doTracks=1, doWaypoints=1, verbose=0):
 
    if os.name == 'nt':
       if not serialDevice: serialDevice =  "com1"
@@ -67,6 +75,7 @@ def doCommand(serialDevice=None, outputURI=None, doWaypoints=1, doTracks=1, verb
 
    if doWaypoints:
         # show waypoints
+	if verbose: print "Getting waypoints"
         wpts = gps.getWaypoints()
         for w in wpts:
 	    if verbose: progress(`w`)
@@ -78,6 +87,7 @@ def doCommand(serialDevice=None, outputURI=None, doWaypoints=1, doTracks=1, verb
 
    if doTracks:
       # show track
+      if verbose: print "Getting tracks"
       tracks = gps.getTracks()
       for t in tracks:
 	track = f.newBlankNode()
@@ -99,11 +109,12 @@ def doCommand(serialDevice=None, outputURI=None, doWaypoints=1, doTracks=1, verb
 		    if verbose: progress("time=%8x, ignoring" % p.time)
 		f.add(point, GPS.time, obj=intern(isodate.fullString(TimeEpoch+p.time)))
 
-
+   phys.f.close()  # Should really be done by the del() below, but isn't
+   del(phys) # close serial link (?)
    f = f.close()
    if verbose:
-	progress("Beginning output")
-   s = f.n3String(base=base, flags="d")   # Flag - no default prefix
+	progress("Beginning output. You can disconnect the GPS now.")
+   s = f.n3String(base=base, flags="d")   # Flag - no default prefix, preserve gps: prefix hint
    if outputURI != None:
 	op = open(outputURI, "w")
 	op.write(s)
@@ -114,14 +125,19 @@ def doCommand(serialDevice=None, outputURI=None, doWaypoints=1, doTracks=1, verb
 
         
 ############################################################ Main program
-    
+
+def usage():
+    print __doc__
+	
 if __name__ == '__main__':
     import getopt
     verbose = 0
+    doTracks = 0
+    doWaypoints = 0
     outputURI = "gpsData.n3"
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hvd:o:",
-	    ["help",  "verbose", "device=", "output="])
+        opts, args = getopt.getopt(sys.argv[1:], "hvtwd:o:",
+	    ["help",  "verbose", "tracks", "waypoints", "device=", "output="])
     except getopt.GetoptError:
         # print help information and exit:
         print __doc__
@@ -133,10 +149,15 @@ if __name__ == '__main__':
             sys.exit()
         if o in ("-v", "--verbose"):
 	    verbose = 1
+        if o in ("-t", "--tracks"):
+	    doTracks = 1
+        if o in ("-w", "--waypoints"):
+	    doWaypoints = 1
         if o in ("-d", "--device"):
             deviceName = a
         if o in ("-o", "--output"):
             outputURI = a
 
-    doCommand(serialDevice=deviceName, outputURI=outputURI, verbose=verbose)
+    doCommand(serialDevice=deviceName, outputURI=outputURI, doTracks=doTracks,
+		doWaypoints=doWaypoints, verbose=verbose)
 
