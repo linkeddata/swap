@@ -338,7 +338,7 @@ rdf/xml files. Note that this requires rdflib.
 	else: # default input
             if option_first_format is None: option_first_format = option_format
 	    ContentType={ "rdf": "application/xml+rdf", "n3":
-				"application/n3" }[option_first_format]
+				"text/rdf+n3" }[option_first_format]
 	    workingContext = _store.load(
 #			    asIfFrom = join(_baseURI, ".stdin"),
 			    asIfFrom = _baseURI,
@@ -375,7 +375,7 @@ rdf/xml files. Note that this requires rdflib.
                 _inputURI = join(option_baseURI, arg)
                 assert ':' in _inputURI
 		ContentType={ "rdf": "application/xml+rdf", "n3":
-				"application/n3" }[option_format]
+				"text/rdf+n3" }[option_format]
 
 		if not option_pipe: workingContext.reopen()
 		load(_store, _inputURI,

@@ -197,6 +197,8 @@ See&nbsp;also:&nbsp;<a href="#Formula-existentials">existentials</a>().</tt></dd
 The&nbsp;URI&nbsp;is&nbsp;typically&nbsp;omitted,&nbsp;and&nbsp;the&nbsp;system&nbsp;will&nbsp;make&nbsp;up&nbsp;an&nbsp;internal&nbsp;idnetifier.<br>
 If&nbsp;given&nbsp;is&nbsp;used&nbsp;as&nbsp;the&nbsp;(arbitrary)&nbsp;internal&nbsp;identifier&nbsp;of&nbsp;the&nbsp;formula.</tt></dd></dl>
 
+<dl><dt><a name="Formula-newList"><strong>newList</strong></a>(self, list)</dt></dl>
+
 <dl><dt><a name="Formula-newLiteral"><strong>newLiteral</strong></a>(self, str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;or&nbsp;reuse&nbsp;the&nbsp;internal&nbsp;representation&nbsp;of&nbsp;the&nbsp;RDF&nbsp;literal&nbsp;whose&nbsp;string&nbsp;is&nbsp;given<br>
 &nbsp;<br>
 The&nbsp;literal&nbsp;is&nbsp;created&nbsp;in&nbsp;the&nbsp;same&nbsp;store&nbsp;as&nbsp;the&nbsp;formula.</tt></dd></dl>
@@ -223,6 +225,8 @@ strings&nbsp;output.</tt></dd></dl>
 <dl><dt><a name="Formula-predicates"><strong>predicates</strong></a>(self, subj<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Obsolete&nbsp;-&nbsp;use&nbsp;<a href="#Formula-each">each</a>(subj=...,&nbsp;obj=...)</tt></dd></dl>
 
 <dl><dt><a name="Formula-rdfString"><strong>rdfString</strong></a>(self, base<font color="#909090">=None</font>, flags<font color="#909090">=''</font>)</dt><dd><tt>Dump&nbsp;the&nbsp;formula&nbsp;to&nbsp;an&nbsp;absolute&nbsp;string&nbsp;in&nbsp;RDF/XML</tt></dd></dl>
+
+<dl><dt><a name="Formula-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context</tt></dd></dl>
 
 <dl><dt><a name="Formula-removeStatement"><strong>removeStatement</strong></a>(self, s)</dt><dd><tt>Removes&nbsp;a&nbsp;statement&nbsp;The&nbsp;formula&nbsp;must&nbsp;be&nbsp;open.<br>
 &nbsp;<br>
@@ -403,5 +407,7 @@ Data and non-method functions defined here:<br>
 <strong>forAllSym</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>
 <strong>forSomeSym</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
 <strong>generators</strong> = _Feature((2, 2, 0, 'alpha', 1), (2, 3, 0, 'final', 0), 4096)<br>
+<strong>owlOneOf</strong> = 'http://www.w3.org/2002/07/owl#oneOf'<br>
+<strong>reifyNS</strong> = 'http://www.w3.org/2004/06/rei#'<br>
 <strong>tracking</strong> = 0</td></tr></table>
 </body></html>

@@ -32,7 +32,7 @@ import md5, binascii  # for building md5 URIs
 from uripath import refTo
 from RDFSink import runNamespace
 
-LITERAL_URI_prefix = "data:application/n3;"
+LITERAL_URI_prefix = "data:text/rdf+n3;"
 
 
 from RDFSink import List_NS
@@ -182,7 +182,7 @@ class Namespace(object):
 	For, and from, pim/toIcal.py"""
 	return  _checkStore().intern((SYMBOL, self._name + lname))
 
-reify = Namespace("http://www.w3.org/2000/10/swap/reify#")
+reify = Namespace("http://www.w3.org/2004/06/rei#")
 
 ########################################  Storage URI Handling
 #
@@ -556,7 +556,7 @@ class FragmentNil(EmptyList, Fragment):
 class Literal(Term):
     """ A Literal is a representation of an RDF literal
 
-    really, data:application/n3;%22hello%22 == "hello" but who
+    really, data:text/rdf+n3;%22hello%22 == "hello" but who
     wants to store it that way?  Maybe we do... at least in theory and maybe
     practice but, for now, we keep them in separate subclases of Term.
     An RDF literal has a value - by default a string, and a datattype, and a language

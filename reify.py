@@ -11,7 +11,7 @@ $Id$
 """
 from term import BuiltIn, LightBuiltIn, LabelledNode, \
     HeavyBuiltIn, Function, ReverseFunction, AnonymousNode, \
-    Literal, Symbol, Fragment, FragmentNil, Anonymous, Term,\
+    Literal, Symbol, Fragment, FragmentNil, Term,\
     CompoundTerm, List, EmptyList, NonEmptyList
 from formula import Formula, StoredStatement
 SUBJ = 0
@@ -44,8 +44,8 @@ def reify(formula):
     as the given formula
     """ 
     a = formula.newFormula()
-    F = reification(formula, a)
-    a.add(F, a.store.type, a.store.Truth)
+    x = formula.reification(a)
+    a.add(x, a.store.type, a.store.Truth)
     a = a.close()
     return a
 
@@ -57,7 +57,7 @@ def reify(formula):
 ##    rest = 1.rest
 ##    
 
-def reification(formula, sink):
+def reification(formula, sink, bnodes={}):
     """Create description of formula in sink
 
     Returns bNode corresponding to the reification
@@ -100,16 +100,20 @@ def reification(formula, sink):
             toDo.append(obj)
         if obj not in formulaURIs:
             formulaURIs[obj] = store.newBlankNode(a)
-        return (formulaURIs[obj], predList[0])
+        return formulaURIs[obj]
 
     def fragmentQuote(obj, predList):
-        return (a.newLiteral(obj.uriref()), predList[1])
+	z = sink.newBlankNode()
+	sink.add(subj=z, pred=rei["uri"], obj=sink.newLiteral(obj.uriref()))
+        return z
 
     def fragmentRepeat(obj, predList):
-        return (obj, predList[0])
+        return obj
     
-    def literalQuote(obj, predList):
-        return (obj, predList[2])
+    def literalQuote(obj, sink):
+	z = sink.newBlankNode()
+	sink.add(subj=z, pred=rei["value"], obj=obj)
+        return z
 
     def bNodeQuote(obj, predList):
         if obj not in bNodes:
@@ -156,14 +160,12 @@ def reification(formula, sink):
         for s in currentFormula.statements:
             subj = a.newBlankNode()
             statementList.append(subj)
-
             x, y, z = s.spo()
-            for predList, obj in (((reifySubj, reifySubjURI, reifySubjLit), x),
-                                  ((reifyPred, reifyPredURI, reifyPredLit), y),
-                                  ((reifyObj,  reifyObjURI,  reifyObjLit),  z)):
-                obj2, pred = typeDispatch(dispatchDict,
-                                         obj, predList)
-                a.add(subj, pred, obj2)
+            for p, obj in (("subj", x),
+                                  ("pred", y),
+                                  ("obj",  z)):
+                obj2 = typeDispatch(dispatchDict, obj)
+                a.add(subj, rei[p], obj2)
             
             
     #The great class of statements
@@ -192,18 +194,24 @@ def reification(formula, sink):
     return F
 
 
+###############################################################################
 
 
-
-def dereify(formula):
+def dereify_old(formula):
     sink = formula.newFormula()
     return dereification(formula,sink)
 
-def dereification(formula,sink):
+def dereification_old(formula,sink):
     store = formula.store
 #There has got to be a better way.
     a = formula
     owlOneOf = a.newSymbol('http://www.w3.org/2002/07/owl#oneOf')
+    
+    for p in "subj", "pred", "obj":
+	vocab[p] = {}
+	for q in "", "URI", "Value":
+	    vocab[q] = a.newSymbol(reifyNS + p + q)
+	    
     reifyPredURI = a.newSymbol(reifyNS+'predURI')
     reifyPred    = a.newSymbol(reifyNS+'pred')
     reifyPredLit = a.newSymbol(reifyNS+'predValue')
@@ -215,6 +223,7 @@ def dereification(formula,sink):
     reifyObjLit  = a.newSymbol(reifyNS+'objValue')
     reifyExVars  = a.newSymbol(reifyNS+'existentials')
     reifyUniVars = a.newSymbol(reifyNS+'universals')
+    
     reifyStatements = a.newSymbol(reifyNS+'statements')
 #end there  has got to be a better way.
     formulaBNodeList = formula.each(pred=reifyStatements)
@@ -244,65 +253,96 @@ def dereification(formula,sink):
     for c in formulaBNodeList:
         b = bNodes[c]
         universalClass = formula.any(subj=c, pred=reifyUniVars)
-        if universalClass != None:
-            universalList = formula.any(subj=universalClass, pred=owlOneOf)
-            if universalList != None:
-                for x in universalList:
-                    y = b.newSymbol(x.value())
-                    bNodes[y] = b.newBlankNode()
-                    b.declareUniversal(bNodes[y])
-        existentialClass = formula.any(subj=c, pred=reifyExVars)
-        if existentialClass != None:
-            existentialList = formula.any(subj=existentialClass, pred=owlOneOf)
-            if existentialList != None:
-                for x in existentialList:
-                    y = b.newSymbol(x.value())
-                    bNodes[y] = b.newBlankNode()
-                    b.declareExistential(bNodes[y])
-        StatementClass = formula.any(subj=c, pred=reifyStatements)
-        if StatementClass != None:
-            StatementList = formula.any(subj=StatementClass, pred=owlOneOf)
-            if StatementList != None:
+	
+        if universalClass == None:
+	    raise ValueError, "Underspecified formula %s no universals list" % c
+	universalList = formula.the(subj=universalClass, pred=owlOneOf)
+	if universalList != None:
+	    for x in universalList:
+		y = b.newSymbol(x.value())
+#		bNodes[y] = b.newBlankNode() # @@ needed? - Tim  -not a bnode
+		b.declareUniversal(bNodes[y])
+
+        existentialClass = formula.the(subj=c, pred=reifyExVars)
+        if existentialClass == None:
+	    raise ValueError, "Underspecified formula %s no existentials list" % c
+	existentialList = formula.any(subj=existentialClass, pred=owlOneOf)
+	if existentialList != None:
+	    for x in existentialList:
+		y = b.newSymbol(x.value())
+#		bNodes[y] = b.newBlankNode()  # @@ needed? - Tim  -not a bnode
+		b.declareExistential(bNodes[y])
+
+        StatementClass = formula.the(subj=c, pred=reifyStatements)
+
+        if StatementClass == None:
+	    raise ValueError, "Underspecified formula %s no statements list ??!!!" % c
+	StatementList = formula.the(subj=StatementClass, pred=owlOneOf)
+	if StatementList != None:
 ##                import sys
 ##                sys.path.append('/home/syosi')
 ##                from apihelper import info
 ##                print info(StatementList[1],30)
-                for subj in StatementList:
-                    for pred in (reifyPredURI, reifyPred, reifyPredLit, \
-                                 reifySubjURI, reifySubj, reifySubjLit, \
-                                 reifyObjURI,  reifyObj,  reifyObjLit):
-                        obj = formula.any(subj=subj, pred=pred)
-                        if obj == None:
-                            continue   #Be very careful
-                        predURI = str(pred.uriref())
-                        if subj not in quads:
-                            quads[subj] = [None, None, None, b]
-             #Find out what value we are actually using
-                        if "URI" in predURI:
-                            value = b.newSymbol(obj.value())
-                        elif "Value" in predURI:
-                            if isinstance(obj,List):
-                                value = dereifyList(b, obj)
-                            else:
-                                value = obj
-                        else:
-                            if isinstance(obj, Fragment) and obj not in bNodes:
-                                value = obj
-                            else:
-                                if obj not in bNodes:
-                                    bNodes[obj] = b.newBlankNode()
-                                value = bNodes[obj]
-            #Put it into the triples we are building
-                        if "subj" in predURI:
-                            quads[subj][SUBJ] = value
-                        elif "pred" in predURI:
-                            quads[subj][PRED] = value
-                        elif "obj" in predURI:
-                            quads[subj][OBJ] = value
-                        else:
-                            assert 0, "I don't know how to get here either " + predURI + ' that was predURI'
-        else:
-            assert 0, "How was I supposed to get here again?"
+	    for subj in StatementList:
+		part = {}
+		for p in "subject", "predicate", "objject":
+		    obj = formula.any(subj=subj, pred=vocab[p]["URI"])
+		    if obj != None:
+			part[p] = b.newSymbol(obj)  # Thing with a URI
+			continue
+		    obj = formula.any(subj=subj, pred=vocab[p]["Value"])
+		    if obj != None:
+			if isinstance(obj,List):
+			    part[p] = dereifyList(b, obj)
+			else:
+			    part[p] = obj
+			continue
+		    obj = formula.any(subj=subj, pred=vocab[p][""])
+		    if obj != None:   # bnode or Formula
+			if isinstance(obj, Fragment) and obj not in bNodes:
+			    value = obj
+			else:
+			    if obj not in bNodes:
+				bNodes[obj] = b.newBlankNode()
+			    value = bNodes[obj]
+			continue
+			
+		b.add(subj=part["subj"], pred=part["pred"], obj=part["obj"])
+		
+###
+		for pred in (reifyPredURI, reifyPred, reifyPredLit, \
+				reifySubjURI, reifySubj, reifySubjLit, \
+				reifyObjURI,  reifyObj,  reifyObjLit):
+		    obj = formula.any(subj=subj, pred=pred)
+		    if obj == None:
+			continue   #Be very careful
+		    predURI = str(pred.uriref())
+		    if subj not in quads:
+			quads[subj] = [None, None, None, b]
+	    #Find out what value we are actually using
+		    if "URI" in predURI:
+			value = b.newSymbol(obj.value())
+		    elif "Value" in predURI:
+			if isinstance(obj,List):
+			    value = dereifyList(b, obj)
+			else:
+			    value = obj
+		    else:
+			if isinstance(obj, Fragment) and obj not in bNodes:
+			    value = obj
+			else:
+			    if obj not in bNodes:
+				bNodes[obj] = b.newBlankNode()
+			    value = bNodes[obj]
+	#Put it into the triples we are building
+		    if "subj" in predURI:
+			quads[subj][SUBJ] = value
+		    elif "pred" in predURI:
+			quads[subj][PRED] = value
+		    elif "obj" in predURI:
+			quads[subj][OBJ] = value
+		    else:
+			assert 0, "I don't know how to get here either " + predURI + ' that was predURI'
             
 #Time to compute the dependency graph
     depends = {}
@@ -335,4 +375,66 @@ def dereification(formula,sink):
         if weKnow in bNodes and isinstance(bNodes[weKnow],Formula):
             sink.loadFormulaWithSubsitution(bNodes[weKnow])
     return sink
+
+
+
+
+#### Alternative method
+# Shortcuts are too messy and don't work with lists
+#
+def dereify(formula, sink=None):
+    store = formula.store
+    if sink == None:
+	sink = formula.newFormula()
+    weKnowList = formula.each(pred=store.type, obj=store.Truth)
+    for weKnow in weKnowList:
+	f = dereification(weKnow, formula, sink)
+	sink.loadFormulaWithSubsitution(f)
+    return sink
+
+def dereification(x, f, sink, bnodes={}):
+    rei = f.newSymbol(reifyNS[:-1])
     
+    if x == None:
+	raise ValueError, "Can't dereify nothing. Suspect missing information in reified form."
+    y = f.the(subj=x, pred=rei["uri"])
+    if y != None: return sink.newSymbol(y.value())
+	
+    y = f.the(subj=x, pred=rei["value"])
+    if y != None: return y
+    
+    y = f.the(subj=x, pred=rei["items"])
+    if y != None: return sink.newList([dereification(z, f, sink, bnodes) for z in y])
+    
+    y = f.the(subj=x, pred=rei["statements"])
+    if y != None:
+	z = sink.newFormula()
+	zbNodes = {}  # Bnode map for this formula
+	
+	uset = f.the(subj=x, pred=rei["universals"])
+	ulist = f.the(subj=uset, pred=f.newSymbol(owlOneOf))
+	from diag import progress
+	progress("universals = ",ulist)
+	for v in ulist:
+	    z.declareUniversal(f.newSymbol(v.value()))
+
+	uset = f.the(subj=x, pred=rei["existentials"])
+	ulist = f.the(subj=uset, pred=f.newSymbol(owlOneOf))
+	progress("existentials %s =  %s"%(ulist, ulist.value()))
+	for v in ulist:
+	    progress("Varibale is ", v)
+	    z.declareExistential(f.newSymbol(v.value()))
+	yy = f.the(subj=y, pred=f.newSymbol(owlOneOf))
+	progress("Statements:  set=%s, list=%s = %s" %(y,yy, yy.value()))
+	for stmt in yy:
+	    z.add(dereification(f.the(subj=stmt, pred=rei["subject"]), f, sink, zbNodes),
+		dereification(f.the(subj=stmt, pred=rei["predicate"]), f, sink, zbNodes),
+		dereification(f.the(subj=stmt, pred=rei["object"]), f, sink, zbNodes))
+	return z.close()
+    if x in bnodes:
+	return bnodes[x]
+    z = sink.newBlankNode()
+    bnodes[x] = z
+    return z
+    
+    raise ValueError, "Can't dereify %s - no clues I understand in %s" % (x, f)

@@ -25,7 +25,7 @@ DOC=doc/CwmHelp.html
 
 
 tested : package
-	(cd test; make all)
+	(cd test; make pre-release)
 	echo "Test worked, now can make release"
 
 doc.made : cwm.py notation3.py sax2rdf.py toXML.py

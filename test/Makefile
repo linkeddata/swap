@@ -8,7 +8,7 @@ RC=../../rdf-tests/rdfcore
 CODE=retest.py ../cwm.py ../notation3.py ../query.py ../llyn.py
 # etc ...
 
-TESTS=regression.n3 list/detailed.tests online.tests \
+OFFLINETESTS=regression.n3 list/detailed.tests \
 	math/detailed.tests \
 	norm/detailed.tests \
 	cwm/detailed.tests \
@@ -17,7 +17,12 @@ TESTS=regression.n3 list/detailed.tests online.tests \
 	delta/detailed.tests \
 	rdfcore-tests.n3 testmeta.n3
 
-all : pyc-check $(CODE) $(TESTS)
+TESTS=online.tests $(OFFLINETESTS)
+
+post-install : pyc-check $(CODE) $(OFFLINETESTS)
+	PYTHONPATH=`/bin/pwd`/.. $P retest.py -c $(OFFLINETESTS)
+
+pre-release : pyc-check $(CODE) $(TESTS)
 	PYTHONPATH=`/bin/pwd`/.. $P retest.py -c $(TESTS)
 
 mellow : pyc-check $(CODE) $(TESTS) 

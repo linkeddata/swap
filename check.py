@@ -20,7 +20,7 @@ import llyn # Chosen engine registers itself
 reason = Namespace("http://www.w3.org/2000/10/swap/reason#")
 log = Namespace("http://www.w3.org/2000/10/swap/log#")
 rdf=Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-rei = Namespace("http://www.w3.org/2000/10/swap/reify#")
+rei = Namespace("http://www.w3.org/2004/06/rei#")
 
 chatty = 0
 

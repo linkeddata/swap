@@ -4,8 +4,20 @@
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 
 "0" log:outputString """<html xmlns="http://www.w3.org/1999/xhtml">
-<head><title>Bug Status</title></head>
-<body><h1>Bug Status</h1>
+  <head>
+    <title>Cwm Bug Status - Chronological</title>
+    <link href="../doc/style.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<h1><a href="../../doc/cwm">Cwm</a> Bug Status</h1>
+<p>
+This is a chronological listing of known bugs, open or closed, in
+<a href="../../doc/cwm">Cwm</a>.  Bugs are registerd by sending mail to
+public-cwm-bugs@w3.org. Please use a good summary of the bug as
+a subject line. If replying, keep the same subject line ("Re:" is Ok).
+To close, reply to the raiser and the list,
+inserting "[closed] " at the front of the subject line.
+</p>
 <ul>
 """.
 

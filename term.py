@@ -33,7 +33,7 @@ import md5, binascii  # for building md5 URIs
 from uripath import refTo
 from RDFSink import runNamespace
 
-LITERAL_URI_prefix = "data:application/n3;"
+LITERAL_URI_prefix = "data:text/rdf+n3;"
 
 
 from RDFSink import List_NS
@@ -51,7 +51,7 @@ import sys
 if sys.hexversion < 0x02020000:
     raise RuntimeError("Sorry, this software requires python2.2 or newer.")
     
-REIFY_NS = "http://www.w3.org/2000/10/swap/reify#"
+REIFY_NS = "http://www.w3.org/2004/06/rei#"
 
 ########################################  Storage URI Handling
 #
@@ -206,6 +206,16 @@ class LabelledNode(Node):
 	raise RuntimeError("""Internal error: URIref strings should not match if not same object,
 	comparing %s and %s""" % (s, o))
 
+    def reification(self, sink, bnodeMap={}, why=None):
+	"""Describe myself in RDF to the given context
+	
+	[ reify:uri "http://example.org/whatever"]
+	""" #"
+	b = sink.newBlankNode(why=why)
+	uri = sink.newSymbol(REIFY_NS + "uri")
+	sink.add(subj=b, pred=uri, obj=sink.newLiteral(self.uriref()), why=why)
+	return b
+                
     def classOrder(self):
 	return	6
 
@@ -238,17 +248,17 @@ class Symbol(LabelledNode):
             self.fragments[fragid] = f
             return f
                 
+    def __getitem__(self, lname):
+        """get the lname Symbol in this namespace.
+
+        lname -- an XML name (limited to URI characters)
+        """
+        if lname.startswith("__"): # python internal
+            raise AttributeError, lname
+        
+        return self.internFrag(lname, Fragment)
+
      
-    def reification(self, sink, why=None):
-	"""Describe myself in RDF to the given context
-	
-	[ reify:uri "http://example.org/whatever"]
-	""" #"
-	b = sink.newBlankNode(why=why)
-	uri = sink.symbol(REIFY_NS + "uri")
-	sink.add(subj=b, pred=uri, obj=sink.newLiteral(self.uriref()), why=why)
-	return b
-                
     def dereference(self, mode="", workingContext=None):
 	"""dereference an identifier, finding the semantics of its schema if any
 	
@@ -305,18 +315,6 @@ class Fragment(LabelledNode):
          context.
          """
 	 return 0   # Use class Anonymous for generated IDs
-         return self.fragid[0] == "_"  # Convention for now @@@@@
-                                # parser should use seperate class?
-
-    def reification(self, sink, why=None):
-	"""Describe myself in RDF to the given context
-	
-	[ reify:uri "http://example.org/#whatever"]
-	"""  #"
-	b = sink.newBlankNode(why=why)
-	uri = sink.symbol(REIFY_NS + "uri")
-	sink.add(subj=b, pred=uri, obj=sink.newLiteral(self.uriref()), why=why)
-	return b
 
     def dereference(self, mode="", workingContext=None):
 	"""dereference an identifyer, finding the semantics of its schema if any
@@ -363,6 +361,19 @@ class AnonymousNode(Node):
     def asPair(self):
         return (ANONYMOUS, self.uriref())
 
+    def reification(self, sink, bnodeMap={}, why=None):
+	"""Describe myself in RDF to the given context
+	
+	[ reify:items ( [ reify:value "foo"]  .... ) ]
+	"""
+	try:
+	    return bnodeMap[self]
+	except KeyError:
+	    b = sink.newBlankNode()
+	    bnodeMap[self] = b
+	return b
+
+
 class AnonymousVariable(AnonymousNode):
     """An anonymous node which is existentially quantified in a given context.
     Also known as a Blank Node, or "bnode" in RDF parlance."""
@@ -378,18 +389,6 @@ class AnonymousUniversal(AnonymousVariable):
     """Nodes which are introduced as universally quantified variables with no quotable URI"""
     pass
     
-class Anonymous(Fragment):
-    def __init__(self, resource, fragid):
-	progress("@@@@ obsolete")
-	raise foobar
-        Fragment.__init__(self, resource, fragid)
-
-    def generated(self):
-        return 1
-
-    def asPair(self):
-        return (ANONYMOUS, self.uriref())
-        
     
 ##########################################################################
 #
@@ -497,6 +496,17 @@ class List(CompoundTerm):
 	    res.append(x.first)
 	    x = x.rest
 	return res
+
+    def reification(self, sink, bnodeMap={}, why=None):
+	"""Describe myself in RDF to the given context
+	
+	[ reify:items ( [ reify:value "foo"]  .... ) ]
+	"""
+	elements = sink.newList([ x.reification(sink, bnodeMap, why) for x in self])
+	b = sink.newBlankNode()
+	sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"items"), obj=elements, why=why)
+	return b
+
 
 class NonEmptyList(List):
 
@@ -628,10 +638,14 @@ class FragmentNil(EmptyList, Fragment):
 #
 #		L I T E R A L S
 
+typeMap = { "integer": int, "boolean": int,
+		"long": long,
+		"double": float, "float": float,
+		"string": str, "datetime":str, "anyURI": str } 
 class Literal(Term):
     """ A Literal is a representation of an RDF literal
 
-    really, data:application/n3;%22hello%22 == "hello" but who
+    really, data:text/rdf+n3;%22hello%22 == "hello" but who
     wants to store it that way?  Maybe we do... at least in theory and maybe
     practice but, for now, we keep them in separate subclases of Term.
     An RDF literal has a value - by default a string, and a datattype, and a language
@@ -702,9 +716,23 @@ class Literal(Term):
         return '"' + self.string + '"'   # @@@ encode quotes; @@@@ strings containing \n
 
     def value(self):
+	"""Datatype conversion XSD to Python
+	
+	RDF primitive datatypes are XML schema datatypes, in the XSD namespace.
+	see http://www.w3.org/TR/xmlschema-2
+	"""
+	global typeMap
 	if self.datatype == None: return self.string
-	if self.datatype is self.store.integer: return int(self.string)
-	if self.datatype is self.store.float: return float(self.string)
+	xsd = self.store.integer.resource
+	if self.datatype.resource is xsd:
+	    try:
+		return typeMap[self.datatype.fragid](self.string)
+	    except KeyError:
+		raise ValueError("Attempt to run built-in on unsupported XSD datatype %s of value %s." 
+			% (`self.datatype`, self.string))
+		
+#	if self.datatype is self.store.integer: return int(self.string)
+#	if self.datatype is self.store.float: return float(self.string)
 	raise ValueError("Attempt to run built-in on unknown datatype %s of value %s." 
 			% (`self.datatype`, self.string))
 
@@ -714,13 +742,13 @@ class Literal(Term):
         return self.asHashURI() #something of a kludge?
         #return  LITERAL_URI_prefix + uri_encode(self.representation())    # tbl preferred
 
-    def reification(self, sink, why=None):
+    def reification(self, sink, bnodeMap={}, why=None):
 	"""Describe myself in RDF to the given context
 	
 	[ reify:value "un expression quelconque"@fr ]
 	"""
 	b = sink.newBlankNode(why=why)
-	sink.add(subj=b, pred=reify.value, obj=sink.newLiteral(self.string), why=why)
+	sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"value"), obj=self, why=why)
 	return b
 
     def unify(self, other, vars, existentials, bindings):

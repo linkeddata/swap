@@ -14,7 +14,7 @@ import diag
 from diag import chatty_flag, tracking, progress
 from term import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
-    Literal, Symbol, Fragment, FragmentNil, Anonymous, Term, \
+    Literal, Symbol, Fragment, FragmentNil,  Term, \
     CompoundTerm, List, EmptyList, NonEmptyList
 from formula import StoredStatement, Formula
 from why import Because, BecauseBuiltIn, BecauseOfRule, \

@@ -292,7 +292,7 @@ Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd
 Methods defined here:<br>
 <dl><dt><a name="EmptyList-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
 
-<dl><dt><a name="EmptyList-newList"><strong>newList</strong></a>(value)</dt></dl>
+<dl><dt><a name="EmptyList-newList"><strong>newList</strong></a>(self, value)</dt></dl>
 
 <dl><dt><a name="EmptyList-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
@@ -427,7 +427,7 @@ Data and non-method functions defined here:<br>
 Methods inherited from <a href="thing.html#EmptyList">EmptyList</a>:<br>
 <dl><dt><a name="FragmentNil-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
 
-<dl><dt><a name="FragmentNil-newList"><strong>newList</strong></a>(value)</dt></dl>
+<dl><dt><a name="FragmentNil-newList"><strong>newList</strong></a>(self, value)</dt></dl>
 
 <dl><dt><a name="FragmentNil-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
@@ -839,7 +839,7 @@ Return&nbsp;[(var1,&nbsp;val1),&nbsp;(var2,val2)...]&nbsp;if&nbsp;match</tt></dd
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>&nbsp;A&nbsp;<a href="#Literal">Literal</a>&nbsp;is&nbsp;a&nbsp;representation&nbsp;of&nbsp;an&nbsp;RDF&nbsp;literal<br>
 &nbsp;<br>
-really,&nbsp;data:application/n3;%22hello%22&nbsp;==&nbsp;"hello"&nbsp;but&nbsp;who<br>
+really,&nbsp;data:text/rdf+n3;%22hello%22&nbsp;==&nbsp;"hello"&nbsp;but&nbsp;who<br>
 wants&nbsp;to&nbsp;store&nbsp;it&nbsp;that&nbsp;way?&nbsp;&nbsp;Maybe&nbsp;we&nbsp;do...&nbsp;at&nbsp;least&nbsp;in&nbsp;theory&nbsp;and&nbsp;maybe<br>
 practice&nbsp;but,&nbsp;for&nbsp;now,&nbsp;we&nbsp;keep&nbsp;them&nbsp;in&nbsp;separate&nbsp;subclases&nbsp;of&nbsp;<a href="#Term">Term</a>.<br>
 An&nbsp;RDF&nbsp;literal&nbsp;has&nbsp;a&nbsp;value&nbsp;-&nbsp;by&nbsp;default&nbsp;a&nbsp;string,&nbsp;and&nbsp;a&nbsp;datattype,&nbsp;and&nbsp;a&nbsp;language<br>&nbsp;</tt></td></tr>
@@ -1248,7 +1248,7 @@ formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&
 <strong>FORMULA</strong> = 1<br>
 <strong>INFINITY</strong> = 1000000000<br>
 <strong>LITERAL</strong> = 2<br>
-<strong>LITERAL_URI_prefix</strong> = 'data:application/n3;'<br>
+<strong>LITERAL_URI_prefix</strong> = 'data:text/rdf+n3;'<br>
 <strong>List_NS</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'<br>
 <strong>Logic_NS</strong> = 'http://www.w3.org/2000/10/swap/log#'<br>
 <strong>OBJ</strong> = 3<br>

@@ -19,7 +19,7 @@ import md5, binascii  # for building md5 URIs
 
 from term import LightBuiltIn, ReverseFunction, Function
 
-LITERAL_URI_prefix = "data:application/n3;"
+LITERAL_URI_prefix = "data:text/rdf+n3;"
 
 
 STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"

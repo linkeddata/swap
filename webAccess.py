@@ -26,7 +26,7 @@ def urlopenForRDF(addr):
     This is now uses urllib2.urlopen(), in order to get better error handling
     """
     z = urllib2.Request(addr)
-    z.add_header('Accept', 'application/n3, application/rdf+xml')
+    z.add_header('Accept', 'text/rdf+n3, application/rdf+xml')
 #    z.add_header('Accept', 'text/plain q=0.1')
     return urllib2.urlopen(z)
 
@@ -67,27 +67,30 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
 	if receivedContentType:
 	    if diag.chatty_flag > 9:
 		progress("Recieved Content-type: " + `receivedContentType` + " for "+addr)
-	    if receivedContentType.find('xml') >= 0 or receivedContentType.find('rdf') >= 0:
+	    if receivedContentType.find('xml') >= 0 or (
+	             receivedContentType.find('rdf')>=0
+		     and not (receivedContentType.find('n3')>=0)  ):
 		guess = "application/rdf+xml"
 	    elif receivedContentType.find('n3') >= 0:
-		guess = "application/n3"
+		guess = "text/rdf+n3"
 	if guess== None and contentType:
 	    if diag.chatty_flag > 9:
 		progress("Given Content-type: " + `contentType` + " for "+addr)
-	    if contentType.find('xml') >= 0 or contentType.find('rdf') >= 0:
+	    if contentType.find('xml') >= 0 or (
+		    contentType.find('rdf') >= 0  and not (contentType.find('n3') >= 0 )):
 		guess = "application/rdf+xml"
 	    elif contentType.find('n3') >= 0:
-		guess = "application/n3"
+		guess = "text/rdf+n3"
 	buffer = netStream.read()
 	if guess == None:
 
 	    # can't be XML if it starts with these...
 	    if buffer[0:1] == "#" or buffer[0:7] == "@prefix":
-		guess = 'application/n3'
+		guess = 'text/rdf+n3'
 	    elif buffer.find('xmlns="') >=0 or buffer.find('xmlns:') >=0: #"
 		guess = 'application/rdf+xml'
 	    else:
-		guess = 'application/n3'
+		guess = 'text/rdf+n3'
 	    if diag.chatty_flag > 9: progress("Guessed ContentType:" + guess)
     except (IOError, OSError):  
 	raise DocumentAccessError(addr, sys.exc_info() )
@@ -113,7 +116,7 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
 	p.feed(buffer)
 	F = p.close()
     else:
-	assert guess == 'application/n3'
+	assert guess == 'text/rdf+n3'
 	if diag.chatty_flag > 49: progress("Parsing as N3")
 	p = notation3.SinkParser(store, F,  thisDoc=asIfFrom,flags=flags, why=why)
 	p.startDoc()

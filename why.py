@@ -121,7 +121,7 @@ class FormulaReason(Reason):
 	returns it.
 	(NB: This is different from reason.explain(ko) which returns the reason)"""
 	if ko == None: ko = self.formula.store.newFormula()
-	ko.bind("n3", "http://www.w3.org/2000/10/swap/reify#")
+	ko.bind("n3", "http://www.w3.org/2004/06/rei#")
 	ko.bind("log", "http://www.w3.org/2000/10/swap/log#")
 	ko.bind("reason", "http://www.w3.org/2000/10/swap/reason#")
 	ko.bind("run", runNamespace())
