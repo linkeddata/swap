@@ -42,7 +42,7 @@ of any identifiers used in the document.
         <rdfs:comment>This connects a document and a string that represents it.
         Cwm knows how to go get a document in order to evaluate this.</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.w3.org/2000/01/pim/doc#Work"/>
-        <rdfs:label>forumla</rdfs:label>
+        <rdfs:label>content</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#String"/>
     </rdf:Property>
 
@@ -99,7 +99,7 @@ List and Other are not stable and may change.
         <rdfs:comment>This connects a document and the formula it parses to.
         Cwm knows how to go get a document and parse it in order to evaluate this.</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.w3.org/2000/01/pim/doc#Work"/>
-        <rdfs:label>forumla</rdfs:label>
+        <rdfs:label>semantics</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#Formula"/>
     </rdf:Property>
 
