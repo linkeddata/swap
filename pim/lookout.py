@@ -50,7 +50,7 @@
 #                        Release 1.5.1
 # http://www.python.org/doc/lib/lib.html
 
-import string, StringIO
+import string, StringIO, sys
 
 # It also uses the win32com package
 # maintained by Mark Hammond
@@ -84,8 +84,14 @@ DETAILS = [
 # for example: LastFirstSpaceOnly.  Some, like "unread", and "saved" are local and don't have
 # a global significance in that form. Some I just don't understand.
 # The read-only ones are in general less useful.
+global boring
 
-BORING = [			# Example value:
+global verbose
+verbose=0
+boring = [			# Example value:
+
+# Fields from Contacts:
+	
   "LastFirstSpaceOnly",     #        "Layman Andrew" ; # r
   "Email2EntryID",          #        "x\000x\000" ; # r
   "Email3EntryID",          #       "0" ; # r
@@ -105,19 +111,50 @@ BORING = [			# Example value:
 #  CreationTime                   "2001-04-10T20:33:41Eastern Daylight Time
 #   "FileAs",                         "Layman, Andrew" ; # rw
 #  ms:Email1EntryID                  "x\000x\000" ; # r    @@@@@@@@@@@@
-#  ms:Sensitivity                    "0" ; # rw
-#  ms:Initials                       "A.L." ; # rw
+   "Sensitivity", 			#                    "0" ; # rw
+    "Initials",                       # "A.L." ; # rw
 #  ms:Subject                        "Andrew Layman" ; # rw
   "LastFirstNoSpace",              # "LaymanAndrew" ; # r
 #  ms:Email1DisplayName              "Andrew Layman (E-mail)" ; # r
-#  ms:Importance                     "1" ; # r
+   "Importance",                     #"1" ; # r
 #  ms:SelectedMailingAddress         "0" ; # r
-  "NoAging"                       # "0" ; # r
+  "NoAging",                       # "0" ; # r
 #  ms:Email3DisplayName,             # "Andrew Layman (E-mail 3)" ; # r
-#  ms:OutlookVersion                 "9.0" #  ConversationIndex  cannot be rea	    
+   "OutlookVersion", #                 "9.0" #  ConversationIndex  cannot be rea
+
+# Fields from Appointments:
+# ms:Organizer                      "Tim Bernes-Lee" ; # r
+#      ms:Duration                       "1440" ; # rw
+#      ms:ReminderSet                    "0" ; # rw
+#      ms:CreationTime                   "1998-11-02T16:33:14Eastern Daylight Time" ; # r
+#      ms:Sensitivity                    "0" ; # rw
+#      ms:OutlookVersion                 "8.5" ; #  included in boring list above
+    "NetMeetingType",		#                 "0" ; # rw
+    "ReminderOverrideDefault", 	#        "0" ; # rw
+    "IsOnlineMeeting",          #     "0" ; # rw
+    "NetMeetingAutoStart",	#            "0" ; # rw
+#      ms:Categories                     "Holiday" ; # rw
+#      ms:ReminderMinutesBeforeStart     "15" ; # rw
+#      ms:End                            "2001-02-15T00:00:00Eastern Daylight Time" ; # rw
+#      ms:RecurrenceState                "0" ; # r
+#      ms:MeetingStatus                  "0" ; # rw
+#      ms:LastModificationTime           "1998-11-02T16:33:14Eastern Daylight Time" ; # r
+#      ms:Importance                     "1" ; # rw
+#      ms:IsRecurring                    "0" ; # r
+      "ConferenceServerAllowExternal", 	#  "0" ; # rw
+#      ms:Subject                        "Valentine's Day" ; # rw
+#      ms:ResponseStatus                 "0" ; # r
+#      ms:Location                       "United States" ; # rw
+#      ms:AllDayEvent                    "1" ; # rw
+#      ms:ReminderPlaySound              "0" ; # rw
+#      ms:BusyStatus                     "0" ; # rw
+	"ConversationIndex", 	#              "^V^@\ubd01\u5ea4\ub781\u1e50\uc7c8\u2510\ud211\uee8d\u
+#      ms:ResponseRequested              "1" ; # rw
+#      ms:Start                          "2001-02-14T00:00:00Eastern Daylight Time"  .  
+
+  
 	    ]
 	    
-BORING = [ ]
 OTHERS = ["Size", "OutlookInternalVersion", "NetMeetingAutoStart", "OutlookVersion",
 			"FormDescription",
 			"StoreID", "EntryID",  # UUIDs mess up the file but might be useful
@@ -151,24 +188,60 @@ _test_data = \
 """
 
 def main():
+	global boring
+	option_calendar = 0
+	option_contacts = 0
+	option_all = 0
+	doall = 0
+	files = []
+
+	for arg in sys.argv[1:]:
+	    if arg[0:1] == "-":
+		if arg == "--contacts": option_contacts = 1
+		elif arg == "--calendar": option_calendar = 1
+		elif arg == "--all":  option_all = 1
+		elif arg == "-v": verbose=1
+		elif arg == "-?" or arg == "-h" or arg == "--help":
+		    print """Convert Fink .info format  to n3 format.
+	Syntax:    python lookout.py  [--calendar] [--contacts] [--all]
+
+	    Chose -- calendar and/or --contacts folder to dump into N3
+	    If you also chose --all, you get every single field from each entry
+	    You may need to export PYTHONPATH=.. if you do this in the swap CVS tree.
+	    $Id$
+	"""
+		    return
+		else:
+		    print """Bad option argument.""", arg, ". use -? for help."
+		    sys.exit(-1)
+	    else:
+		    print """Bad  argument.""", arg, ". use -? for help."
+		    sys.exit(-1)
+
+	if option_all:
+		boring = []
+
+
 	oapp = outlookToN3()
 
 	_version = "$Id$"[1:-1]
 
-	print "# Outlook data extractded by"
+	print "# Outlook data extracted by"
 	print "#   ", _version
 	print "#"
 	print "@prefix", PREFIX, "<http://www.w3.org/2000/10/swap/pim/mso.n3#>."
 	print "@prefix util: <http://www.w3.org/2000/10/swap/util.n3#>."
 	print
-	print "# Calendar:"
-	oapp.getFolder(outlook.constants.olFolderCalendar, [])
-	
-	print "# Contacts:"
-	oapp.getFolder(outlook.constants.olFolderContacts, [
-#		"Attachments" , # Links to follow for details we want
-			"Recipients" ]
-			)
+	if option_calendar:
+		print "# Calendar:"
+		oapp.getFolder(outlook.constants.olFolderCalendar, [])
+
+	if option_contacts:
+		print "# Contacts:"
+		oapp.getFolder(outlook.constants.olFolderContacts, [
+		#		"Attachments" , # Links to follow for details we want
+				"Recipients" ]
+				)
 
 	print "# ENDS"
 	
@@ -190,8 +263,10 @@ def main():
 # http://www.microsoft.com/OutlookDev/Articles/Outprog.htm
 #
 
-# Note this is a copy of the version in notation3.py:
-def stringToN3(str):
+from notation3 import stringToN3 # http://www.w3.org/2000/10/swap/notation3.py
+
+# Note was is a copy of the version in notation3.py:
+def stringToN3_OLD(str):
 	res = ""
 	if len(str) > 20 and string.find(str, "\n") >=0:
 		delim= '"""'
@@ -270,11 +345,24 @@ class outlookToN3(outlook.Application):
 		for i in range(n):
 			item = list[i+1] # GetFirst()
 			id = self._getItem(item)
-			print " <uuid:%s>  util:item <uuid:%s>." % (folderId, id)
+			print " <uuid:%s>\n    util:item <uuid:%s>." % (folderId, id)
 #			if i<n-1: print ","
-		print "."
+#		print "."
+
+
+	def _getEntryId(self, item, key="EntryId"):
+		global verbose
+		try:
+			id = item.__getattr__(key)
+			return "<uuid:%s>" % id
+		except:
+			return None
+
+
+
 			
-	def _getItem(self, item, indent=0):
+	def _getItem(self, item, indent=0, noun=0):
+		global verbose
 		try:
 			gkeys = item._prop_map_get_.keys()
 			pkeys = item._prop_map_put_.keys()        # don't in case it sets "changed" bit
@@ -292,7 +380,7 @@ class outlookToN3(outlook.Application):
 		except:
 			id = None
 			print " [ "
-
+		latest = {}
 		for k in range(len(gkeys)):
 			key = gkeys[k]
 			_w = (key in pkeys)		# Is this writable?
@@ -303,9 +391,15 @@ class outlookToN3(outlook.Application):
 			except:
 				print "# ", key, " cannot be read @@\n    ",
 				break
-			if x != "" and key not in BORING and key != "EntryID":
+			if x != "" and key not in boring and key != "EntryID":
 				str = _toString(x)
-				if str != "" and str[:9] != "<win32com":
+				if str[:9] == "<win32com":
+				    id2 = self._getEntryId(x)
+				    if not id2:
+					print "\n# ", `key`, ":", `str`, "ignored."
+				    else:
+					print "%-32s  %s  # @@ OBJECT" % (PREFIX+key, id2),
+				elif str != "":
 					if need_semicolon: print "; %s\n    " %tail, "    "*indent,
 					need_semicolon = 1
 					if str[:1]=="<":  # Internal structure of some sort
@@ -337,10 +431,22 @@ class outlookToN3(outlook.Application):
 							self._getItem(x, indent+1) # Recurse
 					else: # Not a funny internal thingy
 						print "%-32s  %s" % (PREFIX+key, str),
+						latest[key] = str
 					tail = "# rw"
 					if not _w : tail = "# r"
+		    
+		if latest.get("IsRecurring", '"0"') != '"0"':
+		    rec = item.GetRecurrencePattern()
+		    print ";\n    ms:recurrencePattern # isrec=",latest.get("IsRecurring", 0)
+		    self._getItem(rec, indent=indent+1, noun=1)
+		    print "#@@@ rec = ",`rec`
+
 		if id : print " ."
-		else: print " ] . "
+		else:
+			if noun: print "]"
+			else: print " ]. "
+
+
 		return id
 	
 
@@ -364,44 +470,6 @@ def iso2vb(isotime):
 
 
 	
-def nextrow(fp):
-	# A simple state-machine implementation of Windows
-	# tab-delimited file format with quoted fields.
-	# I'm not sure if this really
-	# does CRLF's right.
-	# There are faster ways to do this, I'm sure...
-	s = 'start'
-	row = ()
-	field = ""
-	while 1:
-		c = fp.read(1)
-		if not c:
-			if field or len(row):
-				raise IOError, "bad end of file"
-			return None
-		if s == 'start':
-			if c == "\n":
-				row = row + (field,)
-				return row
-			elif c == "\t":
-				row = row + (field,)
-				field = ''
-			elif c == '"':
-				s = 'quoted'
-			else:
-				field = field + c
-		elif s == 'quoted':
-			if c == '"':
-				s = 'start'
-			elif c == "\\":
-				s = 'escaped'
-			else:
-				field = field + c
-		elif s == 'escaped':
-			field = field + c
-			s = 'quoted'
-		else:
-			raise RuntimeError, 'bad case'
 			
 		
 if __name__ == '__main__': main()
