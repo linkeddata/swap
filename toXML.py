@@ -99,6 +99,10 @@ option_noregen = 0   # If set, do not regenerate genids on output
 global _namechars	
 _namechars = string.lowercase + string.uppercase + string.digits + '_-'
 	    
+def dummyWrite(x):
+    pass
+
+
 class ToRDF(RDFSink.RDFStructuredOutput):
     """keeps track of most recent subject, reuses it"""
 
@@ -106,16 +110,18 @@ class ToRDF(RDFSink.RDFStructuredOutput):
     #@ Not actually complete, and can encode anyway
     def __init__(self, outFp, thisURI, base=None, flags=""):
         RDFSink.RDFSink.__init__(self)
-        dummyEnc, dummyDec, dummyReader, encWriter = codecs.lookup('utf-8')
-#	progress("&&&&& enxWriter factory is ", encWriter)
-#	z = encWriter(outFp)
-	z = encWriter(sys.stdout)
-#	progress("&&&& Instance of encWriter is", z)
-	zw = z.write
-#	progress("&&&& writer of encWriter is", zw)
-#	zw(u"This \u00BE was sent to zw")
-	self._xwr = XMLWriter(zw)
-#	progress("&&&& _xwr, and XMLWriter,  is", self._xwr)
+	if outFp == None:
+	    self._xwr = XMLWriter(dummyWrite, self)
+	else:
+	    dummyEnc, dummyDec, dummyReader, encWriter = codecs.lookup('utf-8')
+	    z = encWriter(outFp)
+    #	z = encWriter(sys.stdout)
+    #	progress("&&&& Instance of encWriter is", z)
+	    zw = z.write
+    #	progress("&&&& writer of encWriter is", zw)
+    #	zw(u"This \u00BE was sent to zw")
+	    self._xwr = XMLWriter(zw, self)
+    #	progress("&&&& _xwr, and XMLWriter,  is", self._xwr)
 	self._subj = None
 	self._base = base
 	self._formula = None   # Where do we get this from? The outermost formula
@@ -123,11 +129,16 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 	self._thisDoc = thisURI
 	self._flags = flags
 	self._nodeId = {}
+	self._nextNodeId = 0
 	self._docOpen = 0  # Delay doc open <rdf:RDF .. till after binds
 
     #@@I18N
     _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
 
+    def dummyClone(self):
+	"retun a version of myself which will only count occurrences"
+	return ToRDF(None, self._thisDoc, base=self._base, flags=self._flags )
+		    
     def startDoc(self):
         pass
 
@@ -155,9 +166,9 @@ class ToRDF(RDFSink.RDFStructuredOutput):
             if self.prefixes.get(RDF_NS_URI, ":::") == ":::":
                 if self.namespaces.get("rdf", ":::") ==":::":
                     self.bind("rdf", RDF_NS_URI)
-            if self.prefixes.get(Logic_NS, ":::") == ":::":
-                if self.namespaces.get("log", ":::") ==":::":
-                    self.bind("log", Logic_NS)
+#            if self.prefixes.get(Logic_NS, ":::") == ":::":
+#                if self.namespaces.get("log", ":::") ==":::":
+#                    self.bind("log", Logic_NS)
             ats = []
             ps = self.prefixes.values()
             ps.sort()    # Cannonicalize output somewhat
@@ -186,7 +197,12 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 		progress("Ignoring universal quantification of ", obj)
 		return
 	    elif pred == (SYMBOL, N3_forSome_URI):
-		progress("Ignoring existential quantification of ", obj)
+		nid = self._nodeId.get(obj, None)
+		if nid == None:
+		    self._nextNodeId += 1
+		    nid = 'b'+`self._nextNodeId`
+		    self._nodeId[obj] = nid
+		progress("Noting existential quantification of %s as nodeid %s "%(obj, nid))
 		return
 	    
 	if subj[0] not in (SYMBOL, ANONYMOUS, LITERAL):
@@ -209,8 +225,13 @@ class ToRDF(RDFSink.RDFStructuredOutput):
                  self._xwr.startElement(obj[1], [(RDF_NS_URI+" about", subjn),], self.prefixes)
                  return
 	    if subj[0] == SYMBOL or subj[0] == ANONYMOUS:
-		self._xwr.startElement(RDF_NS_URI+'Description',
-				    [(RDF_NS_URI+" about", subjn),], self.prefixes)
+		nid = self._nodeId.get(subj, None)
+		if nid == None:
+		    self._xwr.startElement(RDF_NS_URI+'Description',
+					[(RDF_NS_URI+" about", subjn),], self.prefixes)
+		else:
+		    self._xwr.startElement(RDF_NS_URI+'Description',
+					[(RDF_NS_URI+" nodeid", nid),], self.prefixes)
 	    elif subj[0] == LITERAL:
 		v = subj[1]
 		attrs = []  # Literal
@@ -225,9 +246,13 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 		self._xwr.endElement()
 	    else:
 		raise RuntimeError("Unexpected subject", `subj`)
-	if obj[0] != LITERAL: 
-	    objn = refTo(self._base, obj[1])
-	    self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' resource', objn)], self.prefixes)
+	if obj[0] != LITERAL:
+	    nid = self._nodeId.get(obj, None)
+	    if nid == None:
+		objn = refTo(self._base, obj[1])
+		self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' resource', objn)], self.prefixes)
+	    else:
+		self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' nodeid', nid)], self.prefixes)		
 	    return
 	attrs = []  # Literal
 	v = obj[1]
@@ -248,9 +273,14 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 	if self._subj != subj:
 	    if self._subj:
 		self._xwr.endElement()
-	    subjn = refTo(self._base, subj[1])
-	    self._xwr.startElement(RDF_NS_URI + 'Description',
-				 ((RDF_NS_URI+' about', subjn),), self.prefixes)
+	    nid = self._nodeId.get(subj, None)
+	    if nid == None:
+		subjn = refTo(self._base, subj[1])
+		self._xwr.startElement(RDF_NS_URI + 'Description',
+				    ((RDF_NS_URI+' about', subjn),), self.prefixes)
+	    else:
+		self._xwr.startElement(RDF_NS_URI + 'Description',
+				    ((RDF_NS_URI+' nodeid', nid),), self.prefixes)
 	    self._subj = subj
 
         self._xwr.startElement(pred[1], [(RDF_NS_URI+' parseType','Resource')], self.prefixes)  # @@? Parsetype RDF
@@ -288,10 +318,7 @@ class ToRDF(RDFSink.RDFStructuredOutput):
             self._subj = None
         self._xwr.startElement(RDF_NS_URI+'Description', 
 			      [],
-#			      [(RDF_NS_URI+' about', refTo(self._base,context[1]))],
                               self.prefixes)
-#        print "# @@@@@@@@@@@@@ ", self.prefixes
-#        log_quote = self.prefixes[(SYMBOL, Logic_NS)] + ":Quote"  # Qname yuk
         
         self._xwr.startElement(NODE_MERGE_URI, [(RDF_NS_URI+' parseType', "Quote")], self.prefixes)
         self._subj = None
@@ -310,9 +337,15 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 	if self._subj != subj:
 	    if self._subj:
 		self._xwr.endElement()
-	    subjn = refTo(self._base, subj[1])
-	    self._xwr.startElement(RDF_NS_URI + 'Description',
-				 ((RDF_NS_URI+' about', subjn),), self.prefixes)
+	    nid = self._nodeId.get(subj, None)
+	    if nid == None:
+		progress("@@@@@@Start anonymous node but not nodeid?", subj)
+		subjn = refTo(self._base, subj[1])
+		self._xwr.startElement(RDF_NS_URI + 'Description',
+				    ((RDF_NS_URI+' about', subjn),), self.prefixes)
+	    else:
+		self._xwr.startElement(RDF_NS_URI + 'Description',
+				    ((RDF_NS_URI+' nodeid', nid),), self.prefixes)
 	    self._subj = subj
 
 #        log_quote = self.prefixes[(SYMBOL, Logic_NS)] + ":Quote"  # Qname yuk
@@ -340,7 +373,7 @@ class XMLWriter:
     Takes as argument a writer which does the (eg utf-8) encoding
     """
 
-    def __init__(self, encodingWriter, squeaky=0):
+    def __init__(self, encodingWriter, counter, squeaky=0):
 #	self._outFp = outFp
 	self._encwr = encodingWriter
 	self._elts = []
@@ -349,6 +382,7 @@ class XMLWriter:
         self.needClose = 0  # 1 Means we need a ">" but save till later
         self.noWS = 0       # 1 Means we cant use white space for prettiness
         self.currentNS = None # @@@ Hack
+	self.counter = counter
         
     #@@ on __del__, close all open elements?
 
@@ -380,6 +414,7 @@ class XMLWriter:
             self._encwr(">")
             self.needClose = 0
 
+
     def figurePrefix(self, uriref, rawAttrs, prefixes):
 	i = len(uriref)
 	while i>0:
@@ -389,7 +424,9 @@ class XMLWriter:
 		break
 	ln = uriref[i:]
 	ns = uriref[:i]
+	self.counter.countNamespace(ns)
 #        print "@@@ ns=",ns, "@@@ prefixes =", prefixes
+	
         prefix = prefixes.get(ns, ":::")
         attrs = []
         for a, v in rawAttrs:   # Caller can set default namespace
@@ -411,6 +448,7 @@ class XMLWriter:
             lan = at[i+1:]
 	    if ans == XML_NS_URI: prefix = "xml"
             else:
+		self.counter.countNamespace(ans)
 		prefix = prefixes.get(ans,":::")
 		if prefix == ":::":
 		    raise RuntimeError("#@@@@@ tag %s: atr %s has no prefix :-( in prefix table:\n%s" %

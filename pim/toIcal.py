@@ -29,6 +29,15 @@ NOTE: see earlier work:
 @@cite and use python style
 @@use doctest
 see changelog at end
+
+
+Copyright ©  2000-2004 World Wide Web Consortium, (Massachusetts Institute
+of Technology, European Research Consortium for Informatics and Mathematics,
+Keio University). All Rights Reserved. This work is distributed under the
+W3C® Software License [1] in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ FOR A PARTICULAR PURPOSE.
+
 """
 
 
@@ -284,7 +293,19 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.13  2004-02-23 16:50:54  connolly
+# Revision 2.14  2004-03-06 20:39:40  timbl
+# See http://www.w3.org/2000/10/swap/doc/changes.html for details
+# - Regresssion test incorporates the RDF Core Positive Parser Tests except XMLLiteral & reification
+# - xml:base support was added in the parser.
+# - Use the --rdf=R flag to allow RDF to be parsed even when there is no enveloping <rdf:RDF> tag
+# - nodeid generated on RDF output
+# - Automatically generated terms with no URIs sort after anything which has a URI.
+# - Namespace prefix smarts on output - default ns used for that most frequently used.
+# - suppresses namespace prefix declarations which are not actually needed in the output.
+# - Cwm will also make up prefixes when it needs them for a namespace, and none of the input data uses one.-
+# - Will not use namespace names for URIs which do not have a "#". Including a "/" in the flags overrides.
+#
+# Revision 2.13  2004/02/23 16:50:54  connolly
 # schema-based rewrite. might have regressed a bit.
 #
 # Revision 2.8  2004/02/02 16:46:50  connolly

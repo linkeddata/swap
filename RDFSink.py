@@ -98,6 +98,13 @@ def runNamespace():
     runNamespaceValue = join(base(), runNamespaceValue) # absolutize
     return runNamespaceValue
 
+nextu = 0
+def uniqueURI():
+    "A unique URI"
+    global nextu
+    nextu += 1
+    return runNamespace() + "u_" + `nextu`
+    
 class URISyntaxError(ValueError):
     """A parameter is passed to a routine that requires a URI reference"""
     pass
@@ -135,12 +142,14 @@ class RDFSink:
         self.defaultNamespace = None
 	self.usingRunNamespace = 0
 	self.declaredRunNamespace = 0
+	self._counts = {}	# How many times each namespace is used
 
 	self._genPrefix = genPrefix
 	if genPrefix == None:
 	    self._genPrefix = runNamespace()  + "_g"
 	    self.usingRunNamespace = 1
 	self._nextId = 0
+
 
     def startDoc(self):
         pass
@@ -170,6 +179,16 @@ class RDFSink:
         """
         
         pass
+
+    def countNamespace(self, namesp):
+	"On output, count how many times each namespace is used"
+	try:
+	    self._counts[namesp] += 1
+	except KeyError:
+	    self._counts[namesp] = 1
+
+    def namespaceCounts(self):
+	return self._counts
 
     def bind(self, prefix, uri):
 	"""Pass on a binding hint for later use in output
@@ -283,7 +302,7 @@ class RDFSink:
 
 class RDFStructuredOutput(RDFSink):
 
-    # The foillowing are only used for structured "pretty" outyput of structrued N3.
+    # The foillowing are only used for structured "pretty" output of structrued N3.
     # They roughly correspond to certain syntax forms in N3, but the whole area
     # is just a kludge for pretty output and not worth going into unless you need to.
     

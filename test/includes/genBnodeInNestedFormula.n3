@@ -1,0 +1,7 @@
+@keywords a, is, of, this.
+@prefix : <#>.
+
+[  a Mother; name "Mary" ].
+
+{ ?x  a Mother } => {  ?x  says { You listenTo ?x }}.
+

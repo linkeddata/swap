@@ -1,12 +1,14 @@
 
 
 
-<rdf:RDF xmlns="file:/devel/WWW/2000/10/swap/test/test#"
-    xmlns:dpo="http://www.daml.org/2001/03/daml+oil#"
-    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+<rdf:RDF xmlns="http://www.w3.org/2002/07/owl#"
     xmlns:owl="http://www.w3.org/2002/07/owl#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:t="file:/devel/WWW/2000/10/swap/test/test#">
+    xmlns:t="http://example.com/test#">
+
+    <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil">
+        <t:verb0 rdf:resource="http://example.com/test#object0"/>
+    </rdf:Description>
 
     <rdf:Description>
         <rdf:first>subj1</rdf:first>
@@ -14,7 +16,7 @@
     </rdf:Description>
 
     <rdf:Description rdf:about="run#li17">
-        <verb1 rdf:resource="test#object1"/>
+        <t:verb1 rdf:resource="http://example.com/test#object1"/>
     </rdf:Description>
 
     <rdf:Description>
@@ -26,91 +28,87 @@
     </rdf:Description>
 
     <rdf:Description rdf:about="run#li19">
-        <verb2 rdf:resource="test#object2"/>
+        <t:verb2 rdf:resource="http://example.com/test#object2"/>
     </rdf:Description>
 
-    <rdf:Description rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil">
-        <verb0 rdf:resource="test#object0"/>
-    </rdf:Description>
-
-    <rdf:Description>
-        <anonVerb12 rdf:resource="test#anonObj12"/>
-        <verb12 rdf:resource="test#obj12"/>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="test#a_threebrackets">
-        <owl:sameAs rdf:parseType="Resource">
+    <rdf:Description rdf:about="http://example.com/test#a_threebrackets">
+        <sameAs rdf:parseType="Resource">
             <rdf:first rdf:parseType="Resource">
                 <rdf:first rdf:parseType="Resource">
-                    <rdf:first rdf:resource="test#fff"/>
+                    <rdf:first rdf:resource="http://example.com/test#fff"/>
                     <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
                 </rdf:first>
                 <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
             </rdf:first>
             <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-        </owl:sameAs>
+        </sameAs>
     </rdf:Description>
 
-    <rdf:Description rdf:about="test#emptyList">
-        <owl:sameAs rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+    <rdf:Description rdf:about="http://example.com/test#emptyList">
+        <sameAs rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
     </rdf:Description>
 
-    <rdf:Description rdf:about="test#listOf2Empties">
-        <owl:sameAs rdf:parseType="Resource">
+    <rdf:Description rdf:about="http://example.com/test#listOf2Empties">
+        <sameAs rdf:parseType="Resource">
             <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
             <rdf:rest rdf:parseType="Resource">
                 <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
                 <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
             </rdf:rest>
-        </owl:sameAs>
+        </sameAs>
     </rdf:Description>
 
-    <rdf:Description rdf:about="test#nested">
-        <owl:sameAs rdf:parseType="Resource">
-            <rdf:first rdf:resource="test#first"/>
+    <rdf:Description rdf:about="http://example.com/test#nested">
+        <sameAs rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://example.com/test#first"/>
             <rdf:rest rdf:parseType="Resource">
-                <rdf:first rdf:resource="test#second"/>
+                <rdf:first rdf:resource="http://example.com/test#second"/>
                 <rdf:rest rdf:parseType="Resource">
                     <rdf:first rdf:parseType="Resource">
-                        <rdf:first rdf:resource="test#left3"/>
+                        <rdf:first rdf:resource="http://example.com/test#left3"/>
                         <rdf:rest rdf:parseType="Resource">
-                            <rdf:first rdf:resource="test#right3"/>
+                            <rdf:first rdf:resource="http://example.com/test#right3"/>
                             <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
                         </rdf:rest>
                     </rdf:first>
                     <rdf:rest rdf:parseType="Resource">
-                        <rdf:first rdf:resource="test#fourth"/>
+                        <rdf:first rdf:resource="http://example.com/test#fourth"/>
                         <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
                     </rdf:rest>
                 </rdf:rest>
             </rdf:rest>
-        </owl:sameAs>
+        </sameAs>
     </rdf:Description>
 
-    <rdf:Description rdf:about="test#threeItems">
-        <owl:sameAs rdf:parseType="Resource">
-            <rdf:first rdf:resource="test#b"/>
+    <rdf:Description rdf:about="http://example.com/test#threeItems">
+        <sameAs rdf:parseType="Resource">
+            <rdf:first rdf:resource="http://example.com/test#b"/>
             <rdf:rest rdf:parseType="Resource">
-                <rdf:first rdf:resource="test#c"/>
+                <rdf:first rdf:resource="http://example.com/test#c"/>
                 <rdf:rest rdf:parseType="Resource">
-                    <rdf:first rdf:resource="test#d"/>
+                    <rdf:first rdf:resource="http://example.com/test#d"/>
                     <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
                 </rdf:rest>
             </rdf:rest>
-        </owl:sameAs>
+        </sameAs>
     </rdf:Description>
 
-    <rdf:Description rdf:about="test#twoAnons">
-        <owl:sameAs rdf:parseType="Resource">
+    <rdf:Description rdf:about="http://example.com/test#twoAnons">
+        <sameAs rdf:parseType="Resource">
             <rdf:first rdf:parseType="Resource">
-                <rdf:type rdf:resource="test#mother"/>
+                <rdf:type rdf:resource="http://example.com/test#mother"/>
             </rdf:first>
             <rdf:rest rdf:parseType="Resource">
                 <rdf:first rdf:parseType="Resource">
-                    <rdf:type rdf:resource="test#father"/>
+                    <rdf:type rdf:resource="http://example.com/test#father"/>
                 </rdf:first>
                 <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
             </rdf:rest>
-        </owl:sameAs>
+        </sameAs>
+    </rdf:Description>
+
+    <rdf:Description>
+        <t:anonVerb12 rdf:resource="http://example.com/test#anonObj12"/>
+        <t:verb12 rdf:resource="http://example.com/test#obj12"/>
     </rdf:Description>
 </rdf:RDF>

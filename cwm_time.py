@@ -41,7 +41,8 @@ class BI_inSeconds(LightBuiltIn, Function, ReverseFunction):
     def evaluateObject(self, subj_py):
         try:
             return float(isodate.parse(subj_py))
-        except ValueError:
+        except ValueError, AssertionError:
+	    progress("Warning: Failed to parse time string '%s'" % subj_py)
             return None
 
     def evaluateSubject(self, obj_py):

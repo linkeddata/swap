@@ -1,0 +1,11 @@
+$ time cwm prefixes.n3 gpsData.n3 > gpsData2.n3 
+
+real    24m34.350s
+user    11m9.210s
+sys     0m4.870s
+$ cp gpsData.n3 $SWAP/test/perform
+$ date
+Fri Feb 13 08:12:58 EST 2004
+$ cwm --revision
+   cwm= $Revision$ llyn= $Revision$ 
+$ 

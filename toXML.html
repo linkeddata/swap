@@ -93,6 +93,8 @@ TimBL&nbsp;added&nbsp;RDF&nbsp;stream&nbsp;model.</tt></p>
 Methods defined here:<br>
 <dl><dt><a name="ToRDF-__init__"><strong>__init__</strong></a>(self, outFp, thisURI, base<font color="#909090">=None</font>, flags<font color="#909090">=''</font>)</dt></dl>
 
+<dl><dt><a name="ToRDF-dummyClone"><strong>dummyClone</strong></a>(self)</dt><dd><tt>retun&nbsp;a&nbsp;version&nbsp;of&nbsp;myself&nbsp;which&nbsp;will&nbsp;only&nbsp;count&nbsp;occurrences</tt></dd></dl>
+
 <dl><dt><a name="ToRDF-endAnonymous"><strong>endAnonymous</strong></a>(self, subject, verb)</dt></dl>
 
 <dl><dt><a name="ToRDF-endAnonymousNode"><strong>endAnonymousNode</strong></a>(self, subj<font color="#909090">=None</font>)</dt></dl>
@@ -152,7 +154,11 @@ id&nbsp;is&nbsp;not&nbsp;in&nbsp;fact&nbsp;new.&nbsp;This&nbsp;is&nbsp;useful&nb
 to&nbsp;generate&nbsp;IDs&nbsp;with&nbsp;useful&nbsp;diagnostic&nbsp;ways&nbsp;but&nbsp;this&nbsp;lays&nbsp;them<br>
 open&nbsp;to&nbsp;possibly&nbsp;clashing&nbsp;in&nbsp;pathalogical&nbsp;cases.</tt></dd></dl>
 
+<dl><dt><a name="ToRDF-countNamespace"><strong>countNamespace</strong></a>(self, namesp)</dt><dd><tt>On&nbsp;output,&nbsp;count&nbsp;how&nbsp;many&nbsp;times&nbsp;each&nbsp;namespace&nbsp;is&nbsp;used</tt></dd></dl>
+
 <dl><dt><a name="ToRDF-genId"><strong>genId</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ToRDF-namespaceCounts"><strong>namespaceCounts</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="ToRDF-newBlankNode"><strong>newBlankNode</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -195,7 +201,7 @@ Id:&nbsp;tsv2xml.py,v&nbsp;1.1&nbsp;2000/10/02&nbsp;19:41:02&nbsp;connolly&nbsp;
 Takes&nbsp;as&nbsp;argument&nbsp;a&nbsp;writer&nbsp;which&nbsp;does&nbsp;the&nbsp;(eg&nbsp;utf-8)&nbsp;encoding<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="XMLWriter-__init__"><strong>__init__</strong></a>(self, encodingWriter, squeaky<font color="#909090">=0</font>)</dt></dl>
+<dl><dt><a name="XMLWriter-__init__"><strong>__init__</strong></a>(self, encodingWriter, counter, squeaky<font color="#909090">=0</font>)</dt></dl>
 
 <dl><dt><a name="XMLWriter-closeTag"><strong>closeTag</strong></a>(self)</dt></dl>
 

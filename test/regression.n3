@@ -252,6 +252,11 @@
     test:description   "The scope of _:me should be the document";
     test:arguments     """underbarscope.n3 --think""".
 
+:t103005 a 
+test:CwmTest;
+    test:referenceOutput <ref/genBnodeInNestedFormula-out.n3>;
+    test:description   "Generation of var. exist'ly quant'd in nested formulae";
+    test:arguments     """includes/genBnodeInNestedFormula.n3 --think""".
 
 #	Test output flags
 
@@ -396,7 +401,7 @@
 :t1049 a test:CwmTest;
     test:referenceOutput <ref/sameDan.n3>;
     test:description   "Smushing multiple descriptions of the same thing using log:lessThan, log:uri, daml:equivalentTo";
-    test:arguments     """sameDan.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge""".
+    test:arguments     """sameDan.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge --n3="/" """.
 
 #:t10495 a test:CwmTest;
 #    test:referenceOutput <ref/sameDan5.n3>;

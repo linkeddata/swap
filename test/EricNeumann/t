@@ -1,0 +1,40 @@
+From: "Eric Neumann" <ENeumann@BeyondGenomics.com>
+Date: Fri Apr 4, 2003  12:38:52 US/Eastern
+To: "Tim Berners-Lee (E-mail)" <timbl@w3.org>
+Subject: CWM bug
+Attachments: There are 3 attachments
+
+
+
+Tim,
+
+Here's the cwm bug I mentioned. I use the metab.n3 file, apply the simple rules file, and ask it to think. The results are in metab_intermed.n3. If I now feed that back in as input and apply the same rule and --think, I get the metab_final.n3 result: 
+
+	cwm metab.n3 "--apply=rules.n3" --think > metab_intermed.n3
+	cwm metab_intermed.n3 "--apply=rules.n3" --think > metab_final.n3
+
+This example is a simple metabolic system test for the 3 compound pathway:
+
+<#glucose6P> -> <#fructose6P> -> <#fructose1P>
+
+From this input, I should be able to ask about who's upstream or downstream from any point (transitivity). Note the two result files differ for <#fructose1P> as shown below:
+
+// metab_intermed.n3
+    <#fructose1P>     a :Compound;
+         :isDownStream <#fructose6P>;
+         :isProducedBy <#Fru62Fru1> .
+
+// metab_final.n3
+    <#fructose1P>     a :Compound;
+         :isDownStream <#fructose6P>,
+                <#glucose6P>;
+         :isProducedBy <#Fru62Fru1> .
+
+The difference is that transitivity is only effectively applied on #fructose1P not the first time around (:isDownStream <#fructose6P>), but the second time around (:isDownStream <#fructose6P>, <#glucose6P>;)!  It would appear that --think is not exhaustively called, though it thinks it is. A second cwm call clears the confusion...
+
+Let me know what this may imply for other kinds of rule applying problems.
+
+Eric
+
+ <<metab.n3>>  <<metab_intermed.n3>>  <<metab_final.n3>> 
+

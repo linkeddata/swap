@@ -26,7 +26,7 @@ N3-Bugs.ics: ,bugsToDo.cal3 $(SWAP)/pim/toIcal.py
 # Make update means fteches new info from outside this directory.
 
 update:
-	mv ,n3bugs.rdf ,,n3bugs.rdf
+	mv ,n3bugs0.rdf ,,n3bugs0.rdf
 	make N3-Bugs.ics
 
 # Make publlish makes the results avilable using CVS
@@ -49,7 +49,7 @@ cycle:	update publish
 ,n3bugs.rdf: ,n3bugs0.rdf ../util/reqThreadFix.n3
 	$(CWM) ../util/reqThreadFix.n3 --rdf ,n3bugs0.rdf --think --data >$@
 
-,n3bugs0.rdf: ../util/reqThreadFix.n3
+,n3bugs0.rdf:
 	$(CWM) --rdf 'http://www.w3.org/Search/Mail/Public/advanced_search?keywords=n3bugs&resultsperpage=1000&sortby=date&index-grp=Public%2FFULL&index-type=t&type-index=www-archive' >$@
 
 #ends

@@ -1,6 +1,5 @@
 #!/usr/bin/python
 """
-
 $Id$
 
 Closed World Machine
@@ -12,21 +11,20 @@ It uses llyn, a (forward chaining) query engine, not an (backward chaining) infe
 that is, it will apply all rules it can but won't figure out which ones to apply to prove something. 
 
 
-http://www.w3.org/DesignIssues/Notation3
-Date: 2000/07/17 21:46:13  
+License
+-------
+Cwm: http://www.w3.org/2000/10/swap/doc/cwm.html
 
-Agenda:
-=======
+Copyright (c) 2000-2004 World Wide Web Consortium, (Massachusetts 
+Institute of Technology, European Research Consortium for Informatics 
+and Mathematics, Keio University). All Rights Reserved. This work is 
+distributed under the W3C® Software License [1] in the hope that it 
+will be useful, but WITHOUT ANY WARRANTY; without even the implied 
+warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
-
- - Use conventional python command line parsing
- 
- - get rid of other globals (DWC 30Aug2001)
- 
+[1] http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231
 
 """
-
-"""emacs got confused by long string above@@"""
 
 
 import string
@@ -35,7 +33,7 @@ import diag
 from why import FormulaReason
 from diag import verbosity, setVerbosity, progress, tracking, setTracking
 from uripath import join
-from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
+from webAccess import urlopenForRDF, load   # http://www.w3.org/2000/10/swap/
 
 # import re
 # import StringIO
@@ -46,7 +44,6 @@ import toXML 		#  RDF generator
 from why import BecauseOfCommandLine
 from query import think, applyRules, testIncludes
 
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL, Logic_NS
 import uripath
 import sys
 
@@ -88,7 +85,7 @@ steps, in order left to right:
 --n3          Input & Output in N3 from now on. (Default)
 --rdf=flags   Input & Output ** in RDF and set given RDF flags
 --n3=flags    Input & Output in N3 and set N3 flags
---ntriples    Input & Output in NTriples (equiv --n3=spartan -bySubject -quiet)
+--ntriples    Input & Output in NTriples (equiv --n3=uspartan -bySubject -quiet)
 --language=x  Input & Output in "x" (rdf, n3, etc)  --rdf same as: --language=rdf
 --languageOptions=y     --n3=sp same as:  --language=n3 --languageOptions=sp
 --ugly        Store input and regurgitate, data only, fastest *
@@ -250,7 +247,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             elif arg == "-strings": option_outputStyle = "-no"
             elif arg == "-triples" or arg == "-ntriples":
                 option_format = "n3"
-                option_flags["n3"] = "spartan"
+                option_flags["n3"] = "uspartan"
                 option_outputStyle = "-bySubject"
                 option_quiet = 1
             elif _lhs == "-outURI": option_outURI = _uri
@@ -298,15 +295,17 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
         #  Fix the output sink
         if option_format == "rdf":
-            _outSink = toXML.ToRDF(sys.stdout, _outURI, base=option_baseURI, flags=option_flags["rdf"])
+            _outSink = toXML.ToRDF(sys.stdout, _outURI, base=option_baseURI, 						flags=option_flags["rdf"])
         elif option_format == "n3":
             _outSink = notation3.ToN3(sys.stdout.write, base=option_baseURI,
                                       quiet=option_quiet, flags=option_flags["n3"])
         elif option_format == "trace":
-            _outSink = RDFSink.TracingRDFSink(_outURI, base=option_baseURI, flags=option_flags.get("trace",""))
+            _outSink = RDFSink.TracingRDFSink(_outURI, base=option_baseURI,
+			flags=option_flags.get("trace",""))
             if option_pipe:
                 # this is really what a parser wants to dump to
-                _outSink.backing = llyn.RDFStore( _outURI+"#_g", argv=option_with, crypto=option_crypto) 
+                _outSink.backing = llyn.RDFStore( _outURI+"#_g",
+		    argv=option_with, crypto=option_crypto) 
             else:
                 # this is really what a store wants to dump to 
                 _outSink.backing = notation3.ToN3(sys.stdout.write, base=option_baseURI,
@@ -326,7 +325,6 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         #if option_reify: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula")
         if option_flat: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula", flat=1)
 
-	outFormulaURI = _outURI+ "#0_work"
         if option_pipe:
             _store = _outSink
         else:
@@ -335,23 +333,33 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 	    else:
 		_store = llyn.RDFStore( _outURI+"#_g", argv=option_with, crypto=option_crypto)
 	    myStore.setStore(_store)
-            workingContext = _store.newFormula(outFormulaURI)   #@@@ Hack - use metadata
 
-            history = None
         lxkb = LX.kb.KB()      # set up a parallel store for LX-based operations
 
+	becauseCwm = None
 	if diag.tracking:
 	    proof = FormulaReason(workingContext)
+	    becauseCwm = BecauseOfCommandLine(sys.argv[0]) 
+	    # @@ add user, host, pid, date time? Privacy!
 
-        if not _gotInput: # default input
-            _inputURI = _baseURI # Make abs from relative
+	workingContext = None
+        if  _gotInput: 
+	    workingContext = _store.newFormula(option_inputs [0]+"#_work")
+	else: # default input
             if option_first_format is None: option_first_format = option_format
-            p = getParser(option_first_format, _inputURI, outFormulaURI, option_flags)
-            p.load("", baseURI=_baseURI)
-            del(p)
-            if not option_pipe:
-                inputContext = _store.intern((FORMULA, _inputURI+ "#_formula"))
-                history = inputContext
+	    ContentType={ "rdf": "application/xml+rdf", "n3":
+				"application/n3" }[option_first_format]
+	    workingContext.reopen()
+	    workingContext = _store.load(
+#			    asIfFrom = join(_baseURI, ".stdin"),
+			    asIfFrom = _baseURI,
+			    contentType = ContentType,
+			    flags = option_flags[option_first_format],
+			    remember = 0,
+			    why = becauseCwm)
+
+
+
 
 
         #  Take commands from command line: Second Pass on command line:    - - - - - - - P A S S 2
@@ -376,12 +384,15 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             if arg[0] != "-":
                 _inputURI = join(option_baseURI, arg)
                 assert ':' in _inputURI
-                p = getParser(option_format, _inputURI, outFormulaURI, option_flags)
-                if not option_pipe: workingContext.reopen()
-                p.load(_inputURI)
-                del(p)
-                if not option_pipe:
-                    inputContext = _store.newFormula( _inputURI+ "#_formula")
+		ContentType={ "rdf": "application/xml+rdf", "n3":
+				"application/n3" }[option_format]
+
+		if not option_pipe: workingContext.reopen()
+		load(_store, _inputURI,
+			    openFormula=workingContext,
+			    contentType =ContentType,
+			    flags=option_flags[option_format])
+
                 _gotInput = 1
 
             elif arg == "-help":
@@ -512,10 +523,10 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 # code copied from -filter without really being understood  -sdh
                 _tmpstore = llyn.RDFStore( _outURI+"#_g", metaURI=_metaURI, argv=option_with, crypto=option_crypto)
 
-                tmpContext = _tmpstore.intern((FORMULA, _uri+ "#_formula"))
+                tmpContext = _tmpstore.newFormula(_uri+ "#_formula")
                 _newURI = join(_baseURI, "_w_"+`_genid`)  # Intermediate
                 _genid = _genid + 1
-                _newContext = _tmpstore.intern((FORMULA, _newURI+ "#_formula"))
+                _newContext = _tmpstore.newFormula(_newURI+ "#_formula")
                 _tmpstore.loadURI(_uri)
 
                 targetkb = LX.kb.KB()
@@ -535,7 +546,8 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 lxkb.dereifyTrue()
 
             elif arg == "-size":
-                progress("Size: %i statements in store, %i in working formula." %(_store.size, workingContext.size()))
+                progress("Size: %i statements in store, %i in working formula."
+		    %(_store.size, workingContext.size()))
 
             elif arg == "-strings":  # suppress output
                 need(_store)
@@ -581,35 +593,6 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
 # These could well be methods using instance variables instead of
 # functions using globals.
-
-def getParser(format, inputURI, formulaURI, flags):
-    """Return something which can load from a URI in the given format, while
-    writing to the given store.
-    """
-    r = BecauseOfCommandLine(sys.argv[0]) # @@ add user, host, pid, date time? Privacy!
-    if format == "rdf" :
-        touch(_store)
-	if "l" in flags["rdf"]:
-	    from rdflib2rdf import RDFXMLParser
-	else:
-	    rdfParserName = os.environ.get("CWM_RDF_PARSER", "sax2rdf")
-	    if rdfParserName == "rdflib2rdf":
-		from rdflib2rdf import RDFXMLParser
-	    elif rdfParserName == "sax2rdf":
-		from sax2rdf import RDFXMLParser
-	    else:
-		raise RuntimeError("Unknown RDF parser: " + rdfParserName)
-	return RDFXMLParser(_store, inputURI, formulaURI=formulaURI,
-					flags=flags[format], why=r)
-    elif format == "n3":
-        touch(_store)
-        return notation3.SinkParser(_store, inputURI, formulaURI=formulaURI, why=r)
-    else:
-        need(lxkb)
-        touch(lxkb)
-        return LX.language.getParser(language=format,
-                                     sink=lxkb,
-                                     flags=flags)
 
 def touch(object):
     """Indicate that this object has been modified; for use by need()"""

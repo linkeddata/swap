@@ -1,108 +1,104 @@
-     @prefix : <daml-ont.rdf#> .
-     @prefix daml: <http://www.daml.org/2001/03/daml-ont#> .
-     @prefix dpo: <http://www.daml.org/2001/03/daml+oil#> .
-     @prefix ex: <http://www.daml.org/2001/03/daml-ex#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix : <http://www.daml.org/2001/03/daml-ont#> .
+     @prefix dam: <daml-ont.rdf#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
-     @prefix rdfs: <http://www.w3.org/2001/03/rdf-schema#> .
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
-    <daml-ont.rdf>     a daml:Ontology;
-         daml:imports <http://www.w3.org/2000/01/rdf-schema>;
-         daml:versionInfo "" .
+    <daml-ont.rdf>     a :Ontology;
+         :imports <http://www.w3.org/2000/01/rdf-schema>;
+         :versionInfo "" .
     
-    :Class     a daml:Class;
-         daml:sameClassAs s:Class .
+    dam:Class     a :Class;
+         :sameClassAs s:Class .
     
-    :Disjoint     a daml:Class;
-         daml:comment """for type(L, Disjoint) read: the classes in L are
+    dam:Disjoint     a :Class;
+         :comment """for type(L, Disjoint) read: the classes in L are
   pairwise disjoint.
 
   i.e. if type(L, Disjoint), and C1 in L and C2 in L, then disjointWith(C1, C2).
   """;
-         daml:label "Disjoint";
-         daml:subClassOf :List .
+         :label "Disjoint";
+         :subClassOf dam:List .
     
-    :Empty     a daml:Class;
-         daml:asClass :Nothing .
+    dam:Empty     a :Class;
+         :asClass dam:Nothing .
     
-    :List     a daml:Class;
-         daml:subClassOf rdf:Seq .
+    dam:List     a :Class;
+         :subClassOf rdf:Seq .
     
-    :Literal     a daml:Class;
-         daml:sameClassAs s:Literal .
+    dam:Literal     a :Class;
+         :sameClassAs s:Literal .
     
-    :Nothing     a daml:Class;
-         daml:comment "the class with no things in it.";
-         daml:complementOf :Thing .
+    dam:Nothing     a :Class;
+         :comment "the class with no things in it.";
+         :complementOf dam:Thing .
     
-    :Ontology     a daml:Class;
-         daml:comment """An Ontology is a document that describes
+    dam:Ontology     a :Class;
+         :comment """An Ontology is a document that describes
 	a vocabulary of terms for communication between
 	(human and) automated agents.
   """;
-         daml:label "Ontology" .
+         :label "Ontology" .
     
-    :Property     a daml:Class;
-         daml:sameClassAs rdf:Property .
+    dam:Property     a :Class;
+         :sameClassAs rdf:Property .
     
-    :Qualification     a daml:Class .
+    dam:Qualification     a :Class .
     
-    :Restriction     a daml:Class .
+    dam:Restriction     a :Class .
     
-    :Thing     a daml:Class;
-         daml:comment "The most general class in DAML.";
-         daml:label "Thing" .
+    dam:Thing     a :Class;
+         :comment "The most general class in DAML.";
+         :label "Thing" .
     
-    :TransitiveProperty     a daml:Class .
+    dam:TransitiveProperty     a :Class .
     
-    :UnambiguousProperty     a daml:Class;
-         daml:comment """if P is an UnambiguousProperty, then
+    dam:UnambiguousProperty     a :Class;
+         :comment """if P is an UnambiguousProperty, then
 	if P(x, y) and P(z, y) then x=z.
 	aka injective.
 	e.g. if nameOfMonth(m, "Feb")
 	and nameOfMonth(n, "Feb") then m and n are the same month.
   """;
-         daml:label "UnambiguousProperty"@en;
-         daml:subClassOf :Property .
+         :label "UnambiguousProperty"@en;
+         :subClassOf dam:Property .
     
-    :UniqueProperty     a daml:Class;
-         daml:comment """compare with maxCardinality=1; e.g. integer successor:
+    dam:UniqueProperty     a :Class;
+         :comment """compare with maxCardinality=1; e.g. integer successor:
 	if P is a UniqueProperty, then
 	if P(x, y) and P(x, z) then y=z.
 	aka functional.
   """;
-         daml:label "UniqueProperty";
-         daml:subClassOf :Property .
+         :label "UniqueProperty";
+         :subClassOf dam:Property .
     
-    :cardinality     a daml:Property;
-         daml:comment """for cardinality(P, N) read: P has cardinality N; i.e.
+    dam:cardinality     a :Property;
+         :comment """for cardinality(P, N) read: P has cardinality N; i.e.
     everything x in the domain of P has N things y such that P(x, y).
   """;
-         daml:domain :Property;
-         daml:label "cardinality" .
+         :domain dam:Property;
+         :label "cardinality" .
     
-    :comment     a daml:Property;
-         daml:samePropertyAs s:comment .
+    dam:comment     a :Property;
+         :samePropertyAs s:comment .
     
-    :complementOf     a daml:Property;
-         daml:comment """
+    dam:complementOf     a :Property;
+         :comment """
     for complementOf(X, Y) read: X is the complement of Y; if something is in Y,
     then it's not in X, and vice versa.
 cf OIL NOT""";
-         daml:domain :Class;
-         daml:range :Class .
+         :domain dam:Class;
+         :range dam:Class .
     
-    :default     a daml:Property;
-         daml:comment """default(X, Y) suggests that Y be considered a/the default
+    dam:default     a :Property;
+         :comment """default(X, Y) suggests that Y be considered a/the default
 	value for the X property. This can be considered
 	documentation (ala label, comment) but we don't specify
 	any logical impact.
   """;
-         daml:label "default" .
+         :label "default" .
     
-    :disjointUnionOf     a daml:Property;
-         daml:comment """
+    dam:disjointUnionOf     a :Property;
+         :comment """
 
     for disjointUnionOf(X, Y) read: X is the disjoint union of the classes in
     the list Y: (a) for any c1 and c2 in Y, disjointWith(c1, c2),
@@ -111,37 +107,37 @@ cf OIL NOT""";
 
     cf OIL disjoint-covered
   """;
-         daml:domain :Class;
-         daml:label "disjointUnionOf";
-         daml:range :List .
+         :domain dam:Class;
+         :label "disjointUnionOf";
+         :range dam:List .
     
-    :disjointWith     a daml:Property;
-         daml:comment """for disjointWith(X, Y) read: X and Y have no members
+    dam:disjointWith     a :Property;
+         :comment """for disjointWith(X, Y) read: X and Y have no members
 	in common.
   """;
-         daml:domain :Class;
-         daml:label "disjointWith";
-         daml:range :Class .
+         :domain dam:Class;
+         :label "disjointWith";
+         :range dam:Class .
     
-    :domain     a daml:Property;
-         daml:samePropertyAs s:domain .
+    dam:domain     a :Property;
+         :samePropertyAs s:domain .
     
-    :equivalentTo     a daml:Property;
-         daml:comment """for equivalentTo(X, Y), read X is an equivalent term to Y.
+    dam:equivalentTo     a :Property;
+         :comment """for equivalentTo(X, Y), read X is an equivalent term to Y.
   """ .
     
-    :first     a daml:Property;
-         daml:domain :List .
+    dam:first     a :Property;
+         :domain dam:List .
     
-    :hasValue     a daml:Property;
-         daml:comment """for hasValue(Q, C), read: Q is a hasValue
+    dam:hasValue     a :Property;
+         :comment """for hasValue(Q, C), read: Q is a hasValue
    qualification to C.""";
-         daml:domain :Qualification;
-         daml:label "hasValue";
-         daml:range :Class .
+         :domain dam:Qualification;
+         :label "hasValue";
+         :range dam:Class .
     
-    :imports     a daml:Property;
-         daml:comment """for imports(X, Y) read: X imports Y;
+    dam:imports     a :Property;
+         :comment """for imports(X, Y) read: X imports Y;
 	i.e. X asserts the* contents of Y by reference;
 	i.e. if imports(X, Y) and you believe X and Y says something,
 	then you should believe it.
@@ -153,83 +149,83 @@ cf OIL NOT""";
 	requestor credentials, etc. So for "the contents",
 	read "any contents".
   """;
-         daml:label "imports" .
+         :label "imports" .
     
-    :intersectionOf     a daml:Property;
-         daml:comment """
+    dam:intersectionOf     a :Property;
+         :comment """
     for intersectionOf(X, Y) read: X is the intersection of the classes in the list Y;
     i.e. if something is in all the classes in Y, then it's in X, and vice versa.
 cf OIL AND""";
-         daml:domain :Class;
-         daml:range :List .
+         :domain dam:Class;
+         :range dam:List .
     
-    :inverseOf     a daml:Property;
-         daml:comment """for inverseOf(R, S) read: R is the inverse of S; i.e.
+    dam:inverseOf     a :Property;
+         :comment """for inverseOf(R, S) read: R is the inverse of S; i.e.
      if R(x, y) then S(y, x) and vice versa.""";
-         daml:domain :Property;
-         daml:range :Property .
+         :domain dam:Property;
+         :range dam:Property .
     
-    :isDefinedBy     a daml:Property;
-         daml:samePropertyAs s:isDefinedBy;
-         daml:subPropertyOf :seeAlso .
+    dam:isDefinedBy     a :Property;
+         :samePropertyAs s:isDefinedBy;
+         :subPropertyOf dam:seeAlso .
     
-    :item     a daml:Property;
-         daml:comment """for item(L, I) read: I is an item in L; either first(L, I)
+    dam:item     a :Property;
+         :comment """for item(L, I) read: I is an item in L; either first(L, I)
     or item(R, I) where rest(L, R).""";
-         daml:domain :List .
+         :domain dam:List .
     
-    :label     a daml:Property;
-         daml:samePropertyAs s:label .
+    dam:label     a :Property;
+         :samePropertyAs s:label .
     
-    :maxCardinality     a daml:Property;
-         daml:comment """for maxCardinality(P, N) read: P has maximum cardinality N; i.e.
+    dam:maxCardinality     a :Property;
+         :comment """for maxCardinality(P, N) read: P has maximum cardinality N; i.e.
     everything x in the domain of P has at most N things y such that P(x, y).
   """;
-         daml:domain :Property;
-         daml:label "maxCardinality" .
+         :domain dam:Property;
+         :label "maxCardinality" .
     
-    :minCardinality     a daml:Property;
-         daml:comment """for minCardinality(P, N) read: P has minimum cardinality N; i.e.
+    dam:minCardinality     a :Property;
+         :comment """for minCardinality(P, N) read: P has minimum cardinality N; i.e.
     everything x in the domain of P has at least N things y such that P(x, y).
   """;
-         daml:domain :Property .
+         :domain dam:Property .
     
-    :onProperty     a daml:Property;
-         daml:comment """for onProperty(R, P), read:
+    dam:onProperty     a :Property;
+         :comment """for onProperty(R, P), read:
    R is a restriction/qualification on P.""";
-         daml:domain :Qualification,
-                :Restriction;
-         daml:range :Property .
+         :domain dam:Qualification,
+                dam:Restriction;
+         :range dam:Property .
     
-    :oneOf     a daml:Property;
-         daml:comment """for oneOf(C, L) read everything in C is one of the
+    dam:oneOf     a :Property;
+         :comment """for oneOf(C, L) read everything in C is one of the
      things in L;
      This lets us define classes by enumerating the members.
   """;
-         daml:domain :Class;
-         daml:range :List .
+         :domain dam:Class;
+         :range dam:List .
     
-    :qualifiedBy     a daml:Property;
-         daml:comment """for qualifiedBy(C, Q), read: C is qualified by Q; i.e. the
+    dam:qualifiedBy     a :Property;
+         :comment """for qualifiedBy(C, Q), read: C is qualified by Q; i.e. the
 	qualification Q applies to C;
 
         if onProperty(Q, P) and hasValue(Q, C2)
         then for every i in C, there is some V
 	so that type(V, C2) and P(i, V).
   """;
-         daml:domain :Class;
-         daml:label "qualifiedBy";
-         daml:range :Qualification .
+         :domain dam:Class;
+         :label "qualifiedBy";
+         :range dam:Qualification .
     
-    :range     a daml:Property;
-         daml:samePropertyAs s:range .
+    dam:range     a :Property;
+         :samePropertyAs s:range .
     
-    :rest     a daml:Property;
-         daml:domain :List;
-         daml:range :List .
+    dam:rest     a :Property;
+         :domain dam:List;
+         :range dam:List .
     
-    :restrictedBy     a daml:Property;
-         daml:comment """for restrictedBy(C, R), read: C is restricted by R; i.e. the
+    dam:restrictedBy     a :Property;
+         :comment """for restrictedBy(C, R), read: C is restricted by R; i.e. the
 	restriction R applies to c;
 
         if onProperty(R, P) and toValue(R, V)
@@ -238,56 +234,56 @@ cf OIL AND""";
         if onProperty(R, P) and toClass(R, C2)
         then for every i in C and for all j, if P(i, j) then type(j, C2).
   """;
-         daml:domain :Class;
-         daml:label "restrictedBy";
-         daml:range :Restriction .
+         :domain dam:Class;
+         :label "restrictedBy";
+         :range dam:Restriction .
     
-    :sameClassAs     a daml:Property;
-         daml:subPropertyOf :equivalentTo,
-                :subClassOf .
+    dam:sameClassAs     a :Property;
+         :subPropertyOf dam:equivalentTo,
+                dam:subClassOf .
     
-    :samePropertyAs     a daml:Property;
-         daml:subPropertyOf :equivalentTo,
-                :subPropertyOf .
+    dam:samePropertyAs     a :Property;
+         :subPropertyOf dam:equivalentTo,
+                dam:subPropertyOf .
     
-    :seeAlso     a daml:Property;
-         daml:samePropertyAs s:seeAlso .
+    dam:seeAlso     a :Property;
+         :samePropertyAs s:seeAlso .
     
-    :subClassOf     a daml:Property;
-         daml:samePropertyAs s:subClassOf .
+    dam:subClassOf     a :Property;
+         :samePropertyAs s:subClassOf .
     
-    :subPropertyOf     a daml:Property;
-         daml:samePropertyAs s:subPropertyOf;
-         daml:subPropertyOf s:subPropertyOf .
+    dam:subPropertyOf     a :Property;
+         :samePropertyAs s:subPropertyOf;
+         :subPropertyOf s:subPropertyOf .
     
-    :toClass     a daml:Property;
-         daml:comment "for toClass(R, C), read: R is a restriction to C.";
-         daml:domain :Restriction;
-         daml:range :Class .
+    dam:toClass     a :Property;
+         :comment "for toClass(R, C), read: R is a restriction to C.";
+         :domain dam:Restriction;
+         :range dam:Class .
     
-    :toValue     a daml:Property;
-         daml:comment "for toValue(R, V), read: R is a restriction to V.";
-         daml:domain :Restriction;
-         daml:range :Class .
+    dam:toValue     a :Property;
+         :comment "for toValue(R, V), read: R is a restriction to V.";
+         :domain dam:Restriction;
+         :range dam:Class .
     
-    :type     a daml:Property;
-         daml:samePropertyAs rdf:type .
+    dam:type     a :Property;
+         :samePropertyAs rdf:type .
     
-    :unionOf     a daml:Property;
-         daml:comment """
+    dam:unionOf     a :Property;
+         :comment """
     for unionOf(X, Y) read: X is the union of the classes in the list Y;
     i.e. if something is in any of the classes in Y, it's in X, and vice versa.
     cf OIL OR""";
-         daml:domain :Class;
-         daml:label "unionOf";
-         daml:range :List .
+         :domain dam:Class;
+         :label "unionOf";
+         :range dam:List .
     
-    :value     a daml:Property;
-         daml:samePropertyAs rdf:value .
+    dam:value     a :Property;
+         :samePropertyAs rdf:value .
     
-    :versionInfo     a daml:Property;
-         daml:comment """generally, a string giving information about this
+    dam:versionInfo     a :Property;
+         :comment """generally, a string giving information about this
 	version; e.g. RCS/CVS keywords
   """;
-         daml:label "versionInfo" .
+         :label "versionInfo" .
     

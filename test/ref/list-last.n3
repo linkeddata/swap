@@ -1,6 +1,4 @@
      @prefix : <#> .
-     @prefix list: <http://www.w3.org/2000/10/swap/list#> .
-     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
     
     :test1     a :SUCCESS .
     

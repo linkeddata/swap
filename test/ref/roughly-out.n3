@@ -1,6 +1,5 @@
      @prefix : <#> .
      @prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
-     @prefix dc: <http://purl.org/dc/elements/1.1/> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix rcs: <http://www.w3.org/2001/03swell/rcs#> .
      @prefix string: <http://www.w3.org/2000/10/swap/string#> .
@@ -11,12 +10,12 @@
                 :y,
                 :z .
     
-    <>     dc:creator  [
+    <>     <http://purl.org/dc/elements/1.1/creator>  [
              contact:fullName "Tim berners-Lee";
              contact:homePage <http://www.w3.org/People/Berners-Lee/>;
              contact:mailbox <mailto:timbl@w3.org> ];
-         dc:description "Test string:containsRoughly";
-         dc:rights "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
+         <http://purl.org/dc/elements/1.1/description> "Test string:containsRoughly";
+         <http://purl.org/dc/elements/1.1/rights> "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
          rcs:id "" .
     
     :test1     a :success .

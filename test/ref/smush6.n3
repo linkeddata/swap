@@ -16,8 +16,6 @@
     <>     a :testFile .
     
     :Grey     = :Gray .
-      [      a :Gentleman,
-                    :Scholar ].
     
     :a     a :Hatchback;
          :color :Gray .
@@ -42,4 +40,6 @@
     :vision     =  (
         20 
         20  ) .
+      [      a :Gentleman,
+                    :Scholar ].
     

@@ -41,91 +41,13 @@ See&nbsp;also&nbsp;for&nbsp;comparison,&nbsp;a&nbsp;python&nbsp;RDF&nbsp;API&nbs
 and&nbsp;the&nbsp;redfoot/rdflib&nbsp;interface,&nbsp;a&nbsp;python&nbsp;RDF&nbsp;API:<br>
 &nbsp;&nbsp;&nbsp;<a href="http://rdflib.net/latest/doc/triple_store.html">http://rdflib.net/latest/doc/triple_store.html</a><br>
 &nbsp;<br>
-Agenda:<br>
-=======<br>
-&nbsp;<br>
-&nbsp;-&nbsp;get&nbsp;rid&nbsp;of&nbsp;other&nbsp;globals&nbsp;(DWC&nbsp;30Aug2001)<br>
-&nbsp;-&nbsp;Add&nbsp;dynamic&nbsp;load&nbsp;of&nbsp;web&nbsp;python&nbsp;via&nbsp;rdf-schema:&nbsp;imp.load_source("foo",&nbsp;"llyn.py",&nbsp;open("llyn.py",&nbsp;"r"))<br>
-&nbsp;-&nbsp;implement&nbsp;a&nbsp;back-chaining&nbsp;reasoner&nbsp;(ala&nbsp;Euler/Algernon)&nbsp;on&nbsp;this&nbsp;store?&nbsp;(DWC)<br>
-&nbsp;-&nbsp;run&nbsp;http&nbsp;daemon/client&nbsp;sending&nbsp;changes&nbsp;to&nbsp;database<br>
-&nbsp;-&nbsp;act&nbsp;as&nbsp;client/server&nbsp;for&nbsp;distributed&nbsp;system<br>
-&nbsp;&nbsp;-&nbsp;postgress,&nbsp;mySQl&nbsp;underlying&nbsp;database?<br>
-&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;daml:import<br>
-&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;standard&nbsp;mappping&nbsp;of&nbsp;SQL&nbsp;database&nbsp;into&nbsp;the&nbsp;web&nbsp;in&nbsp;N3/RDF<br>
-&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;<br>
-&nbsp;-&nbsp;logic&nbsp;API&nbsp;as&nbsp;requested&nbsp;DC&nbsp;2000/12/10<br>
-&nbsp;-&nbsp;Jena-like&nbsp;API&nbsp;x=model.createResource();&nbsp;addProperty(DC.creator,&nbsp;"Brian",&nbsp;"en")<br>
-&nbsp;-&nbsp;&nbsp;&nbsp;syntax&nbsp;for&nbsp;"all&nbsp;she&nbsp;wrote"&nbsp;-&nbsp;schema&nbsp;is&nbsp;complete&nbsp;and&nbsp;definitive<br>
-&nbsp;-&nbsp;metaindexes&nbsp;-&nbsp;"to&nbsp;know&nbsp;more&nbsp;about&nbsp;x&nbsp;please&nbsp;see&nbsp;r"&nbsp;-&nbsp;described&nbsp;by<br>
-&nbsp;-&nbsp;general&nbsp;python&nbsp;URI&nbsp;access&nbsp;with&nbsp;catalog!<br>
-&nbsp;-&nbsp;equivalence&nbsp;handling&nbsp;inc.&nbsp;equivalence&nbsp;of&nbsp;equivalence?<br>
-&nbsp;Shakedown:<br>
-&nbsp;-&nbsp;Find&nbsp;all&nbsp;synonyms&nbsp;of&nbsp;synonym<br>
-&nbsp;-&nbsp;Find&nbsp;closure&nbsp;for&nbsp;all&nbsp;synonyms<br>
-&nbsp;-&nbsp;Find&nbsp;superclass&nbsp;closure?<br>
--&nbsp;represent&nbsp;URIs&nbsp;bound&nbsp;to&nbsp;same&nbsp;equivalence&nbsp;closure&nbsp;object?<br>
-&nbsp;-&nbsp;proof&nbsp;generation<br>
-&nbsp;<br>
--&nbsp;dynamic&nbsp;bultins&nbsp;-&nbsp;ontology&nbsp;for&nbsp;adding&nbsp;python.<br>
-&nbsp;<br>
-BULTINS&nbsp;WE&nbsp;NEED<br>
-&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;{x&nbsp;log:entails&nbsp;y&nbsp;}&nbsp;&lt;=&gt;&nbsp;&nbsp;{&nbsp;x!log:conclusion&nbsp;log:includes&nbsp;y}.&nbsp;&nbsp;&nbsp;&nbsp;[is&nbsp;log:conclusion&nbsp;of&nbsp;x]&nbsp;log:includes&nbsp;y<br>
-&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;usesNamespace(x,y)&nbsp;&nbsp;&nbsp;#&nbsp;find&nbsp;transitive&nbsp;closure&nbsp;for&nbsp;validation&nbsp;&nbsp;-&nbsp;awful&nbsp;function&nbsp;in&nbsp;reality<br>
-&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;delegation&nbsp;of&nbsp;query&nbsp;to&nbsp;remote&nbsp;database&nbsp;(cwm&nbsp;or&nbsp;rdbms)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;F&nbsp;impliesUnderThink&nbsp;G.&nbsp;&nbsp;(entails?&nbsp;leadsTo?&nbsp;conclusion?)<br>
-&nbsp;<br>
--&nbsp;Translation;&nbsp;&nbsp;Try&nbsp;to&nbsp;represent&nbsp;the&nbsp;space&nbsp;(or&nbsp;a&nbsp;context)&nbsp;using&nbsp;a&nbsp;subset&nbsp;of&nbsp;namespaces<br>
-&nbsp;<br>
--&nbsp;Other&nbsp;forms&nbsp;of&nbsp;context&nbsp;-&nbsp;explanation&nbsp;of&nbsp;derivation&nbsp;by&nbsp;rule&nbsp;or&nbsp;merging&nbsp;of&nbsp;contexts<br>
--&nbsp;operators&nbsp;on&nbsp;numbers<br>
--&nbsp;operators&nbsp;(union,&nbsp;intersection,&nbsp;subtraction)&nbsp;of&nbsp;context<br>
--&nbsp;cwm&nbsp;-diff&nbsp;using&nbsp;above!&nbsp;for&nbsp;test&nbsp;result&nbsp;comparison<br>
-&nbsp;<br>
--&nbsp;Optimizations:<br>
-&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Remember&nbsp;previous&nbsp;bindings&nbsp;found&nbsp;for&nbsp;this&nbsp;rule(?)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;Notice&nbsp;disjoint&nbsp;graphs&nbsp;&amp;&nbsp;explicitly&nbsp;form&nbsp;cross-product&nbsp;of&nbsp;subresults<br>
-&nbsp;<br>
--&nbsp;test&nbsp;rdf&nbsp;praser&nbsp;against&nbsp;Dave&nbsp;Becket's&nbsp;test&nbsp;suite&nbsp;<a href="http://ilrt.org/people/cmdjb/">http://ilrt.org/people/cmdjb/</a><br>
--&nbsp;Introduce&nbsp;this&nbsp;or&nbsp;$&nbsp;to&nbsp;indicate&nbsp;the&nbsp;current&nbsp;context<br>
--&nbsp;Introduce&nbsp;a&nbsp;difference&nbsp;between&nbsp;&lt;&gt;&nbsp;and&nbsp;$&nbsp;&nbsp;in&nbsp;that&nbsp;&lt;&gt;&nbsp;log:parsesTo&nbsp;$&nbsp;.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;serialised&nbsp;subPropertyOf&nbsp;serialisedAs<br>
-&nbsp;<br>
-Done<br>
-====<br>
-&nbsp;-&nbsp;sucking&nbsp;in&nbsp;the&nbsp;schema&nbsp;(http&nbsp;library?)&nbsp;--schemas&nbsp;;<br>
-&nbsp;-&nbsp;to&nbsp;know&nbsp;about&nbsp;r1&nbsp;see&nbsp;r2;<br>
-&nbsp;-&nbsp;split&nbsp;Query&nbsp;engine&nbsp;out&nbsp;as&nbsp;subclass&nbsp;of&nbsp;<a href="#RDFStore">RDFStore</a>?&nbsp;(DWC)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;SQL-equivalent&nbsp;client<br>
-&nbsp;-&nbsp;split&nbsp;out&nbsp;separate&nbsp;modules:&nbsp;CGI&nbsp;interface,&nbsp;command-line&nbsp;stuff,<br>
-&nbsp;&nbsp;&nbsp;built-ins&nbsp;(DWC&nbsp;30Aug2001)<br>
--&nbsp;(test/retest.sh&nbsp;is&nbsp;another/better&nbsp;list&nbsp;of&nbsp;completed&nbsp;functionality&nbsp;--DWC)<br>
-&nbsp;-&nbsp;BUG:&nbsp;a&nbsp;[&nbsp;b&nbsp;c&nbsp;]&nbsp;d.&nbsp;&nbsp;&nbsp;gets&nbsp;improperly&nbsp;output.&nbsp;See&nbsp;anon-pred<br>
-&nbsp;-&nbsp;Separate&nbsp;the&nbsp;store&nbsp;hash&nbsp;table&nbsp;from&nbsp;the&nbsp;parser.&nbsp;-&nbsp;DONE<br>
-&nbsp;-&nbsp;regeneration&nbsp;of&nbsp;genids&nbsp;on&nbsp;output.&nbsp;-&nbsp;DONE<br>
-&nbsp;-&nbsp;repreentation&nbsp;of&nbsp;genids&nbsp;and&nbsp;foralls&nbsp;in&nbsp;model<br>
--&nbsp;regression&nbsp;test&nbsp;-&nbsp;DONE&nbsp;(once!)<br>
-&nbsp;Manipulation:<br>
-&nbsp;&nbsp;{&nbsp;}&nbsp;as&nbsp;notation&nbsp;for&nbsp;bag&nbsp;of&nbsp;statements&nbsp;-&nbsp;DONE<br>
-&nbsp;&nbsp;-&nbsp;filter&nbsp;-DONE<br>
-&nbsp;&nbsp;-&nbsp;graph&nbsp;match&nbsp;-DONE<br>
-&nbsp;&nbsp;-&nbsp;recursive&nbsp;dump&nbsp;of&nbsp;nested&nbsp;bags&nbsp;-&nbsp;DONE<br>
-&nbsp;-&nbsp;semi-reification&nbsp;-&nbsp;reifying&nbsp;only&nbsp;subexpressions&nbsp;-&nbsp;DONE<br>
-&nbsp;-&nbsp;Bug&nbsp;&nbsp;:x&nbsp;:y&nbsp;:z&nbsp;as&nbsp;data&nbsp;should&nbsp;match&nbsp;[&nbsp;:y&nbsp;:z&nbsp;]&nbsp;as&nbsp;query.&nbsp;Fixed&nbsp;by&nbsp;stripping&nbsp;forSomes&nbsp;from&nbsp;top&nbsp;of&nbsp;query.<br>
-&nbsp;-&nbsp;BUG:&nbsp;{}&nbsp;is&nbsp;a&nbsp;context&nbsp;but&nbsp;that&nbsp;is&nbsp;lost&nbsp;on&nbsp;output!!!<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;statements&nbsp;not&nbsp;enough.&nbsp;See&nbsp;foo2.n3&nbsp;-&nbsp;change&nbsp;existential&nbsp;representation&nbsp;:-(&nbsp;to&nbsp;make&nbsp;context&nbsp;a&nbsp;real&nbsp;conjunction&nbsp;again?<br>
-&nbsp;&nbsp;&nbsp;&nbsp;(the&nbsp;forSome&nbsp;triple&nbsp;is&nbsp;special&nbsp;in&nbsp;that&nbsp;you&nbsp;can't&nbsp;remove&nbsp;it&nbsp;and&nbsp;reduce&nbsp;info)<br>
-&nbsp;-&nbsp;filter&nbsp;out&nbsp;duplicate&nbsp;conclusions&nbsp;-&nbsp;BUG!&nbsp;-&nbsp;DONE<br>
-&nbsp;-&nbsp;Validation:&nbsp;&nbsp;validate&nbsp;domain&nbsp;and&nbsp;range&nbsp;constraints&nbsp;against&nbsp;closuer&nbsp;of&nbsp;classes&nbsp;and<br>
-&nbsp;&nbsp;&nbsp;mutually&nbsp;disjoint&nbsp;classes.<br>
-&nbsp;-&nbsp;Use&nbsp;unambiguous&nbsp;property&nbsp;to&nbsp;infer&nbsp;synomnyms<br>
-&nbsp;&nbsp;&nbsp;(see&nbsp;sameDan.n3&nbsp;test&nbsp;case&nbsp;in&nbsp;test/retest.sh)<br>
-&nbsp;-&nbsp;schema&nbsp;validation&nbsp;-&nbsp;done&nbsp;partly&nbsp;but&nbsp;no&nbsp;"no&nbsp;schema&nbsp;for&nbsp;xx&nbsp;predicate".<br>
-&nbsp;ULTINS&nbsp;WE&nbsp;HAVE&nbsp;DONE<br>
-&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;includes(expr1,&nbsp;expr2)&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(cf&nbsp;&gt;=&nbsp;,&nbsp;&nbsp;dixitInterAlia&nbsp;)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;indirectlyImplies(expr1,&nbsp;expr2)&nbsp;&nbsp;&nbsp;<br>
-&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;startsWith(x,y)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;uri(x,&nbsp;str)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;-&nbsp;usesNamespace(x,y)&nbsp;&nbsp;&nbsp;#&nbsp;find&nbsp;transitive&nbsp;closure&nbsp;for&nbsp;validation&nbsp;&nbsp;-&nbsp;awful&nbsp;function&nbsp;in&nbsp;reality</tt></p>
+&nbsp;&nbsp;&nbsp;&nbsp;<br>
+Copyright&nbsp;()&nbsp;&nbsp;2000-2004&nbsp;World&nbsp;Wide&nbsp;Web&nbsp;Consortium,&nbsp;(Massachusetts&nbsp;Institute<br>
+of&nbsp;Technology,&nbsp;European&nbsp;Research&nbsp;Consortium&nbsp;for&nbsp;Informatics&nbsp;and&nbsp;Mathematics,<br>
+Keio&nbsp;University).&nbsp;All&nbsp;Rights&nbsp;Reserved.&nbsp;This&nbsp;work&nbsp;is&nbsp;distributed&nbsp;under&nbsp;the<br>
+W3C®&nbsp;Software&nbsp;License&nbsp;[1]&nbsp;in&nbsp;the&nbsp;hope&nbsp;that&nbsp;it&nbsp;will&nbsp;be&nbsp;useful,&nbsp;but&nbsp;WITHOUT<br>
+ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;warranty&nbsp;of&nbsp;MERCHANTABILITY&nbsp;or&nbsp;FITNESS<br>
+&nbsp;FOR&nbsp;A&nbsp;PARTICULAR&nbsp;PURPOSE.</tt></p>
 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -136,15 +58,16 @@ Done<br>
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="StringIO.html">StringIO</a><br>
 <a href="binascii.html">binascii</a><br>
 <a href="diag.html">diag</a><br>
-</td><td width="25%" valign=top><a href="md5.html">md5</a><br>
-<a href="notation3.html">notation3</a><br>
+<a href="md5.html">md5</a><br>
+</td><td width="25%" valign=top><a href="notation3.html">notation3</a><br>
 <a href="re.html">re</a><br>
-</td><td width="25%" valign=top><a href="string.html">string</a><br>
+<a href="string.html">string</a><br>
 <a href="sys.html">sys</a><br>
-<a href="time.html">time</a><br>
-</td><td width="25%" valign=top><a href="types.html">types</a><br>
+</td><td width="25%" valign=top><a href="time.html">time</a><br>
+<a href="types.html">types</a><br>
 <a href="uripath.html">uripath</a><br>
 <a href="urllib.html">urllib</a><br>
+</td><td width="25%" valign=top><a href="webAccess.html">webAccess</a><br>
 </td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
@@ -154,7 +77,7 @@ Done<br>
 <tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl>
 <dt><font face="helvetica, arial"><a href="llyn.html#DataObject">DataObject</a>
-</font></dt><dt><font face="helvetica, arial"><a href="formula.html#Formula">formula.Formula</a>(<a href="term.html#Fragment">term.Fragment</a>, <a href="term.html#CompoundTerm">term.CompoundTerm</a>)
+</font></dt><dt><font face="helvetica, arial"><a href="formula.html#Formula">formula.Formula</a>(<a href="term.html#AnonymousNode">term.AnonymousNode</a>, <a href="term.html#CompoundTerm">term.CompoundTerm</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="llyn.html#IndexedFormula">IndexedFormula</a>
@@ -263,6 +186,8 @@ Done<br>
 <dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 <dd><a href="term.html#Function">term.Function</a></dd>
 <dd><a href="term.html#ReverseFunction">term.ReverseFunction</a></dd>
@@ -308,6 +233,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BI_EqualTo-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_EqualTo-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_EqualTo-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
 <dl><dt><a name="BI_EqualTo-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -319,6 +250,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_EqualTo-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_EqualTo-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -353,6 +297,8 @@ This&nbsp;is&nbsp;a&nbsp;function,&nbsp;so&nbsp;the&nbsp;object&nbsp;is&nbsp;cal
 <dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 <dd><a href="term.html#Function">term.Function</a></dd>
 </dl>
@@ -399,6 +345,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BI_conclusion-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_conclusion-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_conclusion-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
 <dl><dt><a name="BI_conclusion-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -410,6 +362,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_conclusion-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_conclusion-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -443,6 +408,8 @@ modulo&nbsp;non-duplication&nbsp;of&nbsp;course<br>&nbsp;</tt></td></tr>
 <dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 <dd><a href="term.html#Function">term.Function</a></dd>
 </dl>
@@ -489,6 +456,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BI_conjunction-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_conjunction-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_conjunction-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
 <dl><dt><a name="BI_conjunction-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -500,6 +473,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_conjunction-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_conjunction-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -531,6 +517,8 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 <dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 <dd><a href="term.html#Function">term.Function</a></dd>
 </dl>
@@ -577,6 +565,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BI_content-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_content-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_content-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
 <dl><dt><a name="BI_content-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -588,6 +582,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_content-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_content-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -621,6 +628,8 @@ context.&nbsp;This&nbsp;is&nbsp;quite&nbsp;a&nbsp;limitation&nbsp;in&nbsp;some&n
 <dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 </dl>
 <hr>
@@ -660,6 +669,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BI_includes-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_includes-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_includes-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
 <dl><dt><a name="BI_includes-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -671,6 +686,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_includes-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_includes-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -708,6 +736,8 @@ A&nbsp;canonical&nbsp;form&nbsp;is&nbsp;possisble&nbsp;but&nbsp;not&nbsp;simple.
 <dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 <dd><a href="term.html#Function">term.Function</a></dd>
 </dl>
@@ -754,6 +784,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BI_n3String-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_n3String-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_n3String-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
 <dl><dt><a name="BI_n3String-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -765,6 +801,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_n3String-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_n3String-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -796,6 +845,8 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 <dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 </dl>
 <hr>
@@ -835,6 +886,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BI_notEqualTo-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_notEqualTo-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_notEqualTo-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
 <dl><dt><a name="BI_notEqualTo-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -846,6 +903,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_notEqualTo-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_notEqualTo-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -889,6 +959,8 @@ includes&nbsp;G&nbsp;for&nbsp;all&nbsp;x,&nbsp;then&nbsp;G&nbsp;would&nbsp;have&
 <dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 </dl>
 <hr>
@@ -928,6 +1000,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BI_notIncludes-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_notIncludes-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_notIncludes-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
 <dl><dt><a name="BI_notIncludes-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -939,6 +1017,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_notIncludes-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_notIncludes-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -970,6 +1061,8 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 <dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 <dd><a href="term.html#Function">term.Function</a></dd>
 </dl>
@@ -1016,6 +1109,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BI_parsedAsN3-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_parsedAsN3-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_parsedAsN3-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
 <dl><dt><a name="BI_parsedAsN3-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -1027,6 +1126,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_parsedAsN3-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_parsedAsN3-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -1058,6 +1170,8 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 <dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 <dd><a href="term.html#Function">term.Function</a></dd>
 </dl>
@@ -1104,6 +1218,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BI_racine-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_racine-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_racine-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
 <dl><dt><a name="BI_racine-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -1115,6 +1235,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_racine-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_racine-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -1148,6 +1281,8 @@ eg&nbsp;see&nbsp;test/includes/check.n3<br>&nbsp;</tt></td></tr>
 <dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 <dd><a href="term.html#Function">term.Function</a></dd>
 </dl>
@@ -1194,6 +1329,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BI_rawType-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_rawType-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_rawType-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
 <dl><dt><a name="BI_rawType-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -1205,6 +1346,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_rawType-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_rawType-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -1238,6 +1392,8 @@ identifiers&nbsp;for&nbsp;anonymous&nbsp;nodes&nbsp;and&nbsp;formuale&nbsp;etc.<
 <dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 <dd><a href="term.html#Function">term.Function</a></dd>
 <dd><a href="term.html#ReverseFunction">term.ReverseFunction</a></dd>
@@ -1294,6 +1450,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BI_rawUri-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_rawUri-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_rawUri-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
 <dl><dt><a name="BI_rawUri-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -1305,6 +1467,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_rawUri-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_rawUri-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -1343,6 +1518,8 @@ which&nbsp;is&nbsp;then&nbsp;parsed&nbsp;according&nbsp;to&nbsp;its&nbsp;content
 <dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 <dd><a href="term.html#Function">term.Function</a></dd>
 </dl>
@@ -1389,6 +1566,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BI_semantics-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_semantics-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_semantics-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
 <dl><dt><a name="BI_semantics-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -1400,6 +1583,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_semantics-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_semantics-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -1432,6 +1628,8 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 <dd><a href="term.html#HeavyBuiltIn">term.HeavyBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 <dd><a href="term.html#Function">term.Function</a></dd>
 </dl>
@@ -1478,6 +1676,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BI_semanticsOrError-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_semanticsOrError-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_semanticsOrError-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
 <dl><dt><a name="BI_semanticsOrError-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -1489,6 +1693,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsOrError-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_semanticsOrError-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -1520,6 +1737,8 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 <dd><a href="term.html#LightBuiltIn">term.LightBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">term.BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">term.LabelledNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 <dd><a href="term.html#Function">term.Function</a></dd>
 <dd><a href="term.html#ReverseFunction">term.ReverseFunction</a></dd>
@@ -1574,6 +1793,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BI_uri-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<br>
+<dl><dt><a name="BI_uri-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BI_uri-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
 <dl><dt><a name="BI_uri-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -1585,6 +1810,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;<a href="RDFSink.html#RDFSink">RDFSink</a>.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_uri-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_uri-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -1687,13 +1925,14 @@ only&nbsp;be&nbsp;used&nbsp;immediately&nbsp;after&nbsp;a&nbsp;<a href="#Indexed
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#IndexedFormula">IndexedFormula</a></dd>
 <dd><a href="formula.html#Formula">formula.Formula</a></dd>
-<dd><a href="term.html#Fragment">term.Fragment</a></dd>
+<dd><a href="term.html#AnonymousNode">term.AnonymousNode</a></dd>
+<dd><a href="term.html#Node">term.Node</a></dd>
 <dd><a href="term.html#Term">term.Term</a></dd>
 <dd><a href="term.html#CompoundTerm">term.CompoundTerm</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="IndexedFormula-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
+<dl><dt><a name="IndexedFormula-__init__"><strong>__init__</strong></a>(self, store, uri<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="IndexedFormula-_noteNewList"><strong>_noteNewList</strong></a>(self, bnode, list, newBindings)</dt><dd><tt>Note&nbsp;that&nbsp;we&nbsp;have&nbsp;a&nbsp;new&nbsp;list.<br>
 &nbsp;<br>
@@ -1827,8 +2066,12 @@ as&nbsp;though&nbsp;a&nbsp;formula&nbsp;were&nbsp;a&nbsp;sequence.</tt></dd></dl
 The&nbsp;store&nbsp;does&nbsp;not&nbsp;use&nbsp;prefixes&nbsp;internally,&nbsp;but&nbsp;keeping&nbsp;track<br>
 of&nbsp;those&nbsp;usedd&nbsp;in&nbsp;the&nbsp;input&nbsp;data&nbsp;makes&nbsp;for&nbsp;more&nbsp;human-readable&nbsp;output.</tt></dd></dl>
 
+<dl><dt><a name="IndexedFormula-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="IndexedFormula-close"><strong>close</strong></a>(self)</dt><dd><tt>No&nbsp;more&nbsp;to&nbsp;add.&nbsp;Please&nbsp;return&nbsp;interned&nbsp;value.<br>
 NOTE&nbsp;You&nbsp;must&nbsp;now&nbsp;use&nbsp;the&nbsp;interned&nbsp;one,&nbsp;not&nbsp;the&nbsp;original!</tt></dd></dl>
+
+<dl><dt><a name="IndexedFormula-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="formula.html#Formula">Formula</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;below</tt></dd></dl>
 
 <dl><dt><a name="IndexedFormula-declareExistential"><strong>declareExistential</strong></a>(self, v)</dt></dl>
 
@@ -1844,6 +2087,8 @@ we&nbsp;may&nbsp;move&nbsp;to&nbsp;an&nbsp;internal&nbsp;storage&nbsp;rather&nbs
 <dl><dt><a name="IndexedFormula-includes"><strong>includes</strong></a>(f, g, _variables<font color="#909090">=[]</font>, bindings<font color="#909090">=[]</font>)</dt><dd><tt>Does&nbsp;this&nbsp;formula&nbsp;include&nbsp;the&nbsp;information&nbsp;in&nbsp;the&nbsp;other?<br>
 &nbsp;<br>
 bindings&nbsp;is&nbsp;for&nbsp;use&nbsp;within&nbsp;a&nbsp;query.</tt></dd></dl>
+
+<dl><dt><a name="IndexedFormula-intern"><strong>intern</strong></a>(self, value)</dt></dl>
 
 <dl><dt><a name="IndexedFormula-loadFormulaWithSubsitution"><strong>loadFormulaWithSubsitution</strong></a>(self, old, bindings<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Load&nbsp;information&nbsp;from&nbsp;another&nbsp;formula,&nbsp;subsituting&nbsp;as&nbsp;we&nbsp;go<br>
 returns&nbsp;number&nbsp;of&nbsp;statements&nbsp;added&nbsp;(roughly)</tt></dd></dl>
@@ -1904,20 +2149,8 @@ We&nbsp;may&nbsp;move&nbsp;to&nbsp;an&nbsp;internal&nbsp;storage&nbsp;rather&nbs
 <dl><dt><a name="IndexedFormula-variables"><strong>variables</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;variables&nbsp;quantified&nbsp;within&nbsp;this&nbsp;scope.</tt></dd></dl>
 
 <hr>
-Methods inherited from <a href="term.html#Fragment">term.Fragment</a>:<br>
-<dl><dt><a name="IndexedFormula-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
-&nbsp;<br>
-Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd></dl>
-
-<dl><dt><a name="IndexedFormula-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
-&nbsp;<br>
-[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
-
-<dl><dt><a name="IndexedFormula-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
-
+Methods inherited from <a href="term.html#AnonymousNode">term.AnonymousNode</a>:<br>
 <dl><dt><a name="IndexedFormula-uriref"><strong>uriref</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="IndexedFormula-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">term.Term</a>:<br>
@@ -1926,6 +2159,21 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 &nbsp;<br>
 output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="IndexedFormula-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="formula.html#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="IndexedFormula-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>The&nbsp;string&nbsp;represnting&nbsp;this&nbsp;in&nbsp;N3</tt></dd></dl>
 
 <dl><dt><a name="IndexedFormula-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
@@ -1982,7 +2230,7 @@ This&nbsp;is&nbsp;the&nbsp;way&nbsp;they&nbsp;are&nbsp;actually&nbsp;made.</tt><
 
 <dl><dt><a name="RDFStore-internURI"><strong>internURI</strong></a>(self, str, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="RDFStore-load"><strong>load</strong></a>(store, uri<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>, formulaURI<font color="#909090">=None</font>, remember<font color="#909090">=1</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
+<dl><dt><a name="RDFStore-load"><strong>load</strong></a>(store, uri<font color="#909090">=None</font>, openFormula<font color="#909090">=None</font>, asIfFrom<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>, remember<font color="#909090">=1</font>, flags<font color="#909090">=''</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
 &nbsp;<br>
 uri:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;None,&nbsp;load&nbsp;from&nbsp;standard&nbsp;input.<br>
 remember:&nbsp;if&nbsp;1,&nbsp;store&nbsp;as&nbsp;metadata&nbsp;the&nbsp;relationship&nbsp;between&nbsp;this&nbsp;URI&nbsp;and&nbsp;this&nbsp;formula.<br>
@@ -1994,7 +2242,7 @@ This&nbsp;was&nbsp;and&nbsp;could&nbsp;be&nbsp;an&nbsp;independent&nbsp;function
 of&nbsp;the&nbsp;store.&nbsp;However,&nbsp;it&nbsp;is&nbsp;natural&nbsp;to&nbsp;call&nbsp;it&nbsp;as&nbsp;a&nbsp;method&nbsp;on&nbsp;the&nbsp;store.<br>
 And&nbsp;a&nbsp;proliferation&nbsp;of&nbsp;APIs&nbsp;confuses.</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-loadMany"><strong>loadMany</strong></a>(self, uris)</dt><dd><tt>Get,&nbsp;parse&nbsp;and&nbsp;merge&nbsp;serveral&nbsp;documents,&nbsp;given&nbsp;a&nbsp;list&nbsp;of&nbsp;URIs.&nbsp;<br>
+<dl><dt><a name="RDFStore-loadMany"><strong>loadMany</strong></a>(self, uris, openFormula<font color="#909090">=None</font>)</dt><dd><tt>Get,&nbsp;parse&nbsp;and&nbsp;merge&nbsp;serveral&nbsp;documents,&nbsp;given&nbsp;a&nbsp;list&nbsp;of&nbsp;URIs.&nbsp;<br>
 &nbsp;<br>
 Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
 Returns&nbsp;top-level&nbsp;formula&nbsp;which&nbsp;is&nbsp;the&nbsp;parse&nbsp;result.<br>
@@ -2054,6 +2302,10 @@ Data and non-method functions defined here:<br>
 
 <hr>
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>
+<dl><dt><a name="RDFStore-countNamespace"><strong>countNamespace</strong></a>(self, namesp)</dt><dd><tt>On&nbsp;output,&nbsp;count&nbsp;how&nbsp;many&nbsp;times&nbsp;each&nbsp;namespace&nbsp;is&nbsp;used</tt></dd></dl>
+
+<dl><dt><a name="RDFStore-namespaceCounts"><strong>namespaceCounts</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="RDFStore-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
 &nbsp;<br>
 This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;this&nbsp;to&nbsp;pass&nbsp;on<br>
@@ -2115,7 +2367,6 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 <strong>DAML_sameAs_URI</strong> = 'http://www.w3.org/2002/07/owl#sameAs'<br>
 <strong>FLOAT_DATATYPE</strong> = 'http://www.w3.org/2001/XMLSchema#double'<br>
 <strong>FORMULA</strong> = 1<br>
-<strong>HTTP_Content_Type</strong> = 'content-type'<br>
 <strong>INTEGER_DATATYPE</strong> = 'http://www.w3.org/2001/XMLSchema#integer'<br>
 <strong>LITERAL</strong> = 2<br>
 <strong>LITERAL_URI_prefix</strong> = 'data:application/n3;'<br>

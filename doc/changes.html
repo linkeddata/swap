@@ -23,43 +23,68 @@ Comparing Formats</p>
 href="../../../../DesignIssues/Notation3.html"><img alt="n3"
 src="../../../../RDF/icons/n3_small" /></a></p>
 
-<p>Next release:</p>
+<h2>Release 0.7.1,   2004-03-04</h2>
+
+<h4>RDF Parser improved</h4>
+
+<p>The cwm regresssion test now incorporates the RDF Core Positive Parser
+Tests except for those  which deal with reification or with XML literals. In
+the process, xml:base supposrt was added in the parser.</p>
+
+<p><a
+href="http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-element-not-mandatory/test001.rdf"></a><a
+href="http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-element-not-mandatory/test001.rdf">A
+new test</a> found in the updated core tests requires RDF to be parsed even
+when there is no enveloping &lt;rdf:RDF&gt; tag, even if the outermost
+element is a typed node production, and so not something in the RDF namespace
+at all. This makes rdf much less self-describing, and makes it more dangerous
+that one might parse say an HTML file as RDF by accident. Use with care.  If
+need this feature, use the --rdf=R flag.</p>
+
+<p>The RDF core tests are done with --rdf=RT to make the parser parse naked
+RDF or RDF buried in foreign XML..</p>
+
+<h4>nodeid generated on RDF output</h4>
+
+<p>This has been a missing feature of the RDF generator for a while. The
+nodeid feature allows bnodes to be output in RDF/XML. I may not have got this
+right, as I don't have RDF generation tests, only RDF parse tests.</p>
 
 <h4>Ordering of output</h4>
 
-<p>The ordering of Terms has been changed.  Automatically generated terms
-with no URIs sort after anything which has a URI.</p>
+<p>The ordering of Terms has been changed. Automatically generated terms with
+no URIs sort after anything which has a URI.</p>
 
 <p>This will change the order of N3 and RDF/XML output but does not change
 its semantics.s</p>
 
 <h4>Namespace prefix smarts on output</h4>
 
-<p>Cwm now does output in a two-pass process.  This makes its counting of the
+<p>Cwm now does output in a two-pass process. This makes its counting of the
 number of occurrences of namespaces more acurate, which determines the
-default namespace it choses.  This does take more time, though not as long as
-the previous method of working out which was going to be most common.  To
-skip this process, use the "d" flag on output (N3 or RDF/XML) to suppress the
-use of a default namespace.</p>
+default namespace it choses. This does take more time, though not as long as
+the previous method of working out which was going to be most common. To skip
+this process, use the "d" flag on output (N3 or RDF/XML) to suppress the use
+of a default namespace.</p>
 
 <p>Because this counting is now accurate, it now suppresses namespace prefix
 declarations which are not actually needed in the output.</p>
 
 <p>Cwm will also make up prefixes when it needs them for a namespace, and
-none of the input data uses one.  It peeks into the the namespace URI, and
+none of the input data uses one. It peeks into the the namespace URI, and
 looks around for a short string after the last "/", adding numbers if
 necessary to make the prefix unique.</p>
 
 <h4>Namespaces without hashes</h4>
 
 <p>Cwm when writing N3 not normally use namespace names for URIs which do not
-have a "#".  Including a "/" in the flags overrides this.</p>
+have a "#". Including a "/" in the flags overrides this.</p>
 
 <p>cwm mydcdata.n3 --n3="/"</p>
 
 <p>Namespaces which end in "/" are architecturally flawed as the names of
 things in the namespace look like HTTP documents, whatever they are. The most
-notorious miscreatnts here are Dublin Core and FOAF.    If you use these
+notorious miscreatnts here are Dublin Core and FOAF. If you use these
 namespaces, you may want to do this, or you may want to encourage the authors
 to change to use a "#".</p>
 

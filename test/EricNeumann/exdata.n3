@@ -1,5 +1,7 @@
 
 @prefix : <http://example.com/exon/#>.
+@prefix da: <http://example.com/exon/#>.
+
 @keywords is, a, of.
 
 # Problem 1
@@ -26,9 +28,12 @@
 # The Gene's 2 transcripts which us built out of different exon
 # subsets...
 
+
+
 <#gi13560662> a :Transcript;
 	:hasCds [ :startsAt "23897840"; :stopsAt "23915296" ];
-	:hasExon <#ATP1B4_e1> , <#ATP1B4_e3>, <#ATP1B4_e4> .
+	:hasExon <#ATP1B4_e1> , <#ATP1B4_e3>, <#ATP1B4_e4> ;
+	:weThink  {  :life a :Great   }.
 
 <#gi13560664> a :Transcript;
 	:hasCds [ :startsAt "23897840"; :stopsAt "23915296" ];

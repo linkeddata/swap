@@ -30,92 +30,13 @@ See also for comparison, a python RDF API for the Redland library (in C):
 and the redfoot/rdflib interface, a python RDF API:
    http://rdflib.net/latest/doc/triple_store.html
 
-Agenda:
-=======
-
- - get rid of other globals (DWC 30Aug2001)
- - Add dynamic load of web python via rdf-schema: imp.load_source("foo", "llyn.py", open("llyn.py", "r"))
- - implement a back-chaining reasoner (ala Euler/Algernon) on this store? (DWC)
- - run http daemon/client sending changes to database
- - act as client/server for distributed system
-  - postgress, mySQl underlying database?
- -    daml:import
- -    standard mappping of SQL database into the web in N3/RDF
- -    
- - logic API as requested DC 2000/12/10
- - Jena-like API x=model.createResource(); addProperty(DC.creator, "Brian", "en")
- -   syntax for "all she wrote" - schema is complete and definitive
- - metaindexes - "to know more about x please see r" - described by
- - general python URI access with catalog!
- - equivalence handling inc. equivalence of equivalence?
- Shakedown:
- - Find all synonyms of synonym
- - Find closure for all synonyms
- - Find superclass closure?
-- represent URIs bound to same equivalence closure object?
- - proof generation
-
-- dynamic bultins - ontology for adding python.
-
-BULTINS WE NEED
-    - {x log:entails y } <=>  { x!log:conclusion log:includes y}.    [is log:conclusion of x] log:includes y
-    - usesNamespace(x,y)   # find transitive closure for validation  - awful function in reality
-    - delegation of query to remote database (cwm or rdbms)
-    - F impliesUnderThink G.  (entails? leadsTo? conclusion?)
-
-- Translation;  Try to represent the space (or a context) using a subset of namespaces
-
-- Other forms of context - explanation of derivation by rule or merging of contexts
-- operators on numbers
-- operators (union, intersection, subtraction) of context
-- cwm -diff using above! for test result comparison
-
-- Optimizations:
-    - Remember previous bindings found for this rule(?)
-    - Notice disjoint graphs & explicitly form cross-product of subresults
-
-- test rdf praser against Dave Becket's test suite http://ilrt.org/people/cmdjb/
-- Introduce this or $ to indicate the current context
-- Introduce a difference between <> and $  in that <> log:parsesTo $ .
-    serialised subPropertyOf serialisedAs
-
-Done
-====
- - sucking in the schema (http library?) --schemas ;
- - to know about r1 see r2;
- - split Query engine out as subclass of RDFStore? (DWC)
-    SQL-equivalent client
- - split out separate modules: CGI interface, command-line stuff,
-   built-ins (DWC 30Aug2001)
-- (test/retest.sh is another/better list of completed functionality --DWC)
- - BUG: a [ b c ] d.   gets improperly output. See anon-pred
- - Separate the store hash table from the parser. - DONE
- - regeneration of genids on output. - DONE
- - repreentation of genids and foralls in model
-- regression test - DONE (once!)
- Manipulation:
-  { } as notation for bag of statements - DONE
-  - filter -DONE
-  - graph match -DONE
-  - recursive dump of nested bags - DONE
- - semi-reification - reifying only subexpressions - DONE
- - Bug  :x :y :z as data should match [ :y :z ] as query. Fixed by stripping forSomes from top of query.
- - BUG: {} is a context but that is lost on output!!!
-     statements not enough. See foo2.n3 - change existential representation :-( to make context a real conjunction again?
-    (the forSome triple is special in that you can't remove it and reduce info)
- - filter out duplicate conclusions - BUG! - DONE
- - Validation:  validate domain and range constraints against closuer of classes and
-   mutually disjoint classes.
- - Use unambiguous property to infer synomnyms
-   (see sameDan.n3 test case in test/retest.sh)
- - schema validation - done partly but no "no schema for xx predicate".
- ULTINS WE HAVE DONE
-    - includes(expr1, expr2)      (cf >= ,  dixitInterAlia )
-    - indirectlyImplies(expr1, expr2)   
-    - startsWith(x,y)
-    - uri(x, str)
-    - usesNamespace(x,y)   # find transitive closure for validation  - awful function in reality
-
+    
+Copyright ()  2000-2004 World Wide Web Consortium, (Massachusetts Institute
+of Technology, European Research Consortium for Informatics and Mathematics,
+Keio University). All Rights Reserved. This work is distributed under the
+W3C® Software License [1] in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+ FOR A PARTICULAR PURPOSE.
 """
 
 # emacsbug="""emacs got confused by long string above@@"""
@@ -147,9 +68,10 @@ from term import BuiltIn, LightBuiltIn, \
     Literal, Symbol, Fragment, FragmentNil, Anonymous, Term,\
     CompoundTerm, List, EmptyList, NonEmptyList
 from OrderedSequence import merge
-from formula import Formula, StoredStatement, compareTerm
+from formula import Formula, StoredStatement
 
 from query import think, applyRules, testIncludes
+import webAccess
 
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
@@ -221,8 +143,8 @@ class IndexedFormula(Formula):
     There is a reopen() method but it is not recommended, and if desperate should
     only be used immediately after a close().
     """
-    def __init__(self, resource, fragid):
-        Formula.__init__(self, resource, fragid)
+    def __init__(self, store, uri=None):
+        Formula.__init__(self, store, uri)
         self.descendents = None   # Placeholder for list of closure under subcontext
 	self.collector = None # Object collecting evidence, if any 
 	self._redirections = {}
@@ -338,7 +260,7 @@ class IndexedFormula(Formula):
 	why 	may be a reason for use when a proof will be required.
 	"""
         if self.canonical != None:
-            raise RuntimeError("Attempt to add statement to canonical formula "+`self`)
+            raise RuntimeError("Attempt to add statement to closed formula "+`self`)
 	store = self.store
 	
 	if not isinstance(subj, Term): subj = store.intern(subj)
@@ -354,8 +276,8 @@ class IndexedFormula(Formula):
 	obj = obj.substituteEquals(self._redirections, newBindings)
 	    
         if diag.chatty_flag > 50:
-            progress("Add statement (size before %i) to %s: {%s %s %s}" % (
-		self.store.size, `self`,  `subj`, `pred`, `obj`) )
+            progress("Add statement (size before %i, %i statements) to %s:\n {%s %s %s}" % (
+		self.store.size, len(self.statements),`self`,  `subj`, `pred`, `obj`) )
         if self.statementsMatching(pred, subj, obj):
             if diag.chatty_flag > 97:
 		progress("Add duplicate SUPPRESSED %s: {%s %s %s}" % (
@@ -378,8 +300,8 @@ class IndexedFormula(Formula):
 # for variables I guess as everyone has been saying.
 # When that happens, expend smushing to symbols.)
 
-	if subj in self._existentialVariables:
-	    if pred is store.rest and isinstance(obj, List):
+	if pred is store.rest:
+	    if isinstance(obj, List) and  subj in self._existentialVariables:
 		ss = self.statementsMatching(pred=store.first, subj=subj)
 		if ss:
 		    s = ss[0]
@@ -390,24 +312,24 @@ class IndexedFormula(Formula):
 		    self.substituteEqualsInPlace(newBindings)
 		    return 1  # Added a statement but ... it is hidden in lists
     
-	    elif pred is store.first:
-		ss = self.statementsMatching(pred=store.rest, subj=subj)
-		if ss:
-		    s = ss[0]
-		    rest = s[OBJ]
-		    if isinstance(rest, List):
-			list = rest.prepend(obj)
-			self.removeStatement(s)
-			self._noteNewList(subj, list, newBindings)
-			self.substituteEqualsInPlace(newBindings)
-			return 1
+	elif pred is store.first  and  subj in self._existentialVariables:
+	    ss = self.statementsMatching(pred=store.rest, subj=subj)
+	    if ss:
+		s = ss[0]
+		rest = s[OBJ]
+		if isinstance(rest, List):
+		    list = rest.prepend(obj)
+		    self.removeStatement(s)
+		    self._noteNewList(subj, list, newBindings)
+		    self.substituteEqualsInPlace(newBindings)
+		    return 1
 
 	if "e" in self._closureMode:
 	    if pred is store.sameAs:
 		if subj is obj: return 0 # ignore a = a
 		if ((subj in self.existentials() and obj not in self.existentials())
 		    or (subj.generated() and not obj.generated())
-		    or compareTerm(obj, subj) < 0): var, val = subj, obj
+		    or Term.compareAnyTerm(obj, subj) < 0): var, val = subj, obj
 		else: var, val = obj, subj
 		newBindings[var] = val
 		if diag.chatty_flag > 90: progress("Equality: %s = %s" % (`var`, `val`))
@@ -446,6 +368,7 @@ class IndexedFormula(Formula):
 		    if diag.chatty_flag > 50: progress("\tExistential ", obj)
 		    self._existentialVariables.append(obj)
 		return 1
+	    raise ValueError("You cannot use 'this' except as subject of forAll or forSome")
 
         self.statements.append(s)
        
@@ -536,9 +459,9 @@ class IndexedFormula(Formula):
 
         fl.sort(StoredStatement.compareSubjPredObj)
 	fe = F.existentials()
-	fe.sort(compareTerm)
+	fe.sort(Term.compareAnyTerm)
 	fu = F.universals ()
-	fu.sort(compareTerm)
+	fu.sort(Term.compareAnyTerm)
 
         for G in possibles:
             gl = G.statements
@@ -552,7 +475,7 @@ class IndexedFormula(Formula):
 		loe = len(oe)
 		if lse > loe: return 1
 		if lse < loe: return -1
-		oe.sort(compareTerm)
+		oe.sort(Term.compareAnyTerm)
 		for i in range(lse):
 		    if se[i] is not oe[i]:
 			break # mismatch
@@ -736,7 +659,7 @@ class IndexedFormula(Formula):
 def comparePair(self, other):
     "Used only in outputString"
     for i in 0,1:
-        x = compareTerm(self[i], other[i])
+        x = self[i].compareAnyTerm(other[i])
         if x != 0:
             return x
 
@@ -907,8 +830,6 @@ class BI_semanticsOrError(BI_semantics):
             return result
     
 
-HTTP_Content_Type = 'content-type' #@@ belongs elsewhere?
-
 
 class DocumentAccessError(IOError):
     def __init__(self, uri, info):
@@ -954,12 +875,10 @@ class BI_parsedAsN3(HeavyBuiltIn, Function):
             if diag.chatty_flag > 10: progress("parsing " + subj.string[:30] + "...")
 
             inputURI = subj.asHashURI() # iffy/bogus... rather asDataURI? yes! but make more efficient
-            p = notation3.SinkParser(store, inputURI)
+            p = notation3.SinkParser(store)
             p.startDoc()
             p.feed(subj.string.encode('utf-8')) #@@ catch parse errors
-            p.endDoc()
-            del(p)
-            F = store.intern((FORMULA, inputURI+ "#_formula"))
+            F = p.endDoc()
             F = F.close()
 	    store._experience.add(subj=subj, pred=store.parsedAsN3, obj=F)
 	    return F
@@ -1170,7 +1089,7 @@ class RDFStore(RDFSink) :
 	return result
 	
     def newFormula(self, uri=None):
-	return self.intern(RDFSink.newFormula(self, uri))
+	return IndexedFormula(self, uri)
 
     def newSymbol(self, uri):
 	return self.intern(RDFSink.newSymbol(self, uri))
@@ -1178,8 +1097,8 @@ class RDFStore(RDFSink) :
     def newBlankNode(self, context, uri=None, why=None):
 	"""Create or reuse, in the default store, a new unnamed node within the given
 	formula as context, and return it for future use"""
-	return self.intern(RDFSink.newBlankNode(self, context, uri, why=why))
-    
+	return context.newBlankNode(uri=uri)
+
     def newExistential(self, context, uri=None, why=None):
 	"""Create or reuse, in the default store, a new named variable
 	existentially qualified within the given
@@ -1197,10 +1116,11 @@ class RDFStore(RDFSink) :
 ###################
 
     def reset(self, metaURI): # Set the metaURI
-        self._experience = self.intern((FORMULA, metaURI + "_formula"))
+        self._experience = self.newFormula(metaURI + "_formula")
 	assert isinstance(self._experience, Formula)
 
-    def load(store, uri=None, contentType=None, formulaURI=None, remember=1, why=None):
+    def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None, remember=1,
+		    flags="", why=None):
 	"""Get and parse document.  Guesses format if necessary.
 
 	uri:      if None, load from standard input.
@@ -1213,71 +1133,25 @@ class RDFStore(RDFSink) :
 	of the store. However, it is natural to call it as a method on the store.
 	And a proliferation of APIs confuses.
 	"""
-	try:
-	    baseURI = uripath.base()
-	    if contentType == None: contentType = ""
-	    ct = contentType
-	    if uri != None:
-		addr = uripath.join(baseURI, uri) # Make abs from relative
-		source = store.newSymbol(addr)
-		if remember:
-		    F = store._experience.the(source, store.semantics)
-		    if F != None:
-			if diag.chatty_flag > 40: progress("Using cached semantics for",addr)
-			return F 
-		    
-		if diag.chatty_flag > 40: progress("Taking input from " + addr)
-		netStream = urlopenForRDF(addr)
-		if diag.chatty_flag > 60:
-		    progress("   Headers for %s: %s\n" %(addr, netStream.headers.items()))
-		if contentType == None: ct=netStream.headers.get(HTTP_Content_Type, None)
-	    else:
-		if diag.chatty_flag > 40: progress("Taking input from standard input")
-		addr = uripath.join(baseURI, "STDIN") # Make abs from relative
-		netStream = sys.stdin
-    
-	#    if diag.chatty_flag > 19: progress("HTTP Headers:" +`netStream.headers`)
-	#    @@How to get at all headers??
-	#    @@ Get sensible net errors and produce dignostics
-    
-	    guess = ct
-	    buffer = netStream.read()
-	    if diag.chatty_flag > 9: progress("Content-type: " + `ct` + " for "+addr)
-	    if ct == None or (ct.find('xml') < 0 and ct.find('rdf') < 0) :   # Rats - nothing to go on
-                # can't be XML if it starts with these...
-		if buffer[0:1] == "#" or buffer[0:7] == "@prefix":
-		    guess = 'application/n3'
-                elif buffer.find('xmlns="') >=0 or buffer.find('xmlns:') >=0:
-		    guess = 'application/xml'
-		if diag.chatty_flag > 29: progress("    guess " + guess)
-	except (IOError, OSError):  
-	    raise DocumentAccessError(addr, sys.exc_info() )
-	    
-	# Hmmm ... what about application/rdf; n3 or vice versa?
-	if guess.find('xml') >= 0 or guess.find('rdf') >= 0:
-	    if diag.chatty_flag > 49: progress("Parsing as RDF")
-	    import sax2rdf, xml.sax._exceptions
-	    p = sax2rdf.RDFXMLParser(store, addr)
-#	    Fpair = p.loadStream(netStream)
-	    p.feed(buffer)
-	    Fpair = p.close()
-	else:
-	    if diag.chatty_flag > 49: progress("Parsing as N3")
-	    p = notation3.SinkParser(store, addr, formulaURI=formulaURI, why=why)
-	    p.startDoc()
-	    p.feed(buffer)
-	    Fpair = p.endDoc()
-	F = store.intern(Fpair)
-	F = F.close()
-	if remember: store._experience.add(
+	baseURI = uripath.base()
+	if uri != None and openFormula==None and remember:
+	    addr = uripath.join(baseURI, uri) # Make abs from relative
+	    source = store.newSymbol(addr)
+	    F = store._experience.the(source, store.semantics)
+	    if F != None:
+		if diag.chatty_flag > 40: progress("Using cached semantics for",addr)
+		return F 
+	    F = webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, why)  
+	    store._experience.add(
 		    store.intern((SYMBOL, addr)), store.semantics, F,
 		    why=BecauseOfExperience("load document"))
-	return F 
+	return webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, why)  
+
     
 
 
 
-    def loadMany(self, uris):
+    def loadMany(self, uris, openFormula=None):
 	"""Get, parse and merge serveral documents, given a list of URIs. 
 	
 	Guesses format if necessary.
@@ -1285,12 +1159,13 @@ class RDFStore(RDFSink) :
 	Raises IOError, SyntaxError
 	"""
 	assert type(uris) is type([])
-	F = self.load(uris[0], remember=0)
+	if openFormula == None: F = self.newFormula()
+	else:  F = openFormula
 	f = F.uriref()
-	for u in uris[1:]:
-	    F.reopen()
-	    self.load(u, formulaURI=f, remember=0)
-	return F
+	for u in uris:
+	    F.reopen()  # should not be necessary
+	    self.load(u, openFormula=F, remember=0)
+	return F.close()
 
     def genId(self):
 	"""Generate a new identifier
@@ -1367,11 +1242,11 @@ class RDFStore(RDFSink) :
 	if type(what) is not types.TupleType:
 	    if isinstance(what, tuple(types.StringTypes)):
 		return self.newLiteral(what, dt, lang)
-	    progress("llyn1450 @@@ interning non-string", `what`)
+#	    progress("llyn1450 @@@ interning non-string", `what`)
 	    if type(what) is types.IntType:
-		return self.newLiteral(`what`, INTEGER_DATATYPE)
+		return self.newLiteral(`what`,  self.integer)
 	    if type(what) is types.FloatType:
-		return self.newLiteral(`what`, FLOAT_DATATYPE)
+		return self.newLiteral(`what`,  self.float)
 	    if type(what) is types.SequenceType:
 		return self.newList(what)
 	    raise RuntimeError("Eh?  can't intern "+`what`)
@@ -1404,6 +1279,7 @@ class RDFStore(RDFSink) :
                 elif typ == ANONYMOUS:
 		    result = r.internFrag(urirefString[hash+1:], Anonymous)
                 elif typ == FORMULA:
+		    raise RuntimeError("obsolete")
 		    result = r.internFrag(urirefString[hash+1:], IndexedFormula)
                 else: raise RuntimeError, "did not expect other type:"+`typ`
         return result

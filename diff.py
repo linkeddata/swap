@@ -8,29 +8,32 @@ Find differences between two webs
 
 
 
+import string, getopt
+from sets import Set    # Python2.3 and on
 import string
+import sys
 
 
+
+
+# http://www.w3.org/2000/10/swap/
 import llyn
-
+from myStore import loadMany
 from diag import verbosity, setVerbosity, progress
-
-
 import notation3    	# N3 parsers and generators
-# import toXML 		#  RDF generator
+
 
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, Logic_NS
 import uripath
-import string
-import sys
 from uripath import join
-from term import  Namespace
+from myStore import  Namespace
+import myStore
 from notation3 import RDF_NS_URI
-
 from llyn import Formula, CONTEXT, PRED, SUBJ, OBJ
 
-daml = Namespace("http://www.daml.org/2001/03/daml+oil#")
-owl = Namespace("http://www.daml.org/2001/03/daml+oil#")   # Same thing for now
+#daml = Namespace("http://www.daml.org/2001/03/daml+oil#")
+OWL = Namespace("http://www.w3.org/2002/07/owl#")
+RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 
 def tryNode(x, f, already=[]):
     """The nailing of a term x within a graph f is the set s of statements
@@ -46,64 +49,151 @@ def tryNode(x, f, already=[]):
 	return []
     possible = []
     ss = f.statementsMatching(subj=x)
-	for t in ss:
-	    if meta.contains(subj=t[PRED], pred=rdf.type, obj=owl.InverseFunctionalProperty):
-		y = t[OBJ]
-		if not y.generated(): return t # sucesss§
-		if y not in already:
-		    possible.append((OBJ, t, None)) # Could nail it by this branch
+    for t in ss:
+	if meta.contains(subj=t[PRED], pred=rdf.type, obj=owl.InverseFunctionalProperty):
+	    y = t[OBJ]
+	    if not y.generated(): return t # success
+	    if y not in already:
+		possible.append((OBJ, t, None)) # Could nail it by this branch
     ss = f.statementsMatching(obj=x)
-	for t in ss:
-	    if meta.contains(subj=t[PRED], pred=rdf.type, obj=owl.FunctionalProperty):
-		y = t[SUBJ]
-		if not y.generated(): return t
-		if y not in already:
-		    possible.append((SUBJ, t, None)) # Could nail it by this branch
+    for t in ss:
+	if meta.contains(subj=t[PRED], pred=rdf.type, obj=owl.FunctionalProperty):
+	    y = t[SUBJ]
+	    if not y.generated(): return t
+	    if y not in already:
+		possible.append((SUBJ, t, None)) # Could nail it by this branch
     if possible == []: return None # Failed to nail it
     return possible
 
-def tryList(node, f, list, already=[]):
+def tryPossibles(node, f, tree, already=[]):
     """ The tree is a list of branches, each branch being (direction, statement and subtree).
     If subtree is None, the tree has not been elaborated.
-    A list element is a statement and another list, or s statement and unnailed node.
+    A tree element is a statement and another list, or s statement and unnailed node.
     Returns a path of statements, or None if no path, or 1 if tree just elaborated.
     """
-    for i in range(len(list)):
-	dirn, statement, node = list[i]
+    for i in range(len(tree)):
+	dirn, statement, node = tree[i]
 	if node == None: # Not elaborated yet? 
 	    x = statement[dirn] # far end of link
 	    if not x.generated():
-		return [ statement ]
+		return [ statement ]   # Success!
 	    branch = tryNode(x, f, already)
 	    if branch == None:
 		pass
-	    elif type(branch) = type([]):
-		list2.append((dir, statement, branch))
+	    elif type(branch) == type([]):
+		tree2.append((dir, statement, branch))
 	    else:
 		return [statement, branch]
 	else:
-	    branch = tryList(statement[dirn], f, node, already + [ statement[dirn] ])
+	    branch = tryPossibles(statement[dirn], f, node, already + [ statement[dirn] ])
 	    if branch == None:
 		pass
 	    elif branch == 1:
-		list2.append((dirn, statement, node)
-	    else
+		tree2.append((dirn, statement, node))
+	    else:
 		branch.append(statement)
 		return branch
     return 1
 
 
-def getParts(f):
+def nailFormula(f):
+    global verbose
+    cc, predicates, ss, oo = getParts(f)
+    nodes = ss | oo
+    sofar = {}
+    bnodes = Set()
+    for node in nodes:
+	if node.generated():
+	    bnodes.add(node)
+	    if verbose: progress("Blank node: %s" % `node`)
+	else:
+	    if verbose: progress("Fixed node: %s" % `node`)
+	sofar[node] = []
+
+    schemas = Set()
+    for pred in predicates:
+	if verbose: progress("Predicate: %s" % `pred`)
+	u = pred.uriref()
+	hash = u.find("#")
+	if hash <0: progress("Warning: Predicate <%s> looks like web resource not Property" % u)
+	else: schemas.add(u[:hash])
+    if verbose:
+	for r in schemas:
+	    progress("Schema: ", r) 
+    if schemas:
+	meta = loadMany([(x) for x in schemas])
+    ifps = predicates & Set(meta.each(pred=RDF.type, obj=OWL.InverseFunctionalProperty))
+    fps = predicates & Set(meta.each(pred=RDF.type, obj=OWL.FunctionalProperty))
+    if verbose:
+	for p in fps:  progress("Functional Property:", p)
+	for p in ifps: progress("Inverse Functional: ", p)
+    
+    a = float(len(bnodes))/len(nodes)
+    if verbose: progress("Proportion of bodes which are blank: %f", a)
+    if a == 0: return
+
+    loose = bnodes.copy()
+    nailing = {}
+    equivs = Set()
+    while loose:
+	newNailed = Set()
+	for pred in fps:
+	    ss = f.statementsMatching(pred=pred)
+	    for s in ss:
+		x = s.object()
+		y = s.subject()
+		if y not in loose:
+		    if x in loose:
+			loose.discard(x)
+			newNailed.add(x)
+			nailing[x] = s
+			if verbose: progress("Nailed %s as %s!%s" % (x, y, pred))
+		    else:
+			if verbose: progress("Re-Nailed %s as %s!%s" % (x, y, pred))
+		    equivalentSet = Set(f.each(subj=y, pred=pred))
+		    if len(equivalentSet) > 1: equivs.add(equivalentSet)
+
+	for pred in ifps:
+	    ss = f.statementsMatching(pred=pred)
+	    for s in ss:
+		x = s.subject()
+		y = s.object()
+		if y not in loose:
+		    if x in loose:
+			loose.discard(x)
+			newNailed.add(x)
+			nailing[x] = s
+			if verbose: progress("Nailed %s as %s.%s" % (x, y, pred))
+		    else:
+			if verbose: progress("Re-Nailed %s as %s.%s" % (x, y, pred))
+		    equivalentSet = Set(f.each(obj=y, pred=pred))
+		    if len(equivalentSet) > 1: equivs.add(equivalentSet)
+			
+	if not newNailed:
+	    progress("Failed for", loose)
+	    break
+
+    f.reopen()
+    for es in equivs:
+	progress("Equivalent: ", es)
+	prev = None
+	for x in es:
+	    if prev:
+		f.add(x, OWL.sameAs, prev)
+	    prev = x
+    f = f.close()
+    print f.n3String()
+
+     
+def getParts(f, meta=None):
     """Make lists of all node IDs and arc types
     """
-    values = [[],[],[],[]]
+    values = [Set([]),Set([]),Set([]),Set([])]
     if meta == None: meta == f
-	for s in s.statements():
+    for s in f.statements:
 	for p in SUBJ, PRED, OBJ:
 	    x = s[p]
-	    values[p].append(x)
-    for p in SUBJ, PRED, OBJ:
-	values[p].sort()
+	    values[p].add(x)
     return values
 
 def smush(f, meta=None):
@@ -126,17 +216,17 @@ def smush(f, meta=None):
 
     # Make an list of equivalent nodes:
     pairs = []
-    for st in f.statments():
+    for st in f.statments:
 	context, pred, subj, obj = s.quad
 	if p in equivalent:
 	    if subj < obj: pairs.append((subj, obj))
 	    else: pairs.append((obj,subj))
 	if pred in unique:
-	    for s in f.each(pred=pred, obj=s[OBJ])
+	    for s in f.each(pred=pred, obj=s[OBJ]):
 		if s < subj: pairs.append((s, subj))
 		else: paits.append((subj, s)) 
 	if pred in unambiguous:
-	    for o in f.each(subj=t[SUBJ], pred=pred)
+	    for o in f.each(subj=t[SUBJ], pred=pred):
 		if o < obj: pairs.append((o, obj))
 		else: pairs.append((obj, o))
     pairs.sort()
@@ -147,7 +237,7 @@ def smush(f, meta=None):
     cannonical = {}
     last = None, None
     for hi, lo in pairs:
-	if not hi, lo = last: 
+	if (hi, lo) != last: 
 	    cannonical[hi] = cannonical.get(lo, lo)
 	last = hi, lo
 	
@@ -157,31 +247,63 @@ def smush(f, meta=None):
 	f.replaceWith(hi, lo)
 
 
-def crossIdentify(f,g, meta=None):
-    assert isinstance(f, Formula)
-    assert isinstance(g, Formula)
-    assert  f.store is g.store
-    store = f.store
 
-def diff(f,g, meta=None):
-    assert isinstance(f, Formula)
-    assert isinstance(g, Formula)
-    assert  f.store is g.store
-    store = f.store
+def loadFiles(files):
+    graph = myStore.formula()
+    graph.setClosureMode("e")    # Implement sameAs by smushing
+    graph = myStore.loadMany(files, openFormula=graph)
+    if verbose: progress("Loaded", graph, graph.__class__)
+    return graph
+    
+def main():
+    testFiles = []
+    diffFiles = []
+    global ploughOn # even if error
+    ploughOn = 0
+    global verbose
+    verbose = 0
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hf:d:iv",
+	    ["help", "from=", "diff=" "ignoreErrors", "verbose"])
+    except getopt.GetoptError:
+        # print help information and exit:
+        usage()
+        sys.exit(2)
+    output = None
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            usage()
+            sys.exit()
+        if o in ("-v", "--verbose"):
+	    verbose = 1
+        if o in ("-i", "--ignoreErrors"):
+	    ploughOn = 1
+	if o in ("-f", "--from"):
+	    testFiles.append(a)
+	if o in ("-d", "--diff"):
+	    diffFiles.append(a)
 
-    fs = f.statements[:]
-    N = len(fs)
     
-    inserted = store.newFormula()
-    deleted  = store.newFormula()
+
+#    if testFiles == []: testFiles = [ "/dev/stdin" ]
+    graph = loadFiles(testFiles)
+    nailFormula(graph)
+    sys.exit(0)
     
-    for i in range(N):
-	statement = fs[i]
-	for part in PRED, SUBJ, OBJ:
-	    x = statement[PART]
-		@@@@@@@@@@@@@@@@@@
+    if diffFiles != []:
+	graph2 = loadFiles(diffFiles)
+	graph2 = canonicalize(graph2)
+	d = compareCanonicalGraphs(graph, graph2)
+	if d != 0:
+	    sys.exit(d)
+    else:
+        serialize(graph)
+
+
+	
 		
-		
-		#   
-		
+if __name__ == "__main__":
+    main()
+
+
 	

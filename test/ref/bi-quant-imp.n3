@@ -2,14 +2,14 @@
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
     this     log:forAll :x .
+    
+    :today     a :Greatday,
+                :Sunnyday .
       [      a :Birthday,
                     :Greatday,
                     :Sunnyday ].
     
       [      a :God ].
-    
-    :today     a :Greatday,
-                :Sunnyday .
     {
         :x     a :Sunnyday .
         

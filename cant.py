@@ -6,10 +6,16 @@ Options:
 --verbose	-v      Print what you are doing as you go
 --help          -h      Print this message and exit
 --from=	uri	-f uri	Specify an input file (or web resource)
+--diff=uri      -d uri  Specify a difference file
 
 Can have any number of --from <file> parameters, in which case files are
 merged. If none are given, /dev/stdin is used.
 
+If any diff files are given then the diff files are read merged separately
+and compared with the input files. the result is a list of differences
+instead of the canonicalizd graph. This is NOT a minimal diff.
+Exits with nonzero system status if graphs do not match.
+ 
 This is an independent n-triples cannonicalizer. It uses heuristics, and
 will not terminate on all graphs. It is designed for testing:  the output and
 the reference output are both canonicalized and compared.
@@ -32,6 +38,7 @@ is complete lack of treatment of symmetry between bnodes.
 References:
  .google graph isomorphism
  See also eg http://www.w3.org/2000/10/rdf-tests/rdfcore/utils/ntc/compare.cc
+ NTriples: see http://www.w3.org/TR/rdf-testcases/#ntriples
  
  Not to mention,  published this month by coincidence:
   Kelly, Brian, [Whitehead Institute]  "Graph cannonicalization", Dr Dobb's Journal, May 2003.
@@ -40,7 +47,8 @@ References:
 This is or was http://www.w3.org/2000/10/swap/cant.py
 W3C open source licence <http://www.w3.org/Consortium/Legal/copyright-software.html>.
 
-NTriples http://www.w3.org/TR/rdf-testcases/#ntriples
+2004-02-31 Serious bug fixed.  This is a test program, shoul dbe itself tested.
+		Quis custodiet ipsos custodes?
 """
 # canticle - Canonicalizer of NTriples Independent of Cwm , Llyn, Etc. ?
 import os
@@ -75,36 +83,11 @@ statement = re.compile( ws + object + ws + object + ws + object  + com) #
 
 def usage():
     print __doc__
-    
-def main():
-    testFiles = []
-    global ploughOn # even if error
-    ploughOn = 0
-    global verbose
-    verbose = 0
-    try:
-        opts, args = getopt.getopt(sys.argv[1:], "hs:ncipf:v",
-	    ["help", "start=", "testsFrom=", "normal", "chatty", "ignoreErrors", "proofs", "verbose"])
-    except getopt.GetoptError:
-        # print help information and exit:
-        usage()
-        sys.exit(2)
-    output = None
-    for o, a in opts:
-        if o in ("-h", "--help"):
-            usage()
-            sys.exit()
-        if o in ("-v", "--verbose"):
-	    verbose = 1
-        if o in ("-i", "--ignoreErrors"):
-	    ploughOn = 1
-	if o in ("-f", "--from"):
-	    testFiles.append(a)
 
-    
-    WD = "file://" + os.getcwd() + "/"
+def loadFiles(testFiles):
     graph = []
-    if testFiles == []: testFiles = [ "/dev/stdin" ]
+    WD = "file://" + os.getcwd() + "/"
+
     for fn in testFiles:
 	if verbose: stderr.write("Loading data from %s\n" % fn)
 
@@ -124,9 +107,86 @@ def main():
 	    if verbose: stderr.write( "Triple: %s  %s  %s.\n" % (triple[0], triple[1], triple[2]))
 	    graph.append(triple)
     if verbose: stderr.write("\nThere are %i statements in graph\n" % (len(graph)))
-    g = canonicalize(graph)
-    serialize(g)
+    return graph
+
+def main():
+    testFiles = []
+    diffFiles = []
+    global ploughOn # even if error
+    ploughOn = 0
+    global verbose
+    verbose = 0
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hf:d:iv",
+	    ["help", "from=", "diff=" "ignoreErrors", "verbose"])
+    except getopt.GetoptError:
+        # print help information and exit:
+        usage()
+        sys.exit(2)
+    output = None
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            usage()
+            sys.exit()
+        if o in ("-v", "--verbose"):
+	    verbose = 1
+        if o in ("-i", "--ignoreErrors"):
+	    ploughOn = 1
+	if o in ("-f", "--from"):
+	    testFiles.append(a)
+	if o in ("-d", "--diff"):
+	    diffFiles.append(a)
+
     
+
+    if testFiles == []: testFiles = [ "/dev/stdin" ]
+    graph = loadFiles(testFiles)
+    graph = canonicalize(graph)
+    
+    if diffFiles != []:
+	graph2 = loadFiles(diffFiles)
+	graph2 = canonicalize(graph2)
+	d = compareCanonicalGraphs(graph, graph2)
+	if d != 0:
+	    sys.exit(d)
+    else:
+        serialize(graph)
+
+
+def compareCanonicalGraphs(g1, g2):
+
+    inserted, deleted = [], []
+    g1.sort()
+    g2.sort()
+    i1, i2 = 0,0
+    while 1:
+	if i1 == len(g1):
+	    inserted = inserted + g2[i2:]
+	    if verbose: stderr.write("All other %i triples were inserted." % (len(g2)-i2))
+	    break
+	if i2 == len(g2):
+	    deleted = deleted + g1[i1:]
+	    if verbose: stderr.write("All other %i triples were deleted." % (len(g1)-i1))
+	    break
+	d = cmp(g1[i1], g2[i2]) # 1-2
+	if d==0:
+	    if verbose: stderr.write("Common:   %s %s %s.\n" % g2[i2])
+	    i1 += 1
+	    i2 += 1
+	elif d<0:
+	    if verbose: stderr.write("Deleted:  %s %s %s.\n" % g1[i1])
+	    deleted.append(g1[i1])
+	    i1 += 1
+	else:
+	    if verbose: stderr.write("Inserted: %s %s %s.\n" % g2[i2])
+	    inserted.append(g2[i2])
+	    i2 += 1
+    for triple in deleted:
+	print "- %s %s %s." % triple
+    for triple in inserted:
+	print "+ %s %s %s." % triple
+    return len(deleted) + len(inserted)
+
 def canonicalize(g):
     "Do our best with this algo"
     dups, graph, c = canon(g)
@@ -184,7 +244,11 @@ def compareFirst(a,b):
 	    return 0
 		
 def canon(graph, c0=0):
-    "Try one pass at canonicalizing this using 1 step sigs"
+    """Try one pass at canonicalizing this using 1 step sigs.
+    Return as a triple:
+    - The new graph
+    - The number of duplicate signatures in the bnodes
+    - The index number for th enext constant to be generated."""
     nextBnode = 0
     bnodes = {}
     pattern = []

@@ -1,12 +1,13 @@
      @prefix : <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    this     <http://www.w3.org/2000/10/swap/log#forAll> :b,
+    this     log:forAll :b,
                 :c .
     {
         
           [      :parent :b;
                  :sister :c ].
         
-        }     <http://www.w3.org/2000/10/swap/log#implies> {:b     :aunt :c .
+        }     log:implies {:b     :aunt :c .
         } .
     

@@ -67,7 +67,7 @@ The&nbsp;list&nbsp;of&nbsp;statements&nbsp;must&nbsp;be&nbsp;sorted&nbsp;if&nbsp
 
 <dl><dt><a name="Serializer-_scan"><strong>_scan</strong></a>(self, x, context<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="Serializer-_scanObj"><strong>_scanObj</strong></a>(self, context, x)</dt></dl>
+<dl><dt><a name="Serializer-_scanObj"><strong>_scanObj</strong></a>(self, context, x)</dt><dd><tt>Does&nbsp;this&nbsp;appear&nbsp;in&nbsp;just&nbsp;one&nbsp;context,&nbsp;and&nbsp;if&nbsp;so&nbsp;counts&nbsp;how&nbsp;many&nbsp;times&nbsp;as&nbsp;object</tt></dd></dl>
 
 <dl><dt><a name="Serializer-_subFormulae"><strong>_subFormulae</strong></a>(self, F, path<font color="#909090">=[]</font>)</dt><dd><tt>Returns&nbsp;a&nbsp;sequence&nbsp;of&nbsp;the&nbsp;all&nbsp;the&nbsp;formulae&nbsp;nested&nbsp;within&nbsp;this&nbsp;one.<br>
 &nbsp;<br>
@@ -85,7 +85,7 @@ Returns&nbsp;&nbsp;number&nbsp;of&nbsp;incoming&nbsp;links&nbsp;(1&nbsp;or&nbsp;
 or&nbsp;zero&nbsp;if&nbsp;self&nbsp;can&nbsp;NOT&nbsp;be&nbsp;represented&nbsp;as&nbsp;an&nbsp;anonymous&nbsp;node.<br>
 Paired&nbsp;with&nbsp;this&nbsp;is&nbsp;whether&nbsp;this&nbsp;is&nbsp;a&nbsp;subexpression.</tt></dd></dl>
 
-<dl><dt><a name="Serializer-dumpBySubject"><strong>dumpBySubject</strong></a>(self, sorting<font color="#909090">=1</font>)</dt><dd><tt>&nbsp;Dump&nbsp;by&nbsp;order&nbsp;of&nbsp;subject&nbsp;except&nbsp;forSome's&nbsp;first&nbsp;for&nbsp;n3=a&nbsp;mode</tt></dd></dl>
+<dl><dt><a name="Serializer-dumpBySubject"><strong>dumpBySubject</strong></a>(self, sorting<font color="#909090">=1</font>)</dt><dd><tt>&nbsp;Dump&nbsp;one&nbsp;formula&nbsp;only&nbsp;by&nbsp;order&nbsp;of&nbsp;subject&nbsp;except&nbsp;forSome's&nbsp;first&nbsp;for&nbsp;n3=a&nbsp;mode</tt></dd></dl>
 
 <dl><dt><a name="Serializer-dumpChronological"><strong>dumpChronological</strong></a>(self)</dt><dd><tt>Fast&nbsp;as&nbsp;possible.&nbsp;Only&nbsp;dumps&nbsp;data.&nbsp;No&nbsp;formulae&nbsp;or&nbsp;universals.</tt></dd></dl>
 
@@ -96,7 +96,7 @@ for&nbsp;each&nbsp;subject.</tt></dd></dl>
 
 <dl><dt><a name="Serializer-dumpNested"><strong>dumpNested</strong></a>(self)</dt><dd><tt>&nbsp;Iterates&nbsp;over&nbsp;all&nbsp;URIs&nbsp;ever&nbsp;seen&nbsp;looking&nbsp;for&nbsp;statements</tt></dd></dl>
 
-<dl><dt><a name="Serializer-dumpPrefixes"><strong>dumpPrefixes</strong></a>(self, sink, counts<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="Serializer-dumpPrefixes"><strong>dumpPrefixes</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="Serializer-dumpStatement"><strong>dumpStatement</strong></a>(self, sink, triple, sorting)</dt><dd><tt>Dump&nbsp;one&nbsp;statement,&nbsp;including&nbsp;structure&nbsp;within&nbsp;object</tt></dd></dl>
 
@@ -104,9 +104,11 @@ for&nbsp;each&nbsp;subject.</tt></dd></dl>
 
 <dl><dt><a name="Serializer-extern"><strong>extern</strong></a>(self, t)</dt></dl>
 
-<dl><dt><a name="Serializer-selectDefaultPrefix"><strong>selectDefaultPrefix</strong></a>(self, context)</dt><dd><tt>&nbsp;Symbol&nbsp;whose&nbsp;fragments&nbsp;have&nbsp;the&nbsp;most&nbsp;occurrences.<br>
+<dl><dt><a name="Serializer-selectDefaultPrefix"><strong>selectDefaultPrefix</strong></a>(self, printFunction)</dt><dd><tt>&nbsp;Symbol&nbsp;whose&nbsp;fragments&nbsp;have&nbsp;the&nbsp;most&nbsp;occurrences.<br>
 we&nbsp;suppress&nbsp;the&nbsp;RDF&nbsp;namespace&nbsp;itself&nbsp;because&nbsp;the&nbsp;XML&nbsp;syntax&nbsp;has&nbsp;problems&nbsp;with&nbsp;it<br>
-being&nbsp;default&nbsp;as&nbsp;it&nbsp;is&nbsp;used&nbsp;for&nbsp;attributes.</tt></dd></dl>
+being&nbsp;default&nbsp;as&nbsp;it&nbsp;is&nbsp;used&nbsp;for&nbsp;attributes.<br>
+&nbsp;<br>
+This&nbsp;also&nbsp;outputs&nbsp;the&nbsp;prefixes.</tt></dd></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -151,5 +153,6 @@ Data and non-method functions defined here:<br>
 <strong>cvsRevision</strong> = '$Revision$'<br>
 <strong>forAllSym</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>
 <strong>forSomeSym</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
+<strong>prefixchars</strong> = 'abcdefghijklmnopqustuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'<br>
 <strong>tracking</strong> = 0</td></tr></table>
 </body></html>

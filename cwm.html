@@ -11,8 +11,7 @@ TT { font-family: lucidatypewriter, lucida console, courier }
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>cwm</strong></big></big></font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/cwm.py">/devel/WWW/2000/10/swap/cwm.py</a></font></td></tr></table>
-    <p><tt><br>
-$Id$<br>
+    <p><tt>$Id$<br>
 &nbsp;<br>
 Closed&nbsp;World&nbsp;Machine<br>
 &nbsp;<br>
@@ -23,16 +22,18 @@ It&nbsp;uses&nbsp;llyn,&nbsp;a&nbsp;(forward&nbsp;chaining)&nbsp;query&nbsp;engi
 that&nbsp;is,&nbsp;it&nbsp;will&nbsp;apply&nbsp;all&nbsp;rules&nbsp;it&nbsp;can&nbsp;but&nbsp;won't&nbsp;figure&nbsp;out&nbsp;which&nbsp;ones&nbsp;to&nbsp;apply&nbsp;to&nbsp;prove&nbsp;something.&nbsp;<br>
 &nbsp;<br>
 &nbsp;<br>
-<a href="http://www.w3.org/DesignIssues/Notation3">http://www.w3.org/DesignIssues/Notation3</a><br>
-Date:&nbsp;2000/07/17&nbsp;21:46:13&nbsp;&nbsp;<br>
+License<br>
+-------<br>
+Cwm:&nbsp;<a href="http://www.w3.org/2000/10/swap/doc/cwm.html">http://www.w3.org/2000/10/swap/doc/cwm.html</a><br>
 &nbsp;<br>
-Agenda:<br>
-=======<br>
+Copyright&nbsp;(c)&nbsp;2000-2004&nbsp;World&nbsp;Wide&nbsp;Web&nbsp;Consortium,&nbsp;(Massachusetts&nbsp;<br>
+Institute&nbsp;of&nbsp;Technology,&nbsp;European&nbsp;Research&nbsp;Consortium&nbsp;for&nbsp;Informatics&nbsp;<br>
+and&nbsp;Mathematics,&nbsp;Keio&nbsp;University).&nbsp;All&nbsp;Rights&nbsp;Reserved.&nbsp;This&nbsp;work&nbsp;is&nbsp;<br>
+distributed&nbsp;under&nbsp;the&nbsp;W3C®&nbsp;Software&nbsp;License&nbsp;[1]&nbsp;in&nbsp;the&nbsp;hope&nbsp;that&nbsp;it&nbsp;<br>
+will&nbsp;be&nbsp;useful,&nbsp;but&nbsp;WITHOUT&nbsp;ANY&nbsp;WARRANTY;&nbsp;without&nbsp;even&nbsp;the&nbsp;implied&nbsp;<br>
+warranty&nbsp;of&nbsp;MERCHANTABILITY&nbsp;or&nbsp;FITNESS&nbsp;FOR&nbsp;A&nbsp;PARTICULAR&nbsp;PURPOSE.<br>
 &nbsp;<br>
-&nbsp;<br>
-&nbsp;-&nbsp;Use&nbsp;conventional&nbsp;python&nbsp;command&nbsp;line&nbsp;parsing<br>
-&nbsp;<br>
-&nbsp;-&nbsp;get&nbsp;rid&nbsp;of&nbsp;other&nbsp;globals&nbsp;(DWC&nbsp;30Aug2001)</tt></p>
+[1]&nbsp;<a href="http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231">http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231</a></tt></p>
 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
@@ -70,7 +71,7 @@ steps,&nbsp;in&nbsp;order&nbsp;left&nbsp;to&nbsp;right:<br>
 --n3&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;N3&nbsp;from&nbsp;now&nbsp;on.&nbsp;(Default)<br>
 --rdf=flags&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;**&nbsp;in&nbsp;RDF&nbsp;and&nbsp;set&nbsp;given&nbsp;RDF&nbsp;flags<br>
 --n3=flags&nbsp;&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;N3&nbsp;and&nbsp;set&nbsp;N3&nbsp;flags<br>
---ntriples&nbsp;&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;NTriples&nbsp;(equiv&nbsp;--n3=spartan&nbsp;-bySubject&nbsp;-quiet)<br>
+--ntriples&nbsp;&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;NTriples&nbsp;(equiv&nbsp;--n3=uspartan&nbsp;-bySubject&nbsp;-quiet)<br>
 --language=x&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;"x"&nbsp;(rdf,&nbsp;n3,&nbsp;etc)&nbsp;&nbsp;--rdf&nbsp;same&nbsp;as:&nbsp;--language=rdf<br>
 --languageOptions=y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--n3=sp&nbsp;same&nbsp;as:&nbsp;&nbsp;--language=n3&nbsp;--languageOptions=sp<br>
 --ugly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Store&nbsp;input&nbsp;and&nbsp;regurgitate,&nbsp;data&nbsp;only,&nbsp;fastest&nbsp;*<br>
@@ -133,8 +134,6 @@ the&nbsp;closure&nbsp;under&nbsp;the&nbsp;operation&nbsp;of&nbsp;looking&nbsp;up
 &nbsp;e&nbsp;&nbsp;&nbsp;Smush&nbsp;together&nbsp;any&nbsp;nodes&nbsp;which&nbsp;are&nbsp;=&nbsp;(owl:sameAs)<br>
 &nbsp;<br>
 See&nbsp;<a href="http://www.w3.org/2000/10/swap/doc/cwm">http://www.w3.org/2000/10/swap/doc/cwm</a>&nbsp;&nbsp;for&nbsp;more&nbsp;documentation.</tt></dd></dl>
- <dl><dt><a name="-getParser"><strong>getParser</strong></a>(format, inputURI, formulaURI, flags)</dt><dd><tt>Return&nbsp;something&nbsp;which&nbsp;can&nbsp;load&nbsp;from&nbsp;a&nbsp;URI&nbsp;in&nbsp;the&nbsp;given&nbsp;format,&nbsp;while<br>
-writing&nbsp;to&nbsp;the&nbsp;given&nbsp;store.</tt></dd></dl>
  <dl><dt><a name="-need"><strong>need</strong></a>(object)</dt><dd><tt>Update&nbsp;the&nbsp;given&nbsp;repository&nbsp;object&nbsp;from&nbsp;the&nbsp;other&nbsp;one&nbsp;if&nbsp;the<br>
 other&nbsp;one&nbsp;has&nbsp;been&nbsp;changed&nbsp;since&nbsp;they&nbsp;were&nbsp;last&nbsp;synchronized.<br>
 If&nbsp;both&nbsp;have&nbsp;been&nbsp;touched,&nbsp;raise&nbsp;an&nbsp;error.</tt></dd></dl>
@@ -146,12 +145,7 @@ If&nbsp;both&nbsp;have&nbsp;been&nbsp;touched,&nbsp;raise&nbsp;an&nbsp;error.</t
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
     
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
-<td width="100%"><strong>ANONYMOUS</strong> = 3<br>
-<strong>FORMULA</strong> = 1<br>
-<strong>LITERAL</strong> = 2<br>
-<strong>Logic_NS</strong> = 'http://www.w3.org/2000/10/swap/log#'<br>
-<strong>SYMBOL</strong> = 0<br>
-<strong>__file__</strong> = './cwm.py'<br>
+<td width="100%"><strong>__file__</strong> = './cwm.py'<br>
 <strong>__name__</strong> = 'cwm'<br>
 <strong>cvsRevision</strong> = '$Revision$'<br>
 <strong>tracking</strong> = 0</td></tr></table>

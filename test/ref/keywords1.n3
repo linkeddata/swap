@@ -1,9 +1,10 @@
      @prefix : <foo.n3#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    this     <http://www.w3.org/2000/10/swap/log#forAll> :x,
+    this     log:forAll :x,
                 :y,
                 :z;
-         <http://www.w3.org/2000/10/swap/log#forSome> :a,
+         log:forSome :a,
                 :b,
                 :c .
     

@@ -140,11 +140,11 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 <td colspan=2><tt>RDF&nbsp;Parser&nbsp;using&nbsp;SAX&nbsp;API&nbsp;for&nbsp;XML&nbsp;parsing<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="RDFHandler-__init__"><strong>__init__</strong></a>(self, sink, thisURI, formulaURI<font color="#909090">=None</font>, flags<font color="#909090">=''</font>, why<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="RDFHandler-__init__"><strong>__init__</strong></a>(self, sink, openFormula, thisDoc, baseURI<font color="#909090">=None</font>, flags<font color="#909090">=''</font>, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="RDFHandler-_nodeElement"><strong>_nodeElement</strong></a>(self, tagURI, attrs)</dt></dl>
 
-<dl><dt><a name="RDFHandler-_propertyAttr"><strong>_propertyAttr</strong></a>(self, ns, name, value)</dt><dd><tt>Parse&nbsp;a&nbsp;propertrAttr&nbsp;production.</tt></dd></dl>
+<dl><dt><a name="RDFHandler-_propertyAttr"><strong>_propertyAttr</strong></a>(self, ns, name, value)</dt><dd><tt>Parse&nbsp;a&nbsp;propertrAttr&nbsp;production.&nbsp;&nbsp;7.2.25</tt></dd></dl>
 
 <dl><dt><a name="RDFHandler-characters"><strong>characters</strong></a>(self, data)</dt></dl>
 
@@ -157,6 +157,8 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 <dl><dt><a name="RDFHandler-flush"><strong>flush</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="RDFHandler-idAboutAttr"><strong>idAboutAttr</strong></a>(self, attrs)</dt><dd><tt>&nbsp;set&nbsp;up&nbsp;subject&nbsp;and&nbsp;maybe&nbsp;context&nbsp;from&nbsp;attributes</tt></dd></dl>
+
+<dl><dt><a name="RDFHandler-newBlankNode"><strong>newBlankNode</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="RDFHandler-processingInstruction"><strong>processingInstruction</strong></a>(self, name, data)</dt></dl>
 
@@ -261,13 +263,13 @@ the&nbsp;element.</tt></dd></dl>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="RDFXMLParser-__init__"><strong>__init__</strong></a>(self, sink, thisURI, formulaURI<font color="#909090">=None</font>, flags<font color="#909090">=''</font>, why<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="RDFXMLParser-__init__"><strong>__init__</strong></a>(self, sink, openFormula, thisDoc<font color="#909090">=None</font>, flags<font color="#909090">=''</font>, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="RDFXMLParser-close"><strong>close</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="RDFXMLParser-feed"><strong>feed</strong></a>(self, data)</dt></dl>
 
-<dl><dt><a name="RDFXMLParser-load"><strong>load</strong></a>(self, uri, baseURI<font color="#909090">=''</font>)</dt><dd><tt>Parse&nbsp;a&nbsp;document&nbsp;identified&nbsp;bythe&nbsp;URI,&nbsp;return&nbsp;the&nbsp;top&nbsp;level&nbsp;formula</tt></dd></dl>
+<dl><dt><a name="RDFXMLParser-load"><strong>load</strong></a>(self, uri, baseURI<font color="#909090">=''</font>)</dt></dl>
 
 <dl><dt><a name="RDFXMLParser-loadStream"><strong>loadStream</strong></a>(self, stream)</dt></dl>
 
@@ -277,13 +279,13 @@ Data and non-method functions defined here:<br>
 
 <dl><dt><strong>__module__</strong> = 'sax2rdf'</dl>
 
-<dl><dt><strong>flagDocumentation</strong> = '<font color="#c040c0">\n</font>    Flags to control RDF/XML INPUT (after --rdf...e decalred as local document is assume xmlns=""<font color="#c040c0">\n\n</font>'</dl>
+<dl><dt><strong>flagDocumentation</strong> = '<font color="#c040c0">\n</font>    Flags to control RDF/XML INPUT (after --rdf...t of RDF inc. datatypes, xml:lang, and nodeIds.<font color="#c040c0">\n\n</font>'</dl>
 
 <hr>
 Methods inherited from <a href="sax2rdf.html#RDFHandler">RDFHandler</a>:<br>
 <dl><dt><a name="RDFXMLParser-_nodeElement"><strong>_nodeElement</strong></a>(self, tagURI, attrs)</dt></dl>
 
-<dl><dt><a name="RDFXMLParser-_propertyAttr"><strong>_propertyAttr</strong></a>(self, ns, name, value)</dt><dd><tt>Parse&nbsp;a&nbsp;propertrAttr&nbsp;production.</tt></dd></dl>
+<dl><dt><a name="RDFXMLParser-_propertyAttr"><strong>_propertyAttr</strong></a>(self, ns, name, value)</dt><dd><tt>Parse&nbsp;a&nbsp;propertrAttr&nbsp;production.&nbsp;&nbsp;7.2.25</tt></dd></dl>
 
 <dl><dt><a name="RDFXMLParser-characters"><strong>characters</strong></a>(self, data)</dt></dl>
 
@@ -296,6 +298,8 @@ Methods inherited from <a href="sax2rdf.html#RDFHandler">RDFHandler</a>:<br>
 <dl><dt><a name="RDFXMLParser-flush"><strong>flush</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="RDFXMLParser-idAboutAttr"><strong>idAboutAttr</strong></a>(self, attrs)</dt><dd><tt>&nbsp;set&nbsp;up&nbsp;subject&nbsp;and&nbsp;maybe&nbsp;context&nbsp;from&nbsp;attributes</tt></dd></dl>
+
+<dl><dt><a name="RDFXMLParser-newBlankNode"><strong>newBlankNode</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="RDFXMLParser-processingInstruction"><strong>processingInstruction</strong></a>(self, name, data)</dt></dl>
 

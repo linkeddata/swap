@@ -4,10 +4,7 @@
 <rdf:RDF xmlns="http://nwalsh.com/pim/Palm/Calendar#"
     xmlns:cal="http://nwalsh.com/pim/Palm/Calendar#"
     xmlns:da="file:/home79536262/ndw/.xmlDate.rdf#"
-    xmlns:log="http://www.w3.org/2000/10/swap/log#"
-    xmlns:palm="http://nwalsh.com/pim/Palm/DateBook#"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 
     <rdf:Description rdf:about="http://nwalsh.com/pim/Palm/Calendar#_2002_2">
         <da:appointments rdf:parseType="Resource">

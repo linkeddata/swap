@@ -43,7 +43,8 @@ import diag  # problems importing the tracking flag, must be explicit it seems d
 from diag import progress, verbosity, tracking
 from term import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
-    Literal, Symbol, Fragment, FragmentNil, Anonymous, Term, CompoundTerm, List, EmptyList, NonEmptyList
+    Literal, AnonymousNode , AnonymousExistential, AnonymousUniversal, \
+    Symbol, Fragment, FragmentNil, Anonymous, Term, CompoundTerm, List, EmptyList, NonEmptyList
 
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
@@ -70,7 +71,7 @@ from why import Because, BecauseBuiltIn, BecauseOfRule, \
 #
 # A Formula is a set of triples.
 
-class Formula(Fragment, CompoundTerm):
+class Formula(AnonymousNode, CompoundTerm):
     """A formula of a set of RDF statements, triples.
     
     (The triples are actually instances of StoredStatement.)
@@ -88,12 +89,50 @@ class Formula(Fragment, CompoundTerm):
     There is a reopen() method but it is not recommended, and if desperate should
     only be used immediately after a close(). 
     """
-    def __init__(self, resource, fragid):
-        Fragment.__init__(self, resource, fragid)
+    def __init__(self, store, uri=None):
+        AnonymousNode.__init__(self, store, uri)
         self.canonical = None # Set to self if this has been canonicalized
 	self.statements = []
 	self._existentialVariables = []
 	self._universalVariables = []
+
+
+    def classOrder(self):
+	return	11  # Put at the end of a listing because it makes it easier to read
+
+    def compareTerm(self, other):
+	"Assume is also a Formula - see function compareTerm below"
+	for f in self, other:
+	    if f.canonical is not f:
+		progress("@@@@@ Comparing formula NOT canonical", `f`)
+	s = self.statements
+	o = other.statements
+	ls = len(s)
+	lo = len(o)
+	if ls > lo: return 1
+	if ls < lo: return -1
+
+	for se, oe, in  ((self.universals(), other.universals()),
+			    (self.existentials(), other.existentials())
+			):
+	    lse = len(se)
+	    loe = len(oe)
+	    if lse > loe: return 1
+	    if lse < loe: return -1
+	    se.sort(Term.compareAnyTerm)
+	    oe.sort(Term.compareAnyTerm)
+	    for i in range(lse):
+		diff = se[i].compareAnyTerm(oe[i])
+		if diff != 0: return diff
+
+#		@@@@ No need - canonical formulae are always sorted
+	s.sort(StoredStatement.compareSubjPredObj) # forumulae are all the same
+	o.sort(StoredStatement.compareSubjPredObj)
+	for i in range(ls):
+	    diff = s[i].compareSubjPredObj(o[i])
+	    if diff != 0: return diff
+	raise RuntimeError("Identical formulae not interned! Length %i: %s\n\t%s\n vs\t%s" % (
+		    ls, `s`, self.debugString(), other.debugString()))
 
 
     def existentials(self):
@@ -102,6 +141,7 @@ class Formula(Fragment, CompoundTerm):
 	Implementation:
 	we may move to an internal storage rather than these pseudo-statements"""
         return self._existentialVariables
+
 
     def universals(self):
         """Return a list of variables universally quantified with this formula as scope.
@@ -141,13 +181,19 @@ class Formula(Fragment, CompoundTerm):
 	
 	The literal is created in the same store as the formula."""
 	return self.store.newLiteral(str, dt, lang)
+
+    def intern(self, value):
+	return self.store.intern(value)
 	
     def newBlankNode(self, uri=None, why=None):
 	"""Create a new unnamed node with this formula as context.
 	
 	The URI is typically omitted, and the system will make up an internal idnetifier.
         If given is used as the (arbitrary) internal identifier of the node."""
-	return self.store.newBlankNode(self, uri,  why=why)
+	x = AnonymousExistential(self, uri)
+	self._existentialVariables.append(x)
+	return x
+
     
     def declareUniversal(self, v):
 	if verbosity() > 90: progress("Declare universal:", v)
@@ -156,14 +202,19 @@ class Formula(Fragment, CompoundTerm):
 	
     def declareExistential(self, v):
 	if verbosity() > 90: progress("Declare existential:", v)
-	if v not in self._existentialVariables:
+	if v not in self._existentialVariables:  # Takes time
 	    self._existentialVariables.append(v)
+#	else:
+#	    raise RuntimeError("Redeclared %s in %s -- trying to erase that" %(v, self)) 
 	
     def newExistential(self, uri=None, why=None):
 	"""Create a named variable existentially qualified within this formula
 	
 	If the URI is not given, an arbitrary identifier is generated.
 	See also: existentials()."""
+	if uri == None:
+	    raise RuntimeError("Please use newBlankNode with no URI")
+	    return self.newBlankNode()  # Please ask for a bnode next time
 	return self.store.newExistential(self, uri, why=why)
     
     def newUniversal(self, uri=None, why=None):
@@ -171,7 +222,9 @@ class Formula(Fragment, CompoundTerm):
 	
 	If the URI is not given, an arbitrary identifier is generated.
 	See also: universals()"""
-	return self.store.newUniversal(self, uri, why=why)
+	x = AnonymousUniversal(self, uri)
+	self._universalVariables.append(x)
+	return x
 
     def newFormula(self, uri=None):
 	"""Create a new open, empty, formula in the same store as this one.
@@ -222,15 +275,15 @@ class Formula(Fragment, CompoundTerm):
 	To aboid confusion, use named parameters.
 	"""
         for s in self.statements:
-	    if ((pred == None or pred is s.predciate()) and
+	    if ((pred == None or pred is s.predicate()) and
 		    (subj == None or subj is s.subject()) and
 		    (obj == None or obj is s.object())):
 		break
 	else: return None
-	if pred == None: return s.predicate()
-	if subj == None: return s.subject()
 	if obj == None: return s.object()
-	raise ParameterError("You must give one wildcard")
+	if subj == None: return s.subject()
+	if pred == None: return s.predicate()
+	raise ValueError("You must give one wildcard in (%s, %s, %s)" %(subj, pred, obj))
 
 
     def the(self, subj=None, pred=None, obj=None):
@@ -254,13 +307,14 @@ class Formula(Fragment, CompoundTerm):
 	
 	"""
         for s in self.statements:
-	    if ((pred == None or pred is s.predciate()) and
+	    if ((pred == None or pred is s.predicate()) and
 		    (subj == None or subj is s.subject()) and
 		    (obj == None or obj is s.object())):
 		if pred == None: yield s.predicate()
 		elif subj == None: yield s.subject()
 		elif obj == None: yield s.object()
-		raise ParameterError("You must give one wildcard")
+		else: raise ValueError(
+		  "You must give one wildcard in (%s, %s, %s)" %(subj, pred, obj))
 
     def searchable(self, subj=None, pred=None, obj=None):
 	"""A pair of the difficulty of searching and a statement iterator of found statements
@@ -508,7 +562,7 @@ class StoredStatement:
             else:           
                 if o is oc: return 1
             if s is not o:
-                return compareTerm(s,o)
+                return s.compareAnyTerm(o)
         return 0
 
     def comparePredObj(self, other):
@@ -525,7 +579,7 @@ class StoredStatement:
             else:           
                 if o is oc: return 1
             if s is not o:
-                return compareTerm(s,o)
+                return s.compareAnyTerm(o)
         return 0
 
 
@@ -579,105 +633,7 @@ class StoredStatement:
 	return f.close()  # probably slow - much slower than statement subclass of formula
 
 
-def compareTerm(self, other):
-    """Compare two langauge items
-        This is a cannoncial ordering in that is designed to allow
-        the same graph always to be printed in the same order.
-        This makes the regression tests possible.
-        The literals are deemed smaller than symbols, which are smaller
-        than formulae.  This puts the rules at the botom of a file where
-        they tend to take a lot of space anyway.
-        Formulae have to be compared as a function of their sorted contents.
-        
-        @@ Anonymous nodes have to, within a given Formula, be compared as
-        a function of the sorted information about them in that context.
-        This is not done yet
-        """
-    if self is other: return 0
-    if isinstance(self, Literal):
-        if isinstance(other, Literal):
-	    if self.datatype == other.datatype:
-		diff = cmp(self.string, other.string)
-		if diff != 0 : return diff
-		return cmp(self.lang, other.lang)
-	    else:
-		if self.datatype == None: return -1
-		if other.datatype == None: return 1
-		return compareTerm(self.datatype, other.datatype)
-        else:
-            return -1
-    if isinstance(other, Literal):
-        return 1
 
-    if isinstance(self, List):
-        if isinstance(other, List):
-	    s = self
-	    o = other
-	    while 1:
-		if isinstance(o, EmptyList): return -1
-		if isinstance(s, EmptyList): return 1
-		diff = compareTerm(s.first, o.first)
-		if diff != 0: return diff
-		s = s.rest
-		o = o.rest
-        else:
-            return -1
-    if isinstance(other, List):
-        return 1
-
-    if isinstance(self, Formula):
-        if isinstance(other, Formula):
-	    for f in self, other:
-		if f.canonical is not f:
-		    progress("@@@@@ Comparing formula NOT canonical", `f`)
-            s = self.statements
-            o = other.statements
-            ls = len(s)
-            lo = len(o)
-            if ls > lo: return 1
-            if ls < lo: return -1
-
-            for se, oe, in  ((self.universals(), other.universals()),
-			     (self.existentials(), other.existentials())
-			    ):
-		lse = len(se)
-		loe = len(oe)
-		if lse > loe: return 1
-		if lse < loe: return -1
-		se.sort(compareTerm)
-		oe.sort(compareTerm)
-		for i in range(lse):
-		    diff = compareTerm(se[i], oe[i])
-		    if diff != 0: return diff
-
-#		@@@@ No need - canonical formulae are always sorted
-            s.sort(StoredStatement.compareSubjPredObj) # forumulae are all the same
-            o.sort(StoredStatement.compareSubjPredObj)
-            for i in range(ls):
-                diff = s[i].compareSubjPredObj(o[i])
-                if diff != 0: return diff
-            raise RuntimeError("Identical formulae not interned! Length %i: %s\n\t%s\n vs\t%s" % (
-			ls, `s`, self.debugString(), other.debugString()))
-        else:
-            return 1
-    if isinstance(other, Formula):
-        return -1
-
-        # Both regular URIs
-#        progress("comparing", self.representation(), other.representation())
-    _type = RDF_type_URI
-    s = self.uriref()
-    if s == _type:
-            return -1
-    o = other.uriref()
-    if o == _type:
-            return 1
-    if s < o :
-            return -1
-    if s > o :
-            return 1
-    print "Error with '%s' being the same as '%s'" %(s,o)
-    raise internalError # Strings should not match if not same object
 
 
 

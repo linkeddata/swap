@@ -16,9 +16,9 @@ import string
 
 import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
 from diag import progress, verbosity, tracking
-from term import   Literal, Symbol, Fragment, FragmentNil, \
-    Anonymous, Term, CompoundTerm, List, EmptyList, NonEmptyList
-from formula import Formula, compareTerm, StoredStatement
+from term import   Literal, Symbol, Fragment, AnonymousVariable, FragmentNil, \
+     Term, CompoundTerm, List, EmptyList, NonEmptyList
+from formula import Formula, StoredStatement
 
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
@@ -38,6 +38,7 @@ META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"
 INTEGER_DATATYPE = "http://www.w3.org/2001/XMLSchema#integer"
 FLOAT_DATATYPE = "http://www.w3.org/2001/XMLSchema#double"
 
+prefixchars = "abcdefghijklmnopqustuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
 class Serializer:
     """A serializer to serialize the formula F into the given
@@ -54,52 +55,91 @@ class Serializer:
 	self._inContext ={}
 	self._occurringAs = [{}, {}, {}, {}]
 
-    def selectDefaultPrefix(self, context):
+    def selectDefaultPrefix(self, printFunction):
 
         """ Symbol whose fragments have the most occurrences.
         we suppress the RDF namespace itself because the XML syntax has problems with it
-        being default as it is used for attributes."""
+        being default as it is used for attributes.
+	
+	This also outputs the prefixes."""
 
-        counts = {}   # Dictionary of how many times each
-        closure = self._subFormulae(context)    # This context and all subFormulae
-	counts[self.store.implies.resource] = 0
-        for con in closure:
-	    for x in con.existentials() + con.universals():
-		if self._inContext.get(x, "foo") != "foo": # actually mentioned
-		    _anon, _incoming = self._topology(x, con)
-		    if not _anon:
-			r = x.resource
-			total = counts.get(r, 0) + 1
-			counts[r] = total
-		    counts[self.store.forAll.resource] = counts[self.store.forAll.resource] + 1
-            for s in con.statements:
-                for p in PRED, SUBJ, OBJ:
-                    x = s[p]
-                    if (x is self.store.first or x is self.store.rest) and p == PRED:
-                        continue  # ignore these - they tend to be in lists
-                    if isinstance(x, Fragment):
-                        _anon, _incoming = self._topology(x, con)
-                        if not _anon and not isinstance(x, Formula):
-                            r = x.resource
-                            total = counts.get(r, 0) + 1
-                            counts[r] = total
+        if "d" in self.flags:
+	    self.defaultNamespace = None
+	    self.dumpPrefixes()
+	    return
+
+	dummySink = self.sink.dummyClone()
+	dummySerializer = Serializer(self.context,
+	    sink=dummySink, flags=self.flags+"d", sorting=self.sorting)
+	printFunction(dummySerializer)
+
+
         best = 0
         mp = None
+	counts = dummySink.namespaceCounts()
         for r, count in counts.items():
-            if verbosity() > 25: progress("    Count is %3i for %s" %(count, r.uriref()))
-            if (r.uri != RDF_NS_URI[:-1]
+            if verbosity() > 25: progress("    Count is %3i for %s" %(count, r))
+            if (r != RDF_NS_URI
                 and count > 0
 		and (count > best or
-                     (count == best and mp.uriref() > r.uriref()))) :  # Must be repeatable for retests
+                     (count == best and mp > r))) :  # Must be repeatable for retests
                 best = count
                 mp = r
 
         if verbosity() > 20:
-            progress("# Most popular Namespace in %s is %s with %i" % (`context`, `mp`, best))
+            progress("# Most popular Namespace is %s with %i" % ( mp, best))
 
-        if mp is None: return counts
-        self.defaultNamespace = mp.uriref()+"#"
-        return counts
+	self.defaultNamespace = mp
+
+        for r, count in counts.items():
+	    if count > 1 and r != mp:
+		if self.store.prefixes.get(r, None) == None:
+		    p = r
+		    if p[-1] in "/#": p = p[:-1]
+		    slash = p.rfind("/")
+		    if slash >= 0: p = p[slash+1:]
+		    i = 0
+		    while i < len(p):
+			if p[i] in prefixchars:
+			    i = i + 1
+			else:
+			    break
+		    p = p[:i]
+		    if len(p) <6 and self.store.namespaces.get(p, None) ==None:
+			pref = p
+		    else:
+			p = p[:5]
+			for l in (3, 2, 4, 1, 5):
+			    if self.store.namespaces.get(p[:l], None) ==None:
+				pref = p[:l]
+				break	
+			else:
+			    n = 2
+			    while 1:
+				pref = p[:3]+`n`
+				if self.store.namespaces.get(pref, None) ==None:
+				    break
+				n = n + 1			
+    
+		    self.store.bind(pref, r)
+		    if verbosity() > 50: progress("Generated @prefix %s: <%s>." % (pref, r))
+
+	if self.defaultNamespace != None:
+	    self.sink.setDefaultNamespace(self.defaultNamespace)
+
+#	progress("&&&& Counts: ", counts)
+        prefixes = self.store.namespaces.keys()   #  bind in same way as input did FYI
+        prefixes.sort()   # For repeatability of test results
+	for pfx in prefixes:
+	    r = self.store.namespaces[pfx]
+	    try:
+		count = counts[r]
+		if count > 0:
+		    self.sink.bind(pfx, r)
+	    except KeyError:
+		pass
+	return
+
 
     def _subFormulae(self, F, path = []):
         """Returns a sequence of the all the formulae nested within this one.
@@ -118,26 +158,15 @@ class Serializer:
                             if c not in set: set.append(c)
         return set
 
-        
 
-
-    def dumpPrefixes(self, sink, counts=None):
+    def dumpPrefixes(self):
 	if self.defaultNamespace != None:
 	    sink.setDefaultNamespace(self.defaultNamespace)
         prefixes = self.store.namespaces.keys()   #  bind in same way as input did FYI
         prefixes.sort()
-#	if counts:
-#	    for pfx in prefixes:
-#		uri = self.store.namespaces[pfx]
-#		r = self.store.symbol(uri[:-1])  # Remove trailing slash
-#		n = counts.get(r, -1)
-#		if verbosity()>20: progress("   Prefix %s has %i" % (pfx, n))
-#		if n > 0:
-#		    sink.bind(pfx, uri)	    
-#	else:
 	for pfx in prefixes:
 	    uri = self.store.namespaces[pfx]
-	    sink.bind(pfx, uri)
+	    self.sink.bind(pfx, uri)
 
 
     def _listsWithinLists(self, L, lists):
@@ -176,7 +205,7 @@ class Serializer:
 	context = self.context
 	sink = self.sink
         sink.startDoc()
-        self.dumpPrefixes(sink, None)
+        self.dumpPrefixes()
 	self.dumpVariables(context, sink, sorting=0, dataOnly=1)
 	uu = context.universals()
 
@@ -206,9 +235,9 @@ class Serializer:
 	"""Dump the forAlls and the forSomes at the top of a formula"""
 	if sorting:
 	    uv = context.universals()[:]
-	    uv.sort(compareTerm)
+	    uv.sort(Term.compareAnyTerm)
 	    ev = context.existentials()[:]
-	    ev.sort(compareTerm)
+	    ev.sort(Term.compareAnyTerm)
 	else:
 	    uv = context.universals()
 	    ev = context.existentials()
@@ -224,46 +253,51 @@ class Serializer:
 		self._outputStatement(sink, (context, self.store.forSome, context, v))
 
     def dumpBySubject(self, sorting=1):
-        """ Dump by order of subject except forSome's first for n3=a mode"""
+        """ Dump one formula only by order of subject except forSome's first for n3=a mode"""
         
 	context = self.context
+	uu = context.universals()[:]
 	sink = self.sink
 	self._scan(context)
-        counts = self.selectDefaultPrefix(context)        
         sink.startDoc()
-        self.dumpPrefixes(sink, counts)
-
+        self.selectDefaultPrefix(Serializer.dumpBySubject)        
 	self.dumpVariables(context, sink, sorting)
-	
 	self.dumpLists()
-	
-        rs = self.store.resources.values()
-        if sorting: rs.sort(compareTerm)
-        for r in rs :  # First the bare resource
-            statements = context.statementsMatching(subj=r)
-            if sorting: statements.sort(StoredStatement.comparePredObj)
-            for s in statements :
-#                if not(context is s.quad[SUBJ]and s.quad[PRED] is self.store.forSome):
-                    self._outputStatement(sink, s.quad)
-            if not isinstance(r, Literal):
-                fs = r.fragments.values()
-                if sorting: fs.sort
-                for f in fs :  # then anything in its namespace
-                    statements = context.statementsMatching(subj=f)
-                    if sorting: statements.sort(StoredStatement.comparePredObj)
-                    for s in statements:
-                        self._outputStatement(sink, s.quad)
+
+	ss = context.statements[:]
+	ss.sort(StoredStatement.compareSubjPredObj)
+        for s in ss:
+	    for p in SUBJ, PRED, OBJ:
+		x = s[p]
+		if isinstance(x, Formula) or x in uu:
+		    break
+	    else:
+		self._outputStatement(sink, s.quad)
+		    
+	if 0:  # Doesn't work as ther ei snow no list of bnodes
+	    rs = self.store.resources.values()
+	    if sorting: rs.sort(Term.compareAnyTerm)
+	    for r in rs :  # First the bare resource
+		statements = context.statementsMatching(subj=r)
+		if sorting: statements.sort(StoredStatement.comparePredObj)
+		for s in statements :
+			self._outputStatement(sink, s.quad)
+		if not isinstance(r, Literal):
+		    fs = r.fragments.values()
+		    if sorting: fs.sort
+		    for f in fs :  # then anything in its namespace
+			statements = context.statementsMatching(subj=f)
+			if sorting: statements.sort(StoredStatement.comparePredObj)
+			for s in statements:
+			    self._outputStatement(sink, s.quad)
         sink.endDoc()
 #
 #  Pretty printing
 #
-#   x is an existential if there is in the context C we are printing
-# is a statement  (C log:forSome x). If so, the anonymous syntaxes follow.
-#
 # An intersting alternative is to use the reverse syntax to the max, which
 # makes the DLG an undirected labelled graph. s and o above merge. The only think which
 # then prevents us from dumping the graph without new bnode ids is the presence of cycles.
-
+#
 # Blank nodes can be represented using the implicit syntax [] or rdf/xml equivalent
 # instead of a dummy identifier iff
 # - they are blank nodes, ie are existentials whose id has been generated, and
@@ -277,6 +311,7 @@ class Serializer:
 # it.  It may occcur in many formulae.
 
     def _scanObj(self, context, x):
+	"Does this appear in just one context, and if so counts how many times as object"
 	z = self._inContext.get(x, None)
 	if z == "many": return # forget it
 	if z == None:
@@ -284,13 +319,21 @@ class Serializer:
 	elif z is not context:
 	    self._inContext[x] = "many"
 	    return
-	if isinstance(x, Fragment) and x.generated(): 
+	    
+	if isinstance(x, AnonymousVariable) or (isinstance(x, Fragment) and x.generated()): 
 	    y = self._occurringAs[OBJ].get(x, 0) + 1
 	    self._occurringAs[OBJ][x] = y
+	    if verbosity() > 98: progress(
+		"scan: %s, a %s, now has %i occurrences as %s" 
+		%(x, x.__class__,y,"CPSO"[y]))
+#	else:
+#	    if x == None: raise RuntimeError("Weird - None in a statement?")
+#	    progress("&&&&&&&&& %s has class %s " %(`z`, `z.__class__`))
 
     def _scan(self, x, context=None):
+#	progress("Scanning ", x, " &&&&&&&&")
 #	assert self.context._redirections.get(x, None) == None, "Should not be redirected: "+`x`
-	if verbosity() > 98: progress("scanning %s in context %s" %(`x`, `context`),
+	if verbosity() > 98: progress("scanning %s a %s in context %s" %(`x`, `x.__class__`,`context`),
 			x.generated(), self._inContext.get(x, "--"))
 	if isinstance(x, NonEmptyList):
 	    for y in x:
@@ -299,7 +342,8 @@ class Serializer:
 	    for s in x.statements:
 		for p in PRED, SUBJ, OBJ:
 		    y = s[p]
-		    if isinstance(y, Fragment) and y.generated(): 
+		    if (isinstance(y, AnonymousVariable) 
+			or (isinstance(y, Fragment) and y.generated())): 
 			z = self._inContext.get(y, None)
 			if z == "many": continue # forget it
 			if z == None:
@@ -309,7 +353,10 @@ class Serializer:
 			    continue
 			z = self._occurringAs[p].get(y, 0)
 			self._occurringAs[p][y] = z + 1
-		    self._scan(y, x)
+#			progress("&&&&&&&&& %s now occurs %i times as %s" %(`y`, z+1, "CPSO"[p]))
+#		    else:
+#			progress("&&&&&&&&& yyyy  %s has class %s " %(`y`, `y.__class__`))
+		    if x is not y: self._scan(y, x)
 		
 
 
@@ -327,6 +374,7 @@ class Serializer:
         Paired with this is whether this is a subexpression.
         """
 
+#	progress("&&&&&&&&& ", `self`,  self._occurringAs)
         _isExistential = x in context.existentials()
         _loop = context.any(subj=x, obj=x)  # does'nt count as incomming
 	_asPred = self._occurringAs[PRED].get(x, 0)
@@ -350,7 +398,7 @@ class Serializer:
 			_asObj < 2 and _asPred == 0 and
 			(not _loop) and
 			_isExistential)
-	    if verbosity() > 98:
+	    if verbosity() > 97:
 		progress( "Topology %s in %s is: ctx=%s,anon=%i obj=%i, pred=%i loop=%s ex=%i "%(
 		`x`, `context`, `ctx`, _anon, _asObj, _asPred, _loop, _isExistential))
 	    return ( _anon, _asObj+_asPred )  
@@ -366,12 +414,12 @@ class Serializer:
     def dumpNested(self):
         """ Iterates over all URIs ever seen looking for statements
         """
+
 	context = self.context
         assert context.canonical != None
 	self._scan(context)
-	counts = self.selectDefaultPrefix(context)        
         self.sink.startDoc()
-        self.dumpPrefixes(self.sink, counts)
+        self.selectDefaultPrefix(Serializer.dumpNested)        
         self.dumpFormulaContents(context, self.sink, sorting=1, equals=1)
         self.sink.endDoc()
 
@@ -460,9 +508,9 @@ class Serializer:
                             self.dumpStatement(sink, s.quad, sorting) # Dump the rest outside the ()
                     return
                 else:
-		    if verbosity() > 90: progress("%s Not list, has values for" % `subj`)
+		    if verbosity() > 90: progress("%s Not list, has property values." % `subj`)
                     sink.startAnonymousNode(subj.asPair())
-                    for s in statements:  #   [] color blue.  might be nicer. @@@$$$$  Try it!
+                    for s in statements:  #   "[] color blue."  might be nicer. @@@  Try it?
                         self.dumpStatement(sink, s.quad, sorting)
                     sink.endAnonymousNode()
                     return  # arcs as subject done
@@ -491,7 +539,7 @@ class Serializer:
             return
 
 	if isinstance(obj, NonEmptyList):
-	    if verbosity()>90:
+	    if verbosity()>99:
 		progress("List found as object of dumpStatement " + `obj` + context.debugString())
 	    sink.startAnonymous(self.extern(triple), isList=1)
 	    self.dumpStatement(sink, (context, self.store.first, obj, obj.first), sorting)

@@ -1,6 +1,5 @@
      @prefix : <TEST#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix time: <http://www.w3.org/2000/10/swap/times#> .
      @prefix v: <#> .
     
     this     log:forAll v:f,

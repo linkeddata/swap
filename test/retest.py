@@ -35,6 +35,7 @@ import urllib
 import llyn
 from myStore import load, loadMany, Namespace
 from uripath import refTo, base
+from diag import progress
 
 rdf = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 test = Namespace("http://www.w3.org/2000/10/swap/test.n3#")
@@ -69,11 +70,11 @@ def execute(cmd1):
     if result != 0:
 	raise RuntimeError("Error %i executing %s" %(result, cmd1))
 
-def diff(case, ref=None):
+def diff(case, ref=None, prog="diff -Bbwu"):
     global verbose
     if ref == None:
 	ref = "ref/%s" % case
-    diffcmd = """diff -Bbwu %s ,temp/%s >,diffs/%s""" %(ref, case, case)
+    diffcmd = """%s %s ,temp/%s >,diffs/%s""" %(prog, ref, case, case)
     if verbose: print "  ", diffcmd
     result = system(diffcmd)
     if result < 0:
@@ -82,6 +83,26 @@ def diff(case, ref=None):
     d = urllib.urlopen(",diffs/"+case)
     buf = d.read()
     if len(buf) > 0:
+	print "#  If this is OK,   cp ,temp/%s %s" %(case, ref)
+	print "######### Differences from reference output:\n" + buf
+	return 1
+    return result
+
+def rdfcompare3(case, ref=None):
+    "Compare NTriples fieles using the cant.py"
+    global verbose
+    if ref == None:
+	ref = "ref/%s" % case
+    diffcmd = """python ../cant.py -d %s -f ,temp/%s >,diffs/%s""" %(ref, case, case)
+    if verbose: print "  ", diffcmd
+    result = system(diffcmd)
+    if result < 0:
+	raise problem("Comparison fails: result %i executing %s" %(result, diffcmd))
+    if result > 0: print "Files differ, result=", result
+    d = urllib.urlopen(",diffs/"+case)
+    buf = d.read()
+    if len(buf) > 0:
+#	print "#  If this is OK,   cp ,temp/%s %s" %(case, ref)
 	print "######### Differences from reference output:\n" + buf
 	return 1
     return result
@@ -92,6 +113,7 @@ def rdfcompare2(case, ref1):
 	ref = ",temp/%s.ref" % case
 	execute("""cat %s | %s > %s""" % (ref1, cant, ref))
 	return diff(case, ref)
+
 
 def rdfcompare(case, ref=None):
     """   The jena.rdfcompare program writes its results to the standard output stream and sets
@@ -159,6 +181,8 @@ def main():
     
     #def basicTest(case, desc, args)
 
+    if verbose: progress("Test files:", testFiles)
+    
     kb = loadMany(testFiles)
     testData = []
     RDFTestData  = []
@@ -186,7 +210,14 @@ def main():
 	testData.append((t.uriref(), case, refFile, description, env, arguments))
 
     for t in kb.each(pred=rdf.type, obj=rdft.PositiveParserTest):
-	case = "rdft_" + t.fragid + ".nt" # Hack - temp file name
+
+	x = t.uriref()
+	y = x.find("/rdf-tests/")
+	x = x[y+11:] # rest
+	for i in range(len(x)):
+	    if x[i]in"/#": x = x[:i]+"_"+x[i+1:]
+	case = "rdft_" + x + ".nt" # Hack - temp file name
+	
 	description = str(kb.the(t, rdft.description))
 #	    if description == None: description = case + " (no description)"
 	inputDocument = kb.the(t, rdft.inputDocument).uriref()
@@ -213,6 +244,7 @@ def main():
     if verbose: print "Cwm tests: %i" % cwmTests
     RDFTestData.sort()
     rdfTests = len(RDFTestData)
+    totalTests = cwmTests + rdfTests
     if verbose: print "RDF parser tests: %i" % rdfTests
 
     for u, case, refFile, description, env, arguments in testData:
@@ -221,7 +253,7 @@ def main():
 	
 	urel = refTo(base(), u)
     
-	print "%3i/%i %-30s  %s" %(tests, cwmTests, urel, description)
+	print "%3i/%i %-30s  %s" %(tests, totalTests, urel, description)
     #    print "      %scwm %s   giving %s" %(arguments, case)
 	assert case and description and arguments
 	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d'""" % (WD, REFWD)
@@ -251,15 +283,14 @@ def main():
 	if tests < start: continue
     
     
-	print "%3i/%i)  %s   %s" %(tests, rdfTests, case, description)
+	print "%3i/%i)  %s   %s" %(tests, totalTests, case, description)
     #    print "      %scwm %s   giving %s" %(inputDocument, case)
 	assert case and description and inputDocument and outputDocument
-	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
-			WD, REFWD)
-	cant = "python ../cant.py"
-	execute("""python ../cwm.py --quiet --rdf=T %s --ntriples | %s > ,temp/%s""" %
-	    (inputDocument, cant , case))
-	if rdfcompare2(case, localize(outputDocument)):
+#	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
+#			WD, REFWD)
+	execute("""python ../cwm.py --quiet --rdf=RT %s --ntriples  > ,temp/%s""" %
+	    (inputDocument, case))
+	if rdfcompare3(case, localize(outputDocument)):
 	    problem("  from positive parser test %s running\n\tcwm %s\n" %( case,  inputDocument))
 
 	passes = passes + 1

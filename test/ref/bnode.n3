@@ -1,10 +1,6 @@
-     @prefix : <http://www.w3.org/2000/10/swap/log#> .
-     @prefix dc: <http://purl.org/dc/elements/1.1/> .
-     @prefix ex: <http://example.org/stuff/1.0/> .
-     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
     
-    <http://www.w3.org/TR/rdf-syntax-grammar>     ex:editor  [
-             ex:fullName "Dave Beckett";
-             ex:homePage <http://purl.org/net/dajobe/> ];
-         dc:title "RDF/XML Syntax Specification (Revised)" .
+    <http://www.w3.org/TR/rdf-syntax-grammar>     <http://example.org/stuff/1.0/editor>  [
+             <http://example.org/stuff/1.0/fullName> "Dave Beckett";
+             <http://example.org/stuff/1.0/homePage> <http://purl.org/net/dajobe/> ];
+         <http://purl.org/dc/elements/1.1/title> "RDF/XML Syntax Specification (Revised)" .
     

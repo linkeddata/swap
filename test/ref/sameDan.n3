@@ -4,22 +4,15 @@
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix ont: <http://www.daml.org/2001/03/daml+oil#> .
      @prefix rcs: <http://www.w3.org/2001/03swell/rcs#> .
-     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+     @prefix sam: <sameDan.n3#> .
     
-    this     log:forAll <sameDan.n3#x>,
+    this     log:forAll sam:x,
                 :p,
                 :q,
                 :x,
                 :y,
                 :z;
          log:forSome <#_g0> .
-    
-    <#_g0>     <sameDan.n3#birthPlace> <sameDan.n3#KC>;
-         <sameDan.n3#hairColor> <sameDan.n3#red>;
-         contact:fullName "Dan Connolly";
-         contact:homePage <http://www.w3.org/People/Connolly/>;
-         contact:mailbox <mailto:connolly@w3.org>;
-         = <#_g0> .
     
     <sameDan.n3>     dc:creator <#_g0>;
          dc:description """rules for determining when two terms denote
@@ -28,7 +21,7 @@ the same thing.""";
          dc:rights "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
          rcs:id "" .
     
-    <sameDan.n3#test1>     a <sameDan.n3#Success> .
+    sam:test1     a sam:Success .
     
     <sameThing.n3>     dc:creator <#_g0>;
          dc:description "substituion of equals for equals in triples, plus some rules for unambiguous/unique properties (@@that probably belong elsewhere)";
@@ -39,6 +32,13 @@ the same thing.""";
     contact:homePageAddress     a ont:UnambiguousProperty .
     
     contact:mailbox     a ont:UnambiguousProperty .
+    
+    <#_g0>     sam:birthPlace sam:KC;
+         sam:hairColor sam:red;
+         contact:fullName "Dan Connolly";
+         contact:homePage <http://www.w3.org/People/Connolly/>;
+         contact:mailbox <mailto:connolly@w3.org>;
+         = <#_g0> .
     {
         :p     a ont:UnambiguousProperty .
         
@@ -70,10 +70,10 @@ the same thing.""";
         }     log:implies {:x     = :z .
         } .
     {
-        <sameDan.n3#x>     <sameDan.n3#birthPlace> <sameDan.n3#KC>;
-             <sameDan.n3#hairColor> <sameDan.n3#red> .
+        sam:x     sam:birthPlace sam:KC;
+             sam:hairColor sam:red .
         
-        }     log:implies {<sameDan.n3#test1>     a <sameDan.n3#Success> .
+        }     log:implies {sam:test1     a sam:Success .
         } .
     {
         :x     contact:homePageAddress :z .

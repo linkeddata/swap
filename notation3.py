@@ -57,7 +57,7 @@ idea: use notation3 for wiki record keeping.
 
 
 
-import types
+import types, sys
 import string
 import codecs # python 2-ism; for writing utf-8 in RDF/xml output
 import urllib
@@ -76,7 +76,6 @@ from RDFSink import Logic_NS
 import diag
 
 from why import BecauseOfData, FormulaReason
-from webAccess import urlopenForRDF
 
 N3_forSome_URI = RDFSink.forSomeSym
 N3_forAll_URI = RDFSink.forAllSym
@@ -85,7 +84,7 @@ N3_forAll_URI = RDFSink.forAllSym
 
 
 from RDFSink import RDF_type_URI, RDF_NS_URI, DAML_sameAs_URI, parsesTo_URI
-from RDFSink import RDF_spec, List_NS
+from RDFSink import RDF_spec, List_NS, uniqueURI
 
 ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
 # This is the hash on namespace URIs
@@ -123,21 +122,24 @@ number_syntax = re.compile(r'([-+]?[0-9]+)(\.[0-9]+)?(e[-+]?[0-9]+)?')
 digitstring = re.compile(r'[0-9]+')		# Unsigned integer	
 interesting = re.compile(r'[\\\r\n\"]')
 langcode = re.compile(r'[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?')
-
+#"
 
 class SinkParser:
-    def __init__(self, sink, thisDoc, baseURI=None,
-                 genPrefix = "", metaURI=None,
-                 formulaURI = None, why=None):
+    def __init__(self, store, openFormula=None, thisDoc="", baseURI=None,
+                 genPrefix = "", metaURI=None, flags="",
+                 why=None):
 	""" note: namespace names should *not* end in #;
 	the # will get added during qname processing """
 
-        assert ':' in thisDoc, "must be absolute: %s" % thisDoc
-
-        self._sink = sink
-	if genPrefix: sink.setGenPrefix(genPrefix) # pass it on
-	
     	self._bindings = {}
+        if thisDoc != "":
+	    assert ':' in thisDoc, "Document URI if any must be absolute: <%s>" % thisDoc
+	    self._bindings[""] = thisDoc + "#"  # default
+
+
+        self._store = store
+	if genPrefix: store.setGenPrefix(genPrefix) # pass it on
+	
 	self._thisDoc = thisDoc
         self.lines = 0              # for error handling
 	self.startOfLine = 0	    # For calculating character number
@@ -147,20 +149,29 @@ class SinkParser:
         self._anonymousNodes = {}   # Dict of anon nodes already declared  ln : Term
 	self._reason = why	# Why the parser w
 	self._reason2 = None	# Why these triples
-	if diag.tracking: self._reason2 = BecauseOfData(sink.newSymbol(thisDoc), because=self._reason) 
+	if diag.tracking: self._reason2 = BecauseOfData(store.newSymbol(thisDoc), because=self._reason) 
 
         if baseURI: self._baseURI = baseURI
-        else: self._baseURI = thisDoc
-
-        assert ':' in self._baseURI
-
-        if not self._genPrefix: self._genPrefix = self._thisDoc + "#_g"
-
-        if formulaURI == None:
-            formulaURI = thisDoc + "#_formula" # Formula node is what the document parses to
         else:
-            formulaURI = formulaURI # Formula node is what the document parses to
-	self._formula = sink.newFormula(formulaURI)
+	    if thisDoc:
+		self._baseURI = thisDoc
+	    else:
+		self._baseURI = None
+
+        assert not self._baseURI or ':' in self._baseURI
+
+        if not self._genPrefix:
+	    if self._thisDoc: self._genPrefix = self._thisDoc + "#_g"
+	    else: self._genPrefix = uniqueURI()
+
+	if openFormula ==None:
+	    if self._thisDoc:
+		self._formula = store.newFormula(thisDoc + "#_formula")
+	    else:
+		self._formula = store.newFormula()
+	else:
+	    self._formula = openFormula
+	
 	if diag.tracking:
 	    progress ("@@@@@@ notation3  167 loading ",thisDoc,  why, self._formula)
 	    proof = self._formula.collector
@@ -189,27 +200,29 @@ class SinkParser:
 	This has diagnostic uses less formally, as it should point one to which 
 	bnode the arbitrary identifier actually is. It gives the
 	line and character number of the '[' charcacter or path character
-	which introduced the blank node.  The first blank node is boringly _L1C1."""
-	if not diag.tracking: return None
-	return "%s#_L%iC%i" % (self. _thisDoc , self.lines + 1, i - self.startOfLine + 1) 
+	which introduced the blank node.  The first blank node is boringly _L1C1.
+	It used to be used only for tracking, but for tests in general
+	it makes the canonical ordering of bnodes repeatable."""
+#	if not diag.tracking: return None
+	return "%s_L%iC%i" % (self._genPrefix , self.lines + 1, i - self.startOfLine + 1) 
         
     def formula(self):
         return self._formula
     
-    def load(self, uri, baseURI=""):
-	"""Parses a document of the given URI and returns its top level formula"""
-        if uri:
-            _inputURI = uripath.join(baseURI, uri) # Make abs from relative
-	    inputResource = self._sink.newSymbol(_inputURI)
-            self._sink.makeComment("Taking input from " + _inputURI)
-            stream = urlopenForRDF(_inputURI)
-	    if diag.tracking: self._reason2 = BecauseOfData(inputResource, because=self._reason) 
-        else:
-            self._sink.makeComment("Taking input from standard input")
-            _inputURI = uripath.join(baseURI, "STDIN") # Make abs from relative
-            stream = sys.stdin     # May be big - buffered in memory!
-	    if self._reason: self._reason2 = BecauseOfData("@@standardInput", because=self._reason) 
-	return self.loadBuf(stream.read())    # self._formula
+#    def load(self, uri, baseURI=""):
+#	"""Parses a document of the given URI and returns its top level formula"""
+#        if uri:
+#            _inputURI = uripath.join(baseURI, uri) # Make abs from relative
+#	    inputResource = self._store.newSymbol(_inputURI)
+#            self._store.makeComment("Taking input from " + _inputURI)
+#            stream = urlopenForRDF(_inputURI)
+#	    if diag.tracking: self._reason2 = BecauseOfData(inputResource, because=self._reason) 
+#        else:
+#            self._store.makeComment("Taking input from standard input")
+#            _inputURI = uripath.join(baseURI, "STDIN") # Make abs from relative
+#            stream = sys.stdin     # May be big - buffered in memory!
+#	    if self._reason: self._reason2 = BecauseOfData("@@standardInput", because=self._reason) 
+#	return self.loadBuf(stream.read())    # self._formula
 
     def loadStream(self, stream):
 	return self.loadBuf(stream.read())   # Not ideal
@@ -299,7 +312,8 @@ class SinkParser:
 	j = self.tok('forAll', str, i)
 	if j > 0:
 	    i = self.commaSeparatedList(str, j, res, self.uri_ref2)
-	    if i <0: raise BadSyntax(self._thisDoc, self.lines, str, i, "Bad variable list")
+	    if i <0: raise BadSyntax(self._thisDoc, self.lines, str, i,
+			"Bad variable list after @forAll")
 	    for x in res:
 		self._context.declareUniversal(x)
 	    return i
@@ -307,7 +321,8 @@ class SinkParser:
 	j = self.tok('forSome', str, i)
 	if j > 0:
 	    i = self. commaSeparatedList(str, j, res, self.uri_ref2)
-	    if i <0: raise BadSyntax(self._thisDoc, self.lines, str, i, "Bad variable list")
+	    if i <0: raise BadSyntax(self._thisDoc, self.lines, str, i,
+		    "Bad variable list after @forSome")
 	    for x in res:
 		self._context.declareExistential(x)
 	    return i
@@ -317,17 +332,20 @@ class SinkParser:
 	
 	t = []
 	i = self.qname(str, j, t)
-	if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "expected qname after bind or prefix")
+	if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j,
+			    "expected qname after @prefix")
 	j = self.uri_ref2(str, i, t)
-	if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected <uriref> after bind _qname_")
+	if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
+			    "expected <uriref> after @prefix _qname_")
 
-#	progress("@@@@@", t)
 	if isinstance(t[1], types.TupleType): ns = t[1][1] # old system for --pipe
         else:
-#	    progress( "@@@@@@@@@@", type(t[1]))
 	    ns = t[1].uriref()
-#        if string.find(ns,"##")>=0: raise BadSyntax(self._thisDoc, self.lines, str, j-2, "trailing # illegal on bind: use @prefix")
-        ns = join(self._baseURI, ns)
+
+        if self._baseURI:
+	    ns = join(self._baseURI, ns)
+	else:
+	    assert ":" in ns, "With no base URI, cannot handle relative URI"
         assert ':' in ns # must be absolute
 	self._bindings[t[0][0]] = ns
 	self.bind(t[0][0], hexify(ns))
@@ -336,9 +354,9 @@ class SinkParser:
     def bind(self, qn, uri):
 	assert isinstance(uri, types.StringType), "Any unicode must be %x-encoded already"
         if qn == "":
-            self._sink.setDefaultNamespace(uri)
+            self._store.setDefaultNamespace(uri)
         else:
-            self._sink.bind(qn, uri)
+            self._store.bind(qn, uri)
 
     def setKeywords(self, k):
 	"Takes a list of strings"
@@ -350,16 +368,16 @@ class SinkParser:
 
 
     def startDoc(self):
-        self._sink.startDoc()
+        self._store.startDoc()
 
     def endDoc(self):
 	"""Signal end of document and stop parsing. returns formula"""
-	self._sink.endDoc(self._formula)  # don't canonicalize yet
+	self._store.endDoc(self._formula)  # don't canonicalize yet
 	return self._formula
 
     def makeStatement(self, quadruple):
 #        print "# Parser output: ", `triple`
-        self._sink.makeStatement(quadruple, why=self._reason2)
+        self._store.makeStatement(quadruple, why=self._reason2)
 
 
 
@@ -420,12 +438,12 @@ class SinkParser:
 
 	    
 	if str[i:i+2] == "<=":
-	    res.append(('<-', self._sink.newSymbol(Logic_NS+"implies")))
+	    res.append(('<-', self._store.newSymbol(Logic_NS+"implies")))
 	    return i+2
 
 	if str[i:i+1] == "=":
 	    if str[i+1:i+2] == ">":
-		res.append(('->', self._sink.newSymbol(Logic_NS+"implies")))
+		res.append(('->', self._store.newSymbol(Logic_NS+"implies")))
 		return i+2
 	    res.append(('->', DAML_sameAs))
 	    return i+1
@@ -463,7 +481,7 @@ class SinkParser:
 		if not ahead or (ahead in _notNameChars and ahead not in ":?<[{("):
 		    break
 	    subj = res.pop()
-	    obj = self._sink.newBlankNode(self._context, uri=self.here(j), why=self._reason2)
+	    obj = self._store.newBlankNode(self._context, uri=self.here(j), why=self._reason2)
 	    j = self.node(str, j+1, res)
 	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "EOF found in middle of path syntax")
 	    pred = res.pop()
@@ -478,7 +496,7 @@ class SinkParser:
 	"""Remember or generate a term for one of these _: anonymous nodes"""
 	term = self._anonymousNodes.get(ln, None)
 	if term != None: return term
-	term = self._sink.newExistential(self._context, self._genPrefix + ln, why=self._reason2)
+	term = self._store.newExistential(self._context, self._genPrefix + ln, why=self._reason2)
 	self._anonymousNodes[ln] = term
 	return term
 
@@ -514,12 +532,16 @@ class SinkParser:
 		    if str[j:j+1] == ";":
 			j=j+1
                 else:
-                    raise BadSyntax(self._thisDoc, self.lines, str, i, "objectList expected after [= ")
+                    raise BadSyntax(self._thisDoc, self.lines, str, i,
+					"objectList expected after [= ")
 
-            if subj is None: subj=self._sink.newBlankNode(self._context,uri= bnodeID, why=self._reason2)
+            if subj is None:
+		subj=self._store.newBlankNode(
+				self._context,uri= bnodeID, why=self._reason2)
 
             i = self.property_list(str, j, subj)
-            if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "property_list expected")
+            if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j,
+				"property_list expected")
 
 	    j = self.skipSpace(str, i)
 	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
@@ -533,7 +555,7 @@ class SinkParser:
 	    j=i+1
             oldParentContext = self._parentContext
 	    self._parentContext = self._context
-            if subj is None: subj = self._sink.newFormula()
+            if subj is None: subj = self._store.newFormula()
             self._context = subj
             
             while 1:
@@ -565,7 +587,7 @@ class SinkParser:
                 item = []
                 j = self.item(str,i, item) #@@@@@ should be path, was object
                 if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected item in list or ')'")
-                this = self._sink.newExistential(self._context, why=self._reason2)
+                this = self._context.newBlankNode(uri=self.here(i), why=self._reason2)
 		if previous:
 		    self.makeStatement((self._context, N3_rest, previous, this ))
 		else:
@@ -698,7 +720,8 @@ class SinkParser:
 	if j>=0:
 	    pfx, ln = qn[0]
 	    if pfx is None:
-		ns = self._thisDoc + ADDED_HASH
+		assert 0, "not used?"
+		ns = self._baseURI + ADDED_HASH
 	    else:
 		try:
 		    ns = self._bindings[pfx]
@@ -707,7 +730,7 @@ class SinkParser:
                         res.append(self.anonymousNode(ln))
                         return j
 		    raise BadSyntax(self._thisDoc, self.lines, str, i, "Prefix %s not bound" % (pfx))
-            res.append(self._sink.newSymbol(ns + ln)) # @@@ "#" CONVENTION
+            res.append(self._store.newSymbol(ns + ln)) # @@@ "#" CONVENTION
             if not string.find(ns, "#"):progress("Warning: no # on NS %s," % ns)
 	    return j
 
@@ -729,10 +752,13 @@ class SinkParser:
             while i < len(str):
                 if str[i] == ">":
                     uref = str[st:i] # the join should dealt with "":
-                    uref = uripath.join(self._baseURI, str[st:i])
+		    if self._baseURI:
+			uref = uripath.join(self._baseURI, uref)
+		    else:
+			assert ":" in uref, "With no base URI, cannot deal with relative URIs"
                     if str[i-1:i]=="#" and not uref[-1:]=="#":
                         uref = uref + "#"  # She meant it! Weirdness in urlparse?
-                    res.append(self._sink.newSymbol(uref))
+                    res.append(self._store.newSymbol(uref))
                     return i+1
                 i = i + 1
             raise BadSyntax(self._thisDoc, self.lines, str, j, "unterminated URI reference")
@@ -740,10 +766,12 @@ class SinkParser:
         elif self.keywordsSet:
 	    v = []
 	    j = self.bareWord(str,i,v)
-	    if j>0:                    #Forget varibles as a class, only in context.
-		res.append(v[0])
-		return j
-	    return -1
+	    if j<0: return -1                    #Forget varibles as a class, only in context.
+	    if v[0] in self.keywords:
+		raise BadSyntax(self._thisDoc, self.lines, str, i,
+		    'Keyword "%s" not allowed here.' % v[0])
+	    res.append(self._store.newSymbol(self._bindings[""]+v[0]))
+	    return j
 	else:
 	    return -1
 
@@ -777,18 +805,18 @@ class SinkParser:
 	    raise BadSyntax(self._thisDoc, self.lines, str, j,
 			    "Varible name can't start with '%s'" % str[j])
 	    return -1
-	while i <len(str) and str[i] not in _notNameChars: #@@ check for intial alpha
+	while i <len(str) and str[i] not in _notNameChars:
             i = i+1
 	if self._parentContext == None:
 	    raise BadSyntax(self._thisDoc, self.lines, str, j,
 			    "Can't use ?xxx syntax for variable in outermost level: %s" % str[j-1:i])
-	var = self._sink.newUniversal(self._parentContext, self. _thisDoc +"#"+str[j:i], why=self._reason2)
+	var = self._store.newUniversal(self._parentContext, self._baseURI + "#" +str[j:i], why=self._reason2)
         res.append(var)
 #        print "Variable found: <<%s>>" % str[j:i]
         return i
 
     def bareWord(self, str, i, res):
-	"""	abc -> 'abc'
+	"""	abc -> :abc
   	"""
 	j = self.skipSpace(str, i)
 	if j<0: return -1
@@ -860,7 +888,7 @@ class SinkParser:
 
                 j, s = self.strconst(str, i, delim)
 
-                res.append(self._sink.newLiteral(s))
+                res.append(self._store.newLiteral(s))
 		progress("New string const ", s, j)
 		return j
 	    else:
@@ -883,11 +911,11 @@ class SinkParser:
 				"Bad number syntax")
 		j = m.end()
 		if m.group(2) != None or  m.group(3) != None: # includes decimal exponent
-		    res.append(self._sink.newLiteral(str[i:j],
-			self._sink.newSymbol(FLOAT_DATATYPE)))
+		    res.append(self._store.newLiteral(str[i:j],
+			self._store.newSymbol(FLOAT_DATATYPE)))
 		else:
-		    res.append(self._sink.newLiteral(str[i:j],
-			self._sink.newSymbol(INTEGER_DATATYPE)))
+		    res.append(self._store.newLiteral(str[i:j],
+			self._store.newSymbol(INTEGER_DATATYPE)))
 		return j
 
 	    if str[i]=='"':
@@ -898,7 +926,7 @@ class SinkParser:
 		dt = None
                 j, s = self.strconst(str, i, delim)
 		lang = None
-		if str[j:j+1] == "@":  # LanguaÄÄge?
+		if str[j:j+1] == "@":  # Language?
 		    m = langcode.match(str, j+1)
 		    if m == None:
 			raise BadSyntax(self._thisDoc, startline, str, i,
@@ -910,7 +938,7 @@ class SinkParser:
 		    res2 = []
 		    j = self.uri_ref2(str, j+2, res2) # Read datatype URI
 		    dt = res2[0]
-                res.append(self._sink.newLiteral(s, dt, lang))
+                res.append(self._store.newLiteral(s, dt, lang))
 		return j
 	    else:
 		return -1
@@ -1047,6 +1075,9 @@ def stripCR(str):
             res = res + ch
     return res
 
+def dummyWrite(x):
+    pass
+
 ############################################################################################
     
 class ToN3(RDFSink.RDFSink):
@@ -1068,6 +1099,7 @@ q   Quiet - don't make comments about the environment in which processing was do
 r   Relative URI suppression. Always use absolute URIs.
 s   Subject must be explicit for every statement. Don't use ";" shorthand.
 t   "this" and "()" special syntax should be suppresed.
+u   Use \u for unicode escaping in URIs instead of utf-8 %XX
 """
 # "
 
@@ -1113,7 +1145,11 @@ t   "this" and "()" special syntax should be suppresed.
 
         if "l" in self._flags: self.noLists = 1
 	
-    
+    def dummyClone(self):
+	"retun a version of myself which will only count occurrences"
+	return ToN3(write=dummyWrite, base=self.base, genPrefix=self._genPrefix, \
+		    noLists=self.noLists, quiet=self._quiet, flags=self._flags )
+		    
     def writeEncoded(self, str):
 	"""Write a possibly unicode string out to the output"""
 	return self._writeRaw(str.encode('utf-8'))
@@ -1415,7 +1451,8 @@ t   "this" and "()" special syntax should be suppresed.
 
 
         j = string.rfind(value, "#")
-	if j<0: j=string.rfind(value, "/")   # Allow "/" namespaces as a second best
+	if j<0 and "/" in self._flags:
+	    j=string.rfind(value, "/")   # Allow "/" namespaces as a second best
 	
         if (j>=0
             and "p" not in self._flags):   # Suppress use of prefixes?
@@ -1427,19 +1464,26 @@ t   "this" and "()" special syntax should be suppresed.
 			progress("Cannot have character %i in local name." % ord(ch))
 		    break
 	    else:
+		namesp = value[:j+1]
 		if (self.defaultNamespace
-		    and self.defaultNamespace == value[:j+1]
+		    and self.defaultNamespace == namesp
 		    and "d" not in self._flags):
 		    return ":"+value[j+1:]
-		prefix = self.prefixes.get(value[:j+1], None) # @@ #CONVENTION
+		self.countNamespace(namesp)
+		prefix = self.prefixes.get(namesp, None) # @@ #CONVENTION
 		if prefix != None : return prefix + ":" + value[j+1:]
 	    
 		if value[:j] == self.base:   # If local to output stream,
 		    return "<#" + value[j+1:] + ">" #   use local frag id (@@ lone word?)
-            
-        if "r" in self._flags: return "<" + hexify(value) + ">"    # Suppress relative URIs?
+        
+	if "r" not in self._flags and self.base != None:
+	    value = refTo(self.base, value)
+	if "u" in self._flags: value = backslashUify(value)
+	else: value = hexify(value)
 
-        return "<" + refTo(self.base, value) + ">"    # Everything else
+        return "<" + value + ">"    # Everything else
+
+
 
 ###################################################
 #
@@ -1481,7 +1525,7 @@ def stringToN3(str, singleLine=0):
         j = m.start()
         res = res + str[i:j]
         ch = m.group(0)
-        if ch == '"' and delim == '"""' and str[j:j+3] != '"""':
+        if ch == '"' and delim == '"""' and str[j:j+3] != '"""':  #"
             res = res + ch
         else:
             k = string.find('\a\b\f\r\t\v\n\\"', ch)
@@ -1492,6 +1536,19 @@ def stringToN3(str, singleLine=0):
         i = j + 1
 
     return delim + res + str[i:] + delim
+
+def backslashUify(ustr):
+    """Use URL encoding to return an ASCII string corresponding to the given unicode"""
+#    progress("String is "+`ustr`)
+#    s1=ustr.encode('utf-8')
+    str  = ""
+    for ch in ustr:  # .encode('utf-8'):
+	if ord(ch) > 126:
+	    ch = "\\u%04X" % ord(ch)
+	else:
+	    ch = "%c" % ord(ch)
+	str = str + ch
+    return str
 
 def hexify(ustr):
     """Use URL encoding to return an ASCII string corresponding to the given unicode"""
@@ -1592,291 +1649,5 @@ class Reifier(RDFSink.RDFSink):
 
     def endDoc(self, rootFormulaPair=None):
         return self._sink.endDoc(self._formula)
-
-######################################################### Tests
-  
-def test():
-    import sys
-    testString = []
-    
-    t0 = """bind x: <http://example.org/x-ns/> .
-	    bind dc: <http://purl.org/dc/elements/1.1/> ."""
-
-    t1="""[ >- x:firstname -> "Ora" ] >- dc:wrote ->
-    [ >- dc:title -> "Moby Dick" ] .
-     bind default <http://example.org/default>.
-     <uriPath> :localProp defaultedName .
-     
-"""
-    t2="""
-[ >- x:type -> x:Receipt;
-  >- x:number -> "5382183";
-  >- x:for -> [ >- x:USD -> "2690" ];
-  >- x:instrument -> [ >- x:type -> x:visa ] ]
-
->- x:inReplyTo ->
-
-[ >- x:type -> x:jobOrder;
-  >- x:number -> "025709";
- >- x:from ->
- [
-  >- x:homePage -> <http://www.topnotchheatingandair.com/>;
-  >- x:est -> "1974";
-  >- x:address -> [ >- x:street -> "23754 W. 82nd Terr.";
-      >- x:city -> "Lenexa";
-      >- x:state -> "KS";
-      >- x:zip -> "66227"];
-  >- x:phoneMain -> <tel:+1-913-441-8900>;
-  >- x:fax -> <tel:+1-913-441-8118>;
-  >- x:mailbox -> <mailto:info@topnotchheatingandair.com> ]
-].    
-
-<http://www.davelennox.com/residential/furnaces/re_furnaces_content_body_elite90gas.asp>
- >- x:describes -> [ >- x:type -> x:furnace;
- >- x:brand -> "Lennox";
- >- x:model -> "G26Q3-75"
- ].
-"""
-    t3="""
-@prefix pp: <http://example.org/payPalStuff?>.
-@prefix default <http://example.org/payPalStuff?>.
-
-<> a pp:Check; pp:payee :tim; pp:amount "$10.00";
-  dc:author :dan; dc:date "2000/10/7" ;
-  is pp:part of [ a pp:Transaction; = :t1 ] .
-"""
-
-# Janet's chart:
-    t4="""
-bind q: <http://example.org/>.
-bind m: <>.
-bind n: <http://example.org/base/>.
-bind : <http://void-prefix.example.org/>.
-bind w3c: <http://www.w3.org/2000/10/org>.
-
-<#QA> :includes 
- [  = w3c:internal ; :includes <#TAB> , <#interoperability> ,
-     <#validation> , w3c:wai , <#i18n> , <#translation> ,
-     <#readability_elegance>, w3c:feedback_accountability ],
- [ = <#conformance>;
-     :includes <#products>, <#content>, <#services> ],
- [ = <#support>; :includes
-     <#tools>, <#tutorials>, <#workshops>, <#books_materails>,
-     <#certification> ] .
-
-<#internal> q:supports <#conformance> .  
-<#support> q:supports <#conformance> .
-
-"""
-
-    t5 = """
-
-bind u: <http://www.example.org/utilities>
-bind default <#>
-
-:assumption = { :fred u:knows :john .
-                :john u:knows :mary .} .
-
-:conclusion = { :fred u:knows :mary . } .
-
-"""
-    thisURI = "file:notation3.py"
-
-    testString.append(  t0 + t1 + t2 + t3 + t4 )
-#    testString.append(  t5 )
-
-#    p=SinkParser(RDFSink(),'http://example.org/base/', 'file:notation3.py',
-#		     'data:#')
-
-    r=SinkParser(ToN3(sys.stdout.write, base=thisURI),
-                  thisURI,'http://example.org/base/',)
-    r.startDoc()
-    
-    print "=== test stringing: ===== STARTS\n ", t0, "\n========= ENDS\n"
-    r.feed(t0)
-
-    print "=== test stringing: ===== STARTS\n ", t1, "\n========= ENDS\n"
-    r.feed(t1)
-
-    print "=== test stringing: ===== STARTS\n ", t2, "\n========= ENDS\n"
-    r.feed(t2)
-
-    print "=== test stringing: ===== STARTS\n ", t3, "\n========= ENDS\n"
-    r.feed(t3)
-
-    r.endDoc()
-                   
-            
-        
-############################################################## Web service
-
-import random
-import time
-import cgi
-import sys
-import StringIO
-
-def serveRequest(env):
-    import random #for message identifiers. Hmm... should seed from request
-
-    #sys.stderr = open("/tmp/connolly-notation3-log", "w")
-
-    form = cgi.FieldStorage()
-
-    if form.has_key('data'):
-	try:
-	    convert(form, env)
-	except BadSyntax, e:
-	    print "Status: 500 syntax error in input data"
-	    print "Content-type: text/plain"
-	    print
-	    print e
-	    
-
-	except:
-	    import traceback
-
-	    print "Status: 500 error in python script. traceback follows"
-	    print "Content-type: text/plain"
-	    print
-	    traceback.print_exc(sys.stdout)
-	    
-    else:
-	showForm()
-
-def convert(form, env):
-    """ raises KeyError if the form data is missing required fields."""
-
-    serviceDomain = 'w3.org' #@@ should compute this from env['SCRIPT_NAME']
-         # or whatever; cf. CGI spec
-
-    data = form['data'].value
-
-    if form.has_key('baseURI'):	baseURI = form['baseURI'].value
-    elif env.has_key('HTTP_REFERER'): baseURI = env['HTTP_REFERER']
-    else: baseURI = 'mid:' #@@
-
-    # output is buffered so that we only send
-    # 200 OK if all went well
-    buf = StringIO.StringIO()
-
-    gen = ToRDF(buf, baseURI)
-    xlate = SinkParser(gen, baseURI, baseURI)
-    xlate.startDoc()
-    xlate.feed(data)
-    xlate.endDoc()
-
-    print "Content-Type: text/xml"
-    #hmm... other headers? last-modified?
-    # handle if-modified-since? i.e. handle input by reference?
-    print # end of HTTP response headers
-    print buf.getvalue()
-
-def showForm():
-    print """Content-Type: text/html
-
-<html>
-<title>A Wiki RDF Service</title>
-<body>
-
-<form method="GET">
-<textarea name="data" rows="4" cols="40">
-bind dc: &lt;http://purl.org/dc/elements/1.1/&gt;
-</textarea>
-<input type="submit"/>
-</form>
-
-<div>
-<h2>References</h2>
-<ul>
-<li><a href="http://www.w3.org/DesignIssues/Notation3">Notation 3</a></li>
-<li><a href="http://www.python.org/doc/">python documentation</a></li>
-<li><a href="http://www.w3.org/2000/01/sw/">Semantic Web Development</a></li>
-</ul>
-</div>
-
-<address>
-<a href="http://www.w3.org/People/Connolly/">Dan Connolly</a>
-</address>
-
-</body>
-</html>
-"""
-#################################################  Command line
-    
-def doCommand():
-        """Command line RDF/N3 tool
-        
- <command> <options> <inputURIs>
- 
- -rdf1out   Output in RDF M&S 1.0 insead of n3 (only works with -pipe at the moment)
- -help      print this message
- -chatty    Verbose output of questionable use
-
-See also: cwm 
-"""
-        
-        import urllib
-        option_ugly = 0     # Store and regurgitate with genids *
-        option_pipe = 1     # Don't store, just pipe though
-        option_rdf1out = 0  # Output in RDF M&S 1.0 instead of N3
-        option_bySubject= 0 # Store and regurgitate in subject order *
-        option_inputs = []
-        option_filters = []
-        option_test = 0
-        setVerbosity(0)          # not too verbose please
-        hostname = "localhost" # @@@@@@@@@@@ Get real one
-        
-        for arg in sys.argv[1:]:  # Command line options after script name
-            if arg == "-test": option_test = 1
-            elif arg == "-rdf1out": option_rdf1out = 1
-            elif arg == "-chatty": chatty = 1
-            elif arg == "-help":
-                print doCommand.__doc__
-                return
-            elif arg[0] == "-": print "Unknown option", arg
-            else : option_inputs.append(arg)
-            
-        if option_test: return test()
-
-        # The base URI for this process - the Web equiv of cwd
-#	_baseURI = "file://" + hostname + os.getcwd() + "/"
-	_baseURI = "file://" + os.getcwd() + "/"
-	
-        _outURI = uripath.join(_baseURI, "STDOUT")
-	if option_rdf1out:
-            _sink = ToRDF(sys.stdout, _outURI)
-        else:
-            _sink = ToN3(sys.stdout.write, base=_outURI)
-        _sink.makeComment("# Base URI of process is " + _baseURI)
-        
-#  Parse and regenerate RDF in whatever notation:
-
-        inputContexts = []
-        for i in option_inputs:
-            _inputURI = uripath.join(_baseURI, i) # Make abs from relative
-            p = SinkParser(_sink,  _inputURI)
-            p.load(_inputURI)
-            del(p)
-
-        if option_inputs == []:
-            _inputURI = uripath.join( _baseURI, "STDIN") # Make abs from relative
-            p = SinkParser(_sink,  _inputURI)
-            p.load("")
-            del(p)
-
-        return
-
-
-
-
-############################################################ Main program
-    
-if __name__ == '__main__':
-    import os
-    if os.environ.has_key('SCRIPT_NAME'):
-        serveRequest(os.environ)
-    else:
-        doCommand()
 
 #ends

@@ -1,11 +1,42 @@
-#Processed by Id: cwm.py,v 1.135 2003/08/14 00:00:18 timbl Exp 
+#Processed by Id: cwm.py,v 1.145 2004/01/29 23:22:22 timbl Exp 
         #    using base file:/devel/WWW/2000/10/rdf-tests/rdfcore/Manifest.rdf
         
 #  Notation3 generation by
-#       notation3.py,v 1.141 2003/08/14 00:00:19 timbl Exp
+#       notation3.py,v 1.151 2004/01/30 17:27:52 timbl Exp
 
 #   Base was: file:/devel/WWW/2000/10/rdf-tests/rdfcore/Manifest.rdf
      @prefix : <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#> .
+     @prefix M: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#> .
+     @prefix Ma: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-uris/Manifest.rdf#> .
+     @prefix Man: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/Manifest.rdf#> .
+     @prefix Man10: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-seq-representation/Manifest.rdf#> .
+     @prefix Man11: <http://www.w3.org/2000/10/rdf-tests/rdfcore/horst-01/Manifest.rdf#> .
+     @prefix Man12: <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlsch-02/Manifest.rdf#> .
+     @prefix Man13: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-parseType/Manifest.rdf#> .
+     @prefix Man14: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/Manifest.rdf#> .
+     @prefix Man15: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#> .
+     @prefix Man16: <http://www.w3.org/2000/10/rdf-tests/rdfcore/tex-01/Manifest.rdf#> .
+     @prefix Man17: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-difference-between-ID-and-about/Manifest.rdf#> .
+     @prefix Man18: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-literals/Manifest.rdf#> .
+     @prefix Man19: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/Manifest.rdf#> .
+     @prefix Man2: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#> .
+     @prefix Man20: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#> .
+     @prefix Man21: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-abouteach/Manifest.rdf#> .
+     @prefix Man22: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-uri-substructure/Manifest.rdf#> .
+     @prefix Man23: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-entailment/Manifest.rdf#> .
+     @prefix Man24: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#> .
+     @prefix Man25: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/Manifest.rdf#> .
+     @prefix Man3: <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#> .
+     @prefix Man4: <http://www.w3.org/2000/10/rdf-tests/rdfcore/statement-entailment/Manifest.rdf#> .
+     @prefix Man5: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/Manifest.rdf#> .
+     @prefix Man6: <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes-intensional/Manifest.rdf#> .
+     @prefix Man7: <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#> .
+     @prefix Man8: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#> .
+     @prefix Man9: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/Manifest.rdf#> .
+     @prefix Mani: <http://www.w3.org/2000/10/rdf-tests/rdfcore/unrecognised-xml-attributes/Manifest.rdf#> .
+     @prefix Manif: <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#> .
+     @prefix XML: <http://www.w3.org/2001/XMLSchema#> .
+     @prefix dat: <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
     
@@ -19,84 +50,117 @@
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/amp-in-url/test001.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#language-and-xml-literal>     a :PositiveEntailmentTest;
+    Man6:xsd-integer-decimal-compatible     a :NegativeEntailmentTest;
+         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Sep/0093.html>;
+         :conclusionDocument  [
+             a :False-Document ];
+         :datatypeSupport XML:decimal,
+                XML:integer;
+         :description """
+The claim that xsd:integer is a subClassOF xsd:decimal is not
+incompatible with using the intensional semantics for datatypes.
+   """;
+         :entailmentRules rdf:,
+                rdfs:,
+                dat:;
+         :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes-intensional/test001.nt>;
+         :status "APPROVED" .
+    
+    Man6:xsd-integer-string-incompatible     a :PositiveEntailmentTest;
+         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Sep/0093.html>;
+         :conclusionDocument  [
+             a :False-Document ];
+         :datatypeSupport XML:integer,
+                XML:string;
+         :description """
+The claim that xsd:integer is a subClassOF xsd:string is
+incompatible with using the intensional semantics for datatypes.
+   """;
+         :entailmentRules rdf:,
+                rdfs:,
+                dat:;
+         :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes-intensional/test002.nt>;
+         :status "APPROVED" .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes-intensional/test001.nt>     a :NT-Document .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes-intensional/test002.nt>     a :NT-Document .
+    
+    Man7:language-and-xml-literal     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test007b.nt>;
          :datatypeSupport rdf:XMLLiteral;
          :description """
 Language does not affect the denotation of rdf:XMLLiteral. NOTE that this
 is a change from previous versions of the spec.
+Langauge tags do not live on XMLLiterals.
    """;
          :entailmentRules rdf:,
                 rdfs:,
-                <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#>;
+                dat:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test007a.nt>;
-         :status "APPROVED" .
+         :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#language-ignored-for-numeric-types-1>     a :PositiveEntailmentTest;
-         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Nov/0611.html>;
+    Man7:language-ignored-for-numeric-types-1     a :PositiveEntailmentTest;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test004b.nt>;
-         :datatypeSupport <http://www.w3.org/2001/XMLSchema#integer>;
+         :datatypeSupport XML:integer;
          :description """
-	Language doesn't affect the semantic equivalence of some datatypes,
-	when doing a DT-entailment.
+Obsoleted: datatyped literals have no language tag.
    """;
          :entailmentRules rdf:,
-                <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#>;
+                dat:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test004a.nt>;
-         :status "APPROVED" .
+         :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#language-ignored-for-numeric-types-2>     a :PositiveEntailmentTest;
-         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Nov/0611.html>;
+    Man7:language-ignored-for-numeric-types-2     a :PositiveEntailmentTest;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test004c.nt>;
-         :datatypeSupport <http://www.w3.org/2001/XMLSchema#integer>;
+         :datatypeSupport XML:integer;
          :description """
-	Language doesn't affect the semantic equivalence of some datatypes,
-	when doing a DT-entailment.
+Obsoleted: datatyped literals have no language tag.
    """;
          :entailmentRules rdf:,
-                <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#>;
+                dat:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test004b.nt>;
-         :status "APPROVED" .
+         :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#language-ignored-for-numeric-types-3>     a :PositiveEntailmentTest;
-         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Nov/0611.html>;
+    Man7:language-ignored-for-numeric-types-3     a :PositiveEntailmentTest;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test004a.nt>;
-         :datatypeSupport <http://www.w3.org/2001/XMLSchema#integer>;
+         :datatypeSupport XML:integer;
          :description """
-	Language doesn't affect the semantic equivalence of some datatypes,
-	when doing a DT-entailment.
+Obsoleted: datatyped literals have no language tag.
    """;
          :entailmentRules rdf:,
-                <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#>;
+                dat:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test004c.nt>;
-         :status "APPROVED" .
+         :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#language-important-for-non-dt-entailment-1>     a :NegativeEntailmentTest;
-         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Nov/0611.html>;
+    Man7:language-important-for-non-dt-entailment-1     a :NegativeEntailmentTest;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test004b.nt>;
          :description """
+This test used to claim:
 	Language attributes on a datatyped literal make them distinct for the purposes
 	of non-datatype-aware entailments.
+There are no longer language tags on datatyped literals.
    """;
          :entailmentRules rdf:,
                 rdfs:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test004a.nt>;
-         :status "APPROVED" .
+         :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#language-important-for-non-dt-entailment-2>     a :NegativeEntailmentTest;
-         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Nov/0611.html>;
+    Man7:language-important-for-non-dt-entailment-2     a :NegativeEntailmentTest;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test004c.nt>;
          :description """
+This test used to claim:
 	Language attributes on a datatyped literal make them distinct for the purposes
 	of non-datatype-aware entailments.
+There are no longer language tags on datatyped literals.
    """;
          :entailmentRules rdf:,
                 rdfs:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test004b.nt>;
-         :status "APPROVED" .
+         :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#non-well-formed-literal-1>     a :PositiveEntailmentTest;
+    Man7:non-well-formed-literal-1     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Nov/0611.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test002.nt>;
          :description """
@@ -107,73 +171,87 @@ is a change from previous versions of the spec.
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test002.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#non-well-formed-literal-2>     a :NegativeEntailmentTest;
+    Man7:non-well-formed-literal-2     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Nov/0611.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test002b.nt>;
-         :datatypeSupport <http://www.w3.org/2001/XMLSchema#integer>;
+         :datatypeSupport XML:integer;
          :description """
 	With appropriate datatype knowledge, a 'badly-formed' datatyped literal can be detected.
    """;
          :entailmentRules rdf:,
                 rdfs:,
-                <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#>;
+                dat:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test002.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#range-clash>     a :PositiveEntailmentTest;
+    Man7:plain-literal-and-xsd-string     a :PositiveEntailmentTest;
+         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Sep/0003.html>;
+         :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test011b.nt>;
+         :datatypeSupport XML:string;
+         :description """
+	A plain literal denotes the same thing as its corresponding xsd:string,
+	where one exists.
+   """;
+         :entailmentRules rdf:,
+                rdfs:,
+                dat:;
+         :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test011a.nt>;
+         :status "APPROVED" .
+    
+    Man7:range-clash     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :conclusionDocument  [
              a :False-Document ];
-         :datatypeSupport <http://www.w3.org/2001/XMLSchema#decimal>,
-                <http://www.w3.org/2001/XMLSchema#string>;
+         :datatypeSupport XML:decimal,
+                XML:string;
          :description """
 	Where sufficient DT knowledge is available, a range clash may be detected; the document then
 	contains a contradiction.
    """;
          :entailmentRules rdf:,
                 rdfs:,
-                <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#>;
+                dat:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test006.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#semantic-equivalence-between-datatypes>     a :PositiveEntailmentTest;
+    Man7:semantic-equivalence-between-datatypes     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test005b.nt>;
-         :datatypeSupport <http://www.w3.org/2001/XMLSchema#decimal>,
-                <http://www.w3.org/2001/XMLSchema#integer>;
+         :datatypeSupport XML:decimal,
+                XML:integer;
          :description """
 	Members of different datatypes may be semantically equivalent.
    """;
          :entailmentRules rdf:,
-                <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#>;
+                dat:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test005a.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#semantic-equivalence-within-type-1>     a :PositiveEntailmentTest;
+    Man7:semantic-equivalence-within-type-1     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Nov/0611.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test003b.nt>;
-         :datatypeSupport <http://www.w3.org/2001/XMLSchema#integer>;
+         :datatypeSupport XML:integer;
          :description """
 	Demonstrating the semantic equivalence of two lexical forms of the same datatyped value.
    """;
          :entailmentRules rdf:,
-                <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#>;
+                dat:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test003a.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#semantic-equivalence-within-type-2>     a :PositiveEntailmentTest;
+    Man7:semantic-equivalence-within-type-2     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Nov/0611.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test003a.nt>;
-         :datatypeSupport <http://www.w3.org/2001/XMLSchema#integer>;
+         :datatypeSupport XML:integer;
          :description """
 	As semantic-equivalence-within-type-1; the entailment works both ways.
    """;
          :entailmentRules rdf:,
-                <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#>;
+                dat:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test003b.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#test001>     a :PositiveParserTest;
+    Man7:test001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Nov/0611.html>;
          :description """
 	A simple datatype production; a language+datatype production. Simply duplicate the
@@ -183,7 +261,7 @@ is a change from previous versions of the spec.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#test002>     a :PositiveParserTest;
+    Man7:test002     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Nov/0611.html>;
          :description """
 	A parser is not required to know about well-formed datatyped literals.
@@ -192,25 +270,27 @@ is a change from previous versions of the spec.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test002.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#test008>     a :PositiveEntailmentTest;
+    Man7:test008     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Oct/0131.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test008b.nt>;
          :description """
 	From decisions listed in http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Oct/0098.html
    """;
+         :entailmentRules :simpleEntailment;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test008a.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#test009>     a :NegativeEntailmentTest;
+    Man7:test009     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Oct/0131.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test009b.nt>;
          :description """
 	From decisions listed in http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Oct/0098.html
    """;
+         :entailmentRules :simpleEntailment;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test009a.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/Manifest.rdf#test010>     a :PositiveEntailmentTest;
+    Man7:test010     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Oct/0131.html>;
          :conclusionDocument  [
              a :False-Document ];
@@ -220,7 +300,7 @@ is a change from previous versions of the spec.
    """;
          :entailmentRules rdf:,
                 rdfs:,
-                <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#>;
+                dat:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test010.nt>;
          :status "APPROVED" .
     
@@ -264,7 +344,11 @@ is a change from previous versions of the spec.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test010.nt>     a :NT-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/horst-01/Manifest.rdf#subClassOf-intensional>     a :NegativeEntailmentTest;
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test011a.nt>     a :NT-Document .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes/test011b.nt>     a :NT-Document .
+    
+    Man11:subClassOf-intensional     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jul/0263.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/horst-01/test002.rdf>;
          :description """
@@ -275,11 +359,11 @@ is a change from previous versions of the spec.
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/horst-01/test001.rdf>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/horst-01/Manifest.rdf#subPropertyOf-intensional>     a :NegativeEntailmentTest;
+    Man11:subPropertyOf-intensional     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jul/0263.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/horst-01/test004.rdf>;
-         :datatypeSupport <http://www.w3.org/2001/XMLSchema#integer>,
-                <http://www.w3.org/2001/XMLSchema#string>;
+         :datatypeSupport XML:integer,
+                XML:string;
          :description """
 	rdfs:subPropertyOf has intensional semantics, not extensional.
    """;
@@ -296,29 +380,48 @@ is a change from previous versions of the spec.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/horst-01/test004.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-literals/Manifest.rdf#error001>     a :NegativeParserTest;
-         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Apr/0056.html>;
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/pfps-10/Manifest.rdf#non-well-formed-literal-1>     a :PositiveEntailmentTest;
+         :approval <http://lists.w3.org/Archives/Public/www-rdf-comments/2003AprJun/0080.html>;
+         :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/pfps-10/test001b.nt>;
+         :description """
+Test that ICEXT(I(rdfs:Literal)) is a subset of LV.
+   """;
+         :entailmentRules rdf:,
+                rdfs:;
+         :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/pfps-10/test001a.nt>;
+         :status "APPROVED" .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/pfps-10/test001a.nt>     a :NT-Document .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/pfps-10/test001b.nt>     a :NT-Document .
+    
+    Man18:error001     a :NegativeParserTest;
+         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Nov/0063.html>;
          :description """
 	Does the treatment of literals conform to charmod ?
 	Test for failure for literal not in Normal Form C
+This test case has been WITHDRAWN in light of changes to NFC handling
+in concepts
    """;
          :discussion <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Apr/0016.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-literals/error001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-charmod-literals>;
-         :status "APPROVED" .
+         :status "WITHDRAWN" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-literals/Manifest.rdf#error002>     a :NegativeParserTest;
-         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Apr/0056.html>;
+    Man18:error002     a :NegativeParserTest;
+         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Nov/0063.html>;
          :description """
 	Does the treatment of literals conform to charmod ?
 	Test for failure for literal not in Normal Form C
+This test case has been WITHDRAWN in light of changes to NFC handling
+in concepts
    """;
          :discussion <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Apr/0016.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-literals/error002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-charmod-literals>;
-         :status "APPROVED" .
+         :status "WITHDRAWN" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-literals/Manifest.rdf#test001>     a :PositiveParserTest;
+    Man18:test001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Apr/0056.html>;
          :description """
 	Does the treatment of literals conform to charmod ?
@@ -338,7 +441,7 @@ is a change from previous versions of the spec.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-literals/test001.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-uris/Manifest.rdf#error001>     a :NegativeParserTest;
+    Ma:error001     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Apr/0474.html>;
          :description """
 	Test for failure for uriref not in Normal Form C.
@@ -348,7 +451,7 @@ is a change from previous versions of the spec.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-charmod-uris>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-uris/Manifest.rdf#test001>     a :PositiveParserTest;
+    Ma:test001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Apr/0474.html>;
          :description """
 	A uriref is allowed to match non-US ASCII forms 
@@ -361,7 +464,7 @@ is a change from previous versions of the spec.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-uris/test001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-uris/Manifest.rdf#test002>     a :PositiveParserTest;
+    Ma:test002     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Apr/0474.html>;
          :description """
 	A uriref which already has % escaping is permitted.
@@ -373,7 +476,7 @@ is a change from previous versions of the spec.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-uris/test002.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-uris/Manifest.rdf#test003>     a :NegativeEntailmentTest;
+    Ma:test003     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Apr/0474.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-uris/test002.rdf>;
          :description """
@@ -387,7 +490,7 @@ is a change from previous versions of the spec.
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-uris/test001.rdf>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-uris/Manifest.rdf#test004>     a :NegativeEntailmentTest;
+    Ma:test004     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Apr/0474.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-uris/test001.rdf>;
          :description """
@@ -411,68 +514,68 @@ is a change from previous versions of the spec.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-charmod-uris/test002.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#error001>     a :NegativeParserTest;
+    Manif:error001     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Jul/0000.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/error001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-containers-syntax-vs-schema>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#error002>     a :NegativeParserTest;
+    Manif:error002     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/error002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-containers-syntax-vs-schema>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#test001>     a :PositiveParserTest;
+    Manif:test001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Jul/0000.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-containers-syntax-vs-schema>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#test002>     a :PositiveParserTest;
+    Manif:test002     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Jul/0000.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-containers-syntax-vs-schema>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test002.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#test003>     a :PositiveParserTest;
+    Manif:test003     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Jul/0000.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test003.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-containers-syntax-vs-schema>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test003.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#test004>     a :PositiveParserTest;
+    Manif:test004     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Jul/0000.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test004.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-containers-syntax-vs-schema>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test004.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#test005>     a :PositiveParserTest;
+    Manif:test005     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test005.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-containers-syntax-vs-schema>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test005.nt>;
          :status "OBSOLETED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#test006>     a :PositiveParserTest;
+    Manif:test006     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Jul/0000.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test006.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-containers-syntax-vs-schema>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test006.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#test007>     a :PositiveParserTest;
+    Manif:test007     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Jul/0000.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test007.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-containers-syntax-vs-schema>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test007.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#test008>     a :PositiveParserTest;
+    Manif:test008     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Jul/0000.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test008.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-containers-syntax-vs-schema>;
@@ -515,7 +618,20 @@ is a change from previous versions of the spec.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/test008.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#error0001>     a :NegativeParserTest;
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-element-not-mandatory/Manifest.rdf#test001>     a :PositiveParserTest;
+         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Oct/0071.html>;
+         :description """
+    A surrounding rdf:RDF element is no longer mandatory.
+   """;
+         :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-element-not-mandatory/test001.rdf>;
+         :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-element-not-mandatory/test001.nt>;
+         :status "APPROVED" .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-element-not-mandatory/test001.nt>     a :NT-Document .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-element-not-mandatory/test001.rdf>     a :RDF-XML-Document .
+    
+    Man15:error0001     a :NegativeParserTest;
          :description """
 	This is again legal RDF
    """;
@@ -523,7 +639,7 @@ is a change from previous versions of the spec.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#error0002>     a :NegativeParserTest;
+    Man15:error0002     a :NegativeParserTest;
          :description """
 	This is again legal RDF
    """;
@@ -531,7 +647,7 @@ is a change from previous versions of the spec.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#error0003>     a :NegativeParserTest;
+    Man15:error0003     a :NegativeParserTest;
          :description """
 	This is again legal RDF
    """;
@@ -539,7 +655,7 @@ is a change from previous versions of the spec.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#error0004>     a :NegativeParserTest;
+    Man15:error0004     a :NegativeParserTest;
          :description """
 	This is again legal RDF
    """;
@@ -547,7 +663,7 @@ is a change from previous versions of the spec.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#error0005>     a :NegativeParserTest;
+    Man15:error0005     a :NegativeParserTest;
          :description """
 	This is again legal RDF
    """;
@@ -555,7 +671,7 @@ is a change from previous versions of the spec.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#error0006>     a :NegativeParserTest;
+    Man15:error0006     a :NegativeParserTest;
          :description """
 	This is again legal RDF
    """;
@@ -563,7 +679,7 @@ is a change from previous versions of the spec.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#error0007>     a :NegativeParserTest;
+    Man15:error0007     a :NegativeParserTest;
          :description """
 	This is again legal RDF
    """;
@@ -571,7 +687,7 @@ is a change from previous versions of the spec.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#error0008>     a :NegativeParserTest;
+    Man15:error0008     a :NegativeParserTest;
          :description """
 	This is again legal RDF
    """;
@@ -579,7 +695,7 @@ is a change from previous versions of the spec.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#error0009>     a :NegativeParserTest;
+    Man15:error0009     a :NegativeParserTest;
          :description """
 	This is again legal RDF
    """;
@@ -587,49 +703,49 @@ is a change from previous versions of the spec.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0001>     a :PositiveParserTest;
+    Man15:test0001     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0002>     a :PositiveParserTest;
+    Man15:test0002     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0002.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0003>     a :PositiveParserTest;
+    Man15:test0003     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0003.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0003.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0004>     a :PositiveParserTest;
+    Man15:test0004     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0004.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0004.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0005>     a :PositiveParserTest;
+    Man15:test0005     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0005.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0005.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0006>     a :PositiveParserTest;
+    Man15:test0006     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0006.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0006.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0007>     a :PositiveParserTest;
+    Man15:test0007     a :PositiveParserTest;
          :description """
 	rdf:aboutEach no longer valid.
    """;
@@ -638,49 +754,49 @@ is a change from previous versions of the spec.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0007.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0008>     a :PositiveParserTest;
+    Man15:test0008     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Jun/0008.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0008.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0008.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0009>     a :PositiveParserTest;
+    Man15:test0009     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0009.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0009.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0010>     a :PositiveParserTest;
+    Man15:test0010     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0010.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0010.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0011>     a :PositiveParserTest;
+    Man15:test0011     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0011.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0011.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0012>     a :PositiveParserTest;
+    Man15:test0012     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0012.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0012.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0013>     a :PositiveParserTest;
+    Man15:test0013     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0013.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0013.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0014>     a :PositiveParserTest;
+    Man15:test0014     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0014.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdf-ns-prefix-confusion>;
@@ -761,12 +877,12 @@ is a change from previous versions of the spec.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/test0014.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-abouteach/Manifest.rdf#error001>     a :NegativeParserTest;
+    Man21:error001     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-abouteach/error001.rdf>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-abouteach/Manifest.rdf#error002>     a :NegativeParserTest;
+    Man21:error002     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-abouteach/error002.rdf>;
          :status "APPROVED" .
@@ -775,20 +891,20 @@ is a change from previous versions of the spec.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-abouteach/error002.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-difference-between-ID-and-about/Manifest.rdf#error1>     a :NegativeParserTest;
+    Man17:error1     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Dec/0108.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-difference-between-ID-and-about/error1.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-difference-between-ID-and-about>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-difference-between-ID-and-about/Manifest.rdf#test1>     a :PositiveParserTest;
+    Man17:test1     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Dec/0108.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-difference-between-ID-and-about/test1.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-difference-between-ID-and-about>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-difference-between-ID-and-about/test1.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-difference-between-ID-and-about/Manifest.rdf#test2>     a :PositiveParserTest;
+    Man17:test2     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	This test shows the treatment of non-ASCII characters
@@ -799,7 +915,7 @@ is a change from previous versions of the spec.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-difference-between-ID-and-about/test2.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-difference-between-ID-and-about/Manifest.rdf#test3>     a :PositiveParserTest;
+    Man17:test3     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	This test shows the treatment of non-ASCII characters
@@ -841,130 +957,130 @@ The WG decided that a parser should accept that case as legal RDF.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-duplicate-member-props/test001.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#error001>     a :NegativeParserTest;
+    Man24:error001     a :NegativeParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/error001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#error002>     a :NegativeParserTest;
+    Man24:error002     a :NegativeParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/error002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#error003>     a :NegativeParserTest;
+    Man24:error003     a :NegativeParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/error003.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test001>     a :PositiveParserTest;
+    Man24:test001     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test002>     a :PositiveParserTest;
+    Man24:test002     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test002.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test003>     a :PositiveParserTest;
+    Man24:test003     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test003.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test003.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test004>     a :PositiveParserTest;
+    Man24:test004     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test004.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test004.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test005>     a :PositiveParserTest;
+    Man24:test005     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test005.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test005.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test006>     a :PositiveParserTest;
+    Man24:test006     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test006.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test006.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test007>     a :PositiveParserTest;
+    Man24:test007     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test007.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test007.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test008>     a :PositiveParserTest;
+    Man24:test008     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test008.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test008.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test009>     a :PositiveParserTest;
+    Man24:test009     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test009.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test009.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test010>     a :PositiveParserTest;
+    Man24:test010     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test010.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test010.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test011>     a :PositiveParserTest;
+    Man24:test011     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test011.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test011.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test012>     a :PositiveParserTest;
+    Man24:test012     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test012.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test012.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test013>     a :PositiveParserTest;
+    Man24:test013     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test013.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test013.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test014>     a :PositiveParserTest;
+    Man24:test014     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test014.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test014.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test015>     a :PositiveParserTest;
+    Man24:test015     a :PositiveParserTest;
          :approval <http://www.w3.org/2000/11/mr76/rdfc25May.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test015.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-empty-property-elements>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test015.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test016>     a :PositiveParserTest;
+    Man24:test016     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 Like rdfms-empty-property-elements/test001.rdf but with a processing instruction 
@@ -975,7 +1091,7 @@ as the only content of the otherwise empty element.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test016.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test017>     a :PositiveParserTest;
+    Man24:test017     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 Like rdfms-empty-property-elements/test001.rdf but with a comment
@@ -1060,35 +1176,35 @@ as the only content of the otherwise empty element.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/test017.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/Manifest.rdf#test001>     a :PositiveParserTest;
+    Man:test001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Oct/0405.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/test001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-identity-anon-resources>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/test001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/Manifest.rdf#test002>     a :PositiveParserTest;
+    Man:test002     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Oct/0405.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/test002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-identity-anon-resources>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/test002.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/Manifest.rdf#test003>     a :PositiveParserTest;
+    Man:test003     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Oct/0405.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/test003.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-identity-anon-resources>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/test003.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/Manifest.rdf#test004>     a :PositiveParserTest;
+    Man:test004     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Oct/0405.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/test004.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-identity-anon-resources>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/test004.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/Manifest.rdf#test005>     a :PositiveParserTest;
+    Man:test005     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Oct/0405.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/test005.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-identity-anon-resources>;
@@ -1115,31 +1231,31 @@ as the only content of the otherwise empty element.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-identity-anon-resources/test005.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test001>     a :PositiveParserTest;
+    Man2:test001     a :PositiveParserTest;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/test001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-literal-is-xml-structure>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/test001.nt>;
          :status "NOT_APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test002>     a :PositiveParserTest;
+    Man2:test002     a :PositiveParserTest;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/test002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-literal-is-xml-structure>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/test002.nt>;
          :status "NOT_APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test003>     a :PositiveParserTest;
+    Man2:test003     a :PositiveParserTest;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/test003.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-literal-is-xml-structure>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/test003.nt>;
          :status "NOT_APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test004>     a :PositiveParserTest;
+    Man2:test004     a :PositiveParserTest;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/test004.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-literal-is-xml-structure>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/test004.nt>;
          :status "NOT_APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test005>     a :PositiveParserTest;
+    Man2:test005     a :PositiveParserTest;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/test005.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-literal-is-xml-structure>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/test005.nt>;
@@ -1165,49 +1281,49 @@ as the only content of the otherwise empty element.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/test005.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test001>     a :PositiveParserTest;
+    Man8:test001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-nested-bagIDs>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test001.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test002>     a :PositiveParserTest;
+    Man8:test002     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-nested-bagIDs>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test002.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test003>     a :PositiveParserTest;
+    Man8:test003     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test003.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-nested-bagIDs>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test003.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test004>     a :PositiveParserTest;
+    Man8:test004     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test004.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-nested-bagIDs>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test004.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test005>     a :PositiveParserTest;
+    Man8:test005     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test005.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-nested-bagIDs>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test005.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test006>     a :PositiveParserTest;
+    Man8:test006     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test006.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-nested-bagIDs>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test006.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test007>     a :NegativeParserTest;
+    Man8:test007     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 rdf:bagID is forbidden on property element prop with an rdf:resource or
@@ -1217,21 +1333,21 @@ rdf:parseType attribute: the following is in error.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-nested-bagIDs>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test008>     a :PositiveParserTest;
+    Man8:test008     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test008.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-nested-bagIDs>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test008.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test009>     a :PositiveParserTest;
+    Man8:test009     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test009.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-nested-bagIDs>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test009.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test010a>     a :PositiveParserTest;
+    Man8:test010a     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :description """
         Two property attributes and a property element on an rdf:Description.
@@ -1245,7 +1361,7 @@ rdf:parseType attribute: the following is in error.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test010a.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test010b>     a :PositiveParserTest;
+    Man8:test010b     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :description """
         Two property attributes and a property element on an rdf:Description.
@@ -1258,7 +1374,7 @@ rdf:parseType attribute: the following is in error.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test010b.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test011a>     a :PositiveParserTest;
+    Man8:test011a     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :description """
         Two property attributes and a property element on an rdf:Description.
@@ -1272,7 +1388,7 @@ rdf:parseType attribute: the following is in error.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test011a.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test011b>     a :PositiveParserTest;
+    Man8:test011b     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :description """
         Two property attributes and a property element on an rdf:Description.
@@ -1285,7 +1401,7 @@ rdf:parseType attribute: the following is in error.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test011b.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test012a>     a :PositiveParserTest;
+    Man8:test012a     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :description """
         Two property attributes and a property element on an rdf:Description.
@@ -1299,7 +1415,7 @@ rdf:parseType attribute: the following is in error.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test012a.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test012b>     a :PositiveParserTest;
+    Man8:test012b     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :description """
         Two property attributes and a property element on an rdf:Description.
@@ -1364,35 +1480,35 @@ rdf:parseType attribute: the following is in error.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/test012b.nt>     a :NT-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/Manifest.rdf#test001>     a :PositiveParserTest;
+    Man9:test001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/test001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-not-id-and-resource-attr>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/test001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/Manifest.rdf#test002>     a :PositiveParserTest;
+    Man9:test002     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/test002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-not-id-and-resource-attr>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/test002.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/Manifest.rdf#test003>     a :PositiveParserTest;
+    Man9:test003     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/test003.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-not-id-and-resource-attr>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/test003.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/Manifest.rdf#test004>     a :PositiveParserTest;
+    Man9:test004     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/test004.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-not-id-and-resource-attr>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/test004.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/Manifest.rdf#test005>     a :PositiveParserTest;
+    Man9:test005     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/test005.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-not-id-and-resource-attr>;
@@ -1430,15 +1546,15 @@ rdf:parseType attribute: the following is in error.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-para196/test001.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-parseType/Manifest.rdf#error001>     a :NegativeParserTest;
+    Man13:error001     a :NegativeParserTest;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-parseType/error001.rdf>;
          :status "NOT_APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-parseType/Manifest.rdf#error002>     a :NegativeParserTest;
+    Man13:error002     a :NegativeParserTest;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-parseType/error002.rdf>;
          :status "NOT_APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-parseType/Manifest.rdf#error003>     a :NegativeParserTest;
+    Man13:error003     a :NegativeParserTest;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-parseType/error003.rdf>;
          :status "NOT_APPROVED" .
     
@@ -1448,7 +1564,7 @@ rdf:parseType attribute: the following is in error.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-parseType/error003.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/Manifest.rdf#error001>     a :NegativeParserTest;
+    Man19:error001     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	  The value of rdf:ID must match the XML Name production,
@@ -1457,7 +1573,7 @@ rdf:parseType attribute: the following is in error.
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/error001.rdf>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/Manifest.rdf#error002>     a :NegativeParserTest;
+    Man19:error002     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	  The value of rdf:ID must match the XML Name production,
@@ -1466,7 +1582,7 @@ rdf:parseType attribute: the following is in error.
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/error002.rdf>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/Manifest.rdf#error003>     a :NegativeParserTest;
+    Man19:error003     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	  The value of rdf:ID must match the XML Name production,
@@ -1475,7 +1591,7 @@ rdf:parseType attribute: the following is in error.
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/error003.rdf>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/Manifest.rdf#error004>     a :NegativeParserTest;
+    Man19:error004     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	  The value of rdf:ID must match the XML Name production,
@@ -1484,7 +1600,7 @@ rdf:parseType attribute: the following is in error.
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/error004.rdf>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/Manifest.rdf#error005>     a :NegativeParserTest;
+    Man19:error005     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	  The value of rdf:ID must match the XML Name production,
@@ -1493,7 +1609,7 @@ rdf:parseType attribute: the following is in error.
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/error005.rdf>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/Manifest.rdf#error006>     a :NegativeParserTest;
+    Man19:error006     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	  The value of rdf:bagID must match the XML Name production,
@@ -1502,7 +1618,7 @@ rdf:parseType attribute: the following is in error.
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/error006.rdf>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/Manifest.rdf#error007>     a :NegativeParserTest;
+    Man19:error007     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	  The value of rdf:bagID must match the XML Name production,
@@ -1525,386 +1641,386 @@ rdf:parseType attribute: the following is in error.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/error007.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-001>     a :NegativeParserTest;
+    M:error-001     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-002>     a :NegativeParserTest;
+    M:error-002     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-003>     a :NegativeParserTest;
+    M:error-003     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-003.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-004>     a :NegativeParserTest;
+    M:error-004     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-004.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-005>     a :NegativeParserTest;
+    M:error-005     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-005.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-006>     a :NegativeParserTest;
+    M:error-006     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-006.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-007>     a :NegativeParserTest;
+    M:error-007     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-007.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-008>     a :NegativeParserTest;
+    M:error-008     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-008.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-009>     a :NegativeParserTest;
+    M:error-009     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-009.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-010>     a :NegativeParserTest;
+    M:error-010     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-010.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-011>     a :NegativeParserTest;
+    M:error-011     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-011.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-012>     a :NegativeParserTest;
+    M:error-012     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-012.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-013>     a :NegativeParserTest;
+    M:error-013     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-013.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-014>     a :NegativeParserTest;
+    M:error-014     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-014.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-015>     a :NegativeParserTest;
+    M:error-015     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-015.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-016>     a :NegativeParserTest;
+    M:error-016     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-016.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-017>     a :NegativeParserTest;
+    M:error-017     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-017.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-018>     a :NegativeParserTest;
+    M:error-018     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-018.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-019>     a :NegativeParserTest;
+    M:error-019     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-019.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#error-020>     a :NegativeParserTest;
+    M:error-020     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/error-020.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-001>     a :PositiveParserTest;
+    M:test-001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-002>     a :PositiveParserTest;
+    M:test-002     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-002.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-003>     a :PositiveParserTest;
+    M:test-003     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-003.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-003.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-004>     a :PositiveParserTest;
+    M:test-004     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-004.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-004.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-005>     a :PositiveParserTest;
+    M:test-005     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-005.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-005.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-006>     a :PositiveParserTest;
+    M:test-006     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-006.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-006.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-007>     a :PositiveParserTest;
+    M:test-007     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-007.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-007.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-008>     a :PositiveParserTest;
+    M:test-008     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-008.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-008.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-009>     a :PositiveParserTest;
+    M:test-009     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-009.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-009.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-010>     a :PositiveParserTest;
+    M:test-010     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-010.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-010.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-011>     a :PositiveParserTest;
+    M:test-011     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-011.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-011.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-012>     a :PositiveParserTest;
+    M:test-012     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-012.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-012.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-013>     a :PositiveParserTest;
+    M:test-013     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-013.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-013.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-014>     a :PositiveParserTest;
+    M:test-014     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-014.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-014.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-015>     a :PositiveParserTest;
+    M:test-015     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-015.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-015.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-016>     a :PositiveParserTest;
+    M:test-016     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-016.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-016.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-017>     a :PositiveParserTest;
+    M:test-017     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-017.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-017.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-018>     a :PositiveParserTest;
+    M:test-018     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-018.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-018.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-019>     a :PositiveParserTest;
+    M:test-019     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-019.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-019.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-020>     a :PositiveParserTest;
+    M:test-020     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-020.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-020.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-021>     a :PositiveParserTest;
+    M:test-021     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-021.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-021.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-022>     a :PositiveParserTest;
+    M:test-022     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-022.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-022.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-023>     a :PositiveParserTest;
+    M:test-023     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-023.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-023.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-024>     a :PositiveParserTest;
+    M:test-024     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-024.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-024.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-025>     a :PositiveParserTest;
+    M:test-025     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-025.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-025.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-026>     a :PositiveParserTest;
+    M:test-026     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-026.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-026.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-027>     a :PositiveParserTest;
+    M:test-027     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-027.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-027.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-028>     a :PositiveParserTest;
+    M:test-028     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-028.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-028.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-029>     a :PositiveParserTest;
+    M:test-029     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-029.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-029.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-030>     a :PositiveParserTest;
+    M:test-030     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-030.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-030.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-031>     a :PositiveParserTest;
+    M:test-031     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-031.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-031.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-032>     a :PositiveParserTest;
+    M:test-032     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-032.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-032.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-033>     a :PositiveParserTest;
+    M:test-033     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-033.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-033.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-034>     a :PositiveParserTest;
+    M:test-034     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-034.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-034.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-035>     a :PositiveParserTest;
+    M:test-035     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-035.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-035.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-036>     a :PositiveParserTest;
+    M:test-036     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-036.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-036.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-037>     a :PositiveParserTest;
+    M:test-037     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-037.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/test-037.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#warn-001>     a :PositiveParserTest;
+    M:warn-001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/warn-001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
@@ -1912,7 +2028,7 @@ rdf:parseType attribute: the following is in error.
          :status "APPROVED";
          :warning " allowed with warnings " .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#warn-002>     a :PositiveParserTest;
+    M:warn-002     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/warn-002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
@@ -1920,7 +2036,7 @@ rdf:parseType attribute: the following is in error.
          :status "APPROVED";
          :warning " allowed with warnings " .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#warn-003>     a :PositiveParserTest;
+    M:warn-003     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Nov/0651.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/warn-003.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-rdf-names-use>;
@@ -2138,14 +2254,14 @@ rdf:parseType attribute: the following is in error.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-reification-required/test001.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-seq-representation/Manifest.rdf#test001>     a :PositiveParserTest;
+    Man10:test001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002May/0159.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-seq-representation/test001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-seq-representation>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-seq-representation/test001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-seq-representation/Manifest.rdf#test002>     a :PositiveEntailmentTest;
+    Man10:test002     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-seq-representation/test002.nt>;
          :description """
@@ -2156,7 +2272,7 @@ rdf:parseType attribute: the following is in error.
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-seq-representation/empty.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-seq-representation/Manifest.rdf#test003>     a :PositiveEntailmentTest;
+    Man10:test003     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-seq-representation/test003b.nt>;
          :description """
@@ -2167,7 +2283,7 @@ rdf:parseType attribute: the following is in error.
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-seq-representation/test003a.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-seq-representation/Manifest.rdf#test004>     a :PositiveEntailmentTest;
+    Man10:test004     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-seq-representation/test004.nt>;
          :description """
@@ -2192,7 +2308,7 @@ rdf:parseType attribute: the following is in error.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-seq-representation/test004.nt>     a :NT-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/Manifest.rdf#error001>     a :NegativeParserTest;
+    Man14:error001     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	  The value of rdf:nodeID must match the XML Name production,
@@ -2202,7 +2318,7 @@ rdf:parseType attribute: the following is in error.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-syntax-incomplete>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/Manifest.rdf#error002>     a :NegativeParserTest;
+    Man14:error002     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	  The value of rdf:nodeID must match the XML Name production,
@@ -2212,7 +2328,7 @@ rdf:parseType attribute: the following is in error.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-syntax-incomplete>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/Manifest.rdf#error003>     a :NegativeParserTest;
+    Man14:error003     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	  The value of rdf:nodeID must match the XML Name production,
@@ -2222,7 +2338,7 @@ rdf:parseType attribute: the following is in error.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-syntax-incomplete>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/Manifest.rdf#error004>     a :NegativeParserTest;
+    Man14:error004     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	  Cannot have rdf:nodeID and rdf:ID.
@@ -2231,7 +2347,7 @@ rdf:parseType attribute: the following is in error.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-syntax-incomplete>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/Manifest.rdf#error005>     a :NegativeParserTest;
+    Man14:error005     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	  Cannot have rdf:nodeID and rdf:about.
@@ -2240,7 +2356,7 @@ rdf:parseType attribute: the following is in error.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-syntax-incomplete>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/Manifest.rdf#error006>     a :NegativeParserTest;
+    Man14:error006     a :NegativeParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	  Cannot have rdf:nodeID and rdf:resource.
@@ -2249,7 +2365,7 @@ rdf:parseType attribute: the following is in error.
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-syntax-incomplete>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/Manifest.rdf#test001>     a :PositiveParserTest;
+    Man14:test001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	rdf:nodeID can be used to label a blank node.
@@ -2259,7 +2375,7 @@ rdf:parseType attribute: the following is in error.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/test001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/Manifest.rdf#test002>     a :PositiveParserTest;
+    Man14:test002     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 	rdf:nodeID can be used to label a blank node.
@@ -2271,7 +2387,7 @@ rdf:parseType attribute: the following is in error.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/test002.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/Manifest.rdf#test003>     a :PositiveParserTest;
+    Man14:test003     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
      On an rdf:Description or typed node rdf:nodeID behaves
@@ -2282,7 +2398,7 @@ rdf:parseType attribute: the following is in error.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/test003.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/Manifest.rdf#test004>     a :PositiveParserTest;
+    Man14:test004     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
      On a property element rdf:nodeID behaves
@@ -2321,7 +2437,7 @@ rdf:parseType attribute: the following is in error.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/test004.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-uri-substructure/Manifest.rdf#error001>     a :MiscellaneousTest;
+    Man22:error001     a :MiscellaneousTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :description """
 An RDF/XML serlializer is recommended to produce an exception if
@@ -2336,7 +2452,7 @@ asked to serialize the following graph since there is no way
 to represent it in the RDF/XML syntax.
    """ .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-uri-substructure/Manifest.rdf#test001>     a :PositiveParserTest;
+    Man22:test001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-uri-substructure/test001.rdf>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-uri-substructure/test001.nt>;
@@ -2348,14 +2464,14 @@ to represent it in the RDF/XML syntax.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-uri-substructure/test001.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/Manifest.rdf#test001>     a :PositiveParserTest;
+    Man25:test001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/test001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-literal-namespaces>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/test001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/Manifest.rdf#test002>     a :PositiveParserTest;
+    Man25:test002     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/test002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-literal-namespaces>;
@@ -2370,57 +2486,69 @@ to represent it in the RDF/XML syntax.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/test002.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#test001>     a :PositiveParserTest;
+    Man20:test001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Jun/0034.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test001.rdf>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#test002>     a :PositiveParserTest;
+    Man20:test002     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Jun/0034.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test002.rdf>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test002.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#test003>     a :PositiveParserTest;
+    Man20:test003     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Jun/0034.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test003.rdf>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test003.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#test004>     a :PositiveParserTest;
+    Man20:test004     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Jun/0034.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test004.rdf>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test004.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#test005>     a :PositiveParserTest;
+    Man20:test005     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Jun/0034.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test005.rdf>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test005.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#test006>     a :PositiveParserTest;
+    Man20:test006     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test006.rdf>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test006.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#test007a>     a :NegativeEntailmentTest;
+    Man20:test007a     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test007b.nt>;
+         :description """
+Plain literals are distinguishable on the basis of language tags.
+   """;
+         :entailmentRules :simpleEntailment;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test007a.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#test007b>     a :NegativeEntailmentTest;
+    Man20:test007b     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test007c.nt>;
+         :description """
+Plain literals are distinguishable on the basis of language tags.
+   """;
+         :entailmentRules :simpleEntailment;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test007b.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#test007c>     a :NegativeEntailmentTest;
+    Man20:test007c     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test007a.nt>;
+         :description """
+Plain literals are distinguishable on the basis of language tags.
+   """;
+         :entailmentRules :simpleEntailment;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/test007c.nt>;
          :status "APPROVED" .
     
@@ -2473,7 +2601,7 @@ to represent it in the RDF/XML syntax.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-container-membership-superProperty/not1P.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/Manifest.rdf#conjunction-test>     a :PositiveEntailmentTest;
+    Man5:conjunction-test     a :PositiveEntailmentTest;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/test004.nt>;
          :description """
 Should a property be allowed more than one rdfs:range property?
@@ -2501,7 +2629,7 @@ test004
                 <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/test003.nt>;
          :status "NOT_APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/Manifest.rdf#intensionality-domain>     a :NegativeEntailmentTest;
+    Man5:intensionality-domain     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/nonconclusions006.rdf>;
          :description """
@@ -2517,7 +2645,7 @@ but may hold in semantic extensions.
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/premises006.rdf>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/Manifest.rdf#intensionality-range>     a :NegativeEntailmentTest;
+    Man5:intensionality-range     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/nonconclusions005.rdf>;
          :description """
@@ -2533,27 +2661,27 @@ but may hold in semantic extensions.
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/premises005.rdf>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/Manifest.rdf#test001>     a :PositiveParserTest;
+    Man5:test001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Oct/0405.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/test001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfs-domain-and-range>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/test001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/Manifest.rdf#test002>     a :PositiveParserTest;
+    Man5:test002     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Oct/0405.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/test002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfs-domain-and-range>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/test002.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/Manifest.rdf#test003>     a :PositiveParserTest;
+    Man5:test003     a :PositiveParserTest;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/test003.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfs-domain-and-range>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/test003.nt>;
          :status "NOT_APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/Manifest.rdf#test004>     a :PositiveParserTest;
+    Man5:test004     a :PositiveParserTest;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/test004.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfs-domain-and-range>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/test004.nt>;
@@ -2582,6 +2710,39 @@ but may hold in semantic extensions.
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/test004.nt>     a :NT-Document .
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-domain-and-range/test004.rdf>     a :RDF-XML-Document .
+    
+    Man23:test001     a :PositiveEntailmentTest;
+         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Nov/0063.html>;
+         :conclusionDocument  [
+             a :False-Document ];
+         :description """
+Indicating a simple inconsistency drawn from RDFS. RDFS
+can only produce inconsistencies through badly-formed XMLLiteral
+datatypes.
+   """;
+         :entailmentRules rdf:,
+                rdfs:;
+         :issue <http://www.w3.org/2001/sw/RDFCore/20031010-comments/#entailment-from-inconsistent-graph>;
+         :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-entailment/test001.nt>;
+         :status "APPROVED" .
+    
+    Man23:test002     a :PositiveEntailmentTest;
+         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Nov/0063.html>;
+         :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-entailment/test002.nt>;
+         :description """
+From an inconsistent graph, any entailment can be drawn. This is an
+example.
+   """;
+         :entailmentRules rdf:,
+                rdfs:;
+         :issue <http://www.w3.org/2001/sw/RDFCore/20031010-comments/#entailment-from-inconsistent-graph>;
+         :premiseDocument  [
+             a :False-Document ];
+         :status "APPROVED" .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-entailment/test001.nt>     a :NT-Document .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-entailment/test002.nt>     a :NT-Document .
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-no-cycles-in-subClassOf/Manifest.rdf#test001>     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2001Oct/0249.html>;
@@ -2635,10 +2796,10 @@ is satisfiable)
          :entailmentRules rdf:,
                 rdfs:;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfs-subClassOf-a-Property>;
-         :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-subClassOf-a-property/test001.nt>;
+         :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-subClassOf-a-Property/test001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-subClassOf-a-property/test001.nt>     a :NT-Document .
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-subClassOf-a-Property/test001.nt>     a :NT-Document .
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-subPropertyOf-semantics/Manifest.rdf#test001>     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jan/0025.html>;
@@ -2658,7 +2819,7 @@ is satisfiable)
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfs-subPropertyOf-semantics/test002.nt>     a :NT-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/statement-entailment/Manifest.rdf#test001>     a :NegativeEntailmentTest;
+    Man4:test001     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Feb/0476.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/statement-entailment/test001b.nt>;
          :description """
@@ -2669,7 +2830,7 @@ is satisfiable)
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/statement-entailment/test001a.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/statement-entailment/Manifest.rdf#test002>     a :NegativeEntailmentTest;
+    Man4:test002     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Feb/0476.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/statement-entailment/test002b.nt>;
          :description """
@@ -2680,7 +2841,7 @@ is satisfiable)
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/statement-entailment/test002a.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/statement-entailment/Manifest.rdf#test003>     a :NegativeEntailmentTest;
+    Man4:test003     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Feb/0476.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/statement-entailment/test001b.nt>;
          :description """
@@ -2693,7 +2854,7 @@ is satisfiable)
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/statement-entailment/test001a.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/statement-entailment/Manifest.rdf#test004>     a :NegativeEntailmentTest;
+    Man4:test004     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Feb/0476.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/statement-entailment/test002b.nt>;
          :description """
@@ -2714,7 +2875,7 @@ is satisfiable)
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/statement-entailment/test002b.nt>     a :NT-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/tex-01/Manifest.rdf#language-tag-case-1>     a :PositiveEntailmentTest;
+    Man16:language-tag-case-1     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jul/0263.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/tex-01/test002.rdf>;
          :description """
@@ -2724,7 +2885,7 @@ is satisfiable)
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/tex-01/test001.rdf>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/tex-01/Manifest.rdf#language-tag-case-2>     a :PositiveEntailmentTest;
+    Man16:language-tag-case-2     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jul/0263.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/tex-01/test001.rdf>;
          :description """
@@ -2738,13 +2899,13 @@ is satisfiable)
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/tex-01/test002.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/unrecognised-xml-attributes/Manifest.rdf#test001>     a :PositiveParserTest;
+    Mani:test001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Jan/0152.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/unrecognised-xml-attributes/test001.rdf>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/unrecognised-xml-attributes/test001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/unrecognised-xml-attributes/Manifest.rdf#test002>     a :PositiveParserTest;
+    Mani:test002     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Jan/0152.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/unrecognised-xml-attributes/test002.rdf>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/unrecognised-xml-attributes/test002.nt>;
@@ -2758,7 +2919,20 @@ is satisfiable)
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/unrecognised-xml-attributes/test002.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#error001>     a :NegativeParserTest;
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xml-canon/Manifest.rdf#test001>     a :PositiveParserTest;
+         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Aug/0138.html>;
+         :description """
+Demonstrating the canonicalisation of XMLLiterals.
+   """;
+         :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xml-canon/test001.rdf>;
+         :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xml-canon/test001.nt>;
+         :status "APPROVED" .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xml-canon/test001.nt>     a :NT-Document .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xml-canon/test001.rdf>     a :RDF-XML-Document .
+    
+    Man3:error001     a :NegativeParserTest;
          :description """
 	This test case concerns URIs relative to a non-relative URI scheme base.
 	It's beyond the scope of the WG to deal with this; it has therefore not
@@ -2768,35 +2942,35 @@ is satisfiable)
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-base>;
          :status "NOT_APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test001>     a :PositiveParserTest;
+    Man3:test001     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test001.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-base>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test001.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test002>     a :PositiveParserTest;
+    Man3:test002     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test002.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-base>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test002.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test003>     a :PositiveParserTest;
+    Man3:test003     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test003.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-base>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test003.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test004>     a :PositiveParserTest;
+    Man3:test004     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test004.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-base>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test004.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test005>     a :PositiveParserTest;
+    Man3:test005     a :PositiveParserTest;
          :description """
 This is not valid rdf/xml. The embedding of RDF/XML in other XML formats is
 beyond the scope of these test cases. Test case withdrawn.
@@ -2806,63 +2980,66 @@ beyond the scope of these test cases. Test case withdrawn.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test005.nt>;
          :status "OBSOLETE" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test006>     a :PositiveParserTest;
+    Man3:test006     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test006.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-base>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test006.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test007>     a :PositiveParserTest;
+    Man3:test007     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test007.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-base>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test007.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test008>     a :PositiveParserTest;
+    Man3:test008     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test008.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-base>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test008.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test009>     a :PositiveParserTest;
+    Man3:test009     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test009.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-base>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test009.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test010>     a :PositiveParserTest;
+    Man3:test010     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test010.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-base>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test010.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test011>     a :PositiveParserTest;
+    Man3:test011     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test011.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-base>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test011.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test012>     a :PositiveParserTest;
-         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
+    Man3:test012     a :PositiveParserTest;
+         :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Oct/0217.html>;
+         :description """
+Test case WITHDRAWN in light of 2396bis
+   """;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test012.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-base>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test012.nt>;
-         :status "APPROVED" .
+         :status "WITHDRAWN" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test013>     a :PositiveParserTest;
+    Man3:test013     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :inputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test013.rdf>;
          :issue <http://www.w3.org/2000/03/rdf-tracking/#rdfms-xml-base>;
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test013.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test014>     a :PositiveParserTest;
+    Man3:test014     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :description """
 	Test output corrected to use correct base URL.
@@ -2872,7 +3049,7 @@ beyond the scope of these test cases. Test case withdrawn.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test014.nt>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test015>     a :PositiveParserTest;
+    Man3:test015     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :description """
 This test case is deprecated. The use of mailto: URIs with xml:base is not within the scope of
@@ -2883,7 +3060,7 @@ RDFCore's charter to sort out.
          :outputDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test015.nt>;
          :status "NOT_APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test016>     a :PositiveParserTest;
+    Man3:test016     a :PositiveParserTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2002Mar/0235.html>;
          :description """
 This test case is deprecated. The use of mailto: URIs with xml:base is not within the scope of
@@ -2960,57 +3137,57 @@ RDFCore's charter to sort out.
     
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/test016.rdf>     a :RDF-XML-Document .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlsch-02/Manifest.rdf#whitespace-facet-1>     a :NegativeEntailmentTest;
+    Man12:whitespace-facet-1     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jul/0263.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlsch-02/test002.rdf>;
-         :datatypeSupport <http://www.w3.org/2001/XMLSchema#int>;
+         :datatypeSupport XML:int;
          :description """
 A well-formed typed literal is not related to an ill-formed literal.
 Even if they only differ by whitespace.      
    """;
          :entailmentRules rdf:,
                 rdfs:,
-                <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#>;
+                dat:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlsch-02/test001.rdf>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlsch-02/Manifest.rdf#whitespace-facet-2>     a :NegativeEntailmentTest;
+    Man12:whitespace-facet-2     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jul/0263.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlsch-02/test001.rdf>;
-         :datatypeSupport <http://www.w3.org/2001/XMLSchema#int>;
+         :datatypeSupport XML:int;
          :description """
 A well-formed typed literal is not related to an ill-formed literal.
 Even if they only differ by whitespace.      
    """;
          :entailmentRules rdf:,
                 rdfs:,
-                <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#>;
+                dat:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlsch-02/test002.rdf>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlsch-02/Manifest.rdf#whitespace-facet-3>     a :PositiveEntailmentTest;
+    Man12:whitespace-facet-3     a :PositiveEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jul/0263.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlsch-02/test003.rdf>;
-         :datatypeSupport <http://www.w3.org/2001/XMLSchema#int>;
+         :datatypeSupport XML:int;
          :description """
 A simple test for well-formedness of a typed literal.
    """;
          :entailmentRules rdf:,
                 rdfs:,
-                <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#>;
+                dat:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlsch-02/test001.rdf>;
          :status "APPROVED" .
     
-    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlsch-02/Manifest.rdf#whitespace-facet-4>     a :NegativeEntailmentTest;
+    Man12:whitespace-facet-4     a :NegativeEntailmentTest;
          :approval <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/2003Jul/0263.html>;
          :conclusionDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlsch-02/test003.rdf>;
-         :datatypeSupport <http://www.w3.org/2001/XMLSchema#int>;
+         :datatypeSupport XML:int;
          :description """
 An integer with whitespace is ill-formed.
    """;
          :entailmentRules rdf:,
                 rdfs:,
-                <http://www.w3.org/2000/10/rdf-tests/rdfcore/datatypes#>;
+                dat:;
          :premiseDocument <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlsch-02/test002.rdf>;
          :status "APPROVED" .
     

@@ -1,38 +1,39 @@
-     @prefix : <foo.n3#> .
+     @prefix : <#> .
      @prefix fam: <http://www.daml.example.org/2001/03/fam#> .
+     @prefix foo: <foo.n3#> .
      @prefix lang: <http://www.daml.example.org/2000/10/lang#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix math: <http://www.w3.org/2000/10/swap/math#> .
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
-    this     log:forSome <#_g0>,
-                <#_g1>,
-                <#_g2>,
-                <#_g3> .
+    this     log:forSome :_g0,
+                :_g1,
+                :_g2,
+                :_g3 .
       ( "1" 
         "2"  )
          math:sum  [
-             a :THREE ] .
-      ( <#_g3> 
+             a foo:THREE ] .
+      ( :_g2 
          [
                  <d> <c> ] )
-         <#relatedTo>  (
-        <#_g1>  ) .
+         :relatedTo  (
+        :_g3  ) .
     
-    <a>     <b> <#_g3> .
+    <a>     <b> :_g2 .
     
     <e>     <f>  [
-             <g> <#_g1> ] .
+             <g> :_g3 ] .
     
-    :admires     :converse <#_g2> .
+    foo:admires     foo:converse :_g1 .
     
-    :albert     <#_g2> :grumpy;
-         fam:mother  [
-             <#_g0> :auntieAnne ] .
+    foo:albert     fam:mother  [
+             :_g0 foo:auntieAnne ];
+         :_g1 foo:grumpy .
     
-    :mentor     :inverse <#_g0> .
+    foo:mentor     foo:inverse :_g0 .
     
-    :x     s:label  [
+    foo:x     s:label  [
              lang:eng "Help!" ],
                  [
              lang:fr "foo" ] .

@@ -17,13 +17,25 @@ simpler API.  That is what this module does. If you import it, you
 will get a global store. This will not stop you using other stores.
 
 You also get the Namespace() class which allows you to generate
-symbols easily
+symbols easily.
 
 History:
-    Spilt of from  thing.py 2003-08-19
+    Spilt off from  thing.py 2003-08-19
 
 $Log$
-Revision 1.4  2004-01-29 21:10:39  timbl
+Revision 1.5  2004-03-06 20:39:38  timbl
+See http://www.w3.org/2000/10/swap/doc/changes.html for details
+- Regresssion test incorporates the RDF Core Positive Parser Tests except XMLLiteral & reification
+- xml:base support was added in the parser.
+- Use the --rdf=R flag to allow RDF to be parsed even when there is no enveloping <rdf:RDF> tag
+- nodeid generated on RDF output
+- Automatically generated terms with no URIs sort after anything which has a URI.
+- Namespace prefix smarts on output - default ns used for that most frequently used.
+- suppresses namespace prefix declarations which are not actually needed in the output.
+- Cwm will also make up prefixes when it needs them for a namespace, and none of the input data uses one.-
+- Will not use namespace names for URIs which do not have a "#". Including a "/" in the flags overrides.
+
+Revision 1.4  2004/01/29 21:10:39  timbl
 ooops - ref to SYMBOL
 
 Revision 1.3  2004/01/28 23:03:00  connolly
@@ -33,6 +45,8 @@ Revision 1.3  2004/01/28 23:03:00  connolly
 
 
 """
+
+import uripath
 
 # Allow a strore provdier to register:
 
@@ -85,15 +99,19 @@ def literal(str, dt=None, lang=None):
     
     return _checkStore().newLiteral(str, dt, lang)
 
+
+def intern(v):
+    return _checkStore().intern(v)
+
 def formula():
     """Create or reuse, in the default store, a new empty formula (triple people think: triple store)
     and return it for future use"""
     return _checkStore().newFormula()
 
-def bNode(str, context):
-    """Create or reuse, in the default store, a new unnamed node within the given
-    formula as context, and return it for future use"""
-    return _checkStore().newBlankNode(context)
+#def bNode(str, context):
+#    """Create or reuse, in the default store, a new unnamed node within the given
+#    formula as context, and return it for future use"""
+#    return _checkStore().newBlankNode(context)
 
 def existential(str, context, uri):
     """Create or reuse, in the default store, a new named variable
@@ -118,13 +136,16 @@ def load(uri=None, contentType=None, formulaURI=None, remember=1):
     """
     return _checkStore().load(uri, contentType, formulaURI, remember)
 
-def loadMany(uris):
+def loadMany(uris, openFormula=None):
     """Load a number of resources into the same formula
     
     Returns:  top-level formula of the parsed information.
     Raises:   IOError, SyntaxError, DocumentError
     """
-    return _checkStore().loadMany(uris)
+    return _checkStore().loadMany(uris, openFormula)
+
+def bind(prefix, uri):
+    return _checkStore().bind(prefix, uri)
 
 class Namespace(object):
     """A shortcut for getting a symbols as interned by the default store

@@ -1,0 +1,6 @@
+# This is where information should be available about the
+# EXIF vocabulary which is an RDF vocabulary exactly equvalent to the information
+# cameras etc squeeze into JPEG/JFIF files.
+#
+#  See eg jhead/exif.c
+#

@@ -12,7 +12,7 @@ steps, in order left to right:
 --n3          Input &amp; Output in N3 from now on. (Default)
 --rdf=flags   Input &amp; Output ** in RDF and set given RDF flags
 --n3=flags    Input &amp; Output in N3 and set N3 flags
---ntriples    Input &amp; Output in NTriples (equiv --n3=spartan -bySubject -quiet)
+--ntriples    Input &amp; Output in NTriples (equiv --n3=uspartan -bySubject -quiet)
 --language=x  Input &amp; Output in "x" (rdf, n3, etc)  --rdf same as: --language=rdf
 --languageOptions=y     --n3=sp same as:  --language=n3 --languageOptions=sp
 --ugly        Store input and regurgitate, data only, fastest *
@@ -88,6 +88,7 @@ q   Quiet - don't make comments about the environment in which processing was do
 r   Relative URI suppression. Always use absolute URIs.
 s   Subject must be explicit for every statement. Don't use ";" shorthand.
 t   "this" and "()" special syntax should be suppresed.
+u   Use \u for unicode escaping in URIs instead of utf-8 %XX
 
 
         Flags to control RDF/XML output (after --rdf=) areas follows:
@@ -103,5 +104,8 @@ t   "this" and "()" special syntax should be suppresed.
              (default it is to ignore unless rdf:RDF at top level)
 	L  - If non-rdf attributes have no namespace prefix, assume in local &lt;#> namespace
 	D  - Assume default namespace decalred as local document is assume xmlns=""
+
+    Note: The parser (sax2rdf) does not support reification, bagIds, or parseType=Literal.
+          It does support the rest of RDF inc. datatypes, xml:lang, and nodeIds.
 
 

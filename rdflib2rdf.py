@@ -58,20 +58,16 @@ import diag
 from diag import progress
 
 class ContextSink(object):
-    def __init__(self, sink,
-                 thisURI, formulaURI=None, flags="", why=None):
+    def __init__(self, sink, openFormula,
+                 thisDoc=None,  flags="", why=None):
         self.sink = sink
-        self.thisURI = thisURI
+	assert thissDoc != None, "Need document URI at the moment, sorry"
+        self.thisDoc = thisDoc
         self.formulaURI = formulaURI
-        if formulaURI==None:
-            # Context of current statements, change in bags                        
-            self._context = FORMULA, thisURI + "#_formula"  
-        else:
-            # Context of current statements, change in bags                        
-            self._context = FORMULA, formulaURI
+	self._context = openFormula
 	self._reason = why	# Why the parser w
 	self._reason2 = None	# Why these triples
-	if diag.tracking: self._reason2 = BecauseOfData(sink.newSymbol(thisURI), because=self._reason)
+	if diag.tracking: self._reason2 = BecauseOfData(sink.newSymbol(thisDoc), because=self._reason)
             
         
     def newSymbol(self, uri):
@@ -101,8 +97,8 @@ from rdflib.URLInputSource import URLInputSource
 
 class RDFXMLParser(Parser):
     def __init__(self, sink,
-                 thisURI, formulaURI=None, flags="", why=None):
-        self.__sink = ContextSink(sink, thisURI, formulaURI, flags, why)
+                 thisDoc, formulaURI=None, flags="", why=None):
+        self.__sink = ContextSink(sink, thisDoc, formulaURI, flags, why)
         self.__bnodes = {}
         
     def __convert(self, t):

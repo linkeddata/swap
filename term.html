@@ -72,6 +72,25 @@ Includes:<br>
 </dd>
 </dl>
 </dd>
+<dt><font face="helvetica, arial"><a href="term.html#Literal">Literal</a>
+</font></dt><dt><font face="helvetica, arial"><a href="term.html#Node">Node</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="term.html#AnonymousNode">AnonymousNode</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="term.html#AnonymousVariable">AnonymousVariable</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="term.html#AnonymousExistential">AnonymousExistential</a>
+</font></dt><dt><font face="helvetica, arial"><a href="term.html#AnonymousUniversal">AnonymousUniversal</a>
+</font></dt></dl>
+</dd>
+</dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="term.html#LabelledNode">LabelledNode</a>
+</font></dt><dd>
+<dl>
 <dt><font face="helvetica, arial"><a href="term.html#Fragment">Fragment</a>
 </font></dt><dd>
 <dl>
@@ -88,9 +107,12 @@ Includes:<br>
 </dd>
 </dl>
 </dd>
-<dt><font face="helvetica, arial"><a href="term.html#Literal">Literal</a>
-</font></dt><dt><font face="helvetica, arial"><a href="term.html#Symbol">Symbol</a>
+<dt><font face="helvetica, arial"><a href="term.html#Symbol">Symbol</a>
 </font></dt></dl>
+</dd>
+</dl>
+</dd>
+</dl>
 </dd>
 </dl>
  
@@ -105,6 +127,8 @@ Includes:<br>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="term.html#Anonymous">Anonymous</a></dd>
 <dd><a href="term.html#Fragment">Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">LabelledNode</a></dd>
+<dd><a href="term.html#Node">Node</a></dd>
 <dd><a href="term.html#Term">Term</a></dd>
 </dl>
 <hr>
@@ -138,12 +162,31 @@ Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd><
 <dl><dt><a name="Anonymous-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
+<dl><dt><a name="Anonymous-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Anonymous-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">Term</a>:<br>
 <dl><dt><a name="Anonymous-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
 &nbsp;<br>
 output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="Anonymous-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="Anonymous-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -165,6 +208,323 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="AnonymousExistential">class <strong>AnonymousExistential</strong></a>(<a href="term.html#AnonymousVariable">AnonymousVariable</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>An&nbsp;anonymous&nbsp;node&nbsp;which&nbsp;is&nbsp;existentially&nbsp;quantified&nbsp;in&nbsp;a&nbsp;given&nbsp;context.<br>
+Also&nbsp;known&nbsp;as&nbsp;a&nbsp;Blank&nbsp;<a href="#Node">Node</a>,&nbsp;or&nbsp;"bnode"&nbsp;in&nbsp;RDF&nbsp;parlance.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="term.html#AnonymousExistential">AnonymousExistential</a></dd>
+<dd><a href="term.html#AnonymousVariable">AnonymousVariable</a></dd>
+<dd><a href="term.html#AnonymousNode">AnonymousNode</a></dd>
+<dd><a href="term.html#Node">Node</a></dd>
+<dd><a href="term.html#Term">Term</a></dd>
+</dl>
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'An anonymous node which is existentially quantif...nown as a Blank Node, or "bnode" in RDF parlance.'</dl>
+
+<dl><dt><strong>__module__</strong> = 'term'</dl>
+
+<hr>
+Methods inherited from <a href="term.html#AnonymousVariable">AnonymousVariable</a>:<br>
+<dl><dt><a name="AnonymousExistential-__init__"><strong>__init__</strong></a>(self, scope, uri<font color="#909090">=None</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#AnonymousNode">AnonymousNode</a>:<br>
+<dl><dt><a name="AnonymousExistential-asPair"><strong>asPair</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="AnonymousExistential-classOrder"><strong>classOrder</strong></a>(self)</dt><dd><tt><a href="#Anonymous">Anonymous</a>&nbsp;ndoes&nbsp;are&nbsp;higher&nbsp;than&nbsp;symbols&nbsp;as&nbsp;the&nbsp;=&nbsp;smushing<br>
+tries&nbsp;to&nbsp;minimize&nbsp;the&nbsp;order&nbsp;rank&nbsp;of&nbsp;the&nbsp;node&nbsp;which&nbsp;it&nbsp;adopts<br>
+as&nbsp;the&nbsp;epresentative&nbsp;node&nbsp;of&nbsp;an&nbsp;equivalence&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="AnonymousExistential-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;Formula&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;below</tt></dd></dl>
+
+<dl><dt><a name="AnonymousExistential-generated"><strong>generated</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="AnonymousExistential-uriref"><strong>uriref</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Term">Term</a>:<br>
+<dl><dt><a name="AnonymousExistential-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
+&nbsp;<br>
+output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="AnonymousExistential-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="AnonymousExistential-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="AnonymousExistential-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
+<dl><dt><a name="AnonymousExistential-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>The&nbsp;string&nbsp;represnting&nbsp;this&nbsp;in&nbsp;N3</tt></dd></dl>
+
+<dl><dt><a name="AnonymousExistential-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="AnonymousExistential-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="AnonymousExistential-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
+Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="AnonymousExistential-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="AnonymousNode">class <strong>AnonymousNode</strong></a>(<a href="term.html#Node">Node</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Has&nbsp;no&nbsp;real&nbsp;URI&nbsp;except&nbsp;when&nbsp;needed&nbsp;for&nbsp;output.<br>
+Goal&nbsp;is&nbsp;to&nbsp;eliminate&nbsp;use&nbsp;of&nbsp;ths&nbsp;URI&nbsp;in&nbsp;the&nbsp;code.<br>
+The&nbsp;URI&nbsp;is&nbsp;however&nbsp;useful&nbsp;as&nbsp;a&nbsp;diagnostic,&nbsp;so&nbsp;we&nbsp;carry&nbsp;it<br>
+when&nbsp;it&nbsp;is&nbsp;given.&nbsp;&nbsp;&nbsp;It&nbsp;is&nbsp;NOT&nbsp;checked&nbsp;for&nbsp;uniqueness&nbsp;etc.<br>
+This&nbsp;is&nbsp;a&nbsp;superclass&nbsp;of&nbsp;many&nbsp;things,&nbsp;including&nbsp;<a href="#AnonymousExistential">AnonymousExistential</a>,&nbsp;which&nbsp;has&nbsp;a&nbsp;scope.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="term.html#AnonymousNode">AnonymousNode</a></dd>
+<dd><a href="term.html#Node">Node</a></dd>
+<dd><a href="term.html#Term">Term</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="AnonymousNode-__init__"><strong>__init__</strong></a>(self, store, uri<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="AnonymousNode-asPair"><strong>asPair</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="AnonymousNode-classOrder"><strong>classOrder</strong></a>(self)</dt><dd><tt><a href="#Anonymous">Anonymous</a>&nbsp;ndoes&nbsp;are&nbsp;higher&nbsp;than&nbsp;symbols&nbsp;as&nbsp;the&nbsp;=&nbsp;smushing<br>
+tries&nbsp;to&nbsp;minimize&nbsp;the&nbsp;order&nbsp;rank&nbsp;of&nbsp;the&nbsp;node&nbsp;which&nbsp;it&nbsp;adopts<br>
+as&nbsp;the&nbsp;epresentative&nbsp;node&nbsp;of&nbsp;an&nbsp;equivalence&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="AnonymousNode-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;Formula&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;below</tt></dd></dl>
+
+<dl><dt><a name="AnonymousNode-generated"><strong>generated</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="AnonymousNode-uriref"><strong>uriref</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Has no real URI except when needed for output.<font color="#c040c0">\n</font> ...ncluding AnonymousExistential, which has a scope.'</dl>
+
+<dl><dt><strong>__module__</strong> = 'term'</dl>
+
+<hr>
+Methods inherited from <a href="term.html#Term">Term</a>:<br>
+<dl><dt><a name="AnonymousNode-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
+&nbsp;<br>
+output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="AnonymousNode-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="AnonymousNode-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="AnonymousNode-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
+<dl><dt><a name="AnonymousNode-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>The&nbsp;string&nbsp;represnting&nbsp;this&nbsp;in&nbsp;N3</tt></dd></dl>
+
+<dl><dt><a name="AnonymousNode-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="AnonymousNode-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="AnonymousNode-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
+Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="AnonymousNode-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="AnonymousUniversal">class <strong>AnonymousUniversal</strong></a>(<a href="term.html#AnonymousVariable">AnonymousVariable</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>Nodes&nbsp;which&nbsp;are&nbsp;introduced&nbsp;as&nbsp;universally&nbsp;quantified&nbsp;variables&nbsp;with&nbsp;no&nbsp;quotable&nbsp;URI<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="term.html#AnonymousUniversal">AnonymousUniversal</a></dd>
+<dd><a href="term.html#AnonymousVariable">AnonymousVariable</a></dd>
+<dd><a href="term.html#AnonymousNode">AnonymousNode</a></dd>
+<dd><a href="term.html#Node">Node</a></dd>
+<dd><a href="term.html#Term">Term</a></dd>
+</dl>
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'Nodes which are introduced as universally quantified variables with no quotable URI'</dl>
+
+<dl><dt><strong>__module__</strong> = 'term'</dl>
+
+<hr>
+Methods inherited from <a href="term.html#AnonymousVariable">AnonymousVariable</a>:<br>
+<dl><dt><a name="AnonymousUniversal-__init__"><strong>__init__</strong></a>(self, scope, uri<font color="#909090">=None</font>)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#AnonymousNode">AnonymousNode</a>:<br>
+<dl><dt><a name="AnonymousUniversal-asPair"><strong>asPair</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="AnonymousUniversal-classOrder"><strong>classOrder</strong></a>(self)</dt><dd><tt><a href="#Anonymous">Anonymous</a>&nbsp;ndoes&nbsp;are&nbsp;higher&nbsp;than&nbsp;symbols&nbsp;as&nbsp;the&nbsp;=&nbsp;smushing<br>
+tries&nbsp;to&nbsp;minimize&nbsp;the&nbsp;order&nbsp;rank&nbsp;of&nbsp;the&nbsp;node&nbsp;which&nbsp;it&nbsp;adopts<br>
+as&nbsp;the&nbsp;epresentative&nbsp;node&nbsp;of&nbsp;an&nbsp;equivalence&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="AnonymousUniversal-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;Formula&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;below</tt></dd></dl>
+
+<dl><dt><a name="AnonymousUniversal-generated"><strong>generated</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="AnonymousUniversal-uriref"><strong>uriref</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Term">Term</a>:<br>
+<dl><dt><a name="AnonymousUniversal-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
+&nbsp;<br>
+output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="AnonymousUniversal-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="AnonymousUniversal-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="AnonymousUniversal-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
+<dl><dt><a name="AnonymousUniversal-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>The&nbsp;string&nbsp;represnting&nbsp;this&nbsp;in&nbsp;N3</tt></dd></dl>
+
+<dl><dt><a name="AnonymousUniversal-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="AnonymousUniversal-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="AnonymousUniversal-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
+Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="AnonymousUniversal-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="AnonymousVariable">class <strong>AnonymousVariable</strong></a>(<a href="term.html#AnonymousNode">AnonymousNode</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>An&nbsp;anonymous&nbsp;node&nbsp;which&nbsp;is&nbsp;existentially&nbsp;quantified&nbsp;in&nbsp;a&nbsp;given&nbsp;context.<br>
+Also&nbsp;known&nbsp;as&nbsp;a&nbsp;Blank&nbsp;<a href="#Node">Node</a>,&nbsp;or&nbsp;"bnode"&nbsp;in&nbsp;RDF&nbsp;parlance.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="term.html#AnonymousVariable">AnonymousVariable</a></dd>
+<dd><a href="term.html#AnonymousNode">AnonymousNode</a></dd>
+<dd><a href="term.html#Node">Node</a></dd>
+<dd><a href="term.html#Term">Term</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="AnonymousVariable-__init__"><strong>__init__</strong></a>(self, scope, uri<font color="#909090">=None</font>)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'An anonymous node which is existentially quantif...nown as a Blank Node, or "bnode" in RDF parlance.'</dl>
+
+<dl><dt><strong>__module__</strong> = 'term'</dl>
+
+<hr>
+Methods inherited from <a href="term.html#AnonymousNode">AnonymousNode</a>:<br>
+<dl><dt><a name="AnonymousVariable-asPair"><strong>asPair</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="AnonymousVariable-classOrder"><strong>classOrder</strong></a>(self)</dt><dd><tt><a href="#Anonymous">Anonymous</a>&nbsp;ndoes&nbsp;are&nbsp;higher&nbsp;than&nbsp;symbols&nbsp;as&nbsp;the&nbsp;=&nbsp;smushing<br>
+tries&nbsp;to&nbsp;minimize&nbsp;the&nbsp;order&nbsp;rank&nbsp;of&nbsp;the&nbsp;node&nbsp;which&nbsp;it&nbsp;adopts<br>
+as&nbsp;the&nbsp;epresentative&nbsp;node&nbsp;of&nbsp;an&nbsp;equivalence&nbsp;class.</tt></dd></dl>
+
+<dl><dt><a name="AnonymousVariable-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;Formula&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;below</tt></dd></dl>
+
+<dl><dt><a name="AnonymousVariable-generated"><strong>generated</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="AnonymousVariable-uriref"><strong>uriref</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="term.html#Term">Term</a>:<br>
+<dl><dt><a name="AnonymousVariable-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
+&nbsp;<br>
+output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="AnonymousVariable-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="AnonymousVariable-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="AnonymousVariable-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
+<dl><dt><a name="AnonymousVariable-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>The&nbsp;string&nbsp;represnting&nbsp;this&nbsp;in&nbsp;N3</tt></dd></dl>
+
+<dl><dt><a name="AnonymousVariable-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="AnonymousVariable-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="AnonymousVariable-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
+Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="AnonymousVariable-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="BuiltIn">class <strong>BuiltIn</strong></a>(<a href="term.html#Fragment">Fragment</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
@@ -175,6 +535,8 @@ A&nbsp;binary&nbsp;operator&nbsp;can&nbsp;calculate&nbsp;truth&nbsp;value&nbsp;g
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="term.html#BuiltIn">BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">LabelledNode</a></dd>
+<dd><a href="term.html#Node">Node</a></dd>
 <dd><a href="term.html#Term">Term</a></dd>
 </dl>
 <hr>
@@ -216,6 +578,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="BuiltIn-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
+<dl><dt><a name="BuiltIn-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="BuiltIn-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">Term</a>:<br>
 <dl><dt><a name="BuiltIn-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -227,6 +595,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BuiltIn-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BuiltIn-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -274,6 +655,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="CompoundTerm-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
 <dl><dt><a name="CompoundTerm-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
 <dl><dt><a name="CompoundTerm-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
@@ -314,6 +708,8 @@ Methods defined here:<br>
 <dl><dt><a name="EmptyList-__getitem__"><strong>__getitem__</strong></a>(self, i)</dt></dl>
 
 <dl><dt><a name="EmptyList-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="EmptyList-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="EmptyList-newList"><strong>newList</strong></a>(value)</dt></dl>
 
@@ -359,6 +755,19 @@ Methods inherited from <a href="term.html#Term">Term</a>:<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="EmptyList-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
 <dl><dt><a name="EmptyList-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
 <dl><dt><a name="EmptyList-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
@@ -381,6 +790,8 @@ Argv&nbsp;is&nbsp;the&nbsp;only&nbsp;useful&nbsp;example&nbsp;I&nbsp;can&nbsp;th
 <dd><a href="term.html#FiniteProperty">FiniteProperty</a></dd>
 <dd><a href="term.html#BuiltIn">BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">LabelledNode</a></dd>
+<dd><a href="term.html#Node">Node</a></dd>
 <dd><a href="term.html#Term">Term</a></dd>
 <dd><a href="term.html#Function">Function</a></dd>
 <dd><a href="term.html#ReverseFunction">ReverseFunction</a></dd>
@@ -430,6 +841,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="FiniteProperty-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
+<dl><dt><a name="FiniteProperty-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FiniteProperty-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">Term</a>:<br>
 <dl><dt><a name="FiniteProperty-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -441,6 +858,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="FiniteProperty-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="FiniteProperty-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -462,12 +892,19 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="Fragment">class <strong>Fragment</strong></a>(<a href="term.html#Term">Term</a>)</font></td></tr>
+<font color="#000000" face="helvetica, arial"><a name="Fragment">class <strong>Fragment</strong></a>(<a href="term.html#LabelledNode">LabelledNode</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;A&nbsp;<a href="#Term">Term</a>&nbsp;which&nbsp;DOES&nbsp;have&nbsp;a&nbsp;fragment&nbsp;id&nbsp;in&nbsp;its&nbsp;URI<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;&nbsp;</td>
-<td width="100%">Methods defined here:<br>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="term.html#Fragment">Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">LabelledNode</a></dd>
+<dd><a href="term.html#Node">Node</a></dd>
+<dd><a href="term.html#Term">Term</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
 <dl><dt><a name="Fragment-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
 <dl><dt><a name="Fragment-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifyer,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
@@ -497,6 +934,12 @@ Data and non-method functions defined here:<br>
 <dl><dt><strong>__module__</strong> = 'term'</dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
+<dl><dt><a name="Fragment-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Fragment-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">Term</a>:<br>
 <dl><dt><a name="Fragment-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -508,6 +951,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="Fragment-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="Fragment-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -541,6 +997,8 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 <dd><a href="term.html#CompoundTerm">CompoundTerm</a></dd>
 <dd><a href="term.html#Term">Term</a></dd>
 <dd><a href="term.html#Fragment">Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">LabelledNode</a></dd>
+<dd><a href="term.html#Node">Node</a></dd>
 </dl>
 <hr>
 Methods defined here:<br>
@@ -557,6 +1015,8 @@ Methods inherited from <a href="term.html#EmptyList">EmptyList</a>:<br>
 <dl><dt><a name="FragmentNil-__getitem__"><strong>__getitem__</strong></a>(self, i)</dt></dl>
 
 <dl><dt><a name="FragmentNil-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="FragmentNil-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="FragmentNil-newList"><strong>newList</strong></a>(value)</dt></dl>
 
@@ -594,6 +1054,19 @@ Methods inherited from <a href="term.html#Term">Term</a>:<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="FragmentNil-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
 <dl><dt><a name="FragmentNil-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
 <dl><dt><a name="FragmentNil-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
@@ -612,6 +1085,10 @@ Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.</tt></dd><
 
 <dl><dt><a name="FragmentNil-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
+<hr>
+Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
+<dl><dt><a name="FragmentNil-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
@@ -628,6 +1105,8 @@ I&nbsp;may&nbsp;make&nbsp;changes&nbsp;to&nbsp;clean&nbsp;up&nbsp;the&nbsp;param
 <dd><a href="term.html#Function">Function</a></dd>
 <dd><a href="term.html#BuiltIn">BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">LabelledNode</a></dd>
+<dd><a href="term.html#Node">Node</a></dd>
 <dd><a href="term.html#Term">Term</a></dd>
 </dl>
 <hr>
@@ -671,6 +1150,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="Function-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
+<dl><dt><a name="Function-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Function-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">Term</a>:<br>
 <dl><dt><a name="Function-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -682,6 +1167,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="Function-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="Function-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -716,6 +1214,8 @@ run&nbsp;it.&nbsp;&nbsp;Going&nbsp;out&nbsp;onto&nbsp;the&nbsp;web&nbsp;or&nbsp;
 <dd><a href="term.html#HeavyBuiltIn">HeavyBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">LabelledNode</a></dd>
+<dd><a href="term.html#Node">Node</a></dd>
 <dd><a href="term.html#Term">Term</a></dd>
 </dl>
 <hr>
@@ -757,6 +1257,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="HeavyBuiltIn-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
+<dl><dt><a name="HeavyBuiltIn-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="HeavyBuiltIn-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">Term</a>:<br>
 <dl><dt><a name="HeavyBuiltIn-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -768,6 +1274,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="HeavyBuiltIn-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="HeavyBuiltIn-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -789,6 +1308,80 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="LabelledNode">class <strong>LabelledNode</strong></a>(<a href="term.html#Node">Node</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>The&nbsp;labelled&nbsp;node&nbsp;is&nbsp;one&nbsp;which&nbsp;has&nbsp;a&nbsp;URI.<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="term.html#LabelledNode">LabelledNode</a></dd>
+<dd><a href="term.html#Node">Node</a></dd>
+<dd><a href="term.html#Term">Term</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="LabelledNode-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="LabelledNode-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'The labelled node is one which has a URI.'</dl>
+
+<dl><dt><strong>__module__</strong> = 'term'</dl>
+
+<hr>
+Methods inherited from <a href="term.html#Term">Term</a>:<br>
+<dl><dt><a name="LabelledNode-__init__"><strong>__init__</strong></a>(self, store)</dt></dl>
+
+<dl><dt><a name="LabelledNode-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
+&nbsp;<br>
+output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="LabelledNode-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
+&nbsp;<br>
+The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="LabelledNode-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="LabelledNode-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="LabelledNode-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
+
+<dl><dt><a name="LabelledNode-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
+<dl><dt><a name="LabelledNode-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>The&nbsp;string&nbsp;represnting&nbsp;this&nbsp;in&nbsp;N3</tt></dd></dl>
+
+<dl><dt><a name="LabelledNode-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="LabelledNode-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="LabelledNode-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
+Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="LabelledNode-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="LightBuiltIn">class <strong>LightBuiltIn</strong></a>(<a href="term.html#BuiltIn">BuiltIn</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
@@ -801,6 +1394,8 @@ run&nbsp;it.&nbsp;&nbsp;Going&nbsp;out&nbsp;onto&nbsp;the&nbsp;web&nbsp;or&nbsp;
 <dd><a href="term.html#LightBuiltIn">LightBuiltIn</a></dd>
 <dd><a href="term.html#BuiltIn">BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">LabelledNode</a></dd>
+<dd><a href="term.html#Node">Node</a></dd>
 <dd><a href="term.html#Term">Term</a></dd>
 </dl>
 <hr>
@@ -842,6 +1437,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="LightBuiltIn-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
+<dl><dt><a name="LightBuiltIn-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="LightBuiltIn-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">Term</a>:<br>
 <dl><dt><a name="LightBuiltIn-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -853,6 +1454,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="LightBuiltIn-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="LightBuiltIn-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -924,6 +1538,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="List-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
 <dl><dt><a name="List-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
 <dl><dt><a name="List-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
@@ -966,6 +1593,10 @@ strictly&nbsp;speaking.</tt></dd></dl>
 
 <dl><dt><a name="Literal-asPair"><strong>asPair</strong></a>(self)</dt></dl>
 
+<dl><dt><a name="Literal-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Literal-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;literal&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
 <dl><dt><a name="Literal-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="Literal-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
@@ -995,9 +1626,84 @@ Data and non-method functions defined here:<br>
 
 <hr>
 Methods inherited from <a href="term.html#Term">Term</a>:<br>
+<dl><dt><a name="Literal-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
 <dl><dt><a name="Literal-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
 <dl><dt><a name="Literal-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Node">class <strong>Node</strong></a>(<a href="term.html#Term">Term</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>A&nbsp;node&nbsp;in&nbsp;the&nbsp;graph<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%">Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'A node in the graph<font color="#c040c0">\n</font>    '</dl>
+
+<dl><dt><strong>__module__</strong> = 'term'</dl>
+
+<hr>
+Methods inherited from <a href="term.html#Term">Term</a>:<br>
+<dl><dt><a name="Node-__init__"><strong>__init__</strong></a>(self, store)</dt></dl>
+
+<dl><dt><a name="Node-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
+as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
+&nbsp;<br>
+output&nbsp;as&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity.</tt></dd></dl>
+
+<dl><dt><a name="Node-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Representation&nbsp;in&nbsp;an&nbsp;earlier&nbsp;format,&nbsp;being&nbsp;phased&nbsp;out&nbsp;2002/08<br>
+&nbsp;<br>
+The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
+see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="Node-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
+<dl><dt><a name="Node-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="Node-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
+
+<dl><dt><a name="Node-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
+
+<dl><dt><a name="Node-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>The&nbsp;string&nbsp;represnting&nbsp;this&nbsp;in&nbsp;N3</tt></dd></dl>
+
+<dl><dt><a name="Node-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="Node-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="Node-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
+which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
+Return&nbsp;0&nbsp;if&nbsp;impossible.<br>
+return&nbsp;[({},&nbsp;reason]&nbsp;if&nbsp;no&nbsp;new&nbsp;bindings<br>
+Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&nbsp;...]&nbsp;if&nbsp;match</tt></dd></dl>
+
+<dl><dt><a name="Node-value"><strong>value</strong></a>(self)</dt><dd><tt>As&nbsp;a&nbsp;python&nbsp;value&nbsp;-&nbsp;by&nbsp;default,&nbsp;none&nbsp;exists,&nbsp;use&nbsp;self</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -1017,6 +1723,10 @@ Methods inherited from <a href="term.html#Term">Term</a>:<br>
 <hr>
 Methods defined here:<br>
 <dl><dt><a name="NonEmptyList-__getitem__"><strong>__getitem__</strong></a>(self, i)</dt></dl>
+
+<dl><dt><a name="NonEmptyList-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="NonEmptyList-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#NonEmptyList">NonEmptyList</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
 <dl><dt><a name="NonEmptyList-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -1062,6 +1772,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="NonEmptyList-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+
 <dl><dt><a name="NonEmptyList-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
 
 <dl><dt><a name="NonEmptyList-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>The&nbsp;string&nbsp;represnting&nbsp;this&nbsp;in&nbsp;N3</tt></dd></dl>
@@ -1084,6 +1807,8 @@ in&nbsp;trying&nbsp;to&nbsp;resolve&nbsp;a&nbsp;query.<br>&nbsp;</tt></td></tr>
 <dd><a href="term.html#ReverseFunction">ReverseFunction</a></dd>
 <dd><a href="term.html#BuiltIn">BuiltIn</a></dd>
 <dd><a href="term.html#Fragment">Fragment</a></dd>
+<dd><a href="term.html#LabelledNode">LabelledNode</a></dd>
+<dd><a href="term.html#Node">Node</a></dd>
 <dd><a href="term.html#Term">Term</a></dd>
 </dl>
 <hr>
@@ -1124,6 +1849,12 @@ context.</tt></dd></dl>
 <dl><dt><a name="ReverseFunction-uriref2"><strong>uriref2</strong></a>(self, base)</dt></dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
+<dl><dt><a name="ReverseFunction-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="ReverseFunction-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">Term</a>:<br>
 <dl><dt><a name="ReverseFunction-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -1135,6 +1866,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="ReverseFunction-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="ReverseFunction-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -1156,12 +1900,19 @@ Return&nbsp;[(&nbsp;{var1:&nbsp;val1,&nbsp;var2:&nbsp;val2,...},&nbsp;reason),&n
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="Symbol">class <strong>Symbol</strong></a>(<a href="term.html#Term">Term</a>)</font></td></tr>
+<font color="#000000" face="helvetica, arial"><a name="Symbol">class <strong>Symbol</strong></a>(<a href="term.html#LabelledNode">LabelledNode</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>&nbsp;&nbsp;&nbsp;A&nbsp;<a href="#Term">Term</a>&nbsp;which&nbsp;has&nbsp;no&nbsp;fragment<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;&nbsp;</td>
-<td width="100%">Methods defined here:<br>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="term.html#Symbol">Symbol</a></dd>
+<dd><a href="term.html#LabelledNode">LabelledNode</a></dd>
+<dd><a href="term.html#Node">Node</a></dd>
+<dd><a href="term.html#Term">Term</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
 <dl><dt><a name="Symbol-__init__"><strong>__init__</strong></a>(self, uri, store)</dt></dl>
 
 <dl><dt><a name="Symbol-dereference"><strong>dereference</strong></a>(self, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;identifier,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
@@ -1185,6 +1936,12 @@ Data and non-method functions defined here:<br>
 <dl><dt><strong>__module__</strong> = 'term'</dl>
 
 <hr>
+Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
+<dl><dt><a name="Symbol-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Symbol-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<hr>
 Methods inherited from <a href="term.html#Term">Term</a>:<br>
 <dl><dt><a name="Symbol-__repr__"><strong>__repr__</strong></a>(self)</dt><dd><tt>This&nbsp;method&nbsp;only&nbsp;used&nbsp;for&nbsp;debugging&nbsp;output&nbsp;-&nbsp;it&nbsp;can&nbsp;be&nbsp;ambiguous,<br>
 as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;debug&nbsp;printout&nbsp;readable.<br>
@@ -1196,6 +1953,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="Symbol-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="Symbol-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -1242,6 +2012,19 @@ This&nbsp;could&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambigu
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="Term-compareAnyTerm"><strong>compareAnyTerm</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;<a href="#Anonymous">Anonymous</a>&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;Formula,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="Term-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
@@ -1295,11 +2078,13 @@ Data and non-method functions defined here:<br>
 <strong>OBJ</strong> = 3<br>
 <strong>PARTS</strong> = (1, 2, 3)<br>
 <strong>PRED</strong> = 1<br>
+<strong>RDF_type_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'<br>
 <strong>REIFY_NS</strong> = 'http://www.w3.org/2000/10/swap/reify#'<br>
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
 <strong>__file__</strong> = './term.pyc'<br>
 <strong>__name__</strong> = 'term'<br>
 <strong>_nextList</strong> = 0<br>
-<strong>generators</strong> = _Feature((2, 2, 0, 'alpha', 1), (2, 3, 0, 'final', 0), 4096)</td></tr></table>
+<strong>generators</strong> = _Feature((2, 2, 0, 'alpha', 1), (2, 3, 0, 'final', 0), 4096)<br>
+<strong>nextId</strong> = 0</td></tr></table>
 </body></html>

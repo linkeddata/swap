@@ -80,7 +80,7 @@ $(SLIFE):
 	mkdir $(SLIFE)
 
 $(SLIFE)/PhotoMeta.n3 : $(SLIFE)
-	jhead -n3 $(IPHOTO)/????/??/??/*.JPG > $@
+	jhead -n3 $(IPHOTO)/????/??/??/*.{JPG,jpg} > $@
 
 $(SLIFE)/PhotoCalendar.cal3: $(SLIFE)/PhotoMeta.n3 PhotoEvent.n3
 	$(PYTHON) $(CWM) $(SLIFE)/PhotoMeta.n3 --filter=PhotoEvent.n3 --ugly > $@

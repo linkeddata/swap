@@ -1,4 +1,8 @@
 # check tests
+# This file looks for tests for features we don't support.
+#
+# usage:  cwm rdfcore-tests.n3 --filter=triage.n3
+
 
 @prefix log:  <http://www.w3.org/2000/10/swap/log#>.
 @prefix string:  <http://www.w3.org/2000/10/swap/string#>.

@@ -38,7 +38,7 @@ LITERAL_URI_prefix = "data:application/n3;"
 
 from RDFSink import List_NS
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
+from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL, RDF_type_URI
 from RDFSink import Logic_NS
 
 from OrderedSequence import merge, intersection, minus
@@ -116,6 +116,26 @@ class Term:
         """Boolean Is this thing a genid - is its name arbitrary? """
         return 0    # unless overridden
   
+    def compareAnyTerm(self, other):
+	"""Compare two langauge items
+	    This is a cannoncial ordering in that is designed to allow
+	    the same graph always to be printed in the same order.
+	    This makes the regression tests possible.
+	    The literals are deemed smaller than symbols, which are smaller
+	    than formulae.  This puts the rules at the botom of a file where
+	    they tend to take a lot of space anyway.
+	    Formulae have to be compared as a function of their sorted contents.
+	    
+	    @@ Anonymous nodes have to, within a given Formula, be compared as
+	    a function of the sorted information about them in that context.
+	    This is not done yet
+	    """
+	if self is other: return 0
+	diff = cmp(self.classOrder(), other.classOrder())
+	if diff != 0: return diff
+	return self.compareTerm(other)
+    
+
     def asPair(self):
 	"""Representation in an earlier format, being phased out 2002/08
 	
@@ -161,8 +181,35 @@ class Term:
 	    return 0
 	
 
+class Node(Term):
+    """A node in the graph
+    """
+    pass
 
-class Symbol(Term):
+class LabelledNode(Node):
+    "The labelled node is one which has a URI."
+
+    def compareTerm(self, other):
+	"Assume is also a LabelledNode - see function compareTerm in formula.py"
+	_type = RDF_type_URI
+	s = self.uriref()
+	if s == _type:
+		return -1
+	o = other.uriref()
+	if o == _type:
+		return 1
+	if s < o :
+		return -1
+	if s > o :
+		return 1
+	print "Error with '%s' being the same as '%s'" %(s,o)
+	raise RuntimeError("""Internal error: URIref strings should not match if not same object,
+	comparing %s and %s""" % (s, o))
+
+    def classOrder(self):
+	return	6
+
+class Symbol(LabelledNode):
     """   A Term which has no fragment
     """
     
@@ -231,7 +278,7 @@ class Symbol(Term):
 	return F
 		
 
-class Fragment(Term):
+class Fragment(LabelledNode):
     """    A Term which DOES have a fragment id in its URI
     """
     def __init__(self, resource, fragid):
@@ -277,10 +324,64 @@ class Fragment(Term):
 	Returns None if it cannot be retreived.
 	"""
 	return self.resource.dereference(mode, workingContext)
-		
 
+		
+nextId = 0
+class AnonymousNode(Node):
+    """Has no real URI except when needed for output.
+    Goal is to eliminate use of ths URI in the code.
+    The URI is however useful as a diagnostic, so we carry it
+    when it is given.   It is NOT checked for uniqueness etc.
+    This is a superclass of many things, including AnonymousExistential, which has a scope."""
+
+    def __init__(self, store, uri=None):
+	global nextId
+	if uri: assert isinstance(uri, tuple(types.StringTypes))
+        Term.__init__(self, store)
+	self._diagnosticURI = uri
+	nextId += 1
+	self.serial = nextId
+
+    def compareTerm(self, other):
+	"Assume is also a Formula - see function compareTerm below"
+	return cmp(self.serial, other.serial)
+
+    def classOrder(self):
+	"""Anonymous ndoes are higher than symbols as the = smushing
+	tries to minimize the order rank of the node which it adopts
+	as the epresentative node of an equivalence class."""
+	return	9
+
+    def uriref(self):
+	if self._diagnosticURI: return self._diagnosticURI
+	return runNamespace() + "+g" + `self.serial`
+#	return runNamespace() + "_b" + `id(self)`
+	
+    def generated(self):
+	return 1
+
+    def asPair(self):
+        return (ANONYMOUS, self.uriref())
+
+class AnonymousVariable(AnonymousNode):
+    """An anonymous node which is existentially quantified in a given context.
+    Also known as a Blank Node, or "bnode" in RDF parlance."""
+    def __init__(self, scope, uri=None):
+	AnonymousNode.__init__(self, scope.store, uri)
+	 
+class AnonymousExistential(AnonymousVariable):
+    """An anonymous node which is existentially quantified in a given context.
+    Also known as a Blank Node, or "bnode" in RDF parlance."""
+    pass
+	 
+class AnonymousUniversal(AnonymousVariable):
+    """Nodes which are introduced as universally quantified variables with no quotable URI"""
+    pass
+    
 class Anonymous(Fragment):
     def __init__(self, resource, fragid):
+	progress("@@@@ obsolete")
+	raise foobar
         Fragment.__init__(self, resource, fragid)
 
     def generated(self):
@@ -399,6 +500,21 @@ class List(CompoundTerm):
 
 class NonEmptyList(List):
 
+    def classOrder(self):
+	return	3
+
+    def compareTerm(self, other):
+	"Assume is also a NonEmptyList - see function compareTerm in formula.py"
+	s = self
+	o = other
+	while 1:
+	    if isinstance(o, EmptyList): return -1
+	    if isinstance(s, EmptyList): return 1
+	    diff = s.first.compareAnyTerm(o.first)
+	    if diff != 0: return diff
+	    s = s.rest
+	    o = o.rest
+
     def unify(self, other, vars, existentials,  bindings):
 	"""See Term.unify()"""
 	if diag.chatty_flag > 90:
@@ -451,6 +567,9 @@ class NonEmptyList(List):
 
 class EmptyList(List):
         
+    def classOrder(self):
+	return	2
+
     def value(self):
         return []
     
@@ -548,8 +667,21 @@ class Literal(Term):
     def asPair(self):
 	if self.datatype == None and self.lang == None: 
 	    return (LITERAL, self.string)  # obsolete
-#	progress ("thing.py 394 @@@@@@@@@@" + `self.datatype` + "@@@@" + `self.lang`)
 	return LITERAL, ( self.string, self.datatype, self.lang )
+
+    def classOrder(self):
+	return	1
+
+    def compareTerm(self, other):
+	"Assume is also a literal - see function compareTerm in formula.py"
+	if self.datatype == other.datatype:
+	    diff = cmp(self.string, other.string)
+	    if diff != 0 : return diff
+	    return cmp(self.lang, other.lang)
+	else:
+	    if self.datatype == None: return -1
+	    if other.datatype == None: return 1
+	    return self.datatype.compareAnyTerm(other.datatype)
 
     def asHashURI(self):
         """return a md5: URI for this literal.

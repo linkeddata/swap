@@ -1,6 +1,6 @@
      @prefix : <test#> .
-     @prefix ont: <http://www.w3.org/2000/10/swap/log#> .
     
+    ()     :verb0 :object0 .
       ( "subj1"  )
          :verb1 :object1 .
       ( "subj2a" 
@@ -9,8 +9,6 @@
       ( 1  )
          <#linksEqualLists>  (
         1  ) .
-    
-    ()     :verb0 :object0 .
     
     :emptyList     = () .
     

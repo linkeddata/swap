@@ -585,11 +585,12 @@ class Query:
 
 	es, exout = self.workingContext.existentials(), []
 	for var, val in bindings.items():
-	    if val in es:
+	    if val in es:   #  Take time for large number of bnodes?
 		exout.append(val)
 		if diag.chatty_flag > 25:
 		    progress("Match found to that which is only an existential: %s -> %s" % (var, val))
-		self.targetContext.declareExistential(val)
+		if self.workingContext is not self.targetContext:
+		    self.targetContext.declareExistential(val)
 
         b2 = bindings.copy()
 	b2[self.conclusion] = self.targetContext

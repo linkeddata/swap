@@ -3,8 +3,8 @@
 #  With no {} so it can be translated in DAML easily
 #
 
-@prefix t: <test#> .
-@prefix : <test#> .
+@prefix t: <http://example.com/test#> .
+@prefix : <http://example.com/test#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 
 # This is cheating a bit - in case output of

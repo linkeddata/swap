@@ -95,6 +95,8 @@ id&nbsp;is&nbsp;not&nbsp;in&nbsp;fact&nbsp;new.&nbsp;This&nbsp;is&nbsp;useful&nb
 to&nbsp;generate&nbsp;IDs&nbsp;with&nbsp;useful&nbsp;diagnostic&nbsp;ways&nbsp;but&nbsp;this&nbsp;lays&nbsp;them<br>
 open&nbsp;to&nbsp;possibly&nbsp;clashing&nbsp;in&nbsp;pathalogical&nbsp;cases.</tt></dd></dl>
 
+<dl><dt><a name="RDFSink-countNamespace"><strong>countNamespace</strong></a>(self, namesp)</dt><dd><tt>On&nbsp;output,&nbsp;count&nbsp;how&nbsp;many&nbsp;times&nbsp;each&nbsp;namespace&nbsp;is&nbsp;used</tt></dd></dl>
+
 <dl><dt><a name="RDFSink-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair)</dt><dd><tt>End&nbsp;a&nbsp;document<br>
 &nbsp;<br>
 Call&nbsp;this&nbsp;once&nbsp;only&nbsp;at&nbsp;the&nbsp;end&nbsp;of&nbsp;parsing&nbsp;so&nbsp;that&nbsp;the&nbsp;receiver&nbsp;can&nbsp;wrap<br>
@@ -113,6 +115,8 @@ comments&nbsp;in&nbsp;the&nbsp;original&nbsp;file.</tt></dd></dl>
 raises&nbsp;<a href="#URISyntaxError">URISyntaxError</a>&nbsp;on&nbsp;bad&nbsp;URIs<br>
 tuple&nbsp;is&nbsp;a&nbsp;quad&nbsp;(context,&nbsp;predicate,&nbsp;subject,&nbsp;object)&nbsp;of&nbsp;things&nbsp;generated&nbsp;by&nbsp;calls&nbsp;to&nbsp;newLiteral&nbsp;etc<br>
 why&nbsp;is&nbsp;reason&nbsp;for&nbsp;the&nbsp;statement.</tt></dd></dl>
+
+<dl><dt><a name="RDFSink-namespaceCounts"><strong>namespaceCounts</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="RDFSink-newBlankNode"><strong>newBlankNode</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -205,6 +209,8 @@ id&nbsp;is&nbsp;not&nbsp;in&nbsp;fact&nbsp;new.&nbsp;This&nbsp;is&nbsp;useful&nb
 to&nbsp;generate&nbsp;IDs&nbsp;with&nbsp;useful&nbsp;diagnostic&nbsp;ways&nbsp;but&nbsp;this&nbsp;lays&nbsp;them<br>
 open&nbsp;to&nbsp;possibly&nbsp;clashing&nbsp;in&nbsp;pathalogical&nbsp;cases.</tt></dd></dl>
 
+<dl><dt><a name="RDFStructuredOutput-countNamespace"><strong>countNamespace</strong></a>(self, namesp)</dt><dd><tt>On&nbsp;output,&nbsp;count&nbsp;how&nbsp;many&nbsp;times&nbsp;each&nbsp;namespace&nbsp;is&nbsp;used</tt></dd></dl>
+
 <dl><dt><a name="RDFStructuredOutput-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair)</dt><dd><tt>End&nbsp;a&nbsp;document<br>
 &nbsp;<br>
 Call&nbsp;this&nbsp;once&nbsp;only&nbsp;at&nbsp;the&nbsp;end&nbsp;of&nbsp;parsing&nbsp;so&nbsp;that&nbsp;the&nbsp;receiver&nbsp;can&nbsp;wrap<br>
@@ -223,6 +229,8 @@ comments&nbsp;in&nbsp;the&nbsp;original&nbsp;file.</tt></dd></dl>
 raises&nbsp;<a href="#URISyntaxError">URISyntaxError</a>&nbsp;on&nbsp;bad&nbsp;URIs<br>
 tuple&nbsp;is&nbsp;a&nbsp;quad&nbsp;(context,&nbsp;predicate,&nbsp;subject,&nbsp;object)&nbsp;of&nbsp;things&nbsp;generated&nbsp;by&nbsp;calls&nbsp;to&nbsp;newLiteral&nbsp;etc<br>
 why&nbsp;is&nbsp;reason&nbsp;for&nbsp;the&nbsp;statement.</tt></dd></dl>
+
+<dl><dt><a name="RDFStructuredOutput-namespaceCounts"><strong>namespaceCounts</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="RDFStructuredOutput-newBlankNode"><strong>newBlankNode</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -354,6 +362,7 @@ Return&nbsp;the&nbsp;current&nbsp;process&nbsp;id</tt></dd></dl>
 &nbsp;<br>
 Return&nbsp;the&nbsp;current&nbsp;time&nbsp;in&nbsp;seconds&nbsp;since&nbsp;the&nbsp;Epoch.<br>
 Fractions&nbsp;of&nbsp;a&nbsp;second&nbsp;may&nbsp;be&nbsp;present&nbsp;if&nbsp;the&nbsp;system&nbsp;clock&nbsp;provides&nbsp;them.</tt></dd></dl>
+ <dl><dt><a name="-uniqueURI"><strong>uniqueURI</strong></a>()</dt><dd><tt>A&nbsp;unique&nbsp;URI</tt></dd></dl>
 </td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
@@ -391,6 +400,7 @@ Fractions&nbsp;of&nbsp;a&nbsp;second&nbsp;may&nbsp;be&nbsp;present&nbsp;if&nbsp;
 <strong>environ</strong> = {'INFOPATH': '/sw/share/info:/sw/info:/usr/share... 'MFLAGS': '', 'SWAP': '/devel/WWW/2000/10/swap'}<br>
 <strong>forAllSym</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>
 <strong>forSomeSym</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
+<strong>nextu</strong> = 0<br>
 <strong>parsesTo_URI</strong> = 'http://www.w3.org/2000/10/swap/log#parsesTo'<br>
 <strong>runNamespaceValue</strong> = None</td></tr></table>
 </body></html>
