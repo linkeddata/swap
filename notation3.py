@@ -82,14 +82,14 @@ N3_forAll_URI = RDFSink.forAllSym
 # Magic resources we know about
 
 
-from RDFSink import RDF_type_URI, RDF_NS_URI, DAML_equivalentTo_URI, parsesTo_URI
+from RDFSink import RDF_type_URI, RDF_NS_URI, DAML_sameAs_URI, parsesTo_URI
 from RDFSink import RDF_spec, List_NS
 
 ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
 # This is the hash on namespace URIs
 
 RDF_type = ( SYMBOL , RDF_type_URI )
-DAML_equivalentTo = ( SYMBOL, DAML_equivalentTo_URI )
+DAML_sameAs = ( SYMBOL, DAML_sameAs_URI )
 
 from RDFSink import N3_first, N3_rest, N3_nil, N3_List, N3_Empty
 
@@ -396,7 +396,7 @@ class SinkParser:
 	    if str[i+1:i+2] == ">":
 		res.append(('->', self._sink.newSymbol(Logic_NS+"implies")))
 		return i+2
-	    res.append(('->', DAML_equivalentTo))
+	    res.append(('->', DAML_sameAs))
 	    return i+1
 
 	if str[i:i+2] == ":=":
@@ -476,7 +476,7 @@ class SinkParser:
                     if len(objs)>1:
                         for obj in objs:
                             self.makeStatement((self._context,
-                                                DAML_equivalentTo, subj, obj))
+                                                DAML_sameAs, subj, obj))
 		    j = self.skipSpace(str, j)
 		    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
 			"EOF when object_list expected after [ = ")
@@ -1199,7 +1199,7 @@ t   "this" and "()" special syntax should be suppresed.
 
         if self._pred is not None:
             self._write(";")
- #       self._makeSubjPred(somecontext, subj, ( SYMBOL,  DAML_equivalentTo_URI ))
+ #       self._makeSubjPred(somecontext, subj, ( SYMBOL,  DAML_sameAs_URI ))
         self.stack.append(0)
         self.indent = self.indent + 1
         self._write(" :- {")
@@ -1251,7 +1251,7 @@ t   "this" and "()" special syntax should be suppresed.
                   self._newline(1)   # Indent predicate from subject
             else: self._write("    ")
 
-            if pred == ( SYMBOL,  DAML_equivalentTo_URI ) and "t" not in self._flags:
+            if pred == ( SYMBOL,  DAML_sameAs_URI ) and "t" not in self._flags:
                 self._write(" = ")
 #            elif pred == ( SYMBOL,  LOG_implies_URI ) and "t" not in self._flags:
 #                self._write(" => ")

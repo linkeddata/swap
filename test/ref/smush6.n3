@@ -14,13 +14,32 @@
          :is :OkVision .
     
     <>     a :testFile .
+    
+    :Grey     = :Gray .
       [      a :Gentleman,
                     :Scholar ].
     
     :a     a :Hatchback;
          :color :Gray .
     
+    :b     = :a .
+    
     :c     :color :Gray .
     
+    :colour     = :color .
+    
+    :firstThree     =  (
+        1 
+        2 
+        3  ) .
+    
     :node1     :called "Bnode1" .
+    
+    :theHumidity     = "86%" .
+    
+    :theTemperature     = 34 .
+    
+    :vision     =  (
+        20 
+        20  ) .
     

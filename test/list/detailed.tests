@@ -5,7 +5,6 @@
 @prefix : <#>.
 @prefix x: <#>.
 @prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
-@prefix dc:  <http://purl.org/dc/elements/1.1/>. # yuk - under protest - no hash
 
 
 
@@ -29,6 +28,12 @@
     test:shortFileName "list-bug2.n3";
     test:description   "List processing bug check 2";
     test:arguments     """list/list-bug2.n3 --think""".
+
+:t1020 a  test:CwmTest;
+    test:shortFileName "list-construct.n3";
+    test:description   "What to do with URI-labelled lists";
+    test:arguments     """list/construct.n3""".
+
 
 
 #        Test list handling in inference

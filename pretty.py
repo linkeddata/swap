@@ -15,7 +15,7 @@ import types
 import string
 
 import diag  # problems importing the tracking flag, must be explicit it seems diag.tracking
-from diag import progress, progressIndent, verbosity, tracking
+from diag import progress, verbosity, tracking
 from term import   Literal, Symbol, Fragment, FragmentNil, \
     Anonymous, Term, CompoundTerm, List, EmptyList, NonEmptyList
 from formula import Formula, compareTerm, StoredStatement
@@ -31,7 +31,7 @@ cvsRevision = "$Revision$"
 
 # Magic resources we know about
 
-from RDFSink import RDF_type_URI, DAML_equivalentTo_URI
+from RDFSink import RDF_type_URI, DAML_sameAs_URI
 
 STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
 META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"
@@ -374,26 +374,33 @@ class Serializer:
 	counts = self.selectDefaultPrefix(context)        
         self.sink.startDoc()
         self.dumpPrefixes(self.sink, counts)
-        self.dumpFormulaContents(context, self.sink, sorting=1)
+        self.dumpFormulaContents(context, self.sink, sorting=1, equals=1)
         self.sink.endDoc()
 
-    def dumpFormulaContents(self, context, sink, sorting):
+    def dumpFormulaContents(self, context, sink, sorting, equals=0):
         """ Iterates over statements in formula, bunching them up into a set
         for each subject.
-        We dump "this" first before everything else
         """
-        if sorting: context.statements.sort(StoredStatement.compareSubjPredObj)
-# @@ necessary?
+
+	allStatements = context.statements[:]
+	if equals:
+	    for x, y in context._redirections.items():
+		if not x.generated() and x not in context.variables():
+		    allStatements.append(StoredStatement(
+			(context, context.store.sameAs, x, y)))
+        allStatements.sort(StoredStatement.compareSubjPredObj)
+#        context.statements.sort(StoredStatement.compareSubjPredObj)
+	# @@ necessary?
 	self.dumpVariables(context, sink, sorting, pretty=1)
 
-	statements = context.statementsMatching(subj=context)  # context is subject
-        if statements:
-	    progress("@@ Statement with context as subj?!", statements,)
-            self._dumpSubject(context, context, sink, sorting, statements)
+#	statements = context.statementsMatching(subj=context)  # context is subject
+#        if statements:
+#	    progress("@@ Statement with context as subj?!", statements,)
+#            self._dumpSubject(context, context, sink, sorting, statements)
 
         currentSubject = None
         statements = []
-        for s in context.statements:
+        for s in allStatements:
             con, pred, subj, obj =  s.quad
             if subj is con: continue # Done them above
             if currentSubject == None: currentSubject = subj

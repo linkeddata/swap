@@ -89,9 +89,8 @@ Paired&nbsp;with&nbsp;this&nbsp;is&nbsp;whether&nbsp;this&nbsp;is&nbsp;a&nbsp;su
 
 <dl><dt><a name="Serializer-dumpChronological"><strong>dumpChronological</strong></a>(self)</dt><dd><tt>Fast&nbsp;as&nbsp;possible.&nbsp;Only&nbsp;dumps&nbsp;data.&nbsp;No&nbsp;formulae&nbsp;or&nbsp;universals.</tt></dd></dl>
 
-<dl><dt><a name="Serializer-dumpFormulaContents"><strong>dumpFormulaContents</strong></a>(self, context, sink, sorting)</dt><dd><tt>&nbsp;Iterates&nbsp;over&nbsp;statements&nbsp;in&nbsp;formula,&nbsp;bunching&nbsp;them&nbsp;up&nbsp;into&nbsp;a&nbsp;set<br>
-for&nbsp;each&nbsp;subject.<br>
-We&nbsp;dump&nbsp;"this"&nbsp;first&nbsp;before&nbsp;everything&nbsp;else</tt></dd></dl>
+<dl><dt><a name="Serializer-dumpFormulaContents"><strong>dumpFormulaContents</strong></a>(self, context, sink, sorting, equals<font color="#909090">=0</font>)</dt><dd><tt>&nbsp;Iterates&nbsp;over&nbsp;statements&nbsp;in&nbsp;formula,&nbsp;bunching&nbsp;them&nbsp;up&nbsp;into&nbsp;a&nbsp;set<br>
+for&nbsp;each&nbsp;subject.</tt></dd></dl>
 
 <dl><dt><a name="Serializer-dumpLists"><strong>dumpLists</strong></a>(self)</dt></dl>
 
@@ -131,7 +130,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 <td width="100%"><strong>ALL4</strong> = (0, 1, 2, 3)<br>
 <strong>ANONYMOUS</strong> = 3<br>
 <strong>CONTEXT</strong> = 0<br>
-<strong>DAML_equivalentTo_URI</strong> = 'http://www.w3.org/2002/07/owl#equivalentTo'<br>
+<strong>DAML_sameAs_URI</strong> = 'http://www.w3.org/2002/07/owl#sameAs'<br>
 <strong>FLOAT_DATATYPE</strong> = 'http://www.w3.org/2001/XMLSchema#double'<br>
 <strong>FORMULA</strong> = 1<br>
 <strong>INTEGER_DATATYPE</strong> = 'http://www.w3.org/2001/XMLSchema#integer'<br>

@@ -23,7 +23,7 @@ import sys, string, re, urllib
 from term import LightBuiltIn, Function, ReverseFunction
 import types
 
-# from RDFSink import DAML_LISTS, RDF_type_URI, DAML_equivalentTo_URI
+# from RDFSink import DAML_LISTS, RDF_type_URI, DAML_sameAs_URI
 
 MATH_NS_URI = 'http://www.w3.org/2000/10/swap/math#'
 
@@ -104,7 +104,7 @@ class BI_product(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
         t = 1
         for x in subj_py: t *= numeric(x)
-        return tidy(t)
+        return t
 
 class BI_factors(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, obj_py): 

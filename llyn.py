@@ -139,7 +139,7 @@ import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 import diag  # problems importing the tracking flag, and chatty_flag must be explicit it seems diag.tracking
-from diag import progress, progressIndent, verbosity
+from diag import progress, verbosity
 from term import BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
     Literal, Symbol, Fragment, FragmentNil, Anonymous, Term,\
@@ -157,6 +157,7 @@ from RDFSink import RDF_NS_URI
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 
 from pretty import Serializer
+from thing import indentString
 
 LITERAL_URI_prefix = "data:application/n3;"
 
@@ -164,7 +165,7 @@ cvsRevision = "$Revision$"
 
 # Magic resources we know about
 
-from RDFSink import RDF_type_URI, DAML_equivalentTo_URI
+from RDFSink import RDF_type_URI, DAML_sameAs_URI
 
 from why import Because, BecauseBuiltIn, BecauseOfRule, \
     BecauseOfExperience, becauseSubexpression, BecauseMerge ,report
@@ -344,7 +345,7 @@ class IndexedFormula(Formula):
 	newBindings = {}
 
 #	Smushing of things which are equal into a single node
-#	Even if we do not do this with owl:equivalentTo, we do with lists
+#	Even if we do not do this with owl:sameAs, we do with lists
 
 	subj = subj.substituteEquals(self._redirections, newBindings)
 	pred = pred.substituteEquals(self._redirections, newBindings)
@@ -364,11 +365,16 @@ class IndexedFormula(Formula):
 		or subj is self
 		or subj.canonical is subj), "subj Should be closed or self"+`subj`
 	assert not isinstance(obj, Formula) or obj.canonical is obj, "obj Should be closed"+`obj`
+        store.size = store.size+1 # rather nominal but should be monotonic
 
 # We collapse lists from the declared daml first,rest structure into List objects.
 # To do this, we need a bnode with (a) a first; (b) a rest, and (c) the rest being a list.
 # We trigger list collapse on any of these three becoming true.
 # @@@ we don't reverse this on remove statement.  Remove statement is really not a user call.
+
+# (Not clear: how t smush symbols without smushing variables. Need separate pytyhon class
+# for variables I guess as everyone has been saying.
+# When that happens, expend smushing to symbols.)
 
 	if subj in self._existentialVariables:
 	    if pred is store.rest and isinstance(obj, List):
@@ -395,8 +401,8 @@ class IndexedFormula(Formula):
 			return 1
 
 	if "e" in self._closureMode:
-	    if pred is store.equivalentTo:
-		if subj is obj: return # ignore a = a
+	    if pred is store.sameAs:
+		if subj is obj: return 0 # ignore a = a
 		if ((subj in self.existentials() and obj not in self.existentials())
 		    or (subj.generated() and not obj.generated())
 		    or compareTerm(obj, subj) < 0): var, val = subj, obj
@@ -416,7 +422,6 @@ class IndexedFormula(Formula):
 	    self.substituteEqualsInPlace(newBindings)
 #######
 
-        store.size = store.size+1
 
         s = StoredStatement((self, pred, subj, obj))
 	
@@ -712,7 +717,6 @@ class IndexedFormula(Formula):
 		quad = [self, s[PRED], s[SUBJ], s[OBJ]]
 		for p in PRED, SUBJ, OBJ:
 		    x = s[p]
-#		    progress("&&&&&&& trying ", x, "with", bindings, ", redirections=", self._redirections)
 		    y = x.substituteEquals(bindings, newBindings)
 		    if y is not x:
 			if diag.chatty_flag>90: progress("Substituted %s -> %s in place" %(x, y))
@@ -908,30 +912,6 @@ class BI_semanticsOrError(BI_semantics):
 HTTP_Content_Type = 'content-type' #@@ belongs elsewhere?
 
 
-def _indent(str):
-    """ Return a string indented by 4 spaces"""
-    s = "    "
-    for ch in str:
-        s = s + ch
-        if ch == "\n": s = s + "    "
-    if s.endswith("    "):
-        s = s[:-4]
-    return s
-
-class BuiltInFailed(Exception):
-    def __init__(self, info, item):
-        progress("@@@@@@@@@ BUILTIN FAILED")
-        self._item = item
-        self._info = info
-        
-    def __str__(self):
-        reason = _indent(self._info[1].__str__())
-#        return "reason=" + reason
-        return ("Error during built-in operation\n%s\nbecause:\n%s" % (
-            `self._item`,
-#            `self._info`))
-            `reason`))
-    
 class DocumentAccessError(IOError):
     def __init__(self, uri, info):
         self._uri = uri
@@ -940,7 +920,7 @@ class DocumentAccessError(IOError):
     def __str__(self):
         # See C:\Python16\Doc\ref\try.html or URI to that effect
 #        reason = `self._info[0]` + " with args: " + `self._info[1]`
-        reason = _indent(self._info[1].__str__())
+        reason = indentString(self._info[1].__str__())
         return ("Unable to access document <%s>, because:\n%s" % ( self._uri, reason))
     
 class BI_content(HeavyBuiltIn, Function):
@@ -1118,7 +1098,7 @@ class RDFStore(RDFSink) :
         log.internFrag("equalTo", BI_EqualTo)
         log.internFrag("notEqualTo", BI_notEqualTo)
 
-	self.equivalentTo = self.symbol(OWL_NS + "equivalentTo")
+	self.sameAs = self.symbol(OWL_NS + "sameAs")
 
 # Heavy relational operators:
 
