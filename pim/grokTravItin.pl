@@ -395,6 +395,7 @@ GLA GLASGOW
 YYZ TORONTO ON
 MAN MANCHESTER UK
 SNA JOHN WAYNE INTL
+MIA MIAMI INTERNTNL
 EODATA
 
     # SNA confirmed via http://www.ocair.com/
@@ -411,7 +412,10 @@ EODATA
 
 
 # $Log$
-# Revision 1.10  2003-02-26 23:45:51  connolly
+# Revision 1.11  2003-03-12 15:01:02  connolly
+# added MIA
+#
+# Revision 1.10  2003/02/26 23:45:51  connolly
 # support link to foafwho file via seeAlso
 # and explicit name for traveller
 #
