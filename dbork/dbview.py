@@ -42,7 +42,7 @@ each table, we're given
 
 
 TODO
-  - show tables, describe _table_ ==> RDF schema.
+  - show tables, describe _table_ ==> RDF schema. (in progress)
   
 REFERENCES
 
@@ -229,7 +229,7 @@ def askdb(db, dbaddr, sink, fields, tables, keys, joins, condextra):
 
     """
 
-    fmla = something(None, None, 'F')
+    fmla = something(sink, None, 'F')
     c = db.cursor()
 
     q = asSQL(fields, tables, keys, joins, condextra)
@@ -285,7 +285,7 @@ def askdb(db, dbaddr, sink, fields, tables, keys, joins, condextra):
                 
                 # subj rdf:type _tableClass_.
                 sink.makeStatement((fmla,
-                                    (RDFSink.SYMBOL, notation3.RDF_type_URI),
+                                    (RDFSink.SYMBOL, RDF.type),
                                     subj,
                                     (RDFSink.SYMBOL, "%s/%s" % (dbaddr, tbl))
                                     ))
@@ -321,6 +321,96 @@ def something(sink, scope=None, hint='gensym'):
     return term
 
 
+class Namespace:
+    """A collection of URIs witha common prefix.
+
+    rape-and-pasted from 2000/04/maillog2rdf/mid_proxy.py
+    
+    ACK: AaronSw / #rdfig
+    http://cvs.plexdev.org/viewcvs/viewcvs.cgi/plex/plex/plexrdf/rdfapi.py?rev=1.6&content-type=text/vnd.viewcvs-markup
+    """
+    def __init__(self, nsname): self.nsname = nsname
+    def __getattr__(self, lname): return self.nsname + lname
+    def __str__(self): return self.nsname
+    def sym(self, lname): return self.nsname + lname
+
+SwDB = Namespace("http://www.w3.org/2000/10/swap/dbork/sqldb@@#")
+RDFS = Namespace("http://www.w3.org/2000/01/rdf-schema#")
+RDF  = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+DAML = Namespace("http://www.daml.org/2001/03/daml+oil#")
+
+
+def aboutDB(db, dbaddr, sink):
+    fmla = something(sink, None, 'aboutDB')
+
+    sink.bind('db', (RDFSink.SYMBOL, str(SwDB)))
+    sink.bind('rdfs', (RDFSink.SYMBOL, str(RDFS)))
+    sink.bind('rdf', (RDFSink.SYMBOL, str(RDF)))
+    
+    c = db.cursor()
+    c.execute("show tables")
+    while 1:
+        row = c.fetchone()
+        if not row: break
+
+        tbl = row[0]
+
+        tblI = "%s/%s" % (dbaddr, tbl)
+        
+        sink.makeStatement((fmla,
+                            (RDFSink.SYMBOL, SwDB.table),
+                            (RDFSink.SYMBOL, dbaddr),
+                            (RDFSink.SYMBOL, tblI),
+                            ))
+        sink.makeStatement((fmla,
+                            (RDFSink.SYMBOL, RDFS.label),
+                            (RDFSink.SYMBOL, tblI),
+                            (RDFSink.LITERAL, tbl)
+                            ))
+
+
+def aboutTable(db, dbaddr, sink, tbl):
+    fmla = something(sink, None, 'aboutTable')
+
+    sink.bind('db', (RDFSink.SYMBOL, str(SwDB)))
+    sink.bind('rdfs', (RDFSink.SYMBOL, str(RDFS)))
+    sink.bind('rdf', (RDFSink.SYMBOL, str(RDF)))
+    
+    c = db.cursor()
+    c.execute("show columns from %s" % tbl)
+    while 1:
+        row = c.fetchone()
+        if not row: break
+
+        colName, ty, nullable, isKey, dunno, dunno = row
+        
+        tblI = "%s/%s" % (dbaddr, tbl)
+        colI = "%s/%s#%s" % (dbaddr, tbl, colName)
+        
+        sink.makeStatement((fmla,
+                            (RDFSink.SYMBOL, SwDB.column),
+                            (RDFSink.SYMBOL, tblI),
+                            (RDFSink.SYMBOL, colI),
+                            ))
+        sink.makeStatement((fmla,
+                            (RDFSink.SYMBOL, RDFS.domain),
+                            (RDFSink.SYMBOL, colI),
+                            (RDFSink.SYMBOL, tblI),
+                            ))
+        sink.makeStatement((fmla,
+                            (RDFSink.SYMBOL, RDFS.label),
+                            (RDFSink.SYMBOL, colI),
+                            (RDFSink.LITERAL, colName)
+                            ))
+        if isKey == 'PRI':
+            sink.makeStatement((fmla,
+                                (RDFSink.SYMBOL, RDF.type),
+                                (RDFSink.SYMBOL, colI),
+                                (RDFSink.SYMBOL, DAML.UnambiguousProperty),
+                                ))
+
+        # could expose nullable as DAML.minCardinality
+        # could expose type as RDFS.range
 
 
 ###############
@@ -435,6 +525,26 @@ def testSvc():
     httpd.serve_forever()
 
 
+def testShow():
+    import sys
+
+    host, port, user, passwd = sys.argv[1:5]
+    port = int(port)
+
+    dbName = 'administration' #@@
+    db=MySQLdb.connect(host=host, port=port,
+                       user=user, passwd=passwd,
+                       db=dbName)
+
+    dbaddr = 'http://example/administration'
+    sink = notation3.ToRDF(sys.stdout, dbaddr)
+
+    aboutDB(db, dbaddr, sink)
+
+    aboutTable(db, dbaddr, sink, 'users')
+
+    sink.endDoc()
+    
 
 def testUI():
     import sys
@@ -463,7 +573,7 @@ def testQ():
                        user=user, passwd=passwd,
                        db='administration')
 
-    dbaddr='http://example/administration'
+    dbaddr = 'http://example/administration'
     
     askdb(db, dbaddr, sink,
           fields, tables, keys, joins, cond)
@@ -472,13 +582,22 @@ def testQ():
 
 
 if __name__ == '__main__':
-    testSvc()
+    #testSvc()
+    testShow()
     #testUI()
     #testQ()
 
 
 # $Log$
-# Revision 1.9  2002-03-06 05:41:32  connolly
+# Revision 1.10  2002-03-06 06:37:32  connolly
+# structure browsing is starting to work:
+# listing tables in a database,
+# listing columns in a table.
+# Converting to RDF/RDFS works.
+# SwDB namespace name needs deciding.
+# HTTP export is TODO.
+#
+# Revision 1.9  2002/03/06 05:41:32  connolly
 # OK! basic query interface, including joins,
 # seems to work.
 #
