@@ -405,7 +405,7 @@ class SinkParser:
                 if j >=0: break
 
                 item = []
-                j = self.node(str,i, item)
+                j = self.object(str,i, item)
                 if j<0: raise BadSyntax(str, i, "expected item in list or ')'")
                 this = self.genid()
                 if tail:
