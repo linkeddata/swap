@@ -255,7 +255,7 @@ class RDFXMLParser(xmllib.XMLParser):
                 x = string.find(name, " ")
                 if x>=0: name=name[x+1:]    # Strip any namespace on attributes!!! @@@@
                 if name == "ID":
-                    print "# Warning: id=%s on <%s...> ignored" %  (value,) # Meaning?
+                    print "# Warning: ID=%s on statement ignored" %  (value) # I consider these a bug
                 elif name == "parseType":
                     if value == "Literal":
                         self._state = STATE_LITERAL # That's an XML subtree not a string
