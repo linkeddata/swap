@@ -46,31 +46,30 @@
 	 str:scrape ?CITYNAME.
   (?TXT "<TR><TD>\\d+<TD>\\d+<TD>[A-Za-z\\. ]+<TD><A HREF='images/npamap/(\\w\\w).gif'>[^<]+</A>")
 	 str:scrape ?STATECODEL.
+
+  ?STATE usps:stateAbbr [ str:equalIgnoringCase ?STATECODEL ].
 } =>
 {
   ?PLACE k:inRegion [
     map:cityName ?CITYNAME;
-    :stateCodeLower ?STATECODEL
+    k:inRegion ?STATE
   ].
 }.
 
 
-{ ?WHERE :stateCodeLower [ is :lower of [ is usps:stateAbbr of ?STATE ]] }
- => { ?WHERE k:inRegion ?STATE }.
 
 # states I visited on one of my trips...
 # hmm... surely this table is published by the post office...
-# @@TODO: str:lower built-in
-k:Kansas               usps:stateAbbr "KS". "KS" :lower "ks".
-k:Missouri             usps:stateAbbr "MO". "MO" :lower "mo".
-k:Illinois-State       usps:stateAbbr "IL". "IL" :lower "il".
-k:Indiana-State        usps:stateAbbr "IN". "IN" :lower "in".
-k:Ohio-State           usps:stateAbbr "OH". "OH" :lower "oh".
-k:Pennsylvania-State   usps:stateAbbr "PA". "PA" :lower "pa".
-k:New_York-State       usps:stateAbbr "NY". "NY" :lower "ny".
-k:New_Hampshire-State  usps:stateAbbr "NH". "NH" :lower "nh".
-k:Vermont-State        usps:stateAbbr "VT". "VT" :lower "vt".
-k:Massachusetts-State  usps:stateAbbr "MA". "MA" :lower "ma".
+k:Kansas               usps:stateAbbr "KS".
+k:Missouri             usps:stateAbbr "MO".
+k:Illinois-State       usps:stateAbbr "IL".
+k:Indiana-State        usps:stateAbbr "IN".
+k:Ohio-State           usps:stateAbbr "OH".
+k:Pennsylvania-State   usps:stateAbbr "PA".
+k:New_York-State       usps:stateAbbr "NY".
+k:New_Hampshire-State  usps:stateAbbr "NH".
+k:Vermont-State        usps:stateAbbr "VT".
+k:Massachusetts-State  usps:stateAbbr "MA".
 
 
 {
@@ -171,7 +170,10 @@ k:Massachusetts-State  usps:stateAbbr "MA". "MA" :lower "ma".
 #  k:inRegion [ map:countryName "Hungary" ] ].
 
 # $Log$
-# Revision 1.10  2004-11-13 20:01:59  connolly
+# Revision 1.11  2004-12-23 15:42:05  connolly
+# eliminated :lower hack to avoid literal subjects
+#
+# Revision 1.10  2004/11/13 20:01:59  connolly
 # special case for ORD/Chicago
 #
 # Revision 1.9  2004/07/09 03:55:43  connolly
