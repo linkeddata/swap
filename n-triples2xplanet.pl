@@ -65,7 +65,7 @@ sub burp{
     printf ("%s %s %s", $Y{$m}, $X{$m}, $Label{$m});
     printf (" align=%s", $Align{$m}) if $Align{$m};
     printf (" color=%s", $Color{$m}) if $Color{$m};
-    print "\n\n"
+    print "\n"
   }
 }
 
@@ -161,7 +161,10 @@ sub term{
     
 
 # $Log$
-# Revision 1.2  2001-11-11 03:46:06  connolly
+# Revision 1.3  2001-11-11 07:52:07  connolly
+# no blank lines (trying to debug xplanet's display of these marker files)
+#
+# Revision 1.2  2001/11/11 03:46:06  connolly
 # handles marker color now
 #
 # Revision 1.1  2001/11/11 03:34:52  connolly
