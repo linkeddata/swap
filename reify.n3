@@ -18,27 +18,27 @@
 :Symbol s:subClassOf :RDFTerm;
 	s:label "RDF symbol, identified by a URI".
 
-:id a rdf:Property; s:label "symbol URI, arbirary or not".
-	a owl:FunctionalProperty, owl:InverseFunctionalProperty;
-	s:comment
-	"""The URI of the symbol is all that is needed to identify it""".
+#:id a rdf:Property; s:label "symbol URI, arbirary or not".
+#	a owl:FunctionalProperty, owl:InverseFunctionalProperty;
+#	s:comment
+#	"""The URI of the symbol is all that is needed to identify it""".
 	
 :uri a rdf:Property; s:label "symbol URI, not arbitray";
 	s:subPropertyOf :id;
 	s:comment
 	"""The URI of the symbol is all that is needed to identify it""".
 
-:aid a rdf:Property; s:label "Arbitrary ID";
-	s:subPropertyOf :ID;
-	a owl:FunctionalProperty, owl:InverseFunctionalProperty;
-	s:comment
-	"""The URI of the symbol is all that is needed to identify it.
-	In this case, the uri given is arbitrary - it is is
-	for convenience in serializing but has no significance
-	as an identifier in the Semantic Web.
-	A "blank node" in a graph is a symbol whose identifier is
-	arbirary and is a member of the forSome list of
-	the graph in question.""".
+#:aid a rdf:Property; s:label "Arbitrary ID";
+#	s:subPropertyOf :ID;
+#	a owl:FunctionalProperty, owl:InverseFunctionalProperty;
+#	s:comment
+#	"""The URI of the symbol is all that is needed to identify it.
+#	In this case, the uri given is arbitrary - it is is
+#	for convenience in serializing but has no significance
+#	as an identifier in the Semantic Web.
+#	A "blank node" in a graph is a symbol whose identifier is
+#	arbirary and is a member of the forSome list of
+#	the graph in question.""".
 
 :Literal s:subClassOf :RDFTerm;
 	s:label "Literal";
