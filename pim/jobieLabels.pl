@@ -9,17 +9,31 @@ use strict;
 # md5sum 2853fa006708d5473dc21b54ef211320 PostScript-MailLabels-2.02.tar.gz
 use PostScript::MailLabels;
 
+my($mm) = .1; # milimeter; .1 centimeters
+my($paA, $paBL, $paBR, $paC);
+
+if(0){
 # jobie is an Epson Stylus Color 740
 # http://support.epson.com/hardware/printer/inkjet/sc740_/documentation.html
 # User Manual  
 # http://files.support.epson.com/pdf/sc740_/sc740_u1.pdf
 # from p171, Printable Area
 
-my($mm) = .1; # milimeter; .1 centimeters
-my($paA) = 3 * $mm; #minimum top
-my($paBL) = 3 * $mm; # minimum left
-my($paBR) = 9 * $mm; # minimum right, letter
-my($paC) = 14 * $mm; # minimum bottom
+$paA = 3 * $mm; #minimum top
+$paBL = 3 * $mm; # minimum left
+$paBR = 9 * $mm; # minimum right, letter
+$paC = 14 * $mm; # minimum bottom
+}else{
+# pesco is an HP PSC 2510 Photosmart All-in-One
+# 
+# pg 118 of the manual
+# http://h10032.www1.hp.com/ctg/Manual/c00043654.pdf
+
+$paA = 1.8 * $mm; #minimum top
+$paBL = 8 * $mm; # minimum left # DWC 6.4 didn't work
+$paBR = 2 * $mm; # minimum right, letter
+$paC = 11.7 * $mm; # minimum bottom
+}
 
 main();
 
@@ -42,7 +56,9 @@ sub main{
 		      Printable_Top => $paA,
 		      Printable_Bot => $paC,
 
-		      avery => 5160 # the product I have is 8160, but I peeked at the definitions and this is evidently how the 8160 stuff is known to the MailLabels module
+		      avery => 5160, # the product I have is 8160, but I peeked at the definitions and this is evidently how the 8160 stuff is known to the MailLabels module
+		      x_adjust => 0.1, # what units?
+
 		     );
 
   my(@addrs) = readLabels();
@@ -60,7 +76,7 @@ sub readLabels{
 	     'deliveryAddress' => 2,
 	     'cityName' => 3,
 	     'stateAbbr' => 4,
-	     'zip' => 5 );
+	     'zipCode' => 5 );
 
   while(<>){
     if(/<(\w+:)?MailingLocation>/ #@@KLUDGE namespace prefix
@@ -94,7 +110,10 @@ sub readLabels{
 }
 
 # $Log$
-# Revision 1.3  2003-04-14 17:29:02  connolly
+# Revision 1.4  2004-12-20 18:38:16  connolly
+# tweaked for PescoPrinter, an HP PSC 2510
+#
+# Revision 1.3  2003/04/14 17:29:02  connolly
 # 25Dec: markup tweak
 #
 # Revision 1.2  2002/06/12 15:41:05  connolly
