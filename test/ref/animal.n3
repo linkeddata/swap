@@ -1,21 +1,20 @@
 
+        #    using base file:/devel/WWW/2000/10/swap/test/animal.rdf
+        
 
 
 
 
-
-
-
-
-     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-     @prefix : <animal.rdf#> .
+     @prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix : <#> .
     
     :Animal     a rdfs:Class;
          rdfs:label "Animal";
-         <barrestrictedBy>  [
-             a <barRestriction>;
-             <baronProperty> :parent;
-             <barcardinality> "2" ] .
+         <bar#restrictedBy>  [
+             a <bar#Restriction>;
+             <bar#onProperty> :parent;
+             <bar#cardinality> "2" ] .
     
  #ENDS

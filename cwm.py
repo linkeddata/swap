@@ -109,8 +109,7 @@ VARIABLE = notation3.VARIABLE
 
 
 chatty = 0   # verbosity debug flag
-
-
+doMeta = 0  # wait until we have written the code! :-)
 
 ########################################  Storage URI Handling
 #
@@ -351,12 +350,14 @@ class RDFStore(notation3.RDFSink) :
         self.Truth = engine.internURI(Logic_NS + "Truth")
         self.type = engine.internURI(notation3.RDF_type_URI)
         self.subExpression = engine.internURI(Logic_NS + "subExpression")
-        
-        self.first = engine.internURI(Logic_NS + "first")
-        self.rest = engine.internURI(Logic_NS + "rest")
-        self.null = engine.internURI(Logic_NS + "null")
-        self.Empty = engine.internURI(Logic_NS + "Empty")
-        self.List = engine.internURI(Logic_NS + "List")
+
+# List stuff - beware of namespace changes! :-(
+
+        self.first = engine.intern(notation3.N3_first)
+        self.rest = engine.intern(notation3.N3_rest)
+        self.nil = engine.intern(notation3.N3_nil)
+        self.Empty = engine.intern(notation3.N3_Empty)
+        self.List = engine.intern(notation3.N3_List)
 
 
 # Input methods:
@@ -567,7 +568,7 @@ class RDFStore(notation3.RDFSink) :
         without loss of information as a list.
         
         """
-        if x == self.null: return 1  # Yes, null is the list ()
+        if x == self.nil: return 1  # Yes, nil is the list ()
 
         _anon, _incoming, _se = self.n3_anonymous(x, context)
         if not _anon: return 0  # This is not anonymous -> can't use list syntax.
