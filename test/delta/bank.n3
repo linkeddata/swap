@@ -1,0 +1,28 @@
+# Test otology for deltas and sigmas
+#
+# diffing and patching
+#
+
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#>.
+
+@keywords a, is, of.
+
+@prefix bank: <#>.
+
+bank:ssn  rdfs:domain con:Person; a owl:InverseFunctionalProperty.
+
+bank:accountNumber rdfs:domain bank:Account; a owl:InverseFunctionalProperty.
+bank:accountHolder
+	rdfs:domain bank:Account;
+	a owl:FunctionalProperty;
+	rdfs:range con:Person.
+bank:accountBalance rdfs:domain bank:Account; a owl:FunctionalProperty.
+bank:id rdfs:domain bank:Bank; a owl:InverseFunctionalProperty.
+
+bank:dateOfBirth rdfs:domain con:Person; a owl:FunctionalProperty.
+bank:homePhone rdfs:domain con:Person; a owl:FunctionalProperty.
+
+
