@@ -27,6 +27,7 @@
 
 :Dog owl:sameClassAs :CanisFamiliaris.
 :Human owl:sameClassAs :HomoSapiens.
+:RedWolf owl:sameClassAs :CanisRufus.
 
 # Some binomial names
 
@@ -53,10 +54,10 @@
 	       endangered species""";
   rdfs:seeAlso <http://druidry.org/obod/endangered/redwolf.html>.
 
-
 :HomoSapiens a owl:Class.
 
 # Some class relationships
 
 :CanisFamiliaris owl:disjoint :HomoSapiens.
+:CanisFamiliaris owl:disjoint :CanisRufus.
 
