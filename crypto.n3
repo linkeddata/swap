@@ -1,0 +1,111 @@
+#  Schema for crypto built-in functions in cwm. 
+#
+#  These are terms drawn to match the available functions
+# in mxCrypto. See:
+# http://www.amk.ca/python/writing/pycrypt/  for the manual and
+# http://www.amk.ca/python/code/crypto.html  for the code.
+#
+#  I am not sure whether in the domain and range functions we should
+# distinguish strings one can present to a person from crypto binary.
+# Might be useful for driving the UI and/or serialization using base64 etc.
+#
+#  Beware that the simplicity of use of some of these properties belies
+# the knowledge o fcrypography that one needs to make a secure system
+#
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+#@prefix daml:  <http://www.daml.org/2001/03/daml-ont#> .
+@prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+@prefix string:  <http://www.w3.org/2000/10/swap/string#> .
+@prefix cr:  <http://www.w3.org/2000/10/swap/crypto#> .
+
+
+#####################################################################
+#
+# Hash functions
+
+cr:HashFunction a s:Class;
+    s:label "Any crypographic hash function";
+    s:comment """
+The crypographic hash functions are (being functions) unique and 
+(the whole point of being hash functions) are, when secure, assumed
+unambiguous. That is, you have the right hash you ahve the right document.
+Currently (2001/9)only SHA is given that property.
+""".
+
+cr:HAVAL128 a rdf:Property; s:label "HAVAL hash (128 bit)";
+    a dpo:UniqueProperty;
+    s:domain string:String;
+    s:range string:String.
+
+cr:HAVAL160 a rdf:Property; s:label "HAVAL hash (160 bit)";
+    a dpo:UniqueProperty;
+    s:domain string:String;
+    s:range string:String.
+
+cr:HAVAL192 a rdf:Property; s:label "HAVAL hash (192 bit)";
+    a dpo:UniqueProperty;
+    s:domain string:String;
+    s:range string:String.
+
+cr:HAVAL224 a rdf:Property; s:label "HAVAL hash (224 bit)";
+    a dpo:UniqueProperty;
+    s:domain string:String;
+    s:range string:String.
+
+cr:HAVAL256 a rdf:Property; s:label "HAVAL hash (256 bit)";
+    a dpo:UniqueProperty;
+    s:domain string:String;
+    s:range string:String.
+
+cr:MD2 a rdf:Property; s:label "MD2 hash";
+    a dpo:UniqueProperty;
+    s:domain string:String;
+    s:range string:String.
+
+cr:MD4 a rdf:Property; s:label "MD4 hash";
+    a dpo:UniqueProperty;
+    s:domain string:String;
+    s:range string:String.
+
+cr:MD5 a rdf:Property; s:label "MD5 hash";
+    a dpo:UniqueProperty;
+    s:domain string:String;
+    s:range string:String.
+
+cr:RIPEMD a rdf:Property; s:label "RIPEMD hash";
+    a dpo:UniqueProperty;
+    s:domain string:String;
+    s:range string:String.
+
+cr:SHA a rdf:Property; s:label "SHA hash";
+    a dpo:UnambiguousProperty, dpo:UniqueProperty;  # Assume unbreakable.
+    s:domain string:String;
+    s:range string:String.
+
+###########################  Public Key Algorithms
+#
+# See http://www.amk.ca/python/writing/pycrypt/node16.html
+#
+
+cr:RSA_ a rdf:Property;
+    a dpo:UniqueProperty;
+    s:label "RSA key generator";
+    s:domain string:String;    # Actually a number in dcimal, length of ky in octets
+    s:range  string:String.    # The key generated
+
+cr:RSA_validSignature a rdf:Property;   # Must be an internal built-in
+    a dpo:UnambiguousProperty, dpo:UniqueProperty;  # Assume unbreakable.
+    s:label "validated RSA signature";
+    s:domain string:String;   # A signed string, typically the hash of the document contents
+    s:range string:String.   # The signature
+
+####### Metaproperties
+#
+# These generate, given an encryptionb module, the funmctions for that module.
+#
+
+
+#ends
