@@ -149,7 +149,8 @@ class ResultSet:
         self.symbols = {}
         self.fragments = {}
     def myIntern(self, q, index, variables, existentials):
-        symbol = q.fragid # re.sub(':', '_', q.qname())
+        if hasattr(q, 'fragid'): symbol = q.fragid # re.sub(':', '_', q.qname())
+        else: symbol = q.string
         try:
             existentials.index(q)
             try:
