@@ -8,5 +8,5 @@
 
 # with "cwm --mode=a --think" this should fire...
 
-{ :Donny a bio:Dog } => { <> rdfs:Comment "THIS TEST WORKS" }.
+{ :Donny a bio:Dog } => { <> rdfs:comment "THIS TEST WORKS" }.
 
