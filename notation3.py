@@ -722,7 +722,7 @@ class ToRDF(RDFSink):
 # Below is for writing an anonymous node which is the object of only one arc
 # This is the arc leading to it.
 
-    def startAnonymous(self,  tuple):
+    def startAnonymous(self,  tuple, isList =0):
         context, pred, subj, obj = tuple 
 	if self._subj is not subj:
 	    if self._subj:
@@ -889,7 +889,7 @@ class ToN3(RDFSink):
 #  We use here a convention that underscores at the start of fragment IDs
 # are reserved for generated Ids. The caller can change that.
 
-    def __init__(self, write, base=None, genPrefix = "#_" ):
+    def __init__(self, write, base=None, genPrefix = "#_", noLists=0 ):
 	self._write = write
 	self._subj = None
 	self.prefixes = {}      # Look up prefix conventions
@@ -898,6 +898,8 @@ class ToN3(RDFSink):
 	self.nextId = 0         # Regenerate Ids on output
 	self.regen = {}         # Mapping of regenerated Ids
 	self.genPrefix = genPrefix  # Prefix for generated URIs on output
+	self.stack = [ 0 ]      # List mode?
+	self.noLists = noLists  # Suppress generation of lists?
 
 	
 	#@@I18N
@@ -940,28 +942,55 @@ class ToN3(RDFSink):
         self._write("\n"+ "    " * (self.indent+extra))
 
     def makeStatement(self, triple):
+        if self.stack[-1]:
+            if triple[PRED] == N3_first:
+                self._write(self.representationOf(triple[OBJ])+" ")
+            elif triple[PRED] != N3_rest:
+                raise intenalError # Should only see first and rest in list mode
+            return
         self._makeSubjPred(triple[SUBJ], triple[PRED])        
         self._write(self.representationOf(triple[OBJ]))
 #        self._write(" (in %s) " % `context`)    #@@@@
         
 # Below is for writing an anonymous node which is the object of only one arc        
-    def startAnonymous(self,  triple):
-        self._makeSubjPred(triple[SUBJ], triple[PRED])
-        self.indent = self.indent + 1
-        self._write(" [")
+    def startAnonymous(self,  triple, isList=0):
+        if isList and not self.noLists:
+            wasList = self.stack[-1]
+            if wasList and triple[PRED]==N3_rest:   # rest p of existing list
+                self.stack.append(2)    # just a rest - no parens
+                self._subj = triple[OBJ]
+            else:
+                self._makeSubjPred(triple[SUBJ], triple[PRED])
+                self.stack.append(1)    # New list
+                self._write(" (")
+                self.indent = self.indent + 1
+            self._pred = N3_first
+        else:
+            self._makeSubjPred(triple[SUBJ], triple[PRED])
+            self.stack.append(0)
+            self._write(" [")
+            self.indent = self.indent + 1
+            self._pred = None
         self._newline()
         self._subj = triple[OBJ]    # The object is now the current subject
-        self._pred = None
 
     def endAnonymous(self, subject, verb):    # Remind me where we are
-        self.indent = self.indent - 1
-        self._write(" ]")
+        wasList = self.stack.pop()
+        isList = self.stack[-1]
+        if wasList:
+            if not isList or wasList == 1:
+                self._write(" )")
+                self.indent = self.indent - 1
+        else:
+            self._write(" ]")
+            self.indent = self.indent - 1
         self._subj = subject
         self._pred = verb
 
 # Below we do anonymous top level node - arrows only leave this circle
 
     def startAnonymousNode(self, subj):
+        self.stack.append(0)
 	if self._subj:
 	    self._write(" .")
 	self._newline()
@@ -970,7 +999,9 @@ class ToN3(RDFSink):
         self._subj = subj    # The object is not the subject context
         self._pred = None
 
+
     def endAnonymousNode(self):    # Remove context
+        self.stack.pop()
         self._write(" ].")
         self.indent = self.indent - 1
         self._newline()
@@ -980,6 +1011,7 @@ class ToN3(RDFSink):
 # Below we notate a nested bag of statements
 
     def startBagSubject(self, context):
+        self.stack.append(0)
 	if self._subj != context:
 	    self._endStatement()
         self.indent = self.indent + 1
@@ -989,6 +1021,8 @@ class ToN3(RDFSink):
         self._pred = None
 
     def endBagSubject(self, subj):    # Remove context
+        self.stack.append(0)
+        self.stack.pop()
         self._endStatement()     # @@@@@@@@ remove in syntax change to implicit
         self._newline()
         self._write("}")
@@ -998,6 +1032,7 @@ class ToN3(RDFSink):
      
     def startBagNamed(self, subj):
         self._makeSubjPred(subj, ( RESOURCE,  DAML_equivalentTo_URI ))
+        self.stack.append(0)
         self.indent = self.indent + 1
         self._write("{")
         self._newline()
@@ -1005,6 +1040,7 @@ class ToN3(RDFSink):
         self._pred = None
 
     def endBagNamed(self, subj):    # Remove context
+        self.stack.pop()
         self._endStatement()     # @@@@@@@@ remove in syntax change to implicit
         self._newline()
         self._write("}")
@@ -1014,12 +1050,14 @@ class ToN3(RDFSink):
      
     def startBagObject(self, triple):
         self._makeSubjPred(triple[SUBJ], triple[PRED])
+        self.stack.append(0)
         self.indent = self.indent + 1
         self._write("{")
 	self._subj = None
         self._pred = None
 
     def endBagObject(self, pred, subj):    # Remove context
+        self.stack.pop()
         self._endStatement() # @@@@@@@@ remove in syntax change to implicit
         self.indent = self.indent - 1
         self._write("}")
@@ -1028,6 +1066,8 @@ class ToN3(RDFSink):
         self._pred = pred
      
     def _makeSubjPred(self, subj, pred):
+
+        if self.stack[-1]: return  # If we are in list mode, don't need to.
         
 	if self._subj != subj:
 	    self._endStatement()
@@ -1070,6 +1110,8 @@ class ToN3(RDFSink):
         """
 
 #        print "# Representation of ", `pair`
+        if pair == N3_null and not self.noLists:
+            return"()"
         type, value = pair
         if ((type == VARIABLE or type == ANONYMOUS)
             and not option_noregen ):

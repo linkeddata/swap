@@ -14,44 +14,42 @@ but won't figure out which ones to apply to prove something.
 http://www.w3.org/DesignIssues/Notation3
 Date: 2000/07/17 21:46:13  
 
+Agenda:
+=======
 
-
----- hmmmm ... not expandable - a bit of a trap.
-
-DWC:
-idea: migrate toward CSS notation?
-
-idea: use notation3 for wiki record keeping.
-
-TBL: more cool things:
+ - filter out duplicate conclusions
+ - semi-reification - reifying only subexpressions
+ - logic API as requested DC 2000/12/10
  - sucking in the schema (http library?) - to know about r see r
  - metaindexes - "to know more about x please see r" - described by
- - equivalence handling inc. equivalence of equivalence
- - regeneration of genids on output. - DONE
- - repreentation of genids and foralls in model
-- regression test - DONE (once!)
+ - equivalence handling inc. equivalence of equivalence?
  Shakedown:
  - Find all synonyms of synonym
  - Find closure for all synonyms
  - Find superclass closure?
  - Use unambiguous property to infer synomnyms
-
- - Separate the store hash table from the parser. - DONE
- 
- Manipulation:
-  { } as notation for bag of statements
-  - filter 
-  - graph match
-  - recursive dump of nested bags
-Validation:  validate domain and range constraints against closuer of classes and
+ - Validation:  validate domain and range constraints against closuer of classes and
    mutually disjoint classes.
-
 - represent URIs bound to same equivalence closuse object?
 
-Translation;  Try to represent the space (or a context) using a subset of namespaces
+- Translation;  Try to represent the space (or a context) using a subset of namespaces
 
 - Other forms of context - explanation of derivation by rule or merging of contexts
-1
+
+
+
+
+Done
+====
+ - Separate the store hash table from the parser. - DONE
+ - regeneration of genids on output. - DONE
+ - repreentation of genids and foralls in model
+- regression test - DONE (once!)
+ Manipulation:
+  { } as notation for bag of statements - DONE
+  - filter -DONE
+  - graph match -DONE
+  - recursive dump of nested bags - DONE
 """
 
 
@@ -322,8 +320,14 @@ class RDFStore(notation3.RDFSink) :
         self.implies = engine.internURI(Logic_NS + "implies")
         self.asserts = engine.internURI(Logic_NS + "asserts")
         self.truth = engine.internURI(Logic_NS + "truth")
-        self.Type = engine.internURI(notation3.RDF_type_URI)
+        self.type = engine.internURI(notation3.RDF_type_URI)
         self.subExpression = engine.internURI(Logic_NS + "subExpression")
+        
+        self.first = engine.internURI(Logic_NS + "first")
+        self.rest = engine.internURI(Logic_NS + "rest")
+        self.null = engine.internURI(Logic_NS + "null")
+        self.Empty = engine.internURI(Logic_NS + "Empty")
+        self.List = engine.internURI(Logic_NS + "List")
 
 
 # Input methods:
@@ -520,6 +524,38 @@ class RDFStore(notation3.RDFSink) :
         _anon = (_op < 2) and _isExistential
         return ( _anon, _asObj+_asPred, _isSubExp)  
 
+    def isList(self, x, context):
+        """ Does this look like a list?
+        This should check that this is a node which can be represented in N3
+        without loss of information as a list.
+        
+        """
+        if x == self.null: return 1  # Yes, null is the list ()
+
+        _anon, _incoming, _se = self.n3_anonymous(x, context)
+        if not _anon: return 0  # This is not anonymous -> can't use list syntax.
+
+        empty = 0
+        left = []
+        right = []
+        for s in x.occursAs[SUBJ]:
+            con, pred, subj, obj = s.triple
+            if con == context:
+                #print "     ",quadToString(s.triple), `self.first`
+                if pred is self.first: left.append(obj)
+                elif pred is self.rest: right.append(obj)
+                elif pred is self.type:
+                    if obj is self.Empty: empty = 1
+                    if obj is not self.List and obj is not self.Empty : return 0
+                else:
+                    #print "     Unacceptable: ",quadToString(s.triple), `self.rest`, `pred`
+                    return 0  # Can't have anything else - wouldn't print.
+        #print "# ", `x`[-8:], "left:", left, "right", right
+        if left == [] and right == [] and empty: return 1
+        if len(left) != 1 or len(right)!=1: return 0 # Invalid
+        return self.isList(right[0], context)
+    
+
 
     def dumpNested(self, context, sink):
         """ Iterates over all URIs ever seen looking for statements
@@ -590,7 +626,6 @@ class RDFStore(notation3.RDFSink) :
             self.dumpNestedStatements(subj, sink)  # dump contents of anonymous bag
             sink.endBagNamed(subj.asPair())       # Subject is now set up
 
-
     def isImplicit(self, s):
         con, pred, subj, obj = s.triple
         _anon, incoming, se = self.n3_anonymous(obj, con)
@@ -621,7 +656,7 @@ class RDFStore(notation3.RDFSink) :
 #            if _isContext > 0 and _isSubject > 0: raise CantDoThat # Syntax problem!@@@
             
             if _isSubject > 0 or not _se :   #   Do [ ] if nothing else as placeholder.
-                sink.startAnonymous(self.extern(triple))
+                sink.startAnonymous(self.extern(triple), self.isList(obj, context))
                 for t in obj.occursAs[SUBJ]:
                     if t.triple[CONTEXT] is context:
                         self.coolMakeStatement(sink, t)
@@ -730,7 +765,7 @@ class RDFStore(notation3.RDFSink) :
             else:
                 c = None
                 if t[PRED] is self.asserts and t[SUBJ] is filterContext: c=t[OBJ]
-                elif t[PRED] is self.Type and t[OBJ] is self.truth: c=t[SUBJ]
+                elif t[PRED] is self.type and t[OBJ] is self.truth: c=t[SUBJ]
 # We could shorten the rule format if forAll(x,y) asserted truth of y too, but this messes up
 # { x foo y } forAll x,y; log:implies {...}. where truth is NOT asserted. This line would do it:
 #                elif t[PRED] is self.forAll and t[SUBJ] is self.truth: c=t[SUBJ]  # DanC suggestion
@@ -1250,6 +1285,7 @@ def doCommand():
         option_bySubject= 0 # Store and regurgitate in subject order *
         option_inputs = []
         option_reify = 0    # Flag: reify on output  (process?)
+        option_outURI = None
         _doneOutput = 0
         _gotInput = 0     #  Do we not need to take input from stdin? 
         hostname = "localhost" # @@@@@@@@@@@ Get real one
@@ -1262,6 +1298,7 @@ def doCommand():
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-bySubject": _doneOutput = 1
             elif arg == "-rdf1out": option_rdf1out = 1
+            elif arg[:8] == "-outURI=": option_outURI = arg[8:]
             elif arg == "-chatty": chatty = 1
             elif arg[:7] == "-apply=": pass
             elif arg == "-reify": option_reify = 1
@@ -1278,6 +1315,8 @@ def doCommand():
 	print "# Base URI of process is" , _baseURI
 	
         _outURI = urlparse.urljoin(_baseURI, "STDOUT")
+        if option_outURI: _outURI = urlparse.urljoin(_outURI, option_outURI)
+        
 	if option_rdf1out:
             _outSink = notation3.ToRDF(sys.stdout, _outURI)
         else:
@@ -1293,6 +1332,7 @@ def doCommand():
 
         if not _gotInput: #@@@@@@@@@@ default input
             _inputURI = urlparse.urljoin( _baseURI, "STDIN") # Make abs from relative
+            inputContext = myEngine.internURI(_inputURI)
             p = notation3.SinkParser(_store,  _inputURI)
             p.load("")
             del(p)
@@ -1380,7 +1420,7 @@ def doCommand():
 
             elif arg == "-size":
                 print "# Size of store: %i statements." %(_store.size,)
-
+            elif arg[:8] == "-outURI=": pass
             else: print "Unknown option", arg
 
 

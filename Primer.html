@@ -164,15 +164,13 @@ applications very simply.</p>
 space, I will just assume the prefixes</p>
 <pre>@prefix rdf:  &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
 @prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
-@prefix ont:  &lt;http://www.daml.org/2000/10/daml-ont#&gt; .
-</pre>
+@prefix ont:  &lt;http://www.daml.org/2000/10/daml-ont#&gt; .</pre>
 
 <p>These are the RDF, RDF schema, and experimental DAML ontology namesapces,
 respectively.  They give us the core terms which we can boostrap ourselves
 into the semantic web.  I am also going to assume that we the empty prefix
 stands for the document we are writing, which we can say in N3 as</p>
-<pre>@prefix : &lt;&gt; .
-</pre>
+<pre>@prefix : &lt;#&gt; .</pre>
 
 <p>This means we could have the example above as</p>
 <pre>:pat :child [ :age "4" ] , [ :age "3" ].</pre>
@@ -180,7 +178,8 @@ stands for the document we are writing, which we can say in N3 as</p>
 <p></p>
 
 <p>which is slightly less characters to type. Now you understand how to write
-N3, you can start making up your own vocabularies.</p>
+data in N3, you can start making up your own vocabularies, because they are
+just data themselves.</p>
 
 <h2>Making vocabularies</h2>
 
@@ -239,7 +238,8 @@ between two terms is so useful and fundamental that N3 has a special shorthand
 for it, "=".</p>
 
 <p>:</p>
-<pre>Woman = foo:FemalAdult;</pre>
+<pre>:Woman = foo:FemalAdult .
+:Title a rdfs:Class; = dc:Title .</pre>
 
 <p></p>
 
@@ -271,7 +271,7 @@ easily, if it finds the mail or looks up the web page.</p>
 ontologies, and you have pointers to where to look for the richer ways of
 defining them.You don't have to go any futher, as what you have now will allow
 you to craete new applications, and craete schemas, data files, and programs
-which interchange and manipulate data for the semantic web. </p>
+which interchange and manipulate data for the semantic web.</p>
 <hr>
 
 <h2>Contexts</h2>
@@ -295,8 +295,7 @@ context.</p>
 <p>In N3 a context can be represented by enclosing all the statements it
 encloses in curly braces { }.(In RDF/XML, contexts are declared using the
 bagid attribute on a collection of statements) .</p>
-<pre>:foo = {  :pat a :Person . } .
-</pre>
+<pre>:foo = {  :pat a :Person . } .</pre>
 
 <p>The context in braces acts just like an identifier in the rest of the
 syntax.  This example just declares that  foo identifies the hypothetical
