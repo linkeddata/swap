@@ -46,11 +46,25 @@ def tidy(x): return string.replace(str(x), '.0', '')
 
 # add, take, multiply, divide
 
+
+class BI_sum(LightBuiltIn, Function):
+    def evaluateObject(self, store, context, subj, subj_py): 
+        t = 0
+        for x in subj_py: t += float(x)
+        return store.intern((LITERAL, tidy(t)))
+
 class BI_sumOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, store, context, obj, obj_py): 
         t = 0
         for x in obj_py: t += float(x)
         return store.intern((LITERAL, tidy(t)))
+
+
+class BI_difference(LightBuiltIn, Function):
+    def evaluateObject(self, store, context, subj, subj_py): 
+        t = None
+        if len(subj_py) == 2: t = float(subj_py[0]) - float(subj_py[1])
+        if t is not None: return store.intern((LITERAL, tidy(t)))
 
 class BI_differenceOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, store, context, obj, obj_py): 
@@ -58,11 +72,23 @@ class BI_differenceOf(LightBuiltIn, ReverseFunction):
         if len(obj_py) == 2: t = float(obj_py[0]) - float(obj_py[1])
         if t is not None: return store.intern((LITERAL, tidy(t)))
 
-class BI_productOf(LightBuiltIn, ReverseFunction):
+class BI_product(LightBuiltIn, Function):
+    def evaluateObject(self, store, context, subj, subj_py): 
+        t = 1
+        for x in subj_py: t *= float(x)
+        return store.intern((LITERAL, tidy(t)))
+
+class BI_factors(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, store, context, obj, obj_py): 
         t = 1
         for x in obj_py: t *= float(x)
         return store.intern((LITERAL, tidy(t)))
+
+class BI_quotient(LightBuiltIn, Function):
+    def evaluateObject(self, store, context, subj, subj_py): 
+        t = None
+        if len(subj_py) == 2: t = float(subj_py[0]) / float(subj_py[1])
+        if t is not None: return store.intern((LITERAL, tidy(t)))
 
 class BI_quotientOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, store, context, obj, obj_py): 
@@ -72,13 +98,19 @@ class BI_quotientOf(LightBuiltIn, ReverseFunction):
 
 # remainderOf and negationOf
 
+class BI_remainder(LightBuiltIn, Function):
+    def evaluateObject(self, store, context, subj, subj_py): 
+        t = None
+        if len(subj_py) == 2: t = float(subj_py[0]) % float(subj_py[1])
+        if t is not None: return store.intern((LITERAL, tidy(t)))
+
 class BI_remainderOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, store, context, obj, obj_py): 
         t = None
         if len(obj_py) == 2: t = float(obj_py[0]) % float(obj_py[1])
         if t is not None: return store.intern((LITERAL, tidy(t)))
 
-class BI_negationOf(LightBuiltIn, Function, ReverseFunction):
+class BI_negation(LightBuiltIn, Function, ReverseFunction):
     def evaluateSubject(self, store, context, obj, obj_py): 
         t = -float(obj.string)
         if t is not None: return store.intern((LITERAL, tidy(t)))
@@ -88,6 +120,12 @@ class BI_negationOf(LightBuiltIn, Function, ReverseFunction):
 
 # Power
 
+class BI_exponentiation(LightBuiltIn, Function):
+    def evaluateObject(self, store, context, subj, subj_py): 
+        t = None
+        if len(subj_py) == 2: t = float(subj_py[0]) ** float(subj_py[1])
+        if t is not None: return store.intern((LITERAL, tidy(t)))
+
 class BI_exponentiationOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, store, context, obj, obj_py): 
         t = None
@@ -95,7 +133,7 @@ class BI_exponentiationOf(LightBuiltIn, ReverseFunction):
         if t is not None: return store.intern((LITERAL, tidy(t)))
 
 # Math greater than and less than etc., modified from cwm_string.py
-# These are truth testing things
+# These are truth testing things  - Binary logical operators
 
 class BI_greaterThan(LightBuiltIn):
     def evaluate(self, store, context, subj, subj_py, obj, obj_py):
@@ -132,12 +170,22 @@ class BI_memberCount(LightBuiltIn, Function):
 
 def register(store):
     str = store.internURI(MATH_NS_URI[:-1])
+    str.internFrag('sum', BI_sum)
+    str.internFrag('difference', BI_difference)
+    str.internFrag('product', BI_product)
+    str.internFrag('quotient', BI_quotient)
+    str.internFrag('remainder', BI_remainder)
+    str.internFrag('exponentiation', BI_exponentiation)
+
     str.internFrag('sumOf', BI_sumOf)
     str.internFrag('differenceOf', BI_differenceOf)
-    str.internFrag('productOf', BI_productOf)
+    str.internFrag('factors', BI_factors)
     str.internFrag('quotientOf', BI_quotientOf)
     str.internFrag('remainderOf', BI_remainderOf)
-    str.internFrag('negationOf', BI_negationOf)
+    str.internFrag('exponentiationOf', BI_exponentiationOf)
+
+    str.internFrag('negation', BI_negation)
+
     str.internFrag('greaterThan', BI_greaterThan)
     str.internFrag('notGreaterThan', BI_notGreaterThan)
     str.internFrag('lessThan', BI_lessThan)
@@ -145,7 +193,6 @@ def register(store):
     str.internFrag('equalTo', BI_equalTo)
     str.internFrag('notEqualTo', BI_notEqualTo)
     str.internFrag('memberCount', BI_memberCount)
-    str.internFrag('exponentiationOf', BI_exponentiationOf)
 
 if __name__=="__main__": 
    print string.strip(__doc__)
