@@ -2,11 +2,11 @@
 
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix daml:  <http://www.daml.org/2000/10/daml-ont#> .
-@prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
-@prefix ex:   <http://www.daml.org/2000/10/daml-ex#> .
+#@prefix daml:  <http://www.daml.org/2000/10/daml-ont#> .
+#@prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+#@prefix ex:   <http://www.daml.org/2000/10/daml-ex#> .
 @prefix log:  <http://www.w3.org/2000/10/swap/log#> .
-@prefix string:  <http://www.w3.org/2000/10/swap/string#> .
+#@prefix string:  <http://www.w3.org/2000/10/swap/string#> .
 
 
 @prefix foo: <foo.n3#>.  # Local stuff
@@ -28,7 +28,7 @@ this log:forAll :d, :x, :y, :F, :G.
 #{ "z" string:greaterThan "a" } log#:implies { :result :is :sanity }. 
 
 { ( { :sky :color :blue }  { :sky :color :green } ) log:conjunction :F }
-    log:implies  { :rest :is :F } .
+    log:implies  {  :F a :result} .
 
 
 # "Conjunction junction, what's your're function?"  - schoolhouse rock.

@@ -281,7 +281,7 @@ class BI_includes(HeavyBuiltIn):
 class BI_notIncludes(HeavyBuiltIn):
     """Check that one formula does not include the other.
 
-    notIncldues is a heavy function not only because it may take more time than
+    notIncludes is a heavy function not only because it may take more time than
     a simple search, but also because it must be performed after other work so that
     the variables within the object formula have all been subsituted.  It makes no sense
     to ask a notIncludes question with variables, "Are there any ?x for which
@@ -461,19 +461,20 @@ class BI_cufi(HeavyBuiltIn, Function):
             F = store.any((store._experience, store.cufi, subj, None))  # Cached value?
             if F: return F
 
-            if thing.verbosity() > 10: progress("Bultin: " + `subj`+ " log:cufi " + `F`)
+            if thing.verbosity() > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
             F = store.genid(FORMULA)
-            self.copyContext(subj, F)
-            self.think(F)
+#            store.storeQuad((context, store.forSome, context, F ))
+            store.copyContext(subj, F)
+            store.think(F)
             store.storeQuad((store._experience, store.cufi, subj, F))  # Cache for later
             return F
     
 class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
-    """ The conjunction of a set of formulae is the set of statments which is
+    """ The conjunction of a set of formulae is the set of statements which is
     just the union of the sets of statements
     modulo non-duplication of course"""
     def evaluateObject(self, store, context, subj, subj_py):
-        if thing.verbosity() > 79:
+        if thing.verbosity() > 50:
             progress("Conjunction input:"+`subj_py`)
             for x in subj_py:
                 progress("    one input formula has %i statements"
@@ -481,9 +482,12 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
 #        F = conjunctionCache.get(subj_py, None)
 #        if F != None: return F
         F = store.genid(FORMULA)
+#        store.storeQuad((context, store.forSome, context, F ))
         for x in subj_py:
             if not isinstance(x, Formula): return None # Can't
             store.copyContext(x, F)
+            if thing.verbosity() > 74:
+                progress("    Formula %s now has %i" % (x2s(F),len(F.occursAs[CONTEXT])))
         return store.endFormula(F)
 
     
@@ -646,7 +650,7 @@ class RDFStore(RDFSink.RDFSink) :
      
 
     def deleteFormula(self,F):
-        for s in F.occuresAs[CONTEXT][:]:   # Take copy
+        for s in F.occursAs[CONTEXT][:]:   # Take copy
             self.removeStatement(s)
 
     def endFormula(self, F):
@@ -654,16 +658,16 @@ class RDFStore(RDFSink.RDFSink) :
         If not, record this one and return it.
         Call this when the forumla is in its final form, with all its statements.
         """
-        l = F.occursAs[CONTEXT]   # The number of statements
+        l = len(F.occursAs[CONTEXT])   # The number of statements
         possibles = self._formulaeOfLength.get(l, None)  # Formulae of same length
         if possibles == None:
-            self.formulaeOfLength[l] = []
-            possibles = self.formulaeOfLength[l]
+            self._formulaeOfLength[l] = []
+            possibles = self._formulaeOfLength[l]
         for G in possibles:
             if self.testIncludes(F,G):  # If same size and one includes the other then equal
                 self.deleteFormula(F)
                 return G
-        possibilities.append(F)
+        possibles.append(F)
         return F
 
 # Input methods:
@@ -791,13 +795,16 @@ class RDFStore(RDFSink.RDFSink) :
         self.size = self.size+1
 
         if pred.definedAsListIn():
-            subj = q[SUBJ]
-            if (not isinstance(subj, Fragment)) or subj._defAsListIn:
+            if (not isinstance(subj, Fragment)):
                 progress("Store Quad: Predicate %s and subject %s" %(pred, subj))
-                if not isinstance(subj, Fragment): progress("Subject class is"+`subj.__class__`)
-                if subj._defAsListIn: progress("Subject is ALREADY defined as a list by "+
+                progress("Subject class is"+`subj.__class__`)
+                raise RuntimeError, "Statement makes list of something not a fragment - see above."
+            li = subj._defAsListIn
+            if li and ((li[OBJ] is not obj) or(li[PRED] is not pred)):                
+                progress("Store Quad: Predicate %s and subject %s" %(pred, subj))
+                progress("Subject is ALREADY defined as a list by "+
                                                quadToString(subj._defAsListIn.triple))
-                raise RuntimeError, "Statement makes list of"
+                raise RuntimeError, "Statement makes list of something which is a DIFFERENR list - see above."
             subj._defAsListIn = s
             self.newList(subj)
 #        print "Exiting, Formula now has %i statements" % len(self._index[(context,None,None,None)])
@@ -987,11 +994,12 @@ class RDFStore(RDFSink.RDFSink) :
 
     def _topology(self, x, context): 
         """ Can be output as an anonymous node in N3. Also counts incoming links.
+        Output tuple parts:
 
         1. True iff can be represented as anonymous node in N3
         2. Number of incoming links: >0 means occurs as object or pred, 0 means as only as subject.
-        3. Is this a literal context? forSome and exists as context.
-            Literal contexts are represented wherever they occur by braces expression
+        3. Is this a literal formula?
+            Literal formulae are represented wherever they occur by braces expressions
         
         Returns  number of incoming links (1 or 2) including forSome link
         or zero if self can NOT be represented as an anonymous node.
@@ -1015,7 +1023,7 @@ class RDFStore(RDFSink.RDFSink) :
                                   
         for s in x.occursAs[OBJ]:  # Checking all statements about x
             con, pred, subj, obj = s.triple
-            # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ HACK - error - check context is ancestor
+            # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Fudge - error - check context is ancestor
             if subj is con and pred is self.forSome :
                 _isExistential = 1
             else:
@@ -1033,7 +1041,10 @@ class RDFStore(RDFSink.RDFSink) :
             _asObj = _asObj + _asPred  # List links are like obj (daml:rest)
             _asPred = 0
             _anon = 1    # Always represent it as anonymous
-        _isSubExp = _isExistential and (isinstance(x, Formula) and x is not context) # subExpression removal
+#        _isSubExp = _isExistential and (isinstance(x, Formula) and x is not context) # subExpression removal
+        _isSubExp = isinstance(x, Formula) and x is not context # subExpression - why calc here?
+        if _isSubExp:
+            _anon = 1
 
         if thing.verbosity() > 98: progress( "\nTopology <%s in <%sanon=%i ob=%i,pr=%i se=%i exl=%i"%(
             `x`[-8:], `context`[-8:], _anon, _asObj, _asPred, _isSubExp, _isExistential))
@@ -1186,15 +1197,20 @@ class RDFStore(RDFSink.RDFSink) :
             `subj`[-8:], _incoming, _se, _anon))
         if _anon and  _incoming == 1: return           # Forget it - will be dealt with in recursion
 
-    
-        if _anon and _incoming == 0:    # Will be root anonymous node - {} or [] or ()
-            if _se > 0:  # Is subexpression of this context
-                sink.startBagSubject(subj.asPair())
-                self.dumpNestedStatements(subj, sink)  # dump contents of anonymous bag
-                sink.endBagSubject(subj.asPair())       # Subject is now set up
-                # continue to do arcs
+        if isinstance(subj, Formula) and subj is not context:
+            sink.startBagSubject(subj.asPair())
+            self.dumpNestedStatements(subj, sink)  # dump contents of anonymous bag
+            sink.endBagSubject(subj.asPair())       # Subject is now set up
+            # continue to do arcs
+            
+        elif _anon and _incoming == 0:    # Will be root anonymous node - {} or [] or ()
+#            if _se > 0:  # Is subexpression of this context
+#                sink.startBagSubject(subj.asPair())
+#                self.dumpNestedStatements(subj, sink)  # dump contents of anonymous bag
+#                sink.endBagSubject(subj.asPair())       # Subject is now set up
+#                # continue to do arcs
 
-            elif subj is context:
+            if subj is context:
                 pass
             else:     #  Could have alternative syntax here
 
@@ -1229,10 +1245,10 @@ class RDFStore(RDFSink.RDFSink) :
                 if not li: sink.endAnonymousNode()
                 return  # arcs as subject done
 
-        if not _anon and isinstance(subj, Formula) and subj is not context:
-            sink.startBagNamed(context.asPair(), subj.asPair())
-            self.dumpNestedStatements(subj, sink)  # dump contents of anonymous bag
-            sink.endBagNamed(subj.asPair())       # Subject is now set up
+#        if not _anon and isinstance(subj, Formula) and subj is not context:
+#            sink.startBagNamed(context.asPair(), subj.asPair())
+#            self.dumpNestedStatements(subj, sink)  # dump contents of anonymous bag
+#            sink.endBagNamed(subj.asPair())       # Subject is now set up
 
         if sorting: statements.sort(StoredStatement.__cmp_cannonical__)
         for s in statements:
@@ -1316,11 +1332,12 @@ class RDFStore(RDFSink.RDFSink) :
                 
     def copyContext(self, old, new):
         for s in old.occursAs[CONTEXT][:] :   # Copy list!
+            q = s.triple
             for p in CONTEXT, PRED, SUBJ, OBJ:
-                x = s.triple[p]
+                x = q[p]
                 if x is old:
-                    s.triple = s.triple[:p] + (new,) + s.triple[p+1:]
-            self.storeQuad(s.triple)
+                    q = q[:p] + (new,) + q[p+1:]
+            self.storeQuad(q)
                 
 #  Clean up intermediate results:
 #

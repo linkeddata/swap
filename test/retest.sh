@@ -109,14 +109,23 @@ cwm_test smush.rdf "Data aggregation challenge from Jan 2001" --rdf smush-exampl
 
 cwm_test vblsNotURIs-out.n3 "Should not get URIs of anonymous nodes" --rdf animal.rdf --n3 vblsNotURIs.n3 --think
 
+
 TEST_PARAMETER_1=TEST_VALUE_1; export TEST_PARAMETER_1 
 cwm_test environ.n3 "Read operating system environment variable" os/environ.n3 -think
 
 TARGET=roadmap/test.graph; export TARGET
 cwm_test roadmap-test.dot "using notIncludes and --strings to make a graphviz file"  roadmap/todot.n3 --think --strings
 
+cwm_test conjunction.n3 "log:conjunction of formulae" includes/conjunction.n3 --think
+
+cwm_test conclusion.n3  "log:conclusion deductive closure" includes/conclusion.n3 --think
+
+
 # $Log$
-# Revision 1.25  2001-12-29 04:00:42  timbl
+# Revision 1.26  2001-12-31 04:33:23  timbl
+# Simple tests on log:conjunction and log:conclusion seem to work
+#
+# Revision 1.25  2001/12/29 04:00:42  timbl
 # Minor fixes. See ./util for bits of validator
 #
 # Revision 1.23  2001/12/02 22:42:28  timbl

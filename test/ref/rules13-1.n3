@@ -4,24 +4,8 @@
     
     this     log:forAll :p,
                 :x,
-                :y;
-         log:forSome {:p     a daml:TransitiveProperty .
-        },
-                {{
-            {
-                :x     :p :y .
-                :y     :p :z .
-                
-                }     log:implies {:x     :p :z .
-                } .
-            
-            }     a log:Truth;
-             log:forAll :x,
-                    :y,
-                    :z .
-        } .
-    
-    :_g0 :- {
+                :y .
+    {
         :p     a daml:TransitiveProperty .
         
         }     :means {{
@@ -50,8 +34,7 @@
                     :y,
                     :z .
         } .
-    
-    :_g1 :- {
+    {
         {
             {
                 :x     :p :y .

@@ -1,12 +1,14 @@
 #   n3 definition of some logical terms
 #
-# these raise the level above ontology
+# These raise the level above RDF's pure relational data,
+# and Web Ontology's ontological level, to allow rules to be expressed
+# and inference done.
+# 
 # $Id$
 
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix doc: <http://www.w3.org/2000/01/pim/doc#>.
-#bind ont: <http://www.daml.org/2000/10/daml-ont> .	 # contains aliases for the above
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix : <#>.
 
@@ -18,23 +20,55 @@ on those specifications, and the semantics defined by the specifications
 of any identifiers used in the document.
 """ .
 
+################################################## Syntactic level
+#
+#  It isn't clear to me that these should be described as Properties
+#  and Classes.  They operate at a level of symbol identity, not daml:Equivalence.
+#
+
+log:equalTo a rdf:Property;
+    rdfs:comment
+"""Equality in this sense is actually the same URI.
+Do not confuse with daml:EquivalentTo.
+A cwm built-in logical operator.
+""".
+
+log:notEqualTo a rdf:Property;
+    rdfs:comment
+"""Equality in this sense is actually the same URI.
+Do not confuse with daml:EquivalentTo.
+A cwm built-in logical operator.
+""".
+
+log:rawType a rdf:Property;
+    rdfs:comment """
+This is a low-level langauge type, one of log:Formula, log:Literal, 
+log:List, log:Other.  I only use testing for log:Formula right now (tbl 2001/9/17).
+List and Other are not stable and may change.
+Example: semanticsOrError returns either a Formula or a String.
+""".
+
 log:Formula a rdfs:Class.
 log:String  a rdfs:Class.
 log:List    a rdfs:Class.     # Syntactic things
+log:Other   a rdfs:Class.     # Not one of the above.
 
 #   The following are inherent in the translation of N3 syntax to quad representation:
 
 log:forSome a rdf:Property;  #@@@@@ buggy!
-	rdfs:comment "A is true for some objectfor which here we use B. This concept is buggy." ;
-	rdfs:domain log:Formula.
+    rdfs:comment """A is true for some object for which here we use B. This
+                is NOT a real rdf property in its behaviour - a pseudoproperty.""" ;
+	   rdfs:domain log:Formula.
 
 
 log:forAll a rdf:Property;
     rdfs:comment "A is true for any object in place of B" .
 
 
-################## The following are used for inference
-
+#########################################################
+#
+#  The following are used for inference
+#
 
 log:Truth a rdfs:Class;
     rdfs:comment """Something which is true: belive it as you would belive this.
@@ -64,29 +98,6 @@ log:notIncludes a rdf:Property;
     rdfs:isDefinedBy <>;
     rdfs:range log:Formula.
 
-log:equalTo a rdf:Property;
-    rdfs:comment
-"""Equality in this sense is actually the same URI.
-Do not confuse with daml:EquivalentTo.
-A cwm built-in logical operator.
-""".
-
-log:notEqualTo a rdf:Property;
-    rdfs:comment
-"""Equality in this sense is actually the same URI.
-Do not confuse with daml:EquivalentTo.
-A cwm built-in logical operator.
-""".
-
-
-log:rawType a rdf:Property;
-    rdfs:comment """
-This is a low-level langauge type, one of log:Formula, log:Literal, 
-log:List, log:Other.  I only use testing for log:Formula right now (tbl 2001/9/17).
-List and Other are not stable and may change.
-""".
-
-    rdfs:Class is  rdf:type of log:Formula, log:Literal, log:List, log:Other.
  
 log:semantics a rdf:Property;   # (was resolvesTo but we use role nouns by preference)
     rdfs:domain doc:Work;
@@ -133,12 +144,12 @@ log:conclusion a rdf:Property;
     rdfs:label "conclusion";
     rdfs:domain log:Formula;
     rdfs:range log:Formula;
-    rdfs:comment """The conclusions which can be drawn from a formula.
+    rdfs:comment """All possible conclusions which can be drawn from a formula.
 
 The object of this function is the set of conclusions which can be
-drawn from the formula on the right, by successively applying any
+drawn from the subject formula, by successively applying any
 rules it contains to the data it contains. This is equivalent to
-cwm's "--think" command line function.  It does use built-ins, to
+cwm's "--think" command line function.  It does use built-ins, so
 it may for example indirectly invoke other documents, validate
 signatures, etc.
 """.
@@ -158,7 +169,9 @@ log:uri a rdf:Property;
     rdfs:comment 
 """This allows one to look at the actual string of the URI
 which identifies this.
-Cwm can get the URI of a resource or get the resource from the URI.""";
+Cwm can get the URI of a resource or get the resource from the URI.
+This is a level breaker, breaking the rule of not looking inside a
+URI.   Use to replace RDF's old "aboutEach" functionality.""";
     rdfs:range log:String.
 
 ############# Rules
