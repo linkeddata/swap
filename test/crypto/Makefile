@@ -6,6 +6,12 @@
 #
 CWM=python ../../cwm.py
 
+W=/devel/WWW
+RM=$W/2001/04/roadmap
+PD=$W/2001/02pd
+
+include $(PD)/GVDOT.mak
+
 .SUFFIXES: .response .request .public .private
 
 .request.response:
@@ -72,5 +78,17 @@ access-1.request : access-tiina.private access-sign-request.n3
 # It checks that the chain of authority has been satisfied by appropriate signed statements.
 access-1.response : access-1.request access-rule.n3 access-tiina.public access-tiina.cert access-elisa.cert access-master.public
 
+######################### Makefile diagram
+
+make.n3 : Makefile $W/2000/10/swap/util/make2n3.py
+	python $W/2000/10/swap/util/make2n3.py Makefile > $@
+
+make.graph: make.n3 $(RM)/make-style.n3
+	$(CWM) make.n3 $(RM)/make-style.n3 --think >$@
+
+make.dot: make.graph
+	TARGET=$< $(CWM) $(RM)/todot.n3 -think --strings | sed -f $(RM)/fix-amp.sed > $@
+
+make.svg: make.dot
 
 # ends
