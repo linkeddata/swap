@@ -1,7 +1,7 @@
 <RDF xmlns="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:cal="http://nwalsh.com/pim/Palm/Calendar#"
-    xmlns:da="file:/home/ndw/.xmlDate.rdf#"
+    xmlns:da="file:/home79536262/ndw/.xmlDate.rdf#"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
     xmlns:palm="http://nwalsh.com/pim/Palm/DateBook#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
@@ -9,14 +9,14 @@
     <rdf:Description rdf:about="http://nwalsh.com/pim/Palm/Calendar#_2002_2">
         <da:appointments rdf:parseType="Resource">
             <rdf:type rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#Seq"/>
-            <rdf:_1 rdf:resource="file:/home/ndw/.xmlDate.rdf#id166"/>
-            <rdf:_2 rdf:resource="file:/home/ndw/.xmlDate.rdf#id172"/>
-            <rdf:_3 rdf:resource="file:/home/ndw/.xmlDate.rdf#id93"/>
-            <_4 rdf:resource="file:/home/ndw/.xmlDate.rdf#id193"/>
-            <_5 rdf:resource="file:/home/ndw/.xmlDate.rdf#id192"/>
-            <_6 rdf:resource="file:/home/ndw/.xmlDate.rdf#id104"/>
-            <_7 rdf:resource="file:/home/ndw/.xmlDate.rdf#id157"/>
-            <_8 rdf:resource="file:/home/ndw/.xmlDate.rdf#id32"/>
+            <rdf:_1 rdf:resource="file:/home79536262/ndw/.xmlDate.rdf#id166"/>
+            <rdf:_2 rdf:resource="file:/home79536262/ndw/.xmlDate.rdf#id172"/>
+            <rdf:_3 rdf:resource="file:/home79536262/ndw/.xmlDate.rdf#id93"/>
+            <_4 rdf:resource="file:/home79536262/ndw/.xmlDate.rdf#id193"/>
+            <_5 rdf:resource="file:/home79536262/ndw/.xmlDate.rdf#id192"/>
+            <_6 rdf:resource="file:/home79536262/ndw/.xmlDate.rdf#id104"/>
+            <_7 rdf:resource="file:/home79536262/ndw/.xmlDate.rdf#id157"/>
+            <_8 rdf:resource="file:/home79536262/ndw/.xmlDate.rdf#id32"/>
         </da:appointments>
         <cal:month>2</cal:month>
         <cal:year>2002</cal:year>
