@@ -1,0 +1,153 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+@prefix n3test: <http://www.w3.org/2004/11/n3test#> .
+@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#>.
+
+
+
+"A" log:outputString
+"""<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-US" lang="en-US">
+ <head profile="http://www.w3.org/2000/08/w3c-synd/#"><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <style type="text/css" xml:space="preserve">
+td.pass {background-color : green; }
+td.partial {background-color : teal; }
+td.failure {background-color: red; }
+td.pretty {width : 10em; }
+h1 {background-color: red; }
+div.diff { width: 80%; 
+	border : 1px solid black; }
+pre {	border : 1px solid black; 
+	width: 60%; 
+	background-color: grey; }
+  </style>
+  <title>N3 test result report:</title>
+""" .
+
+"B" log:outputString
+"""
+ </head>
+ <body>
+  <h1>
+This is a test for now
+  </h1>
+""" .
+
+
+"C" log:outputString
+"""
+  <table border="1">
+   <thead>
+    <tr>
+     <td>
+Test file
+     </td>
+     <td>
+Description
+     </td>
+     <td>
+Class
+     </td>
+""" .
+
+{?parser a n3test:N3Parser; n3test:command ?y . 
+	("D" ?y) string:concatenation ?x . 
+	("<td class=\"pretty\">" ?y "</td>") string:concatenation ?z} log:implies
+{?x log:outputString ?z} .
+
+"E" log:outputString
+"""
+    <tr>
+   </thead>
+   <tbody>
+""" .
+
+{?file a n3test:Input; log:uri ?uri;
+	n3test:description ?a;
+	n3test:expected ?b .
+	("G" ?file) string:concatenation ?x .
+	("G" ?file "zzzzzzzzzzzzzzzzz") string:concatenation ?y .
+	("""<tr>
+    <td>
+<a href="
+""" 
+?uri 
+"""
+">
+"""
+?uri """</a></td><td>"""
+?a
+"</td><td>"
+?b
+"</td>") string:concatenation ?z .} log:implies
+{?x log:outputString ?z .
+ ?y log:outputString "</tr>"} .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file ?parser [n3test:doesNotMatch () ] .
+	("G" ?file ?y) string:concatenation ?x .
+	("""<td class="partial">&nbsp;</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file ?parser ?q .
+	?q ?r ?s .
+	?r a n3test:Diff .
+	?r n3test:diffString ?t .
+	?t string:equalIgnoringCase "" .
+	("G" ?file ?y) string:concatenation ?x .
+	("""<td class="pass">&nbsp;</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:parses ?file .
+	?file ?parser ?q .
+	?q ?r ?s .
+	?r a n3test:Diff;
+	n3test:diffString ?t;
+	log:uri ?b .
+	?b crypto:md5 ?c .
+	?t string:notEqualIgnoringCase "" .
+	("G" ?file ?y) string:concatenation ?x .
+	("<td class=\"partial\"><a href=\"#a" ?c "\">diff</a></td>") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+{?parser a n3test:N3Parser; 
+	n3test:command ?y; 
+	n3test:failsParsing ?file .
+	("G" ?file ?y) string:concatenation ?x .
+	("""<td class="failure">&nbsp</td>""") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+"R" log:outputString
+"""
+   </tbody>
+  </table>
+""" .
+
+{?parser a n3test:N3Parser;  
+	n3test:parses ?file .
+	?file ?parser ?q .
+	?q n3test:isFile ?m .
+	?m log:uri ?n .
+	?q ?a ?s .
+	?s log:uri ?o .
+	?a a n3test:Diff;
+	n3test:diffString ?diff;
+	log:uri ?b .
+	?b crypto:md5 ?c .
+	("S" ?c) string:concatenation ?x .
+	("<div class=\"diff\" id=\"#a" ?c "\"> diff from " ?n " to " ?o " <pre>" ?diff "</pre></div>") string:concatenation ?z . } log:implies
+{?x log:outputString ?z } .
+
+"ZZZZZZ" log:outputString
+"""
+ </body>
+</html>
+""" .

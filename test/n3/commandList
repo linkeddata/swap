@@ -1,3 +1,7 @@
 /home/syosi/SWAP/cwm.py %s --ntriples
 python /home/syosi/SWAP/grammar/predictiveParser.py --grammar=/home/syosi/SWAP/grammar/n3-selectors.n3  --as=http://www.w3.org/2000/10/swap/grammar/n3#document --parse=%s
 cd /home/syosi/tarballs/euler/ && /usr/java/jdk1.5.0/bin/java Euler --nope %s
+python /home/syosi/tarballs/eep/n3.py %s
+python /home/syosi/tarballs/afon/afon.py %s
+python /home/syosi/SWAP/n3spark.py %s
+python download.py %s | CLASSPATH=/home/syosi/tarballs/jena/Jena-2.1/lib/antlr.jar:/home/syosi/tarballs/jena/Jena-2.1/lib/jena.jar:/home/syosi/tarballs/jena/Jena-2.1/lib/commons-logging.jar:/home/syosi/tarballs/jena/Jena-2.1/lib/xercesImpl.jar /usr/java/jdk1.5.0/bin/java jena.n3 --rdf-nt /dev/stdin
