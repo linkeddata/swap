@@ -14,7 +14,7 @@ It's meant to be a drop-in replacement for RDFS and OWL, but
 of course if you do that drop in, you're no longer using RDFS
 or OWL.
 </dc:description> 
-    <doc:rules rdf:resource="http://www.w3.org/2000/10/swap/test/ferrell/axioms.n3"/>
+    <doc:rules rdf:resource="axioms.n3"/>
   </rdf:Description>
 </rdf:RDF>
   

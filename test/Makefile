@@ -8,8 +8,9 @@ RC=../../rdf-tests/rdfcore
 CODE=retest.py ../cwm.py ../notation3.py ../xml2rdf.py
 
 all : $(CODE) regression.n3
-	PYTHONPATH=`/bin/pwd`/.. $P retest.py -n -f regression.n3
+	PYTHONPATH=`/bin/pwd`/.. $P retest.py -n -c -f regression.n3
 	touch all
+
 
 loopback :
 	./n3-xml-test.sh `cat tests-work.txt`

@@ -69,14 +69,6 @@
          log:implies {:p     a daml:TransitiveProperty .
         } .
     {
-        :a     log:implies :b .
-        :b     log:implies :a .
-        
-        }     :means {:a     :means :b .
-        };
-         log:implies {:a     :means :b .
-        } .
-    {
         this     log:forAll :x,
                     :y,
                     :z .
@@ -88,4 +80,12 @@
             } .
         
         }     a log:Truth .
+    {
+        :a     log:implies :b .
+        :b     log:implies :a .
+        
+        }     :means {:a     :means :b .
+        };
+         log:implies {:a     :means :b .
+        } .
     

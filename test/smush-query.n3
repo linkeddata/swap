@@ -6,6 +6,7 @@
 @prefix agg: <http://example.com/xmlns/aggregation-demo#>.
 @prefix : <http://www.w3.org/2000/10/swapt/test/smush-query#>.
 @prefix v: <http://www.w3.org/2000/10/swapt/test/smush-query#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
 
 this log:forAll :interest, :person, :company.
 
@@ -14,5 +15,5 @@ this log:forAll :interest, :person, :company.
   :company agg:ethicalPolicy
 	<http://dotherightthing.example.org/policy.xhtml>.
 }
-log:implies
+   =>
 { :interest a agg:Q1Answer }.

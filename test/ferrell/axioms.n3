@@ -3,8 +3,8 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
 # NOTE: we use custom versions of RDFS and OWL here....
-@prefix rdfs: <http://www.w3.org/2000/10/swap/test/ferrell/ferrell#> .
-@prefix owl: <http://www.w3.org/2000/10/swap/test/ferrell/ferrell#> .
+@prefix rdfs: <ferrell.rdf#> .
+@prefix owl: <ferrell.rdf#> .
 
 # equivalentClass
 { ?c1 owl:equivalentClass ?c2.

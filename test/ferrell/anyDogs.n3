@@ -1,3 +1,3 @@
-@prefix bio: <http://www.w3.org/2000/10/swap/test/ferrell/biology#>. 
+@prefix bio: <biology.n3#>. 
 
 { ?x a bio:Dog. } => { ?x a bio:Dog. }.

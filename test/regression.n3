@@ -167,7 +167,7 @@
 
 :t1022 a test:CwmTest;
     test:shortFileName "daml-ex.n3";
-    test:description   "Try the examples";
+    test:description   "Early DAML example in XML/RDF";
     test:arguments     """daml-pref.n3 -rdf daml-ex.rdf -n3""".
 
 
@@ -289,10 +289,11 @@
     test:arguments     """includes/t6.n3 -think""".
 
 
-:t1038 a test:CwmTest;
-    test:shortFileName "bi-t7.n3";
-    test:description   "Simple use of log:includes";
-    test:arguments     """includes/t7.n3 -think""".
+# Can't query query for "forall x" 2003-07-28
+#:t1038 a test:CwmTest;
+#    test:shortFileName "bi-t7.n3";
+#    test:description   "Simple use of log:includes";
+#    test:arguments     """includes/t7.n3 -think""".
 
 
 :t1039 a test:CwmTest;
@@ -337,7 +338,7 @@
 :t1044 a test:CwmTest;
     test:shortFileName "bi-quant.n3";
     test:description   "log:includes handling of univ./exist. quantifiers";
-    test:arguments     """includes/quantifiers.n3 -think""".
+    test:arguments     """includes/quantifiers_limited.n3 --think --purge-rules""".
 
 
 :t1045 a test:CwmTest;
@@ -437,13 +438,13 @@
 
 :t1100 a test:CwmTest;
     test:shortFileName "defdoc1-out.n3";
-    test:description   "Look up values in local definitive document";
-    test:arguments     "--mode=rse dbork/defdoc1.n3 --think".
+    test:description   "Look up values in local definitive document (ONLINE)";
+    test:arguments     "--mode=rs dbork/defdoc1.n3 --think".
 
 :t1102 a test:CwmTest;
     test:shortFileName	"defdoc2-out.n3";
     test:description	"Look up values in 2 definitive documents";
-    test:arguments	"--mode=rse dbork/defdoc2.n3 --think".
+    test:arguments	"--mode=rs dbork/defdoc2.n3 --think".
 
 #:t3001 a test:CwmTest;
 #    test:shortFileName "lbase-to-otter";

@@ -1,5 +1,5 @@
 @prefix : <http://www.w3.org/2000/10/swap/test/ferrell/myDingo#> .
-@prefix bio: <http://www.w3.org/2000/10/swap/test/ferrell/biology#>. 
+@prefix bio: <biology.n3#>. 
 
 { :Donny ?x ?y. }
  => 

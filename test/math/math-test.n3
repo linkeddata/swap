@@ -107,8 +107,5 @@ this log:forAll :x , :y , :z .
   (?x " + " ?y " = " ?z ) string:concatenation ?s
 } => { ?s a :RESULT }.
 
+#ends
 
-# For purging
-
-log:implies a log:Chaff .
-log:forAll a log:Chaff .

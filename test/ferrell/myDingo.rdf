@@ -1,0 +1,18 @@
+
+<!-- Processed by Id: cwm.py,v 1.132 2003/07/18 20:33:02 timbl Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/test/ferrell/myDingo.n3-->
+
+
+<rdf:RDF xmlns="biology.n3#"
+    xmlns:bio="biology.n3#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <Dog rdf:about="http://www.w3.org/2000/10/swap/test/ferrell/myDingo#Bonny">
+    </Dog>
+
+    <Dingo rdf:about="http://www.w3.org/2000/10/swap/test/ferrell/myDingo#Donny">
+    </Dingo>
+</rdf:RDF>

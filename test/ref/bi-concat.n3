@@ -103,6 +103,14 @@
         }     log:implies {:test13b_bis     a :FAILURE .
         } .
     {
+        :x     string:concat  (
+            "World" 
+            "Wide" 
+            "Web"  ) .
+        
+        }     log:implies {:www2     :is :x .
+        } .
+    {
         :test13a     a :success .
         :test13b     a :success .
         :test13c     a :success .
@@ -113,14 +121,6 @@
         :test13h     a :success .
         
         }     log:implies {:TEST13     a :success .
-        } .
-    {
-        :x     string:concat  (
-            "World" 
-            "Wide" 
-            "Web"  ) .
-        
-        }     log:implies {:www2     :is :x .
         } .
     {
         "one"     log:equalTo  [

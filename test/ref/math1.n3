@@ -25,6 +25,8 @@
     
     3.5     :valueOf "7 / 2" .
     
+    9.5     :valueOf "(7 / 2) + ((7 % 2)^10000000) + 5 [should be 9.5]" .
+    
     -3     :valueOf "3 negated" .
     
     0     a :testValue;

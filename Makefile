@@ -40,7 +40,7 @@ HTMLS= check.html RDFSink.html cwm.html cwm_crypto.html cwm_math.html cwm_maths.
 #all: yappstest yappsdoc math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf
 
 tested : package
-	(cd test; PYTHONPATH=.. $(PYTHON) retest.py -n -c -f regression.n3)
+	(cd test; make all)
 	echo "Test worked, now can release"
 	touch tested
 
