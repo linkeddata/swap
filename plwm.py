@@ -6,17 +6,15 @@
 
 """
 
-from ArgHandler import ArgHandler;
-from PluginManager import PluginManager;
+import ArgHandler;
+import plugins;
 
 class NotImplented(RuntimeError):
     pass
 
 ################################################################
 
-plugger = PluginManager()
-
-class MyArgHandler(ArgHandler):
+class MyArgHandler(ArgHandler.ArgHandler):
 
     def handle__pipe(self):
         """Don't store, just pipe out
@@ -152,17 +150,17 @@ class MyArgHandler(ArgHandler):
     def handle__preplug(self, location):
         """prepend this location to the list of plugins
         """
-        plugger.prepend(location)
+        plugins.prepend(location)
 
     def handle__postplug(self, location):
         """append this location to the list of plugins
         """
-        plugger.append(location)
+        plugins.append(location)
 
     def handle__unplug(self, location):
         """remove this location from the list of plugins
         """
-        plugger.remove(location)
+        plugins.remove(location)
 
 ################################################################
     
@@ -175,6 +173,9 @@ else:
     raise RuntimeError, "this is not a module"
 
 # $Log$
-# Revision 1.1  2003-04-02 20:43:22  sandro
+# Revision 1.2  2003-04-02 20:53:13  sandro
+# Added skeletal plugin manager
+#
+# Revision 1.1  2003/04/02 20:43:22  sandro
 # first draft
 #
