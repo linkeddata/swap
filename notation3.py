@@ -599,25 +599,25 @@ class Resource(Thing):
             return self.uri
 
     def internFrag(r,fragid):
-            try:
-                return r.fragments[fragid]
-            except KeyError:
-                f = Fragment(r, fragid)
-                r.fragments[fragid] = f
-                return f
+            f = r.fragments.get(fragid, None)
+            if f: return f
+            f = Fragment(r, fragid)
+            r.fragments[fragid] = f
+            return f
                 
-    def internAnonymous(r):
-            f = Anonymous(r)
-            r.fragments[f.fragid] = f
+    def internAnonymous(r, fragid):
+            f = r.fragments.get(fragid, None)
+            if f: return f
+            f = Anonymous(r, fragid)
+            r.fragments[fragid] = f
             return f
                 
     def internVariable(r, fragid):
-            try:
-                return r.fragments[fragid]
-            except KeyError:
-                f = Variable(r, fragid)
-                r.fragments[f.fragid] = f
-                return f
+            f = r.fragments.get(fragid, None)
+            if f: return f
+            f = Variable(r, fragid)
+            r.fragments[fragid] = f
+            return f
                 
     
 class Fragment(Thing):
@@ -649,8 +649,8 @@ class Fragment(Thing):
 
 
 class Anonymous(Fragment):
-    def __init__(self, resource):
-        Fragment.__init__(self, resource, "_g"+ `resource.newId()`)
+    def __init__(self, resource, fragid):
+        Fragment.__init__(self, resource, fragid)
 
     def generated(self):
         return 1
@@ -701,7 +701,7 @@ class Engine:
     """
 
     def __init__(self):
-        resources = {}    # Hash table of URIs for interning things
+        self.resources = {}    # Hash table of URIs for interning things
         
         
     def intern(self, pair):
@@ -714,7 +714,7 @@ class Engine:
             return Literal(uriref)  # No interning for literals (?@@?)
 
         hash = len(uriref)-1
-    #    print " ... interning <%s>" % uriref
+        print " ... interning <%s>" % uriref
         while (hash >= 0) and not (uriref[hash] == "#"):
             hash = hash-1
         if hash < 0 :     # This is a resource with no fragment
@@ -725,7 +725,7 @@ class Engine:
             return r
         
         else :      # This has a fragment and a resource
-            r = self.intern(uriref[:hash])
+            r = self.intern((RESOURCE, uriref[:hash]))
             if type == RESOURCE:  return r.internFrag(uriref[hash+1:])
             if type == ANONYMOUS: return r.internAnonymous(uriref[hash+1:])
             if type == VARIBALE:  return r.internVariable(uriref[hash+1:])
@@ -848,7 +848,7 @@ bind default <>
     print "----------------------- Test store:"
 
     testEngine = Engine()
-    store = RDFStore(engine)
+    store = RDFStore(testEngine)
     # (sink,  thisDoc,  baseURI, bindings)
     p = SinkParser(store,  thisURI, 'http://example.org/base/')
     p.startDoc()
@@ -1264,8 +1264,10 @@ class RDFStore(RDFSink) :
 # Input methods:
 
     def makeStatement(self, tuple):
-        q = None, None, None, None
-        for p in CONTEXT, PRED, SUBJ, OBJ : q[p] = self.engine.intern(tuple[p])
+        q = ( self.engine.intern(tuple[CONTEXT]),
+              self.engine.intern(tuple[PRED]),
+              self.engine.intern(tuple[SUBJ]),
+              self.engine.intern(tuple[OBJ]) )
         s = StoredStatement(q)
         for p in ALL4: s.triple[p].occursAs[p].append(s)
                     
