@@ -31,6 +31,34 @@ If a test fails: There are three possiblilities:
 		This is highly unlikely.
 
 
+== What's New In this Release (0.8) ==
+For a complete list of changes, look at doc/changes.html
+
+Release 0.8
+This release has some bugfixes, as well as some changed and new functionality.
+
+==General bugfixes
+Cwm will now do the expected thing on log:uri if given an invalid URI string.
+An integer over the platforms native integer size will no longer crash Cwm.
+Cwm now understands most xsd datatyped for use in builtins.
+By setting the environment variable CWM_RDFLIB to 1, cwm will use rdflib to parse rdf/xml files. Note that this is unsupported, may break in the future, and requrires rdflib be installed. Rdflib supports some rdf features Cwm's parser does not, so this may be useful to you notwithstanding
+
+==BNodes scope changes
+BNodes given names using the _: notation now have formula scope, not document scope.
+Release / Test changes
+Cwm is now released in a new file, cwm.tar.gz, which, while being a fraction of the size of the old cwm.tgz, still includes a complete set of tests. It was discovered that Cwm was not actually running all of its tests. This has been fixed, and the tests have been split into tests guarenteed to work in the .tar.gz file (offline) and those which will not.
+
+==N3QL support
+N3QL support. Initial support for N3QL query language handling in cwm. command line looks like: cwm myKB.n3 --query=myquery.n3ql. Initial test case in swap/test/ql/detailed.tests
+N3 serialization changes
+The default output form is @forAll, not this log:forAll, @forSome, not this log:forSome. Use --n3=v to force the old obsolete form for variable declations. The parser has for a long time and will for some time support both forms.
+
+==Reification support
+Reification, after being broken for almost a year, has been rewritten and is better than ever. The options, as always, are --reify and --dereify. The tests for this are now in. There is insufficient documentation for this feature, and it has not been completely tested, so there may yet be bugs in it. If there is demand for it, fixing the --flatten feature should be possible now.
+
+==MIME type changes
+Mime type for Notation3 switched to text/rdf+n3. This could be a major change. The application for application/n3 never seemed to get anywhere with IANA anyway. Text has the advantage that browsers will by default dispaly it, and N3 is designed to be readable. Downside is that if it not ASCII, then you must include the charset specification in the mime type. This must be UTF-8, and notation3 is always utf-8
+
 
 == Submitting Bugs ==
 
