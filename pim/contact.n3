@@ -23,7 +23,7 @@
 #  Eg http://msdn.microsoft.com/workshop/essentials/versions/vcard.asp
 
 
-vcard_list = """ vCard.Cellular, vCard.Company, vCard.Department, 
+<#vcard_list> = """ vCard.Cellular, vCard.Company, vCard.Department, 
 vCard.DisplayName,
 vCard.Email,
 vCard.FirstName, 
@@ -35,7 +35,7 @@ vCard.Notes, vCard.Office,  # ??? Office what? Number?
 vCard.Pager, 
 vCard.Business.City, vCard.Business.Country, vCard.Business.Fax, 
 vCard.Business.Phone, vCard.Business.State, vCard.Business.StreetAddress, 
-vCard.Business.URL, vCard.Business.Zipcode"""
+vCard.Business.URL, vCard.Business.Zipcode""" .
 
 
 # Let's start with Contact information. See also
@@ -52,7 +52,7 @@ vCard.Business.URL, vCard.Business.Zipcode"""
 	:lastName,
 	:personalSuffix,
 	:company,         # SocialEntity
-	:departmentName,
+	:departmentName .
 
 
 :personalTitle = 	mso:Title .
@@ -77,7 +77,7 @@ vCard.Business.URL, vCard.Business.Zipcode"""
 		:City, :StateOrProvince, :PostalCode, :Country .
 
 :phone a rdf:Property.
-:fax a rdf:Property
+:fax a rdf:Property .
 
 
 ##################### Rules for conversion
@@ -145,7 +145,7 @@ vCard.Business.URL, vCard.Business.Zipcode"""
 
 :birthday a rdfs:Property; =  mso:Birthday; rdfs:range :Date .
 
-Data a Class;    # See ... ICalendar, etc etc
+:Data a Class.    # See ... ICalendar, etc etc
 
 #  mso:Categories  a rdfs:Property .   # replace with RDF individual classes.
 #  mso:Children  a rdfs:Property .
@@ -157,7 +157,7 @@ Data a Class;    # See ... ICalendar, etc etc
 #  mso:Directory_Server  a rdfs:Property .
 
 #  mso:E-mail_Address  a rdfs:Property    # Problmem: not as a URI
-:mailbox a rdfs:Property; rdfs:domain :SocialEntity; rdfs:domain :mboxURI;
+:mailbox a rdfs:Property; rdfs:domain :SocialEntity; rdfs:domain :mboxURI.
 
 #  mso:E-mail_Display_Name  a rdfs:Property .   # Seems redundant and useless IMHO
 
@@ -181,7 +181,7 @@ Data a Class;    # See ... ICalendar, etc etc
 
 :motherTongue a rdf:Property; rdfs:domain :Person; rdfs:range :LanguageCode .
 
-:LanguageCode a rdfs:Class;  A ISO langiuage 1 or 2 part string: a  datatype
+:LanguageCode a rdfs:Class. # A ISO langiuage 1 or 2 part string: a  datatype
 
 #  mso:Location  a rdfs:Property .
 #  mso:Manager's_Name  a rdfs:Property .
@@ -199,7 +199,7 @@ Data a Class;    # See ... ICalendar, etc etc
 #  mso:Referred_By  a rdfs:Property .
 #  mso:Sensitivity  a rdfs:Property .
 
-partner hasSubProperty mso:Spouse .
+:partner hasSubProperty mso:Spouse .
 
 mso:Spouse  a rdfs:Property;  .
 #  mso:User_1  a rdfs:Property .   # Use new pererties and namespaces!
@@ -207,7 +207,7 @@ mso:Spouse  a rdfs:Property;  .
 #  mso:User_3  a rdfs:Property .
 #  mso:User_4  a rdfs:Property .
 
-mso:Web Page  a rdfs:Property;
+mso:WebPage  a rdfs:Property;
 = :publicHomePage .              # I have many home pages, some for me some for others
 
 
