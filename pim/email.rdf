@@ -101,12 +101,12 @@
         <ss:rangeIntersects r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
     </r:Property>
 
-    <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#subject">
+    <owl:FunctionalProperty r:about="http://www.w3.org/2000/10/swap/pim/email#subject">
         <s:label>subject</s:label>
 	<s:domain r:resource="http://www.w3.org/2000/10/swap/pim/email#Message"/>
         <s:comment>domain message. note handling of non-ascii chars</s:comment>
         <s:range r:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </r:Property>
+    </owl:FunctionalProperty>
 
     <r:Property r:about="http://www.w3.org/2000/10/swap/pim/email#to">
         <ss:label>to</ss:label>
