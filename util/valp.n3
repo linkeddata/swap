@@ -1,0 +1,152 @@
+# Test whether a schema mentions the predicates used in this data
+#  This involves searching in files for statements being present or absent.
+ 
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+# @prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+@prefix os:  <http://www.w3.org/2000/10/swap/os#> .
+
+@prefix : <validate.n3#>.  # Local stuff
+
+@prefix val: <validate.n3#>.  # Local stuff
+
+# Usage:   TARGET=myfile.n3 cwm check.n3 -think -purge
+#
+# Output should not incldue any error messages.
+#
+
+this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
+
+#  Some internal terms we will be using in this document:
+
+:usedAsPropertyIn a rdf:Property;
+    s:comment "This term is used as a Property in the given document.";
+    a log:Chaff.  # Internal use only, may be purged.
+
+:within a rdf:Property;
+    s:comment "relationship between a subforumula and the document it was found in";
+    a log:Chaff.  # Internal use only, may be purged.
+
+:targetDocument a s:Class;
+    s:comment "Documents which this run is checking for schema validity";
+    a log:Chaff.  # Internal use only, may be purged.
+
+:schema a rdf:Property;
+    s:comment "The schema for a Property is the document which defines it.".
+
+
+:ERROR_NO_SCHEMA_OR_NOT_DECLARED a rdf:Property;
+    s:comment """The document used this as a predicate and there is no
+schema which declares it as a Property""".
+
+:ERROR_PROPERTY_NOT_DECLARED 	   a rdf:Property.
+
+# Target formulae are the top level formula we are pointed at,
+#  and any subformulae.
+
+{ :d log:uri [is os:environ of "TARGET"]  } log:implies { :d a :targetDocument }.
+
+{ :d a :targetDocument. :d log:semantics :F } log:implies { :F :within :d }.
+
+# Define subforumulae which are within the target documents:
+
+{ :d a :targetDocument.
+  :F :within :d.
+  :F log:includes { :s :p :o}.
+  :s log:rawType  log:Formula   } log:implies { :s :within :d } .
+
+{ :d a :targetDocument.
+  :F :within :d.
+  :F log:includes { :s :p :o}.
+  :o log:rawType  log:Formula   } log:implies { :o :within :d } .
+
+# Anything used as a predicate in any target formula should be checked.
+# We don't bother bout the pseudoproperties log:forSome and log:forAll.
+
+{ :d a :targetDocument.
+  :F :within :d.
+  :F log:includes { :s :p :o}.
+  :p log:rawType log:Other.    # Ignore lists
+  :p log:notEqualTo log:forSome, log:forAll } log:implies { :p :usedAsPropertyIn :d } .
+
+#  Let's see what happens when we dereference a predicate:
+
+{ :d a :targetDocument.
+  :p :usedAsPropertyIn :d.
+  :p log:semanticsOrError :x } log:implies  { :p :predicateSemanticsOrError :x }.
+
+{ :d a :targetDocument.
+  :p :usedAsPropertyIn :d.
+  :p :predicateSemanticsOrError :x.
+  :x log:rawType log:Literal } log:implies { :d :ERROR_IN_SCHEMA_ACCESS_FOR :p.
+                                             :p :SCHEMA_ACCESS_ERROR :x }.
+{ :p :predicateSemanticsOrError :x.
+  :x log:rawType log:Formula } log:implies { :p :semanticsOK :x }.
+
+#  The RDFS spec implies the following algorithm for the definitive schema corresponding
+#  to a Property :p.  (From Ralph Swick, whiteboard conversation)
+#  Maybe we should simplify it to the schema being the result of dereferencing the Property?
+#  I think the counterexample is the dublin core, but it may not work anyway.
+# Actually, the dublic core uses a redirect!!! We need to be aware of the
+#  existence of redirects like that @@
+
+{ :d a :targetDocument.
+  :p :usedAsPropertyIn :d.
+  :p :semanticsOK [log:includes { :p s:isDefinedBy :s }] } log:implies {:p :schema :s}.
+
+# We actually need the formula the schema parses to:
+
+{ :p :schema [ :semanticsOK :F ] } log:implies { :p :schemaFormula :F }. 
+
+
+# Alternatively, the schema can just be the document we pick up
+# directly  This is much simpler!
+#
+#   { :p  :semanticsOK :F  } log:implies { :p :schemaFormula :F.  :p :declaredInDirectSchema }. 
+
+   { :p  :usedAsPropertyIn :d .
+     :d  a :targetDocument.
+     :p  :semanticsOK :F.
+     :F  log:includes { :p a rdf:Property } } log:implies { :p :schemaFormula :F.
+                                                             :p a :declaredInDirectSchema  }. 
+
+#  If there is no schema found, then we flag a problem
+
+{ :d a :targetDocument.
+  :d log:semantics :G.    #  These 2 lines and one below suppress error messages
+  :G log:notEqualTo :F.    #  about undeclared locals in the same file.
+  :p :usedAsPropertyIn :d.
+  :p :semanticsOK :F.
+  :F log:notIncludes { :p s:isDefinedBy [] }.   # No indirect Schema
+  :F log:notIncludes { :p a rdf:Property }.      # Not a direct schema
+} log:implies { :d :ERROR_NO_SCHEMA_OR_NOT_DECLARED :p }.
+
+
+# It is an error, we say, for something to be used as a Property but
+# not *explicitly* declared as such in the schema:
+
+{:p :schemaFormula :F.
+ :F log:notIncludes { :p a rdf:Property }}log:implies { :d :ERROR_PROPERTY_NOT_DECLARED :p } .
+ 
+
+#   (b)when the document is combined with the above, no condradiction
+#      can be found from anything being (eg) member of disjoint sets.
+#
+# @@ to come.
+  
+################################################################### Clean up
+
+{:d a :targetDocument. :F :within :d } log:implies { :F a log:Chaff }. # Clear our formulae
+
+log:Chaff is rdf:type of
+    rdf:type,      # Seriously ...
+    s:comment,
+    log:forAll,
+    log:implies,   #  Clear out rules on -purge
+    :within, :schemaFormula, :schema, :predicateSemanticsOrError, :semanticsOK,
+#    :targetDocument,
+    :usedAsPropertyIn.
+ 
+#ends
+
