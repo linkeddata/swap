@@ -709,10 +709,6 @@ class RDFStore(RDFSink.RDFSink) :
     def endDoc(self):
         pass
 
-class URISyntaxError(ValueError):
-    """A parameter is passed to a routine that requires a URI reference"""
-    pass
-
 ##########################################################################
 #
 # Output methods:
@@ -2028,6 +2024,11 @@ def _lookup(bindings, value):
     for left, right in bindings:
         if left == value: return right
     return value
+
+
+class URISyntaxError(ValueError):
+    """A parameter is passed to a routine that requires a URI reference"""
+    pass
 
 
 #   DIAGNOSTIC STRING OUTPUT
