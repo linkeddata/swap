@@ -41,9 +41,9 @@ see changelog at end
 # Imports
 from string import strip, maketrans, translate, replace, lstrip, \
                    capitalize, upper, uppercase, rfind, split, join
-import RDFSink, llyn # from SWAP http://www.w3.org/2000/10/swap/
-from RDFSink import SYMBOL, FORMULA, SUBJ, PRED, OBJ
-from thing import Namespace, load, setStore
+# import RDFSink, llyn # from SWAP http://www.w3.org/2000/10/swap/
+# from RDFSink import SYMBOL, FORMULA, SUBJ, PRED, OBJ
+from myStore import Namespace, load, setStore
 
 import sys
 try:
@@ -65,8 +65,8 @@ CRLF = chr(13) + chr(10)
 # Prints debugging messages:
 VERBOSE = ERR_NONE
 
-store = llyn.RDFStore()
-setStore(store)
+# store = llyn.RDFStore()   # Not necessary after 
+# setStore(store)
 
 # Namespaces
 RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
@@ -313,6 +313,7 @@ class CalWr:
         w("BEGIN:VTODO"+CRLF)
         self.timeProp(sts, "dtstart", comp)
         self.exportGeneral(E_PROP, sts, comp, ICAL.summary, "SUMMARY")
+        self.exportGeneral(E_PROP, sts, comp, ICAL.uid, "UID")
         self.exportGeneral(E_PROP, sts, comp, ICAL.description, "DESCRIPTION")
         self.exportGeneral(E_PROP, sts, comp, ICAL.location, "LOCATION")
         self.exportGeneral(E_PROP, sts, comp, ICAL.priority, "PRIORITY")
@@ -325,7 +326,7 @@ class CalWr:
         # a value type, but not as a property name. It's a grab-bag
         # for concepts like foaf:homePage, dc:related (which
         # is another grab bag) etc.
-        self.refProp(sts, comp, "URL")
+        self.refProp(sts, comp, "url")
 
         w("END:VTODO"+CRLF)
 
@@ -623,7 +624,7 @@ class CalWr:
         if sym:
             w = self._w
             uri = sym.uriref() #@@need to encode non-ascii chars
-            w("%s;TYPE=URL:%s%s" % (pn, uri, CRLF))
+            w("%s;VALUE=URI:%s%s" % (pn.upper(), uri, CRLF))
 
 
     def recurProp(self, sts, pn, subj):
@@ -724,7 +725,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.3  2004-01-29 19:41:57  timbl
+# Revision 2.4  2004-01-29 21:09:16  timbl
+# Added DTSTART and UID to events. iCal needs DTSTART it seems. Fixed VALUE=URI format.
+#
+# Revision 2.3  2004/01/29 19:41:57  timbl
 # minor fixes
 #
 # Revision 2.2  2004/01/29 15:20:05  connolly
