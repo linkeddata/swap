@@ -38,19 +38,20 @@ NOTE: see earlier work:
 see changelog at end
 """
 
-# Imports
+# Imports from standard python libraries
 from string import strip, maketrans, translate, replace, lstrip, \
                    capitalize, upper, uppercase, rfind, split, join
-# import RDFSink, llyn # from SWAP http://www.w3.org/2000/10/swap/
-from RDFSink import SYMBOL, FORMULA, SUBJ, PRED, OBJ #@@
-from myStore import Namespace, load, setStore
-
 import sys
 try:
     reload (sys)
     sys.setdefaultencoding('iso-8859-1')
 except:
     pass
+
+
+# From SWAP http://www.w3.org/2000/10/swap/
+from RDFSink import SUBJ, PRED, OBJ
+from myStore import Namespace, load, setStore
 
 # Global Constants:
 IANATOKEN = 0 #@@huh? what is this? comment here, please
@@ -730,7 +731,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.8  2004-02-02 16:46:50  connolly
+# Revision 2.9  2004-02-02 19:38:56  timbl
+# re-fix after spurious clash
+#
+# Revision 2.8  2004/02/02 16:46:50  connolly
 # more tweaks for status; fixed a progress message
 #
 # Revision 2.7  2004/01/31 00:45:10  timbl
