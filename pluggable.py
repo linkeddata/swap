@@ -3,6 +3,13 @@
 Declare some basic pluggable interfaces.
 
 
+Problems:
+  we need at least three kinds of sinks:
+      triples, quads, and fol
+
+  how does the parser say which kind of sink it can write to?
+  
+
 """
 
 revision = '$Id$'
