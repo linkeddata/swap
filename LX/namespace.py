@@ -101,13 +101,16 @@ ns.rdf  = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns",
                    ["type", "nil", "first", "rest", "XMLLiteral"])
 ns.rdfs = Namespace("http://www.w3.org/2000/01/rdf-schema",
                    ["Resource", "Class", "Datatype", "seeAlso",
-                    "label", "comment"])
+                    "label", "comment", "subClassOf", "isDefinedBy",
+                    "domain", "range", "subPropertyOf", ])
 ns.xsd = Namespace("http://www.w3.org/2001/XMLSchema#", strict=0)
+ns.dc10 = Namespace("http://purl.org/dc/elements/1.0/", strict=0)
 ns.dc = Namespace("http://purl.org/dc/elements/1.1/", strict=0)
 ns.foaf = Namespace("http://xmlns.com/foaf/0.1/", strict=0)
 ns.log = Namespace("http://www.w3.org/2000/10/swap/log#", strict=0)
 ns.owl = Namespace("http://www.w3.org/2002/07/owl#", strict=0)
 ns.lx   = Namespace("http://www.w3.org/2003/02/04/LX", strict=0)
+ns.rtest   = Namespace("http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#", strict=0)
 
 if __name__ == "__main__":
     import doctest, sys
@@ -115,7 +118,10 @@ if __name__ == "__main__":
 
 
 # $Log$
-# Revision 1.10  2003-09-04 07:14:12  sandro
+# Revision 1.11  2003-09-05 04:38:49  sandro
+# a few additional ns elements
+#
+# Revision 1.10  2003/09/04 07:14:12  sandro
 # fixed plain literal handling
 #
 # Revision 1.9  2003/09/03 21:07:10  sandro
