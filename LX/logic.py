@@ -1,4 +1,11 @@
-"""Elements for making expressions be logic-expressions (ie formulas).
+"""Elements for making expressions be logic expressions (ie formulas).
+
+All the standard terminology like Variables, Constants, Predicates,
+etc, and the standard connectives like Conjunction, Disjunction,
+Quantification, etc.
+
+Also handly functions for handling these things.  They're not object
+methods because the OO hierarchy is sometimes too dynamic here.
 
 """
 __version__ = "$Revision$"
@@ -163,11 +170,13 @@ def getOpenVariables(expr, unusedButQuantified=None):
 AND = BinaryConnective("and")
 OR = BinaryConnective("or")
 MEANS = BinaryConnective("means")
+IFF = MEANS
 IMPLIES = BinaryConnective("implies")
 NOT = UnaryConnective("not")
 FORALL = UniversalQuantifier("forall")
 EXISTS = ExistentialQuantifier("exists")
 EQUALS = Predicate("=")
+
 LX.expr.pythonOperators["and"] = AND
 LX.expr.pythonOperators["or"] = OR
 
@@ -182,7 +191,10 @@ def _test():
 if __name__ == "__main__": _test()
 
 # $Log$
-# Revision 1.1  2003-02-03 17:07:34  sandro
+# Revision 1.2  2003-02-03 17:20:40  sandro
+# factored logic.py out of fol.py
+#
+# Revision 1.1  2003/02/03 17:07:34  sandro
 # Factored logic out of fol (first order logic), now that I need some
 # higher-order syntax for handling lbase.
 #

@@ -1,111 +1,53 @@
-"""Goes with LX.expr, to give it nice First-Order-Logix operations. If
-we ever do HOL, lots of stuff may factor out.
+"""Operations on First-Order logic expressions (see expr.py and logic.py)
 """
 __version__ = "$Revision$"
 # $Id$
 
 import LX.expr
+from LX.logic import *
 
-################################################################
-
-class Variable(LX.expr.AtomicExpr):
-    """
-    This is the kind of variable that can range over first-order
-    kind of stuff, not predicates, functions, etc.
-
-    """
-    pass
-
-class ExiVar(Variable):
-    pass
-
-class UniVar(Variable):
-    pass
+## class Function(LX.logic.Function):
+##     def checkArgs(self, args):
+##         assert(len(args) == 2)
+##         for arg in args:
+##             assert(isFirstOrderTerm(arg))
 
 
-################################################################
+## class Predicate(LX.logic.Predicate):
+##     def checkArgs(self, args):
+##         for arg in args:
+##             assert(isFirstOrderTerm(arg))
 
-class Proposition(LX.expr.AtomicExpr):
-    """A boolean constant, but it's a very different thing from
-    a term constant in FOL."""
-    pass
+## class BinaryConnective(LX.logic.BinaryConnective):
+##     def checkArgs(self, args):
+##         assert(len(args) == 2)
+##         for arg in args:
+##             assert(isFirstOrderFormula(arg))
 
-################################################################
+## class UnaryConnective(LX.logic.UnaryConnective):
+##     def checkArgs(self, args):
+##         assert(len(args) == 1)
+##         for arg in args:
+##             assert(isFirstOrderFormula(arg))
 
-class Constant(LX.expr.AtomicExpr):
-    """
-    This denotes something in the domain of discourse, quite
-    distinct from a variable, predicate, or function
-    """
-    pass
+## class ExistentialQuantifier(LX.logic.ExistentialQuantifier):
 
+##     def checkArgs(self, args):
+##         assert(len(args) == 2)
+##         assert(isinstance(args[0], ExiVar))
+##         assert(isFirstOrderFormula(args[1]))
 
-class Function(LX.expr.AtomicExpr):
-    """
-    This is a kind of mapping from a tuple of values
-    to a (non-truth) value
+## class UniversalQuantifier(LX.logic.UniversalQuantifier):
 
-    """
-
-    def checkArgs(self, args):
-        assert(len(args) == 2)
-        for arg in args:
-            assert(isFirstOrderTerm(arg))
-
-
-class Predicate(LX.expr.AtomicExpr):
-    """A mapping from one or more terms to a truth value.
-
-    When used as the function in an Expr, it makes the Expr be an
-    Atomic Formula.
-    """
-    
-    def checkArgs(self, args):
-        for arg in args:
-            assert(isFirstOrderTerm(arg))
-
-################################################################
-            
-class Connective(LX.expr.AtomicExpr):
-    """A function with specific FOL semantics"""
-
-class BinaryConnective(Connective):
-
-    def checkArgs(self, args):
-        assert(len(args) == 2)
-        #for arg in args:
-        #    assert(isFirstOrderFormula(arg))
-
-class UnaryConnective(Connective):
-
-    def checkArgs(self, args):
-        assert(len(args) == 1)
-        #for arg in args:
-        #    assert(isFirstOrderFormula(arg))
-
-class Quantifier(Connective):
-
-    pass
-
-    
-class ExistentialQuantifier(Quantifier):
-
-    def checkArgs(self, args):
-        assert(len(args) == 2)
-        assert(isinstance(args[0], ExiVar))
-        assert(isFirstOrderFormula(args[1]))
-
-class UniversalQuantifier(Quantifier):
-
-    def checkArgs(self, args):
-        assert(len(args) == 2)
-        assert(isinstance(args[0], UniVar))
-        assert(isFirstOrderFormula(args[1]))
+##     def checkArgs(self, args):
+##         assert(len(args) == 2)
+##         assert(isinstance(args[0], UniVar))
+##         assert(isFirstOrderFormula(args[1]))
 
 
 ################################################################
         
-# We could dispatch this off the Connective inheritance tree or something.
+# We could dispatch this off the Connective inheritance tree or something?
     
 def isFirstOrderTerm(expr):
     """Check whether this is a "Term".
@@ -212,37 +154,6 @@ def isFirstOrderAtomicFormula(expr):
 def isFirstOrder(expr):
     return isFirstOrderFormula(expr) or isFirstOrderTerm(expr)
 
-def getOpenVariables(expr):
-
-    assert(isFirstOrder(expr))
-    if isinstance(expr, Constant):
-        return []
-    elif isinstance(expr, Variable):
-        return [expr]
-    elif isinstance(expr.function, Quantifier):
-        # this kind of makes us think we should be instantiating a subclass
-        raise RuntimeError, "Not Implemented"
-    else:
-        result = []
-        for child in expr.all:
-            result.extend(getOpenVariables(child))
-        return result
-
-AND = BinaryConnective("and")
-OR = BinaryConnective("or")
-MEANS = BinaryConnective("means")
-IMPLIES = BinaryConnective("implies")
-NOT = UnaryConnective("not")
-FORALL = UniversalQuantifier("forall")
-EXISTS = ExistentialQuantifier("exists")
-EQUALS = Predicate("=")
-LX.expr.pythonOperators["and"] = AND
-LX.expr.pythonOperators["or"] = OR
-
-# this is our special predicate!  Oh yeah!
-RDF = Predicate("rdf")
-
-
 def _test():
     import doctest, fol
     return doctest.testmod(fol) 
@@ -251,7 +162,10 @@ def _test():
 if __name__ == "__main__": _test()
 
 # $Log$
-# Revision 1.4  2003-02-01 05:58:10  sandro
+# Revision 1.5  2003-02-03 17:20:40  sandro
+# factored logic.py out of fol.py
+#
+# Revision 1.4  2003/02/01 05:58:10  sandro
 # intermediate lbase support; getting there but buggy; commented out some fol chreccks
 #
 # Revision 1.3  2003/01/29 06:09:18  sandro
