@@ -236,8 +236,10 @@ class SinkParser:
 	j = self.uri_ref2(str, i, t)
 	if j<0: raise BadSyntax(str, i, "expected uriref2 after bind _qname_")
 
-	self._bindings[t[0][0]] = t[1][1]  #????
-	self.bind(t[0][0], t[1] + delim)
+        ns = t[1][1] + delim
+        if string.find(ns,"##")>=0: raise BadSyntax(str, j-2, "trailing # illegal on bind: use @prefix")
+	self._bindings[t[0][0]] = ns
+	self.bind(t[0][0], (RESOURCE, ns))
 	return j
 
     def bind(self, qn, nsPair):
@@ -467,6 +469,8 @@ class SinkParser:
                 if str[i] == ">":
                     uref = str[st:i] # the join should dealt with "":
                     uref = urlparse.urljoin(self._baseURI, str[st:i])
+                    if str[i-1:i]=="#" and not uref[-1:]=="#":
+                        uref = uref + "#"  # She meant it! Weirdness in urlparse?
                     res.append((RESOURCE , uref))
                     return i+1
                 i = i + 1
@@ -556,14 +560,13 @@ class SinkParser:
 	    else: i=j
 
 	    if str[i]=='"':
-		i = i + 1
-		st = i
-		while i < len(str):
-		    if str[i] == '"':
-			res.append(LITERAL, str[st:i])
-			return i+1
-		    i = i + 1
-		raise BadSyntax(str, i, "unterminated string literal")
+		if str[i:i+3] == '"""': delim = '"""'
+		else: delim = '"'
+                i = i + len(delim)
+                j = string.find(str, delim, i)
+                if j<0: raise BadSyntax(str, i, "unterminated string literal")
+                res.append((LITERAL, str[i:j])) # @@@@@ ^decoding escapes
+		return j+len(delim)
 	    else:
 		return -1
 
@@ -980,16 +983,18 @@ class ToN3(RDFSink):
                 else: return "<" + self.genPrefix + "v" + `i` + ">"   # variable
 
         if type == LITERAL:
-            if string.find(value, "\n") or string.find(value, '"'):
+            if string.find(value, "\n") >=0 or string.find(value, '"') >=0:
                 return '"""' + value + '"""'
             return '"' + value + '"'   # @@@@ escaping, encoding !!!!!!
 
         j = string.rfind(value, "#")
         if j>=0:
-            str = self.prefixes.get((RESOURCE, value[:j+1]), None) # @@ #CONVENTION
-            if str != None : return str + ":" + value[j+1:]
-            if j==0: return "<#" + value[j+1:] + ">"
-                
+            prefix = self.prefixes.get((RESOURCE, value[:j+1]), None) # @@ #CONVENTION
+            if prefix != None : return prefix + ":" + value[j+1:]
+        
+            if value[:j] == self.base:   # If local to output stream,
+                return "<#" + value[j+1:] + ">" #   use local frag id (@@ lone word?)
+
         return "<" + value + ">"    # Everything else
 
 
@@ -1020,7 +1025,6 @@ def test():
 [ >- x:type -> x:jobOrder;
   >- x:number -> "025709";
  >- x:from ->
-
  [
   >- x:homePage -> <http://www.topnotchheatingandair.com/>;
   >- x:est -> "1974";
@@ -1040,8 +1044,8 @@ def test():
  ].
 """
     t3="""
-bind pp: <http://example.org/payPalStuff?>.
-bind default <http://example.org/payPalStuff?>.
+@prefix pp: <http://example.org/payPalStuff?>.
+@prefix default <http://example.org/payPalStuff?>.
 
 <> a pp:Check; pp:payee :tim; pp:amount "$10.00";
   dc:author :dan; dc:date "2000/10/7" ;
@@ -1051,7 +1055,7 @@ bind default <http://example.org/payPalStuff?>.
 # Janet's chart:
     t4="""
 bind q: <http://example.org/>.
-bind m: <#>.
+bind m: <>.
 bind n: <http://example.org/base/>.
 bind : <http://void-prefix.example.org/>.
 bind w3c: <http://www.w3.org/2000/10/org>.
@@ -1090,7 +1094,7 @@ bind default <#>
 #    p=SinkParser(RDFSink(),'http://example.org/base/', 'file:notation3.py',
 #		     'data:#')
 
-    r=SinkParser(ToN3(sys.stdout.write, 'file:output'),
+    r=SinkParser(ToN3(sys.stdout.write, thisURI),
                   thisURI,'http://example.org/base/',)
     r.startDoc()
     

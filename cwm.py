@@ -89,7 +89,7 @@ ANONYMOUS = notation3.ANONYMOUS       # existentially qualified unlabelled resou
 VARIABLE = notation3.VARIABLE
 
 
-chatty = 1   # verbosity flag
+chatty = 0   # verbosity flag
 
 
 
@@ -329,6 +329,7 @@ class RDFStore(notation3.RDFSink) :
     def __init__(self, engine):
         notation3.RDFSink.__init__(self)
         self.engine = engine
+        self.size = 0
         self.forSome = engine.internURI(Logic_NS + "forSome")
         self.forAll  = engine.internURI(Logic_NS + "forAll")
         self.implies = engine.internURI(Logic_NS + "implies")
@@ -363,6 +364,7 @@ class RDFStore(notation3.RDFSink) :
 
 	s = StoredStatement(q)
         for p in ALL4: s.triple[p].occursAs[p].append(s)
+        self.size = self.size+1
         return s
 
     def startDoc(self):
@@ -532,7 +534,7 @@ class RDFStore(notation3.RDFSink) :
             if _isSubject > 0 :   #   statements for this thing
                 sink.startAnonymous(self.extern(triple))
                 for t in obj.occursAs[SUBJ]:
-                    if t.triple[CONTEXT] is con:
+                    if t.triple[CONTEXT] is context:
                         self.coolMakeStatement2(sink, t)
                 sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
                 return   # Arc has been made
@@ -572,6 +574,7 @@ class RDFStore(notation3.RDFSink) :
     def applyRules(self, workingContext, filterContext=None, targetContext=None):
         """ Apply rules in one context to the same or another
         """
+        chatty = 0
 
 # A rule here is defined by logic:implies, which associates the template (premise, precondidtion,
 # antecedent) to the conclusion (postcondition).
@@ -593,7 +596,7 @@ class RDFStore(notation3.RDFSink) :
             t = s.triple
             if t[PRED] is self.forAll and t[SUBJ] is filterContext:
                 _variables.append(t[OBJ])
-        print "# We have %i variables" % (len(_variables),), _variables
+        if chatty: print "# We have %i variables" % (len(_variables),), _variables
         
         for s in filterContext.occursAs[CONTEXT]:
             t = s.triple
@@ -671,7 +674,9 @@ newBindings  matches found and not yet applied - used in recursion
     fewest = 5          # Variables to find
     shortest = INFINITY # List to search for one of the variables
     shortest_t = None
-    print "\n## match: called %i terms, %i bindings, terms & new bindings:" % (len(unmatched),len(bindings)), `bindings`,`newBindings`
+    chatty = 0
+    
+    if chatty: print "\n## match: called %i terms, %i bindings, terms & new bindings:" % (len(unmatched),len(bindings)), `bindings`,`newBindings`
 
     for pair in newBindings:
         variables.remove(pair[0])
@@ -683,11 +688,12 @@ newBindings  matches found and not yet applied - used in recursion
               _lookup(newBindings, q[2]),
               _lookup(newBindings, q[3]))
 
-    for q in unmatched:
-        print "        %s     %s  %s  %s ."  % (`q[0]`[-8:],`q[1]`[-8:],`q[2]`[-8:],`q[3]`[-8:])
+    if chatty:
+        for q in unmatched:
+            print "        %s     %s  %s  %s ."  % (`q[0]`[-8:],`q[1]`[-8:],`q[2]`[-8:],`q[3]`[-8:])
 
     if len(unmatched) == 0:
-        print "# Match found with bindings: ", bindings
+        if chatty: print "# Match found with bindings: ", bindings
         action(bindings, param)  # No terms left .. success!
         return 1
 
@@ -707,7 +713,7 @@ newBindings  matches found and not yet applied - used in recursion
                     short = length
 
 
-        print "# One term has %i vars, shortest list %i" % (found, short)
+        if chatty: print "# One term has %i vars, shortest list %i" % (found, short)
         
         if (found < fewest or
             found == fewest and short < shortest) : # We find better.
@@ -734,7 +740,7 @@ newBindings  matches found and not yet applied - used in recursion
         elif p != shortest_p :
             consts.append(p)
 
-    print "# Searching through %i for %s in slot %i." %(shortest, `quad[shortest_p]`,shortest_p)    
+    if chatty: print "# Searching through %i for %s in slot %i." %(shortest, `quad[shortest_p]`,shortest_p)    
 
     for s in quad[shortest_p].occursAs[shortest_p]:
         for p in consts:
@@ -1042,8 +1048,11 @@ def doCommand():
  -ugly      Store input and regurgitate *
  -bySubject Store inpyt and regurgitate in subject order *
             (default is to store and pretty print with anonymous nodes) *
+
+ -apply=foo Read rules from foo, apply to store, adding conclusions to store
  -help      print this message
  -chatty    Verbose output of questionable use
+ 
 
             * mutually exclusive
  
@@ -1057,11 +1066,14 @@ def doCommand():
         option_bySubject= 0 # Store and regurgitate in subject order *
         option_inputs = []
         _doneOutput = 0
+        _gotInput = 0     #  Do we not need to take input from stdin? 
         chatty = 0          # not too verbose please
         hostname = "localhost" # @@@@@@@@@@@ Get real one
         
         for arg in sys.argv[1:]:  # Command line options after script name
-            if arg == "-test": option_test = 1
+            if arg == "-test":
+                option_test = 1
+                _gotInput = 1
             elif arg == "-ugly": _doneOutput = 1
             elif arg == "-pipe": pass
             elif arg == "-bySubject": _doneOutput = 1
@@ -1110,8 +1122,8 @@ def doCommand():
             _lhs = ""
             _rhs = ""
             if _equals >=0:
-                _lhs = arg[:equals]
-                _rhs = arg[equals+1:]
+                _lhs = arg[:_equals]
+                _rhs = arg[_equals+1:]
                 _uri = urlparse.urljoin(_baseURI, _rhs) # Make abs from relative
                 
             if arg == "-test": test()
@@ -1130,20 +1142,34 @@ def doCommand():
             elif arg == "n3": option_rdf = 0
             
             elif arg == "-chatty": chatty = 1
+
             elif arg[:7] == "-apply=":
-                _inputURI = urlparse.urljoin(_baseURI, _uri) # Make abs from relative
-                filterContext = (myEngine.internURI(_inputURI))
-                print "# Input filter ", _inputURI
-                p = notation3.SinkParser(_store,  _inputURI)
-                p.load(_inputURI)
+                filterContext = (myEngine.internURI(_uri))
+                print "# Input rules to apply from ", _uri
+                p = notation3.SinkParser(_store,  _uri)
+                p.load(_uri)
                 del(p)
                 _store.applyRules(workingContext, filterContext);
+
+            elif _lhs == "-filter":
+                filterContext = myEngine.internURI(_uri)
+                _playURI = urlparse.urljoin(_baseURI, "$PLAY$")  # Intermediate
+                _playContext = myEngine.internURI(_playURI)
+                _store.moveContext(workingContext, _playContext)
+                print "# Input filter ", _uri
+                p = notation3.SinkParser(_store,  _uri)
+                p.load(_uri)
+                del(p)
+                _store.applyRules(_playContext, filterContext, workingContext);
 
             elif arg == "-rules":
                 _store.applyRules(workingContext, workingContext);
 
             elif arg == "-help":
                 print doCommand.__doc__
+
+            elif arg == "-size":
+                print "# Size of store: %i statements." %(_store.size,)
 
             elif arg[0] == "-": print "Unknown option", arg
             else :   # Input the data
