@@ -21,13 +21,23 @@ Currently (2001/9)only SHA is given that property.
 </td></tr>
   <tr><td class='ln'>PublicKeyObject</td><td class='comment'>An object corresponding to a key for some algorithm.
     The object can hold a private and optionally a private key.</td></tr>
-  <tr><td class='ln'>publicKey</td><td class='comment'> A public key object that doesn't contain the private key data</td></tr>
-  <tr><td class='ln'>size</td><td class='comment'>The maximum size of a string that can be encrypted or signed,
-measured in bits. String data is treated in big-endian format; the most significant
-byte comes first. (This seems to be a de facto standard for cryptographical
-software.) If the size is not a multiple of 8, then some of the high order
-bits of the first byte must be zero. Usually it's simplest to just divide the
-size by 8 and round down</td></tr>
+  <tr><td class='ln'>md5</td><td class='comment'>The object is a MD5 hash of the subject.</td></tr>
+  <tr><td class='ln'>publicKey</td><td class='comment'>The object is a public key object that doesn't
+    contain the private key data in the subject.
+    This function extracts the public part.</td></tr>
+  <tr><td class='ln'>sha</td><td class='comment'>The object is a SHA-1 hash of the subject.</td></tr>
+  <tr><td class='ln'>sign</td><td class='comment'>The subject should be a list of two things,
+a hash string and a key (containing private and public parts).
+The obejcts is calculated as a signature string by signing
+the has with the key's private part.</td></tr>
+  <tr><td class='ln'>verify</td><td class='comment'>If the subject is a key object containing
+private and public parts and the obejct is a list of
+a hash and a signature, then this is true iff the signaure is
+a valid signatre of the hash with the key.</td></tr>
+  <tr><td class='ln'>verifyBoolean</td><td class='comment'>If the subject is a list
+containg the keypair, a hash and a signature
+then the object is either "1" if the signature validates
+or "0" is it does not.</td></tr>
 </table><h2> log</h2>
 <p class='ns'>@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt;.</p>
 <table>  <tr><td class='ln'>Chaff</td><td class='comment'>Any statement mentioning anything in this class

@@ -15,6 +15,8 @@ RM=$(W)/2001/04/roadmap
 PYTHON=python
 CWM=$(W)/2000/10/swap/cwm.py
 
+SCHEMAS= ../log.n3 ../crypto.n3 ../math.n3 ../os.n3 ../string.n3 ../time.n3 
+
 .SUFFIXES: .svg .dot .graph .n3
 
 # $(RM)/w3c.n3  $(RM)/style.n3
@@ -28,6 +30,13 @@ CWM=$(W)/2000/10/swap/cwm.py
 #.rdf.dot:
 ##	$(XSLT) $< $(PD)rdf2dot.xsl  $@
 #	$(XSLT) $(PD)rdf2dot.xsl  $< $@
+
+
+all:	CwmBuiltins.html
+	touch all
+
+CwmBuiltins.html : $(SCHEMAS)
+	$(PYTHON) $(CWM) $(SCHEMAS) schema2html.n3 --think --strings > $@
 
 
 states.svg: states.graph
