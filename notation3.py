@@ -213,7 +213,7 @@ class SinkParser:
 	return self.loadBuf(stream.read())    # self._formula
 
     def loadStream(self, stream):
-	return loadBuf(stream.read())   # Not ideal
+	return self.loadBuf(stream.read())   # Not ideal
 
     def loadBuf(self, buf):
 	"""Parses a buffer and returns its top level formula"""
