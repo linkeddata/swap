@@ -7,19 +7,25 @@ __version__ = "$Revision$"
 class Resource:
     """A Resource is a thing which is directly identified by a URI.
     The term "resource", like the term "mother" has far more meaning
-    connoting a relationship than a class.
+    connoting a relationship than a class.  A Resource can be anything,
+    but not via an HTTP URI.
 
     >>> import LX.uri
     >>> x = LX.uri.Resource("http://example.com")
     >>> print x
-    [ lx:uri "http://example.com" ]
+    <http://example.com>
     >>> print x.uri
     http://example.com
+    >>> print LX.uri.Resource("http://example.com#foo")
+    [ lx:uri "http://example.com#foo" ]
     """
     def __init__(self, uri):
         self.uri = uri
     def __str__(self):
-        return '[ lx:uri "%s" ]' % self.uri
+        if self.uri.count("#"):
+            return '[ lx:uri "%s" ]' % self.uri
+        else:
+            return '<' + self.uri + '>'
 
 class DescribedThing:
     """A DescribedThing is something which is indirectly associated
@@ -32,11 +38,16 @@ class DescribedThing:
     [ web:uriOfDescription "http://example.com" ]
     >>> print x.uriOfDescription
     http://example.com
+    >>> print LX.uri.DescribedThing("http://example.com#foo")
+    <http://example.com#foo>
     """
     def __init__(self, uri):
         self.uriOfDescription = uri
     def __str__(self):
-        return '[ web:uriOfDescription "%s" ]' % self.uriOfDescription
+        if self.uriOfDescription.count("#"):
+            return '<' + self.uriOfDescription + '>'
+        else:
+            return '[ web:uriOfDescription "%s" ]' % self.uriOfDescription
 
          
 def _test():
@@ -46,7 +57,10 @@ def _test():
 if __name__ == "__main__": _test()
 
 # $Log$
-# Revision 1.2  2003-02-13 17:14:14  sandro
+# Revision 1.3  2003-02-14 19:39:03  sandro
+# adopted smart <...> syntax
+#
+# Revision 1.2  2003/02/13 17:14:14  sandro
 # Dropped all the URI parsing stuff and interesting ideas about
 # WebLocations and SharedMemory and stuff; trimmed down to bare
 # minimum two-level system.

@@ -25,10 +25,10 @@ class Namespace:
     AttributeError: No name sandro declared for namespace http://www.example.com/friends (in strict mode)
     >>> ns1.add("sandro")
     >>> print ns1.sandro
-    [ web:uriOfDescription "http://www.example.com/friends#sandro" ]
+    <http://www.example.com/friends#sandro>
     >>> ns2 = Namespace("http://www.example.com/friends", strict=0)
     >>> print ns2.sandro
-    [ web:uriOfDescription "http://www.example.com/friends#sandro" ]
+    <http://www.example.com/friends#sandro>
 
     """
     def __init__(self, uri, initialNames=[], strict=1, shortForm=None):
@@ -58,7 +58,10 @@ class Namespace:
 
 
 # $Log$
-# Revision 1.3  2003-02-13 19:28:10  sandro
+# Revision 1.4  2003-02-14 19:39:03  sandro
+# adopted smart <...> syntax
+#
+# Revision 1.3  2003/02/13 19:28:10  sandro
 # Changed URI dependency a bit, added some tests
 #
 # Revision 1.2  2002/08/29 16:39:55  sandro
