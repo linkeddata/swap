@@ -160,9 +160,6 @@ LITERAL_URI_prefix = "data:application/n3;"
 
 cvsRevision = "$Revision$"
 
-# Should the internal representation of lists be with DAML:first and :rest?
-DAML_LISTS=1    # If not, do the funny compact ones
-
 # Magic resources we know about
 
 from RDFSink import RDF_type_URI, DAML_equivalentTo_URI
@@ -226,7 +223,14 @@ def compareURI(self, other):
     if self is other: return 0
     if isinstance(self, Literal):
         if isinstance(other, Literal):
-            return cmp(self.string, other.string)
+	    if self.datatype == other.datatype:
+		diff = cmp(self.string, other.string)
+		if diff != 0 : return diff
+		return cmp(self.lang, other.lang)
+	    else:
+		if self.datatype == None: return -1
+		if other.datatype == None: return 1
+		return compareURI(self.datatype, other.datatype)
         else:
             return -1
     if isinstance(other, Literal):
@@ -476,6 +480,17 @@ class Formula(Fragment):
 	If none, returns []
 	"""
         return self._index.get((pred, subj, obj), [])
+
+    def contains(self, pred=None, subj=None, obj=None):
+        """Return boolean true iff formula contains statement(s) matching the parts given
+	
+	For example:
+	if f.contains(pred=pantoneColor):
+	    print "We've got one statement about something being some color"
+	"""
+        x =  self._index.get((pred, subj, obj), [])
+	if x : return 1
+	return 0
 
 
     def any(self, subj=None, pred=None, obj=None):
@@ -835,17 +850,17 @@ class StoredStatement:
 # Equivalence relations
 
 class BI_EqualTo(LightBuiltIn,Function, ReverseFunction):
-    def eval(self,  subj, obj, queue, bindings, proof):
+    def eval(self,  subj, obj, queue, bindings, proof, query):
         return (subj is obj)   # Assumes interning
 
-    def evalObj(self, subj, queue, bindings, proof):
+    def evalObj(self, subj, queue, bindings, proof, query):
         return subj
 
-    def evalSubj(self, obj, queue, bindings, proof):
+    def evalSubj(self, obj, queue, bindings, proof, query):
         return obj
 
 class BI_notEqualTo(LightBuiltIn):
-    def eval(self, subj, obj, queue, bindings, proof):
+    def eval(self, subj, obj, queue, bindings, proof, query):
         return (subj is not obj)   # Assumes interning
 
 
@@ -855,7 +870,7 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
 
 #    def evaluateObject(self, subject):
 #	return subject.uriref()
-    def evalObj(self, subj, queue, bindings, proof):
+    def evalObj(self, subj, queue, bindings, proof, query):
 	type, value = subj.asPair()
 	if type == SYMBOL:     #    or type == ANONYMOUS: 
          # @@@@@@ Should not allow anonymous, but test/forgetDups.n3 uses it
@@ -883,7 +898,7 @@ class BI_rawUri(BI_uri):
     """This is like  uri except that it allows you to get the internal
     identifiers for anonymous nodes and formuale etc."""
      
-    def evalObj(self, subj, queue, bindings, proof):
+    def evalObj(self, subj, queue, bindings, proof, query):
 	type, value = subj.asPair()
 	return self.store.intern((LITERAL, value))
 
@@ -895,7 +910,7 @@ class BI_rawType(LightBuiltIn, Function):
     eg see test/includes/check.n3 
     """
 
-    def evalObj(self, subj,  queue, bindings, proof):
+    def evalObj(self, subj,  queue, bindings, proof, query):
 	store = self.store
         if isinstance(subj, Literal): y = store.Literal
         elif isinstance(subj, Formula): y = store.Formula
@@ -908,7 +923,7 @@ class BI_rawType(LightBuiltIn, Function):
 
 class BI_racine(LightBuiltIn, Function):    # The resource whose URI is the same up to the "#" 
 
-    def evalObj(self, subj,  queue, bindings, proof):
+    def evalObj(self, subj,  queue, bindings, proof, query):
         if isinstance(subj, Fragment):
             return subj.resource
         else:
@@ -931,7 +946,7 @@ class BI_includes(HeavyBuiltIn):
     This limits the ability to bind a variable by searching inside another
     context. This is quite a limitation in some ways. @@ fix
     """
-    def eval(self, subj, obj, queue, bindings, proof):
+    def eval(self, subj, obj, queue, bindings, proof, query):
         store = subj.store
         if isinstance(subj, Formula) and isinstance(obj, Formula):
             return store.testIncludes(subj, obj, [], bindings=bindings) # No (relevant) variables
@@ -953,7 +968,7 @@ class BI_notIncludes(HeavyBuiltIn):
     As for the subject, it does make sense for the opposite reason.  If F(x)
     includes G for all x, then G would have to be infinite.  
     """
-    def eval(self, subj, obj, queue, bindings, proof):
+    def eval(self, subj, obj, queue, bindings, proof, query):
         store = subj.store
         if isinstance(subj, Formula) and isinstance(obj, Formula):
             return not store.testIncludes(subj, obj, [], bindings=bindings) # No (relevant) variables
@@ -963,7 +978,7 @@ class BI_semantics(HeavyBuiltIn, Function):
     """ The semantics of a resource are its machine-readable meaning, as an
     N3 forumula.  The URI is used to find a represnetation of the resource in bits
     which is then parsed according to its content type."""
-    def evalObj(self, subj, queue, bindings, proof):
+    def evalObj(self, subj, queue, bindings, proof, query):
         store = subj.store
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
@@ -982,7 +997,7 @@ class BI_semantics(HeavyBuiltIn, Function):
     
 class BI_semanticsOrError(BI_semantics):
     """ Either get and parse to semantics or return an error message on any error """
-    def evalObj(self, subj, queue, bindings, proof):
+    def evalObj(self, subj, queue, bindings, proof, query):
         import xml.sax._exceptions # hmm...
         store = subj.store
         x = store.any((store._experience, store.semanticsOrError, subj, None))
@@ -1041,7 +1056,7 @@ class DocumentAccessError(IOError):
         return ("Unable to access document <%s>, because:\n%s" % ( self._uri, reason))
     
 class BI_content(HeavyBuiltIn, Function):
-    def evalObj(self, subj, queue, bindings, proof):
+    def evalObj(self, subj, queue, bindings, proof, query):
         store = subj.store
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
@@ -1066,7 +1081,7 @@ class BI_content(HeavyBuiltIn, Function):
 
 
 class BI_parsedAsN3(HeavyBuiltIn, Function):
-    def evalObj(self, subj, queue, bindings, proof):
+    def evalObj(self, subj, queue, bindings, proof, query):
         store = subj.store
         if isinstance(subj, Literal):
             F = store.any((store._experience, store.parsedAsN3, subj, None))
@@ -1086,7 +1101,7 @@ class BI_conclusion(HeavyBuiltIn, Function):
 
     Closure under Forward Inference, equivalent to cwm's --think function.
     """
-    def evalObj(self, subj, queue, bindings, proof):
+    def evalObj(self, subj, queue, bindings, proof, query):
         store = subj.store
         if isinstance(subj, Formula):
             F = self.store.any((store._experience, store.cufi, subj, None))  # Cached value?
@@ -1110,8 +1125,8 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
     """ The conjunction of a set of formulae is the set of statements which is
     just the union of the sets of statements
     modulo non-duplication of course"""
-    def evalObj(self, subj, queue, bindings, proof):
-	subj_py = self.store._toPython(subj, queue)
+    def evalObj(self, subj, queue, bindings, proof, query):
+	subj_py = self.store._toPython(subj, queue, query)
         if verbosity() > 50:
             progress("Conjunction input:"+`subj_py`)
             for x in subj_py:
@@ -1139,7 +1154,7 @@ class BI_n3String(LightBuiltIn, Function):      # Light? well, I suppose so.
     parse back using parsedAsN3 to exaclty the same original formula.
     If we *did* have a cannonical form it would be great for signature
     A cannonical form is possisble but not simple."""
-    def evalObj(self, store, context, subj, queue, bindings, proof):
+    def evalObj(self, store, context, subj, queue, bindings, proof, query):
         if verbosity() > 50:
             progress("Generating N3 string for:"+`subj`)
         if isinstance(subj, Formula):
@@ -1254,12 +1269,14 @@ class RDFStore(RDFSink) :
         import cwm_os      # OS builtins
         import cwm_time    # time and date builtins
         import cwm_math    # Mathematics
+        import cwm_times    # time and date builtins
         import cwm_maths   # Mathematics, perl/string style
         cwm_string.register(self)
         cwm_math.register(self)
         cwm_maths.register(self)
         cwm_os.register(self)
         cwm_time.register(self)
+        cwm_times.register(self)
         if crypto:
 	    import cwm_crypto  # Cryptography
 	    cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
@@ -1946,7 +1963,7 @@ class RDFStore(RDFSink) :
 
     
 
-    def _toPython(self, x, queue=None):
+    def _toPython(self, x, queue, query):
         """#  Convert a data item in query with no unbound variables into a python equivalent 
        Given the entries in a queue template, find the value of a list.
        @@ slow
@@ -1961,16 +1978,22 @@ class RDFStore(RDFSink) :
 	    raise ValueError("Attempt to run built-in on unknown datatype %s of value %s." 
 			    % (`x.datatype`, x.string))
 	if x is self.nil: return []
-#       if @@@ this is not in the queue, must be in the store 
+#       if this is not in the queue, must be in the store 
+#	What if it is defined partly in one and partly in the other - in both?  @@
 
-#       if context.listValue(x) != None:        @@@@@@@  try it in each case :-(
+#        lv = query.workingContext.listValue(x)
+#	if lv != None:        # @@@@@@@  try it in each case :-(
+#	    raise RuntimeError("@@@ Hmm. it is classes as a list" + `x`) # @@ could use that -- faster?
 	elements = self.listElements(x, queue)
+	if elements == None:
+	    elements = self.listElements(x, query.workingContext)
 	if elements != None:
 	    list = []
 	    for e in elements:
-		list.append(self._toPython(e, queue))
+		list.append(self._toPython(e, queue, query))
 	    return list
 
+	
         return x    # If not a list, return unchanged
 
     def _fromPython(self, x, queue):
@@ -1980,6 +2003,8 @@ class RDFStore(RDFSink) :
         elif type(x) is types.IntType:
             return self.newLiteral(`x`, self.integer)
         elif type(x) is types.FloatType:
+#	    s = `x`
+#	    if s[-2:] == '.0': s=s[:-2]   # Tidy things which are ints back into floats
             return self.newLiteral(`x`, self.float)
         elif type(x) == type([]):
 #	    progress("x is >>>%s<<<" % x)
@@ -2203,7 +2228,7 @@ class RDFStore(RDFSink) :
         for subj in context.subjects(pred=self.type, obj=boringClass):
 	    self.purgeSymbol(context, subj)
 
-    def purgeSymbol(self, context, subj=None):
+    def purgeSymbol(self, context, subj):
 	"""Purge all triples in which a symbol occurs.
 	Defaults to all removing occurrences of log:implies, and log:forAll, eg rules.
 	"""
@@ -2891,6 +2916,10 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    if "s" in mode:
 		schema = dereference(pred, mode, self.query.workingContext)
 		if schema != None:
+		    if "a" in mode:
+			ns = pred.resource
+			rules = schema.any(subj=ns, pred=self.store.docRules)
+			rulefile = dereference(rulefile, "m", self.query.workingContext)
 		    self.service = schema.any(pred=self.store.definitiveService, subj=pred)
 	    if self.service == None and self.query.meta != None:
 		self.service = self.query.meta.any(pred=self.store.definitiveService, subj=pred)
@@ -2972,7 +3001,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	try:
 	    if self.neededToRun[SUBJ] == []:
 		if self.neededToRun[OBJ] == []:   # bound expression - we can evaluate it
-		    if pred.eval(subj, obj,  queue, bindings[:], proof):
+		    if pred.eval(subj, obj,  queue, bindings[:], proof, self.query):
 			self.state = S_DONE # satisfied
                         if verbosity() > 80: progress("Builtin buinary relation operator succeeds")
 			if diag.tracking:
@@ -2983,7 +3012,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    else: return 0   # We absoluteley know this won't match with this in it
 		else: 
 		    if isinstance(pred, Function):
-			result = pred.evalObj(subj, queue, bindings[:], proof)
+			result = pred.evalObj(subj, queue, bindings[:], proof, self.query)
 			if result != None:
 			    self.state = S_FAIL
 			    rea=None
@@ -2994,7 +3023,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	    else:
 		if (self.neededToRun[OBJ] == []):
 		    if isinstance(pred, ReverseFunction):
-			result = pred.evalSubj(obj, queue, bindings[:], proof)
+			result = pred.evalSubj(obj, queue, bindings[:], proof, self.query)
 			if result != None:
 			    self.state = S_FAIL
 			    rea=None

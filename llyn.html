@@ -287,11 +287,11 @@ research&nbsp;version.&nbsp;Written&nbsp;in&nbsp;C.&nbsp;Of&nbsp;te&nbsp;order&n
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_EqualTo-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_EqualTo-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
-<dl><dt><a name="BI_EqualTo-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_EqualTo-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
-<dl><dt><a name="BI_EqualTo-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_EqualTo-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -358,7 +358,7 @@ Closure&nbsp;under&nbsp;Forward&nbsp;Inference,&nbsp;equivalent&nbsp;to&nbsp;cwm
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_conclusion-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_conclusion-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -376,7 +376,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_conclusion-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_conclusion-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_conclusion-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -434,7 +434,7 @@ modulo&nbsp;non-duplication&nbsp;of&nbsp;course<br>&nbsp;</tt></td></tr>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_conjunction-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_conjunction-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -452,7 +452,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_conjunction-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_conjunction-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_conjunction-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -508,7 +508,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_content-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_content-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -523,7 +523,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_content-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_content-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_content-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -580,7 +580,7 @@ context.&nbsp;This&nbsp;is&nbsp;quite&nbsp;a&nbsp;limitation&nbsp;in&nbsp;some&n
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_includes-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_includes-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -654,7 +654,7 @@ A&nbsp;cannonical&nbsp;form&nbsp;is&nbsp;possisble&nbsp;but&nbsp;not&nbsp;simple
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_n3String-evalObj"><strong>evalObj</strong></a>(self, store, context, subj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_n3String-evalObj"><strong>evalObj</strong></a>(self, store, context, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -672,7 +672,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_n3String-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_n3String-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_n3String-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -727,7 +727,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_notEqualTo-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_notEqualTo-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -803,7 +803,7 @@ includes&nbsp;G&nbsp;for&nbsp;all&nbsp;x,&nbsp;then&nbsp;G&nbsp;would&nbsp;have&
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_notIncludes-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_notIncludes-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -871,7 +871,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_parsedAsN3-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_parsedAsN3-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -886,7 +886,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_parsedAsN3-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_parsedAsN3-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_parsedAsN3-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -942,7 +942,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_racine-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_racine-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -957,7 +957,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_racine-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_racine-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_racine-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1015,7 +1015,7 @@ eg&nbsp;see&nbsp;test/includes/check.n3<br>&nbsp;</tt></td></tr>
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_rawType-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_rawType-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -1033,7 +1033,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_rawType-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_rawType-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_rawType-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1092,7 +1092,7 @@ identifiers&nbsp;for&nbsp;anonymous&nbsp;nodes&nbsp;and&nbsp;formuale&nbsp;etc.<
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_rawUri-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_rawUri-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -1119,7 +1119,7 @@ has&nbsp;a&nbsp;base,&nbsp;which&nbsp;may&nbsp;be&nbsp;irrelevant.&nbsp;Eg&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_rawUri-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_rawUri-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_rawUri-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1158,7 +1158,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>:<br>
-<dl><dt><a name="BI_rawUri-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_rawUri-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table> 
@@ -1182,7 +1182,7 @@ which&nbsp;is&nbsp;then&nbsp;parsed&nbsp;according&nbsp;to&nbsp;its&nbsp;content
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_semantics-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_semantics-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -1200,7 +1200,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_semantics-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_semantics-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_semantics-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1257,7 +1257,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_semanticsOrError-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_semanticsOrError-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -1275,7 +1275,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_semanticsOrError-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_semanticsOrError-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_semanticsOrError-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1332,7 +1332,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_uri-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_uri-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt></dl>
 
 <dl><dt><a name="BI_uri-evaluateSubject"><strong>evaluateSubject</strong></a>(self, object)</dt><dd><tt>Return&nbsp;the&nbsp;object&nbsp;which&nbsp;has&nbsp;this&nbsp;string&nbsp;as&nbsp;its&nbsp;URI<br>
 &nbsp;<br>
@@ -1354,7 +1354,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_uri-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_uri-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_uri-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1393,7 +1393,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>:<br>
-<dl><dt><a name="BI_uri-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_uri-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table> 
@@ -1557,6 +1557,12 @@ of&nbsp;those&nbsp;usedd&nbsp;in&nbsp;the&nbsp;input&nbsp;data&nbsp;makes&nbsp;f
 
 <dl><dt><a name="Formula-close"><strong>close</strong></a>(self)</dt><dd><tt>No&nbsp;more&nbsp;to&nbsp;add.&nbsp;Please&nbsp;return&nbsp;interned&nbsp;value.<br>
 NOTE&nbsp;You&nbsp;must&nbsp;now&nbsp;use&nbsp;the&nbsp;interned&nbsp;one,&nbsp;not&nbsp;the&nbsp;original!</tt></dd></dl>
+
+<dl><dt><a name="Formula-contains"><strong>contains</strong></a>(self, pred<font color="#909090">=None</font>, subj<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;boolean&nbsp;true&nbsp;iff&nbsp;formula&nbsp;contains&nbsp;statement(s)&nbsp;matching&nbsp;the&nbsp;parts&nbsp;given<br>
+&nbsp;<br>
+For&nbsp;example:<br>
+if&nbsp;f.<a href="#Formula-contains">contains</a>(pred=pantoneColor):<br>
+&nbsp;&nbsp;&nbsp;&nbsp;print&nbsp;"We've&nbsp;got&nbsp;one&nbsp;statement&nbsp;about&nbsp;something&nbsp;being&nbsp;some&nbsp;color"</tt></dd></dl>
 
 <dl><dt><a name="Formula-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt><dd><tt>A&nbsp;simple&nbsp;dump&nbsp;of&nbsp;a&nbsp;formula&nbsp;in&nbsp;debug&nbsp;form.<br>
 &nbsp;<br>
@@ -1856,7 +1862,7 @@ The&nbsp;list&nbsp;of&nbsp;statements&nbsp;must&nbsp;be&nbsp;sorted&nbsp;if&nbsp
 
 <dl><dt><a name="RDFStore-_outputStatement"><strong>_outputStatement</strong></a>(self, sink, triple)</dt></dl>
 
-<dl><dt><a name="RDFStore-_toPython"><strong>_toPython</strong></a>(self, x, queue<font color="#909090">=None</font>)</dt><dd><tt>#&nbsp;&nbsp;Convert&nbsp;a&nbsp;data&nbsp;item&nbsp;in&nbsp;query&nbsp;with&nbsp;no&nbsp;unbound&nbsp;variables&nbsp;into&nbsp;a&nbsp;python&nbsp;equivalent&nbsp;<br>
+<dl><dt><a name="RDFStore-_toPython"><strong>_toPython</strong></a>(self, x, queue, query)</dt><dd><tt>#&nbsp;&nbsp;Convert&nbsp;a&nbsp;data&nbsp;item&nbsp;in&nbsp;query&nbsp;with&nbsp;no&nbsp;unbound&nbsp;variables&nbsp;into&nbsp;a&nbsp;python&nbsp;equivalent&nbsp;<br>
 Given&nbsp;the&nbsp;entries&nbsp;in&nbsp;a&nbsp;queue&nbsp;template,&nbsp;find&nbsp;the&nbsp;value&nbsp;of&nbsp;a&nbsp;list.<br>
 @@&nbsp;slow<br>
 These&nbsp;methods&nbsp;are&nbsp;at&nbsp;the&nbsp;disposal&nbsp;of&nbsp;built-ins.</tt></dd></dl>
@@ -2007,8 +2013,8 @@ when&nbsp;we&nbsp;are&nbsp;searching&nbsp;an&nbsp;existentially&nbsp;qualified&n
 Statements&nbsp;in&nbsp;the&nbsp;given&nbsp;context&nbsp;that&nbsp;a&nbsp;term&nbsp;is&nbsp;a&nbsp;Chaff&nbsp;cause<br>
 any&nbsp;mentions&nbsp;of&nbsp;that&nbsp;term&nbsp;to&nbsp;be&nbsp;removed&nbsp;from&nbsp;the&nbsp;context.</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-purgeSymbol"><strong>purgeSymbol</strong></a>(self, context, subj<font color="#909090">=None</font>)</dt><dd><tt>Purge&nbsp;all&nbsp;triples&nbsp;in&nbsp;which&nbsp;a&nbsp;symbol&nbsp;occurs.<br>
-Defaults&nbsp;to&nbsp;all&nbsp;removing&nbsp;occurrences&nbsp;of&nbsp;log:implies,&nbsp;eg&nbsp;rules.</tt></dd></dl>
+<dl><dt><a name="RDFStore-purgeSymbol"><strong>purgeSymbol</strong></a>(self, context, subj)</dt><dd><tt>Purge&nbsp;all&nbsp;triples&nbsp;in&nbsp;which&nbsp;a&nbsp;symbol&nbsp;occurs.<br>
+Defaults&nbsp;to&nbsp;all&nbsp;removing&nbsp;occurrences&nbsp;of&nbsp;log:implies,&nbsp;and&nbsp;log:forAll,&nbsp;eg&nbsp;rules.</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-removeStatement"><strong>removeStatement</strong></a>(self, s)</dt><dd><tt>Slow,&nbsp;alas.&nbsp;The&nbsp;remove()s&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;time.</tt></dd></dl>
 
@@ -2217,7 +2223,6 @@ The&nbsp;fact&nbsp;that&nbsp;the&nbsp;sequences&nbsp;are&nbsp;sorted&nbsp;makes&
 <td width="100%"><strong>ALL4</strong> = (0, 1, 2, 3)<br>
 <strong>ANONYMOUS</strong> = 3<br>
 <strong>CONTEXT</strong> = 0<br>
-<strong>DAML_LISTS</strong> = 1<br>
 <strong>DAML_NS</strong> = 'http://www.daml.org/2001/03/daml+oil#'<br>
 <strong>DAML_equivalentTo_URI</strong> = 'http://www.daml.org/2001/03/daml+oil#equivalentTo'<br>
 <strong>FLOAT_DATATYPE</strong> = 'http://www.w3.org/2001/XMLSchema#double'<br>

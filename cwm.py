@@ -259,9 +259,13 @@ def reformat(str, thisURI):
 def doCommand():
         """Command line RDF/N3 tool
         
- <command> <options> <inputURIs>
+ <command> <options> <steps> [--with <more args> ]
+
+options:
  
 --pipe        Don't store, just pipe out *
+
+steps, in order left to right:
 
 --rdf         Input & Output ** in RDF M&S 1.0 insead of n3 from now on
 --n3          Input & Output in N3 from now on
@@ -292,6 +296,9 @@ def doCommand():
 --help        print this message
 --revision    print CVS revision numbers of major modules
 --chatty=50   Verbose output of questionable use, range 0-99
+
+finally:
+
 --with        Pass any further arguments to the N3 store as os:argv values
  
 
@@ -302,17 +309,17 @@ Examples:
   cwm foo.n3 bar.n3 --think         Combine data and find all deductions
   cwm foo.n3 --flat --n3=spart
 
-See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
-
 Mode flags affect inference extedning to the web:
+ r   Needed to enable any remote stuff.
+ a   When reading schema, also load rules pointed to by schema.
  e   Errors loading schemas of definitive documents are fatal
  m   Schemas and definitive documents laoded are merged into the meta knowledge
      (otherwise they are consulted independently)
- r   Needed to enable any remote stuff.
  s   Read the schema for any predicate in a query.
  
  u   Generate unique ids using a run-specific
 
+See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 """
         
         #import urllib
@@ -625,7 +632,8 @@ Mode flags affect inference extedning to the web:
 		
             elif arg == "-purge-rules":
                 need(_store); touch(_store)
-                _store.purgeSymbol(workingContext)
+                _store.purgeSymbol(workingContext, _store.implies)
+                _store.purgeSymbol(workingContext, _store.forAll)
 
             elif arg == "-rules":
                 need(_store); touch(_store)

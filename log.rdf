@@ -1,5 +1,5 @@
 
-<!-- Processed by Id: cwm.py,v 1.122 2003/02/09 03:03:47 timbl Exp -->
+<!-- Processed by Id: cwm.py,v 1.129 2003/04/08 16:12:43 timbl Exp -->
 <!--     using base file:/devel/WWW/2000/10/swap/log.n3-->
 
 
@@ -121,7 +121,9 @@ A cwm built-in logical operator, RDF graph level.
     </rdf:Property>
 
     <SyntaxArc rdf:about="http://www.w3.org/2000/10/swap/log#forAll">
-        <rdfs:comment>A is true for any object in place of B.</rdfs:comment>
+        <rdfs:comment>A is true for any object in place of B.
+	This is NOT a real rdf property in its behaviour - a pseudoproperty.
+	For examplem substitution is not permitted on its object.</rdfs:comment>
         <rdfs:label>for All</rdfs:label>
     </SyntaxArc>
 
@@ -135,8 +137,16 @@ A cwm built-in logical operator, RDF graph level.
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#implies">
         <rdfs:comment>Logical implication. 
-This is the relation between the antecedent and conclusion of a rule.
-Used by cwm as the basic hook for adding inference to RDF.</rdfs:comment>
+This is the relation between the antecedent (subject) and
+conclusion (object) of a rule.
+For every subsitution of variable names for symbols or literals
+which maps the antecedent to a fromula which knowledge base
+log:includes, the same substitution is applied to the 
+conclusion to generate the result.
+ 
+Used by cwm as the basic hook for adding inference to RDF.
+See the manual to define what the knowledge base is and
+where the results go. See also log:conclusion.</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource=""/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#Formula"/>
     </rdf:Property>
@@ -144,7 +154,9 @@ Used by cwm as the basic hook for adding inference to RDF.</rdfs:comment>
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#includes">
         <rdfs:comment>One formula is subset of other.
 That is, the two graphs can be matched by finding the
-mapping between blank nodes.
+mapping between varibles in one and variables in the other.
+Variable subsitution is applied recursively to nested formulae.
+[Note forAll and forSome psuedo-statements themselves].
 The information in the subject formula supports the object formula.
 Understood natively by cwm in the antecendent of a rule.</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource=""/>
@@ -166,7 +178,7 @@ A cwm built-in logical operator.
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#notIncludes">
-        <rdfs:comment>The object formula is NOT a subset of subject. Understood natively by cwm.</rdfs:comment>
+        <rdfs:comment>The object formula is NOT a subset of subject. Understood natively by cwm. (See includes)</rdfs:comment>
         <rdfs:isDefinedBy rdf:resource=""/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/log#Formula"/>
     </rdf:Property>

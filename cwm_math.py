@@ -22,6 +22,7 @@ import sys, string, re, urllib
 import thing, notation3
 
 from thing import *
+import types
 
 LITERAL_URI_prefix = 'data:application/n3,'
 DAML_LISTS = notation3.DAML_LISTS
@@ -32,10 +33,12 @@ DAML_equivalentTo_URI = notation3.DAML_equivalentTo_URI
 MATH_NS_URI = 'http://www.w3.org/2000/10/swap/math#'
 
 from diag import progress
+import sys, traceback
 
 def obsolete():
     progress("Warning: Obsolete math built-in used.")
-    
+    traceback.print_stack()
+
 def tidy(x):
     #DWC bugfix: "39.03555" got changed to "393555"
     if x == None: return None
@@ -64,10 +67,14 @@ def isString(x):
 
 # add, take, multiply, divide
 
+def numeric(s):
+    if type(s) == types.IntType or type(s) is types.FloatType: return s
+    if s.find('.') < 0 and s.find('e') < 0 : return int(s)
+    return float(s)
 
 class BI_absoluteValue(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
-	return abs(float(subj_py))
+	return abs(numeric(subj_py))
 
 class BI_rounded(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
@@ -76,32 +83,32 @@ class BI_rounded(LightBuiltIn, Function):
 class BI_sum(LightBuiltIn, Function):
     def evaluateObject(self,  subj_py): 
         t = 0
-        for x in subj_py: t += float(x)
+        for x in subj_py: t += numeric(x)
         return t
 
 class BI_sumOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, obj_py): 
         t = 0
 	obsolete()
-        for x in obj_py: t += float(x)
+        for x in obj_py: t += numeric(x)
         return t
 
 
 class BI_difference(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
         if len(subj_py) == 2:
-	    return float(subj_py[0]) - float(subj_py[1])
+	    return numeric(subj_py[0]) - numeric(subj_py[1])
 
 class BI_differenceOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self,  obj_py): 
 	obsolete()
-        if len(obj_py) == 2: return float(obj_py[0]) - float(obj_py[1])
+        if len(obj_py) == 2: return numeric(obj_py[0]) - numeric(obj_py[1])
 
 
 class BI_product(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
         t = 1
-        for x in subj_py: t *= float(x)
+        for x in subj_py: t *= numeric(x)
         return tidy(t)
 
 class BI_factors(LightBuiltIn, ReverseFunction):
@@ -128,7 +135,7 @@ class BI_quotientOf(LightBuiltIn, ReverseFunction):
 
 class BI_remainder(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
-        if len(subj_py) == 2: return float(subj_py[0]) % float(subj_py[1])
+        if len(subj_py) == 2: return numeric(subj_py[0]) % numeric(subj_py[1])
 
 
 class BI_remainderOf(LightBuiltIn, ReverseFunction):
@@ -138,23 +145,23 @@ class BI_remainderOf(LightBuiltIn, ReverseFunction):
 
 class BI_negation(LightBuiltIn, Function, ReverseFunction):
     def evaluateSubject(self, obj_py): 
-            return -float(obj_py)
+            return -numeric(obj_py)
     def evaluateObject(self, subj_py): 
-            return -float(subj_py)
+            return -numeric(subj_py)
 
 
 # Power
 
 class BI_exponentiation(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
-        if len(subj_py) == 2: return float(subj_py[0]) ** float(subj_py[1])
+        if len(subj_py) == 2: return numeric(subj_py[0]) ** numeric(subj_py[1])
 
 
 class BI_exponentiationOf(LightBuiltIn, ReverseFunction):
 
     def evaluateSubject(self, obj_py): 
         obsolete()
-        if len(obj_py) == 2: return float(obj_py[0]) ** float(obj_py[1])
+        if len(obj_py) == 2: return numeric(obj_py[0]) ** numeric(obj_py[1])
 
 # Math greater than and less than etc., modified from cwm_string.py
 # These are truth testing things  - Binary logical operators

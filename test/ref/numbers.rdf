@@ -6,8 +6,13 @@
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 
     <rdf:Description>
-        <rdf:is rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</rdf:is>
-        <is>The integer 2</is>
+        <rdf:is xml:lang="fr">Le chat</rdf:is>
+        <is>The french phrase 'Le chat'</is>
+    </rdf:Description>
+
+    <rdf:Description>
+        <rdf:is rdf:datatype="http://example.com/types#rational">800/600</rdf:is>
+        <is>800/600 with datatype http://example.com/types#rational</is>
     </rdf:Description>
 
     <rdf:Description>
@@ -21,12 +26,7 @@
     </rdf:Description>
 
     <rdf:Description>
-        <rdf:is rdf:datatype="http://example.com/types#rational">800/600</rdf:is>
-        <is>800/600 with datatype http://example.com/types#rational</is>
-    </rdf:Description>
-
-    <rdf:Description>
-        <rdf:is xml:lang="fr">Le chat</rdf:is>
-        <is>The french phrase 'Le chat'</is>
+        <rdf:is rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</rdf:is>
+        <is>The integer 2</is>
     </rdf:Description>
 </rdf:RDF>

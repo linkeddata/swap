@@ -150,7 +150,7 @@ A&nbsp;binary&nbsp;operator&nbsp;can&nbsp;calculate&nbsp;truth&nbsp;value&nbsp;g
 Methods defined here:<br>
 <dl><dt><a name="BuiltIn-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BuiltIn-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BuiltIn-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -382,9 +382,9 @@ I&nbsp;may&nbsp;make&nbsp;changes&nbsp;to&nbsp;clean&nbsp;up&nbsp;the&nbsp;param
 Methods defined here:<br>
 <dl><dt><a name="Function-__init__"><strong>__init__</strong></a>(self)</dt></dl>
 
-<dl><dt><a name="Function-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="Function-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
-<dl><dt><a name="Function-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="Function-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -468,7 +468,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">BuiltIn</a>:<br>
 <dl><dt><a name="HeavyBuiltIn-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="HeavyBuiltIn-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="HeavyBuiltIn-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -596,7 +596,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">BuiltIn</a>:<br>
 <dl><dt><a name="LightBuiltIn-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="LightBuiltIn-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="LightBuiltIn-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -821,9 +821,9 @@ in&nbsp;trying&nbsp;to&nbsp;resolve&nbsp;a&nbsp;query.<br>&nbsp;</tt></td></tr>
 Methods defined here:<br>
 <dl><dt><a name="ReverseFunction-__init__"><strong>__init__</strong></a>(self)</dt></dl>
 
-<dl><dt><a name="ReverseFunction-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="ReverseFunction-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
-<dl><dt><a name="ReverseFunction-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="ReverseFunction-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 <hr>

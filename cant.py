@@ -33,6 +33,9 @@ References:
  .google graph isomorphism
  See also eg http://www.w3.org/2000/10/rdf-tests/rdfcore/utils/ntc/compare.cc
  
+ Not to mention,  published this month by coincidence:
+  Kelly, Brian, [Whitehead Institute]  "Graph cannonicalization", Dr Dobb's Journal, May 2003.
+ 
  $Id$
 This is or was http://www.w3.org/2000/10/swap/cant.py
 W3C open source licence <http://www.w3.org/Consortium/Legal/copyright-software.html>.

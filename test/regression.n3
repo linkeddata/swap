@@ -295,7 +295,11 @@
     test:description   "Simple use of string built-ins";
     test:arguments     """includes/t8.n3 -think""".
 
-
+:t10393 a test:CwmTest;
+    test:shortFileName "math1.n3";
+    test:description   "Various math builtins";
+    test:arguments     """math/math-test.n3 --think --purge-rules""".
+ 
 :t1040 a test:CwmTest;
     test:shortFileName "bi-t9.n3";
     test:description   "Filter event by date using strcmp BI's";

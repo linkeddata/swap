@@ -171,7 +171,10 @@ metadata, and how it will use it.</p>
 
 <p>This behaviour is controllable in cwm by the --mode flags. By default cwm
 won't doing anything about it at all. (See:<a href="cwm.html#Mode">Cwm's
---mode flags</a> in manual page)</p>
+--mode flags</a> in manual page).  When cwm runs with r and s  mode flags,
+and it finds in the query it i strying to match a statement whose predicate
+has a definitive document, then it will read the document, and search it
+(alone) to resolve that query.</p>
 
 <p></p>
 

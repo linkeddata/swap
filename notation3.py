@@ -120,7 +120,7 @@ eol = re.compile(r'[ \t]*(#[^\n]*)?\r?\n')	# end  of line, poss. w/comment
 eof = re.compile(r'[ \t]*(#[^\n]*)?$')      	# end  of file, poss. w/comment
 ws = re.compile(r'[ \t]*')			# Whitespace not including newline @@(whatabout unicode NL? ask MartinD)
 signed_integer = re.compile(r'[-+]?[0-9]+')	# integer
-number_syntax = re.compile(r'([-+]?[0-9]+)(.[0-9]+)?(e[-+]?[0-9]+)?')
+number_syntax = re.compile(r'([-+]?[0-9]+)(\.[0-9]+)?(e[-+]?[0-9]+)?')
 digitstring = re.compile(r'[0-9]+')		# Unsigned integer	
 interesting = re.compile(r'[\\\r\n\"]')
 langcode = re.compile(r'[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?')
@@ -1477,6 +1477,8 @@ class Reifier(RDFSink.RDFSink):
         if self._flat and tuple[CONTEXT] == self._context:
             return self._sink.makeStatement(tuple)   # In same context: does not need reifying
 
+	rs = self._sink.newBlankNode(self._context)
+	
         self._sink.makeStatement(( self._context, # quantifiers - use inverse?
                                   (SYMBOL, N3_forSome_URI),
                                   self._context,

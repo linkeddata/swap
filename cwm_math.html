@@ -8,7 +8,7 @@ TT { font-family: lucidatypewriter, lucida console, courier }
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
 <tr bgcolor="#7799ee">
 <td valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>cwm_math</strong></big></big> (version 1.9)</font></td
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>cwm_math</strong></big></big> (version 1.10)</font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/cwm_math.py">/devel/WWW/2000/10/swap/cwm_math.py</a></font></td></tr></table>
     <p><tt>Matematical&nbsp;Built-Ins&nbsp;for&nbsp;CWM/Llyn<br>
@@ -37,9 +37,11 @@ cf.&nbsp;<a href="http://www.w3.org/2000/10/swap/cwm.py">http://www.w3.org/2000/
 <a href="string.html">string</a><br>
 <a href="sys.html">sys</a><br>
 </td><td width="25%" valign=top><a href="thing.html">thing</a><br>
-<a href="uripath.html">uripath</a><br>
+<a href="traceback.html">traceback</a><br>
+<a href="types.html">types</a><br>
+</td><td width="25%" valign=top><a href="uripath.html">uripath</a><br>
 <a href="urllib.html">urllib</a><br>
-</td><td width="25%" valign=top></td></tr></table></td></tr></table>
+</td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
 <td colspan=3 valign=bottom>&nbsp;<br>
@@ -152,6 +154,10 @@ name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
+<dl><dt><a name="BI_absoluteValue-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
+
 <dl><dt><a name="BI_absoluteValue-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_absoluteValue-uriref"><strong>uriref</strong></a>(self)</dt></dl>
@@ -226,6 +232,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_difference-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_difference-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -302,6 +312,10 @@ name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
+<dl><dt><a name="BI_differenceOf-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
+
 <dl><dt><a name="BI_differenceOf-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_differenceOf-uriref"><strong>uriref</strong></a>(self)</dt></dl>
@@ -373,6 +387,10 @@ name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
+<dl><dt><a name="BI_equalTo-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
+
 <dl><dt><a name="BI_equalTo-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_equalTo-uriref"><strong>uriref</strong></a>(self)</dt></dl>
@@ -439,6 +457,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_exponentiation-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_exponentiation-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -515,6 +537,10 @@ name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
+<dl><dt><a name="BI_exponentiationOf-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
+
 <dl><dt><a name="BI_exponentiationOf-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_exponentiationOf-uriref"><strong>uriref</strong></a>(self)</dt></dl>
@@ -587,6 +613,10 @@ name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
+<dl><dt><a name="BI_factors-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
+
 <dl><dt><a name="BI_factors-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_factors-uriref"><strong>uriref</strong></a>(self)</dt></dl>
@@ -658,6 +688,10 @@ name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
+<dl><dt><a name="BI_greaterThan-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
+
 <dl><dt><a name="BI_greaterThan-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_greaterThan-uriref"><strong>uriref</strong></a>(self)</dt></dl>
@@ -724,6 +758,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_integerQuotient-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_integerQuotient-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -799,6 +837,10 @@ name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
+<dl><dt><a name="BI_lessThan-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
+
 <dl><dt><a name="BI_lessThan-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_lessThan-uriref"><strong>uriref</strong></a>(self)</dt></dl>
@@ -865,6 +907,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_memberCount-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_memberCount-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -943,6 +989,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_negation-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_negation-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1023,6 +1073,10 @@ name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
+<dl><dt><a name="BI_notEqualTo-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
+
 <dl><dt><a name="BI_notEqualTo-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_notEqualTo-uriref"><strong>uriref</strong></a>(self)</dt></dl>
@@ -1088,6 +1142,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_notGreaterThan-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_notGreaterThan-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1155,6 +1213,10 @@ name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
+<dl><dt><a name="BI_notLessThan-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
+
 <dl><dt><a name="BI_notLessThan-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_notLessThan-uriref"><strong>uriref</strong></a>(self)</dt></dl>
@@ -1221,6 +1283,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_product-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_product-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1297,6 +1363,10 @@ name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
+<dl><dt><a name="BI_quotient-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
+
 <dl><dt><a name="BI_quotient-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_quotient-uriref"><strong>uriref</strong></a>(self)</dt></dl>
@@ -1372,6 +1442,10 @@ name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
+<dl><dt><a name="BI_quotientOf-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
+
 <dl><dt><a name="BI_quotientOf-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_quotientOf-uriref"><strong>uriref</strong></a>(self)</dt></dl>
@@ -1443,6 +1517,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_remainder-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_remainder-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1519,6 +1597,10 @@ name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
+<dl><dt><a name="BI_remainderOf-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
+
 <dl><dt><a name="BI_remainderOf-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_remainderOf-uriref"><strong>uriref</strong></a>(self)</dt></dl>
@@ -1590,6 +1672,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_rounded-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_rounded-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1666,6 +1752,10 @@ name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
+<dl><dt><a name="BI_sum-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
+
 <dl><dt><a name="BI_sum-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_sum-uriref"><strong>uriref</strong></a>(self)</dt></dl>
@@ -1741,6 +1831,10 @@ name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
 
+<dl><dt><a name="BI_sumOf-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
+
 <dl><dt><a name="BI_sumOf-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
 <dl><dt><a name="BI_sumOf-uriref"><strong>uriref</strong></a>(self)</dt></dl>
@@ -1773,6 +1867,7 @@ calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;convent
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl><dt><a name="-isString"><strong>isString</strong></a>(x)</dt></dl>
+ <dl><dt><a name="-numeric"><strong>numeric</strong></a>(s)</dt></dl>
  <dl><dt><a name="-obsolete"><strong>obsolete</strong></a>()</dt></dl>
  <dl><dt><a name="-register"><strong>register</strong></a>(store)</dt></dl>
  <dl><dt><a name="-tidy"><strong>tidy</strong></a>(x)</dt></dl>
@@ -1811,6 +1906,7 @@ calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;convent
 <strong>__file__</strong> = './cwm_math.pyc'<br>
 <strong>__name__</strong> = 'cwm_math'<br>
 <strong>__version__</strong> = '$Revision$'<br>
+<strong>reify</strong> = &lt;thing.Namespace object&gt;<br>
 <strong>store</strong> = None<br>
 <strong>storeClass</strong> = None<br>
 <strong>subcontext_cache_context</strong> = None<br>

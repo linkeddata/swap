@@ -125,7 +125,7 @@ class RDFHandler(xml.sax.ContentHandler):
         self.sink.makeComment("RDF parsed by "+version[1:-1])
 
 	if "D" in self.flags:  # Assume default namespace declaration
-	    self.sink.bind("", self._thisURI+"#")
+	    self.sink.setDefaultNamespace(self._thisURI+"#")
 	    self._nsmap = [ { "": "#"} ]
 
 
@@ -252,6 +252,12 @@ class RDFHandler(xml.sax.ContentHandler):
 				    self._predicate,
 				    self._subject,
 				    self.bnode ), why=self._reason2)
+
+	if not ns:
+	    if "L" not in self.flags:  # assume local?
+		raise BadSyntax(sys.exc_info(), "No namespace on property attribute %s=%s" % (name, value))
+	    ns = self._thisURI + "#"
+
 	pred = ns + name
 	if pred == RDF_NS_URI + "type":  # special case
 	    obj = self.sink.newSymbol(self.uriref(value)) # SYN#7.2.11 step 2/3

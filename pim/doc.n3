@@ -109,6 +109,11 @@ doc:mayControl a r:Property;
 #
 
 doc:rules a r:Property;
+	s:comment """
+	The subject is a namespace document; the object is a document
+	containing rules. The rules are valid information about the terms
+	defined in the namespace document.
+	""".
 	s:range :Work;
 	s:domain :Work.
 

@@ -161,14 +161,14 @@ class BI_verifyBoolean(LightBuiltIn, Function):
       RSAKey = quoToKey(keypair) # Dequote the key
       signature = (long(baseDecode(signature)),)
       result = RSAKey.verify(hash, signature)
-      return store.intern((LITERAL, str(result)))
+      return str(result)
 
 class BI_publicKey(LightBuiltIn, Function): 
    def evaluateObject(self, subj_py): 
       """Generate a quopri public key from a keypair."""
       keypair = quoToKey(subj_py) # Dequote the key
       publickey = keypair.publickey() # Get the public key
-      return store.intern((LITERAL, keyToQuo(publickey)))
+      return keyToQuo(publickey)
 
 #  Register the string built-ins with the store
 

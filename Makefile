@@ -48,14 +48,14 @@ release : tested
 	cvs commit -m "Passes regression test. (make release)"
 	touch release
 
-package: math.rdf maths.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf times.rdf LICENSE.rdf cwm.tar.Z $(HTMLS)
+package: math.rdf maths.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf times.rdf LICENSE.rdf cwm.tgz $(HTMLS)
 
 # Can't make dependencies on *.py :-(
 
 # cwm.py notation3.py llyn.py  RDFSink.py toXML.py
 cwm.tgz:
 	cvs update
-	tar -czf cwm.tgz *.py $(HTMLS) LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply.*.py *.py
+	tar -czf cwm.tgz *.py $(HTMLS) LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply/*.py *.py
 
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py

@@ -30,7 +30,7 @@ DAML_LISTS = notation3.DAML_LISTS
 RDF_type_URI = notation3.RDF_type_URI
 DAML_equivalentTo_URI = notation3.DAML_equivalentTo_URI
 
-MATH_NS_URI = 'http://www.w3.org/2000/10/swap/maths#'
+MATHS_NS_URI = 'http://www.w3.org/2000/10/swap/maths#'
 
 def tidy(x):
     #DWC bugfix: "39.03555" got changed to "393555"
@@ -62,16 +62,14 @@ def isString(x):
 
 
 class BI_absoluteValue(LightBuiltIn, Function):
-    def evalObj(self, subj, queue, bindings, proof):
-        if isinstance(subj, Literal):
-            t = abs(float(subj.string))
-            if t is not None: return self.store.intern((LITERAL, tidy(t)))
+    def evaluateObject(self, x):
+            t = abs(float(x))
+            if t is not None: return tidy(t)
 
 class BI_rounded(LightBuiltIn, Function):
-    def evalObj(self, subj, queue, bindings, proof):
-        if isinstance(subj, Literal):
-            t = round(float(subj.string))
-            if t is not None: return self.store.intern((LITERAL, tidy(t)))
+    def evaluateObject(self, x):
+            t = round(float(x))
+            if t is not None: return tidy(t)
 
 class BI_sum(LightBuiltIn, Function):
     def evaluateObject(self,  subj_py): 
@@ -145,15 +143,14 @@ class BI_remainderOf(LightBuiltIn, ReverseFunction):
         return tidy(t)
 
 class BI_negation(LightBuiltIn, Function, ReverseFunction):
-    def evalSubj(self, obj, queue, bindings, proof): 
-        if isinstance(obj, Literal):
-            t = -float(obj.string)
-            if t is not None: return store.intern((LITERAL, tidy(t)))
 
-    def evalObj(self, subj, queue, bindings, proof):
-        if isinstance(subj, Literal):
-            t = -float(subj.string)
-            if t is not None: return store.intern((LITERAL, tidy(t)))
+    def evalaluateObject(self, subject):
+            t = -float(subject)
+            if t is not None: return tidy(t)
+
+    def evalaluateSubject(self, object):
+            t = -float(object)
+            if t is not None: return tidy(t)
 
 # Power
 
@@ -174,27 +171,27 @@ class BI_exponentiationOf(LightBuiltIn, ReverseFunction):
 # These are truth testing things  - Binary logical operators
 
 class BI_greaterThan(LightBuiltIn):
-    def eval(self, subj, obj, queue, bindings, proof):
+    def eval(self, subj, obj, queue, bindings, proof, query):
         return (float(subj.string) > float(obj.string))
 
 class BI_notGreaterThan(LightBuiltIn):
-    def eval(self, subj, obj, queue, bindings, proof):
+    def eval(self, subj, obj, queue, bindings, proof, query):
         return (float(subj.string) <= float(obj.string))
 
 class BI_lessThan(LightBuiltIn):
-    def eval(self, subj, obj, queue, bindings, proof):
+    def eval(self, subj, obj, queue, bindings, proof, query):
         return (float(subj.string) < float(obj.string))
 
 class BI_notLessThan(LightBuiltIn):
-    def eval(self, subj, obj, queue, bindings, proof):
+    def eval(self, subj, obj, queue, bindings, proof, query):
         return (float(subj.string) >= float(obj.string))
 
 class BI_equalTo(LightBuiltIn):
-    def eval(self, subj, obj, queue, bindings, proof):
+    def eval(self, subj, obj, queue, bindings, proof, query):
         return (float(subj.string) == float(obj.string))
 
 class BI_notEqualTo(LightBuiltIn):
-    def eval(self, subj, obj, queue, bindings, proof):
+    def eval(self, subj, obj, queue, bindings, proof, query):
         return (float(subj.string) != float(obj.string))
 
 # memberCount - this is a proper forward function

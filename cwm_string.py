@@ -48,49 +48,49 @@ STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
 #   Light Built-in classes
 
 class BI_GreaterThan(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings, proof):
+    def eval(self,  subj, obj, queue, bindings, proof, query):
         return (subj.string > obj.string)
 
 class BI_NotGreaterThan(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings, proof):
+    def eval(self,  subj, obj, queue, bindings, proof, query):
         return (subj.string <= obj.string)
 
 class BI_LessThan(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings, proof):
+    def eval(self,  subj, obj, queue, bindings, proof, query):
         return (subj.string < obj.string)
 
 class BI_NotLessThan(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings, proof):
+    def eval(self,  subj, obj, queue, bindings, proof, query):
         return (subj.string >= obj.string)
 
 class BI_StartsWith(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings, proof):
+    def eval(self,  subj, obj, queue, bindings, proof, query):
         return subj.string.startswith(obj.string)
 
 class BI_EndsWith(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings, proof):
+    def eval(self,  subj, obj, queue, bindings, proof, query):
         return subj.string.endswith(obj.string)
 
 # Added, SBP 2001-11:-
 
 class BI_Contains(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings, proof):
+    def eval(self,  subj, obj, queue, bindings, proof, query):
         return subj.string.find(obj.string) >= 0
 
 class BI_ContainsIgnoringCase(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings, proof):
+    def eval(self,  subj, obj, queue, bindings, proof, query):
         return subj.string.lower().find(obj.string.lower()) >= 0
 
 class BI_DoesNotContain(LightBuiltIn): # Converse of the above
-    def eval(self,  subj, obj, queue, bindings, proof):
+    def eval(self,  subj, obj, queue, bindings, proof, query):
         return subj.string.find(obj.string) < 0
 
 class BI_equalIgnoringCase(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings, proof):
+    def eval(self,  subj, obj, queue, bindings, proof, query):
         return (subj.string.lower() == obj.string.lower())
 
 class BI_notEqualIgnoringCase(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings, proof):
+    def eval(self,  subj, obj, queue, bindings, proof, query):
         return (string.lower(subj.string) != string.lower(obj.string))
 
 #  String Constructors - more light built-ins
@@ -147,12 +147,46 @@ class BI_format(LightBuiltIn, Function):
         return subj_py[0] % tuple(subj_py[1:])
 
 class BI_matches(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings, proof):
+    def eval(self,  subj, obj, queue, bindings, proof, query):
         return (re.compile(obj.string).search(subj.string))
 
 class BI_notMatches(LightBuiltIn):
-    def eval(self,  subj, obj, queue, bindings, proof):
+    def eval(self,  subj, obj, queue, bindings, proof, query):
         return (not re.compile(obj.string).search(subj.string))
+
+
+dataEsc = re.compile(r"[\r<>&]")  # timbl removed \n as can be in data
+attrEsc = re.compile(r"[\r<>&'\"\n]")
+
+class BI_xmlEscapeData(LightBuiltIn, Function):
+    """Take a unicode string and return it encoded so as to pass in an XML data
+    You will need the BI_xmlEscapeAttribute on for attributes, escaping quotes."""
+    
+    def evaluateObject(self, subj_py):
+	return xmlEscape(subj_py, dataEsc)
+	
+class BI_xmlEscapeAttribute(LightBuiltIn, Function):
+    """Take a unicode string and return it encoded so as to pass in an XML data
+    You may need stg different for attributes, escaping quotes."""
+    
+    def evaluateObject(self, subj_py):
+	return xmlEscape(subj_py, attrEsc)
+
+def xmlEscape(subj_py, markupChars):
+    """Escape a string given a regex of the markup chars to be escaped
+    from toXML.py """
+    i = 0
+    result = ""
+    while i < len(subj_py):
+	m = markupChars.search(subj_py, i)
+	if not m:
+	    result = result + subj_py[i:]
+	    break
+	j = m.start()
+	result = result + subj_py[i:j]
+	result = result +  ("&#%d;" % (ord(subj_py[j]),))
+	i = j + 1
+    return result
 
 
 
@@ -182,5 +216,7 @@ def register(store):
     str.internFrag("doesNotContain", BI_DoesNotContain)
     str.internFrag("equalIgnoringCase", BI_equalIgnoringCase)
     str.internFrag("notEqualIgnoringCase", BI_notEqualIgnoringCase)
+    str.internFrag("xmlEscapeAttribute", BI_xmlEscapeAttribute)
+    str.internFrag("xmlEscapeData", BI_xmlEscapeData)
 
     

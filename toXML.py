@@ -109,9 +109,11 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 	self._wr = XMLWriter(encWriter(outFp))
 	self._subj = None
 	self._base = base
+	self._formula = None   # Where do we get this from? The outermost formula
 	if base == None: self._base = thisURI
 	self._thisDoc = thisURI
 	self._flags = flags
+	self._nodeId = {}
 	self._docOpen = 0  # Delay doc open <rdf:RDF .. till after binds
 
     #@@I18N
@@ -165,9 +167,19 @@ class ToRDF(RDFSink.RDFStructuredOutput):
     def makeStatement(self,  tuple, why=None):
         self.flushStart()
         context, pred, subj, obj = tuple # Context is ignored
+	if self._formula == None:
+	    self._formula = context   # Asssume first statement is in outermost context @@
 	predn = refTo(self._base, pred[1])
 	subjn = refTo(self._base, subj[1])
 
+	if subj == context: # and context == self._formula:
+	    if pred == (SYMBOL, N3_forAll_URI):
+		progress("Ignoring universal ", obj)
+		return
+	    elif pred == (SYMBOL, N3_forSome_URI):
+		progress("Ignoring existential ", obj)
+		return
+	    
 	if self._subj != subj:
 	    if self._subj:
 		self._wr.endElement()
@@ -193,6 +205,8 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 		self._wr.data(v)
 		self._wr.endElement()
 	    else:
+		progress("Warning:  because subject is strange, Ignoring ", tuple)
+		return
 		raise ValueError("Unexpected subject", `subj`)
 	if obj[0] != LITERAL: 
 	    objn = refTo(self._base, obj[1])

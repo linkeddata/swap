@@ -8,7 +8,7 @@ TT { font-family: lucidatypewriter, lucida console, courier }
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
 <tr bgcolor="#7799ee">
 <td valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>cwm_maths</strong></big></big> (version 1.9)</font></td
+<font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>cwm_maths</strong></big></big> (version 1.1)</font></td
 ><td align=right valign=bottom
 ><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/cwm_maths.py">/devel/WWW/2000/10/swap/cwm_maths.py</a></font></td></tr></table>
     <p><tt>Matematical&nbsp;Built-Ins&nbsp;for&nbsp;CWM/Llyn&nbsp;using&nbsp;Strings<br>
@@ -124,7 +124,7 @@ cf.&nbsp;<a href="http://www.w3.org/2000/10/swap/cwm.py">http://www.w3.org/2000/
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_absoluteValue-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_absoluteValue-evaluateObject"><strong>evaluateObject</strong></a>(self, x)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -139,7 +139,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_absoluteValue-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_absoluteValue-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_absoluteValue-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -152,6 +152,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_absoluteValue-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_absoluteValue-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -171,6 +175,14 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 
 <dl><dt><a name="BI_absoluteValue-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
+<dl><dt><a name="BI_absoluteValue-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -206,7 +218,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_difference-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_difference-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_difference-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -219,6 +231,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_difference-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_difference-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -241,7 +257,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_difference-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_difference-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -281,7 +297,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_differenceOf-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_differenceOf-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_differenceOf-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -294,6 +310,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_differenceOf-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_differenceOf-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -316,7 +336,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>:<br>
-<dl><dt><a name="BI_differenceOf-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_differenceOf-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table> 
@@ -337,7 +357,7 @@ calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;convent
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_equalTo-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_equalTo-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -359,6 +379,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_equalTo-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_equalTo-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -413,7 +437,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_exponentiation-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_exponentiation-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_exponentiation-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -426,6 +450,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_exponentiation-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_exponentiation-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -448,7 +476,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_exponentiation-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_exponentiation-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -488,7 +516,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_exponentiationOf-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_exponentiationOf-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_exponentiationOf-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -501,6 +529,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_exponentiationOf-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_exponentiationOf-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -523,7 +555,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>:<br>
-<dl><dt><a name="BI_exponentiationOf-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_exponentiationOf-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table> 
@@ -560,7 +592,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_factors-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_factors-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_factors-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -573,6 +605,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_factors-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_factors-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -595,7 +631,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>:<br>
-<dl><dt><a name="BI_factors-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_factors-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table> 
@@ -616,7 +652,7 @@ calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;convent
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_greaterThan-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_greaterThan-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -638,6 +674,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_greaterThan-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_greaterThan-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -692,7 +732,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_integerQuotient-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_integerQuotient-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_integerQuotient-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -705,6 +745,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_integerQuotient-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_integerQuotient-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -727,7 +771,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_integerQuotient-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_integerQuotient-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -751,7 +795,7 @@ use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_lessThan-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_lessThan-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -773,6 +817,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_lessThan-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_lessThan-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -827,7 +875,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_memberCount-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_memberCount-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_memberCount-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -840,6 +888,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_memberCount-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_memberCount-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -862,7 +914,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_memberCount-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_memberCount-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -888,9 +940,9 @@ use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_negation-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_negation-evalaluateObject"><strong>evalaluateObject</strong></a>(self, subject)</dt></dl>
 
-<dl><dt><a name="BI_negation-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_negation-evalaluateSubject"><strong>evalaluateSubject</strong></a>(self, object)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -905,7 +957,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_negation-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_negation-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_negation-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -918,6 +970,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_negation-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_negation-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -938,6 +994,19 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 <dl><dt><a name="BI_negation-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
 
+<hr>
+Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
+<dl><dt><a name="BI_negation-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>:<br>
+<dl><dt><a name="BI_negation-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
@@ -956,7 +1025,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_notEqualTo-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_notEqualTo-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -978,6 +1047,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_notEqualTo-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_notEqualTo-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1016,7 +1089,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_notGreaterThan-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_notGreaterThan-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -1038,6 +1111,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_notGreaterThan-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_notGreaterThan-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1076,7 +1153,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_notLessThan-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_notLessThan-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -1098,6 +1175,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_notLessThan-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_notLessThan-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1152,7 +1233,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_product-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_product-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_product-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1165,6 +1246,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_product-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_product-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1187,7 +1272,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_product-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_product-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1227,7 +1312,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_quotient-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_quotient-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_quotient-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1240,6 +1325,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_quotient-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_quotient-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1262,7 +1351,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_quotient-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_quotient-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1302,7 +1391,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_quotientOf-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_quotientOf-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_quotientOf-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1315,6 +1404,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_quotientOf-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_quotientOf-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1337,7 +1430,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>:<br>
-<dl><dt><a name="BI_quotientOf-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_quotientOf-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table> 
@@ -1374,7 +1467,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_remainder-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_remainder-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_remainder-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1387,6 +1480,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_remainder-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_remainder-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1409,7 +1506,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_remainder-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_remainder-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1449,7 +1546,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_remainderOf-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_remainderOf-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_remainderOf-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1462,6 +1559,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_remainderOf-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_remainderOf-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1484,7 +1585,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>:<br>
-<dl><dt><a name="BI_remainderOf-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_remainderOf-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table> 
@@ -1506,7 +1607,7 @@ calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;convent
 </dl>
 <hr>
 Methods defined here:<br>
-<dl><dt><a name="BI_rounded-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt></dl>
+<dl><dt><a name="BI_rounded-evaluateObject"><strong>evaluateObject</strong></a>(self, x)</dt></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -1521,7 +1622,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_rounded-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_rounded-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_rounded-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1534,6 +1635,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_rounded-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_rounded-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1553,6 +1658,14 @@ see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp
 
 <dl><dt><a name="BI_rounded-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
 This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+<hr>
+Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
+<dl><dt><a name="BI_rounded-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -1588,7 +1701,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_sum-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_sum-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_sum-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1601,6 +1714,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_sum-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_sum-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1623,7 +1740,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_sum-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_sum-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1663,7 +1780,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_sumOf-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="BI_sumOf-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_sumOf-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
 &nbsp;<br>
 To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
@@ -1676,6 +1793,10 @@ This&nbsp;arises&nbsp;when&nbsp;a&nbsp;document&nbsp;is&nbsp;parsed&nbsp;and&nbs
 name&nbsp;is&nbsp;made&nbsp;up&nbsp;to&nbsp;represent&nbsp;a&nbsp;node&nbsp;with&nbsp;no&nbsp;known&nbsp;URI.<br>
 It&nbsp;is&nbsp;useful&nbsp;to&nbsp;know&nbsp;that&nbsp;its&nbsp;ID&nbsp;has&nbsp;no&nbsp;use&nbsp;outside&nbsp;that<br>
 context.</tt></dd></dl>
+
+<dl><dt><a name="BI_sumOf-reification"><strong>reification</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
+&nbsp;<br>
+[&nbsp;reify:uri&nbsp;"<a href="http://example.org/#whatever">http://example.org/#whatever</a>"]</tt></dd></dl>
 
 <dl><dt><a name="BI_sumOf-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Optimize&nbsp;output&nbsp;if&nbsp;prefixes&nbsp;available</tt></dd></dl>
 
@@ -1698,7 +1819,7 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 
 <hr>
 Methods inherited from <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>:<br>
-<dl><dt><a name="BI_sumOf-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_sumOf-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof, query)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table></td></tr></table>
@@ -1730,7 +1851,7 @@ calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;convent
 <strong>LITERAL</strong> = 2<br>
 <strong>LITERAL_URI_prefix</strong> = 'data:application/n3,'<br>
 <strong>Logic_NS</strong> = 'http://www.w3.org/2000/10/swap/log#'<br>
-<strong>MATH_NS_URI</strong> = 'http://www.w3.org/2000/10/swap/maths#'<br>
+<strong>MATHS_NS_URI</strong> = 'http://www.w3.org/2000/10/swap/maths#'<br>
 <strong>OBJ</strong> = 3<br>
 <strong>PARTS</strong> = (1, 2, 3)<br>
 <strong>PRED</strong> = 1<br>
@@ -1743,9 +1864,10 @@ calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;convent
 <strong>VARS</strong> = 3<br>
 <strong>__author__</strong> = 'Sean B. Palmer'<br>
 <strong>__cvsid__</strong> = '$Id$'<br>
-<strong>__file__</strong> = './cwm_maths.py'<br>
+<strong>__file__</strong> = './cwm_maths.pyc'<br>
 <strong>__name__</strong> = 'cwm_maths'<br>
 <strong>__version__</strong> = '$Revision$'<br>
+<strong>reify</strong> = &lt;thing.Namespace object&gt;<br>
 <strong>store</strong> = None<br>
 <strong>storeClass</strong> = None<br>
 <strong>subcontext_cache_context</strong> = None<br>
