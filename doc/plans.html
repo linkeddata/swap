@@ -48,10 +48,10 @@ style="float: right" src="../../../../RDF/icons/n3_small" />
   <li>Distribution mechanisms 
     <ul>
       <li>tarball (with test) (<em>done in 0.8</em>)</li>
-      <li>pyton setup.py <em>(in progress as of 22 Jul.  Now works - yosi
+      <li>pyton setup.py <em>(in progress as of 22 Jul. Now works - yosi
         2004/9/3.)</em></li>
-      <li>dpkg debian packaging  Done once setup.py -&gt; RPM -alien-&gt;
-        debian</li>
+      <li>dpkg debian packaging Done once setup.py -&gt; RPM -alien-&gt;
+        debian, NOT this release</li>
     </ul>
   </li>
   <li>allow alternative parsers; in particular, 
@@ -75,13 +75,19 @@ style="float: right" src="../../../../RDF/icons/n3_small" />
   <li>W3.org homepage announcement</li>
 </ul>
 
-<h2 id="Release">by Release 1.1    2004/10/??  (Requires Python 2.3)</h2>
+<h2 id="Release">by Release 1.1 2004/10/?? (Requires Python 2.3)</h2>
 
 <p>This contains performance work which would have been been in 0.9 except
-for unexpected medical situation.   This will use Python sets where
-appropriate (instead of homebrew sets or sequences) and will therefore
-<strong>require python 2.3.</strong></p>
+for unexpected medical situation. This will use Python sets where appropriate
+(instead of homebrew sets or sequences) and will therefore <strong>require
+python 2.3.</strong></p>
 <ul>
+  <li>Distribution mechanisms 
+    <ul>
+      <li>dpkg debian packaging Done once setup.py -&gt; RPM -alien-&gt;
+        debian.</li>
+    </ul>
+  </li>
   <li>Speed benchmark</li>
   <li>allow alternative parsers; in particular, 
     <ul>
@@ -127,7 +133,7 @@ different types of engine.</p>
 <p></p>
 
 <p>N3 grammar close the loop: Connect N3 grammar to syntax tests by
-generating parser directly from the grammar. .   Closing the loop on the
+generating parser directly from the grammar. . Closing the loop on the
 syntax. We have a definition of the N3 syntax in N3. This is only a form of
 documentation until we have automatically generated a parser and/or a test
 suite from that syntax definition. A straightforward job - We have a syntax
@@ -135,11 +141,11 @@ validator based on the BNF in RDF already. The interesting bit is the
 ontology for annotating the BNF grammar with RDF production rules, because it
 could then be reused to annotating foreign and legacy grammars to enable
 automatic extraction of RDF from them. (Apart from the niceness of having
-something defined it itself of course.)  (<em>July 2004 this is done without
+something defined it itself of course.) (<em>July 2004 this is done without
 the grammar annotation necessary to actually generate triples in the
 store</em>)</p>
 
-<p>RDF Output - Use Collections for lists.  </p>
+<p>RDF Output - Use Collections for lists.</p>
 
 <p>N3 syntax - test set syntax (,) (&lt;a&gt;,) (&lt;a&gt;, &lt;b&gt;)</p>
 
