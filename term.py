@@ -160,6 +160,16 @@ class Term:
     def value(self):
 	"As a python value - by default, none exists, use self"
 	return self
+    
+    def doesNodeAppear(self, symbol):
+        """Does that node appear within this one
+
+        This non-overloaded function will simply return if I'm equal to him
+        """
+        return self == symbol
+
+    def unflatten(self, sink, bNodes, why=None):
+        return self
 
     def unify(self, other, vars, existentials,  bindings):
 	"""Unify this which may contain variables with the other,
@@ -216,6 +226,9 @@ class LabelledNode(Node):
 	uri = sink.newSymbol(REIFY_NS + "uri")
 	sink.add(subj=b, pred=uri, obj=sink.newLiteral(self.uriref()), why=why)
 	return b
+
+    def flatten(self, sink, why=None):
+        return self
                 
     def classOrder(self):
 	return	6
@@ -374,6 +387,16 @@ class AnonymousNode(Node):
 	    bnodeMap[self] = b
 	return b
 
+    def flatten(self, sink, why=None):
+        sink.declareExistential(self)
+        return self
+
+    def unflatten(self, sink, bNodes, why=None):
+        try:
+            return bNodes[self]
+        except KeyError:
+            bNodes[self] = sink.newBlankNode()
+            return bNodes[self]
 
 class AnonymousVariable(AnonymousNode):
     """An anonymous node which is existentially quantified in a given context.
@@ -509,6 +532,14 @@ class List(CompoundTerm):
 	sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"items"), obj=elements, why=why)
 	return b
 
+    def flatten(self, sink, why=None):
+        newlist = sink.newList([x.flatten(sink, why=why) for x in self])
+        return newlist
+
+    def unflatten(self, sink, bNodes, why=None):
+        newlist = sink.newList([x.unflatten(sink, bNodes, why=why) for x in self])
+        return newlist
+    
     def doesNodeAppear(self, symbol):
         """Does that particular node appear anywhere in this list
 
@@ -815,6 +846,9 @@ class Literal(Term):
 	b = sink.newBlankNode(why=why)
 	sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"value"), obj=self, why=why)
 	return b
+
+    def flatten(self, sink, why=None):
+        return self
 
     def unify(self, other, vars, existentials, bindings):
 	"""Unify this which may contain variables with the other,

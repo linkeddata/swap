@@ -38,9 +38,9 @@ if exists(swap_dir):
 # Install SWAP
 from distutils.core import setup
 #from swap import __version__
-__version__='0.31417'
+__version__='0.8.0'
 setup(
-    name = 'SWAP/Cwm',
+    name = 'cwm',
     version = __version__,
     description = "Semantic Web Area for Play",
     author = "TimBL, Dan Connolly and contributors",
@@ -48,10 +48,9 @@ setup(
     maintainer = "Tim Berners-Lee",
     maintainer_email = "timbl@w3.org",
     url = "http://www.w3.org/2000/10/swap/",
-    package_dir = {'': 'swap'},
-    packages = ['swap.cwm',
-		'swap.RDFSink',
-		'swap.llyn'],
+    package_dir = {'swap': 'swap'},
+    packages = ['swap'],
+    scripts = ['cwm.py'],
    )
     # todo, figure out which other modules are in public APIs
     # --danbri

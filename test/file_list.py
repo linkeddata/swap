@@ -7,8 +7,24 @@ run the tests. It will miss some files, especially in the online.tests
 """
 
 
-import diag
-import uripath
+#the following lines should be removed. They will NOT work with any distribution
+#-----------------
+from os import chdir, getcwd
+from sys import path
+qqq = getcwd()
+chdir(path[0])
+chdir('..')
+chdir('..')
+path.append(getcwd())
+chdir(qqq)
+#import swap
+#print dir(swap)
+#-----------------
+#end lines should be removed
+
+
+from swap import diag
+from swap import uripath
 
 def main():
     diag.print_all_file_names = 1

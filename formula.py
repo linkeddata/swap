@@ -580,6 +580,9 @@ class Formula(AnonymousNode, CompoundTerm):
 	    
 	return F
 
+    def flatten(self, sink, why=None):
+        return self.reification(sink, {}, why=why)
+
     def doesNodeAppear(self, symbol):
         """Does that particular node appear anywhere in this formula
 

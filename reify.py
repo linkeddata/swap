@@ -14,14 +14,61 @@ from term import BuiltIn, LightBuiltIn, LabelledNode, \
     Literal, Symbol, Fragment, FragmentNil, Term,\
     CompoundTerm, List, EmptyList, NonEmptyList
 from formula import Formula, StoredStatement
-SUBJ = 0
-PRED = 1
-OBJ  = 2
+from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 import uripath
 import diag
 
 reifyNS = 'http://www.w3.org/2004/06/rei#'
 owlOneOf = 'http://www.w3.org/2002/07/owl#oneOf'
+
+def flatten(formula):
+    """Flatten a formula
+
+    This will minimally change a formula to make it valid RDF
+    flattening a flattened formula should thus be the unity
+    """
+    store = formula.store
+    valid_triples = formula.statements[:]
+    for triple in valid_triples:
+        for part in SUBJ, PRED, OBJ:
+            try:
+                triple[part] = triple[part].close()
+            except AttributeError:
+                pass
+    
+    invalid_triples = []
+    for a in formula.universals():
+        new_invalid_triples = []
+        for triple in valid_triples:
+            for part in SUBJ, PRED, OBJ:
+                if triple[part].doesNodeAppear(a):
+                    new_invalid_triples.append(triple)
+        for triple in new_invalid_triples:
+            try:
+                valid_triples.remove(triple)
+            except ValueError:
+                pass
+        invalid_triples.extend(new_invalid_triples)
+    returnFormula = formula.newFormula()
+    tempformula = formula.newFormula()
+    for var in formula.universals():
+        tempformula.declareUniversal(var)
+    for var in formula.existentials():
+        tempformula.declareExistential(var)
+    for triple in invalid_triples:
+        tempformula.add(triple[SUBJ],
+                        triple[PRED],
+                        triple[OBJ])
+    #now for the stuff that isn't reified
+    for triple in valid_triples:
+        returnFormula.add(triple[SUBJ].flatten(returnFormula),
+                        triple[PRED].flatten(returnFormula),
+                        triple[OBJ].flatten(returnFormula))
+    if tempformula.statements != []:
+        x = tempformula.reification(returnFormula)
+        returnFormula.add(x, store.type, store.Truth)
+    return returnFormula.close()
+    
 
 def typeDispatch(typeDict, term, optional = None):
     """Dispatch which function to call based on type
@@ -380,23 +427,60 @@ def dereification_old(formula,sink):
     return sink
 
 
+def unflatten(formula, sink=None):
+    """Undo the effects of the flatten function.
 
+    Note that this still requires helper methods scattered throughout the
+    Term heriarchy. 
+    
+    Our life is made much more difficult by the necessity of removing all
+    triples that have been dereified --- this required a modification to dereification()
+
+    """
+    store = formula.store
+    if sink == None:
+	sink = formula.newFormula()
+    bNodes = {}     #to track bNodes that bacome formulae
+    rei = formula.newSymbol(reifyNS[:-1])
+    formulaList = formula.each(pred=rei["statements"])
+
+    #on the next line, we are filtering Truths because those will be included later
+    formulaList = [a for a in formulaList if formula.the(pred=store.type, obj=store.Truth) == None]
+    skipNodeList=[]
+    for a in formulaList:
+        xList = []
+        bNodes[a] = dereification(a, formula, sink, xList=xList)
+        skipNodeList.extend(xList[1:])
+    dereify(formula, sink, xList=skipNodeList)
+    for triple in formula.statements:
+        if triple[PRED] != rei["statements"] and \
+           triple[PRED] != rei["universals"] and \
+           triple[PRED] != rei["value"] and \
+           triple[PRED] != rei["existentials"] and \
+           triple[SUBJ] not in skipNodeList and \
+           triple[PRED] not in skipNodeList and \
+           triple[OBJ] not in skipNodeList:
+            sink.add(triple[SUBJ].unflatten(sink, bNodes),
+                     triple[PRED].unflatten(sink, bNodes),
+                     triple[OBJ].unflatten(sink, bNodes))        
+    return sink.close()
 
 #### Alternative method
 # Shortcuts are too messy and don't work with lists
 #
-def dereify(formula, sink=None):
+def dereify(formula, sink=None, xList=[]):
     store = formula.store
     if sink == None:
 	sink = formula.newFormula()
     weKnowList = formula.each(pred=store.type, obj=store.Truth)
     for weKnow in weKnowList:
-	f = dereification(weKnow, formula, sink)
+	f = dereification(weKnow, formula, sink, xList=xList)
 	sink.loadFormulaWithSubsitution(f)
     return sink
 
-def dereification(x, f, sink, bnodes={}):
+def dereification(x, f, sink, bnodes={}, xList=[]):
     rei = f.newSymbol(reifyNS[:-1])
+    xList.append(x)
     
     if x == None:
 	raise ValueError, "Can't dereify nothing. Suspect missing information in reified form."
@@ -407,7 +491,7 @@ def dereification(x, f, sink, bnodes={}):
     if y != None: return y
     
     y = f.the(subj=x, pred=rei["items"])
-    if y != None: return sink.newList([dereification(z, f, sink, bnodes) for z in y])
+    if y != None: return sink.newList([dereification(z, f, sink, bnodes, xList) for z in y])
     
     y = f.the(subj=x, pred=rei["statements"])
     if y != None:
@@ -415,7 +499,9 @@ def dereification(x, f, sink, bnodes={}):
 	zbNodes = {}  # Bnode map for this formula
 	
 	uset = f.the(subj=x, pred=rei["universals"])
+	xList.append(uset)
 	ulist = f.the(subj=uset, pred=f.newSymbol(owlOneOf))
+	xList.append(ulist)
 	from diag import progress
 	if diag.chatty_flag > 54:
             progress("universals = ",ulist)
@@ -423,7 +509,9 @@ def dereification(x, f, sink, bnodes={}):
 	    z.declareUniversal(f.newSymbol(v.value()))
 
 	uset = f.the(subj=x, pred=rei["existentials"])
+	xList.append(uset)
 	ulist = f.the(subj=uset, pred=f.newSymbol(owlOneOf))
+	xList.append(ulist)
 	if diag.chatty_flag > 54:
             progress("existentials %s =  %s"%(ulist, ulist.value()))
 	for v in ulist:
@@ -431,12 +519,13 @@ def dereification(x, f, sink, bnodes={}):
                 progress("Variable is ", v)
 	    z.declareExistential(f.newSymbol(v.value()))
 	yy = f.the(subj=y, pred=f.newSymbol(owlOneOf))
+	xList.append(yy)
 	if diag.chatty_flag > 54:
             progress("Statements:  set=%s, list=%s = %s" %(y,yy, yy.value()))
 	for stmt in yy:
-	    z.add(dereification(f.the(subj=stmt, pred=rei["subject"]), f, sink, zbNodes),
-		dereification(f.the(subj=stmt, pred=rei["predicate"]), f, sink, zbNodes),
-		dereification(f.the(subj=stmt, pred=rei["object"]), f, sink, zbNodes))
+	    z.add(dereification(f.the(subj=stmt, pred=rei["subject"]), f, sink, zbNodes, xList),
+		dereification(f.the(subj=stmt, pred=rei["predicate"]), f, sink, zbNodes, xList),
+		dereification(f.the(subj=stmt, pred=rei["object"]), f, sink, zbNodes, xList))
 	return z.close()
     if x in bnodes:
 	return bnodes[x]

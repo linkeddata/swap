@@ -143,11 +143,15 @@ as&nbsp;the&nbsp;epresentative&nbsp;node&nbsp;of&nbsp;an&nbsp;equivalence&nbsp;c
 
 <dl><dt><a name="AnonymousExistential-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;Formula&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;below</tt></dd></dl>
 
+<dl><dt><a name="AnonymousExistential-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="AnonymousExistential-generated"><strong>generated</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="AnonymousExistential-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:items&nbsp;(&nbsp;[&nbsp;reify:value&nbsp;"foo"]&nbsp;&nbsp;....&nbsp;)&nbsp;]</tt></dd></dl>
+
+<dl><dt><a name="AnonymousExistential-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="AnonymousExistential-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -173,6 +177,10 @@ a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;th
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="AnonymousExistential-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="AnonymousExistential-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
 <dl><dt><a name="AnonymousExistential-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
@@ -220,11 +228,15 @@ as&nbsp;the&nbsp;epresentative&nbsp;node&nbsp;of&nbsp;an&nbsp;equivalence&nbsp;c
 
 <dl><dt><a name="AnonymousNode-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;Formula&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;below</tt></dd></dl>
 
+<dl><dt><a name="AnonymousNode-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="AnonymousNode-generated"><strong>generated</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="AnonymousNode-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:items&nbsp;(&nbsp;[&nbsp;reify:value&nbsp;"foo"]&nbsp;&nbsp;....&nbsp;)&nbsp;]</tt></dd></dl>
+
+<dl><dt><a name="AnonymousNode-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="AnonymousNode-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -250,6 +262,10 @@ a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;th
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="AnonymousNode-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="AnonymousNode-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
 <dl><dt><a name="AnonymousNode-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
@@ -297,11 +313,15 @@ as&nbsp;the&nbsp;epresentative&nbsp;node&nbsp;of&nbsp;an&nbsp;equivalence&nbsp;c
 
 <dl><dt><a name="AnonymousUniversal-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;Formula&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;below</tt></dd></dl>
 
+<dl><dt><a name="AnonymousUniversal-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="AnonymousUniversal-generated"><strong>generated</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="AnonymousUniversal-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:items&nbsp;(&nbsp;[&nbsp;reify:value&nbsp;"foo"]&nbsp;&nbsp;....&nbsp;)&nbsp;]</tt></dd></dl>
+
+<dl><dt><a name="AnonymousUniversal-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="AnonymousUniversal-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -327,6 +347,10 @@ a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;th
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="AnonymousUniversal-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="AnonymousUniversal-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
 <dl><dt><a name="AnonymousUniversal-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
@@ -374,11 +398,15 @@ as&nbsp;the&nbsp;epresentative&nbsp;node&nbsp;of&nbsp;an&nbsp;equivalence&nbsp;c
 
 <dl><dt><a name="AnonymousVariable-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;Formula&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;below</tt></dd></dl>
 
+<dl><dt><a name="AnonymousVariable-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="AnonymousVariable-generated"><strong>generated</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="AnonymousVariable-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:items&nbsp;(&nbsp;[&nbsp;reify:value&nbsp;"foo"]&nbsp;&nbsp;....&nbsp;)&nbsp;]</tt></dd></dl>
+
+<dl><dt><a name="AnonymousVariable-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="AnonymousVariable-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -404,6 +432,10 @@ a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;th
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="AnonymousVariable-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
+
+<dl><dt><a name="AnonymousVariable-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
 
 <dl><dt><a name="AnonymousVariable-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
@@ -473,6 +505,8 @@ Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
 
 <dl><dt><a name="BuiltIn-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BuiltIn-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BuiltIn-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -505,11 +539,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BuiltIn-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BuiltIn-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BuiltIn-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BuiltIn-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BuiltIn-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BuiltIn-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BuiltIn-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -558,6 +598,10 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="CompoundTerm-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="CompoundTerm-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="CompoundTerm-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
 
 <dl><dt><a name="CompoundTerm-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
@@ -567,6 +611,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 <dl><dt><a name="CompoundTerm-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="CompoundTerm-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="CompoundTerm-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="CompoundTerm-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -631,11 +677,15 @@ as&nbsp;though&nbsp;a&nbsp;formula&nbsp;were&nbsp;a&nbsp;sequence.</tt></dd></dl
 This&nbsp;function&nbsp;is&nbsp;necessarily&nbsp;recursive,&nbsp;and&nbsp;is&nbsp;useful&nbsp;for&nbsp;the&nbsp;pretty&nbsp;printer<br>
 It&nbsp;will&nbsp;also&nbsp;be&nbsp;useful&nbsp;for&nbsp;the&nbsp;flattener,&nbsp;when&nbsp;we&nbsp;write&nbsp;it.</tt></dd></dl>
 
+<dl><dt><a name="EmptyList-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="EmptyList-prepend"><strong>prepend</strong></a>(self, first)</dt></dl>
 
 <dl><dt><a name="EmptyList-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:items&nbsp;(&nbsp;[&nbsp;reify:value&nbsp;"foo"]&nbsp;&nbsp;....&nbsp;)&nbsp;]</tt></dd></dl>
+
+<dl><dt><a name="EmptyList-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">Term</a>:<br>
@@ -725,6 +775,8 @@ Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
 
 <dl><dt><a name="FiniteProperty-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="FiniteProperty-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="FiniteProperty-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -757,11 +809,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="FiniteProperty-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="FiniteProperty-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="FiniteProperty-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="FiniteProperty-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="FiniteProperty-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="FiniteProperty-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="FiniteProperty-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -812,6 +870,8 @@ Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
 
 <dl><dt><a name="Fragment-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="Fragment-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="Fragment-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -844,11 +904,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="Fragment-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="Fragment-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="Fragment-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="Fragment-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="Fragment-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="Fragment-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="Fragment-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -921,11 +987,15 @@ as&nbsp;though&nbsp;a&nbsp;formula&nbsp;were&nbsp;a&nbsp;sequence.</tt></dd></dl
 This&nbsp;function&nbsp;is&nbsp;necessarily&nbsp;recursive,&nbsp;and&nbsp;is&nbsp;useful&nbsp;for&nbsp;the&nbsp;pretty&nbsp;printer<br>
 It&nbsp;will&nbsp;also&nbsp;be&nbsp;useful&nbsp;for&nbsp;the&nbsp;flattener,&nbsp;when&nbsp;we&nbsp;write&nbsp;it.</tt></dd></dl>
 
+<dl><dt><a name="FragmentNil-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="FragmentNil-prepend"><strong>prepend</strong></a>(self, first)</dt></dl>
 
 <dl><dt><a name="FragmentNil-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:items&nbsp;(&nbsp;[&nbsp;reify:value&nbsp;"foo"]&nbsp;&nbsp;....&nbsp;)&nbsp;]</tt></dd></dl>
+
+<dl><dt><a name="FragmentNil-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <hr>
 Methods inherited from <a href="term.html#Term">Term</a>:<br>
@@ -1021,6 +1091,8 @@ Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
 
 <dl><dt><a name="Function-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="Function-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="Function-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -1053,11 +1125,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="Function-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="Function-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="Function-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="Function-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="Function-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="Function-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="Function-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -1122,6 +1200,8 @@ Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
 
 <dl><dt><a name="HeavyBuiltIn-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="HeavyBuiltIn-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="HeavyBuiltIn-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -1154,11 +1234,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="HeavyBuiltIn-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="HeavyBuiltIn-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="HeavyBuiltIn-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="HeavyBuiltIn-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="HeavyBuiltIn-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="HeavyBuiltIn-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="HeavyBuiltIn-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -1187,6 +1273,8 @@ Methods defined here:<br>
 <dl><dt><a name="LabelledNode-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="LabelledNode-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<dl><dt><a name="LabelledNode-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="LabelledNode-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
@@ -1222,6 +1310,10 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="LabelledNode-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="LabelledNode-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="LabelledNode-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
 
 <dl><dt><a name="LabelledNode-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
@@ -1231,6 +1323,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 <dl><dt><a name="LabelledNode-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="LabelledNode-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="LabelledNode-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="LabelledNode-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -1294,6 +1388,8 @@ Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
 
 <dl><dt><a name="LightBuiltIn-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="LightBuiltIn-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="LightBuiltIn-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -1326,11 +1422,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="LightBuiltIn-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="LightBuiltIn-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="LightBuiltIn-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="LightBuiltIn-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="LightBuiltIn-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="LightBuiltIn-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="LightBuiltIn-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -1366,6 +1468,8 @@ as&nbsp;though&nbsp;a&nbsp;formula&nbsp;were&nbsp;a&nbsp;sequence.</tt></dd></dl
 This&nbsp;function&nbsp;is&nbsp;necessarily&nbsp;recursive,&nbsp;and&nbsp;is&nbsp;useful&nbsp;for&nbsp;the&nbsp;pretty&nbsp;printer<br>
 It&nbsp;will&nbsp;also&nbsp;be&nbsp;useful&nbsp;for&nbsp;the&nbsp;flattener,&nbsp;when&nbsp;we&nbsp;write&nbsp;it.</tt></dd></dl>
 
+<dl><dt><a name="List-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="List-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt><dd><tt>Which&nbsp;variables&nbsp;in&nbsp;the&nbsp;list&nbsp;occur&nbsp;in&nbsp;this&nbsp;list?</tt></dd></dl>
 
 <dl><dt><a name="List-prepend"><strong>prepend</strong></a>(self, first)</dt></dl>
@@ -1377,6 +1481,8 @@ It&nbsp;will&nbsp;also&nbsp;be&nbsp;useful&nbsp;for&nbsp;the&nbsp;flattener,&nbs
 <dl><dt><a name="List-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newBindings)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;of&nbsp;equals&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="List-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;variable&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="List-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="List-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -1435,6 +1541,8 @@ practice&nbsp;but,&nbsp;for&nbsp;now,&nbsp;we&nbsp;keep&nbsp;them&nbsp;in&nbsp;s
 An&nbsp;RDF&nbsp;literal&nbsp;has&nbsp;a&nbsp;value&nbsp;-&nbsp;by&nbsp;default&nbsp;a&nbsp;string,&nbsp;and&nbsp;a&nbsp;datattype,&nbsp;and&nbsp;a&nbsp;language<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
+<dl><dt><a name="Literal-__decimal__"><strong>__decimal__</strong></a>(self)</dt></dl>
+
 <dl><dt><a name="Literal-__float__"><strong>__float__</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="Literal-__init__"><strong>__init__</strong></a>(self, store, str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt></dl>
@@ -1455,6 +1563,8 @@ strictly&nbsp;speaking.</tt></dd></dl>
 <dl><dt><a name="Literal-classOrder"><strong>classOrder</strong></a>(self)</dt></dl>
 
 <dl><dt><a name="Literal-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;literal&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
+
+<dl><dt><a name="Literal-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="Literal-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
@@ -1497,7 +1607,13 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="Literal-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="Literal-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="Literal-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
+
+<dl><dt><a name="Literal-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 </td></tr></table> <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -1537,6 +1653,10 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="Node-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="Node-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="Node-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
 
 <dl><dt><a name="Node-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
@@ -1546,6 +1666,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 <dl><dt><a name="Node-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="Node-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="Node-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="Node-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -1594,6 +1716,8 @@ as&nbsp;though&nbsp;a&nbsp;formula&nbsp;were&nbsp;a&nbsp;sequence.</tt></dd></dl
 This&nbsp;function&nbsp;is&nbsp;necessarily&nbsp;recursive,&nbsp;and&nbsp;is&nbsp;useful&nbsp;for&nbsp;the&nbsp;pretty&nbsp;printer<br>
 It&nbsp;will&nbsp;also&nbsp;be&nbsp;useful&nbsp;for&nbsp;the&nbsp;flattener,&nbsp;when&nbsp;we&nbsp;write&nbsp;it.</tt></dd></dl>
 
+<dl><dt><a name="NonEmptyList-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="NonEmptyList-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt><dd><tt>Which&nbsp;variables&nbsp;in&nbsp;the&nbsp;list&nbsp;occur&nbsp;in&nbsp;this&nbsp;list?</tt></dd></dl>
 
 <dl><dt><a name="NonEmptyList-prepend"><strong>prepend</strong></a>(self, first)</dt></dl>
@@ -1605,6 +1729,8 @@ It&nbsp;will&nbsp;also&nbsp;be&nbsp;useful&nbsp;for&nbsp;the&nbsp;flattener,&nbs
 <dl><dt><a name="NonEmptyList-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newBindings)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;of&nbsp;equals&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="NonEmptyList-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;variable&nbsp;substitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="NonEmptyList-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="NonEmptyList-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
@@ -1695,6 +1821,8 @@ Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
 
 <dl><dt><a name="ReverseFunction-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="ReverseFunction-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="ReverseFunction-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -1727,11 +1855,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="ReverseFunction-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="ReverseFunction-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="ReverseFunction-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="ReverseFunction-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="ReverseFunction-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="ReverseFunction-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="ReverseFunction-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -1780,6 +1914,8 @@ Methods inherited from <a href="term.html#LabelledNode">LabelledNode</a>:<br>
 
 <dl><dt><a name="Symbol-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;<a href="#LabelledNode">LabelledNode</a>&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="Symbol-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="Symbol-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -1812,6 +1948,10 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="Symbol-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="Symbol-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="Symbol-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
 
 <dl><dt><a name="Symbol-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
@@ -1821,6 +1961,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 <dl><dt><a name="Symbol-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="Symbol-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="Symbol-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="Symbol-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -1871,6 +2013,10 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="Term-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="Term-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="Term-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
 
 <dl><dt><a name="Term-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
@@ -1880,6 +2026,8 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 <dl><dt><a name="Term-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="Term-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="Term-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="Term-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>

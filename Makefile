@@ -8,10 +8,10 @@ TESTIN=test/sameDan.n3
 
 HTMLS= term.html formula.html pretty.html myStore.html check.html query.html RDFSink.html cwm.html cwm_crypto.html cwm_list.html cwm_math.html cwm_maths.html cwm_os.html cwm_string.html cwm_time.html cwm_times.html diag.html llyn.html notation3.html reify.html sax2rdf.html rdflib2rdf.html tab2n3.html thing.html toXML.html uripath.html xml2infoset.html why.html doc/changes.html
 
-SOURCES = cwm.py notation3.py query.py llyn.py uripath.py diag.py RDFSink.py reify.py why.py myStore.py webAccess.py OrderedSequence.py term.py formula.py pretty.py cwm_list.py cwm_string.py cwm_os.py cwm_time.py isodate.py cwm_math.py cwm_trigo.py cwm_times.py cwm_maths.py toXML.py update.py sax2rdf.py rdflib_user.py rdfxml.py test/retest.py 
+SOURCES = cwm.py notation3.py query.py llyn.py uripath.py diag.py RDFSink.py reify.py why.py myStore.py webAccess.py OrderedSequence.py term.py formula.py pretty.py cwm_list.py cwm_string.py cwm_os.py cwm_time.py isodate.py cwm_math.py cwm_trigo.py cwm_times.py cwm_maths.py toXML.py update.py sax2rdf.py rdflib_user.py rdfxml.py __init__.py decimal.py
 DOC=doc/CwmHelp.htm
 
-TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/ql/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/cwm/detailed.tests test/ntriples/detailed.tests test/delta/detailed.tests test/syntax/detailed.tests test/reify/detailed.tests test/testmeta.n3
+TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/ql/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/cwm/detailed.tests test/ntriples/detailed.tests test/delta/detailed.tests test/syntax/detailed.tests test/reify/detailed.tests test/testmeta.n3 test/retest.py
 
 TARNAME = cwm-0.8
 
@@ -70,6 +70,17 @@ cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
 	cvs add $(TARNAME).tar.gz
 #LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply/*.py *.py
 
+setup_tarball: $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
+	cvs -q update
+	rm -rf swap
+	mkdir swap
+	cd swap; for A in $(SOURCES); do ln "../$$A"; done
+	echo "cwm.py" > MANIFEST
+	echo "setup.py" >> MANIFEST
+	for A in $(TARBALL_STUFF) $(HTMLS) $(TESTS); do echo "$$A" >> MANIFEST; done
+	for A in $(SOURCES); do echo swap/"$$A" >> MANIFEST; done
+	cat test/testfilelist | sed -e 's/^/test\//' >> MANIFEST
+	python setup.py sdist
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py
 	$(PYTHON) rdfn3_yappstest.py <$(TESTIN) >,xxx.kif

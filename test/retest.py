@@ -33,11 +33,11 @@ import urllib
 
 # From PYTHONPATH equivalent to http://www.w3.org/2000/10/swap
 
-import llyn
-from myStore import load, loadMany, Namespace
-from uripath import refTo, base
-import diag
-from diag import progress
+from swap import llyn
+from swap.myStore import load, loadMany, Namespace
+from swap.uripath import refTo, base
+from swap import diag
+from swap.diag import progress
 
 
 rdf = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")

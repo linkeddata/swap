@@ -5,7 +5,7 @@ W=../../../..
 C=../cwm.py
 RC=../../rdf-tests/rdfcore
 
-CODE=retest.py ../cwm.py ../notation3.py ../query.py ../llyn.py
+CODE=retest.py ../cwm.py # ../notation3.py ../query.py ../llyn.py
 # etc ...
 
 OFFLINETESTS=regression.n3 list/detailed.tests \
@@ -23,25 +23,25 @@ OFFLINETESTS=regression.n3 list/detailed.tests \
 TESTS=online.tests rdfcore-tests.n3 $(OFFLINETESTS)
 
 post-install : pyc-check $(CODE) $(OFFLINETESTS)
-	PYTHONPATH=`/bin/pwd`/.. $P retest.py -c $(OFFLINETESTS)
+	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py -c $(OFFLINETESTS)
 
 pre-release : pyc-check $(CODE) $(TESTS)
-	PYTHONPATH=`/bin/pwd`/.. $P retest.py -c $(TESTS)
+	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py -c $(TESTS)
 
 
 filelist : pyc-check $(CODE) $(OFFLINETESTS)
-	export CWM_LIST_FILES=1; PYTHONPATH=`/bin/pwd`/.. $P retest.py --cwm=./file_list.py -c $(OFFLINETESTS)
+	export CWM_LIST_FILES=1; PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py --cwm=./file_list.py -c $(OFFLINETESTS)
 	sort testfilelist > testfilelist3
 	uniq testfilelist3 > testfilelist
 	rm testfilelist3
 
 
 mellow : pyc-check $(CODE) $(TESTS) 
-	PYTHONPATH=`/bin/pwd`/.. $P retest.py --ignoreErrors -c $(TESTS)
+	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py --ignoreErrors -c $(TESTS)
 
 
 fast : $(CODE) regression.n3
-	PYTHONPATH=`/bin/pwd`/.. $P retest.py -n -f regression.n3
+	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py -n -f regression.n3
 
 
 pyc-check : $(CODE)
@@ -69,4 +69,4 @@ annotation.n3 :
 		sed -e 's/^/</' -e 's/.nt/.nt> a <#ReificationFile>./' > $@
 
 flatten::
-	PYTHONPATH=`/bin/pwd`/.. $P retest.py -n -c -f flatten-tests.n3
+	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py -n -c -f flatten-tests.n3

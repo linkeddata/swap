@@ -26,31 +26,45 @@ warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 """
 
+#the following lines should be removed. They will NOT work with any distribution
+#-----------------
+from os import chdir, getcwd
+from sys import path
+qqq = getcwd()
+chdir(path[0])
+chdir('..')
+path.append(getcwd())
+chdir(qqq)
+#import swap
+#print dir(swap)
+#-----------------
+#end lines should be removed
+
 
 import string
-import diag
+from swap import  diag
 
-from why import FormulaReason
-from diag import verbosity, setVerbosity, progress, tracking, setTracking
-from uripath import join
-from webAccess import urlopenForRDF, load   # http://www.w3.org/2000/10/swap/
+from swap.why import FormulaReason
+from swap.diag import verbosity, setVerbosity, progress, tracking, setTracking
+from swap.uripath import join
+from swap.webAccess import urlopenForRDF, load   # http://www.w3.org/2000/10/swap/
 
 # import re
 # import StringIO
 
-import notation3    	# N3 parsers and generators
-import toXML 		#  RDF generator
+from swap import  notation3    	# N3 parsers and generators
+from swap import  toXML 		#  RDF generator
 
-from why import BecauseOfCommandLine
-from query import think, applyRules, applyQueries, testIncludes
-from update import patch
+from swap.why import BecauseOfCommandLine
+from swap.query import think, applyRules, applyQueries, testIncludes
+from swap.update import patch
 
-import uripath
+from swap import  uripath
 import sys
 
-# from llyn import RDFStore  # A store with query functiuonality
-import llyn
-import RDFSink
+# from swap.llyn import RDFStore  # A store with query functiuonality
+from swap import  llyn
+from swap import  RDFSink
 
 cvsRevision = "$Revision$"
 
@@ -100,8 +114,10 @@ steps, in order left to right:
 --engine=otter use otter (in your $PATH) instead of llyn for linking, etc
 --why         Replace the store with an explanation of its contents
 --mode=flags  Set modus operandi for inference (see below)
---flatten     turn formulas into triples using LX vocabulary
---unflatten   turn described-as-true LX sentences into formulas
+--reify       Replace the statements in the store with statements describing them.
+--dereify     Undo the effects of --reify
+--flatten     Reify only nested subexpressions (not top level) so that no {} remain.
+--unflatten   Undo the effects of --flatten
 --think=foo   as -apply=foo but continue until no more rule matches (or forever!)
 --purge       Remove from store any triple involving anything in class log:Chaff
 --data	      Remove all except plain RDF triples (formulae, forAll, etc)
@@ -153,7 +169,7 @@ rdf/xml files. Note that this requires rdflib.
         
         import time
         import sys
-        import myStore
+        from swap import  myStore
 
         # These would just be attributes if this were an object
         global _store
@@ -261,7 +277,7 @@ rdf/xml files. Note that this requires rdflib.
                 print notation3.ToN3.flagDocumentation
                 print toXML.ToRDF.flagDocumentation
 		try:
-		    import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
+		    from swap import  sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 		    print sax2rdf.RDFXMLParser.flagDocumentation
 		except:
 		    pass
@@ -326,7 +342,10 @@ rdf/xml files. Note that this requires rdflib.
 		_store = llyn.RDFStore( _outURI+"#_g", argv=option_with, crypto=option_crypto)
 	    myStore.setStore(_store)
 
-
+	becauseCwm = None
+	if diag.tracking:
+	    becauseCwm = BecauseOfCommandLine(sys.argv[0]) 
+	    # @@ add user, host, pid, date time? Privacy!
 
 	workingContext = None
         if  _gotInput: 
@@ -344,12 +363,8 @@ rdf/xml files. Note that this requires rdflib.
 			    why = becauseCwm)
 	    workingContext.reopen()
 
-	becauseCwm = None
 	if diag.tracking:
 	    proof = FormulaReason(workingContext)
-	    becauseCwm = BecauseOfCommandLine(sys.argv[0]) 
-	    # @@ add user, host, pid, date time? Privacy!
-
 
 
         #  Take commands from command line: Second Pass on command line:    - - - - - - - P A S S 2
@@ -542,16 +557,22 @@ rdf/xml files. Note that this requires rdflib.
                 print targetkb
 
             elif arg == "-flatten":
-                raise NotImplementedError
-                
+                #raise NotImplementedError
+                from swap import reify
+                workingContext = reify.flatten(workingContext)
+
+            elif arg == "-unflatten":
+                from swap import reify
+                workingContext = reify.unflatten(workingContext)
+                #raise NotImplementedError
                 
             elif arg == "-reify":
-                import reify
+                from swap import reify
                 workingContext = reify.reify(workingContext)
                 
 
             elif arg == "-dereify":
-                import reify
+                from swap import reify
                 workingContext = reify.dereify(workingContext)                
                 
 

@@ -30,7 +30,7 @@
  
 :65 gv:label "65\\nLight Uns Go";
     :description "";
-    :onCall :@@@@ 
+    :onCall :q32 . #@@@@ 
 :s60 gv:label "60\\nNot light\\nnot searched";
     :to :s5, :s7, :s14, :s55;  :onSearch :done, :s15; :onBind :s99.
 

@@ -167,7 +167,7 @@ class BI_search(LightBuiltIn, Function):
 
         if m:
             if verbosity() > 80: progress("search matched:"+m.group(1))
-            return [store._fromPython(x) for x in m.groups()]
+            return m.groups()
         if verbosity() > 80: progress("search didn't match")
 
 

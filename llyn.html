@@ -218,6 +218,8 @@ Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<b
 
 <dl><dt><a name="BI_EqualTo-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BI_EqualTo-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BI_EqualTo-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -250,11 +252,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_EqualTo-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_EqualTo-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BI_EqualTo-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_EqualTo-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BI_EqualTo-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_EqualTo-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BI_EqualTo-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -324,6 +332,8 @@ Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<b
 
 <dl><dt><a name="BI_conclusion-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BI_conclusion-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BI_conclusion-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -356,11 +366,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_conclusion-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_conclusion-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BI_conclusion-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_conclusion-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BI_conclusion-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_conclusion-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BI_conclusion-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -429,6 +445,8 @@ Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<b
 
 <dl><dt><a name="BI_conjunction-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BI_conjunction-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BI_conjunction-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -461,11 +479,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_conjunction-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_conjunction-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BI_conjunction-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_conjunction-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BI_conjunction-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_conjunction-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BI_conjunction-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -530,6 +554,8 @@ Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<b
 
 <dl><dt><a name="BI_content-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BI_content-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BI_content-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -562,11 +588,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_content-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_content-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BI_content-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_content-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BI_content-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_content-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BI_content-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -628,6 +660,8 @@ Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<b
 
 <dl><dt><a name="BI_includes-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BI_includes-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BI_includes-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -660,11 +694,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_includes-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_includes-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BI_includes-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_includes-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BI_includes-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_includes-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BI_includes-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -737,6 +777,8 @@ Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<b
 
 <dl><dt><a name="BI_n3String-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BI_n3String-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BI_n3String-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -769,11 +811,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_n3String-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_n3String-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BI_n3String-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_n3String-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BI_n3String-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_n3String-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BI_n3String-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -831,6 +879,8 @@ Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<b
 
 <dl><dt><a name="BI_notEqualTo-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BI_notEqualTo-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BI_notEqualTo-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -863,11 +913,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_notEqualTo-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_notEqualTo-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BI_notEqualTo-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_notEqualTo-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BI_notEqualTo-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_notEqualTo-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BI_notEqualTo-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -939,6 +995,8 @@ Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<b
 
 <dl><dt><a name="BI_notIncludes-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BI_notIncludes-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BI_notIncludes-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -971,11 +1029,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_notIncludes-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_notIncludes-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BI_notIncludes-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_notIncludes-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BI_notIncludes-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_notIncludes-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BI_notIncludes-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -1040,6 +1104,8 @@ Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<b
 
 <dl><dt><a name="BI_parsedAsN3-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BI_parsedAsN3-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BI_parsedAsN3-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -1072,11 +1138,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_parsedAsN3-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_parsedAsN3-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BI_parsedAsN3-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_parsedAsN3-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BI_parsedAsN3-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_parsedAsN3-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BI_parsedAsN3-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -1141,6 +1213,8 @@ Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<b
 
 <dl><dt><a name="BI_racine-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BI_racine-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BI_racine-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -1173,11 +1247,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_racine-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_racine-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BI_racine-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_racine-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BI_racine-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_racine-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BI_racine-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -1246,6 +1326,8 @@ Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<b
 
 <dl><dt><a name="BI_rawType-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BI_rawType-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BI_rawType-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -1278,11 +1360,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_rawType-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_rawType-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BI_rawType-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_rawType-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BI_rawType-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_rawType-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BI_rawType-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -1361,6 +1449,8 @@ Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<b
 
 <dl><dt><a name="BI_rawUri-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BI_rawUri-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BI_rawUri-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -1393,11 +1483,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_rawUri-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_rawUri-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BI_rawUri-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_rawUri-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BI_rawUri-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_rawUri-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BI_rawUri-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -1471,6 +1567,8 @@ Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<b
 
 <dl><dt><a name="BI_semantics-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BI_semantics-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BI_semantics-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -1503,11 +1601,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_semantics-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_semantics-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BI_semantics-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_semantics-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BI_semantics-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_semantics-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BI_semantics-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -1575,6 +1679,8 @@ Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<b
 
 <dl><dt><a name="BI_semanticsOrError-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BI_semanticsOrError-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BI_semanticsOrError-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -1607,11 +1713,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_semanticsOrError-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_semanticsOrError-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BI_semanticsOrError-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_semanticsOrError-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BI_semanticsOrError-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_semanticsOrError-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BI_semanticsOrError-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -1684,6 +1796,8 @@ Methods inherited from <a href="term.html#LabelledNode">term.LabelledNode</a>:<b
 
 <dl><dt><a name="BI_uri-compareTerm"><strong>compareTerm</strong></a>(self, other)</dt><dd><tt>Assume&nbsp;is&nbsp;also&nbsp;a&nbsp;LabelledNode&nbsp;-&nbsp;see&nbsp;function&nbsp;compareTerm&nbsp;in&nbsp;formula.py</tt></dd></dl>
 
+<dl><dt><a name="BI_uri-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="BI_uri-reification"><strong>reification</strong></a>(self, sink, bnodeMap<font color="#909090">={}</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Describe&nbsp;myself&nbsp;in&nbsp;RDF&nbsp;to&nbsp;the&nbsp;given&nbsp;context<br>
 &nbsp;<br>
 [&nbsp;reify:uri&nbsp;"<a href="http://example.org/whatever">http://example.org/whatever</a>"]</tt></dd></dl>
@@ -1716,11 +1830,17 @@ This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
 
 <dl><dt><a name="BI_uri-debugString"><strong>debugString</strong></a>(self, already)</dt></dl>
 
+<dl><dt><a name="BI_uri-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;node&nbsp;appear&nbsp;within&nbsp;this&nbsp;one<br>
+&nbsp;<br>
+This&nbsp;non-overloaded&nbsp;function&nbsp;will&nbsp;simply&nbsp;return&nbsp;if&nbsp;I'm&nbsp;equal&nbsp;to&nbsp;him</tt></dd></dl>
+
 <dl><dt><a name="BI_uri-occurringIn"><strong>occurringIn</strong></a>(self, vars)</dt></dl>
 
 <dl><dt><a name="BI_uri-substituteEquals"><strong>substituteEquals</strong></a>(self, bindings, newRedirections)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;substitution&nbsp;made</tt></dd></dl>
 
 <dl><dt><a name="BI_uri-substitution"><strong>substitution</strong></a>(self, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;this&nbsp;or&nbsp;a&nbsp;version&nbsp;of&nbsp;me&nbsp;with&nbsp;subsitution&nbsp;made</tt></dd></dl>
+
+<dl><dt><a name="BI_uri-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="BI_uri-unify"><strong>unify</strong></a>(self, other, vars, existentials, bindings)</dt><dd><tt>Unify&nbsp;this&nbsp;which&nbsp;may&nbsp;contain&nbsp;variables&nbsp;with&nbsp;the&nbsp;other,<br>
 which&nbsp;may&nbsp;contain&nbsp;existentials&nbsp;but&nbsp;not&nbsp;variables.<br>
@@ -1789,7 +1909,8 @@ Methods defined here:<br>
 <dl><dt><a name="IndexedFormula-add"><strong>add</strong></a>(self, subj, pred, obj, why<font color="#909090">=None</font>)</dt><dd><tt>Add&nbsp;a&nbsp;triple&nbsp;to&nbsp;the&nbsp;formula.<br>
 &nbsp;<br>
 The&nbsp;formula&nbsp;must&nbsp;be&nbsp;open.<br>
-subj,&nbsp;pred&nbsp;and&nbsp;obj&nbsp;must&nbsp;be&nbsp;objects&nbsp;as&nbsp;for&nbsp;example&nbsp;generated&nbsp;by&nbsp;<a href="formula.html#Formula">Formula</a>.<a href="#IndexedFormula-newSymbol">newSymbol</a>()&nbsp;and&nbsp;<a href="#IndexedFormula-newLiteral">newLiteral</a>(),&nbsp;or&nbsp;else&nbsp;literal&nbsp;values&nbsp;which&nbsp;can&nbsp;be&nbsp;interned.<br>
+subj,&nbsp;pred&nbsp;and&nbsp;obj&nbsp;must&nbsp;be&nbsp;objects&nbsp;as&nbsp;for&nbsp;example&nbsp;generated&nbsp;by&nbsp;<a href="formula.html#Formula">Formula</a>.<a href="#IndexedFormula-newSymbol">newSymbol</a>()<br>
+and&nbsp;<a href="#IndexedFormula-newLiteral">newLiteral</a>(),&nbsp;or&nbsp;else&nbsp;literal&nbsp;values&nbsp;which&nbsp;can&nbsp;be&nbsp;interned.<br>
 why&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;may&nbsp;be&nbsp;a&nbsp;reason&nbsp;for&nbsp;use&nbsp;when&nbsp;a&nbsp;proof&nbsp;will&nbsp;be&nbsp;required.</tt></dd></dl>
 
 <dl><dt><a name="IndexedFormula-any"><strong>any</strong></a>(self, subj<font color="#909090">=None</font>, pred<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;None&nbsp;or&nbsp;the&nbsp;value&nbsp;filing&nbsp;the&nbsp;blank&nbsp;in&nbsp;the&nbsp;called&nbsp;parameters.<br>
@@ -1925,6 +2046,8 @@ It&nbsp;will&nbsp;also&nbsp;be&nbsp;useful&nbsp;for&nbsp;the&nbsp;flattener,&nbs
 Implementation:<br>
 we&nbsp;may&nbsp;move&nbsp;to&nbsp;an&nbsp;internal&nbsp;storage&nbsp;rather&nbsp;than&nbsp;these&nbsp;pseudo-statements</tt></dd></dl>
 
+<dl><dt><a name="IndexedFormula-flatten"><strong>flatten</strong></a>(self, sink, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="IndexedFormula-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Yes,&nbsp;any&nbsp;identifier&nbsp;you&nbsp;see&nbsp;for&nbsp;this&nbsp;is&nbsp;arbitrary.</tt></dd></dl>
 
 <dl><dt><a name="IndexedFormula-includes"><strong>includes</strong></a>(f, g, _variables<font color="#909090">=[]</font>, bindings<font color="#909090">=[]</font>)</dt><dd><tt>Does&nbsp;this&nbsp;formula&nbsp;include&nbsp;the&nbsp;information&nbsp;in&nbsp;the&nbsp;other?<br>
@@ -2001,6 +2124,8 @@ We&nbsp;may&nbsp;move&nbsp;to&nbsp;an&nbsp;internal&nbsp;storage&nbsp;rather&nbs
 
 <hr>
 Methods inherited from <a href="term.html#AnonymousNode">term.AnonymousNode</a>:<br>
+<dl><dt><a name="IndexedFormula-unflatten"><strong>unflatten</strong></a>(self, sink, bNodes, why<font color="#909090">=None</font>)</dt></dl>
+
 <dl><dt><a name="IndexedFormula-uriref"><strong>uriref</strong></a>(self)</dt></dl>
 
 <hr>
@@ -2202,6 +2327,7 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 <strong>ANONYMOUS</strong> = 3<br>
 <strong>CONTEXT</strong> = 0<br>
 <strong>DAML_sameAs_URI</strong> = 'http://www.w3.org/2002/07/owl#sameAs'<br>
+<strong>DECIMAL_DATATYPE</strong> = 'http://www.w3.org/2001/XMLSchema#decimal'<br>
 <strong>Delta_NS</strong> = 'http://www.w3.org/2004/delta#'<br>
 <strong>FLOAT_DATATYPE</strong> = 'http://www.w3.org/2001/XMLSchema#double'<br>
 <strong>FORMULA</strong> = 1<br>

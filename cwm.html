@@ -39,14 +39,14 @@ warranty&nbsp;of&nbsp;MERCHANTABILITY&nbsp;or&nbsp;FITNESS&nbsp;FOR&nbsp;A&nbsp;
 <font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="RDFSink.html">RDFSink</a><br>
-<a href="diag.html">diag</a><br>
-</td><td width="25%" valign=top><a href="llyn.html">llyn</a><br>
-<a href="notation3.html">notation3</a><br>
+<td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="swap.RDFSink.html">swap.RDFSink</a><br>
+<a href="swap.diag.html">swap.diag</a><br>
+</td><td width="25%" valign=top><a href="swap.llyn.html">swap.llyn</a><br>
+<a href="swap.notation3.html">swap.notation3</a><br>
 </td><td width="25%" valign=top><a href="string.html">string</a><br>
 <a href="sys.html">sys</a><br>
-</td><td width="25%" valign=top><a href="toXML.html">toXML</a><br>
-<a href="uripath.html">uripath</a><br>
+</td><td width="25%" valign=top><a href="swap.toXML.html">swap.toXML</a><br>
+<a href="swap.uripath.html">swap.uripath</a><br>
 </td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
@@ -54,7 +54,10 @@ warranty&nbsp;of&nbsp;MERCHANTABILITY&nbsp;or&nbsp;FITNESS&nbsp;FOR&nbsp;A&nbsp;
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
-<td width="100%"><dl><dt><a name="-doCommand"><strong>doCommand</strong></a>()</dt><dd><tt>Command&nbsp;line&nbsp;RDF/N3&nbsp;tool<br>
+<td width="100%"><dl><dt><a name="-chdir"><strong>chdir</strong></a>(...)</dt><dd><tt><a href="#-chdir">chdir</a>(path)<br>
+&nbsp;<br>
+Change&nbsp;the&nbsp;current&nbsp;working&nbsp;directory&nbsp;to&nbsp;the&nbsp;specified&nbsp;path.</tt></dd></dl>
+ <dl><dt><a name="-doCommand"><strong>doCommand</strong></a>()</dt><dd><tt>Command&nbsp;line&nbsp;RDF/N3&nbsp;tool<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<br>
 &nbsp;&lt;command&gt;&nbsp;&lt;options&gt;&nbsp;&lt;steps&gt;&nbsp;[--with&nbsp;&lt;more&nbsp;args&gt;&nbsp;]<br>
 &nbsp;<br>
@@ -87,8 +90,10 @@ steps,&nbsp;in&nbsp;order&nbsp;left&nbsp;to&nbsp;right:<br>
 --engine=otter&nbsp;use&nbsp;otter&nbsp;(in&nbsp;your&nbsp;$PATH)&nbsp;instead&nbsp;of&nbsp;llyn&nbsp;for&nbsp;linking,&nbsp;etc<br>
 --why&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Replace&nbsp;the&nbsp;store&nbsp;with&nbsp;an&nbsp;explanation&nbsp;of&nbsp;its&nbsp;contents<br>
 --mode=flags&nbsp;&nbsp;Set&nbsp;modus&nbsp;operandi&nbsp;for&nbsp;inference&nbsp;(see&nbsp;below)<br>
---flatten&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;turn&nbsp;formulas&nbsp;into&nbsp;triples&nbsp;using&nbsp;LX&nbsp;vocabulary<br>
---unflatten&nbsp;&nbsp;&nbsp;turn&nbsp;described-as-true&nbsp;LX&nbsp;sentences&nbsp;into&nbsp;formulas<br>
+--reify&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Replace&nbsp;the&nbsp;statements&nbsp;in&nbsp;the&nbsp;store&nbsp;with&nbsp;statements&nbsp;describing&nbsp;them.<br>
+--dereify&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Undo&nbsp;the&nbsp;effects&nbsp;of&nbsp;--reify<br>
+--flatten&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Reify&nbsp;only&nbsp;nested&nbsp;subexpressions&nbsp;(not&nbsp;top&nbsp;level)&nbsp;so&nbsp;that&nbsp;no&nbsp;{}&nbsp;remain.<br>
+--unflatten&nbsp;&nbsp;&nbsp;Undo&nbsp;the&nbsp;effects&nbsp;of&nbsp;--flatten<br>
 --think=foo&nbsp;&nbsp;&nbsp;as&nbsp;-apply=foo&nbsp;but&nbsp;continue&nbsp;until&nbsp;no&nbsp;more&nbsp;rule&nbsp;matches&nbsp;(or&nbsp;forever!)<br>
 --purge&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Remove&nbsp;from&nbsp;store&nbsp;any&nbsp;triple&nbsp;involving&nbsp;anything&nbsp;in&nbsp;class&nbsp;log:Chaff<br>
 --data&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Remove&nbsp;all&nbsp;except&nbsp;plain&nbsp;RDF&nbsp;triples&nbsp;(formulae,&nbsp;forAll,&nbsp;etc)<br>
@@ -136,6 +141,9 @@ See&nbsp;<a href="http://www.w3.org/2000/10/swap/doc/cwm">http://www.w3.org/2000
 &nbsp;<br>
 Setting&nbsp;the&nbsp;environment&nbsp;variable&nbsp;CWM_RDFLIB&nbsp;to&nbsp;1&nbsp;maked&nbsp;Cwm&nbsp;use&nbsp;rdflib&nbsp;to&nbsp;parse<br>
 rdf/xml&nbsp;files.&nbsp;Note&nbsp;that&nbsp;this&nbsp;requires&nbsp;rdflib.</tt></dd></dl>
+ <dl><dt><a name="-getcwd"><strong>getcwd</strong></a>(...)</dt><dd><tt><a href="#-getcwd">getcwd</a>()&nbsp;-&gt;&nbsp;path<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;string&nbsp;representing&nbsp;the&nbsp;current&nbsp;working&nbsp;directory.</tt></dd></dl>
 </td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
@@ -144,5 +152,7 @@ rdf/xml&nbsp;files.&nbsp;Note&nbsp;that&nbsp;this&nbsp;requires&nbsp;rdflib.</tt
     
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><strong>cvsRevision</strong> = '$Revision$'<br>
+<strong>path</strong> = ['.', '/home/syosi/CVS-local/WWW/2000/10/swap', '/usr/lib/python23.zip', '/usr/lib/python2.3', '/usr/lib/python2.3/plat-linux2', '/usr/lib/python2.3/lib-tk', '/usr/lib/python2.3/lib-dynload', '/usr/local/lib/python2.3/site-packages', '/usr/lib/python2.3/site-packages', '/usr/lib/python2.3/site-packages/HTMLgen', '/usr/lib/python2.3/site-packages/Numeric', '/usr/lib/python2.3/site-packages/gtk-2.0', '/usr/lib/site-python', '/home/syosi/CVS-local/WWW/2000/10']<br>
+<strong>qqq</strong> = '/home/syosi/CVS-local/WWW/2000/10/swap'<br>
 <strong>tracking</strong> = 0</td></tr></table>
 </body></html>
