@@ -11,10 +11,17 @@
 """
 Options:
 
---testsFrom=uri   take test definitiosn from these files (in RDF/XML or N3 format)
---normal          Do normal tests
--- proof          Do tests generating and cheking a proof
---start=13        skip the first 12 tests
+--testsFrom=uri -f uri  Take test definitions from these files (in RDF/XML or N3 format)
+--normal        -n      Do normal tests
+--proof         -p      Do tests generating and cheking a proof
+--start=13      -s 13   Skip the first 12 tests
+--verbose	-v      Print what you are doing as you go
+--help          -h      Print this message and exit
+
+You must specify some test definitions, and normal or proofs or both,
+or nothing will happen.
+
+Example:    python retest.py -n -f regression.n3
 
  $Id$
 """
@@ -65,7 +72,8 @@ def main():
     global verbose
     verbose = 0
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hs:npf:", ["help", "start=", "testsFrom=", "normal", "proofs"])
+        opts, args = getopt.getopt(sys.argv[1:], "hs:npf:v",
+	    ["help", "start=", "testsFrom=", "normal", "proofs", "verbose"])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
@@ -86,10 +94,6 @@ def main():
 	if o in ("-p", "--proofs"):
 	    proofs = 1
 
-    for fn in testFiles:
-	print "Loading tests from", fn
-	kb=load(fn)
-    
     assert system("mkdir -p ,temp") == 0
     assert system("mkdir -p ,diffs") == 0
     if proofs: assert system("mkdir -p ,proofs") == 0
@@ -101,18 +105,28 @@ def main():
     WD = "file:" + os.getcwd()
     
     #def basicTest(case, desc, args)
+
+    testData = []
+    for fn in testFiles:
+	print "Loading tests from", fn
+	kb=load(fn)
     
-    for t in kb.each(pred=rdf.type, obj=test.CwmTest):
+	for t in kb.each(pred=rdf.type, obj=test.CwmTest):
+	    case = str(kb.the(t, test.shortFileName))
+	    description = str(kb.the(t, test.description))
+	    arguments = str(kb.the(t, test.arguments))
+	    environment = kb.the(t, test.environment)
+	    if environment == None: env=""
+	    else: env = str(environment) + " "
+	    testData.append((t.uriref(), case, description, env, arguments))
+
+    testData.sort()
+
+    for u, case, description, env, arguments in testData:
 	tests = tests + 1
 	if tests < start: continue
     
-    #    print "\nTest:"
-	case = str(kb.the(t, test.shortFileName))
-	description = str(kb.the(t, test.description))
-	arguments = str(kb.the(t, test.arguments))
-	environment = kb.the(t, test.environment)
-	if environment == None: env=""
-	else: env = str(environment) + " "
+    
 	print "%3i)  %s" %(tests, description)
     #    print "      %scwm %s   giving %s" %(arguments, case)
 	assert case and description and arguments
@@ -139,38 +153,5 @@ def main():
 if __name__ == "__main__":
     main()
 
-# WD=file:`/bin/pwd`
-#function cwm_test () {
-#  case=$1; desc=$2
-#  shift; shift;
-#  args=$*
-#  echo
-#  tests=$(($tests+1))
-#
-#  echo ":t$tests a test:CwmTest;"
-#  echo "    test:shortFileName \"$case\";"
-#  echo "    test:description   \"$desc\";"
-#  echo "    test:arguments     \"\"\"$args\"\"\"."
-#  echo
-#  echo $tests Test $case: $desc
-#  echo "   "    cwm $args
-#
-#  if !(python ../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' -e "s;$WD;$REFWD;g" -e '/@prefix run/d' > ,temp/$case);
-#  then echo CRASH $case;
-#  elif ! diff -Bbwu ref/$case ,temp/$case >diffs/$case;
-#  then echo DIFF FAILS: less diffs/$case  "############";
-#  elif [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case "############"; wc ref/$case temp/$case;
-#  else passes=$(($passes+1)); fi
-
-
-#  if !(python ../cwm.py -quiet $args --why | python ../check.py | sed -e 's/#\$[I]d.*\$//g' -e "s;$WD;$REFWD;g" -e '/@prefix run/d' > temp/$case);
-#  then echo CRASH $case;
-#  elif ! diff -Bbwu ref/$case temp/$case >diffs/$case;
-#  then echo DIFF FAILS: less diffs/$case  "############";
-#  elif [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case "############"; wc ref/$case temp/$case;
-#  else passes=$(($passes+1)); fi
-#
-#
-#}
 
 # ends
