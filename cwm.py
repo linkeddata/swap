@@ -45,6 +45,8 @@ import uripath
 
 # from llyn import RDFStore  # A store with query functiuonality
 import llyn
+import LX
+import LX.rdf
 
 cvsRevision = "$Revision$"
 
@@ -266,6 +268,8 @@ def doCommand():
 --filter=foo  Read rules from foo, apply to store, REPLACING store with conclusions
 --rules       Apply rules in store to store, adding conclusions to store
 --think       as -rules but continue until no more rule matches (or forever!)
+--flatten     turn formulas into triples using LX vocabulary
+--unflatten   turn described-as-true LX sentences into formulas
 --think=foo   as -apply=foo but continue until no more rule matches (or forever!)
 --purge       Remove from store any triple involving anything in class log:Chaff
 --purge-rules Remove from store any triple involving log:implies
@@ -420,7 +424,6 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         if option_reify: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula")
         if option_flat: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula", flat=1)
 
-
         if option_pipe:
             _store = _outSink
             workingContextURI = None
@@ -574,6 +577,44 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 _store.think(workingContext, filterContext);
             elif arg == "-think":
                 _store.think(workingContext)
+
+            elif arg == "-otter":
+                # quick hack, should be properly in output handler
+                kb = LX.KB()
+                _store.toLX(workingContext, kb=kb)
+                s = LX.language.otter.Serializer()
+                s.addAbbreviation("rdf_", "http://www.w3.org/1999/02/22-rdf-syntax-ns")
+                s.addAbbreviation("daml_", "http://www.daml.org/2001/03/daml+oil")
+                s.addAbbreviation("", workingContext.resource.uri)
+                print s.serialize(kb)
+                sys.exit(1)
+
+            elif arg == "-flattenAndDump":
+                full = LX.KB()
+                flat = LX.KB()
+                _store.toLX(workingContext, kb=full)
+                LX.rdf.flatten(full, flat)
+                s = LX.language.ntriples.Serializer()
+                s.addAbbreviation("rdf_", "http://www.w3.org/1999/02/22-rdf-syntax-ns")
+                s.addAbbreviation("daml_", "http://www.daml.org/2001/03/daml+oil")
+                s.addAbbreviation("", workingContext.resource.uri)
+                print s.serialize(flat)
+                sys.exit(1)
+
+            elif arg == "-flatten":
+                full = LX.KB()
+                flat = LX.KB()
+                _store.toLX(workingContext, kb=full)
+                LX.rdf.flatten(full, flat)
+                _store.deleteFormula(workingContext)
+                # instead of this (which doesnt work): _store.clear()
+                _store.addLXKB(workingContext, flat)
+
+            elif arg == "-unflatten":
+                flat = _store.toLX()
+                full = LX.rdf.unflatten(flat)
+                _store.clear()
+                _store.addLXKB(full)
 
             elif arg == "-size":
                 progress("Size: %i statements in store, %i in working formula." %(_store.size, workingContext.size()))
