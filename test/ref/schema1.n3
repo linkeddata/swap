@@ -14,7 +14,10 @@
                 v:x,
                 v:y,
                 v:z;
-         log:forSome :_g0 .
+         log:forSome <#_g0> .
+    
+    <#_g0>     a daml:Class;
+         daml:complementOf :Person .
     
     <daml-ex.n3>     a daml:Ontology;
          daml:comment "An example ontology";
@@ -32,8 +35,8 @@
     
     :Car     a daml:Class;
          daml:comment "no car is a person";
-         daml:subClassOf :_g0;
-         rdfs:subClassOf :_g0 .
+         daml:subClassOf <#_g0>;
+         rdfs:subClassOf <#_g0> .
     
     :Female     a daml:Class;
          daml:disjointFrom :Male;
@@ -86,9 +89,6 @@
          rdfs:subClassOf :Animal,
                 :Female,
                 :Person .
-    
-    :_g0     a daml:Class;
-         daml:complementOf :Person .
     
     :ancestor     a daml:TransitiveProperty;
          daml:label "ancestor" .

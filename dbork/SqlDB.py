@@ -223,7 +223,7 @@ class SqlDBAlgae(RdfDBAlgae):
 
         query = self._buildQuery(implQuerySets, asz, wheres, selectPunct, selects, labels)
         messages.append("query SQLselect \"\"\""+query+"\"\"\" .")
-        connection = MySQLdb.connect("localhost", "root", "", "w3c")
+        connection = MySQLdb.connect("localhost", "SqlDB", "SqlDB", "w3c")
         cursor = connection.cursor()
         cursor.execute(query)
 

@@ -24,7 +24,7 @@
                     v:x,
                     v:y,
                     v:z;
-             log:forSome :_g0 .
+             log:forSome <#_g0> .
         <../daml-ex.n3>     a dpo:Ontology;
              dpo:comment "An example ontology";
              dpo:imports <http://www.daml.org/2000/10/daml-ont>;
@@ -38,8 +38,8 @@
              dpo:label "Animal" .
         :Car     a dpo:Class;
              dpo:comment "no car is a person";
-             dpo:subClassOf :_g0;
-             s:subClassOf :_g0 .
+             dpo:subClassOf <#_g0>;
+             s:subClassOf <#_g0> .
         :Female     a dpo:Class;
              dpo:disjointFrom :Male;
              dpo:subClassOf :Animal;
@@ -84,8 +84,6 @@
              s:subClassOf :Animal,
                     :Female,
                     :Person .
-        :_g0     a dpo:Class;
-             dpo:complementOf :Person .
         :ancestor     a dpo:TransitiveProperty;
              dpo:label "ancestor" .
         :child     a dpo:Property;
@@ -113,6 +111,8 @@
              dpo:cardinality "2";
              dpo:domain :Animal;
              s:domain :Animal .
+        <#_g0>     a dpo:Class;
+             dpo:complementOf :Person .
         <../invalid-ex.n3>     dpo:imports <../daml-ex.n3> .
         <../invalid-ex.n3#alex>     :father <../invalid-ex.n3#joe> .
         <../invalid-ex.n3#bill>     :mother <../invalid-ex.n3#joe> .
@@ -242,16 +242,16 @@
         } .
     {
         this     log:forSome <#_g1>,
-                    <#_g3>,
-                    <#_g5> .
+                    <#_g2>,
+                    <#_g3> .
         <../daml-ex.n3>     log:semantics <#_g1> .
           ( <#_g1> 
-            <#_g3> 
-            <#_g5>  )
+            <#_g2> 
+            <#_g3>  )
              log:conjunction  [
                  log:conclusion foo:G ] .
-        <../invalid-ex.n3>     log:semantics <#_g3> .
-        <../schema-rules.n3>     log:semantics <#_g5> .
+        <../invalid-ex.n3>     log:semantics <#_g2> .
+        <../schema-rules.n3>     log:semantics <#_g3> .
         
         }     log:implies {foo:result     foo:is foo:G .
         } .

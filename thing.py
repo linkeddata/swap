@@ -27,48 +27,16 @@ urlparse.uses_relative.append("md5") #@@kludge/patch
 
 LITERAL_URI_prefix = "data:application/n3;"
 
-# Should the internal representation of lists be with DAML:first and :rest?
-#DAML_LISTS = notation3.DAML_LISTS    # If not, do the funny compact ones
-
-# Magic resources we know about
-
-#RDF_type_URI = notation3.RDF_type_URI # "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
-#DAML_equivalentTo_URI = notation3.DAML_equivalentTo_URI
-
-
-#Logic_NS = notation3.Logic_NS
-
-#N3_forSome_URI = Logic_NS + "forSome"
-#N3_subExpression_URI = Logic_NS + "subExpression"
-#N3_forAll_URI = Logic_NS + "forAll"
-
-#STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
-#META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"
-#
-#META_mergedWith = META_NS_URI + "mergedWith"
-#META_source = META_NS_URI + "source"
-#META_run = META_NS_URI + "run"
-
-# The statement is stored as a quad - affectionately known as a triple ;-)
 
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE, SYMBOL
+from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
-
-#CONTEXT = notation3.CONTEXT
-#PRED = notation3.PRED  # offsets when a statement is stored as a Python tuple (p, s, o, c)
-#SUBJ = notation3.SUBJ
-#OBJ = notation3.OBJ
 
 PARTS =  PRED, SUBJ, OBJ
 ALL4 = CONTEXT, PRED, SUBJ, OBJ
 
 # The parser outputs quads where each item is a pair   type, value
-
-from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE, SYMBOL
-
-
+# But you should not assume that ... use RDFSink.new*()
 
 
 doMeta = 0  # wait until we have written the code! :-)
@@ -78,6 +46,7 @@ INFINITY = 1000000000           # @@ larger than any number occurences
 
 # In the query engine we use tuples as data structure in the queue, offsets as follows:
 # Queue elements as follows:
+
 STATE = 0
 SHORT = 1
 CONSTS = 2
@@ -429,11 +398,12 @@ def progressIndent(delta):
     
 import re
 commonHost = re.compile(r'^[-_a-zA-Z0-9.]://[^/]+/[^/]*$')
-# Not perfect - should use root-relative in correct case but never mind.
+
 
 def relativeURI(base, uri):
     """Your regular relative URI algorithm -- never trust anyone else's ;-)
-    This one checks that it uses a root-realtive one where that is all they share."""
+    This one checks that it uses a root-realtive one where that is all they share.
+    Now uses root-relative where appropriate."""
     if base == None: return uri
     if base == uri: return ""
     i=0

@@ -45,7 +45,7 @@ urlparse.uses_relative.append("md5") #@@kludge/patch
 import notation3    	# N3 parsers and generators
 import toXML 		#  RDF generator
 
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE, SYMBOL, Logic_NS
+from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL, Logic_NS
 
 # from llyn import RDFStore  # A store with query functiuonality
 import llyn
@@ -422,7 +422,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             workingContextURI = None
         else:
             _metaURI = urlparse.urljoin(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
-            _store = llyn.RDFStore( _outURI+"#_gs", metaURI=_metaURI, argv=option_with, crypto=option_crypto)
+            _store = llyn.RDFStore( _outURI+"#_g", metaURI=_metaURI, argv=option_with, crypto=option_crypto)
             workingContextURI = _outURI+ "#0_work"
             workingContext = _store.intern((FORMULA, workingContextURI))   #@@@ Hack - use metadata
 #  Metadata context - storing information about what we are doing

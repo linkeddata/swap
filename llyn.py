@@ -18,7 +18,8 @@ optimized particularly.
 Used by cwm - the closed world machine.
 
 See:  http://www.w3.org/DesignIssues/Notation3
- 
+See also for comparison, a python RDF API for the Redland library (in C):
+   http://www.redland.opensource.ac.uk/docs/api/index.html 
 
 Agenda:
 =======
@@ -127,7 +128,7 @@ import notation3    # N3 parsers and generators, and RDF generator
 import thing
 from thing import  progress, progressIndent, BuiltIn, LightBuiltIn, \
     HeavyBuiltIn, Function, ReverseFunction, \
-    Literal, Resource, Fragment, FragmentNil, Thing, List, EmptyList
+    Literal, Resource, Fragment, FragmentNil, Anonymous, Thing, List, EmptyList
 
 import RDFSink
 from RDFSink import Logic_NS
@@ -135,7 +136,7 @@ from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import N3_nil, N3_first, N3_rest, DAML_NS, N3_Empty, N3_List
 from RDFSink import RDF_NS_URI
 
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE, SYMBOL
+from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 # = RDFSink.SYMBOL # @@misnomer
 
 LITERAL_URI_prefix = "data:application/n3;"
@@ -256,7 +257,7 @@ def compareFormulae(self, other):
 
 class Formula(Fragment):
     """A formula of a set of RDF statements, triples. these are actually
-    instances of StoredStatement.  Other systems such as jena use the term "Model"
+    instances of StoredStatement.  Other systems such as jena and redland use the term "Model"
     for this.  Cwm and N3 extend RDF to allow a literal formula as an item in a triple.
     """
     def __init__(self, resource, fragid):
@@ -454,7 +455,10 @@ class BI_notEqualTo(LightBuiltIn):
     
 class BI_uri(LightBuiltIn, Function, ReverseFunction):
     def evaluateObject(self, store, context, subj, subj_py):
-        return store.intern((LITERAL, subj.uriref()))
+	type, value = subj.asPair()
+	if type == SYMBOL or type == ANONYMOUS: 
+	# @@@@@@ Should not allow anonymous, but test/forgetDups.n3 uses it
+	    return store.intern((LITERAL, value))
 
     def evaluateSubject(self, store, context, obj, obj_py):
         #@@hm... check string for URI syntax?
@@ -582,8 +586,9 @@ def loadToStore(store, addr):
     #    @@ Get sensible net errors and produce dignostics
 
         guess = ct
-        if thing.verbosity() > 29: progress("Content-type: " + ct)
-        if ct.find('text/plain') >=0 :   # Rats - nothing to go on
+        if thing.verbosity() > 29: progress("Content-type: " + ct + " for "+addr)
+#        if ct.find('text/plain') >=0 :   # Rats - nothing to go on
+        if ct.find('xml') < 0 and ct.find('rdf') < 0 :   # Rats - nothing to go on
             buffer = netStream.read(500)
             netStream.close()
             netStream = urllib.urlopen(addr)
@@ -700,7 +705,7 @@ class BI_cufi(HeavyBuiltIn, Function):
             if F: return F
 
             if thing.verbosity() > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
-            F = store.genid(FORMULA)
+            F = store.newInterned(FORMULA)
 #            store.storeQuad((context, store.forSome, context, F ))
             store.copyContext(subj, F)
             store.think(F)
@@ -718,7 +723,7 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
                 progress("    conjunction input formula %s has %i statements" % (x, x.size()))
 #        F = conjunctionCache.get(subj_py, None)
 #        if F != None: return F
-        F = store.genid(FORMULA)
+        F = store.newInterned(FORMULA)
 #        store.storeQuad((context, store.forSome, context, F ))
         for x in subj_py:
             if not isinstance(x, Formula): return None # Can't
@@ -748,7 +753,7 @@ class RDFStore(RDFSink.RDFSink) :
     """
 
     def __init__(self, genPrefix=None, metaURI=None, argv=None, crypto=0):
-        RDFSink.RDFSink.__init__(self)
+        RDFSink.RDFSink.__init__(self, genPrefix=genPrefix)
 
         self.resources = {}    # Hash table of URIs for interning things
         self.formulae = []     # List of all formulae        
@@ -756,12 +761,7 @@ class RDFStore(RDFSink.RDFSink) :
         self._formulaeOfLength = {} # A dictionary of all the constant formuale in the store, lookup by length.
 
         self.size = 0
-        self._nextId = 0
         self.argv = argv     # List of command line arguments for N3 scripts
-        if genPrefix: self._genPrefix = genPrefix
-        else: self._genPrefix = "#_gs"
-
-#        self._index = {}   
 
         # Constants, as interned:
         
@@ -893,8 +893,10 @@ class RDFStore(RDFSink.RDFSink) :
                         result = r.internFrag(urirefString[hash+1:], FragmentNil)
                     else:
                         result = r.internFrag(urirefString[hash+1:], Fragment)
+                elif typ == ANONYMOUS:
+		    result = r.internFrag(urirefString[hash+1:], Anonymous)
                 elif typ == FORMULA: result = r.internFrag(urirefString[hash+1:], Formula)
-                else: raise RuntimeError, "did not expect other type"
+                else: raise RuntimeError, "did not expect other type:"+`typ`
         return result
 
     def initThing(self, x):
@@ -1280,7 +1282,7 @@ class RDFStore(RDFSink.RDFSink) :
 #
 # An intersting alternative is to use the reverse syntax to the max, which
 # makes the DLG an undirected labelled graph. s and o above merge. The only think which
-# then prevents us from dumping the graph without genids is the presence of cycles.
+# then prevents us from dumping the graph without newInterneds is the presence of cycles.
 
 # Formulae
 #
@@ -1382,7 +1384,7 @@ class RDFStore(RDFSink.RDFSink) :
             y = x
             y.reverse()
             for e in y:
-                g1 = store.genid()
+                g1 = store.newInterned(ANONYMOUS)
                 self.storeQuad((context, self.forSome, context, g1))
                 self.storeQuad((context, self.first, g1, self._fromPython(context, e)))
                 self.storeQuad((context, self.rest, g1, g))
@@ -1775,9 +1777,8 @@ class RDFStore(RDFSink.RDFSink) :
 #        thing.verbosity() = thing.verbosity()-100
         return result
  
-    def genid(self, type):        
-        self._nextId = self._nextId + 1
-        return self.intern((type, self._genPrefix+`self._nextId`))
+    def newInterned(self, type):        
+        return self.intern((type, self.genId()))
 
     def subContexts(self,con, path = []):
         """
@@ -2054,7 +2055,7 @@ class RDFStore(RDFSink.RDFSink) :
 #        clashes = self.occurringIn(targetContext, vars)    Too slow to do every time
 #        for v in clashes:
         for v in vars:
-            b2.append((v, store.genid(SYMBOL))) # Regenerate names to avoid clash
+            b2.append((v, store.newInterned(ANONYMOUS))) # Regenerate names to avoid clash
         if thing.verbosity()>20:
             progress( "Concluding definitively" + bindingsToString(b2) )
         before = self.size
@@ -2571,7 +2572,7 @@ def _lookupRecursive(bindings, x, old=None, new=None):
     store = x.store
     oc = store.occurringIn(x, vars)
     if oc == []: return x # phew!
-    y = store.genid(FORMULA)
+    y = store.newInterned(FORMULA)
     if thing.verbosity() > 90: progress("lookupRecursive "+`x`+" becomes new "+`y`)
     for s in x.statements:
         store.storeQuad((y,

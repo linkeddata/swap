@@ -1,7 +1,7 @@
      @prefix : <#> .
      @prefix dc: <http://purl.org/dc/elements/1.1/> .
     
-    <>     <http://purl.org/dc/elements/1.1/description> """testing string parsing in N3.
+    <>     dc:description """testing string parsing in N3.
 Hmm... how much of this is in the primer?
 How much should be there?
 @@ Holding off on unicode until support

@@ -66,7 +66,7 @@ from thing import relativeURI
 
 import RDFSink
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE, SYMBOL
+from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
 
 N3_forSome_URI = RDFSink.forSomeSym
@@ -100,30 +100,31 @@ N3CommentCharacter = "#"     # For unix script #! compatabilty
 
 class SinkParser:
     def __init__(self, sink, thisDoc, baseURI="", bindings = {},
-                 genPrefix = "", varPrefix = "", metaURI=None,
+                 genPrefix = "", metaURI=None,
                  formulaURI = None):
 	""" note: namespace names should *not* end in #;
 	the # will get added during qname processing """
         self._sink = sink
+	if genPrefix: sink.setGenPrefix(genPrefix) # pass it on
+	
     	self._bindings = bindings
 	self._thisDoc = thisDoc
         self._baseURI = baseURI
 #	self._context = SYMBOL , self._thisDoc    # For storing with triples @@@@ use stack
         self._contextStack = []      # For nested conjunctions { ... }
-        self._varPrefix = varPrefix
-        self._nextId = 0
+#        self._nextId = 0
         self.lines = 0              # for error handling
         self._genPrefix = genPrefix
         self._anonymousNodes = []   # List of anon nodes already declared
 
         if not self._baseURI: self._baseURI = self._thisDoc
         if not self._genPrefix: self._genPrefix = self._thisDoc + "#_g"
-        if not self._varPrefix: self._varPrefix = self._thisDoc + "#_v"
 
         if formulaURI == None:
-            self._formula = FORMULA, thisDoc + "#_formula" # Formula node is what the document parses to
+            formulaURI = thisDoc + "#_formula" # Formula node is what the document parses to
         else:
-            self._formula = FORMULA, formulaURI # Formula node is what the document parses to
+            formulaURI = formulaURI # Formula node is what the document parses to
+	self._formula = sink.newFormula(formulaURI)
         self._context = self._formula
         
         if metaURI:
@@ -371,7 +372,7 @@ class SinkParser:
                 else:
                     raise BadSyntax(self._thisDoc, self.lines, str, i, "object_list expected after [ = ")
 
-            if subj is None: subj=self.genid(SYMBOL)
+            if subj is None: subj=self._sink.newBlankNode(self._context)
 
             i = self.property_list(str, j, subj)
             if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "property_list expected")
@@ -383,7 +384,7 @@ class SinkParser:
         j = self.tok('{', str, i)
         if j>=0:
             oldContext = self._context
-            if subj is None: subj = self.genid(FORMULA)
+            if subj is None: subj = self._sink.newFormula()
             self._context = subj
             
             while 1:
@@ -412,7 +413,7 @@ class SinkParser:
                 item = []
                 j = self.object(str,i, item)
                 if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected item in list or ')'")
-                this = self.genid(SYMBOL)
+                this = self._sink.newExistential(self._context)
                 if DAML_LISTS:
                     if previous:
                         self.makeStatement((self._context, N3_rest, previous, this ))
@@ -514,12 +515,12 @@ class SinkParser:
             if not string.find(ns, "#"):print"Warning: no # on NS %s,"%(ns,)
 	    return j
 
-        v = []
-        j = self.variable(str,i,v)
-        if j>0:                    #Forget varibles as a class, only in context.
+#        v = []
+#        j = self.variable(str,i,v)
+#        if j>0:                    #Forget varibles as a class, only in context.
 #            res.append(internVariable(self._thisDoc,v[0]))
-            res.append((VARIABLE, v[0]))
-            return j
+#            res.append((VARIABLE, v[0]))
+#            return j
         
         j = self.skipSpace(str, i)
         if j<0: return -1
@@ -720,14 +721,16 @@ class SinkParser:
         return j, uch
 
 
-    def genid(self, type):  # Generate existentially quantified variable id
-        subj = type , self._genPrefix + `self._nextId` # ANONYMOUS node
-        self._nextId = self._nextId + 1
-        self.makeStatement((self._context, # quantifiers - use inverse?
-                            (SYMBOL, N3_forSome_URI), #pred
-                            self._context,  #subj
-                            subj))                      # obj
-        return subj
+#    def genid(self, type):  # Generate existentially quantified variable id
+#	return self._sink.genid(self._context, type)
+
+#        subj = type , self._genPrefix + `self._nextId` # ANONYMOUS node
+#        self._nextId = self._nextId + 1
+#        self.makeStatement((self._context, # quantifiers - use inverse?
+#                            (SYMBOL, N3_forSome_URI), #pred
+#                            self._context,  #subj
+#                            subj))                      # obj
+#        return subj
 
     def operator(self, str, i, res):
 	j = self.tok('+', str, i)
@@ -800,7 +803,7 @@ r   Relative URI suppression. Always use absolute URIs.
 s   Subject must be explicit for every statement. Don't use ";" shorthand.
 t   "this" and "()" special syntax should be suppresed.
 """
-
+# "
 
 
 
@@ -816,7 +819,12 @@ t   "this" and "()" special syntax should be suppresed.
 #
 # Now there is a new way of generating these, with the "_" prefix for anonymous nodes.
 
-    def __init__(self, write, base=None, genPrefix = "#_", noLists=0 , quiet=0, flags=""):
+    def __init__(self, write, base=None, genPrefix = None, noLists=0 , quiet=0, flags=""):
+	gp = genPrefix
+	if gp == None:
+	    if base==None: gp = "#_g"
+	    else: gp = urlparse.urljoin(base, "#_g")
+	RDFSink.RDFSink.__init__(self, gp)
 	self._write = write
 	self._quiet = quiet or "q" in flags
 	self._flags = flags
@@ -825,9 +833,9 @@ t   "this" and "()" special syntax should be suppresed.
 	self.defaultNamespace = None
 	self.indent = 1         # Level of nesting of output
 	self.base = base
-	self.nextId = 0         # Regenerate Ids on output
+#	self.nextId = 0         # Regenerate Ids on output
 	self.regen = {}         # Mapping of regenerated Ids
-	self.genPrefix = genPrefix  # Prefix for generated URIs on output
+#	self.genPrefix = genPrefix  # Prefix for generated URIs on output
 	self.stack = [ 0 ]      # List mode?
 	self.noLists = noLists  # Suppress generation of lists?
 	self._anonymousNodes = [] # For "a" flag
@@ -839,9 +847,9 @@ t   "this" and "()" special syntax should be suppresed.
     _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
 
     
-    def newId(self):
-        nextId = nextId + 1
-        return nextId - 1
+#    def newId(self):
+#        nextId = nextId + 1
+#        return nextId - 1
 
     def setDefaultNamespace(self, nsPair):
         return self.bind("", nsPair)
@@ -876,7 +884,7 @@ t   "this" and "()" special syntax should be suppresed.
             if self.base: self._write("#   Base was: " + self.base + "\n")
         self._write("    " * self.indent)
         self._subj = None
-        self._nextId = 0
+#        self._nextId = 0
 
     def endDoc(self, rootFormulaPair=None):
 	self._endStatement()
@@ -1083,11 +1091,10 @@ t   "this" and "()" special syntax should be suppresed.
     def representationOf(self, context, pair):
         """  Representation of a thing in the output stream
 
-        Regenerates genids and variable names if required.
+        Regenerates genids if required.
         Uses prefix dictionary to use qname syntax if possible.
         """
 
-#        print "# Representation of ", `pair`
         if "t" not in self._flags:
             if pair == context:
                 return "this"
@@ -1095,32 +1102,36 @@ t   "this" and "()" special syntax should be suppresed.
                 return"()"
 
         type, value = pair
+
+        if type == LITERAL: return stringToN3(value)
+
         if pair in self._anonymousNodes:   # "a" flags only
             i = value.find(self.genPrefix + "g")  # One of our conversions?
             if i >= 0:
                 str = value[i+len(self.genPrefix)+1:]
             else:
-                sys.stderr.write("#@@@@@ Ooops ---  anon "+value+"\n with genPrefix "+self.genPrefix+"\n")
+                sys.stderr.write("#@@@@@ Ooops ---  anon "+
+		    value+"\n with genPrefix "+self.genPrefix+"\n")
                 i = len(value)
                 while i > 0 and value[i-1] in _namechars: i = i - 1
                 str = value[i:]
             return "_:a" + str    # Must start with alpha as per NTriples spec.
 
-        if ((type == VARIABLE or type == ANONYMOUS)
+        if ((type == ANONYMOUS)
             and not option_noregen ):
-                i = self.regen.get(value,self.nextId)
-                if i == self.nextId:
-                    self.regen[value] = i
-                    self.nextId = self.nextId + 1
-                if type == ANONYMOUS: return "<"+self.genPrefix + "g" + `i`+">"
-                else: return "<" + self.genPrefix + "v" + `i` + ">"   # variable
+                x = self.regen.get(value, None)
+                if x == None:
+		    x = self.genId()
+                    self.regen[value] = x
+		value = x
+#                return "<"+x+">"
 
-        if type == LITERAL: return stringToN3(value)
 
         j = string.rfind(value, "#")
+	if j<0: j=string.rfind(value, "/")   # Allow "/" namespaces as a second best
         if (j>=0
             and "p" not in self._flags   # Suppress use of prefixes?
-            and value[j+1:].find(".") <0 ): # Can't use prefix is localname includes "."
+            and value[j+1:].find(".") <0 ): # Can't use prefix if localname includes "."
 #            print "|%s|%s|"%(self.defaultNamespace[1], value[:j+1])
             if (self.defaultNamespace
                 and self.defaultNamespace[1] == value[:j+1]
@@ -1218,11 +1229,11 @@ class Reifier(RDFSink.RDFSink):
 
     def __init__(self, sink, inputContextURI, flat=0, genPrefix=None):
         RDFSink.RDFSink.__init__(self)
-        self.sink = sink
+        self._sink = sink
         self._ns = "http://www.w3.org/2000/10/swap/model.n3#"
-        self.sink.bind("n3", (SYMBOL, self._ns))
-        self._nextId = 1
-        self._genPrefix = genPrefix
+        self._sink.bind("n3", (SYMBOL, self._ns))
+#        self._nextId = 1
+#        self._genPrefix = genPrefix
         self._flat = flat      # Just flatten things not in this context
 	contextURI = inputContextURI + "__reified"
 	self._formula = (FORMULA, contextURI) # Formula node is what the document parses to @@kludge
@@ -1232,7 +1243,7 @@ class Reifier(RDFSink.RDFSink):
             self._genPrefix = string.split(contextURI,"#")[0] + "#_rei"
         
     def bind(self, prefix, nsPair):
-        self.sink.bind(prefix, nsPair)
+        self._sink.bind(prefix, nsPair)
                
     def makeStatement(self, tuple):  # Quad of (type, value) pairs
         _statementURI = self._genPrefix + `self._nextId`
@@ -1242,20 +1253,20 @@ class Reifier(RDFSink.RDFSink):
 
         if thing.verbosity() > 50: progress("Reifying in  contexts stg with context %s."%(self._context,tuple[CONTEXT]))
         if self._flat and tuple[CONTEXT] == self._context:
-            return self.sink.makeStatement(tuple)   # In same context: does not need reifying
+            return self._sink.makeStatement(tuple)   # In same context: does not need reifying
 
-        self.sink.makeStatement(( self._context, # quantifiers - use inverse?
+        self._sink.makeStatement(( self._context, # quantifiers - use inverse?
                                   (SYMBOL, N3_forSome_URI),
                                   self._context,
                                   (SYMBOL, _statementURI) )) #  Note this is anonymous
         
-        self.sink.makeStatement(( self._context, # Context
+        self._sink.makeStatement(( self._context, # Context
                               (SYMBOL, self._ns+"statement"), #Predicate
                               tuple[CONTEXT], # Subject
                               (SYMBOL, _statementURI) ))  # Object
 
         for i in PARTS:
-            self.sink.makeStatement((
+            self._sink.makeStatement((
                 self._context, # Context
                 (SYMBOL, self._ns+name[i]), #Predicate
                 (SYMBOL, _statementURI), # Subject
@@ -1263,13 +1274,13 @@ class Reifier(RDFSink.RDFSink):
 
 
     def makeComment(self, str):
-        return self.sink.makeComment(str) 
+        return self._sink.makeComment(str) 
 
     def startDoc(self):
-        return self.sink.startDoc()
+        return self._sink.startDoc()
 
     def endDoc(self, rootFormulaPair=None):
-        return self.sink.endDoc(self._formula)
+        return self._sink.endDoc(self._formula)
 
 ######################################################### Tests
   

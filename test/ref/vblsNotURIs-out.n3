@@ -13,23 +13,22 @@
          d12:restrictedBy  [
              a :Found,
                     d12:Restriction;
-             :called "#_rdfxg0";
+             :called "file:/devel/WWW/2000/10/swap/test/animal.rdf#_rdfxg0";
              d12:cardinality "2";
              d12:onProperty <animal.rdf#parent> ];
          rdfs:label "Animal" .
     
-    <vblsNotURIs.n3>     <http://purl.org/dc/elements/1.1/description> """test that log:uri only
+    <vblsNotURIs.n3>     dc:description """test that log:uri only
 gives URIs that somebody actually used, not variable names
 
 run it ala:
  python cwm.py --rdf test/animal.rdf --n3 test/vblsNotURIs.n3 --think
 """;
-         <http://purl.org/dc/elements/1.1/version> "" .
+         dc:version "" .
     
     :x     d12:restrictedBy  [
              a :Found,
-                    :Something;
-             :called "file:/cygdrive/c/devel/WWW/2000/10/swap/test/vblsNotURIs.n3#_g0" ] .
+                    :Something ] .
     {
         
           [      d12:restrictedBy :o ].

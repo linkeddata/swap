@@ -32,24 +32,8 @@ interactive window.
 
 ______________________________________________
 
-Module originally by Dan Connolly, includeing notation3
-parser and RDF generator. TimBL added RDF stream model
-and N3 generation.
-
-DWC:
-oops... I'm not doing qname expansion as described
-there (i.e. adding a # if it's not already there).
-
-I allow unprefixed qnames, so not all barenames
-are keywords.
-
----- hmmmm ... not expandable - a bit of a trap.
-
-I haven't done quoting yet.
-
-idea: migrate toward CSS notation?
-
-idea: use notation3 for wiki record keeping.
+Module originally by Dan Connolly.
+TimBL added RDF stream model.
 
 
 """
@@ -69,7 +53,7 @@ import RDFSink
 from notation3 import relativeURI
 
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE, SYMBOL
+from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
 
 N3_forSome_URI = RDFSink.forSomeSym
@@ -113,7 +97,7 @@ option_noregen = 0   # If set, do not regenerate genids on output
 global _namechars	
 _namechars = string.lowercase + string.uppercase + string.digits + '_-'
 	    
-class ToRDF(RDFSink.RDFSink):
+class ToRDF(RDFSink.RDFStructuredOutput):
     """keeps track of most recent subject, reuses it"""
 
     _valChars = string.lowercase + string.uppercase + string.digits + "_ !#$%&().,+*/"

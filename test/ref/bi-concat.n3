@@ -158,16 +158,16 @@
         }     log:implies {:www     :is :x .
         } .
     {
-        this     log:forSome :_g59 .
+        this     log:forSome :_g0 .
           ( "World" 
-            :_g59 
+            :_g0 
             "Web"  )
              string:concatenation :x .
           ( "W" 
             "i" 
             "d" 
             "e"  )
-             string:concatenation :_g59 .
+             string:concatenation :_g0 .
         
         }     log:implies {:www5     :is :x .
         } .

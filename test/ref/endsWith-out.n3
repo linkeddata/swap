@@ -11,12 +11,12 @@
                 :y,
                 :z .
     
-    <>     <http://purl.org/dc/elements/1.1/creator>  [
+    <>     dc:creator  [
              contact:fullName "Tim berners-Lee";
              contact:homePage <http://www.w3.org/People/Berners-Lee/>;
              contact:mailbox <mailto:timbl@w3.org> ];
-         <http://purl.org/dc/elements/1.1/description> "Test endswith";
-         <http://purl.org/dc/elements/1.1/rights> "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
+         dc:description "Test endswith";
+         dc:rights "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
          rcs:id "" .
     
     :test1     a :success .
