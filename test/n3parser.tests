@@ -94,3 +94,8 @@
 :n3_20001 a n3test:NegativeParserTest;
     n3test:description    "@keywords is not a valid predicate";
     n3test:inputDocument  <syntax/neg-keywords3.n3> .
+
+
+:n3_20002 a n3test:NegativeParserTest;
+    n3test:description    "single quoted strings are illegal";
+    n3test:inputDocument  <syntax/neg-single-quote.n3> .

@@ -212,6 +212,7 @@ def main():
     kb = loadMany(testFiles, referer="")
     testData = []
     RDFTestData  = []
+    RDFNegativeTestData = []
     perfData = []
     n3PositiveTestData = []
     n3NegativeTestData = []
@@ -268,6 +269,35 @@ def main():
 	if good:
 	    RDFTestData.append((t.uriref(), case, description,  inputDocument, outputDocument))
 
+    for t in kb.each(pred=rdf.type, obj=rdft.NegativeParserTest):
+
+	x = t.uriref()
+	y = x.find("/rdf-tests/")
+	x = x[y+11:] # rest
+	for i in range(len(x)):
+	    if x[i]in"/#": x = x[:i]+"_"+x[i+1:]
+	case = "rdft_" + x + ".nt" # Hack - temp file name
+	
+	description = str(kb.the(t, rdft.description))
+#	    if description == None: description = case + " (no description)"
+	inputDocument = kb.the(t, rdft.inputDocument).uriref()
+	status = kb.the(t, rdft.status).string
+	good = 1
+	if status != "APPROVED":
+	    if verbose: print "\tNot approved: "+ inputDocument[-40:]
+	    good = 0
+	categories = kb.each(t, rdf.type)
+	for cat in categories:
+	    if cat is triage.ReificationTest:
+		if verbose: print "\tNot supported (reification): "+ inputDocument[-40:]
+		good = 0
+	    if cat is triage.ParseTypeLiteralTest:
+		if verbose: print "\tNot supported (Parse type literal): "+ inputDocument[-40:]
+		good = 0
+	if good:
+	    RDFNegativeTestData.append((t.uriref(), case, description,  inputDocument))
+
+
 
     for t in kb.each(pred=rdf.type, obj=n3test.PositiveParserTest):
 	u = t.uriref()
@@ -311,14 +341,17 @@ def main():
     cwmTests = len(testData)
     if verbose: print "Cwm tests: %i" % cwmTests
     RDFTestData.sort()
+    RDFNegativeTestData.sort()
     rdfTests = len(RDFTestData)
+    rdfNegativeTests = len(RDFNegativeTestData)
     perfData.sort()
     perfTests = len(perfData)
     n3PositiveTestData.sort()
     n3PositiveTests = len(n3PositiveTestData)
     n3NegativeTestData.sort()
     n3NegativeTests = len(n3NegativeTestData)
-    totalTests = cwmTests + rdfTests + perfTests + n3PositiveTests + n3NegativeTests
+    totalTests = cwmTests + rdfTests + rdfNegativeTests \
+                 + perfTests + n3PositiveTests + n3NegativeTests
     if verbose: print "RDF parser tests: %i" % rdfTests
 
     for u, case, refFile, description, env, arguments, verboseDebug in testData:
@@ -369,6 +402,29 @@ def main():
 
 	passes = passes + 1
 
+    for u, case, description,  inputDocument in RDFNegativeTestData:
+	tests = tests + 1
+	if tests < start: continue
+    
+    
+	print "%3i/%i)  %s   %s" %(tests, totalTests, case, description)
+    #    print "      %scwm %s   giving %s" %(inputDocument, case)
+	assert case and description and inputDocument
+#	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
+#			WD, REFWD)
+        try:
+            execute("""python %s --quiet --rdf=RT %s --ntriples  > ,temp/%s""" %
+	    (cwm_command, inputDocument, case))
+        except:
+            pass
+        else:
+            problem("""I didn't get a parse error running python %s --quiet --rdf=RT %s --ntriples  > ,temp/%s
+I should have.
+""" %
+	    (cwm_command, inputDocument, case))
+
+	passes = passes + 1
+
 
     for u, case, description, inputDocument in n3PositiveTestData:
 	tests = tests + 1
@@ -380,7 +436,7 @@ def main():
 	assert case and description and inputDocument
 #	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
 #			WD, REFWD)
-	execute("""python %s ../grammar/n3-selectors.n3  http://www.w3.org/2000/10/swap/grammar/n3#document %s  > ,temp/%s""" %
+	execute("""python %s ../grammar/n3-selectors.n3  http://www.w3.org/2000/10/swap/grammar/n3#document %s  > ,temp/%s 2>/dev/null""" %
 	    ('../grammar/predictiveParser.py', inputDocument, case))
 
 	passes = passes + 1
@@ -396,7 +452,7 @@ def main():
 #	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
 #			WD, REFWD)
         try:
-            execute("""python %s ../grammar/n3-selectors.n3  http://www.w3.org/2000/10/swap/grammar/n3#document %s  > ,temp/%s""" %
+            execute("""python %s ../grammar/n3-selectors.n3  http://www.w3.org/2000/10/swap/grammar/n3#document %s  > ,temp/%s 2>/dev/null""" %
                 ('../grammar/predictiveParser.py', inputDocument, case))
         except:
             pass
