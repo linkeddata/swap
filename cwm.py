@@ -104,7 +104,7 @@ This is slow - Parka [guiFrontend PIQ] for example is faster but is propritary (
 research version. Written in C. Of te order of 30k lines
 """
 
-
+"""emacs got confused by long string above@@"""
 
 import string
 import urlparse
@@ -234,13 +234,18 @@ class BI_notEqualTo(LightBuiltIn):
 # Functions 
     
 class BI_uri(LightBuiltIn, Function, ReverseFunction):
-
     def evaluateObject(self, store, context, subj, subj_py):
         return store.intern((LITERAL, subj.uriref()))
 
     def evaluateSubject(self, store, context, obj, obj_py):
-        if type(obj_py) == type(""):
+        #@@hm... check string for URI syntax?
+        # or at least for non-uri chars, such as space?
+
+        if type(obj_py) is type(""):
             return store.intern((RESOURCE, obj_py))
+        elif type(obj_py) is type(u""):
+            uri = obj_py.encode('utf-8')
+            return store.intern((RESOURCE, uri))
 
 class BI_rawType(LightBuiltIn, Function):
     """
@@ -496,6 +501,7 @@ class RDFStore(notation3.RDFSink) :
         self._experience = self.intern((FORMULA, metaURI + "_forumla"))
 
     def internURI(self, str):
+        assert type(str) is type("") # caller %xx-ifies unicode
         return self.intern((RESOURCE,str))
     
     def intern(self, pair):
@@ -503,8 +509,9 @@ class RDFStore(notation3.RDFSink) :
 
     This is the way they are actually made.
     """
-        type, urirefString = pair
-        if type == LITERAL:
+        typ, urirefString = pair
+
+        if typ == LITERAL:
             uriref2 = LITERAL_URI_prefix + urirefString # @@@ encoding at least hashes!!
             r = self.resources.get(uriref2, None)
             if r: return r
@@ -513,6 +520,9 @@ class RDFStore(notation3.RDFSink) :
             return r
         
 #        print " ... interning <%s>" % `uriref`
+
+        assert type(urirefString) is type("") # caller %xx-ifies unicode
+        
         hash = len(urirefString)-1
         while (hash >= 0) and not (urirefString[hash] == "#"):
             hash = hash-1
@@ -525,13 +535,13 @@ class RDFStore(notation3.RDFSink) :
         
         else :      # This has a fragment and a resource
             r = self.internURI(urirefString[:hash])
-            if type == RESOURCE:
+            if typ == RESOURCE:
                 if urirefString == notation3.N3_nil[1]:  # Hack - easier if we have a different classs
                     return r.internFrag(urirefString[hash+1:], FragmentNil)
                 else:
                     return r.internFrag(urirefString[hash+1:], Fragment)
-            if type == FORMULA: return r.internFrag(urirefString[hash+1:], Formula)
-            else: raise shouldntBeHere    # Source code did not expect other type
+            if typ == FORMULA: return r.internFrag(urirefString[hash+1:], Formula)
+            else: raise RuntimeError, "did not expect other type"
 
 
 # Input methods:
