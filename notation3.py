@@ -26,7 +26,8 @@ TBL: more cool things:
  - sucking in the schema (http library?) - to know about r see r
  - metaindexes - "to know more about x please see r" - described by
  - equivalence handling inc. equivalence of equivalence
- - @@ regeneration of genids on output.
+ - regeneration of genids on output. - DONE
+ - repreentation of genids and foralls in model
 - regression test - done once
  Shakedown:
  - Find all synonyms of synonym
@@ -49,6 +50,8 @@ Validation:  validate domain and range constraints against closuer of classes an
 Translation;  Try to represent the space (or a context) using a subset of namespaces
 
 """
+
+
 
 import string
 import urlparse
@@ -99,14 +102,16 @@ class RDFSink:
     """  Dummy RDF sink prints calls
 
     This is a superclass for other RDF processors which accept RDF events
-    -- maybe later Swell events.  Adapted from printParser
+    -- maybe later Swell events.  Adapted from printParser.
+    An RDF stream is defined by startDoc, bind, makeStatement, endDoc methods.
     """
+    
 #  Keeps track of prefixes
-	    
+# there are some things which are in the superclass for commonality 
 
     def __init__(self):
-        self.prefixes = { }     # Convention only - human friendly
-        self.namespaces = {}    # Both ways
+        self.prefixes = { }     # Convention only - human friendly to track these
+        self.namespaces = {}    # reverse mapping of prefixes
 
     def bind(self, prefix, nsPair):
         if not self.prefixes.get(nsPair, None):  # If we don't have a prefix for this ns
@@ -120,7 +125,7 @@ class RDFSink:
     def makeStatement(self, tuple):  # Quad of (type, value) pairs
         pass
 
-ef startDoc(self):
+    def startDoc(self):
         print "sink: start.\n"
 
     def endDoc(self):
@@ -320,9 +325,9 @@ class SinkParser:
 	    if j>=0:
                 subj = ANONYMOUS , self._genPrefix + `self._nextId`
                 self._nextId = self._nextId + 1  # intern
-                if quantifiers: self.makeStatement(((RESOURCE, self.contextURI),
+                self.makeStatement(((RESOURCE, self._thisDoc), # quantifiers - use inverse?
                                     (RESOURCE, N3_forSome_URI),
-                                    (RESOURCE, self.contextURI),
+                                    (RESOURCE, self._thisDoc),
                                     subj)) # @@@ Note this is anonymous node
                 i = self.property_list(str, j, subj)
                 if i<0: raise BadSyntax(str, j, "property_list expected")
@@ -393,7 +398,7 @@ class SinkParser:
             j = self.tok(']', str, i)
             if j>=0: return i # Can omit . before these
 
-            print "# N3: expected '.' in %s^%s" %(str[i-30:i], str[i:i+30])
+            raise BadSyntax(str, j, "expected '.' or '}' or ']' at end of statement")
             return i
 
 
@@ -416,7 +421,7 @@ class SinkParser:
 
         v = []
         j = self.variable(str,i,v)
-        if j>0:
+        if j>0:                    #Forget varibles as a class, only in context.
 #            res.append(internVariable(self._thisDoc,v[0]))
             res.append(VARIABLE, v[0])
             return j
@@ -668,7 +673,7 @@ bind default <>
 
 """
     thisURI = "file:notation3.py"
-    thisDoc = thisURI
+
     testString.append(  t0 + t1 + t2 + t3 + t4 )
 #    testString.append(  t5 )
 
@@ -696,6 +701,8 @@ bind default <>
     print "----------------------- Test store:"
 
     testEngine = Engine()
+    thisDoc = testEngine.intern(thisURI)    # Store used interned forms of URIs
+
     store = RDFStore(testEngine)
     # (sink,  thisDoc,  baseURI, bindings)
     p = SinkParser(store,  thisURI, 'http://example.org/base/')
@@ -1267,7 +1274,7 @@ class Engine:
             r = self.intern((RESOURCE, uriref[:hash]))
             if type == RESOURCE:  return r.internFrag(uriref[hash+1:])
             if type == ANONYMOUS: return r.internAnonymous(uriref[hash+1:])
-            if type == VARIBALE:  return r.internVariable(uriref[hash+1:])
+            if type == VARIABLE:  return r.internVariable(uriref[hash+1:])
 
 
 ######################################################## Storage
@@ -1353,10 +1360,7 @@ class RDFStore(RDFSink) :
             
 # Output methods:
 
-    def dumpChronological(self, contextURI, sink):
-        """ Ignores contexts
-        """
-        context = self.engine.intern((RESOURCE, contextURI))
+    def dumpChronological(self, context, sink):
         sink.startDoc()
         for c in self.prefixes.items():   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
@@ -1376,9 +1380,8 @@ class RDFStore(RDFSink) :
                             t[OBJ].asPair(),
                             )
 
-    def dumpBySubject(self, contextURI, sink):
+    def dumpBySubject(self, context, sink):
 
-        context = self.engine.intern((RESOURCE, contextURI))
         self.selectDefaultPrefix(context)        
         sink.startDoc()
         for c in self.prefixes.items() :   #  bind in same way as input did FYI
@@ -1397,10 +1400,9 @@ class RDFStore(RDFSink) :
 #
 #  Pretty printing
 #
-    def dumpNested(self, contextURI, sink):
+    def dumpNested(self, context, sink):
         """ Iterates over all URIs ever seen looking for statements
         """
-        context = self.engine.intern((RESOURCE, contextURI))
         self.selectDefaultPrefix(context)        
         sink.startDoc()
         for c in self.prefixes.items() :   #  bind in same way as input did FYI
@@ -1471,6 +1473,7 @@ class RDFStore(RDFSink) :
 INFINITY = 1000000000           # @@ larger than any number occurences
 
 def match (unmatched,       # Tuple of tuples we are trying to match
+           variables,       # List of variables qualified universally
            action,
            param,
            bindings = [],    # Bindings discovered so far
@@ -1493,6 +1496,7 @@ def match (unmatched,       # Tuple of tuples we are trying to match
         unmatched2 = unmatched[:] # Copy so we can remove() while iterating :-(
 
         for pair in newBindings:
+            valiables.remove(pair[0])
             bindings.append(pair)  # Record for posterity
             for t in unmatched:     # Replace variables with values
                 for p in SUBJ, PRED, OBJ:
@@ -1505,7 +1509,7 @@ def match (unmatched,       # Tuple of tuples we are trying to match
             short = INFINITY
             for p in PRED, SUBJ, OBJ:
                 r = t.triple[p]
-                if isinstance(r,Variable):
+                if r in variables:
                     vars.append(r)
                 else:
                     if r.occurs[p]< short:
@@ -1551,7 +1555,7 @@ def match (unmatched,       # Tuple of tuples we are trying to match
         q = []   # Parts of speech to test for match
         v = []   # Parts of speech which are variables
         for p in [PRED, SUBJ, OBJ] :
-            if isinstance(t.triple[p], Variable):
+            if t.triple[p] in variables:
                 parts_to_search.remove(p)
                 v.append(p)
             elif p != shortest_p :
@@ -1560,12 +1564,12 @@ def match (unmatched,       # Tuple of tuples we are trying to match
         if found_single:        # One variable, two constants - must search
             for s in t.occursAs[shortest_p]:
                 if s.triple[q[0]] is t.triple[q[0]]: # Found this one
-                    total = total + match(unmatched2, action, param,
+                    total = total + match(unmatched2, variables, action, param,
                                           bindings, [ s.triple[pv], s.triple[pv] ])
             
         else: # Two variables, one constant. Every one in occurrence list will be good
             for s in t.occursAs[shortest_p]:
-                total = total + matches(unmatched2, action, param, bindings,
+                total = total + match(unmatched2, variables, action, param, bindings,
                                         [ t.triple[v[0]], s.triple[v[0]]],
                                         [ t.triple[v[1]], s.triple[v[1]]])
             
@@ -1680,7 +1684,7 @@ def doCommand():
         
  <command> <options> <inputURIs>
  
- -rdf1out   Output in RDF M&S 1.0 insead of n3
+ -rdf1out   Output in RDF M&S 1.0 insead of n3 (only works with -pipe at the moment)
  -pipe      Don't store, just pipe out *
  -ugly      Store input and regurgitate *
  -bySubject Store inpyt and regurgitate in subject order *
@@ -1698,6 +1702,7 @@ def doCommand():
         option_rdf1out = 0  # Output in RDF M&S 1.0 instead of N3
         option_bySubject= 0 # Store and regurgitate in subject order *
         option_inputs = []
+        option_filters = []
         option_test = 0
         chatty = 0          # not too verbose please
         hostname = "localhost" # @@@@@@@@@@@ Get real one
@@ -1709,6 +1714,7 @@ def doCommand():
             elif arg == "-bySubject": option_bySubject = 1
             elif arg == "-rdf1out": option_rdf1out = 1
             elif arg == "-chatty": chatty = 1
+            elif arg[:7] == "-apply=": option_filters.append(arg[7:])
             elif arg == "-help":
                 print doCommand.__doc__
                 return
@@ -1731,14 +1737,14 @@ def doCommand():
         if option_pipe:
             _sink = _outSink
         else:
-            _sink = RDFStore()
+            myEngine = Engine()
+            _sink = RDFStore(myEngine)
         
 #  Suck up the input information:
 
         inputContexts = []
         for i in option_inputs:
             _inputURI = urlparse.urljoin(_baseURI, i) # Make abs from relative
-            inputContexts.append(intern(_inputURI))
             print "# Input from ", _inputURI
             netStream = urllib.urlopen(_inputURI)
             p = SinkParser(_sink,  _inputURI)
@@ -1749,7 +1755,7 @@ def doCommand():
             del(p)
         if option_inputs == []:
             _inputURI = urlparse.urljoin( _baseURI, "STDIN") # Make abs from relative
-            inputContexts.append(intern(_inputURI))
+            inputContexts.append(myEngine.intern((RESOURCE, _inputURI)))
             print "# Taking input from standard input"
             p = SinkParser(_sink,  _inputURI)
             p.startDoc()
@@ -1761,9 +1767,43 @@ def doCommand():
 
 # Manpulate it as directed:
 
-        outputContext = intern(_outURI)
-        for i in inputContexts:
-            _sink.moveContext(i,outputContext)
+        outputContext = myEngine.intern((RESOURCE, _outURI))
+        for i in option_inputs:
+            _inputURI = urlparse.urljoin(_baseURI, i) # Make abs from relative
+            inputContext = myEngine.intern((RESOURCE, _inputURI))
+            _sink.moveContext(inputContext,outputContext)  # Move input data to output context
+
+        for filter in option_filters:
+            _inputURI = urlparse.urljoin(_baseURI, filter) # Make abs from relative
+            filterContext = (myEngine.intern((RESOURCE, _inputURI)))
+            filterContexts.append(filterContext)
+            print "# Input from ", _inputURI
+            netStream = urllib.urlopen(_inputURI)
+            p = SinkParser(_sink,  _inputURI)
+            p.startDoc()
+            p.feed(netStream.read())     # @@ May be big - buffered in memory!
+            p.endDoc()
+            del(p)
+
+            _variables = []
+            for s in filterContext.occursAs[CONTEXT]:
+                if s[PRED] == N3_forAll and s[SUBJ] == filterContext:
+                    _variables.append(s[OBJ])
+            for s in filterContext.occursAs[CONTEXT]:
+                if s[PRED] == N3_implies:
+                    template = s[SUBJ]
+                    conclusion = s[OBJ]
+                    unmatched = []
+                    for arc in template.occursAs[CONTEXT]:
+                        unmatched.append(arc)
+                    
+                    found = match(unmatched, _variables, conclude, ( store, conclusion, outputContext))
+                    print "# Found %i matches for %s." % (found, filter)
+                    #Forget varibles as a class, only in context.
+                    
+                
+            
+            
             
 #@@@@@@@@@@@ problem of deciding which contexts to dump and dumping > 1
                 #@@@ or of merging contexts
@@ -1778,6 +1818,14 @@ def doCommand():
             else:
                 _sink.dumpNested(outputContext, _outSink)
                 
+def conclude(bindings, param):
+    store, conclusion, targetContext = param
+    for s in conclusion.occursAs[CONTEXT]:
+        store.makeStatement((targetContext,
+                             bindings.get(s[PRED],s[PRED]),
+                             bindings.get(s[SUBJ],s[SUBJ]),
+                             bindings.get(s[OBJ],s[OBJ]) ))
+                            
 
 ############################################################ Main program
     
