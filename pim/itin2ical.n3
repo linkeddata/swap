@@ -33,7 +33,9 @@ $Id$
 #   k:nameString "KANSAS CITY INTL";
 #   :timeZone chi:tz.
 
-{ ?DOC a k:ItineraryDocument } => { ?DOC a cal:Vcalendar }.
+{ ?DOC a k:ItineraryDocument.
+  <> log:uri ?ID. } => { ?DOC a cal:Vcalendar; cal:prodid ?ID }.
+
 { ?DOC a k:ItineraryDocument;
     k:containsInformationAbout-Focally ?TRIP.
   ?TRIP k:subEvents ?E.
