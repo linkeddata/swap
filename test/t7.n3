@@ -1,0 +1,77 @@
+
+# Test data in notation3 http://www.w3.org/DesignIssues/Notation3.html
+#    
+# t0
+bind x: <http://example.org/x-ns/> .
+bind dc: <http://purl.org/dc/elements/1.1/> .
+
+
+# t1
+
+   [ >- x:firstname -> "Ora" ] >- dc:wrote ->
+    [ >- dc:title -> "Moby Dick" ] .
+     bind default <http://example.org/default>.
+     <uriPath> :localProp defaultedName .
+     
+#    t2="""
+[ >- x:type -> x:Receipt;
+  >- x:number -> "5382183";
+  >- x:for -> [ >- x:USD -> "2690" ];
+  >- x:instrument -> [ >- x:type -> x:visa ] ]
+
+>- x:inReplyTo ->
+
+[ >- x:type -> x:jobOrder;
+  >- x:number -> "025709";
+ >- x:from ->
+
+ [
+  >- x:homePage -> <http://www.topnotchheatingandair.com/>;
+  >- x:est -> "1974";
+  >- x:address -> [ >- x:street -> "23754 W. 82nd Terr.";
+      >- x:city -> "Lenexa";
+      >- x:state -> "KS";
+      >- x:zip -> "66227"];
+  >- x:phoneMain -> <tel:+1-913-441-8900>;
+  >- x:fax -> <tel:+1-913-441-8118>;
+  >- x:mailbox -> <mailto:info@topnotchheatingandair.com> ]
+].    
+
+<http://www.davelennox.com/residential/furnaces/re_furnaces_content_body_elite90gas.asp>
+ >- x:describes -> [ >- x:type -> x:furnace;
+ >- x:brand -> "Lennox";
+ >- x:model -> "G26Q3-75"
+ ].
+
+#    t3="""
+bind pp: <http://example.org/payPalStuff?>.
+bind default <http://example.org/payPalStuff?>.
+
+<> a pp:Check; pp:payee :tim; pp:amount "$10.00";
+  dc:author :dan; dc:date "2000/10/7" ;
+  is pp:part of [ a pp:Transaction; = :t1 ] .
+
+
+# Janet's chart:
+#    t4="""
+bind q: <http://example.org/>.
+bind m: <>.
+bind n: <http://example.org/base/>.
+bind : <http://void-prefix.example.org/>.
+bind w3c: <http://www.w3.org/2000/10/org>.
+
+<#QA> :includes 
+ [  = w3c:internal ; :includes <#TAB> , <#interoperability> ,
+     <#validation> , w3c:wai , <#i18n> , <#translation> ,
+     <#readability_elegance>, w3c:feedback_accountability ],
+ [ = <#conformance>;
+     :includes <#products>, <#content>, <#services> ],
+ [ = <#support>; :includes
+     <#tools>, <#tutorials>, <#workshops>, <#books_materails>,
+     <#certification> ] .
+
+<#internal> q:supports <#conformance> .  
+<#support> q:supports <#conformance> .
+
+#
+# ENDS
