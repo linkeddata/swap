@@ -148,10 +148,10 @@ class RDFHandler(xml.sax.ContentHandler):
 
     def uriref(self, str):
         """ Generate uri from uriref in this document
+        unicode strings OK.
         """
 
-        return uripath.join(self._thisURI,
-                            str.encode('utf-8')) # fails on non-ascii; do %xx encoding?
+        return uripath.join(self._thisURI, str)
 
     def idAboutAttr(self, attrs):  #MS1.0 6.5 also proprAttr 6.10
         """ set up subject and maybe context from attributes
@@ -169,7 +169,7 @@ class RDFHandler(xml.sax.ContentHandler):
                         print ("# Warning -- %s attribute in %s namespace not RDF NS." %
                                name, ln)
                         ns = RDF_NS_URI  # Allowed as per dajobe: ID, bagID, about, resource, parseType or type
-                uri = (ns + ln).encode('utf-8')
+                uri = (ns + ln)
             if ns == RDF_NS_URI or ns == None:   # Opinions vary sometimes none but RDF_NS is common :-(
                 
                 if ln == "ID":
@@ -204,7 +204,7 @@ class RDFHandler(xml.sax.ContentHandler):
                     if not ns:
                         if "L" not in self.flags:  # assume local?
 			    raise BadSyntax(sys.exc_info(), "No namespace on property attribute %s" % ln)
-			properties.append((self._thisURI + "#" + ln.encode('utf-8'), value))
+			properties.append((self._thisURI + "#" + ln, value))
 		    else:
 			properties.append((uri, value))# If no uri, syntax error @@
 #                    self.sink.makeComment("xml2rdf: Ignored attribute "+uri)
@@ -304,7 +304,7 @@ class RDFHandler(xml.sax.ContentHandler):
         self.flush()
 	self.bnode = None
         
-        tagURI = ((name[0] or "") + name[1]).encode('utf-8')
+        tagURI = ((name[0] or "") + name[1])
 
         if verbosity() > 80:
 	    indent = "- " * len(self._stack) 
