@@ -9,144 +9,60 @@
 </head>
 
 <body xml:lang="en" lang="en">
-<p><a href="/">W3C</a> | <a href="/2000/01/sw/Overview.html">Semantic
-Web</a></p>
+<p><a href="/">W3C</a> | <a href="/2001/sw/">Semantic
+Web</a> | <a href="../">SWAP</a></p>
 
 <h1>Cwm</h1>
+<div class="nav" style="text-align:center">
+<a href="#Closed">Features</a> | <a href="#disc">Discussion</a>
+| <a href="#Related">Related Work</a> | <a href="#dev">Development</a> | <a href="#acks">Acks</a></div>
 
-<p>Cwm is a general-purpose data processor for the semantic web. It is a
+<p>Cwm is a general-purpose data processor for the semantic web,
+somewhat like sed, awk, etc. for text files or XSLT for XML.  It is a
 forward chaining reasoner which can be used for querying, checking,
-transforming and filtering information. Its core language is RDF, extended to
-include rules, and it uses RDF/XML or N3 serializations as required.</p>
+transforming and filtering information. Its core language is RDF,
+extended to include rules, and it uses RDF/XML or RDF/N3
+(see <a href="../Primer">Notation3 Primer</a>)
+serializations as required.</p>
 
-<p>Originally, the name is from from "Closed World Machine" because it
-processed information in a limited space, cwm does <em>not</em> make any
-assumptions about a closed world. Think of it as defined area but with
-openings - like a valley. Cwm is written in <a
-href="http://www.python.org/">python</a>.</p>
-<ul>
-  <li><a href="/2001/sw">The Semantic Web</a> at W3C</li>
-  <li><a href="../Overview.html">Semantic Web Application Platform</a></li>
-  <li><a href="http://infomesh.net/2001/cwm/">Sean Palmer's guide to cwm --
-    often it more up to date than this!</a></li>
-  <li><a href="../Primer.html">Notation3 Primer</a> - a quick introduction to
-    semantic web using cwm and n3</li>
-  <li><a href="Overview">Tutorial</a> - continuing the work of the primer in
-    more depth</li>
-  <li><a href="CwmBuiltins.html">Reference list of Cwm's built-in
-    functions</a></li>
-</ul>
+<p>Cwm is <a href="./#L88">written in
+python</a>; it is part of <a href="../">SWAP</a>, a Semantic Web
+Application Platform.</p>
 
-<p><a id="Check" name="Check">Check out other programs which use the same
-formats</a>:</p>
-<ul>
-  <li><a href="http://www.agfa.com/w3c/euler/">Euler</a> - a
-    backward-chaining reasoner by Jos de Roo. Euler will tell you whether a
-    give set of facts and rules supports a give conclusion.</li>
-  <li><a
-    href="http://www.google.com/search?q=eulersharp&amp;ie=UTF-8&amp;oe=UTF-8">EulerSharp</a>
-    - a C# port of Euler</li>
-  <li><a
-    href="http://www.unc.edu/~bparsia/sw/cwmclone/cwmclone.html">cwmclone</a>
-    - a partial clone of cwm by Bijan Parsia to XSB prolog engine - to
-    demonstrate that conventional logica programming tools are efficent and
-    straightforwradly adapted to semantic web work.</li>
-  <li>Jena RDF toolkit now accepts N3 as well as RDF/XML (2003/2)</li>
-  <li>RDF::Notation3 perl module (<a
-    href="http://archive.develooper.com/modules@perl.org/msg08120.html">submission</a>
-    10 Oct 2001 by Petr Cimprich )</li>
-  <li><a href="http://www.ninebynine.org/Software/swish-0.1.html">Swish</a> -
-    N3 -capable semantic web code Haskell by Graham Kline (2003/6)</li>
-</ul>
 
-<h2><a name="Installing" id="Installing">Installing Cwm</a></h2>
+<h2 id="Closed">Features and Tutorial</h2>
 
-<h3>Prerequisites</h3>
-<ul>
-  <li><strong><a href="http://www.python.org/">Python</a></strong>. Currently
-    (2003/2) cwm needs Python2.2 or later. Python comes with many systems. If
-    you don't have it, on debian type apt-get install python. Mac OSX comes
-    with it after 10.2. On earlier, get fink then type <a
-    href="http://fink.sourceforge.net/"><code>fink</code></a> <code>install
-    python</code>. On <a href="http://www.cygwin.com/">cygwin</a>, select
-    python in the setup.exe installer..</li>
-  <li>If you are reading things in RDF/XML format, you will need the
-    <strong>pyxml</strong> python extension. Under debian, type <code>apt-get
-    install pyxml.</code> Otherwise, untar it and in the right directory type
-    python setup.py install. Under cygwin, select it in the the cygwin
-    setup.exe.</li>
-  <li>If you are using the public key cryptography builtins, you will need
-    the <strong>amkCrypto</strong> python extension. Hopefully the necessary
-    functionality will be in pycrypto soon (next release later than 2002/05).
-    One version had a print statement in number.py#inverse --the print
-    statement needs to be removed. Edit directory names appropriately in
-    setup.py then run <code>python setup.py install</code>. Necessary changes
-    for OSX: @@</li>
-</ul>
+<p>The <a id="Tutorial" href="./">Semantic Web Tutorial Using N3</a>
+covers features such as:</p>
 
-<p>You can do all this under MSWindows but the easiest thing is to install
-cygwin (a unix-like environment for Windows) and run everything in there.</p>
 
-<h3>Download</h3>
-
-<p>The python source files are available as a compressed tar file</p>
-<ul>
-  <li><a href="../cwm.tgz">cwm.tgz</a></li>
-</ul>
-
-<p>Get that, unwrap it in some suitable directory.</p>
-
-<p>Set up an alias (.bat file, etc) to make the cwm command. In bash this
-is:</p>
-
-<p><code>cwm="python /whereverYouPutThem/cwm.py"</code></p>
-
-<p>You should be all set.</p>
-
-<h2>Source</h2>
-
-<p>This <a href="http://dev.w3.org/cvsweb/2000/10/swap/">swap code</a> is not
-guaranteed but is open source and available if you want to play.</p>
-<dl>
-  <dt>Using CVS</dt>
-    <dd>from the <a href="http://dev.w3.org/cvsweb/">public w3c CVS
-      repository</a>. Check out the whole tree to develop. This includes the
-      test data - if you don't need that, delete the test subdirectory. Make
-      a fresh directory where you want to put stuff from dev.w3.org. 
-      <pre>$ <span style="color: #007F00">cvs -d:pserver:anonymous@dev.w3.org:/sources/public login</span>
-password? <span style="color: #007F00">anonymous</span>
-$ <span style="color: #007F00">cvs -d:pserver:anonymous@dev.w3.org:/sources/public get 2000/10/swap</span></pre>
-    </dd>
-  <dt>From the web</dt>
-    <dd>Get the files one by one. <a href="/2000/10/swap/cwm.py">cwm.py</a>
-      is the main application file. You can browse the source files on the
-      web, but this is <strong>not</strong> a practical way to install the
-      system.</dd>
-</dl>
-
-<h2 id="Closed">Features</h2>
-
-<p>This is a general purpose command-line application, in which triples are
-stored in/against the particular context in which they were read, eg RDF file
-or N3 { expression }. The features at the moment include</p>
-<ul>
-  <li>Loading files in RDF/XML and/or N3</li>
-  <li>Applying rules written in N3 to the data.</li>
-  <li>Filtering the data to the result of a particular query</li>
-  <li>Generating RDF or N3 files from the result.</li>
+<ul >
+  <li><a href="../../../../2003/Talks/0520-www-tf1-a4-commandline/slide2-0.html">Loading files in RDF/XML and/or N3</a>,
+  generating RDF or N3 files from the result.</li>
   <li>Pretty printing data so that anonymous nodes are used creatively to
     minimize the number of explicit existentials (generated Ids).</li>
-  <li>Generating arbitrary formats (using --strings)</li>
-  <li>Using an internal knowledge of functions to resolve them within a
+  <li><a href="../../../../2003/Talks/0520-www-tf1-b3-rules/slide1-0.html">Applying rules written in N3 to the data</a></li>
+  <li><a href="../../../../2003/Talks/0520-www-tf1-b3-rules/slide19-0.html">Filtering the data to the result of a particular query</a></li>
+  <li>Generating arbitrary formats (<a href="../../../../2003/Talks/0520-www-tf1-b3-rules/slide26-0.html">using --strings</a>)</li>
+  <li>Using an <a href="Built-in">internal knowledge of functions</a> to resolve them within a
     query, including: 
     <ul>
       <li>Simple math and string operations</li>
       <li>Getting and parsing documents from the web</li>
       <li>Accessing command line arguments and environment variables</li>
-      <li>Cryptography: hashing, generating keys, signing things and checking
+      <li><a href="Trust">Cryptography</a>: hashing, generating keys, signing things and checking
         signatures.</li>
     </ul>
   </li>
+
+ 
+</ul>
+
+<p id="Command">See also: <a href="CwmHelp">Cwm command line arguments reference</a>.</p>
+
+<p>Other features are in development, and haven't been documented as thoroughly:</p>
+
+<ul>
   <li>Accessing the web to directly or indirectly resolve a query, including: 
     <ul>
       <li>Getting schemas for terms in the query</li>
@@ -156,184 +72,22 @@ or N3 { expression }. The features at the moment include</p>
   </li>
 </ul>
 
-<p>Cwm will run as a command, and is designed to be usable as a simple data
-manipulator for RDF on the lines of sed, awk, etc or xsl.</p>
 
-<p>In progress.</p>
 
-<h4 id="Command">Command line parameters</h4>
+<p id="Installing">See <a href="CwmInstall">Installing Cwm</a> to get
+it running for the first time. <em>Installation is not very mature; <a
+href="http://esw.w3.org/topic/CwmTips">CwmTips</a> is a community
+resource for living with cwm</em>.</p>
 
-<p>Command line parameters (except --pipe) are processed in order
- from left to right, like subcommands.
-So the command line is like a
-small program, doing one thing after annother to the data. The input/output mode flags and base URI can be changed several times, and the value used is that in
-effect as the command line arguments are executed from left to right.</p>
-<dl>
-  <dt>--help</dt>
-    <dd>generate a <strong>more up to date</strong> list of parameters!</dd>
-  <dt>--rdf</dt>
-    <dd>input/output format XML/RDF format from now on</dd>
-  <dt>--rdf=flags</dt>
-    <dd>as above but sets flags as to how RDF is written. Use cwm --help for
-      list of flags</dd>
-  <dt>--n3</dt>
-    <dd>input/output is Notation3 from now on.</dd>
-  <dt>--n3=flags</dt>
-    <dd>as above, but also customizes N3 output. cwm --help for list of
-    flags</dd>
-  <dt>--ntriples</dt>
-    <dd>As for n3, but customized to produce the "ntriples" N3 subset.</dd>
-  <dt>--base=<em>uri</em></dt>
-    <dd>The base URI to be used for input or output, and parsing command line arguments.
-On input, relative URIs are resolved with respect to this base.
-On output, URIs are generated as relative to this base.
-If --base is not explicitly given, the default is the URI of the first input file.
-The <em>uri</em> can be relative - it will be interpreted relative to its previous value.</dd>
-  <dt><em>uri</em></dt>
-    <dd>load the resource. Parsed relative to the local directory, so a
-      filename will work.</dd>
-  <dt>--size</dt>
-    <dd>Output the current size of the store.</dd>
-  <dt>--apply=<em>uri</em></dt>
-    <dd>Apply the rules in a given resource, once each, to the store, the
-      conclusions being added to the store.</dd>
-  <dt>--filter=<em>uri</em></dt>
-    <dd>Apply the rules in a given resource, once each, to the store,
-      replacing the original contents of the store with those things
-      concluded from the rules.</dd>
-  <dt>--rules</dt>
-    <dd>Apply any rules in the store to the store itself, conclusions being
-      added to the store.</dd>
-  <dt>--think</dt>
-    <dd>Do --rules and go on doing it until no more is generated.</dd>
-  <dt>--mode=flags</dt>
-    <dd>When doing inference, do interesting things according to <a
-      href="#Mode">these flags</a></dd>
-  <dt>--purge</dt>
-    <dd>Removes any triple containing a term that is declared to be of
-      rdf:type log:Chaff</dd>
-  <dt>--ugly</dt>
-    <dd>When outputting, dump the store in a more or less random order. This tends to be
-      messy, as related information is not grouped.</dd>
-  <dt>--bySubject</dt>
-    <dd>When outputting, dump the store grouping statements by subject.
-      This can be useful when you will be processing the result
-      with, for example, XSLT.
-      This tends to be
-      more readable than -ugly, but not as good as
-      the default pretty printing which makes the output as
-      readable as possible using anonymous nodes wherever possible.</dd>
-  <dt>--strings</dt>
-    <dd>Output the objects of log:outputString statements, ordered by the
-      subject</dd>
-  <dt>--pipe</dt>
-    <dd>don't store, just process serially.
-      This flag is used only with RDF graphs (no nested formulae) 
-      when translating notations. Only advantages are speed and teh presevation
-      of commemnt lines from the source into the translated output.
-      No other processing can be done.
-      Example:   cat foo.rdf | cwm --rdf --pipe --n3 | grep baz   </dd>
-</dl>
-
-<p>Note that where a <em>uri</em> is given, this can be a filename of course.
-The default base URI of the process is the file URI of a file in the current
-working directory, so a local filename will be a valid relative URI. This is
-how URIs were supposed to work.</p>
-
-<h3><a name="Mode" id="Mode">Mode flag</a>s</h3>
-<dl>
-  <dt>r</dt>
-    <dd>This must be present for cwm to go out onto the net to resolve
-      queries. It enables: 
-      <ul>
-        <li>Looking up properties in definitive documents</li>
-        <li>Looking up properties at definitive servers</li>
-        <li>For sql: URIs, just querying the local or remote SQL server</li>
-      </ul>
-    </dd>
-  <dt>s</dt>
-    <dd>For any predictate used in a query, cwm looks it up to see if any
-      useful information can be obtained from its schema. This might be for
-      example, the pointer to a definitive document or a definitive service.
-      See <a href="Reach.html#Getting1">Getting results from the web:
-      log:definitiveDocument and log:definitiveService</a></dd>
-  <dt>e</dt>
-    <dd>If cwm tries to look something up (schema, definitive document etc)
-      and can't, this makes the error fatal. Otherwise, it just goes on.</dd>
-  <dt>m</dt>
-    <dd>Schemas, and definitive documents, when read, are normally kept in
-      separate metadata formuale, which cannot be seen by rules. If the m
-      flag is, set, these formulae are actually merged into the knowledge
-      base (formula) being queried sWhen combined with --think, this could of
-      course load rules which load rules which load rules....</dd>
-</dl>
-
-<h2><a name="Environmen" id="Environmen">Environment Variables</a></h2>
+<h3><a name="Environmen" id="Environmen">Environment Variables</a></h3>
 <dl>
   <dt>CWM_RDF_PARSER</dt>
     <dd>rdflib2rdf or sax2rdf (default). Affects the choice of RDF parser
       module used by cwm.</dd>
 </dl>
 
-<h2 id="Tutorial">Tutorial</h2>
 
-<p>The <a href="Overview.html">tutorial</a> explains the N3 language from the
-practical point of view.</p>
-
-<p>It explains how to encode data, make ontologies, and process data using
-rules.</p>
-
-<h2><a name="Built-in" id="Built-in">Built-in functions</a></h2>
-
-<p>See the full <a href="CwmBuiltins.html">list of functions</a>.</p>
-
-<h3><a name="Logic" id="Logic">Logic</a></h3>
-
-<p>See the <a href="../log.n3">schema.</a> This module has terms which cwm
-understands and which extend the power of the language from just a data
-language to a query language</p>
-
-<p><code>@prefix math: &lt;</code><a
-href="../log.n3"><code>http://www.w3.org/2000/10/swap/log</code></a>#<code>&gt;</code>
-.</p>
-
-<h3>Math</h3>
-
-<p>Simple math functions, where numbers are represented as RDF literal
-strings</p>
-
-<p><code>@prefix math: &lt;</code><a
-href="http://www.w3.org/2000/10/swap/math"><code>http://www.w3.org/2000/10/swap/math</code></a>#<code>&gt;</code>
-.</p>
-
-<h3>String</h3>
-
-<p>Simple string functions.</p>
-
-<p><code>@prefix string: &lt;</code><a
-href="http://www.w3.org/2000/10/swap/string"><code>http://www.w3.org/2000/10/swap/string</code></a><code>#&gt;</code>
-.</p>
-
-<h3>Operating system interface</h3>
-
-<p>Command line arguments after a --with argument are passed to the cwm rules
-and available though os:argv. Also os:environ allows access to environment
-variables.</p>
-
-<p><code>@prefix os: &lt;</code><a
-href="http://www.w3.org/2000/10/swap/math"><code>http://www.w3.org/2000/10/swap/os</code></a><code>#&gt;</code>
-.</p>
-
-<h3>Cryptography</h3>
-
-<p>For security, check the signatures on information before you trust it. All
-you need to build a secure system - but ask a security expert to check your
-system before you really rely on it: good security has to be learned.</p>
-
-<p>@prefix cr: &lt;<a
-href="../../../10./swap/crypto">http://www.w3.org/2000/10/swap/crypto</a>#&gt;.</p>
-
-<h2><a name="Security" id="Security">Security Issues</a></h2>
+<h3><a name="Security" id="Security">Security Issues</a></h3>
 
 <p>Be careful when using rules from an untrusted source.</p>
 <ul>
@@ -361,21 +115,94 @@ things to watch are:</p>
     designed for prototyping new semantic web applications. Use at your own
     risk.</li>
 </ul>
-<hr />
 
-<h2 id="Python">Python modules</h2>
 
-<h3>Don't trust the doc</h3>
+<h2 id="disc">Discussion -- places to talk about this</h2>
+<ul>
+  <li>The RDF Interest group</li>
+  <li><a href="irc://irc.freenode.net/rdfig">#rdfig irc channel</a>
+with <a href="http://rdfig.xmlhack.com/">scratchpad/weblog</a></li>
+  <li>report bugs to Tim, Dan, and/or Sandro with copy to <a href="mailto:www-archive+n3bugs@w3.org">www-archive+n3bugs@w3.org</a> which gives us an <a href="http://www.w3.org/Search/Mail/Public/advanced_search?keywords=n3bugs&amp;hdr-1-name=subject&amp;hdr-1-query=&amp;hdr-2-name=from&amp;hdr-2-query=&amp;hdr-3-name=message-id&amp;hdr-3-query=&amp;resultsperpage=50&amp;sortby=date&amp;index-grp=Public%2FFULL&amp;index-type=t&amp;type-index=www-archive">archive</a></li>
+</ul>
+
+<h3 id="name">About the name <em>cwm</em></h3>
+
+<p>Originally, the name is from from "Closed World Machine" because it
+processed information in a limited space, cwm does <em>not</em> make any
+assumptions about a closed world. Think of it as defined area but with
+openings - like a valley.</p>
+
+<h2 id="Related">Related Work</h2>
+
+  <p>see also Sean Palmer's <a
+  href="http://infomesh.net/2001/cwm/">guide to cwm</a> -- sometimes
+  it is more up to date than this!</p>
+
+<p><a id="Check" name="Check">Check out other programs which use the same
+formats</a>:</p>
+<ul>
+  <li><a href="http://www.agfa.com/w3c/euler/">Euler</a> - a
+    backward-chaining reasoner by Jos de Roo. Euler will tell you whether a
+    give set of facts and rules supports a give conclusion.</li>
+  <li><a
+    href="http://www.google.com/search?q=eulersharp&amp;ie=UTF-8&amp;oe=UTF-8">EulerSharp</a>
+    - a C# port of Euler</li>
+  <li><a
+    href="http://www.unc.edu/~bparsia/sw/cwmclone/cwmclone.html">cwmclone</a>
+    - a partial clone of cwm by Bijan Parsia to XSB prolog engine - to
+    demonstrate that conventional logica programming tools are efficent and
+    straightforwradly adapted to semantic web work.</li>
+  <li>Jena RDF toolkit now accepts N3 as well as RDF/XML (2003/2)</li>
+  <li>RDF::Notation3 perl module (<a
+    href="http://archive.develooper.com/modules@perl.org/msg08120.html">submission</a>
+    10 Oct 2001 by Petr Cimprich )</li>
+  <li><a href="http://www.ninebynine.org/Software/swish-0.1.html">Swish</a> -
+    N3 -capable semantic web code Haskell by Graham Kline (2003/6)</li>
+</ul>
+
+
+
+
+<h2 id="dev">Development</h2>
+
+<p>This <a href="http://dev.w3.org/cvsweb/2000/10/swap/">swap code</a>
+is open source and available for those that want to play with it, but
+comes with no warranty.</p>
+
+<dl>
+  <dt>Using CVS</dt>
+    <dd>from the <a href="http://dev.w3.org/cvsweb/">public w3c CVS
+      repository</a>. Check out the whole tree to develop. This includes the
+      test data - if you don't need that, delete the test subdirectory. Make
+      a fresh directory where you want to put stuff from dev.w3.org. 
+      <pre>$ <span style="color: #007F00">cvs -d:pserver:anonymous@dev.w3.org:/sources/public login</span>
+password? <span style="color: #007F00">anonymous</span>
+$ <span style="color: #007F00">cvs -d:pserver:anonymous@dev.w3.org:/sources/public get 2000/10/swap</span></pre>
+    </dd>
+  <dt>From the web</dt>
+    <dd>Get the files one by one. <a href="/2000/10/swap/cwm.py">cwm.py</a>
+      is the main application file. You can browse the source files on the
+      web, but this is <strong>not</strong> a practical way to install the
+      system.</dd>
+</dl>
+
+
+
+<h3>Test Driven Development (Don't trust the docs ;-)</h3>
 
 <p>The best test of works is what has been tested. So the list of files in
 the <a href="../test/regression.n3">regression test</a> defines the set of
-features which are generally checked on each checkin.</p>
+features which are generally checked on each checkin. Cwm developers
+agree that all the tests have to pass before code is checked in. To
+run the tests, do <tt>make</tt> in the <tt>swap/test</tt> directory.</p>
 
-<h3>llyn.py - The Store</h3>
+<h3>Code Overview</h3>
+
+<h4>llyn.py - The Store</h4>
 
 <p>An in-memory store which does the inference.</p>
 
-<h3 id="L133">notation3.py - Serializing/deserializaing RDF:</h3>
+<h4 id="L133">notation3.py - Serializing/deserializaing RDF</h4>
 
 <p>Originally written by Dan Connolly, uses a basic RDF stream parser
 interface</p>
@@ -393,7 +220,7 @@ to be parsed and re-output.</p>
   <li><a href="notation3.py">Source</a></li>
 </ul>
 
-<h3 id="L311">xml2rdf.py Parsing RDF/XML</h3>
+<h4 id="L311">xml2rdf.py Parsing RDF/XML</h4>
 
 <p>Based on Python's xmllib, this parser is compatible with the RDF stream
 interface of, notation3.py. It completes the square of parsers and
@@ -407,11 +234,11 @@ generators. <strong>Defunct. Now use sax parser and sax2rdf.py.</strong></p>
   <li><a href="xml2rdf.py">Source</a></li>
 </ul>
 
-<h3>cwm_xxx.py - builtin modules</h3>
+<h4>cwm_xxx.py - builtin modules</h4>
 
 <p>These are quite easy to add to</p>
 
-<h2><a id="Design" name="Design">Design issues</a></h2>
+<h3><a id="Design" name="Design">Design issues</a></h3>
 
 <p>The code above investigated and raised issues discussed in the following
 documents.</p>
@@ -428,11 +255,11 @@ documents.</p>
   <li>The question of quoting and BagIDs etc</li>
 </ul>
 
-<h2><a id="QA" name="QA">Code Review notes</a></h2>
+<h3><a id="QA" name="QA">Code Review notes</a></h3>
 
 <p><em>5Aug2002, DanC</em></p>
 <ul>
-  <li>relative URI stuff is all over the map. move to uripath.py</li>
+  <li>relative URI stuff is all over the map. move to uripath.py <em>done, pretty much</em></li>
   <li>why is verbosity() in thing? that seems to be the only part of the
     thing module that llyn uses</li>
   <li>use Namespace() class; N3_forAll_URI = RDFSink.forAllSym -&gt;
@@ -464,23 +291,15 @@ documents.</p>
   <li>this file should be XHTML</li>
 </ul>
 
-<h2>Acknowledgements</h2>
+<h2 id="acks">Acknowledgements</h2>
 
-<p>Thanks to Dan Connolly for writing the first code and thereby introducing
-me to Python, and to him and Sean Palmer and Mark Nottingham for writing
+<p>Thanks to Dan Connolly for writing the first code and thereby <a href="./#L88">introducing
+me to Python</a>, and to him and Sean Palmer and Mark Nottingham for writing
 code. Thanks to Sean for his <a
 href="http://infomesh.net/2001/cwm/">guide</a> to cwm. Thanks for all on
 #RDFIG for being everything which #RDFIG..</p>
 
-<h2 id="Related">Related work</h2>
 
-<p>See <a href="#Check">above</a></p>
-
-<h2>Places to talk about this</h2>
-<ul>
-  <li>The RDF Interest group</li>
-  <li><a href="irc://irc.openprojects.net/rdfig">#RDFIG irc channel</a></li>
-</ul>
 <hr />
 <address>
   Tim BL, with his director hat off<br />
