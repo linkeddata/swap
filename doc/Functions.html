@@ -28,6 +28,13 @@ value. (See Tutorial on Builtins).</p>
 
 <p></p>
 
+<p>There is a generic style diufference in that RDF Properties use camel
+case, and I don't like the use of a hyphen in a name, when one might expect
+to be able to use it as an operator.   RDF/XML does allow a hyphen, as does
+N3 in full form (and has at times allowed it in the qname form)</p>
+
+<p></p>
+
 <p>This is a (working) copy of the table of contents of the XQ/XPath
 Functions and Operators.</p>
 
@@ -86,6 +93,10 @@ length 2, though sum and product take a list of any lenth.  (Note: Zero
 length should of course yield for consistency the idenity under the
 operation: 0 for sum and 1 for product)</p>
 
+<p>Note the naming style difference, that RDF Properties are by convention
+names using role nouns, such as "parent" rather than the verbal form
+"isParentOf".</p>
+
 <p>5.2.1 <a href="/TR/xquery-operators/#func-numeric-add">op:numeric-add</a> 
 -- math:sum</p>
 
@@ -99,38 +110,47 @@ math:product</p>
 
 <p>5.2.4 <a
 href="/TR/xquery-operators/#func-numeric-divide">op:numeric-divide</a> --
-math:divid</p>
+math:quotient</p>
+
+<p>5.2.5 <a
+href="/TR/xquery-operators/#func-numeric-integer-divide">op:numeric-integer-divide</a>
+-- math:integerQuotient<br />
+5.2.6 <a href="/TR/xquery-operators/#func-numeric-mod">op:numeric-mod</a> --
+math:remainder</p>
+
+<p>5.2.7 <a
+href="/TR/xquery-operators/#func-numeric-unary-plus">op:numeric-unary-plus</a>
+   ---- This is the identity operation  (aka NOP).  math:isEqualTo works.</p>
+
+<p>5.2.8 <a
+href="/TR/xquery-operators/#func-numeric-unary-minus">op:numeric-unary-minus
+</a>-- math:negation</p>
 
 <p></p>
 
-<p>5.2.5 <a
-href="/TR/xquery-operators/#func-numeric-integer-divide">op:numeric-integer-divide</a><br
-/>
-5.2.6 <a href="/TR/xquery-operators/#func-numeric-mod">op:numeric-mod</a><br
-/>
-5.2.7 <a
-href="/TR/xquery-operators/#func-numeric-unary-plus">op:numeric-unary-plus</a>
-   ---- This is the identity operation  (aka NOP)</p>
-
-<p>5.2.8 <a
-href="/TR/xquery-operators/#func-numeric-unary-minus">op:numeric-unary-minus</a><br
-/>
-</p>
-
-<p>5.3 <a href="/TR/xquery-operators/#comp.numeric">Comparison of Numeric
+<h3>5.3 <a href="/TR/xquery-operators/#comp.numeric">Comparison of Numeric
 Values</a><br />
-5.3.1 <a
-href="/TR/xquery-operators/#func-numeric-equal">op:numeric-equal</a><br />
-5.3.2 <a
-href="/TR/xquery-operators/#func-numeric-less-than">op:numeric-less-than</a><br
-/>
-5.3.3 <a
-href="/TR/xquery-operators/#func-numeric-greater-than">op:numeric-greater-than</a><br
-/>
-</p>
+</h3>
 
-<p>5.4 <a href="/TR/xquery-operators/#d1e982">Functions on Numeric
-Values</a><br />
+<p>The math: vocabulary has these and also their nergatibes (notEqualTo
+etc)</p>
+
+<p>5.3.1 <a
+href="/TR/xquery-operators/#func-numeric-equal">op:numeric-equal</a> --
+math:equalTo</p>
+
+<p>5.3.2 <a
+href="/TR/xquery-operators/#func-numeric-less-than">op:numeric-less-than</a>
+--math:lessThan</p>
+
+<p>5.3.3 <a
+href="/TR/xquery-operators/#func-numeric-greater-than">op:numeric-greater-than</a>
+-- math:greaterThan</p>
+
+<h3>5.4 <a href="/TR/xquery-operators/#d1e982">Functions on Numeric
+Values</a></h3>
+
+<p><br />
 </p>
 
 <p>5.4.1 <a href="/TR/xquery-operators/#func-floor">fn:floor</a><br />
