@@ -10,10 +10,14 @@
 # I guess the way to use this is to figure out which are non-calculated
 # fields for which one has no data, and assume they are zero.
 # The worst bit of tax data entry if the long list of questions to which the
-# answer i sno butr the question is very complicated.
-# It is easier to just decide, for every category of transaction in one's life,
-# where it figures in the tac form (if at all) and when all are accounted for, answer
-# "no" to the rest.
+# answer is no but the question is very complicated. Two methods:
+#
+# 1. Just decide, for every category of transaction in your life,
+#	where it figures in the tax form (if at all). Make a  file with those total values.
+# 	<filling.n3>  tf:line9  "10000.00".
+#
+# 2.  Look at last year's tax form to see which lines were filled in with input data.
+#     Generate a file for the corresponding values this year.
 #
 # @@ rules from W4
 #
@@ -78,13 +82,6 @@ tf:line5 a form:CheckBox; s:label """Filing status: Qualifying widow(er)
 { ( ?my!tf:line1 ?my!tf:line2 ?my!tf:line3 ?my!tf:line4 ?my!tf:line4 )!math:sum!math:rounded math:notEqualTo "1"}
 	=> { ?my a :ERROR_CHECK_ONE_AND_ONLY_ONE_FILING_STATUS }.
  
-#{?x contact:parter ?y } => {?x tf:spouse ?y}. # @@ Definitions may not be extact
-#
-#{?f!form:filer form:claimgSelf ?n } => { ?f tf:line6c ?n}.
-#{?f!form:filer form:claimingSpouse ?n } => { ?f tf:line6c ?n}.
-#{?f!form:filer form:numberOfDependentKids ?n } => { ?f tf:line6c ?n}.
-
-# @@declare early fields
 
 tf:line6a a form:CheckBox;
 	s:label """Exemption: Yourself. If your parent (or someone else) can claim
@@ -258,9 +255,10 @@ All others:
 	# Take the larger of the standard deduction and the one from schedule A
 
 	{ ?my tf:standardDeduction ?x.
-	  ?x math:greaterThan ?my!tf:line38_a } => {?my tf:line38 ?x}.
-	{ ?my tf:line38_a ?x.
-	  ?x math:notLessThan ?my!tf:standardDeduction } => {?my tf:line38 ?x}.
+	  ?x math:greaterThan ?my!sa:line28 } => {?my tf:line38 ?x}.
+	{ ?my sa:line28 ?x.
+	  ?x math:notLessThan ?my!tf:standardDeduction }
+		=> {?my tf:line38 ?x; s:comment "Attach schedule A"}.
 
 
 tf:line39 a form:Calculated;
@@ -506,22 +504,23 @@ sa:line26 a form:Calculated; s:label "Subtract line 25 from line 23. If line 25 
 	 (?my!sa:line23 ?my!sa:line25) math:difference ?d} => { ?my sa:line26 ?d }.
 
 sa:line27 a form:NumericField; s:label "Other Miscellaneous deductions".
-sa:line28 a form:Calculated; s:label "Total Itemized deducsions";
+sa:line28 a form:Calculated; s:label "Total Itemized deductions";
 	s:comment """Is Form 1040, line 36, over $137,300 (over $68,650 if married filing separately)?	No. Your deduction is not limited. Add the amounts in the far right column	for lines 4 through 27. Also, enter this amount on Form 1040, line 38.	Yes. Your deduction may be limited. See page A-6 for the amount to enter.""".
 
 	{ ( ?my!sa:line4 ?my!sa:line9 ?my!sa:line14 ?my!sa:line18
-		?my!sa:line19 ?my!sa:line26 ?my!sa:line27) math:sum ?sa28. } 
-	=> { ?my sa:line28Provisional ?sa28. }.
+		?my!sa:line19 ?my!sa:line26 ?my!sa:line27) math:sum ?pv. } 
+	=> { ?my sa:line28Provisional ?pv. }.
 
 	{ ?my tf:line3 "0" } => { ?my tf:deductionLimitValue "137300.00" }.
 	{ ?my tf:line3 "1" } => { ?my tf:deductionLimitValue  "68650.00" }. # Married filing sep.
 
 	 {  ?my!tf:line36 math:notGreaterThan ?my!tf:deductionLimitValue.
-	    ?my sa:line28Provisional ?pv. } 
-	=> { ?my sa:line28 ?s; tf:line38_a ?pv. }. # we pick larger of this figure and version from 1040
+	    ?my sa:line28Provisional ?sa28. } 
+	=> { ?my sa:line28 ?sa28 }. # (we pick larger of this figure and version from 1040)
 
 	 { ?my!tf:line36 math:greaterThan ?my!tf:deductionLimitValue }
-	=> { ?my a :maybeLimited. }.   # See Page A-6 and the following worksheet!
+	=> { ?my a :maybeLimited; s:comment "Attach Itemized Deductions Worksheet from page A-6" }.
+  		# See Page A-6 and the following worksheet!
 
 #  Interlude: The Schedule A Itemized deductions worksheet!
 #  Needed only in the "maybelimited " case above.
