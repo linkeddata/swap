@@ -14,6 +14,8 @@ See cwm.py
 import string
 import re
 
+import thing
+
 import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
@@ -69,7 +71,7 @@ class BI_StartsWith(LightBuiltIn):
 
 class BI_concat(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, store, context, obj, obj_py):
-        if chatty > 80: progress("Concat input:"+`obj_py`)
+        if thing.verbosity() > 80: progress("Concat input:"+`obj_py`)
         str = ""
         for x in obj_py:
             if type(x) != type(''): return None # Can't
@@ -78,7 +80,7 @@ class BI_concat(LightBuiltIn, ReverseFunction):
 
 class BI_concatenation(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py):
-        if chatty > 80: progress("Concatenation input:"+`subj_py`)
+        if thing.verbosity() > 80: progress("Concatenation input:"+`subj_py`)
         str = ""
         for x in subj_py:
             if type(x) != type(''): return None # Can't

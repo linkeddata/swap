@@ -68,7 +68,7 @@ ANONYMOUS = notation3.ANONYMOUS     # existentially qualified unlabelled resourc
 VARIABLE = notation3.VARIABLE
 
 
-chatty = 0   # verbosity debug flag
+
 doMeta = 0  # wait until we have written the code! :-)
 
 INFINITY = 1000000000           # @@ larger than any number occurences
@@ -402,4 +402,12 @@ class ReverseFunction:
 def progress(str):
     sys.stderr.write(  str + "\n")
 
-chatty = 0   # verbosity debug flag
+global chatty_flag   # verbosity debug flag
+
+def setVerbosity(x):
+    global chatty_flag
+    chatty_flag = x
+
+def verbosity():
+    global chatty_flag
+    return chatty_flag

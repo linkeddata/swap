@@ -100,7 +100,6 @@ N3_List = (RESOURCE, List_NS + "List")
 N3_Empty = (RESOURCE, List_NS + "Empty")
 
 
-chatty = 0   # verbosity flag
 
 option_noregen = 0   # If set, do not regenerate genids on output
 
@@ -1514,7 +1513,7 @@ class Reifier(RDFSink.RDFSink):
         N3_NS = "http://www.w3.org/2000/10/swap/model.n3#"
         name = "context", "predicate", "subject", "object"
 
-        if chatty > 50: progress("Reifying in  contexts stg with context %s."%(self._context,tuple[CONTEXT]))
+        if thing.verbosity() > 50: progress("Reifying in  contexts stg with context %s."%(self._context,tuple[CONTEXT]))
         if self._flat and tuple[CONTEXT] == self._context:
             return self.sink.makeStatement(tuple)   # In same context: does not need reifying
 
@@ -1776,7 +1775,7 @@ See also: cwm
         option_inputs = []
         option_filters = []
         option_test = 0
-        chatty = 0          # not too verbose please
+        thing.setVerbosity(0)          # not too verbose please
         hostname = "localhost" # @@@@@@@@@@@ Get real one
         
         for arg in sys.argv[1:]:  # Command line options after script name

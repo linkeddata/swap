@@ -42,10 +42,11 @@ import notation3    # N3 parsers and generators, and RDF generator
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE
 
 from llyn import RDFStore  # A store with query functiuonality
+from thing import progress
 
 
 
-######################################################### Tests
+######################################################### Tests  
   
 def test():
     import sys
@@ -268,8 +269,9 @@ Examples:
 #        import urllib
         import time
         import sys
-        global chatty
         global sax2rdf
+        import thing
+#        from thing import chatty
 #        import sax2rdf
 
         option_need_rdf_sometime = 0  # If we don't need it, don't import it
@@ -335,7 +337,8 @@ Examples:
                 option_outputStyle = "-bySubject"
                 option_quiet = 1
             elif _lhs == "-outURI": option_outURI = _uri
-            elif _lhs == "-chatty": chatty = int(_rhs)
+            elif _lhs == "-chatty":
+                thing.setVerbosity(int(_rhs))
             elif arg[:7] == "-apply=": pass
             elif arg == "-reify": option_reify = 1
             elif arg == "-flat": option_flat = 1
@@ -355,7 +358,7 @@ Examples:
             import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 # Between passes, prepare for processing
-        chatty =  0
+        thing.setVerbosity(0)
 #  Base defauts
 
         if option_baseURI == _baseURI:  # Base not specified explicitly - special case
@@ -464,7 +467,7 @@ Examples:
                 option_format = "n3"
                 option_n3_flags = _rhs
             elif arg == "-quiet" : option_quiet = 1            
-            elif _lhs == "-chatty": chatty = int(_rhs)
+            elif _lhs == "-chatty": thing.setVerbosity(int(_rhs))
 
             elif arg == "-reify":
                 pass
@@ -487,7 +490,7 @@ Examples:
 
             elif arg[:7] == "-apply=":
                 filterContext = (_store.intern((FORMULA, _uri+ "#_formula")))
-                if chatty > 4: print "# Input rules to apply from ", _uri
+                if thing.verbosity() > 4: progress( "Input rules to --apply from " + _uri)
                 _store.loadURI(_uri)
                 _store.applyRules(workingContext, filterContext);
 
@@ -515,15 +518,7 @@ Examples:
                 _store.applyRules(workingContext, workingContext)
 
             elif arg == "-think":
-                grandtotal = 0
-                iterations = 0
-                while 1:
-                    iterations = iterations + 1
-                    step = _store.applyRules(workingContext, workingContext)
-                    if step == 0: break
-                    grandtotal= grandtotal + step
-                if chatty > 5: progress("Grand total of %i new statements in %i iterations." %
-                         (grandtotal, iterations))
+                _store.think(workingContext)
 
             elif arg == "-size":
                 progress("Size of store: %i statements." %(_store.size,))
@@ -532,14 +527,16 @@ Examples:
                 option_outputStyle = arg
                 
             elif arg[:8] == "-outURI=": pass
-            else: print "Unknown option", arg
+            else:
+                progress( "cwm: Unknown option: " + arg)
+                sys.exit(-1)
 
 
 
 # Squirt it out if not piped
 
         if not option_pipe:
-            if chatty>5: progress("Begining output.")
+            if thing.verbosity()>5: progress("Begining output.")
             if option_outputStyle == "-ugly":
                 _store.dumpChronological(workingContext, _outSink)
             elif option_outputStyle == "-bySubject":
