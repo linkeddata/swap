@@ -12,11 +12,20 @@ Example Scenario:401: Oh Yeah? Prove you have access!
 
 this log:forAll v:S, v:T, v:K, v:SnT.
 
+##########
+#
+# RDFS
+@prefix u: <http://www.w3.org/2000/01/rdf-schema#> .
+this log:forAll v:s, v:p, v:o.
+{ v:s [ u:subPropertyOf v:p ] v:o } log:implies { v:s v:p v:o }.
+
+
+##########
+#
 # axioms for acl:assures
 
-# was:
-#{ v:S log:implies v:T } log:implies
-#   { { v:K acl:assures v:S } log:implies { v:K acl:assures v:T } }.
+acl:signs u:subPropertyOf acl:assures.
+
 { v:S log:implies v:T.  v:K acl:assures v:S }
    log:implies { v:K acl:assures v:T }.
 
@@ -26,25 +35,48 @@ this log:forAll v:S, v:T, v:K, v:SnT.
    { v:K acl:assures v:SnT }.
 
 
+#######
+#
+# W3C member-confidential rules
+#
 
 @prefix : <acl-pf#>.
 @prefix aclPf: <acl-pf#>.
 
 this log:forAll v:org, v:Kacrep, v:Krep.
 
-#@@:Kdirector acl:assures {
-
 { v:Kacrep :ACRep v:org;
-           acl:assures  [ log:includes { v:Krep :memberRep v:org }] }
+           acl:assures # shouldn't need to use log:includes here...
+             [ log:includes { v:Krep :memberRep v:org }] }
     log:implies { v:Krep :memberRep v:org }.
-# }.
 
 
-:Kdirector acl:assures {
+:Kdirector :sig1 {
   :Kwiley :ACRep :ACME
  }.
+:sig1 u:subPropertyOf acl:signs;
+      acl:cryptoCrap "23lk2j3l23jk";
+	:note1 """hmm... how long does this signature last?
+		how do we represent revocation?
+		perhaps tie it to registration for AC meetings?
+		i.e. once per year, you gotta at least
+		send regrets to an AC meeting;
+		providing advice also resets the clock
+		(i.e. the 2nd step in the 3-way
+		propose/review/decide handshake for
+		a new activity, proposed REC, etc.)""";
+	:note2 """the director doesn't actually sign these.
+		He delegates to the associate chairman of membership (Kotok)
+		who delegates to a staff person""".
 
-:Kwiley acl:assures { :KjohnDoe :memberRep :ACME }.
+:Kwiley :sig2 { :KjohnDoe :memberRep :ACME }.
+:sig2 u:subPropertyOf acl:signs;
+      acl:cryptoCrap "l3kj4lk34j4";
+	:note3 """Currently, AC reps have more of an audit
+		role in granting access; the don't positively
+		grant each account. But... hmm... they do
+		positively grant membership in WGs; perhaps
+		that's the thing to model here.""".
 
 this log:forAll v:org, v:rep.
 
