@@ -1,0 +1,24 @@
+@prefix base1: <http://id.ninebynine.org/wip/2003/test/graph1/node#> .
+@prefix base2: <http://id.ninebynine.org/wip/2003/test/graph2/node/> .
+@prefix base3: <http://id.ninebynine.org/wip/2003/test/graph3/node> .
+@prefix base4: <http://id.ninebynine.org/wip/2003/test/graph3/nodebase> .
+base1:s1 a base1:o1 ; :- 
+  ( [ base2:p21 base2:o2  ;  
+      base2:p22 ( [ base2:p13 "lx11" ] "lx22" ) ] 
+    [ base2:p24 base3:o3 ; base2:p25 "lx13" ] 
+  ) . 
+
+base2:s2 :-
+  ( [ base2:p21 base2:o2  ;  
+      base2:p22a ( [ base2:p23 "lx21" ] "lx22" ) ] 
+    [ base2:p24 _:o3 ; base2:p5 "lx13" ] 
+  ) .
+
+base3:s3 base3:p1 _:b3 ;
+         base3:p2 _:b4 ;
+         base3:p3 _:b10 ;
+         base3:p3 "p3-diff2" .
+       
+base4:s4 base4:p "lit" ;
+         base4:p [ base4:p1 base4:o2 ] ;
+         base4:p _:c2 .
