@@ -1,7 +1,7 @@
 % $Id$
 
 % we need inList
-include('util/owlAx-oneOf.otter').
+include('otter/owlAx-oneOf.otter').
 
 % we need SOMETHING of sameAs/differentFrom, ...
 
@@ -212,7 +212,10 @@ all THING1 THING2 (
 
 
 % $Log$
-% Revision 1.3  2003-08-01 04:24:32  sandro
+% Revision 1.4  2003-08-01 16:27:35  sandro
+% modified to run in swap/surnia instead of swap
+%
+% Revision 1.3  2003/08/01 04:24:32  sandro
 % intermediate; about to play with paramodulation
 %
 % Revision 1.2  2003/07/31 21:45:56  sandro

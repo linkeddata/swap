@@ -3,13 +3,13 @@
 % set(auto).
 
 % check for internal consistency with something like
-%   mace -P -N 10 -k 768000 < util/owlAx.otter
+%   mace -P -N 10 -k 768000 < otter/owlAx.otter
 % but it's gotten too big.  :-(
 
-include('util/owlAx-unionOf.otter').
-include('util/owlAx-oneOf.otter').
-include('util/owlAx-equivProp.otter').
-include('util/owlAx-card.otter').
+include('otter/owlAx-unionOf.otter').
+include('otter/owlAx-oneOf.otter').
+include('otter/owlAx-equivProp.otter').
+include('otter/owlAx-card.otter').
 
 formula_list(usable).
 
@@ -483,7 +483,10 @@ all P1 P2 (
 
 
 % $Log$
-% Revision 1.14  2003-08-01 04:24:32  sandro
+% Revision 1.15  2003-08-01 16:27:35  sandro
+% modified to run in swap/surnia instead of swap
+%
+% Revision 1.14  2003/08/01 04:24:32  sandro
 % intermediate; about to play with paramodulation
 %
 % Revision 1.13  2003/07/31 04:35:07  sandro

@@ -19,7 +19,7 @@ import LX.kb
 ##  Which axioms to use?   all at once?  Some which are theorems?
 ##  Horn form?    ...  lots of work to do here.
 ##
-axiomFile = "util/owlAx%s.otter"    # temp hack path, etc
+axiomFile = "otter/owlAx%s.otter"    # temp hack path, etc
 
 ################################################################
 
