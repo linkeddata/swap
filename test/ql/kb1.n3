@@ -12,4 +12,8 @@
 [] a Reading; temp -10; ex:place Boston.
 [] a Reading; temp 31; ex:place Barcelona.
 
+Joe a Librarian; hairColor "black"; phone "+1 234 555 6789".
+Mary a Librarian; hairColor "red".
+Phil a FilmStar; hairColor "green".
+
 #ends
