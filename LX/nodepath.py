@@ -12,18 +12,6 @@ import re
 
 import LX
 
-            
-if __name__ == "__main__":
-    import doctest, sys
-    doctest.testmod(sys.modules[__name__])
- 
-# $Log$
-# Revision 1.2  2003-08-25 21:10:01  sandro
-# general nodepath support
-#
-# Revision 1.1  2003/08/25 20:29:05  sandro
-# broken draft
-#
 
 class Node:
     """
@@ -56,6 +44,12 @@ class Node:
         setattr(self, name, result)   # save the path, don't come to __getattr_ again!
         assert(getattr(self, name) is result)
         return result
+
+    def __str__(self):
+        try:
+            return self.kb.nickname(self.fromTerm)
+        except KeyError, error:
+            return "Node("+str(self.fromTerm)+")"
 
     def __repr__(self):
         return "Node"+"("+`self.kb`+","+`self.fromTerm`+")"
@@ -111,6 +105,10 @@ class Path:
 
     def __getattr__(self, name):
 
+
+        if name == "data": return self.dataGetOnly()
+        if name == "uri": return self.uriGetOnly()
+
         # is it a namespace-underscore-name name?
         if name.startswith("is_"):
             name = name[3:]
@@ -127,6 +125,9 @@ class Path:
 
     def stepTo(self, term, invert=0):
         return Path(self, term, invert)
+
+    def __str__(self):
+        return str(self.from_)+"."+self.kb.nickname(self.via)
 
     def __repr__(self):
         if self.invert:
@@ -170,13 +171,42 @@ class Path:
     def any(self):
         return self.preFilled[0]
 
+    def uriGetOnly(self):
+        uri = None
+        for node in self:
+            if uri is None:
+                uri = node.fromTerm.uri
+            else:
+                if uri != node.fromTerm.uri:
+                    raise KeyError, 'more than one value for URI'
+        if uri is None:
+            raise KeyError, 'no value for URI'
+        return uri
+
+    # this doesnt work because we have a __getattr_ defined
+    #uri = property(uriGetOnly)
+        
+    def dataGetOnly(self):
+        data = None
+        for node in self:
+            if data is None:
+                data = node.fromTerm.data
+            else:
+                if data != node.fromTerm.data:
+                    raise KeyError, 'more than one value for DATA'
+        if data is None:
+            raise KeyError, 'no value for DATA'
+        return data
+
     def x(self):
+        """test"""
         print "---------------"
         print "I am: ",`self`
         print "I have:",self.preFilled
         self.from_.x()
 
     def dump(self, done):
+        """broken"""
         if done.has_key(self):
             print "[loop]"
             return
@@ -206,7 +236,15 @@ if __name__ == "__main__":
     import doctest, sys
     doctest.testmod(sys.modules[__name__])
 
+ 
 # $Log$
-# Revision 1.2  2003-08-25 21:10:01  sandro
+# Revision 1.3  2003-08-28 11:44:43  sandro
+# * added nickname-based __str__ functions
+# * added .uri and .data to paths, as a smarter only().uri, etc.
+#
+# Revision 1.2  2003/08/25 21:10:01  sandro
 # general nodepath support
+#
+# Revision 1.1  2003/08/25 20:29:05  sandro
+# broken draft
 #
