@@ -66,13 +66,16 @@ web.</p>
 
 <h3>Prerequisites</h3>
 <ul>
-  <li><strong>Python</strong>. That you need. It comes with many systems.  If
-    not, on debian type apt-get install python. On OSX, fink install python.
-    On cygwin, select python in the setup.exe installer.. </li>
-  <li>If you are reading things in RDF/XML format, you will need the pxml
-    python extension.  Under debian, type <code>apt-get install pyxml.</code>
-     Otherwise, untar it and in the right directory type python setup.py
-    install.  Under cygwin, select it in the the cygwin setup.exe.</li>
+  <li><strong><a href="http://www.python.org/">Python</a></strong>. That you
+    need. It comes with many systems.  If not, on debian type apt-get install
+    python. On OSX, typee <a href="http://fink.sourceforge.net/"><code>fink
+    </code></a><code>install python</code>. On cygwin, select python in the
+    setup.exe installer.. </li>
+  <li>If you are reading things in RDF/XML format, you will need the
+    <strong>pxml</strong> python extension.  Under debian, type <code>apt-get
+    install pyxml.</code>  Otherwise, untar it and in the right directory
+    type python setup.py install.  Under cygwin, select it in the the cygwin
+    setup.exe.</li>
   <li>If you are using the public key cryptography builtins, you will need
     the amkCrypto python extension. Hopefully the necessary functionality
     will be in pycryto soon (next release later than 2002/05).  One version
@@ -97,6 +100,16 @@ or N3 { expression }. The features at the moment include</p>
   <li>Pretty printing data so that anonymous nodes are used creatively to
     minimize the number of explicit existentials (generated Ids).</li>
   <li>Gnerating arbitrary formats (using --strings)</li>
+  <li>Using an internal knowledge of functions to resolve them within a
+    query, including:
+    <ul>
+      <li>Simple math and string operations</li>
+      <li>Getting and parsing documents from the web</li>
+      <li>Accessing comamnd line aeguments and environment variables</li>
+      <li>Cryptograhy: hashing, generating keys, signing things and checking
+        signatures.</li>
+    </ul>
+  </li>
 </ul>
 
 <p></p>
