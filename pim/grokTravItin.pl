@@ -33,6 +33,7 @@ my(%AirportCodes) = &airportNames();
 &bind("k", $kNS);
 &bind("dc", $dcNS);
 &bind("t", $tNS);
+&bind("apt", $aNS);
 
 
 my($gen) = 1;
@@ -327,7 +328,10 @@ EODATA
 
 
 # $Log$
-# Revision 1.5  2002-08-28 20:26:49  connolly
+# Revision 1.6  2002-09-11 13:36:44  connolly
+# declare the apt namespace
+#
+# Revision 1.5  2002/08/28 20:26:49  connolly
 # moved airport code lookup to grokTravItin.pl; airportNames is now obsolete
 #
 # Revision 1.4  2002/07/23 23:09:45  connolly
