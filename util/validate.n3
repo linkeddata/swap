@@ -54,7 +54,7 @@ schema which declares it as a Property""".
 #  and any subformulae.
 #  (The command line arguments we get are those after cwm's --with )
 
-{ :d log:uri [is os:argv of "1"]  } log:implies { :d a :targetDocument }.
+{ :d log:uri "1"!os:argv!os:baseAbsolute  } log:implies { :d a :targetDocument }.
 
 { :d a :targetDocument. :d log:semantics :F } log:implies { :F :within :d }.
 
