@@ -9,6 +9,8 @@
 
 :threeItems = {$ :b :c :d $} .
 
+:theeDistinctItems = {$  :b :c :d :c $}.
+
 :nested ={$ :first :second {$ :left3 :right3 $} :fourth $}  .
 
 :emptyList = {$ $} .
@@ -24,11 +26,11 @@
 
 # N3 only:
 
-{$ 1 $} <#linksEqualLists> ( 1 $} .
+{$ 1 $} <#linksEqualSets> {$ 1 $} .
 
 
 
-:twoFormulae = ({:a a :mother} {:b a :father}$}.
+:twoFormulae = ($ {:a a :mother} {:b a :father}  $}.
 
 
 #ENDS
