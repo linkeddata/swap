@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rdf:RDF xmlns:p3p="http://www.w3.org/2001/09/P3Pv1" xmlns:p3pr="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+<p3pr:Policy rdf:about="#forShoppers">
+<p3pr:discuri rdf:resource="http://www.catalog.example.com/Privacy/PrivacyPracticeShopping.html"/>
+<p3pr:opturi rdf:resource="http://catalog.example.com/preferences.html"/>
+<p3pr:entity rdf:parseType="Resource">
+<p3pr:business.name>CatalogExample</p3pr:business.name>
+</p3pr:entity>
+<access rdf:resource="http://www.w3.org/2001/09/P3Pv1#InfoClass-contact-and-other" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<p3pr:statement rdf:parseType="Resource">
+<p3pr:consequence>
+                    We record some information in order to serve your request 
+                    and to secure and improve our Web site.
+                  </p3pr:consequence>
+<recipient rdf:resource="http://www.w3.org/2001/09/P3Pv1#Recipient-ours" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<retention rdf:resource="http://www.w3.org/2001/09/P3Pv1#Retention-stated-purpose" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<purpose rdf:resource="http://www.w3.org/2001/09/P3Pv1#Purpose-admin" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<purpose rdf:resource="http://www.w3.org/2001/09/P3Pv1#Purpose-develop" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#dynamic.clickstream"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#dynamic.http.useragent"/>
+</p3pr:statement>
+<p3pr:statement rdf:parseType="Resource">
+<p3pr:consequence>
+                    We use this information when you make a purchase.
+                  </p3pr:consequence>
+<recipient rdf:resource="http://www.w3.org/2001/09/P3Pv1#Recipient-ours" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<retention rdf:resource="http://www.w3.org/2001/09/P3Pv1#Retention-stated-purpose" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<purpose rdf:resource="http://www.w3.org/2001/09/P3Pv1#Purpose-current" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.name"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.home-info.postal"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.home-info.telecom.telephone"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.business-info.postal"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.business-info.telecom.telephone"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.home-info.online.email"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.login.id"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.login.password"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#dynamic.miscdata"/>
+</p3pr:statement>
+<p3pr:statement rdf:parseType="Resource">
+<p3pr:consequence>
+                    At your request, we will send you carefully selected marketing 
+                    solicitations that we think you will be interested in.
+                  </p3pr:consequence>
+<recipient rdf:resource="http://www.w3.org/2001/09/P3Pv1#Recipient-ours" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<recipient rdf:resource="http://www.w3.org/2001/09/P3Pv1#Recipient-same" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<retention rdf:resource="http://www.w3.org/2001/09/P3Pv1#Retention-stated-purpose" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<purpose rdf:resource="http://www.w3.org/2001/09/P3Pv1#Purpose-contact" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<purpose rdf:resource="http://www.w3.org/2001/09/P3Pv1#Purpose-individual-decision" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<purpose rdf:resource="http://www.w3.org/2001/09/P3Pv1#Purpose-tailoring" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.name"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.home-info.postal"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.home-info.telecom.telephone"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.business-info.postal"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.business-info.telecom.telephone"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.home-info.online.email"/>
+</p3pr:statement>
+<p3pr:statement rdf:parseType="Resource">
+<p3pr:consequence>
+                    We allow you to set a password so that you
+                    can access your own information.
+                  </p3pr:consequence>
+<recipient rdf:resource="http://www.w3.org/2001/09/P3Pv1#Recipient-ours" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<retention rdf:resource="http://www.w3.org/2001/09/P3Pv1#Retention-stated-purpose" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<purpose rdf:resource="http://www.w3.org/2001/09/P3Pv1#Purpose-individual-decision" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#dynamic.miscdata"/>
+</p3pr:statement>
+<p3pr:statement rdf:parseType="Resource">
+<p3pr:consequence>
+                    At your request, we will tailor our site and 
+                    highlight products related to your interests.
+                  </p3pr:consequence>
+<recipient rdf:resource="http://www.w3.org/2001/09/P3Pv1#Recipient-ours" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<retention rdf:resource="http://www.w3.org/2001/09/P3Pv1#Retention-stated-purpose" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<purpose rdf:resource="http://www.w3.org/2001/09/P3Pv1#Purpose-pseudo-decision" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<purpose rdf:resource="http://www.w3.org/2001/09/P3Pv1#Purpose-tailoring" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.bdate.ymd.year"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#user.gender"/>
+</p3pr:statement>
+<p3pr:statement rdf:parseType="Resource">
+<p3pr:consequence>
+                    We tailor our site based on your past visits.
+                  </p3pr:consequence>
+<recipient rdf:resource="http://www.w3.org/2001/09/P3Pv1#Recipient-ours" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<retention rdf:resource="http://www.w3.org/2001/09/P3Pv1#Retention-stated-purpose" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<purpose rdf:resource="http://www.w3.org/2001/09/P3Pv1#Purpose-tailoring" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<purpose rdf:resource="http://www.w3.org/2001/09/P3Pv1#Purpose-develop" xmlns="http://www.w3.org/2001/09/P3Pv1#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#dynamic.cookies"/>
+<p3pr:data rdf:resource="http://www.w3.org/TR/P3P/base#dynamic.miscdata"/>
+</p3pr:statement>
+</p3pr:Policy>
+</rdf:RDF>
