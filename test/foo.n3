@@ -1,0 +1,14 @@
+# Axiom for truth
+#
+@prefix log: <log.n3#> .
+@prefix : <#> .
+
+<> log:forAll :x, :y, :z.
+
+{  :x a log:Truth } log:implies :x . 
+
+{ :sky :is :blue } a log:Truth .
+
+# ends
+
+
