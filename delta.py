@@ -86,14 +86,14 @@ def lookUp(predicates, assumptions=Set()):
     global verbose
     schemas = assumptions
     for pred in predicates:
-	if verbose: progress("Predicate: %s" % `pred`)
+	if verbose > 3: progress("Predicate: %s" % `pred`)
 	u = pred.uriref()
 	hash = u.find("#")
 	if hash <0:
-	    if verbose: progress("Warning: Predicate <%s> looks like web resource not Property" % u)
+	    if verbose > 1: progress("Warning: Predicate <%s> looks like web resource not Property" % u)
 	else:
 	    schemas.add(u[:hash])
-    if verbose:
+    if verbose > 2:
 	for r in schemas:
 	    progress("Metadata to be loaded: ", r) 
     if schemas:
@@ -112,25 +112,25 @@ def nailFormula(f, assumptions=Set()):
     for node in nodes:
 	if node.generated() or node in f.existentials():
 	    bnodes.add(node)
-	    if verbose >=2: progress("Blank node: %s" % `node`)
+	    if verbose >=5: progress("Blank node: %s" % `node`)
 	else:
-	    if verbose >=2: progress("Fixed node: %s" % `node`)
+	    if verbose >=5: progress("Fixed node: %s" % `node`)
 	sofar[node] = []
 
     meta = lookUp(predicates, assumptions)
     ifps = predicates & Set(meta.each(pred=RDF.type, obj=OWL.InverseFunctionalProperty))
     fps = predicates & Set(meta.each(pred=RDF.type, obj=OWL.FunctionalProperty))
-    if verbose:
+    if verbose > 1:
 	for p in fps:  progress("Functional Property:", p)
 	for p in ifps: progress("Inverse Functional: ", p)
     
     definitions = []
     if len(bnodes) == 0:
-	if verbose: progress("No bnodes in graph")
+	if verbose > 0: progress("No bnodes in graph")
 	return  bnodes, definitions
 
     a = float(len(bnodes))/len(nodes)
-    if verbose: progress("Proportion of bodes which are blank: %f" % a)
+    if verbose > 1: progress("Proportion of bodes which are blank: %f" % a)
 #    if a == 0: return bnodes, definitions
 
     loose = bnodes.copy()
@@ -141,7 +141,7 @@ def nailFormula(f, assumptions=Set()):
 	newNailed = Set()
 	for preds, inverse, char in ((fps, 0, "!"), (ifps, 1, "^")):
 	    for pred in preds:
-		if verbose: progress("Predicate", pred)
+		if verbose > 3: progress("Predicate", pred)
 		ss = f.statementsMatching(pred=pred)
 		for s in ss:
 		    if inverse: y, x = s.object(), s.subject()
@@ -150,45 +150,51 @@ def nailFormula(f, assumptions=Set()):
 		    if y not in loose:  # y is the possible anchor
 			defi = (x, inverse, pred, y)
 			if x in loose:   # this node
-			    if verbose: progress("   Nailed %s as %s%s%s" % (`x`, `y`, `char`, `pred`))
+			    if verbose > 4: progress("   Nailed %s as %s%s%s" % (`x`, `y`, `char`, `pred`))
 			    loose.discard(x)
 			    newNailed.add(x)
 			else:
-			    if verbose: progress("   (ignored %s as %s%s%s)" % (`x`, `y`, `char`, `pred`))
+			    if verbose >=6 : progress(
+				"   (ignored %s as %s%s%s)" % (`x`, `y`, `char`, `pred`))
 			definitions.append(defi)
-#			if verbose: progress("   Definition[x] is now", definition[x])
+#			if verbose > 9: progress("   Definition[x] is now", definition[x])
 			if inverse: equivalentSet = Set(f.each(obj=y, pred=pred))
 			else: equivalentSet = Set(f.each(subj=y, pred=pred))
 			if len(equivalentSet) > 1: equivs.add(equivalentSet)
 
 	if not newNailed:
-	    if verbose:
+	    if verbose > 1:
 		progress("Failed to nail nodes:", loose)
-		for n in loose:
-		    debugBnode(n, f)
+		if verbose > 3:
+		    for n in loose:
+			debugBnode(n, f)
 	    break
 
 # At this point if we still have loose nodes, we have failed with ifps and fps.
 # Diff may not be strong. (It might still be: the diffs might not involve weak definitions)
 
     weak = loose.copy()  # Remember
-    if verbose: progress("\nFailed to directly nail everything, looking for weak nailings:")
+    if verbose > 0: progress("\nFailed to directly nail everything, looking for weak nailings.")
 #    sys.exit(-1)  #@@@
     while loose:
 	newNailed = Set()
-	if verbose: progress("\nPass: loose = %s" % loose)
+	if verbose>2:
+	    progress()
+	    progress("Pass: loose = %s" % loose)
 	for x in loose.copy():
-	    if verbose: progress("Checking weakly node %s" % x)
+	    if verbose>3: progress("Checking weakly node %s" % x)
 	    for s in f.statementsMatching(obj=x):
 		pred, y = s.predicate(), s.subject()
 		if y in loose:
-		    if verbose: progress("Can't nail to loose %s" % y)
+		    if verbose > 4: progress("Can't nail to loose %s" % y)
 		    continue    # Can't nail to something loose
 		others = f.each(subj=y, pred=pred)
 		# @@ Should ignore redirected equivalent nodes in others
-		if len(others) != 1: continue  # Defn would be ambiguous in this graph
+		if len(others) != 1:
+		    if verbose>4: progress("Can't nail: %s all are %s of %s." % (others, pred, y))
+		    continue  # Defn would be ambiguous in this graph
 		defi = (x, 0, pred, y)
-		if verbose: progress("   Weakly-nailed %s as %s%s%s" % (x, y, "!", pred))
+		if verbose >4: progress("   Weakly-nailed %s as %s%s%s" % (x, y, "!", pred))
 		loose.discard(x)
 		newNailed.add(x)
 		definitions.append(defi)
@@ -197,36 +203,40 @@ def nailFormula(f, assumptions=Set()):
 		for s in f.statementsMatching(subj=x):
 		    pred, obj = s.predicate(), s.object()
 		    if obj in loose:
-			if verbose: progress("Can't nail to loose %s" % obj)
+			if verbose >4: progress("Can't nail to loose %s" % obj)
 			continue    # Can't nail to something loose
 		    others = f.each(obj=obj, pred=pred)
 		    # @@ Should ignore redirected equivalent nodes in others
-		    if len(others) != 1: continue  # Defn would be ambiguous in this graph
+		    if len(others) != 1:
+			if verbose >4: progress(
+			"Can't nail: %s all have %s of %s." % (others, pred, obj))
+			continue  # Defn would be ambiguous in this graph
 		    defi = (x, 1, pred, obj)
-		    if verbose: progress("   Weakly-nailed %s as %s%s%s" % (`x`, `obj`, "^", `pred`))
+		    if verbose>2: progress("   Weakly-nailed %s as %s%s%s" % (`x`, `obj`, "^", `pred`))
 		    loose.discard(x)
 		    newNailed.add(x)
 		    definitions.append(defi)
 		    break # progress
 
 	if not newNailed:
-	    if verbose: progress("Failed to even weakly nail nodes:", loose)
-	    for n in loose:
-		progress("For node %s" % n)
-		for s in f.statementsMatching(subj=n):
-		    progress("     %s  %s; # could be ifp?" %(`s.predicate()`, `s.object()`)) 
-		for s in f.statementsMatching(obj=n):
-		    progress("     is %s of  %s; # could be fp?" %(s.predicate(), s.subject())) 
+	    if verbose>0:
+		progress("Failed to even weakly nail nodes:", loose)
+		for n in loose:
+		    progress("For node %s" % n)
+		    for s in f.statementsMatching(subj=n):
+			progress("     %s  %s; # could be ifp?" %(`s.predicate()`, `s.object()`)) 
+		    for s in f.statementsMatching(obj=n):
+			progress("     is %s of  %s; # could be fp?" %(s.predicate(), s.subject())) 
 		
 
 	    raise ValueError("Graph insufficiently labelled for nodes: %s" % loose)
 
-    if verbose and not weak: progress("Graph is solid.")
-    if verbose and weak: progress("Graph is NOT solid.")
+    if verbose>0 and not weak: progress("Graph is solid.")
+    if verbose>0 and weak: progress("Graph is NOT solid.")
     
     f.reopen()
     for es in equivs:
-	if verbose: progress("Equivalent: ", es)
+	if verbose>3: progress("Equivalent: ", es)
 	prev = None
 	for x in es:
 	    if prev:
@@ -236,7 +246,7 @@ def nailFormula(f, assumptions=Set()):
 
 def removeCommon(f, g, match):
     """Find common statements from f and g
-    macth gives the dictionary mapping bnodes in f to bnodes in g"""
+    match gives the dictionary mapping bnodes in f to bnodes in g"""
     only_f, common_g = Set(), Set()
     for st in f.statements[:]:
 	s, p, o = st.spo()
@@ -249,7 +259,7 @@ def removeCommon(f, g, match):
 	if og != None and sg != None:
 	    gsts = g.statementsMatching(subj=sg, pred=p, obj=og)
 	    if len(gsts) == 1:
-		if verbose: progress("Statement in both", st)
+		if verbose>4: progress("Statement in both", st)
 		common_g.add(gsts[0])
 		continue
 	only_f.add(st)
@@ -263,7 +273,7 @@ def patches(delta, f, only_f, originalBnodes, definitions, deleting=0):
 	patchVerb = DELTA.deletion
     else:
 	patchVerb = DELTA.insertion
-    if verbose: progress("Patch:", patchVerb)
+    if verbose>2: progress("*********** PATCHES: %s, with  %i to do" %(patchVerb, len(todo)))
     while todo:
 
 	# find a contiguous subgraph defined in the given graph
@@ -274,14 +284,14 @@ def patches(delta, f, only_f, originalBnodes, definitions, deleting=0):
 	newStatements = Set()
 	for seed in todo: break # pick one #@2 fn?
 	statementsToDo = Set([seed])
-	if verbose: progress("Seed:", seed)
+	if verbose>3: progress("Seed:", seed)
 	subgraph = statementsToDo
 	while statementsToDo or bnodesToDo:
 	    for st in statementsToDo:
 		s, p, o = st.spo()
 		for x in s, p, o:
 		    if x.generated() and x not in bnodes: # and x not in commonBnodes:
-			if verbose: progress("   Bnode ", x)
+			if verbose>4: progress("   Bnode ", x)
 			bnodesToDo.add(x)
 			bnodes.add(x)
 		rhs.add(s, p, o)
@@ -294,12 +304,12 @@ def patches(delta, f, only_f, originalBnodes, definitions, deleting=0):
 		for z in ss:
 		    if z in only_f:
 			newStatements.add(z)
-		if verbose: progress("    New statements from %s: %s" % (x, newStatements))
+		if verbose>3: progress("    New statements from %s: %s" % (x, newStatements))
 		statementsToDo = statementsToDo | newStatements
 		subgraph = subgraph |newStatements
 	    bnodesToDo = Set()
 
-	if verbose: progress("Subgraph of %i statements (%i left):\n\t%s\n" 
+	if verbose>3: progress("Subgraph of %i statements (%i left):\n\t%s\n" 
 		%(len(subgraph), len(todo), subgraph))
 	todo = todo - subgraph
 	
@@ -309,6 +319,7 @@ def patches(delta, f, only_f, originalBnodes, definitions, deleting=0):
 	    if x in undefined:
 		if inverse: s, p, o = x, pred, y
 		else: s, p, o = y, pred, x
+		progress("Declaring variable %s" % x.uriref())
 		if deleting:
 		    delta.declareUniversal(x)
 		    lhs.add(subj=s, pred=p, obj=o)
@@ -326,8 +337,10 @@ def patches(delta, f, only_f, originalBnodes, definitions, deleting=0):
 	    for n in undefined:
 		debugBnode(n, f)
 	    raise RuntimeError("BNodes still undefined", undefined)
-
-	delta.add(subj=lhs.close(), pred=patchVerb, obj=rhs.close())
+	lhs = lhs.close()
+	rhs = rhs.close()
+	delta.add(subj=lhs, pred=patchVerb, obj=rhs)
+	if verbose >1: progress("PATCH: %s %s %s\n" %(lhs.n3String(), `patchVerb`, rhs.n3String()))
     return
 
 def consolidate(delta, patchVerb):
@@ -338,7 +351,7 @@ def consolidate(delta, patchVerb):
     and faster to execute in some implementations
     """
     agenda = {}
-    if verbose: progress("Consolidating %s" % patchVerb)
+    if verbose >3: progress("Consolidating %s" % patchVerb)
     for s in delta.statementsMatching(pred=patchVerb):
 	list = agenda.get(s.subject(), None)
 	if list == None:
@@ -346,7 +359,7 @@ def consolidate(delta, patchVerb):
 	    agenda[s.subject()] = list
 	list.append(s)
     for lhs, list in agenda.items():
-	if verbose: progress("Patches lhs= %s: %s" %(lhs, list))
+	if verbose >3: progress("Patches lhs= %s: %s" %(lhs, list))
 	if len(list) > 1:
 	    rhs = delta.newFormula()
 	    for s in list:
@@ -363,7 +376,7 @@ def differences(f, g, assumptions):
 
     g_bnodes, g_definitions = nailFormula(g, assumptions)
     bnodes, definitions = nailFormula(f, assumptions)
-
+    if verbose > 1: progress("\n Done nailing")
     definitions.reverse()  # go back down list @@@ reverse the g list too? @@@
     g_definitions.reverse()	# @@ needed for the patch generation
     
@@ -373,19 +386,19 @@ def differences(f, g, assumptions):
 	if x in match: continue # done already
 
 	if x in f._redirections:
-	    if verbose: progress("Redirected %s to %s. Ignoring" % (`x`, `f._redirections[x]`))
+	    if verbose > 3: progress("Redirected %s to %s. Ignoring" % (`x`, `f._redirections[x]`))
 	    unmatched.discard(x)
 	    continue
 
-	if verbose: progress("Definition %s = %s%s%s"% (`x`,  `pred`, ".^"[inverse], `y`))
+	if verbose > 3: progress("Definition of %s = %s%s%s"% (`x`, `y` , ".!^"[inverse], `pred`))
 
 	if y.generated():
 	    while y in f._redirections:
 		y = f._redirections[y]
-		if verbose: progress(" redirected to  %s = %s%s%s"% (`x`,  `pred`, ".^"[inverse], `y`))
+		if verbose>4: progress(" redirected to  %s = %s%s%s"% (`x`,  `y`, "!^"[inverse], `pred`))
 	    yg = match.get(y, None)
 	    if yg == None:
-		if verbose: progress("  Had definition for %s in terms of %s which is not matched"%(`x`,`y`))
+		if verbose>4: progress("  Had definition for %s in terms of %s which is not matched"%(`x`,`y`))
 		continue
 	else:
 	    yg = y
@@ -398,17 +411,18 @@ def differences(f, g, assumptions):
 #	    raise RuntimeError("Can't match %s" % x)
 
 	if len(matches) > 1:
-	    raise RuntimeError("More than 1 match for %s: %s" % (`x`, `matches`))
+	    raise RuntimeError("""Rats. Wheras in the first graph %s%s%s uniquely selects %s,
+		    in the other graph there are more than 1 matches: %s""" % (`y`, "!^"[inverse], `pred`, `x`,  `matches`))
 	for q in matches:  # pick only one  @@ python function?
 	    z = q
 	    break
-	if verbose:
+	if verbose > 2:
 	    progress("Found match for %s in %s " % (`x`,`z`))
 	match[x] = z
 	unmatched.discard(x)
 
     if len(unmatched) > 0:
-	if verbose:
+	if verbose >1:
 	    progress("Failed to match all nodes:", unmatched)
 	    for n in unmatched:
 		debugBnode(n, f)
@@ -425,7 +439,7 @@ def differences(f, g, assumptions):
     
     common = Set([match[x] for x in match])
 
-    if verbose: progress("Comon nodes (as in g)", common)
+    if verbose>2: progress("Common bnodes (as named in g)", common)
     patches(delta, f, only_f, Set(), definitions, deleting=1)
     patches(delta, g, only_g, common, g_definitions, deleting=0)
     if lumped:
@@ -449,8 +463,9 @@ def getParts(f, meta=None):
 def loadFiles(files):
     graph = myStore.formula()
     graph.setClosureMode("e")    # Implement sameAs by smushing
+    if verbose>0: progress("Loading %s..." % files)
     graph = myStore.loadMany(files, openFormula=graph)
-    if verbose: progress("Loaded", graph, graph.__class__)
+    if verbose>0: progress("Loaded", graph)
     return graph
 
 def usage():
@@ -467,8 +482,8 @@ def main():
     verbose = 0
     lumped = 1
     try:
-        opts, args = getopt.getopt(sys.argv[1:], "hf:t:m:vg",
-	    ["help", "from=", "to=", "meta=", "verbose", "granularity="])
+        opts, args = getopt.getopt(sys.argv[1:], "hf:t:m:v:g",
+	    ["help", "from=", "to=", "meta=", "verbose=", "granularity="])
     except getopt.GetoptError:
         # print help information and exit:
         usage()
@@ -479,7 +494,8 @@ def main():
             usage()
             sys.exit()
         if o in ("-v", "--verbose"):
-	    verbose += 1
+	    try: verbose = int(a)
+	    except ValueError: verbose = 10
         if o in ("-l", "--granularity"):
 	    lumped = int(a)
 	if o in ("-f", "--from"):
@@ -499,13 +515,13 @@ def main():
     version = "$Id$"[1:-1]
     if diffFiles == []:
 	nailFormula(graph, assumptions)
-	if verbose: print "# Smush by " + version
+	if verbose > 1: print "# Smush generated by " + version
 	print graph.close().n3String(base=base(), flags="a")
 	sys.exit(0)
 	
     graph2 = loadFiles(diffFiles)
     delta = differences(graph, graph2, assumptions)
-    if verbose: print "# Differences by " + version
+    if verbose >1: print "# Differences by " + version
     print delta.close().n3String(base=base())
 #    sys.exit(len(delta))
     sys.exit(0)   # didn't crash
