@@ -125,25 +125,24 @@ with the command line option <code>--think.</code></p>
 
 <p>@@ finding the continguous united states</p>
 
-<p>Delivery of packet in the USA is often one price within the
+<p>Delivery of packet in the USA has often one price within the
 <em>continguous United States</em>. How could we find those? Well, the test
 data set <a href="../test/dbork/data/USregionState.n3">USRegionState.n3</a>
 has a list of states of the USA. This includes the <code>borderstate</code>
 property which gives a state's neighbors. Contiguous means that you can get
 there from here by going from state to neighboring US state. Suppose you are
-starting in MA</p>
-
-<p>state:</p>
+starting in Boston.so you can get to Massachusetts.  Also, any state
+bordering a continguous state must also be contiguous. That's all the rules
+you need:</p>
 <pre>{?x us:code "MA"} =&gt; { ?x a :ContiguousState }.
 {?x a :ContiguousState.  ?x us:borderstate ?y} =&gt; {?y a :ContiguousState}.</pre>
 
 <p></p>
 
 <p>These rules need to be applied more than once to find all the contiguous
-states.  In fact it is a very inefficient way of doing things, as cwm has to
-imagine going every conceivable way all over the USA.  This is where you can
-see the difference between --rules and --think.  Try it with --rules. Try it
-with --rules --rules. Then try it with --think.s</p>
+states.   This is where you can see the difference between --rules and
+--think.  Try it with --rules. Try it with --rules --rules. Then try it with
+--think.s</p>
 
 <p></p>
 
