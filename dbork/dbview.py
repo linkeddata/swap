@@ -2,7 +2,33 @@
 """
 dbview -- view an SQL DB thru RDF glasses.
 
-dev notes, links, ...
+hmm... RDF/SQL mapping issue: consider:
+
+  select person.name, phone.room from persons,phones
+     where phone.owner=person.id;
+
+we can look at persons, phones as RDF Classes...
+name as a property whose domain is person,
+and room as a property whose domain is phone.
+then... what's the subject of the resulting properties?
+
+i.e.
+  { ?phone :room ?r; :owner [ is :id of ?who ]. ?who :name ?n}
+    log:implies { [ :room ?r; :owner [:name ?n]]}.
+
+that's the way the SQL query should work, but how do I know where to
+put the []'s in the implies, when converting an SQL rule to an N3
+rule? Hmm... make the id disappear in the RDF level?
+
+
+  { ?phone :room ?r; :owner [ is :id of ?who ]. ?who :name ?n}
+    log:implies { [ :col1 ?r; :col2 ?n].
+                  :col1 sqlmap:cameFrom :name; sqlmap:tables (:person :phone).
+                  :col2 sqlmap:
+                }.
+
+
+earlier dev notes, links, ...
  http://ilrt.org/discovery/chatlogs/rdfig/2002-02-27#T18-29-01
  http://rdfig.xmlhack.com/2002/02/27/2002-02-27.html#1014821419.001175
 """
@@ -69,9 +95,9 @@ def testDBView(fp, host, port, user, passwd):
                        db='administration')
 
     ns='http://example/w3c-admin-db#'
-    sink.bind('admin', ns)
+    sink.bind('admin', (RDFSink.SYMBOL, ns))
     askdb(db, ns, sink,
-          ('family', 'city'),
+          ('email', 'given', 'family', 'city', 'state', 'country', 'URL', 'last'),
           ('users', 'techplenary2002'),
           'users.id=techplenary2002.id')
 
