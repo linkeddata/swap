@@ -1,0 +1,1528 @@
+#Processed by Id: cwm.py,v 1.91 2002/03/12 20:57:15 timbl Exp 
+        #    using base file:/cygdrive/c/devel/WWW/2000/10/swap/test/track/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.106 2002/03/12 20:57:15 timbl Exp
+
+#   Base was: file:/cygdrive/c/devel/WWW/2000/10/swap/test/track/
+     @prefix : <http://www.w3.org/2000/10/swap/xml#> .
+    
+      [      :doctype  [
+                 :pubid "-//W3C//DTD XHTML 1.0 Transitional//EN";
+                 :systemid "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" ];
+             :zcontent  (
+            "\n" 
+             [
+                     :ln "html";
+                     :ns "http://www.w3.org/1999/xhtml";
+                     :zcontent  (
+                     [
+                             :comment " Changed by: tbl 19990524";
+                             :ln "head";
+                             :ns "http://www.w3.org/1999/xhtml";
+                             :zcontent  (
+                             [
+                                     :attr  [
+                                         :ln "content";
+                                         :ns "";
+                                         :value "text/html; charset=iso-8859-1" ],
+                                             [
+                                         :ln "http-equiv";
+                                         :ns "";
+                                         :value "Content-Type" ];
+                                     :ln "meta";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                    "\n\n\n  "  ) ]
+                             [
+                                     :ln "title";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                    """
+  Agenda for 11 March 2002 TAG teleconference"""  ) ]
+                             [
+                                     :attr  [
+                                         :ln "rel";
+                                         :ns "";
+                                         :value "stylesheet" ],
+                                             [
+                                         :ln "type";
+                                         :ns "";
+                                         :value "text/css" ],
+                                             [
+                                         :ln "href";
+                                         :ns "";
+                                         :value "/StyleSheets/base.css" ];
+                                     :ln "link";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                    "\n  "  ) ]
+                            "\n  \n"  ) ]
+                     [
+                             :ln "body";
+                             :ns "http://www.w3.org/1999/xhtml";
+                             :zcontent  (
+                             [
+                                     :ln "h1";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                    """
+
+
+Agenda for 11 March 2002 TAG teleconference"""  ) ]
+                             [
+                                     :ln "p";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                     [
+                                             :attr  [
+                                                 :ln "href";
+                                                 :ns "";
+                                                 :value "04-tag" ];
+                                             :ln "a";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            """
+
+Previous meeting: 4 Mar"""  ) ]
+                                     [
+                                             :attr  [
+                                                 :ln "href";
+                                                 :ns "";
+                                                 :value "04-tagmem-irc" ];
+                                             :ln "a";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            " ; ("  ) ]
+                                     [
+                                             :attr  [
+                                                 :ln "href";
+                                                 :ns "";
+                                                 :value "http://www.w3.org/2002/03/04-tagmem-irc" ];
+                                             :ln "a";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            "IRC log)"  ) ]
+                                     [
+                                             :attr  [
+                                                 :ln "href";
+                                                 :ns "";
+                                                 :value "http://www.w3.org/2002/03/11-tagmem-irc.html" ];
+                                             :ln "a";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            " | This meeting IRC"  ) ]
+                                     [
+                                             :attr  [
+                                                 :ln "href";
+                                                 :ns "";
+                                                 :value "http://www.w3.org/2001/tag/doc/18-tag.html" ];
+                                             :ln "a";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            """ | Next meeting: 18 March
+teleconf"""  ) ] ) ]
+                             [
+                                     :ln "p";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                     [
+                                             :attr  [
+                                                 :ln "href";
+                                                 :ns "";
+                                                 :value "/2001/tag/" ];
+                                             :ln "a";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            "\n\nNearby: TAG home"  ) ]
+                                     [
+                                             :attr  [
+                                                 :ln "href";
+                                                 :ns "";
+                                                 :value "/2001/tag/group/#remote" ];
+                                             :ln "a";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            " \u00b7 teleconference details"  ) ]
+                                     [
+                                             :attr  [
+                                                 :ln "href";
+                                                 :ns "";
+                                                 :value "/2001/tag/ilist" ];
+                                             :ln "a";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            " \u00b7 issues list"  ) ]
+                                     [
+                                             :attr  [
+                                                 :ln "href";
+                                                 :ns "";
+                                                 :value "2001/tag/threads" ];
+                                             :ln "a";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            """ \u00b7 mailing
+list threads"""  ) ] ) ]
+                             [
+                                     :ln "p";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                    """
+
+Where/When:  Zakim bridge  tel:+1-617-761-6200 Passcode 0824# ("0tag")  85
+minutes 10:30ET-11:55 ET"""  ) ]
+                             [
+                                     :ln "h2";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                    """
+
+Administrative stuff (15min)"""  ) ]
+                             [
+                                     :ln "ol";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                     [
+                                             :ln "li";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            """
+
+  Any additions to the agenda? Problems with previous meeting
+  minutes?"""  ) ]
+                                     [
+                                             :ln "li";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            """
+  Review of action items if not done by email"""  ) ]
+                                    "\n"  ) ]
+                             [
+                                     :ln "h2";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                     [
+                                             :attr  [
+                                                 :ln "id";
+                                                 :ns "";
+                                                 :value "arch" ],
+                                                     [
+                                                 :ln "name";
+                                                 :ns "";
+                                                 :value "arch" ];
+                                             :ln "a";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            "\n\nTechnical (70min)"  ) ] ) ]
+                             [
+                                     :ln "ul";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                     [
+                                             :ln "li";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            """
+
+  XML namespace issues. Mixed namespaces. Issue 13."""  ) ]
+                                     [
+                                             :ln "li";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            """
+  For next week: HTTP Query and IETF"""  ) ]
+                                     [
+                                             :ln "li";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                             [
+                                                     :attr  [
+                                                         :ln "href";
+                                                         :ns "";
+                                                         :value "/2001/tag/doc/toc.html" ];
+                                                     :ln "a";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                    """
+  Creative writing: dividing up the TOC"""  ) ] ) ]
+                                    "\n"  ) ]
+                             [
+                                     :ln "h3";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                    """
+
+Homework for next meeting 3/18"""  ) ]
+                             [
+                                     :ln "ul";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                     [
+                                             :ln "li";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            """
+
+  Read the one-page summaries produced"""  ) ]
+                                     [
+                                             :ln "li";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            "\n  ..."  ) ]
+                                    "\n"  ) ]
+                             [
+                                     :ln "h2";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                    """
+
+Recent action items"""  ) ]
+                             [
+                                     :attr  [
+                                         :ln "border";
+                                         :ns "";
+                                         :value "1" ];
+                                     :ln "table";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                     [
+                                             :ln "tbody";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "Topic" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "th";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+
+
+  
+    
+      Topic"""  ) ]
+                                                     [
+                                                             :ln "th";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      Assigned to"  ) ]
+                                                     [
+                                                             :ln "th";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      Assigned at"  ) ]
+                                                     [
+                                                             :ln "th";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+      Status at beginning of meeting"""  ) ]
+                                                     [
+                                                             :ln "th";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+      Changes during meeting"""  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "Summarize1" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+    
+      Summarize different approaches currently used for mapping URIs to
+        media types."""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      Roy"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://lists.w3.org/Archives/Public/www-tag/2002Feb/0050" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+      4 Feb
+        teleconf"""  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :ln "strong";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Open"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      "  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "Summarize2" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "id";
+                                                                         :ns "";
+                                                                         :value "Summarize" ],
+                                                                             [
+                                                                         :ln "name";
+                                                                         :ns "";
+                                                                         :value "Summarize" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+    
+      Summarize TAG findings on using
+        URIs: (a) use URIs when naming in context of Web (2) should be able
+        to follow URI to explanatory material (3) software is not required to
+        follow a URI when processing it"""  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      Paul"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.w3.org/2002/02/12-tagmem-irc.html#T15-52-56" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+      12
+        Feb meeting"""  ) ]
+                                                             [
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    " "  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://lists.w3.org/Archives/Member/tag/2002Mar/0013.html" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Dropped"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      "  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "section" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "/2001/tag/doc/toc" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+    
+      Add a section on datatypes to the TAG
+        arch doc toc"""  ) ]
+                                                            "."  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      TBL"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.w3.org/2002/02/12-tagmem-irc" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+      12 Feb
+      meeting"""  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.w3.org/2001/tag/doc/toc.html#Common" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Done"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      "  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "L624" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "/2001/tag/2002/0129-mime" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+    
+      In 28 Jan findings"""  ) ]
+                                                            """, propose
+        alternative wording to section on namespace-based dispatching"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      TBL"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.w3.org/2002/02/12-tagmem-ircT16-22-25" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+      12 Feb
+        meeting"""  ) ]
+                                                             [
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    " "  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.w3.org/2001/tag/2002/0129-mime#NamespaceDispatchingIsGood" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Done"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      "  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "L648" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "/2001/tag/2002/0129-mime" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+    
+      In 28 Jan findings"""  ) ]
+                                                            """, change
+        "Should" to "Must" where appropriate."""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      TBL"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.w3.org/2002/02/12-tagmem-irc" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+      12 Feb
+      meeting"""  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.w3.org/2001/tag/2002/0129-mime#MediTypesAreGood" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Done"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      "  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "Integrate" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "/2001/tag/doc/toc" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+    
+      Integrate issues & findings into TAG arch doc toc"""  ) ]
+                                                            "."  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      IJ"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.w3.org/2002/02/12-tagmem-irc" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+      12 Feb
+      meeting"""  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :ln "strong";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Open"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+      Tim things he did - Ian to check"""  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "Write" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.ietf.org/internet-drafts/draft-eastlake-cturi-03.txt" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+    
+      Write up that the TAG approves of IETF
+        draft from Don Eastlake"""  ) ]
+                                                            """ with "http:" instead of
+      "content-type:"."""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      SW"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.w3.org/2002/02/12-tagmem-irc" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+      12 Feb
+      meeting"""  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://lists.w3.org/Archives/Public/www-tag/2002Feb/att-0102/01-uriMediaType-9.html" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Done"  ) ]
+                                                             [
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent () ]
+                                                            "."  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      "  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "Write1" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+    
+      Write a proposal to suggest that URNs not be used for namespace
+        URIs."""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      TB"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.w3.org/2002/02/12-tagmem-irc" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+      12 Feb
+      meeting"""  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.textuality.com/tag/Issue8.html#L94" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Done"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      "  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "Philipp" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+    
+      Ask Philipp Hoschka to take a new HTTP requirement on idempotent
+        POST-like method to IETF liaison teleconference. Include the XForms
+        WG in the loop."""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      TBL"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.w3.org/2002/02/12-tagmem-irc" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+      12 Feb
+      meeting"""  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "04-tagmem-irc.html#T15-53-36" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Withdrawn"  ) ]
+                                                            "."  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      "  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "Rewrite" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.textuality.com/tag/Issue8.html" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+    
+      Rewrite point 14 of Architectural Theses
+        on Namespaces and Namespace Documents"""  ) ]
+                                                            """ per discussion at 18 feb
+        teleconference."""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      TB"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "/2002/02/18-tagmem-irc" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+      18 Feb meeting"""  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.textuality.com/tag/Issue8.html" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Done"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      "  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "Find" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.w3.org/XML/2001/07/xmlpm-minutes.html" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    """
+    
+      Find XML
+        PM workshop minutes"""  ) ]
+                                                             [
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent () ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      DanC"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+      25 Feb meeting"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://www.w3.org/XML/2001/07/xmlpm-minutes.html" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Done"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      "  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "Summarize3" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+    
+      Summarize XMl PM workshop"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      PaulC"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+      25 Feb meeting"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://lists.w3.org/Archives/Member/tag/2002Feb/0078.html" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Done"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      "  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "Kick" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+    
+      Kick off discusiion of mixed namespace interpretation on
+      www-tag"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      TimBL"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      25 Feb"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://lists.w3.org/Archives/Public/www-tag/2002Feb/0190.html" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Done"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      "  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "Summary" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+    
+      Summary of TAG activity to date"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      IJ, PaulC"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      25 Feb"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "http://lists.w3.org/Archives/Member/tag/2002Mar/0002.html" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Done"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      "  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "Send" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+    
+      Send summary to AC, chairs and www-tag"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      DanC, IJ"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "04-tagmem-irc.html#T16-00-39" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      04 Mar"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :ln "strong";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Open"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      "  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "L851" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+    
+      One-page summary , section 1"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      DanC, TimBray"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "04-tagmem-irc.html#T16-56-45" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      2002/03/04"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :ln "strong";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Open"  ) ]
+                                                            """. By 3/11 is possible please, for reading by
+        TAG by 3/18"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      A start made"  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "L868" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+    
+      One-page summary , section 2"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      Norm, Stuart"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "04-tagmem-irc.html#T16-56-45" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      2002/03/04"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :ln "strong";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Open"  ) ]
+                                                            """. By 3/11 is possible please, for reading by
+        TAG by 3/18"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      2 drafts"  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "L885" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+    
+      One-page summary , section 3"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      Norm, PaulC"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "04-tagmem-irc.html#T16-56-45" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      2002/03/04"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :ln "strong";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Open"  ) ]
+                                                            """. By 3/11 is possible please, for reading by
+        TAG by 3/18"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+      Norm did draft"""  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "L902" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+    
+      One-page summary , section 4"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      Roy, DavidO"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "04-tagmem-irc.html#T16-56-45" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      2002/03/04"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :ln "strong";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Open"  ) ]
+                                                            """. By 3/11 is possible please, for reading by
+        TAG by 3/18"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+      David has had a bash at it, ongoing. Roy to send to tag@"""  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "L919" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+    
+      One-page summary , section 5"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      ChrisL, PaulC"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "04-tagmem-irc.html#T16-56-45" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      2002/03/04"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :ln "strong";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Open"  ) ]
+                                                            """. By 3/11 is possible please, for reading by
+        TAG by 3/18"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+      Chris sent in some notes,  not discussed with paul... ongoning"""  ) ]
+                                                    "\n    "  ) ]
+                                             [
+                                                     :attr  [
+                                                         :ln "id";
+                                                         :ns "";
+                                                         :value "L936" ];
+                                                     :ln "tr";
+                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                     :zcontent  (
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            """
+    
+      check with workshop chair, make the XML PM ws minutes available to
+        the public, per CFP"""  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      DanC:"  ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :attr  [
+                                                                         :ln "href";
+                                                                         :ns "";
+                                                                         :value "04-tagmem-irc.html#T15-41-02" ];
+                                                                     :ln "a";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      2002/03/04"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                             [
+                                                                     :ln "strong";
+                                                                     :ns "http://www.w3.org/1999/xhtml";
+                                                                     :zcontent  (
+                                                                    "\n      Open"  ) ] ) ]
+                                                     [
+                                                             :ln "td";
+                                                             :ns "http://www.w3.org/1999/xhtml";
+                                                             :zcontent  (
+                                                            "\n      "  ) ]
+                                                    "\n    "  ) ]
+                                            "\n  "  ) ]
+                                    "\n"  ) ]
+                             [
+                                     :ln "hr";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                    "\n"  ) ]
+                             [
+                                     :ln "address";
+                                     :ns "http://www.w3.org/1999/xhtml";
+                                     :zcontent  (
+                                     [
+                                             :ln "br";
+                                             :ns "http://www.w3.org/1999/xhtml";
+                                             :zcontent  (
+                                            """
+
+  Ian Jacobs, for TimBL"""  ) ]
+                                    """
+  Last modified: $Date$
+"""  ) ]
+                            "\n"  ) ]
+                    "\n"  ) ]
+            "\n"  ) ].
+    
+#ENDS
