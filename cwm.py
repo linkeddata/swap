@@ -138,7 +138,7 @@ ANONYMOUS = notation3.ANONYMOUS     # existentially qualified unlabelled resourc
 VARIABLE = notation3.VARIABLE
 
 
-chatty =50   # verbosity debug flag
+chatty = 0   # verbosity debug flag
 doMeta = 0  # wait until we have written the code! :-)
 
 INFINITY = 1000000000           # @@ larger than any number occurences
@@ -216,10 +216,10 @@ def compareURI(self, other):
         if o == _type:
             return 1
         if s < o :
-            print s,  "LESS THAN", o
+#            print s,  "LESS THAN", o
             return -1
         if s > o :
-            print s, "GREATER THAN", o
+#            print s, "GREATER THAN", o
             return 1
         raise internalError # Strings should not match if not same object
 
@@ -1696,7 +1696,7 @@ Examples:
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-bySubject": _doneOutput = 1
             elif _lhs == "-outURI": option_outURI = _uri
-            elif arg == "-chatty": chatty = 1
+            elif arg == "-chatty": cwm.chatty = 50
             elif arg[:7] == "-apply=": pass
             elif arg == "-reify": option_reify = 1
             elif arg == "-help":
