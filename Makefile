@@ -16,7 +16,7 @@ GRAMMAR =  grammar/n3.n3 grammar/README.txt grammar/predictiveParser.py grammar/
 
 TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/ql/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/n3parser.tests test/cwm/detailed.tests test/ntriples/detailed.tests test/delta/detailed.tests test/syntax/detailed.tests test/reify/detailed.tests test/testmeta.n3 test/retest.py
 
-VERSION = 1.0.0rc1
+VERSION = 1.0.0rc2
 TARNAME = cwm-$(VERSION)
 
 TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3
@@ -103,7 +103,7 @@ setup_tarball: $(SOURCES) $(HTMLS) $(TESTS) $(GRAMMAR) $(TARBALL_STUFF) tested f
 	cd ,cwm-$(VERSION)-test && tar -xzf ../cwm-$(VERSION).tar.gz
 	cd ,cwm-$(VERSION)-test/cwm-$(VERSION)/test && mkdir ,test
 	cd ,cwm-$(VERSION)-test/cwm-$(VERSION)/test && $(MAKE)
-	$(PYTHON) -c 'print "".join([a for a in file(".htaccess")][:-1])'
+	$(PYTHON) -c 'print "".join([a for a in file(".htaccess")][:-1])' > ,htaccess
 	echo 'RewriteRule ^cwm.tar.gz$ ' $(TARNAME).tar.gz '[L]' >> ,htaccess
 	mv ,htaccess .htaccess
 	cvs add $(TARNAME).tar.gz	
