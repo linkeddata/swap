@@ -1,0 +1,48 @@
+@prefix gc: <http://www.daml.org/2001/01/gedcom/gedcom#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log.n3#>.
+@prefix : <gedcom-relations.n3#>.
+
+:Goedele gc:childIn :dt; :gender :F.
+:Veerle gc:childIn :dt; :gender :F.
+:Nele gc:childIn :dt; :gender :F.
+:Karel gc:childIn :dt; :gender :M.
+:Maaike gc:spouseIn :dt; :gender :F.
+:Jos gc:spouseIn :dt; :gender :M.
+
+:Jos gc:childIn :dp; :gender :M.
+:Rita gc:childIn :dp; :gender :F.
+:Geert gc:childIn :dp; :gender :M.
+:Caroline gc:childIn :dp; :gender :F.
+:Dirk gc:childIn :dp; :gender :M.
+:Greta gc:childIn :dp; :gender :F.
+:Maria gc:spouseIn :dp; :gender :F.
+:Frans gc:spouseIn :dp; :gender :M.
+
+:Ann gc:childIn :gd; :gender :F.
+:Bart gc:childIn :gd; :gender :M.
+:Rita gc:spouseIn :gd; :gender :F.
+:Paul gc:spouseIn :gd; :gender :M.
+
+:Ann_Sophie gc:childIn :dv; :gender :F.
+:Valerie gc:childIn :dv; :gender :F.
+:Stephanie gc:childIn :dv; :gender :F.
+:Louise gc:childIn :dv; :gender :F.
+:Christine gc:spouseIn :dv; :gender :F.
+:Geert gc:spouseIn :dv; :gender :M.
+
+:Bieke gc:childIn :cd; :gender :F.
+:Tineke gc:childIn :cd; :gender :F.
+:Caroline gc:spouseIn :cd; :gender :F.
+:Hendrik gc:spouseIn :cd; :gender :M.
+
+:Frederik gc:childIn :dc; :gender :M.
+:Stefanie gc:childIn :dc; :gender :F.
+:Stijn gc:childIn :dc; :gender :M.
+:Karolien gc:spouseIn :dc; :gender :F.
+:Dirk gc:spouseIn :dc; :gender :M.
+
+:Lynn gc:childIn :sd; :gender :F.
+:Tom gc:childIn :sd; :gender :M.
+:Greta gc:spouseIn :sd; :gender :F.
+:Marc gc:spouseIn :sd; :gender :M.
+

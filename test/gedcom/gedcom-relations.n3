@@ -1,0 +1,40 @@
+@prefix gc: <http://www.daml.org/2001/01/gedcom/gedcom#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log.n3#>.
+@prefix : <#>.
+
+:gender = gc:sex.
+
+{{:child gc:childIn :family. :parent gc:spouseIn :family} log:implies {:child gc:parent :parent}} a log:Truth; log:forAll :child, :family, :parent.
+{{:child gc:parent :parent. :parent :gender :M} log:implies {:child gc:father :parent}} a log:Truth; log:forAll :child, :parent.
+{{:child gc:parent :parent. :parent :gender :F} log:implies {:child gc:mother :parent}} a log:Truth; log:forAll :child, :parent.
+{{:child gc:parent :parent} log:implies {:parent gc:child :child}} a log:Truth; log:forAll :child, :parent.
+{{:child gc:parent :parent. :child :gender :M} log:implies {:parent gc:son :child}} a log:Truth; log:forAll :child, :parent.
+{{:child gc:parent :parent. :child :gender :F} log:implies {:parent gc:daughter :child}} a log:Truth; log:forAll :child, :parent.
+{{:child gc:parent :parent. :parent gc:parent :grandparent} log:implies {:child gc:grandparent :grandparent}} a log:Truth; log:forAll :child, :parent, :grandparent.
+{{:child gc:grandparent :grandparent. :grandparent :gender :M} log:implies {:child gc:grandfather :grandparent}} a log:Truth; log:forAll :child, :parent, :grandparent.
+{{:child gc:grandparent :grandparent. :grandparent :gender :F} log:implies {:child gc:grandmother :grandparent}} a log:Truth; log:forAll :child, :parent, :grandparent.
+{{:child gc:grandparent :grandparent} log:implies {:grandparent gc:grandchild :child}} a log:Truth; log:forAll :child, :grandparent.
+{{:child gc:grandparent :grandparent. :child :gender :M} log:implies {:grandparent gc:grandson :child}} a log:Truth; log:forAll :child, :grandparent.
+{{:child gc:grandparent :grandparent. :child :gender :F} log:implies {:grandparent gc:granddaughter :child}} a log:Truth; log:forAll :child, :grandparent.
+{{:child1 gc:childIn :family. :child2 gc:childIn :family. {:child1 :equals :child2} log:implies <data:,>} log:implies {:child1 gc:sibling :child2}} a log:Truth; log:forAll :child1, :child2, :family.
+{{:child2 gc:sibling :child1} log:implies {:child1 gc:sibling :child2}} a log:Truth; log:forAll :child1, :child2.
+{{:child gc:sibling :sibling. :sibling :gender :M} log:implies {:child gc:brother :sibling}} a log:Truth; log:forAll :child, :sibling.
+{{:child gc:sibling :sibling. :sibling :gender :F} log:implies {:child gc:sister :sibling}} a log:Truth; log:forAll :child, :sibling.
+{{:spouse1 gc:spouseIn :family. :spouse2 gc:spouseIn :family. {:spouse1 :equals :spouse2} log:implies <data:,>} log:implies {:spouse1 gc:spouse :spouse2}} a log:Truth; log:forAll :spouse1, :spouse2, :family.
+{{:spouse2 gc:spouse :spouse1} log:implies {:spouse1 gc:spouse :spouse2}} a log:Truth; log:forAll :spouse1, :spouse2.
+{{:spouse gc:spouse :husband. :husband :gender :M} log:implies {:spouse gc:husband :husband}} a log:Truth; log:forAll :spouse, :husband.
+{{:spouse gc:spouse :wife. :wife :gender :F} log:implies {:spouse gc:wife :wife}} a log:Truth; log:forAll :spouse, :wife.
+{{:child gc:parent :parent. :parent gc:brother :uncle} log:implies {:child gc:uncle :uncle}} a log:Truth; log:forAll :child, :uncle, :parent.
+{{:child gc:aunt :aunt. :aunt gc:spouse :uncle} log:implies {:child gc:uncle :uncle}} a log:Truth; log:forAll :child, :uncle, :aunt.
+{{:child gc:parent :parent. :parent gc:sister :aunt} log:implies {:child gc:aunt :aunt}} a log:Truth; log:forAll :child, :aunt, :parent.
+{{:child gc:uncle :uncle. :uncle gc:spouse :aunt} log:implies {:child gc:aunt :aunt}} a log:Truth; log:forAll :child, :uncle, :aunt.
+{{:parent gc:daughter :child. :parent gc:sibling :sibling} log:implies {:sibling gc:niece :child}} a log:Truth; log:forAll :sibling, :child, :parent.
+{{:parent gc:son :child. :parent gc:sibling :sibling} log:implies {:sibling gc:nephew :child}} a log:Truth; log:forAll :sibling, :child, :parent.
+{{:cousin1 gc:parent :sibling1. :cousin2 gc:parent :sibling2. :sibling1 gc:sibling :sibling2} log:implies {:cousin1 gc:firstCousin :cousin2}} a log:Truth; log:forAll :cousin1, :cousin2, :sibling1, :sibling2.
+{{:child gc:parent :parent} log:implies {:child gc:ancestor :parent}} a log:Truth; log:forAll :child, :parent.
+{{:child gc:parent :parent. :parent gc:ancestor :ancestor} log:implies {:child gc:ancestor :ancestor}} a log:Truth; log:forAll :child, :parent, :ancestor.
+{{:child gc:ancestor :ancestor} log:implies {:ancestor gc:descendent :child}} a log:Truth; log:forAll :child, :ancestor.
+{{:sibling1 gc:sibling :sibling2. :sibling1 gc:descendent :descendent1. :sibling2 gc:descendent :descendent2} log:implies {:descendent1 gc:cousin :descendent2}} a log:Truth; log:forAll :descendent1, :descendent2, :sibling1, :sibling2.
+
+{:x :equals :x} a log:Truth; log:forAll :x.
+
