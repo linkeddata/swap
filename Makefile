@@ -17,7 +17,13 @@ TESTIN=test/sameDan.n3
 
 #all: yappstest yappsdoc math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf
 
-all: math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf LICENSE.rdf
+all: math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf LICENSE.rdf cwm.tar.Z
+
+# Can't make dependencies on *.py :-(
+
+cwm.tar.Z: cwm.py notation3.py llyn.py  RDFSink.py toXML.py
+	tar -cf cwm.tar *.py
+	compress cwm.tar
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py
 	$(PYTHON) rdfn3_yappstest.py <$(TESTIN) >,xxx.n3
