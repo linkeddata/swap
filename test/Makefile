@@ -25,7 +25,7 @@ fast : $(CODE) regression.n3
 
 
 pyc-check : $(CODE)
-	rm ../*.pyc
+	rm -f ../*.pyc
 	touch pyc-check
 
 loopback :
