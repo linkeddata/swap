@@ -146,6 +146,11 @@ def generate(title, inputfilename, outputfilename=''):
     xwr.startElement('a', [('href', inputfilename)])
     xwr.data(inputfilename)
     xwr.endElement() #a
+    xwr.data(', a ')
+    xwr.startElement('a', [('href', 'http://theory.stanford.edu/~amitp/Yapps/')])
+    xwr.data('YAPPS')
+    xwr.endElement() #a
+    xwr.data(' grammar')
     xwr.endElement() #address
     
     toHTML(t, xwr)
@@ -161,7 +166,10 @@ if __name__ == '__main__':
     main(sys.argv)
 
 # $Log$
-# Revision 1.2  2002-07-17 19:33:48  connolly
+# Revision 1.3  2002-08-15 23:24:17  connolly
+# updated grammar, cited YAPPS
+#
+# Revision 1.2  2002/07/17 19:33:48  connolly
 # published HTML version of relaxNG grammar
 #
 # Revision 1.1  2001/09/01 05:31:17  connolly

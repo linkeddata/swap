@@ -9,8 +9,7 @@
 
     <body>
         <h1>RDF Notation3 Grammar</h1>
-        <address>source: <a href="rdfn3.g">rdfn3.g</a>
-        </address>
+        <address>source: <a href="rdfn3.g">rdfn3.g</a>, a <a href="http://theory.stanford.edu/~amitp/Yapps/">YAPPS</a> grammar</address>
         <dl>
             <dt>
                 <a name="document"
@@ -26,7 +25,7 @@
                 <sub></sub>
             </dt>
             <dd>
-                <tt>"@prefix"</tt> <tt>PREFIX</tt> <tt>URIREF</tt> <tt>"\\."</tt> </dd>
+                <tt>"@prefix"</tt> <tt>PREFIX</tt> <tt>URIREF</tt> <tt>SEP</tt> </dd>
             <dt>
                 <a name="statement"
                     id="statement">statement</a>
@@ -34,7 +33,7 @@
             </dt>
             <dd>
                 <a href="#clause_ind">clause_ind</a>
-                <sub>scp</sub> <tt>"\\."</tt> </dd>
+                <sub>scp</sub> <tt>SEP</tt> </dd>
             <dt>
                 <a name="clause_ind"
                     id="clause_ind">clause_ind</a>
@@ -42,11 +41,11 @@
             </dt>
             <dd>( <a href="#phrase">phrase</a>
                 <sub>scp</sub> [ <a href="#predicate">predicate</a>
-                <sub>scp, phrase</sub> ( <tt>";"</tt> <a href="#predicate">predicate</a>
-                <sub>scp, phrase</sub>  ) *  ]  ) <br class=""/> | ( <a href="#term">term</a>
+                <sub>scp, phrase</sub> ( <tt>PSEP</tt> [ <a href="#predicate">predicate</a>
+                <sub>scp, phrase</sub>  ]  ) *  ] [ <tt>PTERM</tt>  ]  ) <br class=""/> | ( <a href="#term">term</a>
                 <sub>scp</sub> <a href="#predicate">predicate</a>
-                <sub>scp, term</sub> ( <tt>";"</tt> <a href="#predicate">predicate</a>
-                <sub>scp, term</sub>  ) *  ) </dd>
+                <sub>scp, term</sub> ( <tt>PSEP</tt> [ <a href="#predicate">predicate</a>
+                <sub>scp, term</sub>  ]  ) * [ <tt>PTERM</tt>  ]  ) </dd>
             <dt>
                 <a name="term"
                     id="term">term</a>
@@ -92,7 +91,7 @@
                     id="expr">expr</a>
                 <sub>scp</sub>
             </dt>
-            <dd>( <tt>"this"</tt>  ) <br class=""/> | ( <tt>EXVAR</tt>  ) <br class=""/> | ( <tt>UVAR</tt>  ) <br class=""/> | ( <tt>STRLIT3</tt>  ) <br class=""/> | ( <tt>STRLIT1</tt>  ) <br class=""/> | ( <tt>STRLIT2</tt>  ) <br class=""/> | ( <a href="#list">list</a>
+            <dd>( <tt>"this"</tt>  ) <br class=""/> | ( <tt>EXVAR</tt>  ) <br class=""/> | ( <tt>UVAR</tt>  ) <br class=""/> | ( <tt>INTLIT</tt>  ) <br class=""/> | ( <tt>STRLIT3</tt>  ) <br class=""/> | ( <tt>STRLIT1</tt>  ) <br class=""/> | ( <tt>STRLIT2</tt>  ) <br class=""/> | ( <a href="#list">list</a>
                 <sub>scp</sub>  ) <br class=""/> | ( <a href="#phrase">phrase</a>
                 <sub>scp</sub>  ) <br class=""/> | ( <a href="#clause_sub">clause_sub</a>
                 <sub></sub>  ) </dd>
@@ -102,8 +101,16 @@
                 <sub>scp</sub>
             </dt>
             <dd>
-                <tt>"\\("</tt> <a href="#term">term</a>
-                <sub>scp</sub> * <tt>"\\)"</tt> </dd>
+                <tt>"\\("</tt> <a href="#item">item</a>
+                <sub>scp, items</sub> * <tt>"\\)"</tt> </dd>
+            <dt>
+                <a name="item"
+                    id="item">item</a>
+                <sub>scp, items</sub>
+            </dt>
+            <dd>
+                <a href="#term">term</a>
+                <sub>scp</sub> </dd>
             <dt>
                 <a name="phrase"
                     id="phrase">phrase</a>
@@ -111,8 +118,8 @@
             </dt>
             <dd>
                 <tt>"\\["</tt> [ <a href="#predicate">predicate</a>
-                <sub>scp, subj</sub> ( <tt>";"</tt> <a href="#predicate">predicate</a>
-                <sub>scp, subj</sub>  ) * [ <tt>";"</tt>  ]  ] <tt>"\\]"</tt> </dd>
+                <sub>scp, subj</sub> ( <tt>PSEP</tt> <a href="#predicate">predicate</a>
+                <sub>scp, subj</sub>  ) * [ <tt>PTERM</tt>  ]  ] <tt>"\\]"</tt> </dd>
             <dt>
                 <a name="clause_sub"
                     id="clause_sub">clause_sub</a>
@@ -120,8 +127,8 @@
             </dt>
             <dd>
                 <tt>"{"</tt> [ <a href="#clause_ind">clause_ind</a>
-                <sub>scp</sub> ( <tt>"\\."</tt> <a href="#clause_ind">clause_ind</a>
-                <sub>scp</sub>  ) * [ <tt>"\\."</tt>  ]  ] <tt>"}"</tt> </dd>
+                <sub>scp</sub> ( <tt>SEP</tt> <a href="#clause_ind">clause_ind</a>
+                <sub>scp</sub>  ) * [ <tt>TERM</tt>  ]  ] <tt>"}"</tt> </dd>
         </dl>
     </body>
 </html>
