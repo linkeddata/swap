@@ -10,6 +10,7 @@
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log.n3#>.
+@prefix is: <http://www.w3.org/2001/05id/infoset#> . #@@ move this there.
 @prefix : <#>. #variables
 
 iu:propertyName rdfs:label "property name";
@@ -81,9 +82,9 @@ iu:pattern rdfs:label "pattern";
   rdfs:domain rdfs:Class.
 
 iu:StandAloneType rdfs:label "Standalone Type";
-  dpo:oneOf ( :yes :no ).
+  dpo:oneOf ( is:yes is:no ).
 iu:NoValue rdfs:label "No Value";
-  dpo:oneOf ( :noValue ). #@@ cf bottom in KIF v3
+  dpo:oneOf ( is:noValue ). #@@ cf bottom in KIF v3
 
 ## Set utilities...
          

@@ -1,5 +1,5 @@
 /* transformed by by Id: rdf2dot.xsl,v 1.10 2001/05/09 20:29:01 connolly Exp  */
-digraph N1475 {
+digraph N1523 {
 label="XML Infoset $Date$";
 rankdir="LR";
 "http://www.w3.org/2001/05id/infoset#Document" [color="skyblue1",
@@ -157,6 +157,14 @@ color="skyblue2",
 style="filled",
 label="Standalone Type",
 ];
+"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#StandAloneType" -> "http://www.w3.org/2001/05id/infoset#yes" [ /* edge attributes */
+label="one of...",
+color="green",
+];
+"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#StandAloneType" -> "http://www.w3.org/2001/05id/infoset#no" [ /* edge attributes */
+label="one of...",
+color="green",
+];
 "http://www.w3.org/2001/05id/infoset#Version" [label="Version",
 ];
 "http://www.w3.org/2001/05id/infoset#Version" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NoValue" [ /* edge attributes */
@@ -287,6 +295,12 @@ label="Name",
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Name" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#String" [ /* edge attributes */
 color="skyblue2",
 ];
+"http://www.w3.org/2001/05id/infoset#yes" [label="yes",
+shape="plaintext",
+];
+"http://www.w3.org/2001/05id/infoset#no" [label="no",
+shape="plaintext",
+];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NoValue" [color="skyblue1",
 style="filled",
 label="No Value",
@@ -299,6 +313,10 @@ color="skyblue2",
 ];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NoValue" -> "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Prefix" [ /* edge attributes */
 color="skyblue2",
+];
+"file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NoValue" -> "http://www.w3.org/2001/05id/infoset#noValue" [ /* edge attributes */
+label="one of...",
+color="green",
 ];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#VersionNum" [color="skyblue1",
 style="filled",
@@ -332,6 +350,9 @@ color="green",
 ];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#AttributeType" [label="Attribute Type",
 ];
+"http://www.w3.org/2001/05id/infoset#noValue" [label="no value",
+shape="plaintext",
+];
 "file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#true" [label="true",
 shape="plaintext",
 ];
@@ -356,7 +377,7 @@ style="filled",
 label="Character",
 shape="diamond",
 ];
-subgraph clusterN1449 {
+subgraph clusterN1497 {
 label="Items and Properties";
 "mid:abcXX#anItem" [color="skyblue1",
 style="filled",

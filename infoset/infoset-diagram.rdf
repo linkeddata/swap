@@ -245,6 +245,9 @@ This RDF schema's namespace name
         <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs50"/>
         <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs51"/>
         <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs52"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs53"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs54"/>
+        <log:forSome rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs55"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs47">
@@ -404,13 +407,14 @@ This RDF schema's namespace name
 
     <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs48">
         <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
-        <dot:color>purple</dot:color>
+        <dot:label>one of...</dot:label>
+        <dot:color>green</dot:color>
     </rdf:Description>
 
     <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs49">
         <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>one of...</dot:label>
         <dot:color>green</dot:color>
-        <dot:style>bold</dot:style>
     </rdf:Description>
 
     <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs25">
@@ -461,16 +465,27 @@ This RDF schema's namespace name
         <dot:color>purple</dot:color>
     </rdf:Description>
 
-    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs50">
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs54">
         <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
         <dot:color>green</dot:color>
         <dot:style>bold</dot:style>
     </rdf:Description>
 
-    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs51">
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs55">
         <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
         <dot:color>green</dot:color>
         <dot:style>bold</dot:style>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs50">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:label>one of...</dot:label>
+        <dot:color>green</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs51">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:color>purple</dot:color>
     </rdf:Description>
 
     <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs38">
@@ -497,6 +512,12 @@ This RDF schema's namespace name
         <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
         <dot:label>parent</dot:label>
         <dot:color>blue</dot:color>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs53">
+        <rdf:type rdf:resource="http://www.w3.org/2001/02pd/gv#EdgeProperty"/>
+        <dot:color>green</dot:color>
+        <dot:style>bold</dot:style>
     </rdf:Description>
 
     <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#_gs52">
@@ -667,11 +688,14 @@ This RDF schema's namespace name
         <dot:hasNode rdf:resource="http://www.w3.org/2001/05id/infoset#Namespace"/>
         <dot:hasNode rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
         <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Name"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/05id/infoset#yes"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/05id/infoset#no"/>
         <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NoValue"/>
         <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#VersionNum"/>
         <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#String"/>
         <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Boolean"/>
         <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#AttributeType"/>
+        <dot:hasNode rdf:resource="http://www.w3.org/2001/05id/infoset#noValue"/>
         <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#true"/>
         <dot:hasNode rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#false"/>
         <dot:hasNode rdf:resource="http://www.w3.org/2001/05id/infoset#DocumentTypeDeclaration"/>
@@ -710,6 +734,10 @@ This RDF schema's namespace name
         <dot:color>skyblue1</dot:color>
         <dot:style>filled</dot:style>
         <dot:label>Standalone Type</dot:label>
+        <_gs48 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/05id/infoset#yes"/>
+        <_gs49 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/05id/infoset#no"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#AbsoluteURI">
@@ -778,6 +806,8 @@ This RDF schema's namespace name
             rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NamespaceName"/>
         <gSubClassOf xmlns="mid:abcXX#"
             rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Prefix"/>
+        <_gs50 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+            rdf:resource="http://www.w3.org/2001/05id/infoset#noValue"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#propertyName">
@@ -852,9 +882,9 @@ This RDF schema's namespace name
             rdf:resource="http://www.w3.org/2001/05id/infoset#Element"/>
         <_gs45 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
             rdf:resource="http://www.w3.org/2001/05id/infoset#ProcessingInstruction"/>
-        <_gs50 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+        <_gs53 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
             rdf:resource="http://www.w3.org/2001/05id/infoset#Character"/>
-        <_gs52 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+        <_gs55 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
             rdf:resource="http://www.w3.org/2001/05id/infoset#Comment"/>
     </rdf:Description>
 
@@ -902,9 +932,9 @@ This RDF schema's namespace name
             rdf:resource="http://www.w3.org/2001/05id/infoset#Element"/>
         <_gs43 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
             rdf:resource="http://www.w3.org/2001/05id/infoset#ProcessingInstruction"/>
-        <_gs49 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+        <_gs52 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
             rdf:resource="http://www.w3.org/2001/05id/infoset#Comment"/>
-        <_gs51 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+        <_gs54 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
             rdf:resource="http://www.w3.org/2001/05id/infoset#DocumentTypeDeclaration"/>
     </rdf:Description>
 
@@ -1186,7 +1216,7 @@ This RDF schema's namespace name
             rdf:resource="http://www.w3.org/2001/05id/infoset#Element"/>
         <_gs36 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
             rdf:resource="http://www.w3.org/2001/05id/infoset#Document"/>
-        <_gs48 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
+        <_gs51 xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/#"
             rdf:resource="http://www.w3.org/2001/05id/infoset#DocumentTypeDeclaration"/>
     </rdf:Description>
 
@@ -1555,10 +1585,6 @@ This RDF schema's namespace name
         <log:implies rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#_g22"/>
     </rdf:Description>
 
-    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#yes">
-        <rdf:type rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#_g12"/>
-    </rdf:Description>
-
     <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#C2">
         <iu:setOf rdf:resource="http://www.w3.org/2001/05id/infoset#Notation"/>
         <iu:setOf rdf:resource="http://www.w3.org/2001/05id/infoset#UnparsedEntity"/>
@@ -1580,9 +1606,9 @@ This RDF schema's namespace name
     </rdf:Description>
 
     <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#_g14">
-        <dpo:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#noValue"/>
+        <dpo:first rdf:resource="http://www.w3.org/2001/05id/infoset#noValue"/>
         <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-        <dl:member rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#noValue"/>
+        <dl:member rdf:resource="http://www.w3.org/2001/05id/infoset#noValue"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#_g15">
@@ -1591,16 +1617,16 @@ This RDF schema's namespace name
     </rdf:Description>
 
     <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#_g12">
-        <dpo:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#yes"/>
+        <dpo:first rdf:resource="http://www.w3.org/2001/05id/infoset#yes"/>
         <dpo:rest rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#_g13"/>
-        <dl:member rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#yes"/>
-        <dl:member rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#no"/>
+        <dl:member rdf:resource="http://www.w3.org/2001/05id/infoset#yes"/>
+        <dl:member rdf:resource="http://www.w3.org/2001/05id/infoset#no"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#_g13">
-        <dpo:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#no"/>
+        <dpo:first rdf:resource="http://www.w3.org/2001/05id/infoset#no"/>
         <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-        <dl:member rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#no"/>
+        <dl:member rdf:resource="http://www.w3.org/2001/05id/infoset#no"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#_g10">
@@ -1614,10 +1640,6 @@ This RDF schema's namespace name
         <dpo:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NCName"/>
         <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
         <dl:member rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NCName"/>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#no">
-        <rdf:type rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#_g12"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#_g30">
@@ -1647,10 +1669,6 @@ This RDF schema's namespace name
         <dpo:first rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#false"/>
         <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
         <dl:member rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#false"/>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#noValue">
-        <rdf:type rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#_g14"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/01/rdf-schema#Class">
@@ -1898,7 +1916,9 @@ This RDF schema's namespace name
 
     <rdf:Description rdf:about="http://www.w3.org/2001/05id/infoset#yes">
         <rdfs:label>yes</rdfs:label>
+        <rdf:type rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#_g12"/>
         <dot:label>yes</dot:label>
+        <dot:shape>plaintext</dot:shape>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2001/05id/infoset#IDREF">
@@ -1959,7 +1979,9 @@ This RDF schema's namespace name
 
     <rdf:Description rdf:about="http://www.w3.org/2001/05id/infoset#no">
         <rdfs:label>no</rdfs:label>
+        <rdf:type rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#_g12"/>
         <dot:label>no</dot:label>
+        <dot:shape>plaintext</dot:shape>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2001/05id/infoset#Notation">
@@ -2149,6 +2171,8 @@ This RDF schema's namespace name
 
     <rdf:Description rdf:about="http://www.w3.org/2001/05id/infoset#noValue">
         <rdfs:label>no value</rdfs:label>
+        <rdf:type rdf:resource="file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil.n3#_g14"/>
         <dot:label>no value</dot:label>
+        <dot:shape>plaintext</dot:shape>
     </rdf:Description>
 </rdf:RDF>
