@@ -84,12 +84,12 @@ cygwin (a unix-like environment for Windows) and run everything in there.</p>
   <li><a href="../cwm.tgz">cwm.tgz</a></li>
 </ul>
 
-<p>Get that, unwrap it in some suitable directory. </p>
+<p>Get that, unwrap it in some suitable directory.</p>
 
 <p>Set up an alias (.bat file, etc) to make the cwm command. In bash this
 is:</p>
 
-<p> <code>cwm="python /whereverYouPutThem/cwm.py"</code></p>
+<p><code>cwm="python /whereverYouPutThem/cwm.py"</code></p>
 
 <p>You should be all set.</p>
 
@@ -100,9 +100,8 @@ guaranteed but is open source and available if you want to play.</p>
 <dl>
   <dt>Using CVS</dt>
     <dd>from the <a href="http://dev.w3.org/cvsweb/">public w3c CVS
-      repository</a>.  Check out the whole tree to develop.  This includes
-      the test data - if you don't need that, delete the test
-    subdirectory.</dd>
+      repository</a>. Check out the whole tree to develop. This includes the
+      test data - if you don't need that, delete the test subdirectory.</dd>
   <dt>From the web</dt>
     <dd>Get the files one by one. <a href="/2000/10/swap/cwm.py">cwm.py</a>
       is the main application file. You can browse the source files on the
@@ -149,7 +148,10 @@ manipulator for RDF on the lines of sed, awk, etc or xsl.</p>
 <h4 id="Command">Command line parameters</h4>
 
 <p>Some, marked (flag), can occur anywhere on the command line. The others
-are processed in order from left to right.</p>
+are processed in order from left to right.  So the command line is like a
+small program, doing one thing after annother to the data.  The input and
+output mode flags can be changed several times, and the value used is that in
+effect as the command line arguments are executed from left to right..</p>
 <dl>
   <dt>--help</dt>
     <dd>generate a <strong>more up to date</strong> list of parameters!</dd>
@@ -260,7 +262,7 @@ rules.</p>
 
 <p>See the <a href="../log.n3">schema.</a> This module has terms which cwm
 understands and which extend the power of the language from just a data
-language to a query language </p>
+language to a query language</p>
 
 <p><code>@prefix math: &lt;</code><a
 href="../log.n3"><code>http://www.w3.org/2000/10/swap/log</code></a>#<code>&gt;</code>
@@ -277,7 +279,7 @@ href="http://www.w3.org/2000/10/swap/math"><code>http://www.w3.org/2000/10/swap/
 
 <h3>String</h3>
 
-<p>Simple string functions. </p>
+<p>Simple string functions.</p>
 
 <p><code>@prefix string: &lt;</code><a
 href="http://www.w3.org/2000/10/swap/string"><code>http://www.w3.org/2000/10/swap/string</code></a><code>#&gt;</code>
