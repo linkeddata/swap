@@ -47,8 +47,10 @@ style="float: right" src="../../../../RDF/icons/n3_small" />
 <ul>
   <li>Distribution mechanisms 
     <ul>
-      <li>tarball (with test) (<em>done in 0.8</em>)</li>
-      <li>pyton setup.py <em>(in progress as of 22 Jul. Now works - yosi
+      <li>tarball (with test) (<em>done in 0.8.  Broken 2004-11-02 by
+        setup.py work. make cwm.tar.gz bulds a bad tarball.   make
+        setup_tarball works.</em>)</li>
+      <li>python setup.py <em>(in progress as of 22 Jul. Now works - yosi
         2004/9/3.)</em></li>
       <li>dpkg debian packaging Done once setup.py -&gt; RPM -alien-&gt;
         debian</li>
@@ -57,7 +59,7 @@ style="float: right" src="../../../../RDF/icons/n3_small" />
   <li>allow alternative parsers; in particular, 
     <ul>
       <li>RDFlib 22Jul: should be working, but test integration remains (Does
-        all RDF parser tests  -- yosi)) 20040907)</li>
+        all RDF parser tests -- yosi)) 20040907)</li>
     </ul>
   </li>
   <li>N3 formal grammar (<a
@@ -70,13 +72,13 @@ style="float: right" src="../../../../RDF/icons/n3_small" />
     systems and clones. (written - yosi)</li>
   <li>connect with semwebcentral <em>(Now exists on semwebcentral as much as
     it can link to its w3.or home 2004/9/1)</em></li>
-  <li>Bugs:
+  <li>Bugs: 
     <ul>
-      <li> --patch diff.py now can generate weak deltas when necessary, when
-        the graphs are not solid
+      <li>--patch diff.py now can generate weak deltas when necessary, when
+        the graphs are not solid 
         <p>Offline working hack in webaccess.py</p>
         <p>Fixed bug in llyn.py with interning of datatyped literals giving
-        diff objects for same type  sometimes. </p>
+        diff objects for same type sometimes.</p>
       </li>
     </ul>
   </li>
