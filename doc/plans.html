@@ -47,24 +47,35 @@ style="float: right" src="../../../../RDF/icons/n3_small" />
 <ul>
   <li>Distribution mechanisms 
     <ul>
-      <li>tarball (with test) (<em>done in 0.8.  Broken 2004-11-02 by
-        setup.py work. make cwm.tar.gz bulds a bad tarball.   make
-        setup_tarball works.</em>)</li>
+      <li>tarball (with test) (<em>done in 0.8. Broken 2004-11-02 by setup.py
+        work. make cwm.tar.gz bulds a bad tarball. make setup_tarball
+        works.</em>)</li>
       <li>python setup.py <em>(in progress as of 22 Jul. Now works - yosi
-        2004/9/3.)</em></li>
-      <li>dpkg debian packaging Done once setup.py -&gt; RPM -alien-&gt;
-        debian</li>
+        2004/9/3. )</em></li>
+      <li>dpkg debian packagin: setup.py -&gt; RPM -alien-&gt; debian 
+        (<em>Works iff you run it on Linux --&gt; releases should be done on
+        linux.  Dependencies? apt-get alien. 2004-11-05)</em></li>
     </ul>
   </li>
   <li>allow alternative parsers; in particular, 
     <ul>
-      <li>RDFlib 22Jul: should be working, but test integration remains (Does
-        all RDF parser tests -- yosi)) 20040907)</li>
+      <li>RDFlib 22Jul: should be working,  (Does all RDF parser tests --
+        yosi)) 20040907)  (20041105 negative parser tests too now in
+        pre-release tests.).</li>
     </ul>
   </li>
   <li>N3 formal grammar (<a
     href="http://lists.w3.org/Archives/Public/public-cwm-bugs/2004Jun/0015.html">RFE
-    10 Jul)</a></li>
+    10 Jul</a>) Not included in test as of 2004-11-10.
+    <ul>
+      <li>20041105:  predictiveParser.py does all the positive parser tests
+        yosi has come up with.  (Does not pass all negative parser tests.).
+        The tests are only run pre-release (to check consistency of tests and
+        grammar) not in post release.  <em>TODO:  Include the grammar code in
+        the tarball.  Negative test generation and inclusion of Turtle
+        negative tests wait for 1.1</em></li>
+    </ul>
+  </li>
   <li>--think --filter combination. The application of rules to the
     [notional] deductive closure of a formula is a function which is equally
     valid in forward and backward chaining systems. Providing it will allow
