@@ -36,12 +36,16 @@ with up till now, this would look something like</p>
 <p>which reads "that which is the zipcode of that which is the address of
 that which is the home of that which is the assistant of that which is the
 mother of :George", which isn't very conventient to read or write. And this
-is when in ant object-oriented langauge, you would just cascade methods or
+is when in an object-oriented langauge, you would just cascade methods or
 attributes on properties using ".".</p>
 
 <p>To make it easier in N3 there is a shortcut for the above would just be
 written</p>
-<pre>:George.rel:mother.off:assistant.con:home.con:address.con:zipcode</pre>
+<pre>:George.rel:mother
+          .off:assistant
+            .con:home
+              .con:address
+                 .con:zipcode</pre>
 
 <p></p>
 
@@ -59,7 +63,7 @@ if :me.con:mailbox means my mailbox, then
 usual - you can't do it object-oriented programming langauges -- but
 sometimes its what you need.</p>
 
-<p>Note that there isn't necessraily only one match for a path - often there
+<p>Note that there isn't necessarily only one match for a path - often there
 are many, when it is used on the left side of a rule.</p>
 <pre>:me.rel:parent</pre>
 
@@ -90,7 +94,10 @@ are:</p>
 
 (:x :y)
 
-( :cust.bus:order.bus:number  :cust.bus:order.bus:referncedPurchaseOrder.bus:number )</pre>
+( :cust.bus:order.bus:number 
+  :cust.bus:order
+      .bus:referncedPurchaseOrder
+          .bus:number )</pre>
 
 <p>These lists are actually shorthand for statements which knit blank nodes
 together using <code>rdf:first</code> and <code>rdf:rest</code>.
@@ -108,7 +115,8 @@ for the empty list. Therefore,</p>
 
 <p>One of the common uses of lists is as parameter to a relationship which
 ihas more than one argment.</p>
-<pre>(  "Dear " ?name " "," )   string:conatenation   ?salutation.</pre>
+<pre>(  "Dear " ?name " "," )   
+             string:conatenation   ?salutation.</pre>
 
 <p></p>
 
