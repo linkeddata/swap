@@ -1,4 +1,4 @@
-"""
+"""Provides the KB class.
 """
 __version__ = "$Revision$"
 # $Id$
@@ -14,7 +14,7 @@ class KB(list):
     """A Knowledge Base, a list of implicitely conjoined sentences.
 
     This is comparable to an RDF Graph if the Sentences here are all
-    triples.
+    plain triples.
 
     Actually it's more complicated: we have a list of top level
     quantifications, too, so the elements can be open formulas iff
@@ -33,11 +33,24 @@ class KB(list):
     interpretations of constant symbols.  If you want to say something
     about the integer 57, you can make a symbol
 
-       my57 = LX.fol.Constant("the number fifty-seven")
+    >>> from LX.all import *
+    >>> my57 = Constant(suggestedName="the number fifty-seven")
 
-    and say kb.interpret(my57, 57) to let other modules
-    know that you mean the symbol my57 in the KB to stand for the
-    (python) number 57.  This information is lost in a plain
+    and then tell your kb that that symbol actually MEANS what python
+    means by the number 57.
+    
+    >>> kb = KB()
+    >>> kb.interpret(my57, 57)
+    >>> print kb.getInterpretations(my57)
+    [57]
+
+    Now other bits of code using your kb can see and use that fact.
+    If you want to serialize the kb in a language that has integers,
+    it can just use that fact.  Alternatively, you could rewrite that
+    interpretation information into other information, perhaps using
+    URIs.
+
+    [ This information is lost in a plain
     conversion of the KB to a Formula, unless there are describers
     used/usable to encode it into more formulas.  Those describers
     still need SOME fixed-interpretation objects (eg Zero and Succ,
@@ -50,6 +63,7 @@ class KB(list):
     works okay -- ie what KB is most strongly denoted by the URI?
     (Sometimes I think we'd be better of with just a basis vocabulary
     for describing strings, and an englishDenotation() function.)
+    ]
     
     """
 
@@ -57,7 +71,8 @@ class KB(list):
         self.exivars = []
         self.univars = []
         self.exIndex = 0
-        self.interpretation = { }
+        self.__interpretation = { }
+        self.__revInterpretation = { }
 
     def clear(self):
         self.__init__()
@@ -69,8 +84,8 @@ class KB(list):
         result+= "\n  exivars: "+", ".join(map(LX.expr.getNameInScope, self.exivars, [scope] * len(self.exivars)))
         result+= "\n  univars: "+", ".join(map(LX.expr.getNameInScope, self.univars, [scope] * len(self.univars)))
         result+= "\n  interpretation: "
-        for (key,valueList) in self.interpretation.iteritems():
-            result+="\n     %s -->  %s"%(key.getNameInScope(scope), ", ".join(valueList))
+        for (key,valueList) in self.__interpretation.iteritems():
+            result+="\n     %s -->  %s"%(key.getNameInScope(scope), ", ".join(map(str, valueList)))
         result+= "\n  formulas: "
         result+= "\n     "
         result+= "\n     ".join(map(LX.expr.getNameInScope, self, [scope] * len(self)))
@@ -80,10 +95,11 @@ class KB(list):
         return result
     
     def interpret(self, term, object):
-        try:
-            self.interpretation[term].append(object)
-        except KeyError:
-            self.interpretation[term] = [object]
+        self.__interpretation.setdefault(term, []).append(object)
+        self.__revInterpretation.setdefault(object, []).append(term)
+
+    def getInterpretations(self, term):
+        return self.__interpretation[term]
 
     def asFormulaString(self):
         scope = defaultScope.copy()
@@ -96,11 +112,11 @@ class KB(list):
     def asFormula(self):
         result = self[0]
         for s in self[1:]:
-            result = LX.fol.AND(result, s)
+            result = LX.logic.AND(result, s)
         for v in self.univars:
-            result = LX.fol.FORALL(v, result)
+            result = LX.logic.FORALL(v, result)
         for v in self.exivars:
-            result = LX.fol.EXISTS(v, result)
+            result = LX.logic.EXISTS(v, result)
         return result
        
     def prep(kb):
@@ -113,8 +129,15 @@ class KB(list):
     prep = staticmethod(prep)
 
     def add(self, formula, p=None, o=None):
+        """
+        SHOULD allow non-constants, and replace them with constants
+        and user interp() to link to the other thing?   But also
+        look up if we already have a symbol for that?
+
+        needed for    rdf.py's    flatten kind of stuff.
+        """
         if (p):
-            self.append(LX.fol.RDF(s,p,o))
+            self.append(LX.logic.RDF(s,p,o))
             return
         # assert(isinstance(formula, LX.Formula))
         #####assert(LX.fol.isFirstOrderFormula(formula))
@@ -130,7 +153,7 @@ class KB(list):
 
     def newExistential(self, name=None):
         if name is None: name = "g"
-        v = LX.fol.ExiVar(name)
+        v = LX.logic.ExiVar(name)
         self.exivars.append(v)
         return v
 
@@ -142,9 +165,10 @@ class KB(list):
         >>> import LX.expr
         >>> a=LX.expr.AtomicExpr("joe")
         >>> b=LX.expr.AtomicExpr("joe")
-        >>> kb = LX.KB()
+        >>> kb = LX.kb.KB()
         >>> kb.add(a(b))
-        >>> kb.describeInterpretation( {b:[a,b]} )   loop check?!
+
+        xxx kb.describeInterpretation( {b:[a,b]} )   loop check?!
         """
         raise RuntimeError, "Not Implemented"
     
@@ -220,15 +244,19 @@ class KB(list):
         """
 
 def _test():
-    import doctest, expr
-    return doctest.testmod(expr) 
+    import doctest, kb
+    return doctest.testmod(kb) 
 
 if __name__ == "__main__": _test()
 
  
 # $Log$
-# Revision 1.7  2003-02-01 05:58:10  sandro
-# intermediate lbase support; getting there but buggy; commented out some fol chreccks
+# Revision 1.8  2003-02-13 19:48:31  sandro
+# a little more thinking/comment about interpretations
+#
+# Revision 1.7  2003/02/01 05:58:10  sandro
+# intermediate lbase support; getting there but buggy; commented out
+# some fol checks 
 #
 # Revision 1.6  2003/01/29 20:59:34  sandro
 # Moved otter language support back from engine/otter to language/otter
@@ -254,7 +282,8 @@ if __name__ == "__main__": _test()
 # not sure
 #
 # Revision 1.2  2002/08/29 16:39:55  sandro
-# fixed various early typos and ommissions; working on logic bug which is manifesting in description loops
+# fixed various early typos and ommissions; working on logic bug which
+# is manifesting in description loops  
 #
 # Revision 1.1  2002/08/29 11:00:46  sandro
 # initial version, mostly written or heavily rewritten over the past
