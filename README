@@ -1,34 +1,22 @@
+$Id$
 
-Cwm 
-
-1. About this file:
-	This is the README file included in the distribution of Cwm. 
-It tells how to test and run Cwm.
-
-2. Table of contents:
-	1. About this file
-	2. Table of contents
-	3. About Cwm.
-	4. License
-	5. Getting started
-	6. Submitting Bugs.
-
-
-3. About Cwm
-	Cwm is a general-purpose data processor for the semantic 
+Cwm is a general-purpose data processor for the semantic 
 web, somewhat like sed, awk, etc. for text files or XSLT for XML. 
 It is a forward chaining reasoner which can be used for querying, 
 checking, transforming and filtering information. Its core 
 language is RDF, extended to include rules, and it uses RDF/XML 
 or RDF/N3 (see Notation3 Primer) serializations as required.
-To find out more about Cwm, visit 
-http://www.w3.org/2000/10/swap/doc/cwm.html
 
-5. Getting Started
+To find out more about Cwm, visit 
+ http://www.w3.org/2000/10/swap/doc/cwm.html
+
+== Getting Started ==
+
 Unpack this tarball in a useful place. cd to that directory and type:
   cd test; make
 at the command line. It should spend a while testing to make sure
 the program is working.
+
 If a test fails: There are three possiblilities:
 	1. Your Python setup is borked / sufficiently different from the
 		one used in development. This is a distinct possiblility.
@@ -46,7 +34,8 @@ The test files should give you a good idea of commands to get
 Cwm to work. 
 
 
-6. Submitting Bugs
+== Submitting Bugs ==
+
 Cwm is very much a work in progress and has many bugs. 
 Some of them we already know about. Cwm bugs are tracked
 on the public Cwm bug mail list, 
@@ -55,10 +44,12 @@ any bugs you find there, assuming they have not already been
 submitted. Reply to a previous bug report if you have something
 to add. 
 
-4.License
-See the attached files, LICENSE.n3 and LICENSE
+== License ==
 
-7. Contributers:
+cwm is open source. Share and Enjoy.
+For details, see the attached files, LICENSE.n3 and LICENSE
+
+== Contributers ==
 Tim Berners-Lee
 Dan Connolly
 Sean Palmer
