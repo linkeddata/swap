@@ -56,6 +56,8 @@ SUBJ = 1
 OBJ = 2
 PARTS = [ PRED, SUBJ, OBJ]
 
+chatty = 0   # verbosity flag
+
 N3CommentCharacter = "#"     # For unix script #! compatabilty
 
 class Parser:
@@ -81,7 +83,9 @@ class Parser:
 	    if j<0: return
 
             i = self.directiveOrStatement(str,j)
-            if i<0: raise BadSyntax(str, j, "expected directive or statement")
+            if i<0:
+                print "# next char: ", `str[j]` 
+                raise BadSyntax(str, j, "expected directive or statement")
 
     def directiveOrStatement(self, str,h):
     
@@ -104,12 +108,18 @@ class Parser:
 
     def tok(self, tok, str, i):
         """tokenizer strips whitespace and comment"""
-	while i<len(str) and str[i] in string.whitespace:
-	    i = i + 1
-	if i == len(str): return -1
-	if str[i] == N3CommentCharacter:     # "#"?
-            while i<len(str) and str[i] != "\n":
-                i = i + 1
+        j = self.skipSpace(str,i)
+        if j<0: return j
+        i = j
+        
+#	while 1:
+#            while i<len(str) and str[i] in string.whitespace:
+#                i = i + 1
+#            if i == len(str): return -1
+#            if str[i] == N3CommentCharacter:     # "#"?
+#                while i<len(str) and str[i] != "\n":
+#                    i = i + 1
+#            else: break
 	if str[i:i+len(tok)] == tok:
 	    i = i + len(tok)
 	    return i
@@ -329,12 +339,14 @@ class Parser:
 		return -1
 
     def skipSpace(self, str, i):
-	while i<len(str) and str[i] in string.whitespace: i = i + 1
-	if i == len(str): return -1
-	if str[i] == N3CommentCharacter:
-            while i<len(str) and str[i] != "\n": i = i + 1
-	if i == len(str): return -1
-
+	while 1:
+            while i<len(str) and str[i] in string.whitespace:
+                i = i + 1
+            if i == len(str): return -1
+            if str[i] == N3CommentCharacter:     # "#"?
+                while i<len(str) and str[i] != "\n":
+                    i = i + 1
+            else: break
 	return i
 
     def qname(self, str, i, res):
@@ -803,7 +815,7 @@ bind default <>
 #    p=SinkParser(RDFSink(),'http://example.org/base/', 'file:notation3.py',
 #		     'data:#')
 
-    r=SinkParser(SinkToN3(sys.stdout.write, intern('file:output')),
+    r=SinkParser(SinkToN3(sys.stdout.write, 'file:output'),
                   thisURI,'http://example.org/base/',)
     r.startDoc()
     
@@ -832,15 +844,15 @@ bind default <>
 
     print "\n\n------------------ dumping chronologically:"
 
-    store.dumpChronological(SinkToN3(sys.stdout.write, intern('file://dev/mta0')))
+    store.dumpChronological(SinkToN3(sys.stdout.write, 'file://dev/mta0'))
 
     print "\n\n---------------- dumping in subject order:"
 
-    store.dumpBySubject(thisDoc, SinkToN3(sys.stdout.write))
+    store.dumpBySubject(thisDoc, SinkToN3(sys.stdout.write, thisURI))
 
     print "\n\n---------------- dumping nested:"
 
-    store.dumpNested(thisDoc, SinkToN3(sys.stdout.write, thisDoc))
+    store.dumpNested(thisDoc, SinkToN3(sys.stdout.write, thisURI))
 
     print "Regression test **********************************************"
 
@@ -874,7 +886,7 @@ def reformat(str, thisDoc):
         print str
         print "================= ENDs"
     buffer=StringWriter()
-    r=SinkParser(SinkToN3(buffer.write, thisDoc),
+    r=SinkParser(SinkToN3(buffer.write, `thisDoc`),
                   'file:notation3.py')
     r.startDoc()
     r.feed(str)
@@ -903,7 +915,7 @@ class RDFSink:
             if not self.namespaces.get(prefix,None):   # For conventions
                 self.prefixes[ns] = prefix
                 self.namespaces[prefix] = ns
-                print "RDFSink: Bound %s to %s" % (prefix, `ns`)
+                if chatty: print "# RDFSink: Bound %s to %s" % (prefix, `ns`)
             else:
                 self.bind(prefix+"1", ns)
         
@@ -936,6 +948,7 @@ class ToRDF(RDFSink):
 			      (('xmlns:web', self._rdfns),
 			       ('xmlns:g', self._myns)))
 	self._subj = None
+	self._nextId = 0
 
     def endDoc(self):
 	if self._subj:
@@ -1056,13 +1069,18 @@ class SinkToN3(RDFSink):
 	self._subj = None
 	self.prefixes = {}      # Look up prefix conventions
 	self.indent = 1         # Level of nesting of output
-	self.base = base
-
-    #@@I18N
+	self.base = intern(base)
+	self.nextId = 0         # Regenerate Ids on output
+	
+	#@@I18N
     _namechars = string.lowercase + string.uppercase + string.digits + '_'
     _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
     _myns = 'http://www.w3.org/2000/10/n3/notation3.py#'
 
+    def newId(self):
+        nextId = nextId + 1
+        return nextId - 1
+    
     def bind(self, prefix, ns):
         """ Just accepting a convention here """
         self._endStatement()
@@ -1074,8 +1092,9 @@ class SinkToN3(RDFSink):
 
     def startDoc(self):
  
-      self._write("\n#   Start notation3 generation\n")
-      self._subj = None
+        self._write("\n#   Start notation3 generation\n")
+        self._subj = None
+        self._nextId = 0
 
     def endDoc(self):
 	self._endStatement()
@@ -1193,7 +1212,7 @@ class RDFStore(RDFSink) :
             if total > best :
                 best = total
                 mp = r
-        print "*********** Most popular Namesapce in %s is %s" % (`context`, `mp`)
+        if chatty: print "# Most popular Namesapce in %s is %s" % (`context`, `mp`)
         defns = self.namespaces.get("", None)
         if defns :
             del self.namespaces[""]
@@ -1510,12 +1529,87 @@ bind dc: &lt;http://purl.org/dc/elements/1.1/&gt;
 </body>
 </html>
 """
+#################################################  Command line
+    
+def doCommand():
+        import urllib
+        option_ugly = 0     # Store and regurgitate with genids
+        option_pipe = 0     # Don't store, just pipe though
+        option_rdf1out = 0  # Output in RDF M&S 1.0 instead of N3
+        option_bySubject= 0 # Store and regurgitate in subject order
+        option_inputs = []
+        chatty = 0          # not too verbose please
+        hostname = "localhost" # @@@@@@@@@@@ Get real one
+        
+        for arg in sys.argv[1:]:  # Command line options after script name
+            if arg == "-test": return test()
+            elif arg == "-ugly": option_ugly = 1
+            elif arg == "-pipe": option_pipe = 1
+            elif arg == "-bySubject": option_bySubject = 1
+            elif arg == "-rdf1out": option_rdfout = 1
+            elif arg == "-chatty": chatty = 1
+            elif arg[0] == "-": print "Unknown option", arg
+            else : option_inputs.append(arg)
 
+        # The base URI for this process - the Web equiv of cwd
+#	_baseURI = "file://" + hostname + os.getcwd() + "/"
+	_baseURI = "file://" + os.getcwd() + "/"
+	print "# Base URI of process is" , _baseURI
+	
+        _outURI = urlparse.urljoin(_baseURI, "STDOUT")
+	if option_rdf1out:
+            _outSink = ToRDF(sys.stdout)
+        else:
+            _outSink = SinkToN3(sys.stdout.write, _outURI)
+
+        if option_pipe:
+            _sink = _outSink
+        else:
+            _sink = RDFStore()
+        
+            
+        # (sink,  thisDoc,  baseURI, bindings)
+        for i in option_inputs:
+            _inputURI = urlparse.urljoin(_baseURI, i) # Make abs from relative
+            print "# Input from ", _inputURI
+            netStream = urllib.urlopen(_inputURI)
+            p = SinkParser(_sink,  _inputURI)
+            p.startDoc()
+            p.feed(netStream.read())     # May be big - buffered in memory!
+            p.endDoc()
+        # note we can't do it in chunks as p stores no state between feed()s
+            del(p)
+        if option_inputs == []:
+            _inputURI = urlparse.urljoin( _baseURI, "STDIN") # Make abs from relative
+            p = SinkParser(_sink,  _inputURI)
+            p.startDoc()
+            p.feed(sys.stdin.read())     # May be big - buffered in memory!
+            p.endDoc()
+            del(p)
+
+        if option_pipe: return                # everything was done inline
+
+#@@@@@@@@@@@ problem of deciding which contexts to dump and dumping > 1
+                #@@@ or of merging contexts
+
+
+        
+        if not option_pipe:
+            if option_ugly:
+                _sink.dumpChronological(_outSink)
+            elif option_bySubject:
+                _sink.dumpBySubject(_outURI, _outSink)
+            else:
+                _sink.dumpNested(_outURI, _outSink)
+                
+
+############################################################ Main program
     
 if __name__ == '__main__':
     import os
+    import urlparse
     if os.environ.has_key('SCRIPT_NAME'):
 	serveRequest(os.environ)
     else:
-	test()
+        doCommand()
 
