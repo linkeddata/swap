@@ -291,7 +291,8 @@ class SinkParser:
     def statement(self, str, i):
 	r = []
 
-	i = self.subject(str, i, r)
+	i = self.object(str, i, r)       #  Allow literal - This extends RDF model
+#	i = self.subject(str, i, r)        # Don't allow literal - according to RDF model.
 	if i<0:
 	    return -1
 
@@ -743,7 +744,7 @@ class BadSyntax:
 	else: post=""
 
 	return 'Line %i: Bad syntax (%s) at ^ in: "%s%s^%s%s"' \
-	       % (self.lines +1, self._why, pre, str[i-30:i], str[i:i+30], post)
+	       % (self.lines +1, self._why, pre, str[i-40:i], str[i:i+40], post)
 
 
 def stripCR(str):

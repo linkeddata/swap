@@ -440,6 +440,7 @@ class RDFStore(notation3.RDFSink) :
         self.notGreaterThan = engine.internURI(Logic_NS + "notGreaterThan")
         self.lessThan = engine.internURI(Logic_NS + "lessThan")
         self.notLessThan = engine.internURI(Logic_NS + "notLessThan")
+        self.startsWith = engine.internURI(Logic_NS + "startsWith")
         self.equivalentTo = engine.internURI(notation3.DAML_equivalentTo_URI)
         self.Truth = engine.internURI(Logic_NS + "Truth")
         self.type = engine.internURI(notation3.RDF_type_URI)
@@ -1178,8 +1179,9 @@ class RDFStore(notation3.RDFSink) :
                         elif quad[PRED] is self.lessThan : result=( quad[SUBJ].string < quad[OBJ].string)
                         elif quad[PRED] is self.notLessThan : result=( quad[SUBJ].string >= quad[OBJ].string)
                         elif quad[PRED] is self.notGreaterThan : result=( quad[SUBJ].string <= quad[OBJ].string)
-                        elif quad[PRED] is self.startsWith : result=( string.startsWith(quad[SUBJ].string,quad[OBJ].string))
+                        elif quad[PRED] is self.startsWith : result=quad[SUBJ].string.startswith(quad[OBJ].string)
                     if result != "nope":
+                        unmatched.remove(quad)  # Done that.
                         if result: return self.match(unmatched[:], variables[:], existentials[:], smartIn, action, param,
                                           bindings[:], []) # No new bindings but success in calculated logical operator
                         else: return 0   # We absoluteley know this won't match with this in it
