@@ -168,7 +168,7 @@ class BI_publicKey(LightBuiltIn, Function):
 #  Register the string built-ins with the store
 
 def register(store):
-   str = store.internURI(CRYPTO_NS_URI[:-1])
+   str = store.symbol(CRYPTO_NS_URI[:-1])
    str.internFrag('md5', BI_md5)
    str.internFrag('sha', BI_sha)
    if USE_PKC: 

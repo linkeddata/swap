@@ -179,7 +179,7 @@ class BI_parseToSeconds(LightBuiltIn, Function):
 
 #  Register the string built-ins with the store
 def register(store):
-    str = store.internURI(TIME_NS_URI[:-1])
+    str = store.symbol(TIME_NS_URI[:-1])
     str.internFrag("inSeconds", BI_inSeconds)
     str.internFrag("year", BI_year)
     str.internFrag("month", BI_month)

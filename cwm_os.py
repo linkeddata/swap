@@ -85,7 +85,7 @@ def isString(x):
 #  Register the string built-ins with the store
 
 def register(store):
-    str = store.internURI(OS_NS_URI[:-1])
+    str = store.symbol(OS_NS_URI[:-1])
     str.internFrag("environ", BI_environ)
     str.internFrag("baseRelative", BI_baseRelative)
     str.internFrag("baseAbsolute", BI_baseAbsolute)

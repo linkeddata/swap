@@ -199,7 +199,7 @@ def isString(x):
     return type(x) is type('') or type(x) is type(u'')
 
 def register(store):
-    str = store.internURI(STRING_NS_URI[:-1])
+    str = store.symbol(STRING_NS_URI[:-1])
     
     str.internFrag("greaterThan", BI_GreaterThan)
     str.internFrag("notGreaterThan", BI_NotGreaterThan)

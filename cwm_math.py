@@ -194,7 +194,7 @@ class BI_memberCount(LightBuiltIn, Function):
 #  Register the string built-ins with the store
 
 def register(store):
-    str = store.internURI(MATH_NS_URI[:-1])
+    str = store.symbol(MATH_NS_URI[:-1])
     str.internFrag('sum', BI_sum)
     str.internFrag('difference', BI_difference)
     str.internFrag('product', BI_product)

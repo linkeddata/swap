@@ -69,7 +69,7 @@ def register(store):
 #    list.internFrag("first", BI_first)
 #    list.internFrag("rest", BI_rest)
 
-    ns = store.internURI(ListOperationsNamespace[:-1])
+    ns = store.symbol(ListOperationsNamespace[:-1])
     ns.internFrag("in", BI_in)
     ns.internFrag("last", BI_last)
 # ends

@@ -128,7 +128,7 @@ class BI_tanh(LightBuiltIn, Function):
 #  Register the string built-ins with the store
 
 def register(store):
-    str = store.internURI(MATH_NS_URI[:-1])
+    str = store.symbol(MATH_NS_URI[:-1])
     str.internFrag('cos', BI_cos)
     str.internFrag('cosh', BI_cosh)
     str.internFrag('degrees', BI_degrees)
