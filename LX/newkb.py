@@ -26,10 +26,11 @@ class KB(list):
     formula.
 
     This is an extension of an RDF triplestore ("model" in Jena),
-    because it allows for function terms, non-binary predicates, and
-    the full suite of logical connectives (ie first-order logic).
+    because entries are full logic formulas, not just triples.  That
+    is, we have function terms, n-ary predicates, and the full suite
+    of logical connectives including quantifiers.
 
-    Conceptually, it's slightly more than a list of formula, in that
+    Conceptually, it's slightly more than a list of formulas, in that
     we also have some "kb-wide" quantified variables, so you can use
     open formulas more easily.   That is, the KB as a formula looks
     like this:
@@ -42,40 +43,94 @@ class KB(list):
 
     and you can add edit the eN and xN lists separately from editing
     the formula list.  The toPrenex() and toUnPrenex() functions can
-    be used to move the eN/xN variables out the KB scope or in to the
-    formula scope.  (toCNF(), toINF(), and toHorn() do this more
-    dramatically, rewriting all variables out of all the formulas.)
+    be used to move variables out to the KB scope or in to the formula
+    scope.  (toCNF(), toINF(), and toHorn() do this more dramatically,
+    rewriting all variables out of all the formulas, and rearranging
+    the whole KB.)
 
-    *** OBTAINING A KB
+    An example.   More examples in the various functions....
 
-    >>> 
-    >>> kb = KB()
-    >>> kb2 = KB(copyFrom=kb)
-
-    *** BUILDING SENTENCES
-
-    See intern, newConstant, newVariable, ...
+    PART 1: Get ourselves an empty KB, available on this platform,
+    with the features we want.
     
-    *** MODIFYING THE KB 
+    >>> from LX.newkb import KB
+    >>> kb = KB(features=("rdfs", "fol"))     # give ontology uris?  LX.ns.rdfs
+    >>> kb.engine
+    'otter with rdfs axioms'
 
-    Mostly, you can treat it as a python mutable sequence of
-    sentences.   Use append, etc.
+    PART 2: Load some data, using a Parser
 
-    *** QUERYING THE KB 
+    >>> import LX.language.lbase
+    >>> parser = LX.language.lbase.Parser(sink=kb)
+    >>> parser.parse("all ?x color(?x, red) -> Red(?x)")
+    >>> parser.parse("all ?x color(?x, green) -> Green(?x)")
+    >>> kb
 
-    Traverse the sequence, or try inference!
+    PART 3: Load some more data by hand, from Python
 
-                dvars=None nondvars=None
-    >>> q = kb.query(openFormula, distinguishedVariablesList)
-    >>> for binding in q.resultSet
-    >>>    # binding is a map of distVars to Constants
-    >>>    print binding
-    >>>    print pattern.subst(zip(distVars, binding.values))
-    >>>    print pattern.subst(binding.map))
-    >>>    #   q.
+    >>> x = kb.newUniversal(suggestedName="?x")
+    >>> speed = kb.newPredicate(suggestedName="speed")
+    >>> fast = kb.newConstant(suggestedName="fast")
+    >>> fastThing = kb.newPredicate(suggestedName="FastThing")
+    >>> formula = LX.logic.implies(speed(x, fast), fastThing(x))
+    >>> formula
+    x
+    >>> kb.append(formula)
+    >>> myCar = kb.newConstant(suggestedName="sandro's car")
+    >>> kb.append(speed(myCar, fast))
+    >>> kb
+    x
 
+    PART 4: Try some Python values
 
-    *** RESTRUCTURING THE KB
+    >>> maxmph = kb.newPredicate("maxmph")
+    >>> kb.append(maxmph(myCar, 120))
+    >>> owner = kb.newFunction("owner")
+    >>> name = kb.newFunction("name")
+    >>> kb.append(name(owner(myCar)) == "Sandro")   # operator == is overloaded
+    >>> kb[4]
+
+    PART 5: URIs and Spider KBs
+
+    >>> sandro = kb.newConstant(uri="http://www.w3.org/People/Sandro/data#sandro")
+    >>> officetel = kb.newConstant(uri="http://www.w3.org/People/Sandro/data#officetel")
+    >>> kb.append(owner(myCar) == sandro)
+    >>> kb2 = KB(features=("spider"), copyFrom=kb)
+    >>> websandro = kb2.intern(sandro)
+    >>> websandro.getValues(officetel)
+    '+1 617 ALE RATT'
+
+    PART 6: PROPERTY QUERIES -- Based off Expresions owner by KB
+
+    >>> sandro.getFunctionValue(name)
+    'Sandro Hawke'
+    >>> sandro[name]
+    'Sandro Hawke'
+    >>> name(sandro).value
+    'Sandro Hawke'
+    >>> myCar.getValues(maxmph)
+    [120]
+
+    PART 7: PATTERN QUERIES
+
+    >>> x = kb.Variable("?x")
+    >>> y = kb.Variable("?y")
+    >>> pat = fastThing(x) & (y == name(owner(x)))
+    >>> q = kb.query(pat)
+    >>> for res in q.results:
+    ...    print res
+
+    PART 8: PROPERTY UPDATES
+
+    >>> sandro[name] = "Sandro D. Hawke"
+    >>> kb
+
+    * retract?
+    * link in with lbase terms
+    * serialize
+    * modify datatype encoding
+    * math
+    * spidering
     
     """
 
@@ -84,7 +139,18 @@ class KB(list):
     ###   SETUP
     ###
     
-    def __init__(self):
+    def __init__(self, features=(), copyFrom=None, attachTo=None):
+        """attachTo == uses URI and some subordinate impl?
+
+        features = list of features to pick an engine?
+             triples-only
+             fol
+             complete
+             rdfs
+             owl
+             cwm
+             ...?
+        """
         self.exivars = []
         self.univars = []
 
@@ -97,7 +163,7 @@ class KB(list):
         """return a KB if possible, perhaps just the argument; throw
         an error we can't make a KB out of this thing"""
         if isinstance(kb, KB): return kb
-        if isinstance(kb, list): return KB(kb)
+        if isinstance(kb, list): return KB(copyFrom=kb)
         # nothing else for now
         raise RuntimeError, "Not convertable to a KB"
     prep = staticmethod(prep)
@@ -398,7 +464,10 @@ if __name__ == "__main__": _test()
 
  
 # $Log$
-# Revision 1.1  2003-02-20 22:16:20  sandro
+# Revision 1.2  2003-02-21 05:19:34  sandro
+# some doctexts
+#
+# Revision 1.1  2003/02/20 22:16:20  sandro
 # deep revamp
 #
 # Revision 1.10  2003/02/14 17:21:59  sandro
