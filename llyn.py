@@ -2345,7 +2345,7 @@ class RDFStore(RDFSink.RDFSink) :
 
     def remoteQuery(self, items, variables, existentials):
         import SqlDB
-        from SqlDB import ResultSet, SqlDBAlgae
+        from SqlDB import ResultSet, SqlDBAlgae, ShowStatement
 	# progress("Whee! time to call EricP's code!\nRemote Query:", items, variables, existentials)
 
         rs = ResultSet()
@@ -2356,20 +2356,19 @@ class RDFStore(RDFSink.RDFSink) :
         rs.results = nextResults
         def df(datum):
             return re.sub("http://localhost/SqlDB#", "sql:", datum)
-        print string.join(messages, "\n")
-        print "query matrix \"\"\""+rs.toString({'dataFilter' : None})+"\"\"\" .\n"
-        for solutions in nextStatements:
-            print "query solution {"
-            for statement in solutions:
-                print ShowStatement(statement)
-            print "} ."
+        # print string.join(messages, "\n")
+        # print "query matrix \"\"\""+rs.toString({'dataFilter' : None})+"\"\"\" .\n"
 
-	binding = []
-	for i in range(len(variables)):
-	    v = variables[i]
-	    value = "value" + `i`
-	    binding = binding + [ (v, self.intern((LITERAL, value))) ]
-	bindings = [ binding ] 
+	bindings = []
+        for resultsRow in nextResults:
+            boundRow = []
+            for i in range(len(variables)):
+                v = variables[i]
+                index = rs.getVarIndex(`v`)
+                interned = self.intern((LITERAL, `resultsRow[index]`))
+                boundRow = boundRow + [(v, interned)]
+            bindings.append(boundRow)
+
 	progress("====> bindings from remote query:"+`bindings`)
 	return bindings   # No bindings for testing
 
