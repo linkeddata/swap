@@ -16,12 +16,11 @@ OFFLINETESTS=regression.n3 list/detailed.tests \
 	ntriples/detailed.tests \
 	delta/detailed.tests \
 	syntax/detailed.tests \
-	n3parser.tests \
 	testmeta.n3
 #	reify/detailed.tests \
 # 	i18n/detailed.tests \
 
-TESTS=online.tests rdfcore-tests.n3 $(OFFLINETESTS)
+TESTS=online.tests n3parser.tests rdfcore-tests.n3 $(OFFLINETESTS)
 
 post-install : pyc-check $(CODE) $(OFFLINETESTS)
 	PYTHONPATH=`/bin/pwd`/..:`/bin/pwd`/../.. $P retest.py -c $(OFFLINETESTS)
