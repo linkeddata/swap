@@ -18,6 +18,18 @@ http://www.w3.org/DesignIssues/Notation3
 Closed World Machine - and RDF Processor
 http;//www.w3.org/2000/10/swap/cwm
 
+To DO: See also "@@" in comments
+
+Internationlization:
+- Decode incoming N3 file as unicode
+- Encode outgoing file
+- unicode \u  (??) escapes in parse
+- unicode \u  (??) escapes in string output
+
+Note currently unicode strings work in this code
+but fail when they are output into the python debugger
+interactive window.
+
 ______________________________________________
 
 Module originally by Dan Connolly, includeing notation3
@@ -620,12 +632,14 @@ class SinkParser:
                 i = i + len(delim)
                 # @@I18n  This is NOT internationalised. Should have unicode escaping too.
                 j = i
-                ustr = u""   # Empty unicode string
+#                ustr = u""   # Empty unicode string
+                ustr = ""   # Empty string should be unicode @@I18n
                 startline = self.lines # Reember where for error messages
                 while str[j:j+len(delim)] != delim:
                     ch = str[j:j+1]
                     j = j + 1
-                    uch = u""
+#                    uch = u""
+                    uch = ""
                     if ch == "":
                         raise BadSyntax(self.lines, str, i, "unterminated string literal")
                     if ch == "\r": continue   # Strip carriage returns
@@ -673,7 +687,8 @@ class SinkParser:
                                         count = count + 1
                                     uch = unicode.ntou (value) # @@I18n Need n->unicode mapping @@@@
                                     
-                    if uch == u"": uch = ch  # coerce
+# @@I18n                    if uch == u"": uch = ch  # coerce
+                    if uch == "": uch = ch  # coerce
                     ustr = ustr + uch
 
                 res.append((LITERAL, ustr))
@@ -910,17 +925,17 @@ def relativeTo(here, there):
 def relativeURI(base, uri):
     if base == uri: return ""
     i=0
-    while i<len(uri) and i<len(base):
-        if uri[i] == base[i]:
-            i = i + 1
-        else:
-            break
-#    print "# relative", base, uri, "   same up to ", i
+    while i<len(uri) and i<len(base):  # Find how much in common
+        if uri[i] == base[i]: i = i + 1
+        else: break
+    # print "# relative", base, uri, "   same up to ", i
     # i point to end of shortest one or first difference
-    if i<len(uri) and uri[i] =="#": return uri[i:]  # fragment of base
+    if uri[i:i+1] =="#": return uri[i:]  # fragment of base
     while i>0 and uri[i-1] != '/' : i=i-1  # scan for slash
-    if i < 3: return uri  # No way.
-    if string.find(base, "//", i-2)>0: return uri # An unshared "//"
+
+    if i == 0: return uri  # No way.
+    if string.find(base, "//", i)>0: return uri # An unshared "//"
+    if string.find(base, ":", i)>0: return uri  # An unshared ":"
     n = string.count(base, "/", i)
     return ("../" * n) + uri[i:]
             
