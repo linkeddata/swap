@@ -28,6 +28,7 @@ parser _Parser:
     token PREFIX:   r'[a-zA-Z0-9_-]*:'
     token QNAME:    r'([a-zA-Z][a-zA-Z0-9_-]*)?:[a-zA-Z0-9_-]+'
     token LNAME:    r'_:[a-zA-Z0-9_-]+'
+    token VNAME:    r'\?[a-zA-Z0-9_-]+'
     token STRLIT1:  r'"([^\"\\\n]|\\[\\\"nrt])*"'
     token STRLIT2:  r"'([^\'\\\n]|\\[\\\'nrt])*'"
     token STRLIT3:  r'"""([^\"\\]|\\[\\\"nrt])*"""' #@@not right
@@ -59,6 +60,7 @@ parser _Parser:
               : URIREF        {{ return self.uriref(URIREF) }}
               | QNAME         {{ return self.qname(QNAME) }}
               | LNAME         {{ return self.lname(LNAME) }}
+              | VNAME         {{ return self.vname(VNAME) }}
               | THIS          {{ return ctx }}
               | shorthand     {{ return shorthand }}
               | STRLIT3       {{ return self.strlit(STRLIT3, '"""') }}
@@ -132,6 +134,7 @@ class Parser(_Parser):
         self._prefixes = {}
         self._serial = 1
         self._lnames = {}
+        self._vnames = {}
 
     def docContext(self):
         return mkFormula(self._baseURI)
@@ -157,6 +160,16 @@ class Parser(_Parser):
         except KeyError:
             x = self.something(self.docContext(), n)
             self._lnames[n] = x
+            return x
+
+    def vname(self, str):
+        n = str[1:]
+        try:
+            return self._vnames[n]
+        except KeyError:
+            x = self.something(self.docContext(), n,
+                               quant=notation3.N3_forAll_URI)
+            self._vnames[n] = x
             return x
 
     def termA(self):
@@ -191,15 +204,16 @@ class Parser(_Parser):
         return self.something(self.docContext(),
                               "clause", notation3.FORMULA)
 
-    def something(self, ctx, hint="thing", ty=notation3.RESOURCE):
+    def something(self, ctx, hint="thing",
+                  ty=notation3.RESOURCE,
+                  quant = notation3.N3_forSome_URI):
         it = (ty, "%s#%s_%s" % (self._baseURI, hint, self._serial))
 
-        ex = (notation3.RESOURCE, notation3.N3_forSome_URI)
-        self._sink.makeStatement((ctx, ex, ctx, it))
+        p = (notation3.RESOURCE, quant)
+        self._sink.makeStatement((ctx, p, ctx, it))
 
         self._serial = self._serial + 1
         return it
-
 
 def mkFormula(absURI):
     """move this somewhere else?"""
@@ -212,7 +226,10 @@ def DEBUG(*args):
     sys.stderr.write("\n")
     
 # $Log$
-# Revision 1.9  2001-08-31 22:27:57  connolly
+# Revision 1.10  2001-08-31 22:59:58  connolly
+# ?foo for universally quantified variables; document-scoped, ala _:foo
+#
+# Revision 1.9  2001/08/31 22:27:57  connolly
 # added support for _:foo as per n-triples
 #
 # Revision 1.8  2001/08/31 22:15:44  connolly
