@@ -1,20 +1,20 @@
 
-<!-- Processed by Id: cwm.py,v 1.32 2001/04/05 21:33:55 timbl Exp -->
+<!-- Processed by Id: cwm.py,v 1.37 2001/05/08 20:42:35 timbl Exp -->
 <!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/animal.rdf-->
 
 
-<rdf:RDF xmlns:daml="http://www.daml.org/2000/12/daml+oil#"
+<rdf:RDF xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/animal.rdf#"
+    xmlns:daml="http://www.daml.org/2000/12/daml+oil#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
-    xmlns="bar#">
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 
     <rdf:Description rdf:about="#Animal">
         <rdf:type rdf:resource="http://www.w3.org/2000/01/rdf-schema#Class"/>
-        <restrictedBy rdf:parseType="Resource">
-            <rdf:type rdf:resource="bar#Restriction"/>
-            <onProperty rdf:resource="#parent"/>
-            <cardinality>2</cardinality>
-        </restrictedBy>
+        <daml:restrictedBy rdf:parseType="Resource">
+            <rdf:type rdf:resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
+            <daml:onProperty rdf:resource="#parent"/>
+            <daml:cardinality>2</daml:cardinality>
+        </daml:restrictedBy>
         <rdfs:label>Animal</rdfs:label>
     </rdf:Description>
 </rdf:RDF>
