@@ -360,6 +360,7 @@ rdf/xml files. Note that this requires rdflib.
 			    contentType = ContentType,
 			    flags = option_flags[option_first_format],
 			    remember = 0,
+                            referer = "",
 			    why = becauseCwm)
 	    workingContext.reopen()
 
@@ -454,21 +455,21 @@ rdf/xml files. Note that this requires rdflib.
             elif arg[:7] == "-apply=":
 		workingContext = workingContext.canonicalize()
                 
-                filterContext = _store.load(_uri)
+                filterContext = _store.load(_uri, referer="")
 		workingContext.reopen()
                 applyRules(workingContext, filterContext);
 
             elif arg[:7] == "-apply=":
 		workingContext = workingContext.canonicalize()
                 
-                filterContext = _store.load(_uri)
+                filterContext = _store.load(_uri, referer="")
 		workingContext.reopen()
                 applyRules(workingContext, filterContext);
 
             elif arg[:7] == "-patch=":
 		workingContext = workingContext.canonicalize()
                 
-                filterContext = _store.load(_uri)
+                filterContext = _store.load(_uri, referer="")
 		workingContext.reopen()
                 patch(workingContext, filterContext);
 
@@ -479,7 +480,7 @@ rdf/xml files. Note that this requires rdflib.
 		else:
 		    r = None
                 
-                filterContext = _store.load(_uri, why=r)
+                filterContext = _store.load(_uri, why=r, referer="")
 		_newContext = _store.newFormula()
 		if diag.tracking: proof = FormulaReason(_newContext)
                 applyRules(workingContext, filterContext, _newContext)
@@ -492,7 +493,7 @@ rdf/xml files. Note that this requires rdflib.
 		    r = BecauseOfCommandLine(sys.argv[0]) # @@ add user, host, pid, date time? Privacy!
 		else:
 		    r = None
-		filterContext = _store.load(_uri, why=r)
+		filterContext = _store.load(_uri, why=r, referer="")
 		_newContext = _store.newFormula()
 		if diag.tracking: proof = FormulaReason(_newContext)
                 applyQueries(workingContext, filterContext, _newContext)
@@ -526,7 +527,7 @@ rdf/xml files. Note that this requires rdflib.
 
             elif arg[:7] == "-think=":
                 
-                filterContext = _store.load(_uri)
+                filterContext = _store.load(_uri, referer="")
                 if verbosity() > 4: progress( "Input rules to --think from " + _uri)
 		workingContext.reopen()
                 think(workingContext, filterContext, mode=option_flags["think"]);

@@ -198,7 +198,7 @@ def main():
 
     if verbose: progress("Test files:", testFiles)
     
-    kb = loadMany(testFiles)
+    kb = loadMany(testFiles, referer="")
     testData = []
     RDFTestData  = []
 #    for fn in testFiles:

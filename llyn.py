@@ -1121,7 +1121,7 @@ class RDFStore(RDFSink) :
 	assert isinstance(self._experience, Formula)
 
     def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None, remember=1,
-		    flags="", why=None):
+		    flags="", referer=None, why=None):
 	"""Get and parse document.  Guesses format if necessary.
 
 	uri:      if None, load from standard input.
@@ -1142,19 +1142,20 @@ class RDFStore(RDFSink) :
 	    if F != None:
 		if diag.chatty_flag > 40: progress("Using cached semantics for",addr)
 		return F 
-	    F = webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, why)  
+	    F = webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, referer, why)  
 	    store._experience.add(
 		    store.intern((SYMBOL, addr)), store.semantics, F,
 		    why=BecauseOfExperience("load document"))
 	    return F
 	    
-	return webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, why)  
+	return webAccess.load(store, uri, openFormula, asIfFrom, contentType, flags, \
+                              referer=referer, why=why)  
 
     
 
 
 
-    def loadMany(self, uris, openFormula=None):
+    def loadMany(self, uris, openFormula=None, referer=None):
 	"""Get, parse and merge serveral documents, given a list of URIs. 
 	
 	Guesses format if necessary.
@@ -1167,7 +1168,7 @@ class RDFStore(RDFSink) :
 	f = F.uriref()
 	for u in uris:
 	    F.reopen()  # should not be necessary
-	    self.load(u, openFormula=F, remember=0)
+	    self.load(u, openFormula=F, remember=0, referer=referer)
 	return F.close()
 
     def genId(self):

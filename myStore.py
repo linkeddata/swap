@@ -23,7 +23,10 @@ History:
     Spilt off from  thing.py 2003-08-19
 
 $Log$
-Revision 1.8  2004-04-19 13:32:22  connolly
+Revision 1.9  2004-07-29 16:16:11  syosi
+rdflib tests in the default test suite
+
+Revision 1.8  2004/04/19 13:32:22  connolly
 trap __special_names__ in Namespace.__getattr__ so
 that pychecker can work
 
@@ -150,13 +153,13 @@ def load(uri=None, openFormula=None, contentType=None, remember=1):
     return _checkStore().load(uri, openFormula=openFormula, contentType=contentType,
 			remember=remember)
 
-def loadMany(uris, openFormula=None):
+def loadMany(uris, openFormula=None, referer=None):
     """Load a number of resources into the same formula
     
     Returns:  top-level formula of the parsed information.
     Raises:   IOError, SyntaxError, DocumentError
     """
-    return _checkStore().loadMany(uris, openFormula)
+    return _checkStore().loadMany(uris, openFormula, referer=referer)
 
 def bind(prefix, uri):
     return _checkStore().bind(prefix, uri)
