@@ -6,7 +6,8 @@ to iCalendar vocabulary.
 $Id$
 """;
     dc:source <http://www.ietf.org/rfc/rfc2445.txt> ;
-    dc:relation <ical>, <ical.n3>, <ical.rdf>, <toIcal.py>, <ical2rdf.pl>.
+    dc:relation <http://www.w3.org/2002/12/cal/ical>, <toIcal.py>,
+	<http://www.w3.org/2002/12/cal/fromIcal.py>.
 
 @prefix r: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix dt: <http://www.w3.org/2001/XMLSchema#> .
@@ -22,17 +23,6 @@ $Id$
 @prefix :   <itin2ical#>.
 @prefix ic: <itin2ical#>.
 
-this log:forAll :FLT, :CARRIER_NAME, :NUM, :SUM,
-    :YYMMDD, :YYMMDD2, :HH_MM, :HH_MM2, :DTSTART, :DTEND, :TZ, :TZ2,
-    :WHERE, :FROM_NAME, :TO_NAME, :UID.
-
-# airports with the same nameString have the same timezone
-{ :WHERE a k:Airport-Physical;
-    k:nameString [
-      is k:nameString of [ a k:Airport-Physical; :timeZone :TZ ] ] }
-  log:implies { :WHERE :timeZone :TZ }.
-#hmm... someplace to scrape these from?
-
 @prefix a: <http://www.daml.org/cgi-bin/airport?>. #hmm... ?MCI is a document *and* an airport?
 @prefix chi: <http://www.w3.org/2002/12/cal/tzd/America/Chicago#>.
 @prefix ny: <http://www.w3.org/2002/12/cal/tzd/America/New_York#>.
@@ -42,77 +32,14 @@ this log:forAll :FLT, :CARRIER_NAME, :NUM, :SUM,
 @prefix london: <http://www.w3.org/2002/12/cal/tzd/Europe/London#>.
 @prefix zurich: <http://www.w3.org/2002/12/cal/tzd/Europe/Zurich#>.
 @prefix budapest: <http://www.w3.org/2002/12/cal/tzd/Europe/Budapest#>.
+@prefix ams: <http://www.w3.org/2002/12/cal/tzd/Europe/Amsterdam#>.
 
 
-a:MCI a k:Airport-Physical;
-  k:nameString "KANSAS CITY INTL";
-  :timeZone chi:tz.
-a:STL a k:Airport-Physical;
-  k:nameString "ST LOUIS INTL";
-  :timeZone chi:tz.
-a:ORD a k:Airport-Physical;
- k:nameString "CHICAGO OHARE";
- :timeZone chi:tz.
-a:DFW a k:Airport-Physical;
-  k:nameString "DALLAS FT WORTH";
- :timeZone chi:tz.
-a:EWR a k:Airport-Physical;
-  k:nameString "NEWARK";
-  :timeZone ny:tz.
-a:BOS a k:Airport-Physical;
-  k:nameString "BOSTON";
-  :timeZone ny:tz.
-a:DCA a k:Airport-Physical;
-  k:nameString "WASHINGTON REAGAN";
-  :timeZone ny:tz.
-a:NCE a k:Airport-Physical;
-  k:nameString "NICE";
-  :timeZone :ParisTime.
-a:LHR a k:Airport-Physical;
-  k:nameString "LONDON HEATHROW";
-  :timeZone london:tz.
-a:SFO a k:Airport-Physical;
-  k:nameString "SAN FRANCISCO";
-  :timeZone la:tz.
-a:CDG a k:Airport-Physical;
-  k:nameString "PARIS DE GAULLE";
-  :timeZone paris:tz.
-a:FCO a k:Airport-Physical;
-  k:nameString "ROME FIUMICINO";
-  :timeZone paris:tz. #@@ is that right?
-a:AHO a k:Airport-Physical;
-  k:nameString "ALGHERO";
-  :timeZone  paris:tz. #@@ is that right?
-a:PIT a k:Airport-Physical;
-  k:nameString "PITTSBURGH";
-  :timeZone ny:tz.
-a:PHL a k:Airport-Physical;
-  k:nameString "Philadelphia, PA";
-  :timeZone ny:tz.
-a:ATL a k:Airport-Physical;
-  k:nameString "Atlanta, GA";
-  :timeZone ny:tz.
-a:YMX a k:Airport-Physical;
-  k:nameString "MONTREAL DORVALQC";
-  :timeZone ny:tz.
-a:YVR a k:Airport-Physical;
-  k:nameString "VANCOUVER BC";
-  :timeZone la:tz.
-a:SNA a k:Airport-Physical;
-  k:nameString "JOHN WAYNE INTL";
-  :timeZone la:tz.
-a:LAX a k:Airport-Physical;
-  :timeZone la:tz.
-a:LGA a k:Airport-Physical;
-  :timeZone ny:tz.
-a:JFK a k:Airport-Physical;
-  :timeZone ny:tz.
-a:DEN a k:Airport-Physical;
-  :timeZone den:tz.
-a:ZRH a k:Airport-Physical;
-  :timeZone zurich:tz.
-a:BUD a k:Airport-Physical;
-  :timeZone budapest:tz.
+# use cityLookup.n3 to map IATA codes to timezones; we no longer keep
+# these here...
+# a:MCI a k:Airport-Physical;
+#   k:nameString "KANSAS CITY INTL";
+#   :timeZone chi:tz.
 
 { ?DOC a k:ItineraryDocument } => { ?DOC a cal:Vcalendar }.
 { ?DOC a k:ItineraryDocument;
@@ -120,25 +47,27 @@ a:BUD a k:Airport-Physical;
   ?TRIP k:subEvents ?E.
   ?E a cal:Vevent } => { ?DOC cal:component ?E }.
 
-{ :FLT
-    k:startingDate [ dt:date :YYMMDD];
-    k:endingDate [ dt:date :YYMMDD2];
-    t:departureTime :HH_MM;
-    k:fromLocation [ :timeZone [ cal:tzid :TZ] ];
-    t:arrivalTime :HH_MM2;
-    k:toLocation [ :timeZone [ cal:tzid :TZ2] ].
-  :DTSTART is str:concatenation of
-    (:YYMMDD "T" :HH_MM ":00"). #@@ extra punct in dates
-  :DTEND is str:concatenation of
-    (:YYMMDD2 "T" :HH_MM2 ":00").
+{
+  ?TZ a cal:Vtimezone.
+  ?TZ2 a cal:Vtimezone.
 
-  ( :FLT!log:rawUri "@uri-2-mid.w3.org") str:concatenation :UID. #@@hmm... kludge?
+  ?FLT
+    k:startingDate [ dt:date ?YYMMDD];
+    k:endingDate [ dt:date ?YYMMDD2];
+    t:departureTime ?HH_MM;
+    k:fromLocation [ k:inRegion ?TZ ];
+    t:arrivalTime ?HH_MM2;
+    k:toLocation [ k:inRegion ?TZ2 ].
+  ?DTSTART is str:concatenation of
+    (?YYMMDD "T" ?HH_MM ":00") . #@@ extra punct in dates
+  ?DTEND is str:concatenation of
+    (?YYMMDD2 "T" ?HH_MM2 ":00") .
+
 }
- log:implies {
-  :FLT a cal:Vevent;
-    cal:uid :UID;
-    cal:dtstart [ cal:tzid :TZ; cal:dateTime :DTSTART ];
-    cal:dtend [ cal:tzid :TZ2; cal:dateTime :DTEND ].
+ => {
+  ?FLT a cal:Vevent;
+    cal:dtstart [ ?TZ ?DTSTART ];
+    cal:dtend [?TZ2 ?DTEND] .
 }.
 
 
@@ -153,41 +82,3 @@ a:BUD a k:Airport-Physical;
  log:implies {
   :FLT cal:summary :SUM.
 }.
-
-
-# Timezone stuff transcribed from an evolution calendar...
-# original source seems to be...
-
-<> dc:source [ = <ftp://elsie.nci.nih.gov/pub/>;
-  dc:creator "Olson, A.D., et al"; #@@ lazy...
-  dc:title "Time zone code and data";
-  dc:description "updated periodically" ].
-
-
-# @@hmm... use a rule instead?
-@prefix zurich: <http://www.w3.org/2002/12/cal/tzd/Europe/Zurich#>.
-
-chi:tz a cal:Vtimezone;
-  cal:tzid "/softwarestudio.org/Olson_20011030_5/America/Chicago".
-
-ny:tz a cal:Vtimezone;
-  cal:tzid "/softwarestudio.org/Olson_20011030_5/America/New_York".
-
-paris:tz a cal:Vtimezone;
-  cal:tzid "/softwarestudio.org/Olson_20011030_5/Europe/Paris".
-
-london:tz a cal:Vtimezone;
-  cal:tzid "/softwarestudio.org/Olson_20011030_5/Europe/London".
-
-la:tz a cal:Vtimezone;
-  cal:tzid "/softwarestudio.org/Olson_20011030_5/America/Los_Angeles".
-
-den:tz a cal:Vtimezone;
-  cal:tzid "/softwarestudio.org/Olson_20011030_5/America/Denver".
-
-zurich:tz a cal:Vtimezone;
-  cal:tzid "/softwarestudio.org/Olson_20011030_5/Europe/Zurich".
-
-budapest:tz a cal:Vtimezone;
-  cal:tzid "/softwarestudio.org/Olson_20011030_5/Europe/Budapest".
-
