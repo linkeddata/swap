@@ -158,6 +158,11 @@ sub grok{
 	makeStatement($event, $rdfNS . "type", $fltcls);
 	$state = 'inEvent';
       }
+      # sometimes we switch days in flight...
+      elsif(/\bAR /){
+	$state = 'inEvent';
+	goto REDO;
+      }
       else{
 	warn "inDay $calday; unknown event type? $_" if $Verbose;
       }
@@ -165,7 +170,7 @@ sub grok{
     elsif($state eq 'inEvent'){
 
       #e.g. >    LV KANSAS CITY INTL          144P           EQP: MD-80
-      while(s/(LV|AR) ((\S|( [a-zA-Z]))+) \s*(\w\w)?\s*(\d\d?)(\d\d)(A|P)//){
+      while(s/(LV|AR) ((\S|( [a-zA-Z]))+) \s*(\w\w\w)?\s*(\d\d?)(\d\d)(A|P|N)//){
 	my($dir, $airportName, $st, $hh, $mm, $ap) = ($1, $2, $5, $6, $7, $8);
 	$hh += 12 if $ap eq 'P';
 	$hh = 0 if ($ap eq 'A' && $hh == 12);
@@ -314,6 +319,10 @@ SFO SAN FRANCISCO
 STL ST LOUIS INTL
 YMX MONTREAL DORVALQC
 YVR VANCOUVER BC
+BRS BRISTOL
+DTW DETROIT METRO
+AMS AMSTERDAM
+GLA GLASGOW
 EODATA
 
     #
@@ -328,7 +337,10 @@ EODATA
 
 
 # $Log$
-# Revision 1.6  2002-09-11 13:36:44  connolly
+# Revision 1.7  2002-09-22 21:56:46  connolly
+# handle overnight flights; for TAG trip, WebOnt trip
+#
+# Revision 1.6  2002/09/11 13:36:44  connolly
 # declare the apt namespace
 #
 # Revision 1.5  2002/08/28 20:26:49  connolly
