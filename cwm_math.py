@@ -23,7 +23,7 @@ import sys, string, re, urllib
 from term import LightBuiltIn, Function, ReverseFunction
 import types
 
-# from RDFSink import DAML_LISTS, RDF_type_URI, DAML_equivalentTo_URI
+# from RDFSink import DAML_LISTS, RDF_type_URI, DAML_sameAs_URI
 
 MATH_NS_URI = 'http://www.w3.org/2000/10/swap/math#'
 

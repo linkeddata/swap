@@ -182,7 +182,7 @@ class InferenceTask:
 	    cy = pool[0] #  pick random one
 	    seq = partialOrdered(cy, pool) + seq
 
-	if diag.chatty_flag > -1:
+	if diag.chatty_flag > 10:
 	    progress("In order:" + `seq`)
 
 	# TEMPORARY: test that
@@ -1181,14 +1181,14 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 
 def compareCyclics(self,other):
     """Note the set indirectly affected is the same for any member of a cyclic subsystem"""
-    progress("Comparing %s to %s" % (self[0], other[0]))
+#    progress("Comparing %s to %s" % (self[0], other[0]))
     if other[0] in self[0].indirectlyAffects:
-	progress("less, do earlier")
+#	progress("less, do earlier")
 	return -1  # Do me earlier
     if other[0] in self[0].indirectlyAffectedBy:
-	progress("more, do me later")
+#	progress("more, do me later")
 	return 1
-    progress("same")
+#    progress("same")
     return 0
 	
 

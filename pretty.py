@@ -31,7 +31,7 @@ cvsRevision = "$Revision$"
 
 # Magic resources we know about
 
-from RDFSink import RDF_type_URI, DAML_equivalentTo_URI
+from RDFSink import RDF_type_URI, DAML_sameAs_URI
 
 STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
 META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"

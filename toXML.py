@@ -63,7 +63,7 @@ N3_forAll_URI = RDFSink.forAllSym
 RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 RDF_NS_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 DAML_NS=DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
-DAML_equivalentTo_URI = DPO_NS+"equivalentTo"
+DAML_sameAs_URI = DPO_NS+"sameAs"
 parsesTo_URI = Logic_NS + "parsesTo"
 RDF_spec = "http://www.w3.org/TR/REC-rdf-syntax/"
 
@@ -74,7 +74,7 @@ ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
 DAML_LISTS = 1    # Else don't do these - do the funny compact ones- not a good idea after all
 
 RDF_type = ( SYMBOL , RDF_type_URI )
-DAML_equivalentTo = ( SYMBOL, DAML_equivalentTo_URI )
+DAML_sameAs = ( SYMBOL, DAML_sameAs_URI )
 
 List_NS = DPO_NS     # We have to pick just one all the time
 

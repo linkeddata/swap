@@ -121,7 +121,7 @@ def smush(f, meta=None):
 	    unique.append(p)
 	if meta.contains(subj=p, pred=rdf.type, obj=owl.UnambiguousProperty):
 	    unambiguous.append(p)
-    equavalent = [daml.equivalentTo]
+    equavalent = [daml.sameAs]
 
     # Make an list of equivalent nodes:
     pairs = []

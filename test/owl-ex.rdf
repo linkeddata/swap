@@ -71,7 +71,7 @@ The following message was in this daml-ex.rdf, dunno what it refers to - tbl
 <TransitiveProperty ID="descendant"/>
 
 <Property ID="mom">
-  <equivalentTo resource="#mother"/>
+  <sameAs resource="#mother"/>
 </Property>
 
 <Property ID="occupation">

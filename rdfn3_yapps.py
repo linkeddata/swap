@@ -290,7 +290,7 @@ class Parser(_Parser):
         return RDF['type']
     
     def termEq(self):
-        return DAML['equivalentTo']
+        return DAML['sameAs']
 
     def strlit(self, str, delim):
         return StringLiteral(str[1:-1]) #@@BROKEN un-escaping
@@ -357,7 +357,10 @@ def DEBUG(*args):
     sys.stderr.write("\n")
     
 # $Log$
-# Revision 1.5  2002-08-16 22:30:48  timbl
+# Revision 1.5.2.1  2003-09-12 14:56:21  timbl
+# Checking in for safety, list/append.n3 still loops, don't use for real work
+#
+# Revision 1.5  2002/08/16 22:30:48  timbl
 # Add two tests for  quick variable ?x syntax. Passes text/retest.sh.
 #
 # Revision 1.18  2002/08/15 23:20:36  connolly

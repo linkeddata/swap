@@ -39,7 +39,7 @@
     </rdf:Description>
 
     <rdf:Description rdf:about="test#a_threebrackets">
-        <owl:equivalentTo rdf:parseType="Resource">
+        <owl:sameAs rdf:parseType="Resource">
             <rdf:first rdf:parseType="Resource">
                 <rdf:first rdf:parseType="Resource">
                     <rdf:first rdf:resource="test#fff"/>
@@ -48,25 +48,25 @@
                 <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
             </rdf:first>
             <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
-        </owl:equivalentTo>
+        </owl:sameAs>
     </rdf:Description>
 
     <rdf:Description rdf:about="test#emptyList">
-        <owl:equivalentTo rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
+        <owl:sameAs rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="test#listOf2Empties">
-        <owl:equivalentTo rdf:parseType="Resource">
+        <owl:sameAs rdf:parseType="Resource">
             <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
             <rdf:rest rdf:parseType="Resource">
                 <rdf:first rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
                 <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
             </rdf:rest>
-        </owl:equivalentTo>
+        </owl:sameAs>
     </rdf:Description>
 
     <rdf:Description rdf:about="test#nested">
-        <owl:equivalentTo rdf:parseType="Resource">
+        <owl:sameAs rdf:parseType="Resource">
             <rdf:first rdf:resource="test#first"/>
             <rdf:rest rdf:parseType="Resource">
                 <rdf:first rdf:resource="test#second"/>
@@ -84,11 +84,11 @@
                     </rdf:rest>
                 </rdf:rest>
             </rdf:rest>
-        </owl:equivalentTo>
+        </owl:sameAs>
     </rdf:Description>
 
     <rdf:Description rdf:about="test#threeItems">
-        <owl:equivalentTo rdf:parseType="Resource">
+        <owl:sameAs rdf:parseType="Resource">
             <rdf:first rdf:resource="test#b"/>
             <rdf:rest rdf:parseType="Resource">
                 <rdf:first rdf:resource="test#c"/>
@@ -97,11 +97,11 @@
                     <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
                 </rdf:rest>
             </rdf:rest>
-        </owl:equivalentTo>
+        </owl:sameAs>
     </rdf:Description>
 
     <rdf:Description rdf:about="test#twoAnons">
-        <owl:equivalentTo rdf:parseType="Resource">
+        <owl:sameAs rdf:parseType="Resource">
             <rdf:first rdf:parseType="Resource">
                 <rdf:type rdf:resource="test#mother"/>
             </rdf:first>
@@ -111,6 +111,6 @@
                 </rdf:first>
                 <rdf:rest rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"/>
             </rdf:rest>
-        </owl:equivalentTo>
+        </owl:sameAs>
     </rdf:Description>
 </rdf:RDF>

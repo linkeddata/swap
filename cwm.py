@@ -147,7 +147,7 @@ the closure under the operation of looking up:
  i   any owl:imports documents
  r   any doc:rules documents
  
- e   Smush together any nodes which are = (owl:equivalentTo)
+ e   Smush together any nodes which are = (owl:sameAs)
 
 See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 """
