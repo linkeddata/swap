@@ -61,7 +61,7 @@ vCard.Business.URL, vCard.Business.Zipcode"""
 :lastName = 		mso:Last_Name .
 :personalSuffix = 	mso:Suffix .
 
-:ConactLocation a Class;
+:ContactLocation a Class;
     rdfs:comment  "A place with address, phone number, fax, etc".
 
 :office a rdfs:Property;
