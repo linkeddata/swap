@@ -7,6 +7,10 @@
      @prefix rdfs: <http://www.w3.org/2001/03/rdf-schema#> .
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
+    <daml-ont.rdf>     a daml:Ontology;
+         daml:imports <http://www.w3.org/2000/01/rdf-schema>;
+         daml:versionInfo "" .
+    
     :Class     a daml:Class;
          daml:sameClassAs s:Class .
     
@@ -286,8 +290,4 @@ cf OIL AND""";
 	version; e.g. RCS/CVS keywords
   """;
          daml:label "versionInfo" .
-    
-    <daml-ont.rdf>     a daml:Ontology;
-         daml:imports <http://www.w3.org/2000/01/rdf-schema>;
-         daml:versionInfo "" .
     

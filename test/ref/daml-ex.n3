@@ -7,6 +7,11 @@
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
+    <daml-ex.rdf>     a dpo:Ontology;
+         dpo:comment "An example ontology";
+         dpo:imports <http://www.daml.org/2000/10/daml-ont>;
+         dpo:versionInfo "" .
+    
     :Adam     a dpo:Person;
          dpo:comment "Adam is a person.";
          dpo:label "Adam" .
@@ -95,9 +100,4 @@
     :parent     a dpo:Property;
          dpo:cardinality "2";
          dpo:domain :Animal .
-    
-    <daml-ex.rdf>     a dpo:Ontology;
-         dpo:comment "An example ontology";
-         dpo:imports <http://www.daml.org/2000/10/daml-ont>;
-         dpo:versionInfo "" .
     

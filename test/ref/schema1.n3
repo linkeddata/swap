@@ -5,16 +5,21 @@
      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
      @prefix v: <schema-rules.n3#> .
     
-    this     log:forAll v:c1,
+    this     log:forAll v:c,
+                v:c1,
                 v:c2,
-                v:c,
+                v:p,
                 v:p1,
                 v:p2,
-                v:p,
                 v:x,
                 v:y,
                 v:z;
          log:forSome :_g0 .
+    
+    <daml-ex.n3>     a daml:Ontology;
+         daml:comment "An example ontology";
+         daml:imports <http://www.daml.org/2000/10/daml-ont>;
+         daml:versionInfo "" .
     
     :Adam     a daml:Person;
          daml:comment "Adam is a person.";
@@ -121,10 +126,7 @@
          daml:domain :Animal;
          rdfs:domain :Animal .
     
-    <daml-ex.n3>     a daml:Ontology;
-         daml:comment "An example ontology";
-         daml:imports <http://www.daml.org/2000/10/daml-ont>;
-         daml:versionInfo "" .
+    <invalid-ex.n3>     daml:imports <daml-ex.n3> .
     
     <invalid-ex.n3#alex>     :father <invalid-ex.n3#joe> .
     
@@ -145,8 +147,6 @@
                 :Person,
                 :Woman,
                 v:schemaInconsistency .
-    
-    <invalid-ex.n3>     daml:imports <daml-ex.n3> .
     
     v:schemaInconsistency     daml:subPropertyOf log:Falsehood;
          rdfs:subPropertyOf log:Falsehood .
@@ -233,18 +233,6 @@
         }     log:implies {v:x     a v:c2 .
         } .
     {
-        v:p1     = v:p2 .
-        v:x     v:p1 v:y .
-        
-        }     log:implies {v:x     v:p2 v:y .
-        } .
-    {
-        v:p1     rdfs:range v:c .
-        v:p2     rdfs:subPropertyOf v:p1 .
-        
-        }     log:implies {v:p2     rdfs:range v:c .
-        } .
-    {
         v:p     rdfs:domain v:c .
         v:x     v:p v:y .
         
@@ -255,6 +243,18 @@
         v:x     v:p v:y .
         
         }     log:implies {v:y     a v:c .
+        } .
+    {
+        v:p1     = v:p2 .
+        v:x     v:p1 v:y .
+        
+        }     log:implies {v:x     v:p2 v:y .
+        } .
+    {
+        v:p1     rdfs:range v:c .
+        v:p2     rdfs:subPropertyOf v:p1 .
+        
+        }     log:implies {v:p2     rdfs:range v:c .
         } .
     {
         v:x     a v:y,

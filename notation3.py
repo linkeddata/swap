@@ -64,12 +64,11 @@ import re
 
 import RDFSink
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE
+from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE, SYMBOL
 from RDFSink import Logic_NS
 
 N3_forSome_URI = RDFSink.forSomeSym
 N3_forAll_URI = RDFSink.forAllSym
-RESOURCE=RDFSink.SYMBOL # @@misnomer
 
 # Magic resources we know about
 
@@ -86,18 +85,18 @@ ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
 # Should the internal representation of lists be with DAML:first and :rest?
 DAML_LISTS = 1    # Else don't do these - do the funny compact ones- not a good idea after all
 
-RDF_type = ( RESOURCE , RDF_type_URI )
-DAML_equivalentTo = ( RESOURCE, DAML_equivalentTo_URI )
+RDF_type = ( SYMBOL , RDF_type_URI )
+DAML_equivalentTo = ( SYMBOL, DAML_equivalentTo_URI )
 
 List_NS = DPO_NS     # We have to pick just one all the time
 
 # For lists:
-N3_first = (RESOURCE, List_NS + "first")
-N3_rest = (RESOURCE, List_NS + "rest")
-# N3_only = (RESOURCE, List_NS + "only")
-N3_nil = (RESOURCE, List_NS + "nil")
-N3_List = (RESOURCE, List_NS + "List")
-N3_Empty = (RESOURCE, List_NS + "Empty")
+N3_first = (SYMBOL, List_NS + "first")
+N3_rest = (SYMBOL, List_NS + "rest")
+# N3_only = (SYMBOL, List_NS + "only")
+N3_nil = (SYMBOL, List_NS + "nil")
+N3_List = (SYMBOL, List_NS + "List")
+N3_Empty = (SYMBOL, List_NS + "Empty")
 
 
 
@@ -118,7 +117,7 @@ class SinkParser:
     	self._bindings = bindings
 	self._thisDoc = thisDoc
         self._baseURI = baseURI
-#	self._context = RESOURCE , self._thisDoc    # For storing with triples @@@@ use stack
+#	self._context = SYMBOL , self._thisDoc    # For storing with triples @@@@ use stack
         self._contextStack = []      # For nested conjunctions { ... }
         self._varPrefix = varPrefix
         self._nextId = 0
@@ -137,12 +136,12 @@ class SinkParser:
         self._context = self._formula
         
         if metaURI:
-            self.makeStatement((RESOURCE, metaURI), # relate document to parse tree
-                            (RESOURCE, PARSES_TO_URI ), #pred
-                            (RESOURCE, thisDoc),  #subj
+            self.makeStatement((SYMBOL, metaURI), # relate document to parse tree
+                            (SYMBOL, PARSES_TO_URI ), #pred
+                            (SYMBOL, thisDoc),  #subj
                             self._context)                      # obj
-            self.makeStatement(((RESOURCE, metaURI), # quantifiers - use inverse?
-                            (RESOURCE, N3_forSome_URI), #pred
+            self.makeStatement(((SYMBOL, metaURI), # quantifiers - use inverse?
+                            (SYMBOL, N3_forSome_URI), #pred
                             self._context,  #subj
                             subj))                      # obj
         
@@ -238,11 +237,14 @@ class SinkParser:
         ns = t[1][1] + delim
         if string.find(ns,"##")>=0: raise BadSyntax(self._thisDoc, self.lines, str, j-2, "trailing # illegal on bind: use @prefix")
 	self._bindings[t[0][0]] = ns
-	self.bind(t[0][0], (RESOURCE, ns))
+	self.bind(t[0][0], (SYMBOL, ns))
 	return j
 
     def bind(self, qn, nsPair):
-        self._sink.bind(qn, nsPair)
+        if qn == "":
+            self._sink.setDefaultNamespace(nsPair)
+        else:
+            self._sink.bind(qn, nsPair)
 
     def startDoc(self):
         self._sink.startDoc()
@@ -350,11 +352,11 @@ class SinkParser:
             j = self.uri_ref2(str, i, res)
             if j >= 0:
                 if res[0][0] == ANONYMOUS:
-                    x = RESOURCE , self._genPrefix + res[0][1] # ANONYMOUS node
+                    x = SYMBOL , self._genPrefix + res[0][1] # ANONYMOUS node
                     if x not in self._anonymousNodes:
                         self._anonymousNodes.append(x)
                         self.makeStatement((self._formula, # Make declaration at outermost level
-                            (RESOURCE, N3_forSome_URI), #pred
+                            (SYMBOL, N3_forSome_URI), #pred
                             self._formula,  #subj    Scope of universal quantification is whole document
                             x))                      # declare it as anonymous only once
                     res[0] = x
@@ -378,7 +380,7 @@ class SinkParser:
                 else:
                     raise BadSyntax(self._thisDoc, self.lines, str, i, "object_list expected after [ = ")
 
-            if subj is None: subj=self.genid(RESOURCE)
+            if subj is None: subj=self.genid(SYMBOL)
 
             i = self.property_list(str, j, subj)
             if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "property_list expected")
@@ -419,7 +421,7 @@ class SinkParser:
                 item = []
                 j = self.object(str,i, item)
                 if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected item in list or ')'")
-                this = self.genid(RESOURCE)
+                this = self.genid(SYMBOL)
                 if DAML_LISTS:
                     if previous:
                         self.makeStatement((self._context, N3_rest, previous, this ))
@@ -517,7 +519,7 @@ class SinkParser:
                         res.append(( ANONYMOUS, ln))
                         return j
 		    raise BadSyntax(self._thisDoc, self.lines, str, i, "Prefix %s not bound" % (pfx))
-            res.append(( RESOURCE, ns + ln)) # @@@ "#" CONVENTION
+            res.append(( SYMBOL, ns + ln)) # @@@ "#" CONVENTION
             if not string.find(ns, "#"):print"Warning: no # on NS %s,"%(ns,)
 	    return j
 
@@ -541,7 +543,7 @@ class SinkParser:
                     uref = urlparse.urljoin(self._baseURI, str[st:i])
                     if str[i-1:i]=="#" and not uref[-1:]=="#":
                         uref = uref + "#"  # She meant it! Weirdness in urlparse?
-                    res.append((RESOURCE , uref))
+                    res.append((SYMBOL , uref))
                     return i+1
                 i = i + 1
             raise BadSyntax(self._thisDoc, self.lines, str, j, "unterminated URI reference")
@@ -723,7 +725,7 @@ class SinkParser:
         subj = type , self._genPrefix + `self._nextId` # ANONYMOUS node
         self._nextId = self._nextId + 1
         self.makeStatement((self._context, # quantifiers - use inverse?
-                            (RESOURCE, N3_forSome_URI), #pred
+                            (SYMBOL, N3_forSome_URI), #pred
                             self._context,  #subj
                             subj))                      # obj
         return subj
@@ -731,22 +733,22 @@ class SinkParser:
     def operator(self, str, i, res):
 	j = self.tok('+', str, i)
 	if j >= 0:
-	    res.append((RESOURCE, '+')) #@@ convert to operator:plus and then to URI
+	    res.append((SYMBOL, '+')) #@@ convert to operator:plus and then to URI
 	    return j
 
 	j = self.tok('-', str, i)
 	if j >= 0:
-	    res.append((RESOURCE,'-')) #@@
+	    res.append((SYMBOL,'-')) #@@
 	    return j
 
 	j = self.tok('*', str, i)
 	if j >= 0:
-	    res.append((RESOURCE,'*')) #@@
+	    res.append((SYMBOL,'*')) #@@
 	    return j
 
 	j = self.tok('/', str, i)
 	if j >= 0:
-	    res.append((RESOURCE,'/')) #@@
+	    res.append((SYMBOL,'/')) #@@
 	    return j
 	else:
 	    return -1
@@ -829,12 +831,12 @@ class ToRDF(RDFSink.RDFSink):
 
     def flushStart(self):
         if not self._docOpen:
-            if self.prefixes.get((RESOURCE, RDF_NS_URI), ":::") == ":::":
+            if self.prefixes.get((SYMBOL, RDF_NS_URI), ":::") == ":::":
                 if self.namespaces.get("rdf", ":::") ==":::":
-                    self.bind("rdf", (RESOURCE, RDF_NS_URI))
-            if self.prefixes.get((RESOURCE, Logic_NS), ":::") == ":::":
+                    self.bind("rdf", (SYMBOL, RDF_NS_URI))
+            if self.prefixes.get((SYMBOL, Logic_NS), ":::") == ":::":
                 if self.namespaces.get("log", ":::") ==":::":
-                    self.bind("log", (RESOURCE, Logic_NS))
+                    self.bind("log", (SYMBOL, Logic_NS))
             ats = []
             ps = self.prefixes.values()
             ps.sort()    # Cannonicalize output somewhat
@@ -860,7 +862,7 @@ class ToRDF(RDFSink.RDFSink):
 	    if self._subj:
 		self._wr.endElement()
 	    self._subj = subj
-            if (pred == (RESOURCE, RDF_type_URI)# Special case starting with rdf:type as element name
+            if (pred == (SYMBOL, RDF_type_URI)# Special case starting with rdf:type as element name
                 and obj[0] != LITERAL
                 and "c" not in self._flags): # "c" flag suppresses class element syntax on RDF output
                  self._wr.startElement(obj[1], [(RDF_NS_URI+" about", subjn),], self.prefixes)
@@ -935,7 +937,7 @@ class ToRDF(RDFSink.RDFSink):
 #			      [(RDF_NS_URI+' about', relativeURI(self._base,context[1]))],
                               self.prefixes)
 #        print "# @@@@@@@@@@@@@ ", self.prefixes
-        log_quote = self.prefixes[(RESOURCE, Logic_NS)] + ":Quote"  # Qname yuk
+        log_quote = self.prefixes[(SYMBOL, Logic_NS)] + ":Quote"  # Qname yuk
         
         self._wr.startElement(Logic_NS+"is", [(RDF_NS_URI+' parseType', log_quote)], self.prefixes)
         self._subj = None
@@ -961,7 +963,7 @@ class ToRDF(RDFSink.RDFSink):
 				 ((RDF_NS_URI+' about', subjn),), self.prefixes)
 	    self._subj = subj
 
-        log_quote = self.prefixes[(RESOURCE, Logic_NS)] + ":Quote"  # Qname yuk
+        log_quote = self.prefixes[(SYMBOL, Logic_NS)] + ":Quote"  # Qname yuk
         self._wr.startElement(pred[1], [(RDF_NS_URI+' parseType',log_quote)], self.prefixes)  # @@? Parsetype RDF
         self._subj = None
 #        self._pred = None
@@ -1059,7 +1061,7 @@ class XMLWriter:
 	ln = uriref[i:]
 	ns = uriref[:i]
 #        print "@@@ ns=",ns, "@@@ prefixes =", prefixes
-        prefix = prefixes.get((RESOURCE, ns), ":::")
+        prefix = prefixes.get((SYMBOL, ns), ":::")
         attrs = []
         for a, v in rawAttrs:   # Caller can set default namespace
             if a == "xmlns": self.currentNS = v
@@ -1078,7 +1080,7 @@ class XMLWriter:
                 continue
             ans = at[:i]
             lan = at[i+1:]
-            prefix = prefixes.get((RESOURCE, ans),":::")
+            prefix = prefixes.get((SYMBOL, ans),":::")
             if prefix == ":::":
                 print ("#@@@@@ tag %s: atr %s has no prefiex :-(" %
                        (uriref, at, `prefixes`))
@@ -1216,6 +1218,9 @@ t   "this" and "()" special syntax should be suppresed.
     def newId(self):
         nextId = nextId + 1
         return nextId - 1
+
+    def setDefaultNamespace(self, nsPair):
+        return self.bind("", nsPair)
     
     def bind(self, prefixString, nsPair):
         """ Just accepting a convention here """
@@ -1279,7 +1284,7 @@ t   "this" and "()" special syntax should be suppresed.
             return
         
         if ("a" in self._flags and
-            triple[PRED] == (RESOURCE, N3_forSome_URI) and
+            triple[PRED] == (SYMBOL, N3_forSome_URI) and
             triple[CONTEXT] == triple[SUBJ]):   # We assume the output is flat @@@
             self._anonymousNodes.append(triple[OBJ])
             return
@@ -1380,7 +1385,7 @@ t   "this" and "()" special syntax should be suppresed.
 
         if self._pred is not None:
             self._write(";")
- #       self._makeSubjPred(somecontext, subj, ( RESOURCE,  DAML_equivalentTo_URI ))
+ #       self._makeSubjPred(somecontext, subj, ( SYMBOL,  DAML_equivalentTo_URI ))
         self.stack.append(0)
         self.indent = self.indent + 1
         self._write(" :- {")
@@ -1432,9 +1437,9 @@ t   "this" and "()" special syntax should be suppresed.
                   self._newline(1)   # Indent predicate from subject
             else: self._write("    ")
 
-            if pred == ( RESOURCE,  DAML_equivalentTo_URI ) and "t" not in self._flags:
+            if pred == ( SYMBOL,  DAML_equivalentTo_URI ) and "t" not in self._flags:
                 self._write(" = ")
-            elif pred == ( RESOURCE, RDF_type_URI )  and "t" not in self._flags:
+            elif pred == ( SYMBOL, RDF_type_URI )  and "t" not in self._flags:
                 self._write(" a ")
             else :
 #               self._write( " >- %s -> " % self.representationOf(context, pred))
@@ -1497,7 +1502,7 @@ t   "this" and "()" special syntax should be suppresed.
                 and self.defaultNamespace[1] == value[:j+1]
                 and "d" not in self._flags):
                 return ":"+value[j+1:]
-            prefix = self.prefixes.get((RESOURCE, value[:j+1]), None) # @@ #CONVENTION
+            prefix = self.prefixes.get((SYMBOL, value[:j+1]), None) # @@ #CONVENTION
             if prefix != None : return prefix + ":" + value[j+1:]
         
             if value[:j] == self.base:   # If local to output stream,
@@ -1588,7 +1593,7 @@ class Reifier(RDFSink.RDFSink):
         RDFSink.RDFSink.__init__(self)
         self.sink = sink
         self._ns = "http://www.w3.org/2000/10/swap/model.n3#"
-        self.sink.bind("n3", (RESOURCE, self._ns))
+        self.sink.bind("n3", (SYMBOL, self._ns))
         self._nextId = 1
         self._context = (FORMULA, contextURI)
         self._genPrefix = genPrefix
@@ -1610,20 +1615,20 @@ class Reifier(RDFSink.RDFSink):
             return self.sink.makeStatement(tuple)   # In same context: does not need reifying
 
         self.sink.makeStatement(( self._context, # quantifiers - use inverse?
-                                  (RESOURCE, N3_forSome_URI),
+                                  (SYMBOL, N3_forSome_URI),
                                   self._context,
-                                  (RESOURCE, _statementURI) )) #  Note this is anonymous
+                                  (SYMBOL, _statementURI) )) #  Note this is anonymous
         
         self.sink.makeStatement(( self._context, # Context
-                              (RESOURCE, self._ns+"statement"), #Predicate
+                              (SYMBOL, self._ns+"statement"), #Predicate
                               tuple[CONTEXT], # Subject
-                              (RESOURCE, _statementURI) ))  # Object
+                              (SYMBOL, _statementURI) ))  # Object
 
         for i in PARTS:
             self.sink.makeStatement((
                 self._context, # Context
-                (RESOURCE, self._ns+name[i]), #Predicate
-                (RESOURCE, _statementURI), # Subject
+                (SYMBOL, self._ns+name[i]), #Predicate
+                (SYMBOL, _statementURI), # Subject
                 tuple[i] ))  # Object
 
 

@@ -237,26 +237,7 @@ def reformat(str, thisURI):
 ##############################################  String output
 
 
-def comparePair(self, other):
-    for i in 0,1:
-        x = compareURI(self[i], other[i])
-        if x != 0:
-            return x
 
-def outputStrings(store, formula, seed=None, relation=None):
-    """Fetch output strings from store, sort and output
-
-    To output a string, associate (using the given relation) with a key
-    such that the order of the keys is the order in which you want the corresponding
-    strings output.
-    """
-    import sys
-#    if seed == None: seed = store.intern((SYMBOL, Logic_NS + "OutputKey"))
-    if relation == None: relation = store.intern((SYMBOL, Logic_NS + "outputString"))
-    pairs = store.each((formula, relation, None, None))  # List of things of (subj, obj) pairs
-    pairs.sort(comparePair)
-    for key, str in pairs:
-        sys.stdout.write(str.string.encode('utf-8'))
 
     
             
@@ -433,6 +414,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
         if option_pipe:
             _store = _outSink
+            workingContextURI = None
         else:
             _metaURI = urlparse.urljoin(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
             _store = llyn.RDFStore( _outURI+"#_gs", metaURI=_metaURI, argv=option_with)
@@ -452,8 +434,6 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             if not option_pipe:
                 inputContext = _store.intern((FORMULA, _inputURI+ "#_formula"))
                 history = inputContext
-#                if inputContext is not workingContext:
-#                    _store.moveContext(inputContext,workingContext)  # Move input data to output context
 
 
 #  Take commands from command line: Second Pass on command line:
@@ -483,7 +463,6 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 del(p)
                 if not option_pipe:
                     inputContext = _store.intern((FORMULA, _inputURI+ "#_formula"))
-#                    _store.moveContext(inputContext,workingContext)  # Move input data to output context
                     _step  = _step + 1
                     s = _metaURI + `_step`  #@@ leading 0s to make them sort?
 #                    if doMeta and history:
@@ -551,8 +530,6 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 _newURI = urlparse.urljoin(_baseURI, "_w_"+`_genid`)  # Intermediate
                 _genid = _genid + 1
                 _newContext = _store.intern((FORMULA, _newURI+ "#_formula"))
-#                _store.moveContext(workingContext, _newContext)
-#                print "# Input filter ", _uri
                 _store.loadURI(_uri)
                 _store.applyRules(workingContext, filterContext, _newContext)
                 workingContext = _newContext
@@ -577,10 +554,10 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 _store.think(workingContext)
 
             elif arg == "-size":
-                progress("Size of store: %i statements." %(_store.size,))
+                progress("Size: %i statements in store, %i in working formula." %(_store.size, workingContext.size()))
 
             elif arg == "-strings":  # suppress output
-                outputStrings(_store, workingContext) 
+                workingContext.outputStrings() 
                 option_outputStyle = "-no"
                 
             elif arg == "-no":  # suppress output

@@ -5,7 +5,7 @@ $Id$
 
 RDF Store and Query engine
 
-Logic Lookup: Yetanother Name
+Logic Lookup: Yet another Name
 
 (also, in Wales, a lake - a storage area at the centre of the valley?)
 
@@ -27,6 +27,7 @@ Agenda:
  - split out separate modules: CGI interface, command-line stuff,
    built-ins (DWC 30Aug2001)
  - split Query engine out as subclass of RDFStore? (DWC)
+    SQL-equivalent client
  - implement a back-chaining reasoner (ala Euler/Algernon) on this store? (DWC)
  - run http daemon/client sending changes to database
  - act as client/server for distributed system
@@ -85,7 +86,7 @@ Done
  - semi-reification - reifying only subexpressions - DONE
  - Bug  :x :y :z as data should match [ :y :z ] as query. Fixed by stripping forSomes from top of query.
  - BUG: {} is a context but that is lost on output!!!
-     occursAs[CONTEXT] not enough. See foo2.n3 - change existential representation :-( to make context a real conjunction again?
+     statements not enough. See foo2.n3 - change existential representation :-( to make context a real conjunction again?
     (the forSome triple is special in that you can't remove it and reduce info)
  - filter out duplicate conclusions - BUG! - DONE
  - Validation:  validate domain and range constraints against closuer of classes and
@@ -123,15 +124,16 @@ import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 import thing
-from thing import  progress, progressIndent, BuiltIn, LightBuiltIn, HeavyBuiltIn, Function, ReverseFunction, \
-     Formula, Literal, Resource, Fragment, FragmentNil, Thing, List, EmptyList
+from thing import  progress, progressIndent, BuiltIn, LightBuiltIn, \
+    HeavyBuiltIn, Function, ReverseFunction, \
+    Literal, Resource, Fragment, FragmentNil, Thing, List, EmptyList
 
 import RDFSink
 from RDFSink import Logic_NS
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE
-RESOURCE = RDFSink.SYMBOL # @@misnomer
+from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE, SYMBOL
+# = RDFSink.SYMBOL # @@misnomer
 
 LITERAL_URI_prefix = "data:application/n3;"
 
@@ -193,8 +195,8 @@ def compareURI(self, other):
 
         if isinstance(self, Formula):
             if isinstance(other, Formula):
-                s = self.occursAs[CONTEXT]
-                o = other.occursAs[CONTEXT]
+                s = self.statements
+                o = other.statements
                 ls = len(s)
                 lo = len(o)
                 if ls > lo: return 1
@@ -213,11 +215,11 @@ def compareURI(self, other):
 
         # Both regular URIs
 #        progress("comparing", self.representation(), other.representation())
-        _type = "<" + notation3.RDF_type_URI + ">"
-        s = self.representation()
+        _type = notation3.RDF_type_URI
+        s = self.uriref()
         if s == _type:
             return -1
-        o = other.representation()
+        o = other.uriref()
         if o == _type:
             return 1
         if s < o :
@@ -246,6 +248,87 @@ def compareFormulae(self, other):
        is used whichever statement the variable was in fact in. Ooops
     """
     pass
+
+###################################### Forumula
+#
+
+class Formula(Fragment):
+    """A formula of a set of RDF statements, triples. these are actually
+    instances of StoredStatement.  Other systems such as jena use the term "Model"
+    for this.  Cwm and N3 extend RDF to allow a literal formula as an item in a triple.
+    """
+    def __init__(self, resource, fragid):
+        Fragment.__init__(self, resource, fragid)
+#        self.statements = []
+        self.descendents = None   # Placeholder for list of closure under subcontext
+        self.cannonical = None # Set to self if this has been checked for duplicates
+
+    def generated(self):
+        return 1
+
+    def asPair(self):
+        return (FORMULA, self.uriref())
+
+    def existentials(self):
+        "we may move to an internal storage rather than these statements"
+        exs = []
+        ss = self._index.get((self.store.forSome, self, None),[])
+        for s in ss:
+            exs.append(s[OBJ])
+        if thing.verbosity() > 90: progress("Existentials in %s: %s" % (self, exs))
+        return exs
+
+    def universals(self):
+        "we may move to an internal storage rather than these statements"
+        exs = []
+        ss = self._index.get((self.store.forAll, self, None),[])
+        for s in ss:
+            exs.append(s[OBJ])
+        if thing.verbosity() > 90: progress("Universals in %s: %s" % (self, exs))
+        return exs
+    
+    def variables(self):
+        return self.existentials() + self.universals()
+
+#   TRAP:  If we define __len__, then the "if F" will fail if len(F)==0 !!!
+#   Rats .. so much for making it more like a list!
+    def size(self):
+        """ How many statements? """
+        return len(self.statements)
+
+    def statementsMatching(self, pred=None, subj=None, obj=None):
+        return self._index.get((pred, subj, obj), [])
+    
+    def add(self, triple):
+        return self.store.storeQuad((self, triple[0], triple[1], triple[2]))
+
+    def outputStrings(self, channel=None, relation=None):
+        """Fetch output strings from store, sort and output
+
+        To output a string, associate (using the given relation) with a key
+        such that the order of the keys is the order in which you want the corresponding
+        strings output.
+        """
+        if channel == None:
+            channel = sys.stdout
+        if relation == None:
+            relation = self.store.intern((SYMBOL, Logic_NS + "outputString"))
+        list = self.statementsMatching(pred=relation)  # List of things of (subj, obj) pairs
+        pairs = []
+        for s in list:
+            pairs.append((s[SUBJ], s[OBJ]))
+        pairs.sort(comparePair)
+        for key, str in pairs:
+            channel.write(str.string.encode('utf-8'))
+
+def comparePair(self, other):
+    for i in 0,1:
+        x = compareURI(self[i], other[i])
+        if x != 0:
+            return x
+
+
+
 
 class StoredStatement:
 
@@ -353,10 +436,10 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
         # or at least for non-uri chars, such as space?
 
         if type(obj_py) is type(""):
-            return store.intern((RESOURCE, obj_py))
+            return store.intern((SYMBOL, obj_py))
         elif type(obj_py) is type(u""):
             uri = obj_py.encode('utf-8')
-            return store.intern((RESOURCE, uri))
+            return store.intern((SYMBOL, uri))
 
 class BI_rawType(LightBuiltIn, Function):
     """
@@ -501,7 +584,7 @@ def loadToStore(store, addr):
         p.endDoc()
     store.storeQuad((store._experience,
                      store.semantics,
-                     store.intern((RESOURCE, addr)),
+                     store.intern((SYMBOL, addr)),
                      store.intern((FORMULA, addr + "#_formula" ))))
 
 def _indent(str):
@@ -522,9 +605,8 @@ class BuiltInFailed(Exception):
     def __str__(self):
         reason = _indent(self._info[1].__str__())
 #        return "reason=" + reason
-        return ("Error during built-in operation\n  <%s>\n  in formula %s,\nbecause:\n%s" % (
+        return ("Error during built-in operation\n%s\nbecause:\n%s" % (
             `self._item`,
-            `self._item[QUAD][CONTEXT]`,
 #            `self._info`))
             `reason`))
     
@@ -617,7 +699,7 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
             if not isinstance(x, Formula): return None # Can't
             store.copyContext(x, F)
             if thing.verbosity() > 74:
-                progress("    Formula %s now has %i" % (x2s(F),len(F.occursAs[CONTEXT])))
+                progress("    Formula %s now has %i" % (x2s(F),len(F.statements)))
         return store.endFormula(F)
 
     
@@ -630,6 +712,7 @@ class RDFStore(RDFSink.RDFSink) :
         RDFSink.RDFSink.__init__(self)
 
         self.resources = {}    # Hash table of URIs for interning things
+        self.formulae = []     # List of all formulae        
         self._experience = None   #  A formula of all the things program run knows from direct experience
         self._formulaeOfLength = {} # A dictionary of all the constant formuale in the store, lookup by length.
 
@@ -639,7 +722,7 @@ class RDFStore(RDFSink.RDFSink) :
         if genPrefix: self._genPrefix = genPrefix
         else: self._genPrefix = "#_gs"
 
-        self._index = {}   
+#        self._index = {}   
 
         # Constants, as interned:
         
@@ -727,7 +810,7 @@ class RDFStore(RDFSink.RDFSink) :
 
     def internURI(self, str):
         assert type(str) is type("") # caller %xx-ifies unicode
-        return self.intern((RESOURCE,str))
+        return self.intern((SYMBOL,str))
     
     def intern(self, pair):
         """find-or-create a Fragment or a Resource or Literal as appropriate
@@ -761,7 +844,7 @@ class RDFStore(RDFSink.RDFSink) :
                 if string.find(resid, "#") >= 0:
                     raise URISyntaxError # Hash in document ID - can be from parsing XML as N3!
                 r = self.internURI(resid)
-                if typ == RESOURCE:
+                if typ == SYMBOL:
                     if urirefString == notation3.N3_nil[1]:  # Hack - easier if we have a different classs
                         result = r.internFrag(urirefString[hash+1:], FragmentNil)
                     else:
@@ -774,11 +857,13 @@ class RDFStore(RDFSink.RDFSink) :
         """ The store initialized the pointers in a new Thing
         """
 
-        x.occursAs = [], [], [], []    # These are special cases of indexes
-        self._index[(x,None,None,None)] = x.occursAs[CONTEXT]
-        self._index[(None,x,None,None)] = x.occursAs[PRED]
-        self._index[(None,None,x,None)] = x.occursAs[SUBJ]
-        self._index[(None,None,None,x)] = x.occursAs[OBJ]
+#        x.occursAs = [], [], [], []    # These are special cases of indexes
+
+        if isinstance(x, Formula):
+             x.statements = []
+             x._index = {}
+             x._index[(None,None,None)] = x.statements
+             self.formulae.append(x)
         return x
      
     def internList(self, value):
@@ -790,17 +875,14 @@ class RDFStore(RDFSink.RDFSink) :
         return x
 
     def deleteFormula(self,F):
-        if thing.verbosity() > 30: progress("Deleting formula %s %ic %ip %is %io" %
-                                            ( `F`,
-                                              len(F.occursAs[CONTEXT]),
-                                              len(F.occursAs[PRED]),
-                                              len(F.occursAs[SUBJ]),
-                                              len(F.occursAs[OBJ])))
-        for s in F.occursAs[CONTEXT][:]:   # Take copy
+        if thing.verbosity() > 30: progress("Deleting formula %s %ic" %
+                                            ( `F`, len(F.statements)))
+        for s in F.statements[:]:   # Take copy
             self.removeStatement(s)
-        for p in ALL4:
-            if F.occursAs[p] != []:
-                raise RuntimeError("Attempt to delete Formula in use "+`F`, F.occursAs)
+#        for p in ALL4:
+#            if F.occursAs[p] != []:
+#                raise RuntimeError("Attempt to delete Formula in use "+`F`, F.occursAs)
+        self.formulae.remove(F)
 
     def endFormula(self, F):
         """If this formula already exists, return the master version.
@@ -810,7 +892,7 @@ class RDFStore(RDFSink.RDFSink) :
         """
         if F.cannonical:
             return F.cannonical
-        fl = F.occursAs[CONTEXT]
+        fl = F.statements
         fl.sort(StoredStatement.compareSubjPredObj)
         l = len(fl)   # The number of statements
         possibles = self._formulaeOfLength.get(l, None)  # Formulae of same length
@@ -821,7 +903,7 @@ class RDFStore(RDFSink.RDFSink) :
             return F
 
         for G in possibles:
-            gl = G.occursAs[CONTEXT]
+            gl = G.statements
             if len(gl) != l: raise RuntimeError("@@Length is %i instead of %i" %(len(gl), l))
             for i in range(l):
                 for p in CONTEXT, PRED, SUBJ, OBJ:
@@ -832,8 +914,8 @@ class RDFStore(RDFSink.RDFSink) :
                     continue
                 break
             else: #match
-                if thing.verbosity() > 40: progress("** Smushed new formula %s giving old %s" % (F, G))
-                self.replaceWith(F,G)
+                if thing.verbosity() > 20: progress("** Smushed new formula %s giving old %s" % (F, G))
+#                self.replaceWith(F,G)
                 return G
         possibles.append(F)
 #        raise oops
@@ -842,22 +924,19 @@ class RDFStore(RDFSink.RDFSink) :
 
     def reopen(self, F):
         if not F.cannonical: return F # was open
-        self._formulaeOfLength[len(F.occursAs[CONTEXT])].remove(F)  # Formulae of same length
+        self._formulaeOfLength[len(F.statements)].remove(F)  # Formulae of same length
         F.cannonical = None
         return F
 
     def replaceWith(self,old, new):
         if thing.verbosity() > 30:
-            progress("Smush: Replacing %s %ic %ip %is %io with %s" %
+            progress("Smush: Replacing %s (%i statements) with %s" %
                         ( `old`,
-                          len(old.occursAs[CONTEXT]),
-                          len(old.occursAs[PRED]),
-                          len(old.occursAs[SUBJ]),
-                          len(old.occursAs[OBJ]),
+                          len(old.statements),
                           `new`))
         bindings = [ (old, new) ]
-        for p in ALL4:
-            for s in old.occursAs[p][:]:  # copy
+        for F in self.formulae[:]:
+            for s in F.statements[:]:
                 if thing.verbosity() > 95: progress(".......removed", s.quad)
                 q2 = _lookupQuad(bindings, s.quad)
                 self.removeStatement(s)
@@ -867,7 +946,7 @@ class RDFStore(RDFSink.RDFSink) :
 
     def endFormulaNested(self, F, bindings = [], level=0):
         """Cannonicalize this after cannonicalizing any subformulae recusrively
-        Note the subs must be done first. Also not that we can't assume statements
+        Note the subs must be done first. Also note that we can't assume statements
         or formulae are valid after a call to this, unless we track the
         changes which are kept in a shared list, bindings. """
         if thing.verbosity() > 80:
@@ -876,13 +955,21 @@ class RDFStore(RDFSink.RDFSink) :
         if F.cannonical:
             return F.cannonical
         subs = []   # Immediate subformulae
-        for s in F.occursAs[CONTEXT]:
+        for s in F.statements:
             for p in PRED, SUBJ, OBJ:
                 x = s[p]
                 if isinstance(x, Formula) and x is not F:
                     if x not in subs: subs.append(x)
         for x in subs:
             self.endFormulaNested( _lookup(bindings, x), bindings, level=level+1)
+        if bindings != []:
+            for s in F.statements[:]:  # Take a copy as the lists change
+                q2 = _lookupQuad(bindings, s.quad)
+                if q2 != s.quad:
+                    if thing.verbosity() > 95: progress(".......removed", s.quad)
+                    self.removeStatement(s)
+                    self.storeQuad(q2)   #  Could be faster? Patch the existing one?
+                    if thing.verbosity() > 95: progress(".......restored", q2)
 
         new = self.endFormula(F)
         if new is not F:
@@ -914,57 +1001,51 @@ class RDFStore(RDFSink.RDFSink) :
     def makeComment(self, str):
         pass        # Can't store comments
 
-    def contains(self, q):
-        """  Check whether this quad  exists in the store
-
-        Returns 0 or 1        
-	"""
-        return len(self._index.get(q, []))
 
     def any(self, q):
         """  Quad contains one None as wildcard. Returns first value
         matching in that position.
 	"""
-        list = self._index.get(q, None)
-        if list == None: return None
+        list = q[CONTEXT].statementsMatching(q[PRED], q[SUBJ], q[OBJ])
+        if not list: return None
         for p in ALL4:
             if q[p] == None:
                 return list[0].quad[p]
 
-    def each(self, q):
-        """Search store for all occurrences of a one-statement pattern       OBSOLETE
-
-        Quad contains one or more None as wildcard.   If only one wildcard, returns list of values found.append
-        If more than one wildcard, returns list of lists of values
-        matching in those positions.
-	    """
-        short = 1000000 #@@
-        search = []    # p's to search
-        variables = [] # p's where we extract data
-        found = []     # resutling list of lists of found values
-        for p in ALL4:
-            if q[p] != None:
-                search.append(p)
-                l = len(q[p].occursAs[p])
-                if l < short:
-                    short = l
-                    p_short = p
-            else:
-                variables.append(p)
-        search.remove(p_short)
-        for t in q[p_short].occursAs[p_short]:
-            for p in search:
-                if q[p] != None and q[p] is not t.quad[p]:
-                    break
-            else:  # no breaks
-                if len(variables) == 1:
-                    found.append(t[variables[0]])
-                else:
-                    value = []
-                    for p in variables:
-                        value.append(t[p])
-                    found.append(value)
-        return found
+#    def each(self, q):
+#        """Search store for all occurrences of a one-statement pattern       OBSOLETE
+#
+#        Quad contains one or more None as wildcard.   If only one wildcard, returns list of values found.append
+#        If more than one wildcard, returns list of lists of values
+#        matching in those positions.
+#	    """
+#        short = 1000000 #@@
+#        search = []    # p's to search
+#        variables = [] # p's where we extract data
+#        found = []     # resutling list of lists of found values
+#        for p in ALL4:
+#            if q[p] != None:
+#                search.append(p)
+#                l = len(q[p].occursAs[p])
+#                if l < short:
+#                    short = l
+#                    p_short = p
+#            else:
+#                variables.append(p)
+#        search.remove(p_short)
+#        for t in q[p_short].occursAs[p_short]:
+#            for p in search:
+#                if q[p] != None and q[p] is not t.quad[p]:
+#                    break
+#            else:  # no breaks
+#                if len(variables) == 1:
+#                    found.append(t[variables[0]])
+#                else:
+#                    value = []
+#                    for p in variables:
+#                        value.append(t[p])
+#                    found.append(value)
+#        return found
 
     def storeQuad(self, q):
         """ intern quads, in that dupliates are eliminated.
@@ -973,14 +1054,13 @@ class RDFStore(RDFSink.RDFSink) :
         """
         #  Check whether this quad already exists
 #        print "Before, Formula now has %i statements" % len(self._index[(q[CONTEXT],None,None,None)])
-        if self.contains(q):
-            if thing.verbosity() > 97:  progress("storeQuad duplicate suppressed"+`q`)
-            return 0  # Return no change in size of store
         if thing.verbosity() > 97:
             progress("storeQuad (size before %i) "%self.size +`q`)
         
-        self.size = self.size+1
         context, pred, subj, obj = q
+        if context.statementsMatching(pred, subj, obj):
+            if thing.verbosity() > 97:  progress("storeQuad duplicate suppressed"+`q`)
+            return 0  # Return no change in size of store
         if context.cannonical:
             raise RuntimeError("Attempt to add statement to cannonical formula "+`context`)
 
@@ -988,8 +1068,9 @@ class RDFStore(RDFSink.RDFSink) :
 # To do this, we need (a) a first; (b) a rest, and (c) the rest being a list.
 # We trigger List collapse on any of these three becoming true.
 
+        self.size = self.size+1
         if pred is self.rest and obj.asList() != None:
-            ifirst = self._index.get((context, self.first, subj, None),None)
+            ifirst = context.statementsMatching(pred=self.first, subj=subj)
             if ifirst and subj._asList == None:
                 subj._asList = obj._asList.precededBy(ifirst[0][OBJ])
 #                self.removeStatement(ifirst[0])  # Neither first nor rest is needed now
@@ -997,7 +1078,7 @@ class RDFStore(RDFSink.RDFSink) :
 #                return 1  # @@ what are we counting, exactly? We did learn something!
 
         elif pred is self.first:
-            irest = self._index.get((context, self.rest, subj, None),None)
+            irest = context.statementsMatching(self.rest, subj, None)
             if irest:
                 rest = irest[0][OBJ]
                 if rest.asList() != None and subj._asList == None:
@@ -1009,24 +1090,40 @@ class RDFStore(RDFSink.RDFSink) :
         s = StoredStatement(q)
 
 
-        # Build 15 indexes.  4 of them double as occursAs lists.
-#       This now takes most of the time in a typical  cwm run! :-( 
+        # Build 8 indexes.
+#       This now takes a lot of the time in a typical  cwm run! :-( 
 
-        for o1 in obj, None:
-            for s1 in subj, None:
-                for p1 in pred, None:
-                    for c1 in context, None:
-                        quad = (c1, p1, s1, o1)
-                        if quad != (None, None, None, None):
-                            list = self._index.get(quad, None)
-                            if list == None:
-                                self._index[quad]=[s]
-                            else:
-                                list.append(s)
+        context.statements.append(s)
+        
+        list = context._index.get((None, None, obj), None)
+        if list == None: context._index[(None, None, obj)]=[s]
+        else: list.append(s)
+
+        list = context._index.get((None, subj, None), None)
+        if list == None: context._index[(None, subj, None)]=[s]
+        else: list.append(s)
+
+        list = context._index.get((None, subj, obj), None)
+        if list == None: context._index[(None, subj, obj)]=[s]
+        else: list.append(s)
+
+        list = context._index.get((pred, None, None), None)
+        if list == None: context._index[(pred, None, None)]=[s]
+        else: list.append(s)
+
+        list = context._index.get((pred, None, obj), None)
+        if list == None: context._index[(pred, None, obj)]=[s]
+        else: list.append(s)
+
+        list = context._index.get((pred, subj, None), None)
+        if list == None: context._index[(pred, subj, None)]=[s]
+        else: list.append(s)
+
+        list = context._index.get((pred, subj, obj), None)
+        if list == None: context._index[(pred, subj, obj)]=[s]
+        else: list.append(s)
 
 
-#        progress( "Exiting, Formula now has %i statements" %
-#                  len(self._index[(context,None,None,None)]))
         return 1  # One statement has been added
 
 
@@ -1050,7 +1147,7 @@ class RDFStore(RDFSink.RDFSink) :
         counts = {}   # Dictionary of how many times each
         closure = self.subContexts(context)    # This context and all subcontexts
         for con in closure:
-            for s in con.occursAs[CONTEXT]:
+            for s in con.statements:
                 for p in PRED, SUBJ, OBJ:
                     x = s[p]
                     if (x is self.first or x is self.rest) and p == PRED:
@@ -1065,7 +1162,7 @@ class RDFStore(RDFSink.RDFSink) :
         mp = None
         for r, count in counts.items():
             if thing.verbosity() > 25: progress("    Count is %3i for %s" %(count, r.uriref()))
-            if (r.uriref != notation3.RDF_NS_URI[:-1]
+            if (r.uri != notation3.RDF_NS_URI[:-1]
                 and (count > best or
                      (count == best and `mp` > `r`))) :  # Must be repeatable for retests
                 best = count
@@ -1075,11 +1172,11 @@ class RDFStore(RDFSink.RDFSink) :
             progress("# Most popular Namesapce in %s is %s with %i" % (`context`, `mp`, best))
 
         if mp is None: return
-        self.defaultNamespace = (RESOURCE, mp.uriref(None)+"#")
+        self.defaultNamespace = (SYMBOL, mp.uriref()+"#")
         return
 
         
-        mpPair = (RESOURCE, mp.uriref(None)+"#")
+        mpPair = (SYMBOL, mp.uriref()+"#")
         defns = self.namespaces.get("", None)
         if defns :
             del self.namespaces[""]
@@ -1103,8 +1200,8 @@ class RDFStore(RDFSink.RDFSink) :
     def dumpChronological(self, context, sink):
         sink.startDoc()
         self.dumpPrefixes(sink)
-#        print "# There are %i statements in %s" % (len(context.occursAs[CONTEXT]), `context` )
-        for s in context.occursAs[CONTEXT]:
+#        print "# There are %i statements in %s" % (len(context.statements), `context` )
+        for s in context.statements:
             self._outputStatement(sink, s.quad)
         sink.endDoc()
 
@@ -1125,7 +1222,7 @@ class RDFStore(RDFSink.RDFSink) :
         sink.startDoc()
         self.dumpPrefixes(sink)
 
-        statements = context.matching((self.forSome, context, None))
+        statements = context.statementsMatching(self.forSome, context, None)
         if sorting: statements.sort(StoredStatement.compareObj)
         for s in statements:
             self._outputStatement(sink, s.quad)
@@ -1133,7 +1230,7 @@ class RDFStore(RDFSink.RDFSink) :
         rs = self.resources.values()
         if sorting: rs.sort()
         for r in rs :  # First the bare resource
-            statements = context.matching((None, r, None))
+            statements = context.statementsMatching(subj=r)
             if sorting: statements.sort(StoredStatement.comparePredObj)
             for s in statements :
                 if not(context is s.quad[SUBJ]and s.quad[PRED] is self.forSome):
@@ -1142,7 +1239,7 @@ class RDFStore(RDFSink.RDFSink) :
                 fs = r.fragments.values()
                 if sorting: fs.sort
                 for f in fs :  # then anything in its namespace
-                    statements = context.matching((None, f, None))
+                    statements = context.statementsMatching(subj=f)
                     if sorting: statements.sort(StoredStatement.comparePredObj)
                     for s in statements:
                         self._outputStatement(sink, s.quad)
@@ -1185,11 +1282,11 @@ class RDFStore(RDFSink.RDFSink) :
         Paired with this is whether this is a subexpression.
         """
 
-        _asPred = len(self._index.get((context, x, None, None),[]))
+        _asPred = len(context._index.get((x, None, None),[]))
         _elsewhere = 0
-        _isExistential = len(self._index.get((context, self.forSome, context, x),[]))
-        _asObj = len(self._index.get((context, None, None, x),[])) - _isExistential
-        _loop = len(self._index.get((context, None, x, x),[]))  # does'es count as incomming
+        _isExistential = len(context._index.get((self.forSome, context, x),[]))
+        _asObj = len(context._index.get((None, None, x),[])) - _isExistential
+        _loop = len(context._index.get((None, x, x),[]))  # does'es count as incomming
         
         if isinstance(x, Literal):
             anon = 0     #  Never anonymous, always just use the string
@@ -1199,9 +1296,9 @@ class RDFStore(RDFSink.RDFSink) :
             contextClosure = self.subContexts(context)[:]
             contextClosure.remove(context)
             for sc in contextClosure:
-                if (self._index.get((sc, None, None, x),None)
-                    or self._index.get((sc, None, x, None),None)
-                        or self._index.get((sc, x, None, None),None)):
+                if (sc._index.get((None, None, x),None)
+                    or sc._index.get((None, x, None),None)
+                        or sc._index.get((x, None, None),None)):
                     _elsewhere = 1  # Occurs in a subformula - can't be anonymous!
                     break
             _anon = (_asObj < 2) and ( _asPred == 0) and (_loop ==0) and _isExistential and not _elsewhere
@@ -1251,7 +1348,7 @@ class RDFStore(RDFSink.RDFSink) :
             y = x
             y.reverse()
             for e in y:
-                g1 = store.genid(RESOURCE)
+                g1 = store.genid()
                 self.storeQuad((context, self.forSome, context, g1))
                 self.storeQuad((context, self.first, g1, self._fromPython(context, e)))
                 self.storeQuad((context, self.rest, g1, g))
@@ -1273,15 +1370,15 @@ class RDFStore(RDFSink.RDFSink) :
         for each subject.
         @@@ Dump "this" first before everything else
         """
-        if sorting: context.occursAs[CONTEXT].sort(StoredStatement.compareSubjPredObj)
+        if sorting: context.statements.sort(StoredStatement.compareSubjPredObj)
 
-        statements = context.matching((None, context, None))  # context is subject
+        statements = context.statementsMatching(subj=context)  # context is subject
         if statements:
             self._dumpSubject(context, context, sink, sorting, statements)
 
         currentSubject = None
         statements = []
-        for s in context.occursAs[CONTEXT]:
+        for s in context.statements:
             con, pred, subj, obj =  s.quad
             if subj is con: continue # Done them above
             if not currentSubject: currentSubject = subj
@@ -1378,7 +1475,7 @@ class RDFStore(RDFSink.RDFSink) :
             return # implicit forSome
         li = (obj.asList() != None)
         if _anon and (_incoming == 1 or li or _se):  # Embedded anonymous node in N3
-            _isSubject = len(self._index.get((context, obj, None, None), [])) # Has properties in this context?
+            _isSubject = len(context._index.get((obj, None, None), [])) # Has properties in this context?
 
 #            if _isContext > 0 and _isSubject > 0: raise CantDoThat # Syntax problem!@@@
             
@@ -1391,7 +1488,7 @@ class RDFStore(RDFSink.RDFSink) :
                             progress("List found as object of dumpStatement " + x2s(obj))
 #                        self.dumpStatement(sink, (context, self.first, obj, obj.asList().first))
 #                        self.dumpStatement(sink, (context, self.rest, obj, obj.asList().rest)) # includes rest of list
-                    ss = context.matching((None, obj, None))
+                    ss = context.statementsMatching(subj=obj)
                     if sorting: ss.sort(StoredStatement.comparePredObj)
                     for t in ss:
                         self.dumpStatement(sink, t.quad, sorting)
@@ -1429,7 +1526,7 @@ class RDFStore(RDFSink.RDFSink) :
 #        self.reopen(new)    # If cannonical, uncannonicalize #@@ error prone if any references
 #        if bindings == None:
 #            bindings = [(old, new)]
-#        for s in old.occursAs[CONTEXT][:] :   # Copy list!
+#        for s in old.statements[:] :   # Copy list!
 #            q = s.quad
 #            self.removeStatement(s)  # SLOW!
 #            del(s)
@@ -1437,7 +1534,7 @@ class RDFStore(RDFSink.RDFSink) :
 
     def copyContextRecursive(self, old, new, bindings):
         total = 0
-        for s in old.occursAs[CONTEXT][:] :   # Copy list!
+        for s in old.statements[:] :   # Copy list!
 #            q = s.quad
 #            self.removeStatement(s)
             q2 = _lookupQuadRecursive(bindings, s.quad)
@@ -1446,7 +1543,7 @@ class RDFStore(RDFSink.RDFSink) :
         return total
                 
     def copyContext(self, old, new):
-        for s in old.occursAs[CONTEXT][:] :   # Copy list!
+        for s in old.statements[:] :   # Copy list!
             q = s.quad
             for p in CONTEXT, PRED, SUBJ, OBJ:
                 x = q[p]
@@ -1462,32 +1559,37 @@ class RDFStore(RDFSink.RDFSink) :
     def purge(self, context, boringClass=None):
         if not boringClass:
             boringClass = self.Chaff
-        for s in self._index.get((context, self.type, None, boringClass),[])[:]:
+        for s in context.statementsMatching(self.type, None, boringClass)[:]:
             con, pred, subj, obj = s.quad  # subj is a member of boringClass
             total = 0
-            for p in (PRED, SUBJ, OBJ):
-                for t in subj.occursAs[p][:]:  # Take copy as list changes
-                    if t.quad[CONTEXT] is context:
-                        self.removeStatement(t)
+            for t in context.statementsMatching(subj=subj)[:]:
+                        self.removeStatement(t)    # SLOW
                         total = total + 1
-
+            for t in context.statementsMatching(pred=subj)[:]:
+                        self.removeStatement(t)    # SLOW
+                        total = total + 1
+            for t in context.statementsMatching(obj=subj)[:]:
+                        self.removeStatement(t)    # SLOW
+                        total = total + 1
+                        
             if thing.verbosity() > 30:
                 progress("Purged %i statements with %s" % (total,`subj`))
 
 
     def removeStatement(self, s):
+        "Slow, alas. The remove()s take a lot of time."
         context, pred, subj, obj = s.quad
         if thing.verbosity() > 97:  progress("removeStatement "+`s.quad`)
-        for o1 in obj, None:
-            for s1 in subj, None:
-                for p1 in pred, None:
-                    for c1 in context, None:
-                        q = c1, p1, s1, o1
-                        if q != (None, None, None, None):
-                            self._index[(c1, p1, s1, o1)].remove(s)
-        
+        context.statements.remove(s)
+        context._index[(None, None, obj)].remove(s)
+        context._index[(None, subj, None)].remove(s)
+        context._index[(None, subj, obj)].remove(s)
+        context._index[(pred, None, None)].remove(s)
+        context._index[(pred, None, obj)].remove(s)
+        context._index[(pred, subj, None)].remove(s)
+        context._index[(pred, subj, obj)].remove(s)
         self.size = self.size-1
-        del s
+#        del s
 
 #   Iteratively apply rules to a formula
 
@@ -1532,7 +1634,7 @@ class RDFStore(RDFSink.RDFSink) :
         
         _total = 0
         
-        for s in filterContext.occursAs[CONTEXT]:
+        for s in filterContext.statements:
             t = s.quad
             if t[PRED] is self.implies:
                 if alreadyDictionary == None:
@@ -1622,7 +1724,7 @@ class RDFStore(RDFSink.RDFSink) :
 
         if thing.verbosity() > 20:
             progress( "# testIncludes BUILTIN, %i terms in template %s, %i unmatched, %i template variables" % (
-                len(template.occursAs[CONTEXT]),
+                len(template.statements),
                 `template`[-8:], len(unmatched), len(templateExistentials)))
         if thing.verbosity() > 80:
             for v in _variables:
@@ -1648,7 +1750,7 @@ class RDFStore(RDFSink.RDFSink) :
 #        progress("subcontext "+`con`+" path "+`len(path)`)
         set = [con]
         path2 = path + [ con ]     # Avoid loops
-        for s in con.occursAs[CONTEXT]:
+        for s in con.statements:
             for p in PRED, SUBJ, OBJ:
                 if isinstance(s[p], Formula):
                     if s[p] not in path2:
@@ -1665,7 +1767,7 @@ class RDFStore(RDFSink.RDFSink) :
         statements = []
         variables = []
         existentials = []
-        for arc in con.occursAs[CONTEXT]:
+        for arc in con.statements:
             context, pred, subj, obj = arc.quad
             statements.append(arc.quad)
             if subj is context and (pred is self.forSome or pred is self.forAll): # @@@@
@@ -1675,14 +1777,14 @@ class RDFStore(RDFSink.RDFSink) :
                 
         # Find all subformulae  - forumulae which are mentioned at least once.
         subformulae = []
-        for arc in con.occursAs[CONTEXT]:
+        for arc in con.statements:
             for p in [ SUBJ, PRED, OBJ]:  # @ can remove PRED if formulae and predicates distinct
                 x = arc.quad[p]
                 if isinstance(x, Formula) and x in existentials:  # x is a Nested context
                     if x not in subformulae: subformulae.append(x) # Only one copy of each please
                     
         for x in  subformulae:
-            for a2 in con.occursAs[CONTEXT]:  # Rescan for variables
+            for a2 in con.statements:  # Rescan for variables
                 c2, p2, s2, o2 = a2.quad
                 if  s2 is x and (p2 is self.forSome or p2 is self.forAll):
                     variables.append(o2)   # Collect list of existentials
@@ -1705,7 +1807,7 @@ class RDFStore(RDFSink.RDFSink) :
         statements = []
         variables = []
 #        existentials = []
-        for arc in con.occursAs[CONTEXT]:
+        for arc in con.statements:
             context, pred, subj, obj = arc.quad
             if not(subj is context and pred is self.forSome):
                 statements.append(arc.quad)
@@ -1729,7 +1831,7 @@ class RDFStore(RDFSink.RDFSink) :
         if isinstance(x, Formula):
             set = []
 #            if thing.verbosity() > 98: progress("    occuringIn: "+"  "*level+`x`)
-            for s in x.occursAs[CONTEXT]:
+            for s in x.statements:
                 if s[PRED] is not self.forSome:
                     for p in PRED, SUBJ, OBJ:
                         y = s[p]
@@ -1756,7 +1858,7 @@ class RDFStore(RDFSink.RDFSink) :
         """ Figure out, given a set of variables whether any occur in a list, formula etc."""
         if x in vars: return x
         if isinstance(x, Formula):
-            for s in x.occursAs[CONTEXT]:   # Should be valid list
+            for s in x.statements:   # Should be valid list
                 for p in PRED, SUBJ, OBJ:
                     y = s[p]
                     z = self.anyOccurrences(vars, y)
@@ -1817,7 +1919,7 @@ class RDFStore(RDFSink.RDFSink) :
         q2 = list(quad)
         for p in ALL4:
             if quad[p] == None:
-                v = self.intern((RESOURCE, "internaluseonly:#var"+`p`))
+                v = self.intern((SYMBOL, "internaluseonly:#var"+`p`))
                 variables.append(v)
                 q2[p] = v
         unmatched = [ tuple(q2) ]
@@ -1836,10 +1938,10 @@ class RDFStore(RDFSink.RDFSink) :
         """Check whether this new list causes ohter things to become lists"""
         if thing.verbosity() > 80: progress("Checking new list ",`L`)
         rest = L.asList()
-        possibles = self._index.get((context, self.rest, None, L), [])  # What has this as rest?
+        possibles = context.statementsMatching(pred=self.rest, obj=L)  # What has this as rest?
         for s in possibles:
             L2 = s[SUBJ]
-            ff = self._index[(context, self.first, L2, None)]
+            ff = context.statementsMatching(pred=self.first, subj=L2)
             if ff:
                 first = ff[0][OBJ]
                 if L2.asList() == None:
@@ -1912,11 +2014,13 @@ class RDFStore(RDFSink.RDFSink) :
 #        clashes = self.occurringIn(targetContext, vars)    Too slow to do every time
 #        for v in clashes:
         for v in vars:
-            b2.append((v, store.genid(RESOURCE))) # Regenerate names to avoid clash
+            b2.append((v, store.genid(SYMBOL))) # Regenerate names to avoid clash
         if thing.verbosity()>20:
-            progress( "Concluding definitively" + bindingsToString(b2))
+            progress( "Concluding definitively" + bindingsToString(b2) )
         before = self.size
         self.copyContextRecursive(conclusion, targetContext, b2)
+        if thing.verbosity()>20:
+            progress( "  Size of store changed from %i to %i"%(before, self.size))
         return self.size - before
 
 #        myConclusions = conclusions[:]
@@ -1945,7 +2049,7 @@ class RDFStore(RDFSink.RDFSink) :
 #            if isinstance(i, Formula):
 #                g = store.genid(FORMULA)  #  Generate with same type as original
 #            else:
-#                g = store.genid(RESOURCE)  #  Generate with same type as original
+#                g = store.genid(SYMBOL)  #  Generate with same type as original
 #            bindings2.append((i,g))
 
         total = 0
@@ -2154,13 +2258,16 @@ class QueryItem:
                 ur = self.store.occurringIn(x, allvars)
                 self.neededFor[p] = ur    # This determines when we can run a builtin
                 if ur != []:
-                    self.neededFor[p] = ur
+ #                   self.neededFor[p] = ur
                     complex = 1     # Can't search with variables
                 
         if not complex:
-            quad2 = pattern[0], pattern[1], pattern[2], pattern[3]  # @@@ Yuk
-            self.myIndex = self.store._index.get(quad2, [])
+            self.myIndex = con._index.get((pattern[1], pattern[2], pattern[3]), [])
             self.short = len(self.myIndex)
+#            if (pattern[1], pattern[2], pattern[3]) == (None, None, None):
+#                    progress("@@ short=", self.short, "for", (pattern[1], pattern[2], pattern[3]))
+#                    progress("@@ statements:", con.statements)#
+#                    progress("@@ index:", con._index[(None, None, None)])
         else:
             self.short = INFINITY   # complex expressions with variables in, can't search
 
@@ -2326,8 +2433,8 @@ class QueryItem:
         self.quad = q[0], q[1], q[2], q[3]  # yuk
 
         if self.state in [60, 50, 75]: # Not searched yet
-            pattern = [None, None, None, None]
-            for p in ALL4:
+            pattern = [con, None, None, None]
+            for p in PARTS:
                 x = self.quad[p]
                 if isinstance(x, Formula) or x.asList() != None:
                     if self.neededFor[p]!= []:
@@ -2336,8 +2443,7 @@ class QueryItem:
                 if self.neededFor[p] != [x]:   # If not a variable
                     pattern[p] = x
             else:
-                quad2 = pattern[0], pattern[1], pattern[2], pattern[3]  # @@@ Yuk
-                self.myIndex = self.store._index.get(quad2, [])
+                self.myIndex = con._index.get(( pattern[1], pattern[2], pattern[3]), [])
                 self.short = len(self.myIndex)
             if self.short == 0:
                 self.searchDone()
@@ -2406,7 +2512,7 @@ def _lookupRecursive(bindings, x, old=None, new=None):
     if oc == []: return x # phew!
     y = store.genid(FORMULA)
     if thing.verbosity() > 90: progress("lookupRecursive "+`x`+" becomes new "+`y`)
-    for s in x.occursAs[CONTEXT]:
+    for s in x.statements:
         store.storeQuad((y,
                          _lookupRecursive(bindings, s[PRED], x, y),
                          _lookupRecursive(bindings, s[SUBJ], x, y),

@@ -13,7 +13,7 @@
 
 q:Transaction a s:Class.
 
-q:Bank a s:Class.
+q:Bank a s:Class.  # should be Bank_transaction probably
 
 q:Cat a s:Class; s:label "caetgory".
 q:category a r:Property; s:label ""; s:domain q:Transaction.

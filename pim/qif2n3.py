@@ -16,14 +16,14 @@ def stripOut(str, characters):
     str2 = ""
     for i in range(len(str)):
         if str[i] not in characters:
-            str2.append(str[i])
+            str2 = str2 + str[i]
     return str2
 
 def dealWithNumber(str):
     """The number field can be used for other things, which map to class membership."""
     if str == "ATM": return "a qu:ATMTrans;"
     if str == "DEP": return "a qu:depositTrans;"
-    return "qu:number " + str
+    return "qu:number " + '"' + str + '";'
 
 def convertAmount(str):
     return stripOut(str, ",")
@@ -41,7 +41,7 @@ def convertDate(qdate):
             qdate = qdate[:i] + "0" + qdate[i+1:]
     if qdate[5] == "'": C="20"
     else: C="19"
-    return C + qdate[6:8] + "-" + qdate[3:5] + "-" + qdate[0:2]
+    return C + qdate[6:8] + "-" + qdate[0:2] + "-" + qdate[3:5]
     
 def extract(path):
     global nochange
@@ -52,11 +52,12 @@ def extract(path):
     
     # The properties for any non-investment account:
     nonInvestmentProperties = { "C": None, "D": "date", "E": "splitMemo", "L": "category", "P": "payee",
-                   "M": "memo", "N": "number", "S": "splitCategory", "T": "amount", "U": None, "$": "splitAmount"}
+                   "M": "memo", "N": "number", "S": "splitCategory", "T": "amount",
+                                "U": None, "$": "splitAmount"}
 
     # For each type of account, a conversion from QIF poerty letter to rdf property name:
     properties = {
-        # The line below was "Oth L"  for a mortguage type which looks corrupted!
+        # The line below was "Oth L"  for a mortguage type which looks corrupted -- No, its "Other lender"
          "Mort": nonInvestmentProperties,
          "Account": {"D": "description", "L": "limit", "N": "name", "T":  "type"},
          "Bank": nonInvestmentProperties,
@@ -65,7 +66,7 @@ def extract(path):
          "CCard": nonInvestmentProperties,
          "Class": {"D": "description", "N": "name"},
          "Invst": { "D": "date", "L": "link", "P": "payee", "M": "memo",
-                    "N": "number", "T": "amount", "U": "amount2" },
+                    "N": "number", "T": "amount", "U": "amount2", "$": "splitAmount" },
          "Oth_A": nonInvestmentProperties,
          "Oth_L": nonInvestmentProperties,
          }
@@ -77,8 +78,7 @@ def extract(path):
     print """
     @prefix : <#>.
     @prefix d: <#>.
-    @prefix qu: <qif#>.
-    
+    @prefix qu:  <http://www.w3.org/2000/10/swap/pim/qif#>.
     """
 
     input = open(path, "r")
@@ -103,14 +103,14 @@ def extract(path):
                 if value[i]==" ":
                     value=value[:i]+"_"+value[i+1:]
             if inList and what == "Account" and value[0:5]=="Type:":   #  @@@ sic
-                print "\n# List of transactions follows:\n    is qu:toAccount of [\n"
+                print ";\n    is qu:toAccount of [",
                 inList = 1
                 inRecord = 1
                 what = value[5:]
                 continue
 
             if inList:
-                print ".",
+                print ". ",
                 inList = 0
             print
             if value in ignorables:
@@ -118,12 +118,12 @@ def extract(path):
             elif value[0:5] == "Type:":
                 was = what
                 what = value[5:]
-                print "\n# List of %s\n:theSnapshot qu:%s [\n    " % (what,what),
+                print "\n# List of %s\n:theSnapshot qu:%s [" % (what,what),
                 inList = 1
                 inRecord = 1
             elif value == "Account":
                 what = "Account"
-                print "\n# List of Accounts OR define account\n:theSnapshot qu:account [\n" 
+                print "\n# List of Accounts OR define account\n:theSnapshot qu:account [", 
                 inList = 1
                 inRecord = 1
             else:
@@ -161,7 +161,7 @@ def extract(path):
                     continue
                 print 'qu:%s "%s"; '%(property, val),
     if inRecord: print "]",
-    if inList: print "."
+    if inList: print "\n."
     print "\n\n#ends\n"
             
     input.close()

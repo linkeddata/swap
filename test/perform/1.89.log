@@ -1,0 +1,7 @@
+$ date; cwm --revision; time cwm data.n3 --filter=q.n3 > ,out.n3
+Thu Mar  7 23:03:31  2002
+cwm= $Revision$ llyn= $Revision$
+
+real    2m16.677s
+user    2m11.098s
+sys     0m0.881s

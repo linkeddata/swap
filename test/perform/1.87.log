@@ -1,0 +1,8 @@
+
+$ time cwm data.n3 --filter=q.n3 > out.n3
+
+real    6m26.456s
+user    6m8.339s
+sys     0m1.141s
+
+--------------------

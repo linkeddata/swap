@@ -21,7 +21,7 @@ function cwm_test () {
 #  (python ../cwm.py $args | sed -e 's/^ *#.*//' | sed -e 's/\$[I]d:\$//g' > temp/$case) || echo CRASH $case
   (python ../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' > temp/$case) || echo CRASH $case
   diff -Bbwu ref/$case temp/$case >diffs/$case
-  if [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case "############"; else echo Pass $case; fi
+  if [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case "############"; wc ref/$case temp/$case; else echo Pass $case; fi
 }
 
 cwm_test animal.n3 "Parse a small RDF file, generate N3" -rdf animal.rdf -n3
@@ -133,7 +133,10 @@ cwm_test argv-2.n3 "os:argv argument other values"  os/argv.n3 --think --with bo
 
 
 # $Log$
-# Revision 1.28  2002-02-22 04:14:26  timbl
+# Revision 1.29  2002-03-12 20:57:17  timbl
+# Passed test/retest.sh
+#
+# Revision 1.28  2002/02/22 04:14:26  timbl
 # Add norm/fix.rdf tests for namespaces on attributes
 #
 # Revision 1.27  2002/01/10 01:40:50  timbl

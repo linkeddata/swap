@@ -61,7 +61,10 @@ ALL4 = CONTEXT, PRED, SUBJ, OBJ
 
 # The parser outputs quads where each item is a pair   type, value
 
-RESOURCE = notation3.RESOURCE        # which or may not have a fragment
+from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
+from RDFSink import FORMULA, LITERAL, ANONYMOUS, VARIABLE, SYMBOL
+
+SYMBOL = notation3.SYMBOL        # which or may not have a fragment
 FORMULA = notation3.FORMULA          # A set of statements    
 LITERAL = notation3.LITERAL          # string etc - maps to data:
 ANONYMOUS = notation3.ANONYMOUS     # existentially qualified unlabelled resource
@@ -133,7 +136,7 @@ class Thing:
         return None
   
     def asPair(self):
-        return (RESOURCE, self.uriref())
+        return (SYMBOL, self.uriref())
     
 
 
@@ -147,10 +150,13 @@ class Resource(Thing):
         self.uri = uri
         self.fragments = {}
 
-    def uriref(self, base=None):
+    def uriref2(self, base):
         if base is self :  # @@@@@@@ Really should generate relative URI!
             return ""
         else:
+            return self.uri
+
+    def uriref(self):
             return self.uri
 
     def internFrag(self, fragid, thetype):   # type was only Fragment before
@@ -184,13 +190,16 @@ class Fragment(Thing):
     def asList(self):  # Is this a list? (override me!)
         return self._asList
   
-    def uriref(self, base=None):
-        return self.resource.uriref(base) + "#" + self.fragid
+    def uriref(self):
+        return self.resource.uri + "#" + self.fragid
+
+    def uriref2(self, base):
+        return self.resource.uriref2(base) + "#" + self.fragid
 
     def representation(self,  base=None):
         """ Optimize output if prefixes available
         """
-        return  "<" + self.uriref(base) + ">"
+        return  "<" + self.uriref2(base) + ">"
 
     def generated(self):
          """ A generated identifier?
@@ -216,54 +225,6 @@ class Anonymous(Fragment):
     def asPair(self):
         return (ANONYMOUS, self.uriref())
         
-class Formula(Fragment):
-    """A formula of a set of RDF statements, triples. these are actually
-    instances of StoredStatement.  Other systems such as jena use the term "Model"
-    for this.  Cwm and N3 extend RDF to allow a literal formula as an item in a triple.
-    """
-    def __init__(self, resource, fragid):
-        Fragment.__init__(self, resource, fragid)
-        self.descendents = None   # Placeholder for list of closure under subcontext
-        self.cannonical = None # Set to self if this has been checked for duplicates
-
-    def generated(self):
-        return 1
-
-    def asPair(self):
-        return (FORMULA, self.uriref())
-
-    def existentials(self):
-        "we may move to an internal storage rather than these statements"
-        exs = []
-        ss = self.store._index.get((self, self.store.forSome, self, None),[])
-        for s in ss:
-            exs.append(s[OBJ])
-        if verbosity() > 90: progress("Existentials in %s: %s" % (self, exs))
-        return exs
-
-    def universals(self):
-        "we may move to an internal storage rather than these statements"
-        exs = []
-        ss = self.store._index.get((self, self.store.forAll, self, None),[])
-        for s in ss:
-            exs.append(s[OBJ])
-        if verbosity() > 90: progress("Universals in %s: %s" % (self, exs))
-        return exs
-    
-    def variables(self):
-        return self.existentials() + self.universals()
-
-#   TRAP:  If we define __len__, then the "if F" will fail is len(F)==0 !!!
-#   Rats .. so much for making it more like a list!
-    def size(self):
-        """ How many statements? """
-        return len(self.store._index.get((self, None, None, None), []))
-
-    def matching(self, triple):
-        return self.store._index.get((self, triple[0], triple[1], triple[2]), [])
-    
-    def add(self, triple):
-        return self.store.storeQuad((self, triple[0], triple[1], triple[2]))
     
 #################################### Lists
 #
@@ -292,7 +253,7 @@ class List(Thing):
         self._id = _nextList
         _nextList = _nextList + 1
 
-    def uriref(self, base=None):
+    def uriref(self):
         return "http://list.example.org/list"+ `self._id` # @@@@@ Temp. Kludge!! Use run id maybe!
 
     def asList(self):
@@ -313,7 +274,7 @@ class EmptyList(List):
     def value(self):
         return []
     
-    def uriref(self, base=None):
+    def uriref(self):
         return notation3.N3_nil
 
 
@@ -352,7 +313,7 @@ class Literal(Thing):
     def representation(self, base=None):
         return '"' + self.string + '"'   # @@@ encode quotes; @@@@ strings containing \n
 
-    def uriref(self, base=None):
+    def uriref(self):
         # Unused at present but interesting! 2000/10/14
         # used in test/sameThing.n3 testing 2001/07/19
         return self.asHashURI() #something of a kludge?
