@@ -120,8 +120,9 @@ def runOtter(toOtterFilename, fromOtterFilename=None, maxSeconds=1):
             
             outputLog.write(line)
             if line.startswith('The command was "otter".  The process ID is '):
-                #print "Got pid:", line[-7:-2]
-                pid = string.atoi(line[-7:-2])
+                pid = string.atoi(line[44:-2])
+                #print "Line: ",line
+                #print "Got pid:", pid
             if line == "Search stopped by max_proofs option.\n":
                 result.append('maxproofs')
             if line == "Search stopped because sos empty.\n":
