@@ -1,0 +1,30 @@
+#Processed by Id
+        #    using base file:/devel/WWW/2000/10/swap/test/dpo/axioms0.n3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.46 2001/01/16 01:26:54 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/dpo/axioms0.n3
+     @prefix v: <vars#> .
+     @prefix ko: <kif-ops#> .
+     @prefix a: <axioms.n3#> .
+     @prefix : <http://www.daml.org/2000/12/daml+oil#> .
+    
+    a:Ax001     =  (
+        ko:means 
+         (
+            a:Type 
+            v:s 
+            v:o  )
+         (
+            a:PropertyValue 
+            a:type 
+            v:s 
+            v:o  ) ) .
+
+	a:Ax001 a ko:Axiom .
+
+	a:Type a ko:Constant .
+	a:PropertyValue a ko:Constant .
+	a:type a ko:Constant .
+    

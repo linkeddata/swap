@@ -1,29 +1,8 @@
-# Base URI of process is file:/devel/WWW/2000/10/swap/test/
-# Input from  file:/devel/WWW/2000/10/swap/test/daml-ex.n3
-# Input from  file:/devel/WWW/2000/10/swap/test/invalid-ex.n3
-# Input from  file:/devel/WWW/2000/10/swap/test/schema-rules.n3
-#  Total 0 rule matches rules in <file:/devel/WWW/2000/10/swap/test/#_gs1>
-#  Total 0 rule matches rules in <file:/devel/WWW/2000/10/swap/test/#_gs4>
-#  Total 0 rule matches rules in <file:/devel/WWW/2000/10/swap/test/#_gs7>
-#  Total 2 rule matches rules in <file:/devel/WWW/2000/10/swap/test/#_gs10>
-#  Total 79 rule matches rules in <file:/devel/WWW/2000/10/swap/test/>
-#  Total 0 rule matches rules in <file:/devel/WWW/2000/10/swap/test/#_gs1>
-#  Total 0 rule matches rules in <file:/devel/WWW/2000/10/swap/test/#_gs4>
-#  Total 0 rule matches rules in <file:/devel/WWW/2000/10/swap/test/#_gs7>
-#  Total 0 rule matches rules in <file:/devel/WWW/2000/10/swap/test/#_gs10>
-#  Total 5 rule matches rules in <file:/devel/WWW/2000/10/swap/test/>
-#  Total 0 rule matches rules in <file:/devel/WWW/2000/10/swap/test/#_gs1>
-#  Total 0 rule matches rules in <file:/devel/WWW/2000/10/swap/test/#_gs4>
-#  Total 0 rule matches rules in <file:/devel/WWW/2000/10/swap/test/#_gs7>
-#  Total 0 rule matches rules in <file:/devel/WWW/2000/10/swap/test/#_gs10>
-#  Total 0 rule matches rules in <file:/devel/WWW/2000/10/swap/test/>
-# Input filter  file:/devel/WWW/2000/10/swap/test/schema-filter.n3
-# Input from  file:/devel/WWW/2000/10/swap/test/schema-filter.n3
-#  Total 2 rule matches rules in <file:/devel/WWW/2000/10/swap/test/schema-filter.n3>
-# Most popular Namesapce in <file:/devel/WWW/2000/10/swap/test/> is <file:/devel/WWW/2000/10/swap/test/schema-rules.n3> with 2
-
+#Processed by Id: cwm.py,v 1.26 2001/02/05 01:13:24 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/
+        
 #  Notation3 generation by
-#       notation3.py,v 1.41 2001/01/03 00:51:22 timbl Exp
+#       notation3.py,v 1.53 2001/02/05 01:13:24 timbl Exp
 
 #   Base was: file:/devel/WWW/2000/10/swap/test/
      @prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .

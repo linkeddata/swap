@@ -1,8 +1,6 @@
 
-
-
-
-
+        #    using base file:/devel/WWW/2000/10/swap/test/
+        
 
 
 
@@ -13,21 +11,21 @@
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix : <daml-ont.rdf#> .
     
-    <>     ont:versionInfo "$Id$";
+    <>     a ont:Ontology;
          ont:imports <http://www.w3.org/2000/01/rdf-schema>;
-         a ont:Ontology .
+         ont:versionInfo "$Id$" .
     
     :Class     a ont:Class;
          ont:sameClassAs rdfs:Class .
     
     :Disjoint     a ont:Class;
-         ont:label "Disjoint";
-         ont:subClassOf :List;
          ont:comment """for type(L, Disjoint) read: the classes in L are
   pairwise disjoint.
 
   i.e. if type(L, Disjoint), and C1 in L and C2 in L, then disjointWith(C1, C2).
-  """ .
+  """;
+         ont:label "Disjoint";
+         ont:subClassOf :List .
     
     :Empty     a ont:Class;
          ont:asClass :Nothing .
@@ -43,11 +41,11 @@
          ont:complementOf :Thing .
     
     :Ontology     a ont:Class;
-         ont:label "Ontology";
          ont:comment """An Ontology is a document that describes
 	a vocabulary of terms for communication between
 	(human and) automated agents.
-  """ .
+  """;
+         ont:label "Ontology" .
     
     :Property     a ont:Class;
          ont:sameClassAs rdf:Property .
@@ -57,36 +55,36 @@
     :Restriction     a ont:Class .
     
     :Thing     a ont:Class;
-         ont:label "Thing";
-         ont:comment "The most general class in DAML." .
+         ont:comment "The most general class in DAML.";
+         ont:label "Thing" .
     
     :TransitiveProperty     a ont:Class .
     
     :UnambiguousProperty     a ont:Class;
-         ont:label "UnambiguousProperty";
          ont:comment """if P is an UnambiguousProperty, then
 	if P(x, y) and P(z, y) then x=z.
 	aka injective.
 	e.g. if nameOfMonth(m, "Feb")
 	and nameOfMonth(n, "Feb") then m and n are the same month.
   """;
+         ont:label "UnambiguousProperty";
          ont:subClassOf :Property .
     
     :UniqueProperty     a ont:Class;
-         ont:label "UniqueProperty";
          ont:comment """compare with maxCardinality=1; e.g. integer successor:
 	if P is a UniqueProperty, then
 	if P(x, y) and P(x, z) then y=z.
 	aka functional.
   """;
+         ont:label "UniqueProperty";
          ont:subClassOf :Property .
     
     :cardinality     a ont:Property;
-         ont:label "cardinality";
          ont:comment """for cardinality(P, N) read: P has cardinality N; i.e.
     everything x in the domain of P has N things y such that P(x, y).
   """;
-         ont:domain :Property .
+         ont:domain :Property;
+         ont:label "cardinality" .
     
     :comment     a ont:Property;
          ont:samePropertyAs rdfs:comment .
@@ -100,17 +98,14 @@ cf OIL NOT""";
          ont:range :Class .
     
     :default     a ont:Property;
-         ont:label "default";
          ont:comment """default(X, Y) suggests that Y be considered a/the default
 	value for the X property. This can be considered
 	documentation (ala label, comment) but we don't specify
 	any logical impact.
-  """ .
+  """;
+         ont:label "default" .
     
     :disjointUnionOf     a ont:Property;
-         ont:label "disjointUnionOf";
-         ont:domain :Class;
-         ont:range :List;
          ont:comment """
 
     for disjointUnionOf(X, Y) read: X is the disjoint union of the classes in
@@ -119,14 +114,17 @@ cf OIL NOT""";
     in X, and vice versa.
 
     cf OIL disjoint-covered
-  """ .
+  """;
+         ont:domain :Class;
+         ont:label "disjointUnionOf";
+         ont:range :List .
     
     :disjointWith     a ont:Property;
-         ont:label "disjointWith";
          ont:comment """for disjointWith(X, Y) read: X and Y have no members
 	in common.
   """;
          ont:domain :Class;
+         ont:label "disjointWith";
          ont:range :Class .
     
     :domain     a ont:Property;
@@ -140,14 +138,13 @@ cf OIL NOT""";
          ont:domain :List .
     
     :hasValue     a ont:Property;
-         ont:label "hasValue";
          ont:comment """for hasValue(Q, C), read: Q is a hasValue
    qualification to C.""";
          ont:domain :Qualification;
+         ont:label "hasValue";
          ont:range :Class .
     
     :imports     a ont:Property;
-         ont:label "imports";
          ont:comment """for imports(X, Y) read: X imports Y;
 	i.e. X asserts the* contents of Y by reference;
 	i.e. if imports(X, Y) and you believe X and Y says something,
@@ -159,7 +156,8 @@ cf OIL NOT""";
 	that vary with time, data format, preferred language,
 	requestor credentials, etc. So for "the contents",
 	read "any contents".
-  """ .
+  """;
+         ont:label "imports" .
     
     :intersectionOf     a ont:Property;
          ont:comment """
@@ -188,11 +186,11 @@ cf OIL AND""";
          ont:samePropertyAs rdfs:label .
     
     :maxCardinality     a ont:Property;
-         ont:label "maxCardinality";
          ont:comment """for maxCardinality(P, N) read: P has maximum cardinality N; i.e.
     everything x in the domain of P has at most N things y such that P(x, y).
   """;
-         ont:domain :Property .
+         ont:domain :Property;
+         ont:label "maxCardinality" .
     
     :minCardinality     a ont:Property;
          ont:comment """for minCardinality(P, N) read: P has minimum cardinality N; i.e.
@@ -203,8 +201,8 @@ cf OIL AND""";
     :onProperty     a ont:Property;
          ont:comment """for onProperty(R, P), read:
    R is a restriction/qualification on P.""";
-         ont:domain :Restriction,
-                :Qualification;
+         ont:domain :Qualification,
+                :Restriction;
          ont:range :Property .
     
     :oneOf     a ont:Property;
@@ -216,7 +214,6 @@ cf OIL AND""";
          ont:range :List .
     
     :qualifiedBy     a ont:Property;
-         ont:label "qualifiedBy";
          ont:comment """for qualifiedBy(C, Q), read: C is qualified by Q; i.e. the
 	qualification Q applies to C;
 
@@ -225,6 +222,7 @@ cf OIL AND""";
 	so that type(V, C2) and P(i, V).
   """;
          ont:domain :Class;
+         ont:label "qualifiedBy";
          ont:range :Qualification .
     
     :range     a ont:Property;
@@ -235,7 +233,6 @@ cf OIL AND""";
          ont:range :List .
     
     :restrictedBy     a ont:Property;
-         ont:label "restrictedBy";
          ont:comment """for restrictedBy(C, R), read: C is restricted by R; i.e. the
 	restriction R applies to c;
 
@@ -246,6 +243,7 @@ cf OIL AND""";
         then for every i in C and for all j, if P(i, j) then type(j, C2).
   """;
          ont:domain :Class;
+         ont:label "restrictedBy";
          ont:range :Restriction .
     
     :sameClassAs     a ont:Property;
@@ -280,21 +278,21 @@ cf OIL AND""";
          ont:samePropertyAs rdf:type .
     
     :unionOf     a ont:Property;
-         ont:label "unionOf";
          ont:comment """
     for unionOf(X, Y) read: X is the union of the classes in the list Y;
     i.e. if something is in any of the classes in Y, it's in X, and vice versa.
     cf OIL OR""";
          ont:domain :Class;
+         ont:label "unionOf";
          ont:range :List .
     
     :value     a ont:Property;
          ont:samePropertyAs rdf:value .
     
     :versionInfo     a ont:Property;
-         ont:label "versionInfo";
          ont:comment """generally, a string giving information about this
 	version; e.g. RCS/CVS keywords
-  """ .
+  """;
+         ont:label "versionInfo" .
     
  #ENDS

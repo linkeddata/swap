@@ -11,10 +11,10 @@
      @prefix : <#> .
     
     :Animal     a rdfs:Class;
-         rdfs:label "Animal";
          <bar#restrictedBy>  [
              a <bar#Restriction>;
              <bar#onProperty> :parent;
-             <bar#cardinality> "2" ] .
+             <bar#cardinality> "2" ];
+         rdfs:label "Animal" .
     
  #ENDS

@@ -1,0 +1,96 @@
+<html>
+<head>
+  <title>Examples - Getting ino the semantic web and RDF using N3</title>
+  <meta http-equiv="Content-Type" content="text/html">
+  <link href="/StyleSheets/base.css" rel="stylesheet" type="text/css">
+  <link href="/StyleSheets/base.css" rel="stylesheet" type="text/css">
+</head>
+
+<body lang="en">
+<p><a href="/">W3C </a>| <a href="/2000/01/sw/Overview.html">Semantic Web</a>
+| <a href="Overview.html">SWAP</a></p>
+
+<p></p>
+
+<h1>Examples Getting into RDF &amp; Semantic Web  using N3</h1>
+
+<p></p>
+
+<p>This is a collection of examples to accompany the <a
+href="Primer.html">Primer.</a></p>
+
+<h2 id="Rules">Rules making rules</h2>
+
+<p>The a transitive property, like ancestor, is one such that if Fred is Joe's
+ancenstor, and Joe is Bill's ancenstor, then Fred is Bill's ancenstor.  That
+(for all Fred, Joe and Bill)  is a  rule for "ancenstor", and the fact that
+that is true for any transitive property in place of "ancenstor" is the
+definition of transitivity. </p>
+<ul>
+  <li>rules12.n3 has the "implies" rules to draw the above conclusion in two
+    stages, first concluding a specific rule for ancenstor from the general
+    rule for transitivity, and secondly using it in the specific case of Fred
+    and company.</li>
+  <li>rules13.n3 has hte same, but uses "log:means" (a bidirectional
+    implication) to indicate that transitivity is that and only that. "Means"
+    is not a primitive for cwm, so it is defined in terms of log:implies. This
+    doesn't then acheive anything spectacularly new otherwise.</li>
+</ul>
+
+<p>
+<math xmlns="http://www.w3.org/1998/Math/MathML">
+  <mtable>
+  </mtable>
+</math>
+</p>
+
+<h2>KIF to RDF: Converting axioms</h2>
+
+<p>There were some axioms for RDF and RDFS and DAML prodcued by Deborah
+McGuiness and Fikes for the DAML work, in KIF.  KIF list syntax is pretty like
+N3 list syntax so a sed file converts the KIF to N3 list syntax. Then, a bunch
+of rules decorate the lists with their equivalent in N3.  The result is quite
+a mess, but all the intermediate results are labelled as "log:Chaff".  This
+magic class has the feature in cwm that -purge removes any statements from the
+store which mention (as subject, verb or object) anything which is in class
+Chaff.</p>
+
+<p>The process is very recursive, and so uses the -think option on cwm, which
+iterates over all rules. It takes (2001/02) a long time, partly beccause it is
+not directed in its simple-minded approach, and partly because it is not
+optimised.  The rules are by no means complete, so the axoim set is not
+translated in its entirity. This example is unfinished but still may be
+instructive.</p>
+<ul>
+  <li>@@@</li>
+</ul>
+
+<h2 id="Parser">Parser test files</h2>
+
+<p>These are ismple semantic web examples in N3 and RDF syntaxes made
+typically in order to test the software, but you can use them to test your
+understanding.</p>
+<ul>
+  <li>s1.n3   some simple schema information</li>
+  <li>animal.rdf  a little DAML ontology about an animal</li>
+  <li>double-conclusion.n3  Testing that a reasoner wouldn't draw duplicate
+    conclusions</li>
+  <li></li>
+</ul>
+
+<h2 id="References">References</h2>
+<ul>
+  <li><a href="/DesignIssues/Notation3.html">Notation3 - Design Issues
+    article</a></li>
+</ul>
+
+<p></p>
+<hr>
+
+<p></p>
+
+<p>Tim BL, with his director hat off</p>
+
+<p>$Id$</p>
+</body>
+</html>

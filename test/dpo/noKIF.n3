@@ -1,0 +1,34 @@
+#    Label all lists (!) as chaff
+#
+#  Strategy:  Recursively decorate the KIF formula with :inN3 translations
+#   Decorate the axiom itself with :axiomInN3
+#
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
+@prefix daml: <http://www.daml.org/2000/12/daml+oil#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix : <#> .       # For our use
+@prefix conv:  <convert.n3#> .	# Hint for others use
+@prefix v: <myvar#> .
+@prefix ko: <kif-ops#> .
+@prefix a: <axioms.n3#> .  # The source of all knowledge for this one
+
+@prefix av: <vars#> .	# variables used by the axioms.n3
+
+log:implies a log:Chaff .  # Remove all original rules
+
+ko:Axiom a log:Chaff .  
+ko:implies a log:Chaff .
+ko:means a log:Chaff .
+ko:Constant a log:Chaff .
+
+daml:first a log:Chaff .
+daml:rest a log:Chaff .
+daml:nil a log:Chaff .
+
+a:Axiom a log:Chaff .
+
+conv:derivation a log:Chaff.
+
+	

@@ -1,32 +1,13 @@
 
-
-
-
-
-
-
-
+        #    using base file:/devel/WWW/2000/10/swap/test/rules12.n3
+        
 
 
 
 
      @prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
      @prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
-     @prefix : <rules12.n3#> .
-    
-    <>     log:forAll :p .
-    {
-        {
-            :x     :ancestor :y .
-            :y     :ancestor :z .
-            
-            }     log:implies {:x     :ancestor :z .
-            } .
-        
-        }     a log:Truth;
-         log:forAll :x,
-                :y,
-                :z .
+     @prefix : <#> .
     {
         :p     a daml:TransitiveProperty .
         
@@ -43,12 +24,25 @@
                     :y,
                     :z .
         } .
+    {
+        {
+            :_gs3     :ancestor :_gs4 .
+            :_gs4     :ancestor :_gs5 .
+            
+            }     log:implies {:_gs3     :ancestor :_gs5 .
+            } .
+        
+        }     a :_gs2;
+         log:forAll :_gs3,
+                :_gs4,
+                :_gs5 .
     
     :ancestor     a daml:TransitiveProperty .
     
-    :granpa     :ancestor :pa,
-                :bill .
+    :granpa     :ancestor :pa .
     
     :pa     :ancestor :bill .
+    
+    <>     log:forAll :p .
     
  #ENDS

@@ -1,0 +1,8 @@
+@prefix : <whatever#> .
+
+<#Tom> :believes {
+    <#Mary> :wants {
+        <#Mary> :marriedTo [ a :Sailor ]
+    }
+}.
+#ends
