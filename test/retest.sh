@@ -121,6 +121,7 @@ cwm_test smush.rdf "Data aggregation challenge from Jan 2001" --rdf smush-exampl
 
 cwm_test vblsNotURIs-out.n3 "Should not get URIs of anonymous nodes" --rdf animal.rdf --n3 vblsNotURIs.n3 --think
 
+cwm_test n3ExprFor-out.n3 "Parsing strings with n3ExprFor" includes/n3ExprFor.n3 --think
 
 TEST_PARAMETER_1=TEST_VALUE_1; export TEST_PARAMETER_1 
 cwm_test environ.n3 "Read operating system environment variable" os/environ.n3 -think
@@ -138,8 +139,8 @@ cwm_test argv-2.n3 "os:argv argument other values"  os/argv.n3 --think --with bo
 
 
 # $Log$
-# Revision 1.31  2002-03-26 05:57:41  connolly
-# fixed newlines. grumble
+# Revision 1.32  2002-03-30 22:06:24  timbl
+# Add test for n3ExprFor
 #
 # Revision 1.30  2002/03/17 04:24:12  timbl
 # catch up
