@@ -119,7 +119,8 @@ class CompoundExpr(Expr):
         self.__function = function
         assert(len(args) >= 1) 
         for arg in args:
-            assert(isinstance(arg, Expr))
+            if not isinstance(arg, Expr):
+                raise RuntimeError, "What's %s doing here?"%arg
         #if hasattr(function, "checkArgs"):
         #    function.checkArgs(args)
         self.__args = tuple(args)
@@ -192,17 +193,20 @@ class CompoundExpr(Expr):
         if callable(form):
             result = prefix+apply(form, [text, self, nameTable, operators, prec, linePrefix])+suffix
         elif form == "xfx" or form == "xfy" or form == "yfx":
-            assert(len(self.__args) == 2)
-            left = self.__args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
-            right = self.__args[1].serializeWithOperators(nameTable, operators, prec, linePrefix)
-            if 1 or (len(left) + len(right) < width):
-                result = prefix + left + text + right + suffix
-            else:
-                linePrefix = "  " + linePrefix
+            if (len(self.__args) == 2):
                 left = self.__args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
                 right = self.__args[1].serializeWithOperators(nameTable, operators, prec, linePrefix)
-                result = (prefix + "\n" + linePrefix + left + text +
+                if 1 or (len(left) + len(right) < width):
+                    result = prefix + left + text + right + suffix
+                else:
+                    linePrefix = "  " + linePrefix
+                    left = self.__args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
+                    right = self.__args[1].serializeWithOperators(nameTable, operators, prec, linePrefix)
+                    result = (prefix + "\n" + linePrefix + left + text +
                           "\n" + linePrefix + right + suffix)
+            else:
+                raise RuntimeError, ("%s args on a binary operator %s" %
+                                     (len(self.__args), self.__args[0]))
         elif form == "fxy":
             assert(len(self.__args) == 2)
             result = (prefix + text + self.__args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
@@ -318,7 +322,11 @@ if __name__ == "__main__": _test()
 
 
 # $Log$
-# Revision 1.7  2003-02-01 05:58:10  sandro
+# Revision 1.8  2003-07-31 18:25:15  sandro
+# some unknown earlier changes...
+# PLUS increasing support for datatype values
+#
+# Revision 1.7  2003/02/01 05:58:10  sandro
 # intermediate lbase support; getting there but buggy; commented out some fol chreccks
 #
 # Revision 1.6  2003/01/29 06:09:18  sandro

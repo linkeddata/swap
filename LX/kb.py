@@ -83,6 +83,7 @@ class KB(list):
         self.exIndex = 0
         self.__interpretation = { }
         self.__revInterpretation = { }
+        self.__datatypeValuesChecked = { }
 
     def clear(self):
         self.__init__()
@@ -148,21 +149,62 @@ class KB(list):
         raise RuntimeError, "Not convertable to a KB"
     prep = staticmethod(prep)
 
+    def addSupportingTheory(self, term):
+        """
+        If the term, or elements of the term (as an Expr) are datatype
+        value constants (as in LX.logic.ConstantForDatatypeValue),
+        then we should make sure this KB has a datatype theory to
+        support it.
+        """
+        if not term.isAtomic():
+            for e in term.all:
+                self.addSupportingTheory(e)
+            return
+        try:
+            pair = LX.logic.valuesForConstants[term]
+        except KeyError:
+            return
+
+        (lexrep, dturi) = pair
+        if pair in self.__datatypeValuesChecked: return
+
+        if dturi == "http://www.w3.org/2001/XMLSchema#nonNegativeInteger":
+            val = int(lexrep)
+            assert(val != 0)   # would have been handled in LX.logic
+            assert(val > 0)
+            for n in range(1, val+1):
+                print n-1, "succ", n
+                lesser = LX.logic.ConstantForDatatypeValue(str(n-1), dturi)
+                succ = LX.logic.ConstantForURI('foo:succ')
+                self.append(LX.logic.RDF(lesser,succ,term))
+                self.__datatypeValuesChecked[pair] = 1
+            return
+        
+        raise RuntimeError, ("unsupported datatype: "+lexrep+
+                             ", type "+dturi)
+        
+        
     def add(self, formula, p=None, o=None):
         """
         SHOULD allow non-constants, and replace them with constants
         and user interp() to link to the other thing?   But also
-        look up if we already have a symbol for that?
+        look up if we already have a symbol for that?   Nah, just
+        let the user user logic.ConstantForDatatypeValue, etc.
 
-        needed for    rdf.py's    flatten kind of stuff.
         """
         if (p):
+            s = formula
             self.append(LX.logic.RDF(s,p,o))
+            self.addSupportingTheory(s)
+            self.addSupportingTheory(p)
+            self.addSupportingTheory(o)
             return
+        
         # assert(isinstance(formula, LX.Formula))
         #####assert(LX.fol.isFirstOrderFormula(formula))
         # could check that all its openVars are in are vars
         self.append(formula)
+        self.addSupportingTheory(formula)
 
     def addFrom(self, kb):
         for formula in kb:
@@ -305,7 +347,11 @@ if __name__ == "__main__": _test()
 
  
 # $Log$
-# Revision 1.10  2003-02-14 17:21:59  sandro
+# Revision 1.11  2003-07-31 18:25:15  sandro
+# some unknown earlier changes...
+# PLUS increasing support for datatype values
+#
+# Revision 1.10  2003/02/14 17:21:59  sandro
 # Switched to import-as-needed for LX languages and engines
 #
 # Revision 1.9  2003/02/14 00:36:37  sandro

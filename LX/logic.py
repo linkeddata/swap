@@ -13,6 +13,7 @@ __version__ = "$Revision$"
 
 import LX.expr
 
+
 ################################################################
 
 class Variable(LX.expr.AtomicExpr):
@@ -167,6 +168,51 @@ def getOpenVariables(expr, unusedButQuantified=None):
                 result.extend(getOpenVariables(child))
             return result
 
+################################################################
+
+# or do as   Constant(uri=None, value=None)     using __new__
+# for object re-use?
+
+constantsForURIs = { }
+
+def ConstantForURI(uri):
+    try:
+        return constantsForURIs[uri]
+    except KeyError:
+        tt = Constant(uri)
+        constantsForURIs[uri] = tt
+        # kb.interpret(tt, LX.uri.Describedthing(uri))
+        #     # t[0] = constants.setdefault(t[1], LX.fol.Constant(t[1]))
+        return tt
+
+
+constantsForDTVs = {
+    ("0", "http://www.w3.org/2001/XMLSchema#nonNegativeInteger"):
+    ConstantForURI("foo:zero")
+    }
+valuesForConstants = { }
+for (key, value) in constantsForDTVs:
+    valuesForConstants[value] = key
+
+
+def ConstantForDatatypeValue(dtv, dtURI=None):
+    """
+    Basically we'd like to handle python types and RDF/XSD types
+    in the same place.  Hrm.
+    """
+    if dtURI:
+        dtv = (dtv, dtURI)
+    try:
+        return constantsForDTVs[dtv]
+    except KeyError:
+        tt = Constant(suggestedName=("lit"+str(dtv[0])))
+        constantsForDTVs[dtv] = tt
+        valuesForConstants[tt] = dtv
+        return tt
+
+    
+################################################################
+        
 AND = BinaryConnective("and")
 OR = BinaryConnective("or")
 MEANS = BinaryConnective("means")
@@ -181,6 +227,7 @@ LX.expr.pythonOperators["and"] = AND
 LX.expr.pythonOperators["or"] = OR
 
 # this is our special predicate!  Oh yeah!   Why do we want one of these?!
+# ... because sometimes we use synhol (syntactic higher-order logic)
 RDF = Predicate("rdf")
 
 def _test():
@@ -191,7 +238,11 @@ def _test():
 if __name__ == "__main__": _test()
 
 # $Log$
-# Revision 1.2  2003-02-03 17:20:40  sandro
+# Revision 1.3  2003-07-31 18:25:15  sandro
+# some unknown earlier changes...
+# PLUS increasing support for datatype values
+#
+# Revision 1.2  2003/02/03 17:20:40  sandro
 # factored logic.py out of fol.py
 #
 # Revision 1.1  2003/02/03 17:07:34  sandro
