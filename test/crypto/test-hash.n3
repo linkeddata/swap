@@ -1,0 +1,23 @@
+@prefix : <#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#> .
+
+this log:forAll :x , :y , :z .
+
+# The rules
+
+{ :x a :GetHashFile . :x log:content :y } 
+   log:implies { :x :content :y } .
+
+{ :x a :GetHashFile . :x log:content [ crypto:md5 :y; crypto:sha :z ] } 
+   log:implies { :x :md5 :y; :sha :z } .
+
+<test.txt> a :GetHashFile .
+
+# <http://www.w3.org/> a :GetHashFile .
+
+# For purging
+
+log:implies a log:Chaff .
+log:forAll a log:Chaff .

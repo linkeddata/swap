@@ -1,0 +1,18 @@
+#Processed by Id: cwm.py,v 1.82 2001/11/15 22:11:23 timbl Exp 
+        #    using base file:C:\WINDOWS\DESKTOP\CRYPTO\CRYPTO.N3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.98 2001/11/15 22:11:24 timbl Exp
+
+#   Base was: file:C:\WINDOWS\DESKTOP\CRYPTO\CRYPTO.N3
+     @prefix : <#> .
+     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    <file:c:\test.txt>     a :GetHashFile;
+         :content "blargh";
+         :md5 "ef15c9bd4c7836612b1567f4c8396726";
+         :sha "d1e670385f40ee942a059f949c761214872ac35f" .
+    
+#ENDS
