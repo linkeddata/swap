@@ -11,12 +11,16 @@ FULLNAME=$(PACKAGE)_$(MAINVERSION)-$(DEBVERSION)
 package:	update debianize repofiles list 
 website:	package publish
  
+#todo: debian/docs should be built with find, excluding the format dir
 
 update:
 	# grab latest version of files from development tree
+	mkdir -p $(PACKAGE)-$(MAINVERSION)/doc ; \
 	mkdir -p $(PACKAGE)-$(MAINVERSION)/lib ; \
 	cd $(PACKAGE)-$(MAINVERSION)/lib; tar -zxvf ../../../../cwm.tgz
 	(cd ./debian-files && tar cf - .  --exclude CVS) | (cd  $(PACKAGE)-$(MAINVERSION)  && tar xf -)
+	(cd ../.. && tar cf - doc  --exclude CVS --exclude format ) | (cd $(PACKAGE)-$(MAINVERSION)/  && tar xf -)
+	cp setup.py $(PACKAGE)-$(MAINVERSION)/
 	
 
 test:
