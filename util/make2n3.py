@@ -7,6 +7,15 @@ import re
 
 version = "$Id$"[1:-1]
 
+import  notation3  # from http://www.w3.org/2000/10/swap/notation3.py
+
+global verbose
+global recursive
+
+def ss(str):
+    """Format string for output"""
+    return notation3.stringToN3(str)
+
 def macroSubstitute(line, dict):
     return line  #@@@@@@
 
@@ -30,25 +39,32 @@ def convert(path):
     i = 0
     comment = re.compile(r'^(.*?)#.*$')
     macro = re.compile(r'([-_a-zA-Z0-9\.]+)=(.*)')
-    macro1 = re.compile(r'^(.*?)\$([a-zA-Z])(.*)$')
-    macron = re.compile(r'^(.*?)\$\(([a-zA-Z0-9]+)\)(.*)$')
-    include = re.compile(r'include *([-_a-zA-Z0-9\./]+)')
+    macro1 = re.compile(r'^(.*?)\$([a-zA-Z0-9\$@])(.*)$')
+    macron = re.compile(r'^(.*?)\$\(([a-zA-Z0-9\$@]+)\)(.*)$')
+    include = re.compile(r'include *([-_a-zA-Z0-9\./,]+)')
     target = re.compile(r'^(.*?)\$@(.*)$')
-    dependency = re.compile( r'^([-_a-zA-Z0-9][-_a-zA-Z0-9\.]*) *:(.*)$' )
-    rule = re.compile(r'^\.([-_a-zA-Z0-9]*)\.([-_a-zA-Z0-9]*)')
+    dependency = re.compile( r'^([-_a-zA-Z0-9,][-_a-zA-Z0-9\.,]*) *:(.*)$' )
+    rule = re.compile(r'^\.([-_a-zA-Z0-9,]*)\.([-_a-zA-Z0-9,]*)')
     recipe = re.compile( r'^\t.*')
-    filename = re.compile( r'[-_a-zA-Z0-9\./]+')
+    filename = re.compile( r'[-_a-zA-Z0-9\./,]+')
     blank = re.compile(r"^ *$")
     recipeList = []
     subj = None
+    lines = []
 
     while 1:
+        lines.append(i)
 	j = buf.find("\n", i)
 	if j <0: break
+	if buf[j-1:j] == "\\":
+	    buf = buf[:j-1] + " " + buf[j+1:]  # Chop out escaped newline
+	    continue
 	e = j
 	if e>i and buf[e-1]=='\r':
 	    e = e-1
         line = buf[i:e]
+	if verbose:  sys.stderr.write("# ... "+line+"\n")
+	last = 0
 	i = j+1
 
 	k = line.find("#") # Chop comments
@@ -58,24 +74,31 @@ def convert(path):
 	else:
 	    comment = ""
 
-#	line = macroSubstitute(line, dict)
+	here = 0
 	while 1:
-	    m = macro1.match(line)
-            if not m: break
-	    line = m.group(1) + dict[m.group(2)] + m.group(3) #1
-	while 1:
-	    m = macron.match(line)
-            if not m: break
-	    line = m.group(1) + dict[m.group(2)] + m.group(3) #2
-
+	    m = macron.match(line, here)
+	    if not m:
+		m = macro1.match(line, here)
+		if not m: break
+	    var = m.group(2)
+	    if len(var)==1 and var in "$@<>":  # move on
+		here = m.start(3)  # skip $$ and don't use the second $
+		continue
+	    res = dict.get(var, None)
+	    if res == None:
+		raise RuntimeError("No macro value for "+var+ (" around line %i:\n"%len(lines))+buf[lines[-2]:i])
+	    line =  m.group(1) + res + m.group(3) #1
+#line[:here] +
+	if verbose:  sys.stderr.write("# >>> "+line+"\n")
 	m = include.match(line)
 	if m:
-	    print "# start include", m.group(1)
-	    file=m.group(1)
-	    input2 = open(m.group(1), "r")
+	    path2 = m.group(1)  # @@@@@@@@@@@@ Relative addressing in nested makefiles: @@ won't work
+	    if verbose: sys.stderr.write("make2n3: including " + path2 + "\n")
+	    print "# start include", path2
+	    input2 = open(path2, "r")
 	    buf2 = input2.read()  # Read the file
 	    input2.close()
-	    buf = buf[:i] + buf2 + "# end include"+ m.group(1) +"\n" + buf[i:]
+	    buf = buf[:i] + buf2 + "# end include"+ path2 +"\n" + buf[i:]
 	    continue
 
 	m = recipe.search(line)
@@ -94,7 +117,7 @@ def convert(path):
 	if len(recipeList) > 0:
 	    print "%s make:recipeList (" % subj
 	    for r in recipeList:
-		print '    """%s"""' % r
+		print '    %s' % ss(r)
 	    print "    )."
 	    recipeList = []
 	    subj = None
@@ -131,7 +154,7 @@ def convert(path):
 	print "#@@", line, comment
 
 def do(path):
-    if verbose: sys.stderr.write("make2n3: converting " + path + "\n")
+    if verbose: sys.stderr.write("# make2n3: converting " + path + "\n")
     return convert(path)
         
 ######################################## Main program
@@ -139,6 +162,7 @@ def do(path):
 recursive = 0
 nochange = 1
 verbose = 0
+global verbose
 doall = 0
 files = []
 
@@ -152,8 +176,11 @@ Syntax:    make2n3  <file>
     where <file> can be omitted and if so defaults to Makefile.
     This program was http://www.w3.org/2000/10/swap/util/make2p3.py
     $Id$
+    
+    -v  verbose
 """
-        else:
+        elif arg == "-v": verbose = 1
+	else:
             print """Bad option argument."""
             sys.exit(-1)
     else:

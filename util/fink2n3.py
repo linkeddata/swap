@@ -4,6 +4,8 @@
 #   and http://fink.sourceforge.net/doc/packaging/format.php#format
 # See http://www.w3.org/DesignIssues/Notation3.html
 #
+# To run:
+#        The notation3.py files must be in your PYTHONPATH (or installed)
 # TODO:
 #	- Recursive Splitoffs convert nicely to N3. Remember parent,  fink:child relation
 #	- Version number qualifiers on dependecies   [fink:thisOrSuccesso xxx]
