@@ -18,9 +18,9 @@
 
 <p>This is a collection of examples to accompany the <a
 href="Primer.html">Primer. </a> (The files have URIs starting
-http://www.w3.org/2000/10/swap/test/ if you are reading this on paper.) 
-These are designed as examples, to show how something can be done, not as
-working products.</p>
+http://www.w3.org/2000/10/swap/test/ if you are reading this on paper.) These
+are designed as examples, to show how something can be done, not as working
+products.</p>
 
 <p>Remember, to convert an RDF document from n3 syntax into xml syntax,
 <code>cwm xxx.n3 -rdf </code> should do it  among other things.  I haven't
@@ -165,7 +165,7 @@ form to process it using a general purpose engine.</p>
 <h2 id="Rules">Rules making rules</h2>
 
 <p>The a transitive property, like ancestor, is one such that if Fred is
-Joe's ancenstor, and Joe is Bill's ancenstor, then Fred is Bill's ancenstor. 
+Joe's ancenstor, and Joe is Bill's ancenstor, then Fred is Bill's ancenstor.
 That (for all Fred, Joe and Bill)  is a  rule for "ancenstor", and the fact
 that that is true for any transitive property in place of "ancenstor" is the
 definition of transitivity.</p>
@@ -194,7 +194,7 @@ definition of transitivity.</p>
 McGuiness and Fikes for the DAML work, in KIF.  KIF list syntax is pretty
 like N3 list syntax so a sed file converts the KIF to N3 list syntax. Then, a
 bunch of rules decorate the lists with their equivalent in N3.  The result is
-quite a mess, but all the intermediate results are labelled as "log:Chaff". 
+quite a mess, but all the intermediate results are labelled as "log:Chaff".
 This magic class has the feature in cwm that -purge removes any statements
 from the store which mention (as subject, verb or object) anything which is
 in class Chaff.</p>
@@ -268,7 +268,7 @@ look up the schema in real time.  The is done with cwm's builtin
 parsing of the semantic content of a resource.</p>
 <ul>
   <li>The rule file which checks schema validity - <a
-    href="test/includes/check.n3">check.n3</a></li>
+    href="util/validate.n3">validate.n3</a></li>
 </ul>
 
 <p>This file doesn't (yet) check consistency as the example above, it just
