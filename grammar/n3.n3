@@ -8,9 +8,14 @@
 @prefix : <http://www.w3.org/2000/10/swap/grammar/n3#>.
 @prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#>.
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
 @keywords a, is, of.
 
 
+<> bnf:syntaxFor [ bnf:internetMediaType 
+		<http://www.w3.org/2003/mediatypes#application/n3>].
+
+# <> rdfsem:semanticsFor ""   .....
 
 # The N3 Full Grammar
 
@@ -33,6 +38,16 @@ formulacontent bnf:mustBeOneSequence ((
 		statementlist
 	)).
 
+
+statementlist bnf:mustBeOneSequence (
+		( bnf:void )
+		( statement statementtail )
+	).
+
+statementtail bnf:mustBeOneSequence (
+		( bnf:void)
+		( period statementlist )
+	).
 
 universal bnf:mustBeOneSequence (
 		(
@@ -58,7 +73,7 @@ qname bnf:mustBeOneSequence(
 
 declaration bnf:mustBeOneSequence(
 		( "@prefix" qname explicituri period )
-		( "@keywords" [ commaSeparatedPeriodTerminatedListOf barename ] )
+		( "@keywords" [ bnf:commaSeparatedPeriodTerminatedListOf barename ] )
 	).
 
 
@@ -107,7 +122,7 @@ item bnf:mustBeOneSequence(
 
 
 path bnf:mustBeOneSequence(
-		( node nodetail )
+		( node pathtail )
 	).
 
 pathtail bnf:mustBeOneSequence(
@@ -153,6 +168,12 @@ explicituri 	bnf:matches 	"<[^>].*>";
 qname 		bnf:matches  	"(([a-zA-Z_][a-zA-Z0-9_]*)?:)?([a-zA-Z_][a-zA-Z0-9_]*)?";
 		bnf:canStartWith 	"a", "_".  # @@ etc
 
+barename 	bnf:matches  	"[a-zA-Z_][a-zA-Z0-9_]*";  # subset of qname
+		bnf:canStartWith 	"a", "_".  # @@ etc
+
+variable 	bnf:matches  	"\\?[a-zA-Z_][a-zA-Z0-9_]*";  # ? barename
+		bnf:canStartWith 	"?".  #
+
 langcode	bnf:matches  	"[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?";
 		bnf:canStartWith 	"a".
 
@@ -171,6 +192,10 @@ comma		bnf:mustBeOneSequence (( ","));
 period		bnf:mustBeOneSequence (( "."));
 		bnf:canStartWith	".".
 
+#               raw regexp single quoted would be   "([^"]|(\\"))*"
+# @@@ triple-quoted version too
+
+string		bnf:matches		"""("([^"]|(\\\\"))*")""".
 
 #____________________________________________________
 
@@ -183,6 +208,7 @@ period		bnf:mustBeOneSequence (( "."));
 	) 
 }.
 
+
 { ?x bnf:commaSeparatedPeriodTerminatedListOf ?y } =>
 {
 	?x bnf:mustBeOneSequence (
@@ -190,6 +216,15 @@ period		bnf:mustBeOneSequence (( "."));
 		( comma ?y ?x )
 	)
 }.
+
+
+#  labelling of things which do not have explicit URIs:
+
+{ ?x bnf:zeroOrMore [ bnf:label ?y].
+	( ?y "_s" ) string:concatenation ?str } => { ?x bnf:label ?str }.
+
+{ ?x bnf:commaSeparatedPeriodTerminatedListOf [ bnf:label ?y].
+	( ?y "_csl" ) string:concatenation ?str } => { ?x bnf:label ?str }.
 
 
 #ends
