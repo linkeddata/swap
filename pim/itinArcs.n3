@@ -31,12 +31,10 @@ this log:forAll :LAT1, :LON1, :LAT2, :LON2, :NUM, :YMD,
         apt:latitude :LAT2;
         apt:longitude :LON2;
       ];
-      trav:flightNumber :NUM;
       k:startingDate [ dt:date :YMD];
   ] ].
 
-  (:YMD :NUM) str:concatenation :K.
   (:LAT1 " " :LON1 " " :LAT2 " " :LON2 " color=blue\n") str:concatenation :TXT.
 }
- log:implies { :K log:outputString :TXT }.
+ log:implies { [ log:outputString :TXT] }.
 
