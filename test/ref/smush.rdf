@@ -2,6 +2,7 @@
 
 
 <web:RDF xmlns="http://example.com/xmlns/aggregation-demo#"
+    xmlns:agg="http://example.com/xmlns/aggregation-demo#"
     xmlns:contact="http://www.w3.org/2000/10/swap/pim/contact#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"

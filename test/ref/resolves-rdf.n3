@@ -3,9 +3,9 @@
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix u: <http://www.w3.org/2000/01/rdf-schema#> .
     
-    <animal.rdf#Animal>     a <#ClassInAnimal_rdf> .
-    
     this     :forAll <#x> .
+    
+    <animal.rdf#Animal>     a <#ClassInAnimal_rdf> .
     {
         <animal.rdf>     :semantics  [
                  :includes {<#x>     a u:Class .

@@ -7,17 +7,17 @@
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
-    :fred     local:favoriteColor :blue .
-    
-    :test10a     a :success .
-    
-    :test10b     a :success .
-    
     this     log:forAll :F,
                 :G,
                 :d,
                 :x,
                 :y .
+    
+    :fred     local:favoriteColor :blue .
+    
+    :test10a     a :success .
+    
+    :test10b     a :success .
     {
         :F     log:includes {:theSky     :is :blue .
             } .

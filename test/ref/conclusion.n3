@@ -15,10 +15,10 @@
                 foo:x,
                 foo:y .
     {
-        <../daml-ex.n3>     log:semantics <#_g1> .
         this     log:forSome <#_g1>,
                     <#_g3>,
                     <#_g5> .
+        <../daml-ex.n3>     log:semantics <#_g1> .
           ( <#_g1> 
             <#_g3> 
             <#_g5>  )
@@ -30,7 +30,17 @@
         }     log:implies {foo:result     foo:is foo:G .
         } .
     
-    foo:result     foo:is {:Adam     a dpo:Person;
+    foo:result     foo:is {this     log:forAll v:c1,
+                    v:c2,
+                    v:c,
+                    v:p1,
+                    v:p2,
+                    v:p,
+                    v:x,
+                    v:y,
+                    v:z;
+             log:forSome :_g0 .
+        :Adam     a dpo:Person;
              dpo:comment "Adam is a person.";
              dpo:label "Adam" .
         :Animal     a dpo:Class;
@@ -142,16 +152,6 @@
              log:forAll v:x,
                     v:y,
                     v:z .
-        this     log:forAll v:c1,
-                    v:c2,
-                    v:c,
-                    v:p1,
-                    v:p2,
-                    v:p,
-                    v:x,
-                    v:y,
-                    v:z;
-             log:forSome :_g0 .
         {
             {
                 v:x     s:subPropertyOf v:y .

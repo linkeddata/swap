@@ -45,15 +45,22 @@ cwm_test lists-simple.n3 "parsing and generation of N3 list () syntax" -n3 lists
 
 cwm_test lists-simple-1.rdf "conversion of N3 list () syntax to RDF" -n3 lists-simple.n3 -rdf
 
-#exit 0 # Tim, please update the expected results (ref/*)
-#       # of the rest of these tests. -- DWC
-# Should work - tim
+cwm_test prefix1.rdf "Avoiding default namespace on attrs" -rdf norm/fix.rdf
+
+cwm_test prefix2.rdf "Avoiding default namespace on attrs" -rdf norm/fix.rdf -rdf=d
+
+cwm_test prefix3.rdf "Avoiding default namespace on attrs" -rdf norm/fix.rdf -rdf=p
+
 
 # The prefix file is to give cwm a hint for output. It saves hints across files.
 # cwm_test daml-ont.n3 "Convert DAML schema into N3" daml-pref.n3 -rdf daml-ont.rdf -n3
 # This seems to be a duplicate of a test above.
 
 cwm_test daml-ex.n3 "Try the examples" daml-pref.n3 -rdf daml-ex.rdf -n3
+
+echo
+echo "        Test log:implies rules:"
+
 
 cwm_test rules12-1.n3 "log:implies Rules - try one iteration first." rules12.n3 -rules
 
@@ -126,7 +133,10 @@ cwm_test argv-2.n3 "os:argv argument other values"  os/argv.n3 --think --with bo
 
 
 # $Log$
-# Revision 1.27  2002-01-10 01:40:50  timbl
+# Revision 1.28  2002-02-22 04:14:26  timbl
+# Add norm/fix.rdf tests for namespaces on attributes
+#
+# Revision 1.27  2002/01/10 01:40:50  timbl
 # Add os:argv tests
 #
 # Revision 1.26  2001/12/31 04:33:23  timbl

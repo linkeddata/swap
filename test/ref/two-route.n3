@@ -3,6 +3,10 @@
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
     
+    this     log:forAll :x,
+                :y,
+                :z .
+    
     :grass     :color :blue;
          :is :relaxing;
          :sounds :quiet .
@@ -10,10 +14,6 @@
     :sky     :color :blue;
          :is :relaxing;
          :sounds :quiet .
-    
-    this     log:forAll :x,
-                :y,
-                :z .
     {
         :x     :color :blue .
         

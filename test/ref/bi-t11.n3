@@ -3,6 +3,18 @@
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
+    this     log:forAll :F,
+                :G,
+                :H,
+                :S,
+                :d,
+                :o,
+                :p,
+                :s1,
+                :s,
+                :x,
+                :y .
+    
     :blue     a :ERROR_PROPERTY_NOT_DECLARED,
                 :UsedProperty;
          :schema <foo.n3>;
@@ -27,18 +39,6 @@
     
     :test_undefined     a :ERROR_CANT_GET_SCHEMA,
                 :UsedProperty .
-    
-    this     log:forAll :F,
-                :G,
-                :H,
-                :S,
-                :d,
-                :o,
-                :p,
-                :s1,
-                :s,
-                :x,
-                :y .
     {
         :F     log:includes {:blue     a rdf:Property .
             } .

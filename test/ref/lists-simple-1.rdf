@@ -4,7 +4,8 @@
 <rdf:RDF xmlns="file:/cygdrive/c/devel/WWW/2000/10/swap/test/test#"
     xmlns:dpo="http://www.daml.org/2001/03/daml+oil#"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:t="file:/cygdrive/c/devel/WWW/2000/10/swap/test/test#">
 
     <rdf:Description>
         <anonVerb12 rdf:resource="test#anonObj12"/>
