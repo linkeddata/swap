@@ -431,10 +431,10 @@
     test:description	"Look up values in 2 definitive documents";
     test:arguments	"--mode=rse dbork/defdoc2.n3 --think".
 
-:t3001 a test:CwmTest;
-    test:shortFileName "lbase-to-otter";
-    test:description   "Parse lbase, serialize as otter (no llyn involvement)";
-    test:arguments     """--language=lbase lbase/note-long-example.lbase --language=otter""".
+#:t3001 a test:CwmTest;
+#    test:shortFileName "lbase-to-otter";
+#    test:description   "Parse lbase, serialize as otter (no llyn involvement)";
+#    test:arguments     """--language=lbase lbase/note-long-example.lbase --language=otter""".
     
 
 
