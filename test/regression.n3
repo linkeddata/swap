@@ -299,6 +299,11 @@
     test:description   "the --solve= option";
     test:arguments     """daml-ex.n3 invalid-ex.n3 schema-rules.n3 --solve=schema-filter.n3""".
 
+:t1029b a test:CwmTest;
+    test:referenceOutput <ref/schema2.n3>;
+    test:description   "log:filter should do the same thing as --filter";
+    test:arguments     """log-filter.n3 --think --data""".
+
 :t1030 a test:CwmTest;
     test:referenceOutput <ref/underbarscope-out.n3>;
     test:description   "The scope of _:me should be the formula";

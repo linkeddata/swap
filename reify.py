@@ -507,7 +507,9 @@ def dereification(x, f, sink, bnodes={}, xList=[]):
     y = f.the(subj=x, pred=rei["items"])
     if y != None:
         if isinstance(y, N3Set):
-            return sink.store.newSet([dereification(z, f, sink, bnodes, xList) for z in y])
+            yy = [z for z in y]
+            yy.sort(Term.compareAnyTerm)
+            return sink.store.newSet([dereification(z, f, sink, bnodes, xList) for z in yy])
         return sink.newList([dereification(z, f, sink, bnodes, xList) for z in y])
     
     y = f.the(subj=x, pred=rei["statements"])
