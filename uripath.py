@@ -71,10 +71,13 @@ def join(here, there):
     assert(bcolonl >= 0) # else it's not absolute
 
     # join('mid:foo@example', '../foo') bzzt
-    if here[bcolonl+1:bcolonl+3] <> '//':
+    if here[bcolonl+1:bcolonl+2] <> '/':
         raise ValueError, here
 
-    bpath = find(here, '/', bcolonl+3)
+    if here[bcolonl+1:bcolonl+3] == '//':
+        bpath = find(here, '/', bcolonl+3)
+    else:
+        bpath = bcolonl+1
 
     # join('http://xyz', 'foo')
     if bpath < 0:
@@ -257,7 +260,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.1  2002-02-19 22:52:42  connolly
+# Revision 1.2  2002-03-15 23:53:02  connolly
+# handle no-auth case
+#
+# Revision 1.1  2002/02/19 22:52:42  connolly
 # renamed uritools.py to uripath.py
 #
 # Revision 1.2  2002/02/18 07:33:51  connolly
