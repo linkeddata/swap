@@ -9,6 +9,7 @@ Crawler"""
 import llyn
 from thing import Fragment
 import thing
+import diag
 
 import sys
 
@@ -33,11 +34,11 @@ def getDoc(r):
     document[r] = d
     return d
 	
-def crawl(uriref, level=0):
+def crawl(this, level=0):
 
-    print " " * level, "Loading ", uri, 
-    f = load(join(base(), uri))
-    this = thing.symbol(uri)
+    uri = this.uriref()
+    print " " * level, "Loading ", uri
+    f = load(uri)
     thisd = getDoc(this)
     for s in f.statements:
 	for p in 1,2,3:
@@ -64,7 +65,8 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 """
     uriref = sys.argv[1]
     uri = join(base(), uriref)
-    r = thing.symbol(r)
+    r = thing.symbol(uri)
+    diag.setVerbosity(25)
     crawl(r)
     while agenda != []:
 	r = agenda.pop()

@@ -46,6 +46,11 @@
 	test:description	"combinations of - and _ in identifiers";
 	test:arguments		"syntax/dot-dash.n3".
 
+:t1005h a test:CwmTest;
+	test:shortFileName 	"data-ugly.n3";
+	test:description	"dumping data only fast with --ugly";
+	test:arguments		"daml-ex.n3 rules12.n3 --ugly".
+
 :t1006 a test:CwmTest;
     test:shortFileName 	"contexts-1.n3";
     test:description   	"Parse and generate simple contexts";

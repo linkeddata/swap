@@ -1987,7 +1987,7 @@ class RDFStore(RDFSink) :
         for s in context.statements:
 	    for p in SUBJ, PRED, OBJ:
 		x = s[p]
-		if isinstance(Formula, x) or x in uu:
+		if isinstance(x, Formula) or x in uu:
 		    break
 	    else:
 		self._outputStatement(sink, s.quad)
