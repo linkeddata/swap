@@ -259,6 +259,10 @@ z  - Allow relative URIs for namespaces
                     return
                 
 	    elif subj[0] == LITERAL:
+		raise ValueError(
+		"""Bad subject of statement: %s.
+		RDF/XML cannot serialize a graph in which a subject is a literal.""" % subj[1])
+		# See http://lists.w3.org/Archives/Public/public-cwm-bugs/2004Aug/0014.html
 		v = subj[1]
 		attrs = []  # Literal
 		if type(v) is type((1,1)):
