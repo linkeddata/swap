@@ -1028,11 +1028,12 @@ class XMLWriter:
 
         needNL = 0
 	for n, v in attrs:
-	    #@@BUG: need to escape markup chars in v
             if needNL:
                 self.newline()
                 self._wr("   ")
-	    self._wr(" %s=\"%s\"" % (n, v))
+	    self._wr(" %s=\"" % (n, ))
+            xmldata(self._wr, v, self.attrEsc)
+            self._wr("\"")
 	    needNL = 1
 
             
@@ -1065,22 +1066,14 @@ class XMLWriter:
 	self.closeTag()
 
 
-    markupChar = re.compile(r"[\r<>&]")  # timbl removed \n as can be in data
+    dataEsc = re.compile(r"[\r<>&]")  # timbl removed \n as can be in data
+    attrEsc = re.compile(r"[\r<>&'\"\n]")
 
     def data(self, str):
 	#@@ throw an exception if the element stack is empty
 	o = self._outFp
         self.flushClose()
-	i = 0
-	while i < len(str):
-	    m = self.markupChar.search(str, i)
-	    if not m:
-		o.write(str[i:])
-		break
-	    j = m.start()
-	    o.write(str[i:j])
-	    o.write("&#%d;" % (ord(str[j]),))
-	    i = j + 1
+        xmldata(o.write, str, self.dataEsc)
 	self.noWS = 1  # Suppress whitespace - we are in data
 
     def endDocument(self):
@@ -1089,6 +1082,19 @@ class XMLWriter:
         self.flushClose()
         self._wr("\n")
 
+
+def xmldata(write, str, markupChars):
+    i = 0
+    while i < len(str):
+        m = markupChars.search(str, i)
+        if not m:
+            write(str[i:])
+            break
+        j = m.start()
+        write(str[i:j])
+        write("&#%d;" % (ord(str[j]),))
+        i = j + 1
+    
 class ToN3(RDFSink):
     """keeps track of most recent subject and predicate reuses them
 
