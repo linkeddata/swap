@@ -132,8 +132,19 @@ class Document(Streamer):
        self.html.writeTo(s)
 
    def append(self, content):
-       return self.body.append(content)
-    
+       """
+
+       cleverly put plain text into a div.   what else to do with it???
+       """
+       if isinstance(content, Element):
+           self.body.append(content)
+       else:
+           self.body.append(div(content))
+       return self
+
+   def __lshift__(self, content):
+       """Convenience syntax for append, with no parens to balance."""
+       return self.append(content)
 
 class Element(Streamer):
 
@@ -198,7 +209,13 @@ class Element(Streamer):
         except AttributeError:
             self.content = [ self.content ]
             self.content.append(content)
-        
+        return self  # allows chaining    x.append(y).append(z)
+
+    def __lshift__(self, content):
+       """Convenience syntax for append, with no parens to balance."""
+       return self.append(content)
+
+
 class Comment:
     def __init__(self, content=None, inline=0):
         self.content=content
@@ -277,11 +294,11 @@ def createStdElements():
     # HAVE to match inline/flow in HTML's own syntax.
 
     elements = """a abbr acronym address area b base bdo big
-    blockquote+ body+ br button caption cite code col colgroup dd del
+    blockquote+ body+ br+ button caption cite code col colgroup dd del
     dfn div+ dl dt em fieldset form+ h1+ h2+ h3+ h4+ h5+ h6+ head+ hr+ html+ i
-    img input ins kbd label legend li link map meta noscript object ol+
-    optgroup option p+ param pre q samp script+ select small span strong
-    style sub sup table+ tbody+ td textarea tfoot th thead title tr+ tt
+    img input+ ins kbd label legend li link map meta noscript object ol+
+    optgroup option p+ param pre q samp script+ select+ small span strong
+    style sub sup table+ tbody+ td textarea+ tfoot th thead title tr+ tt
     ul+ var"""
 
     for x in elements.split(" "):
@@ -302,7 +319,10 @@ if __name__ =='__main__':
     print doctest.testmod(html) 
 
 # $Log$
-# Revision 1.3  2003-02-18 17:02:05  sandro
+# Revision 1.4  2003-04-29 04:46:57  sandro
+# added clever << operator (now where have I seen that before?)
+#
+# Revision 1.3  2003/02/18 17:02:05  sandro
 # added auto-generation of element-creation functions, based on XHTML DTD
 #
 # Revision 1.2  2003/02/14 00:44:24  sandro
