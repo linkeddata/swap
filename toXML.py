@@ -347,6 +347,7 @@ z  - Allow relative URIs for namespaces
         self._subj = subj    # The object is not the subject context
 
     def endAnonymousNode(self, subj=None):    # Remove context
+        return #If a new subject is started, they'll know to close this one
     	self._xwr.endElement()
 	self._subj = None
 
