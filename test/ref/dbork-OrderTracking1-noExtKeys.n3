@@ -12,7 +12,7 @@
                 :billStreet,
                 :c,
                 :cEK,
-                :dEK,
+                :d,
                 :first,
                 :last,
                 :o,
@@ -85,7 +85,7 @@
              Customers:givenName :last;
              Customers:id :cEK .
         :o     Orders:customer :cEK;
-             Orders:orderDate :dEK;
+             Orders:orderDate :d;
              Orders:product :pEK .
         :p     Products:id :pEK;
              Products:name :productName .

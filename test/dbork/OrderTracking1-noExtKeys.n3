@@ -9,7 +9,7 @@
 
 @prefix : <#>.
 
-this log:forAll :o, :cEK, :pEK, :dEK, :p, :productName, :c, :first, :last, :billAddrEK, :billAddr, :billStreet, :billCity, :billState .
+this log:forAll :o, :cEK, :pEK, :d, :p, :productName, :c, :first, :last, :billAddrEK, :billAddr, :billStreet, :billCity, :billState .
 
 <sql://rdftest@swada.w3.org/OrderTracking/> is log:authoritativeService of
 	Orders:id, Orders:customer, Orders:product, Orders:orderDate, 
@@ -19,7 +19,7 @@ this log:forAll :o, :cEK, :pEK, :dEK, :p, :productName, :c, :first, :last, :bill
 {
  :o Orders:customer :cEK .
  :o Orders:product :pEK .
- :o Orders:orderDate :dEK .
+ :o Orders:orderDate :d .
 
  :p Products:id :pEK .
  :p Products:name :productName .

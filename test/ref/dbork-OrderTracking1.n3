@@ -6,18 +6,15 @@
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
     this     log:forAll :billAddr,
-                :billAddrEK,
                 :billCity,
                 :billState,
                 :billStreet,
                 :c,
-                :cEK,
                 :d,
                 :first,
                 :last,
                 :o,
                 :p,
-                :pEK,
                 :productName .
     
     "'sql://rdftest@swada.w3.org/OrderTracking/Orders.id=2185'"     :RESULT "'123 Elm Street'",
