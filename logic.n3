@@ -5,6 +5,8 @@
 # these raise the level above ontology
 # $Id$
 
+<#log.n3> <http://www.w3.org/2000/10/swap/pim/doc.n3#obsoletes> <> .
+
 bind rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns> . # Unused
 bind rdfs: <http://www.w3.org/2000/01/rdf-schema> .	 # unused
 bind ont: <http://www.daml.org/2000/10/daml-ont> .	 # contains aliases for the above
