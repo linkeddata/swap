@@ -1729,9 +1729,9 @@ Examples:
         if option_outURI: _outURI = urlparse.urljoin(_outURI, option_outURI)
         
 	if option_rdf:
-            _outSink = notation3.ToRDF(sys.stdout, _outURI)
+            _outSink = notation3.ToRDF(sys.stdout, _outURI, base=option_baseURI)
         else:
-            _outSink = notation3.ToN3(sys.stdout.write, _outURI)
+            _outSink = notation3.ToN3(sys.stdout.write, _outURI, base=option_baseURI)
         version = "$Id$"
 	_outSink.makeComment("Processed by " + version[1:-1]) # Strip $ to disarm
 	_outSink.makeComment("    using base " + _baseURI)
