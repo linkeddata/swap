@@ -1,37 +1,25 @@
-# Notation3 
+# Notation3 constrained to be RDF + a horn rules language
+#
 # BNF without tokenization
 #
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix bnf: <http://www.w3.org/2000/10/swap/grammar/bnf#>.
 @prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#>.
-@prefix : <http://www.w3.org/2000/10/swap/grammar/n3#>.
-@prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#>.
+@prefix : <http://www.w3.org/2000/10/swap/grammar/n3ql#>.
+@prefix n3r: <http://www.w3.org/2000/10/swap/grammar/n3-rules#>.
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
 @prefix string: <http://www.w3.org/2000/10/swap/string#>.
 @keywords a, is, of.
 
 
 # Issues:
-# - string token regexp not right
-# - tokenizing rules in general: whitespace
-# - encoding really needs specifying
-# - @keywords affects tokenizing
-# - Use of dot for !
-# - comments (tokenizer deals with)
-# - We assume ASCII, in fact should use not notNameChars for i18n
+# - see general ones in n3.n3
+# - Defining safe rules
 
-# tokenizing:
-# Absorb anything until end of regexp, then stil white space
-#  period followed IMMEDIATELY by an opener or name char is taken as "!".
-#  Except after a "." used instead of in those circumstances,
-#	ws may be inserted between tokens.
-#  WS MUST be inserted between tokens where ambiguity would arise.
-#  (possible ending characters of one and beginning characters overlap)
-#
 
-<> bnf:syntaxFor [ bnf:internetMediaType 
-		<http://www.w3.org/2003/mediatypes#application/n3>].
+#<> bnf:syntaxFor [ bnf:internetMediaType 
+#		<http://www.w3.org/2003/mediatypes#text/n3ql>].
 
 # <> rdfsem:semanticsFor ""   .....
 
@@ -44,20 +32,22 @@ document a rul:Used;
 	
 		(
 			[ bnf:zeroOrMore declaration ]
-			[ bnf:zeroOrMore universal ]
+#			[ bnf:zeroOrMore universal ]
 			[ bnf:zeroOrMore existential ]
 			statements_optional
 			bnf:eof
 		)
 	).
 
-statements_optional bnf:mustBeOneSequence (() ( statement "." statements_optional ) ).
+statements_optional bnf:mustBeOneSequence (() ( statement_or_rule "." statements_optional )).
+
+
+statement_or_rule bnf:mustBeOneSequence( (statement) (rule) ).
 
 # Formula does NOT need period on last statement
 
 formulacontent bnf:mustBeOneSequence ((
 		[ bnf:zeroOrMore declaration ]
-		[ bnf:zeroOrMore  universal ]
 		[ bnf:zeroOrMore existential ]
 		statementlist
 	)).
@@ -85,13 +75,25 @@ existential bnf:mustBeOneSequence(
 		)).
 
 
+symbol bnf:mustBeOneSequence (
+		(explicituri)
+		(qname)
+	).
+
 declaration bnf:mustBeOneSequence(
 		( "@prefix" qname explicituri "." )
 		( "@keywords" [ bnf:commaSeparatedPeriodTerminatedListOf barename ] )
 	).
 
-
 statement bnf:mustBeOneSequence(( subject propertylist )).
+
+rule bnf:mustBeOneSequence (
+	( "{" formulacontent "}" "=>" "{" formulacontent "}" )
+	).
+
+rule_safe bnf:mustBeOneSequence (
+	( "{" formulacontent "}" "=>" "{" formula_safe "}" )
+	).
 
 propertylist bnf:mustBeOneSequence (
 		( )
@@ -100,7 +102,6 @@ propertylist bnf:mustBeOneSequence (
 
 propertylisttail bnf:mustBeOneSequence (
 		( )
-#		( ";" )
 		( ";" verb object objecttail propertylisttail )
 	).
 
@@ -117,15 +118,18 @@ verb bnf:mustBeOneSequence (
 		( "@is" prop "@of" )
 		( "@a" )
 		( "=" )
-		( "=>" )
-		( "<=" ) 
 	).
 
 prop bnf:mustBeOneSequence ((node)).
 
-subject bnf:mustBeOneSequence ((path)).
+subject bnf:mustBeOneSequence ((item)).
 
-object bnf:mustBeOneSequence ((path)).
+object bnf:mustBeOneSequence ((item)).
+
+item bnf:mustBeOneSequence(
+		(path)
+	).
+
 
 path bnf:mustBeOneSequence(
 		( node pathtail )
@@ -140,32 +144,35 @@ pathtail bnf:mustBeOneSequence(
 
 node bnf:mustBeOneSequence (
 		( symbol )
-		( "{" formulacontent "}" )
 		( variable )
 		( numericliteral )
 		( literal )
 		( "[" propertylist "]"  )
-		(  "("  pathlist ")"  )
-		( "@this" )	  #  Deprocated.  Was allowed for this log:forAll x
+		(  "("  itemlist ")"  )
+).
+
+node_safe bnf:mustBeOneSequence (
+		( symbol )
+		( variable )
+		( numericliteral )
+		( literal )
 ).
 
 
-pathlist bnf:mustBeOneSequence (() (path pathlist)).
 
-symbol bnf:mustBeOneSequence (
-		(explicituri)
-		(qname)
-	).
-
-
+itemlist bnf:mustBeOneSequence (() (item itemlist)).
+ 
 literal bnf:mustBeOneSequence(( string dtlang)).
 
-dtlang bnf:mustBeOneSequence(  ()  ("@" 1)  ("^^" symbol)).
+dtlang bnf:mustBeOneSequence(  ()  ("@" langcode)  ("^^" symbol)).
 
 
 #______________________________________________________________________
 #
-#   TERMINALS
+#   TOKENS
+
+alphanumeric 	bnf:matches  	"[a-zA-Z][a-zA-Z0-9_]*";
+		bnf:canStartWith	"a".
 
 numericliteral	bnf:matches	"""[-+]?[0-9]+(\\.[0-9]+)?(e[-+]?[0-9]+)?""";
 		bnf:canStartWith 	"0", "-", "+".
@@ -174,7 +181,7 @@ explicituri 	bnf:matches 	"<[^>].*>";
 		bnf:canStartWith 	"<".
 
 qname 		bnf:matches  	"(([a-zA-Z_][a-zA-Z0-9_]*)?:)?([a-zA-Z_][a-zA-Z0-9_]*)?";
-		bnf:canStartWith 	"a", "_", ":".  # @@ etc unicode
+		bnf:canStartWith 	"a", "_".  # @@ etc
 
 barename 	bnf:matches  	"[a-zA-Z_][a-zA-Z0-9_]*";  # subset of qname
 		bnf:canStartWith 	"a", "_".  # @@ etc
@@ -182,11 +189,7 @@ barename 	bnf:matches  	"[a-zA-Z_][a-zA-Z0-9_]*";  # subset of qname
 variable 	bnf:matches  	"\\?[a-zA-Z_][a-zA-Z0-9_]*";  # ? barename
 		bnf:canStartWith 	"?".  #
 
-# Maybe dtlang should just be part of string regexp?
-# Whitespace is not allowed
-
-# was: "[a-zA-Z][a-zA-Z0-9]*(-[a-zA-Z0-9]+)?";
-langcode	bnf:matches  	"[a-z]+(-[a-z0-9]+)*"; # http://www.w3.org/TR/rdf-testcases/#language
+langcode	bnf:matches  	"[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?";
 		bnf:canStartWith 	"a".
 
 
@@ -194,7 +197,8 @@ langcode	bnf:matches  	"[a-z]+(-[a-z0-9]+)*"; # http://www.w3.org/TR/rdf-testcas
 # @@@ triple-quoted version too
 
 string		bnf:matches		"""("([^"]|(\\\\"))*")""";
-		bnf:canStartWith 	"\"".
+		bnf:canStartWith	"\"".
+
 
 #____________________________________________________
 
@@ -204,14 +208,6 @@ string		bnf:matches		"""("([^"]|(\\\\"))*")""";
 
 
 { ?x bnf:commaSeparatedPeriodTerminatedListOf ?y } =>
-{
-	?x bnf:mustBeOneSequence (
-		( "." )
-		( ?y [bnf:CSLTail ?y]  )
-	)
-}.
-
-{ ?x bnf:CSLTail ?y } =>
 {
 	?x bnf:mustBeOneSequence (
 		( "." )
@@ -227,9 +223,6 @@ string		bnf:matches		"""("([^"]|(\\\\"))*")""";
 
 { ?x bnf:commaSeparatedPeriodTerminatedListOf [ bnf:label ?y].
 	( ?y "_csl" ) string:concatenation ?str } => { ?x bnf:label ?str }.
-
-{ ?x bnf:CSLTail [ bnf:label ?y].
-	( ?y "_necsl" ) string:concatenation ?str } => { ?x bnf:label ?str }.
 
 
 #ends

@@ -97,8 +97,23 @@ bnf:eof bnf:canStartWith "@EOFDUMMY". #  @@ kludge
 # one character, and may allways be a constsnt string rather than a 
 # regexp (check).
 
+# A branchTail is a sequnece which a branch could start with
 { 	?x bnf:branch ?b.
 	?b bnf:sequence ?s.
+} => {
+	?b bnf:branchTail ?s.
+}.
+
+{	?b bnf:branchTail ?s.
+	?s rdf:first [ bnf:branch [ bnf:sequence () ]];
+           rdf:rest ?t
+} => {
+	?b bnf:branchTail ?t.
+}. 
+
+
+{ 	?x bnf:branch ?b.
+	?b bnf:branchTail ?s.
 	?s rdf:first [bnf:canStartWith ?y].
 } => {
 	?x bnf:canStartWith ?y.
