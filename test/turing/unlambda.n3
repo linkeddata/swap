@@ -1,0 +1,75 @@
+@prefix : <http://yosi.us/unlambda#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@keywords a, of, is .
+#
+#
+#
+
+{(?x ?y) a NeedsEval}
+=>
+{?x a NeedsEval .
+ ?y a NeedsEval} .
+
+{?x a NeedsEval; log:rawType log:Other} => {?x eval ?x} .
+
+{ (?x ?y) a NeedsEval .
+ ?x eval ?a .
+ ?y eval ?b .
+} 
+=>
+{(?a ?b) a NeedsApply} .
+
+{(?x ?y) a NeedsEval .
+ ?x eval ?a .
+ ?y eval ?b .
+ (?a ?b) apply ?c . }
+=>
+{(?x ?y) eval ?c } .
+
+
+{(k ?x) apply [is k of ?x ]}
+<= 
+{(k ?x) a NeedsApply} .
+
+{(?a ?x) apply ?y}
+<=
+{(?a ?x) a NeedsApply .
+?y k ?a} .
+
+{(s ?x) apply [is s of ?x]}
+<= 
+{(s ?x) a NeedsApply} .
+
+{(?a ?x) apply [is ?a of ?x]}
+<=
+{(?a ?x) a NeedsApply .
+?y s ?a} .
+
+{(?a ?x) a NeedsApply .
+ ?y s ?b .
+ ?z ?b ?a .
+} =>
+{(?y ?z) a NeedsApply .
+ (?y ?x) a NeedsApply } .
+
+{(?a ?x) a NeedsApply .
+ ?y s ?b .
+ ?z ?b ?a .
+ (?y ?z) apply ?r .
+ (?y ?x) apply ?s .
+}
+=>
+{(?r ?s) a NeedsEval} .
+
+{(?a ?x) a NeedsApply .
+ ?y s ?b .
+ ?z ?b ?a .
+ (?y ?z) apply ?r .
+ (?y ?x) apply ?s .
+ (?r ?s) eval ?w }
+=>
+{(?a ?x) apply ?w} .
+
+{(i ?x) apply ?x}
+<= 
+{(i ?x) a NeedsApply} .
