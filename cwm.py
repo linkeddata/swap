@@ -291,13 +291,13 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
 """
         
-#        import urllib
+        #import urllib
         import time
         import sys
         global sax2rdf
         import thing
-#        from thing import chatty
-#        import sax2rdf
+        #from thing import chatty
+        #import sax2rdf
 
         option_need_rdf_sometime = 0  # If we don't need it, don't import it
                                # (to save errors where parsers don't exist)
@@ -325,7 +325,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         # The base URI for this process - the Web equiv of cwd
 	_baseURI = uripath.base()
 	
-        option_format = "n3"      # Use RDF rather than XML
+        option_format = "n3"      # set the default format
         option_first_format = None
         
         _outURI = _baseURI
@@ -400,18 +400,17 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         if option_need_rdf_sometime:
             import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
-# Between passes, prepare for processing
+        # Between passes, prepare for processing
         setVerbosity(0)
-#  Base defauts
 
+        #  Base defauts
         if option_baseURI == _baseURI:  # Base not specified explicitly - special case
             if _outURI == _baseURI:      # Output name not specified either
                 if _gotInput == 1 and not option_test:  # But input file *is*, 
                     _outURI = option_inputs[0]        # Just output to same URI
                     option_baseURI = _outURI          # using that as base.
 
-#  Fix the output sink
-        
+        #  Fix the output sink
         if option_format == "rdf":
             _outSink = toXML.ToRDF(sys.stdout, _outURI, base=option_baseURI, flags=option_rdf_flags)
         else:
@@ -433,7 +432,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 	    thing.setStore(_store)
             workingContextURI = _outURI+ "#0_work"
             workingContext = _store.intern((FORMULA, workingContextURI))   #@@@ Hack - use metadata
-#  Metadata context - storing information about what we are doing
+            #  Metadata context - storing information about what we are doing
 
             _store.reset(_metaURI+"#_experience")     # Absolutely need this for remembering URIs loaded
             history = None
@@ -451,7 +450,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 history = inputContext
 
 
-#  Take commands from command line: Second Pass on command line:
+        #  Take commands from command line: Second Pass on command line:
 
         option_format = "n3"      # Use RDF rather than XML
         option_rdf_flags = ""
@@ -482,12 +481,12 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                     inputContext = _store.intern((FORMULA, _inputURI+ "#_formula"))
                     _step  = _step + 1
                     s = _metaURI + `_step`  #@@ leading 0s to make them sort?
-#                    if doMeta and history:
-#                        _store.storeQuad((_store._experience, META_mergedWith, s, history))
-#                        _store.storeQuad((_store._experience, META_source, s, inputContext))
-#                        _store.storeQuad((_store._experience, META_run, s, run))
-#                        history = s
-#                    else:
+                    #if doMeta and history:
+                    #   _store.storeQuad((_store._experience, META_mergedWith, s, history))
+                    #   _store.storeQuad((_store._experience, META_source, s, inputContext))
+                    #   _store.storeQuad((_store._experience, META_run, s, run))
+                    #   history = s
+                    #else:
                     history = inputContext
                 _gotInput = 1
 
@@ -553,13 +552,13 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 workingContextURI = _newURI
 
 
-#                if doMeta:
-#                    _step  = _step + 1
-#                    s = _metaURI + `_step`  #@@ leading 0s to make them sort?
-#                    _store.storeQuad(_store._experience, META_basis, s, history)
-#                    _store.storeQuad(_store._experience, META_filter, s, inputContext)
-#                    _store.storeQuad(_store._experience, META_run, s, run)
-#                    history = s
+                #                if doMeta:
+                #                    _step  = _step + 1
+                #                    s = _metaURI + `_step`  #@@ leading 0s to make them sort?
+                #                    _store.storeQuad(_store._experience, META_basis, s, history)
+                #                    _store.storeQuad(_store._experience, META_filter, s, inputContext)
+                #                    _store.storeQuad(_store._experience, META_run, s, run)
+                #                    history = s
 
             elif arg == "-purge":
                 _store.purge(workingContext)
@@ -579,7 +578,8 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 _store.think(workingContext)
 
             elif arg == "-otter":
-                # quick hack, should be properly in output handler
+                # hack instead of using _output, because I haven't figured out
+                # how 
                 kb = LX.KB()
                 _store.toLX(workingContext, kb=kb)
                 s = LX.language.otter.Serializer()
@@ -634,7 +634,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
 
 
-# Squirt it out if not piped
+        # Squirt it out if not piped
 
         if not option_pipe:
             if verbosity()>5: progress("Begining output.")
