@@ -76,7 +76,6 @@ parser _Parser:
         ";" predicates0<<ctx,subj>>
         | # empty
 
-    # This is the central rule for recognizing a fact.
     rule predicate<<ctx,subj>>: verb<<ctx>> objects1<<ctx,subj,verb>>
 
     rule verb<<ctx>> :
@@ -205,7 +204,10 @@ def DEBUG(*args):
     sys.stderr.write("\n")
     
 # $Log$
-# Revision 1.6  2001-08-31 21:14:11  connolly
+# Revision 1.7  2001-08-31 21:28:39  connolly
+# quick release for others to test
+#
+# Revision 1.6  2001/08/31 21:14:11  connolly
 # semantic actions are starting to work;
 # anonymous stuff ( {}, [] ) doesn't seem
 # to be handled correctly yet.
