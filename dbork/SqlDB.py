@@ -563,7 +563,7 @@ class SqlDBAlgae(RdfDBAlgae):
                 comma = ''
             else:
                 comma = ','
-            if (self.labels[1] == None):
+            if (self.labels[i] == None):
                 asStr = ''
             else:
                 asStr = " AS "+self.labels[i]
