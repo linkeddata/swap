@@ -32,7 +32,7 @@
     cal:url ?PG;
     cal:completed [ cal:dateTime ?WHEN ].
   (?WHEN ?PG "7") str:concatenation ?K.
-  ("<li>" ?WHEN2 " <a href='" [is log:uri of ?PG]
+  ("<li>" ?WHEN " <a href='" [is log:uri of ?PG]
        "'>" ?DESC "</a> closed.</li>\n") str:concatenation ?TXT.
 } => { ?K log:outputString ?TXT }.
 
