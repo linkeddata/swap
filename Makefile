@@ -81,23 +81,21 @@ log.rdf: log.n3
 
 #######
 
-GET=curl
+GET=GET
 
 # cf
 # W3C mailing list search results in RDF
 #http://lists.w3.org/Archives/Public/www-rdf-interest/2003Jul/0206.html
 
-bugstatus: bugsToDo.ics
+bugstatus: admin/N3-Bugs.ics
 
 CWM=$(PYTHON) cwm.py
 
-bugsToDo.ics: bugsToDo.cal3
+admin/N3-Bugs.ics: bugsToDo.cal3
 	PYTHONPATH=. $(PYTHON) pim/toIcal.py bugsToDo.cal3 >$@
 
 
-bugsToDo.cal3: n3bugs.rdf util/bugstatus.n3
+bugsToDo.cal3: util/bugstatus.n3
 	$(CWM) util/bugstatus.n3 --think --n3 --data >$@
 
 
-n3bugs.rdf:
-	GET -H Accept:\ application/rdf+xml 'http://www.w3.org/Search/Mail/Public/advanced_search?keywords=n3bugs&resultsperpage=1000&sortby=date&index-grp=Public%2FFULL&index-type=t&type-index=www-archive' >$@
