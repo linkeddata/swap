@@ -67,10 +67,13 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 
 
 :personalTitle = 	mso:Title .
-:firstName = 		mso:First_Name .
+:givenName = 		mso:First_Name .
 :middleName = 		mso:Middle_Name .
-:lastName = 		mso:Last_Name .
+:familyName = 		mso:Last_Name .
 :personalSuffix = 	mso:Suffix .
+:fullName a rdfs:Property; rdfs:label "full name".
+:sortName a rdfs:Property; rdfs:label "sort name";
+  rdfs:comment "re-arranged for lexicographic ordering; ala Doe, John".
 
 :ContactLocation a Class;
     rdfs:comment  "A place with address, phone number, fax, etc".
@@ -168,7 +171,31 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 #  mso:Directory_Server  a rdfs:Property .
 
 #  mso:E-mail_Address  a rdfs:Property    # Problmem: not as a URI
-:mailbox a ont:UnambiguousProperty; rdfs:domain :SocialEntity; rdfs:range :Mailbox.
+:mailbox a ont:UnambiguousProperty;
+  rdfs:domain :SocialEntity;
+  rdfs:range :Mailbox;
+  :_example { :_Dan :mailbox <mailto:connolly@w3.org> }.
+
+:emailAddress a ont:UnambiguousProperty;
+  rdfs:domain :SocialEntity;
+  rdfs:range :_EmailAddress;
+  :_example { :_Dan :emailAddress "connolly@w3.org" }.
+
+# :_EmailAddress rdfs:subClassOf dt:string; dt:pattern "[^@]+@[^@]+". # or something like that. Check RFC822
+
+:mailboxURI a ont:UnambiguousProperty;
+  rdfs:domain :SocialEntity;
+  rdfs:range :_URI;
+  :_example { :_Dan :mailboxURI "mailto:connolly@w3.org" }.
+
+# move these rules to a transcription of the mailto: URI scheme spec.
+:_addressProperty a rdfs:Property.
+:mailbox :_addressProperty :mailboxURI.
+
+#  this log:forAll :x, :ap, :uri.
+#
+#  { :x [ :addressProperty :ap] [ log:uri :uri] } log:means { :x :ap :uri }.
+#  { :ent :mailboxURI [ log:equalTo [ is log:concat of ( "mailto:" [ :_uriEncode :addr ] ) ] ] } log:implies { :ent :emailAddress :addr }. # only goes one way because we could use PUT to HTTP resources to deliver mail.
 
 #  mso:E-mail_Display_Name  a rdfs:Property .   # Seems redundant and useless IMHO
 
@@ -220,7 +247,8 @@ mso:Spouse  a rdfs:Property;  .
 
 mso:WebPage  a rdfs:Property;
 = :publicHomePage .              # I have many home pages, some for me some for others
-
+:publicHomePage rdfs:subPropertyOf :homePage.
+:homePage :_addressProperty :homePageAddress.
 
 
 ####################################### Calendaring -- Time ###########
@@ -236,7 +264,11 @@ mso:WebPage  a rdfs:Property;
 
 <> rcs:log """
 $Log$
-Revision 1.4  2001-06-05 22:01:57  connolly
+Revision 1.5  2001-06-05 23:12:42  connolly
+added mailboxURI and emailAddress in contrast to mailbox
+also: homePage and homePageAddress
+
+Revision 1.4  2001/06/05 22:01:57  connolly
 fixed :mailbox property as agreed in semweb-ad 5 Jun 2001.
 moved many of the n3 comments into RDF.
 updated ont: to March 2001 DAML namespace.
