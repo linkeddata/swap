@@ -231,22 +231,45 @@ class RdfDBAlgae:
     ""
     
 class SqlDBAlgae(RdfDBAlgae):
-    def __init__(self, baseURI, tableDescModuleName, duplicateFieldsInQuery=0, checkUnderConstraintsBeforeQuery=1, checkOverConstraintsOnEmptyResult=1):
+    def __init__(self, baseURI, tableDescModuleName, user, password, host, database, duplicateFieldsInQuery=0, checkUnderConstraintsBeforeQuery=1, checkOverConstraintsOnEmptyResult=1):
         # Grab _AllTables from tableDescModuleName, analogous to
         #        import tableDescModuleName
         #        from tableDescModuleName import _AllTables
+        self.user = user
+        if (password):
+            self.password = password
+        else:
+            self.password = ""
+        self.host = host
+        self.database = database
+        self.connection = None
         self.duplicateFieldsInQuery = duplicateFieldsInQuery
         self.checkUnderConstraintsBeforeQuery = checkUnderConstraintsBeforeQuery
         self.checkOverConstraintsOnEmptyResult = checkOverConstraintsOnEmptyResult
+
         try:
             fp, path, stuff = imp.find_module(tableDescModuleName)
             tableDescModule = imp.load_module(tableDescModuleName, fp, path, stuff)
             if (fp): fp.close
+            self.structure = tableDescModule._AllTables
         except ImportError, e:
-            print tableDescModuleName, " not found"
-            raise SystemExit
+            print tableDescModuleName, " not found\n"
+            self.structure = None
+        except TypeError, e:
+            self.structure = None
+
+        if (self.structure == None):
+            print "analyzing sql://%s/%s\n" % (host, database)
+            self.structure = {}
+            cursor = self._getCursor()
+            cursor.execute("SHOW TABLES")
+            while 1:
+                tableName_ = cursor.fetchone()
+                if not tableName_:
+                    break
+                self._buildTableDesc(tableName_[0])
+
         self.baseUri = baseURI
-        self.structure = tableDescModule._AllTables
         self.predicateRE = re.compile(baseURI+
                                       "(?P<table>\w+)\#(?P<field>[\w\d\%\=\&]+)$")
 
@@ -274,6 +297,26 @@ class SqlDBAlgae(RdfDBAlgae):
 					# all paths of an OR. Handy diagnostic.
         self.overConstraints = {};	# Redundent constraints between aliases.
 
+    def _buildTableDesc(self, table):
+        self.structure[table] = { '-fields' : {},
+                                  '-primaryKey' : [] }
+        cursor = self._getCursor()
+        cursor.execute("SHOW FIELDS FROM " + table)
+        while 1:
+            name_type_null_key_default_extra_ = cursor.fetchone()
+            if not name_type_null_key_default_extra_:
+                break
+            self.structure[table]['-fields'][name_type_null_key_default_extra_[0]] = {}
+
+        cursor = self._getCursor()
+        cursor.execute("SHOW INDEX FROM " + table)
+        while 1:
+            tableName_nonUnique_keyName_seq_columnName_ = cursor.fetchone()
+            if not tableName_nonUnique_keyName_seq_columnName_:
+                break
+            (tableName, nonUnique, keyName, seq, columnName, d,d,d,d,d) = tableName_nonUnique_keyName_seq_columnName_
+            if (keyName == 'PRIMARY'):
+                self.structure[table]['-primaryKey'].append(columnName)
 
     def _processRow(self, row, statements, implQuerySets, resultSet, messages, flags):
         #for iC in range(len(implQuerySets)):
@@ -289,8 +332,7 @@ class SqlDBAlgae(RdfDBAlgae):
 
         query = self._buildQuery(implQuerySets)
         messages.append("query SQLselect \"\"\""+query+"\"\"\" .")
-        connection = MySQLdb.connect("localhost", "root", "", "w3c")
-        cursor = connection.cursor()
+        cursor = self._getCursor()
         cursor.execute(query)
 
         #if (cursor.rows() == 0 and self.checkOverConstraintsOnEmptyResult):
@@ -298,6 +340,12 @@ class SqlDBAlgae(RdfDBAlgae):
 
         nextResults, nextStatements = self._buildResults(cursor, implQuerySets, row, statements)
         return nextResults, nextStatements
+
+    def _getCursor(self):
+        if (self.connection == None):
+            self.connection = MySQLdb.connect(self.host, self.user, self.password, self.database)
+        cursor = self.connection.cursor()
+        return cursor
 
     def _walkQuery (self, term, row, flags):
         if (0):

@@ -1,0 +1,46 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+#@prefix db: 		<http://localhost/SqlDB#>.
+# Tables:
+@prefix Customers: 		<http://localhost/SqlDB/Customers#>.
+@prefix Products: 		<http://localhost/SqlDB/Products#>.
+
+@prefix : <#>.
+@prefix v: <#>.
+
+this log:forAll :customer, :family, :given .
+
+<sql://rdftest@swada.w3.org/OrderTracking> is log:authoritativeService of
+	Customers:familyName, Customers:givenName, Products:name.
+{
+ :customer Customers:familyName :family .
+ :customer Customers:givenName :given .
+} log:implies {
+
+ :given :RESULT :family .
+
+}.
+
+this log:forAll :products, :name .
+
+<sql://root@localhost/OrderTracking> is log:authoritativeService of
+	Products:name.
+{
+ :products Products:name :name .
+} log:implies {
+
+ :products :RESULT :name .
+
+}.
+
+# should create this SQL:
+# SELECT Customers_0.id AS customer_id,
+#        Customers_0.givenName AS given_givenName,
+#        Customers_0.familyName AS family_familyName
+# FROM Customers AS Customers_0
+
+# and
+
+# SELECT Products_0.id AS products_id,
+#        Products_0.name AS name_name
+# FROM Products AS Products_0

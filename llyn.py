@@ -2677,7 +2677,14 @@ class Query:
 
         rs = ResultSet()
         qp = rs.buildQuerySetsFromCwm(items, query.variables, query.existentials)
-        a = SqlDBAlgae("http://localhost/SqlDB/", "AclSqlObjects")
+        (user, password, host, database) = re.match("^sql://(?:([^@:]+)(?::([^@]+))?)@?([^/]+)/(.+)$",
+                                                    items[0].service.uri).groups()
+        HostDB2SchemeMapping = { "sql://root@localhost/w3c" : "AclSqlObjectsg" }
+        if (HostDB2SchemeMapping.has_key(items[0].service.uri)):
+            cachedDetails = HostDB2SchemeMapping.get(items[0].service.uri)
+        else:
+            cachedDetails = None
+        a = SqlDBAlgae("http://localhost/SqlDB/", cachedDetails, user, password, host, database)
         messages = []
         nextResults, nextStatements = a._processRow([], [], qp, rs, messages, {})
         rs.results = nextResults

@@ -1,0 +1,47 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+#@prefix db: 		<http://localhost/SqlDB#>.
+# Tables:
+@prefix Orders: 		<http://localhost/SqlDB/Orders#>.
+@prefix Products: 		<http://localhost/SqlDB/Products#>.
+@prefix Customers: 		<http://localhost/SqlDB/Customers#>.
+@prefix Addresses: 		<http://localhost/SqlDB/Addresses#>.
+
+@prefix : <#>.
+@prefix v: <#>.
+
+this log:forAll :o, :cEK, :pEK, :dEK, :p, :productName, :c, :first, :last, :billAddrEK, :billAddr, :billStreet, :billCity, :billState .
+
+<sql://rdftest@swada.w3.org/OrderTracking> is log:authoritativeService of
+	Orders:id, Orders:customer, Orders:product, Orders:orderDate, 
+	Products:id, Products:name, 
+	Customers:id, Customers:familyName, Customers:givenName, Customers:billingAddress, 
+	Addresses:id, Addresses:street, Addresses:city, Addresses:state.
+{
+ :o Orders:customer :cEK .
+ :o Orders:product :pEK .
+ :o Orders:orderDate :dEK .
+
+ :p Products:id :pEK .
+ :p Products:name :productName .
+
+ :c Customers:id :cEK .
+ :c Customers:familyName :first .
+ :c Customers:givenName :last .
+ :c Customers:billingAddress :billAddrEK .
+
+ :billAddr Addresses:id :billAddrEK .
+ :billAddr Addresses:street :billStreet .
+ :billAddr Addresses:city :billCity .
+ :billAddr Addresses:state :billState .
+} log:implies {
+
+ :o :RESULT :productName .
+ :o :RESULT :first .
+ :o :RESULT :last .
+ :o :RESULT :billStreet .
+ :o :RESULT :billCity .
+ :o :RESULT :billState .
+
+}.
+
