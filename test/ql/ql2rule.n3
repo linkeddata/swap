@@ -1,0 +1,7 @@
+@prefix q: <http://www.w3.org/2004/ql#>.
+@keywords a.
+
+
+{ ?q q:select ?f; q:where ?g } => { ?g => ?f }.
+
+#ends
