@@ -41,7 +41,7 @@ database...</p>
 &gt;           AR CHICAGO OHARE                315P           NON-STOP
 &gt;           ARRIVE: TERMINAL 3    </pre>
 
-<p>...  into RDF. Then I wrote <a href="/2001/07dc-bos/itin2datebook.n3">some
+<p>... into RDF. Then I wrote <a href="/2001/07dc-bos/itin2datebook.n3">some
 rules</a> to relate this itinerary vocabulary to the <a
 href="../../../08/palm56/datebook">RDF vocabulary for the palmpilot
 datebook</a> that I had already developed, and presto, my itinerary was in my
@@ -72,7 +72,7 @@ are a bit tedious...</p>
 
 <p>I have since revised the little perl script; rather than hoping/pretending
 that our travel agent would use an RDF vocabulary, <a
-href="grokTravItin.pl">grokTravItin.pl</a>  uses terms from the <a
+href="grokTravItin.pl">grokTravItin.pl</a> uses terms from the <a
 href="http://www.cyc.com/cyc-2-1/vocab/transportation-vocab.html">cyc
 ontology of common sense transportation terms</a>. (The opencyc project
 released a version in DAML/RDF). I needed a few extra terms:
@@ -92,7 +92,14 @@ tools?]</em></p>
 
 <h2>Visualization: projecting itineraries on earth maps</h2>
 
-<p>@@visualization with xearth</p>
+<p>@@visualization with xearth.</p>
+
+<p>details: <a href="/2002/08dc-ymx/Makefile">Makefile</a></p>
+
+<p>results:</p>
+
+<p><img alt="MCI to YMX and back for Extreme 2002"
+src="/2002/08dc-ymx/itinView.png" align="right" /></p>
 
 <h2>Steps Toward Synchronization</h2>
 
@@ -104,14 +111,12 @@ for import".</p>
 <p>details from <a href="/2002/08dc-ymx/Makefile">Makefile</a>:</p>
 
 <p>First, scrape a formal version of my HTML schedule:</p>
-<pre>
-status-formal.rdf: $(TEAM)/connolly.html $(SW)/schedScrape.xsl
+<pre>status-formal.rdf: $(TEAM)/connolly.html $(SW)/schedScrape.xsl
    $(XSLTPROC) --novalid $(SW)/schedScrape.xsl $(TEAM)/connolly.html &gt;$@</pre>
 
 <p>Then, conver evo ical to RDF:</p>
 <pre>,evocal.rdf: $(HOME)/evolution/local/Calendar/calendar.ics $(PALMAGENT)/vcal2xml.pl
    $(PERL) $(PALMAGENT)/vcal2xml.pl $(HOME)/evolution/local/Calendar/calendar.ics &gt;$@
-
 </pre>
 
 <p><em>[@@TODO: move vcal2xml.pl into swap/pim]</em></p>
@@ -184,7 +189,7 @@ status-formal.rdf: $(TEAM)/connolly.html $(SW)/schedScrape.xsl
 
 <blockquote>
   <ul>
-    <li> data that isn't consumed rots.
+    <li>data that isn't consumed rots. 
       <p>ergo</p>
     </li>
     <li>model only those distinctions that you can exploit.</li>
