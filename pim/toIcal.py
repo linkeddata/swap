@@ -125,7 +125,7 @@ class CalWr:
     def doTEXT(self, sts, val, propName, predName):
         # @@TODO: wrap at 75 cols
         w = self._w
-        text = str(val)
+        text = val.string.encode('utf-8') #hmm...
         for c in ('\\', ';', ','):
             text = text.replace(c, "\\"+c)
         text = text.replace('\n', "\\n")
@@ -294,7 +294,11 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.18  2004-03-30 00:17:41  connolly
+# Revision 2.19  2004-04-09 22:19:44  connolly
+# working on encoding issues in doTEXT.
+# not sure this is exactly the right fix.
+#
+# Revision 2.18  2004/03/30 00:17:41  connolly
 # found bug in INTERVAL handling while porting to rdflib
 #
 # Revision 2.17  2004/03/13 00:01:37  connolly
