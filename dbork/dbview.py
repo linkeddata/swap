@@ -92,19 +92,16 @@ class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         self.send_header("Content-type", "application/rdf+xml") #@@ cf. RDF Core "what mime type to use for RDF?" issue...
         self.end_headers()
 
-        addr = self.server._base + self.path
+        dbaddr = self.server._base + self.path
         
-        sink = notation3.ToRDF(self.wfile, addr)
-
-        ns = addr + '#' #@@hmm...
-        sink.bind('db', (RDFSink.SYMBOL, ns))
+        sink = notation3.ToRDF(self.wfile, dbaddr)
 
         #@@hardcoded
         fields = ('email', 'given', 'family', 'city', 'state', 'country', 'URL', 'last')
         tables = ('users', 'techplenary2002')
         condition = 'users.id=techplenary2002.id'
         
-        askdb(self.server._db, ns, sink, fields, tables, condition)
+        askdb(self.server._db, dbaddr, sink, fields, tables, condition)
 
 
 
@@ -120,11 +117,19 @@ def something(sink, scope=None, hint='gensym'):
     return term
 
 
-def askdb(db, ns, sink, fields, tables, condition):
+def askdb(db, dbaddr, sink, fields, tables, condition):
     scope = something(None, None, 'scope')
     c = db.cursor()
     q='select %s from %s where %s;' % (join(fields, ','), join(tables, ','), condition)
     c.execute(q)
+
+
+    # we assume table names are also
+    # XML names (e.g. no colons) and
+    # URI path segments (e.g. no non-ascii chars)
+    for n in tables:
+        sink.bind(n, (RDFSink.SYMBOL, "%s/%s#" % (dbaddr, n)))
+
 
     while 1:
 	row=c.fetchone()
@@ -138,7 +143,10 @@ def askdb(db, ns, sink, fields, tables, condition):
             ol = cell.decode('iso8859-1')
             
 	    tup = (scope,
-                   (RDFSink.SYMBOL, "%s%s" % (ns, fields[col])),
+                   (RDFSink.SYMBOL,
+                    "%s/%s#%s" % (dbaddr,
+                                  tables[0], #@@right table
+                                  fields[col])),
                    subj, (RDFSink.LITERAL, ol))
             sink.makeStatement(tup)
 	    col = col + 1
@@ -150,13 +158,14 @@ def testSvc():
 
     host, port, user, passwd, httpPort = sys.argv[1:6]
     port = int(port)
-    
+
+    dbName = 'administration' #@@
     db=MySQLdb.connect(host=host, port=port,
                        user=user, passwd=passwd,
-                       db='administration') #@@
+                       db=dbName)
 
     hostPort = ('', int(httpPort))
-    base = "http://127.0.0.1:%s" % httpPort
+    base = "http://127.0.0.1:%s/%s" % (httpPort, dbName)
     httpd = DBViewServer(hostPort, DBViewHandler, db, base)
 
     print "Serving HTTP on port", httpPort, "..."
@@ -172,9 +181,8 @@ def testDBView(fp, host, port, user, passwd):
                        user=user, passwd=passwd,
                        db='administration')
 
-    ns='http://example/w3c-admin-db#'
-    sink.bind('admin', (RDFSink.SYMBOL, ns))
-    askdb(db, ns, sink,
+    dbaddr='http://example/w3c-admin-db'
+    askdb(db, dbaddr, sink,
           ('email', 'given', 'family', 'city', 'state', 'country', 'URL', 'last'),
           ('users', 'techplenary2002'),
           'users.id=techplenary2002.id')
@@ -197,6 +205,9 @@ if __name__ == '__main__':
     
 
 # $Log$
-# Revision 1.5  2002-03-05 22:04:18  connolly
+# Revision 1.6  2002-03-05 22:16:24  connolly
+# per-table namespace of columns starting to work...
+#
+# Revision 1.5  2002/03/05 22:04:18  connolly
 # HTTP interface starting to work...
 #
