@@ -2775,7 +2775,7 @@ class Query:
         else:
             cachedSchema = None
         # The SqlDBAlgae object knows how to compile SQL query from query tree qp.
-        a = SqlDBAlgae(query.store.internURI(items[0].service.uri), cachedSchema, user, password, host, database, query.meta, query.store.pointsAt)
+        a = SqlDBAlgae(query.store.internURI(items[0].service.uri), cachedSchema, user, password, host, database, query.meta, query.store.pointsAt, query.store)
         # Execute the query.
         messages = []
         nextResults, nextStatements = a._processRow([], [], qp, rs, messages, {})
@@ -2791,7 +2791,7 @@ class Query:
             for i in range(len(query.variables)):
                 v = query.variables[i]
                 index = rs.getVarIndex(v)
-                interned = query.store.intern((LITERAL, `resultsRow[index]`))
+                interned = resultsRow[index]
                 boundRow = boundRow + [(v, interned)]
             bindings.append((boundRow, reason))
 

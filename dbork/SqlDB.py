@@ -25,6 +25,7 @@ import MySQLdb
 import TableRenderer
 from TableRenderer import TableRenderer
 from diag import progress, progressIndent, verbosity, tracking
+from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 
 SUBST_NONE = 0
 SUBST_PRED = 1
@@ -40,14 +41,14 @@ def Assure(list, index, value):
         list.append(None)
     list[index] = value
 
-def NTriplesAtom(s, rowBindings):
+def NTriplesAtom(s, rowBindings, interner):
     if (s._URI()):
-        subj = "<"+s._URI()+">"
+        subj = interner.intern((SYMBOL, s._URI()))
     elif (s._literal()):
-        subj = "<"+s._literal()+">"
+        subj = interner.intern((SYMBOL, s._literal()))
     else:
         try:
-            subj = '"'+rowBindings[s.symbol()]+'"'
+            subj = rowBindings[s.symbol()]
         except TypeError, e:
             subj = '"'+str(rowBindings[s.symbol()])+'"'
         except KeyError, e:
@@ -256,7 +257,7 @@ class RdfDBAlgae:
     ""
     
 class SqlDBAlgae(RdfDBAlgae):
-    def __init__(self, baseURI, tableDescModuleName, user, password, host, database, meta, pointsAt, duplicateFieldsInQuery=0, checkUnderConstraintsBeforeQuery=1, checkOverConstraintsOnEmptyResult=1):
+    def __init__(self, baseURI, tableDescModuleName, user, password, host, database, meta, pointsAt, interner, duplicateFieldsInQuery=0, checkUnderConstraintsBeforeQuery=1, checkOverConstraintsOnEmptyResult=1):
         # Grab _AllTables from tableDescModuleName, analogous to
         #        import tableDescModuleName
         #        from tableDescModuleName import _AllTables
@@ -271,6 +272,7 @@ class SqlDBAlgae(RdfDBAlgae):
         self.duplicateFieldsInQuery = duplicateFieldsInQuery
         self.checkUnderConstraintsBeforeQuery = checkUnderConstraintsBeforeQuery
         self.checkOverConstraintsOnEmptyResult = checkOverConstraintsOnEmptyResult
+        self.interner = interner
 
         try:
             fp, path, stuff = imp.find_module(tableDescModuleName)
@@ -612,20 +614,24 @@ class SqlDBAlgae(RdfDBAlgae):
                     col = cols[i]
                     field = fieldz[i]
                     valueHash[field] = answerRow[col]
-                uri = self._composeUniques(valueHash, table)
+                uri = self.interner.intern((SYMBOL, self._composeUniques(valueHash, table)))
                 Assure(nextResults[-1], queryPiece.getVarIndex(), uri) # nextResults[-1][queryPiece.getVarIndex()] = uri
                 rowBindings[queryPiece.symbol()] = uri
             # Grab literals from the results
             for binding in self.scalarBindings:
                 queryPiece, cols = binding
                 str = answerRow[cols[0]]
+                if (hasattr(str, 'strftime')):
+                    str = self.interner.intern((LITERAL, str.strftime())) # @@FIXME: should use builtin date data type
+                else:
+                    str = self.interner.intern((LITERAL, str))
                 Assure(nextResults[-1], queryPiece.getVarIndex(), str) # nextResults[-1][queryPiece.getVarIndex()] = uri
                 rowBindings[queryPiece.symbol()] = str
             # Grab sub-expressions from the results
             for qpStr in self.disjunctionBindings.keys():
                 binding = self.disjunctionBindings[qpStr]
                 qp, cols = binding
-                rowBindings[qp] = answerRow[cols[0]]
+                rowBindings[qp] = self.interner.intern((LITERAL, answerRow[cols[0]]))
 
             # ... and the supporting statements.
             foo = self._bindingsToStatements(implQuerySets, rowBindings, uniqueStatementsCheat)
@@ -654,9 +660,9 @@ class SqlDBAlgae(RdfDBAlgae):
                         for statement in foo:
                             ret.append(statement)
             return ret
-        pred = NTriplesAtom(term[PRED], rowBindings)
-        subj = NTriplesAtom(term[SUBJ], rowBindings)
-        obj = NTriplesAtom(term[OBJ], rowBindings)
+        pred = NTriplesAtom(term[PRED], rowBindings, self.interner)
+        subj = NTriplesAtom(term[SUBJ], rowBindings, self.interner)
+        obj = NTriplesAtom(term[OBJ], rowBindings, self.interner)
 
         try:
             statement = uniqueStatementsCheat[pred][subj][obj]
