@@ -1,0 +1,76 @@
+     @prefix : <http://www.w3.org/2000/10/swap/log#> .
+     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix foaf: <http://xmlns.com/foaf/0.1/> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix rule: <http://id.ninebynine.org/wip/2002/rule/> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    this     :forAll <#A>,
+                <#H>,
+                <#T>,
+                <#Y>,
+                <#Z> .
+    
+    <#A1>     rule:append  (
+         (
+            "ele"  )
+        "appendage"  );
+         daml:first "ele";
+         daml:rest  [
+             rule:append  (
+            () 
+            "appendage"  );
+             daml:first "appendage";
+             daml:rest () ] .
+    
+    <#A3>     rule:append  (
+         (
+            "L11" 
+            "L12" 
+            "L13"  )
+        "L14"  );
+         daml:first "L11";
+         daml:rest  [
+             rule:append  (
+             (
+                "L12" 
+                "L13"  )
+            "L14"  );
+             daml:first "L12";
+             daml:rest  [
+                 rule:append  (
+                 (
+                    "L13"  )
+                "L14"  );
+                 daml:first "L13";
+                 daml:rest  [
+                     rule:append  (
+                    () 
+                    "L14"  );
+                     daml:first "L14";
+                     daml:rest () ] ] ] .
+    
+    rule:append     a :Chaff .
+    {
+        <#A>     rule:append  (
+            () 
+            <#Z>  ) .
+        
+        }     :implies {<#A>     daml:first <#Z>;
+             daml:rest () .
+        } .
+    {
+        <#A>     rule:append  (
+             [
+                     daml:first <#H>;
+                     daml:rest <#T> ]
+            <#Y>  ) .
+        
+        }     :implies {<#A>     daml:first <#H>;
+             daml:rest  [
+                 rule:append  (
+                <#T> 
+                <#Y>  ) ] .
+        } .
+    
