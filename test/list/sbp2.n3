@@ -1,0 +1,53 @@
+
+@prefix log:  <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <#>.
+
+ this log:forAll :x, :y, :z .
+   [ :blargh ("y" "z") ] .
+   { :x :blargh :y } log:implies { :y :blarghOf :z } .
+
+#_________________________________________________________________________
+
+"""
+The error raised:-
+
+            Traceback (most recent call last):
+  File "/home/2000/10/swap/cwm.py", line 615, in ?
+    doCommand()
+  File "/home/2000/10/swap/cwm.py", line 607, in doCommand
+    _store.dumpNested(workingContext, _outSink)
+  File "/home/2000/10/swap/llyn.py", line 1549, in dumpNested
+    self.dumpFormulaContents(context, sink, sorting=1)
+  File "/home/2000/10/swap/llyn.py", line 1570, in dumpFormulaContents
+    self._dumpSubject(currentSubject, context, sink, sorting, statements)
+  File "/home/2000/10/swap/llyn.py", line 1638, in _dumpSubject
+    self.dumpStatement(sink, s.quad, sorting)
+  File "/home/2000/10/swap/llyn.py", line 1680, in dumpStatement
+    self.dumpStatement(sink, t.quad, sorting)
+  File "/home/2000/10/swap/llyn.py", line 1701, in dumpStatement
+    self._outputStatement(sink, triple)
+  File "/home/2000/10/swap/llyn.py", line 1387, in _outputStatement
+    sink.makeStatement(self.extern(triple))
+  File "/home/2000/10/swap/notation3.py", line 922, in makeStatement
+    raise RuntimeError ("Should only see first and rest in list mode",
+triple)
+RuntimeError: ('Should only see first and rest in list mode', ((1,
+'file:/home/list-mode.n3#0_work'), (0, 'file:/home/list-mode.n3#blarghOf'),
+(3, 'file:/home/list-mode.n3#_g1'), (0, 'file:/home/list-mode.n3#z')))
+
+CWM version:-
+
+#Processed by Id: cwm.py,v 1.103 2002/08/08 02:03:35 timbl Exp
+#       notation3.py,v 1.114 2002/08/07 14:32:21 timbl Exp
+
+DanC has come across this error before, last September, but it was for a
+different test case:-
+
+http://ilrt.org/discovery/chatlogs/rdfig/2001-09-19.html#T21-08-30
+
+and one which, I might add, now works:-
+
+$ cwm --rdf http://www.daml.org/2001/03/daml+oil --n3 | wc
+    401    1419   13296
+
+""" :describes <>.
