@@ -1,0 +1,83 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.  #@@ no #
+
+<> dc:title "Comput cwm/n3 bug status (sigma) from www-archive (delta)";
+  dc:description "$Id$",
+"""
+$Log$
+Revision 1.1  2004-01-29 15:14:37  connolly
+- finding thread roots works, to some extent
+- basic conversion from email vocab to ical vocab in place
+
+""".
+
+
+<> dc:description """
+hmm... remote query...
+""".
+
+<> dc:description """
+@@frap. MASE/RDF doesn't give threading headers:
+  in-reply-to, references
+""".
+
+
+@prefix :    <bugstatus#>.
+@prefix bst: <bugstatus#>.
+
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+@prefix email: <http://www.w3.org/2000/10/swap/pim/email#>.
+@prefix cal: <http://www.w3.org/2002/12/cal/ical#> .
+
+:cwm :bugListName "www-archive";
+  :bugKeyWord "n3bugs";
+  :bugStatusCache <../n3bugs.rdf>.
+
+{
+  ?PROJECT :bugListName ?LIST;
+   :bugKeyWord ?KWORD.
+
+  ( "http://www.w3.org/Search/Mail/Public/advanced_search?keywords=" ?KWORD
+      "&resultsperpage=1000&sortby=date&index-grp=Public%2FFULL&index-type=t&type-index=" ?LIST ) str:concatenation ?ADDR.
+  ?ADDR is log:uri of ?KB.
+
+  #hmm... does cwm say Accept: application/xml+rdf on its GETs?
+  # until it does, we can't get the log:semantics.
+}
+ => { ?PROJECT :bugStatusKB ?KB }.
+
+
+{ ?PROJECT :bugStatusCache [] } => { ?PROJECT :calendar [ a cal:Vcalendar ] }.
+
+this log:forAll :MSG, :SUBJ.
+
+@prefix req: <http://www.w3.org/2000/10/swap/util/reqThreads#>.
+
+{
+  ?PROJECT :calendar ?CAL;
+    :bugStatusCache [ log:semantics ?BUGSTATUSKB ].
+
+  (?BUGSTATUSKB [ is log:semantics of <reqThreads.n3> ] ) log:conjunction [
+    log:conclusion [
+      log:includes {
+        [] req:threadRoot :MSG.
+        :MSG email:subject :SUBJ.
+      } ] ].
+
+  :MSG log:uri ?MSGURI.
+  (?MSGURI "mid:(.*)") str:scrape ?MID.
+  ?MSG_ARCHIVE log:uri [
+   is str:concatenation of  ("http://www.w3.org/mid/" ?MID )
+  ].
+}
+  => {
+ ?CAL cal:component [
+  a cal:Vtodo; #@@ not in the rdf calendar schema; i.e. no TODO tests
+  cal:summary :SUBJ;
+  cal:url ?MSG_ARCHIVE; #@@ not sure if rdf calendar tools grok value type URI
+ ]
+ }.
+
+
+
