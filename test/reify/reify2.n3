@@ -914,3 +914,169 @@
              :universals  [
                  owl:oneOf () ] ].
     
+    <#_g0>     a :BlankNode .
+    
+    <#_g1>     a :BlankNode .
+    
+    <#_g2>     a :BlankNode .
+    
+    <#_g3>     a :BlankNode .
+    
+    <#_g4>     a :BlankNode .
+    
+    <#_g5>     a :BlankNode .
+    
+    <#_g6>     a :BlankNode .
+    
+    <#_g7>     a :BlankNode .
+    
+    <#_g8>     a :BlankNode .
+    
+    <#_g9>     a :BlankNode .
+    
+    <#_g10>     a :BlankNode .
+    
+    <#_g11>     a :BlankNode .
+    
+    <#_g12>     a :BlankNode .
+    
+    <#_g13>     a :BlankNode .
+    
+    <#_g14>     a :BlankNode .
+    
+    <#_g15>     a :BlankNode .
+    
+    <#_g16>     a :BlankNode .
+    
+    <#_g17>     a :BlankNode .
+    
+    <#_g18>     a :BlankNode .
+    
+    <#_g19>     a :BlankNode .
+    
+    <#_g20>     a :BlankNode .
+    
+    <#_g21>     a :BlankNode .
+    
+    <#_g22>     a :BlankNode .
+    
+    <#_g23>     a :BlankNode .
+    
+    <#_g24>     a :BlankNode .
+    
+    <#_g25>     a :BlankNode .
+    
+    <#_g26>     a :BlankNode .
+    
+    <#_g27>     a :BlankNode .
+    
+    <#_g28>     a :BlankNode .
+    
+    <#_g29>     a :BlankNode .
+    
+    <#_g30>     a :BlankNode .
+    
+    <#_g31>     a :BlankNode .
+    
+    <#_g32>     a :BlankNode .
+    
+    <#_g33>     a :BlankNode .
+    
+    <#_g34>     a :BlankNode .
+    
+    <#_g35>     a :BlankNode .
+    
+    <#_g36>     a :BlankNode .
+    
+    <#_g37>     a :BlankNode .
+    
+    <#_g38>     a :BlankNode .
+    
+    <#_g39>     a :BlankNode .
+    
+    <#_g40>     a :BlankNode .
+    
+    <#_g41>     a :BlankNode .
+    
+    <#_g42>     a :BlankNode .
+    
+    <#_g43>     a :BlankNode .
+    
+    <#_g44>     a :BlankNode .
+    
+    <#_g45>     a :BlankNode .
+    
+    <#_g46>     a :BlankNode .
+    
+    <#_g47>     a :BlankNode .
+    
+    <#_g48>     a :BlankNode .
+    
+    <#_g49>     a :BlankNode .
+    
+    <#_g50>     a :BlankNode .
+    
+    <#_g51>     a :BlankNode .
+    
+    <#_g52>     a :BlankNode .
+    
+    <#_g53>     a :BlankNode .
+    
+    <#_g54>     a :BlankNode .
+    
+    <#_g55>     a :BlankNode .
+    
+    <#_g56>     a :BlankNode .
+    
+    <#_g57>     a :BlankNode .
+    
+    <#_g58>     a :BlankNode .
+    
+    <#_g59>     a :BlankNode .
+    
+    <#_g60>     a :BlankNode .
+    
+    <#_g61>     a :BlankNode .
+    
+    <#_g62>     a :BlankNode .
+    
+    <#_g63>     a :BlankNode .
+    
+    <#_g64>     a :BlankNode .
+    
+    <#_g65>     a :BlankNode .
+    
+    <#_g66>     a :BlankNode .
+    
+    <#_g67>     a :BlankNode .
+    
+    <#_g68>     a :BlankNode .
+    
+    <#_g69>     a :BlankNode .
+    
+    <#_g70>     a :BlankNode .
+    
+    <#_g71>     a :BlankNode .
+    
+    <#_g72>     a :BlankNode .
+    
+    <#_g73>     a :BlankNode .
+    
+    <#_g74>     a :BlankNode .
+    
+    <#_g75>     a :BlankNode .
+    
+    <#_g76>     a :BlankNode .
+    
+    <#_g77>     a :BlankNode .
+    
+    <#_g78>     a :BlankNode .
+    
+    <#_g79>     a :BlankNode .
+    
+    <#_g80>     a :BlankNode .
+    
+    <#_g81>     a :BlankNode .
+    
+    <#_g82>     a :BlankNode .
+    

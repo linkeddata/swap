@@ -345,7 +345,7 @@ class Serializer:
 	    if verbosity() > 98:
                 progress(
                     "scan: %s, a %s, now has %i occurrences as %s" 
-                    %(x, x.__class__,y,"CPSOq"[y]))
+                    %(x, x.__class__,y,"CPSOqqqqq"[y]))
 #	else:
 #	    if x == None: raise RuntimeError("Weird - None in a statement?")
 #	    progress("&&&&&&&&& %s has class %s " %(`z`, `z.__class__`))

@@ -407,7 +407,7 @@ def main():
     progress("Loading " + grammarFile)
     start = clock()
     g = load(grammarFile)
-    taken = clock() - start
+    taken = clock() - start + 1
     progress("Loaded %i statements in %fs, ie %f/s." %
 	(len(g), taken, len(g)/taken))
     

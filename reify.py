@@ -14,7 +14,7 @@ from term import BuiltIn, LightBuiltIn, LabelledNode, \
     Literal, Symbol, Fragment, FragmentNil, Term,\
     CompoundTerm, List, EmptyList, NonEmptyList
 from formula import Formula, StoredStatement
-from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
+from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4, RDF_type_URI
 import uripath
 import diag
 
@@ -541,10 +541,12 @@ def dereification(x, f, sink, bnodes={}, xList=[]):
 		dereification(f.the(subj=stmt, pred=rei["predicate"]), f, sink, zbNodes, xList),
 		dereification(f.the(subj=stmt, pred=rei["object"]), f, sink, zbNodes, xList))
 	return z.close()
-    if x in bnodes:
-	return bnodes[x]
-    z = sink.newBlankNode()
-    bnodes[x] = z
-    return z
+    y = f.the(subj=x, pred=f.newSymbol(RDF_type_URI))
+    if y is not None:
+        if x in bnodes:
+            return bnodes[x]
+        z = sink.newBlankNode()
+        bnodes[x] = z
+        return z
     
     raise ValueError, "Can't dereify %s - no clues I understand in %s" % (x, f)

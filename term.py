@@ -385,6 +385,9 @@ class AnonymousNode(Node):
 	except KeyError:
 	    b = sink.newBlankNode()
 	    bnodeMap[self] = b
+	q = sink.newSymbol(RDF_type_URI)
+	r = sink.newSymbol(REIFY_NS+"BlankNode")
+	sink.add(subj=b, pred=q, obj=r, why=why)
 	return b
 
     def flatten(self, sink, why=None):

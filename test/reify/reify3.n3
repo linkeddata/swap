@@ -1024,10 +1024,16 @@
                              :uri "http://www.w3.org/2004/06/rei#universals" ];
                          :subject <#_g1> ]
                  [
-                         :object <#_g4>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g3> ]
+                 [
+                         :object <#_g3>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g3> ]
+                         :subject <#_g4> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -1038,7 +1044,7 @@
                          :object <#_g5>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g3> ]
+                         :subject <#_g4> ]
                  [
                          :object  [
                              :items () ];
@@ -1049,12 +1055,18 @@
                          :object <#_g6>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g3> ]
+                         :subject <#_g4> ]
                  [
-                         :object <#_g8>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g7> ]
+                 [
+                         :object <#_g7>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g7> ]
+                         :subject <#_g8> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#existentials" ];
@@ -1065,17 +1077,23 @@
                          :object <#_g9>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g7> ]
+                         :subject <#_g8> ]
                  [
-                         :object <#_g4>;
+                         :object <#_g3>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g7> ]
+                         :subject <#_g8> ]
                  [
-                         :object <#_g11>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g10> ]
+                 [
+                         :object <#_g10>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g10> ]
+                         :subject <#_g11> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -1086,7 +1104,7 @@
                          :object <#_g12>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g10> ]
+                         :subject <#_g11> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#a" ];
@@ -1118,9 +1136,9 @@
                          :object <#_g16>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g10> ]
+                         :subject <#_g11> ]
                  [
-                         :object <#_g8>;
+                         :object <#_g7>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g17> ]
@@ -1136,15 +1154,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g17> ]
                  [
-                         :object <#_g11>;
+                         :object <#_g10>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g17> ]
                  [
-                         :object <#_g20>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g19> ]
+                 [
+                         :object <#_g19>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g19> ]
+                         :subject <#_g20> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -1155,7 +1179,7 @@
                          :object <#_g21>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g19> ]
+                         :subject <#_g20> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#ancestor" ];
@@ -1166,12 +1190,18 @@
                          :object <#_g22>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g19> ]
+                         :subject <#_g20> ]
                  [
-                         :object <#_g24>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g23> ]
+                 [
+                         :object <#_g23>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g23> ]
+                         :subject <#_g24> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#subject" ];
@@ -1182,17 +1212,23 @@
                          :object <#_g25>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g23> ]
+                         :subject <#_g24> ]
                  [
-                         :object <#_g20>;
+                         :object <#_g19>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g23> ]
+                         :subject <#_g24> ]
                  [
-                         :object <#_g27>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g26> ]
+                 [
+                         :object <#_g26>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g26> ]
+                         :subject <#_g27> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -1203,7 +1239,7 @@
                          :object <#_g28>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g26> ]
+                         :subject <#_g27> ]
                  [
                          :object  [
                              :value "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
@@ -1214,9 +1250,9 @@
                          :object <#_g29>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g26> ]
+                         :subject <#_g27> ]
                  [
-                         :object <#_g24>;
+                         :object <#_g23>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g30> ]
@@ -1232,15 +1268,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g30> ]
                  [
-                         :object <#_g27>;
+                         :object <#_g26>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g30> ]
                  [
-                         :object <#_g33>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g32> ]
+                 [
+                         :object <#_g32>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g32> ]
+                         :subject <#_g33> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -1251,7 +1293,7 @@
                          :object <#_g34>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g32> ]
+                         :subject <#_g33> ]
                  [
                          :object  [
                              :value "http://www.daml.org/2001/03/daml+oil#TransitiveProperty" ];
@@ -1262,9 +1304,9 @@
                          :object <#_g35>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g32> ]
+                         :subject <#_g33> ]
                  [
-                         :object <#_g24>;
+                         :object <#_g23>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g36> ]
@@ -1280,15 +1322,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g36> ]
                  [
-                         :object <#_g33>;
+                         :object <#_g32>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g36> ]
                  [
-                         :object <#_g39>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g38> ]
+                 [
+                         :object <#_g38>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g38> ]
+                         :subject <#_g39> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -1299,7 +1347,7 @@
                          :object <#_g40>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g38> ]
+                         :subject <#_g39> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#bill" ];
@@ -1310,12 +1358,18 @@
                          :object <#_g41>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g38> ]
+                         :subject <#_g39> ]
                  [
-                         :object <#_g43>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g42> ]
+                 [
+                         :object <#_g42>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g42> ]
+                         :subject <#_g43> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#subject" ];
@@ -1326,17 +1380,23 @@
                          :object <#_g44>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g42> ]
+                         :subject <#_g43> ]
                  [
-                         :object <#_g39>;
+                         :object <#_g38>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g42> ]
+                         :subject <#_g43> ]
                  [
-                         :object <#_g46>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g45> ]
+                 [
+                         :object <#_g45>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g45> ]
+                         :subject <#_g46> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -1347,7 +1407,7 @@
                          :object <#_g47>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g45> ]
+                         :subject <#_g46> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#ancestor" ];
@@ -1358,9 +1418,9 @@
                          :object <#_g48>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g45> ]
+                         :subject <#_g46> ]
                  [
-                         :object <#_g43>;
+                         :object <#_g42>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g49> ]
@@ -1376,15 +1436,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g49> ]
                  [
-                         :object <#_g46>;
+                         :object <#_g45>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g49> ]
                  [
-                         :object <#_g52>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g51> ]
+                 [
+                         :object <#_g51>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g51> ]
+                         :subject <#_g52> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -1395,7 +1461,7 @@
                          :object <#_g53>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g51> ]
+                         :subject <#_g52> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#pa" ];
@@ -1406,9 +1472,9 @@
                          :object <#_g54>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g51> ]
+                         :subject <#_g52> ]
                  [
-                         :object <#_g43>;
+                         :object <#_g42>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g55> ]
@@ -1424,15 +1490,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g55> ]
                  [
-                         :object <#_g52>;
+                         :object <#_g51>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g55> ]
                  [
-                         :object <#_g58>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g57> ]
+                 [
+                         :object <#_g57>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g57> ]
+                         :subject <#_g58> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -1443,7 +1515,7 @@
                          :object <#_g59>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g57> ]
+                         :subject <#_g58> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#pa" ];
@@ -1454,12 +1526,18 @@
                          :object <#_g60>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g57> ]
+                         :subject <#_g58> ]
                  [
-                         :object <#_g62>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g61> ]
+                 [
+                         :object <#_g61>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g61> ]
+                         :subject <#_g62> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#subject" ];
@@ -1470,17 +1548,23 @@
                          :object <#_g63>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g61> ]
+                         :subject <#_g62> ]
                  [
-                         :object <#_g58>;
+                         :object <#_g57>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g61> ]
+                         :subject <#_g62> ]
                  [
-                         :object <#_g65>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g64> ]
+                 [
+                         :object <#_g64>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g64> ]
+                         :subject <#_g65> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -1491,7 +1575,7 @@
                          :object <#_g66>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g64> ]
+                         :subject <#_g65> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#ancestor" ];
@@ -1502,9 +1586,9 @@
                          :object <#_g67>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g64> ]
+                         :subject <#_g65> ]
                  [
-                         :object <#_g62>;
+                         :object <#_g61>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g68> ]
@@ -1520,15 +1604,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g68> ]
                  [
-                         :object <#_g65>;
+                         :object <#_g64>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g68> ]
                  [
-                         :object <#_g71>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g70> ]
+                 [
+                         :object <#_g70>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g70> ]
+                         :subject <#_g71> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -1539,7 +1629,7 @@
                          :object <#_g72>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g70> ]
+                         :subject <#_g71> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#granpa" ];
@@ -1550,9 +1640,9 @@
                          :object <#_g73>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g70> ]
+                         :subject <#_g71> ]
                  [
-                         :object <#_g62>;
+                         :object <#_g61>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g74> ]
@@ -1568,15 +1658,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g74> ]
                  [
-                         :object <#_g71>;
+                         :object <#_g70>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g74> ]
                  [
-                         :object <#_g77>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g76> ]
+                 [
+                         :object <#_g76>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g76> ]
+                         :subject <#_g77> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -1587,7 +1683,7 @@
                          :object <#_g78>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g76> ]
+                         :subject <#_g77> ]
                  [
                          :object  [
                              :items () ];
@@ -1598,12 +1694,18 @@
                          :object <#_g79>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g76> ]
+                         :subject <#_g77> ]
                  [
-                         :object <#_g81>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g80> ]
+                 [
+                         :object <#_g80>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g80> ]
+                         :subject <#_g81> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#existentials" ];
@@ -1614,17 +1716,23 @@
                          :object <#_g82>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g80> ]
+                         :subject <#_g81> ]
                  [
-                         :object <#_g77>;
+                         :object <#_g76>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g80> ]
+                         :subject <#_g81> ]
                  [
-                         :object <#_g84>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g83> ]
+                 [
+                         :object <#_g83>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g83> ]
+                         :subject <#_g84> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -1635,7 +1743,7 @@
                          :object <#_g85>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g83> ]
+                         :subject <#_g84> ]
                  [
                          :object  [
                              :items () ];
@@ -1646,9 +1754,9 @@
                          :object <#_g86>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g83> ]
+                         :subject <#_g84> ]
                  [
-                         :object <#_g81>;
+                         :object <#_g80>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g87> ]
@@ -1664,15 +1772,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g87> ]
                  [
-                         :object <#_g84>;
+                         :object <#_g83>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g87> ]
                  [
-                         :object <#_g90>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g89> ]
+                 [
+                         :object <#_g89>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g89> ]
+                         :subject <#_g90> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -1683,7 +1797,7 @@
                          :object <#_g91>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g89> ]
+                         :subject <#_g90> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#a" ];
@@ -1694,12 +1808,18 @@
                          :object <#_g92>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g89> ]
+                         :subject <#_g90> ]
                  [
-                         :object <#_g94>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g93> ]
+                 [
+                         :object <#_g93>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g93> ]
+                         :subject <#_g94> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#subject" ];
@@ -1710,17 +1830,23 @@
                          :object <#_g95>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g93> ]
+                         :subject <#_g94> ]
                  [
-                         :object <#_g90>;
+                         :object <#_g89>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g93> ]
+                         :subject <#_g94> ]
                  [
-                         :object <#_g97>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g96> ]
+                 [
+                         :object <#_g96>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g96> ]
+                         :subject <#_g97> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -1731,7 +1857,7 @@
                          :object <#_g98>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g96> ]
+                         :subject <#_g97> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#means" ];
@@ -1742,9 +1868,9 @@
                          :object <#_g99>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g96> ]
+                         :subject <#_g97> ]
                  [
-                         :object <#_g94>;
+                         :object <#_g93>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g100> ]
@@ -1760,15 +1886,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g100> ]
                  [
-                         :object <#_g97>;
+                         :object <#_g96>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g100> ]
                  [
-                         :object <#_g103>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g102> ]
+                 [
+                         :object <#_g102>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g102> ]
+                         :subject <#_g103> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -1779,7 +1911,7 @@
                          :object <#_g104>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g102> ]
+                         :subject <#_g103> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#b" ];
@@ -1790,9 +1922,9 @@
                          :object <#_g105>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g102> ]
+                         :subject <#_g103> ]
                  [
-                         :object <#_g94>;
+                         :object <#_g93>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g106> ]
@@ -1808,15 +1940,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g106> ]
                  [
-                         :object <#_g103>;
+                         :object <#_g102>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g106> ]
                  [
-                         :object <#_g109>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g108> ]
+                 [
+                         :object <#_g108>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g108> ]
+                         :subject <#_g109> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -1827,11 +1965,11 @@
                          :object <#_g110>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g108> ]
+                         :subject <#_g109> ]
                  [
                          :object  [
                              :items  (
-                            <#_g94>  ) ];
+                            <#_g93>  ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#items" ];
                          :subject <#_g111> ]
@@ -1839,9 +1977,9 @@
                          :object <#_g111>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g108> ]
+                         :subject <#_g109> ]
                  [
-                         :object <#_g81>;
+                         :object <#_g80>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g112> ]
@@ -1857,15 +1995,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g112> ]
                  [
-                         :object <#_g109>;
+                         :object <#_g108>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g112> ]
                  [
-                         :object <#_g115>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g114> ]
+                 [
+                         :object <#_g114>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g114> ]
+                         :subject <#_g115> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#subject" ];
@@ -1876,17 +2020,23 @@
                          :object <#_g116>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g114> ]
+                         :subject <#_g115> ]
                  [
-                         :object <#_g81>;
+                         :object <#_g80>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g114> ]
+                         :subject <#_g115> ]
                  [
-                         :object <#_g118>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g117> ]
+                 [
+                         :object <#_g117>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g117> ]
+                         :subject <#_g118> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -1897,7 +2047,7 @@
                          :object <#_g119>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g117> ]
+                         :subject <#_g118> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2000/10/swap/log#implies" ];
@@ -1908,9 +2058,9 @@
                          :object <#_g120>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g117> ]
+                         :subject <#_g118> ]
                  [
-                         :object <#_g115>;
+                         :object <#_g114>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g121> ]
@@ -1926,15 +2076,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g121> ]
                  [
-                         :object <#_g118>;
+                         :object <#_g117>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g121> ]
                  [
-                         :object <#_g124>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g123> ]
+                 [
+                         :object <#_g123>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g123> ]
+                         :subject <#_g124> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -1945,7 +2101,7 @@
                          :object <#_g125>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g123> ]
+                         :subject <#_g124> ]
                  [
                          :object  [
                              :items () ];
@@ -1956,12 +2112,18 @@
                          :object <#_g126>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g123> ]
+                         :subject <#_g124> ]
                  [
-                         :object <#_g128>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g127> ]
+                 [
+                         :object <#_g127>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g127> ]
+                         :subject <#_g128> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#existentials" ];
@@ -1972,17 +2134,23 @@
                          :object <#_g129>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g127> ]
+                         :subject <#_g128> ]
                  [
-                         :object <#_g124>;
+                         :object <#_g123>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g127> ]
+                         :subject <#_g128> ]
                  [
-                         :object <#_g131>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g130> ]
+                 [
+                         :object <#_g130>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g130> ]
+                         :subject <#_g131> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -1993,7 +2161,7 @@
                          :object <#_g132>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g130> ]
+                         :subject <#_g131> ]
                  [
                          :object  [
                              :items () ];
@@ -2004,9 +2172,9 @@
                          :object <#_g133>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g130> ]
+                         :subject <#_g131> ]
                  [
-                         :object <#_g128>;
+                         :object <#_g127>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g134> ]
@@ -2022,15 +2190,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g134> ]
                  [
-                         :object <#_g131>;
+                         :object <#_g130>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g134> ]
                  [
-                         :object <#_g137>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g136> ]
+                 [
+                         :object <#_g136>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g136> ]
+                         :subject <#_g137> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -2041,7 +2215,7 @@
                          :object <#_g138>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g136> ]
+                         :subject <#_g137> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#a" ];
@@ -2052,12 +2226,18 @@
                          :object <#_g139>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g136> ]
+                         :subject <#_g137> ]
                  [
-                         :object <#_g141>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g140> ]
+                 [
+                         :object <#_g140>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g140> ]
+                         :subject <#_g141> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#subject" ];
@@ -2068,17 +2248,23 @@
                          :object <#_g142>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g140> ]
+                         :subject <#_g141> ]
                  [
-                         :object <#_g137>;
+                         :object <#_g136>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g140> ]
+                         :subject <#_g141> ]
                  [
-                         :object <#_g144>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g143> ]
+                 [
+                         :object <#_g143>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g143> ]
+                         :subject <#_g144> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -2089,7 +2275,7 @@
                          :object <#_g145>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g143> ]
+                         :subject <#_g144> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2000/10/swap/log#implies" ];
@@ -2100,9 +2286,9 @@
                          :object <#_g146>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g143> ]
+                         :subject <#_g144> ]
                  [
-                         :object <#_g141>;
+                         :object <#_g140>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g147> ]
@@ -2118,15 +2304,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g147> ]
                  [
-                         :object <#_g144>;
+                         :object <#_g143>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g147> ]
                  [
-                         :object <#_g150>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g149> ]
+                 [
+                         :object <#_g149>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g149> ]
+                         :subject <#_g150> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -2137,7 +2329,7 @@
                          :object <#_g151>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g149> ]
+                         :subject <#_g150> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#b" ];
@@ -2148,9 +2340,9 @@
                          :object <#_g152>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g149> ]
+                         :subject <#_g150> ]
                  [
-                         :object <#_g141>;
+                         :object <#_g140>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g153> ]
@@ -2166,15 +2358,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g153> ]
                  [
-                         :object <#_g150>;
+                         :object <#_g149>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g153> ]
                  [
-                         :object <#_g156>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g155> ]
+                 [
+                         :object <#_g155>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g155> ]
+                         :subject <#_g156> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -2185,7 +2383,7 @@
                          :object <#_g157>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g155> ]
+                         :subject <#_g156> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#b" ];
@@ -2196,12 +2394,18 @@
                          :object <#_g158>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g155> ]
+                         :subject <#_g156> ]
                  [
-                         :object <#_g160>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g159> ]
+                 [
+                         :object <#_g159>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g159> ]
+                         :subject <#_g160> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#subject" ];
@@ -2212,17 +2416,23 @@
                          :object <#_g161>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g159> ]
+                         :subject <#_g160> ]
                  [
-                         :object <#_g156>;
+                         :object <#_g155>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g159> ]
+                         :subject <#_g160> ]
                  [
-                         :object <#_g163>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g162> ]
+                 [
+                         :object <#_g162>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g162> ]
+                         :subject <#_g163> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -2233,7 +2443,7 @@
                          :object <#_g164>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g162> ]
+                         :subject <#_g163> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2000/10/swap/log#implies" ];
@@ -2244,9 +2454,9 @@
                          :object <#_g165>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g162> ]
+                         :subject <#_g163> ]
                  [
-                         :object <#_g160>;
+                         :object <#_g159>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g166> ]
@@ -2262,15 +2472,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g166> ]
                  [
-                         :object <#_g163>;
+                         :object <#_g162>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g166> ]
                  [
-                         :object <#_g169>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g168> ]
+                 [
+                         :object <#_g168>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g168> ]
+                         :subject <#_g169> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -2281,7 +2497,7 @@
                          :object <#_g170>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g168> ]
+                         :subject <#_g169> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#a" ];
@@ -2292,9 +2508,9 @@
                          :object <#_g171>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g168> ]
+                         :subject <#_g169> ]
                  [
-                         :object <#_g160>;
+                         :object <#_g159>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g172> ]
@@ -2310,15 +2526,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g172> ]
                  [
-                         :object <#_g169>;
+                         :object <#_g168>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g172> ]
                  [
-                         :object <#_g175>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g174> ]
+                 [
+                         :object <#_g174>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g174> ]
+                         :subject <#_g175> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -2329,12 +2551,12 @@
                          :object <#_g176>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g174> ]
+                         :subject <#_g175> ]
                  [
                          :object  [
                              :items  (
-                            <#_g141> 
-                            <#_g160>  ) ];
+                            <#_g140> 
+                            <#_g159>  ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#items" ];
                          :subject <#_g177> ]
@@ -2342,9 +2564,9 @@
                          :object <#_g177>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g174> ]
+                         :subject <#_g175> ]
                  [
-                         :object <#_g128>;
+                         :object <#_g127>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g178> ]
@@ -2360,12 +2582,12 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g178> ]
                  [
-                         :object <#_g175>;
+                         :object <#_g174>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g178> ]
                  [
-                         :object <#_g115>;
+                         :object <#_g114>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g180> ]
@@ -2381,15 +2603,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g180> ]
                  [
-                         :object <#_g128>;
+                         :object <#_g127>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g180> ]
                  [
-                         :object <#_g183>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g182> ]
+                 [
+                         :object <#_g182>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g182> ]
+                         :subject <#_g183> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -2400,7 +2628,7 @@
                          :object <#_g184>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g182> ]
+                         :subject <#_g183> ]
                  [
                          :object  [
                              :items () ];
@@ -2411,12 +2639,18 @@
                          :object <#_g185>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g182> ]
+                         :subject <#_g183> ]
                  [
-                         :object <#_g187>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g186> ]
+                 [
+                         :object <#_g186>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g186> ]
+                         :subject <#_g187> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#existentials" ];
@@ -2427,17 +2661,23 @@
                          :object <#_g188>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g186> ]
+                         :subject <#_g187> ]
                  [
-                         :object <#_g183>;
+                         :object <#_g182>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g186> ]
+                         :subject <#_g187> ]
                  [
-                         :object <#_g190>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g189> ]
+                 [
+                         :object <#_g189>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g189> ]
+                         :subject <#_g190> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -2448,7 +2688,7 @@
                          :object <#_g191>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g189> ]
+                         :subject <#_g190> ]
                  [
                          :object  [
                              :items () ];
@@ -2459,9 +2699,9 @@
                          :object <#_g192>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g189> ]
+                         :subject <#_g190> ]
                  [
-                         :object <#_g187>;
+                         :object <#_g186>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g193> ]
@@ -2477,15 +2717,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g193> ]
                  [
-                         :object <#_g190>;
+                         :object <#_g189>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g193> ]
                  [
-                         :object <#_g196>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g195> ]
+                 [
+                         :object <#_g195>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g195> ]
+                         :subject <#_g196> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -2496,7 +2742,7 @@
                          :object <#_g197>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g195> ]
+                         :subject <#_g196> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#p" ];
@@ -2507,12 +2753,18 @@
                          :object <#_g198>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g195> ]
+                         :subject <#_g196> ]
                  [
-                         :object <#_g200>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g199> ]
+                 [
+                         :object <#_g199>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g199> ]
+                         :subject <#_g200> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#subject" ];
@@ -2523,17 +2775,23 @@
                          :object <#_g201>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g199> ]
+                         :subject <#_g200> ]
                  [
-                         :object <#_g196>;
+                         :object <#_g195>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g199> ]
+                         :subject <#_g200> ]
                  [
-                         :object <#_g203>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g202> ]
+                 [
+                         :object <#_g202>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g202> ]
+                         :subject <#_g203> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -2544,7 +2802,7 @@
                          :object <#_g204>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g202> ]
+                         :subject <#_g203> ]
                  [
                          :object  [
                              :value "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
@@ -2555,9 +2813,9 @@
                          :object <#_g205>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g202> ]
+                         :subject <#_g203> ]
                  [
-                         :object <#_g200>;
+                         :object <#_g199>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g206> ]
@@ -2573,15 +2831,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g206> ]
                  [
-                         :object <#_g203>;
+                         :object <#_g202>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g206> ]
                  [
-                         :object <#_g209>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g208> ]
+                 [
+                         :object <#_g208>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g208> ]
+                         :subject <#_g209> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -2592,7 +2856,7 @@
                          :object <#_g210>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g208> ]
+                         :subject <#_g209> ]
                  [
                          :object  [
                              :value "http://www.daml.org/2001/03/daml+oil#TransitiveProperty" ];
@@ -2603,9 +2867,9 @@
                          :object <#_g211>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g208> ]
+                         :subject <#_g209> ]
                  [
-                         :object <#_g200>;
+                         :object <#_g199>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g212> ]
@@ -2621,15 +2885,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g212> ]
                  [
-                         :object <#_g209>;
+                         :object <#_g208>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g212> ]
                  [
-                         :object <#_g215>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g214> ]
+                 [
+                         :object <#_g214>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g214> ]
+                         :subject <#_g215> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -2640,11 +2910,11 @@
                          :object <#_g216>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g214> ]
+                         :subject <#_g215> ]
                  [
                          :object  [
                              :items  (
-                            <#_g200>  ) ];
+                            <#_g199>  ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#items" ];
                          :subject <#_g217> ]
@@ -2652,9 +2922,9 @@
                          :object <#_g217>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g214> ]
+                         :subject <#_g215> ]
                  [
-                         :object <#_g187>;
+                         :object <#_g186>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g218> ]
@@ -2670,15 +2940,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g218> ]
                  [
-                         :object <#_g215>;
+                         :object <#_g214>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g218> ]
                  [
-                         :object <#_g221>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g220> ]
+                 [
+                         :object <#_g220>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g220> ]
+                         :subject <#_g221> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#subject" ];
@@ -2689,17 +2965,23 @@
                          :object <#_g222>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g220> ]
+                         :subject <#_g221> ]
                  [
-                         :object <#_g187>;
+                         :object <#_g186>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g220> ]
+                         :subject <#_g221> ]
                  [
-                         :object <#_g224>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g223> ]
+                 [
+                         :object <#_g223>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g223> ]
+                         :subject <#_g224> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -2710,7 +2992,7 @@
                          :object <#_g225>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g223> ]
+                         :subject <#_g224> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#means" ];
@@ -2721,9 +3003,9 @@
                          :object <#_g226>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g223> ]
+                         :subject <#_g224> ]
                  [
-                         :object <#_g221>;
+                         :object <#_g220>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g227> ]
@@ -2739,15 +3021,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g227> ]
                  [
-                         :object <#_g224>;
+                         :object <#_g223>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g227> ]
                  [
-                         :object <#_g230>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g229> ]
+                 [
+                         :object <#_g229>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g229> ]
+                         :subject <#_g230> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -2758,7 +3046,7 @@
                          :object <#_g231>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g229> ]
+                         :subject <#_g230> ]
                  [
                          :object  [
                              :items () ];
@@ -2769,12 +3057,18 @@
                          :object <#_g232>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g229> ]
+                         :subject <#_g230> ]
                  [
-                         :object <#_g234>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g233> ]
+                 [
+                         :object <#_g233>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g233> ]
+                         :subject <#_g234> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#existentials" ];
@@ -2785,17 +3079,23 @@
                          :object <#_g235>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g233> ]
+                         :subject <#_g234> ]
                  [
-                         :object <#_g230>;
+                         :object <#_g229>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g233> ]
+                         :subject <#_g234> ]
                  [
-                         :object <#_g237>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g236> ]
+                 [
+                         :object <#_g236>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g236> ]
+                         :subject <#_g237> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -2806,7 +3106,7 @@
                          :object <#_g238>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g236> ]
+                         :subject <#_g237> ]
                  [
                          :object  [
                              :items () ];
@@ -2817,9 +3117,9 @@
                          :object <#_g239>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g236> ]
+                         :subject <#_g237> ]
                  [
-                         :object <#_g234>;
+                         :object <#_g233>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g240> ]
@@ -2835,15 +3135,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g240> ]
                  [
-                         :object <#_g237>;
+                         :object <#_g236>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g240> ]
                  [
-                         :object <#_g243>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g242> ]
+                 [
+                         :object <#_g242>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g242> ]
+                         :subject <#_g243> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -2854,7 +3160,7 @@
                          :object <#_g244>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g242> ]
+                         :subject <#_g243> ]
                  [
                          :object  [
                              :items () ];
@@ -2865,12 +3171,18 @@
                          :object <#_g245>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g242> ]
+                         :subject <#_g243> ]
                  [
-                         :object <#_g247>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g246> ]
+                 [
+                         :object <#_g246>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g246> ]
+                         :subject <#_g247> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#existentials" ];
@@ -2881,17 +3193,23 @@
                          :object <#_g248>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g246> ]
+                         :subject <#_g247> ]
                  [
-                         :object <#_g243>;
+                         :object <#_g242>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g246> ]
+                         :subject <#_g247> ]
                  [
-                         :object <#_g250>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g249> ]
+                 [
+                         :object <#_g249>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g249> ]
+                         :subject <#_g250> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -2902,7 +3220,7 @@
                          :object <#_g251>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g249> ]
+                         :subject <#_g250> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#x" ];
@@ -2934,9 +3252,9 @@
                          :object <#_g255>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g249> ]
+                         :subject <#_g250> ]
                  [
-                         :object <#_g247>;
+                         :object <#_g246>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g256> ]
@@ -2952,15 +3270,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g256> ]
                  [
-                         :object <#_g250>;
+                         :object <#_g249>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g256> ]
                  [
-                         :object <#_g259>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g258> ]
+                 [
+                         :object <#_g258>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g258> ]
+                         :subject <#_g259> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -2971,7 +3295,7 @@
                          :object <#_g260>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g258> ]
+                         :subject <#_g259> ]
                  [
                          :object  [
                              :items () ];
@@ -2982,12 +3306,18 @@
                          :object <#_g261>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g258> ]
+                         :subject <#_g259> ]
                  [
-                         :object <#_g263>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g262> ]
+                 [
+                         :object <#_g262>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g262> ]
+                         :subject <#_g263> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#existentials" ];
@@ -2998,17 +3328,23 @@
                          :object <#_g264>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g262> ]
+                         :subject <#_g263> ]
                  [
-                         :object <#_g259>;
+                         :object <#_g258>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g262> ]
+                         :subject <#_g263> ]
                  [
-                         :object <#_g266>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g265> ]
+                 [
+                         :object <#_g265>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g265> ]
+                         :subject <#_g266> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -3019,7 +3355,7 @@
                          :object <#_g267>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g265> ]
+                         :subject <#_g266> ]
                  [
                          :object  [
                              :items () ];
@@ -3030,9 +3366,9 @@
                          :object <#_g268>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g265> ]
+                         :subject <#_g266> ]
                  [
-                         :object <#_g263>;
+                         :object <#_g262>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g269> ]
@@ -3048,15 +3384,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g269> ]
                  [
-                         :object <#_g266>;
+                         :object <#_g265>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g269> ]
                  [
-                         :object <#_g272>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g271> ]
+                 [
+                         :object <#_g271>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g271> ]
+                         :subject <#_g272> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -3067,7 +3409,7 @@
                          :object <#_g273>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g271> ]
+                         :subject <#_g272> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#x" ];
@@ -3078,12 +3420,18 @@
                          :object <#_g274>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g271> ]
+                         :subject <#_g272> ]
                  [
-                         :object <#_g276>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g275> ]
+                 [
+                         :object <#_g275>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g275> ]
+                         :subject <#_g276> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#subject" ];
@@ -3094,17 +3442,23 @@
                          :object <#_g277>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g275> ]
+                         :subject <#_g276> ]
                  [
-                         :object <#_g272>;
+                         :object <#_g271>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g275> ]
+                         :subject <#_g276> ]
                  [
-                         :object <#_g279>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g278> ]
+                 [
+                         :object <#_g278>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g278> ]
+                         :subject <#_g279> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -3115,7 +3469,7 @@
                          :object <#_g280>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g278> ]
+                         :subject <#_g279> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#p" ];
@@ -3126,9 +3480,9 @@
                          :object <#_g281>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g278> ]
+                         :subject <#_g279> ]
                  [
-                         :object <#_g276>;
+                         :object <#_g275>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g282> ]
@@ -3144,15 +3498,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g282> ]
                  [
-                         :object <#_g279>;
+                         :object <#_g278>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g282> ]
                  [
-                         :object <#_g285>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g284> ]
+                 [
+                         :object <#_g284>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g284> ]
+                         :subject <#_g285> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -3163,7 +3523,7 @@
                          :object <#_g286>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g284> ]
+                         :subject <#_g285> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#y" ];
@@ -3174,9 +3534,9 @@
                          :object <#_g287>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g284> ]
+                         :subject <#_g285> ]
                  [
-                         :object <#_g276>;
+                         :object <#_g275>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g288> ]
@@ -3192,15 +3552,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g288> ]
                  [
-                         :object <#_g285>;
+                         :object <#_g284>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g288> ]
                  [
-                         :object <#_g291>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g290> ]
+                 [
+                         :object <#_g290>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g290> ]
+                         :subject <#_g291> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -3211,7 +3577,7 @@
                          :object <#_g292>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g290> ]
+                         :subject <#_g291> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#y" ];
@@ -3222,12 +3588,18 @@
                          :object <#_g293>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g290> ]
+                         :subject <#_g291> ]
                  [
-                         :object <#_g295>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g294> ]
+                 [
+                         :object <#_g294>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g294> ]
+                         :subject <#_g295> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#subject" ];
@@ -3238,17 +3610,23 @@
                          :object <#_g296>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g294> ]
+                         :subject <#_g295> ]
                  [
-                         :object <#_g291>;
+                         :object <#_g290>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g294> ]
+                         :subject <#_g295> ]
                  [
-                         :object <#_g298>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g297> ]
+                 [
+                         :object <#_g297>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g297> ]
+                         :subject <#_g298> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -3259,7 +3637,7 @@
                          :object <#_g299>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g297> ]
+                         :subject <#_g298> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#p" ];
@@ -3270,9 +3648,9 @@
                          :object <#_g300>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g297> ]
+                         :subject <#_g298> ]
                  [
-                         :object <#_g295>;
+                         :object <#_g294>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g301> ]
@@ -3288,15 +3666,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g301> ]
                  [
-                         :object <#_g298>;
+                         :object <#_g297>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g301> ]
                  [
-                         :object <#_g304>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g303> ]
+                 [
+                         :object <#_g303>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g303> ]
+                         :subject <#_g304> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -3307,7 +3691,7 @@
                          :object <#_g305>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g303> ]
+                         :subject <#_g304> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#z" ];
@@ -3318,9 +3702,9 @@
                          :object <#_g306>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g303> ]
+                         :subject <#_g304> ]
                  [
-                         :object <#_g295>;
+                         :object <#_g294>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g307> ]
@@ -3336,15 +3720,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g307> ]
                  [
-                         :object <#_g304>;
+                         :object <#_g303>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g307> ]
                  [
-                         :object <#_g310>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g309> ]
+                 [
+                         :object <#_g309>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g309> ]
+                         :subject <#_g310> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -3355,12 +3745,12 @@
                          :object <#_g311>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g309> ]
+                         :subject <#_g310> ]
                  [
                          :object  [
                              :items  (
-                            <#_g276> 
-                            <#_g295>  ) ];
+                            <#_g275> 
+                            <#_g294>  ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#items" ];
                          :subject <#_g312> ]
@@ -3368,9 +3758,9 @@
                          :object <#_g312>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g309> ]
+                         :subject <#_g310> ]
                  [
-                         :object <#_g263>;
+                         :object <#_g262>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g313> ]
@@ -3386,15 +3776,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g313> ]
                  [
-                         :object <#_g310>;
+                         :object <#_g309>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g313> ]
                  [
-                         :object <#_g316>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g315> ]
+                 [
+                         :object <#_g315>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g315> ]
+                         :subject <#_g316> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#subject" ];
@@ -3405,17 +3801,23 @@
                          :object <#_g317>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g315> ]
+                         :subject <#_g316> ]
                  [
-                         :object <#_g263>;
+                         :object <#_g262>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g315> ]
+                         :subject <#_g316> ]
                  [
-                         :object <#_g319>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g318> ]
+                 [
+                         :object <#_g318>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g318> ]
+                         :subject <#_g319> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -3426,7 +3828,7 @@
                          :object <#_g320>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g318> ]
+                         :subject <#_g319> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2000/10/swap/log#implies" ];
@@ -3437,9 +3839,9 @@
                          :object <#_g321>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g318> ]
+                         :subject <#_g319> ]
                  [
-                         :object <#_g316>;
+                         :object <#_g315>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g322> ]
@@ -3455,15 +3857,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g322> ]
                  [
-                         :object <#_g319>;
+                         :object <#_g318>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g322> ]
                  [
-                         :object <#_g325>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g324> ]
+                 [
+                         :object <#_g324>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g324> ]
+                         :subject <#_g325> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -3474,7 +3882,7 @@
                          :object <#_g326>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g324> ]
+                         :subject <#_g325> ]
                  [
                          :object  [
                              :items () ];
@@ -3485,12 +3893,18 @@
                          :object <#_g327>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g324> ]
+                         :subject <#_g325> ]
                  [
-                         :object <#_g329>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g328> ]
+                 [
+                         :object <#_g328>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g328> ]
+                         :subject <#_g329> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#existentials" ];
@@ -3501,17 +3915,23 @@
                          :object <#_g330>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g328> ]
+                         :subject <#_g329> ]
                  [
-                         :object <#_g325>;
+                         :object <#_g324>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g328> ]
+                         :subject <#_g329> ]
                  [
-                         :object <#_g332>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g331> ]
+                 [
+                         :object <#_g331>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g331> ]
+                         :subject <#_g332> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -3522,7 +3942,7 @@
                          :object <#_g333>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g331> ]
+                         :subject <#_g332> ]
                  [
                          :object  [
                              :items () ];
@@ -3533,9 +3953,9 @@
                          :object <#_g334>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g331> ]
+                         :subject <#_g332> ]
                  [
-                         :object <#_g329>;
+                         :object <#_g328>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g335> ]
@@ -3551,15 +3971,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g335> ]
                  [
-                         :object <#_g332>;
+                         :object <#_g331>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g335> ]
                  [
-                         :object <#_g338>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g337> ]
+                 [
+                         :object <#_g337>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g337> ]
+                         :subject <#_g338> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -3570,7 +3996,7 @@
                          :object <#_g339>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g337> ]
+                         :subject <#_g338> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#x" ];
@@ -3581,12 +4007,18 @@
                          :object <#_g340>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g337> ]
+                         :subject <#_g338> ]
                  [
-                         :object <#_g342>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g341> ]
+                 [
+                         :object <#_g341>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g341> ]
+                         :subject <#_g342> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#subject" ];
@@ -3597,17 +4029,23 @@
                          :object <#_g343>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g341> ]
+                         :subject <#_g342> ]
                  [
-                         :object <#_g338>;
+                         :object <#_g337>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g341> ]
+                         :subject <#_g342> ]
                  [
-                         :object <#_g345>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g344> ]
+                 [
+                         :object <#_g344>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g344> ]
+                         :subject <#_g345> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -3618,7 +4056,7 @@
                          :object <#_g346>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g344> ]
+                         :subject <#_g345> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#p" ];
@@ -3629,9 +4067,9 @@
                          :object <#_g347>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g344> ]
+                         :subject <#_g345> ]
                  [
-                         :object <#_g342>;
+                         :object <#_g341>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g348> ]
@@ -3647,15 +4085,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g348> ]
                  [
-                         :object <#_g345>;
+                         :object <#_g344>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g348> ]
                  [
-                         :object <#_g351>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g350> ]
+                 [
+                         :object <#_g350>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g350> ]
+                         :subject <#_g351> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -3666,7 +4110,7 @@
                          :object <#_g352>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g350> ]
+                         :subject <#_g351> ]
                  [
                          :object  [
                              :value "http://example.com/swap/test/reify/reify0.n3#z" ];
@@ -3677,9 +4121,9 @@
                          :object <#_g353>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g350> ]
+                         :subject <#_g351> ]
                  [
-                         :object <#_g342>;
+                         :object <#_g341>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g354> ]
@@ -3695,15 +4139,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g354> ]
                  [
-                         :object <#_g351>;
+                         :object <#_g350>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g354> ]
                  [
-                         :object <#_g357>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g356> ]
+                 [
+                         :object <#_g356>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g356> ]
+                         :subject <#_g357> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -3714,11 +4164,11 @@
                          :object <#_g358>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g356> ]
+                         :subject <#_g357> ]
                  [
                          :object  [
                              :items  (
-                            <#_g342>  ) ];
+                            <#_g341>  ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#items" ];
                          :subject <#_g359> ]
@@ -3726,9 +4176,9 @@
                          :object <#_g359>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g356> ]
+                         :subject <#_g357> ]
                  [
-                         :object <#_g329>;
+                         :object <#_g328>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g360> ]
@@ -3744,12 +4194,12 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g360> ]
                  [
-                         :object <#_g357>;
+                         :object <#_g356>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g360> ]
                  [
-                         :object <#_g316>;
+                         :object <#_g315>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g362> ]
@@ -3765,15 +4215,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g362> ]
                  [
-                         :object <#_g329>;
+                         :object <#_g328>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g362> ]
                  [
-                         :object <#_g365>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g364> ]
+                 [
+                         :object <#_g364>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g364> ]
+                         :subject <#_g365> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -3784,11 +4240,11 @@
                          :object <#_g366>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g364> ]
+                         :subject <#_g365> ]
                  [
                          :object  [
                              :items  (
-                            <#_g316>  ) ];
+                            <#_g315>  ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#items" ];
                          :subject <#_g367> ]
@@ -3796,9 +4252,9 @@
                          :object <#_g367>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g364> ]
+                         :subject <#_g365> ]
                  [
-                         :object <#_g247>;
+                         :object <#_g246>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g368> ]
@@ -3814,15 +4270,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g368> ]
                  [
-                         :object <#_g365>;
+                         :object <#_g364>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g368> ]
                  [
-                         :object <#_g371>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g370> ]
+                 [
+                         :object <#_g370>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g370> ]
+                         :subject <#_g371> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#subject" ];
@@ -3833,17 +4295,23 @@
                          :object <#_g372>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g370> ]
+                         :subject <#_g371> ]
                  [
-                         :object <#_g247>;
+                         :object <#_g246>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g370> ]
+                         :subject <#_g371> ]
                  [
-                         :object <#_g374>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g373> ]
+                 [
+                         :object <#_g373>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g373> ]
+                         :subject <#_g374> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -3854,7 +4322,7 @@
                          :object <#_g375>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g373> ]
+                         :subject <#_g374> ]
                  [
                          :object  [
                              :value "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
@@ -3865,9 +4333,9 @@
                          :object <#_g376>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g373> ]
+                         :subject <#_g374> ]
                  [
-                         :object <#_g371>;
+                         :object <#_g370>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g377> ]
@@ -3883,15 +4351,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g377> ]
                  [
-                         :object <#_g374>;
+                         :object <#_g373>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g377> ]
                  [
-                         :object <#_g380>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g379> ]
+                 [
+                         :object <#_g379>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g379> ]
+                         :subject <#_g380> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -3902,7 +4376,7 @@
                          :object <#_g381>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g379> ]
+                         :subject <#_g380> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2000/10/swap/log#Truth" ];
@@ -3913,9 +4387,9 @@
                          :object <#_g382>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g379> ]
+                         :subject <#_g380> ]
                  [
-                         :object <#_g371>;
+                         :object <#_g370>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g383> ]
@@ -3931,15 +4405,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g383> ]
                  [
-                         :object <#_g380>;
+                         :object <#_g379>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g383> ]
                  [
-                         :object <#_g386>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g385> ]
+                 [
+                         :object <#_g385>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g385> ]
+                         :subject <#_g386> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -3950,11 +4430,11 @@
                          :object <#_g387>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g385> ]
+                         :subject <#_g386> ]
                  [
                          :object  [
                              :items  (
-                            <#_g371>  ) ];
+                            <#_g370>  ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#items" ];
                          :subject <#_g388> ]
@@ -3962,9 +4442,9 @@
                          :object <#_g388>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g385> ]
+                         :subject <#_g386> ]
                  [
-                         :object <#_g234>;
+                         :object <#_g233>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g389> ]
@@ -3980,12 +4460,12 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g389> ]
                  [
-                         :object <#_g386>;
+                         :object <#_g385>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g389> ]
                  [
-                         :object <#_g221>;
+                         :object <#_g220>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g391> ]
@@ -4001,15 +4481,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g391> ]
                  [
-                         :object <#_g234>;
+                         :object <#_g233>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g391> ]
                  [
-                         :object <#_g394>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g393> ]
+                 [
+                         :object <#_g393>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g393> ]
+                         :subject <#_g394> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#subject" ];
@@ -4020,17 +4506,23 @@
                          :object <#_g395>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g393> ]
+                         :subject <#_g394> ]
                  [
-                         :object <#_g128>;
+                         :object <#_g127>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g393> ]
+                         :subject <#_g394> ]
                  [
-                         :object <#_g397>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g396> ]
+                 [
+                         :object <#_g396>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g396> ]
+                         :subject <#_g397> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2004/06/rei#uri" ];
@@ -4041,7 +4533,7 @@
                          :object <#_g398>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g396> ]
+                         :subject <#_g397> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2000/10/swap/log#implies" ];
@@ -4052,9 +4544,9 @@
                          :object <#_g399>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g396> ]
+                         :subject <#_g397> ]
                  [
-                         :object <#_g394>;
+                         :object <#_g393>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g400> ]
@@ -4070,12 +4562,12 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g400> ]
                  [
-                         :object <#_g397>;
+                         :object <#_g396>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g400> ]
                  [
-                         :object <#_g394>;
+                         :object <#_g393>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g402> ]
@@ -4091,15 +4583,21 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g402> ]
                  [
-                         :object <#_g81>;
+                         :object <#_g80>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g402> ]
                  [
-                         :object <#_g405>;
+                         :object  [
+                             :uri "http://www.w3.org/2004/06/rei#BlankNode" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g404> ]
+                 [
+                         :object <#_g404>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
-                         :subject <#_g404> ]
+                         :subject <#_g405> ]
                  [
                          :object  [
                              :value "http://www.w3.org/2002/07/owl#oneOf" ];
@@ -4110,16 +4608,16 @@
                          :object <#_g406>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
-                         :subject <#_g404> ]
+                         :subject <#_g405> ]
                  [
                          :object  [
                              :items  (
-                            <#_g24> 
-                            <#_g43> 
-                            <#_g62> 
-                            <#_g115> 
-                            <#_g221> 
-                            <#_g394>  ) ];
+                            <#_g23> 
+                            <#_g42> 
+                            <#_g61> 
+                            <#_g114> 
+                            <#_g220> 
+                            <#_g393>  ) ];
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#items" ];
                          :subject <#_g407> ]
@@ -4127,9 +4625,9 @@
                          :object <#_g407>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
-                         :subject <#_g404> ]
+                         :subject <#_g405> ]
                  [
-                         :object <#_g8>;
+                         :object <#_g7>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g408> ]
@@ -4145,12 +4643,12 @@
                              :uri "http://www.w3.org/2004/06/rei#predicate" ];
                          :subject <#_g408> ]
                  [
-                         :object <#_g405>;
+                         :object <#_g404>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#object" ];
                          :subject <#_g408> ]
                  [
-                         :object <#_g8>;
+                         :object <#_g7>;
                          :predicate  [
                              :uri "http://www.w3.org/2004/06/rei#subject" ];
                          :subject <#_g410> ]
@@ -4179,134 +4677,134 @@
                  [
                          :object  [
                              :items  (
-                            <#_g3> 
-                            <#_g7> 
-                            <#_g10> 
+                            <#_g4> 
+                            <#_g8> 
+                            <#_g11> 
                             <#_g17> 
-                            <#_g19> 
-                            <#_g23> 
-                            <#_g26> 
+                            <#_g20> 
+                            <#_g24> 
+                            <#_g27> 
                             <#_g30> 
-                            <#_g32> 
+                            <#_g33> 
                             <#_g36> 
-                            <#_g38> 
-                            <#_g42> 
-                            <#_g45> 
+                            <#_g39> 
+                            <#_g43> 
+                            <#_g46> 
                             <#_g49> 
-                            <#_g51> 
+                            <#_g52> 
                             <#_g55> 
-                            <#_g57> 
-                            <#_g61> 
-                            <#_g64> 
+                            <#_g58> 
+                            <#_g62> 
+                            <#_g65> 
                             <#_g68> 
-                            <#_g70> 
+                            <#_g71> 
                             <#_g74> 
-                            <#_g76> 
-                            <#_g80> 
-                            <#_g83> 
+                            <#_g77> 
+                            <#_g81> 
+                            <#_g84> 
                             <#_g87> 
-                            <#_g89> 
-                            <#_g93> 
-                            <#_g96> 
+                            <#_g90> 
+                            <#_g94> 
+                            <#_g97> 
                             <#_g100> 
-                            <#_g102> 
+                            <#_g103> 
                             <#_g106> 
-                            <#_g108> 
+                            <#_g109> 
                             <#_g112> 
-                            <#_g114> 
-                            <#_g117> 
+                            <#_g115> 
+                            <#_g118> 
                             <#_g121> 
-                            <#_g123> 
-                            <#_g127> 
-                            <#_g130> 
+                            <#_g124> 
+                            <#_g128> 
+                            <#_g131> 
                             <#_g134> 
-                            <#_g136> 
-                            <#_g140> 
-                            <#_g143> 
+                            <#_g137> 
+                            <#_g141> 
+                            <#_g144> 
                             <#_g147> 
-                            <#_g149> 
+                            <#_g150> 
                             <#_g153> 
-                            <#_g155> 
-                            <#_g159> 
-                            <#_g162> 
+                            <#_g156> 
+                            <#_g160> 
+                            <#_g163> 
                             <#_g166> 
-                            <#_g168> 
+                            <#_g169> 
                             <#_g172> 
-                            <#_g174> 
+                            <#_g175> 
                             <#_g178> 
                             <#_g180> 
-                            <#_g182> 
-                            <#_g186> 
-                            <#_g189> 
+                            <#_g183> 
+                            <#_g187> 
+                            <#_g190> 
                             <#_g193> 
-                            <#_g195> 
-                            <#_g199> 
-                            <#_g202> 
+                            <#_g196> 
+                            <#_g200> 
+                            <#_g203> 
                             <#_g206> 
-                            <#_g208> 
+                            <#_g209> 
                             <#_g212> 
-                            <#_g214> 
+                            <#_g215> 
                             <#_g218> 
-                            <#_g220> 
-                            <#_g223> 
+                            <#_g221> 
+                            <#_g224> 
                             <#_g227> 
-                            <#_g229> 
-                            <#_g233> 
-                            <#_g236> 
+                            <#_g230> 
+                            <#_g234> 
+                            <#_g237> 
                             <#_g240> 
-                            <#_g242> 
-                            <#_g246> 
-                            <#_g249> 
+                            <#_g243> 
+                            <#_g247> 
+                            <#_g250> 
                             <#_g256> 
-                            <#_g258> 
-                            <#_g262> 
-                            <#_g265> 
+                            <#_g259> 
+                            <#_g263> 
+                            <#_g266> 
                             <#_g269> 
-                            <#_g271> 
-                            <#_g275> 
-                            <#_g278> 
+                            <#_g272> 
+                            <#_g276> 
+                            <#_g279> 
                             <#_g282> 
-                            <#_g284> 
+                            <#_g285> 
                             <#_g288> 
-                            <#_g290> 
-                            <#_g294> 
-                            <#_g297> 
+                            <#_g291> 
+                            <#_g295> 
+                            <#_g298> 
                             <#_g301> 
-                            <#_g303> 
+                            <#_g304> 
                             <#_g307> 
-                            <#_g309> 
+                            <#_g310> 
                             <#_g313> 
-                            <#_g315> 
-                            <#_g318> 
+                            <#_g316> 
+                            <#_g319> 
                             <#_g322> 
-                            <#_g324> 
-                            <#_g328> 
-                            <#_g331> 
+                            <#_g325> 
+                            <#_g329> 
+                            <#_g332> 
                             <#_g335> 
-                            <#_g337> 
-                            <#_g341> 
-                            <#_g344> 
+                            <#_g338> 
+                            <#_g342> 
+                            <#_g345> 
                             <#_g348> 
-                            <#_g350> 
+                            <#_g351> 
                             <#_g354> 
-                            <#_g356> 
+                            <#_g357> 
                             <#_g360> 
                             <#_g362> 
-                            <#_g364> 
+                            <#_g365> 
                             <#_g368> 
-                            <#_g370> 
-                            <#_g373> 
+                            <#_g371> 
+                            <#_g374> 
                             <#_g377> 
-                            <#_g379> 
+                            <#_g380> 
                             <#_g383> 
-                            <#_g385> 
+                            <#_g386> 
                             <#_g389> 
                             <#_g391> 
-                            <#_g393> 
-                            <#_g396> 
+                            <#_g394> 
+                            <#_g397> 
                             <#_g400> 
                             <#_g402> 
-                            <#_g404> 
+                            <#_g405> 
                             <#_g408> 
                             <#_g410>  ) ];
                          :predicate  [
@@ -4325,4 +4823,832 @@
                          :subject <#_g1> ] ) ];
              :universals  [
                  owl:oneOf () ] ].
+    
+    <#_g0>     a :BlankNode .
+    
+    <#_g1>     a :BlankNode .
+    
+    <#_g2>     a :BlankNode .
+    
+    <#_g3>     a :BlankNode .
+    
+    <#_g4>     a :BlankNode .
+    
+    <#_g5>     a :BlankNode .
+    
+    <#_g6>     a :BlankNode .
+    
+    <#_g7>     a :BlankNode .
+    
+    <#_g8>     a :BlankNode .
+    
+    <#_g9>     a :BlankNode .
+    
+    <#_g10>     a :BlankNode .
+    
+    <#_g11>     a :BlankNode .
+    
+    <#_g12>     a :BlankNode .
+    
+    <#_g13>     a :BlankNode .
+    
+    <#_g14>     a :BlankNode .
+    
+    <#_g15>     a :BlankNode .
+    
+    <#_g16>     a :BlankNode .
+    
+    <#_g17>     a :BlankNode .
+    
+    <#_g18>     a :BlankNode .
+    
+    <#_g19>     a :BlankNode .
+    
+    <#_g20>     a :BlankNode .
+    
+    <#_g21>     a :BlankNode .
+    
+    <#_g22>     a :BlankNode .
+    
+    <#_g23>     a :BlankNode .
+    
+    <#_g24>     a :BlankNode .
+    
+    <#_g25>     a :BlankNode .
+    
+    <#_g26>     a :BlankNode .
+    
+    <#_g27>     a :BlankNode .
+    
+    <#_g28>     a :BlankNode .
+    
+    <#_g29>     a :BlankNode .
+    
+    <#_g30>     a :BlankNode .
+    
+    <#_g31>     a :BlankNode .
+    
+    <#_g32>     a :BlankNode .
+    
+    <#_g33>     a :BlankNode .
+    
+    <#_g34>     a :BlankNode .
+    
+    <#_g35>     a :BlankNode .
+    
+    <#_g36>     a :BlankNode .
+    
+    <#_g37>     a :BlankNode .
+    
+    <#_g38>     a :BlankNode .
+    
+    <#_g39>     a :BlankNode .
+    
+    <#_g40>     a :BlankNode .
+    
+    <#_g41>     a :BlankNode .
+    
+    <#_g42>     a :BlankNode .
+    
+    <#_g43>     a :BlankNode .
+    
+    <#_g44>     a :BlankNode .
+    
+    <#_g45>     a :BlankNode .
+    
+    <#_g46>     a :BlankNode .
+    
+    <#_g47>     a :BlankNode .
+    
+    <#_g48>     a :BlankNode .
+    
+    <#_g49>     a :BlankNode .
+    
+    <#_g50>     a :BlankNode .
+    
+    <#_g51>     a :BlankNode .
+    
+    <#_g52>     a :BlankNode .
+    
+    <#_g53>     a :BlankNode .
+    
+    <#_g54>     a :BlankNode .
+    
+    <#_g55>     a :BlankNode .
+    
+    <#_g56>     a :BlankNode .
+    
+    <#_g57>     a :BlankNode .
+    
+    <#_g58>     a :BlankNode .
+    
+    <#_g59>     a :BlankNode .
+    
+    <#_g60>     a :BlankNode .
+    
+    <#_g61>     a :BlankNode .
+    
+    <#_g62>     a :BlankNode .
+    
+    <#_g63>     a :BlankNode .
+    
+    <#_g64>     a :BlankNode .
+    
+    <#_g65>     a :BlankNode .
+    
+    <#_g66>     a :BlankNode .
+    
+    <#_g67>     a :BlankNode .
+    
+    <#_g68>     a :BlankNode .
+    
+    <#_g69>     a :BlankNode .
+    
+    <#_g70>     a :BlankNode .
+    
+    <#_g71>     a :BlankNode .
+    
+    <#_g72>     a :BlankNode .
+    
+    <#_g73>     a :BlankNode .
+    
+    <#_g74>     a :BlankNode .
+    
+    <#_g75>     a :BlankNode .
+    
+    <#_g76>     a :BlankNode .
+    
+    <#_g77>     a :BlankNode .
+    
+    <#_g78>     a :BlankNode .
+    
+    <#_g79>     a :BlankNode .
+    
+    <#_g80>     a :BlankNode .
+    
+    <#_g81>     a :BlankNode .
+    
+    <#_g82>     a :BlankNode .
+    
+    <#_g83>     a :BlankNode .
+    
+    <#_g84>     a :BlankNode .
+    
+    <#_g85>     a :BlankNode .
+    
+    <#_g86>     a :BlankNode .
+    
+    <#_g87>     a :BlankNode .
+    
+    <#_g88>     a :BlankNode .
+    
+    <#_g89>     a :BlankNode .
+    
+    <#_g90>     a :BlankNode .
+    
+    <#_g91>     a :BlankNode .
+    
+    <#_g92>     a :BlankNode .
+    
+    <#_g93>     a :BlankNode .
+    
+    <#_g94>     a :BlankNode .
+    
+    <#_g95>     a :BlankNode .
+    
+    <#_g96>     a :BlankNode .
+    
+    <#_g97>     a :BlankNode .
+    
+    <#_g98>     a :BlankNode .
+    
+    <#_g99>     a :BlankNode .
+    
+    <#_g100>     a :BlankNode .
+    
+    <#_g101>     a :BlankNode .
+    
+    <#_g102>     a :BlankNode .
+    
+    <#_g103>     a :BlankNode .
+    
+    <#_g104>     a :BlankNode .
+    
+    <#_g105>     a :BlankNode .
+    
+    <#_g106>     a :BlankNode .
+    
+    <#_g107>     a :BlankNode .
+    
+    <#_g108>     a :BlankNode .
+    
+    <#_g109>     a :BlankNode .
+    
+    <#_g110>     a :BlankNode .
+    
+    <#_g111>     a :BlankNode .
+    
+    <#_g112>     a :BlankNode .
+    
+    <#_g113>     a :BlankNode .
+    
+    <#_g114>     a :BlankNode .
+    
+    <#_g115>     a :BlankNode .
+    
+    <#_g116>     a :BlankNode .
+    
+    <#_g117>     a :BlankNode .
+    
+    <#_g118>     a :BlankNode .
+    
+    <#_g119>     a :BlankNode .
+    
+    <#_g120>     a :BlankNode .
+    
+    <#_g121>     a :BlankNode .
+    
+    <#_g122>     a :BlankNode .
+    
+    <#_g123>     a :BlankNode .
+    
+    <#_g124>     a :BlankNode .
+    
+    <#_g125>     a :BlankNode .
+    
+    <#_g126>     a :BlankNode .
+    
+    <#_g127>     a :BlankNode .
+    
+    <#_g128>     a :BlankNode .
+    
+    <#_g129>     a :BlankNode .
+    
+    <#_g130>     a :BlankNode .
+    
+    <#_g131>     a :BlankNode .
+    
+    <#_g132>     a :BlankNode .
+    
+    <#_g133>     a :BlankNode .
+    
+    <#_g134>     a :BlankNode .
+    
+    <#_g135>     a :BlankNode .
+    
+    <#_g136>     a :BlankNode .
+    
+    <#_g137>     a :BlankNode .
+    
+    <#_g138>     a :BlankNode .
+    
+    <#_g139>     a :BlankNode .
+    
+    <#_g140>     a :BlankNode .
+    
+    <#_g141>     a :BlankNode .
+    
+    <#_g142>     a :BlankNode .
+    
+    <#_g143>     a :BlankNode .
+    
+    <#_g144>     a :BlankNode .
+    
+    <#_g145>     a :BlankNode .
+    
+    <#_g146>     a :BlankNode .
+    
+    <#_g147>     a :BlankNode .
+    
+    <#_g148>     a :BlankNode .
+    
+    <#_g149>     a :BlankNode .
+    
+    <#_g150>     a :BlankNode .
+    
+    <#_g151>     a :BlankNode .
+    
+    <#_g152>     a :BlankNode .
+    
+    <#_g153>     a :BlankNode .
+    
+    <#_g154>     a :BlankNode .
+    
+    <#_g155>     a :BlankNode .
+    
+    <#_g156>     a :BlankNode .
+    
+    <#_g157>     a :BlankNode .
+    
+    <#_g158>     a :BlankNode .
+    
+    <#_g159>     a :BlankNode .
+    
+    <#_g160>     a :BlankNode .
+    
+    <#_g161>     a :BlankNode .
+    
+    <#_g162>     a :BlankNode .
+    
+    <#_g163>     a :BlankNode .
+    
+    <#_g164>     a :BlankNode .
+    
+    <#_g165>     a :BlankNode .
+    
+    <#_g166>     a :BlankNode .
+    
+    <#_g167>     a :BlankNode .
+    
+    <#_g168>     a :BlankNode .
+    
+    <#_g169>     a :BlankNode .
+    
+    <#_g170>     a :BlankNode .
+    
+    <#_g171>     a :BlankNode .
+    
+    <#_g172>     a :BlankNode .
+    
+    <#_g173>     a :BlankNode .
+    
+    <#_g174>     a :BlankNode .
+    
+    <#_g175>     a :BlankNode .
+    
+    <#_g176>     a :BlankNode .
+    
+    <#_g177>     a :BlankNode .
+    
+    <#_g178>     a :BlankNode .
+    
+    <#_g179>     a :BlankNode .
+    
+    <#_g180>     a :BlankNode .
+    
+    <#_g181>     a :BlankNode .
+    
+    <#_g182>     a :BlankNode .
+    
+    <#_g183>     a :BlankNode .
+    
+    <#_g184>     a :BlankNode .
+    
+    <#_g185>     a :BlankNode .
+    
+    <#_g186>     a :BlankNode .
+    
+    <#_g187>     a :BlankNode .
+    
+    <#_g188>     a :BlankNode .
+    
+    <#_g189>     a :BlankNode .
+    
+    <#_g190>     a :BlankNode .
+    
+    <#_g191>     a :BlankNode .
+    
+    <#_g192>     a :BlankNode .
+    
+    <#_g193>     a :BlankNode .
+    
+    <#_g194>     a :BlankNode .
+    
+    <#_g195>     a :BlankNode .
+    
+    <#_g196>     a :BlankNode .
+    
+    <#_g197>     a :BlankNode .
+    
+    <#_g198>     a :BlankNode .
+    
+    <#_g199>     a :BlankNode .
+    
+    <#_g200>     a :BlankNode .
+    
+    <#_g201>     a :BlankNode .
+    
+    <#_g202>     a :BlankNode .
+    
+    <#_g203>     a :BlankNode .
+    
+    <#_g204>     a :BlankNode .
+    
+    <#_g205>     a :BlankNode .
+    
+    <#_g206>     a :BlankNode .
+    
+    <#_g207>     a :BlankNode .
+    
+    <#_g208>     a :BlankNode .
+    
+    <#_g209>     a :BlankNode .
+    
+    <#_g210>     a :BlankNode .
+    
+    <#_g211>     a :BlankNode .
+    
+    <#_g212>     a :BlankNode .
+    
+    <#_g213>     a :BlankNode .
+    
+    <#_g214>     a :BlankNode .
+    
+    <#_g215>     a :BlankNode .
+    
+    <#_g216>     a :BlankNode .
+    
+    <#_g217>     a :BlankNode .
+    
+    <#_g218>     a :BlankNode .
+    
+    <#_g219>     a :BlankNode .
+    
+    <#_g220>     a :BlankNode .
+    
+    <#_g221>     a :BlankNode .
+    
+    <#_g222>     a :BlankNode .
+    
+    <#_g223>     a :BlankNode .
+    
+    <#_g224>     a :BlankNode .
+    
+    <#_g225>     a :BlankNode .
+    
+    <#_g226>     a :BlankNode .
+    
+    <#_g227>     a :BlankNode .
+    
+    <#_g228>     a :BlankNode .
+    
+    <#_g229>     a :BlankNode .
+    
+    <#_g230>     a :BlankNode .
+    
+    <#_g231>     a :BlankNode .
+    
+    <#_g232>     a :BlankNode .
+    
+    <#_g233>     a :BlankNode .
+    
+    <#_g234>     a :BlankNode .
+    
+    <#_g235>     a :BlankNode .
+    
+    <#_g236>     a :BlankNode .
+    
+    <#_g237>     a :BlankNode .
+    
+    <#_g238>     a :BlankNode .
+    
+    <#_g239>     a :BlankNode .
+    
+    <#_g240>     a :BlankNode .
+    
+    <#_g241>     a :BlankNode .
+    
+    <#_g242>     a :BlankNode .
+    
+    <#_g243>     a :BlankNode .
+    
+    <#_g244>     a :BlankNode .
+    
+    <#_g245>     a :BlankNode .
+    
+    <#_g246>     a :BlankNode .
+    
+    <#_g247>     a :BlankNode .
+    
+    <#_g248>     a :BlankNode .
+    
+    <#_g249>     a :BlankNode .
+    
+    <#_g250>     a :BlankNode .
+    
+    <#_g251>     a :BlankNode .
+    
+    <#_g252>     a :BlankNode .
+    
+    <#_g253>     a :BlankNode .
+    
+    <#_g254>     a :BlankNode .
+    
+    <#_g255>     a :BlankNode .
+    
+    <#_g256>     a :BlankNode .
+    
+    <#_g257>     a :BlankNode .
+    
+    <#_g258>     a :BlankNode .
+    
+    <#_g259>     a :BlankNode .
+    
+    <#_g260>     a :BlankNode .
+    
+    <#_g261>     a :BlankNode .
+    
+    <#_g262>     a :BlankNode .
+    
+    <#_g263>     a :BlankNode .
+    
+    <#_g264>     a :BlankNode .
+    
+    <#_g265>     a :BlankNode .
+    
+    <#_g266>     a :BlankNode .
+    
+    <#_g267>     a :BlankNode .
+    
+    <#_g268>     a :BlankNode .
+    
+    <#_g269>     a :BlankNode .
+    
+    <#_g270>     a :BlankNode .
+    
+    <#_g271>     a :BlankNode .
+    
+    <#_g272>     a :BlankNode .
+    
+    <#_g273>     a :BlankNode .
+    
+    <#_g274>     a :BlankNode .
+    
+    <#_g275>     a :BlankNode .
+    
+    <#_g276>     a :BlankNode .
+    
+    <#_g277>     a :BlankNode .
+    
+    <#_g278>     a :BlankNode .
+    
+    <#_g279>     a :BlankNode .
+    
+    <#_g280>     a :BlankNode .
+    
+    <#_g281>     a :BlankNode .
+    
+    <#_g282>     a :BlankNode .
+    
+    <#_g283>     a :BlankNode .
+    
+    <#_g284>     a :BlankNode .
+    
+    <#_g285>     a :BlankNode .
+    
+    <#_g286>     a :BlankNode .
+    
+    <#_g287>     a :BlankNode .
+    
+    <#_g288>     a :BlankNode .
+    
+    <#_g289>     a :BlankNode .
+    
+    <#_g290>     a :BlankNode .
+    
+    <#_g291>     a :BlankNode .
+    
+    <#_g292>     a :BlankNode .
+    
+    <#_g293>     a :BlankNode .
+    
+    <#_g294>     a :BlankNode .
+    
+    <#_g295>     a :BlankNode .
+    
+    <#_g296>     a :BlankNode .
+    
+    <#_g297>     a :BlankNode .
+    
+    <#_g298>     a :BlankNode .
+    
+    <#_g299>     a :BlankNode .
+    
+    <#_g300>     a :BlankNode .
+    
+    <#_g301>     a :BlankNode .
+    
+    <#_g302>     a :BlankNode .
+    
+    <#_g303>     a :BlankNode .
+    
+    <#_g304>     a :BlankNode .
+    
+    <#_g305>     a :BlankNode .
+    
+    <#_g306>     a :BlankNode .
+    
+    <#_g307>     a :BlankNode .
+    
+    <#_g308>     a :BlankNode .
+    
+    <#_g309>     a :BlankNode .
+    
+    <#_g310>     a :BlankNode .
+    
+    <#_g311>     a :BlankNode .
+    
+    <#_g312>     a :BlankNode .
+    
+    <#_g313>     a :BlankNode .
+    
+    <#_g314>     a :BlankNode .
+    
+    <#_g315>     a :BlankNode .
+    
+    <#_g316>     a :BlankNode .
+    
+    <#_g317>     a :BlankNode .
+    
+    <#_g318>     a :BlankNode .
+    
+    <#_g319>     a :BlankNode .
+    
+    <#_g320>     a :BlankNode .
+    
+    <#_g321>     a :BlankNode .
+    
+    <#_g322>     a :BlankNode .
+    
+    <#_g323>     a :BlankNode .
+    
+    <#_g324>     a :BlankNode .
+    
+    <#_g325>     a :BlankNode .
+    
+    <#_g326>     a :BlankNode .
+    
+    <#_g327>     a :BlankNode .
+    
+    <#_g328>     a :BlankNode .
+    
+    <#_g329>     a :BlankNode .
+    
+    <#_g330>     a :BlankNode .
+    
+    <#_g331>     a :BlankNode .
+    
+    <#_g332>     a :BlankNode .
+    
+    <#_g333>     a :BlankNode .
+    
+    <#_g334>     a :BlankNode .
+    
+    <#_g335>     a :BlankNode .
+    
+    <#_g336>     a :BlankNode .
+    
+    <#_g337>     a :BlankNode .
+    
+    <#_g338>     a :BlankNode .
+    
+    <#_g339>     a :BlankNode .
+    
+    <#_g340>     a :BlankNode .
+    
+    <#_g341>     a :BlankNode .
+    
+    <#_g342>     a :BlankNode .
+    
+    <#_g343>     a :BlankNode .
+    
+    <#_g344>     a :BlankNode .
+    
+    <#_g345>     a :BlankNode .
+    
+    <#_g346>     a :BlankNode .
+    
+    <#_g347>     a :BlankNode .
+    
+    <#_g348>     a :BlankNode .
+    
+    <#_g349>     a :BlankNode .
+    
+    <#_g350>     a :BlankNode .
+    
+    <#_g351>     a :BlankNode .
+    
+    <#_g352>     a :BlankNode .
+    
+    <#_g353>     a :BlankNode .
+    
+    <#_g354>     a :BlankNode .
+    
+    <#_g355>     a :BlankNode .
+    
+    <#_g356>     a :BlankNode .
+    
+    <#_g357>     a :BlankNode .
+    
+    <#_g358>     a :BlankNode .
+    
+    <#_g359>     a :BlankNode .
+    
+    <#_g360>     a :BlankNode .
+    
+    <#_g361>     a :BlankNode .
+    
+    <#_g362>     a :BlankNode .
+    
+    <#_g363>     a :BlankNode .
+    
+    <#_g364>     a :BlankNode .
+    
+    <#_g365>     a :BlankNode .
+    
+    <#_g366>     a :BlankNode .
+    
+    <#_g367>     a :BlankNode .
+    
+    <#_g368>     a :BlankNode .
+    
+    <#_g369>     a :BlankNode .
+    
+    <#_g370>     a :BlankNode .
+    
+    <#_g371>     a :BlankNode .
+    
+    <#_g372>     a :BlankNode .
+    
+    <#_g373>     a :BlankNode .
+    
+    <#_g374>     a :BlankNode .
+    
+    <#_g375>     a :BlankNode .
+    
+    <#_g376>     a :BlankNode .
+    
+    <#_g377>     a :BlankNode .
+    
+    <#_g378>     a :BlankNode .
+    
+    <#_g379>     a :BlankNode .
+    
+    <#_g380>     a :BlankNode .
+    
+    <#_g381>     a :BlankNode .
+    
+    <#_g382>     a :BlankNode .
+    
+    <#_g383>     a :BlankNode .
+    
+    <#_g384>     a :BlankNode .
+    
+    <#_g385>     a :BlankNode .
+    
+    <#_g386>     a :BlankNode .
+    
+    <#_g387>     a :BlankNode .
+    
+    <#_g388>     a :BlankNode .
+    
+    <#_g389>     a :BlankNode .
+    
+    <#_g390>     a :BlankNode .
+    
+    <#_g391>     a :BlankNode .
+    
+    <#_g392>     a :BlankNode .
+    
+    <#_g393>     a :BlankNode .
+    
+    <#_g394>     a :BlankNode .
+    
+    <#_g395>     a :BlankNode .
+    
+    <#_g396>     a :BlankNode .
+    
+    <#_g397>     a :BlankNode .
+    
+    <#_g398>     a :BlankNode .
+    
+    <#_g399>     a :BlankNode .
+    
+    <#_g400>     a :BlankNode .
+    
+    <#_g401>     a :BlankNode .
+    
+    <#_g402>     a :BlankNode .
+    
+    <#_g403>     a :BlankNode .
+    
+    <#_g404>     a :BlankNode .
+    
+    <#_g405>     a :BlankNode .
+    
+    <#_g406>     a :BlankNode .
+    
+    <#_g407>     a :BlankNode .
+    
+    <#_g408>     a :BlankNode .
+    
+    <#_g409>     a :BlankNode .
+    
+    <#_g410>     a :BlankNode .
+    
+    <#_g411>     a :BlankNode .
+    
+    <#_g412>     a :BlankNode .
+    
+    <#_g413>     a :BlankNode .
     

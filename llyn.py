@@ -1323,7 +1323,7 @@ class RDFStore(RDFSink) :
                 else: raise RuntimeError, "did not expect other type:"+`typ`
         return result
 
-    def newList(self, value):
+    def newList(self, value, context=None):
 	return self.nil.newList(value)
 
 #    def deleteFormula(self,F):
