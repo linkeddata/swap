@@ -118,7 +118,7 @@
 		<p><em>void</em></p>
 	</dd>
   <dt><a name='string'>string</a></dt><dd>
-	<p><em>(""".*""")|("([^"]|(\\["\\a-z]))*")</em></p>
+	<p><em>("""[^"\\]*(?:(?:\\.|"(?!""))[^"\\]*)*""")|("[^"\\]*(?:\\.[^"\\]*)*")</em></p>
 	</dd>
   <dt><a name='subject'>subject</a></dt><dd>
 		<p><a href='#path'>path</a></p>

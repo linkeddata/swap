@@ -1,8 +1,8 @@
-#Processed by Id: cwm.py,v 1.155 2004/06/30 20:04:57 timbl Exp 
+#Processed by Id: cwm.py,v 1.164 2004/10/28 17:41:59 timbl Exp 
         #    using base file:/devel/WWW/2000/10/swap/grammar/
         
 #  Notation3 generation by
-#       notation3.py,v 1.156 2004/06/30 18:06:19 syosi Exp
+#       notation3.py,v 1.166 2004/10/28 17:41:59 timbl Exp
 
 #   Base was: file:/devel/WWW/2000/10/swap/grammar/
      @prefix : <http://www.w3.org/2000/10/swap/grammar/bnf2html#> .
@@ -593,7 +593,7 @@
 """ .
       ( "string" 
         6  )
-         log:outputString """	<p><em>(\""".*\""")|("([^"]|(\\\\["\\\\a-z]))*")</em></p>
+         log:outputString """	<p><em>(\"""[^"\\\\]*(?:(?:\\\\.|"(?!""))[^"\\\\]*)*\""")|("[^"\\\\]*(?:\\\\.[^"\\\\]*)*")</em></p>
 """ .
       ( "string" 
         9  )
@@ -1627,7 +1627,7 @@
     n3:string     a :Production;
          bnf:canStartWith "\"";
          bnf:label "string";
-         bnf:matches """(\""".*\""")|("([^"]|(\\\\["\\\\a-z]))*")""";
+         bnf:matches """(\"""[^"\\\\]*(?:(?:\\\\.|"(?!""))[^"\\\\]*)*\""")|("[^"\\\\]*(?:\\\\.[^"\\\\]*)*")""";
          :reference "<a href='#string'>string</a>" .
     
     n3:subject     a :Production;
