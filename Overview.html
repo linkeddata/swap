@@ -50,32 +50,16 @@ of the W3C.</p>
 <h2>Source</h2>
 
 <p>This <a href="http://dev.w3.org/cvsweb/2000/10/swap/">stuff</a> is not
-guaranteed but is open source and available (after sync delay of few hours)
-from the <a href="http://dev.w3.org/cvsweb/">public w3c CVS repository</a>.
-</p>
-
-<h2>Doing stuff with RDF and Notation3</h2>
-
-<p>The semantic web layer diagram shows a web of trust being built on top of
-a base of RDF (and XML and Unicode), by steps of ontologies and rules. When
-the semnatic web passed its initial snowball phase, there will be masses of
-RDF out there, but in the mean time we have typically to experiment by
-importing data from legacy non-RDF applications, processing it using SemWeb
-tools, and then exporting it to legacy applications. </p>
-
-<p>The swap project itself has concentrated on personal and organization
-information.  Check the list of import and export formats in the <a
-href="talk/Overview.html">slides</a>.</p>
+guaranteed but is open source and available from the <a
+href="http://dev.w3.org/cvsweb/">public w3c CVS repository</a>.</p>
 
 <h3>Cwm - a general-purpose semantic web data processing tool</h3>
 <ul>
   <li><a href="doc/cwm.html">The cwm home page</a></li>
 </ul>
 
-<p>Check out *.py from the top level of the swap hierarchy to use it. (No
-CVS? use tar file).</p>
-
-<p>Check out the whole tree to develop.  </p>
+<p>Check out *.py from the top level of the swap hierarchy to use it, check
+out the whole tree to develop.</p>
 
 <p>Set up an alias (.bat file, etc) to make the cwm command  cwm="python
 /wherever/cwm.py"</p>
@@ -113,7 +97,7 @@ for putting together test and demo applications, and organizing our dailiy
 lives.  Most are defined in n3, many have xml versions. If you don't have it
 in XML, use cwm  to transcode it.</p>
 
-<h3>cwm built-ins</h3>
+<h3>Cwm built-ins</h3>
 
 <p>For cwm these are magic - these are properties which cwm can infer or
 which allow cwm to infer things. They are like built-in functions in a
@@ -122,8 +106,8 @@ programming language.  Not every N3 processor handles the same built-ins.</p>
   <li>Logic - as used by cwm</li>
   <li>String - built in</li>
   <li>Math - builtin</li>
-  <li>Crypto</li>
-  <li>Operating system interface; environment, command line &amp;c</li>
+  <li>Crypto - digital sugnature</li>
+  <li>OS - Operating system interface; environment, command line &amp;c</li>
 </ul>
 
 <p>See the <a href="doc/cwm.html">cwm</a> page for details.</p>
