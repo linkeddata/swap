@@ -54,6 +54,7 @@ def readTabs():
 	        result.append(l)
 	        return result		# end of values
      
+import sys
 
 def convert():
     headings = readTabs()
@@ -65,6 +66,14 @@ def convert():
         for j in range(0,len(h)-1):
 	    if h[j]==" ":
 		headings[i] = headings[i][:j] + "_" + headings[i] [j+1:]
+
+    if "-schema" in sys.argv[1:]:
+	print "# Schema"
+	print "bind : <> ."
+	print "bind rdfs: <http://www.w3.org/2000/01/rdf-schema>"
+	for h in headings:
+	    print "  :%s  a rdfs:Property ." % ( h )
+	print
  
     while 1:
 	values = readTabs()
@@ -73,6 +82,7 @@ def convert():
         records = records + 1
 	if len(values) != len(headings):
 	    print "#  %i headings but %i values" % (len(headings), len(values))
+
 
         print "["
 	i=0
