@@ -1,0 +1,30 @@
+#   n3 definition of some operating system interface functions
+#
+# $Id$
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix doc: <http://www.w3.org/2000/01/pim/doc#>.
+#bind ont: <http://www.daml.org/2000/10/daml-ont> .	 # contains aliases for the above
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+@prefix os: <http://www.w3.org/2000/10/swap/os#>.
+@prefix : <#>.
+
+os:environ a rdf:Property;
+    rdfs:label "environment value";
+    rdfs:description """
+The os:environ property of a string is the value corresponding to
+the string when looked up in the curent environment.  This is
+not, of course, something of global significance: it is only
+used in local processing for passing parameters into a semantic web
+processor.
+
+os:environ is a built-in function in cwm, and corresponds
+to Python's os.environ[] .
+""";
+
+    rdfs:isDefinedBy <>.
+
+# ends
+
