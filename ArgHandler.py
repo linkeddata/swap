@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 """
 
+    By sandro@w3.org....  Nothing else did this at the time.  With
+    python 2.3 gnu-style getopt probably has this basic functionality
+    (allowing filenames to be mixed with arguments, cwm-style),
+    although not nearly as easy-to-use (introspective) an interface.
+    
 """
 import sys
 import inspect
@@ -310,7 +315,10 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
 
 # $Log$
-# Revision 1.7  2003-04-03 04:51:49  sandro
+# Revision 1.8  2003-08-01 15:32:28  sandro
+# added name and comment at top
+#
+# Revision 1.7  2003/04/03 04:51:49  sandro
 # fairly stable in skeletal state
 #
 # Revision 1.6  2003/04/02 20:55:20  sandro
