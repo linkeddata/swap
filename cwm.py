@@ -154,7 +154,6 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         
         import time
         import sys
-        global sax2rdf
         import myStore
 
         # These would just be attributes if this were an object
@@ -280,11 +279,6 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 option_inputs.append(join(option_baseURI, arg))
                 _gotInput = _gotInput + 1  # input filename
             
-
-        # This is conditional as it is not available on all platforms,
-        # needs C and Python to compile xpat.
-        if option_need_rdf_sometime:
-            import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
         # Between passes, prepare for processing
         setVerbosity(0)

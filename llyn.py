@@ -1230,7 +1230,7 @@ class RDFStore(RDFSink) :
 		return self.newLiteral(`what`,  self.integer)
 	    if type(what) is types.FloatType:
 		return self.newLiteral(`what`,  self.float)
-	    if type(what) is types.SequenceType:
+	    if type(what) is types.ListType: #types.SequenceType:
 		return self.newList(what)
 	    raise RuntimeError("Eh?  can't intern "+`what`)
 

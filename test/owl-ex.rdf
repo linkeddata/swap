@@ -116,7 +116,7 @@ The following message was in this daml-ex.rdf, dunno what it refers to - tbl
 </Property>
 
 <Class ID="Height">
-  <oneOf parseType="rdf:collection">
+  <oneOf rdf:parseType="Collection">
     <Height ID="short"/>
     <Height ID="medium"/>
     <Height ID="tall"/>
@@ -137,7 +137,7 @@ The following message was in this daml-ex.rdf, dunno what it refers to - tbl
 <!-- @@ lack Disjoint example -->
 
 <Class ID="TallMan">
-  <intersectionOf parseType="rdf:collection">
+  <intersectionOf rdf:parseType="Collection">
     <Class about="#TallThing"/>
     <Class about="#Man"/>
   </intersectionOf>

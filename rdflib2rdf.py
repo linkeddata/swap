@@ -61,7 +61,7 @@ class ContextSink(object):
     def __init__(self, sink, openFormula,
                  thisDoc=None,  flags="", why=None):
         self.sink = sink
-	assert thissDoc != None, "Need document URI at the moment, sorry"
+	assert thisDoc != None, "Need document URI at the moment, sorry"
         self.thisDoc = thisDoc
         self.formulaURI = formulaURI
 	self._context = openFormula
@@ -88,17 +88,17 @@ class ContextSink(object):
                     
 import uripath
 
-from rdflib.syntax.parser import Parser
+from rdflib.syntax.parser import ParserDispatcher
 from rdflib.URIRef import URIRef
 from rdflib.Literal import Literal
 from rdflib.BNode import BNode
 from rdflib.URLInputSource import URLInputSource
 
 
-class RDFXMLParser(Parser):
+class RDFXMLParser:
     def __init__(self, sink,
-                 thisDoc, formulaURI=None, flags="", why=None):
-        self.__sink = ContextSink(sink, thisDoc, formulaURI, flags, why)
+                 formulaURI, thisDoc, flags="", why=None):
+        self.__sink = ContextSink(sink,formulaURI, thisDoc, flags, why)
         self.__bnodes = {}
         
     def __convert(self, t):
@@ -140,6 +140,9 @@ class RDFXMLParser(Parser):
         predicate = self.__convert(p)
         object = self.__convert(o)                    
         self.__sink.makeStatement((predicate, subject, object))
+
+    def feed(self, buffer):
+        self.parser(StringInputSource(buffer))
 
     def load(self, uri, baseURI=""):
         if uri:
