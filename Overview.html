@@ -10,12 +10,6 @@
 <p><a href="/">W3C </a>| <a href="/2000/01/sw/Overview.html">Semantic
 Web</a></p>
 
-<p>Related:</p>
-<ul>
-  <li><a href="/DesignIssues/Notation3.html">Notation3 in Design
-  Issues</a></li>
-</ul>
-
 <p></p>
 
 <h1>Semantic Web Area for Play</h1>
@@ -39,6 +33,7 @@ RDF and all points west.</p>
       <li>relationships between this and rule languages</li>
     </ul>
   </li>
+  <li>Generate some tools for munging RDF </li>
 </ul>
 
 <p></p>
@@ -110,15 +105,19 @@ data manipulator for RDF on the lines of sed, awk, etc or xsl.</p>
 </ul>
 
 <h4 id="Command">Command line parameters</h4>
+
+<p>Some, marked (flag), can occur anywhere on the command line.  The others
+are processed in order from left to right. </p>
 <dl>
   <dt>-help</dt>
     <dd>generate a <em>maybe</em> more up to date list of parameters</dd>
   <dt>-pipe</dt>
-    <dd>don't store, just process serially. (doesn't lose comment lines!)</dd>
+    <dd>don't store, just process serially. (doesn't lose comment lines!)
+      (flag)</dd>
   <dt>-rdf</dt>
     <dd>input format RDF format from now on</dd>
   <dt>-rdf1out</dt>
-    <dd>output format is RDF.</dd>
+    <dd>output format is RDF. (flag)</dd>
   <dt><em>uri</em></dt>
     <dd>load the resource. Parsed relative to the local directory, so a
       filename will work.</dd>
@@ -133,19 +132,22 @@ data manipulator for RDF on the lines of sed, awk, etc or xsl.</p>
       from the rules.</dd>
   <dt>-rules</dt>
     <dd>Apply any rules in the store to the store itself, conclusions being
-      added to the store.</dd>
+      added to the store. </dd>
   <dt>-ugly</dt>
     <dd>When outputting the result, dump the store in a more or less random
-      order. This tends to be messy, as related information is not
-    grouped.</dd>
+      order. This tends to be messy, as related information is not grouped.
+      (flag)</dd>
   <dt>-bySubject</dt>
     <dd>When outputting the result, dump the store grouping statements by
       subject. This tends to be better than -ugly, but the default is to make
       the output as readable as possible using anonymous nodes wherever
-      possible, and is therefore recommended.</dd>
+      possible, and is therefore recommended. (flag)</dd>
 </dl>
 
-<p></p>
+<p>Note that where a <em>uri </em>is given, this can be a filename of course. 
+The default base URI of the process is the file URI of a file in the current
+working directory, so a local filename will be a valid relative URI. This is
+how URIs were supposed to work.</p>
 
 <h4 id="Rule">Rule file format</h4>
 
@@ -175,14 +177,21 @@ document (&lt;&gt;).</p>
 <p>The code above investigated and raised issues discussed in the following
 documents.</p>
 <ul>
-  <li>Notation 3 - an alternative RDF syntax</li>
+  <li><a href="/DesignIssues/Notation3.html">Notation 3 - an alternative RDF
+    syntax</a></li>
   <li>Quantification implicit in anonymous nodes</li>
+</ul>
+
+<p>not to mention</p>
+<ul>
+  <li>RDFM&amp;S and schema issues</li>
+  <li>The question of quoting and BagIDs etc</li>
 </ul>
 <hr>
 
 <p></p>
 
-<p>Tim BL</p>
+<p>Tim BL, with his director hat off</p>
 
 <p>$Id$</p>
 </body>
