@@ -1,3 +1,4 @@
+#! /usr/bin/env python
 """Call doctest on all our modules, or something.
 
 """
@@ -7,19 +8,18 @@ __version__ = "$Revision$"
 
 import doctest
 import LX
-import LX.fol
-import LX.logic
-import LX.engine
-import LX.language
-import html
 
-for x in [ "LX.expr", "LX.logic", "LX.fol", "LX.engine.otter", "LX.sniff", "html" ]:
+for x in LX.__all__:
     print "Module", "%-25s" %x,
-    __import__(x)
-    print "failed %3d of %3d tests." % eval("doctest.testmod(%s)" % x)
+    lx = __import__("LX."+x)
+    m = getattr(lx, x)
+    print "failed %3d of %3d tests." % doctest.testmod(m)
     
 # $Log$
-# Revision 1.5  2003-02-03 17:20:40  sandro
+# Revision 1.6  2003-02-13 19:25:04  sandro
+# Use LX.__all__ to get the module names automagically
+#
+# Revision 1.5  2003/02/03 17:20:40  sandro
 # factored logic.py out of fol.py
 #
 # Revision 1.4  2003/01/29 18:54:02  sandro
