@@ -25,7 +25,7 @@ in its XML syntax, but easier to scribble when getting started.</p>
 <p>In RDF, information is simply a collection of statements, each with a
 subject, verb and object - and nothing else. In N3, you can write an RDF
 triple just like that, with a period:</p>
-<pre>&lt;#pat&gt; &lt;#knows&gt; &lt;#jo&gt; .<br />
+<pre>&lt;#pat&gt; &lt;#knows&gt; &lt;#jo&gt; .
 </pre>
 
 <p>Everything, be it subject, verb, or object, is identified with a Universal
@@ -143,16 +143,15 @@ title, which they gave the identifier</p>
 <p>&lt;http://purl.org/dc/elements/1.1/title&gt;. So we can make a much
 better defined statement if we say</p>
 <pre>&lt;&gt; &lt;http://purl.org/dc/elements/1.1/title&gt;
- "Primer - Getting into the Semantic Web 
-                             and RDF using N3".</pre>
+ "Primer - Getting into the Semantic Web and RDF using N3".</pre>
 
 <p>That of course would be a bit verbose - imagine using such long
 identifiers for everything like #age and #eyecolor above. So N3 allows you to
 set up a shorthand prefix for the long part - the part we call the
 <dfn>namespace</dfn>. You set it up using "@prefix" like this:</p>
 <pre>@prefix dc:  &lt;http://purl.org/dc/elements/1.1/&gt; .
-&lt;&gt; dc:title  "Primer - Getting into the semantic web 
-                                      and RDF using N3".</pre>
+&lt;&gt; dc:title
+  "Primer - Getting into the Semantic Web and RDF using N3".</pre>
 
 <p>Note that when you use a prefix, you use a colon instead of a hash between
 dc and title, and you don't use the &lt;angle brackets&gt; around the whole
@@ -160,9 +159,10 @@ thing. This is much quicker. This is how you will see and write almost all
 your predicates in N3. Once set up, a prefix can be used for the rest of the
 file.</p>
 
-<p>There are an increasingly large number of RDF vocabularies for you to
-refer to - check the <a href="/RDF/">RDF home page</a> and things linked from
-it - and you can build your own for your own applications very simply.</p>
+<p>There are an increasingly large number of RDF vocabularies for you
+to refer to - check the <a href="../../../../RDF/">RDF home page</a>
+and things linked from it - and you can build your own for your own
+applications very simply.</p>
 
 <p>From now, on we are going to use some well known namespaces, and so to
 save space, I will just assume the prefixes</p>
@@ -181,8 +181,6 @@ for the document we are writing, which we can say in N3 as</p>
 
 <p>This means we could have the example above as</p>
 <pre>:pat :child [ :age "4" ] , [ :age "3" ].</pre>
-<br />
-<br />
 
 
 <p>which is slightly less characters to type. Now you understand how to write
@@ -200,7 +198,7 @@ name="Class2">Class</a></dfn> it belongs to.</p>
 <p>The property which tells you what type something is is
 <code>rdf:type</code> which can be abbreviated to N3 to just <code>a</code>.
 So we can define a class of person</p>
-<pre>:Person a rdfs:Class.<br />
+<pre>:Person a rdfs:Class.
 </pre>
 
 <p>In the same document, we could introduce an actual person</p>
@@ -213,7 +211,7 @@ there is a relationship between two classes you can state it - check out the
 properties (of classes) in the 
 <a href="http://www.w3.org/TR/rdf-schema/">RDF Schema</a> and <a
 href="http://www.w3.org/TR/owl-guide/">OWL</a> vocabularies.</p>
-<pre>:Woman a rdfs:Class; rdfs:subClassOf :Person .<br />
+<pre>:Woman a rdfs:Class; rdfs:subClassOf :Person .
 </pre>
 
 <p>A property is something which is used to declare a relationship between
