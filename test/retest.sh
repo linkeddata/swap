@@ -43,6 +43,8 @@ cwm_test lstring-out.n3 "N3 string nested triple quoting" --n3 syntax/lstring.n3
 #oops... misleading test case name.
 cwm_test equiv-syntax.n3 "conversion of N3 = to RDF" -n3 equiv-syntax.n3 -rdf
 
+cwm_test daml-ont-piped.n3 "Pipe mode for flat n3 to n3" daml-ont.n3 --pipe
+
 cwm_test lists-simple.n3 "parsing and generation of N3 list () syntax" -n3 lists-simple.n3
 
 cwm_test lists-simple-1.rdf "conversion of N3 list () syntax to RDF" -n3 lists-simple.n3 -rdf
@@ -146,7 +148,10 @@ cwm_test argv-2.n3 "os:argv argument other values"  os/argv.n3 --think --with bo
 
 
 # $Log$
-# Revision 1.34  2002-05-21 00:13:30  timbl
+# Revision 1.35  2002-06-07 13:45:29  timbl
+# Missing test
+#
+# Revision 1.34  2002/05/21 00:13:30  timbl
 # Add string:endsWith
 #
 # Revision 1.32  2002/03/30 22:06:24  timbl
