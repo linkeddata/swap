@@ -28,16 +28,41 @@ from the iterary into my calendar:</p>
     able to key in the diffs, but that's even more error prone.</li>
 </ol>
 
-<p>So I wrote a <a href="/2001/07dc-bos/grokNavItin.pl">little perl
-script</a> to convert the travel itinerary, which had obviously been dumped
-from a relational database, into RDF. Then I wrote <a
-href="/2001/07dc-bos/itin2datebook.n3">some rules</a> to relate this
-itinerary vocabulary to the <a href="../../../08/palm56/datebook">RDF
-vocabulary for the palmpilot datebook</a> that I had already developed, and
-presto, </p>
+<p>So I wrote a little perl script (<a
+href="/2001/07dc-bos/grokNavItin.pl">grokNavItin.pl</a>) to convert the
+travel itinerary, which had obviously been dumped from a relational
+database...</p>
+<pre>&gt;  11 JUL 01  -  WEDNESDAY
+&gt;     AIR   AMERICAN AIRLINES    FLT:1364   ECONOMY
+&gt;           LV KANSAS CITY INTL             144P           EQP: MD-80
+&gt;           DEPART: TERMINAL BUILDING A                    01HR 31MIN
+&gt;           AR CHICAGO OHARE                315P           NON-STOP
+&gt;           ARRIVE: TERMINAL 3    </pre>
 
-<p><a href="grokTravItin.pl">grokTravItin.pl</a>, derived from <a
-href="/2001/07dc-bos/grokNavItin.pl">grokNavItin.pl</a></p>
+<p>...  into RDF. Then I wrote <a href="/2001/07dc-bos/itin2datebook.n3">some
+rules</a> to relate this itinerary vocabulary to the <a
+href="../../../08/palm56/datebook">RDF vocabulary for the palmpilot
+datebook</a> that I had already developed, and presto, my itinerary was in my
+calendar. (see <a href="">Makefile</a> for (some of the?) details).</p>
+
+<p><em>[@@image of palm pilot showing flight in the datebook]</em></p>
+
+<p>The next month, I wrote rules like "itineraries that have me leaving
+before 30 July are no good" and ran them over the RDF (Makefile). I was much
+more confident having the machine review my itinerary than eyeballing it.
+More details: <a href="/2001/08swws67/">SWWS stuff</a>.</p>
+
+<p>I have since rewritten the little perl script; rather than
+hoping/pretending that our travel agent would use an RDF vocabulary, <a
+href="grokTravItin.pl">grokTravItin.pl</a>  uses terms from the <a
+href="http://www.cyc.com/cyc-2-1/vocab/transportation-vocab.html">cyc
+ontology of common sense transportation terms</a>. (The opencyc project
+released a version in DAML/RDF). I needed a few extra terms:
+<code>departureTime</code>, <code>flightNumber</code>, ...; see <a
+href="travelTerms">travelTerms</a>, in <a href="travelTerms.rdf">RDF/xml</a>,
+<a href="travelTerms.rdf">RDF/n3</a>.</p>
+
+<p>[@@some figures? SVG view of Makefiles, showing data flow thru tools?]</p>
 
 <p>@@grokNavItin... schema?</p>
 
