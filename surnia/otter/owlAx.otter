@@ -102,15 +102,15 @@ all CLASS LIST (
       rdf(INST, rdf_type, CLASS) <-> inList(INST, LIST)
    ))
 ).
-
 all MEMBER LIST HEAD TAIL (
    (rdf(LIST, rdf_first, HEAD) &
     rdf(LIST, rdf_rest, TAIL) &
-    ( rdf(MEMBER, owl_sameAs, HEAD) | 
-      inList(MEMBER, TAIL) ))
-  ->
-   inList(MEMBER, LIST)
+    inList(MEMBER, LIST))
+   ->
+    ( rdf(MEMBER, owl_sameAs, HEAD) |
+      inList(MEMBER, TAIL) )
 ).
+
 all MEMBER (-inList(MEMBER, rdf_nil)).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -257,7 +257,7 @@ all RESTRICTION PROPERTY VALUE INST (
 
 all PROPERTY (
    rdf(PROPERTY, rdf_type, owl_FunctionalProperty)
-   <->     % BIDIR         TRY for FP004 !
+   <->     %   <-needed for FunctionalProperty/*004 !
    ( all INST VAL1 VAL2 (
      ( rdf(INST, PROPERTY, VAL1) &
        rdf(INST, PROPERTY, VAL2) )
@@ -288,13 +288,27 @@ all PROPERTY (
 %   owl_sameAs
 %
 
-all THING (
-   rdf(THING, owl_sameAs, THING)
+% identity
+all X (
+   rdf(X, owl_sameAs, X)
 ).
 
+% symmetry
+all X Y (
+   rdf(X, owl_sameAs, Y) -> rdf(Y, owl_sameAs, X)
+).
+
+% transitivity
+all X Y Z (
+   (rdf(X, owl_sameAs, Y) & rdf(Y, owl_sameAs, Z))
+   -> 
+   rdf(X, owl_sameAs, Z)
+).
+
+% substitutivity
 all THING1 THING2 (
    rdf(THING1, owl_sameAs, THING2) 
-   ->     % BIDIR
+   ->     % BIDIR   
    (all X Y (
       ( rdf(X, Y, THING1) <-> rdf(X, Y, THING2) ) &
       ( rdf(X, THING1, Y) <-> rdf(X, THING2, Y) ) &
@@ -460,7 +474,12 @@ all P1 P2 (
 ).
     
 % $Log$
-% Revision 1.7  2003-07-30 03:25:18  sandro
+% Revision 1.8  2003-07-30 05:30:07  sandro
+% changed directionality of inList recursion
+% made sameAs transitive and symmetric
+% -> now passes functionalProperty/Manifest004 (runtime 72 seconds!)
+%
+% Revision 1.7  2003/07/30 03:25:18  sandro
 % added owl_Thing and a BIDIR to pass 5.24/...004
 %
 % Revision 1.6  2003/07/30 03:08:01  sandro
@@ -475,3 +494,9 @@ all P1 P2 (
 % Revision 1.3  2003/07/30 02:26:40  sandro
 % added Id and Log cvs keywords
 %
+
+%     rdf(obj, ns6_prop, ss).
+% -rdf(ss, rdf_type, ns6_Singleton).
+% -rdf(ss, owl_sameAs, s).
+% -(all x y z ( (rdf(x, ns6_prop, y) & rdf(x, ns6_prop, z)) -> rdf(y, owl_sameAs, z))).
+% -rdf(ns6_prop, rdf_type, owl_FunctionalProperty).
