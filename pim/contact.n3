@@ -1,0 +1,224 @@
+#    Utility concepts for everyday life
+#    ----------------------------------
+#
+# To illustrate with examples the creation of a schema of RDF properties
+# and classes, but using abstract things for people, rather than strings, etc.
+# If you have an "Assistant's phone number", thenreally you have an assitant who has
+# a phone number - and that is much more useful in general.
+# For example, when data about you and your assietnt in merged,
+# you will end up with an "assistant's email" and the like.
+#
+#  $Id$
+
+@prefix : <#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . # type, Property
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ont:  <http://www.daml.org/2000/10/daml-ont#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+##################################### CONTACT INFORMATION ######
+#
+#  @@ check out vcard
+#  http://www.imc.org/pdi/vcardwhite.html
+#  Eg http://msdn.microsoft.com/workshop/essentials/versions/vcard.asp
+
+
+vcard_list = """ vCard.Cellular, vCard.Company, vCard.Department, 
+vCard.DisplayName,
+vCard.Email,
+vCard.FirstName, 
+vCard.Gender, vCard.Home.City, vCard.Home.Country, 
+vCard.Home.Fax, vCard.Home.Phone, vCard.Home.State, 
+vCard.Home.StreetAddress, vCard.Home.Zipcode, vCard.Homepage, 
+vCard.JobTitle, vCard.LastName, vCard.MiddleName, 
+vCard.Notes, vCard.Office,  # ??? Office what? Number?
+vCard.Pager, 
+vCard.Business.City, vCard.Business.Country, vCard.Business.Fax, 
+vCard.Business.Phone, vCard.Business.State, vCard.Business.StreetAddress, 
+vCard.Business.URL, vCard.Business.Zipcode"""
+
+
+# Let's start with Contact information. See also
+
+@prefix mso: <MSOutlookContacts.n3#> .
+
+:SocialEntity a rdf:Class;
+    rdfs:comment  "The sort of thing which can have a phone number.".
+
+:Person rdfs:subClassOf :SocialEntity;
+    is rdfs:domain of :personalTitle,
+	:firstName,
+	:middleName,
+	:lastName,
+	:personalSuffix,
+	:company,         # SocialEntity
+	:departmentName,
+
+
+:personalTitle = 	mso:Title .
+:firstName = 		mso:First_Name .
+:middleName = 		mso:Middle_Name .
+:lastName = 		mso:Last_Name .
+:personalSuffix = 	mso:Suffix .
+
+:ConactLocation a Class;
+    rdfs:comment  "A place with address, phone number, fax, etc".
+
+:office a rdfs:Property;
+    rdfs:domain :Person; rdfs:range :ContactLocation.
+:home a rdfs:Property;
+    rdfs:domain :Person; rdfs:range :ContactLocation.
+:vacationHome a rdfs:Property;
+    rdfs:domain :Person; rdfs:range :ContactLocation.
+
+:Address a rdfs:Class.
+:address a rdf:Property; rdfs:domain :ContactLocation; rdfs:range :Address;
+    is rdfs:domain of :Street, :Street2, :Street3,
+		:City, :StateOrProvince, :PostalCode, :Country .
+
+:phone a rdf:Property.
+:fax a rdf:Property
+
+
+##################### Rules for conversion
+
+:personalTitle = 	mso:Title .
+:firstName = 		mso:First_Name .
+:middleName = 		mso:Middle_Name .
+:lastName = 		mso:Last_Name .
+:personalSuffix = 	mso:Suffix .
+
+# MSO stuff:
+
+#  mso:Title  a rdfs:Property .
+#  mso:First_Name  a rdfs:Property .
+#  mso:Middle_Name  a rdfs:Property .
+#  mso:Last_Name  a rdfs:Property .
+#  mso:Suffix  a rdfs:Property .
+#  mso:Company  a rdfs:Property .
+#  mso:Department  a rdfs:Property .
+#  mso:Job_Title  a rdfs:Property .
+#  mso:Business_Street  a rdfs:Property .
+#  mso:Business_Street_2  a rdfs:Property .
+#  mso:Business_Street_3  a rdfs:Property .
+#  mso:Business_City  a rdfs:Property .
+#  mso:Business_State  a rdfs:Property .
+#  mso:Business_Postal_Code  a rdfs:Property .
+#  mso:Business_Country  a rdfs:Property .
+#  mso:Home_Street  a rdfs:Property .
+#  mso:Home_Street_2  a rdfs:Property .
+#  mso:Home_Street_3  a rdfs:Property .
+#  mso:Home_City  a rdfs:Property .
+#  mso:Home_State  a rdfs:Property .
+#  mso:Home_Postal_Code  a rdfs:Property .
+#  mso:Home_Country  a rdfs:Property .
+#  mso:Other_Street  a rdfs:Property .
+#  mso:Other_Street_2  a rdfs:Property .
+#  mso:Other_Street_3  a rdfs:Property .
+#  mso:Other_City  a rdfs:Property .
+#  mso:Other_State  a rdfs:Property .
+#  mso:Other_Postal_Code  a rdfs:Property .
+#  mso:Other_Country  a rdfs:Property .
+#  mso:Assistant's_Phone  a rdfs:Property .
+#  mso:Business_Fax  a rdfs:Property .
+#  mso:Business_Phone  a rdfs:Property .
+#  mso:Business_Phone_2  a rdfs:Property .
+#  mso:Callback  a rdfs:Property .
+#  mso:Car_Phone  a rdfs:Property .
+#  mso:Company_Main_Phone  a rdfs:Property .
+#  mso:Home_Fax  a rdfs:Property .
+#  mso:Home_Phone  a rdfs:Property .
+#  mso:Home_Phone_2  a rdfs:Property .
+#  mso:ISDN  a rdfs:Property .
+#  mso:Mobile_Phone  a rdfs:Property .
+#  mso:Other_Fax  a rdfs:Property .
+#  mso:Other_Phone  a rdfs:Property .
+#  mso:Pager  a rdfs:Property .
+#  mso:Primary_Phone  a rdfs:Property .
+#  mso:Radio_Phone  a rdfs:Property .
+#  mso:TTY/TDD_Phone  a rdfs:Property .
+#  mso:Telex  a rdfs:Property .
+#  mso:Account  a rdfs:Property .
+#  mso:Anniversary  a rdfs:Property .  # Assume we mean anniversay of celebration of union
+#  mso:Assistant's_Name  a rdfs:Property .
+#  mso:Billing_Information  a rdfs:Property .
+
+:birthday a rdfs:Property; =  mso:Birthday; rdfs:range :Date .
+
+Data a Class;    # See ... ICalendar, etc etc
+
+#  mso:Categories  a rdfs:Property .   # replace with RDF individual classes.
+#  mso:Children  a rdfs:Property .
+#		replace with :child
+
+:child a rdf:Property .
+# { :x :child :y } log:implies {{ :x a :Person } means { y a :person } }
+
+#  mso:Directory_Server  a rdfs:Property .
+
+#  mso:E-mail_Address  a rdfs:Property    # Problmem: not as a URI
+:mailbox a rdfs:Property; rdfs:domain :SocialEntity; rdfs:domain :mboxURI;
+
+#  mso:E-mail_Display_Name  a rdfs:Property .   # Seems redundant and useless IMHO
+
+#  mso:E-mail_2_Address  a rdfs:Property .    # Just have multiple email addresses.
+#  mso:E-mail_2_Display_Name  a rdfs:Property . # One thing which RDF simplifies
+#  mso:E-mail_3_Address  a rdfs:Property .
+#  mso:E-mail_3_Display_Name  a rdfs:Property .
+
+#  mso:Gender  a rdfs:Property .
+# Replace with:
+
+:Male a Class; ont:complementOf :Female.
+
+
+#  mso:Government_ID_Number  a rdfs:Property .   # Let's keep to the topic now.
+#  mso:Hobby  a rdfs:Property .   # Let's keep to the topic now.
+#  mso:Initials  a rdfs:Property .  # Do WE HAVE to have this?! ;-)
+#  mso:Internet_Free_Busy  a rdfs:Property .  # MSO specific I guess
+#  mso:Keywords  a rdfs:Property .
+#  mso:Language  a rdfs:Property .    # Hmmm. interesting See I18n. Try:
+
+:motherTongue a rdf:Property; rdfs:domain :Person; rdfs:range :LanguageCode .
+
+:LanguageCode a rdfs:Class;  A ISO langiuage 1 or 2 part string: a  datatype
+
+#  mso:Location  a rdfs:Property .
+#  mso:Manager's_Name  a rdfs:Property .
+#  mso:Mileage  a rdfs:Property .
+#  mso:Notes  a rdfs:Property .
+
+:description a rdf:Property .
+
+#  mso:Office_Location  a rdfs:Property .
+#  mso:Organizational_ID_Number  a rdfs:Property .
+#  mso:PO_Box  a rdfs:Property .
+#  mso:Priority  a rdfs:Property .
+#  mso:Private  a rdfs:Property .
+#  mso:Profession  a rdfs:Property .
+#  mso:Referred_By  a rdfs:Property .
+#  mso:Sensitivity  a rdfs:Property .
+
+partner hasSubProperty mso:Spouse .
+
+mso:Spouse  a rdfs:Property;  .
+#  mso:User_1  a rdfs:Property .   # Use new pererties and namespaces!
+#  mso:User_2  a rdfs:Property .
+#  mso:User_3  a rdfs:Property .
+#  mso:User_4  a rdfs:Property .
+
+mso:Web Page  a rdfs:Property;
+= :publicHomePage .              # I have many home pages, some for me some for others
+
+
+
+####################################### Calendaring -- Time ###########
+#
+# Exploring the next direction of human resource expenditure...
+#See:
+# xmlschema dates
+# iCalendar and my partial analysis of it
+# shoul dthis be a separate spec?
+# This is date book as opposde to address book.
+# (and agenda? - nothat need sful workflow tretment...
+#

@@ -1,0 +1,130 @@
+#    Utility concepts for everyday Personal Information Mangement  - CALENDARING
+#    ------------------------------------------------------------
+#
+# To illustrate with examples the creation of a schema of RDF properties
+# and classes, but using abstract things for people, rather than strings, etc.
+# If you have an "Assistant's phone number", thenreally you have an assitant who has
+# a phone number - and that is much more useful in general.
+# For example, when data about you and your assietnt in merged,
+# you will end up with an "assistant's email" and the like.
+#
+# 
+#
+#  $Id$
+
+@prefix : <#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . # type, Property
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix ont:  <http://www.daml.org/2000/10/daml-ont#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+##################################### CALENDAR INFORMATION ######
+
+# My analysis of 
+# http://www.w3.org/2000/01/foo.html
+#
+# IETF RFCS relating to calendaring:
+# http://www.imc.org/rfcs.html#calendar
+#
+# Specifically http://www.ietf.org/rfc/rfc2445.txt iCalendar
+
+
+
+######## iCalendar
+
+# Capitals are used fro standard terms from the iCalendar spec.
+# lower or mixed case denotes concepts created in th emappingt to RDF
+
+:SocialEntity #implicit node in all properties with a CAL-ADDRESS value type. (person or group: anything which can have a mailbox)  
+ical:cal-address a rdf:Property;
+ = pim:mailbox. # A mailbox - normally mailto:... URI 
+
+# Types of celendar entry
+
+:Event a rdfs:Class; rdfs:comment "Any item which a datebook can contain.".
+
+:ToDo rdfs:subClassOf :Event; rdfs:comment "A To-do list item (agendum!)".
+:Journal rdfs:subClassOf :Event; rdfs:comment "A To-do list item (agendum!)".
+:Freebusy rdfs:subClassOf :Event; rdfs:comment "A free/busy marker time stop for some CU".
+:Timezone rdfs:subClassOf :Event; rdfs:comment "A Timezoned definition".
+
+
+
+
+# Caldendar Users
+#
+# These categorize social entities which exist in iCal's world.
+ical:CU a rdfs:Class .#  Calendar user, defined in CUTYPE  
+
+ical:INDIVIDUAL a rdfs:Class;
+    rdfs:isSubClassOf  ical:CU; = :Person.
+    
+ical:GROUP a rdfs:Class;
+    rdfs:isSubClassOf  ical:CU;
+    
+ical:RESOURCE a rdfs:Class;
+    rdfs:isSubClassOf  ical:CU;
+    
+ical:ROOM a rdfs:Class;
+    rdfs:isSubClassOf  ical:CU;
+    
+ical:ldap-directory a rdfs"Class; starts "ldap:" (is this a standard?) URI 
+ical:mime-type a rdfs:Class;    # string 
+
+################################# Participation status
+
+:ParticipationStatus rdfs:subClasOf rdf:Property;
+
+# These are tricky -- they are in the iCalendar as absolute states of the iCalendar
+# entry.  However they really don't make sense globally it might need action by
+# one person and be delgated by others.  So, let us make them properties adding "By".
+#
+:needsActionBy a :ParticipationStatus; rdfs:comment "This event A needs action by B";
+    s:domain :Event;  s:range:SocialEntity;
+    
+:AcceptedBy a :ParticipationStatus; rdfs:comment """This event A has been accepted by B.
+    B has agreed to particpate.";
+# Has this been thought out wrt changes in what is agreed to?
+    s:domain :Event;  s:range:SocialEntity;
+    
+:DeclinedBy a :ParticipationStatus; rdfs:comment "This event A has been declined by B";
+    s:domain :Event;  s:range:SocialEntity;
+    
+:DelegatedBy a :ParticipationStatus;
+    rdfs:comment "This event A has been delegated (to whom?) by B";
+    s:domain :Event;  s:range:SocialEntity;
+    
+# Not clear which combinations of the above are allowed.
+
+# component of a calendar  
+EVENT, TODO, etc  component 
+# TimeProperty DTSTART, DTEND, DUE, EXDATE, RDATE  
+
+:TimeProperty subClassOf s:Property.
+
+ical:DTSTART subClass of :TimeProperty; s:comment "Start date/time of subject" .
+ical:DTEND   subClass of :TimeProperty; s:comment "End date/time of subject" .
+ical:DUE     subClass of :TimeProperty; s:comment "Date/time fro ToDo to be done" .
+ical:EXDATE  subClass of :TimeProperty; s:comment "Excluded Dates @@@@ Logical Problem" .
+ical:RDATE   subClass of :TimeProperty; s:comment "????" .
+
+Timezone see TZID string 
+icalobject   
+
+
+#recur defined by recurrence properties -Really complex datatype could be broken down into RDF!
+#Contains its own nested attr/value structure. 
+
+
+################################ Geography
+#
+# #Cleanup - to give an event a latitude and longitude is a little
+# weird when a cleaner model is to link it to an address which has
+# lattidtude and longitude.
+#
+# GEO property - two floats
+#
+#  Use these with :Address!
+#
+:latitiude  a r:Property;   # Float
+:longitude   a r:Property;  # Float

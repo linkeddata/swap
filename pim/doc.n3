@@ -1,0 +1,95 @@
+#   Documentation control vocabulary
+#
+# All those things which we need to express all the time
+#
+#
+#  Reminder: People are people, not names
+#  Documents are documents, not titles.
+#
+# See also: 
+#  Set of requirements http://lists.w3.org/Archives/Public/uri/2000Sep/0020.html
+# - This contains that (eg image) as part of the document, not as reference.  See LinkLaw.hrml
+#
+
+<> doc:version "$Id: " .
+
+@prefix s: <> .  # RDFS
+
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
+@prefix :    <http://www.w3.org/2000/10/swap/pim/contacts.n3#>
+
+doc:Work a s:Class;
+    s:comment   "A thing of value, typically intellectual property".
+
+doc:version a r:Property;
+    s:comment   "This version of this document (eg number, date, etc). A string".
+    
+doc:creator a r:Property; s:comment "The person (not string) who created this.";
+    s:domain: doc:Work;
+    d:range: :SocialEntity .
+
+doc:derivedFrom a r:Property;
+    s:comment   "A work wholey or partly used in the creation of this one.";
+    s:domain    doc:Work;
+    s:range     doc:Work .
+
+doc:ipr a r:Property;
+    s:comment   "Terms and interllectual property rights licencing condidtions.";
+    s:domain    doc:Work;
+    s:range     doc:Work .
+
+OpenSourceLicense s:subClassOf doc:Work;
+    s:comment   """Class of licenses which can be called Open Soutrce
+                according to opensource.org""".
+
+doc:persitenceyPolicy a r:Property;
+    s:comment   """Publishers policy regarding the peristence of the mapping
+                between URI and its meaning and/or representation in bits.""";
+    s:domain    doc:Work;
+    s:range     doc:Work .
+
+# Version management stuff
+#
+# With these you can build a CVS tree:
+
+doc:versionOf a r:Property;
+    s:comment   """This work is a a specific version of the follwing generic document""";
+    s:domain    doc:Work;
+    s:range     doc:Work .
+    
+doc:obsoletes a r:Property;
+    s:comment   """This work is more upto date than that and makes it obsolete.""";
+    s:domain    doc:Work;
+    s:range     doc:Work .
+
+doc:dependsOn a r:Property;
+    s:comment   """The meaning or value of this work depends on that of that work.""";
+    s:domain    doc:Work;
+    s:range     doc:Work .
+
+doc:adminPage a r:Property;
+    s:comment   """A web page allowing a human user to administer this work,
+            for example changing access control, version control information etc."""
+    s:domain    doc:Work.
+
+# Access control
+#
+# Eg [ :mailbox <mailto:timbl@w3.org> ] doc:mayWrite <> .
+#
+doc:mayRead a r:Property;
+    s:comment   "This may access that for read -- compare 'r' unix";
+    s:domain    :SocialEntity;
+    s:range     doc:Work .
+
+doc:mayWrite a r:Property;
+    s:comment   "This may access that to modify it -- compare 'w' unix";
+    s:domain    :SocialEntity;
+    s:range     doc:Work .
+
+doc:mayControl a r:Property;
+    s:comment   "This may change that access control for that";
+    s:domain    :SocialEntity;
+    s:range     doc:Work .
+
+
+#ENDS
