@@ -98,7 +98,7 @@ are followed.
 """.
 
 db:primaryKey rdfs:subPropertyOf db:column;
-    a daml:uniqueProperty;    # You can only have one primary key in a table
+    a daml:UniqueProperty;    # You can only have one primary key in a table
     rdfs:domain daml:UnambiguousProperty; # No two rows can have same value of a key
     rdfs:comment"""
 The fact that a table has primary key means that a row document exists
