@@ -113,6 +113,15 @@
 #    test:referenceOutput <ref/hiragana.n3>;
 #    test:description   "N3 string, qname and IRI with utf-8 non-ascii characters";
 #    test:arguments     "i18n/hiragana.n3".
+#
+#until i18n/detailed.tests are fully functional, the below will stay where it is
+
+
+:t1009b a test:CwmTest;
+    test:referenceOutput <xml-syntax/non-ascii-pred.rdf>;
+    test:description   "XML to XML with utf-8 non-ascii characters";
+    test:arguments     "--rdf xml-syntax/non-ascii-pred.rdf".
+
 
 :t1010 a test:CwmTest;
     test:referenceOutput <ref/path1.n3>;

@@ -5,12 +5,13 @@ For example, sometimes want on stdout maybe or in a scroll window....
 
 import sys
 import os, traceback
+from codecs import utf_8_encode
 
 def progress(*args):
     level = len(traceback.extract_stack())
     sys.stderr.write(" "*level)
     for a in args:
-        sys.stderr.write("%s " % (a,))
+        sys.stderr.write(utf_8_encode("%s " % (a,))[0])
     sys.stderr.write("\n")
 
 global chatty_flag # verbosity debug flag

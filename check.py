@@ -201,7 +201,6 @@ def valid(proof, r, level=0):
 def main():
     global chatty
     global parsed
-    print proof, type(proof)
     parsed = {}
     setVerbosity(0)
     chatty=60
