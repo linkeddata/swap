@@ -21,7 +21,7 @@ href="../">SWAP</a> | <a href="../doc/">Tutorial</a>
 <p><em>The bane of my existence is doing things I know the computer
 could do for me.</em> When I got my proposed July 2001 travel
 itinerary in email, I just couldn't bear the thought of manually
-copying and pasting each field from the iterary into my calendar.  I
+copying and pasting each field from the iterary into my PDA calendar.  I
 started putting the Semantic Web approach to application integration
 to work.</p>
 
@@ -37,9 +37,9 @@ tasks:</p>
 <ul>
 <li><a href="#map-viz">plot an itinerary on a map</a></li>
 <li><a href="#ical-evo">import travel itineraries into my iCalendar-happy desktop PIM</a></li>
+<li><a href="#pda-in">import travel itineraries into my PDA calendar</a></li>
 <li><a href="#plain-text-sum">produce a brief summary of an itinerary for use in plain text email</a></li>
 <li><a href="#ckcn">check proposed work travel itineraries against family constraints</a></li>
-<li><a href="#pda-in">import travel itineraries into my PDA calendar</a></li>
 <li><a href="#fw">tell me when my travel schedule brings me unusually near a friend/colleague</a></li>
 <li><a href="#fw">produce animated views of my travel schedule or past trips</a></li>
 <li><a href="#fw">find conflicts between teleconferences and flights</a></li>
@@ -316,6 +316,35 @@ FYI: python/evolution stuff: <a
     href="http://heddley.com/edd/2002/03/05/python-libversit-0.1.tar.gz">python-libversit</a>
 </div>
 
+<h2 id="pda-in">Conversion for PDA import</h2>
+
+<p>
+The <a href="itin2ical.n3">itin2ical.n3</a> rules
+were actually developed after my Palm Pilot broke
+and I switched to an iCalendar tool. The original
+rules mapped to 
+an <a
+href="../../../08/palm56/datebook">RDF vocabulary for the palmpilot
+datebook</a>, developed for use with <a
+href="http://dev.w3.org/cvsweb/2001/palmagent/">palmagent</a>, an
+HTTP/RDF interface to my PDA:</p>
+
+<div class="figure" align="center">
+<img src="travelPdaRulesFig.png" alt="pda rules toolchain" />
+
+<div class="noprint mechanics">see <a
+href="../../../../2001/07dc-bos/Makefile">Makefile</a> for (some of
+the?) details).  The rules, <a
+href="../../../../2001/07dc-bos/itin2datebook.n3">itin2datebook.n3</a>,
+use some outdated vocabulary.
+</div>
+
+</div>
+
+
+<div class="noprint"><em>[@@TODO: image of palm pilot showing flight
+in the datebook]</em></div>
+
 <h2 id="plain-text-sum">Plain Text Summaries</h2>
 
 <p>All this rich integration is great when the tools are all working
@@ -377,30 +406,6 @@ higher than my confidence in eyeballing it:</p>
 <p>More details: <a href="../../../../2001/08swws67/">SWWS stuff</a>.</p>
 </div>
 
-<h2 id="pda-in">Conversion for PDA import</h2>
-
-<p>Having already developed <a
-href="http://dev.w3.org/cvsweb/2001/palmagent/">palmagent</a>, an
-HTTP/RDF interface to my PDA, it was almost trivial to write some 
-rules to relate this itinerary vocabulary to the <a
-href="../../../08/palm56/datebook">RDF vocabulary for the palmpilot
-datebook</a>:</p>
-
-<div class="figure" align="center">
-<img src="travelPdaRulesFig.png" alt="pda rules toolchain" />
-
-<div class="noprint mechanics">see <a
-href="../../../../2001/07dc-bos/Makefile">Makefile</a> for (some of
-the?) details).  The rules, <a
-href="../../../../2001/07dc-bos/itin2datebook.n3">itin2datebook.n3</a>,
-use some outdated vocabulary.
-</div>
-
-</div>
-
-
-<div class="noprint"><em>[@@TODO: image of palm pilot showing flight
-in the datebook]</em></div>
 
 
 <h2 id="fw">Conclusions and Future Work</h2>
