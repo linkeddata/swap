@@ -109,6 +109,47 @@ data manipulator for RDF on the lines of sed, awk, etc or xsl.</p>
   <li><a href="cwm.py">Source</a></li>
 </ul>
 
+<h4 id="Command">Command line parameters</h4>
+<dl>
+  <dt>-help</dt>
+    <dd>generate a maybe more up to date list of parameters</dd>
+  <dt>-pipe</dt>
+    <dd>don't store, just process serially. (doesn't lose comment lines!)</dd>
+  <dt>-rdf</dt>
+    <dd>input format RDF format from now on</dd>
+  <dt>-rdf1out</dt>
+    <dd>output format is RDF.</dd>
+  <dt><em>URI</em></dt>
+    <dd>load the resource. Parsed relative to the local directory, so a
+      filename will work.</dd>
+  <dt>-size</dt>
+    <dd>Output the current size of the store.</dd>
+  <dt>-apply=<em>uri</em></dt>
+    <dd>Apply the rules in a given resource, once each, to the store, the
+      conclusions being added to the store.</dd>
+  <dt>-filter=<em>uri</em></dt>
+    <dd>Apply the rules in a given resource, once each, to the store,
+      replacing the original contents of the store with those things concluded
+      from the rules.</dd>
+  <dt>-rules</dt>
+    <dd>Apply any rules in the store to the store itself, conclusions being
+      added to the store.</dd>
+  <dt>-ugly</dt>
+    <dd>Dump the store in a more or less random order. This tends to be messy,
+      as related information is not grouped.</dd>
+  <dt>-bySubject</dt>
+    <dd>Dump the store grouping statements by subject. This tends to be better
+      than -ugly, but the default is to make the output as readable as
+      possible using anonymous nodes wherever possible, and is therefore
+      recommended.</dd>
+</dl>
+
+<p>-bySubject</p>
+
+<p></p>
+
+<p></p>
+
 <h2>Design issues</h2>
 
 <p>The code above investigated and raised issues discussed in the following
