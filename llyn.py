@@ -362,7 +362,7 @@ def loadToStore(store, addr):
             buffer = netStream.read(500)
             netStream.close()
             netStream = urllib.urlopen(addr)
-            if buffer.find('xmlns') >=0:
+            if buffer.find('xmlns="') >=0:
                 guess = 'application/xml'
             elif buffer[0] == "#" or buffer[0:7] == "@prefix":
                 guess = 'application/n3'
@@ -1000,7 +1000,7 @@ class RDFStore(RDFSink.RDFSink) :
         # is an assumed one.
         # @@@ what about nested contexts? @@@@@@@@@@@@@@@@@@@@@@@@@@
 
-        subcontexts = self.subContexts(context)   #  @@ Cache these on the formula for speed?         
+        contextClosure = self.subContexts(context)   #  @@ Cache these on the formula for speed?         
         _asPred = len(self._index.get((context, x, None, None),[]))
         
         _isSubExp = 0
@@ -1020,7 +1020,7 @@ class RDFStore(RDFSink.RDFSink) :
             else:
                 if con is context:
                     _asObj = _asObj + 1  # Regular object
-                elif con in subcontexts:
+                elif con in contextClosure:
                     _elsewhere = _elsewhere + 1  # Occurs in a subformula - can't be anonymous!
                 else:
                     pass    # Irrelevant occurrence in some other formula
@@ -1518,10 +1518,10 @@ class RDFStore(RDFSink.RDFSink) :
         """
         slow...
         """
-        global subcontext_cache_context
-        global subcontext_cache_subcontexts
-        if con is subcontext_cache_context:
-            return subcontext_cache_subcontexts
+
+        if con.descendents != None:
+            return con.descendents
+        
 #        progress("subcontext "+`con`+" path "+`len(path)`)
         set = [con]
         path2 = path + [ con ]     # Avoid loops
@@ -1532,9 +1532,7 @@ class RDFStore(RDFSink.RDFSink) :
                         set2 = self.subContexts(s[p], path2)
                         for c in set2:
                             if c not in set: set.append(c)
-        if path == []:
-            subcontext_cache_context = con
-            subcontext_cache_subcontexts = set  #  @@ when set this dirty?
+        con.descendents = set
         return set
                         
     def nestedContexts(self, con):
@@ -2158,10 +2156,10 @@ class RDFStore(RDFSink.RDFSink) :
         found = self.match(myConclusions[:], [], oes[:], smartIn=[targetContext],hypothetical=1, justOne=1)  # Find first occurrence, SMART
         if found:
             if thing.verbosity()>00:
-                progress( "Concluding: Forget it, already had ???@@@@??" + bindingsToString(bindings))
+                progress( "Concluding: Forget it, already had info" + bindingsToString(bindings))
                 progress("Already list: ", already) 
                 
-                if already != None: raise RunTimeError, "Already in store but bindings new?"
+#            if already != None: raise RunTimeError, "Already in store but bindings new?" 
             return 0
         if thing.verbosity()>20:
             progress( "Concluding definitively" + bindingsToString(bindings))

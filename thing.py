@@ -258,6 +258,9 @@ class Anonymous(Fragment):
         return (ANONYMOUS, self.uriref())
         
 class Formula(Fragment):
+    def __init__(self, resource, fragid):
+        Fragment.__init__(self, resource, fragid)
+        self.descendents = None   # Placeholder for list of closure under subcontext        
 
     def generated(self):
         return 1
