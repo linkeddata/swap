@@ -1,0 +1,38 @@
+# see <http://rdfstore.sourceforge.net/2002/06/24/rdf-query/query-use-cases.html>.
+# Use case: report generation
+
+#
+#  cwm t05.n3 --think --strings > ,t05.html
+#
+#
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> . 
+@prefix data: <#>.
+@prefix : <#>.
+
+{  [] :Given ?g; :Family ?f; :favoriteSport ?s.
+	?s :label ?l.
+	("<tr><td>" ?g "</td><td>" ?f "</td><td>" ?l "\n" )
+	string:concatenation ?r } => { ?l log:outputString ?r }.
+
+"000" log:outputString """<html><body>
+<h1>Ordered by sport</h1>
+<table>
+""".
+
+"ZZZ" log:outputString "</table></body></html>\n".
+
+# test data:
+
+:soccer :label "Soccer".
+:tennis :label "Tennis".
+
+[] :Given "Andrew";     :Family "Other";    :favoriteSport :soccer.
+[] :Given "Jane";       :Family "Doe";      :favoriteSport :tennis.
+[] :Given "Jane";       :Family "Smith";    :favoriteSport :soccer.
+[] :Given "John";       :Family "Smith";    :favoriteSport :tennis.
+[] :Given "Marmaduke";  :Family "Smith";    :favoriteSport :soccer.
+[] :Given "Smith";      :Family "Robinson"; :favoriteSport :soccer.
+#ends
