@@ -55,8 +55,6 @@ parser RDFN3Parser:
                          | # empty
     rule predicate: verb objects1
 
-    rule semOpt : ";" | #empty
-
     rule verb : term | IS term OF  # earlier N3 specs had more sugar...
 
     rule objects1 : term ("," term)*
@@ -67,16 +65,16 @@ parser RDFN3Parser:
               | shorthand
               | STRLIT3 | STRLIT1 | STRLIT2
               | list
+              | phrase
               | clause
-              | conjunction
 
     rule shorthand : A | "="
 
     rule list : LP term * RP
 
-    rule clause: LB predicates0 RB
+    rule phrase: LB predicates0 RB
 
-    rule conjunction: LC statements0 RC
+    rule clause: LC statements0 RC
 
     rule statements0: term predicates0 statements_rest
                     | #empty
@@ -84,7 +82,10 @@ parser RDFN3Parser:
                          | # empty
 
 # $Log$
-# Revision 1.2  2001-08-31 18:46:59  connolly
+# Revision 1.3  2001-08-31 18:55:47  connolly
+# cosmetic/naming tweaks
+#
+# Revision 1.2  2001/08/31 18:46:59  connolly
 # parses test/vocabCheck.n3
 #
 # Revision 1.1  2001/08/31 17:51:08  connolly
