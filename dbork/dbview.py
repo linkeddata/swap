@@ -70,6 +70,7 @@ __version__ = "$Id$" #@@consult python style guide
 
 
 from string import join, split
+import codecs
 
 import MySQLdb # MySQL for Python
                # http://sourceforge.net/projects/mysql-python
@@ -82,6 +83,8 @@ import BaseHTTPServer
 import cgi # for URL-encoded query parsing
 
 
+RDF_MediaType = "application/rdf+xml" #@@ cf. RDF Core
+                           #"what mime type to use for RDF?" issue...
 
 
 class DBViewServer(BaseHTTPServer.HTTPServer):
@@ -126,14 +129,42 @@ class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s = self.server
 
         #DEBUG "which get?", self.path, s._home + s._dbName + self.UIPath
-        
-        pui = s._home + s._dbName + self.UIPath
-        pq = s._home + s._dbName + self.QPath
-        
-        if self.path == pui: self.getUI()
-        elif self.path[:len(pq)+1] == pq + '?': self.getView()
+
+        dbdocaddr = s._home + s._dbName
+
+        if self.path[:len(dbdocaddr)] == dbdocaddr:
+            rest = self.path[len(dbdocaddr):]
+
+            if rest == '':
+                self.describeDB()
+            elif rest == self.UIPath:
+                self.getUI()
+            elif rest[:len(self.QPath)+1] == self.QPath + '?':
+                self.getView()
+            elif rest[0] == '/':
+                self.describeTable(rest[1:])
+            else:
+                self.notFound()
         else:
-            self.send_error(404, 'path not understood')
+            self.notFound()
+
+    def notFound(self):
+        s = self.server
+        pui = s._home + s._dbName + self.UIPath
+        
+        self.send_response(404)
+        self.send_header("Content-type", "text/html")
+        self.end_headers()
+        self.wfile.write("""
+        <html xmlns="http://www.w3.org/1999/xhtml">
+        <head><title>DBViewHandler: 404: Not Found</title></head>
+        <body>
+        <h1>Not Found</h1>
+
+        <p>try: <a href="%s">%s</a> database UI.</p>
+            
+        <p>cf <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html#sec10.4.5">10.4.5 404 Not Found from the HTTP specification.</a></p>
+        """ % (pui, s._dbName) )
 
             
     def getUI(self):
@@ -152,14 +183,60 @@ class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
                 self.server._dbName)
 
         self.wfile.write("""
+        <p>@@TODO: link to form with more than 3 tables</p>
+        """)
+
+        self.wfile.write("""
+        <h2>Descriptions/Schemas</h2>
+        <p>database: <a href="../%s">%s</a>.</p>
+        <p>tables:</p>
+        <ul>
+        """ % (self.server._dbName, self.server._dbName))
+        
+        for tbl in tableNames(self.server._db):
+            self.wfile.write("<li><a href='%s'>%s</a></li>\n" % \
+                                     (tbl, tbl))
+        self.wfile.write("</ul>")
+
+        self.wfile.write("""
         <address>Dan C@@ $Revision$ $Date$</address>
         </body></html>
         """)
 
 
+    def describeDB(self):
+        self.send_response(200, "@@not sure you're winning yet, actually")
+        self.send_header("Content-type", RDF_MediaType)
+        self.end_headers()
+
+        s = self.server
+        dbdocaddr = s._home + s._dbName
+        
+        sink = notation3.ToRDF(self.wfile, dbdocaddr)
+
+        aboutDB(self.server._db, dbdocaddr, sink)
+
+        sink.endDoc()
+
+
+    def describeTable(self, tbl):
+        self.send_response(200, "@@not sure you're winning yet, actually")
+        self.send_header("Content-type", RDF_MediaType)
+        self.end_headers()
+
+        s = self.server
+        dbdocaddr = s._home + s._dbName
+        
+        sink = notation3.ToRDF(self.wfile, dbdocaddr)
+
+        aboutTable(self.server._db, dbdocaddr, sink, tbl)
+
+        sink.endDoc()
+
+
     def getView(self):
         self.send_response(200, "@@not sure you're winning yet, actually")
-        self.send_header("Content-type", "application/rdf+xml") #@@ cf. RDF Core "what mime type to use for RDF?" issue...
+        self.send_header("Content-type", RDF_MediaType)
         self.end_headers()
 
         s = self.server
@@ -219,6 +296,7 @@ def asSQL(fields, tables, keys, joins, condextra = ''):
         else:
             cond = condextra
 
+    #@@bug: empty cond is possible
     return 'select %s from %s where %s;' % (join(fldnames, ','),
                                             join(tables, ','),
                                             cond)
@@ -309,7 +387,7 @@ def askdb(db, dbaddr, sink, fields, tables, keys, joins, condextra):
                 for fld in fields[ti]:
                     cell = row[col]
                     # @@our mysql implementation happens to use iso8859-1
-                    ol = (LITERAL, str(cell).decode('iso8859-1'))
+                    ol = (LITERAL, latin1(str(cell)))
 
                     # ok... now we have subj, pred and obj...
                     prop = (SYMBOL, "%s/%s#%s" % (dbaddr, tbl, fld))
@@ -323,7 +401,13 @@ def askdb(db, dbaddr, sink, fields, tables, keys, joins, condextra):
                         prop = (SYMBOL, "%s/%s#%s" %
                                 (dbaddr, tables[ti], joins[ti][j]))
                         sink.makeStatement((fmla, prop, subj, things[j]))
-                        
+
+# cf
+# 4.8 codecs -- Codec registry and base classes
+# http://www.python.org/doc/2.1.2/lib/module-codecs.html
+latin1_decode = codecs.lookup('iso8859-1')[1]
+def latin1(bytes):
+    return latin1_decode(bytes)[0]
 
 g=0
 def something(sink, scope=None, hint='gensym'):
@@ -393,15 +477,7 @@ def aboutDB(db, dbdocaddr, sink):
                         (SYMBOL, "%s%s" % (dbdocaddr, DBViewHandler.QPath)),
                         ))
 
-    c = db.cursor()
-    c.execute("show tables") # mysql-specific?   http://www.mysql.com/documentation/mysql/bychapter/manual_MySQL_Database_Administration.html#SHOW
-
-    while 1:
-        row = c.fetchone()
-        if not row: break
-
-        tbl = row[0]
-
+    for tbl in tableNames(db):
         tblI = "%s#%s" % (dbdocaddr, tbl)
         tbldocI = "%s/%s" % (dbdocaddr, tbl)
         
@@ -420,6 +496,22 @@ def aboutDB(db, dbdocaddr, sink):
                             (SYMBOL, tblI),
                             (LITERAL, tbl)
                             ))
+
+
+def tableNames(db):
+    c = db.cursor()
+    c.execute("show tables") # mysql-specific?
+    # http://www.mysql.com/documentation/mysql/bychapter/manual_MySQL_Database_Administration.html#SHOW
+
+    res = []
+    
+    while 1:
+        row = c.fetchone()
+        if not row: break
+
+        res.append(row[0])
+
+    return res
 
 
 def aboutTable(db, dbaddr, sink, tbl):
@@ -494,7 +586,6 @@ def queryUI(write, n, qpath, dbName):
     write("<p>other condition: <input name='condition'/></p>\n")
     write("<p><input type=submit value='Get Results'/></p>\n")
     write("</form></div>\n")
-        
 
 
 def parseQuery(qs):
@@ -564,7 +655,7 @@ def parseQuery(qs):
 def testSvc():
     import sys
 
-    host, port, user, passwd, httpHost, httpPort = sys.argv[1:7]
+    host, port, user, passwd, httpHost, httpPort = sys.argv[2:8]
     port = int(port)
 
     dbName = 'administration' #@@
@@ -583,7 +674,7 @@ def testSvc():
 def testShow():
     import sys
 
-    host, port, user, passwd = sys.argv[1:5]
+    host, port, user, passwd = sys.argv[2:6]
     port = int(port)
 
     dbName = 'administration' #@@
@@ -609,7 +700,7 @@ def testUI():
 def testQ():
     import sys
     
-    host, port, user, passwd = sys.argv[1:5]
+    host, port, user, passwd = sys.argv[2:6]
     port = int(port)
     
     path='/administration/.dbq?name1=users&fields1=family%2Cemail%2Ccity%2Cid&key1=id&name2=techplenary2002&fields2=plenary%2Cmeal_choice&key2=&kj2_1=id&name3=&fields3=&key3=&kj3_1=&kj3_2=&name4=&fields4=&key4=&kj4_1=&kj4_2=&kj4_3='
@@ -636,15 +727,42 @@ def testQ():
     sink.endDoc()
 
 
+
+def main(argv):
+    host, port, user, passwd, httpHost, httpPort, dbName = argv[1:8]
+    port = int(port)
+
+    db=MySQLdb.connect(host=host, port=port,
+                       user=user, passwd=passwd,
+                       db=dbName)
+
+    hostPort = (httpHost, int(httpPort))
+    httpd = DBViewServer(hostPort, DBViewHandler, db, '/', dbName)
+
+    print "base:", httpd._base
+    print "Serving database %s HTTP on port %s ..." % (dbName, httpPort)
+    httpd.serve_forever()
+
+
+
 if __name__ == '__main__':
-    #testSvc()
-    testQ()
-    testShow()
-    #testUI()
+    import sys
+
+    if sys.argv[1] == '--testSvc': testSvc()
+    elif sys.argv[1] == '--testShow': testShow()
+    elif sys.argv[1] == '--testQ': testQ()
+    elif sys.argv[1] == '--testUI': testUI()
+    else:
+        main(sys.argv)
+
 
 
 # $Log$
-# Revision 1.14  2002-03-07 23:25:01  connolly
+# Revision 1.15  2002-03-08 00:11:36  connolly
+# HTTP export of schemas working.
+# UI fleshed out a bit.
+#
+# Revision 1.14  2002/03/07 23:25:01  connolly
 # moved ui path to not conflict with table names
 #
 # Revision 1.13  2002/03/07 00:24:43  connolly
