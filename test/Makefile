@@ -13,6 +13,11 @@ all : $(CODE) regression.n3 list/detailed.tests
 	PYTHONPATH=`/bin/pwd`/.. $P retest.py -n -c -f regression.n3 -f list/detailed.tests
 	touch all
 
+fast : $(CODE) regression.n3
+	PYTHONPATH=`/bin/pwd`/.. $P retest.py -n -f regression.n3
+	touch all
+
+
 
 loopback :
 	./n3-xml-test.sh `cat tests-work.txt`

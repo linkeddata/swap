@@ -12,6 +12,7 @@ def strip(path):
     global verbose
     crs = 0
     total = 0
+    newlines = 0
 
     input = open(path, "r")
     buf = input.read()  # Read the file
@@ -20,21 +21,28 @@ def strip(path):
         if not nochange:
             temporary = path + ".decr-temp"
             output = open(temporary, "w")
-        for c in buf:
+	n = len(buf)
+        for i in range(n):
+	    c = buf[i]
             if c != "\r" :
                 if not nochange: output.write(c)
                 total = total + 1
             else:
                 crs = crs + 1
+		if i < n-1 and buf[i+1] != "\n":
+		    newlines += 1
+		    if not nochange: output.write("\n")
         if not nochange:
             output.close()
             os.rename(temporary, path)
         
     if crs > 0 or verbose:
         if nochange:
-            sys.stderr.write("de-cr: %i crs found, %i non-cr characters in %s.\n"%(crs,total, path))
+            sys.stderr.write("de-cr: %i CRs found, %i needed LFs, %i non-cr characters in %s.\n"%(
+			crs, newlines, total, path))
         else:
-            sys.stderr.write("de-cr: %i crs removed, %i non-cr characters left in %s.\n"%(crs,total, path))
+            sys.stderr.write("de-cr: %i CRs removed, %i LFs inserted, %i non-CR characters left in %s.\n"%(
+			crs, newlines, total, path))
 
 
 def do(path):
@@ -70,6 +78,10 @@ for arg in sys.argv[1:]:
             -a  do all files, not just .n3 .py and .rdf
             -f  fix files instead of just looking
 
+This program restores a file to standard unix LF conventions
+for line end.  It removes CR characters, inserting a new LF to
+replace them if they are not followed by a LF in the original file.
+It will not change any files unless -f is given.
 """
             sys.exit(-1)
     else:

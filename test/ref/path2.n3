@@ -6,11 +6,18 @@
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
     this     log:forSome <#_g0>,
-                <#_g1> .
+                <#_g1>,
+                <#_g2>,
+                <#_g3> .
     
-    :admires     :converse <#_g1> .
+    <a>     <b> <#_g3> .
     
-    :albert     <#_g1> :grumpy;
+    <e>     <f>  [
+             <g> <#_g1> ] .
+    
+    :admires     :converse <#_g2> .
+    
+    :albert     <#_g2> :grumpy;
          fam:mother  [
              <#_g0> :auntieAnne ] .
     
@@ -24,4 +31,9 @@
         "2"  )
          math:sum  [
              a :THREE ] .
+      ( <#_g3> 
+         [
+                 <d> <c> ] )
+         <#relatedTo>  (
+        <#_g1>  ) .
     

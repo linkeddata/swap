@@ -1,0 +1,27 @@
+
+<!-- Processed by Id: cwm.py,v 1.135 2003/08/14 00:00:18 timbl Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/test/syntax/nested.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/log#"
+    xmlns:contact="http://www.w3.org/2000/10/swap/pim/contact#"
+    xmlns:doc="http://www.w3.org/2000/10/swap/pim/doc#"
+    xmlns:ex="http://www.example.net/2000/10/whatever#"
+    xmlns:foo="file:/devel/WWW/2000/10/swap/test/syntax/foo.n3#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+
+    <rdf:Description>
+        <ex:says rdf:parseType="Literal">
+             <rdf:Description>
+                <doc:creator rdf:parseType="Resource">
+                    <contact:knownAs>Mark Twain</contact:knownAs>
+                </doc:creator>
+                <doc:title>Huckleberry Finn</doc:title>
+            </rdf:Description>
+        </ex:says>
+        <doc:creator rdf:parseType="Resource">
+            <contact:email rdf:resource="mailto:fred@example.com"/>
+        </doc:creator>
+    </rdf:Description>
+</rdf:RDF>

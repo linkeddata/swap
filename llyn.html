@@ -1916,6 +1916,8 @@ we&nbsp;may&nbsp;move&nbsp;to&nbsp;an&nbsp;internal&nbsp;storage&nbsp;rather&nbs
 
 <dl><dt><a name="IndexedFormula-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Yes,&nbsp;any&nbsp;identifier&nbsp;you&nbsp;see&nbsp;for&nbsp;this&nbsp;is&nbsp;arbitrary.</tt></dd></dl>
 
+<dl><dt><a name="IndexedFormula-loadFormulaWithSubsitution"><strong>loadFormulaWithSubsitution</strong></a>(self, old, bindings, why<font color="#909090">=None</font>)</dt><dd><tt>Load&nbsp;information&nbsp;from&nbsp;another&nbsp;formula,&nbsp;subsituting&nbsp;as&nbsp;we&nbsp;go</tt></dd></dl>
+
 <dl><dt><a name="IndexedFormula-newBlankNode"><strong>newBlankNode</strong></a>(self, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;a&nbsp;new&nbsp;unnamed&nbsp;node&nbsp;with&nbsp;this&nbsp;formula&nbsp;as&nbsp;context.<br>
 &nbsp;<br>
 The&nbsp;URI&nbsp;is&nbsp;typically&nbsp;omitted,&nbsp;and&nbsp;the&nbsp;system&nbsp;will&nbsp;make&nbsp;up&nbsp;an&nbsp;internal&nbsp;idnetifier.<br>
@@ -2176,8 +2178,6 @@ open&nbsp;to&nbsp;possibly&nbsp;clashing&nbsp;in&nbsp;pathalogical&nbsp;cases.</
 
 <dl><dt><a name="RDFStore-copyFormula"><strong>copyFormula</strong></a>(self, old, new, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="RDFStore-copyFormulaRecursive"><strong>copyFormulaRecursive</strong></a>(self, old, new, bindings, why<font color="#909090">=None</font>)</dt></dl>
-
 <dl><dt><a name="RDFStore-deleteFormula"><strong>deleteFormula</strong></a>(self, F)</dt></dl>
 
 <dl><dt><a name="RDFStore-dumpBySubject"><strong>dumpBySubject</strong></a>(self, context, sink, sorting<font color="#909090">=1</font>)</dt><dd><tt>&nbsp;Dump&nbsp;by&nbsp;order&nbsp;of&nbsp;subject&nbsp;except&nbsp;forSome's&nbsp;first&nbsp;for&nbsp;n3=a&nbsp;mode</tt></dd></dl>
@@ -2273,11 +2273,11 @@ Deprocated:&nbsp;use&nbsp;<a href="formula.html#Formula">Formula</a>.add()</tt><
 <dl><dt><a name="RDFStore-testIncludes"><strong>testIncludes</strong></a>(self, f, g, _variables<font color="#909090">=[]</font>, smartIn<font color="#909090">=[]</font>, bindings<font color="#909090">={}</font>)</dt><dd><tt>Return&nbsp;whether&nbsp;or&nbsp;nor&nbsp;f&nbsp;contains&nbsp;a&nbsp;top-level&nbsp;formula&nbsp;equvalent&nbsp;to&nbsp;g.<br>
 Just&nbsp;a&nbsp;test:&nbsp;no&nbsp;bindings&nbsp;returned.</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-think"><strong>think</strong></a>(self, F, G<font color="#909090">=None</font>, mode<font color="#909090">=''</font>)</dt><dd><tt>Forward&nbsp;inference<br>
+<dl><dt><a name="RDFStore-think"><strong>think</strong></a>(self, knowledgeBase, rules<font color="#909090">=None</font>, mode<font color="#909090">=''</font>)</dt><dd><tt>Forward&nbsp;inference<br>
 &nbsp;<br>
 This&nbsp;is&nbsp;tricky&nbsp;in&nbsp;the&nbsp;case&nbsp;in&nbsp;which&nbsp;rules&nbsp;are&nbsp;added&nbsp;back&nbsp;into&nbsp;the<br>
 store.&nbsp;The&nbsp;store&nbsp;is&nbsp;used&nbsp;for&nbsp;read&nbsp;(normally&nbsp;canonical)&nbsp;and&nbsp;write<br>
-(normally&nbsp;open)&nbsp;at&nbsp;the&nbsp;samne&nbsp;time.</tt></dd></dl>
+(normally&nbsp;open)&nbsp;at&nbsp;the&nbsp;samne&nbsp;time.&nbsp;&nbsp;It&nbsp;in&nbsp;fact&nbsp;has&nbsp;to&nbsp;be&nbsp;open.</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-tryRule"><strong>tryRule</strong></a>(self, rule, workingContext, targetContext, _variables, already<font color="#909090">=None</font>, mode<font color="#909090">=''</font>)</dt><dd><tt>Try&nbsp;a&nbsp;rule<br>
 &nbsp;<br>
@@ -2349,10 +2349,9 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl><dt><a name="-_indent"><strong>_indent</strong></a>(str)</dt><dd><tt>&nbsp;Return&nbsp;a&nbsp;string&nbsp;indented&nbsp;by&nbsp;4&nbsp;spaces</tt></dd></dl>
- <dl><dt><a name="-_lookup"><strong>_lookup</strong></a>(bindings, value)</dt></dl>
  <dl><dt><a name="-_substitute"><strong>_substitute</strong></a>(bindings, list)</dt><dd><tt>Subsitustes&nbsp;IN-LINE&nbsp;into&nbsp;a&nbsp;list&nbsp;of&nbsp;quads</tt></dd></dl>
  <dl><dt><a name="-bindingsToString"><strong>bindingsToString</strong></a>(bindings)</dt><dd><tt>#&nbsp;&nbsp;&nbsp;DIAGNOSTIC&nbsp;STRING&nbsp;OUTPUT</tt></dd></dl>
- <dl><dt><a name="-comparePair"><strong>comparePair</strong></a>(self, other)</dt></dl>
+ <dl><dt><a name="-comparePair"><strong>comparePair</strong></a>(self, other)</dt><dd><tt>Used&nbsp;only&nbsp;in&nbsp;outputString</tt></dd></dl>
  <dl><dt><a name="-dereference"><strong>dereference</strong></a>(x, mode<font color="#909090">=''</font>, workingContext<font color="#909090">=None</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;object,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.<br>

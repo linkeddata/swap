@@ -22,4 +22,10 @@
 
   :x  s:label "Help!"^lang:eng, "foo"^lang:fr . # "Au seccours!"^lang:fr.
 
+# Can one put paths inside lists?
+#   yup.
+
+(  <a>.<b>  <c>^<d> ) <#relatedTo> ( <e>.<f>.<g> ) .
+
+
 #ends

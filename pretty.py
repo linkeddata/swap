@@ -152,8 +152,11 @@ class Serializer:
 	sink = self.sink
 	lists = []
 	for s in context.statements:
+#	    progress("&&&& cehck ", `s`)
+
 	    for x in s.predicate(), s.subject(), s.object():
 		if isinstance(x, NonEmptyList):
+#		    progress("&&&&", x)
 		    self._listsWithinLists(x, lists)
 		    
 	for l in lists:
@@ -182,11 +185,8 @@ class Serializer:
 	self.dumpLists()
 	
         for s in context.statements:
-	    lists = []
 	    for p in SUBJ, PRED, OBJ:
 		x = s[p]
-		if isinstance(x, NonEmptyList):
-		    lists.append(x)
 		if isinstance(x, Formula) or x in uu:
 		    break
 	    else:
@@ -406,13 +406,6 @@ class Serializer:
             self._dumpSubject(currentSubject, context, sink, sorting, statements)
 
 
-##########
-#    def _dumpList(self, subj, context, sink, sorting, list):
-#        self.dumpStatement(sink, (context, subject, self.store.first, list.first), sorting)
-#        self.dumpStatement(sink, (context, subject, self.store.rest, list.rest), sorting)
-#        # which handles the recursion
-#        return
-            
     def _dumpSubject(self, subj, context, sink, sorting, statements=[]):
         """ Dump the infomation about one top level subject
         

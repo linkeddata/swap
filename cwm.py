@@ -266,8 +266,8 @@ options:
 
 steps, in order left to right:
 
---rdf         Input & Output ** in RDF M&S 1.0 insead of n3 from now on
---n3          Input & Output in N3 from now on
+--rdf         Input & Output ** in RDF/XML insead of n3 from now on
+--n3          Input & Output in N3 from now on. (Default)
 --rdf=flags   Input & Output ** in RDF and set given RDF flags
 --n3=flags    Input & Output in N3 and set N3 flags
 --ntriples    Input & Output in NTriples (equiv --n3=spartan -bySubject -quiet)
@@ -277,7 +277,9 @@ steps, in order left to right:
 --bySubject   Store input and regurgitate in subject order *
 --no          No output *
               (default is to store and pretty print with anonymous nodes) *
---strings     Dump :s to stdout ordered by :k whereever { :k log:outputString :s }
+--base=<uri>  Set the base URI. Input or output is done as though theis were the document URI.
+--closure=flags  Control automatic lookup of identifiers (see below)
+<uri>         Load document. URI may be relative to current directory.
 
 --apply=foo   Read rules from foo, apply to store, adding conclusions to store
 --filter=foo  Read rules from foo, apply to store, REPLACING store with conclusions
@@ -286,16 +288,16 @@ steps, in order left to right:
 --engine=otter use otter (in your $PATH) instead of llyn for linking, etc
 --why         Replace the store with an explanation of its contents
 --mode=flags  Set modus operandi for inference (see below)
---closure=flags  Control automatic lookup of identifiers (see below)
 --flatten     turn formulas into triples using LX vocabulary
 --unflatten   turn described-as-true LX sentences into formulas
 --think=foo   as -apply=foo but continue until no more rule matches (or forever!)
 --purge       Remove from store any triple involving anything in class log:Chaff
 --data	      Remove all except plain RDF triples (formulae, forAll, etc)
+--strings     Dump :s to stdout ordered by :k whereever { :k log:outputString :s }
 --crypto      Enable processing of crypto builtin functions. Requires python crypto.
 --help        print this message
 --revision    print CVS revision numbers of major modules
---chatty=50   Verbose output of questionable use, range 0-99
+--chatty=50   Verbose debugging output of questionable use, range 0-99
 
 finally:
 
@@ -645,12 +647,12 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 		
             elif arg == "-purge":
                 need(_store); touch(_store)
-		workingContext = workingContext.canonicalize()
+		workingContext.reopen()
                 _store.purge(workingContext)
 		
             elif arg == "-purge-rules" or arg == "-data":
                 need(_store); touch(_store)
-		workingContext = workingContext.canonicalize()
+		workingContext.reopen()
                 _store.purgeExceptData(workingContext)
 
             elif arg == "-rules":
@@ -662,6 +664,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 need(_store); touch(_store)
                 filterContext = _store.load(_uri)
                 if verbosity() > 4: progress( "Input rules to --think from " + _uri)
+		workingContext.reopen()
                 _store.think(workingContext, filterContext, mode=option_flags["think"]);
 
             elif _lhs == "-engine":

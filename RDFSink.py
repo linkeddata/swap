@@ -74,6 +74,7 @@ N3_Empty = (SYMBOL, List_NS + "Empty")
 # Standard python modules:
 from os import getpid
 from time import time
+from uripath import base, join
 
 # SWAP modules:
 from diag import verbosity, progress
@@ -91,6 +92,7 @@ def runNamespace():
 	except KeyError:
 	    runNamespaceValue = uripath.join(
 		uripath.base(), ".run-" + `time()` + "p"+ `getpid()` +"#")
+    runNamespaceValue = join(base(), runNamespaceValue) # absolutize
     return runNamespaceValue
 
 class URISyntaxError(ValueError):
@@ -177,7 +179,7 @@ class RDFSink:
 	assert type(uri) is type("")
         if ':' not in uri:
             # can't raise exceptions inside SAX callback
-            print "must be absolute", nsPair
+            print "URI must be absolute", uri
             import traceback
             for ln in traceback.format_stack():
                 print ln

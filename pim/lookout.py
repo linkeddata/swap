@@ -229,8 +229,8 @@ def main():
 	print "# Outlook data extracted by"
 	print "#   ", _version
 	print "#"
-	print "@prefix", PREFIX, "<http://www.w3.org/2000/10/swap/pim/mso.n3#>."
-	print "@prefix util: <http://www.w3.org/2000/10/swap/util.n3#>."
+	print "@prefix", PREFIX, "<http://www.w3.org/2000/10/swap/pim/mso#>."
+	print "@prefix util: <http://www.w3.org/2000/10/swap/util#>."
 	print
 	if option_calendar:
 		print "# Calendar:"

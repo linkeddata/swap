@@ -491,7 +491,6 @@ class IndexedFormula(Formula):
 			return 1
 #########
 	if newBindings != {}:
-	    progress("&&&&&&& doing new bindings", newBindings)
 	    self.substituteEqualsInPlace(newBindings)
 #######
 
@@ -561,6 +560,7 @@ class IndexedFormula(Formula):
 	
 	This implementation is alas slow, as removal of items from tha hash is slow.
 	"""
+	assert self.canonical == None, "Cannot remove statement from canonnical"+`self`
         self.store.size = self.store.size-1
 	if verbosity() > 97:  progress("removing %s" % (s))
 	context, pred, subj, obj = s.quad
@@ -798,8 +798,6 @@ class IndexedFormula(Formula):
 		for p in PRED, SUBJ, OBJ:
 		    x = s[p]
 		    y = x.substituteEquals(bindings, newBindings)
-		    if verbosity()>120: progress(
-			    "&&&&&& CHECKING %s in place for %s" %(x, redirections))
 		    if y is not x:
 			if verbosity()>90: progress("Substituted %s -> %s in place" %(x, y))
 			changed = 1
@@ -829,19 +827,17 @@ class IndexedFormula(Formula):
 	    mentioned = 1
 
 	for i in range(len(self.lists)):
-	    progress("&&&&&&&&&& checking %s for %s" % (self.lists[i].value(), `bnode`))
 	    x = self.lists[i].substituteEquals({bnode: newList})
 	    if x is not self.lists[i]:
 		self.lists[i] = x
 		mentioned =1
-		progress("&&&&&&&&&&", self.lists[i].value())
-#		raise gotit_now_subsitutethatone
 	if mentioned and newList not in self.lists:
 	    self._noteListMentioed(newList)
 
 
 
 def comparePair(self, other):
+    "Used only in outputString"
     for i in 0,1:
         x = compareTerm(self[i], other[i])
         if x != 0:
@@ -1570,7 +1566,7 @@ class RDFStore(RDFSink) :
             return F # was open
         if verbosity() > 70:
             progress("reopen formula:"+`F`)
-	key = len(F.statements), len(F.universals()), len(F.existentials())  
+	key = len(F.statements), len(F.universals()), len(F.existentials()) 
         self._formulaeOfLength[key].remove(F)  # Formulae of same length
         F.canonical = None
         return F
@@ -1666,28 +1662,12 @@ class RDFStore(RDFSink) :
 #  for variable names which occur in the other but not as the saem sort of variable
 # Must be done by caller.
 
-    def copyFormulaRecursive(self, old, new, bindings, why=None):
-        total = 0
-	for v in old.universals():
-	    new.declareUniversal(_lookup(bindings, v))
-	for v in old.existentials():
-	    new.declareExistential(_lookup(bindings, v))
-	bindings2 = bindings.copy()
-	bindings2[old] = new
-        for s in old.statements[:] :   # Copy list!
-	    self.storeQuad((new,
-                         s[PRED].substitution(bindings2),
-                         s[SUBJ].substitution(bindings2),
-			s[OBJ].substitution(bindings2))
-			 , why)
-        return total
-                
     def copyFormula(self, old, new, why=None):
 	bindings = {old: new}
 	for v in old.universals():
-	    new.declareUniversal(_lookup(bindings, v))
+	    new.declareUniversal(bindings.get(v,v))
 	for v in old.existentials():
-	    new.declareExistential(_lookup(bindings, v))
+	    new.declareExistential(bindings.get(v,v))
         for s in old.statements[:] :   # Copy list!
             q = s.quad
             for p in CONTEXT, PRED, SUBJ, OBJ:
@@ -1743,29 +1723,28 @@ class RDFStore(RDFSink) :
 		    
 #   Iteratively apply rules to a formula
 
-    def think(self, F, G=None, mode=""):
+    def think(self, knowledgeBase, rules=None, mode=""):
 	"""Forward inference
 	
 	This is tricky in the case in which rules are added back into the
 	store. The store is used for read (normally canonical) and write
-	(normally open) at the samne time.
+	(normally open) at the samne time.  It in fact has to be open.
 	"""
         grandtotal = 0
         iterations = 0
-        if G == None:
-	    G = F
-	assert not G.canonical # Must be open to add stuff
-	if F._redirections != {}: F.compactLists()
-        if verbosity() > 45: progress("think: rules from %s added to %s" %(F, G))
+        if rules == None:
+	    rules = knowledgeBase
+	assert knowledgeBase.canonical == None , "Must be open to add stuff:"+ `knowledgeBase `
+
+        if verbosity() > 45: progress("think: rules from %s added to %s" %(knowledgeBase, rules))
         bindingsFound = {}  # rule: list bindings already found
         while 1:
             iterations = iterations + 1
-            step = self.applyRules(F, G, alreadyDictionary=bindingsFound, mode=mode)
+            step = self.applyRules(knowledgeBase, rules, alreadyDictionary=bindingsFound, mode=mode)
             if step == 0: break
             grandtotal= grandtotal + step
         if verbosity() > 5: progress("Grand total of %i new statements in %i iterations." %
                  (grandtotal, iterations))
-	G = G.canonicalize()
         return grandtotal
 
 
@@ -2101,12 +2080,10 @@ class Query:
         if verbosity()>10:
             progress("Concluding definitively" + bindingsToString(b2) )
         before = self.store.size
-	if verbosity() > 120:
-		    progress("&&&&&&&& existentials: %s" % (self.targetContext._existentialVariables))
-        self.store.copyFormulaRecursive(
-		    self.conclusion, self.targetContext, b2, why=reason)
+        self.targetContext.loadFormulaWithSubsitution(
+		    self.conclusion, b2, why=reason)
         if verbosity()>30:
-            progress("   size of store changed from %i to %i."%(before, self.store.size))
+            progress("Size of store changed from %i to %i."%(before, self.store.size))
         return self.store.size - before
 
 
@@ -2698,8 +2675,6 @@ def lookupQuad(bindings, q):
 		bindings.get(subj, subj),
 		bindings.get(obj, obj))
 
-def _lookup(bindings, value):
-    return bindings.get(value, value)
 
 def lookupQuadRecursive(bindings, q, why=None):
 	context, pred, subj, obj = q
@@ -2721,7 +2696,7 @@ class URISyntaxError(ValueError):
 def bindingsToString(bindings):
     str = ""
     for x, y in bindings.items():
-        str = str + (" %s->%s " % ( x, y))
+        str = str + (" %s->%s " % ( `x`, `y`))
     return str
 
 def setToString(set):

@@ -88,9 +88,6 @@ from RDFSink import RDF_spec, List_NS
 ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
 # This is the hash on namespace URIs
 
-# Should the internal representation of lists be with DAML:first and :rest?
-DAML_LISTS = 1    # Else don't do these - do the funny compact ones- not a good idea after all
-
 RDF_type = ( SYMBOL , RDF_type_URI )
 DAML_equivalentTo = ( SYMBOL, DAML_equivalentTo_URI )
 
@@ -432,7 +429,7 @@ class SinkParser:
 	    ch = str[j:j+1]		# @@ Allow "." followed IMMEDIATELY by a node.
 	    if ch == ".":
 		ahead = str[j+1:j+2]
-		if not ahead or ahead in _notNameChars + "[{(":
+		if not ahead or (ahead in _notNameChars and ahead not in ":?<[{("):
 		    break
 	    subj = res.pop()
 	    obj = self._sink.newBlankNode(self._context, uri=self.here(j), why=self._reason2)
@@ -535,31 +532,22 @@ class SinkParser:
 		    break
 
                 item = []
-                j = self.object(str,i, item)
+                j = self.item(str,i, item) #@@@@@ should be path, was object
                 if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected item in list or ')'")
                 this = self._sink.newExistential(self._context, why=self._reason2)
-                if DAML_LISTS:
-                    if previous:
-                        self.makeStatement((self._context, N3_rest, previous, this ))
-                    else:
-                        head = this
-                    self.makeStatement((self._context, N3_first, this, item[0]))
-                else:  # compact lists
-                    if previous:
-                        self.makeStatement((self._context, this, previous, previousvalue ))
-                    else: # First time though
-                        head = this
+		if previous:
+		    self.makeStatement((self._context, N3_rest, previous, this ))
+		else:
+		    head = this
+		self.makeStatement((self._context, N3_first, this, item[0]))
                 previous = this
                 previousvalue = item[0]
 
             if not previous:
                 res.append(N3_nil)
                 return j
-            if DAML_LISTS:
-                self.makeStatement((self._context, N3_rest, previous, N3_nil ))           # obj
-            else:
-                self.makeStatement((self._context, N3_nil, previous, previousvalue ))           # obj                
-            res.append(head)
+	    self.makeStatement((self._context, N3_rest, previous, N3_nil ))
+	    res.append(head)
             return j
 
         j = self.tok('this', str, i)   # This context
@@ -1094,18 +1082,15 @@ t   "this" and "()" special syntax should be suppresed.
 
     def makeStatement(self, triple, why=None):
         if self.stack[-1]:
-            if 1:  # DAML_LISTS
-                if triple[PRED] == N3_first:
-                    self._write(self.representationOf(triple[CONTEXT], triple[OBJ])+" ")
-                elif triple[PRED] == RDF_type and triple[OBJ] == N3_List:
-                    pass  # We knew
-                elif triple[PRED] == RDF_type and triple[OBJ] == N3_Empty:
-                    pass  # not how we would have put it but never mind
-                elif triple[PRED] != N3_rest:
-                    raise RuntimeError ("Should only see %s and %s in list mode" 
-					%(N3_first, N3_rest), triple)
-            else: # compact lists
-                self._write(self.representationOf(triple[CONTEXT], triple[OBJ])+" ")
+	    if triple[PRED] == N3_first:
+		self._write(self.representationOf(triple[CONTEXT], triple[OBJ])+" ")
+	    elif triple[PRED] == RDF_type and triple[OBJ] == N3_List:
+		pass  # We knew
+	    elif triple[PRED] == RDF_type and triple[OBJ] == N3_Empty:
+		pass  # not how we would have put it but never mind
+	    elif triple[PRED] != N3_rest:
+		raise RuntimeError ("Should only see %s and %s in list mode" 
+				    %(N3_first, N3_rest), triple)
             return
         
         if ("a" in self._flags and

@@ -288,9 +288,25 @@ class Formula(Fragment, CompoundTerm):
 	y = store.newFormula()
 	if verbosity() > 90: progress("substitution: formula"+`self`+" becomes new "+`y`,
 				    " because of ", oc)
-	store.copyFormulaRecursive(self, y, bindings, why=why)
+	y.loadFormulaWithSubsitution(self, bindings, why=why)
 	return y.canonicalize()
 
+    def loadFormulaWithSubsitution(self, old, bindings, why=None):
+	"""Load information from another formula, subsituting as we go"""
+        total = 0
+	for v in old.universals():
+	    self.declareUniversal(bindings.get(v, v))
+	for v in old.existentials():
+	    self.declareExistential(bindings.get(v, v))
+	bindings2 = bindings.copy()
+	bindings2[old] = self
+        for s in old.statements[:] :   # Copy list!
+	    self.add(subj=s[SUBJ].substitution(bindings2),
+		    pred=s[PRED].substitution(bindings2),
+		    obj=s[OBJ].substitution(bindings2),
+		    why=why)
+        return total
+                
     def substituteEquals(self, bindings, newBindings):
 	"""Return this or a version of me with subsitution made
 	
@@ -358,7 +374,8 @@ class Formula(Fragment, CompoundTerm):
 	
 	This implementation is alas slow, as removal of items from tha hash is slow.
 	"""
-        self.store.size = self.store.size-1
+        assert self.canonical == None, "Cannot remove statement from canonical "+`self`
+	self.store.size = self.store.size-1
         self.statements.remove(s)
 	return
     
