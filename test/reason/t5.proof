@@ -1,0 +1,78 @@
+#Processed by Id: cwm.py,v 1.111 2002/12/07 01:16:18 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/reason/foo
+        
+#  Notation3 generation by
+#       notation3.py,v 1.123 2002/12/07 23:43:28 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/reason/foo
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+     @prefix foo: <t5.n3#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    
+    this     log:forSome <#_g0> .
+    
+    <#_g0>     a :Parsing;
+         :source <t5.n3> .
+    {
+        <a>     <b> <c> .
+        
+        }     :because <#_g0> .
+    {
+        <c>     <b> <c2> .
+        
+        }     :because  [
+             a :Inference;
+             :binding  [
+                 :boundTo <c>;
+                 :variable foo:x ],
+                     [
+                 :boundTo <b>;
+                 :variable foo:y ];
+             :given {<a>     <b> <c> .
+            };
+             :rule {this     log:forAll foo:x,
+                        foo:y .
+            {
+                <a>     foo:y foo:x .
+                
+                }     log:implies {foo:x     foo:y <c2> .
+                } .
+            } ] .
+    {
+        this     log:forAll foo:x,
+                    foo:y .
+        {
+            <a>     foo:y foo:x .
+            
+            }     log:implies {foo:x     foo:y <c2> .
+            } .
+        
+        }     :because <#_g0> .
+    {
+        this     log:forAll foo:x,
+                    foo:y .
+        <a>     <b> <c> .
+        <c>     <b> <c2> .
+        {
+            <a>     foo:y foo:x .
+            
+            }     log:implies {foo:x     foo:y <c2> .
+            } .
+        
+        }     a :QED;
+         :because  [
+             a :Conjunction;
+             :given {<a>     <b> <c> .
+            },
+                    {<c>     <b> <c2> .
+            },
+                    {this     log:forAll foo:x,
+                        foo:y .
+            {
+                <a>     foo:y foo:x .
+                
+                }     log:implies {foo:x     foo:y <c2> .
+                } .
+            } ] .
+    
+#ENDS

@@ -1,0 +1,70 @@
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+     @prefix foo: <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    
+    this     log:forSome foo:_g0 .
+    
+    foo:_g0     a :Parsing;
+         :source <> .
+    {
+        <a>     <b> <c> .
+        
+        }     :because foo:_g0 .
+    {
+        <c>     <b> <c2> .
+        
+        }     :because  [
+             a :Inference;
+             :binding  [
+                 :boundTo <c>;
+                 :variable foo:x ],
+                     [
+                 :boundTo <b>;
+                 :variable foo:y ];
+             :given {<a>     <b> <c> .
+            };
+             :rule {this     log:forAll foo:x,
+                        foo:y .
+            {
+                <a>     foo:y foo:x .
+                
+                }     log:implies {foo:x     foo:y <c2> .
+                } .
+            } ] .
+    {
+        this     log:forAll foo:x,
+                    foo:y .
+        {
+            <a>     foo:y foo:x .
+            
+            }     log:implies {foo:x     foo:y <c2> .
+            } .
+        
+        }     :because foo:_g0 .
+    {
+        this     log:forAll foo:x,
+                    foo:y .
+        <a>     <b> <c> .
+        <c>     <b> <c2> .
+        {
+            <a>     foo:y foo:x .
+            
+            }     log:implies {foo:x     foo:y <c2> .
+            } .
+        
+        }     a :QED;
+         :because  [
+             a :Conjunction;
+             :given {<a>     <b> <c> .
+            },
+                    {<c>     <b> <c2> .
+            },
+                    {this     log:forAll foo:x,
+                        foo:y .
+            {
+                <a>     foo:y foo:x .
+                
+                }     log:implies {foo:x     foo:y <c2> .
+                } .
+            } ] .
+    
