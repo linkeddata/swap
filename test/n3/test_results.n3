@@ -201,7 +201,28 @@
                 :_g193,
                 :_g194,
                 :_g195,
-                :_g196 .
+                :_g196,
+                :_g197,
+                :_g198,
+                :_g199,
+                :_g200,
+                :_g201,
+                :_g202,
+                :_g203,
+                :_g204,
+                :_g205,
+                :_g206,
+                :_g207,
+                :_g208,
+                :_g209,
+                :_g210,
+                :_g211,
+                :_g212,
+                :_g213,
+                :_g214,
+                :_g215,
+                :_g216,
+                :_g217 .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/anon-prop.n3>     a n3test:Input;
          n3test:description "Parse and regen anonymous property";
@@ -213,16 +234,17 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10008a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g52 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10008.nt> ];
          :_g80  [
-             n3test:isFile () ];
-         :_g81  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1000831da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g87 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10008.nt> ];
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100081c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g86 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10008.nt> ];
-         :_g110  [
+             :_g107 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10008.nt> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10008fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g116 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10008.nt> ];
-         :_g137  [
+             :_g137 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10008.nt> ];
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile () ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/contexts.n3>     a n3test:Input;
@@ -235,16 +257,17 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10007a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g51 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10007.nt> ];
          :_g80  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1000731da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g86 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10007.nt> ];
+         :_g102  [
              n3test:isFile () ];
-         :_g81  [
-             n3test:isFile () ];
-         :_g110  [
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10007fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g115 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10007.nt> ];
-         :_g137  [
+             :_g136 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10007.nt> ];
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10007a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g143 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10007.nt> ];
-         :_g166  [
+             :_g164 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10007.nt> ];
+         :_g187  [
              n3test:isFile () ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/i18n/hiragana.n3>     a n3test:Input;
@@ -256,15 +279,16 @@
          :_g44  [
              n3test:isFile () ];
          :_g80  [
+             n3test:doesNotMatch ();
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1001031da995fbc0353f3d3dee8020a0bfe42.out> ];
+         :_g102  [
              n3test:isFile () ];
-         :_g81  [
+         :_g131  [
              n3test:isFile () ];
-         :_g110  [
-             n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:doesNotMatch ();
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10010a7be3d54f86016cd490c7f6c01b7abb7.out> ];
-         :_g166  [
+         :_g187  [
              n3test:doesNotMatch ();
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100107d090aab38de690e2a527dbe198b7f68.out> ] .
     
@@ -279,13 +303,13 @@
              :_g60 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10017.nt> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile () ];
-         :_g110  [
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile () ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3parser.tests>     a n3test:Input;
@@ -299,17 +323,17 @@
              :_g50 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10006.nt> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100061c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g85 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10006.nt> ];
-         :_g110  [
+             :_g106 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10006.nt> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10006fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g114 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10006.nt> ];
-         :_g137  [
+             :_g135 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10006.nt> ];
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100067d090aab38de690e2a527dbe198b7f68.out>;
-             :_g170 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10006.nt> ] .
+             :_g191 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10006.nt> ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3>     a n3test:Input;
          n3test:description "N3 string quoting with escaping";
@@ -321,18 +345,19 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10009a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g53 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10009.nt> ];
          :_g80  [
-             n3test:isFile () ];
-         :_g81  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1000931da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g88 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10009.nt> ];
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100091c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g87 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10009.nt> ];
-         :_g110  [
+             :_g108 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10009.nt> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10009fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g117 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10009.nt> ];
-         :_g137  [
+             :_g138 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10009.nt> ];
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100097d090aab38de690e2a527dbe198b7f68.out>;
-             :_g171 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10009.nt> ] .
+             :_g192 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10009.nt> ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/djb1a.n3>     a n3test:Input;
          n3test:description "djb noticed a:b was parsed as rdf:type token";
@@ -344,19 +369,20 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10005a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g49 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10005.nt> ];
          :_g80  [
-             n3test:isFile () ];
-         :_g81  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1000531da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g85 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10005.nt> ];
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100051c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g84 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10005.nt> ];
-         :_g110  [
+             :_g105 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10005.nt> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10005fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g113 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10005.nt> ];
-         :_g137  [
+             :_g134 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10005.nt> ];
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10005a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g142 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10005.nt> ];
-         :_g166  [
+             :_g163 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10005.nt> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100057d090aab38de690e2a527dbe198b7f68.out>;
-             :_g169 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10005.nt> ] .
+             :_g190 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10005.nt> ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/dot-dash.n3>     a n3test:Input;
          n3test:description "combinations of - and _ in identifiers";
@@ -368,19 +394,20 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10002a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g46 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10002.nt> ];
          :_g80  [
-             n3test:isFile () ];
-         :_g81  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1000231da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g82 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10002.nt> ];
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100021c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g83 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10002.nt> ];
-         :_g110  [
+             :_g104 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10002.nt> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10002fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g112 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10002.nt> ];
-         :_g137  [
+             :_g133 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10002.nt> ];
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10002a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g139 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10002.nt> ];
-         :_g166  [
+             :_g160 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10002.nt> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100027d090aab38de690e2a527dbe198b7f68.out>;
-             :_g168 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10002.nt> ] .
+             :_g189 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10002.nt> ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/keywords1.n3>     a n3test:Input;
          n3test:description "@keywords in n3";
@@ -392,15 +419,16 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10003a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g47 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10003.nt> ];
          :_g80  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1000331da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g83 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10003.nt> ];
+         :_g102  [
              n3test:isFile () ];
-         :_g81  [
+         :_g131  [
              n3test:isFile () ];
-         :_g110  [
-             n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10003a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g140 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10003.nt> ];
-         :_g166  [
+             :_g161 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10003.nt> ];
+         :_g187  [
              n3test:isFile () ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/keywords2.n3>     a n3test:Input;
@@ -413,15 +441,16 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10004a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g48 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10004.nt> ];
          :_g80  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1000431da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g84 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10004.nt> ];
+         :_g102  [
              n3test:isFile () ];
-         :_g81  [
+         :_g131  [
              n3test:isFile () ];
-         :_g110  [
-             n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10004a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g141 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10004.nt> ];
-         :_g166  [
+             :_g162 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10004.nt> ];
+         :_g187  [
              n3test:isFile () ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/lstring.n3>     a n3test:Input;
@@ -434,16 +463,17 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10016a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g59 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10016.nt> ];
          :_g80  [
-             n3test:isFile () ];
-         :_g81  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1001631da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g93 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10016.nt> ];
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100161c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g89 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10016.nt> ];
-         :_g110  [
+             :_g110 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10016.nt> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10016fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g120 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10016.nt> ];
-         :_g137  [
+             :_g141 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10016.nt> ];
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile () ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/neg-keywords3.n3>     a n3test:Input;
@@ -455,14 +485,14 @@
              n3test:isFile () ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile () ];
-         :_g110  [
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:doesNotMatch ();
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_20001a7be3d54f86016cd490c7f6c01b7abb7.out> ];
-         :_g166  [
+         :_g187  [
              n3test:isFile () ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/neg-single-quote.n3>     a n3test:Input;
@@ -473,14 +503,15 @@
          :_g44  [
              n3test:isFile () ];
          :_g80  [
+             n3test:doesNotMatch ();
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_2000231da995fbc0353f3d3dee8020a0bfe42.out> ];
+         :_g102  [
              n3test:isFile () ];
-         :_g81  [
+         :_g131  [
              n3test:isFile () ];
-         :_g110  [
+         :_g158  [
              n3test:isFile () ];
-         :_g137  [
-             n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:doesNotMatch ();
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_200027d090aab38de690e2a527dbe198b7f68.out> ] .
     
@@ -493,15 +524,16 @@
              n3test:doesNotMatch ();
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_20003a3dc5879189becebfe7edc710c2a24c5.out> ];
          :_g80  [
+             n3test:doesNotMatch ();
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_2000331da995fbc0353f3d3dee8020a0bfe42.out> ];
+         :_g102  [
              n3test:isFile () ];
-         :_g81  [
+         :_g131  [
              n3test:isFile () ];
-         :_g110  [
-             n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:doesNotMatch ();
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_20003a7be3d54f86016cd490c7f6c01b7abb7.out> ];
-         :_g166  [
+         :_g187  [
              n3test:isFile () ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/no-last-nl.n3>     a n3test:Input;
@@ -514,19 +546,20 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10001a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g45 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10001.nt> ];
          :_g80  [
-             n3test:isFile () ];
-         :_g81  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1000131da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g81 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10001.nt> ];
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100011c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g82 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10001.nt> ];
-         :_g110  [
+             :_g103 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10001.nt> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10001fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g111 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10001.nt> ];
-         :_g137  [
+             :_g132 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10001.nt> ];
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10001a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g138 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10001.nt> ];
-         :_g166  [
+             :_g159 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10001.nt> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100017d090aab38de690e2a527dbe198b7f68.out>;
-             :_g167 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10001.nt> ] .
+             :_g188 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10001.nt> ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/numbers.n3>     a n3test:Input;
          n3test:description "Number syntax";
@@ -538,15 +571,16 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10013a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g56 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10013.nt> ];
          :_g80  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1001331da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g90 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10013.nt> ];
+         :_g102  [
              n3test:isFile () ];
-         :_g81  [
+         :_g131  [
              n3test:isFile () ];
-         :_g110  [
-             n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10013a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g146 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10013.nt> ];
-         :_g166  [
+             :_g167 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10013.nt> ];
+         :_g187  [
              n3test:isFile () ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/path1.n3>     a n3test:Input;
@@ -559,18 +593,19 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10011a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g54 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10011.nt> ];
          :_g80  [
-             n3test:isFile () ];
-         :_g81  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1001131da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g89 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10011.nt> ];
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100111c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g88 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10011.nt> ];
-         :_g110  [
+             :_g109 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10011.nt> ];
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10011a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g144 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10011.nt> ];
-         :_g166  [
+             :_g165 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10011.nt> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100117d090aab38de690e2a527dbe198b7f68.out>;
-             :_g172 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10011.nt> ] .
+             :_g193 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10011.nt> ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/path2.n3>     a n3test:Input;
          n3test:description "Path syntax, more";
@@ -583,14 +618,14 @@
              :_g55 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10012.nt> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile () ];
-         :_g110  [
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10012a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g145 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10012.nt> ];
-         :_g166  [
+             :_g166 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10012.nt> ];
+         :_g187  [
              n3test:isFile () ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/qvars1.n3>     a n3test:Input;
@@ -603,16 +638,17 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10014a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g57 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10014.nt> ];
          :_g80  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1001431da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g91 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10014.nt> ];
+         :_g102  [
              n3test:isFile () ];
-         :_g81  [
-             n3test:isFile () ];
-         :_g110  [
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10014fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g118 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10014.nt> ];
-         :_g137  [
+             :_g139 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10014.nt> ];
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10014a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g147 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10014.nt> ];
-         :_g166  [
+             :_g168 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10014.nt> ];
+         :_g187  [
              n3test:isFile () ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/qvars2.n3>     a n3test:Input;
@@ -625,16 +661,17 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10015a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g58 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10015.nt> ];
          :_g80  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1001531da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g92 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10015.nt> ];
+         :_g102  [
              n3test:isFile () ];
-         :_g81  [
-             n3test:isFile () ];
-         :_g110  [
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10015fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g119 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10015.nt> ];
-         :_g137  [
+             :_g140 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10015.nt> ];
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10015a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g148 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10015.nt> ];
-         :_g166  [
+             :_g169 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10015.nt> ];
+         :_g187  [
              n3test:isFile () ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/this-quantifiers.n3>     a n3test:Input;
@@ -647,17 +684,18 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10019a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g62 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10019.nt> ];
          :_g80  [
-             n3test:isFile () ];
-         :_g81  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1001931da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g95 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10019.nt> ];
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_100191c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g90 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10019.nt> ];
-         :_g110  [
+             :_g111 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10019.nt> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10019fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g121 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10019.nt> ];
-         :_g137  [
+             :_g142 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10019.nt> ];
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10019a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g150 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10019.nt> ];
-         :_g166  [
+             :_g171 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10019.nt> ];
+         :_g187  [
              n3test:isFile () ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/this-rules.n3>     a n3test:Input;
@@ -670,16 +708,17 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10020a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g63 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10020.nt> ];
          :_g80  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1002031da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g96 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10020.nt> ];
+         :_g102  [
              n3test:isFile () ];
-         :_g81  [
-             n3test:isFile () ];
-         :_g110  [
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10020fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g122 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10020.nt> ];
-         :_g137  [
+             :_g143 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10020.nt> ];
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10020a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g151 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10020.nt> ];
-         :_g166  [
+             :_g172 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10020.nt> ];
+         :_g187  [
              n3test:isFile () ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3>     a n3test:Input;
@@ -692,15 +731,16 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10018a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g61 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10018.nt> ];
          :_g80  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_1001831da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g94 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10018.nt> ];
+         :_g102  [
              n3test:isFile () ];
-         :_g81  [
+         :_g131  [
              n3test:isFile () ];
-         :_g110  [
-             n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_10018a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g149 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10018.nt> ];
-         :_g166  [
+             :_g170 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/n3parser.tests_n3_10018.nt> ];
+         :_g187  [
              n3test:isFile () ] .
     
     <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/tests-work.txt>     a n3test:Input;
@@ -712,14 +752,14 @@
              n3test:isFile () ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile () ];
-         :_g110  [
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:doesNotMatch ();
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3parser.tests_n3_20000a7be3d54f86016cd490c7f6c01b7abb7.out> ];
-         :_g166  [
+         :_g187  [
              n3test:isFile () ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-02.n3?rev=1.1>     a n3test:Input;
@@ -733,18 +773,18 @@
              :_g64 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-02.nt?rev=1.1> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100021c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g91 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-02.nt?rev=1.1> ];
-         :_g110  [
+             :_g112 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-02.nt?rev=1.1> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10002fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g123 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-02.nt?rev=1.1> ];
-         :_g137  [
+             :_g144 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-02.nt?rev=1.1> ];
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10002a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g152 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-02.nt?rev=1.1> ];
-         :_g166  [
+             :_g173 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-02.nt?rev=1.1> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100027d090aab38de690e2a527dbe198b7f68.out>;
-             :_g174 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-02.nt?rev=1.1> ] .
+             :_g195 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-02.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-03.n3?rev=1.1>     a n3test:Input;
          n3test:description "Test anon nodes";
@@ -757,18 +797,18 @@
              :_g65 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-03.nt?rev=1.1> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100031c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g92 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-03.nt?rev=1.1> ];
-         :_g110  [
+             :_g113 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-03.nt?rev=1.1> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10003fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g124 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-03.nt?rev=1.1> ];
-         :_g137  [
+             :_g145 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-03.nt?rev=1.1> ];
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10003a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g153 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-03.nt?rev=1.1> ];
-         :_g166  [
+             :_g174 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-03.nt?rev=1.1> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100037d090aab38de690e2a527dbe198b7f68.out>;
-             :_g175 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-03.nt?rev=1.1> ] .
+             :_g196 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-03.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-04.n3?rev=1.1>     a n3test:Input;
          n3test:description "Test shared bNode";
@@ -781,17 +821,17 @@
              :_g66 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-04.nt?rev=1.1> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100041c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g93 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-04.nt?rev=1.1> ];
-         :_g110  [
+             :_g114 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-04.nt?rev=1.1> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10004fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g125 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-04.nt?rev=1.1> ];
-         :_g137  [
+             :_g146 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-04.nt?rev=1.1> ];
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100047d090aab38de690e2a527dbe198b7f68.out>;
-             :_g176 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-04.nt?rev=1.1> ] .
+             :_g197 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-04.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-05.n3?rev=1.1>     a n3test:Input;
          n3test:description "Tests <> as a prefix and as a triple node";
@@ -804,18 +844,18 @@
              :_g67 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-05.nt?rev=1.1> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100051c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g94 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-05.nt?rev=1.1> ];
-         :_g110  [
+             :_g115 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-05.nt?rev=1.1> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10005fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g126 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-05.nt?rev=1.1> ];
-         :_g137  [
+             :_g147 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-05.nt?rev=1.1> ];
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10005a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g154 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-05.nt?rev=1.1> ];
-         :_g166  [
+             :_g175 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-05.nt?rev=1.1> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100057d090aab38de690e2a527dbe198b7f68.out>;
-             :_g177 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-05.nt?rev=1.1> ] .
+             :_g198 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-05.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-06.n3?rev=1.1>     a n3test:Input;
          n3test:description "Tests <#> as a prefix and a triple node";
@@ -827,18 +867,19 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10006a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g68 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-06.nt?rev=1.1> ];
          :_g80  [
-             n3test:isFile () ];
-         :_g81  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_1000631da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g97 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-06.nt?rev=1.1> ];
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100061c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g95 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-06.nt?rev=1.1> ];
-         :_g110  [
+             :_g116 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-06.nt?rev=1.1> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10006fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g127 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-06.nt?rev=1.1> ];
-         :_g137  [
+             :_g148 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-06.nt?rev=1.1> ];
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100067d090aab38de690e2a527dbe198b7f68.out>;
-             :_g178 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-06.nt?rev=1.1> ] .
+             :_g199 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-06.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-07.n3?rev=1.1>     a n3test:Input;
          n3test:description "Tests reverse properties";
@@ -850,18 +891,19 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10007a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g69 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-07.nt?rev=1.1> ];
          :_g80  [
-             n3test:isFile () ];
-         :_g81  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_1000731da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g98 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-07.nt?rev=1.1> ];
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100071c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g96 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-07.nt?rev=1.1> ];
-         :_g110  [
+             :_g117 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-07.nt?rev=1.1> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10007fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g128 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-07.nt?rev=1.1> ];
-         :_g137  [
+             :_g149 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-07.nt?rev=1.1> ];
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100077d090aab38de690e2a527dbe198b7f68.out>;
-             :_g179 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-07.nt?rev=1.1> ] .
+             :_g200 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-07.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-08.n3?rev=1.1>     a n3test:Input;
          n3test:description "newline conversion. Will fail on cwm";
@@ -872,15 +914,15 @@
              n3test:isFile () ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile () ];
-         :_g110  [
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100087d090aab38de690e2a527dbe198b7f68.out>;
-             :_g173 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-08.nt?rev=1.1> ] .
+             :_g194 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-08.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-09.n3?rev=1.2>     a n3test:Input;
          n3test:description "Lists";
@@ -892,18 +934,19 @@
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10009a3dc5879189becebfe7edc710c2a24c5.out>;
              :_g70 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-09.nt?rev=1.3> ];
          :_g80  [
-             n3test:isFile () ];
-         :_g81  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_1000931da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g99 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-09.nt?rev=1.3> ];
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100091c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g97 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-09.nt?rev=1.3> ];
-         :_g110  [
+             :_g118 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-09.nt?rev=1.3> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10009fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g129 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-09.nt?rev=1.3> ];
-         :_g137  [
+             :_g150 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-09.nt?rev=1.3> ];
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100097d090aab38de690e2a527dbe198b7f68.out>;
-             :_g180 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-09.nt?rev=1.3> ] .
+             :_g201 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-09.nt?rev=1.3> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-10.n3?rev=1.1>     a n3test:Input;
          n3test:description "Test named anon nodes. Will fail on cwm";
@@ -915,16 +958,16 @@
              n3test:isFile () ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile () ];
-         :_g110  [
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10010a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g155 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-10.nt?rev=1.2> ];
-         :_g166  [
+             :_g176 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-10.nt?rev=1.2> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100107d090aab38de690e2a527dbe198b7f68.out>;
-             :_g181 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-10.nt?rev=1.2> ] .
+             :_g202 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-10.nt?rev=1.2> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-11.n3?rev=1.1>     a n3test:Input;
          n3test:description "Test the syntactic items for abbreviation.";
@@ -937,17 +980,17 @@
              :_g71 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-11.nt?rev=1.1> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile () ];
-         :_g110  [
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10011fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g130 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-11.nt?rev=1.1> ];
-         :_g137  [
+             :_g151 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-11.nt?rev=1.1> ];
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10011a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g156 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-11.nt?rev=1.1> ];
-         :_g166  [
+             :_g177 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-11.nt?rev=1.1> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100117d090aab38de690e2a527dbe198b7f68.out>;
-             :_g182 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-11.nt?rev=1.1> ] .
+             :_g203 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-11.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-12.n3?rev=1.1>     a n3test:Input;
          n3test:description "Test defining _ as a prefix. Undecided";
@@ -959,17 +1002,17 @@
              n3test:isFile () ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100121c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g98 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-12.nt?rev=1.1> ];
-         :_g110  [
+             :_g119 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-12.nt?rev=1.1> ];
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10012a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g157 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-12.nt?rev=1.1> ];
-         :_g166  [
+             :_g178 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-12.nt?rev=1.1> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100127d090aab38de690e2a527dbe198b7f68.out>;
-             :_g183 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-12.nt?rev=1.1> ] .
+             :_g204 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-12.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-13.n3?rev=1.1>     a n3test:Input;
          n3test:description "Test redefining a prefix";
@@ -981,18 +1024,18 @@
              n3test:isFile () ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100131c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g99 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-13.nt?rev=1.1> ];
-         :_g110  [
+             :_g120 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-13.nt?rev=1.1> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10013fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g131 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-13.nt?rev=1.1> ];
-         :_g137  [
+             :_g152 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-13.nt?rev=1.1> ];
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10013a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g158 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-13.nt?rev=1.1> ];
-         :_g166  [
+             :_g179 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-13.nt?rev=1.1> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100137d090aab38de690e2a527dbe198b7f68.out>;
-             :_g184 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-13.nt?rev=1.1> ] .
+             :_g205 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-13.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-14.n3?rev=1.1>     a n3test:Input;
          n3test:description """Test the "is ... of" constuct""";
@@ -1005,17 +1048,17 @@
              :_g72 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-14.nt?rev=1.1> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100141c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g100 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-14.nt?rev=1.1> ];
-         :_g110  [
+             :_g121 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-14.nt?rev=1.1> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10014fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g132 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-14.nt?rev=1.1> ];
-         :_g137  [
+             :_g153 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-14.nt?rev=1.1> ];
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100147d090aab38de690e2a527dbe198b7f68.out>;
-             :_g185 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-14.nt?rev=1.1> ] .
+             :_g206 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-14.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-15.n3?rev=1.2>     a n3test:Input;
          n3test:description "Forward paths. Note that `.' is depricated";
@@ -1027,16 +1070,16 @@
              n3test:isFile () ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile () ];
-         :_g110  [
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10015a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g159 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-15.nt?rev=1.2> ];
-         :_g166  [
+             :_g180 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-15.nt?rev=1.2> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100157d090aab38de690e2a527dbe198b7f68.out>;
-             :_g186 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-15.nt?rev=1.2> ] .
+             :_g207 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-15.nt?rev=1.2> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-16.n3?rev=1.1>     a n3test:Input;
          n3test:description "Backward paths";
@@ -1049,17 +1092,17 @@
              :_g73 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-16.nt?rev=1.1> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100161c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g101 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-16.nt?rev=1.1> ];
-         :_g110  [
+             :_g122 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-16.nt?rev=1.1> ];
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10016a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g160 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-16.nt?rev=1.1> ];
-         :_g166  [
+             :_g181 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-16.nt?rev=1.1> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100167d090aab38de690e2a527dbe198b7f68.out>;
-             :_g187 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-16.nt?rev=1.1> ] .
+             :_g208 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-16.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-17.n3?rev=1.1>     a n3test:Input;
          n3test:description "Mixed paths and paths as objects";
@@ -1072,17 +1115,17 @@
              :_g74 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-17.nt?rev=1.1> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100171c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g102 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-17.nt?rev=1.1> ];
-         :_g110  [
+             :_g123 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-17.nt?rev=1.1> ];
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10017a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g161 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-17.nt?rev=1.1> ];
-         :_g166  [
+             :_g182 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-17.nt?rev=1.1> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100177d090aab38de690e2a527dbe198b7f68.out>;
-             :_g188 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-17.nt?rev=1.1> ] .
+             :_g209 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-17.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-18.n3?rev=1.1>     a n3test:Input;
          n3test:description "Mixed lists and paths";
@@ -1095,18 +1138,18 @@
              :_g75 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-18.nt?rev=1.3> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100181c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g103 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-18.nt?rev=1.3> ];
-         :_g110  [
+             :_g124 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-18.nt?rev=1.3> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10018fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g133 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-18.nt?rev=1.3> ];
-         :_g137  [
+             :_g154 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-18.nt?rev=1.3> ];
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10018a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g162 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-18.nt?rev=1.3> ];
-         :_g166  [
+             :_g183 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-18.nt?rev=1.3> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100187d090aab38de690e2a527dbe198b7f68.out>;
-             :_g189 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-18.nt?rev=1.3> ] .
+             :_g210 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-18.nt?rev=1.3> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-19.n3?rev=1.1>     a n3test:Input;
          n3test:description "Named DAML lists. Will fail on cwm.";
@@ -1117,18 +1160,19 @@
          :_g44  [
              n3test:isFile () ];
          :_g80  [
-             n3test:isFile () ];
-         :_g81  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_1001931da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g100 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-19.nt?rev=1.3> ];
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100191c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g104 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-19.nt?rev=1.3> ];
-         :_g110  [
+             :_g125 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-19.nt?rev=1.3> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10019fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g134 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-19.nt?rev=1.3> ];
-         :_g137  [
+             :_g155 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-19.nt?rev=1.3> ];
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100197d090aab38de690e2a527dbe198b7f68.out>;
-             :_g190 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-19.nt?rev=1.3> ] .
+             :_g211 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-19.nt?rev=1.3> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-20.n3?rev=1.1>     a n3test:Input;
          n3test:description "Named DAML lists. Will fail on cwm.";
@@ -1140,17 +1184,17 @@
              n3test:isFile () ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100201c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g105 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-20.nt?rev=1.3> ];
-         :_g110  [
+             :_g126 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-20.nt?rev=1.3> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10020fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g135 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-20.nt?rev=1.3> ];
-         :_g137  [
+             :_g156 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-20.nt?rev=1.3> ];
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100207d090aab38de690e2a527dbe198b7f68.out>;
-             :_g191 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-20.nt?rev=1.3> ] .
+             :_g212 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-20.nt?rev=1.3> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-21.n3?rev=1.1>     a n3test:Input;
          n3test:description "Datatypes";
@@ -1163,16 +1207,16 @@
              :_g76 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-21.nt?rev=1.1> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100211c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g106 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-21.nt?rev=1.1> ];
-         :_g110  [
+             :_g127 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-21.nt?rev=1.1> ];
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100217d090aab38de690e2a527dbe198b7f68.out>;
-             :_g192 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-21.nt?rev=1.1> ] .
+             :_g213 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-21.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-22.n3?rev=1.1>     a n3test:Input;
          n3test:description "Language tags";
@@ -1185,15 +1229,15 @@
              :_g77 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-22.nt?rev=1.1> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile () ];
-         :_g110  [
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100227d090aab38de690e2a527dbe198b7f68.out>;
-             :_g193 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-22.nt?rev=1.1> ] .
+             :_g214 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-22.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-23.n3?rev=1.1>     a n3test:Input;
          n3test:description "XML literals";
@@ -1206,13 +1250,13 @@
              :_g78 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-23.nt?rev=1.1> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile () ];
-         :_g110  [
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile () ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-24.n3?rev=1.1>     a n3test:Input;
@@ -1223,14 +1267,15 @@
          :_g44  [
              n3test:isFile () ];
          :_g80  [
+             n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_1002431da995fbc0353f3d3dee8020a0bfe42.out>;
+             :_g101 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-24.nt?rev=1.2> ];
+         :_g102  [
              n3test:isFile () ];
-         :_g81  [
+         :_g131  [
              n3test:isFile () ];
-         :_g110  [
+         :_g158  [
              n3test:isFile () ];
-         :_g137  [
-             n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile () ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-25.n3?rev=1.3>     a n3test:Input;
@@ -1242,14 +1287,14 @@
              n3test:isFile () ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile () ];
-         :_g110  [
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10025a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g163 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-25.nt?rev=1.2> ];
-         :_g166  [
+             :_g184 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-25.nt?rev=1.2> ];
+         :_g187  [
              n3test:isFile () ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-26.n3?rev=1.2>     a n3test:Input;
@@ -1262,18 +1307,18 @@
              n3test:isFile () ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100261c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g107 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-26.nt?rev=1.1> ];
-         :_g110  [
+             :_g128 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-26.nt?rev=1.1> ];
+         :_g131  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10026fc11c6bc87f8ca69763e5fcfb2387ab1.out>;
-             :_g136 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-26.nt?rev=1.1> ];
-         :_g137  [
+             :_g157 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-26.nt?rev=1.1> ];
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10026a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g164 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-26.nt?rev=1.1> ];
-         :_g166  [
+             :_g185 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-26.nt?rev=1.1> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100267d090aab38de690e2a527dbe198b7f68.out>;
-             :_g194 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-26.nt?rev=1.1> ] .
+             :_g215 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-26.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-27.n3?rev=1.2>     a n3test:Input;
          n3test:description "More i18n. What is the status of this?";
@@ -1285,17 +1330,17 @@
              n3test:isFile () ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100271c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g108 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-27.nt?rev=1.1> ];
-         :_g110  [
+             :_g129 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-27.nt?rev=1.1> ];
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_10027a7be3d54f86016cd490c7f6c01b7abb7.out>;
-             :_g165 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-27.nt?rev=1.1> ];
-         :_g166  [
+             :_g186 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-27.nt?rev=1.1> ];
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100277d090aab38de690e2a527dbe198b7f68.out>;
-             :_g195 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-27.nt?rev=1.1> ] .
+             :_g216 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-27.nt?rev=1.1> ] .
     
     <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-28.n3?rev=1.1>     a n3test:Input;
          n3test:description "Strange xsd:interges and xsd:doubles";
@@ -1308,16 +1353,16 @@
              :_g79 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-28.nt?rev=1.1> ];
          :_g80  [
              n3test:isFile () ];
-         :_g81  [
+         :_g102  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100281c5479d2e9352c50ddb98e3f3f765896.out>;
-             :_g109 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-28.nt?rev=1.1> ];
-         :_g110  [
+             :_g130 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-28.nt?rev=1.1> ];
+         :_g131  [
              n3test:isFile () ];
-         :_g137  [
+         :_g158  [
              n3test:isFile () ];
-         :_g166  [
+         :_g187  [
              n3test:isFile <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/,temp/n3_jena.tests_jena_100287d090aab38de690e2a527dbe198b7f68.out>;
-             :_g196 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-28.nt?rev=1.1> ] .
+             :_g217 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-result-28.nt?rev=1.1> ] .
     
     :_g0     a n3test:N3Parser;
          n3test:command "/home/syosi/SWAP/cwm.py %s --ntriples";
@@ -1421,8 +1466,8 @@
          n3test:diffString "" .
     
     :_g16     a n3test:Diff;
-         n3test:diffString """- __:c4 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/.run-1100829014.348772p13144#_g5&gt;.
-- __:c5 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/.run-1100829014.348772p13144#_g6&gt;.
+         n3test:diffString """- __:c4 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/.run-1100835403.6366611p15759#_g5&gt;.
+- __:c5 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/.run-1100835403.6366611p15759#_g6&gt;.
 + __:c4 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/.run-1100818951.269227p32593#_g5&gt;.
 + __:c5 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3/.run-1100818951.269227p32593#_g6&gt;.
 """ .
@@ -1983,7 +2028,7 @@
 """ .
     
     :_g75     a n3test:Diff;
-         n3test:diffString """Syntax error: &lt;!DOCTYPE HTML PUBLIC &quot;-//IETF//DTD HTML 2.0//EN&quot;&gt;
+         n3test:diffString """Syntax error:     _:a_g1     &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; _:a_g0 .
 
 """ .
     
@@ -2013,38 +2058,16 @@
     
     :_g80     a n3test:N3Parser;
          n3test:command "cd /home/syosi/tarballs/euler/ && /usr/java/jdk1.5.0/bin/java Euler --nope %s";
-         n3test:failsParsing <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/anon-prop.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/contexts.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/i18n/hiragana.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/lists.n3>,
+         n3test:failsParsing <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/lists.n3>,
                 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3parser.tests>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/djb1a.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/dot-dash.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/keywords1.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/keywords2.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/lstring.n3>,
                 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/neg-keywords3.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/neg-single-quote.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/neg-thisadoc.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/no-last-nl.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/numbers.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/path1.n3>,
                 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/path2.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/qvars1.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/qvars2.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/this-quantifiers.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/this-rules.n3>,
-                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3>,
                 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/tests-work.txt>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-02.n3?rev=1.1>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-03.n3?rev=1.1>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-04.n3?rev=1.1>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-05.n3?rev=1.1>,
-                <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-06.n3?rev=1.1>,
-                <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-07.n3?rev=1.1>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-08.n3?rev=1.1>,
-                <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-09.n3?rev=1.2>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-10.n3?rev=1.1>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-11.n3?rev=1.1>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-12.n3?rev=1.1>,
@@ -2054,18 +2077,145 @@
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-16.n3?rev=1.1>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-17.n3?rev=1.1>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-18.n3?rev=1.1>,
-                <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-19.n3?rev=1.1>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-20.n3?rev=1.1>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-21.n3?rev=1.1>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-22.n3?rev=1.1>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-23.n3?rev=1.1>,
-                <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-24.n3?rev=1.1>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-25.n3?rev=1.3>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-26.n3?rev=1.2>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-27.n3?rev=1.2>,
-                <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-28.n3?rev=1.1> .
+                <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-28.n3?rev=1.1>;
+         n3test:parses <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/anon-prop.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/contexts.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/i18n/hiragana.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/djb1a.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/dot-dash.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/keywords1.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/keywords2.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/lstring.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/neg-single-quote.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/neg-thisadoc.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/no-last-nl.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/numbers.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/path1.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/qvars1.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/qvars2.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/this-quantifiers.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/this-rules.n3>,
+                <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/trailing-semicolon.n3>,
+                <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-06.n3?rev=1.1>,
+                <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-07.n3?rev=1.1>,
+                <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-09.n3?rev=1.2>,
+                <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-19.n3?rev=1.1>,
+                <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-24.n3?rev=1.1> .
     
-    :_g81     a n3test:N3Parser;
+    :_g81     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g82     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g83     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g84     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g85     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g86     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g87     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g88     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g89     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g90     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g91     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g92     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g93     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g94     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g95     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g96     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix rules: &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/this-rules#&gt;.
+
+""" .
+    
+    :_g97     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g98     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g99     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g100     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g101     a n3test:Diff;
+         n3test:diffString """Syntax error: @prefix e: &lt;http://www.agfa.com/w3c/euler/log-rules#&gt;.
+
+""" .
+    
+    :_g102     a n3test:N3Parser;
          n3test:command "python /home/syosi/tarballs/eep/n3.py %s";
          n3test:failsParsing <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/contexts.n3>,
                 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/i18n/hiragana.n3>,
@@ -2119,18 +2269,18 @@
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-27.n3?rev=1.2>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-28.n3?rev=1.1> .
     
-    :_g82     a n3test:Diff;
+    :_g103     a n3test:Diff;
          n3test:diffString """- &lt;a&gt; &lt;b&gt; &lt;c&gt;.
 + &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/a&gt; &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/b&gt; &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/c&gt;.
 """ .
     
-    :_g83     a n3test:Diff;
+    :_g104     a n3test:Diff;
          n3test:diffString "" .
     
-    :_g84     a n3test:Diff;
+    :_g105     a n3test:Diff;
          n3test:diffString "" .
     
-    :_g85     a n3test:Diff;
+    :_g106     a n3test:Diff;
          n3test:diffString """- &lt;#n3_10002&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
 - &lt;#n3_10002&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;combinations of - and _ in identifiers&quot;.
 - &lt;#n3_10002&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;syntax/dot-dash.n3&gt;.
@@ -2315,13 +2465,13 @@
 + &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3parser.tests#n3_20003&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/neg-thisadoc.n3&gt;.
 """ .
     
-    :_g86     a n3test:Diff;
+    :_g107     a n3test:Diff;
          n3test:diffString """- &lt;#anySubj&gt; &quot;[ &lt;#propProp&gt; \\&quot;red\\&quot; ]&quot; &lt;#anyObj&gt;.
 + &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/anon-prop.n3#anySubj&gt; __:c0 &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/anon-prop.n3#anyObj&gt;.
 + __:c0 &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/anon-prop.n3#propProp&gt; &quot;red&quot;.
 """ .
     
-    :_g87     a n3test:Diff;
+    :_g108     a n3test:Diff;
          n3test:diffString """- &lt;#martin&gt; &lt;#surname&gt; &quot;D\\u00fcrst&quot;.
 - &lt;#x&gt; &lt;#prop&gt; &quot;simple string&quot;.
 - &lt;#y&gt; &lt;#prop&gt; &quot;triple quoted\\nstring with newlines in it.&quot;.
@@ -2334,7 +2484,7 @@
 + &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3&gt; &lt;http://purl.org/dc/elements/1.1/description&gt; &quot;testing string parsing in N3.\\nHmm... how much of this is in the primer?\\nHow much should be there?\\n@@ Holding off on unicode until support\\nin python is sufficiently deployed\\n(e.g. python on tux doesn't grok,\\nnor does pythonwin on TimBL's laptop).\\n$Id$\\n&quot;.
 """ .
     
-    :_g88     a n3test:Diff;
+    :_g109     a n3test:Diff;
          n3test:diffString """- &lt;foo.n3#albert&gt; &lt;http://www.daml.example.org/2001/03/fam#father&gt; &lt;http://www.daml.example.org/2001/03/fam#sister&gt;.
 - &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;foo.n3#albert&gt;.
 + &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/foo.n3#albert&gt; &lt;http://www.daml.example.org/2001/03/fam#mother&gt; __:c1.
@@ -2343,12 +2493,12 @@
 + __:c1 &lt;http://www.daml.example.org/2001/03/fam#sister&gt; &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/foo.n3#auntieAnne&gt;.
 """ .
     
-    :_g89     a n3test:Diff;
+    :_g110     a n3test:Diff;
          n3test:diffString """- &quot;     @prefix : &lt;http://www.w3.org/2000/10/swap/test/crypto/acc.n3#&gt; .\\n     @prefix crypto: &lt;http://www.w3.org/2000/10/swap/crypto#&gt; .\\n     @prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .\\n     @prefix os: &lt;http://www.w3.org/2000/10/swap/os#&gt; .\\n     @prefix string: &lt;http://www.w3.org/2000/10/swap/string#&gt; .\\n    \\n    \\&quot;\\&quot;\\&quot;\\nMzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3\\nNTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1\\nNDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2\\nNzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1\\nMjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4\\nOTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D\\n\\&quot;\\&quot;\\&quot;     a :RequestKey;\\n         :authorityName &lt;Tiina&gt;;\\n         :junk \\&quot;327462sjsdfjsakdhfkjsafd32164321\\&quot; .\\n&quot; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;#test_string&gt;.
 + &quot;     @prefix : &lt;http://www.w3.org/2000/10/swap/test/crypto/acc.n3#&gt; .\\n     @prefix crypto: &lt;http://www.w3.org/2000/10/swap/crypto#&gt; .\\n     @prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .\\n     @prefix os: &lt;http://www.w3.org/2000/10/swap/os#&gt; .\\n     @prefix string: &lt;http://www.w3.org/2000/10/swap/string#&gt; .\\n    \\n    \\&quot;\\&quot;\\&quot;\\nMzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3\\nNTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1\\nNDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2\\nNzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1\\nMjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4\\nOTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D\\n\\&quot;\\&quot;\\&quot;     a :RequestKey;\\n         :authorityName &lt;Tiina&gt;;\\n         :junk \\&quot;327462sjsdfjsakdhfkjsafd32164321\\&quot; .\\n&quot; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/lstring.n3#test_string&gt;.
 """ .
     
-    :_g90     a n3test:Diff;
+    :_g111     a n3test:Diff;
          n3test:diffString """- &quot;{ \\&quot;{ &lt;#fee&gt; &lt;#bar&gt; &lt;#baz&gt; }\\&quot; &lt;http://www.w3.org/2000/10/swap/log#includes&gt; \\&quot;{ &lt;http://www.w3.org/2000/10/swap/log#forAll&gt; &lt;#foo&gt; . &lt;#foo&gt; &lt;#bar&gt; &lt;#baz&gt; }\\&quot; }&quot; &lt;http://www.w3.org/2000/10/swap/log#implies&gt; &quot;{ &lt;#testa3d&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;#FAILURE&gt; }&quot;.
 - &quot;{ \\&quot;{ &lt;#fee&gt; &lt;#bar&gt; &lt;#baz&gt; }\\&quot; &lt;http://www.w3.org/2000/10/swap/log#includes&gt; \\&quot;{ &lt;http://www.w3.org/2000/10/swap/log#forSome&gt; &lt;#foo&gt; . &lt;#foo&gt; &lt;#bar&gt; &lt;#baz&gt; }\\&quot; }&quot; &lt;http://www.w3.org/2000/10/swap/log#implies&gt; &quot;{ &lt;#testa2d&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;#success&gt; }&quot;.
 - &quot;{ \\&quot;{ &lt;#fee&gt; &lt;#bar&gt; &lt;#baz&gt; }\\&quot; &lt;http://www.w3.org/2000/10/swap/log#notIncludes&gt; \\&quot;{ &lt;http://www.w3.org/2000/10/swap/log#forSome&gt; &lt;#foo&gt; . &lt;#foo&gt; &lt;#bar&gt; &lt;#baz&gt; }\\&quot; }&quot; &lt;http://www.w3.org/2000/10/swap/log#implies&gt; &quot;{ &lt;#testa2nd&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;#FAILURE&gt; }&quot;.
@@ -2389,53 +2539,53 @@
 - &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2000/10/swap/log#implies&gt;.
 """ .
     
-    :_g91     a n3test:Diff;
+    :_g112     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g0     &lt;http://one.net/ns1#bp1&gt; &lt;http://one.net/ns1#bv1&gt; .
 
 """ .
     
-    :_g92     a n3test:Diff;
+    :_g113     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g0     &lt;http://namespace.net/p1&gt; &lt;http://namespace.net/v1&gt; .
 
 """ .
     
-    :_g93     a n3test:Diff;
+    :_g114     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_ga     &lt;http://one.net/ns#prop1&gt; &quot;anon1&quot; .
 
 """ .
     
-    :_g94     a n3test:Diff;
+    :_g115     a n3test:Diff;
          n3test:diffString """- &lt;&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;a&gt;.
 + &lt;file:///base/rdf-test-05.n3&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;file:///base/rdf-test-05.n3a&gt;.
 """ .
     
-    :_g95     a n3test:Diff;
+    :_g116     a n3test:Diff;
          n3test:diffString """- &lt;#&gt; &lt;#p&gt; &quot;v&quot;.
 + &lt;file:///base/rdf-test-06.n3#&gt; &lt;file:///base/rdf-test-06.n3#p&gt; &quot;v&quot;.
 """ .
     
-    :_g96     a n3test:Diff;
+    :_g117     a n3test:Diff;
          n3test:diffString """- &quot;value&quot; &lt;#prop&gt; &lt;#b&gt;.
 - &lt;#b&gt; &lt;#prop&gt; &quot;value&quot;.
 + &lt;file:///base/rdf-test-07.n3#b&gt; &lt;file:///base/rdf-test-07.n3#prop&gt; &quot;value&quot;.
 """ .
     
-    :_g97     a n3test:Diff;
+    :_g118     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g1     &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; &lt;file:///base/rdf-test-09.n3b&gt; .
 
 """ .
     
-    :_g98     a n3test:Diff;
+    :_g119     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_ga     &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;file:///base/rdf-test-12.n3#p&gt; .
 
 """ .
     
-    :_g99     a n3test:Diff;
+    :_g120     a n3test:Diff;
          n3test:diffString """- &lt;http://host/Z#b&gt; &lt;http://host/Z#p&gt; &lt;http://host/Z#v&gt;.
 + &lt;http://host/A#b&gt; &lt;http://host/A#p&gt; &lt;http://host/A#v&gt;.
 """ .
     
-    :_g100     a n3test:Diff;
+    :_g121     a n3test:Diff;
          n3test:diffString """- &quot;value1&quot; &lt;#prop&gt; &lt;#s&gt;.
 - &quot;value2&quot; &lt;#prop&gt; &lt;#s1&gt;.
 - &quot;value2&quot; &lt;#prop&gt; &lt;#s2&gt;.
@@ -2444,32 +2594,32 @@
 + &lt;file:///base/rdf-test-14.n3#s&gt; &lt;file:///base/rdf-test-14.n3#prop&gt; &quot;value1&quot;.
 """ .
     
-    :_g101     a n3test:Diff;
+    :_g122     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g1     &lt;file:///base/rdf-test-16.n3#b&gt; &lt;file:///base/rdf-test-16.n3#a&gt; .
 
 """ .
     
-    :_g102     a n3test:Diff;
+    :_g123     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g8     &lt;file:///base/rdf-test-17.n3#e3&gt; &lt;file:///base/rdf-test-17.n3#d3&gt; .
 
 """ .
     
-    :_g103     a n3test:Diff;
+    :_g124     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g1     &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; _:a_g0 .
 
 """ .
     
-    :_g104     a n3test:Diff;
+    :_g125     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g1     &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; &quot;2&quot; .
 
 """ .
     
-    :_g105     a n3test:Diff;
+    :_g126     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g1     &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; &quot;2&quot; .
 
 """ .
     
-    :_g106     a n3test:Diff;
+    :_g127     a n3test:Diff;
          n3test:diffString """- &lt;#a&gt; &lt;#p&gt; &quot;11&quot;.
 - &lt;#a&gt; &lt;#p&gt; &quot;11&quot;.
 - &lt;#a&gt; &lt;#q2&gt; &quot;99&quot;.
@@ -2483,7 +2633,7 @@
 + &lt;file:///base/rdf-test-21.n3#a&gt; &lt;file:///base/rdf-test-21.n3#q&gt; &quot;12&quot;^^&lt;http://www.w3.org/2001/XMLSchema#integer&gt;.
 """ .
     
-    :_g107     a n3test:Diff;
+    :_g128     a n3test:Diff;
          n3test:diffString """- &lt;#x&gt; &lt;#y1&gt; &quot;\\u03B1&quot;.
 - &lt;#x&gt; &lt;#y2&gt; &quot;\\u00E9&quot;.
 - &lt;#x&gt; &lt;#y3&gt; &quot;&Atilde;&copy;&quot;.
@@ -2492,19 +2642,19 @@
 + &lt;file:///base/rdf-test-26.n3#x&gt; &lt;file:///base/rdf-test-26.n3#y3&gt; &quot;\\u00E9&quot;.
 """ .
     
-    :_g108     a n3test:Diff;
+    :_g129     a n3test:Diff;
          n3test:diffString """- &lt;http://example.org/x#&gt; &lt;http://example.org/x#p&gt; &quot;alpha qname&quot;.
 + &lt;http://example.org/x#\\u03B1&gt; &lt;http://example.org/x#p&gt; &quot;alpha qname&quot;.
 """ .
     
-    :_g109     a n3test:Diff;
+    :_g130     a n3test:Diff;
          n3test:diffString """- &lt;#x&gt; &lt;#p1&gt; &quot;abc&quot;.
 - &lt;#x&gt; &lt;#p2&gt; &quot;ab.c&quot;.
 + &lt;file:///base/rdf-test-28.n3#x&gt; &lt;file:///base/rdf-test-28.n3#p1&gt; &quot;abc&quot;^^&lt;http://www.w3.org/2001/XMLSchema#integer&gt;.
 + &lt;file:///base/rdf-test-28.n3#x&gt; &lt;file:///base/rdf-test-28.n3#p2&gt; &quot;ab.c&quot;^^&lt;http://www.w3.org/2001/XMLSchema#double&gt;.
 """ .
     
-    :_g110     a n3test:N3Parser;
+    :_g131     a n3test:N3Parser;
          n3test:command "python /home/syosi/tarballs/afon/afon.py %s";
          n3test:failsParsing <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/i18n/hiragana.n3>,
                 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/lists.n3>,
@@ -2558,137 +2708,137 @@
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-20.n3?rev=1.1>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-26.n3?rev=1.2> .
     
-    :_g111     a n3test:Diff;
+    :_g132     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/a') ('URIRef', 'file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/b') ('URIRef', 'file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/c') ('FORMULA', 'formulae:ZmlsZTovaG9tZS9zeW9zaS9jdnMtdHJ1bmsvV1dXLzIwMDAvMTAvc3dhcC90ZXN0L3N5bnRheC9uby1sYXN0LW5sLm4z#RootFormula')
 
 """ .
     
-    :_g112     a n3test:Diff;
+    :_g133     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'http://example.com/foo#hyphen-ated') ('URIRef', 'http://example.com/foo#dot.ted') ('URIRef', 'http://example.com/foo#hyphen-and.dot') ('FORMULA', 'formulae:ZmlsZTovaG9tZS9zeW9zaS9jdnMtdHJ1bmsvV1dXLzIwMDAvMTAvc3dhcC90ZXN0L3N5bnRheC9kb3QtZGFzaC5uMw==#RootFormula')
 
 """ .
     
-    :_g113     a n3test:Diff;
+    :_g134     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'http://example.org/base2#a') ('URIRef', 'http://example.org/base2#b') ('URIRef', 'http://example.org/base2#c') ('FORMULA', 'formulae:ZmlsZTovaG9tZS9zeW9zaS9jdnMtdHJ1bmsvV1dXLzIwMDAvMTAvc3dhcC90ZXN0L3N5bnRheC9kamIxYS5uMw==#RootFormula')
 
 """ .
     
-    :_g114     a n3test:Diff;
+    :_g135     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3parser.tests#n3_10001') ('URIRef', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type') ('URIRef', 'http://www.w3.org/2004/11/n3test#PositiveParserTest') ('FORMULA', 'formulae:ZmlsZTovaG9tZS9zeW9zaS9jdnMtdHJ1bmsvV1dXLzIwMDAvMTAvc3dhcC90ZXN0L24zcGFyc2VyLnRlc3Rz#RootFormula')
 
 """ .
     
-    :_g115     a n3test:Diff;
+    :_g136     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/contexts.n3#fred') ('URIRef', 'http://www.example.org/utilities#knows') ('URIRef', 'file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/contexts.n3#john') ('FORMULA', 'formulae:ZmlsZTovaG9tZS9zeW9zaS9jdnMtdHJ1bmsvV1dXLzIwMDAvMTAvc3dhcC90ZXN0L2NvbnRleHRzLm4z#formula1')
 
 """ .
     
-    :_g116     a n3test:Diff;
+    :_g137     a n3test:Diff;
          n3test:diffString """Syntax error: ('Exivar', 'thing1') ('URIRef', 'file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/anon-prop.n3#propProp') ('Lit', u'red') ('FORMULA', 'formulae:ZmlsZTovaG9tZS9zeW9zaS9jdnMtdHJ1bmsvV1dXLzIwMDAvMTAvc3dhcC90ZXN0L2Fub24tcHJvcC5uMw==#RootFormula')
 
 """ .
     
-    :_g117     a n3test:Diff;
+    :_g138     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3#x') ('URIRef', 'file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3#prop') ('Lit', u'simple string') ('FORMULA', 'formulae:ZmlsZTovaG9tZS9zeW9zaS9jdnMtdHJ1bmsvV1dXLzIwMDAvMTAvc3dhcC90ZXN0L3N0cnF1b3QubjM=#RootFormula')
 
 """ .
     
-    :_g118     a n3test:Diff;
+    :_g139     a n3test:Diff;
          n3test:diffString """Syntax error: ('Univar', 'a') ('URIRef', 'file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/qvars1.n3#mother') ('Univar', 'b') ('FORMULA', 'formulae:ZmlsZTovaG9tZS9zeW9zaS9jdnMtdHJ1bmsvV1dXLzIwMDAvMTAvc3dhcC90ZXN0L3N5bnRheC9xdmFyczEubjM=#formula1')
 
 """ .
     
-    :_g119     a n3test:Diff;
+    :_g140     a n3test:Diff;
          n3test:diffString """Syntax error: ('Univar', 'b') ('URIRef', 'file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/qvars2.n3#aunt') ('Univar', 'c') ('FORMULA', 'formulae:ZmlsZTovaG9tZS9zeW9zaS9jdnMtdHJ1bmsvV1dXLzIwMDAvMTAvc3dhcC90ZXN0L3N5bnRheC9xdmFyczIubjM=#formula1')
 
 """ .
     
-    :_g120     a n3test:Diff;
+    :_g141     a n3test:Diff;
          n3test:diffString """Syntax error: ('Lit', u'     @prefix : &lt;http://www.w3.org/2000/10/swap/test/crypto/acc.n3#&gt; .\\n     @prefix crypto: &lt;http://www.w3.org/2000/10/swap/crypto#&gt; .\\n     @prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .\\n     @prefix os: &lt;http://www.w3.org/2000/10/swap/os#&gt; .\\n     @prefix string: &lt;http://www.w3.org/2000/10/swap/string#&gt; .\\n    \\n    \\\\&quot;\\\\&quot;\\\\&quot;\\nMzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3\\nNTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1\\nNDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2\\nNzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1\\nMjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4\\nOTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D\\n\\\\&quot;\\\\&quot;\\\\&quot;     a :RequestKey;\\n         :authorityName &lt;Tiina&gt;;\\n         :junk &quot;327462sjsdfjsakdhfkjsafd32164321&quot; .\\n') ('URIRef', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type') ('URIRef', 'file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/lstring.n3#test_string') ('FORMULA', 'formulae:ZmlsZTovaG9tZS9zeW9zaS9jdnMtdHJ1bmsvV1dXLzIwMDAvMTAvc3dhcC90ZXN0L3N5bnRheC9sc3RyaW5nLm4z#RootFormula')
 
 """ .
     
-    :_g121     a n3test:Diff;
+    :_g142     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/this-quantifiers.n3#foo') ('URIRef', 'file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/this-quantifiers.n3#bar') ('URIRef', 'file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/this-quantifiers.n3#baz') ('FORMULA', 'formulae:ZmlsZTovaG9tZS9zeW9zaS9jdnMtdHJ1bmsvV1dXLzIwMDAvMTAvc3dhcC90ZXN0L3N5bnRheC90aGlzLXF1YW50aWZpZXJzLm4z#formula2')
 
 """ .
     
-    :_g122     a n3test:Diff;
+    :_g143     a n3test:Diff;
          n3test:diffString """Syntax error: ('Univar', 'p1') ('URIRef', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type') ('URIRef', 'http://www.daml.org/2001/03/daml+oil#TransitiveProperty') ('FORMULA', 'formulae:ZmlsZTovaG9tZS9zeW9zaS9jdnMtdHJ1bmsvV1dXLzIwMDAvMTAvc3dhcC90ZXN0L3N5bnRheC90aGlzLXJ1bGVzLm4z#formula2')
 
 """ .
     
-    :_g123     a n3test:Diff;
+    :_g144     a n3test:Diff;
          n3test:diffString """Syntax error: ('Exivar', 'thing1') ('URIRef', 'http://one.net/ns1#bp1') ('URIRef', 'http://one.net/ns1#bv1') ('FORMULA', 'formulae:aHR0cDovL2N2cy5zb3VyY2Vmb3JnZS5uZXQvdmlld2N2cy5weS8qY2hlY2tvdXQqL2plbmEvamVuYTIvdGVzdGluZy9OMy9yZGYtdGVzdC0wMi5uMz9yZXY9MS4x#RootFormula')
 
 """ .
     
-    :_g124     a n3test:Diff;
+    :_g145     a n3test:Diff;
          n3test:diffString """Syntax error: ('Exivar', 'thing1') ('URIRef', 'http://namespace.net/p1') ('URIRef', 'http://namespace.net/v1') ('FORMULA', 'formulae:aHR0cDovL2N2cy5zb3VyY2Vmb3JnZS5uZXQvdmlld2N2cy5weS8qY2hlY2tvdXQqL2plbmEvamVuYTIvdGVzdGluZy9OMy9yZGYtdGVzdC0wMy5uMz9yZXY9MS4x#RootFormula')
 
 """ .
     
-    :_g125     a n3test:Diff;
+    :_g146     a n3test:Diff;
          n3test:diffString """Syntax error: ('Exivar', 'a') ('URIRef', 'http://one.net/ns#prop1') ('Lit', u'anon1') ('FORMULA', 'formulae:aHR0cDovL2N2cy5zb3VyY2Vmb3JnZS5uZXQvdmlld2N2cy5weS8qY2hlY2tvdXQqL2plbmEvamVuYTIvdGVzdGluZy9OMy9yZGYtdGVzdC0wNC5uMz9yZXY9MS4x#RootFormula')
 
 """ .
     
-    :_g126     a n3test:Diff;
+    :_g147     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-05.n3?rev=1.1') ('URIRef', 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type') ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-05.n3?rev=1.1a') ('FORMULA', 'formulae:aHR0cDovL2N2cy5zb3VyY2Vmb3JnZS5uZXQvdmlld2N2cy5weS8qY2hlY2tvdXQqL2plbmEvamVuYTIvdGVzdGluZy9OMy9yZGYtdGVzdC0wNS5uMz9yZXY9MS4x#RootFormula')
 
 """ .
     
-    :_g127     a n3test:Diff;
+    :_g148     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-06.n3?rev=1.1#') ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-06.n3?rev=1.1#p') ('Lit', u'v') ('FORMULA', 'formulae:aHR0cDovL2N2cy5zb3VyY2Vmb3JnZS5uZXQvdmlld2N2cy5weS8qY2hlY2tvdXQqL2plbmEvamVuYTIvdGVzdGluZy9OMy9yZGYtdGVzdC0wNi5uMz9yZXY9MS4x#RootFormula')
 
 """ .
     
-    :_g128     a n3test:Diff;
+    :_g149     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-07.n3?rev=1.1#b') ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-07.n3?rev=1.1#prop') ('Lit', u'value') ('FORMULA', 'formulae:aHR0cDovL2N2cy5zb3VyY2Vmb3JnZS5uZXQvdmlld2N2cy5weS8qY2hlY2tvdXQqL2plbmEvamVuYTIvdGVzdGluZy9OMy9yZGYtdGVzdC0wNy5uMz9yZXY9MS4x#RootFormula')
 
 """ .
     
-    :_g129     a n3test:Diff;
+    :_g150     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-09.n3?rev=1.2a') ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-09.n3?rev=1.2p1') ('URIRef', 'http://www.daml.org/2001/03/daml+oil#nil') ('FORMULA', 'formulae:aHR0cDovL2N2cy5zb3VyY2Vmb3JnZS5uZXQvdmlld2N2cy5weS8qY2hlY2tvdXQqL2plbmEvamVuYTIvdGVzdGluZy9OMy9yZGYtdGVzdC0wOS5uMz9yZXY9MS4y#RootFormula')
 
 """ .
     
-    :_g130     a n3test:Diff;
+    :_g151     a n3test:Diff;
          n3test:diffString """Syntax error: ('Exivar', 'a') ('URIRef', 'http://www.w3.org/2000/10/swap/log#implies') ('Exivar', 'b') ('FORMULA', 'formulae:aHR0cDovL2N2cy5zb3VyY2Vmb3JnZS5uZXQvdmlld2N2cy5weS8qY2hlY2tvdXQqL2plbmEvamVuYTIvdGVzdGluZy9OMy9yZGYtdGVzdC0xMS5uMz9yZXY9MS4x#RootFormula')
 
 """ .
     
-    :_g131     a n3test:Diff;
+    :_g152     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'http://host/A#b') ('URIRef', 'http://host/A#p') ('URIRef', 'http://host/A#v') ('FORMULA', 'formulae:aHR0cDovL2N2cy5zb3VyY2Vmb3JnZS5uZXQvdmlld2N2cy5weS8qY2hlY2tvdXQqL2plbmEvamVuYTIvdGVzdGluZy9OMy9yZGYtdGVzdC0xMy5uMz9yZXY9MS4x#RootFormula')
 
 """ .
     
-    :_g132     a n3test:Diff;
+    :_g153     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-14.n3?rev=1.1#s') ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-14.n3?rev=1.1#prop') ('Lit', u'value1') ('FORMULA', 'formulae:aHR0cDovL2N2cy5zb3VyY2Vmb3JnZS5uZXQvdmlld2N2cy5weS8qY2hlY2tvdXQqL2plbmEvamVuYTIvdGVzdGluZy9OMy9yZGYtdGVzdC0xNC5uMz9yZXY9MS4x#RootFormula')
 
 """ .
     
-    :_g133     a n3test:Diff;
+    :_g154     a n3test:Diff;
          n3test:diffString """Syntax error: ('Exivar', 'list1') ('URIRef', 'http://www.daml.org/2001/03/daml+oil#first') ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-18.n3?rev=1.1#d1') ('FORMULA', 'formulae:aHR0cDovL2N2cy5zb3VyY2Vmb3JnZS5uZXQvdmlld2N2cy5weS8qY2hlY2tvdXQqL2plbmEvamVuYTIvdGVzdGluZy9OMy9yZGYtdGVzdC0xOC5uMz9yZXY9MS4x#RootFormula')
 
 """ .
     
-    :_g134     a n3test:Diff;
+    :_g155     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-19.n3?rev=1.1#a') ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-19.n3?rev=1.1#p') ('Exivar', 'a') ('FORMULA', 'formulae:aHR0cDovL2N2cy5zb3VyY2Vmb3JnZS5uZXQvdmlld2N2cy5weS8qY2hlY2tvdXQqL2plbmEvamVuYTIvdGVzdGluZy9OMy9yZGYtdGVzdC0xOS5uMz9yZXY9MS4x#RootFormula')
 
 """ .
     
-    :_g135     a n3test:Diff;
+    :_g156     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-20.n3?rev=1.1#a') ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-20.n3?rev=1.1#p') ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-20.n3?rev=1.1#list') ('FORMULA', 'formulae:aHR0cDovL2N2cy5zb3VyY2Vmb3JnZS5uZXQvdmlld2N2cy5weS8qY2hlY2tvdXQqL2plbmEvamVuYTIvdGVzdGluZy9OMy9yZGYtdGVzdC0yMC5uMz9yZXY9MS4x#RootFormula')
 
 """ .
     
-    :_g136     a n3test:Diff;
+    :_g157     a n3test:Diff;
          n3test:diffString """Syntax error: ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-26.n3?rev=1.2#x') ('URIRef', 'http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-26.n3?rev=1.2#y1') ('Lit', u'\\u03b1') ('FORMULA', 'formulae:aHR0cDovL2N2cy5zb3VyY2Vmb3JnZS5uZXQvdmlld2N2cy5weS8qY2hlY2tvdXQqL2plbmEvamVuYTIvdGVzdGluZy9OMy9yZGYtdGVzdC0yNi5uMz9yZXY9MS4y#RootFormula')
 
 """ .
     
-    :_g137     a n3test:N3Parser;
+    :_g158     a n3test:N3Parser;
          n3test:command "python download.py %s | python /home/syosi/SWAP/n3spark.py /dev/stdin";
          n3test:failsParsing <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/anon-prop.n3>,
                 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/lists.n3>,
@@ -2742,147 +2892,147 @@
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-26.n3?rev=1.2>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-27.n3?rev=1.2> .
     
-    :_g138     a n3test:Diff;
+    :_g159     a n3test:Diff;
          n3test:diffString """Syntax error: TOKENS: [a, b, c, .]
 
 """ .
     
-    :_g139     a n3test:Diff;
+    :_g160     a n3test:Diff;
          n3test:diffString """Syntax error: TOKENS: [prefix, :, http://example.com/foo#, ., http://example.com/foo#hyphen-ated, http://example.com/foo#dot.ted, http://example.com/foo#hyphen-and.dot, ., http://example.com/foo#minus-_underscore, http://example.com/foo#under_score, http://example.com/foo#underscore_-minus, ., http://example.com/foo#a, http://example.com/foo#b, http://example.com/foo#c, .]
 
 """ .
     
-    :_g140     a n3test:Diff;
+    :_g161     a n3test:Diff;
          n3test:diffString """Syntax error: TOKENS: [prefix, :, foo.n3#, .]
 
 """ .
     
-    :_g141     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: []
-
-""" .
-    
-    :_g142     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, :, http://example.org/base1#, ., prefix, a, :, http://example.org/base2#, ., a, :a, a, :b, a, :c, .]
-
-""" .
-    
-    :_g143     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, u:, http://www.example.org/utilities#, ., prefix, :, #, ., :assumption, =, {, :fred, u:knows, :john, ., :john, u:knows, :mary, ., }, ., :conclusion, =, {, :fred, u:knows, :mary, ., }, ., :trivialTruth, =, {, }, .]
-
-""" .
-    
-    :_g144     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, fam:, http://www.daml.example.org/2001/03/fam#, ., prefix, :, foo.n3#, ., prefix, foo:, foo.n3#, ., :albert]
-
-""" .
-    
-    :_g145     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, s:, http://www.w3.org/2000/01/rdf-schema#, ., prefix, fam:, http://www.daml.example.org/2001/03/fam#, ., prefix, lang:, http://www.daml.example.org/2000/10/lang#, ., prefix, log:, http://www.w3.org/2000/10/swap/log#, ., prefix, math:, http://www.w3.org/2000/10/swap/math#, ., prefix, :, foo.n3#, ., prefix, foo:, foo.n3#, ., :albert]
-
-""" .
-    
-    :_g146     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: []
-
-""" .
-    
-    :_g147     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [{]
-
-""" .
-    
-    :_g148     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [{]
-
-""" .
-    
-    :_g149     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: []
-
-""" .
-    
-    :_g150     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, log:, http://www.w3.org/2000/10/swap/log#, ., prefix, :, #, ., prefix, qu:, #, ., {, {, :foo, :bar, :baz, }, log:includes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa2, a, :success, }, ., {, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, log:includes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb2, a, :success, }, ., {, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, log:includes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc2, a, :success, }, ., {, {, :foo, :bar, :baz, }, log:includes, {, :foo, :bar, :baz, }, }, log:implies, {, :testa1, a, :success, }, ., {, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, log:includes, {, :foo, :bar, :baz, }, }, log:implies, {, :testb1, a, :FAILURE, }, ., {, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, log:includes, {, :foo, :bar, :baz, }, }, log:implies, {, :testc1, a, :success, }, ., {, {, :foo, :bar, :baz, }, log:includes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa3, a, :FAILURE, }, ., {, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, log:includes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb3, a, :FAILURE, }, ., {, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, log:includes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc3, a, :success, }, ., {, {, :foo, :bar, :baz, }, log:notIncludes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa2n, a, :FAILURE, }, ., {, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, log:notIncludes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb2n, a, :FAILURE, }, ., {, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, log:notIncludes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc2n, a, :FAILURE, }, ., {, {, :foo, :bar, :baz, }, log:notIncludes, {, :foo, :bar, :baz, }, }, log:implies, {, :testa1n, a, :FAILURE, }, ., {, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, log:notIncludes, {, :foo, :bar, :baz, }, }, log:implies, {, :testb1n, a, :success, }, ., {, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, log:notIncludes, {, :foo, :bar, :baz, }, }, log:implies, {, :testc1n, a, :FAILURE, }, ., {, {, :foo, :bar, :baz, }, log:notIncludes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa3n, a, :success, }, ., {, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, log:notIncludes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb3n, a, :success, }, ., {, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, log:notIncludes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc3n, a, :FAILURE, }, ., {, {, :fee, :bar, :baz, }, log:includes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa2d, a, :success, }, ., {, {, this, log:forSome, :fee, ., :fee, :bar, :baz, }, log:includes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb2d, a, :success, }, ., {, {, this, log:forAll, :fee, ., :fee, :bar, :baz, }, log:includes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc2d, a, :success, }, ., {, {, :fee, :bar, :baz, }, log:includes, {, :foo, :bar, :baz, }, }, log:implies, {, :testa1d, a, :FAILURE, }, ., {, {, this, log:forSome, :fee, ., :fee, :bar, :baz, }, log:includes, {, :foo, :bar, :baz, }, }, log:implies, {, :testb1d, a, :FAILURE, }, ., {, {, this, log:forAll, :fee, ., :fee, :bar, :baz, }, log:includes, {, :foo, :bar, :baz, }, }, log:implies, {, :testc1d, a, :success, }, ., {, {, :fee, :bar, :baz, }, log:includes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa3d, a, :FAILURE, }, ., {, {, this, log:forSome, :fee, ., :fee, :bar, :baz, }, log:includes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb3d, a, :FAILURE, }, ., {, {, this, log:forAll, :fee, ., :fee, :bar, :baz, }, log:includes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc3d, a, :success, }, ., {, {, :fee, :bar, :baz, }, log:notIncludes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa2nd, a, :FAILURE, }, ., {, {, this, log:forSome, :fee, ., :fee, :bar, :baz, }, log:notIncludes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb2nd, a, :FAILURE, }, ., {, {, this, log:forAll, :fee, ., :fee, :bar, :baz, }, log:notIncludes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc2nd, a, :FAILURE, }, ., {, {, :fee, :bar, :baz, }, log:notIncludes, {, :foo, :bar, :baz, }, }, log:implies, {, :testa1nd, a, :success, }, ., {, {, this, log:forSome, :fee, ., :fee, :bar, :baz, }, log:notIncludes, {, :foo, :bar, :baz, }, }, log:implies, {, :testb1nd, a, :success, }, ., {, {, this, log:forAll, :fee, ., :fee, :bar, :baz, }, log:notIncludes, {, :foo, :bar, :baz, }, }, log:implies, {, :testc1nd, a, :FAILURE, }, ., {, {, :fee, :bar, :baz, }, log:notIncludes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa3nd, a, :success, }, ., {, {, this, log:forSome, :fee, ., :fee, :bar, :baz, }, log:notIncludes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb3nd, a, :success, }, ., {, {, this, log:forAll, :fee, ., :fee, :bar, :baz, }, log:notIncludes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc3nd, a, :FAILURE, }, ., log:implies, a, log:Chaff, .]
-
-""" .
-    
-    :_g151     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, log:, http://www.w3.org/2000/10/swap/log#, ., prefix, daml:, http://www.daml.org/2001/03/daml+oil#, ., prefix, :, #, ., prefix, rules:, #, ., this, log:forAll, #p, ., {, #p, a, daml:TransitiveProperty, ., }, :means, {, {, this, log:forAll, #x, ,, #y, ,, #z, ., {, #x, #p, #y, ., #y, #p, #z, ., }, log:implies, {, #x, #p, #z, ., }, }, a, log:Truth, ., }, ., this, log:forAll, #a, ,, #b, ., {, #a, :means, #b, ., }, log:implies, {, #a, log:implies, #b, ., #b, log:implies, #a, ., }, ., {, #a, log:implies, #b, ., #b, log:implies, #a, ., }, log:implies, {, #a, :means, #b, ., }, ., #ancestor, a, daml:TransitiveProperty, ., #pa, #ancestor, #granpa, ., #bill, #ancestor, #pa, .]
-
-""" .
-    
-    :_g152     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, ns1:, http://one.net/ns1#, ., prefix, ns2:, http://two.net/ns2#, ., [, ns1:bp1, ns1:bv1, ;, ns1:bp2, ns1:bv2, ], ns2:p1, ns2:v1, .]
-
-""" .
-    
-    :_g153     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, ns:, http://namespace.net/, ., [, ], ns:p1, ns:v1, .]
-
-""" .
-    
-    :_g154     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, :, , ., , a, :a, .]
-
-""" .
-    
-    :_g155     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [http://host/s1, :-, [, http://host/p1, http://host/v1, ], ., http://host/s2, http://host/p2, http://host/v2, ;, :-, [, http://host/p3, http://host/v3, ], ., http://host/s3, :-, [, ], http://host/p, http://host/v, .]
-
-""" .
-    
-    :_g156     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., _:a, =]
-
-""" .
-    
-    :_g157     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., _:a, a, :p, ., prefix, _:, http://underscore/, ., _:a, a, _:p, .]
-
-""" .
-    
-    :_g158     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, a, :, http://host/A#, ., a, :b, a, :p, a, :v, ., prefix, a, :, http://host/Z#, ., a, :b, a, :p, a, :v, .]
-
-""" .
-    
-    :_g159     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., :x1]
-
-""" .
-    
-    :_g160     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., :x]
-
-""" .
-    
-    :_g161     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., :a]
-
-""" .
-    
     :_g162     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., :a, :b, (, :d1]
+         n3test:diffString """Syntax error: TOKENS: []
 
 """ .
     
     :_g163     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., prefix, rdf:, http://www.w3.org/1999/02/22-rdf-syntax-ns#, ., prefix, xsd:, http://www.w3.org/2001/XMLSchema#, ., :x, :f1]
+         n3test:diffString """Syntax error: TOKENS: [prefix, :, http://example.org/base1#, ., prefix, a, :, http://example.org/base2#, ., a, :a, a, :b, a, :c, .]
 
 """ .
     
     :_g164     a n3test:Diff;
-         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., :x, :y1]
+         n3test:diffString """Syntax error: TOKENS: [prefix, u:, http://www.example.org/utilities#, ., prefix, :, #, ., :assumption, =, {, :fred, u:knows, :john, ., :john, u:knows, :mary, ., }, ., :conclusion, =, {, :fred, u:knows, :mary, ., }, ., :trivialTruth, =, {, }, .]
 
 """ .
     
     :_g165     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, fam:, http://www.daml.example.org/2001/03/fam#, ., prefix, :, foo.n3#, ., prefix, foo:, foo.n3#, ., :albert]
+
+""" .
+    
+    :_g166     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, s:, http://www.w3.org/2000/01/rdf-schema#, ., prefix, fam:, http://www.daml.example.org/2001/03/fam#, ., prefix, lang:, http://www.daml.example.org/2000/10/lang#, ., prefix, log:, http://www.w3.org/2000/10/swap/log#, ., prefix, math:, http://www.w3.org/2000/10/swap/math#, ., prefix, :, foo.n3#, ., prefix, foo:, foo.n3#, ., :albert]
+
+""" .
+    
+    :_g167     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: []
+
+""" .
+    
+    :_g168     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [{]
+
+""" .
+    
+    :_g169     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [{]
+
+""" .
+    
+    :_g170     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: []
+
+""" .
+    
+    :_g171     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, log:, http://www.w3.org/2000/10/swap/log#, ., prefix, :, #, ., prefix, qu:, #, ., {, {, :foo, :bar, :baz, }, log:includes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa2, a, :success, }, ., {, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, log:includes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb2, a, :success, }, ., {, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, log:includes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc2, a, :success, }, ., {, {, :foo, :bar, :baz, }, log:includes, {, :foo, :bar, :baz, }, }, log:implies, {, :testa1, a, :success, }, ., {, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, log:includes, {, :foo, :bar, :baz, }, }, log:implies, {, :testb1, a, :FAILURE, }, ., {, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, log:includes, {, :foo, :bar, :baz, }, }, log:implies, {, :testc1, a, :success, }, ., {, {, :foo, :bar, :baz, }, log:includes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa3, a, :FAILURE, }, ., {, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, log:includes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb3, a, :FAILURE, }, ., {, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, log:includes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc3, a, :success, }, ., {, {, :foo, :bar, :baz, }, log:notIncludes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa2n, a, :FAILURE, }, ., {, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, log:notIncludes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb2n, a, :FAILURE, }, ., {, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, log:notIncludes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc2n, a, :FAILURE, }, ., {, {, :foo, :bar, :baz, }, log:notIncludes, {, :foo, :bar, :baz, }, }, log:implies, {, :testa1n, a, :FAILURE, }, ., {, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, log:notIncludes, {, :foo, :bar, :baz, }, }, log:implies, {, :testb1n, a, :success, }, ., {, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, log:notIncludes, {, :foo, :bar, :baz, }, }, log:implies, {, :testc1n, a, :FAILURE, }, ., {, {, :foo, :bar, :baz, }, log:notIncludes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa3n, a, :success, }, ., {, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, log:notIncludes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb3n, a, :success, }, ., {, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, log:notIncludes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc3n, a, :FAILURE, }, ., {, {, :fee, :bar, :baz, }, log:includes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa2d, a, :success, }, ., {, {, this, log:forSome, :fee, ., :fee, :bar, :baz, }, log:includes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb2d, a, :success, }, ., {, {, this, log:forAll, :fee, ., :fee, :bar, :baz, }, log:includes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc2d, a, :success, }, ., {, {, :fee, :bar, :baz, }, log:includes, {, :foo, :bar, :baz, }, }, log:implies, {, :testa1d, a, :FAILURE, }, ., {, {, this, log:forSome, :fee, ., :fee, :bar, :baz, }, log:includes, {, :foo, :bar, :baz, }, }, log:implies, {, :testb1d, a, :FAILURE, }, ., {, {, this, log:forAll, :fee, ., :fee, :bar, :baz, }, log:includes, {, :foo, :bar, :baz, }, }, log:implies, {, :testc1d, a, :success, }, ., {, {, :fee, :bar, :baz, }, log:includes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa3d, a, :FAILURE, }, ., {, {, this, log:forSome, :fee, ., :fee, :bar, :baz, }, log:includes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb3d, a, :FAILURE, }, ., {, {, this, log:forAll, :fee, ., :fee, :bar, :baz, }, log:includes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc3d, a, :success, }, ., {, {, :fee, :bar, :baz, }, log:notIncludes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa2nd, a, :FAILURE, }, ., {, {, this, log:forSome, :fee, ., :fee, :bar, :baz, }, log:notIncludes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb2nd, a, :FAILURE, }, ., {, {, this, log:forAll, :fee, ., :fee, :bar, :baz, }, log:notIncludes, {, this, log:forSome, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc2nd, a, :FAILURE, }, ., {, {, :fee, :bar, :baz, }, log:notIncludes, {, :foo, :bar, :baz, }, }, log:implies, {, :testa1nd, a, :success, }, ., {, {, this, log:forSome, :fee, ., :fee, :bar, :baz, }, log:notIncludes, {, :foo, :bar, :baz, }, }, log:implies, {, :testb1nd, a, :success, }, ., {, {, this, log:forAll, :fee, ., :fee, :bar, :baz, }, log:notIncludes, {, :foo, :bar, :baz, }, }, log:implies, {, :testc1nd, a, :FAILURE, }, ., {, {, :fee, :bar, :baz, }, log:notIncludes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testa3nd, a, :success, }, ., {, {, this, log:forSome, :fee, ., :fee, :bar, :baz, }, log:notIncludes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testb3nd, a, :success, }, ., {, {, this, log:forAll, :fee, ., :fee, :bar, :baz, }, log:notIncludes, {, this, log:forAll, :foo, ., :foo, :bar, :baz, }, }, log:implies, {, :testc3nd, a, :FAILURE, }, ., log:implies, a, log:Chaff, .]
+
+""" .
+    
+    :_g172     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, log:, http://www.w3.org/2000/10/swap/log#, ., prefix, daml:, http://www.daml.org/2001/03/daml+oil#, ., prefix, :, #, ., prefix, rules:, #, ., this, log:forAll, #p, ., {, #p, a, daml:TransitiveProperty, ., }, :means, {, {, this, log:forAll, #x, ,, #y, ,, #z, ., {, #x, #p, #y, ., #y, #p, #z, ., }, log:implies, {, #x, #p, #z, ., }, }, a, log:Truth, ., }, ., this, log:forAll, #a, ,, #b, ., {, #a, :means, #b, ., }, log:implies, {, #a, log:implies, #b, ., #b, log:implies, #a, ., }, ., {, #a, log:implies, #b, ., #b, log:implies, #a, ., }, log:implies, {, #a, :means, #b, ., }, ., #ancestor, a, daml:TransitiveProperty, ., #pa, #ancestor, #granpa, ., #bill, #ancestor, #pa, .]
+
+""" .
+    
+    :_g173     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, ns1:, http://one.net/ns1#, ., prefix, ns2:, http://two.net/ns2#, ., [, ns1:bp1, ns1:bv1, ;, ns1:bp2, ns1:bv2, ], ns2:p1, ns2:v1, .]
+
+""" .
+    
+    :_g174     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, ns:, http://namespace.net/, ., [, ], ns:p1, ns:v1, .]
+
+""" .
+    
+    :_g175     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, :, , ., , a, :a, .]
+
+""" .
+    
+    :_g176     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [http://host/s1, :-, [, http://host/p1, http://host/v1, ], ., http://host/s2, http://host/p2, http://host/v2, ;, :-, [, http://host/p3, http://host/v3, ], ., http://host/s3, :-, [, ], http://host/p, http://host/v, .]
+
+""" .
+    
+    :_g177     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., _:a, =]
+
+""" .
+    
+    :_g178     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., _:a, a, :p, ., prefix, _:, http://underscore/, ., _:a, a, _:p, .]
+
+""" .
+    
+    :_g179     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, a, :, http://host/A#, ., a, :b, a, :p, a, :v, ., prefix, a, :, http://host/Z#, ., a, :b, a, :p, a, :v, .]
+
+""" .
+    
+    :_g180     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., :x1]
+
+""" .
+    
+    :_g181     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., :x]
+
+""" .
+    
+    :_g182     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., :a]
+
+""" .
+    
+    :_g183     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., :a, :b, (, :d1]
+
+""" .
+    
+    :_g184     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., prefix, rdf:, http://www.w3.org/1999/02/22-rdf-syntax-ns#, ., prefix, xsd:, http://www.w3.org/2001/XMLSchema#, ., :x, :f1]
+
+""" .
+    
+    :_g185     a n3test:Diff;
+         n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., :x, :y1]
+
+""" .
+    
+    :_g186     a n3test:Diff;
          n3test:diffString """Syntax error: TOKENS: [prefix, :, #, ., prefix, x:, http://example.org/x#, ., prefix, e:, http://example.org/e-actute-\\u00E9#, ., x:]
 
 """ .
     
-    :_g166     a n3test:N3Parser;
+    :_g187     a n3test:N3Parser;
          n3test:command "python download.py %s | /usr/java/jdk1.5.0/bin/java jena.n3 --rdf-nt /dev/stdin";
          n3test:failsParsing <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/anon-prop.n3>,
                 <file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/contexts.n3>,
@@ -2936,18 +3086,18 @@
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-27.n3?rev=1.2>,
                 <http://cvs.sourceforge.net/viewcvs.py/*checkout*/jena/jena2/testing/N3/rdf-test-28.n3?rev=1.1> .
     
-    :_g167     a n3test:Diff;
+    :_g188     a n3test:Diff;
          n3test:diffString """- &lt;a&gt; &lt;b&gt; &lt;c&gt;.
 + &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/a&gt; &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/b&gt; &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/c&gt;.
 """ .
     
-    :_g168     a n3test:Diff;
+    :_g189     a n3test:Diff;
          n3test:diffString "" .
     
-    :_g169     a n3test:Diff;
+    :_g190     a n3test:Diff;
          n3test:diffString "" .
     
-    :_g170     a n3test:Diff;
+    :_g191     a n3test:Diff;
          n3test:diffString """- &lt;file:////dev/stdin#n3_10001&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2004/11/n3test#PositiveParserTest&gt;.
 - &lt;file:////dev/stdin#n3_10001&gt; &lt;http://www.w3.org/2004/11/n3test#description&gt; &quot;An N3 file with no final newline character&quot;.
 - &lt;file:////dev/stdin#n3_10001&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;syntax/no-last-nl.n3&gt;.
@@ -3132,7 +3282,7 @@
 + &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/n3parser.tests#n3_20003&gt; &lt;http://www.w3.org/2004/11/n3test#inputDocument&gt; &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/neg-thisadoc.n3&gt;.
 """ .
     
-    :_g171     a n3test:Diff;
+    :_g192     a n3test:Diff;
          n3test:diffString """- &lt;#martin&gt; &lt;#surname&gt; &quot;D\\u00FCrst&quot;.
 - &lt;#x&gt; &lt;#prop&gt; &quot;simple string&quot;.
 - &lt;#y&gt; &lt;#prop&gt; &quot;triple quoted\\nstring with newlines in it.&quot;.
@@ -3147,7 +3297,7 @@
 + &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/strquot.n3&gt; &lt;http://purl.org/dc/elements/1.1/description&gt; &quot;testing string parsing in N3.\\nHmm... how much of this is in the primer?\\nHow much should be there?\\n@@ Holding off on unicode until support\\nin python is sufficiently deployed\\n(e.g. python on tux doesn't grok,\\nnor does pythonwin on TimBL's laptop).\\n$Id$\\n&quot;.
 """ .
     
-    :_g172     a n3test:Diff;
+    :_g193     a n3test:Diff;
          n3test:diffString """- &lt;foo.n3#albert&gt; &lt;http://www.daml.example.org/2001/03/fam#mother&gt; __:c1.
 - __:c0 &lt;http://www.daml.example.org/2001/03/fam#father&gt; &lt;foo.n3#albert&gt;.
 - __:c0 &lt;http://www.daml.example.org/2001/03/fam#sister&gt; &lt;foo.n3#nieceBertha&gt;.
@@ -3158,61 +3308,61 @@
 + __:c1 &lt;http://www.daml.example.org/2001/03/fam#sister&gt; &lt;file:/home/syosi/cvs-trunk/WWW/2000/10/swap/test/syntax/foo.n3#auntieAnne&gt;.
 """ .
     
-    :_g173     a n3test:Diff;
+    :_g194     a n3test:Diff;
          n3test:diffString "" .
     
-    :_g174     a n3test:Diff;
+    :_g195     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g0     &lt;http://one.net/ns1#bp1&gt; &lt;http://one.net/ns1#bv1&gt; .
 
 """ .
     
-    :_g175     a n3test:Diff;
+    :_g196     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g0     &lt;http://namespace.net/p1&gt; &lt;http://namespace.net/v1&gt; .
 
 """ .
     
-    :_g176     a n3test:Diff;
+    :_g197     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_ga     &lt;http://one.net/ns#prop1&gt; &quot;anon1&quot; .
 
 """ .
     
-    :_g177     a n3test:Diff;
+    :_g198     a n3test:Diff;
          n3test:diffString """- &lt;file:////dev/stdin&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;file:////dev/stdina&gt;.
 + &lt;file:///base/rdf-test-05.n3&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;file:///base/rdf-test-05.n3a&gt;.
 """ .
     
-    :_g178     a n3test:Diff;
+    :_g199     a n3test:Diff;
          n3test:diffString """- &lt;file:////dev/stdin#&gt; &lt;file:////dev/stdin#p&gt; &quot;v&quot;.
 + &lt;file:///base/rdf-test-06.n3#&gt; &lt;file:///base/rdf-test-06.n3#p&gt; &quot;v&quot;.
 """ .
     
-    :_g179     a n3test:Diff;
+    :_g200     a n3test:Diff;
          n3test:diffString """- &lt;file:////dev/stdin#b&gt; &lt;file:////dev/stdin#prop&gt; &quot;value&quot;.
 + &lt;file:///base/rdf-test-07.n3#b&gt; &lt;file:///base/rdf-test-07.n3#prop&gt; &quot;value&quot;.
 """ .
     
-    :_g180     a n3test:Diff;
+    :_g201     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g1     &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; &lt;file:///base/rdf-test-09.n3b&gt; .
 
 """ .
     
-    :_g181     a n3test:Diff;
+    :_g202     a n3test:Diff;
          n3test:diffString "" .
     
-    :_g182     a n3test:Diff;
+    :_g203     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_ga     &lt;http://www.daml.org/2001/03/daml+oil#equivalentTo&gt; _:a_gb .
 
 """ .
     
-    :_g183     a n3test:Diff;
+    :_g204     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_ga     &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;file:///base/rdf-test-12.n3#p&gt; .
 
 """ .
     
-    :_g184     a n3test:Diff;
+    :_g205     a n3test:Diff;
          n3test:diffString "" .
     
-    :_g185     a n3test:Diff;
+    :_g206     a n3test:Diff;
          n3test:diffString """- &lt;file:////dev/stdin#s1&gt; &lt;file:////dev/stdin#prop&gt; &quot;value2&quot;.
 - &lt;file:////dev/stdin#s2&gt; &lt;file:////dev/stdin#prop&gt; &quot;value2&quot;.
 - &lt;file:////dev/stdin#s&gt; &lt;file:////dev/stdin#prop&gt; &quot;value1&quot;.
@@ -3221,7 +3371,7 @@
 + &lt;file:///base/rdf-test-14.n3#s&gt; &lt;file:///base/rdf-test-14.n3#prop&gt; &quot;value1&quot;.
 """ .
     
-    :_g186     a n3test:Diff;
+    :_g207     a n3test:Diff;
          n3test:diffString """- &lt;file:////dev/stdin#a1&gt; &lt;file:////dev/stdin#b1&gt; __:c0.
 - &lt;file:////dev/stdin#a2&gt; &lt;http://a/ns#b2&gt; __:c5.
 - &lt;file:////dev/stdin#o&gt; &lt;http://a/ns#p1&gt; __:c6.
@@ -3254,32 +3404,32 @@
 + __:c4 &lt;file:///base/rdf-test-15.n3#q2&gt; &quot;5&quot;.
 """ .
     
-    :_g187     a n3test:Diff;
+    :_g208     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g1     &lt;file:///base/rdf-test-16.n3#b&gt; &lt;file:///base/rdf-test-16.n3#a&gt; .
 
 """ .
     
-    :_g188     a n3test:Diff;
+    :_g209     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g8     &lt;file:///base/rdf-test-17.n3#e3&gt; &lt;file:///base/rdf-test-17.n3#d3&gt; .
 
 """ .
     
-    :_g189     a n3test:Diff;
+    :_g210     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g1     &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; _:a_g0 .
 
 """ .
     
-    :_g190     a n3test:Diff;
+    :_g211     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g1     &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; &quot;2&quot; .
 
 """ .
     
-    :_g191     a n3test:Diff;
+    :_g212     a n3test:Diff;
          n3test:diffString """Syntax error:     _:a_g1     &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#first&gt; &quot;2&quot; .
 
 """ .
     
-    :_g192     a n3test:Diff;
+    :_g213     a n3test:Diff;
          n3test:diffString """- &lt;file:////dev/stdin#a&gt; &lt;file:////dev/stdin#p&gt; &quot;11&quot;.
 - &lt;file:////dev/stdin#a&gt; &lt;file:////dev/stdin#p&gt; &quot;11&quot;^^&lt;http://www.w3.org/2001/XMLSchema#integer&gt;.
 - &lt;file:////dev/stdin#a&gt; &lt;file:////dev/stdin#q2&gt; &quot;99&quot;^^&lt;http://www.w3.org/2001/XMLSchema#integer&gt;.
@@ -3292,10 +3442,10 @@
 + &lt;file:///base/rdf-test-21.n3#a&gt; &lt;file:///base/rdf-test-21.n3#q&gt; &quot;12&quot;^^&lt;http://www.w3.org/2001/XMLSchema#integer&gt;.
 """ .
     
-    :_g193     a n3test:Diff;
+    :_g214     a n3test:Diff;
          n3test:diffString "" .
     
-    :_g194     a n3test:Diff;
+    :_g215     a n3test:Diff;
          n3test:diffString """- &lt;file:////dev/stdin#x&gt; &lt;file:////dev/stdin#y1&gt; &quot;\\u03B1&quot;.
 - &lt;file:////dev/stdin#x&gt; &lt;file:////dev/stdin#y2&gt; &quot;\\u00E9&quot;.
 - &lt;file:////dev/stdin#x&gt; &lt;file:////dev/stdin#y3&gt; &quot;\\u00E9&quot;.
@@ -3304,10 +3454,10 @@
 + &lt;file:///base/rdf-test-26.n3#x&gt; &lt;file:///base/rdf-test-26.n3#y3&gt; &quot;\\u00E9&quot;.
 """ .
     
-    :_g195     a n3test:Diff;
+    :_g216     a n3test:Diff;
          n3test:diffString "" .
     
-    :_g196     a n3test:Diff;
+    :_g217     a n3test:Diff;
          n3test:diffString """- &lt;file:////dev/stdin#x&gt; &lt;file:////dev/stdin#p1&gt; &quot;abc&quot;^^&lt;http://www.w3.org/2001/XMLSchema#integer&gt;.
 - &lt;file:////dev/stdin#x&gt; &lt;file:////dev/stdin#p2&gt; &quot;ab.c&quot;^^&lt;http://www.w3.org/2001/XMLSchema#double&gt;.
 + &lt;file:///base/rdf-test-28.n3#x&gt; &lt;file:///base/rdf-test-28.n3#p1&gt; &quot;abc&quot;^^&lt;http://www.w3.org/2001/XMLSchema#integer&gt;.
