@@ -27,12 +27,25 @@ src="../../../../RDF/icons/n3_small" /></a></p>
 
 <p></p>
 
+<p>2004/6/30</p>
+
+<p>N3QL support.  Initial support for <a
+href="../../../../DesignIssues/N3QL.html">N3QL</a> query language handling in
+cwm. command line looks like: <code>cwm <em>myKB.n3</em>
+--query=<em>myquery.n3ql</em></code>.  Initial test case in  <a
+href="../test/ql/detailed.tests">swap/test/ql/detailed.tests</a></p>
+
+<p></p>
+
 <p>2004/6/24:</p>
 
-<p>The default output form is @forAll, not this log:forAll, @forSome, not
-this log:forSome. Use --n3=v to force the old obsolete form for variable
-declations. The parser has for a long time and will for some time support
-both forms.</p>
+<p>The default output form is <code>@forAll</code>, not <code>this
+log:forAll</code>, <code>@forSome</code>, not <code>this log:forSome</code>.
+Use --n3=v to force the old obsolete form for variable declations. The parser
+has for a long time and will for some time support both forms.</p>
+
+<p><code>cwm --reify</code> and <code>--dereify</code> introduced but not
+supported by tests.</p>
 
 <p>2004/6/23:</p>
 
@@ -502,7 +515,6 @@ function in reality</p>
 <hr />
 
 <p>$Id$</p>
-
 </div>
 </body>
 </html>

@@ -3,6 +3,8 @@
 2003-09-07 split off from llyn.py
 """
 
+QL_NS = "http://www.w3.org/2004/ql#"
+
 from RDFSink import Logic_NS, RDFSink, forSomeSym, forAllSym
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import N3_nil, N3_first, N3_rest, OWL_NS, N3_Empty, N3_List, List_NS
@@ -64,6 +66,17 @@ def applyRules(
     """Once"""
     t = InferenceTask(workingContext, ruleFormula, targetContext)
     result = t.run()
+    del(t)
+    return result
+
+def applyQueries(
+		workingContext,    # Data we assume 
+		ruleFormula = None,    # Where to find the rules
+		targetContext = None):   # Where to put the conclusions
+    """Once, nothing recusive, for a N3QL query"""
+    t = InferenceTask(workingContext, ruleFormula, targetContext)
+    t.gatherQueries(t.ruleFormula)
+    result = t.runSmart()
     del(t)
     return result
 
@@ -247,7 +260,7 @@ class InferenceTask:
 	    if (isinstance(subj, Formula)
 		and isinstance(obj, Formula)):
 		v2 = universals + ruleFormula.universals() # Note new variables can be generated
-		r = Rule(self, s,  v2)
+		r = Rule(self, antecedent=subj, consequent=obj, statement=s,  variables=v2)
 		self.ruleFor[s] = r
 		if r.meta: self.hasMetaRule = 1
 		if (diag.chatty_flag >30):
@@ -255,6 +268,28 @@ class InferenceTask:
 
 	for F in ruleFormula.each(pred=self.store.implies, obj=self.store.Truth): #@@ take out when --closure=T ??
 	    self.gatherRules(F)  #See test/rules13.n3, test/schema-rules.n3 etc
+
+    def gatherQueries(self, ruleFormula):
+	"Find a set of rules in N3QL"
+	universals = [] # @@ self.universals??
+	ql_select = self.store.newSymbol(QL_NS + "select")
+	ql_where = self.store.newSymbol(QL_NS + "where")
+	for s in ruleFormula.statementsMatching(pred=ql_select):
+	    r = self.ruleFor.get(s, None)
+	    if r != None: continue
+	    con, pred, query, selectClause  = s.quad
+	    whereClause= ruleFormula.the(subj=query, pred=ql_where)
+	    if whereClause == None: continue # ignore (warning?)
+	    
+	    if (isinstance(selectClause, Formula)
+		and isinstance(whereClause, Formula)):
+		v2 = universals + ruleFormula.universals() # Note new variables can be generated
+		r = Rule(self, antecedent=whereClause, consequent=selectClause,
+				statement=s,  variables=v2)
+		self.ruleFor[s] = r
+		if r.meta: self.hasMetaRule = 1
+		if (diag.chatty_flag >30):
+		    progress( "Found rule %r for statement %s " % (r, s))
 
 
 def partialOrdered(cy1, pool):
@@ -327,7 +362,7 @@ class CyclicSetOfRules:
 nextRule = 0
 class Rule:
 
-    def __init__(self, task, statement, _variables):
+    def __init__(self, task, antecedent, consequent, statement, variables):
 	"""Try a rule
 	
 	Beware lists are corrupted. Already list is updated if present.
@@ -336,10 +371,10 @@ class Rule:
 	"""
 	global nextRule
 	self.task = task
-	self.template = statement[SUBJ]
-	self.conclusion = statement[OBJ]
+	self.template = antecedent
+	self.conclusion = consequent
 	self.store = self.template.store
-	self.statement = statement
+	self.statement = statement      #  original statement
 	self.number = nextRule = nextRule+1
 	self.meta = self.conclusion.contains(pred=self.conclusion.store.implies) #generate rules?
 	if task.repeat: self.already = []
@@ -365,7 +400,7 @@ class Rule:
 	self.templateExistentials = self.template.existentials()[:]
 	_substitute({self.template: task.workingContext}, self.unmatched)
     
-	variablesMentioned = self.template.occurringIn(_variables)
+	variablesMentioned = self.template.occurringIn(variables)
 	self.variablesUsed = self.conclusion.occurringIn(variablesMentioned)
 	for x in variablesMentioned:
 	    if x not in self.variablesUsed:
@@ -375,7 +410,7 @@ class Rule:
 	    for s in self.template.statements: progress("    ", `s`)
 	    progress("=>")
 	    for s in self.conclusion.statements: progress("    ", `s`)
-	    progress("Universals declared in outer " + seqToString(_variables))
+	    progress("Universals declared in outer " + seqToString(variables))
 	    progress(" mentioned in template       " + seqToString(variablesMentioned))
 	    progress(" also used in conclusion     " + seqToString(self.variablesUsed))
 	    progress("Existentials in template     " + seqToString(self.templateExistentials))
@@ -396,7 +431,7 @@ class Rule:
 			conclusion = self.conclusion,
 			targetContext = task.targetContext,
 			already = self.already,
-			rule = self.statement,
+#			rule = self.statement,
 			smartIn = [task.workingContext],    # (...)
 			meta = task.workingContext,
 			mode = task.mode)

@@ -63,7 +63,7 @@ The&nbsp;list&nbsp;of&nbsp;statements&nbsp;must&nbsp;be&nbsp;sorted&nbsp;if&nbsp
 
 <dl><dt><a name="Serializer-_listsWithinLists"><strong>_listsWithinLists</strong></a>(self, L, lists)</dt></dl>
 
-<dl><dt><a name="Serializer-_outputStatement"><strong>_outputStatement</strong></a>(self, sink, quad)</dt></dl>
+<dl><dt><a name="Serializer-_outputStatement"><strong>_outputStatement</strong></a>(self, sink, quad, aWorks<font color="#909090">=1</font>)</dt></dl>
 
 <dl><dt><a name="Serializer-_scan"><strong>_scan</strong></a>(self, x, context<font color="#909090">=None</font>)</dt></dl>
 
@@ -104,6 +104,8 @@ for&nbsp;each&nbsp;subject.</tt></dd></dl>
 
 <dl><dt><a name="Serializer-extern"><strong>extern</strong></a>(self, t)</dt></dl>
 
+<dl><dt><a name="Serializer-notAsExtern"><strong>notAsExtern</strong></a>(self, t)</dt></dl>
+
 <dl><dt><a name="Serializer-selectDefaultPrefix"><strong>selectDefaultPrefix</strong></a>(self, printFunction)</dt><dd><tt>&nbsp;Symbol&nbsp;whose&nbsp;fragments&nbsp;have&nbsp;the&nbsp;most&nbsp;occurrences.<br>
 we&nbsp;suppress&nbsp;the&nbsp;RDF&nbsp;namespace&nbsp;itself&nbsp;because&nbsp;the&nbsp;XML&nbsp;syntax&nbsp;has&nbsp;problems&nbsp;with&nbsp;it<br>
 being&nbsp;default&nbsp;as&nbsp;it&nbsp;is&nbsp;used&nbsp;for&nbsp;attributes.<br>
@@ -117,6 +119,14 @@ Data and non-method functions defined here:<br>
 <dl><dt><strong>__module__</strong> = 'pretty'</dl>
 
 </td></tr></table></td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt><a name="-canItbeABNode"><strong>canItbeABNode</strong></a>(formula, symbol)</dt></dl>
+</td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>
@@ -148,7 +158,7 @@ Data and non-method functions defined here:<br>
 <strong>STRING_NS_URI</strong> = 'http://www.w3.org/2000/10/swap/string#'<br>
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
-<strong>__file__</strong> = './pretty.pyc'<br>
+<strong>__file__</strong> = './pretty.py'<br>
 <strong>__name__</strong> = 'pretty'<br>
 <strong>cvsRevision</strong> = '$Revision$'<br>
 <strong>forAllSym</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>

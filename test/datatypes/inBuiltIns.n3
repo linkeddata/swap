@@ -1,0 +1,32 @@
+# see http://lists.w3.org/Archives/Public/public-cwm-bugs/2004Jun/0021.html
+
+@prefix exp: <http://example.com/expenditure#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#>.
+
+@forAll :x, :k, :s .     
+{  :x exp:memo :k .
+   ( :x!exp:typCd " " :x!exp:category " transaction\n"
+)
+         string:concatenation  :s .
+} => {
+   :k log:outputString :s . 
+} .
+
+#Original (bad) N3 file 
+#======================
+
+:exp1 a exp:Expenditure;
+
+        exp:id                          "1"^^xsd:long;
+        exp:dt                          "2004-06-12"^^xsd:date;
+        exp:fromAcctId          "CASH"^^xsd:string;
+        exp:toAcctId            "STORE"^^xsd:string;
+        exp:typCd           "BUY"^^xsd:string;
+        exp:category            "FOOD"^^xsd:string;
+        exp:subCategory         "FOOD"^^xsd:string;
+        exp:netExpAmt           "21.38"^^xsd:decimal;
+        exp:memo                        "Test exp1"^^xsd:string . 
+
+#

@@ -112,6 +112,8 @@ Data and non-method functions defined here:<br>
 A&nbsp;rule&nbsp;here&nbsp;is&nbsp;defined&nbsp;by&nbsp;log:implies,&nbsp;which&nbsp;associates&nbsp;the&nbsp;template&nbsp;(premise,&nbsp;precondidtion,<br>
 antecedent)&nbsp;to&nbsp;the&nbsp;conclusion&nbsp;(postcondition).</tt></dd></dl>
 
+<dl><dt><a name="InferenceTask-gatherQueries"><strong>gatherQueries</strong></a>(self, ruleFormula)</dt><dd><tt>Find&nbsp;a&nbsp;set&nbsp;of&nbsp;rules&nbsp;in&nbsp;N3QL</tt></dd></dl>
+
 <dl><dt><a name="InferenceTask-gatherRules"><strong>gatherRules</strong></a>(self, ruleFormula)</dt></dl>
 
 <dl><dt><a name="InferenceTask-run"><strong>run</strong></a>(self)</dt><dd><tt>Perform&nbsp;task.<br>
@@ -272,7 +274,7 @@ Avoid&nbsp;loops&nbsp;by&nbsp;spotting&nbsp;reference&nbsp;to&nbsp;containing&nb
 <td colspan=2>&nbsp;</td></tr>
 <tr><td>&nbsp;&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="Rule-__init__"><strong>__init__</strong></a>(self, task, statement, _variables)</dt><dd><tt>Try&nbsp;a&nbsp;rule<br>
+<dl><dt><a name="Rule-__init__"><strong>__init__</strong></a>(self, task, antecedent, consequent, statement, variables)</dt><dd><tt>Try&nbsp;a&nbsp;rule<br>
 &nbsp;<br>
 Beware&nbsp;lists&nbsp;are&nbsp;corrupted.&nbsp;Already&nbsp;list&nbsp;is&nbsp;updated&nbsp;if&nbsp;present.<br>
 The&nbsp;idea&nbsp;is&nbsp;that,&nbsp;for&nbsp;a&nbsp;rule&nbsp;which&nbsp;may&nbsp;be&nbsp;tried&nbsp;many&nbsp;times,&nbsp;the&nbsp;constant&nbsp;<br>
@@ -300,6 +302,7 @@ Data and non-method functions defined here:<br>
     
 <tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl><dt><a name="-_substitute"><strong>_substitute</strong></a>(bindings, list)</dt><dd><tt>Subsitustes&nbsp;IN-LINE&nbsp;into&nbsp;a&nbsp;list&nbsp;of&nbsp;quads</tt></dd></dl>
+ <dl><dt><a name="-applyQueries"><strong>applyQueries</strong></a>(workingContext, ruleFormula<font color="#909090">=None</font>, targetContext<font color="#909090">=None</font>)</dt><dd><tt>Once,&nbsp;nothing&nbsp;recusive,&nbsp;for&nbsp;a&nbsp;N3QL&nbsp;query</tt></dd></dl>
  <dl><dt><a name="-applyRules"><strong>applyRules</strong></a>(workingContext, ruleFormula<font color="#909090">=None</font>, targetContext<font color="#909090">=None</font>)</dt><dd><tt>Once</tt></dd></dl>
  <dl><dt><a name="-bindingsToString"><strong>bindingsToString</strong></a>(bindings)</dt></dl>
  <dl><dt><a name="-compareCyclics"><strong>compareCyclics</strong></a>(self, other)</dt><dd><tt>Note&nbsp;the&nbsp;set&nbsp;indirectly&nbsp;affected&nbsp;is&nbsp;the&nbsp;same&nbsp;for&nbsp;any&nbsp;member&nbsp;of&nbsp;a&nbsp;cyclic&nbsp;subsystem</tt></dd></dl>
@@ -341,6 +344,7 @@ store.&nbsp;The&nbsp;store&nbsp;is&nbsp;used&nbsp;for&nbsp;read&nbsp;(normally&n
 <strong>OWL_NS</strong> = 'http://www.w3.org/2002/07/owl#'<br>
 <strong>PARTS</strong> = (1, 2, 3)<br>
 <strong>PRED</strong> = 1<br>
+<strong>QL_NS</strong> = 'http://www.w3.org/2004/ql#'<br>
 <strong>RDF_NS_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'<br>
 <strong>SUBJ</strong> = 2<br>
 <strong>S_DONE</strong> = 80<br>

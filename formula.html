@@ -157,6 +157,11 @@ if&nbsp;f.<a href="#Formula-contains">contains</a>(pred=pantoneColor):<br>
 
 <dl><dt><a name="Formula-declareUniversal"><strong>declareUniversal</strong></a>(self, v)</dt></dl>
 
+<dl><dt><a name="Formula-doesNodeAppear"><strong>doesNodeAppear</strong></a>(self, symbol)</dt><dd><tt>Does&nbsp;that&nbsp;particular&nbsp;node&nbsp;appear&nbsp;anywhere&nbsp;in&nbsp;this&nbsp;formula<br>
+&nbsp;<br>
+This&nbsp;function&nbsp;is&nbsp;necessarily&nbsp;recursive,&nbsp;and&nbsp;is&nbsp;useful&nbsp;for&nbsp;the&nbsp;pretty&nbsp;printer<br>
+It&nbsp;will&nbsp;also&nbsp;be&nbsp;useful&nbsp;for&nbsp;the&nbsp;flattener,&nbsp;when&nbsp;we&nbsp;write&nbsp;it.</tt></dd></dl>
+
 <dl><dt><a name="Formula-each"><strong>each</strong></a>(self, subj<font color="#909090">=None</font>, pred<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;values&nbsp;value&nbsp;filing&nbsp;the&nbsp;blank&nbsp;in&nbsp;the&nbsp;called&nbsp;parameters<br>
 &nbsp;<br>
 Examples:<br>
@@ -400,7 +405,7 @@ Data and non-method functions defined here:<br>
 <strong>RDF_type_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'<br>
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
-<strong>__file__</strong> = './formula.pyc'<br>
+<strong>__file__</strong> = './formula.py'<br>
 <strong>__name__</strong> = 'formula'<br>
 <strong>becauseSubexpression</strong> = &lt;why.BecauseSubexpression instance&gt;<br>
 <strong>cvsRevision</strong> = '$Revision$'<br>

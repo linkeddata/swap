@@ -8,7 +8,7 @@
      @prefix : <#> .
      @prefix ex: <http://www.example.com/foo#> .
      @prefix q: <http://www.w3.org/2004/ql#> .
-@forAll ?x, ?y.
+@forAll :x, :y.
     {
         :x     a ex:Librarian;
              ex:hairColor :y .
