@@ -48,6 +48,15 @@ parser RDFN3Parser:
 
     rule statement : term predicates0 STOP
 
+    rule term : URIREF
+              | QNAME
+              | THIS
+              | shorthand
+              | STRLIT3 | STRLIT1 | STRLIT2
+              | list
+              | phrase
+              | clause
+
     rule predicates0 : predicate predicates_rest
                      | # empty
 
@@ -59,14 +68,8 @@ parser RDFN3Parser:
 
     rule objects1 : term ("," term)*
 
-    rule term : URIREF
-              | QNAME
-              | THIS
-              | shorthand
-              | STRLIT3 | STRLIT1 | STRLIT2
-              | list
-              | phrase
-              | clause
+
+    # details about terms...
 
     rule shorthand : A | "="
 
@@ -82,7 +85,10 @@ parser RDFN3Parser:
                          | # empty
 
 # $Log$
-# Revision 1.4  2001-08-31 19:06:20  connolly
+# Revision 1.5  2001-08-31 19:10:58  connolly
+# moved term rule for easier reading
+#
+# Revision 1.4  2001/08/31 19:06:20  connolly
 # added END/eof token
 #
 # Revision 1.3  2001/08/31 18:55:47  connolly
