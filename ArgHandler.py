@@ -1,7 +1,22 @@
 #!/usr/bin/env python
+"""
 
+     Special hack to support things like --filter=f where
+     we have an optional parameter in the midst of extra arguments.
+       ...  in1 in2 --filter in3 --filter=f1 in4 ...
+     if the option contains a "=" it must match a method name
+     with EQ appended  ( handle__x__y__filterEQ__z ) which
+     must take exactly one argument.   So filter and filterEQ may
+     be different options.   It's safe to add an EQ version to any
+     option which takes only one parameter
+     
+"""
 import sys
 import inspect
+import re
+
+class Error(RuntimeError):
+   pass
 
 class ArgHandler:
     """A replacement for getopt which supports interleaving
@@ -20,32 +35,46 @@ class ArgHandler:
         self.__dict__.update(attrs)
         self.__dict__.setdefault("argv", sys.argv)
         
-    def handle__h__help(self, whichArg=None):
+    def handle__h__help__helpEQ(self, whichArg=None):
         """Output summary of options, or details on a particular option.
 
-        More explanation here."""
+        If the optional parameter is present, it should name an option for
+        additional information is requested.  (Omit the "-" or "--" from
+        the option so that it looks like a parameter to --help instead of
+        looking like another option!)
+
+        Example:   foo --help help
+        """
 
         if whichArg is None:
-            lines = [
-                ("Option Name", "Param", "Description"),
-                ("===========", "=====", "===========")
-                ]
+            lines = [ ]
             width = [0, 0, 0, 0, 0]
             for member in inspect.getmembers(self):
                 if member[0].startswith("handle__"):
                     line = self.genHelpEntry(member)
-                    # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/148061
+                    #print line
                     for i in range(0, len(line)):
                         width[i] = max(width[i], len(line[i]))
                     lines.append(line)
+            lines.sort(lambda x,y: cmp(x[3], y[3]))
+            lines.insert(0, ("===========", "=====", "==========="))
+            lines.insert(0, ("Option Name", "Param", "Description"))
+                
+
             for line in lines:
-                print "%-*s  %-*s  %s" % (width[0], line[0],
-                                      width[1], line[1],
-                                      line[2])
+               s1 = "%-*s  %-*s  " % (width[0], line[0],
+                                      width[1], line[1])
+               s2 = line[2]
+               s = wrap(s1+s2,79)
+               print re.sub('\\n', "\n"+" "*len(s1), s)
+                
         else:
-           method = self.findMethod(whichArg)
-           if method is None: return
-           self.printHelpEntry(member, long=1)
+           member = self.findMember(whichArg)
+           if member is None: return
+           line = self.genHelpEntry(member, long=1)
+           print "Option: ", line[0]
+           print "Arguments: ", line[1]
+           print "Description: ", wrap(line[2], 79)
 
     def handle__V__version(self):
         """Output version information.
@@ -55,34 +84,48 @@ class ArgHandler:
         conventions.)"""
         print self.version
 
-    def error(self, msg):
-        print "Error:", msg
-        
     def run(self):
-        self.handle__h__help()
-        return
         self.current_argument_index = 1
-        while 1:
-            try:
-                arg = self.peekThis()
-            except IndexError:
-                return
-            m = self.findMethod(arg)
-            if m:
-                # print m.__doc__
-                #print "Arguments:", m.im_func.func_code.co_argcount
-                #print "Var Args:", m.im_func.func_code.co_flags & 4
-                #print "Argument List:", m.im_func.func_code.co_varnames
-                #print "Def:", m.im_func.func_defaults
-                #args = []
-                # for each needed arg, do a getNextNonFlag
-                #    if it fails, then fill it from the right default
-                apply(m[1], ["foo"])
-            else:
-                return  # error
-            self.advance()
+        try:
+           while 1:
+              try:
+                 arg = self.peekThis()
+              except IndexError:
+                 return 0
+              self.handleArg(arg)
+              self.advance()
+        except Error, e:
+           print e
+           print "Try --help for more information."
+           return 1
+           
+    def handleArg(self, arg):
+       option = None
+       if arg.startswith("--"):
+          option = arg[2:]
+       else:
+          if arg.startswith("-"):
+            option = arg[1:]
+          else:
+             self.handleExtraArgument(arg)
+             return
 
-    def findMethod(self, arg):
+       option = re.sub("-", "_", option)
+       try:
+          (left, right) = option.split("=", 2)
+       except ValueError:
+          member = self.findMember(option)
+          args = self.buildArgs(member)
+          apply(member[1], args)
+          return
+
+       member = self.findMember(left+"EQ")
+       apply(member[1], [right])
+
+    def handleExtraArgument(self, arg):
+       raise Error, "Extra argument: \"%s\"" % arg
+    
+    def findMember(self, arg):
         matches=[]
         last_match=None
         for member in inspect.getmembers(self):
@@ -100,19 +143,46 @@ class ArgHandler:
                         last_match = member
 
         if len(matches) == 0:
-            self.error("unknown argument: \"%s\"" % arg)
+           raise Error, "unknown argument: \"%s\"" % arg
         if len(matches) == 1:
             return last_match
         if len(matches) > 1:
-            self.error("ambiguous argument, might be: \"%s\"..." %
+           raise Error, ("ambiguous argument, might be: \"%s\"..." %
                        '", "'.join(matches[0:3]))
 
     def buildArgs(self, member):
-        pass
+       """Call getNext as long as it's not a flag to fill in the
+       argument list.   If we run out, fill in with defaults if
+       possible."""
+       f = member[1].im_func
+       argcount = f.func_code.co_argcount
+       if f.func_code.co_flags & 4 :
+          raise Error, "handlers may not have variable arg lists"
+       defaults = f.func_defaults or ()
+
+       i = 1   # skip "self"
+       args = []
+       name = self.peekThis()
+       while i < argcount:
+
+          next = self.getNextNonFlag()
+          if next is None:
+             indexIntoDefaults = i + len(defaults) - argcount
+             if indexIntoDefaults >= 0:      #defaultable
+                next = defaults[indexIntoDefaults]
+             else:
+                raise Error, "not enough arguments to option \""+name+"\""
+          args.append(next)
+          i+=1
+       return args
+               
 
     def genHelpEntry(self, member, long=0):
 
         names = member[0].split("__")[1:]
+        # primary sort key = case insensitive version, 
+        # secondary is case sensitive
+        sortKey = names[0].lower() + " " + names[0]
         #print names, member
         f = member[1].im_func
         optdesc = ""
@@ -126,7 +196,7 @@ class ArgHandler:
         parmdesc = ""
         argcount = f.func_code.co_argcount
         if f.func_code.co_flags & 4 :
-            raise RuntimeError, "handlers may not have variable arg lists"
+            raise Error, "handlers may not have variable arg lists"
         defaults = f.func_defaults or ()
         argnames = f.func_code.co_varnames
         i = 1   # skip "self"
@@ -150,12 +220,12 @@ class ArgHandler:
             docs = "<undocumented>"
         else:
             if long:
-                docs = f.__doc__
+                docs = re.sub('(?m)^        ', "", f.__doc__)
             else:
                 doc = f.__doc__.split("\n\n", 2)
                 docs = doc[0]
 
-        return (optdesc, parmdesc, docs)
+        return (optdesc, parmdesc, docs, sortKey)
 
     def peekThis(self):
         return self.argv[self.current_argument_index]
@@ -167,9 +237,38 @@ class ArgHandler:
         self.advance();
         return self.peekThis()
 
+    def getNextNonFlag(self):
+       try:
+          if self.peekNext().startswith("-"):
+             return None
+          else:
+             return self.getNext()
+       except IndexError:
+          return None
+
     def advance(self):
         self.current_argument_index += 1
 
+       
+
+# borrowed from http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/148061
+# by Mike Brown, version 1.4, 2002/12/20
+# modified to add "prefix"
+
+def wrap(text, width):
+   """
+   A word-wrap function that preserves existing line breaks
+   and most spaces in the text. Expects that existing line
+   breaks are posix newlines (\n).
+   """
+   return reduce(lambda line, word, width=width: '%s%s%s' %
+                 (line,
+                  ' \n'[(len(line[line.rfind('\n')+1:])
+                         + len(word.split('\n',1)[0]
+                               ) >= width)],
+                  word),
+                 text.split(' ')
+                 )    
            
 ################################################################
 
@@ -178,7 +277,10 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
 
 # $Log$
-# Revision 1.2  2003-04-02 18:06:13  sandro
+# Revision 1.3  2003-04-02 19:43:41  sandro
+# nearly all works
+#
+# Revision 1.2  2003/04/02 18:06:13  sandro
 # short documentation works
 #
 # Revision 1.1  2003/04/02 17:44:47  sandro
