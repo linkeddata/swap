@@ -13,8 +13,9 @@ See cwm.py and the os module in python
 
 import os
 
-from thing import LightBuiltIn, Function
-from diag import verbosity
+from thing import LightBuiltIn, Function, ReverseFunction
+from diag import verbosity, progress
+import uripath
 
 
 OS_NS_URI = "http://www.w3.org/2000/10/swap/os#"
@@ -37,6 +38,32 @@ class BI_environ(LightBuiltIn, Function):
         if isString(subj_py):
             return store._fromPython(context, os.environ.get(subj_py, None))
         progress("os:environ input is not a string: "+`subj_py`)
+
+class BI_baseAbsolute(LightBuiltIn, Function):
+    """The baseAbsolute function generates an absolute URIref from a string,
+    interpreting the string as a a relative URIref relative to the current
+    process base URI (typically, current working directory).
+    It is not a reverse function, because sereral different relativisations
+    exist for the same absolute URI. See uripath.py."""
+    def evaluateObject(self, store, context, subj, subj_py):
+        if verbosity() > 80: progress("os:baseAbsolute input:"+`subj_py`)
+        if isString(subj_py):
+            return store._fromPython(context, uripath.join(uripath.base(), subj_py))
+        progress("Warning: os:baseAbsolute input is not a string: "+`subj_py`)
+
+class BI_baseRelative(LightBuiltIn, Function, ReverseFunction):
+    """The baseRelative of a URI is its expression relation to the process base URI.
+    It is 1:1, being an arbitrary cannonical form.
+    It is a reverse function too, as you can always work the other way."""
+    def evaluateObject(self, store, context, subj, subj_py):
+        if verbosity() > 80: progress("os:baseRelative input:"+`subj_py`)
+        if isString(subj_py):
+            return store._fromPython(context, uripath.refTo(uripath.base(), subj_py))
+        progress("Warning: os:baseRelative input is not a string: "+`subj_py`)
+
+    def evaluateSubject(self, store, context, subj, subj_py):
+	return BI_baseAbsolute.evaluateObject(self, store, context, subj, subj_py)
+
 # Command line argument: read-only
 #  The command lines are passed though cwm using "--with" and into the RDFStore when init'ed.
 # Not fatal if not defined
@@ -62,6 +89,8 @@ def isString(x):
 def register(store):
     str = store.internURI(OS_NS_URI[:-1])
     str.internFrag("environ", BI_environ)
+    str.internFrag("baseRelative", BI_baseRelative)
+    str.internFrag("baseAbsolute", BI_baseAbsolute)
     str.internFrag("argv", BI_argv)
 
 # ends

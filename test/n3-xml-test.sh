@@ -34,5 +34,6 @@ function xml_n3_test () {
 for i in $*; do
 	xml_n3_test $i
 done
+echo "Passed $passes out of $tests n3>xml>n3 loopback tests."
 
 #ends

@@ -41,6 +41,7 @@ import notation3    	# N3 parsers and generators
 import toXML 		#  RDF generator
 
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL, Logic_NS
+import uripath
 
 # from llyn import RDFStore  # A store with query functiuonality
 import llyn
@@ -318,8 +319,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         hostname = "localhost" # @@@@@@@@@@@ Get real one
         
         # The base URI for this process - the Web equiv of cwd
-#	_baseURI = "file://" + hostname + os.getcwd() + "/"
-	_baseURI = "file:" + fixslash(os.getcwd()) + "/"
+	_baseURI = uripath.base()
 	
         option_format = "n3"      # Use RDF rather than XML
         option_first_format = None
@@ -606,14 +606,6 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 _store.dumpNested(workingContext, _outSink)
 
     
-def fixslash(str):
-    """ Fix windowslike filename to unixlike
-    """
-    s = str
-    for i in range(len(s)):
-        if s[i] == "\\": s = s[:i] + "/" + s[i+1:]
-    if s[0] != "/" and s[1] == ":": s = s[2:]  # @@@ Hack when drive letter
-    return s
         
 ############################################################ Main program
     

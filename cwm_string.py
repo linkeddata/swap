@@ -14,7 +14,7 @@ See cwm.py
 import string
 import re
 
-from diag import verbosity
+from diag import verbosity, progress
 
 import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream

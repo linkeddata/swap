@@ -114,7 +114,7 @@ def join(here, there):
     return here[:slashr+1] + path + frag
 
 
-def refTo(src, dest):
+def refTo_DanC(src, dest):
     """compute a path from one URI to another
 
     both src and dest are absolute URI references
@@ -155,12 +155,74 @@ def refTo(src, dest):
 
     return dest
 
+    
+    
+import re
+import string
+commonHost = re.compile(r'^[-_a-zA-Z0-9.]+:(//[^/]*)?/[^/]*$')
+
+
+def refTo(base, uri):
+    """Your regular relative URI algorithm -- never trust anyone else's ;-)
+    This one checks that it uses a root-realtive one where that is all they share.
+    Now uses root-relative where no path is shared.
+    This is a matter of taste but tends to give more resilience IMHO -- and shorter paths"""
+    if base == None: return uri
+    if base == uri: return ""
+    i=0
+    while i<len(uri) and i<len(base):  # Find how much in common
+        if uri[i] == base[i]: i = i + 1
+        else: break
+    # print "# relative", base, uri, "   same up to ", i
+    # i point to end of shortest one or first difference
+
+    m = commonHost.match(base[:i])
+    if m:
+	k=uri.find("//")
+	if k<0: k=-2 # no host
+	l=uri.find("/", k+2)
+	if uri[l+1:l+2] != "/" and base[l+1:l+2] != "/":
+	    return uri[l:]
+
+    if uri[i:i+1] =="#": return uri[i:]  # fragment of base
+    while i>0 and uri[i-1] != '/' : i=i-1  # scan for slash
+
+    if i < 3: return uri  # No way.
+    if string.find(base, "//", i-2)>0 \
+       or string.find(uri, "//", i-2)>0: return uri # An unshared "//"
+    if string.find(base, ":", i)>0: return uri  # An unshared ":"
+    n = string.count(base, "/", i)
+    return ("../" * n) + uri[i:]
+
+import os
+def base():
+        """The base URI for this process - the Web equiv of cwd
+	
+	Relative or abolute unix-standard filenames parsed relative to
+	this yeild the URI of the file.
+	If we had a reliable way of getting a computer name,
+	we should put it in the hostname just to prevent ambiguity"""
+#	return "file://" + hostname + os.getcwd() + "/"
+	return "file:" + _fixslash(os.getcwd()) + "/"
+
+
+def _fixslash(str):
+    """ Fix windowslike filename to unixlike - (#ifdef WINDOWS)
+    """
+    s = str
+    for i in range(len(s)):
+        if s[i] == "\\": s = s[:i] + "/" + s[i+1:]
+    if s[0] != "/" and s[1] == ":": s = s[2:]  # @@@ Hack when drive letter present
+    return s
+
 
 def test():
     cases = (("foo:xyz", "bar:abc", "bar:abc"),
              ('http://example/x/y/z', 'http://example/x/abc', '../abc'),
              ('http://example2/x/y/z', 'http://example/x/abc', 'http://example/x/abc'),
-             ('http://ex/x/y/z', 'http://ex/r', '../../r'),
+             ('http://ex/x/y/z', 'http://ex/x/r', '../r'),
+#             ('http://ex/x/y/z', 'http://ex/r', '../../r'),    # DanC had this.
+             ('http://ex/x/y/z', 'http://ex/r', '/r'),        # I prefer this. - tbl
              ('http://ex/x/y', 'http://ex/x/q/r', 'q/r'),
              ('http://ex/x/y', 'http://ex/x/q/r#s', 'q/r#s'),
              ('http://ex/x/y', 'http://ex/x/q/r#s/t', 'q/r#s/t'),
@@ -169,7 +231,21 @@ def test():
              ('http://ex/x/y/', 'http://ex/x/y/', ''),
              ('http://ex/x/y/pdq', 'http://ex/x/y/pdq', ''),
              ('http://ex/x/y/', 'http://ex/x/y/z/', 'z/'),
-             ('file:/swap/test/animal.rdf', 'file:/swap/test/animal.rdf#Animal', '#Animal')
+             ('file:/swap/test/animal.rdf', 'file:/swap/test/animal.rdf#Animal', '#Animal'),
+             ('file:/e/x/y/z', 'file:/e/x/abc', '../abc'),
+             ('file:/example2/x/y/z', 'file:/example/x/abc', '/example/x/abc'),   # TBL
+             ('file:/ex/x/y/z', 'file:/ex/x/r', '../r'),
+             ('file:/ex/x/y/z', 'file:/r', '/r'),        # I prefer this. - tbl
+             ('file:/ex/x/y', 'file:/ex/x/q/r', 'q/r'),
+             ('file:/ex/x/y', 'file:/ex/x/q/r#s', 'q/r#s'),
+             ('file:/ex/x/y', 'file:/ex/x/q/r#s/t', 'q/r#s/t'),
+             ('file:/ex/x/y', 'ftp://ex/x/q/r', 'ftp://ex/x/q/r'),
+             ('file:/ex/x/y', 'file:/ex/x/y', ''),
+             ('file:/ex/x/y/', 'file:/ex/x/y/', ''),
+             ('file:/ex/x/y/pdq', 'file:/ex/x/y/pdq', ''),
+             ('file:/ex/x/y/', 'file:/ex/x/y/z/', 'z/'),
+	     ('file:/devel/WWW/2000/10/swap/test/reluri-1.n3', 
+	     'file://meetings.example.com/cal#m1', 'file://meetings.example.com/cal#m1')
              )
 
     for inp1, inp2, exp in cases:
@@ -271,7 +347,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.3  2002-08-06 01:36:09  connolly
+# Revision 1.4  2002-08-07 14:32:21  timbl
+# uripath changes. passes 51 general tests and 25 loopback tests
+#
+# Revision 1.3  2002/08/06 01:36:09  connolly
 # cleanup: diagnostic interface, relative/absolute uri handling
 #
 # Revision 1.2  2002/03/15 23:53:02  connolly

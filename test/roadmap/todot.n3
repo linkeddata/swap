@@ -42,7 +42,7 @@ gv:style     gv:attributeName  "style";  gv:default "none"; a gv:nodeAttribute; 
 gv:url       gv:attributeName  "url";    gv:default "none"; a gv:nodeAttribute.
 
 
-{ :x log:uri [is os:environ of "TARGET"] } log:implies { :x a :target_resource }.
+{ :x log:uri [is os:baseAbsolute of [is os:environ of "TARGET"]] } log:implies { :x a :target_resource }.
 
 { :F is log:semantics of [a :target_resource] } log:implies { :F a :target }.
 

@@ -427,7 +427,7 @@ class SinkParser:
                         self.makeStatement((self._context, N3_rest, previous, this ))
                     else:
                         head = this
-                    self.makeStatement((self._context, N3_first, this, item[0] ))
+                    self.makeStatement((self._context, N3_first, this, item[0]))
                 else:  # compact lists
                     if previous:
                         self.makeStatement((self._context, this, previous, previousvalue ))

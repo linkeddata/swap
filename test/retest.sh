@@ -153,10 +153,15 @@ cwm_test argv-2.n3 "os:argv argument other values"  os/argv.n3 --think --with bo
 
 # echo  "Test applications"
 
-echo "Passed $passes out of $tests tests."
+echo "Passed $passes out of $tests geneneraal regresssion tests."
+echo "Loopback parser tests:"
+./n3-xml-test.sh `cat tests-work.txt`
 
 # $Log$
-# Revision 1.37  2002-07-01 20:46:53  timbl
+# Revision 1.38  2002-08-07 14:32:21  timbl
+# uripath changes. passes 51 general tests and 25 loopback tests
+#
+# Revision 1.37  2002/07/01 20:46:53  timbl
 # mmm
 #
 # Revision 1.36  2002/06/23 21:08:31  timbl

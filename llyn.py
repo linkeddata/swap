@@ -16,10 +16,19 @@ but won't figure out which ones to apply to prove something.  It is not
 optimized particularly.
 
 Used by cwm - the closed world machine.
-
 See:  http://www.w3.org/DesignIssues/Notation3
+
+Interfaces
+==========
+
+This store stores many formulae, where one formula is what in
+straight RDF implementations is known as a "triple store".
+So look at the Formula class for a triple store interface.
+
 See also for comparison, a python RDF API for the Redland library (in C):
    http://www.redland.opensource.ac.uk/docs/api/index.html 
+and the redfoot/rdflib interface, a python RDF API:
+   http://rdflib.net/latest/doc/triple_store.html
 
 Agenda:
 =======
@@ -111,6 +120,9 @@ research version. Written in C. Of te order of 30k lines
 
 # emacsbug="""emacs got confused by long string above@@"""
 
+from __future__ import generators
+# see http://www.amk.ca/python/2.2/index.html#SECTION000500000000000000000
+
 import string
 import re
 import StringIO
@@ -167,16 +179,17 @@ subcontext_cache_subcontexts = None
 
 # State values as follows, high value=try first:
 S_UNKNOWN = 	99  # State unknown - to be [re]calculated by setup.
-S_FAIL =   		80  # Have exhausted all possible ways to saitsfy this item. stop now.
-S_LIGHT_UNS_GO= 	70  # Light, not searched yet, but can run
+S_FAIL =   	80  # Have exhausted all possible ways to saitsfy this item. stop now.
+S_LIGHT_UNS_GO= 70  # Light, not searched yet, but can run
 S_LIGHT_GO =  	65  # Light, can run  Do this!
-S_NOT_LIGHT =   	60  # Not a light built-in, haven't searched yet.
+S_NOT_LIGHT =   60  # Not a light built-in, haven't searched yet.
 S_LIGHT_EARLY=	50  # Light built-in, not enough constants to calculate, haven't searched yet.
-S_LIGHT_WAIT=	20  # Light built-in, not enough constants to calculate, search done.
-S_HEAVY_READY=	35  # Heavy built-in, search failed, but formula now has no vars left. Ready to run.
-S_HEAVY_WAIT=	10  # Heavy built-in, too many variables in args to calculate, search failed.
-S_HEAVY_WAIT_F=	 9  # Heavy built-in, too many vars within formula args to calculate, search failed.
-S_LIST_UNBOUND = 	 7  # List defining statement, search failed, unbound variables in list.?? no
+S_HEAVY_READY=	40  # Heavy built-in, search failed, but formula now has no vars left. Ready to run.
+S_LIGHT_WAIT=	30  # Light built-in, not enough constants to calculate, search done.
+S_HEAVY_WAIT=	20  # Heavy built-in, too many variables in args to calculate, search failed.
+S_HEAVY_WAIT_F=	19  # Heavy built-in, too many vars within formula args to calculate, search failed.
+S_REMOTE =	10  # Waiting for local query to be resolved as much as possible
+S_LIST_UNBOUND = 7  # List defining statement, search failed, unbound variables in list.?? no
 S_LIST_BOUND =	 5  # List defining statement, search failed, list is all bound.
 S_DONE =	 0  # Item has been staisfied, and is no longer a constraint
 
@@ -266,8 +279,24 @@ def compareFormulae(self, other):
     """
     pass
 
+
+
+#class partIterator:
+#    def __init__(self, statements, part):
+#	self._part = part
+#	self._statements = statements
+#	self._index = 0
+#	
+#    def next(self):
+#	if self._index = len(self.statements): raise StopIteration()
+#	x = self.statements[self._index][part]
+#	self._index=self._index + 1
+#	return x
+
+
 ###################################### Forumula
 #
+# A Formula is a set of triples.
 
 class Formula(Fragment):
     """A formula of a set of RDF statements, triples. these are actually
@@ -308,10 +337,18 @@ class Formula(Fragment):
         return self.existentials() + self.universals()
 
 #   TRAP:  If we define __len__, then the "if F" will fail if len(F)==0 !!!
-#   Rats .. so much for making it more like a list!
+#   Solution: change all if F to if F != None @@@@
     def size(self):
         """ How many statements? """
         return len(self.statements)
+
+#    def __len__(self):
+#        """ How many statements? """
+#        return len(self.statements)
+
+    def __iter__(self):
+	for s in self.statements:
+	    yield s
 
     def statementsMatching(self, pred=None, subj=None, obj=None):
         """Return a READ-ONLY list of StoredStatement objects matching the parts given
@@ -319,18 +356,71 @@ class Formula(Fragment):
 	For example:
 	for s in f.statementsMatching(pred=pantoneColor):
 	    print "We've got one which is ", `s[OBJ]`
+	    
+	If none, returns []
 	"""
         return self._index.get((pred, subj, obj), [])
 
+    def subjects(self, pred=None, obj=None):
+	for s in self.statementsMatching(pred=pred, obj=obj)[:]:
+	    yield s[SUBJ]
+
+    def predicates(self, subj=None, obj=None):
+	for s in self.statementsMatching(subj=subj, obj=obj)[:]:
+	    yield s[PRED]
+
+    def objects(self, pred=None, subj=None):
+	for s in self.statementsMatching(pred=pred, subj=subj)[:]:
+	    yield s[OBJ]
+
+
+    def any(self, subj=None, pred=None, obj=None):
+        """Return None or the value filing the blank in the called parameters
+	
+	color = f.any(pred=pantoneColor, subj=myCar)
+	redCar = f.any(pred=pantoneColor, obj=red)
+	
+	Note difference from store.any!!
+	Note SPO order not PSO!!
+	"""
+	hits = self._index.get((pred, subj, obj), [])
+	if not hits: return None
+	s = hits[0]
+	if pred == None: return s[PRED]
+	if subj == None: return s[SUBJ]
+	if obj == None: return s[OBJ]
+	raise parameterError("You must give one wildcard")
+
+    def the(self, subj=None, pred=None, obj=None):
+        """Return None or the value filing the blank in the called parameters
+	
+	color = f.any(pred=pantoneColor, subj=myCar)
+	redCar = f.any(pred=pantoneColor, obj=red)
+	
+	Note difference from store.any!!
+	Note SPO order not PSO!!
+	"""
+	hits = self._index.get((pred, subj, obj), [])
+	if not hits: return None
+	assert len(hits) == 1, "There should only be one match for %s %s %s." %(subj, pred, obj)
+	s = hits[0]
+	if pred == None: return s[PRED]
+	if subj == None: return s[SUBJ]
+	if obj == None: return s[OBJ]
+	raise parameterError("You must give one wildcard")
+
+    def add(self, subj, pred, obj):
+        return self.store.storeQuad((self, pred, subj, obj)) # Note order change
+    
+    def remove(self, subj, pred, obj):
+        return self.store.remove((self, pred, subj, obj))
+    
     def close(self):
         """No more to add. Please interned value"""
         return self.store.endFormulaNested(self)
 
     def reopen(self):
         return self.store.reopen(self)
-    
-    def add(self, triple):
-        return self.store.storeQuad((self, triple[0], triple[1], triple[2]))
     
     def n3String(self, flags=""):
         "Dump the formula to an absolute string in N3"
@@ -360,7 +450,7 @@ class Formula(Fragment):
         pairs.sort(comparePair)
         for key, str in pairs:
             channel.write(str.string.encode('utf-8'))
-
+	
 def comparePair(self, other):
     for i in 0,1:
         x = compareURI(self[i], other[i])
@@ -467,20 +557,21 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
 	    return store.intern((LITERAL, value))
 
     def evaluateSubject(self, store, context, obj, obj_py):
+	"""Return the object which has this string as its URI
+	
         #@@hm... check string for URI syntax?
         # or at least for non-uri chars, such as space?
-
+	Note that relative URIs can be OK as the whole process
+	has a base, which may be irrelevant. Eg see roadmap-test in retest.sh
+	"""
+	if ':' not in obj_py:
+	    progress("Warning: taking log:uri of non-abs: %s" % obj_py)
         if type(obj_py) is type(""):
-            if ':' in obj_py:
-                return store.intern((SYMBOL, obj_py))
-            else:
-                progress("taking log:uri of non-abs: %s" % obj_py)
+	    return store.intern((SYMBOL, obj_py))
         elif type(obj_py) is type(u""):
-            if ':' in obj_py:
-                uri = obj_py.encode('utf-8') #@@ %xx-lify
-                return store.intern((SYMBOL, uri))
-            else:
-                progress("taking log:uri of non-abs: %s" % obj_py)
+	    uri = obj_py.encode('utf-8') #@@ %xx-lify
+	    return store.intern((SYMBOL, uri))
+
 
 class BI_rawUri(BI_uri):
     """This is like  uri except that it allows you to get the internal
@@ -562,7 +653,7 @@ class BI_semantics(HeavyBuiltIn, Function):
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
         F = store.any((store._experience, store.semantics, doc, None))
-        if F:
+        if F != None:
             if verbosity() > 10: progress("Already read and parsed "+`doc`+" to "+ `F`)
             return F
         
@@ -578,7 +669,7 @@ class BI_semanticsOrError(BI_semantics):
     def evaluateObject2(self, subj):
         store = subj.store
         x = store.any((store._experience, store.semanticsOrError, subj, None))
-        if x:
+        if x != None:
             if verbosity() > 10: progress(`store._experience`+`store.semanticsOrError`+": Already found error for "+`subj`+" was: "+ `x`)
             return x
         try:
@@ -679,7 +770,7 @@ class BI_content(HeavyBuiltIn, Function): #@@DWC: Function?
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
         C = store.any((store._experience, store.content, doc, None))
-        if C:
+        if C != None:
             if verbosity() > 10: progress("already read " + `doc`)
             return C
         if verbosity() > 10: progress("Reading " + `doc`)
@@ -703,7 +794,7 @@ class BI_parsedAsN3(HeavyBuiltIn, Function):
         store = subj.store
         if isinstance(subj, Literal):
             F = store.any((store._experience, store.parsedAsN3, subj, None))
-            if F: return F
+            if F != None: return F
             if verbosity() > 10: progress("parsing " + subj.string[:30] + "...")
             inputURI = subj.asHashURI() # iffy/bogus... rather asDataURI? yes! but make more efficient
             p = notation3.SinkParser(store, inputURI)
@@ -723,7 +814,7 @@ class BI_cufi(HeavyBuiltIn, Function):
         store = subj.store
         if isinstance(subj, Formula):
             F = store.any((store._experience, store.cufi, subj, None))  # Cached value?
-            if F: return F
+            if F != None: return F
 
             if verbosity() > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
             F = store.newInterned(FORMULA)
@@ -808,7 +899,6 @@ class RDFStore(RDFSink.RDFSink) :
         self.Other =    log.internFrag("Other", Fragment) # syntactic type possible value - a class (Use?)
 
         log.internFrag("conjunction", BI_conjunction)
-
         
 # Bidirectional things:
         log.internFrag("uri", BI_uri)
@@ -832,7 +922,11 @@ class RDFStore(RDFSink.RDFSink) :
         self.parsedAsN3 = log.internFrag("parsedAsN3",  BI_parsedAsN3)
         self.n3ExprFor = log.internFrag("n3ExprFor",  BI_parsedAsN3) ## Obsolete
         log.internFrag("n3String",  BI_n3String)
-        
+
+# Remote service flag in metadata:
+
+	self.authoritativeService = log.internFrag("authoritativeService", Fragment)
+
 # Constants:
 
         self.Truth = self.internURI(Logic_NS + "Truth")
@@ -1036,7 +1130,7 @@ class RDFStore(RDFSink.RDFSink) :
         if verbosity() > 70:
             progress("  "*level, "endFormulaNested:"+`F`+ `bindings`)
 
-        if F.cannonical:
+        if F.cannonical != None:
             return F.cannonical
         subs = []   # Immediate subformulae
         for s in F.statements:
@@ -1071,7 +1165,7 @@ class RDFStore(RDFSink.RDFSink) :
 
 
     def bind(self, prefix, nsPair):
-        if prefix:   #  Ignore binding to empty prefix
+        if prefix != "":   #  Ignore binding to empty prefix
             return RDFSink.RDFSink.bind(self, prefix, nsPair) # Otherwise, do as usual.
     
     def makeStatement(self, tuple):
@@ -1093,7 +1187,7 @@ class RDFStore(RDFSink.RDFSink) :
         matching in that position.
 	"""
         list = q[CONTEXT].statementsMatching(q[PRED], q[SUBJ], q[OBJ])
-        if not list: return None
+        if list == []: return None
         for p in ALL4:
             if q[p] == None:
                 return list[0].quad[p]
@@ -1113,7 +1207,7 @@ class RDFStore(RDFSink.RDFSink) :
         if context.statementsMatching(pred, subj, obj):
             if verbosity() > 97:  progress("storeQuad duplicate suppressed"+`q`)
             return 0  # Return no change in size of store
-        if context.cannonical:
+        if context.cannonical != None:
             raise RuntimeError("Attempt to add statement to cannonical formula "+`context`)
 
 # We collapse lists from there declared daml first,rest structure into List objects.
@@ -1122,22 +1216,17 @@ class RDFStore(RDFSink.RDFSink) :
 
         self.size = self.size+1
         if pred is self.rest and obj.asList() != None:
-            ifirst = context.statementsMatching(pred=self.first, subj=subj)
-            if ifirst and subj._asList == None:
-                subj._asList = obj._asList.precededBy(ifirst[0][OBJ])
-#                self.removeStatement(ifirst[0])  # Neither first nor rest is needed now
+            first = context.the(pred=self.first, subj=subj)
+            if first != None and subj._asList == None:
+                subj._asList = obj._asList.precededBy(first)
                 self.checkList(context, subj)
-#                return 1  # @@ what are we counting, exactly? We did learn something!
 
         elif pred is self.first:
-            irest = context.statementsMatching(self.rest, subj, None)
-            if irest:
-                rest = irest[0][OBJ]
+            rest = context.the(pred=self.rest, subj=subj)
+            if rest !=None:
                 if rest.asList() != None and subj._asList == None:
-#                    self.removeStatement(irest[0])  # Neither first nor rest is needed now
                     subj._asList = rest._asList.precededBy(obj)
                     self.checkList(context, subj)
-#                    return 1
 
         s = StoredStatement(q)
 
@@ -1232,7 +1321,7 @@ class RDFStore(RDFSink.RDFSink) :
         
         mpPair = (SYMBOL, mp.uriref()+"#")
         defns = self.namespaces.get("", None)
-        if defns :
+        if defns != None:
             del self.namespaces[""]
             del self.prefixes[defns]
         if self.prefixes.has_key(mpPair) :
@@ -1244,7 +1333,7 @@ class RDFStore(RDFSink.RDFSink) :
 
 
     def dumpPrefixes(self, sink):
-        if self.defaultNamespace:
+        if self.defaultNamespace != None:
             sink.setDefaultNamespace(self.defaultNamespace)
         prefixes = self.namespaces.keys()   #  bind in same way as input did FYI
         prefixes.sort()
@@ -1494,7 +1583,7 @@ class RDFStore(RDFSink.RDFSink) :
                 if sorting: statements.sort(StoredStatement.comparePredObj)    # Order only for output
 
                 li = subj.asList()
-                if li and not isinstance(li, EmptyList):   # The subject is a list
+                if li != None and not isinstance(li, EmptyList):   # The subject is a list
                     sink.startAnonymousNode(subj.asPair(), li)
 #                    self.dumpStatement(sink, (context, self.first, subj, li.first))
 #                    self.dumpStatement(sink, (context, self.rest, subj, li.rest)) # includes rest of list
@@ -1610,10 +1699,9 @@ class RDFStore(RDFSink.RDFSink) :
     Statements in the given context that a term is a Chaff cause
     any mentions of that term to be removed from the context.
     """
-        if not boringClass:
+        if boringClass == None:
             boringClass = self.Chaff
-        for s in context.statementsMatching(self.type, None, boringClass)[:]:
-            con, pred, subj, obj = s.quad  # subj is a member of boringClass
+        for subj in context.subjects(pred=self.type, obj=boringClass):
 	    self.purgeSymbol(context, subj)
 
     def purgeSymbol(self, context, subj=None):
@@ -1764,9 +1852,8 @@ class RDFStore(RDFSink.RDFSink) :
         return self.match(unmatched, variablesUsed, templateExistentials, [workingContext],
                           self.conclude,
                           ( self, conclusion, targetContext,  # _outputVariables,
-                            already))
-
-
+                            already),
+			    meta=workingContext)
 
 
 
@@ -1958,14 +2045,14 @@ class RDFStore(RDFSink.RDFSink) :
 
 
     def checkList(self, context, L):
-        """Check whether this new list causes ohter things to become lists"""
+        """Check whether this new list causes other things to become lists"""
         if verbosity() > 80: progress("Checking new list ",`L`)
         rest = L.asList()
         possibles = context.statementsMatching(pred=self.rest, obj=L)  # What has this as rest?
         for s in possibles:
             L2 = s[SUBJ]
             ff = context.statementsMatching(pred=self.first, subj=L2)
-            if ff:
+            if ff != []:
                 first = ff[0][OBJ]
                 if L2.asList() == None:
                     L2._asList = rest.precededBy(first)
@@ -1984,7 +2071,8 @@ class RDFStore(RDFSink.RDFSink) :
                param = None,        # a tuple, see the call itself and conclude()
                hypothetical =0,     # The formulae are not in the store - check for their contents
                justOne = 0,         # Flag: Stop when you find the first one
-               level = 0):          # nesting level
+               level = 0,	    # nesting level
+	    meta = None):	    # Context to check for useful info eg remote stuff
         """ Apply action(bindings, param) to succussful matches
         """
         if action == None: action=self.doNothing
@@ -2002,7 +2090,7 @@ class RDFStore(RDFSink.RDFSink) :
         queue = []   #  Unmatched with more info
         for quad in unmatched:
             item = QueryItem(self, quad)
-            if item.setup(allvars=variables+existentials, smartIn=smartIn) == 0:
+            if item.setup(allvars=variables+existentials, smartIn=smartIn, meta=meta) == 0:
                 if verbosity() > 80: progress("match: abandoned, no way for "+`item`)
                 return 0
             queue.append(item)
@@ -2075,8 +2163,8 @@ class RDFStore(RDFSink.RDFSink) :
 ##################################################################################
 
 
-    def  query2(self,                # Neded for getting interned constants
-               queue,               # Ordered queue of items we are trying to match CORRUPTED
+    def  query2(self,               # Neded for getting interned constants
+               queue,               # Set of items we are trying to match CORRUPTED
                variables,           # List of variables to match and return CORRUPTED
                existentials,        # List of variables to match to anything
                                     # Existentials or any kind of variable in subexpression
@@ -2174,6 +2262,13 @@ class RDFStore(RDFSink.RDFSink) :
                     nbs = []
                 else:
                     nbs = item.tryHeavy(queue, bindings)
+            elif state == S_REMOTE: # Remote query -- need to find all of them
+		items = [item]
+		for i in queue[:]:
+		    if i.state == S_REMOTE:
+			items.append(i)
+			queue.remove(i)
+		nbs = self.remoteQuery(items, variables, existentials)
             elif state == S_LIST_UNBOUND: # Lists with unbound vars
                 if verbosity()>50:
                         progress( " "*level+ "List left unbound, returing")
@@ -2213,7 +2308,10 @@ class RDFStore(RDFSink.RDFSink) :
         if verbosity()>50: progress( " "*level+"QUERY MATCH COMPLETE with bindings: " + bindingsToString(bindings))
         return action(bindings, param, level)  # No terms left .. success!
 
-
+    def remoteQuery(items, variables, existentials):
+	progress("Remote Query:", items, variables, existentials)
+	pass
+	return 0   # No bindings for testing
 
 
 class QueryItem:
@@ -2225,6 +2323,7 @@ class QueryItem:
         self.short = INFINITY
         self.neededToRun = None   # see setup()
         self.myIndex = None     # will be list of satistfying statements
+	self.service = None   # Remote database server for this predicate?
         return
 
     def clone(self):
@@ -2241,13 +2340,15 @@ class QueryItem:
 
 
 
-    def setup(self, allvars, smartIn):        
+    def setup(self, allvars, smartIn=[], meta=None):        
         """Check how many variables in this term,
         and how long it would take to search
 
         Returns, [] normally or 0 if there is no way this query will work.
         Only called on virgin query item."""
         con, pred, subj, obj = self.quad
+	if meta:
+	    self.service = meta.any(pred=self.store.authoritativeService, subj=pred)
         self.neededToRun = [ [], [], [], [] ]  # for each part of speech
         self.searchPattern = [con, pred, subj, obj]  # What do we search for?
         hasUnboundFormula = 0
@@ -2366,6 +2467,8 @@ class QueryItem:
                 self.state = S_LIST_BOUND   # @@@ ONYY If existentially qual'd @@, it is true as an axiom.
             else:
                 self.state = S_LIST_UNBOUND   # Still need to resolve this
+	elif self.service:
+	    self.state = S_REMOTE    #  Search done, need to synchronize with other items
         elif not isinstance(pred, HeavyBuiltIn):
             self.state = S_FAIL  # Done with this one: Do new bindings & stop
         elif self.canRun():

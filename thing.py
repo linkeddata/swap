@@ -135,7 +135,7 @@ class Resource(Thing):
             f = self.fragments.get(fragid, None)
             if f:
                 if not isinstance(f, thetype):
-                    raise RuntimeError("Oops.. %s existsnot with type %s"%(f, thetype))
+                    raise RuntimeError("Oops.. %s exists already but not with type %s"%(f, thetype))
                 return f    # (Could check that types match just to be sure)
             f = thetype(self, fragid)
             self.fragments[fragid] = f
