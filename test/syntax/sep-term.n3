@@ -1,0 +1,10 @@
+{ <a> <b> <c>} <p> <o>.
+{ <a> <b> <c>. <d> <e> <f>} <p> <o>.
+{ <a> <b> <c>. <d> <e> <f>.} <p> <o>.
+
+
+<something> <relatedTo> <somethingElse>;
+   <relatedTo> <anotherThing>;
+   <and> <anotherThing>;
+   .
+
