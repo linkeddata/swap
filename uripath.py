@@ -66,9 +66,11 @@ def splitFragP(uriref, punct=0):
 
 def join(here, there):
     """join an absolute URI and URI reference
+    (non-ascii characters are supported/doctested;
+    haven't checked the details of the IRI spec though)
 
-    here must be an absolute URI.
-    there must be a URI reference.
+    here is assumed to be absolute.
+    there is URI reference.
 
     >>> join('http://example/x/y/z', '../abc')
     'http://example/x/abc'
@@ -79,8 +81,16 @@ def join(here, there):
     >>> join('mid:foo@example', '../foo')
     Traceback (most recent call last):
         raise ValueError, here
-    ValueError: Base <mid:foo@example> has no slash after colon - with relative <../foo>.
+    ValueError: Base <mid:foo@example> has no slash after colon - with relative '../foo'.
 
+
+    We grok IRIs
+
+    >>> len(u'Andr\\xe9')
+    5
+    
+    >>> join('http://example.org/', u'#Andr\\xe9')
+    u'http://example.org/#Andr\\xe9'
     """
 
     assert(find(here, "#") < 0), "Base may not contain hash: '%s'"% here # caller must splitFrag (why?)
@@ -379,7 +389,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.14  2003-10-20 17:31:55  timbl
+# Revision 1.15  2004-01-28 22:22:10  connolly
+# tested that IRIs work in uripath.join()
+#
+# Revision 1.14  2003/10/20 17:31:55  timbl
 # Added @keyword support.
 # (eventually got python+expat to wrok on fink, with patch)
 # Trig functions are in, thanks to Karl, with some changes, but NOT in regeression.n3
