@@ -1005,7 +1005,7 @@ class BI_semanticsOrError(BI_semantics):
             if verbosity() > 10: progress(`store._experience`+`store.semanticsOrError`+": Already found error for "+`subj`+" was: "+ `x`)
             return x
         try:
-            return BI_semantics.evalObj(self, subj, queue, bindings, proof)
+            return BI_semantics.evalObj(self, subj, queue, bindings, proof, query)
         except (IOError, SyntaxError, DocumentAccessError, xml.sax._exceptions.SAXParseException):
             message = sys.exc_info()[1].__str__()
             result = store.intern((LITERAL, message))
