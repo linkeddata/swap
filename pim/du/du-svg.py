@@ -34,6 +34,9 @@ style =  [
 svg = sys.stdout.write
 deb = sys.stderr.write
 
+def styleFor(level):
+    return style[level % len(style)]
+
 class File:
     def __init__(self,  name, parent=None, level=0):
 	self.parent = parent
@@ -109,14 +112,14 @@ class File:
 
     def rectangle(self, x, y, dx, dy, flipped=0, opacity=1.0):
 	if flipped: return self.rectangle(y, x, dy, dx, flipped=0, opacity=opacity) #  flip
-	fillColor, strokeColor = style[self.level]
+	fillColor, strokeColor = styleFor(self.level)
 	if opacity < 0.9: fillColor = "none"  #  Don't bother
 	strokeWidth = (dx + dy) /400.0
 	svg("""<rect x="%f" y="%f" width="%f" height="%f" opacity="%1.1f"
         fill="%s" stroke="%s" stroke-width="%f"/>\n""" %(x, y, dx, dy, opacity, fillColor, strokeColor, strokeWidth))
 
     def label(self, lab, x, y, dx, dy, flipped, opacity=1.0):
-	fillColor, strokeColor = style[self.level]
+	fillColor, strokeColor = styleFor(self.level)
 	# Figure out max font size will fit in
 #	if flipped:
 	if 0:
