@@ -1,8 +1,8 @@
-#Processed by Id
+#Processed by Id:
         #    using base file:/devel/WWW/2000/10/swap/test/dpo/axioms0.n3
         
 #  Notation3 generation by
-#       notation3.py,v 1.46 2001/01/16 01:26:54 timbl Exp
+#       notation3.py,v 1.44 2001/01/11 04:25:55 timbl Exp
 
 #   Base was: file:/devel/WWW/2000/10/swap/test/dpo/axioms0.n3
      @prefix v: <vars#> .
@@ -24,9 +24,7 @@
     <#Ax002>     =  (
         ko:means 
          (
-            <#no_> 
-            <#repeats_> 
-            <#list> 
+            <#no_repeats_list> 
             v:l  )
          (
             <#or> 
@@ -57,9 +55,7 @@
                             <#first> 
                             v:l  ) ) )
                  (
-                    <#no_> 
-                    <#repeats_> 
-                    <#list> 
+                    <#no_repeats_list> 
                      (
                         <#rest> 
                         v:l  ) ) ) ) ) .
@@ -1476,9 +1472,7 @@
                      (
                         <#and> 
                          (
-                            <#no_> 
-                            <#repeats_> 
-                            <#list> 
+                            <#no_repeats_list> 
                             v:vl  )
                          (
                             <#forall> 
@@ -1553,9 +1547,7 @@
                          (
                             <#and> 
                              (
-                                <#no_> 
-                                <#repeats_> 
-                                <#list> 
+                                <#no_repeats_list> 
                                 v:vl  )
                              (
                                 <#forall> 
@@ -1630,9 +1622,7 @@
                          (
                             <#and> 
                              (
-                                <#no_> 
-                                <#repeats_> 
-                                <#list> 
+                                <#no_repeats_list> 
                                 v:vl  )
                              (
                                 <#forall> 
@@ -1727,9 +1717,7 @@
                      (
                         <#and> 
                          (
-                            <#no_> 
-                            <#repeats_> 
-                            <#list> 
+                            <#no_repeats_list> 
                             v:vl  )
                          (
                             <#forall> 
@@ -1815,9 +1803,7 @@
                          (
                             <#and> 
                              (
-                                <#no_> 
-                                <#repeats_> 
-                                <#list> 
+                                <#no_repeats_list> 
                                 v:vl  )
                              (
                                 <#forall> 
@@ -1903,9 +1889,7 @@
                          (
                             <#and> 
                              (
-                                <#no_> 
-                                <#repeats_> 
-                                <#list> 
+                                <#no_repeats_list> 
                                 v:vl  )
                              (
                                 <#forall> 

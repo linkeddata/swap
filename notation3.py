@@ -83,7 +83,7 @@ RDF_type = ( RESOURCE , RDF_type_URI )
 DAML_equivalentTo = ( RESOURCE, DAML_equivalentTo_URI )
 
 N3_forSome_URI = Logic_NS + "forSome"
-N3_subExpression_URI = Logic_NS + "subExpression"
+#N3_subExpression_URI = Logic_NS + "subExpression"
 N3_forAll_URI = Logic_NS + "forAll"
 
 DPO_NS = "http://www.daml.org/2000/12/daml+oil#"  # DAML plus oil
@@ -233,7 +233,9 @@ class SinkParser:
 #                while i<len(str) and str[i] != "\n":
 #                    i = i + 1
 #            else: break
-	if str[i:i+len(tok)] == tok:
+	if (str[i:i+len(tok)] == tok
+            and (tok[0] not in self._namechars    # check keyword is not prefix
+                or str[i+len(tok)] in string.whitespace )):
 	    i = i + len(tok)
 	    return i
 	else:
@@ -355,85 +357,85 @@ class SinkParser:
     def prop(self, str, i, res):
 	return self.node(str, i, res)
 
-    def node(self, str, i, res):
-	j = self.uri_ref2(str, i, res)
-	if j >= 0:
-	    return j
-	else:
-	    j = self.tok('[', str, i)
-	    if j>=0:
-                subj = RESOURCE , self._genPrefix + `self._nextId`  #
-                self._nextId = self._nextId + 1
-                self.makeStatement((self._context, # quantifiers - use inverse?
-                                    (RESOURCE, N3_forSome_URI),
-                                    self._context,
-                                    subj)) # @@@ Note this is anonymous node
-                i = self.property_list(str, j, subj)
-                if i<0: raise BadSyntax(str, j, "property_list expected")
-                j = self.tok(']', str, i)
-                if j<0: raise BadSyntax(str, i, "']' expected")
-                res.append(subj)
+    def node(self, str, i, res, subjectAlready=None):
+        subj = subjectAlready
+	if subj is None:   # If this can be a named node, then check for a name.
+            j = self.uri_ref2(str, i, res)
+            if j >= 0:
                 return j
 
-	    j = self.tok('{', str, i)
-	    if j>=0:
-                oldContext = self._context
-                subj = self.genid()
-                self.makeStatement((oldContext, # lexical nesting
-                                    (RESOURCE, N3_subExpression_URI), #pred
-                                    oldContext,  #subj
-                                    subj))                      # obj
+        j = self.tok('[', str, i)
+        if j>=0:
+            if subj is None: subj=self.genid()
+            i = self.property_list(str, j, subj)
+            if i<0: raise BadSyntax(str, j, "property_list expected")
+            j = self.tok(']', str, i)
+            if j<0: raise BadSyntax(str, i, "']' expected")
+            res.append(subj)
+            return j
 
-                self._context = subj
+        j = self.tok('{', str, i)
+        if j>=0:
+            oldContext = self._context
+            if subj is None: subj = self.genid()
+
+            self._context = subj
+            
+            while 1:
+                i = self.skipSpace(str, j)
+                if i<0: raise BadSyntax(str, i, "needed '}', found end.")
                 
-                while 1:
-                    i = self.skipSpace(str, j)
-                    if i<0: raise BadSyntax(str, i, "needed '}', found end.")
-                    
-                    j = self.tok('}', str,i)
-                    if j >=0: break
-                    
-                    j = self.directiveOrStatement(str,i)
-                    if j<0: raise BadSyntax(str, i, "expected statement or '}'")
+                j = self.tok('}', str,i)
+                if j >=0: break
+                
+                j = self.directiveOrStatement(str,i)
+                if j<0: raise BadSyntax(str, i, "expected statement or '}'")
 
-                self._context = oldContext # restore
-                res.append(subj)
+            self._context = oldContext # restore
+            res.append(subj)
+            return j
+
+        j = self.tok('(', str, i)    # List abbreviated syntax?
+        if j>=0:
+            tail = None  # remember value to return
+            while 1:
+                i = self.skipSpace(str, j)
+                if i<0: raise BadSyntax(str, i, "needed ')', found end.")                    
+                j = self.tok(')', str,i)
+                if j >=0: break
+
+                item = []
+                j = self.node(str,i, item)
+                if j<0: raise BadSyntax(str, i, "expected item in list or ')'")
+                this = self.genid()
+                if tail:
+                    self.makeStatement((self._context, N3_rest, tail, this ))
+                else:
+                    head = this
+                tail = this
+                self.makeStatement((self._context, N3_first, this, item[0] ))           # obj
+
+            if not tail:
+                res.append(N3_nil)
                 return j
+            self.makeStatement((self._context, N3_rest, tail, N3_nil ))           # obj
+            res.append(head)
+            return j
 
-	    j = self.tok('(', str, i)    # List abbreviated syntax?
-	    if j>=0:
-                tail = None  # remember value to return
-                while 1:
-                    i = self.skipSpace(str, j)
-                    if i<0: raise BadSyntax(str, i, "needed ')', found end.")                    
-                    j = self.tok(')', str,i)
-                    if j >=0: break
-
-                    item = []
-                    j = self.node(str,i, item)
-                    if j<0: raise BadSyntax(str, i, "expected item in list or ')'")
-                    this = self.genid()
-                    if tail:
-                        self.makeStatement((self._context, N3_rest, tail, this ))
-                    else:
-                        head = this
-                    tail = this
-                    self.makeStatement((self._context, N3_first, this, item[0] ))           # obj
-
-                if not tail:
-                    res.append(N3_nil)
-                    return j
-                self.makeStatement((self._context, N3_rest, tail, N3_nil ))           # obj
-                res.append(head)
-                return j
-
-            return -1
+        return -1
         
     def property_list(self, str, i, subj):
 	while 1:
+            j = self.tok(":-", str,i)
+            if j >=0:
+                res = []
+                i = self.node(str, j, res, subj)
+                if i<0: raise BadSyntax(str, j, "bad {} or () or [] node after :- ")
+                continue
+                
 	    v = []
 	    j = self.verb(str, i, v)
-	    if j<=0:
+            if j<=0:
 		return i # void
 	    else:
 		objs = []
@@ -1147,10 +1149,20 @@ class ToN3(RDFSink):
         self.indent = self.indent - 1
      
     def startBagNamed(self, subj):
-        self._makeSubjPred(subj, ( RESOURCE,  DAML_equivalentTo_URI ))
+	if self._subj != subj:
+	    self._endStatement()
+	    if self.indent == 1:  # Top level only - extra newline
+                self._newline()
+	    self._write(self.representationOf(subj))
+	    self._subj = subj
+	    self._pred = None
+
+        if self._pred is not None:
+            self._write(";")
+ #       self._makeSubjPred(subj, ( RESOURCE,  DAML_equivalentTo_URI ))
         self.stack.append(0)
         self.indent = self.indent + 1
-        self._write("{")
+        self._write(" :- {")
         self._newline()
 	self._subj = None
         self._pred = None

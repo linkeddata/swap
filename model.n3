@@ -3,8 +3,9 @@
 
 @prefix n3: <#>.
 @prefix log: <log.n3#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix : <#>
+@prefix : <#> .
 
 n3:Statement    a rdf:Class .
 n3:StatementSet a rdf:Class .
@@ -22,11 +23,11 @@ n3:context      a rdf:Property; rdfs:domain n3:statement;
 
 ########### Rules
 
-<> forall :s :p :x :y :z .
-{ :x :p :y . } log:means [
+<> forall :s, :p, :x, :y, :z .
+{ :x :p :y . } log:means { [
                 n3:subject :x;
                 n3:predicate :p;
-                n3:object :y ] a log:Truth .
+                n3:object :y ] a log:Truth}.
 
 # Needs more thought ... ideally, we have the implcit AND rules of
 # juxtaposition (introduction and elimination)
@@ -35,13 +36,13 @@ n3:context      a rdf:Property; rdfs:domain n3:statement;
     {
         {  :x n3:includes :s. } log:implies { :y n3:includes :s. } .
     } forall :s1 .
-} log:implies { x: log:implies :y } .
+} log:implies { :x log:implies :y } .
 
 {
     {
         {  :x n3:includes :s. } log:implies { :y n3:includes :s. } .
     } forall :s1
-} log:implies { x: log:implies :y } .
+} log:implies { :x log:implies :y } .
 
 # I think n3:includes has to be axiomatic builtin. - unless you go to syntax description.
 # syntax.n3?

@@ -1,6 +1,7 @@
 #    Hack daml_oil kiflike axioms
 #
-#
+#  Strategy:  Recursively decorate the KIF formula with :inN3 translations
+#   Decorate the axiom itself with :derivation
 #
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
@@ -8,14 +9,15 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
 @prefix : <#> .       # For our use
-@prefix v: <myvar#> .	# Hint for others use
+@prefix conv:  <#> .	# Hint for others use
+@prefix v: <myvar#> .
 @prefix ko: <kif-ops#> .
 @prefix a: <axioms.n3#> .  # The source of all knowledge for this one
 
 @prefix av: <vars#> .	# variables used by the axioms.n3
 
 
-<> log:forAll :v, :x, :y, y3, :z, z3 , :p, :s, :o.
+<> log:forAll  :p, :s, :o, :v, :x, :x3, :y, y3, :z, z3.
 
 :AxiomVar is rdf:type of av:a, av:b, av:c, av:d, av:d, av:e, av:f, av:g, av:h,
 	av:i, av:j, av:k,
@@ -23,8 +25,10 @@
 	av:r, av:s, av:t, av:u, av:v, av:vl, av:w,
 	av:x, av:x1, av:x2, av:y, av:y1, av:y2, av:z. # hack
 
-# Convert in general; believe the axioms.
-### { :x a ko:Axiom .  :x :inN3 :y } log:implies { :y a log:Truth } .
+# Convert in general for ko:Axiom to :Axiom
+
+{ :x a ko:Axiom .  :x = :y .  :y :inN3 :z } log:implies
+	 { :z a :Axiom; :derivation :x. }.
 
 # Find occurences of variables:
  
@@ -33,7 +37,7 @@
 { :y :isVarIn :x . :z daml:first :x . } log:implies { :y :isVarIn :z } .
 { :x a ko:Axiom . :x = :z . :y :isVarIn :z } log:implies { :y :isVarInAxiom :x } .
 
-{ :x :inN3 :y . :v :isVarInAxiom :x . } log:implies { :y log:FORALL :v . } .
+{ :y :derivedFrom :x . :v :isVarInAxiom :x . } log:implies { :y log:FORALL :v . } .
 
 # Implication
 
@@ -43,20 +47,75 @@
 	:z :inN3 :z3 . } log:implies { :x :inN3 { :y3 log:IMPLIES :z3 }}. 
 
 {  :x daml:first ko:means; daml:rest ( :y :z ) .
-    :y :inN3 :y3. :z :inN3 :z3 . } log:implies { :x :inN3 { :y3 log:MEANS :z3 }}. 
+    :y :inN3 :y3. :z :inN3 :z3 . } log:implies {
+
+	{ :y3 log:MEANS :z3 }
+# 	log:subExpression :y3, :z3; log:forSome :y3, :z3; 
+					is :inN3 of :x }. 
 
 # Variables are themselves - although note the forall we have to deduce above.
 
 {:x a :AxiomVar} log:implies {:x :inN3 :x } .
 
+# Constants in this formulation represent themselves.
+
+{:x a ko:Constant} log:implies {:x :inN3 :x } .
+
 # Type assertions
 
-{ :x daml:first a:Type; daml:rest (:x :y).
+{ :s daml:first a:Type; daml:rest (:x :y).
   :x :inN3 :x3.
-  :y :inN3 :y3. } log:implies {:x :inN3 {:x3 a :y3}}.
+  :y :inN3 :y3. } log:implies {{:x3 a :y3} is :inN3 of :s}.
 
 # Convert explicit statements 
 
-{ :x = (a:PropertyValue :x :y :z).
-	:x :inN3 :x3. :y :inN3 :y3. :z :inN3 :z3  } log:implies { :x :inN3 { :x3 :y3 :z3 }} .
+{ :s daml:first a:PropertyValue; daml:rest (:x :y :z).  # Note different order
+	:x :inN3 :x3. :y :inN3 :y3. :z :inN3 :z3  } log:implies {
+	{ :y3 :x3 :z3 }  is :inN3 of :s} .
 
+# Convert universal quantification
+# (forall (x y z) (subexpress...))
+
+{  :s daml:first a:forall; daml:rest [ daml:first :l; daml:rest :x] .
+	:x :inN3 :x3; } log:implies {  :s :inN3 :x3 .  :x3 log:FORALL_LIST :l }.
+
+
+# Expland forall lists only:
+
+{:x log:FORALL_LIST[daml:first :y; daml:rest :z]}log:implies{
+	:x log:FORALL :y.
+	:x log:FORALL_LIST :z}.
+
+
+# Convert operators - use the same id
+
+# a:and a :KIFBinaryOperator.
+a:or a :KIFBinaryOperator .
+
+{ 	:s a :KIFBinaryOperator .
+	( :s :x :y ).
+	:x :inN3 :x3.
+	:y :inN3 :y3. } log:implies
+		{ :s :inN3 [ :op :s; :left :x3; :right :y3 ] }.
+
+{ 	:s daml:first a:and; daml:rest ( :x :y ).
+	:x :inN3 :x3.
+	:y :inN3 :y3. } log:implies
+		{ :s :inN3 { :x3 a log:Truth. :y3 a log:Truth }}.
+
+{ 	:s daml:first ko:equals; daml:rest ( :x :y ).
+	:x :inN3 :x3.
+	:y :inN3 :y3. } log:implies
+		{ :s :inN3 {:x3 = :y3}}.
+
+
+# Things to purge in the end as intermediate results
+
+{ :x :inN3 :x3 } log:implies { :x a log:Chaff }.   # Drop everything xlated OK
+
+log:implies a log:Chaff .    #  Drop all rules!! (hence uppercase IMPLIES generated) 
+
+log:Chaff is rdf:type of :inN3, :isVarIn, :KIFBinaryOperator, ko:Constant,
+	:AxiomVar, :isVarInAxiom.
+
+#     :inN3,	
