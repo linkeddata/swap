@@ -134,7 +134,7 @@ def main():
         testParser(command, kb, output)
 
         output.close()
-        output.store.dumpNested(output, ToN3(file(outputFile+z, 'w').write))
+        output.store.dumpNested(output, ToN3(file(outputFile+`z`, 'w').write))
         z = z+1
     
 if __name__ == "__main__":
