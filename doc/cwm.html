@@ -47,92 +47,19 @@ out the whole tree to develop.</p>
 
 <p></p>
 
-<h2 id="Motivation">Motivation</h2>
-
-<p>These are a few things I put together to</p>
-<ul>
-  <li>Resolve the fact that I had no code development environment</li>
-  <li><a href="#L88">Check out python</a></li>
-  <li>Investigate the questions of the real RDF model particularly with
-    respect to
-    <ul>
-      <li>alternative quick scribbling (wiki wiki?) syntax - notation3</li>
-      <li>managing several bags of RDF data, not covered by the RDF spec</li>
-      <li>relationships between this and rule languages</li>
-    </ul>
-  </li>
-  <li>Generate some tools for munging RDF</li>
-</ul>
-
-<p></p>
-
-<p>The bits are now as follows. There is NO guarantee or support or anything
-for these.</p>
-
 <h2 id="Python">Python modules</h2>
-
-<h3 id="L133">Serializing/deserializaing RDF: notation3.py</h3>
-
-<p>Originally written by Dan Connolly, uses a basic RDF stream parser
-interface</p>
-<ul>
-  <li>Parses N3</li>
-  <li>Generates RDF</li>
-  <li>Generates N3</li>
-</ul>
-
-<p>The command line form  (alias n3 python notation3.py; n3 -help) allows RDF
-to be parsed and re-output.</p>
-
-<p>The module will also run as a CGI script to convert N3 to RDF M&amp;S 1.0
-- by DanC magic.</p>
-<ul>
-  <li><a href="notation3.py">Source</a></li>
-</ul>
-
-<h3 id="L88">By the way... Python is cool.</h3>
-
-<p>I had lamented that it ws a long time since I had a practial hacking
-environment, and Dan Connolly suggested <a
-href="http://www.python.org/">Python</a> as something you could start quickly
-but which would scale to a large system.  One day, 15 minutes before I had to
-leave for the airport, I got my laptop back out of my bag, and sucked off the
-web the <a href="http://www.python.org/1.6/">python 1.6 system</a> and the <a
-href="http://www.python.org/doc/current/tut/tut.html">python tutorial</a>,
-and a copy of a small <a href="../n3/notation3.py">notation3 parser</a> Dan
-had hacked together. I was happy to find that Python is a language you can
-get into on one battery!  I have been happily hacking ever since.</p>
-
-<p>I remember Guido trying to persuade me to use python as I was trying to
-persuade him to write web software!</p>
 
 <h3>Don't trust the doc</h3>
 
 <p>The best test of works is what has been tested.  So the list of files in
-the regression test defines the set of features which are generally checked
-on each checkin.</p>
-
-<h3 id="L311">xml2rdf.py   Parsing RDF</h3>
-
-<p>Based on Python's xmllib, this parser is ocmpatible with the RDF stream
-interface of, notation3.py.  It completes the square of parsers and
-generators.</p>
-<ul>
-  <li>Parses RDF</li>
-</ul>
-
-<p>It has a command line mode for self-test purposes.</p>
-<ul>
-  <li><a href="xml2rdf.py">Source</a></li>
-</ul>
-
-<p></p>
+the <a href="../test/retest.sh">regression test</a> defines the set of
+features which are generally checked on each checkin.</p>
 
 <h3 id="Closed">Closed World Machine : cwm.py</h3>
 
-<p>This is a triple store, in which triples are stored in/against the
-particular context in which they were read, eg RDF file or N3 { expression }.
-The features at the moment include</p>
+<p>This is a general purpose command-line application, in which triples are
+stored in/against the particular context in which they were read, eg RDF file
+or N3 { expression }. The features at the moment include</p>
 <ul>
   <li>Loading files in RDF and/or N3</li>
   <li>Applying rules written in N3 to the data.</li>
@@ -169,7 +96,8 @@ are processed in order from left to right.</p>
   <dt>--n3</dt>
     <dd>input/output is Notation3 from now on.</dd>
   <dt>--n3=flags</dt>
-    <dd>as above, but also customizes N3 output.</dd>
+    <dd>as above, but also customizes N3 output.  cwm --help for list of
+    flags</dd>
   <dt>--ntriples</dt>
     <dd>As for n3, but customizied to produce the "ntriples" N3 subset.</dd>
   <dt>--rdf1out</dt>
@@ -226,13 +154,50 @@ values found. The following is an example:</p>
 <pre>@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .
 @prefix mech: &lt;s1.n3#&gt; .
 
-&lt;&gt; log:forAll &lt;#x&gt; , &lt;#y&gt; .
+this log:forAll &lt;#x&gt; , &lt;#y&gt; .
 { &lt;#x&gt; mech:includes &lt;#y&gt; } log:implies { &lt;#y&gt; mech:partOf &lt;#x&gt; } .</pre>
 
 <p>The @prefix directives define the prefixes log: and mech: as representing
-namespaces.   The &lt;&gt; log:forAll line declares #x and #y, two local
+namespaces.   The this log:forAll line declares #x and #y, two local
 identifiers, as being univerlly quantified variables in the context of this
-document (&lt;&gt;).</p>
+formula (this).</p>
+
+<h3 id="L133">Serializing/deserializaing RDF: notation3.py</h3>
+
+<p>Originally written by Dan Connolly, uses a basic RDF stream parser
+interface</p>
+<ul>
+  <li>Parses N3</li>
+  <li>Generates RDF</li>
+  <li>Generates N3</li>
+</ul>
+
+<p>The command line form  (alias n3 python notation3.py; n3 -help) allows RDF
+to be parsed and re-output.</p>
+
+<p>The module will also run as a CGI script to convert N3 to RDF M&amp;S 1.0
+- by DanC magic.</p>
+<ul>
+  <li><a href="notation3.py">Source</a></li>
+</ul>
+
+<h3 id="L311">xml2rdf.py   Parsing RDF/XML</h3>
+
+<p>Based on Python's xmllib, this parser is ocmpatible with the RDF stream
+interface of, notation3.py.  It completes the square of parsers and
+generators.  <strong>Defunct. Now use sax parser and sax2rdf.py.</strong></p>
+<ul>
+  <li>Parses RDF</li>
+</ul>
+
+<p>It has a command line mode for self-test purposes.</p>
+<ul>
+  <li><a href="xml2rdf.py">Source</a></li>
+</ul>
+
+<p></p>
+
+<p></p>
 
 <h2><a name="Design">Design issues</a></h2>
 
