@@ -81,7 +81,7 @@ log.rdf: log.n3
 
 #######
 
-GET=GET
+GET=curl
 
 # cf
 # W3C mailing list search results in RDF

@@ -35,6 +35,7 @@ import diag
 from why import FormulaReason
 from diag import verbosity, setVerbosity, progress, tracking, setTracking
 from uripath import join
+from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
 
 # import re
 # import StringIO

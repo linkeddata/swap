@@ -137,6 +137,7 @@ import md5, binascii  # for building md5 URIs
 
 import uripath
 import notation3    # N3 parsers and generators, and RDF generator
+from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 import diag  # problems importing the tracking flag, and chatty_flag must be explicit it seems diag.tracking
@@ -932,7 +933,7 @@ class BI_content(HeavyBuiltIn, Function):
         if diag.chatty_flag > 10: progress("Reading " + `doc`)
         inputURI = doc.uriref()
         try:
-            netStream = urllib.urlopen(inputURI)
+            netStream = urlopenForRDF(inputURI)
         except IOError:
             return None
         
@@ -943,7 +944,6 @@ class BI_content(HeavyBuiltIn, Function):
                          doc,
                          C))
         return C
-
 
 class BI_parsedAsN3(HeavyBuiltIn, Function):
     def evalObj(self, subj, queue, bindings, proof, query):
@@ -1227,7 +1227,7 @@ class RDFStore(RDFSink) :
 			return F 
 		    
 		if diag.chatty_flag > 40: progress("Taking input from " + addr)
-		netStream = urllib.urlopen(addr)
+		netStream = urlopenForRDF(addr)
 		if diag.chatty_flag > 60:
 		    progress("   Headers for %s: %s\n" %(addr, netStream.headers.items()))
 		if contentType == None: ct=netStream.headers.get(HTTP_Content_Type, None)
