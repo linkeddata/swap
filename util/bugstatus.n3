@@ -4,7 +4,10 @@
   dc:description "$Id$",
 """
 $Log$
-Revision 1.5  2004-01-31 00:45:19  timbl
+Revision 1.6  2004-03-10 22:06:12  timbl
+Think fixed completuion date
+
+Revision 1.5  2004/01/31 00:45:19  timbl
 Add COMPLETED:
 
 Revision 1.4  2004/01/31 00:10:04  connolly
@@ -122,8 +125,10 @@ this log:forAll :MSG, :SUBJ, :DATE.
   ?PROJECT :calendar ?CAL;
     :bugThreads [
       log:includes {
-        :MSG req:threadTail [];
-	     email:date_iso :DATE.
+#        :MSG req:threadTail [];
+#	     email:date_iso :DATE.
+        :MSG req:threadTail [
+	     email:date_iso :DATE]
       } ].
 }
 => {
