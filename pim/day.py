@@ -101,14 +101,17 @@ class Map:
 		+"&iht=%i&iwd=%i")  % (self.midla, self.midlo, map_ht, map_wid, self.page_y, self.page_x)
 
 	progress("Getting Tiger map ", tigerURI)
-	gifStream = urlopen(tigerURI)
-	gifData = gifStream.read()
-	gifStream.close
-	progress("Saving tiger map")
-	saveStream = open("tiger.gif", "w")
-	saveStream.write(gifData)
-	saveStream.close()
-	
+	try:
+	    gifStream = urlopen(tigerURI)
+	    gifData = gifStream.read()
+	    gifStream.close
+	    progress("Saving tiger map")
+	    saveStream = open("tiger.gif", "w")
+	    saveStream.write(gifData)
+	    saveStream.close()
+	except IOError:
+	    print "Offline? No tigermap"
+	    
 #	tigerURI = ("http://tiger.census.gov/cgi-bin/mapper/map.gif?&lat=%f&lon=%f&ht=%f"
 #	    +"&wid=%f&&on=majroads&on=miscell&tlevel=-&tvar=-&tmeth=i&mlat=&mlon=&msym=bigdot&mlabel=&murl="
 #	    +"&conf=mapnew.con&iht=%i&iwd=%i" ) % (self.midla, self.midlo,  maxla-minla, maxlo-minlo, self.page_y, self.page_x)

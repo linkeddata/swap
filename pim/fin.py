@@ -23,9 +23,11 @@ import uripath
 import string
 import sys
 from uripath import join
-from thing import  Namespace
 from notation3 import RDF_NS_URI
-
+import llyn
+from myStore import store, load, loadMany
+from myStore import  Namespace
+from diag import progress
 
 qu = Namespace("http://www.w3.org/2000/10/swap/pim/qif#")
 tax = Namespace("http://www.w3.org/2000/10/swap/pim/tax.n3#")
@@ -35,18 +37,12 @@ cat_ns = Namespace("categories.n3#")
 
 monthName= ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
-import thing
 import uripath
-
-store = llyn.RDFStore()
-thing.setStore(store)
 
 rdf_type = rdf.type
 cat = cat_ns
-
     
 def sym(uri):
-    global store
     return store.intern((0, uri))
 
 def printTransactionDetails(t):
@@ -140,14 +136,7 @@ def doCommand(year, inputURI="/dev/stdin"):
         import time
         import sys
         global sax2rdf
-        import thing
-	from thing import load
-	global store
 	global kb
-        #from thing import chatty
-        #import sax2rdf
-
-
         
         # The base URI for this process - the Web equiv of cwd
 	_baseURI = uripath.base()
@@ -166,11 +155,11 @@ def doCommand(year, inputURI="/dev/stdin"):
 # Load the data:
 
 #	print "Data from", inputURI
-	kb=store.load(inputURI)
+	kb=load(inputURI)
 	
 #	print "Size of kb: ", len(kb)
 	
-	meta = store.loadMany(["categories.n3", "classify.n3"])  # Category names etc
+	meta = loadMany(["categories.n3", "classify.n3"])  # Category names etc
 #	print "Size of meta", len(meta)
 	
 	qu_date = qu.date
@@ -195,9 +184,11 @@ def doCommand(year, inputURI="/dev/stdin"):
 	unclassified = kb.each(pred=rdf_type, obj=qu_Unclassified)
 	for t in classified: assert t not in unclassified, "Can't be classified and unclassified!"+`t`
 	for s in classified + unclassified:
-#	    print "Transaction ", `s`
+	    progress( "Transaction ", `s`)
 	    t_ok, c_ok = 0, 0
 	    date = kb.any(subj=s, pred=qu_date).__str__()
+	    progress( "date", date)
+	    if date == None: raise ValueError("No date for transaction %s" % s)
 	    year = int(date[0:4])
 #	    print year, yearInQuestion, `s`
 	    if  int(year) != int(yearInQuestion): continue

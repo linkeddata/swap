@@ -18,11 +18,6 @@ from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 import uripath
 import diag
 
-try:
-    from sets import Set, ImmutableSet, BaseSet
-except ImportError:
-    raise NotImplementedError("We need to figure out how to support python 2.2 users")
-
 reifyNS = 'http://www.w3.org/2004/06/rei#'
 owlOneOf = 'http://www.w3.org/2002/07/owl#oneOf'
 
@@ -33,7 +28,7 @@ def flatten(formula):
     flattening a flattened formula should thus be the unity
     """
     store = formula.store
-    valid_triples = formula.statements.__copy__()
+    valid_triples = formula.statements[:]
     for triple in valid_triples:
         for part in SUBJ, PRED, OBJ:
             try:
@@ -49,14 +44,17 @@ def flatten(formula):
                 if triple[part].doesNodeAppear(a):
                     new_invalid_triples.append(triple)
         for triple in new_invalid_triples:
-            valid_triples.discard(triple)
+            try:
+                valid_triples.remove(triple)
+            except ValueError:
+                pass
         invalid_triples.extend(new_invalid_triples)
-    still_needed_existentials = Set()
+    still_needed_existentials = {}
     for a in formula.existentials():
         for triple in valid_triples:
             for part in SUBJ, PRED, OBJ:
                 if triple[part].doesNodeAppear(a):
-                    still_needed_existentials.add(a)
+                    still_needed_existentials[a] = 1
                     break
             else:
                 continue
@@ -64,7 +62,7 @@ def flatten(formula):
         else:
             print a
     returnFormula = formula.newFormula()
-    for a in still_needed_existentials.__copy__():
+    for a in still_needed_existentials.keys():
         returnFormula.declareExistential(a)
     tempformula = formula.newFormula()
     for var in formula.universals():
@@ -80,7 +78,7 @@ def flatten(formula):
         returnFormula.add(triple[SUBJ].flatten(returnFormula),
                         triple[PRED].flatten(returnFormula),
                         triple[OBJ].flatten(returnFormula))
-    if tempformula.statements != Set():
+    if tempformula.statements != []:
         x = tempformula.reification(returnFormula)
         returnFormula.add(x, store.type, store.Truth)
     return returnFormula.close()
@@ -106,8 +104,7 @@ def reify(formula):
 
     Returns an RDF formula with the same semantics
     as the given formula
-    """
-    formula = formula.close()
+    """ 
     a = formula.newFormula()
     x = formula.reification(a)
     a.add(x, a.store.type, a.store.Truth)

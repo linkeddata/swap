@@ -66,18 +66,8 @@ from why import Because, BecauseBuiltIn, BecauseOfRule, \
     BecauseOfExperience, becauseSubexpression, BecauseMerge ,report
 
 
-try:
-    from sets import Set, ImmutableSet, BaseSet
-except ImportError:
-    raise NotImplementedError("We need to figure out how to support python 2.2 users")
-		
 
-##class mySet(Set):
-##    def add(self, other):
-##        print other
-###        if not isinstance(other, StoredStatement):
-###            raise TypeError(`other`)
-##        Set.add(self, other)
+		
 
 ###################################### Forumula
 #
@@ -104,10 +94,9 @@ class Formula(AnonymousNode, CompoundTerm):
     def __init__(self, store, uri=None):
         AnonymousNode.__init__(self, store, uri)
         self.canonical = None # Set to self if this has been canonicalized
-	self.statements = Set()
+	self.statements = []
 	self._existentialVariables = []
-        self._existentialDict = Set()
-	self._universalVariables = Set()
+	self._universalVariables = []
 
 
     def classOrder(self):
@@ -118,14 +107,14 @@ class Formula(AnonymousNode, CompoundTerm):
 	for f in self, other:
 	    if f.canonical is not f:
 		progress("@@@@@ Comparing formula NOT canonical", `f`)
-	s = list(self.statements)
-	o = list(other.statements)
+	s = self.statements
+	o = other.statements
 	ls = len(s)
 	lo = len(o)
 	if ls > lo: return 1
 	if ls < lo: return -1
 
-	for se, oe, in  ((list(self.universals()), list(other.universals())),
+	for se, oe, in  ((self.universals(), other.universals()),
 			    (self.existentials(), other.existentials())
 			):
 	    lse = len(se)
@@ -148,13 +137,11 @@ class Formula(AnonymousNode, CompoundTerm):
 		    ls, `s`, self.debugString(), other.debugString()))
 
 
-    def existentials(self, alwaysDict=0):
+    def existentials(self):
         """Return a list of existential variables with this formula as scope.
 	
 	Implementation:
 	we may move to an internal storage rather than these pseudo-statements"""
-        if self.canonical is None or alwaysDict:
-            return self._existentialDict
         return self._existentialVariables
 
 
@@ -167,7 +154,7 @@ class Formula(AnonymousNode, CompoundTerm):
     
     def variables(self):
         """Return a list of all variables quantified within this scope."""
-        return self.existentials(alwaysDict=1) | self.universals()
+        return self.existentials() + self.universals()
 	
     def size(self):
         """Return the number statements.
@@ -194,9 +181,6 @@ class Formula(AnonymousNode, CompoundTerm):
     def newList(self, list):
 	return self.store.nil.newList(list)
 
-    def newBag(self, bag):
-        return self.store.newBag(bag)
-
     def newLiteral(self, str, dt=None, lang=None):
 	"""Create or reuse the internal representation of the RDF literal whose string is given
 	
@@ -212,20 +196,19 @@ class Formula(AnonymousNode, CompoundTerm):
 	The URI is typically omitted, and the system will make up an internal idnetifier.
         If given is used as the (arbitrary) internal identifier of the node."""
 	x = AnonymousExistential(self, uri)
-	self._existentialDict.add(x)
+	self._existentialVariables.append(x)
 	return x
 
     
     def declareUniversal(self, v):
 	if verbosity() > 90: progress("Declare universal:", v)
 	if v not in self._universalVariables:
-	    self._universalVariables.add(v)
+	    self._universalVariables.append(v)
 	
     def declareExistential(self, v):
 	if verbosity() > 90: progress("Declare existential:", v)
-	self._existentialDict.add(v)
-#	if v not in self._existentialVariables:  # Takes time
-#	    self._existentialVariables.append(v)
+	if v not in self._existentialVariables:  # Takes time
+	    self._existentialVariables.append(v)
 #	else:
 #	    raise RuntimeError("Redeclared %s in %s -- trying to erase that" %(v, self)) 
 	
@@ -245,7 +228,7 @@ class Formula(AnonymousNode, CompoundTerm):
 	If the URI is not given, an arbitrary identifier is generated.
 	See also: universals()"""
 	x = AnonymousUniversal(self, uri)
-	self._universalVariables.add(x)
+	self._universalVariables.append(x)
 	return x
 
     def newFormula(self, uri=None):
@@ -377,7 +360,7 @@ class Formula(AnonymousNode, CompoundTerm):
 	    self.declareExistential(bindings.get(v, v))
 	bindings2 = bindings.copy()
 	bindings2[old] = self
-        for s in old.statements.__copy__() :   # Copy list!
+        for s in old.statements[:] :   # Copy list!
 	    total += self.add(subj=s[SUBJ].substitution(bindings2),
 		    pred=s[PRED].substitution(bindings2),
 		    obj=s[OBJ].substitution(bindings2),
@@ -393,7 +376,7 @@ class Formula(AnonymousNode, CompoundTerm):
 
     def occurringIn(self, vars):
 	"Which variables in the list occur in this?"
-	set = Set()
+	set = []
 	if verbosity() > 98: progress("----occuringIn: ", `self`)
 	for s in self.statements:
 	    for p in PRED, SUBJ, OBJ:
@@ -401,7 +384,7 @@ class Formula(AnonymousNode, CompoundTerm):
 		if y is self:
 		    pass
 		else:
-		    set = set | y.occurringIn(vars)
+		    set = merge(set, y.occurringIn(vars))
 	return set
 
     def unify(self, other, vars, existentials, bindings):
@@ -411,8 +394,8 @@ class Formula(AnonymousNode, CompoundTerm):
 	if not isinstance(other, Formula): return 0
 	if self is other: return [({}, None)]
 	if (len(self) != len(other)
-	    or self. _existentialDict != other._existentialDict
-	    or self. _universalVariables != other._universalVariables
+	    or self. _existentialVariables != other._existentialVariables
+	    or self. _universalVariables != other._existentialVariables
 	    ): return 0
 #	raise RuntimeError("Not implemented unification method on formulae")
 	return 0    # @@@@@@@   FINISH THIS
@@ -542,17 +525,17 @@ class Formula(AnonymousNode, CompoundTerm):
 
     def subjects(self, pred=None, obj=None):
         """Obsolete - use each(pred=..., obj=...)"""
-	for s in self.statementsMatching(pred=pred, obj=obj).__copy__():
+	for s in self.statementsMatching(pred=pred, obj=obj)[:]:
 	    yield s[SUBJ]
 
     def predicates(self, subj=None, obj=None):
         """Obsolete - use each(subj=..., obj=...)"""
-	for s in self.statementsMatching(subj=subj, obj=obj).__copy__():
+	for s in self.statementsMatching(subj=subj, obj=obj)[:]:
 	    yield s[PRED]
 
     def objects(self, pred=None, subj=None):
         """Obsolete - use each(subj=..., pred=...)"""
-	for s in self.statementsMatching(pred=pred, subj=subj).__copy__():
+	for s in self.statementsMatching(pred=pred, subj=subj)[:]:
 	    yield s[OBJ]
 
     def reification(self, sink, bnodeMap={}, why=None):
@@ -560,9 +543,6 @@ class Formula(AnonymousNode, CompoundTerm):
 	
 	
 	"""
-	#assert self.canonical is not None
-	#qq = self.existentials()[:]
-	#self.existentials().sort(Term.compareAnyTerm)
 	try:
 	    return bnodeMap[self]
 	except KeyError:
@@ -570,24 +550,21 @@ class Formula(AnonymousNode, CompoundTerm):
 	    bnodeMap[self] = F
 	rei = sink.newSymbol(reifyNS[:-1])
 	myMap = {}
-	#ooo = sink.newSymbol(owlOneOf)
+	ooo = sink.newSymbol(owlOneOf)
 	for vars, vocab in ((self.existentials(),  rei["existentials"]), 
 			(self.universals(), rei["universals"])):
 	    if diag.chatty_flag > 54:
         	progress("vars=", vars)
                 progress("vars=", [v.uriref() for v in vars])
-	    set = sink.store.newBag([sink.newLiteral(x.uriref()) for x in vars])
-	    #klass = sink.newBlankNode()
-            #sink.add(klass, ooo, list)
-	    #sink.add(F, vocab, klass)
-	    sink.add(F, vocab, set)
+	    list = sink.store.nil.newList([sink.newLiteral(x.uriref()) for x in vars])
+	    klass = sink.newBlankNode()
+            sink.add(klass, ooo, list)
+	    sink.add(F, vocab, klass) 
 
 
 	#The great list of statements
         statementList = []
-        ssk = [qqq for qqq in self.statements]
-        ssk.sort(StoredStatement.compareSubjPredObj)
-        for s in ssk:
+        for s in self.statements:
             subj = sink.newBlankNode()
 	    sink.add(subj, rei["subject"], s[SUBJ].reification(sink, myMap, why)) 
 	    sink.add(subj, rei["predicate"], s[PRED].reification(sink, myMap, why) )
@@ -595,11 +572,11 @@ class Formula(AnonymousNode, CompoundTerm):
 	    statementList.append(subj)
             
     #The great class of statements
-        #StatementClass = sink.newBlankNode()
-        realStatementSet = sink.store.newBag(statementList)
-        #sink.add(StatementClass, ooo, realStatementList)
+        StatementClass = sink.newBlankNode()
+        realStatementList = sink.store.nil.newList(statementList)
+        sink.add(StatementClass, ooo, realStatementList)
     #We now know something!
-        sink.add(F, rei["statements"], realStatementSet)
+        sink.add(F, rei["statements"], StatementClass)
 	    
 	return F
 
@@ -639,9 +616,6 @@ class StoredStatement:
 
     def __repr__(self):
         return "{"+`self[CONTEXT]`+":: "+`self[SUBJ]`+" "+`self[PRED]`+" "+`self[OBJ]`+"}"
-#
-#    def __hash__(self):
-#        return hash((self[SUBJ], self[PRED], self[OBJ]))
 
 #   The order of statements is only for canonical output
 #   We cannot override __cmp__ or the object becomes unhashable, and can't be put into a dictionary.

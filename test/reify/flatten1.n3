@@ -22,6 +22,11 @@
                              :uri "http://www.w3.org/2000/10/swap/log#implies" ];
                          :subject <#_g0> ]
                  [
+                         :object <#_g0>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
+                         :subject <#_g1> ]
+                 [
                          :object  [
                              :existentials  [
                                  owl:oneOf () ];
@@ -77,8 +82,8 @@
                                                                  owl:oneOf () ] ] ] ) ];
                                              :universals  [
                                                  owl:oneOf  (
-                                                "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#y" 
                                                 "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#x" 
+                                                "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#y" 
                                                 "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#z"  ) ] ] ] ) ];
                              :universals  [
                                  owl:oneOf () ] ];
@@ -97,12 +102,7 @@
                                          :subject  [
                                              :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ] ] ) ];
                              :universals  [
-                                 owl:oneOf () ] ] ]
-                 [
-                         :object <#_g0>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
-                         :subject <#_g1> ] ) ];
+                                 owl:oneOf () ] ] ] ) ];
              :universals  [
                  owl:oneOf  (
                 "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" 

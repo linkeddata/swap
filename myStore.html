@@ -1,16 +1,14 @@
 
 <!doctype html PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 <html><head><title>Python: module myStore</title>
-<style type="text/css"><!--
-TT { font-family: lucidatypewriter, lucida console, courier }
---></style></head><body bgcolor="#f0f0f8">
+</head><body bgcolor="#f0f0f8">
 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="heading">
 <tr bgcolor="#7799ee">
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>myStore</strong></big></big></font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/myStore.py">/devel/WWW/2000/10/swap/myStore.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/syosi/CVS-local/WWW/2000/10/swap/myStore.py">/home/syosi/CVS-local/WWW/2000/10/swap/myStore.py</a></font></td></tr></table>
     <p><tt>$Id$<br>
 &nbsp;<br>
 Process-global&nbsp;store<br>
@@ -34,15 +32,15 @@ History:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Spilt&nbsp;off&nbsp;from&nbsp;&nbsp;thing.py&nbsp;2003-08-19<br>
 &nbsp;<br>
 $Log$
-Revision 1.9  2004-08-06 19:11:52  syosi
-so I have stuff to work on at home
+Revision 1.10  2004-08-08 01:44:49  syosi
+undo what I did last thing Friday. Those changes are nowhere near ready for the trunk
 
-Revision 1.7  2004/05/12 01:27:08  timbl
---patch uses delta namespace
--- removed i18n tests
--- numerics canonicalized
-see doc/changes.html
+Revision 1.8  2004/08/03 18:56:57  syosi
+make sure make dist_tarball does not leave around a swap/swap directory to confuse things
 <br>
+Revision&nbsp;1.9&nbsp;&nbsp;2004/07/29&nbsp;16:16:11&nbsp;&nbsp;syosi<br>
+rdflib&nbsp;tests&nbsp;in&nbsp;the&nbsp;default&nbsp;test&nbsp;suite<br>
+&nbsp;<br>
 Revision&nbsp;1.8&nbsp;&nbsp;2004/04/19&nbsp;13:32:22&nbsp;&nbsp;connolly<br>
 trap&nbsp;__special_names__&nbsp;in&nbsp;<a href="#Namespace">Namespace</a>.__getattr__&nbsp;so<br>
 that&nbsp;pychecker&nbsp;can&nbsp;work<br>
@@ -75,21 +73,21 @@ Revision&nbsp;1.3&nbsp;&nbsp;2004/01/28&nbsp;23:03:00&nbsp;&nbsp;connolly<br>
 -&nbsp;added&nbsp;unit&nbsp;tests&nbsp;to&nbsp;confirm&nbsp;that&nbsp;symbol&nbsp;functions&nbsp;take&nbsp;ustrings<br>
 -&nbsp;wrapped&nbsp;some&nbsp;comments&nbsp;at&nbsp;79&nbsp;chars<br>
 &nbsp;&nbsp;per&nbsp;<a href="http://www.python.org/doc/essays/styleguide.html">http://www.python.org/doc/essays/styleguide.html</a></tt></p>
-
+<p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#aa55cc">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#fffff" face="helvetica, arial"><big><strong>Modules</strong></big></font></td></tr>
     
-<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="uripath.html">uripath</a><br>
-</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table>
+</td><td width="25%" valign=top></td><td width="25%" valign=top></td><td width="25%" valign=top></td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ee77aa">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Classes</strong></big></font></td></tr>
     
-<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<tr><td bgcolor="#ee77aa"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
 <td width="100%"><dl>
 <dt><font face="helvetica, arial"><a href="__builtin__.html#object">__builtin__.object</a>
 </font></dt><dd>
@@ -98,13 +96,13 @@ Revision&nbsp;1.3&nbsp;&nbsp;2004/01/28&nbsp;23:03:00&nbsp;&nbsp;connolly<br>
 </font></dt></dl>
 </dd>
 </dl>
- 
+ <p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="Namespace">class <strong>Namespace</strong></a>(<a href="__builtin__.html#object">__builtin__.object</a>)</font></td></tr>
     
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;</tt></td>
 <td colspan=2><tt>A&nbsp;shortcut&nbsp;for&nbsp;getting&nbsp;a&nbsp;symbols&nbsp;as&nbsp;interned&nbsp;by&nbsp;the&nbsp;default&nbsp;store<br>
 &nbsp;<br>
 &gt;&gt;&gt;&nbsp;RDF&nbsp;=&nbsp;<a href="#Namespace">Namespace</a>('<a href="http://www.w3.org/1999/02/22-rdf-syntax-ns">http://www.w3.org/1999/02/22-rdf-syntax-ns</a>#')<br>
@@ -112,7 +110,7 @@ Revision&nbsp;1.3&nbsp;&nbsp;2004/01/28&nbsp;23:03:00&nbsp;&nbsp;connolly<br>
 &gt;&gt;&gt;&nbsp;y&nbsp;=&nbsp;RDF.type<br>
 &gt;&gt;&gt;&nbsp;x&nbsp;is&nbsp;y<br>
 1<br>&nbsp;</tt></td></tr>
-<tr><td>&nbsp;&nbsp;</td>
+<tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="Namespace-__getattr__"><strong>__getattr__</strong></a>(self, lname)</dt><dd><tt>get&nbsp;the&nbsp;lname&nbsp;Symbol&nbsp;in&nbsp;this&nbsp;namespace.<br>
 &nbsp;<br>
@@ -125,47 +123,19 @@ I&nbsp;hope&nbsp;this&nbsp;is&nbsp;only&nbsp;called&nbsp;*after*&nbsp;the&nbsp;o
 For,&nbsp;and&nbsp;from,&nbsp;pim/toIcal.py</tt></dd></dl>
 
 <hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__dict__</strong> = &lt;dict-proxy object&gt;</dl>
+Data and other attributes defined here:<br>
+<dl><dt><strong>__dict__</strong> = &lt;dictproxy object&gt;<dd><tt>dictionary&nbsp;for&nbsp;instance&nbsp;variables&nbsp;(if&nbsp;defined)</tt></dl>
 
-<dl><dt><strong>__doc__</strong> = 'A shortcut for getting a symbols as interned by ...  &gt;&gt;&gt; y = RDF.type<font color="#c040c0">\n</font>      &gt;&gt;&gt; x is y<font color="#c040c0">\n</font>      1<font color="#c040c0">\n\n</font>    '</dl>
+<dl><dt><strong>__weakref__</strong> = &lt;attribute '__weakref__' of 'Namespace' objects&gt;<dd><tt>list&nbsp;of&nbsp;weak&nbsp;references&nbsp;to&nbsp;the&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;(if&nbsp;defined)</tt></dl>
 
-<dl><dt><strong>__module__</strong> = 'myStore'</dl>
-
-<dl><dt><strong>__weakref__</strong> = &lt;member '__weakref__' of 'Namespace' objects&gt;</dl>
-
-<hr>
-Methods inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
-<dl><dt><a name="Namespace-__delattr__"><strong>__delattr__</strong></a>(...)</dt><dd><tt>x.<a href="#Namespace-__delattr__">__delattr__</a>('name')&nbsp;&lt;==&gt;&nbsp;del&nbsp;x.name</tt></dd></dl>
-
-<dl><dt><a name="Namespace-__getattribute__"><strong>__getattribute__</strong></a>(...)</dt><dd><tt>x.<a href="#Namespace-__getattribute__">__getattribute__</a>('name')&nbsp;&lt;==&gt;&nbsp;x.name</tt></dd></dl>
-
-<dl><dt><a name="Namespace-__hash__"><strong>__hash__</strong></a>(...)</dt><dd><tt>x.<a href="#Namespace-__hash__">__hash__</a>()&nbsp;&lt;==&gt;&nbsp;hash(x)</tt></dd></dl>
-
-<dl><dt><a name="Namespace-__reduce__"><strong>__reduce__</strong></a>(...)</dt><dd><tt>helper&nbsp;for&nbsp;pickle</tt></dd></dl>
-
-<dl><dt><a name="Namespace-__repr__"><strong>__repr__</strong></a>(...)</dt><dd><tt>x.<a href="#Namespace-__repr__">__repr__</a>()&nbsp;&lt;==&gt;&nbsp;repr(x)</tt></dd></dl>
-
-<dl><dt><a name="Namespace-__setattr__"><strong>__setattr__</strong></a>(...)</dt><dd><tt>x.<a href="#Namespace-__setattr__">__setattr__</a>('name',&nbsp;value)&nbsp;&lt;==&gt;&nbsp;x.name&nbsp;=&nbsp;value</tt></dd></dl>
-
-<dl><dt><a name="Namespace-__str__"><strong>__str__</strong></a>(...)</dt><dd><tt>x.<a href="#Namespace-__str__">__str__</a>()&nbsp;&lt;==&gt;&nbsp;str(x)</tt></dd></dl>
-
-<hr>
-Data and non-method functions inherited from <a href="__builtin__.html#object">__builtin__.object</a>:<br>
-<dl><dt><strong>__class__</strong> = &lt;type 'type'&gt;</dl>
-
-<dl><dt><strong>__new__</strong> = &lt;built-in method __new__ of type object at 0xc39bc&gt;<dd><tt>T.<a href="#Namespace-__new__">__new__</a>(S,&nbsp;...)&nbsp;-&gt;&nbsp;a&nbsp;new&nbsp;<a href="__builtin__.html#object">object</a>&nbsp;with&nbsp;type&nbsp;S,&nbsp;a&nbsp;subtype&nbsp;of&nbsp;T</tt></dl>
-
-</td></tr></table></td></tr></table>
+</td></tr></table></td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
     
-<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
-<td width="100%"><dl><dt><a name="-_checkStore"><strong>_checkStore</strong></a>(s<font color="#909090">=None</font>)</dt><dd><tt>Check&nbsp;that&nbsp;an&nbsp;explict&nbsp;or&nbsp;implicit&nbsp;stroe&nbsp;exists</tt></dd></dl>
- <dl><dt><a name="-_test"><strong>_test</strong></a>()</dt></dl>
- <dl><dt><a name="-bind"><strong>bind</strong></a>(prefix, uri)</dt></dl>
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><dl><dt><a name="-bind"><strong>bind</strong></a>(prefix, uri)</dt></dl>
  <dl><dt><a name="-existential"><strong>existential</strong></a>(str, context, uri)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;new&nbsp;named&nbsp;variable<br>
 existentially&nbsp;qualified&nbsp;within&nbsp;the&nbsp;given<br>
 formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
@@ -186,7 +156,7 @@ remember:&nbsp;if&nbsp;1,&nbsp;store&nbsp;as&nbsp;metadata&nbsp;the&nbsp;relatio
 &nbsp;<br>
 Returns:&nbsp;&nbsp;top-level&nbsp;formula&nbsp;of&nbsp;the&nbsp;parsed&nbsp;document.<br>
 Raises:&nbsp;&nbsp;&nbsp;IOError,&nbsp;SyntaxError,&nbsp;DocumentError</tt></dd></dl>
- <dl><dt><a name="-loadMany"><strong>loadMany</strong></a>(uris, openFormula<font color="#909090">=None</font>)</dt><dd><tt>Load&nbsp;a&nbsp;number&nbsp;of&nbsp;resources&nbsp;into&nbsp;the&nbsp;same&nbsp;formula<br>
+ <dl><dt><a name="-loadMany"><strong>loadMany</strong></a>(uris, openFormula<font color="#909090">=None</font>, referer<font color="#909090">=None</font>)</dt><dd><tt>Load&nbsp;a&nbsp;number&nbsp;of&nbsp;resources&nbsp;into&nbsp;the&nbsp;same&nbsp;formula<br>
 &nbsp;<br>
 Returns:&nbsp;&nbsp;top-level&nbsp;formula&nbsp;of&nbsp;the&nbsp;parsed&nbsp;information.<br>
 Raises:&nbsp;&nbsp;&nbsp;IOError,&nbsp;SyntaxError,&nbsp;DocumentError</tt></dd></dl>
@@ -202,15 +172,13 @@ in&nbsp;the&nbsp;default&nbsp;store.&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;
  <dl><dt><a name="-universal"><strong>universal</strong></a>(str, context, uri)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;named&nbsp;variable<br>
 universally&nbsp;qualified&nbsp;within&nbsp;the&nbsp;given<br>
 formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
-</td></tr></table>
+</td></tr></table><p>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
     
-<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
-<td width="100%"><strong>__file__</strong> = './myStore.pyc'<br>
-<strong>__name__</strong> = 'myStore'<br>
-<strong>store</strong> = None<br>
+<tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;</td>
+<td width="100%"><strong>store</strong> = None<br>
 <strong>storeClass</strong> = None</td></tr></table>
 </body></html>

@@ -114,10 +114,10 @@
                          :subject  [
                              :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#pa" ] ]
                  [
-                         :object <#_g0>;
+                         :object <#_g1>;
                          :predicate  [
                              :uri "http://www.w3.org/2000/10/swap/log#implies" ];
-                         :subject <#_g1> ]
+                         :subject <#_g0> ]
                  [
                          :object  [
                              :existentials  [
@@ -196,10 +196,10 @@
                              :universals  [
                                  owl:oneOf () ] ] ]
                  [
-                         :object <#_g1>;
+                         :object <#_g0>;
                          :predicate  [
                              :uri "http://www.w3.org/2000/10/swap/log#implies" ];
-                         :subject <#_g0> ] ) ];
+                         :subject <#_g1> ] ) ];
              :universals  [
                  owl:oneOf  (
                 "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" 
@@ -207,6 +207,20 @@
                 "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p"  ) ] ].
     
     <#_g0>     :existentials  [
+             owl:oneOf () ];
+         :statements  [
+             owl:oneOf  (
+             [
+                     :object  [
+                         :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ];
+                     :predicate  [
+                         :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#means" ];
+                     :subject  [
+                         :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ] ] ) ];
+         :universals  [
+             owl:oneOf () ] .
+    
+    <#_g1>     :existentials  [
              owl:oneOf () ];
          :statements  [
              owl:oneOf  (
@@ -224,20 +238,6 @@
                          :uri "http://www.w3.org/2000/10/swap/log#implies" ];
                      :subject  [
                          :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ] ] ) ];
-         :universals  [
-             owl:oneOf () ] .
-    
-    <#_g1>     :existentials  [
-             owl:oneOf () ];
-         :statements  [
-             owl:oneOf  (
-             [
-                     :object  [
-                         :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ];
-                     :predicate  [
-                         :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#means" ];
-                     :subject  [
-                         :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ] ] ) ];
          :universals  [
              owl:oneOf () ] .
     

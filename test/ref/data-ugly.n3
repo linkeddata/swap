@@ -4,16 +4,25 @@
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix rules: <rules12.n3#> .
     
-     @forSome <#_g0>,
+    @forSome <#_g0>,
                 <#_g1>,
                 <#_g2>,
+                <run#li3>,
+                <run#li2>,
+                <run#li1>,
                 <run#li5>,
                 <run#li4>,
                 <run#li7>,
-                <run#li6>,
-                <run#li3>,
-                <run#li2>,
-                <run#li1> .
+                <run#li6> .
+    
+    <run#li3>     rdf:first ex:short;
+         rdf:rest <run#li2> .
+    
+    <run#li2>     rdf:first ex:medium;
+         rdf:rest <run#li1> .
+    
+    <run#li1>     rdf:first ex:tall;
+         rdf:rest () .
     
     <run#li5>     rdf:first ex:Man;
          rdf:rest <run#li4> .
@@ -27,144 +36,102 @@
     <run#li6>     rdf:first ex:Man;
          rdf:rest () .
     
-    <run#li3>     rdf:first ex:short;
-         rdf:rest <run#li2> .
+    ex:Adam     a daml:Person;
+         daml:comment "Adam is a person.";
+         daml:label "Adam" .
     
-    <run#li2>     rdf:first ex:medium;
-         rdf:rest <run#li1> .
+    ex:Animal     a daml:Class;
+         daml:comment """This class of animals is illustrative of a number of
+	ontological idioms.""";
+         daml:label "Animal" .
     
-    <run#li1>     rdf:first ex:tall;
-         rdf:rest () .
+    ex:Car     a daml:Class;
+         daml:comment "no car is a person" .
     
-    ex:Male     a daml:Class .
+    <#_g0>     a daml:Class;
+         daml:complementOf ex:Person .
     
-    ex:occupation     a daml:Property .
+    ex:Car     daml:subClassOf <#_g0> .
     
-    <daml-ex.n3>     daml:imports <http://www.daml.org/2000/10/daml-ont> .
+    ex:Female     a daml:Class;
+         daml:disjointFrom ex:Male;
+         daml:subClassOf ex:Animal .
     
-    ex:height     daml:domain ex:Person .
+    ex:Height     a daml:Class;
+         daml:oneOf <run#li3> .
     
-    rules:ancestor     a daml:TransitiveProperty .
+    ex:Male     a daml:Class;
+         daml:subClassOf ex:Animal .
     
-    ex:height     daml:range ex:Height .
+    ex:Man     a daml:Class;
+         daml:subClassOf ex:Male,
+                ex:Person .
     
-    ex:Person     daml:comment "every person is a man or a woman" .
+    ex:Person     a daml:Class;
+         daml:comment "every person is a man or a woman";
+         daml:disjointUnionOf <run#li5> .
     
-    ex:mom     a daml:Property .
+    <#_g1>     a daml:Restriction;
+         daml:onProperty ex:parent;
+         daml:toClass ex:Person .
     
-    ex:Car     daml:comment "no car is a person" .
+    ex:Person     daml:restrictedBy <#_g1>;
+         daml:subClassOf ex:Animal .
     
-    ex:mom     = ex:mother .
-    
-    rules:pa     rules:ancestor rules:bill .
-    
-    ex:Height     a daml:Class .
-    
-    ex:Person     daml:disjointUnionOf <run#li5> .
-    
-    ex:mother     daml:subProperty ex:parent .
-    
-    ex:Person     daml:restrictedBy <#_g1> .
-    
-    ex:Woman     daml:subClassOf ex:Person .
-    
-    ex:Adam     a daml:Person .
-    
-    <#_g1>     a daml:Restriction .
-    
-    ex:parent     daml:domain ex:Animal .
-    
-    ex:Adam     daml:label "Adam" .
-    
-    <daml-ex.n3>     daml:comment "An example ontology";
-         daml:versionInfo "" .
-    
-    ex:TallMan     daml:intersectionOf <run#li7> .
+    ex:TallMan     a daml:Class;
+         daml:intersectionOf <run#li7> .
     
     ex:TallThing     a daml:Class .
     
     <#_g2>     a daml:Restriction;
+         daml:onProperty ex:height;
          daml:toValue ex:tall .
-    
-    <daml-ex.n3>     a daml:Ontology .
-    
-    ex:Woman     daml:subClassOf ex:Female .
-    
-    ex:Man     a daml:Class .
-    
-    ex:Female     daml:subClassOf ex:Animal .
-    
-    ex:child     a daml:Property .
-    
-    ex:Man     daml:subClassOf ex:Person .
-    
-    ex:descendant     a daml:TransitiveProperty .
-    
-    ex:Male     daml:subClassOf ex:Animal .
-    
-    ex:father     a daml:Property .
-    
-    ex:Height     daml:oneOf <run#li3> .
-    
-    ex:father     daml:range ex:Man;
-         daml:subProperty ex:parent .
-    
-    ex:height     a daml:Property .
-    
-    ex:Person     a daml:Class .
-    
-    ex:parent     daml:cardinality "2" .
-    
-    <#_g0>     a daml:Class .
-    
-    ex:Car     daml:subClassOf <#_g0> .
-    
-    ex:mother     daml:range ex:Woman .
-    
-    ex:Female     a daml:Class .
-    
-    ex:Person     daml:subClassOf ex:Animal .
-    
-    ex:occupation     daml:maxCardinality "1" .
-    
-    <#_g1>     daml:onProperty ex:parent .
-    
-    ex:parent     a daml:Property .
-    
-    <#_g1>     daml:toClass ex:Person .
-    
-    ex:Adam     daml:comment "Adam is a person." .
-    
-    ex:TallMan     a daml:Class .
-    
-    ex:Animal     a daml:Class;
-         daml:comment """This class of animals is illustrative of a number of
-	ontological idioms.""" .
-    
-    ex:Woman     a daml:Class .
-    
-    ex:Animal     daml:label "Animal" .
-    
-    rules:granpa     rules:ancestor rules:pa .
     
     ex:TallThing     daml:restrictedBy <#_g2> .
     
-    <#_g2>     daml:onProperty ex:height .
-    
-    <#_g0>     daml:complementOf ex:Person .
-    
-    ex:Car     a daml:Class .
-    
-    ex:mother     a daml:UniqueProperty .
-    
-    ex:Female     daml:disjointFrom ex:Male .
+    ex:Woman     a daml:Class;
+         daml:subClassOf ex:Female,
+                ex:Person .
     
     ex:ancestor     a daml:TransitiveProperty;
          daml:label "ancestor" .
     
-    ex:child     daml:inverseOf ex:parent .
+    ex:child     a daml:Property;
+         daml:inverseOf ex:parent .
     
-    ex:Man     daml:subClassOf ex:Male .
+    ex:descendant     a daml:TransitiveProperty .
     
-    ex:father     daml:cardinality "1" .
+    ex:father     a daml:Property;
+         daml:cardinality "1";
+         daml:range ex:Man;
+         daml:subProperty ex:parent .
+    
+    ex:height     a daml:Property;
+         daml:domain ex:Person;
+         daml:range ex:Height .
+    
+    ex:mom     a daml:Property;
+         = ex:mother .
+    
+    ex:mother     a daml:UniqueProperty;
+         daml:range ex:Woman;
+         daml:subProperty ex:parent .
+    
+    ex:occupation     a daml:Property;
+         daml:maxCardinality "1" .
+    
+    ex:parent     a daml:Property;
+         daml:cardinality "2";
+         daml:domain ex:Animal .
+    
+    <daml-ex.n3>     a daml:Ontology;
+         daml:comment "An example ontology";
+         daml:imports <http://www.daml.org/2000/10/daml-ont>;
+         daml:versionInfo "" .
+    
+    rules:ancestor     a daml:TransitiveProperty .
+    
+    rules:granpa     rules:ancestor rules:pa .
+    
+    rules:pa     rules:ancestor rules:bill .
     
