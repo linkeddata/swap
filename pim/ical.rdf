@@ -9,8 +9,7 @@
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:s="http://www.w3.org/2000/01/rdf-schema#"
     xmlns:ss="http://www.w3.org/2000/10/swap/util/sniffSchema#"
-    xmlns:str="http://www.w3.org/2000/10/swap/string#"
-    xmlns:x="http://www.w3.org/2000/01/foo-X@@#">
+    xmlns:str="http://www.w3.org/2000/10/swap/string#">
 
     <rdf:Property rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">
         <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vcalendar"/>
@@ -18,17 +17,6 @@
         <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtimezone"/>
         <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtodo"/>
         <ss:label>type</ss:label>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/01/foo-X@@#evolutionAlarmUid">
-        <ss:label>evolutionAlarmUid</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/01/foo-X@@#licLocation">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtimezone"/>
-        <ss:label>licLocation</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#forSome">
@@ -68,7 +56,6 @@
 
     <s:Class rdf:about="http://www.w3.org/2000/10/swap/pim/ical#Vtimezone">
         <ss:intersectsDomainOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/01/foo-X@@#licLocation"/>
         <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#daylight"/>
         <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#standard"/>
         <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#tzid"/>

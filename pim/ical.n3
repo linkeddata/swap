@@ -12,7 +12,6 @@
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
      @prefix ss: <http://www.w3.org/2000/10/swap/util/sniffSchema#> .
      @prefix str: <http://www.w3.org/2000/10/swap/string#> .
-     @prefix x: <http://www.w3.org/2000/01/foo-X@@#> .
     
     rdf:type     a rdf:Property;
          ss:domainIntersects :Vcalendar,
@@ -20,15 +19,6 @@
                 :Vtimezone,
                 :Vtodo;
          ss:label "type" .
-    
-    x:evolutionAlarmUid     a rdf:Property;
-         ss:label "evolutionAlarmUid";
-         ss:rangeIntersects s:Literal .
-    
-    x:licLocation     a rdf:Property;
-         ss:domainIntersects :Vtimezone;
-         ss:label "licLocation";
-         ss:rangeIntersects s:Literal .
     
     log:forSome     a rdf:Property;
          ss:label "forSome";
@@ -64,7 +54,6 @@
     
     :Vtimezone     a s:Class;
          ss:intersectsDomainOf rdf:type,
-                x:licLocation,
                 :daylight,
                 :standard,
                 :tzid;

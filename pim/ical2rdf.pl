@@ -34,7 +34,7 @@
 use strict;
 
 my($ICal_ns) = 'http://www.w3.org/2000/10/swap/pim/ical#';
-my($X_ns) = 'http://www.w3.org/2000/01/foo-X@@#'; #@@ get this from command-line? or from PRODID?
+my($X_ns); #@@TODO get this from command-line or from PRODID.
 
 my(@stack);
 my($intag);
@@ -118,7 +118,14 @@ while(1){
     my($n) = ($1);
     my($enc, $iprop, %attrs, $attrp, $xprop);
 
-    if($n =~ s/^X-//i){ $xprop = 1 };
+    if($n =~ s/^X-//i){
+      if(!$X_ns){
+	warn "@@ TODO: implement getting X- namespace URI from command line or PRODID: $n\n";
+	$field = $line;
+	next;
+      }
+      $xprop = 1
+    };
     $n = camelCase($n);
     if($xprop){ $n = "x:" . $n };
 
@@ -222,14 +229,14 @@ printf "</rdf:RDF>\n";
 sub startDoc{
   my($n) = @_;
 
+  #@@TODO: add X- namespace
   printf(
 "<rdf:RDF
   xmlns:rdf='http://www.w3.org/1999/02/22-rdf-syntax-ns#'
   xmlns='%s'
   xmlns:i='%s'
-  xmlns:x='%s'
 ><%s rdf:about=''>",
-	 $ICal_ns, $ICal_ns, $X_ns, $n);
+	 $ICal_ns, $ICal_ns, $n);
 }
 
 sub asContent{
@@ -291,7 +298,10 @@ sub testCamelCase{
 # @@TODO: params
 
 # $Log$
-# Revision 1.3  2002-07-18 05:16:32  connolly
+# Revision 1.4  2002-07-18 05:26:36  connolly
+# be more conservative about X- stuff
+#
+# Revision 1.3  2002/07/18 05:16:32  connolly
 # oops! got ical URI wrong! thx daml validator
 #
 # Revision 1.2  2002/07/17 20:59:40  connolly
