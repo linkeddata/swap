@@ -20,6 +20,9 @@ this log:forAll :f, :t, :x, :y, :z.
 "2002-06" a :TestDate.
 "2002" a :TestDate.
 
+"2000-01-01T00:00:00Z" a :TestDate.
+"1999-12-31T23:59:59.99Z" a :TestDate.
+
 "year %Y month %M day %d date: %D" a :TestFormat.
 "" a :TestFormat.
 

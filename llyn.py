@@ -829,10 +829,12 @@ class RDFStore(RDFSink.RDFSink) :
 
         import cwm_string  # String builtins
         import cwm_os      # OS builtins
+        import cwm_time    # time and date builtins
         import cwm_math    # Mathematics
         cwm_string.register(self)
         cwm_math.register(self)
         cwm_os.register(self)
+        cwm_time.register(self)
         if crypto:
 	    import cwm_crypto  # Cryptography
 	    cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available

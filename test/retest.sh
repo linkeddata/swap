@@ -8,20 +8,23 @@
 # see also: changelog at end of file.
 mkdir -p temp
 mkdir -p diffs
+tests=0
+passes=0
 
 function cwm_test () {
   case=$1; desc=$2
   shift; shift;
   args=$*
   echo
+  tests=$(($tests+1))
   echo Test $case: $desc
+  echo "   "    cwm $args
 
-  echo Test    cwm $args
   # Hmm... this suggests a --nocomments flag on cwm  its -quiet
 #  (python ../cwm.py $args | sed -e 's/^ *#.*//' | sed -e 's/\$[I]d:\$//g' > temp/$case) || echo CRASH $case
   (python ../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' > temp/$case) || echo CRASH $case
   diff -Bbwu ref/$case temp/$case >diffs/$case
-  if [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case "############"; wc ref/$case temp/$case; else echo Pass $case; fi
+  if [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case "############"; wc ref/$case temp/$case; else passes=$(($passes+1)); fi
 }
 
 cwm_test animal.n3 "Parse a small RDF file, generate N3" -rdf animal.rdf -n3
@@ -123,6 +126,8 @@ cwm_test resolves-rdf.n3 "log:resolvesTo with RDF/xml syntax" resolves-rdf.n3 -t
 
 cwm_test sameDan.n3 "dealing with multiple descriptions of the same thing using log:lessThan, log:uri, daml:equivalentTo" sameDan.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge
 
+cwm_test timet1.n3 "basic ISo time handling functions" time/t1.n3 --think --purge
+
 cwm_test smush.rdf "Data aggregation challenge from Jan 2001" --rdf smush-examples.rdf --n3 smush-schema.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge --filter=smush-query.n3 --rdf
 
 cwm_test vblsNotURIs-out.n3 "Should not get URIs of anonymous nodes" --rdf animal.rdf --n3 vblsNotURIs.n3 --think
@@ -145,10 +150,13 @@ cwm_test argv-2.n3 "os:argv argument other values"  os/argv.n3 --think --with bo
 
 # echo  "Test applications"
 
-
+echo "Passed $passes out of $tests tests."
 
 # $Log$
-# Revision 1.35  2002-06-07 13:45:29  timbl
+# Revision 1.36  2002-06-23 21:08:31  timbl
+# Add cwm_time.py.  Thanks, Mark Nottingham! mnot.com
+#
+# Revision 1.35  2002/06/07 13:45:29  timbl
 # Missing test
 #
 # Revision 1.34  2002/05/21 00:13:30  timbl
