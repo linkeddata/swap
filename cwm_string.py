@@ -105,6 +105,27 @@ class BI_concatenation(LightBuiltIn, Function):
             str = str + x 
         return store._fromPython(str)
 
+class BI_scrape(LightBuiltIn, Function):
+    """a built-in for scraping using regexps.
+    takes a list of 2 strings; the first is the
+    input data, and the second is a regex with one () group.
+    Returns the data matched by the () group.
+
+    see also: test/includes/scrape1.n3
+    Hmm... negative tests don't seem to work.
+    """
+    
+    def evaluateObject(self, store, context, subj, subj_py):
+        if thing.verbosity() > 80: progress("scrape input:"+`subj_py`)
+
+        str, pat = subj_py
+        patc = re.compile(pat)
+        m = patc.search(str)
+        if m:
+            return store._fromPython(m.group(1))
+        else:
+            return None
+
 #  Register the string built-ins with the store
 
 def register(store):
@@ -117,6 +138,7 @@ def register(store):
     str.internFrag("startsWith", BI_StartsWith)
     str.internFrag("concat", BI_concat)
     str.internFrag("concatenation", BI_concatenation)
+    str.internFrag("scrape", BI_scrape)
     str.internFrag("contains", BI_Contains)
     str.internFrag("doesNotContain", BI_DoesNotContain)
     str.internFrag("equalIgnoringCase", BI_equalIgnoringCase)
