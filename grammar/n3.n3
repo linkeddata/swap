@@ -103,7 +103,6 @@ propertylist bnf:mustBeOneSequence (
 propertylisttail bnf:mustBeOneSequence (
 		( )
 		( ";" propertylist )
-# was		( ";" verb object objecttail propertylisttail )
 	).
 
 
