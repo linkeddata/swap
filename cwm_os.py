@@ -34,17 +34,19 @@ class BI_environ(LightBuiltIn, Function):
         if thing.verbosity() > 80: progress("os:environ input:"+`subj_py`+ " has value "+os.environ[subj_py])
         if type(subj_py) == type(''):
             return store._fromPython(context, os.environ.get(subj_py, None))
-
+        progress("os:environ input is not a string: "+`subj_py`)
 # Command line argument: read-only
 #  The command lines are passed though cwm using "--with" and into the RDFStore when init'ed.
 # Not fatal if not defined
 class BI_argv(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py):
-        if thing.verbosity() > 80: progress("os:argv input:"+`subj_py`+ " has value "+os.environ[subj_py])
+        if thing.verbosity() > 80: progress("os:argv input:"+`subj_py`)
         if type(subj_py) == type('') and store.argv:  # Not None or []
             try:
                 argnum = int(subj_py) -1
             except ValueError:
+                if thing.verbosity() > 30:
+                    progress("os:argv input is not a number: "+`subj_py`)
                 return None
             if argnum < len(store.argv):
                 return store._fromPython(context, store.argv[argnum])
