@@ -133,10 +133,25 @@ all C1 C2 (
 
 all C1 C2 (
    rdf(C1, rdfs_subClassOf, C2)
-   ->     % BIDIR 
+   <->     % <- needed for equivalentClass/Manifest002
    (all INST (
      rdf(INST, rdf_type, C1) -> rdf(INST, rdf_type, C2) 
    ))
+).
+
+% lemma for equivalentClass/Manifest002
+all a b (
+  rdf(a, owl_equivalentClass, b) 
+  ->
+  rdf(a, rdfs_subClassOf, b)
+).
+
+% lemma for equivalentClass/Manifest003
+all a b (
+  ( rdf(a, rdfs_subClassOf, b) &
+    rdf(b, rdfs_subClassOf, a) )
+  ->
+  rdf(a, owl_equivalentClass, b) 
 ).
 
 
@@ -147,12 +162,15 @@ all C1 C2 (
 
 all C1 C2 (
    rdf(C1, owl_complementOf, C2)
-   ->     % BIDIR 
+   <->     % <- needed for complementOf/Manifest001
+         % very odd bit: having this be "<->" speeds up
+         % FunctionalProperty/Manifest004 by 50-100 times
+	 % even though the proof found is the same and
+	 % does not involved owl_complementOf!
    (all INST (
      rdf(INST, rdf_type, C1) <-> -rdf(INST, rdf_type, C2) 
    ))
 ).
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -314,6 +332,19 @@ all THING1 THING2 (
       ( rdf(X, THING1, Y) <-> rdf(X, THING2, Y) ) &
       ( rdf(THING1, X, Y) <-> rdf(THING2, X, Y) ) 
    ))
+).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_differentFrom
+%
+
+all X Y (
+   rdf(X, owl_differentFrom, Y) -> rdf(Y, owl_differentFrom, X)
+).
+
+all X Y (
+   rdf(X, owl_differentFrom, Y) <-> -rdf(X, owl_sameAs, Y)
 ).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -488,7 +519,13 @@ all P1 P2 (
 ).
     
 % $Log$
-% Revision 1.9  2003-07-30 05:53:34  sandro
+% Revision 1.10  2003-07-30 06:46:58  sandro
+% supporting several more tests, and coincidentally improving
+% performance dramatically in our bad cases.
+% Added some lemmas for subClass
+% Added differentFrom
+%
+% Revision 1.9  2003/07/30 05:53:34  sandro
 % added rdf_domain, bidir on InvFuncProp, passing InfFuncProp004
 %
 % Revision 1.8  2003/07/30 05:30:07  sandro
