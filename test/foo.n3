@@ -1,11 +1,11 @@
 # Axiom for truth
 #
-@prefix log: <log.n3#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
 @prefix : <#> .
 
 <> log:forAll :x, :y, :z.
 
-{  :x a log:Truth } log:implies :x . 
+{  {:x :y :z } a log:Truth .  } log:implies { :x :y :z } . 
 
 { :sky :is :blue } a log:Truth .
 
