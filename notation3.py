@@ -52,6 +52,7 @@ import re
 # Magic resources we know about
 
 RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+RDF_NS_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 DAML_equivalentTo_URI = "http://www.daml.org/2000/10/daml-ont#equivalentTo"
 DAML_NS = "http://www.daml.org/2000/10/daml-ont#"
 Logic_NS = "http://www.w3.org/2000/10/swap/log.n3#"
@@ -166,13 +167,13 @@ class SinkParser:
     def load(self, uri, _baseURI=""):
         if uri:
             _inputURI = urlparse.urljoin(_baseURI, uri) # Make abs from relative
-            print "# Input from ", _inputURI
+            self._sink.makeComment("Taking input from " + _inputURI)
             netStream = urllib.urlopen(_inputURI)
             self.startDoc()
             self.feed(netStream.read())     # @ May be big - buffered in memory!
             self.endDoc()
         else:
-            print "# Taking N3 input from standard input"
+            self._sink.makeComment("Taking input from standard input")
             _inputURI = urlparse.urljoin(_baseURI, "STDIN") # Make abs from relative
             self.startDoc()
             self.feed(sys.stdin.read())     # May be big - buffered in memory!
@@ -670,6 +671,7 @@ class ToRDF(RDFSink):
 	self._wr = XMLWriter(outFp)
 	self._subj = None
 	self._thisDoc = thisURI
+	self._docOpen = 0  # Delay doc open <rdf:RDF .. till after binds
 
     #@@I18N
     _namechars = string.lowercase + string.uppercase + string.digits + '_'
@@ -677,51 +679,54 @@ class ToRDF(RDFSink):
     _myns = 'http://www.w3.org/2000/10/n3/notation3.py#'
 
     def startDoc(self):
-	self._wr.startElement('web:RDF',
-			      (('xmlns:web', self._rdfns),
-			       ('xmlns:g', self._myns)))
-	self._subj = None
-	self._nextId = 0
+        pass
 
     def endDoc(self):
 	if self._subj:
 	    self._wr.endElement()
 	self._subj = None
-	self._wr.endElement()
+	self._wr.endElement()  # </rdf:RDF>
+	self._wr.endDocument()
 
     def makeComment(self, str):
         self._wr.makeComment(str)
         
     def makeStatement(self,  tuple):
-        context, pred, subj, obj = tuple # Context is ignored
-	predn = relativeTo(self._thisDoc, pred)
-	subjn = relativeTo(self._thisDoc, subj)
 
-	if self._subj is not subj:
+        if not self._docOpen:
+            if self.prefixes.get((RESOURCE, RDF_NS_URI), ":::") == ":::":
+                if self.namespaces.get("rdf", ":::") ==":::":
+                    self.bind("rdf", (RESOURCE, RDF_NS_URI))
+            ats = []
+            for pfx in self.prefixes.values():
+                if pfx:
+                    ats.append(('xmlns:'+pfx, self.namespaces[pfx][1]))
+                else:
+                    ats.append(('xmlns', self.namespaces[pfx][1]))
+            self._wr.startElement(RDF_NS_URI+'RDF', ats, self.prefixes)
+            self._subj = None
+            self._nextId = 0
+            self._docOpen = 1
+
+        context, pred, subj, obj = tuple # Context is ignored
+	predn = relativeURI(self._thisDoc, pred[1])
+	subjn = relativeURI(self._thisDoc, subj[1])
+
+	if self._subj != subj:
 	    if self._subj:
 		self._wr.endElement()
-	    self._wr.startElement('web:Description',
-				 (('about', subjn),))
+#	    if pred == (RESOURCE, RDF_type_URI): # Special case starting with this
+#                
+	    self._wr.startElement(RDF_NS_URI+'Description',
+				 [('about', subjn),])
 	    self._subj = subj
 
 
-	i = len(predn)
-	while i>0:
-	    if predn[i-1] in self._namechars:
-		i = i - 1
-	    else:
-		break
-	ln = predn[i:]
-	ns = predn[:i]
-
 	if obj[0] != LITERAL: 
-	    objn = relativeTo(self._thisDoc, obj)
-	    self._wr.emptyElement(ln,
-				 (('xmlns', ns),
-				  ('resource', objn)))
+	    objn = relativeURI(self._thisDoc, obj[1])
+	    self._wr.emptyElement(pred[1], [('resource', objn)], self.prefixes)
 	else:
-	    self._wr.startElement(ln,
-				 (('xmlns', ns),))
+	    self._wr.startElement(pred[1], [], self.prefixes)
 	    self._wr.data(obj[1])
 	    self._wr.endElement()
 
@@ -730,25 +735,15 @@ class ToRDF(RDFSink):
 
     def startAnonymous(self,  tuple, isList =0):
         context, pred, subj, obj = tuple 
-	if self._subj is not subj:
+	if self._subj != subj:
 	    if self._subj:
 		self._wr.endElement()
-	    subjn = relativeTo(self._thisDoc, subj)
-	    self._wr.startElement('web:Description',
-				 (('about', subjn),))
+	    subjn = relativeURI(self._thisDoc, subj[1])
+	    self._wr.startElement(RDF_NS_URI + 'Description',
+				 (('about', subjn),), self.prefixes)
 	    self._subj = subj
 
-        predn = pred[1]
-	i = len(predn)
-	while i>0:
-	    if predn[i-1] in self._namechars:
-		i = i - 1
-	    else:
-		break
-	ln = predn[i:]
-	ns = predn[:i]
-
-        self._wr.startElement(ln, (('xmlns', ns),))  # Parsetype RDF
+        self._wr.startElement(pred[1], [], self.prefixes)  # @@? Parsetype RDF
 	    
         self._subj = obj    # The object is now the current subject
 
@@ -757,14 +752,14 @@ class ToRDF(RDFSink):
 
         self._wr.endElement()
 #        self._subj = subject
-        self._subj = None       # @@@ This all needs to be thought about!
+        self._subj = subject       # @@@ This all needs to be thought about!
 
 
 # Below we do anonymous top level node - arrows only leave this circle
 
     def startAnonymousNode(self, subj):
         self._wr.endElement()
-        self._wr.startElement('web:Description', ())
+        self._wr.startElement(RDF_NS_URI+'Description', [], self.prefixes)
         self._subj = subj    # The object is not the subject context
         self._pred = None
 
@@ -773,22 +768,23 @@ class ToRDF(RDFSink):
 	self._subj = None
         self._pred = None
 
-# Below we notate a nested bag of statements
+# Below we notate a nested bag of statements - a context
 
     def startBag(self, context):  # Doesn't work with RDF sorry ILLEGAL
         self.indent = self.indent + 1
-        self._wr.startElement('web:RDF', # Like description but no subject?
-				 (('bagid', context[1])))
+        self._wr.startElement(RDF_NS_URI+'Quote', # Like description but no subject?
+			      [('context', relativeURI(self._thisDoc,context[1]))],
+                              self.prefixes)
 
 
     def endBag(self, subj):    # Remove context
-        self._write(" } ")
+        self._endElement()
         self._subj = subj
         self._pred = None
-        self.indent = self.indent - 1
      
 
 def relativeTo(here, there):
+    print "### Relative to ", here[1], there[1]
     return relativeURI(here[1], there[1])
     
 def relativeToOld(here, there):    # algorithm!? @@@@
@@ -830,12 +826,23 @@ class XMLWriter:
 	self._elts = []
 	self.squeaky = squeaky  # No, not squeaky clean output
 	self.tab = 4        # Number of spaces to indent per level
-        self.needClose = 0  # Means we need a ">" but save till later
-    
+        self.needClose = 0  # 1 Means we need a ">" but save till later
+        self.noWS = 0       # 1 Means we cant use white space for prettiness
+        self.currentNS = RDF_NS_URI # @@@ Hack
+        
     #@@ on __del__, close all open elements?
 
+    _namechars = string.lowercase + string.uppercase + string.digits + '_'
+
+
     def newline(self, howmany=1):
-        self._wr("\n\n\n\n"[:howmany])
+        if self.noWS:
+            self.noWS = 0
+            self.flushClose()
+            return
+        i = howmany
+        if i<1: i=1
+        self._wr("\n\n\n\n"[:i])
         self.indent()
 
     def indent(self, extra=0):
@@ -853,42 +860,69 @@ class XMLWriter:
             self._wr(">")
             self.needClose = 0
 
+    def figurePrefix(self, uriref, prefixes):
+	i = len(uriref)
+	while i>0:
+	    if uriref[i-1] in self._namechars:
+		i = i - 1
+	    else:
+		break
+	ln = uriref[i:]
+	ns = uriref[:i]
+
+        prefix = prefixes.get((RESOURCE, ns), ":::")
+        attrs = []
+        if ns != self.currentNS:
+            if prefix == ":::" or not prefix:  # Can't trust stored null prefix
+                attrs = [('xmlns', ns)]
+                self.currentNS = ns
+            else:
+                if prefix: ln = prefix + ":" + ln
+        return (ln, attrs)
+
     def makeComment(self, str):
         self.newline()
         self._wr("<!-- " + str + "-->") # @@
         
-    def startElement(self, n, attrs = ()):
+    def startElement(self, n, attrs = [], prefixes={}):
+        oldNS = self.currentNS
+        ln, at2 = self.figurePrefix(n, prefixes)
+        attrs = at2 + attrs
 	self.newline(3-len(self._elts))    # Newlines separate higher levels
-	self._wr("<%s" % (n,))
+	self._wr("<%s" % (ln,))
 	self._attrs(attrs)
-	self._elts.append(n)
+	
+	self._elts.append(ln, oldNS)
 	self.closeTag()
 
     def _attrs(self, attrs):
-	o = self._outFp
+        needNL = 0
 	for n, v in attrs:
 	    #@@BUG: need to escape markup chars in v
-            self.newline()
-	    o.write("    %s=\"%s\"" % (n, v))
+            if needNL:
+                self.newline()
+                self._wr("   ")
+	    self._wr(" %s=\"%s\"" % (n, v))
+	    needNL = 1
 
-    def emptyElement(self, n, attrs):
-        self.newline()
-	self._outFp.write("<%s" % (n,))
+    def emptyElement(self, n, attrs=[], prefixes={}):
+        oldNS = self.currentNS
+        ln, at2 = self.figurePrefix(n, prefixes)
+        attrs = at2 + attrs
+	self.newline(3-len(self._elts))    # Newlines separate higher levels
+	self._wr("<%s" % (ln,))
 	self._attrs(attrs)
+
+	self.currentNS = oldNS  # Forget change - no nesting
+	self._wr("/")
         self.closeTag()
 
     def endElement(self):
 
-	n = self._elts.pop()
+	n, self.currentNS = self._elts.pop()
         self.newline()
 	self._outFp.write("</%s" % n)
-
-	if self.squeaky:   # squeaky clean output has no whitespace content but looks weird
-            self.newline()
-            self._outFp.write(">")
-	else:
-            self._outFp.write(">")
-            self.newline()
+	self.closeTag()
 
 
     markupChar = re.compile(r"[\n\r<>&]")
@@ -907,8 +941,13 @@ class XMLWriter:
 	    o.write(str[i:j])
 	    o.write("&#%d;" % (ord(str[j]),))
 	    i = j + 1
+	self.noWS = 1  # Suppress whitespace - we are in data
 
-
+    def endDocument(self):
+        while len(self._elts) > 0:
+            self.endElement()
+        self.flushClose()
+        self._wr("\n")
 
 class ToN3(RDFSink):
     """keeps track of most recent subject and predicate reuses them
@@ -1490,14 +1529,13 @@ See also: cwm
         # The base URI for this process - the Web equiv of cwd
 #	_baseURI = "file://" + hostname + os.getcwd() + "/"
 	_baseURI = "file://" + os.getcwd() + "/"
-	print "# Base URI of process is" , _baseURI
 	
         _outURI = urlparse.urljoin(_baseURI, "STDOUT")
 	if option_rdf1out:
             _sink = ToRDF(sys.stdout, _outURI)
         else:
             _sink = ToN3(sys.stdout.write, _outURI)
-
+        _sink.makeComment("# Base URI of process is " + _baseURI)
         
 #  Parse and regenerate RDF in whatever notation:
 
@@ -1510,7 +1548,6 @@ See also: cwm
 
         if option_inputs == []:
             _inputURI = urlparse.urljoin( _baseURI, "STDIN") # Make abs from relative
-            print "# Taking input from standard input"
             p = SinkParser(_sink,  _inputURI)
             p.load("")
             del(p)

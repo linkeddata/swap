@@ -50,12 +50,10 @@ class RDFXMLParser(xmllib.XMLParser):
     def load(self, uri, _baseURI=""):
         if uri:
             _inputURI = urlparse.urljoin(_baseURI, uri) # Make abs from relative
-            print "# Input from ", _inputURI
             netStream = urllib.urlopen(_inputURI)
             self.feed(netStream.read())     # @ May be big - buffered in memory!
             self.close()
         else:
-            print "# Taking N3 input from standard input"
             _inputURI = urlparse.urljoin(_baseURI, "STDIN") # Make abs from relative
             self.feed(sys.stdin.read())     # May be big - buffered in memory!
             self.close()
