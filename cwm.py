@@ -20,6 +20,7 @@ Agenda:
 =======
 
  - BUG: a [ b c ] d.   gets improperly output. See anon-pred
+ 
  - BUG: {} is a context but that is lost on output!!!
      occursAs[CONTEXT] not enough. See foo2.n3 - change existential representation :-( to make context a real conjunction again?
     (the forSome triple is special in that you can't remove it and reduce info)
@@ -52,8 +53,8 @@ BULTINS WE NEED
     - indirectlyImplies(expr1, expr2)   
     - startsWith(x,y)
     - URIof(x, str)
-    - usesNamespace(x,y)   # find transitive closure for validation
-    - delegation of query to remote database (cwm or rdvms)
+    - usesNamespace(x,y)   # find transitive closure for validation  - awful function in reality
+    - delegation of query to remote database (cwm or rdbms)
 
 - Translation;  Try to represent the space (or a context) using a subset of namespaces
 
@@ -83,7 +84,7 @@ Done
   - graph match -DONE
   - recursive dump of nested bags - DONE
  - semi-reification - reifying only subexpressions - DONE
-
+ - Bug  :x :y :z as data should match [ :y :z ] as query. Fixed by stripping forSomes from top of query.
 
 NOTES
 
@@ -131,13 +132,16 @@ ALL4 = CONTEXT, PRED, SUBJ, OBJ
 # The parser outputs quads where each item is a pair   type, value
 
 RESOURCE = notation3.RESOURCE        # which or may not have a fragment
-LITERAL = notation3.LITERAL         # string etc - maps to data:
-ANONYMOUS = notation3.ANONYMOUS       # existentially qualified unlabelled resource
+FORMULA = notation3.FORMULA          # A set of statements    
+LITERAL = notation3.LITERAL          # string etc - maps to data:
+ANONYMOUS = notation3.ANONYMOUS     # existentially qualified unlabelled resource
 VARIABLE = notation3.VARIABLE
 
 
-chatty = 20   # verbosity debug flag
+chatty =50   # verbosity debug flag
 doMeta = 0  # wait until we have written the code! :-)
+
+INFINITY = 1000000000           # @@ larger than any number occurences
 
 ########################################  Storage URI Handling
 #
@@ -165,22 +169,22 @@ class Thing:
 
     # Use the URI to allow sorted listings - for cannonnicalization if nothing else
     #  Put a type declaration before anything else
-    def __cmp__(self, other):
-        if self is other: return 0
-        _type = "<" + notation3.RDF_type_URI + ">"
-        s = self.representation()
-        if s == _type:
-            return -1
-        o = other.representation()
-        if o == _type:
-            return 1
-        if s < o :
+#    def __cmp__(self, other):
+#        if self is other: return 0
+#        _type = "<" + notation3.RDF_type_URI + ">"
+#        s = self.representation()
+#        if s == _type:
+#            return -1
+#        o = other.representation()
+#        if o == _type:
+#            return 1
+#        if s < o :
 #            print s,  "LESS THAN", o
-            return -1
-        if s > o :
+#            return -1
+#        if s > o :
 #            print s, "GREATER THAN", o
-            return 1
-        raise internalError # Strings should not match if not same object
+#            return 1
+#        raise internalError # Strings should not match if not same object
 
     def representation(self, base=None):
         """ in N3 """
@@ -225,10 +229,10 @@ class Resource(Thing):
         else:
             return self.uri
 
-    def internFrag(r,fragid):
+    def internFrag(r,fragid, type):   # type was only Fragment before
             f = r.fragments.get(fragid, None)
             if f: return f
-            f = Fragment(r, fragid)
+            f = type(r, fragid)
             r.fragments[fragid] = f
             return f
                 
@@ -278,6 +282,16 @@ class Anonymous(Fragment):
 
     def asPair(self):
         return (ANONYMOUS, self.uriref(None))
+        
+class Formula(Fragment):
+    def __init__(self, resource, fragid):
+        Fragment.__init__(self, resource, fragid)
+
+    def generated(self):
+        return 1
+
+    def asPair(self):
+        return (FORMULA, self.uriref(None))
         
         
 class Literal(Thing):
@@ -344,7 +358,7 @@ class Engine:
     """
         type, uriref = pair
         if type == LITERAL:
-            return Literal(uriref)  # No interning for literals (?@@?)
+            return Literal(uriref)  # No interning for literals (?@@? Prevents == rats)
 
 #        print " ... interning <%s>" % `uriref`
         hash = len(uriref)-1
@@ -359,8 +373,9 @@ class Engine:
         
         else :      # This has a fragment and a resource
             r = self.internURI(uriref[:hash])
-            if type == RESOURCE:  return r.internFrag(uriref[hash+1:])
-
+            if type == RESOURCE:  return r.internFrag(uriref[hash+1:], Fragment)
+            if type == FORMULA:  return r.internFrag(uriref[hash+1:], Formula)
+            else: raise shouldntBeHere    # Source code did not expect other type
 
 
 ######################################################## Storage
@@ -375,14 +390,14 @@ class StoredStatement:
         self.triple = q
 
 #   The order of statements is only for cannonical output
-    def __cmp__(self, other):
-        if self is other: return 0
-        if self.triple[CONTEXT] is not other.triple[CONTEXT]:
-            return self.triple[CONTEXT].__cmp__(other.triple[CONTEXT])
-        for p in [CONTEXT, SUBJ, PRED, OBJ]: # Note NOT internal order
-            if self.triple[p] is not other.triple[p]:
-                return self.triple[p].__cmp__(other.triple[p])
-        raise internalerror # SHould never have two identical distinct
+#    def __cmp__(self, other):
+#        if self is other: return 0
+#        if self.triple[CONTEXT] is not other.triple[CONTEXT]:
+#            return self.triple[CONTEXT].__cmp__(other.triple[CONTEXT])
+#        for p in [CONTEXT, SUBJ, PRED, OBJ]: # Note NOT internal order
+#            if self.triple[p] is not other.triple[p]:
+#                return self.triple[p].__cmp__(other.triple[p])
+#        raise internalerror # SHould never have two identical distinct
         
 class RDFStore(notation3.RDFSink) :
     """ Absorbs RDF stream and saves in triple store
@@ -401,10 +416,21 @@ class RDFStore(notation3.RDFSink) :
 #        self.subExpression = engine.internURI(Logic_NS + "subExpression")
         self.forAll  = engine.internURI(Logic_NS + "forAll")
         self.implies = engine.internURI(Logic_NS + "implies")
+        self.includes = engine.internURI(Logic_NS + "includes")
+        self.directlyIncludes = engine.internURI(Logic_NS + "directlyIncludes")
+        self.notIncludes = engine.internURI(Logic_NS + "notIncludes")
+        self.notDirectlyIncludes = engine.internURI(Logic_NS + "notDirectlyIncludes")
         self.asserts = engine.internURI(Logic_NS + "asserts")
+        self.greaterThan = engine.internURI(Logic_NS + "greaterThan")
+        self.notGreaterThan = engine.internURI(Logic_NS + "notGreaterThan")
+        self.lessThan = engine.internURI(Logic_NS + "lessThan")
+        self.notLessThan = engine.internURI(Logic_NS + "notLessThan")
+        self.equivalentTo = engine.internURI(notation3.DAML_equivalentTo_URI)
         self.Truth = engine.internURI(Logic_NS + "Truth")
         self.type = engine.internURI(notation3.RDF_type_URI)
+        self.uri = engine.internURI(Logic_NS + "uri")
         self.Chaff = engine.internURI(Logic_NS + "Chaff")
+
 
 # List stuff - beware of namespace changes! :-(
 
@@ -642,7 +668,7 @@ class RDFStore(notation3.RDFSink) :
         _op = _asObj + _asPred
 #        _anon = (_op < 2) and _isExistential
         _anon = (_asObj < 2) and _asPred == 0 and _isExistential
-        _isSubExp = _isExistential and (x.occursAs[CONTEXT] != [] and x is not context) # subExpression removal
+        _isSubExp = _isExistential and (isinstance(x, Formula) and x is not context) # subExpression removal
 
         if 0: print "Topology <%s in <%sanon=%i ob=%i,pr=%i se=%i exl=%i"%(
             `x`[-8:], `context`[-8:], _anon, _asObj, _asPred, _isSubExp, _isExistential)
@@ -768,7 +794,7 @@ class RDFStore(notation3.RDFSink) :
                 sink.endAnonymousNode()
                 return  # arcs as subject done
 
-        if not _anon and subj.occursAs[CONTEXT] != [] and subj is not context:
+        if not _anon and isinstance(subj, Formula) and subj is not context:
             sink.startBagNamed(context.asPair(), subj.asPair())
             self.dumpNestedStatements(subj, sink)  # dump contents of anonymous bag
             sink.endBagNamed(subj.asPair())       # Subject is now set up
@@ -907,10 +933,10 @@ class RDFStore(notation3.RDFSink) :
     #                print "Filter quad:", t
             if t[PRED] is self.implies:
                 tries = 0
-                found = self.tryRule(s, workingContext, filterContext, targetContext, _variables)
+                found = self.tryRule(s, workingContext, targetContext, _variables)
                 if (chatty >40) or (chatty > 5 and tries > 1):
-                    progress( "Found %i new stmts for rule %s" % (subtotal, tries, quadToString(t)))
-                sys.stderr.write( "# Found %i new stmts for rule %s\n" % (found, quadToString(t)))
+                    progress( "Found %i new stmts for rule %s" % (tries, quadToString(t)))
+  #              sys.stderr.write( "# Found %i new stmts for rule %s\n" % (found, quadToString(t)))
                 _total = _total+found
             else:
                 c = None
@@ -927,11 +953,11 @@ class RDFStore(notation3.RDFSink) :
                     _total = _total + self.applyRules(workingContext, c, targetContext, _vs)  # Nested rules
 
 
-        progress("Total %i new statements from rules in %s" % ( _total, filterContext))
+        if chatty > 4: progress("Total %i new statements from rules in %s" % ( _total, filterContext))
         return _total
 
 
-    def tryRule(self, s, workingContext, filterContext, targetContext, _variables):
+    def tryRule(self, s, workingContext, targetContext, _variables):
         t = s.triple
         template = t[SUBJ]
         conclusion = t[OBJ]
@@ -945,6 +971,20 @@ class RDFStore(notation3.RDFSink) :
 
         unmatched, _templateVariables = self.nestedContexts(template)
         _substitute([( template, workingContext)], unmatched)
+
+# If we know :a :b :c, then [ :b :c ] is true.
+        u2 = []  #  Strip out "forSome" at top level as we don't need to find them
+        for quad in unmatched:
+            if (quad[CONTEXT] is workingContext
+                and quad[SUBJ] is workingContext
+                and quad[PRED] is self.forSome):
+                pass
+                if chatty>80: print " Stripped forSome <%s" % `quad[OBJ]`[-10:]
+            else:
+                u2.append(quad)
+        if chatty>80: print " Stripped %i  %i" % (len(unmatched), len(u2))
+        unmatched = u2
+        
         if chatty >20:
             print "# IMPLIES Template", setToString(unmatched)
             for v in _variables: print "    %s" % `v`[-8:]
@@ -959,9 +999,31 @@ class RDFStore(notation3.RDFSink) :
         if chatty > 80:
             for v in _variables:
                 print "    Variable: ", `v`[-8:]
+    # The smartIn contaext was the template context but it has been mapped to the workingContext.
+        return self.match(unmatched, _variables, _templateVariables, [workingContext],
+                      self.conclude, ( self, conclusions, targetContext, _outputVariables))
 
-        return match(unmatched, _variables, _templateVariables,
-                      conclude, ( self, conclusions, targetContext, _outputVariables))
+# Return whether or nor workingContext containts a top-level template equvalent to subexp 
+    def testIncludes(self, workingContext, template, _variables, smartIn=[]):
+
+        if chatty >30: print"\n\n=================== includes ============\n"
+
+        # When the template refers to itself, the thing we are
+        # are looking for will refer to the context we are searching
+
+        unmatched, _templateVariables = self.nestedContexts(template)
+        _substitute([( template, workingContext)], unmatched)
+
+        if chatty > 20:
+            print "# includes rule, %i terms in template %s, %i unmatched, %i template variables" % (
+                len(template.occursAs[CONTEXT]),
+                `template`[-8:], len(unmatched), len(_templateVariables))
+        if chatty > 80:
+            for v in _variables:
+                print "    Variable: ", `v`[-8:]
+
+        return self.match(unmatched, [], _variables + _templateVariables, smartIn, justOne=1)
+
  
     def genid(self,context):        
         self._nextId = self._nextId + 1
@@ -985,23 +1047,256 @@ class RDFStore(notation3.RDFSink) :
 #                if obj is self.Truth: print "#@@@@@@@@@@@@@", quadToString(arc.triple)
             if subj is context and pred is self.forSome: # @@@@
                 existentials.append(obj)   # Collect list of existentials
-
+                
+        # Find all subforumlae  - forumulae which are mentioned at least once.
+        subformulae = []
         for arc in con.occursAs[CONTEXT]:
 #           if pred is self.subExpression and subj is con:
             for p in [ SUBJ, PRED, OBJ]:  # @ can remove PRED if contexts and predicates distinct
                 x = arc.triple[p]
-                if x.occursAs[CONTEXT] != [] and x in existentials:  # x is a Nested context                    
-                    for a2 in con.occursAs[CONTEXT]:  # Rescan for variables
-                        c2, p2, s2, o2 = a2.triple
-                        if  s2 is x and (p2 is self.forSome or p2 is self.forAll):
-                            variables.append(o2)   # Collect list of existentials
+                if isinstance(x, Formula) and x in existentials:  # x is a Nested context
+                    if x not in subformulae: subformulae.append(x) # Only one copy of each please
+                    
+        for x in  subformulae:
+            for a2 in con.occursAs[CONTEXT]:  # Rescan for variables
+                c2, p2, s2, o2 = a2.triple
+                if  s2 is x and (p2 is self.forSome or p2 is self.forAll):
+                    variables.append(o2)   # Collect list of existentials
 #                            if o2 is self.Truth: print "#@@@@@@@@@@@@@", quadToString(a2.triple)
-                    s, v = self.nestedContexts(x)
-                    statements = statements + s
-                    variables = variables + v
+            s, v = self.nestedContexts(x)
+            statements = statements + s
+            variables = variables + v
         return statements, variables
-    
 
+
+############################################################## Query engine
+#
+# Template matching in a graph
+#
+# Optimizations we have NOT done:
+#   - storing the tree of matches so that we don't have to duplicate them another time
+#   - using that tree to check only whether new data would extend it (very cool - memory?)
+#      (this links to dynamic data, live variables.)
+#   - recognising in advance disjoint graph templates, doing cross product of separate searches
+#
+
+    def test45(self, test436):
+        return 0
+
+    def  match(self,                 # Neded for getting interned constants
+               unmatched,           # Tuple of interned quads we are trying to match CORRUPTED
+               variables,           # List of variables to match and return
+               existentials,        # List of variables to match to anything
+                                    # Existentials or any kind of variable in subexpression
+               smartIn = [],        # List of contexts in which to use builtins - typically the top one
+               action = None,  # Action routine return subtotal of actions
+               param = None,        # a tuple, see the call itself and conclude()
+               bindings = [],       # Bindings discovered so far
+               newBindings = [],    # Bindings JUST discovered - to be folded in
+               justOne = 0):        # Flag: Stop when you find the first one
+
+        """ Apply action(bindings, param) to succussful matches
+    bindings      collected matches already found
+    newBindings  matches found and not yet applied - used in recursion
+        """
+        if action == None: action=self.doNothing
+        
+    # Scan terms to see what sort of a problem we have:
+    #
+    # We prefer terms with a single variable to those with two.
+    # (Those with none we immediately check and therafter ignore)
+    # Secondarily, we prefer short searches to long ones.
+
+        total = 0           # Number of matches found (recursively)
+        fewest = 5          # Variables to find
+        shortest = INFINITY # List to search for one of the variables
+        shortest_t = None
+        
+        if chatty > 50:
+            print "\n## match: called %i terms, %i bindings:" % (len(unmatched),len(bindings))
+            print bindingsToString(newBindings)
+            if chatty > 90: print setToString(unmatched)
+        
+        for pair in newBindings:   # Take care of business left over from recursive call
+            if pair[0] in variables:
+                variables.remove(pair[0])  
+                bindings.append(pair)  # Record for posterity
+            else:
+                existentials.remove(pair[0]) # Can't match anything anymore, need exact match
+        _substitute(newBindings, unmatched)     # Replace variables with values
+
+        if len(unmatched) == 0:
+            if chatty>50: print "# Match found with bindings: ", bindingsToString(bindings)
+            return action(bindings, param)  # No terms left .. success!
+
+        
+        for quad in unmatched:
+            found = 0       # Count where variables are
+            short_p = -1
+            short = INFINITY
+            for p in ALL4:
+                r = quad[p]
+                if r in variables + existentials:     #  @@@@@ This test takes too much time
+                    found = found + 1
+                    lastVar = p
+                else:
+                    length = len(r.occursAs[p])
+                    if length < short:
+                        short_p = p
+                        short = length
+#        if quad[p] in self.builtIns:
+#            if (quad[PRED] is self.equivalentTo and
+#                found == 1 and
+#                (short_p == SUBJ or short_p == OBJ)
+#                     @@@ deal with assigning to variable?
+
+# In some circumstances we can simply calculate whether a statement is true:
+            if quad[CONTEXT] in smartIn:
+                if found == 0:   # no variables: constant expression
+                    result = "nope"
+                    if quad[PRED] is self.equivalentTo: result = (quad[SUBJ] is quad[OBJ])
+                    elif isinstance(quad[SUBJ],Literal) and isinstance(quad[OBJ],Literal):
+                        if quad[PRED] is self.greaterThan : result=( quad[SUBJ].string > quad[OBJ].string) # @@ other datatypes!
+                        elif quad[PRED] is self.lessThan : result=( quad[SUBJ].string < quad[OBJ].string)
+                        elif quad[PRED] is self.notLessThan : result=( quad[SUBJ].string >= quad[OBJ].string)
+                        elif quad[PRED] is self.notGreaterThan : result=( quad[SUBJ].string <= quad[OBJ].string)
+                        elif quad[PRED] is self.startsWith : result=( string.startsWith(quad[SUBJ].string,quad[OBJ].string))
+                    if result != "nope":
+                        if result: return self.match(unmatched[:], variables[:], existentials[:], smartIn, action, param,
+                                          bindings[:], []) # No new bindings but success in calculated logical operator
+                        else: return 0   # We absoluteley know this won't match with this in it
+
+# Built-in Monadic Functions are statements were the object can be calculated from the subject or vice-versa:
+                elif found == 1 :  # The statement has one variable
+                    nb = []
+                    if lastVar == SUBJ:
+                        if quad[PRED] is self.equivalentTo:
+                            nb.append(( quad[SUBJ], quad[OBJ]))
+                        elif quad[PRED] is self.uri and  isinstance(quad[OBJ], Literal):
+                            nb.append(( quad[SUBJ], self.engine.internURI(quad[OBJ].string)))
+                    if lastVar == OBJ:
+                        if quad[PRED] is self.equivalentTo:
+                            nb.append(( quad[OBJ], quad[SUBJ]))
+                        elif quad[PRED] is self.uri:
+                            nb.append(( quad[OBJ], self.engine.intern((LITERAL, quad[SUBJ].representation)) ))
+                    if nb != []:
+                        unmatched.remove(quad)  # We have resolved this one
+                        if chatty > 30: progress("Monadic function binds %s as %s" %
+                                                 `nb[0][0]`[-10:],`nb[0][1]`[-10:])
+                        return self.match(unmatched[:], variables[:], existentials[:], smartIn, action, param,
+                                                  bindings[:], nb)
+
+            if (found < fewest or
+                found == fewest and short < shortest) : # We find better.
+                    fewest = found
+                    shortest = short
+                    shortest_p = short_p
+                    shortest_t = quad
+        
+        # Now we have identified the  list to search
+
+        if fewest == 4:
+            raise notimp
+            return 0    # Can't handle something with no constants at all.
+                        # Not a closed world problem - and this is a cwm!
+                        # Actually, it could be a valid problem -but pathalogical.
+
+        quad = shortest_t
+        unmatched.remove(quad)  # We will resolve this one now if possible
+
+        consts = []   # Parts of speech to test for match
+        vars = []   # Parts of speech which are variables
+        for p in ALL4 :
+            if quad[p] in variables + existentials:
+                vars.append(p)
+            elif p != shortest_p :
+                consts.append(p)
+
+        if chatty > 36:
+            print "# Searching %i with %s in slot %i." %(shortest, `quad[shortest_p]`[-8:],shortest_p)
+            print "#    for ", quadToString(quad)
+            if chatty > 75:
+                print "#    where variables are"
+                for i in variables + existentials:
+                    print "#         ", `i`[-8:] 
+
+        matches = 0
+        for s in quad[shortest_p].occursAs[shortest_p]:
+            for p in consts:
+                if s.triple[p] is not quad[p]:
+                    if chatty>78: print "   Rejecting ", quadToString(s.triple), "\n      for ", quadToString(quad)
+                    break
+            else:  # found match
+                nb = []
+                for p in vars:
+                    nb.append(( quad[p], s.triple[p]))
+                total = total + self.match(unmatched[:], variables[:], existentials[:], smartIn, action, param,
+                                      bindings[:], nb)
+                matches = matches + 1
+                
+# If we have searched in vain for explicit knowledge we can still in some circumstances calculate it:
+#  @@@ why the difference between existentials and variables below?
+        if matches == 0 and quad[CONTEXT] in smartIn:
+            if ((quad[PRED] is self.includes and self.testIncludes(quad[SUBJ], quad[OBJ], existentials, smartIn))
+                or(quad[PRED] is self.directlyIncludes and self.testIncludes(quad[SUBJ], quad[OBJ], variables))
+                or(quad[PRED] is self.notIncludes and not self.testIncludes(quad[SUBJ], quad[OBJ], existentials, smartIn))
+                or(quad[PRED] is self.notDirectlyIncludes and not self.testIncludes(quad[SUBJ], quad[OBJ], variables))):
+                total = total + self.match(unmatched[:], variables[:], existentials[:], smartIn, action, param,
+                                  bindings[:], []) # No new bindings but success in calculated logical operator
+                    
+#@@@@@ The problem is that we do the expensive function even when there may be a local
+# search which it also depends on which we have not done.  Need to modify the algroithm, think of a clean way.
+
+# USE THIS PLACE LATER for heavy monadic fucntions parsesTo  which fetches from net, etc.
+# Built-in Monadic Functions are statements were the object can be calcualted from the subject or vice-versa:
+#        elif len(vars) == 1 :  # The statement has one variable
+#            nb = []
+#            if var[0] == SUBJ:
+#                if quad[PRED] is self.equivalentTo:
+#                    nb.append(( quad[SUBJ], quad[OBJ]))
+#                 elif quad[PRED] is self.uri and  isinstance(quad[OBJ], Literal):
+#                    nb.append(( quad[SUBJ], self.engine.internURI(quad[OBJ].string)))
+#            if var[0] == OBJ:
+#                if quad[PRED] is self.parsesTo:
+#                    nb.append(( quad[OBJ], quad[SUBJ]))
+#                 elif quad[PRED] is self.uri:
+#                    nb.append(( quad[OBJ], self.engine.intern((LITERAL, quad[SUBJ].representation)) ))
+#            if nb != []:
+#                total = total + self.match(unmatched[:], variables[:], existentials[:], smartIn, action, param,
+#                                          bindings[:], nb)
+
+        return total
+         
+    def doNothing(self, bindings, param):
+        if chatty>99: print "Success! found it!"
+        return 1                    # Return count of calls only
+
+    # Whether we do a smart match determines whether we will be able to conclude
+    # things which in fact we knew already thanks to the builtins.
+    def conclude(self, bindings, param):  # Returns number of statements added to store
+        store, conclusions, targetContext, oes = param
+        if chatty >60: print "\n#Concluding tenttatively...", bindingsToString(bindings)
+
+        myConclusions = conclusions[:]
+        _substitute(bindings, myConclusions)
+        # Does this conclusion exist already in the database?
+        found = self.match(myConclusions[:], [], oes[:], smartIn=[targetContext], justOne=1)  # Find first occurrence, SMART
+        if found:
+            if chatty>60: print "    .... forget it, conclusion already in store."
+            return 0
+        
+        # Regenerate a new form with its own existential variables
+        # because we can't reuse the subexpression identifiers.
+        bindings2 = []
+        for i in oes:
+            g = store.genid(targetContext)
+            bindings2.append((i,g))
+        total = 0
+        for q in myConclusions:
+            q2 = _lookupQuad(bindings2, q)
+            total = total + store.storeQuad(q2)
+            if chatty>75: print "# *** Conclude: ", quadToString(q2)
+        return total
 
 def bindingsToString(bindings):
     str = ""
@@ -1019,30 +1314,6 @@ def quadToString(q):
     return "<%s> ::  <%s <%s <%s ." %(
         `q[CONTEXT]`[-10:], `q[SUBJ]`[-10:], `q[PRED]`[-10:], `q[OBJ]`[-10:])
 
-def conclude(bindings, param):  # Returns number of statements added to store
-    store, conclusions, targetContext, oes = param
-    if chatty >60: print "\n#Concluding tenttatively...", bindingsToString(bindings)
-
-    myConclusions = conclusions[:]
-    _substitute(bindings, myConclusions)
-    # Does this conclusion exist already in the database?
-    found = match(myConclusions[:], [], oes[:], justOne=1)  # Find first occurrence
-    if found:
-        if chatty>60: print "    .... forget it, conclusion already in store."
-        return 0
-    
-    # Regenerate a new form with its own existential variables
-    # because we can't reuse the subexpression identifiers.
-    bindings2 = []
-    for i in oes:
-        g = store.genid(targetContext)
-        bindings2.append((i,g))
-    total = 0
-    for q in myConclusions:
-        q2 = _lookupQuad(bindings2, q)
-        total = total + store.storeQuad(q2)
-        if chatty>75: print "# *** Conclude: ", quadToString(q2)
-    return total
 
 def _substitute(bindings, list):
     for i in range(len(list)):
@@ -1062,129 +1333,6 @@ def _lookup(bindings, value):
         if left == value: return right
     return value
 
-
-
-############################################################## Query engine
-#
-# Template matching in a graph
-#
-# Optimizations we have NOT done:
-#   - storing the tree of matches so that we don't have to duplicate them another time
-#   - using that tree to check only whether new data would extend it (very cool - memory?)
-#      (this links to dynamic data, live variables.)
-#   - recognising in advance disjoint graph templates, doing cross product of separate searches
-#
-
-def doNothing(bindings, param):
-    if chatty>99: print "Success! found it!"
-    return 1                    # Return count of calls only
-
-INFINITY = 1000000000           # @@ larger than any number occurences
-
-def match (unmatched,           # Tuple of interned quads we are trying to match CORRUPTED
-           variables,           # List of variables to match and return
-	   existentials,        # List of variables to match to anything
-                                # Existentials or any kind of variable in subexpression
-           action = doNothing,  # Action routine retiurn subtotal of actions
-           param = None,        # a tuple, see the call itself and conclude()
-           bindings = [],       # Bindings discovered so far
-           newBindings = [],    # Bindings JUST discovered - not followed though on
-           justOne = 0):        # Flag: Stop when you find the first one
-
-    """ Apply action(bindings, param) to succussful matches
-bindings      collected matches alreday found
-newBindings  matches found and not yet applied - used in recursion
-    """
-# Scan terms to see what sort of a problem we have:
-#
-# We prefer terms with a single variable to those with two.
-# (Those with none we immediately check and therafter ignore)
-# Secondarily, we prefer short searches to long ones.
-
-    total = 0           # Number of matches found (recursively)
-    fewest = 5          # Variables to find
-    shortest = INFINITY # List to search for one of the variables
-    shortest_t = None
-    
-    if chatty > 50:
-        print "\n## match: called %i terms, %i bindings:" % (len(unmatched),len(bindings))
-        print bindingsToString(newBindings)
-        if chatty > 90: print setToString(unmatched)
-    
-    for pair in newBindings:   # Take care of business left over from recursive call
-        if pair[0] in variables:
-            variables.remove(pair[0])  
-            bindings.append(pair)  # Record for posterity
-        else:
-            existentials.remove(pair[0]) # Can't match anything anymore, need exact match
-    _substitute(newBindings, unmatched)     # Replace variables with values
-
-    if len(unmatched) == 0:
-        if chatty>50: print "# Match found with bindings: ", bindingsToString(bindings)
-        return action(bindings, param)  # No terms left .. success!
-
-    
-    for quad in unmatched:
-        found = 0       # Count where variables are
-        short_p = -1
-        short = INFINITY
-        for p in ALL4:
-            r = quad[p]
-            if r in variables + existentials:
-                found = found + 1
-            else:
-                length = len(r.occursAs[p])
-                if length < short:
-                    short_p = p
-                    short = length
-
-        if (found < fewest or
-            found == fewest and short < shortest) : # We find better.
-                fewest = found
-                shortest = short
-                shortest_p = short_p
-                shortest_t = quad
-    
-    # Now we have identified the  list to search
-
-    if fewest == 4:
-        raise notimp
-        return 0    # Can't handle something with no constants at all.
-                    # Not a closed world problem - and this is a cwm!
-                    # Actually, it could be a valid problem -but pathalogical.
-
-    quad = shortest_t
-    unmatched.remove(quad)  # We will resolve this one now if possible
-
-    consts = []   # Parts of speech to test for match
-    vars = []   # Parts of speech which are variables
-    for p in ALL4 :
-        if quad[p] in variables + existentials:
-            vars.append(p)
-        elif p != shortest_p :
-            consts.append(p)
-
-    if chatty > 36:
-        print "# Searching %i with %s in slot %i." %(shortest, `quad[shortest_p]`[-8:],shortest_p)
-        print "#    for ", quadToString(quad)
-        if chatty > 75:
-            print "#    where variables are"
-            for i in variables + existentials:
-                print "#         ", `i`[-8:] 
-
-    for s in quad[shortest_p].occursAs[shortest_p]:
-        for p in consts:
-            if s.triple[p] is not quad[p]:
-                if chatty>78: print "   Rejecting ", quadToString(s.triple), "\n      for ", quadToString(quad)
-                break
-        else:  # found match
-            nb = []
-            for p in vars:
-                nb.append(( quad[p], s.triple[p]))
-            total = total + match(unmatched[:], variables[:], existentials[:], action, param,
-                                  bindings[:], nb)
-    return total
-     
 
 
 
@@ -1509,6 +1657,7 @@ Examples:
         option_pipe = 0     # Don't store, just pipe though
         option_bySubject= 0 # Store and regurgitate in subject order *
         option_inputs = []
+        option_test = 0     # Do simple self-test
         option_reify = 0    # Flag: reify on output  (process?)
         option_outURI = None
         _doneOutput = 0
@@ -1559,7 +1708,7 @@ Examples:
 #  Base defauts
 
         if option_baseURI == _baseURI:
-            if _gotInput == 1:
+            if _gotInput == 1 and not option_test:
                 _baseURI = option_inputs[0]
 
 #  Metadata context - storing information about what we are doing
@@ -1572,7 +1721,7 @@ Examples:
 
         _outURI = _baseURI
         if option_baseURI == _baseURI: # If base not specified
-            if _gotInput == 1:          # and only one input then relative to that
+            if _gotInput == 1 and not option_test: # and only one input then relative to that
                 _outURI = option_inputs[0]
         if option_outURI: _outURI = urlparse.urljoin(_outURI, option_outURI)
         
