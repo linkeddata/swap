@@ -365,14 +365,15 @@ are inverse.</p>
 <pre>:parent ont:inverse :child .</pre>
 
 <p>A machine can then infer the same thing given a generic rule</p>
-<pre>&lt;&gt; log:forAll :p :q, .
+<pre>&lt;&gt; log:forAll :p, :q .
 
 {  :p ont:inverse :q . } log:implies
 
 {
   {
     { :x :p :y. } log:implies { :y :q :x. }
-  } a log:Truth; log:forAll :x, :y.
+  } a log:Truth;
+				log:forAll :x, :y.
 } .</pre>
 
 <p>The outer rule is that if p is the inverse of q, then the inside rule is a
@@ -417,7 +418,7 @@ what these things mean.</p>
   <dt>Thing</dt>
     <dd>In DAML, a generic name for anything - abstract, animate, inanimate,
       whatever. The class which anything is in. (In RDF parlance, confusingly,
-      rdf:Resource.)  Idenified by a URI with or without a "#" in it. </dd>
+      rdf:Resource.)  Idenified by a URI with or without a "#" in it.</dd>
   <dt>Truth</dt>
     <dd>In the log: namespace, a Class of all contexts which are true.</dd>
   <dt>type</dt>
