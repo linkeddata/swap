@@ -1,0 +1,42 @@
+<> a <http://www.w3.org/2000/10/swap/log#N3Document> .
+
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+<> dc:description """comput xplanet arcs from an itinerary""",
+"$Id$";
+dc:relation <airportLookup.n3>.
+
+@prefix dt: <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix str: <http://www.w3.org/2000/10/swap/string#> .
+
+@prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#> .
+@prefix trav: <http://www.w3.org/2000/10/swap/pim/travelTerms#>.
+@prefix apt: <http://www.daml.org/2001/10/html/airport-ont#>.
+
+@prefix : <itinArcs#>.
+
+this log:forAll :LAT1, :LON1, :LAT2, :LON2, :NUM, :YMD,
+  :K, :TXT, :IT, :P, :Q, :X, :Y.
+
+
+
+# report lat/long of flights...
+{ [ k:subEvents [
+      k:fromLocation [
+        apt:latitude :LAT1;
+        apt:longitude :LON1;
+      ];
+      k:toLocation [
+        apt:latitude :LAT2;
+        apt:longitude :LON2;
+      ];
+      trav:flightNumber :NUM;
+      k:startingDate [ dt:date :YMD];
+  ] ].
+
+  (:YMD :NUM) str:concatenation :K.
+  (:LAT1 " " :LON1 " " :LAT2 " " :LON2 " color=blue\n") str:concatenation :TXT.
+}
+ log:implies { :K log:outputString :TXT }.
+

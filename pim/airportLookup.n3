@@ -1,0 +1,56 @@
+<> a <http://www.w3.org/2000/10/swap/log#N3Document> .
+
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+<> dc:description """lookup lat/long etc. of airports""",
+"$Id$".
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix str: <http://www.w3.org/2000/10/swap/string#> .
+
+@prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#> .
+@prefix apt: <http://www.daml.org/2001/10/html/airport-ont#>.
+
+@prefix : <http://www.w3.org/2000/10/swap/pim/airportLookup#>.
+
+this log:forAll :LAT1, :LON1, :LAT2, :LON2, :NUM, :YMD,
+  :K, :TXT, :IT, :P, :Q, :X, :Y.
+
+
+# well-known airports...
+{ :X a :Y; #@@kludge...
+    log:uri [ str:startsWith "http://www.daml.org/cgi-bin/airport?" ] }
+ log:implies { :X a :AirportKnownToDAML }.
+
+# we only want to look up certain airports...
+{ [ k:toLocation :X ]. }
+ log:implies { :X a :InterestingPlace }.
+{ [ k:fromLocation :X ]. }
+ log:implies { :X a :InterestingPlace }.
+
+
+# believe what daml.org says about airport latitutde/longitudes...
+:AirportProperty is rdf:type of
+  apt:latitude,
+  apt:name,
+  apt:iataCode,
+  apt:icaoCode,
+  apt:location,
+  apt:latitude,
+  apt:longitude,
+  apt:elevation.
+
+{
+  :P a :AirportProperty.
+  [ a :AirportKnownToDAML, :InterestingPlace;
+    log:semantics [
+      log:includes {
+        :IT :P :X.
+      }
+    ] ].
+} log:implies {
+  :IT a apt:Airport; :P :X.
+}.
+
+

@@ -1,0 +1,37 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+
+<> dc:description """map navigant (sabre?) airport names to IATA-based
+daml.org names; relate to opencyc:fromLocation and opencyc:toLocation""",
+"@@TODO: constraint the premise of the mapping rule a bit?",
+"$Id$".
+
+@prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#> .
+
+@prefix a: <http://www.daml.org/cgi-bin/airport?>. #hmm... ?MCI is a document *and* an airport?
+a:MCI k:nameString "KANSAS CITY INTL".
+a:STL k:nameString "ST LOUIS INTL".
+a:ORD k:nameString "CHICAGO OHARE".
+a:DFW k:nameString "DALLAS FT WORTH".
+a:EWR k:nameString "NEWARK".
+a:BOS k:nameString "BOSTON".
+a:DCA k:nameString "WASHINGTON REAGAN".
+a:NCE k:nameString "NICE".
+a:LHR k:nameString "LONDON HEATHROW".
+a:SFO k:nameString "SAN FRANCISCO".
+a:CDG k:nameString "PARIS DE GAULLE".
+a:FCO k:nameString "ROME FIUMICINO".
+a:AHO k:nameString "ALGHERO".
+
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+@prefix :  <?var#>.
+@prefix v: <?var#>.
+
+this log:forAll :P, :Q, :X, :Y.
+
+#special case of UnambiguousProperty and =, perhaps
+k:nameString :determines k:fromLocation, k:toLocation.
+{ :P :determines :Q.
+  :X :Q [ :P [ is :P of :Y ] ].
+} log:implies { :X :Q :Y }.

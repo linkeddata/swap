@@ -1,0 +1,76 @@
+<> a <http://www.w3.org/2000/10/swap/log#N3Document> .
+
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+<> dc:description """comput xplanet markers from an itinerary""",
+"$Id$";
+dc:relation <airportLookup.n3>.
+
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix str: <http://www.w3.org/2000/10/swap/string#> .
+
+@prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#> .
+@prefix trav: <http://www.w3.org/2000/10/swap/pim/travelTerms#>.
+@prefix apt: <http://www.daml.org/2001/10/html/airport-ont#>.
+
+@prefix : <itinMarks#>.
+
+this log:forAll :LAT1, :LON1, :IATA, :TXT, :T1, :T2,
+  :YMD, :DOW, :DOWN, :DDD, :P, :Q, :PN, :C.
+
+
+# report lat/long of flights...
+:ArLv is rdf:type of k:fromLocation, k:toLocation.
+k:fromLocation :label "lv"; :timeProp trav:departureTime.
+k:toLocation :label "ar"; :timeProp trav:arrivalTime.
+
+k:Sunday
+  :dayColor "red".
+k:Monday
+  :dayColor "orange".
+k:Tuesday
+  :dayColor "yellow".
+k:Wednesday
+  :dayColor "green".
+k:Thursday
+  :dayColor "blue".
+k:Friday
+  :dayColor "indigo".
+k:Saturday
+  :dayColor "violet".
+
+
+{ :P a :ArLv.
+  [ k:subEvents [
+      :P [
+        apt:latitude :LAT1;
+        apt:longitude :LON1;
+        apt:iataCode :IATA;
+      ]
+  ] ].
+
+
+  (:LAT1 " " :LON1 " \"" :IATA "\" color=blue\n") str:concatenation :TXT.
+}
+ log:implies { :IATA log:outputString :TXT }.
+
+
+{ :P a :ArLv; :label :PN; :timeProp :Q.
+
+  [ k:subEvents [
+      k:startingDate [ a :DOW ];
+      :Q :T1;
+      :P [
+        apt:latitude :LAT1;
+        apt:longitude :LON1;
+      ]
+  ] ].
+
+  :DOW a k:DayOfWeekType; k:nameString :DOWN.
+  (:DOWN "(...)") str:scrape :DDD. # grab Sun from Sunday
+  :DOW :dayColor :C.
+
+  (:LAT1 " " :LON1 " \"" :PN " " :DDD " " :T1 "\" color=" :C "\n") str:concatenation :TXT.
+}
+ log:implies { :TXT log:outputString :TXT }.
+
