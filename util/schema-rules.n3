@@ -18,17 +18,14 @@
 @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 
-@prefix : <#> .       # For our use
-@prefix v: <#> .	# Hint for others use
+@prefix : <validate#> .       # For our use
+@prefix v: <validate.n3#> .	# Hint for others use
 
-#
-# This is what we will flag:
-:schemaInconsistency daml:subPropertyOf log:Falsehood .
 
 this log:forAll <#p>, <#p1>, <#p2>,	# Properties
 	 <#c>, <#c1>, <#c2>.   # Classes
 
-# The following is a su bset of the properties of =, which should not need stating.
+# The following is a subset of the properties of =, which should not need stating.
 # But cwm currently doesn't know a lot about = inherently. @@
 
 { <#x> <#p1> <#y> . <#p1> = <#p2> . } log:implies {<#x> <#p2> <#y> } . # Duh
@@ -41,7 +38,11 @@ daml:subClassOf = rdfs:subClassOf .
 daml:range 	= rdfs:range .
 daml:domain = rdfs:domain .
 
+daml:Class rdfs:subClassOf rdfs:Class.   # Make daml definitions work for RDFS engines
+daml:Property rdfs:subClassOf rdf:Property.
 
+daml:UniqueProperty rdfs:subClassOf daml:Property.
+daml:UnambiguousProperty rdfs:subClassOf daml:Property.
 
 # Implication of transitivity:
 
@@ -98,7 +99,7 @@ rdfs:subClassOf 		a daml:TransitiveProperty .
 this log:forAll <#x>, <#y>, <#z> .
 { 	<#x> a <#y> .
 	<#x> a <#z> .
-	<#y> daml:disjointFrom <#z> } log:implies { <#x> a v:schemaInconsistency } .
+	<#y> daml:disjointFrom <#z> } log:implies { <#x> v:ERROR  "Member of disjoint classes" } .
 
 
 # <> daml:imports <rdfs.n3> . #?@@@@@@@@@@@
