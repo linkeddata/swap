@@ -406,25 +406,30 @@ all A L (
    allDifferent(L)
 ).
 
-allDifferent(rdf_nil).
-
-all LIST HEAD TAIL (
-   ( rdf(LIST, rdf_first, HEAD) &
-     rdf(LIST, rdf_rest, TAIL) &
-     allDifferentOther(HEAD, TAIL) )
-   ->   % BIDIR
+all LIST (
    allDifferent(LIST)
+   <->
+   (( LIST = rdf_nil )
+    |
+    ( exists HEAD TAIL (
+        rdf(LIST, rdf_first, HEAD) &
+        rdf(LIST, rdf_rest, TAIL) &
+        differentFromAll(HEAD, TAIL)
+    )))
 ).
 
-all OTHER LIST HEAD TAIL (
-   ( rdf(LIST, rdf_first, HEAD) &
-     rdf(LIST, rdf_rest, TAIL) &
-     rdf(OTHER, owl_differentFrom, HEAD) &
-     allDifferentOther(OTHER, TAIL) )
-   ->   % BIDIR
-   allDifferentOther(OTHER, LIST)
+all SUBJECT LIST (
+   differentFromAll(SUBJECT, LIST)
+   <->
+   (( LIST = rdf_nil )
+    |
+    ( exists HEAD TAIL (
+        rdf(LIST, rdf_first, HEAD) &
+        rdf(LIST, rdf_rest, TAIL) &
+	rdf(SUBJECT, owl_differentFrom, HEAD) &
+        differentFromAll(SUBJECT, TAIL)
+    )))
 ).
-
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -450,7 +455,10 @@ all P1 P2 (
 ).
     
 % $Log$
-% Revision 1.4  2003-07-30 02:43:26  sandro
+% Revision 1.5  2003-07-30 03:05:40  sandro
+% switched to using equals for allDifferent
+%
+% Revision 1.4  2003/07/30 02:43:26  sandro
 % added first draft of allDifferent
 %
 % Revision 1.3  2003/07/30 02:26:40  sandro
