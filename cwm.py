@@ -1,4 +1,4 @@
-#! /usr/bin/python /devel/WWW/2000/10/swap/cwm.py
+#!/usr/bin/python
 """
 
 $Id$
@@ -460,6 +460,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 if option_format == "rdf" :
                     p = sax2rdf.RDFXMLParser(_store, _inputURI, formulaURI=workingContextURI)
                 else: p = notation3.SinkParser(_store,  _inputURI, formulaURI=workingContextURI)
+                workingContext.reopen()
                 p.load(_inputURI)
                 del(p)
                 if not option_pipe:

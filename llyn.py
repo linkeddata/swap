@@ -24,8 +24,6 @@ Agenda:
 =======
 
  - get rid of other globals (DWC 30Aug2001)
- - split out separate modules: CGI interface, command-line stuff,
-   built-ins (DWC 30Aug2001)
  - split Query engine out as subclass of RDFStore? (DWC)
     SQL-equivalent client
  - implement a back-chaining reasoner (ala Euler/Algernon) on this store? (DWC)
@@ -72,7 +70,9 @@ BULTINS WE NEED
 
 Done
 ====
-(test/retest.sh is another/better list of completed functionality --DWC)
+ - split out separate modules: CGI interface, command-line stuff,
+   built-ins (DWC 30Aug2001)
+- (test/retest.sh is another/better list of completed functionality --DWC)
  - BUG: a [ b c ] d.   gets improperly output. See anon-pred
  - Separate the store hash table from the parser. - DONE
  - regeneration of genids on output. - DONE
@@ -298,9 +298,26 @@ class Formula(Fragment):
 
     def statementsMatching(self, pred=None, subj=None, obj=None):
         return self._index.get((pred, subj, obj), [])
+
+    def close(self):
+        """No more to add. Please interned value"""
+        return self.store.endFormulaNested(self)
+
+    def reopen(self):
+        return self.store.reopen(self)
     
     def add(self, triple):
         return self.store.storeQuad((self, triple[0], triple[1], triple[2]))
+    
+    def n3String(self, flags=""):
+        "Dump the formula to an absolute string in N3"
+        buffer=StringIO.StringIO()
+#      _outSink = notation3.ToRDF(buffer, _outURI, flags=flags)
+        _outSink = notation3.ToN3(buffer.write,
+                                      quiet=1, flags=flags)
+        self.store.dumpNested(self, _outSink)
+        return buffer.getvalue()   # Do we need to explicitly close it or will it be GCd?
+
 
     def outputStrings(self, channel=None, relation=None):
         """Fetch output strings from store, sort and output
@@ -567,7 +584,7 @@ def loadToStore(store, addr):
             elif buffer[0] == "#" or buffer[0:7] == "@prefix":
                 guess = 'application/n3'
             if thing.verbosity() > 29: progress("    guess " + guess)
-    except (IOError):
+    except (IOError, OSError):
         raise DocumentAccessError(addr, sys.exc_info() )
         
     # Hmmm ... what about application/rdf; n3 or vice versa?
@@ -647,11 +664,11 @@ class BI_content(HeavyBuiltIn, Function): #@@DWC: Function?
         return C
 
 
-class BI_n3ExprFor(HeavyBuiltIn, Function):
+class BI_parsedAsN3(HeavyBuiltIn, Function):
     def evaluateObject2(self, subj):
         store = subj.store
         if isinstance(subj, Literal):
-            F = store.any((store._experience, store.n3ExprFor, subj, None))
+            F = store.any((store._experience, store.parsedAsN3, subj, None))
             if F: return F
             if thing.verbosity() > 10: progress("parsing " + subj.string[:30] + "...")
             inputURI = subj.asHashURI() # iffy/bogus... rather asDataURI? yes! but make more efficient
@@ -702,6 +719,20 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
                 progress("    Formula %s now has %i" % (x2s(F),len(F.statements)))
         return store.endFormula(F)
 
+class BI_n3String(LightBuiltIn, Function):      # Light? well, I suppose so.
+    """ The n3 string for a formula is what you get when you
+    express it in the N3 language without using any URIs.
+    Note that there is no guarantee that two implementations will
+    generate the same thing, but whatever they generate should
+    parse back using parsedAsN3 to exaclty the same original formula.
+    If we *did* have a cannonical form it would be great for signature
+    A cannonical form is possisble but not simple."""
+    def evaluateObject(self, store, context, subj, subj_py):
+        if thing.verbosity() > 50:
+            progress("Generating N3 string for:"+`subj_py`)
+        if isinstance(subj, Formula):
+            return store.intern((LITERAL, subj.n3String()))
+
     
 ###################################################################################        
 class RDFStore(RDFSink.RDFSink) :
@@ -740,11 +771,11 @@ class RDFStore(RDFSink.RDFSink) :
 
         log.internFrag("racine", BI_racine)  # Strip fragment identifier from string
 
-        self.rawType =          log.internFrag("rawType", BI_rawType) # syntactic type, oneOf:
-        self.Literal =          log.internFrag("Literal", Fragment) # syntactic type possible value - a class
-        self.List =             log.internFrag("List", Fragment) # syntactic type possible value - a class
-        self.Formula =          log.internFrag("Formula", Fragment) # syntactic type possible value - a class
-        self.Other =            log.internFrag("Other", Fragment) # syntactic type possible value - a class (Use?)
+        self.rawType =  log.internFrag("rawType", BI_rawType) # syntactic type, oneOf:
+        self.Literal =  log.internFrag("Literal", Fragment) # syntactic type possible value - a class
+        self.List =     log.internFrag("List", Fragment) # syntactic type possible value - a class
+        self.Formula =  log.internFrag("Formula", Fragment) # syntactic type possible value - a class
+        self.Other =    log.internFrag("Other", Fragment) # syntactic type possible value - a class (Use?)
 
         log.internFrag("conjunction", BI_conjunction)
         
@@ -767,7 +798,9 @@ class RDFStore(RDFSink.RDFSink) :
         self.cufi = log.internFrag("conclusion", BI_cufi)
         self.semanticsOrError = log.internFrag("semanticsOrError", BI_semanticsOrError)
         self.content = log.internFrag("content", BI_content)
-        self.n3ExprFor = log.internFrag("n3ExprFor",  BI_n3ExprFor)
+        self.parsedAsN3 = log.internFrag("parsedAsN3",  BI_parsedAsN3)
+        self.n3ExprFor = log.internFrag("n3ExprFor",  BI_parsedAsN3) ## Obsolete
+        log.internFrag("n3String",  BI_n3String)
         
 # Constants:
 
@@ -890,7 +923,9 @@ class RDFStore(RDFSink.RDFSink) :
         Call this when the formula is in its final form, with all its statements.
         Make sure no one else has a copy of the pointer to the smushed one.
         """
-        if F.cannonical:
+        if F.cannonical != None:
+            if thing.verbosity() > 70:
+                progress("End formula -- @@ already cannonical:"+`F`)
             return F.cannonical
         fl = F.statements
         fl.sort(StoredStatement.compareSubjPredObj)
@@ -900,11 +935,14 @@ class RDFStore(RDFSink.RDFSink) :
     
         if possibles == None:
             self._formulaeOfLength[l] = [F]
+            if thing.verbosity() > 70:
+                progress("End formula - first of length", l, F)
+            F.cannonical = F
             return F
 
         for G in possibles:
             gl = G.statements
-            if len(gl) != l: raise RuntimeError("@@Length is %i instead of %i" %(len(gl), l))
+            if len(gl) != l: raise RuntimeError("@@Length of %s is %i instead of %i" %(G, len(gl), l))
             for i in range(l):
                 for p in CONTEXT, PRED, SUBJ, OBJ:
                     if (fl[i][p] is not gl[i][p]
@@ -916,14 +954,23 @@ class RDFStore(RDFSink.RDFSink) :
             else: #match
                 if thing.verbosity() > 20: progress("** Smushed new formula %s giving old %s" % (F, G))
 #                self.replaceWith(F,G)
+                if thing.verbosity() > 70:
+                    progress("End formula -- found match! ", F, G)
                 return G
         possibles.append(F)
 #        raise oops
         F.cannonical = F
+        if thing.verbosity() > 70:
+            progress("End formula, a fresh one:"+`F`)
         return F
 
     def reopen(self, F):
-        if not F.cannonical: return F # was open
+        if F.cannonical == None:
+            if thing.verbosity() > 70:
+                progress("reopen formula -- @@ already open:"+`F`)
+            return F # was open
+        if thing.verbosity() > 70:
+            progress("reopen formula:"+`F`)
         self._formulaeOfLength[len(F.statements)].remove(F)  # Formulae of same length
         F.cannonical = None
         return F
@@ -949,7 +996,7 @@ class RDFStore(RDFSink.RDFSink) :
         Note the subs must be done first. Also note that we can't assume statements
         or formulae are valid after a call to this, unless we track the
         changes which are kept in a shared list, bindings. """
-        if thing.verbosity() > 80:
+        if thing.verbosity() > 70:
             progress("  "*level, "endFormulaNested:"+`F`+ `bindings`)
 
         if F.cannonical:
@@ -1097,8 +1144,8 @@ class RDFStore(RDFSink.RDFSink) :
         pass
 
     def endDoc(self, rootFormulaPair):
-        self.endFormulaNested(self.intern(rootFormulaPair))
-        return
+        F =self.intern(rootFormulaPair)
+        return F.close()
 
 ##########################################################################
 #
@@ -1296,9 +1343,10 @@ class RDFStore(RDFSink.RDFSink) :
                     con, pred, subj, obj = item.quad
                     if subj is x and pred is self.first: f = obj
                     if subj is x and pred is self.rest: r = obj
-                if f != None and r != None:
-                    if r.asList() ==None:  #cut
-                        raise RuntimeError("@@@@@@@ List rest not a list:" + `r`)
+                if f != None and r != None and r.asList()!= None:
+#                    if r.asList() ==None:  #cut
+#                        progress("queue=", queue)
+#                        raise RuntimeError("Rest of list %s not a list:%s" %(x,r))
                     return [ self._toPython(f, queue) ] + self._toPython(r, queue)
 #                progress("@@@", `x`, x.asList())
                 y = []
@@ -2061,7 +2109,7 @@ class RDFStore(RDFSink.RDFSink) :
         if action == None: action=self.doNothing
         total = 0
         
-        if thing.verbosity() > 50:
+        if thing.verbosity() > 28:
             progress( " "*level+"QUERY2: called %i terms, %i bindings %s, (new: %s)" %
                       (len(queue),len(bindings),bindingsToString(bindings),
                        bindingsToString(newBindings)))
@@ -2328,7 +2376,7 @@ class QueryItem:
         elif (subj.asList() != None
               and ( pred is self.store.first or pred is self.store.rest)):
             if self.neededToRun[SUBJ] == [] and self.neededToRun[OBJ] == []:
-                self.state = 5   # , it is true as an axiom.
+                self.state = 5   # @@@ ONYY If existentially qual'd @@, it is true as an axiom.
             else:
                 self.state = 7   # Still need to resolve this
         elif not isinstance(pred, HeavyBuiltIn):
