@@ -43,6 +43,12 @@ forAllSym = Logic_NS + "forAll"
 
 _Old_Logic_NS = "http://www.w3.org/2000/10/swap/log.n3#"
 
+
+class URISyntaxError(ValueError):
+    """A parameter is passed to a routine that requires a URI reference"""
+    pass
+
+
 class RDFSink:
 
     """interface to connect modules in RDF processing.
@@ -71,6 +77,8 @@ class RDFSink:
     def makeStatement(self, tuple):
         """add a statement to a stream/store.
 
+        raises URISyntaxError on bad URIs
+        
         tuple is a quad of (type, value) pairs
         """
         

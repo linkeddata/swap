@@ -194,6 +194,7 @@ class Resource(Thing):
     
     def __init__(self, uri):
         Thing.__init__(self)
+        assert string.find(uri, "#") < 0
         self.uri = uri
         self.fragments = {}
 

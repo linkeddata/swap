@@ -125,7 +125,16 @@ class RDFHandler(xml.sax.ContentHandler):
 
     def uriref(self, str):
         """ Generate uri from uriref in this document
-        """ 
+        """
+
+        # @@move this to uriparse module-to-be?
+        h1 = string.rfind(str, "#")
+        if h1 >= 0:
+            h2 = string.rfind(str[:h1], "#")
+            if h2 >= 0:
+                raise BadSyntax(sys.exc_info(),
+                                "URI with two hashes: %s" % str)
+        
         return urlparse.urljoin(self._thisURI,
                                 str.encode('utf-8')) # fails on non-ascii; do %xx encoding?
 

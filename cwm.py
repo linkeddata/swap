@@ -186,7 +186,7 @@ class StoredStatement:
             if self.triple[p] is not other.triple[p]:
                 return compareURI(self.triple[p],other.triple[p])
         progress("Problem with duplicates: '%s' and '%s'" % (quadToString(self.triple),quadToString(other.triple)))
-        raise RuntimeError # SHould never have two identical distinct
+        raise RuntimeError, "should never have two identical distinct [@@]"
 
     
 ###############################################################################################
@@ -541,10 +541,14 @@ class RDFStore(RDFSink.RDFSink) :
         return self.intern((RESOURCE,str))
     
     def intern(self, pair):
-        """  Returns either a Fragment or a Resource or Literal as appropriate
+        """find-or-create a Fragment or a Resource or Literal as appropriate
 
-    This is the way they are actually made.
-    """
+        returns URISyntaxError if, for example, the URIref has
+        two #'s.
+        
+        This is the way they are actually made.
+        """
+        
         typ, urirefString = pair
 
         if typ == LITERAL:
@@ -558,10 +562,8 @@ class RDFStore(RDFSink.RDFSink) :
 #        print " ... interning <%s>" % `uriref`
 
         assert type(urirefString) is type("") # caller %xx-ifies unicode
-        
-        hash = len(urirefString)-1
-        while (hash >= 0) and not (urirefString[hash] == "#"):
-            hash = hash-1
+
+        hash = string.rfind(urirefString, "#")
         if hash < 0 :     # This is a resource with no fragment
             r = self.resources.get(urirefString, None)
             if r: return r
@@ -570,7 +572,10 @@ class RDFStore(RDFSink.RDFSink) :
             return r
         
         else :      # This has a fragment and a resource
-            r = self.internURI(urirefString[:hash])
+            resid = urirefString[:hash]
+            if string.find(resid, "#") >= 0:
+                raise URISyntaxError
+            r = self.internURI(resid)
             if typ == RESOURCE:
                 if urirefString == notation3.N3_nil[1]:  # Hack - easier if we have a different classs
                     return r.internFrag(urirefString[hash+1:], FragmentNil)
@@ -703,6 +708,10 @@ class RDFStore(RDFSink.RDFSink) :
 
     def endDoc(self):
         pass
+
+class URISyntaxError(ValueError):
+    """A parameter is passed to a routine that requires a URI reference"""
+    pass
 
 ##########################################################################
 #

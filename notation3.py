@@ -1224,8 +1224,7 @@ t   "this" and "()" special syntax should be suppresed.
                 elif triple[PRED] == RDF_type and triple[OBJ] == N3_Empty:
                     pass  # not how we would have put it but never mind
                 elif triple[PRED] != N3_rest:
-                    print "####@@@@@@ ooops:", triple
-#                    raise RuntimeError, "Should only see first and rest in list mode"
+                    raise RuntimeError ("Should only see first and rest in list mode", triple)
             else: # compact lists
                 self._write(self.representationOf(triple[CONTEXT], triple[OBJ])+" ")
             return
