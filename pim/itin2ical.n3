@@ -14,7 +14,7 @@ $Id$
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix str: <http://www.w3.org/2000/10/swap/string#>.
 
-@prefix cal: <http://www.w3.org/2000/10/swap/pim/ical#>.
+@prefix cal: <http://www.w3.org/2002/12/cal/ical#>.
 @prefix t:   <http://www.w3.org/2000/10/swap/pim/travelTerms#> .
 
 @prefix k: <http://opencyc.sourceforge.net/daml/cyc.daml#>.
@@ -40,6 +40,9 @@ this log:forAll :FLT, :CARRIER_NAME, :NUM, :SUM,
 @prefix den: <http://www.w3.org/2002/12/cal/tzd/America/Denver#>.
 @prefix paris: <http://www.w3.org/2002/12/cal/tzd/Europe/Paris#>.
 @prefix london: <http://www.w3.org/2002/12/cal/tzd/Europe/London#>.
+@prefix zurich: <http://www.w3.org/2002/12/cal/tzd/Europe/Zurich#>.
+@prefix budapest: <http://www.w3.org/2002/12/cal/tzd/Europe/Budapest#>.
+
 
 a:MCI a k:Airport-Physical;
   k:nameString "KANSAS CITY INTL";
@@ -100,21 +103,24 @@ a:JFK a k:Airport-Physical;
   :timeZone ny:tz.
 a:DEN a k:Airport-Physical;
   :timeZone den:tz.
+a:ZRH a k:Airport-Physical;
+  :timeZone zurich:tz.
+a:BUD a k:Airport-Physical;
+  :timeZone budapest:tz.
 
+{ ?DOC a k:ItineraryDocument } => { ?DOC a cal:Vcalendar }.
+{ ?DOC a k:ItineraryDocument;
+    k:containsInformationAbout-Focally ?TRIP.
+  ?TRIP k:subEvents ?E.
+  ?E a cal:Vevent } => { ?DOC cal:component ?E }.
 
 { :FLT
     k:startingDate [ dt:date :YYMMDD];
     k:endingDate [ dt:date :YYMMDD2];
-    t:carrier [ k:nameOfAgent :CARRIER_NAME ];
-    t:flightNumber :NUM;
     t:departureTime :HH_MM;
-    k:fromLocation [ k:nameString :FROM_NAME;
-                     :timeZone [ cal:tzid :TZ] ];
+    k:fromLocation [ :timeZone [ cal:tzid :TZ] ];
     t:arrivalTime :HH_MM2;
-    k:toLocation [ k:nameString :TO_NAME;
-                   :timeZone [ cal:tzid :TZ2] ].
-  :SUM is str:concatenation of
-    (:CARRIER_NAME " #" :NUM " from " :FROM_NAME " to " :TO_NAME).
+    k:toLocation [ :timeZone [ cal:tzid :TZ2] ].
   :DTSTART is str:concatenation of
     (:YYMMDD "T" :HH_MM ":00"). #@@ extra punct in dates
   :DTEND is str:concatenation of
@@ -125,11 +131,21 @@ a:DEN a k:Airport-Physical;
  log:implies {
   :FLT a cal:Vevent;
     cal:uid :UID;
-    cal:summary :SUM;
     cal:dtstart [ cal:tzid :TZ; cal:dateTime :DTSTART ];
-    cal:dtend [ cal:tzid :TZ2; cal:dateTime :DTEND ];
-    .
-  
+    cal:dtend [ cal:tzid :TZ2; cal:dateTime :DTEND ].
+}.
+
+
+{ :FLT
+    t:carrier [ k:nameOfAgent :CARRIER_NAME ];
+    t:flightNumber :NUM;
+    k:fromLocation [ k:nameString :FROM_NAME; ];
+    k:toLocation [ k:nameString :TO_NAME; ].
+  :SUM is str:concatenation of
+    (:CARRIER_NAME " #" :NUM " from " :FROM_NAME " to " :TO_NAME).
+}
+ log:implies {
+  :FLT cal:summary :SUM.
 }.
 
 
@@ -142,11 +158,13 @@ a:DEN a k:Airport-Physical;
   dc:description "updated periodically" ].
 
 
+# @@hmm... use a rule instead?
+@prefix zurich: <http://www.w3.org/2002/12/cal/tzd/Europe/Zurich#>.
+
 chi:tz a cal:Vtimezone;
   cal:tzid "/softwarestudio.org/Olson_20011030_5/America/Chicago".
 
-
-chi:tz a cal:Vtimezone;
+ny:tz a cal:Vtimezone;
   cal:tzid "/softwarestudio.org/Olson_20011030_5/America/New_York".
 
 paris:tz a cal:Vtimezone;
@@ -160,3 +178,10 @@ la:tz a cal:Vtimezone;
 
 den:tz a cal:Vtimezone;
   cal:tzid "/softwarestudio.org/Olson_20011030_5/America/Denver".
+
+zurich:tz a cal:Vtimezone;
+  cal:tzid "/softwarestudio.org/Olson_20011030_5/Europe/Zurich".
+
+budapest:tz a cal:Vtimezone;
+  cal:tzid "/softwarestudio.org/Olson_20011030_5/Europe/Budapest".
+
