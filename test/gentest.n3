@@ -1,0 +1,42 @@
+# generate test files from RDF Core WG test manifest
+
+     @prefix : <http://www.w3.org/2000/03/rdf-tracking/#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix test: <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema/> .
+
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+    
+this log:forAll :i, :n, :o, :r, :s, :x, :y, :z.
+
+"0" log:outputString """export CWM="python ../cwm.py"\n""".
+ 
+
+
+{  [log:uri :n] a test:NT-Document.
+  ( "echo NT " :n ";$CWM --n3 " :n " --no\n") string:concatenation :s.
+} log:implies {
+   "2" log:outputString :s.
+}.
+
+
+
+{  [log:uri :n] a test:RDF-XML-Document.
+  ( "echo RDF " :n ";$CWM --rdf " :n " --no\n") string:concatenation :s.
+} log:implies {
+   "3" log:outputString :s.
+}.
+
+
+{  [] a test:PositiveParserTest;
+         test:inputDocument [log:uri :r];
+         test:outputDocument [log:uri :n].
+
+  ( "(echo PPT " :r ";$CWM --rdf " :r " --ntriples > ,temp; $CWM " :n """ --ntriples|diff - ,temp)||echo "<"""" :r """">" a test:Failure.\n") string:concatenation :s.
+} log:implies {
+   "4" log:outputString :s.
+}.
+
+
+#ENDS
