@@ -1,0 +1,19 @@
+#   Quciken(tm) Interchange Format RDF vocabulary
+#
+
+@prefix r:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix q: <http://www.w3.org/2000/10/swap/pim/qif#> .
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
+@prefix :  <http://www.w3.org/2000/10/swap/pim/qif#> .
+
+<> doc:version "$Id: " .
+
+
+q:Bank a s:Class.
+q:Cat a s:Class; s:label "caetgory".
+
+q:category a r:Property.
+
+#ENDS
