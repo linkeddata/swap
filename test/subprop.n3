@@ -1,0 +1,9 @@
+# testing rdfs rules...
+
+@prefix : <subprop#>.
+
+     @prefix u: <http://www.w3.org/2000/01/rdf-schema#> .
+
+:husband u:subPropertyOf :spouse.
+
+:Mary :husband :Dan.
