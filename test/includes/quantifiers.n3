@@ -1,6 +1,10 @@
 #  Test of interactions of qualifiers with log:includes
 #
 #  $Id$
+#
+# Usage: cwm quantifiers.n3 -think -purge
+#  Should give 18 successes and no failures.
+#
  
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 
@@ -8,11 +12,12 @@
 @prefix qu: <#>.
 
 
-# @@  Test also same tests but with fee on LHS of includes instead of foo
-
-
+# 
+# Basically,  forall x G(x) implies G(x) which implies forSome X G(x). 
+# log:includes should allow the stronger statement to "include" the weaker one.
+#
 {{ :foo :bar :baz } log:includes { this log:forSome :foo. :foo :bar :baz }}
-   log:implies { :testa2 a :success }. #FAILS TO FIRE
+   log:implies { :testa2 a :success }. # Originally failed
 
 
 
@@ -20,7 +25,7 @@
   log:implies { :testb2 a :success }.
 
 {{ this log:forAll :foo. :foo :bar :baz } log:includes {this log:forSome :foo. :foo :bar :baz }}
-  log:implies { :testc2 a :success }.  #FAILS TO FIRE
+  log:implies { :testc2 a :success }.  # Originally failed
 
 
 
@@ -28,7 +33,7 @@
   log:implies { :testa1 a :success }.
 
 {{ this log:forSome :foo. :foo :bar :baz } log:includes { :foo :bar :baz }}
-  log:implies { :testb1 a :FAILURE }.    # FAILS
+  log:implies { :testb1 a :FAILURE }.    # Originally failed, STILL FAILS.
 
 {{ this log:forAll :foo. :foo :bar :baz } log:includes { :foo :bar :baz }}
   log:implies { :testc1 a :success }.
@@ -50,13 +55,13 @@
 
 
 {{ :foo :bar :baz } log:notIncludes { this log:forSome :foo. :foo :bar :baz }}
-   log:implies { :testa2n a :FAILURE }.# FAILS
+   log:implies { :testa2n a :FAILURE }.# Originally failed
 
 {{ this log:forSome :foo. :foo :bar :baz } log:notIncludes {this log:forSome :foo. :foo :bar :baz }}
   log:implies { :testb2n a :FAILURE }. 
 
 {{ this log:forAll :foo. :foo :bar :baz } log:notIncludes {this log:forSome :foo. :foo :bar :baz }}
-  log:implies { :testc2n a :FAILURE }. # FAILS
+  log:implies { :testc2n a :FAILURE }. # Originally failed
 
 
 
@@ -86,13 +91,13 @@
 
 
 {{ :fee :bar :baz } log:includes { this log:forSome :foo. :foo :bar :baz }}
-   log:implies { :testa2d a :success }. #FAILS TO FIRE
+   log:implies { :testa2d a :success }. # Originally failed
 
 {{ this log:forSome :fee. :fee :bar :baz } log:includes {this log:forSome :foo. :foo :bar :baz }}
   log:implies { :testb2d a :success }.
 
 {{ this log:forAll :fee. :fee :bar :baz } log:includes {this log:forSome :foo. :foo :bar :baz }}
-  log:implies { :testc2d a :success }.  #FAILS TO FIRE
+  log:implies { :testc2d a :success }.  # Originally failed
 
 
 
@@ -100,7 +105,7 @@
   log:implies { :testa1d a :FAILURE }.
 
 {{ this log:forSome :fee. :fee :bar :baz } log:includes { :foo :bar :baz }}
-  log:implies { :testb1d a :FAILURE }.    # FAILS
+  log:implies { :testb1d a :FAILURE }.    # Originally failed
 
 {{ this log:forAll :fee. :fee :bar :baz } log:includes { :foo :bar :baz }}
   log:implies { :testc1d a :success }.
@@ -138,7 +143,7 @@
   log:implies { :testb1nd a :success }.
 
 {{ this log:forAll :fee. :fee :bar :baz } log:notIncludes { :foo :bar :baz }}
-  log:implies { :testc1nd a :FAILURE }.  # Originally failed
+  log:implies { :testc1nd a :FAILURE }.  # Originally failed, STILL FAILS 
 
 
 
