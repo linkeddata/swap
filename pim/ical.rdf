@@ -3,7 +3,7 @@
 <!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/pim/ical.n3-->
 
 
-<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/ical#"
+<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/pim/ical#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -13,10 +13,10 @@
     xmlns:x="http://www.w3.org/2000/01/foo-X@@#">
 
     <rdf:Property rdf:about="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vcalendar"/>
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtimezone"/>
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtodo"/>
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vcalendar"/>
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtimezone"/>
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtodo"/>
         <ss:label>type</ss:label>
     </rdf:Property>
 
@@ -26,297 +26,297 @@
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/01/foo-X@@#licLocation">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtimezone"/>
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtimezone"/>
         <ss:label>licLocation</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <s:Class rdf:about="http://www.w3.org/2000/10/swap/ical#Vcalendar">
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#calscale"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#prodid"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#version"/>
-        <ss:label>Vcalendar</ss:label>
-    </s:Class>
-
-    <s:Class rdf:about="http://www.w3.org/2000/10/swap/ical#Vevent">
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#attendee"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#categories"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#class"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#description"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#dtend"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#dtstamp"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#dtstart"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#location"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#organizer"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#rrule"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#sequence"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#summary"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#transp"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#uid"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#valarm"/>
-        <ss:label>Vevent</ss:label>
-    </s:Class>
-
-    <s:Class rdf:about="http://www.w3.org/2000/10/swap/ical#Vtimezone">
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/01/foo-X@@#licLocation"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#daylight"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#standard"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#tzid"/>
-        <ss:label>Vtimezone</ss:label>
-    </s:Class>
-
-    <s:Class rdf:about="http://www.w3.org/2000/10/swap/ical#Vtodo">
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#class"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#dtstamp"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#percentComplete"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#priority"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#sequence"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#status"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#summary"/>
-        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/ical#uid"/>
-        <ss:label>Vtodo</ss:label>
-    </s:Class>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#action">
-        <ss:label>action</ss:label>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#attendee">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:label>attendee</ss:label>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#byday">
-        <ss:label>byday</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#bymonth">
-        <ss:label>bymonth</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#calscale">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vcalendar"/>
-        <ss:label>calscale</ss:label>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#categories">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:label>categories</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#class">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtodo"/>
-        <ss:label>class</ss:label>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#cn">
-        <ss:label>cn</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#cutype">
-        <ss:label>cutype</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#date">
-        <ss:label>date</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#daylight">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtimezone"/>
-        <ss:label>daylight</ss:label>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#description">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:label>description</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#dtend">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:label>dtend</ss:label>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#dtstamp">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtodo"/>
-        <ss:label>dtstamp</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#dtstart">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:label>dtstart</ss:label>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#duration">
-        <ss:label>duration</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#freq">
-        <ss:label>freq</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#interval">
-        <ss:label>interval</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#language">
-        <ss:label>language</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#location">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:label>location</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#organizer">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:label>organizer</ss:label>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#partstat">
-        <ss:label>partstat</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#percentComplete">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtodo"/>
-        <ss:label>percentComplete</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#priority">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtodo"/>
-        <ss:label>priority</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#prodid">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vcalendar"/>
-        <ss:label>prodid</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#related">
-        <ss:label>related</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#role">
-        <ss:label>role</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#rrule">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:label>rrule</ss:label>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#rsvp">
-        <ss:label>rsvp</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#sequence">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtodo"/>
-        <ss:label>sequence</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#standard">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtimezone"/>
-        <ss:label>standard</ss:label>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#status">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtodo"/>
-        <ss:label>status</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#summary">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtodo"/>
-        <ss:label>summary</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#transp">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:label>transp</ss:label>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#trigger">
-        <ss:label>trigger</ss:label>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#tzid">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtimezone"/>
-        <ss:label>tzid</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#tzname">
-        <ss:label>tzname</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#tzoffsetfrom">
-        <ss:label>tzoffsetfrom</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#tzoffsetto">
-        <ss:label>tzoffsetto</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#uid">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtodo"/>
-        <ss:label>uid</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#valarm">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:label>valarm</ss:label>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#value">
-        <ss:label>value</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
-    </rdf:Property>
-
-    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/ical#version">
-        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vcalendar"/>
-        <ss:label>version</ss:label>
         <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/log#forSome">
         <ss:label>forSome</ss:label>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vevent"/>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtimezone"/>
-        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtodo"/>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtimezone"/>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtodo"/>
+    </rdf:Property>
+
+    <s:Class rdf:about="http://www.w3.org/2000/10/swap/pim/ical#Vcalendar">
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#calscale"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#prodid"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#version"/>
+        <ss:label>Vcalendar</ss:label>
+    </s:Class>
+
+    <s:Class rdf:about="http://www.w3.org/2000/10/swap/pim/ical#Vevent">
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#attendee"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#categories"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#class"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#description"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#dtend"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#dtstamp"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#dtstart"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#location"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#organizer"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#rrule"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#sequence"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#summary"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#transp"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#uid"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#valarm"/>
+        <ss:label>Vevent</ss:label>
+    </s:Class>
+
+    <s:Class rdf:about="http://www.w3.org/2000/10/swap/pim/ical#Vtimezone">
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/01/foo-X@@#licLocation"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#daylight"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#standard"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#tzid"/>
+        <ss:label>Vtimezone</ss:label>
+    </s:Class>
+
+    <s:Class rdf:about="http://www.w3.org/2000/10/swap/pim/ical#Vtodo">
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#type"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#class"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#dtstamp"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#percentComplete"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#priority"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#sequence"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#status"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#summary"/>
+        <ss:intersectsDomainOf rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#uid"/>
+        <ss:label>Vtodo</ss:label>
+    </s:Class>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#action">
+        <ss:label>action</ss:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#attendee">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:label>attendee</ss:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#byday">
+        <ss:label>byday</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#bymonth">
+        <ss:label>bymonth</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#calscale">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vcalendar"/>
+        <ss:label>calscale</ss:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#categories">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:label>categories</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#class">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtodo"/>
+        <ss:label>class</ss:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#cn">
+        <ss:label>cn</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#cutype">
+        <ss:label>cutype</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#date">
+        <ss:label>date</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#daylight">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtimezone"/>
+        <ss:label>daylight</ss:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#description">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:label>description</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#dtend">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:label>dtend</ss:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#dtstamp">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtodo"/>
+        <ss:label>dtstamp</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#dtstart">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:label>dtstart</ss:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#duration">
+        <ss:label>duration</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#freq">
+        <ss:label>freq</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#interval">
+        <ss:label>interval</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#language">
+        <ss:label>language</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#location">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:label>location</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#organizer">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:label>organizer</ss:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#partstat">
+        <ss:label>partstat</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#percentComplete">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtodo"/>
+        <ss:label>percentComplete</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#priority">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtodo"/>
+        <ss:label>priority</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#prodid">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vcalendar"/>
+        <ss:label>prodid</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#related">
+        <ss:label>related</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#role">
+        <ss:label>role</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#rrule">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:label>rrule</ss:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#rsvp">
+        <ss:label>rsvp</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#sequence">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtodo"/>
+        <ss:label>sequence</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#standard">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtimezone"/>
+        <ss:label>standard</ss:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#status">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtodo"/>
+        <ss:label>status</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#summary">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtodo"/>
+        <ss:label>summary</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#transp">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:label>transp</ss:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#trigger">
+        <ss:label>trigger</ss:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#tzid">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtimezone"/>
+        <ss:label>tzid</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#tzname">
+        <ss:label>tzname</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#tzoffsetfrom">
+        <ss:label>tzoffsetfrom</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#tzoffsetto">
+        <ss:label>tzoffsetto</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#uid">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vtodo"/>
+        <ss:label>uid</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#valarm">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vevent"/>
+        <ss:label>valarm</ss:label>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#value">
+        <ss:label>value</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/ical#version">
+        <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/pim/ical#Vcalendar"/>
+        <ss:label>version</ss:label>
+        <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
     </rdf:Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/util/sniffSchema#intersectsDomainOf">

@@ -5,7 +5,7 @@
 #       notation3.py,v 1.110 2002/07/06 12:52:05 timbl Exp
 
 #   Base was: file:/home/connolly/w3ccvs/WWW/2000/10/swap/pim/
-     @prefix : <http://www.w3.org/2000/10/swap/ical#> .
+     @prefix : <http://www.w3.org/2000/10/swap/pim/ical#> .
      @prefix dc: <http://purl.org/dc/elements/1.1/> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
@@ -29,6 +29,12 @@
          ss:domainIntersects :Vtimezone;
          ss:label "licLocation";
          ss:rangeIntersects s:Literal .
+    
+    log:forSome     a rdf:Property;
+         ss:label "forSome";
+         ss:rangeIntersects :Vevent,
+                :Vtimezone,
+                :Vtodo .
     
     :Vcalendar     a s:Class;
          ss:intersectsDomainOf rdf:type,
@@ -263,12 +269,6 @@
          ss:domainIntersects :Vcalendar;
          ss:label "version";
          ss:rangeIntersects s:Literal .
-    
-    log:forSome     a rdf:Property;
-         ss:label "forSome";
-         ss:rangeIntersects :Vevent,
-                :Vtimezone,
-                :Vtodo .
     
     ss:intersectsDomainOf     s:subPropertyOf s:seeAlso .
     
