@@ -88,8 +88,8 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 :vacationHome a rdf:Property;
     rdfs:domain :Person; rdfs:range :ContactLocation.
 
-:Address a rdfs:Class.
-:address a rdf:Property; rdfs:domain :ContactLocation; rdfs:range :Address;
+:address a rdf:Property; rdfs:domain :ContactLocation; rdfs:range :Address.
+:Address a rdfs:Class;
     is rdfs:domain of :Street, :Street2, :Street3,
 		:City, :StateOrProvince, :PostalCode, :Country .
 
@@ -269,7 +269,10 @@ mso:WebPage  a rdf:Property;
 
 <> rcs:log """
 $Log$
-Revision 1.9  2001-11-05 16:30:21  connolly
+Revision 1.10  2001-11-05 16:43:02  connolly
+oops... really updated RDF/xml version
+
+Revision 1.9  2001/11/05 16:30:21  connolly
 fixed log: prefix; updated RDF/xml version
 
 Revision 1.8  2001/11/05 16:28:37  connolly
