@@ -425,7 +425,7 @@ class RDFStore(notation3.RDFSink) :
                 mp = r
         if mp is None: return
         
-        if chatty < 20: print "# Most popular Namesapce in %s is %s with %i" % (`context`, `mp`, best)
+        if chatty > 20: print "# Most popular Namesapce in %s is %s with %i" % (`context`, `mp`, best)
         mpPair = (RESOURCE, mp.uriref(None)+"#")
         defns = self.namespaces.get("", None)
         if defns :
@@ -1329,8 +1329,10 @@ def doCommand():
  -pipe      Don't store, just pipe out *
 
  -rdf       Input & Output ** in RDF M&S 1.0 insead of n3 from now on
+ -n3        Input & Output in N3 from now on
  -ugly      Store input and regurgitate *
  -bySubject Store inpyt and regurgitate in subject order *
+ -no        No output *
             (default is to store and pretty print with anonymous nodes) *
  -apply=foo Read rules from foo, apply to store, adding conclusions to store
  -filter=foo Read rules from foo, apply to store, REPLACING store with conclusions
@@ -1342,7 +1344,10 @@ def doCommand():
 
             * mutually exclusive
             ** doesn't work for complex cases :-/
- 
+Examples:
+  cwm -rdf foo.rdf -n3 -pipe        Convert from rdf to n3
+  cwm foo.n3 bar.n3 -think          Combine data and find all deductions
+
 """
         
         import urllib
@@ -1359,7 +1364,6 @@ def doCommand():
         # The base URI for this process - the Web equiv of cwd
 #	_baseURI = "file://" + hostname + os.getcwd() + "/"
 	_baseURI = "file:" + fixslash(os.getcwd()) + "/"
-	print "# Base URI of process is" , _baseURI
 	
         option_rdf = 0      # Use RDF rather than XML
         _outURI = _baseURI
@@ -1399,6 +1403,8 @@ def doCommand():
             _outSink = notation3.ToRDF(sys.stdout, _outURI)
         else:
             _outSink = notation3.ToN3(sys.stdout.write, _outURI)
+	_outSink.makeComment("# Base URI of process is" + _baseURI)
+
 
         if option_pipe:
             _store = _outSink
@@ -1410,12 +1416,13 @@ def doCommand():
 
         if not _gotInput: #@@@@@@@@@@ default input
             _inputURI = _baseURI # Make abs from relative
-            inputContext = myEngine.internURI(_inputURI)
             p = notation3.SinkParser(_store,  _inputURI)
             p.load("")
             del(p)
-            if inputContext is not workingContext:
-                _store.moveContext(inputContext,workingContext)  # Move input data to output context
+            if not option_pipe:
+                inputContext = myEngine.internURI(_inputURI)
+                if inputContext is not workingContext:
+                    _store.moveContext(inputContext,workingContext)  # Move input data to output context
 
 
 #  Take commands from command line: Second Pass on command line:
