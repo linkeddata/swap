@@ -41,7 +41,7 @@ style="float: right" src="../../../../RDF/icons/n3_small" />
     (ontology comments? DesignIssues? )</li>
 </ul>
 
-<h2>by Release 1.0 2004/09/??</h2>
+<h2>by Release 1.0 2004/11/31?</h2>
 
 <p></p>
 <ul>
@@ -50,6 +50,8 @@ style="float: right" src="../../../../RDF/icons/n3_small" />
       <li>tarball (with test) (<em>done in 0.8</em>)</li>
       <li>pyton setup.py <em>(in progress as of 22 Jul. Now works - yosi
         2004/9/3.)</em></li>
+      <li>dpkg debian packaging Done once setup.py -&gt; RPM -alien-&gt;
+        debian</li>
     </ul>
   </li>
   <li>allow alternative parsers; in particular, 
@@ -65,9 +67,19 @@ style="float: right" src="../../../../RDF/icons/n3_small" />
     [notional] deductive closure of a formula is a function which is equally
     valid in forward and backward chaining systems. Providing it will allow
     the same problems to be tackled by different techniques, and different
-    systems and clones.</li>
+    systems and clones. (written - yosi)</li>
   <li>connect with semwebcentral <em>(Now exists on semwebcentral as much as
     it can link to its w3.or home 2004/9/1)</em></li>
+  <li>Bugs:
+    <ul>
+      <li> --patch diff.py now can generate weak deltas when necessary, when
+        the graphs are not solid
+        <p>Offline working hack in webaccess.py</p>
+        <p>Fixed bug in llyn.py with interning of datatyped literals giving
+        diff objects for same type  sometimes. </p>
+      </li>
+    </ul>
+  </li>
   <li>W3.org homepage announcement</li>
 </ul>
 
