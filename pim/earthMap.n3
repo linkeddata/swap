@@ -9,7 +9,7 @@
 	 "$Id$";
   s:seeAlso <../n-triples2xplanet.pl>,
 	<http://www.w3.org/2001/sw/WebOnt/mapStyle.n3>,
-	<http://www.w3.org/2001/sw/WebOnt/xplanet-filter.n3>;
+	<http://www.w3.org/2001/sw/WebOnt/xplanet-filter.n3>,
 	<http://www.w3.org/2001/sw/WebOnt/Makefile>;
   dc:description """developed initially to map WebOnt WG folk
 	on the globe; refined a bit in the context of a 2nd
@@ -57,3 +57,10 @@ map:y a r:Property; s:label "y", "y coordinate";
 	dc:source [ = <http://www.mathforum.com/dr.math/problems/longandlat.html>;
 		dc:title "Using Longitude and Latitude to Determine Distance"]
   ].
+
+
+:City a s:Class; s:label "City".
+:cityName s:label "city name"; s:domain :City.
+
+:Country a s:Class; s:label "Country".
+:countryName s:label "country name"; s:domain :Country.
