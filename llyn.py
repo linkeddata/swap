@@ -129,12 +129,13 @@ import re
 import StringIO
 import sys
 import time
-import uripath
+from warnings import warn
 
 
 import urllib # for log:content
 import md5, binascii  # for building md5 URIs
 
+import uripath
 import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
@@ -788,11 +789,7 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
 	store = self.store
 	if ':' not in object:
 	    progress("Warning: taking log:uri of non-abs: %s" % object)
-        if type(object) is type(""):
-	    return store.intern((SYMBOL, object))
-        elif type(object) is type(u""):
-	    uri = object.encode('utf-8') #@@ %xx-lify
-	    return store.intern((SYMBOL, uri))
+        return store.intern((SYMBOL, object))
 
 
 class BI_rawUri(BI_uri):
@@ -1031,11 +1028,11 @@ class BI_n3String(LightBuiltIn, Function):      # Light? well, I suppose so.
     parse back using parsedAsN3 to exaclty the same original formula.
     If we *did* have a canonical form it would be great for signature
     A canonical form is possisble but not simple."""
-    def evalObj(self, store, context, subj, queue, bindings, proof, query):
+    def evalObj(self, subj, queue, bindings, proof, query):
         if diag.chatty_flag > 50:
             progress("Generating N3 string for:"+`subj`)
         if isinstance(subj, Formula):
-            return store.intern((LITERAL, subj.n3String()))
+            return self.store.intern((LITERAL, subj.n3String()))
 
     
 ################################################################################################
@@ -1335,14 +1332,13 @@ class RDFStore(RDFSink) :
 
 
     def internURI(self, str, why=None):
-	"old -use symbol()"
-        assert type(str) is type("") # caller %xx-ifies unicode
+        warn("use symbol()", DeprecationWarning, stacklevel=3)
         return self.intern((SYMBOL,str), why=None)
 
     def symbol(self, str):
-	"""Intern a URI for a symvol, returning a symbol object"""
-        assert type(str) is type("") # caller %xx-ifies unicode
-        return self.intern((SYMBOL,str), why=None)
+	"""Intern a URI for a symbol, returning a symbol object"""
+
+        return self.intern((SYMBOL, str), why=None)
     
     def _fromPython(self, x, queue=None):
 	"""Takem a python string, seq etc and represent as a llyn object"""
@@ -1385,10 +1381,6 @@ class RDFStore(RDFSink) :
         if typ == LITERAL:
 	    return self.newLiteral(urirefString, dt, lang)
         else:
-	    assert isinstance(urirefString, tuple(types.StringTypes))
-	    if isinstance(urirefString, types.UnicodeType):
-		urirefString = notation3.hexify(urirefString.encode('utf-8'))
-#            assert type(urirefString) is type("") # caller %xx-ifies unicode
             assert ':' in urirefString, "must be absolute: %s" % urirefString
 
             hash = string.rfind(urirefString, "#")
@@ -1440,7 +1432,7 @@ class RDFStore(RDFSink) :
 
 
     def bind(self, prefix, uri):
-	assert type(uri) is type("")
+
         if prefix != "":   #  Ignore binding to empty prefix
             return RDFSink.bind(self, prefix, uri) # Otherwise, do as usual.
     
