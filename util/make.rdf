@@ -1,0 +1,46 @@
+
+<!-- Processed by Id: cwm.py,v 1.126 2003/02/14 17:48:08 sandro Exp -->
+<!--     using base file:/home/ryanlee/WWW/2000/10/swap/util/make-informal.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/10/swap/util/make#"
+    xmlns:daml="http://www.daml.org/2001/03/daml+oil#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:make="http://www.w3.org/2000/10/swap/util/make#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#">
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/util/make#dependsOn">
+        <s:description>A make target depends on this file.</s:description>
+        <s:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <s:isDefinedBy rdf:resource="http://www.w3.org/2000/10/swap/util/make#"/>
+        <s:label>Depends On</s:label>
+        <s:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/util/make#fromExt">
+        <s:description>A make conversion will convert a file from this type/extension; should in practice be coupled with make:toExt</s:description>
+        <s:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <s:isDefinedBy rdf:resource="http://www.w3.org/2000/10/swap/util/make#"/>
+        <s:label>From Extension</s:label>
+        <s:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <s:seeAlso rdf:resource="http://www.w3.org/2000/10/swap/util/make#toExt"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/util/make#recipeList">
+        <s:description>An RDF list of the steps make will take to generate the intended target</s:description>
+        <s:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <s:isDefinedBy rdf:resource="http://www.w3.org/2000/10/swap/util/make#"/>
+        <s:label>Recipe List</s:label>
+        <s:range rdf:resource="http://www.daml.org/2001/03/daml+oil#List"/>
+    </rdf:Property>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/util/make#toExt">
+        <s:description>A make conversion will convert a file to this type/extensio; should in practice be coupled with make:fromExt</s:description>
+        <s:domain rdf:resource="http://www.w3.org/2000/01/rdf-schema#Resource"/>
+        <s:isDefinedBy rdf:resource="http://www.w3.org/2000/10/swap/util/make#"/>
+        <s:label>To Extension</s:label>
+        <s:range rdf:resource="http://www.w3.org/2000/01/rdf-schema#Literal"/>
+        <s:seeAlso rdf:resource="http://www.w3.org/2000/10/swap/util/make#toExt"/>
+    </rdf:Property>
+</rdf:RDF>
