@@ -63,7 +63,7 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 	:middleName,
 	:lastName,
 	:personalSuffix,
-	:company,         # SocialEntity
+	:organization,         # SocialEntity, was company
 	:departmentName .
 
 
@@ -273,7 +273,7 @@ mso:WebPage  a rdf:Property;
 
 <> dc:description """
 $Log$
-Revision 1.16  2002-10-07 19:41:37  timbl
+Revision 1.17  2002-10-07 20:50:00  timbl
 (timbl) Changed through Jigsaw.
 
 Revision 1.13  2002/07/18 05:30:49  connolly
