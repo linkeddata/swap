@@ -45,23 +45,27 @@ formula_list(usable).
 %
 %   owl_intersectionOf
 %
-%   not really full semantics
 
 all INST CLASS LIST (
-   rdf(INST, rdf_type, CLASS) &
    rdf(CLASS, owl_intersectionOf, LIST)
    ->
-   instanceOfAll(INST, LIST)
+   ( rdf(INST, rdf_type, CLASS) 
+     <->
+     instanceOfAll(INST, LIST)
+   )
 ).
 
 all INST LIST HEAD TAIL (
-   (rdf(LIST, rdf_first, HEAD) &
-    rdf(LIST, rdf_rest, TAIL) &
-    rdf(INST, rdf_type, HEAD) &
-    instanceOfAll(INST, TAIL))
-  ->
-   instanceOfAll(INST, LIST)
+   ( rdf(LIST, rdf_first, HEAD) &
+     rdf(LIST, rdf_rest, TAIL) )
+   ->
+   ( instanceOfAll(INST, LIST)		
+     <->
+     ( rdf(INST, rdf_type, HEAD) &
+       instanceOfAll(INST, TAIL) )
+   )
 ).
+
 all INST (instanceOfAll(INST, rdf_nil)).
 
 
@@ -519,7 +523,10 @@ all P1 P2 (
 ).
     
 % $Log$
-% Revision 1.10  2003-07-30 06:46:58  sandro
+% Revision 1.11  2003-07-30 18:51:00  sandro
+% fixed intersectionOf, removed some leftover comments
+%
+% Revision 1.10  2003/07/30 06:46:58  sandro
 % supporting several more tests, and coincidentally improving
 % performance dramatically in our bad cases.
 % Added some lemmas for subClass
@@ -549,8 +556,3 @@ all P1 P2 (
 % added Id and Log cvs keywords
 %
 
-%     rdf(obj, ns6_prop, ss).
-% -rdf(ss, rdf_type, ns6_Singleton).
-% -rdf(ss, owl_sameAs, s).
-% -(all x y z ( (rdf(x, ns6_prop, y) & rdf(x, ns6_prop, z)) -> rdf(y, owl_sameAs, z))).
-% -rdf(ns6_prop, rdf_type, owl_FunctionalProperty).
