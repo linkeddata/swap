@@ -1703,6 +1703,7 @@ Examples:
         _gotInput = 0     #  Do we not need to take input from stdin?
         option_meta = 0
         option_rdf_flags = ""  # Random flags affecting parsing/output
+        option_quiet = 0
 
         _step = 0           # Step number used for metadata
 
@@ -1735,6 +1736,7 @@ Examples:
                 option_format = "rdf"
                 option_rdf_flags = _rhs
             elif arg == "-n3": option_format = "n3"
+            elif arg == "-quiet": option_quiet = 1
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-bySubject": _doneOutput = 1
             elif _lhs == "-outURI": option_outURI = _uri
@@ -1771,10 +1773,11 @@ Examples:
 	if option_format == "rdf":
             _outSink = notation3.ToRDF(sys.stdout, _outURI, base=option_baseURI, flags=option_rdf_flags)
         else:
-            _outSink = notation3.ToN3(sys.stdout.write, base=option_baseURI)
+            _outSink = notation3.ToN3(sys.stdout.write, base=option_baseURI, quiet=option_quiet)
         version = "$Id$"
-	_outSink.makeComment("Processed by " + version[1:-1]) # Strip $ to disarm
-	_outSink.makeComment("    using base " + option_baseURI)
+	if not option_quiet:
+            _outSink.makeComment("Processed by " + version[1:-1]) # Strip $ to disarm
+            _outSink.makeComment("    using base " + option_baseURI)
         if option_reify: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula")
         if option_flat: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula", flat=1)
 
@@ -1803,6 +1806,7 @@ Examples:
 
         option_format = "n3"      # Use RDF rather than XML
         option_rdf_flags = ""
+        option_quiet = 0
         _outURI = _baseURI
         option_baseURI = _baseURI     # To start with
         for arg in sys.argv[1:]:  # Command line options after script name
@@ -1854,7 +1858,7 @@ Examples:
                 option_format = "rdf"
                 option_rdf_flags = _rhs
             elif arg == "-n3": option_format = "n3"
-            
+            elif arg == "-quiet" : option_quiet = 1            
             elif _lhs == "-chatty": chatty = int(_rhs)
 
             elif arg == "-reify":

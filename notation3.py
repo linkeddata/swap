@@ -1177,8 +1177,9 @@ class ToN3(RDFSink):
 #  We use here a convention that underscores at the start of fragment IDs
 # are reserved for generated Ids. The caller can change that.
 
-    def __init__(self, write, base=None, genPrefix = "#_", noLists=0 ):
+    def __init__(self, write, base=None, genPrefix = "#_", noLists=0 , quiet=0):
 	self._write = write
+	self._quiet = quiet
 	self._subj = None
 	self.prefixes = {}      # Look up prefix conventions
 	self.indent = 1         # Level of nesting of output
@@ -1208,17 +1209,19 @@ class ToN3(RDFSink):
 
     def startDoc(self):
  
-        self._write("\n#  Notation3 generation by\n")
-        idstring = "$Id$" # CVS CHANGES THIS
-        self._write("#       " + idstring[5:-2] + "\n\n") # Strip $s in case result is checked in
-        if self.base: self._write("#   Base was: " + self.base + "\n")
+        if not self._quiet:  # Suppress stuff which will confuse test diffs
+            self._write("\n#  Notation3 generation by\n")
+            idstring = "$Id$" # CVS CHANGES THIS
+            self._write("#       " + idstring[5:-2] + "\n\n") # Strip $s in case result is checked in
+            if self.base: self._write("#   Base was: " + self.base + "\n")
         self._write("    " * self.indent)
         self._subj = None
         self._nextId = 0
 
     def endDoc(self):
 	self._endStatement()
-	self._write("\n #ENDS\n")
+	self._write("\n")
+	if not self._quiet: self._write("#ENDS\n")
 
     def makeComment(self, str):
         for line in string.split(str, "\n"):
