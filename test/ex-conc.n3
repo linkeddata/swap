@@ -1,9 +1,21 @@
 @prefix : <#>.
-@prefix log: <http://www.w3.org/2000/10/swap/log.n3#>.
 
-:dan :uncle :shannon.
+#@prefix log: <http://www.w3.org/2000/10/swap/log.n3#>.
 
-<> log:forAll :x, :y.
+#:dan :uncle :shannon.
+#
+#<> log:forAll :x, :y.
+#
+#{ :x :uncle :y } log:implies { :x :sibling [ is :parent of :y] }.
 
-{ :x :uncle :y } log:implies { :x :sibling [ is :parent of :y] }.
+# Simplified (mimimized) fault case:
+# Fault was cwm output:
+#   <#a>     = {
+#      [      :forSome <#_g1> ].
+#    <#s1>     <#p> <#_g1> .
+#    <#s2>     <#q> <#_g1> .
+#    } .
 
+:a = { :s1 :p1 [ is :p2 of :s2 ] . } .
+
+# ends
