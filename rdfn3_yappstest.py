@@ -32,4 +32,5 @@ def testKIF(text, addr):
 
 if __name__ == '__main__':
     import os
-    testKIF(sys.stdin.read(), 'file:%s/STDIN' % (os.getcwd(),))
+    import profile
+    profile.run("testKIF(sys.stdin.read(), 'file:%s/STDIN' % (os.getcwd(),))")

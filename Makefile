@@ -1,6 +1,6 @@
 # $Id$
 
-PYTHON=python2
+PYTHON=python
 
 YAPPS=yapps2.py
 
