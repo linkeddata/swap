@@ -13,56 +13,91 @@
 
 @prefix foo: <foo.n3#>.  # Local stuff
 
-# Usage:   cwm t11.n3 -think
+# Usage:   TARGET=myfile.n3 cwm check.n3 -think -purge
 #
-# Output should conclude all test* a :success and no failures.
+# Output should not incldue any error messages.
 #
-
 
 this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
 
-{ :x os:environ "HOME" } log:implies { :HOME :is :x }.
-{ [ log:uri [is os:environ of "TARGET" ]] log:resolvesTo :F } log:implies { :F a :target }.
+#  Some terms we will be using in this document:
 
-{ :F a :target .
-  :F log:includes { :s :p :o}   } log:implies { :p a :UsedAsProperty } .
+:usedAsPropertyIn a rdf:Property;
+    s:description "This term is used as a Property in the given document.".
 
+:within a rdf:Property;
+    s:description "relationship between a subforumula and the document it was found in".
+
+:targetDocument a s:Class;
+    s:description "Documents which this run is checking for schema validity".
+
+# Target formulae are the top level formula we are pointed at,
+#  and any subformulae.
+
+{ :d log:uri [is os:environ of "TARGET"]  } log:implies { :d a :targetDocument }.
+
+{ :d a :targetDocument. :d log:resolvesTo :F } log:implies { :F :within :d }.
+
+# Define subforumulae which are within the target documents:
+
+{ :d a :targetDocument.
+  :F :within :d.
+  :F log:includes { :s :p :o}.
+  :s log:rawType  log:Formula   } log:implies { :s :within :d } .
+
+{ :d a :targetDocument.
+  :F :within :d.
+  :F log:includes { :s :p :o}.
+  :o log:rawType  log:Formula   } log:implies { :o :within :d } .
+
+# Anything used as a predicate in any target formula should be checked.
+# We don't bother bout the pseudoproperties log:forSome and log:forAll.
+
+{ :d a :targetDocument.
+  :F :within :d.
+  :F log:includes { :s :p :o}.
+  :p log:notEqualTo log:forSome, log:forAll } log:implies { :p :usedAsPropertyIn :d } .
 
 #  The RDFS spec implies the following algorithm for the definitive schema corresponding
 #  to a Property :p.  (From Ralph Swick, whiteboard conversation)
 #  Maybe we should simplify it to the schema being the result of dereferencing the Property?
 #  I think the counterexample is the dublin core, but it may not work anyway.
 
-{ :p a :UsedAsProperty .
+{ :d a :targetDocument.
+  :p :usedAsPropertyIn :d.
   :p log:resolvesTo [log:includes { :p s:isDefinedBy :s }] } log:implies {:p :schema :s}.
 
+# We actually need the formula the schema parses to:
 
-# We may need the schema as a formula two:
+{ :p :schema [ log:resolvesTo :F ] } log:implies { :p :schemaFormula :F }. 
 
-{     :p :schema [ log:resolvesTo :F ] } log:implies { :p :schemaFormula :F }. 
+
+# Alternatively, the schema can just be the document we pick up
+# directly  This is much simpler!
+#
+#   { :p  log:resolvesTo :F  } log:implies { :p :schemaFormula :F.  :p :declaredInDirectSchema }. 
+
+   { :p  :usedAsPropertyIn :d .
+     :d  a :targetDocument.
+     :p  log:resolvesTo :F.
+     :F  log:includes { :p a rdf:Property } } log:implies { :p :schemaFormula :F.
+                                                             :p a :declaredInDirectSchema  }. 
 
 #  If there is no schema found, then we flag a problem
 
-{ :p a :UsedAsProperty .
-  :p log:resolvesTo [log:notIncludes { :p s:isDefinedBy :x }]
-} log:implies {:p a :ERROR_CANT_GET_SCHEMA}.
-
-
-{ :p a :UsedAsProperty .
+{ :d a :targetDocument.
+  :p :usedAsPropertyIn :d.
   :p log:resolvesTo :F.
-  :F log:includes { :p s:isDefinedBy :s }.
-  :s log:resolvesTo :G } log:implies { :p :schemaFormula :G }.
-
-# FYI
-{:p :schemaFormula :F.
- :F log:includes { :p a rdf:Property }}log:implies { :p a :Property_declared } .
+  :F log:notIncludes { :p s:isDefinedBy :x }.   # No indirect Schema
+  :F log:notIncludes { :p a rdf:Property }.      # Not a direct schema
+} log:implies { :d :ERROR_NO_SCHEMA_OR_NOT_DECLARED :p }.
 
 
 # It is an error, we say, for something to be used as a Property but
 # not *explicitly* declared as such in the schema:
 
 {:p :schemaFormula :F.
- :F log:notIncludes { :p a rdf:Property }}log:implies { :p a :ERROR_PROPERTY_NOT_DECLARED } .
+ :F log:notIncludes { :p a rdf:Property }}log:implies { :d :ERROR_PROPERTY_NOT_DECLARED :p } .
  
 
 #   (b)when the document is combined with the above, no condradiction
@@ -71,7 +106,13 @@ this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
 
 log:implies a log:Chaff.  #  Clear out rules on -purge
 
+{ :F a :target } log:implies { :F a log:Chaff }. # Clear our formulae
 
-
+log:Chaff is rdf:type of log:forAll,
+    :within,
+    :schemaFormula, :schema,
+    :targetDocument,
+    :usedAsPropertyIn.
  
 #ends
+
