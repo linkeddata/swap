@@ -213,6 +213,7 @@ class SinkParser:
         self._nextId = 0
         self.lines = 0              # for error handling
         self._genPrefix = genPrefix
+        self._anonymousNodes = []   # List of anon nodes already declared
 
         if not self._baseURI: self._baseURI = self._thisDoc
         if not self._genPrefix: self._genPrefix = self._thisDoc + "#_g"
@@ -232,7 +233,7 @@ class SinkParser:
                             subj))                      # obj
         
     def formula(self):
-        return self._forumula
+        return self._formula
     
     def load(self, uri, _baseURI=""):
         if uri:
@@ -281,7 +282,8 @@ class SinkParser:
 
 
     #@@I18N
-    _namechars = string.lowercase + string.uppercase + string.digits + '_-'
+    global _namechars
+    _namechars = string.lowercase + string.uppercase + string.digits + '_'
 
     def tok(self, tok, str, i):
         """tokenizer strips whitespace and comment"""
@@ -298,7 +300,7 @@ class SinkParser:
 #                    i = i + 1
 #            else: break
 	if (str[i:i+len(tok)] == tok
-            and (tok[0] not in self._namechars    # check keyword is not prefix
+            and (tok[0] not in _namechars    # check keyword is not prefix
                 or str[i+len(tok)] in string.whitespace )):
 	    i = i + len(tok)
 	    return i
@@ -433,6 +435,15 @@ class SinkParser:
 	if subj is None:   # If this can be a named node, then check for a name.
             j = self.uri_ref2(str, i, res)
             if j >= 0:
+                if res[0][0] == ANONYMOUS:
+                    x = RESOURCE , self._genPrefix + res[0][1] # ANONYMOUS node
+                    if x not in self._anonymousNodes:
+                        self._anonymousNodes.append(x)
+                        self.makeStatement((self._formula, # Make declaration at outermost level
+                            (RESOURCE, N3_forSome_URI), #pred
+                            self._formula,  #subj    Scope of universal quantification is whole document
+                            x))                      # declare it as anonymous only once
+                    res[0] = x
                 return j
 
 
@@ -562,7 +573,10 @@ class SinkParser:
 		try:
 		    ns = self._bindings[pfx]
 		except KeyError:
-		    raise BadSyntax(self.lines, str, i, "prefix not bound")
+                    if pfx == "_":   # Magic prefix added 2001/05/30, can be overridden
+                        res.append(( ANONYMOUS, ln))
+                        return j
+		    raise BadSyntax(self.lines, str, i, "Prefix %s not bound" % (pfx))
             res.append(( RESOURCE, ns + ln)) # @@@ "#" CONVENTION
             if not string.find(ns, "#"):print"Warning: no # on NS %s,"%(ns,)
 	    return j
@@ -616,7 +630,7 @@ class SinkParser:
         if str[j:j+1] != "?": return -1
         j=j+1
         i = j
-	while i <len(str) and str[i] in self._namechars:
+	while i <len(str) and str[i] in _namechars:
             i = i+1
         res.append( self.varPrefix + str[j:i])
 #        print "Variable found: <<%s>>" % str[j:i]
@@ -634,12 +648,12 @@ class SinkParser:
 	else: i=j
 
 	c = str[i]
-	if c in self._namechars:
+	if c in _namechars:
 	    ln = c
 	    i = i + 1
 	    while i < len(str):
 		c = str[i]
-		if c in self._namechars:
+		if c in _namechars:
 		    ln = ln + c
 		    i = i + 1
 		else: break
@@ -652,7 +666,7 @@ class SinkParser:
 	    ln = ''
 	    while i < len(str):
 		c = str[i]
-		if c in self._namechars:
+		if c in _namechars:
 		    ln = ln + c
 		    i = i + 1
 		else: break
@@ -808,6 +822,9 @@ def stripCR(str):
 
 
 ########################## RDF 1.0 Syntax generator
+
+    global _namechars	
+    _namechars = string.lowercase + string.uppercase + string.digits + '_'
 	    
 class ToRDF(RDFSink):
     """keeps track of most recent subject, reuses it"""
@@ -825,7 +842,6 @@ class ToRDF(RDFSink):
 	self._docOpen = 0  # Delay doc open <rdf:RDF .. till after binds
 
     #@@I18N
-    _namechars = string.lowercase + string.uppercase + string.digits + '_'
     _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
 
     def startDoc(self):
@@ -1183,10 +1199,13 @@ class ToN3(RDFSink):
 # document very much more readable to regenerate the IDs.
 #  We use here a convention that underscores at the start of fragment IDs
 # are reserved for generated Ids. The caller can change that.
+#
+# Now there is a new way of generating these, with the "_" prefix for anonymous nodes.
 
-    def __init__(self, write, base=None, genPrefix = "#_", noLists=0 , quiet=0):
+    def __init__(self, write, base=None, genPrefix = "#_", noLists=0 , quiet=0, flags=""):
 	self._write = write
-	self._quiet = quiet
+	self._quiet = quiet or "q" in flags
+	self._flags = flags
 	self._subj = None
 	self.prefixes = {}      # Look up prefix conventions
 	self.indent = 1         # Level of nesting of output
@@ -1196,18 +1215,32 @@ class ToN3(RDFSink):
 	self.genPrefix = genPrefix  # Prefix for generated URIs on output
 	self.stack = [ 0 ]      # List mode?
 	self.noLists = noLists  # Suppress generation of lists?
+	self._anonymousNodes = [] # For "a" flag
 
 	
 	#@@I18N
     _namechars = string.lowercase + string.uppercase + string.digits + '_'
     _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
 
+    def flagDocumentation(self):
+        return """Flags for N3 output are as follows:-
+        
+a   Anonymous nodes should be output using the _: convention (p flag or not).
+p   Prefix suppression - don't use them, always URIs in <> instead of qnames.
+q   Quiet - don't make comments about the environment in which processing was done.
+r   Relative URI suppression. Always use absolute URIs.
+s   Subject must be explicit for every statement. Don't use ";" shorthand.
+t   "this" and "()" special syntax should be suppresed.
+"""
+    
     def newId(self):
         nextId = nextId + 1
         return nextId - 1
     
     def bind(self, prefixString, nsPair):
         """ Just accepting a convention here """
+        if "p" in self._flags: return  # Ignore the prefix system completely
+        
         self._endStatement()
         self.prefixes[nsPair] = prefixString
         self._write(" @prefix %s: <%s> ." % (prefixString, relativeURI(self.base, nsPair[1])) )
@@ -1247,14 +1280,19 @@ class ToN3(RDFSink):
                 pass  # We knew
             elif triple[PRED] == RDF_type and triple[OBJ] == N3_Empty:
                 pass  # not how we would have put it but never mind
-#                self._write("# Empty set terminated\n")
             elif triple[PRED] != N3_rest:
                 print "####@@@@@@ ooops:", triple
                 raise intenalError # Should only see first and rest in list mode
             return
+        
+        if ("a" in self._flags and
+            triple[PRED] == (RESOURCE, N3_forSome_URI) and
+            triple[CONTEXT] == triple[SUBJ]):   # We assume the output is flat @@@
+            self._anonymousNodes.append(triple[OBJ])
+            return
+
         self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])        
         self._write(self.representationOf(triple[CONTEXT], triple[OBJ]))
-#        self._write(" (in %s) " % `context`)    #@@@@
         
 # Below is for writing an anonymous node which is the object of only one arc        
     def startAnonymous(self,  triple, isList=0):
@@ -1383,7 +1421,7 @@ class ToN3(RDFSink):
 
         if self.stack[-1]: return  # If we are in list mode, don't need to.
         
-        if self._subj != subj:
+        if self._subj != subj or "s" in self._flags:
             self._endStatement()
             if self.indent == 1:  # Top level only - extra newline
                 self._newline()
@@ -1424,11 +1462,24 @@ class ToN3(RDFSink):
         """
 
 #        print "# Representation of ", `pair`
-        if pair == context:
-            return "this"
-        if pair == N3_nil and not self.noLists:
-            return"()"
+        if "t" not in self._flags:
+            if pair == context:
+                return "this"
+            if pair == N3_nil and not self.noLists:
+                return"()"
+
         type, value = pair
+        if pair in self._anonymousNodes:   # "a" flags only
+            i = value.find(self.genPrefix + "g")  # One of our conversions?
+            if i >= 0:
+                str = value[i+len(self.genPrefix)+1:]
+            else:
+                sys.stderr.write("#@@@@@ Ooops ---  anon "+value+"\n with genPrefix "+self.genPrefix+"\n")
+                i = len(value)
+                while i > 0 and value[i-1] in _namechars: i = i - 1
+                str = value[i:]
+            return "_:" + str
+
         if ((type == VARIABLE or type == ANONYMOUS)
             and not option_noregen ):
                 i = self.regen.get(value,self.nextId)
@@ -1441,12 +1492,14 @@ class ToN3(RDFSink):
         if type == LITERAL: return stringToN3(value)
 
         j = string.rfind(value, "#")
-        if j>=0:
+        if j>=0 and "p" not in self._flags:   # Suppress use of prefixes?
             prefix = self.prefixes.get((RESOURCE, value[:j+1]), None) # @@ #CONVENTION
             if prefix != None : return prefix + ":" + value[j+1:]
         
             if value[:j] == self.base:   # If local to output stream,
                 return "<#" + relativeURI(self.base, value[j+1:]) + ">" #   use local frag id (@@ lone word?)
+            
+        if "r" in self._flags: return "<" + value+ ">"    # Suppress relative URIs?
 
         return "<" + relativeURI(self.base, value) + ">"    # Everything else
 
@@ -1488,7 +1541,7 @@ class Reifier(RDFSink):
         self._ns = "http://www.w3.org/2000/10/swap/model.n3#"
         self.sink.bind("n3", (RESOURCE, self._ns))
         self._nextId = 1
-        self._context = (RESOURCE, contextURI)
+        self._context = (FORMULA, contextURI)
         self._genPrefix = genPrefix
         self._flat = flat      # Just flatten things not in this context
         if self._genPrefix == None:
@@ -1503,6 +1556,7 @@ class Reifier(RDFSink):
         N3_NS = "http://www.w3.org/2000/10/swap/model.n3#"
         name = "context", "predicate", "subject", "object"
 
+        if chatty > 50: progress("Reifying in  contexts stg with context %s."%(self._context,tuple[CONTEXT]))
         if self._flat and tuple[CONTEXT] == self._context:
             return self.sink.makeStatement(tuple)   # In same context: does not need reifying
 
