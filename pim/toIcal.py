@@ -83,11 +83,13 @@ class CalWr:
             val  = sts.any(comp, ICAL.sym(predName))
             if val:
                 if valueType == 'TEXT':
-                    self.doTEXT(sts, val, prop, predName)
+                    self.doSIMPLE(mkTEXT(val), prop)
                 elif valueType == 'INTEGER':
-                    self.doINTEGER(sts, val, prop, predName)
+                    self.doSIMPLE(mkINTEGER(val), prop)
+                elif valueType == 'FLOAT':
+                    self.doSIMPLE(mkFLOAT(val), prop)
                 elif valueType == 'URI':
-                    self.doURI(sts, val, prop, predName)
+                    self.doURI(val, prop)
                 elif valueType == 'DATE-TIME':
                     self.doDateTime(sts, val, prop, predName)
                 elif valueType == 'DURATION':
@@ -96,9 +98,24 @@ class CalWr:
                     self.doRecur(sts, val, prop, predName)
                 elif valueType == 'CAL-ADDRESS':
                     self.doCalAddress(sts, val, prop, predName)
+                elif type(valueType) == tuple: 
+                    valueType = valueType[0]
+                    if valueType not in ('TEXT', 'INTEGER', 'FLOAT'): 
+                        raise RuntimeError, "list value type not implemented"
+                    values = []
+                    while 1: 
+                        first = val.first
+                        val = val.rest
+                        mkSIMPLE = {'TEXT': mkTEXT, 
+                                    'INTEGER': mkINTEGER, 
+                                    'FLOAT': mkFLOAT}[valueType]
+                        v = mkSIMPLE(first)
+                        values.append(v)
+                        if val == RDF.nil: break
+                    self.doSIMPLE(';'.join(values), prop)
                 else:
                     raise RuntimeError, "value type not implemented: " + \
-                          valueType + " on " + prop
+                          str(valueType) + " on " + str(prop)
 
 
         for sub in sts.each(subj = comp, pred = ICAL.component):
@@ -122,23 +139,11 @@ class CalWr:
         w("END:%s%s" % (name, CRLF))
 
 
-    def doTEXT(self, sts, val, propName, predName):
-        # @@TODO: wrap at 75 cols
+    def doSIMPLE(self, v, propName): 
         w = self._w
-        text = val.string.encode('utf-8') #hmm...
-        for c in ('\\', ';', ','):
-            text = text.replace(c, "\\"+c)
-        text = text.replace('\n', "\\n")
-        w("%s:%s%s" % (propName, text, CRLF))
+        w("%s:%s%s" % (propName, v, CRLF))
 
-
-    def doINTEGER(self, sts, val, propName, predName):
-        w = self._w
-        i = int(str(val))
-        w("%s:%d%s" % (propName, i, CRLF))
-
-
-    def doURI(self, sts, sym, propName, predName):
+    def doURI(self, sym, propName):
         """ handle reference properties
         i.e. properties with value type URI
         
@@ -149,9 +154,9 @@ class CalWr:
 
         ATTACH;FMTTYPE=application/binary:ftp://domain.com/pub/docs/agenda.doc
         """
+        uri = sym.uriref() #@@need to encode non-ascii chars
 
         w = self._w
-        uri = sym.uriref() #@@need to encode non-ascii chars
         w("%s;VALUE=URI:%s%s" % (propName, uri, CRLF))
 
 
@@ -239,7 +244,21 @@ class CalWr:
 
 
 
+def mkTEXT(val):
+    # @@TODO: wrap at 75 cols
+    text = val.string.encode('utf-8') #hmm...
+    for c in ('\\', ';', ','):
+        text = text.replace(c, "\\"+c)
+    text = text.replace('\n', "\\n")
+    return text
 
+def mkINTEGER(val):
+    i = int(str(val))
+    return "%i" % i
+
+def mkFLOAT(val):
+    n = float(str(val))
+    return "%f" % n
 
 
 def wrapString(self, str, slen):
@@ -294,7 +313,12 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.19  2004-04-09 22:19:44  connolly
+# Revision 2.20  2004-04-15 22:39:46  connolly
+# integrated patch from SeanP:
+# - adds support for list of float/int/text (e.g. GEO)
+# - refactor doTEXT etc. as mkTEXT, doSIMPLE
+#
+# Revision 2.19  2004/04/09 22:19:44  connolly
 # working on encoding issues in doTEXT.
 # not sure this is exactly the right fix.
 #
