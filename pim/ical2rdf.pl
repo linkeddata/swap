@@ -215,6 +215,7 @@ while(1){
   }
 
   else{
+    last if eof;
     warn "what???", $_;
   }
 
@@ -298,7 +299,10 @@ sub testCamelCase{
 # @@TODO: params
 
 # $Log$
-# Revision 1.4  2002-07-18 05:26:36  connolly
+# Revision 1.5  2002-09-03 17:20:41  connolly
+# handle individual vevents
+#
+# Revision 1.4  2002/07/18 05:26:36  connolly
 # be more conservative about X- stuff
 #
 # Revision 1.3  2002/07/18 05:16:32  connolly
