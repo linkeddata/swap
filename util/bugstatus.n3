@@ -4,7 +4,10 @@
   dc:description "$Id$",
 """
 $Log$
-Revision 1.1  2004-01-29 15:14:37  connolly
+Revision 1.2  2004-01-29 21:10:11  timbl
+Added DTSTART  to events. iCal needs DTSTART it seems.
+
+Revision 1.1  2004/01/29 15:14:37  connolly
 - finding thread roots works, to some extent
 - basic conversion from email vocab to ical vocab in place
 
@@ -32,7 +35,7 @@ hmm... remote query...
 
 :cwm :bugListName "www-archive";
   :bugKeyWord "n3bugs";
-  :bugStatusCache <../n3bugs.rdf>.
+  :bugStatusCache <../admin/n3bugs.rdf>.
 
 {
   ?PROJECT :bugListName ?LIST;
@@ -50,7 +53,7 @@ hmm... remote query...
 
 { ?PROJECT :bugStatusCache [] } => { ?PROJECT :calendar [ a cal:Vcalendar ] }.
 
-this log:forAll :MSG, :SUBJ.
+this log:forAll :MSG, :SUBJ, :DATE.
 
 @prefix req: <http://www.w3.org/2000/10/swap/util/reqThreads#>.
 
@@ -63,6 +66,7 @@ this log:forAll :MSG, :SUBJ.
       log:includes {
         [] req:threadRoot :MSG.
         :MSG email:subject :SUBJ.
+        :MSG email:date_iso :DATE.
       } ] ].
 
   :MSG log:uri ?MSGURI.
@@ -73,9 +77,10 @@ this log:forAll :MSG, :SUBJ.
 }
   => {
  ?CAL cal:component [
-  a cal:Vtodo; #@@ not in the rdf calendar schema; i.e. no TODO tests
-  cal:summary :SUBJ;
-  cal:url ?MSG_ARCHIVE; #@@ not sure if rdf calendar tools grok value type URI
+    a cal:Vtodo; #@@ not in the rdf calendar schema; i.e. no TODO tests
+    cal:summary :SUBJ;
+    cal:url ?MSG_ARCHIVE;
+    cal:dtstart [cal:dateTime :DATE];
  ]
  }.
 
