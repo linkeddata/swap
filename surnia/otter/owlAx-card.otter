@@ -34,6 +34,38 @@ all RESTRICTION PROPERTY CARDINALITY INST (
    )))
 ).
 
+all RESTRICTION PROPERTY MINCARDINALITY INST (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_minCardinality, MINCARDINALITY) &
+     rdf(INST, rdf_type, RESTRICTION) )
+   ->
+   % there is a set with that cardinality
+   % and it matches the values  of rdf(INST, PROPERTY...)
+   ( exists LIST CARDINALITY ( all VAL (
+     ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
+     cardinality(LIST, CARDINALITY) &
+     lteq(MINCARDINALITY, CARDINALITY)
+   )))
+).
+
+all RESTRICTION PROPERTY MAXCARDINALITY INST (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_maxCardinality, MAXCARDINALITY) &
+     rdf(INST, rdf_type, RESTRICTION) )
+   ->
+   % there is a set with that cardinality
+   % and it matches the values  of rdf(INST, PROPERTY...)
+   ( exists LIST CARDINALITY ( all VAL (
+     ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
+     cardinality(LIST, CARDINALITY) &
+     lteq(CARDINALITY, MAXCARDINALITY)
+   )))
+).
+
+
+
 % the cardinality of a list is the number of DISTINCT members
 % in it.
 
@@ -173,6 +205,9 @@ all I J K (
    -> 
    rdf(I, owl_sameAs, K)
 ).
+all I J (
+   (lt(I,J) | I=J) <-> lteq(I,J)
+).
    
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -212,7 +247,10 @@ all THING1 THING2 (
 
 
 % $Log$
-% Revision 1.4  2003-08-01 16:27:35  sandro
+% Revision 1.5  2003-08-08 15:00:15  sandro
+% old change; unsure
+%
+% Revision 1.4  2003/08/01 16:27:35  sandro
 % modified to run in swap/surnia instead of swap
 %
 % Revision 1.3  2003/08/01 04:24:32  sandro
