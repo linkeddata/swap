@@ -1,1 +1,3 @@
 /home/syosi/SWAP/cwm.py %s --ntriples
+python /home/syosi/SWAP/grammar/predictiveParser.py --grammar=/home/syosi/SWAP/grammar/n3-selectors.n3  --as=http://www.w3.org/2000/10/swap/grammar/n3#document --parse=%s
+cd /home/syosi/tarballs/euler/ && /usr/java/jdk1.5.0/bin/java Euler --nope %s

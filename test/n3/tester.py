@@ -4,7 +4,7 @@
 run all of the n3 tests given on all
 
 """
-from os import system, popen3
+from os import system, popen3, popen4
 import os
 import sys
 import urllib
@@ -28,10 +28,17 @@ triage = Namespace("http://www.w3.org/2000/10/swap/test/triage#")
 import getopt
 import sys
 import re
+from htmlentitydefs import codepoint2name
 
 
 def usage():
     print __doc__
+
+def escapize(char):
+    a = codepoint2name.get(ord(char), None)
+    if a:
+        return '&' + a + ';'
+    return char
 
 def testParser(command, kb, output):
     """The main parser tester
@@ -45,6 +52,7 @@ def testParser(command, kb, output):
     totalTestList = kb.each(pred=rdf.type, obj=n3test.PositiveParserTest) + \
                     kb.each(pred=rdf.type, obj=n3test.NegativeParserTest) + \
                     kb.each(pred=rdf.type, obj=n3test.UndecidedParserTest)
+    
     for t in totalTestList:
 	u = t.uriref()
 	hash = u.rfind("#")
@@ -56,6 +64,7 @@ def testParser(command, kb, output):
 #	    if description == None: description = case + " (no description)"
 	inputDocument = kb.the(t, n3test.inputDocument)
         outputDocument = kb.any(t, n3test.outputDocument)
+        output.add(inputDocument, rdf.type, n3test.Input)
         #result = 1
         result = system((command + '> %s 2>/dev/null') % (inputDocument.uriref(), case) )
         #print (command + '> %s 2>/dev/null') % (inputDocument.uriref(), case)
@@ -65,13 +74,16 @@ def testParser(command, kb, output):
             output.add(commandNode, n3test.parses, inputDocument)
             parseResult = output.newBlankNode()
             output.add(inputDocument, commandNode, parseResult)
+            output.add(inputDocument, n3test.description, description)
             if outputDocument is None:
                 output.add(parseResult, n3test.doesNotMatch, rdf.nil)
-            elif system("%s %s -f %s -d %s > /dev/null 2>/dev/null" % \
-                              ('python', '../../cant.py', case, outputDocument.uriref())):
-                output.add(parseResult, n3test.doesNotMatch, outputDocument)
             else:
-                output.add(parseResult, n3test.matches, outputDocument)
+                a = output.newBlankNode()
+                child_stdin, child_stdout = popen4("%s %s -f %s -d %s" % \
+                              ('python', '../../cant.py', case, outputDocument.uriref()))
+                output.add(a, rdf.type, n3test.Diff)
+                output.add(a, n3test.diffString, "".join([escapize(ii) for ii in child_stdout.read()]))
+                output.add(parseResult, a, outputDocument)
 def main():
     """The main function
 
