@@ -27,7 +27,6 @@ NOTE: see earlier work:
   http://www.w3.org/2002/01dc-nj/toICal.py
 
 @@cite and use python style
-@@use doctest
 see changelog at end
 
 
@@ -166,7 +165,7 @@ class CalWr:
 
         whenV = sts.any(when, ICAL.date)
         if whenV:
-            whenV = translate(str(whenV), maketrans("", ""), "-:")
+            whenV = mkDATE(whenV)
             w("%s;VALUE=DATE:%s%s" % (propName, whenV, CRLF))
         else:
             for tzp in sts.each(pred=RDF.type, obj=ICAL.Vtimezone):
@@ -212,7 +211,7 @@ class CalWr:
         else: warn("no freq in recur")
         
         when = sts.any(r, ICAL.until)
-        if when: w(";UNTIL=%s" % when)
+        if when: w(";UNTIL=%s" % mkDATE(when))
 
         ival = sts.any(r, ICAL.interval)
         if ival: w(";INTERVAL=%s" % ival)
@@ -270,6 +269,14 @@ def mkFLOAT(val):
     n = float(str(val))
     return "%f" % n
 
+def mkDATE(val):
+    """
+    >>> mkDATE('2004-11-19')
+    '20041119'
+    """
+    
+    return translate(str(val), maketrans("", ""), "-:")
+
 
 def wrapString(self, str, slen):
     """ helper function to wrap a string iCal-style
@@ -305,6 +312,11 @@ def main(args):
     if not args[1:]:
         usage()
         sys.exit(1)
+
+    if args[1] == '--test':
+        test()
+        sys.exit(0)
+
     addr = uripath.join("file:" + os.getcwd() + "/", args[1])
     
     c = CalWr(sys.stdout.write)
@@ -315,6 +327,10 @@ def main(args):
     progress("exporting...")
     c.export(sts, addr)
 
+
+def test():
+    import doctest, toIcal
+    doctest.testmod(toIcal)
 
 def progress(*args):
     for i in args:
@@ -334,7 +350,11 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.22  2004-11-13 16:51:14  connolly
+# Revision 2.23  2004-11-13 17:02:58  connolly
+# fixed punctuation of UNTIL; factored out mkDATE
+# added --test option for doctest style testing
+#
+# Revision 2.22  2004/11/13 16:51:14  connolly
 # added UNTIL support in doRecur (IOU a test)
 #
 # Revision 2.21  2004/09/08 15:46:05  connolly
