@@ -135,7 +135,7 @@ class BI_gmTime(LightBuiltIn, Function):
 	Returns formatted."""
         if verbosity() > 80: progress("time:gmTime input:"+`subj_py`)
         format = subj_py
-	if format =="" : format="%Y-%M-%dT%H:%m:%SZ"
+	if format =="" : format="%Y-%m-%dT%H:%M:%SZ"
         try:
             return time.strftime(format, time.gmtime(time.time()))
         except:
