@@ -113,8 +113,13 @@ class Thing:
 #      self.occursAs = [], [], [], []    # These are special cases of indexes
       #  List of statements in store by part of speech       
             
-    def __repr__(self):   # only used for debugging I think
-        return self.representation()
+    def __repr__(self):   # only used for debugging - can be ambiguous!  @@ use namespaces
+        s = self.uriref()
+        p = string.find(s,'#')
+        if p >= 0: return s[p+1:]
+        p = string.find(s,'/')
+        if p >= 0: return s[p+1:]
+        return s
 
     def representation(self, base=None):
         """ in N3 """
@@ -124,11 +129,11 @@ class Thing:
         """  Is this thing a genid - is its name arbitrary? """
         return 0    # unless overridden
 
-    def definedAsListIn(self):  # Is this a list? (override me!)
+    def asList(self):  # Is this a list? (override me!)
         return None
   
     def asPair(self):
-        return (RESOURCE, self.uriref(None))
+        return (RESOURCE, self.uriref())
     
 
     # Use the URI to allow sorted listings - for cannonnicalization if nothing else
@@ -152,10 +157,8 @@ def compareURI(self, other):
         if o == _type:
             return 1
         if s < o :
-#            print s,  "LESS THAN", o
             return -1
         if s > o :
-#            print s, "GREATER THAN", o
             return 1
         print "Error with '%s' being the same as '%s'" %(s,o)
         raise internalError # Strings should not match if not same object
@@ -178,6 +181,8 @@ def compareFormulae(self, other):
        variables, two may be equal, in which case the same (first) statement number
        is used whichever statement the variable was in fact in. Ooops
     """
+    pass
+
 class Resource(Thing):
     """   A Thing which has no fragment
     """
@@ -197,6 +202,8 @@ class Resource(Thing):
     def internFrag(self, fragid, thetype):   # type was only Fragment before
             f = self.fragments.get(fragid, None)
             if f:
+                if not isinstance(f, thetype):
+                    raise RuntimeError("Oops.. %s existsnot with type %s"%(f, thetype))
                 return f    # (Could check that types match just to be sure)
             f = thetype(self, fragid)
             self.fragments[fragid] = f
@@ -218,10 +225,10 @@ class Fragment(Thing):
         Thing.__init__(self, resource.store)
         self.resource = resource
         self.fragid = fragid
-        self._defAsListIn = None      # This is not a list as far as we know
+        self._asList = None      # This is not a list as far as we know
 
-    def definedAsListIn(self):  # Is this a list? (override me!)
-        return self._defAsListIn
+    def asList(self):  # Is this a list? (override me!)
+        return self._asList
   
     def uriref(self, base=None):
         return self.resource.uriref(base) + "#" + self.fragid
@@ -242,9 +249,7 @@ class Fragment(Thing):
                                 # parser should use seperate class?
 
 class FragmentNil(Fragment):
-
-    def definedAsListIn(self):  # Is this a list? (override me!)
-        return self  # YEs, though a special one
+    pass
 
 
 class Anonymous(Fragment):
@@ -260,14 +265,88 @@ class Anonymous(Fragment):
 class Formula(Fragment):
     def __init__(self, resource, fragid):
         Fragment.__init__(self, resource, fragid)
-        self.descendents = None   # Placeholder for list of closure under subcontext        
+        self.descendents = None   # Placeholder for list of closure under subcontext
+        self.cannonical = None # Set to self if this has been checked for duplicates
 
     def generated(self):
         return 1
 
     def asPair(self):
         return (FORMULA, self.uriref())
+
+    def existentials(self):
+        "we may move to an internal storage rather than these statements"
+        exs = []
+        ss = self.store._index.get((self, self.store.forSome, self, None),[])
+        for s in ss:
+            exs.append(s[OBJ])
+        if verbosity() > 90: progress("Existentials in %s: %s" % (self, exs))
+        return exs
+
+    def universals(self):
+        "we may move to an internal storage rather than these statements"
+        exs = []
+        ss = self.store._index.get((self, self.store.forAll, self, None),[])
+        for s in ss:
+            exs.append(s[OBJ])
+        if verbosity() > 90: progress("Universals in %s: %s" % (self, exs))
+        return exs
+    
+    def variables(self):
+        return self.existentials() + self.universals()
+    
+#################################### Lists
+#
+#  The statement  x p l   where l is a list is shorthand for
+#  exists g such that x p g. g first; rest r.
+#
+# Lists are interned, so python object comparison works for log:equalTo.
+# For this reason, do NOT use a regular init, always use rest.precededBy(first)
+# to generate a new list form an old, or nil.precededBy(first) for a singleton,
+# or internList(somePythonList)
+# This lists can only hold hashable objects - but we only use hashable objects
+#  in statements.
+# These don't have much to be said for them, compared with python lists,
+# except that (a) they are hashable, and (b) if you do your procesing using
+# first and rest a lot, you don't generate n(n+1)/2 lists when traversing.
+
+_nextList = 0
+
+class List(Thing):
+    def __init__(self, store, first, rest):  # Do not use directly
+        global _nextList
+        Thing.__init__(self, store)
+        self.first = first
+        self.rest = rest
+        self._prec = {}
+        self._id = _nextList
+        _nextList = _nextList + 1
+
+    def uriref(self, base=None):
+        return "http://list.example.org/list"+ `self._id` # @@@@@ Temp. Kludge!! Use run id maybe!
+
+    def asList(self):
+        return self    # Allows a list to be used as a Thing which is should be really
+
+    def precededBy(self, first):
+        x = self._prec.get(first, None)
+        if x: return x
+        x = List(self.store, first, self)
+        self._prec[first] = x
+        return x
+
+    def value(self):
+        return [self.first] + self.rest.value()
+
+class EmptyList(List):
         
+    def value(self):
+        return []
+    
+    def uriref(self, base=None):
+        return notation3.N3_nil
+
+
         
 class Literal(Thing):
     """ A Literal is a data resource to make it clean
@@ -283,7 +362,8 @@ class Literal(Thing):
         self.string = string    #  n3 notation EXcluding the "  "
 
     def __repr__(self):
-        return self.string
+        return '"' + self.string[0:8] + '"'
+#        return self.string
 
     def asPair(self):
         return (LITERAL, self.string)
@@ -361,8 +441,8 @@ class Function:
 
 # This version is used by heavy functions:
 
-    def evaluate2(self, store, subj, obj, variables, bindings):
-        F = self.evaluateObject2(store, subj)
+    def evaluate2(self, subj, obj, bindings):
+        F = self.evaluateObject2(subj)
         return (F is obj) # @@@@@@@@@@@@@@@@@@@@@@@@@@@@ do structual equivalnce thing
 
 
@@ -374,8 +454,8 @@ class ReverseFunction:
     def evaluate(self, store, context, subj, subj_py, obj, obj_py):    # For inheritance only
         return (subj is self.evaluateSubject(store, context, obj, obj_py))
 
-    def evaluate2(self, store, subj, obj, variables, bindings):
-        F = self.evaluateObject2(store, obj)
+    def evaluate2(self, subj, obj, bindings):
+        F = self.evaluateObject2(obj)
         return (F is subj) # @@@@@@@@@@@@@@@@@@@@@@@@@@@@ do structual equivalnce thing
 
     def evaluateSubject(self, store, context, obj, obj_py):
@@ -387,12 +467,17 @@ class ReverseFunction:
 # For example, sometimes want on stdout maybe or in a scroll window....
 def progress(*args):
     import sys
+    global chatty_level  # verbosity indent level
+    sys.stderr.write(" "*chatty_level)
     for a in args:
         sys.stderr.write("%s " % (a,))
     sys.stderr.write("\n")
 #        sys.stderr.write(  str + "\n")
 
 global chatty_flag   # verbosity debug flag
+global chatty_level  # verbosity indent level
+
+chatty_level = 0
 
 def setVerbosity(x):
     global chatty_flag
@@ -401,3 +486,8 @@ def setVerbosity(x):
 def verbosity():
     global chatty_flag
     return chatty_flag
+
+def progressIndent(delta):
+    global chatty_level
+    chatty_level = chatty_level + delta
+    return chatty_level

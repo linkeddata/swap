@@ -45,6 +45,7 @@ class RDFXMLParser(xmllib.XMLParser):
         self._thisURI = thisURI
         self._state = STATE_NOT_RDF  # Maybe should ignore RDF poutside <rdf:RDF>??
         self._context = thisURI + "#_formula"  # Context of current statements, change in bags
+        self._formula = RESOURCE, self._context
         self._subject = None
         self._predicate = None
         self._genPrefix = "#_g"    # @@@ allow parameter override
@@ -395,7 +396,7 @@ class RDFXMLParser(xmllib.XMLParser):
     def close(self):
         xmllib.XMLParser.close(self)
         self.flush()
-        self.sink.endDoc()
+        self.sink.endDoc(self._formula)
 
 def test(args = None):
     import sys, getopt

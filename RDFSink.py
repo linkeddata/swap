@@ -71,7 +71,7 @@ class RDFSink:
     def startDoc(self):
         print "\nsink: start."
 
-    def endDoc(self):
+    def endDoc(self, rootFormulaPair):
         print "sink: end.\n"
 
     def makeStatement(self, tuple):

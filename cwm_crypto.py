@@ -44,12 +44,12 @@ CRYPTO_NS_URI = 'http://www.w3.org/2000/10/swap/crypto#'
 class BI_md5(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py): 
         m = md5.new(subj_py).digest() 
-        return store._fromPython(binascii.hexlify(m))
+        return store._fromPython(context, binascii.hexlify(m))
 
 class BI_sha(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py): 
         m = sha.new(subj_py).digest() 
-        return store._fromPython(binascii.hexlify(m))
+        return store._fromPython(context, binascii.hexlify(m))
 
 #  Register the string built-ins with the store
 

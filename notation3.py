@@ -84,7 +84,7 @@ ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
 # This is the hash on namespace URIs
 
 # Should the internal representation of lists be with DAML:first and :rest?
-DAML_LISTS = 0    # Don't do these - do the funny compact ones
+DAML_LISTS = 1    # Else don't do these - do the funny compact ones- not a good idea after all
 
 RDF_type = ( RESOURCE , RDF_type_URI )
 DAML_equivalentTo = ( RESOURCE, DAML_equivalentTo_URI )
@@ -244,7 +244,7 @@ class SinkParser:
         self._sink.startDoc()
 
     def endDoc(self):
-        self._sink.endDoc()
+        self._sink.endDoc(self._formula)
 
     def makeStatement(self, quadruple):
 #        print "# Parser output: ", `triple`
@@ -804,7 +804,7 @@ class ToRDF(RDFSink.RDFSink):
     def startDoc(self):
         pass
 
-    def endDoc(self):
+    def endDoc(self, rootFormulaPair=None):
         self.flushStart()  # Note: can't just leave empty doc if not started: bad XML
 	if self._subj:
 	    self._wr.endElement()  # </rdf:Description>
@@ -1222,7 +1222,7 @@ t   "this" and "()" special syntax should be suppresed.
         self._subj = None
         self._nextId = 0
 
-    def endDoc(self):
+    def endDoc(self, rootFormulaPair=None):
 	self._endStatement()
 	self._write("\n")
 	if not self._quiet: self._write("#ENDS\n")
@@ -1264,26 +1264,15 @@ t   "this" and "()" special syntax should be suppresed.
     def startAnonymous(self,  triple, isList=0):
         if isList and not self.noLists:
             wasList = self.stack[-1]
-            if 1:  # Always expect DAML lists on output:
-                if wasList and (triple[PRED]==N3_rest) :   # rest p of existing list
-                    self.stack.append(2)    # just a rest - no parens         
-                    self._subj = triple[OBJ]
-                else:
-                    self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
-                    self.stack.append(1)    # New list
-                    self._write(" (")
-                    self.indent = self.indent + 1
-                self._pred = N3_first
-            else: # not DAML_LISTS
-                if wasList :   # rest p of existing list
-                    self.stack.append(2)    # just a rest - no parens         
-                    self._subj = triple[PRED]
-                else:
-                    self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
-                    self.stack.append(1)    # New list
-                    self._write(" (")
-                    self.indent = self.indent + 1
-                self._pred = N3_first
+            if wasList and (triple[PRED]==N3_rest) :   # rest p of existing list
+                self.stack.append(2)    # just a rest - no parens         
+                self._subj = triple[OBJ]
+            else:
+                self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
+                self.stack.append(1)    # New list
+                self._write(" (")
+                self.indent = self.indent + 1
+            self._pred = N3_first
 
         else:
             self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
@@ -1613,7 +1602,7 @@ class Reifier(RDFSink.RDFSink):
         return self.sink.startDoc()
 
     def endDoc(self):
-        return self.sink.endDoc()
+        return self.sink.endDoc(self._formula)
 
 ######################################################### Tests
   

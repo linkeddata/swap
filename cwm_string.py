@@ -94,7 +94,7 @@ class BI_concat(LightBuiltIn, ReverseFunction):
         for x in obj_py:
             if not isString(x): return None # Can't
             str = str + x 
-        return store._fromPython(str)
+        return store._fromPython(context, str)
 
 class BI_concatenation(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py):
@@ -103,7 +103,7 @@ class BI_concatenation(LightBuiltIn, Function):
         for x in subj_py:
             if not isString(x): return None # Can't
             str = str + x 
-        return store._fromPython(str)
+        return store._fromPython(context, str)
 
 class BI_scrape(LightBuiltIn, Function):
     """a built-in for scraping using regexps.
@@ -122,7 +122,7 @@ class BI_scrape(LightBuiltIn, Function):
         patc = re.compile(pat)
         m = patc.search(str)
         if m:
-            return store._fromPython(m.group(1))
+            return store._fromPython(context, m.group(1))
         else:
             return None
 

@@ -123,8 +123,8 @@ import notation3    # N3 parsers and generators, and RDF generator
 # import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 import thing
-from thing import  progress, BuiltIn, LightBuiltIn, HeavyBuiltIn, Function, ReverseFunction, \
-     Formula, Literal, Resource, Fragment, FragmentNil, compareURI 
+from thing import  progress, progressIndent, BuiltIn, LightBuiltIn, HeavyBuiltIn, Function, ReverseFunction, \
+     Formula, Literal, Resource, Fragment, FragmentNil, compareURI, Thing, List, EmptyList
 
 import RDFSink
 from RDFSink import Logic_NS
@@ -156,17 +156,6 @@ doMeta = 0  # wait until we have written the code! :-)
 INFINITY = 1000000000           # @@ larger than any number occurences
 
 
-# In the query engine we use tuples as data structure in the queue, offsets as follows:
-# Queue elements as follows:
-STATE = 0
-SHORT = 1
-CONSTS = 2
-VARS = 3
-BOUNDLISTS = 4
-QUAD = 5
-LISTSTATE = 6
-MYINDEX = 7
-
 #  Keep a cache of subcontext closure:
 subcontext_cache_context = None
 subcontext_cache_subcontexts = None
@@ -196,6 +185,8 @@ class StoredStatement:
                 return compareURI(self.triple[p],other.triple[p])
         progress("Problem with duplicates: '%s' and '%s'" % (quadToString(self.triple),quadToString(other.triple)))
         raise RuntimeError, "should never have two identical distinct [@@]"
+
+
 
     
 ###############################################################################################
@@ -240,14 +231,14 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
 class BI_rawType(LightBuiltIn, Function):
     """
     The raw type is a type from the point of view of the langauge: is
-    it a forumla, list, and so on. Needed for test for formula in finding subformulae
+    it a formula, list, and so on. Needed for test for formula in finding subformulae
     eg see test/includes/check.n3 
     """
 
     def evaluateObject(self, store, context, subj, subj_py):
         if isinstance(subj, Literal): y = store.Literal
         elif isinstance(subj, Formula): y = store.Formula
-        elif subj.definedAsListIn(): y = store.List
+        elif subj.asList(): y = store.List
         else: y = store.Other  #  None?  store.Other?
         if thing.verbosity() > 91:
             progress("%s  rawType %s." %(`subj`, y))
@@ -266,11 +257,11 @@ class BI_racine(LightBuiltIn, Function):    # The resource whose URI is the same
 
 #
 #class BI_directlyIncludes(HeavyBuiltIn):
-#    def evaluate2(self, store, subj, obj, variables, bindings):
+#    def evaluate2(self, subj, obj,  bindings):
 #        return store.testIncludes(subj, obj, variables, bindings=bindings)
 #    
 #class BI_notDirectlyIncludes(HeavyBuiltIn):
-#    def evaluate2(self, store, subj, obj, variables, bindings):
+#    def evaluate2(self, subj, obj,  bindings):
 #        return not store.testIncludes(subj, obj, variables, bindings=bindings)
     
 
@@ -293,15 +284,9 @@ class BI_notIncludes(HeavyBuiltIn):
     As for the subject, it does make sense for the opposite reason.  If F(x)
     includes G for all x, then G would have to be infinite.  
     """
-    def evaluate2(self, store, subj, obj, variables, bindings):
+    def evaluate2(self, subj, obj, bindings):
+        store = subj.store
         if isinstance(subj, Formula) and isinstance(obj, Formula):
-#            for F in subj, obj:
-#                x = store.anyOccurrences(variables, F)
-#                if x != None:                
-#                    if thing.verbosity() > 40:
-#                        progress(" Waiting for unresolved variable " + x2s(x))
-#                        raise RunTimeError, x
-#                    return None # Can't do - too many variables.
             return not store.testIncludes(subj, obj, [], bindings=bindings) # No (relevant) variables
         return 0   # Can't say it *doesn't* include it if it ain't a formula
 
@@ -309,7 +294,8 @@ class BI_semantics(HeavyBuiltIn, Function):
     """ The semantics of a resource are its machine-readable meaning, as an
     N3 forumula.  The URI is used to find a represnetation of the resource in bits
     which is then parsed according to its content type."""
-    def evaluateObject2(self, store, subj):
+    def evaluateObject2(self, subj):
+        store = subj.store
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
         F = store.any((store._experience, store.semantics, doc, None))
@@ -326,13 +312,14 @@ class BI_semantics(HeavyBuiltIn, Function):
     
 class BI_semanticsOrError(BI_semantics):
     """ Either get and parse to semantics or return an error message on any error """
-    def evaluateObject2(self, store, subj):
+    def evaluateObject2(self, subj):
+        store = subj.store
         x = store.any((store._experience, store.semanticsOrError, subj, None))
         if x:
             if thing.verbosity() > 10: progress(`store._experience`+`store.semanticsOrError`+": Already found error for "+`subj`+" was: "+ `x`)
             return x
         try:
-            return BI_semantics.evaluateObject2(self, store, subj)
+            return BI_semantics.evaluateObject2(self, subj)
         except (IOError, SyntaxError):
             message = sys.exc_info()[1].__str__()
             result = store.intern((LITERAL, message))
@@ -406,7 +393,7 @@ class BuiltInFailed(Exception):
         reason = _indent(self._info[1].__str__())
 #        return "reason=" + reason
         return ("Error during built-in operation\n  <%s>\n  in formula %s,\nbecause:\n%s" % (
-            itemToString(self._item),
+            `self._item`,
             `self._item[QUAD][CONTEXT]`,
 #            `self._info`))
             `reason`))
@@ -423,7 +410,8 @@ class DocumentAccessError(IOError):
         return ("Unable to access document <%s>, because:\n%s" % ( self._uri, reason))
     
 class BI_content(HeavyBuiltIn, Function): #@@DWC: Function?
-    def evaluateObject2(self, store, subj):
+    def evaluateObject2(self, subj):
+        store = subj.store
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
         C = store.any((store._experience, store.content, doc, None))
@@ -447,7 +435,8 @@ class BI_content(HeavyBuiltIn, Function): #@@DWC: Function?
 
 
 class BI_n3ExprFor(HeavyBuiltIn, Function):
-    def evaluateObject2(self, store, subj):
+    def evaluateObject2(self, subj):
+        store = subj.store
         if isinstance(subj, Literal):
             F = store.any((store._experience, store.n3ExprFor, subj, None))
             if F: return F
@@ -466,7 +455,8 @@ class BI_cufi(HeavyBuiltIn, Function):
 
     Closure under Forward Inference, equivalent to cwm's --think function
     conclusion  might be a better word than cufi."""
-    def evaluateObject2(self, store, subj):
+    def evaluateObject2(self, subj):
+        store = subj.store
         if isinstance(subj, Formula):
             F = store.any((store._experience, store.cufi, subj, None))  # Cached value?
             if F: return F
@@ -578,6 +568,8 @@ class RDFStore(RDFSink.RDFSink) :
         self.first = self.intern(notation3.N3_first)
         self.rest = self.intern(notation3.N3_rest)
         self.nil = self.intern(notation3.N3_nil)
+        self.nil._asList = EmptyList(self, None, None)
+#        self.nil = EmptyList(self, None, None)
 #        self.only = self.intern(notation3.N3_only)
         self.Empty = self.intern(notation3.N3_Empty)
         self.List = self.intern(notation3.N3_List)
@@ -601,7 +593,7 @@ class RDFStore(RDFSink.RDFSink) :
 # - formulae grow with addStatement() and would have to be re-interned
 
     def reset(self, metaURI): # Set the metaURI
-        self._experience = self.intern((FORMULA, metaURI + "_forumla"))
+        self._experience = self.intern((FORMULA, metaURI + "_formula"))
 
     def internURI(self, str):
         assert type(str) is type("") # caller %xx-ifies unicode
@@ -659,27 +651,114 @@ class RDFStore(RDFSink.RDFSink) :
         self._index[(None,None,None,x)] = x.occursAs[OBJ]
         return x
      
+    def internList(self, value):
+        x = nil
+        l = len(value)
+        while l > 0:
+            l = l - 1
+            x = x.precededBy(value[l])
+        return x
 
     def deleteFormula(self,F):
+        if thing.verbosity() > 30: progress("Deleting formula %s %ic %ip %is %io" %
+                                            ( `F`,
+                                              len(F.occursAs[CONTEXT]),
+                                              len(F.occursAs[PRED]),
+                                              len(F.occursAs[SUBJ]),
+                                              len(F.occursAs[OBJ])))
         for s in F.occursAs[CONTEXT][:]:   # Take copy
             self.removeStatement(s)
+        for p in ALL4:
+            if F.occursAs[p] != []:
+                raise RuntimeError("Attempt to delete Formula in use "+`F`, F.occursAs)
 
     def endFormula(self, F):
         """If this formula already exists, return the master version.
         If not, record this one and return it.
-        Call this when the forumla is in its final form, with all its statements.
+        Call this when the formula is in its final form, with all its statements.
+        Make sure no one else has a copy of the pointer to the smushed one.
         """
-        l = len(F.occursAs[CONTEXT])   # The number of statements
+        if F.cannonical:
+            return F.cannonical
+        fl = F.occursAs[CONTEXT]
+        fl.sort(StoredStatement.__cmp_cannonical__)
+        l = len(fl)   # The number of statements
         possibles = self._formulaeOfLength.get(l, None)  # Formulae of same length
+
+    
         if possibles == None:
-            self._formulaeOfLength[l] = []
-            possibles = self._formulaeOfLength[l]
+            self._formulaeOfLength[l] = [F]
+            return F
+
         for G in possibles:
-            if self.testIncludes(F,G):  # If same size and one includes the other then equal
-                self.deleteFormula(F)
+            gl = G.occursAs[CONTEXT]
+#            gl.sort(StoredStatement.__cmp_cannonical__)   #  needed cannonical?!
+            if len(gl) != l: raise RuntimeError("@@Length is %i instead of %i" %(len(gl), l))
+            for i in range(l):
+                for p in CONTEXT, PRED, SUBJ, OBJ:
+                    if (fl[i][p] is not gl[i][p]
+                        and (fl[i][p] is not F or gl[i][p] is not G)):
+                        break # mismatch
+                else: #match one statement
+                    continue
+                break
+            else: #match
+                if thing.verbosity() > 40: progress("** Smushed new formula %s giving old %s" % (F, G))
+                self.replaceWith(F,G)
                 return G
         possibles.append(F)
+#        raise oops
+        F.cannonical = F
         return F
+
+    def reopen(self, F):
+        if not F.cannonical: return F # was open
+        self._formulaeOfLength[len(F.occursAs[CONTEXT])].remove(F)  # Formulae of same length
+        F.cannonical = None
+        return F
+
+    def replaceWith(self,old, new):
+        if thing.verbosity() > 30:
+            progress("Smush: Replacing %s %ic %ip %is %io with %s" %
+                        ( `old`,
+                          len(old.occursAs[CONTEXT]),
+                          len(old.occursAs[PRED]),
+                          len(old.occursAs[SUBJ]),
+                          len(old.occursAs[OBJ]),
+                          `new`))
+        bindings = [ (old, new) ]
+        for p in ALL4:
+            for s in old.occursAs[p][:]:  # copy
+                if thing.verbosity() > 95: progress(".......removed", s.triple)
+                q2 = _lookupQuad(bindings, s.triple)
+                self.removeStatement(s)
+                self.storeQuad(q2)
+                if thing.verbosity() > 95: progress(".......restored", q2)
+        return new
+
+    def endFormulaNested(self, F, bindings = [], level=0):
+        """Cannonicalize this after cannonicalizing any subformulae recusrively
+        Note the subs must be done first. Also not that we can't assume statements
+        or formulae are valid after a call to this, unless we track the
+        changes which are kept in a shared list, bindings. """
+        if thing.verbosity() > 80:
+            progress("  "*level, "endFormulaNested:"+`F`+ `bindings`)
+
+        if F.cannonical:
+            return F.cannonical
+        subs = []   # Immediate subformulae
+        for s in F.occursAs[CONTEXT]:
+            for p in PRED, SUBJ, OBJ:
+                x = s[p]
+                if isinstance(x, Formula) and x is not F:
+                    if x not in subs: subs.append(x)
+        for x in subs:
+            self.endFormulaNested( _lookup(bindings, x), bindings, level=level+1)
+
+        new = self.endFormula(F)
+        if new is not F:
+            bindings.append((F, new))
+        return new
 
 # Input methods:
 
@@ -698,6 +777,8 @@ class RDFStore(RDFSink.RDFSink) :
               self.intern(tuple[PRED]),
               self.intern(tuple[SUBJ]),
               self.intern(tuple[OBJ]) )
+        if q[PRED] is self.forSome and isinstance(q[OBJ], Formula):
+            return  # This is implicit, and the same formula can be used un >1 place
         self.storeQuad(q)
                     
     def makeComment(self, str):
@@ -721,7 +802,7 @@ class RDFStore(RDFSink.RDFSink) :
                 return list[0].triple[p]
 
     def each(self, q):
-        """Search store for all occurrences of a one-statement pattern
+        """Search store for all occurrences of a one-statement pattern       OBSOLETE
 
         Quad contains one or more None as wildcard.   If only one wildcard, returns list of values found.append
         If more than one wildcard, returns list of lists of values
@@ -763,34 +844,40 @@ class RDFStore(RDFSink.RDFSink) :
         #  Check whether this quad already exists
 #        print "Before, Formula now has %i statements" % len(self._index[(q[CONTEXT],None,None,None)])
         if self.contains(q): return 0  # Return no change in size of store
-
-        # Compress string constructors within store:
-        # The first, rest pair becomes a single dotted-pair-like compact list element
-        # These are extended in the output routine back to first and rest.
         
+        self.size = self.size+1
         context, pred, subj, obj = q
+        if context.cannonical:
+            raise RuntimeError("Attempt to add statement to cannonical formula "+`context`)
 
-        if pred is self.first:  # If first, and rest already known, combine:
-            for s in subj.occursAs[SUBJ]:
-                if s[PRED] is self.rest and s[CONTEXT] is context:
-                    q = (context, s[OBJ], subj, obj)
-                    context, pred, subj, obj = q
-                    self.removeStatement(s)
-                    if thing.verbosity() > 80: progress("Found list:" + quadToStr(q))
-                    break
-        elif pred is self.rest:  # And vice versa
-            for s in subj.occursAs[SUBJ]:
-                if s[PRED] is self.first and s[CONTEXT] is context:
-                    q = (context, obj, subj, s[OBJ])
-                    context, pred, subj, obj = q
-                    self.removeStatement(s)
-                    if thing.verbosity() > 80: progress("Found list:" + quadToString(q))
-                    break
+# We collapse lists from there declared daml first,rest structure into List objects.
+# To do this, we need (a) a first; (b) a rest, and (c) the rest being a list.
+# We trigger List collapse on any of these three becoming true.
+
+        if pred is self.rest and obj.asList() != None:
+            ifirst = self._index.get((context, self.first, subj, None),None)
+            if ifirst and subj._asList == None:
+                subj._asList = obj._asList.precededBy(ifirst[0][OBJ])
+#                self.removeStatement(ifirst[0])  # Neither first nor rest is needed now
+                self.checkList(context, subj)
+#                return 1  # @@ what are we counting, exactly? We did learn something!
+
+        elif pred is self.first:
+            irest = self._index.get((context, self.rest, subj, None),None)
+            if irest:
+                rest = irest[0][OBJ]
+                if rest.asList() != None and subj._asList == None:
+#                    self.removeStatement(irest[0])  # Neither first nor rest is needed now
+                    subj._asList = rest._asList.precededBy(obj)
+                    self.checkList(context, subj)
+#                    return 1
 
         s = StoredStatement(q)
 
+
         # Build 15 indexes.  4 of them double as occursAs lists.
-#        print "Between, Formula now has %i statements" % len(self._index[(context,None,None,None)])
+#       This now takes most of the time in a typical  cwm run! :-( 
+
         for o1 in obj, None:
             for s1 in subj, None:
                 for p1 in pred, None:
@@ -803,43 +890,16 @@ class RDFStore(RDFSink.RDFSink) :
                             else:
                                 list.append(s)
 
-        self.size = self.size+1
 
-        if pred.definedAsListIn():
-            if (not isinstance(subj, Fragment)):
-                progress("Store Quad: Predicate %s and subject %s" %(pred, subj))
-                progress("Subject class is"+`subj.__class__`)
-                raise RuntimeError, "Statement makes list of something not a fragment - see above."
-            li = subj._defAsListIn
-            if li and ((li[OBJ] is not obj) or(li[PRED] is not pred)):                
-                progress("Store Quad: Predicate %s and subject %s" %(pred, subj))
-                progress("Subject is ALREADY defined as a list by "+
-                                               quadToString(subj._defAsListIn.triple))
-                raise RuntimeError, "Statement makes list of something which is a DIFFERENR list - see above."
-            subj._defAsListIn = s
-            self.newList(subj)
 #        print "Exiting, Formula now has %i statements" % len(self._index[(context,None,None,None)])
         return 1  # One statement has been added
 
-    def newList(self, x):  # Note, for speed, that this is a list
-        for s in x.occursAs[PRED]:  # For every one which tis list gen'd
-            y = s.triple[SUBJ]
-            if not y._defAsListIn:
-                y._defAsListIn = s
-                self.newList(y)
-        return
-
-    def deList(self, x):
-        for s in x.occursAs[PRED]:
-            y = s.triple[SUBJ]
-            y._defAsListIn = None
-            self.deList(y)
-        return
 
     def startDoc(self):
         pass
 
-    def endDoc(self):
+    def endDoc(self, rootFormulaPair):
+        self.endFormulaNested(self.intern(rootFormulaPair))
         pass
 
 ##########################################################################
@@ -859,9 +919,11 @@ class RDFStore(RDFSink.RDFSink) :
             for s in con.occursAs[CONTEXT]:
                 for p in PRED, SUBJ, OBJ:
                     x = s[p]
+                    if (x is self.first or x is self.rest) and p == PRED:
+                        continue  # ignore these - they tend to be in lists
                     if isinstance(x, Fragment):
-                        anon, inc, se = self._topology(x, con)
-                        if not anon and not isinstance(x, Formula):
+                        _anon, _incoming = self._topology(x, con)
+                        if not _anon and not isinstance(x, Formula):
                             r = x.resource
                             total = counts.get(r, 0) + 1
                             counts[r] = total
@@ -950,54 +1012,20 @@ class RDFStore(RDFSink.RDFSink) :
 #
 #   x is an existential if there is in the context C we are printing
 # is a statement  (C log:forSome x). If so, the anonymous syntaxes follow.
-# c is 1 if x is a subexpression of the current context else c=0
-# r s and o are the number  times x occurs within context as p,s or o
-# o excludes the statements making it an existential and maybe subexp.
 #
-#   c  p  s  o   Syntax
-#   0  0  0  0   (won't occur.)
-#   0  0  ?  1   y p [ ... ] .
-#   0  0  y  0   [] p z, ....     or  [ p y,z ... ] .  or a combination
-#   0  0  y  1   y q [ p y z ... ] .
-#   0  1  ?  0   y  [ ... ] w .
-#   ?  1  ?  1   can't be pred and obj.
-#   y  0  y  0   { ... } p y z,... .
-#   y  0  y  1   y q [ p y z ...; = { ... } ] .
-#   ?  ?  ?  >1  can't without using revese <- p -< notation
-#   ?  >1 ?  ?   can't UNLESS all occurrences for same subject
-#   y  0  0  0   { ... } .     Does this have any meaning? Void meaning I think.
-#   y  0  0  1   y q { ... } .
-#   y  1  0  0   x  { .... }  y .   Illegal because statementlist and property disjoint????
-#   y  1  y  0   x  [ ... ; ={ ...} ]  (illegal - same reason?)
-# simplified rules:
-#  If it occurs > once as a (predicate or object), forget it.
-#  If it occurs as a predicate or object at all
-#       Wait for it to turn up
-#
-#  If it is not as a subject but is as a context use {}
-#  Else use [ ..] with optionally a = { ... } inside. 
-#
-#  Exception: when the subject, and when 
-#  If it occurs both as predicate and object, forget it.
-#  If it occurs as context and subject in the SAME STATEMENT, forget it.
-#  Else
-#      If it does not occur as a subject use { ... } form
-#      Else use [ ... ] form optionally with  = { ... } if both
-#  Exception:  if subject and not pred or obj then use  [] p z... form to cut down nesting?
-
 # An intersting alternative is to use the reverse syntax to the max, which
 # makes the DLG an undirected labelled graph. s and o above merge. The only think which
 # then prevents us from dumping the graph without genids is the presence of cycles.
 
-# Contexts
+# Formulae
 #
 # These are in some way like literal strings, in that they are defined completely
 # by their contents. They are sets of statements. (To say a statement occurs
 # twice has no menaing).  Can they be given an id?  You can assert that any
-# object is equivalent to (=) a given context. However, it is the contexts which
-# define a context. If one could label it in one place then one would want to
+# object is equivalent to (=) a given formula.
+# If one could label it in one place then one would want to
 # be able to label it in more than one.  I'm not sure whether this is wise.
-# Let's try it with no IDs on contexts as in the N3 syntax.  There would be
+# Let's try it with no IDs on formulae as in the N3 syntax.  There would be
 # the question of in which context the assertion wa made that the URI was
 # a label for the expression. You couldn't just treat it as part of the
 # machinery as we do for URI of a regular thing.
@@ -1007,152 +1035,88 @@ class RDFStore(RDFSink.RDFSink) :
         """ Can be output as an anonymous node in N3. Also counts incoming links.
         Output tuple parts:
 
-        1. True iff can be represented as anonymous node in N3
+        1. True iff can be represented as anonymous node in N3, [] or {}
         2. Number of incoming links: >0 means occurs as object or pred, 0 means as only as subject.
-        3. Is this a literal formula?
-            Literal formulae are represented wherever they occur by braces expressions
+            1 means just occurs once
+            >1 means occurs too many times to be anon
         
         Returns  number of incoming links (1 or 2) including forSome link
         or zero if self can NOT be represented as an anonymous node.
         Paired with this is whether this is a subexpression.
         """
-        # @@@@ This is NOT a proper test - we should test that the statement
-        # is an assumed one.
-        # @@@ what about nested contexts? @@@@@@@@@@@@@@@@@@@@@@@@@@
 
-        contextClosure = self.subContexts(context)   #  @@ Cache these on the formula for speed?         
         _asPred = len(self._index.get((context, x, None, None),[]))
-        
-        _isSubExp = 0
-        _asObj = 0       # Times occurs as object NOT counting the subExpression or ForSome
-        _isExistential = 0  # Is there a forSome?
         _elsewhere = 0
-
-        _isExistential = len(self._index.get((context, context, self.forSome, x),[]))
-        _asObj = len(self._index.get((context, context, None, x),[]))
+        _isExistential = len(self._index.get((context, self.forSome, context, x),[]))
+        _asObj = len(self._index.get((context, None, None, x),[])) - _isExistential
+        _loop = len(self._index.get((context, None, x, x),[]))  # does'es count as incomming
         
-                                  
-        for s in x.occursAs[OBJ]:  # Checking all statements about x
-            con, pred, subj, obj = s.triple
-            # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Fudge - error - check context is ancestor
-            if subj is con and pred is self.forSome :
-                _isExistential = 1
-            else:
-                if con is context:
-                    _asObj = _asObj + 1  # Regular object
-                elif con in contextClosure:
-                    _elsewhere = _elsewhere + 1  # Occurs in a subformula - can't be anonymous!
-                else:
-                    pass    # Irrelevant occurrence in some other formula
+        if isinstance(x, Literal):
+            anon = 0     #  Never anonymous, always just use the string
+        if x.asList() != None or isinstance(x, Formula):
+            _anon = 2    # Always represent it just as itself
+        else:
+            contextClosure = self.subContexts(context)[:]
+            contextClosure.remove(context)
+            for sc in contextClosure:
+                if (self._index.get((sc, None, None, x),None)
+                    or self._index.get((sc, None, x, None),None)
+                        or self._index.get((sc, x, None, None),None)):
+                    _elsewhere = 1  # Occurs in a subformula - can't be anonymous!
+                    break
+            _anon = (_asObj < 2) and ( _asPred == 0) and (_loop ==0) and _isExistential and not _elsewhere
+
+        if thing.verbosity() > 98:
+            progress( "Topology %s in %s is: anon=%i ob=%i, loop=%i pr=%i ex=%i elsewhere=%i"%(
+            `x`[-8:], `context`[-8:], _anon, _asObj, _loop, _asPred,  _isExistential, _elsewhere))
+
+        return ( _anon, _asObj+_asPred )  
 
 
-#        _anon = (_op < 2) and _isExistential
-        _anon = (_asObj < 2) and ( _asPred == 0) and _isExistential and not _elsewhere
-        if x.definedAsListIn():
-            _asObj = _asObj + _asPred  # List links are like obj (daml:rest)
-            _asPred = 0
-            _anon = 1    # Always represent it as anonymous
-#        _isSubExp = _isExistential and (isinstance(x, Formula) and x is not context) # subExpression removal
-        _isSubExp = isinstance(x, Formula) and x is not context # subExpression - why calc here?
-        if _isSubExp:
-            _anon = 1
-
-        if thing.verbosity() > 98: progress( "\nTopology <%s in <%sanon=%i ob=%i,pr=%i se=%i exl=%i"%(
-            `x`[-8:], `context`[-8:], _anon, _asObj, _asPred, _isSubExp, _isExistential))
-        return ( _anon, _asObj+_asPred, _isSubExp)  
-
-    def isList(self, x, context):
-        """ Does this look like a list?
-        This should check that this is a node which can be represented in N3
-        without loss of information as a list.
-        This does not check whether the node is anonymous - check that first.
-        It does check whether there is more info about the node which
-            can't be represented in ()
-        
-        """
-# nil is not representable simply as a list if it is the subject of
-# statements. Well, these statements could be separated but they aren't
-# currently. @@ Separate them to allow statements about () in pretty printing.
-        if not DAML_LISTS:
-            if x is self.nil:
-                return 1  # Yes, only is actually the list ()
-            ld = x.definedAsListIn()
-            if not ld: return None
-            first = ld.triple[OBJ]     # first
-            rest = ld.triple[PRED]    # rest
-            left = []
-            right = []
-            for s in x.occursAs[SUBJ]:
-                con, pred, subj, obj = s.triple
-                if con == context and s is not ld: 
-                    #print "     ",quadToString(s.triple), `self.first`
-                    if pred is self.first and obj is first:
-                        pass
-                    elif pred is self.rest and obj is rest:
-                        pass
-                    elif pred is self.type:
-                        if obj is not self.List and obj is not self.Empty : return 0
-                    else:
-                        print "     Unacceptable: ",quadToString(s.triple), `self.rest`, `pred`
-                        return 0  # Can't have anything else - wouldn't print.
-            #print "# ", `x`[-8:], "left:", left, "right", right
-            return self.isList(rest, context)
-        else:  # DAML_LISTS
-            if x is self.nil: return 1  # Yes, nil is the list ()
-            empty = 0
-            left = []
-            right = []
-            for s in x.occursAs[SUBJ]:
-                con, pred, subj, obj = s.triple
-                if con == context:
-                    #print "     ",quadToString(s.triple), `self.first`
-                    if pred is self.first: left.append(obj)
-                    elif pred is self.rest: right.append(obj)
-                    elif pred is self.type:
-                        if obj is self.Empty: empty = 1
-                        if obj is not self.List and obj is not self.Empty : return 0
-                    else:
-                        #print "     Unacceptable: ",quadToString(s.triple), `self.rest`, `pred`
-                        return 0  # Can't have anything else - wouldn't print.
-            #print "# ", `x`[-8:], "left:", left, "right", right
-            if left == [] and right == [] and empty: return 1
-            if len(left) != 1 or len(right)!=1: return 0 # Invalid
-            return self.isList(right[0], context)
     
-#  Convert a data item with no unbound variables into a python equivalent 
-#  Given the entries in a queue template, find the value of a list.
-#  @@ slow
-#   These mthods are at the disposal of built-ins.
 
-    def _toPython(self, x, hypothetical, queue):
+    def _toPython(self, x, queue):
+        """#  Convert a data item in query with no unbound variables into a python equivalent 
+       Given the entries in a queue template, find the value of a list.
+       @@ slow
+       These methods are at the disposal of built-ins.
+"""
         if thing.verbosity() > 85: progress("#### Converting to python "+ x2s(x))
         """ Returns an N3 list as a Python sequence"""
-        if x is self.nil: return []  # Yes, nil is the list ()
-        ld = x.definedAsListIn()
-        if not ld:
-            if isinstance(x, Literal):
-                return x.string
-            return x    # If not a list, return unchanged
-        if hypothetical: # This is a hypothetical list in the query
-            for i in range(len(queue)):  # @@ slow
-                c2, p2, s2, o2 = queue[i][QUAD]
-                if s2 is x and p2.definedAsListIn():
-                    object_hypothetical = OBJ in queue[i][BOUNDLISTS]
-                    predicate_hypothetical = PRED in queue[i][BOUNDLISTS]
-                    return [ self._toPython(o2, object_hypothetical, queue) ] + self._toPython(p2, predicate_hypothetical, queue)
-            else:
-                raise noendtolist  # oops -bug
-        else:  #  A stored list - get it from the store
-            ld = x.definedAsListIn()
-            return  [ self._toPython(ld[OBJ], 0, queue) ] + self._toPython(ld[PRED], 0, queue) 
+        if x.asList() != None:
+            if x is self.nil: return []
+            f = None
+            r = None
+            for item in queue:
+                con, pred, subj, obj = item.quad
+                if subj is x and pred is self.first: f = obj
+                if subj is x and pred is self.rest: r = obj
+            if f == None or r == None:
+                raise RuntimeError("Can't find value of list "+`x`)
+#            if r is self.nil: return [x]
+            return [ self._toPython(f, queue) ] + self._toPython(r, queue)
 
-    def _fromPython(self, x):
+#            return x.asList().value()
+        if isinstance(x, Literal):
+            return x.string
+        return x    # If not a list, return unchanged
+
+    def _fromPython(self, context, x):
         if isString(x):
             return self.intern((LITERAL, x))
-        if type(x) == type(2):
-            return self.intern((LITERAL, `x`))
-#        if type(x, []): # @@@@@@@@@@@@@ return list
-#            return self.intern(LITERAL, x)
+        elif type(x) == type(2):
+            return self.intern((LITERAL, `x`))    # @@ Add literal numeric type to N3?
+        elif type(x) == type([]):
+            g = store.nil
+            y = x
+            y.reverse()
+            for e in y:
+                g1 = store.genid(RESOURCE)
+                self.storeQuad((context, self.forSome, context, g1))
+                self.storeQuad((context, self.first, g1, self._fromPython(context, e)))
+                self.storeQuad((context, self.rest, g1, g))
+                g = g1
+            return g
         return x
 
     def dumpNested(self, context, sink):
@@ -1161,11 +1125,12 @@ class RDFStore(RDFSink.RDFSink) :
         self.selectDefaultPrefix(context)        
         sink.startDoc()
         self.dumpPrefixes(sink)
-        self.dumpNestedStatements(context, sink)
+        self.dumpFormulaContents(context, sink)
         sink.endDoc()
 
-    def dumpNestedStatements(self, context, sink, sorting=1):
-        """ Iterates over statements in 
+    def dumpFormulaContents(self, context, sink, sorting=1):
+        """ Iterates over statements in formula, bunching them up into a set
+        for each subject.
         """
         if sorting: context.occursAs[CONTEXT].sort(StoredStatement.__cmp_cannonical__)
         currentSubject = None
@@ -1181,45 +1146,32 @@ class RDFStore(RDFSink.RDFSink) :
         if currentSubject:
             self._dumpSubject(currentSubject, context, sink, sorting, statements)
 
-    def dumpNestedStatements_old(self, context, sink, sorting=1):
-        """ Iterates over all URIs ever seen looking for statements
-        """
-        rs = self.resources.values()[:]
-        if sorting: rs.sort(compareURI)
-        for r in rs :  # First the bare resource
-            #print "# sorted?" ,`r`
-            self._dumpSubject(r, context, sink, sorting)
-            fs = r.fragments.values()[:]
-            if sorting: fs.sort(compareURI) 
-            for f in fs :  # then anything in its namespace
-                self._dumpSubject(f, context, sink, sorting)
 
-# This outputs arcs leading away from a node, and where appropriate
-# recursively descends the tree, by dumping the object nodes
-# (and in the case of a compact list, the predicate (rest) node).
-
+##########
+#    def _dumpList(self, subj, context, sink, sorting, list):
+#        self.dumpStatement(sink, (context, subject, self.first, list.first), sorting)
+#        self.dumpStatement(sink, (context, subject, self.rest, list.rest), sorting)
+#        # which handles the recursion
+#        return
+            
     def _dumpSubject(self, subj, context, sink, sorting=1, statements=[]):
-        """ Take care of top level anonymous nodes
+        """ Dump the infomation about one top level subject
+        
+        This outputs arcs leading away from a node, and where appropriate
+     recursively descends the tree, by dumping the object nodes
+     (and in the case of a compact list, the predicate (rest) node).
+     It does NOTHING for anonymous nodes which don't occur explicitly as subjects.
         """
-        _anon, _incoming, _se = self._topology(subj, context)    # Is anonymous?
-
-       
-        if 0: sink.makeComment("DEBUG: %s incoming=%i, se=%i, anon=%i" % (
-            `subj`[-8:], _incoming, _se, _anon))
-        if _anon and  _incoming == 1: return           # Forget it - will be dealt with in recursion
+        _anon, _incoming = self._topology(subj, context)    # Is anonymous?
+        if _anon and  _incoming == 1 and not isinstance(subj, Formula): return           # Forget it - will be dealt with in recursion
 
         if isinstance(subj, Formula) and subj is not context:
             sink.startBagSubject(subj.asPair())
-            self.dumpNestedStatements(subj, sink)  # dump contents of anonymous bag
+            self.dumpFormulaContents(subj, sink)  # dump contents of anonymous bag
             sink.endBagSubject(subj.asPair())       # Subject is now set up
             # continue to do arcs
             
         elif _anon and _incoming == 0:    # Will be root anonymous node - {} or [] or ()
-#            if _se > 0:  # Is subexpression of this context
-#                sink.startBagSubject(subj.asPair())
-#                self.dumpNestedStatements(subj, sink)  # dump contents of anonymous bag
-#                sink.endBagSubject(subj.asPair())       # Subject is now set up
-#                # continue to do arcs
 
             if subj is context:
                 pass
@@ -1228,38 +1180,35 @@ class RDFStore(RDFSink.RDFSink) :
                 for s in statements:  # Find at least one we will print
                     context, pre, sub, obj = s.triple
                     if sub is obj: break  # Ok, we will do it
-                    _anon, _incoming, _se = self._topology(obj, context)
+                    _anon, _incoming = self._topology(obj, context)
                     if not((pre is self.forSome) and sub is context and _anon):
                         break # We will print it
                 else: return # Nothing to print - so avoid printing [].
 
                 if sorting: statements.sort(StoredStatement.__cmp_cannonical__)    # Order only for output
 
-                li = subj.definedAsListIn()
-                sink.startAnonymousNode(subj.asPair(), li)
-                if li:   # The subject is a list
-                    self.dumpStatement(sink, li.triple)  #  The actual list, including recursion
+                li = subj.asList()
+                if li and not isinstance(li, EmptyList):   # The subject is a list
+                    sink.startAnonymousNode(subj.asPair(), li)
+#                    self.dumpStatement(sink, (context, self.first, subj, li.first))
+#                    self.dumpStatement(sink, (context, self.rest, subj, li.rest)) # includes rest of list
+                    for s in statements:
+                        p = s.triple[PRED]
+                        if p is self.first or p is self.rest:
+                            self.dumpStatement(sink, s.triple) # Dump the rest outside the ()
                     sink.endAnonymousNode(subj.asPair())
                     for s in statements:
-                        if s is not li:
+                        p = s.triple[PRED]
+                        if p is not self.first and p is not self.rest:
                             self.dumpStatement(sink, s.triple) # Dump the rest outside the ()
                     return
-#                        next = s[PRED].definedAsListIn()    # List?
-#                        if next and next is not self.nil:
-#                            self.dumpStatement(sink, s.triple)    # Dump the element of list
-#                            self.dumpStatement(sink, next.triple) # Dump the rest
-                for s in statements:
-                    if s is not li: self.dumpStatement(sink, s.triple)
-                    next = s[PRED].definedAsListIn()    # List?
-                    if next and next is not self.nil:
-                        self.dumpStatement(sink, next.triple) # If so, unweave now
-                if not li: sink.endAnonymousNode()
-                return  # arcs as subject done
+                else:
+                    sink.startAnonymousNode(subj.asPair())
+                    for s in statements:  #   [] color blue.  might be nicer. @@@$$$$  Try it!
+                        self.dumpStatement(sink, s.triple)
+                    sink.endAnonymousNode()
+                    return  # arcs as subject done
 
-#        if not _anon and isinstance(subj, Formula) and subj is not context:
-#            sink.startBagNamed(context.asPair(), subj.asPair())
-#            self.dumpNestedStatements(subj, sink)  # dump contents of anonymous bag
-#            sink.endBagNamed(subj.asPair())       # Subject is now set up
 
         if sorting: statements.sort(StoredStatement.__cmp_cannonical__)
         for s in statements:
@@ -1269,57 +1218,51 @@ class RDFStore(RDFSink.RDFSink) :
     def dumpStatement(self, sink, triple, sorting=0):
         # triple = s.triple
         context, pre, sub, obj = triple
-        if sub is obj:
+        if (sub is obj and not isinstance(sub, Formula))  or (isinstance(obj.asList(), EmptyList)) or isinstance(obj, Literal):
             self._outputStatement(sink, triple) # Do 1-loops simply
             return
-        # Expand lists to DAML lists on output - its easier
-        if pre.definedAsListIn():
-            self.dumpStatement(sink, (context, self.first, sub, obj), sorting)
-#            if pre is not self.nil:
-            self.dumpStatement(sink, (context, self.rest,  sub, pre), sorting)
-            return
-        _anon, _incoming, _se = self._topology(obj, context)
-        if 0: sink.makeComment("...%s anon=%i, incoming=%i, se=%i" % (
-            `obj`[-8:], _anon, _incoming, _se))
+
+        _anon, _incoming = self._topology(obj, context)
+        _se = isinstance(obj, Formula) and obj is not context
         
         if ((pre is self.forSome) and sub is context and _anon):
-#            print "# @@@@ implicit ", quadToString(s.triple)  
-            return # implicit forSome - may leave [] empty :-(
-
-        if _anon and _incoming == 1:  # Embedded anonymous node in N3
+            return # implicit forSome
+        li = (obj.asList() != None)
+        if _anon and (_incoming == 1 or li or _se):  # Embedded anonymous node in N3
             _isSubject = len(self._index.get((context, obj, None, None), [])) # Has properties in this context?
 
 #            if _isContext > 0 and _isSubject > 0: raise CantDoThat # Syntax problem!@@@
             
             if _isSubject > 0 or not _se :   #   Do [ ] if nothing else as placeholder.
-                li = _anon and self.isList(obj,context)
-                if thing.verbosity()>49 and li:
-                    progress("List found in " + x2s(obj))
-                sink.startAnonymous(self.extern(triple), li)
-                if sorting: obj.occursAs[SUBJ].sort(StoredStatement.__cmp_cannonical__)
-                for t in obj.occursAs[SUBJ]:
-                    if t.triple[CONTEXT] is context:
-                        self.dumpStatement(sink, t.triple)
 
-                ld = pre.definedAsListIn()
-                if ld: #@@@@
-                    self.dumpStatement(sink, ld.triple)
-  
-                if _se > 0:
-                    sink.startBagNamed(context.asPair(),obj.asPair()) # @@@@@@@@@  missing "="
-                    self.dumpNestedStatements(obj, sink)  # dump contents of anonymous bag
-                    sink.endBagObject(pre.asPair(), sub.asPair())
-                    
+                sink.startAnonymous(self.extern(triple), li)
+                if not li or not isinstance(obj.asList(), EmptyList):   # nil gets no contents
+                    if li:
+                        if thing.verbosity()>49:
+                            progress("List found as object of dumpStatement " + x2s(obj))
+#                        self.dumpStatement(sink, (context, self.first, obj, obj.asList().first))
+#                        self.dumpStatement(sink, (context, self.rest, obj, obj.asList().rest)) # includes rest of list
+                    if sorting: obj.occursAs[SUBJ].sort(StoredStatement.__cmp_cannonical__)
+                    for t in obj.occursAs[SUBJ]:
+                        if t.triple[CONTEXT] is context:
+                            self.dumpStatement(sink, t.triple)
+      
+                    if _se > 0:
+                        sink.startBagNamed(context.asPair(),obj.asPair()) # @@@@@@@@@  missing "="
+                        self.dumpFormulaContents(obj, sink)  # dump contents of anonymous bag
+                        sink.endBagObject(pre.asPair(), sub.asPair())
+                        
                 sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
+
             else:  # _isSubject == 0 and _se
                 sink.startBagObject(self.extern(triple))
-                self.dumpNestedStatements(obj, sink)  # dump contents of anonymous bag
+                self.dumpFormulaContents(obj, sink)  # dump contents of anonymous bag
                 sink.endBagObject(pre.asPair(), sub.asPair())
             return # Arc is done
 
         if _se:
             sink.startBagObject(self.extern(triple))
-            self.dumpNestedStatements(obj, sink)  # dump contents of anonymous bag
+            self.dumpFormulaContents(obj, sink)  # dump contents of anonymous bag
             sink.endBagObject(pre.asPair(), sub.asPair())
             return
 
@@ -1332,14 +1275,25 @@ class RDFStore(RDFSink.RDFSink) :
 #  Note when we move things, then the store may shrink as they may
 # move on top of existing entries and we don't allow duplicates.
 #
-    def moveContext(self, old, new):
+    def moveContext(self, old, new, bindings=None):
+        self.reopen(new)    # If cannonical, uncannonicalize #@@ error prone if any references
+        if bindings == None:
+            bindings = [(old, new)]
         for s in old.occursAs[CONTEXT][:] :   # Copy list!
+            q = s.triple
             self.removeStatement(s)
-            for p in CONTEXT, PRED, SUBJ, OBJ:
-                x = s.triple[p]
-                if x is old:
-                    s.triple = s.triple[:p] + (new,) + s.triple[p+1:]
-            self.storeQuad(s.triple)
+            del(s)
+            self.storeQuad(_lookupQuad(bindings, q))
+
+    def copyContextRecursive(self, old, new, bindings):
+        total = 0
+        for s in old.occursAs[CONTEXT][:] :   # Copy list!
+#            q = s.triple
+#            self.removeStatement(s)
+            q2 = _lookupQuadRecursive(bindings, s.triple)
+            if thing.verbosity() > 30: progress("    Conclude: "+`q2`) 
+            total = total -1 + self.storeQuad(q2)
+        return total
                 
     def copyContext(self, old, new):
         for s in old.occursAs[CONTEXT][:] :   # Copy list!
@@ -1358,17 +1312,17 @@ class RDFStore(RDFSink.RDFSink) :
     def purge(self, context, boringClass=None):
         if not boringClass:
             boringClass = self.Chaff
-        for s in boringClass.occursAs[OBJ][:]:
-            con, pred, subj, obj = s.triple
-            if con is context and  pred is self.type:
-                total = 0
-                for p in (PRED, SUBJ, OBJ):
-                    for t in subj.occursAs[p][:]:  # Take copy as list changes
-                        if t.triple[CONTEXT] is context:
-                            self.removeStatement(t)
-                            total = total + 1
+        for s in self._index.get((context, self.type, None, boringClass),[])[:]:
+            con, pred, subj, obj = s.triple  # subj is a member of boringClass
+            total = 0
+            for p in (PRED, SUBJ, OBJ):
+                for t in subj.occursAs[p][:]:  # Take copy as list changes
+                    if t.triple[CONTEXT] is context:
+                        self.removeStatement(t)
+                        total = total + 1
 
-                if thing.verbosity() > 30: progress("Purged %i statements with...%s" % (total,`subj`[-20:]))
+            if thing.verbosity() > 30:
+                progress("Purged %i statements with %s" % (total,`subj`))
 
 
     def removeStatement(self, s):
@@ -1380,13 +1334,7 @@ class RDFStore(RDFSink.RDFSink) :
                         q = c1, p1, s1, o1
                         if q != (None, None, None, None):
                             self._index[(c1, p1, s1, o1)].remove(s)
-
         
-        if pred.definedAsListIn():
-            if not subj._defAsListIn: raise RuntimeError, "Defined as list in two places" #should only once
-            subj._defAsListIn = None
-            self.deList(subj)
-
         self.size = self.size-1
         del s
 
@@ -1430,13 +1378,7 @@ class RDFStore(RDFSink.RDFSink) :
 
         # Execute a filter:
         
-        _variables = universals[:] # Rule-wide or wider universals
         _total = 0
-        for s in filterContext.occursAs[CONTEXT]:
-            t = s.triple
-            if t[PRED] is self.forAll and t[SUBJ] is filterContext:
-                _variables.append(t[OBJ])
-#        print "\n\n# APPLY RULES TO %s, (%i vars)" % (filterContext, len(_variables),), _variables
         
         for s in filterContext.occursAs[CONTEXT]:
             t = s.triple
@@ -1448,7 +1390,8 @@ class RDFStore(RDFSink.RDFSink) :
                     if already == None:
                         alreadyDictionary[s] = []
                         already = alreadyDictionary[s]
-                found = self.tryRule(s, workingContext, targetContext, _variables[:],
+                v2 = universals + filterContext.universals() # Note new variables can be generated
+                found = self.tryRule(s, workingContext, targetContext, v2,
                                      already=already)
                 if (thing.verbosity() >40):
                     progress( "Found %i new stmts on for rule %s" % (found, quadToString(t)))
@@ -1459,13 +1402,10 @@ class RDFStore(RDFSink.RDFSink) :
                 elif t[PRED] is self.type and t[OBJ] is self.Truth: c=t[SUBJ]
 # We could shorten the rule format if forAll(x,y) asserted truth of y too, but this messes up
 # { x foo y } forAll x,y; log:implies {...}. where truth is NOT asserted. This line would do it:
-                elif t[PRED] is self.forAll and t[SUBJ] is self.Truth: c=t[SUBJ]  # DanC suggestion @@
+#                elif t[PRED] is self.forAll and t[SUBJ] is filterContext: c=t[SUBJ]  # DanC suggestion @@
                 if c:
-                    _vs = _variables[:]
-                    for s in filterContext.occursAs[CONTEXT]: # find forAlls pointing downward
-                        if s.triple[PRED] is self.forAll and s.triple[SUBJ] is c:
-                            _vs.append(s.triple[OBJ])
-                    _total = _total + self.applyRules(workingContext, c, targetContext, _vs)  # Nested rules
+                    _total = _total + self.applyRules(workingContext, c, targetContext,
+                                                      universals=universals + filterContext.universals())  # Nested rules
 
 
         if thing.verbosity() > 4: progress("Total %i new statements from rules in %s" % ( _total, filterContext))
@@ -1493,18 +1433,20 @@ class RDFStore(RDFSink.RDFSink) :
                 templateExistentials.append(x)
         if thing.verbosity() >20:
             progress("\n=================== tryRule ============ looking for:")
-            progress( setToString(unmatched, variablesMentioned))
+            progress( setToString(unmatched))
             progress("Variables declared       " + seqToString(_variables))
             progress(" mentioned in template   " + seqToString(variablesMentioned))
             progress(" also used in conclusion " + seqToString(variablesUsed))
             progress("Existentials        " + seqToString(templateExistentials))
 
-        conclusions, _outputVariables = self.nestedContexts(conclusion)
-        _substitute([( conclusion, targetContext)], conclusions)                
+#        conclusions, _outputVariables = self.nestedContexts(conclusion)
+#        _substitute([( conclusion, targetContext)], conclusions)                
 
     # The smartIn context was the template context but it has been mapped to the workingContext.
         return self.match(unmatched, variablesUsed, templateExistentials, [workingContext],
-                      self.conclude, ( self, conclusions, targetContext, _outputVariables, already))
+                          self.conclude,
+                          ( self, conclusion, targetContext,  # _outputVariables,
+                            already))
 
 
 
@@ -1579,7 +1521,7 @@ class RDFStore(RDFSink.RDFSink) :
             if subj is context and pred is self.forSome: # @@@@
                 existentials.append(obj)   # Collect list of existentials
                 
-        # Find all subforumlae  - forumulae which are mentioned at least once.
+        # Find all subformulae  - forumulae which are mentioned at least once.
         subformulae = []
         for arc in con.occursAs[CONTEXT]:
             for p in [ SUBJ, PRED, OBJ]:  # @ can remove PRED if formulae and predicates distinct
@@ -1619,51 +1561,61 @@ class RDFStore(RDFSink.RDFSink) :
                 if thing.verbosity()>79: progress( " Stripped forSome %s" % x2s(obj))
 
             if subj is context and (pred is self.forSome or pred is self.forAll): # @@@@
-                variables.append(obj)   # Collect list of existentials
+                if not isinstance(obj, Formula):
+                    variables.append(obj)   # Collect list of existentials
 #                if pred is self.forSome: # @@@@
 #                    existentials.append(obj)   # Collect list of existentials
                 
         return statements, variables
 
-#   Find how many variables occur in an expression
-#   Not sure whether we need thus .. but anyway, here it is for the record.
+#   Find which variables occur in an expression
 
     def occurringIn(self, x, vars, level=0):
-        """ Figure out, given a set of variables which if any occur in a formula.
+        """ Figure out, given a set of variables which if any occur in a formula, list, etc
          The result is returned as an ordered set so that merges can be done faster.
         """
-        set = []
-        if thing.verbosity() > 20: progress(`level`+"  "+`x`)
-        for s in x.occursAs[CONTEXT]:
-            if s[PRED] is not self.forSome:
-                for p in PRED, SUBJ, OBJ:
-                    y = s[p]
-                    if y is x:
-                        pass
-                    elif isinstance(y, Formula):
-                        set = merge(set, self.occurringIn(y, vars, level+1))
-                    elif y in vars:
-                        set = merge(set, [y])
-        return set 
+        if isinstance(x, Formula):
+            set = []
+#            if thing.verbosity() > 98: progress("    occuringIn: "+"  "*level+`x`)
+            for s in x.occursAs[CONTEXT]:
+                if s[PRED] is not self.forSome:
+                    for p in PRED, SUBJ, OBJ:
+                        y = s[p]
+                        if y is x:
+                            pass
+                        else:
+                            set = merge(set, self.occurringIn(y, vars, level+1))
+            return set
+        elif x.asList() != None:
+            set = []
+            for y in x.asList().value():
+                set = merge(set, self.occurringIn(y, vars, level+1))
+            return set
+        else:
+            if x in vars:
+                return [x]
+            return []
 
 
 #  Find whether any variables occur in an expression
-#  Used in the built-ins to see whether they can run
+#  NOT Used.
 
     def anyOccurrences(self, vars, x):
-        """ Figure out, given a set of variables which if any occur in a list, formula etc."""
-#        if x in done: return None   # Don't bother looping with nested formulae
-#        done2 = done + [ x ]
-        for s in x.occursAs[CONTEXT]:   # Should be valid list
-            for p in PRED, SUBJ, OBJ:
-                y = s[p]
-                if y is not x:
-                    if y in vars: return y
-                    if isinstance(y, Formula):
-                        z = self.anyOccurrences(vars, s[p])                    
-                        if z != None: return z
-        return None
-
+        """ Figure out, given a set of variables whether any occur in a list, formula etc."""
+        if x in vars: return x
+        if isinstance(x, Formula):
+            for s in x.occursAs[CONTEXT]:   # Should be valid list
+                for p in PRED, SUBJ, OBJ:
+                    y = s[p]
+                    z = self.anyOccurrences(vars, y)
+                    if z != None: return z
+        elif x.asList() != None:
+            for y in x.asList().value():
+                z = self.anyOccurrences(vars, y)
+                if z != None: return z
+            return None
+        return None            
+        
 
 
 ############################################################## Query engine
@@ -1707,24 +1659,8 @@ class RDFStore(RDFSink.RDFSink) :
 
 # Utilities to search the store:
 
-#    def any(self, quad):             # Returns first match for one variable
-#        variables = []
-#        q2 = [ quad[0], quad[1], quad[2], quad[3]]  # tuple to list
-#        for p in ALL4:
-#            if quad[p] == None:
-#                v = self.intern((RESOURCE, "internaluseonly:#var"+`p`))
-#               variables.append(v)
-#                q2[p] = v
-#        unmatched = [ ( q2[0], q2[1], q2[2], q2[3])]
-#        listOfBindings = []
-#        count = self.match(unmatched, variables, [], action=self.collectBindings, param=listOfBindings, justOne=1)
-#        if listOfBindings == []: return None
-##        progress("#@@@ any findss %s " % listOfBindings)
-#
-#        return listOfBindings[0][0][1]  # First result, first variable, value.
 
-
-    def every(self, quad):             # Returns a list of lists of values
+    def every(self, quad):             # Returns a list of lists of values.  Used?
         variables = []
         q2 = list(quad)
         for p in ALL4:
@@ -1744,52 +1680,26 @@ class RDFStore(RDFSink.RDFSink) :
             results.append(res)
         return results
 
-
-    def _noteBoundList(self, L, queue, allVariables):
-        """Note that there are no unbound variables in a list L
-        
-        L is a list in the queue which now has no variables in it.
-        This may mean that list of which it is the daml:rest are alsoo bound.
-        """
-        if thing.verbosity() > 49: progress("Bound list: " + x2s(L))
-        for i in range(len(queue)):
-            item = queue[i]
-            state, short, consts, vars, boundLists, quad, listState, myIndex = item
-            lv = vars[:]
-            bl = boundLists[:]
-            changed = 0
-            for p in PARTS:
-                if quad[p] is L:
-                    # Might not be on vars yet, as may be in state 99
-                    if p in queue[i][VARS]:
-                        lv.remove(p)
-                    bl.append(p)
-                    changed = 1
-                    if thing.verbosity() > 49:
-                        progress("  @@Bound list: %s, bl length now "
-                                        %x2s(quad[p]),  `len(bl)`)
-                    if queue[i][STATE] == 20 or queue[i][STATE] == 50:
-                        state = 99
-                        listState = 2  # dignostic only i think
-            if changed:
-                queue[i] = (state, short, consts, lv, bl, quad, listState, myIndex)    # Bound now! @@ revisit
-
-            if quad[PRED] is L and (quad[OBJ] not in allVariables):  # Propagate
-                self._noteBoundList(quad[SUBJ], queue, allVariables)
-
-    # Find all lists in the query by seeding this with nil.
-    def _noteList(self, L, queue):
-        if thing.verbosity() > 49: progress("List: " + x2s(L))
-        for i in range(len(queue)):
-            state, short, consts, vars, boundLists, quad, listState, myIndex = queue[i]
-            if quad[PRED] is L:  # Propagate
-                if listState == 0:  # If we do't know already
-                    queue[i] = (state, short, consts, vars, boundLists, quad, 1, myIndex)
-                    self._noteList(quad[SUBJ], queue)
+    def checkList(self, context, L):
+        """Check whether this new list causes ohter things to become lists"""
+        if thing.verbosity() > 80: progress("Checking new list ",`L`)
+        rest = L.asList()
+        possibles = self._index.get((context, self.rest, None, L), [])  # What has this as rest?
+        for s in possibles:
+            L2 = s[SUBJ]
+            ff = self._index[(context, self.first, L2, None)]
+            if ff:
+                first = ff[0][OBJ]
+                if L2.asList() == None:
+                    L2._asList = rest.precededBy(first)
+#                    self.removeStatement(ff[0])
+#                    self.removeStatement(s)
+                    self.checkList(context, L2)
+                return
 
 # Generic match routine, outer level:  Prepares query
         
-    def  match(self,                 # Neded for getting interned constants
+    def match(self,                 # Neded for getting interned constants
                unmatched,           # Tuple of interned quads we are trying to match CORRUPTED
                variables,           # List of variables to match and return CORRUPTED
                existentials,        # List of variables to match to anything
@@ -1798,15 +1708,15 @@ class RDFStore(RDFSink.RDFSink) :
                action = None,       # Action routine return subtotal of actions
                param = None,        # a tuple, see the call itself and conclude()
                hypothetical =0,     # The formulae are not in the store - check for their contents
-               justOne = 0):        # Flag: Stop when you find the first one
-
+               justOne = 0,         # Flag: Stop when you find the first one
+               level = 0):          # nesting level
         """ Apply action(bindings, param) to succussful matches
         """
         if action == None: action=self.doNothing
         
         if thing.verbosity() > 50:
             progress( "match: called with %i terms." % (len(unmatched)))
-            if thing.verbosity() > 90: progress( setToString(unmatched, variables))
+            if thing.verbosity() > 90: progress( setToString(unmatched))
 
         if not hypothetical:
             for x in existentials[:]:   # Existentials don't count when they are just formula names
@@ -1814,30 +1724,104 @@ class RDFStore(RDFSink.RDFSink) :
                 if isinstance(x,Formula):
                     existentials.remove(x)
 
-        queue = []   #  Unmatched with more info, in order
+        queue = []   #  Unmatched with more info
         for quad in unmatched:
-            item = (99, INFINITY, [], [], [], quad, 0, None) 
+            item = QueryItem(self, quad)
+            if item.setup(allvars=variables+existentials, smartIn=smartIn) == 0:
+                if thing.verbosity() > 80: progress("match: abandoned, no way for "+`item`)
+                return 0
             queue.append(item)
-        self._noteList(self.nil, queue)
-        return self.query(queue, variables, existentials, smartIn, action, param,
+        return self.query2(queue, variables, existentials, smartIn, action, param,
                           bindings=[], justOne=justOne)
 
+         
+    def doNothing(self, bindings, param, level=0):
+        if thing.verbosity()>99: progress( " "*level, "doNothing: Success! found it!")
+        return 1                    # Return count of calls only
 
-    STATES = """State values as follows, high value=try first:
-    99  State unknown - to be [re]calculated.
+    # Whether we do a smart match determines whether we will be able to conclude
+    # things which in fact we knew already thanks to the builtins.
+    def conclude(self, bindings, param, level=0):  # Returns number of statements added to store
+        store, conclusion, targetContext,  already = param
+        if thing.verbosity() >60: progress( "\n#Concluding tentatively..." + bindingsToString(bindings))
+
+        if already != None:
+            if bindings in already:
+                if thing.verbosity() > 30: progress("@@Duplicate result: ", bindingsToString(bindings))
+                # raise foo
+                return 0
+            if thing.verbosity() > 30: progress("-- ok: ", bindingsToString(bindings))
+            already.append(bindings)   # A list of lists
+
+        b2 = bindings[:]
+        b2.append((conclusion, targetContext))
+        ok = targetContext.universals()  # It is actually ok to share universal variables with other stuff
+        poss = conclusion.universals()
+        for x in poss[:]:
+            if x in ok: poss.remove(x)
+        vars = conclusion.existentials() + poss  # Things with arbitrary identifiers
+        clashes = self.occurringIn(targetContext, vars)
+        for v in clashes:
+            b2.append((v, store.genid(RESOURCE))) # Regenerate names to avoid clash
+        if thing.verbosity()>20:
+            progress( "Concluding definitively" + bindingsToString(b2))
+        before = self.size
+        self.copyContextRecursive(conclusion, targetContext, b2)
+        return self.size - before
+
+#        myConclusions = conclusions[:]
+#        _substitute(bindings, myConclusions)
+#        # Does this conclusion exist already in the database?
+#        found = self.match(myConclusions[:],
+#                           [], oes[:], smartIn=[targetContext],
+#                           hypothetical=1,
+#                           justOne=1,
+#                           level = level + 8)  # Find first occurrence, SMART
+#        if found:
+#            if thing.verbosity()>00:
+#                progress( "Concluding: Forget it, already had info" + bindingsToString(bindings))
+#                progress("Already list: ", already) 
+#                
+#            if already != None: raise RunTimeError, "Already in store but bindings new?" 
+#            return 0
+        if thing.verbosity()>20:
+            progress( "Concluding definitively" + bindingsToString(bindings))
+        
+        # Regenerate a new form with its own existential variables
+        # because we can't reuse the subexpression identifiers.
+        # We don't want clashes with existing variables or constants!
+#        bindings2 = []
+#        for i in oes:
+#            if isinstance(i, Formula):
+#                g = store.genid(FORMULA)  #  Generate with same type as original
+#            else:
+#                g = store.genid(RESOURCE)  #  Generate with same type as original
+#            bindings2.append((i,g))
+
+        total = 0
+        for q in myConclusions:
+            q2 = _lookupQuad(bindings2, q)
+            total = total + store.storeQuad(q2)
+            if thing.verbosity()>10: progress( "        *** Conclude: " + quadToString(q2))
+        return total
+
+##################################################################################
+
+    STATES2 = """State values as follows, high value=try first:
+    99  State unknown - to be [re]calculated by setup, which should change it to stg else.
+    80  Have exhausted all possible ways to saitsfy this item. stop now.
+    65  Light, can run  Do this!
     60  Not a light built-in, haven't searched yet.
-    55  Not a light built-in, haven't searched yet, a list. ?? no.
     50  Light built-in, not enough constants to calculate, haven't searched yet.
-    20  Light built-in, not enough constants to calculate, search failed.
-    15  Heavy built-in, search failed, but formula now has no vars left. Ready to run.
-    14  Heavy built-in, search failed, no vars, except maybe embedded in formula arguments.
+    20  Light built-in, not enough constants to calculate, search done.
+    35  Heavy built-in, search failed, but formula now has no vars left. Ready to run.
     10  Heavy built-in, too many variables in args to calculate, search failed.
      9  Heavy built-in, too many variables within formula args to calculate, search failed.
      7  List defining statement, search failed, unbound variables in list.?? no
      5  List defining statement, search failed, list is all bound.
                     """
 
-    def  query(self,                # Neded for getting interned constants
+    def  query2(self,                # Neded for getting interned constants
                queue,               # Ordered queue of items we are trying to match CORRUPTED
                variables,           # List of variables to match and return CORRUPTED
                existentials,        # List of variables to match to anything
@@ -1846,9 +1830,9 @@ class RDFStore(RDFSink.RDFSink) :
                action = None,       # Action routine return subtotal of actions
                param = None,        # a tuple, see the call itself and conclude()
                bindings = [],       # Bindings discovered so far
-               newBindings = [],    # Bindings JUST discovered - to be folded in
-               justOne = 0):        # Flag: Stop when you find the first one
-
+               newBindings = [],    # New bindings not yet incorporated
+               justOne = 0,         # Flag: Stop when you find the first one
+               level = 0):          # Nesting level for diagnostic indentation only
         """ Apply action(bindings, param) to succussful matches
     bindings      collected matches already found
     newBindings  matches found and not yet applied - used in recursion
@@ -1857,13 +1841,13 @@ class RDFStore(RDFSink.RDFSink) :
         total = 0
         
         if thing.verbosity() > 50:
-            progress( "QUERY: called %i terms, %i bindings %s, (new: %s)" %
+            progress( " "*level+"QUERY2: called %i terms, %i bindings %s, (new: %s)" %
                       (len(queue),len(bindings),bindingsToString(bindings),
                        bindingsToString(newBindings)))
-            if thing.verbosity() > 90: progress( queueToString(queue))
+            if thing.verbosity() > 90: progress( queueToString(queue, level))
 
         for pair in newBindings:   # Take care of business left over from recursive call
-            if thing.verbosity()>95: progress("New binding:  %s -> %s" % (x2s(pair[0]), x2s(pair[1])))
+            if thing.verbosity()>95: progress(" "*level+"    new binding:  %s -> %s" % (x2s(pair[0]), x2s(pair[1])))
             if pair[0] in variables:
                 variables.remove(pair[0])
                 bindings.append(pair)  # Record for posterity
@@ -1873,346 +1857,360 @@ class RDFStore(RDFSink.RDFSink) :
 
         # Perform the substitution, noting where lists become boundLists.
         # We do this carefully, messing up the order only of things we have already processed.
-        i = len(queue) - 1
-        while i >= 0:  # A valid index into q
-            state, short, consts, vars, boundLists, quad, listState, myIndex = queue[i]
-            changed = 0
-            newBoundList = 0
-            if state == 9:
-                for var, val in newBindings:
-                    if var in myIndex:
-                        l = myIndex[:]   # Make copy of list to preserve versions from previous iterations
-                        l.remove(var)
-                        myIndex = l
-                        # progress ("@@@@ removed  ", var, myIndex)
-                        changed = 1
-                        if myIndex == []:
-                            state = 15   # Heavy ready
-                            break
-
-            for var, val in newBindings:
-                for p in ALL4:  # any variables, even list IDs, can be bound
-                    if quad[p] is var:
-                        if p in vars:
-                            vs = vars[:]
-                            vs.remove(p)
-                            vars = vs
-                        changed = 1
-                        if (p == OBJ
-                            and (PRED in boundLists or quad[PRED] is self.nil)): # and this is a list with no vars in daml:rest   @@@@???
-                            newBoundList = 1
-            if changed:   # Has fewer variables now .. this is progress
-                if state != 15: state = 99
-                quad = _lookupQuad(newBindings, quad)
-                queue[i] = (state, short, consts, vars, boundLists, quad, listState, myIndex)
-                if newBoundList:
-                    self._noteBoundList(quad[SUBJ], queue, variables + existentials)  # The list is now bound, so propagate this up
-                    # Note that noteBoundList affects queue, so must store our changed first.
-
-            i = i - 1
+        if newBindings != []:
+            for item in queue:
+                if item.bindNew(newBindings) == 0: return 0
 
 
-        if len(queue) == 0:
-            if thing.verbosity()>50: progress( "# QUERY FOUND MATCH with bindings: " + bindingsToString(bindings))
-            return action(bindings, param)  # No terms left .. success!
+ #       if len(queue) == 0:
+ #           if thing.verbosity()>50: progress( " "*level+"QUERY MATCH COMPLETE with bindings: " + bindingsToString(bindings))
+ #           return action(bindings, param, level)  # No terms left .. success!
 
 
         while len(queue) > 0:
 
-            if (thing.verbosity() > 90) or (thing.verbosity() > 65) and queue[-1][STATE] != 99:
-                progress( "   query iterating with %i terms, %i bindings: %s; %i new bindings: %s ." %
+            if (thing.verbosity() > 90):
+                progress(  " "*level+"query iterating with %i terms, %i bindings: %s; %i new bindings: %s ." %
                           (len(queue),
                            len(bindings),bindingsToString(bindings),
                            len(newBindings),bindingsToString(newBindings)))
-                progress (queueToString(queue))
+                progress ( " "*level, queueToString(queue, level))
 
 
-            # Take last.  (Could search here instead of keeping queue in order)
-            # state, short, consts, vars, boundLists, quad = queue.pop()
-            # The effort required to search is roughly the length of the list
-
+            # Take best.  (Design choice: search here or keep queue in order)
+            # item = queue.pop()
             best = len(queue) -1 # , say...
             i = best - 1
             while i >=0:
-                if (queue[i][STATE] > queue[best][STATE]
-                    or (queue[i][STATE] == queue[best][STATE]
-                        and queue[i][SHORT] < queue[best][SHORT])): best=i
+                if (queue[i].state > queue[best].state
+                    or (queue[i].state == queue[best].state
+                        and queue[i].short < queue[best].short)): best=i
                 i = i - 1                
-            state, short, consts, vars, boundLists, quad, listState, myIndex = queue[best]
+            item = queue[best]
+            queue.remove(item)
             if thing.verbosity()>49:
-                progress("Looking at " + itemToString(queue[best])
+                progress( " "*level+"Looking at " + `item`
                          + "\nwith vars("+seqToString(variables)+")"
                          + " ExQuVars:("+seqToString(existentials)+")")
-            queue = queue[:best] + queue[best+1:]
+            con, pred, subj, obj = item.quad
+            state = item.state
+            if state == 80:
+                return total # Forget it -- must be impossible
+            if state == 70 or state == 65:
+                nbs = item.tryLight(queue)
+            elif state == 50 or state == 60: #  Not searched yet
+                nbs = item.trySearch()
+            elif state == 35:  # not light, may be heavy; or heavy ready to run
+                if pred is self.includes:
+                    if (isinstance(subj, Formula)
+                        and isinstance(obj, Formula)):
 
-
-            con, pred, subj, obj = quad
-            if state == 99:   # Haven't looked at it yet, or things have changed
-
-                # First, check how many variables in this term, and how long it would take to search:
-                consts = []         # Parts of speech to test for match
-                vars = []           # Parts of speech which are variables
-                pattern = [None, None, None, None]
-                for p in ALL4 :
-                    if p in boundLists: # If we know this from before
-                        pass
-                    elif quad[p] in variables + existentials:
-                        vars.append(p)
+                        more_unmatched, more_variables = self.oneContext(obj)
+                        _substitute([( obj, subj)], more_unmatched)
+                        _substitute(bindings, more_unmatched)
+                        existentials = existentials + more_variables
+                        allvars = variables + existentials
+                        for quad in more_unmatched:
+                            newItem = QueryItem(self, quad)
+                            queue.append(newItem)
+                            newItem.setup(allvars, smartIn + [subj])
+                        if thing.verbosity() > 40:progress( " "*level+"**** Includes: Adding %i new terms and %s as new existentials."%
+                                                 (len(more_unmatched),seqToString(more_variables)))
+                        item.state = 0
                     else:
-                        pattern[p] = quad[p]
-                quad2 = pattern[0], pattern[1], pattern[2], pattern[3]  # @@@ Yuk
-                myIndex = self._index.get(quad2, [])
-                short = len(myIndex)
-                
-                # Seed bound lists:          
-                if (PRED in boundLists or quad[PRED] is self.nil) and SUBJ in vars and OBJ not in vars:
-                    self._noteBoundList(quad[SUBJ], queue, variables + existentials)
-                            
-                # Next, check for "light" (quick) built-in functions
-#                progress ("Q BuiltIn %s isinstnace LightBuiltIn = %i" % (`pred`,isinstance(pred, LightBuiltIn)))
-#                progress ("    "+`pred.__class__`)
-#                progress ("    "+ `LightBuiltIn`)
-                
-                if con in smartIn and isinstance(pred, LightBuiltIn):
-                    if len(vars) == 0:   # no variables: constant expression - we can definitely evaluate it
-                        obj_py = self._toPython(obj, OBJ in boundLists, queue)
-                        subj_py = self._toPython(subj, SUBJ in boundLists, queue)
-                        if pred.evaluate(self, con, subj, subj_py, obj, obj_py):
-                            return self.query(queue, variables, existentials, smartIn, action, param,
-                                          bindings, [], justOne) # No new bindings but success in calculated logical operator
-                                                        #    and so, one less query line.
-                        else: return 0   # We absoluteley know this won't match with this in it
-                    elif len(vars) == 1 :  # The statement has one variable - try functions
-                        if vars[0] == OBJ and isinstance(pred, Function):
-                            subj_py = self._toPython(subj, SUBJ in boundLists, queue)
-                            result = pred.evaluateObject(self, con, subj, subj_py)
-                            if result == None: state = 50 # Light, Waiting for SOME CONDITION, not searched
-                            else: return self.query(queue, variables, existentials, smartIn, action, param,
-                                                      bindings, [ (obj, result)], justOne)
-                        elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
-                            obj_py = self._toPython(obj, OBJ in boundLists, queue)
-                            result = pred.evaluateSubject(self, con, obj, obj_py)
-                            if result == None: state = 50 # Light, Waiting for constants, not searched
-                            else: return self.query(queue, variables, existentials, smartIn, action, param,
-                                                      bindings, [ (subj, result)], justOne)
-                    # Now we have a light builtin needs search, otherwise waiting for enough constants to run
-                    state = 50
+                        raise RuntimeError("Include can only work on formulae "+`item`)
+                    nbs = []
+                else:
+                    nbs = item.tryHeavy(queue, bindings)
+            elif state == 7: # All we are left with are list definitions, which are fine  7 or 5
+                if thing.verbosity()>50: progress( " "*level+ "QUERY FOUND MATCH (dropping lists) with bindings: " + bindingsToString(bindings))
+                return action(bindings, param)  # No non-list terms left .. success!
+            elif state ==10 or state == 20: # Can't
+                if thing.verbosity() > 49 :
+                    progress("@@@@ Warning: query can't find term which will work.")
+                    progress( "   state is %s, queue length %i" % (state, len(queue)+1))
+                    progress("@@ Current item: %s" % `item`)
+                    progress(queueToString(queue))
+                    raise RuntimeError, "Insufficient clues"
+                return 0  # Forget it
+            else:
+                raise RuntimeError, "Unknown state " + `state`
+            if thing.verbosity() > 90: progress(" "*level +"nbs=" + `nbs`)
+            if nbs == 0: return 0
+            else:
+                total = 0
+                for nb in nbs:
+                    q2 = []
+                    for i in queue:
+                        newItem = i.clone()
+                        q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
+                    total = total + self.query2(q2, variables[:], existentials[:], smartIn, action, param,
+                                          bindings[:], nb, justOne=justOne, level=level+2)
+                    if justOne and total:
+                        return total
 
-                else:   # Not a light builtin
-                    if short == 0:  # Skip search if no possibilities!
-                        if listState:
-                            if PRED in boundLists: state = 5  # hypothetical
-                            else: state = 7                   # hypothetical
-                        elif not isinstance(pred, HeavyBuiltIn):
-                            if thing.verbosity()>49: progress("No way, short=0 for " + quadToString(quad, vars, boundLists))
-                            return 0  # No way
-                        
-                    if listState: state = 55
-                    else: state = 60   # Not a light built in, not searched. Try it when it comes around.
-
-            else: # not 99
-                if state == 50 or state == 55 or state == 60: #  Not searched yet
-                    # Search the store
-                    if len(vars) == 4:
-                        raise notimp # Can't handle something with no constants at all.
-                        return 0    
-                                    # Not a closed world problem - and this is a cwm!
-                                    # Actually, it could be a valid problem -but pathalogical.
-                    if thing.verbosity() > 36:
-                        progress( "  Searching %i for %s" %(
-                            short, quadToString(quad, vars, boundLists)))
-                        if thing.verbosity() > 70:
-                            progress( "#    where variables are" + seqToString(variables + existentials))
-
-                    for s in myIndex:
-                        nb = []
-                        reject = 0
-                        for p in vars:
-                            binding = ( quad[p], s.triple[p])
-                            duplicate = 0
-                            for oldbinding in nb:
-                                if oldbinding[0] is quad[p]:
-                                    if oldbinding[1] is binding[1]: # A binding we have already - no sweat
-                                        duplicate = 1  #from double occurrence on variable in query line
-                                    else: # A clash - reject binding the same to var to 2 different things!
-                                        reject = 1
-                            if not duplicate:
-                                nb.append(( quad[p], s.triple[p]))
-                        if not reject:
-                        #  We must take copies of the lists each time, as they get corrupted and we need them again:
-                            total = total + self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
-                                                  bindings[:], nb[:], justOne=justOne)
-                            if justOne and total: return total
-                    # Search has failed
-                    if state == 50: state = 20   # Note that search on light builtin tried
-                    elif state == 55 or state == 60:   # List search failed
-                        if con in smartIn and isinstance(pred, HeavyBuiltIn):
-                            state = 14  # Try heavy now
-                        elif listState:
-                            if pred is self.nil or PRED in boundLists:  # This is a structural line: a hypothesis. Keep it
-                                state = 5
-                            else:
-                                state = 7
-                        else: # Not heavy, done search.
-                            if thing.verbosity() > 80: progress("Not builtin, search done, %i found." % total)
-                            return total
-                    
-                if state == 14 or state == 15:  # not light, may be heavy; or heavy ready to run
-
-                    # notIncludes has to be a recursive call, but log:includes just extends the search
-                    try:
-                        if pred is self.includes:
-                            if (isinstance(subj, Formula)
-                                and isinstance(obj, Formula)):
-
-                                more_unmatched, more_variables = self.oneContext(quad[OBJ])
-                                _substitute([( obj, subj)], more_unmatched)
-                                _substitute(bindings, more_unmatched)
-                                for quad in more_unmatched:
-                                    item = 99, 0, [], [], [], quad, 0, None
-                                    queue.append(item)
-                                existentials = existentials + more_variables
-                                if thing.verbosity() > 40: progress(" **** Includes: Adding %i new terms and %s as new existentials."%
-                                                         (len(more_unmatched),seqToString(more_variables)))
-                                return self.query(queue, variables, existentials, smartIn, action, param,
-                                                  bindings=bindings, justOne=justOne) # bindings new to this forumula
-                            else:  # Not forumla
-                                if len(vars) == 0: return total  # Not going to work if not forumlae ever
-                                # otherwise might work if vars 
-
-                        else: # Deal with others.   First, check any formula arguments for unresolved vars:
-                            # progress("@@@@@@@@@@@state", state, subj, obj, "vars=", vars)
-                            if len(vars)==0:    # Binary operators?
-                                if state == 14:
-                                    v = merge(self.occurringIn(subj, variables+existentials),
-                                              self.occurringIn(obj, variables+existentials))
-                                    if v != []:
-                                        # progress(" Waiting for unresolved variables in subformula: " + seqToString(v))
-                                        myIndex = v  # Use this to cache things we are waiting for
-                                        state = 9    # Wwait for more variables as per myIndex
-                                if state != 9:
-                                    result = pred.evaluate2(self, subj, obj, variables[:], bindings[:])
-                                    if result:
-                                        if thing.verbosity() > 80: progress("Heavy predicate succeeds")
-                                        return self.query(queue, variables, existentials, smartIn, action, param,
-                                                      bindings, [],justOne=justOne) # No new bindings but success in calculated logical operator
-                                    else:
-                                        if thing.verbosity() > 80: progress("Heavy predicate fails")
-                                        return total   # We absoluteley know this won't match with this in it
-                            elif len(vars) == 1 :  # The statement has one variable - try functions
-                                if vars[0] == OBJ and isinstance(pred, Function):
-                                    if state == 14:
-                                        v = self.occurringIn(subj, variables)
-                                        if v != []:
-                                            myIndex = v  # Use this to cache things we are waiting for
-                                            state = 9    # Wwait for more variables as per myIndex
-                                    if state != 9:
-                                        result = pred.evaluateObject2(self, subj)
-                                        if result == None: return total
-                                        else: return self.query(queue, variables, existentials, smartIn, action, param,
-                                                                  bindings, [ (obj, result)],justOne=justOne)
-                                elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
-                                    if state == 14:
-                                        v = self.occurringIn(obj, variables)
-                                        if v != []:
-                                            myIndex = v  # Use this to cache things we are waiting for
-                                            state = 9    # Wwait for more variables as per myIndex
-                                    if state != 9:
-                                        obj_py = self._toPython(obj, OBJ in boundLists, queue)
-                                        result = pred.evaluateSubject2(self, obj, obj_py)
-                                        if result != None:  # There is some such result
-                                            return self.query(queue, variables, existentials, smartIn, action, param,
-                                                                  bindings, [ (subj, result)],justOne=justOne)
-                                        else: return total
-                                else:
-                                    state = 10   # Heavy, can't resolve without more variables
-                            else:
-                                state = 10   # Heavy, can't resolve without more variables
-
-                    except (IOError, SyntaxError):
-                        raise BuiltInFailed(sys.exc_info(),
-                                              (state, short, consts, vars, boundLists, quad, listState, myIndex) ),None
-                    #, sys.exc_info[2]
-
-                        
-                elif state < 9: # All we are left with are list definitions, which are fine  7 or 5
-                    if thing.verbosity()>50: progress( "# QUERY FOUND MATCH (dropping lists) with bindings: " + bindingsToString(bindings))
-                    return action(bindings, param)  # No non-list terms left .. success!
-
-                elif state <50: # state was not 99, 60 or 50 or <9, so either 20 or 10 or 9:
-                    if thing.verbosity() > 49 :
-                        # progress("@@@@ Warning: query can't find term which will work.")
-                        progress( "   state is %s, queue length %i" % (state, len(queue)+1))
-
-                        item = state, short, consts, vars, boundLists, quad, listState, myIndex
-                        progress("@@ Current item: %s" % itemToString(item))
-                        progress(queueToString(queue))
-                        raise RuntimeError, "Insufficient clues"
-                    return total  # Forget it
-    #                raise internalError # We have something in an unknown state in the queue
-
-
-            if state != 0:   # state 0 means leave me off the list
-                item = state, short, consts, vars, boundLists, quad, listState, myIndex
+            if item.state == 80: return total
+            if item.state != 0:   # state 0 means leave me off the list
                 queue.append(item)
             # And loop back to take the next item
 
-        if queue != []:
-            raise canNotResolve  # we have ended up with an impossible combination of things it seems
-        return total
-         
-    def doNothing(self, bindings, param):
-        if thing.verbosity()>99: progress( "Success! found it!")
-        return 1                    # Return count of calls only
+        if thing.verbosity()>50: progress( " "*level+"QUERY MATCH COMPLETE with bindings: " + bindingsToString(bindings))
+        return action(bindings, param, level)  # No terms left .. success!
 
-    # Whether we do a smart match determines whether we will be able to conclude
-    # things which in fact we knew already thanks to the builtins.
-    def conclude(self, bindings, param):  # Returns number of statements added to store
-        store, conclusions, targetContext, oes, already = param
-        if thing.verbosity() >60: progress( "\n#Concluding tentatively..." + bindingsToString(bindings))
+#        if queue != []:
+#            raise RuntimeError, "Cannot Resolve "+`queue`  # we have ended up with an impossible combination of things it seems
+#        return total
 
-        if already != None:
-            if bindings in already:
-                if thing.verbosity() > 30: progress("@@Dup: ", bindingsToString(bindings))
-                # raise foo
-                return 0
-            if thing.verbosity() > 30: progress("-- ok: ", bindingsToString(bindings))
-            already.append(bindings)   # A list of lists
-        
-        myConclusions = conclusions[:]
-        _substitute(bindings, myConclusions)
-        # Does this conclusion exist already in the database?
-        found = self.match(myConclusions[:], [], oes[:], smartIn=[targetContext],hypothetical=1, justOne=1)  # Find first occurrence, SMART
-        if found:
-            if thing.verbosity()>00:
-                progress( "Concluding: Forget it, already had info" + bindingsToString(bindings))
-                progress("Already list: ", already) 
+
+
+class QueryItem:
+    def __init__(self, store, quad):
+        self.quad = quad  # 99, INFINITY, [], [], [], quad, 0, None
+        self.store = store
+        self.state = 99
+        self.short = INFINITY
+        self.neededFor = None   # see setup()
+        self.myIndex = None     # will be list of satistfying statements
+        return
+
+    def clone(self):
+        """Take a copy when for iterating on a query"""
+        x = QueryItem(self.store, self.quad)
+        x.state = self.state
+        x.short = self.short
+        x.neededFor = []
+        for p in ALL4:   # Deep copy!  Prevent crosstalk
+            x.neededFor.append(self.neededFor[p][:])
+        x.myIndex = self.myIndex
+        return x
+
+
+
+    def setup(self, allvars, smartIn):        
+        """Check how many variables in this term, and how long it would take to search
+
+        Returns, [] normally or 0 if there is no way this query will work."""
+        con, pred, subj, obj = self.quad
+        self.neededFor = [ [], [], [], [] ]  # Things we are waiting for for each part of speech
+        pattern = [con, pred, subj, obj]  # What do we search for?
+        complex = 0
+        for p in PRED, SUBJ, OBJ :
+            x = self.quad[p]
+#            if x in allvars and x.asList() == None:   # Variable
+            if x in allvars:   # Variable
+                self.neededFor[p] = [x]
+                pattern[p] = None   # This determines what we search for
+            if isinstance(x, Formula) or x.asList() != None: # expr
+                ur = self.store.occurringIn(x, allvars)
+                self.neededFor[p] = ur    # This determines when we can run a builtin
+                if ur != []:
+                    self.neededFor[p] = ur
+                    complex = 1     # Can't search with variables
                 
-#            if already != None: raise RunTimeError, "Already in store but bindings new?" 
-            return 0
-        if thing.verbosity()>20:
-            progress( "Concluding definitively" + bindingsToString(bindings))
+        if not complex:
+            quad2 = pattern[0], pattern[1], pattern[2], pattern[3]  # @@@ Yuk
+            self.myIndex = self.store._index.get(quad2, [])
+            self.short = len(self.myIndex)
+        else:
+            self.short = INFINITY   # complex expressions with variables in, can't search
+
+        if con in smartIn and isinstance(pred, LightBuiltIn):
+            if self.canRun(): self.state = 70  # Can't do it here as can't return result from this method
+            else: self.state = 50 # Light built-in, can't run yet, not searched
+        elif self.short == 0:  # Skip search if no possibilities!
+            self.searchDone()
+        else:
+            self.state = 60   # Not a light built in, not searched. Try it when it comes around.
+        if thing.verbosity() > 80: progress("setup:" + `self`)
+        if self.state == 80: return 0
+        return []
+
+
+
+    def tryLight(self, queue):                    
+        """check for "light" (quick) built-in functions.
+        Return codes:  0 - give up;  1 - continue,  [...] list of binding lists"""
+        con, pred, subj, obj = self.quad
+
+        self.state = 50   # Assume can't run
+        if (self.neededFor[SUBJ] == []):
+            if (self.neededFor[OBJ] == []):   # no variables: constant expression - we can definitely evaluate it
+                obj_py = self.store._toPython(obj, queue)
+                subj_py = self.store._toPython(subj, queue)
+                if pred.evaluate(self.store, con, subj, subj_py, obj, obj_py):
+                    self.state = 0 # satisfied
+                    return []   # No new bindings but success in calculated logical operator
+                else: return 0   # We absoluteley know this won't match with this in it
+            else: 
+                if isinstance(pred, Function):
+                    subj_py = self.store._toPython(subj, queue)
+                    result = pred.evaluateObject(self.store, con, subj, subj_py)
+                    if result != None:
+                        self.state = 80
+                        return [[ (obj, result)]]
+        else:
+            if (self.neededFor[OBJ] == []):
+                if isinstance(pred, ReverseFunction):
+                    obj_py = self.store._toPython(obj, queue)
+                    result = pred.evaluateSubject(self.store, con, obj, obj_py)
+                    if result != None:
+                        self.state = 80
+                        return [[ (subj, result)]]
+        if thing.verbosity() > 30:
+            progress("Builtin could not give result"+`self`)
+
+        # Now we have a light builtin needs search, otherwise waiting for enough constants to run
+        return []   # Keep going
         
-        # Regenerate a new form with its own existential variables
-        # because we can't reuse the subexpression identifiers.
-        # We don't want clashes with existing variables or constants!
-        bindings2 = []
-        for i in oes:
-            if isinstance(i, Formula):
-                g = store.genid(FORMULA)  #  Generate with same type as original
+    def trySearch(self):
+        """Search the store"""
+        nbs = []
+        if self.short == INFINITY:
+            if thing.verbosity() > 36:
+                progress( "  Non-recursive, can't search for %s" % `self`)
+        else:
+            if thing.verbosity() > 36:
+                progress( "  Searching %i for %s" %(self.short, `self`))
+            for s in self.myIndex :  # search the index
+                nb = []
+                reject = 0
+                for p in ALL4:
+                    if self.neededFor[p] == [self.quad[p]]:   # A regular variable
+                        binding = ( self.quad[p], s.triple[p])
+                        duplicate = 0
+                        for oldbinding in nb:
+                            if oldbinding[0] is self.quad[p]:
+                                if oldbinding[1] is binding[1]: # A binding we have already - no sweat
+                                    duplicate = 1  #from double occurrence on variable in query line
+                                else: # A clash - reject binding the same to var to 2 different things!
+                                    reject = 1
+                        if not duplicate:
+                            nb.append(( self.quad[p], s.triple[p]))
+                if not reject:
+                    nbs.append(nb)  # Add the new bindings into the set
+
+        self.searchDone()  # State transitions
+        return nbs
+
+    def searchDone(self):
+        """Search has been done: figure out next state."""
+        con, pred, subj, obj = self.quad
+        if self.state == 50:   # Light, can't run yet.
+            self.state = 20    # Search done, can't run
+        elif (subj.asList() != None
+            and ( pred is self.store.first or pred is self.store.rest)):
+            self.state = 7   # This is something defining a list, it is true as an axiom.
+        elif not isinstance(pred, HeavyBuiltIn):
+            self.state = 80  # Done with this one: Do new bindings then stop
+        elif self.canRun():
+            self.state = 35
+        else:
+            self.state = 10
+        return
+    
+    def canRun(self):
+        "Is this built-in ready to run?"
+
+        if (self.neededFor[SUBJ] == []):
+            if (self.neededFor[OBJ] == []): return 1
             else:
-                g = store.genid(RESOURCE)  #  Generate with same type as original
-            bindings2.append((i,g))
-        total = 0
-        for q in myConclusions:
-            q2 = _lookupQuad(bindings2, q)
-            total = total + store.storeQuad(q2)
-            if thing.verbosity()>10: progress( "        *** Conclude: " + quadToString(q2))
-        return total
+                pred = self.quad[PRED]
+                return (isinstance(pred, Function)
+                          or pred is self.store.includes)  # Speacial, can use variables
+        else:
+            if (self.neededFor[OBJ] == []):
+                return isinstance(self.quad[PRED], ReverseFunction)
+        
+    def  tryHeavy(self, queue, bindings):
+        """Deal with heavy built-in functions."""
+        con, pred, subj, obj = self.quad
+        try:
+            self.state = 10  # Assume can't resolve
+            if self.neededFor[SUBJ] == []:
+                if self.neededFor[OBJ] == []: # Binary operators?
+                    result = pred.evaluate2(subj, obj, bindings[:])
+                    if result:
+                        if thing.verbosity() > 80: progress("Heavy predicate succeeds")
+                        self.state = 0  # done
+                        return []
+                    else:
+                        if thing.verbosity() > 80: progress("Heavy predicate fails")
+                        return 0   # We absoluteley know this won't match with this in it
+                else:   # The statement has one variable - try functions
+                    if isinstance(pred, Function):
+                        result = pred.evaluateObject2(subj)
+                        if result == None: return 0
+                        else:
+                            self.state = 80
+                            return [[ (obj, result)]]
+            else:
+                if self.neededFor[OBJ] == [] and isinstance(pred, ReverseFunction):
+                        obj_py = self.store._toPython(obj, queue)
+                        result = pred.evaluateSubject2(self.store, obj, obj_py)
+                        if result != None:  # There is some such result
+                            self.state = 80  # Do this then stop - that is all
+                            return [[ (subj, result)]]
+                        else: return 0
+            if thing.verbosity() > 30:
+                progress("Builtin could not give result"+`self`)
+        except (IOError, SyntaxError):
+            raise BuiltInFailed(sys.exc_info(), self ),None
+
+
+    def bindNew(self, newBindings):
+        """Take into account new bindings from query processing to date
+
+        The search may get easier, and builtins may become ready to run."""
+        con, pred, subj, obj = self.quad
+        if thing.verbosity() > 90:
+            progress("binding ", `self` + " with "+ `newBindings`)
+        q=[con, pred, subj, obj]
+        for p in ALL4:
+            changed = 0
+            for var, val in newBindings:
+                if var in self.neededFor[p]:
+                    self.neededFor[p].remove(var)
+                    changed = 1
+            if changed:
+                q[p] = _lookupRecursive(newBindings, q[p])   # possibly expensive
+        self.quad = q[0], q[1], q[2], q[3]  # yuk
+
+        if self.state in [60, 50, 75]: # Not searched yet
+            pattern = [None, None, None, None]
+            for p in ALL4:
+                x = self.quad[p]
+                if isinstance(x, Formula) or x.asList() != None:
+                    if self.neededFor[p]!= []:
+                        self.short = INFINITY  # Forget it
+                        break
+                if self.neededFor[p] != [x]:   # If not a variable
+                    pattern[p] = x
+            else:
+                quad2 = pattern[0], pattern[1], pattern[2], pattern[3]  # @@@ Yuk
+                self.myIndex = self.store._index.get(quad2, [])
+                self.short = len(self.myIndex)
+            if self.short == 0:
+                self.searchDone()
+
+
+        if isinstance(self.quad[PRED], BuiltIn):
+            if self.canRun():
+                if self.state == 50: self.state = 70
+                elif self.state == 20: self.state = 65
+                elif self.state == 10: self.state = 35
+        if thing.verbosity() > 90:
+            progress("...bound becomes ", `self`)
+        if self.state == 80: return 0
+        return [] # continue
+
+    def __repr__(self):
+        """Diagnostic string only"""
+        return "%3i) short=%i, %s" % (self.state, self.short, quadToString(self.quad, self.neededFor))
+
 
 # An action routine for collecting bindings:
 
-def collectBindings(bindings, param):
+def collectBindings(bindings, param, level=0):
     """Return number of bindings found and collects them"""
     param.append(bindings)
     return len(bindings)
@@ -2231,10 +2229,39 @@ def _lookupQuad(bindings, q):
             _lookup(bindings, subj),
             _lookup(bindings, obj) )
 
+def _lookupQuadRecursive(bindings, q):
+	context, pred, subj, obj = q
+	return (
+            _lookupRecursive(bindings, context),
+            _lookupRecursive(bindings, pred),
+            _lookupRecursive(bindings, subj),
+            _lookupRecursive(bindings, obj) )
+
 def _lookup(bindings, value):
     for left, right in bindings:
         if left == value: return right
     return value
+
+def _lookupRecursive(bindings, x, old=None, new=None):
+    """ Subsitute into formula. Problem: intermiediate formulae won't get garbage collected."""
+    vars = []
+    if x is old: return new
+    for left, right in bindings:
+        if left == x: return right
+        vars.append(left)
+    if not isinstance(x, Formula):
+        return x
+    store = x.store
+    oc = store.occurringIn(x, vars)
+    if oc == []: return x # phew!
+    y = store.genid(FORMULA)
+    if thing.verbosity() > 90: progress("lookupRecursive "+`x`+" becomes new "+`y`)
+    for s in x.occursAs[CONTEXT]:
+        store.storeQuad((y,
+                         _lookupRecursive(bindings, s[PRED], x, y),
+                         _lookupRecursive(bindings, s[SUBJ], x, y),
+                         _lookupRecursive(bindings, s[OBJ], x, y)))
+    return store.endFormula(y) # intern
 
 
 class URISyntaxError(ValueError):
@@ -2279,10 +2306,10 @@ def bindingsToString(bindings):
         str = str + (" %s->%s" % ( x2s(x), x2s(y)))
     return str
 
-def setToString(set, vars=[], boundLists = []):
+def setToString(set, neededFor=[[],[],[],[]]):
     str = ""
     for q in set:
-        str = str+ "        " + quadToString(q, vars, boundLists) + "\n"
+        str = str+ "        " + quadToString(q, neededFor) + "\n"
     return str
 
 def seqToString(set):
@@ -2293,41 +2320,28 @@ def seqToString(set):
         str = str+  x2s(x)
     return str
 
-def queueToString(queue):
+def queueToString(queue, level=0):
     str = ""
     for item in queue:
-        str = str + "    "+ itemToString(item) + "\n"
+        str = str + " "*level +  `item` + "\n"
     return str
 
 
-def quadToString(q, vars=[], boundLists = []):
+def quadToString(q, neededFor=[[],[],[],[]]):
     qm=[" "," "," "," "]
     for p in ALL4:
-        if p in vars: qm[p]= "?"
-        if p in boundLists: qm[p]= "~"
-    return "%s%s ::  %8s%s %8s%s %8s%s ." %(x2s(q[CONTEXT]), qm[CONTEXT],
+        n = neededFor[p]
+        if n == []: qm[p]=""
+        elif n == [q[p]]: qm[p] = "?"
+        else: qm[p] = "(" + `n`[1:-1] + ")"
+    return "%s%s ::  %8s%s %8s%s %8s%s." %(x2s(q[CONTEXT]), qm[CONTEXT],
                                             x2s(q[SUBJ]),qm[SUBJ],
                                             x2s(q[PRED]),qm[PRED],
                                             x2s(q[OBJ]),qm[OBJ])
-def itemToString(item):
-    if item[STATE] == 9:
-        wf = " needs("+seqToString(item[MYINDEX])+")"
-    else:
-        wf = ""
-    return "%3i)  %s short=%i, li=%i %s" % (item[STATE],
-                                   quadToString(item[QUAD], item[VARS], item[BOUNDLISTS]),
-#                                   `item[CONSTS]`,
-                                   item[SHORT], item[LISTSTATE], wf )
+
 
 def x2s(x):
-    if isinstance(x, Literal):
-        return '"' + x.string[0:8] + '"'
-    s = `x`[1:-1]
-    p = string.find(s,'#')
-    if p >= 0: return s[p+1:]
-    p = string.find(s,'/')
-    if p >= 0: return s[p+1:]
-    return s
+    return `x`
 
 
 def isString(x):
