@@ -1,0 +1,27 @@
+@prefix : <#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+
+:Pi a :Test .
+:BigNum a :Test .
+:LittleNum a :Test .
+:me a :Test .
+
+{("1.1"^^xsd:decimal "1.1"^^xsd:decimal) math:sum ?x . (?x "1000000000000"^^xsd:decimal) math:product ?y} => {?y :is "equal to 2200000000000"} .
+{(1.1 1.1) math:sum ?x . (?x "1000000000000"^^xsd:decimal) math:product ?y} => {?y :is "a little more than 2200000000000"} .
+
+"3.1415926535897932384626433832795028841971693993751058209749445923078164062862089986280"^^xsd:decimal a :Pi .
+"3.3950035809e+14"^^xsd:decimal a :BigNum .
+"2.34598e-10"^^xsd:decimal a :LittleNum .
+
+{?x a :Pi . (?x ?x) math:product ?y. ?y math:equalTo
+"9.869604401089358618834490999876151135313699407240790626413349376220044822419205243001554589640644767844174396249034675848886676757449104687164526278975372831642505882384"^^xsd:decimal } => {:Pi a :Success} .
+
+{?x a :BigNum. ?y a :LittleNum . (?x ?y) math:quotient ?z. ?z math:equalTo 1.44715793864e+24} => {:BigNum a :Success} .
+{?x a :BigNum. ?y a :LittleNum . (?y ?x) math:quotient ?z. ?z math:equalTo 6.91009580431e-25} => {:LittleNum a :Success} . 
+
+#{ @forAll :q . {:q a :Test} => {:q a :Success} } => {<> a :Success} .
+
+{:Success rdfs:subClassOf :Test} => {:a :b :c} .
