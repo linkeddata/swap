@@ -20,13 +20,13 @@
     s:comment "Short title, less than one line".
 
 :notes a r:Property;
-    s:comment "Commenst about this eg for the use of group secretary". 
+    s:comment "Comments about this eg for the use of group secretary". 
 
 # State changes
 
 :opens a r:Property; s:domain doc:Work; r:range t:Issue;
     s:label "opens";
-    s:comment ".
+    s:comment "This document is the one which opens this issue".
 
 :closes a r:Property; s:domain doc:Work; r:range t:Issue.
 
