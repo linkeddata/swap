@@ -54,7 +54,7 @@ from notation3 import relativeURI
 
 from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
-from RDFSink import Logic_NS
+from RDFSink import Logic_NS, NODE_MERGE_URI
 
 N3_forSome_URI = RDFSink.forSomeSym
 N3_forAll_URI = RDFSink.forAllSym
@@ -230,27 +230,27 @@ class ToRDF(RDFSink.RDFStructuredOutput):
             self._subj = None
         self._wr.startElement(RDF_NS_URI+'Description', [], self.prefixes)
         self._subj = subj    # The object is not the subject context
-#        self._pred = None
 
     def endAnonymousNode(self, subj=None):    # Remove context
     	self._wr.endElement()
 	self._subj = None
-#        self._pred = None
 
 # Below we notate a nested bag of statements - a context
 
     def startBagSubject(self, context):  # Doesn't work with RDF sorry ILLEGAL
         self.flushStart()
+        if self._subj:
+            self._wr.endElement()
+            self._subj = None
         self._wr.startElement(RDF_NS_URI+'Description', 
 			      [],
 #			      [(RDF_NS_URI+' about', relativeURI(self._base,context[1]))],
                               self.prefixes)
 #        print "# @@@@@@@@@@@@@ ", self.prefixes
-        log_quote = self.prefixes[(SYMBOL, Logic_NS)] + ":Quote"  # Qname yuk
+#        log_quote = self.prefixes[(SYMBOL, Logic_NS)] + ":Quote"  # Qname yuk
         
-        self._wr.startElement(Logic_NS+"is", [(RDF_NS_URI+' parseType', log_quote)], self.prefixes)
+        self._wr.startElement(NODE_MERGE_URI, [(RDF_NS_URI+' parseType', "Quote")], self.prefixes)
         self._subj = None
-#        self._pred = None
 
 
     def endBagSubject(self, subj):    # Remove context
@@ -259,7 +259,6 @@ class ToRDF(RDFSink.RDFStructuredOutput):
             self._subj = 0
         self._wr.endElement()     # End quote
         self._subj = subj
-#       self._pred = None
 
     def startBagObject(self, tuple):
         self.flushStart()
@@ -272,10 +271,9 @@ class ToRDF(RDFSink.RDFStructuredOutput):
 				 ((RDF_NS_URI+' about', subjn),), self.prefixes)
 	    self._subj = subj
 
-        log_quote = self.prefixes[(SYMBOL, Logic_NS)] + ":Quote"  # Qname yuk
-        self._wr.startElement(pred[1], [(RDF_NS_URI+' parseType',log_quote)], self.prefixes)  # @@? Parsetype RDF
+#        log_quote = self.prefixes[(SYMBOL, Logic_NS)] + ":Quote"  # Qname yuk
+        self._wr.startElement(pred[1], [(RDF_NS_URI+' parseType', "Quote")], self.prefixes)  # @@? Parsetype RDF
         self._subj = None
-#        self._pred = None
 
 
     def endBagObject(self, pred, subj):    # Remove context
@@ -283,9 +281,9 @@ class ToRDF(RDFSink.RDFStructuredOutput):
             self._wr.endElement()        #  </description> if any
             self._subj = None
         self._wr.endElement()           # end quote
-        self._subj = pred   #@@@@@?
+        self._subj = subj   # restore context from start
+#	print "Ending formula, pred=", pred, "\n   subj=", subj
 #        print "\nEnd bag object, pred=", `pred`[-12:]
-#        self._pred = subj     
 
 def relativeTo(here, there):
     print "### Relative to ", here[1], there[1]

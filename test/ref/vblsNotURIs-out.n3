@@ -13,7 +13,6 @@
          d12:restrictedBy  [
              a :Found,
                     d12:Restriction;
-             :called "file:/devel/WWW/2000/10/swap/test/animal.rdf#_rdfxg0";
              d12:cardinality "2";
              d12:onProperty <animal.rdf#parent> ];
          rdfs:label "Animal" .

@@ -62,8 +62,8 @@
 
 :Contributor  a rdfs:Property;
 
-  rdfs:label  "An entity responsible for making contributions to the
-               content of the resource.";
+  rdfs:label  """An entity responsible for making contributions to the
+               content of the resource.""";
                
   rdfs:comment     """Examples of a Contributor include a person, an organisation,
                or a service.
@@ -73,8 +73,8 @@
 # Another "Typically"... shjould be constrained to what event and what dat format IMHO
 :Date a rdfs:Property;
 
-  rdfs:label  "A date associated with an event in the life cycle of the
-               resource.";
+  rdfs:label  """A date associated with an event in the life cycle of the
+               resource.""";
                
   rdfs:comment     """Typically, Date will be associated with the creation or
                availability of the resource.  Recommended best practice

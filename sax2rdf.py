@@ -55,8 +55,8 @@ import xml.sax._exceptions
 from xml.sax.handler import feature_namespaces
 
 import RDFSink
-from RDFSink import FORMULA, LITERAL
-RESOURCE=RDFSink.SYMBOL #@@misnomer
+from RDFSink import FORMULA, LITERAL, SYMBOL, ANONYMOUS, NODE_MERGE_URI
+SYMBOL=RDFSink.SYMBOL #@@misnomer
 
 # States:
 
@@ -65,7 +65,7 @@ STATE_NO_SUBJECT =  "no context"  # @@@@@@@@@ use numbers for speed
 STATE_DESCRIPTION = "Description (have subject)" #
 STATE_LITERAL =     "within literal"
 STATE_VALUE =       "plain value"
-STATE_NOVALUE =     "no value"
+STATE_NOVALUE =     "no value"     # We already have an object, another would be error
 STATE_LIST =        "within list"
 
 RDF_NS_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#" # As per the spec
@@ -74,7 +74,7 @@ DAML_ONT_NS = "http://www.daml.org/2000/10/daml-ont#"  # DAML early version
 DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
 
 
-RDF_IS = RESOURCE, RDF_NS_URI + "is"   # Used with quoting
+RDF_IS = SYMBOL, NODE_MERGE_URI   # Used with quoting
 
 _nextId = 0        # For generation of arbitrary names for anonymous nodes
 
@@ -97,6 +97,7 @@ class RDFHandler(xml.sax.ContentHandler):
         self._predicate = None
         self._items = [] # for <rdf:li> containers
         self._genPrefix = uripath.join(thisURI, "#_rdfxg")    # allow parameter override?
+	self.sink.setGenPrefix(self._genPrefix)
 
         self._litDepth = 0
         self.sink.startDoc()
@@ -144,7 +145,6 @@ class RDFHandler(xml.sax.ContentHandler):
         """
         self._subject = None
         self._state = STATE_DESCRIPTION
-        self._subject = None
         self._items.append(0)
         properties = []
         
@@ -164,10 +164,10 @@ class RDFHandler(xml.sax.ContentHandler):
                     if self._subject:
                         print "# oops - subject already", self._subject
                         raise BadSyntax(sys.exc_info(), ">1 subject")
-                    self._subject = self.uriref("#" + value)
+                    self._subject = self.sink.newSymbol(self.uriref("#" + value))
                 elif ln == "about":
                     if self._subject: raise BadSyntax(sys.exc_info(), ">1 subject")
-                    self._subject = self.uriref(value)
+                    self._subject = self.sink.newSymbol(self.uriref(value))
                 elif ln == "aboutEachPrefix":
                     if value == " ":  # OK - a trick to make NO subject
                         self._subject = None
@@ -191,24 +191,14 @@ class RDFHandler(xml.sax.ContentHandler):
 #                print "@@@@@@ <%s> <%s>" % properties[-1]
 
         if self._subject == None:
-            self._subject = self._generate() #for debugging: encode file/line info?
+            self._subject = self.sink.newBlankNode(self._context) #for debugging: encode file/line info?
         for pred, obj in properties:
             self.sink.makeStatement(( self._context,
-                                      (RESOURCE, pred),
-                                      (RESOURCE, self._subject),
+                                      (SYMBOL, pred),
+                                      self._subject,
                                       (LITERAL, obj) ))
 
             
-    def _generate(self):
-        global _nextId
-        generatedId = self._genPrefix + `_nextId`  #
-        _nextId = _nextId + 1
-        self.sink.makeStatement(( self._context,
-                                  (RESOURCE, RDFSink.forSomeSym),
-                                  self._context,
-                                  (RESOURCE, generatedId) )) #  Note this is anonymous node
-        #thing.progress("sax2rdf: nextId now: " + `_nextId`)
-        return generatedId
 
     def _obj(self, tagURI, attrs):  # 6.2
         if tagURI == RDF_NS_URI + "Description":
@@ -220,11 +210,11 @@ class RDFHandler(xml.sax.ContentHandler):
             c = self._context   # (Might be change in idAboutAttr) #@@DC: huh?
             self.idAboutAttr(attrs)
             if c == None: raise roof
-            if self._subject == None:raise roof
+            assert self._subject != None
             self.sink.makeStatement((  c,
-                                       (RESOURCE, RDF_NS_URI+"type"),
-                                       (RESOURCE, self._subject),
-                                       (RESOURCE, tagURI) ))
+                                       (SYMBOL, RDF_NS_URI+"type"),
+                                       self._subject,
+                                       (SYMBOL, tagURI) ))
         self._state = STATE_DESCRIPTION
                 
 
@@ -247,7 +237,7 @@ class RDFHandler(xml.sax.ContentHandler):
         b[prefix] = uri
         self._nsmap.append(b)
 
-        self.sink.bind(prefix, (RESOURCE, uri))
+        self.sink.bind(prefix, (SYMBOL, uri))
 
     def endPrefixMapping(self, prefix):
         del self._nsmap[-1]
@@ -287,10 +277,10 @@ class RDFHandler(xml.sax.ContentHandler):
             #  http://www.w3.org/2000/03/rdf-tracking/#rdf-containers-syntax-ambiguity
             if tagURI == RDF_NS_URI + "li":
                 item = self._items[-1] + 1
-                self._predicate = "%s_%s" % (RDF_NS_URI, item)
+                self._predicate = SYMBOL, ("%s_%s" % (RDF_NS_URI, item))
                 self._items[-1] = item
             else:
-                self._predicate = tagURI
+                self._predicate = SYMBOL, tagURI
 
             self._state = STATE_VALUE  # May be looking for value but see parse type
             self.testdata = ""         # Flush value data
@@ -302,6 +292,10 @@ class RDFHandler(xml.sax.ContentHandler):
                 if name == "ID":
                     print "# Warning: ID=%s on statement ignored" %  (value) # I consider these a bug
                 elif name == "parseType":
+#		    x = value.find(":")
+#		    if x>=0: pref = value[:x]
+#		    else: pref = ""
+#		    nsURI = self._nsmap[-1].get(pref, None)
                     if value == "Literal":
                         self._state = STATE_LITERAL # That's an XML subtree not a string
                         self._litDepth = 1
@@ -309,53 +303,40 @@ class RDFHandler(xml.sax.ContentHandler):
                     elif value == "Resource":
                         c = self._context
                         s = self._subject
-                        self._subject = self._generate()
+                        self._subject = self.sink.newBlankNode(self._context)
                         self.idAboutAttr(attrs) #@@
-                        self.sink.makeStatement(( c,
-                                                  (RESOURCE, self._predicate),
-                                                  (RESOURCE, s),
-                                                  (RESOURCE, self._subject) ))
+                        self.sink.makeStatement(( c, self._predicate, s, self._subject))
                         self._state = STATE_DESCRIPTION  # Nest description
                         
-                    elif value[-6:] == ":quote":
-                        nsURI = self._nsmap[-1].get(pref, None)
-                        if nsURI == Logic_NS: 
+                    elif value == "Quote":
+#		     or value == "quote" or (
+#			value[-6:] == ":quote" and (nsURI == Logic_NS or nsURI == RDF_NS)): 
                             c = self._context
                             s = self._subject
                             self.idAboutAttr(attrs)  # set subject and context for nested description
-                            if self._predicate == RDF_NS_URI+"is": # magic :-( @@notation3.py switched to Logic_NS here, I think.
-                                self._subject = s  # Forget anonymous genid - context is subect
-                                print "#@@@@@@@@@@@@@ decided subject is ",`s`[-10:-1]
+			    self._subject = self.sink.newFormula()  # Forget anonymous genid - context is subect
+                            if self._predicate == (SYMBOL, NODE_MERGE_URI): # magic :-(
+				self._stack[-1][3] = self._subject  # St C P S retrofit subject of outer level!
                             else:
-                                self.sink.makeStatement(( c,
-                                                          (RESOURCE, self._predicate),
-                                                          (RESOURCE, s),
-                                                          (RESOURCE, self._subject) ))
-                            self._context = FORMULA, self._subject
+                                self.sink.makeStatement(( c, self._predicate, s, self._subject))
+                            self._context = self._subject
                             self._subject = None
-                            self._state = STATE_NO_SUBJECT  # Nest context
+                            self._state = STATE_NO_SUBJECT  # Inside quote, there is no subject
                         
-                    elif value[-11:] == ":collection":  # Is this a daml:collection qname?
-                        pref = value[:-11]
-                        nsURI = self._nsmap[-1].get(pref, None)
-                        if (nsURI == DAML_ONT_NS
-                                               or nsURI == DPO_NS): 
+                    elif (value=="Collection" or
+#		     or value=="collection" or(
+			value[-11:] == ":collection"):  # Is this a daml:collection qname?
+#                        and (nsURI == DAML_ONT_NS
+#					or nsURI == RDF_NS 
+#					or nsURI == DPO_NS)): 
                             self._state = STATE_LIST  # Linked list of obj's
-                                #print "########### Start list"
-                        #print "############ parsetype pref=",pref ,"nslist",nslist
 
                 elif name == "resource":
                     self.sink.makeStatement((self._context,
-                                             (RESOURCE, self._predicate),
-                                             (RESOURCE, self._subject),
-                                             (RESOURCE, self.uriref(value)) ))
+                                             self._predicate,
+                                             self._subject,
+                                             self.sink.newSymbol(self.uriref(value)) ))
                     self._state = STATE_NOVALUE  # NOT looking for value
-                elif name == "value":
-                    self.sink.makeStatement((self._context,
-                                             (RESOURCE, self._predicate),
-                                             (RESOURCE, self._subject),
-                                             (LITERAL,  value) ))
-                    self._state = STATE_NOVALUE  # NOT looking for value @@bogus. value is just a normal property. -- dwc
                 else:
                     self.sink.makeComment("# Warning: Ignored attribute %s on %s" % (
                         name, tagURI))
@@ -365,18 +346,18 @@ class RDFHandler(xml.sax.ContentHandler):
             c = self._context
             s = self._subject  # The tail of the list so far
             p = self._predicate
-            pair = self._generate()        # The new pair
+            pair = self.sink.newBlankNode(self._context)        # The new pair
             self.sink.makeStatement(( c,   # Link in new pair
-                                      (RESOURCE, p),
-                                      (RESOURCE, s),
-                                      (RESOURCE, pair) )) 
+                                      p,
+                                      s,
+                                      pair )) 
             self.idAboutAttr(attrs)  # set subject (the next item) and context 
             self.sink.makeStatement(( c,
-                                      (RESOURCE, DPO_NS + "first"),
-                                      (RESOURCE, pair),
-                                      (RESOURCE, self._subject) )) # new item
+                                      (SYMBOL, DPO_NS + "first"),
+                                      pair,
+                                      self._subject)) # new item
             
-            self._stack[-1][2] = DPO_NS + "rest"  # Leave dangling link
+            self._stack[-1][2] = SYMBOL, DPO_NS + "rest"  # Leave dangling link   #@check
             self._stack[-1][3] = pair  # Underlying state tracks tail of growing list
 
          
@@ -385,16 +366,15 @@ class RDFHandler(xml.sax.ContentHandler):
             p = self._predicate
             s = self._subject
             self._obj(tagURI, attrs)   # Parse the object thing's attributes
-            self.sink.makeStatement(( c, # Link to new object
-                                      (RESOURCE, p),
-                                      (RESOURCE, s),
-                                      (RESOURCE, self._subject) ))
+            self.sink.makeStatement((c, p, s, self._subject))
             
             self._stack[-1][0] = STATE_NOVALUE  # When we return, cannot have literal now
 
         elif self._state == STATE_NOVALUE:
+	    str = ""
+	    for e in self._stack: str = str + `e`+"\n"
             raise BadSyntax(sys.exc_info(), """Expected no value, found name=%s; qname=%s, attrs=%s
-            in nested context: %s""" %(name, qname, attrs,self._stack))
+            in nested context:\n%s""" %(name, qname, attrs, str))
 
         elif self._state == STATE_LITERAL:
             self._litDepth = self._litDepth + 1
@@ -413,9 +393,9 @@ class RDFHandler(xml.sax.ContentHandler):
             if self._litDepth == 0:
                 buf = self.testdata
                 self.sink.makeStatement(( self._context,
-                                          (RESOURCE, self._predicate),
-                                          (RESOURCE, self._subject),
-                                          (LITERAL,  buf) ))
+                                          self._predicate,
+                                          self._subject,
+                                          self.sink.newLiteral(buf) ))
                 self.testdata = ""
             else:
                 return # don't pop state
@@ -423,16 +403,16 @@ class RDFHandler(xml.sax.ContentHandler):
         elif self._state == STATE_VALUE:
             buf = self.testdata
             self.sink.makeStatement(( self._context,
-                                       (RESOURCE, self._predicate),
-                                       (RESOURCE, self._subject),
-                                       (LITERAL,  buf) ))
+                                       self._predicate,
+                                       self._subject,
+                                       self.sink.newLiteral(buf) ))
             self.testdata = ""
             
         elif self._state == STATE_LIST:
             self.sink.makeStatement(( self._context,
-                                      (RESOURCE, DPO_NS + "rest"),
-                                      (RESOURCE, self._subject),
-                                      (RESOURCE, DPO_NS + "nil") ))
+                                      (SYMBOL, DPO_NS + "rest"),
+                                      self._subject,
+                                      (SYMBOL, DPO_NS + "nil") ))
         elif self._state == STATE_DESCRIPTION:
             self._items.pop()
         elif self._state == STATE_NOVALUE or \
@@ -441,7 +421,7 @@ class RDFHandler(xml.sax.ContentHandler):
         else:
             raise RuntimeError, ("Unknown RDF parser state '%s' in end tag" % self._state, self._stack)
 
-        l =  self._stack.pop() # [self._state, self._context, self._subject])
+        l =  self._stack.pop() #
         self._state = l[0]
         self._context = l[1]
         self._predicate = l[2]
@@ -465,12 +445,12 @@ class RDFXMLParser(RDFHandler):
     def feed(self, data):
         self._p.feed(data)
 
-    def load(self, uri, _baseURI=""):
+    def load(self, uri, baseURI=""):
         if uri:
-            _inputURI = uripath.join(_baseURI, uri) # Make abs from relative
+            _inputURI = uripath.join(baseURI, uri) # Make abs from relative
             f = urllib.urlopen(_inputURI)
         else:
-            _inputURI = uripath.join(_baseURI, "STDIN") # Make abs from relative
+            _inputURI = uripath.join(baseURI, "STDIN") # Make abs from relative
             f = sys.stdin
         self.loadStream(f)
 

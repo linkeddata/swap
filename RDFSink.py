@@ -39,6 +39,10 @@ ANONYMOUS = 3       # As SYMBOL except actual symbol is arbitrary, can be regene
 
 # quanitifiers... @@it's misleading to treat these as predicates...
 Logic_NS = "http://www.w3.org/2000/10/swap/log#"
+# For some graphs you can express with NTriples, there is no RDF syntax. The 
+# following allows an anonymous node to be merged with another node.
+# It really is the same node, at the ntriples level, do not confuse with daml:equivalentTO
+NODE_MERGE_URI = Logic_NS + "is"  # Pseudo-property indicating node merging
 forSomeSym = Logic_NS + "forSome"
 forAllSym = Logic_NS + "forAll"
 

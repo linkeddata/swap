@@ -24,8 +24,8 @@ this log:forAll :x, :y, :z, :p, :q.
 this log:forAll :s1, :s2.
 
 { :x = :y.
-  :x log:uri :s1.
-  :y log:uri :s2.
+  :x log:rawUri :s1.  # Levelbreaker - cheats by looking at URI of bnode
+  :y log:rawUri :s2.
   :s1 string:lessThan :s2.
 }
   log:implies {

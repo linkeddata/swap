@@ -140,9 +140,9 @@ class SinkParser:
     def formula(self):
         return self._formula
     
-    def load(self, uri, _baseURI=""):
+    def load(self, uri, baseURI=""):
         if uri:
-            _inputURI = urlparse.urljoin(_baseURI, uri) # Make abs from relative
+            _inputURI = urlparse.urljoin(baseURI, uri) # Make abs from relative
             self._sink.makeComment("Taking input from " + _inputURI)
             netStream = urllib.urlopen(_inputURI)
             self.startDoc()
@@ -150,7 +150,7 @@ class SinkParser:
             self.endDoc()
         else:
             self._sink.makeComment("Taking input from standard input")
-            _inputURI = urlparse.urljoin(_baseURI, "STDIN") # Make abs from relative
+            _inputURI = urlparse.urljoin(baseURI, "STDIN") # Make abs from relative
             self.startDoc()
             self.feed(sys.stdin.read())     # May be big - buffered in memory!
             self.endDoc()
@@ -1106,12 +1106,12 @@ t   "this" and "()" special syntax should be suppresed.
         if type == LITERAL: return stringToN3(value)
 
         if pair in self._anonymousNodes:   # "a" flags only
-            i = value.find(self.genPrefix + "g")  # One of our conversions?
+            i = value.find(self._genPrefix + "g")  # One of our conversions?
             if i >= 0:
-                str = value[i+len(self.genPrefix)+1:]
+                str = value[i+len(self._genPrefix)+1:]
             else:
                 sys.stderr.write("#@@@@@ Ooops ---  anon "+
-		    value+"\n with genPrefix "+self.genPrefix+"\n")
+		    value+"\n with genPrefix "+self._genPrefix+"\n")
                 i = len(value)
                 while i > 0 and value[i-1] in _namechars: i = i - 1
                 str = value[i:]

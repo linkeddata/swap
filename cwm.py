@@ -344,14 +344,19 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             elif _lhs == "-base": option_baseURI = _uri
             elif arg == "-rdf":
                 option_format = "rdf"
+		if option_first_format == None: option_first_format = option_format 
                 option_need_rdf_sometime = 1
             elif _lhs == "-rdf":
                 option_format = "rdf"
+		if option_first_format == None: option_first_format = option_format 
                 option_rdf_flags = _rhs
                 option_need_rdf_sometime = 1
-            elif arg == "-n3": option_format = "n3"
+            elif arg == "-n3":
+		option_format = "n3"
+		if option_first_format == None: option_first_format = option_format 
             elif _lhs == "-n3":
                 option_format = "n3"
+		if option_first_format == None: option_first_format = option_format 
                 option_n3_flags = _rhs
             elif arg == "-quiet": option_quiet = 1
             elif arg == "-pipe": option_pipe = 1
@@ -431,10 +436,12 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             history = None
 	
 
-        if not _gotInput: #@@@@@@@@@@ default input
+        if not _gotInput: # default input
             _inputURI = _baseURI # Make abs from relative
-            p = notation3.SinkParser(_store,  _inputURI, formulaURI=workingContextURI)
-            p.load("")
+	    if option_first_format == "rdf" :
+		p = sax2rdf.RDFXMLParser(_store, _inputURI, formulaURI=workingContextURI)
+	    else: p = notation3.SinkParser(_store,  _inputURI, formulaURI=workingContextURI)
+            p.load("", baseURI=_baseURI)
             del(p)
             if not option_pipe:
                 inputContext = _store.intern((FORMULA, _inputURI+ "#_formula"))
