@@ -1,10 +1,10 @@
 #Processed by Id: cwm.py,v 1.165 2004/11/19 01:58:39 syosi Exp 
-        #    using base file:/home/syosi/cvs-trunk/WWW/2000/10/swap/grammar/
+        #    using base file:/devel/WWW/2000/10/swap/grammar/
         
 #  Notation3 generation by
-#       notation3.py,v 1.167 2004/11/23 18:51:32 syosi Exp
+#       notation3.py,v 1.166 2004/10/28 17:41:59 timbl Exp
 
-#   Base was: file:/home/syosi/cvs-trunk/WWW/2000/10/swap/grammar/
+#   Base was: file:/devel/WWW/2000/10/swap/grammar/
      @prefix : <http://www.w3.org/2000/10/swap/grammar/bnf#> .
      @prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#> .
      @prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#> .
@@ -95,7 +95,7 @@
     
     "@of"     :canPrecede n3:object .
     
-    "@prefix"     :canPrecede n3:qname;
+    "@prefix"     :canPrecede n3:prefix;
          :canStartWith "@prefix" .
     
     "@this"     :canPrecede ")",
@@ -155,144 +155,6 @@
                 n3:propertylisttail,
                 n3:statementtail .
     
-    ()     a rul:Used .
-      ( "!" 
-        n3:path  )
-         a rul:Used .
-      ( "(" 
-        n3:pathlist 
-        ")"  )
-         a rul:Used .
-      ( "," 
-        n3:barename 
-        <#_g5>  )
-         a rul:Used .
-      ( "," 
-        n3:object 
-        n3:objecttail  )
-         a rul:Used .
-      ( "," 
-        n3:symbol 
-        <#_g3>  )
-         a rul:Used .
-      ( "," 
-        n3:symbol 
-        <#_g4>  )
-         a rul:Used .
-      ( "." 
-        n3:statementlist  )
-         a rul:Used .
-      ( ";" 
-        n3:propertylist  )
-         a rul:Used .
-      ( "<="  )
-         a rul:Used .
-      ( "="  )
-         a rul:Used .
-      ( "=>"  )
-         a rul:Used .
-      ( "@" 
-        n3:langcode  )
-         a rul:Used .
-      ( "@a"  )
-         a rul:Used .
-      ( "@forAll" 
-        <#_g0>  )
-         a rul:Used .
-      ( "@forSome" 
-        <#_g1>  )
-         a rul:Used .
-      ( "@has" 
-        n3:path  )
-         a rul:Used .
-      ( "@is" 
-        n3:path 
-        "@of"  )
-         a rul:Used .
-      ( "@keywords" 
-        <#_g2>  )
-         a rul:Used .
-      ( "@prefix" 
-        n3:qname 
-        n3:explicituri  )
-         a rul:Used .
-      ( "@this"  )
-         a rul:Used .
-      ( "[" 
-        n3:propertylist 
-        "]"  )
-         a rul:Used .
-      ( "^" 
-        n3:path  )
-         a rul:Used .
-      ( "^^" 
-        n3:symbol  )
-         a rul:Used .
-      ( "{" 
-        n3:formulacontent 
-        "}"  )
-         a rul:Used .
-      ( n3:barename 
-        <#_g5>  )
-         a rul:Used .
-      ( n3:declaration  )
-         a rul:Used .
-      ( n3:existential  )
-         a rul:Used .
-      ( n3:explicituri  )
-         a rul:Used .
-      ( n3:literal  )
-         a rul:Used .
-      ( n3:node 
-        n3:pathtail  )
-         a rul:Used .
-      ( n3:numericliteral  )
-         a rul:Used .
-      ( n3:path 
-        n3:pathlist  )
-         a rul:Used .
-      ( n3:path  )
-         a rul:Used .
-      ( n3:qname  )
-         a rul:Used .
-      ( n3:simpleStatement  )
-         a rul:Used .
-      ( n3:statement 
-        "." 
-        n3:statements_optional  )
-         a rul:Used .
-      ( n3:statement 
-        n3:statementtail  )
-         a rul:Used .
-      ( n3:statementlist  )
-         a rul:Used .
-      ( n3:statements_optional 
-        :eof  )
-         a rul:Used .
-      ( n3:string 
-        n3:dtlang  )
-         a rul:Used .
-      ( n3:subject 
-        n3:propertylist  )
-         a rul:Used .
-      ( n3:symbol 
-        <#_g3>  )
-         a rul:Used .
-      ( n3:symbol 
-        <#_g4>  )
-         a rul:Used .
-      ( n3:symbol  )
-         a rul:Used .
-      ( n3:universal  )
-         a rul:Used .
-      ( n3:variable  )
-         a rul:Used .
-      ( n3:verb 
-        n3:object 
-        n3:objecttail 
-        n3:propertylisttail  )
-         a rul:Used .
-    
     <n3.n3>     :syntaxFor  [
              :internetMediaType <http://www.w3.org/2003/mediatypes#application/n3> ] .
     
@@ -311,12 +173,12 @@
          :branch  [
              :branchTail  (
             "@prefix" 
-            n3:qname 
+            n3:prefix 
             n3:explicituri  );
              :condition "@prefix";
              :sequence  (
             "@prefix" 
-            n3:qname 
+            n3:prefix 
             n3:explicituri  ) ],
                  [
              :branchTail  (
@@ -336,7 +198,7 @@
          :mustBeOneSequence  (
          (
             "@prefix" 
-            n3:qname 
+            n3:prefix 
             n3:explicituri  )
          (
             "@keywords" 
@@ -984,6 +846,12 @@
             "^" 
             n3:path  ) ) .
     
+    n3:prefix     :canPrecede n3:explicituri;
+         :canStartWith ":",
+                "_",
+                "a";
+         :matches "([a-zA-Z_][a-zA-Z0-9_]*)?:" .
+    
     n3:propertylist     :TEST n3:verb;
          :branch  [
              :branchTail ();
@@ -1084,7 +952,6 @@
                 "@of",
                 "]",
                 "}",
-                n3:explicituri,
                 n3:object,
                 n3:objecttail,
                 n3:pathlist,
