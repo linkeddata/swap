@@ -92,9 +92,9 @@ class BI_cosh(LightBuiltIn, Function):
 
 class BI_degrees(LightBuiltIn, Function, ReverseFunction):
     def evaluateObject(self, subj_py):
-		return degrees(numeric(subj_py))
-	def evaluateSubject(self, obj_py): 
-		return radians(numeric(obj_py))
+        return degrees(numeric(subj_py))
+    def evaluateSubject(self, obj_py): 
+        return radians(numeric(obj_py))
 
 class BI_sin(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
