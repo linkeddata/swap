@@ -30,7 +30,7 @@ pre, .example {
   background: #f5f2f5;
   /*  border-style: dotted;
       border-width: 1px;  */
-  font-family: monospace
+  font-family: monospace;
   list-style-position: inside;
   margin-left: 0.5em;
   margin-right: 0.5em;
