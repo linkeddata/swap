@@ -23,7 +23,7 @@ style="float: right" src="../../../../RDF/icons/n3_small" />
 <p></p>
 
 <p>You don't get an appreciation of a technology until you have tried to usit
-for real.  We have plans to use the cwm platform for many things -- we don't
+for real. We have plans to use the cwm platform for many things -- we don't
 know how much we will time for.</p>
 
 <p>See also:</p>
@@ -33,7 +33,7 @@ know how much we will time for.</p>
   <li><a href="../admin/bugStatus.html">Outstanding bugs.</a> Bugs (and some
     small requests for enhancement) are tracked in RDF, and available as a
     TODO list in an online calendar.</li>
-  <li><a href="plans.html">Release Roadmap</a>   Enhancements planned to the
+  <li><a href="plans.html">Release Roadmap</a> Enhancements planned to the
     Cwm platform</li>
 </ul>
 
@@ -45,8 +45,8 @@ know how much we will time for.</p>
 
 <p>Each module lives on the web, and can be installed on demand, but also the
 dependencies are all known or determined, and the system can transparently
-install a system by just making a persistent cache of everything.  Do this to
-(a) OWL ontologies and linked  metainformation; (b) Sets of rule files; (c)
+install a system by just making a persistent cache of everything. Do this to
+(a) OWL ontologies and linked metainformation; (b) Sets of rule files; (c)
 debian packages (d) python packages -- with a little tweaking of the insides
 of the python package system. G</p>
 
@@ -89,10 +89,10 @@ into and out of RDF.</p>
 standard or recommended one -- we assume that policy systems will take much
 time to develop.</p>
 
-<p>A goal would be to test the proof-checking techniques.  Cwm's  --why flag
+<p>A goal would be to test the proof-checking techniques. Cwm's --why flag
 would produce a proof of its current knoweldge base, which a proof validator
-could verify, regenerating the knowledge base.  This code has (2004) rotted
-in that it wasnot kept up to date with advances in the platform.</p>
+could verify, regenerating the knowledge base. This code has (2004) rotted in
+that it wasnot kept up to date with advances in the platform.</p>
 
 <p>Example problem statement:</p>
 <ul>
@@ -101,11 +101,11 @@ in that it wasnot kept up to date with advances in the platform.</p>
 
 <p>Ontologies involved (find, or collborate in development of)</p>
 <ul>
-  <li>Digital signature generation and verification;
+  <li>Digital signature generation and verification; 
     <p>Proof</p>
   </li>
   <li>Policy in the target ssytem such as access control, transaction
-    authorization, etc etc.
+    authorization, etc etc. 
     <p>Possibly: RDF ontologies correspnding to existing systems such as
     XKMS, PKI, PGP.</p>
   </li>
@@ -127,20 +127,36 @@ in that it wasnot kept up to date with advances in the platform.</p>
   <li>Calendar events (iCalendar)</li>
   <li>Tax forms</li>
   <li>Bank statements</li>
-  <li>GPS tracks
+  <li>GPS tracks 
     <p>Maps</p>
   </li>
   <li>Email metadata</li>
   <li>Email lists as group membership</li>
   <li>Photo (EXIF)</li>
-  <li>Tasks, Bug tracking
+  <li>Tasks, Bug tracking 
     <p>Workflow</p>
   </li>
 </ul>
 
 <p></p>
 
+<h2>The mass of rules</h2>
+
 <p></p>
+
+<p>Imagine that the semantic web has taken off in the sense that there are
+lots of ontologies out there.  Imagine that there are sources of data, and
+for some properties, definitive servers.  Imagine that the ontologies have
+been linked together using OWL statements and rules. (Example: there is a
+trusted document somewhere which tell you how to convert Fahrenheit 
+<code>f:temperature</code>  into Celsius <code>c:temperature</code>).</p>
+
+<p>How can you make a machine to answer arbitrary questions given what is out
+there? One approaach is to index the rules.  Assume you can keep a copy of
+them all one one computer. Index them by input and output vocabulary, at the
+ontology and/or term level.</p>
+
+<p> </p>
 
 <div class="noprint">
 <hr />
