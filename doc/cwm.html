@@ -29,7 +29,7 @@ in python.</p>
   <li><a href="../Overview.html">Semantic Web Application Platform</a></li>
   <li><a href="http://infomesh.net/2001/cwm/">Sean Palmer's guide to cwm --
     Sean keeps it more up to date than this!</a></li>
-  <li><a href="../Primer.html">Notation3 Primer</a> - a quick into to
+  <li><a href="../Primer.html">Notation3 Primer</a> - a quick introduction to
     semantic web using cwm and n3</li>
 </ul>
 
@@ -49,17 +49,21 @@ formats</a>:</p>
 <h2>Source</h2>
 
 <p>This <a href="http://dev.w3.org/cvsweb/2000/10/swap/">swap code</a> is not
-guaranteed but is open source and available from the <a
-href="http://dev.w3.org/cvsweb/">public w3c CVS repository</a>.</p>
+guaranteed but is open source and available:</p>
+<dl>
+  <dt>Using CVS</dt>
+    <dd>from the <a href="http://dev.w3.org/cvsweb/">public w3c CVS
+      repository</a>.Check out *.py from the top level of the swap hierarchy
+      to use it, check out the whole tree to develop</dd>
+  <dt>From the web</dt>
+    <dd>Get the files one by one. <a href="/2000/10/swap/cwm.py">cwm.py</a>
+      is the main one. Save them into the same directory.</dd>
+</dl>
 
-<p>Check out *.py from the top level of the swap hierarchy to use it, check
-out the whole tree to develop.</p>
+<p>However you got the files,, set up an alias (.bat file, etc) to make the
+cwm command  cwm="python /whereverYouPutThem/cwm.py"</p>
 
-<p>Set up an alias (.bat file, etc) to make the cwm command  cwm="python
-/wherever/cwm.py"</p>
-
-<p>Alternatively, you can get the sources one-by-one by download from the
-web.</p>
+<p>Have fun.</p>
 
 <h3>Prerequisites</h3>
 <ul>
@@ -235,6 +239,9 @@ href="http://www.w3.org/2000/10/swap/log.n3"><code>http://www.w3.org/2000/10/swa
 
 <h3>Math</h3>
 
+<p>Simple math functions, where numbers are represented as RDF literal
+strings</p>
+
 <p><code>@prefix math:  &lt;</code><a
 href="http://www.w3.org/2000/10/swap/math"><code>http://www.w3.org/2000/10/swap/math</code></a>#<code>&gt;</code>
 .</p>
@@ -243,13 +250,17 @@ href="http://www.w3.org/2000/10/swap/math"><code>http://www.w3.org/2000/10/swap/
 
 <h3>String</h3>
 
+<p>Simple string functions</p>
+
 <p><code>@prefix string:  &lt;</code><a
 href="http://www.w3.org/2000/10/swap/string"><code>http://www.w3.org/2000/10/swap/string</code></a><a><code></code></a><code>#&gt;</code>
 .</p>
 
-<p></p>
-
 <h3>Operating system interface</h3>
+
+<p>Command line arguments after a --with argument are passed to the cwm rules
+and available though os:argv. Also os:environ allows access to environment
+variables.</p>
 
 <p><code>@prefix os:  &lt;</code><a
 href="http://www.w3.org/2000/10/swap/math"><code>http://www.w3.org/2000/10/swap/os</code></a><a><code></code></a><code>#&gt;</code>
@@ -259,12 +270,29 @@ href="http://www.w3.org/2000/10/swap/math"><code>http://www.w3.org/2000/10/swap/
 
 <h3>Cryptography</h3>
 
-<p>For security, check the signatures on information before you trust it. </p>
+<p>For security, check the signatures on information before you trust it. 
+All you need to build a secure system - but ask a security expert to check
+your system before you really rely on it: good security has to be learned.</p>
 
 <p>@prefix cr:  &lt;<a
 href="../../../10./swap/crypto">http://www.w3.org/2000/10/swap/crypto</a>#&gt;.</p>
 
-<p></p>
+<p>I am not an expert but a few things to watch are:</p>
+<ul>
+  <li>Allways think where the weakest link is.  It is not always on the
+  net.</li>
+  <li>Where do you keep the private key, anyway?</li>
+  <li>Beware of all forms of attack, including replay and man in the
+  middle.</li>
+  <li>Always sign some random junk as well as the critical data to stop
+    reverse engineering of the key.</li>
+  <li>Ask a crypto specialist to look over your stuff</li>
+  <li>Make the techniques, rules, code. public. Public debugging is valuable.
+    trying to hide it from attackers by keeping it secret doesn't pay.</li>
+  <li>This code is not guaranteed anyway, or made for production use. It is
+    designed for prototyping new semantic web applications. Use at your own
+    risk.</li>
+</ul>
 
 <p></p>
 <hr>
