@@ -28,32 +28,34 @@ grammar and all the ontologies they are using.</p>
 <p>The process of developing an ontology is usually similar to the process of
 object-oriented analysis and design: you figure out the classes of objects in
 some subject area, then consider how instances of those classes relate to
-each other and what they have in common.</p>
+each other (what is the class hierarchy?) and what they have in common
+(what are the properties of each instance?).</p>
 
 <p>With RDF ontologies, however, this analysis usually remains separated from
-any programming language. The features of inheritence and type-checking
+any programming language. Features likes inheritence and type-checking
 remain, however, and can be of great value.</p>
 
-<p>With RDF, we currently have four ontology languages. In order of
-increasing expressive power:</p>
-<ul>
-  <li><a href="http://www.w3.org/TR/rdf-schema/">RDFS</a> is quite simple,
-    but may be all you need.</li>
-  <li><a href="http://www.w3.org/TR/2003/WD-owl-features-20030210/#s2.1">OWL
-    Lite</a> is very strict and precise, but not very expressive. For many
-    modeling tasks, it's a good place to start.</li>
-  <li><a href="http://www.w3.org/TR/2003/WD-owl-features-20030210/#s2.2">OWL
-    DL</a> is strict like OWL Lite, but offers all the standard Description
-    Logic (DL) features.</li>
-  <li>OWL Full removes many restrictions of OWL DL, making reasoning
-    potentially intractable. (This replaces <a
-    href="http://www.daml.org/2001/03/daml+oil-index.html">DAML+OIL</a>.)</li>
-</ul>
+<p>Historically, RDF has had a variety of ontology languages,
+including <a href="http://www.w3.org/TR/rdf-schema/">RDFS</a>, <a
+href="http://www.daml.org/2001/03/daml+oil-index.html">DAML+OIL</a>,
+and OWL with its <a
+href="http://www.w3.org/TR/2003/WD-owl-features-20030210/#s1.3">three
+different "species"</a>, <a
+href="http://www.w3.org/TR/2003/WD-owl-features-20030210/#s2.1">OWL
+Lite</a>, <a
+href="http://www.w3.org/TR/2003/WD-owl-features-20030210/#s2.2">OWL
+DL</a> and OWL Full.  However, with the exception of DAML+OIL which is
+obsolete, they all fit together in OWL Full.  So use OWL Full, and if
+you use only a restricted subset of the language, then you will have
+additional performance guarantees.
+</p>
 
 <h2>Classes, Properties, Individuals, and Datatype Values</h2>
 
-<p>In ontology development, one tends to divide the world into four different
-kinds of things:</p>
+<p>In designing an ontology, it can be useful to divide the world into four different
+kinds of things.  (Occasionally something will fit into more than one
+of the areas; that's okay with OWL Full.)
+</p>
 <ul>
   <li>An <strong>individual</strong> is something in the domain of discourse,
     like a specific person, an inventory item, or a city. This roughly
@@ -104,6 +106,21 @@ kinds of things:</p>
   </li>
 </ul>
 
+<h2>What is it for?</h2>
+
+<p>An ontology can be used in several different ways:</p>
+
+<ul>
+<li>By ontology creators, to keep the ontology logically consistent.</li>
+<li>By data providers and consumers, to help communicate which
+information might be provided and what the terms mean.
+<li>By data providers and consumers, to help "validate" the 
+data, finding constructs which are definitely or probably errors</li>
+<li>By consumers, to license inferences, possibly from multiple
+data sources, supporting data "fusion"</li>
+</ul>
+
+
 <h2>Subclass Reasoning</h2>
 <pre>:Man s:subclassOf :Human .
 :YoungMan s:subclassOf :Man .</pre>
@@ -135,13 +152,11 @@ ___________________________________
 :Alan = :MrFoster.
 </pre>
 
-<h2>Sameness</h2>
+<h2>Sameness and Difference</h2>
 
-<p>@@</p>
+<p>@@@ owl:sameAs, sameIndividualAs, ...</p>
 
-<h2>Difference</h2>
-
-<p>@@Hrm. testing.</p>
+<p>distinctFrom, disjointClass</p>
 
 <div class="noprint">
 <hr />
