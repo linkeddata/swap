@@ -90,14 +90,14 @@ cr:SHA a rdf:Property; s:label "SHA hash";
 # See http://www.amk.ca/python/writing/pycrypt/node16.html
 #
 
-cr:PublicKeyObject a rdfs:Class;
+cr:PublicKeyObject a s:Class;
     s:comment """An object corresponding to a key for some algorithm.
     The object can hold a private and optionally a private key.""".
 
-cr:CanEncrypt a s:isSubClassOf cr:PublicKeyObject;
+cr:CanEncrypt s:isSubClassOf cr:PublicKeyObject;
     s:comment """PublicKeyObjects which are cabable of encrypting things""".
 
-cr:CanSign a s:isSubClassOf cr:PublicKeyObject;
+cr:CanSign s:isSubClassOf cr:PublicKeyObject;
     s:comment """PublicKeyObjects which are cabable of signing things.
 True if the algorithm is capable of signing data; returns false otherwise.
 To test if a given key object can sign data, use CanSign and HasPrivate. """.
@@ -107,13 +107,13 @@ cr:HasPrivate s:isSubClassOf cr:PublicKeyObject;
 Some keys have private parts, some don't.  This is the class of those which do.
 """.
 
-cr:publicKey a rdfs:Property;
+cr:publicKey a s:Property;
     s:domain cr:PublicKeyObject;
     s:range cr:PublicKeyObject;
     s:comment """ A public key object that doesn't contain the private key data""".
 
 
-cr:size a rdfs:Property;
+cr:size a s:Property;
     s:domain cr:PublicKeyObject;
     s:range  log:Number;   # @@  string, decimal
     s:comment """The maximum size of a string that can be encrypted or signed,
@@ -124,7 +124,7 @@ bits of the first byte must be zero. Usually it's simplest to just divide the
 size by 8 and round down""".
 
 
-cr:RSA a s:SubClassOf cr:PublicKeyObject.
+cr:RSA s:SubClassOf cr:PublicKeyObject.
 
 cr:RSA_ a rdf:Property;
     a dpo:UniqueProperty;

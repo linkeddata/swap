@@ -5,7 +5,7 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix doc: <http://www.w3.org/2000/01/pim/doc#>.
-#bind ont: <http://www.daml.org/2000/10/daml-ont> .	 # contains aliases for the above
+@prefix ont: <http://www.daml.org/2000/10/daml-ont#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 
 @prefix os: <http://www.w3.org/2000/10/swap/os#>.
@@ -42,7 +42,7 @@ is relative to the conditions pertaining at the time of execution. Beware
 of writing axioms about these, in making optimizations for example about
 reuse of information between runs.  The uniqueness of this property pertains
 to one run of a program.  The ont:UniqueProperty may be removed if it
-messes up more complex processing."""
+messes up more complex processing.""".
     
 
 # ends
