@@ -1,12 +1,12 @@
 
-<!-- Processed by Id: cwm.py,v 1.129 2003/04/08 16:12:43 timbl Exp -->
-<!--     using base file:/home/sandro/cvs/cvs.w3c.org/WWW/2000/10/swap/test/demo1/biology.n3-->
+<!-- Processed by Id: cwm.py,v 1.130 2003/06/24 13:44:47 timbl Exp -->
+<!--     using base file:/home/sandro/cvs/cvs.w3c.org/WWW/2000/10/swap/test/ferrell/biology.n3-->
 
 
-<rdf:RDF xmlns="file:/home/sandro/cvs/cvs.w3c.org/WWW/2000/10/swap/test/demo1/biology.n3#"
+<rdf:RDF xmlns="file:/home/sandro/cvs/cvs.w3c.org/WWW/2000/10/swap/test/ferrell/biology.n3#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
-    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:owl="http://www.w3.org/2003/07/ferrell#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 
@@ -23,7 +23,7 @@
         <dc:title>Biology Ontology (demo)</dc:title>
         <rdfs:seeAlso rdf:resource="http://www.wikipedia.org/wiki/Binomial_nomenclature"/>
         <owl:imports rdf:resource="http://www.w3.org/2000/01/rdf-schema#"/>
-        <owl:imports rdf:resource="http://www.w3.org/2002/07/owl#"/>
+        <owl:imports rdf:resource="http://www.w3.org/2003/07/ferrell#"/>
         <owl:versionInfo>$Id$</owl:versionInfo>
     </owl:Ontology>
 
@@ -37,7 +37,8 @@
 	       not wolves.</rdfs:comment>
         <rdfs:label>Canis familiaris</rdfs:label>
         <rdfs:seeAlso rdf:resource="http://www.agrobiologicals.com/glossary/G3089.htm"/>
-        <owl:disjoint rdf:resource="#HomoSapiens"/>
+        <owl:disjointWith rdf:resource="#CanisRufus"/>
+        <owl:disjointWith rdf:resource="#HomoSapiens"/>
         <owl:subClassOf rdf:resource="#Canis"/>
     </owl:Class>
 
@@ -63,5 +64,9 @@
 
     <rdf:Description rdf:about="#Human">
         <owl:sameClassAs rdf:resource="#HomoSapiens"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#RedWolf">
+        <owl:sameClassAs rdf:resource="#CanisRufus"/>
     </rdf:Description>
 </rdf:RDF>
