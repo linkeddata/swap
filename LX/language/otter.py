@@ -182,8 +182,94 @@ def serialize(kb):
     s.serializeKB(kb)
     return str.getvalue()
 
+import basicOtter
+import urllib
+import re
+
+prefixPattern = re.compile("^%\s*@prefix\s+(?P<short>\w+)\s+<(?P<long>.+)>\s*$")
+class Parser:
+
+    def __init__(self, sink=None, flags=""):
+        self.kb = sink
+        self.prefix = { }
+        self.allShortsPattern = None
+        self.consts = { }
+
+    def load(self, inputURI):
+        stream = urllib.urlopen(inputURI)
+        s = stream.read()
+        tree = basicOtter.parse("inputDocument", s)
+
+        # find prefix cmds
+        for line in s.splitlines():
+            m=prefixPattern.match(line)
+            if m is not None:
+                prefix[m.group("short")] = m.group("long")
+        allShorts = "|".join(prefix.keys())
+        self.allShortsPattern = re.compile(allShorts)
+
+        # traverse tree converting to kb.
+        for f in tree:
+            if f[0] in ("include", "set", "assign"):
+                print ("Warning: otter '%s' directive ignored" % f[0])
+                continue
+            if f[0] == "formula_list":
+                continue
+            self.kb.add(self.convertFormula(f))
+        
+    def convertFormula(self, f, scope={}):
+        try:
+            functor = f[0]
+        except:
+            pass
+
+        if functor is None:
+            m = self.allShortsPattern.match(f)
+            if m is not None:
+                key=f[m.start():m.end()]
+                f = self.prefix[key]+f[m.end():]
+            if f.find(":") > -1:
+                return LX.logic.ConstantForURI(f)
+            else:
+                try:
+                    return scope[f]
+                except KeyError:
+                    pass
+                try:
+                    return self.consts[f]
+                except KeyError:
+                    self.consts[f] = LX.logic.Constant(f)
+                    return self.consts[f]
+
+        else:
+            if functor == "$Quantified":
+                if f[1] == "all":
+                    q=LX.logic.FORALL
+                    vc=LX.logic.UniVar
+                elif f[1] == "exists":
+                    q=LX.logic.EXISTS
+                    vc=LX.logic.ExiVar
+                else:
+                    raise RuntimeError, "bad quantifier string"
+                n=2
+                newscope=scope.copy()
+                while isinstance(f[n], ""):
+                    newscope[f[n]] = vc(f[n])      # mid-edit?
+                    n+=1
+                assert(n==len(f)-1)   # it's always the last term that's the expr
+                return self.convertFormula(f[n], newscope)
+            else:
+                terms = []
+                for term in f:
+                    terms.append(self.convertFormula(term))
+                return apply(LX.expr.CompoundExpr, terms)
+            
+
 # $Log$
-# Revision 1.9  2003-07-23 19:43:02  sandro
+# Revision 1.10  2003-08-20 09:26:01  sandro
+# in progress addition of otter parser
+#
+# Revision 1.9  2003/07/23 19:43:02  sandro
 # tweaks to work with surnia
 #
 # Revision 1.8  2003/02/14 19:40:32  sandro
