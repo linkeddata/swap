@@ -1,0 +1,54 @@
+# $Id$
+#
+# Invoke ala:
+# $ python cwm.py \
+#    http://www.w3.org/2003/03/Translations/trans.rdf \
+#    http://www.w3.org/2002/01/tr-automation/tr.rdf \
+#    http://www.w3.org/2003/03/docGroups.rdf \
+#      util/findTrans.n3 --filter=util/findTrans.n3 \
+#    --n3 >,owl-es.n3
+#
+
+@prefix trans: <http://www.w3.org/2003/03/Translations/transSchema#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix recs: <http://www.w3.org/2003/03/recsSchema#>.
+@prefix tr: <http://www.w3.org/2001/02pd/rec54#>.
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
+@prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#>.
+@prefix trans: <http://www.w3.org/2003/03/Translations/transSchema#>.
+
+
+@prefix : <#>.
+
+:target :language "es"; :docGroup "OWL".
+
+rdf:_1 a rdfs:ContainerMembershipProperty.
+rdf:_2 a rdfs:ContainerMembershipProperty.
+rdf:_3 a rdfs:ContainerMembershipProperty.
+rdf:_4 a rdfs:ContainerMembershipProperty.
+rdf:_5 a rdfs:ContainerMembershipProperty.
+rdf:_6 a rdfs:ContainerMembershipProperty.
+rdf:_7 a rdfs:ContainerMembershipProperty.
+rdf:_8 a rdfs:ContainerMembershipProperty.
+rdf:_9 a rdfs:ContainerMembershipProperty.
+
+{
+  :target :language ?LANG; :docGroup ?STITLE.
+
+  ?DOC trans:translationFrom ?ORIG;
+   dc:title ?TITLE;
+   dc:language ?LANG.
+
+   ?P a rdfs:ContainerMembershipProperty.
+  ?GRP recs:shortTitle ?STITLE;
+    recs:groupMembers [ ?P ?SERIES ].
+
+  ?ORIG doc:versionOf ?SERIES.
+}
+ => {
+   ?DOC dc:language ?LANG;
+     trans:translationFrom ?ORIG
+}.
+
