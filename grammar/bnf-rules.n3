@@ -108,6 +108,12 @@ bnf:eof bnf:canStartWith "@EOFDUMMY". #  @@ kludge
 
 
 { 	?x bnf:branch ?b;
+	    bnf:canPrecede ?z.
+	?z log:rawType log:Literal.
+	?b bnf:sequence ().
+} =>  { ?b bnf:condition ?z}.
+
+{ 	?x bnf:branch ?b;
 	    bnf:canPrecede [bnf:canStartWith ?z].
 	?b bnf:sequence ().
 } =>  { ?b bnf:condition ?z}.
