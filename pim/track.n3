@@ -33,7 +33,8 @@
 
 :acceptance a r:Property; s:domain t:Issue; r:range doc:Work;
     s:label "acceptance";
-    s:comment "The document which accepts the this issue, creating it as an issue".
+    s:comment "The document which accepts the this issue, creating it as an issue. That document is expected (today) to include information about where
+it was raised (URI), who raised it (the issue author), and on what date.".
 
 :resolution a r:Property; s:domain t:Issue; r:range doc:Work;
     s:comment """This document closes (resolves) the issue, which must have been open""".
@@ -47,11 +48,13 @@
 :reopener a r:Property s:domain t:Issue; r:range doc:Work;
     s:comment  """A closed issue is re-openned.""".
 
-#  Assigns?  Reassigns?
-#  Subsumed by? 
-#  Objection?  Minority report  Cancelation?
-#  Original source of the problem info?
-#  Document rewview which invoked the comment?
+# - Assigns?  Reassigns?
+# - Subsumed by? 
+# - Objection?  Minority report  Cancelation?
+# - Original source of the problem info?
+# - Grouping property (e.g., this issue is part of 
+#   the group of issues related to the second last call)
+#
 
 #ends
 
