@@ -299,6 +299,8 @@ Examples:
   cwm foo.n3 bar.n3 --think         Combine data and find all deductions
   cwm foo.n3 --flat --n3=spart
 
+See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
+
 """
         
 #        import urllib
@@ -546,8 +548,8 @@ Examples:
 
             elif _lhs == "-filter":
                 filterContext = _store.intern((FORMULA, _uri+ "#_formula"))
-                _newURI = urlparse.urljoin(_baseURI, "_w_"+`self._genid`)  # Intermediate
-                self._genid = self._genid + 1
+                _newURI = urlparse.urljoin(_baseURI, "_w_"+`_genid`)  # Intermediate
+                _genid = _genid + 1
                 _newContext = _store.intern((FORMULA, _newURI+ "#_formula"))
 #                _store.moveContext(workingContext, _newContext)
 #                print "# Input filter ", _uri
