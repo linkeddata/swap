@@ -1,12 +1,17 @@
+#!/usr/bin/perl
+# $Id$
+# see changelog at end
+
 use strict;
 
 while(<>){
   my($S, $P, $O, $st, $pt, $ot);
+
+  next unless /\S/; # skip blank lines
+  s/^\s*//; # trim leading space
+  s/\s*\.\s*$//; # trim trailing space and .
   
-  chop;
-  s/\s*\.$//;
-  
-  ($S, $P, $O) = split(/ /, $_, 3);
+  ($S, $P, $O) = split(/ +/, $_, 3);
   if($st = term($S, 0)){
     # OK
   }
@@ -69,3 +74,8 @@ sub term{
   }
 }
     
+
+# $Log$
+# Revision 1.2  2001-05-30 22:34:14  connolly
+# allow some whitespace
+#
