@@ -17,7 +17,7 @@ class decimal:
     float is not recommended
     """
 
-    _limit = 10
+    _limit = 16
     
     def normalize(self):
         """convert this decimal into some sort of canonical form
@@ -53,6 +53,12 @@ class decimal:
         elif isinstance(other, LongType):
             self.value = other
             self.magnitude = 0
+            self.normalize()
+            return
+        elif hasattr(other,'__decimal__') and callable(getattr(other, '__decimal__')):
+            a = other.__decimal__()
+            self.value = a.value
+            self.magnitude = a.magnitude
             self.normalize()
             return
         elif isinstance(other,FloatType):
@@ -143,14 +149,17 @@ class decimal:
     def __div__(self, other):
         """x.__div__(y) <==> x/y
         """
-        while self.magnitude <  self.__class__._limit + other.magnitude: # + int(log10(other)):
+        while self.magnitude <  self.__class__._limit + other.magnitude + int(log10(other)):
             self.value = self.value * 10
             self.magnitude = self.magnitude + 1
-        a = self.__class__()
-        a.value = self.value // other.value
-        a.magnitude = self.magnitude - other.magnitude
+        if self.value % other.value:
+            a = float(self) / float(other)
+        else:
+            a = self.__class__()
+            a.value = self.value // other.value
+            a.magnitude = self.magnitude - other.magnitude
+            a.normalize()
         self.normalize()
-        a.normalize()
         return a
     def __divmod__(self, other):
         """x.__divmod__(y) <==> divmod(x, y)
@@ -179,7 +188,7 @@ class decimal:
     def __hash__(self):
         """x.__hash__() <==> hash(x)
         """
-        return hash((self,value, self.magnitude))
+        return hash((self.value, self.magnitude))
     def __int__(self):
         """x.__int__() <==> int(x)
         """

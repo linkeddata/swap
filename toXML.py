@@ -206,7 +206,7 @@ z  - Allow relative URIs for namespaces
 		    self._nextnodeID += 1
 		    nid = 'b'+`self._nextnodeID`
 		    self._nodeID[obj] = nid
-                    progress("object is now", obj, nid)
+                    #progress("object is now", obj, nid)
 		return
 	    
 	if subj[0] not in (SYMBOL, ANONYMOUS, LITERAL):

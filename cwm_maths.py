@@ -22,6 +22,7 @@ __version__ = '$Revision$'
 import sys, string, re, urllib
 
 from term import LightBuiltIn, Function, ReverseFunction
+from decimal import decimal
 
 MATHS_NS_URI = 'http://www.w3.org/2000/10/swap/maths#'
 
@@ -56,7 +57,7 @@ def isString(x):
 
 class BI_absoluteValue(LightBuiltIn, Function):
     def evaluateObject(self, x):
-            t = abs(float(x))
+            t = abs(decimal(x))
             if t is not None: return tidy(t)
 
 class BI_rounded(LightBuiltIn, Function):
@@ -69,38 +70,38 @@ class BI_sum(LightBuiltIn, Function):
         t = 0
         for x in subj_py:
             if not isString(x): return None
-            t += float(x)
+            t += decimal(x)
         return tidy(t)
 
 class BI_sumOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, obj_py): 
         t = 0
-        for x in obj_py: t += float(x)
+        for x in obj_py: t += decimal(x)
         return tidy(t)
 
 
 class BI_difference(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
         t = None
-        if len(subj_py) == 2: t = float(subj_py[0]) - float(subj_py[1])
+        if len(subj_py) == 2: t = decimal(subj_py[0]) - decimal(subj_py[1])
         return tidy(t)
 
 class BI_differenceOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self,  obj_py): 
         t = None
-        if len(obj_py) == 2: t = float(obj_py[0]) - float(obj_py[1])
+        if len(obj_py) == 2: t = decimal(obj_py[0]) - decimal(obj_py[1])
         return tidy(t)
 
 class BI_product(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
         t = 1
-        for x in subj_py: t *= float(x)
+        for x in subj_py: t *= decimal(x)
         return tidy(t)
 
 class BI_factors(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, obj_py): 
         t = 1
-        for x in obj_py: t *= float(x)
+        for x in obj_py: t *= decimal(x)
         return tidy(t)
 
 class BI_quotient(LightBuiltIn, Function):
@@ -138,11 +139,11 @@ class BI_remainderOf(LightBuiltIn, ReverseFunction):
 class BI_negation(LightBuiltIn, Function, ReverseFunction):
 
     def evalaluateObject(self, subject):
-            t = -float(subject)
+            t = -decimal(subject)
             if t is not None: return tidy(t)
 
     def evalaluateSubject(self, object):
-            t = -float(object)
+            t = -decimal(object)
             if t is not None: return tidy(t)
 
 # Power

@@ -21,6 +21,7 @@ __version__ = '$Revision$'
 import sys, string, re, urllib
 
 from term import LightBuiltIn, Function, ReverseFunction
+from decimal import decimal
 import types
 
 # from RDFSink import DAML_LISTS, RDF_type_URI, DAML_sameAs_URI
@@ -65,9 +66,10 @@ def isString(x):
 def numeric(s):
     if type(s) == types.IntType or \
        type(s) == types.LongType or \
-       type(s) is types.FloatType: return s
+       type(s) is types.FloatType or \
+       isinstance(s,decimal): return s
     if s.find('.') < 0 and s.find('e') < 0 : return long(s)
-    return float(s)
+    return decimal(s)
 
 class BI_absoluteValue(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
@@ -112,12 +114,12 @@ class BI_factors(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, obj_py): 
 	obsolete()
         t = 1
-        for x in obj_py: t *= float(x)
+        for x in obj_py: t *= numeric(x)
         return t
 
 class BI_quotient(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
-        if len(subj_py) == 2: return float(subj_py[0]) / float(subj_py[1])
+        if len(subj_py) == 2: return numeric(subj_py[0]).__truediv__(numeric(subj_py[1]))
 
 class BI_integerQuotient(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
@@ -134,7 +136,7 @@ class BI_bit(LightBuiltIn, Function):
 class BI_quotientOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self,  obj_py): 
         obsolete()
-        if len(obj_py) == 2: return float(obj_py[0]) / float(obj_py[1])
+        if len(obj_py) == 2: return numeric(obj_py[0]).__truediv__(numeric(obj_py[1]))
 
 # remainderOf and negationOf
 
@@ -146,7 +148,7 @@ class BI_remainder(LightBuiltIn, Function):
 class BI_remainderOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self,  obj_py): 
         obsolete()
-        if len(obj_py) == 2: return float(obj_py[0]) % float(obj_py[1])
+        if len(obj_py) == 2: return numeric(obj_py[0]) % numeric(obj_py[1])
 
 class BI_negation(LightBuiltIn, Function, ReverseFunction):
     def evaluateSubject(self, obj_py): 

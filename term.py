@@ -729,6 +729,9 @@ class Literal(Term):
     def __float__(self):
 	return float(self.string)
 
+    def __decimal__(self):
+        return decimal(self.string)
+
     def occurringIn(self, vars):
 	return []
 
