@@ -41,9 +41,9 @@
     n3test:description   "N3 string quoting with escaping";
     n3test:inputDocument     <strquot.n3> .
 
-#:n3_10010 a n3test:PositiveParserTest;
-#    n3test:description   "N3 string, qname and IRI with utf-8 non-ascii characters";
-#    n3test:inputDocument     <i18n/hiragana.n3> .
+:n3_10010 a n3test:PositiveParserTest;
+    n3test:description   "N3 string, qname and IRI with utf-8 non-ascii characters";
+    n3test:inputDocument     <i18n/hiragana.n3> .
 
 :n3_10011 a n3test:PositiveParserTest;
     n3test:description   "Path syntax, simple";
@@ -99,3 +99,8 @@
 :n3_20002 a n3test:NegativeParserTest;
     n3test:description    "single quoted strings are illegal";
     n3test:inputDocument  <syntax/neg-single-quote.n3> .
+
+:n3_20003 a n3test:NegativeParserTest;
+    n3test:description    "single quoted strings are illegal";
+    n3test:inputDocument  <syntax/neg-thisadoc.n3> .
+

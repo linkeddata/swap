@@ -425,6 +425,30 @@ def isXMLChar(character, char_class):
     else:
         return isXMLChar10(character, char_class)
 
+
+def isNCName(string):
+    """Is this string a valid NCName
+
+    """
+    if not isXMLChar(string[0], NCNameStartChar):
+        return False
+    for a in string[1:]:
+        if not isXMLChar(a, NCNameChar):
+            return False
+    return True
+
+def isName(string):
+    """Is this string a valid NCName
+
+    """
+    if not isXMLChar(string[0], NameStartChar):
+        return False
+    for a in string[1:]:
+        if not isXMLChar(a, NameChar):
+            return False
+    return True
+
+
 XMLVersion = '1.0'
 
 def setXMLVersion(ver):

@@ -12,9 +12,11 @@ HTMLS= term.html formula.html pretty.html myStore.html check.html query.html RDF
 SOURCES = cwm.py notation3.py query.py llyn.py uripath.py diag.py RDFSink.py reify.py why.py myStore.py webAccess.py OrderedSequence.py term.py formula.py pretty.py cwm_list.py cwm_string.py cwm_os.py cwm_time.py isodate.py cwm_math.py cwm_trigo.py cwm_times.py cwm_maths.py toXML.py update.py sax2rdf.py rdflib_user.py rdfxml.py __init__.py decimal.py isXML.py
 DOC=doc/CwmHelp.htm
 
+GRAMMAR =  grammar/n3.n3 grammar/README.txt grammar/predictiveParser.py grammar/bnf2html.n3 grammar/Makefile grammar/bnf2html.n3 grammar/bnf.n3 grammar/bnf-rules.n3 grammar/n3-rdf.n3 grammar/n3-rules.n3 grammar/n3-yacc.c grammar/n3-ql.n3
+
 TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/ql/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/cwm/detailed.tests test/ntriples/detailed.tests test/delta/detailed.tests test/syntax/detailed.tests test/reify/detailed.tests test/testmeta.n3 test/retest.py
 
-VERSION = 0.8.1
+VERSION = 1.0.0-rc1
 TARNAME = cwm-$(VERSION)
 
 TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3
@@ -34,6 +36,8 @@ TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3
 
 #all: yappstest yappsdoc math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf
 
+install : setup.py
+	./setup.py bdist
 
 tested :  updated package
 	(cd test; make pre-release)
@@ -78,13 +82,13 @@ cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
 	cvs add $(TARNAME).tar.gz
 #LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply/*.py *.py
 
-setup_tarball: $(SOURCES) $(HTMLS) $(TESTS) $(TARBALL_STUFF) #tested filelist
+setup_tarball: $(SOURCES) $(HTMLS) $(TESTS) $(GRAMMAR) $(TARBALL_STUFF) #tested filelist
 	-rm -rf swap
 	mkdir swap
 	cd swap; for A in $(SOURCES); do ln "../$$A"; done
 	echo "cwm.py" > MANIFEST
 	echo "setup.py" >> MANIFEST
-	for A in $(TARBALL_STUFF) $(HTMLS) $(TESTS); do echo "$$A" >> MANIFEST; done
+	for A in $(TARBALL_STUFF) $(HTMLS) $(GRAMMAR) $(TESTS); do echo "$$A" >> MANIFEST; done
 	for A in $(SOURCES); do echo swap/"$$A" >> MANIFEST; done
 	cat test/testfilelist | sed -e 's/^/test\//' >> MANIFEST
 	python setup.py sdist

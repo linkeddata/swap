@@ -43,6 +43,7 @@ import sys
 
 import uripath
 from why import BecauseOfData
+import isXML
 import diag
 from webAccess import urlopenForRDF   # http://www.w3.org/2000/10/swap/
 
@@ -87,6 +88,22 @@ from diag import verbosity, progress, tracking
 
 
 _nextId = 0        # For generation of arbitrary names for anonymous nodes
+
+
+coreSyntaxTerms = ['RDF', 'ID', 'about', 'parseType', 'resource', 'nodeID', 'datatype'] 
+syntaxTerms = coreSyntaxTerms + ['Description', 'li']
+oldTerms = ['aboutEach', 'aboutEachPrefix', 'bagID'] 
+
+nodeElementExceptions = {}
+for a in coreSyntaxTerms + oldTerms + ['li',]:
+    nodeElementExceptions[RDF_NS_URI + a] = True
+propertyElementExceptions = {}
+for a in coreSyntaxTerms + oldTerms + ['Description',]:
+    propertyElementExceptions[RDF_NS_URI + a] = True
+propertyAttributeExceptions = {}
+for a in syntaxTerms + oldTerms:
+    propertyAttributeExceptions[RDF_NS_URI + a] = True
+
 
 class RDFHandler(xml.sax.ContentHandler):
     """RDF Parser using SAX API for XML parsing
@@ -180,8 +197,9 @@ class RDFHandler(xml.sax.ContentHandler):
                         ns = RDF_NS_URI  # Allowed as per dajobe: ID, bagID, about, resource, parseType or type
                 uri = (ns + ln)
             if ns == RDF_NS_URI or ns == None:   # Opinions vary sometimes none but RDF_NS is common :-(
-                
                 if ln == "ID":
+                    if not isXML.isName(value):
+                        raise  BadSyntax(sys.exc_info(), 'An ID must be a Name %s' % value)
                     if self._subject:
                         print "# oops - subject already", self._subject
                         raise BadSyntax(sys.exc_info(), ">1 subject")
@@ -191,6 +209,8 @@ class RDFHandler(xml.sax.ContentHandler):
                     self._subject = self.sink.newSymbol(self.uriref(value))
                 elif ln == "nodeID":
                     if self._subject: raise BadSyntax(sys.exc_info(), ">1 subject")
+                    if not isXML.isNCName(value):
+                        raise  BadSyntax(sys.exc_info(), 'A nodeID must be a NCName %s' % value)
 		    s = self._nodeIDs.get(value, None)
 		    if s == None:
 			s = self.newBlankNode()
@@ -200,7 +220,9 @@ class RDFHandler(xml.sax.ContentHandler):
                     if value == " ":  # OK - a trick to make NO subject
                         self._subject = None
                     else: raise ooops # can't do about each prefix yet
-                elif ln == "bagid":
+                elif ln == "bagID":
+                    if not isXML.isName(value):
+                        raise  BadSyntax(sys.exc_info(), 'A bagID must be a Name %s' % value)
                     c = self._context #@@dwc: this is broken, no?
                     self._context = FORMULA, self.uriref("#" + value) #@@ non-ascii
                 elif ln == "parseType":
@@ -247,8 +269,8 @@ class RDFHandler(xml.sax.ContentHandler):
         if tagURI == RDF_NS_URI + "Description":
             self.idAboutAttr(attrs)  # Set up subject and context                
 
-        elif tagURI == RDF_NS_URI + "li":
-            raise ValueError, "rdf:li as typednode not implemented"
+        elif tagURI in nodeElementExceptions:
+            raise ValueError, "%s as typednode not implemented" % tagURI
         else:  # Unknown tag within STATE_NO_SUBJECT: typedNode #MS1.0 6.13
             c = self._context   # (Might be changed in idAboutAttr) #@@DC: huh?
             self.idAboutAttr(attrs)
@@ -377,6 +399,8 @@ class RDFHandler(xml.sax.ContentHandler):
                 self._predicate = self.sink.newSymbol("%s_%s" % (RDF_NS_URI, item))
                 self._items[-1] = item
             else:
+                if tagURI in propertyElementExceptions:
+                    raise BadSyntax(sys.exc_info(), 'Invalid predicate URI: %s' % tagURI) 
                 self._predicate = self.sink.newSymbol(tagURI)
 
             self._state = STATE_VALUE  # May be looking for value but see parse type
@@ -434,6 +458,8 @@ class RDFHandler(xml.sax.ContentHandler):
 			raise SyntaxError("Unknown parse type '%s'" % value )
                 elif name == "nodeID":
 		    assert not gotSubject
+                    if not isXML.isNCName(value):
+                        raise  BadSyntax(sys.exc_info(), 'A nodeID must be a NCName %s' % value)
 		    obj = self._nodeIDs.get(value, None)
 		    if obj == None:
 			obj = self.newBlankNode()
