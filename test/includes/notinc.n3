@@ -11,7 +11,7 @@
 @prefix : <foo.n3#>.  # Local stuff
 
 # @prefix foo: <http://www.w3.org/2000/10/swap/test/includes/foo.n3#>.  # Local stuff
-@prefix foo: <foo.n3#>.  # Local stuff
+@prefix foo: <notinc.n3#>.  # Local stuff
 
 
 this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
@@ -19,7 +19,7 @@ this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
 <fred> :schema <foo.n3>.
 
 {     :p :schema :s.
-      :s log:resolvesTo [log:notIncludes { :p a rdf:Property }].
+      :s log:semantics [log:notIncludes { :p a rdf:Property }].
 } log:implies {
       :p a :ERROR_SPELLING_MISTAKE_MAYBE.  # ;-)
 }.
@@ -31,23 +31,23 @@ log:implies a log:Chaff.  #  Clear out rules on -purge
 ########################### Old stuff:
 
 #{ :p a :UsedProperty.
-#  :p log:resolvesTo :H.
+#  :p log:semantics :H.
 # } log:impliesXX {:H a :schemaFormula }.
 
-#{ foo:is log:resolvesTo :H.
+#{ foo:is log:semantics :H.
 #   :H log:includes { foo:is a rdf:Property }
 #} log:implies { :H a :success1 }.
 
-#{ foo:is log:resolvesTo :H.
+#{ foo:is log:semantics :H.
 #   :H log:includes { foo:is a rdf:Property }
 #} log:implies { foo:is a :defined_as_prop_in_schema }.
 
 #{  :p a :UsedProperty.
-#   :p log:resolvesTo :H.
+#   :p log:semantics :H.
 #   :H log:includes { :p a rdf:Property }
 #} log:implies { :p a :defined_as_property_in_ns_doc1 }.
 
-#{ <foo.n3#is> log:resolvesTo :H.
+#{ <foo.n3#is> log:semantics :H.
 #  :H log:includes { :p s:isDefinedBy :x }} log:impliesXX { :p a :defined_in_schema2 .
 #    :p  :is_defined_in2 :x.
 #    :H :is :whatFooIsResolvedTo2 }.

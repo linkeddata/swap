@@ -14,7 +14,7 @@
 # Output should conclude all test* a :success and no failures.
 #
 
-log:includes a rdf:Property; s:description
+log:includes a rdf:Property; s:comment
 """ The includes property indicates that one formula either
 is, or is a conjunction of several subformulae one of which is,
 the other forumla or its equivalent by the renaming of variables.

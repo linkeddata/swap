@@ -1,15 +1,15 @@
 #    Test filter in N3
 #
-bind log: <http://www.w3.org/2000/10/swap/log> .
-bind daml: <http://www.daml.org/2001/03/daml+oil> .
-bind : <> .
-bind rules: <> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+@prefix : <#> .
+@prefix rules: <#> .
 
 # Full DanC challenge
 
 this log:forAll <#p> .
 
-{  <#p> a daml:TransitiveProperty . } log:means
+{  <#p> a daml:TransitiveProperty . } :means
 
 {
   {
@@ -22,15 +22,15 @@ this log:forAll <#p> .
 # Intoduce a symmetric implication for convienience
 
 this log:forAll <#x>, <#y> .
-{ <#x> log:means <#y>. }  log:implies {	<#x> log:implies <#y> .
+{ <#x> :means <#y>. }  log:implies {	<#x> log:implies <#y> .
 					<#y> log:implies <#x> . } .
   
 {   <#x> log:implies <#y> .
-    <#y> log:implies <#x> . }  log:implies  { <#x> log:means <#y>. }  . 
+    <#y> log:implies <#x> . }  log:implies  { <#x> :means <#y>. }  . 
 
 # and in fact, though it is not axiomatic...
 #
-#{ <#x> log:means <#y>. }  log:means {	<#x> log:implies <#y> .
+#{ <#x> :means <#y>. }  :means {	<#x> log:implies <#y> .
 #					<#y> log:implies <#x> . } . 
 #
 

@@ -4,8 +4,8 @@
 
 this log:forAll :x.
 
-#{ <rdfs.n3> log:resolvesTo [ log:includes { :x a u:Class } ]}
+#{ <rdfs.n3> log:semantics [ log:includes { :x a u:Class } ]}
 #  log:implies { :x a :ClassInrdfs_n3 }.
 
-{ <animal.rdf> log:resolvesTo [ log:includes { :x a u:Class } ]}
+{ <animal.rdf> log:semantics [ log:includes { :x a u:Class } ]}
   log:implies { :x a :ClassInAnimal_rdf }.

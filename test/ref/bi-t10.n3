@@ -2,11 +2,12 @@
      @prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
      @prefix dpo: <http://www.daml.org/2001/03/daml+oil#> .
      @prefix ex: <http://www.daml.org/2000/10/daml-ex#> .
+     @prefix local: <#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
-    :fred     :favoriteColor :blue .
+    :fred     local:favoriteColor :blue .
     
     :test10a     a :success .
     
@@ -20,18 +21,18 @@
     {
         :F     log:includes {:theSky     :is :blue .
             } .
-        <t10a.n3>     log:resolvesTo :F .
+        <t10a.n3>     log:semantics :F .
         
         }     log:implies {:test10a     a :success .
         } .
     {
         :F     log:includes :G .
-        :d     log:resolvesTo :F .
+        :d     log:semantics :F .
         
-        }     log:implies {:doc     :says :G .
+        }     log:implies {:doc     local:says :G .
         } .
     {
-        <t10a.n3>     :says {:theSky     :is :blue .
+        <t10a.n3>     local:says {:theSky     :is :blue .
             } .
         
         }     log:implies {:test_SURPRISE     a :success .
@@ -39,19 +40,19 @@
     {
         :F     log:includes {:theSky     :is :green .
             } .
-        <t10a.n3>     log:resolvesTo :F .
+        <t10a.n3>     log:semantics :F .
         
         }     log:implies {:test10-bis     a :FAILURE .
         } .
     {
         :F     log:includes {:theSky     :is :x .
             } .
-        <t10a.n3>     log:resolvesTo :F .
+        <t10a.n3>     log:semantics :F .
         
-        }     log:implies {:fred     :favoriteColor :x .
+        }     log:implies {:fred     local:favoriteColor :x .
         } .
     {
-        :fred     :favoriteColor :blue .
+        :fred     local:favoriteColor :blue .
         
         }     log:implies {:test10b     a :success .
         } .

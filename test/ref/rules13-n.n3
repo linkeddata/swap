@@ -24,7 +24,7 @@
     :_g0 :- {
         :p     a daml:TransitiveProperty .
         
-        }     log:implies {{
+        }     :means {{
             {
                 :x     :p :y .
                 :y     :p :z .
@@ -37,7 +37,7 @@
                     :y,
                     :z .
         };
-         log:means {{
+         log:implies {{
             {
                 :x     :p :y .
                 :y     :p :z .
@@ -65,12 +65,12 @@
                     :y,
                     :z .
         
-        }     log:implies {:p     a daml:TransitiveProperty .
+        }     :means {:p     a daml:TransitiveProperty .
         };
-         log:means {:p     a daml:TransitiveProperty .
+         log:implies {:p     a daml:TransitiveProperty .
         } .
     {
-        :x     log:means :y .
+        :x     :means :y .
         
         }     log:implies {:x     log:implies :y .
         :y     log:implies :x .
@@ -79,7 +79,7 @@
         :x     log:implies :y .
         :y     log:implies :x .
         
-        }     log:implies {:x     log:means :y .
+        }     log:implies {:x     :means :y .
         } .
     {
         {

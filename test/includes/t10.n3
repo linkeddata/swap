@@ -10,6 +10,8 @@
 @prefix foo: <foo.n3#>.  # Local stuff
 @prefix : <foo.n3#>.  # Local stuff
 
+@prefix local: <t10.n3#>.
+
 # Usage:   cwm t10.n3 -think
 #
 # See also t10a.n3  foo.n3
@@ -20,30 +22,30 @@
 
 this log:forAll :d, :x, :y, :F, :G.
 
-{ <t10a.n3> log:resolvesTo :F.
+{ <t10a.n3> log:semantics :F.
   :F log:includes { :theSky :is :blue}   } log:implies { :test10a a :success } .
  
-{ <t10a.n3> log:resolvesTo :F.
+{ <t10a.n3> log:semantics :F.
   :F log:includes { :theSky :is :green}   } log:implies { :test10-bis a :FAILURE } .
  
-{ <t10a.n3> log:resolvesTo :F.
-  :F log:includes { :theSky :is :x}   } log:implies { :fred :favoriteColor :x  } .
+{ <t10a.n3> log:semantics :F.
+  :F log:includes { :theSky :is :x}   } log:implies { :fred local:favoriteColor :x  } .
 
-{ :fred :favoriteColor :blue } log:implies { :test10b a :success}.
+{ :fred local:favoriteColor :blue } log:implies { :test10b a :success}.
  
 #-----------------------------------
 #
 #  This illustrates the inabilaty of cwm to do backward chaining
 #
 
-{ :d log:resolvesTo :F .
-  :F  log:includes :G } log:implies  {  :doc :says :G }. 
+{ :d log:semantics :F .
+  :F  log:includes :G } log:implies  {  :doc local:says :G }. 
 
-{ <t10a.n3> :says { :theSky :is :blue } } log:implies {:test_SURPRISE a :success}.
+{ <t10a.n3> local:says { :theSky :is :blue } } log:implies {:test_SURPRISE a :success}.
 
 
 # Not to mention:
-# { :d log:signedBy :k. :d log:says :F } log:means { :k log:guarantees :F }.
+# { :d log:signedBy :k. :d local:says :F } log:means { :k log:guarantees :F }.
 
 
 #ends

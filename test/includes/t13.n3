@@ -7,7 +7,7 @@
 #@prefix ex:   <http://www.daml.org/2000/10/daml-ex#> .
 
 @prefix log:  <http://www.w3.org/2000/10/swap/log#> .
-
+@prefix string:  <http://www.w3.org/2000/10/swap/string#> .
 @prefix : <#>.  # Local stuff
 
 # Usage:   cwm t13.n3 -think
@@ -17,34 +17,34 @@
 
 this log:forAll :x, :y, :z.
 
-#{ ""  log:concat () } log:implies {:test13a a :success}.
+#{ ""  string:concat () } log:implies {:test13a a :success}.
 
-# { :x  log:concat ( :y ) } log:implies {:empty :is :x}.
+# { :x  string:concat ( :y ) } log:implies {:empty :is :x}.
 
-# :x log:concat ( :junk ) }  log:implies { :one :is :x }.
+# :x string:concat ( :junk ) }  log:implies { :one :is :x }.
 
-#{ :x log:concat :junk } log:implies { :junk2 :is :x }.
+#{ :x string:concat :junk } log:implies { :junk2 :is :x }.
 
-{ :x  log:concat ("World" "Wide" "Web") } log:implies {:www :is :x}.
+{ :x  string:concat ("World" "Wide" "Web") } log:implies {:www :is :x}.
 
-#{ :x  log:concat ("World" :y "Web").
-#  :y  log:concat ( "W" " " "I" " " "D" " " "E").
+#{ :x  string:concat ("World" :y "Web").
+#  :y  string:concat ( "W" " " "I" " " "D" " " "E").
 # } log:implies {:www2:is :x}.
 
 
-#{ "" log:equalTo [ log:concat () ]  } log:implies {:test13a1 a :success}.
+#{ "" log:equalTo [ string:concat () ]  } log:implies {:test13a1 a :success}.
 #
-#{ "one" log:equalTo [ log:concat ( "one" ) ].} log:implies {:test13b a :success}.
+#{ "one" log:equalTo [ string:concat ( "one" ) ].} log:implies {:test13b a :success}.
 #
-#{ "WorldWideWeb" log:equalTo [ log:concat ( "World" "Wide" "Web" ) ]}
+#{ "WorldWideWeb" log:equalTo [ string:concat ( "World" "Wide" "Web" ) ]}
 #    log:implies {:test13c a :success}.
 #
 #
-#{ "one" log:equalTo [ log:concat () ]  } log:implies {:test13a_bis a :FAILURE}.
+#{ "one" log:equalTo [ string:concat () ]  } log:implies {:test13a_bis a :FAILURE}.
 #
-#{ "" log:equalTo [ log:concat ( "one" ) ].} log:implies {:test13b_bis a :FAILURE}.
+#{ "" log:equalTo [ string:concat ( "one" ) ].} log:implies {:test13b_bis a :FAILURE}.
 #
-#{ "one" log:equalTo [ log:concat ( "World" "Wide" "Web" ) ]}
+#{ "one" log:equalTo [ string:concat ( "World" "Wide" "Web" ) ]}
 #    log:implies {:test13c_bis a :FAILURE}.
 
 

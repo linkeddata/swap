@@ -23,7 +23,7 @@ this log:forAll :d, :x, :y, :F, :G.
 #  It can't find a constant to start with on the left hand side.
 #
 
-{ :d log:resolvesTo :F .
+{ :d log:semantics :F .
   :F  log:includes :G } log:implies  {  :doc :says :G }. 
 
 { <t10a.n3> :says { :theSky :is :blue } } log:implies {test_SURPRISE a :success}.

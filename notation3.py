@@ -89,7 +89,7 @@ DAML_LISTS = 0    # Don't do these - do the funny compact ones
 RDF_type = ( RESOURCE , RDF_type_URI )
 DAML_equivalentTo = ( RESOURCE, DAML_equivalentTo_URI )
 
-List_NS = DPO_NS     # We have to pick just one all te time
+List_NS = DPO_NS     # We have to pick just one all the time
 
 # For lists:
 N3_first = (RESOURCE, List_NS + "first")

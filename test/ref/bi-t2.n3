@@ -17,7 +17,7 @@
     :test2     a :success .
     
     log:includes     a rdf:Property;
-         s:description """ The includes property indicates that one formula either
+         s:comment """ The includes property indicates that one formula either
 is, or is a conjunction of several subformulae one of which is,
 the other forumla or its equivalent by the renaming of variables.
 

@@ -7,7 +7,7 @@
     
     this     :forAll <#x> .
     {
-        <animal.rdf>     :resolvesTo  [
+        <animal.rdf>     :semantics  [
                  :includes {<#x>     a u:Class .
                 } ] .
         

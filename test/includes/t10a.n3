@@ -20,6 +20,6 @@
  
  :theSky :blue :is .       # Predicate defined by schema but not a Property.
 
- :theSky :isjunk :blue .   # Not a schema-valid Property
+ :theSky :test_undefined :blue .   # Not a schema-valid Property
  
 #ends

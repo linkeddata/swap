@@ -29,12 +29,12 @@ this log:forAll :x.
 
 # Now a negative test:
 
-{ <> log:includes
+{ <> log:notIncludes
     { this log:forAll :x.
     		{ this log:forAll :y.  :x :loves  :y } log:implies 
 		{ { this log:forSome :z. :x :hates :z } a log:falsehood }.
     }
-} log:notImplies { :testg_1 a :FAILURE }.
+} log:implies { :testg_1 a :FAILURE }.
 
 
 

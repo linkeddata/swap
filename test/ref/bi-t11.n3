@@ -17,7 +17,7 @@
          :schema <foo.n3>;
          :schemaFormula :_formula .
     
-    :isjunk     a :ERROR_CANT_GET_SCHEMA,
+    :test_undefined     a :ERROR_CANT_GET_SCHEMA,
                 :UsedProperty .
     
     this     log:forAll :F,
@@ -34,20 +34,20 @@
     {
         :F     log:includes {:blue     a rdf:Property .
             } .
-        <foo.n3>     log:resolvesTo :F .
+        <foo.n3>     log:semantics :F .
         
         }     log:implies {:includesTest     a :FAILURE .
         } .
     {
         :F     log:includes {:s     :p :o .
             } .
-        <t10a.n3>     log:resolvesTo :F .
+        <t10a.n3>     log:semantics :F .
         
         }     log:implies {:p     a :UsedProperty .
         } .
     {
         :p     a :UsedProperty;
-             log:resolvesTo  [
+             log:semantics  [
                  log:includes {:p     s:isDefinedBy :s .
                 } ] .
         
@@ -55,13 +55,13 @@
         } .
     {
         :p     :schema  [
-                 log:resolvesTo :F ] .
+                 log:semantics :F ] .
         
         }     log:implies {:p     :schemaFormula :F .
         } .
     {
         :p     a :UsedProperty;
-             log:resolvesTo  [
+             log:semantics  [
                  log:notIncludes {:p     s:isDefinedBy :x .
                 } ] .
         
@@ -71,8 +71,8 @@
         :F     log:includes {:p     s:isDefinedBy :s .
             } .
         :p     a :UsedProperty;
-             log:resolvesTo :F .
-        :s     log:resolvesTo :G .
+             log:semantics :F .
+        :s     log:semantics :G .
         
         }     log:implies {:p     :schemaFormula :G .
         } .
@@ -93,21 +93,21 @@
     {
         :F     log:notIncludes {:blue     a rdf:Property .
             } .
-        <foo.n3>     log:resolvesTo :F .
+        <foo.n3>     log:semantics :F .
         
         }     log:implies {:includesTest2     a :success .
         } .
     {
         :F     log:includes {:is     a rdf:Property .
             } .
-        <foo.n3>     log:resolvesTo :F .
+        <foo.n3>     log:semantics :F .
         
         }     log:implies {:includesTest3     a :success .
         } .
     {
         :F     log:notIncludes {:is     a rdf:Property .
             } .
-        <foo.n3>     log:resolvesTo :F .
+        <foo.n3>     log:semantics :F .
         
         }     log:implies {:includesTest4     a :FAILURE .
         } .

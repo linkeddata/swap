@@ -111,7 +111,7 @@ import urlparse
 import re
 import StringIO
 
-import urllib # for hasContent
+import urllib # for log:content
 import md5, binascii  # for building md5 URIs
 urlparse.uses_fragment.append("md5") #@@kludge/patch
 urlparse.uses_relative.append("md5") #@@kludge/patch
@@ -292,27 +292,31 @@ class BI_notIncludes(HeavyBuiltIn):
             return not store.testIncludes(subj, obj, variables, bindings=bindings)
         return 0   # Can't say it *doesn't* include it if it ain't a formula
 
-class BI_resolvesTo(HeavyBuiltIn, Function):
+class BI_semantics(HeavyBuiltIn, Function):
+    """ The semantics of a resource are its machine-readable meaning, as an
+    N3 forumula.  The URI is used to find a represnetation of the resource in bits
+    which is then parsed according to its content type."""
     def evaluateObject2(self, store, subj):
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
-        F = store.any((store._experience, store.resolvesTo, doc, None))
+        F = store.any((store._experience, store.semantics, doc, None))
         if F: return F
         
         if chatty > 10: progress("Reading and parsing " + `doc`)
         inputURI = doc.uriref()
         loadToStore(store, inputURI)
-        if chatty>10: progress("resolvesTo FORMULA addr: %s" % (inputURI+ "#_formula"))
+        if chatty>10: progress("semantics FORMULA addr: %s" % (inputURI+ "#_formula"))
         F = store.intern((FORMULA, inputURI+ "#_formula"))
         return F
     
-class BI_resolvesToIfPossible(HeavyBuiltIn, Function):
+class BI_semanticsOrError(HeavyBuiltIn, Function):
+    """ Either get and parse to semantics or return an error message on any error """
     def evaluateObject2(self, store, subj):
         try:
-            return BI_resolvesTo.evaluateObject2(self, store, subj)
+            return BI_semantics.evaluateObject2(self, store, subj)
         except (IOError, SyntaxError):
             if chatty > 0: progress("Error trying to resolve <" + inputURI + ">") 
-            return None
+            return store.intern((LITERAL, sys.exc_info()[1].__str__()))
     
 
 HTTP_Content_Type = 'content-type' #@@ belongs elsewhere?
@@ -364,8 +368,19 @@ def _indent(str):
         s = s[:-4]
     return s
 
+class BuiltInFailed(Exception):
+    def __init__(self, info, item):
+        self._item = item
+        self._info = info
+        
+    def __str__(self):
+        reason = _indent(self._info[1].__str__())
+        return ("Error during built-in operation\n  <%s>\n  in formula %s\n, because:\n%s" % (
+            itemToString(self._item),
+            `self._item[QUAD][CONTEXT]`,
+            reason))
+    
 class DocumentAccessError(IOError):
-
     def __init__(self, uri, info):
         self._uri = uri
         self._info = info
@@ -376,11 +391,11 @@ class DocumentAccessError(IOError):
         reason = _indent(self._info[1].__str__())
         return ("Unable to access document <%s>, because:\n%s" % ( self._uri, reason))
     
-class BI_hasContent(HeavyBuiltIn, Function): #@@DWC: Function?
+class BI_content(HeavyBuiltIn, Function): #@@DWC: Function?
     def evaluateObject2(self, store, subj):
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
-        C = store.any((store._experience, store.hasContent, doc, None))
+        C = store.any((store._experience, store.content, doc, None))
         if C: return C
         if chatty > 10: progress("Reading " + `doc`)
         inputURI = doc.uriref()
@@ -466,9 +481,10 @@ class RDFStore(RDFSink.RDFSink) :
 
 #Heavy functions:
 
-        self.resolvesTo = log.internFrag("resolvesTo", BI_resolvesTo)
-        log.internFrag("resolvesToIfPossible", BI_resolvesToIfPossible)
-        log.internFrag("hasContent", BI_hasContent)
+        log.internFrag("resolvesTo", BI_semantics) # obsolete
+        self.semantics = log.internFrag("semantics", BI_semantics)
+        log.internFrag("semanticsOrError", BI_semanticsOrError)
+        self.content = log.internFrag("content", BI_content)
         log.internFrag("n3ExprFor",  BI_n3ExprFor)
         
 # Constants:
@@ -1821,48 +1837,51 @@ class RDFStore(RDFSink.RDFSink) :
 
 # notIncludes has to be a recursive call, but log:includes just extends the search
                     if con in smartIn and isinstance(pred, HeavyBuiltIn):
-                        state = 10   # Heavy, man
-                        if pred is self.includes:
-                            if (isinstance(subj, Formula)
-                                and isinstance(obj, Formula)):
+                        try:
+                            state = 10   # Heavy, man
+                            if pred is self.includes:
+                                if (isinstance(subj, Formula)
+                                    and isinstance(obj, Formula)):
 
-                                more_unmatched, more_variables = self.oneContext(quad[OBJ])
-                                _substitute([( obj, subj)], more_unmatched)
-                                _substitute(bindings, more_unmatched)
-                                for quad in more_unmatched:
-                                    item = 99, 0, [], [], [], quad
-                                    queue.append(item)
-                                existentials = existentials + more_variables
-                                if chatty > 40: progress(" **** Includes: Adding %i new terms and %s as new existentials."%
-                                                         (len(more_unmatched),seqToString(more_variables)))
-                                return self.query(queue, variables, existentials, smartIn, action, param,
-                                                  bindings=bindings, justOne=justOne) # bindings new to this forumula
-                            else:  # Not forumla
-                                if len(vars) == 0: return total  # Not going to work if not forumlae ever
-                                # otherwise might work if vars 
+                                    more_unmatched, more_variables = self.oneContext(quad[OBJ])
+                                    _substitute([( obj, subj)], more_unmatched)
+                                    _substitute(bindings, more_unmatched)
+                                    for quad in more_unmatched:
+                                        item = 99, 0, [], [], [], quad
+                                        queue.append(item)
+                                    existentials = existentials + more_variables
+                                    if chatty > 40: progress(" **** Includes: Adding %i new terms and %s as new existentials."%
+                                                             (len(more_unmatched),seqToString(more_variables)))
+                                    return self.query(queue, variables, existentials, smartIn, action, param,
+                                                      bindings=bindings, justOne=justOne) # bindings new to this forumula
+                                else:  # Not forumla
+                                    if len(vars) == 0: return total  # Not going to work if not forumlae ever
+                                    # otherwise might work if vars 
 
-                        elif len(vars)==0:  # Deal with others
+                            elif len(vars)==0:  # Deal with others
 
-                                if pred.evaluate2(self, subj, obj, variables[:], bindings[:]):
-                                    if chatty > 80: progress("Heavy predicate succeeds")
-                                    return self.query(queue, variables, existentials, smartIn, action, param,
-                                                  bindings, [],justOne=justOne) # No new bindings but success in calculated logical operator
-                                else:
-                                    if chatty > 80: progress("Heavy predicate fails")
-                                    return total   # We absoluteley know this won't match with this in it
-                        elif len(vars) == 1 :  # The statement has one variable - try functions
-                            if vars[0] == OBJ and isinstance(pred, Function):
-                                result = pred.evaluateObject2(self, subj)
-                                if result != None:
-                                    return self.query(queue, variables, existentials, smartIn, action, param,
-                                                          bindings, [ (obj, result)],justOne=justOne)
-                            elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
-                                obj_py = self._toPython(obj, OBJ in boundLists, queue)
-                                result = pred.evaluateSubject2(self, obj, obj_py)
-                                if result != None:  # There is some such result
-                                    return self.query(queue, variables, existentials, smartIn, action, param,
-                                                          bindings, [ (subj, result)],justOne=justOne)
-                    # Now we have a heavy builtin  waiting for enough constants to run
+                                    if pred.evaluate2(self, subj, obj, variables[:], bindings[:]):
+                                        if chatty > 80: progress("Heavy predicate succeeds")
+                                        return self.query(queue, variables, existentials, smartIn, action, param,
+                                                      bindings, [],justOne=justOne) # No new bindings but success in calculated logical operator
+                                    else:
+                                        if chatty > 80: progress("Heavy predicate fails")
+                                        return total   # We absoluteley know this won't match with this in it
+                            elif len(vars) == 1 :  # The statement has one variable - try functions
+                                if vars[0] == OBJ and isinstance(pred, Function):
+                                    result = pred.evaluateObject2(self, subj)
+                                    if result != None:
+                                        return self.query(queue, variables, existentials, smartIn, action, param,
+                                                              bindings, [ (obj, result)],justOne=justOne)
+                                elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
+                                    obj_py = self._toPython(obj, OBJ in boundLists, queue)
+                                    result = pred.evaluateSubject2(self, obj, obj_py)
+                                    if result != None:  # There is some such result
+                                        return self.query(queue, variables, existentials, smartIn, action, param,
+                                                              bindings, [ (subj, result)],justOne=justOne)
+                        except:
+                            raise BuiltInFailed, (sys.exc_info(), (state, short, consts, vars, boundLists, quad) ) 
+                        # Now we have a heavy builtin  waiting for enough constants to run
                         state = 10
                     elif pred is self.nil or PRED in boundLists:  # This is a structural line: a hypothesis. Keep it
                         state = 5
@@ -1875,7 +1894,7 @@ class RDFStore(RDFSink.RDFSink) :
                 return action(bindings, param)  # No non-list terms left .. success!
 
             else: # state was not 99, 60 or 50, so either 20 or 10:
-                if chatty > 0:
+                if chatty > 49 :
                     progress("@@@@ Warning: query can't find term which will work.")
                     progress( "   state is %s, que length %i" % (state, len(queue)))
 

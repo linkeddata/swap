@@ -33,7 +33,7 @@
         }     :implies {<#testg_1>     a <#success> .
         } .
     {
-        <>     :includes {this     :forAll <#x> .
+        <>     :notIncludes {this     :forAll <#x> .
             {
                 this     :forAll <#y> .
                 <#x>     <#loves> <#y> .
@@ -46,6 +46,6 @@
                 } .
             } .
         
-        }     :notImplies {<#testg_1>     a <#FAILURE> .
+        }     :implies {<#testg_1>     a <#FAILURE> .
         } .
     

@@ -3,9 +3,7 @@
  
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
-# @prefix daml:  <http://www.daml.org/2000/10/daml-ont#> .
 # @prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
-# @prefix ex:   <http://www.daml.org/2000/10/daml-ex#> .
 @prefix log:  <http://www.w3.org/2000/10/swap/log#> .
 @prefix os:  <http://www.w3.org/2000/10/swap/os#> .
 
@@ -49,7 +47,7 @@ schema which declares it as a Property""".
 
 { :d log:uri [is os:environ of "TARGET"]  } log:implies { :d a :targetDocument }.
 
-{ :d a :targetDocument. :d log:resolvesTo :F } log:implies { :F :within :d }.
+{ :d a :targetDocument. :d log:semantics :F } log:implies { :F :within :d }.
 
 # Define subforumulae which are within the target documents:
 
@@ -78,29 +76,31 @@ schema which declares it as a Property""".
 
 { :d a :targetDocument.
   :p :usedAsPropertyIn :d.
-  :p log:resolvesTo [log:includes { :p s:isDefinedBy :s }] } log:implies {:p :schema :s}.
+  :p log:semantics [log:includes { :p s:isDefinedBy :s }] } log:implies {:p :schema :s}.
 
 # We actually need the formula the schema parses to:
 
-{ :p :schema [ log:resolvesTo :F ] } log:implies { :p :schemaFormula :F }. 
+{ :p :schema [ log:semantics :F ] } log:implies { :p :schemaFormula :F }. 
 
 
 # Alternatively, the schema can just be the document we pick up
 # directly  This is much simpler!
 #
-#   { :p  log:resolvesTo :F  } log:implies { :p :schemaFormula :F.  :p :declaredInDirectSchema }. 
+#   { :p  log:semantics :F  } log:implies { :p :schemaFormula :F.  :p :declaredInDirectSchema }. 
 
    { :p  :usedAsPropertyIn :d .
      :d  a :targetDocument.
-     :p  log:resolvesTo :F.
+     :p  log:semantics :F.
      :F  log:includes { :p a rdf:Property } } log:implies { :p :schemaFormula :F.
                                                              :p a :declaredInDirectSchema  }. 
 
 #  If there is no schema found, then we flag a problem
 
 { :d a :targetDocument.
+  :d log:semantics :G.    #  These 2 lines and one below suppress error messages
+  :G log:notEqualTo :F.    #  about undeclared locals in the same file.
   :p :usedAsPropertyIn :d.
-  :p log:resolvesTo :F.
+  :p log:semantics :F.
   :F log:notIncludes { :p s:isDefinedBy :x }.   # No indirect Schema
   :F log:notIncludes { :p a rdf:Property }.      # Not a direct schema
 } log:implies { :d :ERROR_NO_SCHEMA_OR_NOT_DECLARED :p }.
@@ -123,10 +123,12 @@ schema which declares it as a Property""".
 {:d a :targetDocument. :F :within :d } log:implies { :F a log:Chaff }. # Clear our formulae
 
 log:Chaff is rdf:type of
+    rdf:type,      # Seriously ...
+    s:comment,
     log:forAll,
     log:implies,   #  Clear out rules on -purge
     :within, :schemaFormula, :schema,
-    :targetDocument,
+#    :targetDocument,
     :usedAsPropertyIn.
  
 #ends
