@@ -104,7 +104,8 @@ option_noregen = 0   # If set, do not regenerate genids on output
 # @@ I18n - the notname chars need extending for well known unicode non-text characters.
 # The XML spec switched to assuming unknown things were name characaters.
 # _namechars = string.lowercase + string.uppercase + string.digits + '_-'
-_notNameChars = "\t\r\n !\"#$%&'()*.,+/;:<=>?@[\\]^`{|}~"  # Assume anything else valid name :-/
+_notQNameChars = "\t\r\n !\"#$%&'()*.,+/;<=>?@[\\]^`{|}~"  # Assume anything else valid qname :-/
+_notNameChars = _notQNameChars + ":"  # Assume anything else valid name :-/
 _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
 
 
@@ -259,6 +260,8 @@ class SinkParser:
     def tok(self, tok, str, i):
         """Check for keyword.  Space must have been stripped on entry and
 	we must not be at end of file."""
+	
+	assert tok[0] not in _notNameChars # not for punctuation
 	whitespace = '\t\n\x0b\x0c\r ' # string.whitespace was '\t\n\x0b\x0c\r \xa0' not ascii
 	if str[i:i+1] == "@":
 	    i = i+1
@@ -267,8 +270,7 @@ class SinkParser:
 		return -1   # Nope, this has neither keywords declaration nor "@"
 
 	if (str[i:i+len(tok)] == tok
-            and (tok[0]  in _notNameChars  # check keyword is not prefix
-                or str[i+len(tok)] in  _notNameChars )): 
+            and (str[i+len(tok)] in  _notQNameChars )): 
 	    i = i + len(tok)
 	    return i
 	else:

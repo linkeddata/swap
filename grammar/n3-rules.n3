@@ -151,6 +151,13 @@ node bnf:mustBeOneSequence (
 		(  "("  itemlist ")"  )
 ).
 
+node_safe bnf:mustBeOneSequence (
+		( symbol )
+		( variable )
+		( numericliteral )
+		( literal )
+).
+
 
 
 itemlist bnf:mustBeOneSequence (() (item itemlist)).

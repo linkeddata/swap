@@ -167,6 +167,8 @@ class InferenceTask:
 		cyclic = intersection(r1.indirectlyAffects, r1.indirectlyAffectedBy)
 		pool = minus(pool, cyclic)
 	    cyclics.append(CyclicSetOfRules(cyclic))
+	    if diag.chatty_flag > 90:
+		progress("New cyclic: %s" % cyclics[-1])
 	    
 
 	# Because the cyclic subsystems contain any loops, we know
@@ -265,12 +267,12 @@ def partialOrdered(cy1, pool):
     Then, any node in the pool can be done earlier, because has no depndency from those done.
     """
     seq = []
-    r1 = cy1[0]
-    for r2 in  r1.affects:
-	if r2 not in cy1:  # An external dependency
-	    cy2 = r2.cycle
-	    if cy2 in pool:
-		seq = partialOrdered(cy2, pool) + seq
+    for r1 in cy1:   # @@ did just chose first rule cy[0], but didn't get all
+	for r2 in  r1.affects:
+	    if r2 not in cy1:  # An external dependency
+		cy2 = r2.cycle
+		if cy2 in pool:
+		    seq = partialOrdered(cy2, pool) + seq
     pool.remove(cy1)
     if diag.chatty_flag > 90: progress("partial topo: %s" % `[cy1] + seq`)
     return [cy1] + seq

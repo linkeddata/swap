@@ -81,7 +81,12 @@
     test:description   "Iterative ops on lists";
     test:arguments     """list/append.n3 --think --data""".
 
-
+# Test other builtins
 	
+:t2006 a test:CwmTest;
+    test:shortFileName "list-last.n3";
+    test:description   "last, in builtins on lists";
+    test:arguments     """list/last.n3 --think --data""".
+
 
 #ends

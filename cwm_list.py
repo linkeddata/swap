@@ -40,12 +40,22 @@ class BI_rest(LightBuiltIn, Function):
 	if not isinstance(subj, NonEmptyList): return None
 	return subj.rest
 
+class BI_last(LightBuiltIn, Function):
+    def evalObj(self, subj, queue, bindings, proof, query):
+	if not isinstance(subj, NonEmptyList): return None
+	x = subj
+	while 1:
+	    last = x
+	    x = x.rest
+	    if isinstance(x, EmptyList): return last.first
+
+
 class BI_in(LightBuiltIn):
     """Is the subject in the object?
     Thsi is a wimpy implementation, because the built-in 
     system can only return single values right now.  It ought to be
     able in the future return all subjects wjich are in the object."""
-    def eval(self, subj, queue, bindings, proof, query):
+    def eval(self, subj, obj, queue, bindings, proof, query):
 	if not isinstance(obj, List): return None
 	return subj in obj
 
@@ -61,6 +71,6 @@ def register(store):
 
     ns = store.internURI(ListOperationsNamespace[:-1])
     ns.internFrag("in", BI_in)
-
+    ns.internFrag("last", BI_last)
 # ends
 

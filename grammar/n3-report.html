@@ -10,14 +10,6 @@
     <em>void</em> means an empty production.
   </p>
   <dl>
-  <dt><a name='alphanumeric'>alphanumeric</a></dt><dd>
-	<p><em>[a-zA-Z][a-zA-Z0-9_]*</em></p>
-	</dd>
-  <dt><a name='anonnode'>anonnode</a></dt><dd>
-		<p><b><code>"("</code></b> <a href='#itemlist'>itemlist</a> <b><code>")"</code></b></p>
-		<p><b><code>"["</code></b> <a href='#propertylist'>propertylist</a> <b><code>"]"</code></b></p>
-		<p><b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b></p>
-	</dd>
   <dt><a name='barename'>barename</a></dt><dd>
 	<p><em>[a-zA-Z_][a-zA-Z0-9_]*</em></p>
 	</dd>
@@ -33,6 +25,11 @@
 		<p><a href='#declaration'>declaration</a> <a href='#declaration_s'>declaration_s</a></p>
 		<p><em>void</em></p>
 	</dd>
+  <dt><a name='dtlang'>dtlang</a></dt><dd>
+		<p><b><code>"@"</code></b> <a href='#langcode'>langcode</a></p>
+		<p><b><code>"^^"</code></b> <a href='#symbol'>symbol</a></p>
+		<p><em>void</em></p>
+	</dd>
   <dt><a name='existential'>existential</a></dt><dd>
 		<p><b><code>"@forSome"</code></b> <a href='#symbol_csl'>symbol_csl</a></p>
 	</dd>
@@ -46,32 +43,30 @@
   <dt><a name='formulacontent'>formulacontent</a></dt><dd>
 		<p><a href='#declaration_s'>declaration_s</a> <a href='#universal_s'>universal_s</a> <a href='#existential_s'>existential_s</a> <a href='#statementlist'>statementlist</a></p>
 	</dd>
-  <dt><a name='item'>item</a></dt><dd>
-		<p><a href='#path'>path</a></p>
-	</dd>
-  <dt><a name='itemlist'>itemlist</a></dt><dd>
-		<p><a href='#item'>item</a> <a href='#itemlist'>itemlist</a></p>
-		<p><em>void</em></p>
-	</dd>
   <dt><a name='langcode'>langcode</a></dt><dd>
 	<p><em>[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?</em></p>
+	</dd>
+  <dt><a name='literal'>literal</a></dt><dd>
+		<p><a href='#string'>string</a> <a href='#dtlang'>dtlang</a></p>
 	</dd>
   <dt><a name='n3document'>n3document</a></dt><dd>
 		<p><a href='#declaration_s'>declaration_s</a> <a href='#universal_s'>universal_s</a> <a href='#existential_s'>existential_s</a> <a href='#statements_optional'>statements_optional</a> <em>EOF</em></p>
 	</dd>
   <dt><a name='node'>node</a></dt><dd>
-		<p><a href='#anonnode'>anonnode</a></p>
+		<p><a href='#literal'>literal</a></p>
 		<p><a href='#numericliteral'>numericliteral</a></p>
-		<p><a href='#string'>string</a></p>
 		<p><a href='#symbol'>symbol</a></p>
 		<p><a href='#variable'>variable</a></p>
+		<p><b><code>"("</code></b> <a href='#pathlist'>pathlist</a> <b><code>")"</code></b></p>
 		<p><b><code>"@this"</code></b></p>
+		<p><b><code>"["</code></b> <a href='#propertylist'>propertylist</a> <b><code>"]"</code></b></p>
+		<p><b><code>"{"</code></b> <a href='#formulacontent'>formulacontent</a> <b><code>"}"</code></b></p>
 	</dd>
   <dt><a name='numericliteral'>numericliteral</a></dt><dd>
 	<p><em>[-+]?[0-9]+(\.[0-9]+)?(e[-+]?[0-9]+)?</em></p>
 	</dd>
   <dt><a name='object'>object</a></dt><dd>
-		<p><a href='#item'>item</a></p>
+		<p><a href='#path'>path</a></p>
 	</dd>
   <dt><a name='objecttail'>objecttail</a></dt><dd>
 		<p><b><code>","</code></b> <a href='#object'>object</a> <a href='#objecttail'>objecttail</a></p>
@@ -80,14 +75,14 @@
   <dt><a name='path'>path</a></dt><dd>
 		<p><a href='#node'>node</a> <a href='#pathtail'>pathtail</a></p>
 	</dd>
+  <dt><a name='pathlist'>pathlist</a></dt><dd>
+		<p><a href='#path'>path</a> <a href='#pathlist'>pathlist</a></p>
+		<p><em>void</em></p>
+	</dd>
   <dt><a name='pathtail'>pathtail</a></dt><dd>
 		<p><b><code>"!"</code></b> <a href='#path'>path</a></p>
 		<p><b><code>"^"</code></b> <a href='#path'>path</a></p>
 		<p><em>void</em></p>
-	</dd>
-  <dt><a name='prefix'>prefix</a></dt><dd>
-		<p><a href='#alphanumeric'>alphanumeric</a></p>
-		<p><b><code>"_"</code></b></p>
 	</dd>
   <dt><a name='prop'>prop</a></dt><dd>
 		<p><a href='#node'>node</a></p>
@@ -122,7 +117,7 @@
 	<p><em>("([^"]|(\\"))*")</em></p>
 	</dd>
   <dt><a name='subject'>subject</a></dt><dd>
-		<p><a href='#item'>item</a></p>
+		<p><a href='#path'>path</a></p>
 	</dd>
   <dt><a name='symbol'>symbol</a></dt><dd>
 		<p><a href='#explicituri'>explicituri</a></p>

@@ -55,6 +55,7 @@ to:
 
 from RDFSink import FORMULA
 import diag
+from diag import progress
 
 class ContextSink(object):
     def __init__(self, sink,
@@ -123,7 +124,8 @@ class RDFXMLParser(Parser):
         if isinstance(t, URIRef):
             return self.__sink.newSymbol(str(t))
         elif isinstance(t, Literal):
-            return self.__sink.newLiteral(str(t))
+#            return self.__sink.newLiteral(str(t))
+            return self.__sink.newLiteral(t)   # t is subclass of unicode
         elif isinstance(t, BNode):
             bnodes = self.__bnodes                    
             if t in bnodes:

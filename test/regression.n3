@@ -56,6 +56,10 @@
 	test:description	"using no keywords in n3";
 	test:arguments		"syntax/keywords2.n3".
 
+:t1005e a test:CwmTest;
+	test:referenceOutput <ref/djb1a-out.n3>;
+	test:description	"djb noticed a:b was parsed as rdf:type token";
+	test:arguments		"syntax/djb1a.n3".
 
 :t1005h a test:CwmTest;
 	test:referenceOutput <ref/data-ugly.n3>;

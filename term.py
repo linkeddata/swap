@@ -438,6 +438,15 @@ class NonEmptyList(List):
 #    def __repr__(self):
 #	return "(" + `self.first` + "...)"
 
+    def __getitem__(self, i):
+	p = self
+	while 1:
+	    if i == 0: return p.first
+	    p = p.rest
+	    if not isinstance(p, NonEmptyList):
+		raise ValueError("Index %i exceeds size of list %s" % (i, `self`))
+	    i = i - 1
+
 class EmptyList(List):
         
     def value(self):
@@ -482,6 +491,9 @@ class EmptyList(List):
 
     def __repr__(self):
 	return "()"
+
+    def __getitem__(self, i):
+	raise ValueError("Index %i exceeds size of empty list %s" % (i, `self`))
 
 
 class FragmentNil(EmptyList, Fragment):

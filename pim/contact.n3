@@ -19,6 +19,7 @@ dc:description """
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . # type, Property
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix owl: <http://www.w3.org/2002/07/owl#>.
 @prefix doc:  <http://www.w3.org/2000/10/swap/pim/doc#> .
 
 <> doc:persistencePolicy [ a :_SubjectToChange;
@@ -213,19 +214,19 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 #  mso:Directory_Server  a rdf:Property .
 
 #  mso:E-mail_Address  a rdf:Property    # Problmem: not as a URI
-:mailbox a ont:UnambiguousProperty;
+:mailbox a ont:InverseFunctionalProperty;
   rdfs:domain :SocialEntity;
   rdfs:range :Mailbox;
   :_example { :_Dan :mailbox <mailto:connolly@w3.org> }.
 
-:emailAddress a ont:UnambiguousProperty;
+:emailAddress a ont:UnambiguousProperty, owl:InverseFunctionalProperty;
   rdfs:domain :SocialEntity;
   rdfs:range :_EmailAddress;
   :_example { :_Dan :emailAddress "connolly@w3.org" }.
 
 # :_EmailAddress rdfs:subClassOf dt:string; dt:pattern "[^@]+@[^@]+". # or something like that. Check RFC822
 
-:mailboxURI a ont:UnambiguousProperty;
+:mailboxURI a ont:UnambiguousProperty, owl:InverseFunctionalProperty;
   rdfs:domain :SocialEntity;
   rdfs:range :_URI;
   :_example { :_Dan :mailboxURI "mailto:connolly@w3.org" }.
@@ -290,15 +291,19 @@ mso:Spouse  a rdfs:Property;  .
 mso:WebPage  a rdf:Property;
 = :publicHomePage .              # I have many home pages, some for me some for others
 :publicHomePage rdfs:subPropertyOf :homePage.
-:homePage a ont:UnambiguousProperty;
+:homePage a ont:UnambiguousProperty, owl:InverseFunctionalProperty;
+	
   :_addressProperty :homePageAddress.
-:homePageAddress a ont:UnambiguousProperty.
+:homePageAddress a ont:UnambiguousProperty, owl:InverseFunctionalProperty.
 
 
 
 <> dc:description """
 $Log$
-Revision 1.22  2003-08-01 20:09:20  timbl
+Revision 1.23  2003-12-04 21:20:17  timbl
+regression.n3#t1005e            djb noticed a:b was parsed as rdf:type token
+
+Revision 1.22  2003/08/01 20:09:20  timbl
 Minor fixes
 
 Revision 1.21  2003/07/07 16:10:16  connolly

@@ -4,7 +4,7 @@ SWAP=..
 P=python2.2
 C=$(SWAP)/cwm.py
 
-all : n3-checked.txt n3-selectors.n3 n3-report.html n3rdf-report.html n3rules-report.html
+all : n3-checked.txt n3-report.html n3rdf-report.html n3rules-report.html
 	touch all
 
 n3-checked.txt: n3-selectors.n3
@@ -21,6 +21,9 @@ n3-report.html : n3-report.big
 
 
 # N3-RDF
+
+n3rdf-checked.txt: n3rdf-selectors.n3
+	python check-grammar.py n3rdf-selectors.n3 > $@
 
 n3rdf-selectors.n3 : n3-rdf.n3 bnf-rules.n3
 	time $P $C n3-rdf.n3 bnf-rules.n3 --think --purge --data > $@

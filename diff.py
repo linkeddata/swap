@@ -36,7 +36,8 @@ def tryNode(x, f, already=[]):
     """The nailing of a term x within a graph f is the set s of statements
     taken from f such that when one is given s, one can uniquely determine the identity of x.
     
-    returns EITHER a sequence of possibles
+    returns EITHER a sequence of possible branches. A possible branch give sthe statement
+	    by which, if the otherend was nailed, x would be.
 	OR a statement which nails x 
 	or None - impossible, sorry.
     Possible future enhancements:  Multi-field keys -- connects to multi-property functions.
@@ -46,14 +47,14 @@ def tryNode(x, f, already=[]):
     possible = []
     ss = f.statementsMatching(subj=x)
 	for t in ss:
-	    if meta.contains(subj=t[PRED], pred=rdf.type, obj=owl.UnambiguousProperty):
+	    if meta.contains(subj=t[PRED], pred=rdf.type, obj=owl.InverseFunctionalProperty):
 		y = t[OBJ]
-		if not y.generated(): return t
+		if not y.generated(): return t # sucesss§
 		if y not in already:
 		    possible.append((OBJ, t, None)) # Could nail it by this branch
     ss = f.statementsMatching(obj=x)
 	for t in ss:
-	    if meta.contains(subj=t[PRED], pred=rdf.type, obj=owl.UniqueProperty):
+	    if meta.contains(subj=t[PRED], pred=rdf.type, obj=owl.FunctionalProperty):
 		y = t[SUBJ]
 		if not y.generated(): return t
 		if y not in already:
@@ -62,7 +63,7 @@ def tryNode(x, f, already=[]):
     return possible
 
 def tryList(node, f, list, already=[]):
-    """ The tree is a list of branches, each direction, statement and subtree.
+    """ The tree is a list of branches, each branch being (direction, statement and subtree).
     If subtree is None, the tree has not been elaborated.
     A list element is a statement and another list, or s statement and unnailed node.
     Returns a path of statements, or None if no path, or 1 if tree just elaborated.
@@ -178,5 +179,9 @@ def diff(f,g, meta=None):
 	statement = fs[i]
 	for part in PRED, SUBJ, OBJ:
 	    x = statement[PART]
+		@@@@@@@@@@@@@@@@@@
+		
+		
+		#   
 		
 	
