@@ -96,6 +96,10 @@
     test:description   "use nodeID's with classes";
     test:arguments     """nodeID/classes.n3 -rdf""".
 
+:t1007d a test:CwmTest;
+    test:referenceOutput <ref/anonymous_loop.ref>;
+    test:description   "A loop of anonymous nodes wasn't being printed at all";
+    test:arguments     """anonymous_loop.n3""".
 
 :t1008 a test:CwmTest;
     test:referenceOutput <ref/daml-ont.n3>;
