@@ -395,13 +395,13 @@
 
 :t1100 a test:CwmTest;
     test:shortFileName "defdoc1-out.n3";
-    test:description   "look up values in local definitive document";
+    test:description   "Look up values in local definitive document";
     test:arguments     "--mode=rse dbork/defdoc1.n3 --think".
 
 :t1102 a test:CwmTest;
     test:shortFileName	"defdoc2-out.n3";
-    test:description	"look up values in 2 definitive documents";
-    test:argements	"--mode=rse defdoc2.n3 --think".
+    test:description	"Look up values in 2 definitive documents";
+    test:arguments	"--mode=rse dbork/defdoc2.n3 --think".
 
 # Test proof generation -- see also the -p option of retest.py
 

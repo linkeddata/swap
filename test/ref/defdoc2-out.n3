@@ -1,0 +1,183 @@
+     @prefix : <#> .
+     @prefix city: <data/USCity.n3#> .
+     @prefix city_: <data/City.n3#> .
+     @prefix country: <data/Country.n3#> .
+     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix state: <data/USRegionState.n3#> .
+     @prefix state_: <data/State.n3#> .
+    
+    this     log:forAll :n .
+    
+    "Albany"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Amherst"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Avon"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Bridgeport"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Buffalo"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Burlington"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Concord"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Danbury"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Darien"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Derry"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Dix Hills"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Dover"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "East Greenwich"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "East Moriches"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Fairfield"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Farmington"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Greenwich"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Guilford"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Hartford"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Hebron"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Hollis"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Huntington"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Jericho"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Keene"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Long Beach"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Mamaroneck"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Manchester"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Manlius"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Massapequa"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Merrick"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Middletown"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Montpelier"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Mystic"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Nashua"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "New City"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "New Fairfield"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "New Haven"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "New London"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "New Rochelle"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "New York"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Newtown"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Norwalk"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Old Greenwich"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Old Lyme"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Old Saybrook"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Ossining"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Peekskill"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Pleasantville"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Pomona"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Portsmouth"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Poughkeepsie"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Providence"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Queens Village"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Ridgefield"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Rochester"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Rockville Centre"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Rutland"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Rye Brook"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Salem"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Scarsdale"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Setauket"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Simsbury"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Southampton"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Stamford"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Staten Island"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Stonington"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Syosset"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Syracuse"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Torrington"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Valley Stream"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Wakefield"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Warwick"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Waterbury"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "West Islip"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Westhampton"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Weston"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Westport"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "White Plains"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Wilton"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    
+    "Woodbury"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+    {
+        this     log:forSome :_g0 .
+          [      state:borderstate :_g0;
+                 state:code "MA" ].
+        
+          [      city:name :n;
+                 city:state :_g0 ].
+        
+        }     log:implies {:n     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
+        } .
+    

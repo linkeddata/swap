@@ -2,19 +2,14 @@
 #
 #   cwm --mode=rse defdoc2.n3 --think
 #
-# Normal stuff
-@prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix : <#>.
-
-# Data copied from CMU, with schema slightly modified:
-
-@prefix country: <data/Country.n3#> .
 @prefix state: <data/USRegionState.n3#> .
 @prefix city: <data/USCity.n3#> .
 
-# And now the question: What cities are in states bordering Massachusetts?
+# Question: What cities are in states bordering Massachusetts?
+
 
 {"MA"^state:code.state:borderstate^city:state city:name ?n}=>{
    ?n a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS }.
 
-#ends	
+# ends	
