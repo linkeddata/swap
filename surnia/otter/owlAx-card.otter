@@ -9,11 +9,18 @@ formula_list(usable).
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % 
-%   rdf_nil
+%   rdf lists = otter lists
 %
 
--(exists c (rdf(rdf_nil, rdf_rest, c))).
--(exists c (rdf(rdf_nil, rdf_first, c))).
+all LIST HEAD TAIL (
+   rdf(LIST, rdf_first, HEAD) &
+   rdf(LIST, rdf_rest, TAIL)
+   <->
+   LIST=[HEAD|TAIL]
+).
+
+rdf_nil=[].
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %
@@ -30,7 +37,7 @@ all RESTRICTION PROPERTY CARDINALITY INST (
    % and it matches the values  of rdf(INST, PROPERTY...)
    ( exists LIST ( all VAL (
      ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
-     cardinality(LIST, CARDINALITY)
+       CARDINALITY=card(LIST) 
    )))
 ).
 
@@ -42,10 +49,9 @@ all RESTRICTION PROPERTY MINCARDINALITY INST (
    ->
    % there is a set with that cardinality
    % and it matches the values  of rdf(INST, PROPERTY...)
-   ( exists LIST CARDINALITY ( all VAL (
+   ( exists LIST ( all VAL (
      ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
-     cardinality(LIST, CARDINALITY) &
-     lteq(MINCARDINALITY, CARDINALITY)
+     lteq(MINCARDINALITY, card(LIST))
    )))
 ).
 
@@ -57,19 +63,70 @@ all RESTRICTION PROPERTY MAXCARDINALITY INST (
    ->
    % there is a set with that cardinality
    % and it matches the values  of rdf(INST, PROPERTY...)
-   ( exists LIST CARDINALITY ( all VAL (
+   ( exists LIST ( all VAL (
      ( rdf(INST, PROPERTY, VAL) -> inList(VAL, LIST) ) &
-     cardinality(LIST, CARDINALITY) &
-     lteq(CARDINALITY, MAXCARDINALITY)
+     lteq(card(LIST), MAXCARDINALITY)
    )))
 ).
 
 
+%  define item(elem, list)
+
+all A -item(A, []).
+
+all ELEM LIST (
+  item(ELEM, LIST)
+  <->
+  ( exists HEAD TAIL (
+      LIST=[HEAD|TAIL] &
+      ( HEAD=ELEM  |
+        item(ELEM, TAIL) )
+   ))
+).
+
+
+%  define removed; the removed() of a list is 
+%  a copy of that list with that element not
+%  in it?    er, no.  No, with one copy removed.
+
+all A removed(A, []) = []
+
+all ELEM LIST HEAD TAIL (
+    LIST = [HEAD|TAIL] 
+    -> 
+      ( HEAD=ELEM -> removed(ELEM,LIST)=TAIL)
+      |
+      ( -HEAD=ELEM -> removed(ELEM,LIST)=removed(ELEM,TAIL)
+)).
+    
+all ELEM SET (
+   item(ELEM, SET) 
+  ->
+   (exists SUBSET (
+     -item(ELEM, SUBSET) &
+     card(SUBSET)=
 
 % the cardinality of a list is the number of DISTINCT members
 % in it.
 
-cardinality(rdf_nil, 'foo:zero').
+card([]) = 0.
+
+all A B LIST (
+   item(A, LIST) &
+   item(B, LIST) &
+   -(A=B)
+  ->
+   card(LIST) = card(removed(A, LIST))
+).
+
+all A B LIST (
+   inList(A, LIST) &
+   inList(B, LIST) &
+   A=B
+  ->
+   card(LIST) = card(removed(A, LIST))
+)
+   
 
 all LIST CARD HEAD (
    ( cardinality(LIST, CARD) &
@@ -247,8 +304,8 @@ all THING1 THING2 (
 
 
 % $Log$
-% Revision 1.5  2003-08-08 15:00:15  sandro
-% old change; unsure
+% Revision 1.6  2003-08-08 15:01:17  sandro
+% a failed experiment
 %
 % Revision 1.4  2003/08/01 16:27:35  sandro
 % modified to run in swap/surnia instead of swap
