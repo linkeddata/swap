@@ -447,7 +447,7 @@ class IndexedFormula(Formula):
 	    
         if verbosity() > 50:
             progress("Add statement (size before %i) to %s: {%s %s %s}" % (
-		self.store.size, self,  subj, pred, obj) )
+		self.store.size, `self`,  `subj`, `pred`, `obj`) )
         if self.statementsMatching(pred, subj, obj):
             if verbosity() > 97:
 		progress("Add duplicate SUPPRESSED %s: {%s %s %s}" % (

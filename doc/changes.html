@@ -90,10 +90,15 @@ here.</p>
 
 <p>More changes 2003-08-25</p>
 <ol>
-  <li>2003-08  Pretty printing split from llyn.py to pretty.py. Interface may
-    change.  Pretty printing should be faster now - for some runs it was
+  <li>2003-08 Pretty printing split from llyn.py to pretty.py. Interface may
+    change. Pretty printing should be faster now - for some runs it was
     taking a lot longer than the parsing and inference steps. It had never
     been designed for speed, but it was getting ridiculous.</li>
+  <li>2003-08-30 List processing improved.  test/list/append.n3 works,
+    reverse.n3 doesn't yet.  substituteEquals supported by all Terms, does
+    substituton of equals, used in compbaintion with F._redirection which is
+    a dictionary of aliases. Preparing for handling of equality and smushing
+    of nodes. </li>
 </ol>
 
 <h3>For python cwm developers</h3>
@@ -105,7 +110,7 @@ here.</p>
     The unification engine which includes the built-in function operation now
     uses the store's api to access the store without peeking into
   internals.</li>
-  <li>thing.py split into myStore.py and term.py </li>
+  <li>thing.py split into myStore.py and term.py</li>
   <li>It used to be that the universal and existential variables in a formula
     were stored in forAll and forSome psudo-property triples. This was
     basically a kludge. One had to be always aware that the pseudoproperties
@@ -131,7 +136,7 @@ checking out with the tag oldLists .</p>
 
 <p></p>
 
-<p>Performance:  Make test/perform test suite with standard tests for  </p>
+<p>Performance: Make test/perform test suite with standard tests for</p>
 
 <h3>Syntax</h3>
 
@@ -192,11 +197,11 @@ project?</em></p>
 <h3>Net</h3>
 
 <p>Implement <strong>persistent cache</strong> - make an ontology (based very
-stongly on HTTP headers) for recording the results of an HTTP (etc) get. 
+stongly on HTTP headers) for recording the results of an HTTP (etc) get.
 Store metadata about fetched ontologies. Build an index into the persistent
-cache for offline working.  Functions: find the closure of these documents
+cache for offline working. Functions: find the closure of these documents
 under eg --closure=ptr and make sure than they are all in my persistent
-cache.  Allow environment variable to specify persistent cache mode (default:
+cache. Allow environment variable to specify persistent cache mode (default:
 ontologies only, write to cache when online and expiry check fails, read from
 cache when offline). Provide pcache.urlopen() as a transparent extension of
 urlopen()</p>
