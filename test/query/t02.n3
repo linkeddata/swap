@@ -1,0 +1,26 @@
+# Needs some test data...
+# Not a very realistic test as it doesn't return any other data
+
+@prefix email: <http://www.hpl.hp.com/email/email#>.
+
+{ ?x email:message-id "123456@example.com" }
+ =>
+{ ?x email:message-id "123456@example.com" }.
+
+
+# test data
+
+
+@prefix : <#>.
+
+:m1235 email:message-id "814358768@example.com";
+	email:from	"whoever@example.com".
+
+:m1236 email:message-id "814358432168@example.com";
+	email:from	"whoever@example.com".
+
+:m12314 email:message-id "123456@example.com";
+	email:from	"whoeverelse@example.com".
+
+#ends
+

@@ -1,0 +1,26 @@
+# see <http://rdfstore.sourceforge.net/2002/06/24/rdf-query/query-use-cases.html>.
+# Use case heating system
+
+# fun things to add
+#  - FSM with hysteresis on the thermostats and mimumum on and off times
+#   for boiler.
+#  - A/C
+#  - use of defaults to explicitly set the boiler off.
+#
+@prefix therm: <http://www.example.com/therm>.
+
+{ ?themostat therm:temp ?t; them:setting ?s .
+  ?s  math:greaterThan ?t .
+} => {
+  ?s a therm:CallingForHeat .
+}.
+
+{ [] a therm:CallingForHeat } => { :boiler therm:control "ON" }.
+
+:livingRoom  therm:temp  "22"; therm:setting "21".
+
+:bedroom     therm:temp  "14"; therm:setting "18".
+
+:hall        therm:temp  "22"; therm:setting "21".
+
+#ends
