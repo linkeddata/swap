@@ -1,0 +1,135 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+
+<> dc:description """
+rules to map from travel itinerary vocabulary
+to iCalendar vocabulary.
+$Id$
+""";
+    dc:source <http://www.ietf.org/rfc/rfc2445.txt> ;
+    dc:relation <ical>, <ical.n3>, <ical.rdf>, <toIcal.py>, <ical2rdf.pl>.
+
+@prefix r: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix dt: <http://www.w3.org/2001/XMLSchema#> .
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix cal: <http://www.w3.org/2000/10/swap/pim/ical#>.
+@prefix t:   <http://www.w3.org/2000/10/swap/pim/travelTerms#> .
+
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+
+@prefix :   <itin2ical#>.
+@prefix ic: <itin2ical#>.
+
+this log:forAll :FLT, :CARRIER_NAME, :NUM, :SUM,
+    :YYMMDD, :HH_MM, :HH_MM2, :DTSTART, :DTEND, :TZ, :TZ2,
+    :WHERE, :FROM_NAME, :TO_NAME.
+
+# airports with the same nameString have the same timezone
+{ :WHERE a k:Airport-Physical;
+    k:nameString [
+      is k:nameString of [ a k:Airport-Physical; :timeZone :TZ ] ] }
+  log:implies { :WHERE :timeZone :TZ }.
+#hmm... someplace to scrape these from?
+
+@prefix a: <http://www.daml.org/cgi-bin/airport?>. #hmm... ?MCI is a document *and* an airport?
+a:MCI a k:Airport-Physical;
+  k:nameString "KANSAS CITY INTL";
+  :timeZone :ChicagoTime.
+a:STL a k:Airport-Physical;
+  k:nameString "ST LOUIS INTL";
+  :timeZone :ChicagoTime.
+a:ORD a k:Airport-Physical;
+ k:nameString "CHICAGO OHARE";
+ :timeZone :ChicagoTime.
+a:DFW a k:Airport-Physical;
+  k:nameString "DALLAS FT WORTH";
+ :timeZone :ChicagoTime.
+a:EWR a k:Airport-Physical;
+  k:nameString "NEWARK";
+  :timeZone :NewYorkTime.
+a:BOS a k:Airport-Physical;
+  k:nameString "BOSTON";
+  :timeZone :NewYorkTime.
+a:DCA a k:Airport-Physical;
+  k:nameString "WASHINGTON REAGAN";
+  :timeZone :NewYorkTime.
+a:NCE a k:Airport-Physical;
+  k:nameString "NICE";
+  :timeZone :ParisTime.
+a:LHR a k:Airport-Physical;
+  k:nameString "LONDON HEATHROW";
+  :timeZone :LondonTime.
+a:SFO a k:Airport-Physical;
+  k:nameString "SAN FRANCISCO";
+  :timeZone :LosAngelesTime.
+a:CDG a k:Airport-Physical;
+  k:nameString "PARIS DE GAULLE";
+  :timeZone :ParisTime.
+a:FCO a k:Airport-Physical;
+  k:nameString "ROME FIUMICINO";
+  :timeZone :ParisTime. #@@ is that right?
+a:AHO a k:Airport-Physical;
+  k:nameString "ALGHERO";
+  :timeZone  :ParisTime. #@@ is that right?
+a:PIT a k:Airport-Physical;
+  k:nameString "PITTSBURGH";
+  :timeZone :NewYorkTime.
+a:YMX a k:Airport-Physical;
+  k:nameString "MONTREAL DORVALQC";
+  :timeZone :NewYorkTime.
+
+
+
+{ :FLT
+    k:startingDate [ dt:date :YYMMDD];
+    t:carrier [ k:nameOfAgent :CARRIER_NAME ];
+    t:flightNumber :NUM;
+    t:departureTime :HH_MM;
+    k:fromLocation [ k:nameString :FROM_NAME;
+                     :timeZone [ cal:tzid :TZ] ];
+    t:arrivalTime :HH_MM2;
+    k:toLocation [ k:nameString :TO_NAME;
+                   :timeZone [ cal:tzid :TZ2] ].
+  :SUM is str:concatenation of
+    (:CARRIER_NAME " #" :NUM " from " :FROM_NAME " to " :TO_NAME).
+  :DTSTART is str:concatenation of
+    (:YYMMDD "T" :HH_MM ":00"). #@@ extra punct in dates
+  :DTEND is str:concatenation of
+    (:YYMMDD "T" :HH_MM2 ":00").
+}
+ log:implies {
+  :FLT a cal:Vevent;
+    cal:summary :SUM;
+    cal:dtstart [ cal:tzid :TZ; cal:dateTime :DTSTART ];
+    cal:dtend [ cal:tzid :TZ2; cal:dateTime :DTEND ];
+    .
+  
+}.
+
+
+# Timezone stuff transcribed from an evolution calendar...
+# original source seems to be...
+
+<> dc:source [ = <ftp://elsie.nci.nih.gov/pub/>;
+  dc:creator "Olson, A.D., et al"; #@@ lazy...
+  dc:title "Time zone code and data";
+  dc:description "updated periodically" ].
+
+
+:ChicagoTime a cal:Vtimezone;
+  cal:tzid "/softwarestudio.org/Olson_20011030_5/America/Chicago".
+
+
+:NewYorkTime a cal:Vtimezone;
+  cal:tzid "/softwarestudio.org/Olson_20011030_5/America/New_York".
+
+:ParisTime
+  cal:tzid "/softwarestudio.org/Olson_20011030_5/Europe/Paris"
+  .
+
+:LondonTime
+  cal:tzid "/softwarestudio.org/Olson_20011030_5/Europe/London".
+
+
+:LosAngelesTime
+  cal:tzid "/softwarestudio.org/Olson_20011030_5/America/Los_Angeles".
