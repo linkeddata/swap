@@ -29,7 +29,12 @@ DAML_equivalentTo_URI = notation3.DAML_equivalentTo_URI
 
 MATH_NS_URI = 'http://www.w3.org/2000/10/swap/math#'
 
-def tidy(x): return string.replace(str(x), '.0', '')
+def tidy(x):
+    #DWC bugfix: "39.03555" got changed to "393555"
+    s = str(x)
+    if s[-2:] == '.0': s=s[:-2]
+    return s
+
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #
