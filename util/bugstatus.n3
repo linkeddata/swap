@@ -4,7 +4,10 @@
   dc:description "$Id$",
 """
 $Log$
-Revision 1.6  2004-03-10 22:06:12  timbl
+Revision 1.7  2005-04-04 21:10:32  connolly
+updated to icaltzd
+
+Revision 1.6  2004/03/10 22:06:12  timbl
 Think fixed completuion date
 
 Revision 1.5  2004/01/31 00:45:19  timbl
@@ -41,9 +44,10 @@ hmm... remote query...
 
 @prefix str: <http://www.w3.org/2000/10/swap/string#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix dt: <http://www.w3.org/2001/XMLSchema#>.
 
 @prefix email: <http://www.w3.org/2000/10/swap/pim/email#>.
-@prefix cal: <http://www.w3.org/2002/12/cal/ical#> .
+@prefix cal: <http://www.w3.org/2002/12/cal/icaltzd#> .
 
 :cwm :bugListName "www-archive";
   :bugKeyWord "n3bugs";
@@ -105,6 +109,9 @@ this log:forAll :MSG, :SUBJ, :DATE.
   ?MSG_ARCHIVE log:uri [
    is str:concatenation of  ("http://www.w3.org/mid/" ?MID )
   ].
+
+  ?DATET is log:dtlit of (:DATE dt:dateTime).
+
 }
   => {
  :MSG :archive ?MSG_ARCHIVE.
@@ -113,7 +120,7 @@ this log:forAll :MSG, :SUBJ, :DATE.
     a cal:Vtodo; #@@ not in the rdf calendar schema; i.e. no TODO tests
     cal:summary :SUBJ;
     cal:url ?MSG_ARCHIVE;
-    cal:dtstart [cal:dateTime :DATE];
+    cal:dtstart ?DATET
  ]
  }.
 
@@ -130,12 +137,12 @@ this log:forAll :MSG, :SUBJ, :DATE.
         :MSG req:threadTail [
 	     email:date_iso :DATE]
       } ].
+
+  ?WHEN is log:dtlit of (:DATE dt:dateTime).
 }
 => {
   ?TODO cal:status "COMPLETED";
-	cal:completed [cal:dateTime :DATE].
+	cal:completed ?WHEN.
 }.
-
-
 
 
