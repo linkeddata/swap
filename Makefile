@@ -79,23 +79,5 @@ log.rdf: log.n3
 	$(PYTHON) cwm.py log.n3 --rdf > log.rdf
 
 
-#######
-
-GET=GET
-
-# cf
-# W3C mailing list search results in RDF
-#http://lists.w3.org/Archives/Public/www-rdf-interest/2003Jul/0206.html
-
-bugstatus: admin/N3-Bugs.ics
-
-CWM=$(PYTHON) cwm.py
-
-admin/N3-Bugs.ics: bugsToDo.cal3
-	PYTHONPATH=. $(PYTHON) pim/toIcal.py bugsToDo.cal3 >$@
-
-
-bugsToDo.cal3: util/bugstatus.n3
-	$(CWM) util/bugstatus.n3 --think --n3 --data >$@
-
+#ends
 
