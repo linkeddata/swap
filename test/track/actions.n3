@@ -17,10 +17,29 @@
 
 this log:forAll :a, :d, :e, :p, :s, :t, :w, :x, :y, :z.
 
+#() :elementsOnly ().
+##
+#{  :y daml:first [ log:rawType log:String ] ;
+#		daml:rest :z.
+#   :z :elementsOnly :w.
+# } log:implies {
+#    :y :elementsOnly :w.
+#}
+#
+#{  :y daml:first :x; daml:rest :z.
+#   :x log:rawType log:Other;
+#   :z :elementsOnly :w.
+# } log:implies {
+#    :y :elementsOnly [daml:first :x; daml:rest :w].
+#}.
 
-{ [] xml:ln "tr"; xml:zcontent ( :t :p :a :s :d ).
-   :t xml:ln "td".}
-   log:implies
-{ [ :topic :w; :assignedTo :p; :assigndeAt :a; :status :s; :delta :d]}.
+{  [] xml:ln "tr";
+    xml:zcontent [ daml:first :t ].
+#   xml:zcontent ( :t :p :a :s :d :y).
+   :t xml:ln "td"; xml:zcontent :x.
+}   log:implies {
+   :x a :SUCCESS.
+}.
+#{ [ :topic :w; :assignedTo :p; :assigndeAt :a; :status :s; :delta :d]}.
 
 #ends

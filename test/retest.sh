@@ -77,6 +77,11 @@ cwm_test schema1.n3 "Schema validity 1" daml-ex.n3 invalid-ex.n3 schema-rules.n3
 cwm_test schema2.n3 "Schema validity using filtering out essential output" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think -filter=schema-filter.n3
 
 echo
+echo "        Test list handling"
+
+cwm_test li-r1.n3  "Inference using lists"  list/r1.n3 -think
+
+echo
 echo "        Test builtins:"
 
 cwm_test bi-t1.n3 "Simple use of log:includes" includes/t1.n3 -think
@@ -133,7 +138,10 @@ cwm_test argv-2.n3 "os:argv argument other values"  os/argv.n3 --think --with bo
 
 
 # $Log$
-# Revision 1.29  2002-03-12 20:57:17  timbl
+# Revision 1.30  2002-03-17 04:24:12  timbl
+# catch up
+#
+# Revision 1.29  2002/03/12 20:57:17  timbl
 # Passed test/retest.sh
 #
 # Revision 1.28  2002/02/22 04:14:26  timbl

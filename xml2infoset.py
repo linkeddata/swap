@@ -14,6 +14,8 @@ import urllib   # Opening resources in load()
 import string
 # States:
 
+from notation3 import List_NS
+
 STATE_NOT_RDF =     "not RDF"     # Before <rdf:RDF>
 STATE_NO_SUBJECT =  "no context"  # @@@@@@@@@ use numbers for speed
 STATE_DESCRIPTION = "Description (have subject)" #
@@ -33,7 +35,7 @@ chatty = 0
 
 RDF_IS = SYMBOL, RDF_NS_URI + "is"   # Used with quoting
 
-NS= "http://www.w3.org/2000/10/swap/xml-unordered#"  # Unordered representation of XML document
+NS= "http://www.w3.org/2000/10/swap/xml#"  # Representation of XML document
 
 
 class RDFXMLParser(xmllib.XMLParser):
@@ -59,7 +61,9 @@ class RDFXMLParser(xmllib.XMLParser):
 
         self._root = self._generate("doc")
         self._cursor = self._root
-        self.sink.bind("x", (SYMBOL, NS))        
+        self._children = None
+        self.sink.bind("x", (SYMBOL, NS))
+        self.unordered = 0
 
 
     def load(self, uri, _baseURI=""):
@@ -107,20 +111,21 @@ class RDFXMLParser(xmllib.XMLParser):
         self._data = self._data + data
 
     def handle_cdata(self, data):
-        if data:
-            self.sink.makeStatement(( (SYMBOL, self._context),
-                                  (SYMBOL, NS+"cdata"),
-                                  (SYMBOL, self._cursor),
-                                  (LITERAL, data) ))
+        self._cdata = self._data + data  # Not sure how this works -tbl
         
     def flush(self):
         if self._data:
-            self.sink.makeStatement(( (SYMBOL, self._context),
-                                  (SYMBOL, NS+"data"),
-                                  (SYMBOL, self._cursor),
-                                  (LITERAL, self._data) ))
+            if self.unordered:
+                self.psv(NS+"data", self._cursor, self._data)
+            else:
+                item = self._generate("i")
+                self.psv(List_NS+"first", item, self._data)
+                if self._children == None:
+                    self.pso(NS+"zcontent", self._cursor, item)
+                else:
+                    self.pso(List_NS+"rest", self._children, item)
+                self._children = item
             self._data = ""
-        return
 
     def handle_proc(self, name, data):
         pi = self._generate("pi")
@@ -136,35 +141,25 @@ class RDFXMLParser(xmllib.XMLParser):
         
 #        self.sink.makeComment(data)    An alternative.
 
-    def syntax_error(self, message):
-        raise SyntaxError('error at line %d: %s' % (self.lineno, message))
-
-    def tag2uri(self, str):
-        """ Generate URI from tagname
-        """
-        x = string.find(str, " ")
-        if x < 0: return str
-        return str[:x]+ str[x+1:]
-    
-    def uriref(self, str):
-        """ Generate uri from uriref in this document
-        """ 
-        return urlparse.urljoin(self._thisURI,str)
-
-            
-    def _generate(self, str=""):
-            "The string is just a debugging hint really"
-            generatedId = self._genPrefix + str + `self._nextId`  #
-            self._nextId = self._nextId + 1
-            self.pso(notation3.N3_forSome_URI, self._context, generatedId) #  Note this is anonymous node
-            return generatedId                
-
     def unknown_starttag(self, tag, attrs):
         """ Handle start tag. We register none so all are unknown
         """
         element = self._generate("e")
-        self.pso(NS+"child", self._cursor, element)
-        self._stack.append(self._cursor)
+
+        if self.unordered:
+            self.pso(NS+"child", self._cursor, element)
+            self._stack.append(self._cursor)
+        else:
+            item = self._generate("i")
+            self.pso(List_NS+"first", item, element)
+            if self._children == None:
+                self.pso(NS+"zcontent", self._cursor, item)
+            else:
+                self.pso(List_NS+"rest", self._children, item)
+            self._children = item
+            self._stack.append((self._cursor, self._children))
+            self._children = None
+                     
         self._cursor = element
 
         x = string.find(tag, " ")
@@ -195,7 +190,15 @@ class RDFXMLParser(xmllib.XMLParser):
         
     def unknown_endtag(self, tag):
         self.flush()
-        self._cursor =  self._stack.pop()
+        if self.unordered:
+            self._cursor =  self._stack.pop()
+        else:
+            if self._children != None:
+                self.pso(List_NS+"rest", self._children, List_NS+"nil")
+            else:
+                self.pso(NS+"zcontent", self._cursor, List_NS+"nil")
+                
+            self._cursor, self._children =  self._stack.pop()
 
     def unknown_entityref(self, ref):
         pass
@@ -204,8 +207,38 @@ class RDFXMLParser(xmllib.XMLParser):
         pass
     
     def close(self):
+        self.flush()
+        if self._children:
+            self.pso(List_NS+"rest", self._children, List_NS+"nil")
+        else:
+            self.pso(NS+"zcontent", self._cursor, List_NS+"nil")
         xmllib.XMLParser.close(self)
         self.sink.endDoc(self._formula)
+
+
+    def syntax_error(self, message):
+        raise SyntaxError('error at line %d: %s' % (self.lineno, message))
+
+    def tag2uri(self, str):
+        """ Generate URI from tagname
+        """
+        x = string.find(str, " ")
+        if x < 0: return str
+        return str[:x]+ str[x+1:]
+    
+    def uriref(self, str):
+        """ Generate uri from uriref in this document
+        """ 
+        return urlparse.urljoin(self._thisURI,str)
+
+            
+    def _generate(self, str=""):
+            "The string is just a debugging hint really"
+            generatedId = self._genPrefix + str + `self._nextId`  #
+            self._nextId = self._nextId + 1
+            self.pso(notation3.N3_forSome_URI, self._context, generatedId)
+            return generatedId                
+
 
 #  Internal methods to generate triples in destination formula
 
