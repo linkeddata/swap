@@ -19,6 +19,7 @@ dc:description """
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . # type, Property
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix doc:  <http://www.w3.org/2000/10/swap/pim/doc#> .
 
 <> :_nspolicy [ a :_SubjectToChange;
    dc:description """If you change this, you have to tell the W3C SemWeb AD
@@ -27,6 +28,10 @@ dc:description """
 :_nspolicy a rdf:Property; rdfs:label "namespace policy";
 	rdfs:isDefinedBy <http://www.w3.org/1999/10/nsuri>. # @@move these :_ things there.
 :_SubjectToChange rdfs:label "subject to change". 
+
+
+
+<contact> doc:rules <contact-rules>.
 
 ##################################### CONTACT INFORMATION ######
 #
@@ -285,7 +290,10 @@ mso:WebPage  a rdf:Property;
 
 <> dc:description """
 $Log$
-Revision 1.19  2003-02-14 11:56:47  timbl
+Revision 1.20  2003-06-18 19:12:14  timbl
+draft
+
+Revision 1.19  2003/02/14 11:56:47  timbl
 bug fixes to tax rules
 
 Revision 1.18  2002/11/24 03:12:03  timbl
