@@ -1,0 +1,43 @@
+# Test the log:includes function
+
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix daml:  <http://www.daml.org/2000/10/daml-ont#> .
+@prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix ex:   <http://www.daml.org/2000/10/daml-ex#> .
+@prefix log:  <http://www.w3.org/2000/10/swap/log.n3#> .
+
+@prefix : <#>.  # Local stuff
+
+# Usage:   cwm includes.n3 -think
+#
+# Output should conclude all test* a :success and no failures.
+#
+
+this log:forAll :x.
+    	{ this log:forAll :y.  :x :loves  :y } log:implies
+	{  { this log:forSome :z. :x :hates :z } a log:falsehood }.
+
+# Now a positive test:
+
+{ <> log:includes
+    { this log:forAll :x.
+    		{ this log:forAll :y.  :x :loves  :y } log:implies 
+		{ { this log:forSome :z. :x :hates :z } a log:falsehood }.
+    }
+} log:implies { :testg_1 a :success }.
+
+# Now a negative test:
+
+{ <> log:includes
+    { this log:forAll :x.
+    		{ this log:forAll :y.  :x :loves  :y } log:implies 
+		{ { this log:forSome :z. :x :hates :z } a log:falsehood }.
+    }
+} log:notImplies { :testg_1 a :FAILURE }.
+
+
+
+
+
+
