@@ -153,6 +153,38 @@ class RDFSink:
     def makeStatement(self, tuple):  # Quad of (type, value) pairs
         pass
 
+# These simple versions may be inherited by the reifier for example
+
+    def startAnonymous(self,  triple, isList=0):
+        return self.makeStatement(triple)
+    
+    def endAnonymous(self, subject, verb):    # Remind me where we are
+        pass
+    
+    def startAnonymousNode(self, subj):
+        pass
+    
+    def endAnonymousNode(self):    # Remove default subject
+        pass
+
+    def startBagSubject(self, context):
+        pass
+
+    def endBagSubject(self, subj):    # Remove context
+        pass
+     
+    def startBagNamed(self, context, subj):
+        pass
+
+    def endBagNamed(self, subj):    # Remove context
+        pass
+     
+    def startBagObject(self, triple):
+        return self.makeStatement(triple)
+
+    def endBagObject(self, pred, subj):    # Remove context
+        pass
+    
     def makeComment(self, str):
         print "sink: comment: ", str 
 
@@ -782,13 +814,14 @@ class ToRDF(RDFSink):
 
     _valChars = string.lowercase + string.uppercase + string.digits + "_ !#$%&().,+*/"
     #@ Not actually complete, and can encode anyway
-    def __init__(self, outFp, thisURI, base=None):
+    def __init__(self, outFp, thisURI, base=None, flags=""):
         RDFSink.__init__(self)
 	self._wr = XMLWriter(outFp)
 	self._subj = None
 	self._base = base
 	if base == None: self._base = thisURI
 	self._thisDoc = thisURI
+	self._flags = flags
 	self._docOpen = 0  # Delay doc open <rdf:RDF .. till after binds
 
     #@@I18N
@@ -814,6 +847,9 @@ class ToRDF(RDFSink):
             if self.prefixes.get((RESOURCE, RDF_NS_URI), ":::") == ":::":
                 if self.namespaces.get("rdf", ":::") ==":::":
                     self.bind("rdf", (RESOURCE, RDF_NS_URI))
+            if self.prefixes.get((RESOURCE, Logic_NS), ":::") == ":::":
+                if self.namespaces.get("log", ":::") ==":::":
+                    self.bind("log", (RESOURCE, Logic_NS))
             ats = []
             for pfx in self.prefixes.values():
                 if pfx:
@@ -835,14 +871,19 @@ class ToRDF(RDFSink):
 	    if self._subj:
 		self._wr.endElement()
 	    self._subj = subj
-	    self._wr.startElement(RDF_NS_URI+'Description',
+            if (pred == (RESOURCE, RDF_type_URI)# Special case starting with rdf:type as element name
+                and obj[0] != LITERAL
+                and "c" not in self._flags): # "c" flag suppresses class element syntax on RDF output
+                 self._wr.startElement(obj[1], [(RDF_NS_URI+" about", subjn),], self.prefixes)
+                 return
+            self._wr.startElement(RDF_NS_URI+'Description',
 				 [(RDF_NS_URI+" about", subjn),], self.prefixes)
 
 	if obj[0] != LITERAL: 
 	    objn = relativeURI(self._base, obj[1])
 	    self._wr.emptyElement(pred[1], [(RDF_NS_URI+' resource', objn)], self.prefixes)
 	    return
-# Actually this shorthand notatoin is not RDF, it was my misunderstanding! rats...
+# Actually this "value=" shorthand notation is *not* RDF! It was my misunderstanding! rats...
 #	for ch in obj[1]:  # Is literal representable as an attribute value?
 #            if ch in self._valChars: continue
 #            else: break # No match
@@ -904,7 +945,10 @@ class ToRDF(RDFSink):
 			      [],
 #			      [(RDF_NS_URI+' about', relativeURI(self._base,context[1]))],
                               self.prefixes)
-        self._wr.startElement(RDF_NS_URI+"is", [(RDF_NS_URI+' parseType', 'Quote')], self.prefixes)
+#        print "# @@@@@@@@@@@@@ ", self.prefixes
+        log_quote = self.prefixes[(RESOURCE, Logic_NS)] + ":Quote"  # Qname yuk
+        
+        self._wr.startElement(Logic_NS+"is", [(RDF_NS_URI+' parseType', log_quote)], self.prefixes)
         self._subj = None
         self._pred = None
 
@@ -926,7 +970,8 @@ class ToRDF(RDFSink):
 				 ((RDF_NS_URI+' about', subjn),), self.prefixes)
 	    self._subj = subj
 
-        self._wr.startElement(pred[1], [(RDF_NS_URI+' parseType','Quote')], self.prefixes)  # @@? Parsetype RDF
+        log_quote = self.prefixes[(RESOURCE, Logic_NS)] + ":Quote"  # Qname yuk
+        self._wr.startElement(pred[1], [(RDF_NS_URI+' parseType',log_quote)], self.prefixes)  # @@? Parsetype RDF
         self._subj = None
         self._pred = None
 
@@ -1404,15 +1449,15 @@ def stringToN3(str):
         res = ""
         if len(str) > 20 and string.find(str, "\n") >=0:
                 delim= '"""'
-                forbidden = "\\\"\a\b\f\r\t\v"
+                forbidden = "\\\"\a\b\f\r\v"    # (allow tabs too now)
         else:
                 delim = '"'
-                forbidden = "\\\"\a\b\f\r\t\v\n"
+                forbidden = "\\\"\a\b\f\r\v\t\n"
         for i in range(len(str)):
                 ch = str[i]
                 j = string.find(forbidden, ch)
-                if j>=0: ch = "\\" + '\\"abfrtvn'[j]
-                elif ch <> "\n" and (ch < " " or ch > "}") : ch= 'x'+`ch`[1:-1] # Use python
+                if j>=0: ch = "\\" + '\\"abfrvtn'[j]
+                elif ch not in "\n\t" and (ch < " " or ch > "}") : ch= 'x'+`ch`[1:-1] # Use python
                 res = res + ch
         return delim + res + delim
 
@@ -1422,21 +1467,22 @@ def stringToN3(str):
 #    Reifier
 #
 # Use:
-#   sink = notation3.Reifier(sink, outputURI)
+#   sink = notation3.Reifier(sink, outputContextURI, flat)
 
 
 class Reifier(RDFSink):
 
-    def __init__(self, sink, context, genPrefix=None):
+    def __init__(self, sink, contextURI, flat=0, genPrefix=None):
         RDFSink.__init__(self)
         self.sink = sink
         self._ns = "http://www.w3.org/2000/10/swap/model.n3#"
         self.sink.bind("n3", (RESOURCE, self._ns))
         self._nextId = 1
-        self._context = context
+        self._context = (RESOURCE, contextURI)
         self._genPrefix = genPrefix
+        self._flat = flat      # Just flatten things not in this context
         if self._genPrefix == None:
-            self._genPrefix = self._context + "#_s"
+            self._genPrefix = string.split(contextURI,"#")[0] + "#_s"
         
     def bind(self, prefix, nsPair):
         self.sink.bind(prefix, nsPair)
@@ -1447,19 +1493,22 @@ class Reifier(RDFSink):
         N3_NS = "http://www.w3.org/2000/10/swap/model.n3#"
         name = "context", "predicate", "subject", "object"
 
-        self.sink.makeStatement(( (RESOURCE, self._context), # quantifiers - use inverse?
+        if self._flat and tuple[CONTEXT] == self._context:
+            return self.sink.makeStatement(tuple)   # In same context: does not need reifying
+
+        self.sink.makeStatement(( self._context, # quantifiers - use inverse?
                                   (RESOURCE, N3_forSome_URI),
-                                  (RESOURCE, self._context),
+                                  self._context,
                                   (RESOURCE, _statementURI) )) #  Note this is anonymous
         
-        self.sink.makeStatement(( (RESOURCE, self._context), # Context
+        self.sink.makeStatement(( self._context, # Context
                               (RESOURCE, self._ns+"statement"), #Predicate
                               tuple[CONTEXT], # Subject
                               (RESOURCE, _statementURI) ))  # Object
 
         for i in PARTS:
             self.sink.makeStatement((
-                (RESOURCE, self._context), # Context
+                self._context, # Context
                 (RESOURCE, self._ns+name[i]), #Predicate
                 (RESOURCE, _statementURI), # Subject
                 tuple[i] ))  # Object

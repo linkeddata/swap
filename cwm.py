@@ -238,7 +238,7 @@ class Resource(Thing):
         self.uri = uri
         self.fragments = {}
 
-    def uriref(self, base):
+    def uriref(self, base=None):
         if base is self :  # @@@@@@@ Really should generate relative URI!
             return ""
         else:
@@ -269,7 +269,7 @@ class Fragment(Thing):
         self.resource = resource
         self.fragid = fragid
 
-    def uriref(self, base):
+    def uriref(self, base=None):
         return self.resource.uriref(base) + "#" + self.fragid
 
     def representation(self,  base=None):
@@ -296,7 +296,7 @@ class Anonymous(Fragment):
         return 1
 
     def asPair(self):
-        return (ANONYMOUS, self.uriref(None))
+        return (ANONYMOUS, self.uriref())
         
 class Formula(Fragment):
     def __init__(self, resource, fragid):
@@ -306,7 +306,7 @@ class Formula(Fragment):
         return 1
 
     def asPair(self):
-        return (FORMULA, self.uriref(None))
+        return (FORMULA, self.uriref())
         
         
 class Literal(Thing):
@@ -1045,9 +1045,9 @@ class RDFStore(notation3.RDFSink) :
         return self.match(unmatched, [], _variables + _templateVariables, smartIn, justOne=1)
 
  
-    def genid(self,context):        
+    def genid(self,context, type=RESOURCE):        
         self._nextId = self._nextId + 1
-        return self.engine.internURI(self._genPrefix+`self._nextId`)
+        return self.engine.intern((type, self._genPrefix+`self._nextId`))
 
     def nestedContexts(self, con):
         """ Return a list of statements and variables of either type
@@ -1323,7 +1323,10 @@ class RDFStore(notation3.RDFSink) :
         # because we can't reuse the subexpression identifiers.
         bindings2 = []
         for i in oes:
-            g = store.genid(targetContext)
+            if isinstance(i, Formula):
+                g = store.genid(targetContext, FORMULA)  #  Generate with same type as original
+            else:
+                g = store.genid(targetContext, RESOURCE)  #  Generate with same type as original
             bindings2.append((i,g))
         total = 0
         for q in myConclusions:
@@ -1488,7 +1491,7 @@ bind default <>
 
     testEngine = Engine()
     thisDoc = testEngine.internURI(thisURI)    # Store used interned forms of URIs
-    thisContext = testEngine.internURI(thisURI+ "#_formula")    # @@@ Store used interned forms of URIs
+    thisContext = testEngine.intern((FORUMLA, thisURI+ "#_formula"))    # @@@ Store used interned forms of URIs
 
     store = RDFStore(testEngine)
     # (sink,  thisDoc,  baseURI, bindings)
@@ -1694,10 +1697,12 @@ Examples:
         option_inputs = []
         option_test = 0     # Do simple self-test
         option_reify = 0    # Flag: reify on output  (process?)
+        option_flat = 0    # Flag: reify on output  (process?)
         option_outURI = None
         _doneOutput = 0
         _gotInput = 0     #  Do we not need to take input from stdin?
         option_meta = 0
+        option_rdf_flags = ""  # Random flags affecting parsing/output
 
         _step = 0           # Step number used for metadata
 
@@ -1707,7 +1712,9 @@ Examples:
 #	_baseURI = "file://" + hostname + os.getcwd() + "/"
 	_baseURI = "file:" + fixslash(os.getcwd()) + "/"
 	
-        option_rdf = 0      # Use RDF rather than XML
+        option_format = "n3"      # Use RDF rather than XML
+        option_first_format = None
+        
         _outURI = _baseURI
         option_baseURI = _baseURI     # To start with - then tracks running base
         for arg in sys.argv[1:]:  # Command line options after script name
@@ -1723,14 +1730,18 @@ Examples:
                 _gotInput = 1
             elif arg == "-ugly": _doneOutput = 1
             elif _lhs == "-base": option_baseURI = _uri
-            elif arg == "-rdf": option_rdf = 1
-            elif arg == "-n3": option_rdf = 0
+            elif arg == "-rdf": option_format = "rdf"
+            elif _lhs == "-rdf":
+                option_format = "rdf"
+                option_rdf_flags = _rhs
+            elif arg == "-n3": option_format = "n3"
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-bySubject": _doneOutput = 1
             elif _lhs == "-outURI": option_outURI = _uri
             elif _lhs == "-chatty": chatty = int(_rhs)
             elif arg[:7] == "-apply=": pass
             elif arg == "-reify": option_reify = 1
+            elif arg == "-flat": option_flat = 1
             elif arg == "-help":
                 print doCommand.__doc__
                 return
@@ -1757,23 +1768,24 @@ Examples:
 	history = None
 
         
-	if option_rdf:
-            _outSink = notation3.ToRDF(sys.stdout, _outURI, base=option_baseURI)
+	if option_format == "rdf":
+            _outSink = notation3.ToRDF(sys.stdout, _outURI, base=option_baseURI, flags=option_rdf_flags)
         else:
             _outSink = notation3.ToN3(sys.stdout.write, base=option_baseURI)
         version = "$Id$"
 	_outSink.makeComment("Processed by " + version[1:-1]) # Strip $ to disarm
 	_outSink.makeComment("    using base " + option_baseURI)
+        if option_reify: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula")
+        if option_flat: _outSink = notation3.Reifier(_outSink, _outURI+ "#_formula", flat=1)
 
 
         if option_pipe:
             _store = _outSink
-            if option_reify: _store = notation3.Reifier(_store, _outURI)
         else:
             myEngine = Engine()
             _store = RDFStore(myEngine, _outURI+"#_gs")
-            workingContext = myEngine.internURI(_outURI+ "#_formula")   #@@@ Hack - use metadata
-            _meta = myEngine.internURI(_runURI)
+            workingContext = myEngine.intern((FORMULA, _outURI+ "#_formula"))   #@@@ Hack - use metadata
+            _meta = myEngine.intern((FORMULA, _runURI))
 
         if not _gotInput: #@@@@@@@@@@ default input
             _inputURI = _baseURI # Make abs from relative
@@ -1781,7 +1793,7 @@ Examples:
             p.load("")
             del(p)
             if not option_pipe:
-                inputContext = myEngine.internURI(_inputURI+ "#_formula")
+                inputContext = myEngine.intern((FORMULA, _inputURI+ "#_formula"))
                 history = inputContext
                 if inputContext is not workingContext:
                     _store.moveContext(inputContext,workingContext)  # Move input data to output context
@@ -1789,7 +1801,8 @@ Examples:
 
 #  Take commands from command line: Second Pass on command line:
 
-        option_rdf = 0      # Use RDF rather than XML
+        option_format = "n3"      # Use RDF rather than XML
+        option_rdf_flags = ""
         _outURI = _baseURI
         option_baseURI = _baseURI     # To start with
         for arg in sys.argv[1:]:  # Command line options after script name
@@ -1803,12 +1816,12 @@ Examples:
                 
             if arg[0] != "-":
                 _inputURI = urlparse.urljoin(option_baseURI, arg) # Make abs from relative
-                if option_rdf: p = xml2rdf.RDFXMLParser(_store,  _inputURI)
+                if option_format == "rdf" : p = xml2rdf.RDFXMLParser(_store,  _inputURI)
                 else: p = notation3.SinkParser(_store,  _inputURI)
                 p.load(_inputURI)
                 del(p)
                 if not option_pipe:
-                    inputContext = myEngine.internURI(_inputURI+ "#_formula")
+                    inputContext = myEngine.intern((FORMULA, _inputURI+ "#_formula"))
                     _store.moveContext(inputContext,workingContext)  # Move input data to output context
                     _step  = _step + 1
                     s = _metaURI + `_step`  #@@ leading 0s to make them sort?
@@ -1836,28 +1849,33 @@ Examples:
             elif arg == "-pipe": pass
             elif _lhs == "-outURI": option_outURI = _uri
 
-            elif arg == "-rdf": option_rdf = 1
-            elif arg == "-n3": option_rdf = 0
+            elif arg == "-rdf": option_format = "rdf"
+            elif _lhs == "-rdf":
+                option_format = "rdf"
+                option_rdf_flags = _rhs
+            elif arg == "-n3": option_format = "n3"
             
             elif _lhs == "-chatty": chatty = int(_rhs)
 
             elif arg == "-reify":
-                if not option_pipe:
-                    _playURI = urlparse.urljoin(_baseURI, "PLAY")  # Intermediate
-                    _playContext = myEngine.internURI(_playURI)
-                    _store.moveContext(workingContext, _playContext)
-
-                    _store.dumpBySubject(_playContext,
-                                         notation3.Reifier(_store, _outURI))                                
+                pass
+#                if not option_pipe:
+#                    _playURI = urlparse.urljoin(_baseURI, "TEMP")  # Intermediate
+#                    _playContext = myEngine.internURI(_playURI)
+#                    _store.moveContext(workingContext, _playContext)
+#
+#                    _store.dumpBySubject(_playContext,
+#                                         notation3.Reifier(_store, workingContext.uriref()))                                
 
             elif arg == "-flat":  # reify only nested expressions, not top level
-                if not option_pipe:
-                    _playURI = urlparse.urljoin(_baseURI, "PLAY")  # Intermediate
-                    _playContext = myEngine.internURI(_playURI)
-                    _store.moveContext(workingContext, _playContext)
-
-                    _store.dumpBySubject(_playContext,
-                                         notation3.Reifier(_store, _outURI, 1)) #flat                                
+                pass
+#                if not option_pipe:
+#                    _playURI = urlparse.urljoin(_baseURI, "TEMP")  # Intermediate
+#                    _playContext = myEngine.internURI(_playURI)
+#                    _store.moveContext(workingContext, _playContext)
+#
+#                    _store.dumpBySubject(_playContext,
+#                                         notation3.Reifier(_store, workingContext.uriref(), flat=1)) #flat                                
 
             elif option_pipe: ############## End of pipable options
                 print "# Command line error: %s illegal option with -pipe", arg
@@ -1868,15 +1886,15 @@ Examples:
                 _doneOutput = 1            
 
             elif arg[:7] == "-apply=":
-                filterContext = (myEngine.internURI(_uri+ "#_formula"))
+                filterContext = (myEngine.intern((FORMULA, _uri+ "#_formula")))
                 print "# Input rules to apply from ", _uri
                 _store.loadURI(_uri)
                 _store.applyRules(workingContext, filterContext);
 
             elif _lhs == "-filter":
-                filterContext = myEngine.internURI(_uri+ "#_formula")
+                filterContext = myEngine.intern((FORMULA, _uri+ "#_formula"))
                 _playURI = urlparse.urljoin(_baseURI, "PLAY")  # Intermediate
-                _playContext = myEngine.internURI(_playURI+ "#_formula")
+                _playContext = myEngine.intern((FORMULA, _playURI+ "#_formula"))
                 _store.moveContext(workingContext, _playContext)
 #                print "# Input filter ", _uri
                 _store.loadURI(_uri)
@@ -1904,7 +1922,7 @@ Examples:
                     step = _store.applyRules(workingContext, workingContext)
                     if step == 0: break
                     grandtotal= grandtotal + step
-                progress("Grand total of %i new statements in %i iterations." %
+                if chatty > 5: progress("Grand total of %i new statements in %i iterations." %
                          (grandtotal, iterations))
 
             elif arg == "-size":
@@ -1920,7 +1938,7 @@ Examples:
 
 # Squirt it out if no output done
         if not option_pipe and not _doneOutput:
-            progress("Begining output.")
+            if chatty>5: progress("Begining output.")
             _store.dumpNested(workingContext, _outSink)
 
 def progress(str):
