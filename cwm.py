@@ -279,6 +279,7 @@ def doCommand():
 --filter=foo  Read rules from foo, apply to store, REPLACING store with conclusions
 --rules       Apply rules in store to store, adding conclusions to store
 --think       as -rules but continue until no more rule matches (or forever!)
+--engine=otter use otter (in your $PATH) instead of llyn for linking, etc
 --why         Replace the store with an explanation of its contents
 --flatten     turn formulas into triples using LX vocabulary
 --unflatten   turn described-as-true LX sentences into formulas
@@ -332,7 +333,8 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         option_flags = { "rdf":"", "n3":"" }    # Random flags affecting parsing/output
         option_quiet = 0
         option_with = None  # Command line arguments made available to N3 processing
-
+        option_engine = "llyn"
+        
         _step = 0           # Step number used for metadata
         _genid = 0
 
@@ -455,7 +457,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             #  hm.  why does TimBL use sys.stdout.write, above?  performance at the
             #  cost of flexibility?
             myflags = option_flags.get("otter", "")
-            _outSink = LX.engine.otter.Serializer(sys.stdout, flags=myflags)
+            _outSink = LX.language.otter.Serializer(sys.stdout, flags=myflags)
         elif option_format == "htables":
             myflags = option_flags.get("htables", "")
             _outSink = LX.language.htables.Serializer(sys.stdout, flags=myflags)
@@ -610,35 +612,34 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 if verbosity() > 4: progress( "Input rules to --think from " + _uri)
                 _store.think(workingContext, filterContext);
 
+            elif _lhs == "-engine":
+                option_engine = _rhs
+                
             elif arg == "-think":
-                need(_store); touch(_store)
-                _store.think(workingContext)
+                if option_engine=="otter":
+                    need(lxkb); # touch(lxkb)    ###  If we modify it, uncomment this!
+                    print "\n\n# Running Otter..."
+                    try:
+                        proof = LX.engine.otter.run(lxkb)
+                        print "# Contradiction found."
+                        print "# for details try:  cat ,lx.engine.otter.fromOtter"
+                    except LX.engine.otter.SOSEmpty:
+                        print "# Consistency proven."
+                        print "# for details try:  cat ,lx.engine.otter.fromOtter"
+                    print "# Done running Otter [ Inferences NOT incorporated back into cwm ]"
+                elif option_engine=="llyn":
+                    need(_store); touch(_store)
+                    _store.think(workingContext)
+                else:
+                    raise RuntimeError, "unknown engine: "+str(option_engine)
 
-            elif arg == "-lxkbdump":
+            elif arg == "-lxkbdump":  # just for debugging
                 need(lxkb)
                 print lxkb
 
-            elif arg == "-lxfdump":
+            elif arg == "-lxfdump":   # just for debugging
                 need(lxkb)
                 print lxkb.asFormula()
-
-            elif arg == "-otterDump":
-                need(lxkb)
-                # s.addAbbreviation("rdf_", "http://www.w3.org/1999/02/22-rdf-syntax-ns")
-                # s.addAbbreviation("daml_", "http://www.daml.org/2001/03/daml+oil")
-                # s.addAbbreviation("", workingContext.resource.uri)
-                print LX.engine.otter.serialize(lxkb)
-
-            elif arg == "-check":
-                need(lxkb)
-                # should we also check the inverse, to see if this
-                # is tautological?
-                if lxkb.isSelfConsistent():
-                    print "Consistency proven."
-                    print "for details try:  cat ,lx.engine.otter.fromOtter"
-                else:
-                    print "Contradiction found."
-                    print "for details try:  cat ,lx.engine.otter.fromOtter"
 
             elif _lhs == "-prove":
 

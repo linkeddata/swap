@@ -1,5 +1,8 @@
 """
 
+I'm iffy about the whole idea of "interpretation" here for how URIs
+work.  It was just an idea, at the time.
+
 
 """
 __version__ = "$Revision$"
@@ -146,6 +149,7 @@ class KB(list):
         result = result[0:-1]
         return result
 
+        
     def isSelfConsistent(self):
         # should also try mace, icgns, etc...
         try:
@@ -205,7 +209,12 @@ if __name__ == "__main__": _test()
 
  
 # $Log$
-# Revision 1.5  2003-01-29 06:09:18  sandro
+# Revision 1.6  2003-01-29 20:59:34  sandro
+# Moved otter language support back from engine/otter to language/otter
+# Changed cwm.py to use this, and [ --engine=otter --think ] instead of
+# --check.
+#
+# Revision 1.5  2003/01/29 06:09:18  sandro
 # Major shift in style of LX towards using expr.py.  Added some access
 # to otter, via --check.  Works as described in
 # http://lists.w3.org/Archives/Public/www-archive/2003Jan/0024
