@@ -3,7 +3,6 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <title>Primer - Getting into the semantic web and RDF using N3</title>
   <link href="/People/Berners-Lee/general.css" rel="stylesheet"
   type="text/css" />
@@ -383,59 +382,6 @@ differently. Check the documentation of software near you.</p>
 
 <p>One program I hacked together is called <em>cwm</em>, (pronounced as in
 the welsh word with a short "oo"). Further examples will use that.</p>
-
-<h2>Practical rules: Query information using a Filter</h2>
-<address>
-  added by reagle 20020408
-</address>
-
-<p>Now that we know how to make a statements in N3, what can we do with them?
-One thing is to use them to add inferred knowledge to a store which already
-contains data. Another thing is to extract useful information via a form of
-query called a <dfn><a name="filter1" id="filter1">filter</a></dfn>.</p>
-
-<p>In <a href="test/uncle.n3">uncle.n3</a> we state that Fred is the father
-Joe, and Bob is the brother of Fred; we also describe the logical rule for
-the uncle relationship:</p>
-<pre>@prefix : &lt;uncle#&gt;.
-:Fred is :father of :Joe.
-:Bob is :brother of :Fred.
-
-@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .
-this log:forAll :who1, :who2.
-{ :who1 :father [ :brother :who2 ] } log:implies { :who1 :uncle :who2 }.</pre>
-
-<p>This rule means "whenever someone's father has a brother, then the latter
-is their uncle". This rule, once is cwm's store, will cause <em><a
-href="doc/cwm.html">cwm</a></em> to deduce the uncle information when it runs
-with the command line option <code>--think.</code></p>
-
-<p>In another file (<a href="test/uncleF.n3">uncleF.n3</a>) we use as a
-filter. When a filter runs (unlike --think) <em>only</em> the information
-gathered by the rules is preserved: everything else is discarded. We use a
-filter to select the logical relationships that we want from the mass of what
-is already known:</p>
-<pre>@prefix : &lt;uncle#&gt;.
-@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .
-
-this log:forAll :p.
-
-# What is the relationship between Joe and Bob
-
-{ :Joe :p :Bob } log:implies { :p a :RelationshipBetweeJoeAndBob }.
-
-# Is Bob an Uncle of Joe?
-
-{ :Joe :uncle :Bob } log:implies { :Joe :uncle :Bob }.</pre>
-
-<p>When we ask cwm to consider the implication it concludes:</p>
-<pre>&gt; python cwm.py uncle.n3 --think --filter=uncleF.n3
-    :Joe     :uncle :Bob .
-    :uncle     a :RelationshipBetweeJoeAndBob .</pre>
-
-<p>You can read the command line as <em>read uncle.n3 and the deduce any new
-information you can given any rules you have. Now just tell me the
-information selected by the filter uncleF.n3</em>.</p>
 
 <h3>More</h3>
 
