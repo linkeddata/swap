@@ -13,7 +13,7 @@ DOC=doc/CwmHelp.htm
 
 TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/ql/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/cwm/detailed.tests test/ntriples/detailed.tests test/delta/detailed.tests test/syntax/detailed.tests test/reify/detailed.tests test/testmeta.n3 test/retest.py
 
-VERSION = 0.8.0
+VERSION = 0.8.1
 TARNAME = cwm-$(VERSION)
 
 TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3
@@ -50,6 +50,7 @@ release : doc.made cwm.tar.gz message.txt
 
 
 package: math.rdf maths.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf times.rdf LICENSE.rdf  $(HTMLS)
+	cvs -q update -d
 
 # Can't make dependencies on *.py :-(
 
@@ -73,9 +74,8 @@ cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
 	cvs add $(TARNAME).tar.gz
 #LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply/*.py *.py
 
-setup_tarball: $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) # tested filelist
-	cvs -q update
-	rm -rf swap || true
+setup_tarball: $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
+	-rm -rf swap
 	mkdir swap
 	cd swap; for A in $(SOURCES); do ln "../$$A"; done
 	echo "cwm.py" > MANIFEST
@@ -84,9 +84,14 @@ setup_tarball: $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) # tested filelist
 	for A in $(SOURCES); do echo swap/"$$A" >> MANIFEST; done
 	cat test/testfilelist | sed -e 's/^/test\//' >> MANIFEST
 	python setup.py sdist
-	python setup.py bdist_rpm
+	-python setup.py bdist_rpm
+	-python setup.py bdist_wininst
 	rm -rf swap
 	cp dist/cwm-$(VERSION).tar.gz .
+	-rm -rf ,cwm-$(VERSION)-test
+	mkdir ,cwm-$(VERSION)-test
+	cd ,cwm-$(VERSION)-test && tar -xzf ../cwm-$(VERSION).tar.gz
+	cd ,cwm-$(VERSION)-test/cwm-$(VERSION)/test && $(MAKE)
 	head -n -1 .htaccess > ,htaccess
 	echo 'RewriteRule ^cwm.tar.gz$ ' $(TARNAME) '[L]' >> ,htaccess
 	mv ,htaccess .htaccess

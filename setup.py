@@ -24,10 +24,10 @@ swap_dir = join(lib_dir, "swap")
 print "swap dir: "+swap_dir
 
 
-if exists(swap_dir):
-    backup = "%s-%s" % (swap_dir, int(time()))
-    print "Renaming previously installed rdflib to: \n  %s" % backup
-    rename(swap_dir, backup)
+#if exists(swap_dir):
+#    backup = "%s-%s" % (swap_dir, int(time()))
+#    print "Renaming previously installed swap to: \n  %s" % backup
+#    rename(swap_dir, backup)
 
 
 
