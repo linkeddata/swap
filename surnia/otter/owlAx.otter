@@ -387,6 +387,44 @@ rdf(owl_InverseOf, rdf_type, owl_SymmetricProperty).
 )).
 
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%    owl_AllDifferent
+%
+
+all A (
+   rdf(A, rdf_type, owl_AllDifferent)
+   <->
+   (exists L (
+     rdf(A, owl_distinctMembers, L)
+   ))
+).
+
+all A L (
+   rdf(A, owl_distinctMembers, L)
+   ->   % BIDIR
+   allDifferent(L)
+).
+
+allDifferent(rdf_nil).
+
+all LIST HEAD TAIL (
+   ( rdf(LIST, rdf_first, HEAD) &
+     rdf(LIST, rdf_rest, TAIL) &
+     allDifferentOther(HEAD, TAIL) )
+   ->   % BIDIR
+   allDifferent(LIST)
+).
+
+all OTHER LIST HEAD TAIL (
+   ( rdf(LIST, rdf_first, HEAD) &
+     rdf(LIST, rdf_rest, TAIL) &
+     rdf(OTHER, owl_differentFrom, HEAD) &
+     allDifferentOther(OTHER, TAIL) )
+   ->   % BIDIR
+   allDifferentOther(OTHER, LIST)
+).
+
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -412,6 +450,9 @@ all P1 P2 (
 ).
     
 % $Log$
-% Revision 1.3  2003-07-30 02:26:40  sandro
+% Revision 1.4  2003-07-30 02:43:26  sandro
+% added first draft of allDifferent
+%
+% Revision 1.3  2003/07/30 02:26:40  sandro
 % added Id and Log cvs keywords
 %
