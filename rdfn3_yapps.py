@@ -16,9 +16,14 @@
 # http://www.w3.org/DesignIssues/Notation3
 
 import string
-import urlparse # for urljoin. hmm... @@patch bugs?
-import RDFSink # for FORMULA, SYMBOL
-import notation3
+
+import uripath
+from ConstTerm import Symbol, StringLiteral, Namespace
+
+RDF = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+LIST = Namespace("http://www.daml.org/2001/03/daml+oil#")
+DPO = Namespace("http://www.daml.org/2001/03/daml+oil#")
+LOG = Namespace("http://www.w3.org/2000/10/swap/log#")
 
 
 from string import *
@@ -50,6 +55,7 @@ class _ParserScanner(Scanner):
             ('QNAME', '([a-zA-Z][a-zA-Z0-9_-]*)?:[a-zA-Z0-9_-]+'),
             ('EXVAR', '_:[a-zA-Z0-9_-]+'),
             ('UVAR', '\\?[a-zA-Z0-9_-]+'),
+            ('INTLIT', '-?\\d+'),
             ('STRLIT1', '"([^\\"\\\\\\n]|\\\\[\\\\\\"nrt])*"'),
             ('STRLIT2', "'([^\\'\\\\\\n]|\\\\[\\\\\\'nrt])*'"),
             ('STRLIT3', '"""([^\\"\\\\]|\\\\[\\\\\\"nrt])*"""'),
@@ -59,8 +65,8 @@ class _ParserScanner(Scanner):
 class _Parser(Parser):
     def document(self):
         self.bindListPrefix(); scp = self.docScope()
-        while self._peek('END', '"@prefix"', '"\\\\["', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"{"') != 'END':
-            _token_ = self._peek('"@prefix"', '"\\\\["', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"{"')
+        while self._peek('END', '"@prefix"', '"\\\\["', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"{"') != 'END':
+            _token_ = self._peek('"@prefix"', '"\\\\["', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"{"')
             if _token_ == '"@prefix"':
                 directive = self.directive()
             else:                 statement = self.statement(scp)
@@ -78,25 +84,25 @@ class _Parser(Parser):
         self._scan('"\\\\."')
 
     def clause_ind(self, scp):
-        _token_ = self._peek('"\\\\["', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"{"')
+        _token_ = self._peek('"\\\\["', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"{"')
         if _token_ == '"\\\\["':
             phrase = self.phrase(scp)
-            if self._peek('";"', '"is"', '","', '"\\\\."', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"', '"\\\\]"', '"}"') not in ['";"', '","', '"\\\\."', '"\\\\]"', '"}"']:
+            if self._peek('";"', '"is"', '","', '"\\\\."', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"', '"\\\\]"', '"}"') not in ['";"', '","', '"\\\\."', '"\\\\]"', '"}"']:
                 predicate = self.predicate(scp, phrase)
                 while self._peek('";"', '","', '"\\\\."', '"\\\\]"', '"}"') == '";"':
                     self._scan('";"')
-                    if self._peek('";"', '"is"', '","', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"', '"\\\\."', '"\\\\]"', '"}"') not in ['";"', '","', '"\\\\."', '"\\\\]"', '"}"']:
+                    if self._peek('";"', '"is"', '","', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"', '"\\\\."', '"\\\\]"', '"}"') not in ['";"', '","', '"\\\\."', '"\\\\]"', '"}"']:
                         predicate = self.predicate(scp, phrase)
         elif 1:
             term = self.term(scp)
             predicate = self.predicate(scp, term)
             while self._peek('";"', '","', '"\\\\."', '"\\\\]"', '"}"') == '";"':
                 self._scan('";"')
-                if self._peek('";"', '"is"', '","', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"', '"\\\\."', '"\\\\]"', '"}"') not in ['";"', '","', '"\\\\."', '"\\\\]"', '"}"']:
+                if self._peek('";"', '"is"', '","', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"', '"\\\\."', '"\\\\]"', '"}"') not in ['";"', '","', '"\\\\."', '"\\\\]"', '"}"']:
                     predicate = self.predicate(scp, term)
 
     def term(self, scp):
-        _token_ = self._peek('"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"')
+        _token_ = self._peek('"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"')
         if _token_ not in ['URIREF', 'QNAME', '"a"', '"="']:
             expr = self.expr(scp)
             return expr
@@ -109,7 +115,7 @@ class _Parser(Parser):
         objects1 = self.objects1(scp,subj,verb)
 
     def verb(self, scp):
-        _token_ = self._peek('"is"', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"')
+        _token_ = self._peek('"is"', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"')
         if _token_ != '"is"':
             term = self.term(scp)
             return (1, term)
@@ -143,7 +149,7 @@ class _Parser(Parser):
             return self.termEq()
 
     def expr(self, scp):
-        _token_ = self._peek('"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', '"\\\\("', '"\\\\["', '"{"')
+        _token_ = self._peek('"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', '"\\\\("', '"\\\\["', '"{"')
         if _token_ == '"this"':
             self._scan('"this"')
             return scp
@@ -153,6 +159,9 @@ class _Parser(Parser):
         elif _token_ == 'UVAR':
             UVAR = self._scan('UVAR')
             return self.vname(UVAR)
+        elif _token_ == 'INTLIT':
+            INTLIT = self._scan('INTLIT')
+            return self.intLit(INTLIT)
         elif _token_ == 'STRLIT3':
             STRLIT3 = self._scan('STRLIT3')
             return self.strlit(STRLIT3, '"""')
@@ -175,7 +184,7 @@ class _Parser(Parser):
     def list(self, scp):
         self._scan('"\\\\("')
         items = []
-        while self._peek('"\\\\)"', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"') != '"\\\\)"':
+        while self._peek('"\\\\)"', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"') != '"\\\\)"':
             item = self.item(scp, items)
         self._scan('"\\\\)"')
         return self.mkList(scp, items)
@@ -187,7 +196,7 @@ class _Parser(Parser):
     def phrase(self, scp):
         self._scan('"\\\\["')
         subj = self.something(scp)
-        if self._peek('"\\\\]"', '"is"', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"') != '"\\\\]"':
+        if self._peek('"\\\\]"', '"is"', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"') != '"\\\\]"':
             predicate = self.predicate(scp, subj)
             while self._peek('";"', '","', '"\\\\]"', '"\\\\."', '"}"') == '";"':
                 self._scan('";"')
@@ -200,7 +209,7 @@ class _Parser(Parser):
     def clause_sub(self):
         self._scan('"{"')
         scp = self.newScope()
-        if self._peek('"}"', '"\\\\["', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"{"') != '"}"':
+        if self._peek('"}"', '"\\\\["', '"this"', 'EXVAR', 'UVAR', 'INTLIT', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"{"') != '"}"':
             clause_ind = self.clause_ind(scp)
             while self._peek('";"', '"\\\\."', '","', '"}"', '"\\\\]"') == '"\\\\."':
                 self._scan('"\\\\."')
@@ -224,10 +233,12 @@ def scanner(text):
 class BadSyntax(SyntaxError):
     pass
 
+
 class Parser(_Parser):
     def __init__(self, scanner, sink, baseURI):
         _Parser.__init__(self, scanner)
         self._sink = sink
+	self._docScope = sink.newFormula()
         self._baseURI = baseURI
         self._prefixes = {}
         self._serial = 1
@@ -235,10 +246,10 @@ class Parser(_Parser):
         self._vnames = {}
 
     def docScope(self):
-        return mkFormula(self._baseURI)
+	return self._docScope
 
     def uriref(self, str):
-        return RDFSink.SYMBOL, urlparse.urljoin(self._baseURI, str[1:-1])
+        return Symbol(uripath.join(self._baseURI, str[1:-1]))
 
     def qname(self, str):
         i = string.find(str, ":")
@@ -249,14 +260,14 @@ class Parser(_Parser):
         except:
             raise BadSyntax, "prefix %s not bound" % pfx
         else:
-            return RDFSink.SYMBOL, ns + ln
+            return Symbol(ns + ln)
 
     def lname(self, str):
         n = str[2:]
         try:
             return self._lnames[n]
         except KeyError:
-            x = self.something(self.docScope(), n)
+            x = self.docScope().mkVar(n)
             self._lnames[n] = x
             return x
 
@@ -265,76 +276,73 @@ class Parser(_Parser):
         try:
             return self._vnames[n]
         except KeyError:
-            x = self.something(self.docScope(), n,
-                               quant=RDFSink.forAllSym)
+            x = self.docScope().mkVar(n, 1)
             self._vnames[n] = x
             return x
 
     def termA(self):
-        return notation3.RDF_type
+        return RDF['type']
     
     def termEq(self):
-        return notation3.DAML_equivalentTo
+        return DAML['equivalentTo']
 
     def strlit(self, str, delim):
-        return RDFSink.LITERAL, str[1:-1] #@@BROKEN
+        return StringLiteral(str[1:-1]) #@@BROKEN un-escaping
+
+    def intLit(self, str):
+        try:
+            v = int(str)
+        except ValueError:
+            v = long(str)
+        return IntegerLiteral(v) #@@
 
     def bindListPrefix(self):
-        self._sink.bind("l", (RDFSink.SYMBOL, notation3.N3_nil[1][:-3]))
+        self._sink.bind("l", LIST.name())
+        self._sink.bind("r", RDF.name())
     
     def bind(self, pfx, ref):
         ref = ref[1:-1] # take of <>'s
-        if ref[-1] == '#': # @@work around bug in urljoin...
-            sep = '#'
-            ref = ref[:-1]
-        else: sep = ''
-        addr = urlparse.urljoin(self._baseURI, ref) + sep
+        addr = uripath.join(self._baseURI, ref)
         #DEBUG("bind", pfx, ref, addr)
-        self._sink.bind(pfx, (RDFSink.SYMBOL, addr))
+        self._sink.bind(pfx, addr)
         #@@ check for pfx already bound?
         self._prefixes[pfx] = addr
 
     def gotStatement(self, scp, subj, verb, obj):
-	#DEBUG("gotStatement:", scp, subj, verb, obj)
+	DEBUG("gotStatement:", scp, subj, verb, obj)
         
         dir, pred = verb
         if dir<0: subj, obj = obj, subj
-        self._sink.makeStatement((scp, pred, subj, obj))
+	if scp is subj and pred is LOG['forAll']:
+	    DEBUG("@@bogus forAll", obj)
+	elif scp is subj and pred is LOG['forSome']:
+	    DEBUG("@@bogus forSome", obj)
+	else:
+	    scp.add(pred, subj, obj)
 
     def newScope(self):
-        return self.something(self.docScope(),
-                              "clause", RDFSink.FORMULA)
+        return self._sink.newFormula()
 
     def something(self, scp, hint="thing",
-                  ty=RDFSink.SYMBOL,
-                  quant = RDFSink.forSomeSym):
-        it = (ty, "%s#%s_%s" % (self._baseURI, hint, self._serial))
-
-        p = (RDFSink.SYMBOL, quant)
-        self._sink.makeStatement((scp, p, scp, it))
-
-        self._serial = self._serial + 1
-        return it
+                  univ = 0):
+	return scp.mkVar(hint, univ)
 
 
     def mkList(self, scp, items):
 	tail = None
-	head = notation3.N3_nil
-	say = self._sink.makeStatement
+	head = LIST['nil']
+	say = scp.add
 	for term in items:
-	    cons = self.something(scp, "cons")
-	    say((scp, notation3.N3_first, cons, term))
+	    cons = scp.mkVar("cons")
+	    say(LIST['first'], cons, term)
 	    if tail:
-	        say((scp, notation3.N3_rest, tail, cons))
+	        say(LIST['rest'], tail, cons)
 	    tail = cons
 	    if not head: head = cons
 	if tail:
-	    say((scp, notation3.N3_rest, tail, notation3.N3_nil))
+	    say(LIST['rest'], tail, LIST['nil'])
 	return head
 
-def mkFormula(absURI):
-    """move this somewhere else?"""
-    return RDFSink.FORMULA, absURI + "#_formula" #@@KLUDGE from notation3.py, cwm.py
 
 def DEBUG(*args):
     import sys
@@ -343,7 +351,13 @@ def DEBUG(*args):
     sys.stderr.write("\n")
     
 # $Log$
-# Revision 1.3  2002-06-21 16:04:02  connolly
+# Revision 1.4  2002-08-13 07:55:15  connolly
+# playing with a new parser/sink interface
+#
+# Revision 1.16  2002/08/07 16:01:23  connolly
+# working on datatypes
+#
+# Revision 1.15  2002/06/21 16:04:02  connolly
 # implemented list handling
 #
 # Revision 1.14  2002/01/12 23:37:14  connolly

@@ -14,93 +14,101 @@ References
   http://logic.stanford.edu/kif/dpans.html
   Thu, 25 Jun 1998 22:31:37 GMT
 """
+
 __version__="$Id$"
 
 from string import rfind, split
 import re
 
-import RDFSink
-from RDFSink import FORMULA, SYMBOL, LITERAL, forSomeSym, forAllSym
+from ConstTerm import Symbol, StringLiteral
 
-#from thing import progress
 
-class Sink(RDFSink.RDFSink):
+class Sink(object):
     def __init__(self, write):
-        RDFSink.RDFSink.__init__(self)
         self._write = write
+        self.prefixes = {}
 
-    def bind(self, pfx, nspr):
-        RDFSink.RDFSink.bind(self, pfx, nspr)
-
-        x, ns = nspr
+    def bind(self, pfx, ns):
         w = self._write
+        self.prefixes[ns] = pfx
         w('(prefix-kludge "%s" "%s")\n' % (pfx, ns))
         
     def startDoc(self):
-        self._ex = []
-        self._uv = []
-        self._conj = []
         self._map = {} # scopes to (ex, uv, conj) tuples
         self._ancestors = []
         self._root = None # root scope
-        self._scope = None # current scope
-        self._depth = None # scope depth
 
     def makeComment(self, text):
         for l in split(text, "\n"):
             self._write(";; %s\n" % l)
-        
-    def makeStatement(self, cpso):
-        #progress("makestatment:", cpso)
-        c, p, s, o = cpso
 
-        if self._scope <> c[1]:
-            self._setScope(c[1])
+    def newFormula(self):
+        """make a new formula
 
-        if s == (FORMULA, self._scope):
-            if p[1] == forSomeSym:
-                if o[0] is SYMBOL:
-                    self._ex.append(o[1])
-                return
-            elif p[1] == forAllSym:
-                self._uv.append(o[1])
-                return
+        Hmm... accept a 'which doc did I come from?' arg?
+        """
+        f =  Formula()
+        if not self._root: self._root = f
+        return f
 
-        self._conj.append((p, s, o)) #@@pairs?
-
-
-    def _setScope(self, c):
-        if self._root is None:
-            #progress("setting root scope to...", c)
-            self._root = self._scope = c
-            self._ancestors = []
-            self._ex, self._uv, self._conj = [], [], []
-        else:
-            #progress("former scope size:", len(self._conj))
-            self._map[self._scope] = (self._ex, self._uv, self._conj)
-
-            if c in self._ancestors: # popping out...
-                self._ancestors.pop()
-                while c in self._ancestors: self._ancestors.pop()
-                euc = self._map[c]
-                self._ex, self._uv, self._conj = euc
-                #progress("popping back to scope...", c, "conjuncts:", len(self._conj))
-            else: # pushing into a new scope
-                #progress("pushing into scope...", c)
-                self._ancestors.append(self._scope)
-                self._ex, self._uv, self._conj = [], [], []
-        self._scope = c
-
+    
 
     def endDoc(self):
-        self._map[self._scope] = (self._ex, self._uv, self._conj)
-        self._writeScope(self._root)
+        self._root.write(self._write, self.prefixes)
 
 
-    def _writeScope(self, scope, outer={}, level=1):
-        #progress("writing scope...", scope)
-        ex, uv, conj = self._map[scope]
-        w = self._write
+
+def writeTerm(w, t, prefixes, vmap, level):
+    DEBUG("writing term", t, " at level", level)
+    if isinstance(t, Variable):
+        n, vl = vmap[t]
+
+        # escape to where the variable is bound
+        unquote = level - vl
+        if unquote: w(", " * unquote)
+        w("%s " % n)
+    elif isinstance(t, Symbol):
+        w("%s " % withPrefix(t, prefixes))
+    elif isinstance(t, Formula):
+        w("^ ")
+        t.write(w, prefixes, vmap, level + 1)
+    elif isinstance(t, StringLiteral):
+        lit = re.sub(r'[\"\\]', _escchar, t) # escape newlines? hmm...
+        w('"%s"' % lit)
+    else:
+        raise RuntimeError, "term not implemented: " + str(t)
+        
+
+def withPrefix(i, prefixes):
+    sep = rfind(i, "#")
+    if sep < 0:
+        sep = rfind(i, "/")
+    if sep >= 0:
+        ns, ln = i[:sep+1], i[sep+1:]
+        pfx = prefixes.get(ns, None)
+        #print "split <%s> before <%s>. pfx: %s" % (i, ln, pfx)
+        if pfx is not None:
+            return "%s:%s" % (pfx, ln) # ala common lisp package syntax?
+    return uri2word(i)
+
+
+class Formula(object):
+    def __init__(self):
+        self._ex = []
+        self._uv = []
+        self._conj = []
+
+    def add(self, p, s, o):
+        self._conj.append((p, s, o))
+
+    def mkVar(self, hint, universal = 0):
+        v = Variable(hint)
+        if universal: self._uv.append(v)
+        else: self._ex.append(v)
+        return v
+
+    def write(self, w, prefixes, outer={}, level=1):
+        ex, uv, conj = self._ex, self._uv, self._conj
 
         vmap = _moreVarNames(outer, ex + uv, level)
 
@@ -109,79 +117,49 @@ class Sink(RDFSink.RDFSink):
         if ex:
             w("%s(exists (" % ind)
             for v in ex:
-                w("%s " % vmap[v][0])
+                w("%s " % v.name())
             w(")\n")
 
         if uv:
             w("%s (forall (" % ind)
             for v in uv:
-                w("%s " % vmap[v][0])
+                w("%s " % v.name())
             w(")\n")
 
         if len(conj)>1: w("%s  (and\n" % ind)
         for p, s, o in conj:
-            w("%s   (" % ind)
-            self._writeTerm(p, vmap, level)
-            self._writeTerm(s, vmap, level)
-            self._writeTerm(o, vmap, level)
+            w("%s   (holds " % ind)
+            writeTerm(w, p, prefixes, vmap, level)
+            writeTerm(w, s, prefixes, vmap, level)
+            writeTerm(w, o, prefixes, vmap, level)
             w(")\n")
         if len(conj)>1: w("%s  )\n" % ind)
 
         if uv: w("%s )\n" % ind)
         if ex:w("%s)\n" % ind)
         
-    def _writeTerm(self, t, vmap, level):
-        w = self._write
-        if t[0] is SYMBOL:
-            nvl = vmap.get(t[1], None)
 
-            if nvl:
-                n, vl = nvl
-                # escape to where the variable is bound
-                unquote = level - vl
-                if unquote: w(", " * unquote)
-                w("%s " % n)
-            else:
-                w("%s " % self.withPrefix(t))
-        elif t[0] is FORMULA:
-            w("^ ")
-            self._writeScope(t[1], vmap, level + 1)
-        elif t[0] is LITERAL:
-            v = t[1]
-            if type(v) is type(1):
-                w("%s" % (v,))
-            elif type(v) is type(1L):
-                w("%s" % (v,))
-            elif type(v) is type(()):
-                ty, str = v
-                lit = re.sub(r'[\"\\]', escchar, str) # escape newlines? hmm...
-                w('(%s "%s")' % (ty, lit))
-            else:
-                lit = re.sub(r'[\"\\]', escchar, v) # escape newlines? hmm...
-                w('"%s"' % lit)
-        else:
-            raise RuntimeError, "term implemented: " + str(t)
-        
-    def withPrefix(self, pair):
-        i = pair[1]
-        sep = rfind(i, "#")
-        if sep >= 0:
-            ns, ln = i[:sep+1], i[sep+1:]
-            pfx = self.prefixes.get((pair[0], ns), None)
-            #print "split <%s> before <%s>. pfx: %s" % (i, ln, pfx)
-            if pfx is not None:
-                return "%s:%s" % (pfx, ln) # ala common lisp package syntax
-        return uri2word(i)
+class Variable(object):
+    _i = 1
+    
+    def __init__(self, name):
+        #@@TODO: make sure this is a good KIF name,
+        Variable._i += 1
+        self._name = '?%s%s' % (name, Variable._i)
+
+    def name(self):
+        return self._name
+
 
 def uri2word(i):
     # special ::= " | # | ' | ( | ) | , | \ | ^ | ` | :
-    return re.sub(r'[\"\#\'\(\)\,\\\^\`\:]', escchar, i)
+    return re.sub(r'[\"\#\'\(\)\,\\\^\`\:]', _escchar, i)
 
-def escchar(matchobj):
+def _escchar(matchobj):
     return "\\%s" % matchobj.group(0)
     
-def _moreVarNames(outermap, uris, level):
-    """Build a mapping from URIs to (n, l) pairs
+def _moreVarNames(outermap, vars, level):
+    """Build a mapping from variables to (n, l) pairs
     where n is a KIF variable name and l is the depth of
     the scope where the variable is declared/bound.
 
@@ -189,20 +167,25 @@ def _moreVarNames(outermap, uris, level):
 
     m = {}; m.update(outermap)
 
-    for i in uris:
-        for sepchar in '#/?:': # one of these has to occur in any full URI...
-            sep = rfind(i, sepchar)
-            if sep >= 0:
-                vname = '?%s' % i[sep+1:]
-                while vname in m.values():
-                    vname = vname + "x"
-                m[i] = (vname, level)
-                break
+    for v in vars:
+        vname = v.name()
+        m[v] = (vname, level)
     return m
 
 
+def DEBUG(*args):
+    import sys
+    for a in args:
+        sys.stderr.write("%s " % (a,))
+    sys.stderr.write("\n")
+    
+
+
 # $Log$
-# Revision 1.9  2002-08-07 16:01:23  connolly
+# Revision 1.10  2002-08-13 07:55:15  connolly
+# playing with a new parser/sink interface
+#
+# Revision 1.9  2002/08/07 16:01:23  connolly
 # working on datatypes
 #
 # Revision 1.8  2002/06/21 16:04:02  connolly

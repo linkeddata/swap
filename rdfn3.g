@@ -16,9 +16,14 @@
 # http://www.w3.org/DesignIssues/Notation3
 
 import string
-import urlparse # for urljoin. hmm... @@patch bugs?
-import RDFSink # for FORMULA, SYMBOL
-import notation3
+
+import uripath
+from ConstTerm import Symbol, StringLiteral, Namespace
+
+RDF = Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
+LIST = Namespace("http://www.daml.org/2001/03/daml+oil#")
+DPO = Namespace("http://www.daml.org/2001/03/daml+oil#")
+LOG = Namespace("http://www.w3.org/2000/10/swap/log#")
 
 %%
 parser _Parser:
@@ -31,7 +36,6 @@ parser _Parser:
     token EXVAR:    r'_:[a-zA-Z0-9_-]+'
     token UVAR:     r'\?[a-zA-Z0-9_-]+'
     token INTLIT:   r'-?\d+'
-    token TYPEDLIT: r'(string|boolean|decimal|float|double|duration|dateTime|time|date|gYearMonth|gYear|gMonthDay|gDay|gMonth|hexBinary|base64Binary|anyURI|normalizedString|token|language|Name|NCName|integer|nonPositiveInteger|negativeInteger|long|int|short|byte|nonNegativeInteger|unsignedLong|unsignedInt|unsignedShort|unsignedByte|positiveInteger)"([^\"\\\n]|\\[\\\"nrt])*"'
     token STRLIT1:  r'"([^\"\\\n]|\\[\\\"nrt])*"'
     token STRLIT2:  r"'([^\'\\\n]|\\[\\\'nrt])*'"
     token STRLIT3:  r'"""([^\"\\]|\\[\\\"nrt])*"""' #@@not right
@@ -88,7 +92,6 @@ parser _Parser:
               | EXVAR         {{ return self.lname(EXVAR) }}
               | UVAR          {{ return self.vname(UVAR) }}
               | INTLIT        {{ return self.intLit(INTLIT) }}
-              | TYPEDLIT      {{ return self.typedLit(TYPEDLIT) }}
               | STRLIT3       {{ return self.strlit(STRLIT3, '"""') }}
               | STRLIT1       {{ return self.strlit(STRLIT1, '"') }}
               | STRLIT2       {{ return self.strlit(STRLIT2, "'") }}
@@ -120,37 +123,12 @@ def scanner(text):
 class BadSyntax(SyntaxError):
     pass
 
-# base types of XML Schema datatypes
-# this maps types either to the name
-# of a base type or to a python
-# value whose type can hold the values
-# of the XML Schema type.
-# e.g. int => 1
-#      long => 1L
-# hmm.. still thinking about datetime...
-base = {'normalizedString': 'string',
-        'token': 'string',
-        'language': 'string',
-        'Name': 'string',
-        'NCName': 'string',
-        'integer': 1L,
-        'nonPositiveInteger': 1L,
-        'negativeInteger' : 1L,
-        'long': 1L,
-        'int': 1,
-        'short': 1,
-        'byte': 1,
-        'nonNegativeInteger': 1L,
-	'unsignedLong': 1L,
-	'unsignedInt': 1L,
-	'unsignedShort': 1,
-	'unsignedByte': 1,
-	'positiveInteger': 1L}
 
 class Parser(_Parser):
     def __init__(self, scanner, sink, baseURI):
         _Parser.__init__(self, scanner)
         self._sink = sink
+	self._docScope = sink.newFormula()
         self._baseURI = baseURI
         self._prefixes = {}
         self._serial = 1
@@ -158,10 +136,10 @@ class Parser(_Parser):
         self._vnames = {}
 
     def docScope(self):
-        return mkFormula(self._baseURI)
+	return self._docScope
 
     def uriref(self, str):
-        return RDFSink.SYMBOL, urlparse.urljoin(self._baseURI, str[1:-1])
+        return Symbol(uripath.join(self._baseURI, str[1:-1]))
 
     def qname(self, str):
         i = string.find(str, ":")
@@ -172,14 +150,14 @@ class Parser(_Parser):
         except:
             raise BadSyntax, "prefix %s not bound" % pfx
         else:
-            return RDFSink.SYMBOL, ns + ln
+            return Symbol(ns + ln)
 
     def lname(self, str):
         n = str[2:]
         try:
             return self._lnames[n]
         except KeyError:
-            x = self.something(self.docScope(), n)
+            x = self.docScope().mkVar(n)
             self._lnames[n] = x
             return x
 
@@ -188,96 +166,73 @@ class Parser(_Parser):
         try:
             return self._vnames[n]
         except KeyError:
-            x = self.something(self.docScope(), n,
-                               quant=RDFSink.forAllSym)
+            x = self.docScope().mkVar(n, 1)
             self._vnames[n] = x
             return x
 
     def termA(self):
-        return notation3.RDF_type
+        return RDF['type']
     
     def termEq(self):
-        return notation3.DAML_equivalentTo
+        return DAML['equivalentTo']
 
     def strlit(self, str, delim):
-        return RDFSink.LITERAL, str[1:-1] #@@BROKEN
+        return StringLiteral(str[1:-1]) #@@BROKEN un-escaping
 
     def intLit(self, str):
         try:
             v = int(str)
         except ValueError:
             v = long(str)
-        return RDFSink.LITERAL, v #@@ other than LITERAL?
-
-    def typedLit(self, str):
-	qindex = index(str, '"')
-	ty = str[:qindex]
-	str = str[qindex+1:-1]
-        # convert to primitive type
-        ty = base.get(ty, ty)
-        if ty == 'string':
-            return RDFSink.LITERAL, str
-        elif type(ty) is type(''):
-            return RDFSink.LITERAL, (ty, str) #@@ other than LITERAL?
-        else:
-            return self.intLit(str)
+        return IntegerLiteral(v) #@@
 
     def bindListPrefix(self):
-        self._sink.bind("l", (RDFSink.SYMBOL, notation3.N3_nil[1][:-3]))
+        self._sink.bind("l", LIST.name())
+        self._sink.bind("r", RDF.name())
     
     def bind(self, pfx, ref):
         ref = ref[1:-1] # take of <>'s
-        if ref[-1] == '#': # @@work around bug in urljoin...
-            sep = '#'
-            ref = ref[:-1]
-        else: sep = ''
-        addr = urlparse.urljoin(self._baseURI, ref) + sep
+        addr = uripath.join(self._baseURI, ref)
         #DEBUG("bind", pfx, ref, addr)
-        self._sink.bind(pfx, (RDFSink.SYMBOL, addr))
+        self._sink.bind(pfx, addr)
         #@@ check for pfx already bound?
         self._prefixes[pfx] = addr
 
     def gotStatement(self, scp, subj, verb, obj):
-	#DEBUG("gotStatement:", scp, subj, verb, obj)
+	DEBUG("gotStatement:", scp, subj, verb, obj)
         
         dir, pred = verb
         if dir<0: subj, obj = obj, subj
-        self._sink.makeStatement((scp, pred, subj, obj))
+	if scp is subj and pred is LOG['forAll']:
+	    DEBUG("@@bogus forAll", obj)
+	elif scp is subj and pred is LOG['forSome']:
+	    DEBUG("@@bogus forSome", obj)
+	else:
+	    scp.add(pred, subj, obj)
 
     def newScope(self):
-        return self.something(self.docScope(),
-                              "clause", RDFSink.FORMULA)
+        return self._sink.newFormula()
 
     def something(self, scp, hint="thing",
-                  ty=RDFSink.SYMBOL,
-                  quant = RDFSink.forSomeSym):
-        it = (ty, "%s#%s_%s" % (self._baseURI, hint, self._serial))
-
-        p = (RDFSink.SYMBOL, quant)
-        self._sink.makeStatement((scp, p, scp, it))
-
-        self._serial = self._serial + 1
-        return it
+                  univ = 0):
+	return scp.mkVar(hint, univ)
 
 
     def mkList(self, scp, items):
 	tail = None
-	head = notation3.N3_nil
-	say = self._sink.makeStatement
+	head = LIST['nil']
+	say = scp.add
 	for term in items:
-	    cons = self.something(scp, "cons")
-	    say((scp, notation3.N3_first, cons, term))
+	    cons = scp.mkVar("cons")
+	    say(LIST['first'], cons, term)
 	    if tail:
-	        say((scp, notation3.N3_rest, tail, cons))
+	        say(LIST['rest'], tail, cons)
 	    tail = cons
 	    if not head: head = cons
 	if tail:
-	    say((scp, notation3.N3_rest, tail, notation3.N3_nil))
+	    say(LIST['rest'], tail, LIST['nil'])
 	return head
 
-def mkFormula(absURI):
-    """move this somewhere else?"""
-    return RDFSink.FORMULA, absURI + "#_formula" #@@KLUDGE from notation3.py, cwm.py
 
 def DEBUG(*args):
     import sys
@@ -286,7 +241,10 @@ def DEBUG(*args):
     sys.stderr.write("\n")
     
 # $Log$
-# Revision 1.16  2002-08-07 16:01:23  connolly
+# Revision 1.17  2002-08-13 07:55:15  connolly
+# playing with a new parser/sink interface
+#
+# Revision 1.16  2002/08/07 16:01:23  connolly
 # working on datatypes
 #
 # Revision 1.15  2002/06/21 16:04:02  connolly
