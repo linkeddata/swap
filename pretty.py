@@ -177,6 +177,7 @@ class Serializer:
 		self._listsWithinLists(i, lists)
 
     def dumpLists(self):
+        listList = {}
 	context = self.context
 	sink = self.sink
 	lists = []
@@ -189,14 +190,17 @@ class Serializer:
 	for l in lists:
 	    list = l
 	    while not isinstance(list, EmptyList):
-		self._outputStatement(sink, (context, self.store.forSome, context, list))
+                if list not in listList:
+                    self._outputStatement(sink, (context, self.store.forSome, context, list))
+                    listList[list] = 1
 		list = list.rest
-
+        listList = {}
 	for l in lists:
 	    list = l
-	    while not isinstance(list, EmptyList):
+	    while (not isinstance(list, EmptyList)) and list not in listList:
 		self._outputStatement(sink, (context, self.store.first, list, list.first))
 		self._outputStatement(sink, (context, self.store.rest,  list, list.rest))
+		listList[list] = 1
 		list = list.rest
 
 
