@@ -26,9 +26,22 @@ class ArgHandler:
         More explanation here."""
 
         if whichArg is None:
+            lines = [
+                ("Option Name", "Param", "Description"),
+                ("===========", "=====", "===========")
+                ]
+            width = [0, 0, 0, 0, 0]
             for member in inspect.getmembers(self):
                 if member[0].startswith("handle__"):
-                    self.printHelpEntry(member)
+                    line = self.genHelpEntry(member)
+                    # http://aspn.activestate.com/ASPN/Cookbook/Python/Recipe/148061
+                    for i in range(0, len(line)):
+                        width[i] = max(width[i], len(line[i]))
+                    lines.append(line)
+            for line in lines:
+                print "%-*s  %-*s  %s" % (width[0], line[0],
+                                      width[1], line[1],
+                                      line[2])
         else:
            method = self.findMethod(whichArg)
            if method is None: return
@@ -97,12 +110,20 @@ class ArgHandler:
     def buildArgs(self, member):
         pass
 
-    def printHelpEntry(self, member, long=0):
+    def genHelpEntry(self, member, long=0):
+
         names = member[0].split("__")[1:]
         #print names, member
         f = member[1].im_func
-        print names, "  :: ",
+        optdesc = ""
+        for name in names:
+            if len(name) == 1:
+                optdesc += "-" + name + " "
+            else:
+                optdesc += "--" + name + " "
+        optdesc = optdesc[:-1]
 
+        parmdesc = ""
         argcount = f.func_code.co_argcount
         if f.func_code.co_flags & 4 :
             raise RuntimeError, "handlers may not have variable arg lists"
@@ -116,23 +137,25 @@ class ArgHandler:
             #print "index", i
             #print "indexIntoDefaults", indexIntoDefaults
             if indexIntoDefaults >= 0:
-                print "[", argnames[i],
+                parmdesc += "[" +  argnames[i]
                 d = defaults[indexIntoDefaults]
                 if d is not None:
-                    print "=", d,
-                print "]",
+                    parmdesc += "=" + str(d)
+                parmdesc +=  "] "
             else:
-                print argnames[i],
+                parmdesc +=  argnames[i] + " "
             i+=1
 
         if f.__doc__ is None:
-            print "<undocumented>"
+            docs = "<undocumented>"
         else:
             if long:
-                print f.__doc__
+                docs = f.__doc__
             else:
                 doc = f.__doc__.split("\n\n", 2)
-                print doc[0]
+                docs = doc[0]
+
+        return (optdesc, parmdesc, docs)
 
     def peekThis(self):
         return self.argv[self.current_argument_index]
@@ -155,6 +178,9 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
 
 # $Log$
-# Revision 1.1  2003-04-02 17:44:47  sandro
+# Revision 1.2  2003-04-02 18:06:13  sandro
+# short documentation works
+#
+# Revision 1.1  2003/04/02 17:44:47  sandro
 # a spectacular peice of dogwash
 #
