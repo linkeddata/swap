@@ -18,11 +18,14 @@ __all__ = [
     "namespace",
 #    "uri",
 #    "defaultns",
-    "ns",
+#    "ns",
     ] 
 
 # $Log$
-# Revision 1.10  2003-08-26 11:15:55  sandro
+# Revision 1.11  2003-09-04 03:14:01  sandro
+# remove reference to ns.py
+#
+# Revision 1.10  2003/08/26 11:15:55  sandro
 # rolled defaultns.py into namespace.py
 #
 # Revision 1.9  2003/02/14 17:21:59  sandro
