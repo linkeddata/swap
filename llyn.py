@@ -1282,6 +1282,8 @@ class RDFStore(RDFSink) :
 	    if `x`.lower() == "nan":  # We can get these form eg 2.math:asin
 		return None
             return self.newLiteral(`x`, self.float)
+        elif isinstance(x, Set) or isinstance(x, ImmutableSet):
+            return self.newSet([self._fromPython(y) for y in x])
         elif isinstance(x, Term):
             return x
         elif hasattr(x,'__getitem__'): #type(x) == type([]):

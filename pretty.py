@@ -515,6 +515,31 @@ class Serializer:
         self.dumpFormulaContents(context, self.sink, sorting=1, equals=1)
         self.sink.endDoc()
 
+    def tmDumpNested(self):
+        """
+
+        """
+        context = self.context
+        assert context.canonical is not None
+        self._scan(context)
+        self.tm.start()
+        self._dumpFormula(context)
+        self.tm.end()
+
+    def _dumpNode(self, node):
+        tm = self.tm
+        if isinstance(node, List):
+            tm.startList()
+            [self._dumpNode(x) for x in node]
+            tm.endList()
+        elif isinstance(node, N3Set):
+            pass
+        elif isinstance(node, formula):
+            tm.startFormula()
+            self._dumpFormula(node)
+            tm.endFormula()
+        
+
     def dumpFormulaContents(self, context, sink, sorting, equals=0):
         """ Iterates over statements in formula, bunching them up into a set
         for each subject.
