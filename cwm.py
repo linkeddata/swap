@@ -22,6 +22,7 @@ Agenda:
  - Use conventional python command line parsing
  
  - get rid of other globals (DWC 30Aug2001)
+ 
 
 """
 
@@ -283,6 +284,7 @@ def doCommand():
 --flat      Reify only nested subexpressions (not top level) so that no {} remain.
 --help      print this message
 --chatty=50 Verbose output of questionable use, range 0-99
+--with      Pass any further arguments to the N3 store as os:argv values
  
 
             * mutually exclusive
@@ -317,6 +319,7 @@ Examples:
         option_rdf_flags = ""  # Random flags affecting parsing/output
         option_n3_flags = ""  # Random flags affecting parsing/output
         option_quiet = 0
+        option_with = None  # Command line arguments made available to N3 processing
 
         _step = 0           # Step number used for metadata
 
@@ -331,7 +334,8 @@ Examples:
         
         _outURI = _baseURI
         option_baseURI = _baseURI     # To start with - then tracks running base
-        for arg in sys.argv[1:]:  # Command line options after script name
+        for argnum in range(1,len(sys.argv)):  # Command line options after script name
+            arg = sys.argv[argnum]
             if arg.startswith("--"): arg = arg[1:]   # Chop posix-style double dash to one
             _equals = string.find(arg, "=")
             _lhs = ""
@@ -376,6 +380,9 @@ Examples:
                 print doCommand.__doc__
                 print notation3.ToN3.flagDocumentation
                 return
+            elif arg == "-with":
+                option_with = sys.argv[argnum+1:] # The rest of the args are passed to n3
+                break
             elif arg[0] == "-": pass  # Other option
             else :
                 option_inputs.append(urlparse.urljoin(option_baseURI,arg))
@@ -416,7 +423,7 @@ Examples:
             _store = _outSink
         else:
             _metaURI = urlparse.urljoin(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
-            _store = RDFStore( _outURI+"#_gs", metaURI=_metaURI)
+            _store = RDFStore( _outURI+"#_gs", metaURI=_metaURI, argv=option_with)
             workingContext = _store.intern((FORMULA, _outURI+ "#_formula"))   #@@@ Hack - use metadata
 #  Metadata context - storing information about what we are doing
 
@@ -561,6 +568,7 @@ Examples:
                 option_outputStyle = arg
                 
             elif arg[:8] == "-outURI=": pass
+            elif arg == "-with": break
             else:
                 progress( "cwm: Unknown option: " + arg)
                 sys.exit(-1)
