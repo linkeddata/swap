@@ -938,6 +938,27 @@ class BI_conclusion(HeavyBuiltIn, Function):
             self.store.storeQuad((store._experience, store.cufi, subj, F),
 		    why=BecauseOfExperience("conclusion"))  # Cache for later
             return F
+
+class BI_filter(LightBuiltIn, Function):
+    """Filtering of formulae
+
+    """
+    def evalObj(self, subj, queue, bindings, proof, query):
+        store = subj.store
+        if not isinstance(subj, List):
+            raise ValueError('I need a list of two formulae')
+        list = [x for x in subj]
+        if len(list) != 2:
+            raise ValueError('I need a list of TWO formulae')
+        base, filter = list
+        F = self.store.newFormula()
+        if diag.tracking:
+            pass
+        else: reason = None
+        applyRules(base, filter, F)
+        F = F.close()
+        return F
+        
     
 class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
     """ The conjunction of a set of formulae is the set of statements which is
@@ -1049,6 +1070,7 @@ class RDFStore(RDFSink) :
         self.List =     log.internFrag("List", Fragment) # syntactic type possible value - a class
         self.Formula =  log.internFrag("Formula", Fragment) # syntactic type possible value - a class
         self.Other =    log.internFrag("Other", Fragment) # syntactic type possible value - a class
+        self.filter  =  log.internFrag("filter", BI_filter) # equivilent of --filter
 
         log.internFrag("conjunction", BI_conjunction)
         
@@ -1112,6 +1134,7 @@ class RDFStore(RDFSink) :
         import cwm_times    # time and date builtins
         import cwm_maths   # Mathematics, perl/string style
 	import cwm_list	   # List handling operations
+	import cwm_set     # Set operations
         cwm_string.register(self)
         cwm_math.register(self)
         cwm_trigo.register(self)
@@ -1120,6 +1143,7 @@ class RDFStore(RDFSink) :
         cwm_time.register(self)
         cwm_times.register(self)
 	cwm_list.register(self)
+	cwm_set.register(self)
         if crypto:
 	    import cwm_crypto  # Cryptography
 	    cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available

@@ -10,11 +10,6 @@
              :statements  [
                  owl:oneOf  (
                  [
-                         :object <#_g0>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
-                         :subject <#_g1> ]
-                 [
                          :object  [
                              :uri "http://www.daml.org/2001/03/daml+oil#TransitiveProperty" ];
                          :predicate  [
@@ -116,12 +111,17 @@
                                          :subject  [
                                              :uri "http://example.com/swap/test/reify/reify0.n3#p" ] ] ) ];
                              :universals  [
-                                 owl:oneOf () ] ] ] ) ];
+                                 owl:oneOf () ] ] ]
+                 [
+                         :object <#_g0>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
+                         :subject <#_g1> ] ) ];
              :universals  [
                  owl:oneOf  (
-                "http://example.com/swap/test/reify/reify0.n3#p" 
                 "http://example.com/swap/test/reify/reify0.n3#a" 
-                "http://example.com/swap/test/reify/reify0.n3#b"  ) ] ].
+                "http://example.com/swap/test/reify/reify0.n3#b" 
+                "http://example.com/swap/test/reify/reify0.n3#p"  ) ] ].
     
     <#_g0>     :existentials  [
              owl:oneOf () ];

@@ -93,16 +93,13 @@ class BI_append(LightBuiltIn, Function):
             r.extend([a for a in x])
         return self.store.newList(r)
 
-class BI_union(LightBuiltIn, Function):
-    """Takes a set or list of sets, and finds the union
+class BI_members(LightBuiltIn, Function):
+    """Makes a set from a list
 
     """
     def evaluateObject(self, subj):
-        ret = Set()
-        for m in subj:
-            ret.update(m)
-        return ret
-
+        return Set(subj)
+    
 #  Register the string built-ins with the store
 
 def register(store):
@@ -117,5 +114,6 @@ def register(store):
     ns.internFrag("member", BI_member)
     ns.internFrag("last", BI_last)
     ns.internFrag("append", BI_append)
+    ns.internFrag("members", BI_members)
 # ends
 

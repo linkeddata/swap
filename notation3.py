@@ -1372,7 +1372,7 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
         self._pred = None
 
     def endBagSubject(self, subj):    # Remove context
-        self.stack.append(0)
+        #self.stack.append(0)
         self.stack.pop()
         self._endStatement()     # @@@@@@@@ remove in syntax change to implicit
         self._newline()
