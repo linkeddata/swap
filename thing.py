@@ -124,6 +124,14 @@ def load(uri=None, contentType=None, formulaURI=None, remember=1):
     """
     return _checkStore().load(uri, contentType, formulaURI, remember)
 
+def loadMany(uris):
+    """Load a number of resources into the same formula
+    
+    Returns:  top-level formula of the parsed information.
+    Raises:   IOError, SyntaxError, DocumentError
+    """
+    return _checkStore().loadMany(uris)
+
 import sys
 if sys.hexversion < 0x02020000:
     raise RuntimeError("Sorry, this software requires python2.2 or newer.")

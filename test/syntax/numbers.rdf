@@ -1,4 +1,6 @@
 
+<!-- Processed by Id: cwm.py,v 1.127 2003/03/28 14:11:20 timbl Exp -->
+<!--     using base file:/devel/WWW/2000/10/swap/test/syntax/numbers.n3-->
 
 
 <rdf:RDF xmlns="file:/devel/WWW/2000/10/swap/test/syntax/numbers.n3#"
@@ -11,7 +13,7 @@
     </rdf:Description>
 
     <rdf:Description>
-        <rdf:is rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2.0</rdf:is>
+        <rdf:is rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2.0</rdf:is>
         <is>The rational number 2.0</is>
     </rdf:Description>
 

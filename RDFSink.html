@@ -10,7 +10,7 @@ TT { font-family: lucidatypewriter, lucida console, courier }
 <td valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial">&nbsp;<br><big><big><strong>RDFSink</strong></big></big> (version $Id$)</font></td
 ><td align=right valign=bottom
-><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/home/sandro/cvs/cvs.w3c.org/WWW/2000/10/swap/RDFSink.py">/home/sandro/cvs/cvs.w3c.org/WWW/2000/10/swap/RDFSink.py</a></font></td></tr></table>
+><font color="#ffffff" face="helvetica, arial"><a href=".">index</a><br><a href="file:/devel/WWW/2000/10/swap/RDFSink.py">/devel/WWW/2000/10/swap/RDFSink.py</a></font></td></tr></table>
     <p><tt><a href="#RDFSink">RDFSink</a>&nbsp;--&nbsp;RDF&nbsp;parser/serializer/store&nbsp;interface<br>
 &nbsp;<br>
 HISTORY<br>
@@ -61,7 +61,7 @@ REFERENCES<br>
 <td colspan=2><tt>interface&nbsp;to&nbsp;connect&nbsp;modules&nbsp;in&nbsp;RDF&nbsp;processing.<br>
 &nbsp;<br>
 This&nbsp;is&nbsp;a&nbsp;superclass&nbsp;for&nbsp;other&nbsp;RDF&nbsp;processors&nbsp;which&nbsp;accept&nbsp;RDF&nbsp;events<br>
-or&nbsp;indeed&nbsp;Swell&nbsp;events.&nbsp;&nbsp;Adapted&nbsp;from&nbsp;printParser.<br>
+or&nbsp;indeed&nbsp;Swell&nbsp;events.<br>
 &nbsp;<br>
 Keeps&nbsp;track&nbsp;of&nbsp;prefixes.&nbsp;There&nbsp;are&nbsp;some&nbsp;things&nbsp;which&nbsp;are&nbsp;in&nbsp;the<br>
 superclass&nbsp;for&nbsp;commonality&nbsp;(i.e.&nbsp;implementation&nbsp;inheritance)<br>
@@ -118,7 +118,7 @@ why&nbsp;is&nbsp;reason&nbsp;for&nbsp;the&nbsp;statement.</tt></dd></dl>
 
 <dl><dt><a name="RDFSink-newFormula"><strong>newFormula</strong></a>(self, uri<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="RDFSink-newLiteral"><strong>newLiteral</strong></a>(self, str)</dt></dl>
+<dl><dt><a name="RDFSink-newLiteral"><strong>newLiteral</strong></a>(self, str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="RDFSink-newSymbol"><strong>newSymbol</strong></a>(self, uri)</dt></dl>
 
@@ -143,9 +143,15 @@ or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;u
 
 <hr>
 Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'interface to connect modules in RDF processing.... as craeting new arbitray\n    identifiers\n    '</dl>
+<dl><dt><strong>__doc__</strong> = 'interface to connect modules in RDF processing.<font color="#c040c0">\n</font>...uch as craeting new arbitray<font color="#c040c0">\n</font>    identifiers<font color="#c040c0">\n</font>    '<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
 
-<dl><dt><strong>__module__</strong> = 'RDFSink'</dl>
+<dl><dt><strong>__module__</strong> = 'RDFSink'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -181,7 +187,10 @@ Data and non-method functions defined here:<br>
 Data and non-method functions defined here:<br>
 <dl><dt><strong>__doc__</strong> = None</dl>
 
-<dl><dt><strong>__module__</strong> = 'RDFSink'</dl>
+<dl><dt><strong>__module__</strong> = 'RDFSink'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
 
 <hr>
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink</a>:<br>
@@ -226,7 +235,7 @@ why&nbsp;is&nbsp;reason&nbsp;for&nbsp;the&nbsp;statement.</tt></dd></dl>
 
 <dl><dt><a name="RDFStructuredOutput-newFormula"><strong>newFormula</strong></a>(self, uri<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="RDFStructuredOutput-newLiteral"><strong>newLiteral</strong></a>(self, str)</dt></dl>
+<dl><dt><a name="RDFStructuredOutput-newLiteral"><strong>newLiteral</strong></a>(self, str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="RDFStructuredOutput-newSymbol"><strong>newSymbol</strong></a>(self, uri)</dt></dl>
 
@@ -280,7 +289,7 @@ bash-2.04$&nbsp;python&nbsp;cwm.py&nbsp;test/rules12.n3&nbsp;--bySubject&nbsp;--
 
 <dl><dt><a name="TracingRDFSink-endBagSubject"><strong>endBagSubject</strong></a>(self, subj)</dt></dl>
 
-<dl><dt><a name="TracingRDFSink-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair<font color="#909090">='<<strangely omitted>>'</font>)</dt></dl>
+<dl><dt><a name="TracingRDFSink-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair<font color="#909090">='&lt;&lt;strangely omitted&gt;&gt;'</font>)</dt></dl>
 
 <dl><dt><a name="TracingRDFSink-makeComment"><strong>makeComment</strong></a>(self, comment)</dt></dl>
 
@@ -288,7 +297,7 @@ bash-2.04$&nbsp;python&nbsp;cwm.py&nbsp;test/rules12.n3&nbsp;--bySubject&nbsp;--
 
 <dl><dt><a name="TracingRDFSink-newFormula"><strong>newFormula</strong></a>(self, uri<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="TracingRDFSink-newLiteral"><strong>newLiteral</strong></a>(self, str)</dt></dl>
+<dl><dt><a name="TracingRDFSink-newLiteral"><strong>newLiteral</strong></a>(self, str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="TracingRDFSink-newSymbol"><strong>newSymbol</strong></a>(self, uri)</dt></dl>
 
@@ -302,9 +311,15 @@ bash-2.04$&nbsp;python&nbsp;cwm.py&nbsp;test/rules12.n3&nbsp;--bySubject&nbsp;--
 
 <hr>
 Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'An implementation of the RDFSink interface whic...n\n    ... and see the different outputs\n\n    '</dl>
+<dl><dt><strong>__doc__</strong> = 'An implementation of the RDFSink interface which...race<font color="#c040c0">\n\n</font>    ... and see the different outputs<font color="#c040c0">\n\n</font>    '<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
 
-<dl><dt><strong>__module__</strong> = 'RDFSink'</dl>
+<dl><dt><strong>__module__</strong> = 'RDFSink'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -323,9 +338,15 @@ Data and non-method functions defined here:<br>
 </dl>
 <hr>
 Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'A parameter is passed to a routine that requires a URI reference'</dl>
+<dl><dt><strong>__doc__</strong> = 'A parameter is passed to a routine that requires a URI reference'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
 
-<dl><dt><strong>__module__</strong> = 'RDFSink'</dl>
+<dl><dt><strong>__module__</strong> = 'RDFSink'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
 
 <hr>
 Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception</a>:<br>
@@ -381,7 +402,7 @@ Fractions&nbsp;of&nbsp;a&nbsp;second&nbsp;may&nbsp;be&nbsp;present&nbsp;if&nbsp;
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
 <strong>_Old_Logic_NS</strong> = 'http://www.w3.org/2000/10/swap/log.n3#'<br>
-<strong>__file__</strong> = './RDFSink.py'<br>
+<strong>__file__</strong> = './RDFSink.pyc'<br>
 <strong>__name__</strong> = 'RDFSink'<br>
 <strong>__version__</strong> = '$Id$'<br>
 <strong>forAllSym</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>

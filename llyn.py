@@ -127,6 +127,7 @@ research version. Written in C. Of te order of 30k lines
 from __future__ import generators
 # see http://www.amk.ca/python/2.2/index.html#SECTION000500000000000000000
 
+import types
 import string
 import re
 import StringIO
@@ -171,6 +172,9 @@ from why import Because, BecauseBuiltIn, BecauseOfRule, \
 
 STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
 META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"
+INTEGER_DATATYPE = "http://www.w3.org/2001/XMLSchema#integer"
+DOUBLE_DATATYPE = "http://www.w3.org/2001/XMLSchema#double"
+
 reason=Namespace("http://www.w3.org/2000/10/swap/reason#")
 
 META_mergedWith = META_NS_URI + "mergedWith"
@@ -1164,6 +1168,8 @@ class RDFStore(RDFSink) :
         # Constants, as interned:
         
         self.forSome = self.internURI(forSomeSym)
+	self.integer = self.internURI(INTEGER_DATATYPE)
+	self.double  = self.internURI(DOUBLE_DATATYPE)
         self.forAll  = self.internURI(forAllSym)
         self.implies = self.internURI(Logic_NS + "implies")
         self.means = self.internURI(Logic_NS + "means")
@@ -1440,9 +1446,10 @@ class RDFStore(RDFSink) :
         if typ == LITERAL:
 	    return self.newLiteral(urirefString, dt, lang)
         else:
-            if not (type(urirefString) is type("")):
-                raise TypeError, type(urirefString)
-            assert type(urirefString) is type("") # caller %xx-ifies unicode
+	    assert isinstance(urirefString, types.StringTypes)
+	    if isinstance(urirefString, types.UnicodeType):
+		urirefString = notation3.hexify(urirefString.encode('utf-8'))
+#            assert type(urirefString) is type("") # caller %xx-ifies unicode
             assert ':' in urirefString, "must be absolute: %s" % urirefString
 
             hash = string.rfind(urirefString, "#")
@@ -1830,7 +1837,7 @@ class RDFStore(RDFSink) :
             self._outputStatement(sink, s.quad)
 
         rs = self.resources.values()
-        if sorting: rs.sort()
+        if sorting: rs.sort(compareURI)
         for r in rs :  # First the bare resource
             statements = context.statementsMatching(subj=r)
             if sorting: statements.sort(StoredStatement.comparePredObj)
@@ -1927,7 +1934,11 @@ class RDFStore(RDFSink) :
         """ Returns an N3 list as a Python sequence"""
         if verbosity() > 85: progress("#### Converting to python "+ x2s(x))
         if isinstance(x, Literal):
-            return x.string
+	    if x.datatype == None: return x.string
+	    if x.datatype is self.integer: return int(x.string)
+	    if x.datatype is self.double: return double(x.string)
+	    raise ValueError("Attempt to run built-in on unknown datatype %s of value %s." 
+			    % x.datatype, x.string)
 	if x is self.nil: return []
 #       if @@@ this is not in the queue, must be in the store 
 
@@ -1943,10 +1954,10 @@ class RDFStore(RDFSink) :
 
     def _fromPython(self, x, queue):
 	"""Takem a python string, seq etc and represent as a llyn object"""
-        if isString(x):
+        if isinstance(x, types.StringTypes):
             return self.intern((LITERAL, x))
-        elif type(x) == type(2):
-            return self.intern((LITERAL, `x`))    # @@ Add literal numeric type to N3?
+        elif type(x) is types.IntType:
+            return self.newLiteral(`x`, self.integer)
         elif type(x) == type([]):
 #	    progress("x is >>>%s<<<" % x)
 	    raise RuntimeError("Internals generating lists not supported yet")
@@ -2673,6 +2684,7 @@ class Query:
             if state == S_LIGHT_UNS_GO or state == S_LIGHT_GO:
 		item.state = S_LIGHT_EARLY   # Assume can't run
                 nbs = item.tryBuiltin(queue, bindings, heavy=0, evidence=evidence)
+		# progress("llyn.py 2706:   nbs = %s" % nbs)
             elif state == S_LIGHT_EARLY or state == S_NOT_LIGHT: #  Not searched yet
                 nbs = item.trySearch()
             elif state == S_HEAVY_READY:  # not light, may be heavy; or heavy ready to run
@@ -2734,6 +2746,8 @@ class Query:
             if nbs == 0: return total
             elif nbs != []:
                 total = 0
+#		if nbs != 0 and nbs != []: pass
+		# progress("llyn.py 2738:   nbs = %s" % nbs)
                 for nb, reason in nbs:
                     q2 = []
                     for i in queue:

@@ -75,19 +75,19 @@ class BI_EndsWith(LightBuiltIn):
 
 class BI_Contains(LightBuiltIn):
     def eval(self,  subj, obj, queue, bindings, proof):
-        return string.find(subj.string, obj.string) >= 0
+        return subj.string.find(obj.string) >= 0
 
 class BI_ContainsIgnoringCase(LightBuiltIn):
     def eval(self,  subj, obj, queue, bindings, proof):
-        return string.find(string.lower(subj.string), string.lower(obj.string)) >= 0
+        return subj.string.lower().find(obj.string.lower()) >= 0
 
 class BI_DoesNotContain(LightBuiltIn): # Converse of the above
     def eval(self,  subj, obj, queue, bindings, proof):
-        return string.find(subj.string, obj.string) < 0
+        return subj.string.find(obj.string) < 0
 
 class BI_equalIgnoringCase(LightBuiltIn):
     def eval(self,  subj, obj, queue, bindings, proof):
-        return (string.lower(subj.string) == string.lower(obj.string))
+        return (subj.string.lower() == obj.string.lower())
 
 class BI_notEqualIgnoringCase(LightBuiltIn):
     def eval(self,  subj, obj, queue, bindings, proof):

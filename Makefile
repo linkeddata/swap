@@ -6,7 +6,7 @@ YAPPS=yapps2.py
 
 TESTIN=test/sameDan.n3
 
-HTMLS= check.html RDFSink.html cwm.html cwm_crypto.html cwm_math.html cwm_os.html cwm_string.html cwm_time.html diag.html llyn.html notation3.html sax2rdf.html rdflib2rdf.html tab2n3.html thing.html toXML.html uripath.html xml2infoset.html why.html
+HTMLS= check.html RDFSink.html cwm.html cwm_crypto.html cwm_math.html cwm_maths.html cwm_os.html cwm_string.html cwm_time.html cwm_times.html diag.html llyn.html notation3.html sax2rdf.html rdflib2rdf.html tab2n3.html thing.html toXML.html uripath.html xml2infoset.html why.html
 
 #xml2rdf.html
 #de-cr.html
@@ -48,13 +48,15 @@ release : tested
 	cvs commit -m "Passes regression test. (make release)"
 	touch release
 
-package: math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf LICENSE.rdf cwm.tar.Z $(HTMLS)
+package: math.rdf maths.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf times.rdf LICENSE.rdf cwm.tar.Z $(HTMLS)
 
 # Can't make dependencies on *.py :-(
 
 # cwm.py notation3.py llyn.py  RDFSink.py toXML.py
 cwm.tgz:
+	cvs update
 	tar -czf cwm.tgz *.py $(HTMLS) LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply.*.py *.py
+
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py
 	$(PYTHON) rdfn3_yappstest.py <$(TESTIN) >,xxx.kif

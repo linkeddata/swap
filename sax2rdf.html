@@ -36,6 +36,9 @@ TT { font-family: lucidatypewriter, lucida console, courier }
 &nbsp;<br>
 &nbsp;How&nbsp;to&nbsp;on&nbsp;xmllib:<br>
 &nbsp;<a href="http://www.python.org/doc/howto/xml/node7.html">http://www.python.org/doc/howto/xml/node7.html</a><br>
+&nbsp;<br>
+&nbsp;<br>
+&nbsp;RDF&nbsp;grammar&nbsp;<a href="http://www.w3.org/TR/rdf-syntax-grammar/">http://www.w3.org/TR/rdf-syntax-grammar/</a>&nbsp;esp&nbsp;sections&nbsp;6&nbsp;and&nbsp;7<br>
 &nbsp;&nbsp;&nbsp;&nbsp;<br>
 #####################################&nbsp;SAX&nbsp;pointers<br>
 &nbsp;First&nbsp;hit&nbsp;on&nbsp;Python&nbsp;SAX&nbsp;parser<br>
@@ -147,7 +150,9 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 <td width="100%">Methods defined here:<br>
 <dl><dt><a name="RDFHandler-__init__"><strong>__init__</strong></a>(self, sink, thisURI, formulaURI<font color="#909090">=None</font>, flags<font color="#909090">=''</font>, why<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="RDFHandler-_obj"><strong>_obj</strong></a>(self, tagURI, attrs)</dt></dl>
+<dl><dt><a name="RDFHandler-_nodeElement"><strong>_nodeElement</strong></a>(self, tagURI, attrs)</dt></dl>
+
+<dl><dt><a name="RDFHandler-_propertyAttr"><strong>_propertyAttr</strong></a>(self, ns, name, value)</dt><dd><tt>Parse&nbsp;a&nbsp;propertrAttr&nbsp;production.</tt></dd></dl>
 
 <dl><dt><a name="RDFHandler-characters"><strong>characters</strong></a>(self, data)</dt></dl>
 
@@ -298,7 +303,9 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 
 <hr>
 Methods inherited from <a href="sax2rdf.html#RDFHandler">RDFHandler</a>:<br>
-<dl><dt><a name="RDFXMLParser-_obj"><strong>_obj</strong></a>(self, tagURI, attrs)</dt></dl>
+<dl><dt><a name="RDFXMLParser-_nodeElement"><strong>_nodeElement</strong></a>(self, tagURI, attrs)</dt></dl>
+
+<dl><dt><a name="RDFXMLParser-_propertyAttr"><strong>_propertyAttr</strong></a>(self, ns, name, value)</dt><dd><tt>Parse&nbsp;a&nbsp;propertrAttr&nbsp;production.</tt></dd></dl>
 
 <dl><dt><a name="RDFXMLParser-characters"><strong>characters</strong></a>(self, data)</dt></dl>
 

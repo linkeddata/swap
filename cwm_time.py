@@ -1,5 +1,5 @@
 #
-#
+#  Note - see also times for string-oriented versions
 #
 # TODO:
 # - extraction os fields should extend date time if necessary
@@ -41,7 +41,7 @@ class BI_inSeconds(LightBuiltIn, Function, ReverseFunction):
     """
     def evaluateObject(self, subj_py):
         try:
-            return str(isodate.parse(subj_py))
+            return double(isodate.parse(subj_py))
         except:
             return None
 
@@ -58,21 +58,21 @@ class BI_equalTo(LightBuiltIn):
 class BI_year(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
         try:
-            return subj_py[:4]
+            return int(subj_py[:4])
         except:
             return None
 
 class BI_month(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
         try:
-            return subj_py[5:7]
+            return int(subj_py[5:7])
         except:
             return None
 
 class BI_day(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
         try:
-            return subj_py[8:10]
+            return int(subj_py[8:10])
         except:
             return None
 
@@ -86,21 +86,21 @@ class BI_date(LightBuiltIn, Function):
 class BI_hour(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
         try:
-            return subj_py[11:13]
+            return int(subj_py[11:13])
         except:
             return None
 
 class BI_minute(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
         try:
-            return subj_py[14:16]
+            return int(subj_py[14:16])
         except:
             return None
 
 class BI_second(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
         try:
-            return subj_py[17:19]
+            return int(subj_py[17:19])
         except:
             return None
 

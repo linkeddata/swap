@@ -1,0 +1,133 @@
+#Processed by Id: cwm.py,v 1.127 2003/03/28 14:11:20 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/rdfcore-tests.n3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.135 2003/03/29 03:41:43 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/rdfcore-tests.n3
+     @prefix : <http://www.w3.org/2000/10/swap/test/triage#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix rdft: <http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#test004>     a :BoringTest,
+                :ParseTypeLiteralTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-containers-syntax-vs-schema/Manifest.rdf#test006>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdf-ns-prefix-confusion/Manifest.rdf#test0002>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test003>     a :BoringTest,
+                :ParseTypeLiteralTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test005>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test006>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test009>     a :BoringTest,
+                :ParseTypeLiteralTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test011>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-empty-property-elements/Manifest.rdf#test012>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test001>     a :BoringTest,
+                :ParseTypeLiteralTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test002>     a :BoringTest,
+                :ParseTypeLiteralTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test003>     a :BoringTest,
+                :ParseTypeLiteralTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-literal-is-xml-structure/Manifest.rdf#test004>     a :BoringTest,
+                :ParseTypeLiteralTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test001>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test002>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test003>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test004>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test005>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test006>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test008>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test009>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test010a>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test010b>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test011a>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test011b>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test012a>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-nested-bagIDs/Manifest.rdf#test012b>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/Manifest.rdf#test001>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/Manifest.rdf#test003>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/Manifest.rdf#test004>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-not-id-and-resource-attr/Manifest.rdf#test005>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-names-use/Manifest.rdf#test-024>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/Manifest.rdf#test003>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-syntax-incomplete/Manifest.rdf#test004>     a :BoringTest,
+                :ReificationTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/Manifest.rdf#test001>     a :BoringTest,
+                :ParseTypeLiteralTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xml-literal-namespaces/Manifest.rdf#test002>     a :BoringTest,
+                :ParseTypeLiteralTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#test001>     a :BoringTest,
+                :ParseTypeLiteralTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-xmllang/Manifest.rdf#test002>     a :BoringTest,
+                :ParseTypeLiteralTest .
+    
+    <http://www.w3.org/2000/10/rdf-tests/rdfcore/xmlbase/Manifest.rdf#test004>     a :BoringTest,
+                :ReificationTest .
+    
+#ENDS

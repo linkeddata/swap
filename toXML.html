@@ -161,15 +161,20 @@ it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a&nbsp;useful&nbsp;hint
 of&nbsp;the&nbsp;same&nbsp;namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent<br>
 or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly</tt></dd></dl>
 
+<dl><dt><a name="ToRDF-checkNewId"><strong>checkNewId</strong></a>(self, uri)</dt><dd><tt>The&nbsp;store&nbsp;can&nbsp;override&nbsp;this&nbsp;to&nbsp;raise&nbsp;an&nbsp;exception&nbsp;if&nbsp;the<br>
+id&nbsp;is&nbsp;not&nbsp;in&nbsp;fact&nbsp;new.&nbsp;This&nbsp;is&nbsp;useful&nbsp;because&nbsp;it&nbsp;is&nbsp;usfeul<br>
+to&nbsp;generate&nbsp;IDs&nbsp;with&nbsp;useful&nbsp;diagnostic&nbsp;ways&nbsp;but&nbsp;this&nbsp;lays&nbsp;them<br>
+open&nbsp;to&nbsp;possibly&nbsp;clashing&nbsp;in&nbsp;pathalogical&nbsp;cases.</tt></dd></dl>
+
 <dl><dt><a name="ToRDF-genId"><strong>genId</strong></a>(self)</dt></dl>
 
-<dl><dt><a name="ToRDF-newBlankNode"><strong>newBlankNode</strong></a>(self, context, why<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="ToRDF-newBlankNode"><strong>newBlankNode</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="ToRDF-newExistential"><strong>newExistential</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="ToRDF-newFormula"><strong>newFormula</strong></a>(self, uri<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="ToRDF-newLiteral"><strong>newLiteral</strong></a>(self, str)</dt></dl>
+<dl><dt><a name="ToRDF-newLiteral"><strong>newLiteral</strong></a>(self, str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="ToRDF-newSymbol"><strong>newSymbol</strong></a>(self, uri)</dt></dl>
 
@@ -291,6 +296,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 <strong>RDF_type_URI</strong> = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#type'<br>
 <strong>SUBJ</strong> = 2<br>
 <strong>SYMBOL</strong> = 0<br>
+<strong>XML_NS_URI</strong> = 'http://www.w3.org/XML/1998/namespace'<br>
 <strong>__file__</strong> = './toXML.pyc'<br>
 <strong>__name__</strong> = 'toXML'<br>
 <strong>_namechars</strong> = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-'<br>

@@ -64,7 +64,12 @@ Includes:<br>
 </font></dt></dl>
 </dd>
 <dt><font face="helvetica, arial"><a href="thing.html#Literal">Literal</a>
-</font></dt><dt><font face="helvetica, arial"><a href="thing.html#Symbol">Symbol</a>
+</font></dt><dd>
+<dl>
+<dt><font face="helvetica, arial"><a href="thing.html#Integer">Integer</a>
+</font></dt></dl>
+</dd>
+<dt><font face="helvetica, arial"><a href="thing.html#Symbol">Symbol</a>
 </font></dt></dl>
 </dd>
 <dt><font face="helvetica, arial"><a href="__builtin__.html#object">__builtin__.object</a>
@@ -480,6 +485,59 @@ This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambig
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#ffc8d8">
 <td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="Integer">class <strong>Integer</strong></a>(<a href="thing.html#Literal">Literal</a>)</font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2>&nbsp;</td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt>Method resolution order:</dt>
+<dd><a href="thing.html#Integer">Integer</a></dd>
+<dd><a href="thing.html#Literal">Literal</a></dd>
+<dd><a href="thing.html#Term">Term</a></dd>
+</dl>
+<hr>
+Methods defined here:<br>
+<dl><dt><a name="Integer-__init__"><strong>__init__</strong></a>(self, store, str)</dt></dl>
+
+<dl><dt><a name="Integer-__int__"><strong>__int__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Integer-__repr__"><strong>__repr__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Integer-__str__"><strong>__str__</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Integer-representation"><strong>representation</strong></a>(self, base<font color="#909090">=None</font>)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = None</dl>
+
+<dl><dt><strong>__module__</strong> = 'thing'<dd><tt>str(<a href="__builtin__.html#object">object</a>)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;<a href="__builtin__.html#object">object</a>.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;<a href="__builtin__.html#object">object</a>.</tt></dl>
+
+<hr>
+Methods inherited from <a href="thing.html#Literal">Literal</a>:<br>
+<dl><dt><a name="Integer-asHashURI"><strong>asHashURI</strong></a>(self)</dt><dd><tt>return&nbsp;a&nbsp;md5:&nbsp;URI&nbsp;for&nbsp;this&nbsp;literal.<br>
+Hmm...&nbsp;encoding...&nbsp;assuming&nbsp;utf8?&nbsp;@@test&nbsp;this.<br>
+Hmm...&nbsp;for&nbsp;a&nbsp;class&nbsp;of&nbsp;literals&nbsp;including&nbsp;this&nbsp;one,<br>
+strictly&nbsp;speaking.</tt></dd></dl>
+
+<dl><dt><a name="Integer-asPair"><strong>asPair</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="Integer-uriref"><strong>uriref</strong></a>(self)</dt></dl>
+
+<hr>
+Methods inherited from <a href="thing.html#Term">Term</a>:<br>
+<dl><dt><a name="Integer-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Boolean&nbsp;Is&nbsp;this&nbsp;thing&nbsp;a&nbsp;genid&nbsp;-&nbsp;is&nbsp;its&nbsp;name&nbsp;arbitrary?</tt></dd></dl>
+
+<dl><dt><a name="Integer-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#000000" face="helvetica, arial"><a name="LightBuiltIn">class <strong>LightBuiltIn</strong></a>(<a href="thing.html#BuiltIn">BuiltIn</a>)</font></td></tr>
     
 <tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
@@ -601,7 +659,7 @@ wants&nbsp;to&nbsp;store&nbsp;it&nbsp;that&nbsp;way?&nbsp;&nbsp;Maybe&nbsp;we&nb
 practice&nbsp;but,&nbsp;for&nbsp;now,&nbsp;we&nbsp;keep&nbsp;them&nbsp;in&nbsp;separate&nbsp;subclases&nbsp;of&nbsp;<a href="#Term">Term</a>.<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="Literal-__init__"><strong>__init__</strong></a>(self, store, string)</dt></dl>
+<dl><dt><a name="Literal-__init__"><strong>__init__</strong></a>(self, store, string, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="Literal-__int__"><strong>__int__</strong></a>(self)</dt></dl>
 
@@ -876,7 +934,7 @@ existentially&nbsp;qualified&nbsp;within&nbsp;the&nbsp;given<br>
 formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
  <dl><dt><a name="-formula"><strong>formula</strong></a>()</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;new&nbsp;empty&nbsp;formula&nbsp;(triple&nbsp;people&nbsp;think:&nbsp;triple&nbsp;store)<br>
 and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
- <dl><dt><a name="-literal"><strong>literal</strong></a>(str)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;an&nbsp;interned&nbsp;version&nbsp;of&nbsp;the&nbsp;given&nbsp;literal&nbsp;string<br>
+ <dl><dt><a name="-literal"><strong>literal</strong></a>(str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;an&nbsp;interned&nbsp;version&nbsp;of&nbsp;the&nbsp;given&nbsp;literal&nbsp;string<br>
 and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
  <dl><dt><a name="-load"><strong>load</strong></a>(uri<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>, formulaURI<font color="#909090">=None</font>, remember<font color="#909090">=1</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
 &nbsp;<br>
@@ -884,6 +942,10 @@ uri:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;if&nbsp;None,&nbsp;load&nbsp;from&nbsp;s
 remember:&nbsp;if&nbsp;1,&nbsp;store&nbsp;as&nbsp;metadata&nbsp;the&nbsp;relationship&nbsp;between&nbsp;this&nbsp;URI&nbsp;and&nbsp;this&nbsp;formula.<br>
 &nbsp;<br>
 Returns:&nbsp;&nbsp;top-level&nbsp;formula&nbsp;of&nbsp;the&nbsp;parsed&nbsp;document.<br>
+Raises:&nbsp;&nbsp;&nbsp;IOError,&nbsp;SyntaxError,&nbsp;DocumentError</tt></dd></dl>
+ <dl><dt><a name="-loadMany"><strong>loadMany</strong></a>(uris)</dt><dd><tt>Load&nbsp;a&nbsp;number&nbsp;of&nbsp;resources&nbsp;into&nbsp;the&nbsp;same&nbsp;formula<br>
+&nbsp;<br>
+Returns:&nbsp;&nbsp;top-level&nbsp;formula&nbsp;of&nbsp;the&nbsp;parsed&nbsp;information.<br>
 Raises:&nbsp;&nbsp;&nbsp;IOError,&nbsp;SyntaxError,&nbsp;DocumentError</tt></dd></dl>
  <dl><dt><a name="-setStore"><strong>setStore</strong></a>(s)</dt><dd><tt>Set&nbsp;the&nbsp;process-global&nbsp;default&nbsp;store&nbsp;to&nbsp;be&nbsp;used&nbsp;when&nbsp;an&nbsp;explicit&nbsp;store&nbsp;is&nbsp;not</tt></dd></dl>
  <dl><dt><a name="-setStoreClass"><strong>setStoreClass</strong></a>(c)</dt><dd><tt>Set&nbsp;the&nbsp;process-global&nbsp;class&nbsp;to&nbsp;be&nbsp;used&nbsp;to&nbsp;generate&nbsp;a&nbsp;new&nbsp;store&nbsp;if&nbsp;needed</tt></dd></dl>
@@ -925,6 +987,5 @@ formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&
 <strong>store</strong> = None<br>
 <strong>storeClass</strong> = None<br>
 <strong>subcontext_cache_context</strong> = None<br>
-<strong>subcontext_cache_subcontexts</strong> = None<br>
-<strong>version</strong> = ['2', '2', '1']</td></tr></table>
+<strong>subcontext_cache_subcontexts</strong> = None</td></tr></table>
 </body></html>

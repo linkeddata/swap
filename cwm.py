@@ -267,7 +267,7 @@ def doCommand():
 --n3          Input & Output in N3 from now on
 --rdf=flags   Input & Output ** in RDF and set given RDF flags
 --n3=flags    Input & Output in N3 and set N3 flags
---ntriples    Input & Output in NTriples (equiv --n3=spart -bySubject -quiet)
+--ntriples    Input & Output in NTriples (equiv --n3=spartan -bySubject -quiet)
 --language=x  Input & Output in "x" (rdf, n3, etc)  --rdf same as: --language=rdf
 --languageOptions=y     --n3=sp same as:  --language=n3 --languageOptions=sp
 --ugly        Store input and regurgitate *
@@ -412,7 +412,7 @@ Mode flags affect inference extedning to the web:
             elif arg == "-strings": option_outputStyle = "-no"
             elif arg == "-triples" or arg == "-ntriples":
                 option_format = "n3"
-                option_flags["n3"] = "spart"
+                option_flags["n3"] = "spartan"
                 option_outputStyle = "-bySubject"
                 option_quiet = 1
             elif _lhs == "-outURI": option_outURI = _uri

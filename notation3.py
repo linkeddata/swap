@@ -56,9 +56,11 @@ idea: use notation3 for wiki record keeping.
 
 
 
+import types
 import string
 import codecs # python 2-ism; for writing utf-8 in RDF/xml output
 import urllib
+
 import re
 import thing
 
@@ -102,6 +104,13 @@ DOUBLE_DATATYPE = "http://www.w3.org/2001/XMLSchema#double"
 
 option_noregen = 0   # If set, do not regenerate genids on output
 
+# @@ I18n - the notname chars need extending for well known unicode non-text characters.
+# The XML spec switched to assuming unknown things were name characaters.
+# _namechars = string.lowercase + string.uppercase + string.digits + '_-'
+_notNameChars = "\t\r\n !\"#$%&'()*.,+/;:<=>?@[\\]^`{|}~"  # Assume anything else valid name :-/
+_rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+
+
 N3CommentCharacter = "#"     # For unix script #! compatabilty
 
 ########################################## Parse string to sink
@@ -114,7 +123,7 @@ signed_integer = re.compile(r'[-+]?[0-9]+')	# integer
 number_syntax = re.compile(r'([-+]?[0-9]+)(.[0-9]+)?(e[-+]?[0-9]+)?')
 digitstring = re.compile(r'[0-9]+')		# Unsigned integer	
 interesting = re.compile(r'[\\\r\n\"]')
-langcode = re.compile(r'[a-z0-9]+(-[a-z0-9]+)?')
+langcode = re.compile(r'[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?')
 
 
 class SinkParser:
@@ -205,12 +214,15 @@ class SinkParser:
 	return self.endDoc()    # self._formula
 
 
-    def feed(self, str):
-	"""if BadSyntax is raised, the string
+    def feed(self, octets):
+	"""Feed an octet stream tothe parser
+	
+	if BadSyntax is raised, the string
 	passed in the exception object is the
 	remainder after any statements have been parsed.
 	So if there is more data to feed to the
 	parser, it should be straightforward to recover."""
+	str = octets.decode('utf-8')
         i = 0
 	while i >= 0:
 	    j = self.skipSpace(str, i)
@@ -236,8 +248,8 @@ class SinkParser:
 
 
     #@@I18N
-    global _namechars
-    _namechars = string.lowercase + string.uppercase + string.digits + '_-'
+    global _notNameChars
+    #_namechars = string.lowercase + string.uppercase + string.digits + '_-'
 
     def tok(self, tok, str, i):
         """Check for keyword.  Space must have been stripped on entry and
@@ -250,7 +262,7 @@ class SinkParser:
 		return -1   # Nope, this has neither keywords declaration nor "@"
 
 	if (str[i:i+len(tok)] == tok
-            and (tok[0] not in _namechars    # check keyword is not prefix
+            and (tok[0]  in _notNameChars    # check keyword is not prefix
                 or str[i+len(tok)] in string.whitespace )):
 	    i = i + len(tok)
 	    return i
@@ -283,7 +295,7 @@ class SinkParser:
 	if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected <uriref> after bind _qname_")
 
 #	progress("@@@@@", t)
-	if type(t[1]) is type((1,1)): ns = t[1][1] # old system for --pipe
+	if isinstance(t[1], types.TupleType): ns = t[1][1] # old system for --pipe
         else:
 #	    progress( "@@@@@@@@@@", type(t[1]))
 	    ns = t[1].uriref()
@@ -291,11 +303,11 @@ class SinkParser:
         ns = join(self._baseURI, ns)
         assert ':' in ns # must be absolute
 	self._bindings[t[0][0]] = ns
-	self.bind(t[0][0], ns)
+	self.bind(t[0][0], hexify(ns))
 	return j
 
     def bind(self, qn, uri):
-	assert type(uri) is type("")
+	assert isinstance(uri, types.StringType), "Any unicode must be %x-encoded already"
         if qn == "":
             self._sink.setDefaultNamespace(uri)
         else:
@@ -412,7 +424,7 @@ class SinkParser:
 	    ch = str[j:j+1]		# @@ Allow "." followed IMMEDIATELY by a node.
 	    if ch == ".":
 		ahead = str[j+1:j+2]
-		if not ahead or ahead not in _namechars + "[{(":
+		if not ahead or ahead in _notNameChars + "[{(":
 		    break
 	    subj = res.pop()
 	    obj = self._sink.newBlankNode(self._context, uri=self.here(j), why=self._reason2)
@@ -640,7 +652,7 @@ class SinkParser:
 		except KeyError:
                     if pfx == "_":   # Magic prefix added 2001/05/30, can be overridden
                         res.append(self.anonymousNode(ln))
-			progress("@@@@@@@ uri_ref2 res", res)
+			# progress("@@@@@@@ uri_ref2 res", res)
                         return j
 		    raise BadSyntax(self._thisDoc, self.lines, str, i, "Prefix %s not bound" % (pfx))
             res.append(self._sink.newSymbol(ns + ln)) # @@@ "#" CONVENTION
@@ -699,7 +711,7 @@ class SinkParser:
         if str[j:j+1] != "?": return -1
         j=j+1
         i = j
-	while i <len(str) and str[i] in _namechars: #@@ check for intial alpha
+	while i <len(str) and str[i] not in _notNameChars: #@@ check for intial alpha
             i = i+1
 	if self._parentContext == None:
 	    raise BadSyntax(self._thisDoc, self.lines, str, j,
@@ -721,12 +733,12 @@ class SinkParser:
 	else: i=j
 
 	c = str[i]
-	if c in _namechars:
+	if c not in _notNameChars:
 	    ln = c
 	    i = i + 1
 	    while i < len(str):
 		c = str[i]
-		if c in _namechars:
+		if c not in _notNameChars:
 		    ln = ln + c
 		    i = i + 1
 		else: break
@@ -739,7 +751,7 @@ class SinkParser:
 	    ln = ''
 	    while i < len(str):
 		c = str[i]
-		if c in _namechars:
+		if c not in _notNameChars:
 		    ln = ln + c
 		    i = i + 1
 		else: break
@@ -787,8 +799,7 @@ class SinkParser:
 		    raise BadSyntax(self._thisDoc, startline, str, i,
 				"Bad number syntax")
 		j = m.end()
-		if m.group(3) != None: # includes exponent
-		    dt = self._sink.newSymbol(DOUBLE_DATATYPE)
+		if m.group(2) != None or  m.group(3) != None: # includes decimal exponent
 		    res.append(self._sink.newLiteral(str[i:j],
 			self._sink.newSymbol(DOUBLE_DATATYPE)))
 		else:
@@ -853,8 +864,10 @@ class SinkParser:
 		err = ""
 		for c in str[j:i]:
 		    err = err + (" %02x" % ord(c))
+		streason = sys.exc_info()[1].__str__()
 		raise BadSyntax(self._thisDoc, startline, str, j,
-				"Unicode error appending characters %s to string" % err)
+				"Unicode error appending characters %s to string, because\n\t%s"
+				% (err, streason))
 		
 #	    print "@@@ i = ",i, " j=",j, "m.end=", m.end()
 
@@ -922,7 +935,7 @@ class SinkParser:
 
 class BadSyntax(SyntaxError):
     def __init__(self, uri, lines, str, i, why):
-	self._str = str
+	self._str = str.encode('utf-8') # Better go back to strings for errors
 	self._i = i
 	self._why = why
 	self.lines = lines
@@ -1012,10 +1025,6 @@ t   "this" and "()" special syntax should be suppresed.
 
         if "l" in self._flags: self.noLists = 1
 	
-	#@@I18N
-    _namechars = string.lowercase + string.uppercase + string.digits + '_-'
-    _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-
     
 #    def newId(self):
 #        nextId = nextId + 1
@@ -1282,7 +1291,7 @@ t   "this" and "()" special syntax should be suppresed.
         ty, value = pair
 
         if ty == LITERAL:
-	    if type(value) is not type(()):  # simple old-fashioned string
+	    if type(value) is not types.TupleType:  # simple old-fashioned string
 		return stringToN3(value)
 	    s, dt, lang = value
 	    if dt != None:
@@ -1303,8 +1312,9 @@ t   "this" and "()" special syntax should be suppresed.
                 if verbosity()>10: progress("#@@@@@ Ooops ---  anon "+
 		    value+"\n with genPrefix "+self._genPrefix+"\n")
                 i = len(value)
-                while i > 0 and value[i-1] in _namechars: i = i - 1
+                while i > 0 and value[i-1] not in _notNameChars: i = i - 1
                 str = value[i:]
+	    while str.startswith("_"): str = str[1:] # Strip that leading "_" which ntriples doesn't allow
             return "_:a" + str    # Must start with alpha as per NTriples spec.
 
         if ((ty == ANONYMOUS)
@@ -1354,7 +1364,7 @@ Escapes = {'a':  '\a',
 
 forbidden1 = re.compile(ur'[\\\"\a\b\f\r\v\u0080-\uffff]')
 forbidden2 = re.compile(ur'[\\\"\a\b\f\r\v\t\n\u0080-\uffff]')
-
+#"
 def stringToN3(str):
     res = ''
     if (len(str) > 20 and
@@ -1382,8 +1392,8 @@ def stringToN3(str):
             k = string.find('\a\b\f\r\t\v\n\\"', ch)
             if k >= 0: res = res + "\\" + 'abfrtvn\\"'[k]
             else:
-                res = res + ('\\u%04x' % ord(ch))
-#                res = res + ('\\u%04X' % ord(ch))
+#                res = res + ('\\u%04x' % ord(ch))
+                res = res + ('\\u%04X' % ord(ch))  # http://www.w3.org/TR/rdf-testcases/#ntriples
         i = j + 1
 
     return delim + res + str[i:] + delim
@@ -1396,6 +1406,8 @@ def hexify(ustr):
     for ch in ustr:  # .encode('utf-8'):
 	if ord(ch) > 126:
 	    ch = "%%%02X" % ord(ch)
+	else:
+	    ch = "%c" % ord(ch)
 	str = str + ch
     return str
     
