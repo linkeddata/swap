@@ -1980,29 +1980,32 @@ def doCommand():
         
  <command> <options> <inputURIs>
  
- -pipe      Don't store, just pipe out *
+--pipe      Don't store, just pipe out *
 
- -rdf       Input & Output ** in RDF M&S 1.0 insead of n3 from now on
- -n3        Input & Output in N3 from now on
- -ugly      Store input and regurgitate *
- -bySubject Store inpyt and regurgitate in subject order *
- -no        No output *
+--rdf       Input & Output ** in RDF M&S 1.0 insead of n3 from now on
+--n3        Input & Output in N3 from now on
+--rdf=flags Input & Output ** in RDF and set given RDF flags
+--n3=flags  Input & Output in N3 and set N3 flags
+--ugly      Store input and regurgitate *
+--bySubject Store inpyt and regurgitate in subject order *
+--no        No output *
             (default is to store and pretty print with anonymous nodes) *
- -apply=foo Read rules from foo, apply to store, adding conclusions to store
- -filter=foo Read rules from foo, apply to store, REPLACING store with conclusions
- -rules     Apply rules in store to store, adding conclusions to store
- -think     as -rules but continue until no more rule matches (or forever!)
- -reify     Replace the statements in the store with statements describing them.
- -flat      Reify only nested subexpressions (not top level) so that no {} remain.
- -help      print this message
- -chatty=50 Verbose output of questionable use, range 0-99
+--apply=foo Read rules from foo, apply to store, adding conclusions to store
+--filter=foo Read rules from foo, apply to store, REPLACING store with conclusions
+--rules     Apply rules in store to store, adding conclusions to store
+--think     as -rules but continue until no more rule matches (or forever!)
+--reify     Replace the statements in the store with statements describing them.
+--flat      Reify only nested subexpressions (not top level) so that no {} remain.
+--help      print this message
+--chatty=50 Verbose output of questionable use, range 0-99
  
 
             * mutually exclusive
             ** doesn't work for complex cases :-/
 Examples:
-  cwm -rdf foo.rdf -n3 -pipe        Convert from rdf to n3
-  cwm foo.n3 bar.n3 -think          Combine data and find all deductions
+  cwm --rdf foo.rdf --n3 --pipe        Convert from rdf to n3
+  cwm foo.n3 bar.n3 --think          Combine data and find all deductions
+  cwm foo.n3 -flat -n3=spart
 
 """
         
@@ -2038,6 +2041,7 @@ Examples:
         _outURI = _baseURI
         option_baseURI = _baseURI     # To start with - then tracks running base
         for arg in sys.argv[1:]:  # Command line options after script name
+            if arg.startswith("--"): arg = arg[1:]   # Chop posix-style double dash to one
             _equals = string.find(arg, "=")
             _lhs = ""
             _rhs = ""
@@ -2068,6 +2072,7 @@ Examples:
             elif arg == "-flat": option_flat = 1
             elif arg == "-help":
                 print doCommand.__doc__
+                print notation3.ToN3.flagDocumentation
                 return
             elif arg[0] == "-": pass  # Other option
             else :
@@ -2136,6 +2141,7 @@ Examples:
         _outURI = _baseURI
         option_baseURI = _baseURI     # To start with
         for arg in sys.argv[1:]:  # Command line options after script name
+            if arg.startswith("--"): arg = arg[1:]   # Chop posix-style double dash to one
             _equals = string.find(arg, "=")
             _lhs = ""
             _rhs = ""
