@@ -18,6 +18,11 @@ __version__ = "$Revision$"
 
 import LX.logic
 
+class TermHasNoURI(RuntimeError):
+    pass
+class NoShortNameDeclared(RuntimeError):
+    pass
+
 class NamespaceCluster:
     """An object whose attributes (eg rdf, rdfs, foaf, dc, ...) are
     short names for Namespace objects.  
@@ -33,7 +38,7 @@ class NamespaceCluster:
         try:
             uri = term.uri
         except AttributeError, e:
-            raise AttributeError(term)
+            raise TermHasNoURI(term)
         for (key, value) in self.__dict__.iteritems():
             if uri.startswith(value.uri):
                 rest = uri[len(value.uri):]
@@ -42,8 +47,9 @@ class NamespaceCluster:
                 if rest in value.__dict__:
                     return (key, rest)
                 else:
-                    print "NamespaceCluster inverselookup not-matched due to strict"
-        raise KeyError
+                    raise NotInNamespace(term)
+
+        raise NoShortNameDeclared(term)
                     
             
 
@@ -58,8 +64,8 @@ class Namespace:
     compileflags, 1) in globs
     File "<string>", line 1, in ?
     File "/home/sandro/0/10/swap/LX/namespace.py", line 46, in __getattr__
-    raise AttributeError, msg
-    AttributeError: No name sandro declared for namespace http://www.example.com/friends# (in strict mode)
+    raise NotInNamespace, msg
+    NotInNamespace: No name sandro declared for namespace http://www.example.com/friends# (in strict mode)
     >>> ns1.add("sandro")
     >>> ns1.sandro.uri
     'http://www.example.com/friends#sandro'
@@ -91,7 +97,7 @@ class Namespace:
         if self.strict:
             msg = ("No name %s declared for namespace %s (in strict mode)" %
                    (name, self.uri))
-            raise AttributeError, msg
+            raise NotInNamespace(msg)
         result = LX.logic.ConstantForURI(self.uri + name)
         self.__dict__[name] = result
         return result
@@ -118,7 +124,10 @@ if __name__ == "__main__":
 
 
 # $Log$
-# Revision 1.11  2003-09-05 04:38:49  sandro
+# Revision 1.12  2003-09-06 04:49:00  sandro
+# made inverse lookup use its own errors
+#
+# Revision 1.11  2003/09/05 04:38:49  sandro
 # a few additional ns elements
 #
 # Revision 1.10  2003/09/04 07:14:12  sandro
