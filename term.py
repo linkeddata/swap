@@ -502,9 +502,10 @@ class N3Set(ImmutableSet, CompoundTerm): #,
 	
 	[ reify:items ( [ reify:value "foo"]  .... ) ]
 	"""
-	m = [ x.reification(sink, bnodeMap, why) for x in self]
+	m = [x for x in self]
 	m.sort(Term.compareAnyTerm)
-	elements = sink.store.newSet(m)
+	mm = [x.reification(sink, bnodeMap, why) for x in m]
+	elements = sink.store.newSet(mm)
 	b = sink.newBlankNode()
 	sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"items"), obj=elements, why=why)
 	return b
@@ -599,6 +600,7 @@ class List(CompoundTerm):
 	for x in s:
 	    tail = tail.prepend(x.substituteEquals(bindings, newBindings))
 	newBindings[self] = tail # record a new equality
+	self.generated = lambda : True
 	if diag.chatty_flag > 90: progress("SubstitueEquals list CHANGED %s -> %s" % (self, tail))
 	return tail
 	    

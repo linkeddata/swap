@@ -63,77 +63,11 @@
                 <http://example.com/swap/test/run#_g94>,
                 <#_g0>,
                 <#_g1> .
-    
-    <#_g0>     :existentials  [
-             owl:oneOf () ];
-         :statements  [
-             owl:oneOf  (
-             [
-                     :object  [
-                         :uri "http://example.com/swap/test/reify/reify0.n3#b" ];
-                     :predicate  [
-                         :uri "http://www.w3.org/2000/10/swap/log#implies" ];
-                     :subject  [
-                         :uri "http://example.com/swap/test/reify/reify0.n3#a" ] ]
-             [
-                     :object  [
-                         :uri "http://example.com/swap/test/reify/reify0.n3#a" ];
-                     :predicate  [
-                         :uri "http://www.w3.org/2000/10/swap/log#implies" ];
-                     :subject  [
-                         :uri "http://example.com/swap/test/reify/reify0.n3#b" ] ] ) ];
-         :universals  [
-             owl:oneOf () ] .
-    
-    <#_g1>     :existentials  [
-             owl:oneOf () ];
-         :statements  [
-             owl:oneOf  (
-             [
-                     :object  [
-                         :uri "http://example.com/swap/test/reify/reify0.n3#b" ];
-                     :predicate  [
-                         :uri "http://example.com/swap/test/reify/reify0.n3#means" ];
-                     :subject  [
-                         :uri "http://example.com/swap/test/reify/reify0.n3#a" ] ] ) ];
-         :universals  [
-             owl:oneOf () ] .
       [      a log:Truth;
              :existentials  [
                  owl:oneOf () ];
              :statements  [
                  owl:oneOf  (
-                 [
-                         :object  [
-                             :uri "http://example.com/swap/test/reify/reify0.n3#pa" ];
-                         :predicate  [
-                             :uri "http://example.com/swap/test/reify/reify0.n3#ancestor" ];
-                         :subject  [
-                             :uri "http://example.com/swap/test/reify/reify0.n3#bill" ] ]
-                 [
-                         :object  [
-                             :uri "http://www.daml.org/2001/03/daml+oil#TransitiveProperty" ];
-                         :predicate  [
-                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
-                         :subject  [
-                             :uri "http://example.com/swap/test/reify/reify0.n3#ancestor" ] ]
-                 [
-                         :object <#_g1>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
-                         :subject <#_g0> ]
-                 [
-                         :object  [
-                             :uri "http://example.com/swap/test/reify/reify0.n3#granpa" ];
-                         :predicate  [
-                             :uri "http://example.com/swap/test/reify/reify0.n3#ancestor" ];
-                         :subject  [
-                             :uri "http://example.com/swap/test/reify/reify0.n3#pa" ] ]
-                 [
-                         :object <#_g0>;
-                         :predicate  [
-                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
-                         :subject <#_g1> ]
                  [
                          :object  [
                              :existentials  [
@@ -174,18 +108,18 @@
                                                                  owl:oneOf  (
                                                                  [
                                                                          :object  [
-                                                                             :uri "http://example.com/swap/test/reify/reify0.n3#y" ];
-                                                                         :predicate  [
-                                                                             :uri "http://example.com/swap/test/reify/reify0.n3#p" ];
-                                                                         :subject  [
-                                                                             :uri "http://example.com/swap/test/reify/reify0.n3#x" ] ]
-                                                                 [
-                                                                         :object  [
                                                                              :uri "http://example.com/swap/test/reify/reify0.n3#z" ];
                                                                          :predicate  [
                                                                              :uri "http://example.com/swap/test/reify/reify0.n3#p" ];
                                                                          :subject  [
-                                                                             :uri "http://example.com/swap/test/reify/reify0.n3#y" ] ] ) ];
+                                                                             :uri "http://example.com/swap/test/reify/reify0.n3#y" ] ]
+                                                                 [
+                                                                         :object  [
+                                                                             :uri "http://example.com/swap/test/reify/reify0.n3#y" ];
+                                                                         :predicate  [
+                                                                             :uri "http://example.com/swap/test/reify/reify0.n3#p" ];
+                                                                         :subject  [
+                                                                             :uri "http://example.com/swap/test/reify/reify0.n3#x" ] ] ) ];
                                                              :universals  [
                                                                  owl:oneOf () ] ] ] ) ];
                                              :universals  [
@@ -210,10 +144,76 @@
                                          :subject  [
                                              :uri "http://example.com/swap/test/reify/reify0.n3#p" ] ] ) ];
                              :universals  [
-                                 owl:oneOf () ] ] ] ) ];
+                                 owl:oneOf () ] ] ]
+                 [
+                         :object  [
+                             :uri "http://www.daml.org/2001/03/daml+oil#TransitiveProperty" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject  [
+                             :uri "http://example.com/swap/test/reify/reify0.n3#ancestor" ] ]
+                 [
+                         :object <#_g1>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
+                         :subject <#_g0> ]
+                 [
+                         :object  [
+                             :uri "http://example.com/swap/test/reify/reify0.n3#granpa" ];
+                         :predicate  [
+                             :uri "http://example.com/swap/test/reify/reify0.n3#ancestor" ];
+                         :subject  [
+                             :uri "http://example.com/swap/test/reify/reify0.n3#pa" ] ]
+                 [
+                         :object  [
+                             :uri "http://example.com/swap/test/reify/reify0.n3#pa" ];
+                         :predicate  [
+                             :uri "http://example.com/swap/test/reify/reify0.n3#ancestor" ];
+                         :subject  [
+                             :uri "http://example.com/swap/test/reify/reify0.n3#bill" ] ]
+                 [
+                         :object <#_g0>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
+                         :subject <#_g1> ] ) ];
              :universals  [
                  owl:oneOf  (
                 "http://example.com/swap/test/reify/reify0.n3#a" 
                 "http://example.com/swap/test/reify/reify0.n3#b" 
                 "http://example.com/swap/test/reify/reify0.n3#p"  ) ] ].
+    
+    <#_g0>     :existentials  [
+             owl:oneOf () ];
+         :statements  [
+             owl:oneOf  (
+             [
+                     :object  [
+                         :uri "http://example.com/swap/test/reify/reify0.n3#a" ];
+                     :predicate  [
+                         :uri "http://www.w3.org/2000/10/swap/log#implies" ];
+                     :subject  [
+                         :uri "http://example.com/swap/test/reify/reify0.n3#b" ] ]
+             [
+                     :object  [
+                         :uri "http://example.com/swap/test/reify/reify0.n3#b" ];
+                     :predicate  [
+                         :uri "http://www.w3.org/2000/10/swap/log#implies" ];
+                     :subject  [
+                         :uri "http://example.com/swap/test/reify/reify0.n3#a" ] ] ) ];
+         :universals  [
+             owl:oneOf () ] .
+    
+    <#_g1>     :existentials  [
+             owl:oneOf () ];
+         :statements  [
+             owl:oneOf  (
+             [
+                     :object  [
+                         :uri "http://example.com/swap/test/reify/reify0.n3#b" ];
+                     :predicate  [
+                         :uri "http://example.com/swap/test/reify/reify0.n3#means" ];
+                     :subject  [
+                         :uri "http://example.com/swap/test/reify/reify0.n3#a" ] ] ) ];
+         :universals  [
+             owl:oneOf () ] .
     

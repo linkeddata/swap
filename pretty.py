@@ -497,7 +497,6 @@ class Serializer:
         if verbosity() > 98:
             progress( "Topology %s in %s is: anon=%i obj=%i, pred=%i loop=%s ex=%i "%(
             `x`, `context`,  _anon, _asObj, _asPred, _loop, _isExistential))
-
 ##        self._topology_returns[x] = ( _anon, _asObj+_asPred )
         return ( _anon, _asObj+_asPred )  
 

@@ -662,6 +662,7 @@ class IndexedFormula(Formula):
 
     def _noteNewSet(self, bnode, set, newBindings):
         newBindings[bnode] = set
+        if diag.chatty_flag > 80: progress("...New set newBindings %s"%(`newBindings`))
         self._existentialVariables.discard(bnode)
 
     def substituteEqualsInPlace(self, redirections):
