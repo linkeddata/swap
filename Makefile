@@ -11,7 +11,7 @@ HTMLS= term.html formula.html pretty.html myStore.html check.html query.html RDF
 SOURCES = cwm.py notation3.py query.py llyn.py uripath.py diag.py RDFSink.py reify.py why.py myStore.py webAccess.py OrderedSequence.py term.py formula.py pretty.py cwm_list.py cwm_string.py cwm_os.py cwm_time.py isodate.py cwm_math.py cwm_trigo.py cwm_times.py cwm_maths.py toXML.py update.py sax2rdf.py rdflib_user.py rdfxml.py test/retest.py 
 DOC=doc/CwmHelp.htm
 
-TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/cwm/detailed.tests
+TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/ql/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/cwm/detailed.tests test/ntriples/detailed.tests test/delta/detailed.tests test/syntax/detailed.tests test/reify/detailed.tests test/testmeta.n3
 
 .SUFFIXES: .html .py .g .rdf .n3
 
@@ -28,18 +28,18 @@ TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/math/deta
 
 
 tested : package
-	(cd test; make filelist)
+	(cd test; make pre-release)
 	echo "Test worked, now can make release"
 
 doc.made : cwm.py notation3.py sax2rdf.py toXML.py
 	(cd doc; make)
 
-release : tested doc.made message.txt
+release : cwm.tar.gz doc.made message.txt
 	cvs commit -F message.txt
 	rm message.txt
 
 
-package: math.rdf maths.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf times.rdf LICENSE.rdf cwm.tar.gz $(HTMLS)
+package: math.rdf maths.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf times.rdf LICENSE.rdf  $(HTMLS)
 
 # Can't make dependencies on *.py :-(
 

@@ -63,8 +63,10 @@ def isString(x):
 # add, take, multiply, divide
 
 def numeric(s):
-    if type(s) == types.IntType or type(s) is types.FloatType: return s
-    if s.find('.') < 0 and s.find('e') < 0 : return int(s)
+    if type(s) == types.IntType or \
+       type(s) == types.LongType or \
+       type(s) is types.FloatType: return s
+    if s.find('.') < 0 and s.find('e') < 0 : return long(s)
     return float(s)
 
 class BI_absoluteValue(LightBuiltIn, Function):
@@ -119,7 +121,7 @@ class BI_quotient(LightBuiltIn, Function):
 
 class BI_integerQuotient(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
-        if len(subj_py) == 2: return int(subj_py[0]) / int(subj_py[1])
+        if len(subj_py) == 2: return long(subj_py[0]) / long(subj_py[1])
 
 class BI_bit(LightBuiltIn, Function):
     """@@needs a test."""

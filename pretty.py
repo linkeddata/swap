@@ -333,9 +333,10 @@ class Serializer:
 	if isinstance(x, AnonymousVariable) or (isinstance(x, Fragment) and x.generated()): 
 	    y = self._occurringAs[OBJ].get(x, 0) + 1
 	    self._occurringAs[OBJ][x] = y
-	    if verbosity() > 98: progress(
-		"scan: %s, a %s, now has %i occurrences as %s" 
-		%(x, x.__class__,y,"CPSO"[y]))
+	    if verbosity() > 98:
+                progress(
+                    "scan: %s, a %s, now has %i occurrences as %s" 
+                    %(x, x.__class__,y,"CPSOq"[y]))
 #	else:
 #	    if x == None: raise RuntimeError("Weird - None in a statement?")
 #	    progress("&&&&&&&&& %s has class %s " %(`z`, `z.__class__`))
@@ -572,7 +573,7 @@ class Serializer:
 	
 def canItbeABNode(formula, symbol):
     for quad in formula.statements:
-        for s in SUBJ, OBJ:
+        for s in PRED, SUBJ, OBJ:
             if isinstance(quad[s], Formula):
                 if quad[s].doesNodeAppear(symbol):
                     return 0

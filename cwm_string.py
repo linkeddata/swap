@@ -96,6 +96,7 @@ def normalizeWhitespace(s):
     return res
 
 #  String Constructors - more light built-ins
+make_string = str
 
 class BI_concat(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self, obj_py):
@@ -112,7 +113,10 @@ class BI_concatenation(LightBuiltIn, Function):
         str = ""
         for x in subj_py:
             if not isString(x):
-		x = `x`
+                if type(x) == type(long()):
+                    x = make_string(x)
+                else:
+                    x = `x`
 		if verbosity() > 34: progress("Warning: Coercing to string for concat:"+`x`)
 #		return None # Can't
             str = str + x 

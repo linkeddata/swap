@@ -9,23 +9,25 @@ CODE=retest.py ../cwm.py ../notation3.py ../query.py ../llyn.py
 # etc ...
 
 OFFLINETESTS=regression.n3 list/detailed.tests \
-	ql.detailed.tests \
+	ql/detailed.tests \
 	math/detailed.tests \
 	norm/detailed.tests \
 	cwm/detailed.tests \
-# 	i18n/detailed.tests \
 	ntriples/detailed.tests \
 	delta/detailed.tests \
 	syntax/detailed.tests \
-	rdfcore-tests.n3 testmeta.n3
+	reify/detailed.tests \
+	testmeta.n3
+# 	i18n/detailed.tests \
 
-TESTS=online.tests $(OFFLINETESTS)
+TESTS=online.tests rdfcore-tests.n3 $(OFFLINETESTS)
 
 post-install : pyc-check $(CODE) $(OFFLINETESTS)
 	PYTHONPATH=`/bin/pwd`/.. $P retest.py -c $(OFFLINETESTS)
 
-pre-release : pyc-check $(CODE) $(TESTS)
-	PYTHONPATH=`/bin/pwd`/.. $P retest.py -c $(TESTS)
+pre-release : filelist
+#pyc-check $(CODE) $(TESTS)
+#	PYTHONPATH=`/bin/pwd`/.. $P retest.py -c $(TESTS)
 
 
 filelist : pyc-check $(CODE) $(TESTS)

@@ -112,7 +112,7 @@ class BI_quotient(LightBuiltIn, Function):
 class BI_integerQuotient(LightBuiltIn, Function):
     def evaluateObject(self, subj_py): 
         t = None
-        if len(subj_py) == 2: t = int(subj_py[0]) / int(subj_py[1])
+        if len(subj_py) == 2: t = long(subj_py[0]) / long(subj_py[1])
         return tidy(t)
 
 class BI_quotientOf(LightBuiltIn, ReverseFunction):

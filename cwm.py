@@ -141,6 +141,7 @@ the closure under the operation of looking up:
  t   the object of an rdf:type statement added
  i   any owl:imports documents
  r   any doc:rules documents
+ E   errors are ignored --- This is independant of --mode=E
  
  e   Smush together any nodes which are = (owl:sameAs)
 
@@ -326,11 +327,6 @@ rdf/xml files. Note that this requires rdflib.
 	    myStore.setStore(_store)
 
 
-	becauseCwm = None
-	if diag.tracking:
-	    proof = FormulaReason(workingContext)
-	    becauseCwm = BecauseOfCommandLine(sys.argv[0]) 
-	    # @@ add user, host, pid, date time? Privacy!
 
 	workingContext = None
         if  _gotInput: 
@@ -348,7 +344,11 @@ rdf/xml files. Note that this requires rdflib.
 			    why = becauseCwm)
 	    workingContext.reopen()
 
-
+	becauseCwm = None
+	if diag.tracking:
+	    proof = FormulaReason(workingContext)
+	    becauseCwm = BecauseOfCommandLine(sys.argv[0]) 
+	    # @@ add user, host, pid, date time? Privacy!
 
 
 

@@ -1,0 +1,1330 @@
+     @prefix : <http://www.w3.org/2004/06/rei#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix owl: <http://www.w3.org/2002/07/owl#> .
+    
+     @forSome </devel/WWW/2000/10/swap/test/run#_g100>,
+                </devel/WWW/2000/10/swap/test/run#_g101>,
+                </devel/WWW/2000/10/swap/test/run#_g102>,
+                </devel/WWW/2000/10/swap/test/run#_g103>,
+                </devel/WWW/2000/10/swap/test/run#_g104>,
+                </devel/WWW/2000/10/swap/test/run#_g105>,
+                </devel/WWW/2000/10/swap/test/run#_g106>,
+                </devel/WWW/2000/10/swap/test/run#_g107>,
+                </devel/WWW/2000/10/swap/test/run#_g108>,
+                </devel/WWW/2000/10/swap/test/run#_g109>,
+                </devel/WWW/2000/10/swap/test/run#_g110>,
+                </devel/WWW/2000/10/swap/test/run#_g111>,
+                </devel/WWW/2000/10/swap/test/run#_g112>,
+                </devel/WWW/2000/10/swap/test/run#_g113>,
+                </devel/WWW/2000/10/swap/test/run#_g114>,
+                </devel/WWW/2000/10/swap/test/run#_g115>,
+                </devel/WWW/2000/10/swap/test/run#_g116>,
+                </devel/WWW/2000/10/swap/test/run#_g117>,
+                </devel/WWW/2000/10/swap/test/run#_g118>,
+                </devel/WWW/2000/10/swap/test/run#_g119>,
+                </devel/WWW/2000/10/swap/test/run#_g120>,
+                </devel/WWW/2000/10/swap/test/run#_g121>,
+                </devel/WWW/2000/10/swap/test/run#_g122>,
+                </devel/WWW/2000/10/swap/test/run#_g123>,
+                </devel/WWW/2000/10/swap/test/run#_g124>,
+                </devel/WWW/2000/10/swap/test/run#_g125>,
+                </devel/WWW/2000/10/swap/test/run#_g126>,
+                </devel/WWW/2000/10/swap/test/run#_g127>,
+                </devel/WWW/2000/10/swap/test/run#_g128>,
+                </devel/WWW/2000/10/swap/test/run#_g129>,
+                </devel/WWW/2000/10/swap/test/run#_g130>,
+                </devel/WWW/2000/10/swap/test/run#_g131>,
+                </devel/WWW/2000/10/swap/test/run#_g132>,
+                </devel/WWW/2000/10/swap/test/run#_g133>,
+                </devel/WWW/2000/10/swap/test/run#_g134>,
+                </devel/WWW/2000/10/swap/test/run#_g135>,
+                </devel/WWW/2000/10/swap/test/run#_g136>,
+                </devel/WWW/2000/10/swap/test/run#_g137>,
+                </devel/WWW/2000/10/swap/test/run#_g138>,
+                </devel/WWW/2000/10/swap/test/run#_g139>,
+                </devel/WWW/2000/10/swap/test/run#_g140>,
+                </devel/WWW/2000/10/swap/test/run#_g141>,
+                </devel/WWW/2000/10/swap/test/run#_g142>,
+                </devel/WWW/2000/10/swap/test/run#_g143>,
+                </devel/WWW/2000/10/swap/test/run#_g144>,
+                </devel/WWW/2000/10/swap/test/run#_g145>,
+                </devel/WWW/2000/10/swap/test/run#_g146>,
+                </devel/WWW/2000/10/swap/test/run#_g147>,
+                </devel/WWW/2000/10/swap/test/run#_g148>,
+                </devel/WWW/2000/10/swap/test/run#_g149>,
+                </devel/WWW/2000/10/swap/test/run#_g150>,
+                </devel/WWW/2000/10/swap/test/run#_g151>,
+                </devel/WWW/2000/10/swap/test/run#_g152>,
+                </devel/WWW/2000/10/swap/test/run#_g153>,
+                </devel/WWW/2000/10/swap/test/run#_g154>,
+                </devel/WWW/2000/10/swap/test/run#_g155>,
+                </devel/WWW/2000/10/swap/test/run#_g156>,
+                </devel/WWW/2000/10/swap/test/run#_g157>,
+                </devel/WWW/2000/10/swap/test/run#_g158>,
+                </devel/WWW/2000/10/swap/test/run#_g159>,
+                </devel/WWW/2000/10/swap/test/run#_g160>,
+                </devel/WWW/2000/10/swap/test/run#_g161>,
+                </devel/WWW/2000/10/swap/test/run#_g162>,
+                </devel/WWW/2000/10/swap/test/run#_g163>,
+                </devel/WWW/2000/10/swap/test/run#_g164>,
+                </devel/WWW/2000/10/swap/test/run#_g165>,
+                </devel/WWW/2000/10/swap/test/run#_g166>,
+                </devel/WWW/2000/10/swap/test/run#_g167>,
+                </devel/WWW/2000/10/swap/test/run#_g168>,
+                </devel/WWW/2000/10/swap/test/run#_g169>,
+                </devel/WWW/2000/10/swap/test/run#_g170>,
+                </devel/WWW/2000/10/swap/test/run#_g171>,
+                </devel/WWW/2000/10/swap/test/run#_g172>,
+                </devel/WWW/2000/10/swap/test/run#_g173>,
+                </devel/WWW/2000/10/swap/test/run#_g174>,
+                </devel/WWW/2000/10/swap/test/run#_g175>,
+                </devel/WWW/2000/10/swap/test/run#_g176>,
+                </devel/WWW/2000/10/swap/test/run#_g177>,
+                </devel/WWW/2000/10/swap/test/run#_g178>,
+                </devel/WWW/2000/10/swap/test/run#_g179>,
+                </devel/WWW/2000/10/swap/test/run#_g180>,
+                </devel/WWW/2000/10/swap/test/run#_g181>,
+                </devel/WWW/2000/10/swap/test/run#_g182>,
+                </devel/WWW/2000/10/swap/test/run#_g183>,
+                </devel/WWW/2000/10/swap/test/run#_g184>,
+                </devel/WWW/2000/10/swap/test/run#_g185>,
+                </devel/WWW/2000/10/swap/test/run#_g186>,
+                </devel/WWW/2000/10/swap/test/run#_g187>,
+                </devel/WWW/2000/10/swap/test/run#_g188>,
+                </devel/WWW/2000/10/swap/test/run#_g189>,
+                </devel/WWW/2000/10/swap/test/run#_g190>,
+                </devel/WWW/2000/10/swap/test/run#_g191>,
+                </devel/WWW/2000/10/swap/test/run#_g192>,
+                </devel/WWW/2000/10/swap/test/run#_g193>,
+                </devel/WWW/2000/10/swap/test/run#_g194>,
+                </devel/WWW/2000/10/swap/test/run#_g195>,
+                </devel/WWW/2000/10/swap/test/run#_g196>,
+                </devel/WWW/2000/10/swap/test/run#_g197>,
+                </devel/WWW/2000/10/swap/test/run#_g198>,
+                </devel/WWW/2000/10/swap/test/run#_g199>,
+                </devel/WWW/2000/10/swap/test/run#_g200>,
+                </devel/WWW/2000/10/swap/test/run#_g201>,
+                </devel/WWW/2000/10/swap/test/run#_g202>,
+                </devel/WWW/2000/10/swap/test/run#_g203>,
+                </devel/WWW/2000/10/swap/test/run#_g204>,
+                </devel/WWW/2000/10/swap/test/run#_g205>,
+                </devel/WWW/2000/10/swap/test/run#_g206>,
+                </devel/WWW/2000/10/swap/test/run#_g207>,
+                </devel/WWW/2000/10/swap/test/run#_g208>,
+                </devel/WWW/2000/10/swap/test/run#_g209>,
+                </devel/WWW/2000/10/swap/test/run#_g210>,
+                </devel/WWW/2000/10/swap/test/run#_g211>,
+                </devel/WWW/2000/10/swap/test/run#_g212>,
+                </devel/WWW/2000/10/swap/test/run#_g213>,
+                </devel/WWW/2000/10/swap/test/run#_g214>,
+                </devel/WWW/2000/10/swap/test/run#_g215>,
+                </devel/WWW/2000/10/swap/test/run#_g216>,
+                </devel/WWW/2000/10/swap/test/run#_g217>,
+                </devel/WWW/2000/10/swap/test/run#_g218>,
+                </devel/WWW/2000/10/swap/test/run#_g219>,
+                </devel/WWW/2000/10/swap/test/run#_g220>,
+                </devel/WWW/2000/10/swap/test/run#_g221>,
+                </devel/WWW/2000/10/swap/test/run#_g222>,
+                </devel/WWW/2000/10/swap/test/run#_g223>,
+                </devel/WWW/2000/10/swap/test/run#_g224>,
+                </devel/WWW/2000/10/swap/test/run#_g225>,
+                </devel/WWW/2000/10/swap/test/run#_g226>,
+                </devel/WWW/2000/10/swap/test/run#_g227>,
+                </devel/WWW/2000/10/swap/test/run#_g228>,
+                </devel/WWW/2000/10/swap/test/run#_g229>,
+                </devel/WWW/2000/10/swap/test/run#_g230>,
+                </devel/WWW/2000/10/swap/test/run#_g231>,
+                </devel/WWW/2000/10/swap/test/run#_g232>,
+                </devel/WWW/2000/10/swap/test/run#_g233>,
+                </devel/WWW/2000/10/swap/test/run#_g234>,
+                </devel/WWW/2000/10/swap/test/run#_g235>,
+                </devel/WWW/2000/10/swap/test/run#_g236>,
+                </devel/WWW/2000/10/swap/test/run#_g237>,
+                </devel/WWW/2000/10/swap/test/run#_g238>,
+                </devel/WWW/2000/10/swap/test/run#_g239>,
+                </devel/WWW/2000/10/swap/test/run#_g240>,
+                </devel/WWW/2000/10/swap/test/run#_g241>,
+                </devel/WWW/2000/10/swap/test/run#_g242>,
+                </devel/WWW/2000/10/swap/test/run#_g243>,
+                </devel/WWW/2000/10/swap/test/run#_g244>,
+                </devel/WWW/2000/10/swap/test/run#_g245>,
+                </devel/WWW/2000/10/swap/test/run#_g246>,
+                </devel/WWW/2000/10/swap/test/run#_g247>,
+                </devel/WWW/2000/10/swap/test/run#_g248>,
+                </devel/WWW/2000/10/swap/test/run#_g249>,
+                </devel/WWW/2000/10/swap/test/run#_g250>,
+                </devel/WWW/2000/10/swap/test/run#_g251>,
+                </devel/WWW/2000/10/swap/test/run#_g252>,
+                </devel/WWW/2000/10/swap/test/run#_g253>,
+                </devel/WWW/2000/10/swap/test/run#_g254>,
+                </devel/WWW/2000/10/swap/test/run#_g255>,
+                </devel/WWW/2000/10/swap/test/run#_g256>,
+                </devel/WWW/2000/10/swap/test/run#_g257>,
+                </devel/WWW/2000/10/swap/test/run#_g258>,
+                </devel/WWW/2000/10/swap/test/run#_g259>,
+                </devel/WWW/2000/10/swap/test/run#_g260>,
+                </devel/WWW/2000/10/swap/test/run#_g261>,
+                </devel/WWW/2000/10/swap/test/run#_g262>,
+                </devel/WWW/2000/10/swap/test/run#_g263>,
+                </devel/WWW/2000/10/swap/test/run#_g264>,
+                </devel/WWW/2000/10/swap/test/run#_g265>,
+                </devel/WWW/2000/10/swap/test/run#_g266>,
+                </devel/WWW/2000/10/swap/test/run#_g267>,
+                </devel/WWW/2000/10/swap/test/run#_g268>,
+                </devel/WWW/2000/10/swap/test/run#_g269>,
+                </devel/WWW/2000/10/swap/test/run#_g270>,
+                </devel/WWW/2000/10/swap/test/run#_g271>,
+                </devel/WWW/2000/10/swap/test/run#_g272>,
+                </devel/WWW/2000/10/swap/test/run#_g273>,
+                </devel/WWW/2000/10/swap/test/run#_g274>,
+                </devel/WWW/2000/10/swap/test/run#_g275>,
+                </devel/WWW/2000/10/swap/test/run#_g276>,
+                </devel/WWW/2000/10/swap/test/run#_g277>,
+                </devel/WWW/2000/10/swap/test/run#_g278>,
+                </devel/WWW/2000/10/swap/test/run#_g279>,
+                </devel/WWW/2000/10/swap/test/run#_g280>,
+                </devel/WWW/2000/10/swap/test/run#_g281>,
+                </devel/WWW/2000/10/swap/test/run#_g282>,
+                </devel/WWW/2000/10/swap/test/run#_g283>,
+                </devel/WWW/2000/10/swap/test/run#_g284>,
+                </devel/WWW/2000/10/swap/test/run#_g285>,
+                </devel/WWW/2000/10/swap/test/run#_g286>,
+                </devel/WWW/2000/10/swap/test/run#_g287>,
+                </devel/WWW/2000/10/swap/test/run#_g288>,
+                </devel/WWW/2000/10/swap/test/run#_g289>,
+                </devel/WWW/2000/10/swap/test/run#_g290>,
+                </devel/WWW/2000/10/swap/test/run#_g291>,
+                </devel/WWW/2000/10/swap/test/run#_g292>,
+                </devel/WWW/2000/10/swap/test/run#_g293>,
+                </devel/WWW/2000/10/swap/test/run#_g294>,
+                </devel/WWW/2000/10/swap/test/run#_g295>,
+                </devel/WWW/2000/10/swap/test/run#_g296>,
+                </devel/WWW/2000/10/swap/test/run#_g297>,
+                </devel/WWW/2000/10/swap/test/run#_g298>,
+                </devel/WWW/2000/10/swap/test/run#_g299>,
+                </devel/WWW/2000/10/swap/test/run#_g300>,
+                </devel/WWW/2000/10/swap/test/run#_g301>,
+                </devel/WWW/2000/10/swap/test/run#_g302>,
+                </devel/WWW/2000/10/swap/test/run#_g303>,
+                </devel/WWW/2000/10/swap/test/run#_g304>,
+                </devel/WWW/2000/10/swap/test/run#_g305>,
+                </devel/WWW/2000/10/swap/test/run#_g306>,
+                </devel/WWW/2000/10/swap/test/run#_g307>,
+                </devel/WWW/2000/10/swap/test/run#_g308>,
+                </devel/WWW/2000/10/swap/test/run#_g309>,
+                </devel/WWW/2000/10/swap/test/run#_g310>,
+                </devel/WWW/2000/10/swap/test/run#_g311>,
+                </devel/WWW/2000/10/swap/test/run#_g312>,
+                </devel/WWW/2000/10/swap/test/run#_g313>,
+                </devel/WWW/2000/10/swap/test/run#_g314>,
+                </devel/WWW/2000/10/swap/test/run#_g315>,
+                </devel/WWW/2000/10/swap/test/run#_g316>,
+                </devel/WWW/2000/10/swap/test/run#_g317>,
+                </devel/WWW/2000/10/swap/test/run#_g318>,
+                </devel/WWW/2000/10/swap/test/run#_g319>,
+                </devel/WWW/2000/10/swap/test/run#_g320>,
+                </devel/WWW/2000/10/swap/test/run#_g321>,
+                </devel/WWW/2000/10/swap/test/run#_g322>,
+                </devel/WWW/2000/10/swap/test/run#_g323>,
+                </devel/WWW/2000/10/swap/test/run#_g324>,
+                </devel/WWW/2000/10/swap/test/run#_g325>,
+                </devel/WWW/2000/10/swap/test/run#_g326>,
+                </devel/WWW/2000/10/swap/test/run#_g327>,
+                </devel/WWW/2000/10/swap/test/run#_g328>,
+                </devel/WWW/2000/10/swap/test/run#_g329>,
+                </devel/WWW/2000/10/swap/test/run#_g330>,
+                </devel/WWW/2000/10/swap/test/run#_g331>,
+                </devel/WWW/2000/10/swap/test/run#_g332>,
+                </devel/WWW/2000/10/swap/test/run#_g333>,
+                </devel/WWW/2000/10/swap/test/run#_g334>,
+                </devel/WWW/2000/10/swap/test/run#_g335>,
+                </devel/WWW/2000/10/swap/test/run#_g336>,
+                </devel/WWW/2000/10/swap/test/run#_g337>,
+                </devel/WWW/2000/10/swap/test/run#_g338>,
+                </devel/WWW/2000/10/swap/test/run#_g339>,
+                </devel/WWW/2000/10/swap/test/run#_g340>,
+                </devel/WWW/2000/10/swap/test/run#_g341>,
+                </devel/WWW/2000/10/swap/test/run#_g342>,
+                </devel/WWW/2000/10/swap/test/run#_g343>,
+                </devel/WWW/2000/10/swap/test/run#_g344>,
+                </devel/WWW/2000/10/swap/test/run#_g345>,
+                </devel/WWW/2000/10/swap/test/run#_g346>,
+                </devel/WWW/2000/10/swap/test/run#_g347>,
+                </devel/WWW/2000/10/swap/test/run#_g348>,
+                </devel/WWW/2000/10/swap/test/run#_g349>,
+                </devel/WWW/2000/10/swap/test/run#_g350>,
+                </devel/WWW/2000/10/swap/test/run#_g351>,
+                </devel/WWW/2000/10/swap/test/run#_g352>,
+                </devel/WWW/2000/10/swap/test/run#_g353>,
+                </devel/WWW/2000/10/swap/test/run#_g354>,
+                </devel/WWW/2000/10/swap/test/run#_g355>,
+                </devel/WWW/2000/10/swap/test/run#_g356>,
+                </devel/WWW/2000/10/swap/test/run#_g357>,
+                </devel/WWW/2000/10/swap/test/run#_g358>,
+                </devel/WWW/2000/10/swap/test/run#_g359>,
+                </devel/WWW/2000/10/swap/test/run#_g360>,
+                </devel/WWW/2000/10/swap/test/run#_g361>,
+                </devel/WWW/2000/10/swap/test/run#_g362>,
+                </devel/WWW/2000/10/swap/test/run#_g363>,
+                </devel/WWW/2000/10/swap/test/run#_g364>,
+                </devel/WWW/2000/10/swap/test/run#_g365>,
+                </devel/WWW/2000/10/swap/test/run#_g366>,
+                </devel/WWW/2000/10/swap/test/run#_g367>,
+                </devel/WWW/2000/10/swap/test/run#_g368>,
+                </devel/WWW/2000/10/swap/test/run#_g369>,
+                </devel/WWW/2000/10/swap/test/run#_g370>,
+                </devel/WWW/2000/10/swap/test/run#_g371>,
+                </devel/WWW/2000/10/swap/test/run#_g372>,
+                </devel/WWW/2000/10/swap/test/run#_g373>,
+                </devel/WWW/2000/10/swap/test/run#_g374>,
+                </devel/WWW/2000/10/swap/test/run#_g375>,
+                </devel/WWW/2000/10/swap/test/run#_g376>,
+                </devel/WWW/2000/10/swap/test/run#_g377>,
+                </devel/WWW/2000/10/swap/test/run#_g378>,
+                </devel/WWW/2000/10/swap/test/run#_g379>,
+                </devel/WWW/2000/10/swap/test/run#_g380>,
+                </devel/WWW/2000/10/swap/test/run#_g381>,
+                </devel/WWW/2000/10/swap/test/run#_g382>,
+                </devel/WWW/2000/10/swap/test/run#_g383>,
+                </devel/WWW/2000/10/swap/test/run#_g384>,
+                </devel/WWW/2000/10/swap/test/run#_g385>,
+                </devel/WWW/2000/10/swap/test/run#_g386>,
+                </devel/WWW/2000/10/swap/test/run#_g387>,
+                </devel/WWW/2000/10/swap/test/run#_g388>,
+                </devel/WWW/2000/10/swap/test/run#_g389>,
+                </devel/WWW/2000/10/swap/test/run#_g390>,
+                </devel/WWW/2000/10/swap/test/run#_g391>,
+                </devel/WWW/2000/10/swap/test/run#_g392>,
+                </devel/WWW/2000/10/swap/test/run#_g393>,
+                </devel/WWW/2000/10/swap/test/run#_g394>,
+                </devel/WWW/2000/10/swap/test/run#_g395>,
+                </devel/WWW/2000/10/swap/test/run#_g396>,
+                </devel/WWW/2000/10/swap/test/run#_g397>,
+                </devel/WWW/2000/10/swap/test/run#_g398>,
+                </devel/WWW/2000/10/swap/test/run#_g399>,
+                </devel/WWW/2000/10/swap/test/run#_g400>,
+                </devel/WWW/2000/10/swap/test/run#_g401>,
+                </devel/WWW/2000/10/swap/test/run#_g402>,
+                </devel/WWW/2000/10/swap/test/run#_g403>,
+                </devel/WWW/2000/10/swap/test/run#_g404>,
+                </devel/WWW/2000/10/swap/test/run#_g405>,
+                </devel/WWW/2000/10/swap/test/run#_g406>,
+                </devel/WWW/2000/10/swap/test/run#_g407>,
+                </devel/WWW/2000/10/swap/test/run#_g408>,
+                </devel/WWW/2000/10/swap/test/run#_g409>,
+                </devel/WWW/2000/10/swap/test/run#_g410>,
+                </devel/WWW/2000/10/swap/test/run#_g411>,
+                </devel/WWW/2000/10/swap/test/run#_g412>,
+                </devel/WWW/2000/10/swap/test/run#_g413>,
+                </devel/WWW/2000/10/swap/test/run#_g414>,
+                </devel/WWW/2000/10/swap/test/run#_g415>,
+                </devel/WWW/2000/10/swap/test/run#_g416>,
+                </devel/WWW/2000/10/swap/test/run#_g417>,
+                </devel/WWW/2000/10/swap/test/run#_g418>,
+                </devel/WWW/2000/10/swap/test/run#_g419>,
+                </devel/WWW/2000/10/swap/test/run#_g420>,
+                </devel/WWW/2000/10/swap/test/run#_g421>,
+                </devel/WWW/2000/10/swap/test/run#_g422>,
+                </devel/WWW/2000/10/swap/test/run#_g423>,
+                </devel/WWW/2000/10/swap/test/run#_g424>,
+                </devel/WWW/2000/10/swap/test/run#_g425>,
+                </devel/WWW/2000/10/swap/test/run#_g426>,
+                </devel/WWW/2000/10/swap/test/run#_g427>,
+                </devel/WWW/2000/10/swap/test/run#_g428>,
+                </devel/WWW/2000/10/swap/test/run#_g429>,
+                </devel/WWW/2000/10/swap/test/run#_g430>,
+                </devel/WWW/2000/10/swap/test/run#_g431>,
+                </devel/WWW/2000/10/swap/test/run#_g432>,
+                </devel/WWW/2000/10/swap/test/run#_g433>,
+                </devel/WWW/2000/10/swap/test/run#_g434>,
+                </devel/WWW/2000/10/swap/test/run#_g435>,
+                </devel/WWW/2000/10/swap/test/run#_g436>,
+                </devel/WWW/2000/10/swap/test/run#_g437>,
+                </devel/WWW/2000/10/swap/test/run#_g438>,
+                </devel/WWW/2000/10/swap/test/run#_g439>,
+                </devel/WWW/2000/10/swap/test/run#_g440>,
+                </devel/WWW/2000/10/swap/test/run#_g441>,
+                </devel/WWW/2000/10/swap/test/run#_g442>,
+                </devel/WWW/2000/10/swap/test/run#_g443>,
+                </devel/WWW/2000/10/swap/test/run#_g444>,
+                </devel/WWW/2000/10/swap/test/run#_g445>,
+                </devel/WWW/2000/10/swap/test/run#_g446>,
+                </devel/WWW/2000/10/swap/test/run#_g447>,
+                </devel/WWW/2000/10/swap/test/run#_g448>,
+                </devel/WWW/2000/10/swap/test/run#_g449>,
+                </devel/WWW/2000/10/swap/test/run#_g450>,
+                </devel/WWW/2000/10/swap/test/run#_g451>,
+                </devel/WWW/2000/10/swap/test/run#_g452>,
+                </devel/WWW/2000/10/swap/test/run#_g453>,
+                </devel/WWW/2000/10/swap/test/run#_g454>,
+                </devel/WWW/2000/10/swap/test/run#_g455>,
+                </devel/WWW/2000/10/swap/test/run#_g456>,
+                </devel/WWW/2000/10/swap/test/run#_g457>,
+                </devel/WWW/2000/10/swap/test/run#_g458>,
+                </devel/WWW/2000/10/swap/test/run#_g459>,
+                </devel/WWW/2000/10/swap/test/run#_g460>,
+                </devel/WWW/2000/10/swap/test/run#_g461>,
+                </devel/WWW/2000/10/swap/test/run#_g462>,
+                </devel/WWW/2000/10/swap/test/run#_g463>,
+                </devel/WWW/2000/10/swap/test/run#_g464>,
+                </devel/WWW/2000/10/swap/test/run#_g465>,
+                </devel/WWW/2000/10/swap/test/run#_g466>,
+                </devel/WWW/2000/10/swap/test/run#_g467>,
+                </devel/WWW/2000/10/swap/test/run#_g468>,
+                </devel/WWW/2000/10/swap/test/run#_g469>,
+                </devel/WWW/2000/10/swap/test/run#_g470>,
+                </devel/WWW/2000/10/swap/test/run#_g471>,
+                </devel/WWW/2000/10/swap/test/run#_g472>,
+                </devel/WWW/2000/10/swap/test/run#_g473>,
+                </devel/WWW/2000/10/swap/test/run#_g474>,
+                </devel/WWW/2000/10/swap/test/run#_g475>,
+                </devel/WWW/2000/10/swap/test/run#_g476>,
+                </devel/WWW/2000/10/swap/test/run#_g477>,
+                </devel/WWW/2000/10/swap/test/run#_g478>,
+                </devel/WWW/2000/10/swap/test/run#_g479>,
+                </devel/WWW/2000/10/swap/test/run#_g480>,
+                </devel/WWW/2000/10/swap/test/run#_g481>,
+                </devel/WWW/2000/10/swap/test/run#_g482>,
+                </devel/WWW/2000/10/swap/test/run#_g483>,
+                </devel/WWW/2000/10/swap/test/run#_g484>,
+                </devel/WWW/2000/10/swap/test/run#_g485>,
+                </devel/WWW/2000/10/swap/test/run#_g486>,
+                </devel/WWW/2000/10/swap/test/run#_g487>,
+                </devel/WWW/2000/10/swap/test/run#_g488>,
+                </devel/WWW/2000/10/swap/test/run#_g489>,
+                </devel/WWW/2000/10/swap/test/run#_g490>,
+                </devel/WWW/2000/10/swap/test/run#_g491>,
+                </devel/WWW/2000/10/swap/test/run#_g492>,
+                </devel/WWW/2000/10/swap/test/run#_g493>,
+                </devel/WWW/2000/10/swap/test/run#_g494>,
+                </devel/WWW/2000/10/swap/test/run#_g495>,
+                </devel/WWW/2000/10/swap/test/run#_g496>,
+                </devel/WWW/2000/10/swap/test/run#_g497>,
+                </devel/WWW/2000/10/swap/test/run#_g498>,
+                </devel/WWW/2000/10/swap/test/run#_g499>,
+                </devel/WWW/2000/10/swap/test/run#_g500>,
+                </devel/WWW/2000/10/swap/test/run#_g501>,
+                </devel/WWW/2000/10/swap/test/run#_g502>,
+                </devel/WWW/2000/10/swap/test/run#_g503>,
+                </devel/WWW/2000/10/swap/test/run#_g504>,
+                </devel/WWW/2000/10/swap/test/run#_g505>,
+                </devel/WWW/2000/10/swap/test/run#_g506>,
+                </devel/WWW/2000/10/swap/test/run#_g507>,
+                </devel/WWW/2000/10/swap/test/run#_g508>,
+                </devel/WWW/2000/10/swap/test/run#_g509>,
+                </devel/WWW/2000/10/swap/test/run#_g510>,
+                </devel/WWW/2000/10/swap/test/run#_g97>,
+                </devel/WWW/2000/10/swap/test/run#_g98>,
+                </devel/WWW/2000/10/swap/test/run#_g99>,
+                <#_g0>,
+                <#_g1>,
+                <#_g2>,
+                <#_g3>,
+                <#_g4>,
+                <#_g5>,
+                <#_g6>,
+                <#_g7>,
+                <#_g8>,
+                <#_g9>,
+                <#_g10>,
+                <#_g11>,
+                <#_g12>,
+                <#_g13>,
+                <#_g14>,
+                <#_g15>,
+                <#_g16>,
+                <#_g17>,
+                <#_g18>,
+                <#_g19>,
+                <#_g20>,
+                <#_g21>,
+                <#_g22>,
+                <#_g23>,
+                <#_g24>,
+                <#_g25>,
+                <#_g26>,
+                <#_g27>,
+                <#_g28>,
+                <#_g29>,
+                <#_g30>,
+                <#_g31>,
+                <#_g32>,
+                <#_g33>,
+                <#_g34>,
+                <#_g35>,
+                <#_g36>,
+                <#_g37>,
+                <#_g38>,
+                <#_g39>,
+                <#_g40>,
+                <#_g41>,
+                <#_g42>,
+                <#_g43>,
+                <#_g44>,
+                <#_g45>,
+                <#_g46>,
+                <#_g47>,
+                <#_g48>,
+                <#_g49>,
+                <#_g50>,
+                <#_g51>,
+                <#_g52>,
+                <#_g53>,
+                <#_g54>,
+                <#_g55>,
+                <#_g56>,
+                <#_g57>,
+                <#_g58>,
+                <#_g59>,
+                <#_g60>,
+                <#_g61>,
+                <#_g62>,
+                <#_g63>,
+                <#_g64>,
+                <#_g65>,
+                <#_g66>,
+                <#_g67>,
+                <#_g68>,
+                <#_g69>,
+                <#_g70>,
+                <#_g71>,
+                <#_g72>,
+                <#_g73>,
+                <#_g74>,
+                <#_g75>,
+                <#_g76>,
+                <#_g77>,
+                <#_g78>,
+                <#_g79>,
+                <#_g80>,
+                <#_g81>,
+                <#_g82> .
+      [      a log:Truth;
+             :existentials  [
+                 owl:oneOf  (
+                "file:/devel/WWW/2000/10/swap/test/run#_g13" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g14" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g15" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g16" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g17" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g18" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g19" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g20" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g21" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g22" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g23" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g24" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g25" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g26" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g27" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g28" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g29" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g30" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g31" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g32" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g33" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g34" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g35" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g36" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g37" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g38" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g39" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g40" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g41" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g42" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g43" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g44" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g45" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g46" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g47" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g48" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g49" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g50" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g51" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g52" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g53" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g54" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g55" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g56" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g57" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g58" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g59" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g60" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g61" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g62" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g63" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g64" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g65" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g66" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g67" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g68" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g69" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g70" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g71" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g72" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g73" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g74" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g75" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g76" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g77" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g78" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g79" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g80" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g81" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g82" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g83" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g84" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g85" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g86" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g87" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g88" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g89" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g90" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g91" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g92" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g93" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g94" 
+                "file:/devel/WWW/2000/10/swap/test/run#_g95"  ) ];
+             :statements  [
+                 owl:oneOf  (
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g0> ]
+                 [
+                         :object <#_g0>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
+                         :subject <#_g1> ]
+                 [
+                         :object  [
+                             :items  (
+                             [
+                                     :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ]
+                             [
+                                     :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ]
+                             [
+                                     :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ] ) ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g2> ]
+                 [
+                         :object <#_g2>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                         :subject <#_g1> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#ancestor" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g3> ]
+                 [
+                         :object <#_g3>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g4> ]
+                 [
+                         :object  [
+                             :value "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g5> ]
+                 [
+                         :object <#_g5>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g4> ]
+                 [
+                         :object  [
+                             :value "http://www.daml.org/2001/03/daml+oil#TransitiveProperty" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g6> ]
+                 [
+                         :object <#_g6>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g4> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#bill" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g7> ]
+                 [
+                         :object <#_g7>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g8> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#ancestor" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g9> ]
+                 [
+                         :object <#_g9>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g8> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#pa" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g10> ]
+                 [
+                         :object <#_g10>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g8> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#pa" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g11> ]
+                 [
+                         :object <#_g11>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g12> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#ancestor" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g13> ]
+                 [
+                         :object <#_g13>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g12> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#granpa" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g14> ]
+                 [
+                         :object <#_g14>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g12> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g15> ]
+                 [
+                         :object <#_g15>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
+                         :subject <#_g16> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g17> ]
+                 [
+                         :object <#_g17>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                         :subject <#_g16> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g18> ]
+                 [
+                         :object <#_g18>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g19> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#means" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g20> ]
+                 [
+                         :object <#_g20>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g19> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g21> ]
+                 [
+                         :object <#_g21>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g19> ]
+                 [
+                         :object  [
+                             :items  (
+                            <#_g19>  ) ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g22> ]
+                 [
+                         :object <#_g22>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#statements" ];
+                         :subject <#_g16> ]
+                 [
+                         :object <#_g16>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g23> ]
+                 [
+                         :object  [
+                             :value "http://www.w3.org/2000/10/swap/log#implies" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g24> ]
+                 [
+                         :object <#_g24>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g23> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g25> ]
+                 [
+                         :object <#_g25>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
+                         :subject <#_g26> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g27> ]
+                 [
+                         :object <#_g27>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                         :subject <#_g26> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g28> ]
+                 [
+                         :object <#_g28>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g29> ]
+                 [
+                         :object  [
+                             :value "http://www.w3.org/2000/10/swap/log#implies" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g30> ]
+                 [
+                         :object <#_g30>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g29> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g31> ]
+                 [
+                         :object <#_g31>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g29> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g32> ]
+                 [
+                         :object <#_g32>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g33> ]
+                 [
+                         :object  [
+                             :value "http://www.w3.org/2000/10/swap/log#implies" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g34> ]
+                 [
+                         :object <#_g34>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g33> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g35> ]
+                 [
+                         :object <#_g35>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g33> ]
+                 [
+                         :object  [
+                             :items  (
+                            <#_g29> 
+                            <#_g33>  ) ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g36> ]
+                 [
+                         :object <#_g36>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#statements" ];
+                         :subject <#_g26> ]
+                 [
+                         :object <#_g26>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g23> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g37> ]
+                 [
+                         :object <#_g37>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
+                         :subject <#_g38> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g39> ]
+                 [
+                         :object <#_g39>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                         :subject <#_g38> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g40> ]
+                 [
+                         :object <#_g40>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g41> ]
+                 [
+                         :object  [
+                             :value "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g42> ]
+                 [
+                         :object <#_g42>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g41> ]
+                 [
+                         :object  [
+                             :value "http://www.daml.org/2001/03/daml+oil#TransitiveProperty" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g43> ]
+                 [
+                         :object <#_g43>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g41> ]
+                 [
+                         :object  [
+                             :items  (
+                            <#_g41>  ) ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g44> ]
+                 [
+                         :object <#_g44>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#statements" ];
+                         :subject <#_g38> ]
+                 [
+                         :object <#_g38>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g45> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#means" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g46> ]
+                 [
+                         :object <#_g46>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g45> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g47> ]
+                 [
+                         :object <#_g47>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
+                         :subject <#_g48> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g49> ]
+                 [
+                         :object <#_g49>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                         :subject <#_g48> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g50> ]
+                 [
+                         :object <#_g50>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
+                         :subject <#_g51> ]
+                 [
+                         :object  [
+                             :items  (
+                             [
+                                     :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#x" ]
+                             [
+                                     :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#y" ]
+                             [
+                                     :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#z" ] ) ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g52> ]
+                 [
+                         :object <#_g52>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                         :subject <#_g51> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g53> ]
+                 [
+                         :object <#_g53>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
+                         :subject <#_g54> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g55> ]
+                 [
+                         :object <#_g55>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                         :subject <#_g54> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#x" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g56> ]
+                 [
+                         :object <#_g56>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g57> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g58> ]
+                 [
+                         :object <#_g58>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g57> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#y" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g59> ]
+                 [
+                         :object <#_g59>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g57> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#y" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g60> ]
+                 [
+                         :object <#_g60>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g61> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g62> ]
+                 [
+                         :object <#_g62>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g61> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#z" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g63> ]
+                 [
+                         :object <#_g63>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g61> ]
+                 [
+                         :object  [
+                             :items  (
+                            <#_g57> 
+                            <#_g61>  ) ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g64> ]
+                 [
+                         :object <#_g64>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#statements" ];
+                         :subject <#_g54> ]
+                 [
+                         :object <#_g54>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g65> ]
+                 [
+                         :object  [
+                             :value "http://www.w3.org/2000/10/swap/log#implies" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g66> ]
+                 [
+                         :object <#_g66>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g65> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g67> ]
+                 [
+                         :object <#_g67>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#existentials" ];
+                         :subject <#_g68> ]
+                 [
+                         :object  [
+                             :items () ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g69> ]
+                 [
+                         :object <#_g69>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#universals" ];
+                         :subject <#_g68> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#x" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g70> ]
+                 [
+                         :object <#_g70>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g71> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g72> ]
+                 [
+                         :object <#_g72>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g71> ]
+                 [
+                         :object  [
+                             :value "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#z" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g73> ]
+                 [
+                         :object <#_g73>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g71> ]
+                 [
+                         :object  [
+                             :items  (
+                            <#_g71>  ) ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g74> ]
+                 [
+                         :object <#_g74>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#statements" ];
+                         :subject <#_g68> ]
+                 [
+                         :object <#_g68>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g65> ]
+                 [
+                         :object  [
+                             :items  (
+                            <#_g65>  ) ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g75> ]
+                 [
+                         :object <#_g75>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#statements" ];
+                         :subject <#_g51> ]
+                 [
+                         :object <#_g51>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g76> ]
+                 [
+                         :object  [
+                             :value "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g77> ]
+                 [
+                         :object <#_g77>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g76> ]
+                 [
+                         :object  [
+                             :value "http://www.w3.org/2000/10/swap/log#Truth" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g78> ]
+                 [
+                         :object <#_g78>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g76> ]
+                 [
+                         :object  [
+                             :items  (
+                            <#_g76>  ) ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g79> ]
+                 [
+                         :object <#_g79>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#statements" ];
+                         :subject <#_g48> ]
+                 [
+                         :object <#_g48>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g45> ]
+                 [
+                         :object <#_g26>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#subject" ];
+                         :subject <#_g80> ]
+                 [
+                         :object  [
+                             :value "http://www.w3.org/2000/10/swap/log#implies" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#uri" ];
+                         :subject <#_g81> ]
+                 [
+                         :object <#_g81>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#predicate" ];
+                         :subject <#_g80> ]
+                 [
+                         :object <#_g16>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#object" ];
+                         :subject <#_g80> ]
+                 [
+                         :object  [
+                             :items  (
+                            <#_g4> 
+                            <#_g8> 
+                            <#_g12> 
+                            <#_g23> 
+                            <#_g45> 
+                            <#_g80>  ) ];
+                         :predicate  [
+                             :uri "http://www.w3.org/2002/07/owl#oneOf" ];
+                         :subject <#_g82> ]
+                 [
+                         :object <#_g82>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2004/06/rei#statements" ];
+                         :subject <#_g1> ]
+                 [
+                         :object  [
+                             :uri "http://www.w3.org/2000/10/swap/log#Truth" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject <#_g1> ] ) ];
+             :universals  [
+                 owl:oneOf () ] ].
+    

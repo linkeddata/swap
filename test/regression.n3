@@ -266,7 +266,7 @@
 
 :t1030 a test:CwmTest;
     test:referenceOutput <ref/underbarscope-out.n3>;
-    test:description   "The scope of _:me should be the document";
+    test:description   "The scope of _:me should be the formula";
     test:arguments     """underbarscope.n3 --think""".
 
 :t103005 a 

@@ -904,7 +904,7 @@ class SinkParser:
 #		    res.append(self._store.newLiteral(str[i:j],
 #			self._store.newSymbol(FLOAT_DATATYPE)))
 		else:
-		    res.append(int(str[i:j]))
+		    res.append(long(str[i:j]))
 #		    res.append(self._store.newLiteral(str[i:j],
 #			self._store.newSymbol(INTEGER_DATATYPE)))
 		return j
@@ -1446,7 +1446,7 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 	    if dt != None and "n" not in self._flags:
 		dt_uri = dt.uriref()		 
 		if (dt_uri == INTEGER_DATATYPE):
-		    return str(int(s))
+		    return str(long(s))
 		if (dt_uri == FLOAT_DATATYPE):
 		    return str(float(s))    # numeric value python-normalized
 	    st = stringToN3(s, singleLine= singleLine)

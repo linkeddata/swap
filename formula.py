@@ -587,7 +587,7 @@ class Formula(AnonymousNode, CompoundTerm):
         It will also be useful for the flattener, when we write it.
         """
         for quad in self.statements:
-            for s in SUBJ, OBJ:
+            for s in PRED, SUBJ, OBJ:
                 val = 0
                 if isinstance(quad[s], CompoundTerm):
                     val = val or quad[s].doesNodeAppear(symbol)
@@ -694,8 +694,10 @@ class StoredStatement:
 	c, p, s, o = self.quad
 	f = store.newFormula()   # @@@CAN WE DO THIS BY CLEVER SUBCLASSING? statement subclass of f?
 	f.add(s, p, o, why=why)
-	uu = store.occurringIn(f, c.universals())
-	ee = store.occurringIn(f, c.existentials())
+#	uu = store.occurringIn(f, c.universals())
+#	ee = store.occurringIn(f, c.existentials())
+	uu = f.occurringIn(c.universals())
+	ee = f.occurringIn(c.existentials())
 	bindings = []
 	for v in uu:
 	    x = f.newUniversal(v.uriref(), why=why)

@@ -1,0 +1,243 @@
+     @prefix : <http://www.w3.org/2004/06/rei#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix owl: <http://www.w3.org/2002/07/owl#> .
+    
+     @forSome </devel/WWW/2000/10/swap/test/run#_g13>,
+                </devel/WWW/2000/10/swap/test/run#_g14>,
+                </devel/WWW/2000/10/swap/test/run#_g15>,
+                </devel/WWW/2000/10/swap/test/run#_g16>,
+                </devel/WWW/2000/10/swap/test/run#_g17>,
+                </devel/WWW/2000/10/swap/test/run#_g18>,
+                </devel/WWW/2000/10/swap/test/run#_g19>,
+                </devel/WWW/2000/10/swap/test/run#_g20>,
+                </devel/WWW/2000/10/swap/test/run#_g21>,
+                </devel/WWW/2000/10/swap/test/run#_g22>,
+                </devel/WWW/2000/10/swap/test/run#_g23>,
+                </devel/WWW/2000/10/swap/test/run#_g24>,
+                </devel/WWW/2000/10/swap/test/run#_g25>,
+                </devel/WWW/2000/10/swap/test/run#_g26>,
+                </devel/WWW/2000/10/swap/test/run#_g27>,
+                </devel/WWW/2000/10/swap/test/run#_g28>,
+                </devel/WWW/2000/10/swap/test/run#_g29>,
+                </devel/WWW/2000/10/swap/test/run#_g30>,
+                </devel/WWW/2000/10/swap/test/run#_g31>,
+                </devel/WWW/2000/10/swap/test/run#_g32>,
+                </devel/WWW/2000/10/swap/test/run#_g33>,
+                </devel/WWW/2000/10/swap/test/run#_g34>,
+                </devel/WWW/2000/10/swap/test/run#_g35>,
+                </devel/WWW/2000/10/swap/test/run#_g36>,
+                </devel/WWW/2000/10/swap/test/run#_g37>,
+                </devel/WWW/2000/10/swap/test/run#_g38>,
+                </devel/WWW/2000/10/swap/test/run#_g39>,
+                </devel/WWW/2000/10/swap/test/run#_g40>,
+                </devel/WWW/2000/10/swap/test/run#_g41>,
+                </devel/WWW/2000/10/swap/test/run#_g42>,
+                </devel/WWW/2000/10/swap/test/run#_g43>,
+                </devel/WWW/2000/10/swap/test/run#_g44>,
+                </devel/WWW/2000/10/swap/test/run#_g45>,
+                </devel/WWW/2000/10/swap/test/run#_g46>,
+                </devel/WWW/2000/10/swap/test/run#_g47>,
+                </devel/WWW/2000/10/swap/test/run#_g48>,
+                </devel/WWW/2000/10/swap/test/run#_g49>,
+                </devel/WWW/2000/10/swap/test/run#_g50>,
+                </devel/WWW/2000/10/swap/test/run#_g51>,
+                </devel/WWW/2000/10/swap/test/run#_g52>,
+                </devel/WWW/2000/10/swap/test/run#_g53>,
+                </devel/WWW/2000/10/swap/test/run#_g54>,
+                </devel/WWW/2000/10/swap/test/run#_g55>,
+                </devel/WWW/2000/10/swap/test/run#_g56>,
+                </devel/WWW/2000/10/swap/test/run#_g57>,
+                </devel/WWW/2000/10/swap/test/run#_g58>,
+                </devel/WWW/2000/10/swap/test/run#_g59>,
+                </devel/WWW/2000/10/swap/test/run#_g60>,
+                </devel/WWW/2000/10/swap/test/run#_g61>,
+                </devel/WWW/2000/10/swap/test/run#_g62>,
+                </devel/WWW/2000/10/swap/test/run#_g63>,
+                </devel/WWW/2000/10/swap/test/run#_g64>,
+                </devel/WWW/2000/10/swap/test/run#_g65>,
+                </devel/WWW/2000/10/swap/test/run#_g66>,
+                </devel/WWW/2000/10/swap/test/run#_g67>,
+                </devel/WWW/2000/10/swap/test/run#_g68>,
+                </devel/WWW/2000/10/swap/test/run#_g69>,
+                </devel/WWW/2000/10/swap/test/run#_g70>,
+                </devel/WWW/2000/10/swap/test/run#_g71>,
+                </devel/WWW/2000/10/swap/test/run#_g72>,
+                </devel/WWW/2000/10/swap/test/run#_g73>,
+                </devel/WWW/2000/10/swap/test/run#_g74>,
+                </devel/WWW/2000/10/swap/test/run#_g75>,
+                </devel/WWW/2000/10/swap/test/run#_g76>,
+                </devel/WWW/2000/10/swap/test/run#_g77>,
+                </devel/WWW/2000/10/swap/test/run#_g78>,
+                </devel/WWW/2000/10/swap/test/run#_g79>,
+                </devel/WWW/2000/10/swap/test/run#_g80>,
+                </devel/WWW/2000/10/swap/test/run#_g81>,
+                </devel/WWW/2000/10/swap/test/run#_g82>,
+                </devel/WWW/2000/10/swap/test/run#_g83>,
+                </devel/WWW/2000/10/swap/test/run#_g84>,
+                </devel/WWW/2000/10/swap/test/run#_g85>,
+                </devel/WWW/2000/10/swap/test/run#_g86>,
+                </devel/WWW/2000/10/swap/test/run#_g87>,
+                </devel/WWW/2000/10/swap/test/run#_g88>,
+                </devel/WWW/2000/10/swap/test/run#_g89>,
+                </devel/WWW/2000/10/swap/test/run#_g90>,
+                </devel/WWW/2000/10/swap/test/run#_g91>,
+                </devel/WWW/2000/10/swap/test/run#_g92>,
+                </devel/WWW/2000/10/swap/test/run#_g93>,
+                </devel/WWW/2000/10/swap/test/run#_g94>,
+                </devel/WWW/2000/10/swap/test/run#_g95>,
+                <#_g0>,
+                <#_g1> .
+      [      a log:Truth;
+             :existentials  [
+                 owl:oneOf () ];
+             :statements  [
+                 owl:oneOf  (
+                 [
+                         :object  [
+                             :uri "http://www.daml.org/2001/03/daml+oil#TransitiveProperty" ];
+                         :predicate  [
+                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                         :subject  [
+                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#ancestor" ] ]
+                 [
+                         :object  [
+                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#pa" ];
+                         :predicate  [
+                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#ancestor" ];
+                         :subject  [
+                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#bill" ] ]
+                 [
+                         :object  [
+                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#granpa" ];
+                         :predicate  [
+                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#ancestor" ];
+                         :subject  [
+                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#pa" ] ]
+                 [
+                         :object <#_g1>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
+                         :subject <#_g0> ]
+                 [
+                         :object  [
+                             :existentials  [
+                                 owl:oneOf () ];
+                             :statements  [
+                                 owl:oneOf  (
+                                 [
+                                         :object  [
+                                             :uri "http://www.w3.org/2000/10/swap/log#Truth" ];
+                                         :predicate  [
+                                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                                         :subject  [
+                                             :existentials  [
+                                                 owl:oneOf () ];
+                                             :statements  [
+                                                 owl:oneOf  (
+                                                 [
+                                                         :object  [
+                                                             :existentials  [
+                                                                 owl:oneOf () ];
+                                                             :statements  [
+                                                                 owl:oneOf  (
+                                                                 [
+                                                                         :object  [
+                                                                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#z" ];
+                                                                         :predicate  [
+                                                                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
+                                                                         :subject  [
+                                                                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#x" ] ] ) ];
+                                                             :universals  [
+                                                                 owl:oneOf () ] ];
+                                                         :predicate  [
+                                                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
+                                                         :subject  [
+                                                             :existentials  [
+                                                                 owl:oneOf () ];
+                                                             :statements  [
+                                                                 owl:oneOf  (
+                                                                 [
+                                                                         :object  [
+                                                                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#y" ];
+                                                                         :predicate  [
+                                                                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
+                                                                         :subject  [
+                                                                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#x" ] ]
+                                                                 [
+                                                                         :object  [
+                                                                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#z" ];
+                                                                         :predicate  [
+                                                                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ];
+                                                                         :subject  [
+                                                                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#y" ] ] ) ];
+                                                             :universals  [
+                                                                 owl:oneOf () ] ] ] ) ];
+                                             :universals  [
+                                                 owl:oneOf  (
+                                                "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#x" 
+                                                "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#y" 
+                                                "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#z"  ) ] ] ] ) ];
+                             :universals  [
+                                 owl:oneOf () ] ];
+                         :predicate  [
+                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#means" ];
+                         :subject  [
+                             :existentials  [
+                                 owl:oneOf () ];
+                             :statements  [
+                                 owl:oneOf  (
+                                 [
+                                         :object  [
+                                             :uri "http://www.daml.org/2001/03/daml+oil#TransitiveProperty" ];
+                                         :predicate  [
+                                             :uri "http://www.w3.org/1999/02/22-rdf-syntax-ns#type" ];
+                                         :subject  [
+                                             :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p" ] ] ) ];
+                             :universals  [
+                                 owl:oneOf () ] ] ]
+                 [
+                         :object <#_g0>;
+                         :predicate  [
+                             :uri "http://www.w3.org/2000/10/swap/log#implies" ];
+                         :subject <#_g1> ] ) ];
+             :universals  [
+                 owl:oneOf  (
+                "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" 
+                "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" 
+                "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#p"  ) ] ].
+    
+    <#_g0>     :existentials  [
+             owl:oneOf () ];
+         :statements  [
+             owl:oneOf  (
+             [
+                     :object  [
+                         :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ];
+                     :predicate  [
+                         :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#means" ];
+                     :subject  [
+                         :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ] ] ) ];
+         :universals  [
+             owl:oneOf () ] .
+    
+    <#_g1>     :existentials  [
+             owl:oneOf () ];
+         :statements  [
+             owl:oneOf  (
+             [
+                     :object  [
+                         :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ];
+                     :predicate  [
+                         :uri "http://www.w3.org/2000/10/swap/log#implies" ];
+                     :subject  [
+                         :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ] ]
+             [
+                     :object  [
+                         :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#a" ];
+                     :predicate  [
+                         :uri "http://www.w3.org/2000/10/swap/log#implies" ];
+                     :subject  [
+                         :uri "file:/devel/WWW/2000/10/swap/test/reify/reify0.n3#b" ] ] ) ];
+         :universals  [
+             owl:oneOf () ] .
+    

@@ -485,6 +485,7 @@ class List(CompoundTerm):
 	while not isinstance(x, EmptyList):
 	    y = x.first
 	    x = x.rest
+	    import types
 	    set = merge(set, y.occurringIn(vars))
 	return set
 
@@ -657,10 +658,50 @@ class FragmentNil(EmptyList, Fragment):
 #
 #		L I T E R A L S
 
-typeMap = { "integer": int, "boolean": int,
-		"long": long,
-		"double": float, "float": float,
-		"string": str, "datetime":str, "anyURI": str } 
+typeMap = { "integer": long,
+                "nonPositiveInteger": long,
+                    "negativeInteger": long,
+                "long": int,
+                    "int": int,
+                        "short": int,
+                            "byte": int,
+                "nonNegativeInteger": long,
+                    "unsignedLong": int,
+                        "unsignedInt": int,
+                            "unsignedShort": int,
+                                "unsignedByte": int,
+                    "positiveInteger": long,
+            "boolean": int,
+            "double": float,
+            "float": float,
+            "duration": str,
+            "dateTime": str,
+            "time": str,
+            "date": str,
+            "gYearMonth": str,
+            "gYear": str,
+            "gMonthDay": str,
+            "gDay": str,
+            "gMonth": str,
+            "anyURI": str,
+            "QName": str,
+            "NOTATION": str,
+            "string": str,
+                "normalizedString": str,
+                    "token": str,
+                        "language": str,
+                        "Name": str,
+                            "NCNAME": str,
+                                "ID": str,
+                                "IDREF": str,
+                                    "IDREFS": str,
+                                "ENTITY": str,
+                                    "ENTITIES": str,
+                        "NMTOKEN": str,
+                            "NMTOKENS": str}
+##
+## We don't support decimal, base64Binary, or hexBinary
+##
 class Literal(Term):
     """ A Literal is a representation of an RDF literal
 

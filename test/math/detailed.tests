@@ -21,7 +21,9 @@
     test:description   "Various trig builtins";
     test:arguments     """math/trigo-test.n3 --think --data""".
  
-
-
+:t10395 a test:CwmTest;
+    test:referenceOutput <../math/long.n3>;
+    test:description   "Various trig builtins";
+    test:arguments     """math/long.n3""".
 
 #ends
