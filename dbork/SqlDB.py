@@ -546,7 +546,9 @@ class SqlDBAlgae(RdfDBAlgae):
                 rowBindings[qp] = answerRow[cols[0]]
 
             # ... and the supporting statements.
-            nextStatements[-1].append(self._bindingsToStatements(implQuerySets, rowBindings, uniqueStatementsCheat))
+            foo = self._bindingsToStatements(implQuerySets, rowBindings, uniqueStatementsCheat)
+            for statement in foo:
+                nextStatements[-1].append(statement)
 	    #for s in nextStatements->[-1]
             #    $self->{-db}->applyClosureRules($self->{-db}{INTERFACES_implToAPI}, 
             #				    $s->getPredicate, $s->getSubject, $s->getObject, 
@@ -562,9 +564,13 @@ class SqlDBAlgae(RdfDBAlgae):
                         binding = self.disjunctionBindings[subTerm]
                         qp, cols = binding
                         if (rowBindings[qp]):
-                            ret.append(self._bindingsToStatements(subTerm, rowBindings, uniqueStatementsCheat))
+                            foo = self._bindingsToStatements(subTerm, rowBindings, uniqueStatementsCheat)
+                            for statement in foo:
+                                ret.append(statement)
 		    else:
-		        ret.append(self._bindingsToStatements(subTerm, rowBindings, uniqueStatementsCheat))
+		        foo = self._bindingsToStatements(subTerm, rowBindings, uniqueStatementsCheat)
+                        for statement in foo:
+                            ret.append(statement)
             return ret
         pred = NTriplesAtom(term[PRED], rowBindings)
         subj = NTriplesAtom(term[SUBJ], rowBindings)
@@ -582,7 +588,7 @@ class SqlDBAlgae(RdfDBAlgae):
                     uniqueStatementsCheat[pred][subj] = {obj : statement}
             except KeyError, e:
                 uniqueStatementsCheat[pred] = {subj : {obj : statement}}
-        return statement
+        return [statement]
 
     def _addReaches (self, frm, to, term):
         # Entries are a list of paths (lists) that connect frm to to and visa
@@ -783,12 +789,11 @@ if __name__ == '__main__':
     for solutions in nextStatements:
         print "query solution {"
         for statement in solutions:
-            print statement
-            # print ShowStatement(statement)
+            print ShowStatement(statement)
         print "} ."
 
 blah = """
-testing with `python2.2 ./cwm.py test/dbork/aclQuery.n3` -think
+testing with `python2.2 ./cwm.py test/dbork/aclQuery.n3 -think`
 
 aclQuery -- :acl acls:access :access .
 sentences[1].quad -- (attrib,      s,   p,      o)
