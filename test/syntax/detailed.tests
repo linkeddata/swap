@@ -29,6 +29,11 @@
     test:description   "Can still gen the old 'this log:forAll' syntax";
     test:arguments     "--n3=v rules13.n3".
 
+:syn007 a test:CwmTest;
+    test:referenceOutput <trailing-semicolon-ref.nt>;
+    test:description   "Propertylists can end in trailing semicolon.";
+    test:arguments     "--n3 syntax/trailing-semicolon.n3 --ntriples".
+
 
 
 
