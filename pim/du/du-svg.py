@@ -1,35 +1,34 @@
 #!/bin/python
-"""Convert disk utiliyzation output to scalable graphic
+"""Visualize disk usage as scalable graphic
 
+A rectangular area is divided up according to directories and subdirectories,
+to scale so you can see where all you disk space has gone.
 
-dusvg > foo.svg
+du-svg ~/Documents > foo.svg
+
+Author timbl@w3.org 2004/9/19
+Licence: W3C open source. Enjoy
 """
 
 import os, sys
 from os.path import join, getsize
 
-#for root, dirs, files in os.walk('python/Lib/email'):
-#    print root, "consumes",
-#    print sum([getsize(join(root, name)) for name in files]),
-#    print "bytes in", len(files), "non-directory files"
-#    if 'CVS' in dirs:
-#        dirs.remove('CVS')  # don't visit CVS directories
-
-verbose = 1
+verbose = 0
 ignorable = []
 threshold = 1 # Bytes: ignore below this size
 chunking = 120	# Number of perpendicular things we like in a region
-#	strokeColor  fillColor
+#	 fillColor	strokeColor
 style =  [
-	("#F88",		"#400"),  	# red
-	("#FC8",		"#420"),	# Orange
-	("#FF8",		"#440"),
-	("#8F8",		"#040"),
-	("#8FF",		"#044"),
-	("#88F",		"#004"),
+	("none",		"black"),
+	("#FDD",		"#400"),  	# red
+#	("#FED",		"#420"),	# Orange
+	("#FFD",		"#440"),	# Yellow
+	("#DFD",		"#040"),
+	("#DFF",		"#044"),
+	("#DDF",		"#004"),
 	("#FFF",		"#002"),
-	("#F88",		"#400"),
-	("#FFF",		"none")
+	("#FDF",		"#404"),
+	("none",		"black")
 	]
 	
 svg = sys.stdout.write
@@ -62,7 +61,12 @@ class File:
 	    self.size = s.st_size
 	    if (s.st_mode & 0x4000): # Directory .. symbol?
 		self.children = []
-		contents = os.listdir(path)
+		try:
+		    contents = os.listdir(path)
+		except OSError:
+		    if verbose >= 0:
+			deb(" "*self.level +  "Error listing %s, assumed empty\n" % path)
+		    contents = []
 		for fn in contents:
 		    child = File(fn, self, self.level+1)
 		    self.size += child.measure()
@@ -70,33 +74,38 @@ class File:
 		if verbose: deb( " "*self.level + "...Dir %s total size %i\n" %(self.name,self.size))
 	return self.size
     
-    def layout(self, x, y, width, height, flipped=0):
+    def layout(self, x, y, width, height, flipped=0, inheritedPath = ""):
 	if verbose: deb( " "*self.level + "Layout for %s (%f,%f)-(%f,%f) %i\n" %(
 			    self.path(), x, y, x+width, y+height, flipped))
-	if height > width: return self.layout(y, x, height, width, flipped=1-flipped)
+	if height > width: return self.layout(y, x, height, width, flipped=1-flipped, inheritedPath= inheritedPath)
+	lab = inheritedPath + self.name
 	if self.children == None:
 	    self.rectangle(x, y, width, height, flipped)
-	    self.label(x, y, width, height, flipped)
+	    self.label(lab, x, y, width, height, flipped)
 	    return # Plain file
 
 	# First the details then overlay this one
 	yy = []
 	for child in self.children:
-	    if child.size > threshold:
+	    if (child.size > threshold):  #  and (child.size * chunking > self.size):
 		yy.append((child.size, child))
 	yy.sort()
 	yy.reverse()  # Now in reverse order of size, biggest first
 	cursor = 0
+	singleton = (len(yy) == 1) and (self.size - yy[0][0]) < threshold
+	if singleton: ip = lab + "/"
+	else: ip = ""
 	for siz, child in yy:
-	    if siz * chunking > self.size:
-		dx = width * siz/float(self.size)
-		child.layout(x + cursor, y, dx, height, flipped)
-		cursor += dx
-	    remaining = width - cursor
+	    dx = width * siz/float(self.size)
+	    child.layout(x + cursor, y, dx, height, flipped, ip)
+	    cursor += dx
+#	remaining = width - cursor
 
 	self.rectangle(x, y, width, height, flipped, opacity=0.2)
-	if self.level > 0:
-	    self.label(x, y, width, height, flipped, opacity=0.2)
+	if self.level > 0 and not singleton:
+	    if len(yy) == 0: opacity = 1.0
+	    else: opacity = 0.2
+	    self.label(lab, x, y, width, height, flipped, opacity=opacity)
 
     def rectangle(self, x, y, dx, dy, flipped=0, opacity=1.0):
 	if flipped: return self.rectangle(y, x, dy, dx, flipped=0, opacity=opacity) #  flip
@@ -106,27 +115,31 @@ class File:
 	svg("""<rect x="%f" y="%f" width="%f" height="%f" opacity="%1.1f"
         fill="%s" stroke="%s" stroke-width="%f"/>\n""" %(x, y, dx, dy, opacity, fillColor, strokeColor, strokeWidth))
 
-    def label(self, x, y, dx, dy, flipped, opacity=1.0):
+    def label(self, lab, x, y, dx, dy, flipped, opacity=1.0):
 	fillColor, strokeColor = style[self.level]
 	# Figure out max font size will fit in
-	if flipped:
-	    em1 = (dy/len(self.name)) * 1.6
+#	if flipped:
+	if 0:
+	    em1 = (dy/(len(lab)+2)) * 1.6
 	    em2 = (dx/2)
 	else:
-	    em1 = (dx/len(self.name)) * 1.6
+	    em1 = (dx/(len(lab)+2)) * 1.6
 	    em2 = (dy/2)
 	em = min(em1, em2)
+	stagger = (self.level-2) * em /2.0
+	y1 = y+(dy/2)+ (0.3*em) + stagger
 	strokeWidth = em/200
 	if flipped:
 	    svg("""<g transform="translate(%f,%f)">
 	<text transform="rotate(-90deg)" x="0" y="0" opacity="%1.1f" 
 	    fill="%s" stroke="%s" font-size="%f" stroke-width="%f">%s</text></g>\n""" #"
-		%(y+(dy/2)+ (0.3*em), x+dx-em, opacity,  strokeColor, strokeColor, em,  strokeWidth, escape(self.name)))
+		%(y1, x+dx-em, opacity,  strokeColor, strokeColor, em,  strokeWidth, escape(lab)))
 	else:
 	    svg("""<text x="%f" y="%f" opacity="%1.1f" fill="%s" stroke="%s" font-size="%f" stroke-width="%f">%s</text>\n""" 
-		%(x+(em/2), y+(dy/2)+ (0.3*em),  opacity, strokeColor, strokeColor, em,  strokeWidth, escape(self.name)))
+		%(x+(em/2), y1,  opacity, strokeColor, strokeColor, em,  strokeWidth, escape(lab)))
 	
 def escape(s):
+    "Escape text for XML"
     res = ""
     for ch in s:
 	if ch == "&": ch = "&amp;"
@@ -142,8 +155,8 @@ svg("<svg>\n")
 top = File(start)
 x = top.measure()
 threshold = x/1000.0  # say ... try that
-deb("Total size %f; ignoring things les than %f\n" %(x, threshold))
-top.layout(0, 0, 600, 800)
+deb("Total size %f; ignoring things less than %f\n" %(x, threshold))
+top.layout(0, 0, 550, 700)
 svg("</svg>\n")
 
 # ends
