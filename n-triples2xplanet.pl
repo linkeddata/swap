@@ -22,7 +22,7 @@
 
 use strict;
 
-my (@Markers, %X, %Y, %Label, %Align);
+my (@Markers, %X, %Y, %Label, %Align, %Color);
 
 &slurp();
 &burp();
@@ -64,6 +64,7 @@ sub burp{
   foreach $m (@Markers){
     printf ("%s %s %s", $Y{$m}, $X{$m}, $Label{$m});
     printf (" align=%s", $Align{$m}) if $Align{$m};
+    printf (" color=%s", $Color{$m}) if $Color{$m};
     print "\n\n"
   }
 }
@@ -99,6 +100,10 @@ sub statement{
     $o =~ s/^\"//; $o =~ s/\"$//;
     $Align{$s} = $o;
   }
+  elsif ($p eq 'http://www.w3.org/2001/02pd/xplanet#color'){
+    $o =~ s/^\"//; $o =~ s/\"$//;
+    $Color{$s} = $o;
+  }
 }
 
 sub fromDMSd{
@@ -111,7 +116,7 @@ sub fromDMSd{
     ($d, $m, $s, $dir) = ($1, $3, $5, $6);
     $dir = ($dir eq 'N' || $dir eq 'E') ? 1 : -1;
     $ret = $dir * ($d + ($m + ($s / 60.0)) / 60.0);
-    print STDERR "@@ fromDMSd: $o ==> $d $m $s ==> $ret\n";
+    #print STDERR " fromDMSd: $o ==> $d $m $s ==> $ret\n";
     return $dir * ($d + ($m + ($s / 60.0)) / 60.0);
   }
 
@@ -156,7 +161,10 @@ sub term{
     
 
 # $Log$
-# Revision 1.1  2001-11-11 03:34:52  connolly
+# Revision 1.2  2001-11-11 03:46:06  connolly
+# handles marker color now
+#
+# Revision 1.1  2001/11/11 03:34:52  connolly
 # works for a few WebOnt WG members
 #
 
