@@ -15,7 +15,7 @@
 @prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
 
 
-this log:forAll :a, :b, :c, :d, :e, :f, :g, :h, :j, :k, :p, :s, :t, :w, :x, :y, :z.
+@forAll :a, :b, :c, :d, :e, :f, :g, :h, :j, :k, :p, :s, :t, :w, :x, :y, :z.
 
 #() :elementsOnly ().
 ##

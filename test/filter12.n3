@@ -5,7 +5,7 @@
 
 # DanC challenge - see rules12.n3
 
-this log:forAll <#x> , <#y> , <#z>.
+@forAll <#x> , <#y> , <#z>.
 
 { <#x> rules:ancestor <#y> . } log:implies { <#x> rules:ancestor <#y> .}.
 

@@ -1,7 +1,7 @@
      @prefix : <v#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    this     log:forAll :a,
+    @forAll :a,
                 :b,
                 :c,
                 :x,

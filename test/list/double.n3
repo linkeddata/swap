@@ -8,7 +8,7 @@
 @prefix : <#>.
 
 
-this log:forAll :a, :s.
+@forAll :a, :s.
 
 "Ostrich" a :foobar.
 

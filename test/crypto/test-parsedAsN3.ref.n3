@@ -2,7 +2,7 @@
      @prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    this     log:forAll :F .
+    @forAll :F .
     {
         """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
      @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .

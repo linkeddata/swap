@@ -100,7 +100,7 @@ owl:Nothing owl:complementOf owl:Thing;
   owl:oneOf ().
 
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
-this log:forAll :XX.
+@forAll :XX.
 
 { :XX a owl:Nothing } =>{ { :XX a owl:Nothing } a :_ProofOfInconsistency }.
 
@@ -122,7 +122,13 @@ this log:forAll :XX.
 
 #
 # $Log$
-# Revision 1.1  2003-04-17 02:00:03  connolly
+# Revision 1.2  2004-06-25 01:27:00  timbl
+# The @forAll form is now the primary form used by cwm, not this log:forAll.
+# Supporess withh  --n3=v
+# --reify and --dereify introduced, not supported by tests yet.
+# See doc/changes.html
+#
+# Revision 1.1  2003/04/17 02:00:03  connolly
 # dunno how to fit meeting attendee/action rules into owl
 #
 #

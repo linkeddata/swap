@@ -5,7 +5,7 @@
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
     
-    this     log:forAll :c,
+         @forAll :c,
                 :c1,
                 :c2,
                 :p,
@@ -13,8 +13,8 @@
                 :p2,
                 :x,
                 :y,
-                :z;
-         log:forSome <#_g0> .
+                :z.
+         @forSome <#_g0> .
     
     <daml-ex.n3>     a daml:Ontology;
          daml:comment "An example ontology";
@@ -165,7 +165,7 @@
     {
         :p     a daml:TransitiveProperty .
         
-        }     log:implies {this     log:forAll :x,
+        }     log:implies {     @forAll :x,
                     :y,
                     :z .
         {

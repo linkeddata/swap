@@ -90,7 +90,7 @@
 
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix str: <http://www.w3.org/2000/10/swap/string#> .
-this log:forAll :r, :t, :addr, :pat.
+@forAll :r, :t, :addr, :pat.
 
 
 { :r http:requestURI :addr.
@@ -105,7 +105,7 @@ this log:forAll :r, :t, :addr, :pat.
 ####
 # SPKI evaluation rule
 
-this log:forAll :cert, :req, :whoK, :CK, :f.
+@forAll :cert, :req, :whoK, :CK, :f.
 
  { :cert s:tag [ sA:matches :req ];
          s:subject [ s:sha1 :f];
@@ -116,7 +116,13 @@ this log:forAll :cert, :req, :whoK, :CK, :f.
 
 <> dc:description """
 $Log$
-Revision 1.2  2002-05-02 22:37:48  connolly
+Revision 1.3  2004-06-25 01:26:59  timbl
+The @forAll form is now the primary form used by cwm, not this log:forAll.
+Supporess withh  --n3=v
+--reify and --dereify introduced, not supported by tests yet.
+See doc/changes.html
+
+Revision 1.2  2002/05/02 22:37:48  connolly
 evaluation rule works!
 
 """.

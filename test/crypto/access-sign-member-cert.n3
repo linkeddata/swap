@@ -6,7 +6,7 @@
 @prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#>.
 @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
 
-this log:forAll  :n, :k, :kp, :str, :tk, :tkp, :z.
+@forAll  :n, :k, :kp, :str, :tk, :tkp, :z.
 
 # Assume we have data from <access-master.private>  and, eg, <access-elisa.public>
 

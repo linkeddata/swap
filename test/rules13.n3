@@ -7,11 +7,11 @@
 
 # Full DanC challenge
 
-this log:forAll <#p> .
+@forAll <#p> .
 
 {  <#p> a daml:TransitiveProperty . } :means
 {
-  { this log:forAll <#x> , <#y> , <#z>.
+  { @forAll <#x> , <#y> , <#z>.
     { <#x> <#p> <#y>. <#y> <#p> <#z>. } log:implies { <#x> <#p> <#z>. }
   } a log:Truth.
 } .
@@ -20,7 +20,7 @@ this log:forAll <#p> .
 
 # Intoduce a symmetric implication for convienience
 
-this log:forAll <#a>, <#b> .
+@forAll <#a>, <#b> .
 { <#a> :means <#b>. }  log:implies {	<#a> log:implies <#b> .
 					<#b> log:implies <#a> . } .
   

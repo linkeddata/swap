@@ -13,7 +13,7 @@
 
 @prefix clo: <closure.n3#>.
 
-this log:forAll :m, :s, :x, :y, :z.
+@forAll :m, :s, :x, :y, :z.
 
 #{ :x fink:depends :y } log:implies {:x :needs :y.}.
 #{ :x fink:buildDepends :y } log:implies {:x :needs :y.}.

@@ -9,7 +9,7 @@
 
 @prefix : <v#>.
 
-this log:forAll :a, :b, :c, :x, :y, :z.
+@forAll :a, :b, :c, :x, :y, :z.
 
 ( "one"  "two" ) a :whatever.
 

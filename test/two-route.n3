@@ -18,7 +18,7 @@
 
 
 
-this log:forAll :x, :y, :z.	#
+@forAll :x, :y, :z.	#
 
 :sky :color :blue.
 

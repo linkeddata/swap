@@ -1088,6 +1088,7 @@ r   Relative URI suppression. Always use absolute URIs.
 s   Subject must be explicit for every statement. Don't use ";" shorthand.
 t   "this" and "()" special syntax should be suppresed.
 u   Use \u for unicode escaping in URIs instead of utf-8 %XX
+v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSome".
 """
 # "
 
@@ -1365,28 +1366,44 @@ u   Use \u for unicode escaping in URIs instead of utf-8 %XX
 
         if self.stack[-1]: return  # If we are in list mode, don't need to.
         
+	varDecl = (subj == context and "v" not in self._flags and (
+		pred == (SYMBOL, N3_forAll_URI) or
+		pred == (SYMBOL, N3_forSome_URI)))
+		
         if self._subj != subj or "s" in self._flags:
             self._endStatement()
             if self.indent == 1:  # Top level only - extra newline
                 self._newline()
-            self._write(self.representationOf(context, subj))
+	    if "v" in self._flags or subj != context:
+		self._write(self.representationOf(context, subj))
+	    else:  # "this" suppressed
+		if (pred != (SYMBOL, N3_forAll_URI) and
+		    pred != (SYMBOL, N3_forSome_URI)):
+		    raise ValueError("On N3 output, 'this' used with bad predicate: %s" % pred)
             self._subj = subj
             self._pred = None
 
         if self._pred != pred:
             if self._pred:
-                  self._write(";")
-                  self._newline(1)   # Indent predicate from subject
+		if "v" not in self._flags and (
+		     self._pred== (SYMBOL, N3_forAll_URI) or
+		     self._pred == (SYMBOL, N3_forSome_URI)):
+		     self._write(".")
+		else:
+		    self._write(";")
+		self._newline(1)   # Indent predicate from subject
             else: self._write("    ")
 
-            if pred == ( SYMBOL,  DAML_sameAs_URI ) and "t" not in self._flags:
+	    if varDecl:
+		    if pred == (SYMBOL, N3_forAll_URI):
+			self._write( " @forAll ")
+		    else:
+			self._write( " @forSome ")
+            elif pred == ( SYMBOL,  DAML_sameAs_URI ) and "t" not in self._flags:
                 self._write(" = ")
-#            elif pred == ( SYMBOL,  LOG_implies_URI ) and "t" not in self._flags:
-#                self._write(" => ")
             elif pred == ( SYMBOL, RDF_type_URI )  and "t" not in self._flags:
                 self._write(" a ")
             else :
-#               self._write( " >- %s -> " % self.representationOf(context, pred))
                 self._write( " %s " % self.representationOf(context, pred))
                 
             self._pred = pred
@@ -1578,71 +1595,5 @@ def dummy():
         return delim + res + delim
 
 
-#########################################################
-#
-#    Reifier
-#
-# Use:
-#   sink = notation3.Reifier(sink, outputContextURI, flat)
-
-
-class Reifier(RDFSink.RDFSink):
-
-    def __init__(self, sink, inputContextURI, flat=0, genPrefix=None):
-        RDFSink.RDFSink.__init__(self)
-        self._sink = sink
-        self._ns = "http://www.w3.org/2000/10/swap/model.n3#"
-        self._sink.bind("n3", self._ns)
-#        self._nextId = 1
-#        self._genPrefix = genPrefix
-        self._flat = flat      # Just flatten things not in this context
-	contextURI = inputContextURI + "__reified"
-	self._formula = sink.newFormula(contextURI) # Formula node is what the document parses to @@kludge
-        self._context = self._formula
-
-        if self._genPrefix == None:
-            self._genPrefix = string.split(contextURI,"#")[0] + "#_rei"
-        
-    def bind(self, prefix, uri):
-        self._sink.bind(prefix, uri)
-               
-    def makeStatement(self, tuple, why=None):  # Quad of (type, value) pairs
-        _statementURI = self._genPrefix + `self._nextId`
-        self._nextId = self._nextId + 1
-        N3_NS = "http://www.w3.org/2000/10/swap/model.n3#"
-        name = "context", "predicate", "subject", "object"
-
-        if verbosity() > 50: progress("Reifying in  contexts stg with context %s."%(self._context,tuple[CONTEXT]))
-        if self._flat and tuple[CONTEXT] == self._context:
-            return self._sink.makeStatement(tuple)   # In same context: does not need reifying
-
-	rs = self._sink.newBlankNode(self._context)
-	
-        self._sink.makeStatement(( self._context, # quantifiers - use inverse?
-                                  (SYMBOL, N3_forSome_URI),
-                                  self._context,
-                                  (SYMBOL, _statementURI) )) #  Note this is anonymous
-        
-        self._sink.makeStatement(( self._context, # Context
-                              (SYMBOL, self._ns+"statement"), #Predicate
-                              tuple[CONTEXT], # Subject
-                              (SYMBOL, _statementURI) ))  # Object
-
-        for i in PARTS:
-            self._sink.makeStatement((
-                self._context, # Context
-                (SYMBOL, self._ns+name[i]), #Predicate
-                (SYMBOL, _statementURI), # Subject
-                tuple[i] ))  # Object
-
-
-    def makeComment(self, str):
-        return self._sink.makeComment(str) 
-
-    def startDoc(self):
-        return self._sink.startDoc()
-
-    def endDoc(self, rootFormulaPair=None):
-        return self._sink.endDoc(self._formula)
 
 #ends

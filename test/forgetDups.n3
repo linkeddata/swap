@@ -19,9 +19,9 @@
 @prefix string: <http://www.w3.org/2000/10/swap/string#>.
 @prefix : <#>.
 
-this log:forAll :x, :y, :z, :p, :q.
+@forAll :x, :y, :z, :p, :q.
 
-this log:forAll :s1, :s2.
+@forAll :s1, :s2.
 
 { :x = :y.
   :x log:rawUri :s1.  # Levelbreaker - cheats by looking at URI of bnode

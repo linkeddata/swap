@@ -5,7 +5,7 @@
      @prefix Products: <mysql://rdftest@swada.w3.org/OrderTracking/Products#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    this     log:forAll :billAddr,
+    @forAll :billAddr,
                 :billCity,
                 :billState,
                 :billStreet,

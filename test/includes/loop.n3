@@ -23,7 +23,7 @@
 
 
 
-this log:forAll :d, :x, :y, :F, :G.
+@forAll :d, :x, :y, :F, :G.
 
 # Note log:greaterThan is NOT a built-in
 

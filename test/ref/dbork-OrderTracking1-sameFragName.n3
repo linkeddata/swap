@@ -15,7 +15,7 @@
      @prefix p: <http://example.com/p#> .
      @prefix productName: <http://example.com/productName#> .
     
-    this     log:forAll billAddr:a,
+    @forAll billAddr:a,
                 billCity:a,
                 billState:a,
                 billStreet:a,

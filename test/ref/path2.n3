@@ -2,11 +2,10 @@
      @prefix fam: <http://www.daml.example.org/2001/03/fam#> .
      @prefix foo: <foo.n3#> .
      @prefix lang: <http://www.daml.example.org/2000/10/lang#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix math: <http://www.w3.org/2000/10/swap/math#> .
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
-    this     log:forSome :_g0,
+         @forSome :_g0,
                 :_g1,
                 :_g2,
                 :_g3 .

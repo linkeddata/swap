@@ -4,7 +4,7 @@
      @prefix rcs: <http://www.w3.org/2001/03swell/rcs#> .
      @prefix string: <http://www.w3.org/2000/10/swap/string#> .
     
-    this     log:forAll :p,
+    @forAll :p,
                 :q,
                 :x,
                 :y,

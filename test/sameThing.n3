@@ -19,7 +19,7 @@
 
 # These should be derivable from the axiomatic semantics for DAML+OIL
 
-this log:forAll :x, :y, :z, :p, :q.
+@forAll :x, :y, :z, :p, :q.
 
 { :x = :y } log:implies { :y = :x }. # symmetric
 { :x = [ = :z] } log:implies { :x = :z }. # transitive

@@ -16,7 +16,7 @@ s:seeAlso a :InterestingProperty.
 #foaf:knows a :InterestingProperty.
 #foaf:depiction a :InterestingProperty.
 
-this log:forAll :S, :P, :O.
+@forAll :S, :P, :O.
 
 
 {  <http://xmlns.com/foaf/0.1/index.rdf> log:semantics [
@@ -37,7 +37,13 @@ this log:forAll :S, :P, :O.
   => { :S :P :O }.
 
 # $Log$
-# Revision 1.2  2003-02-27 03:33:29  connolly
+# Revision 1.3  2004-06-25 01:26:59  timbl
+# The @forAll form is now the primary form used by cwm, not this log:forAll.
+# Supporess withh  --n3=v
+# --reify and --dereify introduced, not supported by tests yet.
+# See doc/changes.html
+#
+# Revision 1.2  2003/02/27 03:33:29  connolly
 # the ?S ?P ?O search didn't have any place to start.
 # we're grabbing :InterestingProperties from the foaf
 # schema now.

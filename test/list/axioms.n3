@@ -14,7 +14,7 @@
 
 
 
-this log:forAll :d, :e, :l, :m, :n, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
+@forAll :d, :e, :l, :m, :n, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
 
 # List generators are things which work as lists and also if you
 # use them as a predicate they construct a list one longer.

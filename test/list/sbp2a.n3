@@ -2,7 +2,7 @@
 @prefix log:  <http://www.w3.org/2000/10/swap/log#>.
 @prefix : <#>.
 
- this log:forAll :x, :y, :z .
+ @forAll :x, :y, :z .
    [ :blargh ("y" "z") ] .
    { :x :blargh :y } log:implies { :y :blarghOf :x } .
 

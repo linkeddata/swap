@@ -8,11 +8,11 @@
     
     :testg_1     a :success .
     {
-        this     log:forAll :y .
+        @forAll :y .
         :x     :loves :y .
         
         }     log:implies {{
-            this     log:forSome :z .
+            @forSome :z .
             :x     :hates :z .
             
             }     a log:falsehood .
@@ -20,11 +20,11 @@
     {
         <>     log:semantics  [
                  log:notIncludes {{
-                    this     log:forAll :y .
+                    @forAll :y .
                     :x     :loves :y .
                     
                     }     log:implies {{
-                        this     log:forSome :z .
+                        @forSome :z .
                         :x     :hates :z .
                         
                         }     a log:falsehood .
@@ -36,11 +36,11 @@
     {
         <>     log:semantics  [
                  log:includes {{
-                    this     log:forAll :y .
+                    @forAll :y .
                     :x     :loves :y .
                     
                     }     log:implies {{
-                        this     log:forSome :z .
+                        @forSome :z .
                         :x     :hates :z .
                         
                         }     a log:falsehood .

@@ -5,7 +5,7 @@
 
 <dt10-premise.rdf> :testConclusion <dt10-conc.nt>.
 
-this log:forAll :premise, :conc.
+@forAll :premise, :conc.
 
 { :premise :testConclusion :conc.
   [ is log:semantics of :premise ]

@@ -89,8 +89,7 @@ idea:&nbsp;use&nbsp;notation3&nbsp;for&nbsp;wiki&nbsp;record&nbsp;keeping.</tt><
 <dt><font face="helvetica, arial"><a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>
 </font></dt><dd>
 <dl>
-<dt><font face="helvetica, arial"><a href="notation3.html#Reifier">Reifier</a>
-</font></dt><dt><font face="helvetica, arial"><a href="notation3.html#ToN3">ToN3</a>
+<dt><font face="helvetica, arial"><a href="notation3.html#ToN3">ToN3</a>
 </font></dt></dl>
 </dd>
 <dt><font face="helvetica, arial"><a href="notation3.html#SinkParser">SinkParser</a>
@@ -145,75 +144,6 @@ Data and non-method functions inherited from <a href="exceptions.html#SyntaxErro
 <hr>
 Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception</a>:<br>
 <dl><dt><a name="BadSyntax-__getitem__"><strong>__getitem__</strong></a>(...)</dt></dl>
-
-</td></tr></table> 
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#ffc8d8">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#000000" face="helvetica, arial"><a name="Reifier">class <strong>Reifier</strong></a>(<a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>)</font></td></tr>
-    
-<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
-<td colspan=2>&nbsp;</td></tr>
-<tr><td>&nbsp;&nbsp;</td>
-<td width="100%">Methods defined here:<br>
-<dl><dt><a name="Reifier-__init__"><strong>__init__</strong></a>(self, sink, inputContextURI, flat<font color="#909090">=0</font>, genPrefix<font color="#909090">=None</font>)</dt></dl>
-
-<dl><dt><a name="Reifier-bind"><strong>bind</strong></a>(self, prefix, uri)</dt></dl>
-
-<dl><dt><a name="Reifier-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair<font color="#909090">=None</font>)</dt></dl>
-
-<dl><dt><a name="Reifier-makeComment"><strong>makeComment</strong></a>(self, str)</dt></dl>
-
-<dl><dt><a name="Reifier-makeStatement"><strong>makeStatement</strong></a>(self, tuple, why<font color="#909090">=None</font>)</dt></dl>
-
-<dl><dt><a name="Reifier-startDoc"><strong>startDoc</strong></a>(self)</dt></dl>
-
-<hr>
-Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = None</dl>
-
-<dl><dt><strong>__module__</strong> = 'notation3'</dl>
-
-<hr>
-Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>
-<dl><dt><a name="Reifier-checkNewId"><strong>checkNewId</strong></a>(self, uri)</dt><dd><tt>The&nbsp;store&nbsp;can&nbsp;override&nbsp;this&nbsp;to&nbsp;raise&nbsp;an&nbsp;exception&nbsp;if&nbsp;the<br>
-id&nbsp;is&nbsp;not&nbsp;in&nbsp;fact&nbsp;new.&nbsp;This&nbsp;is&nbsp;useful&nbsp;because&nbsp;it&nbsp;is&nbsp;usfeul<br>
-to&nbsp;generate&nbsp;IDs&nbsp;with&nbsp;useful&nbsp;diagnostic&nbsp;ways&nbsp;but&nbsp;this&nbsp;lays&nbsp;them<br>
-open&nbsp;to&nbsp;possibly&nbsp;clashing&nbsp;in&nbsp;pathalogical&nbsp;cases.</tt></dd></dl>
-
-<dl><dt><a name="Reifier-countNamespace"><strong>countNamespace</strong></a>(self, namesp)</dt><dd><tt>On&nbsp;output,&nbsp;count&nbsp;how&nbsp;many&nbsp;times&nbsp;each&nbsp;namespace&nbsp;is&nbsp;used</tt></dd></dl>
-
-<dl><dt><a name="Reifier-genId"><strong>genId</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="Reifier-namespaceCounts"><strong>namespaceCounts</strong></a>(self)</dt></dl>
-
-<dl><dt><a name="Reifier-newBlankNode"><strong>newBlankNode</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
-
-<dl><dt><a name="Reifier-newExistential"><strong>newExistential</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
-
-<dl><dt><a name="Reifier-newFormula"><strong>newFormula</strong></a>(self, uri<font color="#909090">=None</font>)</dt></dl>
-
-<dl><dt><a name="Reifier-newLiteral"><strong>newLiteral</strong></a>(self, str, dt<font color="#909090">=None</font>, lang<font color="#909090">=None</font>)</dt></dl>
-
-<dl><dt><a name="Reifier-newSymbol"><strong>newSymbol</strong></a>(self, uri)</dt></dl>
-
-<dl><dt><a name="Reifier-newUniversal"><strong>newUniversal</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
-
-<dl><dt><a name="Reifier-reopen"><strong>reopen</strong></a>(self)</dt><dd><tt>Un-End&nbsp;a&nbsp;document<br>
-&nbsp;<br>
-If&nbsp;you&nbsp;have&nbsp;added&nbsp;stuff&nbsp;to&nbsp;a&nbsp;document,&nbsp;thought&nbsp;you&nbsp;were&nbsp;done,&nbsp;and<br>
-then&nbsp;want&nbsp;to&nbsp;add&nbsp;more,&nbsp;call&nbsp;this&nbsp;to&nbsp;get&nbsp;back&nbsp;into&nbsp;the&nbsp;sate&nbsp;that&nbsp;makeSatement<br>
-is&nbsp;again&nbsp;acceptable.&nbsp;Remember&nbsp;to&nbsp;end&nbsp;the&nbsp;document&nbsp;again&nbsp;when&nbsp;done.</tt></dd></dl>
-
-<dl><dt><a name="Reifier-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, uri)</dt><dd><tt>Pass&nbsp;on&nbsp;a&nbsp;binding&nbsp;hint&nbsp;for&nbsp;later&nbsp;use&nbsp;in&nbsp;output<br>
-&nbsp;<br>
-This&nbsp;really&nbsp;is&nbsp;just&nbsp;a&nbsp;hint.&nbsp;The&nbsp;parser&nbsp;calls&nbsp;this&nbsp;to&nbsp;pass&nbsp;on<br>
-the&nbsp;default&nbsp;namespace&nbsp;which&nbsp;it&nbsp;came&nbsp;across,&nbsp;as&nbsp;this&nbsp;is&nbsp;a<br>
-useful&nbsp;hint&nbsp;for&nbsp;a&nbsp;human&nbsp;readable&nbsp;prefix&nbsp;for&nbsp;output&nbsp;of&nbsp;the&nbsp;same<br>
-namespace.&nbsp;Otherwise,&nbsp;output&nbsp;processors&nbsp;will&nbsp;have&nbsp;to&nbsp;invent&nbsp;or<br>
-avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;ugly.</tt></dd></dl>
-
-<dl><dt><a name="Reifier-setGenPrefix"><strong>setGenPrefix</strong></a>(self, genPrefix)</dt></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -404,7 +334,7 @@ Data and non-method functions defined here:<br>
 
 <dl><dt><strong>__module__</strong> = 'notation3'</dl>
 
-<dl><dt><strong>flagDocumentation</strong> = 'Flags for N3 output are as follows:-<font color="#c040c0">\n</font>        <font color="#c040c0">\n</font>a ...or unicode escaping in URIs instead of utf-8 %XX<font color="#c040c0">\n</font>'</dl>
+<dl><dt><strong>flagDocumentation</strong> = 'Flags for N3 output are as follows:-<font color="#c040c0">\n</font>        <font color="#c040c0">\n</font>a ...f @forAll, and "this log:forAll" for "@forSome".<font color="#c040c0">\n</font>'</dl>
 
 <hr>
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>

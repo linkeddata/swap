@@ -3,7 +3,7 @@
 @prefix : <#>.
 
 # :s2 :p2 :o2.
-this log:forAll :x, :s, :p, :o.
+@forAll :x, :s, :p, :o.
 
 this a :input.
 

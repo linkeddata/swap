@@ -4,17 +4,17 @@
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix : <#>.
 
-this log:forAll :P, :C.
+@forAll :P, :C.
 
 {
-    this log:forAll :Y .
+    @forAll :Y .
        { [] :P :Y } => { :Y a :C}
 
 } => { :P s:range :C }. 
 
 
 
- this log:forAll :X, :Z.
+ @forAll :X, :Z.
 
 {  [] :sister :X } =>  { :X a :Woman }.
 

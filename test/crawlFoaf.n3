@@ -23,7 +23,7 @@
   ?S1 ?P ?O. ?S2 ?P ?O. } => { ?S1 = ?S2 }.
 
 
-this log:forAll :S, :P, :O, :P2, :O2.
+@forAll :S, :P, :O, :P2, :O2.
 
 {
   ?WHO foaf:knows ?WHO2. # Mark knows Dan.
@@ -66,7 +66,13 @@ this log:forAll :S, :P, :O, :P2, :O2.
 
 
 # $Log$
-# Revision 1.1  2003-03-01 23:40:35  connolly
+# Revision 1.2  2004-06-25 01:26:59  timbl
+# The @forAll form is now the primary form used by cwm, not this log:forAll.
+# Supporess withh  --n3=v
+# --reify and --dereify introduced, not supported by tests yet.
+# See doc/changes.html
+#
+# Revision 1.1  2003/03/01 23:40:35  connolly
 # worked once
 #
 

@@ -6,7 +6,7 @@
 @prefix string: <http://www.w3.org/2000/10/swap/string#> .
 @prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#>.
 
-this log:forAll :x , :y.
+@forAll :x , :y.
 
 
 { :x crypto:keyLength "1024";

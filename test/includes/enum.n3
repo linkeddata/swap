@@ -8,7 +8,7 @@
 
 { <> log:includes
    { :p :s :o.
-     this log:forAll :p, :s, :o. }}
+     @forAll :p, :s, :o. }}
  log:implies { <#x> a :Found }.
 
 @prefix dc: <http://purl.org/dc/elements/1.1/>.

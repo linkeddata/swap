@@ -4,7 +4,7 @@
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix rules: <rules12.n3#> .
     
-    this     log:forSome <#_g0>,
+    @forSome <#_g0>,
                 <#_g1>,
                 <#_g2>,
                 <run#li3>,

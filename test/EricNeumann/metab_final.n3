@@ -15,7 +15,7 @@ C:\Python22\CWM>..\python cwm.py metab_intermed.n3 "--apply=rules.n3" --think
      @prefix rules: <http://infomesh.net/2001/05/rdflint/rules#> .
      @prefix v: <http://infomesh.net/2001/05/rdflint/vars#> .
     
-    this     log:forAll v:e,
+    @forAll v:e,
                 v:p,
                 v:r,
                 v:s .

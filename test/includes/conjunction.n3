@@ -23,7 +23,7 @@
 
 
 
-this log:forAll :d, :x, :y, :F, :G.
+@forAll :d, :x, :y, :F, :G.
 
 #{ "z" string:greaterThan "a" } log#:implies { :result :is :sanity }. 
 

@@ -18,9 +18,9 @@
 # Output should conclude all test* a :success and no failures.
 #
 
-#this log:forAll :x.
+#@forAll :x.
 
-this log:forAll :x, :y, :z.
+@forAll :x, :y, :z.
 
 { ""  string:concat () } log:implies {:test13a a :success}.
 

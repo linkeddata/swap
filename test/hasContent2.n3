@@ -6,7 +6,7 @@
 
 :fido a :Dog.
 
-this log:forAll v:str, v:f, v:g, v:x, v:p, v:s, v:o.
+@forAll v:str, v:f, v:g, v:x, v:p, v:s, v:o.
 
 { <hasContent2.n3> log:hasContent v:str.
   v:str log:n3ExprFor v:f.

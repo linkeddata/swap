@@ -1,0 +1,35 @@
+# List of regression tests
+#
+#      Syntax tests: details
+#
+# Note: Command lines must be for running in the directory above.
+#
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+
+
+:syn001 a test:CwmTest;
+    test:referenceOutput <this-quantifiers-ref.n3>;
+    test:description   "Can still read the old 'this log:forSome' syntax";
+    test:arguments     "syntax/this-quantifiers.n3".
+
+:syn002 a test:CwmTest;
+    test:referenceOutput <this-rules-ref.n3>;
+    test:description   "Can still read the old 'this log:forAll' syntax";
+    test:arguments     "syntax/this-rules.n3".
+
+:syn005 a test:CwmTest;
+    test:referenceOutput <this-quantifiers-ref2.n3>;
+    test:description   "Can still gen the old 'this log:forSome' syntax";
+    test:arguments     "--n3=v includes/quantifiers.n3".
+
+:syn006 a test:CwmTest;
+    test:referenceOutput <this-rules-ref2.n3>;
+    test:description   "Can still gen the old 'this log:forAll' syntax";
+    test:arguments     "--n3=v rules13.n3".
+
+
+
+
+#ends

@@ -10,13 +10,13 @@ Example Scenario:401: Oh Yeah? Prove you have access!
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix logAux: <logAux@@#>.
 
-this log:forAll v:S, v:T, v:K, v:SnT.
+@forAll v:S, v:T, v:K, v:SnT.
 
 ##########
 #
 # RDFS
 @prefix u: <http://www.w3.org/2000/01/rdf-schema#> .
-this log:forAll v:s, v:p, v:o.
+@forAll v:s, v:p, v:o.
 { v:s [ u:subPropertyOf v:p ] v:o } log:implies { v:s v:p v:o }.
 
 
@@ -43,7 +43,7 @@ acl:signs u:subPropertyOf acl:assures.
 @prefix : <acl-pf#>.
 @prefix aclPf: <acl-pf#>.
 
-this log:forAll v:org, v:Kacrep, v:Krep.
+@forAll v:org, v:Kacrep, v:Krep.
 
 { v:Kacrep :ACRep v:org;
            acl:assures # shouldn't need to use log:includes here...
@@ -78,12 +78,12 @@ this log:forAll v:org, v:Kacrep, v:Krep.
 		positively grant membership in WGs; perhaps
 		that's the thing to model here.""".
 
-this log:forAll v:org, v:rep.
+@forAll v:org, v:rep.
 
 {:Kdirector acl:assures [ log:includes { v:rep :ACRep v:org }] }
    log:implies { v:rep :ACRep v:org }.
 
- this log:forAll v:K, v:org.
+ @forAll v:K, v:org.
  
 { v:K :memberRep v:org }
   log:implies { v:K :hasAccess :meetingRecord } .
@@ -94,12 +94,12 @@ this log:forAll v:org, v:rep.
 
 ##########
 #:Kwebmaster acl:assures
-# { this log:forAll v:org, v:rep.
+# { @forAll v:org, v:rep.
 #   { :Kdirector acl:assures { v:rep :memberRep v:org } } log:implies
 #        { v:rep :memberRep v:org } }.
 #
 #:Kwebmaster acl:assures
-# { this log:forAll v:K, v:org.
+# { @forAll v:K, v:org.
 #   { v:K :memberRep v:org } log:implies { v:K :hasAccess :meetingRecord } }.
 #
 #{ :Kwebmaster acl:assures { :KjohnDoe :hasAccess :meetingRecord } }

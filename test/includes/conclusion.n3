@@ -21,7 +21,7 @@
 
 
 
-this log:forAll :d, :x, :y, :F, :G.
+@forAll :d, :x, :y, :F, :G.
 
 
 # Conjunction junction, what's your're function?  - schoolhouse rock.

@@ -64,7 +64,7 @@ _:www2002 a :Conference;
   cn:endingDate [ dt:date "2002-05-11" ].
 
 
-this log:forAll :who, :whoElse, :what, :where, :when.
+@forAll :who, :whoElse, :what, :where, :when.
 
 { :who cn:acquaintedWith :whoElse.
   :where a cn:City.
@@ -148,7 +148,7 @@ cn:inRegion a ont:TransitiveProperty.
 @prefix log:  <http://www.w3.org/2000/10/swap/log#> .
 
 #####
-this log:forAll :s, :p, :o.
+@forAll :s, :p, :o.
 
 { :s [ ont:samePropertyAs :p ] :o } log:implies { :s :p :o }.
 
@@ -165,7 +165,7 @@ ont:samePropertyAs a cn:SymmetricBinaryPredicate.
 ######
 # string dates
 @prefix str:  <http://www.w3.org/2000/10/swap/string#> .
-this log:forAll :x, :y, :z.
+@forAll :x, :y, :z.
 
 dt:date a :DataType; s:domain cn:TimeInterval.
 cn:TimeInterval s:subClassOf cn:temporallyContinuous.

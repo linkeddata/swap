@@ -10,7 +10,7 @@
 
 # Simplified rules for debugging rules
 
-this log:forAll :y.
+@forAll :y.
 
 {  :Joe :likes :y } log:implies { :y :madeof :chocolate }.
 

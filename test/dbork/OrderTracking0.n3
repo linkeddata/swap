@@ -7,7 +7,7 @@
 
 @prefix : <#>.
 
-this log:forAll :customer, :family, :given .
+@forAll :customer, :family, :given .
 
 <mysql://rdftest@swada.w3.org/OrderTracking/> is log:definitiveService of
 	Customers:familyName, Customers:givenName, Products:name.
@@ -18,7 +18,7 @@ this log:forAll :customer, :family, :given .
  :customer Customers:familyName :family; Customers:givenName :given.
 }.
 
-this log:forAll :products, :name .
+@forAll :products, :name .
 
 <mysql://root@localhost/OrderTracking> is log:definitiveService of
 	Products:name.

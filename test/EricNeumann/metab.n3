@@ -62,13 +62,13 @@ bg:Product a daml:Class;
 	daml:subClassOf bg:BioChemical ;
 	daml:hasProperty bg:isProducedBy . 
 
-this log:forAll v:e, v:r, v:s, v:p .
+@forAll v:e, v:r, v:s, v:p .
 	{ v:e bg:catalyzes v:r . 
 	v:r bg:consumes v:s . } 
 	log:implies 
 	{ v:e bg:metabolizes v:s . } .
 
-this log:forAll v:e, v:r, v:p .
+@forAll v:e, v:r, v:p .
 	{ v:e bg:catalyzes v:r . 
 	v:r bg:produces v:p . } 
 	# log:implies 
@@ -85,7 +85,7 @@ bg:isDownStream a daml:TransitiveProperty;
 	daml:range bg:BioChemical  . 
 
 
-this log:forAll v:r, v:s, v:p .
+@forAll v:r, v:s, v:p .
 	{v:r bg:consumes v:s .
 	v:r bg:produces v:p }
 	log:implies

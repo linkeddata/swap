@@ -19,13 +19,13 @@
 @prefix ex: <http://example/vocab#>.
 
 :given1
-  pf:proves { this log:forAll :x.
+  pf:proves { @forAll :x.
               { :x a ex:Dog } log:implies { :x ex:gets ex:Fleas } }.
 
 :given2
   pf:proves { ex:fido a ex:Dog. }.
 
-this log:forAll :PfPthenQ, :PfPgnd, :A, :P, :Q, :F, :Pgnd, :v.
+@forAll :PfPthenQ, :PfPgnd, :A, :P, :Q, :F, :Pgnd, :v.
 { :PfPgnd pf:proves :Pgnd.
   :PfPthenQ pf:proves [ log:includes { :P log:implies :Q };
                       ].

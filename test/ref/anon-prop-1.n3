@@ -1,6 +1,6 @@
      @prefix : <#> .
     
-    this     <http://www.w3.org/2000/10/swap/log#forSome> :_g0 .
+         @forSome :_g0 .
     
     :anySubj     :_g0 :anyObj .
     

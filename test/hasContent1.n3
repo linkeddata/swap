@@ -3,7 +3,7 @@
 
 @prefix : <hasContent1#>.
 
-this log:forAll v:str.
+@forAll v:str.
 
 { <hasContent1.n3> log:hasContent v:str }
   log:implies

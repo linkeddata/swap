@@ -25,7 +25,7 @@
 #        It would have been even simpler in fact to declare recursively but
 #        would have been open to denial of service by very long chains
 
-this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z , :q .
+@forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z , :q .
 
 # The rule of access.
 #

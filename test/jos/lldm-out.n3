@@ -14,7 +14,7 @@
      @prefix run: <.run-1049671598.194459p12946#> .
      @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
     
-    this     log:forAll :m,
+    @forAll :m,
                 :x,
                 :y,
                 :z .

@@ -11,7 +11,7 @@
 @prefix : <#>.
 
 
-this log:forAll :t, :l.
+@forAll :t, :l.
 
 {
     <http://xmlhack.com/rss10.php>.log:semantics log:includes {

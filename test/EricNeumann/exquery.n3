@@ -7,7 +7,7 @@
 # are not part of the first transcript; the answer should be <#ATP1B4_e2>
 # I've tried the following rule, but it doesn't seem to work...
 
-this log:forAll e, t1, t2, F.
+@forAll e, t1, t2, F.
 
 {      <exdata.n3> log:semantics F.
    F  log:includes { t1  a :Transcript; :hasExon e.

@@ -4,7 +4,7 @@
 
 #:dan :uncle :shannon.
 #
-#this log:forAll :x, :y.
+#@forAll :x, :y.
 #
 #{ :x :uncle :y } log:implies { :x :sibling [ is :parent of :y] }.
 

@@ -15,26 +15,26 @@
 # Output should conclude all test* a :success and no failures.
 #  This used to make a self-reference which was not allowed.
 
-#this log:forAll :x.
-    	{ this log:forAll :y.  :x :loves  :y } log:implies
-	{  { this log:forSome :z. :x :hates :z } a log:falsehood }.
+#@forAll :x.
+    	{ @forAll :y.  :x :loves  :y } log:implies
+	{  { @forSome :z. :x :hates :z } a log:falsehood }.
 
 #this :is :doc.
 # Now a positive test:
 
 { [is log:semantics of <>] log:includes
-    { # this log:forAll :x.
-    		{ this log:forAll :y.  :x :loves  :y } log:implies 
-		{ { this log:forSome :z. :x :hates :z } a log:falsehood }.
+    { # @forAll :x.
+    		{ @forAll :y.  :x :loves  :y } log:implies 
+		{ { @forSome :z. :x :hates :z } a log:falsehood }.
     }
 } log:implies { :testg_1 a :success }.
 
 # Now a negative test:
 
 { [is log:semantics of <>] log:notIncludes
-    {# this log:forAll :x.
-    		{ this log:forAll :y.  :x :loves  :y } log:implies 
-		{ { this log:forSome :z. :x :hates :z } a log:falsehood }.
+    {# @forAll :x.
+    		{ @forAll :y.  :x :loves  :y } log:implies 
+		{ { @forSome :z. :x :hates :z } a log:falsehood }.
     }
 } log:implies { :testg_1 a :FAILURE }.
 

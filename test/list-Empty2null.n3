@@ -4,7 +4,7 @@
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix : <#> .
 
-this log:forAll :x .
+@forAll :x .
 
 # There is only one empty list, called null:
 

@@ -3,7 +3,7 @@
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix state: <data/USRegionState.n3#> .
     
-    this     log:forAll :n .
+    @forAll :n .
     
     "Albany"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
     
@@ -165,7 +165,7 @@
     
     "Woodbury"     a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS .
     {
-        this     log:forSome :_g0 .
+        @forSome :_g0 .
           [      state:borderstate :_g0;
                  state:code "MA" ].
         

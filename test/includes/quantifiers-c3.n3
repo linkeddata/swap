@@ -13,11 +13,11 @@
 
 
 
-{{ this log:forAll :foo. :foo :bar :baz } log:includes {this log:forAll :foo.  :foo :bar :baz }}
+{{ @forAll :foo. :foo :bar :baz } log:includes {@forAll :foo.  :foo :bar :baz }}
   log:implies { :testc3 a :success }.
 
 
-#{{ this log:forAll :foo. :foo :bar :baz } log:notIncludes {this log:forAll :foo.  :foo :bar :baz }}
+#{{ @forAll :foo. :foo :bar :baz } log:notIncludes {@forAll :foo.  :foo :bar :baz }}
 #  log:implies { :testc3n a :FAILURE }.
 
 # ENDS

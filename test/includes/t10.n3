@@ -20,7 +20,7 @@
 #
 
 
-this log:forAll :d, :x, :y, :F, :G.
+@forAll :d, :x, :y, :F, :G.
 
 { <t10a.n3> log:semantics :F.
   :F log:includes { :theSky :is :blue}   } log:implies { :test10a a :success } .

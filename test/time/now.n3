@@ -9,7 +9,7 @@
 @prefix TEST: <TEST#>.
 @prefix : <#>.
 
-this log:forAll :f, :t, :x, :y, :z.
+@forAll :f, :t, :x, :y, :z.
 
 
 "year %Y month %M day %d date: %D" a :TestFormat.

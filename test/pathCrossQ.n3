@@ -1,7 +1,7 @@
 @prefix cn: <http://opencyc.sourceforge.net/daml/cyc.daml#>.
 @prefix : <pathCrossQ#>.
 
-this log:forSome :who, :whoElse, :where, :when.
+@forSome :who, :whoElse, :where, :when.
 
   :who cn:acquaintedWith :whoElse.
   :where a cn:City.

@@ -10,7 +10,7 @@
 @prefix : <#>.
 @prefix v: <#>.
 
-this log:forAll :urisRow, :aacl, :acl, :access, :u1, :g1, :accessor .
+@forAll :urisRow, :aacl, :acl, :access, :u1, :g1, :accessor .
 
 <http://dummyserver.w3.org/foo.mdb/acl> is log:definitiveService of
 	acls:acl, acls:access, acls:id, ids:value, idInclusions:id, 

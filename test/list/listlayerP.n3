@@ -13,7 +13,7 @@ _:these rdf:first eg:B.
 @prefix : <#>.
 
 
-this log:forAll :S, :P, :O, :C, :X, :Y.
+@forAll :S, :P, :O, :C, :X, :Y.
 
 owl:intersectionOf rdfs:range owl:List.
 owl:List rdfs:subClassOf [ owl:onProperty rdf:first;

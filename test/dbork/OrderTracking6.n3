@@ -9,7 +9,7 @@
 
 @prefix : <#>.
 
-this log:forAll :o, :d, :p, :productName, :c, :first, :last, :billAddr, :billStreet, :billCity, :billState .
+@forAll :o, :d, :p, :productName, :c, :first, :last, :billAddr, :billStreet, :billCity, :billState .
 
 <mysql://rdftest@swada.w3.org/OrderTracking/> is log:definitiveService of
 	Orders:id, Orders:customer, Orders:product, Orders:orderDate, 

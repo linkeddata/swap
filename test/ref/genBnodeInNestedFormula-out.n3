@@ -1,9 +1,8 @@
      @prefix : <#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    this     log:forAll :x,
-                :_g0;
-         log:forSome :_g0 .
+         @forAll :x,
+                :_g0.
+         @forSome :_g0 .
     
     :_g0     a :Mother;
          :name "Mary";
@@ -12,7 +11,7 @@
     {
         :x     a :Mother .
         
-        }     log:implies {this     log:forAll :x .
+        }     <http://www.w3.org/2000/10/swap/log#implies> {     @forAll :x .
         :x     :says {:You     :listenTo :x .
             } .
         } .

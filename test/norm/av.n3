@@ -42,7 +42,7 @@
   :title "DVD";
   :output :selector .
 
-this log:forAll :p, :s, :o, :t .
+@forAll :p, :s, :o, :t .
 
 # Graph rules
 

@@ -6,7 +6,7 @@
 
 @prefix : <#>.
 
-this log:forAll :x; :y; :z.
+@forAll :x; :y; :z.
 
 { "1"!os:argv^log:uri!log:semantics ?f} => { ?f a :Proof}.
 

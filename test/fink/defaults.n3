@@ -6,7 +6,7 @@
 @prefix fink: <http://www.w3.org/2000/10/swap/util/fink#>.
 @prefix :  <#>.
 
-this log:forAll :x, :y, :z.
+@forAll :x, :y, :z.
 
 { [] 	is log:semantics of [log:uri [is os:argv of "1"]];
  	log:includes { :x fink:depends :y};

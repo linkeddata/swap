@@ -27,10 +27,17 @@ src="../../../../RDF/icons/n3_small" /></a></p>
 
 <p></p>
 
+<p>2004/6/24:</p>
+
+<p>The default output form is @forAll, not this log:forAll, @forSome, not
+this log:forSome. Use --n3=v to force the old obsolete form for variable
+declations. The parser has for a long time and will for some time support
+both forms.</p>
+
 <p>2004/6/23:</p>
 
 <p><strong>Mime type</strong> for Notation3 switched to text/rdf+n3. This
-could be a major change.  The application for application/n3 never seemed to
+could be a major change. The application for application/n3 never seemed to
 get anywhere with IANA anyway. Text has the advantage that browsers will by
 default dispaly it, and N3 is designed to be readable. Downside is that if it
 not ASCII, then you must include the charset specification in teh mime type.

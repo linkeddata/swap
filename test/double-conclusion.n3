@@ -18,7 +18,7 @@
 
 
 
-this log:forAll <#p>.	# Property
+@forAll <#p>.	# Property
 
 
 # Implication of transitivity:

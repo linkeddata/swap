@@ -7,7 +7,7 @@
 
 # DanC challenge
 
-this log:forAll <#p> .
+@forAll <#p> .
 
 {  <#p> a daml:TransitiveProperty . } log:means
 

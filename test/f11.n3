@@ -8,12 +8,12 @@
 #  Simple one-triple template:
 #
 
-this log:forAll <#x> , <#y> .
+@forAll <#x> , <#y> .
 { <#x> mech:includes <#y> } log:implies { <#y> mech:partOf <#x> } .
 
 #  Non-trivial template including existentials and statements about predicates:
 
-this log:forAll <#p>, <#z> .   #  as well as x and y above
+@forAll <#p>, <#z> .   #  as well as x and y above
 
 { <#x> <#p> <#y> .
   <#y> <#p> <#z> .

@@ -19,7 +19,7 @@
 #
 
 
-this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
+@forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
 
 {<foo.n3> log:semantics :F .
    :F log:includes { :blue a rdf:Property }} log:implies { :includesTest a :FAILURE}.

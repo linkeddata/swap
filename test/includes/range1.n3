@@ -8,12 +8,12 @@
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix : <#>.
 
-this log:forAll :P, :C.
+@forAll :P, :C.
 
 {
  :P a :Property.  # Hint
  :C a :Class.
-    this log:forAll :Y, :Z .
+    @forAll :Y, :Z .
    
        { :Z :P :Y } => { :Y a :C}
 
@@ -21,7 +21,7 @@ this log:forAll :P, :C.
 
 
 
- this log:forAll :X, :W.
+ @forAll :X, :W.
  :sister a :Property.  # Hint
  :Woman a :Class.
 

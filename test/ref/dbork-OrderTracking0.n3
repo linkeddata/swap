@@ -2,7 +2,7 @@
      @prefix Customers: <mysql://rdftest@swada.w3.org/OrderTracking/Customers#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    this     log:forAll <#customer>,
+    @forAll <#customer>,
                 <#family>,
                 <#given>,
                 <#name>,

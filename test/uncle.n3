@@ -11,7 +11,7 @@
 :Fred has :brother :Bob.
 
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-this log:forAll :who1, :who2.
+@forAll :who1, :who2.
 
 { :who1 :father [ :brother :who2 ] } log:implies { :who1 :uncle :who2 }.
 

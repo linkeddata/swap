@@ -3,7 +3,7 @@
 
 @prefix : <#>.
 
-this log:forAll :s.
+@forAll :s.
 
 { ("abcdef" "ab(..)ef") str:scrape "cd" } log:implies { :Test1 a :Success }.
 

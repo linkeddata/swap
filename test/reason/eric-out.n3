@@ -8,7 +8,7 @@
      @prefix : <foo#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    this     log:forAll <eric-b.n3#x>,
+    @forAll <eric-b.n3#x>,
                 <eric-b.n3#y>,
                 <eric-b.n3#z> .
     

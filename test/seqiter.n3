@@ -13,7 +13,7 @@
 @prefix : <seqiter#>.
 @prefix si: <seqiter#>.
 
-this log:forAll :SEQ, :X, :P, :Q, :N, :NN.
+@forAll :SEQ, :X, :P, :Q, :N, :NN.
 
 
 { :SEQ rdf:_1 :X } log:implies { :X a :IterationCandidate }.

@@ -1,7 +1,7 @@
 @prefix : <#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 
-this log:forAll :x, :y.
+@forAll :x, :y.
 
 ( <a> <b> ) a <twoer>.
 

@@ -15,6 +15,7 @@ OFFLINETESTS=regression.n3 list/detailed.tests \
 # 	i18n/detailed.tests \
 	ntriples/detailed.tests \
 	delta/detailed.tests \
+	syntax/detailed.tests \
 	rdfcore-tests.n3 testmeta.n3
 
 TESTS=online.tests $(OFFLINETESTS)

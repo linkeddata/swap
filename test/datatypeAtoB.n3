@@ -25,7 +25,7 @@ dtA:string a :InterpretationProperty.
 
 exA:birthdate :lexicalForm exB:birthdate.
 
-this log:forAll :s, :p, :o, :ip, :olit, :lp.
+@forAll :s, :p, :o, :ip, :olit, :lp.
 
 { :s :p :o.
   :o :ip :olit.

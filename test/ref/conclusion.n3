@@ -7,13 +7,13 @@
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
-    this     log:forAll foo:F,
+         @forAll foo:F,
                 foo:G,
                 foo:d,
                 foo:x,
                 foo:y .
     
-    foo:result     foo:is {this     log:forAll :c,
+    foo:result     foo:is {     @forAll :c,
                     :c1,
                     :c2,
                     :p,
@@ -21,8 +21,8 @@
                     :p2,
                     :x,
                     :y,
-                    :z;
-             log:forSome con:_g0 .
+                    :z.
+             @forSome con:_g0 .
         <../daml-ex.n3>     a dpo:Ontology;
              dpo:comment "An example ontology";
              dpo:imports <http://www.daml.org/2000/10/daml-ont>;
@@ -139,7 +139,7 @@
         {
             :p     a dpo:TransitiveProperty .
             
-            }     log:implies {this     log:forAll :x,
+            }     log:implies {     @forAll :x,
                         :y,
                         :z .
             {
@@ -212,7 +212,7 @@
             } .
         } .
     {
-        this     log:forSome con:_g1,
+             @forSome con:_g1,
                     con:_g2,
                     con:_g3 .
           ( con:_g1 

@@ -9,7 +9,7 @@
 <#something> <#note>
   " log:forAll <mid:is@example> <#nifty>. ".
 
-this log:forAll v:x, v:n, v:f, v:s, v:o.
+@forAll v:x, v:n, v:f, v:s, v:o.
 
 { v:x <#note> v:n.
   v:n log:n3ExprFor v:f.

@@ -14,7 +14,7 @@ python cwm.py esw2pd.n3 --think --purge --rdf=d >,palmStuff.rdf
 
 @prefix : <#>.
 
-this log:forAll :E, :WHAT, :WHEN, :DESC.
+@forAll :E, :WHAT, :WHEN, :DESC.
 
 @prefix ev: <http://purl.org/rss/1.0/modules/event/>.
 @prefix rss: <http://purl.org/rss/1.0/>.

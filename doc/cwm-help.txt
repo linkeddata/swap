@@ -93,6 +93,7 @@ r   Relative URI suppression. Always use absolute URIs.
 s   Subject must be explicit for every statement. Don't use ";" shorthand.
 t   "this" and "()" special syntax should be suppresed.
 u   Use \u for unicode escaping in URIs instead of utf-8 %XX
+v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSome".
 
 
 Flags to control RDF/XML output (after --rdf=) areas follows:

@@ -19,7 +19,7 @@
 #
 
 
-this log:forAll :x.
+@forAll :x.
 
 { "1" os:argv :x } log:implies { :test_param_1 :is :x }.
 

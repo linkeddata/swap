@@ -7,7 +7,7 @@
 @prefix   : <rdfcore#>.
 @prefix rt: <rdfcore#>.
 
-this log:forAll :T, :IN, :EXPECTED, :F, :G.
+@forAll :T, :IN, :EXPECTED, :F, :G.
 
 { <../../rdf-tests/rdfcore/Manifest.rdf> log:semantics [ log:includes {
     :T a test:PositiveParserTest; test:status "APPROVED";
@@ -49,6 +49,12 @@ this log:forAll :T, :IN, :EXPECTED, :F, :G.
 
 
 # $Log$
-# Revision 1.1  2003-02-03 15:52:27  connolly
+# Revision 1.2  2004-06-25 01:26:59  timbl
+# The @forAll form is now the primary form used by cwm, not this log:forAll.
+# Supporess withh  --n3=v
+# --reify and --dereify introduced, not supported by tests yet.
+# See doc/changes.html
+#
+# Revision 1.1  2003/02/03 15:52:27  connolly
 # does not really work, but I want to archive it anyway
 #

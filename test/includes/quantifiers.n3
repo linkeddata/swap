@@ -16,15 +16,15 @@
 # Basically,  forall x G(x) implies G(x) which implies forSome X G(x). 
 # log:includes should allow the stronger statement to "include" the weaker one.
 #
-{{ :foo :bar :baz } log:includes { this log:forSome :foo. :foo :bar :baz }}
+{{ :foo :bar :baz } log:includes { @forSome :foo. :foo :bar :baz }}
    log:implies { :testa2 a :success }. # Originally failed
 
 
 
-{{ this log:forSome :foo. :foo :bar :baz } log:includes {this log:forSome :foo. :foo :bar :baz }}
+{{ @forSome :foo. :foo :bar :baz } log:includes {@forSome :foo. :foo :bar :baz }}
   log:implies { :testb2 a :success }.
 
-{{ this log:forAll :foo. :foo :bar :baz } log:includes {this log:forSome :foo. :foo :bar :baz }}
+{{ @forAll :foo. :foo :bar :baz } log:includes {@forSome :foo. :foo :bar :baz }}
   log:implies { :testc2 a :success }.  # Originally failed
 
 
@@ -32,21 +32,21 @@
 {{ :foo :bar :baz } log:includes { :foo :bar :baz }}
   log:implies { :testa1 a :success }.
 
-{{ this log:forSome :foo. :foo :bar :baz } log:includes { :foo :bar :baz }}
+{{ @forSome :foo. :foo :bar :baz } log:includes { :foo :bar :baz }}
   log:implies { :testb1 a :FAILURE }.    # Originally failed, STILL FAILS.
 
-{{ this log:forAll :foo. :foo :bar :baz } log:includes { :foo :bar :baz }}
+{{ @forAll :foo. :foo :bar :baz } log:includes { :foo :bar :baz }}
   log:implies { :testc1 a :success }.
 
 
 
-{{ :foo :bar :baz } log:includes {this log:forAll :foo. :foo :bar :baz }}
+{{ :foo :bar :baz } log:includes {@forAll :foo. :foo :bar :baz }}
    log:implies { :testa3 a :FAILURE }.
 
-{{ this log:forSome :foo. :foo :bar :baz } log:includes {this log:forAll :foo.  :foo :bar :baz }}
+{{ @forSome :foo. :foo :bar :baz } log:includes {@forAll :foo.  :foo :bar :baz }}
   log:implies { :testb3 a :FAILURE }.
 
-{{ this log:forAll :foo. :foo :bar :baz } log:includes {this log:forAll :foo.  :foo :bar :baz }}
+{{ @forAll :foo. :foo :bar :baz } log:includes {@forAll :foo.  :foo :bar :baz }}
   log:implies { :testc3 a :success }.
 
 
@@ -54,13 +54,13 @@
 
 
 
-{{ :foo :bar :baz } log:notIncludes { this log:forSome :foo. :foo :bar :baz }}
+{{ :foo :bar :baz } log:notIncludes { @forSome :foo. :foo :bar :baz }}
    log:implies { :testa2n a :FAILURE }.# Originally failed
 
-{{ this log:forSome :foo. :foo :bar :baz } log:notIncludes {this log:forSome :foo. :foo :bar :baz }}
+{{ @forSome :foo. :foo :bar :baz } log:notIncludes {@forSome :foo. :foo :bar :baz }}
   log:implies { :testb2n a :FAILURE }. 
 
-{{ this log:forAll :foo. :foo :bar :baz } log:notIncludes {this log:forSome :foo. :foo :bar :baz }}
+{{ @forAll :foo. :foo :bar :baz } log:notIncludes {@forSome :foo. :foo :bar :baz }}
   log:implies { :testc2n a :FAILURE }. # Originally failed
 
 
@@ -68,21 +68,21 @@
 {{ :foo :bar :baz } log:notIncludes { :foo :bar :baz }}
   log:implies { :testa1n a :FAILURE }.
 
-{{ this log:forSome :foo. :foo :bar :baz } log:notIncludes { :foo :bar :baz }}
+{{ @forSome :foo. :foo :bar :baz } log:notIncludes { :foo :bar :baz }}
   log:implies { :testb1n a :success }.
 
-{{ this log:forAll :foo. :foo :bar :baz } log:notIncludes { :foo :bar :baz }}
+{{ @forAll :foo. :foo :bar :baz } log:notIncludes { :foo :bar :baz }}
   log:implies { :testc1n a :FAILURE }.
 
 
 
-{{ :foo :bar :baz } log:notIncludes {this log:forAll :foo. :foo :bar :baz }}
+{{ :foo :bar :baz } log:notIncludes {@forAll :foo. :foo :bar :baz }}
    log:implies { :testa3n a :success }.
 
-{{ this log:forSome :foo. :foo :bar :baz } log:notIncludes {this log:forAll :foo.  :foo :bar :baz }}
+{{ @forSome :foo. :foo :bar :baz } log:notIncludes {@forAll :foo.  :foo :bar :baz }}
   log:implies { :testb3n a :success }.
 
-{{ this log:forAll :foo. :foo :bar :baz } log:notIncludes {this log:forAll :foo.  :foo :bar :baz }}
+{{ @forAll :foo. :foo :bar :baz } log:notIncludes {@forAll :foo.  :foo :bar :baz }}
   log:implies { :testc3n a :FAILURE }.
 
 
@@ -90,13 +90,13 @@
 ######################## Versions with different identifiers:
 
 
-{{ :fee :bar :baz } log:includes { this log:forSome :foo. :foo :bar :baz }}
+{{ :fee :bar :baz } log:includes { @forSome :foo. :foo :bar :baz }}
    log:implies { :testa2d a :success }. # Originally failed
 
-{{ this log:forSome :fee. :fee :bar :baz } log:includes {this log:forSome :foo. :foo :bar :baz }}
+{{ @forSome :fee. :fee :bar :baz } log:includes {@forSome :foo. :foo :bar :baz }}
   log:implies { :testb2d a :success }.
 
-{{ this log:forAll :fee. :fee :bar :baz } log:includes {this log:forSome :foo. :foo :bar :baz }}
+{{ @forAll :fee. :fee :bar :baz } log:includes {@forSome :foo. :foo :bar :baz }}
   log:implies { :testc2d a :success }.  # Originally failed
 
 
@@ -104,21 +104,21 @@
 {{ :fee :bar :baz } log:includes { :foo :bar :baz }}
   log:implies { :testa1d a :FAILURE }.
 
-{{ this log:forSome :fee. :fee :bar :baz } log:includes { :foo :bar :baz }}
+{{ @forSome :fee. :fee :bar :baz } log:includes { :foo :bar :baz }}
   log:implies { :testb1d a :FAILURE }.    # Originally failed
 
-{{ this log:forAll :fee. :fee :bar :baz } log:includes { :foo :bar :baz }}
+{{ @forAll :fee. :fee :bar :baz } log:includes { :foo :bar :baz }}
   log:implies { :testc1d a :success }.
 
 
 
-{{ :fee :bar :baz } log:includes {this log:forAll :foo. :foo :bar :baz }}
+{{ :fee :bar :baz } log:includes {@forAll :foo. :foo :bar :baz }}
    log:implies { :testa3d a :FAILURE }.
 
-{{ this log:forSome :fee. :fee :bar :baz } log:includes {this log:forAll :foo.  :foo :bar :baz }}
+{{ @forSome :fee. :fee :bar :baz } log:includes {@forAll :foo.  :foo :bar :baz }}
   log:implies { :testb3d a :FAILURE }.
 
-{{ this log:forAll :fee. :fee :bar :baz } log:includes {this log:forAll :foo.  :foo :bar :baz }}
+{{ @forAll :fee. :fee :bar :baz } log:includes {@forAll :foo.  :foo :bar :baz }}
   log:implies { :testc3d a :success }.
 
 
@@ -126,34 +126,34 @@
 
 
 
-{{ :fee :bar :baz } log:notIncludes { this log:forSome :foo. :foo :bar :baz }}
+{{ :fee :bar :baz } log:notIncludes { @forSome :foo. :foo :bar :baz }}
    log:implies { :testa2nd a :FAILURE }.     # Originally failed
 
-{{ this log:forSome :fee. :fee :bar :baz } log:notIncludes {this log:forSome :foo. :foo :bar :baz }}
+{{ @forSome :fee. :fee :bar :baz } log:notIncludes {@forSome :foo. :foo :bar :baz }}
   log:implies { :testb2nd a :FAILURE }. 
 
-{{ this log:forAll :fee. :fee :bar :baz } log:notIncludes {this log:forSome :foo. :foo :bar :baz }}
+{{ @forAll :fee. :fee :bar :baz } log:notIncludes {@forSome :foo. :foo :bar :baz }}
   log:implies { :testc2nd a :FAILURE }.    # Originally failed
 
 
 {{ :fee :bar :baz } log:notIncludes { :foo :bar :baz }}
   log:implies { :testa1nd a :success }.
 
-{{ this log:forSome :fee. :fee :bar :baz } log:notIncludes { :foo :bar :baz }}
+{{ @forSome :fee. :fee :bar :baz } log:notIncludes { :foo :bar :baz }}
   log:implies { :testb1nd a :success }.
 
-{{ this log:forAll :fee. :fee :bar :baz } log:notIncludes { :foo :bar :baz }}
+{{ @forAll :fee. :fee :bar :baz } log:notIncludes { :foo :bar :baz }}
   log:implies { :testc1nd a :FAILURE }.  # Originally failed, STILL FAILS 
 
 
 
-{{ :fee :bar :baz } log:notIncludes {this log:forAll :foo. :foo :bar :baz }}
+{{ :fee :bar :baz } log:notIncludes {@forAll :foo. :foo :bar :baz }}
    log:implies { :testa3nd a :success }.
 
-{{ this log:forSome :fee. :fee :bar :baz } log:notIncludes {this log:forAll :foo.  :foo :bar :baz }}
+{{ @forSome :fee. :fee :bar :baz } log:notIncludes {@forAll :foo.  :foo :bar :baz }}
   log:implies { :testb3nd a :success }.
 
-{{ this log:forAll :fee. :fee :bar :baz } log:notIncludes {this log:forAll :foo.  :foo :bar :baz }}
+{{ @forAll :fee. :fee :bar :baz } log:notIncludes {@forAll :foo.  :foo :bar :baz }}
   log:implies { :testc3nd a :FAILURE }.
 
 

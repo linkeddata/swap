@@ -3,7 +3,7 @@
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix : <#>.
 
-this log:forAll :x.
+@forAll :x.
 
 
 :me <#hairColor> "red".
@@ -16,7 +16,7 @@ this log:forAll :x.
 }
   log:implies { :x a :Found }.
 
-#  { this log:forSome :y.
+#  { @forSome :y.
 #    :y <#hairColor> "red".
 #  <#something> <#suggests> { :x <#height> "6foot2inches" }
 #}
