@@ -1,0 +1,74 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+
+<> dc:description """
+Example Scenario:401: Oh Yeah? Prove you have access!
+""";
+  dc:source <http://www.w3.org/2000/01/sw/DevelopmentProposal>.
+
+@prefix acl: <acl@@#>.
+@prefix v: <#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix logAux: <logAux@@#>.
+
+this log:forAll v:S, v:T, v:K, v:SnT.
+
+# axioms for acl:assures
+
+# was:
+#{ v:S log:implies v:T } log:implies
+#   { { v:K acl:assures v:S } log:implies { v:K acl:assures v:T } }.
+{ v:S log:implies v:T.  v:K acl:assures v:S }
+   log:implies { v:K acl:assures v:T }.
+
+{ v:K acl:assures v:S, v:T.
+   v:SnT is logAux:conjunction of (v:S v:T) }
+ log:implies
+   { v:K acl:assures v:SnT }.
+
+
+
+@prefix : <acl-pf#>.
+@prefix aclPf: <acl-pf#>.
+
+this log:forAll v:org, v:Kacrep, v:Krep.
+
+#@@:Kdirector acl:assures {
+
+{ v:Kacrep :ACRep v:org;
+           acl:assures  [ log:includes { v:Krep :memberRep v:org }] }
+    log:implies { v:Krep :memberRep v:org }.
+# }.
+
+
+:Kdirector acl:assures {
+  :Kwiley :ACRep :ACME
+ }.
+
+:Kwiley acl:assures { :KjohnDoe :memberRep :ACME }.
+
+this log:forAll v:org, v:rep.
+
+{:Kdirector acl:assures [ log:includes { v:rep :ACRep v:org }] }
+   log:implies { v:rep :ACRep v:org }.
+
+ this log:forAll v:K, v:org.
+ 
+{ v:K :memberRep v:org }
+  log:implies { v:K :hasAccess :meetingRecord } .
+
+#@@{ :Kwebmaster acl:assures
+ { :KjohnDoe :hasAccess :meetingRecord }
+  log:implies { :aclPfTest a :Success }.
+
+##########
+#:Kwebmaster acl:assures
+# { this log:forAll v:org, v:rep.
+#   { :Kdirector acl:assures { v:rep :memberRep v:org } } log:implies
+#        { v:rep :memberRep v:org } }.
+#
+#:Kwebmaster acl:assures
+# { this log:forAll v:K, v:org.
+#   { v:K :memberRep v:org } log:implies { v:K :hasAccess :meetingRecord } }.
+#
+#{ :Kwebmaster acl:assures { :KjohnDoe :hasAccess :meetingRecord } }
+#  log:implies { :aclPfTest a :Success }.
