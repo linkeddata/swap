@@ -22,6 +22,7 @@ my($rdfNS) = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
 my($dcNS) = "http://purl.org/dc/elements/1.1/";
 my($kNS) = "http://opencyc.sourceforge.net/daml/cyc.daml#";
 my($dtNS) = "http://www.w3.org/2001/XMLSchema#";
+my($tNS) = "http://www.w3.org/2000/10/swap/pim/travelTerms#";
 
 my(%Things);
 
@@ -29,6 +30,7 @@ my(%Things);
 &bind("dt", $dtNS); # datatypes
 &bind("k", $kNS);
 &bind("dc", $dcNS);
+&bind("t", $tNS);
 
 
 my($gen) = 1;
@@ -139,13 +141,13 @@ sub grok{
 	makeStatement($trip, $kNS . "subEvents", $event);
 	makeStatement($trip, $kNS . "firstSubEvents", $event) unless $firstEvent++;
 	makeStatement($event, $kNS . "startingDate", $calday);
-	makeStatement($event, $kNS . "nameString", '', $flightNum); #@@hmm... flight number...
+	makeStatement($event, $tNS . "flightNumber", '', $flightNum);
 
 	my($carrier);
 
 	$carrier = the($kNS . 'nameOfAgent', $carrierName, $carrierName);
 	makeStatement($carrier, $rdfNS . 'type', $kNS . 'AirlineCompany');
-	makeStatement($event, $kNS . "performedBy", $carrier); #@@hm... a stretch? more specific term?
+	makeStatement($event, $tNS . "carrier", $carrier);
 
 	my($fltcls);
 	$fltcls = the($rdfNS . 'value', $flightClassName, $flightClassName);
@@ -166,14 +168,14 @@ sub grok{
 	my($place, $ti);
 	$place = the($kNS . "nameString", $airportName, $airportName);
 	makeStatement($place, $rdfNS . "type", $kNS . "Airport-Physical");
-	$ti = the($dtNS . "time",
-		  sprintf("%02d:%02d", $hh, $mm), "time${hh}_$mm");
+
+	$ti = sprintf("%02d:%02d", $hh, $mm);
 	if($dir eq 'LV'){
 	  makeStatement($event, $kNS . 'fromLocation', $place);
-	  makeStatement($event, "@@#startTime", $ti);
+	  makeStatement($event, $tNS . 'departureTime', '', $ti);
 	}else{
 	  makeStatement($event, $kNS . 'toLocation', $place);
-	  makeStatement($event, "@@#endTime", $ti);
+	  makeStatement($event, $tNS . 'arrivalTime', '', $ti);
 	}
 
       }
@@ -281,6 +283,9 @@ sub the{
 }
 
 # $Log$
-# Revision 1.1  2002-06-12 06:57:23  connolly
+# Revision 1.2  2002-06-12 15:42:27  connolly
+# grokTravItin.pl seems to be working now
+#
+# Revision 1.1  2002/06/12 06:57:23  connolly
 # sorta working; a few terms missing from cyc
 #

@@ -1,0 +1,73 @@
+
+<!-- Processed by Id: cwm.py,v 1.96 2002/06/07 20:07:17 timbl Exp -->
+<!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/pim/travelTerms.n3-->
+
+
+<r:RDF xmlns="http://www.w3.org/2000/10/swap/pim/travelTerms#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:dt="http://www.w3.org/2001/XMLSchema#"
+    xmlns:k="http://opencyc.sourceforge.net/daml/cyc.daml#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:ont="http://www.daml.org/2001/03/daml+oil#"
+    xmlns:r="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:s="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:trav="http://www.w3.org/2000/10/swap/pim/travelTerms#">
+
+    <r:Description r:about="#0_work">
+        <log:forSome r:resource="#_g0"/>
+    </r:Description>
+
+    <r:Description r:about="">
+        <dc:description>$Id$</dc:description>
+        <dc:title>Travel terms</dc:title>
+        <s:seeAlso r:resource="grokTravItin.pl"/>
+        <s:seeAlso r:resource="travel"/>
+        <s:seeAlso r:resource="travel.html"/>
+    </r:Description>
+
+    <r:Description r:about="http://www.w3.org/2000/10/swap/pim/travelTerms#Flight">
+        <s:label>Flight</s:label>
+        <s:subClassOf r:resource="http://opencyc.sourceforge.net/daml/cyc.daml#Translocation"/>
+    </r:Description>
+
+    <s:Class r:about="http://www.w3.org/2000/10/swap/pim/travelTerms#TimeString">
+        <s:comment>@@TODO: relate this to xml schema time stuff, cyc calendar stuff, etc.</s:comment>
+        <s:comment>a string of the form HH:MM; e.g. 12:00, 14:23</s:comment>
+        <s:label>time string</s:label>
+    </s:Class>
+
+    <ont:UniqueProperty r:about="http://www.w3.org/2000/10/swap/pim/travelTerms#arrivalTime">
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/travelTerms#Flight"/>
+        <s:label>arrival time</s:label>
+        <s:range r:resource="http://www.w3.org/2000/10/swap/pim/travelTerms#TimeString"/>
+    </ont:UniqueProperty>
+
+    <ont:UniqueProperty r:about="http://www.w3.org/2000/10/swap/pim/travelTerms#carrier">
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/travelTerms#Flight"/>
+        <s:label>carrier</s:label>
+        <s:range r:resource="http://opencyc.sourceforge.net/daml/cyc.daml#AirlineCompany"/>
+        <s:subPropertyOf r:resource="http://opencyc.sourceforge.net/daml/cyc.daml#performedBy"/>
+    </ont:UniqueProperty>
+
+    <ont:UniqueProperty r:about="http://www.w3.org/2000/10/swap/pim/travelTerms#departureTime">
+        <s:comment>a string representing the departure time,
+   in the timezone of the flight's fromLocation</s:comment>
+        <s:comment>hmm... model this as the time of a departure subevent?</s:comment>
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/travelTerms#Flight"/>
+        <s:label>departure time</s:label>
+        <s:range r:resource="http://www.w3.org/2000/10/swap/pim/travelTerms#TimeString"/>
+    </ont:UniqueProperty>
+
+    <ont:UniqueProperty r:about="http://www.w3.org/2000/10/swap/pim/travelTerms#flightNumber">
+        <s:comment>@@range specification needs a new datatyping property</s:comment>
+        <s:domain r:resource="http://www.w3.org/2000/10/swap/pim/travelTerms#Flight"/>
+        <s:label>flight number</s:label>
+        <s:range r:resource="#_g0"/>
+        <s:subPropertyOf r:resource="http://opencyc.sourceforge.net/daml/cyc.daml#nameString"/>
+        <s:subPropertyOf r:resource="http://www.w3.org/1999/02/22-rdf-syntax-ns#value"/>
+    </ont:UniqueProperty>
+
+    <r:Description r:about="http://www.w3.org/2001/XMLSchema#positiveInteger">
+        <s:range r:resource="#_g0"/>
+    </r:Description>
+</r:RDF>
