@@ -1,0 +1,18 @@
+     @prefix : <http://www.w3.org/2000/10/swap/reason#> .
+    
+      [      a :Conjunction,
+                    :Proof;
+             :component  [
+                 a :Extraction;
+                 :because  [
+                     a :Parsing;
+                     :source <reason/e.n3> ];
+                 :gives {<reason/e.n3#_L1C1>     <reason/foo#bar> <reason/e.n3#_L2C12> .
+                } ];
+             :existential <reason/e.n3#_L1C1>,
+                    <reason/e.n3#_L2C12>;
+             :gives {this     <http://www.w3.org/2000/10/swap/log#forSome> <reason/e.n3#_L1C1>,
+                        <reason/e.n3#_L2C12> .
+            <reason/e.n3#_L1C1>     <reason/foo#bar> <reason/e.n3#_L2C12> .
+            } ].
+    
