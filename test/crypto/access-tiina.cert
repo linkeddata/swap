@@ -1,15 +1,34 @@
 #Processed by Id: cwm.py,v 1.92 2002/03/22 21:36:00 timbl Exp 
-        #    using base file:/cygdrive/c/devel/WWW/2000/10/swap/test/crypto/
+        #    using base file:/devel/WWW/2000/10/swap/test/crypto/
         
 #  Notation3 generation by
 #       notation3.py,v 1.107 2002/03/22 21:36:00 timbl Exp
 
-#   Base was: file:/cygdrive/c/devel/WWW/2000/10/swap/test/crypto/
-     @prefix : <access-sign-cert.n3#> .
-     @prefix acc: <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
+#   Base was: file:/devel/WWW/2000/10/swap/test/crypto/
+     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
      @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix os: <http://www.w3.org/2000/10/swap/os#> .
      @prefix string: <http://www.w3.org/2000/10/swap/string#> .
+    
+    """
+ODQ2NzMKCjQ5OTUyNTIxNzk2OTU0OTA5Mzg2NzAwMjc5NzUwMDY3NDU5MDE5OTE3OTEyNzU1OTQx
+NTM3Mjg0NTAyMTQzOTY3OTk3ODM3NjQzODAzOTg3MDk2MzY5MTA2NDkzMjkxMzQwNjc0NzU5MDMx
+OTc0NTMyMDQxMzc1OTg3Mjk5OTA2NTQzNzQzOTI2MjY4NTY3OTg5OTY2NTAxNzk2NzkxOTk3NjUz
+MzMxNzkyMDg5NzE2OTY5ODEzODcwOTQ2NTEwODI2NjQwMzc1MzYzMTMwMzI2ODc1OTYyMzQzMTMw
+OTg2MDEwNzU0NDk2MzQzNDQwMzk1NzMyMDE3MjUyOTU4MTE2OTE5Nzk4MzEzMDA3ODY3Nzk4MzQw
+NDE3MjMyODE5NzExMjYyMjY0Nzg3NzUxMDcyNjc5NwoKNzM1MDE0MDc2NTg2NzA1NTgwMzQ4OTg4
+MjA4MDU0NjIyNDU1NzE2ODg0MTAxMjIwMzEyOTg0MTAwNzMxMjk3Njk0OTk3Mjk0NTM3OTkxODky
+NjE0NzIwOTgyODM5NzY4MDY0NzUxMjQ2Mjk5NzMwMzY4MjQ0MzA4NjA1Nzc2OTcyMTQ5OTI0NTA2
+NDg5Nzc2NjU0ODg3MjA4MjI2NDEwNjUzMDE3MDg0ODA3NjE1NzI2NzQwNTAwNTU0OTQ2MDIyMjM4
+MDcyOTk0NjI2NTk1ODE1NzI3NjAyMDgzOTM5NjI3NjUwMTkxMjA5NTg1NzA5NjA0MzU5Mzk3NDE1
+MjQ2Mjg2MzIzMzY5MTgyMDQzNTgyODA3NTQ3MTk5NTIwMjk4NjQ0NTY0NTU0ODQ5NzEwMzc2ODUK
+CjEyNzU1NzUzMDI5MjQwNDUwMjM1MzkwNTY2NDY2MDE1MDEzMDIyMzg5MTQ0OTcxNzYyMDk2MzIx
+MDk2ODA1MDQ0MTIxNDc2MjUxNTU0NDcwOTk0MzM1MTEzMTg2NzIzOTI4MDI2NTczMzY3OTQwOTU2
+MzczMDU5Mzk2NTAzMzU4NTIyMjI3ODA3NzgxOTI2MDgyNTk4MDcwNzgzCgozOTE2MDc3ODQyMDg3
+OTYwNjM0NDg0ODE1NTY4NDIyNDM1ODYyMjk5MTI3NzkyNzI3Mzk5MjY2NDc3NDExNzQzODA0Nzg0
+MjE0Mjk3NDY3ODI1NTUzNzI2NTkxNzUxNDI3ODI0NDk0OTc3NjExNjE4NjQ1ODAzNjIyMDIzMDU4
+MzI0OTg4NzM3OTA3NDQ5MjEzOTMyNjExODI1OQ=3D=3D
+"""     a :Secret .
     
 #ENDS

@@ -1,7 +1,7 @@
 
 
 
-<rdf:RDF xmlns="file:/cygdrive/c/devel/WWW/2000/10/swap/test/equiv-syntax.n3#"
+<rdf:RDF xmlns="file:/devel/WWW/2000/10/swap/test/equiv-syntax.n3#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">

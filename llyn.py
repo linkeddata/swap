@@ -991,8 +991,8 @@ class RDFStore(RDFSink.RDFSink) :
                 if thing.verbosity() > 95: progress(".......restored", q2)
         return new
 
-    def endFormulaNested(self, F, bindings = [], level=0):
-        """Cannonicalize this after cannonicalizing any subformulae recusrively
+    def endFormulaNested(self, F, bindings = [], level=0, notThis=0):
+        """Cannonicalize this (unloess notThis set) after cannonicalizing any subformulae recusrively
         Note the subs must be done first. Also note that we can't assume statements
         or formulae are valid after a call to this, unless we track the
         changes which are kept in a shared list, bindings. """
@@ -1017,6 +1017,8 @@ class RDFStore(RDFSink.RDFSink) :
                     self.removeStatement(s)
                     self.storeQuad(q2)   #  Could be faster? Patch the existing one?
                     if thing.verbosity() > 95: progress(".......restored", q2)
+
+	if notThis: return F
 
         new = self.endFormula(F)
         if new is not F:
@@ -1144,8 +1146,10 @@ class RDFStore(RDFSink.RDFSink) :
         pass
 
     def endDoc(self, rootFormulaPair):
-        F =self.intern(rootFormulaPair)
-        return F.close()
+	self.endFormulaNested(self.intern(rootFormulaPair), notThis=1)
+        return
+#        F =self.intern(rootFormulaPair)
+#        return F.close()
 
 ##########################################################################
 #
@@ -2494,6 +2498,10 @@ class QueryItem:
               and self.neededToRun[SUBJ] == []
               and self.neededToRun[OBJ] == []):
             self.state = 5
+	if self.state == 5 and self.searchPattern[SUBJ] != None:
+	    if thing.verbosity() > 50:
+		progress("Rejecting list already searched and now bound", self)
+	    self.state = 80    # see test/list-bug1.n3
         if thing.verbosity() > 90:
             progress("...bound becomes ", `self`)
         if self.state == 80: return 0

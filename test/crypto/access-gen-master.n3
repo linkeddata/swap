@@ -10,7 +10,8 @@ this log:forAll :x , :y.
 
 
 { :x crypto:keyLength "1024";
-     crypto:publicKey :y } log:implies { :x a acc:MasterKeyPair.  :y a acc:MasterKey } .
+     crypto:publicKey :y } log:implies {
+ :x a acc:MasterKeyPair; a acc:Secret.  :y a acc:MasterKey } .
 
 log:forAll a log:Chaff.
 log:implies a log:Chaff.

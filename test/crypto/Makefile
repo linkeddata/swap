@@ -12,37 +12,56 @@ CWM=python ../../cwm.py
 	$(CWM) access-rule.n3 --think --purge --with $< > $@
 
 .private.public:
-	$(CWM) $< access-onlyPublic.n3 --purge > $@
+	$(CWM) $< access-onlyPublic.n3 --think --purge > $@
 
 #all: access-1.response
 #	touch all
 
-access-1.response : access-1.request access-rule.n3 access-tiina.public access-tiina.cert access-master.public
+all: access-1.response
 
-# Sign a request by Tiina for the W3C member page:
-access-1.request : access-tiina.private access-sign-request.n3
-	$(CWM) access-tiina.private access-sign-request.n3 --think --purge --with http://www.w3.org/Member > $@
+clean:
+	rm *.response *.cert *.public
 
-# Elisa (Kari for example) signs a certificate for Tiina
-#   Kari makes a note of who he gave this cert to, for tracking
+# First, the parties involved create the keys they need.
+
+# Alan makes a master key to use as the final authority in all this.
+# It contains his matching public and private keys. He keeps this file safe.
+access-master.private : access-gen-master.n3
+	$(CWM) access-gen-master.n3 --think --purge > access-master.private
+
+# From that, Alan makes a public file to announce only the public key.
+
+access-master.public : access-master.private
+
+# Kari makes a keypair to use in his role as a delegated authority.
+access-elisa.private : access-gen-elisa.n3
+	$(CWM) access-gen-elisa.n3 --think --purge --with "Elisa" > access-elisa.private
+
+access-elisa.public : acecss-elisa.private
+
+
+# Tiina's browser (or w3C script) makes a keypair for her to use for access to the site.
+# (She can reuse the same key pair for many sites.) 
+access-tiina.private : access-gen-tiina.n3
+	$(CWM) access-gen-tiina.n3 --think --purge  > access-tiina.private
+
+access-tiina.public : access-tiina.private
+
+#  Kari now signs a certificate for Tiina, to indicate that she is an employee of Elisa.
+#  (Kari makes a note of who he gave this cert to, for tracking.)
+#  He uses his private key for this, but only need Tiina's public key, which she brings him.
 
 access-tiina.cert : access-tiina.public access-elisa.private
 	$(CWM) access-tiina.public access-elisa.private access-sign-cert.n3 --think --purge --with "Tiina" > $@
 
-# Generate public keys and secret key pairs:
 
-access-elisa.public : acecss-elisa.private
+# When she wants to browse the W3C member site, Tiina's software signs a request with her public key:
+access-1.request : access-tiina.private access-sign-request.n3
+	$(CWM) access-tiina.private access-sign-request.n3 --think --purge --with http://www.w3.org/Member > $@
 
-access-master.public : access-master.private
-access-tiina.public : access-tiina.private
-
-access-master.private : access-gen-master.n3
-	$(CWM) access-gen-master.n3 --think --purge > access-master.private
-
-access-elisa.private : access-gen-elisa.n3
-	$(CWM) access-gen-elisa.n3 --think --purge --with "Elisa" > access-elisa.private
-
-access-tiina.private : access-gen-tiina.n3
-	$(CWM) access-gen-tiina.n3 --think --purge  > access-tiina.private
+# The response to the request is generated in the server by access-rule.n3 
+# It checks that the chain of authority has been satisfied by appropriate signed statements.
+access-1.response : access-1.request access-rule.n3 access-tiina.public access-tiina.cert access-master.public
 
 
+# ends

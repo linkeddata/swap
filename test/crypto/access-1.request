@@ -1,42 +1,34 @@
 #Processed by Id: cwm.py,v 1.92 2002/03/22 21:36:00 timbl Exp 
-        #    using base file:/cygdrive/c/devel/WWW/2000/10/swap/test/crypto/
+        #    using base file:/devel/WWW/2000/10/swap/test/crypto/
         
 #  Notation3 generation by
 #       notation3.py,v 1.107 2002/03/22 21:36:00 timbl Exp
 
-#   Base was: file:/cygdrive/c/devel/WWW/2000/10/swap/test/crypto/
+#   Base was: file:/devel/WWW/2000/10/swap/test/crypto/
      @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
      @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix os: <http://www.w3.org/2000/10/swap/os#> .
      @prefix string: <http://www.w3.org/2000/10/swap/string#> .
     
-    """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
-     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
-     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
-    
-    this     :credential <file:/cygdrive/c/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
-         :forDocument <http://www.w3.org/Member>;
-         :junk "32746213462187364732164732164321" .
-    
-"""     :endorsement  [
-             :key """
-MjQ1OTMKCjQ1NzE0ODY3NjE0NzkzMzgwNjE4NjAzNDQyNTE0NTkzMjk3MjI1MTM1NjU1MjQ2MDA3
-MDU2NzkxNzk0NzA5NDk5MTAzNTI5NDg4OTY4OTM5OTAwODE3MzIzMzU1NjE3Mjg5NjQxNjM1NjI3
-NjM3NjMwMDczMDA3MzI4NjM3MTY5ODM2MTMwMjE1ODM2NDc2MjM3NTE1ODc0OTQxNDM2NTM2MjY4
-Njc1NTY5MTYyMzg2ODEzMzk1MzkxOTE4MDEwMjYzNzI0ODk5NzQ3NTc3ODI0MjIzNjY0NDM3MzYw
-Njc1MTk2MzUyMDg4MDk1MjExMjg0NzU5NzYyOTA4NzY1MDAxMTY4MDcyNTkzMzIzMTY3MTczNjk2
-NjA4NDE5MDg3MTA2MzM5MDcwODM3MTY1MTA4MjM5OQ=3D=3D
-""";
-             :signature """
-NDEzOTA3MzE1ODUzMDU4MTc5NDg5NTA0NzM0Mjk3NzgwMTkzMzYwMjc5MTI1ODUyMzI4NjQ1MTQ1
-MDg3Njg3NDE0OTUyMTM2NzI2NzAxMDg4NDU3Njg2Mjg4MDMwNTM2MzYxNjY2NDU1OTU4MTA4MjQ1
-OTcxMzYzNDcxMjI2NjIyMjA5MjkwNjk3OTMwNjkzMDMyMTQ3MTMxNzI1NjA2MjIxNTIzMzI5OTE2
-NjYwMDcxMTQyMzgwMTg5MTQ4MzM0MDA4MzA4MDAyMTgxNTk1MDEyNzY5MTc4NzE4ODMzMDkzODIw
-MTgwOTA0ODcwOTk1OTcwNDExMjk5NTUwOTc3NTAyMjAxNDQ3MDY0NjM2MTgyOTE3MTcwMDU3Mjkx
-NTE2Njk5Mjk3ODUyMTU3MTUwMDk3MDEx
-""" ] .
+    """
+MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
+NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
+NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
+Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
+MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
+OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1MwoKMjg1NjA0MDIxNzEzNzAxNjg0MzU4NzA5
+NzE3MzMyNDE3NDMzMjUzMzM3ODQzMDgwNzc2MjgzMzE3NDkxMjUwMTAxMTI2OTk0MTY2NDA0MTM3
+MjI5MzUzNjkwNzc4MjY3NDg5MTI5MjMyNTkwMzY2OTUwODY1NzQ0MDY1NzE1NzY3ODAwODcyMjMw
+NDYyMjIyNTY4NzI0NTc1MzYyOTY4Njg5NzI2NjQ2NjY4MDgwMTQ1NzIxOTE0Mjc1MDk0MTk1MDA1
+NzgwODk2MzMyMDIwNTQ3MDgyMDIxMjUzNzU2NDQ5MzMwOTQ3MTkxMzQ0NDc2MTM4OTkwNTAxMTgz
+ODM4MDc5NDc1MzA0NDAyNTgyNDY2MDUyMzIxNzc4NzI4NDA1NzQ1NDA1MTg1NzkzNjQ0NDIyNTI3
+CgoxMjcxNDU3ODM2OTUzNjU2MzEzNTgyNjc2ODM1MzUwOTc0MDA3NjUxNjgwNTIxMTE4NDY3Mjgw
+MTUwMzMxOTg2NzYzNjg2NTU0MTk2NDY0NjA1NDI2NDA4MDQ1NjMzMjM5MjA0OTE3MTkwNzUwODU2
+NjMxMzI2MTI3MjI5MjU1Mjc0NzE3MDc0MjgxMzE2MjkxNzQ0Nzc1NDIyNwoKMjkwMTU3NDk0MzU5
+MTY5NzIwMTcwNjM3Mzk3OTg1NzMzODIyNDIxMjYzNzYzMTI0MzM1MzMxMjEwMzU0OTEwMTgyMjgw
+NTE3NTkyNjk3MjA5NTY4MzIzNDU4ODEwMTAwMTYxNDEyNDE1NzA3MzQyODQxMTU0Mzk4ODEwMzk2
+MzI3NzM4NTc4OTA3OTkxMTYxMjgxNDAyOTQ4Mzk=3D
+"""     a :Secret .
     
 #ENDS

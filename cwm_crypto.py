@@ -127,8 +127,9 @@ class BI_keyLength(LightBuiltIn, Function, ReverseFunction):
          one key pair (per iteration), in order to work around a bug."""
       if self.do: 
          randfunc, self.do = randpool.RandomPool(int(obj_py)), 0
+#         print "#@@@@@@@@@@@@@@@@@@@@@@@@ HERE"
          RSAKey = RSA.generate(int(obj_py), randfunc.getBytes)
-         # print formatObject(RSAKey)
+#         print "#@@@@@@@@@@@@@@@@@@@@@@@@ THERE"
          TextKey = keyToQuo(RSAKey)
          if TextKey != 'N.': return store._fromPython(context, TextKey)
 
