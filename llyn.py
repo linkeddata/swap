@@ -24,6 +24,7 @@ Agenda:
 =======
 
  - get rid of other globals (DWC 30Aug2001)
+ - Add dynamic load pf web python via rdf-schema: imp.load_source("foo", "llyn.py", open("llyn.py", "r"))
  - split Query engine out as subclass of RDFStore? (DWC)
     SQL-equivalent client
  - implement a back-chaining reasoner (ala Euler/Algernon) on this store? (DWC)
@@ -107,7 +108,7 @@ This is slow - Parka [guiFrontend PIQ] for example is faster but is propritary (
 research version. Written in C. Of te order of 30k lines
 """
 
-"""emacs got confused by long string above@@"""
+# emacsbug="""emacs got confused by long string above@@"""
 
 import string
 import urlparse
@@ -745,7 +746,7 @@ class RDFStore(RDFSink.RDFSink) :
     """ Absorbs RDF stream and saves in triple store
     """
 
-    def __init__(self, genPrefix=None, metaURI=None, argv=None):
+    def __init__(self, genPrefix=None, metaURI=None, argv=None, crypto=0):
         RDFSink.RDFSink.__init__(self)
 
         self.resources = {}    # Hash table of URIs for interning things
@@ -829,11 +830,12 @@ class RDFStore(RDFSink.RDFSink) :
         import cwm_string  # String builtins
         import cwm_os      # OS builtins
         import cwm_math    # Mathematics
-        import cwm_crypto  # Cryptography
         cwm_string.register(self)
         cwm_math.register(self)
         cwm_os.register(self)
-        cwm_crypto.register(self)
+        if crypto:
+	    import cwm_crypto  # Cryptography
+	    cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
         
         if metaURI != None:
             self.reset(metaURI)
