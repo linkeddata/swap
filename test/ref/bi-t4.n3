@@ -7,16 +7,16 @@
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
     this     log:forAll :x .
+    
+    :test4     a :success .
+    
+    :thesis     :is {:theSky     :is :blue .
+        } .
     {
         :thesis     :is :x .
         :x     log:notIncludes {:theSky     :is :green .
             } .
         
         }     log:implies {:test4     a :success .
-        } .
-    
-    :test4     a :success .
-    
-    :thesis     :is {:theSky     :is :blue .
         } .
     

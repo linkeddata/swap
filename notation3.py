@@ -110,7 +110,8 @@ N3CommentCharacter = "#"     # For unix script #! compatabilty
 
 class SinkParser:
     def __init__(self, sink, thisDoc, baseURI="", bindings = {},
-                 genPrefix = "", varPrefix = "", metaURI=None):
+                 genPrefix = "", varPrefix = "", metaURI=None,
+                 formulaURI = None):
 	""" note: namespace names should *not* end in #;
 	the # will get added during qname processing """
         self._sink = sink
@@ -129,7 +130,10 @@ class SinkParser:
         if not self._genPrefix: self._genPrefix = self._thisDoc + "#_g"
         if not self._varPrefix: self._varPrefix = self._thisDoc + "#_v"
 
-        self._formula = FORMULA, thisDoc + "#_formula" # Formula node is what the document parses to
+        if formulaURI == None:
+            self._formula = FORMULA, thisDoc + "#_formula" # Formula node is what the document parses to
+        else:
+            self._formula = FORMULA, formulaURI # Formula node is what the document parses to
         self._context = self._formula
         
         if metaURI:

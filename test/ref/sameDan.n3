@@ -13,18 +13,6 @@
                 :y,
                 :z;
          log:forSome <sameDan.n3#_g0> .
-    {
-        :x     contact:homePageAddress :z .
-        :y     contact:homePageAddress :z .
-        
-        }     log:implies {:x     = :y .
-        } .
-    {
-        :x     contact:mailbox :z .
-        :y     contact:mailbox :z .
-        
-        }     log:implies {:x     = :y .
-        } .
     
     <sameDan.n3#_g0>     <sameDan.n3#birthPlace> <sameDan.n3#KC>;
          <sameDan.n3#hairColor> <sameDan.n3#red>;
@@ -32,12 +20,6 @@
          contact:fullName "Dan Connolly";
          contact:homePage <http://www.w3.org/People/Connolly/>;
          contact:mailbox <mailto:connolly@w3.org> .
-    {
-        <sameDan.n3#x>     <sameDan.n3#birthPlace> <sameDan.n3#KC>;
-             <sameDan.n3#hairColor> <sameDan.n3#red> .
-        
-        }     log:implies {<sameDan.n3#test1>     a <sameDan.n3#Success> .
-        } .
     
     <sameDan.n3#test1>     a <sameDan.n3#Success> .
     
@@ -47,16 +29,16 @@ the same thing.""";
          <http://purl.org/dc/elements/1.1/relation> <forgetDups.n3>;
          <http://purl.org/dc/elements/1.1/rights> "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
          rcs:id "" .
-    {
-        :p     a ont:UniqueProperty .
-        
-        }     log:implies {{
-            :x     :p :y,
-                        :z .
-            
-            }     log:implies {:y     = :z .
-            } .
-        } .
+    
+    <sameThing.n3>     <http://purl.org/dc/elements/1.1/creator> <sameDan.n3#_g0>;
+         <http://purl.org/dc/elements/1.1/description> "substituion of equals for equals in triples, plus some rules for unambiguous/unique properties (@@that probably belong elsewhere)";
+         <http://purl.org/dc/elements/1.1/relation> <forgetDups.n3>;
+         <http://purl.org/dc/elements/1.1/rights> "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
+         rcs:id "" .
+    
+    contact:homePageAddress     a ont:UnambiguousProperty .
+    
+    contact:mailbox     a ont:UnambiguousProperty .
     {
         :p     a ont:UnambiguousProperty .
         
@@ -65,6 +47,16 @@ the same thing.""";
             :y     :p :z .
             
             }     log:implies {:x     = :y .
+            } .
+        } .
+    {
+        :p     a ont:UniqueProperty .
+        
+        }     log:implies {{
+            :x     :p :y,
+                        :z .
+            
+            }     log:implies {:y     = :z .
             } .
         } .
     {
@@ -78,12 +70,22 @@ the same thing.""";
         }     log:implies {:x     = :z .
         } .
     {
-        :p     log:notEqualTo log:forAll,
-                    log:forSome .
-        :x     :p :y;
-             = :z .
+        <sameDan.n3#x>     <sameDan.n3#birthPlace> <sameDan.n3#KC>;
+             <sameDan.n3#hairColor> <sameDan.n3#red> .
         
-        }     log:implies {:z     :p :y .
+        }     log:implies {<sameDan.n3#test1>     a <sameDan.n3#Success> .
+        } .
+    {
+        :x     contact:homePageAddress :z .
+        :y     contact:homePageAddress :z .
+        
+        }     log:implies {:x     = :y .
+        } .
+    {
+        :x     contact:mailbox :z .
+        :y     contact:mailbox :z .
+        
+        }     log:implies {:x     = :y .
         } .
     {
         :p     = :q;
@@ -96,19 +98,17 @@ the same thing.""";
     {
         :p     log:notEqualTo log:forAll,
                     log:forSome .
+        :x     :p :y;
+             = :z .
+        
+        }     log:implies {:z     :p :y .
+        } .
+    {
+        :p     log:notEqualTo log:forAll,
+                    log:forSome .
         :x     :p :y .
         :y     = :z .
         
         }     log:implies {:x     :p :z .
         } .
-    
-    <sameThing.n3>     <http://purl.org/dc/elements/1.1/creator> <sameDan.n3#_g0>;
-         <http://purl.org/dc/elements/1.1/description> "substituion of equals for equals in triples, plus some rules for unambiguous/unique properties (@@that probably belong elsewhere)";
-         <http://purl.org/dc/elements/1.1/relation> <forgetDups.n3>;
-         <http://purl.org/dc/elements/1.1/rights> "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
-         rcs:id "" .
-    
-    contact:homePageAddress     a ont:UnambiguousProperty .
-    
-    contact:mailbox     a ont:UnambiguousProperty .
     

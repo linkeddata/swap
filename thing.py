@@ -136,52 +136,6 @@ class Thing:
         return (RESOURCE, self.uriref())
     
 
-    # Use the URI to allow sorted listings - for cannonnicalization if nothing else
-    #  Put a type declaration before anything else except for strings
-    
-def compareURI(self, other):
-        if self is other: return 0
-        if isinstance(self, Literal):
-            if isinstance(other, Literal):
-                return cmp(self.string, other.string)
-            else:
-                return -1
-        if isinstance(other, Literal):
-            return 1
-        # Both regular URIs
-        _type = "<" + notation3.RDF_type_URI + ">"
-        s = self.representation()
-        if s == _type:
-            return -1
-        o = other.representation()
-        if o == _type:
-            return 1
-        if s < o :
-            return -1
-        if s > o :
-            return 1
-        print "Error with '%s' being the same as '%s'" %(s,o)
-        raise internalError # Strings should not match if not same object
-
-def compareFormulae(self, other):
-    """ This algorithm checks for equality in the sense of structural equivalence, and
-    also provides an ordering which allows is to render a graph in a canonical way.
-    This is a form of unification.
-
-    The steps are as follows:
-    1. If one forumula has more statments than the other, it is greater.
-    2. The variables of each are found. If they have different number of variables,
-       then the ine with the most is "greater".
-    3. The statements of both formulae are ordered, and the formulae compared statement
-       for statement ignoring variables. If this produced a difference, then
-       the one with the first largest statement is greater.
-       Note that this may involve a recursive comparison of subformulae.
-    3. If the formulae are still the same, then for each variable, a list
-       of appearances is created.  Note that because we are comparing statements without
-       variables, two may be equal, in which case the same (first) statement number
-       is used whichever statement the variable was in fact in. Ooops
-    """
-    pass
 
 class Resource(Thing):
     """   A Thing which has no fragment

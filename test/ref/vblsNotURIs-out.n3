@@ -11,12 +11,25 @@
     
     <animal.rdf#Animal>     a rdfs:Class;
          d12:restrictedBy  [
-             a d12:Restriction;
+             a :Found,
+                    d12:Restriction;
+             :called "#_rdfxg0";
              d12:cardinality "2";
-             d12:onProperty <animal.rdf#parent>;
-             a :Found;
-             :called "#_rdfxg0" ];
+             d12:onProperty <animal.rdf#parent> ];
          rdfs:label "Animal" .
+    
+    :x     d12:restrictedBy  [
+             a :Found,
+                    :Something;
+             :called "file:/cygdrive/c/devel/WWW/2000/10/swap/test/vblsNotURIs.n3#_g0" ] .
+    
+    <vblsNotURIs.n3>     <http://purl.org/dc/elements/1.1/description> """test that log:uri only
+gives URIs that somebody actually used, not variable names
+
+run it ala:
+ python cwm.py --rdf test/animal.rdf --n3 test/vblsNotURIs.n3 --think
+""";
+         <http://purl.org/dc/elements/1.1/version> "" .
     {
         
           [      d12:restrictedBy :o ].
@@ -30,17 +43,4 @@
         
         }     log:implies {:o     :called :i .
         } .
-    
-    :x     d12:restrictedBy  [
-             a :Something,
-                    :Found;
-             :called "file:/cygdrive/c/devel/WWW/2000/10/swap/test/vblsNotURIs.n3#_g0" ] .
-    
-    <vblsNotURIs.n3>     <http://purl.org/dc/elements/1.1/description> """test that log:uri only
-gives URIs that somebody actually used, not variable names
-
-run it ala:
- python cwm.py --rdf test/animal.rdf --n3 test/vblsNotURIs.n3 --think
-""";
-         <http://purl.org/dc/elements/1.1/version> "" .
     

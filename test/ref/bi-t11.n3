@@ -39,12 +39,28 @@
     
     :test_undefined     a :ERROR_CANT_GET_SCHEMA,
                 :UsedProperty .
+    
+    log:implies     a log:Chaff .
     {
         :F     log:includes {:blue     a rdf:Property .
             } .
         <foo.n3>     log:semantics :F .
         
         }     log:implies {:includesTest     a :FAILURE .
+        } .
+    {
+        :F     log:includes {:is     a rdf:Property .
+            } .
+        <foo.n3>     log:semantics :F .
+        
+        }     log:implies {:includesTest3     a :success .
+        } .
+    {
+        :F     log:includes {:p     a rdf:Property .
+            } .
+        :p     :schemaFormula :F .
+        
+        }     log:implies {:p     a :Property_declared .
         } .
     {
         :F     log:includes {:s     :p :o .
@@ -54,18 +70,39 @@
         }     log:implies {:p     a :UsedProperty .
         } .
     {
-        :p     a :UsedProperty;
-             log:semantics  [
-                 log:includes {:p     s:isDefinedBy :s .
-                } ] .
+        :F     log:notIncludes {:blue     a rdf:Property .
+            } .
+        <foo.n3>     log:semantics :F .
         
-        }     log:implies {:p     :schema :s .
+        }     log:implies {:includesTest2     a :success .
+        } .
+    {
+        :F     log:notIncludes {:is     a rdf:Property .
+            } .
+        <foo.n3>     log:semantics :F .
+        
+        }     log:implies {:includesTest4     a :FAILURE .
+        } .
+    {
+        :F     log:notIncludes {:p     a rdf:Property .
+            } .
+        :p     :schemaFormula :F .
+        
+        }     log:implies {:p     a :ERROR_PROPERTY_NOT_DECLARED .
         } .
     {
         :p     :schema  [
                  log:semantics :F ] .
         
         }     log:implies {:p     :schemaFormula :F .
+        } .
+    {
+        :p     a :UsedProperty;
+             log:semantics  [
+                 log:includes {:p     s:isDefinedBy :s .
+                } ] .
+        
+        }     log:implies {:p     :schema :s .
         } .
     {
         :p     a :UsedProperty;
@@ -85,41 +122,4 @@
         
         }     log:implies {:p     :schemaFormula :G .
         } .
-    {
-        :F     log:includes {:p     a rdf:Property .
-            } .
-        :p     :schemaFormula :F .
-        
-        }     log:implies {:p     a :Property_declared .
-        } .
-    {
-        :F     log:notIncludes {:p     a rdf:Property .
-            } .
-        :p     :schemaFormula :F .
-        
-        }     log:implies {:p     a :ERROR_PROPERTY_NOT_DECLARED .
-        } .
-    {
-        :F     log:notIncludes {:blue     a rdf:Property .
-            } .
-        <foo.n3>     log:semantics :F .
-        
-        }     log:implies {:includesTest2     a :success .
-        } .
-    {
-        :F     log:includes {:is     a rdf:Property .
-            } .
-        <foo.n3>     log:semantics :F .
-        
-        }     log:implies {:includesTest3     a :success .
-        } .
-    {
-        :F     log:notIncludes {:is     a rdf:Property .
-            } .
-        <foo.n3>     log:semantics :F .
-        
-        }     log:implies {:includesTest4     a :FAILURE .
-        } .
-    
-    log:implies     a log:Chaff .
     

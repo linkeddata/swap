@@ -7,6 +7,8 @@
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
     this     :is :doc .
+    
+    :testg_1     a :success .
     {
         this     log:forAll :y .
         :x     :loves :y .
@@ -51,6 +53,4 @@
         
         }     log:implies {:testg_1     a :success .
         } .
-    
-    :testg_1     a :success .
     

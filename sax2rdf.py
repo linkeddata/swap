@@ -80,7 +80,7 @@ _nextId = 0        # For generation of arbitrary names for anonymous nodes
 
 class RDFHandler(xml.sax.ContentHandler):
 
-    def __init__(self, sink, thisURI, **kw):
+    def __init__(self, sink, thisURI, formulaURI=None):
         self.testdata = ""
         self._stack =[]  # Stack of states
         self._nsmap = [] # stack of namespace bindings
@@ -88,7 +88,10 @@ class RDFHandler(xml.sax.ContentHandler):
         self.sink = sink
         self._thisURI = thisURI
         self._state = STATE_NOT_RDF  # Maybe should ignore RDF poutside <rdf:RDF>??
-        self._context = FORMULA, thisURI + "#_formula"  # Context of current statements, change in bags
+        if formulaURI==None:
+            self._context = FORMULA, thisURI + "#_formula"  # Context of current statements, change in bags
+        else:
+            self._context = FORMULA, formulaURI  # Context of current statements, change in bags
         self._formula = self._context  # Root formula
         self._subject = None
         self._predicate = None
@@ -460,8 +463,8 @@ class RDFHandler(xml.sax.ContentHandler):
 
 
 class RDFXMLParser(RDFHandler):
-    def __init__(self, sink, thisURI, **kw):
-        RDFHandler.__init__(self, sink, thisURI)
+    def __init__(self, sink, thisURI, formulaURI=None):
+        RDFHandler.__init__(self, sink, thisURI, formulaURI=formulaURI)
         p = xml.sax.make_parser()
         p.setFeature(feature_namespaces, 1)
         p.setContentHandler(self)

@@ -6,6 +6,13 @@
                 :_gs2,
                 :_gs3,
                 :p .
+    
+    :ancestor     a daml:TransitiveProperty .
+    
+    :granpa     :ancestor :bill,
+                :pa .
+    
+    :pa     :ancestor :bill .
     {
         :p     a daml:TransitiveProperty .
         
@@ -20,16 +27,9 @@
             } .
         } .
     {
-        :_gs1     :ancestor :_gs3 .
-        :_gs3     :ancestor :_gs2 .
+        :_gs2     :ancestor :_gs3 .
+        :_gs3     :ancestor :_gs1 .
         
-        }     log:implies {:_gs1     :ancestor :_gs2 .
+        }     log:implies {:_gs2     :ancestor :_gs1 .
         } .
-    
-    :ancestor     a daml:TransitiveProperty .
-    
-    :granpa     :ancestor :bill,
-                :pa .
-    
-    :pa     :ancestor :bill .
     

@@ -5,6 +5,22 @@
     this     log:forAll :a,
                 :b,
                 :p .
+    
+    :ancestor     a daml:TransitiveProperty .
+    
+    :bill     :ancestor :granpa,
+                :pa .
+    
+    :pa     :ancestor :granpa .
+    {
+        :a     :means :b .
+        
+        }     :means {:a     log:implies :b .
+        :b     log:implies :a .
+        };
+         log:implies {:a     log:implies :b .
+        :b     log:implies :a .
+        } .
     {
         :p     a daml:TransitiveProperty .
         
@@ -53,15 +69,6 @@
          log:implies {:p     a daml:TransitiveProperty .
         } .
     {
-        :a     :means :b .
-        
-        }     :means {:a     log:implies :b .
-        :b     log:implies :a .
-        };
-         log:implies {:a     log:implies :b .
-        :b     log:implies :a .
-        } .
-    {
         :a     log:implies :b .
         :b     log:implies :a .
         
@@ -81,11 +88,4 @@
             } .
         
         }     a log:Truth .
-    
-    :ancestor     a daml:TransitiveProperty .
-    
-    :bill     :ancestor :granpa,
-                :pa .
-    
-    :pa     :ancestor :granpa .
     

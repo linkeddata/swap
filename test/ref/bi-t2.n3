@@ -5,12 +5,6 @@
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
-    {
-        
-          [      :b :c ].
-        
-        }     log:implies {:test2     a :success .
-        } .
     
     :a     :b :c .
     
@@ -23,4 +17,10 @@ the other forumla or its equivalent by the renaming of variables.
 
 It can be calculated if one knows the formulae involved.
 """ .
+    {
+        
+          [      :b :c ].
+        
+        }     log:implies {:test2     a :success .
+        } .
     

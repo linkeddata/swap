@@ -8,12 +8,12 @@
     
     this     :forAll v:doc .
       [      c:mailbox <mailto:w3c-rdfcore-wg@w3.org> ].
+    
+    <mailto:w3c-rdfcore-wg@w3.org>     c:archive <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/> .
     {
         v:doc     :uri  [
                  string:startsWith "http://lists.w3.org/Archives/Public/" ] .
         
         }     :implies {v:doc     a aacl:PubliclyReadable .
         } .
-    
-    <mailto:w3c-rdfcore-wg@w3.org>     c:archive <http://lists.w3.org/Archives/Public/w3c-rdfcore-wg/> .
     

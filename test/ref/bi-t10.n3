@@ -19,6 +19,11 @@
     
     :test10b     a :success .
     {
+        :fred     local:favoriteColor :blue .
+        
+        }     log:implies {:test10b     a :success .
+        } .
+    {
         :F     log:includes {:theSky     :is :blue .
             } .
         <t10a.n3>     log:semantics :F .
@@ -38,10 +43,5 @@
         <t10a.n3>     log:semantics :F .
         
         }     log:implies {:fred     local:favoriteColor :x .
-        } .
-    {
-        :fred     local:favoriteColor :blue .
-        
-        }     log:implies {:test10b     a :success .
         } .
     

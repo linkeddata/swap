@@ -15,54 +15,6 @@
                 v:y,
                 v:z;
          log:forSome :_g0 .
-    {
-        {
-            v:x     :descendant v:y .
-            v:y     :descendant v:z .
-            
-            }     log:implies {v:x     :descendant v:z .
-            } .
-        
-        }     a log:Truth;
-         log:forAll v:x,
-                v:y,
-                v:z .
-    {
-        {
-            v:x     :ancestor v:y .
-            v:y     :ancestor v:z .
-            
-            }     log:implies {v:x     :ancestor v:z .
-            } .
-        
-        }     a log:Truth;
-         log:forAll v:x,
-                v:y,
-                v:z .
-    {
-        {
-            v:x     rdfs:subClassOf v:y .
-            v:y     rdfs:subClassOf v:z .
-            
-            }     log:implies {v:x     rdfs:subClassOf v:z .
-            } .
-        
-        }     a log:Truth;
-         log:forAll v:x,
-                v:y,
-                v:z .
-    {
-        {
-            v:x     rdfs:subPropertyOf v:y .
-            v:y     rdfs:subPropertyOf v:z .
-            
-            }     log:implies {v:x     rdfs:subPropertyOf v:z .
-            } .
-        
-        }     a log:Truth;
-         log:forAll v:x,
-                v:y,
-                v:z .
     
     :Adam     a daml:Person;
          daml:comment "Adam is a person.";
@@ -195,11 +147,102 @@
                 v:schemaInconsistency .
     
     <invalid-ex.n3>     daml:imports <daml-ex.n3> .
+    
+    v:schemaInconsistency     daml:subPropertyOf log:Falsehood;
+         rdfs:subPropertyOf log:Falsehood .
+    
+    daml:domain     = rdfs:domain .
+    
+    daml:range     = rdfs:range .
+    
+    daml:subClassOf     = rdfs:subClassOf .
+    
+    daml:subPropertyOf     = rdfs:subPropertyOf .
+    
+    rdfs:subClassOf     a daml:TransitiveProperty .
+    
+    rdfs:subPropertyOf     a daml:TransitiveProperty .
+    {
+        v:p     a daml:TransitiveProperty .
+        
+        }     log:implies {{
+            {
+                v:x     v:p v:y .
+                v:y     v:p v:z .
+                
+                }     log:implies {v:x     v:p v:z .
+                } .
+            
+            }     a log:Truth;
+             log:forAll v:x,
+                    v:y,
+                    v:z .
+        } .
+    {
+        {
+            v:x     :ancestor v:y .
+            v:y     :ancestor v:z .
+            
+            }     log:implies {v:x     :ancestor v:z .
+            } .
+        
+        }     a log:Truth;
+         log:forAll v:x,
+                v:y,
+                v:z .
+    {
+        {
+            v:x     :descendant v:y .
+            v:y     :descendant v:z .
+            
+            }     log:implies {v:x     :descendant v:z .
+            } .
+        
+        }     a log:Truth;
+         log:forAll v:x,
+                v:y,
+                v:z .
+    {
+        {
+            v:x     rdfs:subClassOf v:y .
+            v:y     rdfs:subClassOf v:z .
+            
+            }     log:implies {v:x     rdfs:subClassOf v:z .
+            } .
+        
+        }     a log:Truth;
+         log:forAll v:x,
+                v:y,
+                v:z .
+    {
+        {
+            v:x     rdfs:subPropertyOf v:y .
+            v:y     rdfs:subPropertyOf v:z .
+            
+            }     log:implies {v:x     rdfs:subPropertyOf v:z .
+            } .
+        
+        }     a log:Truth;
+         log:forAll v:x,
+                v:y,
+                v:z .
+    {
+        v:c1     rdfs:subClassOf v:c2 .
+        v:x     a v:c1 .
+        
+        }     log:implies {v:x     a v:c2 .
+        } .
     {
         v:p1     = v:p2 .
         v:x     v:p1 v:y .
         
         }     log:implies {v:x     v:p2 v:y .
+        } .
+    {
+        v:p1     rdfs:range v:c .
+        v:p2     rdfs:subPropertyOf v:p1 .
+        
+        }     log:implies {v:p2     rdfs:range v:c .
         } .
     {
         v:p     rdfs:domain v:c .
@@ -220,47 +263,4 @@
         
         }     log:implies {v:x     a v:schemaInconsistency .
         } .
-    {
-        v:p     a daml:TransitiveProperty .
-        
-        }     log:implies {{
-            {
-                v:x     v:p v:y .
-                v:y     v:p v:z .
-                
-                }     log:implies {v:x     v:p v:z .
-                } .
-            
-            }     a log:Truth;
-             log:forAll v:x,
-                    v:y,
-                    v:z .
-        } .
-    {
-        v:c1     rdfs:subClassOf v:c2 .
-        v:x     a v:c1 .
-        
-        }     log:implies {v:x     a v:c2 .
-        } .
-    {
-        v:p1     rdfs:range v:c .
-        v:p2     rdfs:subPropertyOf v:p1 .
-        
-        }     log:implies {v:p2     rdfs:range v:c .
-        } .
-    
-    v:schemaInconsistency     daml:subPropertyOf log:Falsehood;
-         rdfs:subPropertyOf log:Falsehood .
-    
-    daml:domain     = rdfs:domain .
-    
-    daml:range     = rdfs:range .
-    
-    daml:subClassOf     = rdfs:subClassOf .
-    
-    daml:subPropertyOf     = rdfs:subPropertyOf .
-    
-    rdfs:subClassOf     a daml:TransitiveProperty .
-    
-    rdfs:subPropertyOf     a daml:TransitiveProperty .
     

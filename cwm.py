@@ -31,7 +31,7 @@ Agenda:
 import string
 import urlparse
 import thing
-from thing import compareURI
+from llyn import compareURI
 
 # import re
 # import StringIO
@@ -425,7 +425,8 @@ Examples:
         else:
             _metaURI = urlparse.urljoin(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
             _store = RDFStore( _outURI+"#_gs", metaURI=_metaURI, argv=option_with)
-            workingContext = _store.intern((FORMULA, _outURI+ "#0_work"))   #@@@ Hack - use metadata
+            workingContextURI = _outURI+ "#0_work"
+            workingContext = _store.intern((FORMULA, workingContextURI))   #@@@ Hack - use metadata
 #  Metadata context - storing information about what we are doing
 
             _store.reset(_metaURI+"#_experience")     # Absolutely need this for remembering URIs loaded
@@ -434,14 +435,14 @@ Examples:
 
         if not _gotInput: #@@@@@@@@@@ default input
             _inputURI = _baseURI # Make abs from relative
-            p = notation3.SinkParser(_store,  _inputURI)
+            p = notation3.SinkParser(_store,  _inputURI, formulaURI=workingContextURI)
             p.load("")
             del(p)
             if not option_pipe:
                 inputContext = _store.intern((FORMULA, _inputURI+ "#_formula"))
                 history = inputContext
-                if inputContext is not workingContext:
-                    _store.moveContext(inputContext,workingContext)  # Move input data to output context
+#                if inputContext is not workingContext:
+#                    _store.moveContext(inputContext,workingContext)  # Move input data to output context
 
 
 #  Take commands from command line: Second Pass on command line:
@@ -464,13 +465,14 @@ Examples:
                 
             if arg[0] != "-":
                 _inputURI = urlparse.urljoin(option_baseURI, arg) # Make abs from relative
-                if option_format == "rdf" : p = sax2rdf.RDFXMLParser(_store,  _inputURI)
-                else: p = notation3.SinkParser(_store,  _inputURI)
+                if option_format == "rdf" :
+                    p = sax2rdf.RDFXMLParser(_store, _inputURI, formulaURI=workingContextURI)
+                else: p = notation3.SinkParser(_store,  _inputURI, formulaURI=workingContextURI)
                 p.load(_inputURI)
                 del(p)
                 if not option_pipe:
                     inputContext = _store.intern((FORMULA, _inputURI+ "#_formula"))
-                    _store.moveContext(inputContext,workingContext)  # Move input data to output context
+#                    _store.moveContext(inputContext,workingContext)  # Move input data to output context
                     _step  = _step + 1
                     s = _metaURI + `_step`  #@@ leading 0s to make them sort?
 #                    if doMeta and history:

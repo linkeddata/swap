@@ -124,7 +124,7 @@ import notation3    # N3 parsers and generators, and RDF generator
 
 import thing
 from thing import  progress, progressIndent, BuiltIn, LightBuiltIn, HeavyBuiltIn, Function, ReverseFunction, \
-     Formula, Literal, Resource, Fragment, FragmentNil, compareURI, Thing, List, EmptyList
+     Formula, Literal, Resource, Fragment, FragmentNil, Thing, List, EmptyList
 
 import RDFSink
 from RDFSink import Logic_NS
@@ -163,9 +163,87 @@ subcontext_cache_subcontexts = None
 
 ######################################################## Storage
 # The store uses an index in the interned resource objects.
-#
-#   store.occurs[context, thing][partofspeech]   dict, list, ???
+    # Use the URI to allow sorted listings - for cannonnicalization if nothing else
+    #  Put a type declaration before anything else except for strings
+    
+def compareURI(self, other):
+        """Compare two langauge items
+        This is a cannoncial ordering in that is designed to allow
+        the same graph always to be printed in the same order.
+        This makes the regression tests possible.
+        The literals are deemed smaller than symbols, which are smaller
+        than formulae.  This puts the rules at the botom of a file where
+        they tend to take a lot of space anyway.
+        Formulae have to be compared as a function of their sorted contents.
+        
+        @@ Anonymous nodes have to, within a given Formula, be compared as
+        a function of the sorted information about them in that context.
+        This is not done yet
+        """
+        if self is other: return 0
+        if isinstance(self, Literal):
+            if isinstance(other, Literal):
+                return cmp(self.string, other.string)
+            else:
+                return -1
+        if isinstance(other, Literal):
+            return 1
 
+        if isinstance(self, Formula):
+            if isinstance(other, Formula):
+                s = self.occursAs[CONTEXT]
+                o = other.occursAs[CONTEXT]
+                ls = len(s)
+                lo = len(o)
+                if ls > lo: return 1
+                if ls < lo: return -1
+
+                s.sort(StoredStatement.compareSubjPredObj) # forumulae are all the same
+                o.sort(StoredStatement.compareSubjPredObj)
+                for i in range(ls):
+                    diff = s[i].compareSubjPredObj(o[i])
+                    if diff != 0: return diff
+                raise RuntimeError("Identical formulae not interned!")
+            else:
+                return 1
+        if isinstance(other, Formula):
+            return -1
+
+        # Both regular URIs
+#        progress("comparing", self.representation(), other.representation())
+        _type = "<" + notation3.RDF_type_URI + ">"
+        s = self.representation()
+        if s == _type:
+            return -1
+        o = other.representation()
+        if o == _type:
+            return 1
+        if s < o :
+            return -1
+        if s > o :
+            return 1
+        print "Error with '%s' being the same as '%s'" %(s,o)
+        raise internalError # Strings should not match if not same object
+
+def compareFormulae(self, other):
+    """ This algorithm checks for equality in the sense of structural equivalence, and
+    also provides an ordering which allows is to render a graph in a canonical way.
+    This is a form of unification.
+
+    The steps are as follows:
+    1. If one forumula has more statments than the other, it is greater.
+    2. The variables of each are found. If they have different number of variables,
+       then the ine with the most is "greater".
+    3. The statements of both formulae are ordered, and the formulae compared statement
+       for statement ignoring variables. If this produced a difference, then
+       the one with the first largest statement is greater.
+       Note that this may involve a recursive comparison of subformulae.
+    3. If the formulae are still the same, then for each variable, a list
+       of appearances is created.  Note that because we are comparing statements without
+       variables, two may be equal, in which case the same (first) statement number
+       is used whichever statement the variable was in fact in. Ooops
+    """
+    pass
 
 class StoredStatement:
 
@@ -175,17 +253,67 @@ class StoredStatement:
     def __getitem__(self, i):   # So that we can index the stored thing directly
         return self.quad[i]
 
+    def __repr__(self):
+        return "{"+`self[CONTEXT]`+":: "+`self[SUBJ]`+" "+`self[PRED]`+" "+`self[OBJ]`+"}"
+
 #   The order of statements is only for cannonical output
 #   We cannot override __cmp__ or the object becomes unhashable, and can't be put into a dictionary.
 
-    def __cmp_cannonical__(self, other):
-        if self is other: return 0
-        for p in [CONTEXT, SUBJ, PRED, OBJ]: # Note NOT internal order
-            if self.quad[p] is not other.quad[p]:
-                return compareURI(self.quad[p],other.quad[p])
-        progress("Problem with duplicates: '%s' and '%s'" % (quadToString(self.quad),quadToString(other.quad)))
-        raise RuntimeError, "should never have two identical distinct [@@]"
+# Unused:
+#    def compareContextSubjPredObj(self, other):
+#        if self is other: return 0
+#        for p in [CONTEXT, SUBJ, PRED, OBJ]: # Note NOT internal order
+#            if self.quad[p] is not other.quad[p]:
+#                return compareURI(self.quad[p],other.quad[p])
+#        progress("Problem with duplicates - CSPO: '%s' and '%s'" % (self,other))
+#        raise RuntimeError, "should never have two identical distinct [@@]"
 
+    def compareSubjPredObj(self, other):
+        """Just compare SUBJ, Pred and OBJ, others the same
+        Avoid loops by spotting reference to containing formula"""
+        if self is other: return 0
+        sc = self.quad[CONTEXT]
+        oc = other.quad[CONTEXT]
+        for p in [SUBJ, PRED, OBJ]: # Note NOT internal order
+            s = self.quad[p]
+            o = other.quad[p]
+            if s is sc:
+                if o is oc: continue
+                else: return -1  # @this is smaller than other formulae
+            else:           
+                if o is oc: return 1
+            if s is not o:
+                return compareURI(s,o)
+        return 0
+
+    def comparePredObj(self, other):
+        """Just compare P and OBJ, others the same"""
+        if self is other: return 0
+        sc = self.quad[CONTEXT]
+        oc = other.quad[CONTEXT]
+        for p in [PRED, OBJ]: # Note NOT internal order
+            s = self.quad[p]
+            o = other.quad[p]
+            if s is sc:
+                if o is oc: continue
+                else: return -1  # @this is smaller than other formulae
+            else:           
+                if o is oc: return 1
+            if s is not o:
+                return compareURI(s,o)
+        return 0
+
+    def compareObj(self, other):
+        """Just compare OBJ, others the same"""
+        if self is other: return 0
+        s = self.quad[OBJ]
+        o = other.quad[OBJ]
+        if s is sc:
+            if o is oc: return 0
+            else: return -1  # @this is smaller than other formulae
+        else:           
+            if o is oc: return 1
+        return compareURI(s,o)
 
 
     
@@ -681,7 +809,7 @@ class RDFStore(RDFSink.RDFSink) :
         if F.cannonical:
             return F.cannonical
         fl = F.occursAs[CONTEXT]
-        fl.sort(StoredStatement.__cmp_cannonical__)
+        fl.sort(StoredStatement.compareSubjPredObj)
         l = len(fl)   # The number of statements
         possibles = self._formulaeOfLength.get(l, None)  # Formulae of same length
 
@@ -692,7 +820,6 @@ class RDFStore(RDFSink.RDFSink) :
 
         for G in possibles:
             gl = G.occursAs[CONTEXT]
-#            gl.sort(StoredStatement.__cmp_cannonical__)   #  needed cannonical?!
             if len(gl) != l: raise RuntimeError("@@Length is %i instead of %i" %(len(gl), l))
             for i in range(l):
                 for p in CONTEXT, PRED, SUBJ, OBJ:
@@ -996,27 +1123,27 @@ class RDFStore(RDFSink.RDFSink) :
         sink.startDoc()
         self.dumpPrefixes(sink)
 
-        if sorting: context.occursAs[SUBJ].sort(StoredStatement.__cmp_cannonical__)
-        for s in context.occursAs[SUBJ] :
-            if context is s.quad[CONTEXT]and s.quad[PRED] is self.forSome:
-                self._outputStatement(sink, s.quad)
+        statements = context.matching((self.forSome, context, None))
+        if sorting: statements.sort(StoredStatement.compareObj)
+        for s in statements:
+            self._outputStatement(sink, s.quad)
 
         rs = self.resources.values()
         if sorting: rs.sort()
         for r in rs :  # First the bare resource
-            if sorting: r.occursAs[SUBJ].sort(StoredStatement.__cmp_cannonical__)
-            for s in r.occursAs[SUBJ] :
-                if context is s.quad[CONTEXT]:
-                    if not(context is s.quad[SUBJ]and s.quad[PRED] is self.forSome):
-                        self._outputStatement(sink, s.quad)
+            statements = context.matching((None, r, None))
+            if sorting: statements.sort(StoredStatement.comparePredObj)
+            for s in statements :
+                if not(context is s.quad[SUBJ]and s.quad[PRED] is self.forSome):
+                    self._outputStatement(sink, s.quad)
             if not isinstance(r, Literal):
                 fs = r.fragments.values()
                 if sorting: fs.sort
                 for f in fs :  # then anything in its namespace
-                    for s in f.occursAs[SUBJ] :
-#                        print "...dumping %s in context %s" % (`s.quad[CONTEXT]`, `context`)
-                        if s.quad[CONTEXT] is context:
-                            self._outputStatement(sink, s.quad)
+                    statements = context.matching((None, f, None))
+                    if sorting: statements.sort(StoredStatement.comparePredObj)
+                    for s in statements:
+                        self._outputStatement(sink, s.quad)
         sink.endDoc()
 #
 #  Pretty printing
@@ -1136,15 +1263,15 @@ class RDFStore(RDFSink.RDFSink) :
         self.selectDefaultPrefix(context)        
         sink.startDoc()
         self.dumpPrefixes(sink)
-        self.dumpFormulaContents(context, sink)
+        self.dumpFormulaContents(context, sink, sorting=1)
         sink.endDoc()
 
-    def dumpFormulaContents(self, context, sink, sorting=1):
+    def dumpFormulaContents(self, context, sink, sorting):
         """ Iterates over statements in formula, bunching them up into a set
         for each subject.
         @@@ Dump "this" first before everything else
         """
-        if sorting: context.occursAs[CONTEXT].sort(StoredStatement.__cmp_cannonical__)
+        if sorting: context.occursAs[CONTEXT].sort(StoredStatement.compareSubjPredObj)
 
         statements = context.matching((None, context, None))  # context is subject
         if statements:
@@ -1172,20 +1299,22 @@ class RDFStore(RDFSink.RDFSink) :
 #        # which handles the recursion
 #        return
             
-    def _dumpSubject(self, subj, context, sink, sorting=1, statements=[]):
+    def _dumpSubject(self, subj, context, sink, sorting, statements=[]):
         """ Dump the infomation about one top level subject
         
         This outputs arcs leading away from a node, and where appropriate
      recursively descends the tree, by dumping the object nodes
      (and in the case of a compact list, the predicate (rest) node).
      It does NOTHING for anonymous nodes which don't occur explicitly as subjects.
+
+     The list of statements must be sorted if sorting is true.     
         """
         _anon, _incoming = self._topology(subj, context)    # Is anonymous?
         if _anon and  _incoming == 1 and not isinstance(subj, Formula): return           # Forget it - will be dealt with in recursion
 
         if isinstance(subj, Formula) and subj is not context:
             sink.startBagSubject(subj.asPair())
-            self.dumpFormulaContents(subj, sink)  # dump contents of anonymous bag
+            self.dumpFormulaContents(subj, sink, sorting)  # dump contents of anonymous bag
             sink.endBagSubject(subj.asPair())       # Subject is now set up
             # continue to do arcs
             
@@ -1203,7 +1332,7 @@ class RDFStore(RDFSink.RDFSink) :
                         break # We will print it
                 else: return # Nothing to print - so avoid printing [].
 
-                if sorting: statements.sort(StoredStatement.__cmp_cannonical__)    # Order only for output
+                if sorting: statements.sort(StoredStatement.comparePredObj)    # Order only for output
 
                 li = subj.asList()
                 if li and not isinstance(li, EmptyList):   # The subject is a list
@@ -1213,27 +1342,27 @@ class RDFStore(RDFSink.RDFSink) :
                     for s in statements:
                         p = s.quad[PRED]
                         if p is self.first or p is self.rest:
-                            self.dumpStatement(sink, s.quad) # Dump the rest outside the ()
+                            self.dumpStatement(sink, s.quad, sorting) # Dump the rest outside the ()
                     sink.endAnonymousNode(subj.asPair())
                     for s in statements:
                         p = s.quad[PRED]
                         if p is not self.first and p is not self.rest:
-                            self.dumpStatement(sink, s.quad) # Dump the rest outside the ()
+                            self.dumpStatement(sink, s.quad, sorting) # Dump the rest outside the ()
                     return
                 else:
                     sink.startAnonymousNode(subj.asPair())
                     for s in statements:  #   [] color blue.  might be nicer. @@@$$$$  Try it!
-                        self.dumpStatement(sink, s.quad)
+                        self.dumpStatement(sink, s.quad, sorting)
                     sink.endAnonymousNode()
                     return  # arcs as subject done
 
 
-        if sorting: statements.sort(StoredStatement.__cmp_cannonical__)
+        if sorting: statements.sort(StoredStatement.comparePredObj)
         for s in statements:
-            self.dumpStatement(sink, s.quad)
+            self.dumpStatement(sink, s.quad, sorting)
 
                 
-    def dumpStatement(self, sink, triple, sorting=0):
+    def dumpStatement(self, sink, triple, sorting):
         # triple = s.quad
         context, pre, sub, obj = triple
         if (sub is obj and not isinstance(sub, Formula))  or (isinstance(obj.asList(), EmptyList)) or isinstance(obj, Literal):
@@ -1260,27 +1389,27 @@ class RDFStore(RDFSink.RDFSink) :
                             progress("List found as object of dumpStatement " + x2s(obj))
 #                        self.dumpStatement(sink, (context, self.first, obj, obj.asList().first))
 #                        self.dumpStatement(sink, (context, self.rest, obj, obj.asList().rest)) # includes rest of list
-                    if sorting: obj.occursAs[SUBJ].sort(StoredStatement.__cmp_cannonical__)
-                    for t in obj.occursAs[SUBJ]:
-                        if t.quad[CONTEXT] is context:
-                            self.dumpStatement(sink, t.quad)
+                    ss = context.matching((None, obj, None))
+                    if sorting: ss.sort(StoredStatement.comparePredObj)
+                    for t in ss:
+                        self.dumpStatement(sink, t.quad, sorting)
       
                     if _se > 0:
                         sink.startBagNamed(context.asPair(),obj.asPair()) # @@@@@@@@@  missing "="
-                        self.dumpFormulaContents(obj, sink)  # dump contents of anonymous bag
+                        self.dumpFormulaContents(obj, sink, sorting)  # dump contents of anonymous bag
                         sink.endBagObject(pre.asPair(), sub.asPair())
                         
                 sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
 
             else:  # _isSubject == 0 and _se
                 sink.startBagObject(self.extern(triple))
-                self.dumpFormulaContents(obj, sink)  # dump contents of anonymous bag
+                self.dumpFormulaContents(obj, sink, sorting)  # dump contents of anonymous bag
                 sink.endBagObject(pre.asPair(), sub.asPair())
             return # Arc is done
 
         if _se:
             sink.startBagObject(self.extern(triple))
-            self.dumpFormulaContents(obj, sink)  # dump contents of anonymous bag
+            self.dumpFormulaContents(obj, sink, sorting)  # dump contents of anonymous bag
             sink.endBagObject(pre.asPair(), sub.asPair())
             return
 
@@ -1294,12 +1423,13 @@ class RDFStore(RDFSink.RDFSink) :
 # move on top of existing entries and we don't allow duplicates.
 #
     def moveContext(self, old, new, bindings=None):
+        if thing.verbosity() > 0: progress("Move context - SLOW")
         self.reopen(new)    # If cannonical, uncannonicalize #@@ error prone if any references
         if bindings == None:
             bindings = [(old, new)]
         for s in old.occursAs[CONTEXT][:] :   # Copy list!
             q = s.quad
-            self.removeStatement(s)
+            self.removeStatement(s)  # SLOW!
             del(s)
             self.storeQuad(_lookupQuad(bindings, q))
 
@@ -1362,6 +1492,7 @@ class RDFStore(RDFSink.RDFSink) :
     def think(self, F):
         grandtotal = 0
         iterations = 0
+        self.reopen(F)
         bindingsFound = {}  # rule: list bindings already found
         while 1:
             iterations = iterations + 1
