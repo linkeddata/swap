@@ -515,7 +515,7 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
         return store.engine.intern((LITERAL, subj.uriref))
 
     def evaluateSubject(self, store, context, obj):    
-        return store.engine.intern((RESOURCE, subj.string))
+        return store.engine.intern((RESOURCE, obj.string))
 
 class BI_racine(LightBuiltIn, Function):
 
