@@ -799,9 +799,6 @@ class ToRDF(RDFSink):
 	    if self._subj:
 		self._wr.endElement()
 	    self._subj = subj
-	    if pred == (RESOURCE, RDF_type_URI) and obj[0] != LITERAL: # Special case starting with this
-                self._wr.startElement(obj[1], [(RDF_NS_URI+" about", subjn),], self.prefixes)
-                return
 	    self._wr.startElement(RDF_NS_URI+'Description',
 				 [(RDF_NS_URI+" about", subjn),], self.prefixes)
 
