@@ -1,4 +1,4 @@
-#! /usr/bin/env python
+#! /usr/bin/python
 """
 $Id$
 
@@ -59,7 +59,8 @@ import urlparse
 import re
 import StringIO
 
-import notation3
+import notation3    # N3 parsers and generators, and RDF generator
+import xml2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 # Magic resources we know about
 
@@ -68,8 +69,7 @@ DAML_equivalentTo_URI = notation3.DAML_equivalentTo_URI
 
 
 Logic_NS = notation3.Logic_NS
-N3_forSome_URI = Logic_NS + "#forSome"
-N3_forAll_URI = Logic_NS + "#forAll"
+
 
 # The statement is stored as a quad - affectionately known as a triple ;-)
 
@@ -143,7 +143,7 @@ class Thing:
             con, pred, subj, obj = s.triple
             if con is context and subj is context:
 #                print "## Anon - what about", `pred`
-                if pred.uriref(None)==N3_forSome_URI:
+                if pred.uriref(None)==Logic_NS + "forSome":
 #                    print "## Anon: %s has %i incoming and passes" % (`self`, incoming)
                     return incoming
             
@@ -281,7 +281,10 @@ class Engine:
     def __init__(self):
         self.resources = {}    # Hash table of URIs for interning things
         
-        
+
+    def internURI(self, str):
+        return self.intern((RESOURCE,str))
+    
     def intern(self, pair):
         """  Returns either a Fragment or a Resource as appropriate
 
@@ -303,7 +306,7 @@ class Engine:
             return r
         
         else :      # This has a fragment and a resource
-            r = self.intern((RESOURCE, uriref[:hash]))
+            r = self.internURI(uriref[:hash])
             if type == RESOURCE:  return r.internFrag(uriref[hash+1:])
 
 
@@ -326,8 +329,11 @@ class RDFStore(notation3.RDFSink) :
     def __init__(self, engine):
         notation3.RDFSink.__init__(self)
         self.engine = engine
-        self.forSome = engine.intern((RESOURCE, N3_forSome_URI))
-        self.forAll = engine.intern((RESOURCE, N3_forAll_URI))
+        self.forSome = engine.internURI(Logic_NS + "forSome")
+        self.forAll  = engine.internURI(Logic_NS + "forAll")
+        self.implies = engine.internURI(Logic_NS + "implies")
+        self.asserts = engine.internURI(Logic_NS + "asserts")
+
 
 # Input methods:
 
@@ -342,10 +348,22 @@ class RDFStore(notation3.RDFSink) :
               self.engine.intern(tuple[OBJ]) )
 	self.storeQuad(q)
                     
+
     def storeQuad(self, q):
+        """ Effectively intern quads, in that dupliates are eliminated.
+        """
+	short = 1000000 #@@
+	for p in ALL4:
+            l = len(q[p].occursAs[p])
+            if l < short:
+                short = l
+                p_short = p
+        for t in q[p_short].occursAs[p_short]:
+            if t.triple == q: return t
+
 	s = StoredStatement(q)
         for p in ALL4: s.triple[p].occursAs[p].append(s)
-
+        return s
 
     def startDoc(self):
         pass
@@ -383,25 +401,6 @@ class RDFStore(notation3.RDFSink) :
         self.prefixes[mpPair] = ""
         self.namespaces[""] = mpPair
         
-# Manipulation methods:
-
-    def moveContext(self, old, new):
-        for s in old.occursAs[CONTEXT][:] :   # Copy list!
-#            print  "Old, new:",`old`, `new`, "Quad:", `s.triple`
-            con, pred, subj, obj = s.triple
-            if pred is self.forAll or pred is self.forSome:
-                if subj is old: subj = new # Move quantifier pointers too
-            s.triple = new, pred, subj, obj
-#            print "Quantifiers: ", `self.forAll`, `self.forSome`
- 
-            old.occursAs[CONTEXT].remove(s)
-            new.occursAs[CONTEXT].append(s)
-            
-            
-    def copyContext(self, old, new):
-        for s in old.occursAs[CONTEXT][:] :  # Copy list!
-                self.makeStatement((new, s.triple[PRED], s.triple[SUBJ], s.triple[OBJ]))
-            
 # Output methods:
 
     def dumpChronological(self, context, sink):
@@ -451,7 +450,11 @@ class RDFStore(notation3.RDFSink) :
         sink.startDoc()
         for c in self.prefixes.items() :   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
+        self.dumpNestedStatements(context, sink)
 
+    def dumpNestedStatements(self, context, sink):
+        """ Iterates over all URIs ever seen looking for statements
+        """
         for r in self.engine.resources.values() :  # First the bare resource
             self._dumpSubject(r, context, sink)
             for f in r.fragments.values() :  # then anything in its namespace
@@ -466,26 +469,31 @@ class RDFStore(notation3.RDFSink) :
             `subj`, subj.occurrences(CONTEXT, None),
             subj.occurrences(PRED,context), subj.occurrences(SUBJ,context),
             subj.occurrences(OBJ, context))
-        incoming = subj.n3_anonymous(context)
-        if incoming == 1:    # Can be root anonymous node
-            if subj.occurrences(SUBJ,context) > 0 :   # Ignore if actually no statements for this thing
+        _incoming = subj.n3_anonymous(context)    # Is anonymous?
+        _isContext = len(subj.occursAs[CONTEXT])  # Is a bag?  @@@@ check is subcontext @@@!!
+        _isSubject = subj.occurrences(SUBJ,context) # Has properties in this context?
+        if _incoming == 2: return           # Forget it - will be dealt with in recursion
+        
+        if _incoming == 1:    # Can be root anonymous node
+            if _isContext > 0:  # @@@ How represent the empty bag in the model?
+                sink.startBagSubject(subj.asPair())
+#                raise theRoof
+                self.dumpNestedStatements(subj, sink)  # dump contents of anonymous bag
+                sink.endBagSubject(subj.asPair())                     # Subject is now set up
+
+            elif _isSubject > 0 :   # Ignore if actually no statements for this thing
                 sink.startAnonymousNode(subj.asPair())
                 for s in subj.occursAs[SUBJ]:
                     if s.triple[CONTEXT] is context:
                         self.coolMakeStatement(sink, s)
                 sink.endAnonymousNode()
-            if subj.occurrences(CONTEXT, None) > 0:  # @@@ How represent the empty bag in the model?
-                sink.startBag(subj)
-                raise theRoof
-                self.dumpNested(subj, sink)  # dump contents of anonymous bag
-                sink.endBag(subj)
-        elif incoming == 2:
-            pass   # forget it - this will be comvered in the recursion
-        else:
-            for s in subj.occursAs[SUBJ]:
-                con, pred, subj, obj = s.triple
-                if con is context:
-                        self.coolMakeStatement(sink, s)
+                return   # Done [ ... ]
+
+        for s in subj.occursAs[SUBJ]:
+            con, pred, subj, obj = s.triple
+            if con is context:
+                    self.coolMakeStatement(sink, s)
+
 
     def implicitExistential(self, s):
         con, pred, subj, obj = s.triple
@@ -507,19 +515,129 @@ class RDFStore(notation3.RDFSink) :
                 
     def coolMakeStatement2(self, sink, s):
         triple = s.triple
-        con, pre, sub, obj = triple
-        if obj.n3_anonymous(con) == 2:  # Embedded anonymous node in N3
-            sink.startAnonymous(self.extern(triple))
-            for t in obj.occursAs[SUBJ]:
-                if t.triple[CONTEXT] is con:
-                    self.coolMakeStatement2(sink, t)
-            sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
-        else:
-            if self.implicitExistential(s):
-                print "### implicit existential", `triple`
-                return # Existential will be implicit.
-            self._outputStatement(sink, s)
+        context, pre, sub, obj = triple
+        if obj.n3_anonymous(context) == 2:  # Embedded anonymous node in N3
+            _isContext = len(obj.occursAs[CONTEXT])  # Is a bag?  @@@@ check is subcontext @@@!!
+            _isSubject = obj.occurrences(SUBJ,context) # Has properties in this context?
+
+            if _isContext > 0 and _isSubject > 0: raise CantDoThat # Syntax problem!@@@
+
+            if _isContext > 0:  # @@@ How represent the empty bag in the model?
+                sink.startBagObject(self.extern(triple))
+                self.dumpNestedStatements(obj, sink)  # dump contents of anonymous bag
+                sink.endBagObject(pre.asPair(), sub.asPair())
+                return # Arc has been made
+
+            
+            if _isSubject > 0 :   #   statements for this thing
+                sink.startAnonymous(self.extern(triple))
+                for t in obj.occursAs[SUBJ]:
+                    if t.triple[CONTEXT] is con:
+                        self.coolMakeStatement2(sink, t)
+                sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
+                return   # Arc has been made
+
+        if self.implicitExistential(s):
+            print "### implicit existential", `triple`
+            return # Existential will be implicit.
+        self._outputStatement(sink, s)
                 
+
+
+#################################  Manipulation methods:
+
+    def moveContext(self, old, new):
+        for s in old.occursAs[CONTEXT][:] :   # Copy list!
+#            print  "Old, new:",`old`, `new`, "Quad:", `s.triple`
+            con, pred, subj, obj = s.triple
+#            if pred is self.forAll or pred is self.forSome:
+#                if subj is old: subj = new # Move quantifier pointers too
+            if pred is old: pred = new # Move references (even pred?)
+            if subj is old: subj = new # Move
+            if obj is old: obj  = new # Move
+
+            s.triple = new, pred, subj, obj
+#            print "Quantifiers: ", `self.forAll`, `self.forSome`
+ 
+            old.occursAs[CONTEXT].remove(s)
+            new.occursAs[CONTEXT].append(s)
+            
+            
+    def copyContext(self, old, new):
+        for s in old.occursAs[CONTEXT][:] :  # Copy list!
+                self.makeStatement((new, s.triple[PRED], s.triple[SUBJ], s.triple[OBJ]))
+            
+#  Apply rules from one context to another
+                
+    def applyRules(self, workingContext, filterContext=None, targetContext=None):
+        """ Apply rules in one context to the same or another
+        """
+
+# A rule here is defined by logic:implies, which associates the template (premise, precondidtion,
+# antecedent) to the conclusion (postcondition).
+#
+# This is just a database search, very SQL-like.
+#
+# To verify that for all x, f(s) one can either find that asserted explicitly,
+# or find an example for some specific value of x.  Here, we deliberately
+# chose only to do the first.
+        
+        if targetContext == None: targetContext = workingContext # return new data to store
+        if filterContext == None: filterContext = workingContext # apply own rules
+
+        # Execute a filter:
+        
+        _variables = []
+        _total = 0
+        for s in filterContext.occursAs[CONTEXT]:
+            t = s.triple
+            if t[PRED] is self.forAll and t[SUBJ] is filterContext:
+                _variables.append(t[OBJ])
+        print "# We have %i variables" % (len(_variables),), _variables
+        
+        for s in filterContext.occursAs[CONTEXT]:
+            t = s.triple
+    #                print "Filter quad:", t
+            if t[PRED] is self.implies:
+                template = t[SUBJ]
+                conclusion = t[OBJ]
+                unmatched = []
+                print "\n\n# IMPLIES rule, %i terms in template %s => %s" % (len(template.occursAs[CONTEXT]),
+                                                                             `template`[-8:], `conclusion`[-8:])
+
+
+                _existentials = [] # Things existentially quantified in the template
+                for arc in template.occursAs[CONTEXT]:   #@@@ and sub contexts!!
+
+                    context, pred, subj, obj = arc.triple
+                    if subj is template and pred is self.forSome:
+                        _existentials.append(obj)
+                    if context is template: context = workingContext # where we will look for it
+                    unmatched.append((context, pred, subj, obj))
+                
+                found = match(unmatched, _variables, _existentials,
+                              conclude, ( self, conclusion, targetContext))
+                _total = _total + found
+                print "# Found %i matches for %s => %s" % (found, `template`[:-8], `conclusion`[:-8])
+        
+            elif t[PRED] is self.asserts and t[SUBJ] is filterContext:
+                self.applyRules(t[OBJ], workingContext, targetContext)  # Nested rules
+        print "#  Total matches in filter", _total, "\n"
+                
+def conclude(bindings, param):
+    store, conclusion, targetContext = param
+    for s in conclusion.occursAs[CONTEXT]:
+        print "# *** Conclude: ", s.triple
+	context, pred, subj, obj = s.triple
+        store.storeQuad((targetContext,
+                             _lookup(bindings, pred),
+                             _lookup(bindings, subj),
+                             _lookup(bindings, obj) ))
+                            
+def _lookup(bindings, value):
+    for pair in bindings:
+        if pair[0] == value: return pair[1]
+    return value
 
 
 
@@ -553,15 +671,20 @@ newBindings  matches found and not yet applied - used in recursion
     fewest = 5          # Variables to find
     shortest = INFINITY # List to search for one of the variables
     shortest_t = None
-    print "## match: called %i terms, %i bindings, terms & new bindings:" % (len(unmatched),len(bindings)), `unmatched`, `bindings`,`newBindings`
-
+    print "\n## match: called %i terms, %i bindings, terms & new bindings:" % (len(unmatched),len(bindings)), `bindings`,`newBindings`
 
     for pair in newBindings:
         variables.remove(pair[0])
         bindings.append(pair)  # Record for posterity
-        for q in unmatched:     # Replace variables with values
-            for p in ALL4:
-                if q[p] is pair[0] : q[p] = pair[1]
+    for i in range(len(unmatched)):     # Replace variables with values
+        q = unmatched[i]
+        unmatched[i] = ( _lookup(newBindings, q[0]),
+              _lookup(newBindings, q[1]),
+              _lookup(newBindings, q[2]),
+              _lookup(newBindings, q[3]))
+
+    for q in unmatched:
+        print "        %s     %s  %s  %s ."  % (`q[0]`[-8:],`q[1]`[-8:],`q[2]`[-8:],`q[3]`[-8:])
 
     if len(unmatched) == 0:
         print "# Match found with bindings: ", bindings
@@ -584,7 +707,7 @@ newBindings  matches found and not yet applied - used in recursion
                     short = length
 
 
-        print "One term has %i vars+exists  shortest list %i" % (found, short)
+        print "# One term has %i vars, shortest list %i" % (found, short)
         
         if (found < fewest or
             found == fewest and short < shortest) : # We find better.
@@ -743,7 +866,7 @@ bind default <>
     print "----------------------- Test store:"
 
     testEngine = Engine()
-    thisDoc = testEngine.intern((RESOURCE, thisURI))    # Store used interned forms of URIs
+    thisDoc = testEngine.internURI(thisURI)    # Store used interned forms of URIs
 
     store = RDFStore(testEngine)
     # (sink,  thisDoc,  baseURI, bindings)
@@ -929,33 +1052,32 @@ def doCommand():
         import urllib
         option_ugly = 0     # Store and regurgitate with genids *
         option_pipe = 0     # Don't store, just pipe though
+        option_rdf = 0      # Use RDF rather than XML
         option_rdf1out = 0  # Output in RDF M&S 1.0 instead of N3
         option_bySubject= 0 # Store and regurgitate in subject order *
         option_inputs = []
-        option_filters = []
-        option_test = 0
+        _doneOutput = 0
         chatty = 0          # not too verbose please
         hostname = "localhost" # @@@@@@@@@@@ Get real one
         
         for arg in sys.argv[1:]:  # Command line options after script name
             if arg == "-test": option_test = 1
-            elif arg == "-ugly": option_ugly = 1
-            elif arg == "-pipe": option_pipe = 1
-            elif arg == "-bySubject": option_bySubject = 1
+            elif arg == "-ugly": _doneOutput = 1
+            elif arg == "-pipe": pass
+            elif arg == "-bySubject": _doneOutput = 1
             elif arg == "-rdf1out": option_rdf1out = 1
             elif arg == "-chatty": chatty = 1
-            elif arg[:7] == "-apply=": option_filters.append(arg[7:])
+            elif arg[:7] == "-apply=": pass
             elif arg == "-help":
                 print doCommand.__doc__
                 return
-            elif arg[0] == "-": print "Unknown option", arg
-            else : option_inputs.append(arg)
+            elif arg[0] == "-": pass  # Other option
+            else : _gotInput=1  # input filename
             
-        if option_test: return test()
 
         # The base URI for this process - the Web equiv of cwd
 #	_baseURI = "file://" + hostname + os.getcwd() + "/"
-	_baseURI = "file://" + os.getcwd() + "/"
+	_baseURI = "file://" + fixslash(os.getcwd()) + "/"
 	print "# Base URI of process is" , _baseURI
 	
         _outURI = urlparse.urljoin(_baseURI, "STDOUT")
@@ -964,119 +1086,92 @@ def doCommand():
         else:
             _outSink = notation3.ToN3(sys.stdout.write, _outURI)
 
-        if option_pipe:
-            _sink = _outSink
+        if sys.argv[1] == "-pipe":   # Must be first arg
+            _store = _outSink
         else:
             myEngine = Engine()
-            _sink = RDFStore(myEngine)
-        
-#  Suck up the input information:
+            _store = RDFStore(myEngine)
 
-        inputContexts = []
-        for i in option_inputs:
-            _inputURI = urlparse.urljoin(_baseURI, i) # Make abs from relative
-            p = notation3.SinkParser(_sink,  _inputURI)
-            p.load(_inputURI)
-            del(p)
+        workingContext = myEngine.internURI(_outURI)
 
-        if option_inputs == []:
+        if not _gotInput: #@@@@@@@@@@ default input
             _inputURI = urlparse.urljoin( _baseURI, "STDIN") # Make abs from relative
-            inputContexts.append(myEngine.intern((RESOURCE, _inputURI)))
-            p = notation3.SinkParser(_sink,  _inputURI)
+            inputContexts.append(myEngine.internURI(_inputURI))
+            p = notation3.SinkParser(_store,  _inputURI)
             p.load("")
             del(p)
+            _store.moveContext(inputContext,workingContext)  # Move input data to output context
 
-        if option_pipe: return                # everything was done inline
 
-# Manpulate it as directed:
+#  Take commands from command line:
 
-        workingContext = myEngine.intern((RESOURCE, _outURI))
-        for i in option_inputs:
-            _inputURI = urlparse.urljoin(_baseURI, i) # Make abs from relative
-            inputContext = myEngine.intern((RESOURCE, _inputURI))
-            _sink.moveContext(inputContext,workingContext)  # Move input data to output context
-
-        N3_forAll = myEngine.intern(( RESOURCE, N3_forAll_URI)) # @@@@@ What about forSome? @@
-        N3_implies = myEngine.intern(( RESOURCE, Logic_NS + "#implies"))
-        N3_forSome = myEngine.intern(( RESOURCE, N3_forSome_URI)) # Unused at the moment?
-        
-        filterContexts = []
-        for filter in option_filters:
-
-            # Parse a filter:
-            
-            _inputURI = urlparse.urljoin(_baseURI, filter) # Make abs from relative
-            filterContext = (myEngine.intern((RESOURCE, _inputURI)))
-
-            print "# Input filter ", _inputURI
-            p = notation3.SinkParser(_sink,  _inputURI)
-            p.load(_inputURI)
-            del(p)
-
-            # Execute a filter:
-            
-            _variables = []
-            for s in filterContext.occursAs[CONTEXT]:
-                t = s.triple
-                if t[PRED] == N3_forAll and t[SUBJ] == filterContext:
-                    _variables.append(t[OBJ])
-            print "# We have %i variables" % (len(_variables),), _variables
-            
-            for s in filterContext.occursAs[CONTEXT]:
-                t = s.triple
-#                print "Filter quad:", t
-                if t[PRED] is N3_implies:
-                    template = t[SUBJ]
-                    conclusion = t[OBJ]
-                    unmatched = []
-                    print "# We have %i terms in template %s" % (len(template.occursAs[CONTEXT]),`template`)
-
-# To verify that for all x, f(s) one can either find that asserted explicitly,
-# or find an example for some specific value of x.  Here, we deliberately
-# chose only to do the first.
-
-		    _existentials = [] # Things existentially quantified in the template
-                    for arc in template.occursAs[CONTEXT]:   #@@@ and sub contexts!!
-
-                        context, pred, subj, obj = arc.triple
-			if subj is template and pred is N3_forSome:
-			    _existentials.append(obj)
-                        if context is template: context = workingContext # where we will look for it
-                        unmatched.append((context, pred, subj, obj))
-                    
-                    found = match(unmatched, _variables, _existentials,
-				  conclude, ( _sink, conclusion, workingContext))
-                    print "# Found %i matches for %s." % (found, filter)
-            
-		elif t[PRED] is N3_asserts and t[SUBJ] is filterContext:
-		    filter(t[OBJ], workingContext, targetContext)  # Nested rules
-
- 
-# Squirt it out again as directed
-        
-        if not option_pipe:
-            if option_ugly:
-                _sink.dumpChronological(workingContext, _outSink)
-            elif option_bySubject:
-                _sink.dumpBySubject(workingContext, _outSink)
-            else:
-                _sink.dumpNested(workingContext, _outSink)
+        for arg in sys.argv[1:]:  # Command line options after script name
+            _equals = string.find(arg, "=")
+            _lhs = ""
+            _rhs = ""
+            if _equals >=0:
+                _lhs = arg[:equals]
+                _rhs = arg[equals+1:]
+                _uri = urlparse.urljoin(_baseURI, _rhs) # Make abs from relative
                 
-def conclude(bindings, param):
-    store, conclusion, targetContext = param
-    for s in conclusion.occursAs[CONTEXT]:
-        print "# *** Conclude: ", s.triple
-	context, pred, subj, obj = s.triple
-        store.storeQuad((targetContext,
-                             _lookup(bindings, pred),
-                             _lookup(bindings, subj),
-                             _lookup(bindings, obj) ))
-                            
-def _lookup(bindings, value):
-    for pair in bindings:
-        if pair[0] == value: return pair[1]
-    return value
+            if arg == "-test": test()
+            elif arg == "-ugly":
+                _store.dumpChronological(workingContext, _outSink)
+                _doneOutput = 1            
 
+            elif arg == "-pipe": option_pipe = 1
+            elif arg == "-bySubject":
+                _store.dumpBySubject(workingContext, _outSink)
+                _doneOutput = 1            
+
+            elif arg == "-rdf1out": option_rdf1out = 1
+
+            elif arg == "-rdf": option_rdf = 1
+            elif arg == "n3": option_rdf = 0
+            
+            elif arg == "-chatty": chatty = 1
+            elif arg[:7] == "-apply=":
+                _inputURI = urlparse.urljoin(_baseURI, _uri) # Make abs from relative
+                filterContext = (myEngine.internURI(_inputURI))
+                print "# Input filter ", _inputURI
+                p = notation3.SinkParser(_store,  _inputURI)
+                p.load(_inputURI)
+                del(p)
+                _store.applyRules(workingContext, filterContext);
+
+            elif arg == "-rules":
+                _store.applyRules(workingContext, workingContext);
+
+            elif arg == "-help":
+                print doCommand.__doc__
+
+            elif arg[0] == "-": print "Unknown option", arg
+            else :   # Input the data
+                _inputURI = urlparse.urljoin(_baseURI, arg) # Make abs from relative
+                if option_rdf: p = xml2rdf.RDFXMLParser(_store,  _inputURI)
+                else: p = notation3.SinkParser(_store,  _inputURI)
+                p.load(_inputURI)
+                del(p)
+                inputContext = myEngine.internURI(_inputURI)
+                _store.moveContext(inputContext,workingContext)  # Move input data to output context
+                _gotInput = 1
+
+
+# Squirt it out if no output done
+        
+        if not _doneOutput:
+            _store.dumpNested(workingContext, _outSink)
+
+
+def fixslash(str):
+    """ Fix backslashes to forward slashes
+    """
+    s = str
+    for i in range(len(s)):
+        if s[i] == "\\": s = s[:i] + "/" + s[i+1:]
+    if s[0] != "/" and s[1] == ":": s = s[2:]  # @@@ Hack when drive letter
+    return s
+        
 ############################################################ Main program
     
 if __name__ == '__main__':

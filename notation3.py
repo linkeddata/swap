@@ -53,9 +53,12 @@ import re
 
 RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 DAML_equivalentTo_URI = "http://www.daml.org/2000/10/daml-ont#equivalentTo"
-Logic_NS = "http://www.w3.org/2000/10/swap/log.n3"
-N3_forSome_URI = Logic_NS + "#forSome"
-N3_forAll_URI = Logic_NS + "#forAll"
+Logic_NS = "http://www.w3.org/2000/10/swap/log.n3#"
+N3_forSome_URI = Logic_NS + "forSome"
+N3_forAll_URI = Logic_NS + "forAll"
+
+ADDED_HASH = "#"  # Stop where we use this in case we want to remove it!
+# This is the hash on namespace URIs
 
 # The statement is stored as a quad - affectionately known as a triple ;-)
 
@@ -118,8 +121,11 @@ class RDFSink:
     def makeStatement(self, tuple):  # Quad of (type, value) pairs
         pass
 
+    def makeComment(self, str):
+        print "sink: comment: ", str 
+
     def startDoc(self):
-        print "sink: start.\n"
+        print "\nsink: start."
 
     def endDoc(self):
         print "sink: end.\n"
@@ -217,16 +223,21 @@ class SinkParser:
 	    return -1
 
     def directive(self, str, i):
-	j = self.tok('bind', str, i)
-	if j<0: return -1
+        delim = "#"
+	j = self.tok('bind', str, i)        # implied "#". Obsolete.
+	if j<0:
+            j=self.tok('@prefix', str, i)   # no implied "#"
+            delim = ""
+            if j<0: return -1
+	
 	t = []
 	i = self.qname(str, j, t)
-	if i<0: raise BadSyntax(str, j, "expected qname after bind")
+	if i<0: raise BadSyntax(str, j, "expected qname after bind or prefix")
 	j = self.uri_ref2(str, i, t)
 	if j<0: raise BadSyntax(str, i, "expected uriref2 after bind _qname_")
 
-	self._bindings[t[0][0]] = t[1][1]
-	self.bind(t[0][0], t[1])
+	self._bindings[t[0][0]] = t[1][1]  #????
+	self.bind(t[0][0], t[1] + delim)
 	return j
 
     def bind(self, qn, nsPair):
@@ -417,27 +428,32 @@ class SinkParser:
 
 
     def uri_ref2(self, str, i, res):
-	#hmm... intern the resulting symbol?
+	"""Generate uri from n3 representation.
+
+	Note that the RDF convention of directly concatenating
+	NS and local name is now used though I prefer inserting a '#'
+	to make the namesapces look more like what XML folks expect.
+	"""
 	qn = []
 	j = self.qname(str, i, qn)
 	if j>=0:
 	    pfx, ln = qn[0]
 	    if pfx is None:
-		ns = self._thisDoc
+		ns = self._thisDoc + ADDED_HASH   # @@@ "#" CONVENTION
 	    else:
 		try:
 		    ns = self._bindings[pfx]
 		except KeyError:
 		    raise BadSyntax(str, i, "prefix not bound")
-#	    res.append(internFrag(ns, ln))
-            res.append( RESOURCE, ns+ "#" + ln)
+            res.append(( RESOURCE, ns + ln)) # @@@ "#" CONVENTION
+            if not string.find(ns, "#"):print"Warning: no # on NS %s,"%(ns,)
 	    return j
 
         v = []
         j = self.variable(str,i,v)
         if j>0:                    #Forget varibles as a class, only in context.
 #            res.append(internVariable(self._thisDoc,v[0]))
-            res.append(VARIABLE, v[0])
+            res.append((VARIABLE, v[0]))
             return j
         
         j = self.skipSpace(str, i)
@@ -451,7 +467,7 @@ class SinkParser:
                 if str[i] == ">":
                     uref = str[st:i] # the join should dealt with "":
                     uref = urlparse.urljoin(self._baseURI, str[st:i])
-                    res.append(RESOURCE , uref)
+                    res.append((RESOURCE , uref))
                     return i+1
                 i = i + 1
             raise BadSyntax(str, j, "unterminated URI reference")
@@ -831,7 +847,7 @@ class ToN3(RDFSink):
         """ Just accepting a convention here """
         self._endStatement()
         self.prefixes[nsPair] = prefixString
-        self._write(" bind %s: <%s> .\n" % (prefixString, nsPair[1]) )
+        self._write(" @prefix %s: <%s> .\n" % (prefixString, nsPair[1]) )
         self._write("    " * self.indent)
 
 
@@ -846,6 +862,10 @@ class ToN3(RDFSink):
     def endDoc(self):
 	self._endStatement()
 	self._write("\n")
+
+    def makeComment(self, str):
+        for line in string.split(str, "\n"):
+            self._write("#" + line + "\n")  # Newline order??@@
 
     def makeStatement(self, triple):
         self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])        
@@ -882,14 +902,33 @@ class ToN3(RDFSink):
 
 # Below we notate a nested bag of statements
 
-    def startBag(self, context):
+    def startBagSubject(self, context):
+	if self._subj != context:
+	    self._endStatement()
+	else:
+	    self._write(" = ")   # hack - for things with contentand properties!
         self.indent = self.indent + 1
         self._write(" { \n"+ "    " * self.indent + "    ")
+	self._subj = None
+        self._pred = None
 
-    def endBag(self, subj):    # Remove context
-        self._write(" }\n")
+    def endBagSubject(self, subj):    # Remove context
+        self._write("    " * self.indent + " }\n")
         self._subj = subj
         self._pred = None
+        self.indent = self.indent - 1
+     
+    def startBagObject(self, triple):
+        self._makeSubjPred(triple[CONTEXT], triple[SUBJ], triple[PRED])
+        self.indent = self.indent + 1
+        self._write(" { \n"+ "    " * self.indent + "    ")
+	self._subj = None
+        self._pred = None
+
+    def endBagObject(self, pred, subj):    # Remove context
+        self._write(" }\n")
+        self._subj = subj
+        self._pred = pred
         self.indent = self.indent - 1
      
     def _makeSubjPred(self, context, subj, pred):
@@ -941,11 +980,13 @@ class ToN3(RDFSink):
                 else: return "<" + self.genPrefix + "v" + `i` + ">"   # variable
 
         if type == LITERAL:
-            return '"' + value + '"'   # @@@@ encoding !!!!!!
+            if string.find(value, "\n") or string.find(value, '"'):
+                return '"""' + value + '"""'
+            return '"' + value + '"'   # @@@@ escaping, encoding !!!!!!
 
         j = string.rfind(value, "#")
         if j>=0:
-            str = self.prefixes.get((RESOURCE, value[:j]), None)
+            str = self.prefixes.get((RESOURCE, value[:j+1]), None) # @@ #CONVENTION
             if str != None : return str + ":" + value[j+1:]
             if j==0: return "<#" + value[j+1:] + ">"
                 
@@ -1010,7 +1051,7 @@ bind default <http://example.org/payPalStuff?>.
 # Janet's chart:
     t4="""
 bind q: <http://example.org/>.
-bind m: <>.
+bind m: <#>.
 bind n: <http://example.org/base/>.
 bind : <http://void-prefix.example.org/>.
 bind w3c: <http://www.w3.org/2000/10/org>.
@@ -1033,7 +1074,7 @@ bind w3c: <http://www.w3.org/2000/10/org>.
     t5 = """
 
 bind u: <http://www.example.org/utilities>
-bind default <>
+bind default <#>
 
 :assumption = { :fred u:knows :john .
                 :john u:knows :mary .} .

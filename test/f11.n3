@@ -17,6 +17,6 @@ bind : <> .
 
 { <#x> <#p> <#y> .
   <#y> <#p> <#z> .
-  <#p> a daml:TransitiveProperty . } implies { <#x> <#p> <#z> } .
+  <#p> a daml:TransitiveProperty . } log:implies { <#x> <#p> <#z> } .
 
-<>log:asserts { } . 
+<>log:asserts { } .   # Problem represesdd
