@@ -1,0 +1,1019 @@
+%!PS-Adobe-2.0
+%%Creator: dot version 1.7.5 (Mon Jun 25 21:31:03 MDT 2001)
+%%For: (connolly) Dan Connolly,,+1-913-491-0501,
+%%Title: id2595511
+%%Pages: (atend)
+%%BoundingBox: 36 36 1230 744
+%%EndComments
+%%BeginProlog
+save
+/DotDict 200 dict def
+DotDict begin
+
+%%BeginResource: procset
+/coord-font-family /Times-Roman def
+/default-font-family /Times-Roman def
+/coordfont coord-font-family findfont 8 scalefont def
+
+/InvScaleFactor 1.0 def
+/set_scale {
+	dup 1 exch div /InvScaleFactor exch def
+	dup scale
+} bind def
+
+% styles
+/solid { } bind def
+/dashed { [9 InvScaleFactor mul dup ] 0 setdash } bind def
+/dotted { [1 InvScaleFactor mul 6 InvScaleFactor mul] 0 setdash } bind def
+/invis {/fill {newpath} def /stroke {newpath} def /show {pop newpath} def} bind def
+/bold { 2 setlinewidth } bind def
+/filled { } bind def
+/unfilled { } bind def
+/rounded { } bind def
+/diagonals { } bind def
+
+% hooks for setting color 
+/nodecolor { sethsbcolor } bind def
+/edgecolor { sethsbcolor } bind def
+/graphcolor { sethsbcolor } bind def
+/nopcolor {pop pop pop} bind def
+
+/beginpage {	% i j npages
+	/npages exch def
+	/j exch def
+	/i exch def
+	/str 10 string def
+	npages 1 gt {
+		gsave
+			coordfont setfont
+			0 0 moveto
+			(() show i str cvs show (,) show j str cvs show ()) show
+		grestore
+	} if
+} bind def
+
+/set_font {
+	findfont exch
+	scalefont setfont
+} def
+
+% draw aligned label in bounding box aligned to current point
+% alignfactor tells what fraction to place on the left.
+% -.5 is centered.
+/alignedtext {			% text labelwidth fontsz alignfactor
+	/alignfactor exch def
+	/fontsz exch def
+	/width exch def
+	/text exch def
+	gsave
+		% even if node or edge is dashed, don't paint text with dashes
+		[] 0 setdash
+		currentpoint newpath moveto
+		text stringwidth pop
+		alignfactor mul fontsz -.3 mul rmoveto
+		text show
+	grestore
+} def
+
+/boxprim {				% xcorner ycorner xsize ysize
+		4 2 roll
+		moveto
+		2 copy
+		exch 0 rlineto
+		0 exch rlineto
+		pop neg 0 rlineto
+		closepath
+} bind def
+
+/ellipse_path {
+	/ry exch def
+	/rx exch def
+	/y exch def
+	/x exch def
+	matrix currentmatrix
+	newpath
+	x y translate
+	rx ry scale
+	0 0 1 0 360 arc
+	setmatrix
+} bind def
+
+/endpage { showpage } bind def
+
+/layercolorseq
+	[	% layer color sequence - darkest to lightest
+		[0 0 0]
+		[.2 .8 .8]
+		[.4 .8 .8]
+		[.6 .8 .8]
+		[.8 .8 .8]
+	]
+def
+
+/setlayer {/maxlayer exch def /curlayer exch def
+	layercolorseq curlayer get
+	aload pop sethsbcolor
+	/nodecolor {nopcolor} def
+	/edgecolor {nopcolor} def
+	/graphcolor {nopcolor} def
+} bind def
+
+/onlayer { curlayer ne {invis} if } def
+
+/onlayers {
+	/myupper exch def
+	/mylower exch def
+	curlayer mylower lt
+	curlayer myupper gt
+	or
+	{invis} if
+} def
+
+/curlayer 0 def
+
+%%EndProlog
+%%BeginSetup
+14 default-font-family set_font
+1 setmiterlimit
+% /arrowlength 10 def
+% /arrowwidth 5 def
+
+% make sure pdfmark is harmless for PS-interpreters other than Distiller
+/pdfmark where {pop} {userdict /pdfmark /cleartomark load put} ifelse
+% make '<<' and '>>' safe on PS Level 1 devices
+/languagelevel where {pop languagelevel}{1} ifelse
+2 lt {
+    userdict (<<) cvn ([) cvn load put
+    userdict (>>) cvn ([) cvn load put
+} if
+
+%%EndResource
+%%EndSetup
+%%Page: 1 1
+%%PageBoundingBox: 36 36 1230 744
+%%PageOrientation: Portrait
+gsave
+35 35 1195 709 boxprim clip newpath
+36 36 translate
+0 0 1 beginpage
+0 0 translate 0 rotate
+[ /CropBox [36 36 1230 744] /PAGES pdfmark
+0.000 0.000 0.000 graphcolor
+14.00 /Times-Roman set_font
+gsave 10 dict begin
+8 354 moveto (XML Infoset $Date$) 245 14.00 -0.50 alignedtext
+end grestore
+gsave 10 dict begin
+newpath 24 386 moveto
+659 386 lineto
+659 691 lineto
+24 691 lineto
+closepath
+stroke
+gsave 10 dict begin
+88 700 moveto (Items and Properties) 114 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#AbsoluteURIref
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+newpath 977 406 moveto
+895 406 lineto
+895 370 lineto
+977 370 lineto
+closepath
+fill
+newpath 977 406 moveto
+895 406 lineto
+895 370 lineto
+977 370 lineto
+closepath
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+936 389 moveto (Abs. URIref) 69 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NCName
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+newpath 657 220 moveto
+591 220 lineto
+591 184 lineto
+657 184 lineto
+closepath
+fill
+newpath 657 220 moveto
+591 220 lineto
+591 184 lineto
+657 184 lineto
+closepath
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+624 203 moveto (NCName) 52 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Name
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+newpath 1185 112 moveto
+1131 112 lineto
+1131 76 lineto
+1185 76 lineto
+closepath
+fill
+newpath 1185 112 moveto
+1131 112 lineto
+1131 76 lineto
+1185 76 lineto
+closepath
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+1158 95 moveto (Name) 33 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NoValue
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+936 332 37 18 ellipse_path
+fill
+936 332 37 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+936 333 moveto (No Value) 53 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#String
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+newpath 1185 205 moveto
+1131 205 lineto
+1131 169 lineto
+1185 169 lineto
+closepath
+fill
+newpath 1185 205 moveto
+1131 205 lineto
+1131 169 lineto
+1185 169 lineto
+closepath
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+1158 188 moveto (String) 34 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlContent#Content
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+357 126 32 18 ellipse_path
+fill
+357 126 32 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+357 127 moveto (Content) 44 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlContent#Item
+gsave 10 dict begin
+624 126 27 18 ellipse_path
+stroke
+gsave 10 dict begin
+624 127 moveto (Item) 25 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlContent#Content -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlContent#Item
+gsave 10 dict begin
+0.333 1.000 1.000 edgecolor
+newpath 390 126 moveto
+439 126 533 126 586 126 curveto
+stroke
+newpath 587 124 moveto
+597 126 lineto
+587 129 lineto
+closepath
+fill
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#Element
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+newpath 81 173 moveto
+34 155 lineto
+81 137 lineto
+128 155 lineto
+closepath
+fill
+newpath 81 173 moveto
+34 155 lineto
+81 137 lineto
+128 155 lineto
+closepath
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+81 156 moveto (Element) 46 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlContent#Item -> http://www.w3.org/2001/05id/infoset#Element
+gsave 10 dict begin
+bold
+0.769 0.867 0.941 edgecolor
+newpath 112 142 moveto
+129 135 147 128 147 128 curveto
+197 115 247 103 297 96 curveto
+383 87 536 111 598 121 curveto
+stroke
+newpath 114 144 moveto
+104 146 lineto
+112 139 lineto
+closepath
+fill
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#ProcessingInstruction
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+newpath 936 112 moveto
+833 94 lineto
+936 76 lineto
+1039 94 lineto
+closepath
+fill
+newpath 936 112 moveto
+833 94 lineto
+936 76 lineto
+1039 94 lineto
+closepath
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+936 95 moveto (Processing Instruction) 124 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlContent#Item -> http://www.w3.org/2001/05id/infoset#ProcessingInstruction
+gsave 10 dict begin
+bold
+0.769 0.867 0.941 edgecolor
+newpath 651 123 moveto
+698 118 794 108 862 102 curveto
+stroke
+newpath 861 100 moveto
+871 101 lineto
+861 105 lineto
+closepath
+fill
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#Character
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+newpath 936 166 moveto
+883 148 lineto
+936 130 lineto
+989 148 lineto
+closepath
+fill
+newpath 936 166 moveto
+883 148 lineto
+936 130 lineto
+989 148 lineto
+closepath
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+936 149 moveto (Character) 54 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlContent#Item -> http://www.w3.org/2001/05id/infoset#Character
+gsave 10 dict begin
+bold
+0.769 0.867 0.941 edgecolor
+newpath 651 128 moveto
+703 132 816 139 883 144 curveto
+stroke
+newpath 882 141 moveto
+892 145 lineto
+882 146 lineto
+closepath
+fill
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#Comment
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+newpath 936 220 moveto
+883 202 lineto
+936 184 lineto
+989 202 lineto
+closepath
+fill
+newpath 936 220 moveto
+883 202 lineto
+936 184 lineto
+989 202 lineto
+closepath
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+936 203 moveto (Comment) 55 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlContent#Item -> http://www.w3.org/2001/05id/infoset#Comment
+gsave 10 dict begin
+bold
+0.769 0.867 0.941 edgecolor
+newpath 647 135 moveto
+665 142 688 150 703 153 curveto
+756 165 844 183 895 194 curveto
+stroke
+newpath 892 191 moveto
+902 195 lineto
+892 196 lineto
+closepath
+fill
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#Element -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NCName
+gsave 10 dict begin
+0.667 1.000 1.000 edgecolor
+newpath 107 163 moveto
+120 167 136 172 147 172 curveto
+270 183 490 195 582 200 curveto
+stroke
+newpath 580 198 moveto
+590 200 lineto
+580 203 lineto
+closepath
+fill
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+357 200 moveto (local name) 60 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#Element -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/xmlContent#Content
+gsave 10 dict begin
+0.667 1.000 1.000 edgecolor
+newpath 118 151 moveto
+171 145 264 136 318 130 curveto
+stroke
+newpath 315 128 moveto
+325 129 lineto
+315 133 lineto
+closepath
+fill
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+213 158 moveto (children) 45 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#Attribute
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+newpath 357 269 moveto
+307 251 lineto
+357 233 lineto
+407 251 lineto
+closepath
+fill
+newpath 357 269 moveto
+307 251 lineto
+357 233 lineto
+407 251 lineto
+closepath
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+357 252 moveto (Attribute) 50 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#Element -> http://www.w3.org/2001/05id/infoset#Attribute
+gsave 10 dict begin
+bold
+0.106 1.000 1.000 edgecolor
+newpath 97 167 moveto
+111 178 132 192 147 197 curveto
+193 213 269 231 316 242 curveto
+stroke
+newpath 317 240 moveto
+326 244 lineto
+316 244 lineto
+closepath
+fill
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+213 243 moveto (attributes) 52 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#NamespaceName
+gsave 10 dict begin
+624 350 61 18 ellipse_path
+stroke
+gsave 10 dict begin
+624 351 moveto (Namespace Name) 101 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#Element -> http://www.w3.org/2001/05id/infoset#NamespaceName
+gsave 10 dict begin
+0.667 1.000 1.000 edgecolor
+newpath 87 171 moveto
+98 196 122 243 147 257 curveto
+236 306 337 329 435 348 curveto
+467 355 516 355 556 354 curveto
+stroke
+newpath 554 352 moveto
+564 354 lineto
+554 357 lineto
+closepath
+fill
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+357 353 moveto (namespace name) 94 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#Namespace
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+newpath 357 52 moveto
+297 34 lineto
+357 16 lineto
+417 34 lineto
+closepath
+fill
+newpath 357 52 moveto
+297 34 lineto
+357 16 lineto
+417 34 lineto
+closepath
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+357 35 moveto (Namespace) 64 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#Element -> http://www.w3.org/2001/05id/infoset#Namespace
+gsave 10 dict begin
+bold
+0.106 1.000 1.000 edgecolor
+newpath 87 139 moveto
+97 112 119 59 147 47 curveto
+185 30 250 29 298 31 curveto
+stroke
+newpath 298 29 moveto
+308 31 lineto
+298 34 lineto
+closepath
+fill
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+213 56 moveto (in-scope namespaces) 117 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#ProcessingInstruction -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#Name
+gsave 10 dict begin
+0.667 1.000 1.000 edgecolor
+newpath 1039 94 moveto
+1069 94 1100 94 1123 94 curveto
+stroke
+newpath 1121 92 moveto
+1131 94 lineto
+1121 97 lineto
+closepath
+fill
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+1085 103 moveto (target) 31 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#ProcessingInstruction -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#String
+gsave 10 dict begin
+0.667 1.000 1.000 edgecolor
+newpath 986 103 moveto
+1005 107 1025 113 1039 118 curveto
+1063 128 1097 148 1123 164 curveto
+stroke
+newpath 1124 162 moveto
+1131 169 lineto
+1121 166 lineto
+closepath
+fill
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+1085 168 moveto (content) 41 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#Attribute -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NCName
+gsave 10 dict begin
+0.667 1.000 1.000 edgecolor
+newpath 391 245 moveto
+440 236 530 220 583 209 curveto
+stroke
+newpath 580 207 moveto
+590 208 lineto
+580 212 lineto
+closepath
+fill
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+490 246 moveto (local name) 60 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#Attribute -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#String
+gsave 10 dict begin
+0.667 1.000 1.000 edgecolor
+newpath 394 256 moveto
+408 258 424 260 435 260 curveto
+472 262 509 262 545 260 curveto
+710 253 876 252 1039 232 curveto
+1063 229 1097 215 1123 204 curveto
+stroke
+newpath 1121 202 moveto
+1131 200 lineto
+1123 207 lineto
+closepath
+fill
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+759 263 moveto (normalized value) 96 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#Attribute -> http://www.w3.org/2001/05id/infoset#NamespaceName
+gsave 10 dict begin
+0.667 1.000 1.000 edgecolor
+newpath 378 262 moveto
+396 270 420 282 435 287 curveto
+472 301 531 320 573 334 curveto
+stroke
+newpath 573 331 moveto
+582 337 lineto
+572 336 lineto
+closepath
+fill
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+490 334 moveto (namespace name) 94 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#NamespaceName -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#AbsoluteURIref
+gsave 10 dict begin
+0.769 0.867 0.941 edgecolor
+newpath 681 356 moveto
+689 358 697 359 703 360 curveto
+753 367 835 372 887 378 curveto
+stroke
+newpath 884 375 moveto
+894 379 lineto
+884 380 lineto
+closepath
+fill
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#NamespaceName -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#AbsoluteURIref
+gsave 10 dict begin
+bold
+0.769 0.867 0.941 edgecolor
+newpath 653 366 moveto
+670 372 690 376 703 378 curveto
+752 385 831 390 883 392 curveto
+stroke
+newpath 884 390 moveto
+894 392 lineto
+884 395 lineto
+closepath
+fill
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#NamespaceName -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NoValue
+gsave 10 dict begin
+0.769 0.867 0.941 edgecolor
+newpath 678 342 moveto
+738 336 835 331 891 329 curveto
+stroke
+newpath 888 327 moveto
+898 329 lineto
+888 332 lineto
+closepath
+fill
+end grestore
+
+%	http://www.w3.org/2001/05id/infoset#NamespaceName -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/infosetUtil#NoValue
+gsave 10 dict begin
+bold
+0.769 0.867 0.941 edgecolor
+newpath 685 352 moveto
+746 351 839 345 894 339 curveto
+stroke
+newpath 891 337 moveto
+901 338 lineto
+891 342 lineto
+closepath
+fill
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#ABC
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+357 412 27 18 ellipse_path
+fill
+357 412 27 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+357 413 moveto (ABC) 28 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#DEF
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+81 613 27 18 ellipse_path
+fill
+81 613 27 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+81 614 moveto (DEF) 26 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#One
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+357 508 32 18 ellipse_path
+fill
+357 508 32 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+357 509 moveto (A Class) 43 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Part1
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+624 557 27 18 ellipse_path
+fill
+624 557 27 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+624 558 moveto (X) 10 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Part2
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+624 611 27 18 ellipse_path
+fill
+624 611 27 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+624 612 moveto (Y) 10 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Part3
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+624 665 27 18 ellipse_path
+fill
+624 665 27 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+624 666 moveto (Z) 8 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Parts
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+357 611 27 18 ellipse_path
+fill
+357 611 27 18 ellipse_path
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+357 612 moveto (X|Y|Z) 34 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Parts -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Part1
+gsave 10 dict begin
+bold
+0.769 0.867 0.941 edgecolor
+newpath 380 601 moveto
+420 590 500 576 545 567 curveto
+556 565 572 561 587 558 curveto
+stroke
+newpath 587 556 moveto
+597 556 lineto
+588 560 lineto
+closepath
+fill
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Parts -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Part1
+gsave 10 dict begin
+0.769 0.867 0.941 edgecolor
+newpath 385 612 moveto
+425 607 501 593 545 585 curveto
+558 582 578 577 595 572 curveto
+stroke
+newpath 594 570 moveto
+604 569 lineto
+595 575 lineto
+closepath
+fill
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Parts -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Part2
+gsave 10 dict begin
+bold
+0.769 0.867 0.941 edgecolor
+newpath 384 607 moveto
+434 603 537 603 591 606 curveto
+stroke
+newpath 588 603 moveto
+598 607 lineto
+588 608 lineto
+closepath
+fill
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Parts -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Part2
+gsave 10 dict begin
+0.769 0.867 0.941 edgecolor
+newpath 384 615 moveto
+433 619 532 619 587 616 curveto
+stroke
+newpath 588 613 moveto
+598 615 lineto
+588 618 lineto
+closepath
+fill
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Parts -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Part3
+gsave 10 dict begin
+0.769 0.867 0.941 edgecolor
+newpath 385 612 moveto
+435 620 541 641 593 654 curveto
+stroke
+newpath 591 651 moveto
+600 656 lineto
+590 656 lineto
+closepath
+fill
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Parts -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Part3
+gsave 10 dict begin
+bold
+0.769 0.867 0.941 edgecolor
+newpath 381 620 moveto
+429 633 535 654 590 663 curveto
+stroke
+newpath 587 660 moveto
+597 664 lineto
+587 665 lineto
+closepath
+fill
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#anItem
+gsave 10 dict begin
+filled
+0.565 0.471 1.000 nodecolor
+newpath 81 526 moveto
+49 508 lineto
+81 490 lineto
+113 508 lineto
+closepath
+fill
+newpath 81 526 moveto
+49 508 lineto
+81 490 lineto
+113 508 lineto
+closepath
+stroke
+gsave 10 dict begin
+0.000 0.000 0.000 nodecolor
+81 509 moveto (Item) 25 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#anItem -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#ABC
+gsave 10 dict begin
+bold
+0.106 1.000 1.000 edgecolor
+newpath 108 505 moveto
+117 503 125 499 129 493 curveto
+146 468 122 421 147 405 curveto
+169 393 269 402 323 408 curveto
+stroke
+newpath 320 405 moveto
+330 409 lineto
+320 410 lineto
+closepath
+fill
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+213 414 moveto (many-to-many) 82 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#anItem -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#One
+gsave 10 dict begin
+0.667 1.000 1.000 edgecolor
+newpath 114 508 moveto
+165 508 262 508 317 508 curveto
+stroke
+newpath 314 506 moveto
+324 508 lineto
+314 511 lineto
+closepath
+fill
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+213 517 moveto (many-to-one) 71 14.00 -0.50 alignedtext
+end grestore
+end grestore
+
+%	file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#anItem -> file:/home/connolly/w3ccvs/WWW/2000/10/swap/infoset/?#Parts
+gsave 10 dict begin
+0.667 1.000 1.000 edgecolor
+newpath 89 522 moveto
+104 546 134 595 147 600 curveto
+171 609 269 611 322 611 curveto
+stroke
+newpath 319 609 moveto
+329 611 lineto
+319 614 lineto
+closepath
+fill
+gsave 10 dict begin
+0.000 0.000 0.000 edgecolor
+213 619 moveto (many-to-1) 58 14.00 -0.50 alignedtext
+end grestore
+end grestore
+endpage
+grestore
+%%PageTrailer
+%%EndPage: 1
+%%Trailer
+%%Pages: 1
+end
+restore
+%%EOF

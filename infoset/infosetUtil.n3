@@ -10,7 +10,7 @@
 @prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
-@prefix log: <http://www.w3.org/2000/10/swap/log.n3#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix is: <http://www.w3.org/2001/05id/infoset#> . #@@ move this there.
 @prefix : <#>. #variables
 
@@ -51,8 +51,9 @@ iu:NCName rdfs:label "NCName";
   iu:pattern "@@";
   rdfs:subClassOf iu:Name;
   rdfs:comment"production [@@] from the Namespaces in XML spec".
-iu:Prefix rdfs:label "Prefix";
-  dpo:disjointUnionOf (iu:NoValue iu:NCName).
+
+#@@@iu:Prefix rdfs:label "Prefix";
+#  dpo:disjointUnionOf (iu:NoValue iu:NCName).
 
 iu:VersionNum rdfs:label "VersionNum";
   iu:pattern "[a-zA-Z0-9_.:-]+";
@@ -75,7 +76,7 @@ iu:NoValue rdfs:label "No Value";
 dpo:toClass rdfs:range rdfs:Class.
 dpo:toClass rdfs:domain rdfs:Class.
 
-<> log:forAll :C1, :s, :p, :o, :L, :C2.
+this log:forAll :C1, :s, :p, :o, :L, :C2.
 
 { :C1 dpo:disjointUnionOf :L.
   :L dl:member :C2 }
@@ -95,7 +96,7 @@ dpo:oneOf rdfs:domain rdfs:Class.
 rdfs:domain rdfs:domain rdfs:Class.
 rdfs:range rdfs:domain rdfs:Class.
 
-<> log:forAll :s, :p, :o, :C.
+this log:forAll :s, :p, :o, :C.
 
 #subproperty
 { :s [ rdfs:subPropertyOf :p ] :o. }

@@ -4,11 +4,12 @@
 #  $Id $
 
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc.n3#>.
-@prefix log: <http://www.w3.org/2000/10/swap/log.n3#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix dot: <http://www.w3.org/2001/02pd/gv#>.
 @prefix is: <http://www.w3.org/2001/05id/infoset#> .
+@prefix xc: <xmlContent#>.
 @prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
 
 # NOTE rdf2dot.xsl needs namespace URIs absolutized @@
@@ -16,10 +17,10 @@
 @prefix iu: <infosetUtil#>.
 @prefix dl: <http://www.w3.org/2001/03swell/lists#>.
 
-@prefix : <mid:abcXX#>.  # Just for variales in fact
-@prefix v: <mid:defXX#>.  # Just for variales in fact
+@prefix : <?#>.  # Just for variables in fact
+@prefix v: <?#>.  # Just for variables in fact
 
-<> log:forAll :n1, :n2, :p, :s, :s2, :CR, :CD.
+this log:forAll :n1, :n2, :p, :s, :s2, :CR, :CD.
 
 <> doc:cvsversion "$Id$".
 
@@ -32,7 +33,7 @@ s:Class s:label "Class".
    log:implies { :n1 dot:shape "diamond" }.
 
 { :CR s:subClassOf rdfs:Literal; s:label :s. }
-  log:implies { :CR dot:shape "rectangle" }.
+  log:implies { :CR dot:shape "box" }.
 
 { :p s:domain :CD; s:range :CR; s:label :s. }
   log:implies
@@ -57,6 +58,13 @@ s:Class s:label "Class".
   log:implies
 { :n1 [ a dot:EdgeProperty; dot:color "purple" ] :CR. }.
 
+#@@ key: purple bold for partitioned
+{ :CD dpo:disjointUnionOf [ dl:member :CR ].
+  :CR s:label :s2.
+ }
+  log:implies
+{ :CD [ a dot:EdgeProperty; dot:color "purple"; dot:style "bold" ] :CR. }.
+
 #@@ key: bold orange for one-to-many, unordered
 { :CD s:subClassOf [ dpo:onProperty :p;
 	dpo:toClass [ sws:setOf :CR]].
@@ -65,19 +73,25 @@ s:Class s:label "Class".
   log:implies
 { :CD [ a dot:EdgeProperty; dot:label :s; dot:color "orange"; dot:style "bold" ] :CR.}.
 
-#@@ key: bold green for one-to-many, ordered
-{ :CD s:subClassOf [ dpo:onProperty :p;
-	dpo:toClass [ dl:listOf :CR]].
-  :p a dpo:UniqueProperty; s:label :s.
+# key: bold purple for ordered list/forest over X/Y/Z
+{ :CD dl:listOf :CR .
   :CR s:label :s2 }
   log:implies
-{ :CD [ a dot:EdgeProperty; dot:label :s; dot:color "green"; dot:style "bold" ] :CR. }.
+{ :CD [ a dot:EdgeProperty; dot:color "green" ] :CR. }.
+
+#@@ key: bold green for one-to-many, ordered
+#{ :CD s:subClassOf [ dpo:onProperty :p;
+#	dpo:toClass [ dl:listOf :CR]].
+#  :p a dpo:UniqueProperty; s:label :s.
+#  :CR s:label :s2 }
+#  log:implies
+#{ :CD [ a dot:EdgeProperty; dot:label :s; dot:color "green"; dot:style "bold" ] :CR. }.
 
 #@@ key: bold purple for ordered list/forest over X/Y/Z
-{ :CD dl:listOf [ dpo:disjointUnionOf [ dl:member :CR ] ].
-  :CR s:label :s2 }
-  log:implies
-{ :CD [ a dot:EdgeProperty; dot:color "purple"; dot:style "bold" ] :CR. }.
+#{ :CD dl:listOf [ dpo:disjointUnionOf [ dl:member :CR ] ].
+#  :CR s:label :s2 }
+#  log:implies
+#{ :CD [ a dot:EdgeProperty; dot:color "purple"; dot:style "bold" ] :CR. }.
 
 #@@ key: purple for choice of X/Y/Z
 { :CD dpo:oneOf [ dl:member :n1 ].
@@ -133,8 +147,9 @@ s:Class s:label "Class".
 :ABC s:label "ABC"; a s:Class.
 
 :theGraph dot:hasNode is:Document.    # arbitrary seed to trace out from
+:theGraph dot:hasNode xc:Content.    # arbitrary seed to trace out from
 
-<> log:forAll :n1, :n2, :p, :s.
+this log:forAll :n1, :n2, :p, :s.
 
 { :theGraph dot:hasNode :n1.
   :n1 :p :n2.
