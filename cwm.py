@@ -364,6 +364,7 @@ class RDFStore(notation3.RDFSink) :
         self.Truth = engine.internURI(Logic_NS + "Truth")
         self.type = engine.internURI(notation3.RDF_type_URI)
         self.subExpression = engine.internURI(Logic_NS + "subExpression")
+        self.Chaff = engine.internURI(Logic_NS + "Chaff")
 
 # List stuff - beware of namespace changes! :-(
 
@@ -725,10 +726,9 @@ class RDFStore(notation3.RDFSink) :
                     
                 sink.endAnonymous(sub.asPair(), pre.asPair()) # Restore parse state
             else:
-                if _se:  # @@@ How represent the empty bag in the model?
-                    sink.startBagObject(self.extern(triple))
-                    self.dumpNestedStatements(obj, sink)  # dump contents of anonymous bag
-                    sink.endBagObject(pre.asPair(), sub.asPair())
+                sink.startBagObject(self.extern(triple))
+                self.dumpNestedStatements(obj, sink)  # dump contents of anonymous bag
+                sink.endBagObject(pre.asPair(), sub.asPair())
             return # Arc is done
 
         if self.isImplicit(s):
@@ -747,21 +747,33 @@ class RDFStore(notation3.RDFSink) :
             for p in CONTEXT, PRED, SUBJ, OBJ:
                 x = s.triple[p]
                 if x is old:
-#                    y=new
-#                elif isinstance(x, Fragment) and x.resource is old:
-#                   y = self.engine.internURI(new.uriref()+"#"+x.fragid@@@
-#                if x is y: continue
                     s.triple = s.triple[:p] + (new,) + s.triple[p+1:]
                     old.occursAs[p].remove(s)
                     new.occursAs[p].append(s)
                 
-#            if pred is old: pred = new # Move references (even pred?)
-#            if subj is old: subj = new # Move
-#            if obj is old: obj  = new # Move
-#            s.triple = new, pred, subj, obj
- 
-#        pfx = self.prefixes.get(old, None)
-                        
+#  Clean up intermediate results:
+#
+# Statements in the given context that a term is a Chaff cause
+# any mentions of that term to be removed from the context.
+
+    def purge(self, context, boringClass=None):
+        if not boringClass:
+            boringClass = self.Chaff
+        for s in boringClass.occursAs[OBJ][:]:
+            con, pred, subj, obj = s.triple
+            if con is context and  pred is self.type:
+                print "#@@@@@@@@@ Purging ", `subj`[-10:]
+                for p in ALL4:
+                    for t in subj.occursAs[p][:]:  # Take copy as list changes
+                        if t.triple[CONTEXT] is context:
+                            print "     ", quadToString(t.triple)
+                            self.removeStatement(t)
+
+    def removeStatement(self, s):
+        for p in ALL4: s.triple[p].occursAs[p].remove(s)
+        self.size = self.size-1
+        del s
+
 #  Apply rules from one context to another
                 
     def applyRules(self, workingContext,    # Data we assume 
@@ -1056,7 +1068,7 @@ newBindings  matches found and not yet applied - used in recursion
                                   bindings[:], nb)
     return total
      
-                            
+
 
 
 ######################################################### Tests
@@ -1575,6 +1587,9 @@ Examples:
                     _store.storeQuad(_meta, META_filter, s, inputContext)
                     _store.storeQuad(_meta, META_run, s, run)
                     history = s
+
+            elif arg == "-purge":
+                _store.purge(workingContext)
 
             elif arg == "-rules":
                 _store.applyRules(workingContext, workingContext)
