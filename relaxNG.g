@@ -1,6 +1,4 @@
-""" relaxNG.g -- a Yapps grammar for Relax NG
-
-not quite working yet. see @@'s
+""" relaxNG.g -- a Yapps grammar for Relax NG's non-XML syntax
 
 see change log at end.
 
@@ -18,6 +16,12 @@ REFERENCES
   A Non-XML Syntax for RELAX NG
   http://www.thaiopensource.com/relaxng/nonxml/syntax.html
   James Clark
+
+  and source code
+  http://www.thaiopensource.com/relaxng/nonxml/rngnx.zip
+  md5: 5a01eca0c2792d775dbec9cfa706101f
+  esp com/thaiopensource/relaxng/nonxml/NonXmlSyntax.jj
+
 """
 
 __version__ = '$Id$'
@@ -28,79 +32,84 @@ parser RNGParser:
     ignore: r'\s+'         # whitespace.
     ignore: r'#.*\r?\n'    # n3 comments; sh/perl style
 
-
+    token END: r'\Z'
+    
     #token keyword : r'attribute|default|datatypes|element|empty|externalRef|grammar|inherit|list|mixed|namespace|notAllowed|parent|start|string|text|token' 
 
-    token nsName : r'\w+:\*' # NCName ":*"
+    token nsName : r'[a-zA-Z0-9_-]+:\*' # NCName ":*" #@@real name chars
 
-    token CName : r'\w+:\w+' # NCName ":" NCName
-    token QName : r'\w+:\w+' # @@???
+    token CName : r'[a-zA-Z0-9_-]+:[a-zA-Z0-9_-]+' # NCName ":" NCName
+    token QName : r'[a-zA-Z0-9_-]+:[a-zA-Z0-9_-]+' # @@???
 
-    token identifier : r'\\?\w+' # NCName | escapedIdentifier
+    token identifier : r'\\?[a-zA-Z0-9_-]+' # NCName | escapedIdentifier
 
-    token identifierNotKeyword : r'\\?\w+' # identifier - keyword.
+    token identifierNotKeyword : r'\\?[a-zA-Z0-9_-]+' # identifier - keyword.
                 # yapps is context-sensitive, so this should work. I think.
 
-    token identDEF : r'\\?\w+\s*(=|\|=|&=)' # sort of a kludge...
+    token identDEF : r'\\?[a-zA-Z0-9_-]+\s*(=|\|=|&=)' # sort of a kludge...
     
-    token escapedIdentifier : r'\\\w+' # "\" NCName
+    token escapedIdentifier : r'\\[a-zA-Z0-9_-]+' # "\" NCName
     token literal1 : r'("([^"]|"")*")'
     token literal2 : r"('([^']|'')*')"
           # '"' ([^"] | '""')* '"' | "'" ([^'] | "''")* "'"
 
-
-    rule topLevel : decl* (pattern|grammar)
+    rule topLevel : decl* (pattern|grammar) END
 
     rule decl :
         "namespace" identifier "=" (literal | "inherit")
         | "default" "namespace" [identifier] "=" (literal | "inherit")
         | "datatypes" identifier "=" literal
 
-    rule pattern :
-        particle
-          [
-           ("\\|" particle)+
-           | ("," particle)+ 
-           | ("&" particle)+
-          ]
+    rule pattern:
+        UnaryExpr [
+            ( "\\|" UnaryExpr) +
+            | ( "," UnaryExpr) +
+            | ( "&" UnaryExpr) +
+            ]
+    rule UnaryExpr:
+        PrimaryExpr ["\\*"| "\\+" | "\\?"]
 
-          # @@ can't seem to left-factor the grammar with this in it...
-        # | datatypeName [params] ("-" primary)
-
-    rule particle : primary ["\\*"| "\\+" | "\\?"]
-
-    rule primary :
-        "\\(" pattern "\\)"
-        | "element" nameClass "{" pattern "}"
-        | "attribute" nameClass "{" pattern "}"
-        | "mixed" "{" pattern "}"
-        | "empty"
-        | "notAllowed"
+    rule PrimaryExpr :
+        "empty"
         | "text"
+        | "notAllowed"
+        |"element" NameClass<<0>> "{" pattern "}"
+        | "attribute" NameClass<<1>> "{" pattern "}"
         | "list" "{" pattern "}"
-        | datatypeName [params | datatypeValue] # left-factored here.
-        | datatypeValue
+        | "mixed" "{" pattern "}"
         | "grammar" "{" grammar "}"
-        | ref
-        | "parent" ref
+        | "\\(" pattern "\\)"
         | "externalRef" literal [inherit]
+        | "parent" ref
+        | ref
+        | datatypeValue
+        | datatypeName
+            [params [ Except ]
+             | Except
+             | datatypeValue]
 
-    #@@these are broken somehow
-    rule nameClass :
-        basicNameClass_ [ ("\\|" basicNameClass)+ ]
-        | openNameClass ["-" basicNameClass] # left-factored 2 rules
+    rule Except: "-" PrimaryExpr
 
-    rule basicNameClass :
-        QName
-        | openNameClass
-        | "\\(" nameClass "\\)"
-
-    rule basicNameClass_ :
-        QName
-        | "\\(" nameClass "\\)"
-
-    rule openNameClass : nsName | "\\*" # anyName
-   
+    # from .jj source@@
+    rule NameClass<<inAttr>>:
+        PrimaryNameClass<<inAttr>> [ ("\\|" PrimaryNameClass<<inAttr>>)* ]
+    rule PrimaryNameClass<<inAttr>>:
+        UnprefixedNameClass<<inAttr>>
+        | PrefixedNameClass
+        | AnyNameClass<<inAttr>>
+        | NsNameClass<<inAttr>>
+        | ParenNameClass<<inAttr>>
+    rule UnprefixedNameClass<<inAttr>>:
+        identifier
+    rule PrefixedNameClass:
+        CName
+    rule NsNameClass<<inAttr>>:
+        nsName [ "-" PrimaryNameClass<<inAttr>> ]
+    rule AnyNameClass<<inAttr>>:
+        "\\*" [ "-" PrimaryNameClass<<inAttr>> ]
+    rule ParenNameClass<<inAttr>>:
+        "\\(" NameClass<<inAttr>> "\\)"
+        
     rule ref : identifierNotKeyword
 
     rule datatypeName : CName | "string" | "token"
@@ -122,6 +131,10 @@ parser RNGParser:
     rule literal : literal1 | literal2
 
 # $Log$
-# Revision 1.1  2001-09-28 09:19:54  connolly
+# Revision 1.2  2001-09-28 23:35:55  connolly
+# the grammar from the web page wasn't LL(1),
+# so I used the .jj source; that worked.
+#
+# Revision 1.1  2001/09/28 09:19:54  connolly
 # almost parses rdfx.rng by clark
 #
