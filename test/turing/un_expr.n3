@@ -1,5 +1,24 @@
 @prefix : <http://yosi.us/unlambda#> .
 @keywords a, of, is .
+
 #(((s i) i) ((s i) i)) a RootExpression .
-(((s k) s) s) a RootExpression .
+#(((s k) s) s) a RootExpression .
 #((k k) i) a RootExpression .
+
+#
+#try to all 1 and 2 .
+#
+# add is ``si`k`s``s`ksk
+# or ((s i) (k (s ((s (k s)) k))))
+#
+#one is i
+# two is ``s``s`kski
+# or ((s ((s (k s)) k)) i)
+#
+#so our expression is -
+((((s i) (k (s ((s (k s)) k)))) i) ((s ((s (k s)) k)) i)) a RootExpression .
+#
+# here is 3 ``s``s`ksk``s``s`kski
+# or ((s ((s (k s)) k)) ((s ((s (k s)) k)) i))
+#((s ((s (k s)) k)) ((s ((s (k s)) k)) i)) a RootExpression .
+#

@@ -29,48 +29,40 @@
 {(?x ?y) eval ?c } .
 
 
-{(k ?x) apply [is k of ?x ]}
+{(k ?x) apply (k ?x)}
 <= 
 {(k ?x) a NeedsApply} .
 
-{(?a ?x) apply ?y}
+{((k ?y) ?x) apply ?y}
 <=
-{(?a ?x) a NeedsApply .
-?y k ?a} .
+{((k ?y) ?x) a NeedsApply} .
 
-{(s ?x) apply [is s of ?x]}
+{(s ?x) apply (s ?x)}
 <= 
 {(s ?x) a NeedsApply} .
 
-{(?a ?x) apply [is ?a of ?x]}
+{((s ?y) ?x) apply ((s ?y) ?x)}
 <=
-{(?a ?x) a NeedsApply .
-?y s ?a} .
+{((s ?y) ?x) a NeedsApply } .
 
-{(?a ?x) a NeedsApply .
- ?y s ?b .
- ?z ?b ?a .
+{(((s ?y) ?z) ?x) a NeedsApply .
 } =>
 {(?y ?x) a NeedsEval .
  (?z ?x) a NeedsEval } .
 
-{(?a ?x) a NeedsApply .
- ?y s ?b .
- ?z ?b ?a .
+{(((s ?y) ?z) ?x) a NeedsApply .
  (?y ?x) eval ?r .
  (?z ?x) eval ?s .
 }
 =>
 {(?r ?s) a NeedsEval} .
 
-{(?a ?x) a NeedsApply .
- ?y s ?b .
- ?z ?b ?a .
+{(((s ?y) ?z) ?x) a NeedsApply .
  (?y ?x) eval ?r .
  (?z ?x) eval ?s .
  (?r ?s) eval ?w }
 =>
-{(?a ?x) apply ?w} .
+{(((s ?y) ?z) ?x) apply ?w} .
 
 {(i ?x) apply ?x}
 <= 
@@ -79,4 +71,4 @@
 
 {(v ?x) apply v}
 <=
-{(v ?x a NeedsApply} .
+{(v ?x) a NeedsApply} .
