@@ -858,7 +858,7 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
 	"""
 	store = self.store
 	if ':' not in object:
-	    progress("Warning: taking log:uri of non-abs: %s" % obj_py)
+	    progress("Warning: taking log:uri of non-abs: %s" % object)
         if type(object) is type(""):
 	    return store.intern((SYMBOL, object))
         elif type(object) is type(u""):
@@ -886,7 +886,7 @@ class BI_rawType(LightBuiltIn, Function):
 	store = self.store
         if isinstance(subj, Literal): y = store.Literal
         elif isinstance(subj, Formula): y = store.Formula
-        elif context.listValue.get(subj, None): y = store.List
+        #@@elif context.listValue.get(subj, None): y = store.List
         else: y = store.Other  #  None?  store.Other?
         if verbosity() > 91:
             progress("%s  rawType %s." %(`subj`, y))
@@ -970,6 +970,7 @@ class BI_semantics(HeavyBuiltIn, Function):
 class BI_semanticsOrError(BI_semantics):
     """ Either get and parse to semantics or return an error message on any error """
     def evalObj(self, subj, queue, bindings, proof):
+        import xml.sax._exceptions # hmm...
         store = subj.store
         x = store.any((store._experience, store.semanticsOrError, subj, None))
         if x != None:
@@ -977,7 +978,7 @@ class BI_semanticsOrError(BI_semantics):
             return x
         try:
             return BI_semantics.evalObj(self, subj, queue, bindings, proof)
-        except (IOError, SyntaxError, DocumentAccessError):
+        except (IOError, SyntaxError, DocumentAccessError, xml.sax._exceptions.SAXParseException):
             message = sys.exc_info()[1].__str__()
             result = store.intern((LITERAL, message))
             if verbosity() > 0: progress(`store.semanticsOrError`+": Error trying to resolve <" + `subj` + ">: "+ message) 
@@ -1321,15 +1322,16 @@ class RDFStore(RDFSink) :
     
 	    guess = ct
 	    buffer = netStream.read()
-	    if verbosity() > 29: progress("Content-type: " + `ct` + " for "+addr)
+	    if verbosity() > 9: progress("Content-type: " + `ct` + " for "+addr)
 	    if ct == None or (ct.find('xml') < 0 and ct.find('rdf') < 0) :   # Rats - nothing to go on
 #		buffer = netStream.read(500)
 #		netStream.close()
 #		netStream = urllib.urlopen(addr)
-		if buffer.find('xmlns="') >=0 or buffer.find('xmlns:') >=0:
-		    guess = 'application/xml'
-		elif buffer[0:1] == "#" or buffer[0:7] == "@prefix":
+                # can't be XML if it starts with these...
+		if buffer[0:1] == "#" or buffer[0:7] == "@prefix":
 		    guess = 'application/n3'
+                elif buffer.find('xmlns="') >=0 or buffer.find('xmlns:') >=0:
+		    guess = 'application/xml'
 		if verbosity() > 29: progress("    guess " + guess)
 	except (IOError, OSError):  
 	    raise DocumentAccessError(addr, sys.exc_info() )
@@ -2694,7 +2696,8 @@ class Query:
                                            seqToString(more_variables)))
                         item.state = S_DONE
                     else:
-                        raise RuntimeError("Include can only work on formulae "+`item`)
+                        progress("Include can only work on formulae "+`item`) #@@ was RuntimeError exception
+                        item.state = S_FAIL
                     nbs = []
                 else:
 		    item.state = S_HEAVY_WAIT  # Assume can't resolve
