@@ -1,0 +1,293 @@
+% set(auto).
+
+% check for internal consistency with something like
+%   mace -P -N 10 -k 768000 < util/owlAx.otter
+% but it's gotten too big.  :-(
+
+formula_list(usable).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% 
+%   rdf_nil
+%
+
+-(exists c (rdf(rdf_nil, rdf_rest, c))).
+-(exists c (rdf(rdf_nil, rdf_first, c))).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_Nothing
+%
+
+% (all X (-rdf(X, rdf_type, owl_Nothing))).
+
+-(exists c (rdf(c, rdf_type, owl_Nothing))).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_Thing, rdf_Resource
+%
+
+% (all X (rdf(X, rdf_type, owl_Thing))).
+(all X (rdf(X, rdf_type, rdf_Resource))).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_intersectionOf
+%
+
+all INST CLASS LIST (
+   rdf(INST, rdf_type, CLASS) &
+   rdf(CLASS, owl_intersectionOf, LIST)
+   ->
+   instanceOfAll(INST, LIST)
+).
+
+all INST LIST HEAD TAIL (
+   (rdf(LIST, rdf_first, HEAD) &
+    rdf(LIST, rdf_rest, TAIL) &
+    rdf(INST, rdf_type, HEAD) &
+    instanceOfAll(INST, TAIL))
+  ->
+   instanceOfAll(INST, LIST)
+).
+all INST (instanceOfAll(INST, rdf_nil)).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_unionOf
+%
+
+all INST CLASS LIST (
+   rdf(INST, rdf_type, CLASS) &
+   rdf(CLASS, owl_unionOf, LIST)
+   ->
+   instanceOfAny(INST, LIST)
+).
+
+all INST LIST HEAD TAIL (
+   (rdf(LIST, rdf_first, HEAD) &
+    rdf(LIST, rdf_rest, TAIL) &
+    rdf(INST, rdf_type, HEAD) &
+    instanceOfAny(INST, TAIL))
+  ->
+   instanceOfAny(INST, LIST)
+).
+all INST (-instanceOfAny(INST, rdf_nil)).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_equivalentClass
+%
+
+all C1 C2 (
+   rdf(C1, owl_equivalentClass, C2)
+   <-> 
+   (all INST (
+     rdf(INST, rdf_type, C1) <-> rdf(INST, rdf_type, C2) 
+   ))
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_complementOf
+%
+
+all C1 C2 (
+   rdf(C1, owl_complementOf, C2)
+   <-> 
+   (all INST (
+     rdf(INST, rdf_type, C1) <-> -rdf(INST, rdf_type, C2) 
+   ))
+).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_disjointWith
+%
+
+all C1 C2 (
+   rdf(C1, owl_disjointWith, C2)
+   <-> 
+   (all INST (
+     - (rdf(INST, rdf_type, C1) & rdf(INST, rdf_type, C2))
+   ))
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   rdfs_subClassOf
+%
+
+all INST C1 C2 (
+   rdf(C1, rdfs_subClassOf, C2)
+   ->    %%  This is the RDF Core definition; does OWL require
+         %%  <-> ???   
+   ( rdf(INST, rdf_type, C1) 
+     -> 
+     rdf(INST, rdf_type, C2) 
+   )
+).
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   allValuesFrom
+%
+%   The owl:allValuesFrom restriction requires that for every instance
+%   of the class that has instances of the specified property, the
+%   values of the property are all instances of the specified
+%   restriction class.      -- OWL Guide
+%
+
+all RESTRICTION PROPERTY BASECLASS INST VALUE (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_allValuesFrom, BASECLASS) &
+     rdf(INST, rdf_type, RESTRICTION) )
+   ->
+   ( rdf(INST, PROPERTY, VALUE)
+     <->
+     rdf(VALUE, rdf_type, BASECLASS)  )
+).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   someValuesFrom
+%
+%   allValuesFrom
+%      For all wines, if they have makers, all the makers are wineries.
+%   someValuesFrom 
+%      For all wines, they have at least one maker that is a winery.
+%              -- OWL Guide
+%
+%   
+
+all RESTRICTION PROPERTY BASECLASS INST (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_someValuesFrom, BASECLASS) &
+     rdf(INST, rdf_type, RESTRICTION) )
+   -> 
+%   conceptually we want:
+%  (exists VALUE (
+%    rdf(INST, PROPERTY, VALUE)
+%    rdf(VALUE, rdf_type, BASECLASS)
+%  ))
+%   but we'll manually Skolemize with fewer dependencies:
+%
+   ( rdf(INST, PROPERTY, valueSkFunc(INST, RESTRICTION)) &
+     rdf(valueSkFunc(INST, RESTRICTION), rdf_type, BASECLASS) )
+).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_hasValue
+%
+
+all RESTRICTION PROPERTY VALUE INST (
+   ( rdf(RESTRICTION, rdf_type, owl_Restriction) &
+     rdf(RESTRICTION, owl_onProperty, PROPERTY) &
+     rdf(RESTRICTION, owl_hasValue, VALUE) &
+     rdf(INST, rdf_type, RESTRICTION) )
+   ->
+   rdf(INST, PROPERTY, VALUE)
+).
+   
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_FunctionalProperty
+%
+
+all PROPERTY (
+   rdf(PROPERTY, rdf_type, owl_FunctionalProperty)
+   <->
+   ( all INST VAL1 VAL2 (
+     ( rdf(INST, PROPERTY, VAL1) &
+       rdf(INST, PROPERTY, VAL2) )
+     ->
+     rdf(VAL1, owl_sameAs, VAL2)
+   ))
+).
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_InverseFunctionalProperty
+%
+
+all PROPERTY (
+   rdf(PROPERTY, rdf_type, owl_InverseFunctionalProperty)
+   <->
+   ( all INST1 INST2 VAL (
+     ( rdf(INST1, PROPERTY, VAL) &
+       rdf(INST2, PROPERTY, VAL) )
+      ->
+       rdf(INST1, owl_sameAs, INST2)
+   ))
+).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_sameAs
+%
+
+all THING (
+   rdf(THING, owl_sameAs, THING)
+).
+
+all THING1 THING2 (
+   rdf(THING1, owl_sameAs, THING2) 
+   <->
+   (all X Y (
+      ( rdf(X, Y, THING1) <-> rdf(X, Y, THING2) ) &
+      ( rdf(X, THING1, Y) <-> rdf(X, THING2, Y) ) &
+      ( rdf(THING1, X, Y) <-> rdf(THING2, X, Y) ) 
+   ))
+).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_EquivalentProperty
+%
+
+all PRED1 PRED2 (
+   rdf(PRED1, owl_equivalentProperty, PRED2)
+   <->
+   (all SUBJ OBJ (
+      ( rdf(SUBJ, PRED1, OBJ) <-> rdf(SUBJ, PRED2, OBJ) )
+   ))
+).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%
+%   owl_InverseOf
+%
+
+all PRED1 PRED2 (
+   rdf(PRED1, owl_inverseOf, PRED2)
+   <->
+   (all SUBJ OBJ (
+      ( rdf(SUBJ, PRED1, OBJ) <-> -rdf(SUBJ, PRED2, OBJ) )
+   ))
+).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%   owl_SymmetricProperty
+%   owl_TransitiveProperty
+
+
+
+%   rdfs_range
+%   rdfs_domain
+%   rdfs_subPropertyOf
+
