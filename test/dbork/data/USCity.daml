@@ -3,27 +3,22 @@
   <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns">
   <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
   <!ENTITY daml "http://www.daml.org/2001/03/daml+oil">
-
-  <!ENTITY log "http://www.w3.org/2000/10/swap/log">
-  <!ENTITY usstate "USRegionState.daml">
-  <!ENTITY country "Country.daml">
-  <!ENTITY city "City.daml">
-  <!ENTITY DEFAULT "USCity.daml">
-  <!ENTITY THIS "USCity.daml">
+  <!ENTITY usstate "http://www.daml.ri.cmu.edu/ont/USRegionState.daml">
+  <!ENTITY country "http://www.daml.ri.cmu.edu/ont/Country.daml">
+  <!ENTITY city "http://www.daml.ri.cmu.edu/ont/City.daml">
+  <!ENTITY DEFAULT "http://www.daml.ri.cmu.edu/ont/USCity.daml">
+  <!ENTITY THIS "http://www.daml.ri.cmu.edu/ont/USCity.daml">
 ]>
  
 <!--
 This document uses entity types as a shorthand for URIs.
 Download the source for a version with unexpanded entities.
-
-These were in http://www.daml.ri.cmu.edu/ont
   -->
  
 <rdf:RDF
   xmlns:rdf=    "&rdf;#"
   xmlns:rdfs=   "&rdfs;#"
   xmlns:daml=   "&daml;#"
-  xmlns:log=    "&log;#"
   xmlns:usstate="&usstate;#"
   xmlns:country="&country;#"
   xmlns:city=   "&city;#"
@@ -48,18 +43,6 @@ These were in http://www.daml.ri.cmu.edu/ont
     <daml:imports rdf:resource="&daml;" />
     <daml:imports rdf:resource="&city;" />
   </daml:Ontology>
-
-  <rdf:Property rdf:ID="name">
-    <rdfs:domain rdf:resource="#City" />
-    <rdfs:range rdf:resource="&rdfs;#Literal"/>
-    <log:authoritativeDocument rdf:resource="&THIS;"/>
-  </rdf:Property> 
-
-  <rdf:Property rdf:ID="country">
-    <rdfs:domain rdf:resource="#City" />
-    <rdfs:range rdf:resource="&country;#Country" />
-  </rdf:Property> 
-
  
   <rdfs:Class rdf:ID="USCity">
     <rdfs:label>USCity</rdfs:label>
@@ -72,7 +55,6 @@ These were in http://www.daml.ri.cmu.edu/ont
   <rdf:Property rdf:ID="state">
     <rdfs:domain rdf:resource="#USCity" />
     <rdfs:range rdf:resource="&usstate;#USState" />
-    <log:authoritativeDocument rdf:resource="&THIS;"/>
   </rdf:Property> 
 
   <!-- Constrain the country to be the USA -->

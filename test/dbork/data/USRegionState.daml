@@ -3,19 +3,16 @@
   <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns">
   <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
   <!ENTITY daml "http://www.daml.org/2001/03/daml+oil">
-  <!ENTITY log "http://www.w3.org/2000/10/swap/log">
-  <!ENTITY country "Country.daml">
-  <!ENTITY state "State.daml">
-  <!ENTITY uscity "USCity.daml">
-  <!ENTITY DEFAULT "USRegionState.daml">
-  <!ENTITY THIS "USRegionState.daml">
+  <!ENTITY country "http://www.daml.ri.cmu.edu/ont/Country.daml">
+  <!ENTITY state "http://www.daml.ri.cmu.edu/ont/State.daml">
+  <!ENTITY uscity "http://www.daml.ri.cmu.edu/ont/USCity.daml">
+  <!ENTITY DEFAULT "http://www.daml.ri.cmu.edu/ont/USRegionState.daml">
+  <!ENTITY THIS "http://www.daml.ri.cmu.edu/ont/USRegionState.daml">
 ]>
  
 <!--
 This document uses entity types as a shorthand for URIs.
 Download the source for a version with unexpanded entities.
-
-TBL: Added log lines - authoritativeDocument
   -->
  
 <rdf:RDF
@@ -23,7 +20,6 @@ TBL: Added log lines - authoritativeDocument
   xmlns:rdfs=   "&rdfs;#"
   xmlns:daml=   "&daml;#"
   xmlns:country="&country;#"
-  xmlns:log=    "&log;#"
   xmlns:state=  "&state;#"
   xmlns:uscity= "&uscity;#"
   xmlns:this=   "&THIS;#"
@@ -55,27 +51,6 @@ TBL: Added log lines - authoritativeDocument
   <rdf:Property rdf:ID="region">
     <rdfs:domain rdf:resource="&THIS;#USState" />
     <rdfs:range rdf:resource="&THIS;#USRegion" />
-    <log:authoritativeDocument rdf:resource="&THIS;"/>
-  </rdf:Property> 
-
-  <rdf:Property rdf:ID="borderstate">
-    <rdfs:domain rdf:resource="&THIS;#USState" />
-    <log:authoritativeDocument rdf:resource="&THIS;"/>
-  </rdf:Property> 
-
-  <rdf:Property rdf:ID="name">
-    <rdfs:domain rdf:resource="&THIS;#USState" />
-    <log:authoritativeDocument rdf:resource="&THIS;"/>
-  </rdf:Property> 
-
-  <rdf:Property rdf:ID="code">
-    <rdfs:domain rdf:resource="&THIS;#USState" />
-    <log:authoritativeDocument rdf:resource="&THIS;"/>
-  </rdf:Property> 
-
-  <rdf:Property rdf:ID="capital">
-    <rdfs:domain rdf:resource="&THIS;#USState" />
-    <log:authoritativeDocument rdf:resource="&THIS;"/>
   </rdf:Property> 
 
   <!-- Constrain the country to be the USA -->

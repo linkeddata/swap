@@ -22,7 +22,7 @@
 
 this log:forAll o:a, d:a, p:a, productName:a, c:a, first:a, last:a, billAddr:a, billStreet:a, billCity:a, billState:a .
 
-<sql://rdftest@swada.w3.org/OrderTracking/> is log:authoritativeService of
+<sql://rdftest@swada.w3.org/OrderTracking/> is log:definitiveService of
 	Orders:id, Orders:customer, Orders:product, Orders:orderDate, 
 	Products:id, Products:name, 
 	Customers:id, Customers:familyName, Customers:givenName, Customers:billingAddress, 

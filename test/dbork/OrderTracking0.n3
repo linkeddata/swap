@@ -9,7 +9,7 @@
 
 this log:forAll :customer, :family, :given .
 
-<sql://rdftest@swada.w3.org/OrderTracking/> is log:authoritativeService of
+<sql://rdftest@swada.w3.org/OrderTracking/> is log:definitiveService of
 	Customers:familyName, Customers:givenName, Products:name.
 {
  :customer Customers:familyName :family .
@@ -22,7 +22,7 @@ this log:forAll :customer, :family, :given .
 
 this log:forAll :products, :name .
 
-<sql://root@localhost/OrderTracking> is log:authoritativeService of
+<sql://root@localhost/OrderTracking> is log:definitiveService of
 	Products:name.
 {
  :products Products:name :name .

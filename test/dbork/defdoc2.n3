@@ -6,43 +6,15 @@
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix : <#>.
 
+# Data copied from CMU, with schema slightly modified:
 
-# DAML test data from CMU
-
-#@prefix country: <http://www.daml.ri.cmu.edu/ont/Country.daml#> .
-#@prefix state: <http://www.daml.ri.cmu.edu/ont/USRegionState.daml#> .
-#@prefix city: <http://www.daml.ri.cmu.edu/ont/USCity.daml#> .
-
-# local copy:
-
-@prefix country: <data/Country.daml#> .
-@prefix state: <data/USRegionState.daml#> .
-@prefix city: <data/USCity.daml#> .
-
-# Stuff it would be cool to mention in the schema:
-# 
-# NOTE in this case, the proerties are specifically limited
-# to US cities and status.  There is a separate namespaace
-# for generic city and state concepts.
-# This makes the data files definitive.
-#
-# (But in fact it is good to note we could have
-#  needed to follow subproperties here.
-#  Check whether any subproperties of the queried property have
-#      definitive sources.)
-
-<data/USRegionState.daml#>
-	is log:authoritativeDocument of state:capital,
-		state:name, state:code,
-		state:borderstate, state:region. 
-
-<data/USCity.daml> is
-	log:authoritativeDocument of city:name, city:state.
+@prefix country: <data/Country.n3#> .
+@prefix state: <data/USRegionState.n3#> .
+@prefix city: <data/USCity.n3#> .
 
 # And now the question: What cities are in states bordering Massachusetts?
-#
+
 {"MA"^state:code.state:borderstate^city:state city:name ?n}=>{
    ?n a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS }.
 
-# awsome, dude ... thanks for the data.
 #ends	

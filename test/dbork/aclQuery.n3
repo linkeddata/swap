@@ -12,7 +12,7 @@
 
 this log:forAll :urisRow, :aacl, :acl, :access, :u1, :g1, :accessor .
 
-<sql://root@localhost/w3c> is log:authoritativeService of
+<sql://root@localhost/w3c> is log:definitiveService of
 	acls:acl, acls:access, acls:id, ids:value, idInclusions:id, 
 	idInclusions:groupId, uris:acl, uris:uri.
 {

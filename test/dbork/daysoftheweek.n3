@@ -3,7 +3,7 @@
 @prefix day: <daysoftheweek.n3#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 
-day:label log:authoritativeDocument <daytable.n3>.
+day:label log:definitiveDocument <daytable.n3>.
 
 
 #ends	

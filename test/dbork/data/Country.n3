@@ -1,0 +1,1133 @@
+#Processed by Id: cwm.py,v 1.121 2003/02/02 16:09:06 timbl Exp 
+        #    using base http://www.daml.ri.cmu.edu/ont/Country.daml
+        
+#  Notation3 generation by
+#       notation3.py,v 1.133 2003/02/02 16:09:09 timbl Exp
+
+#   Base was: http://www.daml.ri.cmu.edu/ont/Country.daml
+     @prefix : <#> .
+     @prefix cia: <http://ontolingua.stanford.edu/doc/chimaera/ontologies/world-fact-book.daml#> .
+     @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    <>     a daml:Ontology;
+         daml:imports <http://www.daml.org/2001/03/daml+oil>,
+                <http://www.w3.org/1999/02/22-rdf-syntax-ns>,
+                <http://www.w3.org/2000/01/rdf-schema>;
+         daml:versionInfo """
+      $Id$
+    """;
+         rdfs:comment """
+      Country Ontology.  Use as a top level ontology for describing countries.
+      Some entries below include references to the CI world fact book.
+      Note that this is not necessarily a complete or accurate ontology; to
+      mke corrections, contact terryp@cs.cmu.edu
+
+    """ .
+    
+    :AFGHANISTAN     a :Country;
+         :cia cia:AFGHANISTAN;
+         :name "Afghanistan" .
+    
+    :ALBANIA     a :Country;
+         :cia cia:ALBANIA;
+         :name "Albania" .
+    
+    :ALGERIA     a :Country;
+         :cia cia:ALGERIA;
+         :name "Algeria" .
+    
+    :AMERICAN-SAMOA     a :Country;
+         :cia cia:AMERICAN-SAMOA;
+         :name "American Samoa" .
+    
+    :ANDORRA     a :Country;
+         :cia cia:ANDORRA;
+         :name "Andorra" .
+    
+    :ANGOLA     a :Country;
+         :cia cia:ANGOLA;
+         :name "Angola" .
+    
+    :ANGUILLA     a :Country;
+         :cia cia:ANGUILLA;
+         :name "Anguilla" .
+    
+    :ANTARCTICA     a :Country;
+         :cia cia:ANTARCTICA;
+         :name "Antarctica" .
+    
+    :ANTIGUA-AND-BARBUDA     a :Country;
+         :cia cia:ANTIGUA-AND-BARBUDA;
+         :name "Antigua and Barbuda" .
+    
+    :ARCTIC-OCEAN     a :Country;
+         :cia cia:ARCTIC-OCEAN;
+         :name "Arctic Ocean" .
+    
+    :ARGENTINA     a :Country;
+         :cia cia:ARGENTINA;
+         :name "Argentina" .
+    
+    :ARMENIA     a :Country;
+         :cia cia:ARMENIA;
+         :name "Armenia" .
+    
+    :ARUBA     a :Country;
+         :cia cia:ARUBA;
+         :name "Aruba" .
+    
+    :ASHMORE-AND-CARTIER-ISLANDS     a :Country;
+         :cia cia:ASHMORE-AND-CARTIER-ISLANDS;
+         :name "Ashmore and Cartier Islands" .
+    
+    :ATLANTIC-OCEAN     a :Country;
+         :cia cia:ATLANTIC-OCEAN;
+         :name "Atlantic Ocean" .
+    
+    :AUSTRALIA     a :Country;
+         :cia cia:AUSTRALIA;
+         :name "Australia" .
+    
+    :AUSTRIA     a :Country;
+         :cia cia:AUSTRIA;
+         :name "Austria" .
+    
+    :AZERBAIJAN     a :Country;
+         :cia cia:AZERBAIJAN;
+         :name "Azerbaijan" .
+    
+    :BAHRAIN     a :Country;
+         :cia cia:BAHRAIN;
+         :name "Bahrain" .
+    
+    :BAKER-ISLAND     a :Country;
+         :cia cia:BAKER-ISLAND;
+         :name "Baker Island" .
+    
+    :BANGLADESH     a :Country;
+         :cia cia:BANGLADESH;
+         :name "Bangladesh" .
+    
+    :BARBADOS     a :Country;
+         :cia cia:BARBADOS;
+         :name "Barbados" .
+    
+    :BASSAS-DA-INDIA     a :Country;
+         :cia cia:BASSAS-DA-INDIA;
+         :name "Bassas da India" .
+    
+    :BELARUS     a :Country;
+         :cia cia:BELARUS;
+         :name "Belarus" .
+    
+    :BELGIUM     a :Country;
+         :cia cia:BELGIUM;
+         :name "Belgium" .
+    
+    :BELIZE     a :Country;
+         :cia cia:BELIZE;
+         :name "Belize" .
+    
+    :BENIN     a :Country;
+         :cia cia:BENIN;
+         :name "Benin" .
+    
+    :BERMUDA     a :Country;
+         :cia cia:BERMUDA;
+         :name "Bermuda" .
+    
+    :BHUTAN     a :Country;
+         :cia cia:BHUTAN;
+         :name "Bhutan" .
+    
+    :BOLIVIA     a :Country;
+         :cia cia:BOLIVIA;
+         :name "Bolivia" .
+    
+    :BOSNIA-AND-HERZEGOVINA     a :Country;
+         :cia cia:BOSNIA-AND-HERZEGOVINA;
+         :name "Bosnia and Herzegovina" .
+    
+    :BOTSWANA     a :Country;
+         :cia cia:BOTSWANA;
+         :name "Botswana" .
+    
+    :BOUVET-ISLAND     a :Country;
+         :cia cia:BOUVET-ISLAND;
+         :name "Bouvet Island" .
+    
+    :BRAZIL     a :Country;
+         :cia cia:BRAZIL;
+         :name "Brazil" .
+    
+    :BRITISH-INDIAN-OCEAN-TERRITORY     a :Country;
+         :cia cia:BRITISH-INDIAN-OCEAN-TERRITORY;
+         :name "British Indian Ocean Territory" .
+    
+    :BRITISH-VIRGIN-ISLANDS     a :Country;
+         :cia cia:BRITISH-VIRGIN-ISLANDS;
+         :name "British Virgin Islands" .
+    
+    :BRUNEI     a :Country;
+         :cia cia:BRUNEI;
+         :name "Brunei" .
+    
+    :BULGARIA     a :Country;
+         :cia cia:BULGARIA;
+         :name "Bulgaria" .
+    
+    :BURKINA-FASO     a :Country;
+         :cia cia:BURKINA-FASO;
+         :name "Burkina Faso" .
+    
+    :BURMA     a :Country;
+         :cia cia:BURMA;
+         :name "Burma" .
+    
+    :BURUNDI     a :Country;
+         :cia cia:BURUNDI;
+         :name "Burundi" .
+    
+    :CAMBODIA     a :Country;
+         :cia cia:CAMBODIA;
+         :name "Cambodia" .
+    
+    :CAMEROON     a :Country;
+         :cia cia:CAMEROON;
+         :name "Cameroon" .
+    
+    :CANADA     a :Country;
+         :cia cia:CANADA;
+         :name "Canada" .
+    
+    :CAPE-VERDE     a :Country;
+         :cia cia:CAPE-VERDE;
+         :name "Cape Verde" .
+    
+    :CAYMAN-ISLANDS     a :Country;
+         :cia cia:CAYMAN-ISLANDS;
+         :name "Cayman Islands" .
+    
+    :CENTRAL-AFRICAN-REPUBLIC     a :Country;
+         :cia cia:CENTRAL-AFRICAN-REPUBLIC;
+         :name "Central African Republic" .
+    
+    :CHAD     a :Country;
+         :cia cia:CHAD;
+         :name "Chad" .
+    
+    :CHILE     a :Country;
+         :cia cia:CHILE;
+         :name "Chile" .
+    
+    :CHINA     a :Country;
+         :cia cia:CHINA;
+         :name "China" .
+    
+    :CHRISTMAS-ISLAND     a :Country;
+         :cia cia:CHRISTMAS-ISLAND;
+         :name "Christmas Island" .
+    
+    :CLIPPERTON-ISLAND     a :Country;
+         :cia cia:CLIPPERTON-ISLAND;
+         :name "Clipperton Island" .
+    
+    :COCOS-ISLANDS     a :Country;
+         :cia cia:COCOS-KEELING-ISLANDS;
+         :name "Cocos (Keeling) Islands" .
+    
+    :COLOMBIA     a :Country;
+         :cia cia:COLOMBIA;
+         :name "Colombia" .
+    
+    :COMOROS     a :Country;
+         :cia cia:COMOROS;
+         :name "Comoros" .
+    
+    :COOK-ISLANDS     a :Country;
+         :cia cia:COOK-ISLANDS;
+         :name "Cook Islands" .
+    
+    :CORAL-SEA-ISLANDS     a :Country;
+         :cia cia:CORAL-SEA-ISLANDS;
+         :name "Coral Sea Islands" .
+    
+    :COSTA-RICA     a :Country;
+         :cia cia:COSTA-RICA;
+         :name "Costa Rica" .
+    
+    :COTE-D-IVOIRE     a :Country;
+         :cia cia:COTE-D'IVOIRE;
+         :name "Cote d'Ivoire" .
+    
+    :CROATIA     a :Country;
+         :cia cia:CROATIA;
+         :name "Croatia" .
+    
+    :CUBA     a :Country;
+         :cia cia:CUBA;
+         :name "Cuba" .
+    
+    :CYPRUS     a :Country;
+         :cia cia:CYPRUS;
+         :name "Cyprus" .
+    
+    :CZECH-REPUBLIC     a :Country;
+         :cia cia:CZECH-REPUBLIC;
+         :name "Czech Republic" .
+    
+    :Country     a rdfs:Class;
+         daml:sameClassAs cia:GEOREFF;
+         rdfs:comment """ 
+      High level country concept.
+    """;
+         rdfs:label "Country";
+         rdfs:subClassOf <http://www.daml.org/services/daml-s/2001/10/Profile.daml#Location> .
+    
+    :DEMOCRATIC-REPUBLIC-OF-THE-CONGO     a :Country;
+         :cia cia:DEMOCRATIC-REPUBLIC-OF-THE-CONGO;
+         :name "Congo, Democratic Republic of the" .
+    
+    :DENMARK     a :Country;
+         :cia cia:DENMARK;
+         :name "Denmark" .
+    
+    :DJIBOUTI     a :Country;
+         :cia cia:DJIBOUTI;
+         :name "Djibouti" .
+    
+    :DOMINICA     a :Country;
+         :cia cia:DOMINICA;
+         :name "Dominica" .
+    
+    :DOMINICAN-REPUBLIC     a :Country;
+         :cia cia:DOMINICAN-REPUBLIC;
+         :name "Dominican Republic" .
+    
+    :EAST-TIMOR     a :Country;
+         :name "East-Timor" .
+    
+    :ECUADOR     a :Country;
+         :cia cia:ECUADOR;
+         :name "Ecuador" .
+    
+    :EGYPT     a :Country;
+         :cia cia:EGYPT;
+         :name "Egypt" .
+    
+    :EL-SALVADOR     a :Country;
+         :cia cia:EL-SALVADOR;
+         :name "El Salvador" .
+    
+    :EQUATORIAL-GUINEA     a :Country;
+         :cia cia:EQUATORIAL-GUINEA;
+         :name "Equatorial Guinea" .
+    
+    :ERITREA     a :Country;
+         :cia cia:ERITREA;
+         :name "Eritrea" .
+    
+    :ESTONIA     a :Country;
+         :cia cia:ESTONIA;
+         :name "Estonia" .
+    
+    :ETHIOPIA     a :Country;
+         :cia cia:ETHIOPIA;
+         :name "Ethiopia" .
+    
+    :EUROPA-ISLAND     a :Country;
+         :cia cia:EUROPA-ISLAND;
+         :name "Europa Island" .
+    
+    :FALKLAND-ISLANDS     a :Country;
+         :cia cia:FALKLAND-ISLANDS-(ISLAS-MALVINAS);
+         :name "Falkland Islands (Islas Malvinas)" .
+    
+    :FAROE-ISLANDS     a :Country;
+         :cia cia:FAROE-ISLANDS;
+         :name "Faroe Islands" .
+    
+    :FEDERATED-STATES-OF-MICRONESIA     a :Country;
+         :cia cia:FEDERATED-STATES-OF-MICRONESIA;
+         :name "Micronesia, Federated States of" .
+    
+    :FIJI     a :Country;
+         :cia cia:FIJI;
+         :name "Fiji" .
+    
+    :FINLAND     a :Country;
+         :cia cia:FINLAND;
+         :name "Finland" .
+    
+    :FRANCE     a :Country;
+         :cia cia:FRANCE;
+         :name "France" .
+    
+    :FRENCH-GUIANA     a :Country;
+         :cia cia:FRENCH-GUIANA;
+         :name "French Guiana" .
+    
+    :FRENCH-POLYNESIA     a :Country;
+         :cia cia:FRENCH-POLYNESIA;
+         :name "French Polynesia" .
+    
+    :FRENCH-SOUTHERN-AND-ANTARCTIC-LANDS     a :Country;
+         :cia cia:FRENCH-SOUTHERN-AND-ANTARCTIC-LANDS;
+         :name "French Southern and Antarctic Lands" .
+    
+    :GABON     a :Country;
+         :cia cia:GABON;
+         :name "Gabon" .
+    
+    :GAZA-STRIP     a :Country;
+         :cia cia:GAZA-STRIP;
+         :name "Gaza Strip" .
+    
+    :GEORGIA     a :Country;
+         :cia cia:GEORGIA;
+         :name "Georgia" .
+    
+    :GERMANY     a :Country;
+         :cia cia:GERMANY;
+         :name "Germany" .
+    
+    :GHANA     a :Country;
+         :cia cia:GHANA;
+         :name "Ghana" .
+    
+    :GIBRALTAR     a :Country;
+         :cia cia:GIBRALTAR;
+         :name "Gibraltar" .
+    
+    :GLORIOSO-ISLANDS     a :Country;
+         :cia cia:GLORIOSO-ISLANDS;
+         :name "Glorioso Islands" .
+    
+    :GREECE     a :Country;
+         :cia cia:GREECE;
+         :name "Greece" .
+    
+    :GREENLAND     a :Country;
+         :cia cia:GREENLAND;
+         :name "Greenland" .
+    
+    :GRENADA     a :Country;
+         :cia cia:GRENADA;
+         :name "Grenada" .
+    
+    :GUADELOUPE     a :Country;
+         :cia cia:GUADELOUPE;
+         :name "Guadeloupe" .
+    
+    :GUAM     a :Country;
+         :cia cia:GUAM;
+         :name "Guam" .
+    
+    :GUATEMALA     a :Country;
+         :cia cia:GUATEMALA;
+         :name "Guatemala" .
+    
+    :GUERNSEY     a :Country;
+         :cia cia:GUERNSEY;
+         :name "Guernsey" .
+    
+    :GUINEA     a :Country;
+         :cia cia:GUINEA;
+         :name "Guinea" .
+    
+    :GUINEA-BISSAU     a :Country;
+         :cia cia:GUINEA-BISSAU;
+         :name "Guinea-Bissau" .
+    
+    :GUYANA     a :Country;
+         :cia cia:GUYANA;
+         :name "Guyana" .
+    
+    :HAITI     a :Country;
+         :cia cia:HAITI;
+         :name "Haiti" .
+    
+    :HEARD-ISLAND-AND-MCDONALD-ISLANDS     a :Country;
+         :cia cia:HEARD-ISLAND-AND-MCDONALD-ISLANDS;
+         :name "Heard Island and McDonald Islands" .
+    
+    :HOLY-SEE     a :Country;
+         daml:sameClassAs :VATICAN-CITY;
+         :name "Holy See (Vatican City)" .
+    
+    :HONDURAS     a :Country;
+         :cia cia:HONDURAS;
+         :name "Honduras" .
+    
+    :HONG-KONG     a :Country;
+         :cia cia:HONG-KONG;
+         :name "Hong Kong" .
+    
+    :HOWLAND-ISLAND     a :Country;
+         :cia cia:HOWLAND-ISLAND;
+         :name "Howland Island" .
+    
+    :HUNGARY     a :Country;
+         :cia cia:HUNGARY;
+         :name "Hungary" .
+    
+    :ICELAND     a :Country;
+         :cia cia:ICELAND;
+         :name "Iceland" .
+    
+    :INDIA     a :Country;
+         :cia cia:INDIA;
+         :name "India" .
+    
+    :INDIAN-OCEAN     a :Country;
+         :cia cia:INDIAN-OCEAN;
+         :name "Indian Ocean" .
+    
+    :INDONESIA     a :Country;
+         :cia cia:INDONESIA;
+         :name "Indonesia" .
+    
+    :IRAN     a :Country;
+         :cia cia:IRAN;
+         :name "Iran" .
+    
+    :IRAQ     a :Country;
+         :cia cia:IRAQ;
+         :name "Iraq" .
+    
+    :IRELAND     a :Country;
+         :cia cia:IRELAND;
+         :name "Ireland" .
+    
+    :ISLAS-MALVINAS     a :Country;
+         daml:sameClassAs :FALKLAND-ISLANDS;
+         :name "Islas Malvinas" .
+    
+    :ISLE-OF-MAN     a :Country;
+         :cia cia:ISLE-OF-MAN;
+         :name "Man, Isle of" .
+    
+    :ISRAEL     a :Country;
+         :cia cia:ISRAEL;
+         :name "Israel" .
+    
+    :ITALY     a :Country;
+         :cia cia:ITALY;
+         :name "Italy" .
+    
+    :JAMAICA     a :Country;
+         :cia cia:JAMAICA;
+         :name "Jamaica" .
+    
+    :JAN-MAYEN     a :Country;
+         :cia cia:JAN-MAYEN;
+         :name "Jan Mayen" .
+    
+    :JAPAN     a :Country;
+         :cia cia:JAPAN;
+         :name "Japan" .
+    
+    :JARVIS-ISLAND     a :Country;
+         :cia cia:JARVIS-ISLAND;
+         :name "Jarvis Island" .
+    
+    :JERSEY     a :Country;
+         :cia cia:JERSEY;
+         :name "Jersey" .
+    
+    :JOHNSTON-ATOLL     a :Country;
+         :cia cia:JOHNSTON-ATOLL;
+         :name "Johnston Atoll" .
+    
+    :JORDAN     a :Country;
+         :cia cia:JORDAN;
+         :name "Jordan" .
+    
+    :JUAN-DE-NOVA-ISLAND     a :Country;
+         :cia cia:JUAN-DE-NOVA-ISLAND;
+         :name "Juan de Nova Island" .
+    
+    :KAZAKHSTAN     a :Country;
+         :cia cia:KAZAKHSTAN;
+         :name "Kazakhstan" .
+    
+    :KEELING-ISLANDS     a :Country;
+         daml:sameClassAs :COCOS-ISLANDS;
+         :name "Cocos (Keeling) Islands" .
+    
+    :KENYA     a :Country;
+         :cia cia:KENYA;
+         :name "Kenya" .
+    
+    :KINGMAN-REEF     a :Country;
+         :cia cia:KINGMAN-REEF;
+         :name "Kingman Reef" .
+    
+    :KIRIBATI     a :Country;
+         :cia cia:KIRIBATI;
+         :name "Kiribati" .
+    
+    :KUWAIT     a :Country;
+         :cia cia:KUWAIT;
+         :name "Kuwait" .
+    
+    :KYRGYZSTAN     a :Country;
+         :cia cia:KYRGYZSTAN;
+         :name "Kyrgyzstan" .
+    
+    :LAOS     a :Country;
+         :cia cia:LAOS;
+         :name "Laos" .
+    
+    :LATVIA     a :Country;
+         :cia cia:LATVIA;
+         :name "Latvia" .
+    
+    :LEBANON     a :Country;
+         :cia cia:LEBANON;
+         :name "Lebanon" .
+    
+    :LESOTHO     a :Country;
+         :cia cia:LESOTHO;
+         :name "Lesotho" .
+    
+    :LIBERIA     a :Country;
+         :cia cia:LIBERIA;
+         :name "Liberia" .
+    
+    :LIBYA     a :Country;
+         :cia cia:LIBYA;
+         :name "Libya" .
+    
+    :LIECHTENSTEIN     a :Country;
+         :cia cia:LIECHTENSTEIN;
+         :name "Liechtenstein" .
+    
+    :LITHUANIA     a :Country;
+         :cia cia:LITHUANIA;
+         :name "Lithuania" .
+    
+    :LUXEMBOURG     a :Country;
+         :cia cia:LUXEMBOURG;
+         :name "Luxembourg" .
+    
+    :MACAU     a :Country;
+         :cia cia:MACAU;
+         :name "Macau" .
+    
+    :MADAGASCAR     a :Country;
+         :cia cia:MADAGASCAR;
+         :name "Madagascar" .
+    
+    :MALAWI     a :Country;
+         :cia cia:MALAWI;
+         :name "Malawi" .
+    
+    :MALAYSIA     a :Country;
+         :cia cia:MALAYSIA;
+         :name "Malaysia" .
+    
+    :MALDIVES     a :Country;
+         :cia cia:MALDIVES;
+         :name "Maldives" .
+    
+    :MALI     a :Country;
+         :cia cia:MALI;
+         :name "Mali" .
+    
+    :MALTA     a :Country;
+         :cia cia:MALTA;
+         :name "Malta" .
+    
+    :MARSHALL-ISLANDS     a :Country;
+         :cia cia:MARSHALL-ISLANDS;
+         :name "Marshall Islands" .
+    
+    :MARTINIQUE     a :Country;
+         :cia cia:MARTINIQUE;
+         :name "Martinique" .
+    
+    :MAURITANIA     a :Country;
+         :cia cia:MAURITANIA;
+         :name "Mauritania" .
+    
+    :MAURITIUS     a :Country;
+         :cia cia:MAURITIUS;
+         :name "Mauritius" .
+    
+    :MAYOTTE     a :Country;
+         :cia cia:MAYOTTE;
+         :name "Mayotte" .
+    
+    :MEXICO     a :Country;
+         :cia cia:MEXICO;
+         :name "Mexico" .
+    
+    :MIDWAY-ISLANDS     a :Country;
+         :cia cia:MIDWAY-ISLANDS;
+         :name "Midway Islands" .
+    
+    :MOLDOVA     a :Country;
+         :cia cia:MOLDOVA;
+         :name "Moldova" .
+    
+    :MONACO     a :Country;
+         :cia cia:MONACO;
+         :name "Monaco" .
+    
+    :MONGOLIA     a :Country;
+         :cia cia:MONGOLIA;
+         :name "Mongolia" .
+    
+    :MONTSERRAT     a :Country;
+         :cia cia:MONTSERRAT;
+         :name "Montserrat" .
+    
+    :MOROCCO     a :Country;
+         :cia cia:MOROCCO;
+         :name "Morocco" .
+    
+    :MOZAMBIQUE     a :Country;
+         :cia cia:MOZAMBIQUE;
+         :name "Mozambique" .
+    
+    :NAMIBIA     a :Country;
+         :cia cia:NAMIBIA;
+         :name "Namibia" .
+    
+    :NAURU     a :Country;
+         :cia cia:NAURU;
+         :name "Nauru" .
+    
+    :NAVASSA-ISLAND     a :Country;
+         :cia cia:NAVASSA-ISLAND;
+         :name "Navassa Island" .
+    
+    :NEPAL     a :Country;
+         :cia cia:NEPAL;
+         :name "Nepal" .
+    
+    :NETHERLANDS     a :Country;
+         :cia cia:NETHERLANDS;
+         :name "Netherlands" .
+    
+    :NETHERLANDS-ANTILLES     a :Country;
+         :cia cia:NETHERLANDS-ANTILLES;
+         :name "Netherlands Antilles" .
+    
+    :NEW-CALEDONIA     a :Country;
+         :cia cia:NEW-CALEDONIA;
+         :name "New Caledonia" .
+    
+    :NEW-ZEALAND     a :Country;
+         :cia cia:NEW-ZEALAND;
+         :name "New Zealand" .
+    
+    :NICARAGUA     a :Country;
+         :cia cia:NICARAGUA;
+         :name "Nicaragua" .
+    
+    :NIGER     a :Country;
+         :cia cia:NIGER;
+         :name "Niger" .
+    
+    :NIGERIA     a :Country;
+         :cia cia:NIGERIA;
+         :name "Nigeria" .
+    
+    :NIUE     a :Country;
+         :cia cia:NIUE;
+         :name "Niue" .
+    
+    :NORFOLK-ISLAND     a :Country;
+         :cia cia:NORFOLK-ISLAND;
+         :name "Norfolk Island" .
+    
+    :NORTH-KOREA     a :Country;
+         :cia cia:NORTH-KOREA;
+         :name "Korea, North" .
+    
+    :NORTHERN-MARIANA-ISLANDS     a :Country;
+         :cia cia:NORTHERN-MARIANA-ISLANDS;
+         :name "Northern Mariana Islands" .
+    
+    :NORWAY     a :Country;
+         :cia cia:NORWAY;
+         :name "Norway" .
+    
+    :OMAN     a :Country;
+         :cia cia:OMAN;
+         :name "Oman" .
+    
+    :PACIFIC-OCEAN     a :Country;
+         :cia cia:PACIFIC-OCEAN;
+         :name "Pacific Ocean" .
+    
+    :PAKISTAN     a :Country;
+         :cia cia:PAKISTAN;
+         :name "Pakistan" .
+    
+    :PALAU     a :Country;
+         :cia cia:PALAU;
+         :name "Palau" .
+    
+    :PALESTINE     a :Country;
+         :cia cia:GAZA-STRIP,
+                cia:WEST-BANK;
+         :name "Palestine" .
+    
+    :PALMYRA-ATOLL     a :Country;
+         :cia cia:PALMYRA-ATOLL;
+         :name "Palmyra Atoll" .
+    
+    :PANAMA     a :Country;
+         :cia cia:PANAMA;
+         :name "Panama" .
+    
+    :PAPUA-NEW-GUINEA     a :Country;
+         :cia cia:PAPUA-NEW-GUINEA;
+         :name "Papua New Guinea" .
+    
+    :PARACEL-ISLANDS     a :Country;
+         :cia cia:PARACEL-ISLANDS;
+         :name "Paracel Islands" .
+    
+    :PARAGUAY     a :Country;
+         :cia cia:PARAGUAY;
+         :name "Paraguay" .
+    
+    :PERU     a :Country;
+         :cia cia:PERU;
+         :name "Peru" .
+    
+    :PHILIPPINES     a :Country;
+         :cia cia:PHILIPPINES;
+         :name "Philippines" .
+    
+    :PITCAIRN-ISLANDS     a :Country;
+         :cia cia:PITCAIRN-ISLANDS;
+         :name "Pitcairn Islands" .
+    
+    :POLAND     a :Country;
+         :cia cia:POLAND;
+         :name "Poland" .
+    
+    :PORTUGAL     a :Country;
+         :cia cia:PORTUGAL;
+         :name "Portugal" .
+    
+    :PUERTO-RICO     a :Country;
+         :cia cia:PUERTO-RICO;
+         :name "Puerto Rico" .
+    
+    :QATAR     a :Country;
+         :cia cia:QATAR;
+         :name "Qatar" .
+    
+    :REPUBLIC-OF-THE-CONGO     a :Country;
+         :cia cia:REPUBLIC-OF-THE-CONGO;
+         :name "Congo, Republic of the" .
+    
+    :REUNION     a :Country;
+         :cia cia:REUNION;
+         :name "Reunion" .
+    
+    :ROMANIA     a :Country;
+         :cia cia:ROMANIA;
+         :name "Romania" .
+    
+    :RUSSIA     a :Country;
+         :cia cia:RUSSIA;
+         :name "Russia" .
+    
+    :RWANDA     a :Country;
+         :cia cia:RWANDA;
+         :name "Rwanda" .
+    
+    :SAINT-HELENA     a :Country;
+         :cia cia:SAINT-HELENA;
+         :name "Saint Helena" .
+    
+    :SAINT-KITTS-AND-NEVIS     a :Country;
+         :cia cia:SAINT-KITTS-AND-NEVIS;
+         :name "Saint Kitts and Nevis" .
+    
+    :SAINT-LUCIA     a :Country;
+         :cia cia:SAINT-LUCIA;
+         :name "Saint Lucia" .
+    
+    :SAINT-PIERRE-AND-MIQUELON     a :Country;
+         :cia cia:SAINT-PIERRE-AND-MIQUELON;
+         :name "Saint Pierre and Miquelon" .
+    
+    :SAINT-VINCENT-AND-THE-GRENADINES     a :Country;
+         :cia cia:SAINT-VINCENT-AND-THE-GRENADINES;
+         :name "Saint Vincent and the Grenadines" .
+    
+    :SAMOA     a :Country;
+         :cia cia:SAMOA;
+         :name "Samoa" .
+    
+    :SAN-MARINO     a :Country;
+         :cia cia:SAN-MARINO;
+         :name "San Marino" .
+    
+    :SAO-TOME-AND-PRINCIPE     a :Country;
+         :cia cia:SAO-TOME-AND-PRINCIPE;
+         :name "Sao Tome and Principe" .
+    
+    :SAUDI-ARABIA     a :Country;
+         :cia cia:SAUDI-ARABIA;
+         :name "Saudi Arabia" .
+    
+    :SENEGAL     a :Country;
+         :cia cia:SENEGAL;
+         :name "Senegal" .
+    
+    :SERBIA-AND-MONTENEGRO     a :Country;
+         :cia cia:SERBIA-AND-MONTENEGRO;
+         :name "Serbia and Montenegro" .
+    
+    :SEYCHELLES     a :Country;
+         :cia cia:SEYCHELLES;
+         :name "Seychelles" .
+    
+    :SIERRA-LEONE     a :Country;
+         :cia cia:SIERRA-LEONE;
+         :name "Sierra Leone" .
+    
+    :SINGAPORE     a :Country;
+         :cia cia:SINGAPORE;
+         :name "Singapore" .
+    
+    :SLOVAKIA     a :Country;
+         :cia cia:SLOVAKIA;
+         :name "Slovakia" .
+    
+    :SLOVENIA     a :Country;
+         :cia cia:SLOVENIA;
+         :name "Slovenia" .
+    
+    :SOLOMON-ISLANDS     a :Country;
+         :cia cia:SOLOMON-ISLANDS;
+         :name "Solomon Islands" .
+    
+    :SOMALIA     a :Country;
+         :cia cia:SOMALIA;
+         :name "Somalia" .
+    
+    :SOUTH-AFRICA     a :Country;
+         :cia cia:SOUTH-AFRICA;
+         :name "South Africa" .
+    
+    :SOUTH-GEORGIA-AND-THE-SOUTH-SANDWICH-ISLANDS     a :Country;
+         :cia cia:SOUTH-GEORGIA-AND-THE-SOUTH-SANDWICH-ISLANDS;
+         :name "South Georgia and the South Sandwich Islands" .
+    
+    :SOUTH-KOREA     a :Country;
+         :cia cia:SOUTH-KOREA;
+         :name "Korea, South" .
+    
+    :SOUTHERN-OCEAN     a :Country;
+         :cia cia:SOUTHERN-OCEAN;
+         :name "Southern Ocean" .
+    
+    :SPAIN     a :Country;
+         :cia cia:SPAIN;
+         :name "Spain" .
+    
+    :SPRATLY-ISLANDS     a :Country;
+         :cia cia:SPRATLY-ISLANDS;
+         :name "Spratly Islands" .
+    
+    :SRI-LANKA     a :Country;
+         :cia cia:SRI-LANKA;
+         :name "Sri Lanka" .
+    
+    :SUDAN     a :Country;
+         :cia cia:SUDAN;
+         :name "Sudan" .
+    
+    :SURINAME     a :Country;
+         :cia cia:SURINAME;
+         :name "Suriname" .
+    
+    :SVALBARD     a :Country;
+         :cia cia:SVALBARD;
+         :name "Svalbard" .
+    
+    :SWAZILAND     a :Country;
+         :cia cia:SWAZILAND;
+         :name "Swaziland" .
+    
+    :SWEDEN     a :Country;
+         :cia cia:SWEDEN;
+         :name "Sweden" .
+    
+    :SWITZERLAND     a :Country;
+         :cia cia:SWITZERLAND;
+         :name "Switzerland" .
+    
+    :SYRIA     a :Country;
+         :cia cia:SYRIA;
+         :name "Syria" .
+    
+    :TAIWAN     a :Country;
+         :cia cia:TAIWAN;
+         :name "Taiwan" .
+    
+    :TAJIKISTAN-     a :Country;
+         :cia cia:TAJIKISTAN-;
+         :name "Tajikistan " .
+    
+    :TANZANIA-     a :Country;
+         :cia cia:TANZANIA-;
+         :name "Tanzania " .
+    
+    :THAILAND-     a :Country;
+         :cia cia:THAILAND-;
+         :name "Thailand " .
+    
+    :THE-BAHAMAS     a :Country;
+         :cia cia:THE-BAHAMAS;
+         :name "Bahamas, The" .
+    
+    :THE-FORMER-YUGOSLAV-REPUBLIC-OF-MACEDONIA     a :Country;
+         :cia cia:THE-FORMER-YUGOSLAV-REPUBLIC-OF-MACEDONIA;
+         :name "Macedonia, The Former Yugoslav Republic of" .
+    
+    :THE-GAMBIA     a :Country;
+         :cia cia:THE-GAMBIA;
+         :name "Gambia, The" .
+    
+    :TOGO-     a :Country;
+         :cia cia:TOGO-;
+         :name "Togo " .
+    
+    :TOKELAU-     a :Country;
+         :cia cia:TOKELAU-;
+         :name "Tokelau " .
+    
+    :TONGA-     a :Country;
+         :cia cia:TONGA-;
+         :name "Tonga " .
+    
+    :TRINIDAD-AND-TOBAGO-     a :Country;
+         :cia cia:TRINIDAD-AND-TOBAGO-;
+         :name "Trinidad and Tobago " .
+    
+    :TROMELIN-ISLAND-     a :Country;
+         :cia cia:TROMELIN-ISLAND-;
+         :name "Tromelin Island " .
+    
+    :TUNISIA-     a :Country;
+         :cia cia:TUNISIA-;
+         :name "Tunisia " .
+    
+    :TURKEY-     a :Country;
+         :cia cia:TURKEY-;
+         :name "Turkey " .
+    
+    :TURKMENISTAN-     a :Country;
+         :cia cia:TURKMENISTAN-;
+         :name "Turkmenistan " .
+    
+    :TURKS-AND-CAICOS-ISLANDS-     a :Country;
+         :cia cia:TURKS-AND-CAICOS-ISLANDS-;
+         :name "Turks and Caicos Islands " .
+    
+    :TUVALU-     a :Country;
+         :cia cia:TUVALU-;
+         :name "Tuvalu " .
+    
+    :UGANDA     a :Country;
+         :cia cia:UGANDA;
+         :name "Uganda" .
+    
+    :UKRAINE     a :Country;
+         :cia cia:UKRAINE;
+         :name "Ukraine" .
+    
+    :UNITED-ARAB-EMIRATES     a :Country;
+         :cia cia:UNITED-ARAB-EMIRATES;
+         :name "United Arab Emirates" .
+    
+    :UNITED-KINGDOM     a :Country;
+         :cia cia:UNITED-KINGDOM;
+         :name "United Kingdom" .
+    
+    :UNITED-STATES     a :Country;
+         :cia cia:UNITED-STATES;
+         :name "United States" .
+    
+    :URUGUAY     a :Country;
+         :cia cia:URUGUAY;
+         :name "Uruguay" .
+    
+    :UZBEKISTAN     a :Country;
+         :cia cia:UZBEKISTAN;
+         :name "Uzbekistan" .
+    
+    :VANUATU     a :Country;
+         :cia cia:VANUATU;
+         :name "Vanuatu" .
+    
+    :VATICAN-CITY     a :Country;
+         :cia cia:HOLY-SEE-(VATICAN-CITY);
+         :name "Holy See (Vatican City)" .
+    
+    :VENEZUELA     a :Country;
+         :cia cia:VENEZUELA;
+         :name "Venezuela" .
+    
+    :VIETNAM     a :Country;
+         :cia cia:VIETNAM;
+         :name "Vietnam" .
+    
+    :VIRGIN-ISLANDS     a :Country;
+         :cia cia:VIRGIN-ISLANDS;
+         :name "Virgin Islands" .
+    
+    :WAKE-ISLAND     a :Country;
+         :cia cia:WAKE-ISLAND;
+         :name "Wake Island" .
+    
+    :WALLIS-AND-FUTUNA     a :Country;
+         :cia cia:WALLIS-AND-FUTUNA;
+         :name "Wallis and Futuna" .
+    
+    :WEST-BANK     a :Country;
+         :cia cia:WEST-BANK;
+         :name "West Bank" .
+    
+    :WESTERN-SAHARA     a :Country;
+         :cia cia:WESTERN-SAHARA;
+         :name "Western Sahara" .
+    
+    :WORLD     a :Country;
+         :cia cia:WORLD;
+         :name "World" .
+    
+    :YEMEN     a :Country;
+         :cia cia:YEMEN;
+         :name "Yemen" .
+    
+    :ZAMBIA     a :Country;
+         :cia cia:ZAMBIA;
+         :name "Zambia" .
+    
+    :ZIMBABWE     a :Country;
+         :cia cia:ZIMBABWE;
+         :name "Zimbabwe" .
+    
+    :cia     a rdf:Property;
+         rdfs:domain :Country;
+         rdfs:range cia:GEOREF .
+    
+    :name     a rdf:Property;
+         rdfs:domain :Country;
+         rdfs:range rdfs:Literal .
+    
+#ENDS

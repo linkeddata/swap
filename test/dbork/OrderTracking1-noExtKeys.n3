@@ -11,7 +11,7 @@
 
 this log:forAll :o, :cEK, :pEK, :d, :p, :productName, :c, :first, :last, :billAddrEK, :billAddr, :billStreet, :billCity, :billState .
 
-<sql://rdftest@swada.w3.org/OrderTracking/> is log:authoritativeService of
+<sql://rdftest@swada.w3.org/OrderTracking/> is log:definitiveService of
 	Orders:id, Orders:customer, Orders:product, Orders:orderDate, 
 	Products:id, Products:name, 
 	Customers:id, Customers:familyName, Customers:givenName, Customers:billingAddress, 
