@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.0//EN" "http://www.w3.org/TR/2001/PR-SVG-20010719/DTD/svg10.dtd">
+<svg width="37cm" height="25cm" viewBox="2 0 37 25">
+  <rect style="fill: #ffffff" x="7" y="11.55" width="3.471" height="1.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="7" y="11.55" width="3.471" height="1.4"/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 1" x="8.7355" y="12.55">Flight</text>
+  <rect style="fill: #ffffff" x="7" y="12.95" width="3.471" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="7" y="12.95" width="3.471" height="0.4"/>
+  <rect style="fill: #ffffff" x="7" y="13.35" width="3.471" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="7" y="13.35" width="3.471" height="0.4"/>
+  <rect style="fill: #ffffff" x="2.9" y="17.9" width="5.451" height="1.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="2.9" y="17.9" width="5.451" height="1.4"/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 1" x="5.6255" y="18.9">Economy</text>
+  <rect style="fill: #ffffff" x="2.9" y="19.3" width="5.451" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="2.9" y="19.3" width="5.451" height="0.4"/>
+  <rect style="fill: #ffffff" x="2.9" y="19.7" width="5.451" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="2.9" y="19.7" width="5.451" height="0.4"/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="8.7355,13.75 8.7355,16.05 5.6255,16.05 5.6255,17.9 "/>
+  <polygon style="fill: #ffffff" points="9.1355,14.55 8.7355,13.75 8.3355,14.55 "/>
+  <polygon style="fill: none; stroke-width: 0.1; stroke: #000000" points="9.1355,14.55 8.7355,13.75 8.3355,14.55 "/>
+  <rect style="fill: #ffffff" x="7.55" y="5.55" width="7.75" height="1.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="7.55" y="5.55" width="7.75" height="1.4"/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 1" x="11.425" y="6.55">Translocation</text>
+  <rect style="fill: #ffffff" x="7.55" y="6.95" width="7.75" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="7.55" y="6.95" width="7.75" height="0.4"/>
+  <rect style="fill: #ffffff" x="7.55" y="7.35" width="7.75" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="7.55" y="7.35" width="7.75" height="0.4"/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="11.425,7.75 11.425,9.75 8.7355,9.75 8.7355,11.55 "/>
+  <polygon style="fill: #ffffff" points="11.825,8.55 11.425,7.75 11.025,8.55 "/>
+  <polygon style="fill: none; stroke-width: 0.1; stroke: #000000" points="11.825,8.55 11.425,7.75 11.025,8.55 "/>
+  <rect style="fill: #ffffff" x="29.15" y="14.45" width="9.312" height="1.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="29.15" y="14.45" width="9.312" height="1.4"/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 1" x="33.806" y="15.45">PartiallyTangible</text>
+  <rect style="fill: #ffffff" x="29.15" y="15.85" width="9.312" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="29.15" y="15.85" width="9.312" height="0.4"/>
+  <rect style="fill: #ffffff" x="29.15" y="16.25" width="9.312" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="29.15" y="16.25" width="9.312" height="0.4"/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="15.3,6.25 15.3,6 29.15,6 29.15,15.15 "/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 0.8" x="22.225" y="5.81714">fromLocation</text>
+  <polygon style="fill: #000000" points="25.4182,5.81714 25.4182,5.41714 25.8182,5.61714 "/>
+  <rect style="fill: #ffffff" x="35.8" y="5.6" width="2.866" height="1.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="35.8" y="5.6" width="2.866" height="1.4"/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 1" x="37.233" y="6.6">Date</text>
+  <rect style="fill: #ffffff" x="35.8" y="7" width="2.866" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="35.8" y="7" width="2.866" height="0.4"/>
+  <rect style="fill: #ffffff" x="35.8" y="7.4" width="2.866" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="35.8" y="7.4" width="2.866" height="0.4"/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="22.826,2.15 22.826,3.2 37.233,3.2 37.233,5.6 "/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 0.8" x="30.0295" y="3.01714">startingDate</text>
+  <polygon style="fill: #000000" points="33.2183,3.01714 33.2183,2.61714 33.6183,2.81714 "/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="22.826,2.15 22.826,4 37.233,4 37.233,5.6 "/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 0.8" x="30.0295" y="3.81714">endingDate</text>
+  <polygon style="fill: #000000" points="32.7079,3.81714 32.7079,3.41714 33.1079,3.61714 "/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="15.3,6.25 15.3,7 33.806,7 33.806,14.45 "/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 0.8" x="24.553" y="6.81714">toLocation</text>
+  <polygon style="fill: #000000" points="27.249,6.81714 27.249,6.41714 27.649,6.61714 "/>
+  <rect style="fill: #ffffff" x="14.35" y="1.45" width="8.476" height="1.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #6d70d9" x="14.35" y="1.45" width="8.476" height="1.4"/>
+  <text style="fill: #6d70d9; text-anchor: middle; font-size: 1" x="18.588" y="2.45">TemporalThing</text>
+  <rect style="fill: #ffffff" x="14.35" y="2.85" width="8.476" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #6d70d9" x="14.35" y="2.85" width="8.476" height="0.4"/>
+  <rect style="fill: #ffffff" x="14.35" y="3.25" width="8.476" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #6d70d9" x="14.35" y="3.25" width="8.476" height="0.4"/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="18.588,3.65 18.588,5.2 11.425,5.2 11.425,5.55 "/>
+  <polygon style="fill: #ffffff" points="18.988,4.45 18.588,3.65 18.188,4.45 "/>
+  <polygon style="fill: none; stroke-width: 0.1; stroke: #000000" points="18.988,4.45 18.588,3.65 18.188,4.45 "/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="10.471,12.25 10.471,13.15 17.45,13.15 17.45,14.4 "/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 0.8" x="13.9605" y="12.9671">arrivalTime</text>
+  <polygon style="fill: #000000" points="16.8985,12.9671 16.8985,12.5671 17.2985,12.7671 "/>
+  <rect style="fill: #ffffff" x="17.45" y="13.7" width="10.5528" height="1.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="17.45" y="13.7" width="10.5528" height="1.4"/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 1" x="22.7264" y="14.7">TimeString</text>
+  <rect style="fill: #ffffff" x="17.45" y="15.1" width="10.5528" height="1"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="17.45" y="15.1" width="10.5528" height="1"/>
+  <text style="fill: #000000; text-anchor: start; font-size: 0.8" x="17.6" y="15.8171">+pattern: \d\d:\d\d</text>
+  <rect style="fill: #ffffff" x="17.45" y="16.1" width="10.5528" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="17.45" y="16.1" width="10.5528" height="0.4"/>
+  <rect style="fill: #ffffff" x="14.05" y="22.6" width="8.993" height="1.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="14.05" y="22.6" width="8.993" height="1.4"/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 1" x="18.5465" y="23.6">AirlineCompany</text>
+  <rect style="fill: #ffffff" x="14.05" y="24" width="8.993" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="14.05" y="24" width="8.993" height="0.4"/>
+  <rect style="fill: #ffffff" x="14.05" y="24.4" width="8.993" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="14.05" y="24.4" width="8.993" height="0.4"/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="10.471,12.25 10.471,19.4 14.05,19.4 14.05,23.3 "/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 0.8" x="12.2605" y="19.2171">carrier</text>
+  <polygon style="fill: #000000" points="14.1469,19.2171 14.1469,18.8171 14.5469,19.0171 "/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="10.471,12.25 10.471,15.05 17.45,15.05 17.45,14.4 "/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 0.8" x="13.9605" y="14.8671">departureTime</text>
+  <polygon style="fill: #000000" points="17.4309,14.8671 17.4309,14.4671 17.8309,14.6671 "/>
+  <rect style="fill: #ffffff" x="24.75" y="8.35" width="3.735" height="1.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="24.75" y="8.35" width="3.735" height="1.4"/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 1" x="26.6175" y="9.35">Literal</text>
+  <rect style="fill: #ffffff" x="24.75" y="9.75" width="3.735" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="24.75" y="9.75" width="3.735" height="0.4"/>
+  <rect style="fill: #ffffff" x="24.75" y="10.15" width="3.735" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="24.75" y="10.15" width="3.735" height="0.4"/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="26.6175,10.55 26.6175,12.55 22.7264,12.55 22.7264,13.7 "/>
+  <polygon style="fill: #ffffff" points="27.0175,11.35 26.6175,10.55 26.2175,11.35 "/>
+  <polygon style="fill: none; stroke-width: 0.1; stroke: #000000" points="27.0175,11.35 26.6175,10.55 26.2175,11.35 "/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="20.647,18.85 20.647,17.5 28.485,17.5 28.485,9.05 "/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 0.8" x="24.566" y="17.3171">nameOfAgent</text>
+  <polygon style="fill: #000000" points="27.504,17.3171 27.504,16.9171 27.904,17.1171 "/>
+  <rect style="fill: #ffffff" x="17" y="18.15" width="3.647" height="1.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="17" y="18.15" width="3.647" height="1.4"/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 1" x="18.8235" y="19.15">Agent</text>
+  <rect style="fill: #ffffff" x="17" y="19.55" width="3.647" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="17" y="19.55" width="3.647" height="0.4"/>
+  <rect style="fill: #ffffff" x="17" y="19.95" width="3.647" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="17" y="19.95" width="3.647" height="0.4"/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="18.8235,20.35 18.8235,21.3 18.5465,21.3 18.5465,22.6 "/>
+  <polygon style="fill: #ffffff" points="19.2235,21.15 18.8235,20.35 18.4235,21.15 "/>
+  <polygon style="fill: none; stroke-width: 0.1; stroke: #000000" points="19.2235,21.15 18.8235,20.35 18.4235,21.15 "/>
+  <rect style="fill: #ffffff" x="29.9" y="20.7" width="9.004" height="1.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="29.9" y="20.7" width="9.004" height="1.4"/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 1" x="34.402" y="21.7">Airport-Physical</text>
+  <rect style="fill: #ffffff" x="29.9" y="22.1" width="9.004" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="29.9" y="22.1" width="9.004" height="0.4"/>
+  <rect style="fill: #ffffff" x="29.9" y="22.5" width="9.004" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="29.9" y="22.5" width="9.004" height="0.4"/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="33.806,16.65 33.806,18.65 34.402,18.65 34.402,20.7 "/>
+  <polygon style="fill: #ffffff" points="34.206,17.45 33.806,16.65 33.406,17.45 "/>
+  <polygon style="fill: none; stroke-width: 0.1; stroke: #000000" points="34.206,17.45 33.806,16.65 33.406,17.45 "/>
+  <rect style="fill: #ffffff" x="5.75" y="1.7" width="3.482" height="1.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="5.75" y="1.7" width="3.482" height="1.4"/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 1" x="7.491" y="2.7">Event</text>
+  <rect style="fill: #ffffff" x="5.75" y="3.1" width="3.482" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="5.75" y="3.1" width="3.482" height="0.4"/>
+  <rect style="fill: #ffffff" x="5.75" y="3.5" width="3.482" height="0.4"/>
+  <rect style="fill: none; stroke-width: 0.1; stroke: #000000" x="5.75" y="3.5" width="3.482" height="0.4"/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="9.232,2.4 9.232,0.9 7.491,0.9 7.491,1.7 "/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 0.8" x="8.3615" y="0.717143">subEvents</text>
+  <polygon style="fill: #000000" points="10.7495,0.717143 10.7495,0.317143 11.1495,0.517143 "/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="7.491,3.9 7.491,4.95 11.425,4.95 11.425,5.55 "/>
+  <polygon style="fill: #ffffff" points="7.891,4.7 7.491,3.9 7.091,4.7 "/>
+  <polygon style="fill: none; stroke-width: 0.1; stroke: #000000" points="7.891,4.7 7.491,3.9 7.091,4.7 "/>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="35.8,6.3 35.8,8.9 28.485,8.9 28.485,9.05 "/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 0.8" x="32.1425" y="8.71714">dt:date</text>
+  <polygon style="fill: #000000" points="34.0289,8.71714 34.0289,8.31714 34.4289,8.51714 "/>
+  <text style="fill: #000000; text-anchor: start; font-size: 0.8" x="35.8" y="6.91714">1..1</text>
+  <text style="fill: #000000; text-anchor: start; font-size: 0.8" x="28.485" y="8.86714">1..*</text>
+  <polyline style="fill: none; stroke-width: 0.1; stroke: #000000" points="10.471,12.25 10.471,10.55 24.75,10.55 24.75,9.05 "/>
+  <text style="fill: #000000; text-anchor: middle; font-size: 0.8" x="17.6105" y="10.3671">flightNumber</text>
+  <polygon style="fill: #000000" points="20.8037,10.3671 20.8037,9.96714 21.2037,10.1671 "/>
+</svg>
