@@ -99,9 +99,7 @@ def main():
 	    proofs = 1
 
     assert system("mkdir -p ,temp") == 0
-    assert system("mkdir -p ,temp/dbork") == 0
     assert system("mkdir -p ,diffs") == 0
-    assert system("mkdir -p ,diffs/dbork") == 0
     if proofs: assert system("mkdir -p ,proofs") == 0
     
     tests=0

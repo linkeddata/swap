@@ -1,15 +1,15 @@
 #!/usr/bin/python
-"""
+"""Summarize and chart one year's finances
+    
+usage, eg:
+    fin -y 2003
+    
+    The year must be given explicitly. Transactions outside that year will be ignored.
+
+This is an RDF application.
 
 $Id$
-
-Financial
-
 """
-
-"""emacs got confused by long string above@@"""
-
-
 import llyn
 
 from diag import verbosity, setVerbosity, progress
@@ -235,7 +235,7 @@ def doCommand():
 	    t_ok, c_ok = 0, 0
 	    date = kb.any(subj=s, pred=qu_date).__str__()
 	    year = int(date[0:4])
-	    if  year != 2002: continue
+	    if  year != yearInQuestion: continue
 	    month = int(date[5:7]) -1
 	    
 	    payees = kb.each(subj=s, pred=qu_payee)
@@ -452,5 +452,30 @@ def doCommand():
 ############################################################ Main program
     
 if __name__ == '__main__':
-    doCommand()
+    testFiles = []
+    start = 1
+    normal = 0
+    chatty = 0
+    proofs = 0
+    global verbose
+    global yearInQuestion
+    verbose = 0
+    try:
+        opts, args = getopt.getopt(sys.argv[1:], "hs:ncpf:v",
+	    ["help", "start=", "testsFrom=", "normal", "chatty", "proofs", "verbose"])
+    except getopt.GetoptError:
+        # print help information and exit:
+        print __doc__
+        sys.exit(2)
+    output = None
+    for o, a in opts:
+        if o in ("-h", "--help"):
+            usage()
+            sys.exit()
+        if o in ("-v", "--verbose"):
+	    verbose = 1
+        if o in ("-y", "--year"):
+            yearInQuestion = a
+
+    doCommand(year=yearInQuestion)
 

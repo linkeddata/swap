@@ -304,8 +304,11 @@ Examples:
 
 See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
-Mode flags:
- r   Do remote queries when you discover they are posisble.
+Mode flags affect inference extedning to the web:
+ e   Errors loading schemas of definitive documents are fatal
+ m   Schemas and definitive documents laoded are merged into the meta knowledge
+     (otherwise they are consulted independently)
+ r   Needed to enable any remote stuff.
  s   Read the schema for any predicate in a query.
 
 """
@@ -648,7 +651,7 @@ Mode flags:
                     print "# Done running Otter [ Inferences NOT incorporated back into cwm ]"
                 elif option_engine=="llyn":
                     need(_store); touch(_store)
-                    _store.think(workingContext)
+                    _store.think(workingContext, mode=option_flags["think"])
                 else:
                     raise RuntimeError, "unknown engine: "+str(option_engine)
 

@@ -393,9 +393,15 @@
     test:description   "os:argv argument other values";
     test:arguments     """os/argv.n3 --think --with boof""".
 
+:t1100 a test:CwmTest;
+    test:shortFileName "defdoc1-out.n3";
+    test:description   "look up values in local definitive document";
+    test:arguments     "--mode=rse dbork/defdoc1.n3 --think".
+
+
 # Test proof generation -- see also the -p option of retest.py
 
-#:t1060 a test:CwmTest;
+#:t2060 a test:CwmTest;
 #    test:shortFileName "reason-t5.n3";
 #    test:description   "Proof for one simple rule";
 #    test:arguments     """reason/t5.n3 --think --base=foo --why""".

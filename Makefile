@@ -40,13 +40,22 @@ HTMLS= check.html RDFSink.html cwm.html cwm_crypto.html cwm_math.html cwm_os.htm
 
 #all: yappstest yappsdoc math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf
 
-all: math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf LICENSE.rdf cwm.tar.Z $(HTMLS)
+tested : package
+	(cd test; python retest.py -n -c -f regression.n3)
+	echo "Test worked, now can release"
+	touch tested
+
+release : test
+	cvs commit -m "Passes regression test"
+	touch release
+
+package: math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf LICENSE.rdf cwm.tar.Z $(HTMLS)
 
 # Can't make dependencies on *.py :-(
 
 # cwm.py notation3.py llyn.py  RDFSink.py toXML.py
 cwm.tar.Z::
-	tar -cf cwm.tar *.py LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py
+	tar -cf cwm.tar *.py $(HTMLS) LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py
 	compress -f cwm.tar
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py
@@ -78,6 +87,4 @@ SemEnglish.html: SemEnglish.g gram2html.py
 
 log.rdf: log.n3
 	$(PYTHON) cwm.py log.n3 --rdf > log.rdf
-
-
 

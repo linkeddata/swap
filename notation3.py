@@ -409,10 +409,10 @@ class SinkParser:
 	    j = self.node(str, j+1, res)
 	    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "EOF found in middle of path syntax")
 	    pred = res.pop()
-	    if ch == "!":
-		self.makeStatement((self._context, pred, subj, obj)) 
-	    else:
+	    if ch == "^": # Reverse traverse
 		self.makeStatement((self._context, pred, obj, subj)) 
+	    else:
+		self.makeStatement((self._context, pred, subj, obj)) 
 	    res.append(obj)
 	return j
 

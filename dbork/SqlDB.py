@@ -500,6 +500,7 @@ class SqlDBAlgae(RdfDBAlgae):
 
     def _lookupPredicate(self, predicate):
         m = self.predicateRE.match(predicate)
+	assert m, "Oops    predicate=%s doesn't match %s" %(predicate, self.predicateRE.pattern)
         table = m.group("table")
         field = m.group("field")
         try:

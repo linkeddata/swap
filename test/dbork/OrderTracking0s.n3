@@ -14,26 +14,28 @@ this log:forAll :customer, :family, :given .
 
 #<sql://rdftest@swada.w3.org/OrderTracking/> is log:authoritativeService of
 #	Customers:familyName, Customers:givenName, Products:name.
+
 {
- :customer Customers:familyName :family .
- :customer Customers:givenName :given .
+ 	:customer Customers:familyName :family .
+ 	:customer Customers:givenName :given .
 } log:implies {
-
- :given :RESULT :family .
-
+	:given :RESULT :family .
 }.
 
-this log:forAll :products, :name .
 
-<sql://root@localhost/OrderTracking> is log:authoritativeService of
-	Products:name.
-{
- :products Products:name :name .
-} log:implies {
-
- :products :RESULT :name .
-
-}.
+# Find all products with a name:
+#
+#this log:forAll :product, :name .
+#
+#<sql://root@localhost/OrderTracking> is log:authoritativeService of
+#	Products:name.
+#{
+# :product Products:name :name .
+#} log:implies {
+#
+# :product :PRODUCT_NAME :name .
+#
+#}.
 
 # SQL queries (so nicely formatted):
 # SELECT Customers_0.id AS customer_id,

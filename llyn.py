@@ -34,20 +34,16 @@ Agenda:
 =======
 
  - get rid of other globals (DWC 30Aug2001)
- - Add dynamic load pf web python via rdf-schema: imp.load_source("foo", "llyn.py", open("llyn.py", "r"))
- - split Query engine out as subclass of RDFStore? (DWC)
-    SQL-equivalent client
+ - Add dynamic load of web python via rdf-schema: imp.load_source("foo", "llyn.py", open("llyn.py", "r"))
  - implement a back-chaining reasoner (ala Euler/Algernon) on this store? (DWC)
  - run http daemon/client sending changes to database
  - act as client/server for distributed system
   - postgress, mySQl underlying database?
- -    
+ -    daml:import
  -    standard mappping of SQL database into the web in N3/RDF
  -    
  - logic API as requested DC 2000/12/10
  - Jena-like API x=model.createResource(); addProperty(DC.creator, "Brian", "en")
- - sucking in the schema (http library?) --schemas ;
- - to know about r1 see r2; daml:import
  -   syntax for "all she wrote" - schema is complete and definitive
  - metaindexes - "to know more about x please see r" - described by
  - general python URI access with catalog!
@@ -85,6 +81,10 @@ BULTINS WE NEED
 
 Done
 ====
+ - sucking in the schema (http library?) --schemas ;
+ - to know about r1 see r2;
+ - split Query engine out as subclass of RDFStore? (DWC)
+    SQL-equivalent client
  - split out separate modules: CGI interface, command-line stuff,
    built-ins (DWC 30Aug2001)
 - (test/retest.sh is another/better list of completed functionality --DWC)
@@ -310,7 +310,7 @@ class DataObject:
 	    yield DataObject(self.context, v)
 
 
-def dereference(x):
+def dereference(x, critical=0):
     """dereference an object, finding the semantics of its schema if any
     
     Returns None if it cannot be retreived.
@@ -327,13 +327,15 @@ def dereference(x):
 #		return None
 #
     inputURI = x.uriref()
-    if verbosity() > 25: progress("Looking up schema for %s" % x)
-    try:
-	F = x.store.load(inputURI)
-    except (IOError, SyntaxError, DocumentAccessError):
-	F = None
+    if verbosity() > 20: progress("Web: Looking up %s" % x)
+    if critical: F = x.store.load(inputURI)
+    else:
+	try:
+	    F = x.store.load(inputURI)
+	except (IOError, SyntaxError, DocumentAccessError):
+	    F = None
     setattr(x, "_semantics", F)
-    if verbosity() > 25: progress("Schema for %s is %s" %(x, F))
+    if verbosity() > 25: progress("Web: Dereferencing %s gives %s" %(x, F))
     return F
 		
 
@@ -348,6 +350,16 @@ class Formula(Fragment):
     Other systems such as jena and redland use the term "Model" for this.
     For rdflib, this is known as a TripleStore.
     Cwm and N3 extend RDF to allow a literal formula as an item in a triple.
+    
+    A formula is either open or closed.  Initially, it is open. In this
+    state is may be modified - for example, triples may be added to it.
+    When it is closed, note that a different interned version of itself
+    may be returned. From then on it is a constant.
+    
+    Only closed formulae may be mentioned in statements in other formuale.
+    
+    There is a reopen() method but it is not recommended, and if desperate should
+    only be used immediately after a close().
     """
     def __init__(self, resource, fragid):
         Fragment.__init__(self, resource, fragid)
@@ -356,16 +368,8 @@ class Formula(Fragment):
 	self.collector = None # Object collecting evidence, if any 
 	self._listValue = {}
 
-    def generated(self):
-	"""Yes, any identifier you see for this is arbitrary."""
-        return 1
-
-    def asPair(self):
-	"""Old representation."""
-        return (FORMULA, self.uriref())
-
     def existentials(self):
-        """Return a list of existential variables with this scope.
+        """Return a list of existential variables with this formula as scope.
 	
 	Implementation:
 	we may move to an internal storage rather than these pseudo-statements"""
@@ -377,8 +381,9 @@ class Formula(Fragment):
         return exs
 
     def universals(self):
-        """Return a list of variables universally quantified within this scope.
+        """Return a list of variables universally quantified with this formula as scope.
 
+	Implementation:
 	We may move to an internal storage rather than these statements."""
         exs = []
         ss = self._index.get((self.store.forAll, self, None),[])
@@ -397,7 +402,8 @@ class Formula(Fragment):
 	return self._listValue.get(x, None)
 
     def size(self):
-        """ How many statements? """
+        """Return the number statements.
+	Obsolete: use len(F)."""
         return len(self.statements)
 
     def __len__(self):
@@ -405,33 +411,50 @@ class Formula(Fragment):
         return len(self.statements)
 
     def __iter__(self):
+	"""The internal method which allows one to iterate over the statements
+	as though a formula were a sequence.
+	"""
 	for s in self.statements:
 	    yield s
 
     def newSymbol(self, uri):
+	"""Create or reuse the internal representation of the RDF node whose uri is given
+	
+	The symbol is created in the same store as the formula."""
 	return self.store.newSymbol(uri)
 
     def newLiteral(self, st):
+	"""Create or reuse the internal representation of the RDF literal whose string is given
+	
+	The literal is craeted in the same store as the formula."""
 	return self.store.newLiteral(st)
 	
     def newBlankNode(self, uri=None, why=None):
-	"""Create or reuse, in the default store, a new unnamed node within the given
-	formula as context, and return it for future use"""
+	"""Create a new unnamed node with this formula as context.
+	
+	The URI is typically omitted, and the system will make up an internal idnetifier.
+        If given is used as the (arbitrary) internal identifier of the node."""
 	return self.store.newBlankNode(self, uri,  why=why)
     
     def newExistential(self, uri=None, why=None):
-	"""Create or reuse, in the default store, a new named variable
-	existentially qualified within the given
-	formula as context, and return it for future use"""
+	"""Create a named variable existentially qualified within this formula
+	
+	If the URI is not given, an arbitrary identifier is generated.
+	See also: existentials()."""
 	return self.store.newExistential(self, uri, why=why)
     
     def newUniversal(self, uri=None, why=None):
-	"""Create or reuse, in the default store, a named variable
-	universally qualified within the given
-	formula as context, and return it for future use"""
+	"""Create a named variable universally qualified within this formula
+	
+	If the URI is not given, an arbitrary identifier is generated.
+	See also: universals()"""
 	return self.store.newUniversal(self, uri, why=why)
 
     def newFormula(self, uri=None):
+	"""Create a new open, empty, formula in the same store as this one.
+	
+	The URI is typically omitted, and the system will make up an internal idnetifier.
+        If given is used as the (arbitrary) internal identifier of the formula."""
 	return self.store.newFormula(uri)
 
     def statementsMatching(self, pred=None, subj=None, obj=None):
@@ -445,27 +468,17 @@ class Formula(Fragment):
 	"""
         return self._index.get((pred, subj, obj), [])
 
-    def subjects(self, pred=None, obj=None):
-	for s in self.statementsMatching(pred=pred, obj=obj)[:]:
-	    yield s[SUBJ]
-
-    def predicates(self, subj=None, obj=None):
-	for s in self.statementsMatching(subj=subj, obj=obj)[:]:
-	    yield s[PRED]
-
-    def objects(self, pred=None, subj=None):
-	for s in self.statementsMatching(pred=pred, subj=subj)[:]:
-	    yield s[OBJ]
-
 
     def any(self, subj=None, pred=None, obj=None):
-        """Return None or the value filing the blank in the called parameters
+        """Return None or the value filing the blank in the called parameters.
 	
+	Specifiy exactly two of the arguments.
 	color = f.any(pred=pantoneColor, subj=myCar)
-	redCar = f.any(pred=pantoneColor, obj=red)
+	somethingRed = f.any(pred=pantoneColor, obj=red)
 	
-	Note difference from store.any!!
-	Note SPO order not PSO!!
+	Note difference from the old store.any!!
+	Note SPO order not PSO.
+	To aboid confusion, use named parameters.
 	"""
 	hits = self._index.get((pred, subj, obj), [])
 	if not hits: return None
@@ -475,34 +488,14 @@ class Formula(Fragment):
 	if obj == None: return s[OBJ]
 	raise ParameterError("You must give one wildcard")
 
-    def each(self, subj=None, pred=None, obj=None):
-        """Return a list of values value filing the blank in the called parameters
-	
-	colors = f.each(pred=pantoneColor, subj=myCar)
-	redCar = f.any(pred=pantoneColor, obj=red)
-	
-	Note difference from store.any!!
-	Note SPO order not PSO!!
-	"""
-	hits = self._index.get((pred, subj, obj), [])
-	if hits == []: return []
-	if pred == None: wc = PRED
-	elif subj == None: wc = SUBJ
-	elif obj == None: wc = OBJ
-	else: raise ParameterError("You must give one wildcard None for any")
-	res = []
-	for s in hits:
-	    res.append(s[wc])   # should use yeild @@ when we are ready
-	return res
-
     def the(self, subj=None, pred=None, obj=None):
         """Return None or the value filing the blank in the called parameters
 	
-	color = f.any(pred=pantoneColor, subj=myCar)
-	redCar = f.any(pred=pantoneColor, obj=red)
+	This is just like any() except it checks that there is only
+	one answer in the store. It wise to use this when you expect only one.
 	
-	Note difference from store.any!!
-	Note SPO order not PSO!!
+	color = f.the(pred=pantoneColor, subj=myCar)
+	redCar = f.the(pred=pantoneColor, obj=red)
 	"""
 	hits = self._index.get((pred, subj, obj), [])
 	if not hits: return None
@@ -512,15 +505,50 @@ class Formula(Fragment):
 	if pred == None: return s[PRED]
 	if subj == None: return s[SUBJ]
 	if obj == None: return s[OBJ]
-	raise parameterError("You must give one wildcard")
+	raise parameterError("You must give one wildcard using the()")
+
+    def each(self, subj=None, pred=None, obj=None):
+        """Return a list of values value filing the blank in the called parameters
+	
+	Examples:
+	colors = f.each(pred=pantoneColor, subj=myCar)
+	
+	for redthing in f.each(pred=pantoneColor, obj=red): ...
+	
+	"""
+	hits = self._index.get((pred, subj, obj), [])
+	if hits == []: return []
+	if pred == None: wc = PRED
+	elif subj == None: wc = SUBJ
+	elif obj == None: wc = OBJ
+	else: raise ParameterError("You must give one wildcard None for each()")
+	res = []
+	for s in hits:
+	    res.append(s[wc])   # should use yeild @@ when we are ready
+	return res
 
     def bind(self, prefix, uri):
-	return self.store.bind(prefix, uri) # Otherwise, do as usual.
+	"""Give a prefix and associated URI as a hint for output
+	
+	The store does not use prefixes internally, but keeping track
+	of those usedd in the input data makes for more human-readable output.
+	"""
+	return self.store.bind(prefix, uri)
 
     def add(self, subj, pred, obj, why=None):
+	"""Add a triple to the formula.
+	
+	The formula must be open.
+	subj, pred and obj must be objects as for example generated by Formula.newSymbol() and newLiteral()
+	why 	may be a reason for use when a proof will be required.
+	"""
         return self.store.storeQuad((self, pred, subj, obj), why=why) # Note order change
     
     def remove(self, subj, pred, obj):
+	"""Removes the information from the store.
+	
+	Similar to add(). The formula must be open.
+	"""
         return self.store.remove((self, pred, subj, obj))
     
     def close(self):
@@ -529,7 +557,15 @@ class Formula(Fragment):
         return self.store.endFormula(self)
 
     def reopen(self):
+	"""Make a formula which was once closed oopen for input again.
+	
+	NOT Recommended.  Dangers: this formula will be, because of interning,
+	the same objet as a formula used elsewhere which happens to have the same content.
+	You mess with this one, you mess with that one.
+	Much better to keep teh formula open until you don't needed it open any more.
+	The trouble is, the parsers close it at the moment automatically. To be fixed."""
         return self.store.reopen(self)
+
     
     def n3String(self, flags=""):
         "Dump the formula to an absolute string in N3"
@@ -541,7 +577,10 @@ class Formula(Fragment):
         return buffer.getvalue()   # Do we need to explicitly close it or will it be GCd?
 
     def debugString(self, already=[]):
-	"""A simple dump of a formula in debug form."""
+	"""A simple dump of a formula in debug form.
+	
+	This formula is dumped, using ids for nested formula.
+	Then, each nested formula mentioned is dumped."""
 	str = `self`+" is {"
 	todo = []
 	for s in self.statements:
@@ -577,12 +616,19 @@ class Formula(Fragment):
             channel.write(str.string.encode('utf-8'))
 
     def includes(f, g, _variables=[], smartIn=[], bindings=[]):
+	"""Does this formula include the information in the other?
+	
+	smartIn gives a list of formulae for which builtin functions should operate
+	   in the consideration of what "includes" means.
+	bindings is for use within a query.
+	"""
 	return  f.store.testIncludes(f, g, _variables=_variables, smartIn=smartIn, bindings=bindings)
 
 
     def subFormulae(self, path = []):
-        """
-        slow...
+        """Returns a sequence of the all the formulae nested within this one.
+        
+	slow...typically only used in pretty print functions.
         """
 
         if self.descendents != None:
@@ -601,8 +647,33 @@ class Formula(Fragment):
         self.descendents = set
         return set
 
-    def checkList(self,  L):
-        """Check whether this new list causes other things to become lists"""
+    def generated(self):
+	"""Yes, any identifier you see for this is arbitrary."""
+        return 1
+
+    def asPair(self):
+	"""Return an old representation. Obsolete"""
+        return (FORMULA, self.uriref())
+
+    def subjects(self, pred=None, obj=None):
+        """Obsolete - use each(pred=..., obj=...)"""
+	for s in self.statementsMatching(pred=pred, obj=obj)[:]:
+	    yield s[SUBJ]
+
+    def predicates(self, subj=None, obj=None):
+        """Obsolete - use each(subj=..., obj=...)"""
+	for s in self.statementsMatching(subj=subj, obj=obj)[:]:
+	    yield s[PRED]
+
+    def objects(self, pred=None, subj=None):
+        """Obsolete - use each(subj=..., pred=...)"""
+	for s in self.statementsMatching(pred=pred, subj=subj)[:]:
+	    yield s[OBJ]
+
+    def _checkList(self,  L):
+        """Check whether this new list causes other things to become lists.
+	
+	Internal function."""
         if verbosity() > 80: progress("Checking new list ",`L`)
         rest = self.listValue(L)
         possibles = self.statementsMatching(pred=self.store.rest, obj=L)  # What has this as rest?
@@ -613,8 +684,9 @@ class Formula(Fragment):
                 first = ff[0][OBJ]
                 if self.listValue(L2) == None:
                     self._listValue[L2] = rest.precededBy(first)
-                    self.checkList(L2)
+                    self._checkList(L2)
                 return
+
 	
 def comparePair(self, other):
     for i in 0,1:
@@ -1135,6 +1207,7 @@ class RDFStore(RDFSink) :
 # Remote service flag in metadata:
 
 	self.authoritativeService = log.internFrag("authoritativeService", Fragment)
+	self.authoritativeDocument = log.internFrag("authoritativeDocument", Fragment)
 	self.pointsAt = log.internFrag("pointsAt", Fragment)
 
 # Constants:
@@ -1566,14 +1639,14 @@ class RDFStore(RDFSink) :
             first = context.the(pred=self.first, subj=subj)
             if first != None and context.listValue(subj) == None:
                 context._listValue[subj] = context.listValue(obj).precededBy(first)
-                context.checkList(subj)
+                context._checkList(subj)
 
         elif pred is self.first:
             rest = context.the(pred=self.rest, subj=subj)
             if rest !=None:
                 if content.listValue(rest) != None and context.listValue(subj) == None:
                     context._listValue[subj] = context.listValue(rest).precededBy(obj)
-                    context.checkList(subj)
+                    context._checkList(subj)
 
         s = StoredStatement(q)
 	
@@ -2025,7 +2098,7 @@ class RDFStore(RDFSink) :
                 sink.startAnonymous(self.extern(triple), li)
                 if not li or not isinstance(context.listValue(obj), EmptyList):   # nil gets no contents
                     if li:
-                        if verbosity()>49:
+                        if verbosity()>90:
                             progress("List found as object of dumpStatement " + x2s(obj))
                     ss = context.statementsMatching(subj=obj)
                     if sorting: ss.sort(StoredStatement.comparePredObj)
@@ -2224,7 +2297,7 @@ class RDFStore(RDFSink) :
             if x not in variablesUsed:
                 templateExistentials.append(x)
         if verbosity() >20:
-            progress("\n=================== tryRule ============ looking for:")
+            progress("\n=================== tryRule ============ (mode=%s) looking for:" %mode)
             progress( setToString(unmatched))
             progress("Universals declared in outer " + seqToString(_variables))
             progress(" mentioned in template       " + seqToString(variablesMentioned))
@@ -2291,42 +2364,6 @@ class RDFStore(RDFSink) :
     def newInterned(self, type):        
         return self.intern((type, self.genId()))
 
-    def nestedContexts(self, con):
-        """ Return a list of statements and variables of either type
-        found within the nested subFormulae
-        """
-        statements = []
-        variables = []
-        existentials = []
-        for arc in con.statements:
-            context, pred, subj, obj = arc.quad
-            statements.append(arc.quad)
-            if subj is context and (pred is self.forSome or pred is self.forAll): # @@@@
-                variables.append(obj)   # Collect list of existentials
-            if subj is context and pred is self.forSome: # @@@@
-                existentials.append(obj)   # Collect list of existentials
-                
-        # Find all subformulae  - forumulae which are mentioned at least once.
-        subformulae = []
-        for arc in con.statements:
-            for p in [ SUBJ, PRED, OBJ]:  # @ can remove PRED if formulae and predicates distinct
-                x = arc.quad[p]
-                if isinstance(x, Formula) and x in existentials:  # x is a Nested context
-                    if x not in subformulae: subformulae.append(x) # Only one copy of each please
-                    
-        for x in  subformulae:
-            for a2 in con.statements:  # Rescan for variables
-                c2, p2, s2, o2 = a2.quad
-                if  s2 is x and (p2 is self.forSome or p2 is self.forAll):
-                    variables.append(o2)   # Collect list of existentials
-            s, v = self.nestedContexts(x)
-            statements = statements + s
-            variables = variables + v
-        return statements, variables
-
-
-#  One context only:
-# When we return the context, any nested ones are of course referenced in it
 
     def oneContext(self, con):
         """Find statements and variables in formula as template of a query.
@@ -2337,7 +2374,6 @@ class RDFStore(RDFSink) :
         """
         statements = []
         variables = []
-#        existentials = []
         for arc in con.statements:
             context, pred, subj, obj = arc.quad
             if not(subj is context and pred is self.forSome):
@@ -2348,8 +2384,6 @@ class RDFStore(RDFSink) :
             if subj is context and (pred is self.forSome or pred is self.forAll): # @@@@
                 if not isinstance(obj, Formula):
                     variables.append(obj)   # Collect list of existentials
-#                if pred is self.forSome: # @@@@
-#                    existentials.append(obj)   # Collect list of existentials
                 
         return statements, variables
 
@@ -2725,6 +2759,8 @@ class Query:
         # QueryPiece qp stores query tree.
         qp = rs.buildQuerySetsFromCwm(items, query.variables, query.existentials)
         # Extract access info from the first item.
+	if verbosity() > 90:
+	    progress("    Remote service %s" %items[0].service.uri)
         (user, password, host, database) = re.match("^sql://(?:([^@:]+)(?::([^@]+))?)@?([^/]+)/([^/]+)/$",
                                                     items[0].service.uri).groups()
         # Look for one of a set of pre-compiled rdb schemas.
@@ -2802,12 +2838,13 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 	self.service = None
 
 	if "r" in mode:
+	    schema = None
 	    if "s" in mode:
-		schema = dereference(pred)
+		schema = dereference(pred, critical = "e" in mode)
 		if schema != None:
 		    self.service = schema.any(pred=self.store.authoritativeService, subj=pred)
-		elif "S" in mode:
-		    raise RuntimeError("No schema for %s" % pred)
+		    if "m" in mode:   # @@@@ will do multiple times .. not good @@@ .. do in dereference
+			self.store.copyContext(meta, schema, why=reason)
 	    if self.service == None and self.query.meta != None:
 		self.service = self.query.meta.any(pred=self.store.authoritativeService, subj=pred)
 		if self.service == None:
@@ -2815,7 +2852,24 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		    if uri[:4] == "sql:":
 			j = uri.rfind("/")
 			if j>0: self.service = meta.newSymbol(uri[:j])
-	    if verbosity() > 90 and self.service: progress("We have a remote service  for "+`pred`)
+	    if verbosity() > 90 and self.service:
+		progress("We have a Remote service %s for %s." %(self.service, pred))
+	    if not self.service:
+		authDoc = None
+		if schema != None:
+		    authDoc = schema.any(pred=self.store.authoritativeDocument, subj=pred)
+		if authDoc == None and self.query.meta != None:
+		    authDoc = self.query.meta.any(pred=self.store.authoritativeDocument, subj=pred)
+		if authDoc != None:
+		    if verbosity() > 90:
+			progress("We have a definitive document %s for %s." %(authDoc, pred))
+		    authFormula = dereference(authDoc, critical = "e" in mode)
+		    if authFormula != None:
+			self.quad = (authFormula, pred, subj, obj)
+			con = authFormula
+			if "m" in mode:
+			    self.store.copyContext(self.query.meta, authFormula)
+
         self.neededToRun = [ [], [], [], [] ]  # for each part of speech
         self.searchPattern = [con, pred, subj, obj]  # What do we search for?
         hasUnboundFormula = 0

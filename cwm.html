@@ -103,8 +103,11 @@ Examples:<br>
 &nbsp;<br>
 See&nbsp;<a href="http://www.w3.org/2000/10/swap/doc/cwm">http://www.w3.org/2000/10/swap/doc/cwm</a>&nbsp;&nbsp;for&nbsp;more&nbsp;documentation.<br>
 &nbsp;<br>
-Mode&nbsp;flags:<br>
-&nbsp;r&nbsp;&nbsp;&nbsp;Do&nbsp;remote&nbsp;queries&nbsp;when&nbsp;you&nbsp;discover&nbsp;they&nbsp;are&nbsp;posisble.<br>
+Mode&nbsp;flags&nbsp;affect&nbsp;inference&nbsp;extedning&nbsp;to&nbsp;the&nbsp;web:<br>
+&nbsp;e&nbsp;&nbsp;&nbsp;Errors&nbsp;loading&nbsp;schemas&nbsp;of&nbsp;definitive&nbsp;documents&nbsp;are&nbsp;fatal<br>
+&nbsp;m&nbsp;&nbsp;&nbsp;Schemas&nbsp;and&nbsp;definitive&nbsp;documents&nbsp;laoded&nbsp;are&nbsp;merged&nbsp;into&nbsp;the&nbsp;meta&nbsp;knowledge<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(otherwise&nbsp;they&nbsp;are&nbsp;consulted&nbsp;independently)<br>
+&nbsp;r&nbsp;&nbsp;&nbsp;Needed&nbsp;to&nbsp;enable&nbsp;any&nbsp;remote&nbsp;stuff.<br>
 &nbsp;s&nbsp;&nbsp;&nbsp;Read&nbsp;the&nbsp;schema&nbsp;for&nbsp;any&nbsp;predicate&nbsp;in&nbsp;a&nbsp;query.</tt></dd></dl>
  <dl><dt><a name="-getParser"><strong>getParser</strong></a>(format, inputURI, formulaURI, flags)</dt><dd><tt>Return&nbsp;something&nbsp;which&nbsp;can&nbsp;load&nbsp;from&nbsp;a&nbsp;URI&nbsp;in&nbsp;the&nbsp;given&nbsp;format,&nbsp;while<br>
 writing&nbsp;to&nbsp;the&nbsp;given&nbsp;store.</tt></dd></dl>

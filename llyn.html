@@ -45,20 +45,16 @@ Agenda:<br>
 =======<br>
 &nbsp;<br>
 &nbsp;-&nbsp;get&nbsp;rid&nbsp;of&nbsp;other&nbsp;globals&nbsp;(DWC&nbsp;30Aug2001)<br>
-&nbsp;-&nbsp;Add&nbsp;dynamic&nbsp;load&nbsp;pf&nbsp;web&nbsp;python&nbsp;via&nbsp;rdf-schema:&nbsp;imp.load_source("foo",&nbsp;"llyn.py",&nbsp;open("llyn.py",&nbsp;"r"))<br>
-&nbsp;-&nbsp;split&nbsp;<a href="#Query">Query</a>&nbsp;engine&nbsp;out&nbsp;as&nbsp;subclass&nbsp;of&nbsp;<a href="#RDFStore">RDFStore</a>?&nbsp;(DWC)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;SQL-equivalent&nbsp;client<br>
+&nbsp;-&nbsp;Add&nbsp;dynamic&nbsp;load&nbsp;of&nbsp;web&nbsp;python&nbsp;via&nbsp;rdf-schema:&nbsp;imp.load_source("foo",&nbsp;"llyn.py",&nbsp;open("llyn.py",&nbsp;"r"))<br>
 &nbsp;-&nbsp;implement&nbsp;a&nbsp;back-chaining&nbsp;reasoner&nbsp;(ala&nbsp;Euler/Algernon)&nbsp;on&nbsp;this&nbsp;store?&nbsp;(DWC)<br>
 &nbsp;-&nbsp;run&nbsp;http&nbsp;daemon/client&nbsp;sending&nbsp;changes&nbsp;to&nbsp;database<br>
 &nbsp;-&nbsp;act&nbsp;as&nbsp;client/server&nbsp;for&nbsp;distributed&nbsp;system<br>
 &nbsp;&nbsp;-&nbsp;postgress,&nbsp;mySQl&nbsp;underlying&nbsp;database?<br>
-&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;<br>
+&nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;daml:import<br>
 &nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;standard&nbsp;mappping&nbsp;of&nbsp;SQL&nbsp;database&nbsp;into&nbsp;the&nbsp;web&nbsp;in&nbsp;N3/RDF<br>
 &nbsp;-&nbsp;&nbsp;&nbsp;&nbsp;<br>
 &nbsp;-&nbsp;logic&nbsp;API&nbsp;as&nbsp;requested&nbsp;DC&nbsp;2000/12/10<br>
 &nbsp;-&nbsp;Jena-like&nbsp;API&nbsp;x=model.createResource();&nbsp;addProperty(DC.creator,&nbsp;"Brian",&nbsp;"en")<br>
-&nbsp;-&nbsp;sucking&nbsp;in&nbsp;the&nbsp;schema&nbsp;(http&nbsp;library?)&nbsp;--schemas&nbsp;;<br>
-&nbsp;-&nbsp;to&nbsp;know&nbsp;about&nbsp;r1&nbsp;see&nbsp;r2;&nbsp;daml:import<br>
 &nbsp;-&nbsp;&nbsp;&nbsp;syntax&nbsp;for&nbsp;"all&nbsp;she&nbsp;wrote"&nbsp;-&nbsp;schema&nbsp;is&nbsp;complete&nbsp;and&nbsp;definitive<br>
 &nbsp;-&nbsp;metaindexes&nbsp;-&nbsp;"to&nbsp;know&nbsp;more&nbsp;about&nbsp;x&nbsp;please&nbsp;see&nbsp;r"&nbsp;-&nbsp;described&nbsp;by<br>
 &nbsp;-&nbsp;general&nbsp;python&nbsp;URI&nbsp;access&nbsp;with&nbsp;catalog!<br>
@@ -96,6 +92,10 @@ BULTINS&nbsp;WE&nbsp;NEED<br>
 &nbsp;<br>
 Done<br>
 ====<br>
+&nbsp;-&nbsp;sucking&nbsp;in&nbsp;the&nbsp;schema&nbsp;(http&nbsp;library?)&nbsp;--schemas&nbsp;;<br>
+&nbsp;-&nbsp;to&nbsp;know&nbsp;about&nbsp;r1&nbsp;see&nbsp;r2;<br>
+&nbsp;-&nbsp;split&nbsp;<a href="#Query">Query</a>&nbsp;engine&nbsp;out&nbsp;as&nbsp;subclass&nbsp;of&nbsp;<a href="#RDFStore">RDFStore</a>?&nbsp;(DWC)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;SQL-equivalent&nbsp;client<br>
 &nbsp;-&nbsp;split&nbsp;out&nbsp;separate&nbsp;modules:&nbsp;CGI&nbsp;interface,&nbsp;command-line&nbsp;stuff,<br>
 &nbsp;&nbsp;&nbsp;built-ins&nbsp;(DWC&nbsp;30Aug2001)<br>
 -&nbsp;(test/retest.sh&nbsp;is&nbsp;another/better&nbsp;list&nbsp;of&nbsp;completed&nbsp;functionality&nbsp;--DWC)<br>
@@ -1441,7 +1441,17 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 The&nbsp;triples&nbsp;are&nbsp;actually&nbsp;instances&nbsp;of&nbsp;<a href="#StoredStatement">StoredStatement</a>.<br>
 Other&nbsp;systems&nbsp;such&nbsp;as&nbsp;jena&nbsp;and&nbsp;redland&nbsp;use&nbsp;the&nbsp;term&nbsp;"Model"&nbsp;for&nbsp;this.<br>
 For&nbsp;rdflib,&nbsp;this&nbsp;is&nbsp;known&nbsp;as&nbsp;a&nbsp;TripleStore.<br>
-Cwm&nbsp;and&nbsp;N3&nbsp;extend&nbsp;RDF&nbsp;to&nbsp;allow&nbsp;a&nbsp;literal&nbsp;formula&nbsp;as&nbsp;an&nbsp;item&nbsp;in&nbsp;a&nbsp;triple.<br>&nbsp;</tt></td></tr>
+Cwm&nbsp;and&nbsp;N3&nbsp;extend&nbsp;RDF&nbsp;to&nbsp;allow&nbsp;a&nbsp;literal&nbsp;formula&nbsp;as&nbsp;an&nbsp;item&nbsp;in&nbsp;a&nbsp;triple.<br>
+&nbsp;<br>
+A&nbsp;formula&nbsp;is&nbsp;either&nbsp;open&nbsp;or&nbsp;closed.&nbsp;&nbsp;Initially,&nbsp;it&nbsp;is&nbsp;open.&nbsp;In&nbsp;this<br>
+state&nbsp;is&nbsp;may&nbsp;be&nbsp;modified&nbsp;-&nbsp;for&nbsp;example,&nbsp;triples&nbsp;may&nbsp;be&nbsp;added&nbsp;to&nbsp;it.<br>
+When&nbsp;it&nbsp;is&nbsp;closed,&nbsp;note&nbsp;that&nbsp;a&nbsp;different&nbsp;interned&nbsp;version&nbsp;of&nbsp;itself<br>
+may&nbsp;be&nbsp;returned.&nbsp;From&nbsp;then&nbsp;on&nbsp;it&nbsp;is&nbsp;a&nbsp;constant.<br>
+&nbsp;<br>
+Only&nbsp;closed&nbsp;formulae&nbsp;may&nbsp;be&nbsp;mentioned&nbsp;in&nbsp;statements&nbsp;in&nbsp;other&nbsp;formuale.<br>
+&nbsp;<br>
+There&nbsp;is&nbsp;a&nbsp;<a href="#Formula-reopen">reopen</a>()&nbsp;method&nbsp;but&nbsp;it&nbsp;is&nbsp;not&nbsp;recommended,&nbsp;and&nbsp;if&nbsp;desperate&nbsp;should<br>
+only&nbsp;be&nbsp;used&nbsp;immediately&nbsp;after&nbsp;a&nbsp;<a href="#Formula-close">close</a>().<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;&nbsp;</td>
 <td width="100%"><dl><dt>Method resolution order:</dt>
 <dd><a href="llyn.html#Formula">Formula</a></dd>
@@ -1452,70 +1462,99 @@ Cwm&nbsp;and&nbsp;N3&nbsp;extend&nbsp;RDF&nbsp;to&nbsp;allow&nbsp;a&nbsp;literal
 Methods defined here:<br>
 <dl><dt><a name="Formula-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
-<dl><dt><a name="Formula-__iter__"><strong>__iter__</strong></a>(self)</dt></dl>
+<dl><dt><a name="Formula-__iter__"><strong>__iter__</strong></a>(self)</dt><dd><tt>The&nbsp;internal&nbsp;method&nbsp;which&nbsp;allows&nbsp;one&nbsp;to&nbsp;iterate&nbsp;over&nbsp;the&nbsp;statements<br>
+as&nbsp;though&nbsp;a&nbsp;formula&nbsp;were&nbsp;a&nbsp;sequence.</tt></dd></dl>
 
 <dl><dt><a name="Formula-__len__"><strong>__len__</strong></a>(self)</dt><dd><tt>&nbsp;How&nbsp;many&nbsp;statements?</tt></dd></dl>
 
-<dl><dt><a name="Formula-add"><strong>add</strong></a>(self, subj, pred, obj, why<font color="#909090">=None</font>)</dt></dl>
-
-<dl><dt><a name="Formula-any"><strong>any</strong></a>(self, subj<font color="#909090">=None</font>, pred<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;None&nbsp;or&nbsp;the&nbsp;value&nbsp;filing&nbsp;the&nbsp;blank&nbsp;in&nbsp;the&nbsp;called&nbsp;parameters<br>
+<dl><dt><a name="Formula-_checkList"><strong>_checkList</strong></a>(self, L)</dt><dd><tt>Check&nbsp;whether&nbsp;this&nbsp;new&nbsp;list&nbsp;causes&nbsp;other&nbsp;things&nbsp;to&nbsp;become&nbsp;lists.<br>
 &nbsp;<br>
+Internal&nbsp;function.</tt></dd></dl>
+
+<dl><dt><a name="Formula-add"><strong>add</strong></a>(self, subj, pred, obj, why<font color="#909090">=None</font>)</dt><dd><tt>Add&nbsp;a&nbsp;triple&nbsp;to&nbsp;the&nbsp;formula.<br>
+&nbsp;<br>
+The&nbsp;formula&nbsp;must&nbsp;be&nbsp;open.<br>
+subj,&nbsp;pred&nbsp;and&nbsp;obj&nbsp;must&nbsp;be&nbsp;objects&nbsp;as&nbsp;for&nbsp;example&nbsp;generated&nbsp;by&nbsp;<a href="#Formula">Formula</a>.<a href="#Formula-newSymbol">newSymbol</a>()&nbsp;and&nbsp;<a href="#Formula-newLiteral">newLiteral</a>()<br>
+why&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;may&nbsp;be&nbsp;a&nbsp;reason&nbsp;for&nbsp;use&nbsp;when&nbsp;a&nbsp;proof&nbsp;will&nbsp;be&nbsp;required.</tt></dd></dl>
+
+<dl><dt><a name="Formula-any"><strong>any</strong></a>(self, subj<font color="#909090">=None</font>, pred<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;None&nbsp;or&nbsp;the&nbsp;value&nbsp;filing&nbsp;the&nbsp;blank&nbsp;in&nbsp;the&nbsp;called&nbsp;parameters.<br>
+&nbsp;<br>
+Specifiy&nbsp;exactly&nbsp;two&nbsp;of&nbsp;the&nbsp;arguments.<br>
 color&nbsp;=&nbsp;f.<a href="#Formula-any">any</a>(pred=pantoneColor,&nbsp;subj=myCar)<br>
-redCar&nbsp;=&nbsp;f.<a href="#Formula-any">any</a>(pred=pantoneColor,&nbsp;obj=red)<br>
+somethingRed&nbsp;=&nbsp;f.<a href="#Formula-any">any</a>(pred=pantoneColor,&nbsp;obj=red)<br>
 &nbsp;<br>
-Note&nbsp;difference&nbsp;from&nbsp;store.any!!<br>
-Note&nbsp;SPO&nbsp;order&nbsp;not&nbsp;PSO!!</tt></dd></dl>
+Note&nbsp;difference&nbsp;from&nbsp;the&nbsp;old&nbsp;store.any!!<br>
+Note&nbsp;SPO&nbsp;order&nbsp;not&nbsp;PSO.<br>
+To&nbsp;aboid&nbsp;confusion,&nbsp;use&nbsp;named&nbsp;parameters.</tt></dd></dl>
 
-<dl><dt><a name="Formula-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Old&nbsp;representation.</tt></dd></dl>
+<dl><dt><a name="Formula-asPair"><strong>asPair</strong></a>(self)</dt><dd><tt>Return&nbsp;an&nbsp;old&nbsp;representation.&nbsp;Obsolete</tt></dd></dl>
 
-<dl><dt><a name="Formula-bind"><strong>bind</strong></a>(self, prefix, uri)</dt></dl>
-
-<dl><dt><a name="Formula-checkList"><strong>checkList</strong></a>(self, L)</dt><dd><tt>Check&nbsp;whether&nbsp;this&nbsp;new&nbsp;list&nbsp;causes&nbsp;other&nbsp;things&nbsp;to&nbsp;become&nbsp;lists</tt></dd></dl>
+<dl><dt><a name="Formula-bind"><strong>bind</strong></a>(self, prefix, uri)</dt><dd><tt>Give&nbsp;a&nbsp;prefix&nbsp;and&nbsp;associated&nbsp;URI&nbsp;as&nbsp;a&nbsp;hint&nbsp;for&nbsp;output<br>
+&nbsp;<br>
+The&nbsp;store&nbsp;does&nbsp;not&nbsp;use&nbsp;prefixes&nbsp;internally,&nbsp;but&nbsp;keeping&nbsp;track<br>
+of&nbsp;those&nbsp;usedd&nbsp;in&nbsp;the&nbsp;input&nbsp;data&nbsp;makes&nbsp;for&nbsp;more&nbsp;human-readable&nbsp;output.</tt></dd></dl>
 
 <dl><dt><a name="Formula-close"><strong>close</strong></a>(self)</dt><dd><tt>No&nbsp;more&nbsp;to&nbsp;add.&nbsp;Please&nbsp;return&nbsp;interned&nbsp;value.<br>
 NOTE&nbsp;You&nbsp;must&nbsp;now&nbsp;use&nbsp;the&nbsp;interned&nbsp;one,&nbsp;not&nbsp;the&nbsp;original!</tt></dd></dl>
 
-<dl><dt><a name="Formula-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt><dd><tt>A&nbsp;simple&nbsp;dump&nbsp;of&nbsp;a&nbsp;formula&nbsp;in&nbsp;debug&nbsp;form.</tt></dd></dl>
+<dl><dt><a name="Formula-debugString"><strong>debugString</strong></a>(self, already<font color="#909090">=[]</font>)</dt><dd><tt>A&nbsp;simple&nbsp;dump&nbsp;of&nbsp;a&nbsp;formula&nbsp;in&nbsp;debug&nbsp;form.<br>
+&nbsp;<br>
+This&nbsp;formula&nbsp;is&nbsp;dumped,&nbsp;using&nbsp;ids&nbsp;for&nbsp;nested&nbsp;formula.<br>
+Then,&nbsp;each&nbsp;nested&nbsp;formula&nbsp;mentioned&nbsp;is&nbsp;dumped.</tt></dd></dl>
 
 <dl><dt><a name="Formula-each"><strong>each</strong></a>(self, subj<font color="#909090">=None</font>, pred<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;values&nbsp;value&nbsp;filing&nbsp;the&nbsp;blank&nbsp;in&nbsp;the&nbsp;called&nbsp;parameters<br>
 &nbsp;<br>
+Examples:<br>
 colors&nbsp;=&nbsp;f.<a href="#Formula-each">each</a>(pred=pantoneColor,&nbsp;subj=myCar)<br>
-redCar&nbsp;=&nbsp;f.<a href="#Formula-any">any</a>(pred=pantoneColor,&nbsp;obj=red)<br>
 &nbsp;<br>
-Note&nbsp;difference&nbsp;from&nbsp;store.any!!<br>
-Note&nbsp;SPO&nbsp;order&nbsp;not&nbsp;PSO!!</tt></dd></dl>
+for&nbsp;redthing&nbsp;in&nbsp;f.<a href="#Formula-each">each</a>(pred=pantoneColor,&nbsp;obj=red):&nbsp;...</tt></dd></dl>
 
-<dl><dt><a name="Formula-existentials"><strong>existentials</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;existential&nbsp;variables&nbsp;with&nbsp;this&nbsp;scope.<br>
+<dl><dt><a name="Formula-existentials"><strong>existentials</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;existential&nbsp;variables&nbsp;with&nbsp;this&nbsp;formula&nbsp;as&nbsp;scope.<br>
 &nbsp;<br>
 Implementation:<br>
 we&nbsp;may&nbsp;move&nbsp;to&nbsp;an&nbsp;internal&nbsp;storage&nbsp;rather&nbsp;than&nbsp;these&nbsp;pseudo-statements</tt></dd></dl>
 
 <dl><dt><a name="Formula-generated"><strong>generated</strong></a>(self)</dt><dd><tt>Yes,&nbsp;any&nbsp;identifier&nbsp;you&nbsp;see&nbsp;for&nbsp;this&nbsp;is&nbsp;arbitrary.</tt></dd></dl>
 
-<dl><dt><a name="Formula-includes"><strong>includes</strong></a>(f, g, _variables<font color="#909090">=[]</font>, smartIn<font color="#909090">=[]</font>, bindings<font color="#909090">=[]</font>)</dt></dl>
+<dl><dt><a name="Formula-includes"><strong>includes</strong></a>(f, g, _variables<font color="#909090">=[]</font>, smartIn<font color="#909090">=[]</font>, bindings<font color="#909090">=[]</font>)</dt><dd><tt>Does&nbsp;this&nbsp;formula&nbsp;include&nbsp;the&nbsp;information&nbsp;in&nbsp;the&nbsp;other?<br>
+&nbsp;<br>
+smartIn&nbsp;gives&nbsp;a&nbsp;list&nbsp;of&nbsp;formulae&nbsp;for&nbsp;which&nbsp;builtin&nbsp;functions&nbsp;should&nbsp;operate<br>
+&nbsp;&nbsp;&nbsp;in&nbsp;the&nbsp;consideration&nbsp;of&nbsp;what&nbsp;"includes"&nbsp;means.<br>
+bindings&nbsp;is&nbsp;for&nbsp;use&nbsp;within&nbsp;a&nbsp;query.</tt></dd></dl>
 
 <dl><dt><a name="Formula-listValue"><strong>listValue</strong></a>(self, x)</dt><dd><tt>as&nbsp;stored&nbsp;in&nbsp;this&nbsp;formula,&nbsp;does&nbsp;this&nbsp;have&nbsp;a&nbsp;value&nbsp;as&nbsp;a&nbsp;list?</tt></dd></dl>
 
 <dl><dt><a name="Formula-n3String"><strong>n3String</strong></a>(self, flags<font color="#909090">=''</font>)</dt><dd><tt>Dump&nbsp;the&nbsp;formula&nbsp;to&nbsp;an&nbsp;absolute&nbsp;string&nbsp;in&nbsp;N3</tt></dd></dl>
 
-<dl><dt><a name="Formula-newBlankNode"><strong>newBlankNode</strong></a>(self, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;new&nbsp;unnamed&nbsp;node&nbsp;within&nbsp;the&nbsp;given<br>
-formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+<dl><dt><a name="Formula-newBlankNode"><strong>newBlankNode</strong></a>(self, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;a&nbsp;new&nbsp;unnamed&nbsp;node&nbsp;with&nbsp;this&nbsp;formula&nbsp;as&nbsp;context.<br>
+&nbsp;<br>
+The&nbsp;URI&nbsp;is&nbsp;typically&nbsp;omitted,&nbsp;and&nbsp;the&nbsp;system&nbsp;will&nbsp;make&nbsp;up&nbsp;an&nbsp;internal&nbsp;idnetifier.<br>
+If&nbsp;given&nbsp;is&nbsp;used&nbsp;as&nbsp;the&nbsp;(arbitrary)&nbsp;internal&nbsp;identifier&nbsp;of&nbsp;the&nbsp;node.</tt></dd></dl>
 
-<dl><dt><a name="Formula-newExistential"><strong>newExistential</strong></a>(self, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;new&nbsp;named&nbsp;variable<br>
-existentially&nbsp;qualified&nbsp;within&nbsp;the&nbsp;given<br>
-formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+<dl><dt><a name="Formula-newExistential"><strong>newExistential</strong></a>(self, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;a&nbsp;named&nbsp;variable&nbsp;existentially&nbsp;qualified&nbsp;within&nbsp;this&nbsp;formula<br>
+&nbsp;<br>
+If&nbsp;the&nbsp;URI&nbsp;is&nbsp;not&nbsp;given,&nbsp;an&nbsp;arbitrary&nbsp;identifier&nbsp;is&nbsp;generated.<br>
+See&nbsp;also:&nbsp;<a href="#Formula-existentials">existentials</a>().</tt></dd></dl>
 
-<dl><dt><a name="Formula-newFormula"><strong>newFormula</strong></a>(self, uri<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="Formula-newFormula"><strong>newFormula</strong></a>(self, uri<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;a&nbsp;new&nbsp;open,&nbsp;empty,&nbsp;formula&nbsp;in&nbsp;the&nbsp;same&nbsp;store&nbsp;as&nbsp;this&nbsp;one.<br>
+&nbsp;<br>
+The&nbsp;URI&nbsp;is&nbsp;typically&nbsp;omitted,&nbsp;and&nbsp;the&nbsp;system&nbsp;will&nbsp;make&nbsp;up&nbsp;an&nbsp;internal&nbsp;idnetifier.<br>
+If&nbsp;given&nbsp;is&nbsp;used&nbsp;as&nbsp;the&nbsp;(arbitrary)&nbsp;internal&nbsp;identifier&nbsp;of&nbsp;the&nbsp;formula.</tt></dd></dl>
 
-<dl><dt><a name="Formula-newLiteral"><strong>newLiteral</strong></a>(self, st)</dt></dl>
+<dl><dt><a name="Formula-newLiteral"><strong>newLiteral</strong></a>(self, st)</dt><dd><tt>Create&nbsp;or&nbsp;reuse&nbsp;the&nbsp;internal&nbsp;representation&nbsp;of&nbsp;the&nbsp;RDF&nbsp;literal&nbsp;whose&nbsp;string&nbsp;is&nbsp;given<br>
+&nbsp;<br>
+The&nbsp;literal&nbsp;is&nbsp;craeted&nbsp;in&nbsp;the&nbsp;same&nbsp;store&nbsp;as&nbsp;the&nbsp;formula.</tt></dd></dl>
 
-<dl><dt><a name="Formula-newSymbol"><strong>newSymbol</strong></a>(self, uri)</dt></dl>
+<dl><dt><a name="Formula-newSymbol"><strong>newSymbol</strong></a>(self, uri)</dt><dd><tt>Create&nbsp;or&nbsp;reuse&nbsp;the&nbsp;internal&nbsp;representation&nbsp;of&nbsp;the&nbsp;RDF&nbsp;node&nbsp;whose&nbsp;uri&nbsp;is&nbsp;given<br>
+&nbsp;<br>
+The&nbsp;symbol&nbsp;is&nbsp;created&nbsp;in&nbsp;the&nbsp;same&nbsp;store&nbsp;as&nbsp;the&nbsp;formula.</tt></dd></dl>
 
-<dl><dt><a name="Formula-newUniversal"><strong>newUniversal</strong></a>(self, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;named&nbsp;variable<br>
-universally&nbsp;qualified&nbsp;within&nbsp;the&nbsp;given<br>
-formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
+<dl><dt><a name="Formula-newUniversal"><strong>newUniversal</strong></a>(self, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;a&nbsp;named&nbsp;variable&nbsp;universally&nbsp;qualified&nbsp;within&nbsp;this&nbsp;formula<br>
+&nbsp;<br>
+If&nbsp;the&nbsp;URI&nbsp;is&nbsp;not&nbsp;given,&nbsp;an&nbsp;arbitrary&nbsp;identifier&nbsp;is&nbsp;generated.<br>
+See&nbsp;also:&nbsp;<a href="#Formula-universals">universals</a>()</tt></dd></dl>
 
-<dl><dt><a name="Formula-objects"><strong>objects</strong></a>(self, pred<font color="#909090">=None</font>, subj<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="Formula-objects"><strong>objects</strong></a>(self, pred<font color="#909090">=None</font>, subj<font color="#909090">=None</font>)</dt><dd><tt>Obsolete&nbsp;-&nbsp;use&nbsp;<a href="#Formula-each">each</a>(subj=...,&nbsp;pred=...)</tt></dd></dl>
 
 <dl><dt><a name="Formula-outputStrings"><strong>outputStrings</strong></a>(self, channel<font color="#909090">=None</font>, relation<font color="#909090">=None</font>)</dt><dd><tt>Fetch&nbsp;output&nbsp;strings&nbsp;from&nbsp;store,&nbsp;sort&nbsp;and&nbsp;output<br>
 &nbsp;<br>
@@ -1523,13 +1562,22 @@ To&nbsp;output&nbsp;a&nbsp;string,&nbsp;associate&nbsp;(using&nbsp;the&nbsp;give
 such&nbsp;that&nbsp;the&nbsp;order&nbsp;of&nbsp;the&nbsp;keys&nbsp;is&nbsp;the&nbsp;order&nbsp;in&nbsp;which&nbsp;you&nbsp;want&nbsp;the&nbsp;corresponding<br>
 strings&nbsp;output.</tt></dd></dl>
 
-<dl><dt><a name="Formula-predicates"><strong>predicates</strong></a>(self, subj<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="Formula-predicates"><strong>predicates</strong></a>(self, subj<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Obsolete&nbsp;-&nbsp;use&nbsp;<a href="#Formula-each">each</a>(subj=...,&nbsp;obj=...)</tt></dd></dl>
 
-<dl><dt><a name="Formula-remove"><strong>remove</strong></a>(self, subj, pred, obj)</dt></dl>
+<dl><dt><a name="Formula-remove"><strong>remove</strong></a>(self, subj, pred, obj)</dt><dd><tt>Removes&nbsp;the&nbsp;information&nbsp;from&nbsp;the&nbsp;store.<br>
+&nbsp;<br>
+Similar&nbsp;to&nbsp;<a href="#Formula-add">add</a>().&nbsp;The&nbsp;formula&nbsp;must&nbsp;be&nbsp;open.</tt></dd></dl>
 
-<dl><dt><a name="Formula-reopen"><strong>reopen</strong></a>(self)</dt></dl>
+<dl><dt><a name="Formula-reopen"><strong>reopen</strong></a>(self)</dt><dd><tt>Make&nbsp;a&nbsp;formula&nbsp;which&nbsp;was&nbsp;once&nbsp;closed&nbsp;oopen&nbsp;for&nbsp;input&nbsp;again.<br>
+&nbsp;<br>
+NOT&nbsp;Recommended.&nbsp;&nbsp;Dangers:&nbsp;this&nbsp;formula&nbsp;will&nbsp;be,&nbsp;because&nbsp;of&nbsp;interning,<br>
+the&nbsp;same&nbsp;objet&nbsp;as&nbsp;a&nbsp;formula&nbsp;used&nbsp;elsewhere&nbsp;which&nbsp;happens&nbsp;to&nbsp;have&nbsp;the&nbsp;same&nbsp;content.<br>
+You&nbsp;mess&nbsp;with&nbsp;this&nbsp;one,&nbsp;you&nbsp;mess&nbsp;with&nbsp;that&nbsp;one.<br>
+Much&nbsp;better&nbsp;to&nbsp;keep&nbsp;teh&nbsp;formula&nbsp;open&nbsp;until&nbsp;you&nbsp;don't&nbsp;needed&nbsp;it&nbsp;open&nbsp;any&nbsp;more.<br>
+The&nbsp;trouble&nbsp;is,&nbsp;the&nbsp;parsers&nbsp;close&nbsp;it&nbsp;at&nbsp;the&nbsp;moment&nbsp;automatically.&nbsp;To&nbsp;be&nbsp;fixed.</tt></dd></dl>
 
-<dl><dt><a name="Formula-size"><strong>size</strong></a>(self)</dt><dd><tt>&nbsp;How&nbsp;many&nbsp;statements?</tt></dd></dl>
+<dl><dt><a name="Formula-size"><strong>size</strong></a>(self)</dt><dd><tt>Return&nbsp;the&nbsp;number&nbsp;statements.<br>
+Obsolete:&nbsp;use&nbsp;len(F).</tt></dd></dl>
 
 <dl><dt><a name="Formula-statementsMatching"><strong>statementsMatching</strong></a>(self, pred<font color="#909090">=None</font>, subj<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;a&nbsp;READ-ONLY&nbsp;list&nbsp;of&nbsp;<a href="#StoredStatement">StoredStatement</a>&nbsp;objects&nbsp;matching&nbsp;the&nbsp;parts&nbsp;given<br>
 &nbsp;<br>
@@ -1539,27 +1587,30 @@ for&nbsp;s&nbsp;in&nbsp;f.<a href="#Formula-statementsMatching">statementsMatchi
 &nbsp;&nbsp;&nbsp;&nbsp;<br>
 If&nbsp;none,&nbsp;returns&nbsp;[]</tt></dd></dl>
 
-<dl><dt><a name="Formula-subFormulae"><strong>subFormulae</strong></a>(self, path<font color="#909090">=[]</font>)</dt><dd><tt>slow...</tt></dd></dl>
+<dl><dt><a name="Formula-subFormulae"><strong>subFormulae</strong></a>(self, path<font color="#909090">=[]</font>)</dt><dd><tt>Returns&nbsp;a&nbsp;sequence&nbsp;of&nbsp;the&nbsp;all&nbsp;the&nbsp;formulae&nbsp;nested&nbsp;within&nbsp;this&nbsp;one.<br>
+&nbsp;<br>
+slow...typically&nbsp;only&nbsp;used&nbsp;in&nbsp;pretty&nbsp;print&nbsp;functions.</tt></dd></dl>
 
-<dl><dt><a name="Formula-subjects"><strong>subjects</strong></a>(self, pred<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="Formula-subjects"><strong>subjects</strong></a>(self, pred<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Obsolete&nbsp;-&nbsp;use&nbsp;<a href="#Formula-each">each</a>(pred=...,&nbsp;obj=...)</tt></dd></dl>
 
 <dl><dt><a name="Formula-the"><strong>the</strong></a>(self, subj<font color="#909090">=None</font>, pred<font color="#909090">=None</font>, obj<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;None&nbsp;or&nbsp;the&nbsp;value&nbsp;filing&nbsp;the&nbsp;blank&nbsp;in&nbsp;the&nbsp;called&nbsp;parameters<br>
 &nbsp;<br>
-color&nbsp;=&nbsp;f.<a href="#Formula-any">any</a>(pred=pantoneColor,&nbsp;subj=myCar)<br>
-redCar&nbsp;=&nbsp;f.<a href="#Formula-any">any</a>(pred=pantoneColor,&nbsp;obj=red)<br>
+This&nbsp;is&nbsp;just&nbsp;like&nbsp;<a href="#Formula-any">any</a>()&nbsp;except&nbsp;it&nbsp;checks&nbsp;that&nbsp;there&nbsp;is&nbsp;only<br>
+one&nbsp;answer&nbsp;in&nbsp;the&nbsp;store.&nbsp;It&nbsp;wise&nbsp;to&nbsp;use&nbsp;this&nbsp;when&nbsp;you&nbsp;expect&nbsp;only&nbsp;one.<br>
 &nbsp;<br>
-Note&nbsp;difference&nbsp;from&nbsp;store.any!!<br>
-Note&nbsp;SPO&nbsp;order&nbsp;not&nbsp;PSO!!</tt></dd></dl>
+color&nbsp;=&nbsp;f.<a href="#Formula-the">the</a>(pred=pantoneColor,&nbsp;subj=myCar)<br>
+redCar&nbsp;=&nbsp;f.<a href="#Formula-the">the</a>(pred=pantoneColor,&nbsp;obj=red)</tt></dd></dl>
 
-<dl><dt><a name="Formula-universals"><strong>universals</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;variables&nbsp;universally&nbsp;quantified&nbsp;within&nbsp;this&nbsp;scope.<br>
+<dl><dt><a name="Formula-universals"><strong>universals</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;variables&nbsp;universally&nbsp;quantified&nbsp;with&nbsp;this&nbsp;formula&nbsp;as&nbsp;scope.<br>
 &nbsp;<br>
+Implementation:<br>
 We&nbsp;may&nbsp;move&nbsp;to&nbsp;an&nbsp;internal&nbsp;storage&nbsp;rather&nbsp;than&nbsp;these&nbsp;statements.</tt></dd></dl>
 
 <dl><dt><a name="Formula-variables"><strong>variables</strong></a>(self)</dt><dd><tt>Return&nbsp;a&nbsp;list&nbsp;of&nbsp;all&nbsp;variables&nbsp;quantified&nbsp;within&nbsp;this&nbsp;scope.</tt></dd></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = 'A formula of a set of RDF statements, triples.<font color="#c040c0">\n</font> ...ow a literal formula as an item in a triple.<font color="#c040c0">\n</font>    '<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+<dl><dt><strong>__doc__</strong> = 'A formula of a set of RDF statements, triples.<font color="#c040c0">\n</font> ...   only be used immediately after a close().<font color="#c040c0">\n</font>    '<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
 &nbsp;<br>
 Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
 If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
@@ -1858,9 +1909,6 @@ Raises&nbsp;<a href="exceptions.html#IOError">IOError</a>,&nbsp;SyntaxError</tt>
 
 <dl><dt><a name="RDFStore-makeStatement"><strong>makeStatement</strong></a>(self, tuple, why<font color="#909090">=None</font>)</dt><dd><tt>Add&nbsp;a&nbsp;quad&nbsp;to&nbsp;the&nbsp;store,&nbsp;each&nbsp;part&nbsp;of&nbsp;the&nbsp;quad&nbsp;being&nbsp;in&nbsp;pair&nbsp;form.</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-nestedContexts"><strong>nestedContexts</strong></a>(self, con)</dt><dd><tt>&nbsp;Return&nbsp;a&nbsp;list&nbsp;of&nbsp;statements&nbsp;and&nbsp;variables&nbsp;of&nbsp;either&nbsp;type<br>
-found&nbsp;within&nbsp;the&nbsp;nested&nbsp;subFormulae</tt></dd></dl>
-
 <dl><dt><a name="RDFStore-newBlankNode"><strong>newBlankNode</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt><dd><tt>Create&nbsp;or&nbsp;reuse,&nbsp;in&nbsp;the&nbsp;default&nbsp;store,&nbsp;a&nbsp;new&nbsp;unnamed&nbsp;node&nbsp;within&nbsp;the&nbsp;given<br>
 formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&nbsp;use</tt></dd></dl>
 
@@ -2078,7 +2126,7 @@ Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nb
 @@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
 a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
 This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
- <dl><dt><a name="-dereference"><strong>dereference</strong></a>(x)</dt><dd><tt>dereference&nbsp;an&nbsp;object,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
+ <dl><dt><a name="-dereference"><strong>dereference</strong></a>(x, critical<font color="#909090">=0</font>)</dt><dd><tt>dereference&nbsp;an&nbsp;object,&nbsp;finding&nbsp;the&nbsp;semantics&nbsp;of&nbsp;its&nbsp;schema&nbsp;if&nbsp;any<br>
 &nbsp;<br>
 Returns&nbsp;None&nbsp;if&nbsp;it&nbsp;cannot&nbsp;be&nbsp;retreived.<br>
 Could&nbsp;be&nbsp;speeded&nbsp;up&nbsp;by&nbsp;hanging&nbsp;the&nbsp;cached&nbsp;value&nbsp;as&nbsp;a&nbsp;python&nbsp;attribute&nbsp;on&nbsp;x</tt></dd></dl>

@@ -71,6 +71,7 @@ DATUM = 1	# normal
 HEADER = 2	# underlined
 
 import string
+from diag import progress # @@ for debugging
 
 def Assure(list, index, value):
     for i in range(len(list), index+1):
@@ -115,13 +116,15 @@ class TableRenderer:
         ret.append(self._hr())
         return string.join(ret, "\n")
 
-    def _addData(self, data, type, filter):
+    def _addData(self, data, theType, filter):
+	progress("@@ _addData data=%s theType=%s filter=%s " %(data, theType, filter))
+	progress("@@@ type ", type(data))
+	if type(data[0]) is not type([]): data = [data]   # resolve ambiguous calling convention
         try:
-            data[0].isdigit() # Lord, there's got to be a better way. @@@
+            data[0].isdigit() # Lord, there's got to be a better way. @@@   (@@ to do what? --tim)
             data = [data]
         except AttributeError, e:
-            data = data
-
+            data = data  #  @@? what does this do - tim   mean "pass"?
         for row in data:
             rowEntry = []
             self.data.append(rowEntry)
@@ -134,7 +137,7 @@ class TableRenderer:
                 if (filter):
                     datum = filter(datum)
                 self._checkWidth(datum, len(self.data) - 1, columnNo)
-                rowEntry.append([datum, type])
+                rowEntry.append([datum, theType])
 
     def _hr(self):
         ret = []
