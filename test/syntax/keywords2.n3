@@ -2,13 +2,13 @@
 # Test the cwm quick variable declarations
 
 
-@keywords this, forAll, forSome, a, prefix.   # Use no keywards
+@keywords.   # Use no keywards
 
 
-prefix : <foo.n3#>.  # Local stuff
+@prefix : <foo.n3#>.  # Local stuff
 
-forAll x, y, z.
-forSome a, b, c.
+@forAll x, y, z.
+@forSome a, b, c.
 
 b a c.  # Should simply use a as a local symbol, NOT as rdf:type.
 

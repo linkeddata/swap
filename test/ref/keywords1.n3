@@ -1,0 +1,11 @@
+     @prefix : <foo.n3#> .
+    
+    this     <http://www.w3.org/2000/10/swap/log#forAll> :x,
+                :y,
+                :z;
+         <http://www.w3.org/2000/10/swap/log#forSome> :a,
+                :b,
+                :c .
+    
+    :b     :a :c .
+    

@@ -83,7 +83,7 @@ def join(here, there):
 
     """
 
-    assert(find(here, "#") < 0) # caller must splitFrag
+    assert(find(here, "#") < 0), "Base may not contain hash: '%s'"% here # caller must splitFrag (why?)
 
     slashl = find(there, '/')
     colonl = find(there, ':')
@@ -379,7 +379,13 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.13  2003-07-03 21:04:39  timbl
+# Revision 1.14  2003-10-20 17:31:55  timbl
+# Added @keyword support.
+# (eventually got python+expat to wrok on fink, with patch)
+# Trig functions are in, thanks to Karl, with some changes, but NOT in regeression.n3
+# see test/math/test-trigo.n3 for now.
+#
+# Revision 1.13  2003/07/03 21:04:39  timbl
 # New string function to compare strings normalizing case and whitespace string:containsRoughly
 #
 # Revision 1.12  2003/04/03 22:35:12  ryanlee

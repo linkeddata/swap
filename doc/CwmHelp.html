@@ -25,22 +25,28 @@ Comparing Formats</p>
 <pre>
 Command line RDF/N3 tool
         
- &lt;command> &lt;options> &lt;inputURIs>
+ &lt;command> &lt;options> &lt;steps> [--with &lt;more args> ]
+
+options:
  
 --pipe        Don't store, just pipe out *
 
---rdf         Input &amp; Output ** in RDF M&amp;S 1.0 insead of n3 from now on
---n3          Input &amp; Output in N3 from now on
+steps, in order left to right:
+
+--rdf         Input &amp; Output ** in RDF/XML insead of n3 from now on
+--n3          Input &amp; Output in N3 from now on. (Default)
 --rdf=flags   Input &amp; Output ** in RDF and set given RDF flags
 --n3=flags    Input &amp; Output in N3 and set N3 flags
 --ntriples    Input &amp; Output in NTriples (equiv --n3=spartan -bySubject -quiet)
 --language=x  Input &amp; Output in "x" (rdf, n3, etc)  --rdf same as: --language=rdf
 --languageOptions=y     --n3=sp same as:  --language=n3 --languageOptions=sp
---ugly        Store input and regurgitate *
+--ugly        Store input and regurgitate, data only, fastest *
 --bySubject   Store input and regurgitate in subject order *
 --no          No output *
               (default is to store and pretty print with anonymous nodes) *
---strings     Dump :s to stdout ordered by :k whereever { :k log:outputString :s }
+--base=&lt;uri>  Set the base URI. Input or output is done as though theis were the document URI.
+--closure=flags  Control automatic lookup of identifiers (see below)
+&lt;uri>         Load document. URI may be relative to current directory.
 
 --apply=foo   Read rules from foo, apply to store, adding conclusions to store
 --filter=foo  Read rules from foo, apply to store, REPLACING store with conclusions
@@ -53,11 +59,15 @@ Command line RDF/N3 tool
 --unflatten   turn described-as-true LX sentences into formulas
 --think=foo   as -apply=foo but continue until no more rule matches (or forever!)
 --purge       Remove from store any triple involving anything in class log:Chaff
---purge-rules Remove from store any triple involving log:implies
+--data	      Remove all except plain RDF triples (formulae, forAll, etc)
+--strings     Dump :s to stdout ordered by :k whereever { :k log:outputString :s }
 --crypto      Enable processing of crypto builtin functions. Requires python crypto.
 --help        print this message
 --revision    print CVS revision numbers of major modules
---chatty=50   Verbose output of questionable use, range 0-99
+--chatty=50   Verbose debugging output of questionable use, range 0-99
+
+finally:
+
 --with        Pass any further arguments to the N3 store as os:argv values
  
 
@@ -68,17 +78,28 @@ Examples:
   cwm foo.n3 bar.n3 --think         Combine data and find all deductions
   cwm foo.n3 --flat --n3=spart
 
-See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
-
 Mode flags affect inference extedning to the web:
- e   Errors loading schemas of definitive documents are fatal
+ r   Needed to enable any remote stuff.
+ a   When reading schema, also load rules pointed to by schema (requires r, s)
+ E   Errors loading schemas of definitive documents are ignored
  m   Schemas and definitive documents laoded are merged into the meta knowledge
      (otherwise they are consulted independently)
- r   Needed to enable any remote stuff.
  s   Read the schema for any predicate in a query.
- 
  u   Generate unique ids using a run-specific
 
+Closure flags are set to cause the working formula to be automatically exapnded to
+the closure under the operation of looking up:
+
+ s   the subject of a statement added
+ p   the predicate of a statement added
+ o   the object of a statement added
+ t   the object of an rdf:type statement added
+ i   any owl:imports documents
+ r   any doc:rules documents
+ 
+ e   Smush together any nodes which are = (owl:sameAs)
+
+See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
 Flags for N3 output are as follows:-
         

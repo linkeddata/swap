@@ -45,7 +45,8 @@ ______________________________________________<br>
 &nbsp;<br>
 Module&nbsp;originally&nbsp;by&nbsp;Dan&nbsp;Connolly,&nbsp;includeing&nbsp;notation3<br>
 parser&nbsp;and&nbsp;RDF&nbsp;generator.&nbsp;TimBL&nbsp;added&nbsp;RDF&nbsp;stream&nbsp;model<br>
-and&nbsp;N3&nbsp;generation.<br>
+and&nbsp;N3&nbsp;generation,&nbsp;replaced&nbsp;stream&nbsp;model&nbsp;with&nbsp;use<br>
+of&nbsp;common&nbsp;store/formula&nbsp;API.<br>
 &nbsp;<br>
 DWC:<br>
 oops...&nbsp;I'm&nbsp;not&nbsp;doing&nbsp;qname&nbsp;expansion&nbsp;as&nbsp;described<br>
@@ -129,10 +130,7 @@ Methods defined here:<br>
 Data and non-method functions defined here:<br>
 <dl><dt><strong>__doc__</strong> = None</dl>
 
-<dl><dt><strong>__module__</strong> = 'notation3'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__module__</strong> = 'notation3'</dl>
 
 <hr>
 Data and non-method functions inherited from <a href="exceptions.html#SyntaxError">exceptions.SyntaxError</a>:<br>
@@ -140,10 +138,7 @@ Data and non-method functions inherited from <a href="exceptions.html#SyntaxErro
 
 <dl><dt><strong>lineno</strong> = None</dl>
 
-<dl><dt><strong>msg</strong> = ''<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>msg</strong> = ''</dl>
 
 <dl><dt><strong>offset</strong> = None</dl>
 
@@ -181,10 +176,7 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 Data and non-method functions defined here:<br>
 <dl><dt><strong>__doc__</strong> = None</dl>
 
-<dl><dt><strong>__module__</strong> = 'notation3'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__module__</strong> = 'notation3'</dl>
 
 <hr>
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>
@@ -237,9 +229,14 @@ the&nbsp;#&nbsp;will&nbsp;get&nbsp;added&nbsp;during&nbsp;qname&nbsp;processing<
 
 <dl><dt><a name="SinkParser-anonymousNode"><strong>anonymousNode</strong></a>(self, ln)</dt><dd><tt>Remember&nbsp;or&nbsp;generate&nbsp;a&nbsp;term&nbsp;for&nbsp;one&nbsp;of&nbsp;these&nbsp;_:&nbsp;anonymous&nbsp;nodes</tt></dd></dl>
 
+<dl><dt><a name="SinkParser-bareWord"><strong>bareWord</strong></a>(self, str, i, res)</dt><dd><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;abc&nbsp;-&gt;&nbsp;'abc'</tt></dd></dl>
+
 <dl><dt><a name="SinkParser-bind"><strong>bind</strong></a>(self, qn, uri)</dt></dl>
 
 <dl><dt><a name="SinkParser-checkDot"><strong>checkDot</strong></a>(self, str, i)</dt></dl>
+
+<dl><dt><a name="SinkParser-commaSeparatedList"><strong>commaSeparatedList</strong></a>(self, str, j, res, what)</dt><dd><tt>return&nbsp;value:&nbsp;-1&nbsp;bad&nbsp;syntax;&nbsp;&gt;1&nbsp;new&nbsp;position&nbsp;in&nbsp;str<br>
+res&nbsp;has&nbsp;things&nbsp;found&nbsp;appended</tt></dd></dl>
 
 <dl><dt><a name="SinkParser-directive"><strong>directive</strong></a>(self, str, i)</dt></dl>
 
@@ -283,7 +280,7 @@ instead&nbsp;of&nbsp;in&nbsp;multipe&nbsp;calls&nbsp;to&nbsp;<a href="#SinkParse
 
 <dl><dt><a name="SinkParser-object"><strong>object</strong></a>(self, str, i, res)</dt></dl>
 
-<dl><dt><a name="SinkParser-object_list"><strong>object_list</strong></a>(self, str, i, res)</dt></dl>
+<dl><dt><a name="SinkParser-objectList"><strong>objectList</strong></a>(self, str, i, res)</dt></dl>
 
 <dl><dt><a name="SinkParser-path"><strong>path</strong></a>(self, str, i, res)</dt><dd><tt>Parse&nbsp;the&nbsp;path&nbsp;production.</tt></dd></dl>
 
@@ -295,6 +292,8 @@ Leaves&nbsp;the&nbsp;terminating&nbsp;punctuation&nbsp;in&nbsp;the&nbsp;buffer</
 <dl><dt><a name="SinkParser-qname"><strong>qname</strong></a>(self, str, i, res)</dt><dd><tt>xyz:def&nbsp;-&gt;&nbsp;('xyz',&nbsp;'def')<br>
 If&nbsp;not&nbsp;in&nbsp;keywords&nbsp;and&nbsp;keywordsSet:&nbsp;def&nbsp;-&gt;&nbsp;('',&nbsp;'def')<br>
 :def&nbsp;-&gt;&nbsp;('',&nbsp;'def')</tt></dd></dl>
+
+<dl><dt><a name="SinkParser-setKeywords"><strong>setKeywords</strong></a>(self, k)</dt><dd><tt>Takes&nbsp;a&nbsp;list&nbsp;of&nbsp;strings</tt></dd></dl>
 
 <dl><dt><a name="SinkParser-skipSpace"><strong>skipSpace</strong></a>(self, str, i)</dt><dd><tt>Skip&nbsp;white&nbsp;space,&nbsp;newlines&nbsp;and&nbsp;comments.<br>
 return&nbsp;-1&nbsp;if&nbsp;EOF,&nbsp;else&nbsp;position&nbsp;of&nbsp;first&nbsp;non-ws&nbsp;character</tt></dd></dl>
@@ -334,10 +333,7 @@ _operator_</tt></dd></dl>
 Data and non-method functions defined here:<br>
 <dl><dt><strong>__doc__</strong> = None</dl>
 
-<dl><dt><strong>__module__</strong> = 'notation3'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__module__</strong> = 'notation3'</dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -399,20 +395,11 @@ Uses&nbsp;prefix&nbsp;dictionary&nbsp;to&nbsp;use&nbsp;qname&nbsp;syntax&nbsp;if
 
 <hr>
 Data and non-method functions defined here:<br>
-<dl><dt><strong>__doc__</strong> = "Serializer output sink for N3<font color="#c040c0">\n</font>    <font color="#c040c0">\n</font>      keeps t...     Adapted from Dan's ToRDFParser(Parser);<font color="#c040c0">\n</font>    "<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__doc__</strong> = "Serializer output sink for N3<font color="#c040c0">\n</font>    <font color="#c040c0">\n</font>      keeps t...     Adapted from Dan's ToRDFParser(Parser);<font color="#c040c0">\n</font>    "</dl>
 
-<dl><dt><strong>__module__</strong> = 'notation3'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>__module__</strong> = 'notation3'</dl>
 
-<dl><dt><strong>flagDocumentation</strong> = 'Flags for N3 output are as follows:-<font color="#c040c0">\n</font>        <font color="#c040c0">\n</font>a ...is" and "()" special syntax should be suppresed.<font color="#c040c0">\n</font>'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
-&nbsp;<br>
-Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
-If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+<dl><dt><strong>flagDocumentation</strong> = 'Flags for N3 output are as follows:-<font color="#c040c0">\n</font>        <font color="#c040c0">\n</font>a ...is" and "()" special syntax should be suppresed.<font color="#c040c0">\n</font>'</dl>
 
 <hr>
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>

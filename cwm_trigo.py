@@ -18,7 +18,7 @@ __cvsid__ = '$Id$'
 __version__ = '$Revision$'
 __all__ = ["evaluateObject"]
 
-from math import sin, acos, asin, atan, atan2, cos, cosh, degrees, radians, sinh, tan, tanh
+from math import sin, acos, asin, atan, atan2, cos, cosh, sinh, tan, tanh
 from term import LightBuiltIn, Function, ReverseFunction
 import types
 from diag import progress
@@ -33,48 +33,34 @@ MATH_NS_URI = 'http://www.w3.org/2000/10/swap/math#'
 #
 # Light Built-in classes - these are all reverse functions
 #
-# cosine, arc cosine, hyperbolic or not
-# sine, arc sine, hyperbolic or not
+#  Note that asin the arc sine i s just the reverse function of sin,
+#  handled by sin being a reverse function as well as a function
+# cosine,  hyperbolic or not
+# sine,  hyperbolic or not
 # tangent, arc tangent, arc tangent (y/x)
 #
 
-class BI_acos(LightBuiltIn, Function):
-    def evaluateObject(self, subj_py):      
-        """acos(x)
-        
-        Return the arc cosine (measured in radians) of x."""
-        return acos(numeric(subj_py))
-
-class BI_asin(LightBuiltIn, Function):
-    def evaluateObject(self, subj_py):
-        """asin(x)
-        
-        Return the arc sine (measured in radians) of x."""
-        return asin(numeric(subj_py))
-
-class BI_atan(LightBuiltIn, Function):
-    def evaluateObject(self, subj_py):
-        """atan(x)
-        
-        Return the arc tangent (measured in radians) of x."""
-        return atan(numeric(subj_py))
 
 class BI_atan2(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
         """atan2(y, x)
         
         Return the arc tangent (measured in radians) of y/x.
-        Unlike atan(y/x), the signs of both x and y are considered.""" 
+        Unlike atan(y/x), the signs of both x and y are considered.
+	-- Karl""" 
         if len(numeric(subj_py)) == 2:
         	return atan2(numeric(subj_py[0]),numeric(subj_py[1]))
         else: return None
 
-class BI_cos(LightBuiltIn, Function):
+class BI_cos(LightBuiltIn, Function, ReverseFunction):
     def evaluateObject(self, subj_py):
         """cos(x)
         
         Return the cosine of x (measured in radians)."""
         return cos(numeric(subj_py))
+
+    def evaluateSubject(self, x):
+        return acos(numeric(x))
 
 class BI_cosh(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
@@ -83,20 +69,28 @@ class BI_cosh(LightBuiltIn, Function):
         Return the hyperbolic cosine of x."""
         return cosh(numeric(subj_py))
 
-class BI_degrees(LightBuiltIn, Function, ReverseFunction):
-    def evaluateObject(self, subj_py):
-        """degrees(x) -> converts angle x from radians to degrees"""
-        return degrees(numeric(subj_py))
-    def evaluateSubject(self, obj_py): 
-        """radians(x) -> converts angle x from degrees to radians"""
-        return radians(numeric(obj_py))
+#    def evaluateSubject(self, x):
+#        return acosh(numeric(x))
 
-class BI_sin(LightBuiltIn, Function):
+class BI_degrees(LightBuiltIn, Function, ReverseFunction):
+    """Angles are in radians.  This property is the equivalent in degrees.
+    It can be calculated either way."""
     def evaluateObject(self, subj_py):
-        """sin(x)
+        """Angles are in radians.  This property is the equivalent in degrees."""
+        return numeric(subj_py) * 180 / 3.14159265358979323846
+    def evaluateSubject(self, obj_py): 
+        """radians(x) -> converts angle x from degrees to radian"""
+        return numeric(obj_py) * 3.14159265358979323846 / 180
+
+class BI_sin(LightBuiltIn, Function, ReverseFunction):
+    """sin(x)
         
-        Return the sine of x (measured in radians)."""
+    x.math:sin is the sine of x (x measured in radians)."""
+    def evaluateObject(self, subj_py):
         return sin(numeric(subj_py))
+
+    def evaluateSubject(self, x):
+        return asin(numeric(x))
 
 class BI_sinh(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
@@ -105,28 +99,36 @@ class BI_sinh(LightBuiltIn, Function):
         Return the hyperbolic sine of x."""
         return sinh(numeric(subj_py))
 
-class BI_tan(LightBuiltIn, Function):
+#    def evaluateSubject(self, x):
+#        return asinh(numeric(x))
+
+class BI_tan(LightBuiltIn, Function, ReverseFunction):
     def evaluateObject(self, subj_py):
         """tan(x)
         
         Return the tangent of x (measured in radians)."""
         return tan(numeric(subj_py))
 
+    def evaluateSubject(self, x):
+        """tan(x)
+        
+        Return the tangent of x (measured in radians)."""
+        return atan(numeric(x))
+
 class BI_tanh(LightBuiltIn, Function):
-    def evaluateObject(self, subj_py):
-        """tanh(x)
+    """tanh(x)
         
         Return the hyperbolic tangent of x."""
+    def evaluateObject(self, subj_py):
         return tanh(numeric(subj_py))
+
+#    def evaluateSubject(self, x):
+#        return atanh(numeric(x))
 
 #  Register the string built-ins with the store
 
 def register(store):
     str = store.internURI(MATH_NS_URI[:-1])
-    str.internFrag('acos', BI_acos)
-    str.internFrag('asin', BI_asin)
-    str.internFrag('atan', BI_atan)
-    str.internFrag('atan2', BI_atan2)
     str.internFrag('cos', BI_cos)
     str.internFrag('cosh', BI_cosh)
     str.internFrag('degrees', BI_degrees)

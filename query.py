@@ -61,6 +61,7 @@ def applyRules(
 		workingContext,    # Data we assume 
 		ruleFormula = None,    # Where to find the rules
 		targetContext = None):   # Where to put the conclusions
+    """Once"""
     t = InferenceTask(workingContext, ruleFormula, targetContext)
     result = t.run()
     del(t)
@@ -202,7 +203,8 @@ class InferenceTask:
 	"""Perform task.
 	Return number of  new facts"""
 	self.gatherRules(self.ruleFormula)
-	if self.hasMetaRule: return self.runLaborious()
+	if self.hasMetaRule or not self.repeat:
+	    return self.runLaborious()
 	return self.runSmart()
 
     def runLaborious(self):
@@ -270,6 +272,7 @@ def partialOrdered(cy1, pool):
 	    if cy2 in pool:
 		seq = partialOrdered(cy2, pool) + seq
     pool.remove(cy1)
+    if diag.chatty_flag > 90: progress("partial topo: %s" % `[cy1] + seq`)
     return [cy1] + seq
 
 class CyclicSetOfRules:

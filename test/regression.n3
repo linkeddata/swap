@@ -46,6 +46,17 @@
 	test:description	"combinations of - and _ in identifiers";
 	test:arguments		"syntax/dot-dash.n3".
 
+:t1005c a test:CwmTest;
+	test:referenceOutput <ref/keywords1.n3>;
+	test:description	"@keywords in n3";
+	test:arguments		"syntax/keywords1.n3".
+
+:t1005d a test:CwmTest;
+	test:referenceOutput <ref/keywords2.n3>;
+	test:description	"using no keywords in n3";
+	test:arguments		"syntax/keywords2.n3".
+
+
 :t1005h a test:CwmTest;
 	test:referenceOutput <ref/data-ugly.n3>;
 	test:description	"dumping data only fast with --ugly";

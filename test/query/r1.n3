@@ -1,0 +1,16 @@
+
+#   Rules ... diffferent toplogies for interconnections betwen rules
+
+@prefix : <#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+
+1 a :TestValue.
+
+10 a :Limit.
+{ (?x 1) math:sum ?y.
+  ?x a :TestValue.
+  ?y  math:lessThan [a :Limit] } => { ?y a :TestValue }.
+
+{ ?x a :TestValue.  ?y a :TestValue.
+  (?x ?y) math:product ?z } =>  {  ?z a :Result }. 
+

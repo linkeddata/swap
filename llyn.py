@@ -1351,6 +1351,8 @@ class RDFStore(RDFSink) :
         elif type(x) is types.IntType:
             return self.newLiteral(`x`, self.integer)
         elif type(x) is types.FloatType:
+	    if `x` == "NaN":  # We can get these form eg 2.math:asin
+		return None
             return self.newLiteral(`x`, self.float)
         elif type(x) == type([]):
 	    return self.store.nil.newList(x)

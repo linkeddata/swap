@@ -38,6 +38,15 @@ a valid signatre of the hash with the key.</td></tr>
 containg the keypair, a hash and a signature
 then the object is either "1" if the signature validates
 or "0" is it does not.</td></tr>
+</table><h2> list</h2>
+<p class='ns'>@prefix list: &lt;http://www.w3.org/2000/10/swap/list#&gt;.</p>
+<table>  <tr><td class='ln'>in</td><td class='comment'>
+Iff the object is a list and the subject is in that list, then this is true.
+</td></tr>
+  <tr><td class='ln'>last</td><td class='comment'>
+Iff the object is a list and the subject is the last thing that list, then this is true.
+The last element can be calculated as a function of the list.
+</td></tr>
 </table><h2> log</h2>
 <p class='ns'>@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt;.</p>
 <table>  <tr><td class='ln'>Chaff</td><td class='comment'>Any statement mentioning anything in this class
@@ -173,6 +182,9 @@ functionality. Use to implement the URI spec and protocol specs, etc.
   <tr><td class='ln'>TwoMemberedList</td><td class='comment'>This is the class of things that are math lists with only two members.</td></tr>
   <tr><td class='ln'>Value</td><td class='comment'>The class of things that are numeric float values as in Python.</td></tr>
   <tr><td class='ln'>absoluteValue</td><td class='comment'>The object is calulated as the absolute value of the subject.</td></tr>
+  <tr><td class='ln'>atan2</td><td class='comment'>The subject is a pair of numbers. The object is calulated as the arc tangent value of the ratio of the two subject values.</td></tr>
+  <tr><td class='ln'>cos</td><td class='comment'>The subject is an angle expressed in radians. The object is calulated as the cosine value of the subject.</td></tr>
+  <tr><td class='ln'>degrees</td><td class='comment'>The subject is an angle expressed in radians. The object is calulated as the conversion in degrees of the value of the subject.</td></tr>
   <tr><td class='ln'>difference</td><td class='comment'>The subject is a pair of numbers. The object
 is calculated by subtracting the second number of the pair from the first.
 </td></tr>
@@ -201,9 +213,13 @@ is calculated by dividing the first number of the pair by the second.
 is calculated by dividing the first number of the pair by the second and taking the remainder.
 </td></tr>
   <tr><td class='ln'>rounded</td><td class='comment'>The object is calulated as the subject rounded to the nearest integer.</td></tr>
+  <tr><td class='ln'>sin</td><td class='comment'>The subject is an angle expressed in radians. The object is calulated as the sine value of the subject.</td></tr>
+  <tr><td class='ln'>sinh</td><td class='comment'>The subject is an angle expressed in radians. The object is calulated as the hyperbolic sine value of the subject.</td></tr>
   <tr><td class='ln'>sum</td><td class='comment'>The subject is a list of numbers.
 The object is calculated as the arithmentic sum of those numbers.
 </td></tr>
+  <tr><td class='ln'>tan</td><td class='comment'>The subject is an angle expressed in radians. The object is calulated as the tangent value of the subject.</td></tr>
+  <tr><td class='ln'>tanh</td><td class='comment'>The subject is an angle expressed in radians. The object is calulated as the hyperbolic tangent value of the subject.</td></tr>
 </table><h2> os</h2>
 <p class='ns'>@prefix os: &lt;http://www.w3.org/2000/10/swap/os#&gt;.</p>
 <table>  <tr><td class='ln'>argv</td><td class='comment'>The object is looked up as the literal string which was given

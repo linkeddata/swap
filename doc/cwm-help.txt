@@ -1,0 +1,107 @@
+Command line RDF/N3 tool
+        
+ &lt;command> &lt;options> &lt;steps> [--with &lt;more args> ]
+
+options:
+ 
+--pipe        Don't store, just pipe out *
+
+steps, in order left to right:
+
+--rdf         Input &amp; Output ** in RDF/XML insead of n3 from now on
+--n3          Input &amp; Output in N3 from now on. (Default)
+--rdf=flags   Input &amp; Output ** in RDF and set given RDF flags
+--n3=flags    Input &amp; Output in N3 and set N3 flags
+--ntriples    Input &amp; Output in NTriples (equiv --n3=spartan -bySubject -quiet)
+--language=x  Input &amp; Output in "x" (rdf, n3, etc)  --rdf same as: --language=rdf
+--languageOptions=y     --n3=sp same as:  --language=n3 --languageOptions=sp
+--ugly        Store input and regurgitate, data only, fastest *
+--bySubject   Store input and regurgitate in subject order *
+--no          No output *
+              (default is to store and pretty print with anonymous nodes) *
+--base=&lt;uri>  Set the base URI. Input or output is done as though theis were the document URI.
+--closure=flags  Control automatic lookup of identifiers (see below)
+&lt;uri>         Load document. URI may be relative to current directory.
+
+--apply=foo   Read rules from foo, apply to store, adding conclusions to store
+--filter=foo  Read rules from foo, apply to store, REPLACING store with conclusions
+--rules       Apply rules in store to store, adding conclusions to store
+--think       as -rules but continue until no more rule matches (or forever!)
+--engine=otter use otter (in your $PATH) instead of llyn for linking, etc
+--why         Replace the store with an explanation of its contents
+--mode=flags  Set modus operandi for inference (see below)
+--flatten     turn formulas into triples using LX vocabulary
+--unflatten   turn described-as-true LX sentences into formulas
+--think=foo   as -apply=foo but continue until no more rule matches (or forever!)
+--purge       Remove from store any triple involving anything in class log:Chaff
+--data	      Remove all except plain RDF triples (formulae, forAll, etc)
+--strings     Dump :s to stdout ordered by :k whereever { :k log:outputString :s }
+--crypto      Enable processing of crypto builtin functions. Requires python crypto.
+--help        print this message
+--revision    print CVS revision numbers of major modules
+--chatty=50   Verbose debugging output of questionable use, range 0-99
+
+finally:
+
+--with        Pass any further arguments to the N3 store as os:argv values
+ 
+
+            * mutually exclusive
+            ** doesn't work for complex cases :-/
+Examples:
+  cwm --rdf foo.rdf --n3 --pipe     Convert from rdf/xml to rdf/n3
+  cwm foo.n3 bar.n3 --think         Combine data and find all deductions
+  cwm foo.n3 --flat --n3=spart
+
+Mode flags affect inference extedning to the web:
+ r   Needed to enable any remote stuff.
+ a   When reading schema, also load rules pointed to by schema (requires r, s)
+ E   Errors loading schemas of definitive documents are ignored
+ m   Schemas and definitive documents laoded are merged into the meta knowledge
+     (otherwise they are consulted independently)
+ s   Read the schema for any predicate in a query.
+ u   Generate unique ids using a run-specific
+
+Closure flags are set to cause the working formula to be automatically exapnded to
+the closure under the operation of looking up:
+
+ s   the subject of a statement added
+ p   the predicate of a statement added
+ o   the object of a statement added
+ t   the object of an rdf:type statement added
+ i   any owl:imports documents
+ r   any doc:rules documents
+ 
+ e   Smush together any nodes which are = (owl:sameAs)
+
+See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
+
+Flags for N3 output are as follows:-
+        
+a   Anonymous nodes should be output using the _: convention (p flag or not).
+d   Don't use default namespace (empty prefix)
+i   Use identifiers from store - don't regen on output
+l   List syntax suppression. Don't use (..)
+n   No numeric syntax - use strings typed with ^^ syntax
+p   Prefix suppression - don't use them, always URIs in &lt;> instead of qnames.
+q   Quiet - don't make comments about the environment in which processing was done.
+r   Relative URI suppression. Always use absolute URIs.
+s   Subject must be explicit for every statement. Don't use ";" shorthand.
+t   "this" and "()" special syntax should be suppresed.
+
+
+        Flags to control RDF/XML output (after --rdf=) areas follows:
+        
+        c  - Don't use elements as class names
+        d  - Don't use default namespace
+
+
+
+    Flags to control RDF/XML INPUT (after --rdf=) follow:
+        S  - Strict spec. Unknown parse type treated as Literal instead of error.
+        T  - take foreign XML as transparent and parse any RDF in it
+             (default it is to ignore unless rdf:RDF at top level)
+	L  - If non-rdf attributes have no namespace prefix, assume in local &lt;#> namespace
+	D  - Assume default namespace decalred as local document is assume xmlns=""
+
+

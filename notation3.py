@@ -34,7 +34,8 @@ ______________________________________________
 
 Module originally by Dan Connolly, includeing notation3
 parser and RDF generator. TimBL added RDF stream model
-and N3 generation.
+and N3 generation, replaced stream model with use
+of common store/formula API.
 
 DWC:
 oops... I'm not doing qname expansion as described
@@ -258,7 +259,6 @@ class SinkParser:
     def tok(self, tok, str, i):
         """Check for keyword.  Space must have been stripped on entry and
 	we must not be at end of file."""
-
 	whitespace = '\t\n\x0b\x0c\r ' # string.whitespace was '\t\n\x0b\x0c\r \xa0' not ascii
 	if str[i:i+1] == "@":
 	    i = i+1
@@ -268,7 +268,7 @@ class SinkParser:
 
 	if (str[i:i+len(tok)] == tok
             and (tok[0]  in _notNameChars  # check keyword is not prefix
-                or str[i+len(tok)] in whitespace )): 
+                or str[i+len(tok)] in  _notNameChars )): 
 	    i = i + len(tok)
 	    return i
 	else:
@@ -277,18 +277,37 @@ class SinkParser:
     def directive(self, str, i):
 	j = self.skipSpace(str, i)
 	if j<0: return j # eof
-
+	res = []
+	
 	j = self.tok('bind', str, i)        # implied "#". Obsolete.
 	if j>0: raise BadSyntax(self._thisDoc, self.lines, str, i, "keyword bind is obsolete: use @prefix")
 
 	j = self.tok('keywords', str, i)
 	if j>0:
-	    raise BadSyntax(self._thisDoc, self.lines, str, i, "Sorry, '@keywords' not implemented yet")
+	    i = self.commaSeparatedList(str, j, res, self.bareWord)
+	    if i < 0:
+		raise BadSyntax(self._thisDoc, self.lines, str, i,
+		    "'@keywords' needs comma separated list of words")
+	    self.setKeywords(res[:])
+	    if diag.chatty_flag > 80: progress("Keywords ", self.keywords)
+	    return i
 
-	j = self.tok('from', str, i)
-	if j>0:
-	    raise BadSyntax(self._thisDoc, self.lines, str, i,
-		"Sorry, '@from <xxx> @import a, b, c.' not implemented yet")
+
+	j = self.tok('forAll', str, i)
+	if j > 0:
+	    i = self.commaSeparatedList(str, j, res, self.uri_ref2)
+	    if i <0: raise BadSyntax(self._thisDoc, self.lines, str, i, "Bad variable list")
+	    for x in res:
+		self._context.declareUniversal(x)
+	    return i
+
+	j = self.tok('forSome', str, i)
+	if j > 0:
+	    i = self. commaSeparatedList(str, j, res, self.uri_ref2)
+	    if i <0: raise BadSyntax(self._thisDoc, self.lines, str, i, "Bad variable list")
+	    for x in res:
+		self._context.declareExistential(x)
+	    return i
 
 	j=self.tok('prefix', str, i)   # no implied "#"
 	if j<0: return -1
@@ -317,6 +336,15 @@ class SinkParser:
             self._sink.setDefaultNamespace(uri)
         else:
             self._sink.bind(qn, uri)
+
+    def setKeywords(self, k):
+	"Takes a list of strings"
+	if k == None:
+	    self.keywordsSet = 0
+	else:
+	    self.keywords = k
+	    self.keywordsSet = 1
+
 
     def startDoc(self):
         self._sink.startDoc()
@@ -470,7 +498,7 @@ class SinkParser:
 	    if str[j:j+1] == "=":     #   Hack for "is"  binding name to anon node
 		i = j+1
                 objs = []
-                j = self.object_list(str, i, objs);
+                j = self.objectList(str, i, objs);
                 if j>=0:
                     subj = objs[0]
                     if len(objs)>1:
@@ -479,11 +507,11 @@ class SinkParser:
                                                 DAML_sameAs, subj, obj))
 		    j = self.skipSpace(str, j)
 		    if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i,
-			"EOF when object_list expected after [ = ")
+			"EOF when objectList expected after [ = ")
 		    if str[j:j+1] == ";":
 			j=j+1
                 else:
-                    raise BadSyntax(self._thisDoc, self.lines, str, i, "object_list expected after [= ")
+                    raise BadSyntax(self._thisDoc, self.lines, str, i, "objectList expected after [= ")
 
             if subj is None: subj=self._sink.newBlankNode(self._context,uri= bnodeID, why=self._reason2)
 
@@ -586,8 +614,8 @@ class SinkParser:
 		return i # void but valid
 
 	    objs = []
-	    i = self.object_list(str, j, objs)
-	    if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "object_list expected")
+	    i = self.objectList(str, j, objs)
+	    if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "objectList expected")
 	    for obj in objs:
 		dir, sym = v[0]
 		if dir == '->':
@@ -603,7 +631,33 @@ class SinkParser:
 		return i
 	    i = i+1 # skip semicolon and continue
 
-    def object_list(self, str, i, res):
+    def commaSeparatedList(self, str, j, res, what):
+	"""return value: -1 bad syntax; >1 new position in str
+	res has things found appended
+	"""
+	i = self.skipSpace(str, j)
+	if i<0:
+	    raise BadSyntax(self._thisDoc, self.lines, str, i, "EOF found expecting comma sep list")
+	    return i
+	if str[i] == ".": return j  # empty list is OK
+	i = what(str, i, res)
+	if i<0: return -1
+	
+	while 1:
+#	    progress("^^^^^", res, `what`, "\n >>>%s" % str[i:i+40])
+	    j = self.skipSpace(str, i)
+	    if j<0: return j # eof
+	    ch = str[j:j+1]  
+	    if ch != ",":
+		if ch != ".":
+		    return -1
+		return j    # Found  but not swallowed "."
+	    i = what(str, j+1, res)
+	    if i<0:
+		raise BadSyntax(self._thisDoc, self.lines, str, i, "bad list content")
+		return i
+
+    def objectList(self, str, i, res):
 	i = self.object(str, i, res)
 	if i<0: return -1
 	while 1:
@@ -641,7 +695,7 @@ class SinkParser:
 	if j>=0:
 	    pfx, ln = qn[0]
 	    if pfx is None:
-		ns = self._thisDoc + ADDED_HASH   # @@@ "#" CONVENTION
+		ns = self._thisDoc + ADDED_HASH
 	    else:
 		try:
 		    ns = self._bindings[pfx]
@@ -654,17 +708,19 @@ class SinkParser:
             if not string.find(ns, "#"):progress("Warning: no # on NS %s," % ns)
 	    return j
 
-        v = []
-        j = self.variable(str,i,v)
-        if j>0:                    #Forget varibles as a class, only in context.
-            res.append(v[0])
-            return j
         
-        j = self.skipSpace(str, i)
-        if j<0: return -1
-        else: i=j
+        i = self.skipSpace(str, i)
+        if i<0: return -1
 
-        if str[i]=="<":
+	if str[i] == "?":
+	    v = []
+	    j = self.variable(str,i,v)
+	    if j>0:                    #Forget varibles as a class, only in context.
+		res.append(v[0])
+		return j
+	    return -1
+
+        elif str[i]=="<":
             i = i + 1
             st = i
             while i < len(str):
@@ -677,8 +733,16 @@ class SinkParser:
                     return i+1
                 i = i + 1
             raise BadSyntax(self._thisDoc, self.lines, str, j, "unterminated URI reference")
-        else:
-            return -1
+
+        elif self.keywordsSet:
+	    v = []
+	    j = self.bareWord(str,i,v)
+	    if j>0:                    #Forget varibles as a class, only in context.
+		res.append(v[0])
+		return j
+	    return -1
+	else:
+	    return -1
 
     def skipSpace(self, str, i):
 	"""Skip white space, newlines and comments.
@@ -706,6 +770,10 @@ class SinkParser:
         if str[j:j+1] != "?": return -1
         j=j+1
         i = j
+	if str[j] in "0123456789-":
+	    raise BadSyntax(self._thisDoc, self.lines, str, j,
+			    "Varible name can't start with '%s'" % str[j])
+	    return -1
 	while i <len(str) and str[i] not in _notNameChars: #@@ check for intial alpha
             i = i+1
 	if self._parentContext == None:
@@ -716,6 +784,19 @@ class SinkParser:
 #        print "Variable found: <<%s>>" % str[j:i]
         return i
 
+    def bareWord(self, str, i, res):
+	"""	abc -> 'abc'
+  	"""
+	j = self.skipSpace(str, i)
+	if j<0: return -1
+
+	if str[j] in "0123456789-" or str[j] in _notNameChars: return -1
+        i = j
+	while i <len(str) and str[i] not in _notNameChars:
+            i = i+1
+        res.append(str[j:i])
+        return i
+
     def qname(self, str, i, res):
 	"""
 	xyz:def -> ('xyz', 'def')
@@ -723,11 +804,11 @@ class SinkParser:
 	:def -> ('', 'def')    
 	"""
 
-	j = self.skipSpace(str, i)
-	if j<0: return -1
-	else: i=j
+	i = self.skipSpace(str, i)
+	if i<0: return -1
 
 	c = str[i]
+	if c in "0123456789-+": return -1
 	if c not in _notNameChars:
 	    ln = c
 	    i = i + 1
@@ -737,7 +818,7 @@ class SinkParser:
 		    ln = ln + c
 		    i = i + 1
 		else: break
-	else:
+	else: # First character is non-alpha
             ln = ''   # Was:  None - TBL (why? useful?)
 
 	if i<len(str) and str[i] == ':':
@@ -754,7 +835,10 @@ class SinkParser:
 	    res.append((pfx, ln))
 	    return i
 
-	else:
+	else:  # delimiter was not ":"
+	    if ln and self.keywordsSet and ln not in self.keywords:
+		res.append(('', ln))
+		return i
             return -1
 	    
     def object(self, str, i, res):
@@ -774,6 +858,7 @@ class SinkParser:
                 j, s = self.strconst(str, i, delim)
 
                 res.append(self._sink.newLiteral(s))
+		progress("New string const ", s, j)
 		return j
 	    else:
 		return -1
@@ -810,7 +895,7 @@ class SinkParser:
 		dt = None
                 j, s = self.strconst(str, i, delim)
 		lang = None
-		if str[j:j+1] == "@":  # Language?
+		if str[j:j+1] == "@":  # LanguaÄÄge?
 		    m = langcode.match(str, j+1)
 		    if m == None:
 			raise BadSyntax(self._thisDoc, startline, str, i,

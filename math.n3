@@ -194,27 +194,29 @@ math:rounded a rdf:Property;
 # 
 # Here start the trigonometric functions - karl dubost
 #
+#  Inverse functions are implemented by using the function backwards
+#  eg for  x math:asin y   say   x is math:sin of y
 
-math:acos a rdf:Property;
-	rdfs:label "acos";
-	rdfs:range math:Value;
-	rdfs:domain math:Value;
-	rdfs:comment
-"""The object is calulated as the arc cosine value of the subject.""".
+#math:acos a rdf:Property;
+#	rdfs:label "acos";
+#	rdfs:range math:Value;
+#	rdfs:domain math:Value;
+#	rdfs:comment
+#"""The object is calulated as the arc cosine value of the subject.""".
 
-math:asin a rdf:Property;
-	rdfs:label "asin";
-	rdfs:range math:Value;
-	rdfs:domain math:Value;
-	rdfs:comment
-"""The object is calulated as the arc sine value of the subject.""".
+#math:asin a rdf:Property;
+#	rdfs:label "asin";
+#	rdfs:range math:Value;
+#	rdfs:domain math:Value;
+#	rdfs:comment
+#"""The object is calulated as the arc sine value of the subject.""".
 
-math:atan a rdf:Property;
-	rdfs:label "atan";
-	rdfs:range math:Value;
-	rdfs:domain math:Value;
-	rdfs:comment
-"""The object is calulated as the arc tangent value of the subject.""".
+#math:atan a rdf:Property;
+#	rdfs:label "atan";
+#	rdfs:range math:Value;
+#	rdfs:domain math:Value;
+#	rdfs:comment
+#"""The object is calulated as the arc tangent value of the subject.""".
 
 math:atan2 a rdf:Property;
 	rdfs:label "atan2";
@@ -230,12 +232,12 @@ math:cos a rdf:Property;
 	rdfs:comment
 """The subject is an angle expressed in radians. The object is calulated as the cosine value of the subject.""".
 
-math:cosh a rdf:Property;
-	rdfs:label "cosh";
-	rdfs:range math:Value;
-	rdfs:domain math:Value;
-	rdfs:comment
-"""The subject is an angle expressed in radians. The object is calulated as the hyperbolic cosine value of the subject.""".
+##math:cosh a rdf:Property;
+#	rdfs:label "cosh";
+#	rdfs:range math:Value;
+#	rdfs:domain math:Value;
+#	rdfs:comment
+#"""The subject is an angle expressed in radians. The object is calulated as the #hyperbolic cosine value of the subject.""".
 
 math:degrees a rdf:Property;
 	rdfs:label "degrees";

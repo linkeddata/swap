@@ -1,4 +1,4 @@
-#   n3 definition of some liste functions
+#   n3 definition of some list functions
 #
 # $Id$
 
@@ -11,10 +11,18 @@
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
 @prefix : <#>.
 
-list:in a rdf:Property, ont:UniqueProperty;
+list:in a rdf:Property;
     rdfs:label "in";
     rdfs:comment """
-If the object is a list and the subject is in that list, then this is strue.
+Iff the object is a list and the subject is in that list, then this is true.
+""";
+    rdfs:isDefinedBy <>.
+
+list:last a rdf:Property, ont:functionalProperty;
+    rdfs:label "in";
+    rdfs:comment """
+Iff the object is a list and the subject is the last thing that list, then this is true.
+The last element can be calculated as a function of the list.
 """;
     rdfs:isDefinedBy <>.
 

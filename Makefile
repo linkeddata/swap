@@ -8,6 +8,7 @@ TESTIN=test/sameDan.n3
 
 HTMLS= term.html formula.html pretty.html myStore.html check.html query.html RDFSink.html cwm.html cwm_crypto.html cwm_list.html cwm_math.html cwm_maths.html cwm_os.html cwm_string.html cwm_time.html cwm_times.html diag.html llyn.html notation3.html sax2rdf.html rdflib2rdf.html tab2n3.html thing.html toXML.html uripath.html xml2infoset.html why.html
 
+DOC=doc/CwmHelp.html
 
 .SUFFIXES: .html .py .g .rdf .n3
 
@@ -22,12 +23,17 @@ HTMLS= term.html formula.html pretty.html myStore.html check.html query.html RDF
 
 #all: yappstest yappsdoc math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf
 
+
 tested : package
 	(cd test; make all)
 	echo "Test worked, now can make release"
 	touch tested
 
-release : tested message.txt
+doc.made : cwm.py notation3.py
+	(cd doc; make all)
+	touch doc.made
+
+release : tested doc.made message.txt
 	cvs commit -F message.txt
 	rm message.txt
 	touch release

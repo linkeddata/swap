@@ -152,11 +152,9 @@ class Serializer:
 	sink = self.sink
 	lists = []
 	for s in context.statements:
-#	    progress("&&&& cehck ", `s`)
 
 	    for x in s.predicate(), s.subject(), s.object():
 		if isinstance(x, NonEmptyList):
-#		    progress("&&&&", x)
 		    self._listsWithinLists(x, lists)
 		    
 	for l in lists:
