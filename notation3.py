@@ -1,4 +1,4 @@
-#!/usr/local/bin/python
+#! /usr/bin/python
 """
 $Id$
 
@@ -57,6 +57,8 @@ OBJ = 2
 PARTS = [ PRED, SUBJ, OBJ]
 
 chatty = 0   # verbosity flag
+
+option_noregen = 0   # If set, do not regenerate genids on output
 
 N3CommentCharacter = "#"     # For unix script #! compatabilty
 
@@ -524,7 +526,7 @@ class Thing:
     def __repr__(self):   # only used for debugging I think
         return self.representation()
 
-    def representation(self, prefixes = {}, base=None):
+    def representation(self, base=None):
         """ in N3 """
         return "<" + self.uriref(base) + ">"
 
@@ -596,14 +598,10 @@ class Fragment(Thing):
     def uriref(self, base):
         return self.resource.uriref(base) + "#" + self.fragid
 
-    def representation(self, prefixes = {}, base=None):
+    def representation(self,  base=None):
         """ Optimize output if prefixes available
         """
-#        print "Prefixes: ", prefixes
-        try:
-            return prefixes[self.resource] + ":" + self.fragid;
-        except KeyError:
-            return  "<" + self.uriref(base) + ">"
+        return  "<" + self.uriref(base) + ">"
 
     def generated(self):
          """ A generated identifier?
@@ -627,7 +625,7 @@ class Variable(Fragment):
     def __init__(self, resource):
         Fragment.__init__(self, resource, "_v"+ `resource.newId()`)
 
-    def representation(self, prefixes = {}, base=None):
+    def representation(self, base=None):
         return ":" + self.fragid;
 
         
@@ -647,8 +645,8 @@ class Literal(Thing):
     def __repr__(self):
         return self.string
 
-    def representation(self, prefixes = {}, base=None):
-        return '"' + self.string + '"'
+    def representation(self, base=None):
+        return '"' + self.string + '"'   # @@@ encode quotes; @@@@ strings containing \n
 
     def uriref(self, base=None):      # Unused at present but interesting! 2000/10/14
         return  Literal_URI_Prefix + uri_encode(self.representation())
@@ -911,13 +909,13 @@ class RDFSink:
         self.namespaces = {}    # Both ways
 
     def bind(self, prefix, ns):
-        if not self.prefixes.get(ns, None):  # If
+        if not self.prefixes.get(ns, None):  # If we don't have a prefix for this ns
             if not self.namespaces.get(prefix,None):   # For conventions
                 self.prefixes[ns] = prefix
                 self.namespaces[prefix] = ns
                 if chatty: print "# RDFSink: Bound %s to %s" % (prefix, `ns`)
             else:
-                self.bind(prefix+"1", ns)
+                self.bind(prefix+"g1", ns) # Recurive
         
     def makeStatement(self, context, tuple):
         pass
@@ -1060,19 +1058,30 @@ class XMLWriter:
 	    i = j + 1
 
 
+#   A word about regenerated Ids.
+#
+# Within the program, the URI of a resource is kept the same, and in fact
+# tampering with it would leave risk of all kinds of inconsistencies.
+# Hwoever, on output, where there are URIs whose values are irrelevant,
+# such as variables and generated IDs from anonymous ndoes, it makes the
+# document very much more readable to regenerate the IDs.
+#  We use here a convention that underscores at the start of fragment IDs
+# are reserved for generated Ids. That should be a parameter.
 class SinkToN3(RDFSink):
     """keeps track of most recent subject and predicate reuses them
 
       Adapted from Dan's ToRDFParser(Parser);
     """
 
-    def __init__(self, write, base=None):
+    def __init__(self, write, base=None, genPrefix = ":_" ):
 	self._write = write
 	self._subj = None
 	self.prefixes = {}      # Look up prefix conventions
 	self.indent = 1         # Level of nesting of output
 	self.base = intern(base)
 	self.nextId = 0         # Regenerate Ids on output
+	self.regen = {}         # Mapping of regenerated Ids
+	self.genPrefix = genPrefix  # Prefix for generated URIs on output
 	
 	#@@I18N
     _namechars = string.lowercase + string.uppercase + string.digits + '_'
@@ -1087,10 +1096,7 @@ class SinkToN3(RDFSink):
         """ Just accepting a convention here """
         self._endStatement()
         self.prefixes[ns] = prefix
-        if prefix == "" :
-            self._write(" bind default %s .\n" % (`ns`) )
-        else :
-            self._write(" bind %s: %s .\n" % (prefix, `ns`) )
+        self._write(" bind %s: %s .\n" % (prefix, `ns`) )
 
     def startDoc(self):
  
@@ -1103,14 +1109,15 @@ class SinkToN3(RDFSink):
 
     def makeStatement(self, context, triple):
         self._makeSubjPred(context, triple[SUBJ], triple[PRED])        
-        self._write(triple[OBJ].representation(self.prefixes, self.base));
+        self._write(self.representationOf(triple[OBJ]))
+#        self._write(" (in %s) " % `context`)    #@@@@
         
 # Below is for writing an anonymous node which is the object of only one arc        
     def startAnonymous(self, context, triple):
         self._makeSubjPred(context, triple[SUBJ], triple[PRED])
         self.indent = self.indent + 1
         self._write(" [ \n"+ "    " * self.indent + "    ")
-        self._subj = triple[OBJ]    # The object is not the subject context
+        self._subj = triple[OBJ]    # The object is now the current subject
         self._pred = None
 
     def endAnonymous(self, subject, verb):    # Remind me where we are
@@ -1127,7 +1134,6 @@ class SinkToN3(RDFSink):
         self._write("\n  [ "+ "    " * self.indent)
         self._subj = subj    # The object is not the subject context
         self._pred = None
-        if `subj` == "<#_1>" : raise theroof
 
     def endAnonymousNode(self):    # Remove context
         self._write(" ].\n")
@@ -1138,7 +1144,7 @@ class SinkToN3(RDFSink):
         
 	if self._subj is not subj:
 	    self._endStatement()
-	    self._write(subj.representation(self.prefixes, self.base))
+	    self._write(self.representationOf(subj))
 	    self._subj = subj
 	    self._pred = None
 
@@ -1151,9 +1157,9 @@ class SinkToN3(RDFSink):
             elif pred is RDF_type :
                 self._write(" a ")
             else :
-#	        self._write( " >- %s -> " % (pred.representation(self.prefixes,base)))
-                self._write( " %s " % (pred.representation(self.prefixes,self.base)))
-
+#	        self._write( " >- %s -> " % self.representationOf(pred))
+                self._write( " %s " % self.representationOf(pred))
+                
 	    self._pred = pred
 	else:
 	    self._write(",\n" + "    " * (self.indent+3))    # Same subject and pred => object list
@@ -1163,6 +1169,27 @@ class SinkToN3(RDFSink):
             self._write(" .\n")
             self._write("    " * self.indent)
             self._subj = None
+
+    def representationOf(self, x):
+        """  Representation of a thing in the output stream
+
+        Regenerates genids and variable names if required.
+        Uses prefix dictionary to use qname syntax if possible.
+        """
+        if isinstance(x, Variable) or isinstance(x, Anonymous):
+            if x.generated() and not option_noregen:
+                i = self.regen.get(x,self.nextId)
+                if i == self.nextId:
+                    self.regen[x] = i
+                    self.nextId = self.nextId + 1
+                if isinstance(x, Anonymous): return self.genPrefix + "g" + `i`
+                else: return self.genPrefix + "v" + `i`   # variable
+
+        if isinstance(x, Fragment):            
+            str = self.prefixes.get(x.resource, None)
+            if str != None : return str + ":" + x.fragid;
+                
+        return x.representation(self.base)    # Everything else
 
     
 class StringWriter:
@@ -1209,8 +1236,8 @@ class RDFStore(RDFSink) :
             for f in r.fragments.values():
                 total = total + (f.occurrences(SUBJ,context) +
                                  f.occurrences(PRED,context) +f.occurrences(OBJ, context))
-            if total > 3:
-                print "   Resource %s has %i occurrences in %s" % (`r`, total, `context`)
+            if total > 3 and chatty:
+                print "#   Resource %s has %i occurrences in %s" % (`r`, total, `context`)
             if total > best :
                 best = total
                 mp = r
@@ -1226,14 +1253,28 @@ class RDFStore(RDFSink) :
         self.prefixes[mp] = ""
         self.namespaces[""] = mp
         
+# Input methods:
 
     def makeStatement(self, context, tuple):
         s = RDFTriple(context, tuple) # @@ duplicate check?
         self.statements.append(s)
 
+# Manipulation methods:
+
+    def moveContext(self, old, new):
+        for s in self.statements :
+            if s.context == old: s.context = new
+            
+    def copyContext(self, old, new):
+        for s in self.statements :
+            if s.context == old:
+                self.makeStatement(new, s.triple)
+            
 # Output methods:
 
     def dumpChronological(self, sink):
+        """ Ignores contexts
+        """
         sink.startDoc()
         for c in self.prefixes.items():   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
@@ -1536,14 +1577,17 @@ bind dc: &lt;http://purl.org/dc/elements/1.1/&gt;
 def doCommand():
         """Command line RDF/N3 tool
         
- <command> <options> <inputURis>
- -pipe      Don't store, just pipe out
+ <command> <options> <inputURIs>
+ 
  -rdf1out   Output in RDF M&S 1.0 insead of n3
- -ugly      Store input and regurgidate *
+ -pipe      Don't store, just pipe out *
+ -ugly      Store input and regurgitate *
  -bySubject Store inpyt and regurgitate in subject order *
-            (default is to pretty print anonymous nodes) *
+            (default is to store and pretty print with anonymous nodes) *
  -help      print this message
  -chatty    Verbose output of questionable use
+
+            * mutually exclusive
  
 """
         
@@ -1564,7 +1608,7 @@ def doCommand():
             elif arg == "-rdf1out": option_rdf1out = 1
             elif arg == "-chatty": chatty = 1
             elif arg == "-help":
-                print self.__doc__
+                print doCommand.__doc__
                 return
             elif arg[0] == "-": print "Unknown option", arg
             else : option_inputs.append(arg)
@@ -1585,10 +1629,12 @@ def doCommand():
         else:
             _sink = RDFStore()
         
-            
-        # (sink,  thisDoc,  baseURI, bindings)
+#  Suck up the input information:
+
+        inputContexts = []
         for i in option_inputs:
             _inputURI = urlparse.urljoin(_baseURI, i) # Make abs from relative
+            inputContexts.append(intern(_inputURI))
             print "# Input from ", _inputURI
             netStream = urllib.urlopen(_inputURI)
             p = SinkParser(_sink,  _inputURI)
@@ -1599,6 +1645,8 @@ def doCommand():
             del(p)
         if option_inputs == []:
             _inputURI = urlparse.urljoin( _baseURI, "STDIN") # Make abs from relative
+            inputContexts.append(intern(_inputURI))
+            print "# Taking input from standard input"
             p = SinkParser(_sink,  _inputURI)
             p.startDoc()
             p.feed(sys.stdin.read())     # May be big - buffered in memory!
@@ -1607,18 +1655,24 @@ def doCommand():
 
         if option_pipe: return                # everything was done inline
 
+# Manpulate it as directed:
+
+        outputContext = intern(_outURI)
+        for i in inputContexts:
+            _sink.moveContext(i,outputContext)
+            
 #@@@@@@@@@@@ problem of deciding which contexts to dump and dumping > 1
                 #@@@ or of merging contexts
 
-
+# Squirt it out again as directed
         
         if not option_pipe:
             if option_ugly:
                 _sink.dumpChronological(_outSink)
             elif option_bySubject:
-                _sink.dumpBySubject(_outURI, _outSink)
+                _sink.dumpBySubject(outputContext, _outSink)
             else:
-                _sink.dumpNested(_outURI, _outSink)
+                _sink.dumpNested(outputContext, _outSink)
                 
 
 ############################################################ Main program
