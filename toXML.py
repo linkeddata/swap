@@ -579,6 +579,316 @@ class XMLWriter:
         self._encwr("\n")
 
 
+##NOTHING   = -1
+##SUBJECT   = 0
+##PREDICATE = 1
+##OBJECT    = 2
+##
+##FORMULA = 0
+##LIST    = 1
+##ANONYMOUS = 2
+##
+##NO = 0
+##STALE = 1
+##FRESH = 2
+import triple_maker
+tm = triple_maker
+
+def swap(List, a, b):
+    q = List[a]
+    List[a] = List[b]
+    List[b] = q
+
+class tmToRDF(RDFSink.RDFStructuredOutput):
+    """Trying to do the same as above, using the TripleMaker interface
+
+
+    """
+    def __init__(self, outFp, thisURI=None, base=None, flags=""):
+        RDFSink.RDFSink.__init__(self)
+	if outFp == None:
+	    self._xwr = XMLWriter(dummyWrite, self)
+	else:
+	    dummyEnc, dummyDec, dummyReader, encWriter = codecs.lookup('utf-8')
+	    z = encWriter(outFp)
+	    zw = z.write
+	    self._xwr = XMLWriter(zw, self)
+	self._subj = None
+	self._base = base
+	self._formula = None   # Where do we get this from? The outermost formula
+	if base == None: self._base = thisURI
+	self._thisDoc = thisURI
+	self._flags = flags
+	self._nodeID = {}
+	self._nextnodeID = 0
+	self._docOpen = 0  # Delay doc open <rdf:RDF .. till after binds
+        def doNothing():
+            pass
+	self._toDo = doNothing
+
+	def dummyClone(self):
+            "retun a version of myself which will only count occurrences"
+            return tmToRDF(None, self._thisDoc, base=self._base, flags=self._flags )
+	
+    def start(self):
+        self._parts = [tm.NOTHING]
+        self._triples = [[None, None, None]]
+        self._classes = [None]
+        self.lists = []
+        self._modes = [tm.FORMULA]
+        self.bNodes = []
+        self._predIsOfs = [tm.NO]
+        self._pathModes = [False]
+        if not self._docOpen:
+            if getXMLVersion() != '1.0':
+                self._xwr.makePI('xml version="%s"' % getXMLVersion())
+            self._toDo()
+            if self.prefixes.get(RDF_NS_URI, ":::") == ":::":
+                if self.namespaces.get("rdf", ":::") ==":::":
+                    self.bind("rdf", RDF_NS_URI)
+#            if self.prefixes.get(Logic_NS, ":::") == ":::":
+#                if self.namespaces.get("log", ":::") ==":::":
+#                    self.bind("log", Logic_NS)
+            ats = []
+            ps = self.prefixes.values()
+            ps.sort()    # Cannonicalize output somewhat
+            if self.defaultNamespace and "d" not in self._flags:
+		if "z" in self._flags:
+		    ats.append(('xmlns',
+			self.referenceTo(self.defaultNamespace)))
+		else:
+		    ats.append(('xmlns',self.defaultNamespace))
+            for pfx in ps:
+		nsvalue = self.namespaces[pfx]
+		if "z" in self._flags:
+		    nsvalue = self.referenceTo( nsvalue)
+		ats.append(('xmlns:'+pfx, nsvalue))
+
+            self._xwr.startElement(RDF_NS_URI+'RDF', ats, self.prefixes)
+            self._nextId = 0
+            self._docOpen = 1
+
+#        self._subjs
+#        self.store.startDoc()
+
+    def end(self):
+        assert len(self.lists) == 0
+        assert len(self.bNodes) == 0
+        self._closeSubject()
+        self._xwr.endElement()
+        self._docOpen = 0
+        self._xwr.endDocument()
+
+    def addNode(self, node):
+        if self._modes[-1] == tm.ANONYMOUS and node is not None and self._parts[-1] == tm.NOTHING:
+            raise ValueError('You put a dot in a bNode')
+        if self._modes[-1] == tm.FORMULA or self._modes[-1] == tm.ANONYMOUS:
+            self._parts[-1] = self._parts[-1] + 1
+            if self._parts[-1] > 3:
+                raise ValueError('Try ending the statement')
+            if node is not None:
+                #print node, '+', self._triples, '++', self._parts
+                if self._parts[-1] == tm.PREDICATE and self._predIsOfs[-1] == tm.STALE:
+                    self._predIsOfs[-1] = tm.NO
+                if self._parts[-1] == tm.SUBJECT:
+                    subj = self._triples[-1][tm.SUBJECT]
+                    if subj is not None and node !=  subj:
+                        self._closeSubject()
+                elif self._parts[-1] == tm.PREDICATE:
+                    if node == (SYMBOL, RDF_type_URI):
+                        #special thing for
+                        self._classes[-1] = "Wait"
+                    else:
+                        if self._classes[-1] is None:
+                            self._openSubject(self._triples[-1][tm.SUBJECT])
+                        #self._openPredicate(node)
+                else:
+                    if self._classes[-1] == "Wait":
+                        self._classes[-1] = node
+                        self.openSubject(self._triples[-1][tm.SUBJECT])
+                    else:
+                        if node[0] == LITERAL:
+                            self._openPredicate(self._triples[-1][tm.PREDICATE], args=(node[2],node[3]))
+                            self._writeLiteral(node)
+                            self._closePredicate()
+                        elif node[0] == SYMBOL:
+                            self._openPredicate(self._triples[-1][tm.PREDICATE], obj=node)
+                        
+                self._triples[-1][self._parts[-1]] = node
+        if self._modes[-1] == tm.ANONYMOUS and self._pathModes[-1] == True:
+            self.endStatement()
+            self.endAnonymous()
+        if self._modes[-1] == tm.LIST:
+            self.beginAnonymous()
+            self.addNode(node)
+            self._modes[-1] = tm.LIST
+
+    def _openSubject(self, subject):
+        if subject is not None:
+            subj = subject[1]
+            q = ((RDF_NS_URI+' about', subj),)
+        else:
+            q = []
+        if self._classes[-1] is None:
+            self._xwr.startElement(RDF_NS_URI + 'Description',
+				    q, self.prefixes)
+            self._classes[-1] = subject
+        else:
+            self._xwr.startElement(self._classes[-1][1],
+				    q, self.prefixes)
+
+    def _closeSubject(self):
+        self._xwr.endElement()
+
+    def _openPredicate(self, pred, args=None, obj=None, resource=None):
+        if obj is None:
+            if resource is not None:
+                self._xwr.startElement(pred[1],  [(RDF_NS_URI+' parseType','Resource')], self.prefixes)
+            else:
+                attrs = []
+                if args is not None:
+                    dt, lang = args
+                    if dt is not None:
+                        attrs.append((RDF_NS_URI+' datatype', dt))
+                    if lang is not None:
+                        attrs.append((XML_NS_URI+' lang', lang))
+                print pred[1], attrs
+                self._xwr.startElement(pred[1], attrs, self.prefixes)
+        else:
+            self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' resource', obj[1])], self.prefixes)
+
+    def _closePredicate(self):
+        self._xwr.endElement()
+
+    def _writeLiteral(self, lit):
+        self._xwr.data(lit[1])
+
+    def IsOf(self):
+        self._predIsOfs[-1] = tm.FRESH
+
+    def checkIsOf(self):
+        return self._predIsOfs[-1]
+
+    def forewardPath(self):
+        if self._modes[-1] == tm.LIST:
+            a = self.lists[-1].pop()
+        else:
+            a = self._triples[-1][self._parts[-1]]
+            self._parts[-1] = self._parts[-1] - 1
+        self.beginAnonymous()
+        self.addNode(a)
+        self._predIsOfs[-1] = tm.FRESH
+        self._pathModes[-1] = True
+        
+    def backwardPath(self):
+        a = self._triples[-1][self._parts[-1]]
+        self._parts[-1] = self._parts[-1] - 1
+        self.beginAnonymous()
+        self.addNode(a)
+        self._pathModes[-1] = True
+
+    def endStatement(self):
+        if self._parts[-1] == tm.SUBJECT:
+            pass
+        elif False:
+            
+            if self._parts[-1] != tm.OBJECT:
+                raise ValueError('try adding more to the statement' + `self._triples`)
+
+            if self._pathModes[-1]:
+                swap(self._triples[-1], tm.PREDICATE, tm.OBJECT)
+            if self._predIsOfs[-1]:
+                swap(self._triples[-1], tm.SUBJECT, tm.OBJECT)
+            subj, pred, obj = self._triples[-1]
+
+            if subj == '@this':
+                if pred == self.forSome:
+                    formula.declareExistential(obj)
+                elif pred == self.forAll:
+                    formula.declareUniversal(obj)
+                else:
+                    raise ValueError("This is useless!")
+            else:
+                formula.add(subj, pred, obj)
+        self._parts[-1] = tm.NOTHING
+        if self._modes[-1] == tm.ANONYMOUS and self._pathModes[-1]:
+            self._parts[-1] = tm.SUBJECT
+
+    def addLiteral(self, lit, dt=None, lang=None):
+        a = (LITERAL, lit, dt, lang)
+        self.addNode(a)
+
+    def addSymbol(self, sym):
+        a = (SYMBOL, sym)
+        self.addNode(a)
+    
+    def beginFormula(self):
+        raise ValueError("How do you intend to do that?")
+
+    def endFormula(self):
+        raise ValueError("Try beginning a formula first")
+
+    def beginList(self):
+        self.lists.append(0)
+        self._modes.append(tm.LIST)
+
+    def endList(self):
+        self.addSymbol(RDF_NS_URI + 'nil')
+        a = self.lists.pop()
+        for x in range(a):
+            self.endAnonymous()
+        self._modes.pop()
+
+    def addAnonymous(self, Id):
+        a = (tm.ANONYMOUS, Id)
+        self.addNode(a)
+        
+    
+    def beginAnonymous(self):
+        a = (tm.ANONYMOUS, 'hi')
+        self.bNodes.append(a)
+        if self._parts[-1] == tm.NOTHING:
+            self._openSubject(None)
+        if self._parts[-1] == tm.PREDICATE:
+            self._openPredicate(self._triples[-1][tm.PREDICATE], resource=[])
+        self._modes.append(tm.ANONYMOUS)
+        self._triples.append([a, None, None])
+        self._parts.append(tm.SUBJECT)
+        self._predIsOfs.append(tm.NO)
+        self._pathModes.append(False)
+        
+
+    def endAnonymous(self):
+        if self._parts[-1] != tm.NOTHING:
+            self.endStatement()
+        a = self.bNodes.pop()
+        self._modes.pop()
+        self._triples.pop()
+        self._parts.pop()
+        self._predIsOfs.pop()
+        self._pathModes.pop()
+        self._closePredicate()
+
+    def declareExistential(self, sym):
+        return
+        formula = self.formulas[-1]
+        a = formula.newSymbol(sym)
+        formula.declareExistential(a)
+
+    def declareUniversal(self, sym):
+        return
+        formula = self.formulas[-1]
+        a = formula.newSymbol(sym)
+        formula.declareUniversal(a)
+
+    def addQuestionMarkedSymbol(self, sym):
+        return
+        formula = self.formulas[-2]
+        a = formula.newSymbol(sym)
+        formula.declareUniversal(a)
+        self.addNode(a)
+
+        
 def xmldata(write, str, markupChars):
     i = 0
 #    progress("XML data: type is ", type(str))
