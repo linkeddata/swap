@@ -1,0 +1,45 @@
+# see <http://rdfstore.sourceforge.net/2002/06/24/rdf-query/query-use-cases.html>.
+# Use case: Look up and decode data from catalog
+
+#
+#  cwm --rdf http://etbrowse.jrc.it/xml/rdf/example10.xml --n3 --filter=t08.n3
+#
+#  @@@ test file in Italy - connection times out :-(
+
+@prefix     rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix     dc:  <http://purl.org/dc/elements/1.1/>.
+@prefix     dcq:  <http://purl.org/dc/terms/>.
+@prefix     etbthes: <http://eun.org/etb/thesaurus/elements/>.
+
+@prefix rss: <http://purl.org/rss/1.0/>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix : <#>.
+@prefix result: <result#>.
+
+
+{
+  [   dc:title [
+          rdf:value ?title_value;
+          dc:language [dcq:RFC1766 ?title_language]];
+      dc:subject [
+          etbthes:ETBT [
+              rdf:value ?subject_value;
+              dc:language [dcq:RFC1766 ?subject_language]]];
+      dc:description [
+          rdf:value ?description_value;
+          dc:language [dcq:RFC1766 ?description_language]];
+      dc:identifier ?identifier;
+      dc:language [dcq:RFC1766 ?language]].
+} => {
+      [  result:titleValue ?title_value;
+         result:titleLanguage ?title_language;
+	   result:subjectValue ?subject_value;
+         result:subjectLangauge ?subject_language;
+	   result:descriptionValue ?description_value;
+         result:descriptionLangauge ?description_language;
+         result:langauge ?language;
+         result:identifier ?identifier].
+}.
+
+#ends
