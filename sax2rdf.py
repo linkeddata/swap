@@ -76,6 +76,7 @@ DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
 
 RDF_IS = RESOURCE, RDF_NS_URI + "is"   # Used with quoting
 
+_nextId = 0        # For generation of arbitrary names for anonymous nodes
 
 class RDFHandler(xml.sax.ContentHandler):
 
@@ -91,8 +92,8 @@ class RDFHandler(xml.sax.ContentHandler):
         self._subject = None
         self._predicate = None
         self._items = [] # for <rdf:li> containers
-        self._genPrefix = "#_g"    # @@@ allow parameter override
-        self._nextId = 0        # For generation of arbitrary names for anonymous nodes
+        self._genPrefix = "#_rdfxg"    # @@@ allow parameter override
+
         self._litDepth = 0
         self.sink.startDoc()
         version = "$Id$"
@@ -194,7 +195,7 @@ class RDFHandler(xml.sax.ContentHandler):
 #                print "@@@@@@ <%s> <%s>" % properties[-1]
 
         if self._subject == None:
-            self._subject = self._generate()
+            self._subject = self._generate() #for debugging: encode file/line info?
         for pred, obj in properties:
             self.sink.makeStatement(( self._context,
                                       (RESOURCE, pred),
@@ -203,13 +204,15 @@ class RDFHandler(xml.sax.ContentHandler):
 
             
     def _generate(self):
-            generatedId = self._genPrefix + `self._nextId`  #
-            self._nextId = self._nextId + 1
-            self.sink.makeStatement(( self._context,
-                                      (RESOURCE, RDFSink.forSomeSym),
-                                      self._context,
-                                      (RESOURCE, generatedId) )) #  Note this is anonymous node
-            return generatedId
+        global _nextId
+        generatedId = self._genPrefix + `_nextId`  #
+        _nextId = _nextId + 1
+        self.sink.makeStatement(( self._context,
+                                  (RESOURCE, RDFSink.forSomeSym),
+                                  self._context,
+                                  (RESOURCE, generatedId) )) #  Note this is anonymous node
+        #thing.progress("sax2rdf: nextId now: " + `_nextId`)
+        return generatedId
 
     def _obj(self, tagURI, attrs):  # 6.2
         if tagURI == RDF_NS_URI + "Description":
@@ -218,7 +221,7 @@ class RDFHandler(xml.sax.ContentHandler):
         elif tagURI == RDF_NS_URI + "li":
             raise ValueError, "rdf:li as typednode not implemented"
         else:  # Unknown tag within STATE_NO_SUBJECT: typedNode #6.13
-            c = self._context   # (Might be change in idAboutAttr)
+            c = self._context   # (Might be change in idAboutAttr) #@@DC: huh?
             self.idAboutAttr(attrs)
             if c == None: raise roof
             if self._subject == None:raise roof
@@ -261,14 +264,15 @@ class RDFHandler(xml.sax.ContentHandler):
         
         tagURI = ((name[0] or "") + name[1]).encode('utf-8')
 
-        if thing.verbosity():
-            if not attrs:
-                print '# State =', self._state, 'start tag: <' + tagURI + '>'
-            else:
-                print '# state =', self._state, 'start tag: <' + tagURI,
-                for name, value in attrs.items():
-                    print "    " + name + '=' + '"' + value + '"',
-                print '>'
+#@@change to use progress
+#        if thing.verbosity():
+#            if not attrs:
+#                print '# State =', self._state, 'start tag: <' + tagURI + '>'
+#            else:
+#                print '# state =', self._state, 'start tag: <' + tagURI,
+#                for name, value in attrs.items():
+#                    print "    " + name + '=' + '"' + value + '"',
+#                print '>'
 
 
         self._stack.append([self._state, self._context, self._predicate, self._subject])
@@ -309,7 +313,8 @@ class RDFHandler(xml.sax.ContentHandler):
                     elif value == "Resource":
                         c = self._context
                         s = self._subject
-                        self.idAboutAttr(attrs)  # set subject and context for nested description @@dwc thinks this is buggy
+                        self._subject = self._generate()
+                        self.idAboutAttr(attrs) #@@
                         self.sink.makeStatement(( c,
                                                   (RESOURCE, self._predicate),
                                                   (RESOURCE, s),
