@@ -75,12 +75,20 @@ def join(here, there):
     >>> join('http://example/x/y/z', '../abc')
     'http://example/x/abc'
 
+    >>> join('http://xyz', 'foo')
+    'http://xyz/foo'
+    
+    >>> join('base:', 'foo:/')
+    'foo:/'
+    
+    >>> join('file:/foo', '#http://blort/event?id=03211')
+    'file:/foo#http://blort/event?id=03211'
+    
     Raise ValueError if there uses relative path
     syntax but here has no hierarchical path.
 
     >>> join('mid:foo@example', '../foo')
     Traceback (most recent call last):
-        raise ValueError, here
     ValueError: Base <mid:foo@example> has no slash after colon - with relative '../foo'.
 
 
@@ -95,8 +103,9 @@ def join(here, there):
 
     assert(find(here, "#") < 0), "Base may not contain hash: '%s'"% here # caller must splitFrag (why?)
 
-    slashl = find(there, '/')
-    colonl = find(there, ':')
+    path, frag = splitFragP(there)
+    slashl = find(path, '/')
+    colonl = find(path, ':')
 
     # join(base, 'foo:/') -- absolute
     if colonl >= 0 and (slashl < 0 or colonl < slashl):
@@ -120,16 +129,15 @@ def join(here, there):
         here = here + '/'
 
     # join('http://xyz/', '//abc') => 'http://abc'
-    if there[:2] == '//':
+    if path[:2] == '//':
         return here[:bcolonl+1] + there
 
     # join('http://xyz/', '/abc') => 'http://xyz/abc'
-    if there[:1] == '/':
+    if path[:1] == '/':
         return here[:bpath] + there
 
     slashr = rfind(here, '/')
 
-    path, frag = splitFragP(there)
     if not path: return here + frag
     
     while 1:
@@ -259,6 +267,13 @@ import unittest
 class Tests(unittest.TestCase):
     def testPaths(self):
         cases = (("foo:xyz", "bar:abc", "bar:abc"),
+                 # from GK Thu, 19 Feb 2004 15:00:26 +0000
+                 #hmm... need exception harness
+                 #("foo:a", "foo:/b/c", "../b/c"),
+                 #("http://example.com/path?query#frag",
+                 # "http://example.com/path?query", ""),
+                 #("foo:a", "foo:b/c", "b/c"),
+
                  ('http://example/x/y/z', 'http://example/x/abc', '../abc'),
                  ('http://example2/x/y/z', 'http://example/x/abc', 'http://example/x/abc'),
                  ('http://ex/x/y/z', 'http://ex/x/r', '../r'),
@@ -297,12 +312,16 @@ class Tests(unittest.TestCase):
                  ("http://example/x/y%2Fz", "http://example/x%2Fabc", "/x%2Fabc"),
                  ("http://example/x%2Fy/z", "http://example/x%2Fy/abc", "abc"),
                  # Ryan Lee
-                 ("http://example/x/abc.efg", "http://example/x/", "./")
+                 ("http://example/x/abc.efg", "http://example/x/", "./"),
+                 # danc/timbl 19May
+                 #@@('http://foo.com/bar/', 'http://foo.com/bar/./baz', "./bazdfs@@")
                  )
 
         for inp1, inp2, exp in cases:
-            self.assertEquals(refTo(inp1, inp2), exp)
             self.assertEquals(join(inp1, exp), inp2)
+
+        for inp1, inp2, exp in cases:
+            self.assertEquals(refTo(inp1, inp2), exp)
 
 
     def testSplit(self):
@@ -389,7 +408,11 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.16  2004-03-21 04:24:35  timbl
+# Revision 1.16.10.1  2005-03-16 17:55:36  connolly
+# fixed join bug with : in frag
+# commented out some non-working tests
+#
+# Revision 1.16  2004/03/21 04:24:35  timbl
 # (See doc/changes.html)
 # on xml output, nodeID was incorrectly spelled.
 # update.py provides cwm's --patch option.
