@@ -23,7 +23,11 @@ History:
     Spilt off from  thing.py 2003-08-19
 
 $Log$
-Revision 1.7  2004-03-21 04:24:35  timbl
+Revision 1.8  2004-04-19 13:32:22  connolly
+trap __special_names__ in Namespace.__getattr__ so
+that pychecker can work
+
+Revision 1.7  2004/03/21 04:24:35  timbl
 (See doc/changes.html)
 on xml output, nodeID was incorrectly spelled.
 update.py provides cwm's --patch option.
@@ -182,6 +186,9 @@ class Namespace(object):
         lname -- an XML name (limited to URI characters)
 	I hope this is only called *after* the ones defines above have been checked
         """
+        if lname.startswith("__"): # python internal
+            raise AttributeError, lname
+        
         return _checkStore(self.store).symbol(self._name+lname)
 
     def sym(self, lname):
