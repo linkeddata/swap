@@ -86,7 +86,7 @@ href="travelTerms">travelTerms</a>, in <a href="travelTerms.rdf">RDF/xml</a>,
 
 <p>if your desktop is SVG-happy, <a href="travelFig.svg">travelFig.svg</a> is
 nicer. I drew it with dia; you can play <a
-href="travelFig.xml">travelFig.xml</a>, the source. I'm working on  <a
+href="travelFig.xml">travelFig.xml</a>, the source. I'm working on <a
 href="/2002/03owlt/umlp/dia2owl.xsl">dia2owl.xsl</a>, which converts it to
 RDF/S: <a href="travelFig.rdf">travelFig.rdf</a>.</p>
 
@@ -124,19 +124,18 @@ for import".</p>
 <pre>status-formal.rdf: $(TEAM)/connolly.html $(SW)/schedScrape.xsl
    $(XSLTPROC) --novalid $(SW)/schedScrape.xsl $(TEAM)/connolly.html &gt;$@</pre>
 
-<p>Then, conver evo ical to RDF:</p>
-<pre>,evocal.rdf: $(HOME)/evolution/local/Calendar/calendar.ics $(PALMAGENT)/vcal2xml.pl
-   $(PERL) $(PALMAGENT)/vcal2xml.pl $(HOME)/evolution/local/Calendar/calendar.ics &gt;$@
+<p>Then, convert evo ical to RDF:</p>
+<pre>,evocal.rdf: $(HOME)/evolution/local/Calendar/calendar.ics $(PIM)/ical2rdf.pl
+$(PERL) $(PIM)/ical2rdf.pl $(HOME)/evolution/local/Calendar/calendar.ics &gt;$@
 </pre>
-
-<p><em>[@@TODO: move vcal2xml.pl into swap/pim]</em></p>
 
 <p>Finally, check rules ala:</p>
 <pre>evoMissing.n3: status2evo.n3 status-formal.rdf ,evocal.rdf
    $(PYTHON) $(CWM) status2evo.n3 --think &gt;$@
 </pre>
 
-<p>The rules look like:</p>
+<p>The rules look like <em>[@@TODO: update ical names w.r.t.
+capitalization]</em>:</p>
 <pre>{
   :P s:subPropertyOf :cityName.
 &lt;status-formal.rdf&gt; log:semantics [
@@ -193,6 +192,13 @@ for import".</p>
     in #rdfig 12Jun</li>
   <li><a href="http://www.cyc.com/cycdoc/vocab/transportation-vocab.html">cyc
     transportation vocab</a></li>
+  <li>lat/long source: <a
+    href="http://www.un.org/Depts/unsd/demog/ctry.htm">Capital cities and
+    cities of 100,000 and more inhabitants</a>; scraped it in <a
+    href="../../../04/mem-news/teamToGlobe.n3">team2Globe.n3</a>; hmm...
+    seems to cite NIMA's <a
+    href="http://www.nima.mil/gns/html/index.html">GEOnet Names Server</a> as
+    its source.</li>
 </ul>
 
 <p>Some principles:</p>
