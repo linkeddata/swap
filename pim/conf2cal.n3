@@ -10,8 +10,8 @@
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix os: <http://www.w3.org/2000/10/swap/os#> .
 @prefix string: <http://www.w3.org/2000/10/swap/string#> .
-@prefix time: <http://www.w3.org/2000/10/swap/time#> .
-@prefix math: <http://www.w3.org/2000/10/swap/math#> .
+@prefix times: <http://www.w3.org/2000/10/swap/times#> .
+@prefix maths: <http://www.w3.org/2000/10/swap/maths#> .
 #@prefix cal: <http://ilrt.org/discovery/2001/06/schemas/ical-full/hybrid.rdf#>.
 @prefix cal: <http://www.w3.org/2000/10/swap/pim/ical#>.
 
@@ -35,8 +35,8 @@ this log:forAll :a,:b,:c,:d,:e,:f,:g,:h,:i,:j,:k,:l,:m,
 # 	dtstart, thank goodness!
 
 #{   :x conf:start :s; conf:duration :d.
-#    :e time:inSeconds [is math:sum of
-#        ([is time:inSeconds of :s] [is math:product of (:d "60")])].
+#    :e times:inSeconds [is maths:sum of
+#        ([is times:inSeconds of :s] [is maths:product of (:d "60")])].
 #} log:implies {
 #    :x  cal:DTSTART [rdf:value :s];
 #  	cal:DTEND   [rdf:value :e].
@@ -55,8 +55,8 @@ this log:forAll :a,:b,:c,:d,:e,:f,:g,:h,:i,:j,:k,:l,:m,
          conf:ports :p;  # eg "15";
          conf:start :s. # eg "2002-07-10T12:00Z"
 
-    :e time:inSeconds [is math:sum of
-        ([is time:inSeconds of :s] [is math:product of (:d "60")])].
+    :e times:inSeconds [is maths:sum of
+        ([is times:inSeconds of :s] [is maths:product of (:d "60")])].
 
     (:i "@telconf.w3.org") string:concatenation :u.
     :n string:startsWith [ conf:attendee_user [ is os:environ of "USER"]].
