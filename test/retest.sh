@@ -93,6 +93,8 @@ cwm_test bi-t10.n3 "log:resolvesTo and log:includes" includes/t10.n3 -think
 
 cwm_test bi-t11.n3 "log:resolvesTo and log:includes - schema checking" includes/t11.n3 -think
 
+cwm_test bi-quant.n3 "log:includes handling of univ./exist. quantifiers" includes/quantifiers.n3 -think
+
 cwm_test bi-concat.n3 "Test string concatetnation built-in" includes/concat.n3 -think
 
 cwm_test bi-uri-startswith.n3 "Dan's bug case with uri and startswith" includes/uri-startswith.n3 -think
@@ -108,7 +110,10 @@ cwm_test environ.n3 "Read operating system environment variable" os/environ.n3 -
 
 
 # $Log$
-# Revision 1.21  2001-11-15 22:11:24  timbl
+# Revision 1.22  2001-11-19 15:25:16  timbl
+# quantifiers
+#
+# Revision 1.21  2001/11/15 22:11:24  timbl
 # --string added, list output bugs fixed, quotation choices changed on output, log:includes hudes handles quantified variables better
 #
 # Revision 1.20  2001/09/19 19:14:28  timbl
