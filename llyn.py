@@ -348,7 +348,8 @@ def dereference(x, mode="", workingContext=None):
     else:
 	try:
 	    F = x.store.load(inputURI)
-	except (IOError, SyntaxError, DocumentAccessError):
+	except:
+	#except (IOError, SyntaxError, DocumentAccessError, xml.sax._exceptions.SAXParseException):
 	    F = None
     if F != None and "m" in mode:
 	workingContext.reopen()
@@ -391,8 +392,10 @@ class Formula(Fragment):
 	self.statements = []
 	self._index = {}
 	self._index[(None,None,None)] = self.statements
-	self.closureMode = ""
-	self.closureAlready = []
+
+	self._closureMode = ""
+	self._closureAgenda = []
+	self._closureAlready = []
 	self._existentialVariables = []
 	self._universalVariables = []
 
@@ -687,7 +690,7 @@ class Formula(Fragment):
         if list == None: self._index[(pred, subj, obj)]=[s]
         else: list.append(s)
 
-	if self.closureMode != "":
+	if self._closureMode != "":
 	    self.checkClosure(subj, pred, obj)
 
         return 1  # One statement has been added  @@ ignore closure extras from closure
@@ -727,7 +730,7 @@ class Formula(Fragment):
         return self.store.reopen(self)
 
     def setClosureMode(self, x):
-	self.closureMode = x
+	self._closureMode = x
 
     def checkClosure(self, subj, pred, obj):
 	"""Check the closure of the formula given new contents
@@ -736,23 +739,30 @@ class Formula(Fragment):
 	i asks it to follow owl:imports
 	r ask it to follow doc:rules
 	"""
-	if "s" in self.closureMode: self.checkClosureOfSymbol(subj)
-	if "p" in self.closureMode: self.checkClosureOfSymbol(pred)
-	if "o" in self.closureMode: self.checkClosureOfSymbol(obj)
-	if (("r" in self.closureMode and
+	firstCall = (self._closureAgenda == [])
+	if "s" in self._closureMode: self.checkClosureOfSymbol(subj)
+	if "p" in self._closureMode: self.checkClosureOfSymbol(pred)
+	if ("o" in self._closureMode or
+	    "t" in self._closureMode and pred is self.store.type):
+	    self.checkClosureOfSymbol(obj)
+	if (("r" in self._closureMode and
 	      pred is self.store.docRules) or
-	    ("i" in self.closureMode and
-	      pred is self.store.imports)) and subj in self.closureAlready:
+	    ("i" in self._closureMode and
+	      pred is self.store.imports)) and subj in self._closureAlready:
 	    self.checkClosureDocument(obj)
+	if firstCall:
+	    while self._closureAgenda != []:
+		x = self._closureAgenda.pop()
+		self._closureAlready.append(x)
+		dereference(x, "m" + self._closureMode, self)
     
     def checkClosureOfSymbol(self, y):
 	if not isinstance(y, Fragment): return
 	return self.checkClosureDocument(y.resource)
 
     def checkClosureDocument(self, x):
-	if x != None and x not in self.closureAlready:
-	    self.closureAlready.append(x)
-	    dereference(x, "m" + self.closureMode, self)
+	if x != None and x not in self._closureAlready and x not in self._closureAgenda:
+	    self._closureAgenda.append(x)
 
 
     def n3String(self, flags=""):
@@ -913,8 +923,8 @@ class FormulaSimple(Formula):
 	self._listValue = {}
 	self.statements = []
 	self._index[(None,None,None)] = self.statements
-	self.closureMode = ""
-	self.closureAlready = []
+	self._closureMode = ""
+	self._closureAlready = []
 
 	
 def comparePair(self, other):
@@ -1969,11 +1979,18 @@ class RDFStore(RDFSink) :
 	    sink.bind(pfx, uri)
 
     def dumpChronological(self, context, sink):
+	"Fast as possible. Only dumps data. No formulae or universals."
         sink.startDoc()
         self.dumpPrefixes(sink, None)
-#        print "# There are %i statements in %s" % (len(context.statements), `context` )
+	self.dumpVariables(context, sink, sorting=0, dataOnly=1)
+	uu = context.universals()
         for s in context.statements:
-            self._outputStatement(sink, s.quad)
+	    for p in SUBJ, PRED, OBJ:
+		x = s[p]
+		if isinstance(Formula, x) or x in uu:
+		    break
+	    else:
+		self._outputStatement(sink, s.quad)
         sink.endDoc()
 
     def _outputStatement(self, sink, quad):
@@ -1986,7 +2003,7 @@ class RDFStore(RDFSink) :
                             t[OBJ].asPair(),
                             )
 
-    def dumpVariables(self, context, sink, sorting=1, pretty=0):
+    def dumpVariables(self, context, sink, sorting=1, pretty=0, dataOnly=0):
 	"""Dump the forAlls and the forSomes at the top of a formula"""
 	if sorting:
 	    uv = context.universals()[:]
@@ -1996,8 +2013,9 @@ class RDFStore(RDFSink) :
 	else:
 	    uv = context.universals()
 	    ev = context.existentials()
-	for v in uv:
-	    self._outputStatement(sink, (context, self.forAll, context, v))
+	if not dataOnly:
+	    for v in uv:
+		self._outputStatement(sink, (context, self.forAll, context, v))
 	for v in ev:
 	    if pretty:
 		_anon, _incoming = self._topology(v, context)

@@ -274,7 +274,7 @@ steps, in order left to right:
 --ntriples    Input & Output in NTriples (equiv --n3=spartan -bySubject -quiet)
 --language=x  Input & Output in "x" (rdf, n3, etc)  --rdf same as: --language=rdf
 --languageOptions=y     --n3=sp same as:  --language=n3 --languageOptions=sp
---ugly        Store input and regurgitate *
+--ugly        Store input and regurgitate, data only, fastest *
 --bySubject   Store input and regurgitate in subject order *
 --no          No output *
               (default is to store and pretty print with anonymous nodes) *
@@ -292,7 +292,7 @@ steps, in order left to right:
 --unflatten   turn described-as-true LX sentences into formulas
 --think=foo   as -apply=foo but continue until no more rule matches (or forever!)
 --purge       Remove from store any triple involving anything in class log:Chaff
---purge-rules Remove from store any triple involving log:implies
+--data	      Remove all except plain RDF triples (formulae, forAll, etc)
 --crypto      Enable processing of crypto builtin functions. Requires python crypto.
 --help        print this message
 --revision    print CVS revision numbers of major modules
@@ -325,6 +325,7 @@ the closure under the operation of looking up:
  s   the subject of a statement added
  p   the predicate of a statement added
  o   the object of a statement added
+ t   the object of an rdf:type statement added
  i   any owl:imports documents
  r   any doc:rules documents
 
@@ -643,7 +644,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 need(_store); touch(_store)
                 _store.purge(workingContext)
 		
-            elif arg == "-purge-rules":
+            elif arg == "-purge-rules" or arg == "-data":
                 need(_store); touch(_store)
                 _store.purgeExceptData(workingContext)
 
