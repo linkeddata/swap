@@ -450,7 +450,23 @@ class SinkParser:
 
         j = self.tok('[', str, i)
         if j>=0:
+            i = self.tok('=', str, j)
+            if i>=0:
+                objs = []
+                j = self.object_list(str, i, objs);
+                if j>=0:
+                    subj = objs[0]
+                    if len(objs)>1:
+                        for obj in objs:
+                            self.makeStatement((self._context,
+                                                DAML_equivalentTo, subj, obj))
+                    i = self.tok(';', str, j)
+                    if i>=0: j = i
+                else:
+                    raise BadSyntax(self.lines, str, i, "object_list expected after [ = ")
+
             if subj is None: subj=self.genid(RESOURCE)
+
             i = self.property_list(str, j, subj)
             if i<0: raise BadSyntax(self.lines, str, j, "property_list expected")
             j = self.tok(']', str, i)
