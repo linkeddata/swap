@@ -85,9 +85,10 @@ _:genid1 per:name "Rover".
 
     &lt;bio:Human rdf:about="#pat"&gt;
         &lt;per:name&gt;Pat Smith&lt;/per:name&gt;
-        &lt;per:pet rdf:parseType="Resource"&gt;
-            &lt;rdf:type rdf:resource="http://www.example.org/BiologicalOrganisms#Dog"/&gt;
-            &lt;per:name&gt;Rover&lt;/per:name&gt;
+        &lt;per:pet&gt;
+            &lt;bio:Dog&gt;
+                &lt;per:name&gt;Rover&lt;/per:name&gt;
+            &lt;/bio:Dog&gt;
         &lt;/per:pet&gt;
     &lt;/bio:Human&gt;
 &lt;/rdf:RDF&gt;
@@ -196,6 +197,41 @@ verbose and easier for some kinds of applications to handle</p>
     &lt;object&gt;&lt;literal&gt;Rover&lt;/literal&gt;&lt;/object&gt;
   &lt;/Triple&gt;
 &lt;/Graph&gt;
+</pre>
+
+<h2>Javascript and Python</h2>
+
+<p>This ignores URI and cardinality issues (it only allows pat to
+have one name and one pet).</p>
+
+<pre>
+pat = Human()
+rover = Dog()
+pat.name = "Pat Smith"
+rover.name = "Rover"
+pat.pet = rover
+</pre>
+
+<p>We can begin to consider cardinality...</p>
+
+<pre>
+pat = Human()
+rover = Dog()
+pat.name.append("Pat Smith")
+rover.name.append("Rover")
+pat.pet.append(rover)
+</pre>
+
+<p>This might help with URIs...</p>
+
+<pre>
+# Human,Dog are subclasses of Resource with an rdf:type of "http:// ... "
+pat = Human()
+rover = Dog()
+# name,pet are subclasses of Property with associated URIs
+pat.addProperty(name, "Pat Smith")
+rover.addProperty(name, "Rover")
+pat.addProperty(pet, rover)
 </pre>
 
 
