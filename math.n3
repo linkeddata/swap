@@ -191,6 +191,86 @@ math:rounded a rdf:Property;
 	rdfs:comment
 """The object is calulated as the subject rounded to the nearest integer.""".
 
+# 
+# Here start the trigonometric functions - karl dubost
+#
+
+math:acos a rdf:Property;
+	rdfs:label "acos";
+	rdfs:range math:Value;
+	rdfs:domain math:Value;
+	rdfs:comment
+"""The object is calulated as the arc cosine value of the subject.""".
+
+math:asin a rdf:Property;
+	rdfs:label "asin";
+	rdfs:range math:Value;
+	rdfs:domain math:Value;
+	rdfs:comment
+"""The object is calulated as the arc sine value of the subject.""".
+
+math:atan a rdf:Property;
+	rdfs:label "atan";
+	rdfs:range math:Value;
+	rdfs:domain math:Value;
+	rdfs:comment
+"""The object is calulated as the arc tangent value of the subject.""".
+
+math:atan2 a rdf:Property;
+	rdfs:label "atan2";
+	rdfs:range math:Value;
+	rdfs:domain math:Value;
+	rdfs:comment
+"""The subject is a pair of numbers. The object is calulated as the arc tangent value of the ratio of the two subject values.""".
+
+math:cos a rdf:Property;
+	rdfs:label "cos";
+	rdfs:range math:Value;
+	rdfs:domain math:Value;
+	rdfs:comment
+"""The subject is an angle expressed in radians. The object is calulated as the cosine value of the subject.""".
+
+math:cosh a rdf:Property;
+	rdfs:label "cosh";
+	rdfs:range math:Value;
+	rdfs:domain math:Value;
+	rdfs:comment
+"""The subject is an angle expressed in radians. The object is calulated as the hyperbolic cosine value of the subject.""".
+
+math:degrees a rdf:Property;
+	rdfs:label "degrees";
+	rdfs:range math:Value;
+	rdfs:domain math:Value;
+	rdfs:comment
+"""The subject is an angle expressed in radians. The object is calulated as the conversion in degrees of the value of the subject.""".
+
+math:sin a rdf:Property;
+	rdfs:label "sin";
+	rdfs:range math:Value;
+	rdfs:domain math:Value;
+	rdfs:comment
+"""The subject is an angle expressed in radians. The object is calulated as the sine value of the subject.""".
+
+math:sinh a rdf:Property;
+	rdfs:label "sinh";
+	rdfs:range math:Value;
+	rdfs:domain math:Value;
+	rdfs:comment
+"""The subject is an angle expressed in radians. The object is calulated as the hyperbolic sine value of the subject.""".
+
+math:tan a rdf:Property;
+	rdfs:label "tan";
+	rdfs:range math:Value;
+	rdfs:domain math:Value;
+	rdfs:comment
+"""The subject is an angle expressed in radians. The object is calulated as the tangent value of the subject.""".
+
+math:tanh a rdf:Property;
+	rdfs:label "tanh";
+	rdfs:range math:Value;
+	rdfs:domain math:Value;
+	rdfs:comment
+"""The subject is an angle expressed in radians. The object is calulated as the hyperbolic tangent value of the subject.""".
 
 
 #ends
