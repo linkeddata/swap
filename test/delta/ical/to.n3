@@ -15,14 +15,17 @@
                  a :Vevent;
                  :attendee  [
                      :calAddress <mailto:libby.miller@bristol.ac.uk>;
-                     :cn "Libby Miller" ];
+                     :cn "Libby Miller"
+		], [
+                     :calAddress <mailto:timbl@w3.org>;
+                     :cn "Tim Berners-Lee" ];
                  :component  [
                      a :Valarm;
 		     :alarmid "EB825E41-23CE-11D7-B93D-003foobar";
                      :action "AUDIO";
-                     :attach <Ping>;
+                     :attach <Pong>;
                      :trigger  [
-                         :duration "-PT10M" ] ];
+                         :duration "-PT15M" ] ];
                  :dtstamp  [
                      :dateTime "2003-01-09T12:39:09Z" ];
                  :dtstart  [

@@ -18,7 +18,14 @@
 owl:InverseFunctionalProperty is rdf:type of
 	calAddress,		# Person
 	uid,			# event
+	publishedAs,		# calendar @@@ need stg like this.
+	alarmid,		# alarm @@@ cf Eveolution's alarm id	
 	tzid.			# timezone
+#no  - tzid applies to a date
+#  :dtstart  [
+#          :dateTime "2003-01-15T18:00:00";
+#          :tzid "/softwarestudio.org/Olson_20011030_5/Europe/London" #];
+             
 
 
 # Things which anything can only have one of:
@@ -27,6 +34,7 @@ owl:FunctionalProperty is rdf:type of
 
 	action,
 	trigger,
+	timsezone,
 	duration,
 	dtstamp, dateTime, dtstart, tzid, duration, organizer, sequence,
 	summary,

@@ -1,0 +1,40 @@
+     @prefix : <#> .
+     @prefix ical: <ical-ifp.n3#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    
+    this     log:forAll :_g0,
+                :_g1,
+                :_g2,
+                :_g3,
+                :_g4 .
+    {
+        :_g0     ical:alarmid "EB825E41-23CE-11D7-B93D-003foobar" .
+        
+        }     log:deletion {:_g0     ical:attach <Ping> .
+        } .
+    {
+        :_g2     ical:uid "EB825E41-23CE-11D7-B93D-003065B0C95E" .
+        
+        }     log:insertion {:_g2     ical:attendee  [
+                 ical:calAddress <mailto:timbl@w3.org>;
+                 ical:cn "Tim Berners-Lee" ] .
+        } .
+    {
+        :_g3     ical:alarmid "EB825E41-23CE-11D7-B93D-003foobar" .
+        
+        }     log:insertion {:_g3     ical:attach <Pong> .
+        } .
+    {
+        :_g0     ical:alarmid "EB825E41-23CE-11D7-B93D-003foobar";
+             ical:trigger :_g1 .
+        
+        }     log:deletion {:_g1     ical:duration "-PT10M" .
+        } .
+    {
+        :_g3     ical:alarmid "EB825E41-23CE-11D7-B93D-003foobar";
+             ical:trigger :_g4 .
+        
+        }     log:insertion {:_g4     ical:duration "-PT15M" .
+        } .
+    
+
