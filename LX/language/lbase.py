@@ -83,7 +83,7 @@ def t_NUMERAL(t):
     return t
 
 def t_QUOTEDSTRING(t):
-    r"'[^'*]'"   # need \-handling
+    r"'[^']*'"   # need \-handling
     t.value = t.value[1:-1]
     return t
 
@@ -99,8 +99,8 @@ def t_error(t):
     t.skip(1)
     
 # Build the lexer
-import lex
-lex.lex()
+import ply.lex
+ply.lex.lex()
 
 # Test it out
 data = '''
@@ -236,11 +236,22 @@ variables = {}
 prefixes = {
     'rdf':'http://www.w3.org/1999/02/22-rdf-syntax-ns#',
     'rdfs':'http://www.w3.org/2000/01/rdf-schema#',
-    'Lbase':'http://..../lbase#',
+    'Lbase':'http://www.w3.org/TR/2003/NOTE-lbase-20030123-ns#',
     }
 def p_term_simple1(t):
     '''term : CONSTANT'''
-    t[0] = constants.setdefault(t[1], LX.fol.Constant(t[1]))
+    # It seems like what's actually meant is this:
+    uri = "http://example.com#"+t[1]
+    if constants.has_key(uri):
+        t[0] = constants[uri]
+    else:
+        tt = LX.logic.Constant(uri)
+        t[0] = tt
+        kb.interpret(tt, LX.uri.DescribedThing(uri))
+        constants[uri] = tt
+    # not
+    # t[0] = constants.setdefault(t[1], LX.fol.Constant(t[1]))
+
 
 def p_term_simple2(t):
     '''term : URIREF'''      ##  need two productions here?!
@@ -252,9 +263,24 @@ def p_term_simple2(t):
     if constants.has_key(uri):
         t[0] = constants[uri]
     else:
-        tt = LX.fol.Constant(uri)
+        tt = LX.logic.Constant(uri)
         t[0] = tt
-        kb.interpret(tt, LX.rdf.Thing(uri))
+        kb.interpret(tt, LX.uri.DescribedThing(uri))
+        constants[uri] = tt
+
+def p_term_numeral(t):
+    '''term : NUMERAL'''
+    if constants.has_key(t[1]):
+        t[0] = constants[y[1]]
+    else:
+        tt = LX.logic.Constant(str(t[1]))
+        t[0] = tt
+        kb.interpret(tt, t[1])
+        constants[t[1]] = tt
+
+def p_term_quotedstrin(t):
+    '''term : QUOTEDSTRING'''
+    t[0] = kb.constantFor(t[1])
 
 #            | NUMERAL
 #            | QUOTEDSTRING
@@ -369,8 +395,8 @@ def p_formula_5(t):
 def p_error(t):
     print "Syntax error at '%s' on line %s" % (t.value, t.lineno)
 
-import yacc
-yacc.yacc()
+import ply.yacc
+ply.yacc.yacc(tabmodule="lx_language_lbase_tab")
 
 #while 1:
 #    try:
@@ -398,7 +424,7 @@ yacc.yacc()
 def parse(s, to_kb):
     global kb
     kb = to_kb
-    yacc.parse(s)
+    ply.yacc.parse(s)
 
 import urllib
 
@@ -412,10 +438,24 @@ class Parser:
         s = stream.read()
         global kb
         kb = self.kb
-        yacc.parse(s)
+        ply.yacc.parse(s)
+
+class Serializer:
+
+    def __init__(self, stream, flags=""):
+        self.stream = stream
+
+    def makeComment(self, comment):
+        self.stream.write("% "+comment+"\n")
+
+    def serializeKB(self, kb):
+        pass
 
 # $Log$
-# Revision 1.4  2003-02-13 19:50:55  sandro
+# Revision 1.5  2003-02-14 00:52:03  sandro
+# added literals, some tweaks in URI handling
+#
+# Revision 1.4  2003/02/13 19:50:55  sandro
 # better support for "holds", changed parser API a little
 #
 # Revision 1.3  2003/02/01 06:23:55  sandro
