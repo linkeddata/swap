@@ -21,19 +21,76 @@ from string import split
 def virtual():
     raise RuntimeError, "Function should have been implemented in subclass"
 
-opTable = { }       # gets filled in later, using things not yet defined
+pythonOperators = { }       # gets filled in later, using things not yet defined
 
 class Expr:
 
     # or should these only be defined on certain subclasses...???
-    def __and__(self, other):    return CompoundExpr(opTable["and"], self, other)
-    def __or__(self, other):     return CompoundExpr(opTable["or"],  self, other)
-    def __rshift__(self, other): return CompoundExpr(opTable[">>"], self, other)
-    def __neg__(self, other):    return CompoundExpr(opTable["-"],  self)
+    def __and__(self, other):    return CompoundExpr(pythonOperators["and"], self, other)
+    def __or__(self, other):     return CompoundExpr(pythonOperators["or"],  self, other)
+    def __rshift__(self, other): return CompoundExpr(pythonOperators[">>"], self, other)
+    def __neg__(self, other):    return CompoundExpr(pythonOperators["-"],  self)
     def __call__(self, *args):   return apply(CompoundExpr, (self,)+args)  # (need apply() the handle varargs)
 
     def isAtomic(self):
         return 0
+
+    def serializeWithOperators(self, nameTable, operators,
+                               parentLooseness=9999,
+                               linePrefix="",
+                               width=80):
+
+        """An advanced __str__ function which uses infix and prefix
+        operators, as provided in an operator table.
+
+        The operator table idea and syntax are borrow from Prolog, as
+        seen in
+        http://www.forestro.com/kiev/kiev-187_4.html
+        http://cs.wwc.edu/~aabyan/Logic/Prolog.html
+        http://www.trinc-prolog.com/doc/pl_lang2.htm
+        
+        ##opTable = {
+        ##    LX.IMPLIES:   [ 800, "xfx", "->" ],
+        ##    LX.OR:        [ 790, "xfy", "|" ],
+        ##    LX.AND:       [ 780, "xfy", "&" ],
+
+        The first number is normally called the "priority" or
+        "precidence" but I call it "looseness" since the higher
+        numbers mean the operator binds more loosely.
+
+        In strings like "xfx", f shows where the operator goes with
+        respect to the arguments, x and/or y.  x means an argument
+        (expression) with greater looseness, y means on with greater
+        or equal looseness.   That is xfx means non-associative, xfy
+        means right associative, and yfx means left-associative.
+
+        All this is just to avoid printing some parentheses we don't
+        really need, which would waste ink.  :-)
+        
+        Suitable for recursive use.  If told that the parent's
+        operator has a higher looseness than the operator (if any)
+        here, it can skip outer parentheses.
+
+        When newlines are needed, the linePrefix is used.
+
+        >>> import LX.expr
+        >>> a=LX.expr.AtomicExpr("a")
+        >>> b=LX.expr.AtomicExpr("b")
+        >>> c=LX.expr.AtomicExpr("c")
+        >>> p=LX.expr.AtomicExpr("modulo")
+        >>> f1 = LX.expr.CompoundExpr(p,a,b)
+        >>> print f1
+        modulo(a, b)
+        >>> ops= { p : [ 800, "xfx", "%" ] }
+        >>> print f1.serializeWithOperators({},ops)
+        a%b
+        >>> f2 = LX.expr.CompoundExpr(p,c,f1)
+        >>> print f2
+        modulo(c, modulo(a, b))
+        >>> print f2.serializeWithOperators({},ops)
+        c%(a%b)
+
+        """
     
 class CompoundExpr(Expr):
     """An internal branch node in an abstract syntax tree,
@@ -110,6 +167,51 @@ class CompoundExpr(Expr):
             names.append(arg.getNameInScope(nameTable))
         return names[0]+"("+", ".join(names[1:])+")"
 
+    def serializeWithOperators(self, nameTable, operators,
+                               parentLooseness=9999,
+                               linePrefix="",
+                               width=80):
+
+        op = operators[self.__function]
+        prec = op[0]
+        form = op[1]
+        text = op[2]
+        prefix = ""; suffix = ""
+
+        # my first attempt at writing this, so I'm not thinking about
+        # the difference between "x" and "y", so we'll get some extra
+        # parens
+        
+        if prec >= parentLooseness:
+            prefix = "("; suffix = ")"
+        if form == "xfx" or form == "xfy" or form == "yfx":
+            assert(len(self.__args) == 2)
+            left = self.__args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
+            right = self.__args[1].serializeWithOperators(nameTable, operators, prec, linePrefix)
+            if 1 or (len(left) + len(right) < width):
+                result = prefix + left + text + right + suffix
+            else:
+                linePrefix = "  " + linePrefix
+                left = self.__args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
+                right = self.__args[1].serializeWithOperators(nameTable, operators, prec, linePrefix)
+                result = (prefix + "\n" + linePrefix + left + text +
+                          "\n" + linePrefix + right + suffix)
+        elif form == "fxy":
+            assert(len(self.__args) == 2)
+            result = (prefix + text + self.__args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
+                      + " " + self.__args[1].serializeWithOperators(nameTable, operators, prec, linePrefix) + suffix)
+        elif form == "fx" or form == "fy":
+            assert(len(self.__args) == 1)
+            result = prefix + text + self.__args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
+        else:
+            raise RuntimeError, "unknown associativity form in table of operators"
+        return result
+
+        
+
+def getNameInScope(thing, nameTable):
+    return thing.getNameInScope(nameTable)
+    
 class AtomicExpr(Expr):
 
     def isAtomic(self):
@@ -138,30 +240,49 @@ class AtomicExpr(Expr):
         >>> print b.getNameInScope(scope)
         joe2
 
-        todo: add a filter for guaranteeing names match some syntax
-        (a regexp for names, and a function to generate a nice
-        name from suggested names)
+        if the scope has a key ("legal",) it should be a regexp to
+        match against; if match fails, suggested name wont be used.
+        The first group in the regexp at the key ("hint",) will be
+        used, if available.  Note that these keys are separated from
+        the normal keys by being strings inside tuples.
+
         """
         try:
             return nameTable[self]
         except KeyError: pass
+        n = self.suggestedName
+        try:
+            legal = nameTable[("legal",)]
+            if not legal.match(n):
+                n = "xx"
+                hint = nameTable[("hint",)]
+                m = hint.search(self.suggestedName)
+                if m:
+                    n = m.group(1)
+        except KeyError: pass
         for extra in xrange(1, 100000000):
             if extra == 1:
-                newName = self.suggestedName
+                newName = n
             else:
-                newName = self.suggestedName + str(extra)
+                newName = n + str(extra)
             if newName not in nameTable.values():      # @ linear performance hit
                 nameTable[self] = newName
                 return newName
         raise RuntimeError, "wayyyyy to many similarly named expressions"
 
 
+    def serializeWithOperators(self, nameTable, operators,
+                               parentLooseness=9999,
+                               linePrefix="",
+                               width=80):
+        return self.getNameInScope(nameTable)
+
 class AtomicConstant(AtomicExpr):
     pass
 
 #import LX.firstOrderLogic
 
-#opTable["and"] = LX.firstOrderLogic.AND
+#pythonOperators["and"] = LX.firstOrderLogic.AND
 # ... or something.
 
 #def _test_expr_setup():
@@ -190,7 +311,10 @@ if __name__ == "__main__": _test()
 
 
 # $Log$
-# Revision 1.4  2002-10-03 16:13:02  sandro
+# Revision 1.5  2003-01-08 12:38:38  sandro
+# Added serializeWithOperators(), taken from the old language/abstract.py
+#
+# Revision 1.4  2002/10/03 16:13:02  sandro
 # some minor changes to LX-formula stuff, but it's still broken in ways
 # that don't show up on the regression test.
 #
