@@ -35,8 +35,8 @@ This RDF schema's namespace name
  changing the namespace name.
 """.
 
-@prefix iu: <infosetUtil#>. #@@?
-@prefix dl: <damlList#>. #@@
+@prefix iu: <mid:infosetUtil#>. #@@?
+@prefix dl: <mid:damlList#>. #@@
 
 
 :Document rdfs:label "Document";
@@ -85,10 +85,10 @@ This RDF schema's namespace name
 
   rdfs:subClassOf [
     dpo:onProperty :version;
-    dpo:toClass [ dpo:unionOf (iu:NoValue iu:VersionNum) ]
+    dpo:toClass :Version;
   ].
 
-iu:DocChildren rdfs:label "Items...";
+iu:DocChildren rdfs:label "Doc Items...";
   iu:listOf [
     dpo:disjointUnionOf (
       :Element # exactly one; see rule below
@@ -97,27 +97,8 @@ iu:DocChildren rdfs:label "Items...";
       :DocumentTypeDeclaration # at most one@@
     ) ].
 
-:Element     rdfs:label "Element";
-  rdfs:comment "@@more...".
-
-:ProcessingInstruction rdfs:label "Processing Instruction";
-  rdfs:comment "@@more...".
-
-:Comment     rdfs:label "Comment";
-  rdfs:comment "@@more...".
-
-:DocumentTypeDeclaration rdfs:label "Document Type Declaration";
-  rdfs:comment "@@more...".
-
-:Notation rdfs:label "Notation";
-  rdfs:comment "@@more...".
-
-:UnparsedEntity rdfs:label "Unparsed Entity";
-  rdfs:comment "@@more...".
-
-:allDeclarationsProcessed iu:propertyName "all declarations processed";
-  rdfs:range iu:Boolean.
-  
+:Version rdfs:label "Version";
+  dpo:disjointUnionOf (iu:NoValue iu:VersionNum).
 
 :children iu:propertyName "children".
 
@@ -138,6 +119,120 @@ iu:DocChildren rdfs:label "Items...";
 :no rdfs:label "no".
 :noValue rdfs:label "no value".
 
+:version iu:propertyName "version".
+
+:Element     rdfs:label "Element";
+  rdfs:subClassOf [
+    dpo:onProperty :namespaceName;
+    dpo:toClass iu:NamespaceName;
+  ];
+
+  rdfs:subClassOf [
+    dpo:onProperty :localName;
+    dpo:toClass iu:NCName;
+  ];
+    
+  rdfs:subClassOf [
+    dpo:onProperty :prefix;
+    dpo:toClass iu:Prefix;
+  ];
+
+  rdfs:subClassOf [
+    dpo:onProperty :children;
+    dpo:toClass iu:Content;
+  ];
+
+  rdfs:subClassOf [
+    dpo:onProperty :attributes;
+    dpo:toClass [ iu:setOf :Attribute ];
+  ];
+
+  rdfs:subClassOf [
+    dpo:onProperty :namespaceAttributes;
+    dpo:toClass [ iu:setOf :Attribute ];
+  ];
+
+  rdfs:subClassOf [
+    dpo:onProperty :inScopeNamespaces;
+    dpo:toClass [ iu:setOf :Namespace ];
+  ];
+
+  rdfs:subClassOf [
+    dpo:onProperty :baseURI;
+    dpo:toClass iu:AbsoluteURI;
+  ];
+
+  rdfs:subClassOf [
+    dpo:onProperty :parent;
+    dpo:toClass [ dpo:disjointUnionOf ( :Element :Document ) ];
+  ];
+
+  <#foo> "@@more"
+  .
+
+:namespaceName iu:propertyName "namespace name".
+iu:NamespaceName rdfs:label "Namespace Name";
+  dpo:disjointUnionOf (
+    iu:NoValue #@@REVIEW: hmm... the "" URIreference
+    iu:AbsoluteURI
+  ).
+
+:localName iu:propertyName "local name".
+
+:prefix iu:propertyName "prefix".
+
+iu:Content rdfs:label "Content";
+  iu:listOf [
+    dpo:disjointUnionOf (
+      :Element
+      :ProcessingInstruction
+      # unexpanded entity reference is not part of the actual model.
+      :Character
+      :Comment
+      ) ].
+
+:attributes iu:propertyName "attributes".
+:namespaceAttributes iu:propertyName "namespace attributes".
+
+:inScopeNamespaces iu:propertyName "in-scope namespaces";
+  rdfs:comment """@@not captured:
+"This set always
+             contains an item with the prefix xml which is implicitly bound to the namespace
+             name http://www.w3.org/XML/1998/namespace."
+""".
+
+:parent iu:propertyName "parent".
+
+:Attribute rdfs:label "Attribute";
+  rdfs:comment "@@more...".
+
+:Namespace rdfs:label "Namespace";
+  rdfs:comment "@@more...".
+
+:Character rdfs:label "Character";
+  rdfs:comment "@@more...".
+
+
+:ProcessingInstruction rdfs:label "Processing Instruction";
+  rdfs:comment "@@more...".
+
+:Comment     rdfs:label "Comment";
+  rdfs:comment "@@more...".
+
+:DocumentTypeDeclaration rdfs:label "Document Type Declaration";
+  rdfs:comment "@@more...".
+
+:Notation rdfs:label "Notation";
+  rdfs:comment "@@more...".
+
+:UnparsedEntity rdfs:label "Unparsed Entity";
+  rdfs:comment "@@more...".
+
+:allDeclarationsProcessed iu:propertyName "all declarations processed";
+  rdfs:range iu:Boolean.
+  
+
+
 ### supplemental rules
 @prefix log: <http://www.w3.org/2000/10/swap/log.n3#>.
 
@@ -146,6 +241,8 @@ iu:DocChildren rdfs:label "Items...";
      :children [ dl:member :e ].
   :e a :Element
 } log:means { :d :documentElement :e. }.
+
+{ :s :parent :o } log:means { :o :children [ dl:member :s ] }.
 
 
 ## Infoset Utilities (separate this out?)
@@ -173,10 +270,18 @@ iu:AbsoluteURI   rdfs:label "Absolute URI";
   rdfs:subClassOf rdfs:Literal;
   rdfs:comment "@@connect with XML Schema data type and/or 03swell/URI stuff".
 
+rdfs:Literal rdfs:label "Literal".
+
 iu:EncName rdfs:label "EncName";
   iu:pattern "[A-Za-z][A-Za-z0-9._-]*"; #@@ double-check this.
   rdfs:isDefinedBy <http://www.w3.org/TR/REC-xml#NT-EncName>;
   rdfs:comment"production [81] from the XML spec".
+
+iu:NCName rdfs:label "NCName";
+  iu:pattern "@@";
+  rdfs:comment"production [@@] from the Namespaces in XML spec".
+iu:Prefix rdfs:label "Prefix";
+  dpo:disjointUnionOf (iu:NoValue iu:NCName).
 
 iu:VersionNum rdfs:label "VersionNum";
   iu:pattern "[a-zA-Z0-9_.:-]+";
@@ -197,11 +302,6 @@ iu:NoValue rdfs:label "No Value";
 iu:instance dpo:inverseOf rdf:type.
 
 dpo:toClass rdfs:domain rdfs:Class.
-
-# (part of?) the definition of rdfs:domain...
-<> log:forAll :s, :p, :o, :C.
-{ :s :p :o.
-  :p rdfs:domain :C. } log:implies { :s a :C }.
 
 # a theorem: if X subset Y, then PowerSet(X) subset PowerSet(Y)
 <> log:forAll :E1, :E2, :C1, :C2, :P, :Q.
@@ -240,5 +340,9 @@ dpo:oneOf rdfs:domain rdfs:Class.
 { :s :p :o.
   :p rdfs:subPropertyOf :p2 }
 log:implies { :s :p2 :o }.
+# (part of?) the definition of rdfs:domain...
+<> log:forAll :s, :p, :o, :C.
+{ :s :p :o.
+  :p rdfs:domain :C. } log:implies { :s a :C }.
 
  #ENDS
