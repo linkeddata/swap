@@ -1,0 +1,24 @@
+#
+#   try with cwm util/autoimport.n3 test/spot.n3 --think
+#   and look for :spot a :Mammal.
+#
+
+@prefix : <#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix animals: <http://www.w3.org/2000/10/swap/test/animals#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+this log:forAll :S, :P, :O.
+
+#  comment out the ones you don't need, for speed
+#      (log:rawType is needed to keep us from following up literals)
+{ ?x ?p ?y. ?p log:rawType log:Other. [ is log:semantics of [ is log:racine of ?p ]] log:includes { :S :P :O }} => { :S :P :O}.
+#{ ?x ?p ?y. ?x log:rawType log:Other. [ is log:semantics of [ is log:racine of ?x ]] log:includes { :S :P :O }} => { :S :P :O}.
+#{ ?x ?p ?y. ?y log:rawType log:Other. [ is log:semantics of [ is log:racine of ?y ]] log:includes { :S :P :O }} => { :S :P :O}.
+
+
+# Fails for unknown reason:
+#[ is log:semantics of <http://www.w3.org/2000/10/swap/util/rdfs-rules>
+#] a log:Truth.
+# so we'll do it by hand for now:
+{ ?small rdfs:subClassOf ?big.  ?x a ?small } => { ?x a ?big }.
