@@ -23,4 +23,9 @@
     test:description   "manual JOIN from OrderTracking database";
     test:arguments     """dbork/OrderTracking1-noExtKeys.n3 -think""".
 
+:d1004 a test:CwmTest;
+    test:shortFileName "dbork-OrderTracking1-sameFragName.n3";
+    test:description   "test for name collisions in database table names";
+    test:arguments     """dbork/OrderTracking1-sameFragName.n3 -think""".
+
 #ends

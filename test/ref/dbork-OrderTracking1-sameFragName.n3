@@ -1,0 +1,108 @@
+     @prefix : <#> .
+     @prefix Addresses: <sql://rdftest@swada.w3.org/OrderTracking/Addresses#> .
+     @prefix Customers: <sql://rdftest@swada.w3.org/OrderTracking/Customers#> .
+     @prefix Orders: <sql://rdftest@swada.w3.org/OrderTracking/Orders#> .
+     @prefix Products: <sql://rdftest@swada.w3.org/OrderTracking/Products#> .
+     @prefix billAddr: <http://example.com/billAddr#> .
+     @prefix billCity: <http://example.com/billCity#> .
+     @prefix billState: <http://example.com/billState#> .
+     @prefix billStreet: <http://example.com/billStreet#> .
+     @prefix c: <http://example.com/c#> .
+     @prefix d: <http://example.com/d#> .
+     @prefix first: <http://example.com/first#> .
+     @prefix last: <http://example.com/last#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix o: <http://example.com/o#> .
+     @prefix p: <http://example.com/p#> .
+     @prefix productName: <http://example.com/productName#> .
+    
+    this     log:forAll billAddr:a,
+                billCity:a,
+                billState:a,
+                billStreet:a,
+                c:a,
+                d:a,
+                first:a,
+                last:a,
+                o:a,
+                p:a,
+                productName:a .
+    
+    "'sql://rdftest@swada.w3.org/OrderTracking/Orders.id=2185'"     :RESULT "'123 Elm Street'",
+                "'Biff'",
+                "'EdgeCity'",
+                "'Thompson'",
+                "'XX'",
+                "'pool'" .
+    
+    "'sql://rdftest@swada.w3.org/OrderTracking/Orders.id=2186'"     :RESULT "'123 Elm Street'",
+                "'Chip'",
+                "'EdgeCity'",
+                "'Thompson'",
+                "'XX'",
+                "'skateboard'" .
+    
+    "'sql://rdftest@swada.w3.org/OrderTracking/Orders.id=2187'"     :RESULT "'123 Elm Street'",
+                "'Chip'",
+                "'EdgeCity'",
+                "'Thompson'",
+                "'XX'",
+                "'nose ring'" .
+    
+    "'sql://rdftest@swada.w3.org/OrderTracking/Orders.id=3183'"     :RESULT "'123 Elm Street'",
+                "'Chip'",
+                "'EdgeCity'",
+                "'Thompson'",
+                "'XX'",
+                "'other ring'" .
+    
+    Addresses:city     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Addresses:id     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Addresses:state     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Addresses:street     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Customers:billingAddress     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/>;
+         log:pointsAt Addresses:id .
+    
+    Customers:familyName     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Customers:givenName     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Customers:id     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Orders:customer     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/>;
+         log:pointsAt Customers:id .
+    
+    Orders:id     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Orders:orderDate     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Orders:product     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/>;
+         log:pointsAt Products:id .
+    
+    Products:id     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Products:name     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    {
+        billAddr:a     Addresses:city billCity:a;
+             Addresses:state billState:a;
+             Addresses:street billStreet:a .
+        c:a     Customers:billingAddress billAddr:a;
+             Customers:familyName first:a;
+             Customers:givenName last:a .
+        o:a     Orders:customer c:a;
+             Orders:orderDate d:a;
+             Orders:product p:a .
+        p:a     Products:name productName:a .
+        
+        }     log:implies {o:a     :RESULT billCity:a,
+                    billState:a,
+                    billStreet:a,
+                    first:a,
+                    last:a,
+                    productName:a .
+        } .
+    

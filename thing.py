@@ -189,10 +189,10 @@ class Term:
         store.initTerm(self)
 
             
-    def __repr__(self):
-	"""This method only used for debugging output - it can be ambiguous,
-	as it is is deliberately short to make debug printout readable.
-	"""
+    def qname(self):
+        """Output XML qnames [http://www.w3.org/TR/REC-xml-names/#NT-QName].
+        This should be beefed up to guarantee unambiguity (see __repr__ documentation).
+        """
         s = self.uriref()
         p = string.rfind(s, "#")
 	if p<0: p=string.rfind(s, "/")   # Allow "/" namespaces as a second best
@@ -201,6 +201,12 @@ class Term:
             if prefix != None : return prefix + ":" + s[p+1:]
         if p >= 0: return s[p+1:]
         return s
+
+    def __repr__(self):
+	"""This method only used for debugging output - it can be ambiguous,
+	as it is is deliberately short to make debug printout readable.
+	"""
+        return self.qname()
 
     def representation(self, base=None):
         """The string represnting this in N3 """

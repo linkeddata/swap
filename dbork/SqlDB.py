@@ -146,24 +146,31 @@ class ResultSet:
         self.varIndex = {}
         self.indexVar = []
         self.results = []
+        self.symbols = {}
+        self.fragments = {}
     def myIntern(self, q, index, variables, existentials):
+        symbol = q.fragid # re.sub(':', '_', q.qname())
         try:
             existentials.index(q)
             try:
                 index = self.varIndex[q]
+                symbol = self.fragments[q]
             except KeyError, e:
                 index = self.varIndex[q] = len(self.indexVar)
                 self.indexVar.append(q)
-            return (VariableQueryPiece(q.fragid, index, 1)) # uri1#foo and uri2#foo may collide
+                symbol = self.ensureUniqueSymbol(symbol, q)
+            return (VariableQueryPiece(symbol, index, 1)) # uri1#foo and uri2#foo may collide
         except ValueError, e:
             try:
                 variables.index(q)
                 try:
                     index = self.varIndex[q]
+                    symbol = self.fragments[q]
                 except KeyError, e:
                     index = self.varIndex[q] = len(self.indexVar)
                     self.indexVar.append(q)
-                return (VariableQueryPiece(q.fragid, index, 0))
+                    symbol = self.ensureUniqueSymbol(symbol, q)
+                return (VariableQueryPiece(symbol, index, 0))
             except ValueError, e:
                 try:
                     return (LiteralQueryPiece(q.string))
@@ -173,6 +180,24 @@ class ResultSet:
                     except Exception, e:
                         raise RuntimeError, "what's a \""+q+"\"?"
         
+    def ensureUniqueSymbol(self, symbol, q):
+        i = 0
+        base = symbol
+        while self.symbols.has_key(symbol):
+            symbol = base + `i`
+            i = i + 1
+        # This is always called for new symbols so no need to check the
+        # existent fragment to symbol mapping.
+        # If you don't believe me, uncomment the following:
+        #if self.symbols.has_key(symbol):
+        #    if self.symbols[symbol].uriref() == q.uriref():
+        #        print "!!re-used symbol '%s' used for %s and %s" %(symbol, self.symbols[symbol].uriref(), q.uriref())
+        #    else:
+        #        print "duplicate symbol '%s' used for %s and %s" %(symbol, self.symbols[symbol].uriref(), q.uriref())
+        self.symbols[symbol] = q
+        self.fragments[q] = symbol
+        return symbol
+
     def buildQuerySetsFromCwm(self, sentences, variables, existentials):
         set = []
         for sentence in sentences:

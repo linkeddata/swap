@@ -1,0 +1,75 @@
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+# Tables:
+@prefix Orders: 	<sql://rdftest@swada.w3.org/OrderTracking/Orders#>.
+@prefix Products: 	<sql://rdftest@swada.w3.org/OrderTracking/Products#>.
+@prefix Customers: 	<sql://rdftest@swada.w3.org/OrderTracking/Customers#>.
+@prefix Addresses: 	<sql://rdftest@swada.w3.org/OrderTracking/Addresses#>.
+
+@prefix o: 		<http://example.com/o#>.
+@prefix d: 		<http://example.com/d#>.
+@prefix p: 		<http://example.com/p#>.
+@prefix c: 		<http://example.com/c#>.
+@prefix productName: 	<http://example.com/productName#>.
+@prefix first: 		<http://example.com/first#>.
+@prefix last: 		<http://example.com/last#>.
+@prefix billAddr: 	<http://example.com/billAddr#>.
+@prefix billStreet: 	<http://example.com/billStreet#>.
+@prefix billCity: 	<http://example.com/billCity#>.
+@prefix billState: 	<http://example.com/billState#>.
+
+@prefix : <#>.
+
+this log:forAll o:a, d:a, p:a, productName:a, c:a, first:a, last:a, billAddr:a, billStreet:a, billCity:a, billState:a .
+
+<sql://rdftest@swada.w3.org/OrderTracking/> is log:authoritativeService of
+	Orders:id, Orders:customer, Orders:product, Orders:orderDate, 
+	Products:id, Products:name, 
+	Customers:id, Customers:familyName, Customers:givenName, Customers:billingAddress, 
+	Addresses:id, Addresses:street, Addresses:city, Addresses:state.
+
+Orders:product log:pointsAt Products:id .
+Orders:customer log:pointsAt Customers:id .
+Customers:billingAddress log:pointsAt Addresses:id .
+
+{
+ o:a Orders:customer c:a .
+ o:a Orders:product p:a .
+ o:a Orders:orderDate d:a .
+
+ p:a Products:name productName:a .
+
+ c:a Customers:familyName first:a .
+ c:a Customers:givenName last:a .
+ c:a Customers:billingAddress billAddr:a .
+
+ billAddr:a Addresses:street billStreet:a .
+ billAddr:a Addresses:city billCity:a .
+ billAddr:a Addresses:state billState:a .
+} log:implies {
+
+ o:a :RESULT productName:a .
+ o:a :RESULT first:a .
+ o:a :RESULT last:a .
+ o:a :RESULT billStreet:a .
+ o:a :RESULT billCity:a .
+ o:a :RESULT billState:a .
+
+}.
+
+# SELECT Products_0.id AS a_id,
+#          Products_0.name AS a0_name,
+#        Addresses_0.id AS a1_id,
+#          Addresses_0.city AS a2_city,
+#          Addresses_0.state AS a3_state,
+#          Addresses_0.street AS a4_street,
+#        Customers_0.id AS a5_id,
+#          Customers_0.familyName AS a6_familyName,
+#          Customers_0.givenName AS a7_givenName,
+#        Orders_0.id AS a8_id,
+#          Orders_0.orderDate AS a9_orderDate
+# FROM Products AS Products_0, Addresses AS Addresses_0, Customers AS Customers_0, Orders AS Orders_0
+# WHERE Customers_0.billingAddress=Addresses_0.id
+#   AND Orders_0.customer=Customers_0.id
+#   AND Orders_0.product=Products_0.id
+
