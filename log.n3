@@ -48,7 +48,7 @@ log:Truth a rdf:Class;
 log:implies a rdfs:Property;
     rdfs:comment "Logical implication. Understood natively by cwm.";
     rdfs:range log:Formula;
-    rdfs:definedBy <>;
+    rdfs:isDefinedBy <>;
     rdfs:range log:Formula.
 
 log:resolvesTo a rdf:Property;
