@@ -1,11 +1,11 @@
-#  Build stuff uop from the BNF
+#  Build stuff up from the CFG
 
 SWAP=..
 P=python
-C=$(SWAP)/cwm.py --n3=e
-CG=PYTHONPATH=$(SWAP) python check-grammar.py
+C=$(SWAP)/cwm.py
+CG=PYTHONPATH=$(SWAP) python predictiveParser.py
 
-all : n3-checked.txt n3-report.html \
+all : n3-checked.txt n3-report.html
 		n3rdf-report.html \
 		n3rules-report.html \
 		n3ql-report.html
@@ -81,4 +81,28 @@ n3ql-report.big:  n3-ql.n3 bnf2html.n3
 
 n3ql-report.html : n3ql-report.big
 	time $P $C  n3ql-report.big --strings > $@
+
+#___________________________________
+
+Q=../../../../2001/sw/DataAccess/rq23
+sparql.n3 : $Q/grammar.yy
+	sed -f yy2n3.sed < $Q/grammar.yy > sparql.n3
+
+
+sparql-checked.txt: sparql-selectors.n3
+	$(CG) --grammar=sparql-selectors.n3 \
+		--as=http://www.w3.org/2000/10/swap/grammar/sparql#Query > $@
+
+sparql-selectors.n3 : sparql.n3 bnf-rules.n3 shorthand-rules.n3
+	time $P $C sparql.n3 shorthand-rules.n3 bnf-rules.n3 --think --purge --data > $@
+
+sparql-report.big:  sparql.n3 bnf2html.n3
+	time $P $C sparql.n3 bnf2html.n3 --chatty=21 --think --data > $@
+
+
+sparql-report.html : sparql-report.big
+	time $P $C  sparql-report.big --strings > $@
+
+
+#ends
 
