@@ -25,17 +25,25 @@ from rdflib.Namespace import Namespace
 from rdflib.constants import TYPE
 from rdflib.TripleStore import TripleStore
 from rdflib.BNode import BNode
+from rdflib.URIRef import URIRef
+from rdflib.Literal import Literal
 import OwlAxiomReasoner
 import time
+import os
+import os.path
+import re
 
 #import random
 
+resultsPrefix=",results-"
+
 FOAF = Namespace("http://xmlns.com/foaf/0.1/")
 OTEST = Namespace("http://www.w3.org/2002/03owlt/testOntology#")
-TRES = Namespace("http://www.w3.org/2003/08/owl-systems/testRes#")
+TRES = Namespace("http://www.w3.org/2002/03owlt/resultsOntology#")
 RTEST = Namespace("http://www.w3.org/2000/10/rdf-tests/rdfcore/testSchema#")
 DC = Namespace("http://purl.org/dc/elements/1.0/")
 RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+RDFS = Namespace("http://www.w3.org/2000/01/rdf-schema#")
 OWL = Namespace("http://www.w3.org/2002/07/owl#")
 
 
@@ -102,7 +110,8 @@ skip = {
 
 maxFailed = 999999
 failed = 0
-
+system = BNode()
+    
 def run(store, test, name, input, entailed, expected, resultStore):
 
     global failed
@@ -114,21 +123,26 @@ def run(store, test, name, input, entailed, expected, resultStore):
     if tag.endswith("#test"):
         tag = tag[:-5]
     tag = "__".join(tag.split("/"))
+    tag = re.sub("__Manifest", "-", tag)
 
     localMaxSeconds=maxSecondsTable.get(str(test), maxSeconds)
 
     if localMaxSeconds != maxSeconds:
         print (" [special time limit: %ds]" % localMaxSeconds),
     
+    ifn = resultsPrefix+tag+".otter.in.txt"
+    ofn = resultsPrefix+tag+".otter.out.txt"
+    
     try:
         start = time.time()
         result = OwlAxiomReasoner.checkConsistency(
                      input,
                      entailedDocument=entailed,
-                     tag=tag,
                      requiredDatatypes=dtlist,
                      maxSeconds=localMaxSeconds,
-                     axiomTag=axiomTag.get(str(test), ""))
+                     axiomTag=axiomTag.get(str(test), ""),
+                     inputFileName=ifn,
+                     outputFileName=ofn)
         end = time.time()
     except OwlAxiomReasoner.UnsupportedDatatype, dt:
         print "skipped; uses unsupported datatype", dt
@@ -137,7 +151,11 @@ def run(store, test, name, input, entailed, expected, resultStore):
     this = BNode()
     resultStore.add((this, RDF["type"], TRES["TestRun"]))
     resultStore.add((this, TRES["test"], test))
-
+    resultStore.add((this, TRES["system"], system))
+    resultStore.add((this, TRES["output"], URIRef(os.path.basename(ofn))))
+    #resultStore.add((this, TRES["start"],
+    #                 Literal("20030203T12:12:12", datatype="xsd:time")))
+    
     if result == expected:
         dur = end-start
         print "PASSED %ss" % dur
@@ -154,6 +172,9 @@ def run(store, test, name, input, entailed, expected, resultStore):
         #print "   failed %d (max %d)" % (failed, maxFailed)
                     
 def runTests(store, resultStore):
+
+    resultStore.add((system, RDFS["label"], Literal("surnia")))
+    
     for testType in (testTypes):
         print
         print "Trying each",testType,"..."
@@ -222,7 +243,24 @@ def runTests(store, resultStore):
 # ...
 # ]
 
-
+def getDirectoryName(pattern):
+    try:
+        filled = pattern % 0
+    except TypeError, e:
+        return pattern
+    dirName = os.path.dirname(pattern)   #  [0:pattern.rindex("/")]
+    try:
+        counterFile = file(dirName+"/.counter", "r+")
+        count = int(counterFile.readline())
+        counterFile.seek(0)
+    except IOError, e:
+        os.makedirs(dirName)
+        counterFile = file(dirName+"/.counter", "w")
+        count=0
+    counterFile.write(str(count+1))
+    counterFile.close()
+    return pattern % count
+    
 class MyArgHandler(ArgHandler.ArgHandler):
 
     def __init__(self, *args, **kwargs):
@@ -246,8 +284,11 @@ class MyArgHandler(ArgHandler.ArgHandler):
             runTests(store, resultStore)
         except KeyboardInterrupt, k:
             print "KeyboardInterrupt"
-        print "Writing test results in RDF..."
-        resultStore.save("surnia-test-results.rdf")
+        if resultsPrefix:
+            f = resultsPrefix + "results.rdf"
+            print "Writing test results to %s ..." % f,
+            resultStore.save(f)
+            print " done."
 
     def handle__maxSeconds(self, timeLimit=1):
         """Time limit for each run of the underlying reasoner.
@@ -260,6 +301,26 @@ class MyArgHandler(ArgHandler.ArgHandler):
     # --reach ...      include data from the web
     # --nolookup       don't fetch stuff to validate....  ?
     # --query          a pattern to lookup / prove
+
+    def handle__results(self, prefixPattern="./test-results/%05d/"):
+        """File name prefix pattern, where test results should be stored.
+
+        Something like: /home/sandro/3/08/surnia/test-results/foo
+        or              /home/sandro/3/08/surnia/test-results/%08d/
+
+        If it contains a %-part, then a number will be put there, using
+        file ".counter" in that directory to story the count.   (This
+        hack means that if you store two sets in the same directory,
+        they'll still use distinct numbers.  A bug, you might say.)
+
+        prefix+"results.rdf" will store the general test results,
+        while other names linked from it will store the output for
+        that particular test.
+        """
+        global resultsPrefix
+        resultsPrefix = getDirectoryName(prefixPattern)
+        if resultsPrefix.endswith("/"):
+            os.makedirs(resultsPrefix)
     
     def handleNoArgs(self):
         raise ArgHandler.Error, "no options or parameters specified."

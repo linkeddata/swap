@@ -67,8 +67,10 @@ def checkConsistency(inputDocument,
                      entailedDocument=None,
                      requiredDatatypes=[],    # dt not impl
                      forbiddenDatatypes=[],
-                     tag="unnamed", maxSeconds=5,
-                     axiomTag=""):
+                     maxSeconds=5,
+                     axiomTag="",
+                     inputFileName=None,
+                     outputFileName=None):
     """An OWL consistency checker takes a document as input, and
        returns one word being Consistent, Inconsistent, or Unknown.
 
@@ -104,8 +106,11 @@ def checkConsistency(inputDocument,
         #kb.gather(prefixMap)
 
         try:
-            LX.engine.otter.run(kb, fileBase=",ot/"+tag,
-                                includes=[axiomFile % axiomTag], maxSeconds=maxSeconds)
+            LX.engine.otter.run(kb, 
+                                includes=[axiomFile % axiomTag],
+                                maxSeconds=maxSeconds,
+                                inputFileName=inputFileName,
+                                outputFileName=outputFileName)
             return "Inconsistent"
         except LX.engine.otter.SOSEmpty:
             return "Consistent"
