@@ -1,0 +1,54 @@
+# Test the log:includes function
+
+#@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+#@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+#@prefix daml:  <http://www.daml.org/2000/10/daml-ont#> .
+#@prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+#@prefix ex:   <http://www.daml.org/2000/10/daml-ex#> .
+
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+@prefix : <#>.  # Local stuff
+
+# Usage:   cwm t13.n3 -think
+#
+# Output should conclude all test* a :success and no failures.
+#
+
+this log:forAll :x, :y, :z.
+
+#{ ""  log:concat () } log:implies {:test13a a :success}.
+
+{ :x  log:concat ( :y ) } log:implies {:empty :is :x}.
+
+# :x log:concat ( :junk ) }  log:implies { :one :is :x }.
+
+#{ :x log:concat :junk } log:implies { :junk2 :is :x }.
+
+#{ :x  log:concat ("World" "Wide" "Web") } log:implies {:www :is :x}.
+
+#{ :x  log:concat ("World" :y "Web").
+#  :y  log:concat ( "W" " " "I" " " "D" " " "E").
+# } log:implies {:www2:is :x}.
+
+
+#{ "" log:equalTo [ log:concat () ]  } log:implies {:test13a1 a :success}.
+#
+#{ "one" log:equalTo [ log:concat ( "one" ) ].} log:implies {:test13b a :success}.
+#
+#{ "WorldWideWeb" log:equalTo [ log:concat ( "World" "Wide" "Web" ) ]}
+#    log:implies {:test13c a :success}.
+#
+#
+#{ "one" log:equalTo [ log:concat () ]  } log:implies {:test13a_bis a :FAILURE}.
+#
+#{ "" log:equalTo [ log:concat ( "one" ) ].} log:implies {:test13b_bis a :FAILURE}.
+#
+#{ "one" log:equalTo [ log:concat ( "World" "Wide" "Web" ) ]}
+#    log:implies {:test13c_bis a :FAILURE}.
+
+
+
+# ends
+
+
