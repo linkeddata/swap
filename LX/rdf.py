@@ -110,8 +110,43 @@ class FormulaDescriber:
 
         return term
 
+# This implements http://www.w3.org/2002/12/rdf-identifiers/
+
+class WebLocation:
+    def __init__(self, uri):
+        self.uri = uri
+    def __str__(self):
+        return '[ web:uri "%s" ]' % self.uri
+    
+class Thing:
+    def __init__(self, uri):
+        self.uriOfDescription = uri
+    def __str__(self):
+        return '[ web:uriOfDescription "%s" ]' % self.uriOfDescription
+
+
+rdf_type = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+def denotation(triple, index):
+    """
+    Return the object denoted by triple[index], where string
+    elements of the triple are taken to be URIRef node/arc labels.
+    Literals, etc, need to be handled elsewhere.
+    
+    We need the whole triple because of the disambiguating rules from
+    http://www.w3.org/2002/12/rdf-identifiers/
+    """
+    u = triple[index]
+    if index == 1: return Thing(u)
+    if u.find("#") >= 0:
+        return Thing(u)
+    if index == 2 and triple[1] == rdf_type: return Thing(u)
+    return WebLocation(u)
+    
 # $Log$
-# Revision 1.5  2003-01-29 06:09:18  sandro
+# Revision 1.6  2003-02-01 05:58:10  sandro
+# intermediate lbase support; getting there but buggy; commented out some fol chreccks
+#
+# Revision 1.5  2003/01/29 06:09:18  sandro
 # Major shift in style of LX towards using expr.py.  Added some access
 # to otter, via --check.  Works as described in
 # http://lists.w3.org/Archives/Public/www-archive/2003Jan/0024

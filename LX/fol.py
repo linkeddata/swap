@@ -73,15 +73,15 @@ class BinaryConnective(Connective):
 
     def checkArgs(self, args):
         assert(len(args) == 2)
-        for arg in args:
-            assert(isFirstOrderFormula(arg))
+        #for arg in args:
+        #    assert(isFirstOrderFormula(arg))
 
 class UnaryConnective(Connective):
 
     def checkArgs(self, args):
         assert(len(args) == 1)
-        for arg in args:
-            assert(isFirstOrderFormula(arg))
+        #for arg in args:
+        #    assert(isFirstOrderFormula(arg))
 
 class Quantifier(Connective):
 
@@ -235,7 +235,7 @@ IMPLIES = BinaryConnective("implies")
 NOT = UnaryConnective("not")
 FORALL = UniversalQuantifier("forall")
 EXISTS = ExistentialQuantifier("exists")
-
+EQUALS = Predicate("=")
 LX.expr.pythonOperators["and"] = AND
 LX.expr.pythonOperators["or"] = OR
 
@@ -251,7 +251,10 @@ def _test():
 if __name__ == "__main__": _test()
 
 # $Log$
-# Revision 1.3  2003-01-29 06:09:18  sandro
+# Revision 1.4  2003-02-01 05:58:10  sandro
+# intermediate lbase support; getting there but buggy; commented out some fol chreccks
+#
+# Revision 1.3  2003/01/29 06:09:18  sandro
 # Major shift in style of LX towards using expr.py.  Added some access
 # to otter, via --check.  Works as described in
 # http://lists.w3.org/Archives/Public/www-archive/2003Jan/0024

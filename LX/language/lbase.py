@@ -2,9 +2,20 @@
 
 See http://www.w3.org/TR/2003/NOTE-lbase-20030123/#consistency
 
+use kb.interpretation for numbers, strings, ...
+
+how to wrap as object?    maybe just do?   nah - parse in one pass; no need.
+
+
 """
 __version__ = "$Revision$"
 # $Id$
+
+import LX.fol
+import LX.expr
+import LX.kb
+
+kb = LX.kb.KB()
 
 tokens = (
     'AND', 'OR', 'IMPLIES', 'IFF', 'NOT',
@@ -165,12 +176,13 @@ rdfs:subClassOf(rdf:Seq, rdfs:Container).
 rdfs:subClassOf(rdfs:ContainerMembershipProperty,rdf:Property).
 rdfs:subPropertyOf(rdfs:isDefinedBy,rdfs:seeAlso).
 rdfs:Datatype(?x) implies ( LegalLexicalForm(?y,?x)) iff
-          ?x(L2V(?y,?x)) ).
+          ?x(L2V(?y,?x)).
 ( rdfs:Datatype(?x) and LegalLexicalForm(?y,?x) and ?x(?y))
           implies rdfs:Literal(?y).
 Lbase:XMLThing(?x) iff
           LegalLexicalForm(?x,rdf:XMLLiteral).
 '''
+###          ?x(L2V(?y,?x)).
 
 ## # Give the lexer some input
 
@@ -197,92 +209,142 @@ precedence = (
 names = { }
 
 def p_unit(t):
-    '''unit : formula PERIOD'''
+    '''unit : formulaList'''
+    pass
 
-    return t
+def p_formulaList_empty(t):
+    '''formulaList : '''
+    pass
 
-def p_term_simple(t):
-    '''term : CONSTANT
-            | VARIABLE
-            | URIREF
-            | NUMERAL
-            | QUOTEDSTRING
-            | XMLSTRUCTURE'''
-    return t
+def p_formulaList_more(t):
+    '''formulaList : formulaList formula PERIOD'''
+    print "Adding formula %s\n" % t[2]
+    kb.add(t[2])
+
+constants = {}
+variables = {}
+
+def p_term_simple1(t):
+    '''term : CONSTANT'''
+    t[0] = constants.setdefault(t[1], LX.fol.Constant(t[1]))
+
+def p_term_simple2(t):
+    '''term : URIREF'''      ##  need two productions here?!
+    if constants.has_key(t[1]):
+        t[0] = constants[t[1]]
+    else:
+        tt = LX.fol.Constant(t[1])
+        t[0] = tt
+        kb.interpret(tt, LX.rdf.Thing(t[1]))
+        print "NEW URIREF", t[1]
+
+#            | NUMERAL
+#            | QUOTEDSTRING
+#            | XMLSTRUCTURE'''
+
+def p_term_var(t):
+    'term : VARIABLE'
+    for frame in varStack:
+        if t[1] == frame.name:
+            t[0] = frame.variable
+            return
+    if variables.has_key(t[1]):
+        t[0] = variables[t[1]]
+    else:
+        tt = LX.fol.UniVar(t[1])
+        t[0] = tt
+        variables[t[1]] = tt
+        kb.univars.append(tt)
+        print "NEW UNiVar", t[1]
 
 def p_term_compound(t):
     '''term : term LPAREN termlist RPAREN '''
-    return t
+    t[0] = apply(LX.expr.CompoundExpr, [t[1]] + t[3])
 
-def p_termlist(t):
-    '''termlist : term
-                | term COMMA termlist'''
-    return t
+def p_termlist_singleton(t):
+    '''termlist : term'''
+    t[0] = [t[1]]
+
+def p_termlist_more(t):
+    'termlist : term COMMA termlist'''
+    t[0] = [t[1]] + t[3]
 
 def p_atomicformula(t):
-    '''atomicformula : term
-                     | term EQUALS term'''
-    return t
+    'atomicformula : term'
+    #  assert function is a predicate?
+    t[0] = t[1]
+
+def p_atomicformula_2(t):
+    'atomicformula : term EQUALS term'
+    t[0] = LX.fol.EQUALS(t[1], t[3])
 
 def p_varlist(t):
-    '''varlist : VARIABLE
-               | VARIABLE varlist'''
-    return t
+    '''varlist : VARIABLE'''
+    t[0] = [t[1]]
+
+def p_varlist_2(t):
+    'varlist : VARIABLE varlist'
+    t[0] = [t[1]] + t[2]
 
 def p_formula(t):
-    '''formula : atomicformula
-               | formula PERIOD formula
-               | formula AND formula
-               | formula OR formula
-               | formula IMPLIES formula
-               | formula IFF formula
-               | NOT formula
-               | FORALL LPAREN varlist RPAREN formula
-               | EXISTS LPAREN varlist RPAREN formula
-               | LPAREN formula RPAREN
-               '''
-    return t
+    'formula : atomicformula'
+    t[0] = t[1]
     
-## def p_statement_assign(t):
-##     'statement : NAME EQUALS expression'
-##     names[t[1]] = t[3]
+def p_formula_2(t):
+    '''formula : formula AND formula
+                | formula OR formula
+                | formula IMPLIES formula
+                | formula IFF formula'''
+    f = { "and": LX.fol.AND,
+          "or": LX.fol.OR,
+          "implies": LX.fol.IMPLIES,
+          "iff": LX.fol.MEANS}[t[2]]
+    t[0] = apply(f, (t[1], t[3]))
 
-## def p_statement_expr(t):
-##     'statement : expression'
-##     print t[1]
+def p_formula_3(t):
+     'formula : NOT formula'
+     t[0] = LX.fol.NOT(t[2])
 
-## def p_expression_binop(t):
-##     '''expression : expression PLUS expression
-##                   | expression MINUS expression
-##                   | expression TIMES expression
-##                   | expression DIVIDE expression'''
-##     if t[2] == '+'  : t[0] = t[1] + t[3]
-##     elif t[2] == '-': t[0] = t[1] - t[3]
-##     elif t[2] == '*': t[0] = t[1] * t[3]
-##     elif t[2] == '/': t[0] = t[1] / t[3]
+class Frame:
+    def __init__(self):
+        self.name = None; self.variable = None; self.quantifier = None
+frameSep = Frame()
+varStack = []
 
-## def p_expression_uminus(t):
-##     'expression : MINUS expression %prec UMINUS'
-##     t[0] = -t[2]
-
-## def p_expression_group(t):
-##     'expression : LPAREN expression RPAREN'
-##     t[0] = t[2]
-
-## def p_expression_number(t):
-##     'expression : NUMBER'
-##     t[0] = t[1]
-
-## def p_expression_name(t):
-##     'expression : NAME'
-##     try:
-##         t[0] = names[t[1]]
-##     except LookupError:
-##         print "Undefined name '%s'" % t[1]
-##         t[0] = 0
-
+def p_quantification(t):
+    '''quantification : FORALL LPAREN varlist RPAREN 
+                      | EXISTS LPAREN varlist RPAREN '''
+    varlist = t[3]
+    varStack.insert(0, frameSep)
+    quantifier = { "forall": LX.fol.FORALL,
+                   "exists": LX.fol.EXISTS }[t[1]]
+    varclass =   { "forall": LX.fol.UniVar,
+                   "exists": LX.fol.ExiVar }[t[1]]
+    for var in varlist:
+        frame = Frame()
+        frame.name = var
+        frame.variable = apply(varclass, (var,))
+        frame.quantifier = quantifier
+        varStack.insert(0, frame)
+    print "varStack built up to", varStack
+            
+def p_formula_4(t):
+     'formula : quantification formula'
+     f = t[2]
+     while 1:
+         frame = varStack.pop(0)
+         if frame == frameSep: break
+         f = apply(frame.quantifier, [frame.variable, f])
+         print "f built up to ", f
+     print "varStack chopped to", varStack, "@@@ forgot to quantify"
+     t[0] = f
+     
+def p_formula_5(t):
+     'formula : LPAREN formula RPAREN'
+     t[0] = t[2]
+    
 def p_error(t):
-    print "Syntax error at '%s'" % t.value
+    print "Syntax error at '%s' on line %s" % (t.value, t.lineno)
 
 import yacc
 yacc.yacc()
@@ -294,15 +356,26 @@ yacc.yacc()
 #        break
 #    yacc.parse(s)
 
-yacc.parse(longData, debug=1)
+yacc.parse(longData)
 
 #yacc.parse('p', debug=1)
 #yacc.parse('not not not not p', debug=1)
 #yacc.parse('p or or or q', debug=1)
 #yacc.parse('''p q r''', debug=1)
 
+#yacc.parse('p(x,y,x) or q(x).')
+#yacc.parse('p(x,y,x) or q(?x).')
+#yacc.parse('forall (?a ?b) exists (?z) p(x,?a, y,x) or q(x).')
+
+#print kb
+
+print LX.language.otter.serialize(kb)
+
 # $Log$
-# Revision 1.1  2003-01-30 22:11:52  sandro
+# Revision 1.2  2003-02-01 05:58:12  sandro
+# intermediate lbase support; getting there but buggy; commented out some fol chreccks
+#
+# Revision 1.1  2003/01/30 22:11:52  sandro
 # handles syntax now, I think; needs to build LX AST
 #
 

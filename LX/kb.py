@@ -1,9 +1,4 @@
 """
-
-I'm iffy about the whole idea of "interpretation" here for how URIs
-work.  It was just an idea, at the time.
-
-
 """
 __version__ = "$Revision$"
 # $Id$
@@ -33,6 +28,29 @@ class KB(list):
        )
 
     (aka a sentence in "prenex" form.)
+
+    Meanwhile, we also can store information about fixed
+    interpretations of constant symbols.  If you want to say something
+    about the integer 57, you can make a symbol
+
+       my57 = LX.fol.Constant("the number fifty-seven")
+
+    and say kb.interpret(my57, 57) to let other modules
+    know that you mean the symbol my57 in the KB to stand for the
+    (python) number 57.  This information is lost in a plain
+    conversion of the KB to a Formula, unless there are describers
+    used/usable to encode it into more formulas.  Those describers
+    still need SOME fixed-interpretation objects (eg Zero and Succ,
+    for this example).
+
+    How exactly URIs fit into this story is still debatable.
+    Strictly, we should do it via something like...  strings and the
+    magic 'uri' function.  But what is that URI function?  Aint no
+    such thing, .. there's various ones.  Maybe the kburi function
+    works okay -- ie what KB is most strongly denoted by the URI?
+    (Sometimes I think we'd be better of with just a basis vocabulary
+    for describing strings, and an englishDenotation() function.)
+    
     """
 
     def __init__(self):
@@ -99,7 +117,7 @@ class KB(list):
             self.append(LX.fol.RDF(s,p,o))
             return
         # assert(isinstance(formula, LX.Formula))
-        assert(LX.fol.isFirstOrderFormula(formula))
+        #####assert(LX.fol.isFirstOrderFormula(formula))
         # could check that all its openVars are in are vars
         self.append(formula)
 
@@ -209,7 +227,10 @@ if __name__ == "__main__": _test()
 
  
 # $Log$
-# Revision 1.6  2003-01-29 20:59:34  sandro
+# Revision 1.7  2003-02-01 05:58:10  sandro
+# intermediate lbase support; getting there but buggy; commented out some fol chreccks
+#
+# Revision 1.6  2003/01/29 20:59:34  sandro
 # Moved otter language support back from engine/otter to language/otter
 # Changed cwm.py to use this, and [ --engine=otter --think ] instead of
 # --check.
