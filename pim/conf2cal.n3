@@ -13,7 +13,9 @@
 @prefix times: <http://www.w3.org/2000/10/swap/times#> .
 @prefix maths: <http://www.w3.org/2000/10/swap/maths#> .
 #@prefix cal: <http://ilrt.org/discovery/2001/06/schemas/ical-full/hybrid.rdf#>.
-@prefix cal: <http://www.w3.org/2000/10/swap/pim/ical#>.
+
+# was: @prefix cal: <http://www.w3.org/2000/10/swap/pim/ical#>.
+@prefix cal: <http://www.w3.org/2002/12/cal/ical#>.
 
 # Vocabs from teleconferce.n3:
 #
@@ -63,14 +65,30 @@ this log:forAll :a,:b,:c,:d,:e,:f,:g,:h,:i,:j,:k,:l,:m,
 
 
 } log:implies {
-   [	a cal:Vevent;
-	cal:summary :n;
-	cal:dtstart [cal:value :s];
-  	cal:dtend   [cal:value :e];
-	cal:uid  :u
+ 
+   :theCalendar
+	a cal:Vcalendar;
+	cal:component [
+	  a cal:Vevent;
+	  cal:summary :n;
+	  cal:dtstart [
+		cal:dateTime :s];
+#		cal:tzid "/softwarestudio.org/Olson_20011030_5/America/New_York"];
+	  cal:dtend   [
+		cal:dateTime :e];
+#		cal:tzid "/softwarestudio.org/Olson_20011030_5/America/New_York"];
+	  cal:uid  :u
     ]
 }.
 
+
+{} => {
+
+  <http://www.w3.org/2002/12/cal/tzd/America/New_York#tz>
+	a cal:Vtimezone;
+	cal:tzid "/softwarestudio.org/Olson_20011030_5/America/New_York".
+
+}.
 
 
 #ends
