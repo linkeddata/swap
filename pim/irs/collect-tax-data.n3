@@ -1,0 +1,64 @@
+#  n3
+#
+#  Fill in the user-entered fields for a tax filing
+#  A separate rules file computes the other fields
+#
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix q:  <http://www.w3.org/2000/10/swap/pim/qif#>.
+
+@prefix form: <http://www.w3.org/2000/10/swap/pim/form#>.
+
+@prefix tf:   <http://www.w3.org/2000/10/swap/pim/irs/2002-irs-1040-rules#>.
+@prefix sa:   <http://www.w3.org/2000/10/swap/pim/irs/2002-1040-sa#>.
+@prefix sb:   <http://www.w3.org/2000/10/swap/pim/irs/2002-1040-sb#>.
+@prefix sc:   <http://www.w3.org/2000/10/swap/pim/irs/2002-1040-sc#>.
+@prefix sd:   <http://www.w3.org/2000/10/swap/pim/irs/2002-1040-sd#>.
+@prefix se:   <http://www.w3.org/2000/10/swap/pim/irs/2002-1040-se#>.
+
+
+@prefix : <tax-rules.n3#>.
+@prefix tr: <tax-rules.n3#>.
+
+# Where no data is given, fill in zeros:
+# Note: Thhis means you have to check your return
+#
+this log:forAll :line, :cat, :value, :aValue.
+{
+ <file:///devel/WWW/2000/10/swap/pim/irs/2002-irs-1040-rules.n3>!log:semantics 		log:includes { :line a form:NumericField }.
+  <cat-to-tax.n3>!log:semantics log:notIncludes { :line q:isTotalOf [] }.
+  <tax-input.n3>!log:semantics log:notIncludes { <f1040.n3> :line [] }.
+} => {
+	<f1040.n3> :line "0.00".
+}.
+
+#  Where Checkboxes are not set to "1", record zero:
+{
+ <file:///devel/WWW/2000/10/swap/pim/irs/2002-irs-1040-rules.n3>!log:semantics 		log:includes { :line a form:CheckBox }.
+  <tax-input.n3>!log:semantics log:notIncludes { <f1040.n3> :line [] }.
+} => {
+	<f1040.n3> :line "0".
+}.
+
+# Pick up explicitly given data:
+{
+  <tax-input.n3>!log:semantics log:includes { <f1040.n3> :line :value }.
+} => {
+	<f1040.n3> :line :value.
+}.
+
+# Pick up calculated category totals from totals file:
+{
+  <cat-to-tax.n3>!log:semantics log:includes { :line q:isTotalOf :cat }.
+  <totals.n3>!log:semantics log:includes { :cat q:total :value }.
+  :value math:absoluteValue :aValue.
+} => {
+	<f1040.n3> :line :aValue.
+}.
+
+ 
+
+#ends
