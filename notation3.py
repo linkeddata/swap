@@ -13,6 +13,8 @@ there (i.e. adding a # if it's not already there).
 I allow unprefixed qnames, so not all barenames
 are keywords.
 
+---- hmmmm ... not expandable - a bit of a trap.
+
 I haven't done quoting yet.
 
 idea: migrate toward CSS notation?
@@ -215,7 +217,7 @@ class Parser:
 	    i = self.object(str, j, res)
 
     def uri_ref2(self, str, i, res):
-	#hmm... intern the resulting symbol?
+	#hmm... intern the resulting symbol?  Sounds good-tim
 	qn = []
 	j = self.qname(str, i, qn)
 	if j>=0:
@@ -467,7 +469,9 @@ bind default <http://example.org/payPalStuff?>
 
 
     print "--- RDF:"
-    r=ToRDFParser(sys.stdout, 'http://example.org/base/', 'file:notation3.py',
+#    r=ToRDFParser(sys.stdout, 'http://example.org/base/', 'file:notation3.py',
+#		  'data:#')
+    r=ToN3Parser(sys.stdout, 'http://example.org/base/', 'file:notation3.py',
 		  'data:#')
     r.startDoc()
     r.feed(t0)
@@ -602,6 +606,77 @@ def relativeTo(here, there):
     else:
 	return nt
 
+################################################################### tim
+
+
+class ToN3Parser(Parser):
+    """keeps track of most recent subject and predicate reuses them
+
+      Adapted from ToRDFParser(Parser);
+    """
+
+    def __init__(self, outFp, baseURI, thisDoc, genBase, bindings = {}):
+	Parser.__init__(self, baseURI, thisDoc, genBase, bindings)
+	self._outFp = outFp
+	self._subj = None
+
+    #@@I18N
+    _namechars = string.lowercase + string.uppercase + string.digits + '_'
+    _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
+    _myns = 'http://www.w3.org/2000/10/n3/notation3.py#'
+
+    def startDoc(self):
+      _w = self._outFp.write
+      self._outFp.write("#" * 30 + "Start parse\n")
+      _w('bind web'+ self._rdfns + " .\n")
+      _w('bind g ' + self._myns + " .\n\n")
+
+      self._subj = None
+
+    def endDoc(self):
+	if self._subj:
+	    self._outFp.write(" .\n")
+	self._subj = None
+	self._outFp.write("#" * 30 + " end parse\n\n")
+
+    def makeStatement(self, subj, pred, obj):
+	predn = relativeTo(self._thisDoc, pred)
+	subjn = relativeTo(self._thisDoc, subj)
+
+	if self._subj is not subj:
+	    if self._subj:
+		  self._outFp.write(" .\n")
+	    self._outFp.write('  ' + subjn)
+	    self._subj = subj
+	    self._pred = None
+
+	elif self._pred is not pred:
+	    if self._pred:
+		  self._outFp.write(";\n    ")
+	    self._outFp.write( " >- " + predn + " -> ")
+	    self._pred = pred
+	else:
+	    self._outFp.write(",")    # Same subject pred => obejct list
+
+	i = len(predn)
+	while i>0:
+	    if predn[i-1] in self._namechars:
+		i = i - 1
+	    else:
+		break
+	ln = predn[i:]
+	ns = predn[:i]
+
+	if isinstance(obj, Symbol):
+	    objn = relativeTo(self._thisDoc, obj)
+	    self._outFp.write(objn)
+	else:
+	    self._outFp.write(obj)
+
+
+
+
+############################################################### /tim
 import random
 import time
 import cgi
