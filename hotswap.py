@@ -74,6 +74,7 @@ import sys
 import inspect
 import re
 from cStringIO import StringIO
+from types import ClassType
 
 class Error(RuntimeError):
    pass
@@ -150,7 +151,7 @@ class Module:
         self.module = mod
 
     def __str__(self):
-        return "plugin-collection-module("+self.location+")"
+        return "<Module \""+self.location+"\" found at \""+self.module.__file__+"\">"
 
     def __repr__(self):
         return "plugin-collection-module("+self.location+")"
@@ -159,7 +160,7 @@ class Module:
 Module.foo = "bar"
 
 def subclass(sub, super):
-    print "subclass",sub,super
+    #print "subclass",sub,super
     # class comparison is tricky -- this doesn't seem to match
     # if the same class is imported via two different paths...?
     if sub == super:
@@ -188,7 +189,7 @@ class PluginManager:
         self.collections.insert(0, Collection(location))
 
     def append(self, location):
-        self.collections.append(0, Collection(location))
+        self.collections.append(Collection(location))
 
     def remove(self, location):
         i = 0
@@ -198,7 +199,7 @@ class PluginManager:
             else:
                 i += 1
 
-    def get(self, service, *classFeatures, **propertyFeatures):
+    def get(self, service, interfaces=None, properties={}):
         """Return the appropriate service provider.
         
         Return the current instance charged with handling the
@@ -209,6 +210,14 @@ class PluginManager:
         one.
         """
 
+        if (interfaces is None and
+            properties == {} and
+            type(service) is ClassType):
+            interfaces = (service,)
+
+        if interfaces is None:
+            interfaces = ()
+
         # look for the first matching Class
         #
         # (we could keep a cache of features-listings -> class,
@@ -217,33 +226,33 @@ class PluginManager:
         matchingClass = None
         # print self.collections
         for c in self.collections:
-            print "Trying collection", c
+            #print "Trying collection", c
             for member in inspect.getmembers(c.module):
-                print "   Trying member", member[0]
+                #print "   Trying member", member[0]
                 failed = 0
                 m = member[1]
                 if inspect.isclass(m):
 
-                    print "       isclass"
-                    for cf in classFeatures:
+                    #print "       isclass"
+                    for cf in interfaces:
                         if subclass(m, cf):
-                            print "       subclass", cf
+                            #print "       subclass", cf
                             continue      # try next feature
                         # missing class-feature cf
-                        print "       FAILED subclass", cf
+                        #print "       FAILED subclass", cf
                         failed = 1
                         break
                     if failed: continue   # try next member
                     
-                    for (prop, val) in propertyFeatures:
+                    for (prop, val) in properties:
                         try:
                             if getattr(m, prop) == val:
-                                print "       has .%s=%s"%(prop,val)
+                                #print "       has .%s=%s"%(prop,val)
                                 continue  # try next feature
                         except AttributeError:
                             pass
                         # missing property/value match
-                        print "       FAILED .%s=%s"%(prop,val)
+                        #print "       FAILED .%s=%s"%(prop,val)
                         failed = 1
                         break
                     if failed: continue   # try next member
@@ -255,7 +264,7 @@ class PluginManager:
                 break     # check no more collections
         
         if matchingClass is None:
-            raise NoMatchFound(self, classFeatures)
+            raise NoMatchFound(self, interfaces)
     
         # if we have an instance && it is the same Class, return it
         current = self.services.get(service, None)
@@ -334,8 +343,13 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
 
 # $Log$
-# Revision 1.1  2003-04-03 04:51:49  sandro
+# Revision 1.2  2003-04-03 05:14:55  sandro
+# passes two simple tests
+#
+# Revision 1.1  2003/04/03 04:51:49  sandro
 # fairly stable in skeletal state
+#
+# (renamed from plugins.py)
 #
 # Revision 1.2  2003/04/03 00:03:47  sandro
 # mostly done!
