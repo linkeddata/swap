@@ -103,7 +103,7 @@ setup_tarball: $(SOURCES) $(HTMLS) $(TESTS) $(GRAMMAR) $(TARBALL_STUFF) tested f
 	cd ,cwm-$(VERSION)-test && tar -xzf ../cwm-$(VERSION).tar.gz
 	cd ,cwm-$(VERSION)-test/cwm-$(VERSION)/test && mkdir ,test
 	cd ,cwm-$(VERSION)-test/cwm-$(VERSION)/test && $(MAKE)
-	if which head; then head -n 1 .htaccess > ,htaccess; fi
+	$(PYTHON) -c 'print "".join([a for a in file(".htaccess")][:-1])'
 	echo 'RewriteRule ^cwm.tar.gz$ ' $(TARNAME).tar.gz '[L]' >> ,htaccess
 	mv ,htaccess .htaccess
 	cvs add $(TARNAME).tar.gz	
