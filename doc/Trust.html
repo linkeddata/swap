@@ -31,33 +31,33 @@ business environment. However, we can give a taste with a simple example. The
 idea here is not to learn this particular cryptographic library, but to get
 the feel of what can be done.</p>
 
-<h2>Delegated authority </h2>
+<h2>Delegated authority</h2>
 
 <p>Suppose we want to set up an access control system for the W3C <em>Member
-site</em>.  (Yes, even though companies support W3C just because is a good
-thing, many quite reasonably need this "what's in it for me?" justification).
-</p>
+site</em>. (Yes, even though companies support W3C just because is a good
+thing, many quite reasonably need this "what's in it for me?"
+justification).</p>
 
-<p>We will formalize the social arrangements  and then we will write the
-rules which encapsulate those arranegments so that they can be followed by a
-machine.  Let's just take the case of a web page which is only accessible to
-W3C members.  What does that mean? Well, when a company or organization joins
+<p>We will formalize the social arrangements and then we will write the rules
+which encapsulate those arranegments so that they can be followed by a
+machine. Let's just take the case of a web page which is only accessible to
+W3C members. What does that mean? Well, when a company or organization joins
 the W3C Advisory Committee representative is chosen as the liaison between
-everyone at the organization and everything happening at W3C.  Currently
+everyone at the organization and everything happening at W3C. Currently
 (2003) when someone says they belong to a company and want to acecss the
-member site in that role, we check, by email, with the AC rep.   Let's design
-a system to do it with digital signature.</p>
+member site in that role, we check, by email, with the AC rep. Let's design a
+system to do it with digital signature.</p>
 
 <p><img alt="example of trust processing"
 src="/2002/Talks/04-sweb/elisaaccess.png" /></p>
 
 <p>In this picture, Alan Kotok is the W3C associate chairman who deals with
-membership.  In this case, Kari is the AC rep for W3C member <em>Elisa
-Communications</em>.  Alan delgates to Kari the right to say who, as a
-emploee of Elisa, get access to the W3C Member Site.</p>
+membership. In this case, Kari is the AC rep for W3C member <em>Elisa
+Communications</em>. Alan delgates to Kari the right to say who, as a emploee
+of Elisa, get access to the W3C Member Site.</p>
 
 <p>Alan's authority to define who is a W3C is represented by a digital key.
-he generates it using the command </p>
+he generates it using the command</p>
 <pre>cwm access-gen-master.n3 --think --purge &gt; access-master.private</pre>
 
 <p></p>
@@ -79,23 +79,22 @@ this log:forAll :x , :y.
  :x a acc:MasterKeyPair; a acc:Secret.  :y a acc:MasterKey } .
 
 log:forAll a log:Chaff.
-log:implies a log:Chaff.
-</pre>
+log:implies a log:Chaff.</pre>
 
 <p></p>
 
 <p>The <code>crypto:keyLength</code> built-in generates :x, which a string
-which actually contains both the private and the public keys.  This is
-conventient, as anyone  who knows a private key needs to keep track of which
-public key goes with it.  This is not a very semantic web function, as it
+which actually contains both the private and the public keys. This is
+conventient, as anyone who knows a private key needs to keep track of which
+public key goes with it. This is not a very semantic web function, as it
 isn't repeatable rule you can resue - it is just a trick for generating a
 key. (It will generate a different key each time, although the library at one
 stage didn't do that to make debugging easier).</p>
 
 <p>The <code>crypto:publicKey</code> builtin is a function which strips out
-the private parts of a key :x, leaving only the public part :y.  Note we have
+the private parts of a key :x, leaving only the public part :y. Note we have
 class here <code>:Secret</code> which we just use for labellling things which
-we don't want another person to know. </p>
+we don't want another person to know.</p>
 
 <p>The log:Chaff part is to label those bits which are for deletion by the
 --purge command, just to leave the key file clean of stuff we don't want.</p>
@@ -104,13 +103,14 @@ we don't want another person to know. </p>
 
 <p></p>
 
-<p>Here is the complete data slow, </p>
-
-<p>  </p>
+<p>Here is the complete data flow,</p>
 
 <p></p>
 
-<p><img src="make.jpg" alt="See Makefile for text version" /></p>
+<p></p>
+
+<p><img src="../test/crypto/make.jpg" alt="See Makefile for text version"
+/></p>
 
 <p></p>
 
