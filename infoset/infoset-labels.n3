@@ -1,5 +1,6 @@
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix : <http://www.w3.org/2001/04/infoset#> .
 
     :AttributeType     rdfs:label "AttributeType".
     :AttributeType_ID     rdfs:label "ID".
