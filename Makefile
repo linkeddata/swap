@@ -6,13 +6,17 @@ YAPPS=yapps2.py
 
 TESTIN=test/sameDan.n3
 
-.SUFFIXES: .g .py .html
+.SUFFIXES: .g .py .html .rdf .n3
 
 .g.py:
 	$(PYTHON) $(YAPPS) $< $@
 
+.n3.rdf:
+	$(PYTHON) cwm.py $< > $@
 
-all: yappstest yappsdoc
+#all: yappstest yappsdoc math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf
+
+all: math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py
 	$(PYTHON) rdfn3_yappstest.py <$(TESTIN) >,xxx.n3
