@@ -12,6 +12,7 @@ cf. http://www.w3.org/2000/10/swap/cwm.py
 See http://ilrt.org/discovery/chatlogs/rdfig/2003-09-23.html#T22-37-54
 http://rdfig.xmlhack.com/2003/09/23/2003-09-23.html#1064356689.846120
 
+
 """
 
 __author__ = 'Karl Dubost'
