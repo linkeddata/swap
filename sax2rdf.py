@@ -91,6 +91,7 @@ class RDFHandler(xml.sax.ContentHandler):
         self._items = [] # for <rdf:li> containers
         self._genPrefix = "#_g"    # @@@ allow parameter override
         self._nextId = 0        # For generation of arbitrary names for anonymous nodes
+        self._litDepth = 0
         self.sink.startDoc()
         version = "$Id$"
         self.sink.makeComment("RDF parsed by "+version[1:-1])
@@ -109,7 +110,8 @@ class RDFHandler(xml.sax.ContentHandler):
 
 
     def characters(self, data):
-        if self._state == STATE_VALUE:
+        if self._state == STATE_VALUE or \
+           self._state == STATE_LITERAL:
             self.testdata = self.testdata + data
         
 
@@ -301,7 +303,8 @@ class RDFHandler(xml.sax.ContentHandler):
                 elif name == "parseType":
                     if value == "Literal":
                         self._state = STATE_LITERAL # That's an XML subtree not a string
-                        
+                        self._litDepth = 1
+                        self.testdata = "@@" # buggy implementation
                     elif value == "Resource":
                         c = self._context
                         s = self._subject
@@ -350,7 +353,7 @@ class RDFHandler(xml.sax.ContentHandler):
                                              (RESOURCE, self._predicate),
                                              (RESOURCE, self._subject),
                                              (LITERAL,  value) ))
-                    self._state = STATE_NOVALUE  # NOT looking for value
+                    self._state = STATE_NOVALUE  # NOT looking for value @@bogus. value is just a normal property. -- dwc
                 else:
                     self.sink.makeComment("# Warning: Ignored attribute %s on %s" % (
                         name, tagURI))
@@ -390,8 +393,12 @@ class RDFHandler(xml.sax.ContentHandler):
         elif self._state == STATE_NOVALUE:
             raise BadSyntax(sys.exc_info(), """Expected no value, found name=%s; qname=%s, attrs=%s
             in nested context: %s""" %(name, qname, attrs,self._stack))
+
+        elif self._state == STATE_LITERAL:
+            self._litDepth = self._litDepth + 1
+            #@@ need to capture the literal
         else:
-            raise RuntimeError, "Unknown state in RDF parser" # Unknown state
+            raise RuntimeError, ("Unknown state in RDF parser", self._stack) # Unknown state
 
 # aboutEachprefix { <#> forall r . { r startsWith ppp } l:implies ( zzz } ) 
 # aboutEach { <#> forall r . { ppp rdf:li r } l:implies ( zzz } )
@@ -399,7 +406,19 @@ class RDFHandler(xml.sax.ContentHandler):
 
     def endElementNS(self, name, qname):
         
-        if self._state == STATE_VALUE:
+        if self._state == STATE_LITERAL:
+            self._litDepth = self._litDepth - 1
+            if self._litDepth == 0:
+                buf = self.testdata
+                self.sink.makeStatement(( self._context,
+                                          (RESOURCE, self._predicate),
+                                          (RESOURCE, self._subject),
+                                          (LITERAL,  buf) ))
+                self.testdata = ""
+            else:
+                return # don't pop state
+            
+        elif self._state == STATE_VALUE:
             buf = self.testdata
             self.sink.makeStatement(( self._context,
                                        (RESOURCE, self._predicate),
@@ -414,6 +433,11 @@ class RDFHandler(xml.sax.ContentHandler):
                                       (RESOURCE, DPO_NS + "nil") ))
         elif self._state == STATE_DESCRIPTION:
             self._items.pop()
+        elif self._state == STATE_NOVALUE or \
+             self._state == STATE_NO_SUBJECT:
+            pass
+        else:
+            raise RuntimeError, ("Unknown RDF parser state '%s' in end tag" % self._state, self._stack)
 
         l =  self._stack.pop() # [self._state, self._context, self._subject])
         self._state = l[0]
