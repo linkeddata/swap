@@ -87,6 +87,7 @@ class RDFHandler(xml.sax.ContentHandler):
         self._context = thisURI + "#_formula"  # Context of current statements, change in bags
         self._subject = None
         self._predicate = None
+        self._items = [] # for <rdf:li> containers
         self._genPrefix = "#_g"    # @@@ allow parameter override
         self._nextId = 0        # For generation of arbitrary names for anonymous nodes
         self.sink.startDoc()
@@ -133,6 +134,7 @@ class RDFHandler(xml.sax.ContentHandler):
         self._subject = None
         self._state = STATE_DESCRIPTION
         self._subject = None
+        self._items.append(0)
         properties = []
         
         for name, value in attrs.items():
@@ -197,23 +199,21 @@ class RDFHandler(xml.sax.ContentHandler):
             return generatedId
 
     def _obj(self, tagURI, attrs):  # 6.2
-            if tagURI == RDF_NS_URI + "Description":
-                self.idAboutAttr(attrs)  # Set up subject and context                
+        if tagURI == RDF_NS_URI + "Description":
+            self.idAboutAttr(attrs)  # Set up subject and context                
 
-            elif ( tagURI == RDF_NS_URI + "Bag" or  # 6.4 container :: bag | sequence | alternative
-                   tagURI == RDF_NS_URI + "Alt" or
-                   tagURI == RDF_NS_URI + "Seq"):
-                raise unimplemented  # Don't parse bags yet sorry
-            else:  # Unknown tag within STATE_NO_SUBJECT: typedNode #6.13
-                c = self._context   # (Might be change in idAboutAttr)
-                self.idAboutAttr(attrs)
-                if c == None: raise roof
-                if self._subject == None:raise roof
-                self.sink.makeStatement((  (RESOURCE, c),
-                                      (RESOURCE, RDF_NS_URI+"type"),
-                                      (RESOURCE, self._subject),
-                                      (RESOURCE, tagURI) ))
-                self._state = STATE_DESCRIPTION
+        elif tagURI == RDF_NS_URI + "li":
+            raise ValueError, "rdf:li as typednode not implemented"
+        else:  # Unknown tag within STATE_NO_SUBJECT: typedNode #6.13
+            c = self._context   # (Might be change in idAboutAttr)
+            self.idAboutAttr(attrs)
+            if c == None: raise roof
+            if self._subject == None:raise roof
+            self.sink.makeStatement((  (RESOURCE, c),
+                                       (RESOURCE, RDF_NS_URI+"type"),
+                                       (RESOURCE, self._subject),
+                                       (RESOURCE, tagURI) ))
+        self._state = STATE_DESCRIPTION
                 
 
     def startPrefixMapping(self, prefix, uri):
@@ -270,7 +270,15 @@ class RDFHandler(xml.sax.ContentHandler):
             self._obj(tagURI, attrs)
             
         elif self._state == STATE_DESCRIPTION:   # Expect predicate (property) PropertyElt
-            self._predicate = tagURI #  propertyElt #6.12
+            #  propertyElt #6.12
+            #  http://www.w3.org/2000/03/rdf-tracking/#rdf-containers-syntax-ambiguity
+            if tagURI == RDF_NS_URI + "li":
+                item = self._items[-1] + 1
+                self._predicate = "%s_%s" % (RDF_NS_URI, item)
+                self._items[-1] = item
+            else:
+                self._predicate = tagURI
+
             self._state = STATE_VALUE  # May be looking for value but see parse type
             self.testdata = ""         # Flush value data
             
@@ -295,7 +303,7 @@ class RDFHandler(xml.sax.ContentHandler):
                         self._state = STATE_DESCRIPTION  # Nest description
                         
                     elif value[-6:] == ":quote":
-                        nsURI = self._nsmape[-1].get(pref, None)
+                        nsURI = self._nsmap[-1].get(pref, None)
                         if nsURI == Logic_NS: 
                             c = self._context
                             s = self._subject
@@ -394,7 +402,8 @@ class RDFHandler(xml.sax.ContentHandler):
                                       (RESOURCE, DPO_NS + "rest"),
                                       (RESOURCE, self._subject),
                                       (RESOURCE, DPO_NS + "nil") ))
-
+        elif self._state == STATE_DESCRIPTION:
+            self._items.pop()
 
         l =  self._stack.pop() # [self._state, self._context, self._subject])
         self._state = l[0]
