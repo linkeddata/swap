@@ -120,9 +120,16 @@ cwm_test conjunction.n3 "log:conjunction of formulae" includes/conjunction.n3 --
 
 cwm_test conclusion.n3  "log:conclusion deductive closure" includes/conclusion.n3 --think
 
+cwm_test argv-1.n3 "os:argv argument values"  os/argv.n3 --think --with foo bar baz
+
+cwm_test argv-2.n3 "os:argv argument other values"  os/argv.n3 --think --with boof
+
 
 # $Log$
-# Revision 1.26  2001-12-31 04:33:23  timbl
+# Revision 1.27  2002-01-10 01:40:50  timbl
+# Add os:argv tests
+#
+# Revision 1.26  2001/12/31 04:33:23  timbl
 # Simple tests on log:conjunction and log:conclusion seem to work
 #
 # Revision 1.25  2001/12/29 04:00:42  timbl
