@@ -1,6 +1,4 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
-@prefix rcs: <http://www.w3.org/2001/03swell/rcs#>.
-
 
 <> dc:title "Contact: Utility concepts for everyday life";
 #    ----------------------------------
@@ -11,8 +9,8 @@ dc:description """
  a phone number - and that is much more useful in general.
  For example, when data about you and your assietnt in merged,
  you will end up with an "assistant's email" and the like.
-""";
-rcs:id "$Id$". # see changelog at the bottom.
+""",
+"$Id$". # see changelog at the bottom.
 
 
 @prefix : <http://www.w3.org/2000/10/swap/pim/contact#> .
@@ -54,7 +52,7 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 
 # Let's start with Contact information. See also
 
-@prefix mso: <MSOutlookContacts.n3#> .
+@prefix mso: <../MSOutlookContacts.n3#> .
 
 :SocialEntity a rdfs:Class;
     rdfs:comment  "The sort of thing which can have a phone number.".
@@ -268,9 +266,12 @@ mso:WebPage  a rdf:Property;
 # (and agenda? - nothat need sful workflow tretment...
 #
 
-<> rcs:log """
+<> dc:description """
 $Log$
-Revision 1.12  2002-03-19 18:55:57  connolly
+Revision 1.13  2002-07-18 05:30:49  connolly
+remove dependency on 2001/03swell/rcs stuff; fix pointer to outlook contacts
+
+Revision 1.12  2002/03/19 18:55:57  connolly
 homePageAddress is unambiguous too.
 
 Revision 1.11  2001/11/05 17:04:37  connolly

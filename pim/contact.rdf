@@ -1,40 +1,24 @@
 
-<!-- Processed by Id: cwm.py,v 1.81 2001/11/01 14:44:49 timbl Exp -->
+<!-- Processed by Id: cwm.py,v 1.97 2002/07/06 12:52:02 timbl Exp -->
 <!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/pim/contact.n3-->
 
 
 <rdf:RDF xmlns="http://www.w3.org/2000/10/swap/pim/contact#"
+    xmlns:con="http://www.w3.org/2000/10/swap/pim/contact#"
     xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
-    xmlns:mso="file:/home/connolly/w3ccvs/WWW/2000/10/swap/pim/MSOutlookContacts.n3#"
+    xmlns:mso="file:/home/connolly/w3ccvs/WWW/2000/10/swap/MSOutlookContacts.n3#"
     xmlns:ont="http://www.daml.org/2001/03/daml+oil#"
-    xmlns:rcs="http://www.w3.org/2001/03swell/rcs#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 
-    <rdfs:Property rdf:about="MSOutlookContacts.n3#Spouse">
+    <rdfs:Property rdf:about="../MSOutlookContacts.n3#Spouse">
         <rdfs:subPropertyOf rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#partner"/>
     </rdfs:Property>
 
-    <rdf:Property rdf:about="MSOutlookContacts.n3#WebPage">
+    <rdf:Property rdf:about="../MSOutlookContacts.n3#WebPage">
         <ont:equivalentTo rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#publicHomePage"/>
     </rdf:Property>
-
-    <rdf:Description rdf:about="#vcard_list">
-        <ont:equivalentTo> vCard.Cellular, vCard.Company, vCard.Department, 
-vCard.DisplayName,
-vCard.Email,
-vCard.FirstName, 
-vCard.Gender, vCard.Home.City, vCard.Home.Country, 
-vCard.Home.Fax, vCard.Home.Phone, vCard.Home.State, 
-vCard.Home.StreetAddress, vCard.Home.Zipcode, vCard.Homepage, 
-vCard.JobTitle, vCard.LastName, vCard.MiddleName, 
-vCard.Notes, vCard.Office,  # ??? Office what? Number?
-vCard.Pager, 
-vCard.Business.City, vCard.Business.Country, vCard.Business.Fax, 
-vCard.Business.Phone, vCard.Business.State, vCard.Business.StreetAddress, 
-vCard.Business.URL, vCard.Business.Zipcode</ont:equivalentTo>
-    </rdf:Description>
 
     <rdf:Description rdf:about="">
         <dc:description>
@@ -45,16 +29,15 @@ vCard.Business.URL, vCard.Business.Zipcode</ont:equivalentTo>
  For example, when data about you and your assietnt in merged,
  you will end up with an "assistant's email" and the like.
 </dc:description>
-        <dc:title>Contact: Utility concepts for everyday life</dc:title>
-        <_nspolicy rdf:parseType="Resource">
-            <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#_SubjectToChange"/>
-            <dc:description>If you change this, you have to tell the W3C SemWeb AD
-   folk, including Dan Connolly; so agreed 5 Jun 2001</dc:description>
-        </_nspolicy>
-        <rcs:id>$Id$</rcs:id>
-        <rcs:log>
+        <dc:description>
 $Log$
-Revision 1.4  2001-11-05 17:04:37  connolly
+Revision 1.5  2002-07-18 05:30:49  connolly
+remove dependency on 2001/03swell/rcs stuff; fix pointer to outlook contacts
+
+Revision 1.12  2002/03/19 18:55:57  connolly
+homePageAddress is unambiguous too.
+
+Revision 1.11  2001/11/05 17:04:37  connolly
 commented out rules
 
 Revision 1.10  2001/11/05 16:43:02  connolly
@@ -87,7 +70,30 @@ fixed :mailbox property as agreed in semweb-ad 5 Jun 2001.
 moved many of the n3 comments into RDF.
 updated ont: to March 2001 DAML namespace.
 
-</rcs:log>
+</dc:description>
+        <dc:description>$Id$</dc:description>
+        <dc:title>Contact: Utility concepts for everyday life</dc:title>
+        <_nspolicy rdf:parseType="Resource">
+            <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#_SubjectToChange"/>
+            <dc:description>If you change this, you have to tell the W3C SemWeb AD
+   folk, including Dan Connolly; so agreed 5 Jun 2001</dc:description>
+        </_nspolicy>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#vcard_list">
+        <ont:equivalentTo> vCard.Cellular, vCard.Company, vCard.Department, 
+vCard.DisplayName,
+vCard.Email,
+vCard.FirstName, 
+vCard.Gender, vCard.Home.City, vCard.Home.Country, 
+vCard.Home.Fax, vCard.Home.Phone, vCard.Home.State, 
+vCard.Home.StreetAddress, vCard.Home.Zipcode, vCard.Homepage, 
+vCard.JobTitle, vCard.LastName, vCard.MiddleName, 
+vCard.Notes, vCard.Office,  # ??? Office what? Number?
+vCard.Pager, 
+vCard.Business.City, vCard.Business.Country, vCard.Business.Fax, 
+vCard.Business.Phone, vCard.Business.State, vCard.Business.StreetAddress, 
+vCard.Business.URL, vCard.Business.Zipcode</ont:equivalentTo>
     </rdf:Description>
 
     <rdfs:Class rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Address">
@@ -131,15 +137,15 @@ updated ont: to March 2001 DAML namespace.
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
     </rdf:Description>
 
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Street">
+        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
+    </rdf:Description>
+
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Street2">
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Street3">
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
-    </rdf:Description>
-
-    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#Street">
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Address"/>
     </rdf:Description>
 
@@ -161,7 +167,7 @@ updated ont: to March 2001 DAML namespace.
     </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#birthday">
-        <ont:equivalentTo rdf:resource="MSOutlookContacts.n3#Birthday"/>
+        <ont:equivalentTo rdf:resource="../MSOutlookContacts.n3#Birthday"/>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Date"/>
     </rdf:Property>
 
@@ -190,14 +196,14 @@ updated ont: to March 2001 DAML namespace.
     </ont:UnambiguousProperty>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#familyName">
-        <ont:equivalentTo rdf:resource="MSOutlookContacts.n3#Last_Name"/>
+        <ont:equivalentTo rdf:resource="../MSOutlookContacts.n3#Last_Name"/>
     </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#fax">
     </rdf:Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#firstName">
-        <ont:equivalentTo rdf:resource="MSOutlookContacts.n3#First_Name"/>
+        <ont:equivalentTo rdf:resource="../MSOutlookContacts.n3#First_Name"/>
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
 
@@ -206,7 +212,7 @@ updated ont: to March 2001 DAML namespace.
     </rdf:Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#givenName">
-        <ont:equivalentTo rdf:resource="MSOutlookContacts.n3#First_Name"/>
+        <ont:equivalentTo rdf:resource="../MSOutlookContacts.n3#First_Name"/>
     </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/pim/contact#home">
@@ -218,8 +224,11 @@ updated ont: to March 2001 DAML namespace.
         <_addressProperty rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#homePageAddress"/>
     </ont:UnambiguousProperty>
 
+    <ont:UnambiguousProperty rdf:about="http://www.w3.org/2000/10/swap/pim/contact#homePageAddress">
+    </ont:UnambiguousProperty>
+
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#lastName">
-        <ont:equivalentTo rdf:resource="MSOutlookContacts.n3#Last_Name"/>
+        <ont:equivalentTo rdf:resource="../MSOutlookContacts.n3#Last_Name"/>
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
 
@@ -245,7 +254,7 @@ updated ont: to March 2001 DAML namespace.
     </ont:UnambiguousProperty>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#middleName">
-        <ont:equivalentTo rdf:resource="MSOutlookContacts.n3#Middle_Name"/>
+        <ont:equivalentTo rdf:resource="../MSOutlookContacts.n3#Middle_Name"/>
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
 
@@ -260,12 +269,12 @@ updated ont: to March 2001 DAML namespace.
     </rdf:Property>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#personalSuffix">
-        <ont:equivalentTo rdf:resource="MSOutlookContacts.n3#Suffix"/>
+        <ont:equivalentTo rdf:resource="../MSOutlookContacts.n3#Suffix"/>
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/pim/contact#personalTitle">
-        <ont:equivalentTo rdf:resource="MSOutlookContacts.n3#Title"/>
+        <ont:equivalentTo rdf:resource="../MSOutlookContacts.n3#Title"/>
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/pim/contact#Person"/>
     </rdf:Description>
 
