@@ -23,7 +23,7 @@ acc:requestSupportedBy a rdf:Property.
 acc:certSupportedBy a rdf:Property.
 
 acc:MasterKey a s:Class; s:label "The master key which Alan holds".
-acc:GoodKey a s:Class; s:label "A key good for access, as Tiina holds".
+acc:RequestKey a s:Class; s:label "A key good for access, as Tiina holds".
 acc:MemberKey a s:Class; s:label "A key of delegated authority, as @@@ holds".
 
 acc:endorsement a rdf:Property.

@@ -52,34 +52,31 @@ this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z
         log:includes {:x a acc:MasterKey}]
 } log:implies {:x a acc:MasterKey}.
 
-#  DEBUG
 
-{  "1" os:argv [ is log:uri of [ log:semantics :F ]].
-   :F log:includes { :str acc:endorsement[acc:signature :sig; acc:key :k]}.
- } log:implies { :str a :DEBUG_STRING.  :sig a :DEBUG_SIGNATURE. :k a :DEBUG_PUBKEY }.
-
-{ [ a :DEBUG_STRING; crypto:md5 :x]}  log:implies  { :x a :DEBUG_HASH }.
-
-{   ( [a :DEBUG_PUBKEY] [a :DEBUG_HASH] [a :DEBUG_SIGNATURE] ) crypto:verifyBoolean  :x }
-  log:implies { :x a :DEBUG_RESULT }.
-
-#  What constitutes a request, anyway?
+#  What do we belive is a request?
+#  We trust the command line in defining what is a request.
 
 {  "1" os:argv [ is log:uri of [ log:semantics :F ]].
    :F log:includes { :str acc:endorsement[acc:signature :sig; acc:key :k]}.
    :k crypto:verify ([is crypto:md5 of :str] :sig).
    :str log:parsedAsN3:G } log:implies { :G acc:requestSupportedBy :k }.
 
-#  So what do we believe from a signed request?
+#  What do we believe from a signed request?
 #   - what it says it is asking for.
 #   - what it quotes as credentials
-#  It could actually enclose a copy of the credentials inline, but here we use the web
-#
+#  It could actually enclose a copy of the credentials inline,
+#  but here we use the web.  A credential is a document which
+#  provides evidence in support of the request.
+
 {:G acc:requestSupportedBy :k; log:includes {:G acc:forDocument :d}} log:implies {:G acc:forDocument :d}.
 
 {:G acc:requestSupportedBy :k; log:includes {:G acc:credential :d}} log:implies {:G acc:credential :d}.
 
-# What do we get from a signed credential?
+# What do we belive from a signed credential.
+#
+# In this case, just note that a key supports the signed formula.
+# The fact of this support is used in eth access rule above.
+# We don't actually beleive everything the certificate says.
 
 {  [] acc:credential [ log:semantics :F ].
    :F log:includes { :str acc:endorsement[acc:signature :sig; acc:key :k]}.
@@ -90,3 +87,4 @@ this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z
 
 log:implies a log:Chaff .
 log:forAll a log:Chaff .
+

@@ -20,41 +20,6 @@ NDU1ODEwNjM0OTEwMjU5MzU4NDc1NDk3MzMyMzgyNzEyODM1OTc2NDMwMTIyNjIyMjEzMDEwNTEz
 MDA1NjUyNDU1NTI0Mzk5NDMzNTA3NDU5NDQ0OTgxODc=3D
 """     a :MasterKey .
     
-    """
-MzE5MDcKCjM2ODkyMzAyMDE1MzgwMjY2NTU5MzgzNjMyMDQyOTM1Mjc4MDk3MzAwNzE4ODMzOTY3
-NTY3NTk1Njg5MjE2Mjk0NzkyMzUyNTQ3OTQzMjI4MjM2MDEwNjQwMTAyMjcxODk0OTY2MzgzNjQ1
-NDQyODQ5Njg3MzUzOTM2NzAyMTI5NDgxNDg4MzIxMzUyODEyMTc1NjIxNjE0NjE5Mzk2MDY4MjE2
-Nzk1MzY0NjAxNjE0MzM5NDYzOTIyMDMwMDE4NTEyODMyMTg0NDIyMzI3MzcxNzE5MjcxMzY0ODY1
-MjEzMzU1OTc4Nzk0OTIyMzQ4NDU5NTUxMTQ2MTcyNjE0MTk3ODI2NTg0NDA2Mzg2OTQwMTcwNTE4
-OTY0MDQzNzMxNzEyODc1OTk3NjAyNjE4ODUzNDQ1Mw=3D=3D
-"""     a <#DEBUG_PUBKEY> .
-    
-    """
-ODU1NjAyNjcyMzg1NzM1MjA0MDkwMTg3NTE2NjM3ODMxMTY5OTc3Mjg0MDQ1NDAwNzczNTYxNDQ0
-NTk3ODEzMjA2NjY5MDE4NDIxODg0MTkwOTMzNTQyMTY4NjIzMjI5MTUwMzgyMDQ0NTg1NjY3MjMy
-NzgzODgwNTAyMzEyOTU1ODUxOTg5MTYwODYxMTI1NTUyOTQyMTQwNDk2MTcxMDQyNzk0Nzc5MDcy
-OTgwNzg2OTEyODQ4NTU3ODE2MTY3Njg4NjczNjk0NjUzNDM1MTY5MTUwOTI0Mzc3NDc2MDgxNzU1
-NzY0NTQwMDgyNzY3NjA2Mzg5NDQxMDA2MzUwNTc0NjgzNTc2MzM1NTgwODIzNjk4NzQyOTI3MjE2
-ODc2ODIxOTY3NTM1MjYzNjQ4MDg1MjM=3D
-"""     a <#DEBUG_SIGNATURE> .
-    
-    """     @prefix : <http://www.w3.org/2000/10/swap/test/crypto/acc.n3#> .
-     @prefix crypto: <http://www.w3.org/2000/10/swap/crypto#> .
-     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
-     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
-    
-    this     :credential <file:/devel/WWW/2000/10/swap/test/crypto/access-elisa.cert>,
-                <file:/devel/WWW/2000/10/swap/test/crypto/access-tiina.cert>;
-         :forDocument <http://www.w3.org/Member>;
-         :junk "32746213462187364732164732164321" .
-    
-"""     a <#DEBUG_STRING> .
-    
-    "1"     a <#DEBUG_RESULT> .
-    
-    "e5b59d8b93971f88b6e1e04daa201615"     a <#DEBUG_HASH> .
-    
     <>     <#description> <http://www.w3.org/2002/Talks/04-sweb/slide22-1.html> .
     {
         """
