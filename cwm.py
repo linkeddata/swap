@@ -20,10 +20,14 @@ Date: 2000/07/17 21:46:13
 Agenda:
 =======
 
- 
+ - get rid of other globals (DWC 30Aug2001)
+ - split out separate modules: CGI interface, command-line stuff,
+   built-ins (DWC 30Aug2001)
+ - split Query engine out as subclass of RDFStore? (DWC)
+ - implement a back-chaining reasoner (ala Euler/Algernon) on this store? (DWC)
  - run http daemon/client sending changes to database
  - act as client/server for distributed system
- - Bultins - says, startsWith,
+ - Bultins - says
  - postgress, mySQl underlying database?
  -    
  -    standard mappping of SQL database into the web in N3/RDF
@@ -41,7 +45,6 @@ Agenda:
  - Find all synonyms of synonym
  - Find closure for all synonyms
  - Find superclass closure?
- - Use unambiguous property to infer synomnyms
 - represent URIs bound to same equivalence closuse object?
 
 BULTINS WE NEED
@@ -67,6 +70,7 @@ BULTINS WE NEED
 
 Done
 ====
+(test/retest.sh is another/better list of completed functionality --DWC)
  - BUG: a [ b c ] d.   gets improperly output. See anon-pred
  - Separate the store hash table from the parser. - DONE
  - regeneration of genids on output. - DONE
@@ -85,6 +89,8 @@ Done
  - filter out duplicate conclusions - BUG! - DONE
  - Validation:  validate domain and range constraints against closuer of classes and
    mutually disjoint classes.
+ - Use unambiguous property to infer synomnyms
+   (see sameDan.n3 test case in test/retest.sh)
 BULTINS WE HAVE DONE
     - includes(expr1, expr2)      (cf >= ,  dixitInterAlia )
     - indirectlyImplies(expr1, expr2)   
@@ -429,7 +435,9 @@ class Engine:
 
     def __init__(self):
         self.resources = {}    # Hash table of URIs for interning things
-        
+
+    def reset(self, metaURI):
+        self._experience = self.intern((FORMULA, metaURI + "_forumla"))
 
     def internURI(self, str):
         return self.intern((RESOURCE,str))
@@ -646,7 +654,7 @@ class BI_resolvesTo(HeavyBuiltIn, Function):
     def evaluateObject2(self, store, subj):
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
-        F = store.any((experience, store.resolvesTo, doc, None))
+        F = store.any((store.engine._experience, store.resolvesTo, doc, None))
         if F: return F
         if chatty > 10: progress("Reading and parsing " + `doc`)
         inputURI = doc.uriref()
@@ -667,7 +675,7 @@ class BI_hasContent(HeavyBuiltIn, Function): #@@DWC: Function?
     def evaluateObject2(self, store, subj):
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
-        C = store.any((experience, store.hasContent, doc, None))
+        C = store.any((store.engine._experience, store.hasContent, doc, None))
         if C: return C
         if chatty > 10: progress("Reading " + `doc`)
         inputURI = doc.uriref()
@@ -683,7 +691,7 @@ class BI_hasContent(HeavyBuiltIn, Function): #@@DWC: Function?
 class BI_n3ExprFor(HeavyBuiltIn, Function):
     def evaluateObject2(self, store, subj):
         if isinstance(subj, Literal):
-            F = store.any((experience, store.n3ExprFor, subj, None))
+            F = store.any((store.engine._experience, store.n3ExprFor, subj, None))
             if F: return F
             if chatty > 10: progress("parsing " + subj.string[:30] + "...")
             inputURI = subj.asHashURI() # iffy/bogus... rather asDataURI?
@@ -2657,8 +2665,7 @@ Examples:
 #  Metadata context - storing information about what we are doing
 
             _metaURI = urlparse.urljoin(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
-            global experience   # A global fourmula including first-hand knowledge from what happens
-            experience = myEngine.intern((FORMULA, _metaURI + "_forumla"))
+            myEngine.reset(_metaURI)
             history = None
 	
 
@@ -2704,9 +2711,9 @@ Examples:
                     _step  = _step + 1
                     s = _metaURI + `_step`  #@@ leading 0s to make them sort?
                     if doMeta and history:
-                        _store.storeQuad((experience, META_mergedWith, s, history))
-                        _store.storeQuad((experience, META_source, s, inputContext))
-                        _store.storeQuad((experience, META_run, s, run))
+                        _store.storeQuad((myEngine._experience, META_mergedWith, s, history))
+                        _store.storeQuad((myEngine._experience, META_source, s, inputContext))
+                        _store.storeQuad((myEngine._experience, META_run, s, run))
                         history = s
                     else:
                         history = inputContext
@@ -2788,9 +2795,9 @@ Examples:
                 if doMeta:
                     _step  = _step + 1
                     s = _metaURI + `_step`  #@@ leading 0s to make them sort?
-                    _store.storeQuad(experience, META_basis, s, history)
-                    _store.storeQuad(experience, META_filter, s, inputContext)
-                    _store.storeQuad(experience, META_run, s, run)
+                    _store.storeQuad(myEngine._experience, META_basis, s, history)
+                    _store.storeQuad(myEngine._experience, META_filter, s, inputContext)
+                    _store.storeQuad(myEngine._experience, META_run, s, run)
                     history = s
 
             elif arg == "-purge":
