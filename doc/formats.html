@@ -4,7 +4,6 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <title>Comparing Formats</title>
-  <meta name="generator" content="amaya 7.1, see http://www.w3.org/Amaya/" />
   <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
@@ -22,14 +21,6 @@ ways.   Converters to between some of these formats, but not others
 (yet).
 </p>
 
-<p>@@@ TODO: Make give him another name, 'Patrick Smith' to show off
-cardinality issues.</p>
-
-<p>@@@ change names to about-pat and friends-ontology (clear, but maybe not practical).... </p>
-
-<p>@@@ make a demo 2 about either auto-repair shops or late-night restaurants.  Use it for
-n-ary via Go-Meta (reify).</p>
-
 <h2>English (Very Informal)</h2>
 
 <p class="example">
@@ -38,31 +29,31 @@ pet dog named "Rover".
 </p>
 
 <h2>English Hypertext (Informal)</h2>
-http://www.w3.org/2000/10/swap/test/demo1/
+
 <p>Here the ambiguity of terms is addressed by making the words be
 hypertext links.  The links may or may not work, depending on the
 servers involved.
 </p>
 
 <p class="example">
-<a href="http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#pat">Pat</a> <a
+<a href="http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat">Pat</a> <a
 href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">is a</a> <a
 href="http://www.w3.org/2000/10/swap/test/demo1/biology#Human">human</a> with
-the <a href="http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name">names</a> "Pat
-Smith" and "Patrick Smith".  <a href="http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#pat">Pat</a> has a <a
-href="http://www.w3.org/2000/10/swap/test/demo1/personal-notes#pet">pet</a>, <a
+the <a href="http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name">names</a> "Pat
+Smith" and "Patrick Smith".  <a href="http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat">Pat</a> has a <a
+href="http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet">pet</a>, <a
 href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">a</a> <a
 href="http://www.w3.org/2000/10/swap/test/demo1/biology#Dog">dog</a>, with
-the <a href="http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name">name</a>
+the <a href="http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name">name</a>
 "Rover".
 </p>
 
 <h2>N3</h2>
 
 <pre>
-@prefix : &lt;http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#&gt; .
+@prefix : &lt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#&gt; .
 @prefix bio: &lt;http://www.w3.org/2000/10/swap/test/demo1/biology#&gt; .
-@prefix per: &lt;http://www.w3.org/2000/10/swap/test/demo1/personal-notes#&gt; .
+@prefix per: &lt;http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#&gt; .
     
 :pat     a bio:Human;
      per:name "Pat Smith",
@@ -88,9 +79,9 @@ the <a href="http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name">name
 <h2>RDF/XML</h2>
 
 <pre>
-&lt;rdf:RDF xmlns="http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#"
+&lt;rdf:RDF xmlns="http://www.w3.org/2000/10/swap/test/demo1/about-pat#"
     xmlns:bio="http://www.w3.org/2000/10/swap/test/demo1/biology#"
-    xmlns:per="http://www.w3.org/2000/10/swap/test/demo1/personal-notes#"
+    xmlns:per="http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"&gt;
 
     &lt;bio:Human rdf:about="#pat"&gt;
@@ -109,9 +100,9 @@ the <a href="http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name">name
 
 <p>With @prefix:</p>
 <pre>
-@prefix : &lt;http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#&gt; .
+@prefix : &lt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#&gt; .
 @prefix bio: &lt;http://www.w3.org/2000/10/swap/test/demo1/biology#&gt; .
-@prefix per: &lt;http://www.w3.org/2000/10/swap/test/demo1/personal-notes#&gt; .
+@prefix per: &lt;http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#&gt; .
 @prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
 
 :pat rdf:type bio:Human.
@@ -124,12 +115,12 @@ _:genid1 per:name "Rover".
 
 <p>In standard form:</p>
 <pre>
-&lt;http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#pat&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2000/10/swap/test/demo1/biology#Human&gt; .
-&lt;http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#pat&gt; &lt;http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name&gt; "Pat Smith" .
-&lt;http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#pat&gt; &lt;http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name&gt; "Patrick Smith" .
-&lt;http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#pat&gt; &lt;http://www.w3.org/2000/10/swap/test/demo1/personal-notes#pet&gt; _:genid1 .
+&lt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2000/10/swap/test/demo1/biology#Human&gt; .
+&lt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat&gt; &lt;http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name&gt; "Pat Smith" .
+&lt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat&gt; &lt;http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name&gt; "Patrick Smith" .
+&lt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat&gt; &lt;http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet&gt; _:genid1 .
 _:genid1 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2000/10/swap/test/demo1/biology#Dog&gt; .
-_:genid1 &lt;http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name&gt; "Rover" .
+_:genid1 &lt;http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name&gt; "Rover" .
 </pre>
 
 <h2>Prolog</h2>
@@ -147,9 +138,9 @@ pet(pat, rover).
 <p>One approach to namespaces:</p>
 <pre>
 
-ns(ns1_, "http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog").
+ns(ns1_, "http://www.w3.org/2000/10/swap/test/demo1/about-pat").
 ns(bio_, "http://www.w3.org/2000/10/swap/test/demo1/biology#").
-ns(per_, "http://www.w3.org/2000/10/swap/test/demo1/personal-notes#").
+ns(per_, "http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#").
 bio_Human(ns1_pat).
 bio_Dog(rover).      # unprefix could be be NodeIDs...
 per_name(ns1_pat, "Pat Smith").
@@ -175,9 +166,9 @@ CREATE TABLE uri (
 INSERT INTO uri (uri) VALUES ('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
 INSERT INTO uri (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/biology#Human');
 INSERT INTO uri (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/biology#Dog');
-INSERT INTO uri (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name');
-INSERT INTO uri (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/personal-notes#pet');
-INSERT INTO uri (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#pat');
+INSERT INTO uri (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name');
+INSERT INTO uri (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet');
+INSERT INTO uri (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat');
 INSERT INTO uri (uri) VALUES (NULL);   # this is rover, who has no URI
 
 mysql> select * from uri;
@@ -187,9 +178,9 @@ mysql> select * from uri;
 |  1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type  |
 |  2 | http://www.w3.org/2000/10/swap/test/demo1/biology#Human |
 |  3 | http://www.w3.org/2000/10/swap/test/demo1/biology#Dog   |
-|  4 | http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name        |
-|  5 | http://www.w3.org/2000/10/swap/test/demo1/personal-notes#pet         |
-|  6 | http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#pat                                             |
+|  4 | http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name        |
+|  5 | http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet         |
+|  6 | http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat                                             |
 |  7 | NULL                                             |
 +----+--------------------------------------------------+
 </pre>
@@ -202,14 +193,14 @@ mysql> select * from uri;
 <li>Predicates must be known to be individual-valued or data-valued;
 and if data-valued, then what type?</li>
 <li>You cannot have multivalued (cardinality > 1) properties</li>
-</p>
+</ul>
 
 <pre>
 CREATE TABLE resource ( 
   id INT PRIMARY KEY,
   type INT,           # http://www.w3.org/1999/02/22-rdf-syntax-ns#type
-  name varchar(255),  # http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name
-  pet INT             # http://www.w3.org/2000/10/swap/test/demo1/personal-notes#pet
+  name varchar(255),  # http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name
+  pet INT             # http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet
 );
 INSERT INTO resource (id, type, name, pet) VALUES (6, 2, 'Pat Smith', 7);
 INSERT INTO resource (id, type, name) VALUES (7, 3, 'Rover');
@@ -234,12 +225,12 @@ there is no support for inheritance.
 <pre>
 CREATE TABLE human (  # http://www.w3.org/2000/10/swap/test/demo1/biology#Human
   id INT PRIMARY KEY,
-  name varchar(255),  # http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name
-  pet INT             # http://www.w3.org/2000/10/swap/test/demo1/personal-notes#pet
+  name varchar(255),  # http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name
+  pet INT             # http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet
 );
 CREATE TABLE dog (  # http://www.w3.org/2000/10/swap/test/demo1/biology#Dog
   id INT PRIMARY KEY,
-  name varchar(255)   # http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name
+  name varchar(255)   # http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name
 );
 INSERT INTO human VALUES (6, 'Pat Smith', 7);
 INSERT INTO dog   VALUES (7, 'Rover');
@@ -258,13 +249,13 @@ mysql> select * from human, dog where human.pet=dog.id;
 <p>Here we can support duplicate values.</p>
 
 <pre>
-CREATE TABLE name (  # http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name
+CREATE TABLE name (  # http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name
   subject INT NOT NULL,
   object varchar(255),
   INDEX(subject),
   UNIQUE INDEX(subject, object)
 );
-CREATE TABLE pet (   # http://www.w3.org/2000/10/swap/test/demo1/personal-notes#pet
+CREATE TABLE pet (   # http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet
   subject INT NOT NULL,
   object INT,
   INDEX(subject),
@@ -307,6 +298,8 @@ mysql> select * from type;
 |       7 |      3 |
 +---------+--------+
 
+</pre>
+
 <h3>Option 4: One Table of Triples, One Table Of Resources</h3>
 
 <p>If we redo our URIs table as a "resources" table, with literals as
@@ -325,9 +318,9 @@ CREATE TABLE resources (
 INSERT INTO resources (uri) VALUES ('http://www.w3.org/1999/02/22-rdf-syntax-ns#type');
 INSERT INTO resources (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/biology#Human');
 INSERT INTO resources (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/biology#Dog');
-INSERT INTO resources (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name');
-INSERT INTO resources (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/personal-notes#pet');
-INSERT INTO resources (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#pat');
+INSERT INTO resources (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name');
+INSERT INTO resources (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet');
+INSERT INTO resources (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat');
 INSERT INTO resources (uri) VALUES (NULL);   # this is rover, who has no URI
 INSERT INTO resources (literal_value) VALUES ('Pat Smith');
 INSERT INTO resources (literal_value) VALUES ('Patrick Smith');
@@ -340,9 +333,9 @@ mysql> select * from resources;
 |  1 | http://www.w3.org/1999/02/22-rdf-syntax-ns#type  | NULL          |     NULL | NULL     |
 |  2 | http://www.w3.org/2000/10/swap/test/demo1/biology#Human | NULL          |     NULL | NULL     |
 |  3 | http://www.w3.org/2000/10/swap/test/demo1/biology#Dog   | NULL          |     NULL | NULL     |
-|  4 | http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name        | NULL          |     NULL | NULL     |
-|  5 | http://www.w3.org/2000/10/swap/test/demo1/personal-notes#pet         | NULL          |     NULL | NULL     |
-|  6 | http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#pat                                             | NULL          |     NULL | NULL     |
+|  4 | http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name        | NULL          |     NULL | NULL     |
+|  5 | http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet         | NULL          |     NULL | NULL     |
+|  6 | http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat                                             | NULL          |     NULL | NULL     |
 |  7 | NULL                                             | NULL          |     NULL | NULL     |
 |  8 | NULL                                             | Pat Smith     |     NULL | NULL     |
 |  9 | NULL                                             | Patrick Smith |     NULL | NULL     |
@@ -389,12 +382,12 @@ mysql> select s.id, s.uri, p.uri as "predicate",
 +----+------+-------------------------------------------------+----+--------------------------------------------------+---------------+
 | id | uri  | predicate                                       | id | uri                                              | lit           |
 +----+------+-------------------------------------------------+----+--------------------------------------------------+---------------+
-|  6 | http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#pat | http://www.w3.org/1999/02/22-rdf-syntax-ns#type |  2 | http://www.w3.org/2000/10/swap/test/demo1/biology#Human | NULL          |
-|  6 | http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#pat | http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name       |  8 | NULL                                             | Pat Smith     |
-|  6 | http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#pat | http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name       |  9 | NULL                                             | Patrick Smith |
-|  6 | http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#pat | http://www.w3.org/2000/10/swap/test/demo1/personal-notes#pet        |  7 | NULL                                             | NULL          |
+|  6 | http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat | http://www.w3.org/1999/02/22-rdf-syntax-ns#type |  2 | http://www.w3.org/2000/10/swap/test/demo1/biology#Human | NULL          |
+|  6 | http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat | http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name       |  8 | NULL                                             | Pat Smith     |
+|  6 | http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat | http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name       |  9 | NULL                                             | Patrick Smith |
+|  6 | http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat | http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet        |  7 | NULL                                             | NULL          |
 |  7 | NULL | http://www.w3.org/1999/02/22-rdf-syntax-ns#type |  3 | http://www.w3.org/2000/10/swap/test/demo1/biology#Dog   | NULL          |
-|  7 | NULL | http://www.w3.org/2000/10/swap/test/demo1/personal-notes#name       | 10 | NULL                                             | Rover         |
+|  7 | NULL | http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name       | 10 | NULL                                             | Rover         |
 +----+------+-------------------------------------------------+----+--------------------------------------------------+---------------+
 </pre>
 
@@ -409,7 +402,7 @@ specialized software</p>
 
 <pre>
 &lt;Human&gt;
-  &lt;uri&gt;http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#pat&lt;/uri&gt;
+  &lt;uri&gt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat&lt;/uri&gt;
   &lt;name&gt;Pat Smith&lt;/name&gt;
   &lt;pet&gt;
     &lt;Dog&gt;
@@ -428,8 +421,8 @@ this kind of syntax may be easier than RDF/XML or a striped syntax.</p>
 &lt;!DOCTYPE Graph [
  &lt;!ENTITY rdf    "http://www.w3.org/1999/02/22-rdf-syntax-ns#"&gt;
  &lt;!ENTITY bio    "http://www.w3.org/2000/10/swap/test/demo1/biology#"&gt;
- &lt;!ENTITY ns1    "http://www.w3.org/2000/10/swap/test/demo1/pat-and-dog#"&gt;
- &lt;!ENTITY per    "http://www.w3.org/2000/10/swap/test/demo1/personal-notes#"&gt;
+ &lt;!ENTITY ns1    "http://www.w3.org/2000/10/swap/test/demo1/about-pat#"&gt;
+ &lt;!ENTITY per    "http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#"&gt;
 ]&gt;
 &lt;Graph&gt;
   &lt;Triple&gt;
@@ -503,12 +496,11 @@ pat.addProperty(  ns.perpet, rover)
 
 
 
-
 <p></p>
 <div class="noprint">
 <hr />
-
 <p>$Id$</p>
 </div>
+
 </body>
 </html>
