@@ -39,7 +39,7 @@ k:Wednesday
 k:Thursday
   :dayColor "blue".
 k:Friday
-  :dayColor "indigo".
+  :dayColor "pink".
 k:Saturday
   :dayColor "violet".
 
