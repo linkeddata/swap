@@ -20,16 +20,21 @@ this log:forAll :LAT1, :LON1, :LAT2, :LON2, :NUM, :YMD,
   :K, :TXT, :IT, :P, :Q, :X, :Y.
 
 
+@prefix geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>.
+
+#@@ use subproperty in stead?
+{ ?S  apt:latitude ?O } => { ?S geo:lat ?O }.
+{ ?S  apt:longitude ?O } => { ?S geo:long ?O }.
 
 # report lat/long of flights...
 { [ k:subEvents [
       k:fromLocation [
-        apt:latitude :LAT1;
-        apt:longitude :LON1;
+        geo:lat :LAT1;
+        geo:long :LON1;
       ];
       k:toLocation [
-        apt:latitude :LAT2;
-        apt:longitude :LON2;
+        geo:lat :LAT2;
+        geo:long :LON2;
       ];
       k:startingDate [ dt:date :YMD];
   ] ].
