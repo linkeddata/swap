@@ -1,0 +1,53 @@
+# List of regression tests for testing explanations bit by bit!
+#
+# NOTE that command strinsg assume working doirectory is ../
+# - 
+#
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+
+
+# Test proof generation -- see also the -p option of retest.py
+
+:t1060a a test:CwmTest;
+    test:shortFileName "reason-t1.n3";
+    test:description   "Proof for one simple rule";
+    test:arguments     """reason/t1.n3 --think --base=foo --why""".
+
+:t1060b a test:CwmTest;
+    test:shortFileName "reason-t2.n3";
+    test:description   "Proof for one simple rule";
+    test:arguments     """reason/t5.n3 --think --base=foo --why""".
+
+:t1060c a test:CwmTest;
+    test:shortFileName "reason-t3.n3";
+    test:description   "Proof for one simple rule";
+    test:arguments     """reason/t3.n3 --think --base=foo --why""".
+
+:t1060d a test:CwmTest;
+    test:shortFileName "reason-t4.n3";
+    test:description   "Proof for one simple rule";
+    test:arguments     """reason/t4.n3 --think --base=foo --why""".
+
+:t1060e a test:CwmTest;
+    test:shortFileName "reason-t5.n3";
+    test:description   "Proof for one simple rule";
+    test:arguments     """reason/t5.n3 --think --base=foo --why""".
+
+:t1060f a test:CwmTest;
+    test:shortFileName "reason-e.n3";
+    test:description   "Proof for one simple rule";
+    test:arguments     """reason/e.n3 --think --base=foo --why""".
+
+:t1060z a test:CwmTest;
+    test:shortFileName "reason-t5.n3";
+    test:description   "Proof for one simple rule";
+    test:arguments     """reason/t5.n3 --think --base=foo --why""".
+
+:t1060z a test:CwmTest;
+    test:shortFileName "reason-t5.n3";
+    test:description   "Proof for one simple rule";
+    test:arguments     """reason/t5.n3 --think --base=foo --why""".
+
+#ends

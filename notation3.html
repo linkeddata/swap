@@ -190,7 +190,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>
 <dl><dt><a name="Reifier-genId"><strong>genId</strong></a>(self)</dt></dl>
 
-<dl><dt><a name="Reifier-newBlankNode"><strong>newBlankNode</strong></a>(self, context, why<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="Reifier-newBlankNode"><strong>newBlankNode</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="Reifier-newExistential"><strong>newExistential</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -249,6 +249,14 @@ So&nbsp;if&nbsp;there&nbsp;is&nbsp;more&nbsp;data&nbsp;to&nbsp;feed&nbsp;to&nbsp
 parser,&nbsp;it&nbsp;should&nbsp;be&nbsp;straightforward&nbsp;to&nbsp;recover.</tt></dd></dl>
 
 <dl><dt><a name="SinkParser-formula"><strong>formula</strong></a>(self)</dt></dl>
+
+<dl><dt><a name="SinkParser-here"><strong>here</strong></a>(self, i)</dt><dd><tt>String&nbsp;generated&nbsp;from&nbsp;position&nbsp;in&nbsp;file<br>
+&nbsp;<br>
+This&nbsp;is&nbsp;for&nbsp;repeatability&nbsp;when&nbsp;refering&nbsp;people&nbsp;to&nbsp;bnodes&nbsp;in&nbsp;a&nbsp;document.<br>
+This&nbsp;has&nbsp;diagnostic&nbsp;uses&nbsp;less&nbsp;formally,&nbsp;as&nbsp;it&nbsp;should&nbsp;point&nbsp;one&nbsp;to&nbsp;which&nbsp;<br>
+bnode&nbsp;the&nbsp;arbitrary&nbsp;identifier&nbsp;actually&nbsp;is.&nbsp;It&nbsp;gives&nbsp;the<br>
+line&nbsp;and&nbsp;character&nbsp;number&nbsp;of&nbsp;the&nbsp;'['&nbsp;charcacter&nbsp;or&nbsp;path&nbsp;character<br>
+which&nbsp;introduced&nbsp;the&nbsp;blank&nbsp;node.&nbsp;&nbsp;The&nbsp;first&nbsp;blank&nbsp;node&nbsp;is&nbsp;boringly&nbsp;_L1C1.</tt></dd></dl>
 
 <dl><dt><a name="SinkParser-item"><strong>item</strong></a>(self, str, i, res)</dt></dl>
 
@@ -412,7 +420,7 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="RDFSink.html#RDFSink">RDFSink.RDFSink</a>:<br>
 <dl><dt><a name="ToN3-genId"><strong>genId</strong></a>(self)</dt></dl>
 
-<dl><dt><a name="ToN3-newBlankNode"><strong>newBlankNode</strong></a>(self, context, why<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="ToN3-newBlankNode"><strong>newBlankNode</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 
 <dl><dt><a name="ToN3-newExistential"><strong>newExistential</strong></a>(self, context, uri<font color="#909090">=None</font>, why<font color="#909090">=None</font>)</dt></dl>
 

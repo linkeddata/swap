@@ -36,6 +36,10 @@
     test:description   "test generation of relative URIs";
     test:arguments     """reluri-1.n3 --rdf""".
 
+:t1005a a test:CwmTest;
+	test:shortFileName 	"no-last-nl.n3";
+	test:description	"An N3 file with no final newline character";
+	test:arguments		"syntax/no-last-nl.n3".
 
 :t1006 a test:CwmTest;
     test:shortFileName "contexts-1.n3";
