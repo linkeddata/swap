@@ -1,0 +1,16 @@
+#not working yet...
+# $Id$
+#
+# try
+# $ python cwm.py  --chatty=25 test/crawlSeeAlso.n3 --rdf http://rdfweb.org/people/danbri/rdfweb/webwho.xrdf  --think
+
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+{ [] s:seeAlso [ log:semanticsOrError ?WHAT ].
+
+  ?WHAT log:rawType log:Formula.
+
+  ?WHAT log:includes {  ?S ?P ?O }.
+}
+  => { ?S ?P ?O }.
