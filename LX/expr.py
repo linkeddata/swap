@@ -12,6 +12,9 @@ There's a fairly clear hierarchy split between CompoundExpr and
 AtomicExpr, but there are many classifications one could do of Expr's
 that do not fit a single hierarchy. 
 
+TODO:
+   redo as new-style class, inherit from list, with __slots__= []
+   
 """
 __version__ = "$Revision$"
 # $Id$
@@ -20,6 +23,10 @@ from string import split
 
 def virtual():
     raise RuntimeError, "Function should have been implemented in subclass"
+
+class NotRDF(TypeError):
+    """Something was treated as RDF, but it wasn't."""
+    pass
 
 pythonOperators = { }       # gets filled in later, using things not yet defined
 
@@ -146,6 +153,33 @@ class CompoundExpr(Expr):
 
     args = property(getArgs)
 
+    ################################################################
+    # RDF Terminology
+
+    def getSubject(self):
+        if len(self.__args) != 2:
+            raise NotRDF(self)
+        return self.__args[0]
+    subject = property(getSubject)
+
+    def getObject(self):
+        if len(self.__args) != 2:
+            raise NotRDF(self)
+        return self.__args[1]
+    object = property(getObject)
+
+    def getPredicate(self):
+        if len(self.__args) != 2:
+            raise NotRDF(self)
+        return self.__function
+    predicate = property(getPredicate)
+
+    def getSPO(self):
+        if len(self.__args) != 2:
+            raise NotRDF(self)
+        return (self.__args[0], self.__args[1], self.__function)
+    spo = property(getSPO)
+
     def getAll(self):
         return (self.__function,) + self.__args
 
@@ -243,7 +277,13 @@ class AtomicExpr(Expr):
 
     def __init__(self, suggestedName="x"):
         self.suggestedName = suggestedName
-        
+
+    def __hash__(self):
+        return id(self)
+
+    def __eq__(self, other):
+        return self is other
+    
     def __str__(self):
         return self.suggestedName
 
@@ -338,7 +378,10 @@ if __name__ == "__main__": _test()
 
 
 # $Log$
-# Revision 1.9  2003-08-01 15:27:21  sandro
+# Revision 1.10  2003-09-10 20:12:04  sandro
+# added some get-as-RDF functions
+#
+# Revision 1.9  2003/08/01 15:27:21  sandro
 # kind of vaguely working datatype support (for xsd unsigned ints)
 #
 # Revision 1.8  2003/07/31 18:25:15  sandro
