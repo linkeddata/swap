@@ -42,7 +42,7 @@ see changelog at end
 from string import strip, maketrans, translate, replace, lstrip, \
                    capitalize, upper, uppercase, rfind, split, join
 # import RDFSink, llyn # from SWAP http://www.w3.org/2000/10/swap/
-# from RDFSink import SYMBOL, FORMULA, SUBJ, PRED, OBJ
+from RDFSink import SYMBOL, FORMULA, SUBJ, PRED, OBJ #@@
 from myStore import Namespace, load, setStore
 
 import sys
@@ -122,7 +122,7 @@ symbolVals = {
        'SUMMARY':       [[IANATOKEN,]],
        'LOCATION':      [[IANATOKEN,]],
        'PRIORITY':      [[IANATOKEN,]],
-       'STATUS':        [[IANATOKEN,]],
+       'STATUS':        [[ICAL.confirmed, 'CONFIRMED'], [IANATOKEN,]],
        'PRODID':        [[IANATOKEN,]],
        'VERSION':       [[IANATOKEN,]],
        'CALSCALE':      [[IANATOKEN,]],
@@ -383,6 +383,7 @@ class CalWr:
         self.exportGeneral(E_PROP, sts, event, ICAL.description, "DESCRIPTION")
         self.exportGeneral(E_PROP, sts, event, ICAL.location, "LOCATION")
         self.exportGeneral(E_PROP, sts, event, ICAL.priority, "PRIORITY")
+        self.exportGeneral(E_PROP, sts, event, ICAL.status, "STATUS")
         self.recurProp(sts, "rrule", event)
 
         self.exportXFields(sts, event)
@@ -399,9 +400,10 @@ class CalWr:
                                ICAL.transp, ICAL.sym("class"), 
                                ICAL.categories, ICAL.organizer, 
                                ICAL.attendee, ICAL.valarm,
+                               ICAL.status,
                                ICAL.rrule) and \
                str(s[1])[0:2] != "x:": 
-                progress("@@skipping ", s[PRED], " of [", txt, "] = [", \
+                progress("@@skipping ", s[PRED], " of [", '@@txt', "] = [", \
                                  s[OBJ], "]")
         w("END:VEVENT"+CRLF)
     #enddef exportEvent
@@ -728,7 +730,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.7  2004-01-31 00:45:10  timbl
+# Revision 2.8  2004-02-02 16:46:50  connolly
+# more tweaks for status; fixed a progress message
+#
+# Revision 2.7  2004/01/31 00:45:10  timbl
 # Add COMPLETED:
 #
 # Revision 2.6  2004/01/31 00:11:06  connolly
