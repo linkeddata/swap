@@ -276,7 +276,11 @@ z  - Allow relative URIs for namespaces
 	    nid = self._nodeID.get(obj, None)
 	    if nid == None:
 		objn = self.referenceTo( obj[1])
-		self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' resource', objn)], self.prefixes)
+		nid2 = self._nodeID.get(pred, None)
+		if nid2 is None:
+                    self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' resource', objn)], self.prefixes)
+                else:
+                    bNodePredicate()
 	    else:
 		self._xwr.emptyElement(pred[1], [(RDF_NS_URI+' nodeID', nid)], self.prefixes)		
 	    return
@@ -286,7 +290,11 @@ z  - Allow relative URIs for namespaces
 	    v, dt, lang = v
 	    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt.uriref()))
 	    if lang != None: attrs.append((XML_NS_URI+' lang', lang))
-        self._xwr.startElement(pred[1], attrs, self.prefixes)
+	nid = self._nodeID.get(pred, None)
+	if nid is None:
+            self._xwr.startElement(pred[1], attrs, self.prefixes)
+        else:
+            bNodePredicate()            
         self._xwr.data(v)
         self._xwr.endElement()
 
@@ -308,8 +316,11 @@ z  - Allow relative URIs for namespaces
 		self._xwr.startElement(RDF_NS_URI + 'Description',
 				    ((RDF_NS_URI+' nodeID', nid),), self.prefixes)
 	    self._subj = subj
-
-        self._xwr.startElement(pred[1], [(RDF_NS_URI+' parseType','Resource')], self.prefixes)  # @@? Parsetype RDF
+        nid = self._nodeID.get(pred, None)
+	if nid is None:
+            self._xwr.startElement(pred[1], [(RDF_NS_URI+' parseType','Resource')], self.prefixes)  # @@? Parsetype RDF
+        else:
+            bNodePredicate()             
 
         self._subj = obj    # The object is now the current subject
 
@@ -582,5 +593,11 @@ def xmldata(write, str, markupChars):
         write("&#%d;" % (ord(str[j]),))
         i = j + 1
     
+def bNodePredicate():
+    raise ValueError("""Serialization Error:
+It is not possible in RDF/XML to have a bNode in a predicate.
+See <http://www.w3.org/TR/rdf-syntax-grammar/#section-Syntax-parsetype-resource>
+Try using n3 instead.""")
+
 
 #ends
