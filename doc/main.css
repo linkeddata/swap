@@ -23,6 +23,7 @@ p  { /* text-indent : 1em ;  */
 /* pre { margin-left: 2em; } */
 
 pre, .example {
+  list-style-position: inside;
   margin-left: 1em;
   padding: 0.5em;
   border-style: dotted;
