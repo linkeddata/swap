@@ -115,6 +115,10 @@ class VariableQueryPiece(QueryPiece):
 
 class SetQueryPiece(QueryPiece):
     ""
+    def __init__(self, datum):
+        QueryPiece.__init__(self, datum)
+        self.disjunction = 0
+        self.nope = 0
     def getList(self):
         return self.datum
     def isDisjunction(self):
@@ -227,10 +231,13 @@ class RdfDBAlgae:
     ""
     
 class SqlDBAlgae(RdfDBAlgae):
-    def __init__(self, baseURI, tableDescModuleName):
+    def __init__(self, baseURI, tableDescModuleName, duplicateFieldsInQuery=0, checkUnderConstraintsBeforeQuery=1, checkOverConstraintsOnEmptyResult=1):
         # Grab _AllTables from tableDescModuleName, analogous to
         #        import tableDescModuleName
         #        from tableDescModuleName import _AllTables
+        self.duplicateFieldsInQuery = duplicateFieldsInQuery
+        self.checkUnderConstraintsBeforeQuery = checkUnderConstraintsBeforeQuery
+        self.checkOverConstraintsOnEmptyResult = checkOverConstraintsOnEmptyResult
         try:
             fp, path, stuff = imp.find_module(tableDescModuleName)
             tableDescModule = imp.load_module(tableDescModuleName, fp, path, stuff)
@@ -243,102 +250,173 @@ class SqlDBAlgae(RdfDBAlgae):
         self.predicateRE = re.compile(baseURI+
                                       "(?P<table>\w+)\#(?P<field>[\w\d\%\=\&]+)$")
 
+        # SQL query components:
+        self.tableAliases = [];		# FROM foo AS bar
+        self.selects = [];		# SELECT foo
+        self.labels = [];		#            AS bar
+        self.selectPunct = [];		# pretty printing
+        self.wheres = [];		# WHERE foo=bar
+
+        # Variable, table, column state:
+        self.whereStack = [];		# Save WHERES for paren exprs.
+        self.symbolBindings = {};	# Table alias for a given symbol.
+        self.tableBindings = {};	# Next number for a table alias.
+        self.objectBindings = [];	# External key targs in SELECT.
+        self.scalarBindings = [];	# Literals in SELECT.
+        self.fieldBindings = {};	# Which alias.fields are in SELECT.
+        self.disjunctionBindings = {};	# Which OR clauses are in SELECT.
+        self.scalarReferences = {};	# Where scalar variables were used.
+
+        # Keeping track of [under]constraints
+        self.constraintReaches = {};	# Transitive closure of all aliases
+					# constrained with other aliases.
+        self.constraintHints = {};	# Aliases constrained in some but not
+					# all paths of an OR. Handy diagnostic.
+        self.overConstraints = {};	# Redundent constraints between aliases.
+
+
     def _processRow(self, row, statements, implQuerySets, resultSet, messages, flags):
         #for iC in range(len(implQuerySets)):
         #    print implQuerySets[iC]
-        wheres = []
 
-        aliases = []
-        asz = []
-        vars = {};
-        self.LAST_CH = ord('a')
-        self._walkQuerySets(implQuerySets, aliases, asz, vars, wheres, row, flags)
+        for term in implQuerySets.getList():
+	    self._walkQuery(term, row, flags)
 
-        selectPunct = []
-        selects = []
-        labels = []
-        varOrder = vars.keys()
-        self._buildVarInfo(selectPunct, selects, labels, vars, varOrder, resultSet)
+        if (self.checkUnderConstraintsBeforeQuery):
+            self._checkForUnderConstraint()
 
-        query = self._buildQuery(implQuerySets, asz, wheres, selectPunct, selects, labels)
+        self.selectPunct[-1] = ''
+
+        query = self._buildQuery(implQuerySets)
         messages.append("query SQLselect \"\"\""+query+"\"\"\" .")
         connection = MySQLdb.connect("localhost", "root", "", "w3c")
         cursor = connection.cursor()
         cursor.execute(query)
 
-        nextResults, nextStatements = self._buildResults(cursor, selects, vars, varOrder, implQuerySets, row, statements)
+        #if (cursor.rows() == 0 and self.checkOverConstraintsOnEmptyResult):
+        #    self._checkForOverConstraint;
+
+        nextResults, nextStatements = self._buildResults(cursor, implQuerySets, row, statements)
         return nextResults, nextStatements
 
-    def _walkQuerySets(self, implQuerySets, aliases, asz, vars, wheres, row, flags):
-        disjunction = implQuerySets.isDisjunction()
-        for c in implQuerySets.getList():
-            ch = chr(self.LAST_CH)
-            innerWheres = []
+    def _walkQuery (self, term, row, flags):
+        if (0):
+            # Handle ORs here.
+	    tmpWheres = self.wheres
+        else:
+            c = term	# @@@ NUKE c
             p = c[PRED]
             s = c[SUBJ]
             o = c[OBJ]
-            table, field, target = self._lookupPredicate(p._URI())
-
-            symbol = s.symbol()
-            try:
-                last = vars[symbol]
-                ch = last[0][3]
-            except KeyError, e:
-                vars[symbol] = []
+            sTable, field, oTable, targetField = self._lookupPredicate(p._URI())
+            sAlias = None;
+            oAlias = None;
 
             if (s._const()):
                 uri = s._uri()
                 if (uri):
-                    innerWheres.push(self._decomposeUniques(uri, 'subject', table))
+                    sAlias = self._bindTableToConstant(sTable, s)
                 else:
                     raise RuntimeError, "not implemented"
             else:
-		self._addBinding(s, ch, table, None, SUBST_SUBJ, asz, vars, innerWheres, disjunction);
+                sAlias = self._bindTableToVariable(sTable, s)
 
             if (o._const()):
-                lookFor = o._const()
-                if (target):
-                    innerWheres.append(self._decomposeUniques(lookFor, 'target', target[0]))
+                if (oTable):
+                    oAlias = self._bindTableToConstant(oTable, o)
+                    self._addWhere(sAlias+"."+field+"="+oAlias+"."+targetField, term)
+                    self._adddReaches(sAlias, oAlias, term)
                 else:
-                    innerWheres.append(ch+"."+field+"=\""+lookFor+"\"")
-            elif (o.symbol):
-		self._addBinding(o, ch, table, field, SUBST_SUBJ, asz, vars, innerWheres, disjunction);
+                    self._addWhere(sAlias+"."+field+"=\""+o._const()+"\"", term)
             else:
-                raise RuntimeError, "what type is "+o.toString()
-
-            if (len(innerWheres)):
-                wheres.append('('+string.join(innerWheres, "\n  AND ")+')')
+                if (oTable):
+                    oAlias = self._bindTableToVariable(oTable, o)
+                    self._addWhere(sAlias+"."+field+"="+oAlias+"."+targetField, term)
+                    self._addReaches(sAlias, oAlias, term)
+                else:
+                    try:
+                        scalarReference = self.scalarReferences[o.symbol()]
+                        firstAlias, firstField = scalarReference
+                        self._addWhere(sAlias+"."+field+"="+firstAlias+"."+firstField, term)
+                        self._addReaches(sAlias, firstAlias, term)
+                    except KeyError, e:
+                        col = self._addSelect(sAlias+"."+field, o.symbol()+"_"+field, "\n")
+                        self.scalarBindings.append([o, [col]])
+                        self.scalarReferences[o.symbol()] = [sAlias, field]
                 
-    def _addBinding(self, ob, as, table, field, pos, asz, vars, wheres, disjunction):
-        symbol = ob.symbol()
+    def _preferredID (self, table, alias, qp):
         pk = self.structure[table]['-primaryKey']
         try:
-            dummy = vars[symbol]
+            pk.isdigit() # Lord, there's got to be a better way. @@@
+            pk = [pk]
+        except AttributeError, e:
+            pk = pk
+        cols = []
+        fieldz = []
+        for iField in range(len(pk)):
+            field = pk[iField]
+            if (iField == len(pk)-1):
+                punct = "\n       "
+            else:
+                punct = ' '
+            col = self._addSelect(alias+"."+field, qp.symbol()+"_"+field, punct)
+            cols.append(col)
+            fieldz.append(field)
+        self.objectBindings.append([qp, cols, fieldz, table])
+        #        self.selectPunct.pop()
+
+    def _addSelect (self, name, label, punct):
+        try:
+            ret = self.fieldBindings[name]
+            if (self.duplicateFieldsInQuery):
+                raise KeyError, "force duplicate fields"
         except KeyError, e:
-            vars[symbol] = []
-        vars[symbol].append([ob, field, table, as, pk, pos, self._uniquesFor(table)])
-        if (len(vars[symbol]) == 1):
-            if (field == None and disjunction == None):
-                self.LAST_CH = self.LAST_CH + 1
-                asz.append(table+" AS "+as)
-        else:
-            ob0 = vars[symbol][0][0]
-            field0 = vars[symbol][0][1]
-            table0 = vars[symbol][0][2]
-            var0 = vars[symbol][0][3]
-            pk0 = vars[symbol][0][4]
+            self.selects.append(name)
+            self.labels.append(label)
+            self.selectPunct.append(punct)
+            self.fieldBindings[name] = ret = len(self.selects)-1
+        return ret
 
-            N = len(vars[symbol]) - 1
-            obN = vars[symbol][N][0]
-            fieldN = vars[symbol][N][1]
-            tableN = vars[symbol][N][2]
-            varN = vars[symbol][N][3]
-            pkN = vars[symbol][N][4]
+    def _bindTableToVariable (self, table, qp):
+        try:
+            self.symbolBindings[qp.symbol()]
+        except KeyError, e:
+            self.symbolBindings[qp.symbol()] = {}
+        try:
+            binding = self.symbolBindings[qp.symbol()][table]
+        except KeyError, e:
+            try:
+                maxForTable = self.tableBindings[table]
+            except KeyError, e:
+                maxForTable = self.tableBindings[table] = 0
+            binding = table+"_"+repr(maxForTable)
+            self.symbolBindings[qp.symbol()][table] = binding
+            self.tableBindings[table] = self.tableBindings[table] + 1
 
-            if (table0 != tableN):
-                if (field0 == None): field0 = pk0
-                if (fieldN == None): fieldN = pkN
-                wheres.append(var0+"."+field0+"="+varN+"."+fieldN)
+            self.tableAliases.append([table, binding])
+            self._preferredID(table, binding, qp) # (A_0.u0, A_0.u1)
+        return binding
+
+    def _bindTableToConstant (self, table, qp):
+        try:
+            self.symbolBindings[qp._URI()]
+        except KeyError, e:
+            self.symbolBindings[qp._URI()] = {}
+        try:
+            binding = self.symbolBindings[qp._URI()][table]
+        except KeyError, e:
+            try:
+                maxForTable = self.tableBindings[table]
+            except KeyError, e:
+                maxForTable = self.tableBindings[table] = 0
+            binding = table+"_"+repr(maxForTable)
+            self.symbolBindings[qp._URI()][table] = binding
+            self.tableBindings[table] = self.tableBindings[table] + 1
+
+            self.tableAliases.append([table, binding])
+            for where in self._decomposeUniques(qp._URI(), binding, table):
+                self._addWhere(where, qp)
+        return binding
 
     def _lookupPredicate(self, predicate):
         m = self.predicateRE.match(predicate)
@@ -350,9 +428,10 @@ class SqlDBAlgae(RdfDBAlgae):
             fieldDesc = None
         try:
             target = fieldDesc['-target']
+            return table, field, target[0], target[1]
         except KeyError, e:
             target = None
-        return table, field, target
+            return table, field, None, None
 
     def _uniquesFor(self, table):
         try:
@@ -392,78 +471,45 @@ class SqlDBAlgae(RdfDBAlgae):
             constraints.append(tableAs+"."+field+"=\""+value+"\"")
         return constraints
 
-    def _buildVarInfo(self, selectPunct, selects, labels, vars, varOrder, resultSet):
-        for var in varOrder:
-            # vars[var] contains an array of every time a variable was
-            # referenced in a pattern. We care ony about the first for buiding
-            # the selects list.
-            varInfo = vars[var][0]
-            queryPiece = varInfo[0]
-            field = varInfo[1]
-            table = varInfo[2]
-            var = varInfo[3]
-            pk = varInfo[4]
-            varIndex = queryPiece.getVarIndex()
-            symbol = queryPiece.symbol()
-
-            # nicely group selections for the same variable on the same line
-            selectPunct.append("\n  ")
-
-            if (resultSet.getVarIndex(symbol) != varIndex):
-                raise RuntimeError, symbol+": "+resultSet.getVarIndex(symbol)+" != "+varIndex # bind new fields in resultSet
-            if (field):
-                selects.append(var+"."+field)
-                labels.append(symbol)
-            elif (pk):
-                # Some primary keys are scalars, some are lists.
-                # Here we make them all be lists.
-                try:
-                    pk.isdigit() # Lord, there's got to be a better way. @@@
-                    pk = [pk]
-                except AttributeError, e:
-                    pk = pk
-                for field in pk:
-                    selects.append(var+"."+field)
-                    labels.append(symbol+"_"+field)
-                    selectPunct.append('')
-                selectPunct.pop
-
-    def _buildQuery(self, implQuerySets, asz, wheres, selectPunct, selects, labels):
-
+    def _buildQuery (self, implQuerySets):
         # assemble the query
-        segments = []
+        segments = [];
         segments.append('SELECT ')
-
-	sel = []
-        for i in range(len(selects)):
-            if (selects[i]):
-		sel.append(selectPunct[i]+selects[i]+" as "+labels[i])
-	    else:
-                print "ParameterException"+labels[i]
-		selects.pop(i)
-		labels.pop(i)
-		i = i - 1
-        segments.append(string.join(sel, ','))
+	tmp = []
+        for i in range(len(self.selects)):
+            # Note, the " AS self.labels[$i]" is just gravy -- nice in logs.
+            if (i == len(self.selects) - 1):
+                comma = ''
+            else:
+                comma = ','
+            if (self.labels[1] == None):
+                asStr = ''
+            else:
+                asStr = " AS "+self.labels[i]
+            tmp.append(self.selects[i]+asStr+comma+self.selectPunct[i])
+	segments.append(string.join(tmp, ''))
 
         segments.append("\nFROM ")
-        segments.append(string.join(asz, ','))
-        if (len(wheres) > 0):
+        tmp = []
+        for i in range(len(self.tableAliases)):
+            tmp.append(self.tableAliases[i][0]+" AS "+self.tableAliases[i][1])
+        segments.append(string.join (tmp, ', '))
+        where = whereStr = self._makeWheres(implQuerySets.disjunction, implQuerySets.nope)
+        if (where):
             segments.append("\nWHERE ")
-            segments.append(self._makeWheres(wheres, implQuerySets))
+            segments.append(whereStr)
         #    if ($flags->{-uniqueResults}) {
         #	push (@$segments, ' GROUP BY ');
-        #	push (@$segments, CORE::join (',', @$labels));
+        #	push (@$segments, CORE::join (',', @{self.labels}));
         #    } elsif (my $groupBy = $flags->{-groupBy}) {
         #	if (@$groupBy) {
         #	    push (@$segments, ' GROUP BY ');
         #	    push (@$segments, CORE::join (',', @$groupBy));
         #	}
         #    }
-
-        # /me thinks that one may group by ^existentials
         return string.join(segments, '')
 
-    def _buildResults(self, cursor, selects, vars, varOrder, implQuerySets, row, statements):
+    def _buildResults (self, cursor, implQuerySets, row, statements):
         nextResults = []
         nextStatements = []
         uniqueStatementsCheat = {}
@@ -475,62 +521,221 @@ class SqlDBAlgae(RdfDBAlgae):
             nextResults.append(row[:])
             nextStatements.append(statements[:])
 
+            # Grab objects from the results
             rowBindings = {}
-            iSelect = 0;
-            for var in varOrder:
-                varInfo = vars[var][0]
-                queryPiece, field, table, var, pk, dummy, fieldz = varInfo
+            for binding in self.objectBindings:
+                queryPiece, cols, fieldz, table = binding
                 valueHash = {}
-                if (field):
-                    str = answerRow[iSelect]
-                    Assure(nextResults[-1], queryPiece.getVarIndex(), str) # nextResults[-1][queryPiece.getVarIndex()] = str
-                    rowBindings[queryPiece.symbol()] = str
-                    iSelect = iSelect + 1
-                else:
-                    try:
-                        fieldz.isdigit() # Lord, there's got to be a better way. @@@
-                        fieldz = [fieldz]
-                    except AttributeError, e:
-                        fieldz = fieldz
-                    for iField in range(len(fieldz)):
-                        valueHash[fieldz[iField]] = answerRow[iSelect + iField]
-                    uri = self._composeUniques(valueHash, table)
-                    Assure(nextResults[-1], queryPiece.getVarIndex(), uri) # nextResults[-1][queryPiece.getVarIndex()] = uri
-                    rowBindings[queryPiece.symbol()] = uri
-                    iSelect += len(fieldz)
-                    
-	    # ... and the supporting statements.
-            for term in implQuerySets.getList():
-                pred = NTriplesAtom(term[PRED], rowBindings)
-                subj = NTriplesAtom(term[SUBJ], rowBindings)
-                obj = NTriplesAtom(term[OBJ], rowBindings)
+                for i in range(len(cols)):
+                    col = cols[i]
+                    field = fieldz[i]
+                    valueHash[field] = answerRow[col]
+                uri = self._composeUniques(valueHash, table)
+                Assure(nextResults[-1], queryPiece.getVarIndex(), uri) # nextResults[-1][queryPiece.getVarIndex()] = uri
+                rowBindings[queryPiece.symbol()] = uri
+            # Grab literals from the results
+            for binding in self.scalarBindings:
+                queryPiece, cols = binding
+                str = answerRow[cols[0]]
+                Assure(nextResults[-1], queryPiece.getVarIndex(), str) # nextResults[-1][queryPiece.getVarIndex()] = uri
+                rowBindings[queryPiece.symbol()] = str
+            # Grab sub-expressions from the results
+            for qpStr in self.disjunctionBindings.keys():
+                binding = self.disjunctionBindings[qpStr]
+                qp, cols = binding
+                rowBindings[qp] = answerRow[cols[0]]
 
-                try:
-                    statement = uniqueStatementsCheat[pred][subj][obj]
-                except KeyError, e:
-                    statement = ['<db>', pred, subj, obj]
-                    try:
-                        byPred = uniqueStatementsCheat[pred]
-                        try:
-                            bySubj = byPred[subj]
-                        except KeyError, e:
-                            uniqueStatementsCheat[pred][subj] = {obj : statement}
-                    except KeyError, e:
-                        uniqueStatementsCheat[pred] = {subj : {obj : statement}}
-	        nextStatements[-1].append(statement)
-
+            # ... and the supporting statements.
+            nextStatements[-1].append(self._bindingsToStatements(implQuerySets, rowBindings, uniqueStatementsCheat))
+	    #for s in nextStatements->[-1]
+            #    $self->{-db}->applyClosureRules($self->{-db}{INTERFACES_implToAPI}, 
+            #				    $s->getPredicate, $s->getSubject, $s->getObject, 
+            #				    $s->getReifiedAs, $s->getReifiedIn, $s->getAttribution);
         return nextResults, nextStatements
 
-    def _makeWheres(self, wheres, term):
-        if (term.isDisjunction()):
+    def _bindingsToStatements (self, term, rowBindings, uniqueStatementsCheat):
+        if (term.__class__.__name__ == "SetQueryPiece"):
+            ret = []
+            if (term.nope == 0):
+                for subTerm in term.getList():
+                    if (term.disjunction):
+                        binding = self.disjunctionBindings[subTerm]
+                        qp, cols = binding
+                        if (rowBindings[qp]):
+                            ret.append(self._bindingsToStatements(subTerm, rowBindings, uniqueStatementsCheat))
+		    else:
+		        ret.append(self._bindingsToStatements(subTerm, rowBindings, uniqueStatementsCheat))
+            return ret
+        pred = NTriplesAtom(term[PRED], rowBindings)
+        subj = NTriplesAtom(term[SUBJ], rowBindings)
+        obj = NTriplesAtom(term[OBJ], rowBindings)
+
+        try:
+            statement = uniqueStatementsCheat[pred][subj][obj]
+        except KeyError, e:
+            statement = ['<db>', pred, subj, obj]
+            try:
+                byPred = uniqueStatementsCheat[pred]
+                try:
+                    bySubj = byPred[subj]
+                except KeyError, e:
+                    uniqueStatementsCheat[pred][subj] = {obj : statement}
+            except KeyError, e:
+                uniqueStatementsCheat[pred] = {subj : {obj : statement}}
+        return statement
+
+    def _addReaches (self, frm, to, term):
+        # Entries are a list of paths (lists) that connect frm to to and visa
+        # versa. The first path is the first way the tables were constrained.
+        # Additional paths represent over-constraints.
+        self._fromReachesToAndEverythingToReaches(frm, to, [term])
+        for fromFrom in self.constraintReaches[frm].keys():
+            if (fromFrom != to):
+                self._fromReachesToAndEverythingToReaches(fromFrom, to, [self.constraintReaches[frm][fromFrom], term])
+
+    def _fromReachesToAndEverythingToReaches (self, frm, to, path):
+        try:
+            self.constraintReaches[frm]
+        except KeyError, e:
+            self.constraintReaches[frm] = {}
+        try:
+            self.constraintReaches[to]
+        except KeyError, e:
+            self.constraintReaches[to] = {}
+        try:
+            self.overConstraints[frm][to].append(path)
+        except KeyError, e:
+            #	print "  [c]-[g]->[p]\n"
+            try:
+                for toTo in self.constraintReaches[to].keys():
+                    toPath = [self.constraintReaches[to][toTo], path]
+                    try:
+                        self.overConstraints[frm][toTo].append(path)
+                    except KeyError, e:
+                        self.constraintReaches[frm][toTo] = toPath
+                        self.constraintReaches[toTo][frm] = toPath
+            except KeyError, e:
+                self.constraintReaches[to] = {}
+            self.constraintReaches[frm][to] = path
+            self.constraintReaches[to][frm] = path
+
+    def _showConstraints (self):
+        ret = []
+        for frm in self.constraintReaches.keys():
+            for to in self.constraintReaches[frm].keys():
+                ret.append(self._showConstraint(frm, to))
+        return string.join(ret, "\n")
+
+#    def _showConstraint (self, frm, to):
+#        my pathStr = join (' - ', map {_->toString({-brief => 1})} @{self.constraintReaches[frm][to]})
+#        return "frm:to: pathStr"
+
+    def _mergeCommonConstraints (self, reachesSoFar, term, subTerm):
+        for fromTable in self.constraintReaches.keys():
+            try:
+                reachesSoFar[fromTable]
+            except KeyError, e:
+                try:
+                    self.constraintHints[fromTable]
+                except KeyError, e:
+                    self.constraintHints[fromTable] = {}
+                    #			    push (@{self.constraintHints[fromTable]}, "for fromTable")
+            for toTable in self.constraintReaches[fromTable].keys():
+                try:
+                    reachesSoFar[fromTable][toTable]
+                except KeyError, e:
+                    self.constraintHints[fromTable][toTable].append([term, subTerm])
+                    self.constraintHints[toTable][fromTable].append([term, subTerm])
+        for fromTable in eachesSoFa.keys():
+            try:
+                self.constraintReaches[fromTable]
+            except KeyError, e:
+                try:
+                    self.constraintHints[fromTable]
+                except KeyError, e:
+                    self.constraintHints[fromTable] = {}
+                    #			    push (@{self.constraintHints[fromTable]}, "for fromTable")
+            for toTable in reachesSoFar[fromTable].keys():
+                try:
+                    self.constraintReaches[fromTable][toTable]
+                except KeyError, e:
+                    del reachesSoFar[fromTable][toTable]
+                    del reachesSoFar[toTable][fromTable]
+                    self.constraintHints[fromTable][toTable].append([term, subTerm])
+                    self.constraintHints[toTable][fromTable].append([term, subTerm])
+
+    def _checkForUnderConstraint (self):
+        firstAlias = self.tableAliases[0][1]
+        messages = []
+        for iAliasSet in range(1, len(self.tableAliases)):
+            table, alias = self.tableAliases[iAliasSet]
+            try:
+                self.constraintReaches[firstAlias][alias]
+            except KeyError, e:
+                messages.append("  firstAlias not constrained against alias")
+                for reaches in self.constraintReaches[firstAlias].keys():
+                    messages.append("    firstAlias reaches reaches")
+                for reaches in self.constraintReaches[alias].keys():
+                    messages.append("    alias reaches reaches")
+                for terms in self.constraintHints[firstAlias][alias]:
+                    constrainedByStr = terms[1].toString({-brief : 1})
+                    constrainedInStr = terms[0].toString({-brief : 1})
+                    messages.append("    partially constrained by 'constrainedByStr' in 'constrainedInStr'")
+        if (len(messages) > 0):
+            raise RuntimeError, "underconstraints exception:\n"+string.join(messages, "\n")
+
+    def _checkForOverConstraint (self):
+        messages = []
+        done = {}
+        for frm in self.overConstraints.keys():
+            try:
+                done[frm]
+            except KeyError, e:
+                break
+            done[frm] = 1
+            for to in self.overConstraints[frm].keys():
+                try:
+                    done[frm]
+                except KeyError, e:
+                    break
+                if (to != frm):
+                    messages.append("  frm over-constrained against to"._showPath(self.constraintReaches[frm][to]))
+                    for path in self.overConstraints[frm][to]:
+                        messages.append('    '._showPath(path))
+        if (len(messages)):
+            raise RuntimeError, "overconstraints exception:\n"+string.join(messages, "\n")
+
+    def _showPath(path) : # static
+        pathStrs = []
+        for term in path:
+            pathStrs.append(term.toString({-brief : 1}))
+        return string.join(pathStrs, ' - ')
+
+    def _addWhere (self, condition, term):
+        self.wheres.append(condition)
+
+    def _pushWheres (self):
+        self.whereStack.append(self.wheres)
+        self.wheres = []
+
+    def _popWheres (self, disjunction, negation):
+        innerWheres = self._makeWheres(disjunction, negation)
+        self.wheres = self.whereStack.pop()
+        if (innerWheres):
+            self.wheres.push("("+innerWheres+")")
+
+    def _makeWheres (self, disjunction, negation):
+        if (len(self.wheres) < 1):
+            return ''
+        if (disjunction):
             junction = "\n   OR "
         else:
             junction = "\n  AND "
-        ret = string.join(wheres, junction)
-        if (term.isNot):
-            return ret
+        ret = string.join(self.wheres, junction)
+        if (negation):
+            return "NOT (ret)"
         else:
-            return "NOT ("+ret+")"
+            return ret
 
     def unescapeName(toEscape):
         a = toEscape
@@ -578,7 +783,8 @@ if __name__ == '__main__':
     for solutions in nextStatements:
         print "query solution {"
         for statement in solutions:
-            print ShowStatement(statement)
+            print statement
+            # print ShowStatement(statement)
         print "} ."
 
 blah = """
