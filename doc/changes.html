@@ -34,28 +34,51 @@ href="cwm">Cwm</a> Changes</h1>
 
 <h2>Since Release 0.8</h2>
 
-<p></p>
+<h4>General bugfixes</h4>
+
+<p>Fixes in decimal support</p>
+
+<p>A bug introduced into 0.8.0 where cwm crashed if no input files were
+specified has been fixed</p>
+
+<h4>RDF/XML support changes</h4>
 
 <p>cwm's rdf/xml output will now output any file that can be outputted in xml
 1.0. Failing that, it will output it in xml 1.1. Failing that, it will throw
 an exception. The previous behavior of generating empty tags was a bug.</p>
 
-<p>--why doesn't crash --- I have no clue if it's doing anything close to
-what it should / what Sir Tim's idea of how it should work is.</p>
-
-<p>Performance work has resulted in some tasks taking 1/10 the time that they
-used to.</p>
+<p>Cwm will throw an excpetion if told to output rdf/xml for a file that uses
+literals as subjects </p>
 
 <p>Tests have been added for rdflib. It is now supported to a degree.</p>
 
+<p>Cwm now successfully fails to parse all but four of the rdf negative
+parser tests</p>
+
+<h4>Performance improvements</h4>
+
+<p>Performance work has resulted in some tasks taking 1/10 the time that they
+used to. Much more work is planned in this regard.</p>
+
+<p></p>
+
+<h4>Packaging</h4>
+
+<p>Cwm now uses python's distutils for distribution. This allows for
+installation of cwm. As an added bonus, there are now rpm's, windows
+installers.</p>
+
+<p></p>
+
+<h4>Flatten support</h4>
+
 <p>--flatten and --unflatten have been rewritten, replacing the old --flat.
-They should now work.</p>
+Flatten minimally reifies an n3 file to make it an rdf graph. Note that the
+graph may still fail to serialize as rdf, due to literals as subjects.</p>
 
-<p>A bug introduced into 0.8.0 where cwm crashed if no input files were
-specified has been fixed</p>
+<p></p>
 
-<p>Preliminary support for python distutils (setup.py) has been written. This
-will someday allow for better ways of distributing cwm.</p>
+<p></p>
 
 <h2 id="rel0.8">Release 0.8</h2>
 <ul>
