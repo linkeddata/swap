@@ -16,6 +16,8 @@ $Id$
 NOTE: see earlier work:
   http://www.w3.org/2002/01dc-nj/toICal.py
 
+@@cite and use python style
+@@use doctest
 see changelog at end
 """
 
@@ -34,7 +36,7 @@ except:
     pass
 
 # Global Constants:
-IANATOKEN = 0
+IANATOKEN = 0 #@@huh? what is this? comment here, please
 E_PARAM = 10
 E_PROP = 11
 ERR_NONE = 100
@@ -51,7 +53,9 @@ RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 ICAL = Namespace('http://www.w3.org/2002/12/cal/ical#')
 
 
-# ADDED: a dictionary mapping things to their possible symbols.
+#@@added? that's for the cvs log, not for the code.
+# ADDED: a dictionary mapping things (@@things?) to their possible symbols.
+# @@ perhaps a doctest style unittest to show what's going on here?
 symbolVals = {
         'ACTION':       [[ICAL.audio, 'AUDIO'],
                          [ICAL.email, 'EMAIL'],
@@ -182,10 +186,13 @@ class CalWr:
                 xstr = "X-" + self.unCamel(xstr)
                 # the actual data is in the node's third list item
                 w(xstr + ":" + str(n[3]) + "\n") 
-	#enddef exportXFields
+	#enddef exportXFields #@@ ew. let's stick to python styleguide
     
     def unCamel(self, xstr):
         """a procedure to reverse-camel a string
+
+	@@ why is this a method? I don't see any reference to self.
+	@@ odd algorithm... seems to do a lot of work twice.
 
         ical2rdf.pl performs camelCase() on X- attributes. namely,
         (1) it strips '-' characters, (2) tokenizes the stuff in between
@@ -254,7 +261,7 @@ class CalWr:
 	# ADDED:
     def exportAlarm(self, sts, alarm):
         """ support for the VALARM component
-        @@ incomplete!
+        @@ incomplete! @@how so?
         -- 4.6.6 http://www.ietf.org/rfc/rfc2445.txt
         """
         w = self._w
@@ -480,7 +487,7 @@ class CalWr:
                 v = ";" + pref + "=" + val 
             elif outtype == E_PROP:
                 v = pref + ":" + val + "\n"
-            w(self.wrapString(v, 75))
+            w(self.wrapString(v, 75)) #@@magic number. move to top. does it come from the RFC?
         #enddef egWrite
 
         w = self._w
@@ -524,7 +531,9 @@ class CalWr:
     #enddef exportGeneral
 
     def wrapString(self, str, slen):
-        """ helper function to wrap a string iCal-style """
+        """ helper function to wrap a string iCal-style
+	@@ why is this a method? I don't see any reference to self.
+	"""
         #@@linebreaks? <-- what did this comment mean?
         x = ''
         while(len(str) > slen):
@@ -638,7 +647,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.0  2003-08-23 08:40:40  ghuo
+# Revision 2.1  2003-08-28 15:49:04  connolly
+# various code review notes that I want to discuss with ghuo
+#
+# Revision 2.0  2003/08/23 08:40:40  ghuo
 # Added support for numerous new properties and parameters.
 # Added the VALARM component. Restructured the export
 # procedures. Fixed various output bugs.
