@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Cwm command line arguments</title>
+  <meta name="generator" content="amaya 7.1, see http://www.w3.org/Amaya/" />
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+
+<div class="noprint">
+<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a> |
+<a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
+href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
+Comparing Formats</p>
+</div>
+
+<h1>Cwm Changes 2003/08</h1>
+
+<p>At this point cwm made a number of changes at once, so we document htem
+here.</p>
+
+<p><small><code>@prefix test:
+&lt;http://www.w3.org/2000/10/swap/test/regression#&gt;.</code></small></p>
+<ol>
+  <li><p>The <strong>namespaces</strong> used for lists changed from DAML to
+    RDF. The namespace used for "=" switched to OWL. DAML and DAML+OIL are
+    used no more, though we remember them fondly. This change actually
+    shouldn't change much in many applications, where files use the
+    collection syntax in RDF or the () and = syntaxes in N3. It does affect
+    the order of statements cwm uses to pretty-print files.</p>
+  </li>
+  <li><strong>Lists</strong> are handled differently internally. This is a
+    bit of a an experiment. Instead of being stored in their first/rest forms
+    in the graph, complete lists are stored as List objects. Thse are first
+    class objects. . 
+    <ul>
+      <li>Currently, <strong>you can no longer match against a list</strong>.
+        Unification of formlae will catch identical lists such as ( &lt;a&gt;
+        &lt;b&gt; ) matching against ( &lt;a&gt; &lt;b&gt; ) because Lists
+        are interned, but will currently NOT unify ( ?x ?y ) with ( &lt;a&gt;
+        &lt;b&gt; ). This is similar to the behaviour of formulae. Watch this
+        space, though,as this should change. (Tests which fail:
+        test/list/list-bug{1,2}.n3)</li>
+      <li>You should be able to generate lists from built-ins.</li>
+      <li>The unification (query) engine was complicated by the fact that
+        lists in the antecedent can be assumed as all lists exist by axiom.
+        The last release of llyn had a bug (<code>test:t1018b2</code>) with
+        that - and wrapping my head round that caused me to decide it was
+        time for the change.</li>
+      <li>In canonical comparisons, Lists are greater than literals and
+        smaller than formulae. This may affect the ordering of cwm-generated
+        files. Lists currently compare element by element, or if elements
+        match, shortest is smallest.</li>
+    </ul>
+  </li>
+  <li><strong>New option --data</strong> strips the store down to an RDF
+    graph, losing universal variables (forAll's) and any statements which
+    mentoin nested formulae. --purge-rules is now deprocated and does the
+    same thing. (--purge-rules sed to be a just remove things menioning
+    forAll or implies.)</li>
+  <li>The store is being separated into components. llyn.py was too big. The
+    idea is to be able to support a redland underlying store in the future.
+    The unification engine which includes the built-in function operation now
+    uses the store's api to access the store without peeking into
+  internals.</li>
+</ol>
+
+<p></p>
+
+<h2>Getting an old version</h2>
+
+<p></p>
+
+<p>You can get the old version before these changes using CVS, by checking
+out with the tag oldLists .  </p>
+
+<p>cvs update -r oldLists</p>
+
+<p></p>
+
+<p></p>
+
+<p></p>
+
+<div class="noprint">
+<hr />
+
+<p>$Id$</p>
+</div>
+</body>
+</html>

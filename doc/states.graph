@@ -22,8 +22,15 @@
 
 :s99 gv:label "99\\nUnexamined"; :description "State unknown - to be [re]calculated";
     :to :s60, :s55, :s50, :s7, :s5;
+    :onSearch :s80;
     :onCall :done.   #  @@@ a bug, I think - need to also search.
 
+:s80 gv:label "80\\nFail";
+    :description "Have exhausted all possible ways to saitsfy this item. stop now.".
+ 
+:65 gv:label "65\\nLight Uns Go";
+    :description "";
+    :onCall :@@@@ 
 :s60 gv:label "60\\nNot light\\nnot searched";
     :to :s5, :s7, :s14, :s55;  :onSearch :done, :s15; :onBind :s99.
 
