@@ -1,0 +1,72 @@
+#not working yet...
+# $Id$
+#
+# try
+# $ python cwm.py  --chatty=15 test/crawlFoaf.n3 --rdf http://xmlns.com/foaf/0.1/index.rdf http://www.markbaker.ca/foaf.rdf --think --purge-rules >,out.rdf
+
+@prefix r: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+@prefix str:  <http://www.w3.org/2000/10/swap/string#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/>.
+
+@prefix ont: <http://www.w3.org/2002/07/owl#>.
+
+@prefix : <crawlFoaf#>.
+
+# a bit of RDFS semantics?
+#{ ?S [ s:subPropertyOf ?P ] ?O } => { ?S ?P ?O }.
+#{ ?S a [ s:subClassOf ?C ] } => { ?S a ?C }.
+
+# a bit of owl
+{ ?P a ont:InverseFunctionalProperty.
+  ?S1 ?P ?O. ?S2 ?P ?O. } => { ?S1 = ?S2 }.
+
+
+this log:forAll :S, :P, :O, :P2, :O2.
+
+{
+  ?WHO foaf:knows ?WHO2. # Mark knows Dan.
+
+  :P a ont:InverseFunctionalProperty. # e.g. foaf:mbox
+
+  ?WHO2 :P :O. # dan mbox connolly@w3.org
+
+  # dan seeAlso <dan-foaf.rdf>
+  ?WHO2 s:seeAlso [
+        log:uri [ str:doesNotContain "www.ecademy.com/", # too big
+			 "hampton.ws" # too slow
+		];
+
+	log:semanticsOrError ?KB2
+	].
+  ?KB2 log:rawType log:Formula. # not an error
+
+  # in <dan-foaf.rdf> we find
+  # somebody mbox connolly@w3.org ... must be Dan...
+  # + somebody P2 O2. ... more about Dan ...
+  ?KB2 log:includes { :S :P :O; :P2 :O2 }.
+
+}
+  => { ?WHO2 = :S; :P2 :O2. ?KB2 :about ?WHO2. }.
+
+
+# Lift seeAlso links...
+{ ?KB :about ?WHO;
+    log:includes { :S s:seeAlso :O }
+} => { :S s:seeAlso :O }.
+
+# Lift unambiguous statements
+{
+ :P a ont:InverseFunctionalProperty.
+ ?KB :about ?WHO;
+    log:includes { :S :P :O }
+} => { :S :P :O }.
+
+
+
+# $Log$
+# Revision 1.1  2003-03-01 23:40:35  connolly
+# worked once
+#
+
