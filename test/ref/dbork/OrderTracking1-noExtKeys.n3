@@ -1,0 +1,100 @@
+     @prefix : <#> .
+     @prefix Addresses: <sql://rdftest@swada.w3.org/OrderTracking/Addresses#> .
+     @prefix Customers: <sql://rdftest@swada.w3.org/OrderTracking/Customers#> .
+     @prefix Orders: <sql://rdftest@swada.w3.org/OrderTracking/Orders#> .
+     @prefix Products: <sql://rdftest@swada.w3.org/OrderTracking/Products#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    
+    this     log:forAll :billAddr,
+                :billAddrEK,
+                :billCity,
+                :billState,
+                :billStreet,
+                :c,
+                :cEK,
+                :dEK,
+                :first,
+                :last,
+                :o,
+                :p,
+                :pEK,
+                :productName .
+    
+    "'sql://rdftest@swada.w3.org/OrderTracking/Orders.id=2185'"     :RESULT "'123 Elm Street'",
+                "'Biff'",
+                "'EdgeCity'",
+                "'Thompson'",
+                "'XX'",
+                "'pool'" .
+    
+    "'sql://rdftest@swada.w3.org/OrderTracking/Orders.id=2186'"     :RESULT "'123 Elm Street'",
+                "'Chip'",
+                "'EdgeCity'",
+                "'Thompson'",
+                "'XX'",
+                "'skateboard'" .
+    
+    "'sql://rdftest@swada.w3.org/OrderTracking/Orders.id=2187'"     :RESULT "'123 Elm Street'",
+                "'Chip'",
+                "'EdgeCity'",
+                "'Thompson'",
+                "'XX'",
+                "'nose ring'" .
+    
+    "'sql://rdftest@swada.w3.org/OrderTracking/Orders.id=3183'"     :RESULT "'123 Elm Street'",
+                "'Chip'",
+                "'EdgeCity'",
+                "'Thompson'",
+                "'XX'",
+                "'other ring'" .
+    
+    Addresses:city     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Addresses:id     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Addresses:state     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Addresses:street     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Customers:billingAddress     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Customers:familyName     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Customers:givenName     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Customers:id     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Orders:customer     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Orders:id     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Orders:orderDate     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Orders:product     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Products:id     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    
+    Products:name     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    {
+        :billAddr     Addresses:city :billCity;
+             Addresses:id :billAddrEK;
+             Addresses:state :billState;
+             Addresses:street :billStreet .
+        :c     Customers:billingAddress :billAddrEK;
+             Customers:familyName :first;
+             Customers:givenName :last;
+             Customers:id :cEK .
+        :o     Orders:customer :cEK;
+             Orders:orderDate :dEK;
+             Orders:product :pEK .
+        :p     Products:id :pEK;
+             Products:name :productName .
+        
+        }     log:implies {:o     :RESULT :billCity,
+                    :billState,
+                    :billStreet,
+                    :first,
+                    :last,
+                    :productName .
+        } .
+    

@@ -1,0 +1,26 @@
+# List of regression tests requiring access to database swada.w3.org
+#
+# invocation
+#   PYTHONPATH=.. python retest.py -n -f file:/home/eric/sources/public/2000/10/swap/test/dbRegression.n3
+
+@prefix : <#>.
+@prefix x: <#>.
+@prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+
+
+:d1001 a test:CwmTest;
+    test:shortFileName "dbork/OrderTracking0.n3";
+    test:description   "SELECT from tables sample database called OrderTracking";
+    test:arguments     """dbork/OrderTracking0.n3 -think""".
+
+:d1002 a test:CwmTest;
+    test:shortFileName "dbork/OrderTracking1.n3";
+    test:description   "join from sample database called OrderTracking";
+    test:arguments     """dbork/OrderTracking1.n3 -think""".
+
+:d1003 a test:CwmTest;
+    test:shortFileName "dbork/OrderTracking1-noExtKeys.n3";
+    test:description   "manual linking of tables in OrderTracking database";
+    test:arguments     """dbork/OrderTracking1-noExtKeys.n3 -think""".
+
+#ends

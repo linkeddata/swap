@@ -2618,7 +2618,7 @@ class Query:
             elif state == S_REMOTE: # Remote query -- need to find all of them for the same service
 		items = [item]
 		for i in queue[:]:
-#!!! EGP		    if i.state == S_REMOTE and i.service is self.service: #@@ optimize which group is done first!
+		    if i.state == S_REMOTE and i.service is item.service: #@@ optimize which group is done first!
 			items.append(i)
 			queue.remove(i)
 		nbs = query.remoteQuery(items)
@@ -2678,21 +2678,19 @@ class Query:
 
         rs = ResultSet()
         qp = rs.buildQuerySetsFromCwm(items, query.variables, query.existentials)
-        (user, password, host, database) = re.match("^sql://(?:([^@:]+)(?::([^@]+))?)@?([^/]+)/(.+)$",
+        (user, password, host, database) = re.match("^sql://(?:([^@:]+)(?::([^@]+))?)@?([^/]+)/([^/]+)/$",
                                                     items[0].service.uri).groups()
-        HostDB2SchemeMapping = { "sql://root@localhost/w3c" : "AclSqlObjectsg" }
+        HostDB2SchemeMapping = { "sql://root@localhost/w3c" : "AclSqlObjects" }
         if (HostDB2SchemeMapping.has_key(items[0].service.uri)):
             cachedDetails = HostDB2SchemeMapping.get(items[0].service.uri)
         else:
             cachedDetails = None
-        a = SqlDBAlgae(query.store.internURI("http://localhost/SqlDB/"), cachedDetails, user, password, host, database, query.meta, query.store.pointsAt)
+        a = SqlDBAlgae(query.store.internURI(items[0].service.uri), cachedDetails, user, password, host, database, query.meta, query.store.pointsAt)
         messages = []
         nextResults, nextStatements = a._processRow([], [], qp, rs, messages, {})
         rs.results = nextResults
-        def df(datum):
-            return re.sub("http://localhost/SqlDB#", "sql:", datum)
-        # print string.join(messages, "\n")
-        # print "query matrix \"\"\""+rs.toString({'dataFilter' : None})+"\"\"\" .\n"
+        if verbosity() > 90: progress(string.join(messages, "\n"))
+        if verbosity() > 90: progress("query matrix \"\"\""+rs.toString({'dataFilter' : None})+"\"\"\" .\n")
 
 	bindings = []
 	reason = Because("Remote query") # @ add more info?
@@ -2705,7 +2703,7 @@ class Query:
                 boundRow = boundRow + [(v, interned)]
             bindings.append((boundRow, reason))
 
-	progress("====> bindings from remote query:"+`bindings`)
+        if verbosity() > 10: progress("====> bindings from remote query:"+`bindings`)
 	return bindings   # No bindings for testing
 
 

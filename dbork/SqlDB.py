@@ -24,6 +24,7 @@ import imp
 import MySQLdb
 import TableRenderer
 from TableRenderer import TableRenderer
+from diag import progress, progressIndent, verbosity, tracking
 
 SUBST_NONE = 0
 SUBST_PRED = 1
@@ -263,7 +264,7 @@ class SqlDBAlgae(RdfDBAlgae):
                                       "(?P<table>\w+)\#(?P<field>[\w\d\%\=\&]+)$")
 
         if (self.structure == None):
-            print "analyzing sql://%s/%s\n" % (host, database)
+            if verbosity() > 10: progress("analyzing sql://%s/%s\n" % (host, database))
             self.structure = {}
             cursor = self._getCursor()
             cursor.execute("SHOW TABLES")
@@ -830,17 +831,17 @@ class SqlDBAlgae(RdfDBAlgae):
         return a
 
 if __name__ == '__main__':
-    s = [["<http://localhost/SqlDB/uris#uri>", "?urisRow", "<http://www.w3.org/Member/Overview.html>"], 
-         ["<http://localhost/SqlDB/acls#access>", "?acl", "?access"], 
-         ["<http://localhost/SqlDB/acls#acl>", "?acl", "?aacl"], 
-         ["<http://localhost/SqlDB/acls#id>", "?acl", "?accessor"], 
-         ["<http://localhost/SqlDB/idInclusions#groupId>", "?g1", "?accessor"], 
-         ["<http://localhost/SqlDB/idInclusions#id>", "?g1", "?u1"], 
-         ["<http://localhost/SqlDB/ids#value>", "?u1", "\"eric\""], 
-         ["<http://localhost/SqlDB/uris#acl>", "?urisRow", "?aacl"]]
+    s = [["<sql://rdftest@swada.w3.org/OrderTracking/uris#uri>", "?urisRow", "<http://www.w3.org/Member/Overview.html>"], 
+         ["<sql://rdftest@swada.w3.org/OrderTracking/acls#access>", "?acl", "?access"], 
+         ["<sql://rdftest@swada.w3.org/OrderTracking/acls#acl>", "?acl", "?aacl"], 
+         ["<sql://rdftest@swada.w3.org/OrderTracking/acls#id>", "?acl", "?accessor"], 
+         ["<sql://rdftest@swada.w3.org/OrderTracking/idInclusions#groupId>", "?g1", "?accessor"], 
+         ["<sql://rdftest@swada.w3.org/OrderTracking/idInclusions#id>", "?g1", "?u1"], 
+         ["<sql://rdftest@swada.w3.org/OrderTracking/ids#value>", "?u1", "\"eric\""], 
+         ["<sql://rdftest@swada.w3.org/OrderTracking/uris#acl>", "?urisRow", "?aacl"]]
     rs = ResultSet()
     qp = rs.buildQuerySetsFromArray(s)
-    a = SqlDBAlgae("http://localhost/SqlDB/", "AclSqlObjects")
+    a = SqlDBAlgae("sql://rdftest@swada.w3.org/OrderTracking/", "AclSqlObjects")
     messages = []
     nextResults, nextStatements = a._processRow([], [], qp, rs, messages, {})
     rs.results = nextResults
@@ -861,7 +862,7 @@ aclQuery -- :acl acls:access :access .
 sentences[1].quad -- (attrib,      s,   p,      o)
                      (0_work, access, acl, access)
 p.uriref() -- 'file:/home/eric/WWW/2000/10/swap/test/dbork/aclQuery.n3#acl'
-s.uriref() -- 'http://localhost/SqlDB/acls#access'
+s.uriref() -- 'sql://rdftest@swada.w3.org/OrderTracking/acls#access'
 o.uriref() -- 'file:/home/eric/WWW/2000/10/swap/test/dbork/aclQuery.n3#access'
 existentials[1] == sentences[1].quad[2] -- 1
 
@@ -875,14 +876,14 @@ c
 s
 
 this one works:
-    s = [["<http://localhost/SqlDB/uris#uri>", "?urisRow", "<http://www.w3.org/Member/Overview.html>"], 
-         ["<http://localhost/SqlDB/uris#acl>", "?urisRow", "?aacl"], 
-         ["<http://localhost/SqlDB/acls#acl>", "?acl", "?aacl"], 
-         ["<http://localhost/SqlDB/acls#access>", "?acl", "?access"], 
-         ["<http://localhost/SqlDB/ids#value>", "?u1", "\"eric\""], 
-         ["<http://localhost/SqlDB/idInclusions#id>", "?g1", "?u1"], 
-         ["<http://localhost/SqlDB/idInclusions#groupId>", "?g1", "?accessor"], 
-         ["<http://localhost/SqlDB/acls#id>", "?acl", "?accessor"]]
+    s = [["<sql://rdftest@swada.w3.org/OrderTracking/uris#uri>", "?urisRow", "<http://www.w3.org/Member/Overview.html>"], 
+         ["<sql://rdftest@swada.w3.org/OrderTracking/uris#acl>", "?urisRow", "?aacl"], 
+         ["<sql://rdftest@swada.w3.org/OrderTracking/acls#acl>", "?acl", "?aacl"], 
+         ["<sql://rdftest@swada.w3.org/OrderTracking/acls#access>", "?acl", "?access"], 
+         ["<sql://rdftest@swada.w3.org/OrderTracking/ids#value>", "?u1", "\"eric\""], 
+         ["<sql://rdftest@swada.w3.org/OrderTracking/idInclusions#id>", "?g1", "?u1"], 
+         ["<sql://rdftest@swada.w3.org/OrderTracking/idInclusions#groupId>", "?g1", "?accessor"], 
+         ["<sql://rdftest@swada.w3.org/OrderTracking/acls#id>", "?acl", "?accessor"]]
 
 """
 

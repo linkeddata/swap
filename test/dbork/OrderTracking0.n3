@@ -2,14 +2,14 @@
 
 #@prefix db: 		<http://localhost/SqlDB#>.
 # Tables:
-@prefix Customers: 		<http://localhost/SqlDB/Customers#>.
-@prefix Products: 		<http://localhost/SqlDB/Products#>.
+@prefix Customers: 	<sql://rdftest@swada.w3.org/OrderTracking/Customers#>.
+@prefix Products: 	<sql://rdftest@swada.w3.org/OrderTracking/Products#>.
 
 @prefix : <#>.
 
 this log:forAll :customer, :family, :given .
 
-<sql://rdftest@swada.w3.org/OrderTracking> is log:authoritativeService of
+<sql://rdftest@swada.w3.org/OrderTracking/> is log:authoritativeService of
 	Customers:familyName, Customers:givenName, Products:name.
 {
  :customer Customers:familyName :family .

@@ -2,10 +2,10 @@
 
 #@prefix db: 		<http://localhost/SqlDB#>.
 # Tables:
-@prefix acls: 		<http://localhost/SqlDB/acls#>.
-@prefix uris: 		<http://localhost/SqlDB/uris#>.
-@prefix ids: 		<http://localhost/SqlDB/ids#>.
-@prefix idInclusions:	<http://localhost/SqlDB/idInclusions#>.
+@prefix acls: 		<sql://rdftest.w3.org/OrderTracking/acls#>.
+@prefix uris: 		<sql://rdftest.w3.org/OrderTracking/uris#>.
+@prefix ids: 		<sql://rdftest.w3.org/OrderTracking/ids#>.
+@prefix idInclusions:	<sql://rdftest.w3.org/OrderTracking/idInclusions#>.
 
 @prefix : <#>.
 @prefix v: <#>.
