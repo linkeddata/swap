@@ -3,24 +3,23 @@
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
   <title>Primer - Shortcuts</title>
-  <link href="style.css" rel="stylesheet"
-  type="text/css" />
+  <link href="style.css" rel="stylesheet" type="text/css" />
 </head>
 
 <body xml:lang="en" lang="en">
+
 <div class="noprint">
-<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a>
-| <a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> | Comparing Formats</p>
+<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a> |
+<a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
+href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
+Comparing Formats</p>
 </div>
 
-
-
-<h1>Paths and lists</h1>
+<h1>Shorthand: Paths and lists</h1>
 
 <p>You don't need to know this. It just makes life easier, and of course
-helps when reading other people's work. </p>
+helps when reading other people's work.</p>
 
 <h2><a name="Paths" id="Paths">Paths</a></h2>
 
@@ -84,7 +83,7 @@ output a file will turn it into the form of N3 you already know.</p>
 <h2 id="Lists">Lists</h2>
 
 <p>A common need is to represent an ordered collection of things. This is
-done in OWL as a owl:Collection. In N3, the list is represented by sepetating
+done in RDF as a rdf:Collection. In N3, the list is represented by sepetating
 the objects with whitespace and surrounding them with parenthases. Examples
 are:</p>
 <pre>( "Monday" "Tuesday" "Wednesday" )
@@ -94,17 +93,18 @@ are:</p>
 ( :cust.bus:order.bus:number  :cust.bus:order.bus:referncedPurchaseOrder.bus:number )</pre>
 
 <p>These lists are actually shorthand for statements which knit blank nodes
-together using owl:first and owl:rest. owl:first is the relationship betwen a
-list and its foirst component. owl:rest if the relationship between a list
-and the list of everything except its first element. owl:nil is the name for
-the empty list. Therefore,</p>
+together using <code>rdf:first</code> and <code>rdf:rest</code>.
+<code>rdf:first</code> is the relationship betwen a list and its first
+component. <code>rdf:rest</code> if the relationship between a list and the
+list of everything except its first element. <code>rdf:nil</code> is the name
+for the empty list. Therefore,</p>
 <pre>( "Monday" "Tuesday" "Wednesday" )</pre>
 
 <p>is equivalent to</p>
-<pre>[ owl:first "Monday";
-  owl:next [ owl:first "Tuesday";
-             owl:rest [ owl:first "Wednesday";
-                        owl:rest owl:nil ]]]</pre>
+<pre>[ rdf:first "Monday";
+  rdf:next [ rdf:first "Tuesday";
+             rdf:rest [ rdf:first "Wednesday";
+                        rdf:rest rdf:nil ]]]</pre>
 
 <p>One of the common uses of lists is as parameter to a relationship which
 ihas more than one argment.</p>
@@ -117,10 +117,6 @@ the three strings "Dear", whatever ?name is, and a comma. This will be used
 with built-in functions which we will discuss later.</p>
 
 <div class="noprint">
-
-<p></p>
-
-<p><a href="Rules.html">Next: Rules</a></p>
 <br />
 
 <hr />

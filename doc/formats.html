@@ -1,6 +1,4 @@
 <?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <title>Comparing Formats</title>
@@ -8,50 +6,48 @@
 </head>
 
 <body>
+
 <div class="noprint">
-<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a>
-| <a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> | Comparing Formats</p>
+<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a> |
+<a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
+href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
+Comparing Formats</p>
 </div>
 
 <h1>Comparing Formats</h1>
 
 <p>There are a many languages in use today for exchanging RDF-structured
-information.   Here's a simple example rendered in many different
-ways.   Converters to between some of these formats, but not others
-(yet).
-</p>
+information. Here's a simple example rendered in many different ways.
+Converters to between some of these formats, but not others (yet).</p>
 
 <h2>English (Very Informal)</h2>
 
-<p class="example">
-There is person, Pat, known as "Pat Smith" and "Patrick Smith".  Pat has a
-pet dog named "Rover".   
-</p>
+<p class="example">There is person, Pat, known as "Pat Smith" and "Patrick
+Smith". Pat has a pet dog named "Rover".</p>
 
 <h2>English Hypertext (Informal)</h2>
 
-<p>Here the ambiguity of terms is addressed by making the words be
-hypertext links.  The links may or may not work, depending on the
-servers involved.
-</p>
+<p>Here the ambiguity of terms is addressed by making the words be hypertext
+links. The links may or may not work, depending on the servers involved.</p>
 
-<p class="example">
-<a href="http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat">Pat</a> <a
+<p class="example"><a
+href="http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat">Pat</a> <a
 href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">is a</a> <a
 href="http://www.w3.org/2000/10/swap/test/demo1/biology#Human">human</a> with
-the <a href="http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name">names</a> "Pat
-Smith" and "Patrick Smith".  <a href="http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat">Pat</a> has a <a
-href="http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet">pet</a>, <a
-href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">a</a> <a
+the <a
+href="http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name">names</a>
+"Pat Smith" and "Patrick Smith". <a
+href="http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat">Pat</a> has a
+<a
+href="http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet">pet</a>,
+<a href="http://www.w3.org/1999/02/22-rdf-syntax-ns#type">a</a> <a
 href="http://www.w3.org/2000/10/swap/test/demo1/biology#Dog">dog</a>, with
-the <a href="http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name">name</a>
-"Rover".
-</p>
+the <a
+href="http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name">name</a>
+"Rover".</p>
 
 <h2>N3</h2>
-
-<pre>
-@prefix : &lt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#&gt; .
+<pre>@prefix : &lt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#&gt; .
 @prefix bio: &lt;http://www.w3.org/2000/10/swap/test/demo1/biology#&gt; .
 @prefix per: &lt;http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#&gt; .
     
@@ -60,27 +56,23 @@ the <a href="http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name">na
               "Patrick Smith";
      per:pet  [
          a bio:Dog;
-         per:name "Rover" ] .
-</pre>
+         per:name "Rover" ] .</pre>
 
 <h2>Directed Labeled Graph</h2>
-
- <!-- DO NOT let examplex1.ps exist on the server!   The "x" is needed
+<!-- DO NOT let examplex1.ps exist on the server!   The "x" is needed
  to keep  MultipleChoice answer from being embedded. -->
-
- <object data="formats-examplex1.ps" type="application/postscript">
- <object data="formats-example1">
- <object data="formats-example1.jpg" type="image/jpeg">
-    <img class="example" src="formats-example1" />
- </object>
- </object>
- </object>
-
+<object width="400" height="400" data="formats-examplex1.ps"
+type="application/postscript">
+  <object width="400" height="400" data="formats-example1">
+    <object width="400" height="400" data="formats-example1.jpg"
+    type="image/jpeg">
+      <img class="example" src="formats-example1" /></object>
+  </object>
+</object>
+ 
 
 <h2>RDF/XML</h2>
-
-<pre>
-&lt;rdf:RDF xmlns="http://www.w3.org/2000/10/swap/test/demo1/about-pat#"
+<pre>&lt;rdf:RDF xmlns="http://www.w3.org/2000/10/swap/test/demo1/about-pat#"
     xmlns:bio="http://www.w3.org/2000/10/swap/test/demo1/biology#"
     xmlns:per="http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"&gt;
@@ -94,14 +86,12 @@ the <a href="http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name">na
             &lt;/bio:Dog&gt;
         &lt;/per:pet&gt;
     &lt;/bio:Human&gt;
-&lt;/rdf:RDF&gt;
-</pre>
+&lt;/rdf:RDF&gt;</pre>
 
 <h2>N-Triples</h2>
 
 <p>With @prefix:</p>
-<pre>
-@prefix : &lt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#&gt; .
+<pre>@prefix : &lt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#&gt; .
 @prefix bio: &lt;http://www.w3.org/2000/10/swap/test/demo1/biology#&gt; .
 @prefix per: &lt;http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#&gt; .
 @prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
@@ -111,34 +101,28 @@ the <a href="http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name">na
 :pat per:name "Patrick Smith".
 :pat per:pat _:genid1.
 _:genid1 rdf:type bio:Dog.
-_:genid1 per:name "Rover".
-</pre>
+_:genid1 per:name "Rover".</pre>
 
 <p>In standard form:</p>
-<pre>
-&lt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2000/10/swap/test/demo1/biology#Human&gt; .
+<pre>&lt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2000/10/swap/test/demo1/biology#Human&gt; .
 &lt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat&gt; &lt;http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name&gt; "Pat Smith" .
 &lt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat&gt; &lt;http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name&gt; "Patrick Smith" .
 &lt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat&gt; &lt;http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet&gt; _:genid1 .
 _:genid1 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.w3.org/2000/10/swap/test/demo1/biology#Dog&gt; .
-_:genid1 &lt;http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name&gt; "Rover" .
-</pre>
+_:genid1 &lt;http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name&gt; "Rover" .</pre>
 
 <h2>Prolog</h2>
 
 <p>Without namespaces, this is very terse:</p>
-<pre>
-human(pat).
+<pre>human(pat).
 dog(rover).            % we have to assign a name
 name(pat, "Pat Smith").
 name(pat, "Patrick Smith").
 name(rover, "Rover").
-pet(pat, rover).
-</pre>
+pet(pat, rover).</pre>
 
 <p>One approach to namespaces:</p>
 <pre>
-
 ns(ns1_, "http://www.w3.org/2000/10/swap/test/demo1/about-pat").
 ns(bio_, "http://www.w3.org/2000/10/swap/test/demo1/biology#").
 ns(per_, "http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#").
@@ -147,19 +131,16 @@ bio_Dog(rover).      # unprefix could be be NodeIDs...
 per_name(ns1_pat, "Pat Smith").
 per_name(ns1_pat, "Patrick Smith").
 per_name(rover, "Rover").
-per_pet(ns1_pat, rover).
-</pre>
+per_pet(ns1_pat, rover).</pre>
 
 <h2>SQL</h2>
 
 <h3>Table Relating URIs to Internal IDs</h3>
 
-<p>URIs are big, variable-length keys; it's much more efficient to
-translate them into an internal id.  If the "uri" is NULL, this
-resource is anonymous (a bNode, like a NodeID in RDF/XML).</p>
-
-<pre>
-CREATE TABLE uri (
+<p>URIs are big, variable-length keys; it's much more efficient to translate
+them into an internal id. If the "uri" is NULL, this resource is anonymous (a
+bNode, like a NodeID in RDF/XML).</p>
+<pre>CREATE TABLE uri (
   id INT AUTO_INCREMENT PRIMARY KEY,    # PRIMARY = UNIQUE and NOT NULL
   uri BLOB,   # BLOB is also called LONGVARBINARY 
   UNIQUE KEY uri (uri(64))  # length is just a tuning knob
@@ -172,7 +153,7 @@ INSERT INTO uri (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/friends
 INSERT INTO uri (uri) VALUES ('http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat');
 INSERT INTO uri (uri) VALUES (NULL);   # this is rover, who has no URI
 
-mysql> select * from uri;
+mysql&gt; select * from uri;
 +----+--------------------------------------------------+
 | id | uri                                              |
 +----+--------------------------------------------------+
@@ -183,21 +164,18 @@ mysql> select * from uri;
 |  5 | http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet         |
 |  6 | http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat                                             |
 |  7 | NULL                                             |
-+----+--------------------------------------------------+
-</pre>
++----+--------------------------------------------------+</pre>
 
 <h3>Option 1: One Table, One Column Per Predicate</h3>
 
 <p>This is a simple, intuitive approach, but...</p>
 <ul>
-<li>You need to add a new column with each new predicate you use</li>
-<li>Predicates must be known to be individual-valued or data-valued;
-and if data-valued, then what type?</li>
-<li>You cannot have multivalued (cardinality > 1) properties</li>
+  <li>You need to add a new column with each new predicate you use</li>
+  <li>Predicates must be known to be individual-valued or data-valued; and if
+    data-valued, then what type?</li>
+  <li>You cannot have multivalued (cardinality &gt; 1) properties</li>
 </ul>
-
-<pre>
-CREATE TABLE resource ( 
+<pre>CREATE TABLE resource ( 
   id INT PRIMARY KEY,
   type INT,           # http://www.w3.org/1999/02/22-rdf-syntax-ns#type
   name varchar(255),  # http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name
@@ -206,25 +184,21 @@ CREATE TABLE resource (
 INSERT INTO resource (id, type, name, pet) VALUES (6, 2, 'Pat Smith', 7);
 INSERT INTO resource (id, type, name) VALUES (7, 3, 'Rover');
 
-mysql> select * from resource;
+mysql&gt; select * from resource;
 +----+------+-----------+------+
 | id | type | name      | pet  |
 +----+------+-----------+------+
 |  6 |    2 | Pat Smith |    7 |
 |  7 |    3 | Rover     | NULL |
-+----+------+-----------+------+
-</pre>
++----+------+-----------+------+</pre>
 
 <h3>Option 2: One Table Per Class, One Column Per Predicate</h3>
 
-<p>Here we avoid having such wide tables, and our modeling better
-matches the normal database modeling.  On the other hand, we have 
-some conceptual redundancy between human.name and dog.name, because
-there is no support for inheritance.
-</p>
-
-<pre>
-CREATE TABLE human (  # http://www.w3.org/2000/10/swap/test/demo1/biology#Human
+<p>Here we avoid having such wide tables, and our modeling better matches the
+normal database modeling. On the other hand, we have some conceptual
+redundancy between human.name and dog.name, because there is no support for
+inheritance.</p>
+<pre>CREATE TABLE human (  # http://www.w3.org/2000/10/swap/test/demo1/biology#Human
   id INT PRIMARY KEY,
   name varchar(255),  # http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name
   pet INT             # http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet
@@ -236,21 +210,17 @@ CREATE TABLE dog (  # http://www.w3.org/2000/10/swap/test/demo1/biology#Dog
 INSERT INTO human VALUES (6, 'Pat Smith', 7);
 INSERT INTO dog   VALUES (7, 'Rover');
 
-mysql> select * from human, dog where human.pet=dog.id;
+mysql&gt; select * from human, dog where human.pet=dog.id;
 +----+-----------+------+----+-------+
 | id | name      | pet  | id | name  |
 +----+-----------+------+----+-------+
 |  6 | Pat Smith |    7 |  7 | Rover |
-+----+-----------+------+----+-------+
-</pre>
-
++----+-----------+------+----+-------+</pre>
 
 <h3>Option 3: One Table Per Predicate</h3>
 
 <p>Here we can support duplicate values.</p>
-
-<pre>
-CREATE TABLE name (  # http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name
+<pre>CREATE TABLE name (  # http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name
   subject INT NOT NULL,
   object varchar(255),
   INDEX(subject),
@@ -275,7 +245,7 @@ INSERT INTO pet VALUES (6, 7);
 INSERT INTO type VALUES (6, 2);
 INSERT INTO type VALUES (7, 3);
 
-mysql> select * from name;                   
+mysql&gt; select * from name;                   
 +---------+---------------+
 | subject | object        |
 +---------+---------------+
@@ -284,29 +254,26 @@ mysql> select * from name;
 |       7 | Rover         |
 +---------+---------------+
 
-mysql> select * from pet;
+mysql&gt; select * from pet;
 +---------+--------+
 | subject | object |
 +---------+--------+
 |       6 |      7 |
 +---------+--------+
 
-mysql> select * from type;
+mysql&gt; select * from type;
 +---------+--------+
 | subject | object |
 +---------+--------+
 |       6 |      2 |
 |       7 |      3 |
-+---------+--------+
-
-</pre>
++---------+--------+</pre>
 
 <h3>Option 4: One Table of Triples, One Table Of Resources</h3>
 
-<p>If we redo our URIs table as a "resources" table, with literals as
-well as URIs, we have some more options.</p>
-<pre>
-CREATE TABLE resources (
+<p>If we redo our URIs table as a "resources" table, with literals as well as
+URIs, we have some more options.</p>
+<pre>CREATE TABLE resources (
   id INT AUTO_INCREMENT PRIMARY KEY,    # PRIMARY = UNIQUE and NOT NULL
   # either provide a uri
   uri BLOB, 
@@ -327,7 +294,7 @@ INSERT INTO resources (literal_value) VALUES ('Pat Smith');
 INSERT INTO resources (literal_value) VALUES ('Patrick Smith');
 INSERT INTO resources (literal_value) VALUES ('Rover');
 
-mysql> select * from resources;
+mysql&gt; select * from resources;
 +----+--------------------------------------------------+---------------+----------+----------+
 | id | uri                                              | literal_value | datatype | language |
 +----+--------------------------------------------------+---------------+----------+----------+
@@ -341,13 +308,10 @@ mysql> select * from resources;
 |  8 | NULL                                             | Pat Smith     |     NULL | NULL     |
 |  9 | NULL                                             | Patrick Smith |     NULL | NULL     |
 | 10 | NULL                                             | Rover         |     NULL | NULL     |
-+----+--------------------------------------------------+---------------+----------+----------+
-</pre>
++----+--------------------------------------------------+---------------+----------+----------+</pre>
 
 <p>Then we can have a simple table of triples:</p>
-
-<pre>
-CREATE TABLE triples (
+<pre>CREATE TABLE triples (
   subject INT NOT NULL,
   predicate INT NOT NULL,
   object INT NOT NULL,
@@ -362,7 +326,7 @@ INSERT INTO triples VALUES (6, 1, 2);
 INSERT INTO triples VALUES (7, 1, 3);
 INSERT INTO triples VALUES (6, 5, 7);
 
-mysql> select * from triples; 
+mysql&gt; select * from triples; 
 +---------+-----------+--------+
 | subject | predicate | object |
 +---------+-----------+--------+
@@ -374,7 +338,7 @@ mysql> select * from triples;
 |       7 |         4 |     10 |
 +---------+-----------+--------+
 
-mysql> select s.id, s.uri, p.uri as "predicate", 
+mysql&gt; select s.id, s.uri, p.uri as "predicate", 
        o.id, o.uri, o.literal_value as "lit"
        from triples, resources as s, resources as p, resources as o
        where s.id=triples.subject AND
@@ -389,20 +353,14 @@ mysql> select s.id, s.uri, p.uri as "predicate",
 |  6 | http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat | http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#pet        |  7 | NULL                                             | NULL          |
 |  7 | NULL | http://www.w3.org/1999/02/22-rdf-syntax-ns#type |  3 | http://www.w3.org/2000/10/swap/test/demo1/biology#Dog   | NULL          |
 |  7 | NULL | http://www.w3.org/2000/10/swap/test/demo1/friends-ontology#name       | 10 | NULL                                             | Rover         |
-+----+------+-------------------------------------------------+----+--------------------------------------------------+---------------+
-</pre>
-
-
++----+------+-------------------------------------------------+----+--------------------------------------------------+---------------+</pre>
 
 <h2>XML (but not RDF/XML)</h2>
 
-<p>The <strong>striped</strong> or <strong>alternating-normal
-form</strong> approach uses a markup language designed for the
-application domain.  Conversion to and from triples requires
-specialized software</p>
-
-<pre>
-&lt;Human&gt;
+<p>The <strong>striped</strong> or <strong>alternating-normal form</strong>
+approach uses a markup language designed for the application domain.
+Conversion to and from triples requires specialized software</p>
+<pre>&lt;Human&gt;
   &lt;uri&gt;http://www.w3.org/2000/10/swap/test/demo1/about-pat#pat&lt;/uri&gt;
   &lt;name&gt;Pat Smith&lt;/name&gt;
   &lt;pet&gt;
@@ -410,16 +368,13 @@ specialized software</p>
      &lt;name&gt;Rover&lt;/name&gt;
     &lt;/Dog&gt;
   &lt;/pet&gt;
-&lt;/Human&gt;
-</pre>
+&lt;/Human&gt;</pre>
 
-<p>An alternative is to use <strong>XML Triples</strong>.  This does
-not involve domain-specific markup.   Several candidate DTDs/Schemes
-have been proposed; this is just one strawman.  For some applications,
-this kind of syntax may be easier than RDF/XML or a striped syntax.</p>
-
-<pre>
-&lt;!DOCTYPE Graph [
+<p>An alternative is to use <strong>XML Triples</strong>. This does not
+involve domain-specific markup. Several candidate DTDs/Schemes have been
+proposed; this is just one strawman. For some applications, this kind of
+syntax may be easier than RDF/XML or a striped syntax.</p>
+<pre>&lt;!DOCTYPE Graph [
  &lt;!ENTITY rdf    "http://www.w3.org/1999/02/22-rdf-syntax-ns#"&gt;
  &lt;!ENTITY bio    "http://www.w3.org/2000/10/swap/test/demo1/biology#"&gt;
  &lt;!ENTITY ns1    "http://www.w3.org/2000/10/swap/test/demo1/about-pat#"&gt;
@@ -451,57 +406,65 @@ this kind of syntax may be easier than RDF/XML or a striped syntax.</p>
     &lt;predicate&gt;&lt;uri&gt;&amp;per;name&lt;/uri&gt;&lt;/predicate&gt;
     &lt;object&gt;&lt;literal&gt;Rover&lt;/literal&gt;&lt;/object&gt;
   &lt;/Triple&gt;
-&lt;/Graph&gt;
-</pre>
+&lt;/Graph&gt;</pre>
 
 <h2>Javascript and Python</h2>
 
-<p>The RDF model maps fairly well to several
-common programming constructs, especially those found in interpreted
-object-oriented languages, like Javascript and Python.   Still, this
-mapping is not perfect.</p>
+<p>The RDF model maps fairly well to several common programming constructs,
+especially those found in interpreted object-oriented languages, like
+Javascript and Python. Still, this mapping is not perfect.</p>
 
-<p>This simple approach ignores URI and cardinality issues; it only
-allows pat to have one name and one pet:</p>
-
-<pre>
-pat = Human()
+<p>This simple approach ignores URI and cardinality issues; it only allows
+pat to have one name and one pet:</p>
+<pre>pat = Human()
 rover = Dog()
 pat.name = "Pat Smith"
 rover.name = "Rover"
-pat.pet = rover
-</pre>
+pat.pet = rover</pre>
 
 <p>We can begin to consider cardinality:</p>
-
-<pre>
-pat = Human()
+<pre>pat = Human()
 rover = Dog()
 pat.name.append("Pat Smith")
 rover.name.append("Rover")
-pat.pet.append(rover)
-</pre>
+pat.pet.append(rover)</pre>
 
-<p>But to be more complete, we need something like this which loses
-the simplicity of the built-in model:</p>
-
-<pre>
-pat = Resource()
+<p>But to be more complete, we need something like this which loses the
+simplicity of the built-in model:</p>
+<pre>pat = Resource()
 rover = Resource()
 pat.addProperty(  ns.rdf.type, ns.bio.Human)
 rover.addProperty(ns.rdf.type, ns.bio.Dog)
 pat.addProperty(  ns.per.name, "Pat Smith")
 rover.addProperty(ns.per.name, "Rover")
-pat.addProperty(  ns.perpet, rover)
-</pre>
+pat.addProperty(  ns.perpet, rover)</pre>
 
+<h2>But remember...</h2>
 
+<p>Beware of thinking of RDF as a format for serailizing objects.  The
+semantic web is different - it is weblike.</p>
+<ul>
+  <li>Any document can (potentially) say anything about anything.  There is
+    no set of "slots" or "attributes" for a class.  The properties defined in
+    a schema are not the only properties which one can use to describe
+    something which is in that class.
+    <p>An object can be in many classes.  When you create a semantic web
+    document about something, others can deduce more things about it, in
+    vocabularies you have never heard of. </p>
+    <p>Entity-Relationship and UML diagrams are useful for describing RDF --
+    so long as you remember the above.</p>
+  </li>
+</ul>
 
-<p></p>
+<p>One of the interesting challenges is how to blend languges such as n3
+seamlessly into object-oriented procedural languages.</p>
+
+<p> </p>
+
 <div class="noprint">
 <hr />
+
 <p>$Id$</p>
 </div>
-
 </body>
 </html>
