@@ -1,0 +1,36 @@
+@prefix owl: <http://www.daml.org/2001/03/daml+oil#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+@prefix list: <cwm-lists-are-broken#>.
+@prefix form: <cwm-formula-printing-is-broken#>.
+
+@prefix : <#>.
+
+this log:forSome :_g1 .
+
+:_g1 a :_g1, owl:Restriction;
+ owl:hasClassQ [ owl:oneOf [ list:first :_g1; list:rest list:nil] ];
+   owl:maxCardinalityQ "0";
+   owl:onProperty rdf:type .
+
+
+this log:forAll :s, :p, :o, :C, :C1, :C2, :F.
+
+{ :s a [ owl:hasClassQ :C; owl:maxCardinalityQ "0";    owl:onProperty :p ].
+  :o a :C }
+  log:implies { [ form:subject :s; form:predicate :p; form:object :o ] a log:Falsehood }.
+
+{ [ list:first :s ]. } # cwm needs something to trigger from...
+ log:implies { :s a [ owl:oneOf [ list:first :s; list:rest list:nil] ]. }.
+
+{ :C1 owl:oneOf [ list:first :o ].
+  :C2 owl:oneOf [ list:first :o; list:rest list:nil ].
+  :s a :C1 }
+  log:implies { :s a :C2 }.
+
+{ :s :p :o.
+  :F form:subject :s; form:predicate :p; form:object :o.
+  :F a log:Falsehood }
+  log:implies {
+   :F a :Goofy. }.
