@@ -103,7 +103,7 @@ class InferenceTask:
 		for s1 in r1.conclusion.statements:
 		    for s2 in r2.template.statements:
 			for p in PRED, SUBJ, OBJ:
-			    if ((s1[p] nor in r1.variables)
+			    if ((s1[p] not in r1.variables)
 				and (s2[p] not in r2.variables)
 				and (s1[p] is not s2[p])):
 				    progress("...can't effect")
@@ -111,7 +111,7 @@ class InferenceTask:
 			else:
 			    r1.affects[r2] = 1
 			    if verbosity > 40: progress("%s can affect %s because %s can trigger %s" %
-					    (`r1`, `r2`, `s1`, `s2`)
+					    (`r1`, `r2`, `s1`, `s2`))
 			    break # can affect
 		    else:  # that statement couldn't but
 			continue # try next one
