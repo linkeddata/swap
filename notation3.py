@@ -670,7 +670,7 @@ class SinkParser:
     def qname(self, str, i, res):
 	"""
 	xyz:def -> ('xyz', 'def')
-	def -> ('', 'def')                   @@@@
+	# not any more: def -> ('', 'def')
 	:def -> ('', 'def')    
 	"""
 
@@ -706,11 +706,7 @@ class SinkParser:
 	    return i
 
 	else:
-	    if ln:
-		res.append(('', ln))
-		return i
-	    else:
-		return -1
+            return -1
 	    
     def object(self, str, i, res):
 	j = self.subject(str, i, res)
