@@ -3,24 +3,25 @@
      @prefix f: <file:/devel/WWW/2000/10/swap/test/delta/t2/from.n3#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix to: <file:/devel/WWW/2000/10/swap/test/delta/t2/to.n3#> .
+     @prefix pat: <#>.
     
-    this     log:forAll f:_g_L17C1,
-                to:_g_L17C1,
-                to:_g_L18C22 .
+    this     log:forAll pat:AC,
+                pat:ac2,
+                pat:Joe .
     {
-        f:_g_L17C1     :accountNumber "1234567-0" .
+        pat:AC     :accountNumber "1234567-0" .
         
-        }     log:deletes {f:_g_L17C1     :accountBalance "-4000" .
+        }     log:deletion {pat:AC     :accountBalance "-4000" .
         } .
     {
-        to:_g_L17C1     :accountNumber "1234567-0" .
+        pat:ac2     :accountNumber "1234567-0" .
         
-        }     log:inserts {to:_g_L17C1     :accountBalance "-3347.47" .
+        }     log:insertion {pat:ac2     :accountBalance "-3347.47" .
         } .
     {
-        to:_g_L18C22     :ssn "123456789" .
+        pat:Joe     :ssn "123456789" .
         
-        }     log:inserts {to:_g_L18C22     :address  [
+        }     log:insertion {pat:Joe     :address  [
                  :city "Anytown";
                  :street "77 Accacia Avenue" ];
              :phoneNumber "+1 202 555 1212" .

@@ -1,0 +1,38 @@
+#Processed by Id: cwm.py,v 1.146 2004/03/06 20:39:37 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/delta/t2/from-smushed.n3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.152 2004/03/06 20:39:38 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/delta/t2/from-smushed.n3
+     @prefix : <../bank.n3#> .
+     @prefix f: <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    
+    this     log:forSome f:_g0,
+                f:_g1 .
+      [      :accountBalance "-3347.47";
+             :accountBank f:_g0;
+             :accountHolder f:_g1;
+             :accountNumber "1234567-0" ].
+    
+    f:_g0     :id "10-23-45" .
+    
+    f:_g1     :address  [
+             :city "Anytown";
+             :street "77 Accacia Avenue" ];
+         :dateOfBirth "1966--6";
+         :phoneNumber "+1 202 555 1212";
+         :ssn "123456789" .
+      [      :accountBalance "40000";
+             :accountBank f:_g0;
+             :accountHolder f:_g1;
+             :accountNumber "1234567-1" ].
+    
+      [      :accountBalance "3333";
+             :accountBank f:_g0;
+             :accountHolder  [
+                 :dateOfBirth "1987-06-05" ];
+             :accountNumber "555-1212-0" ].
+    
+#ENDS
