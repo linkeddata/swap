@@ -105,7 +105,7 @@ import re
 import StringIO
 
 import notation3    # N3 parsers and generators, and RDF generator
-import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
+# import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 import urllib # for hasContent
 import md5, binascii  # for building md5 URIs
@@ -114,6 +114,8 @@ urlparse.uses_relative.append("md5") #@@kludge/patch
 
 LITERAL_URI_prefix = "data:application/n3;"
 
+# Should the internal representation of lists be with DAML:first and :rest?
+DAML_LISTS = notation3.DAML_LISTS    # If not, do the funny compact ones
 
 # Magic resources we know about
 
@@ -188,6 +190,8 @@ class Thing:
         """  Is this thing a genid - is its name arbitrary? """
         return 0    # unless overridden
 
+    def definedAsListIn(self):  # Is this a list? (override me!)
+        return None
   
     def asPair(self):
         return (RESOURCE, self.uriref(None))
@@ -237,7 +241,24 @@ def compareURI(self, other):
         print "Error with '%s' being the same as '%s'" %(s,o)
         raise internalError # Strings should not match if not same object
 
+def compareFormulae(self, other):
+    """ This algorithm checks for equality in the sense of structural equivalence, and
+    also provides an ordering which allows is to render a graph in a canonical way.
+    This is a form of unification.
 
+    The steps are as follows:
+    1. If one forumula has more statments than the other, it is greater.
+    2. The variables of each are found. If they have different number of variables,
+       then the ine with the most is "greater".
+    3. The statements of both formulae are ordered, and the formulae compared statement
+       for statement ignoring variables. If this produced a difference, then
+       the one with the first largest statement is greater.
+       Note that this may involve a recursive comparison of subformulae.
+    3. If the formulae are still the same, then for each variable, a list
+       of appearances is created.  Note that because we are comparing statements without
+       variables, two may be equal, in which case the same (first) statement number
+       is used whichever statement the variable was in fact in. Ooops
+    """
 class Resource(Thing):
     """   A Thing which has no fragment
     """
@@ -268,7 +289,7 @@ class Resource(Thing):
             return f
                 
                 
-    
+
 class Fragment(Thing):
     """    A Thing which DOES have a fragment id in its URI
     """
@@ -277,7 +298,11 @@ class Fragment(Thing):
 
         self.resource = resource
         self.fragid = fragid
+        self._defAsListIn = None      # This is not a list as far as we know
 
+    def definedAsListIn(self):  # Is this a list? (override me!)
+        return self._defAsListIn
+  
     def uriref(self, base=None):
         return self.resource.uriref(base) + "#" + self.fragid
 
@@ -295,6 +320,11 @@ class Fragment(Thing):
          """
          return self.fragid[0] == "_"  # Convention for now @@@@@
                                 # parser should use seperate class?
+
+class FragmentNil(Fragment):
+
+    def definedAsListIn(self):  # Is this a list? (override me!)
+        return self  # YEs, though a special one
 
 
 class Anonymous(Fragment):
@@ -416,7 +446,11 @@ class Engine:
         
         else :      # This has a fragment and a resource
             r = self.internURI(urirefString[:hash])
-            if type == RESOURCE: return r.internFrag(urirefString[hash+1:], Fragment)
+            if type == RESOURCE:
+                if urirefString == notation3.N3_nil[1]:  # Hack - easier if we have a different classs
+                    return r.internFrag(urirefString[hash+1:], FragmentNil)
+                else:
+                    return r.internFrag(urirefString[hash+1:], Fragment)
             if type == FORMULA: return r.internFrag(urirefString[hash+1:], Formula)
             else: raise shouldntBeHere    # Source code did not expect other type
 
@@ -431,6 +465,9 @@ class StoredStatement:
 
     def __init__(self, q):
         self.triple = q
+
+    def __getitem__(self, i):   # So that we can index the stored thing directly
+        return self.triple[i]
 
 #   The order of statements is only for cannonical output
     def __cmp__(self, other):
@@ -535,8 +572,6 @@ class BI_uri(LightBuiltIn, Function, ReverseFunction):
     def evaluateSubject(self, store, context, obj):
         if isinstance(obj, Literal):
             return store.engine.intern((RESOURCE, obj.string))
-        else:
-            raise RuntimeError, `("@@ log:uri object not a literal", obj)`
 
 class BI_racine(LightBuiltIn, Function):
 
@@ -596,14 +631,10 @@ class BI_resolvesTo(HeavyBuiltIn, Function):
 #                if option_format == "rdf" : p = sax2rdf.RDFXMLParser(_store,  _inputURI)
 # @@@ Only handles N3 - should handle anything especially RDF/XML.
         p = notation3.SinkParser(store,  inputURI)
-        try:
-            p.load(inputURI)
-        except IOError:
-            return None #@@ is that OK?
-        else:
-            del(p)
-            F = store.engine.intern((FORMULA, inputURI+ "#_formula"))
-            return F
+        p.load(inputURI)
+        del(p)
+        F = store.engine.intern((FORMULA, inputURI+ "#_formula"))
+        return F
     
     def evaluate2(self, store, subj, obj, variables, bindings):
         F = self.evaluateObject2(store, subj)
@@ -711,6 +742,7 @@ class RDFStore(notation3.RDFSink) :
         self.first = engine.intern(notation3.N3_first)
         self.rest = engine.intern(notation3.N3_rest)
         self.nil = engine.intern(notation3.N3_nil)
+#        self.only = engine.intern(notation3.N3_only)
         self.Empty = engine.intern(notation3.N3_Empty)
         self.List = engine.intern(notation3.N3_List)
 
@@ -777,10 +809,53 @@ class RDFStore(notation3.RDFSink) :
         #  Check whether this quad already exists
 	if self.contains(q): return 0  # Return no change in size of store
 
+        # Compress string constructors within store:
+        # The first, rest pair becomes a single dotted-pair-like compact list element
+        # These are extended in the output routine back to first and rest.
+        
+        context, pred, subj, obj = q        
+        if pred is self.first:  # If first, and rest already known, combine:
+            for s in subj.occursAs[SUBJ]:
+                if s[PRED] is self.rest and s[CONTEXT] is context:
+                    q = (context, s[OBJ], subj, obj)
+                    context, pred, subj, obj = q
+                    self.removeStatement(s)
+                    break
+        elif pred is self.rest:  # And vice versa
+            for s in subj.occursAs[SUBJ]:
+                if s[PRED] is self.first and s[CONTEXT] is context:
+                    q = (context, obj, subj, s[OBJ])
+                    context, pred, subj, obj = q
+                    self.removeStatement(s)
+                    break
+
 	s = StoredStatement(q)
-        for p in ALL4: s.triple[p].occursAs[p].append(s)
+        for p in ALL4: q[p].occursAs[p].append(s)
         self.size = self.size+1
+
+        if pred.definedAsListIn():
+            subj = q[SUBJ]
+            if (not isinstance(subj, Fragment)) or subj._defAsListIn:
+                progress("??? ")
+                raise internalError #should only once
+            subj._defAsListIn = s
+            self.newList(subj)
         return 1  # One statement has been added
+
+    def newList(self, x):  # Note, for speed, that this is a list
+        for s in x.occursAs[PRED]:  # For every one which tis list gen'd
+            y = s.triple[SUBJ]
+            if not y._defAsListIn:
+                y._defAsListIn = s
+                self.newList(y)
+        return
+
+    def deList(self, x):
+        for s in x.occursAs[PRED]:
+            y = s.triple[SUBJ]
+            y._defAsListIn = None
+            self.deList(y)
+        return
 
     def startDoc(self):
         pass
@@ -799,7 +874,7 @@ class RDFStore(notation3.RDFSink) :
             if isinstance(r, Resource):
                 for f in r.fragments.values():
                     anon, inc, se = self._topology(f, context)
-                    if not anon:
+                    if not anon and not isinstance(f, Formula):
                         total = total + (f.occurrences(PRED,context)+
                                          f.occurrences(SUBJ,context)+
                                          f.occurrences(OBJ,context))
@@ -837,11 +912,11 @@ class RDFStore(notation3.RDFSink) :
         self.dumpPrefixes(sink)
 #        print "# There are %i statements in %s" % (len(context.occursAs[CONTEXT]), `context` )
         for s in context.occursAs[CONTEXT]:
-            self._outputStatement(sink, s)
+            self._outputStatement(sink, s.triple)
         sink.endDoc()
 
-    def _outputStatement(self, sink, s):
-        sink.makeStatement(self.extern(s.triple))
+    def _outputStatement(self, sink, triple):
+        sink.makeStatement(self.extern(triple))
 
     def extern(self, t):
         return(t[CONTEXT].asPair(),
@@ -860,7 +935,7 @@ class RDFStore(notation3.RDFSink) :
         if sorting: context.occursAs[SUBJ].sort()
         for s in context.occursAs[SUBJ] :
             if context is s.triple[CONTEXT]and s.triple[PRED] is self.forSome:
-                self._outputStatement(sink, s)
+                self._outputStatement(sink, s.triple)
 
         rs = self.engine.resources.values()
         if sorting: rs.sort()
@@ -869,7 +944,7 @@ class RDFStore(notation3.RDFSink) :
             for s in r.occursAs[SUBJ] :
                 if context is s.triple[CONTEXT]:
                     if not(context is s.triple[SUBJ]and s.triple[PRED] is self.forSome):
-                        self._outputStatement(sink, s)
+                        self._outputStatement(sink, s.triple)
             if not isinstance(r, Literal):
                 fs = r.fragments.values()
                 if sorting: fs.sort
@@ -877,13 +952,13 @@ class RDFStore(notation3.RDFSink) :
                     for s in f.occursAs[SUBJ] :
 #                        print "...dumping %s in context %s" % (`s.triple[CONTEXT]`, `context`)
                         if s.triple[CONTEXT] is context:
-                            self._outputStatement(sink, s)
+                            self._outputStatement(sink, s.triple)
         sink.endDoc()
 #
 #  Pretty printing
 #
 #   x is an existential if there is in the context C we are printing
-# a statement  (c log:forSome x). If so the anonymous syntaxes follow.
+# is a statement  (C log:forSome x). If so, the anonymous syntaxes follow.
 # c is 1 if x is a subexpression of the current context else c=0
 # r s and o are the number  times x occurs within context as p,s or o
 # o excludes the statements making it an existential and maybe subexp.
@@ -925,7 +1000,7 @@ class RDFStore(notation3.RDFSink) :
 
 # Contexts
 #
-# These are in some way like literal strings, in that theyu are defined completely
+# These are in some way like literal strings, in that they are defined completely
 # by their contents. They are sets of statements. (To say a statement occurs
 # twice has no menaing).  Can they be given an id?  You can assert that any
 # object is equivalent to (=) a given context. However, it is the contexts which
@@ -949,17 +1024,18 @@ class RDFStore(notation3.RDFSink) :
         or zero if self can NOT be represented as an anonymous node.
         Paired with this is whether this is a subexpression.
         """
-        # @@@@ This is NOT a proper test - we should test that the statment
+        # @@@@ This is NOT a proper test - we should test that the statement
         # is an assumed one.
         # @@@ what about nested contexts? @@@@@@@@@@@@@@@@@@@@@@@@@@
+
+        subcontexts = self.subContexts(context)   #  @@ Cache these on the formula for speed?         
         _asPred = x.occurrences(PRED, context)
         
         _isSubExp = 0
         _asObj = 0       # Times occurs as object NOT counting the subExpression or ForSome
         _isExistential = 0  # Is there a forSome?
+        _elsewhere = 0
         for s in x.occursAs[OBJ]:  # Checking all statements about x
-#            if string.find(`x`, "_gs") >0: print "  ----- ",quadToString(s.triple)
-            if not isinstance(s,StoredStatement):print "s=",`s`
             con, pred, subj, obj = s.triple
             # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ HACK - error - check context is ancestor
             if subj is con and pred is self.forSome :
@@ -967,24 +1043,21 @@ class RDFStore(notation3.RDFSink) :
             else:
                 if con is context:
                     _asObj = _asObj + 1  # Regular object
+                elif con in subcontexts:
+                    _elsewhere = _elsewhere + 1  # Occurs in a subformula - can't be anonymous!
+                else:
+                    pass    # Irrelevant occurrence in some other formula
 
-            # @@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ end hack
-#            
-#            if con is context:  # believing ones in this context
-#                if subj is context and pred is self.forSome :
-#                    _isExistential = 1
-#                else:
-#                    _asObj = _asObj + 1  # Regular object
-#            elif con is x:   # Believing also for this purpose only those in context x
-#                if pred is self.forSome :
-#                    _isExistential = 1
 
-        _op = _asObj + _asPred
 #        _anon = (_op < 2) and _isExistential
-        _anon = (_asObj < 2) and _asPred == 0 and _isExistential
+        _anon = (_asObj < 2) and ( _asPred == 0) and _isExistential and not _elsewhere
+        if x.definedAsListIn():
+            _asObj = _asObj + _asPred  # List links are like obj (daml:rest)
+            _asPred = 0
+            _anon = 1    # Always represent it as anonymous
         _isSubExp = _isExistential and (isinstance(x, Formula) and x is not context) # subExpression removal
 
-        if 0: print "Topology <%s in <%sanon=%i ob=%i,pr=%i se=%i exl=%i"%(
+        if chatty > 98: print "\nTopology <%s in <%sanon=%i ob=%i,pr=%i se=%i exl=%i"%(
             `x`[-8:], `context`[-8:], _anon, _asObj, _asPred, _isSubExp, _isExistential)
         return ( _anon, _asObj+_asPred, _isSubExp)  
 
@@ -993,29 +1066,57 @@ class RDFStore(notation3.RDFSink) :
         This should check that this is a node which can be represented in N3
         without loss of information as a list.
         This does not check whether the node is anonymous - check that first.
+        It does check whether there is more info about the node which
+            can't be represented in ()
         
         """
         if x is self.nil: return 1  # Yes, nil is the list ()
 
-        empty = 0
-        left = []
-        right = []
-        for s in x.occursAs[SUBJ]:
-            con, pred, subj, obj = s.triple
-            if con == context:
-                #print "     ",quadToString(s.triple), `self.first`
-                if pred is self.first: left.append(obj)
-                elif pred is self.rest: right.append(obj)
-                elif pred is self.type:
-                    if obj is self.Empty: empty = 1
-                    if obj is not self.List and obj is not self.Empty : return 0
-                else:
-                    #print "     Unacceptable: ",quadToString(s.triple), `self.rest`, `pred`
-                    return 0  # Can't have anything else - wouldn't print.
-        #print "# ", `x`[-8:], "left:", left, "right", right
-        if left == [] and right == [] and empty: return 1
-        if len(left) != 1 or len(right)!=1: return 0 # Invalid
-        return self.isList(right[0], context)
+        if not DAML_LISTS:
+            if x is self.nil: return 1  # Yes, only is actually the list ()
+            ld = x.definedAsListIn()
+            if not ld: return None
+            first = ld.triple[OBJ]     # first
+            rest = ld.triple[PRED]    # rest
+            empty = 0
+            left = []
+            right = []
+            for s in x.occursAs[SUBJ]:
+                con, pred, subj, obj = s.triple
+                if con == context and s is not ld: 
+                    #print "     ",quadToString(s.triple), `self.first`
+                    if pred is self.first and obj is first:
+                        pass
+                    elif pred is self.rest and obj is rest:
+                        pass
+                    elif pred is self.type:
+                        if obj is self.Empty: empty = 1
+                        if obj is not self.List and obj is not self.Empty : return 0
+                    else:
+                        #print "     Unacceptable: ",quadToString(s.triple), `self.rest`, `pred`
+                        return 0  # Can't have anything else - wouldn't print.
+            #print "# ", `x`[-8:], "left:", left, "right", right
+            return self.isList(rest, context)
+        else:  # DAML_LISTS
+            empty = 0
+            left = []
+            right = []
+            for s in x.occursAs[SUBJ]:
+                con, pred, subj, obj = s.triple
+                if con == context:
+                    #print "     ",quadToString(s.triple), `self.first`
+                    if pred is self.first: left.append(obj)
+                    elif pred is self.rest: right.append(obj)
+                    elif pred is self.type:
+                        if obj is self.Empty: empty = 1
+                        if obj is not self.List and obj is not self.Empty : return 0
+                    else:
+                        #print "     Unacceptable: ",quadToString(s.triple), `self.rest`, `pred`
+                        return 0  # Can't have anything else - wouldn't print.
+            #print "# ", `x`[-8:], "left:", left, "right", right
+            if left == [] and right == [] and empty: return 1
+            if len(left) != 1 or len(right)!=1: return 0 # Invalid
+            return self.isList(right[0], context)
     
     def getList(self, x, context):
         progress("#### getting list"+`x`)
@@ -1071,6 +1172,9 @@ class RDFStore(notation3.RDFSink) :
             for f in fs :  # then anything in its namespace
                 self._dumpSubject(f, context, sink, sorting)
 
+# This outputs arcs leading away from a node, and where appropriate
+# recursively descends the tree, by dumping the object nodes
+# (and in the case of a compact list, the predicate (rest) node).
 
     def _dumpSubject(self, subj, context, sink, sorting=1, statements=[]):
         """ Take care of top level anonymous nodes
@@ -1080,9 +1184,9 @@ class RDFStore(notation3.RDFSink) :
             subj.occurrences(PRED,context), subj.occurrences(SUBJ,context),
             subj.occurrences(OBJ, context))
         _anon, _incoming, _se = self._topology(subj, context)    # Is anonymous?
-#        _isSubject = subj.occurrences(SUBJ,context) # Has properties in this context?
-#        if not _isSubject and not _se: return       # Waste no more time
-#        if not _isSubject: return       # Waste no more time
+
+
+
         
         if 0: sink.makeComment("DEBUG: %s incoming=%i, se=%i, anon=%i" % (
             `subj`[-8:], _incoming, _se, _anon))
@@ -1112,11 +1216,16 @@ class RDFStore(notation3.RDFSink) :
                 sink.startAnonymousNode(subj.asPair())
                 if sorting: statements.sort()    # Order only for output
                 for s in statements:
-                    self.dumpStatement(sink, s)
+                    self.dumpStatement(sink, s.triple)
 #                if _se > 0:  # Is subexpression of this context  @@@@@@ MISSING "="
 #                    sink.startBagSubject(subj.asPair())
 #                    self.dumpNestedStatements(subj, sink)  # dump contents of anonymous bag
 #                    sink.endBagSubject(subj.asPair())
+
+                    next = s[PRED].definedAsListIn()    # List?
+                    if next:
+                        self.dumpStatement(sink, next.triple) # If so, unweave now
+                        
                 sink.endAnonymousNode()
                 return  # arcs as subject done
 
@@ -1127,15 +1236,21 @@ class RDFStore(notation3.RDFSink) :
 
         if sorting: statements.sort()
         for s in statements:
-            self.dumpStatement(sink, s)
+            self.dumpStatement(sink, s.triple)
 
 
                 
-    def dumpStatement(self, sink, s, sorting=0):
-        triple = s.triple
+    def dumpStatement(self, sink, triple, sorting=0):
+        # triple = s.triple
         context, pre, sub, obj = triple
         if sub is obj:
-            self._outputStatement(sink, s) # Do 1-loops simply
+            self._outputStatement(sink, triple) # Do 1-loops simply
+            return
+        # Expand lists to DAML lists on output - its easier
+        if pre.definedAsListIn():
+            self.dumpStatement(sink, (context, self.first, sub, obj), sorting)
+#            if pre is not self.nil:
+            self.dumpStatement(sink, (context, self.rest,  sub, pre), sorting)
             return
         _anon, _incoming, _se = self._topology(obj, context)
         if 0: sink.makeComment("...%s anon=%i, incoming=%i, se=%i" % (
@@ -1152,11 +1267,18 @@ class RDFStore(notation3.RDFSink) :
             
             if _isSubject > 0 or not _se :   #   Do [ ] if nothing else as placeholder.
                 li = _anon and self.isList(obj,context)
+                if chatty>49 and li:
+                    progress("List found in " + x2s(obj))
                 sink.startAnonymous(self.extern(triple), li)
                 if sorting: obj.occursAs[SUBJ].sort()
                 for t in obj.occursAs[SUBJ]:
                     if t.triple[CONTEXT] is context:
-                        self.dumpStatement(sink, t)
+                        self.dumpStatement(sink, t.triple)
+
+                ld = pre.definedAsListIn()
+                if ld: #@@@@
+                    self.dumpStatement(sink, ld.triple)
+  
                 if _se > 0:
                     sink.startBagNamed(context.asPair(),obj.asPair()) # @@@@@@@@@  missing "="
                     self.dumpNestedStatements(obj, sink)  # dump contents of anonymous bag
@@ -1175,7 +1297,7 @@ class RDFStore(notation3.RDFSink) :
             sink.endBagObject(pre.asPair(), sub.asPair())
             return
 
-        self._outputStatement(sink, s)
+        self._outputStatement(sink, triple)
                 
 
 
@@ -1211,7 +1333,7 @@ class RDFStore(notation3.RDFSink) :
                             self.removeStatement(t)
                             total = total + 1
 
-                progress("Purged %i statements with...%s" % (total,`subj`[-20:]))
+                if chatty > 30: progress("Purged %i statements with...%s" % (total,`subj`[-20:]))
 
 
     def removeStatement(self, s):
@@ -1222,6 +1344,13 @@ class RDFStore(notation3.RDFSink) :
                 i = i + 1
             l[i:i+1] = []  # Remove one element
             # s.triple[p].occursAs[p].remove(s)  # uses slow __cmp__
+        pred = s.triple[PRED]
+        if pred.definedAsListIn():
+            subj = s.triple[SUBJ]
+            if not subj._defAsListIn: raise internalError #should only once
+            subj._defAsListIn = None
+            self.deList(subj)
+
         self.size = self.size-1
         del s
 
@@ -1362,6 +1491,15 @@ class RDFStore(notation3.RDFSink) :
         self._nextId = self._nextId + 1
         return self.engine.intern((type, self._genPrefix+`self._nextId`))
 
+    def subContexts(self,con):
+        set = [con]
+        for s in con.occursAs[CONTEXT]:
+            for p in PRED, SUBJ, OBJ:
+                if isinstance(s[p], Formula):
+                    set2 = self.subContexts(s[p])
+                    for c in set2:
+                        if c not in set: set.append(c)
+                        
     def nestedContexts(self, con):
         """ Return a list of statements and variables of either type
         found within the nested subcontexts
@@ -1399,6 +1537,31 @@ class RDFStore(notation3.RDFSink) :
             s, v = self.nestedContexts(x)
             statements = statements + s
             variables = variables + v
+        return statements, variables
+
+
+#  One context only:
+# When we return the context, any nested ones are of course referenced in it
+
+    def oneContext(self, con):
+        """ Return a list of statements and variables of either type
+        found within the top level
+        """
+        statements = []
+        variables = []
+        existentials = []
+#        print "# NESTING in ", `self`, " using ", `subExpression`
+        for arc in con.occursAs[CONTEXT]:
+#            print"#    NESTED ",arc.triple
+            context, pred, subj, obj = arc.triple
+            statements.append(arc.triple)
+#            print "%%%%%%", quadToString(arc.triple)
+            if subj is context and (pred is self.forSome or pred is self.forAll): # @@@@
+                variables.append(obj)   # Collect list of existentials
+#                if obj is self.Truth: print "#@@@@@@@@@@@@@", quadToString(arc.triple)
+            if subj is context and pred is self.forSome: # @@@@
+                existentials.append(obj)   # Collect list of existentials
+                
         return statements, variables
 
 
@@ -1441,12 +1604,7 @@ class RDFStore(notation3.RDFSink) :
 #        return listOfBindings[0][0][1]  # First result, first variable, value.
 
 
-    def every(self, quad):
-        """Returns a list of lists of values.
-        
-        unlike any(), you can feed as many None's as you like.
-        if you're looking for triplesMatching, this is it."""
-        
+    def every(self, quad):             # Returns a list of lists of values
         variables = []
         q2 = [ quad[0], quad[1], quad[2], quad[3]]  # tuple to list
         for p in ALL4:
@@ -1479,6 +1637,7 @@ class RDFStore(notation3.RDFSink) :
                param = None,        # a tuple, see the call itself and conclude()
                bindings = [],       # Bindings discovered so far
                newBindings = [],    # Bindings JUST discovered - to be folded in
+               hypothetical =0,     # The formulae are not in the store - check for their contents
                justOne = 0):        # Flag: Stop when you find the first one
 
         """ Apply action(bindings, param) to succussful matches
@@ -1491,6 +1650,12 @@ class RDFStore(notation3.RDFSink) :
             print "## match: called %i terms, %i bindings:" % (len(unmatched),len(bindings))
             print bindingsToString(newBindings)
             if chatty > 90: print setToString(unmatched)
+
+        if not hypothetical:
+            for x in existentials[:]:   # Existentials don't count when they are just formula names
+                                        # Also, we don't want a partial match. 
+                if isinstance(x,Formula):
+                    existentials.remove(x)
 
         queue = []   #  Unmatched with more info, in order
         for quad in unmatched:
@@ -1591,11 +1756,15 @@ class RDFStore(notation3.RDFSink) :
                         else: return 0   # We absoluteley know this won't match with this in it
                     elif len(vars) == 1 :  # The statement has one variable - try functions
                         if vars[0] == OBJ and isinstance(pred, Function):
-                            return self.query(queue, variables, existentials, smartIn, action, param,
-                                                      bindings, [ (obj, pred.evaluateObject(self,con,subj))])
+                            result = pred.evaluateObject(self,con,subj)
+                            if result != None:
+                                return self.query(queue, variables, existentials, smartIn, action, param,
+                                                      bindings, [ (obj, result)])
                         elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
-                            return self.query(queue, variables, existentials, smartIn, action, param,
-                                                      bindings, [ (subj, pred.evaluateSubject(self,con,obj))])
+                            result = pred.evaluateSubject(self,con,obj)
+                            if result != None:
+                                return self.query(queue, variables, existentials, smartIn, action, param,
+                                                      bindings, [ (subj, result)])
                     # Now we have a light builtin needs search, otherwise waiting for enough constants to run
                     state = 50
 
@@ -1661,7 +1830,7 @@ class RDFStore(notation3.RDFSink) :
                                     queue.append(item)
                                 existentials = existentials + more_variables
                                 if chatty > 40: progress(" **** Includes: Adding %i new terms and %s as new existentials."%
-                                                         (len(more_unmatched),setToString(more_variables)))
+                                                         (len(more_unmatched),seqToString(more_variables)))
                                 return self.query(queue, variables, existentials, smartIn, action, param,
                                                   bindings=bindings) # bindings new to this forumula
                             else:  # Not forumla
@@ -1679,11 +1848,15 @@ class RDFStore(notation3.RDFSink) :
                                     return total   # We absoluteley know this won't match with this in it
                         elif len(vars) == 1 :  # The statement has one variable - try functions
                             if vars[0] == OBJ and isinstance(pred, Function):
-                                return self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
-                                                          bindings, [ (obj, pred.evaluateObject2(self, subj))])
+                                result = pred.evaluateObject2(self, subj)
+                                if result != None:
+                                    return self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
+                                                          bindings, [ (obj, result)])
                             elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
-                                return self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
-                                                          bindings, [ (subj, pred.evaluateSubject2(self, obj))])
+                                result = pred.evaluateSubject2(self, obj)
+                                if result != None:  # There is some such result
+                                    return self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
+                                                          bindings, [ (subj, result)])
                     # Now we have a heavy builtin  waiting for enough constants to run
                         state = 10
                     else: # Not heavy, failed to find any.
@@ -1739,7 +1912,7 @@ class RDFStore(notation3.RDFSink) :
         myConclusions = conclusions[:]
         _substitute(bindings, myConclusions)
         # Does this conclusion exist already in the database?
-        found = self.match(myConclusions[:], [], oes[:], smartIn=[targetContext], justOne=1)  # Find first occurrence, SMART
+        found = self.match(myConclusions[:], [], oes[:], smartIn=[targetContext],hypothetical=1, justOne=1)  # Find first occurrence, SMART
         if found:
             if chatty>60: print "    .... forget it, conclusion already in store."
             return 0
@@ -1799,6 +1972,14 @@ def setToString(set):
     str = ""
     for q in set:
         str = str+ "        " + quadToString(q) + "\n"
+    return str
+
+def seqToString(set):
+    str = ""
+    for x in set[:-1]:
+        str = str+ " " + x2s(x) + ","
+    for x in set[-1:]:
+        str = str+ " " + x2s(x)
     return str
 
 def queueToString(queue):
@@ -2123,8 +2304,9 @@ def doCommand():
 --n3        Input & Output in N3 from now on
 --rdf=flags Input & Output ** in RDF and set given RDF flags
 --n3=flags  Input & Output in N3 and set N3 flags
+--ntriples  Input & Output in NTriples (equiv --n3=spart -bySubject -quiet)
 --ugly      Store input and regurgitate *
---bySubject Store inpyt and regurgitate in subject order *
+--bySubject Store input and regurgitate in subject order *
 --no        No output *
             (default is to store and pretty print with anonymous nodes) *
 --apply=foo Read rules from foo, apply to store, adding conclusions to store
@@ -2140,15 +2322,21 @@ def doCommand():
             * mutually exclusive
             ** doesn't work for complex cases :-/
 Examples:
-  cwm --rdf foo.rdf --n3 --pipe        Convert from rdf to n3
-  cwm foo.n3 bar.n3 --think          Combine data and find all deductions
-  cwm foo.n3 -flat -n3=spart
+  cwm --rdf foo.rdf --n3 --pipe     Convert from rdf/xml to rdf/n3
+  cwm foo.n3 bar.n3 --think         Combine data and find all deductions
+  cwm foo.n3 --flat --n3=spart
 
 """
         
         import urllib
         import time
         global chatty
+        global sax2rdf
+#        import sax2rdf
+
+        option_need_rdf_sometime = 0  # If we don't need it, don't import it
+                               # (to save errors where parsers don't exist)
+        
         option_pipe = 0     # Don't store, just pipe though
         option_inputs = []
         option_test = 0     # Do simple self-test
@@ -2189,10 +2377,13 @@ Examples:
                 _gotInput = 1
             elif arg == "-ugly": option_outputStyle = arg
             elif _lhs == "-base": option_baseURI = _uri
-            elif arg == "-rdf": option_format = "rdf"
+            elif arg == "-rdf":
+                option_format = "rdf"
+                option_need_rdf_sometime = 1
             elif _lhs == "-rdf":
                 option_format = "rdf"
                 option_rdf_flags = _rhs
+                option_need_rdf_sometime = 1
             elif arg == "-n3": option_format = "n3"
             elif _lhs == "-n3":
                 option_format = "n3"
@@ -2200,7 +2391,7 @@ Examples:
             elif arg == "-quiet": option_quiet = 1
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-bySubject": option_outputStyle = arg
-            elif arg == "-triples":
+            elif arg == "-triples" or arg == "-ntriples":
                 option_format = "n3"
                 option_n3_flags = "spart"
                 option_outputStyle = "-bySubject"
@@ -2219,6 +2410,11 @@ Examples:
                 option_inputs.append(urlparse.urljoin(option_baseURI,arg))
                 _gotInput = _gotInput + 1  # input filename
             
+
+        # This is conditional as it is not available on all platforms,
+        # needs C and Python to compile xpat.
+        if option_need_rdf_sometime:
+            import sax2rdf      # RDF1.0 syntax parser to N3 RDF stream
 
 # Between passes, prepare for processing
         chatty =  0
@@ -2358,7 +2554,7 @@ Examples:
                 print "# Command line error: %s illegal option with -pipe", arg
                 break
 
-            elif arg == "-triples":
+            elif arg == "-triples" or arg == "-ntriples":
                 option_format = "n3"
                 option_n3_flags = "spart"
                 option_outputStyle = "-bySubject"
