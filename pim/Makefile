@@ -50,7 +50,7 @@ $(PIMTEST)/testTasks.rdf: $(PIMTEST)/testTasks.ics ical2rdf.pl
 
 include $(PD)/GVDOT.mak
 
-travelFigs: grokLeg.svg grokLeg.ps grokLeg.png  travelPdaRulesFig.svg travelPdaRulesFig.ps travelPdaRulesFig.png mapVizFig.svg mapVizFig.ps mapVizFig.png  
+travelFigs: grokLeg.svg grokLeg.ps grokLeg.png  travelPdaRulesFig.svg travelPdaRulesFig.ps travelPdaRulesFig.png mapVizFig.svg mapVizFig.ps mapVizFig.png  calIntFig.svg calIntFig.ps calIntFig.png  
 
 grokLeg.svg: grokLeg.dot
 grokLeg.ps: grokLeg.dot
@@ -61,6 +61,9 @@ mapVizFig.png: mapVizFig.dot
 travelPdaRulesFig.svg: travelPdaRulesFig.dot
 travelPdaRulesFig.ps: travelPdaRulesFig.dot
 travelPdaRulesFig.png: travelPdaRulesFig.dot
+calIntFig.svg: calIntFig.dot
+calIntFig.ps: calIntFig.dot
+calIntFig.png: calIntFig.dot
 
 clean:
 	$(RM) $(PIMTEST)/testCal.rdf $(PIMTEST)/testTasks.rdf ,chi.rdf ical.n3 ical.rdf

@@ -33,9 +33,9 @@ tasks:</p>
 
 <ul>
 <li><a href="#map-viz">plot an itinerary on a map</a></li>
+<li><a href="#ical-evo">import travel itineraries into my iCalendar-happy desktop PIM</a></li>
 <li><a href="#ckcn">check proposed work travel itineraries against family constraints</a></li>
 <li><a href="#pda-in">import travel itineraries into my PDA calendar</a></li>
-<li>import travel itineraries into my iCalendar-happy desktop PIM</li>
 <li>produce a brief summary of an itinerary for use in plain text email</li>
 <li>tell me when my travel schedule brings me unusually near a friend/colleague</li>
 <li>produce animated views of my travel schedule or past trips</li>
@@ -174,7 +174,7 @@ specialized or more generalized terms is cheap, using
 <div class="noprint"> <em>(@@ok to just say that
 without demonstrating it?)</em></div>
 
-<h2 id="map-viz">Visualization: projecting itineraries on earth maps</h2>
+<h2 id="map-viz">Integration with mapping tools</h2>
 
 <p>Let's exploit the effort we have put into going beyond formalized
 document structure into formalized data about the real world.
@@ -254,6 +254,56 @@ src="../../../../2003/04dc-mia/itin-mia.png" /></p>
 
 
 
+<h2 id="ical-evo">Integration with iCalendar Tools</h2>
+
+<p>In fact, the published RDF/XML version of the itinerary is joined
+not only with latitude/longitude data, but also timezone data, and
+elaborated via <a href="itin2ical.n3">itin2ical.n3</a> rules into <a href="../../../../2002/12/cal/">an RDF
+representation of the standard iCalendar syntax</a>.
+
+<pre>
+
+{ :FLT
+    k:startingDate [ dt:date :YYMMDD];
+    k:endingDate [ dt:date :YYMMDD2];
+    t:departureTime :HH_MM;
+    k:fromLocation [ :timeZone [ cal:tzid :TZ] ];
+    t:arrivalTime :HH_MM2;
+    k:toLocation [ :timeZone [ cal:tzid :TZ2] ].
+  :DTSTART is str:concatenation of
+    (:YYMMDD "T" :HH_MM ":00"). #@@ extra punct in dates
+  :DTEND is str:concatenation of
+    (:YYMMDD2 "T" :HH_MM2 ":00").
+
+  ( :FLT!log:rawUri "@uri-2-mid.w3.org") str:concatenation :UID. #@@hmm... kludge?
+}
+ log:implies {
+  :FLT a cal:Vevent;
+    cal:uid :UID;
+    cal:dtstart [ cal:tzid :TZ; cal:dateTime :DTSTART ];
+    cal:dtend [ cal:tzid :TZ2; cal:dateTime :DTEND ].
+}.
+</pre>
+
+
+<p> The final
+syntactic export is more complex than the markers/arcs case, so we
+wrote a python program, <tt><a
+href="toIcal.py">toIcal.py</a></tt>, using the
+cwm API, to generate iCalendar syntax.</p>
+
+<div class="figure" align="center">
+<p><img alt="calendar integration toolchain" src="calIntFig.png" />
+</div>
+
+<p>We can import the resulting iCalendar file into an of
+a number of interoperable tools, such as Ximian Evolution:</p>
+
+<div class="figure" align="center">
+<p><img alt="evo screenshot" src="calIntShot.png" />
+</div>
+
+
 <h2 id="ckcn">Checking Constraints</h2>
 
 <p>Now that I have the proposed itinerary formalized, I can
@@ -314,10 +364,9 @@ use some outdated vocabulary.
 <p><em>[@@image of palm pilot showing flight in the datebook]</em></p>
 
 
-
-<h2>Evolution Import</h2>
-
-<p>@@converting flight itineraries to .ics for import into evolution</p>
+<div class="noprint">
+<hr />
+<h2>Fodder</h2>
 
 <h2>Steps Toward Synchronization</h2>
 
@@ -440,8 +489,6 @@ capitalization]</em>:</p>
   <li>IETF calsched WG (working on XML versions of ical)</li>
 </ul>
 
-<hr />
-<h2>Fodder</h2>
 <ol>
   <li>I'd probably make a mistake, so I'd never trust the results. I'd always
     have to check the travel itinerary again. <em>Never mind the fact that I
@@ -451,12 +498,15 @@ capitalization]</em>:</p>
     decline it and start over when the revision comes in. I might just be
     able to key in the diffs, but that's even more error prone.</li>
 </ol>
+</div>
 
+<div class="noprint">
 <hr />
 <address>
   <p><a href="../../../../People/Connolly/">Dan Connolly</a>, Jun 2002<br />
   $Revision$ of $Date$ by $Author$</p>
 
 </address>
+</div>
 </body>
 </html>

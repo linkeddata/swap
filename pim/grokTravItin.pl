@@ -396,6 +396,8 @@ YYZ TORONTO ON
 MAN MANCHESTER UK
 SNA JOHN WAYNE INTL
 MIA MIAMI INTERNTNL
+ZRH ZURICH
+BUD BUDAPEST
 EODATA
 
     # SNA confirmed via http://www.ocair.com/
@@ -412,7 +414,10 @@ EODATA
 
 
 # $Log$
-# Revision 1.11  2003-03-12 15:01:02  connolly
+# Revision 1.12  2003-04-14 21:20:51  connolly
+# ical section done
+#
+# Revision 1.11  2003/03/12 15:01:02  connolly
 # added MIA
 #
 # Revision 1.10  2003/02/26 23:45:51  connolly

@@ -1,0 +1,27 @@
+digraph world {
+  rankdir=LR;
+
+subgraph stepB {
+  "toIcal.py" [ shape="diamond"];
+  
+  "toIcal.py" -> "itin-cal.ics";
+  itinKB2 -> "toIcal.py";
+
+  itinKB2 [ label="itin.rdf"];
+}
+
+subgraph stepA {
+
+  cwm2 [ label="cwm", shape="diamond"];
+  "itin.nt" -> cwm2;
+  "airportLookup.n3" -> cwm2;
+  "airportLookup.n3" [ shape="parallelogram"];
+  "itin2ical.n3" -> cwm2;
+  "itin2ical.n3" [ shape="parallelogram"];
+  "DAML airport data" -> cwm2
+  cwm2 -> itinKB1;
+  itinKB1 [ label="itin.rdf"];
+
+}
+
+}

@@ -49,7 +49,7 @@ my($nsDone);
 
 $field = <>;
 
-my(@symbolProps) = ('calscale', 'action', 'class', 'transp', 'start',
+my(@symbolProps) = ('action', 'class', 'transp', 'start',
 		   'partstat', 'rsvp', 'role', 'cutype');
 my(@resProps) = ('standard', 'daylight',
 		 'valarm', 'trigger',#@@mismatch?
@@ -61,6 +61,20 @@ my(@valProps) = ('dtstart', 'dtend', 'trigger',
 		 'rrule', # special...
 		 'exdate' #@@comma-separated
 		);
+
+my(%ValueType) = (
+		  'calscale', 'text', # 4.7.1 Calendar Scale
+		  'prodid', 'text', # 4.7.3 Product Identifier
+		  'version', 'text', # 4.7.4 Version
+		  'dtstamp', 'date-time', # 4.8.7.2 Date/Time Stamp
+		  'summary', 'text',
+		  'sequence', 'integer', # 4.8.7.4 Sequence Number
+		  'uid', 'text', # 4.8.4.7 Unique Identifier
+		 );
+
+my(%ValueTypeD) = ('dtend', 'date-time', # 4.8.2.2 Date/Time End
+		   'dtstart', 'date-time' # 4.8.2.4 Date/Time Start
+		  );
 
 my(@component) = ("Vevent" , "Vtodo" , "Vjournal" , "Vfreebusy"
                         , "Vtimezone" ); # / x-name / iana-token)
@@ -88,17 +102,17 @@ while(1){
 	if($#stack == 0){ # jump out of VCALENDAR
 	  my($m);
 	  $m=pop(@stack);
-	  printf("</%s>\n", $m);
+	  printf("  </%s>\n", $m);
 	}
-	printf "<%s>", $n;
+	printf "  <%s>\n", $n;
       }
       elsif(grep(lc($_) eq lc($n), @resProps)){
 	$n = camelCase($n);
 
-	printf "<%s rdf:parseType='Resource'>", $n;
+	printf "  <%s rdf:parseType='Resource'>", $n;
       }else{
 	$n = camelCase($n);
-	printf "<%s>", $n;
+	printf "  <%s>", $n;
       }
     }else{
       $n = camelCase($n, 1);
@@ -118,7 +132,7 @@ while(1){
     $m=pop(@stack);
     warn "mismatch [$n] expected [$m]" unless lc($n) eq lc($m);
 
-    printf "</%s\n>", $m;
+    printf "  </%s>\n", $m;
   }
   elsif($field =~ s/^([\w-]+)([;:])\s*/$2/){
     my($n) = ($1);
@@ -135,7 +149,7 @@ while(1){
     $n = camelCase($n);
     if($xprop){ $n = "x:" . $n };
 
-    printf "<%s", $n;
+    printf "    <%s", $n;
 
     while($field =~ s/^;([\w-]+)=([^;:]+)//){
       my($an, $av) = (camelCase($1), $2);
@@ -147,6 +161,11 @@ while(1){
 	$attrp = 1;
       }
     }
+
+    if(! $iprop) { $iprop = $ValueType{$n} || $ValueTypeD{$n} };
+
+    if(! $iprop) { die "no value type given, default unknown: $n $field" };
+
 
     while($field =~ s/^;([\w-]+)//){
       $enc = $1;
@@ -170,18 +189,18 @@ while(1){
 	$v =~ s/^MAILTO:/mailto:/; #fix borkenness
 
 	printf(" rdf:parseType='Resource'>\n");
-	printf "<value rdf:resource='%s'/>\n", asAttr($v);
+	printf "      <value rdf:resource='%s'/>\n", asAttr($v);
 
 	my($an);
 	foreach $an (keys %attrs){
 	  my($av) = $attrs{$an};
-	  printf("<%s>%s</%s>\n", $an, asContent($av), $an);
+	  printf("      <%s>%s</%s>\n", $an, asContent($av), $an);
 	  #warn "serialized attr $an = $av";
 	}
 
 	warn "conflicting VALUE param $iprop on $n" if $iprop;
 
-	printf "</%s>\n", $n;
+	printf "    </%s>\n", $n;
       }
       elsif(grep($_ eq $n, @valProps)){
 	printf(" rdf:parseType='Resource'>\n");
@@ -191,28 +210,26 @@ while(1){
 	    my($an, $av) = (camelCase($1), $2);
 	    $attrs{$an} = $av;
 	  }
-	}elsif($iprop){
-	  printf("<%s>%s</%s>\n", $iprop, asContent($v), $iprop);
+	}else{
+	  $v = lexForm($iprop, $v);
+	  printf("      <%s>%s</%s>\n", $iprop, asContent($v), $iprop);
 	}
-	else{
-	  #warn "no iprop for $n; using rdf:value";
-	  printf("<value>%s</value>\n", asContent($v));
-	}
-
 
 	my($an); #@@duplicated code
 	foreach $an (keys %attrs){
 	  my($av) = $attrs{$an};
-	  printf("<%s>%s</%s>\n", $an, asContent($av), $an);
+	  printf("      <%s>%s</%s>\n", $an, asContent($av), $an);
 	  #warn "serialized attr $an = $av";
 	}
 
-	printf "</%s>\n", $n;
-      }elsif($iprop){
-	printf(" i:%s='%s'/>\n", $iprop, $v);
-	warn "unexpected attrs on $n" if $attrp;
-      }else{
+	printf "    </%s>\n", $n;
+
+      }
+      else{
+
+	$v = lexForm($iprop, $v);
 	printf ">%s</%s>\n", asContent($v), $n;
+
 	warn "unexpected attrs on $n" if $attrp;
       }
     }else{
@@ -243,7 +260,8 @@ sub startDoc{
   xmlns='%s'
   xmlns:i='%s'
   xmlns:x='%s'
-><%s rdf:about=''>",
+><%s rdf:about=''>
+",
 	 $ICal_ns, $ICal_ns, $X_ns, $n);
 }
 
@@ -259,6 +277,23 @@ sub asContent{
 
     return $c
 }
+
+sub lexForm{
+  my($iprop, $v) = @_;
+
+  if($iprop eq 'text'
+     || $iprop eq 'integer'){
+    # do nothing
+  }
+  elsif($iprop eq 'date-time'){
+    $v =~ s/(\d\d\d\d)(\d\d)(\d\d)T(\d\d)(\d\d)(\d\d)(.*)/$1-$2-$3T$4:$5:$6$7/;
+  }else{
+    die "unknown iprop $iprop; dunno what to do with value '$v'";
+  }
+
+  return $v;
+}
+
 
 sub asAttr{
   my($c) = @_;
@@ -306,7 +341,10 @@ sub testCamelCase{
 # @@TODO: params
 
 # $Log$
-# Revision 1.6  2002-12-13 18:55:21  connolly
+# Revision 1.7  2003-04-14 21:20:51  connolly
+# ical section done
+#
+# Revision 1.6  2002/12/13 18:55:21  connolly
 # added --xnames option to give namespace
 # for X- properties
 #
