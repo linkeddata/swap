@@ -1,12 +1,12 @@
-     @prefix : <#> .
+     @prefix : <http://www.daml.org/2000/12/daml+oil#> .
      @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
     
-    :Animal     a rdfs:Class;
-         <http://www.daml.org/2000/12/daml+oil#restrictedBy>  [
-             a <http://www.daml.org/2000/12/daml+oil#Restriction>;
-             <http://www.daml.org/2000/12/daml+oil#onProperty> :parent;
-             <http://www.daml.org/2000/12/daml+oil#cardinality> "2" ];
+    <#Animal>     a rdfs:Class;
+         :restrictedBy  [
+             a :Restriction;
+             :cardinality "2";
+             :onProperty <#parent> ];
          rdfs:label "Animal" .
     

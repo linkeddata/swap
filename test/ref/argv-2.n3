@@ -1,53 +1,53 @@
-     @prefix : <http://www.w3.org/2000/10/swap/log#> .
-     @prefix foo: <#> .
+     @prefix : <#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix os: <http://www.w3.org/2000/10/swap/os#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
-    this     :forAll foo:x .
+    this     log:forAll :x .
     {
-        "1"     os:argv foo:x .
+        "1"     os:argv :x .
         
-        }     :implies {foo:test_param_1     foo:is foo:x .
+        }     log:implies {:test_param_1     :is :x .
         } .
     {
         "3"     os:argv "baz" .
         
-        }     :implies {foo:test3     a foo:sucess .
+        }     log:implies {:test3     a :sucess .
         } .
     {
-        "4"     os:argv foo:x .
+        "4"     os:argv :x .
         
-        }     :implies {foo:test3     a foo:FAILURE .
+        }     log:implies {:test3     a :FAILURE .
         } .
     {
-        "THIS is not a valid number"     os:argv foo:x .
+        "THIS is not a valid number"     os:argv :x .
         
-        }     :implies {foo:test4     a foo:FAILURE .
+        }     log:implies {:test4     a :FAILURE .
         } .
     {
         "1"     os:argv "foo" .
         
-        }     :implies {foo:test1     a foo:sucess .
+        }     log:implies {:test1     a :sucess .
         } .
     {
         "1"     os:argv "foot" .
         
-        }     :implies {foo:test1b     a foo:FAILURE .
+        }     log:implies {:test1b     a :FAILURE .
         } .
     {
         "1"     os:argv  [
-                 :notEqualTo "foo" ] .
+                 log:notEqualTo "foo" ] .
         
-        }     :implies {foo:test1c     a foo:FAILURE .
+        }     log:implies {:test1c     a :FAILURE .
         } .
     {
         "2"     os:argv "bar" .
         
-        }     :implies {foo:test2     a foo:sucess .
+        }     log:implies {:test2     a :sucess .
         } .
     
-    foo:test1c     a foo:FAILURE .
+    :test1c     a :FAILURE .
     
-    foo:test_param_1     foo:is "boof" .
+    :test_param_1     :is "boof" .
     

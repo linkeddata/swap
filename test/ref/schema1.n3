@@ -17,52 +17,52 @@
          log:forSome :_g0 .
     {
         {
-            <#_gs14>     rdfs:subPropertyOf <#_gs15> .
-            <#_gs15>     rdfs:subPropertyOf <#_gs16> .
+            v:x     :descendant v:y .
+            v:y     :descendant v:z .
             
-            }     log:implies {<#_gs14>     rdfs:subPropertyOf <#_gs16> .
+            }     log:implies {v:x     :descendant v:z .
             } .
         
         }     a log:Truth;
-         log:forAll <#_gs14>,
-                <#_gs15>,
-                <#_gs16> .
+         log:forAll v:x,
+                v:y,
+                v:z .
     {
         {
-            <#_gs20>     rdfs:subClassOf <#_gs21> .
-            <#_gs21>     rdfs:subClassOf <#_gs22> .
+            v:x     :ancestor v:y .
+            v:y     :ancestor v:z .
             
-            }     log:implies {<#_gs20>     rdfs:subClassOf <#_gs22> .
+            }     log:implies {v:x     :ancestor v:z .
             } .
         
         }     a log:Truth;
-         log:forAll <#_gs20>,
-                <#_gs21>,
-                <#_gs22> .
+         log:forAll v:x,
+                v:y,
+                v:z .
     {
         {
-            <#_gs2>     :ancestor <#_gs3> .
-            <#_gs3>     :ancestor <#_gs4> .
+            v:x     rdfs:subClassOf v:y .
+            v:y     rdfs:subClassOf v:z .
             
-            }     log:implies {<#_gs2>     :ancestor <#_gs4> .
+            }     log:implies {v:x     rdfs:subClassOf v:z .
             } .
         
         }     a log:Truth;
-         log:forAll <#_gs2>,
-                <#_gs3>,
-                <#_gs4> .
+         log:forAll v:x,
+                v:y,
+                v:z .
     {
         {
-            <#_gs8>     :descendant <#_gs9> .
-            <#_gs9>     :descendant <#_gs10> .
+            v:x     rdfs:subPropertyOf v:y .
+            v:y     rdfs:subPropertyOf v:z .
             
-            }     log:implies {<#_gs8>     :descendant <#_gs10> .
+            }     log:implies {v:x     rdfs:subPropertyOf v:z .
             } .
         
         }     a log:Truth;
-         log:forAll <#_gs10>,
-                <#_gs8>,
-                <#_gs9> .
+         log:forAll v:x,
+                v:y,
+                v:z .
     
     :Adam     a daml:Person;
          daml:comment "Adam is a person.";

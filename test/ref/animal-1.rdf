@@ -1,18 +1,17 @@
 
 
 
-<rdf:RDF xmlns="file:/cygdrive/c/devel/WWW/2000/10/swap/test/animal.rdf#"
+<rdf:RDF xmlns="http://www.daml.org/2000/12/daml+oil#"
     xmlns:daml="http://www.daml.org/2001/03/daml+oil#"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 
     <rdfs:Class rdf:about="#Animal">
-        <restrictedBy xmlns="http://www.daml.org/2000/12/daml+oil#"
-            rdf:parseType="Resource">
+        <restrictedBy rdf:parseType="Resource">
             <rdf:type rdf:resource="http://www.daml.org/2000/12/daml+oil#Restriction"/>
-            <onProperty rdf:resource="#parent"/>
             <cardinality>2</cardinality>
+            <onProperty rdf:resource="#parent"/>
         </restrictedBy>
         <rdfs:label>Animal</rdfs:label>
     </rdfs:Class>

@@ -8,8 +8,7 @@
                 :y,
                 :z .
     {
-        ""     string:concat  (
-             ) .
+        ""     string:concat () .
         
         }     log:implies {:test13a     a :success .
         } .
@@ -35,8 +34,7 @@
         :x     string:concat  (
             "World" 
             "Wide" 
-            "Web" 
-             ) .
+            "Web"  ) .
         
         }     log:implies {:www2     :is :x .
         } .
@@ -46,8 +44,7 @@
         }     log:implies {:test13e     a :success .
         } .
     {
-        :x     string:concat  (
-             ) .
+        :x     string:concat () .
         
         }     log:implies {:emptyString     :is :x .
         } .
@@ -71,23 +68,20 @@
         } .
     {
         ""     log:equalTo  [
-                 string:concat  (
-                 ) ] .
+                 string:concat () ] .
         
         }     log:implies {:test13g     a :success .
         } .
     {
         "one"     log:equalTo  [
-                 string:concat  (
-                 ) ] .
+                 string:concat () ] .
         
         }     log:implies {:test13a_bis     a :FAILURE .
         } .
     {
         ""     log:equalTo  [
                  string:concat  (
-                "one" 
-                 ) ] .
+                "one"  ) ] .
         
         }     log:implies {:test13b_bis     a :FAILURE .
         } .
@@ -101,8 +95,7 @@
                  string:concat  (
                 "World" 
                 "Wide" 
-                "Web" 
-                 ) ] .
+                "Web"  ) ] .
         
         }     log:implies {:test13c_bis     a :FAILURE .
         } .
@@ -139,8 +132,7 @@
         } .
     {
         :x     string:concat  (
-            "foo" 
-             ) .
+            "foo"  ) .
         
         }     log:implies {:fooString     :is :x .
         } .

@@ -12,21 +12,21 @@ this log:forAll <#p> .
 {  <#p> a daml:TransitiveProperty . } :means
 
 {
-  {
+  { this log:forAll <#x> , <#y> , <#z>.
     { <#x> <#p> <#y>. <#y> <#p> <#z>. } log:implies { <#x> <#p> <#z>. }
-  } a log:Truth; log:forAll <#x> , <#y> , <#z>.
+  } a log:Truth.
 } .
 
 
 
 # Intoduce a symmetric implication for convienience
 
-this log:forAll <#x>, <#y> .
-{ <#x> :means <#y>. }  log:implies {	<#x> log:implies <#y> .
-					<#y> log:implies <#x> . } .
+this log:forAll <#a>, <#b> .
+{ <#a> :means <#b>. }  log:implies {	<#a> log:implies <#b> .
+					<#b> log:implies <#a> . } .
   
-{   <#x> log:implies <#y> .
-    <#y> log:implies <#x> . }  log:implies  { <#x> :means <#y>. }  . 
+{   <#a> log:implies <#b> .
+    <#b> log:implies <#a> . }  log:implies  { <#a> :means <#b>. }  . 
 
 # and in fact, though it is not axiomatic...
 #
@@ -36,8 +36,9 @@ this log:forAll <#x>, <#y> .
 
 
 <#ancestor>  a daml:TransitiveProperty .
-<#granpa> <#ancestor> <#pa> .
-<#pa> <#ancestor> <#bill> .
 
+# (Was the wrong way around for a long time, just confused people.)
+<#pa> <#ancestor> <#granpa> .
+<#bill> <#ancestor> <#pa> .
 
-
+#ends

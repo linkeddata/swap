@@ -2,6 +2,8 @@
 [ a ex:Foo].
 
 
+ex:bar ex:insinuates [ a ex:baz].
+
 # test with: python ../cwm.py typednode.n3 --rdf
 # you should get a typednode in the RDF output,
 # i.e. not a Description element.

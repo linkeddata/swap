@@ -21,8 +21,7 @@
                     <#_g5> .
           ( <#_g1> 
             <#_g3> 
-            <#_g5> 
-             )
+            <#_g5>  )
              log:conjunction  [
                  log:conclusion foo:G ] .
         <../invalid-ex.n3>     log:semantics <#_g3> .
@@ -47,8 +46,10 @@
              dpo:subClassOf :Animal;
              s:subClassOf :Animal .
         :Height     a dpo:Class;
-             dpo:oneOf  [
-                 :_g2 :short ] .
+             dpo:oneOf  (
+            :short 
+            :medium 
+            :tall  ) .
         :Male     a dpo:Class;
              dpo:subClassOf :Animal;
              s:subClassOf :Animal .
@@ -60,8 +61,9 @@
                     :Person .
         :Person     a dpo:Class;
              dpo:comment "every person is a man or a woman";
-             dpo:disjointUnionOf  [
-                 :_g5 :Man ];
+             dpo:disjointUnionOf  (
+            :Man 
+            :Woman  );
              dpo:restrictedBy  [
                  a dpo:Restriction;
                  dpo:onProperty :parent;
@@ -69,8 +71,9 @@
              dpo:subClassOf :Animal;
              s:subClassOf :Animal .
         :TallMan     a dpo:Class;
-             dpo:intersectionOf  [
-                 :_g8 :TallThing ] .
+             dpo:intersectionOf  (
+            :TallThing 
+            :Man  ) .
         :TallThing     a dpo:Class;
              dpo:restrictedBy  [
                  a dpo:Restriction;
@@ -84,13 +87,6 @@
                     :Person .
         :_g0     a dpo:Class;
              dpo:complementOf :Person .
-        :_g2     :_g3 :medium .
-        :_g3     dpo:first :tall;
-             dpo:rest () .
-        :_g5     dpo:first :Woman;
-             dpo:rest () .
-        :_g8     dpo:first :Man;
-             dpo:rest () .
         :ancestor     a dpo:TransitiveProperty;
              dpo:label "ancestor" .
         :child     a dpo:Property;
@@ -124,28 +120,28 @@
              dpo:versionInfo "" .
         {
             {
-                <#_gs16>     s:subPropertyOf <#_gs17> .
-                <#_gs17>     s:subPropertyOf <#_gs18> .
+                v:x     :descendant v:y .
+                v:y     :descendant v:z .
                 
-                }     log:implies {<#_gs16>     s:subPropertyOf <#_gs18> .
+                }     log:implies {v:x     :descendant v:z .
                 } .
             
             }     a log:Truth;
-             log:forAll <#_gs16>,
-                    <#_gs17>,
-                    <#_gs18> .
+             log:forAll v:x,
+                    v:y,
+                    v:z .
         {
             {
-                <#_gs22>     s:subClassOf <#_gs23> .
-                <#_gs23>     s:subClassOf <#_gs24> .
+                v:x     s:subClassOf v:y .
+                v:y     s:subClassOf v:z .
                 
-                }     log:implies {<#_gs22>     s:subClassOf <#_gs24> .
+                }     log:implies {v:x     s:subClassOf v:z .
                 } .
             
             }     a log:Truth;
-             log:forAll <#_gs22>,
-                    <#_gs23>,
-                    <#_gs24> .
+             log:forAll v:x,
+                    v:y,
+                    v:z .
         this     log:forAll v:c1,
                     v:c2,
                     v:c,
@@ -155,35 +151,31 @@
                     v:x,
                     v:y,
                     v:z;
-             log:forSome :_g0,
-                    :_g2,
-                    :_g3,
-                    :_g5,
-                    :_g8 .
+             log:forSome :_g0 .
         {
             {
-                <#_gs4>     :ancestor <#_gs5> .
-                <#_gs5>     :ancestor <#_gs6> .
+                v:x     s:subPropertyOf v:y .
+                v:y     s:subPropertyOf v:z .
                 
-                }     log:implies {<#_gs4>     :ancestor <#_gs6> .
+                }     log:implies {v:x     s:subPropertyOf v:z .
                 } .
             
             }     a log:Truth;
-             log:forAll <#_gs4>,
-                    <#_gs5>,
-                    <#_gs6> .
+             log:forAll v:x,
+                    v:y,
+                    v:z .
         {
             {
-                <#_gs10>     :descendant <#_gs11> .
-                <#_gs11>     :descendant <#_gs12> .
+                v:x     :ancestor v:y .
+                v:y     :ancestor v:z .
                 
-                }     log:implies {<#_gs10>     :descendant <#_gs12> .
+                }     log:implies {v:x     :ancestor v:z .
                 } .
             
             }     a log:Truth;
-             log:forAll <#_gs10>,
-                    <#_gs11>,
-                    <#_gs12> .
+             log:forAll v:x,
+                    v:y,
+                    v:z .
         <../invalid-ex.n3#alex>     :father <../invalid-ex.n3#joe> .
         <../invalid-ex.n3#bill>     :mother <../invalid-ex.n3#joe> .
         <../invalid-ex.n3#disjointTest>     a :Animal,

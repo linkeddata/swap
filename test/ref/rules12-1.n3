@@ -2,9 +2,9 @@
      @prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    this     log:forAll :_gs3,
-                :_gs4,
-                :_gs5,
+    this     log:forAll :_gs1,
+                :_gs2,
+                :_gs3,
                 :p .
     {
         :p     a daml:TransitiveProperty .
@@ -20,15 +20,16 @@
             } .
         } .
     {
-        :_gs3     :ancestor :_gs4 .
-        :_gs4     :ancestor :_gs5 .
+        :_gs1     :ancestor :_gs3 .
+        :_gs3     :ancestor :_gs2 .
         
-        }     log:implies {:_gs3     :ancestor :_gs5 .
+        }     log:implies {:_gs1     :ancestor :_gs2 .
         } .
     
     :ancestor     a daml:TransitiveProperty .
     
-    :granpa     :ancestor :pa .
+    :granpa     :ancestor :bill,
+                :pa .
     
     :pa     :ancestor :bill .
     

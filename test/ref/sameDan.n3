@@ -14,14 +14,14 @@
                 :z;
          log:forSome <sameDan.n3#_g0> .
     {
-        :x     contact:mailbox :z .
-        :y     contact:mailbox :z .
+        :x     contact:homePageAddress :z .
+        :y     contact:homePageAddress :z .
         
         }     log:implies {:x     = :y .
         } .
     {
-        :x     contact:homePageAddress :z .
-        :y     contact:homePageAddress :z .
+        :x     contact:mailbox :z .
+        :y     contact:mailbox :z .
         
         }     log:implies {:x     = :y .
         } .

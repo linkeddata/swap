@@ -1,0 +1,74 @@
+#Processed by Id: cwm.py,v 1.82 2001/11/15 22:11:23 timbl Exp 
+        #    using base http://www.w3.org/2001/03/19-annotated-RDF-WSDL.rdf
+        
+#  Notation3 generation by
+#       notation3.py,v 1.98 2001/11/15 22:11:24 timbl Exp
+
+#   Base was: http://www.w3.org/2001/03/19-annotated-RDF-WSDL.rdf
+     @prefix : <http://www.snowboard-info.com/EndorsementSearch.wsdl#> .
+     @prefix es: <http://www.snowboard-info.com/EndorsementSearch.wsdl> .
+     @prefix esxsd: <http://schemas.snowboard-info.com/EndorsementSearch.xsd> .
+     @prefix rdf: <../../1999/02/22-rdf-syntax-ns#> .
+     @prefix soap: <http://schemas.xmlsoap.org/wsdl/soap/> .
+     @prefix wsdl: <http://schemas.xmlsoap.org/wsdl/> .
+    
+    :EndorsementSearchService     a <http://schemas.xmlsoap.org/wsdl/service>;
+         <http://schemas.xmlsoap.org/wsdl/documentation> "snowboarding-info.com Endorsement Service";
+         <http://schemas.xmlsoap.org/wsdl/hasPort> :GetEndorsingBoarderPort;
+         <http://schemas.xmlsoap.org/wsdl/name> <http://namespaces.snowboard-info.com#EndorsementSearchService> .
+    
+    :EndorsementSearchSoapBinding     a <http://schemas.xmlsoap.org/wsdl/binding>;
+         <http://schemas.xmlsoap.org/wsdl/hasBinding>  [
+             a <http://schemas.xmlsoap.org/wsdl/soap/binding>;
+             <http://schemas.xmlsoap.org/wsdl/soap/style> <http://schemas.xmlsoap.org/wsdl/soap/document>;
+             <http://schemas.xmlsoap.org/wsdl/soap/transport> <http://schemas.xmlsoap.org/soap/http> ];
+         <http://schemas.xmlsoap.org/wsdl/hasOperation> <GetEndorsingBoarder>;
+         <http://schemas.xmlsoap.org/wsdl/name> <http://namespaces.snowboard-info.com#EndorsementSearchSoapBinding>;
+         <http://schemas.xmlsoap.org/wsdl/type> :GetEndorsingBoarderPortType .
+    
+    :GetEndorsingBoarderPort     a <http://schemas.xmlsoap.org/wsdl/port>;
+         <http://schemas.xmlsoap.org/wsdl/binding> :EndorsementSearchSoapBinding;
+         <http://schemas.xmlsoap.org/wsdl/soap/address> <http://www.snowboard-info.com/EndorsementSearch> .
+    
+    :GetEndorsingBoarderPortType     a <http://schemas.xmlsoap.org/wsdl/portType>;
+         <http://schemas.xmlsoap.org/wsdl/hasOperation>  [
+             a <http://schemas.xmlsoap.org/wsdl/operation>;
+             <http://schemas.xmlsoap.org/wsdl/name> <http://namespaces.snowboard-info.com#GetEndorsingBoarder>;
+             <http://schemas.xmlsoap.org/wsdl/input> :GetEndorsingBoarderRequest;
+             <http://schemas.xmlsoap.org/wsdl/output> :GetEndorsingBoarderResponse;
+             <http://schemas.xmlsoap.org/wsdl/fault> :GetEndorsingBoarderFault ];
+         <http://schemas.xmlsoap.org/wsdl/name> <http://namespaces.snowboard-info.com#GetEndorsingBoarderPortType> .
+    
+    :GetEndorsingBoarderRequest     a <http://schemas.xmlsoap.org/wsdl/message>;
+         <http://schemas.xmlsoap.org/wsdl/hasPart>  [
+             a <http://schemas.xmlsoap.org/wsdl/part>;
+             <http://schemas.xmlsoap.org/wsdl/name> <http://namespaces.snowboard-info.com#body>;
+             <http://schemas.xmlsoap.org/wsdl/element> <http://schemas.snowboard-info.com/EndorsementSearch.xsd#GetEndorsingBoarder> ];
+         <http://schemas.xmlsoap.org/wsdl/name> <http://namespaces.snowboard-info.com#GetEndorsingBoarderRequest> .
+    
+    :GetEndorsingBoarderResponse     a <http://schemas.xmlsoap.org/wsdl/message>;
+         <http://schemas.xmlsoap.org/wsdl/hasPart>  [
+             a <http://schemas.xmlsoap.org/wsdl/part>;
+             <http://schemas.xmlsoap.org/wsdl/name> <http://namespaces.snowboard-info.com#body>;
+             <http://schemas.xmlsoap.org/wsdl/element> <http://schemas.snowboard-info.com/EndorsementSearch.xsd#GetEndorsingBoarderResponse> ];
+         <http://schemas.xmlsoap.org/wsdl/name> <http://namespaces.snowboard-info.com#GetEndorsingBoarderResponse> .
+    
+    <http://www.snowboard-info.com/EndorsementSearch>     a <http://schemas.xmlsoap.org/wsdl/soap/location> .
+    
+    <GetEndorsingBoarder>     a <http://schemas.xmlsoap.org/wsdl/operation>;
+         <http://schemas.xmlsoap.org/wsdl/fault>  [
+             a <http://schemas.xmlsoap.org/wsdl/soap/body>;
+             <http://schemas.xmlsoap.org/wsdl/soap/use> <http://schemas.xmlsoap.org/wsdl/soap/literal>;
+             <http://schemas.xmlsoap.org/wsdl/soap/namespace> <http://schemas.snowboard-info.com/EndorsementSearch.xsd> ];
+         <http://schemas.xmlsoap.org/wsdl/input>  [
+             a <http://schemas.xmlsoap.org/wsdl/soap/body>;
+             <http://schemas.xmlsoap.org/wsdl/soap/use> <http://schemas.xmlsoap.org/wsdl/soap/literal>;
+             <http://schemas.xmlsoap.org/wsdl/soap/namespace> <http://schemas.snowboard-info.com/EndorsementSearch.xsd> ];
+         <http://schemas.xmlsoap.org/wsdl/output>  [
+             a <http://schemas.xmlsoap.org/wsdl/soap/body>;
+             <http://schemas.xmlsoap.org/wsdl/soap/use> <http://schemas.xmlsoap.org/wsdl/soap/literal>;
+             <http://schemas.xmlsoap.org/wsdl/soap/namespace> <http://schemas.snowboard-info.com/EndorsementSearch.xsd> ];
+         <http://schemas.xmlsoap.org/wsdl/soap/operation>  [
+             <http://schemas.xmlsoap.org/wsdl/soap/soapAction> <http://www.snowboard-info.com/EndorsementSearch> ] .
+    
+#ENDS

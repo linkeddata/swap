@@ -1,51 +1,56 @@
-     @prefix : <http://www.w3.org/2000/10/swap/log#> .
+     @prefix : <#> .
      @prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
      @prefix dpo: <http://www.daml.org/2001/03/daml+oil#> .
      @prefix ex: <http://www.daml.org/2000/10/daml-ex#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
     
-    this     :forAll <#x> .
+    this     :is :doc .
     {
-        this     :forAll <#y> .
-        <#x>     <#loves> <#y> .
+        this     log:forAll :y .
+        :x     :loves :y .
         
-        }     :implies {{
-            <#x>     <#hates>  [
+        }     log:implies {{
+            :x     :hates  [
                  ] .
             
-            }     a :falsehood .
+            }     a log:falsehood .
         } .
     {
-        <>     :includes {this     :forAll <#x> .
-            {
-                this     :forAll <#y> .
-                <#x>     <#loves> <#y> .
-                
-                }     :implies {{
-                    <#x>     <#hates>  [
-                         ] .
-                    
-                    }     a :falsehood .
-                } .
-            } .
         
-        }     :implies {<#testg_1>     a <#success> .
+          [      :is :doc;
+                 log:notIncludes {{
+                    this     log:forAll :y .
+                    :x     :loves :y .
+                    
+                    }     log:implies {{
+                        :x     :hates  [
+                             ] .
+                        
+                        }     a log:falsehood .
+                    } .
+                } ].
+        
+        }     log:implies {:testg_1     a :FAILURE .
         } .
     {
-        <>     :notIncludes {this     :forAll <#x> .
-            {
-                this     :forAll <#y> .
-                <#x>     <#loves> <#y> .
-                
-                }     :implies {{
-                    <#x>     <#hates>  [
-                         ] .
-                    
-                    }     a :falsehood .
-                } .
-            } .
         
-        }     :implies {<#testg_1>     a <#FAILURE> .
+          [      :is :doc;
+                 log:includes {{
+                    this     log:forAll :y .
+                    :x     :loves :y .
+                    
+                    }     log:implies {{
+                        :x     :hates  [
+                             ] .
+                        
+                        }     a log:falsehood .
+                    } .
+                } ].
+        
+        }     log:implies {:testg_1     a :success .
         } .
+    
+    :testg_1     a :success .
     
