@@ -18,12 +18,20 @@
         <log:forAll r:resource="#X"/>
     </r:Description>
 
+    <s:Property r:about="#domainIntersects">
+        <s:label>domain intersects</s:label>
+    </s:Property>
+
     <s:Property r:about="#intersectsDomainOf">
         <s:label>intersects domain of</s:label>
     </s:Property>
 
     <s:Property r:about="#label">
         <s:label>label?</s:label>
+    </s:Property>
+
+    <s:Property r:about="#rangeIntersects">
+        <s:label>range intersects</s:label>
     </s:Property>
 
     <r:Description r:about="">
