@@ -758,7 +758,6 @@ class ToRDF(RDFSink):
     #@@I18N
     _namechars = string.lowercase + string.uppercase + string.digits + '_'
     _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-    _myns = 'http://www.w3.org/2000/10/n3/notation3.py#'
 
     def startDoc(self):
         pass
@@ -801,14 +800,14 @@ class ToRDF(RDFSink):
 		self._wr.endElement()
 	    self._subj = subj
 	    if pred == (RESOURCE, RDF_type_URI) and obj[0] != LITERAL: # Special case starting with this
-                self._wr.startElement(obj[1], [("about", subjn),], self.prefixes)
+                self._wr.startElement(obj[1], [(RDF_NS_URI+" about", subjn),], self.prefixes)
                 return
 	    self._wr.startElement(RDF_NS_URI+'Description',
-				 [("about", subjn),], self.prefixes)
+				 [(RDF_NS_URI+" about", subjn),], self.prefixes)
 
 	if obj[0] != LITERAL: 
 	    objn = relativeURI(self._thisDoc, obj[1])
-	    self._wr.emptyElement(pred[1], [('resource', objn)], self.prefixes)
+	    self._wr.emptyElement(pred[1], [(RDF_NS_URI+' resource', objn)], self.prefixes)
 	    return
 # Actually this shorthand notatoin is not RDF, it was my misunderstanding! rats...
 #	for ch in obj[1]:  # Is literal representable as an attribute value?
@@ -833,10 +832,10 @@ class ToRDF(RDFSink):
 		self._wr.endElement()
 	    subjn = relativeURI(self._thisDoc, subj[1])
 	    self._wr.startElement(RDF_NS_URI + 'Description',
-				 (('about', subjn),), self.prefixes)
+				 ((RDF_NS_URI+' about', subjn),), self.prefixes)
 	    self._subj = subj
 
-        self._wr.startElement(pred[1], [('parseType','Resource')], self.prefixes)  # @@? Parsetype RDF
+        self._wr.startElement(pred[1], [(RDF_NS_URI+' parseType','Resource')], self.prefixes)  # @@? Parsetype RDF
 
         self._subj = obj    # The object is now the current subject
 
@@ -870,9 +869,9 @@ class ToRDF(RDFSink):
         self.flushStart()
         self._wr.startElement(RDF_NS_URI+'Description', 
 			      [],
-#			      [('about', relativeURI(self._thisDoc,context[1]))],
+#			      [(RDF_NS_URI+' about', relativeURI(self._thisDoc,context[1]))],
                               self.prefixes)
-        self._wr.startElement(RDF_NS_URI+"is", [('parseType', 'Quote')], self.prefixes)
+        self._wr.startElement(RDF_NS_URI+"is", [(RDF_NS_URI+' parseType', 'Quote')], self.prefixes)
         self._subj = None
         self._pred = None
 
@@ -891,10 +890,10 @@ class ToRDF(RDFSink):
 		self._wr.endElement()
 	    subjn = relativeURI(self._thisDoc, subj[1])
 	    self._wr.startElement(RDF_NS_URI + 'Description',
-				 (('about', subjn),), self.prefixes)
+				 ((RDF_NS_URI+' about', subjn),), self.prefixes)
 	    self._subj = subj
 
-        self._wr.startElement(pred[1], [('parseType','Quote')], self.prefixes)  # @@? Parsetype RDF
+        self._wr.startElement(pred[1], [(RDF_NS_URI+' parseType','Quote')], self.prefixes)  # @@? Parsetype RDF
         self._subj = None
         self._pred = None
 
@@ -1005,9 +1004,6 @@ class XMLWriter:
                 continue
             ans = at[:i]
             lan = at[i+1:]
-            if ans == ns:    #  self.currentNS ?!! Default is same as
-                attrs.append((lan, val))
-                continue
             prefix = prefixes.get((RESOURCE, ans),":::")
             if prefix == ":::":
                 print ("#@@@@@ tag %s: atr %s has no prefiex :-(" %
@@ -1112,7 +1108,6 @@ class ToN3(RDFSink):
 	#@@I18N
     _namechars = string.lowercase + string.uppercase + string.digits + '_'
     _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
-    _myns = 'http://www.w3.org/2000/10/n3/notation3.py#'
 
     def newId(self):
         nextId = nextId + 1
