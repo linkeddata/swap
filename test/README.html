@@ -12,16 +12,32 @@ checked out of the public CVS on dev.w3.org</p>
 
 <p></p>
 
-<p>The test harness is as follows;</p>
+<p>The test harness is as follows:</p>
 <dl>
   <dt>retest.py</dt>
     <dd>Test harness. Runes cwm in command line, driven by test descriptions
       from cwm test ontology or rdf test ontology.
-      <p> <code>python retest.py --help</code> for command line args.</p>
+      <p> <code>python retest.py --help</code> for command line args.  RTFS 
+      for more details ;-).</p>
     </dd>
+  <dt>regression.n3</dt>
+    <dd>Definitions of tests which we run befroe checking in a new version of
+      cwm, using
+      <p><code>python retest.py -n -f regression.n3</code></p>
+    </dd>
+  <dt>rdfcore-tests.n3</dt>
+    <dd>A local n3 version of the rdf core test manifest. (local in case ytou
+      want to test it offline). Run with
+      <p><code>python retest.py -f rdfcore-tests.n3</code></p>
+    </dd>
+  <dt>ref</dt>
+    <dd>A directory containing reference output for the regression test.</dd>
+  <dt>.temp</dt>
+    <dd>A temp directory for outputs of regression tests. Compared against
+      ref/*</dd>
 </dl>
 
-<p>retest.py</p>
+<p></p>
 
 <p></p>
 
