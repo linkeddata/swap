@@ -14,6 +14,10 @@ all : result.n3 axioms.rdf purged2.n3
 
 C=python ../../cwm.py
 
+clean :
+	rm temp* consts.n3 result.n3 axioms0.n3 consts.n3 purged.n3 purged2.rdf\
+	purged2.n3 a*-conv.n3 a*-purged.n3 a*-purged2.n3 axioms.rdf all
+
 axioms.rdf : axioms.n3
 	$C axioms.n3 -rdf > axioms.rdf
 
