@@ -1,0 +1,31 @@
+@prefix   m:   <http://www.w3.org/2000/10/swap/pim/email#> .
+@prefix   s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+
+@prefix : <reqThreadFix#>.
+
+# $Id$
+# cribbed from
+# http://www.w3.org/2001/sw/WebOnt/lc-thread-fixup.n3
+
+# replies without references. grr...
+:Thread :replyPrefix
+  "Re: ",
+  "RE: ",
+  "[Closed] RE: ",
+  "[closed] RE: ",
+  "[closed] Re: ".
+
+m:to s:subPropertyOf :toOrCc.
+m:cc s:subPropertyOf :toOrCc.
+
+{
+  :Thread :replyPrefix ?PFX.
+
+  ?M1
+    m:subject ?TXT;
+    [ s:subPropertyOf :toOrCc] [ m:mbox ?LISTBOX ].
+  ?M2 m:subject ?S2;
+     [ s:subPropertyOf :toOrCc] [ m:mbox ?LISTBOX ].
+  ?S2 str:startsWith ?PFX; str:contains ?TXT.
+} => { ?M2 m:references ?M1; m:subject ?S2 }.
