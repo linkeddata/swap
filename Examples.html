@@ -12,12 +12,43 @@
 
 <p></p>
 
-<h1>Examples Getting into RDF &amp; Semantic Web  using N3</h1>
+<h1>Examples - Getting into RDF &amp; Semantic Web  using N3</h1>
 
 <p></p>
 
 <p>This is a collection of examples to accompany the <a
-href="Primer.html">Primer.</a></p>
+href="Primer.html">Primer. </a> (The files have URIs starting
+http://www.w3.org/2000/10/swap/test/ if you are reading this on paper.)  These
+are designed as examples, to show how something can be done, not as working
+products.</p>
+
+<h2 id="Schema">Schema validation</h2>
+
+<p>In the semantic web, there are many different forms of document validity.
+One useful form is to check that the document doesn't violate any rules
+associated with the vocabularies it uses, and that for each namespace it uses,
+every term it uses is actually mentioned in the schema for that namespace.</p>
+<ul>
+  <li><a href="test/daml-ex.n3 ">daml-ex.n3</a>  An example schema using
+  DAML</li>
+  <li><a href="test/invalid-ex.n3 ">invalid-ex.n3</a>  A document which
+    declares terms in an invalid way</li>
+  <li><a href="test/schema-rules.n3">schema-rules.n3</a> A set of rules about
+    the DAML vocabulary</li>
+  <li><a href="test/schema-filter.n3">schema-filter.n3</a> A filter to remove
+    all the worlkings and preserve just the result</li>
+</ul>
+
+<p>The command line I used with the closed world machine was</p>
+<pre>cwm daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think -filter=schema-filter.n3</pre>
+
+<p>This combines the schema, the document and the rules, and draws all
+possible conclusions, then filters out any conclusions of invalidity.</p>
+
+<p>The rules are by no means complete, and this is by no means the only way to
+do validation. A special-purpose program would be more efficient of cource.
+However, this demonstrates how easy it is when data is a semantic form to
+process it using a general purpose engine.</p>
 
 <h2 id="Rules">Rules making rules</h2>
 
@@ -25,16 +56,17 @@ href="Primer.html">Primer.</a></p>
 ancenstor, and Joe is Bill's ancenstor, then Fred is Bill's ancenstor.  That
 (for all Fred, Joe and Bill)  is a  rule for "ancenstor", and the fact that
 that is true for any transitive property in place of "ancenstor" is the
-definition of transitivity. </p>
+definition of transitivity.</p>
 <ul>
-  <li>rules12.n3 has the "implies" rules to draw the above conclusion in two
-    stages, first concluding a specific rule for ancenstor from the general
-    rule for transitivity, and secondly using it in the specific case of Fred
-    and company.</li>
-  <li>rules13.n3 has hte same, but uses "log:means" (a bidirectional
-    implication) to indicate that transitivity is that and only that. "Means"
-    is not a primitive for cwm, so it is defined in terms of log:implies. This
-    doesn't then acheive anything spectacularly new otherwise.</li>
+  <li><a href="test/rules12.n3">rules12.n3</a> has the "implies" rules to draw
+    the above conclusion in two stages, first concluding a specific rule for
+    ancenstor from the general rule for transitivity, and secondly using it in
+    the specific case of Fred and company.</li>
+  <li><a href="test/rules13.n3">rules13.n3</a> has hte same, but uses
+    "log:means" (a bidirectional implication) to indicate that transitivity is
+    that and only that. "Means" is not a primitive for cwm, so it is defined
+    in terms of log:implies. This doesn't then acheive anything spectacularly
+    new otherwise.</li>
 </ul>
 
 <p>
@@ -71,7 +103,7 @@ instructive.</p>
 typically in order to test the software, but you can use them to test your
 understanding.</p>
 <ul>
-  <li>s1.n3   some simple schema information</li>
+  <li><a href="test/s1.n3 ">s1.n3 </a>  some simple schema information</li>
   <li>animal.rdf  a little DAML ontology about an animal</li>
   <li>double-conclusion.n3  Testing that a reasoner wouldn't draw duplicate
     conclusions</li>
