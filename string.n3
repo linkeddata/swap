@@ -52,4 +52,16 @@ string:notLessThan a dpo:Property;
     s:domain string:String;
     s:range  string:String.
 
+string:startsWith a dpo:Property;
+    s:definedBy <http://www.w3.org/2000/10/swap/string>;  
+    s:label  "starts with";
+    s:domain string:String;
+    s:range  string:String.
 
+string:endsWith a dpo:Property;
+    s:definedBy <http://www.w3.org/2000/10/swap/string>;  
+    s:label  "ends with";
+    s:domain string:String;
+    s:range  string:String.
+
+#ends
