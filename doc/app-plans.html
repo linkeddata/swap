@@ -18,7 +18,7 @@ href="/2000/10/swap/">SWAP</a> | <a href="cwm.html">Cwm</a></p>
 
 <h1><a href="../../../../DesignIssues/Notation3.html"><img alt="n3"
 style="float: right" src="../../../../RDF/icons/n3_small" />
-</a> <a href="cwm">Cwm</a> Release Roadmap</h1>
+</a> <a href="cwm">Cwm</a> Application Ideas</h1>
 
 <p></p>
 
@@ -29,211 +29,23 @@ style="float: right" src="../../../../RDF/icons/n3_small" />
   <li><a href="../admin/bugStatus.html">Outstanding bugs.</a> Bugs (and some
     small requests for enhancement) are tracked in RDF, and available as a
     TODO list in an online calendar.</li>
+  <li><a href="plans.html">Release Roadmap</a>   Enhancements planned to the
+    Cwm platform</li>
 </ul>
-
-<h2>by Release 0.9 (may be skipped)</h2>
 
 <p></p>
 
-<p>(no enhancements except tackling of bugs in bug system)</p>
+<h2>Software installation problem</h2>
+
+<p></p>
+
+<p>General problem statement:</p>
 <ul>
-  <li>Reification: write it up - in tutorial and some reference form
-    (ontology comments? DesignIssues? )</li>
+  <li>Article <em><a href="/DesignIssues/Installation.html">Installation,
+    Catalogs, and Caches</a></em></li>
 </ul>
 
-<h2>by Release 1.0 2004/09/??</h2>
-
-<p></p>
-<ul>
-  <li>Distribution mechanisms 
-    <ul>
-      <li>tarball (with test) (<em>done in 0.8</em>)</li>
-      <li>pyton setup.py <em>(in progress as of 22 Jul.  Now works - yosi
-        2004/9/3.)</em></li>
-      <li>dpkg debian packaging  Done once setup.py -&gt; RPM -alien-&gt;
-        debian</li>
-    </ul>
-  </li>
-  <li>allow alternative parsers; in particular, 
-    <ul>
-      <li>RDFlib 22Jul: should be working, but test integration remains</li>
-      <li>redland (<a
-        href="http://lists.w3.org/Archives/Public/public-cwm-bugs/2004Jun/0011.html">RFE</a>,
-        not critical path for 1.0)</li>
-    </ul>
-  </li>
-  <li>N3 formal grammar (<a
-    href="http://lists.w3.org/Archives/Public/public-cwm-bugs/2004Jun/0015.html">RFE
-    10 Jul)</a></li>
-  <li>--think --filter combination. The application of rules to the
-    [notional] deductive closure of a formula is a function which is equally
-    valid in forward and backward chaining systems. Providing it will allow
-    the same problems to be tackled by different techniques, and different
-    systems and clones.</li>
-  <li>connect with semwebcentral <em>(Now exists on semwebcentral as much as
-    it can link to its w3.or home 2004/9/1)</em></li>
-  <li>W3.org homepage announcement</li>
-</ul>
-
-<h2 id="Release">by Release 1.1    2004/10/??  (Requires Python 2.3)</h2>
-
-<p>This contains performance work which would have been been in 0.9 except
-for unexpected medical situation.   This will use Python sets where
-appropriate (instead of homebrew sets or sequences) and will therefore
-<strong>require python 2.3.</strong></p>
-<ul>
-  <li>Speed benchmark</li>
-  <li>allow alternative parsers; in particular, 
-    <ul>
-      <li>redland (<a
-        href="http://lists.w3.org/Archives/Public/public-cwm-bugs/2004Jun/0011.html">RFE</a>)</li>
-    </ul>
-  </li>
-  <li></li>
-</ul>
-
-<h2>Longer Term</h2>
-
-<p></p>
-
-<p>There is no timescale for these enhahcements, as they are not subject to
-existing funded development or volunteer commitment. Bother are of course
-welcome at any time!</p>
-
-<h3>Performance</h3>
-
-<p>Performance: Make test/perform test suite with standard tests so as to
-plot perfromance changes version to version.</p>
-
-<p>Develop specific benchmarks for specific problems, such as pipelineable
-cases, large store/small rules, large rules/small data, etc.. Include
-feedback from users to characterize different types of way in whic cwm is
-used.</p>
-
-<h3>Clones</h3>
-
-<p>Cwm demonstrates the power of a particular langauge and a particular
-general-purpose tool. Encourage and liaise with compatible systems, and share
-test data. Work to define subsets of the rule langauges which work with
-different types of engine.</p>
-<ul>
-  <li>Rete rule-based system</li>
-  <li>Backward-chaining systems, eg Euler.</li>
-  <li>Compiled systems</li>
-</ul>
-
-<h3>Syntax</h3>
-
-<p></p>
-
-<p>N3 grammar close the loop: Connect N3 grammar to syntax tests by
-generating parser directly from the grammar. .   Closing the loop on the
-syntax. We have a definition of the N3 syntax in N3. This is only a form of
-documentation until we have automatically generated a parser and/or a test
-suite from that syntax definition. A straightforward job - We have a syntax
-validator based on the BNF in RDF already. The interesting bit is the
-ontology for annotating the BNF grammar with RDF production rules, because it
-could then be reused to annotating foreign and legacy grammars to enable
-automatic extraction of RDF from them. (Apart from the niceness of having
-something defined it itself of course.)  (<em>July 2004 this is done without
-the grammar annotation necessary to actually generate triples in the
-store</em>)</p>
-
-<p>RDF Output - Use Collections for lists.  </p>
-
-<p>N3 syntax - test set syntax (,) (&lt;a&gt;,) (&lt;a&gt;, &lt;b&gt;)</p>
-
-<p>Extended RDF output syntax for formulae (how? have RDF Core locked
-<em>all</em> the exits? Prevents RDF2 not superset of RDF/XML1)</p>
-
-<h3>Query/Inference</h3>
-
-<p></p>
-
-<p>Built-ins for lists. in (needs muli value function, below); append,
-prepend, second..seventh, last, concat.</p>
-
-<p>Sets, plus builtins, see syntax in N3. Information is lost, and
-optimizations are lost, when sets are actually represented as ordered lists
-because that is the only syntax easy to use in RDF. owl:oneOf provides the
-constructor for sets.</p>
-
-<p>Build cwm on python sets, requiring python 2.3, to gain speed.</p>
-
-<p>Builtins extracting closed world data: s=Q(F, y, G) is set of x such that
-formula F.substite((y, x)) log:includes G.</p>
-
-<p>Symbols used as variables as separate python class - save some time
-checking occurrences</p>
-
-<p>Paramodulation - smushing built into store. Reuse redirection used for
-lists?</p>
-
-<p>Builtin operations:</p>
-<ul>
-  <li>Return many bindings from builtin eg list:in, os:argv</li>
-  <li>Fairly complete XQ functions and operators implementations (use same
-    URIs?)</li>
-  <li>Extract datatype, language and string from a literal.</li>
-</ul>
-
-<p>Remove all vestiges of the old pair represetation of symbols.</p>
-
-<p>Implement backward chainer (like Euler) on the same store. Allow forward
-and backward chainers to interact, share built-ins.</p>
-
-<h3>Store</h3>
-
-<p>Implement versions of the store based on Redland, Jena, etc.</p>
-
-<p>Implement rete method. Rules with state as objects. <em>&lt;= student
-project?</em></p>
-
-<p></p>
-
-<h3>Net</h3>
-
-<p>Implement <strong>persistent cache</strong> - make an ontology (based very
-stongly on HTTP headers) for recording the results of an HTTP (etc) get.
-Store metadata about fetched ontologies. Build an index into the persistent
-cache for offline working.</p>
-
-<p>Functions: find the closure of these documents under eg --closure=ptr and
-make sure than they are all in my persistent cache. Allow environment
-variable to specify persistent cache mode (default: ontologies only, write to
-cache when online and expiry check fails, read from cache when offline).
-Provide pcache.urlopen() as a transparent extension of urlopen()</p>
-
-<p>Persistent Cache management and software installation become the same
-thing.</p>
-
-<p></p>
-
-<h3>Remote Operation</h3>
-
-<p></p>
-
-<p>Support DAWG remote query protocol as client, as currently done using
-SQL.</p>
-
-<p>DAWG server.</p>
-
-<p>Variations of DAWG using N3 where DAWG is not exactly N3.</p>
-
-<p>IRC bot (sWBot) -- Your friendly N3-happy robotic chat room companion. See
-sandbox security below.</p>
-
-<p></p>
-
-<h3>Security</h3>
-
-<p>Sandboxed version of cwm, which is immune to attacks from rules in data,
-builtin functions in untrusted rules, confientiality violations by indirect
-web access, and so on. While you can build a secure trusted system without
-needing a sandbox at all (it isn't really the way to build one) sandboxing is
-handy for things like demo servers and IRC bots.</p>
-
-<p></p>
+<p>Ontologies involved (find, or collborate in development of)</p>
 
 <p></p>
 
