@@ -81,7 +81,11 @@ class Parser:
 	if j<0: raise BadSyntax(str, i, "expected uriref2 after bind _qname_")
 
 	self._bindings[t[0][0]] = `t[1]`
+	self.bind(t[0][0], `t[1]`)
 	return j
+
+    def bind(self, qname, uriref):
+        pass                            # Hook for subclasses
 
     def statement(self, str, i):
 	r = []
@@ -383,32 +387,106 @@ class Symbol:
     def __repr__(self):
 	return self._name
 
-def intern(str):
+def intern_old(str):
     try:
 	return Symbol.symtab[str]
     except KeyError:
 	sym = Symbol(str)
 	Symbol.symtab[str] = sym
 	return sym
+
+
+########################################################  URI Handling
 #
-#####
+#  In general an RDf resource - here a Thing, has a uriRef rather
+# than just a URI.  It has subclasses of Resource and Fragment.
+# (libwww equivalent HTParentAnchor and HTChildAnchor IIRC)
+#
+# Every resource has a symbol table of fragments.
+# A resource may (later) have a connection to a bunch of parsed stuff.
+#
+# We are nesting symbols two deep let's make a symbol table for each resource
+
+
+class Thing:
+    def __init__(self):
+        pass    #  Should be error as superclass should not be instantiated
+
+class Resource(Thing):
+    """   A Thing which has no fragment
+    """
+    table = {} # Table of resources
+    
+    def __init__(self, uri):
+        self.uri = uri
+        self.fragments = {}
+
+    def __repr__(self):
+        return "<" + self.uri + ">"
+    
+class Fragment(Thing):
+    """    A Thing which DOES have a fragment
+    """
+    def __init__(self, resource, fragid):
+        self.resource = resource
+        self.fragid = fragid
+
+    def __repr__(self):
+        return "<" + self.resource.uri + "#" + self.fragid + ">"
+
+    def representation(self, prefixes = {}):
+        """ Optimize output if prefixes available
+        """
+        try:
+            return prefixes[self.resource] + ":" + self.fragid;
+        except KeyError:
+            return self.__repr__()
+            
+        
+    
+def intern(uriref):
+    """  Returns either a Fragment or a Resource as appropriate
+
+This is the way they are actually made.
+"""
+    hash = len(uriref)-1
+    while (hash >= 0) and not (uriref[hash] == "#"):
+        hash = hash-1
+    if hash < 0 :     # This is a resource with no fragment
+        try:
+            return Resource.table[uriref]
+        except KeyError:
+            r = Resource(uriref)
+            Resource.table[uriref] = r  
+            return r
+  
+    else :      # This has a fragment and a resource
+        r = intern(uriref[:hash]) # 
+        try:
+            return r.fragments[uriref[hash+1:]]
+        except KeyError:
+            f = Fragment(r, uriref[hash+1:])
+            r.fragments[uriref[hash+1:]] = f
+            return f
+            
 
 RDF_type = intern("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
 DAML_equivalentTo = intern("http://www.daml.org/2000/10/daml-ont#equivalentTo")
 
 class PrintingParser(Parser):
+    """ Obsolete - use SinkParser(RDFSink(...)) """
+    
     def makeStatement(self, subj, pred, obj):
 	if isinstance(obj, Symbol):
 	    print "** %s(%s, %s)" % (pred, subj, obj)
 	else:
 	    print "** %s(%s, %s)" % (pred, subj, repr(obj))
 
+
 def test():
     import sys
 
-    p=PrintingParser('http://example.org/base/', 'file:notation3.py',
-		     'data:#')
-
+ 
     t0 = """bind x: <http://example.org/x-ns/>
 	    bind dc: <http://purl.org/dc/elements/1.1/>"""
 
@@ -453,31 +531,52 @@ bind default <http://example.org/payPalStuff?>
 <> a pp:Check; pp:payee :tim; pp:amount "$10.00"; dc:author :dan; dc:date "2000/10/7" ;  is pp:part of [ a pp:Transaction; = :t1 ]
 """
 
+#   p=PrintingParser('http://example.org/base/', 'file:notation3.py',
+#		     'data:#')
 
-    print "=== testing: ", t0
+    p=SinkParser(RDFSink(),'http://example.org/base/', 'file:notation3.py',
+		     'data:#')
+#    r=ToRDFParser(sys.stdout, 'http://example.org/base/', 'file:notation3.py',
+#		  'data:#')
+    r=SinkParser(SinkToN3(sys.stdout), 'http://example.org/base/', 'file:notation3.py',
+		  '#_')
+#    r=ToN3Parser(sys.stdout, 'http://example.org/base/', 'file:notation3.py',
+#		  '#_')
+
+    p.startDoc()
+    r.startDoc()
+    
+    print "=== testing: \n ", t0, "\n========="
     p.feed(t0)
+    r.feed(t0)
 
-    print "=== testing: ", t1
+    print "=== testing: ", t1, "\n========="
     p.feed(t1)
+    r.feed(t1)
 
 
-    print "=== testing: ", t2
+    print "=== testing: ", t2, "\n========="
     p.feed(t2)
+    r.feed(t2)
 
     print "=== testing: ", t3
     p.feed(t3)
+    r.feed(t3)
 
+    p.endDoc()
+    r.endDoc()
 
     print "--- RDF:"
+
 #    r=ToRDFParser(sys.stdout, 'http://example.org/base/', 'file:notation3.py',
 #		  'data:#')
-    r=ToN3Parser(sys.stdout, 'http://example.org/base/', 'file:notation3.py',
-		  'data:#')
-    r.startDoc()
-    r.feed(t0)
-    r.feed(t2)
-    r.feed(t3)
-    r.endDoc()
+#    r=ToN3Parser(sys.stdout, 'http://example.org/base/', 'file:notation3.py',
+#		  '#_')
+
+#    r.feed(t0)
+#    r.feed(t2)
+#    r.feed(t3)
+#    r.endDoc()
 
 
 
@@ -608,28 +707,77 @@ def relativeTo(here, there):
 
 ################################################################### tim
 
+class RDFSink:
 
-class ToN3Parser(Parser):
+    """  Dummy RDF sink prints calls
+
+    This is a superclass for other RDF processors which accept RDF events
+    -- maybe later Swell events.  Adapted from printParser
+    """
+
+    def __init__(self):
+        print "\nsink: created."
+
+    def bind(self, qname, uri):
+        print "sink: bind %s %s" % (qname, uri)
+        
+    def makeStatement(self, subj, pred, obj):
+	if isinstance(obj, Symbol):
+	    print "sink: %s(%s, %s)" % (pred, subj, obj)
+	else:
+	    print "sink: %s(%s, %s)" % (pred, subj, repr(obj))
+
+    def startDoc(self):
+          print "sink: start.\n"
+
+    def endDoc(self):
+        print "sink: end.\n"
+
+
+class SinkParser(Parser):
+    """Parses notation3 and outputs RDF stream to sink"""
+
+    def __init__(self, sink, baseURI, thisDoc, genBase, bindings = {}):
+	Parser.__init__(self, baseURI, thisDoc, genBase, bindings)
+	self._sink = sink
+
+    def bind(self, qname, uriref):
+        self._sink.bind(qname, uriref)                            # Hook for subclasses
+
+    def startDoc(self):
+        self._sink.startDoc()
+
+    def endDoc(self):
+        self._sink.endDoc()
+
+    def makeStatement(self, subj, pred, obj):
+        self._sink.makeStatement(subj, pred, obj)
+
+class SinkToN3(RDFSink):
     """keeps track of most recent subject and predicate reuses them
 
       Adapted from ToRDFParser(Parser);
     """
 
-    def __init__(self, outFp, baseURI, thisDoc, genBase, bindings = {}):
-	Parser.__init__(self, baseURI, thisDoc, genBase, bindings)
+    def __init__(self, outFp):
 	self._outFp = outFp
 	self._subj = None
+	self.prefixes = {}      # Look up prefix conventions 
 
     #@@I18N
     _namechars = string.lowercase + string.uppercase + string.digits + '_'
     _rdfns = 'http://www.w3.org/1999/02/22-rdf-syntax-ns#'
     _myns = 'http://www.w3.org/2000/10/n3/notation3.py#'
 
+    def convention(self, ns, prefix):
+        self.prefixes[ns] = prefix
+        self._outFp.write("\n bind %s %s .\n" % (prefix, `ns`) )
+
     def startDoc(self):
       _w = self._outFp.write
       self._outFp.write("#" * 30 + "Start parse\n")
-      _w('bind web'+ self._rdfns + " .\n")
-      _w('bind g ' + self._myns + " .\n\n")
+      _w('bind web '+ self._rdfns + " .\n")
+      _w('bind g   ' + self._myns + " .\n\n")
 
       self._subj = None
 
@@ -639,44 +787,39 @@ class ToN3Parser(Parser):
 	self._subj = None
 	self._outFp.write("#" * 30 + " end parse\n\n")
 
-    def makeStatement(self, subj, pred, obj):
-	predn = relativeTo(self._thisDoc, pred)
-	subjn = relativeTo(self._thisDoc, subj)
+    def writeThing(self, thing):
+    	if isinstance(thing, Symbol):
+#	    objn = relativeTo(self._thisDoc, obj)
+	    self._outFp.write( ' <' + `thing` + '>')
+	else:
+	    self._outFp.write( ' "' + thing  + '"')
 
+
+    def makeStatement(self, subj, pred, obj):
+        
 	if self._subj is not subj:
 	    if self._subj:
 		  self._outFp.write(" .\n")
-	    self._outFp.write('  ' + subjn)
+	    self.writeThing(subj)
 	    self._subj = subj
 	    self._pred = None
 
-	elif self._pred is not pred:
+	if self._pred is not pred:
 	    if self._pred:
 		  self._outFp.write(";\n    ")
-	    self._outFp.write( " >- " + predn + " -> ")
+	    self._outFp.write( " >- " )
+	    self.writeThing(pred)
+	    self._outFp.write( " -> ")
 	    self._pred = pred
 	else:
 	    self._outFp.write(",")    # Same subject pred => obejct list
 
-	i = len(predn)
-	while i>0:
-	    if predn[i-1] in self._namechars:
-		i = i - 1
-	    else:
-		break
-	ln = predn[i:]
-	ns = predn[:i]
-
-	if isinstance(obj, Symbol):
-	    objn = relativeTo(self._thisDoc, obj)
-	    self._outFp.write(objn)
-	else:
-	    self._outFp.write(obj)
-
-
+        self.writeThing(obj);
+        
 
 
 ############################################################### /tim
+
 import random
 import time
 import cgi
