@@ -29,3 +29,19 @@ this log:forAll :urisRow, :aacl, :acl, :access, :u1, :g1, :accessor .
  :aacl :RESULT :u1
 
 }.
+
+# should create this SQL:
+# SELECT 
+#   c.id as u1_id,
+#   a.id as urisRow_id,
+#   d.id as g1_id,d.groupId as g1_groupId,
+#   b.access as access,
+#   a.acl as aacl,
+#   b.acl as acl_acl,b.id as acl_id,b.access as acl_access,
+#   d.groupId as accessor
+# FROM uris AS a,acls AS b,ids AS c,idInclusions AS d
+# WHERE (a.uri="http://www.w3.org/Member/Overview.html")
+#   AND (a.acl=b.acl)
+#   AND (c.value="eric")
+#   AND (c.id=d.id)
+#   AND (d.groupId=b.id)
