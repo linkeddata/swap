@@ -11,6 +11,7 @@ import sniff
 import urllib
 import LX.language
 import pluggable
+import LX.nodepath
 
 class UnsupportedDatatype(RuntimeError):
     pass
@@ -19,14 +20,6 @@ defaultScope = {
     ("legal",): re.compile(r"^[a-zA-Z0-9_]+$"),
     ("hint",): re.compile(r"(?:\/|#)([a-zA-Z0-9_]*)/?$")
     }
-
-def stdValuesFilter(obj):
-    if isinstance(obj, type("")): return 1
-    if isinstance(obj, type(1)): return 1
-    if isinstance(obj, type(0.1)): return 1
-    # we'd like this to only be acceptable as a predicate/function...
-    if obj == LX.ns.lx.uri: return 1
-    return 0
 
 class KB(list, pluggable.Store):
     """A Knowledge Base, a list of implicitely conjoined sentences.
@@ -47,18 +40,29 @@ class KB(list, pluggable.Store):
 
     (aka a sentence in "prenex" form.)
 
+    Currently inherits from "list" but that's probably a mistake,
+    since we'll be wanting to catch updates.   Don't try to modify
+    except via add(), please...?
+
     """
 
-    def __init__(self):
+    def __init__(self, namespaceCluster=LX.namespace.ns):
+        self.ns = namespaceCluster
         self.exivars = []
         self.univars = []
         self.exIndex = 0
         self.__datatypeValuesChecked = { }
+        self.nodes = { }
+        self.nodesAreCurrent = 1
+        self.nicknames = { }
 
     def clear(self):
         self.__init__()
         self[:] = []
 
+    def __repr__(self):
+        return "<KB instance at %x>" % id(self)
+    
     def __str__(self):
         scope = defaultScope.copy()
         result = "\nKB Contents:"
@@ -152,6 +156,7 @@ class KB(list, pluggable.Store):
         Possibility: call Constant, ConstantForURI, ConstantForDTV,
         if you don't pass in constants...?  Nah.
         """
+        self.nodesAreCurrent = 0
         if (p):
             s = formula
             self.append(LX.logic.RDF(s,p,o))
@@ -318,12 +323,96 @@ class KB(list, pluggable.Store):
         parser=LX.language.getParser(language=language)
         parser.parse(stream, self) 
 
+    def __getattr__(self, name):
+        """
+        >>> import LX.kb
+        >>> kb=LX.kb.KB()
+        >>> kb.rdf_type
+        Node([],LX.logic.ConstantForURI("http://www.w3.org/1999/02/22-rdf-syntax-ns#type))
+        """
+
+        # is it a namespace-underscore-name name?
+        try:
+            (pre, post) = name.split("_", 2)
+        except ValueError:
+            raise AttributeError, ("KB has no %s attribute" % name)
+        ns = getattr(self.ns, pre)
+        term = getattr(ns, post)
+        # if this is always true, we could just maintain an inverse map...
+        if name != self.nickname(term):
+            raise RuntimeError, "NAME: %s, TERM: %s , NICK: %s" % (name, term, self.nickname(term))
+        return self.getNode(term)
+
+    def getNode(self, term):
+        """Return a Node, which is a lot like a logic.Term, except that
+        it's attached to a particular KB.  
+
+        Talking about the nodes properties is like talking about the
+        properties of the thing symbolized by that Term, according to
+        the attached KB.
+
+        The getattr override allow you to use kb.rdf_type as a
+        shorthand for kb.getNode(LX.logic.ConstantForURI("http:.....#type"))
+        """
+        self.fillNodes()
+        return self.nodes.setdefault(term, LX.nodepath.Node(self, term))
+
+    def fillNodes(self):
+        """In this implementation, the node API is all
+        forward-chained; you call kb.fillNodes() and it
+        fills out all the nodes.   You can still refer
+        to nodes and paths not in the KB, as needed for adding stuff,
+        but we've filled in the __dict__s for the stuff in the KB.
+
+        This wins for being simple, and fast in the common case of the
+        KB being loaded then node-queried a lot.
+
+        It's unclear whether I should hide this, in slightly-lazy-eval
+        way, or not....
+        """
+        if self.nodesAreCurrent: return
+        self.nodesAreCurrent = 1
+
+        for f in self:
+            if f.function == LX.logic.RDF:
+                (subj, pred, obj) = f.args
+            else:
+                try:
+                    (pred, subj, obj) = f.all
+                except ValueError:
+                    raise RuntimeError, "Not pure-RDF KB!"
+
+            k = self.nickname(pred)
+            
+            subjNode = self.nodes.setdefault(subj, LX.nodepath.Node(self, subj))
+            objNode = self.nodes.setdefault(obj, LX.nodepath.Node(self, obj))
+
+            subjNode.preFill(k, objNode, pred, 0)
+            objNode.preFill("is_"+k, subjNode, pred, 1)
+
+        #print self.nodes
+
+    def nickname(self, term):
+        try:
+            return self.nicknames[term]
+        except KeyError:
+            pass
+        nick = "_".join(self.ns.inverseLookup(term))
+        self.nicknames[term] = nick
+        return nick
+        
+
+
+        
 if __name__ == "__main__":
     import doctest, sys
     doctest.testmod(sys.modules[__name__])
  
 # $Log$
-# Revision 1.16  2003-08-25 16:10:41  sandro
+# Revision 1.17  2003-08-25 21:10:01  sandro
+# general nodepath support
+#
+# Revision 1.16  2003/08/25 16:10:41  sandro
 # removed all the leftover 'interpretation' stuff
 #
 # Revision 1.15  2003/08/22 20:49:41  sandro

@@ -18,7 +18,10 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
  
 # $Log$
-# Revision 1.1  2003-08-25 20:29:05  sandro
+# Revision 1.2  2003-08-25 21:10:01  sandro
+# general nodepath support
+#
+# Revision 1.1  2003/08/25 20:29:05  sandro
 # broken draft
 #
 
@@ -32,6 +35,7 @@ class Node:
     def __init__(self, kb, term):
         self.kb = kb
         self.fromTerm = term
+        self.arcLists = { }
 
     def __getattr__(self, name):
 
@@ -56,35 +60,47 @@ class Node:
     def __repr__(self):
         return "Node"+"("+`self.kb`+","+`self.fromTerm`+")"
 
+    
     def preFill(self, attr, value, term, invert):
-        getattr(self, attr).append(value)
-        # make sure these got recovered from "attr" properly
-        assert(getattr(self, attr).via == term)
-        assert(getattr(self, attr).invert == invert)
-        #print str(self)+"."+attr+" << "+str(value)
-        #print "    now I am ", id(self)
-        #print "    :", self.__dict__
-        #print "    now id "+str(id(getattr(self, attr)))
-        #print "    now: "+str(getattr(self, attr).preFilled)
+        self.arcLists.setdefault((term,invert), []).append(value)
 
     def dump(self, done):
+        """needs shorter names, maybe line breaking, is-of handling, ..."""
         if done.has_key(self):
-            print "[loop]"
-            return
+            return "[loop]"
         done[self] = 1
-        print "[ ",
-        for (key, value) in self.__dict__.iteritems():
-            print key,
-            if isinstance(value, Path):
-                value.dump(done)
-            else:
-                print "<"+`value`+">"
+        result = "[ "
         try:
-            print '"'+'"^^<'.join(LX.logic.valuesForConstants[self.fromTerm])+'>',
-        except KeyError:
-            pass
-        print " ]",
+            result += "= "+self.kb.nickname(self.fromTerm)+"; "
+        except: pass
+        keytexts = []
+        for (key, values) in self.arcLists.iteritems():
+            
+            try:
+                nick = self.kb.nickname(key[0])
+                if key[1]:
+                    continue
+                    nick = "is "+nick+" of"
+            except:
+                nick = str(key)
+            keytext = nick + " "
+            valuetexts = []
+            for v in values:
+                if isinstance(v, Node):
+                    valuetexts.append(v.dump(done))
+                else:
+                    valuetexts.append("<"+`v`+">")
+            keytext += ", ".join(valuetexts)
+            keytexts.append(keytext)
+        result += "; ".join(keytexts)
+        result += " ]"
 
+        #print '"'+'"^^<'.join(LX.logic.valuesForConstants[self.fromTerm])+'>',
+
+        return result
+
+    def getValue(self):
+        return self.fromTerm
 
 class Path:
     def __init__(self, from_, via, invert):
@@ -92,7 +108,6 @@ class Path:
         self.kb=from_.kb
         self.via=via
         self.invert=invert
-        self.preFilled = []
 
     def __getattr__(self, name):
 
@@ -119,32 +134,35 @@ class Path:
         else:
             return "Path"+"("+`self.from_`+","+`self.via`+")"
 
-    def append(self, value):
-        self.preFilled.append(value)
-
     def first(self):
         if isinstance(self.from_, Path):
             return self.from_.first()
         return self
     
     def __iter__(self):
-        first = self.first()
-        if self is not first: print "WARNING"
         
-        #print "In Iter, count=", len(self.preFilled)
-        for i in self.preFilled:
-            yield i
-        #print "Done with Iter"
+        # for [the node that is my from_] / [each node in my from_],
+        # yield all the nodes at my key (via,invert)....  
+
+        key = (self.via, self.invert)
+        
+        if isinstance(self.from_, Node):
+            for n in self.from_.arcLists.setdefault(key, []):
+                yield n
+        else:
+            for m in self.from_:
+                for n in m.arcLists.setdefault(key, []):
+                    yield n
 
     def only(self):
         i = self.__iter__()
         try:
             a = i.next();
         except StopIteration:
-            raise RuntimeError, `self`+" 'only' violation, too few"
+            raise KeyError, `self`+" 'only' violation, too few"
         try:
             b = i.next();
-            raise RuntimeError, `self`+" 'only' violation, too many"
+            raise KeyError, `self`+" 'only' violation, too many"
         except StopIteration:
             pass
         return a
@@ -187,3 +205,8 @@ class Path:
 if __name__ == "__main__":
     import doctest, sys
     doctest.testmod(sys.modules[__name__])
+
+# $Log$
+# Revision 1.2  2003-08-25 21:10:01  sandro
+# general nodepath support
+#
