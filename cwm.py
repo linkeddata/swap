@@ -167,25 +167,6 @@ class Thing:
     def __repr__(self):   # only used for debugging I think
         return self.representation()
 
-    # Use the URI to allow sorted listings - for cannonnicalization if nothing else
-    #  Put a type declaration before anything else
-#    def __cmp__(self, other):
-#        if self is other: return 0
-#        _type = "<" + notation3.RDF_type_URI + ">"
-#        s = self.representation()
-#        if s == _type:
-#            return -1
-#        o = other.representation()
-#        if o == _type:
-#            return 1
-#        if s < o :
-#            print s,  "LESS THAN", o
-#            return -1
-#        if s > o :
-#            print s, "GREATER THAN", o
-#            return 1
-#        raise internalError # Strings should not match if not same object
-
     def representation(self, base=None):
         """ in N3 """
         return "<" + self.uriref(base) + ">"
@@ -213,6 +194,35 @@ class Thing:
                 if s.triple[CONTEXT] is context:
                     n = n+1
         return n
+
+    # Use the URI to allow sorted listings - for cannonnicalization if nothing else
+    #  Put a type declaration before anything else except for strings
+    
+def compareURI(self, other):
+        if self is other: return 0
+        if isinstance(self, Literal):
+            if isinstance(other, Literal):
+                return cmp(self.string, other.string)
+            else:
+                return -1
+        if isinstance(other, Literal):
+            return 1
+        # Both regular URIs
+        _type = "<" + notation3.RDF_type_URI + ">"
+        s = self.representation()
+        if s == _type:
+            return -1
+        o = other.representation()
+        if o == _type:
+            return 1
+        if s < o :
+            print s,  "LESS THAN", o
+            return -1
+        if s > o :
+            print s, "GREATER THAN", o
+            return 1
+        raise internalError # Strings should not match if not same object
+
 
 class Resource(Thing):
     """   A Thing which has no fragment
@@ -319,11 +329,6 @@ class Literal(Thing):
     def uriref(self, base=None):      # Unused at present but interesting! 2000/10/14
         return  Literal_URI_Prefix + uri_encode(self.representation())
 
-    def __cmp__(self, other):
-        if isinstance(other, Literal):
-            return cmp(self.string, other.string)
-        else:
-            return cmp(self.string, other.representation())
 
 
 def uri_encode(str):
@@ -390,14 +395,12 @@ class StoredStatement:
         self.triple = q
 
 #   The order of statements is only for cannonical output
-#    def __cmp__(self, other):
-#        if self is other: return 0
-#        if self.triple[CONTEXT] is not other.triple[CONTEXT]:
-#            return self.triple[CONTEXT].__cmp__(other.triple[CONTEXT])
-#        for p in [CONTEXT, SUBJ, PRED, OBJ]: # Note NOT internal order
-#            if self.triple[p] is not other.triple[p]:
-#                return self.triple[p].__cmp__(other.triple[p])
-#        raise internalerror # SHould never have two identical distinct
+    def __cmp__(self, other):
+        if self is other: return 0
+        for p in [CONTEXT, SUBJ, PRED, OBJ]: # Note NOT internal order
+            if self.triple[p] is not other.triple[p]:
+                return compareURI(self.triple[p],other.triple[p])
+        raise internalerror # SHould never have two identical distinct
         
 class RDFStore(notation3.RDFSink) :
     """ Absorbs RDF stream and saves in triple store
@@ -736,12 +739,12 @@ class RDFStore(notation3.RDFSink) :
         """ Iterates over all URIs ever seen looking for statements
         """
         rs = self.engine.resources.values()[:]
-        if sorting: rs.sort()
+        if sorting: rs.sort(compareURI)
         for r in rs :  # First the bare resource
             #print "# sorted?" ,`r`
             self._dumpSubject(r, context, sink, sorting)
             fs = r.fragments.values()[:]
-            if sorting: fs.sort() 
+            if sorting: fs.sort(compareURI) 
             for f in fs :  # then anything in its namespace
                 self._dumpSubject(f, context, sink, sorting)
 
