@@ -2,6 +2,13 @@
 """
 dbview -- view an SQL DB thru RDF glasses.
 
+an implementation of...
+
+[SWDB]
+ Relational Databases on the Semantic Web
+ Id: RDB-RDF.html,v 1.17 2002/03/06 20:43:13 timbl
+ http://www.w3.org/DesignIssues/RDB-RDF.html
+
 Share and Enjoy. Open Source license:
 Copyright (c) 2001 W3C (MIT, INRIA, Keio)
 http://www.w3.org/Consortium/Legal/copyright-software-19980720
@@ -56,11 +63,6 @@ REFERENCES
  
 SEE ALSO
 
-[SWDB]
- Relational Databases on the Semantic Web
- Id: RDB-RDF.html,v 1.17 2002/03/06 20:43:13 timbl
- http://www.w3.org/DesignIssues/RDB-RDF.html
-
 earlier dev notes, links, ...
  http://ilrt.org/discovery/chatlogs/rdfig/2002-02-27#T18-29-01
  http://rdfig.xmlhack.com/2002/02/27/2002-02-27.html#1014821419.001175
@@ -77,7 +79,7 @@ import MySQLdb # MySQL for Python
                # any Python Database API-happy implementation will do.
 
 from RDFSink import SYMBOL, LITERAL
-import notation3 # @@move RDF/XML writer out of notation3
+import toXML # RDF/XML sink
 
 import BaseHTTPServer
 import cgi # for URL-encoded query parsing
@@ -212,7 +214,7 @@ class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s = self.server
         dbdocaddr = s._base
         
-        sink = notation3.ToRDF(self.wfile, dbdocaddr)
+        sink = toXML.ToRDF(self.wfile, dbdocaddr)
 
         aboutDB(self.server._db, dbdocaddr, sink)
 
@@ -227,7 +229,7 @@ class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s = self.server
         dbdocaddr = s._base
         
-        sink = notation3.ToRDF(self.wfile, dbdocaddr)
+        sink = toXML.ToRDF(self.wfile, dbdocaddr)
 
         aboutTable(self.server._db, dbdocaddr, sink, tbl)
 
@@ -242,7 +244,7 @@ class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         s = self.server
         dbaddr = s._base
         
-        sink = notation3.ToRDF(self.wfile, dbaddr)
+        sink = toXML.ToRDF(self.wfile, dbaddr)
 
         path, qs = split(self.path, '?')
         fields, tables, keys, joins, cond = parseQuery(qs)
@@ -327,9 +329,9 @@ def askdb(db, dbaddr, sink, fields, tables, keys, joins, condextra):
 
     # using table names as namespace names seems to be aesthetic...
     for n in tables:
-        sink.bind(n, (SYMBOL, "%s/%s#" % (dbaddr, n)))
+        sink.bind(n, "%s/%s#" % (dbaddr, n))
     # and suggest a prefix for the table classes...
-    sink.bind('tables', (SYMBOL, "%s#" % (dbaddr,)))
+    sink.bind('tables', "%s#" % (dbaddr,))
 
 
     while 1:
@@ -458,9 +460,9 @@ def aboutDB(db, dbdocaddr, sink):
 
     fmla = something(sink, None, 'aboutDB')
 
-    sink.bind('db', (SYMBOL, str(SwDB)))
-    sink.bind('rdfs', (SYMBOL, str(RDFS)))
-    sink.bind('rdf', (SYMBOL, str(RDF)))
+    sink.bind('db', str(SwDB))
+    sink.bind('rdfs', str(RDFS))
+    sink.bind('rdf', str(RDF))
 
     dbaddr = "%s#.database" % dbdocaddr
 
@@ -517,9 +519,9 @@ def tableNames(db):
 def aboutTable(db, dbaddr, sink, tbl):
     fmla = something(sink, None, 'aboutTable')
 
-    sink.bind('db', (SYMBOL, str(SwDB)))
-    sink.bind('rdfs', (SYMBOL, str(RDFS)))
-    sink.bind('rdf', (SYMBOL, str(RDF)))
+    sink.bind('db', str(SwDB))
+    sink.bind('rdfs', str(RDFS))
+    sink.bind('rdf', str(RDF))
     
     c = db.cursor()
     c.execute("show columns from %s" % tbl)
@@ -683,7 +685,7 @@ def testShow():
                        db=dbName)
 
     dbaddr = 'http://example/administration'
-    sink = notation3.ToRDF(sys.stdout, dbaddr)
+    sink = toXML.ToRDF(sys.stdout, dbaddr)
 
     aboutDB(db, dbaddr, sink)
 
@@ -735,7 +737,7 @@ def testQ():
 
     print "as SQL:", asSQL(fields, tables, keys, joins, cond)
     
-    sink = notation3.ToRDF(sys.stdout, 'stdout:')
+    sink = toXML.ToRDF(sys.stdout, 'stdout:')
 
     db=MySQLdb.connect(host=host, port=port,
                        user=user, passwd=passwd,
@@ -781,7 +783,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.18  2002-03-16 06:14:53  connolly
+# Revision 1.19  2003-03-02 06:07:46  connolly
+# updated per bind API change, XML serializer move to toXML module
+#
+# Revision 1.18  2002/03/16 06:14:53  connolly
 # allow command-line test cases for --testSQL
 #
 # Revision 1.17  2002/03/16 05:59:43  connolly
