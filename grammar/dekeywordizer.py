@@ -32,7 +32,7 @@ def dekeywordize(inTokens, bareName):
                (token == 'keywords' and keywordMode and 'keywords' in keywords):
                 keywordMode = True
                 newKeywordMode = 1
-                keyWords = {}
+                keywords = {}
             else:
                 if keywordMode:
                     if token in keywords:

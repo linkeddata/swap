@@ -155,6 +155,8 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
 	assert guess == 'text/rdf+n3'
 	if diag.chatty_flag > 49: progress("Parsing as N3")
 	p = notation3.SinkParser(store, F,  thisDoc=asIfFrom,flags=flags, why=why)
+        import grammar.yosiParser
+#	p = grammar.yosiParser.SinkParser(store, F,  thisDoc=asIfFrom,flags=flags, why=why)
 	p.startDoc()
 	p.feed(buffer)
 	p.endDoc()

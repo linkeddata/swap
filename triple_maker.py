@@ -190,6 +190,10 @@ class TripleMaker:
         self.addNode(a)
 
     def addAnonymous(self, Id):
+        """If an anonymous shows up more than once, this is the
+        function to call
+
+        """
         if Id not in bNodes:
             a = self.formulas[-1].newBlankNode()
             bNodes[Id] = a

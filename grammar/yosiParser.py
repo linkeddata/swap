@@ -209,7 +209,7 @@ class SinkParser:
                     tm.declareExistential(token[1:-1])
                 else:
                     raise ValueError(token)
-                forMode = 3                
+                forMode = 4               
             elif forMode == 3 or forMode == 4:
                 if token == '.':
                     forMode = 0

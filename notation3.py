@@ -1557,6 +1557,106 @@ v   Use  "this log:forAll" instead of @forAll, and "this log:forAll" for "@forSo
 def nothing():
     pass
 
+class tmToN3:
+    """
+
+
+    """
+    def __init__(self, write):
+        self._write = writeEncoded
+        self._writeRaw = write
+    
+    def writeEncoded(self, str):
+	"""Write a possibly unicode string out to the output"""
+	return self._writeRaw(str.encode('utf-8'))
+    
+    def start(self):
+        pass
+        self._parts = [0]
+        self._types = [None]
+
+    def end(self):
+        self._write('\n\n#End')
+
+    def addNode(self, node):
+        pass
+
+    def IsOf(self):
+        self._write('is ')
+        self._predIsOfs[-1] = FRESH
+
+    def checkIsOf(self):
+        return self._predIsOfs[-1]
+
+    def forewardPath(self):
+        self._write('!')
+        
+    def backwardPath(self):
+        self._write('^')
+        
+    def endStatement(self):
+        self._parts[-1] = 0
+
+    def addLiteral(self, lit, dt=None, lang=None):
+        self._types = LITERAL
+        self.addNode((lit, dt, lang))
+
+    def addSymbol(self, sym):
+        self._types = SYMBOL
+        self.addNode(sym)
+    
+    def beginFormula(self):
+        self._parts.append(0)
+        self._write('{')
+
+    def endFormula(self):
+        self._parts.pop()
+        self._write('}')
+        self._types = None
+        self.addNode(None)
+
+    def beginList(self):
+        self._parts.append(-1)
+
+    def endList(self):
+        self._parts.pop()
+        self._types = LIST
+        self.addNode(None)
+
+    def addAnonymous(self, Id):
+        """If an anonymous shows up more than once, this is the
+        function to call
+
+        """
+        if Id not in bNodes:
+            a = self.formulas[-1].newBlankNode()
+            bNodes[Id] = a
+        else:
+            a = bNodes[Id]
+        self.addNode(a)
+        
+    
+    def beginAnonymous(self):
+        self._parts.append(0)
+        self._write('[')
+        
+
+    def endAnonymous(self):
+        self._parts.pop()
+        self._write(']')
+        self._types = None
+        self.addNone(None)
+
+    def declareExistential(self, sym):
+        self._write('@forSome ' + sym + ' . ')
+
+    def declareUniversal(self, sym):
+        self._write('@forAll ' + sym + ' . ')
+
+    def addQuestionMarkedSymbol(self, sym):
+        self._types = QUESTION
+        self.addNode(sym)
+
 import fake_llyn
 from formula import Formula
 from term import Node, Literal, AnonymousExistential

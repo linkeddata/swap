@@ -10,7 +10,7 @@
 # Question: What cities are in states bordering Massachusetts?
 
 
-{"MA"^state:code.state:borderstate^city:state city:name ?n}=>{
+{"MA"^state:code!state:borderstate^city:state city:name ?n}=>{
    ?n a :NAME_OF_CITY_IN_A_STATE_BORDERING_MASSACHUSETTS }.
 
 # ends	
