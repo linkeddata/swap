@@ -51,8 +51,8 @@ in python.</p>
 
 <h2>Source</h2>
 
-<p>This <a href="http://dev.w3.org/cvsweb/2000/10/swap/">stuff</a> is not
-guaranteed but is open source and available from the <a
+<p>This <a href="http://dev.w3.org/cvsweb/2000/10/swap/">swap codef</a> is
+not guaranteed but is open source and available from the <a
 href="http://dev.w3.org/cvsweb/">public w3c CVS repository</a>.</p>
 
 <p>Check out *.py from the top level of the swap hierarchy to use it, check
@@ -61,7 +61,28 @@ out the whole tree to develop.</p>
 <p>Set up an alias (.bat file, etc) to make the cwm command  cwm="python
 /wherever/cwm.py"</p>
 
-<p></p>
+<p>Alternatively, you can get the sources one-by-one by download from the
+web.</p>
+
+<h3>Prerequisites</h3>
+<ul>
+  <li><strong>Python</strong>. That you need. It comes with many systems.  If
+    not, on debian type apt-get install python. On OSX, fink install python.
+    On cygwin, select python in the setup.exe installer.. </li>
+  <li>If you are reading things in RDF/XML format, you will need the pxml
+    python extension.  Under debian, type <code>apt-get install pyxml.</code>
+     Otherwise, untar it and in the right directory type python setup.py
+    install.  Under cygwin, select it in the the cygwin setup.exe.</li>
+  <li>If you are using the public key cryptography builtins, you will need
+    the amkCrypto python extension. Hopefully the necessary functionality
+    will be in pycryto soon (next release later than 2002/05).  One version
+    had a print statement in number.py#inverse --the print statement needs to
+    be removed.  Edit directory names appropraitely in setup.py then run
+    <code>python setup.py install</code>.  Necessary changes for OSX: @@</li>
+</ul>
+
+<p>You can do all this under MSWindows but the easiest thing is to install
+cygwin (a unix-like environment for Windows) and run everything in there.</p>
 
 <h3 id="Closed">Features</h3>
 
@@ -94,7 +115,7 @@ data manipulator for RDF on the lines of sed, awk, etc or xsl.</p>
 are processed in order from left to right.</p>
 <dl>
   <dt>--help</dt>
-    <dd>generate a  more up to date list of parameters</dd>
+    <dd>generate a  <strong>more up to date</strong> list of parameters</dd>
   <dt>--pipe</dt>
     <dd>don't store, just process serially. (doesn't lose comment lines!)
       (flag)</dd>
