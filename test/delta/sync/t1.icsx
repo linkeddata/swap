@@ -1,0 +1,40 @@
+<rdf:RDF
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns="http://www.w3.org/2002/12/cal/ical#"
+  ><Vcalendar
+     xmlns:x-wr="http://www.w3.org/2002/12/cal/prod/Apple_Comp_273def595c8b3485#"
+    ><version
+      >2.0</version
+    ><x-wr:calname
+      >test</x-wr:calname
+    ><prodid
+      >-//Apple Computer, Inc//iCal 1.5//EN</prodid
+    ><x-wr:relcalid
+      >D762F657-6FFA-11D9-B3B2-000A9580D8C0</x-wr:relcalid
+    ><x-wr:timezone
+      >US/Eastern</x-wr:timezone
+    ><calscale
+      >GREGORIAN</calscale
+    ><component
+      ><Vevent
+         rdf:about="http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0"
+        ><dtstart
+           xmlns:zone="http://www.w3.org/2002/12/cal/tzd/America/New_York#"
+           zone:tz="2005-01-23T15:00:00"
+        /><dtend
+           xmlns:zone="http://www.w3.org/2002/12/cal/tzd/America/New_York#"
+           zone:tz="2005-01-23T16:00:00"
+        /><summary
+          >New Event</summary
+        ><uid
+          >009608A4-6FFB-11D9-B3B2-000A9580D8C0</uid
+        ><sequence
+          >1</sequence
+        ><dtstamp
+           rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime"
+          >2005-01-27T00:33:02Z</dtstamp
+        ></Vevent
+      ></component
+    ></Vcalendar
+  ></rdf:RDF
+>

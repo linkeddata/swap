@@ -1,0 +1,30 @@
+#Processed by Id: cwm.py,v 1.167 2005/01/10 19:15:22 syosi Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/delta/sync/t1.icsx
+        
+#  Notation3 generation by
+#       notation3.py,v 1.174 2005/01/11 20:17:31 syosi Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/delta/sync/t1.icsx
+     @prefix : <http://www.w3.org/2002/12/cal/ical#> .
+     @prefix x-wr: <http://www.w3.org/2002/12/cal/prod/Apple_Comp_273def595c8b3485#> .
+     @prefix zone: <http://www.w3.org/2002/12/cal/tzd/America/New_York#> .
+    
+    <http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>     a :Vevent;
+         :dtend  [
+             zone:tz "2005-01-23T16:00:00" ];
+         :dtstamp "2005-01-27T00:33:02Z"^^<http://www.w3.org/2001/XMLSchema#dateTime>;
+         :dtstart  [
+             zone:tz "2005-01-23T15:00:00" ];
+         :sequence "1";
+         :summary "New Event";
+         :uid "009608A4-6FFB-11D9-B3B2-000A9580D8C0" .
+      [      a :Vcalendar;
+             :calscale "GREGORIAN";
+             :component <http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>;
+             :prodid "-//Apple Computer, Inc//iCal 1.5//EN";
+             :version "2.0";
+             x-wr:calname "test";
+             x-wr:relcalid "D762F657-6FFA-11D9-B3B2-000A9580D8C0";
+             x-wr:timezone "US/Eastern" ].
+    
+#ENDS

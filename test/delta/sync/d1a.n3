@@ -1,0 +1,13 @@
+     @prefix : <http://www.w3.org/2002/12/cal/ical#> .
+     @prefix delta: <http://www.w3.org/2004/delta#> .
+     @prefix dt: <http://www.w3.org/2001/XMLSchema#> .
+    {
+        
+        }     delta:deletion {<http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>     :dtstamp "2005-01-27T00:33:02Z"^^dt:dateTime;
+             :summary "New Event" .
+        };
+         delta:insertion {<http://www.w3.org/uid/009608A4-6FFB-11D9-B3B2-000A9580D8C0>     :dtstamp "2005-01-27T00:33:53Z"^^dt:dateTime;
+             :summary "Meet everyone in the group" .
+        } .
+    
+
