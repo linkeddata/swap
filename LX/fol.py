@@ -6,16 +6,16 @@ __version__ = "$Revision$"
 
 import LX.expr
 
-class Proposition(LX.expr.AtomicConstant):
-    """A boolean constant"""
-    pass
+################################################################
 
 class Variable(LX.expr.AtomicExpr):
     """
     This is the kind of variable that can range over first-order
     kind of stuff, not predicates, functions, etc.
 
-    [ Hack -- uriref belongs in some metadata ]
+    The uriref really belongs in metadata -- it's the name some people
+    are using to talk about this variable; those people should keep
+    track of it, I think, not us.
     """
     def __init__(self, name=None, uriref=None):
         self.name = name
@@ -26,6 +26,16 @@ class ExiVar(Variable):
 
 class UniVar(Variable):
     pass
+
+
+################################################################
+
+class Proposition(LX.expr.AtomicExpr):
+    """A boolean constant, but it's a very different thing from
+    a term constant in FOL."""
+    pass
+
+################################################################
 
 class Constant(LX.expr.AtomicExpr):
     """
@@ -48,7 +58,7 @@ class Function(LX.expr.AtomicExpr):
             assert(isFirstOrderTerm(arg))
 
 
-class Predicate(LX.expr.AtomicConstant):
+class Predicate(LX.expr.AtomicExpr):
     """A mapping from one or more terms to a truth value.
 
     When used as the function in an Expr, it makes the Expr be an
@@ -59,7 +69,9 @@ class Predicate(LX.expr.AtomicConstant):
         for arg in args:
             assert(isFirstOrderTerm(arg))
 
-class Connective(LX.expr.AtomicConstant):
+################################################################
+            
+class Connective(LX.expr.AtomicExpr):
     """A function with specific FOL semantics"""
 
 class BinaryConnective(Connective):
@@ -96,6 +108,8 @@ class UniveralQuantifier(Quantifier):
         assert(isFirstOrderFormula(args[1]))
 
 
+################################################################
+        
 # We could dispatch this off the Connective inheritance tree or something.
     
 def isFirstOrderTerm(expr):
@@ -224,7 +238,14 @@ def _test():
 if __name__ == "__main__": _test()
 
 # $Log$
-# Revision 1.1  2002-09-18 19:56:46  sandro
+# Revision 1.2  2002-10-03 16:13:02  sandro
+# some minor changes to LX-formula stuff, but it's still broken in ways
+# that don't show up on the regression test.
+#
+# mostly: moved llyn-LX conversion stuff out of llyn.py, into
+# LX.engine.llynInterface.py
+#
+# Revision 1.1  2002/09/18 19:56:46  sandro
 # more refactoring, added some unit tests, stricter notion of typing
 #
 

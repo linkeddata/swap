@@ -23,7 +23,7 @@ class SOSEmpty(NoProofFound):
     for a proof"""
     pass
 
-def run(string, fileBase):
+def run(string, fileBase=",lx.engine.otter"):
     # change to also take KB/Sentence some day
     filename = fileBase+".toOtter"
     out = fileBase+".fromOtter"

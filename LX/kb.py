@@ -65,6 +65,19 @@ class KB(list):
         self.exivars.append(v)
         return v
 
+    def describeInterpretation(i, descriptionLadder=None):
+        """For all the exprs in the kb which are keys in i, "describe"
+        them as the value.
+
+        >>> import LX.kb
+        >>> import LX.expr
+        >>> a=LX.expr.AtomicExpr("joe")
+        >>> b=LX.expr.AtomicExpr("joe")
+        >>> kb = LX.KB()
+        >>> kb.add(a(b))
+        >>> kb.describeInterpretation( {b:[a,b]} )   loop check?!
+        """
+        raise RuntimeError, "Not Implemented"
     
     def reifyAsTrue(self):
         flat = KB()
@@ -78,8 +91,19 @@ class KB(list):
         self.clear()
         self.addFrom(flat)
 
+    def isSelfConsistent(self):
+        # should also try mace, icgns, etc...
+        s = LX.language.otter.Serializer()
+        str = s.serialize(self)
+        try:
+            proof = LX.engine.otter.run(str)
+            return 0
+        except LX.engine.otter.SOSEmpty:
+            return 1
+        # ... just let other exceptions bubble up, for now
+
     def load(self, uri, allowedLanguages=["*"]):
-        """Add the formal meaning of identified document.
+        """NOT IMPLEMENTED: Add the formal meaning of identified document.
 
         In the simplest case, this might mean opening a local file,
         which we know to contain n3, read the contents, and parse them
@@ -117,9 +141,22 @@ class KB(list):
 
         """
         
-        
+def _test():
+    import doctest, expr
+    return doctest.testmod(expr) 
+
+if __name__ == "__main__": _test()
+
+ 
 # $Log$
-# Revision 1.3  2002-10-02 23:32:20  sandro
+# Revision 1.4  2002-10-03 16:13:02  sandro
+# some minor changes to LX-formula stuff, but it's still broken in ways
+# that don't show up on the regression test.
+#
+# mostly: moved llyn-LX conversion stuff out of llyn.py, into
+# LX.engine.llynInterface.py
+#
+# Revision 1.3  2002/10/02 23:32:20  sandro
 # not sure
 #
 # Revision 1.2  2002/08/29 16:39:55  sandro

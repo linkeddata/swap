@@ -47,6 +47,7 @@ import uripath
 import llyn
 import LX
 import LX.rdf
+import LX.engine.llynInterface 
 
 cvsRevision = "$Revision$"
 
@@ -592,6 +593,15 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 s.addAbbreviation("", workingContext.resource.uri)
                 print s.serialize(lxkb)
 
+            elif arg == "-check":
+                need(lxkb)
+                # should we also check the inverse, to see if this
+                # is tautological?
+                if lxkb.isSelfConsistent():
+                    print "Consistency proven."
+                else:
+                    print "Contradiction found."
+
             elif arg == "-flatten":
                 need(lxkb); touch(lxkb)
                 lxkb.reifyAsTrueNonRDF()
@@ -666,7 +676,7 @@ def need(object):
             if object is lxkb:
                 #print "# copying _store to lxkb"
                 lxkb.clear()
-                _store.toLX(workingContext, kb=lxkb)
+                LX.engine.llynInterface.toLX(_store, workingContext, kb=lxkb)
                 del(_store.touched)
             else:
                 pass   # lxkb is out of date, but not needed yet
@@ -675,7 +685,7 @@ def need(object):
             if object is _store:
                 #print "# copying lxkb to _store"
                 _store.deleteFormula(workingContext)
-                _store.addLXKB(workingContext, lxkb)
+                LX.engine.llynInterface.addLXKB(_store, workingContext, lxkb)
                 del(lxkb.touched)
             else:
                 pass  # _store is out of date, but not needed yet

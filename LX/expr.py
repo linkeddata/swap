@@ -159,33 +159,6 @@ class AtomicExpr(Expr):
 class AtomicConstant(AtomicExpr):
     pass
 
-## where does this stuff go?   outside, somewhere....
-class URIRef(AtomicConstant):
-    """We know a URIRef which identifies the same thing as this
-    Constant.  Should we allow many of these, therefor?"""
-
-    def __init__(self, u):
-        try:
-            self.racine, self.fragment = split(u, "#")
-            #print "initialized URIRef to %s, %s" % (self.racine, self.fragment)
-        except ValueError:
-            self.racine = u; self.fragment = None
-        self.value = u
-
-class String(AtomicConstant):
-
-    def __init__(self, u):
-        self._u = u
-
-    def value(self):
-        return self._u
-
-    
-class RDFLiteral(AtomicConstant):
-
-    def __init__(self, text, lang=None, isXML=0):
-        pass
-
 #import LX.firstOrderLogic
 
 #opTable["and"] = LX.firstOrderLogic.AND
@@ -217,7 +190,14 @@ if __name__ == "__main__": _test()
 
 
 # $Log$
-# Revision 1.3  2002-09-18 19:56:46  sandro
+# Revision 1.4  2002-10-03 16:13:02  sandro
+# some minor changes to LX-formula stuff, but it's still broken in ways
+# that don't show up on the regression test.
+#
+# mostly: moved llyn-LX conversion stuff out of llyn.py, into
+# LX.engine.llynInterface.py
+#
+# Revision 1.3  2002/09/18 19:56:46  sandro
 # more refactoring, added some unit tests, stricter notion of typing
 #
 # Revision 1.2  2002/09/02 20:10:44  sandro

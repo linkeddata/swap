@@ -124,7 +124,9 @@ class Formula(tuple):
                     if newname not in namesUsedOutside:
                         break
                 nameOverridesTable[var] = newname
-            self.nameVars(nameOverridesTable, namesUsedOutside+(newname,))
+                # @@@ hrm.   I just added and indent here, but I don't
+                # understand this code
+                self.nameVars(nameOverridesTable, namesUsedOutside+(newname,))
         elif self.operator is LX.ATOMIC_SENTENCE:
             pass   # there wont be any quantifications in here
         else:
@@ -184,7 +186,14 @@ class ExistentialQuantification(Formula):
 
 
 # $Log$
-# Revision 1.3  2002-10-02 22:56:35  sandro
+# Revision 1.4  2002-10-03 16:13:02  sandro
+# some minor changes to LX-formula stuff, but it's still broken in ways
+# that don't show up on the regression test.
+#
+# mostly: moved llyn-LX conversion stuff out of llyn.py, into
+# LX.engine.llynInterface.py
+#
+# Revision 1.3  2002/10/02 22:56:35  sandro
 # Switched cwm main-loop to keeping state in llyn AND/OR an LX.formula,
 # as needed by each command-line option.  Also factored out common
 # language code in main loop, so cwm can handle more than just "rdf" and

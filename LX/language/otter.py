@@ -35,7 +35,7 @@ class Serializer(LX.language.abstract.Serializer):
             self.recursing = 1
         if f[0] in (LX.ALL, LX.EXISTS):
             val = (self.quantOpName[f.operator] + " " +
-                   " ".join([self.serializeTerm(x, 9999) for x in vars]) +
+                   " ".join([self.serializeTerm(x, 9999) for x in f.openVars()]) +
                    " (" + self.serializeFormula(child, 9999, linePrefix) + ")")
 
             if parentPrecedence < 1000: val = "("+val+")"
@@ -46,7 +46,7 @@ class Serializer(LX.language.abstract.Serializer):
         try:
             return self.overrideTerms[t]
         except KeyError:
-            return LX.language.abstract.Serializer.serializeTerm(self, f, parentPrecedence)
+            return LX.language.abstract.Serializer.serializeTerm(self, t, parentPrecedence)
 
         
 
@@ -74,7 +74,14 @@ if __name__ =='__main__':
     test()
 
 # $Log$
-# Revision 1.2  2002-10-02 22:56:35  sandro
+# Revision 1.3  2002-10-03 16:13:03  sandro
+# some minor changes to LX-formula stuff, but it's still broken in ways
+# that don't show up on the regression test.
+#
+# mostly: moved llyn-LX conversion stuff out of llyn.py, into
+# LX.engine.llynInterface.py
+#
+# Revision 1.2  2002/10/02 22:56:35  sandro
 # Switched cwm main-loop to keeping state in llyn AND/OR an LX.formula,
 # as needed by each command-line option.  Also factored out common
 # language code in main loop, so cwm can handle more than just "rdf" and
