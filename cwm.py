@@ -52,10 +52,12 @@ import sys
 # from llyn import RDFStore  # A store with query functiuonality
 import llyn
 import LX
-import LX.rdf
+import LX.kb
+# import LX.rdf
 import LX.engine.llynInterface 
 import LX.engine.otter
 import LX.language.htables
+import LX.language.lbase
 import RDFSink
 
 cvsRevision = "$Revision$"
@@ -481,6 +483,9 @@ Mode flags affect inference extedning to the web:
         elif option_format == "htables":
             myflags = option_flags.get("htables", "")
             _outSink = LX.language.htables.Serializer(sys.stdout, flags=myflags)
+        elif option_format == "lbase":
+            myflags = option_flags.get("lbase", "")
+            _outSink = LX.language.lbase.Serializer(sys.stdout, flags=myflags)
         else:
             raise RuntimeError, "unknown output format: "+str(option_format)
         version = "$Id$"
@@ -502,7 +507,7 @@ Mode flags affect inference extedning to the web:
 
 #            _store.reset(_metaURI+"#_experience")     # Absolutely need this for remembering URIs loaded
             history = None
-        lxkb = LX.KB()      # set up a parallel store for LX-based operations
+        lxkb = LX.kb.KB()      # set up a parallel store for LX-based operations
 
 	if diag.tracking:
 	    proof = FormulaReason(workingContext)
@@ -674,7 +679,7 @@ Mode flags affect inference extedning to the web:
                 _newContext = _tmpstore.intern((FORMULA, _newURI+ "#_formula"))
                 _tmpstore.loadURI(_uri)
 
-                targetkb = LX.KB()
+                targetkb = LX.kb.KB()
                 LX.engine.llynInterface.toLX(_tmpstore, _newContext, kb=targetkb, kbMode=1)
                 print targetkb
 
@@ -752,6 +757,9 @@ def getParser(format, inputURI, formulaURI, flags):
     elif format == "n3":
         touch(_store)
         return notation3.SinkParser(_store, inputURI, formulaURI=formulaURI, why=r)
+    elif format == "lbase":
+        touch(lxkb)
+        return LX.language.lbase.Parser(lxkb)
     else:
         raise RuntimeError, "unknown input format: "+str(format)
 
