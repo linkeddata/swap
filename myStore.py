@@ -23,7 +23,10 @@ History:
     Spilt off from  thing.py 2003-08-19
 
 $Log$
-Revision 1.5  2004-03-06 20:39:38  timbl
+Revision 1.6  2004-03-09 23:55:50  connolly
+updated load to track change in llyn
+
+Revision 1.5  2004/03/06 20:39:38  timbl
 See http://www.w3.org/2000/10/swap/doc/changes.html for details
 - Regresssion test incorporates the RDF Core Positive Parser Tests except XMLLiteral & reification
 - xml:base support was added in the parser.
@@ -134,7 +137,8 @@ def load(uri=None, contentType=None, formulaURI=None, remember=1):
     Returns:  top-level formula of the parsed document.
     Raises:   IOError, SyntaxError, DocumentError
     """
-    return _checkStore().load(uri, contentType, formulaURI, remember)
+    return _checkStore().load(uri, contentType=contentType,
+                              asIfFrom=formulaURI, remember=remember)
 
 def loadMany(uris, openFormula=None):
     """Load a number of resources into the same formula
