@@ -1,0 +1,12 @@
+# test: make sure that the prefix isn't used when it can't be
+@prefix : <http://example.com/foo#>.
+
+
+<http://example.com/foo#hypen-ated> <http://example.com/foo#dot.ted>
+<http://example.com/foo#hypen-and.dot> .
+
+<http://example.com/foo#a> <http://example.com/foo#b> <http://example.com/foo#c>.
+
+
+#end
+

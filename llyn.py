@@ -428,11 +428,11 @@ class Formula(Fragment):
 	The symbol is created in the same store as the formula."""
 	return self.store.newSymbol(uri)
 
-    def newLiteral(self, st):
+    def newLiteral(self, str, dt=None, lang=None):
 	"""Create or reuse the internal representation of the RDF literal whose string is given
 	
-	The literal is craeted in the same store as the formula."""
-	return self.store.newLiteral(st)
+	The literal is created in the same store as the formula."""
+	return self.store.newLiteral(str, dt, lang)
 	
     def newBlankNode(self, uri=None, why=None):
 	"""Create a new unnamed node with this formula as context.
@@ -1247,9 +1247,14 @@ class RDFStore(RDFSink) :
 	    import cwm_crypto  # Cryptography
 	    cwm_crypto.register(self)  # would like to anyway to catch bug if used but not available
 
-    def newLiteral(self, str):
+    def newLiteral(self, str, dt=None, lang=None):
 	"Interned version: generat new literal object as stored in this store"
-	return self.intern(RDFSink.newLiteral(self, str))
+	uriref2 = LITERAL_URI_prefix + `dt` + " " + `lang` + " " + str # @@@ encoding at least hashes!!
+	result = self.resources.get(uriref2, None)
+	if result != None: return result
+	result = Literal(self, str, dt, lang)
+	self.resources[uriref2] = result
+	return result
 	
     def newFormula(self, uri=None):
 	return self.intern(RDFSink.newFormula(self, uri))
@@ -1418,7 +1423,7 @@ class RDFStore(RDFSink) :
         assert type(str) is type("") # caller %xx-ifies unicode
         return self.intern((SYMBOL,str), why=None)
     
-    def intern(self, pair, why=None):
+    def intern(self, pair, why=None, dt=None, lang=None):
         """find-or-create a Fragment or a Symbol or Literal as appropriate
 
         returns URISyntaxError if, for example, the URIref has
@@ -1433,11 +1438,7 @@ class RDFStore(RDFSink) :
         typ, urirefString = pair
 
         if typ == LITERAL:
-            uriref2 = LITERAL_URI_prefix + urirefString # @@@ encoding at least hashes!!
-            result = self.resources.get(uriref2, None)
-            if result != None: return result
-            result = Literal(self, urirefString)
-            self.resources[uriref2] = result
+	    return self.newLiteral(urirefString, dt, lang)
         else:
             if not (type(urirefString) is type("")):
                 raise TypeError, type(urirefString)

@@ -95,7 +95,7 @@ class RDFSink:
     """interface to connect modules in RDF processing.
 
     This is a superclass for other RDF processors which accept RDF events
-    or indeed Swell events.  Adapted from printParser.
+    or indeed Swell events.
     
     Keeps track of prefixes. There are some things which are in the
     superclass for commonality (i.e. implementation inheritance)
@@ -220,7 +220,9 @@ class RDFSink:
 	if not self._genPrefix:
 	    self._genPrefix = genPrefix
 
-    def newLiteral(self, str):
+    def newLiteral(self, str, dt=None, lang=None):
+	if dt != None: raise ValueError("This sink cannot accept datatyped values")
+	if lang != None: raise ValueError("This sink cannot accept values with languages")
 	return (LITERAL, str)
 
     def newSymbol(self, uri):
@@ -377,8 +379,8 @@ class TracingRDFSink:
         printState()
         return self.backing.newSymbol(uri)
 
-    def newLiteral(self, str):
+    def newLiteral(self, str, dt=None, lang=None):
         printState()
-        return self.backing.newSymbol(str)
+        return self.backing.newSymbol(str, dt, lang)
 
 # ends

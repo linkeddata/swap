@@ -1,0 +1,10 @@
+# Test number literals
+
+2 <#is>  "The integer 2".
+
+2.0 <#is>  "The rational number 2.0".
+
+2.0e3 <#is>  "The double floating point 2.0e3".
+
+#ends
+  

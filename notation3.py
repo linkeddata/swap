@@ -97,6 +97,9 @@ from RDFSink import N3_first, N3_rest, N3_nil, N3_List, N3_Empty
 
 LOG_implies_URI = "http://www.w3.org/2000/10/swap/log#implies"
 
+INTEGER_DATATYPE = "http://www.w3.org/2001/XMLSchema#integer"
+DOUBLE_DATATYPE = "http://www.w3.org/2001/XMLSchema#double"
+
 option_noregen = 0   # If set, do not regenerate genids on output
 
 N3CommentCharacter = "#"     # For unix script #! compatabilty
@@ -107,8 +110,11 @@ N3CommentCharacter = "#"     # For unix script #! compatabilty
 eol = re.compile(r'[ \t]*(#[^\n]*)?\r?\n')	# end  of line, poss. w/comment
 eof = re.compile(r'[ \t]*(#[^\n]*)?$')      	# end  of file, poss. w/comment
 ws = re.compile(r'[ \t]*')			# Whitespace not including newline @@(whatabout unicode NL? ask MartinD)
+signed_integer = re.compile(r'[-+]?[0-9]+')	# integer
+number_syntax = re.compile(r'([-+]?[0-9]+)(.[0-9]+)?(e[-+]?[0-9]+)?')
+digitstring = re.compile(r'[0-9]+')		# Unsigned integer	
 interesting = re.compile(r'[\\\r\n\"]')
-
+langcode = re.compile(r'[a-z0-9]+(-[a-z0-9]+)?')
 
 
 class SinkParser:
@@ -274,9 +280,13 @@ class SinkParser:
 	i = self.qname(str, j, t)
 	if i<0: raise BadSyntax(self._thisDoc, self.lines, str, j, "expected qname after bind or prefix")
 	j = self.uri_ref2(str, i, t)
-	if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected uriref2 after bind _qname_")
+	if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected <uriref> after bind _qname_")
 
-        ns = t[1][1]
+#	progress("@@@@@", t)
+	if type(t[1]) is type((1,1)): ns = t[1][1] # old system for --pipe
+        else:
+#	    progress( "@@@@@@@@@@", type(t[1]))
+	    ns = t[1].uriref()
 #        if string.find(ns,"##")>=0: raise BadSyntax(self._thisDoc, self.lines, str, j-2, "trailing # illegal on bind: use @prefix")
         ns = join(self._baseURI, ns)
         assert ':' in ns # must be absolute
@@ -630,6 +640,7 @@ class SinkParser:
 		except KeyError:
                     if pfx == "_":   # Magic prefix added 2001/05/30, can be overridden
                         res.append(self.anonymousNode(ln))
+			progress("@@@@@@@ uri_ref2 res", res)
                         return j
 		    raise BadSyntax(self._thisDoc, self.lines, str, i, "Prefix %s not bound" % (pfx))
             res.append(self._sink.newSymbol(ns + ln)) # @@@ "#" CONVENTION
@@ -655,7 +666,7 @@ class SinkParser:
                     uref = uripath.join(self._baseURI, str[st:i])
                     if str[i-1:i]=="#" and not uref[-1:]=="#":
                         uref = uref + "#"  # She meant it! Weirdness in urlparse?
-                    res.append((SYMBOL , uref))
+                    res.append(self._sink.newSymbol(uref))
                     return i+1
                 i = i + 1
             raise BadSyntax(self._thisDoc, self.lines, str, j, "unterminated URI reference")
@@ -769,14 +780,45 @@ class SinkParser:
 	    if j<0: return -1
 	    else: i=j
 
+	    ch = str[i]
+	    if ch in "-+0987654321":
+		m = number_syntax.match(str, i)
+		if m == None:
+		    raise BadSyntax(self._thisDoc, startline, str, i,
+				"Bad number syntax")
+		j = m.end()
+		if m.group(3) != None: # includes exponent
+		    dt = self._sink.newSymbol(DOUBLE_DATATYPE)
+		    res.append(self._sink.newLiteral(str[i:j],
+			self._sink.newSymbol(DOUBLE_DATATYPE)))
+		else:
+		    res.append(self._sink.newLiteral(str[i:j],
+			self._sink.newSymbol(INTEGER_DATATYPE)))
+		return j
+
 	    if str[i]=='"':
 		if str[i:i+3] == '"""': delim = '"""'
 		else: delim = '"'
                 i = i + len(delim)
 
+		dt = None
                 j, s = self.strconst(str, i, delim)
-
-                res.append(self._sink.newLiteral(s))
+		lang = None
+		if str[j:j+1] == "@":  # Language?
+		    m = langcode.match(str, j+1)
+		    if m == None:
+			raise BadSyntax(self._thisDoc, startline, str, i,
+				    "Bad language code syntax on string literal, after @")
+		    i = m.end()
+		    lang = str[j+1:i]
+		    progress("j, i", j, i)
+		    j = i
+		if str[j:j+2] == "^^":
+		    res2 = []
+		    j = self.uri_ref2(str, j+2, res2) # Read datatype URI
+		    dt = res2[0]
+		    progress("Datatype to ", j, `res`)
+                res.append(self._sink.newLiteral(s, dt, lang))
 		return j
 	    else:
 		return -1
@@ -911,11 +953,12 @@ def stripCR(str):
             res = res + ch
     return res
 
-
+############################################################################################
     
 class ToN3(RDFSink.RDFSink):
-    """keeps track of most recent subject and predicate reuses them
-
+    """Serializer output sink for N3
+    
+      keeps track of most recent subject and predicate reuses them.
       Adapted from Dan's ToRDFParser(Parser);
     """
 
@@ -925,6 +968,7 @@ a   Anonymous nodes should be output using the _: convention (p flag or not).
 d   Don't use default namespace (empty prefix)
 i   Use identifiers from store - don't regen on output
 l   List syntax suppression. Don't use (..)
+n   No numeric syntax - use strings typed with ^^ syntax
 p   Prefix suppression - don't use them, always URIs in <> instead of qnames.
 q   Quiet - don't make comments about the environment in which processing was done.
 r   Relative URI suppression. Always use absolute URIs.
@@ -1237,9 +1281,21 @@ t   "this" and "()" special syntax should be suppresed.
             if pair == N3_nil and not self.noLists:
                 return"()"
 
-        type, value = pair
+        ty, value = pair
 
-        if type == LITERAL: return stringToN3(value)
+        if ty == LITERAL:
+	    if type(value) is not type(()):  # simple old-fashioned string
+		return stringToN3(value)
+	    s, dt, lang = value
+	    if dt != None:
+		dt_uri = dt.uriref()		 
+		if (dt_uri == INTEGER_DATATYPE or
+		    dt_uri == DOUBLE_DATATYPE) and "n" not in self._flags:
+		    return s    # Naked numeric value
+	    str = stringToN3(s)
+	    if lang != None: str = str + "@" + lang
+	    if dt != None: str = str + "^^" + self.representationOf(context, dt.asPair())
+	    return str
 
         if pair in self._anonymousNodes:   # "a" flags only
             i = value.find(self._genPrefix + "g")  # One of our conversions?
@@ -1253,7 +1309,7 @@ t   "this" and "()" special syntax should be suppresed.
                 str = value[i:]
             return "_:a" + str    # Must start with alpha as per NTriples spec.
 
-        if ((type == ANONYMOUS)
+        if ((ty == ANONYMOUS)
             and not option_noregen and "i" not in self._flags ):
                 x = self.regen.get(value, None)
                 if x == None:
@@ -1279,7 +1335,7 @@ t   "this" and "()" special syntax should be suppresed.
             if value[:j] == self.base:   # If local to output stream,
                 return "<#" + value[j+1:] + ">" #   use local frag id (@@ lone word?)
             
-        if "r" in self._flags: return "<" + value+ ">"    # Suppress relative URIs?
+        if "r" in self._flags: return "<" + hexify(value) + ">"    # Suppress relative URIs?
 
         return "<" + refTo(self.base, value) + ">"    # Everything else
 
@@ -1329,10 +1385,22 @@ def stringToN3(str):
             if k >= 0: res = res + "\\" + 'abfrtvn\\"'[k]
             else:
                 res = res + ('\\u%04x' % ord(ch))
+#                res = res + ('\\u%04X' % ord(ch))
         i = j + 1
 
     return delim + res + str[i:] + delim
 
+def hexify(ustr):
+    """Use URL encoding to return an ASCII string corresponding to the given unicode"""
+#    progress("String is "+`ustr`)
+#    s1=ustr.encode('utf-8')
+    str  = ""
+    for ch in ustr:  # .encode('utf-8'):
+	if ord(ch) > 126:
+	    ch = "%%%02X" % ord(ch)
+	str = str + ch
+    return str
+    
 def dummy():
         res = ""
         if len(str) > 20 and (string.find(str, "\n") >=0 or string.find(str, '"') >=0):

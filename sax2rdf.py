@@ -25,6 +25,9 @@
 
  How to on xmllib:
  http://www.python.org/doc/howto/xml/node7.html
+
+
+ RDF grammar http://www.w3.org/TR/rdf-syntax-grammar/ esp sections 6 and 7
     
 ##################################### SAX pointers
  First hit on Python SAX parser
@@ -105,6 +108,8 @@ class RDFHandler(xml.sax.ContentHandler):
 
         self._subject = None
         self._predicate = None
+	self._datatype = None
+	self._language = None
 	self._nodeIDs = {}
         self._items = [] # for <rdf:li> containers
         self._genPrefix = uripath.join(thisURI, "#_rdfxg")    # allow parameter override?
@@ -143,7 +148,7 @@ class RDFHandler(xml.sax.ContentHandler):
         return uripath.join(self._thisURI,
                             str.encode('utf-8')) # fails on non-ascii; do %xx encoding?
 
-    def idAboutAttr(self, attrs):  #6.5 also proprAttr 6.10
+    def idAboutAttr(self, attrs):  #MS1.0 6.5 also proprAttr 6.10
         """ set up subject and maybe context from attributes
         """
         self._subject = None
@@ -186,8 +191,8 @@ class RDFHandler(xml.sax.ContentHandler):
                     self._context = FORMULA, self.uriref("#" + value) #@@ non-ascii
                 elif ln == "parseType":
                     pass  #later - object-related
-                elif ln == "value":
-                    pass  #later
+#                elif ln == "value":
+#                    pass  #later
                 elif ln == "resource":
                     pass  #later
                 else:
@@ -198,28 +203,34 @@ class RDFHandler(xml.sax.ContentHandler):
 		    else:
 			properties.append((uri, value))# If no uri, syntax error @@
 #                    self.sink.makeComment("xml2rdf: Ignored attribute "+uri)
-            else:  # Property attribute propAttr #6.10
+            else:  # Property attribute propAttr #MS1.0 6.10
                 properties.append((uri, value)) 
 #                print "@@@@@@ <%s> <%s>" % properties[-1]
 
         if self._subject == None:
             self._subject = self.sink.newBlankNode(self._context, why=self._reason2) #for debugging: encode file/line info?
         for pred, obj in properties:
-            self.sink.makeStatement(( self._context,
-                                      self.sink.newSymbol(pred),
-                                      self._subject,
-                                      self.sink.newLiteral(obj) ), why=self._reason2)
+	    if pred == RDF_NS_URI + "type":
+		self.sink.makeStatement(( self._context,
+					self.sink.newSymbol(pred),
+					self._subject,
+					self.sink.newSymbol(self.uriref(obj)) ), why=self._reason2)
+	    else:
+		self.sink.makeStatement(( self._context,
+					self.sink.newSymbol(pred),
+					self._subject,
+					self.sink.newLiteral(obj) ), why=self._reason2)
 
             
 
-    def _obj(self, tagURI, attrs):  # 6.2
+    def _nodeElement(self, tagURI, attrs):  #MS1.0 6.2
         if tagURI == RDF_NS_URI + "Description":
             self.idAboutAttr(attrs)  # Set up subject and context                
 
         elif tagURI == RDF_NS_URI + "li":
             raise ValueError, "rdf:li as typednode not implemented"
-        else:  # Unknown tag within STATE_NO_SUBJECT: typedNode #6.13
-            c = self._context   # (Might be change in idAboutAttr) #@@DC: huh?
+        else:  # Unknown tag within STATE_NO_SUBJECT: typedNode #MS1.0 6.13
+            c = self._context   # (Might be changed in idAboutAttr) #@@DC: huh?
             self.idAboutAttr(attrs)
             if c == None: raise roof
             assert self._subject != None
@@ -228,6 +239,28 @@ class RDFHandler(xml.sax.ContentHandler):
                                        self._subject,
                                        self.sink.newSymbol(tagURI) ), why=self._reason2)
         self._state = STATE_DESCRIPTION
+
+    def _propertyAttr(self, ns, name, value):
+	"Parse a propertrAttr production."
+	if self.bnode == None:  # Property as attribute
+	    self.bnode = self.sink.newBlankNode(self._context)
+	    self.sink.makeStatement((self._context,
+				    self._predicate,
+				    self._subject,
+				    self.bnode ), why=self._reason2)
+	pred = ns + name
+	if pred == RDF_NS_URI + "type":  # special case
+	    obj = self.sink.newSymbol(self.uriref(value)) # SYN#7.2.11 step 2/3
+	else:
+	    obj = self.sink.newLiteral(value)
+	progress("ns %s and name %s" % (`ns`, `name`)) 
+	self.sink.makeStatement((self._context,
+				    self.sink.newSymbol(self.uriref(pred)),
+				    self.bnode,
+				    obj), why=self._reason2)
+	self._state = STATE_NOVALUE  # NOT looking for value
+	return
+    
                 
 
     def startPrefixMapping(self, prefix, uri):
@@ -258,6 +291,7 @@ class RDFHandler(xml.sax.ContentHandler):
         """
         
         self.flush()
+	self.bnode = None
         
         tagURI = ((name[0] or "") + name[1]).encode('utf-8')
 
@@ -289,11 +323,16 @@ class RDFHandler(xml.sax.ContentHandler):
             else:
                 pass                    # Ignore embedded RDF
 
-        elif self._state == STATE_NO_SUBJECT:  # 6.2 obj :: desription | container
-            self._obj(tagURI, attrs)
-            
+        elif self._state == STATE_NO_SUBJECT:  #MS1.0 6.2 obj :: desription | container
+            self._nodeElement(tagURI, attrs)
+#            for name, value in attrs.items():
+#                ns, name = name
+#		if ns == RDF_NS_URI and name in ( "id", "resource", "datatype", "nodeId", "about", "bagId"):
+#		    continue
+#		self._propertyAttr(ns, name, value)
+		
         elif self._state == STATE_DESCRIPTION:   # Expect predicate (property) PropertyElt
-            #  propertyElt #6.12
+            #  propertyElt #MS1.0 6.12
             #  http://www.w3.org/2000/03/rdf-tracking/#rdf-containers-syntax-ambiguity
             if tagURI == RDF_NS_URI + "li":
                 item = self._items[-1] + 1
@@ -303,10 +342,11 @@ class RDFHandler(xml.sax.ContentHandler):
                 self._predicate = self.sink.newSymbol(tagURI)
 
             self._state = STATE_VALUE  # May be looking for value but see parse type
+	    self._dataType = None
+	    self._language = None
             self.testdata = ""         # Flush value data
             
             # print "\n  attributes:", `attrs`
-
             for name, value in attrs.items():
                 ns, name = name
                 if name == "ID":
@@ -316,21 +356,15 @@ class RDFHandler(xml.sax.ContentHandler):
 #		    if x>=0: pref = value[:x]
 #		    else: pref = ""
 #		    nsURI = self._nsmap[-1].get(pref, None)
-                    if value == "Literal":
-                        self._state = STATE_LITERAL # That's an XML subtree not a string
-                        self._litDepth = 1
-                        self.testdata = "@@" # buggy implementation
-                    elif value == "Resource":
+                    if value == "Resource":
                         c = self._context
                         s = self._subject
                         self._subject = self.sink.newBlankNode(self._context, why=self._reason2)
-                        self.idAboutAttr(attrs) #@@
+                        self.idAboutAttr(attrs) #@@ not according to current syntax @@@@@@@@@@@
                         self.sink.makeStatement(( c, self._predicate, s, self._subject), why=self._reason2)
                         self._state = STATE_DESCRIPTION  # Nest description
                         
                     elif value == "Quote":
-#		     or value == "quote" or (
-#			value[-6:] == ":quote" and (nsURI == Logic_NS or nsURI == RDF_NS)): 
                             c = self._context
                             s = self._subject
                             self.idAboutAttr(attrs)  # set subject and context for nested description
@@ -345,13 +379,17 @@ class RDFHandler(xml.sax.ContentHandler):
                             self._state = STATE_NO_SUBJECT  # Inside quote, there is no subject
                         
                     elif (value=="Collection" or
-#		     or value=="collection" or(
 			value[-11:] == ":collection"):  # Is this a daml:collection qname?
-#                        and (nsURI == DAML_ONT_NS
-#					or nsURI == RDF_NS 
-#					or nsURI == DPO_NS)): 
-                            self._state = STATE_LIST  # Linked list of obj's
 
+			self._state = STATE_LIST  # Linked list of obj's
+                    elif value == "Literal" or "S" in self.flags:  # Strictly, other types are literal SYN#7.2.20
+                        self._state = STATE_LITERAL # That's an XML subtree not a string
+                        self._litDepth = 1
+                        self.testdata = "@@sax2rdf.py bug@@" # buggy implementation
+			self._datatype = self.sink.newSymbol("http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral")
+			raise RuntimeError("This version of sax2rdf.py does not support parseType=Literal.")
+		    else:
+			raise SyntaxError("Unknown parse type '%s'" % value )
                 elif name == "nodeID":
 		    obj = self._nodeIDs.get(value, None)
 		    if obj == None:
@@ -368,9 +406,14 @@ class RDFHandler(xml.sax.ContentHandler):
                                              self._subject,
                                              self.sink.newSymbol(self.uriref(value)) ), why=self._reason2)
                     self._state = STATE_NOVALUE  # NOT looking for value
+                elif name == "datatype":
+#		    progress("sax2rdf.py @@@@@@@@@@@@@@@@@@@@@@ datatype"+ `value`)
+		    self._datatype = self.sink.newSymbol(self.uriref(value))
+                elif name == "lang":    # @@@@@@ XML NAMESPACE
+#		    progress("sax2rdf.py @@@@@@@@@@@@@@@@@@@@@@ lang"+ `value`)
+		    self._language = value  #  ISO country code (no base URI alas)
                 else:
-                    self.sink.makeComment("# Warning: Ignored attribute %s on %s" % (
-                        name, tagURI))
+		    self._propertyAttr(ns, name, value)
                     
         elif self._state == STATE_LIST:   # damlCollection :: objs - make list
             # Subject and predicate are set and dangling. 
@@ -387,16 +430,21 @@ class RDFHandler(xml.sax.ContentHandler):
                                       self.sink.newSymbol(DPO_NS + "first"),
                                       pair,
                                       self._subject), why=self._reason2) # new item
+	    if "S" in self.flags: # Strictly to spec
+		self.sink.makeStatement(( c,
+					self.sink.newSymbol(RDF_NS_URI + "type"),
+					self.sink.newSymbol(DPO_NS + "List"),
+					self._subject), why=self._reason2) # new item
             
             self._stack[-1][2] = self.sink.newSymbol(DPO_NS + "rest")  # Leave dangling link   #@check
             self._stack[-1][3] = pair  # Underlying state tracks tail of growing list
 
          
-        elif self._state == STATE_VALUE:   # Value :: Obj in this case # 6.17  6.2
+        elif self._state == STATE_VALUE:   # Value :: Obj in this case #MS1.0 6.17  6.2
             c = self._context
             p = self._predicate
             s = self._subject
-            self._obj(tagURI, attrs)   # Parse the object thing's attributes
+            self._nodeElement(tagURI, attrs)   # Parse the object thing's attributes
             self.sink.makeStatement((c, p, s, self._subject), why=self._reason2)
             
             self._stack[-1][0] = STATE_NOVALUE  # When we return, cannot have literal now
@@ -441,10 +489,11 @@ class RDFHandler(xml.sax.ContentHandler):
             
         elif self._state == STATE_VALUE:
             buf = self.testdata
+	    obj = self.sink.newLiteral(buf, self._datatype, self._language)
             self.sink.makeStatement(( self._context,
                                        self._predicate,
                                        self._subject,
-                                       self.sink.newLiteral(buf) ), why=self._reason2)
+				       obj), why=self._reason2)
             self.testdata = ""
             
         elif self._state == STATE_LIST:
@@ -503,7 +552,7 @@ class RDFXMLParser(RDFHandler):
 
     flagDocumentation = """
     Flags to control RDF/XML INPUT (after --rdf=) follow:
-        
+        S  - Strict spec. Unknown parse type treated as Literal instead of error.
         T  - take foreign XML as transparent and parse any RDF in it
              (default it is to ignore unless rdf:RDF at top level)
 	L  - If non-rdf attributes have no namespace prefix, assume in local <#> namespace
@@ -540,7 +589,11 @@ class RDFXMLParser(RDFHandler):
             self._p.parse(s)
         except xml.sax._exceptions.SAXException, e:
             # was: raise SyntaxError() which left no info as to what had happened
-            raise SyntaxError("parsing XML: "+sys.exc_info()[1].__str__())   # Remove all XML diagnostic info?!? -tbl
+	    columnNumber = self._p.getColumnNumber()
+	    lineNumber = self._p.getLineNumber()
+	    where = "parsing XML at column %i in line %i of <%s>\n\t" % (
+			    columnNumber, lineNumber, self._thisURI)
+            raise SyntaxError(where + sys.exc_info()[1].__str__())
         # self.close()  don't do a second time - see endDocument
 	return self._formula
 

@@ -1,0 +1,8 @@
+     @prefix : <#> .
+    
+    "2"^^<http://www.w3.org/2001/XMLSchema#integer>     :is "The integer 2" .
+    
+    "2.0"^^<http://www.w3.org/2001/XMLSchema#integer>     :is "The rational number 2.0" .
+    
+    "2.0e3"^^<http://www.w3.org/2001/XMLSchema#double>     :is "The double floating point 2.0e3" .
+    

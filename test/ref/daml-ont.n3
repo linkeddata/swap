@@ -63,7 +63,7 @@
 	e.g. if nameOfMonth(m, "Feb")
 	and nameOfMonth(n, "Feb") then m and n are the same month.
   """;
-         daml:label "UnambiguousProperty";
+         daml:label "UnambiguousProperty"@en;
          daml:subClassOf :Property .
     
     :UniqueProperty     a daml:Class;

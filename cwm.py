@@ -586,7 +586,7 @@ Mode flags affect inference extedning to the web:
 
             elif arg == "-triples" or arg == "-ntriples":
                 option_format = "n3"
-                option_flags["n3"] = "spart"
+                option_flags["n3"] = "spartan"
                 option_outputStyle = "-bySubject"
                 option_quiet = 1
 

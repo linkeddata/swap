@@ -156,7 +156,7 @@ def main():
 	    outputDocument = kb.the(t, rdft.outputDocument).uriref()
 	    status = kb.the(t, rdft.status).string
 	    if status != "APPROVED":
-		print "@@@ Not approved: "+ inputDocument
+		if verbose: print "@@@ Not approved: "+ inputDocument
 		continue
 	    RDFTestData.append((t.uriref(), case, description,  inputDocument, outputDocument))
 
@@ -208,7 +208,7 @@ def main():
 			WD, REFWD)
 	
 	if 1:
-	    execute("""python ../cwm.py --quiet --rdf %s --ntriples | %s > ,temp/%s""" %
+	    execute("""python ../cwm.py --quiet --rdf=T %s --ntriples | %s > ,temp/%s""" %
 		(inputDocument, cleanup , case))
 	    ref = ",temp/%s.ref" % case
 	    execute("""cat %s | %s > %s""" % (localize(outputDocument), cleanup, ref))

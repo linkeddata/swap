@@ -328,6 +328,8 @@ class Anonymous(Fragment):
 
 _nextList = 0
 
+from diag import progress
+
 class List(Term):
     def __init__(self, store, first, rest):  # Do not use directly
         global _nextList
@@ -374,7 +376,7 @@ class Literal(Term):
         Term.__init__(self, store)
         self.string = string    #  n3 notation EXcluding the "  "
 	self.datatype = dt
-	self.lang=None
+	self.lang=lang
 
     def __str__(self):
         return self.string
@@ -387,7 +389,10 @@ class Literal(Term):
 #        return self.string
 
     def asPair(self):
-        return (LITERAL, self.string)  # obsolete
+	if self.datatype == None and self.lang == None: 
+	    return (LITERAL, self.string)  # obsolete
+#	progress ("thing.py 394 @@@@@@@@@@" + `self.datatype` + "@@@@" + `self.lang`)
+	return LITERAL, ( self.string, self.datatype, self.lang )
 
     def asHashURI(self):
         """return a md5: URI for this literal.

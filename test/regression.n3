@@ -81,6 +81,15 @@
     test:description   "Path syntax, more";
     test:arguments     """syntax/path2.n3""".
 
+:t10115 a test:CwmTest;
+	test:shortFileName "numbers.n3";
+	test:description "Number syntax";
+	test:arguments  "syntax/numbers.n3".
+
+:t10116 a test:CwmTest;
+	test:shortFileName "numbers-n.n3";
+	test:description "Number syntax suppressed on output";
+	test:arguments  "syntax/numbers.n3 --n3=n".
 
 :t1012 a test:CwmTest;
     test:shortFileName "qvars1.n3";
