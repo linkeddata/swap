@@ -1,0 +1,49 @@
+# $Id$
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+
+@prefix : <heartbeat#>.
+@keywords is, of, a.
+
+@prefix org: <http://www.w3.org/2001/04/roadmap/org#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>. #@@ missing #
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
+
+threeMonths    a InterestingPeriod; start "2005-01-01";
+ next sixMonths.
+sixMonths      a InterestingPeriod; start "2004-10-01";
+ next twelveMonths.
+twelveMonths   a InterestingPeriod; start "2004-04-01";
+ next eighteenMonths.
+eighteenMonths a InterestingPeriod; start "2003-10-01".
+
+{
+#@@ <http://www.w3.org/2002/01/tr-automation/tr.rdf> log:semantics ?F
+ <tr.rdf> log:semantics ?F
+} => { ?F a TRKB }.
+
+@forAll DOC, WHEN, PG, GROUP, PLONG, PSHORT.
+
+{
+  ?K a TRKB.
+  (?K
+   [ is log:semantics of <heartbeat-aux.n3> ]
+  ) log:conjunction [ log:conclusion ?AUDITKB].
+} => { ?AUDITKB a AuditKB }.
+
+{
+  ?AUDITKB a AuditKB.
+  PSHORT next PLONG.
+
+  ?AUDITKB log:includes {
+    GROUP contact:homePage PG;
+      publishedInRecent PLONG
+  }.
+
+  ?AUDITKB log:notIncludes {
+   GROUP publishedInRecent PSHORT
+  }
+}
+ => { PSHORT noPubFrom GROUP }.
+
+
