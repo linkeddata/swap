@@ -36,7 +36,13 @@ import urlparse  # Comes with python 1.6, lacks file<->url mapping
 import urllib   # Opening resources in load()
 import string
 
-import xml.sax
+import xml.sax # PyXML stuff
+               #   http://sourceforge.net/projects/pyxml
+               # Connolly uses the debian python2-xml 0.6.5-2 package
+               #  http://packages.debian.org/testing/interpreters/python2-xml.html
+               # and suggests TimBL try the win32 distribution from
+               # the PyXML sourceforge project
+               # http://prdownloads.sourceforge.net/pyxml/PyXML-0.6.5.win32-py2.1.exe
 from xml.sax.handler import feature_namespaces
 
 import notation3 # http://www.w3.org/2000/10/swap/notation3.py
