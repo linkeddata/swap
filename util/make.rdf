@@ -8,9 +8,15 @@
 <rdf:RDF xmlns="http://www.w3.org/2000/10/swap/util/make#"
     xmlns:daml="http://www.daml.org/2001/03/daml+oil#"
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
-    xmlns:make="http://www.w3.org/2000/10/swap/util/make#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
     xmlns:s="http://www.w3.org/2000/01/rdf-schema#">
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/util/make#">
+        <dc:description>This is a small RDF Schema describing the general structure found in Makefile documents</dc:description>
+        <dc:title>Makefile RDF Schema</dc:title>
+        <s:comment>$Id$</s:comment>
+    </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/util/make#dependsOn">
         <s:description>A make target depends on this file.</s:description>
