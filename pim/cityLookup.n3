@@ -115,6 +115,8 @@ k:Massachusetts-State  usps:stateAbbr "MA".
 
 # ORD finds Ord, Nebraska as well as the airport
 { ?WHERE :formVal "ORD" } => { ?WHERE :formVal "Chicago" }.
+# patch for HEL airport
+{ ?WHERE :formVal "HEL" } => { ?WHERE :formVal "Helsinki" }.
 
 #http://www.vicinity.com/myblast/map.mb?CMD=LFILL&&CT=47.43000031:19.18000031:90000&
 
@@ -170,7 +172,10 @@ k:Massachusetts-State  usps:stateAbbr "MA".
 #  k:inRegion [ map:countryName "Hungary" ] ].
 
 # $Log$
-# Revision 1.11  2004-12-23 15:42:05  connolly
+# Revision 1.12  2004-12-23 15:58:28  connolly
+# patch for HEL/Helsinki
+#
+# Revision 1.11  2004/12/23 15:42:05  connolly
 # eliminated :lower hack to avoid literal subjects
 #
 # Revision 1.10  2004/11/13 20:01:59  connolly
