@@ -393,6 +393,8 @@ class StoredStatement:
         if self is other: return 0
         s = self.quad[OBJ]
         o = other.quad[OBJ]
+        sc = self.quad[CONTEXT]
+        oc = other.quad[CONTEXT]
         if s is sc:
             if o is oc: return 0
             else: return -1  # @this is smaller than other formulae
