@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en">
+<head>
+<meta name="generator" content="HTML Tidy, see www.w3.org" />
+<title>Classical Logic on the Semantic Web</title>
+<link rel="stylesheet" type="text/css" href="style.css" />
+</head>
+<body bgcolor="#FFFFFF">
+
+<h1>Classical Logic on the Semantic Web</h1>
+
+<h3>Status</h3>
+
+<p><strong>PARTIAL DRAFT</strong>  $Revision$  $Date$</p>
+
+<p>Content from mail postings like <a
+href="http://lists.w3.org/Archives/Public/www-rdf-logic/2002Sep/0013.html">More
+Approaches to Avoiding Paradox with Asserted Reifications</a> needs to be
+integrated.</p>
+
+<p>By Sandro Hawke.   Thanks (or more) to Tim Berners-Lee,
+Dan Connolly, Bijan Parsia, Lynn Andrea Stein, Jim Hendler, Damian Steer,
+William McCune, ... ?</p>
+
+<h2>Abstract</h2>
+
+<p>
+We suggest that RDF's limited expressive power can be extended safely
+to the level of classical first-order logic by using a combination of
+reification and a <em>stratified</em> truth predicate.  First we
+formalize RDF in terms of classical logic.  Then, we survey
+prior work on reification vocabularies and suggest a new candidate
+(called LX), and define it and the truth predicate with axioms.  We
+show how to use a resolution theorem prover (Otter) and a tabled
+prolog compiler (XSB) to work with reified-and-asserted knowledge on
+sample problems.  Finally, we suggest that adoption of LX reasoners
+could allow other logics (such as RDFS and OWL) to be trivially
+deployed for applications needing only moderate performance.
+</p>
+
+<h2>1. Introduction</h2>
+
+<p>
+As a knowledge representation language, RDF has very little expressive
+power.  Without an extension to its vocabulary, an RDF document can do
+no more than state the values of properties of things.  RDF critics
+have argued that more expressivity is needed [@]. RDF advocates have
+replied that this is enough because (1) it is all we need for most
+important applications [@], and (2) more expressive power can be added
+at a "higher layer" [@].
+</p>
+
+<p>
+The mechanism and even the feasibility of adding expressive power
+has been debated.  While the RDFS vocabulary appears to succesfully
+extend RDF from being a minimalist frame system to being a weak
+description logic [@], attempts to define a vocabulary for a
+stronger description logic, DAML+OIL, have run into controversy [@].
+In general, the prospect of adding expressive power at higher layers
+has been brought into question [Patel-Shneider02].
+</p>
+
+<p>
+People have already defined RDF vocabularies for logical systems close
+to classical first-order logic [Berners-Lee00, McDermott01, Hawke01,
+McDermott02], but they have failed to address precisely how such
+systems might productively interact with the underlying RDF.  It has
+been suggested that doing so would lead to catastrophic failures due
+to paradoxes of self-reference, but we believe these problems can be
+avoided.
+</p>
+
+<p>@@ talk about classical logic</p>
+
+<h2>2. RDF as a Predicate Logic</h2>
+
+<p>RDF follows the traditions of semantic networks [@], which 
+are well known to be equalivalent to classical logic or some subset of
+classical logic [@].</p>
+
+<p>At its simplest, and RDF graph is equivalent to a conjunction of
+ground binary atomic sentences, but there are few twists:
+</p>
+
+<ol>
+<li>Some node and arc labels are document scope; these are equivalent
+to using existentially quantified variables as labels, so we must
+allow this quantification over entire RDF sentences.
+</li>
+<li>Common inferences, such as used in RDFS, quantify over predicates,
+which is not a first-order operation, so we'll use a super-predicate
+to wrap the binary atomic sentences, like <em>rdf(subject, predicate,
+object)</em>.
+</li>
+<li>RDF has several kinds of strings (called "literals" in the RDF
+literature, but not to be confused with "literals" in automated theorem proving
+literature, which are possibly-negated atomic formulas), which are
+immediately known to be pairwise equal or distinct.   This is
+addressed below in section 2.1.
+</li>
+<li>The text of universal-scope labels on RDF nodes and arcs may be
+available to processing software and should not, in our opinion,
+simply be discarded or held to be entirely opaque.  We suggest that if
+true opacity were desired, UUIDs would server as far better labels
+than URIRefs.  We make this "microstructure" information available by
+using a "webDenotation" function, which maps many-to-one from
+character strings (which are URIRefs according to RDF) to objects in
+the domain of discourse.
+</li>
+
+</ol>
+
+<p>By viewing RDF as a sublanguage of first-order logic, our mechanism
+for reifying first-order logic (section 3) can be used for reifying
+RDF graphs.</p>
+
+<h3>2.1 RDF Strings</h3>
+
+<p>We consider basic strings to be sequences of unicode characters.
+These can be assembled using four primitive terms: first, rest, nil,
+and unicode.   "unicode" is itself a list of the unicode characters,
+in code sequence order.       @@more details   @@unicode versioning
+</p>
+
+<p>@@@ RDF String also have the is-XML bit, and the language
+attribute.
+</p>
+
+<h2>3. Vocabularies for Reification</h2>
+
+<p>Berners-Lee suggested that first-order formula could be
+conveyed in RDF with a quoting operator, but did not precisely define
+a mapping to triples.</p>
+
+<p>McDermott showed that one could describe first-order formulas using
+RDF triples, and with only a number of triples proportional to the
+complexity of the formula.</p>
+
+<p>We find one flaw in McDermott's vocabulary design, which prompts us 
+to consider some design decisions.
+</p>
+
+<p>@@ handling of RDF inferences (spontaneous delabeling, relabing,
+and merging); distinguishing constants from variables at what
+level?   Flaw in McDermott's.</p>
+
+<p>@@ community of users, "and" vs "conjunction"</p>
+
+<p>@@ binary vs n-ary</p>
+
+<p>@@ in-line (log:implies, or  "a and b") </p>
+
+<p>@@ LX binary, Drews, Kif, Tim's ...? </p>
+
+
+<h2>4. Truth Predicates</h2>
+
+<p>A truth predicate lets us get from "There is a sentence which
+says there is a fire in this building" to "There is a fire in this
+building!".   We do it by saying "There is a <em>true</em> sentence
+which says there is a fire in this building."</p>
+
+<p>But we have to be careful: that same <em>true</em> might be used to
+say things like: "There is a sentence which says that it, the sentence
+itself, is not <em>true</em>."  This is the classic liar paradox
+("This is a lie!").   Is that sentence true?   It's a touchy subject.
+</p>
+
+<p>This is but the simplest paradox of self-reference; there are
+trickier ones, like Curry's, and many of them have been studied at
+great length</p>
+
+<p>@@@@ Solutions:
+kif3, 
+kif98 (truth predicate only at top level), 
+stratification, 
+stratification of negation
+</p>
+
+<h2>5. Application Experience</h2>
+
+<pre>
+otter
+xsb
+translators
+axioms
+[cwm???]
+
+what apps?
+
+web-lookup of axioms
+
+performance
+</pre>
+
+<h2>6. Issues</h2>
+
+<pre>
+why not just use java?     composibility, I think.
+
+performance - open-ended badness!
+
+too confusing
+
+not rdf style
+
+web-loop self reference; open world
+</pre>
+
+<h2>7. Conclusions</h2>
+
+this stuff is great, but can get slow, and is not likely to replace
+conventional programming any time soon.
+
+<h2>Bibliograph</h2>
+
+<pre>
+Drew
+
+Peter
+
+MT
+
+M&amp;S
+
+Pat &amp; Drew's old Semantic Networks stuff (AIMA)
+
+RDF M&amp;S revisited: From Reification to Nesting, from Containers to
+Lists, from Dialect to pure XML; Conen, Klapsing, Koppen;
+http://nestroy.wi-inf.uni-essen.de/rdf/SWWSBook.pdf
+
+AIMA
+
+http://www.xml.com/pub/a/2001/07/25/prologrdf.html
+by Bijan Parsia
+July 25, 2001
+</pre>
+
+<p><a href="http://www.w3.org/People/Sandro">Sandro Hawke</a><br />
+First: 2002-03-29; This: $Id$</p>
+</body>
+</html>
+
+
