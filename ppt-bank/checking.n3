@@ -6,36 +6,41 @@
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix lst: <http://www.daml.org/2001/03/daml+oil#>.
 
-this log:forAll :acct, :draft, :tot, :b0, :tt, :a1, :doc, :l.
+this log:forAll :B0, :DOC, :ACCT, :A1.
+#@@this log:forAll :acct, :draft, :tot, :b0, :tt, :a1, :doc, :l.
 
 
 {
-  :acct
-    bk:statements [ lst:first :doc ];
-    bk:transAfter [ :amt :tt; :more () ].
+  :ACCT
+    bk:statements [ lst:first ?LAST_ST ];
+    bk:transAfter [ :amt ?TT; :more () ].
 
-  :doc log:semantics [ log:includes
-        { :acct :balance :b0 }
+  ?LAST_ST log:semantics [ log:includes
+        { :ACCT :balance :B0 }
       ].
 
-  ( :b0 :tt ) math:sum :tot.
+  ( :B0 ?TT ) math:sum ?TOT.
 }
-  log:implies { :acct :balance :tot }.
+  log:implies { :ACCT :balance ?TOT }.
 
-{ :acct bk:transactions :l }
+{ ?ACCT bk:transactions ?L }
   log:implies {
-    :acct bk:transAfter [ :amt "0"; :more :l ]
+    ?ACCT bk:transAfter [ :amt "0"; :more ?L ]
   }.
 
 {
-  :acct bk:transAfter [ :amt :b0; :more [ lst:first :doc; lst:rest :l ]].
-  :doc log:semantics [
-    log:includes { :doc a ck:Check; ck:amount :a1; :account :acct }
+  ?ACCT bk:transAfter [ :amt :B0; :more [ lst:first :DOC; lst:rest ?L ]].
+  :DOC log:semantics [
+    log:includes { :DOC a ck:Check; ck:amount :A1; :account :ACCT. }
   ].
-  (:b0 [ math:negation :a1]) math:sum :tot.
+  ("8" "5") math:difference "3".
+  (:B0 :A1) math:difference ?TOT.
  }
-  log:implies { :acct bk:transAfter [ :amt :tot; :more :l ] }.
+  log:implies { :ACCT bk:transAfter [ :amt ?TOT; :more ?L ] }.
 
+
+####
+#@@ investigating cwm list bugs
 :xyz :foo ("1").
 
 { :xyz :foo [ lst:rest :l] } log:implies { :xyz :snort :l }.
