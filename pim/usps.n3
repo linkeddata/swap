@@ -1,9 +1,10 @@
 <> a <http://www.w3.org/2000/10/swap/log#N3Document> .
 @prefix dc: <http://purl.org/dc/elements/1.1/>.
-
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 
 <> dc:title "An RDF Schema for United States Postal Addressing Standards";
-  dc:source [ = <http://pe.usps.gov/cpim/ftp/pubs/Pub28/pub28.pdf>
+  s:seeAlso <jobieLabels.pl>;
+  dc:source [ = <http://pe.usps.gov/cpim/ftp/pubs/Pub28/pub28.pdf>;
   dc:title "Postal Addressing Standards Publication 28";
   dc:date "November 2000";
   ],
@@ -12,7 +13,6 @@
   ].
 
 @prefix r: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
-@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
 
 @prefix p: <http://www.w3.org/2000/10/swap/pim/usps#>.
