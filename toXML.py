@@ -268,7 +268,7 @@ z  - Allow relative URIs for namespaces
 		attrs = []  # Literal
 		if type(v) is type((1,1)):
 		    v, dt, lang = v
-		    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt.uriref()))
+		    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt))
 		    if lang != None: attrs.append((XML_NS_URI+' lang', lang))
 		self._xwr.startElement(RDF_NS_URI+'Description',
 				    [], self.prefixes)
@@ -294,7 +294,7 @@ z  - Allow relative URIs for namespaces
 	v = obj[1]
 	if obj[0] == LITERAL_DT:
 	    v, dt = v
-	    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt.uriref()))
+	    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt))
 	elif obj[0] == LITERAL_LANG:
 	    v, lang = v
 	    if lang != None: attrs.append((XML_NS_URI+' lang', lang))
