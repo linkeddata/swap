@@ -602,11 +602,11 @@ class BI_racine(LightBuiltIn, Function):    # The resource whose URI is the same
 
 class BI_directlyIncludes(HeavyBuiltIn):
     def evaluate2(self, store, subj, obj, variables, bindings):
-        return store.testIncludes(subj, obj, variables, bindings)
+        return store.testIncludes(subj, obj, variables, bindings=bindings)
     
 class BI_notDirectlyIncludes(HeavyBuiltIn):
     def evaluate2(self, store, subj, obj, variables, bindings):
-        return not store.testIncludes(subj, obj, variables, bindings)
+        return not store.testIncludes(subj, obj, variables, bindings=bindings)
     
 
 class BI_includes(HeavyBuiltIn):
@@ -633,7 +633,7 @@ class BI_includes(HeavyBuiltIn):
 class BI_notIncludes(HeavyBuiltIn):
     def evaluate2(self, store, subj, obj, variables, bindings):
         if isinstance(subj, Formula) and isinstance(obj, Formula):
-            return not store.testIncludes(subj, obj, variables, bindings)
+            return not store.testIncludes(subj, obj, variables, bindings=bindings)
         return 0   # Can't say it *doesn't* include it if it ain't a formula
 
 class BI_resolvesTo(HeavyBuiltIn, Function):
@@ -648,6 +648,7 @@ class BI_resolvesTo(HeavyBuiltIn, Function):
         try:
             loadToStore(store, inputURI)
         except (IOError, SyntaxError):
+            if chatty > 0: progress("Error trying to resolve <" + inputURI + ">") 
             return None
         else:
             if chatty>10: progress("resolvesTo FORMULA addr: %s" % (inputURI+ "#_formula"))
@@ -1584,8 +1585,10 @@ class RDFStore(notation3.RDFSink) :
 
 # Return whether or nor workingContext containts a top-level template equvalent to subexp 
     def testIncludes(self, workingContext, template, _variables, smartIn=[], bindings=[]):
+        global chatty
 
         if chatty >30: progress("\n\n=================== testIncludes ============")
+#        chatty = chatty+100
 
         # When the template refers to itself, the thing we are
         # are looking for will refer to the context we are searching
@@ -1595,10 +1598,11 @@ class RDFStore(notation3.RDFSink) :
 
         unmatched, _templateVariables = self.oneContext(template)
         _substitute([( template, workingContext)], unmatched)
+        
         if bindings != []: _substitute(bindings, unmatched)
 
         if chatty > 20:
-            progress( "# includes rule, %i terms in template %s, %i unmatched, %i template variables" % (
+            progress( "# testIncludes BUILTIN, %i terms in template %s, %i unmatched, %i template variables" % (
                 len(template.occursAs[CONTEXT]),
                 `template`[-8:], len(unmatched), len(_templateVariables)))
         if chatty > 80:
@@ -1606,7 +1610,8 @@ class RDFStore(notation3.RDFSink) :
                 progress( "    Variable: " + `v`[-8:])
 
         result = self.match(unmatched, [], _variables + _templateVariables, smartIn, justOne=1)
-        if chatty >30: progress("=================== end includes =" + `result`)
+        if chatty >30: progress("=================== end testIncludes =" + `result`)
+#        chatty = chatty-100
         return result
  
     def genid(self,context, type=RESOURCE):        
@@ -1984,7 +1989,7 @@ class RDFStore(notation3.RDFSink) :
 
             best = len(queue) -1 # , say...
             i = best - 1
-            while i >0:
+            while i >=0:
                 if (queue[i][STATE] > queue[best][STATE]
                             or queue[i][STATE] == queue[best][STATE]
                                and (len(queue[i][CONSTS]) < len(queue[best][CONSTS])

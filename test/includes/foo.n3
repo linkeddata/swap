@@ -21,5 +21,6 @@ foo:is a rdf:Property;
 
 foo:blue s:isDefinedBy <> .
 
-
+#foo:red s:isDefinedBy <> .
+#
 #ends

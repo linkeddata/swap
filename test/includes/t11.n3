@@ -21,57 +21,102 @@
 
 this log:forAll :d, :o, :p, :s, :S, :s1, :x, :y, :F, :G, :H.
 
+# <foo.n3> log:resolvesTo :F .
+#   :F log:includes { :blue a rdf:Property }} log:implies { :includesTest a :FAILURE}.
+#
+#{ <foo.n3> log:resolvesTo :F .  
+# :F log:notIncludes { :blue a rdf:Property }} log:implies { :includesTest2 a :success}.
+#
+#{ <foo.n3> log:resolvesTo :F .
+#   :F log:includes { :is a rdf:Property }} log:implies { :includesTest3 a :success}.
+#
+#{ <foo.n3> log:resolvesTo :F .  
+# :F log:notIncludes { :is a rdf:Property }} log:implies { :includesTest4 a :FAILURE}.
+#
+#
 { <t10a.n3> log:resolvesTo :F.
   :F log:includes { :s :p :o}   } log:implies { :p a :UsedProperty } .
-
+#
 # Debug:
-{ <foo.n3> log:resolvesTo :F. } log:implies { :WE :FOUND :F }.
+#{ :blue log:resolvesTo :F. } log:implies { :WE :FOUND :F }.
+#
+#{ :blue log:resolvesTo :F.
+#  :F log:includes { :x s:isDefinedBy :y }} log:implies { :x :DEFINEDIN_BLUE_NS :y }.
+#
+#{ :blue log:resolvesTo :F.
+#  :F log:includes { :x s:isDefinedBy :y }} log:implies { :x :DEFINEDIN_BLUE_NS :y }.
+#
+#{ :p a :UsedProperty .
+#  :p log:resolvesTo :F.
+#                     } log:implies { :p :USED_AND_RESOLVES_TO :F }.
 
-#  The RDF and RDFS specs imply this algorithm for the definitive schema corresponding
+#{ :p :USED_AND_RESOLVES_TO :F.
+#:F log:includes { :x s:isDefinedBy :y } } log:implies { :p :USED_AND_SOMETHING_DEFINED_IN :F }.
+#
+
+#
+#  The RDF and RDFS specs imply the following algorithm for the definitive schema corresponding
 #  to a Property :p.  (From Ralph Swick, whiteboard conversation)
+#
 
 { :p a :UsedProperty .
-  :p log:resolvesTo [log:includes { :p s:isDefinedBy :x }]
+  :p log:resolvesTo [log:includes { :p s:isDefinedBy :s }] } log:implies {:p :schema :s}.
 
-} log:implies {
-    :p a :defined_in_schema3 .
-    :p  :schema :x.
-}.
 
-# We may need the schema as a forumula two:
+# We may need the schema as a formula two:
 
 {     :p :schema [ log:resolvesTo :F ] } log:implies { :p :schemaFormula :F }. 
 
 #  If there is no schema found, then we flag a problem
-#
+
 { :p a :UsedProperty .
   :p log:resolvesTo [log:notIncludes { :p s:isDefinedBy :x }]
 } log:implies {:p a :ERROR_CANT_GET_SCHEMA}.
 
+
+
+
+{ :p a :UsedProperty .
+  :p log:resolvesTo :F.
+  :F log:includes { :p s:isDefinedBy :s }.
+  :s log:resolvesTo :G } log:implies { :p :schemaFormula :G }.
+
+#
+{:p :schemaFormula :F.
+ :F log:includes { :p a rdf:Property }}log:implies { :p a :Property_declared } .
+ 
+{:p :schemaFormula :F.
+ :F log:notIncludes { :p a rdf:Property }}log:implies { :p a :ERROR_PROPERTY_NOT_DECLARED } .
+ 
+#{     :p :schema :s.
+#      :s log:resolvesTo [log:notIncludes { :p a rdf:Property }].
+#} log:implies {
+#      :p a :ERROR_SPELLING_MISTAKE_MAYBE.  # ;-)
+#}.
 
 # Now we can find the schema, we can check whether the property is indeed
 # mentioned in the schema.
 # Exactly what we require of a schema is a good question.
 #  One answer is that
 #   (a)when the schema is found and combined with well-known general rules
-#      wiht inference that you can show that eachof the predictes used is
-#      indeed defined as a property. This gets rid of spelling errors etc.
+#      with inference that you can show that each of the predictes used is
+#      indeed declared as a property. This gets rid of spelling errors etc.
 #   (b)when the document is combined with the above, no condradiction
 #      can be found from anything being (eg) member of disjoint sets.
-
-{     :p :schema :s.
-      :s log:resolvesTo [log:includes { :p a rdf:Property }].
-} log:implies {
-      :p a :schema_defined_property4.  #
-}.
-
-
-{     :p :schema :s.
-      :s log:resolvesTo [log:notIncludes { :p a rdf:Property }].
-} log:implies {
-      :p a :ERROR_SPELLING_MISTAKE_MAYBE.  # ;-)
-}.
-
+#
+#{     :p :schema :s.
+#      :s log:resolvesTo [log:includes { :p a rdf:Property }].
+#} log:implies {
+#      :p a :schema_defined_property4.  #
+#}.
+#
+#
+#{     :p :schema :s.
+#      :s log:resolvesTo [log:notIncludes { :p a rdf:Property }].
+#} log:implies {
+#      :p a :ERROR_SPELLING_MISTAKE_MAYBE.  # ;-)
+#}.
+#
 
 log:implies a log:Chaff.  #  Clear out rules on -purge
 
