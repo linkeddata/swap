@@ -145,14 +145,16 @@ title, which they gave the identifier</p>
 <p>&lt;http://purl.org/dc/elements/1.1/title&gt;. So we can make a much
 better defined statement if we say</p>
 <pre>&lt;&gt; &lt;http://purl.org/dc/elements/1.1/title&gt;
- "Primer - Getting into the Semantic Web and RDF using N3".</pre>
+ "Primer - Getting into the Semantic Web 
+                             and RDF using N3".</pre>
 
 <p>That of course would be a bit verbose - imagine using such long
 identifiers for everything like #age and #eyecolor above. So N3 allows you to
 set up a shorthand prefix for the long part - the part we call the
 <dfn>namespace</dfn>. You set it up using "@prefix" like this:</p>
 <pre>@prefix dc:  &lt;http://purl.org/dc/elements/1.1/&gt; .
-&lt;&gt; dc:title  "Primer - Getting into the semantic web and RDF using N3".</pre>
+&lt;&gt; dc:title  "Primer - Getting into the semantic web 
+                                      and RDF using N3".</pre>
 
 <p>Note that when you use a prefix, you use a colon instead of a hash between
 dc and title, and you don't use the &lt;angle brackets&gt; around the whole
@@ -166,9 +168,12 @@ it - and you can build your own for your own applications very simply.</p>
 
 <p>From now, on we are going to use some well known namespaces, and so to
 save space, I will just assume the prefixes</p>
-<pre>@prefix rdf:  &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt; .
-@prefix rdfs: &lt;http://www.w3.org/2000/01/rdf-schema#&gt; .
-@prefix ont:  &lt;http://www.daml.org/2001/03/daml-ont#&gt; .</pre>
+<pre>@prefix rdf:  &lt;http://www.w3.org/1999/
+                         02/22-rdf-syntax-ns#&gt; .
+@prefix rdfs: &lt;http://www.w3.org/2000/
+                         01/rdf-schema#&gt; .
+@prefix owl:  &lt;http://www.w3.org/2002/
+                         07/owl#&gt; .</pre>
 
 <p>These are the RDF, RDF schema, and experimental DAML ontology namespaces,
 respectively. They give us the core terms which we can bootstrap ourselves
@@ -223,7 +228,8 @@ id="domain">domain</a></dfn> of the property. When the object must be in a
 class, that class is called the <dfn><a name="range"
 id="range">range</a></dfn> of a property. A property can have many domains
 and ranges, but typically one specifies one.</p>
-<pre>:sister rdfs:domain :Person; rdfs:range :Woman.</pre>
+<pre>:sister rdfs:domain :Person; 
+        rdfs:range :Woman.</pre>
 
 <p>Note the class identifiers start with capitals and properties with lower
 case letters. This is not a rule, but it is a good convention to stick to.
