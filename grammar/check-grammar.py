@@ -1,6 +1,9 @@
 #! /usr/bin/python
-# Check ambiguity as for predictive parser
-#
+""" Check ambiguity as for predictive parser
+"""
+
+__version__ = "$Id$"
+
 import llyn
 from myStore import load, Namespace
 from term import Literal
