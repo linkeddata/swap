@@ -34,65 +34,72 @@ this log:forAll :FLT, :CARRIER_NAME, :NUM, :SUM,
 #hmm... someplace to scrape these from?
 
 @prefix a: <http://www.daml.org/cgi-bin/airport?>. #hmm... ?MCI is a document *and* an airport?
+@prefix chi: <http://www.w3.org/2002/12/cal/tzd/America/Chicago#>.
+@prefix ny: <http://www.w3.org/2002/12/cal/tzd/America/New_York#>.
+@prefix la: <http://www.w3.org/2002/12/cal/tzd/America/Los_Angeles#>.
+@prefix den: <http://www.w3.org/2002/12/cal/tzd/America/Denver#>.
+@prefix paris: <http://www.w3.org/2002/12/cal/tzd/Europe/Paris#>.
+@prefix london: <http://www.w3.org/2002/12/cal/tzd/Europe/London#>.
+
 a:MCI a k:Airport-Physical;
   k:nameString "KANSAS CITY INTL";
-  :timeZone :ChicagoTime.
+  :timeZone chi:tz.
 a:STL a k:Airport-Physical;
   k:nameString "ST LOUIS INTL";
-  :timeZone :ChicagoTime.
+  :timeZone chi:tz.
 a:ORD a k:Airport-Physical;
  k:nameString "CHICAGO OHARE";
- :timeZone :ChicagoTime.
+ :timeZone chi:tz.
 a:DFW a k:Airport-Physical;
   k:nameString "DALLAS FT WORTH";
- :timeZone :ChicagoTime.
+ :timeZone chi:tz.
 a:EWR a k:Airport-Physical;
   k:nameString "NEWARK";
-  :timeZone :NewYorkTime.
+  :timeZone ny:tz.
 a:BOS a k:Airport-Physical;
   k:nameString "BOSTON";
-  :timeZone :NewYorkTime.
+  :timeZone ny:tz.
 a:DCA a k:Airport-Physical;
   k:nameString "WASHINGTON REAGAN";
-  :timeZone :NewYorkTime.
+  :timeZone ny:tz.
 a:NCE a k:Airport-Physical;
   k:nameString "NICE";
   :timeZone :ParisTime.
 a:LHR a k:Airport-Physical;
   k:nameString "LONDON HEATHROW";
-  :timeZone :LondonTime.
+  :timeZone london:tz.
 a:SFO a k:Airport-Physical;
   k:nameString "SAN FRANCISCO";
-  :timeZone :LosAngelesTime.
+  :timeZone la:tz.
 a:CDG a k:Airport-Physical;
   k:nameString "PARIS DE GAULLE";
-  :timeZone :ParisTime.
+  :timeZone paris:tz.
 a:FCO a k:Airport-Physical;
   k:nameString "ROME FIUMICINO";
-  :timeZone :ParisTime. #@@ is that right?
+  :timeZone paris:tz. #@@ is that right?
 a:AHO a k:Airport-Physical;
   k:nameString "ALGHERO";
-  :timeZone  :ParisTime. #@@ is that right?
+  :timeZone  paris:tz. #@@ is that right?
 a:PIT a k:Airport-Physical;
   k:nameString "PITTSBURGH";
-  :timeZone :NewYorkTime.
+  :timeZone ny:tz.
 a:YMX a k:Airport-Physical;
   k:nameString "MONTREAL DORVALQC";
-  :timeZone :NewYorkTime.
+  :timeZone ny:tz.
 a:YVR a k:Airport-Physical;
   k:nameString "VANCOUVER BC";
-  :timeZone :LosAngelesTime.
+  :timeZone la:tz.
 a:SNA a k:Airport-Physical;
   k:nameString "JOHN WAYNE INTL";
-  :timeZone :LosAngelesTime.
+  :timeZone la:tz.
 a:LAX a k:Airport-Physical;
-  :timeZone :LosAngelesTime.
+  :timeZone la:tz.
 a:LGA a k:Airport-Physical;
-  :timeZone :NewYorkTime.
+  :timeZone ny:tz.
 a:JFK a k:Airport-Physical;
-  :timeZone :NewYorkTime.
+  :timeZone ny:tz.
 a:DEN a k:Airport-Physical;
-  :timeZone :DenverTime.
+  :timeZone den:tz.
 
 
 { :FLT
@@ -135,23 +142,21 @@ a:DEN a k:Airport-Physical;
   dc:description "updated periodically" ].
 
 
-:ChicagoTime a cal:Vtimezone;
+chi:tz a cal:Vtimezone;
   cal:tzid "/softwarestudio.org/Olson_20011030_5/America/Chicago".
 
 
-:NewYorkTime a cal:Vtimezone;
+chi:tz a cal:Vtimezone;
   cal:tzid "/softwarestudio.org/Olson_20011030_5/America/New_York".
 
-:ParisTime
-  cal:tzid "/softwarestudio.org/Olson_20011030_5/Europe/Paris"
-  .
+paris:tz a cal:Vtimezone;
+  cal:tzid "/softwarestudio.org/Olson_20011030_5/Europe/Paris".
 
-:LondonTime
+london:tz a cal:Vtimezone;
   cal:tzid "/softwarestudio.org/Olson_20011030_5/Europe/London".
 
-
-:LosAngelesTime
+la:tz a cal:Vtimezone;
   cal:tzid "/softwarestudio.org/Olson_20011030_5/America/Los_Angeles".
 
-:DenverTime
+den:tz a cal:Vtimezone;
   cal:tzid "/softwarestudio.org/Olson_20011030_5/America/Denver".
