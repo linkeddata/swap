@@ -53,6 +53,7 @@ import re
 
 RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#Type"
 DAML_equivalentTo_URI = "http://www.daml.org/2000/10/daml-ont#equivalentTo"
+DAML_NS = "http://www.daml.org/2000/10/daml-ont#"
 Logic_NS = "http://www.w3.org/2000/10/swap/log.n3#"
 
 
@@ -86,6 +87,8 @@ N3_forAll_URI = Logic_NS + "forAll"
 N3_first = (RESOURCE, Logic_NS + "first")
 N3_rest = (RESOURCE, Logic_NS + "rest")
 N3_null = (RESOURCE, Logic_NS + "null")
+N3_List = (RESOURCE, Logic_NS + "List")
+N3_Empty = (RESOURCE, Logic_NS + "Empty")
 
 
 chatty = 0   # verbosity flag
@@ -945,7 +948,13 @@ class ToN3(RDFSink):
         if self.stack[-1]:
             if triple[PRED] == N3_first:
                 self._write(self.representationOf(triple[OBJ])+" ")
+            elif triple[PRED] == RDF_type and triple[OBJ] == N3_List:
+                pass  # We knew
+            elif triple[PRED] == RDF_type and triple[OBJ] == N3_Empty:
+                pass  # not how we would have put it but never mind
+#                self._write("# Empty set terminated\n")
             elif triple[PRED] != N3_rest:
+                print "####@@@@@@ ooops:", triple
                 raise intenalError # Should only see first and rest in list mode
             return
         self._makeSubjPred(triple[SUBJ], triple[PRED])        
