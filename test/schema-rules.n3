@@ -78,7 +78,7 @@ rdfs:subClassOf 		a daml:TransitiveProperty .
 	<#x> <#p> <#y> . } log:implies  { <#x> a <#c> } .
 
 { 	<#p> rdfs:range <#c>.
-	<#x> <#p> <#y> . } log:implies  { <#x> a <#c> } .
+	<#x> <#p> <#y> . } log:implies  { <#y> a <#c> } .
 
 # From the above once can conclude the specific propagation rules
 # for of subclasss and subproperties, such as:
@@ -100,7 +100,7 @@ rdfs:subClassOf 		a daml:TransitiveProperty .
 	<#y> daml:disjointFrom <#z> } log:implies { <#x> a v:schemaInconsistency } .
 
 
-<> daml:imports <rdfs.n3> . #?@@@@@@@@@@@
+# <> daml:imports <rdfs.n3> . #?@@@@@@@@@@@
 
 
 

@@ -1,0 +1,40 @@
+#    Double conclusion test
+#
+#  I had/ve a problem that the engine would conclude a rule
+# and add it to the store even though it matched one already there.
+# This is a test case to get to the bottom of that one.
+#
+#  cwm double-concludion.n3 -size -rules -size -rules -size
+#
+# should show the store not growing after the first application of the rules.
+#
+#
+@prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
+@prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix : <#> .       # For our use
+@prefix v: <#> .	# Hint for others use
+
+
+
+<> log:forAll <#p>.	# Property
+
+
+# Implication of transitivity:
+
+
+{  <#p> a daml:TransitiveProperty . } log:implies
+
+{
+  {
+    { <#x> <#p> <#y>. <#y> <#p> <#z>. } log:implies { <#x> <#p> <#z>. }
+  } a log:Truth; log:forAll <#x> , <#y> , <#z>.
+} .
+
+
+rdfs:subPropertyOf 	a daml:TransitiveProperty .
+
+
+
+

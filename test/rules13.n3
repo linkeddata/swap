@@ -1,41 +1,43 @@
 #    Test filter in N3
 #
 bind log: <http://www.w3.org/2000/10/swap/log.n3> .
-bind mech: <s1.n3> .
 bind daml: <http://www.daml.org/2000/10/daml-ont> .
 bind : <> .
 bind rules: <> .
 
-# DanC challenge
+# Full DanC challenge
 
-#<> log:forAll <#p> .
-#
-#{  <#p> a daml:TransitiveProperty . } log:means
-#
-#{
-#  {
-#    { <#x> <#p> <#y>. <#y> <#p> <#z>. } log:implies { <#x> <#p> <#z>. }
-#  } a log:Truth; log:forAll <#x> , <#y> , <#z>.
-#} .
+<> log:forAll <#p> .
+
+{  <#p> a daml:TransitiveProperty . } log:means
+
+{
+  {
+    { <#x> <#p> <#y>. <#y> <#p> <#z>. } log:implies { <#x> <#p> <#z>. }
+  } a log:Truth; log:forAll <#x> , <#y> , <#z>.
+} .
 
 
 
 # Intoduce a symmetric implication for convienience
-# Could be just labelled as self-inverse i suppose.
+
+<> log:forAll <#x>, <#y> .
+{ <#x> log:means <#y>. }  log:implies {	<#x> log:implies <#y> .
+					<#y> log:implies <#x> . } .
+  
+{   <#x> log:implies <#y> .
+    <#y> log:implies <#x> . }  log:implies  { <#x> log:means <#y>. }  . 
+
+# and in fact, though it is not axiomatic...
 #
-<> log:forAll <#f>, <#g> .
-{ <#f> log:means <#g> }  log:implies {	<#f> log:implies <#g> .
-	    				<#g> log:implies <#f> . } . 
-
-# and in fact,  though it will just lead to more processing,
+#{ <#x> log:means <#y>. }  log:means {	<#x> log:implies <#y> .
+#					<#y> log:implies <#x> . } . 
 #
-#{ <#g> log:means <#h> }  log:means {	<#h> log:implies <#g> .
-#					<#g> log:implies <#h> . } . 
 
 
+<#ancestor>  a daml:TransitiveProperty .
+<#granpa> <#ancestor> <#pa> .
+<#pa> <#ancestor> <#bill> .
 
-# <#ancestor>  a daml:TransitiveProperty .
-# <#granpa> <#ancestor> <#pa> .
-# <#pa> <#ancestor> <#bill> .
 
 

@@ -11,6 +11,11 @@
 #  - apply a given set of rules (a certian limite number of times?)
 #  - check the result has no inconsistencies.
 #
+# See schema-rules.n3
+#
+#  This file just filters out the error messages from everything else.
+#
+
 @prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
 #bind daml: <http://www.daml.org/2000/10/daml-ont> .
 #bind : <> .       # For our use
