@@ -36,7 +36,10 @@ class ArgHandler:
      must take exactly one argument.   So filter and filterEQ may
      be different options.   It's safe to add an EQ version to any
      option which takes only one parameter
-     
+
+     Should we issue a warning when a non-option parameter occurs
+     next after a = option, saying that it makes the = significant
+     which might confuse some people?
 
     """
 
@@ -53,7 +56,7 @@ class ArgHandler:
         self.__dict__.update(attrs)
         self.__dict__.setdefault("argv", sys.argv)
         
-    def handle__h__help__helpEQ(self, whichArg=None):
+    def handle__h__help__helpEQ(self, whichOption=None):
         """Output summary of options, or details on a particular option.
 
         If the optional parameter is present, it should name an option for
@@ -64,7 +67,7 @@ class ArgHandler:
         Example:   foo --help help
         """
 
-        if whichArg is None:
+        if whichOption is None:
             lines = [ ]
             width = [0, 0, 0, 0, 0]
             for member in inspect.getmembers(self):
@@ -87,7 +90,7 @@ class ArgHandler:
                print re.sub('\\n', "\n"+" "*len(s1), s)
                 
         else:
-           member = self.findMember(whichArg)
+           member = self.findMember(whichOption)
            if member is None: return
            line = self.genHelpEntry(member, long=1)
            print "Option: ", line[0]
@@ -201,6 +204,8 @@ class ArgHandler:
     def genHelpEntry(self, member, long=0):
 
         names = member[0].split("__")[1:]
+        names = map(lambda x: re.sub("_", "-", x), names)
+        names = map(lambda x: re.sub("EQ$", "=", x), names)
         # primary sort key = case insensitive version, 
         # secondary is case sensitive
         sortKey = names[0].lower() + " " + names[0]
@@ -245,7 +250,8 @@ class ArgHandler:
             else:
                 doc = f.__doc__.split("\n\n", 2)
                 docs = doc[0]
-
+        docs = re.sub("\\s*$", "", docs)
+        print docs, "K"
         return (optdesc, parmdesc, docs, sortKey)
 
     def peekThis(self):
@@ -298,7 +304,10 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
 
 # $Log$
-# Revision 1.4  2003-04-02 19:52:33  sandro
+# Revision 1.5  2003-04-02 20:42:56  sandro
+# pretty up help a bit
+#
+# Revision 1.4  2003/04/02 19:52:33  sandro
 # a bit of docs
 #
 # Revision 1.3  2003/04/02 19:43:41  sandro
