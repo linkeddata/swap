@@ -30,7 +30,7 @@ parser _Parser:
     ignore: r'\s+'         # whitespace. @@count lines?
     ignore: r'#.*\r?\n'    # n3 comments; sh/perl style
 
-    token URIREF:   r'<[^ >]*>'
+    token URIREF:   r'<[^ \n>]*>'
     token PREFIX:   r'[a-zA-Z0-9_-]*:'
     token QNAME:    r'([a-zA-Z][a-zA-Z0-9_-]*)?:[a-zA-Z0-9_-]+'
     token EXVAR:    r'_:[a-zA-Z0-9_-]+'
@@ -39,25 +39,41 @@ parser _Parser:
     token STRLIT1:  r'"([^\"\\\n]|\\[\\\"nrt])*"'
     token STRLIT2:  r"'([^\'\\\n]|\\[\\\'nrt])*'"
     token STRLIT3:  r'"""([^\"\\]|\\[\\\"nrt])*"""' #@@not right
+
+    # clause terminator: . followed by }
+    # @@ this should allow comments...
+    token TERM:     r'\.(?=\s*})'
+
+    # clause separator: . *not* followed by }
+    token SEP:      r'\.(?!\s*})'
+
+    # phrase terminator: ; followed by . or }
+    # @@ this should allow comments...
+    token PTERM:     r';(?=\s*[\.}])'
+
+    # clause separator: . *not* followed by }
+    token PSEP:     r';(?!\s*[\.}])'
+
     token END:      r'\Z'
 
     rule document:
               {{ self.bindListPrefix(); scp = self.docScope() }}
          ( directive | statement<<scp>> ) * END
 
-    rule directive : "@prefix" PREFIX URIREF "\\."
+    rule directive : "@prefix" PREFIX URIREF SEP
               {{ self.bind(PREFIX[:-1], URIREF) }}
 
     # foos0 is mnemonic for 0 or more foos
     # foos1      "          1 or more foos
 
-    rule statement<<scp>> : clause_ind<<scp>> "\\."
+    rule statement<<scp>> : clause_ind<<scp>> SEP
 
     rule clause_ind<<scp>>:
          phrase<<scp>>
-           [predicate<<scp, phrase>> (";" [predicate<<scp, phrase>>])* ]
+           [predicate<<scp, phrase>>
+            (PSEP [predicate<<scp, phrase>>])* ] [PTERM]
        | term<<scp>>
-            predicate<<scp, term>> (";" [predicate<<scp, term>>])*
+            predicate<<scp, term>> (PSEP [predicate<<scp, term>>])* [PTERM]
 
     rule term<<scp>>:
                 expr<<scp>>     {{ return expr }}
@@ -107,12 +123,12 @@ parser _Parser:
 
     rule phrase<<scp>>:
         "\\[" {{ subj = self.something(scp) }}
-        [predicate<<scp, subj>> (";" predicate<<scp, subj>>)* [";"] ]
+        [predicate<<scp, subj>> (PSEP predicate<<scp, subj>>)* [PTERM] ]
         "\\]" {{ return subj }}
 
     rule clause_sub:
         "{" {{ scp = self.newScope() }}
-        [ clause_ind<<scp>> ("\\." clause_ind<<scp>>)* ["\\."]]
+        [ clause_ind<<scp>> (SEP clause_ind<<scp>>)* [TERM] ]
         "}" {{ return scp }}
 
 %%
@@ -199,7 +215,7 @@ class Parser(_Parser):
         self._prefixes[pfx] = addr
 
     def gotStatement(self, scp, subj, verb, obj):
-	DEBUG("gotStatement:", scp, subj, verb, obj)
+	#DEBUG("gotStatement:", scp, subj, verb, obj)
         
         dir, pred = verb
         if dir<0: subj, obj = obj, subj
@@ -241,7 +257,10 @@ def DEBUG(*args):
     sys.stderr.write("\n")
     
 # $Log$
-# Revision 1.17  2002-08-13 07:55:15  connolly
+# Revision 1.18  2002-08-15 23:20:36  connolly
+# fixed . separater/terminator grammar problem
+#
+# Revision 1.17  2002/08/13 07:55:15  connolly
 # playing with a new parser/sink interface
 #
 # Revision 1.16  2002/08/07 16:01:23  connolly

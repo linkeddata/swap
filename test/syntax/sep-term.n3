@@ -1,3 +1,5 @@
+# $Id$
+
 { <a> <b> <c>} <p> <o>.
 { <a> <b> <c>. <d> <e> <f>} <p> <o>.
 { <a> <b> <c>. <d> <e> <f>.} <p> <o>.
@@ -8,3 +10,11 @@
    <and> <anotherThing>;
    .
 
+<something> <relatedTo> <somethingElse>;
+   <relatedTo> <anotherThing>;
+   <and> <anotherThing>
+   .
+
+# this case doesn't work yet:
+{ <a> <b> <c>. #foo
+  } <p> <o>.
