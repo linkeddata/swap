@@ -392,6 +392,7 @@ rdf(owl_InverseOf, rdf_type, owl_SymmetricProperty).
 %    owl_AllDifferent
 %
 
+
 all A (
    rdf(A, rdf_type, owl_AllDifferent)
    <->
@@ -406,29 +407,33 @@ all A L (
    allDifferent(L)
 ).
 
-all LIST (
-   allDifferent(LIST)
-   <->
-   (( LIST = rdf_nil )
-    |
-    ( exists HEAD TAIL (
-        rdf(LIST, rdf_first, HEAD) &
-        rdf(LIST, rdf_rest, TAIL) &
-        differentFromAll(HEAD, TAIL)
-    )))
+allDifferent(rdf_nil).
+
+all LIST HEAD TAIL (
+   (allDifferent(LIST) &
+    rdf(LIST, rdf_first, HEAD) &
+    rdf(LIST, rdf_rest, TAIL))
+   ->
+   differentFromAll(HEAD, TAIL)
 ).
 
-all SUBJECT LIST (
-   differentFromAll(SUBJECT, LIST)
-   <->
-   (( LIST = rdf_nil )
-    |
-    ( exists HEAD TAIL (
-        rdf(LIST, rdf_first, HEAD) &
-        rdf(LIST, rdf_rest, TAIL) &
-	rdf(SUBJECT, owl_differentFrom, HEAD) &
-        differentFromAll(SUBJECT, TAIL)
-    )))
+all SUBJECT (
+  differentFromAll(SUBJECT, rdf_nil)
+).
+
+all SUBJECT LIST HEAD TAIL (
+   (differentFromAll(SUBJECT, LIST) &
+    rdf(LIST, rdf_first, HEAD) &
+    rdf(LIST, rdf_rest, TAIL))
+   ->
+   ( rdf(SUBJECT, owl_differentFrom, HEAD) &
+     differentFromAll(SUBJECT, TAIL) )
+).
+
+all X Y (
+   rdf(X, owl_differentFrom, Y)
+   ->
+   rdf(Y, owl_differentFrom, X)
 ).
 
 
@@ -455,7 +460,10 @@ all P1 P2 (
 ).
     
 % $Log$
-% Revision 1.5  2003-07-30 03:05:40  sandro
+% Revision 1.6  2003-07-30 03:08:01  sandro
+% third try for allDifferent; passes test finally
+%
+% Revision 1.5  2003/07/30 03:05:40  sandro
 % switched to using equals for allDifferent
 %
 % Revision 1.4  2003/07/30 02:43:26  sandro
