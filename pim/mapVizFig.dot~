@@ -1,0 +1,22 @@
+digraph world {
+  "xplanet" [ shape="diamond"];
+  
+  "itin-markers" -> "xplanet";
+  "itin-arcs" -> "xplanet";
+  "xplanet" -> "itin-map.png";
+
+  cwm2 [ label="cwm", shape="diamond"];
+  "itin.nt" -> cwm2;
+  "airportLookup.n3" -> cwm2;
+  "airport lat/long data" -> cwm2
+  cwm2 -> "itin.rdf";
+
+  cwm3 [ label="cwm", shape="diamond"];
+  cwm4 [ label="cwm", shape="diamond"];
+  "itin.rdf" -> cwm3;
+  "itinMarks.n3" -> cwm3;
+  cwm3 -> "itin-markers";
+  "itin.rdf" -> cwm4;
+  "itinArcs.n3" -> cwm4;
+  cwm4 -> "itin-arcs";
+}

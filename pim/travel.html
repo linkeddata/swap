@@ -32,18 +32,18 @@ not constrained enough, semantically, to accomplish these integration
 tasks:</p>
 
 <ul>
-<li>import travel itineraries into my PDA calendar</li>
+<li><a href="#map-viz">plot an itinerary on a map</a></li>
+<li><a href="#ckcn">check proposed work travel itineraries against family constraints</a></li>
+<li><a href="#pda-in">import travel itineraries into my PDA calendar</a></li>
 <li>import travel itineraries into my iCalendar-happy desktop PIM</li>
 <li>produce a brief summary of an itinerary for use in plain text email</li>
-<li>plot an itinerary on a map</li>
-<li>check proposed work travel itineraries against family constraints</li>
 <li>tell me when my travel schedule brings me unusually near a friend/colleague</li>
 <li>produce animated views of my travel schedule or past trips</li>
 <li>find conflicts between teleconferences and flights</li>
 </ul>
 
 
-<h2>Step 1: Grok Legacy Data</h2>
+<h2 id="grokLeg">Step 1: Grok Legacy Data</h2>
 
 <p>While more and more of the data in our lives is available
 in the Semantic Web, there will always be a place for mechanisms
@@ -143,17 +143,18 @@ custom terms were needed:</p>
 
 <div align="center"><img alt="travel terms" src="travelFig.png" />
 
-<blockquote class="tech-details">if your desktop is SVG-happy, <a href="travelFig.svg">travelFig.svg</a> is
+<div class="noprint mechanics" class="tech-details">if your desktop is SVG-happy, <a href="travelFig.svg">travelFig.svg</a> is
 nicer. I drew it with dia; you can play <a
 href="travelFig.xml">travelFig.xml</a>, the source. I'm working on <a
 href="/2002/03owlt/umlp/dia2owl.xsl">dia2owl.xsl</a>, which converts it to
 RDF/S: <a href="travelFig.rdf">travelFig.rdf</a>.
-</blockquote>
+</div>
 </div>
 
 
 <ul>
 <li style="color: red">cyc terms (prefix <tt>k:</tt>) in red</li>
+<li style="color: purple">DAML airport ontology terms in purple</li>
 <li style="color: green">custom travelTerms (prefix <tt>t:</tt>) in green.
 e.g. <code>departureTime</code>, <code>flightNumber</code>, ...; see <a
 href="travelTerms">travelTerms</a>, in <a href="travelTerms.rdf">RDF/xml</a>,
@@ -163,61 +164,160 @@ href="travelTerms">travelTerms</a>, in <a href="travelTerms.rdf">RDF/xml</a>,
 <li style="color: orange">XML Schema terms (prefix <tt>dt:</tt>)in orange</li>
 </ul>
 
-<p>An important point is that <strong>mixing vocabularies is
-easy</strong>. Within the basic subject/predicate/object abstract
-syntax, terms can be combined freely. Migrating to more specialized or
-more generalized terms is cheap, using <tt>rdfs:subPropertyOf</tt> and
-the like. <em>(@@ok to just say that without demonstrating it?)</em></p>
+<p>Note that <strong>mixing vocabularies in RDF is easy</strong>; so
+easy, compared with the general problem of mixing XML namespaces, that
+I hardly notice it at all. Within the basic subject/predicate/object
+abstract syntax, terms can be combined freely. Migrating to more
+specialized or more generalized terms is cheap, using
+<tt>rdfs:subPropertyOf</tt> and the like.</p>
+
+<div class="noprint"> <em>(@@ok to just say that
+without demonstrating it?)</em></div>
+
+<h2 id="map-viz">Visualization: projecting itineraries on earth maps</h2>
+
+<p>Let's exploit the effort we have put into going beyond formalized
+document structure into formalized data about the real world.
+Folks in the <a href="http://www.daml.org/">DAML project</a> have
+imported airport lat/long data into the semantic web; we
+can use log:semantics to reach out and get it with rules like
+these, excerpted from <a href="airportLookup.n3">airportLookup.n3</a>:
+</p>
+
+<pre>
+# well-known airports...
+{ :X a :Y; #@@kludge...
+    log:uri [ str:startsWith "http://www.daml.org/cgi-bin/airport?" ] }
+ log:implies { :X a :AirportKnownToDAML }.
+
+{ :X apt:iataCode :K.
+  :Y log:uri [ is str:concatenation of
+               ("http://www.daml.org/cgi-bin/airport?" :K) ];
+}
+  log:implies { :Y a apt:Airport; apt:iataCode :K; = :X }.
+
+# we only want to look up certain airports...
+{ [ k:toLocation :X ]. }
+ log:implies { :X a :InterestingPlace }.
+{ [ k:fromLocation :X ]. }
+ log:implies { :X a :InterestingPlace }.
 
 
-<h2>Conversion for PDA import</h2>
+# believe what daml.org says about airport latitutde/longitudes...
+:AirportProperty is rdf:type of
+  apt:latitude,
+  apt:name,
+  apt:iataCode,
+  apt:icaoCode,
+  apt:location,
+  apt:latitude,
+  apt:longitude,
+  apt:elevation.
 
-<p>Having already developed <a href="">palmagent</a>
+{
+  :P a :AirportProperty.
+  [ a :AirportKnownToDAML, :InterestingPlace;
+    log:semantics [
+      log:includes {
+        :IT :P :X.
+      }
+    ] ].
+} log:implies {
+  :IT a apt:Airport; :P :X.
+}.
+</pre>
 
-... into RDF. Then I wrote <a href="/2001/07dc-bos/itin2datebook.n3">some
-rules</a> to relate this itinerary vocabulary to the <a
+
+<p>For the convenience of consumers (including ourselves), we publish
+in RDF/XML the results of reaching out with the rules; i.e. the
+itinerary including the lat/long info. Then we use the (<em>little
+documented</em>) <tt>cwm --strings</tt> output mode to generate two
+files, <tt>itin-arcs</tt> and <tt>itin-markers</tt>, as input to <a
+href="http://xplanet.sourceforge.net/">xplanet</a>:
+
+<div class="figure" align="center">
+
+<p><img alt="map viz toolchain" src="mapVizFig.png" />
+</div>
+
+
+<p>The resulting map shows that we have given the
+machine a fairly deep understanding of the itinerary:</p>
+
+<div class="figure" align="center">
+
+<p><img alt="MCI to YMX and back for Extreme 2002"
+src="../../../../2003/04dc-mia/itin-mia.png" /></p>
+
+<div class="noprint">more details are in the <a href="../../../../2003/04dc-mia/Makefile">Makefile</a></div>
+</div>
+
+
+
+<h2 id="ckcn">Checking Constraints</h2>
+
+<p>Now that I have the proposed itinerary formalized, I can
+automatically check it against various constraints before
+I accept it and before I copy it to my PDA and to all the
+other peers that need to know about it.</p>
+
+<p>Rules like "itineraries that have me leaving
+before 30 July are no good" are a bit tedious to
+formalize, but my confidence in the results is
+higher than my confidence in eyeballing it:</p>
+
+<pre>{
+ ?D a k:ItineraryDocument; k:containsInformationAbout-Focally ?TRIP.
+ ?TRIP k:subEvents
+    [ k:startingDate [ dt:date ?D1 ];
+      k:fromLocation [ apt:iataCode "MCI" ];
+      t:departureTime ?T1;
+    ].
+  ?D1 str:lessThan "2001-07-30".
+} => {
+   ?TRIP &lt;#leavesDaysTooSoon&gt; ?D1;
+          &lt;#at&gt; ?T1.
+}.</pre>
+
+<p>These constraints can be checked with cwm ala:</p>
+
+<pre>$ python cwm.py proposed-itinerary.nt --think=constraints.n3</pre>
+
+<p>... and look for <tt>&lt;#leavesDaysTooSoon&gt;</tt> in the output.</p>
+
+<div class="noprint mechanics">
+<p>More details: <a href="/2001/08swws67/">SWWS stuff</a>.</p>
+</div>
+
+<h2 id="pda-in">Conversion for PDA import</h2>
+
+<p>Having already developed <a
+href="http://dev.w3.org/cvsweb/2001/palmagent/">palmagent</a>, an
+HTTP/RDF interface to my PDA, it was almost trivial to write some 
+rules to relate this itinerary vocabulary to the <a
 href="../../../08/palm56/datebook">RDF vocabulary for the palmpilot
-datebook</a> that I had already developed, and presto, my itinerary was in my
-calendar. (see <a href="">Makefile</a> for (some of the?) details).</p>
+datebook</a>:</p>
+
+<div class="figure" align="center">
+<img src="travelPdaRulesFig.png" alt="pda rules toolchain" />
+
+<div class="noprint mechanics">see <a
+href="../../../../2001/07dc-bos/Makefile">Makefile</a> for (some of
+the?) details).  The rules, <a
+href="../../../../2001/07dc-bos/itin2datebook.n3">itin2datebook.n3</a>,
+use some outdated vocabulary.
+</div>
+
+</div>
+
 
 <p><em>[@@image of palm pilot showing flight in the datebook]</em></p>
 
-<p>The next month, I wrote rules like "itineraries that have me leaving
-before 30 July are no good" and ran them over the RDF. I was much more
-confident having the machine review my itinerary than eyeballing it. The rule
-are a bit tedious...</p>
-<pre>{
- v:itin a i:Itinerary;
-  i:air
-    [ i:date v:d1;
-      i:LV [ i:place [ t:iata "MCI" ];
-             i:time v:t1;
-           ];
-    ].
-  v:d1 log:lessThan "2001-07-30".
-}
-  log:implies {
-   v:itin &lt;#leavesDaysTooSoon&gt; v:d1;
-          &lt;#at&gt; v:t1.
-}.</pre>
-
-<p>More details: <a href="/2001/08swws67/">SWWS stuff</a>.</p>
 
 
 <h2>Evolution Import</h2>
 
 <p>@@converting flight itineraries to .ics for import into evolution</p>
-
-<h2>Visualization: projecting itineraries on earth maps</h2>
-
-<p>@@visualization with xearth.</p>
-
-<p>details: <a href="/2002/08dc-ymx/Makefile">Makefile</a></p>
-
-<p>results:</p>
-
-<p><img alt="MCI to YMX and back for Extreme 2002"
-src="../../../../2002/08dc-ymx/itinView.png" /></p>
 
 <h2>Steps Toward Synchronization</h2>
 
