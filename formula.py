@@ -35,6 +35,8 @@ import uripath
 
 from OrderedSequence import merge
 
+from set_importer import Set, ImmutableSet
+
 import urllib # for log:content
 import md5, binascii  # for building md5 URIs
 
@@ -95,8 +97,8 @@ class Formula(AnonymousNode, CompoundTerm):
         AnonymousNode.__init__(self, store, uri)
         self.canonical = None # Set to self if this has been canonicalized
 	self.statements = []
-	self._existentialVariables = []
-	self._universalVariables = []
+	self._existentialVariables = Set()
+	self._universalVariables = Set()
 	self.stayOpen = 0   # If set, works as a knowledegbase, never canonicalized.
 
     def __repr__(self):
@@ -124,8 +126,8 @@ class Formula(AnonymousNode, CompoundTerm):
 	if ls > lo: return 1
 	if ls < lo: return -1
 
-	for se, oe, in  ((self.universals(), other.universals()),
-			    (self.existentials(), other.existentials())
+	for se, oe, in  ((list(self.universals()), list(other.universals())),
+			    (list(self.existentials()), list(other.existentials()))
 			):
 	    lse = len(se)
 	    loe = len(oe)
@@ -164,7 +166,7 @@ class Formula(AnonymousNode, CompoundTerm):
     
     def variables(self):
         """Return a list of all variables quantified within this scope."""
-        return self.existentials() + self.universals()
+        return self.existentials() | self.universals()
 	
     def size(self):
         """Return the number statements.
@@ -206,19 +208,19 @@ class Formula(AnonymousNode, CompoundTerm):
 	The URI is typically omitted, and the system will make up an internal idnetifier.
         If given is used as the (arbitrary) internal identifier of the node."""
 	x = AnonymousExistential(self, uri)
-	self._existentialVariables.append(x)
+	self._existentialVariables.add(x)
 	return x
 
     
     def declareUniversal(self, v):
 	if verbosity() > 90: progress("Declare universal:", v)
 	if v not in self._universalVariables:
-	    self._universalVariables.append(v)
+	    self._universalVariables.add(v)
 	
     def declareExistential(self, v):
 	if verbosity() > 90: progress("Declare existential:", v)
 	if v not in self._existentialVariables:  # Takes time
-	    self._existentialVariables.append(v)
+	    self._existentialVariables.add(v)
 #	else:
 #	    raise RuntimeError("Redeclared %s in %s -- trying to erase that" %(v, self)) 
 	
@@ -238,7 +240,7 @@ class Formula(AnonymousNode, CompoundTerm):
 	If the URI is not given, an arbitrary identifier is generated.
 	See also: universals()"""
 	x = AnonymousUniversal(self, uri)
-	self._universalVariables.append(x)
+	self._universalVariables.add(x)
 	return x
 
     def newFormula(self, uri=None):
@@ -352,7 +354,7 @@ class Formula(AnonymousNode, CompoundTerm):
 	assert type(bindings) is type({})
 	store = self.store
 	oc = self.occurringIn(bindings.keys())
-	if oc == []: return self # phew!
+	if oc == Set(): return self # phew!
 
 	y = store.newFormula()
 	if verbosity() > 90: progress("substitution: formula"+`self`+" becomes new "+`y`,
@@ -386,7 +388,7 @@ class Formula(AnonymousNode, CompoundTerm):
 
     def occurringIn(self, vars):
 	"Which variables in the list occur in this?"
-	set = []
+	set = Set()
 	if verbosity() > 98: progress("----occuringIn: ", `self`)
 	for s in self.statements:
 	    for p in PRED, SUBJ, OBJ:
@@ -394,7 +396,7 @@ class Formula(AnonymousNode, CompoundTerm):
 		if y is self:
 		    pass
 		else:
-		    set = merge(set, y.occurringIn(vars))
+		    set = set | y.occurringIn(vars)
 	return set
 
     def unify(self, other, vars, existentials, bindings):
@@ -553,6 +555,7 @@ class Formula(AnonymousNode, CompoundTerm):
 	
 	
 	"""
+	list = [].__class__
 	try:
 	    return bnodeMap[self]
 	except KeyError:
@@ -561,8 +564,12 @@ class Formula(AnonymousNode, CompoundTerm):
 	rei = sink.newSymbol(reifyNS[:-1])
 	myMap = {}
 	ooo = sink.newSymbol(owlOneOf)
-	for vars, vocab in ((self.existentials(),  rei["existentials"]), 
-			(self.universals(), rei["universals"])):
+	es = list(self.existentials())
+	es.sort(Term.compareAnyTerm)
+	us = list(self.universals())
+	us.sort(Term.compareAnyTerm)
+	for vars, vocab in ((es,  rei["existentials"]), 
+			(us, rei["universals"])):
 	    if diag.chatty_flag > 54:
         	progress("vars=", vars)
                 progress("vars=", [v.uriref() for v in vars])
@@ -611,6 +618,13 @@ class Formula(AnonymousNode, CompoundTerm):
                 if val == 1:
                     return 1
         return 0
+
+    def doNodesAppear(self, symbols):
+        val = Set()
+        for quad in self.statements:
+            for s in PRED, SUBJ, OBJ:
+                val.update(quad[s].doesNodeAppear(symbols))
+        return val
 
 #################################################################################
 

@@ -251,13 +251,13 @@ class Serializer:
     def dumpVariables(self, context, sink, sorting=1, pretty=0, dataOnly=0):
 	"""Dump the forAlls and the forSomes at the top of a formula"""
 	if sorting:
-	    uv = context.universals()[:]
+	    uv = list(context.universals())
 	    uv.sort(Term.compareAnyTerm)
-	    ev = context.existentials()[:]
+	    ev = list(context.existentials())
 	    ev.sort(Term.compareAnyTerm)
 	else:
-	    uv = context.universals()
-	    ev = context.existentials()
+	    uv = list(context.universals())
+	    ev = list(context.existentials())
 	if not dataOnly:
 	    for v in uv:
 		self._outputStatement(sink, (context, self.store.forAll, context, v))
@@ -275,7 +275,7 @@ class Serializer:
         """ Dump one formula only by order of subject except forSome's first for n3=a mode"""
         
 	context = self.context
-	uu = context.universals()[:]
+	uu = context.universals().copy()
 	sink = self.sink
 	self._scan(context)
         sink.startDoc()
@@ -383,7 +383,9 @@ class Serializer:
 		
     def _breakloops(self, context):
         _done = {}
-        for x in self._occurringAs[SUBJ]:
+        _todo = list(self._occurringAs[SUBJ])
+        _todo.sort(Term.compareAnyTerm)
+        for x in _todo:
             if x in _done:
                 continue
             if not (isinstance(x, AnonymousVariable) and not ((isinstance(x, Fragment) and x.generated()))):
@@ -432,8 +434,8 @@ class Serializer:
 ##        except KeyError:
 ##            pass
 #	progress("&&&&&&&&& ", `self`,  self._occurringAs)
-#        _isExistential = x in context.existentials()
-        _isExistential = context.existentialDict.get(x,0)
+        _isExistential = x in context.existentials()
+#        _isExistential = context.existentialDict.get(x,0)
 #        return (0, 2)
         _loop = context.any(subj=x, obj=x)  # does'nt count as incomming
 	_asPred = self._occurringAs[PRED].get(x, 0)

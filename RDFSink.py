@@ -188,6 +188,19 @@ class RDFSink:
         
         pass
 
+    def intern(self, something):
+        return something
+
+    def newList(self, l, context):
+        if l == []:
+            return self.newSymbol('http://www.w3.org/1999/02/22-rdf-syntax-ns#nil')
+        a = self.newBlankNode(context)
+        first = self.newSymbol('http://www.w3.org/1999/02/22-rdf-syntax-ns#first')
+        rest = self.newSymbol('http://www.w3.org/1999/02/22-rdf-syntax-ns#rest')
+        self.makeStatement((context, first, a, l[0]))
+        self.makeStatement((context, rest, a, self.newList(l[1:], context)))
+        return a
+
     def countNamespace(self, namesp):
 	"On output, count how many times each namespace is used"
 	try:

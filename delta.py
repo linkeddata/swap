@@ -24,7 +24,10 @@ http://www.w3.org/2000/10/swap/diff.py
 
 
 import string, getopt
-from sets import Set    # Python2.3 and on
+try:
+    Set = set               # Python2.4 and on
+except NameError:
+    from sets import Set    # Python2.3 and on
 import string
 import sys
 

@@ -26,6 +26,8 @@ from __future__ import generators  # for yield
 
 import string, sys, types
 
+from set_importer import Set, ImmutableSet
+
 
 import uripath # DanC's tested and correct one
 import md5, binascii  # for building md5 URIs
@@ -157,8 +159,8 @@ class Term:
 
     def occurringIn(self, vars):
 	if self in vars:
-	    return [self]
-	return []
+	    return Set([self])
+	return Set()
 
     def value(self):
 	"As a python value - by default, none exists, use self"
@@ -171,6 +173,9 @@ class Term:
         """
         return self == symbol
 
+    def doNodesAppear(self, symbols):
+        return Set([a for a in symbols if a == self])
+        
     def unflatten(self, sink, bNodes, why=None):
         return self
 
@@ -189,7 +194,7 @@ class Term:
 	    return x.unify(other, vars, existentials, bindings)
 	except KeyError:	    
 	    if self is other: return [ ({}, None)]
-	    if self in vars+existentials:
+	    if self in vars|existentials:
 		if diag.chatty_flag > 80: progress("Unifying term MATCHED %s to %s"%(self,other))
 		return [ ({self: other}, None) ]
 	    return 0
@@ -481,7 +486,7 @@ class List(CompoundTerm):
 
     def substitution(self, bindings, why=None):
 	"Return this or a version of me with variable substitution made"
-	if self.occurringIn(bindings.keys()) == []:
+	if self.occurringIn(bindings.keys()) == Set():
 	    return self # phew!
 	s = self.asSequence()
 	s.reverse()
@@ -496,7 +501,7 @@ class List(CompoundTerm):
     def substituteEquals(self, bindings, newBindings):
 	"Return this or a version of me with substitution of equals made"
 	if diag.chatty_flag > 100: progress("SubstituteEquals list %s with %s" % (self, bindings))
-	if self.occurringIn(bindings.keys()) == []:
+	if self.occurringIn(bindings.keys()) == Set():
 	    return self # phew!
 	s = self.asSequence()
 	s.reverse()
@@ -510,13 +515,13 @@ class List(CompoundTerm):
 
     def occurringIn(self, vars):
 	"Which variables in the list occur in this list?"
-	set = []
+	set = Set()
 	x = self
 	while not isinstance(x, EmptyList):
 	    y = x.first
 	    x = x.rest
 	    import types
-	    set = merge(set, y.occurringIn(vars))
+	    set = set | y.occurringIn(vars)
 	return set
 
     def asSequence(self):
@@ -565,6 +570,11 @@ class List(CompoundTerm):
                 return 1
         return 0
             
+    def doNodesAppear(self, symbols):
+        val = Set()
+        for elt in self:
+            val.update(elt.doNodesAppear(symbols))
+        return val
 
 class NonEmptyList(List):
 
@@ -599,8 +609,8 @@ class NonEmptyList(List):
 	    if nb == []:
 		nbs2 = self.rest.unify(other.rest, vars, existentials,  b2)
 	    else:
-		vars2 = vars[:]
-		existentials2 = existentials[:]
+		vars2 = vars.copy()
+		existentials2 = existentials.copy()
 		for var in nb:
 		    if var in vars2:
 			vars2.remove(var)
@@ -676,7 +686,7 @@ class EmptyList(List):
 	return 0
 	
     def occurringIn(self, vars):
-	return []
+	return Set()
 
     def __repr__(self):
 	return "()"
@@ -771,7 +781,7 @@ class Literal(Term):
         return Decimal(self.string)
 
     def occurringIn(self, vars):
-	return []
+	return Set()
 
     def __repr__(self):
         return '"' + self.string[0:8] + '"'

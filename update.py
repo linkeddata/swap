@@ -7,6 +7,10 @@ query module.
 2004-03-17 written as an extension of query.py
 """
 
+try:
+    Set = set
+except NameError:
+    from sets import Set
 
 
 import diag
@@ -27,7 +31,7 @@ def patch(workingContext, patchFormula):
     store = workingContext.store
 
     true = store.newFormula().close()  #   {}
-    universals = []
+    universals = Set()
     lhs_done = []
     agenda = {}
     for pred in store.insertion, store.deletion:
@@ -40,7 +44,7 @@ def patch(workingContext, patchFormula):
     for lhs, dict in agenda.items():
 	if diag.chatty_flag > 19: progress("Patches lhs= %s: %s" %(lhs, dict))
 	if isinstance(lhs, Formula):
-	    if lhs.universals() != []:
+	    if lhs.universals() != Set():
 		raise RuntimeError("""Cannot query for universally quantified things.
 		As of 2003/07/28 forAll x ...x cannot be on left hand side of rule.
 		This/these were: %s\n""" % lhs.universals())
@@ -53,15 +57,15 @@ def patch(workingContext, patchFormula):
 		else: retraction = true
 
 		unmatched = lhs.statements[:]
-		templateExistentials = lhs.existentials()[:]
+		templateExistentials = lhs.existentials().copy()
 		_substitute({lhs: workingContext}, unmatched)  # Change context column
 	    
 		variablesMentioned = lhs.occurringIn(patchFormula.universals())
-		variablesUsed = conclusion.occurringIn(variablesMentioned) +\
+		variablesUsed = conclusion.occurringIn(variablesMentioned) | \
 				retraction.occurringIn(variablesMentioned)
 		for x in variablesMentioned:
 		    if x not in variablesUsed:
-			templateExistentials.append(x)
+			templateExistentials.add(x)
 		if diag.chatty_flag >20:
 		    progress("New Patch  =========== applied to %s" %(workingContext) )
 		    for s in lhs.statements: progress("    ", `s`)
