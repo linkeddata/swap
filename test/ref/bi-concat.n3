@@ -1,5 +1,6 @@
      @prefix : <#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix string: <http://www.w3.org/2000/10/swap/string#> .
     
     :TEST13     a :success .
     
@@ -7,16 +8,16 @@
                 :y,
                 :z .
     {
-        ""     log:concat  (
+        ""     string:concat  (
              ) .
         
         }     log:implies {:test13a     a :success .
         } .
     {
-        :x     log:concat  (
+        :x     string:concat  (
             "World" 
              [
-                     log:concat  (
+                     string:concat  (
                     "W" 
                     "i" 
                     "d" 
@@ -31,7 +32,7 @@
         }     log:implies {:test13d     a :success .
         } .
     {
-        :x     log:concat  (
+        :x     string:concat  (
             "World" 
             "Wide" 
             "Web" 
@@ -45,17 +46,17 @@
         }     log:implies {:test13e     a :success .
         } .
     {
-        :x     log:concat  (
+        :x     string:concat  (
              ) .
         
         }     log:implies {:emptyString     :is :x .
         } .
     {
-        :x     log:concat  (
+        :x     string:concat  (
             "World" 
             :y 
             "Web"  ) .
-        :y     log:concat  (
+        :y     string:concat  (
             "W" 
             "I" 
             "D" 
@@ -70,21 +71,21 @@
         } .
     {
         ""     log:equalTo  [
-                 log:concat  (
+                 string:concat  (
                  ) ] .
         
         }     log:implies {:test13g     a :success .
         } .
     {
         "one"     log:equalTo  [
-                 log:concat  (
+                 string:concat  (
                  ) ] .
         
         }     log:implies {:test13a_bis     a :FAILURE .
         } .
     {
         ""     log:equalTo  [
-                 log:concat  (
+                 string:concat  (
                 "one" 
                  ) ] .
         
@@ -97,13 +98,42 @@
         } .
     {
         "one"     log:equalTo  [
-                 log:concat  (
+                 string:concat  (
                 "World" 
                 "Wide" 
                 "Web" 
                  ) ] .
         
         }     log:implies {:test13c_bis     a :FAILURE .
+        } .
+    {
+        this     log:forSome :_g59 .
+          [      <http://www.daml.org/2001/03/daml+oil#first> "World";
+                 <http://www.daml.org/2001/03/daml+oil#rest>  (
+                :_g59 
+                "Web"  ) .
+            :_g64     <http://www.daml.org/2001/03/daml+oil#first> :_g59;
+                 <http://www.daml.org/2001/03/daml+oil#rest>  (
+                "Web"  ) .
+            :_g58     string:concatenation :x ].
+        
+          [      <http://www.daml.org/2001/03/daml+oil#first> "W";
+                 <http://www.daml.org/2001/03/daml+oil#rest>  (
+                "i" 
+                "d" 
+                "e"  ) .
+            :_g61     <http://www.daml.org/2001/03/daml+oil#first> "i";
+                 <http://www.daml.org/2001/03/daml+oil#rest>  (
+                "d" 
+                "e"  ) .
+            :_g60     string:concatenation :_g59 ].
+        
+        }     log:implies {:www5     :is :x .
+        } .
+    {
+        :www5     :is "WorldWideWeb" .
+        
+        }     log:implies {:test13h     a :success .
         } .
     {
         :test13a     a :success .
@@ -113,11 +143,12 @@
         :test13e     a :success .
         :test13f     a :success .
         :test13g     a :success .
+        :test13h     a :success .
         
         }     log:implies {:TEST13     a :success .
         } .
     {
-        :x     log:concat  (
+        :x     string:concat  (
             "foo" 
              ) .
         
@@ -147,9 +178,13 @@
     
     :test13g     a :success .
     
+    :test13h     a :success .
+    
     :www2     :is "WorldWideWeb" .
     
     :www3     :is "WorldWIDEWeb" .
+    
+    :www5     :is "WorldWideWeb" .
     
     :www     :is "WorldWideWeb" .
     
