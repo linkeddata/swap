@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <title>Primer - Processing Semantic Web data using N3</title>
+  <link href="/People/Berners-Lee/general.css" rel="stylesheet"
+  type="text/css" />
+</head>
+
+<body xml:lang="en" lang="en">
+<p><a href="/">W3C</a> | <a href="/2000/01/sw/Overview.html">Semantic Web</a>
+| <a href="Overview.html">SWAP</a></p>
+<br />
+<br />
+
+
+<h1>Primer: Processing your data using N3 and Cwm</h1>
+Now that we know how to make a statements in N3, what can we do with them? 
+
+<p>You know about how to write your data in N3, and also how to describe the
+terms you are using in a schema, or ontology. Why is that so useful? Because
+of all the things you can then do with it. Here we'll learn some basic ways
+to use cwm, a command line python program. There are lots of other processors
+for RDF information, and cwm is just one we'll use here. It was designed to
+show the feasability of everything in the Semantic Web layer cake, so we can
+go quite a long way with it. It isn't optimized, though, so you may find it
+too slow to use for large datasets. This is going to be a completely
+practical how-to, rather than a theoretical analysis of what is going on. You
+might like to keep around for reference:</p>
+<ul>
+  <li><a href="cwm.html">The cwm manual</a>
+    <p><a href="../Examples.html">Examples</a> - rather random order
+    supplement</p>
+  </li>
+</ul>
+
+<p>Cwm is a python program, so on most systems you can run it as <code>python
+wherever/cwm.py</code>, depending on where you have installed it.  From now
+on, though, we'll assume you have set up an alias or whatever your system
+uses to make it available by simply by the command <code>cwm</code>.  You can
+always use the long form if you don't have the short form.</p>
+
+<p>Cwm uses the command line as a sequence of operations to perform from left
+to right. You can input data, process it and output it. The default is to
+input and output from the standard input and output. So you can read</p>
+<pre>cwm --rdf foo.rdf --think --n3</pre>
+
+<p>as "switch to RDF/XML format, read in foo.rdf, think about it, and then
+switch to N3 format (for output)".</p>
+
+<p>Any filename is actually a relative URI, so you can suck data off the web
+just by giving its URI:</p>
+<pre>cwm http://www.w3.org/2000/10/swap/log.n3</pre>
+
+<p>will read in the remote file, and then output it to the terminal.</p>
+
+<h2><a name="Converting" id="Converting">Converting data format</a></h2>
+
+<p>Converting data formats is simple:</p>
+<pre>cwm --rdf foo.xml --n3 &gt; foo.n3</pre>
+
+<p>converts the RDF/XML file foo.xml into n3, and</p>
+<pre>cwm bar.n3 --ntriples &gt; bar.nt</pre>
+
+<p></p>
+
+<p>converts bar.n3 to ntriples format. The default format at the beginning of
+the command line is N3. We'll mostly use RDF/N3 from now on, but all the data
+could equally well be in RDF/XML.</p>
+
+<p>(All these examples involve cwm reading the data into a store, and then
+reading it out. This means that the order of the results will be different
+(sorted) and the comments will be lost. There is actually
+a<code>--pipe</code> option which preserves comments and order, but it only
+works with flat RDF files, not with rules and other things which need
+formulae. <strong>Hint</strong>: if the comment you are about to write is
+about one of the things your RDF file is about, make it a rdfs:comment
+property and it will be carried through the system -- who knows who will find
+it useful later?)</p>
+
+<h2><a name="Merging" id="Merging">Merging data</a></h2>
+
+<p></p>
+
+<p>The great thing about RDF which you will soon just assume (but you can't
+do with plain XML documents) is that merging data is trivial.</p>
+
+<p></p>
+<pre>cwm --rdf foo.rdf --n3 bar.n3 &gt; both.n3</pre>
+
+<p></p>
+
+<p>reads one xml file and one n3 file, and then outputs the results in N3 to
+both.n3.</p>
+<ul>
+  <li>see also - color example@@</li>
+</ul>
+
+<h3><a name="Deducing" id="Deducing">Deducing more data</a></h3>
+
+<p>Often, you have data in a raw form and the information you want can be
+deduced from it, and you would like it added to the data set.</p>
+
+<p>In <a href="test/uncle.n3">uncle.n3</a> we state that Fred is the father
+Joe, and Bob is the brother of Fred; we also describe the logical rule for
+the uncle relationship:</p>
+<pre>@prefix : &lt;uncle#&gt;.
+:Fred is :father of :Joe.
+:Bob is :brother of :Fred.
+
+@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .
+this log:forAll :who1, :who2.
+{ :who1 :father [ :brother :who2 ] } log:implies { :who1 :uncle :who2 }.</pre>
+
+<p>This rule means "whenever someone's father has a brother, then the latter
+is their uncle". This rule, once is cwm's store, will cause <em><a
+href="doc/cwm.html">cwm</a></em> to deduce the uncle information when it runs
+with the command line option <code>--think.</code></p>
+
+<p></p>
+
+<p>@@- adding effective focal length to a photograph</p>
+
+<p>@@ finding the continguous united states</p>
+
+<p>Delivery of packet in the USA is often one price within the
+<em>continguous United States</em>. How could we find those? Well, the test
+data set <a href="../test/dbork/data/USregionState.n3">USRegionState.n3</a>
+has a list of states of the USA. This includes the <code>borderstate</code>
+property which gives a state's neighbors. Contiguous means that you can get
+there from here by going from state to neighboring US state. Suppose you are
+starting in MA</p>
+
+<p>state:</p>
+<pre>{?x us:code "MA"} =&gt; { ?x a :ContiguousState }.
+{?x a :ContiguousState.  ?x us:borderstate ?y} =&gt; {?y a :ContiguousState}.</pre>
+
+<p></p>
+
+<p>These rules need to be applied more than once to find all the contiguous
+states.  In fact it is a very inefficient way of doing things, as cwm has to
+imagine going every conceivable way all over the USA.  This is where you can
+see the difference between --rules and --think.  Try it with --rules. Try it
+with --rules --rules. Then try it with --think.s</p>
+
+<p></p>
+
+<h2 id="Filtering">Filtering: when you have too much data</h2>
+
+<p>The result of the above search for contiguous state is too much
+information. How can we cut it down?  Sometimes all we want from the mass of
+data at our disposal is a single statement.</p>
+
+<p>One way is to decorate the data by marking all the uninteresting bits as
+being in class log:Chaff.  Then, the  --purge option of cwm will remove from
+the store any statement which mentions anything which is in that class.  This
+doesn't need much more discussion. </p>
+
+<p>A more interesting way is to compute just the things which are
+interesting.  This is done with a <dfn><a name="filter11"
+id="filter11">filter</a></dfn>.</p>
+
+<p>In <a href="test/uncleF.n3">uncleF.n3</a> we use the uncle example above,
+but as a filter. When a filter runs (unlike --think) <em>only</em> the
+information gathered by the rules is preserved: everything else is discarded.
+We use a filter to select the logical relationships that we want from the
+mass of what is already known:</p>
+<pre>@prefix : &lt;uncle#&gt;.
+@prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .
+
+this log:forAll :p.
+
+# What is the relationship between Joe and Bob
+
+{ :Joe :p :Bob } log:implies { :p a :RelationshipBetweeJoeAndBob }.
+
+# Is Bob an Uncle of Joe?
+
+{ :Joe :uncle :Bob } log:implies { :Joe :uncle :Bob }.</pre>
+
+<p>When we ask cwm to consider the implication it concludes:</p>
+<pre>&gt; python cwm.py uncle.n3 --think --filter=uncleF.n3
+    :Joe     :uncle :Bob .
+    :uncle     a :RelationshipBetweeJoeAndBob .</pre>
+
+<p>You can read the command line as: <em>read uncle.n3 and the deduce any new
+information you can given any rules you have. Now just tell me the
+information selected by the filter uncleF.n3</em>.</p>
+
+<p>Note that any data in the filter is <strong>not</strong> used.  It is easy
+to imagine that the machine knows something because you can see it in the
+filter file. However, the filter file is only searched for rules.  If you
+want to incldue the data, you can put it into a separate input file, or you
+can even add the filter file as an input file as well as using it as the
+filter.</p>
+
+<h3><a name="Combining" id="Combining">Combining cwm steps</a></h3>
+
+<p>In a lot of cases, one wants to take input, decorate the information with
+new stuff inferred using rules (with <code>--think</code>) and then filter
+out the essence of what is needed. Commands like</p>
+<pre>cwm income.n3 expenses.n3  categorize.n3 --think --filter=taxable.n3 </pre>
+
+<p>are common ways of using cwm.</p>
+
+<h2><a name="Report" id="Report">Report Generation</a></h2>
+
+<p>All the examples above proces data and leave the result in N3.  It is easy
+of course to generate RDF/XML, too.</p>
+
+<p>What do you do to generate something else, maybe an XHTML page, or an SVG
+diagram?</p>
+
+<h3>Using RDF/XML and XSLT</h3>
+
+<p>If you are used to XML tools such as XSLT, then you can generate the
+RDF/XML of your data, and then use XSLT to transform it into a report. When
+you do this, you may want to use the rdf output control flags to tell cwm how
+you like your output.  There is also the <code>--bySubject</code> output
+method which prevents the "pretty-printing" of XML.</p>
+<ul>
+  <li>See examples:  Making .dot files, ...</li>
+</ul>
+
+<p></p>
+
+<h3><a name="Using" id="Using">Using --strings to output text</a></h3>
+
+<p>Another way is to output strings from cwm.  This may work well or seem a
+bit weird, depending on your application.  Remembering that all the data in
+cwm is stored in a big unordered pot, the trick is to tell cwm where you want
+things on the output stream.  This is done by giving each output string a key
+using log:outputString relationship from key to string..  The --strings
+option then outputs all the strings which have keys, in order of key.   You
+can use string:concatenation to build the strings out of data.  You can also
+use it to build the key.</p>
+<pre>{   ?x.context:familyName  ?k.</pre>
+<pre>     (?x.context:givenName " " ?x.context:familyName "has been invited\n" )
+string:concatenation  ?s</pre>
+<pre>} =&gt; {</pre>
+<pre>    ?k  log:outputString ?s.</pre>
+<pre>}.</pre>
+
+<p>This says if k is someone's family name, and a string is made by
+concatenating their given name, a space, their family name and " has been
+invited\n", then that string is output in order of key. In other words, in
+order of family name.</p>
+
+<p></p>
+<ul>
+  <li>See examples:  tax report</li>
+</ul>
+
+<h2 id="Debugging">Debugging</h2>
+
+<p>This is all very well, but what happens if it doesn't work? There are a
+number of ways of looking at problems. They are not in order.</p>
+
+<p>Checking the syntax of files when you have finsiehd editing them can save
+bothe later. You can just load the file with the <code>--no</code> option so
+that the syntax is checked by no output is done.</p>
+
+<p>If a rule isn't firing, try commenting out one of the conditions to see
+which isn't firing.</p>
+
+<p>Try calculating intermediate results, dividing a big rule into more than
+one step.</p>
+
+<p>You may have mispelled a term.  If you do that,  it just won't match but
+it will be perfectly good syntax. To ctach this, validate your file using the
+DAML validator or the cwm validator. These will check that the ters you use
+are indeed declared in a schema.  It'll check a few other things too.</p>
+
+<p>If you think it would help to know what cwm is doing, you can run cwm with
+<code>--chatty=50</code>, or any value between 0 and 99.  It is often useful
+to change the <code>--chatty</code> flag at various times in the command
+line, setting it back to zero when you don't need it.  You will find 15 tells
+you when files are being opened, 25 gives a list of the things cwm has
+deduced, then increasing levels give you more and more of the gorey details
+of what happens inside.  If a rule isn't firing, look for "no way" in the
+debug output.</p>
+
+<p>Get cwm to read your input file and output them again (<code>cwm foo.n3
+&gt; ,foo.n3</code>). Looking at the file in its new format sometimes shows
+up a bug: is that <em>really</em> what you meant?</p>
+
+<p>Think.</p>
+
+<p></p>
+
+<h2 id="Tips">Tips</h2>
+
+<p>When you use N3, you find that all your files, data and rules, can all be
+in the same language. Sometimes, when using tools like <code>make</code>,  it
+is convenient to gibe files different file extensions depending on their
+role.  You might want to leave the rule files as .n3, but make the sensor
+data .sense and the analysed data as .ana. Then you can make makefile rules
+to map craete .ana files from .sen files.</p>
+
+<p>If you need to pass  parameters to your rules, for example something to
+search for, or your name, then pass them as comamnd line argments, putting
+them at the very end of the cwm command line, after a --with. Then, the
+<code>os:argv</code> builtin function can be used to pick up the value of
+each argument, as <code>"1".os:argv</code> and so on.</p>
+
+<h2 id="More">More</h2>
+
+<p>At this point, you should be getting the hang of it and be writing stuff.
+To give you some more ideas, though, there is a <a href="Examples">longer
+list of more complex and varied examples</a>. These come with less tutorial
+explanation.</p>
+
+<p>Have fun!</p>
+<hr />
+
+<h2 id="References">References</h2>
+<ul>
+  <li><a href="Examples.html">Many More Examples</a></li>
+  <li><a href="/DesignIssues/Notation3.html">Notation3 - Design Issues
+    article</a></li>
+</ul>
+<br />
+<br />
+
+<hr />
+Thanks to contrubters including Joseph Reagle who added the unclue example to
+the original primer.<br />
+
+
+<p>Tim BL, with his director hat off</p>
+
+<p>$Id$</p>
+</body>
+</html>
