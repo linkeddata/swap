@@ -9,7 +9,8 @@
      default parser is Notation3 ?   I think it's the language,
      which means (1) you need a parser which can handle it, and
      (2) you need to tell the parser that's the language.
-     
+
+     (testing cvs)
 """
 revision = '$Id$'
 
@@ -267,7 +268,10 @@ if __name__ == "__main__":
     pump.pump(store, ser)
     
 # $Log$
-# Revision 1.5  2003-04-25 19:55:53  sandro
+# Revision 1.6  2003-04-28 19:17:52  sandro
+# testing cvs!
+#
+# Revision 1.5  2003/04/25 19:55:53  sandro
 # moved interface class defns out of plwm into pluggable
 # implemented wrappers around llyn and notation3
 # implemented simple Host class to handle jailing
