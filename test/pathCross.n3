@@ -1,0 +1,185 @@
+@prefix : <pathCross#>.
+@prefix pc: <pathCross#>.
+
+@prefix c: <http://www.w3.org/2000/10/swap/pim/contact#>.
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#>.
+@prefix cn: <http://opencyc.sourceforge.net/daml/cyc.daml#>.
+@prefix map: <http://www.w3.org/2000/10/swap/pim/earthMap#>.
+@prefix usps: <http://www.w3.org/2000/10/swap/pim/usps#>.
+@prefix dt: <http://www.w3.org/2000/10/XMLSchema#>. #@@REC ns?
+@prefix ont:  <http://www.daml.org/2001/03/daml+oil#> .
+
+
+
+#from <http://www.w3.org/People/Connolly/>
+:DanC c:mailbox <mailto:connolly@w3.org>; c:fullName "Dan Connolly".
+
+
+_:webConf cn:socialParticipants :DanC.
+
+:Conference s:subClassOf cn:MeetingTakingPlace.
+
+_:webConf a :Conference;
+  :homePage <http://www2002.org/>;
+  cn:eventOccursAt [
+    a :Hotel; :name "Sheraton Waikiki";
+    usps:deliveryAddress "2255 Kalakaua Avenue";
+    usps:zipCode "96815";
+
+    cn:inRegion [
+      map:cityName "Honolulu";
+      map:x "-157.80423"; # per usPlaceToLatLong.n3...
+      map:y "21.31725";
+      cn:inRegion [
+        usps:stateAbbr "HI";
+        :name "Hawaii";
+        cn:inRegion [
+          :name "USA"
+        ] ] ] ];
+  cn:startingDate [ dt:date "2002-05-07" ];
+  cn:endingDate [ dt:date "2002-05-11" ].
+
+_:may2002 dt:date "2002-05".
+_:y2002 dt:date "2002".
+
+:DanC cn:acquaintedWith :DanBri.
+
+:DanBri c:mailbox <mailto:danbri@w3.org>; c:fullName "Dan Brickley".
+
+_:www2002 cn:socialParticipants :DanBri.
+
+_:www2002 a :Conference;
+  :homePage <http://www2002.org/>;
+    cn:inRegion [
+      map:cityName "Honolulu";
+      cn:inRegion [
+        usps:stateAbbr "HI";
+        :name "Hawaii";
+        cn:inRegion [
+          :name "USA"
+        ] ] ];
+  cn:startingDate [ dt:date "2002-05-07" ];
+  cn:endingDate [ dt:date "2002-05-11" ].
+
+
+this log:forAll :who, :whoElse, :what, :where, :when.
+
+{ :who cn:acquaintedWith :whoElse.
+  :where a cn:City.
+
+  [ cn:actors :who;
+    cn:inRegion :where;
+    cn:temporalBoundsIntersect :when
+  ].
+
+  [ cn:actors :whoElse;
+    cn:inRegion :where;
+    cn:temporalBoundsIntersect :when
+  ].
+}
+  log:implies {
+    :who :pathCross :whoElse; :pathWhere :where; :pathWhen :when.
+}.
+
+
+# inRegion and lat/long...
+{ :s cn:inRegion [ map:x :x; map:y :y ].
+  :o map:x :x; map:y :y.
+}
+  log:implies { :s cn:inRegion :o }.
+
+# inRegion and post/zip
+{ :s cn:inRegion [ usps:deliveryAddress :x; usps:zip :y ].
+  :o usps:deliveryAddress :x; usps:zip :y.
+}
+  log:implies { :s cn:inRegion :o }.
+
+# inRegion and city/country @@pretty loose
+{ :s cn:inRegion [ map:cityName :x; cn:inRegion [ :name :y ] ].
+  :o map:cityName :x; cn:inRegion [ :name :y ].
+}
+  log:implies { :s cn:inRegion :o }.
+
+
+#####
+# Contact stuff
+c:fullName s:domain c:Person, cn:Person.
+
+c:mailbox a ont:UnambiguousProperty.
+:homePage a ont:UnambiguousProperty.
+
+######
+# Map stuff
+map:cityName s:domain cn:City.
+
+
+#####
+# cyc (common knowledge) stuff
+
+cn:MeetingTakingPlace s:subClassOf cn:SocialGathering.
+
+cn:eventOccursAt s:domain :Event; s:range :PartiallyTangible;
+  s:subPropertyOf cn:temporallyIntersects, cn:actors, cn:inRegion.
+
+cn:temporallyIntersects a cn:SymmetricBinaryPredicate, cn:ReflexiveBinaryPredicate.
+
+cn:temporallySubsumes s:subPropertyOf cn:temporallyIntersects;
+  a ont:TransitiveProperty.
+cn:temporallyIntersects s:subPropertyOf cn:temporalBoundsIntersect;
+  a cn:SymmetricBinaryPredicate.
+
+cn:temporalBoundsIntersect a cn:SymmetricBinaryPredicate.
+
+cn:startingDate s:subPropertyOf cn:startsDuring.
+cn:startsDuring s:subPropertyOf cn:temporalBoundsIntersect.
+
+cn:endingDate s:subPropertyOf cn:endsDuring.
+cn:endsDuring s:subPropertyOf cn:temporalBoundsIntersect.
+
+cn:socialParticipants s:subPropertyOf cn:preActors.
+cn:preActors cn:genlPreds cn:actors.
+
+cn:genlPreds ont:samePropertyAs s:subPropertyOf.
+
+cn:inRegion a ont:TransitiveProperty.
+
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+
+#####
+this log:forAll :s, :p, :o.
+
+{ :s [ ont:samePropertyAs :p ] :o } log:implies { :s :p :o }.
+
+ont:samePropertyAs a cn:SymmetricBinaryPredicate.
+
+{ :p a ont:TransitiveProperty.
+  :s :p [ :p :o ]. }
+  log:implies { :s :p :o }.
+
+{ :p a cn:SymmetricBinaryPredicate } log:implies { :p ont:inverseOf :p }.
+
+{ :s [ ont:inverseOf :p ] :o } log:implies { :o :p :s }.
+
+######
+# string dates
+@prefix str:  <http://www.w3.org/2000/10/swap/string#> .
+this log:forAll :x, :y, :z.
+
+dt:date a :DataType; s:domain cn:TimeInterval.
+cn:TimeInterval s:subClassOf cn:temporallyContinuous.
+
+:DataType s:subClassOf ont:UnambiguousProperty.
+
+{ :x dt:date :s.
+  :y dt:date :o.
+  :s str:startsWith :o.
+}
+  log:implies { :y cn:temporallySubsumes :x }.
+
+{ :s cn:temporallySubsumes :x, :y; a cn:temporallyContinuous.
+  :o cn:startsDuring :x; cn:endsDuring :y.
+}
+  log:implies { :s cn:temporallySubsumes :o }.
+
