@@ -1,0 +1,10 @@
+.cvsignore
+COPYING
+doc
+www
+CHANGES
+README
+TODO
+example
+test
+*.pyc
