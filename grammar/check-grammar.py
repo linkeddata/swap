@@ -1,5 +1,27 @@
 #! /usr/bin/python
-""" Check ambiguity as for predictive parser
+"""Generic predictive parser for N3-like languages
+
+This is is a generic parser for a set of N3-like languages.
+It is directly driven by the context-free grammar (CFG) in RDF.
+It was made to mutually test the CFG against the test files.
+
+Argunments
+1.  An RDF file to read in which contains the grammar, as annotated
+     by the rules.
+2. The URI of the CFG production as which the document is to br parsed.
+    The program checks that a predictive parser *can* be built from the CFG given.
+3. To actually parse a file, include a URI as third parameter.
+
+For example:
+cwm n3.n3 bnf-rules.n3 --think --purge --data > n3-selectors.n3
+PYTHONPATH=$SWAP python check-grammar.py n3-selectors.n3  \
+    http://www.w3.org/2000/10/swap/grammar/n3#document  n3.n3
+    
+A yacc file is also generated, whose name is the first argument plus "-yacc.y".
+ This has not been tested.
+The parser is N3-specific only because of the built-in tokenizer.
+This program is or was http://www.w3.org/2000/10/swap/grammar/check-grammar.py
+W3C open source licence. Enjoy. Tim BL
 """
 
 __version__ = "$Id$"
