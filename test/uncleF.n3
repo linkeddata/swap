@@ -9,8 +9,7 @@
 this log:forAll :p.
 
 # But then how do I ask, what is the 
-# relationship between Joe and Fred.
-# [sic; I think he meant Bob]
+# relationship between Joe and Bob.
 
 { :Joe :p :Bob } log:implies { :p a :RelationshipBetweeJoeAndBob }.
 
