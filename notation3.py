@@ -811,13 +811,11 @@ class SinkParser:
 				    "Bad language code syntax on string literal, after @")
 		    i = m.end()
 		    lang = str[j+1:i]
-		    progress("j, i", j, i)
 		    j = i
 		if str[j:j+2] == "^^":
 		    res2 = []
 		    j = self.uri_ref2(str, j+2, res2) # Read datatype URI
 		    dt = res2[0]
-		    progress("Datatype to ", j, `res`)
                 res.append(self._sink.newLiteral(s, dt, lang))
 		return j
 	    else:

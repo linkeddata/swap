@@ -1,0 +1,144 @@
+#  Dot format generation with Default values for GraphViz properties
+#
+
+# "Drawing graphs with dot" is dc:title of
+#    <http://www.research.att.com/sw/tools/graphviz/dotguide.pdf>.
+
+@prefix str: <http://www.w3.org/2000/10/swap/string#>. 
+@prefix os: <http://www.w3.org/2000/10/swap/os#>. 
+@prefix gv: <http://www.w3.org/2001/02pd/gv#> .    # GraphViz vocabulary
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix : <#>.
+@prefix todot: <#>.
+
+
+this log:forAll :a, :b, :c, :d, :e,  :F, :g, :n, :n1, :n2, :p,
+                       :s, :s1, :s2, :s3, :s4, :u, :u1, :u2, :v, :x, :y, :z.
+
+# Should be moved to gv: schema:
+#
+#  The default values are not actually used.
+#
+gv:label     gv:attributeName  "label"; gv:default "?label?";
+             a gv:nodeAttribute, gv:edgeAttribute, gv:graphAttribute.
+gv:color     gv:attributeName  "color"; gv:default "black"; a gv:nodeAttribute; a gv:edgeAttribute.
+gv:fontcolor gv:attributeName  "fontcolor"; gv:default "black"; a gv:nodeAttribute.
+gv:fontname  gv:attributeName  "fontname"; gv:default "Times-Roman"; a gv:nodeAttribute.
+gv:shape     gv:attributeName  "shape";  gv:default "ellipse"; a gv:nodeAttribute.
+gv:style     gv:attributeName  "style";  gv:default "none"; a gv:nodeAttribute; a gv:edgeAttribute.
+gv:URL       gv:attributeName  "URL";    gv:default "none"; a gv:nodeAttribute.
+
+gv:rankdir   gv:attributeName  "rankdir"; gv:default "TB"; a gv:graphAttribute.
+#gv:center   gv:attributeName  "center"; gv:default "none"; a gv:graphAttribute.
+
+# The TARGET environment variable names the resource to be pased as a target
+
+{"TARGET"!os:environ!os:baseAbsolute^log:uri log:semantics :F} log:implies {:F a :target}.
+
+
+
+#   Rules for creating GraphViz input format:
+#
+#
+#  Header:
+
+:result0 log:outputString """
+/* transformed by:                    */
+/*   $Id$  */
+
+""".
+
+#  Graphs:
+
+# The following is the way historically the (a) root graph has been tagged using
+#    <> gv:diGraph :whatever   in the source.
+#
+# @@ subgraphs not picked up.
+
+{ :F a :target.
+  :F log:includes {:x gv:digraph :g}
+} log:implies{:F :hasGraph :g. :g :source :x}.
+
+{  :p a gv:graphAttribute.
+  [ a :target] :hasGraph :g; log:notIncludes { :g :p [] }.
+} log:implies { [:forgraph :g; :gproperty :p; :gstring ""] }.
+
+{ [a :target] :hasGraph :g; log:includes { :g :p :v}.
+  :p a gv:graphAttribute; gv:attributeName :x.
+  ( :x  "=\"" :v "\"; " ) str:concatenation :s .
+  } log:implies {  [:forgraph :g; :gproperty :p; :gstring :s] }.
+
+{ :F a :target; :hasGraph :g.
+  [ :forgraph :g; :gproperty gv:label;  :gstring :s1].
+  [ :forgraph :g; :gproperty gv:rankdir;  :gstring :s2].
+  ( "digraph my__Graph {" :s1 :s2 "\n") str:concatenation :x.
+} log:implies { :result05 log:outputString :x }.
+
+
+# Nodes and default attributes:
+
+# The case where the value is not given, allow dot to supply default
+# though we could just as easily insert our own default value.
+
+ { :F a :target; :hasGraph :g; log:includes { :g gv:hasNode :n. }.
+ } log:implies { :F  :includesNode :n }.
+
+{  :p a gv:nodeAttribute.
+  [ a :target] :includesNode :n; log:notIncludes { :n :p [] }.
+} log:implies { [:fornode :n; :property :p; :nstring ""] }.
+
+{ [a :target] :includesNode :n; log:includes { :n :p :v}.
+  :p a gv:nodeAttribute; gv:attributeName :x.
+  ( :x  "=\"" :v "\", " ) str:concatenation :s .
+  } log:implies {  [:fornode :n; :property :p; :nstring :s] }.
+
+
+
+#  Declarations of nodes:
+
+  {  [a :target] :includesNode :n; log:includes {:n gv:label :x}.  # Ignore nodes with no labels
+     :n log:uri :u.
+    [:fornode :n; :property gv:color; :nstring :s1].
+    [:fornode :n; :property gv:shape; :nstring :s2].
+    [:fornode :n; :property gv:style; :nstring :s3].
+    [:fornode :n; :property gv:URL;   :nstring :s4].
+     ( " \"" :u "\" [ label=\""  :x "\", "  :s1 :s2 :s3 :s4  "];\n" ) str:concatenation :y.
+   } log:implies {
+        :result1 log:outputString :y.
+   }.
+
+
+
+########## Edges:
+
+ { [a :target] log:includes { :p a gv:EdgeProperty };
+               log:notIncludes { :p :e [] }.
+  :e a gv:edgeAttribute.
+} log:implies { [:edgeProp :p; :attribute :e; :string ""] }.
+ 
+ { [a :target] log:includes { :p a gv:EdgeProperty; :e :v }.
+  :e gv:attributeName :x.
+  (  :x  "=\"" :v "\", " ) str:concatenation :s .
+} log:implies { [:edgeProp :p; :attribute :e; :string :s] }.
+ 
+#  Declarations of edges in dot format:
+
+{   [a :target] :includesNode :n1, :n2;
+        log:includes {:p a gv:EdgeProperty. :n1  :p  :n2}. 
+    :n1  log:uri :u1.
+    :n2  log:uri :u2.
+    [ :edgeProp :p; :attribute gv:label; :string :s1].
+    [ :edgeProp :p; :attribute gv:color; :string :s2].
+    [ :edgeProp :p; :attribute gv:style; :string :s3].
+    ( "\""  :u1  "\" -> \"" :u2 "\"\n  [" :s1 :s2 :s3 " ]\n" ) str:concatenation :x
+  } log:implies { :result2 log:outputString :x }.
+
+#  Trailer:
+ :result9 log:outputString "\n}\n\n/*  End of generated .dot file.  */".
+
+
+# Cleanup:
+log:implies a log:Chaff.
+ 
+# ENDS
+

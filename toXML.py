@@ -47,6 +47,7 @@ import urllib
 import re
 import thing
 from uripath import refTo
+from diag import progress
 
 import RDFSink
 
@@ -84,6 +85,8 @@ N3_rest = (SYMBOL, List_NS + "rest")
 N3_nil = (SYMBOL, List_NS + "nil")
 N3_List = (SYMBOL, List_NS + "List")
 N3_Empty = (SYMBOL, List_NS + "Empty")
+
+XML_NS_URI = "http://www.w3.org/XML/1998/namespace"
 
 
 
@@ -174,23 +177,35 @@ class ToRDF(RDFSink.RDFStructuredOutput):
                 and "c" not in self._flags): # "c" flag suppresses class element syntax on RDF output
                  self._wr.startElement(obj[1], [(RDF_NS_URI+" about", subjn),], self.prefixes)
                  return
-            self._wr.startElement(RDF_NS_URI+'Description',
-				 [(RDF_NS_URI+" about", subjn),], self.prefixes)
-
+	    if subj[0] == SYMBOL or subj[0] == ANONYMOUS:
+		self._wr.startElement(RDF_NS_URI+'Description',
+				    [(RDF_NS_URI+" about", subjn),], self.prefixes)
+	    elif subj[0] == LITERAL:
+		v = subj[1]
+		attrs = []  # Literal
+		if type(v) is type((1,1)):
+		    v, dt, lang = v
+		    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt.uriref()))
+		    if lang != None: attrs.append((XML_NS_URI+' lang', lang))
+		self._wr.startElement(RDF_NS_URI+'Description',
+				    [], self.prefixes)
+		self._wr.startElement(RDF_NS_URI+"is", attrs, self.prefixes)
+		self._wr.data(v)
+		self._wr.endElement()
+	    else:
+		raise ValueError("Unexpected subject", `subj`)
 	if obj[0] != LITERAL: 
 	    objn = refTo(self._base, obj[1])
 	    self._wr.emptyElement(pred[1], [(RDF_NS_URI+' resource', objn)], self.prefixes)
 	    return
-# Actually this "value=" shorthand notation is *not* RDF! It was my misunderstanding! rats...
-#	for ch in obj[1]:  # Is literal representable as an attribute value?
-#            if ch in self._valChars: continue
-#            else: break # No match
-#        else:
-#            if len(obj[1]) < 40:    # , say
-#                self._wr.emptyElement(pred[1], [('value', obj[1])], self.prefixes)
-#                return
-        self._wr.startElement(pred[1], [], self.prefixes)
-        self._wr.data(obj[1])
+	attrs = []  # Literal
+	v = obj[1]
+	if type(v) is type((1,1)):
+	    v, dt, lang = v
+	    if dt != None: attrs.append((RDF_NS_URI+' datatype', dt.uriref()))
+	    if lang != None: attrs.append((XML_NS_URI+' lang', lang))
+        self._wr.startElement(pred[1], attrs, self.prefixes)
+        self._wr.data(v)
         self._wr.endElement()
 
 # Below is for writing an anonymous node which is the object of only one arc
@@ -361,10 +376,12 @@ class XMLWriter:
                 continue
             ans = at[:i]
             lan = at[i+1:]
-            prefix = prefixes.get(ans,":::")
-            if prefix == ":::":
-                raise RuntimeError("#@@@@@ tag %s: atr %s has no prefix :-( in prefix table:\n%s" %
-                       (uriref, at, `prefixes`))
+	    if ans == XML_NS_URI: prefix = "xml"
+            else:
+		prefix = prefixes.get(ans,":::")
+		if prefix == ":::":
+		    raise RuntimeError("#@@@@@ tag %s: atr %s has no prefix :-( in prefix table:\n%s" %
+			(uriref, at, `prefixes`))
             attrs.append(( prefix+":"+lan, val))    
 
 	self.newline(3-len(self._elts))    # Newlines separate higher levels
@@ -376,6 +393,9 @@ class XMLWriter:
                 self.newline()
                 self._wr("   ")
 	    self._wr(" %s=\"" % (n, ))
+	    if type(v) is type((1,1)):
+		progress("@@@@@@ toXML.py 382: ", `v`)
+		v = `v`
             xmldata(self._wr, v, self.attrEsc)
             self._wr("\"")
 	    needNL = 1

@@ -1,0 +1,22 @@
+# Find all contiguous US states
+#
+# usage:
+#	cwm ../dbork/data/USRegionState.n3 --think=contig.n3
+#	cwm contig.n3 --more=rse --think
+
+@prefix us: <../dbork/data/USRegionState.n3#>.
+@prefix i: <#>.
+@prefix : <#>.
+
+
+{?x us:code "MA"} => { ?x a :ContiguousState }.
+{?x a :ContiguousState.  ?x us:borderstate ?y} => {?y a :ContiguousState}.
+
+
+#  Seeding with all states takes a lot longer!
+# {?x us:borderstate ?y } => {?x :contiguous ?y }.
+# {?x :contiguous ?y. ?y us:borderstate ?z } => { ?x :contiguous ?z }.
+
+#ends
+
+

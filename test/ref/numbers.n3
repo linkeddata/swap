@@ -4,5 +4,9 @@
     
     2.0     :is "The rational number 2.0" .
     
-    2.0e3     :is "The double floating point 2.0e3" .
+    2.0e3     :is "The double precision floating point 2.0e3" .
+    
+    "800/600"^^<http://example.com/types#rational>     :is "800/600 with datatype http://example.com/types#rational" .
+    
+    "Le chat"@fr     :is "The french phrase 'Le chat'" .
     
