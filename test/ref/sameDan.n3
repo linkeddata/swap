@@ -1,0 +1,90 @@
+# Input rules to apply from  file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/forgetDups.n3
+     @prefix : <http://www.w3.org/2000/10/swap/log#> .
+     @prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#> .
+     @prefix dc: <http://purl.org/dc/elements/1.1/> .
+     @prefix ont: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix rcs: <http://www.w3.org/2001/03swell/rcs#> .
+    
+    this     :forAll <sameDan.n3#x>,
+                <sameThing.n3#p>,
+                <sameThing.n3#q>,
+                <sameThing.n3#x>,
+                <sameThing.n3#y>,
+                <sameThing.n3#z>;
+         :forSome <sameDan.n3#_g0> .
+    {
+        <sameThing.n3#x>     contact:mailbox <sameThing.n3#z> .
+        <sameThing.n3#y>     contact:mailbox <sameThing.n3#z> .
+        
+        }     :implies {<sameThing.n3#x>     = <sameThing.n3#y> .
+        } .
+    
+    <sameDan.n3#_g0>     <sameDan.n3#birthPlace> <sameDan.n3#KC>;
+         <sameDan.n3#hairColor> <sameDan.n3#red>;
+         = <sameDan.n3#_g0>;
+         contact:fullName "Dan Connolly";
+         contact:homePage <http://www.w3.org/People/Connolly/>;
+         contact:mailbox <mailto:connolly@w3.org> .
+    {
+        <sameDan.n3#x>     <sameDan.n3#birthPlace> <sameDan.n3#KC>;
+             <sameDan.n3#hairColor> <sameDan.n3#red> .
+        
+        }     :implies {<sameDan.n3#test1>     a <sameDan.n3#Success> .
+        } .
+    
+    <sameDan.n3#test1>     a <sameDan.n3#Success> .
+    
+    <sameDan.n3>     <http://purl.org/dc/elements/1.1/creator> <sameDan.n3#_g0>;
+         <http://purl.org/dc/elements/1.1/description> """rules for determining when two terms denote
+the same thing.""";
+         <http://purl.org/dc/elements/1.1/relation> <forgetDups.n3>;
+         <http://purl.org/dc/elements/1.1/rights> "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
+         rcs:id "" .
+    {
+        <sameThing.n3#p>     a ont:UnambiguousProperty .
+        
+        }     :implies {{
+            <sameThing.n3#x>     <sameThing.n3#p> <sameThing.n3#z> .
+            <sameThing.n3#y>     <sameThing.n3#p> <sameThing.n3#z> .
+            
+            }     :implies {<sameThing.n3#x>     = <sameThing.n3#y> .
+            } .
+        } .
+    {
+        <sameThing.n3#x>     <sameThing.n3#p> <sameThing.n3#y>;
+             = <sameThing.n3#z> .
+        
+        }     :implies {<sameThing.n3#z>     <sameThing.n3#p> <sameThing.n3#y> .
+        } .
+    {
+        <sameThing.n3#p>     = <sameThing.n3#q> .
+        <sameThing.n3#x>     <sameThing.n3#p> <sameThing.n3#y> .
+        
+        }     :implies {<sameThing.n3#x>     <sameThing.n3#q> <sameThing.n3#y> .
+        } .
+    {
+        <sameThing.n3#x>     <sameThing.n3#p> <sameThing.n3#y> .
+        <sameThing.n3#y>     = <sameThing.n3#z> .
+        
+        }     :implies {<sameThing.n3#x>     <sameThing.n3#p> <sameThing.n3#z> .
+        } .
+    {
+        <sameThing.n3#p>     a ont:UniqueProperty .
+        
+        }     :implies {{
+            <sameThing.n3#x>     <sameThing.n3#p> <sameThing.n3#y>,
+                        <sameThing.n3#z> .
+            
+            }     :implies {<sameThing.n3#y>     = <sameThing.n3#z> .
+            } .
+        } .
+    
+    <sameThing.n3>     <http://purl.org/dc/elements/1.1/creator> <sameDan.n3#_g0>;
+         <http://purl.org/dc/elements/1.1/description> """rules for determining when two terms denote
+the same thing.""";
+         <http://purl.org/dc/elements/1.1/relation> <forgetDups.n3>;
+         <http://purl.org/dc/elements/1.1/rights> "copyright (c) 2001 W3C (MIT, Keio, INRIA)";
+         rcs:id "" .
+    
+    contact:mailbox     a ont:UnambiguousProperty .
+    
