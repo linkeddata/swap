@@ -1,0 +1,480 @@
+#Processed by Id: cwm.py,v 1.29 2001/02/28 20:45:26 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/gedcom/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.54 2001/02/12 18:38:31 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/gedcom/
+     @prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
+     @prefix : <gedcom-relations.n3#> .
+     @prefix gc: <http://www.daml.org/2001/01/gedcom/gedcom#> .
+    
+    :Ann     :gender :F;
+         gc:childIn :gd .
+    
+    :Ann_Sophie     :gender :F;
+         gc:childIn :dv .
+    
+    :Bart     :gender :M;
+         gc:childIn :gd .
+    
+    :Bieke     :gender :F;
+         gc:childIn :cd .
+    
+    :Caroline     :gender :F;
+         gc:childIn :dp;
+         gc:spouseIn :cd .
+    
+    :Christine     :gender :F;
+         gc:spouseIn :dv .
+    
+    :Dirk     :gender :M;
+         gc:childIn :dp;
+         gc:spouseIn :dc .
+    
+    :Frans     :gender :M;
+         gc:spouseIn :dp .
+    
+    :Frederik     :gender :M;
+         gc:childIn :dc .
+    
+    :Geert     :gender :M;
+         gc:childIn :dp;
+         gc:spouseIn :dv .
+    
+    :Goedele     :gender :F;
+         gc:childIn :dt .
+    
+    :Greta     :gender :F;
+         gc:childIn :dp;
+         gc:spouseIn :sd .
+    
+    :Hendrik     :gender :M;
+         gc:spouseIn :cd .
+    
+    :Jos     :gender :M;
+         gc:childIn :dp;
+         gc:spouseIn :dt .
+    
+    :Karel     :gender :M;
+         gc:childIn :dt .
+    
+    :Karolien     :gender :F;
+         gc:spouseIn :dc .
+    
+    :Louise     :gender :F;
+         gc:childIn :dv .
+    
+    :Lynn     :gender :F;
+         gc:childIn :sd .
+    
+    :Maaike     :gender :F;
+         gc:spouseIn :dt .
+    
+    :Marc     :gender :M;
+         gc:spouseIn :sd .
+    
+    :Maria     :gender :F;
+         gc:spouseIn :dp .
+    
+    :Nele     :gender :F;
+         gc:childIn :dt .
+    
+    :Paul     :gender :M;
+         gc:spouseIn :gd .
+    
+    :Rita     :gender :F;
+         gc:childIn :dp;
+         gc:spouseIn :gd .
+    
+    :Stefanie     :gender :F;
+         gc:childIn :dc .
+    
+    :Stephanie     :gender :F;
+         gc:childIn :dv .
+    
+    :Stijn     :gender :M;
+         gc:childIn :dc .
+    
+    :Tineke     :gender :F;
+         gc:childIn :cd .
+    
+    :Tom     :gender :M;
+         gc:childIn :sd .
+    
+    :Valerie     :gender :F;
+         gc:childIn :dv .
+    
+    :Veerle     :gender :F;
+         gc:childIn :dt .
+    {
+        {
+            :child     gc:childIn :family .
+            :parent     gc:spouseIn :family .
+            
+            }     log:implies {:child     gc:parent :parent .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :family,
+                :parent .
+    {
+        {
+            :child     :gender :M;
+                 gc:parent :parent .
+            
+            }     log:implies {:parent     gc:son :child .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :parent .
+    {
+        {
+            :child     :gender :F;
+                 gc:parent :parent .
+            
+            }     log:implies {:parent     gc:daughter :child .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :parent .
+    {
+        {
+            :child     gc:parent :parent .
+            :parent     gc:parent :grandparent .
+            
+            }     log:implies {:child     gc:grandparent :grandparent .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :grandparent,
+                :parent .
+    {
+        {
+            :child     gc:grandparent :grandparent .
+            :grandparent     :gender :M .
+            
+            }     log:implies {:child     gc:grandfather :grandparent .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :grandparent,
+                :parent .
+    {
+        {
+            :child     gc:grandparent :grandparent .
+            :grandparent     :gender :F .
+            
+            }     log:implies {:child     gc:grandmother :grandparent .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :grandparent,
+                :parent .
+    {
+        {
+            :child     gc:grandparent :grandparent .
+            
+            }     log:implies {:grandparent     gc:grandchild :child .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :grandparent .
+    {
+        {
+            :child     :gender :M;
+                 gc:grandparent :grandparent .
+            
+            }     log:implies {:grandparent     gc:grandson :child .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :grandparent .
+    {
+        {
+            :child     :gender :F;
+                 gc:grandparent :grandparent .
+            
+            }     log:implies {:grandparent     gc:granddaughter :child .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :grandparent .
+    {
+        {
+            {
+                :child1     :equals :child2 .
+                
+                }     log:implies <data:,> .
+            :child1     gc:childIn :family .
+            :child2     gc:childIn :family .
+            
+            }     log:implies {:child1     gc:sibling :child2 .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child1,
+                :child2,
+                :family .
+    {
+        {
+            :child     gc:parent :parent .
+            :parent     :gender :M .
+            
+            }     log:implies {:child     gc:father :parent .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :parent .
+    {
+        {
+            :child2     gc:sibling :child1 .
+            
+            }     log:implies {:child1     gc:sibling :child2 .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child1,
+                :child2 .
+    {
+        {
+            :child     gc:sibling :sibling .
+            :sibling     :gender :M .
+            
+            }     log:implies {:child     gc:brother :sibling .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :sibling .
+    {
+        {
+            :child     gc:sibling :sibling .
+            :sibling     :gender :F .
+            
+            }     log:implies {:child     gc:sister :sibling .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :sibling .
+    {
+        {
+            {
+                :spouse1     :equals :spouse2 .
+                
+                }     log:implies <data:,> .
+            :spouse1     gc:spouseIn :family .
+            :spouse2     gc:spouseIn :family .
+            
+            }     log:implies {:spouse1     gc:spouse :spouse2 .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :family,
+                :spouse1,
+                :spouse2 .
+    {
+        {
+            :spouse2     gc:spouse :spouse1 .
+            
+            }     log:implies {:spouse1     gc:spouse :spouse2 .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :spouse1,
+                :spouse2 .
+    {
+        {
+            :husband     :gender :M .
+            :spouse     gc:spouse :husband .
+            
+            }     log:implies {:spouse     gc:husband :husband .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :husband,
+                :spouse .
+    {
+        {
+            :spouse     gc:spouse :wife .
+            :wife     :gender :F .
+            
+            }     log:implies {:spouse     gc:wife :wife .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :spouse,
+                :wife .
+    {
+        {
+            :child     gc:parent :parent .
+            :parent     gc:brother :uncle .
+            
+            }     log:implies {:child     gc:uncle :uncle .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :parent,
+                :uncle .
+    {
+        {
+            :aunt     gc:spouse :uncle .
+            :child     gc:aunt :aunt .
+            
+            }     log:implies {:child     gc:uncle :uncle .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :aunt,
+                :child,
+                :uncle .
+    {
+        {
+            :child     gc:parent :parent .
+            :parent     gc:sister :aunt .
+            
+            }     log:implies {:child     gc:aunt :aunt .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :aunt,
+                :child,
+                :parent .
+    {
+        {
+            :child     gc:parent :parent .
+            :parent     :gender :F .
+            
+            }     log:implies {:child     gc:mother :parent .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :parent .
+    {
+        {
+            :child     gc:uncle :uncle .
+            :uncle     gc:spouse :aunt .
+            
+            }     log:implies {:child     gc:aunt :aunt .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :aunt,
+                :child,
+                :uncle .
+    {
+        {
+            :parent     gc:daughter :child;
+                 gc:sibling :sibling .
+            
+            }     log:implies {:sibling     gc:niece :child .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :parent,
+                :sibling .
+    {
+        {
+            :parent     gc:sibling :sibling;
+                 gc:son :child .
+            
+            }     log:implies {:sibling     gc:nephew :child .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :parent,
+                :sibling .
+    {
+        {
+            :cousin1     gc:parent :sibling1 .
+            :cousin2     gc:parent :sibling2 .
+            :sibling1     gc:sibling :sibling2 .
+            
+            }     log:implies {:cousin1     gc:firstCousin :cousin2 .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :cousin1,
+                :cousin2,
+                :sibling1,
+                :sibling2 .
+    {
+        {
+            :child     gc:parent :parent .
+            
+            }     log:implies {:child     gc:ancestor :parent .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :parent .
+    {
+        {
+            :child     gc:parent :parent .
+            :parent     gc:ancestor :ancestor .
+            
+            }     log:implies {:child     gc:ancestor :ancestor .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :ancestor,
+                :child,
+                :parent .
+    {
+        {
+            :child     gc:ancestor :ancestor .
+            
+            }     log:implies {:ancestor     gc:descendent :child .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :ancestor,
+                :child .
+    {
+        {
+            :sibling1     gc:descendent :descendent1;
+                 gc:sibling :sibling2 .
+            :sibling2     gc:descendent :descendent2 .
+            
+            }     log:implies {:descendent1     gc:cousin :descendent2 .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :descendent1,
+                :descendent2,
+                :sibling1,
+                :sibling2 .
+    {
+        :x     :equals :x .
+        
+        }     a log:Truth;
+         log:forAll :x .
+    {
+        {
+            :child     gc:parent :parent .
+            
+            }     log:implies {:parent     gc:child :child .
+            } .
+        
+        }     a log:Truth;
+         log:forAll :child,
+                :parent .
+    
+    :gender     = gc:sex .
+    
+ #ENDS
