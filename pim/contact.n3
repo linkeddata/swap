@@ -195,6 +195,7 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 :_addressProperty a rdf:Property.
 :mailbox :_addressProperty :mailboxURI.
 
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
 this log:forAll :x, :p, :y.
 
 { :x [ is :_addressProperty of :p] [ is log:uri of :y] } log:implies { :x :p :y }.
@@ -268,7 +269,10 @@ mso:WebPage  a rdf:Property;
 
 <> rcs:log """
 $Log$
-Revision 1.8  2001-11-05 16:28:37  connolly
+Revision 1.9  2001-11-05 16:30:21  connolly
+fixed log: prefix; updated RDF/xml version
+
+Revision 1.8  2001/11/05 16:28:37  connolly
 fixed daml+ont address
 
 added addressProperty rule. (should go elsewhere?)
