@@ -1,0 +1,12 @@
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+@prefix str:  <http://www.w3.org/2000/10/swap/string#> .
+
+@prefix : <#>.
+
+this log:forAll :s.
+
+{ ("abcdef" "ab(..)ef") str:scrape "cd" } log:implies { :Test1 a :Success }.
+
+{ ("abcdef" "ab(..)ef") str:scrape :s } log:implies { :Test2 :result :s. }.
+
+{ ("abXcdef" "ab(..)ef") str:scrape :s } log:implies { :Test3 :result :s }.
