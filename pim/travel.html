@@ -89,7 +89,7 @@ is in <a
 href="http://www.w3.org/TR/rdf-testcases/#ntriples">n-triples</a>, a
 line-oriented serialization developed in the RDF Core working group
 for testing parsers. For visual inspection and debugging, we use cwm
-to pretty-print it in N3. The result look like this:</p>
+to pretty-print it in N3. The results look like this:</p>
 
 <pre>
     :_gflt3199_3     a :_gECONOMY_5;
@@ -148,7 +148,7 @@ custom terms were needed:</p>
 <div class="figure"><img alt="travel terms" src="travelFig.png" />
 
 <div class="noprint mechanics" >if your desktop is SVG-happy, <a href="travelFig.svg">travelFig.svg</a> is
-nicer. I drew it with dia; you can play <a
+nicer. I drew it with dia; you can play with <a
 href="travelFig.xml">travelFig.xml</a>, the source. I'm working on <a
 href="/2002/03owlt/umlp/dia2owl.xsl">dia2owl.xsl</a>, which converts it to
 RDF/S: <a href="travelFig.rdf">travelFig.rdf</a>.
@@ -226,11 +226,11 @@ these, excerpted from <a href="airportLookup.n3">airportLookup.n3</a>:
   [ a :AirportKnownToDAML, :InterestingPlace;
     log:semantics [
       log:includes {
-        :IT :P :X.
+        :IT :P :V.
       }
     ] ].
 } log:implies {
-  :IT a apt:Airport; :P :X.
+  :IT a apt:Airport; :P :V.
 }.
 </pre>
 
