@@ -47,7 +47,7 @@ def cacheHack(addr):
 		continue
     return addr
 		
-def urlopenForRDF(addr, referer):
+def urlopenForRDF(addr, referer=None):
     """A version of urllib.urlopen() which asks for RDF by preference
 
     This is now uses urllib2.urlopen(), in order to get better error handling
