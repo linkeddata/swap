@@ -105,8 +105,13 @@ subcontext_cache_subcontexts = None
 
         
 class Thing:
-    def __init__(self):
-      self.occursAs = [], [], [], []  #  List of statements in store by part of speech       
+    def __init__(self, store):
+      self.store = store
+      store.initThing(self)
+
+#      self.occursAs = None    # Store must set this quad up      
+#      self.occursAs = [], [], [], []    # These are special cases of indexes
+      #  List of statements in store by part of speech       
             
     def __repr__(self):   # only used for debugging I think
         return self.representation()
@@ -125,21 +130,6 @@ class Thing:
     def asPair(self):
         return (RESOURCE, self.uriref(None))
     
-    def occurrences(self, p, context):
-        """ Count the times a thing occurs in a statement in given context
-        """
-        lp = len(self.occursAs[p])
-        lc = len(context.occursAs[CONTEXT])
-        n = 0
-        if lc < lp:
-            for s in context.occursAs[CONTEXT]:
-                if s.triple[p] is self:
-                    n = n + 1
-        else:
-            for s in self.occursAs[p]:
-                if s.triple[CONTEXT] is context:
-                    n = n+1
-        return n
 
     # Use the URI to allow sorted listings - for cannonnicalization if nothing else
     #  Put a type declaration before anything else except for strings
@@ -192,8 +182,8 @@ class Resource(Thing):
     """   A Thing which has no fragment
     """
     
-    def __init__(self, uri):
-        Thing.__init__(self)
+    def __init__(self, store, uri):
+        Thing.__init__(self, store)
         assert string.find(uri, "#") < 0
         self.uri = uri
         self.fragments = {}
@@ -225,14 +215,10 @@ class Fragment(Thing):
     """    A Thing which DOES have a fragment id in its URI
     """
     def __init__(self, resource, fragid):
-        Thing.__init__(self)
-
+        Thing.__init__(self, resource.store)
         self.resource = resource
         self.fragid = fragid
         self._defAsListIn = None      # This is not a list as far as we know
-#        print ("  BuiltIn %s isinstance LightBuiltIn = %i" % (`self`,isinstance(self, LightBuiltIn)))
-#        print ("   " + `self.__class__`)
-#        print ("    "+ `LightBuiltIn`)
 
     def definedAsListIn(self):  # Is this a list? (override me!)
         return self._defAsListIn
@@ -273,9 +259,6 @@ class Anonymous(Fragment):
         
 class Formula(Fragment):
 
-#    def __init__(self, resource, fragid):
-#        Fragment.__init__(self, resource, fragid)
-
     def generated(self):
         return 1
 
@@ -292,8 +275,8 @@ class Literal(Thing):
     """
 
 
-    def __init__(self, string):
-        Thing.__init__(self)
+    def __init__(self, store, string):
+        Thing.__init__(self, store)
         self.string = string    #  n3 notation EXcluding the "  "
 
     def __repr__(self):
