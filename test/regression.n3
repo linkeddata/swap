@@ -188,9 +188,9 @@
 
 
 :t1016 a test:CwmTest;
-    test:referenceOutput <ref/daml-ont-piped.n3>;
-    test:description   "Pipe mode for flat n3 to n3";
-    test:arguments     """daml-ont.n3 --pipe""".
+    test:referenceOutput <ref/piped-t016-out.n3>;
+    test:description   "Pipe mode for flat rdf and flat n3 to n3";
+    test:arguments     """--pipe --rdf animal.rdf owl-ex.rdf smush-examples.rdf --n3 daml-ont.n3""".
 
 
 :t1017 a test:CwmTest;
