@@ -214,7 +214,7 @@ def refTo(base, uri):
        or string.find(uri, "//", i-2)>0: return uri # An unshared "//"
     if string.find(base, ":", i)>0: return uri  # An unshared ":"
     n = string.count(base, "/", i)
-    if n == 0 and uri[i] == '#':
+    if n == 0 and i<len(uri) and uri[i] == '#':
         return "./" + uri[i:]
     else:
         return ("../" * n) + uri[i:]
@@ -375,7 +375,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.10  2003-02-24 15:06:38  connolly
+# Revision 1.11  2003-04-03 22:06:54  ryanlee
+# small fix in if, line 217
+#
+# Revision 1.10  2003/02/24 15:06:38  connolly
 # some more tests from Graham
 #
 # Revision 1.9  2002/12/25 20:01:32  timbl
