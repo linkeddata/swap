@@ -1,0 +1,184 @@
+
+
+
+<html xmlns="">
+
+    <head>
+        <title>KIF Form Grammar</title>
+    </head>
+
+    <body>
+        <h1>KIF Form Grammar</h1>
+        <address>source: <a href="kifForm.g">kifForm.g</a>
+        </address>
+        <dl>
+            <dt>
+                <a name="variable"
+                    id="variable">variable</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>indvar</tt> <br class=""/> | <tt>seqvar</tt> </dd>
+            <dt>
+                <a name="term"
+                    id="term">term</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>indvar</tt> <br class=""/> | <tt>constant</tt> <br class=""/> | <tt>charref</tt> <br class=""/> | <tt>string</tt> <br class=""/> | <tt>block</tt> <br class=""/> | <a href="#quoterm">quoterm</a>
+                <sub></sub> <br class=""/> | <a href="#funterm">funterm</a>
+                <sub></sub> <br class=""/> | <a href="#listterm">listterm</a>
+                <sub></sub> <br class=""/> | <a href="#logterm">logterm</a>
+                <sub></sub> </dd>
+            <dt>
+                <a name="quoterm"
+                    id="quoterm">quoterm</a>
+                <sub></sub>
+            </dt>
+            <dd>( <tt>"\\(\s*quote"</tt> <a href="#listexpr">listexpr</a>
+                <sub></sub> <tt>"\\)"</tt>  ) <br class=""/> | ( <tt>"'"</tt> <a href="#listexpr">listexpr</a>
+                <sub></sub>  ) </dd>
+            <dt>
+                <a name="listexpr"
+                    id="listexpr">listexpr</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#atom">atom</a>
+                <sub></sub> <br class=""/> | ( <tt>"\\("</tt> <a href="#listexpr">listexpr</a>
+                <sub></sub> * <tt>"\\)"</tt>  ) </dd>
+            <dt>
+                <a name="atom"
+                    id="atom">atom</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>word</tt> <br class=""/> | <tt>charref</tt> <br class=""/> | <tt>string</tt> <br class=""/> | <tt>block</tt> </dd>
+            <dt>
+                <a name="funterm"
+                    id="funterm">funterm</a>
+                <sub></sub>
+            </dt>
+            <dd>( <tt>"\\(\s*value"</tt> <a href="#term">term</a>
+                <sub></sub> <a href="#term">term</a>
+                <sub></sub> * [ <tt>seqvar</tt>  ] <tt>"\\)"</tt>  ) <br class=""/> | ( <tt>"\\("</tt> <tt>constant</tt> <a href="#term">term</a>
+                <sub></sub> * [ <tt>seqvar</tt>  ] <tt>"\\)"</tt>  ) </dd>
+            <dt>
+                <a name="listterm"
+                    id="listterm">listterm</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"\\(\s*listof"</tt> <a href="#term">term</a>
+                <sub></sub> * [ <tt>seqvar</tt>  ] <tt>"\\)"</tt> </dd>
+            <dt>
+                <a name="logterm"
+                    id="logterm">logterm</a>
+                <sub></sub>
+            </dt>
+            <dd>( <tt>"\\(\s*if"</tt> <a href="#logpair">logpair</a>
+                <sub></sub> + [ <a href="#term">term</a>
+                <sub></sub>  ] <tt>"\\)"</tt>  ) <br class=""/> | ( <tt>"\\(\s*cond"</tt> <a href="#logitem">logitem</a>
+                <sub></sub> * <tt>"\\)"</tt>  ) </dd>
+            <dt>
+                <a name="logpair"
+                    id="logpair">logpair</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#sentence">sentence</a>
+                <sub></sub> <a href="#term">term</a>
+                <sub></sub> </dd>
+            <dt>
+                <a name="logitem"
+                    id="logitem">logitem</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"\\("</tt> <a href="#sentence">sentence</a>
+                <sub></sub> <a href="#term">term</a>
+                <sub></sub> <tt>"\\)"</tt> </dd>
+            <dt>
+                <a name="sentence"
+                    id="sentence">sentence</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>constant</tt> <br class=""/> | <a href="#equation">equation</a>
+                <sub></sub> <br class=""/> | <a href="#inequality">inequality</a>
+                <sub></sub> <br class=""/> | <a href="#relsent">relsent</a>
+                <sub></sub> <br class=""/> | <a href="#logsent">logsent</a>
+                <sub></sub> <br class=""/> | <a href="#quantsent">quantsent</a>
+                <sub></sub> </dd>
+            <dt>
+                <a name="equation"
+                    id="equation">equation</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"\\(\s*="</tt> <a href="#term">term</a>
+                <sub></sub> <a href="#term">term</a>
+                <sub></sub> <tt>"\\)"</tt> </dd>
+            <dt>
+                <a name="inequality"
+                    id="inequality">inequality</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"\\(\s*/="</tt> <a href="#term">term</a>
+                <sub></sub> <a href="#term">term</a>
+                <sub></sub> <tt>"\\)"</tt> </dd>
+            <dt>
+                <a name="relsent"
+                    id="relsent">relsent</a>
+                <sub></sub>
+            </dt>
+            <dd>( <tt>"\\(\s*holds"</tt> <a href="#term">term</a>
+                <sub></sub> <a href="#term">term</a>
+                <sub></sub> * [ <tt>seqvar</tt>  ] <tt>"\\)"</tt>  ) <br class=""/> | ( <tt>"\\("</tt> <tt>constant</tt> <a href="#term">term</a>
+                <sub></sub> * [ <tt>seqvar</tt>  ] <tt>"\\)"</tt>  ) </dd>
+            <dt>
+                <a name="logsent"
+                    id="logsent">logsent</a>
+                <sub></sub>
+            </dt>
+            <dd>( <tt>"\\(\s*not"</tt> <a href="#sentence">sentence</a>
+                <sub></sub> <tt>"\\)"</tt>  ) <br class=""/> | ( <tt>"\\(\s*and"</tt> <a href="#sentence">sentence</a>
+                <sub></sub> * <tt>"\\)"</tt>  ) <br class=""/> | ( <tt>"\\(\s*or"</tt> <a href="#sentence">sentence</a>
+                <sub></sub> * <tt>"\\)"</tt>  ) <br class=""/> | ( <tt>"\\(\s*=&#62;"</tt> <a href="#sentence">sentence</a>
+                <sub></sub> * <a href="#sentence">sentence</a>
+                <sub></sub> <tt>"\\)"</tt>  ) <br class=""/> | ( <tt>"\\(\s*&#60;="</tt> <a href="#sentence">sentence</a>
+                <sub></sub> <a href="#sentence">sentence</a>
+                <sub></sub> * <tt>"\\)"</tt>  ) <br class=""/> | ( <tt>"\\(\s*&#60;=&#62;"</tt> <a href="#sentence">sentence</a>
+                <sub></sub> <a href="#sentence">sentence</a>
+                <sub></sub> <tt>"\\)"</tt>  ) </dd>
+            <dt>
+                <a name="quantsent"
+                    id="quantsent">quantsent</a>
+                <sub></sub>
+            </dt>
+            <dd>( <tt>"\\(\s*forall"</tt> <tt>"\\("</tt> <a href="#varspec">varspec</a>
+                <sub></sub> + <tt>"\\)"</tt> <a href="#sentence">sentence</a>
+                <sub></sub> <tt>"\\)"</tt>  ) <br class=""/> | ( <tt>"\\(\s*exists"</tt> <tt>"\\("</tt> <a href="#varspec">varspec</a>
+                <sub></sub> + <tt>"\\)"</tt> <a href="#sentence">sentence</a>
+                <sub></sub> <tt>"\\)"</tt>  ) </dd>
+            <dt>
+                <a name="varspec"
+                    id="varspec">varspec</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#variable">variable</a>
+                <sub></sub> <br class=""/> | ( <tt>"\\("</tt> <a href="#variable">variable</a>
+                <sub></sub> <tt>constant</tt> <tt>"\\)"</tt>  ) </dd>
+            <dt>
+                <a name="form"
+                    id="form">form</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <a href="#sentence">sentence</a>
+                <sub></sub> </dd>
+        </dl>
+    </body>
+</html>

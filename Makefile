@@ -6,7 +6,7 @@ YAPPS=yapps2.py
 
 TESTIN=test/sameDan.n3
 
-.SUFFIXES: .g .py
+.SUFFIXES: .g .py .html
 
 .g.py:
 	$(PYTHON) $(YAPPS) $< $@
@@ -24,4 +24,14 @@ doc: rdfn3-gram.html
 
 rdfn3-gram.html: rdfn3.g gram2html.py
 	$(PYTHON) gram2html.py rdfn3.g "RDF Notation3 Grammar" >$@
+
+kifExpr.py: kifExpr.g
+
+kifExpr.html: kifExpr.g gram2html.py
+	$(PYTHON) gram2html.py kifExpr.g "KIF Expression Grammar" >$@
+
+kifForm.py: kifForm.g
+
+kifForm.html: kifExpr.g gram2html.py
+	$(PYTHON) gram2html.py kifForm.g "KIF Form Grammar" >$@
 
