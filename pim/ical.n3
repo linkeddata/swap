@@ -10,7 +10,7 @@
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
      @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
-     @prefix ss: <../util/sniffSchema#> .
+     @prefix ss: <http://www.w3.org/2000/10/swap/util/sniffSchema#> .
      @prefix str: <http://www.w3.org/2000/10/swap/string#> .
      @prefix x: <http://www.w3.org/2000/01/foo-X@@#> .
     
@@ -20,8 +20,6 @@
                 :Vtimezone,
                 :Vtodo;
          ss:label "type" .
-    
-    ss:intersectsDomainOf     s:subPropertyOf s:seeAlso .
     
     x:evolutionAlarmUid     a rdf:Property;
          ss:label "evolutionAlarmUid";
@@ -271,5 +269,7 @@
          ss:rangeIntersects :Vevent,
                 :Vtimezone,
                 :Vtodo .
+    
+    ss:intersectsDomainOf     s:subPropertyOf s:seeAlso .
     
 #ENDS

@@ -8,7 +8,7 @@
     xmlns:log="http://www.w3.org/2000/10/swap/log#"
     xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:s="http://www.w3.org/2000/01/rdf-schema#"
-    xmlns:ss="file:/home/connolly/w3ccvs/WWW/2000/10/swap/util/sniffSchema#"
+    xmlns:ss="http://www.w3.org/2000/10/swap/util/sniffSchema#"
     xmlns:str="http://www.w3.org/2000/10/swap/string#"
     xmlns:x="http://www.w3.org/2000/01/foo-X@@#">
 
@@ -19,10 +19,6 @@
         <ss:domainIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtodo"/>
         <ss:label>type</ss:label>
     </rdf:Property>
-
-    <rdf:Description rdf:about="../util/sniffSchema#intersectsDomainOf">
-        <s:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#seeAlso"/>
-    </rdf:Description>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/01/foo-X@@#evolutionAlarmUid">
         <ss:label>evolutionAlarmUid</ss:label>
@@ -322,4 +318,8 @@
         <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtimezone"/>
         <ss:rangeIntersects rdf:resource="http://www.w3.org/2000/10/swap/ical#Vtodo"/>
     </rdf:Property>
+
+    <rdf:Description rdf:about="http://www.w3.org/2000/10/swap/util/sniffSchema#intersectsDomainOf">
+        <s:subPropertyOf rdf:resource="http://www.w3.org/2000/01/rdf-schema#seeAlso"/>
+    </rdf:Description>
 </rdf:RDF>
