@@ -429,14 +429,15 @@ the welsh word with a short "oo"). Further examples will use that.</p>
 <br />
 
 
-<h2>Query/Filter</h2>
+<h2>Practical rules: Query information using a Filter</h2>
 <address>
   added by reagle 20020408
 </address>
 
 <p>Now that we know how to make a statements in N3, what can we do with them?
-One thing we can do is use them to obtain other useful information via a
-query/filter.</p>
+ One thing is to use them to add inferred knowledge to a store which already
+contains data. Another thing is to extract useful information via a form of
+query called a <dfn><a name="filter1" id="filter1">filter</a></dfn>. </p>
 
 <p>In <a href="test/uncle.n3">uncle.n3</a> we state that Fred is the father
 Joe, and Bob is the brother of Fred; we also describe the logical rule for
@@ -456,9 +457,10 @@ href="doc/cwm.html">cwm</a></em> to conclude the deduce the uncle information
 when it runs with the command line option <code>--think.</code></p>
 
 <p>In another file (<a href="test/uncleF.n3">uncleF.n3</a>) we use as a
-<em>filter</em>. When a filter runs (unlike --think) only the information
-gathered by the rules is preserved. We use a filter to select the logical
-relationships that we want from the mass of what is already known:</p>
+filter. When a filter runs (unlike --think) <em>only</em> the information
+gathered by the rules is preserved: everything else is discarded. We use a
+filter to select the logical relationships that we want from the mass of what
+is already known:</p>
 <pre>@prefix : &lt;uncle#&gt;.
 @prefix log: &lt;http://www.w3.org/2000/10/swap/log#&gt; .
 
@@ -514,7 +516,7 @@ information where available.</p>
     <dd>(From: Closed world machine; valley.) A bit of code for playing with
       this stuff, as grep is for regular expressions. Sucks in RDF in XML or
       N3, processes rules, and spits it out again.</dd>
-  <dt><a name="filter" id="filter">filter</a></dt>
+  <dt><a name="filter" id="filter" href="#filter1">filter</a></dt>
     <dd>A set of <a href="#rule">rules</a> which are used to select certain
       data from a larger amount of information.</dd>
   <dt><a name="N3" id="N3" href="/DesignIssues/Notation3">N3</a></dt>
