@@ -587,6 +587,8 @@ class IndexedFormula(Formula):
             pairs.append((s[SUBJ], s[OBJ]))
         pairs.sort(comparePair)
         for key, str in pairs:
+            if not hasattr(str, "string"):
+                print `str`
             channel.write(str.string.encode('utf-8'))
 
 

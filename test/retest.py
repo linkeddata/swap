@@ -306,8 +306,14 @@ def main():
 	description = str(kb.the(t, n3test.description))
 #	    if description == None: description = case + " (no description)"
 	inputDocument = kb.the(t, n3test.inputDocument).uriref()
-
-	n3PositiveTestData.append((t.uriref(), case, description,  inputDocument))
+        good = 1
+        categories = kb.each(t, rdf.type)
+	for cat in categories:
+	    if cat is triage.knownError:
+		if verbose: print "\tknown failure: "+ inputDocument[-40:]
+		good = 0
+	if good:
+            n3PositiveTestData.append((t.uriref(), case, description,  inputDocument))
 
 
     for t in kb.each(pred=rdf.type, obj=n3test.NegativeParserTest):

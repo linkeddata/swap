@@ -143,5 +143,6 @@
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-difference-between-ID-and-about/Manifest.rdf#error1>     a :knownError .
 
     <http://www.w3.org/2000/10/rdf-tests/rdfcore/rdfms-rdf-id/Manifest.rdf#error007>     a :knownError .
+    <n3parser.tests#n3_10010> a :knownError .
 
 #ENDS

@@ -17,9 +17,12 @@ from term import Function, ReverseFunction, LightBuiltIn
 
 USE_PKC = 1
 
-if USE_PKC: 
-   import Crypto.Util.randpool as randpool
-   import Crypto.PublicKey.RSA as RSA
+if USE_PKC:
+    try:
+        import Crypto.Util.randpool as randpool
+        import Crypto.PublicKey.RSA as RSA
+    except ImportError:
+        USE_PKC = 0
 
 # Some stuff that we need to know about
 

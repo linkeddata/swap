@@ -264,7 +264,7 @@ rdf/xml files. Note that this requires rdflib.
             elif arg == "-strings": option_outputStyle = "-no"
             elif arg == "-triples" or arg == "-ntriples":
                 option_format = "n3"
-                option_flags["n3"] = "uspartane"
+                option_flags["n3"] = "uspartanev"
                 option_outputStyle = "-bySubject"
                 option_quiet = 1
             elif _lhs == "-outURI": option_outURI = _uri

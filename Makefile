@@ -16,7 +16,7 @@ GRAMMAR =  grammar/n3.n3 grammar/README.txt grammar/predictiveParser.py grammar/
 
 TESTS = test/Makefile test/regression.n3 test/list/detailed.tests test/ql/detailed.tests test/math/detailed.tests test/norm/detailed.tests test/n3parser.tests test/cwm/detailed.tests test/ntriples/detailed.tests test/delta/detailed.tests test/syntax/detailed.tests test/reify/detailed.tests test/testmeta.n3 test/retest.py
 
-VERSION = 1.0.0
+VERSION = 1.0.1
 TARNAME = cwm-$(VERSION)
 
 TARBALL_STUFF = README LICENSE LICENSE.rdf LICENSE.n3
@@ -82,11 +82,14 @@ cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
 	cvs add $(TARNAME).tar.gz
 #LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply/*.py *.py
 
-setup_tarball: $(SOURCES) $(HTMLS) $(TESTS) $(GRAMMAR) $(TARBALL_STUFF) tested filelist
+setup_tarball: $(SOURCES) $(HTMLS) $(TESTS) $(GRAMMAR) $(TARBALL_STUFF)  tested filelist
 	-rm -rf swap
 	mkdir swap
 	cd swap; for A in $(SOURCES); do ln "../$$A"; done
-	echo "cwm.py" > MANIFEST
+	ln cwm.py cwm
+	ln delta.py delta
+	ln cant.py cant
+	echo "cwm" > MANIFEST
 	echo "delta.py" >> MANIFEST
 	echo "cant.py" >> MANIFEST
 	echo "setup.py" >> MANIFEST
@@ -97,6 +100,9 @@ setup_tarball: $(SOURCES) $(HTMLS) $(TESTS) $(GRAMMAR) $(TARBALL_STUFF) tested f
 	-python setup.py bdist_rpm
 	-python setup.py bdist_wininst
 	rm -rf swap
+	rm cwm
+	rm delta
+	rm cant
 	cp dist/cwm-$(VERSION).tar.gz .
 	-rm -rf ,cwm-$(VERSION)-test
 	mkdir ,cwm-$(VERSION)-test
