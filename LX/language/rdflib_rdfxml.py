@@ -61,7 +61,6 @@ class ParserX(rdflib.syntax.parser.Parser):
         raise RuntimeError, "conversion from rdflib of: "+s.n3()
         
     def add(self, t):
-        # Store in RAISED (FOL, FlatBread) form for now....
         self.kb.add(self.termFor(t[0]),
                     self.termFor(t[1]),
                     self.termFor(t[2]))
@@ -78,7 +77,10 @@ class Serializer:
         pass
 
 # $Log$
-# Revision 1.6  2003-09-05 04:39:07  sandro
+# Revision 1.7  2003-09-10 20:13:56  sandro
+# removed obsolete comment
+#
+# Revision 1.6  2003/09/05 04:39:07  sandro
 # changed handling of i18n chars
 #
 # Revision 1.5  2003/09/04 07:14:15  sandro
