@@ -14,7 +14,7 @@ import string
 # States:
 
 STATE_NOT_RDF = "not RDF"   # Before <rdf:RDF>
-STATE_NO_CONTEXT = "no context"  # @@@@@@@@@ use numbers for speed
+STATE_NO_SUBJECT = "no context"  # @@@@@@@@@ use numbers for speed
 STATE_DESCRIPTION = "Description (have subject)" #
 STATE_LITERAL = "within literal"
 STATE_VALUE = "plain value"
@@ -24,11 +24,13 @@ STATE_LIST =    "within list"
 RESOURCE = notation3.RESOURCE
 LITERAL = notation3.LITERAL
 
-RDF_NS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#" # As per the spec
+RDF_NS_URI = notation3.RDF_NS_URI # As per the spec
 RDF_Specification = "http://www.w3.org/TR/REC-rdf-syntax/" # Must come in useful :-)
 DAML_ONT_NS = "http://www.daml.org/2000/10/daml-ont#"  # DAML early version
 DPO_NS = "http://www.daml.org/2000/12/daml+oil#"  # DAML plus oil
 chatty = 0
+
+RDF_IS = RESOURCE, RDF_NS_URI + "is"   # Used with quoting
 
 class RDFXMLParser(xmllib.XMLParser):
 
@@ -122,16 +124,16 @@ class RDFXMLParser(xmllib.XMLParser):
                 ns = name[:x]
                 ln = name[x+1:]    # Strip any namespace on attributes!!! @@@@
                 if string.find("ID ambout AboutEachPrefix bagid type", name)>0:
-                    if ns != RDF_NS:
+                    if ns != RDF_NS_URI:
                         print ("# Warning -- %s attribute in %s namespace not RDF NS." %
                                name, ln)
-                        ns = RDF_NS  # @@@@@@@@@@@@@@@@
+                        ns = RDF_NS_URI  # @@@@@@@@@@@@@@@@
                 uri = ns + ln
             else:
                 ln = name
                 ns = None
 #               raise NoNS   # @@@ Actually, XML spec says we should get these: parser is wrong
-            if ns == RDF_NS or ns == None:   # These should have none but RDF_NS is common :-(
+            if ns == RDF_NS_URI or ns == None:   # These should have none but RDF_NS is common :-(
                 
                 if ln == "ID":
                     if self._subject:
@@ -148,11 +150,6 @@ class RDFXMLParser(xmllib.XMLParser):
                 elif ln == "bagid":
                     c = self._context
                     self._context = self.uriref("#" + value)
-                    if 0: self.sink.makeStatement((  # Note lexical nesting
-                        (RESOURCE, c),                                 
-                        (RESOURCE, notation3.N3_subExpression_URI),
-                        (RESOURCE, c),
-                        (RESOURCE, self._context) ))
                 elif ln == "parseType":
                     pass  #later - object-related
                 elif ln == "value":
@@ -188,20 +185,20 @@ class RDFXMLParser(xmllib.XMLParser):
             return generatedId
 
     def _obj(self, tagURI, attrs):  # 6.2
-            if tagURI == RDF_NS + "Description":
+            if tagURI == RDF_NS_URI + "Description":
                 self.idAboutAttr(attrs)  # Set up subject and context                
 
-            elif ( tagURI == RDF_NS + "Bag" or  # 6.4 container :: bag | sequence | alternative
-                   tagURI == RDF_NS + "Alt" or
-                   tagURI == RDF_NS + "Seq"):
+            elif ( tagURI == RDF_NS_URI + "Bag" or  # 6.4 container :: bag | sequence | alternative
+                   tagURI == RDF_NS_URI + "Alt" or
+                   tagURI == RDF_NS_URI + "Seq"):
                 raise unimplemented
-            else:  # Unknown tag within STATE_NO_CONTEXT: typedNode #6.13
+            else:  # Unknown tag within STATE_NO_SUBJECT: typedNode #6.13
                 c = self._context   # (Might be change in idAboutAttr)
                 self.idAboutAttr(attrs)
                 if c == None: raise roof
                 if self._subject == None:raise roof
                 self.sink.makeStatement((  (RESOURCE, c),
-                                      (RESOURCE, RDF_NS+"type"),
+                                      (RESOURCE, RDF_NS_URI+"type"),
                                       (RESOURCE, self._subject),
                                       (RESOURCE, tagURI) ))
                 self._state = STATE_DESCRIPTION
@@ -227,8 +224,8 @@ class RDFXMLParser(xmllib.XMLParser):
         self._stack.append([self._state, self._context, self._predicate, self._subject])
 
         if self._state == STATE_NOT_RDF:
-            if tagURI == RDF_NS + "RDF":
-                self._state = STATE_NO_CONTEXT
+            if tagURI == RDF_NS_URI + "RDF":
+                self._state = STATE_NO_SUBJECT
                 
                 # HACK @@ to grab prefixes
                 nslist = self._XMLParser__namespaces.items()
@@ -242,7 +239,7 @@ class RDFXMLParser(xmllib.XMLParser):
             else:
                 pass                    # Some random XML
 
-        elif self._state == STATE_NO_CONTEXT:  # 6.2 obj :: desription | container
+        elif self._state == STATE_NO_SUBJECT:  # 6.2 obj :: desription | container
             self._obj(tagURI, attrs)
             
         elif self._state == STATE_DESCRIPTION:   # Expect predicate (property) PropertyElt
@@ -260,6 +257,7 @@ class RDFXMLParser(xmllib.XMLParser):
                 elif name == "parseType":
                     if value == "Literal":
                         self._state = STATE_LITERAL # That's an XML subtree not a string
+                        
                     elif value == "Resource":
                         c = self._context
                         s = self._subject
@@ -269,6 +267,23 @@ class RDFXMLParser(xmllib.XMLParser):
                                                   (RESOURCE, s),
                                                   (RESOURCE, self._subject) ))
                         self._state = STATE_DESCRIPTION  # Nest description
+                        
+                    elif value == "Quote":
+                        c = self._context
+                        s = self._subject
+                        self.idAboutAttr(attrs)  # set subject and context for nested description
+                        if self._predicate == RDF_NS_URI+"is": # magic :-(
+                            self._subject = s  # Forget anonymous genid - context is subect
+                            print "#@@@@@@@@@@@@@ decided subject is ",`s`[-10:-1]
+                        else:
+                            self.sink.makeStatement(( (RESOURCE, c),
+                                                  (RESOURCE, self._predicate),
+                                                  (RESOURCE, s),
+                                                  (RESOURCE, self._subject) ))
+                        self._context = self._subject
+                        self._subject = None
+                        self._state = STATE_NO_SUBJECT  # Nest context
+                        
                     elif value[-11:] == ":collection":  # Is this a daml:collection qname?
                         pref = value[:-11]
                         nslist = self._XMLParser__namespaces.items()

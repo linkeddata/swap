@@ -797,19 +797,44 @@ class ToRDF(RDFSink):
 
 # Below we notate a nested bag of statements - a context
 
-    def startBag(self, context):  # Doesn't work with RDF sorry ILLEGAL
+    def startBagSubject(self, context):  # Doesn't work with RDF sorry ILLEGAL
         self.flushStart()
-        self.indent = self.indent + 1
-        self._wr.startElement(RDF_NS_URI+'Quote', # Like description but no subject?
-			      [('context', relativeURI(self._thisDoc,context[1]))],
+        self._wr.startElement(RDF_NS_URI+'Description', 
+			      [],
+#			      [('about', relativeURI(self._thisDoc,context[1]))],
                               self.prefixes)
+        self._wr.startElement(RDF_NS_URI+"is", [('parseType', 'Quote')], self.prefixes)
+        self._subj = None
+        self._pred = None
 
 
-    def endBag(self, subj):    # Remove context
-        self._endElement()
+    def endBagSubject(self, subj):    # Remove context
+        self._wr.endElement()
+        self._wr.endElement()
         self._subj = subj
         self._pred = None
-     
+
+    def startBagObject(self, tuple):
+        self.flushStart()
+        context, pred, subj, obj = tuple 
+	if self._subj != subj:
+	    if self._subj:
+		self._wr.endElement()
+	    subjn = relativeURI(self._thisDoc, subj[1])
+	    self._wr.startElement(RDF_NS_URI + 'Description',
+				 (('about', subjn),), self.prefixes)
+	    self._subj = subj
+
+        self._wr.startElement(pred[1], [('parseType','Quote')], self.prefixes)  # @@? Parsetype RDF
+        self._subj = None
+        self._pred = None
+
+
+    def endBagObject(self, pred, subj):    # Remove context
+        self._wr.endElement()
+        self._wr.endElement()
+        self._subj = pred
+        self._pred = subj     
 
 def relativeTo(here, there):
     print "### Relative to ", here[1], there[1]
@@ -894,6 +919,8 @@ class XMLWriter:
 #        print "@@@ ns=",ns, "@@@ prefixes =", prefixes
         prefix = prefixes.get((RESOURCE, ns), ":::")
         attrs = []
+        for a, v in rawAttrs:   # Caller can set default namespace
+            if a == "xmlns": self.currentNS = v
         if ns != self.currentNS:
             if prefix == ":::" or not prefix:  # Can't trust stored null prefix
                 attrs = [('xmlns', ns)]
@@ -1118,7 +1145,7 @@ class ToN3(RDFSink):
         self._pred = None
 
 
-    def endAnonymousNode(self):    # Remove context
+    def endAnonymousNode(self):    # Remove default subject
         self.stack.pop()
         self._write(" ].")
         self.indent = self.indent - 1
@@ -1284,7 +1311,7 @@ class Reifier(RDFSink):
         self._context = context
         self._genPrefix = genPrefix
         if self._genPrefix == None:
-            self._genPrefix = self._context + "#_g"
+            self._genPrefix = self._context + "#_s"
         
     def bind(self, prefix, nsPair):
         self.sink.bind(prefix, nsPair)

@@ -710,7 +710,8 @@ class RDFStore(notation3.RDFSink) :
 
             else:     #  Could have alternative syntax here
                 if len(statements) == 1:
-                    print "# [].???: ", quadToString(statements[0].triple)
+                    pass
+                    #print "# [].???: ", quadToString(statements[0].triple)
                     #return       #  Don't bother with [].
                 sink.startAnonymousNode(subj.asPair())
                 if sorting: statements.sort()    # Order only for output
@@ -723,14 +724,15 @@ class RDFStore(notation3.RDFSink) :
                 sink.endAnonymousNode()
                 return  # arcs as subject done
 
+        if not _anon and subj.occursAs[CONTEXT] != [] and subj is not context:
+            sink.startBagNamed(subj.asPair())
+            self.dumpNestedStatements(subj, sink)  # dump contents of anonymous bag
+            sink.endBagNamed(subj.asPair())       # Subject is now set up
+
         if sorting: statements.sort()
         for s in statements:
             self.dumpStatement(sink, s)
 
-        if not _anon and _se:
-            sink.startBagNamed(subj.asPair())
-            self.dumpNestedStatements(subj, sink)  # dump contents of anonymous bag
-            sink.endBagNamed(subj.asPair())       # Subject is now set up
 
                 
     def dumpStatement(self, sink, s, sorting=0):
