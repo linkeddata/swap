@@ -1,64 +1,66 @@
-# Base URI of process is file:/devel/WWW/2000/10/swap/test/tambis/
-# Taking N3 input from standard input
-
+#Processed by Id: cwm.py,v 1.27 2001/02/05 19:58:24 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/tambis/
+        
 #  Notation3 generation by
-#       notation3.py,v 1.40 2000/12/20 22:44:05 timbl Exp
+#       notation3.py,v 1.53 2001/02/05 01:13:24 timbl Exp
 
-     @prefix : <http://www.w3.org/2000/10/swap/log.n3#> .
-     @prefix ex: <http://www.daml.org/2000/10/daml-ex#> .
-     @prefix ont: <http://www.daml.org/2000/10/daml-ont#> .
-     @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+#   Base was: file:/devel/WWW/2000/10/swap/test/tambis/
+     @prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
+     @prefix : <http://www.daml.org/2000/12/daml+oil#> .
      @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix b: <http://www.w3.org/2000/01/rdf-schema#> .
     
+    <Glycosylysis>     a b:Class;
+         b:subClassOf <hydrolysis> .
       [      a :Disjoint;
+             :first <dna>;
              :rest  [
                  a :Disjoint;
-                 :rest ();
-                 :first <rna> ];
-             :first <dna> ].
+                 :rest  (
+                 );
+                 :first <rna> ] ].
     
       [      a :Disjoint;
+             :first <messenger-rna>;
              :rest  [
                  a :Disjoint;
                  :rest  [
                      a :Disjoint;
                      :rest  [
                          a :Disjoint;
-                         :rest ();
+                         :rest  (
+                         );
                          :first <ribosomal-rna> ];
                      :first <small-nuclear-rna> ];
-                 :first <transfer-rna> ];
-             :first <messenger-rna> ].
+                 :first <transfer-rna> ] ].
     
       [      a :Disjoint;
+             :first <covalent-bond>;
              :rest  [
                  a :Disjoint;
                  :rest  [
                      a :Disjoint;
-                     :rest ();
+                     :rest  (
+                     );
                      :first <van-der-waals-bond> ];
-                 :first <electrostatic-bond> ];
-             :first <covalent-bond> ].
-    
-    <Glycosylysis>     a rdfs:Class;
-         rdfs:subClassOf <hydrolysis> .
+                 :first <electrostatic-bond> ] ].
     
     <accession-number-of>     a rdf:Property .
     
-    <accession-number>     a rdfs:Class;
-         rdfs:subClassOf <label> .
+    <accession-number>     a b:Class;
+         b:subClassOf <label> .
     
-    <acetylation-site>     a rdfs:Class;
-         rdfs:subClassOf <modification-site> .
+    <acetylation-site>     a b:Class;
+         b:subClassOf <modification-site> .
     
-    <acid-anhydride-hydrolysis>     a rdfs:Class;
-         rdfs:subClassOf <hydrolysis> .
+    <acid-anhydride-hydrolysis>     a b:Class;
+         b:subClassOf <hydrolysis> .
     
-    <actin-binding>     a rdfs:Class;
-         rdfs:subClassOf <binding> .
+    <actin-binding>     a b:Class;
+         b:subClassOf <binding> .
     
-    <active-site>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <active-site>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <enzyme-function>;
              :onProperty <indicates-function> ],
@@ -68,17 +70,18 @@
              :onProperty <indicates-function> ],
                 <site> .
     
-    <acyl-group>     a rdfs:Class;
-         rdfs:subClassOf <ligand> .
+    <acyl-group>     a b:Class;
+         b:subClassOf <ligand> .
     
-    <acyl-transfer>     a rdfs:Class;
-         rdfs:subClassOf <inter-molecule-transfer> .
+    <acyl-transfer>     a b:Class;
+         b:subClassOf <inter-molecule-transfer> .
     
-    <aldehyde-transfer>     a rdfs:Class;
-         rdfs:subClassOf <inter-molecule-transfer> .
+    <aldehyde-transfer>     a b:Class;
+         b:subClassOf <inter-molecule-transfer> .
     
-    <alkali-metal>     a rdfs:Class;
+    <alkali-metal>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -87,33 +90,34 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <alkyl-transfer>     a rdfs:Class;
-         rdfs:subClassOf <inter-molecule-transfer> .
+    <alkyl-transfer>     a b:Class;
+         b:subClassOf <inter-molecule-transfer> .
     
-    <alpha-helix>     a rdfs:Class;
-         rdfs:subClassOf <protein-secondary-structure> .
+    <alpha-helix>     a b:Class;
+         b:subClassOf <protein-secondary-structure> .
     
-    <amidation-site>     a rdfs:Class;
-         rdfs:subClassOf <modification-site> .
+    <amidation-site>     a b:Class;
+         b:subClassOf <modification-site> .
     
-    <amide>     a rdfs:Class;
-         rdfs:subClassOf <ligand> .
+    <amide>     a b:Class;
+         b:subClassOf <ligand> .
     
-    <amino-acid>     a rdfs:Class;
-         rdfs:subClassOf <small-organic-molecular-compound> .
+    <amino-acid>     a b:Class;
+         b:subClassOf <small-organic-molecular-compound> .
     
-    <amino-transfer>     a rdfs:Class;
-         rdfs:subClassOf <inter-molecule-transfer> .
+    <amino-transfer>     a b:Class;
+         b:subClassOf <inter-molecule-transfer> .
     
-    <angstrom>     a rdfs:Class;
-         rdfs:subClassOf <length-unit> .
+    <angstrom>     a b:Class;
+         b:subClassOf <length-unit> .
     
-    <anion>     a rdfs:Class;
+    <anion>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :minCardinality "1";
@@ -130,17 +134,18 @@
                  :hasValue <negative-charge> ]
         <chemical>  ) .
     
-    <anti-codon>     a rdfs:Class;
-         rdfs:subClassOf <rna-part> .
+    <anti-codon>     a b:Class;
+         b:subClassOf <rna-part> .
     
-    <anticoagulant>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <anticoagulant>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <apoptosis-inhibitor>     a rdfs:Class;
-         rdfs:subClassOf <regulation> .
+    <apoptosis-inhibitor>     a b:Class;
+         b:subClassOf <regulation> .
     
-    <astatine>     a rdfs:Class;
+    <astatine>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -149,16 +154,15 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
     <atom-type>     a rdf:Property .
     
-    <atom>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class ];
+    <atom>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -167,19 +171,21 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
-        <chemical>  ) .
+        <chemical>  );
+         b:subClassOf  [
+             a b:Class ] .
     
     <atomic-number>     a rdf:Property .
     
-    <author-name>     a rdfs:Class;
-         rdfs:subClassOf <name> .
+    <author-name>     a b:Class;
+         b:subClassOf <name> .
     
     <author-of>     a rdf:Property .
     
-    <authored-chapter>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <authored-chapter>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <author-name>;
              :onProperty <has-author> ],
@@ -189,54 +195,56 @@
              :onProperty <part-of> ],
                 <published-material> .
     
-    <beta-sheet>     a rdfs:Class;
-         rdfs:subClassOf <protein-secondary-structure> .
+    <beta-sheet>     a b:Class;
+         b:subClassOf <protein-secondary-structure> .
     
-    <binding-site>     a rdfs:Class;
+    <binding-site>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <binding>;
                  :onProperty <target-for> ]
         <protein-part>  ) .
     
-    <binding>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <binding>     a b:Class;
+         b:subClassOf <biological-function> .
     
     <binds-loosely>     a rdf:Property;
-         rdfs:subPropertyOf <binds>;
-         :inverseOf <loosely-bound-by> .
+         :inverseOf <loosely-bound-by>;
+         b:subPropertyOf <binds> .
     
     <binds-strongly>     a rdf:Property;
-         rdfs:subPropertyOf <binds>;
-         :inverseOf <strongly-bound-by> .
+         :inverseOf <strongly-bound-by>;
+         b:subPropertyOf <binds> .
     
     <binds>     a rdf:Property;
          :inverseOf <bound-by> .
     
-    <biological-classification>     a rdfs:Class;
-         rdfs:subClassOf <mental-organisation> .
+    <biological-classification>     a b:Class;
+         b:subClassOf <mental-organisation> .
     
-    <biological-compartment>     a rdfs:Class;
-         rdfs:subClassOf <biological-space> .
+    <biological-compartment>     a b:Class;
+         b:subClassOf <biological-space> .
     
-    <biological-function>     a rdfs:Class;
-         rdfs:subClassOf <function> .
+    <biological-function>     a b:Class;
+         b:subClassOf <function> .
     
-    <biological-organisation>     a rdfs:Class;
-         rdfs:subClassOf <physical-organisation> .
+    <biological-organisation>     a b:Class;
+         b:subClassOf <physical-organisation> .
     
-    <biological-process>     a rdfs:Class;
-         rdfs:subClassOf <process> .
+    <biological-process>     a b:Class;
+         b:subClassOf <process> .
     
-    <biological-space>     a rdfs:Class;
-         rdfs:subClassOf <three-dimensional-space> .
+    <biological-space>     a b:Class;
+         b:subClassOf <three-dimensional-space> .
     
-    <biological-structure>     a rdfs:Class;
-         rdfs:subClassOf <physical-structure> .
+    <biological-structure>     a b:Class;
+         b:subClassOf <physical-structure> .
     
-    <book-title>     a rdfs:Class;
+    <book-title>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <book>;
@@ -247,8 +255,8 @@
                  :onProperty <title-of> ]
         <work-title>  ) .
     
-    <book>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <book>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <book-title>;
              :onProperty <has-book-title> ],
@@ -264,8 +272,9 @@
     
     <boundary-of>     a rdf:Property .
     
-    <bromine>     a rdfs:Class;
+    <bromine>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -274,12 +283,13 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <cadmium>     a rdfs:Class;
+    <cadmium>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -288,12 +298,13 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <calcium-binding-site>     a rdfs:Class;
+    <calcium-binding-site>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :minCardinality "1";
@@ -305,8 +316,9 @@
                  :hasValue <calcium> ]
         <binding-site>  ) .
     
-    <calcium>     a rdfs:Class;
+    <calcium>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -315,112 +327,121 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <carbohydrate>     a rdfs:Class;
-         rdfs:subClassOf <small-organic-molecular-compound> .
+    <carbohydrate>     a b:Class;
+         b:subClassOf <small-organic-molecular-compound> .
     
-    <carbon-carbon-bond-formation>     a rdfs:Class;
-         rdfs:subClassOf <ligation> .
+    <carbon-carbon-bond-formation>     a b:Class;
+         b:subClassOf <ligation> .
     
-    <carbon-carbon-bond-hydrolysis>     a rdfs:Class;
+    <carbon-carbon-bond-hydrolysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <carbon-carbon-bond>;
                  :onProperty <hydrolysis-of> ]
         <reaction>  ) .
     
-    <carbon-carbon-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <carbon-carbon-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <carbon-carbon-lysis>     a rdfs:Class;
+    <carbon-carbon-lysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <carbon-carbon-bond>;
                  :onProperty <lysis-of> ]
         <reaction>  ) .
     
-    <carbon-halide-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <carbon-halide-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <carbon-halide-lysis>     a rdfs:Class;
+    <carbon-halide-lysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <carbon-halide-bond>;
                  :onProperty <lysis-of> ]
         <reaction>  ) .
     
-    <carbon-nitrogen-bond-formation>     a rdfs:Class;
-         rdfs:subClassOf <ligation> .
+    <carbon-nitrogen-bond-formation>     a b:Class;
+         b:subClassOf <ligation> .
     
-    <carbon-nitrogen-bond-hydrolysis>     a rdfs:Class;
+    <carbon-nitrogen-bond-hydrolysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <carbon-nitrogen-bond>;
                  :onProperty <hydrolysis-of> ]
         <reaction>  ) .
     
-    <carbon-nitrogen-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <carbon-nitrogen-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <carbon-nitrogen-lysis>     a rdfs:Class;
+    <carbon-nitrogen-lysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <carbon-nitrogen-bond>;
                  :onProperty <lysis-of> ]
         <reaction>  ) .
     
-    <carbon-oxygen-bond-formation>     a rdfs:Class;
-         rdfs:subClassOf <ligation> .
+    <carbon-oxygen-bond-formation>     a b:Class;
+         b:subClassOf <ligation> .
     
-    <carbon-oxygen-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <carbon-oxygen-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <carbon-oxygen-lysis>     a rdfs:Class;
+    <carbon-oxygen-lysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <carbon-oxygen-bond>;
                  :onProperty <lysis-of> ]
         <reaction>  ) .
     
-    <carbon-phosphorus-bond-hydrolysis>     a rdfs:Class;
+    <carbon-phosphorus-bond-hydrolysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <carbon-phosphorus-bond>;
                  :onProperty <hydrolysis-of> ]
         <reaction>  ) .
     
-    <carbon-phosphorus-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <carbon-phosphorus-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <carbon-sulfur-bond-formation>     a rdfs:Class;
-         rdfs:subClassOf <ligation> .
+    <carbon-sulfur-bond-formation>     a b:Class;
+         b:subClassOf <ligation> .
     
-    <carbon-sulfur-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <carbon-sulfur-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <carbon-sulfur-lysis>     a rdfs:Class;
+    <carbon-sulfur-lysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <carbon-sulphur-bond>;
                  :onProperty <lysis-of> ]
         <reaction>  ) .
     
-    <carbon-sulphur-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <carbon-sulphur-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <carbon>     a rdfs:Class;
+    <carbon>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -429,23 +450,24 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <carboxyl>     a rdfs:Class;
-         rdfs:subClassOf <ligand> .
+    <carboxyl>     a b:Class;
+         b:subClassOf <ligand> .
     
-    <carboxylation-site>     a rdfs:Class;
-         rdfs:subClassOf <modification-site> .
+    <carboxylation-site>     a b:Class;
+         b:subClassOf <modification-site> .
     
     <catalysed-by>     a rdf:Property .
     
     <catalyses>     a rdf:Property;
          :inverseOf <catalysed-by> .
     
-    <cation>     a rdfs:Class;
+    <cation>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :minCardinality "1";
@@ -462,28 +484,30 @@
                  :hasValue <positive-charge> ]
         <chemical>  ) .
     
-    <cell-adhesion>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <cell-adhesion>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <cell-cycle-regulator>     a rdfs:Class;
-         rdfs:subClassOf <regulation> .
+    <cell-cycle-regulator>     a b:Class;
+         b:subClassOf <regulation> .
     
-    <cell-membrane>     a rdfs:Class;
-         rdfs:subClassOf <membrane> .
+    <cell-membrane>     a b:Class;
+         b:subClassOf <membrane> .
     
-    <cell>     a rdfs:Class;
-         rdfs:subClassOf <biological-structure> .
+    <cell>     a b:Class;
+         b:subClassOf <biological-structure> .
     
-    <cellular-part>     a rdfs:Class;
+    <cellular-part>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <cell>;
                  :onProperty <part-of> ]
         <biological-structure>  ) .
     
-    <cesium>     a rdfs:Class;
+    <cesium>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -492,21 +516,21 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <chaperone>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <chaperone>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <chemical-bond>     a rdfs:Class;
-         rdfs:subClassOf <chemical-structure> .
+    <chemical-bond>     a b:Class;
+         b:subClassOf <chemical-structure> .
     
-    <chemical-part>     a rdfs:Class;
-         rdfs:subClassOf <chemical> .
+    <chemical-part>     a b:Class;
+         b:subClassOf <chemical> .
     
-    <chemical-structure>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <chemical-structure>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <chemical>;
              :onProperty <structure-of> ],
@@ -516,11 +540,12 @@
              :onProperty <structure-of> ],
                 <physical-structure> .
     
-    <chemical>     a rdfs:Class;
-         rdfs:subClassOf <physical-substance> .
+    <chemical>     a b:Class;
+         b:subClassOf <physical-substance> .
     
-    <chlorine>     a rdfs:Class;
+    <chlorine>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -529,12 +554,13 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <chloroplast-chromosome>     a rdfs:Class;
+    <chloroplast-chromosome>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <chloroplast>;
@@ -545,8 +571,10 @@
                  :onProperty <part-of> ]
         <chromosome>  ) .
     
-    <chloroplast-compartment>     a rdfs:Class;
+    <chloroplast-compartment>     a b:Class;
          :intersectionOf  (
+        
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -556,11 +584,11 @@
                  a :Restriction;
                  :toClass <chloroplast-membrane>;
                  :onProperty <has-boundary> ]
-        <cellular-part> 
-        <biological-compartment>  ) .
+        <cellular-part> <biological-compartment>  ) .
     
-    <chloroplast-dna>     a rdfs:Class;
+    <chloroplast-dna>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <deoxy-nucleotide>;
@@ -573,6 +601,7 @@
                  a :Restriction;
                  :hasValue <double-stranded>;
                  :onProperty <strandedness> ]
+        
          [
                  a :Restriction;
                  :toClass <chloroplast-chromosome>;
@@ -581,14 +610,13 @@
                  a :Restriction;
                  :cardinality "1";
                  :hasValue :Thing;
-                 :onProperty <part-of> ]
-        <macromolecular-compound>  ) .
+                 :onProperty <part-of> ]<macromolecular-compound>  ) .
     
-    <chloroplast-membrane>     a rdfs:Class;
-         rdfs:subClassOf <membrane> .
+    <chloroplast-membrane>     a b:Class;
+         b:subClassOf <membrane> .
     
-    <chloroplast>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <chloroplast>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <cytosol>;
              :onProperty <part-of> ],
@@ -602,11 +630,11 @@
              :onProperty <has-classification> ],
                 <organelle> .
     
-    <chromosome>     a rdfs:Class;
-         rdfs:subClassOf <dna-organisation> .
+    <chromosome>     a b:Class;
+         b:subClassOf <dna-organisation> .
     
-    <cis-trans-isomerisation>     a rdfs:Class;
-         rdfs:subClassOf <isomerisation> .
+    <cis-trans-isomerisation>     a b:Class;
+         b:subClassOf <isomerisation> .
     
     <cited-in>     a rdf:Property;
          :inverseOf <cites> .
@@ -615,8 +643,8 @@
     
     <classification-of>     a rdf:Property .
     
-    <cleavage-site>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <cleavage-site>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <peptide-bond-hydrolysis>;
              :onProperty <target-for> ],
@@ -626,8 +654,8 @@
              :onProperty <target-for> ],
                 <site> .
     
-    <cleaved-peptide>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <cleaved-peptide>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :cardinality "1";
              :hasValue :Thing;
@@ -638,8 +666,9 @@
              :toClass <protein> ],
                 <peptide> .
     
-    <cobalt>     a rdfs:Class;
+    <cobalt>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -648,7 +677,7 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
@@ -657,11 +686,12 @@
     <codes-for>     a rdf:Property;
          :inverseOf <coded-by> .
     
-    <coenzyme-a>     a rdfs:Class;
-         rdfs:subClassOf <coenzyme> .
+    <coenzyme-a>     a b:Class;
+         b:subClassOf <coenzyme> .
     
-    <coenzyme-requiring-enzyme>     a rdfs:Class;
+    <coenzyme-requiring-enzyme>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <amino-acid>;
@@ -689,8 +719,9 @@
                  :onProperty <has-ec-number> ]
         <macromolecular-compound>  ) .
     
-    <coenzyme-requiring-holoenzyme>     a rdfs:Class;
+    <coenzyme-requiring-holoenzyme>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <amino-acid>;
@@ -727,8 +758,9 @@
                  :onProperty <has-ec-number> ]
         <macromolecular-compound>  ) .
     
-    <coenzyme>     a rdfs:Class;
+    <coenzyme>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <binds-loosely>;
@@ -739,20 +771,23 @@
                  :toClass <enzyme> ]
         <cofactor>  ) .
     
-    <cofactor>     a rdfs:Class;
+    <cofactor>     a b:Class;
          :intersectionOf  (
          [
-                 a rdfs:Class;
+                 a b:Class;
                  :intersectionOf  (
+                
                  [
-                         a rdfs:Class;
+                         a b:Class;
                          :unionOf  (
-                        <small-organic-molecular-compound> 
-                        <metal-ion>  ) ]
-                <reaction-participant>  ) ] ) .
+                        
+                        
+                        <small-organic-molecular-compound> <metal-ion>  ) ]
+                <reaction-participant>  ) ]
+         ) .
     
-    <collection-book>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <collection-book>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <editor-name>;
              :onProperty <has-editor> ],
@@ -767,8 +802,10 @@
              :onProperty <has-part> ],
                 <published-material> .
     
-    <complement-dna>     a rdfs:Class;
+    <complement-dna>     a b:Class;
+         :equivalentTo <expressed-sequence-tag>;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <deoxy-nucleotide>;
@@ -789,10 +826,11 @@
          [
                  a :Restriction;
                  :toClass  [
-                     a rdfs:Class;
+                     a b:Class;
                      :unionOf  (
+                    
                      [
-                             a rdfs:Class;
+                             a b:Class;
                              :intersectionOf  (
                              [
                                      a :Restriction;
@@ -802,23 +840,24 @@
                              [
                                      a :Restriction;
                                      :toClass <messenger-rna>;
-                                     :onProperty <part-of> ] ) ]
+                                     :onProperty <part-of> ]
+                             ) ]
                     <messenger-rna>  ) ];
                  :onProperty <reverse-transcribed-from> ]
-        <macromolecular-compound>  );
-         :equivalentTo <expressed-sequence-tag> .
+        <macromolecular-compound>  ) .
     
-    <compound>     a rdfs:Class;
+    <compound>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <number-of-atoms> ]
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atom-type> ]
         <chemical>  ) .
     
@@ -827,12 +866,13 @@
     <contains>     a rdf:Property;
          :inverseOf <contained-in> .
     
-    <copper-divalent-cation>     a rdfs:Class;
+    <copper-divalent-cation>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
          [
                  a :Restriction;
@@ -849,8 +889,9 @@
                  :hasValue <positive-charge> ]
         <chemical>  ) .
     
-    <copper>     a rdfs:Class;
+    <copper>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -859,18 +900,19 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <covalent-bond>     a rdfs:Class;
-         rdfs:subClassOf <chemical-bond> .
+    <covalent-bond>     a b:Class;
+         b:subClassOf <chemical-bond> .
     
-    <cytoskeletal-regulator>     a rdfs:Class;
-         rdfs:subClassOf <regulation> .
+    <cytoskeletal-regulator>     a b:Class;
+         b:subClassOf <regulation> .
     
-    <cytosol-part>     a rdfs:Class;
+    <cytosol-part>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <cytosol>;
@@ -881,8 +923,10 @@
                  :onProperty <part-of> ]
         <biological-structure>  ) .
     
-    <cytosol>     a rdfs:Class;
+    <cytosol>     a b:Class;
          :intersectionOf  (
+        
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -892,26 +936,26 @@
                  a :Restriction;
                  :toClass <cell-membrane>;
                  :onProperty <has-boundary> ]
-        <cellular-part> 
-        <biological-compartment>  ) .
+        <cellular-part> <biological-compartment>  ) .
     
-    <dalton>     a rdfs:Class;
-         rdfs:subClassOf <weight-unit> .
+    <dalton>     a b:Class;
+         b:subClassOf <weight-unit> .
     
-    <defenseimmunity-protein>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <defenseimmunity-protein>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <dehydrogenation>     a rdfs:Class;
-         rdfs:subClassOf <oxidation-and-reduction> .
+    <dehydrogenation>     a b:Class;
+         b:subClassOf <oxidation-and-reduction> .
     
-    <deoxy-nucleotide>     a rdfs:Class;
-         rdfs:subClassOf <nucleotide> .
+    <deoxy-nucleotide>     a b:Class;
+         b:subClassOf <nucleotide> .
     
-    <disulphide-bridge>     a rdfs:Class;
-         rdfs:subClassOf <sulphur-sulphur-bond> .
+    <disulphide-bridge>     a b:Class;
+         b:subClassOf <sulphur-sulphur-bond> .
     
-    <divalent-anion>     a rdfs:Class;
+    <divalent-anion>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "2";
@@ -923,8 +967,9 @@
                  :hasValue <negative-charge> ]
         <chemical>  ) .
     
-    <divalent-cation>     a rdfs:Class;
+    <divalent-cation>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "2";
@@ -936,24 +981,26 @@
                  :hasValue <positive-charge> ]
         <chemical>  ) .
     
-    <dna-binding-site>     a rdfs:Class;
+    <dna-binding-site>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <binds>;
                  :hasValue <dna> ]
         <binding-site>  ) .
     
-    <dna-organisation>     a rdfs:Class;
-         rdfs:subClassOf <biological-organisation> .
+    <dna-organisation>     a b:Class;
+         b:subClassOf <biological-organisation> .
     
-    <dna-part>     a rdfs:Class;
+    <dna-part>     a b:Class;
          :intersectionOf  (
          [
-                 a rdfs:Class;
+                 a b:Class;
                  :intersectionOf  (
+                
                  [
-                         a rdfs:Class;
+                         a b:Class;
                          :intersectionOf  (
                          [
                                  a :Restriction;
@@ -962,17 +1009,20 @@
                          [
                                  a :Restriction;
                                  :toClass <dna>;
-                                 :onProperty <part-of> ] ) ]
-                <macromolecule-part>  ) ] ) .
+                                 :onProperty <part-of> ]
+                         ) ]
+                <macromolecule-part>  ) ]
+         ) .
     
-    <dna-site>     a rdfs:Class;
-         rdfs:subClassOf <dna-part> .
+    <dna-site>     a b:Class;
+         b:subClassOf <dna-part> .
     
-    <dna-structure>     a rdfs:Class;
-         rdfs:subClassOf <biological-structure> .
+    <dna-structure>     a b:Class;
+         b:subClassOf <biological-structure> .
     
-    <dna>     a rdfs:Class;
+    <dna>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <deoxy-nucleotide>;
@@ -987,8 +1037,9 @@
                  :hasValue <strandedness-selector> ]
         <macromolecular-compound>  ) .
     
-    <double-stranded-dna>     a rdfs:Class;
+    <double-stranded-dna>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <deoxy-nucleotide>;
@@ -1003,46 +1054,49 @@
                  :onProperty <strandedness> ]
         <macromolecular-compound>  ) .
     
-    <double-stranded>     a rdfs:Class;
-         rdfs:subClassOf <strandedness-selector> .
+    <double-stranded>     a b:Class;
+         b:subClassOf <strandedness-selector> .
     
     <ec-number-of>     a rdf:Property .
     
-    <ec-number>     a rdfs:Class;
-         rdfs:subClassOf <label> .
+    <ec-number>     a b:Class;
+         b:subClassOf <label> .
     
-    <editor-name>     a rdfs:Class;
-         rdfs:subClassOf <name> .
+    <editor-name>     a b:Class;
+         b:subClassOf <name> .
     
     <editor-of>     a rdf:Property .
     
-    <electrical-charge>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class ],
+    <electrical-charge>     a b:Class;
+         b:subClassOf  [
+             a b:Class ],
                 <physicochemical-property> .
     
-    <electrostatic-bond>     a rdfs:Class;
-         rdfs:subClassOf <chemical-bond> .
+    <electrostatic-bond>     a b:Class;
+         b:subClassOf <chemical-bond> .
     
-    <element>     a rdfs:Class;
+    <element>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atom-type> ]
         <chemical>  ) .
     
-    <elemental-molecule>     a rdfs:Class;
+    <elemental-molecule>     a b:Class;
          :intersectionOf  (
          [
-                 a rdfs:Class;
+                 a b:Class;
                  :intersectionOf  (
-                <molecule> 
-                <element>  ) ] ) .
+                
+                
+                <molecule> <element>  ) ]
+         ) .
     
-    <endoplasmic-reticulum>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <endoplasmic-reticulum>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <cytosol>;
              :onProperty <part-of> ],
@@ -1050,48 +1104,21 @@
     
     <entry-id-of>     a rdf:Property .
     
-    <entry-identifier>     a rdfs:Class;
-         rdfs:subClassOf <label> .
+    <entry-identifier>     a b:Class;
+         b:subClassOf <label> .
     
-    <enzyme-activator>     a rdfs:Class;
-         rdfs:subClassOf <regulation> .
+    <enzyme-activator>     a b:Class;
+         b:subClassOf <regulation> .
     
-    <enzyme-function>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <enzyme-function>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <enzyme-inhibitor>     a rdfs:Class;
-         rdfs:subClassOf <regulation> .
+    <enzyme-inhibitor>     a b:Class;
+         b:subClassOf <regulation> .
     
-    <enzyme>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class;
-             :unionOf  (
-             [
-                     a rdfs:Class;
-                     :intersectionOf  (
-                     [
-                             a :Restriction;
-                             :hasValue <chemical>;
-                             :onProperty <has-substrate> ]
-                     [
-                             a :Restriction;
-                             :toClass <chemical>;
-                             :onProperty <has-substrate> ] ) ] ) ],
-                 [
-             a rdfs:Class;
-             :unionOf  (
-             [
-                     a rdfs:Class;
-                     :intersectionOf  (
-                     [
-                             a :Restriction;
-                             :hasValue <chemical>;
-                             :onProperty <has-product> ]
-                     [
-                             a :Restriction;
-                             :toClass <chemical>;
-                             :onProperty <has-product> ] ) ] ) ];
+    <enzyme>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <amino-acid>;
@@ -1108,55 +1135,76 @@
                  a :Restriction;
                  :hasValue <ec-number>;
                  :onProperty <has-ec-number> ]
-        <macromolecular-compound>  ) .
+        <macromolecular-compound>  );
+         b:subClassOf  [
+             a b:Class;
+             :unionOf  (
+             [
+                     a b:Class;
+                     :intersectionOf  (
+                     [
+                             a :Restriction;
+                             :hasValue <chemical>;
+                             :onProperty <has-substrate> ]
+                     [
+                             a :Restriction;
+                             :toClass <chemical>;
+                             :onProperty <has-substrate> ]
+                     ) ]
+             ) ],
+                 [
+             a b:Class;
+             :unionOf  (
+             [
+                     a b:Class;
+                     :intersectionOf  (
+                     [
+                             a :Restriction;
+                             :hasValue <chemical>;
+                             :onProperty <has-product> ]
+                     [
+                             a :Restriction;
+                             :toClass <chemical>;
+                             :onProperty <has-product> ]
+                     ) ]
+             ) ] .
     
-    <epimerisation>     a rdfs:Class;
-         rdfs:subClassOf <isomerisation> .
+    <epimerisation>     a b:Class;
+         b:subClassOf <isomerisation> .
     
-    <ester-bond-hydrolysis>     a rdfs:Class;
+    <ester-bond-hydrolysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <ester-bond>;
                  :onProperty <hydrolysis-of> ]
         <reaction>  ) .
     
-    <ester-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <ester-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <ether-bond-hydrolysis>     a rdfs:Class;
+    <ether-bond-hydrolysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <ether-bond>;
                  :onProperty <hydrolysis-of> ]
         <reaction>  ) .
     
-    <ether-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <ether-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <ethyl>     a rdfs:Class;
-         rdfs:subClassOf <ligand> .
+    <ethyl>     a b:Class;
+         b:subClassOf <ligand> .
     
-    <eukaryote>     a rdfs:Class;
-         rdfs:subClassOf <organism-classification> .
+    <eukaryote>     a b:Class;
+         b:subClassOf <organism-classification> .
     
-    <exon>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class;
-             :unionOf  (
-             [
-                     a rdfs:Class;
-                     :intersectionOf  (
-                     [
-                             a :Restriction;
-                             :hasValue <eukaryote>;
-                             :onProperty <organism-classification-of> ]
-                     [
-                             a :Restriction;
-                             :toClass <eukaryote>;
-                             :onProperty <organism-classification-of> ] ) ] ) ];
+    <exon>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <gene>;
@@ -1181,33 +1229,52 @@
                  a :Restriction;
                  :toClass <rna>;
                  :onProperty <transcribed-to> ]
-        <dna-part>  ) .
+        <dna-part>  );
+         b:subClassOf  [
+             a b:Class;
+             :unionOf  (
+             [
+                     a b:Class;
+                     :intersectionOf  (
+                     [
+                             a :Restriction;
+                             :hasValue <eukaryote>;
+                             :onProperty <organism-classification-of> ]
+                     [
+                             a :Restriction;
+                             :toClass <eukaryote>;
+                             :onProperty <organism-classification-of> ]
+                     ) ]
+             ) ] .
     
     <expressed-by>     a rdf:Property .
     
-    <expressed-sequence-tag>     a rdfs:Class;
-         :intersectionOf () .
+    <expressed-sequence-tag>     a b:Class;
+         :intersectionOf  (
+         ) .
     
     <expresses>     a rdf:Property;
-         rdfs:range  [
-             a rdfs:Class;
-             :unionOf  (
-            <rna> 
-            <protein>  ) ];
          :inverseOf <expressed-by>;
-         rdfs:domain <gene> .
+         b:domain <gene>;
+         b:range  [
+             a b:Class;
+             :unionOf  (
+            
+            
+            <rna> <protein>  ) ] .
     
-    <extra-cellular-space>     a rdfs:Class;
-         rdfs:subClassOf <biological-space> .
+    <extra-cellular-space>     a b:Class;
+         b:subClassOf <biological-space> .
     
-    <fad>     a rdfs:Class;
-         rdfs:subClassOf <prosthetic-group> .
+    <fad>     a b:Class;
+         b:subClassOf <prosthetic-group> .
     
-    <farnesyl-attachment-site>     a rdfs:Class;
-         rdfs:subClassOf <lipid-attachment-site> .
+    <farnesyl-attachment-site>     a b:Class;
+         b:subClassOf <lipid-attachment-site> .
     
-    <flourine>     a rdfs:Class;
+    <flourine>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -1216,15 +1283,16 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <formylation-site>     a rdfs:Class;
-         rdfs:subClassOf <modification-site> .
+    <formylation-site>     a b:Class;
+         b:subClassOf <modification-site> .
     
-    <francium>     a rdfs:Class;
+    <francium>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -1233,7 +1301,7 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
@@ -1241,11 +1309,12 @@
     
     <function-of>     a rdf:Property .
     
-    <function>     a rdfs:Class;
-         rdfs:subClassOf :Thing .
+    <function>     a b:Class;
+         b:subClassOf :Thing .
     
-    <gene-name>     a rdfs:Class;
+    <gene-name>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <gene>;
@@ -1256,8 +1325,9 @@
                  :onProperty <name-of> ]
         <name>  ) .
     
-    <gene-part>     a rdfs:Class;
+    <gene-part>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <gene>;
@@ -1268,12 +1338,13 @@
                  :onProperty <part-of> ]
         <dna-part>  ) .
     
-    <gene-product>     a rdfs:Class;
+    <gene-product>     a b:Class;
          :equivalentTo <protein>,
                 <rna> .
     
-    <gene-promoter>     a rdfs:Class;
+    <gene-promoter>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <gene>;
@@ -1288,29 +1359,33 @@
                  :hasValue <transcription> ]
         <dna-part>  ) .
     
-    <gene>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class;
+    <gene>     a b:Class;
+         b:subClassOf  [
+             a b:Class;
              :intersectionOf  (
+            
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :intersectionOf  (
                      [
                              a :Restriction;
                              :hasValue  [
-                                 a rdfs:Class;
+                                 a b:Class;
                                  :unionOf  (
-                                <plasmid> 
-                                <chromosome>  ) ];
+                                
+                                
+                                <plasmid> <chromosome>  ) ];
                              :onProperty <part-of> ]
                      [
                              a :Restriction;
                              :toClass  [
-                                 a rdfs:Class;
+                                 a b:Class;
                                  :unionOf  (
-                                <plasmid> 
-                                <chromosome>  ) ];
-                             :onProperty <part-of> ] ) ]
+                                
+                                
+                                <plasmid> <chromosome>  ) ];
+                             :onProperty <part-of> ]
+                     ) ]
             <dna-part>  ) ],
                  [
              a :Restriction;
@@ -1320,10 +1395,11 @@
                  [
              a :Restriction;
              :toClass  [
-                 a rdfs:Class;
+                 a b:Class;
                  :unionOf  (
+                
                  [
-                         a rdfs:Class;
+                         a b:Class;
                          :intersectionOf  (
                          [
                                  a :Restriction;
@@ -1333,12 +1409,14 @@
                          [
                                  a :Restriction;
                                  :toClass <gene-name>;
-                                 :onProperty <part-of> ] ) ]
+                                 :onProperty <part-of> ]
+                         ) ]
                 <gene-name>  ) ];
              :onProperty <has-name> ] .
     
-    <genome-part>     a rdfs:Class;
+    <genome-part>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -1347,15 +1425,17 @@
          [
                  a :Restriction;
                  :toClass  [
-                     a rdfs:Class;
+                     a b:Class;
                      :unionOf  (
-                    <chromosome> 
-                    <plasmid>  ) ];
+                    
+                    
+                    <chromosome> <plasmid>  ) ];
                  :onProperty <part-of> ]
         <dna-part>  ) .
     
-    <genomic-dna>     a rdfs:Class;
+    <genomic-dna>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <deoxy-nucleotide>;
@@ -1376,57 +1456,61 @@
          [
                  a :Restriction;
                  :toClass  [
-                     a rdfs:Class;
+                     a b:Class;
                      :unionOf  (
-                    <chloroplast-chromosome> 
-                    <mitochondrial-chromosome> 
-                    <nuclear-chromosome>  ) ];
+                    
+                    
+                    
+                    <chloroplast-chromosome> <mitochondrial-chromosome> <nuclear-chromosome>  ) ];
                  :onProperty <part-of> ]
         <macromolecular-compound>  ) .
     
-    <geranyl-geranyl-attachment-site>     a rdfs:Class;
-         rdfs:subClassOf <lipid-attachment-site> .
+    <geranyl-geranyl-attachment-site>     a b:Class;
+         b:subClassOf <lipid-attachment-site> .
     
-    <glucosyl-transfer>     a rdfs:Class;
-         rdfs:subClassOf <inter-molecule-transfer> .
+    <glucosyl-transfer>     a b:Class;
+         b:subClassOf <inter-molecule-transfer> .
     
-    <glycosaminoglycan-substitution-site>     a rdfs:Class;
-         rdfs:subClassOf <modification-site> .
+    <glycosaminoglycan-substitution-site>     a b:Class;
+         b:subClassOf <modification-site> .
     
-    <glycosylation-site>     a rdfs:Class;
+    <glycosylation-site>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <glucosyl-transfer>;
                  :onProperty <target-for> ]
         <modification-site>  ) .
     
-    <golgi-apparatus>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <golgi-apparatus>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <cytosol>;
              :onProperty <part-of> ],
                 <organelle> .
     
-    <gpi-anchor-attachment-site>     a rdfs:Class;
-         rdfs:subClassOf <lipid-attachment-site> .
+    <gpi-anchor-attachment-site>     a b:Class;
+         b:subClassOf <lipid-attachment-site> .
     
-    <haem>     a rdfs:Class;
-         rdfs:subClassOf <prosthetic-group> .
+    <haem>     a b:Class;
+         b:subClassOf <prosthetic-group> .
     
-    <halide-bond-hydrolysis>     a rdfs:Class;
+    <halide-bond-hydrolysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <halide-bond>;
                  :onProperty <hydrolysis-of> ]
         <reaction>  ) .
     
-    <halide-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <halide-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <halogen>     a rdfs:Class;
+    <halogen>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -1435,20 +1519,20 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
     <has-accession-number>     a rdf:Property;
          :inverseOf <accession-number-of>;
-         rdfs:subPropertyOf <has-label> .
+         b:subPropertyOf <has-label> .
     
     <has-author>     a rdf:Property;
          :inverseOf <author-of>;
-         rdfs:subPropertyOf <has-name> .
+         b:subPropertyOf <has-name> .
     
     <has-bond>     a rdf:Property;
-         rdfs:range <chemical-bond> .
+         b:range <chemical-bond> .
     
     <has-book-title>     a rdf:Property .
     
@@ -1459,23 +1543,23 @@
          :inverseOf <boundary-of> .
     
     <has-charge>     a rdf:Property;
-         rdfs:range <electrical-charge>;
-         rdfs:domain <ion> .
+         b:domain <ion>;
+         b:range <electrical-charge> .
     
     <has-classification>     a rdf:Property;
          :inverseOf <classification-of> .
     
     <has-ec-number>     a rdf:Property;
          :inverseOf <ec-number-of>;
-         rdfs:subPropertyOf <has-label> .
+         b:subPropertyOf <has-label> .
     
     <has-editor>     a rdf:Property;
          :inverseOf <editor-of>;
-         rdfs:subPropertyOf <has-name> .
+         b:subPropertyOf <has-name> .
     
     <has-entry-id>     a rdf:Property;
          :inverseOf <entry-id-of>;
-         rdfs:subPropertyOf <has-label> .
+         b:subPropertyOf <has-label> .
     
     <has-function>     a rdf:Property;
          :inverseOf <function-of> .
@@ -1495,21 +1579,22 @@
          :inverseOf <match-level-of> .
     
     <has-metal-class>     a rdf:Property;
-         rdfs:range  [
-             a rdfs:Class;
+         :inverseOf <metal-class-of>;
+         b:domain <atom>;
+         b:range  [
+             a b:Class;
              :unionOf  (
-            <metalloid> 
-            <nonmetal> 
-            <metal>  ) ];
-         rdfs:domain <atom>;
-         :inverseOf <metal-class-of> .
+            
+            
+            
+            <metalloid> <nonmetal> <metal>  ) ] .
     
     <has-molecular-weight>     a rdf:Property;
          :inverseOf <molecular-weight-of> .
     
     <has-name>     a rdf:Property;
-         rdfs:subPropertyOf <has-label>;
-         :inverseOf <name-of> .
+         :inverseOf <name-of>;
+         b:subPropertyOf <has-label> .
     
     <has-organism-classification>     a rdf:Property .
     
@@ -1517,8 +1602,8 @@
          :inverseOf <part-of> .
     
     <has-polarity>     a rdf:Property;
-         rdfs:domain <electrical-charge>;
-         rdfs:range <polarity> .
+         b:domain <electrical-charge>;
+         b:range <polarity> .
     
     <has-product>     a rdf:Property .
     
@@ -1544,8 +1629,9 @@
     
     <has-unit>     a rdf:Property .
     
-    <holoenzyme>     a rdfs:Class;
+    <holoenzyme>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <amino-acid>;
@@ -1573,8 +1659,9 @@
                  :onProperty <has-ec-number> ]
         <macromolecular-compound>  ) .
     
-    <holoprotein>     a rdfs:Class;
+    <holoprotein>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <amino-acid>;
@@ -1596,11 +1683,12 @@
     
     <homologous-to>     a rdf:Property .
     
-    <hydrogen-bond>     a rdfs:Class;
-         rdfs:subClassOf <chemical-bond> .
+    <hydrogen-bond>     a b:Class;
+         b:subClassOf <chemical-bond> .
     
-    <hydrolase>     a rdfs:Class;
+    <hydrolase>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <amino-acid>;
@@ -1623,32 +1711,33 @@
     
     <hydrolysis-of>     a rdf:Property;
          :inverseOf <hydrolysed-by>;
-         rdfs:subPropertyOf <lysis-of> .
+         b:subPropertyOf <lysis-of> .
     
-    <hydrolysis>     a rdfs:Class;
+    <hydrolysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <covalent-bond>;
                  :onProperty <hydrolysis-of> ]
         <reaction>  ) .
     
-    <hydrophilic>     a rdfs:Class;
-         rdfs:subClassOf <hydrophobicity-property> .
+    <hydrophilic>     a b:Class;
+         b:subClassOf <hydrophobicity-property> .
     
-    <hydrophobic>     a rdfs:Class;
-         rdfs:subClassOf <hydrophobicity-property> .
+    <hydrophobic>     a b:Class;
+         b:subClassOf <hydrophobicity-property> .
     
-    <hydrophobicity-property>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class ],
+    <hydrophobicity-property>     a b:Class;
+         b:subClassOf  [
+             a b:Class ],
                 <physicochemical-property> .
     
-    <hydroxyl>     a rdfs:Class;
-         rdfs:subClassOf <ligand> .
+    <hydroxyl>     a b:Class;
+         b:subClassOf <ligand> .
     
-    <hydroxylation-site>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <hydroxylation-site>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <oxidation-and-reduction>;
              :onProperty <target-for> ],
@@ -1658,8 +1747,8 @@
              :onProperty <target-for> ],
                 <modification-site> .
     
-    <identity>     a rdfs:Class;
-         rdfs:subClassOf <match-type> .
+    <identity>     a b:Class;
+         b:subClassOf <match-type> .
     
     <indicates-function>     a rdf:Property;
          :inverseOf <function-indicated> .
@@ -1669,50 +1758,38 @@
     <initiates>     a rdf:Property;
          :inverseOf <initiated-by> .
     
-    <inorganic-molecular-compound>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class;
+    <inorganic-molecular-compound>     a b:Class;
+         b:subClassOf  [
+             a b:Class;
              :intersectionOf  (
+            
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :complementOf <organic-molecular-compound> ]
             <chemical>  ) ],
                  [
              a :Restriction;
              :hasValue  [
-                 a rdfs:Class ];
+                 a b:Class ];
              :onProperty <atom-type> ],
                  [
              a :Restriction;
              :hasValue  [
-                 a rdfs:Class ];
+                 a b:Class ];
              :onProperty <number-of-atoms> ] .
     
-    <institution>     a rdfs:Class;
-         rdfs:subClassOf <mental-structure> .
+    <institution>     a b:Class;
+         b:subClassOf <mental-structure> .
     
-    <inter-molecule-transfer>     a rdfs:Class;
-         rdfs:subClassOf <reaction> .
+    <inter-molecule-transfer>     a b:Class;
+         b:subClassOf <reaction> .
     
-    <intra-molecular-transfer>     a rdfs:Class;
-         rdfs:subClassOf <isomerisation> .
+    <intra-molecular-transfer>     a b:Class;
+         b:subClassOf <isomerisation> .
     
-    <intron>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class;
-             :unionOf  (
-             [
-                     a rdfs:Class;
-                     :intersectionOf  (
-                     [
-                             a :Restriction;
-                             :hasValue <eukaryote>;
-                             :onProperty <organism-classification-of> ]
-                     [
-                             a :Restriction;
-                             :toClass <eukaryote>;
-                             :onProperty <organism-classification-of> ] ) ] ) ];
+    <intron>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <gene>;
@@ -1724,9 +1801,9 @@
          [
                  a :Restriction;
                  :toClass  [
-                     a rdfs:Class;
+                     a b:Class;
                      :complementOf  [
-                         a rdfs:Class;
+                         a b:Class;
                          :intersectionOf  (
                          [
                                  a :Restriction;
@@ -1735,7 +1812,8 @@
                          [
                                  a :Restriction;
                                  :onProperty <codes-for>;
-                                 :toClass <gene-product> ] ) ] ];
+                                 :toClass <gene-product> ]
+                         ) ] ];
                  :onProperty <part-of> ]
          [
                  a :Restriction;
@@ -1745,10 +1823,27 @@
                  a :Restriction;
                  :toClass <rna>;
                  :onProperty <transcribed-to> ]
-        <dna-part>  ) .
+        <dna-part>  );
+         b:subClassOf  [
+             a b:Class;
+             :unionOf  (
+             [
+                     a b:Class;
+                     :intersectionOf  (
+                     [
+                             a :Restriction;
+                             :hasValue <eukaryote>;
+                             :onProperty <organism-classification-of> ]
+                     [
+                             a :Restriction;
+                             :toClass <eukaryote>;
+                             :onProperty <organism-classification-of> ]
+                     ) ]
+             ) ] .
     
-    <iodine>     a rdfs:Class;
+    <iodine>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -1757,12 +1852,13 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <ion>     a rdfs:Class;
+    <ion>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :minCardinality "1";
@@ -1774,32 +1870,37 @@
                  :onProperty <has-charge> ]
         <chemical>  ) .
     
-    <ionic-compound>     a rdfs:Class;
+    <ionic-compound>     a b:Class;
          :intersectionOf  (
          [
-                 a rdfs:Class;
+                 a b:Class;
                  :intersectionOf  (
-                <compound> 
-                <ion>  ) ]
+                
+                
+                <compound> <ion>  ) ]
          [
                  a :Restriction;
                  :hasValue <electrostatic-bond>;
-                 :onProperty <has-bond> ] ) .
+                 :onProperty <has-bond> ]
+         ) .
     
-    <ionic-molecule>     a rdfs:Class;
+    <ionic-molecule>     a b:Class;
          :intersectionOf  (
          [
-                 a rdfs:Class;
+                 a b:Class;
                  :intersectionOf  (
-                <molecule> 
-                <ion>  ) ] ) .
+                
+                
+                <molecule> <ion>  ) ]
+         ) .
     
-    <iron-divalent-cation>     a rdfs:Class;
+    <iron-divalent-cation>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
          [
                  a :Restriction;
@@ -1816,8 +1917,9 @@
                  :hasValue <positive-charge> ]
         <chemical>  ) .
     
-    <iron>     a rdfs:Class;
+    <iron>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -1826,24 +1928,25 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
     <is-publication-year-of>     a rdf:Property .
     
-    <isomerisation>     a rdfs:Class;
-         rdfs:subClassOf <reaction> .
+    <isomerisation>     a b:Class;
+         b:subClassOf <reaction> .
     
-    <journal-article>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <journal-article>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :onProperty <has-journal-name>;
              :hasValue <journal-name> ],
                 <published-material> .
     
-    <journal-name>     a rdfs:Class;
+    <journal-name>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <journal>;
@@ -1854,46 +1957,47 @@
                  :onProperty <name-of> ]
         <name>  ) .
     
-    <journal>     a rdfs:Class;
-         rdfs:subClassOf <published-material> .
+    <journal>     a b:Class;
+         b:subClassOf <published-material> .
     
     <label-of>     a rdf:Property .
     
-    <label>     a rdfs:Class;
-         rdfs:subClassOf <mental-structure> .
+    <label>     a b:Class;
+         b:subClassOf <mental-structure> .
     
     <length-of>     a rdf:Property .
     
-    <length-unit>     a rdfs:Class;
-         rdfs:subClassOf <unit> .
+    <length-unit>     a b:Class;
+         b:subClassOf <unit> .
     
-    <length>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <length>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue  [
-                 a rdfs:Class;
+                 a b:Class;
                  :unionOf  (
-                <angstrom> 
-                <residue-number>  ) ];
+                
+                
+                <angstrom> <residue-number>  ) ];
              :onProperty <has-unit> ],
                 <physicochemical-property> .
     
-    <ligand-binding-or-carrier>     a rdfs:Class;
-         rdfs:subClassOf <binding> .
+    <ligand-binding-or-carrier>     a b:Class;
+         b:subClassOf <binding> .
     
-    <ligand-function>     a rdfs:Class;
-         rdfs:subClassOf <signal-transduction> .
+    <ligand-function>     a b:Class;
+         b:subClassOf <signal-transduction> .
     
-    <ligand>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <ligand>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :toClass  [
-                 a rdfs:Class ];
+                 a b:Class ];
              :onProperty <number-of-atoms> ],
                  [
              a :Restriction;
              :hasValue  [
-                 a rdfs:Class ];
+                 a b:Class ];
              :onProperty <atom-type> ],
                  [
              a :Restriction;
@@ -1906,20 +2010,21 @@
              :onProperty <has-bond> ],
                 <chemical-part> .
     
-    <ligation>     a rdfs:Class;
-         rdfs:subClassOf <reaction> .
+    <ligation>     a b:Class;
+         b:subClassOf <reaction> .
     
-    <lipid-attachment-site>     a rdfs:Class;
-         rdfs:subClassOf <modification-site> .
+    <lipid-attachment-site>     a b:Class;
+         b:subClassOf <modification-site> .
     
-    <lipid-group>     a rdfs:Class;
-         rdfs:subClassOf <ligand> .
+    <lipid-group>     a b:Class;
+         b:subClassOf <ligand> .
     
-    <lipid>     a rdfs:Class;
-         rdfs:subClassOf <small-organic-molecular-compound> .
+    <lipid>     a b:Class;
+         b:subClassOf <small-organic-molecular-compound> .
     
-    <lithium>     a rdfs:Class;
+    <lithium>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -1928,7 +2033,7 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
@@ -1936,8 +2041,9 @@
     
     <loosely-bound-by>     a rdf:Property .
     
-    <lyase>     a rdfs:Class;
+    <lyase>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <amino-acid>;
@@ -1961,23 +2067,23 @@
     <lysis-of>     a rdf:Property;
          :inverseOf <lysed-by> .
     
-    <lysis>     a rdfs:Class;
+    <lysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <covalent-bond>;
                  :onProperty <lysis-of> ]
         <reaction>  ) .
     
-    <macromolecular-compound>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class ];
+    <macromolecular-compound>     a b:Class;
          :intersectionOf  (
          [
-                 a rdfs:Class;
+                 a b:Class;
                  :intersectionOf  (
-                <compound> 
-                <molecule>  ) ]
+                
+                
+                <compound> <molecule>  ) ]
          [
                  a :Restriction;
                  :cardinality "1";
@@ -1986,7 +2092,7 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <has-molecular-weight> ]
          [
                  a :Restriction;
@@ -2004,10 +2110,14 @@
          [
                  a :Restriction;
                  :onProperty <has-length>;
-                 :hasValue <residue-number> ] ) .
+                 :hasValue <residue-number> ]
+         );
+         b:subClassOf  [
+             a b:Class ] .
     
-    <macromolecular-structure>     a rdfs:Class;
+    <macromolecular-structure>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <macromolecular-compound>;
@@ -2018,13 +2128,14 @@
                  :onProperty <structure-of> ]
         <physical-structure>  ) .
     
-    <macromolecule-part>     a rdfs:Class;
+    <macromolecule-part>     a b:Class;
          :intersectionOf  (
          [
-                 a rdfs:Class;
+                 a b:Class;
                  :intersectionOf  (
+                
                  [
-                         a rdfs:Class;
+                         a b:Class;
                          :intersectionOf  (
                          [
                                  a :Restriction;
@@ -2033,11 +2144,14 @@
                          [
                                  a :Restriction;
                                  :toClass <macromolecular-compound>;
-                                 :onProperty <part-of> ] ) ]
-                <chemical-part>  ) ] ) .
+                                 :onProperty <part-of> ]
+                         ) ]
+                <chemical-part>  ) ]
+         ) .
     
-    <magnesium>     a rdfs:Class;
+    <magnesium>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -2046,12 +2160,13 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <manganese>     a rdfs:Class;
+    <manganese>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -2060,33 +2175,35 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
     <match-level-of>     a rdf:Property .
     
-    <match-type>     a rdfs:Class;
-         rdfs:subClassOf <modifier> .
+    <match-type>     a b:Class;
+         b:subClassOf <modifier> .
     
-    <membrane>     a rdfs:Class;
-         rdfs:subClassOf <cellular-part> .
+    <membrane>     a b:Class;
+         b:subClassOf <cellular-part> .
     
-    <mental-organisation>     a rdfs:Class;
-         rdfs:subClassOf <mental-structure> .
+    <mental-organisation>     a b:Class;
+         b:subClassOf <mental-structure> .
     
-    <mental-structure>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class;
+    <mental-structure>     a b:Class;
+         b:subClassOf  [
+             a b:Class;
              :intersectionOf  (
-            <structure> 
-            <mental>  ) ] .
+            
+            
+            <structure> <mental>  ) ] .
     
-    <mental>     a rdfs:Class;
-         rdfs:subClassOf :Thing .
+    <mental>     a b:Class;
+         b:subClassOf :Thing .
     
-    <messenger-rna>     a rdfs:Class;
+    <messenger-rna>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <polymer-of>;
@@ -2114,8 +2231,9 @@
                  :onProperty <translated-to> ]
         <macromolecular-compound>  ) .
     
-    <metal-binding-site>     a rdfs:Class;
+    <metal-binding-site>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :minCardinality "1";
@@ -2129,15 +2247,17 @@
     
     <metal-class-of>     a rdf:Property .
     
-    <metal-ion>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class;
+    <metal-ion>     a b:Class;
+         b:subClassOf  [
+             a b:Class;
              :intersectionOf  (
-            <cation> 
-            <metal>  ) ] .
+            
+            
+            <cation> <metal>  ) ] .
     
-    <metal>     a rdfs:Class;
+    <metal>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -2146,12 +2266,13 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <metalloid>     a rdfs:Class;
+    <metalloid>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -2160,25 +2281,26 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <methyl>     a rdfs:Class;
-         rdfs:subClassOf <ligand> .
+    <methyl>     a b:Class;
+         b:subClassOf <ligand> .
     
-    <methylation-site>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <methylation-site>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <alkyl-transfer>;
              :onProperty <target-for> ],
                 <modification-site> .
     
-    <microtubule-binding>     a rdfs:Class;
-         rdfs:subClassOf <binding> .
+    <microtubule-binding>     a b:Class;
+         b:subClassOf <binding> .
     
-    <mitochondrial-chromosome>     a rdfs:Class;
+    <mitochondrial-chromosome>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <mitochondrion>;
@@ -2189,8 +2311,10 @@
                  :onProperty <part-of> ]
         <chromosome>  ) .
     
-    <mitochondrial-compartment>     a rdfs:Class;
+    <mitochondrial-compartment>     a b:Class;
          :intersectionOf  (
+        
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -2200,11 +2324,11 @@
                  a :Restriction;
                  :onProperty <has-boundary>;
                  :toClass <mitochondrial-membrane> ]
-        <cellular-part> 
-        <biological-compartment>  ) .
+        <cellular-part> <biological-compartment>  ) .
     
-    <mitochondrial-dna>     a rdfs:Class;
+    <mitochondrial-dna>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <deoxy-nucleotide>;
@@ -2228,11 +2352,11 @@
                  :onProperty <part-of> ]
         <macromolecular-compound>  ) .
     
-    <mitochondrial-membrane>     a rdfs:Class;
-         rdfs:subClassOf <membrane> .
+    <mitochondrial-membrane>     a b:Class;
+         b:subClassOf <membrane> .
     
-    <mitochondrion>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <mitochondrion>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <cytosol>;
              :onProperty <part-of> ],
@@ -2246,23 +2370,26 @@
              :onProperty <has-classification> ],
                 <organelle> .
     
-    <modification-site>     a rdfs:Class;
+    <modification-site>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class;
+                     a b:Class;
                      :unionOf  (
-                    <oxidation-and-reduction> 
-                    <inter-molecule-transfer>  ) ];
+                    
+                    
+                    <oxidation-and-reduction> <inter-molecule-transfer>  ) ];
                  :onProperty <target-for> ]
         <protein-part>  ) .
     
-    <modifier>     a rdfs:Class;
-         rdfs:subClassOf :Thing .
+    <modifier>     a b:Class;
+         b:subClassOf :Thing .
     
-    <molecular-compound-structure>     a rdfs:Class;
+    <molecular-compound-structure>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <molecular-compound>;
@@ -2273,18 +2400,21 @@
                  :onProperty <structure-of> ]
         <physical-structure>  ) .
     
-    <molecular-compound>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class ];
+    <molecular-compound>     a b:Class;
          :intersectionOf  (
          [
-                 a rdfs:Class;
+                 a b:Class;
                  :intersectionOf  (
-                <molecule> 
-                <compound>  ) ] ) .
+                
+                
+                <molecule> <compound>  ) ]
+         );
+         b:subClassOf  [
+             a b:Class ] .
     
-    <molecular-structure>     a rdfs:Class;
+    <molecular-structure>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <molecule>;
@@ -2297,26 +2427,28 @@
     
     <molecular-weight-of>     a rdf:Property .
     
-    <molecular-weight>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <molecular-weight>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue  [
-                 a rdfs:Class;
+                 a b:Class;
                  :unionOf  (
-                <dalton> 
-                <sbedberg>  ) ];
+                
+                
+                <dalton> <sbedberg>  ) ];
              :onProperty <has-unit> ],
                 <physicochemical-property> .
     
-    <molecular_function-unknown>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <molecular_function-unknown>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <molecule>     a rdfs:Class;
+    <molecule>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <number-of-atoms> ]
          [
                  a :Restriction;
@@ -2333,8 +2465,9 @@
                  :hasValue <molecular-weight> ]
         <chemical>  ) .
     
-    <molybdenum>     a rdfs:Class;
+    <molybdenum>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -2343,12 +2476,13 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <monovalent-anion>     a rdfs:Class;
+    <monovalent-anion>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -2360,8 +2494,9 @@
                  :hasValue <negative-charge> ]
         <chemical>  ) .
     
-    <monovalent-cation>     a rdfs:Class;
+    <monovalent-cation>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -2373,17 +2508,18 @@
                  :hasValue <positive-charge> ]
         <chemical>  ) .
     
-    <motor>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <motor>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <myristoylation-site>     a rdfs:Class;
-         rdfs:subClassOf <lipid-attachment-site> .
+    <myristoylation-site>     a b:Class;
+         b:subClassOf <lipid-attachment-site> .
     
-    <n-acyl-diglyceride-attachment-site>     a rdfs:Class;
-         rdfs:subClassOf <lipid-attachment-site> .
+    <n-acyl-diglyceride-attachment-site>     a b:Class;
+         b:subClassOf <lipid-attachment-site> .
     
-    <nad-requiring-oxidoreductase>     a rdfs:Class;
+    <nad-requiring-oxidoreductase>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <amino-acid>;
@@ -2411,27 +2547,29 @@
                  :hasValue <nad> ]
         <macromolecular-compound>  ) .
     
-    <nad>     a rdfs:Class;
-         rdfs:subClassOf <prosthetic-group> .
+    <nad>     a b:Class;
+         b:subClassOf <prosthetic-group> .
     
     <name-of>     a rdf:Property .
     
-    <name>     a rdfs:Class;
-         rdfs:subClassOf <label> .
+    <name>     a b:Class;
+         b:subClassOf <label> .
     
-    <negative-charge>     a rdfs:Class;
+    <negative-charge>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <has-polarity>;
                  :hasValue <negative> ]
         <electrical-charge>  ) .
     
-    <negative>     a rdfs:Class;
-         rdfs:subClassOf <polarity> .
+    <negative>     a b:Class;
+         b:subClassOf <polarity> .
     
-    <nickel>     a rdfs:Class;
+    <nickel>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -2440,12 +2578,13 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <nonmetal>     a rdfs:Class;
+    <nonmetal>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -2454,12 +2593,13 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <nuclear-chromosome>     a rdfs:Class;
+    <nuclear-chromosome>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <nucleus>;
@@ -2470,8 +2610,9 @@
                  :onProperty <part-of> ]
         <chromosome>  ) .
     
-    <nuclear-dna>     a rdfs:Class;
+    <nuclear-dna>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <deoxy-nucleotide>;
@@ -2495,24 +2636,26 @@
                  :onProperty <part-of> ]
         <macromolecular-compound>  ) .
     
-    <nucleic-acid-binding-site>     a rdfs:Class;
+    <nucleic-acid-binding-site>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <binds>;
                  :hasValue <nucleic-acid> ]
         <binding-site>  ) .
     
-    <nucleic-acid-binding>     a rdfs:Class;
-         rdfs:subClassOf <binding> .
+    <nucleic-acid-binding>     a b:Class;
+         b:subClassOf <binding> .
     
-    <nucleic-acid-part>     a rdfs:Class;
+    <nucleic-acid-part>     a b:Class;
          :intersectionOf  (
          [
-                 a rdfs:Class;
+                 a b:Class;
                  :intersectionOf  (
+                
                  [
-                         a rdfs:Class;
+                         a b:Class;
                          :intersectionOf  (
                          [
                                  a :Restriction;
@@ -2521,15 +2664,28 @@
                          [
                                  a :Restriction;
                                  :toClass <nucleic-acid>;
-                                 :onProperty <part-of> ] ) ]
-                <macromolecule-part>  ) ] ) .
+                                 :onProperty <part-of> ]
+                         ) ]
+                <macromolecule-part>  ) ]
+         ) .
     
-    <nucleic-acid>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class;
+    <nucleic-acid>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :hasValue <nucleotide>;
+                 :onProperty <polymer-of> ]
+         [
+                 a :Restriction;
+                 :toClass <nucleotide>;
+                 :onProperty <polymer-of> ]
+        <macromolecular-compound>  );
+         b:subClassOf  [
+             a b:Class;
              :unionOf  (
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :intersectionOf  (
                      [
                              a :Restriction;
@@ -2538,12 +2694,14 @@
                      [
                              a :Restriction;
                              :toClass <accession-number>;
-                             :onProperty <has-accession-number> ] ) ] ) ],
+                             :onProperty <has-accession-number> ]
+                     ) ]
+             ) ],
                  [
-             a rdfs:Class;
+             a b:Class;
              :unionOf  (
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :intersectionOf  (
                      [
                              a :Restriction;
@@ -2552,12 +2710,14 @@
                      [
                              a :Restriction;
                              :toClass <entry-identifier>;
-                             :onProperty <has-entry-id> ] ) ] ) ],
+                             :onProperty <has-entry-id> ]
+                     ) ]
+             ) ],
                  [
-             a rdfs:Class;
+             a b:Class;
              :unionOf  (
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :intersectionOf  (
                      [
                              a :Restriction;
@@ -2571,12 +2731,14 @@
                      [
                              a :Restriction;
                              :onProperty <has-species>;
-                             :toClass <species> ] ) ] ) ],
+                             :toClass <species> ]
+                     ) ]
+             ) ],
                  [
-             a rdfs:Class;
+             a b:Class;
              :unionOf  (
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :intersectionOf  (
                      [
                              a :Restriction;
@@ -2590,12 +2752,14 @@
                      [
                              a :Restriction;
                              :onProperty <homologous-to>;
-                             :toClass <nucleic-acid> ] ) ] ) ],
+                             :toClass <nucleic-acid> ]
+                     ) ]
+             ) ],
                  [
-             a rdfs:Class;
+             a b:Class;
              :unionOf  (
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :intersectionOf  (
                      [
                              a :Restriction;
@@ -2605,20 +2769,13 @@
                      [
                              a :Restriction;
                              :onProperty <cited-in>;
-                             :hasValue <published-material> ] ) ] ) ];
-         :intersectionOf  (
-         [
-                 a :Restriction;
-                 :hasValue <nucleotide>;
-                 :onProperty <polymer-of> ]
-         [
-                 a :Restriction;
-                 :toClass <nucleotide>;
-                 :onProperty <polymer-of> ]
-        <macromolecular-compound>  ) .
+                             :hasValue <published-material> ]
+                     ) ]
+             ) ] .
     
-    <nucleotide-binding-site>     a rdfs:Class;
+    <nucleotide-binding-site>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :minCardinality "1";
@@ -2626,11 +2783,12 @@
                  :hasValue <nucleotide> ]
         <binding-site>  ) .
     
-    <nucleotide>     a rdfs:Class;
-         rdfs:subClassOf <small-organic-molecular-compound> .
+    <nucleotide>     a b:Class;
+         b:subClassOf <small-organic-molecular-compound> .
     
-    <nucleus-part>     a rdfs:Class;
+    <nucleus-part>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <nucleus>;
@@ -2641,8 +2799,8 @@
                  :onProperty <part-of> ]
         <biological-structure>  ) .
     
-    <nucleus>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <nucleus>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <cell>;
              :onProperty <part-of> ],
@@ -2662,11 +2820,11 @@
     
     <number-of-atoms>     a rdf:Property .
     
-    <obsolete>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <obsolete>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <organelle>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <organelle>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <cell>;
              :onProperty <part-of> ],
@@ -2676,8 +2834,8 @@
              :onProperty <part-of> ],
                 <biological-structure> .
     
-    <organic-molecular-compound>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <organic-molecular-compound>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :minCardinality "1";
              :onProperty <has-bond>;
@@ -2689,12 +2847,12 @@
                  [
              a :Restriction;
              :hasValue  [
-                 a rdfs:Class ];
+                 a b:Class ];
              :onProperty <atom-type> ],
                  [
              a :Restriction;
              :hasValue  [
-                 a rdfs:Class ];
+                 a b:Class ];
              :onProperty <number-of-atoms> ],
                  [
              a :Restriction;
@@ -2708,23 +2866,24 @@
                 <chemical> .
     
     <organism-classification-of>     a rdf:Property;
-         rdfs:subPropertyOf <classification-of>;
-         :inverseOf <has-organism-classification> .
+         :inverseOf <has-organism-classification>;
+         b:subPropertyOf <classification-of> .
     
-    <organism-classification>     a rdfs:Class;
-         rdfs:subClassOf <biological-classification> .
+    <organism-classification>     a b:Class;
+         b:subClassOf <biological-classification> .
     
-    <other-bond-lysis>     a rdfs:Class;
-         rdfs:subClassOf <lysis> .
+    <other-bond-lysis>     a b:Class;
+         b:subClassOf <lysis> .
     
-    <oxidation-and-reduction>     a rdfs:Class;
-         rdfs:subClassOf <reaction> .
+    <oxidation-and-reduction>     a b:Class;
+         b:subClassOf <reaction> .
     
-    <oxidation>     a rdfs:Class;
-         rdfs:subClassOf <oxidation-and-reduction> .
+    <oxidation>     a b:Class;
+         b:subClassOf <oxidation-and-reduction> .
     
-    <oxidoreductase>     a rdfs:Class;
+    <oxidoreductase>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <amino-acid>;
@@ -2743,8 +2902,9 @@
                  :onProperty <has-ec-number> ]
         <macromolecular-compound>  ) .
     
-    <oxygen>     a rdfs:Class;
+    <oxygen>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -2753,18 +2913,19 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <oxygenation>     a rdfs:Class;
-         rdfs:subClassOf <oxidation-and-reduction> .
+    <oxygenation>     a b:Class;
+         b:subClassOf <oxidation-and-reduction> .
     
-    <palmitate-attachment-site>     a rdfs:Class;
-         rdfs:subClassOf <lipid-attachment-site> .
+    <palmitate-attachment-site>     a b:Class;
+         b:subClassOf <lipid-attachment-site> .
     
-    <part-of-biological-structure>     a rdfs:Class;
+    <part-of-biological-structure>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <biological-structure>;
@@ -2775,11 +2936,11 @@
                  :onProperty <part-of> ]
         <biological-structure>  ) .
     
-    <part-of-physical-structure>     a rdfs:Class;
-         rdfs:subClassOf <physical-structure> .
+    <part-of-physical-structure>     a b:Class;
+         b:subClassOf <physical-structure> .
     
-    <part-of-physical-substance>     a rdfs:Class;
-         rdfs:subClassOf <physical-substance> .
+    <part-of-physical-substance>     a b:Class;
+         b:subClassOf <physical-substance> .
     
     <part-of>     a rdf:Property .
     
@@ -2788,8 +2949,9 @@
     <passes-through>     a rdf:Property;
          :inverseOf <passed-through-by> .
     
-    <peptidase>     a rdfs:Class;
+    <peptidase>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <amino-acid>;
@@ -2808,25 +2970,27 @@
                  :onProperty <has-ec-number> ]
         <macromolecular-compound>  ) .
     
-    <peptide-bond-hydrolysis>     a rdfs:Class;
+    <peptide-bond-hydrolysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <hydrolysis-of>;
                  :hasValue <peptide-bond> ]
         <reaction>  ) .
     
-    <peptide-bond>     a rdfs:Class;
-         rdfs:subClassOf <carbon-nitrogen-bond> .
+    <peptide-bond>     a b:Class;
+         b:subClassOf <carbon-nitrogen-bond> .
     
-    <peptide>     a rdfs:Class;
-         rdfs:subClassOf <small-molecular-compound> .
+    <peptide>     a b:Class;
+         b:subClassOf <small-molecular-compound> .
     
-    <peroxidation>     a rdfs:Class;
-         rdfs:subClassOf <oxidation-and-reduction> .
+    <peroxidation>     a b:Class;
+         b:subClassOf <oxidation-and-reduction> .
     
-    <phosphatase>     a rdfs:Class;
+    <phosphatase>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <amino-acid>;
@@ -2845,14 +3009,14 @@
                  :onProperty <has-ec-number> ]
         <macromolecular-compound>  ) .
     
-    <phosphate-transfer>     a rdfs:Class;
-         rdfs:subClassOf <inter-molecule-transfer> .
+    <phosphate-transfer>     a b:Class;
+         b:subClassOf <inter-molecule-transfer> .
     
-    <phosphate>     a rdfs:Class;
-         rdfs:subClassOf <ligand> .
+    <phosphate>     a b:Class;
+         b:subClassOf <ligand> .
     
-    <phosphopantetheine-substitution-site>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <phosphopantetheine-substitution-site>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <inter-molecule-transfer>;
              :onProperty <target-for> ],
@@ -2862,11 +3026,12 @@
              :onProperty <target-for> ],
                 <modification-site> .
     
-    <phosphoric-ester-bond-formation>     a rdfs:Class;
-         rdfs:subClassOf <ligation> .
+    <phosphoric-ester-bond-formation>     a b:Class;
+         b:subClassOf <ligation> .
     
-    <phosphorous>     a rdfs:Class;
+    <phosphorous>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -2875,97 +3040,104 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <phosphorus-nitrogen-bond-hydrolysis>     a rdfs:Class;
+    <phosphorus-nitrogen-bond-hydrolysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <hydrolysis-of>;
                  :hasValue <phosphorus-nitrogen-bond> ]
         <reaction>  ) .
     
-    <phosphorus-nitrogen-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <phosphorus-nitrogen-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <phosphorus-oxygen-bond-hydrolysis>     a rdfs:Class;
+    <phosphorus-oxygen-bond-hydrolysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <hydrolysis-of>;
                  :hasValue <phosphorus-oxygen-bond> ]
         <reaction>  ) .
     
-    <phosphorus-oxygen-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <phosphorus-oxygen-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <phosphorus-oxygen-lysis>     a rdfs:Class;
+    <phosphorus-oxygen-lysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <lysis-of>;
                  :hasValue <phosphorus-oxygen-bond> ]
         <reaction>  ) .
     
-    <phosphorylation-site>     a rdfs:Class;
+    <phosphorylation-site>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <phosphate-transfer>;
                  :onProperty <target-for> ]
         <modification-site>  ) .
     
-    <physical-organisation>     a rdfs:Class;
-         rdfs:subClassOf <physical-structure> .
+    <physical-organisation>     a b:Class;
+         b:subClassOf <physical-structure> .
     
-    <physical-process>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class;
+    <physical-process>     a b:Class;
+         b:subClassOf  [
+             a b:Class;
              :intersectionOf  (
-            <physical> 
-            <process>  ) ] .
+            
+            
+            <physical> <process>  ) ] .
     
-    <physical-space>     a rdfs:Class;
-         rdfs:subClassOf <physical-structure> .
+    <physical-space>     a b:Class;
+         b:subClassOf <physical-structure> .
     
-    <physical-structure>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class;
+    <physical-structure>     a b:Class;
+         b:subClassOf  [
+             a b:Class;
              :intersectionOf  (
-            <structure> 
-            <physical>  ) ] .
+            
+            
+            <structure> <physical>  ) ] .
     
-    <physical-substance>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class;
+    <physical-substance>     a b:Class;
+         b:subClassOf  [
+             a b:Class;
              :intersectionOf  (
-            <substance> 
-            <physical>  ) ] .
+            
+            
+            <substance> <physical>  ) ] .
     
-    <physical>     a rdfs:Class;
-         rdfs:subClassOf :Thing .
+    <physical>     a b:Class;
+         b:subClassOf :Thing .
     
-    <physicochemical-property>     a rdfs:Class;
-         rdfs:subClassOf <property> .
+    <physicochemical-property>     a b:Class;
+         b:subClassOf <property> .
     
-    <physicochemical-selector>     a rdfs:Class;
-         rdfs:subClassOf <selector> .
+    <physicochemical-selector>     a b:Class;
+         b:subClassOf <selector> .
     
-    <plasma-membrane>     a rdfs:Class;
-         rdfs:subClassOf <membrane> .
+    <plasma-membrane>     a b:Class;
+         b:subClassOf <membrane> .
     
-    <plasmid>     a rdfs:Class;
-         rdfs:subClassOf <dna-organisation> .
+    <plasmid>     a b:Class;
+         b:subClassOf <dna-organisation> .
     
-    <polarity>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class ],
+    <polarity>     a b:Class;
+         b:subClassOf  [
+             a b:Class ],
                 <physicochemical-selector> .
     
-    <poly-a-tail>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <poly-a-tail>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <messenger-rna>;
              :onProperty <part-of> ],
@@ -2973,8 +3145,9 @@
     
     <polymer-of>     a rdf:Property .
     
-    <polysaccaride>     a rdfs:Class;
+    <polysaccaride>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <carbohydrate>;
@@ -2985,25 +3158,28 @@
                  :onProperty <polymer-of> ]
         <macromolecular-compound>  ) .
     
-    <positive-charge>     a rdfs:Class;
+    <positive-charge>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <has-polarity>;
                  :hasValue <positive> ]
         <electrical-charge>  ) .
     
-    <positive>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class;
+    <positive>     a b:Class;
+         b:subClassOf  [
+             a b:Class;
              :intersectionOf  (
+            
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :complementOf <negative> ]
             <polarity>  ) ] .
     
-    <potassium>     a rdfs:Class;
+    <potassium>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -3012,15 +3188,15 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <prenyl-group>     a rdfs:Class;
-         rdfs:subClassOf <ligand> .
+    <prenyl-group>     a b:Class;
+         b:subClassOf <ligand> .
     
-    <prenylation-site>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <prenylation-site>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <inter-molecule-transfer>;
              :onProperty <target-for> ],
@@ -3030,25 +3206,26 @@
              :onProperty <target-for> ],
                 <modification-site> .
     
-    <process>     a rdfs:Class;
-         rdfs:subClassOf :Thing .
+    <process>     a b:Class;
+         b:subClassOf :Thing .
     
-    <product>     a rdfs:Class;
-         rdfs:subClassOf <reaction-participant> .
+    <product>     a b:Class;
+         b:subClassOf <reaction-participant> .
     
-    <prokaryote>     a rdfs:Class;
-         rdfs:subClassOf <organism-classification> .
+    <prokaryote>     a b:Class;
+         b:subClassOf <organism-classification> .
     
-    <property>     a rdfs:Class;
-         rdfs:subClassOf <modifier> .
+    <property>     a b:Class;
+         b:subClassOf <modifier> .
     
-    <prosthetic-group>     a rdfs:Class;
+    <prosthetic-group>     a b:Class;
          :intersectionOf  (
          [
-                 a rdfs:Class;
+                 a b:Class;
                  :intersectionOf  (
+                
                  [
-                         a rdfs:Class;
+                         a b:Class;
                          :complementOf <metal-ion> ]
                 <cofactor>  ) ]
          [
@@ -3058,10 +3235,12 @@
          [
                  a :Restriction;
                  :onProperty <binds-strongly>;
-                 :toClass <protein> ] ) .
+                 :toClass <protein> ]
+         ) .
     
-    <protein-binding-site>     a rdfs:Class;
+    <protein-binding-site>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :minCardinality "1";
@@ -3073,8 +3252,9 @@
                  :hasValue <protein> ]
         <binding-site>  ) .
     
-    <protein-name>     a rdfs:Class;
+    <protein-name>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <name-of>;
@@ -3085,13 +3265,14 @@
                  :toClass <protein> ]
         <name>  ) .
     
-    <protein-part>     a rdfs:Class;
+    <protein-part>     a b:Class;
          :intersectionOf  (
          [
-                 a rdfs:Class;
+                 a b:Class;
                  :intersectionOf  (
+                
                  [
-                         a rdfs:Class;
+                         a b:Class;
                          :intersectionOf  (
                          [
                                  a :Restriction;
@@ -3100,14 +3281,17 @@
                          [
                                  a :Restriction;
                                  :onProperty <part-of>;
-                                 :toClass <protein> ] ) ]
-                <macromolecule-part>  ) ] ) .
+                                 :toClass <protein> ]
+                         ) ]
+                <macromolecule-part>  ) ]
+         ) .
     
-    <protein-primary-structure>     a rdfs:Class;
-         rdfs:subClassOf <protein-structure> .
+    <protein-primary-structure>     a b:Class;
+         b:subClassOf <protein-structure> .
     
-    <protein-protein-homologue>     a rdfs:Class;
+    <protein-protein-homologue>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <amino-acid>;
@@ -3126,15 +3310,16 @@
                  :hasValue <match-type> ]
         <macromolecular-compound>  ) .
     
-    <protein-secondary-structure>     a rdfs:Class;
-         rdfs:subClassOf <protein-structure> .
+    <protein-secondary-structure>     a b:Class;
+         b:subClassOf <protein-structure> .
     
-    <protein-sequence>     a rdfs:Class;
+    <protein-sequence>     a b:Class;
          :equivalentTo <protein-primary-structure>;
-         rdfs:subClassOf <protein-structure> .
+         b:subClassOf <protein-structure> .
     
-    <protein-structure>     a rdfs:Class;
+    <protein-structure>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <macromolecular-compound>;
@@ -3145,18 +3330,29 @@
                  :onProperty <structure-of> ]
         <biological-structure>  ) .
     
-    <protein-tagging>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <protein-tagging>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <protein-turn>     a rdfs:Class;
-         rdfs:subClassOf <protein-secondary-structure> .
+    <protein-turn>     a b:Class;
+         b:subClassOf <protein-secondary-structure> .
     
-    <protein>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class;
+    <protein>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :hasValue <amino-acid>;
+                 :onProperty <polymer-of> ]
+         [
+                 a :Restriction;
+                 :toClass <amino-acid>;
+                 :onProperty <polymer-of> ]
+        <macromolecular-compound>  );
+         b:subClassOf  [
+             a b:Class;
              :unionOf  (
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :intersectionOf  (
                      [
                              a :Restriction;
@@ -3166,19 +3362,22 @@
                      [
                              a :Restriction;
                              :hasValue  [
-                                 a rdfs:Class;
+                                 a b:Class;
                                  :unionOf  (
+                                
                                  [
                                          a :Restriction;
                                          :onProperty <part-of>;
                                          :toClass <protein-name> ]
                                 <protein-name>  ) ];
-                             :onProperty <has-name> ] ) ] ) ],
+                             :onProperty <has-name> ]
+                     ) ]
+             ) ],
                  [
-             a rdfs:Class;
+             a b:Class;
              :unionOf  (
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :intersectionOf  (
                      [
                              a :Restriction;
@@ -3192,12 +3391,14 @@
                      [
                              a :Restriction;
                              :toClass <biological-function>;
-                             :onProperty <has-function> ] ) ] ) ],
+                             :onProperty <has-function> ]
+                     ) ]
+             ) ],
                  [
-             a rdfs:Class;
+             a b:Class;
              :unionOf  (
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :intersectionOf  (
                      [
                              a :Restriction;
@@ -3207,8 +3408,9 @@
                      [
                              a :Restriction;
                              :hasValue  [
-                                 a rdfs:Class;
+                                 a b:Class;
                                  :unionOf  (
+                                
                                  [
                                          a :Restriction;
                                          :onProperty <part-of>;
@@ -3218,70 +3420,82 @@
                      [
                              a :Restriction;
                              :toClass  [
-                                 a rdfs:Class;
+                                 a b:Class;
                                  :unionOf  (
+                                
                                  [
                                          a :Restriction;
                                          :onProperty <part-of>;
                                          :toClass <protein-sequence> ]
                                 <protein-sequence>  ) ];
-                             :onProperty <has-sequence> ] ) ] ) ],
+                             :onProperty <has-sequence> ]
+                     ) ]
+             ) ],
                  [
-             a rdfs:Class;
+             a b:Class;
              :unionOf  (
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :intersectionOf  (
                      [
                              a :Restriction;
                              :hasValue  [
-                                 a rdfs:Class;
+                                 a b:Class;
                                  :unionOf  (
-                                <messenger-rna> 
-                                <dna>  ) ];
+                                
+                                
+                                <messenger-rna> <dna>  ) ];
                              :onProperty <translated-from> ]
                      [
                              a :Restriction;
                              :toClass  [
-                                 a rdfs:Class;
+                                 a b:Class;
                                  :unionOf  (
-                                <messenger-rna> 
-                                <dna>  ) ];
-                             :onProperty <translated-from> ] ) ] ) ],
+                                
+                                
+                                <messenger-rna> <dna>  ) ];
+                             :onProperty <translated-from> ]
+                     ) ]
+             ) ],
                  [
-             a rdfs:Class;
+             a b:Class;
              :unionOf  (
              [
                      a :Restriction;
                      :onProperty <has-secondary-structure>;
-                     :toClass <protein-secondary-structure> ] ) ],
+                     :toClass <protein-secondary-structure> ]
+             ) ],
                  [
-             a rdfs:Class;
+             a b:Class;
              :unionOf  (
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :intersectionOf  (
                      [
                              a :Restriction;
                              :hasValue  [
-                                 a rdfs:Class;
+                                 a b:Class;
                                  :unionOf  (
-                                <nucleic-acid> 
-                                <protein>  ) ];
+                                
+                                
+                                <nucleic-acid> <protein>  ) ];
                              :onProperty <homologous-to> ]
                      [
                              a :Restriction;
                              :toClass  [
-                                 a rdfs:Class;
+                                 a b:Class;
                                  :unionOf  (
-                                <nucleic-acid> 
-                                <protein>  ) ];
-                             :onProperty <homologous-to> ] ) ] ) ],
+                                
+                                
+                                <nucleic-acid> <protein>  ) ];
+                             :onProperty <homologous-to> ]
+                     ) ]
+             ) ],
                  [
-             a rdfs:Class;
+             a b:Class;
              :unionOf  (
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :intersectionOf  (
                      [
                              a :Restriction;
@@ -3295,41 +3509,48 @@
                      [
                              a :Restriction;
                              :onProperty <has-species>;
-                             :toClass <species> ] ) ] ) ],
+                             :toClass <species> ]
+                     ) ]
+             ) ],
                  [
-             a rdfs:Class;
+             a b:Class;
              :unionOf  (
              [
                      a :Restriction;
                      :hasValue <accession-number>;
-                     :onProperty <has-accession-number> ] ) ],
+                     :onProperty <has-accession-number> ]
+             ) ],
                  [
-             a rdfs:Class;
+             a b:Class;
              :unionOf  (
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :intersectionOf  (
                      [
                              a :Restriction;
                              :hasValue  [
-                                 a rdfs:Class;
+                                 a b:Class;
                                  :unionOf  (
-                                <cell> 
-                                <extra-cellular-space>  ) ];
+                                
+                                
+                                <cell> <extra-cellular-space>  ) ];
                              :onProperty <part-of> ]
                      [
                              a :Restriction;
                              :toClass  [
-                                 a rdfs:Class;
+                                 a b:Class;
                                  :unionOf  (
-                                <cell> 
-                                <extra-cellular-space>  ) ];
-                             :onProperty <part-of> ] ) ] ) ],
+                                
+                                
+                                <cell> <extra-cellular-space>  ) ];
+                             :onProperty <part-of> ]
+                     ) ]
+             ) ],
                  [
-             a rdfs:Class;
+             a b:Class;
              :unionOf  (
              [
-                     a rdfs:Class;
+                     a b:Class;
                      :intersectionOf  (
                      [
                              a :Restriction;
@@ -3339,23 +3560,15 @@
                      [
                              a :Restriction;
                              :onProperty <cited-in>;
-                             :hasValue <published-material> ] ) ] ) ];
-         :intersectionOf  (
-         [
-                 a :Restriction;
-                 :hasValue <amino-acid>;
-                 :onProperty <polymer-of> ]
-         [
-                 a :Restriction;
-                 :toClass <amino-acid>;
-                 :onProperty <polymer-of> ]
-        <macromolecular-compound>  ) .
+                             :hasValue <published-material> ]
+                     ) ]
+             ) ] .
     
     <published-by>     a rdf:Property;
          :inverseOf <has-publisher> .
     
-    <published-material>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <published-material>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :onProperty <published-by>;
              :hasValue <publishing-institution> ],
@@ -3373,25 +3586,26 @@
              :hasValue <work-title> ],
                 <work> .
     
-    <publishing-institution>     a rdfs:Class;
-         rdfs:subClassOf <institution> .
+    <publishing-institution>     a b:Class;
+         b:subClassOf <institution> .
     
-    <quarternary-structure>     a rdfs:Class;
-         rdfs:subClassOf <protein-structure> .
+    <quarternary-structure>     a b:Class;
+         b:subClassOf <protein-structure> .
     
-    <racemation>     a rdfs:Class;
-         rdfs:subClassOf <isomerisation> .
+    <racemation>     a b:Class;
+         b:subClassOf <isomerisation> .
     
-    <reaction-participant>     a rdfs:Class;
+    <reaction-participant>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <reaction>;
                  :onProperty <takes-part-in> ]
         <chemical>  ) .
     
-    <reaction>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <reaction>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <chemical>;
              :onProperty <transforms> ],
@@ -3417,34 +3631,35 @@
              :onProperty <has-substrate> ],
                 <physical-process> .
     
-    <receptor-signalling-protein>     a rdfs:Class;
-         rdfs:subClassOf <signal-transduction> .
+    <receptor-signalling-protein>     a b:Class;
+         b:subClassOf <signal-transduction> .
     
-    <receptor>     a rdfs:Class;
-         rdfs:subClassOf <signal-transduction> .
+    <receptor>     a b:Class;
+         b:subClassOf <signal-transduction> .
     
-    <regulation>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <regulation>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <residue-number>     a rdfs:Class;
-         rdfs:subClassOf <length-unit> .
+    <residue-number>     a b:Class;
+         b:subClassOf <length-unit> .
     
-    <restriction-endonuclease-site>     a rdfs:Class;
-         rdfs:subClassOf <dna-site> .
+    <restriction-endonuclease-site>     a b:Class;
+         b:subClassOf <dna-site> .
     
     <reverse-transcribed-from>     a rdf:Property;
-         rdfs:domain <complement-dna>;
-         rdfs:range <messenger-rna>;
-         rdfs:subPropertyOf <transcribed-from> .
+         b:domain <complement-dna>;
+         b:range <messenger-rna>;
+         b:subPropertyOf <transcribed-from> .
     
-    <ribo-nucleotide>     a rdfs:Class;
-         rdfs:subClassOf <nucleotide> .
+    <ribo-nucleotide>     a b:Class;
+         b:subClassOf <nucleotide> .
     
-    <ribosomal-rna-function>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <ribosomal-rna-function>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <ribosomal-rna>     a rdfs:Class;
+    <ribosomal-rna>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <polymer-of>;
@@ -3472,8 +3687,8 @@
                  :hasValue <ribosome> ]
         <macromolecular-compound>  ) .
     
-    <ribosome-binding-site>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <ribosome-binding-site>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <messenger-rna>;
              :onProperty <part-of> ],
@@ -3488,8 +3703,8 @@
              :hasValue <ribosome> ],
                 <rna-part> .
     
-    <ribosome>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <ribosome>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <cytosol>;
              :onProperty <part-of> ],
@@ -3499,13 +3714,14 @@
              :onProperty <part-of> ],
                 <biological-structure> .
     
-    <rna-part>     a rdfs:Class;
+    <rna-part>     a b:Class;
          :intersectionOf  (
          [
-                 a rdfs:Class;
+                 a b:Class;
                  :intersectionOf  (
+                
                  [
-                         a rdfs:Class;
+                         a b:Class;
                          :intersectionOf  (
                          [
                                  a :Restriction;
@@ -3514,11 +3730,14 @@
                          [
                                  a :Restriction;
                                  :onProperty <part-of>;
-                                 :toClass <rna> ] ) ]
-                <macromolecule-part>  ) ] ) .
+                                 :toClass <rna> ]
+                         ) ]
+                <macromolecule-part>  ) ]
+         ) .
     
-    <rna>     a rdfs:Class;
+    <rna>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <polymer-of>;
@@ -3529,8 +3748,9 @@
                  :toClass <ribo-nucleotide> ]
         <macromolecular-compound>  ) .
     
-    <rubidium>     a rdfs:Class;
+    <rubidium>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -3539,22 +3759,23 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <sbedberg>     a rdfs:Class;
-         rdfs:subClassOf <weight-unit> .
+    <sbedberg>     a b:Class;
+         b:subClassOf <weight-unit> .
     
     <secondary-structure-of>     a rdf:Property;
          :inverseOf <has-secondary-structure>;
-         rdfs:subPropertyOf <structure-of> .
+         b:subPropertyOf <structure-of> .
     
-    <selector>     a rdfs:Class;
-         rdfs:subClassOf <modifier> .
+    <selector>     a b:Class;
+         b:subClassOf <modifier> .
     
-    <selenium>     a rdfs:Class;
+    <selenium>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -3563,20 +3784,21 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
     <sequence-of>     a rdf:Property .
     
-    <signal-transduction>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <signal-transduction>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <similarity>     a rdfs:Class;
-         rdfs:subClassOf <match-type> .
+    <similarity>     a b:Class;
+         b:subClassOf <match-type> .
     
-    <single-stranded-dna>     a rdfs:Class;
+    <single-stranded-dna>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <deoxy-nucleotide>;
@@ -3591,18 +3813,19 @@
                  :onProperty <strandedness> ]
         <macromolecular-compound>  ) .
     
-    <single-stranded>     a rdfs:Class;
-         rdfs:subClassOf <strandedness-selector> .
+    <single-stranded>     a b:Class;
+         b:subClassOf <strandedness-selector> .
     
-    <site>     a rdfs:Class;
-         rdfs:subClassOf <protein-part> .
+    <site>     a b:Class;
+         b:subClassOf <protein-part> .
     
-    <small-molecular-compound>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class;
+    <small-molecular-compound>     a b:Class;
+         b:subClassOf  [
+             a b:Class;
              :intersectionOf  (
-            <compound> 
-            <molecule>  ) ],
+            
+            
+            <compound> <molecule>  ) ],
                  [
              a :Restriction;
              :cardinality "1";
@@ -3611,14 +3834,15 @@
                  [
              a :Restriction;
              :hasValue  [
-                 a rdfs:Class ];
+                 a b:Class ];
              :onProperty <has-molecular-weight> ] .
     
-    <small-nuclear-rna-function>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <small-nuclear-rna-function>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <small-nuclear-rna>     a rdfs:Class;
+    <small-nuclear-rna>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <polymer-of>;
@@ -3646,18 +3870,20 @@
                  :toClass <spliceosome> ]
         <macromolecular-compound>  ) .
     
-    <small-nucleolar-rna-function>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <small-nucleolar-rna-function>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <small-organic-molecular-compound>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class;
+    <small-organic-molecular-compound>     a b:Class;
+         b:subClassOf  [
+             a b:Class;
              :intersectionOf  (
-            <small-molecular-compound> 
-            <organic-molecular-compound>  ) ] .
+            
+            
+            <small-molecular-compound> <organic-molecular-compound>  ) ] .
     
-    <sodium>     a rdfs:Class;
+    <sodium>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -3666,17 +3892,17 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
     <species-of>     a rdf:Property .
     
-    <species>     a rdfs:Class;
-         rdfs:subClassOf <organism-classification> .
+    <species>     a b:Class;
+         b:subClassOf <organism-classification> .
     
-    <spliceosome>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <spliceosome>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <nucleus>;
              :onProperty <part-of> ],
@@ -3686,37 +3912,37 @@
              :onProperty <part-of> ],
                 <biological-structure> .
     
-    <storage-protein>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <storage-protein>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <strandedness-selector>     a rdfs:Class;
-         rdfs:subClassOf  [
-             a rdfs:Class ],
+    <strandedness-selector>     a b:Class;
+         b:subClassOf  [
+             a b:Class ],
                 <physicochemical-selector> .
     
     <strandedness>     a rdf:Property;
-         rdfs:domain <nucleic-acid>;
-         rdfs:range <strandedness-selector> .
+         b:domain <nucleic-acid>;
+         b:range <strandedness-selector> .
     
     <strongly-bound-by>     a rdf:Property .
     
-    <structural-protein>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <structural-protein>     a b:Class;
+         b:subClassOf <biological-function> .
     
     <structure-of>     a rdf:Property;
          :inverseOf <has-structure> .
     
-    <structure>     a rdfs:Class;
-         rdfs:subClassOf :Thing .
+    <structure>     a b:Class;
+         b:subClassOf :Thing .
     
-    <substance>     a rdfs:Class;
-         rdfs:subClassOf :Thing .
+    <substance>     a b:Class;
+         b:subClassOf :Thing .
     
-    <substrate>     a rdfs:Class;
-         rdfs:subClassOf <reaction-participant> .
+    <substrate>     a b:Class;
+         b:subClassOf <reaction-participant> .
     
-    <sulphation-site>     a rdfs:Class;
-         rdfs:subClassOf  [
+    <sulphation-site>     a b:Class;
+         b:subClassOf  [
              a :Restriction;
              :hasValue <inter-molecule-transfer>;
              :onProperty <target-for> ],
@@ -3726,33 +3952,36 @@
              :onProperty <target-for> ],
                 <modification-site> .
     
-    <sulphur-group>     a rdfs:Class;
-         rdfs:subClassOf <ligand> .
+    <sulphur-group>     a b:Class;
+         b:subClassOf <ligand> .
     
-    <sulphur-nitrogen-bond-hydrolysis>     a rdfs:Class;
+    <sulphur-nitrogen-bond-hydrolysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <hydrolysis-of>;
                  :hasValue <sulphur-nitrogen-bond> ]
         <reaction>  ) .
     
-    <sulphur-nitrogen-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <sulphur-nitrogen-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <sulphur-sulphur-bond-hydrolysis>     a rdfs:Class;
+    <sulphur-sulphur-bond-hydrolysis>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <hydrolysis-of>;
                  :hasValue <sulphur-sulphur-bond> ]
         <reaction>  ) .
     
-    <sulphur-sulphur-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <sulphur-sulphur-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <sulphur>     a rdfs:Class;
+    <sulphur>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -3761,7 +3990,7 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
@@ -3772,20 +4001,20 @@
     
     <targets>     a rdf:Property .
     
-    <tertiary-structure>     a rdfs:Class;
-         rdfs:subClassOf <protein-structure> .
+    <tertiary-structure>     a b:Class;
+         b:subClassOf <protein-structure> .
     
-    <thioester-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <thioester-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <thioether-bond>     a rdfs:Class;
-         rdfs:subClassOf <covalent-bond> .
+    <thioether-bond>     a b:Class;
+         b:subClassOf <covalent-bond> .
     
-    <three-dimensional-space>     a rdfs:Class;
-         rdfs:subClassOf <physical-space> .
+    <three-dimensional-space>     a b:Class;
+         b:subClassOf <physical-space> .
     
-    <time-unit>     a rdfs:Class;
-         rdfs:subClassOf <unit> .
+    <time-unit>     a b:Class;
+         b:subClassOf <unit> .
     
     <title-of>     a rdf:Property .
     
@@ -3794,17 +4023,18 @@
     <transcribed-to>     a rdf:Property;
          :inverseOf <transcribed-from> .
     
-    <transcription-factor-binding>     a rdfs:Class;
-         rdfs:subClassOf <binding> .
+    <transcription-factor-binding>     a b:Class;
+         b:subClassOf <binding> .
     
-    <transcription>     a rdfs:Class;
-         rdfs:subClassOf <biological-process> .
+    <transcription>     a b:Class;
+         b:subClassOf <biological-process> .
     
-    <transfer-rna-function>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <transfer-rna-function>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <transfer-rna>     a rdfs:Class;
+    <transfer-rna>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :onProperty <polymer-of>;
@@ -3842,8 +4072,9 @@
     <translated-to>     a rdf:Property;
          :inverseOf <translated-from> .
     
-    <transmembrane-helix>     a rdfs:Class;
+    <transmembrane-helix>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <membrane>;
@@ -3854,11 +4085,12 @@
                  :onProperty <passes-through> ]
         <alpha-helix>  ) .
     
-    <transporter>     a rdfs:Class;
-         rdfs:subClassOf <biological-function> .
+    <transporter>     a b:Class;
+         b:subClassOf <biological-function> .
     
-    <trivalent-cation>     a rdfs:Class;
+    <trivalent-cation>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "3";
@@ -3870,11 +4102,12 @@
                  :hasValue <positive-charge> ]
         <chemical>  ) .
     
-    <tumor-suppressor>     a rdfs:Class;
-         rdfs:subClassOf <regulation> .
+    <tumor-suppressor>     a b:Class;
+         b:subClassOf <regulation> .
     
-    <tungsten>     a rdfs:Class;
+    <tungsten>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -3883,24 +4116,25 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <two-component-response-regulator>     a rdfs:Class;
-         rdfs:subClassOf <signal-transduction> .
+    <two-component-response-regulator>     a b:Class;
+         b:subClassOf <signal-transduction> .
     
-    <two-component-sensor-molecule>     a rdfs:Class;
-         rdfs:subClassOf <signal-transduction> .
+    <two-component-sensor-molecule>     a b:Class;
+         b:subClassOf <signal-transduction> .
     
-    <unit>     a rdfs:Class;
-         rdfs:subClassOf <modifier> .
+    <unit>     a b:Class;
+         b:subClassOf <modifier> .
     
-    <van-der-waals-bond>     a rdfs:Class;
-         rdfs:subClassOf <chemical-bond> .
+    <van-der-waals-bond>     a b:Class;
+         b:subClassOf <chemical-bond> .
     
-    <vanadium>     a rdfs:Class;
+    <vanadium>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -3909,15 +4143,16 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
-    <weight-unit>     a rdfs:Class;
-         rdfs:subClassOf <unit> .
+    <weight-unit>     a b:Class;
+         b:subClassOf <unit> .
     
-    <work-title>     a rdfs:Class;
+    <work-title>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue <published-material>;
@@ -3928,18 +4163,19 @@
                  :onProperty <title-of> ]
         <label>  ) .
     
-    <work>     a rdfs:Class;
-         rdfs:subClassOf <mental-structure> .
+    <work>     a b:Class;
+         b:subClassOf <mental-structure> .
     
-    <year>     a rdfs:Class;
-         rdfs:subClassOf <time-unit> .
+    <year>     a b:Class;
+         b:subClassOf <time-unit> .
     
-    <zinc-divalent-cation>     a rdfs:Class;
+    <zinc-divalent-cation>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
          [
                  a :Restriction;
@@ -3956,8 +4192,9 @@
                  :hasValue <positive-charge> ]
         <chemical>  ) .
     
-    <zinc>     a rdfs:Class;
+    <zinc>     a b:Class;
          :intersectionOf  (
+        
          [
                  a :Restriction;
                  :cardinality "1";
@@ -3966,32 +4203,39 @@
          [
                  a :Restriction;
                  :hasValue  [
-                     a rdfs:Class ];
+                     a b:Class ];
                  :onProperty <atomic-number> ]
         <chemical>  ) .
     
     :disjointUnionOf     :unionOf  (
-        <small-molecular-compound> 
-        <macromolecular-compound>  ),
+        
+        
+        <small-molecular-compound> <macromolecular-compound>  ),
                  (
-        <polysaccaride> 
-        <nucleic-acid> 
-        <protein>  ),
+        
+        
+        
+        <polysaccaride> <nucleic-acid> <protein>  ),
                  (
-        <metalloid> 
-        <nonmetal> 
-        <metal>  ),
+        
+        
+        
+        <metalloid> <nonmetal> <metal>  ),
                  (
-        <negative-charge> 
-        <positive-charge>  ),
+        
+        
+        <negative-charge> <positive-charge>  ),
                  (
-        <double-stranded> 
-        <single-stranded>  ),
+        
+        
+        <double-stranded> <single-stranded>  ),
                  (
-        <positive> 
-        <negative>  ),
+        
+        
+        <positive> <negative>  ),
                  (
-        <hydrophilic> 
-        <hydrophobic>  ) .
+        
+        
+        <hydrophilic> <hydrophobic>  ) .
     
  #ENDS
