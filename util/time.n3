@@ -8,7 +8,7 @@
 @prefix dc: <http://purl.org/dc/elements/1.1/> .
 
 <> dc:source <http://www.cs.rochester.edu/~ferguson/daml/daml-time-nov2002.txt>;
-   owl:versionInfo "$Id$".
+   Owl:versionInfo "$Id$".
 
 <http://www.cs.rochester.edu/~ferguson/daml/daml-time-nov2002.txt>
   dc:title "A DAML Ontology of Time";
@@ -23,6 +23,7 @@ Interval s:subClassOf TemporalEntity.
 
 #(A T)[temporal-entity(T) --> [instant(T) v interval(T)]]
 #hmm... why? seems to me a conference is a TemporalEntity
+# hmm... perhaps section 2.5.  Linking Time and Events: explains
 TemporalEntity s:subClassOf [owl:unionOf (Instant Interval) ].
 
 #begins(t,T) --> instant(t) & temporal-entity(T)
@@ -115,7 +116,27 @@ before a owl:TransitiveProperty.
 { ?T1 after ?T2 } log:means { ?T2 before ?T1 }.
 
 # 2.3.  Interval Relations
-#@@
+
+#2.3-1
+intEqual a owl:SymmetricProperty;
+  s:domain ProperInterval;
+  s:range ProperInterval.
+{ ?T1 intEqual ?T2. ?t1 begins ?T1. } => { ?t1 begins ?T2 }.
+{ ?T1 intEqual ?T2. ?t2 ends ?T1. } => { ?t2 ends ?T2 }.
+
+###
+#2.4.  Optional Extensions:
+# skipped
+
+# int-during is used in 2.5
+# I think iCalendar assumes TotalOrder and No-Pts-at-Inf
+
+#######
+#2.5.  Linking Time and Events: explains
+atTime s:range Instant.  # 2.5-1
+during s:range Interval. # 2.5-2
+{ ?e during ?T. ?t inside ?T } => { ?e atTime ?t }. # 2.5-3
+{ ?e during ?T. ?T1 intDuring ?T } => { ?e during ?T1 }.
 
 ############
 # RDFS rules
@@ -128,6 +149,9 @@ s:range s:domain s:Property.
 { ?S a [ s:subClassOf ?C ] } => { ?S a ?C }.
 
 # OWL
+{ ?P a owl:SymmetricProperty } => { ?P owl:inverseOf ?O }.
+{ ?S [ owl:inverseOf ?P ] ?O } => { ?O ?P ?S }.
+
 { ?P a owl:InverseFunctionalProperty.
   ?X ?P ?Z.
   ?Y ?P ?Z.
