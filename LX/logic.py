@@ -7,21 +7,43 @@ Quantification, etc.
 Also handly functions for handling these things.  They're not object
 methods because the OO hierarchy is sometimes too dynamic here.
 
+
+
+? split into   term.py    and    formula.py
+
+or import bits into kb.py? ...?
+
 """
 __version__ = "$Revision$"
 # $Id$
 
+from sys import stderr
 import LX.expr
+# from LX.namespace import ns    BELOW to avoid loop problem
 
 ################################################################
 
 class Variable(LX.expr.AtomicExpr):
+##     #__slots__ = [ ]
+##     def __new__(class_, suggestedName="x"):
+##         return LX.expr.AtomicExpr.__new__(class_)
+
+##     def __init__(self, suggestedName):
+##         pass
     pass
 
 class ExiVar(Variable):
+    #__slots__ = [ ]
+
+##     def __new__(class_, suggestedName="x"):
+##         return Variable.__new__(class_)
+
+##     def __init__(self, suggestedName):
+##         pass
     pass
 
 class UniVar(Variable):
+    #__slots__ = [ ]
     pass
 
 class Proposition(LX.expr.AtomicExpr):
@@ -31,20 +53,158 @@ class Proposition(LX.expr.AtomicExpr):
 
 constantsForURIs = { }
 
+
 class Constant(LX.expr.AtomicExpr):
     """
     This denotes something in the domain of discourse.  In FOL, it is
     quite distinct from a variable, predicate, or function   
     """
 
+    #__slots__ = []
+
     def __repr__(self):
         try:
-            #return "LX.logic.ConstantForURI(\""+self.uri+"\", "+str(id(self))+")"
-            return "LX.logic.ConstantForURI(\""+self.uri+")"
+            return "LX.logic.URIConstant(\""+self.uri+"\")"
         except AttributeError:
             return "LX.logic.Constant(#"+str(id(self))+")"
 
+class URIConstant(Constant):
 
+    __slots__ = ["uri"]
+
+    def __new__(class_, uri):
+        #print "New called, uri:",uri,"  uri(id):",id(uri)
+        try:
+            result = constantsForURIs[uri]
+        except KeyError:
+            result = Constant.__new__(class_)
+            result.uri = uri
+            constantsForURIs[uri] = result
+            #print "  creating new"
+        else:
+            #print "  reusing"
+            pass
+        #print "  id(result)=",id(result)
+        return result
+
+    def __reduce__(self):
+        """
+         >>> filename="/tmp/sdfsdfsdf"
+         >>> from LX.logic import *
+         >>> c=URIConstant('http://www.w3.org/')
+         >>> d=URIConstant('http://www.w3.org/')
+         >>> c is d
+         True
+         >>> from cPickle import Pickler, Unpickler
+         >>> f=file(filename, "w")
+         >>> p=Pickler(f, -1)
+         >>> dummy=p.dump((c,d))
+         >>> f.close()
+         >>> f=file(filename)
+         >>> u=Unpickler(f)
+         >>> r=u.load()
+         >>> r[0] is r[1]
+         True
+         >>> r[0] is c
+         True
+
+        """
+        return (__newobj__, (URIConstant, self.uri))
+    
+class DataConstant(Constant):
+
+    __slots__ = ["lexrep", "value", "datatype"]
+
+    def __init__(self, *args, **kwargs):
+        pass
+
+    def __new__(class_, value=None, lexrep=None, datatype=None):
+        """Works in two modes: either:
+                 (1) you specify the value and let us pick a lexrep
+                     and datatype, or 
+                 (2) specify a lexrep (and optional datatype) and
+                     we'll figure out the value (if we can)
+
+           In value-mode, what if we can't pick a lexrep?  That's
+           an error, I think, because we couldn't send it as RDF.
+
+           datatype can be given as a URI string or a URIConstant.  If
+           None, then lexrep is taken to be a "plain literal" (ie
+           xsd:string, I think.)
+           
+        """
+        #print "NEW CALLED, lexrep:",lexrep
+
+        if datatype is not None and not isinstance(datatype, URIConstant):
+            datatype = URIConstant(datatype)
+            
+        if value is None:
+            datapair = (lexrep, datatype)
+        else:
+            datapair = asDataPair(value)
+            
+        try:
+            result = constantsForDTVs[datapair]
+        except KeyError:
+            #print "  creating new"
+            result = Constant.__new__(class_)
+            #print "  filling in"
+            result.suggestedName = u"lit_"+datapair[0][:30]
+            result.suggestedName = u"lit"
+            result.lexrep  = datapair[0]
+            result.datatype= datapair[1]
+            if value is None:
+                result.value = asValue(lexrep, datatype)
+                #print "  Picked value: ", result.value, result.value.__class__
+            else:
+                result.value = value
+            constantsForDTVs[datapair] = result
+        else:
+            #print "  reusing"
+            pass
+        #print "  id(result)=",id(result)
+        return result
+
+    #    def __getnewargs__(self):
+    #        print >>stderr, "DATA getnewargs called"
+    #        return (self.value, self.lexrep, self.datatype)
+
+    def __reduce__(self):
+        """
+         >>> filename="/tmp/sdfsdfsdf"
+         >>> from LX.logic import *
+         >>> c=DataConstant('http://www.w3.org/')
+         >>> d=DataConstant('http://www.w3.org/')
+         >>> c is d
+         True
+         >>> from cPickle import Pickler, Unpickler
+         >>> f=file(filename, "w")
+         >>> p=Pickler(f, -1)
+         >>> dummy=p.dump((c,d))
+         >>> f.close()
+         >>> f=file(filename)
+         >>> u=Unpickler(f)
+         >>> r=u.load()
+         >>> r[0] is r[1]
+         True
+         >>> r[0] is c
+         True
+
+        """
+        return (__newobj__, (DataConstant, self.value, self.lexrep, self.datatype))
+    
+    def __repr__(self):
+        return ("LX.logic.DataConstant(value="+repr(self.value)+
+                ", lexrep="+repr(self.lexrep)+", datatype="+
+                repr(self.datatype)+"\")")
+
+    def getData(self):
+        return (self.lexrep, self.datatype)
+    data=property(getData)
+    
+def __newobj__(cls, *args):
+    return cls.__new__(cls, *args)
+      
 class Function(LX.expr.AtomicExpr):
     """
     This is a kind of mapping from a tuple of values
@@ -193,17 +353,6 @@ def getOpenVariables(expr, unusedButQuantified=None):
 #      know we do....
 
 
-def ConstantForURI(uri):
-    try:
-        return constantsForURIs[uri]
-    except KeyError:
-        tt = Constant(uri)
-        constantsForURIs[uri] = tt
-        tt.uri = uri
-        # kb.interpret(tt, LX.uri.Describedthing(uri))
-        #     # t[0] = constants.setdefault(t[1], LX.fol.Constant(t[1]))
-        return tt
-
 def gatherURIs(expr, set):
     if expr.isAtomic():
         try:
@@ -213,36 +362,57 @@ def gatherURIs(expr, set):
     else:
         for term in expr.all:
             gatherURIs(term, set)
-        
-constantsForDTVs = {
-    ("0", "http://www.w3.org/2001/XMLSchema#nonNegativeInteger"):
-    ConstantForURI("foo:zero")
-    }
-valuesForConstants = { }
-for (key, value) in constantsForDTVs:
-    valuesForConstants[value] = key
 
+# OLD OBSOLETE FORWARDERS
 
-def ConstantForDatatypeValue(value, datatype=None):
-    """
-    Basically we'd like to handle python types and RDF/XSD types
-    in the same place.  Hrm.
-    """
+def ConstantForURI(uri):
+    return URIConstant(uri)
 
-    pair = (value, datatype)
-    try:
-        return constantsForDTVs[pair]
-    except KeyError:
-        tt = Constant(suggestedName=(u"lit"+value))
-        constantsForDTVs[pair] = tt
-        valuesForConstants[tt] = pair
-        tt.data = pair
-        return tt
+def ConstantForDatatypeValue(lexrep, datatype=None):
+    return DataConstant(lexrep=lexrep, datatype=datatype)
 
 def ConstantForPlainLiterals(value):
     return ConstantForDatatypeValue(value)
                                     
-                                    
+
+
+################################################################
+
+constantsForDTVs = {
+
+    # this needs work, but its enough for surnia right now....
+    ("0", "http://www.w3.org/2001/XMLSchema#nonNegativeInteger"):
+    URIConstant("foo:zero")
+
+    }
+
+class NoSuitableDatatype(RuntimeError):
+    pass
+
+# put these on a DatatypeManager object, or something, which
+# optionally gets passed to DataConstant.__new__ ?
+
+def asDataPair(value):
+    from LX.namespace import ns
+
+    if isinstance(value, int):
+        # do nonNegativeInteger sometimes, ...?
+        return (str(value), ns.xsd.int)
+    if isinstance(value, (str, unicode)):
+        return (value, None)
+    raise NoSuitableDatatype(value)
+
+def asValue(lexrep, datatype):
+    from LX.namespace import ns
+
+    """Okay to return None if there is no suitable value."""
+    if datatype is None:
+        return lexrep
+    if datatype is ns.xsd.int:
+        return int(lexrep)
+    return None
+
+
                                     
     
 ################################################################
@@ -272,7 +442,10 @@ def _test():
 if __name__ == "__main__": _test()
 
 # $Log$
-# Revision 1.10  2003-09-05 04:39:06  sandro
+# Revision 1.11  2003-09-17 17:18:02  sandro
+# changed how URIs and Datatypes are handled, mostly to supporting pickling
+#
+# Revision 1.10  2003/09/05 04:39:06  sandro
 # changed handling of i18n chars
 #
 # Revision 1.9  2003/09/04 07:14:12  sandro
