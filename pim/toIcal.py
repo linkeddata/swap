@@ -55,7 +55,7 @@ from fromIcal import iCalendarDefs # http://www.w3.org/2002/12/cal/
 CRLF = chr(13) + chr(10)
 
 RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
-ICAL = Namespace('http://www.w3.org/2002/12/cal/ical#')
+ICAL = Namespace('http://www.w3.org/2002/12/cal/icaltzd#')
 XMLSchema = Namespace('http://www.w3.org/2001/XMLSchema#')
 
 
@@ -386,7 +386,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.26  2005-03-19 14:10:46  connolly
+# Revision 2.27  2005-03-30 15:33:23  connolly
+# switched namespace name to stop abusing the old one
+#
+# Revision 2.26  2005/03/19 14:10:46  connolly
 # COUNT param
 # timezones as datatypes
 #
