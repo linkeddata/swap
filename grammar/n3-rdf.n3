@@ -103,7 +103,8 @@ objecttail bnf:mustBeOneSequence (
 verb bnf:mustBeOneSequence (
 		( prop )
 		( "@has" prop )
-		( "@is" prop "@of" )
+#		( "@is" prop "@of" )  
+# would be complicated to allow - would need subjectlist.
 		( "@a" )
 		( "=" )
 	).

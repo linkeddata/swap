@@ -2,7 +2,7 @@
 
 import llyn
 from myStore import load, Namespace
-from thing import Literal
+from term import Literal
 import diag
 diag.chatty_flag=10
 
@@ -12,13 +12,23 @@ from sys import argv
 already = []
 agenda = []
 
+dict = {}
+
 def doProduction(lhs):
     if lhs is BNF.void:
-	print "void"
+	print "\nvoid"
 	return
-    if type(lhs) is type (u""):
-	print "Token %s" %(lhs)
+    if lhs is BNF.eof:
+	print "\nEOF"
 	return
+
+    if isinstance(lhs, Literal):
+#    	print "\nLiteral %s" %(lhs)
+	return
+
+    branchDict = {}
+    dict[lhs] = branchDict
+
     rhs = g.the(pred=BNF.matches, subj=lhs)
     if rhs != None:
 	print "Token %s matches regexp %s" %(lhs, rhs)
@@ -28,22 +38,44 @@ def doProduction(lhs):
 	print "############## NO DEFINITION OF ", `lhs`
 	return
 	raise RuntimeError("No definition of %s  in\n %s" %(`lhs`, `g`))
-    options = rhs.value()
-    print "Production %s :: %s" %(`lhs`, `options` )
-    selectors = g.each(subj=lhs, pred=BNF.selector)
-    print "Selectors:", selectors
-    for option in options:
-	print "  Option "+`option`
+    options = rhs
+    print "\nProduction %s :: %s  ie %s" %(`lhs`, `options` , `options.value()`)
+
+    succ = g.each(subj=lhs, pred=BNF.canPrecede)
+    print "\tCan precede ", succ
+
+    branches = g.each(subj=lhs, pred=BNF.branch)
+#    print "branches:", `branches`
+    for branch in branches:
+	option = g.the(subj=branch, pred=BNF.sequence)
+	print "\toption: "+`option.value()`
 	for part in option:
 #	    print "    Part: " + `part`
 	    if part not in already and part not in agenda: agenda.append(part)
-	for sel in selectors:
-	    str, branch = sel.value()
-	    print "Selector %s for %s" %(str, branch)
-	    if branch == rhs:
-		print "**** Selector %s for option %s" %(str, `branch`)
-    
+	conditions = g.each(subj=branch, pred=BNF.condition)
+	if conditions == []:
+	    print "\t\t####### NO SELECTOR for %s option %s ie %s" %(`lhs`, `option`, `option.value()` )
+	    if option.value == []: # Void case - the tricky one
+		succ = g.each(subj=lhs, pred=BNF.canPrecede)
+		for y in succ:
+		    print "\t\t\tCan precede ", `y`
+	for str1 in conditions:
+	    print "\t\tCondition '%s'" %(str1)
+	    if str1 in branchDict:
+		print "##### Conflict: %s is also the condition for %s" % (
+				str1, branchDict[str1].value())
+	    branchDict[str1] = rhs
+	    break
+	for str1 in branchDict:
+	    for str2 in branchDict:
+		
+		s1 = str1.__str__()
+		s2 = str2.__str__()
+		if s1.startswith(s2) and branchDict[str1] is not branchDict[str2]:
+		    print "\t\t##### Conflict: %s ans %s are conditions is also the condition for %s" % (
+				s1, s2, `option.value()`)
 
+# @@ check that selectors are distinct, not substrings
 
 
 # The Grammar formula

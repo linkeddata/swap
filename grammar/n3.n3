@@ -18,7 +18,7 @@
 # - encoding really needs specifying
 # - @keywords affects tokenizing
 # - Use of dot for !
-# - datatypes and/or* languages in literals (*choice - follow RDF)
+# - comments
 
 # tokenizing:
 # Absorb anything until end of regexp, then stil white space
@@ -50,7 +50,7 @@ n3document a rul:Used;
 		)
 	).
 
-statements_optional bnf:mustBeOneSequence (() ( statement "." statements_optional )e ).
+statements_optional bnf:mustBeOneSequence (() ( statement "." statements_optional ) ).
 
 # Formula does NOT need period on last statement
 
@@ -141,7 +141,7 @@ node bnf:mustBeOneSequence (
 		( "{" formulacontent "}" )
 		( variable )
 		( numericliteral )
-		( string )
+		( literal )
 		( "[" propertylist "]"  )
 		(  "("  pathlist ")"  )
 		( "@this" )	  #  Deprocated.  Was allowed for this log:forAll x
@@ -156,7 +156,10 @@ symbol bnf:mustBeOneSequence (
 	).
 
 
- 
+literal bnf:mustBeOneSequence(( string dtlang)).
+
+dtlang bnf:mustBeOneSequence(  ()  ("@" langcode)  ("^^" symbol)).
+
 
 #______________________________________________________________________
 #
@@ -184,7 +187,8 @@ langcode	bnf:matches  	"[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?";
 #               raw regexp single quoted would be   "([^"]|(\\"))*"
 # @@@ triple-quoted version too
 
-string		bnf:matches		"""("([^"]|(\\\\"))*")""".
+string		bnf:matches		"""("([^"]|(\\\\"))*")""";
+		bnf:canStartWith 	"\"".
 
 #____________________________________________________
 

@@ -18,43 +18,72 @@
 
 # Shorthand expansion into BNF
 
-{ ?x bnf:zeroOrMore ?y } => {
-    ?x bnf:mustBeOneSequence (
-		( )
-		( ?y ?x )
-	) 
-}.
-
-{ ?x bnf:mustBe ?y } => {?x bnf:mustBeOneSequence ((?y))}.
-
+#{ ?x bnf:zeroOrMore ?y } => {
+#    ?x bnf:mustBeOneSequence (
+##		( )
+#		( ?y ?x )
+#	) 
+#}.
+#
+#{ ?x bnf:mustBe ?y } => {?x bnf:mustBeOneSequence ((?y))}.
+#
 # Axioms relating the definite (open world) form to the indefinte (closed world) 
 #(better words?) form:
+#
+#{ ?x bnf:mustBe ?y } => { ?x bnf:mustBeOneSequence (( ?y )) }.
+#
 
-{ ?x bnf:mustBe ?y } => { ?x bnf:mustBeOneSequence (( ?y )) }.
+# Enumerate options:
 
 { ?x bnf:mustBeOneSequence ?y} => { ?x optionTail ?y }.
 
 {?x optionTail [rdf:first ?y; rdf:rest ?z]} => {
-	?x 	bnf:canBeSequence ?y;
+	?x 	bnf:branch [ bnf:sequence ?y];
 		optionTail ?z.
 	?y a :Used}.
 
-{ ?x bnf:canBeSequence ?y } =>  { ?y sequenceTail ?y }.
+{ ?x bnf:branch [bnf:sequence ?y] } =>  { ?y sequenceTail ?y }.
 
 sequenceTail a log:Chaff.
 optionTail a log:Chaff.
 
 { ?x sequenceTail [ rdf:rest ?z ] } => { ?x sequenceTail ?z }.
 
-{ ?x sequenceTail [ rdf:first ?y; rdf:rest [ rdf:first ?z ]] } =>
-	{?y canPrecede ?z}.
+# What productions can follow each other?
+# This is used for working out when to 
 
-# Have to separatethe next two rules 
-{ ?x bnf:canBeSequence [ rdf:first ?y ].
+{ ?x sequenceTail [ rdf:first ?y; rdf:rest [ rdf:first ?z ]] } =>
+	{ ?y bnf:canPrecede ?z }.
+
+{	?x bnf:branch [
+	    bnf:sequence [
+		list:last ?y]].
+	?x bnf:canPrecede ?z} =>
+	{ ?y bnf:canPrecede ?z }.
+
+{ 	?x bnf:canPrecede ?y.
+	?y bnf:branch [ bnf:sequence () ].
+	?y bnf:canPrecede ?z.
+} => {
+
+	?x bnf:canPrecede ?z.
+}.
+
+
+bnf:eof bnf:canStartWith "@EOFDUMMY". #  @@ kludge
+
+# Have to separate the next three rules or cwm seems to
+# get screwed up and assume there is no solution @@@
+ 
+{ ?x bnf:branch [bnf:sequence [ rdf:first ?y ]].
+  }  => { ?x bnf:TEST ?y }.
+
+{ ?x bnf:TEST ?y .
   ?y log:rawType log:Literal. }  => { ?x bnf:canStartWithLiteral ?y }.
 
 { ?x bnf:canStartWithLiteral ?y .
-  (?y "(.).*")  string:scrape ?c }  => { ?x bnf:canStartWith ?c }.
+#  (?y "(.).*")  string:scrape ?c     # Use whole string
+ }  => { ?y bnf:canStartWith ?y }.
 
 #______________________________________________________________
 
@@ -62,26 +91,27 @@ optionTail a log:Chaff.
 
 # Rules for determining branching
 
-{ 	?x bnf:canBeSequence ?s. ?s rdf:first [bnf:canStartWith ?y].
+# A branch has  a sequence, which is the given BNF production, and
+# one or more conditions, which are the strings on which to consider
+# that branch.  N3 is a langauge in whch the look-ahead often is only
+# one character, and may allways be a constsnt string rather than a 
+# regexp (check).
+
+{ 	?x bnf:branch ?b.
+	?b bnf:sequence ?s.
+	?s rdf:first [bnf:canStartWith ?y].
 } => {
-	?x bnf:selector ( ?y ?s ); bnf:canStartWith ?y.
+	?x bnf:canStartWith ?y.
+	?b bnf:condition ?y.
 }.
 
 
-{ 	?x bnf:canBeSequence ();
-		canPrecede [bnf:canStartWith ?z]} =>  { ?x bnf:selector (?z ())}.
 
+{ 	?x bnf:branch ?b;
+	    bnf:canPrecede [bnf:canStartWith ?z].
+	?b bnf:sequence ().
+} =>  { ?b bnf:condition ?z}.
 
-{   	?x a Used; bnf:canBeSequence ?s.
-} => {
-	?y a Used.
-	?s a UsedSequence.
-	?s a UsedTail.
-}.
-
-
-
-{ ?x bnf:canBeSequence [ list:last ?y ]; canPrecede ?z} => { ?y canPrecede ?z }.
 
 
 

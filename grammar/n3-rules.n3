@@ -1,32 +1,22 @@
-# Notation3 
+# Notation3 constrained to be RDF + a horn rules language
+#
 # BNF without tokenization
 #
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix bnf: <http://www.w3.org/2000/10/swap/grammar/bnf#>.
 @prefix rul: <http://www.w3.org/2000/10/swap/grammar/bnf-rules#>.
-@prefix : <http://www.w3.org/2000/10/swap/grammar/n3#>.
-@prefix n3: <http://www.w3.org/2000/10/swap/grammar/n3#>.
+@prefix : <http://www.w3.org/2000/10/swap/grammar/n3-rules#>.
+@prefix n3r: <http://www.w3.org/2000/10/swap/grammar/n3-rules#>.
 @prefix list: <http://www.w3.org/2000/10/swap/list#>.
 @prefix string: <http://www.w3.org/2000/10/swap/string#>.
 @keywords a, is, of.
 
 
 # Issues:
-# - string token regexp not right
-# - tokenizing rules in general
-# - @keywords affects tokenizing
-# - Use of dot for !
-# - datatypes and/or* languages in literals (*choice - follow RDF)
+# - see general ones in n3.n3
+# - Defining safe rules
 
-# tokenizing:
-# Absorb anything until end of regexp, then stil white space
-#  period followed IMMEDIATELY by an opener or name char is taken as "!".
-#  Except after a "." used instead of in those circumstances,
-#	ws may be inserted between tokens.
-#  WS MUST be inserted between tokens where ambiguity would arise.
-#  (possible ending characters of one and beginning characters overlap)
-#
 
 <> bnf:syntaxFor [ bnf:internetMediaType 
 		<http://www.w3.org/2003/mediatypes#application/n3>].
@@ -49,13 +39,15 @@ n3document a rul:Used;
 		)
 	).
 
-statements_optional bnf:mustBeOneSequence (() ( statement "." statements_optional )e ).
+statements_optional bnf:mustBeOneSequence (() ( statement_or_rule "." statements_optional )e ).
+
+
+statement_or_rule bnf:mustBeOneSequence( (statement) (rule) ).
 
 # Formula does NOT need period on last statement
 
 formulacontent bnf:mustBeOneSequence ((
 		[ bnf:zeroOrMore declaration ]
-		[ bnf:zeroOrMore  universal ]
 		[ bnf:zeroOrMore existential ]
 		statementlist
 	)).
@@ -88,19 +80,20 @@ symbol bnf:mustBeOneSequence (
 		(qname)
 	).
 
-#qname bnf:mustBeOneSequence(
-#		( prefix colon localname )
-#		( localname )
-#	).
-
 declaration bnf:mustBeOneSequence(
 		( "@prefix" qname explicituri "." )
 		( "@keywords" [ bnf:commaSeparatedPeriodTerminatedListOf barename ] )
 	).
 
-########### Full N3 Versions
-
 statement bnf:mustBeOneSequence(( subject propertylist )).
+
+rule bnf:mustBeOneSequence (
+	"{" formulacontent "}" "=>" "{" formulacontent "}"
+	).
+
+rule_safe bnf:mustBeOneSequence (
+	"{" formulacontent "}" "=>" "{" formula_safe "}"
+	).
 
 propertylist bnf:mustBeOneSequence (
 		( )
@@ -125,8 +118,6 @@ verb bnf:mustBeOneSequence (
 		( "@is" prop "@of" )
 		( "@a" )
 		( "=" )
-		( "=>" )
-		( "<=" ) 
 	).
 
 prop bnf:mustBeOneSequence ((node)).
@@ -137,7 +128,6 @@ object bnf:mustBeOneSequence ((item)).
 
 item bnf:mustBeOneSequence(
 		(path)
-#		( node "@of" path )     # Not implemented, just an idea
 	).
 
 
@@ -154,28 +144,21 @@ pathtail bnf:mustBeOneSequence(
 
 node bnf:mustBeOneSequence (
 		( symbol )
-		( "{" formulacontent "}" )
 		( variable )
 		( numericliteral )
-		( string )
+		( literal )
 		( "[" propertylist "]"  )
 		(  "("  itemlist ")"  )
-		( "@this" )	  #  Deprocated.  Was allowed for this log:forAll x
 ).
 
 
 
 itemlist bnf:mustBeOneSequence (() (item itemlist)).
  
-#prefix bnf:mustBeOneSequence (
-#		( alphanumeric )
-#		( "_" )
-#	).
+literal bnf:mustBeOneSequence(( string dtlang)).
 
-#_____________________________________________________________________
-#
+dtlang bnf:mustBeOneSequence(  ()  ("@" langcode)  ("^^" symbol)).
 
-RDF-only language
 
 #______________________________________________________________________
 #
@@ -207,6 +190,7 @@ langcode	bnf:matches  	"[a-zA-Z0-9]+(-[a-zA-Z0-9]+)?";
 # @@@ triple-quoted version too
 
 string		bnf:matches		"""("([^"]|(\\\\"))*")""".
+
 
 #____________________________________________________
 
