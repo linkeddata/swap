@@ -105,6 +105,7 @@ class RDFHandler(xml.sax.ContentHandler):
 
         self._subject = None
         self._predicate = None
+	self._nodeIDs = {}
         self._items = [] # for <rdf:li> containers
         self._genPrefix = uripath.join(thisURI, "#_rdfxg")    # allow parameter override?
 	self.sink.setGenPrefix(self._genPrefix)
@@ -169,6 +170,13 @@ class RDFHandler(xml.sax.ContentHandler):
                 elif ln == "about":
                     if self._subject: raise BadSyntax(sys.exc_info(), ">1 subject")
                     self._subject = self.sink.newSymbol(self.uriref(value))
+                elif ln == "nodeID":
+                    if self._subject: raise BadSyntax(sys.exc_info(), ">1 subject")
+		    s = self._nodeIDs.get(value, None)
+		    if s == None:
+			s = self.sink.newBlankNode(self._context)
+			self._nodeIDs[value] = s
+                    self._subject = s
                 elif ln == "aboutEachPrefix":
                     if value == " ":  # OK - a trick to make NO subject
                         self._subject = None
@@ -344,6 +352,16 @@ class RDFHandler(xml.sax.ContentHandler):
 #					or nsURI == DPO_NS)): 
                             self._state = STATE_LIST  # Linked list of obj's
 
+                elif name == "nodeID":
+		    obj = self._nodeIDs.get(value, None)
+		    if obj == None:
+			obj = self.sink.newBlankNode(self._context)
+			self._nodeIDs[value] = obj
+                    self.sink.makeStatement((self._context,
+                                             self._predicate,
+                                             self._subject,
+                                             obj ), why=self._reason2)
+                    self._state = STATE_NOVALUE  # NOT looking for value
                 elif name == "resource":
                     self.sink.makeStatement((self._context,
                                              self._predicate,

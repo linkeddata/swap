@@ -46,32 +46,32 @@ math:TwoMemberedList a rdfs:Class; rdfs:label "TwoMemberedList";
      "This is the class of things that are math lists with only two members." .
 
 # Reverse functions:  (obsolete - we stdize on forwrad ones i think -tbl)
-
-math:differenceOf a math:ReverseFunction; rdfs:label "differenceOf"; 
-   rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
-   rdfs:comment "The difference of the list members. (obsolete)" .
-
-math:factors a math:ReverseFunction; rdfs:label "factors"; 
-   rdfs:domain math:Value; rdfs:range math:List;
-   daml:inverse math:product; 
-   rdfs:comment "A list of values which multiply to produce the subject. (obsolete)" .
-
-math:quotientOf a math:ReverseFunction; rdfs:label "quotientOf"; 
-   rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
-   rdfs:comment "The quotient of the list members (obsolete)" .
-
-math:remainderOf a math:ReverseFunction; rdfs:label "remainderOf"; 
-   rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
-   rdfs:comment "The remainder of the list members (obsolete)" .
-
-math:negationOf a math:Function, math:ReverseFunction;
-   rdfs:label "negation"; 
-   rdfs:domain math:Value; rdfs:range math:Value; 
-   rdfs:comment "The subject is the negotation of the object (obsolete)" .
-
-math:exponentiationOf a math:ReverseFunction; rdfs:label "exponentiationOf"; 
-   rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
-   rdfs:comment "For exponOf(x, (y, z)), x = y^z   (obsolete)" .
+#
+#math:differenceOf a math:ReverseFunction; rdfs:label "differenceOf"; 
+#   rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
+#   rdfs:comment "The difference of the list members. (obsolete)" .
+#
+#math:factors a math:ReverseFunction; rdfs:label "factors"; 
+#   rdfs:domain math:Value; rdfs:range math:List;
+#   daml:inverse math:product; 
+#   rdfs:comment "A list of values which multiply to produce the subject. (obsolete)" .
+#
+#math:quotientOf a math:ReverseFunction; rdfs:label "quotientOf"; 
+#   rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
+#   rdfs:comment "The quotient of the list members (obsolete)" .
+#
+#math:remainderOf a math:ReverseFunction; rdfs:label "remainderOf"; 
+#   rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
+#   rdfs:comment "The remainder of the list members (obsolete)" .
+#
+#math:negationOf a math:Function, math:ReverseFunction;
+#   rdfs:label "negation"; 
+#   rdfs:domain math:Value; rdfs:range math:Value; 
+#   rdfs:comment "The subject is the negotation of the object (obsolete)" .
+#
+#math:exponentiationOf a math:ReverseFunction; rdfs:label "exponentiationOf"; 
+#   rdfs:domain math:Value; rdfs:range math:TwoMemberedList; 
+#   rdfs:comment "For exponOf(x, (y, z)), x = y^z   (obsolete)" .
 
 #  Forward function
 
@@ -137,13 +137,30 @@ math:product a rdf:Property;
 The object is calculated as the arithmentic product of those numbers.
 """.
 
-math:difference a rdf:Property;
-	rdfs:label "difference";
+math:quotient a rdf:Property;
+	rdfs:label "quotient";
 	rdfs:range math:Value;
 	rdfs:comment
 """The subject is a pair of numbers. The object
 is calculated by dividing the first number of the pair by the second.
 """.
+
+math:intgerQuotient a rdf:Property;
+	rdfs:label "integerQuotient";
+	rdfs:range math:Value;
+	rdfs:comment
+"""The subject is a pair of integer numbers. The object
+is calculated by dividing the first number of the pair by the second, ignoring remainder.
+""".
+
+math:remainder a rdf:Property;
+	rdfs:label "remainder";
+	rdfs:range math:Value;
+	rdfs:comment
+"""The subject is a pair of integers. The object
+is calculated by dividing the first number of the pair by the second and taking the remainder.
+""".
+
 
 math:exponentiation a rdf:Property;
 	rdfs:label "exponentiation";

@@ -1,5 +1,5 @@
 
-<!-- Processed by Id: cwm.py,v 1.122 2003/02/09 03:03:47 timbl Exp -->
+<!-- Processed by Id: cwm.py,v 1.126 2003/02/14 17:48:08 sandro Exp -->
 <!--     using base file:/devel/WWW/2000/10/swap/math.n3-->
 
 
@@ -62,21 +62,11 @@
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#difference">
         <rdfs:comment>The subject is a pair of numbers. The object
-is calculated by dividing the first number of the pair by the second.
-</rdfs:comment>
-        <rdfs:comment>The subject is a pair of numbers. The object
 is calculated by subtracting the second number of the pair from the first.
 </rdfs:comment>
         <rdfs:label>difference</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
     </rdf:Property>
-
-    <ReverseFunction rdf:about="http://www.w3.org/2000/10/swap/math#differenceOf">
-        <rdfs:comment>The difference of the list members. (obsolete)</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
-        <rdfs:label>differenceOf</rdfs:label>
-        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#TwoMemberedList"/>
-    </ReverseFunction>
 
     <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#equalTo">
         <rdfs:comment>True iff the subject is a string representation of a number which  is EQUAL TO a number of which the object is a string representation.</rdfs:comment>
@@ -93,27 +83,20 @@ is calculated by raising the first number of the power of the second.
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
     </rdf:Property>
 
-    <ReverseFunction rdf:about="http://www.w3.org/2000/10/swap/math#exponentiationOf">
-        <rdfs:comment>For exponOf(x, (y, z)), x = y^z   (obsolete)</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
-        <rdfs:label>exponentiationOf</rdfs:label>
-        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#TwoMemberedList"/>
-    </ReverseFunction>
-
-    <ReverseFunction rdf:about="http://www.w3.org/2000/10/swap/math#factors">
-        <daml:inverse rdf:resource="http://www.w3.org/2000/10/swap/math#product"/>
-        <rdfs:comment>A list of values which multiply to produce the subject. (obsolete)</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
-        <rdfs:label>factors</rdfs:label>
-        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#List"/>
-    </ReverseFunction>
-
     <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#greaterThan">
         <rdfs:comment>True iff the subject is a string representation of a number which  is greater than the number of which the object is a string representation.</rdfs:comment>
         <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
         <rdfs:label>greaterThan</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
     </StrictProperty>
+
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#intgerQuotient">
+        <rdfs:comment>The subject is a pair of integer numbers. The object
+is calculated by dividing the first number of the pair by the second, ignoring remainder.
+</rdfs:comment>
+        <rdfs:label>integerQuotient</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
 
     <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#lessThan">
         <rdfs:comment>True iff the subject is a string representation of a number which  is LESS than a number of which the object is a string representation.</rdfs:comment>
@@ -136,14 +119,6 @@ the object is calculated as the number of members.</rdfs:comment>
         <rdfs:label>negation</rdfs:label>
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
     </rdf:Property>
-
-    <Function rdf:about="http://www.w3.org/2000/10/swap/math#negationOf">
-        <rdf:type rdf:resource="http://www.w3.org/2000/10/swap/math#ReverseFunction"/>
-        <rdfs:comment>The subject is the negotation of the object (obsolete)</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
-        <rdfs:label>negation</rdfs:label>
-        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
-    </Function>
 
     <StrictProperty rdf:about="http://www.w3.org/2000/10/swap/math#notEqualTo">
         <rdfs:comment>True iff the subject is a string representation of a number which  is NOT EQUAL to a number of which the object is a string representation.</rdfs:comment>
@@ -175,19 +150,21 @@ The object is calculated as the arithmentic product of those numbers.
         <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
     </rdf:Property>
 
-    <ReverseFunction rdf:about="http://www.w3.org/2000/10/swap/math#quotientOf">
-        <rdfs:comment>The quotient of the list members (obsolete)</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
-        <rdfs:label>quotientOf</rdfs:label>
-        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#TwoMemberedList"/>
-    </ReverseFunction>
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#quotient">
+        <rdfs:comment>The subject is a pair of numbers. The object
+is calculated by dividing the first number of the pair by the second.
+</rdfs:comment>
+        <rdfs:label>quotient</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
 
-    <ReverseFunction rdf:about="http://www.w3.org/2000/10/swap/math#remainderOf">
-        <rdfs:comment>The remainder of the list members (obsolete)</rdfs:comment>
-        <rdfs:domain rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
-        <rdfs:label>remainderOf</rdfs:label>
-        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#TwoMemberedList"/>
-    </ReverseFunction>
+    <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#remainder">
+        <rdfs:comment>The subject is a pair of integers. The object
+is calculated by dividing the first number of the pair by the second and taking the remainder.
+</rdfs:comment>
+        <rdfs:label>remainder</rdfs:label>
+        <rdfs:range rdf:resource="http://www.w3.org/2000/10/swap/math#Value"/>
+    </rdf:Property>
 
     <rdf:Property rdf:about="http://www.w3.org/2000/10/swap/math#rounded">
         <rdfs:comment>The object is calulated as the subject rounded to the nearest integer.</rdfs:comment>

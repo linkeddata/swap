@@ -5,6 +5,7 @@
 @prefix : <#>.
 @prefix x: <#>.
 @prefix test: <http://www.w3.org/2000/10/swap/test.n3#>.
+@prefix dc:  <http://purl.org/dc/elements/1.1/>. # yuk - under protest - no hash
 
 :t1001 a test:CwmTest;
     test:shortFileName "animal.n3";
@@ -50,6 +51,11 @@
     test:shortFileName "anon-prop-1.n3";
     test:description   "Parse and regen anonymous property";
     test:arguments     """anon-prop.n3""".
+
+:t1007a a test:CwmTest;
+    test:shortFileName "bnode.n3";
+    test:description   "Parse RDF/XML nodeID";
+    test:arguments     """--rdf nodeID/ex1.rdf --n3""".
 
 
 :t1008 a test:CwmTest;

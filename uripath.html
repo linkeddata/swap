@@ -16,7 +16,7 @@ above&nbsp;the&nbsp;access&nbsp;layer<br>
 &nbsp;<br>
 The&nbsp;name&nbsp;of&nbsp;this&nbsp;module&nbsp;and&nbsp;the&nbsp;functions&nbsp;are&nbsp;somewhat<br>
 arbitrary;&nbsp;they&nbsp;hark&nbsp;to&nbsp;other&nbsp;parts&nbsp;of&nbsp;the&nbsp;python<br>
-library;&nbsp;e.g.&nbsp;uripath.<a href="#-join">join</a>()&nbsp;is&nbsp;somewhat&nbsp;like&nbsp;os.path.<a href="#-join">join</a>().<br>
+library;&nbsp;e.g.&nbsp;uripath.join()&nbsp;is&nbsp;somewhat&nbsp;like&nbsp;os.path.join().<br>
 &nbsp;<br>
 REFERENCES<br>
 &nbsp;<br>
@@ -160,85 +160,6 @@ Data and non-method functions inherited from <a href="unittest.html#TestCase">un
 <dl><dt><strong>failureException</strong> = &lt;class exceptions.AssertionError&gt;<dd><tt>Assertion&nbsp;failed.</tt></dl>
 
 </td></tr></table></td></tr></table>
-<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
-<tr bgcolor="#eeaa77">
-<td colspan=3 valign=bottom>&nbsp;<br>
-<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
-    
-<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
-<td width="100%"><dl><dt><a name="-_fixslash"><strong>_fixslash</strong></a>(str)</dt><dd><tt>&nbsp;Fix&nbsp;windowslike&nbsp;filename&nbsp;to&nbsp;unixlike&nbsp;-&nbsp;(#ifdef&nbsp;WINDOWS)</tt></dd></dl>
- <dl><dt><a name="-_test"><strong>_test</strong></a>()</dt></dl>
- <dl><dt><a name="-base"><strong>base</strong></a>()</dt><dd><tt>The&nbsp;base&nbsp;URI&nbsp;for&nbsp;this&nbsp;process&nbsp;-&nbsp;the&nbsp;Web&nbsp;equiv&nbsp;of&nbsp;cwd<br>
-&nbsp;<br>
-Relative&nbsp;or&nbsp;abolute&nbsp;unix-standard&nbsp;filenames&nbsp;parsed&nbsp;relative&nbsp;to<br>
-this&nbsp;yeild&nbsp;the&nbsp;URI&nbsp;of&nbsp;the&nbsp;file.<br>
-If&nbsp;we&nbsp;had&nbsp;a&nbsp;reliable&nbsp;way&nbsp;of&nbsp;getting&nbsp;a&nbsp;computer&nbsp;name,<br>
-we&nbsp;should&nbsp;put&nbsp;it&nbsp;in&nbsp;the&nbsp;hostname&nbsp;just&nbsp;to&nbsp;prevent&nbsp;ambiguity</tt></dd></dl>
- <dl><dt><a name="-join"><strong>join</strong></a>(here, there)</dt><dd><tt>join&nbsp;an&nbsp;absolute&nbsp;URI&nbsp;and&nbsp;URI&nbsp;reference<br>
-&nbsp;<br>
-here&nbsp;must&nbsp;be&nbsp;an&nbsp;absolute&nbsp;URI.<br>
-there&nbsp;must&nbsp;be&nbsp;a&nbsp;URI&nbsp;reference.<br>
-&nbsp;<br>
-&gt;&gt;&gt;&nbsp;<a href="#-join">join</a>('<a href="http://example/x/y/z">http://example/x/y/z</a>',&nbsp;'../abc')<br>
-'<a href="http://example/x/abc">http://example/x/abc</a>'<br>
-&nbsp;<br>
-Raise&nbsp;ValueError&nbsp;if&nbsp;there&nbsp;uses&nbsp;relative&nbsp;path<br>
-syntax&nbsp;but&nbsp;here&nbsp;has&nbsp;no&nbsp;hierarchical&nbsp;path.<br>
-&nbsp;<br>
-&gt;&gt;&gt;&nbsp;<a href="#-join">join</a>('mid:foo@example',&nbsp;'../foo')<br>
-Traceback&nbsp;(most&nbsp;recent&nbsp;call&nbsp;last):<br>
-&nbsp;&nbsp;&nbsp;&nbsp;raise&nbsp;ValueError,&nbsp;here<br>
-ValueError:&nbsp;mid:foo@example</tt></dd></dl>
- <dl><dt><a name="-refTo"><strong>refTo</strong></a>(base, uri)</dt><dd><tt>figure&nbsp;out&nbsp;a&nbsp;relative&nbsp;URI&nbsp;reference&nbsp;from&nbsp;base&nbsp;to&nbsp;uri<br>
-&nbsp;<br>
-&gt;&gt;&gt;&nbsp;<a href="#-refTo">refTo</a>('<a href="http://example/x/y/z">http://example/x/y/z</a>',&nbsp;'<a href="http://example/x/abc">http://example/x/abc</a>')<br>
-'../abc'<br>
-&nbsp;<br>
-&gt;&gt;&gt;&nbsp;<a href="#-refTo">refTo</a>('file:/ex/x/y',&nbsp;'file:/ex/x/q/r#s')<br>
-'q/r#s'<br>
-&nbsp;<br>
-&gt;&gt;&gt;&nbsp;<a href="#-refTo">refTo</a>(None,&nbsp;'<a href="http://ex/x/y">http://ex/x/y</a>')<br>
-'<a href="http://ex/x/y">http://ex/x/y</a>'<br>
-&nbsp;<br>
-&gt;&gt;&gt;&nbsp;<a href="#-refTo">refTo</a>('<a href="http://ex/x/y">http://ex/x/y</a>',&nbsp;'<a href="http://ex/x/y">http://ex/x/y</a>')<br>
-''<br>
-&nbsp;<br>
-&nbsp;<br>
-This&nbsp;one&nbsp;checks&nbsp;that&nbsp;it&nbsp;uses&nbsp;a&nbsp;root-realtive&nbsp;one&nbsp;where&nbsp;that&nbsp;is<br>
-all&nbsp;they&nbsp;share.&nbsp;&nbsp;Now&nbsp;uses&nbsp;root-relative&nbsp;where&nbsp;no&nbsp;path&nbsp;is&nbsp;shared.<br>
-This&nbsp;is&nbsp;a&nbsp;matter&nbsp;of&nbsp;taste&nbsp;but&nbsp;tends&nbsp;to&nbsp;give&nbsp;more&nbsp;resilience&nbsp;IMHO<br>
---&nbsp;and&nbsp;shorter&nbsp;paths<br>
-&nbsp;<br>
-Note&nbsp;that&nbsp;base&nbsp;may&nbsp;be&nbsp;None,&nbsp;meaning&nbsp;no&nbsp;base.&nbsp;&nbsp;In&nbsp;some&nbsp;situations,&nbsp;there<br>
-just&nbsp;ain't&nbsp;a&nbsp;base.&nbsp;Slife.&nbsp;In&nbsp;these&nbsp;cases,&nbsp;relTo&nbsp;returns&nbsp;the&nbsp;absolute&nbsp;value.<br>
-The&nbsp;axiom&nbsp;abs(,rel(b,x))=x&nbsp;still&nbsp;holds.<br>
-This&nbsp;saves&nbsp;people&nbsp;having&nbsp;to&nbsp;set&nbsp;the&nbsp;base&nbsp;to&nbsp;"bogus:".<br>
-&nbsp;<br>
-&gt;&gt;&gt;&nbsp;<a href="#-refTo">refTo</a>('<a href="http://ex/x/y/z">http://ex/x/y/z</a>',&nbsp;'<a href="http://ex/r">http://ex/r</a>')<br>
-'/r'</tt></dd></dl>
- <dl><dt><a name="-splitFrag"><strong>splitFrag</strong></a>(uriref)</dt><dd><tt>split&nbsp;a&nbsp;URI&nbsp;reference&nbsp;between&nbsp;the&nbsp;fragment&nbsp;and&nbsp;the&nbsp;rest.<br>
-&nbsp;<br>
-Punctuation&nbsp;is&nbsp;thrown&nbsp;away.<br>
-&nbsp;<br>
-e.g.<br>
-&nbsp;<br>
-&gt;&gt;&gt;&nbsp;<a href="#-splitFrag">splitFrag</a>("abc#def")<br>
-('abc',&nbsp;'def')<br>
-&nbsp;<br>
-&gt;&gt;&gt;&nbsp;<a href="#-splitFrag">splitFrag</a>("abcdef")<br>
-('abcdef',&nbsp;None)</tt></dd></dl>
- <dl><dt><a name="-splitFragP"><strong>splitFragP</strong></a>(uriref, punct<font color="#909090">=0</font>)</dt><dd><tt>split&nbsp;a&nbsp;URI&nbsp;reference&nbsp;before&nbsp;the&nbsp;fragment<br>
-&nbsp;<br>
-Punctuation&nbsp;is&nbsp;kept.<br>
-&nbsp;<br>
-e.g.<br>
-&nbsp;<br>
-&gt;&gt;&gt;&nbsp;<a href="#-splitFragP">splitFragP</a>("abc#def")<br>
-('abc',&nbsp;'#def')<br>
-&nbsp;<br>
-&gt;&gt;&gt;&nbsp;<a href="#-splitFragP">splitFragP</a>("abcdef")<br>
-('abcdef',&nbsp;'')</tt></dd></dl>
-</td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>

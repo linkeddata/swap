@@ -115,6 +115,12 @@ class BI_quotient(LightBuiltIn, Function):
         if len(subj_py) == 2: t = float(subj_py[0]) / float(subj_py[1])
         return tidy(t)
 
+class BI_integerQuotient(LightBuiltIn, Function):
+    def evaluateObject(self, subj_py): 
+        t = None
+        if len(subj_py) == 2: t = int(subj_py[0]) / int(subj_py[1])
+        return tidy(t)
+
 class BI_quotientOf(LightBuiltIn, ReverseFunction):
     def evaluateSubject(self,  obj_py): 
         t = None
@@ -203,6 +209,7 @@ def register(store):
     str.internFrag('difference', BI_difference)
     str.internFrag('product', BI_product)
     str.internFrag('quotient', BI_quotient)
+    str.internFrag('integerQuotient', BI_integerQuotient)
     str.internFrag('remainder', BI_remainder)
     str.internFrag('exponentiation', BI_exponentiation)
 
