@@ -62,7 +62,7 @@ collborators using CVS.)</p>
 
         <p>Needs Safe Mode.</p>
       </td>
-      <td></td>
+      <td>(old version by DanC now out of date.)</td>
       <td></td>
     </tr>
     <tr>
@@ -76,7 +76,7 @@ collborators using CVS.)</p>
       <td>Diff and synch</td>
       <td>Find the diffrences between two graphs, express it in terms of
         identifyable nodes, send it around as a news item.</td>
-      <td>(some work, on the shelf -timbl)</td>
+      <td>(some work, on the shelf, -timbl)</td>
       <td></td>
     </tr>
     <tr>
@@ -94,8 +94,10 @@ collborators using CVS.)</p>
     </tr>
     <tr>
       <td>Performance</td>
-      <td>Reduce number of hash tables, and profile and speed this thing
-      up!</td>
+      <td>Reduce number of hash tables, and profile and speed this thing up!
+        Maybe clone lyyn.RDFStore with different stored optimized for
+        different cases. Example: Don't index the store if no query/inference
+        needed in command line.</td>
       <td></td>
       <td></td>
     </tr>
@@ -108,8 +110,9 @@ collborators using CVS.)</p>
     </tr>
     <tr>
       <td>Guessing parser</td>
-      <td>The guess code in llyn as a parser which dispatches to the
-        appropriate one.</td>
+      <td>The guess code in llyn refactored as a parser which makes an
+        educated guess at the format and dispatches to the appropriate one.
+        Use of that as the default mode for cwm.</td>
       <td></td>
       <td></td>
     </tr>
