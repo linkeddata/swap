@@ -1,4 +1,5 @@
 @prefix : <http://yosi.us/unlambda#> .
 @keywords a, of, is .
-(((s i) i) ((s i) i)) a RootExpression .
-#(((s k) s) s) a RootExpression .
+#(((s i) i) ((s i) i)) a RootExpression .
+(((s k) s) s) a RootExpression .
+#((k k) i) a RootExpression .
