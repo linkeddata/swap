@@ -1,4 +1,4 @@
-# Test data -- use with filer f11.n3
+# Test data -- use with filter f11.n3
 #
 
 @prefix test: <s1.n3#> .

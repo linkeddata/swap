@@ -186,7 +186,7 @@ class StoredStatement:
             if self.triple[p] is not other.triple[p]:
                 return compareURI(self.triple[p],other.triple[p])
         progress("Problem with duplicates: '%s' and '%s'" % (quadToString(self.triple),quadToString(other.triple)))
-        raise internalerror # SHould never have two identical distinct
+        raise RuntimeError # SHould never have two identical distinct
 
     
 ###############################################################################################
@@ -300,23 +300,35 @@ class BI_semantics(HeavyBuiltIn, Function):
         if isinstance(subj, Fragment): doc = subj.resource
         else: doc = subj
         F = store.any((store._experience, store.semantics, doc, None))
-        if F: return F
+        if F:
+            if chatty > 10: progress("Already read and parsed "+`doc`+" to "+ `F`)
+            return F
         
         if chatty > 10: progress("Reading and parsing " + `doc`)
         inputURI = doc.uriref()
         loadToStore(store, inputURI)
-        if chatty>10: progress("semantics FORMULA addr: %s" % (inputURI+ "#_formula"))
+        if chatty>10: progress("    semantics: %s" % (inputURI+ "#_formula"))
         F = store.intern((FORMULA, inputURI+ "#_formula"))
         return F
     
-class BI_semanticsOrError(HeavyBuiltIn, Function):
+class BI_semanticsOrError(BI_semantics):
     """ Either get and parse to semantics or return an error message on any error """
     def evaluateObject2(self, store, subj):
+        x = store.any((store._experience, store.semanticsOrError, subj, None))
+        if x:
+            if chatty > 10: progress(`store._experience`+`store.semanticsOrError`+": Already found error for "+`subj`+" was: "+ `x`)
+            return x
         try:
             return BI_semantics.evaluateObject2(self, store, subj)
         except (IOError, SyntaxError):
-            if chatty > 0: progress("Error trying to resolve <" + inputURI + ">") 
-            return store.intern((LITERAL, sys.exc_info()[1].__str__()))
+            message = sys.exc_info()[1].__str__()
+            result = store.intern((LITERAL, message))
+            if chatty > 0: progress(`store.semanticsOrError`+": Error trying to resolve <" + `subj` + ">: "+ message) 
+            store.storeQuad((store._experience,
+                             store.semanticsOrError,
+                             subj,
+                             result))
+            return result
     
 
 HTTP_Content_Type = 'content-type' #@@ belongs elsewhere?
@@ -357,6 +369,10 @@ def loadToStore(store, addr):
         p.startDoc()
         p.feed(netStream.read())
         p.endDoc()
+    store.storeQuad((store._experience,
+                     store.semantics,
+                     store.intern((RESOURCE, addr)),
+                     store.intern((FORMULA, addr + "#_formula" ))))
 
 def _indent(str):
     """ Return a string indented by 4 spaces"""
@@ -483,7 +499,7 @@ class RDFStore(RDFSink.RDFSink) :
 
         log.internFrag("resolvesTo", BI_semantics) # obsolete
         self.semantics = log.internFrag("semantics", BI_semantics)
-        log.internFrag("semanticsOrError", BI_semanticsOrError)
+        self.semanticsOrError = log.internFrag("semanticsOrError", BI_semanticsOrError)
         self.content = log.internFrag("content", BI_content)
         log.internFrag("n3ExprFor",  BI_n3ExprFor)
         
@@ -604,20 +620,23 @@ class RDFStore(RDFSink.RDFSink) :
         matching in that position.
 	"""
         short = 1000000 #@@
+        search = []
 	for p in ALL4:
             if q[p] != None:
+                search.append(p)
                 l = len(q[p].occursAs[p])
                 if l < short:
                     short = l
                     p_short = p
+            else:
+                target = p
+        search.remove(p_short)
         for t in q[p_short].occursAs[p_short]:
-            for p in ALL4:
+            for p in search:
                 if q[p] != None and q[p] is not t.triple[p]:
                     break
-                else:
-                    for p in ALL4:
-                        if q[p] == None:
-                            return t.triple[p]
+            else:  # no breaks
+                return t.triple[target]
         return None
 
     def storeQuad(self, q):
@@ -645,7 +664,7 @@ class RDFStore(RDFSink.RDFSink) :
                     q = (context, obj, subj, s[OBJ])
                     context, pred, subj, obj = q
                     self.removeStatement(s)
-                    if chatty > 80: progress("Found list:" + quadToStr(q))
+                    if chatty > 80: progress("Found list:" + quadToString(q))
                     break
 
 	s = StoredStatement(q)
@@ -655,8 +674,11 @@ class RDFStore(RDFSink.RDFSink) :
         if pred.definedAsListIn():
             subj = q[SUBJ]
             if (not isinstance(subj, Fragment)) or subj._defAsListIn:
-                progress("??? ")
-                raise internalError #should only once
+                progress("Store Quad: Predicate %s and subject %s" %(pred, subj))
+                if not isinstance(subj, Fragment): progress("Subject class is"+`subj.__class__`)
+                if subj._defAsListIn: progress("Subject is ALREADY defined as a list by "+
+                                               quadToString(subj._defAsListIn.triple))
+                raise RuntimeError, "Statement makes list of"
             subj._defAsListIn = s
             self.newList(subj)
         return 1  # One statement has been added
@@ -711,7 +733,7 @@ class RDFStore(RDFSink.RDFSink) :
 
         if chatty > 25:
             for r, count in counts.items():
-                if count > 4:
+                if count > 0:
                     progress("    Count is %3i for %s" %(count, `r`))
 
         if chatty > 20:
@@ -901,15 +923,26 @@ class RDFStore(RDFSink.RDFSink) :
             can't be represented in ()
         
         """
-        if x is self.nil: return 1  # Yes, nil is the list ()
-
+# nil is not representable simply as a list if it is the subject of
+# statements. Well, these statements could be separated but they aren't
+# currently. @@ Separate them to allow statements about () in pretty printing.
         if not DAML_LISTS:
-            if x is self.nil: return 1  # Yes, only is actually the list ()
+            if x is self.nil:
+                for s in x.occursAs[SUBJ]:
+                    con, pred, subj, obj = s.triple
+                    if con == context: 
+                        #print "     ",quadToString(s.triple), `self.first`
+                        if pred is self.type:
+                            if (obj is not self.List and
+                                obj is not self.Empty) : return 0
+                        else:
+                            #print "     Unacceptable: ",quadToString(s.triple), `self.rest`, `pred`
+                            return 0  # Can't have anything else - wouldn't print.
+                return 1  # Yes, only is actually the list ()
             ld = x.definedAsListIn()
             if not ld: return None
             first = ld.triple[OBJ]     # first
             rest = ld.triple[PRED]    # rest
-            empty = 0
             left = []
             right = []
             for s in x.occursAs[SUBJ]:
@@ -921,7 +954,6 @@ class RDFStore(RDFSink.RDFSink) :
                     elif pred is self.rest and obj is rest:
                         pass
                     elif pred is self.type:
-                        if obj is self.Empty: empty = 1
                         if obj is not self.List and obj is not self.Empty : return 0
                     else:
                         #print "     Unacceptable: ",quadToString(s.triple), `self.rest`, `pred`
@@ -929,6 +961,7 @@ class RDFStore(RDFSink.RDFSink) :
             #print "# ", `x`[-8:], "left:", left, "right", right
             return self.isList(rest, context)
         else:  # DAML_LISTS
+            if x is self.nil: return 1  # Yes, nil is the list ()
             empty = 0
             left = []
             right = []
@@ -1190,7 +1223,7 @@ class RDFStore(RDFSink.RDFSink) :
         pred = s.triple[PRED]
         if pred.definedAsListIn():
             subj = s.triple[SUBJ]
-            if not subj._defAsListIn: raise internalError #should only once
+            if not subj._defAsListIn: raise RuntimeError, "Defined as list in two places" #should only once
             subj._defAsListIn = None
             self.deList(subj)
 
@@ -1655,7 +1688,7 @@ class RDFStore(RDFSink.RDFSink) :
             if chatty > 90: progress( queueToString(queue))
 
         for pair in newBindings:   # Take care of business left over from recursive call
-            if chatty>40: progress("New binding:  %s -> %s" % (x2s(pair[0]), x2s(pair[1])))
+            if chatty>95: progress("New binding:  %s -> %s" % (x2s(pair[0]), x2s(pair[1])))
             if pair[0] in variables:
                 variables.remove(pair[0])
                 bindings.append(pair)  # Record for posterity
@@ -1879,8 +1912,10 @@ class RDFStore(RDFSink.RDFSink) :
                                     if result != None:  # There is some such result
                                         return self.query(queue, variables, existentials, smartIn, action, param,
                                                               bindings, [ (subj, result)],justOne=justOne)
-                        except:
-                            raise BuiltInFailed, (sys.exc_info(), (state, short, consts, vars, boundLists, quad) ) 
+                        except (IOError, SyntaxError):
+                            raise BuiltInFailed(sys.exc_info(),
+                                                  (state, short, consts, vars, boundLists, quad) ),None
+                        #, sys.exc_info[2]
                         # Now we have a heavy builtin  waiting for enough constants to run
                         state = 10
                     elif pred is self.nil or PRED in boundLists:  # This is a structural line: a hypothesis. Keep it
@@ -2481,7 +2516,7 @@ Examples:
             workingContext = _store.intern((FORMULA, _outURI+ "#_formula"))   #@@@ Hack - use metadata
 #  Metadata context - storing information about what we are doing
 
-#            _store.reset(_metaURI)
+            _store.reset(_metaURI)     # Absolutely need this for remembering URIs loaded
             history = None
 	
 

@@ -67,30 +67,47 @@ schema which declares it as a Property""".
 { :d a :targetDocument.
   :F :within :d.
   :F log:includes { :s :p :o}.
+  :p log:rawType log:Other.    # Ignore lists
   :p log:notEqualTo log:forSome, log:forAll } log:implies { :p :usedAsPropertyIn :d } .
+
+#  Let's see what happens when we dereference a predicate:
+
+{ :d a :targetDocument.
+  :p :usedAsPropertyIn :d.
+  :p log:semanticsOrError :x } log:implies  { :p :predicateSemanticsOrError :x }.
+
+{ :d a :targetDocument.
+  :p :usedAsPropertyIn :d.
+  :p :predicateSemanticsOrError :x.
+  :x log:rawType log:Literal } log:implies { :d :ERROR_IN_SCHEMA_ACCESS_FOR :p.
+                                             :p :SCHEMA_ACCESS_ERROR :x }.
+{ :p :predicateSemanticsOrError :x.
+  :x log:rawType log:Formula } log:implies { :p :semanticsOK :x }.
 
 #  The RDFS spec implies the following algorithm for the definitive schema corresponding
 #  to a Property :p.  (From Ralph Swick, whiteboard conversation)
 #  Maybe we should simplify it to the schema being the result of dereferencing the Property?
 #  I think the counterexample is the dublin core, but it may not work anyway.
+# Actually, the dublic core uses a redirect!!! We need to be aware of the
+#  existence of redirects like that @@
 
 { :d a :targetDocument.
   :p :usedAsPropertyIn :d.
-  :p log:semantics [log:includes { :p s:isDefinedBy :s }] } log:implies {:p :schema :s}.
+  :p :semanticsOK [log:includes { :p s:isDefinedBy :s }] } log:implies {:p :schema :s}.
 
 # We actually need the formula the schema parses to:
 
-{ :p :schema [ log:semantics :F ] } log:implies { :p :schemaFormula :F }. 
+{ :p :schema [ :semanticsOK :F ] } log:implies { :p :schemaFormula :F }. 
 
 
 # Alternatively, the schema can just be the document we pick up
 # directly  This is much simpler!
 #
-#   { :p  log:semantics :F  } log:implies { :p :schemaFormula :F.  :p :declaredInDirectSchema }. 
+#   { :p  :semanticsOK :F  } log:implies { :p :schemaFormula :F.  :p :declaredInDirectSchema }. 
 
    { :p  :usedAsPropertyIn :d .
      :d  a :targetDocument.
-     :p  log:semantics :F.
+     :p  :semanticsOK :F.
      :F  log:includes { :p a rdf:Property } } log:implies { :p :schemaFormula :F.
                                                              :p a :declaredInDirectSchema  }. 
 
@@ -100,7 +117,7 @@ schema which declares it as a Property""".
   :d log:semantics :G.    #  These 2 lines and one below suppress error messages
   :G log:notEqualTo :F.    #  about undeclared locals in the same file.
   :p :usedAsPropertyIn :d.
-  :p log:semantics :F.
+  :p :semanticsOK :F.
   :F log:notIncludes { :p s:isDefinedBy :x }.   # No indirect Schema
   :F log:notIncludes { :p a rdf:Property }.      # Not a direct schema
 } log:implies { :d :ERROR_NO_SCHEMA_OR_NOT_DECLARED :p }.
@@ -127,7 +144,7 @@ log:Chaff is rdf:type of
     s:comment,
     log:forAll,
     log:implies,   #  Clear out rules on -purge
-    :within, :schemaFormula, :schema,
+    :within, :schemaFormula, :schema, :predicateSemanticsOrError, :semanticsOK,
 #    :targetDocument,
     :usedAsPropertyIn.
  
