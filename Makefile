@@ -35,3 +35,6 @@ kifForm.py: kifForm.g
 kifForm.html: kifExpr.g gram2html.py
 	$(PYTHON) gram2html.py kifForm.g "KIF Form Grammar" >$@
 
+SemEnglish.html: SemEnglish.g gram2html.py
+	$(PYTHON) gram2html.py SemEnglish.g "SemEnglish Grammar (from Seth)" >$@
+
