@@ -53,4 +53,15 @@ a001-purged.n3 : a001-conv.n3
 a001-purged2.n3 : a001-purged.n3 noKIF.n3
 	$C a001-conv.n3 noKIF.n3 -purge > a001-purged2.n3
 
+#---------------------------------------------------------
+
+a127-conv.n3 : a127.n3 ../../cwm.py ../../notation3.py convert.n3
+	$C a127.n3 convert.n3 -think > a127-conv.n3
+
+a127-purged.n3 : a127-conv.n3
+	$C a127-conv.n3 -purge > a127-purged.n3
+
+a127-purged2.n3 : a127-purged.n3 noKIF.n3
+	$C a127-conv.n3 noKIF.n3 -purge > a127-purged2.n3
+
 # ends
