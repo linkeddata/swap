@@ -5,7 +5,7 @@
 __version__ = "$Revision$"
 # $Id$
 
-__all__ = ["otter", "abstract", "htables", "lbase", "n3x"]
+__all__ = ["otter", "abstract", "htables", "lbase"]
 
 import LX
 
@@ -53,7 +53,10 @@ def getParser(language=None, sink=None, flags=""):
         raise RuntimeError, "No such parser: \"%s\"\nWe have: %s" % (language, ", ".join(parsers.keys()))
     
 # $Log$
-# Revision 1.7  2003-08-22 20:49:41  sandro
+# Revision 1.8  2003-09-17 16:12:41  sandro
+# removed n3x; it never materialized
+#
+# Revision 1.7  2003/08/22 20:49:41  sandro
 # midway on getting load() and parser abstraction to work better
 #
 # Revision 1.6  2003/07/31 18:26:02  sandro
