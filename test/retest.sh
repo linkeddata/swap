@@ -88,9 +88,15 @@ cwm_test bi-t9.n3 "Filter event by date using strcmp BI's" includes/t9br.n3 -thi
 
 cwm_test sameDan.n3 "dealing with multiple descriptions of the same thing using log:lessThan, log:uri, daml:equivalentTo" sameDan.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge
 
+cwm_test smush.rdf "Data aggregation challenge from Jan 2001" --rdf smush-examples.rdf --n3 smush-schema.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge --filter=smush-query.n3 --rdf
+
+
 
 # $Log$
-# Revision 1.13  2001-07-19 16:56:00  connolly
+# Revision 1.14  2001-07-20 16:21:59  connolly
+# split smush-query out of smush-schema; added expected results, entry in retest.sh
+#
+# Revision 1.13  2001/07/19 16:56:00  connolly
 # whoohoo! node merging works!
 #
 # Revision 1.12  2001/06/25 06:35:51  connolly
