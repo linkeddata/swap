@@ -1,0 +1,39 @@
+#
+#  Find dependents 
+#
+#	Just for interest
+#	Use as filter
+#
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix os: <http://www.w3.org/2000/10/swap/os#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix fink: <http://www.w3.org/2000/10/swap/util/fink#>.
+@prefix pkg: <http://www.w3.org/2000/10/swap/util/fink-pkg#>.
+@prefix :  <#>.
+
+@prefix clo: <closure.n3#>.
+
+this log:forAll :m, :s, :x, :y, :z.
+
+#{ :x fink:depends :y } log:implies {:x :needs :y.}.
+#{ :x fink:buildDepends :y } log:implies {:x :needs :y.}.
+
+# Note -- I am not sure whether the following is true.
+# fink:depends may be defied to be only a direct dependency.
+
+{ "1" os:argv :x.
+  ("http://www.w3.org/2000/10/swap/util/fink-pkg#" :x)string:concatenation :y.
+  :z log:uri :y.
+  :s fink:depends :z.
+} log:implies {
+  :s :REASON_FOR :z.
+}.
+
+# { :x fink:depends :y. :y fink:depends :z} log:implies {:x fink:depends :z}.
+
+
+<closure.n3#topApplication>
+
+#ends
+
+

@@ -1,0 +1,49 @@
+#Processed by Id: cwm.py,v 1.93 2002/05/14 22:11:04 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/fink/defaults.n3
+        
+#  Notation3 generation by
+#       notation3.py,v 1.108 2002/05/15 00:38:10 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/fink/defaults.n3
+     @prefix : <#> .
+     @prefix con: <http://www.w3.org/2000/10/swap/pim/contact#> .
+     @prefix fink: <http://www.w3.org/2000/10/swap/util/fink#> .
+     @prefix lic: <http://www.w3.org/2000/10/swap/util/fink-lic#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix os: <http://www.w3.org/2000/10/swap/os#> .
+     @prefix pkg: <http://www.w3.org/2000/10/swap/util/fink-pkg#> .
+    
+    this     log:forAll :x,
+                :y,
+                :z .
+    
+    pkg:amaya     a :topApplication .
+    
+    pkg:aria     a :topApplication .
+    
+    pkg:dillo     a :topApplication .
+    
+    pkg:junkbuster     a :topApplication .
+    
+    pkg:mhonarc     a :topApplication .
+    
+    pkg:mozilla     a :topApplication .
+    
+    pkg:php     a :topApplication .
+    
+    pkg:zope     a :topApplication .
+    {
+        this     log:forSome :_g3 .
+        "1"     os:argv :_g3 .
+          [      log:semantics  [
+                     log:includes {:x     fink:depends :y .
+                    };
+                     log:notIncludes {
+                      [      fink:depends :x ].
+                    } ];
+                 log:uri :_g3 ].
+        
+        }     log:implies {:x     a :topApplication .
+        } .
+    
+#ENDS
