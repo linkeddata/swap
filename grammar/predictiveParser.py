@@ -224,7 +224,7 @@ class PredictiveParser:
 	parser.lineNumber = 1
 	parser.startOfLine = 0	# Offset in buffer
 	parser.keywords = [ "a", "is", "of", "this" ]
-	parser.verb = 0  # Verbosity
+	parser.verb = 1  # Verbosity
 	
     def countLines(parser, buffer, here):
 	"""Count lines since called last time
