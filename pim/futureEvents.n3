@@ -1,0 +1,182 @@
+# $Id$
+# @@ dc:description
+
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+
+@prefix c: <http://www.w3.org/2002/12/cal/ical#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix str: <http://www.w3.org/2000/10/swap/string#> .
+@prefix os: <http://www.w3.org/2000/10/swap/os#> .
+
+@prefix : <futureEvents#>.
+@prefix fe: <futureEvents#>.
+
+# crude by-date selection of events; any repeating event
+# that overlaps the interval at all is selected;
+# e.g. stuff that happens every wednesday in March 2001
+# is selected even when you ask about just one tuesday in March.
+# originally implemented in perl in pdkb.pl in
+# http://@@/palmagent/
+
+#:window :start "20021214". #@@ enhance ical2rdf.pl to put hyphens in dates
+
+this log:forAll :CAL, :EV, :ID, :RULE, :SUMMARY, :FREQ,
+	:START, :STARTDATETIME, :STARTTZ, :STARTDATE, :KEY, :WHEN, :VAL.
+
+
+
+{ ?F log:uri [ is os:baseAbsolute of [ is os:argv of "1" ]] }
+=> { ?F a :CalFile }.
+
+:FutureOneTime s:subClassOf :FutureEvent.
+:RepeatsIndefinitely s:subClassOf :FutureEvent.
+:RepeatsUntilLater s:subClassOf :FutureEvent.
+:BirthDay s:subClassOf :RepeatsIndefinitely.
+
+{ ?X a [ s:subClassOf ?C ] } log:implies { ?X a ?C }.
+
+# :FutureOneTime
+c:date a :DateKeyProp.
+c:dateTime a :DateKeyProp.
+
+{
+ [ a :CalFile ] log:semantics :CAL.
+
+  :KEY a :DateKeyProp.
+
+  :CAL log:includes {
+    :EV  c:uid :ID;
+        c:summary :SUMMARY;
+        c:dtstart [ :KEY :START ]
+  }.
+
+  :CAL log:notIncludes {
+    :EV c:rrule []
+  }.
+
+  :START str:notLessThan "2003-02-01".
+
+}
+  log:implies
+{
+  :EV a :FutureOneTime;
+      c:summary :SUMMARY;
+      c:uid :ID;
+      c:dtstart [ :KEY :START ]
+}.
+
+
+
+# :RepeatsIndefinitely
+#   #@@other case: untimed, just a date
+{
+  [ a :CalFile ] log:semantics :CAL.
+
+  :KEY a :DateKeyProp.
+
+  :CAL log:includes {
+    :EV  c:uid :ID;
+        c:summary :SUMMARY;
+        c:dtstart [ :KEY :START ];
+        c:rrule :RULE.
+    :RULE c:freq :FREQ.
+
+  }.
+
+  :CAL log:notIncludes {
+    :RULE c:until []
+  }.
+}
+  log:implies
+{
+  :EV a :RepeatsIndefinitely;
+      c:summary :SUMMARY;
+      c:uid :ID;
+      c:dtstart [
+         :KEY :START
+      ];
+      c:rrule [ c:freq :FREQ ].
+
+ }.
+
+# :RepeatsUntilLater
+#   #@@other case: untimed, just a date
+{
+  [ a :CalFile ] log:semantics :CAL.
+
+  :KEY a :DateKeyProp.
+
+  :CAL log:includes {
+    :EV  c:uid :ID;
+        c:summary :SUMMARY;
+        c:dtstart [ :KEY :START ];
+        c:rrule [ c:until :WHEN ]
+        .
+  }.
+
+  :WHEN str:notLessThan "2003-01".
+
+}
+  log:implies
+{
+  :EV a :RepeatsUntilLater;
+      c:summary :SUMMARY;
+      c:uid :ID;
+      c:dtstart [
+         :KEY :START
+      ].
+   #@@ copy the :rrule
+ }.
+
+
+###
+# grab timezone
+{ :EV a :FutureEvent; c:uid :ID; c:dtstart :START.
+
+  [ a :CalFile ] log:semantics :CAL.
+
+  :CAL log:includes {
+    [ c:uid :ID; c:dtstart [ c:tzid :STARTTZ ]].
+  }
+}
+  log:implies { :START c:tzid :STARTTZ }.
+
+###
+# birthdays
+{
+  :EV a :FutureEvent; c:summary [ str:containsIgnoringCase "birthday" ]
+} log:implies { :EV a :Birthday }.
+
+###
+# grab rrule properties
+{
+  :EV a :FutureEvent; c:uid :ID; c:rrule :RULE.
+
+  [ a :CalFile ] log:semantics :CAL.
+
+  :CAL log:includes {
+    [ c:uid :ID; c:rrule [ :KEY :VAL ] ]
+  }
+}
+  log:implies { :RULE :KEY :VAL }.
+
+
+###
+# other properties to grab:
+c:description a :GrabProp.
+# c:dtend @@not simple
+# valarm?
+#c:contacts ?
+c:location  a :GrabProp.
+
+{ :EV a :FutureEvent; c:uid :ID.
+  :KEY a :GrabProp.
+
+  [ a :CalFile ] log:semantics :CAL.
+
+  :CAL log:includes {
+    [ c:uid :ID; :KEY :VAL ].
+  }
+}
+  log:implies { :EV :KEY :VAL }.
+
