@@ -1,0 +1,10 @@
+# $Id$
+# derived from bug report:
+#
+# CWM bug + RFE: N3 to XML RDF fails on non-trivial
+# Unicode Sampo Syreeni (Mon, Jun 24 2002) 
+# mid:Pine.SOL.4.30.0206241436200.26257-100000@kruuna.Helsinki.FI
+# http://lists.w3.org/Archives/Public/www-archive/2002Jun/0030.html
+
+<#unique_0000000000000015> a <#con_Address> ;
+    <#con_Street> "Kämnerintie 4 A 22".
