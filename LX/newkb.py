@@ -1,4 +1,11 @@
-"""Provides the KB class, the heart of Knowledge Management.
+"""
+
+NOT USABLE.
+
+   This was a branch from kb.py with some cool documentation, tests,
+   ideas, ... but I was getting ahead of myself.    Worth looking at
+   from time to time.
+
 """
 __version__ = "$Revision$"
 # $Id$
@@ -504,7 +511,10 @@ if __name__ == "__main__": _test()
 
  
 # $Log$
-# Revision 1.3  2003-02-25 16:17:15  sandro
+# Revision 1.4  2003-08-25 21:10:49  sandro
+# added explanatory heading
+#
+# Revision 1.3  2003/02/25 16:17:15  sandro
 # a little cleanup
 #
 # Revision 1.2  2003/02/21 05:19:34  sandro
