@@ -15,6 +15,6 @@ Changes:
  .
    * Initial Release, test packaging by danbri.
 Files: 
- 17b7a58e58e0f7d052eb04d8275b06df 239 interpreters optional swap-cwm_0.9-1.dsc
- a24b75602aa481befd1f119c6d51ea36 348614 interpreters optional swap-cwm_0.9-1.tar.gz
- dc8d9dd2c0ef64356135da3522f038cc 69414 interpreters optional swap-cwm_0.9-1_all.deb
+ dc39bd5806f6b885845f3b1386b191a2 239 interpreters optional swap-cwm_0.9-1.dsc
+ 4eb819c74943df7160fd0a378d09335b 348741 interpreters optional swap-cwm_0.9-1.tar.gz
+ c8fe2b5c24b2fecc3d931b54bd3f9f29 69412 interpreters optional swap-cwm_0.9-1_all.deb

@@ -1,6 +1,12 @@
 # See HEADER.html for more details
 # danbri@w3.org
 
+# compare:
+# eg 4suite packaging
+# http://prdownloads.sourceforge.net/foursuite/4Suite-0.12.0a3.tar.gz?download
+# also rdflib ?
+
+
 PACKAGE=swap-cwm
 #MAINVERSION=0.91
 MAINVERSION=0.9

@@ -7,7 +7,7 @@ Architecture: all
 Version: 0.9-1
 Depends: python
 Filename: ./swap-cwm_0.9-1_all.deb
-Size: 69414
-MD5sum: dc8d9dd2c0ef64356135da3522f038cc
+Size: 69412
+MD5sum: c8fe2b5c24b2fecc3d931b54bd3f9f29
 Description: RDF and Semantic Web engine for Python
 
