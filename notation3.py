@@ -1066,14 +1066,15 @@ class XMLWriter:
 # such as variables and generated IDs from anonymous ndoes, it makes the
 # document very much more readable to regenerate the IDs.
 #  We use here a convention that underscores at the start of fragment IDs
-# are reserved for generated Ids. That should be a parameter.
+# are reserved for generated Ids. The caller can change that.
+
 class SinkToN3(RDFSink):
     """keeps track of most recent subject and predicate reuses them
 
       Adapted from Dan's ToRDFParser(Parser);
     """
 
-    def __init__(self, write, base=None, genPrefix = ":_" ):
+    def __init__(self, write, base=None, genPrefix = "#_" ):
 	self._write = write
 	self._subj = None
 	self.prefixes = {}      # Look up prefix conventions
@@ -1182,8 +1183,8 @@ class SinkToN3(RDFSink):
                 if i == self.nextId:
                     self.regen[x] = i
                     self.nextId = self.nextId + 1
-                if isinstance(x, Anonymous): return self.genPrefix + "g" + `i`
-                else: return self.genPrefix + "v" + `i`   # variable
+                if isinstance(x, Anonymous): return "<"+self.genPrefix + "g" + `i`+">"
+                else: return "<" + self.genPrefix + "v" + `i` + ">"   # variable
 
         if isinstance(x, Fragment):            
             str = self.prefixes.get(x.resource, None)
