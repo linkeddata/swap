@@ -50,6 +50,7 @@ import uripath
 
 import getopt
 import re
+import types
 
 name = "[A-Za-z][A-Za-z0-9]*" #http://www.w3.org/TR/rdf-testcases/#ntriples
 nodeID = '_:' + name
@@ -141,6 +142,36 @@ def serialize(graph):
 	    print x,
 	print "."
 
+def compare(a,b, level = 0):
+    "Compare consistently nested lists of strings"
+    print("  "*level, "@@@@@@@@@ compare %s and %s" % (`a`,`b`))
+    if a==None and b == None: return 0
+    if a == None: return -1
+    if b == None: return 1
+    if isinstance(a, types.IntType):
+	if isinstance (b,types.IntType): return a-b
+	else:
+	    return -1  # Ints are less than strings or lists
+    if isinstance(a, types.StringTypes):
+	if isinstance (b, types.IntType): return 1
+	if isinstance (b,types.StringTypes):
+	    if a < b: return -1
+	    if a > b: return 1
+	    return 0
+	else:
+	    return -1  # Strings are less than lists
+    else:  # a is list
+	if isinstance (b,types.StringTypes):
+	    return 1
+	else: # list vs list
+#	    assert isinstance(a, types.ListType) or isinstance(a, TupleType)
+	    if len(a) < len(b): return -1
+	    if len(a) > len(b): return 1
+	    for i in range(len(a)):
+		d = compare(a[i], b[i], level+1)
+		if d != 0: return d
+	    return 0
+		
 def canon(graph, c0=0):
     "Try one pass at canonicalizing this using 1 step sigs"
     nextBnode = 0
@@ -171,7 +202,7 @@ def canon(graph, c0=0):
     n = nextBnode
     s = []
     for i in range(n):
-	signature[i].sort()   # Signature is now intrinsic to the local environment of that bnode.
+	signature[i].sort(compare)   # Signature is now intrinsic to the local environment of that bnode.
 	if verbose: print " %3i) %s" % (i, signature[i])
 	s.append((signature[i], i))
     s.sort()
