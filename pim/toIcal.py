@@ -75,12 +75,16 @@ class CalWr:
 
 
     def exportTimezone(self, sts, tz):
+        w = self._w
+        
+        w("BEGIN:VTIMEZONE" +CRLF)
         self.textProp(sts, "tzid", tz)
 
         for subcomp in sts.each(subj = tz, pred = ICAL.standard):
             self.exportTZSub(sts, subcomp, 'standard')
         for subcomp in sts.each(subj = tz, pred = ICAL.daylight):
             self.exportTZSub(sts, subcomp, 'daylight')
+        w("END:VTIMEZONE" +CRLF)
 
     def exportTZSub(self, sts, tzs, n):
         w = self._w
@@ -201,7 +205,11 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.8  2003-03-14 03:12:35  connolly
+# Revision 1.9  2003-03-14 03:17:23  connolly
+# oops! forgot begin/end around vtimezone.
+# clearly I don't have any good way to test this code.
+#
+# Revision 1.8  2003/03/14 03:12:35  connolly
 # update to 2002/12 namespace
 # export timezones, at least well enough for one case
 # export rrules well enough for one test case
