@@ -1,0 +1,73 @@
+
+<!-- Processed by Id: cwm.py,v 1.37 2001/05/08 20:42:35 timbl Exp -->
+<!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/lists-simple.n3-->
+
+
+<rdf:RDF xmlns:t="file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/test#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://www.daml.org/2001/03/daml+oil#"
+    xmlns:ont="http://www.w3.org/2000/10/swap/log.n3#">
+
+    <rdf:Description rdf:about="test#emptyList">
+        <equivalentTo rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="test#listOf2Empties">
+        <equivalentTo rdf:parseType="Resource">
+            <first rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+            <rest rdf:parseType="Resource">
+                <first rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+                <rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+            </rest>
+        </equivalentTo>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="test#nested">
+        <equivalentTo rdf:parseType="Resource">
+            <first rdf:resource="test#first"/>
+            <rest rdf:parseType="Resource">
+                <first rdf:resource="test#second"/>
+                <rest rdf:parseType="Resource">
+                    <first rdf:parseType="Resource">
+                        <first rdf:resource="test#left3"/>
+                        <rest rdf:parseType="Resource">
+                            <first rdf:resource="test#right3"/>
+                            <rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+                        </rest>
+                    </first>
+                    <rest rdf:parseType="Resource">
+                        <first rdf:resource="test#fourth"/>
+                        <rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+                    </rest>
+                </rest>
+            </rest>
+        </equivalentTo>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="test#threeItems">
+        <equivalentTo rdf:parseType="Resource">
+            <first rdf:resource="test#b"/>
+            <rest rdf:parseType="Resource">
+                <first rdf:resource="test#c"/>
+                <rest rdf:parseType="Resource">
+                    <first rdf:resource="test#d"/>
+                    <rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+                </rest>
+            </rest>
+        </equivalentTo>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="test#twoAnons">
+        <equivalentTo rdf:parseType="Resource">
+            <first rdf:parseType="Resource">
+                <rdf:type rdf:resource="test#mother"/>
+            </first>
+            <rest rdf:parseType="Resource">
+                <first rdf:parseType="Resource">
+                    <rdf:type rdf:resource="test#father"/>
+                </first>
+                <rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+            </rest>
+        </equivalentTo>
+    </rdf:Description>
+</rdf:RDF>

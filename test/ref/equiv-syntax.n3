@@ -1,0 +1,21 @@
+
+<!-- Processed by Id: cwm.py,v 1.37 2001/05/08 20:42:35 timbl Exp -->
+<!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/equiv-syntax.n3-->
+
+
+<rdf:RDF xmlns="file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/equiv-syntax.n3#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/">
+
+    <rdf:Description rdf:about="#x">
+        <equivalentTo xmlns="http://www.daml.org/2001/03/daml+oil#"
+            rdf:resource="#y"/>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="">
+        <dc:description>testing = short-hand syntax in N3.
+I'm adding this test in particular to track changes
+regarding which DAML+OIL namespace we use.
+</dc:description>
+    </rdf:Description>
+</rdf:RDF>

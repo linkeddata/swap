@@ -29,7 +29,7 @@ LITERAL = notation3.LITERAL
 RDF_NS_URI = notation3.RDF_NS_URI # As per the spec
 RDF_Specification = "http://www.w3.org/TR/REC-rdf-syntax/" # Must come in useful :-)
 DAML_ONT_NS = "http://www.daml.org/2000/10/daml-ont#"  # DAML early version
-DPO_NS = "http://www.daml.org/2000/12/daml+oil#"  # DAML plus oil
+DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
 chatty = 0
 
 RDF_IS = RESOURCE, RDF_NS_URI + "is"   # Used with quoting

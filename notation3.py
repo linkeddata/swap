@@ -65,8 +65,8 @@ import re
 
 RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
 RDF_NS_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-DAML_equivalentTo_URI = "http://www.daml.org/2000/10/daml-ont#equivalentTo"
-DAML_NS = "http://www.daml.org/2000/10/daml-ont#"
+DAML_NS = "http://www.daml.org/2001/03/daml+oil#"
+DAML_equivalentTo_URI = DAML_NS + "equivalentTo"
 Logic_NS = "http://www.w3.org/2000/10/swap/log.n3#"
 
 RDF_spec = "http://www.w3.org/TR/REC-rdf-syntax/"
@@ -99,7 +99,7 @@ N3_forSome_URI = Logic_NS + "forSome"
 #N3_subExpression_URI = Logic_NS + "subExpression"
 N3_forAll_URI = Logic_NS + "forAll"
 
-DPO_NS = "http://www.daml.org/2000/12/daml+oil#"  # DAML plus oil
+DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
 
 List_NS = DPO_NS     # We have to pick just one all te time
 
@@ -681,11 +681,11 @@ class SinkParser:
                                         if ch == "":
                                             raise BadSyntax(startline, str, i, "unterminated string literal(3)")
                                         k = string.find("0123456789abcdef", ch)
-                                        if k <=0:
+                                        if k <0:
                                             raise BadSyntax(startline, str, i, "bad string literal hex escape")
                                         value = value * 16 + k
                                         count = count + 1
-                                    uch = unicode.ntou (value) # @@I18n Need n->unicode mapping @@@@
+                                    uch = unichr(value)
                                     
 # @@I18n                    if uch == u"": uch = ch  # coerce
                     if uch == "": uch = ch  # coerce
@@ -1390,7 +1390,7 @@ def stringToN3(str):
                 ch = str[i]
                 j = string.find(forbidden, ch)
                 if j>=0: ch = "\\" + '\\"abfrtvn'[j]
-                elif ch < " " or ch > "}" : ch= 'x'+`ch`[1:-1] # Use python
+                elif ch <> "\n" and ch < " " or ch > "}" : ch= '\\u%04x'%(ord(ch),)
                 res = res + ch
         return delim + res + delim
 

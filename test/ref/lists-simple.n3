@@ -1,0 +1,31 @@
+        
+
+     @prefix t: <test#> .
+     @prefix : <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix ont: <http://www.w3.org/2000/10/swap/log.n3#> .
+    
+    t:emptyList     = () .
+    
+    t:listOf2Empties     =  (
+        () 
+        ()  ) .
+    
+    t:nested     =  (
+        t:first 
+        t:second 
+         (
+            t:left3 
+            t:right3  )
+        t:fourth  ) .
+    
+    t:threeItems     =  (
+        t:b 
+        t:c 
+        t:d  ) .
+    
+    t:twoAnons     =  (
+         [
+                 a t:mother ]
+         [
+                 a t:father ] ) .
+    
