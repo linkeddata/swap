@@ -46,10 +46,10 @@ def main():
     sig = ssh_agent_sign(as, key, data)
 
     keytn, sig = getString(sig)
-    sigdata, sig = getBignum(sig)
+    signum, sig = getBignum(sig)
     if keytn <> "ssh-rsa": raise ProtocolError, ("unexpected key type", keytn)
     assert sig == ''
-    progress("signature:", keytn, sigdata)
+    progress("signature:", keytn, `signum`)
 
     #hmm... this doesn't work.
     # reading http://www.faqs.org/rfcs/rfc2437.html
@@ -61,8 +61,25 @@ def main():
 	from Crypto.Hash import SHA
 	k = RSA.construct((key._n, key._e))
 	dh = SHA.new(data).digest()
-	result = k.verify(dh, (sigdata,))
+	progress("hash length: ", len(dh))
+	result = k.verify(dh, (signum,))
 	progress("result:", result)
+
+def pycryptest():
+    from Crypto.PublicKey import RSA
+    from Crypto.Hash import SHA
+    from Crypto.Util.randpool import RandomPool
+    r = RandomPool()
+    k = RSA.generate(1024, r.get_bytes)
+    progress("pycryptest key:", `(k.n, k.e)`)
+    data = "abcdefg"
+    
+    dh = SHA.new(data).digest()
+    sig = k.sign(dh, None)
+    progress("pycryptest signature:", `sig`)
+    result = k.verify(dh, sig)
+    progress("pycryptest result:", result)
+    
 
 class RSAKey:
     def __init__(self, e, n):
@@ -161,12 +178,13 @@ def getBignum(buf):
     >>> getBignum(packBignum(20L) + "abc")
     (20L, 'abc')
     """
-    
+
     (ln,) = struct.unpack(">I", buf[:4])
     bin = buf[4:4+ln]
     progress("getBignum bytes:", ln)
     x = 0L
     for byte in bin:
+	progress("byte: %02x" % ord(byte))
 	x = x * 256 + ord(byte)
     return x, buf[4+ln:]
 
@@ -193,12 +211,17 @@ def _test():
     doctest.testmod(sshAuth)
 
 
+
 if __name__ == '__main__':
-    _test()
+    #_test()
+    #pycryptest()
     main()
 
 # $Log$
-# Revision 1.4  2003-09-16 04:36:24  connolly
+# Revision 1.5  2004-06-10 12:44:58  connolly
+# more diagnostics. 16 Sep 2004
+#
+# Revision 1.4  2003/09/16 04:36:24  connolly
 # trying to play with python crypto toolkit
 #
 # Revision 1.3  2003/09/13 23:18:03  connolly
