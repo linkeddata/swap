@@ -1,0 +1,21 @@
+     @prefix : <file:/home/syosi/quine.n3#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+    
+     @forAll :a,
+                :b,
+                :x .
+    {
+        
+          ( { @forAll :a,
+                            :b,
+                            :x .
+                }
+            {:a     log:implies :b .
+                } )
+             log:conjunction  [
+                 log:n3String :x ] .
+        :a     log:implies :b .
+        
+        }     log:implies {"a"     log:outputString :x .
+        } .
+    
