@@ -7,19 +7,19 @@
 
 @prefix : <#>.
 
-this log:forAll :X, :Y, :Z, :P.
+this log:forAll :X, :Y, :Z, :P, :Q.
 
 { :X :P :Y. :X = :Z.
-  :P log:notEqualTo log:forAll, log:forSome
+  :P log:notEqualTo log:forAll, log:forSome    #HIDELINE
 } log:implies
  { :Z :P :Y }.
 
 { :X :P :Y. :P = :Q.
-  :P log:notEqualTo log:forAll, log:forSome
+  :P log:notEqualTo log:forAll, log:forSome    #HIDELINE
 } log:implies { :X :Q :Y }.
 
 { :X :P :Y. :Y = :Z.
-  :P log:notEqualTo log:forAll, log:forSome
+  :P log:notEqualTo log:forAll, log:forSome    #HIDELINE
 } log:implies { :X :P :Z }.
 
 
