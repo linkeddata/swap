@@ -17,7 +17,14 @@ import LX.kb
 import LX.rdf
 
 kb = LX.kb.KB()
-holds = LX.fol.Predicate("holds")
+holds = [ LX.fol.Predicate("holds0"),
+          LX.fol.Predicate("holds1"),
+          LX.fol.Predicate("holds2"),
+          LX.fol.Predicate("holds3"),
+          LX.fol.Predicate("holds4"),
+          LX.fol.Predicate("holds5"),
+          LX.fol.Predicate("holds6"),
+          ]
 
 tokens = (
     'AND', 'OR', 'IMPLIES', 'IFF', 'NOT',
@@ -221,7 +228,7 @@ def p_formulaList_empty(t):
 
 def p_formulaList_more(t):
     '''formulaList : formulaList formula PERIOD'''
-    print "Adding formula %s\n" % t[2]
+    #print "Adding formula %s\n" % t[2]
     kb.add(t[2])
 
 constants = {}
@@ -248,7 +255,6 @@ def p_term_simple2(t):
         tt = LX.fol.Constant(uri)
         t[0] = tt
         kb.interpret(tt, LX.rdf.Thing(uri))
-        print "NEW URIREF", uri
 
 #            | NUMERAL
 #            | QUOTEDSTRING
@@ -267,12 +273,16 @@ def p_term_var(t):
         t[0] = tt
         variables[t[1]] = tt
         kb.univars.append(tt)
-        print "NEW UNiVar", t[1]
 
 def p_term_compound(t):
     '''term : term LPAREN termlist RPAREN '''
     #t[0] = apply(LX.expr.CompoundExpr, [t[1]] + t[3])
-    t[0] = apply(holds, [t[1]] + t[3])
+    #   for now just read it in as FOL.
+    args = [t[1]] + t[3]
+    if len(args) == 3:
+        t[0] = apply(LX.fol.RDF, (args[1], args[0], args[2]))
+    else:
+        t[0] = apply(holds[len(args)], args)
 
 def p_termlist_singleton(t):
     '''termlist : term'''
@@ -339,7 +349,7 @@ def p_quantification(t):
         frame.variable = apply(varclass, (var,))
         frame.quantifier = quantifier
         varStack.insert(0, frame)
-    print "varStack built up to", varStack
+    #print "varStack built up to", varStack
             
 def p_formula_4(t):
      'formula : quantification formula'
@@ -348,8 +358,8 @@ def p_formula_4(t):
          frame = varStack.pop(0)
          if frame == frameSep: break
          f = apply(frame.quantifier, [frame.variable, f])
-         print "f built up to ", f
-     print "varStack chopped to", varStack, "@@@ forgot to quantify"
+         #print "f built up to ", f
+     #print "varStack chopped to", varStack, "@@@ forgot to quantify"
      t[0] = f
      
 def p_formula_5(t):
@@ -369,7 +379,7 @@ yacc.yacc()
 #        break
 #    yacc.parse(s)
 
-yacc.parse(longData)
+# yacc.parse(longData)
 
 #yacc.parse('p', debug=1)
 #yacc.parse('not not not not p', debug=1)
@@ -382,10 +392,33 @@ yacc.parse(longData)
 
 #print kb
 
-print LX.language.otter.serialize(kb)
+# print LX.language.otter.serialize(kb)
+
+# @@ need to properly re-init stuff, like being a proper object?
+def parse(s, to_kb):
+    global kb
+    kb = to_kb
+    yacc.parse(s)
+
+import urllib
+
+class Parser:
+
+    def __init__(self, to_kb):
+        self.kb = to_kb
+
+    def load(self, inputURI):
+        stream = urllib.urlopen(inputURI)
+        s = stream.read()
+        global kb
+        kb = self.kb
+        yacc.parse(s)
 
 # $Log$
-# Revision 1.3  2003-02-01 06:23:55  sandro
+# Revision 1.4  2003-02-13 19:50:55  sandro
+# better support for "holds", changed parser API a little
+#
+# Revision 1.3  2003/02/01 06:23:55  sandro
 # intermediate lbase support; getting even better
 #
 # Revision 1.2  2003/02/01 05:58:12  sandro
