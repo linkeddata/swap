@@ -293,6 +293,13 @@ class Literal(Thing):
     def uriref(self, base=None):      # Unused at present but interesting! 2000/10/14
         return  Literal_URI_Prefix + uri_encode(self.representation())
 
+    def __cmp__(self, other):
+        if isinstance(other, Literal):
+            return cmp(self.string, other.string)
+        else:
+            return cmp(self.string, other.representation())
+
+
 def uri_encode(str):
         """ untested - this must be in a standard library somewhere
         """
