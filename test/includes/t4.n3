@@ -14,11 +14,12 @@
 # Output should conclude all test* a :success and no failures.
 #
 
-<#theSky> <#is> <#blue> .
+:thesis :is { <#theSky> <#is> <#blue> } .
 
+this log:forAll :x.
 
-{ :doc log:includes {<#theSky> <#is> <#green>} } log:implies { :testd_1 a :FAILURE } .
-{ :doc log:notIncludes {<#theSky> <#is> <#green>} } log:implies { :testd_2 a :success } .
+#{ :thesis :is :x. :x log:includes {<#theSky> <#is> <#green>} } log:implies { :test4_bis a :FAILURE } .
+{ :thesis :is :x. :x log:notIncludes {<#theSky> <#is> <#green>} } log:implies { :test4 a :success } .
 
 #ends
 

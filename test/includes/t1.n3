@@ -23,7 +23,7 @@ It can be calculated if one knows the formulae involved.
 """.
 
 
-{{ :a :b :c } log:includes { :a :b :c }} log:implies { :testa a :success } .
+{{ :a :b :c } log:includes { :a :b :c }} log:implies { :test1 a :success } .
  
 
 #ends

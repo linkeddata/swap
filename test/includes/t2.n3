@@ -29,7 +29,7 @@ It can be calculated if one knows the formulae involved.
 # { :a :b :c } log:implies { :testa a :success } .
  
 
-{ [ :b :c ] } log:implies { :testb a :success } .
+{ [ :b :c ] } log:implies { :test2 a :success } .
  
 
 #ends
