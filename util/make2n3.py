@@ -32,11 +32,12 @@ def convert(path):
     macro = re.compile(r'([-_a-zA-Z0-9\.]+)=(.*)')
     macro1 = re.compile(r'^(.*?)\$([a-zA-Z])(.*)$')
     macron = re.compile(r'^(.*?)\$\(([a-zA-Z0-9]+)\)(.*)$')
+    include = re.compile(r'include *([-_a-zA-Z0-9\./]+)')
     target = re.compile(r'^(.*?)\$@(.*)$')
     dependency = re.compile( r'^([-_a-zA-Z0-9][-_a-zA-Z0-9\.]*) *:(.*)$' )
     rule = re.compile(r'^\.([-_a-zA-Z0-9]*)\.([-_a-zA-Z0-9]*)')
     recipe = re.compile( r'^\t.*')
-    filename = re.compile( r'[-_a-zA-Z0-9\.]+')
+    filename = re.compile( r'[-_a-zA-Z0-9\./]+')
     blank = re.compile(r"^ *$")
     recipeList = []
     subj = None
@@ -61,11 +62,21 @@ def convert(path):
 	while 1:
 	    m = macro1.match(line)
             if not m: break
-	    line = m.group(1) + dict[m.group(2)] + m.group(3)
+	    line = m.group(1) + dict[m.group(2)] + m.group(3) #1
 	while 1:
 	    m = macron.match(line)
             if not m: break
-	    line = m.group(1) + dict[m.group(2)] + m.group(3)
+	    line = m.group(1) + dict[m.group(2)] + m.group(3) #2
+
+	m = include.match(line)
+	if m:
+	    print "# start include", m.group(1)
+	    file=m.group(1)
+	    input2 = open(m.group(1), "r")
+	    buf2 = input2.read()  # Read the file
+	    input2.close()
+	    buf = buf[:i] + buf2 + "# end include"+ m.group(1) +"\n" + buf[i:]
+	    continue
 
 	m = recipe.search(line)
 	if m:
@@ -133,10 +144,15 @@ files = []
 
 for arg in sys.argv[1:]:
     if arg[0:1] == "-":
-        if arg == "-r": recursive = 1    # Recursive
-        elif arg == "-a": doall = 1   # Fix
-        elif arg == "-f": nochange = 0   # Fix
-        elif arg == "-v": verbose = 1   # Tell me even about files which were ok
+        if arg == "-?" or arg == "--help":
+	    print """Convert Makfile format of make(1) to n3 format.
+
+Syntax:    make2n3  <file>
+
+    where <file> can be omitted and if so defaults to Makefile.
+    This program was http://www.w3.org/2000/10/swap/util/make2p3.py
+    $Id$
+"""
         else:
             print """Bad option argument."""
             sys.exit(-1)
