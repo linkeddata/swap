@@ -138,37 +138,43 @@ a pattern of using the general purpose cyc ontology
 emerged, and the expected benefit of maintaining the
 special-purpose ontology was dominated by the cost.
 More recent versions convert directly to terms
-in shared ontologies:</p>
+in shared ontologies, except in the case where
+custom terms were needed:</p>
 
-<p><img alt="travel terms" src="travelFig.png" /></p>
+<div align="center"><img alt="travel terms" src="travelFig.png" />
 
-<blockquote>if your desktop is SVG-happy, <a href="travelFig.svg">travelFig.svg</a> is
+<blockquote class="tech-details">if your desktop is SVG-happy, <a href="travelFig.svg">travelFig.svg</a> is
 nicer. I drew it with dia; you can play <a
 href="travelFig.xml">travelFig.xml</a>, the source. I'm working on <a
 href="/2002/03owlt/umlp/dia2owl.xsl">dia2owl.xsl</a>, which converts it to
 RDF/S: <a href="travelFig.rdf">travelFig.rdf</a>.
 </blockquote>
+</div>
 
 
-(The opencyc project
-released a version in DAML/RDF). I needed a few extra terms:
-<code>departureTime</code>, <code>flightNumber</code>, ...; see <a
+<ul>
+<li style="color: red">cyc terms (prefix <tt>k:</tt>) in red</li>
+<li style="color: green">custom travelTerms (prefix <tt>t:</tt>) in green.
+e.g. <code>departureTime</code>, <code>flightNumber</code>, ...; see <a
 href="travelTerms">travelTerms</a>, in <a href="travelTerms.rdf">RDF/xml</a>,
-<a href="travelTerms.rdf">RDF/n3</a>.</p>
+<a href="travelTerms.rdf">RDF/n3</a>.
+</li>
+<li style="color: blue">RDF standard terms (prefix <tt>r:</tt>)in blue</li>
+<li style="color: orange">XML Schema terms (prefix <tt>dt:</tt>)in orange</li>
+</ul>
+
+<p>An important point is that <strong>mixing vocabularies is
+easy</strong>. Within the basic subject/predicate/object abstract
+syntax, terms can be combined freely. Migrating to more specialized or
+more generalized terms is cheap, using <tt>rdfs:subPropertyOf</tt> and
+the like. <em>(@@ok to just say that without demonstrating it?)</em></p>
 
 
-<p>Here's a UML diagram of some of the terms::</p>
+<h2>Conversion for PDA import</h2>
 
+<p>Having already developed <a href="">palmagent</a>
 
-<p><em>[@@figure of (some of the) travelTerms? use dia? use
-sniffSchema.n3?]</em></p>
-
-<p><em>[@@some figures? SVG view of Makefiles, showing data flow thru
-tools?]</em></p>
-
-
-
-<p>... into RDF. Then I wrote <a href="/2001/07dc-bos/itin2datebook.n3">some
+... into RDF. Then I wrote <a href="/2001/07dc-bos/itin2datebook.n3">some
 rules</a> to relate this itinerary vocabulary to the <a
 href="../../../08/palm56/datebook">RDF vocabulary for the palmpilot
 datebook</a> that I had already developed, and presto, my itinerary was in my
