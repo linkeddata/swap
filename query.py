@@ -1019,7 +1019,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			self.state = S_SATISFIED # satisfied
                         if diag.chatty_flag > 80: progress("Builtin buinary relation operator succeeds")
 			if diag.tracking:
-                            raise Error
+                            #raise Error
 			    rea = BecauseBuiltIn(subj, pred, obj, proof)
 			    evidence = evidence + [rea]
 #			    return [([], rea)]  # Involves extra recursion just to track reason

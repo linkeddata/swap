@@ -18,6 +18,10 @@
     test:description   "Parse a small RDF file and regenerate RDF";
     test:arguments     """-rdf=z animal.rdf""".
 
+:t1002a a test:CwmTest;
+    test:referenceOutput <ref/xml-redefine.rdf>;
+    test:description   "Do not redefine the xml: prefix";
+    test:arguments     """--n3 xml-syntax/xml_prefix.n3 --rdf""".
 
 :t1003 a test:CwmTest;
     test:referenceOutput <ref/in-xml-t.n3>;
