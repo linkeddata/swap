@@ -132,6 +132,7 @@ sub grok{
       #e.g. >     AIR   AMERICAN AIRLINES    FLT:1364   ECONOMY
       if(/\bAIR\b/ && /FLT:(\d+)\s+(\w+)/){
 	my($flightNum, $flightClassName) = ($1, $2);
+	s/^>\s*//;
 	s/FLT:.*//;
 	s/\s*AIR\s*//;
 	s/\s+$//;
@@ -285,7 +286,10 @@ sub the{
 }
 
 # $Log$
-# Revision 1.3  2002-06-12 20:36:15  connolly
+# Revision 1.4  2002-07-23 23:09:45  connolly
+# deal with a little > fluff
+#
+# Revision 1.3  2002/06/12 20:36:15  connolly
 # factored out common stuff from travel tools
 #
 # Revision 1.2  2002/06/12 15:42:27  connolly
