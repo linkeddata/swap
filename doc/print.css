@@ -1,0 +1,70 @@
+
+BODY {
+  font-size: 10pt;
+  /* font-family: Palatino; */
+}
+
+H3 { font-style: italic }
+
+/* not used by html2ps*/
+DIV.nav {
+   display: none
+}
+
+/* not used by html2ps*/
+DIV.version {
+   display: none
+}
+
+@html2ps {
+
+  seq-number: 1; 
+  ball-radius: 0.1em
+  extrapage: 1
+
+  paper {
+     type: A4
+  }
+
+  option {
+    twoup: 1
+    scaleimage: 2
+    toc: bh 
+    frame: 0
+    grayscale: 1
+    titlepage: 1
+    number: 1
+  }
+
+  margin {
+    middle: 1.5cm
+  }
+
+  /*
+  toc {
+    level: 2
+  }
+  */
+
+  header {           
+    odd-left: $T;    
+    even-left: $T;   
+  }
+
+  /* these two slow it down a lot */
+  xref {
+    passes: 2;
+  }
+  toc {
+    level: 3;
+  }
+
+  titlepage {
+    margin-top: 7cm
+    content: "<DIV align=center> <H1>Semantic Web<BR>Tutorial Using N3</H1><H2>Tim Berners-Lee<BR>Dan Connolly<BR>Sandro Hawke<BR></H2><H2>For Presentaton<BR>May 20, 2003</H2></DIV>"
+  }
+
+}
+
+
+
