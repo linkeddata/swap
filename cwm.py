@@ -349,6 +349,8 @@ class RDFStore(notation3.RDFSink) :
               self.engine.intern(tuple[OBJ]) )
 	self.storeQuad(q)
                     
+    def makeComment(self, str):
+        pass        # Can't store comments
 
     def storeQuad(self, q):
         """ Effectively intern quads, in that dupliates are eliminated.
@@ -1075,7 +1077,7 @@ def doCommand():
                 option_test = 1
                 _gotInput = 1
             elif arg == "-ugly": _doneOutput = 1
-            elif arg == "-pipe": pass
+            elif arg == "-pipe": option_pipe = 1
             elif arg == "-bySubject": _doneOutput = 1
             elif arg == "-rdf1out": option_rdf1out = 1
             elif arg == "-chatty": chatty = 1
@@ -1098,17 +1100,15 @@ def doCommand():
         else:
             _outSink = notation3.ToN3(sys.stdout.write, _outURI)
 
-        if sys.argv[1] == "-pipe":   # Must be first arg
+        if option_pipe:
             _store = _outSink
         else:
             myEngine = Engine()
             _store = RDFStore(myEngine)
-
-        workingContext = myEngine.internURI(_outURI)
+            workingContext = myEngine.internURI(_outURI)
 
         if not _gotInput: #@@@@@@@@@@ default input
             _inputURI = urlparse.urljoin( _baseURI, "STDIN") # Make abs from relative
-            inputContexts.append(myEngine.internURI(_inputURI))
             p = notation3.SinkParser(_store,  _inputURI)
             p.load("")
             del(p)
@@ -1184,13 +1184,12 @@ def doCommand():
 
 
 # Squirt it out if no output done
-        
         if not _doneOutput:
             _store.dumpNested(workingContext, _outSink)
 
 
 def fixslash(str):
-    """ Fix backslashes to forward slashes
+    """ Fix windowslike filename to unixlike
     """
     s = str
     for i in range(len(s)):

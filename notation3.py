@@ -51,7 +51,7 @@ import re
 
 # Magic resources we know about
 
-RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#type"
+RDF_type_URI = "http://www.w3.org/1999/02/22-rdf-syntax-ns#Type"
 DAML_equivalentTo_URI = "http://www.daml.org/2000/10/daml-ont#equivalentTo"
 Logic_NS = "http://www.w3.org/2000/10/swap/log.n3#"
 N3_forSome_URI = Logic_NS + "forSome"
@@ -836,6 +836,7 @@ class ToN3(RDFSink):
 	self.nextId = 0         # Regenerate Ids on output
 	self.regen = {}         # Mapping of regenerated Ids
 	self.genPrefix = genPrefix  # Prefix for generated URIs on output
+
 	
 	#@@I18N
     _namechars = string.lowercase + string.uppercase + string.digits + '_'
@@ -856,7 +857,7 @@ class ToN3(RDFSink):
 
     def startDoc(self):
  
-        self._write("\n#  Start notation3 generation\n")
+        self._write("\n#  Notation3 generation by\n")
         self._write("#  $Id$\n\n")
         self._write("    " * self.indent)
         self._subj = None
@@ -938,6 +939,9 @@ class ToN3(RDFSink):
         
 	if self._subj != subj:
 	    self._endStatement()
+	    if self.indent == 1:  # Top level only
+                self._write("\n")
+                self._write("    " * self.indent)
 	    self._write(self.representationOf(subj))
 	    self._subj = subj
 	    self._pred = None

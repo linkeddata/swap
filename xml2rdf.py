@@ -17,12 +17,15 @@ STATE_NO_CONTEXT = "no context"  # @@@@@@@@@ use numbers for speed
 STATE_DESCRIPTION = "Description (have subject)" #
 STATE_LITERAL = "within literal"
 STATE_VALUE = "plain value"
+STATE_NOVALUE = "no value"
 
 RESOURCE = notation3.RESOURCE
 LITERAL = notation3.LITERAL
 
 RDFNS = "http://www.w3.org/1999/02/22-rdf-syntax-ns#" # As per the spec
 RDF_Specification = "http://www.w3.org/TR/REC-rdf-syntax/" # Must come in useful :-)
+
+chatty = 0
 
 class RDFXMLParser(xmllib.XMLParser):
 
@@ -66,15 +69,15 @@ class RDFXMLParser(xmllib.XMLParser):
         print 'DOCTYPE:',tag, `data`
 
     def handle_data(self, data):
-        self.testdata = self.testdata + data
-        if len(`self.testdata`) >= 70:
-            self.flush()
+        if self._state == STATE_VALUE:
+            self.testdata = self.testdata + data
+        
 
     def flush(self):
         data = self.testdata
         if data:
             self.testdata = ""
-            print 'data:', `data`
+            print '# flushed data:', `data`
 
     def handle_cdata(self, data):
         self.flush()
@@ -86,7 +89,6 @@ class RDFXMLParser(xmllib.XMLParser):
 
     def handle_comment(self, data):
         self.flush()
-        r = `data`
         self.sink.makeComment(data)
 
     def syntax_error(self, message):
@@ -109,16 +111,18 @@ class RDFXMLParser(xmllib.XMLParser):
         """
         self._subject = None
         self._state = STATE_DESCRIPTION
-        self.subject = None
+        self._subject = None
 
         for name, value in attrs.items():
             x = string.find(name, " ")
             if x>=0: name=name[x+1:]    # Strip any namespace on attributes!!! @@@@
-            if name == "id":
-                if self.subject: raise syntaxError # ">1 subject"
-                self.subject = self.uriref("#" + value)
+            if name == "ID":
+                if self._subject:
+                    print "# oops - subject already", self._subject
+                    raise syntaxError # ">1 subject"
+                self._subject = self.uriref("#" + value)
             elif name == "about":
-                if self.subject: raise syntaxError # ">1 subject"
+                if self._subject: raise syntaxError # ">1 subject"
                 self._subject = self.uriref(value)
             elif name == "aboutEachPrefix":
                 if value == " ":  # OK - a trick to make NO subject
@@ -127,7 +131,7 @@ class RDFXMLParser(xmllib.XMLParser):
             if name == "bagid":
                 self._context = self.uriref("#" + value)
 
-        if not self.subject:
+        if self._subject == None:
             self._subject = self._genPrefix + `self._nextId`  #
             self._nextId = self._nextId + 1
             self.sink.makeStatement(( (RESOURCE, self._context),                                 
@@ -141,13 +145,14 @@ class RDFXMLParser(xmllib.XMLParser):
         self.flush()
         tagURI = self.tag2uri(tag)
 
-        if not attrs:
-            print '# state =', self._state, 'start tag: <' + tagURI + '>'
-        else:
-            print '# state =', self._state, 'start tag: <' + tagURI,
-            for name, value in attrs.items():
-                print "    " + name + '=' + '"' + value + '"',
-            print '>'
+        if chatty:
+            if not attrs:
+                print '# State =', self._state, 'start tag: <' + tagURI + '>'
+            else:
+                print '# state =', self._state, 'start tag: <' + tagURI,
+                for name, value in attrs.items():
+                    print "    " + name + '=' + '"' + value + '"',
+                print '>'
 
 
         self._stack.append([self._state, self._context, self._subject])
@@ -169,6 +174,8 @@ class RDFXMLParser(xmllib.XMLParser):
             else:  # Unknown tag within STATE_NO_CONTEXT: typedNode #6.13
                 c = self._context   # (Might be change in idAboutAttr)
                 self.idAboutAttr(attrs)
+                if c == None: raise roof
+                if self._subject == None:raise roof
                 self.sink.makeStatement((  (RESOURCE, c),
                                       (RESOURCE, RDFNS+"Type"),
                                       (RESOURCE, self._subject),
@@ -180,7 +187,9 @@ class RDFXMLParser(xmllib.XMLParser):
         elif self._state == STATE_DESCRIPTION:   # Expect predicate (property)
             self._predicate = tagURI # Declaration by class name [ a my:class ;... ]
             self._state = STATE_VALUE  # Propably looking for value but see parse type
-            print "\n  attributes:", `attrs`
+            self.testdata = ""         # Flush value data
+            
+            # print "\n  attributes:", `attrs`
 
             for name, value in attrs.items():
                 x = string.find(name, " ")
@@ -200,18 +209,23 @@ class RDFXMLParser(xmllib.XMLParser):
                                                   (RESOURCE, s),
                                                   (RESOURCE, self._subject) ))
 
+                        self._state = STATE_DESCRIPTION  # Nest description
                 elif name == "resource":
                     self.sink.makeStatement(((RESOURCE, self._context),
-                                             (RESOURCE, self._subject),
                                              (RESOURCE, self._predicate),
+                                             (RESOURCE, self._subject),
                                              (RESOURCE, self.uriref(value)) ))
+                    self._state = STATE_NOVALUE  # NOT looking for value
                 elif name == "value":
                     self.sink.makeStatement(((RESOURCE, self._context),
-                                             (RESOURCE, self._subject),
                                              (RESOURCE, self._predicate),
-                                             (LITERAL, value) ))
+                                             (RESOURCE, self._subject),
+                                             (LITERAL,  value) ))
+                    self._state = STATE_NOVALUE  # NOT looking for value
         elif self._state == STATE_VALUE:
             raise syntaxError # Found tag in plain value
+        elif self._state == STATE_NOVALUE:
+            raise syntaxError # Found tag, expected empty
         else:
             raise internalError # Unknown state
 
@@ -220,12 +234,22 @@ class RDFXMLParser(xmllib.XMLParser):
 
         
     def unknown_endtag(self, tag):
+        if self._state == STATE_VALUE:
+            buf = ""
+            for c in self.testdata:
+                if c != "\r": buf = buf + c  # Strip CRs
+            self.sink.makeStatement(( (RESOURCE, self._context),
+                                       (RESOURCE, self._predicate),
+                                       (RESOURCE, self._subject),
+                                       (LITERAL,  buf) ))
+            self.testdata = ""
+
         l =  self._stack.pop() # [self._state, self._context, self._subject])
         self._state = l[0]
         self._context = l[1]
         self._subject = l[2]
         self.flush()
-        print '\nend tag: </' + tag + '>'
+        # print '\nend tag: </' + tag + '>'
 
     def unknown_entityref(self, ref):
         self.flush()

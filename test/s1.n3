@@ -1,14 +1,18 @@
 # Schema for test data
 #
 # This is only 
-bind ont: <http://www.daml.org/2000/10/daml-ont> .
-bind test: <> .
+@prefix daml: <http://www.daml.org/2000/10/daml-ont#> .
+@prefix mech: <> .
 
-bind : <> .
+@prefix : <#> .
 
-:includes a ont:TransitiveProperty .
+:includes a daml:TransitiveProperty .
 
-:partOf a ont:TransitiveProperty; ont:inverseOf :includes .
+:partOf a daml:TransitiveProperty; daml:inverseOf :includes .
+
+:dependsOn a daml:TransitiveProperty ;
+      daml:hasSubProperty  :includes .   # Real name of subproperty?
+
 
 
 
