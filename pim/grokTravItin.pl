@@ -64,6 +64,7 @@ sub grok{
   $firstEvent = 0;
 
   $trip = genSym("trip");
+  makeStatement("", $rdfNS . "type", $kNS . "ItineraryDocument");
   makeStatement("", $kNS . "containsInformationAbout-Focally", $trip);
 
   while(<>){
@@ -175,11 +176,9 @@ sub grok{
 	$hh += 12 if $ap eq 'P' && $hh < 12;
 	$hh = 0 if ($ap eq 'A' && $hh == 12);
 	my($place, $ti, $code);
-	$place = the($kNS . "nameString", $airportName, $airportName);
-	makeStatement($place, $rdfNS . "type", $kNS . "Airport-Physical");
 
 	if($code = $AirportCodes{$airportName}){
-	  makeStatement($place, $aNS . "iataCode", '', $code);
+	  $place = theAirport($code, $airportName);
 	}else{
 	  die "unknown airport: ", $airportName;
 	}
@@ -201,7 +200,7 @@ sub grok{
 	my($seatName) = ($1);
 	my($sa);
 	$sa = genSym("seat");
-	makeStatement($event, "@@#seatNum", $seatName);
+	makeStatement($event, "@@#seatNum", '', $seatName);
       }
 
       elsif(/\bAIR\b/){
@@ -300,6 +299,19 @@ sub the{
   return $ret;
 }
 
+sub theAirport{
+  my($iata, $name) = @_;
+
+  my($apt) = "http://www.daml.org/cgi-bin/airport?" . $iata;
+
+  makeStatement($apt, $kNS . "nameString", '', $name);
+  makeStatement($apt, $rdfNS . "type", $kNS . "Airport-Physical");
+  makeStatement($apt, $aNS . "iataCode", '', $iata);
+
+  return $apt;
+}
+
+
 sub airportNames{
   my($data, $ln, %ret);
 
@@ -342,7 +354,10 @@ EODATA
 
 
 # $Log$
-# Revision 1.8  2002-09-27 21:16:04  connolly
+# Revision 1.9  2002-10-18 20:45:14  connolly
+# well-known airport names rather than bnodes
+#
+# Revision 1.8  2002/09/27 21:16:04  connolly
 # handle overnight flights
 #
 # Revision 1.7  2002/09/22 21:56:46  connolly
