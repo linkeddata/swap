@@ -1,0 +1,36 @@
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix contact: <http://www.w3.org/2000/10/swap/pim/contact#>.
+@prefix rcs: <http://www.w3.org/2001/03swell/rcs#>.
+
+<> dc:description """Test endswith""";
+  rcs:id "$Id$";
+  dc:creator [ 
+	contact:fullName "Tim berners-Lee";
+	contact:homePage <http://www.w3.org/People/Berners-Lee/>;
+	contact:mailbox <mailto:timbl@w3.org>
+	];
+  dc:rights "copyright (c) 2001 W3C (MIT, Keio, INRIA)".
+
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix : <#>.
+
+this log:forAll :x, :y, :z, :p, :q.
+
+{ "asdfghjkl" string:endsWith "jkl" } log:implies { :test1 a :success }.
+
+{ "asdfghjkl" string:endsWith "jkk" } log:implies { :test2 a :FAILURE }.
+
+{ "jkl" string:endsWith "jkl" } log:implies { :test3 a :success }.
+
+{ "asdfghjkl" string:endsWith "aaajkl" } log:implies { :test4 a :FAILURE }.
+
+{ "asdfjhkh" string:endsWith "asd" } log:implies { :test5 a :FAILURE }.
+
+{ "foobar" string:endsWith "" } log:implies { :test6 a :success }.
+
+{ "" string:endsWith "" } log:implies { :test7 a :success }.
+
+#ends
+

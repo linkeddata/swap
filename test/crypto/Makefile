@@ -26,7 +26,8 @@ include $(PD)/GVDOT.mak
 all: access-1.response
 
 clean:
-	rm *.response *.cert *.public
+#	rm *.response *.cert *.public 
+	rm make.graph make.dot make.n3
 
 # First, the parties involved create the keys they need.
 
