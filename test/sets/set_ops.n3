@@ -1,9 +1,9 @@
 @prefix set: <http://www.w3.org/2000/10/swap/set#> .
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 
-{$ :a :b $} a :Set .
-{$ 1 2 $} a :Set .
-{$ :a 1 $} a :Set .
+{$ :a, :b $} a :Set .
+{$ 1, 2 $} a :Set .
+{$ :a, 1 $} a :Set .
 
 { ?x a :Set . 
   ?y a :Set .

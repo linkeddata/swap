@@ -557,10 +557,16 @@ class SinkParser:
                     if not first_run:
                         if str[i:i+1] == ',':
                             i+=1
-                        elif False:
+                        else:
                             raise BadSyntax(self._thisDoc, self.lines, str, i, "expected: ','")
                     else: first_run = False
 
+                    i = self.skipSpace(str, i)
+                    if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "needed '$}', found end.")                    
+                    if str[i:i+2] == '$}':
+                        j = i+2
+                        break
+                    
                     item = []
                     j = self.item(str,i, item) #@@@@@ should be path, was object
                     if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected item in set or '$}'")
