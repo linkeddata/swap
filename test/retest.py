@@ -151,6 +151,7 @@ def main():
     chatty = 0
     proofs = 0
     cwm_command='../cwm.py'
+    python_command='python'
     global ploughOn # even if error
     ploughOn = 0
     global verbose
@@ -369,21 +370,21 @@ def main():
 	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d'""" % (WD, REFWD)
 	
 	if normal:
-	    execute("""CWM_RUN_NS="run#" %spython %s --quiet %s | %s > ,temp/%s""" %
-		(env, cwm_command, arguments, cleanup , case))	
+	    execute("""CWM_RUN_NS="run#" %s %s %s --quiet %s | %s > ,temp/%s""" %
+		(env, python_command, cwm_command, arguments, cleanup , case))	
 	    if diff(case, refFile):
 		problem("######### from normal case %s: %scwm %s" %( case, env, arguments))
 		continue
 
 	if chatty and not verboseDebug:
-	    execute("""%spython %s --chatty=100  %s  &> /dev/null""" %
-		(env, cwm_command, arguments))	
+	    execute("""%s %s %s --chatty=100  %s  &> /dev/null""" %
+		(env, python_command, cwm_command, arguments))	
 
 	if proofs:
-	    execute("""%spython %s --quiet %s --base=a --why  > ,proofs/%s""" %
-		(env, cwm_command, arguments, case))
-	    execute("""python ../check.py < ,proofs/%s | %s > ,temp/%s""" %
-		(case, cleanup , case))	
+	    execute("""%s %s %s --quiet %s --base=a --why  > ,proofs/%s""" %
+		(env, python_command, cwm_command, arguments, case))
+	    execute("""%s ../check.py < ,proofs/%s | %s > ,temp/%s""" %
+		(python_command, case, cleanup , case))	
 	    if diff(case, refFile):
 		problem("######### from proof case %s: %scwm %s" %( case, env, arguments))
 	passes = passes + 1
@@ -398,8 +399,8 @@ def main():
 	assert case and description and inputDocument and outputDocument
 #	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
 #			WD, REFWD)
-	execute("""python %s --quiet --rdf=RT %s --ntriples  > ,temp/%s""" %
-	    (cwm_command, inputDocument, case))
+	execute("""%s %s --quiet --rdf=RT %s --ntriples  > ,temp/%s""" %
+	    (python_command, cwm_command, inputDocument, case))
 	if rdfcompare3(case, localize(outputDocument)):
 	    problem("  from positive parser test %s running\n\tcwm %s\n" %( case,  inputDocument))
 
@@ -416,8 +417,8 @@ def main():
 #	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
 #			WD, REFWD)
         try:
-            execute("""python %s --quiet --rdf=RT %s --ntriples  > ,temp/%s 2>/dev/null""" %
-	    (cwm_command, inputDocument, case))
+            execute("""%s %s --quiet --rdf=RT %s --ntriples  > ,temp/%s 2>/dev/null""" %
+	    (python_command, cwm_command, inputDocument, case))
         except:
             pass
         else:
@@ -441,12 +442,11 @@ I should have.
 #	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
 #			WD, REFWD)
         try:
-            execute("""python %s --grammar=../grammar/n3-selectors.n3  --as=http://www.w3.org/2000/10/swap/grammar/n3#document --parse=%s  > ,temp/%s 2>/dev/null""" %
-	    ('../grammar/predictiveParser.py', inputDocument, case))
+            execute("""%s %s --grammar=../grammar/n3-selectors.n3  --as=http://www.w3.org/2000/10/swap/grammar/n3#document --parse=%s  > ,temp/%s 2>/dev/null""" %
+	    (python_command, '../grammar/predictiveParser.py', inputDocument, case))
         except RuntimeError:
             problem("""Error running ``python %s --grammar=../grammar/n3-selectors.n3  --as=http://www.w3.org/2000/10/swap/grammar/n3#document --parse=%s  > ,temp/%s 2>/dev/null''""" %
 	    ('../grammar/predictiveParser.py', inputDocument, case))
-
 	passes = passes + 1
 
     for u, case, description, inputDocument in n3NegativeTestData:
@@ -460,8 +460,8 @@ I should have.
 #	cleanup = """sed -e 's/\$[I]d.*\$//g' -e "s;%s;%s;g" -e '/@prefix run/d' -e '/^#/d' -e '/^ *$/d'""" % (
 #			WD, REFWD)
         try:
-            execute("""python %s --grammar=../grammar/n3-selectors.n3  --as=http://www.w3.org/2000/10/swap/grammar/n3#document --parse=%s    > ,temp/%s 2>/dev/null""" %
-                ('../grammar/predictiveParser.py', inputDocument, case))
+            execute("""%s %s ../grammar/n3-selectors.n3  http://www.w3.org/2000/10/swap/grammar/n3#document %s  > ,temp/%s 2>/dev/null""" %
+                (python_command, '../grammar/predictiveParser.py', inputDocument, case))
         except:
             pass
         else:
@@ -483,8 +483,8 @@ I should have.
     
 	print "%3i/%i %-30s  %s" %(tests, totalTests, urel, description)
 	tt = os.times()[-1]
-        a = system("""%spython %s --quiet %s >,time.out""" %
-                       (env, cwm_command, arguments))
+        a = system("""%s %s %s --quiet %s >,time.out""" %
+                       (env, python_command, cwm_command, arguments))
         userTime = os.times()[-1] - tt
         print """%spython %s --quiet %s 2>,time.out""" % \
                        (env, cwm_command, arguments)

@@ -34,6 +34,10 @@
     test:description   "What to do with URI-labelled lists";
     test:arguments     """list/construct.n3""".
 
+:t1021 a  test:CwmTest;
+    test:shortFileName "bnode_in_list_in_list.ref";
+    test:description   "Anonymous nodes in nested lists";
+    test:arguments     """list/bnode_in_list_in_list.n3""".
 
 
 #        Test list handling in inference

@@ -1027,6 +1027,9 @@ class SinkParser:
                 elif ch == "u":
                     j, ch = self.uEscape(str, j+1, startline)
                     ustr = ustr + ch
+                elif ch == "U":
+                    j, ch = self.UEscape(str, j+1, startline)
+                    ustr = ustr + ch
                 else:
                     raise BadSyntax(self._thisDoc, self.lines, str, i,
                                     "bad escape")
@@ -1040,6 +1043,25 @@ class SinkParser:
         count = 0
         value = 0
         while count < 4:  # Get 4 more characters
+            ch = str[j:j+1].lower()  # sbp http://ilrt.org/discovery/chatlogs/rdfig/2002-07-05
+            j = j + 1
+            if ch == "":
+                raise BadSyntax(self._thisDoc, startline, str, i,
+                                "unterminated string literal(3)")
+            k = string.find("0123456789abcdef", ch)
+            if k < 0:
+                raise BadSyntax(self._thisDoc, startline, str, i,
+                                "bad string literal hex escape")
+            value = value * 16 + k
+            count = count + 1
+        uch = unichr(value)
+        return j, uch
+
+    def UEscape(self, str, i, startline):
+        j = i
+        count = 0
+        value = 0
+        while count < 8:  # Get 4 more characters
             ch = str[j:j+1].lower()  # sbp http://ilrt.org/discovery/chatlogs/rdfig/2002-07-05
             j = j + 1
             if ch == "":
@@ -1548,8 +1570,8 @@ Escapes = {'a':  '\a',
            '\\': '\\',
            '"':  '"'}
 
-forbidden1 = re.compile(ur'[\\\"\a\b\f\r\v\u0080-\uffff]')
-forbidden2 = re.compile(ur'[\\\"\a\b\f\r\v\t\n\u0080-\uffff]')
+forbidden1 = re.compile(ur'[\\\"\a\b\f\r\v\u0080-\U0000ffff]')
+forbidden2 = re.compile(ur'[\\\"\a\b\f\r\v\t\n\u0080-\U0000ffff]')
 #"
 def stringToN3(str, singleLine=0, flags=""):
     res = ''
@@ -1565,6 +1587,7 @@ def stringToN3(str, singleLine=0, flags=""):
         forbidden = forbidden2
         
     i = 0
+
     while i < len(str):
         m = forbidden.search(str, i)
         if not m:
@@ -1586,7 +1609,16 @@ def stringToN3(str, singleLine=0, flags=""):
                     res = res + ch
         i = j + 1
 
-    return delim + res + str[i:] + delim
+    # The following code fixes things for really high range Unicode
+    newstr = ""
+    for ch in res + str[i:]:
+        if ord(ch)>65535:
+            newstr = newstr + ('\\U%08X' % ord(ch))  # http://www.w3.org/TR/rdf-testcases/#ntriples
+        else:
+            newstr = newstr + ch
+    #
+
+    return delim + newstr + delim
 
 def backslashUify(ustr):
     """Use URL encoding to return an ASCII string corresponding to the given unicode"""
@@ -1594,7 +1626,9 @@ def backslashUify(ustr):
 #    s1=ustr.encode('utf-8')
     str  = ""
     for ch in ustr:  # .encode('utf-8'):
-	if ord(ch) > 126:
+        if ord(ch) > 65535:
+            ch = "\\U%08X" % ord(ch)       
+	elif ord(ch) > 126:
 	    ch = "\\u%04X" % ord(ch)
 	else:
 	    ch = "%c" % ord(ch)

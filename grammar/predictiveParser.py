@@ -163,7 +163,7 @@ def doProduction(lhs):
     rhs = g.the(pred=BNF.matches, subj=lhs)
     if rhs != None:
 	if chatty_flag: progress( "\nToken %s matches regexp %s" %(lhs, rhs))
-	tokenRegexps[lhs] = re.compile(rhs.value())
+	tokenRegexps[lhs] = re.compile(rhs.value(), re.U)
 	cc = g.each(subj=lhs, pred=BNF.canStartWith)
 	if cc == []: progress (recordError(
 	    "No record of what token %s can start with" % `lhs`))
@@ -218,8 +218,8 @@ def doProduction(lhs):
 
 ######################### Parser based on the RDF Context-free grammar
 
-whiteSpace = re.compile(r'[ \t]*((#[^\n]*)?\r?\n)?')
-singleCharacterSelectors = "\t\r\n !\"#$%&'()*.,+/;<=>?[\\]^`{|}~"
+whiteSpace = re.compile(ur'[ \t]*((#[^\n]*)?\r?\n)?')
+singleCharacterSelectors = u"\t\r\n !\"#$%&'()*.,+/;<=>?[\\]^`{|}~"
 notQNameChars = singleCharacterSelectors + "@"  # Assume anything else valid qname :-/
 notNameChars = notQNameChars + ":"  # Assume anything else valid name :-/
 
@@ -251,7 +251,7 @@ class PredictiveParser:
 	"0" means numeric
 	"a" means alphanumeric
 	"""
-    
+	
 	while 1:
 	    m = whiteSpace.match(str, i)
 	    if m == None or m.end() == i: break
@@ -313,9 +313,11 @@ class PredictiveParser:
 	if tok == "": return tok, here # EOF    
 	lookupTable = parser.branchTable[lhs]
 	rhs = lookupTable.get(tok, None)  # Predict branch from token
-	if rhs == None: raise SyntaxError(
-		"Found %s when expecting some form of %s,\n\tsuch as %s\n\t%s"
-		    %(tok, lhs, lookupTable.keys(), parser.around(str, here)))
+	if rhs == None:
+            progress("""Found %s when expecting some form of %s,
+\tsuch as %s\n\t%s"""  % (tok, lhs, lookupTable.keys(), parser.around(str, here)))
+            raise SyntaxError("""Found %s when expecting some form of %s,
+\tsuch as %s\n\t%s"""  % (tok, lhs, lookupTable.keys(), parser.around(str, here)))
 	if parser.verb: progress( "%i  %s means expand %s as %s" %(parser.lineNumber,tok, lhs, rhs.value()))
 	for term in rhs:
 	    if isinstance(term, Literal): # CFG Terminal
@@ -325,7 +327,7 @@ class PredictiveParser:
 		elif "@"+str[here:next-1] == lit: next = next-1
 		else: raise SyntaxError(
 		    "Found %s where %s expected\n\t %s" %
-			(str[here:next], lit, parser.around(str, here)))
+			(`str[here:next]`, lit, parser.around(str, here)))
 	    else:
 		rexp = tokenRegexps.get(term, None)
 		if rexp == None: # Not token
@@ -333,7 +335,9 @@ class PredictiveParser:
 		    continue
 		m = rexp.match(str, here)
 		if m == None:
-		    raise SyntaxError("Token: should match %s\n\t" % 
+                    progress("\n\n\nToken: should match %s\n\t %s" % 
+				(rexp.pattern, parser.around(str, here)))
+		    raise SyntaxError("Token: should match %s\n\t %s" % 
 				(rexp.pattern, parser.around(str, here)))
 		if parser.verb: progress( "Token matched to <%s> as pattern <%s>" % (str[here:m.end()], rexp.pattern))
 		next = m.end()

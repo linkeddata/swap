@@ -11,7 +11,8 @@ def progress(*args):
     level = len(traceback.extract_stack())
     sys.stderr.write(" "*level)
     for a in args:
-        sys.stderr.write(utf_8_encode("%s " % (a,))[0])
+        q = utf_8_encode(u"%s " % (a,))[0]
+        sys.stderr.write(q)
     sys.stderr.write("\n")
 
 global chatty_flag # verbosity debug flag

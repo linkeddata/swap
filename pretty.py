@@ -336,7 +336,9 @@ class Serializer:
 	elif z is not context:
 	    self._inContext[x] = "many"
 	    return
-	    
+        if isinstance(x, NonEmptyList):
+	    for y in x:
+		self._scanObj(context, y)	    
 	if isinstance(x, AnonymousVariable) or (isinstance(x, Fragment) and x.generated()): 
 	    y = self._occurringAs[OBJ].get(x, 0) + 1
 	    self._occurringAs[OBJ][x] = y
@@ -532,6 +534,7 @@ class Serializer:
                     for s in statements:
                         p = s.quad[PRED]
                         if p is not self.store.first and p is not self.store.rest:
+#                            progress("++++%s" % `s`)
                             self.dumpStatement(sink, s.quad, sorting) # Dump the rest outside the ()
                     return
                 else:
@@ -587,7 +590,7 @@ class Serializer:
         self._outputStatement(sink, triple)
 
 	
-def canItbeABNode(formula, symbol):   # @@@@ Really slow -tbl
+def canItbeABNode(formula, symbol):   # @@@@ Really slow -tbl @@@ send me an e-mail with a run of myProfiler proving it. -Yosi
     def returnFunc():
         for quad in formula.statements:
             for s in PRED, SUBJ, OBJ:
