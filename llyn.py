@@ -393,10 +393,10 @@ class Formula(Fragment):
 	for s in self.statements:
 	    yield s
 
-    def newBlankNode(self, why=None):
+    def newBlankNode(self, uri=None, why=None):
 	"""Create or reuse, in the default store, a new unnamed node within the given
 	formula as context, and return it for future use"""
-	return self.store.newBlankNode(self, why=why)
+	return self.store.newBlankNode(self, uri,  why=why)
     
     def newExistential(self, uri=None, why=None):
 	"""Create or reuse, in the default store, a new named variable
@@ -1156,10 +1156,10 @@ class RDFStore(RDFSink) :
     def newSymbol(self, uri):
 	return self.intern(RDFSink.newSymbol(self, uri))
 
-    def newBlankNode(self, context, why=None):
+    def newBlankNode(self, context, uri=None, why=None):
 	"""Create or reuse, in the default store, a new unnamed node within the given
 	formula as context, and return it for future use"""
-	return self.intern(RDFSink.newBlankNode(self, context, why=why))
+	return self.intern(RDFSink.newBlankNode(self, context, uri, why=why))
     
     def newExistential(self, context, uri=None, why=None):
 	"""Create or reuse, in the default store, a new named variable
@@ -2751,6 +2751,11 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
         con, pred, subj, obj = self.quad
 	if self.query.meta != None:
 	    self.service = self.query.meta.any(pred=self.store.authoritativeService, subj=pred)
+	    if self.service == None:
+		uri = pred.uriref()
+		if uri.startsWith("sql:"):
+		    j = uri.rfind("/")
+		    if j>0: self.service = meta.newSymbol(uri[:j])
 	    if verbosity() > 90 and self.service: progress("Ooooo. we have a remote service for "+`pred`)
         self.neededToRun = [ [], [], [], [] ]  # for each part of speech
         self.searchPattern = [con, pred, subj, obj]  # What do we search for?
