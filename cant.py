@@ -65,19 +65,7 @@ comment = re.compile("^"+com+"$")
 statement = re.compile( ws + object + ws + object + ws + object  + com) # 
 
 
-def localize(uri):
-    """Get URI relative to where this lives"""
-    return uripath.refTo("http://www.w3.org/2000/10/swap/test/retest.py", uri)
-
-def problem(str):
-    global ploughOn
-    global problems
-    sys.stderr.write(str + "\n")
-    problems = problems + 1
-    if not ploughOn:
-	sys.exit(-1)
-
-#	raise RuntimeError(str)
+#"
 
 def usage():
     print __doc__
