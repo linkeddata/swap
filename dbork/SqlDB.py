@@ -220,6 +220,7 @@ class SqlDBAlgae(RdfDBAlgae):
         selectPunct = []
         selects = []
         labels = []
+        self.orderedVars = self.vars.keys()
         self._buildVarInfo(varInfos, selectPunct, selects, labels, resultSet)
 
         query = self._buildQuery(implQuerySets, asz, wheres, selectPunct, selects, labels)
@@ -356,7 +357,7 @@ class SqlDBAlgae(RdfDBAlgae):
 
     def _buildVarInfo(self, varInfos, selectPunct, selects, labels, resultSet):
         selectVarIndex = 0;
-        for var in self.vars.keys():
+        for var in self.orderedVars:
             # self.vars[var] contains an array of every time a variable was
             # referenced in a pattern. We care ony about the first for buiding
             # the selects list.
@@ -377,8 +378,6 @@ class SqlDBAlgae(RdfDBAlgae):
             if (field):
                 selects.append(var+"."+field)
                 labels.append(symbol)
-                varInfos.append(varInfo)
-                selectVarIndex = selectVarIndex + 1
             elif (pk):
                 # Some primary keys are scalars, some are lists.
                 # Here we make them all be lists.
@@ -390,10 +389,11 @@ class SqlDBAlgae(RdfDBAlgae):
                 for field in pk:
                     selects.append(var+"."+field)
                     labels.append(symbol+"_"+field)
-                    varInfos.append(varInfo)
                     selectVarIndex = selectVarIndex + 1
                     selectPunct.append('')
                 selectPunct.pop
+            varInfos.append(varInfo)
+            selectVarIndex = selectVarIndex + 1
 
     def _buildQuery(self, implQuerySets, asz, wheres, selectPunct, selects, labels):
 
@@ -441,9 +441,11 @@ class SqlDBAlgae(RdfDBAlgae):
             nextStatements.append(statements[:])
 
             rowBindings = {}
-            for iSelect in range(len(selects)):
+            iSelect = 0;
+            for var in self.orderedVars:
+                varInfo = self.vars[var][0]
+                queryPiece, field, table, var, pk, dummy, fieldz = varInfo
                 var = answerRow[iSelect]
-                queryPiece, field, table, var, pk, dummy, fieldz = varInfos[iSelect]
                 valueHash = {}
                 if (field):
                     str = answerRow[iSelect]
