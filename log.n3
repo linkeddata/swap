@@ -90,14 +90,14 @@ List and Other are not stable and may change.
 log:semantics a rdf:Property;   # (was resolvesTo but we use role nouns by preference)
     rdfs:domain doc:Work;
     rdfs:range  log:Formula;
-    rdfs:label  "forumla";
+    rdfs:label  "semantics";
     rdfs:comment """This connects a document and the formula it parses to.
         Cwm knows how to go get a document and parse it in order to evaluate this.""".
 
 log:content a rdf:Property;   # (was hasContent but we use role nouns by preference)
     rdfs:domain doc:Work;
     rdfs:range  log:String;
-    rdfs:label  "forumla";
+    rdfs:label  "content";
     rdfs:comment """This connects a document and a string that represents it.
         Cwm knows how to go get a document in order to evaluate this.""".
 
