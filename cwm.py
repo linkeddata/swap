@@ -704,7 +704,7 @@ class RDFStore(notation3.RDFSink) :
                     if t.triple[CONTEXT] is context:
                         self.coolMakeStatement(sink, t)
                 if _se > 0:
-                    sink.startBagObject(self.extern(triple)) # @@@@@@@@@  missing "="
+                    sink.startBagNamed(obj.asPair()) # @@@@@@@@@  missing "="
                     self.dumpNestedStatements(obj, sink)  # dump contents of anonymous bag
                     sink.endBagObject(pre.asPair(), sub.asPair())
                     
@@ -1342,6 +1342,8 @@ def doCommand():
             (default is to store and pretty print with anonymous nodes) *
  -apply=foo Read rules from foo, apply to store, adding conclusions to store
  -filter=foo Read rules from foo, apply to store, REPLACING store with conclusions
+ -rules     Apply rules in store to store, adding conclusions to store
+ -think     as -rules but continue until no more rule matches (or forever!)
  -reify     Replace the statements in the store with statements describing them.
  -flat      Reify only nested subexpressions (not top level) so that no {} remain.
  -help      print this message
@@ -1483,10 +1485,10 @@ Examples:
                     _store.moveContext(inputContext,workingContext)  # Move input data to output context
                     _step  = _step + 1
                     s = _metaURI + `_step`  #@@ leading 0s to make them sort?
-                    if history:
-                        _store.storeQuad(_meta, META_mergedWith, s, history)
-                        _store.storeQuad(_meta, META_source, s, inputContext)
-                        _store.storeQuad(_meta, META_run, s, run)
+                    if doMeta and history:
+                        _store.storeQuad((_meta, META_mergedWith, s, history))
+                        _store.storeQuad((_meta, META_source, s, inputContext))
+                        _store.storeQuad((_meta, META_run, s, run))
                         history = s
                     else:
                         history = inputContext
