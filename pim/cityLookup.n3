@@ -33,6 +33,19 @@
 }
   log:implies { ?CITY :formVal ?N }.
 
+# What we really want is a built-in for
+# uri-escaping. This KLUDGE works just
+# for the U.K.
+{
+ ?CITY k:inRegion [ map:countryName "United Kingdom"].
+
+ ?N is str:concatenation of (
+  [ is map:cityName of ?CITY ]
+  "%2CUnited+Kingdom"
+ ).
+}
+  log:implies { ?CITY :formVal ?N }.
+
 
 {
  ?CITY k:inRegion ?AREA.
@@ -99,11 +112,14 @@
 
 # test case
 
-[ map:cityName "Budapest";
-  k:inRegion [ map:countryName "Hungary" ] ].
+#[ map:cityName "Budapest";
+#  k:inRegion [ map:countryName "Hungary" ] ].
 
 # $Log$
-# Revision 1.5  2004-02-22 20:50:06  connolly
+# Revision 1.6  2004-04-14 16:01:06  connolly
+# kludge for United Kingdom
+#
+# Revision 1.5  2004/02/22 20:50:06  connolly
 #  - scrape US-specific lat/lon pattern
 #  - scrape time zone names as well as lat/lon
 #  - look up airport codes as well as city names
