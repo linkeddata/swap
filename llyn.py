@@ -2479,6 +2479,7 @@ class QueryItem:
                     self.neededToRun[p] = [] # Now it is definitely all bound
             if changed:
                 q[p] = _lookupRecursive(newBindings, q[p])   # possibly expensive
+		if self.searchPattern[p] != None: self.searchPattern[p] = q[p]
                 
         self.quad = q[0], q[1], q[2], q[3]  # yuk
 
@@ -2497,7 +2498,6 @@ class QueryItem:
 #                progress("@@@ Ooops, short is ", self.short, self.searchPattern)
             if self.short == 0:
                 self.searchDone()
-
 
         if isinstance(self.quad[PRED], BuiltIn):
             if self.canRun():
