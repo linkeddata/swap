@@ -3,6 +3,17 @@
 @prefix lst: <http://www.daml.org/2001/03/daml+oil#>.
 @prefix log: <http://www.w3.org/2000/10/swap/log#>.
 
+this log:forAll :l.
+
 :xyz :foo ("1").
 
 { :xyz :foo [ lst:rest :l] } log:implies { :xyz :snort :l }.
+
+
+# meanwhile:
+
+@prefix mylst: <bindRest_#>.
+
+:xyz :foo [ mylst:first "1"; mylst:rest mylst:nil ].
+
+{ :xyz :foo [ mylst:rest :l] } log:implies { :xyz :blort :l }.
