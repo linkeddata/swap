@@ -62,7 +62,7 @@ log:resolvesTo a rdf:Property;
 #
 log:uri a rdf:Property;
     rdfs:description """This allows one to look at the actual string of the URI
-        which identifies this.""".
+        which identifies this.""";
     rdfs:range log:String.
 
 ############# Rules
