@@ -193,7 +193,7 @@ Id:&nbsp;tsv2xml.py,v&nbsp;1.1&nbsp;2000/10/02&nbsp;19:41:02&nbsp;connolly&nbsp;
 Takes&nbsp;as&nbsp;argument&nbsp;a&nbsp;writer&nbsp;which&nbsp;does&nbsp;the&nbsp;(eg&nbsp;utf-8)&nbsp;encoding<br>&nbsp;</tt></td></tr>
 <tr><td>&nbsp;</td>
 <td width="100%">Methods defined here:<br>
-<dl><dt><a name="XMLWriter-__init__"><strong>__init__</strong></a>(self, encodingWriter, counter, squeaky<font color="#909090">=0</font>)</dt></dl>
+<dl><dt><a name="XMLWriter-__init__"><strong>__init__</strong></a>(self, encodingWriter, counter, squeaky<font color="#909090">=0</font>, version<font color="#909090">='1.0'</font>)</dt></dl>
 
 <dl><dt><a name="XMLWriter-closeTag"><strong>closeTag</strong></a>(self)</dt></dl>
 
@@ -212,6 +212,8 @@ Takes&nbsp;as&nbsp;argument&nbsp;a&nbsp;writer&nbsp;which&nbsp;does&nbsp;the&nbs
 <dl><dt><a name="XMLWriter-indent"><strong>indent</strong></a>(self, extra<font color="#909090">=0</font>)</dt></dl>
 
 <dl><dt><a name="XMLWriter-makeComment"><strong>makeComment</strong></a>(self, str)</dt></dl>
+
+<dl><dt><a name="XMLWriter-makePI"><strong>makePI</strong></a>(self, str)</dt></dl>
 
 <dl><dt><a name="XMLWriter-newline"><strong>newline</strong></a>(self, howmany<font color="#909090">=1</font>)</dt></dl>
 
@@ -259,6 +261,8 @@ Data and other attributes defined here:<br>
 <strong>N3_forSome_URI</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
 <strong>N3_nil</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#nil')<br>
 <strong>N3_rest</strong> = (0, 'http://www.daml.org/2001/03/daml+oil#rest')<br>
+<strong>NCNameChar</strong> = 0<br>
+<strong>NCNameStartChar</strong> = 1<br>
 <strong>NODE_MERGE_URI</strong> = 'http://www.w3.org/2000/10/swap/log#is'<br>
 <strong>OBJ</strong> = 3<br>
 <strong>PARTS</strong> = (1, 2, 3)<br>

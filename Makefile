@@ -72,7 +72,7 @@ cwm.tar.gz:  $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
 	cvs add $(TARNAME).tar.gz
 #LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply/*.py *.py
 
-setup_tarball: $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) tested filelist
+setup_tarball: $(HTMLS) $(SOURCES) $(TESTS) $(TARBALL_STUFF) # tested filelist
 	cvs -q update
 	rm -rf swap || true
 	mkdir swap

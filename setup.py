@@ -34,7 +34,7 @@ if exists(swap_dir):
 # Install SWAP
 from distutils.core import setup
 #from swap import __version__
-__version__='0.8.0'
+__version__='0.8.0-plus'
 setup(
     name = 'cwm',
     version = __version__,

@@ -26,12 +26,12 @@ This is or was http://www.w3.org/2000/10/swap/test/retest.py
 W3C open source licence <http://www.w3.org/Consortium/Legal/copyright-software.html>.
 
 """
-from os import system
+from os import system, popen3
 import os
 import sys
 import urllib
 
-# From PYTHONPATH equivalent to http://www.w3.org/2000/10/swap
+# From PYTHONPATH equivalent to http://www.w3.org/2000/10
 
 from swap import llyn
 from swap.myStore import load, loadMany, Namespace
@@ -47,6 +47,7 @@ triage = Namespace("http://www.w3.org/2000/10/swap/test/triage#")
 
 import getopt
 import sys
+import re
 
 def localize(uri):
     """Get URI relative to where this lives"""
@@ -201,6 +202,7 @@ def main():
     kb = loadMany(testFiles, referer="")
     testData = []
     RDFTestData  = []
+    perfData = []
 #    for fn in testFiles:
 #	print "Loading tests from", fn
 #	kb=load(fn)
@@ -253,13 +255,24 @@ def main():
 	if good:
 	    RDFTestData.append((t.uriref(), case, description,  inputDocument, outputDocument))
 
+    for t in kb.each(pred=rdf.type, obj=test.PerformanceTest):
+        x = t.uriref()
+        theTime = kb.the(subj=t, pred=test.pyStones)
+	description = str(kb.the(t, test.description))
+	arguments = str(kb.the(t, test.arguments))
+	environment = kb.the(t, test.environment)
+	if environment == None: env=""
+	else: env = str(environment) + " "
+	perfData.append((x, theTime, description, env, arguments))
 
     testData.sort()
     cwmTests = len(testData)
     if verbose: print "Cwm tests: %i" % cwmTests
     RDFTestData.sort()
     rdfTests = len(RDFTestData)
-    totalTests = cwmTests + rdfTests
+    perfData.sort()
+    perfTests = len(perfData)
+    totalTests = cwmTests + rdfTests + perfTests
     if verbose: print "RDF parser tests: %i" % rdfTests
 
     for u, case, refFile, description, env, arguments in testData:
@@ -310,6 +323,32 @@ def main():
 
 	passes = passes + 1
 
+    timeMatcher = re.compile(r'\t([0-9]+)m([0-9]+)\.([0-9]+)s')
+    from test.pystone import pystones
+    pyStoneTime = pystones()[1]
+    for u, theTime, description, env, arguments in perfData:
+	tests = tests + 1
+	if tests < start: continue
+	
+	urel = refTo(base(), u)
+    
+	print "%3i/%i %-30s  %s" %(tests, totalTests, urel, description)
+	tt = os.times()[-1]
+        a = system("""%spython %s --quiet %s >,time.out""" %
+                       (env, cwm_command, arguments))
+        userTime = os.times()[-1] - tt
+        print """%spython %s --quiet %s 2>,time.out""" % \
+                       (env, cwm_command, arguments)
+##        c = file(',time.out', 'r')
+##        timeOutput = c.read()
+##        c.close()
+##        timeList = [timeMatcher.search(b).groups() for b in timeOutput.split('\n') if timeMatcher.search(b) is not None]
+##        print timeList
+##        userTimeStr = timeList[1]
+##        userTime = int(userTimeStr[0])*60 + float(userTimeStr[1] + '.' + userTimeStr[2])
+        pyCount = pyStoneTime * userTime
+        print pyCount
+        
     if problems != []:
 	sys.stderr.write("\nProblems:\n")
 	for s in problems:
