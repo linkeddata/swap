@@ -1195,7 +1195,7 @@ class RDFStore(RDFSink) :
 
 #Heavy functions:
 
-        log.internFrag("resolvesTo", BI_semantics) # obsolete
+#        log.internFrag("resolvesTo", BI_semantics) # obsolete
         self.semantics = log.internFrag("semantics", BI_semantics)
         self.cufi = log.internFrag("conclusion", BI_conclusion)
         self.semanticsOrError = log.internFrag("semanticsOrError", BI_semanticsOrError)
@@ -1208,7 +1208,7 @@ class RDFStore(RDFSink) :
 
 	self.definitiveService = log.internFrag("definitiveService", Fragment)
 	self.definitiveDocument = log.internFrag("definitiveDocument", Fragment)
-	self.pointsAt = log.internFrag("pointsAt", Fragment)
+	self.pointsAt = log.internFrag("pointsAt", Fragment)  # This was EricP's
 
 # Constants:
 

@@ -6,7 +6,7 @@ YAPPS=yapps2.py
 
 TESTIN=test/sameDan.n3
 
-HTMLS= check.html RDFSink.html cwm.html cwm_crypto.html cwm_math.html cwm_os.html cwm_string.html cwm_time.html diag.html llyn.html notation3.html sax2rdf.html tab2n3.html thing.html toXML.html uripath.html xml2infoset.html why.html
+HTMLS= check.html RDFSink.html cwm.html cwm_crypto.html cwm_math.html cwm_os.html cwm_string.html cwm_time.html diag.html llyn.html notation3.html sax2rdf.html rdflib2rdf.html tab2n3.html thing.html toXML.html uripath.html xml2infoset.html why.html
 
 #xml2rdf.html
 #de-cr.html
@@ -55,7 +55,7 @@ package: math.rdf log.rdf db.rdf os.rdf string.rdf crypto.rdf time.rdf LICENSE.r
 
 # cwm.py notation3.py llyn.py  RDFSink.py toXML.py
 cwm.tar.Z::
-	tar -cf cwm.tar *.py $(HTMLS) LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply/*.py
+	tar -cf cwm.tar *.py $(HTMLS) LX/*.py LX/*/*.py  LX/*/*.P dbork/*.py ply.*.py *.py
 	compress -f cwm.tar
 
 yappstest: rdfn3_yapps.py rdfn3_yappstest.py

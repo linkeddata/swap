@@ -11,11 +11,11 @@
 
 <body xml:lang="en" lang="en">
 <p><a href="/">W3C</a> | <a href="/2000/01/sw/Overview.html">Semantic Web</a>
-| <a href="Overview.html">SWAP</a></p>
+| <a href="Overview.html">SWAP</a> | <a href="Overview.html">Tutorial</a></p>
 <br />
 
 
-<h1><a name="Primer" id="Primer">Primer: Reaching out onto the Web</a></h1>
+<h1><a name="Primer" id="Primer">Tutorial: Reaching out onto the Web</a></h1>
 
 <p>So what is this Semantic <em>Web</em>, anyway? Where does the <em>Web</em>
 come in? So far you've shown us just a language for writing data.</p>
@@ -48,13 +48,22 @@ returning the formula<a href="#L4808"><sup>1</sup></a>..</p>
 <p>Having got a formula, we can test what it has using log:includes. One
 formula <code>log:incldues</code> a second formula if for each statement in
 the second, there is a corresponding one in the first. This the same pattern
-matching which happens with rules.</p>
+matching which happens with rules: the names of variables do not have to
+match..</p>
 
 <p>So let's say we we have a concept of a semantic web home page for a
 person. Instead of believing anyone, we only believe that page about the
 person being a vegetarian.</p>
 <pre>this log:forAll :x.
-{:x.:homePage log:includes { :x a :Vegetarian }}=&gt; { :x a :Vegetarian}.</pre>
+{:x :homePage log:includes { :x a :Vegetarian }}=&gt; { :x a :Vegetarian}.</pre>
+
+<p></p>
+
+<p>Why didn't we use the ?x form there? Well, we have some nested formulae.
+The variable x is quantified in the scope of the whole document. We are not
+asking whether the home page includes "everyone is vegetarian". This is an
+example of how one must be explicit about the scope of variables when they
+are used at more than one level..</p>
 
 <h3><a name="Implementi" id="Implementi">Implementing defaults and
 <code>log:notIncludes</code></a></h3>
@@ -98,10 +107,10 @@ parsing.</p>
   <dt><code>log:N3String</code></dt>
     <dd>For a formula, a string which expressed that formula in N3.</dd>
   <dt>log:uri</dt>
-    <dd>The uri of a resource. &lt;http://example.org/&gt; log:uri
-      "http://example.org/". Normal logic processing doesn't look at URIs but
-      in some cases one needs to. This is a level-breaker: it lets an N3
-      system look at its infrastructure. It is a function which cwm can
+    <dd>The uri of a resource. <code>&lt;http://example.org/&gt; log:uri
+      "http://example.org/".</code> Normal logic processing doesn't look at
+      URIs but in some cases one needs to. This is a level-breaker: it lets
+      an N3 system look at its infrastructure. It is a function which cwm can
       evaluate either way: resource to URI or URI to resource.</dd>
   <dt></dt>
     <dd></dd>
@@ -111,11 +120,18 @@ parsing.</p>
 the digital signature of a string before accepting the data encoded in it.</p>
 
 <h2><a name="Getting" id="Getting">Getting results from the web:</a>
-<code>log:definitiveService</code>and <code>log:definitiveDocument</code></h2>
+<code>log:definitiveService</code> and
+<code>log:definitiveDocument</code></h2>
 
 <p></p>
 
-<p>There is some relationships for which there is just a well-defined</p>
+<p>There is some properties for which there is just a well-defined set of
+values.  The state codes of the US states is an example. There are 50 states,
+and each has one state code and one state name.  One you know them, you know
+them.  Once you know where to look them up, you can resolve any query about
+them. </p>
+
+<p>@@@ To be completed</p>
 
 <p></p>
 
@@ -135,11 +151,13 @@ separately. Now all you need is some crypto ....</p>
 
 <p><a name="L4808" id="L4808">1.</a> Of course, the value of this function
 depends on the real world, which can change. Many systems either assume that
-other documents won't change or accept that the information derived from it
-will change with it. It is would also possible to model the time at which a
-given representation of a document was returned by a server, and what expiry
-date was given, and so on, but cwm does not in 2003 provide such
-functionality..)</p>
+other documents won't change, or accept that the information derived from
+them will change with them. It is would also possible to model the time at
+which a given representation of a document was returned by a server, and what
+expiry date was given, and so on, and the reader is welcome to experiment
+with such schemes where they are needed. Cwm does not  currently( 2003/2)
+provide the functionality of looking inside the HTTP response to extract the
+protocol headers which convey time-related information.</p>
 <hr />
 
 <p>Tim BL, with his director hat off</p>

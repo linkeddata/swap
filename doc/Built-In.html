@@ -12,7 +12,7 @@
 
 <body xml:lang="en" lang="en">
 <p><a href="/">W3C</a> | <a href="/2000/01/sw/Overview.html">Semantic Web</a>
-| <a href="Overview.html">SWAP</a></p>
+| <a href="Overview.html">SWAP</a> | <a href="Overview.html">Tutorial</a></p>
 <br />
 <br />
 
@@ -46,29 +46,38 @@ available.</p>
 <p>Builtin-in functions in cwm <strong>only work</strong> when they are used
 inside the <strong>left-hand side of a rule</strong>.</p>
 
-<p>They are only used to figure out what things could take the place of a 
-variable.  If you add data to the stroe with a built-in function in it, it is
+<p>They are only used to figure out what things could take the place of a
+variable. If you add data to the stroe with a built-in function in it, it is
 just stored.</p>
 
 <p>Let's make a more complicates thermostat rule::</p>
-<pre>
-{ :thermostat :temp ?x.  ?x math:greaterThan "70" } log:implies { :cooling :power "high" } .
-</pre>
+<pre>{ :thermostat :temp ?x.  ?x math:greaterThan "70" } log:implies { :cooling :power "high" } .</pre>
 
 <p>The first part, <code>:thermostat :temp ?x</code>, is statisfied by
 looking in the strore, where presumably the temperature at the thermostat is
-stored as, say, <code>:thermostat :temp "76.4"</code>.   Under the hypothesis
-that ?x is is "76.4", then the second part, which now looks like  "76.4"
+stored as, say, <code>:thermostat :temp "76.4"</code>. Under the hypothesis
+that ?x is is "76.4", then the second part, which now looks like "76.4"
 math:greaterThan "70" , is satified just by the built-in property of the
 math:greaterThan operator.</p>
 
-<p>You can use path expressions to invoke builtins, especially useful for
-chaining them.</p>
+<p>You can use path expressions to invoke builtins: this is of course
+especially useful for chaining them.</p>
 <pre>{ "1".os:argv^log:uri  log:semantics ?f } =&gt; { ?f a :InputFormula }.</pre>
 
-<p>@@explain</p>
+<p>You could read this along the lines of "If the first command line argument
+-- well, whatever has that as a URI -- has semantics f, then f is an input
+formula". Here it is in longhand:</p>
+<pre>{ "1".os:argv  ?x.
+  ?d log:uri   ?x.
+  ?d log:semantics ?f
+} =&gt; {
+  ?f a :InputFormula
+}.</pre>
 
-<p>Some functions need mroe than one parameter, and in N3 they take lists.</p>
+<p></p>
+
+<p>Some functions need more than one parameter. The convention we have used
+is that they take lists as the subject.</p>
 <pre>{   ((?x.tempInF "32").math:difference "0.5555") math:product ?c) } =&gt; { ?x tempInC ?c}.
  </pre>
 
@@ -84,13 +93,22 @@ chaining them.</p>
 going to start with some data, which will alow it to find the values of
 variables.</p>
 
-<p>{   ?x math:greaterThan ?y.  } =&gt; { ?x  :moreInterestingThan ?y }.</p>
+<p>{ ?x math:greaterThan ?y. } =&gt; { ?x :moreInterestingThan ?y }.</p>
 
 <p>This doesn't give cwm, a forward reasoner, much to go on. It won't list
-all pairs of number where the first   is greate than the second. A backward
-reasoner, such as Euler, will be able to use that.  Future semantic web
+all pairs of number where the first is greater than the second. A backward
+reasoner, such as Euler, will be able to use that. Future semantic web
 engines will get smarter about picking rules to use and algorithms to use
 them with.</p>
+
+<p>These built-in functions give allow you to use basic properties of strings
+and numbers in your rules. They also allow you to do pragmatic things, such
+as pick up command line parameters and environment variables, which allow the
+whole rules system to be parameterized.  They also allow you do do somthing
+else.  They allow you to make rules which interrogate the Web, parse
+documents, and look objectively at the contents of documents.  This opens up
+some very interesting possibilities -- so much so that it warrants a move to
+<a href="Reach.html">the next chapter</a>.</p>
 
 <p></p>
 <hr />
@@ -100,6 +118,8 @@ them with.</p>
   <li><a href="Examples.html">Many More Examples</a></li>
   <li><a href="/DesignIssues/Notation3.html">Notation3 - Design Issues
     article</a></li>
+  <li>For comparison - <a href="http://www.w3.org/TR/xquery-operators/">the
+    XQuery functions</a></li>
 </ul>
 <br />
 <br />

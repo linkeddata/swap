@@ -3,6 +3,7 @@
 #   cwm --mode=rse defdoc2.n3 --think
 #
 @prefix : <#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix state: <data/USRegionState.n3#> .
 @prefix city: <data/USCity.n3#> .
 
