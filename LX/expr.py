@@ -20,6 +20,7 @@ __version__ = "$Revision$"
 # $Id$
 
 from string import split
+from sys import stderr
 
 def virtual():
     raise RuntimeError, "Function should have been implemented in subclass"
@@ -30,7 +31,12 @@ class NotRDF(TypeError):
 
 pythonOperators = { }       # gets filled in later, using things not yet defined
 
-class Expr:
+class Expr(object):
+
+    # __slots__ = []
+
+    def __getstate__(self):
+        return None
 
     # or should these only be defined on certain subclasses...???
     def __and__(self, other):    return CompoundExpr(pythonOperators["and"], self, other)
@@ -99,12 +105,26 @@ class Expr:
 
         """
     
-class CompoundExpr(Expr):
+class CompoundExpr(Expr, tuple):
     """An internal branch node in an abstract syntax tree,
     representing the application of some function (or operator or
     connective) to one or more expressions.
 
     """
+
+    # __slots__ = [ ]
+
+    def __new__(class_, function, *args):
+        self = tuple.__new__(class_, (function,)+tuple(args))
+        for arg in self:
+            if not isinstance(arg, Expr):
+                raise RuntimeError, "What's %s doing here?"%arg
+        #if hasattr(function, "checkArgs"):
+        #    function.checkArgs(args)
+
+        
+
+        return self
 
     def __init__(self, function, *args):
         """Initialize the compound expression (immutably) with
@@ -122,21 +142,13 @@ class CompoundExpr(Expr):
         "connective", "functor", ...?   It seems like the most common
         term and not too confusing. 
         """
-        assert(isinstance(function, Expr))
-        self.__function = function
-        assert(len(args) >= 1) 
-        for arg in args:
-            if not isinstance(arg, Expr):
-                raise RuntimeError, "What's %s doing here?"%arg
-        #if hasattr(function, "checkArgs"):
-        #    function.checkArgs(args)
-        self.__args = tuple(args)
+        pass
         
     def getFunction(self):
         """Return the function (also called operator, connective,
         predicate, functor, ...) of this expression.
         """
-        return self.__function
+        return self[0]
 
     function = property(getFunction)
 
@@ -149,7 +161,7 @@ class CompoundExpr(Expr):
         know when/why you'd want that.  Perhaps we should forbid it
         until we have a good reason for it.
         """
-        return self.__args
+        return self[1:]
 
     args = property(getArgs)
 
@@ -157,31 +169,31 @@ class CompoundExpr(Expr):
     # RDF Terminology
 
     def getSubject(self):
-        if len(self.__args) != 2:
+        if len(self) != 3:
             raise NotRDF(self)
-        return self.__args[0]
+        return self[1]
     subject = property(getSubject)
 
     def getObject(self):
-        if len(self.__args) != 2:
+        if len(self) != 3:
             raise NotRDF(self)
-        return self.__args[1]
+        return self[2]
     object = property(getObject)
 
     def getPredicate(self):
-        if len(self.__args) != 2:
+        if len(self) != 3:
             raise NotRDF(self)
-        return self.__function
+        return self[0]
     predicate = property(getPredicate)
 
     def getSPO(self):
-        if len(self.__args) != 2:
+        if len(self) != 3:
             raise NotRDF(self)
-        return (self.__args[0], self.__args[1], self.__function)
+        return (self[1], self[0], self[2])
     spo = property(getSPO)
 
     def getAll(self):
-        return (self.__function,) + self.__args
+        return self
 
     all = property(getAll)
     
@@ -221,7 +233,7 @@ class CompoundExpr(Expr):
                                width=80):
 
         try:
-            op = operators[self.__function]
+            op = operators[self.function]
             prec = op[0]
             form = op[1]
             text = op[2]
@@ -240,27 +252,27 @@ class CompoundExpr(Expr):
         if callable(form):
             result = prefix+apply(form, [text, self, nameTable, operators, prec, linePrefix])+suffix
         elif form == "xfx" or form == "xfy" or form == "yfx":
-            if (len(self.__args) == 2):
-                left = self.__args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
-                right = self.__args[1].serializeWithOperators(nameTable, operators, prec, linePrefix)
+            if (len(self.args) == 2):
+                left = self.args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
+                right = self.args[1].serializeWithOperators(nameTable, operators, prec, linePrefix)
                 if 1 or (len(left) + len(right) < width):
                     result = prefix + left + text + right + suffix
                 else:
                     linePrefix = "  " + linePrefix
-                    left = self.__args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
-                    right = self.__args[1].serializeWithOperators(nameTable, operators, prec, linePrefix)
+                    left = self.args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
+                    right = self.args[1].serializeWithOperators(nameTable, operators, prec, linePrefix)
                     result = (prefix + "\n" + linePrefix + left + text +
                           "\n" + linePrefix + right + suffix)
             else:
                 raise RuntimeError, ("%s args on a binary operator %s" %
-                                     (len(self.__args), self.__args[0]))
+                                     (len(self.args), self.args[0]))
         elif form == "fxy":
-            assert(len(self.__args) == 2)
-            result = (prefix + text + self.__args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
-                      + " " + self.__args[1].serializeWithOperators(nameTable, operators, prec, linePrefix) + suffix)
+            assert(len(self.args) == 2)
+            result = (prefix + text + self.args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
+                      + " " + self.args[1].serializeWithOperators(nameTable, operators, prec, linePrefix) + suffix)
         elif form == "fx" or form == "fy":
-            assert(len(self.__args) == 1)
-            result = prefix + text + self.__args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
+            assert(len(self.args) == 1)
+            result = prefix + text + self.args[0].serializeWithOperators(nameTable, operators, prec, linePrefix)
         else:
             raise RuntimeError, "unknown associativity form in table of operators"
         return result
@@ -272,17 +284,34 @@ def getNameInScope(thing, nameTable):
     
 class AtomicExpr(Expr):
 
+    def __getstate__(self):
+        return (self.suggestedName,)
+    def __setstate__(self, arg):
+        self.suggestedName = arg[0]
+        
+    # __slots__= [ 'suggestedName' ]
+
+    #def __getnewargs__(self):
+    #    return (self.suggestedName,)
+
     def isAtomic(self):
         return 1
 
-    def __init__(self, suggestedName="x"):
+    #def __new__(class_, suggestedName="x"):
+    #    self = Expr.__new__(class_)
+    #    self.suggestedName = suggestedName
+    #    return self
+
+    def __init__(self, suggestedName):
         self.suggestedName = suggestedName
+        #assert(hasattr(self, "suggestedName"))
+        #pass
 
-    def __hash__(self):
-        return id(self)
+#    def __hash__(self):
+#        return id(self)
 
-    def __eq__(self, other):
-        return self is other
+#    def __eq__(self, other):
+#        return self is other
     
     def __str__(self):
         return self.suggestedName
@@ -317,7 +346,10 @@ class AtomicExpr(Expr):
         try:
             return nameTable[self]
         except KeyError: pass
-        n = self.suggestedName
+        try:
+            n = self.suggestedName
+        except AttributeError:
+            n = "^"+str(self.__class__)+str(id(self))
         try:
             legal = nameTable[("legal",)]
             if not legal.match(n):
@@ -378,7 +410,10 @@ if __name__ == "__main__": _test()
 
 
 # $Log$
-# Revision 1.10  2003-09-10 20:12:04  sandro
+# Revision 1.11  2003-09-17 16:13:56  sandro
+# now self-interning and supporting pickle
+#
+# Revision 1.10  2003/09/10 20:12:04  sandro
 # added some get-as-RDF functions
 #
 # Revision 1.9  2003/08/01 15:27:21  sandro
