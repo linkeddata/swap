@@ -5,10 +5,10 @@ This is is a generic parser for a set of N3-like languages.
 It is directly driven by the context-free grammar (CFG) in RDF.
 It was made to mutually test the CFG against the test files.
 
-Argunments
+Arguments
 1.  An RDF file to read in which contains the grammar, as annotated
      by the rules.
-2. The URI of the CFG production as which the document is to br parsed.
+2. The URI of the CFG production as which the document is to be parsed.
     The program checks that a predictive parser *can* be built from the CFG given.
 3. To actually parse a file, include a URI as third parameter.
 
