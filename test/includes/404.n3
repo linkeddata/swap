@@ -1,0 +1,5 @@
+@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+@prefix : <#> .
+
+
+{<http://www.w3.org/2000/10/swap/test/there-will-never-be-anything-here>  log:semanticsOrError ?x} => { ?x a :TEST_RESULT }.
