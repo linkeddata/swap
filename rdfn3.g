@@ -48,9 +48,9 @@ parser _Parser:
 
     rule clause_ind<<scp>>:
          phrase<<scp>>
-           [predicate<<scp, phrase>> (";" predicate<<scp, phrase>>)* ]
+           [predicate<<scp, phrase>> (";" [predicate<<scp, phrase>>])* ]
        | term<<scp>>
-            predicate<<scp, term>> (";" predicate<<scp, term>>)*
+            predicate<<scp, term>> (";" [predicate<<scp, term>>])*
 
     rule term<<scp>>:
                 expr<<scp>>     {{ return expr }}
@@ -213,7 +213,10 @@ def DEBUG(*args):
     sys.stderr.write("\n")
     
 # $Log$
-# Revision 1.13  2001-09-06 19:55:13  connolly
+# Revision 1.14  2002-01-12 23:37:14  connolly
+# allow . after ;
+#
+# Revision 1.13  2001/09/06 19:55:13  connolly
 # started N3 list semantics. got KIFSink working well enough to discuss
 #
 # Revision 1.12  2001/09/01 05:56:28  connolly

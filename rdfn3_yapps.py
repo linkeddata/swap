@@ -84,13 +84,15 @@ class _Parser(Parser):
                 predicate = self.predicate(scp, phrase)
                 while self._peek('";"', '","', '"\\\\."', '"\\\\]"', '"}"') == '";"':
                     self._scan('";"')
-                    predicate = self.predicate(scp, phrase)
+                    if self._peek('";"', '"is"', '","', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"', '"\\\\."', '"\\\\]"', '"}"') not in ['";"', '","', '"\\\\."', '"\\\\]"', '"}"']:
+                        predicate = self.predicate(scp, phrase)
         elif 1:
             term = self.term(scp)
             predicate = self.predicate(scp, term)
             while self._peek('";"', '","', '"\\\\."', '"\\\\]"', '"}"') == '";"':
                 self._scan('";"')
-                predicate = self.predicate(scp, term)
+                if self._peek('";"', '"is"', '","', '"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"', '"\\\\."', '"\\\\]"', '"}"') not in ['";"', '","', '"\\\\."', '"\\\\]"', '"}"']:
+                    predicate = self.predicate(scp, term)
 
     def term(self, scp):
         _token_ = self._peek('"this"', 'EXVAR', 'UVAR', 'STRLIT3', 'STRLIT1', 'STRLIT2', 'URIREF', 'QNAME', '"a"', '"="', '"\\\\("', '"\\\\["', '"{"')
@@ -317,7 +319,10 @@ def DEBUG(*args):
     sys.stderr.write("\n")
     
 # $Log$
-# Revision 1.1  2001-09-06 19:55:13  connolly
+# Revision 1.2  2002-01-12 23:37:14  connolly
+# allow . after ;
+#
+# Revision 1.13  2001/09/06 19:55:13  connolly
 # started N3 list semantics. got KIFSink working well enough to discuss
 #
 # Revision 1.12  2001/09/01 05:56:28  connolly
