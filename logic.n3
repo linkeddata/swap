@@ -17,32 +17,42 @@ on those specifications, and the semantics defined by the specifications
 of any identifiers used in the document.
 """ .
 
-log:context a rdfs:Class;
-	rdfs:comment "An unordered conjunction of log statements" 
+#   The following are inherent in the translation of N3 syntax to quad representation:
 
 log:forSome a rdf:Property;
 	rdfs:comment "A is true for some objectfor which here we use B" .
 	rdfs:domain: log:context;
 
+log:subExpression a rdf:Property;
+	rdfs:comment "B is lexically nested within A. The information
+	is in B is part of the information in A.  Lexically scoped varibles are
+	inherited from A to B.
+	"""
+
 log:forAll a rdf:Property;
 	rdfs:comment "A is true for any object in place of B" .
 
-log:truth a rdf:Class;
-	rdfs:comment "Something which is true: belive it as you would belive this."
 
-log:falsehood a rdf:Class;
-	rdfs:comment "Something which is not true."
+################## The following are used for inference
+
+
+log:Truth a rdf:Class;
+	rdfs:comment "Something which is true: belive it as you would belive this.
+	Understood natively by cwm."
+
+log:Falsehood a rdf:Class;
+	rdfs:comment "Something which is not true. Not the complement of True!"
 	rdfs:domain log:context;
 
 log:implies a rdfs:Property;
-	rdfs:comment "Logical implication" .
+	rdfs:comment "Logical implication. Understood natively by cwm." .
 
 ############# Rules
-
- 
+# Rule names may change.
+# Conversion between falsehood and implication:
 rule1 log:forAll :x, :y, :z; =
 {
-    { :x log:implies :y } means {  { :x a :truth . y: a :falsehood.} a:falsehood}.
+    { :x log:implies :y } means {  { :x a :Truth . y: a :falsehood.} a:falsehood}.
 } .
 
 # etc etc

@@ -17,11 +17,19 @@ Date: 2000/07/17 21:46:13
 Agenda:
 =======
 
- - filter out duplicate conclusions
- - semi-reification - reifying only subexpressions
+ - filter out duplicate conclusions - BUG!
+ - run hhtp daemon/client sending changes to database
+ - act as client/server for distributed
+ - Bultins - says, startsWith,
+ - postgress underlying database?
+ -    
+ -    standard mappping of SQL database into the web in N3/RDF
+ -    
  - logic API as requested DC 2000/12/10
- - sucking in the schema (http library?) - to know about r see r
+ - sucking in the schema (http library?); to know about r1 see r2
+ - schema validation - done partly but no "no schema for xx predicate".
  - metaindexes - "to know more about x please see r" - described by
+ - general python URI access with catalog!
  - equivalence handling inc. equivalence of equivalence?
  Shakedown:
  - Find all synonyms of synonym
@@ -50,6 +58,7 @@ Done
   - filter -DONE
   - graph match -DONE
   - recursive dump of nested bags - DONE
+ - semi-reification - reifying only subexpressions - DONE
 """
 
 
@@ -92,7 +101,7 @@ ANONYMOUS = notation3.ANONYMOUS       # existentially qualified unlabelled resou
 VARIABLE = notation3.VARIABLE
 
 
-chatty = 0   # verbosity flag
+chatty = 0   # verbosity debug flag
 
 
 
@@ -120,6 +129,19 @@ class Thing:
     def __repr__(self):   # only used for debugging I think
         return self.representation()
 
+    # Use the URI to allow sorted listings - for connonnicalization if nothing else
+    def __cmp__(self, other):
+        if self is other: return 0  # duh
+        s = self.representation()
+        o = other.representation()
+        if s < o :
+#            print s,  "LESS THAN", o
+            return -1
+        if s > o :
+#            print s, "GREATER THAN", o
+            return 1
+        raise internalError # Strings should not match if not same object
+
     def representation(self, base=None):
         """ in N3 """
         return "<" + self.uriref(base) + ">"
@@ -135,7 +157,7 @@ class Thing:
     def occurrences(self, p, context):
         """ Count the times a thing occurs in a statement in given context
         """
-        if context == None:   # meaning any
+        if context is None:   # meaning any
             return len(self.occursAs[p])
         else:
             n = 0
@@ -378,22 +400,24 @@ class RDFStore(notation3.RDFSink) :
 
     def selectDefaultPrefix(self, context):
 
-        """ Resource whose fragments have the most occurrences
+        """ Resource whose fragments have the most occurrences.
         """
         best = 0
         mp = None
         for r in self.engine.resources.values() :
             total = 0
             for f in r.fragments.values():
-                total = total + (f.occurrences(PRED,context)+
-                                 f.occurrences(SUBJ,context)+
-                                 f.occurrences(OBJ,context))
+                anon, inc, se = self.n3_anonymous(f, context)
+                if not anon:
+                    total = total + (f.occurrences(PRED,context)+
+                                     f.occurrences(SUBJ,context)+
+                                     f.occurrences(OBJ,context))
             if total > best :
                 best = total
                 mp = r
-        if mp == None: return
+        if mp is None: return
         
-        if chatty: print "# Most popular Namesapce in %s is %s" % (`context`, `mp`)
+        if chatty: print "# Most popular Namesapce in %s is %s with %i" % (`context`, `mp`, best)
         mpPair = (RESOURCE, mp.uriref(None)+"#")
         defns = self.namespaces.get("", None)
         if defns :
@@ -567,12 +591,17 @@ class RDFStore(notation3.RDFSink) :
         self.dumpNestedStatements(context, sink)
         sink.endDoc()
 
-    def dumpNestedStatements(self, context, sink):
+    def dumpNestedStatements(self, context, sink, sorting=1):
         """ Iterates over all URIs ever seen looking for statements
         """
-        for r in self.engine.resources.values() :  # First the bare resource
+        rs = self.engine.resources.values()[:]
+        if sorting: rs.sort()
+        for r in rs :  # First the bare resource
+            #print "# sorted?" ,`r`
             self._dumpSubject(r, context, sink)
-            for f in r.fragments.values() :  # then anything in its namespace
+            fs = r.fragments.values()[:]
+            if sorting: fs.sort() 
+            for f in fs :  # then anything in its namespace
                 self._dumpSubject(f, context, sink)
 
 
@@ -586,7 +615,7 @@ class RDFStore(notation3.RDFSink) :
         _anon, _incoming, _se = self.n3_anonymous(subj, context)    # Is anonymous?
         _isSubject = subj.occurrences(SUBJ,context) # Has properties in this context?
         if not _isSubject and not _se: return       # Waste no more time
-        if chatty: sink.makeComment("...%s incoming=%i, se=%i, asSubj=%i" % (
+        if 0: sink.makeComment("...%s incoming=%i, se=%i, asSubj=%i" % (
             `subj`[-8:], _incoming, _se, _isSubject))
         if _anon and  _incoming == 1: return           # Forget it - will be dealt with in recursion
     
@@ -648,7 +677,7 @@ class RDFStore(notation3.RDFSink) :
         triple = s.triple
         context, pre, sub, obj = triple
         _anon, _incoming, _se = self.n3_anonymous(obj, context)
-        if chatty: sink.makeComment("...%s anon=%i, incoming=%i, se=%i" % (
+        if 0: sink.makeComment("...%s anon=%i, incoming=%i, se=%i" % (
             `obj`[-8:], _anon, _incoming, _se))
         if _anon and _incoming == 1:  # Embedded anonymous node in N3
             _isSubject = obj.occurrences(SUBJ,context) # Has properties in this context?
@@ -686,13 +715,23 @@ class RDFStore(notation3.RDFSink) :
     def moveContext(self, old, new):
         for s in old.occursAs[CONTEXT][:] :   # Copy list!
             con, pred, subj, obj = s.triple
-            if pred is old: pred = new # Move references (even pred?)
-            if subj is old: subj = new # Move
-            if obj is old: obj  = new # Move
-            s.triple = new, pred, subj, obj
+            for p in CONTEXT, PRED, SUBJ, OBJ:
+                x = s.triple[p]
+                if x is old:
+#                    y=new
+#                elif isinstance(x, Fragment) and x.resource is old:
+#                   y = self.engine.internURI(new.uriref()+"#"+x.fragid@@@
+#                if x is y: continue
+                    s.triple = s.triple[:p] + (new,) + s.triple[p+1:]
+                    old.occursAs[p].remove(s)
+                    new.occursAs[p].append(s)
+                
+#            if pred is old: pred = new # Move references (even pred?)
+#            if subj is old: subj = new # Move
+#            if obj is old: obj  = new # Move
+#            s.triple = new, pred, subj, obj
  
-            old.occursAs[CONTEXT].remove(s)
-            new.occursAs[CONTEXT].append(s)
+#        pfx = self.prefixes.get(old, None)
                         
 #  Apply rules from one context to another
                 
@@ -712,8 +751,8 @@ class RDFStore(notation3.RDFSink) :
 # or find an example for some specific value of x.  Here, we deliberately
 # chose only to do the first.
         
-        if targetContext == None: targetContext = workingContext # return new data to store
-        if filterContext == None: filterContext = workingContext # apply own rules
+        if targetContext is None: targetContext = workingContext # return new data to store
+        if filterContext is None: filterContext = workingContext # apply own rules
 
         # Execute a filter:
         
@@ -785,7 +824,7 @@ class RDFStore(notation3.RDFSink) :
         self._nextId = self._nextId + 1
         return self.engine.internURI(self._genPrefix+`self._nextId`)
 
-    def nestedContexts(self, con):
+    def nestedContexts(self, con, parent=None):
         """ Return a list of statements and variables of either type
         found within the nested subcontexts
         """
@@ -797,10 +836,14 @@ class RDFStore(notation3.RDFSink) :
             context, pred, subj, obj = arc.triple
             statements.append(arc.triple)
 #            print "%%%%%%", quadToString(arc.triple)
-            if subj is context and (pred is self.forSome or pred is self.forAll): # @@@
+            if subj is context and (pred is self.forSome or pred is self.forAll): # @@@@
                 variables.append(obj)   # Collect list of existentials
             if pred is self.subExpression and subj is con:
-                s, v = self.nestedContexts(obj)
+                for a2 in con.occursAs[CONTEXT]:  # Rescan for variables
+                    c2, p2, s2, o2 = a2.triple
+                    if  s2 is obj and (pred is self.forSome or pred is self.forAll):
+                        variables.append(o2)   # Collect list of existentials
+                s, v = self.nestedContexts(obj, con)
                 statements = statements + s
                 variables = variables + v
         return statements, variables
@@ -810,7 +853,7 @@ class RDFStore(notation3.RDFSink) :
 def bindingsToString(bindings):
     str = ""
     for x, y in bindings:
-        str = str + " %s --> %s," % ( `x`[-8:], `y`[-8:])
+        str = str + " %s --> %s," % ( `x`[-10:], `y`[-10:])
     return str + "\n"
 
 def setToString(set):
@@ -821,11 +864,13 @@ def setToString(set):
 
 def quadToString(q):
     return "<%s> ::  <%s <%s <%s ." %(
-        `q[CONTEXT]`[-8:], `q[SUBJ]`[-8:], `q[PRED]`[-8:], `q[OBJ]`[-8:])
+        `q[CONTEXT]`[-10:], `q[SUBJ]`[-10:], `q[PRED]`[-10:], `q[OBJ]`[-10:])
 
 def conclude(bindings, param):  # Returns number of statements added to store
     store, conclusions, targetContext, oes = param
-    if chatty: print "\n#Concluding ..."
+    if chatty: print "\n#Concluding tenttatively..."
+
+    _substitute(bindings, conclusions)
     # Does this conclusion exist already in the database?
     found = match(conclusions[:], [], oes[:], justOne=1)  # Find first occurrence
     if found:
@@ -833,7 +878,8 @@ def conclude(bindings, param):  # Returns number of statements added to store
         return 0
     
     # Regenerate a new form with its own existential variables
-    bindings2 = bindings[:]
+    # because we can't reuse the subexpression identifiers.
+    bindings2 = []
     for i in oes:
         g = store.genid(targetContext)
         bindings2.append((i,g))
@@ -870,6 +916,7 @@ def _lookup(bindings, value):
 
     
 def doNothing(bindings, param):
+    if chatty: print "Success! found it!"
     return 1                    # Return count of calls only
 
 INFINITY = 1000000000           # @@ larger than any number occurences
@@ -899,8 +946,10 @@ newBindings  matches found and not yet applied - used in recursion
     shortest = INFINITY # List to search for one of the variables
     shortest_t = None
     
-    if chatty: print "\n## match: called %i terms, %i bindings, terms & new bindings:" % (len(unmatched),len(bindings))
-    if chatty: print setToString(unmatched)
+    if chatty:
+        print "\n## match: called %i terms, %i bindings, terms & new bindings:" % (len(unmatched),len(bindings))
+        print bindingsToString(newBindings)
+        print setToString(unmatched)
     
     for pair in newBindings:   # Take care of business left over from recursive call
         if pair[0] in variables:
@@ -955,12 +1004,17 @@ newBindings  matches found and not yet applied - used in recursion
         elif p != shortest_p :
             consts.append(p)
 
-    if chatty: print "# Searching through %i for %s in slot %i." %(shortest, `quad[shortest_p]`,shortest_p)    
+    if chatty:
+        print "# Searching %i with %s in slot %i." %(shortest, `quad[shortest_p]`[-8:],shortest_p)
+        print "#    for ", quadToString(quad)
+        print "#    where variables are"
+        for i in variables + existentials:
+            print "#         ", `i`[-8:] 
 
     for s in quad[shortest_p].occursAs[shortest_p]:
         for p in consts:
             if s.triple[p] is not quad[p]:
-#                print "   Rejecting ", quadToString(s.triple)
+                if chatty: print "   Rejecting ", quadToString(s.triple), "\n      for ", quadToString(quad)
                 break
         else:  # found match
             nb = []
@@ -1261,27 +1315,28 @@ def doCommand():
         
  <command> <options> <inputURIs>
  
- -rdf1out   Output in RDF M&S 1.0 insead of n3 (only works with -pipe at the moment)
  -pipe      Don't store, just pipe out *
+
+ -rdf       Input & Output ** in RDF M&S 1.0 insead of n3 from now on
  -ugly      Store input and regurgitate *
  -bySubject Store inpyt and regurgitate in subject order *
             (default is to store and pretty print with anonymous nodes) *
-
  -apply=foo Read rules from foo, apply to store, adding conclusions to store
+ -filter=foo Read rules from foo, apply to store, REPLACING store with conclusions
  -reify     Replace the statements in the store with statements describing them.
+ -flat      Reify only nested subexpressions (not top level) so that no {} remain.
  -help      print this message
  -chatty    Verbose output of questionable use
  
 
             * mutually exclusive
+            ** doesn't work for complex cases :-/
  
 """
         
         import urllib
         option_ugly = 0     # Store and regurgitate with genids *
         option_pipe = 0     # Don't store, just pipe though
-        option_rdf = 0      # Use RDF rather than XML
-        option_rdf1out = 0  # Output in RDF M&S 1.0 instead of N3
         option_bySubject= 0 # Store and regurgitate in subject order *
         option_inputs = []
         option_reify = 0    # Flag: reify on output  (process?)
@@ -1290,15 +1345,31 @@ def doCommand():
         _gotInput = 0     #  Do we not need to take input from stdin? 
         hostname = "localhost" # @@@@@@@@@@@ Get real one
         
+        # The base URI for this process - the Web equiv of cwd
+#	_baseURI = "file://" + hostname + os.getcwd() + "/"
+	_baseURI = "file:" + fixslash(os.getcwd()) + "/"
+	print "# Base URI of process is" , _baseURI
+	
+        option_rdf = 0      # Use RDF rather than XML
+        _outURI = _baseURI
+        option_baseURI = _baseURI     # To start with
         for arg in sys.argv[1:]:  # Command line options after script name
+            _equals = string.find(arg, "=")
+            _lhs = ""
+            _rhs = ""
+            if _equals >=0:
+                _lhs = arg[:_equals]
+                _rhs = arg[_equals+1:]
+                _uri = urlparse.urljoin(option_baseURI, _rhs) # Make abs from relative
             if arg == "-test":
                 option_test = 1
                 _gotInput = 1
             elif arg == "-ugly": _doneOutput = 1
+            elif _lhs == "-base": option_baseURI = _uri
+            elif arg == "-rdf": option_rdf = 1
             elif arg == "-pipe": option_pipe = 1
             elif arg == "-bySubject": _doneOutput = 1
-            elif arg == "-rdf1out": option_rdf1out = 1
-            elif arg[:8] == "-outURI=": option_outURI = arg[8:]
+            elif _lhs == "-outURI": option_outURI = _uri
             elif arg == "-chatty": chatty = 1
             elif arg[:7] == "-apply=": pass
             elif arg == "-reify": option_reify = 1
@@ -1309,15 +1380,10 @@ def doCommand():
             else : _gotInput=1  # input filename
             
 
-        # The base URI for this process - the Web equiv of cwd
-#	_baseURI = "file://" + hostname + os.getcwd() + "/"
-	_baseURI = "file://" + fixslash(os.getcwd()) + "/"
-	print "# Base URI of process is" , _baseURI
-	
-        _outURI = urlparse.urljoin(_baseURI, "STDOUT")
+        _outURI = _baseURI
         if option_outURI: _outURI = urlparse.urljoin(_outURI, option_outURI)
         
-	if option_rdf1out:
+	if option_rdf:
             _outSink = notation3.ToRDF(sys.stdout, _outURI)
         else:
             _outSink = notation3.ToN3(sys.stdout.write, _outURI)
@@ -1331,16 +1397,20 @@ def doCommand():
             workingContext = myEngine.internURI(_outURI)
 
         if not _gotInput: #@@@@@@@@@@ default input
-            _inputURI = urlparse.urljoin( _baseURI, "STDIN") # Make abs from relative
+            _inputURI = _baseURI # Make abs from relative
             inputContext = myEngine.internURI(_inputURI)
             p = notation3.SinkParser(_store,  _inputURI)
             p.load("")
             del(p)
-            _store.moveContext(inputContext,workingContext)  # Move input data to output context
+            if inputContext is not workingContext:
+                _store.moveContext(inputContext,workingContext)  # Move input data to output context
 
 
-#  Take commands from command line:
+#  Take commands from command line: Second Pass on command line:
 
+        option_rdf = 0      # Use RDF rather than XML
+        _outURI = _baseURI
+        option_baseURI = _baseURI     # To start with
         for arg in sys.argv[1:]:  # Command line options after script name
             _equals = string.find(arg, "=")
             _lhs = ""
@@ -1348,7 +1418,7 @@ def doCommand():
             if _equals >=0:
                 _lhs = arg[:_equals]
                 _rhs = arg[_equals+1:]
-                _uri = urlparse.urljoin(_baseURI, _rhs) # Make abs from relative
+                _uri = urlparse.urljoin(option_baseURI, _rhs) # Make abs from relative
                 
             if arg[0] != "-":
                 _inputURI = urlparse.urljoin(_baseURI, arg) # Make abs from relative
@@ -1365,14 +1435,14 @@ def doCommand():
                 print doCommand.__doc__
 
             elif arg == "-test": test()
+            elif _lhs == "-base": option_baseURI = _uri
 
             elif arg == "-ugly":
                 _store.dumpChronological(workingContext, _outSink)
                 _doneOutput = 1            
 
             elif arg == "-pipe": pass
-            
-            elif arg == "-rdf1out": option_rdf1out = 1
+            elif _lhs == "-outURI": option_outURI = _uri
 
             elif arg == "-rdf": option_rdf = 1
             elif arg == "-n3": option_rdf = 0
@@ -1387,6 +1457,15 @@ def doCommand():
 
                     _store.dumpBySubject(_playContext,
                                          notation3.Reifier(_store, _outURI))                                
+
+            elif arg == "-flat":  # reify only nested expressions, not top level
+                if not option_pipe:
+                    _playURI = urlparse.urljoin(_baseURI, "PLAY")  # Intermediate
+                    _playContext = myEngine.internURI(_playURI)
+                    _store.moveContext(workingContext, _playContext)
+
+                    _store.dumpBySubject(_playContext,
+                                         notation3.Reifier(_store, _outURI, 1)) #flat                                
 
             elif option_pipe: ############## End of pipable options
                 print "# Command line error: %s illegal option with -pipe", arg

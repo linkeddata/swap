@@ -26,7 +26,7 @@ n3:context      a rdf:Property; rdfs:domain n3:statement;
 { :x :p :y . } log:means [
                 n3:subject :x;
                 n3:predicate :p;
-                n3:object :y ] a log:truth .
+                n3:object :y ] a log:Truth .
 
 # Needs more thought ... ideally, we have the implcit AND rules of
 # juxtaposition (introduction and elimination)
