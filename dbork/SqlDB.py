@@ -215,13 +215,11 @@ class SqlDBAlgae(RdfDBAlgae):
         self.LAST_CH = ord('a')
         self._walkQuerySets(implQuerySets, aliases, asz, wheres, row, flags)
 
-        varInfos = []
-        selectVarIndex = 0
         selectPunct = []
         selects = []
         labels = []
         self.orderedVars = self.vars.keys()
-        self._buildVarInfo(varInfos, selectPunct, selects, labels, resultSet)
+        self._buildVarInfo(selectPunct, selects, labels, resultSet)
 
         query = self._buildQuery(implQuerySets, asz, wheres, selectPunct, selects, labels)
         messages.append("query SQLselect \"\"\""+query+"\"\"\" .")
@@ -229,7 +227,7 @@ class SqlDBAlgae(RdfDBAlgae):
         cursor = connection.cursor()
         cursor.execute(query)
 
-        nextResults, nextStatements = self._buildResults(cursor, selects, varInfos, implQuerySets, row, statements)
+        nextResults, nextStatements = self._buildResults(cursor, selects, implQuerySets, row, statements)
         return nextResults, nextStatements
 
     def _walkQuerySets(self, implQuerySets, aliases, asz, wheres, row, flags):
@@ -355,8 +353,7 @@ class SqlDBAlgae(RdfDBAlgae):
             constraints.append(tableAs+"."+field+"=\""+value+"\"")
         return constraints
 
-    def _buildVarInfo(self, varInfos, selectPunct, selects, labels, resultSet):
-        selectVarIndex = 0;
+    def _buildVarInfo(self, selectPunct, selects, labels, resultSet):
         for var in self.orderedVars:
             # self.vars[var] contains an array of every time a variable was
             # referenced in a pattern. We care ony about the first for buiding
@@ -389,11 +386,8 @@ class SqlDBAlgae(RdfDBAlgae):
                 for field in pk:
                     selects.append(var+"."+field)
                     labels.append(symbol+"_"+field)
-                    selectVarIndex = selectVarIndex + 1
                     selectPunct.append('')
                 selectPunct.pop
-            varInfos.append(varInfo)
-            selectVarIndex = selectVarIndex + 1
 
     def _buildQuery(self, implQuerySets, asz, wheres, selectPunct, selects, labels):
 
@@ -428,7 +422,7 @@ class SqlDBAlgae(RdfDBAlgae):
         #    }
         return string.join(segments, '')
 
-    def _buildResults(self, cursor, selects, varInfos, implQuerySets, row, statements):
+    def _buildResults(self, cursor, selects, implQuerySets, row, statements):
         nextResults = []
         nextStatements = []
         uniqueStatementsCheat = {}
