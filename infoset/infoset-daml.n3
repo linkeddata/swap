@@ -1,0 +1,347 @@
+# An RDF Schema for the XML infoset
+#
+#Processed by Id: cwm.py,v 1.32 2001/04/05 21:33:55 timbl Exp 
+# Originally from:
+        #    using base http://www.w3.org/2001/04/infoset
+#
+# Problems with that were: 
+#
+# - Identifiers with "." in chjanged to use "_" as N3 doesn't like "."
+#   This is an RDF/N3 problem.
+#
+# - rdfs:domain used as literally in the spec, not DAML-style.
+#   This is a rdfs problem and a problem with the NOTE.
+#
+#  These are marked @@ and should be union classes.
+#
+#   Base was: http://www.w3.org/2001/04/infoset
+# Original RDF parsed by Id: xml2rdf.py,v 1.14 2001/04/21 22:14:02 timbl Exp 
+
+# DWC: exploiting DAML stuff...
+@prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+
+# Comments from the original RDF/XML:
+
+# this can be decoded as US-ASCII or iso-8859-1 as well,
+#     since it contains no characters outside the US-ASCII repertoire 
+# From Id: infoset.rdf,v 1.2 2001/04/06 20:11:13 dom Exp  
+
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix : <http://www.w3.org/2001/04/infoset#> .
+    # 
+#
+# This RDF schema's namespace name
+#
+#  http://www.w3.org/2001/04/infoset#
+#
+# will only be used to describe the infoitems and properties defined in
+# the corresponding version of the XML Infoset specification, which is
+#
+#  http://www.w3.org/TR/2001/WD-xml-infoset-20010316
+#
+# Any new version of the specification that changes the infoitems or
+# properties will have a new RDF schema with a different namespace
+# name.
+#
+# This RDF schema for the XML Infoset is not a normative part of the 
+# XML Infoset Specification.  If this schema is found not to match
+# the normative text of the specification, it will be corrected without
+# changing the namespace name.
+#
+#
+        #Enumeration classes and their members
+        
+    :AttributeType     a rdfs:Class .
+    
+    :AttributeType_ID     a :AttributeType .
+    
+    :AttributeType_IDREF     a :AttributeType .
+    
+    :AttributeType_IDREFS     a :AttributeType .
+    
+    :AttributeType_ENTITY     a :AttributeType .
+    
+    :AttributeType_ENTITIES     a :AttributeType .
+    
+    :AttributeType_NMTOKEN     a :AttributeType .
+    
+    :AttributeType_NMTOKENS     a :AttributeType .
+    
+    :AttributeType_NOTATION     a :AttributeType .
+    
+    :AttributeType_CDATA     a :AttributeType .
+    
+    :AttributeType_ENUMERATION     a :AttributeType .
+    
+    :Boolean     a rdfs:Class;
+	dpo:oneOf (:Boolean_true :Boolean_false).
+    
+    :Standalone     a rdfs:Class;
+	dpo:oneOf (:Standalone_yes :Standalone_no).
+    
+    :Unknown     a rdfs:Class;
+         rdfs:subClassOf :AttributeType,
+                :Literal,
+                :Boolean,
+                :Notation.
+    
+    :Unknown_unknown     a :Unknown .
+    
+    :NoValue     a rdfs:Class;
+         rdfs:subClassOf :AttributeType,
+                :Literal,
+                :Boolean,
+                :Standalone,
+                :Notation.
+    
+    :NoValue_noValue     a :Unknown# Property classes derived from standard classes 
+         .
+    
+    :Literal     a rdfs:Class .
+    
+    rdfs:Literal     rdfs:subClassOf :Literal .
+    
+    :Integer     a rdfs:Class;
+         rdfs:subClassOf rdfs:Literal.
+
+
+##################  InfoItem Classes
+
+    :InfoItem     a rdfs:Class;
+	dpo:disjointUnionOf (
+		:Document
+		:Element
+		:Attribute
+		:ProcessingInstruction
+		:Character
+		:UnexpandedEntityReference #@@ whoa! this is a processing artifact, not part of the model, isn't it? --DWC
+		:Comment    
+		:DocumentTypeDeclaration
+		:UnparsedEntity
+		:Notation
+		:Namespace).
+
+
+##### Set containers 
+         
+@prefix log: <http://www.w3.org/2000/10/swap/log.n3#>.
+
+:instance dpo:inverseOf rdf:type.
+
+dpo:toClass rdfs:domain rdfs:Class.
+
+# (part of?) the definition of rdfs:domain...
+<> log:forAll :s, :p, :o, :C.
+{ :s :p :o.
+  :p rdfs:domain :C. } log:implies { :s a :C }.
+
+# a theorem: if X subset Y, then PowerSet(X) subset PowerSet(Y)
+<> log:forAll :E1, :E2, :C1, :C2, :P, :Q.
+
+{ :C1 is :powerSet of :C2 }
+   log:means { :C1 dpo:onProperty :instance; dpo:toClass :E1 }.
+:powerSet a dpo:UnambiguousProperty.
+:powerSet a dpo:UniqueProperty.
+{ :P log:means :Q } log:implies { :P log:implies :Q. :Q log:implies :P. }.
+
+{ :C1 is :powerSet of :E1.
+  :C2 is :powerSet of :E2.
+  :E1 rdfs:subClassOf :E2. }
+  log:implies { :C1 rdfs:subClassOf :C2. }.
+
+    :InfoItemSet
+        rdfs:subClassOf rdf:Bag; # bags are finite, no?
+	dpo:toClass :InfoItem;
+	dpo:onProperty :instance.
+
+    :AttributeSet
+        rdfs:subClassOf rdf:Bag;
+	dpo:toClass :Attribute;
+	dpo:onProperty :instance.
+    
+    :UnparsedEntitySet
+        rdfs:subClassOf rdf:Bag;
+	dpo:toClass :UnparsedEntity;
+	dpo:onProperty :instance.
+    
+    :NamespaceSet
+        rdfs:subClassOf rdf:Bag;
+	dpo:toClass :Namespace;
+	dpo:onProperty :instance.
+    
+    :NotationSet
+        rdfs:subClassOf rdf:Bag;
+	dpo:toClass :Notation;
+	dpo:onProperty :instance.
+
+# Sequence containers 
+
+    
+    :InfoItemSeq     a rdfs:Class;
+         rdfs:subClassOf rdf:Seq.
+    
+#Info item properties
+
+    
+    :allDeclarationsProcessed     a rdf:Property;
+         rdfs:domain :Document;
+         rdfs:range :Boolean .
+    
+    :attributes     a rdf:Property;
+         rdfs:domain :Element;
+         rdfs:range :AttributeSet .
+    
+    :attributeType     a rdf:Property;
+         rdfs:domain :Attribute;
+         rdfs:range :AttributeType .
+    
+    :baseURI     a rdf:Property;
+	   rdfs:domain :InfoItem;	# @@ new version  tbl
+#         rdfs:domain :Document,     # @@@@ SHould be union
+#                :Element,
+#                :ProcessingInstruction;
+         rdfs:range :Literal .
+    
+    :characterCode     a rdf:Property;
+         rdfs:domain :Character;
+         rdfs:range :Integer .
+    
+    :characterEncodingScheme     a rdf:Property;
+         rdfs:domain :Document;
+         rdfs:range rdfs:Literal .
+    
+    :children     a rdf:Property.
+    :Element rdfs:subClassOf [ dpo:onProperty :children; dpo:toClass :InfoItemSeq ].
+    :DocumenTypeDelcaration rdfs:subClassOf [ dpo:onProperty :children; dpo:toClass :InfoItemSeq ].
+    
+    :content     a rdf:Property.
+	:ProcessingInstruction rdfs:subClassOf [ dpo:onProperty :content; dpo:toClass rdfs:Literal ].
+	:Comment rdfs:subClassOf [ dpo:onProperty :content; dpo:toClass rdfs:Literal ].
+    
+    :namespaceAttributes     a rdf:Property;
+         rdfs:domain :Element;
+         rdfs:range :AttributeSet .
+    
+    :declarationBaseURI     a rdf:Property.
+    :UnexpandedEntityReference rdfs:subClassOf [ dpo:onProperty :declarationBaseURI; dpo:toClass :InfoItemSeq ].
+    :UnparsedEntity rdfs:subClassOf [ dpo:onProperty :declarationBaseURI; dpo:toClass :InfoItemSeq ].
+    :Notation rdfs:subClassOf [ dpo:onProperty :declarationBaseURI; dpo:toClass :InfoItemSeq ].
+    
+    :documentElement     a rdf:Property;
+         rdfs:domain :Document;
+         rdfs:range :Element .
+    
+    :elementContentWhitespace     a rdf:Property;
+         rdfs:domain :Character;
+         rdfs:range :Boolean .
+    
+    :unparsedEntities     a rdf:Property;
+         rdfs:domain :Document;
+         rdfs:range :UnparsedEntitySet .
+    
+    :inScopeNamespaces     a rdf:Property;
+         rdfs:domain :Element;
+         rdfs:range :NamespaceSet .
+    
+    :localName     a rdf:Property;
+         rdfs:domain :InfoItem;
+# @@ should union of :Element,
+#                :Attribute;
+         rdfs:range rdfs:Literal .
+    
+    :name     a rdf:Property;
+         rdfs:domain :InfoItem;
+# @@ should be union of :UnexpandedEntityReference,
+#                :UnparsedEntity,
+#                :Notation;
+         rdfs:range rdfs:Literal .
+    
+    :namespaceName     a rdf:Property;
+         rdfs:domain  :InfoItem;
+# @@ should be union of  :Element,
+#                :Attribute,
+#                :Namespace;
+         rdfs:range :Literal .
+    
+    :normalizedValue     a rdf:Property;
+         rdfs:domain :Attribute;
+         rdfs:range rdfs:Literal .
+    
+    :notation     a rdf:Property;
+         rdfs:domain :UnparsedEntity;
+         rdfs:range :Notation .
+    
+    :notationName     a rdf:Property;
+         rdfs:domain :UnparsedEntity;
+         rdfs:range :Literal .
+    
+    :notations     a rdf:Property;
+         rdfs:domain :Document;
+         rdfs:range :NotationSet .
+    
+    :ownerElement     a rdf:Property;
+         rdfs:domain :Attribute;
+         rdfs:range :Element .
+    
+    :parent     a rdf:Property;
+         rdfs:domain :InfoItem;
+# @@ should be union of :Element,
+#                :ProcessingInstruction,
+#                :Character,
+#                :UnexpandedEntityReference,
+#                :Comment,
+#                :DocumentTypeDeclaration;
+         rdfs:range :InfoItem .
+    
+    :prefix     a rdf:Property;
+         rdfs:domain :InfoItem;
+# @@ should be union of :Namespace,
+#                :Element,
+#                :Attribute;
+         rdfs:range :Literal .
+    
+    :publicIdentifier     a rdf:Property;
+         rdfs:domain :InfoItem;
+# @@ should be union of :UnexpandedEntityReference,
+#                :UnparsedEntity,
+#                :DocumentTypeDeclaration,
+#                :Notation;
+         rdfs:range :Literal .
+    
+    :specified     a rdf:Property;
+         rdfs:domain :Attribute;
+         rdfs:range :Boolean .
+    
+    :standalone     a rdf:Property;
+         rdfs:domain :Document;
+         rdfs:range :Standalone .
+    
+    :systemIdentifier     a rdf:Property;
+         rdfs:domain :InfoItem;
+# @@ should be union of :UnexpandedEntityReference,
+#                :UnparsedEntity,
+#                :DocumentTypeDeclaration,
+#                :Notation;
+         rdfs:range :Literal .      #  @@ Actually, a URI.
+    
+    :target     a rdf:Property;
+         rdfs:domain :ProcessingInstruction;
+         rdfs:range rdfs:Literal .
+    
+    :version     a rdf:Property;
+         rdfs:domain :Document;
+         rdfs:range :Literal .
+
+# explain a bit of daml...
+<> log:forAll :C1, :x, :L, :L1, :L2, :C2.
+
+{ :L dpo:first :x } log:implies { :L :member :x }.
+{ :L1 dpo:rest :L2. :L2 dpo:first :x } log:implies { :L1 :member :x }.
+
+{ :C1 dpo:disjointUnionOf :L.
+  :L :member :C2 }
+  log:implies { :C2 rdfs:subClassOf :C1 }.
+
+    
+ #ENDS
