@@ -408,9 +408,11 @@ MEM MEMPHIS
 BRU BRUSSELS
 ATL ATLANTA
 HEL HELSINKI VANTAA
+MKE MILWAUKEE
 EODATA
 
     # SNA confirmed via http://www.ocair.com/
+    # MKE from http://www.world-airport-codes.com/usa/milwaukee-airport-4729.html
 
     #
     foreach $ln (split(/\n/, $data)){
@@ -424,7 +426,10 @@ EODATA
 
 
 # $Log$
-# Revision 1.18  2004-12-23 15:42:16  connolly
+# Revision 1.19  2005-02-24 15:06:23  connolly
+# MKE
+#
+# Revision 1.18  2004/12/23 15:42:16  connolly
 # HEL airport
 #
 # Revision 1.17  2004/08/19 21:23:36  connolly
