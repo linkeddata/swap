@@ -1,5 +1,5 @@
-# Test whether a schema mentions the predicates used in this data
-#  This involves searching in files for statements being present or absent.
+# Expand schema validation to be recursive, ie involving the validity
+# of schemas used as well as the file itself.
  
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
@@ -11,7 +11,7 @@
 
 @prefix val: <validate.n3#>.  # Local stuff
 
-# Usage:   TARGET=myfile.n3 cwm check.n3 -think -purge
+# Usage:   cwm validate.n3 recurse.n3 -think -purge -with myfile.n3
 #
 # Output should not include any error messages.
 #
@@ -21,16 +21,11 @@ this log:forAll :x.
 #  Targets include any schemata of target documents.
 
 
-{ [] :usedAsPropertyIn [a :targetDocument];
+{ [] :usedIn [a :targetDocument];
      log:racine :x;
      :semanticsOK [].
   } log:implies { :x a :targetDocument }.
 
-
-{ [] :usedAsClassIn [a :targetDocument];
-     log:racine :x;
-     :semanticsOK [].
-  } log:implies { :x a :targetDocument }.
 
 # ends
 

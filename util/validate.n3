@@ -11,7 +11,9 @@
 
 @prefix val: <validate.n3#>.  # Local stuff
 
-# Usage:   TARGET=myfile.n3 cwm check.n3 -think -purge
+# Usage: to validate myfile.n3,
+#            cwm validate.n3 -think -purge --with myfile.n3
+#
 #
 # Output should not incldue any error messages.
 #
@@ -47,7 +49,7 @@ schema which declares it as a Property""".
 # Target formulae are the top level formula we are pointed at,
 #  and any subformulae.
 
-{ :d log:uri [is os:environ of "TARGET"]  } log:implies { :d a :targetDocument }.
+{ :d log:uri [is os:argv of "1"]  } log:implies { :d a :targetDocument }.
 
 { :d a :targetDocument. :d log:semantics :F } log:implies { :F :within :d }.
 

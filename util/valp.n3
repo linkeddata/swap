@@ -32,7 +32,7 @@ this log:forAll :d, :o, :p, :r, :s, :S, :s1, :x, :y, :F, :G, :H.
     s:comment "Documents which this run is checking for schema validity";
     a log:Chaff.  # Internal use only, may be purged.
 
-:schema a rdf:Property;
+:propertySchema a rdf:Property;
     s:comment "The schema for a Property is the document which defines it.".
 
 
@@ -93,60 +93,69 @@ schema which declares it as a Property""".
 
 { :d a :targetDocument.
   :p :usedAsPropertyIn :d.
-  :p :semanticsOK [log:includes { :p s:isDefinedBy :s }] } log:implies {:p :schema :s}.
+  :p :semanticsOK [log:includes { :p s:isDefinedBy :s }].
+} log:implies {
+  :p :propertySchema :s.
+  :d :documentSchema :s.
+}.
 
-# The normal case is not the redirection:
+# The normal case is with no redirection:
 
 { :d a :targetDocument.
   :p :usedAsPropertyIn :d.
   :p :semanticsOK [log:notIncludes { :p s:isDefinedBy [] }].
-  :p log:racine :r } log:implies {:p :schema :r}.
+  :p log:racine :s.
+} log:implies {
+  :p :propertySchema :s.
+  :d :documentSchema :s.
+}.
 
 # We actually need the formula the schema parses to:
 
-{ :p :schema [ :semanticsOK :F ] } log:implies { :p :schemaFormula :F }. 
+{ :p :propertySchema [ :semanticsOK :F ] } log:implies { :p :schemaFormula :F }. 
+
+{ :d :documentSchema :s.
+  :s :semanticsOK  :F.
+  (:F [is log:semantics of <schema-rules.n3>]) log:conjunction [has log:conclusion :G].
+} log:implies {
+  :s :augmented :G
+}
 
 # We don't insist that the schema *directly* defined properties and
 # classes as such.  We take as given the axioms of rdfs.
-# Here, we create an aumented schema which is the deductive closure
-# of the original schema and the axioms.
+# Here, we consider an augmented schema which is the deductive closure
+# of the original schema and the axioms:
 
-{ :p :schemaFormula :F.
-  ( :F  [ is log:semantics of <schema-rules.n3> ] )
+{ ( [is :schemaFormula of :p]  [is log:semantics of <schema-rules.n3>] )
         log:conjunction [ has log:conclusion :G ] }
  log:implies  { :p :augmentedSchemaFormula :G }.
 
-# Alternatively, the schema can just be the document we pick up
-# directly.  This is much simpler!
+# It is an error, we say, for something to be used as a Property but
+# not im plicitly or explicitly declared as such in the schema, that is,
+# not explicitly declared as such in the augmented schema.
 #
-#   { :p  :usedAsPropertyIn :d .
-#     :d  a :targetDocument.
-#     :p  :semanticsOK :F.
-#     :F  log:includes { :p a rdf:Property } } log:implies { :p :schemaFormula :F.
-#                                                            :p a :declaredInDirectSchema  }. 
-
-#  The augmented schema should defined a predicate as a Property
+#  (That is, except for local identifiers, which we assume to be used correctly.
+#  Note this looseness is a choice: we could require local declarations,
+#  to follow a more traditionally careful software engineering style.)
 
 { :d a :targetDocument.
   :p :usedAsPropertyIn :d; log:racine [log:notEqualTo :d].  # Not local
-#  :p :semanticsOK :F.
-  :p :augmentedSchemaFormula :F.
-#  :F log:notIncludes { :p s:isDefinedBy [] }.   # No indirect Schema
-  :F log:notIncludes { :p a rdf:Property }.      # Not a direct schema
-} log:implies { :d :ERROR_DOES_NOT_IMPLY_PROPERTY_IS_CLASS_OF :p }.
+  :p :schema [:augmented [log:notIncludes { :p a rdf:Property }]].
+} log:implies { :d :ERROR_PREDICATE_NOT_DECLARED_AS_PROPERTY :p }.
 
 
-# It is an error, we say, for something to be used as a Property but
-# not *explicitly* declared as such in the schema:
-#
-#{:p :schemaFormula :F.
-# :F log:notIncludes { :p a rdf:Property }}log:implies { :d :ERROR_PROPERTY_NOT_DECLARED :p } .
- 
 
-#   (b)when the document is combined with the above, no condradiction
+#   (b)when the document is combined with the above, no contradiction
 #      can be found from anything being (eg) member of disjoint sets.
 #
-# @@ to come.
+
+{ :d a :targetDocument.
+  :p :usedAsPropertyIn :d; :augmentedSchemaFormula :F} log:implies { :d :usesAugmented :F }.
+
+{ :d :usesAugmented :F.
+   (  [is log:semantics of :d] :F ) log:conclusion [log:includes ([] a :ERROR)]
+} log:implies { :d :ERROR_INCONSISTENCY_W_R_T_SCHEMA :s } @@@
+
   
 ################################################################### Clean up
 
@@ -157,7 +166,7 @@ log:Chaff is rdf:type of
     s:comment,
     log:forAll,
     log:implies,   #  Clear out rules on -purge
-    :within, :schemaFormula, :schema, :predicateSemanticsOrError, :semanticsOK,
+    :within, :schemaFormula, :augmentedSchemaFormula, :propertySchema, :predicateSemanticsOrError, :semanticsOK,
 #    :targetDocument,
     :usedAsPropertyIn.
  
