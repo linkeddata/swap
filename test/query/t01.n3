@@ -7,15 +7,23 @@
 #  - A/C
 #  - use of defaults to explicitly set the boiler off.
 #
-@prefix therm: <http://www.example.com/therm>.
+#  cwm t01.n3 --think
+#
+@prefix therm: <http://www.example.com/thermal#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix : <myHouse#>.
+@prefix my: <myHouse#>.
 
-{ ?themostat therm:temp ?t; them:setting ?s .
+
+{ ?thermostat therm:temp ?t; therm:setting ?s .
   ?s  math:greaterThan ?t .
 } => {
-  ?s a therm:CallingForHeat .
+  ?thermostat a therm:CallingForHeat .
 }.
 
 { [] a therm:CallingForHeat } => { :boiler therm:control "ON" }.
+
+# test data:
 
 :livingRoom  therm:temp  "22"; therm:setting "21".
 
