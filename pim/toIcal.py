@@ -13,26 +13,41 @@ references:
 
 $Id$
 
+NOTE: see earlier work:
+  http://www.w3.org/2002/01dc-nj/toICal.py
+
 see changelog at end
 """
 
 from string import strip, maketrans, translate
 
 import RDFSink, llyn # from SWAP http://www.w3.org/2000/10/swap/
-from RDFSink import SYMBOL, FORMULA, SUBJ
+from RDFSink import SYMBOL, FORMULA, SUBJ, PRED, OBJ
 
 
 CRLF = chr(13) + chr(10)
 
 ProdID = "-//w3.org/2002/01dc-nj/toICal.py//NONSGML v1.0/EN" #@@bogus?
 
-RDF_ns = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-RDF_type_URI = RDF_ns + "type"
+class Namespace:
+    """A collection of URIs witha common prefix.
 
+    ACK: AaronSw / #rdfig
+    http://cvs.plexdev.org/viewcvs/viewcvs.cgi/plex/plex/plexrdf/rdfapi.py?rev=1.6&content-type=text/vnd.viewcvs-markup
+    """
+    def __init__(self, nsname): self.nsname = nsname
+    def __getattr__(self, lname): return self.nsname + lname
+    def sym(self, lname): return self.nsname + lname
+
+RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+
+ICAL = Namespace('http://www.w3.org/2000/10/swap/pim/ical#')
+
+#@@owe update to these folks:
 # by Libby and company; e.g.
 # SWWS data http://swordfish.rdfweb.org:8085/swws/index.html
-IH = "http://ilrt.org/discovery/2001/06/schemas/ical-full/hybrid.rdf#"
-VEVENT = IH + "Vevent"
+#IH = "http://ilrt.org/discovery/2001/06/schemas/ical-full/hybrid.rdf#"
+#VEVENT = IH + "Vevent"
 
 class CalWr:
     def __init__(self, writeFun):
@@ -56,38 +71,54 @@ class CalWr:
         #hmm... method? cf 3.2 Parameters
 
         ctx = kb.intern((FORMULA, ctx + "#_formula"))
-        ty = kb.internURI(RDF_type_URI)
+        ty = kb.internURI(RDF.type)
         
         progress("@@skipping timezones and lots of other component types")
-        progress("querying for type ", VEVENT, " in ", ctx )
+        progress("querying for type ", ICAL.Vevent, " in ", ctx )
         eventHits = ctx.statementsMatching(ty,
                                            None,
-                                           kb.internURI(VEVENT))
+                                           kb.internURI(ICAL.Vevent))
         
         for hit in eventHits:
             event = hit[SUBJ]
             w("BEGIN:VEVENT"+CRLF)
-            txt = self.textProp(kb, ctx, "SUMMARY", event)
-            uid = self.textProp(kb, ctx, "UID", event)
-            self.timeProp(kb, ctx, "DTSTART", event)
-            self.timeProp(kb, ctx, "DTEND", event)
-            progress("@@skipping other properties of ", txt)
+            txt = self.textProp(kb, ctx, "summary", event)
+            self.textProp(kb, ctx, "description", event)
+            uid = self.textProp(kb, ctx, "uid", event)
+
+            # 4.8.2.4 Date/Time Start
+            self.timeProp(kb, ctx, "dtstart", event)
+
+            self.timeProp(kb, ctx, "dtend", event)
+
+            other = ctx.statementsMatching(None, event, None)
+            for s in other:
+                if str(s[PRED]) not in ('dtstart', 'dtend', 'uid', 'summary', 'description'):
+                    progress("@@skipping ", s[PRED], " of [", txt, "] = [", \
+                             s[OBJ], "]")
             w("END:VEVENT"+CRLF)
             
         w("END:VCALENDAR" + CRLF)
 
     def textProp(self, kb, ctx, pn, subj):
+        # "Property names, parameter names and enumerated parameter values are
+        # case insensitive."
+        #  -- 4.5 Property, http://www.ietf.org/rfc/rfc2445.txt
         w = self._w
-        txt  = kb.any((ctx, kb.internURI(IH+pn.lower()), subj, None))
+        txt  = kb.any((ctx, kb.internURI(ICAL.sym(pn)), subj, None))
         v = strip(str(txt))
         w("%s:%s%s" % (pn, v, CRLF)) #@@linebreaks?
         return v
     
     def timeProp(self, kb, ctx, pn, subj):
         w = self._w
-        when = kb.any((ctx, kb.internURI(IH+pn.lower()), subj, None))
-        whenV = kb.any((ctx, kb.internURI(RDF_ns+"value"), when, None))
-        whenTZ = kb.any((ctx, kb.internURI(IH+"tzid"), when, None))
+        when = kb.any((ctx, kb.internURI(ICAL.sym(pn)), subj, None))
+        whenV = kb.any((ctx, kb.internURI(ICAL.value), when, None)) \
+                or kb.any((ctx, kb.internURI(ICAL.date), when, None)) \
+                or kb.any((ctx, kb.internURI(ICAL.dateTime), when, None))
+        if not whenV:
+            progress("@@no value for ", when)
+        whenTZ = kb.any((ctx, kb.internURI(ICAL.tzid), when, None))
 
         whenV = translate(str(whenV), maketrans("", ""), "-:")
 	if whenTZ:
@@ -99,7 +130,7 @@ class CalWr:
             w("%s;TZID=%s:%s%s" % (pn, str(whenTZ), whenV, CRLF))
         else:
 	    if whenV[-1:] != "Z":
-		progress("@@@@@ No timezone and no Z for "+ whenV)
+		pass # local time. hmm...
 	    else:
 		whenV = whenV[:-1]+"000000"
 		whenV = whenV[:15] + "Z"
@@ -133,7 +164,15 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.1  2002-07-20 17:14:39  timbl
+# Revision 1.2  2002-07-23 21:44:16  connolly
+# - updated ICAL namespace pointer, case of RDF terms
+# - handle description, as well as summary
+# - be more clear about what properties we skip/don't handle
+# - don't complain about floating/local time
+# - pointer to earlier work
+# - used Namespace() trick
+#
+# Revision 1.1  2002/07/20 17:14:39  timbl
 # DanC's with slight updates
 #
 # Revision 1.7  2002/06/27 02:36:27  timbl
