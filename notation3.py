@@ -567,7 +567,38 @@ class SinkParser:
 
         if ch == "(":
 	    j=i+1
-            previous = None  # remember value to return
+##            ######################################
+##            #The below code should be hit with a sledgehammer multiple times.
+##            #It is creating firsts and nexts, only to have the formula _slowly_
+##            #go through them and recreate the list. This will change
+##            previous = None  # remember value to return
+##            while 1:
+##                i = self.skipSpace(str, j)
+##                if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "needed ')', found end.")                    
+##                if str[i:i+1] == ')':
+##		    j = i+1
+##		    break
+##
+##                item = []
+##                j = self.item(str,i, item) #@@@@@ should be path, was object
+##                if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected item in list or ')'")
+##                this = self._context.newBlankNode(uri=self.here(i), why=self._reason2)
+##		if previous:
+##		    self.makeStatement((self._context, N3_rest, previous, this ))
+##		else:
+##		    head = this
+##		self.makeStatement((self._context, N3_first, this, item[0]))
+##                previous = this
+##                previousvalue = item[0]
+##
+##            if not previous:
+##                res.append(N3_nil)
+##                return j
+##	    self.makeStatement((self._context, N3_rest, previous, N3_nil ))
+##	    res.append(head)
+##	    #There is a far better way to do the above. See below
+##	    ##########################################
+            List = []
             while 1:
                 i = self.skipSpace(str, j)
                 if i<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "needed ')', found end.")                    
@@ -578,20 +609,8 @@ class SinkParser:
                 item = []
                 j = self.item(str,i, item) #@@@@@ should be path, was object
                 if j<0: raise BadSyntax(self._thisDoc, self.lines, str, i, "expected item in list or ')'")
-                this = self._context.newBlankNode(uri=self.here(i), why=self._reason2)
-		if previous:
-		    self.makeStatement((self._context, N3_rest, previous, this ))
-		else:
-		    head = this
-		self.makeStatement((self._context, N3_first, this, item[0]))
-                previous = this
-                previousvalue = item[0]
-
-            if not previous:
-                res.append(N3_nil)
-                return j
-	    self.makeStatement((self._context, N3_rest, previous, N3_nil ))
-	    res.append(head)
+                List.append(self._store.intern(item[0]))
+            res.append(self._store.newList(List))
             return j
 
         j = self.tok('this', str, i)   # This context
