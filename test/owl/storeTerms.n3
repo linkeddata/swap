@@ -2,6 +2,9 @@
 @prefix p: <prodDesc#>.
 
 @prefix st: <storeTerms#>.
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#>.
+
+<> s:seeAlso <prodDescMore.n3>.
 
 st:widget a p:Product;
   p:obsoletes st:gadget.
