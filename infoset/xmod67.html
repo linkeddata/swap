@@ -4,14 +4,39 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
   <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
-  <title>No title</title>
+  <title>Using RDF to model XML structures (Abstract)</title>
   <meta name="generator" content="amaya 5.3, see http://www.w3.org/Amaya/" />
 </head>
 
 <body>
-<p><a href="../../">W3C</a></p>
+<p><a href="../../../../">W3C</a></p>
 
 <h1>Using RDF to model XML structures</h1>
+
+<p>XML is a relatively simple technology, by itself. But the collection of
+specifications build on XML at W3C and elsewhere is growing at an extreme
+pace. W3C has launched a <a href="/QA/">Quality Assurance</a> activity in
+recognition of the need for, for example, more uniform testing and
+translation practices. Formal methods are being applied to clarify
+specifications such as RDF (cf <a href="/TR/rdf-mt/">RDF Model Theory</a>)
+and XML Schema (<a href="/TR/xmlschema-formal/">XML Schema: Formal
+Description</a>). But these post-hoc clarification efforts are surely not
+optimal.</p>
+
+<blockquote>
+  <p>Semanticists should be obstetricians, not coroners of programming
+  languages.</p>
+  <address>
+    <p>-- John Reynolds</p>
+
+  </address>
+</blockquote>
+
+<p>In the <a href="../../../01/sw/">Advanced Development component of the W3C
+Semantic Web Activity</a>, we're testing the hypothesis that application of
+XML and RDF to a wide variety of W3C's operations will lead to an increase in
+quality and efficiency. In this paper, we explore the application of RDF to
+modelling of XML structures.</p>
 
 <p>The <a href="/TR/2001/REC-xml-infoset-20011024/"><cite>XML Information
 Set</cite></a> complements the XML 1.0 specifiction with an abstract model of
@@ -33,9 +58,10 @@ many children but (at most) one parent.</p>
 
 <p>Using additional RDF vocabulary from <a
 href="http://www.daml.org/2001/03/daml+oil-index.html">DAML+OIL</a>, we can
-capture the structure of the XML information set much more completely. A
-transcription from the text of the infoset spec into RDF using DAML+OIL terms
-follows point by point; it was an afternoon's work.</p>
+capture the structure of the XML information set much more completely. A <a
+href="infoset-daml.n3">transcription</a> from the text of the infoset spec
+into RDF using DAML+OIL terms follows point by point; it was an afternoon's
+work.</p>
 
 <p>The resulting schema is usable with generic RDF tools; ising some <a
 href="/2001/02pd/">tools for visualizing RDF as circles-and-arrows
@@ -63,6 +89,8 @@ about all sorts of stuff, including XML documents. (mention DSD?)</p>
     comments on webont</a></li>
   <li><a href="/TR/xml-infoset-rdfs">An RDF Schema for the XML Information
     Set</a>, W3C Note 6 April 2001, Richard Tobin</li>
+  <li><a href="../xml2infoset.py">xml2infoset.py</a> -- code to get an RDF
+    model of an XML document; slightly different vocabulary</li>
 </ul>
 
 <h2>Related work</h2>
@@ -70,8 +98,8 @@ about all sorts of stuff, including XML documents. (mention DSD?)</p>
   <li>Catalasys@@, UML stuff</li>
 </ul>
 <address>
-  <p><a href="../../People/Connolly/">Dan Connolly</a>, Dan Brickley@@Apr
-  2002<br />
+  <p><a href="../../../../People/Connolly/">Dan Connolly</a>, Dan
+  Brickley@@Apr 2002<br />
   $Revision$ of $Date$ by $Author$</p>
 
 </address>
