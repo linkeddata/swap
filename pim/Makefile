@@ -35,8 +35,10 @@ ical.n3: $(PIMTEST)/testCal.rdf $(PIMTEST)/testTasks.rdf ,chi.rdf
 ,chi.rdf: ical2rdf.pl /usr/share/libical-evolution/zoneinfo/America/Chicago.ics
 	$(PERL) ical2rdf.pl /usr/share/libical-evolution/zoneinfo/America/Chicago.ics >$@
 
+EVONS=http://www.w3.org/2000/10/swap/pim/evo-ical-ext\#
+
 ,evocal.rdf: $(HOME)/evolution/local/Calendar/calendar.ics ical2rdf.pl
-	$(PERL) ical2rdf.pl $(HOME)/evolution/local/Calendar/calendar.ics >$@
+	$(PERL) ical2rdf.pl --xnames $(EVONS) $(HOME)/evolution/local/Calendar/calendar.ics >$@
 
 
 $(PIMTEST)/testCal.rdf: $(PIMTEST)/testCal.ics ical2rdf.pl
