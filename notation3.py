@@ -570,6 +570,8 @@ class Thing:
             self.occurrences(OBJ,context) == 1 and  # This is only incoming arrow
             self.occurrences(PRED, context) == 0 )    # It is not used as a verb itself
 
+    def asPair(self):
+        return (RESOURCE, self.uriref(None))
     
     def occurrences(self, p, context):
         """ Count the times a thing occurs in a statement in given context
@@ -654,11 +656,16 @@ class Anonymous(Fragment):
 
     def generated(self):
         return 1
-    
+
+    def asPair(self):
+        return (ANONYMOUS, self.uriref(None))
+        
 class Variable(Fragment):
     def __init__(self, resource, fragid):
         Fragment.__init__(self, resource, fragid)
 
+    def asPair(self):
+        return (VARIABLE, self.uriref(None))
         
 class Literal(Thing):
     """ A Literal is a data resource to make it clean
@@ -675,6 +682,9 @@ class Literal(Thing):
 
     def __repr__(self):
         return self.string
+
+    def asPair(self):
+        return (LITERAL, self.string)
 
     def representation(self, base=None):
         return '"' + self.string + '"'   # @@@ encode quotes; @@@@ strings containing \n
@@ -713,8 +723,8 @@ class Engine:
         if type == LITERAL:
             return Literal(uriref)  # No interning for literals (?@@?)
 
+#        print " ... interning <%s>" % `uriref`
         hash = len(uriref)-1
-        print " ... interning <%s>" % uriref
         while (hash >= 0) and not (uriref[hash] == "#"):
             hash = hash-1
         if hash < 0 :     # This is a resource with no fragment
@@ -857,7 +867,7 @@ bind default <>
 
     print "\n\n------------------ dumping chronologically:"
 
-    store.dumpChronological(SinkToN3(sys.stdout.write, 'file://dev/mta0'))
+    store.dumpChronological(thisDoc, SinkToN3(sys.stdout.write, thisURI))
 
     print "\n\n---------------- dumping in subject order:"
 
@@ -1205,6 +1215,7 @@ class SinkToN3(RDFSink):
         Uses prefix dictionary to use qname syntax if possible.
         """
 
+#        print "# Representation of ", `pair`
         type, value = pair
         if ((type == VARIABLE or type == ANONYMOUS)
             and not option_noregen ):
@@ -1310,10 +1321,12 @@ class RDFStore(RDFSink) :
 # Manipulation methods:
 
     def moveContext(self, old, new):
-        for s in self.statements :
+        for s in old.occursAs[CONTEXT] :
             t = s.triple
 #            print "Quad:", `s.triple`, "Old, new:",`old`, `new`
-            if t[CONTEXT] == old: s.triple = new, t[PRED], t[SUBJ], t[OBJ]
+            s.triple = new, t[PRED], t[SUBJ], t[OBJ]
+            old.occursAs[CONTEXT].remove(s)
+            
             
     def copyContext(self, old, new):
         for s in self.statements :
@@ -1322,45 +1335,57 @@ class RDFStore(RDFSink) :
             
 # Output methods:
 
-    def dumpChronological(self, sink):
+    def dumpChronological(self, contextURI, sink):
         """ Ignores contexts
         """
+        context = self.engine.intern((RESOURCE, contextURI))
         sink.startDoc()
         for c in self.prefixes.items():   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
-        for s in self.statements :
-            sink.makeStatement(s.triple)
+        for s in context.occursAs[CONTEXT]:
+#        for s in self.statements :
+            self._outputStatement(sink, s)
         sink.endDoc()
 
-    def dumpBySubject(self, context, sink):
+    def _outputStatement(self, sink, s):
+        t = s.triple
+        sink.makeStatement((t[CONTEXT].asPair(),
+                            t[PRED].asPair(),
+                            t[SUBJ].asPair(),
+                            t[OBJ].asPair(),
+                            ))
 
+    def dumpBySubject(self, contextURI, sink):
+
+        context = self.engine.intern((RESOURCE, contextURI))
         self.selectDefaultPrefix(context)        
         sink.startDoc()
         for c in self.prefixes.items() :   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
 
-        for r in Resource.table.values() :  # First the bare resource
+        for r in self.engine.resources.values() :  # First the bare resource
             for s in r.occursAs[SUBJ] :
                 if context is s.triple[CONTEXT]:
-                    sink.makeStatement(s.triple)
+                    self._outputStatement(sink, s)
             for f in r.fragments.values() :  # then anything in its namespace
                 for s in f.occursAs[SUBJ] :
 #                    print "...dumping %s in context %s" % (`s.triple[CONTEXT]`, `context`)
                     if s.triple[CONTEXT] is context:
-                        sink.makeStatement(s.triple)
+                        self._outputStatement(sink, s)
         sink.endDoc()
 #
 #  Pretty printing
 #
-    def dumpNested(self, context, sink):
+    def dumpNested(self, contextURI, sink):
         """ Iterates over all URIs ever seen looking for statements
         """
+        context = self.engine.intern((RESOURCE, contextURI))
         self.selectDefaultPrefix(context)        
         sink.startDoc()
         for c in self.prefixes.items() :   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
         print "# RDFStore: Done bindings, doing arcs:" 
-        for r in Resource.table.values() :  # First the bare resource
+        for r in self.engine.resources.values() :  # First the bare resource
             self._dumpSubject(r, context, sink)
             for f in r.fragments.values() :  # then anything in its namespace
                 self._dumpSubject(f, context, sink)
@@ -1381,7 +1406,7 @@ class RDFStore(RDFSink) :
                 sink.startAnonymousNode(subj)
                 for s in subj.occursAs[SUBJ]:
                     if s.triple[CONTEXT] is context:
-                        self.coolMakeStatement(sink, s.triple)
+                        self.coolMakeStatement(sink, s)
                 sink.endAnonymousNode()
             if subj.occurrences(CONTEXT, None) > 0:  # @@@ only dumps of no statemenst about it
                 sink.startBag(subj)
@@ -1392,26 +1417,26 @@ class RDFStore(RDFSink) :
         else:
             for s in subj.occursAs[SUBJ]:
                 if s.triple[CONTEXT] is context:
-                    self.coolMakeStatement(sink, s.triple)
+                    self.coolMakeStatement(sink, s)
 
-    def coolMakeStatement(self, sink, triple):
-     
+    def coolMakeStatement(self, sink, s):
+        triple = s.triple
         if triple[SUBJ] is triple[OBJ]:
-            sink.makeStatement(triple)
+            self.outputStatement(s)
         else:
             if not triple[SUBJ].n3_anonymous(triple[CONTEXT]):  # Don't repeat
-                self.coolMakeStatement2(sink, triple)
+                self.coolMakeStatement2(sink, s)
                 
-    def coolMakeStatement2(self, sink, triple):
-     
+    def coolMakeStatement2(self, sink, s):
+        triple = s.triple
         if triple[OBJ].n3_anonymous(triple[CONTEXT]):  # Can be represented as anonymous node in N3
             sink.startAnonymous( triple)
             for t in triple[OBJ].occursAs[SUBJ]:
                 if t.triple[CONTEXT] is triple[CONTEXT]:
-                    self.coolMakeStatement2(sink, t.triple)
+                    self.coolMakeStatement2(sink, t)
             sink.endAnonymous(triple[SUBJ], triple[PRED]) # Restore context
         else:    
-            sink.makeStatement(triple)
+            self._outputStatement(sink, s)
                 
 
 
@@ -1727,7 +1752,7 @@ def doCommand():
         
         if not option_pipe:
             if option_ugly:
-                _sink.dumpChronological(_outSink)
+                _sink.dumpChronological(outputContext, _outSink)
             elif option_bySubject:
                 _sink.dumpBySubject(outputContext, _outSink)
             else:
