@@ -2,7 +2,8 @@
 
 """
      plwm (pronounced plume) is a plugable rewrite of cwm.  it should
-     be a drop-in replacement, eventually renamed cwm.py.
+     be a drop-in replacement, eventually renamed cwm.py.  Or maybe
+     staying plwm, as "plugable web machine".
 
      does --n3  mean the new default language is n3, or the new
      default parser is Notation3 ?   I think it's the language,
@@ -10,84 +11,80 @@
      (2) you need to tell the parser that's the language.
      
 """
+revision = '$Id$'
 
 import sys
 import ArgHandler
 import hotswap
-
-# Import ourself, so our classes are known as plwm.Foo, not
-# just __main__.Foo.   This is important since hotswap 
-# compares class names to determine interface conformance.
-import plwm
+import pluggable
+import urllib
 
 class NotImplented(RuntimeError):
     pass
 
-################################################################
-##
-##  The basic interfaces implemented by the hotswap modules
-##  we load and use.
-##
 
-class Store:
-    """
-    A passive repository for structured data.   See KB.
-    """
-    pass
+class Host:
+    """The host is the central point of control and resource
+    management, dispatching to the parsers, stores, query engines,
+    etc, as needed.
 
-class Opener:
-    """
-    A general communications driver which can establish
-    read and write connections to various external storage
-    and processing facilities.
-    """
-    pass
+    The host passes itself (or a different host) to the components it
+    calls to allow for a flexible callback/dialog mechanism.  This
+    allows the components access to virtual system state: they can
+    look at option flags, produce debugging output, read and write
+    files, etc, ... all managed through one interface.   In fact, they
+    are expected to run in a restricted execution environment where
+    they can ONLY do these things through this interface.
 
-class Engine:
-    """
-    A server (passive) object which works with a Store, potentially
-    doing complex queries and inference.  See KB.
-    """
-    pass
+    If you don't want to some component to be able to do something,
+    pass it a different host which disallows those things.
 
-class KB:
-    """
-    The combination of a Store and an Engine.  Sometimes it makes more
-    sense to treat the pair as one unit; sometimes it makes to
-    consider them separately.  
-    """
-    pass
+    We do all the handling of hotswap here.  Components (eg parsers)
+    should not need to know about that.  If they need a Store to pass
+    to, we'll hand them one.  If they need a particular KIND of store,
+    .... um ... um ....     Maybe they should use hotswap.
 
-class Parser:
     """
-    An active (client) object which reads from a stream (produced
-    by an Opener) and writes to a Store.
-    """
-    pass
 
-class Serializer:
-    """
-    A passive (server) object which receives content like a Store but
-    instead of keeping it, write it out to an output stream.
-    """
-    pass
+    def __init__(self):
+        # we don't need to keep track of a current Store, current Parser,
+        # or any of that, because hotswap does it for us, while letting them
+        # be swapped.
+        pass
+    
+    def trace(self, message, subsystem=None):
+        # look at who caller is, too
+        raise NotImplemented
 
-class Pump:
-    """
-    An active (client) object which queries a KB and sends the results
-    to a Receiver (Store or Serializer).
-    """
-    pass
+    def open(self, url, readwrite="read"):
+        # readwrite part not implemented
+        stream = urllib.urlopen(url)
+        stream.info().uri = url     # @@ absoluteize?  sanitize?
+        return stream
 
-class Receiver:
-    """
-    Something to which you can send structured information.
-    """
-    pass
+    def output(self):
+        raise NotImplemented
+
+    def explain(self, result, step):       # is this about right?!?!
+        raise NotImplemented
+
+    def load(self, source):
+        " or is load() an option on a store/kb?    Hrmph. "
+        parser = hotswap.get(pluggable.Parser)
+        store = hotswap.get(pluggable.Store)
+        parser.setSink(store)
+        stream = self.open(source)
+        parser.parse(stream, host=self)
+        
 
 ################################################################
 
 class MyArgHandler(ArgHandler.ArgHandler):
+
+    def __init__(self, host=None, *args, **kwargs):
+        #apply(super(MyArgHandler, self).__init__, args, kwargs)
+        apply(ArgHandler.ArgHandler.__init__, [self]+list(args), kwargs)
+        self.host = host
 
     def handle__pipe(self):
         """Don't store, just pipe out
@@ -236,11 +233,7 @@ class MyArgHandler(ArgHandler.ArgHandler):
         hotswap.remove(location)
 
     def handleExtraArgument(self, arg):
-        parser = hotswap.get(plwm.Parser)
-        ih = hotswap.get(plwm.Opener)
-        store = hotswap.get(plwm.Store)
-        stream = ih.open(arg)
-        parser.parse(stream, store)
+        self.host.load(arg)
 
     def handleNoArgs(self):
         self.handleExtraArgument("-")
@@ -248,12 +241,17 @@ class MyArgHandler(ArgHandler.ArgHandler):
 ################################################################
     
 if __name__ == "__main__":
+
+
+    host=Host()
     # should pass some extra help text...
-    a = MyArgHandler(program="plwm",
+    a = MyArgHandler(host=host,
+                     program="plwm",
                      version="$Id$",
                      uri="http://www.w3.org/2000/10/swap/doc/cwm")
 
-    hotswap.append("sillyParser")
+    hotswap.prepend("wrap_n3")
+    hotswap.prepend("wrap_llyn")
     try:
         a.run()
     except hotswap.NoMatchFound, e:
@@ -261,9 +259,21 @@ if __name__ == "__main__":
         print "Try  --help preplug  for more information\n"
         sys.exit(1)
 
-
+    # who should do this, really?
+    store = hotswap.get(pluggable.Store)
+    ser = hotswap.get(pluggable.Serializer, initargs=[sys.stdout, ""])
+    pump = hotswap.get(pluggable.Pump)
+    # which pump?   let that be up to hotswap of course
+    pump.pump(store, ser)
+    
 # $Log$
-# Revision 1.4  2003-04-03 05:14:55  sandro
+# Revision 1.5  2003-04-25 19:55:53  sandro
+# moved interface class defns out of plwm into pluggable
+# implemented wrappers around llyn and notation3
+# implemented simple Host class to handle jailing
+# works on simple read/store/write an n3 file
+#
+# Revision 1.4  2003/04/03 05:14:55  sandro
 # passes two simple tests
 #
 # Revision 1.3  2003/04/03 04:51:49  sandro
