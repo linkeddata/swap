@@ -41,14 +41,15 @@ Agenda:<br>
     
 <tr><td bgcolor="#aa55cc"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
 <td width="100%"><table width="100%" summary="list"><tr><td width="25%" valign=top><a href="LX.html">LX</a><br>
+<a href="RDFSink.html">RDFSink</a><br>
 <a href="diag.html">diag</a><br>
 </td><td width="25%" valign=top><a href="llyn.html">llyn</a><br>
 <a href="notation3.html">notation3</a><br>
-</td><td width="25%" valign=top><a href="string.html">string</a><br>
-<a href="sys.html">sys</a><br>
-</td><td width="25%" valign=top><a href="toXML.html">toXML</a><br>
+<a href="string.html">string</a><br>
+</td><td width="25%" valign=top><a href="sys.html">sys</a><br>
+<a href="toXML.html">toXML</a><br>
 <a href="uripath.html">uripath</a><br>
-</td></tr></table></td></tr></table>
+</td><td width="25%" valign=top></td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#eeaa77">
 <td colspan=3 valign=bottom>&nbsp;<br>
@@ -66,6 +67,8 @@ Agenda:<br>
 --rdf=flags&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;**&nbsp;in&nbsp;RDF&nbsp;and&nbsp;set&nbsp;given&nbsp;RDF&nbsp;flags<br>
 --n3=flags&nbsp;&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;N3&nbsp;and&nbsp;set&nbsp;N3&nbsp;flags<br>
 --ntriples&nbsp;&nbsp;&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;NTriples&nbsp;(equiv&nbsp;--n3=spart&nbsp;-bySubject&nbsp;-quiet)<br>
+--language=x&nbsp;&nbsp;Input&nbsp;&amp;&nbsp;Output&nbsp;in&nbsp;"x"&nbsp;(rdf,&nbsp;n3,&nbsp;etc)&nbsp;&nbsp;--rdf&nbsp;same&nbsp;as:&nbsp;--language=rdf<br>
+--languageOptions=y&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;--n3=sp&nbsp;same&nbsp;as:&nbsp;&nbsp;--language=n3&nbsp;--languageOptions=sp<br>
 --ugly&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Store&nbsp;input&nbsp;and&nbsp;regurgitate&nbsp;*<br>
 --bySubject&nbsp;&nbsp;&nbsp;Store&nbsp;input&nbsp;and&nbsp;regurgitate&nbsp;in&nbsp;subject&nbsp;order&nbsp;*<br>
 --no&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;No&nbsp;output&nbsp;*<br>
@@ -76,7 +79,9 @@ Agenda:<br>
 --filter=foo&nbsp;&nbsp;Read&nbsp;rules&nbsp;from&nbsp;foo,&nbsp;apply&nbsp;to&nbsp;store,&nbsp;REPLACING&nbsp;store&nbsp;with&nbsp;conclusions<br>
 --rules&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Apply&nbsp;rules&nbsp;in&nbsp;store&nbsp;to&nbsp;store,&nbsp;adding&nbsp;conclusions&nbsp;to&nbsp;store<br>
 --think&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;as&nbsp;-rules&nbsp;but&nbsp;continue&nbsp;until&nbsp;no&nbsp;more&nbsp;rule&nbsp;matches&nbsp;(or&nbsp;forever!)<br>
+--engine=otter&nbsp;use&nbsp;otter&nbsp;(in&nbsp;your&nbsp;$PATH)&nbsp;instead&nbsp;of&nbsp;llyn&nbsp;for&nbsp;linking,&nbsp;etc<br>
 --why&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Replace&nbsp;the&nbsp;store&nbsp;with&nbsp;an&nbsp;explanation&nbsp;of&nbsp;its&nbsp;contents<br>
+--mode=flags&nbsp;&nbsp;Set&nbsp;modus&nbsp;operandi&nbsp;for&nbsp;inference&nbsp;(see&nbsp;below)<br>
 --flatten&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;turn&nbsp;formulas&nbsp;into&nbsp;triples&nbsp;using&nbsp;LX&nbsp;vocabulary<br>
 --unflatten&nbsp;&nbsp;&nbsp;turn&nbsp;described-as-true&nbsp;LX&nbsp;sentences&nbsp;into&nbsp;formulas<br>
 --think=foo&nbsp;&nbsp;&nbsp;as&nbsp;-apply=foo&nbsp;but&nbsp;continue&nbsp;until&nbsp;no&nbsp;more&nbsp;rule&nbsp;matches&nbsp;(or&nbsp;forever!)<br>
@@ -96,7 +101,11 @@ Examples:<br>
 &nbsp;&nbsp;cwm&nbsp;foo.n3&nbsp;bar.n3&nbsp;--think&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Combine&nbsp;data&nbsp;and&nbsp;find&nbsp;all&nbsp;deductions<br>
 &nbsp;&nbsp;cwm&nbsp;foo.n3&nbsp;--flat&nbsp;--n3=spart<br>
 &nbsp;<br>
-See&nbsp;<a href="http://www.w3.org/2000/10/swap/doc/cwm">http://www.w3.org/2000/10/swap/doc/cwm</a>&nbsp;&nbsp;for&nbsp;more&nbsp;documentation.</tt></dd></dl>
+See&nbsp;<a href="http://www.w3.org/2000/10/swap/doc/cwm">http://www.w3.org/2000/10/swap/doc/cwm</a>&nbsp;&nbsp;for&nbsp;more&nbsp;documentation.<br>
+&nbsp;<br>
+Mode&nbsp;flags:<br>
+&nbsp;r&nbsp;&nbsp;&nbsp;Do&nbsp;remote&nbsp;queries&nbsp;when&nbsp;you&nbsp;discover&nbsp;they&nbsp;are&nbsp;posisble.<br>
+&nbsp;s&nbsp;&nbsp;&nbsp;Read&nbsp;the&nbsp;schema&nbsp;for&nbsp;any&nbsp;predicate&nbsp;in&nbsp;a&nbsp;query.</tt></dd></dl>
  <dl><dt><a name="-getParser"><strong>getParser</strong></a>(format, inputURI, formulaURI, flags)</dt><dd><tt>Return&nbsp;something&nbsp;which&nbsp;can&nbsp;load&nbsp;from&nbsp;a&nbsp;URI&nbsp;in&nbsp;the&nbsp;given&nbsp;format,&nbsp;while<br>
 writing&nbsp;to&nbsp;the&nbsp;given&nbsp;store.</tt></dd></dl>
  <dl><dt><a name="-need"><strong>need</strong></a>(object)</dt><dd><tt>Update&nbsp;the&nbsp;given&nbsp;repository&nbsp;object&nbsp;from&nbsp;the&nbsp;other&nbsp;one&nbsp;if&nbsp;the<br>

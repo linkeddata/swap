@@ -62,7 +62,7 @@ import urllib
 import re
 import thing
 
-from diag import verbosity, setVerbosity
+from diag import verbosity, setVerbosity, progress
 
 from uripath import refTo, join
 

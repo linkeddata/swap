@@ -43,7 +43,8 @@ REFERENCES<br>
 <dt><font face="helvetica, arial"><a href="RDFSink.html#RDFStructuredOutput">RDFStructuredOutput</a>
 </font></dt></dl>
 </dd>
-<dt><font face="helvetica, arial"><a href="exceptions.html#ValueError">exceptions.ValueError</a>(<a href="exceptions.html#StandardError">exceptions.StandardError</a>)
+<dt><font face="helvetica, arial"><a href="RDFSink.html#TracingRDFSink">TracingRDFSink</a>
+</font></dt><dt><font face="helvetica, arial"><a href="exceptions.html#ValueError">exceptions.ValueError</a>(<a href="exceptions.html#StandardError">exceptions.StandardError</a>)
 </font></dt><dd>
 <dl>
 <dt><font face="helvetica, arial"><a href="RDFSink.html#URISyntaxError">URISyntaxError</a>
@@ -256,6 +257,67 @@ or&nbsp;avoid&nbsp;useing&nbsp;namespaces,&nbsp;which&nbsp;will&nbsp;look&nbsp;u
 <dl><dt><a name="RDFStructuredOutput-setGenPrefix"><strong>setGenPrefix</strong></a>(self, genPrefix)</dt></dl>
 
 <dl><dt><a name="RDFStructuredOutput-startDoc"><strong>startDoc</strong></a>(self)</dt></dl>
+
+</td></tr></table> 
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#ffc8d8">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#000000" face="helvetica, arial"><a name="TracingRDFSink">class <strong>TracingRDFSink</strong></a></font></td></tr>
+    
+<tr bgcolor="#ffc8d8"><td rowspan=2><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td>
+<td colspan=2><tt>An&nbsp;implementation&nbsp;of&nbsp;the&nbsp;<a href="#RDFSink">RDFSink</a>&nbsp;interface&nbsp;which&nbsp;helps&nbsp;me<br>
+understand&nbsp;it,&nbsp;especially&nbsp;how&nbsp;it&nbsp;gets&nbsp;used&nbsp;by&nbsp;parsers&nbsp;vs.&nbsp;by&nbsp;an<br>
+RDF&nbsp;store.&nbsp;&nbsp;&nbsp;&nbsp;[&nbsp;-sandro&nbsp;]<br>
+&nbsp;<br>
+Set&nbsp;.backing&nbsp;to&nbsp;be&nbsp;some&nbsp;other&nbsp;<a href="#RDFSink">RDFSink</a>&nbsp;if&nbsp;you&nbsp;want&nbsp;to&nbsp;get&nbsp;proper<br>
+results&nbsp;while&nbsp;tracing.<br>
+&nbsp;<br>
+Try:<br>
+&nbsp;<br>
+bash-2.04$&nbsp;python&nbsp;cwm.py&nbsp;test/rules12.n3&nbsp;--language=trace<br>
+bash-2.04$&nbsp;python&nbsp;cwm.py&nbsp;--pipe&nbsp;test/rules12.n3&nbsp;--language=trace<br>
+bash-2.04$&nbsp;python&nbsp;cwm.py&nbsp;test/rules12.n3&nbsp;--bySubject&nbsp;--language=trace<br>
+&nbsp;<br>
+...&nbsp;and&nbsp;see&nbsp;the&nbsp;different&nbsp;outputs<br>&nbsp;</tt></td></tr>
+<tr><td>&nbsp;&nbsp;</td>
+<td width="100%">Methods defined here:<br>
+<dl><dt><a name="TracingRDFSink-__init__"><strong>__init__</strong></a>(self, outURI, base<font color="#909090">=None</font>, flags<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-bind"><strong>bind</strong></a>(self, prefix, uri)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-endBagObject"><strong>endBagObject</strong></a>(self, pred, subj)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-endBagSubject"><strong>endBagSubject</strong></a>(self, subj)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-endDoc"><strong>endDoc</strong></a>(self, rootFormulaPair<font color="#909090">='&lt;&lt;strangely omitted&gt;&gt;'</font>)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-makeComment"><strong>makeComment</strong></a>(self, comment)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-makeStatement"><strong>makeStatement</strong></a>(self, tuple, why<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-newFormula"><strong>newFormula</strong></a>(self, uri<font color="#909090">=None</font>)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-newSymbol"><strong>newSymbol</strong></a>(self, uri)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-setDefaultNamespace"><strong>setDefaultNamespace</strong></a>(self, ns)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-startBagObject"><strong>startBagObject</strong></a>(self, triple)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-startBagSubject"><strong>startBagSubject</strong></a>(self, context)</dt></dl>
+
+<dl><dt><a name="TracingRDFSink-startDoc"><strong>startDoc</strong></a>(self)</dt></dl>
+
+<hr>
+Data and non-method functions defined here:<br>
+<dl><dt><strong>__doc__</strong> = 'An implementation of the RDFSink interface which...race<font color="#c040c0">\n\n</font>    ... and see the different outputs<font color="#c040c0">\n\n</font>    '<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
+
+<dl><dt><strong>__module__</strong> = 'RDFSink'<dd><tt>str(object)&nbsp;-&gt;&nbsp;string<br>
+&nbsp;<br>
+Return&nbsp;a&nbsp;nice&nbsp;string&nbsp;representation&nbsp;of&nbsp;the&nbsp;object.<br>
+If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;value&nbsp;is&nbsp;the&nbsp;same&nbsp;object.</tt></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">

@@ -282,6 +282,7 @@ def doCommand():
 --think       as -rules but continue until no more rule matches (or forever!)
 --engine=otter use otter (in your $PATH) instead of llyn for linking, etc
 --why         Replace the store with an explanation of its contents
+--mode=flags  Set modus operandi for inference (see below)
 --flatten     turn formulas into triples using LX vocabulary
 --unflatten   turn described-as-true LX sentences into formulas
 --think=foo   as -apply=foo but continue until no more rule matches (or forever!)
@@ -302,6 +303,10 @@ Examples:
   cwm foo.n3 --flat --n3=spart
 
 See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
+
+Mode flags:
+ r   Do remote queries when you discover they are posisble.
+ s   Read the schema for any predicate in a query.
 
 """
         
@@ -383,6 +388,8 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 option_format = "n3"
 		if option_first_format == None: option_first_format = option_format 
                 option_flags["n3"] = _rhs
+            elif _lhs == "-mode":
+                option_flags["think"] = _rhs
             elif _lhs == "-language":
                 option_format = _rhs
                 if option_first_format == None: option_first_format = option_format
@@ -511,7 +518,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
         #  Take commands from command line: Second Pass on command line:    - - - - - - - P A S S 2
 
         option_format = "n3"      # Use RDF/n3 rather than RDF/XML 
-        option_flags = { "rdf":"", "n3":"" } 
+        option_flags = { "rdf":"", "n3":"", "think": "" } 
         option_quiet = 0
         _outURI = _baseURI
         option_baseURI = _baseURI     # To start with
@@ -556,6 +563,8 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             elif _lhs == "-rdf":
                 option_format = "rdf"
                 option_flags["rdf"] = _rhs
+            elif _lhs == "-mode":
+                option_flags["think"] = _rhs
             elif arg == "-n3": option_format = "n3"
             elif _lhs == "-n3":
                 option_format = "n3"
@@ -620,7 +629,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
                 need(_store); touch(_store)
                 filterContext = _store.load(_uri)
                 if verbosity() > 4: progress( "Input rules to --think from " + _uri)
-                _store.think(workingContext, filterContext);
+                _store.think(workingContext, filterContext, mode=option_flags["think"]);
 
             elif _lhs == "-engine":
                 option_engine = _rhs

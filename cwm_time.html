@@ -122,6 +122,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_date-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_date-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_date-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -146,12 +152,16 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_date-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_date-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
-
-<dl><dt><a name="BI_date-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+<dl><dt><a name="BI_date-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -187,6 +197,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_day-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_day-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_day-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -211,12 +227,16 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_day-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_day-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
-
-<dl><dt><a name="BI_day-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+<dl><dt><a name="BI_day-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -252,6 +272,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_dayOfWeek-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_dayOfWeek-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_dayOfWeek-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -276,12 +302,16 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_dayOfWeek-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_dayOfWeek-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
-
-<dl><dt><a name="BI_dayOfWeek-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+<dl><dt><a name="BI_dayOfWeek-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -316,6 +346,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_equalTo-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_equalTo-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_equalTo-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -339,6 +375,9 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 &nbsp;<br>
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
+
+<dl><dt><a name="BI_equalTo-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -374,6 +413,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_format-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_format-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_format-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -398,12 +443,16 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_format-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_format-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
-
-<dl><dt><a name="BI_format-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+<dl><dt><a name="BI_format-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -441,6 +490,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_formatSeconds-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_formatSeconds-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_formatSeconds-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -465,12 +520,16 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_formatSeconds-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_formatSeconds-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
-
-<dl><dt><a name="BI_formatSeconds-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+<dl><dt><a name="BI_formatSeconds-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -507,6 +566,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_gmTime-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_gmTime-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_gmTime-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -531,12 +596,16 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_gmTime-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_gmTime-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
-
-<dl><dt><a name="BI_gmTime-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+<dl><dt><a name="BI_gmTime-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -572,6 +641,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_hour-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_hour-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_hour-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -596,12 +671,16 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_hour-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_hour-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
-
-<dl><dt><a name="BI_hour-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+<dl><dt><a name="BI_hour-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -643,6 +722,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_inSeconds-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_inSeconds-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_inSeconds-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -667,16 +752,20 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_inSeconds-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_inSeconds-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
-
-<dl><dt><a name="BI_inSeconds-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+<dl><dt><a name="BI_inSeconds-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 <hr>
 Methods inherited from <a href="thing.html#ReverseFunction">thing.ReverseFunction</a>:<br>
-<dl><dt><a name="BI_inSeconds-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+<dl><dt><a name="BI_inSeconds-evalSubj"><strong>evalSubj</strong></a>(self, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
 calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
 
 </td></tr></table> 
@@ -714,6 +803,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_localTime-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_localTime-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_localTime-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -738,12 +833,16 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_localTime-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_localTime-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
-
-<dl><dt><a name="BI_localTime-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+<dl><dt><a name="BI_localTime-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -779,6 +878,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_minute-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_minute-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_minute-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -803,12 +908,16 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_minute-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_minute-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
-
-<dl><dt><a name="BI_minute-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+<dl><dt><a name="BI_minute-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -844,6 +953,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_month-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_month-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_month-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -868,12 +983,16 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_month-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_month-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
-
-<dl><dt><a name="BI_month-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+<dl><dt><a name="BI_month-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -909,6 +1028,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_parseToSeconds-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_parseToSeconds-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_parseToSeconds-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -933,12 +1058,16 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_parseToSeconds-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_parseToSeconds-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
-
-<dl><dt><a name="BI_parseToSeconds-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+<dl><dt><a name="BI_parseToSeconds-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -974,6 +1103,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_second-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_second-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_second-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -998,12 +1133,16 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_second-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_second-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
-
-<dl><dt><a name="BI_second-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+<dl><dt><a name="BI_second-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -1039,6 +1178,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_timeZone-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_timeZone-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_timeZone-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -1063,12 +1208,16 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_timeZone-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_timeZone-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
-
-<dl><dt><a name="BI_timeZone-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+<dl><dt><a name="BI_timeZone-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table> 
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
@@ -1104,6 +1253,12 @@ If&nbsp;the&nbsp;argument&nbsp;is&nbsp;a&nbsp;string,&nbsp;the&nbsp;return&nbsp;
 Methods inherited from <a href="thing.html#BuiltIn">thing.BuiltIn</a>:<br>
 <dl><dt><a name="BI_year-__init__"><strong>__init__</strong></a>(self, resource, fragid)</dt></dl>
 
+<dl><dt><a name="BI_year-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;evaluate,&nbsp;subject,&nbsp;etc.</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Fragment">thing.Fragment</a>:<br>
 <dl><dt><a name="BI_year-generated"><strong>generated</strong></a>(self)</dt><dd><tt>&nbsp;A&nbsp;generated&nbsp;identifier?<br>
@@ -1128,12 +1283,16 @@ as&nbsp;it&nbsp;is&nbsp;is&nbsp;deliberately&nbsp;short&nbsp;to&nbsp;make&nbsp;d
 The&nbsp;first&nbsp;part&nbsp;of&nbsp;the&nbsp;pair&nbsp;is&nbsp;a&nbsp;constant&nbsp;number&nbsp;represnting&nbsp;the&nbsp;type<br>
 see&nbsp;RDFSink.py.&nbsp;&nbsp;the&nbsp;second&nbsp;is&nbsp;the&nbsp;value&nbsp;--&nbsp;uri&nbsp;for&nbsp;symbols,&nbsp;string&nbsp;for&nbsp;literals</tt></dd></dl>
 
+<dl><dt><a name="BI_year-qname"><strong>qname</strong></a>(self)</dt><dd><tt>Output&nbsp;XML&nbsp;qnames&nbsp;[<a href="http://www.w3.org/TR/REC-xml-names/#NT-QName">http://www.w3.org/TR/REC-xml-names/#NT-QName</a>].<br>
+This&nbsp;should&nbsp;be&nbsp;beefed&nbsp;up&nbsp;to&nbsp;guarantee&nbsp;unambiguity&nbsp;(see&nbsp;__repr__&nbsp;documentation).</tt></dd></dl>
+
 <hr>
 Methods inherited from <a href="thing.html#Function">thing.Function</a>:<br>
-<dl><dt><a name="BI_year-eval"><strong>eval</strong></a>(self, subj, obj, queue, bindings)</dt></dl>
-
-<dl><dt><a name="BI_year-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
-calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions</tt></dd></dl>
+<dl><dt><a name="BI_year-evalObj"><strong>evalObj</strong></a>(self, subj, queue, bindings, proof)</dt><dd><tt>This&nbsp;function&nbsp;which&nbsp;has&nbsp;access&nbsp;to&nbsp;the&nbsp;store,&nbsp;unless&nbsp;overridden,<br>
+calls&nbsp;a&nbsp;simpler&nbsp;one&nbsp;which&nbsp;uses&nbsp;python&nbsp;conventions.<br>
+&nbsp;<br>
+To&nbsp;reduce&nbsp;confusion,&nbsp;the&nbsp;inital&nbsp;ones&nbsp;called&nbsp;with&nbsp;the&nbsp;internals&nbsp;available<br>
+use&nbsp;abreviations&nbsp;"eval",&nbsp;"subj"&nbsp;etc&nbsp;while&nbsp;the&nbsp;python-style&nbsp;ones&nbsp;use&nbsp;"evaluate",&nbsp;"subject",&nbsp;etc.</tt></dd></dl>
 
 </td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">

@@ -291,19 +291,6 @@ def compareFormulae(self, other):
 
 
 
-#class partIterator:
-#    def __init__(self, statements, part):
-#	self._part = part
-#	self._statements = statements
-#	self._index = 0
-#	
-#    def next(self):
-#	if self._index = len(self.statements): raise StopIteration()
-#	x = self.statements[self._index][part]
-#	self._index=self._index + 1
-#	return x
-
-
 class DataObject:
     """The info about a term in the context of a specific formula
     It is created by being passed the formula and the term, and is
@@ -321,6 +308,34 @@ class DataObject:
 	values = context.objects(pred=pred, subj=self.term)
 	for v in value:
 	    yield DataObject(self.context, v)
+
+
+def dereference(x):
+    """dereference an object, finding the semantics of its schema if any
+    
+    Returns None if it cannot be retreived.
+    Could be speeded up by hanging the cached value as a python attribute on x
+    """
+    if isinstance(x, Fragment): x = x.resource
+    if hasattr(x, "_semantics"): return x._semantics
+#	if x.store._experience:
+#	    f = x.store._experience.the(x, x.store.semantics)
+#	    if f != None: return f
+#	    s = x.store._experience.the(x, self.semanticsOrError)
+#	    if isinstance(s, Formula): return F
+#	    if s != None:
+#		return None
+#
+    inputURI = x.uriref()
+    if verbosity() > 25: progress("Looking up schema for %s" % x)
+    try:
+	F = x.store.load(inputURI)
+    except (IOError, SyntaxError, DocumentAccessError):
+	F = None
+    setattr(x, "_semantics", F)
+    if verbosity() > 25: progress("Schema for %s is %s" %(x, F))
+    return F
+		
 
 ###################################### Forumula
 #
@@ -393,6 +408,12 @@ class Formula(Fragment):
 	for s in self.statements:
 	    yield s
 
+    def newSymbol(self, uri):
+	return self.store.newSymbol(uri)
+
+    def newLiteral(self, st):
+	return self.store.newLiteral(st)
+	
     def newBlankNode(self, uri=None, why=None):
 	"""Create or reuse, in the default store, a new unnamed node within the given
 	formula as context, and return it for future use"""
@@ -879,7 +900,7 @@ class BI_semanticsOrError(BI_semantics):
             return x
         try:
             return BI_semantics.evalObj(self, subj)
-        except (IOError, SyntaxError):
+        except (IOError, SyntaxError, DocumentAccessError):
             message = sys.exc_info()[1].__str__()
             result = store.intern((LITERAL, message))
             if verbosity() > 0: progress(`store.semanticsOrError`+": Error trying to resolve <" + `subj` + ">: "+ message) 
@@ -1273,14 +1294,6 @@ class RDFStore(RDFSink) :
 	    F.reopen()
 	    self.load(u, formulaURI=f, remember=0)
 	return F
-
-
-    def dereference(self, x):
-	"""Dereference a URI by looking up the ncorresponding document on the web
-	
-	We could store this information in the experience store but for speed
-	I'm going to hang it on the resource object, as it means fewer hash table
-	lookups."""
 
     def genId(self):
 	"""Generate a new identifier
@@ -2112,7 +2125,7 @@ class RDFStore(RDFSink) :
 
 #   Iteratively apply rules to a formula
 
-    def think(self, F, G=None):
+    def think(self, F, G=None, mode=""):
         grandtotal = 0
         iterations = 0
         if G == None: G = F
@@ -2120,7 +2133,7 @@ class RDFStore(RDFSink) :
         bindingsFound = {}  # rule: list bindings already found
         while 1:
             iterations = iterations + 1
-            step = self.applyRules(F, G, alreadyDictionary=bindingsFound)
+            step = self.applyRules(F, G, alreadyDictionary=bindingsFound, mode=mode)
             if step == 0: break
             grandtotal= grandtotal + step
         if verbosity() > 5: progress("Grand total of %i new statements in %i iterations." %
@@ -2133,6 +2146,7 @@ class RDFStore(RDFSink) :
                    targetContext = None,    # Where to put the conclusions
                    universals = [],             # Inherited from higher contexts
                    alreadyDictionary = None,  # rule: list of bindings already found
+		   mode="",			# modus operandi
 		   why=None):			# Trace reason for all this
         """ Apply rules in one context to the same or another
 
@@ -2165,7 +2179,7 @@ class RDFStore(RDFSink) :
                         already = alreadyDictionary[s]
                 v2 = universals + filterContext.universals() # Note new variables can be generated
                 found = self.tryRule(s, workingContext, targetContext, v2,
-                                     already=already)
+                                     already=already, mode=mode)
                 if (verbosity() >40):
                     progress( "Found %i new stmts on for rule %s" % (found, s))
                 _total = _total+found
@@ -2177,7 +2191,8 @@ class RDFStore(RDFSink) :
                     _total = _total + self.applyRules(workingContext,
                                                       c, targetContext,
                                                       universals=universals
-                                                      + filterContext.universals())
+                                                      + filterContext.universals(),
+						      mode=mode)
 
 
         if verbosity() > 4:
@@ -2186,7 +2201,7 @@ class RDFStore(RDFSink) :
         return _total
 
 
-    def tryRule(self, rule, workingContext, targetContext, _variables, already=None):
+    def tryRule(self, rule, workingContext, targetContext, _variables, already=None, mode=""):
 	"""Try a rule
 	
 	Beware lists are corrupted. Already list is updated if present.
@@ -2227,7 +2242,8 @@ class RDFStore(RDFSink) :
 			already = already,
 			rule = rule,
 			smartIn = [workingContext],    # (...)
-			meta=workingContext)
+			meta=workingContext,
+			mode=mode)
 
 	total = query.resolve()
 	if verbosity() > 20:
@@ -2266,7 +2282,7 @@ class RDFStore(RDFSink) :
 		    template = g,
 		    variables=[],
 		    existentials=_variables + templateExistentials,
-		    smartIn=smartIn, justOne=1).resolve()
+		    smartIn=smartIn, justOne=1, mode="").resolve()
 
         if verbosity() >30: progress("=================== end testIncludes =" + `result`)
 #        verbosity() = verbosity()-100
@@ -2432,6 +2448,7 @@ class Query:
 	       rule = None,		    # The rule statement
                smartIn = [],        # List of contexts in which to use builtins - typically the top onebb
                justOne = 0,         # Flag: Stop when you find the first one
+	       mode = "rs",	    # Character flags modifying modus operandi
 	    meta = None):	    # Context to check for useful info eg remote stuff
 
         
@@ -2460,9 +2477,10 @@ class Query:
 	self.rule = rule
 	self.template = template  # For looking for lists
 	self.meta = meta
+	self.mode = mode
         for quad in unmatched:
             item = QueryItem(self, quad)
-            if item.setup(allvars=variables+existentials, unmatched=unmatched, smartIn=smartIn) == 0:
+            if item.setup(allvars=variables+existentials, unmatched=unmatched, smartIn=smartIn, mode=mode) == 0:
                 if verbosity() > 80: progress("match: abandoned, no way for "+`item`)
                 self.noWay = 1
 		return  # save time
@@ -2628,7 +2646,8 @@ class Query:
                         for quad in more_unmatched:
                             newItem = QueryItem(query, quad)
                             queue.append(newItem)
-                            newItem.setup(allvars, smartIn = query.smartIn + [subj], unmatched=more_unmatched)
+                            newItem.setup(allvars, smartIn = query.smartIn + [subj],
+				    unmatched=more_unmatched, mode=query.mode)
                         if verbosity() > 40:
                                 progress( " "*level+
                                           "**** Includes: Adding %i new terms and %s as new existentials."%
@@ -2772,21 +2791,31 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 
 
 
-    def setup(self, allvars, unmatched, smartIn=[]):        
+    def setup(self, allvars, unmatched, smartIn=[], mode=""):        
         """Check how many variables in this term,
         and how long it would take to search
 
         Returns, [] normally or 0 if there is no way this query will work.
-        Only called on virgin query item."""
+        Only called on virgin query item.
+	The mode is a set of character flags about how we think."""
         con, pred, subj, obj = self.quad
-	if self.query.meta != None:
-	    self.service = self.query.meta.any(pred=self.store.authoritativeService, subj=pred)
-	    if self.service == None:
-		uri = pred.uriref()
-		if uri[:4] == "sql:":
-		    j = uri.rfind("/")
-		    if j>0: self.service = meta.newSymbol(uri[:j])
-	    if verbosity() > 90 and self.service: progress("Ooooo. we have a remote service for "+`pred`)
+	self.service = None
+
+	if "r" in mode:
+	    if "s" in mode:
+		schema = dereference(pred)
+		if schema != None:
+		    self.service = schema.any(pred=self.store.authoritativeService, subj=pred)
+		elif "S" in mode:
+		    raise RuntimeError("No schema for %s" % pred)
+	    if self.service == None and self.query.meta != None:
+		self.service = self.query.meta.any(pred=self.store.authoritativeService, subj=pred)
+		if self.service == None:
+		    uri = pred.uriref()
+		    if uri[:4] == "sql:":
+			j = uri.rfind("/")
+			if j>0: self.service = meta.newSymbol(uri[:j])
+	    if verbosity() > 90 and self.service: progress("We have a remote service  for "+`pred`)
         self.neededToRun = [ [], [], [], [] ]  # for each part of speech
         self.searchPattern = [con, pred, subj, obj]  # What do we search for?
         hasUnboundFormula = 0
@@ -2834,7 +2863,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 
 
     def tryBuiltin(self, queue, bindings, heavy, evidence):                    
-        """check for  built-in functions to see whether it will resolve.
+        """Check for  built-in functions to see whether it will resolve.
         Return codes:  0 - give up;  1 - continue,
                 [...] list of binding lists"""
         con, pred, subj, obj = self.quad
