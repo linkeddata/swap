@@ -230,7 +230,7 @@ class PredictiveParser:
 
     def around(parser, str, this):
 	"The line around the given point"
-	sol = str.rfind("\n", this)
+	sol = str.rfind("\n", 0, this)
 	if sol <= 0: sol = 0
 	eol = str.find("\n", this)
 	if eol <= 0: eol = len(str)
