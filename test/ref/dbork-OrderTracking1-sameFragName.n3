@@ -56,36 +56,36 @@
                 "'XX'",
                 "'other ring'" .
     
-    Addresses:city     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    Addresses:city     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/> .
     
-    Addresses:id     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    Addresses:id     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/> .
     
-    Addresses:state     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    Addresses:state     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/> .
     
-    Addresses:street     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    Addresses:street     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/> .
     
-    Customers:billingAddress     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/>;
+    Customers:billingAddress     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/>;
          log:pointsAt Addresses:id .
     
-    Customers:familyName     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    Customers:familyName     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/> .
     
-    Customers:givenName     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    Customers:givenName     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/> .
     
-    Customers:id     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    Customers:id     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/> .
     
-    Orders:customer     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/>;
+    Orders:customer     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/>;
          log:pointsAt Customers:id .
     
-    Orders:id     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    Orders:id     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/> .
     
-    Orders:orderDate     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    Orders:orderDate     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/> .
     
-    Orders:product     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/>;
+    Orders:product     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/>;
          log:pointsAt Products:id .
     
-    Products:id     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    Products:id     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/> .
     
-    Products:name     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    Products:name     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/> .
     {
         billAddr:a     Addresses:city billCity:a;
              Addresses:state billState:a;

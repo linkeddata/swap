@@ -37,11 +37,11 @@
     
     "'sql://rdftest@swada.w3.org/OrderTracking/Products.id=2005'"     :RESULT "'other ring'" .
     
-    Customers:familyName     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    Customers:familyName     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/> .
     
-    Customers:givenName     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    Customers:givenName     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/> .
     
-    Products:name     log:authoritativeService <sql://rdftest@swada.w3.org/OrderTracking/>,
+    Products:name     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/>,
                 <sql://root@localhost/OrderTracking> .
     {
         :products     Products:name :name .
