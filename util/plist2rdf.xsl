@@ -3,7 +3,7 @@
     xmlns:xsl  ="http://www.w3.org/1999/XSL/Transform" version="1.0"
     xmlns:r    ="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
     xmlns:s    ="http://www.w3.org/2000/01/rdf-schema#"
-    xmlns:xsi  ="http://www.w3.org/2001/XMLSchema-instance"
+    xmlns:xsi  ="http://www.w3.org/2001/XMLSchema"
     xmlns:a    ="http://www.w3.org/2000/10/swap/util/applePList@@#"
     >
 
@@ -16,6 +16,8 @@
   select='"http://www.w3.org/2000/10/swap/util/applePList@@#"'/>
 
 <xsl:param name="Debug" select='0'/>
+
+<xsl:variable name="DT_ns" select='"http://www.w3.org/2001/XMLSchema#"'/>
 
 <!--
   http://www.apple.com/DTDs/PropertyList-1.0.dtd
@@ -69,19 +71,40 @@
             </xsl:when>
 
             <xsl:when test='name() = "integer"'>
-	      <!-- using xsi:type in anticipation of RDF Core decisions...-->
-              <xsl:attribute name="xsi:type">integer</xsl:attribute>
+              <xsl:attribute name="r:datatype">
+		<xsl:value-of select='concat($DT_ns,"integer")'/>
+	      </xsl:attribute>
+              <xsl:value-of select='.'/>
+            </xsl:when>
+
+            <xsl:when test='name() = "real"'>
+              <xsl:attribute name="r:datatype">
+		<xsl:value-of select='concat($DT_ns,"double")'/>
+	      </xsl:attribute>
+              <xsl:value-of select='.'/>
+            </xsl:when>
+
+            <xsl:when test='name() = "data"'>
+              <xsl:attribute name="r:datatype">
+		<xsl:value-of select='concat($DT_ns,"base64")'/>
+	      </xsl:attribute>
               <xsl:value-of select='.'/>
             </xsl:when>
 
             <xsl:when test='name() = "date"'>
     	      <!-- @@check syntax details -->
-              <xsl:attribute name="xsi:type">date</xsl:attribute>
+              <xsl:attribute name="r:datatype">
+		<xsl:value-of select='concat($DT_ns,"date")'/>
+	      </xsl:attribute>
               <xsl:value-of select='.'/>
             </xsl:when>
 
             <xsl:when test='name() = "true"'>
-              <xsl:attribute name="r:resource"><xsl:value-of select='$P_ns'/>true</xsl:attribute>
+		<!-- @@bool or boolean? -->
+	      <xsl:attribute name="r:datatype">
+		<xsl:value-of select='concat($DT_ns,"boolean")'/>
+	      </xsl:attribute>
+		<xsl:text>true</xsl:text>
             </xsl:when>
 
             <xsl:otherwise>
