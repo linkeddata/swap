@@ -86,6 +86,8 @@ cwm_test bi-t8.n3 "Simple use of string built-ins" includes/t8.n3 -think
 
 cwm_test bi-t9.n3 "Filter event by date using strcmp BI's" includes/t9br.n3 -think
 
+cwm_test resolves-rdf.n3 "log:resolvesTo with RDF/xml syntax" resolves-rdf.n3 -think
+
 cwm_test sameDan.n3 "dealing with multiple descriptions of the same thing using log:lessThan, log:uri, daml:equivalentTo" sameDan.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge
 
 cwm_test smush.rdf "Data aggregation challenge from Jan 2001" --rdf smush-examples.rdf --n3 smush-schema.n3 sameThing.n3 --think --apply=forgetDups.n3 --purge --filter=smush-query.n3 --rdf
@@ -93,7 +95,10 @@ cwm_test smush.rdf "Data aggregation challenge from Jan 2001" --rdf smush-exampl
 
 
 # $Log$
-# Revision 1.16  2001-08-27 12:45:57  timbl
+# Revision 1.17  2001-08-30 21:29:16  connolly
+# resolves-rdf.n3 case
+#
+# Revision 1.16  2001/08/27 12:45:57  timbl
 # Runs most of retest, not all builtins. List handling started but not tested.
 #
 # Revision 1.15  2001/08/09 21:38:09  timbl
