@@ -1,11 +1,11 @@
-# Reification of N3 (or RDF) in a useful fashion
+# Reification of N3 (including RDF) in a useful fashion
 #
 #
 
 @prefix : <http://www.w3.org/2000/10/swap/reify#>.
 @prefix rei: <http://www.w3.org/2000/10/swap/reify#>.
 
-# Each element of the language are described as a bnode
+# Each element of the language can be described as a bnode
 #
 #
 #  see why.py, check.py etc
@@ -18,10 +18,27 @@
 :Symbol s:subClassOf :RDFTerm;
 	s:label "RDF symbol, identified by a URI".
 
-:uri a rdf:Property; s:label "symbol URI";
+:id a rdf:Property; s:label "symbol URI, arbirary or not".
 	a owl:FunctionalProperty, owl:InverseFunctionalProperty;
 	s:comment
 	"""The URI of the symbol is all that is needed to identify it""".
+	
+:uri a rdf:Property; s:label "symbol URI, not arbitray";
+	s:subPropertyOf :id;
+	s:comment
+	"""The URI of the symbol is all that is needed to identify it""".
+
+:aid a rdf:Property; s:label "Arbitrary ID";
+	s:subPropertyOf :ID;
+	a owl:FunctionalProperty, owl:InverseFunctionalProperty;
+	s:comment
+	"""The URI of the symbol is all that is needed to identify it.
+	In this case, the uri given is arbitrary - it is is
+	for convenience in serializing but has no significance
+	as an identifier in the Semantic Web.
+	A "blank node" in a graph is a symbol whose identifier is
+	arbirary and is a member of the forSome list of
+	the graph in question.""".
 
 :Literal s:subClassOf :RDFTerm;
 	s:label "Literal";
@@ -52,8 +69,16 @@
 	is equivalent to e.g. in loose math
 		forall x,y,x there exists a,b,c such that s1 and s2 and s3
 	That is, the universals are always outside the existentials.
+	Two formulae are the equal if the contents
+	of their forAll, forSome, and statements lists are the same
+	irrespective of order.
+	Two formulae are equivalent if there is a 1:1 mapping between
+	variable names of one and variable names in the other
+	which used as subsitution bindings on one gives a formula
+	equal to the other.
 	""".
 
+	
 :forAll a rdf:Property;
 	s:label "for all";
 	s:domain :Formula;
@@ -98,26 +123,23 @@
 	s:domain :Statement;
 	s:range :Term.	# For RDF 1.0, :RDFTerm
 
+# proof stuff - different namespace?
 
-#_____________________________________________ OLD
-#
-#:PlainLiteral s:subClassOf :Literal;
-#	s:label "Plain Literal";
-#	s:comment """A Literal with explicitly absent langauge code and
-#	datatype.
-#	""".
-#:NO_DATATYPE a xsi:DataType. # Used to mark the absence of any other datatype
-#
-#
-#{ ?x a :PlainLiteral } => { ?x :datatype :NO_DATATYPE; :lang  }.
+:Binding a s:Class;
+	s:label "binding";
+	s:comment """A binding is given eg in a proof or query result
 
-#:Variable s:subClassOf :Symbol;
-#	s:label "Variable";
-#	s:comment """A variable is a symbol which is
-#	subject to a quantification.  This is a tip.
-#	There is nothing fundamentally different 
-#	about a variable. In fact, there is no reason
-#	to have it here."""
+	This is not needed for simple description of N3.""".
+
+:variable a rdf:Property;
+	s:label "variable";
+	s:domain :Binding;
+	s:range	:Symbol.
+
+:boundTo  a rdf:Property;
+	s:label "bound to";
+	s:domain :Binding;
+	s:range	:Term.
 
 
 

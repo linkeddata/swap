@@ -1,0 +1,89 @@
+# Vocabulary for proofs 
+#
+#
+
+@prefix : <http://www.w3.org/2000/10/swap/reason#>.
+@prefix rea: <http://www.w3.org/2000/10/swap/reason#>.
+@prefix n3: <http://www.w3.org/2000/10/swap/reify#>.
+@prefix soc: <http://www.w3.org/2000/10/swap/pim/soc#>.
+
+
+
+:Step a s:Class;
+	s:label "proof step";
+	s:comment """A step in a proof.
+
+	See :gives for the arc to the formula proved at this step.
+	""".
+
+:gives a rdf:Property;
+	s:label "gives";
+	s:domain :Step;
+	s:range n3:Formula.
+	
+:Proof s:subClassOf :Step;
+	s:label "proof";
+	s:comment
+	"""A Proof step is the last step in the proof, 
+	a step which :gives that which was to be proved.
+	Typically a document will assert just one :Proof,
+	which a checker can then check and turn into
+	the Formula proved - Q.E.D. .
+	""".
+
+:Parsing s:subClassOf :Step;
+	s:label "parsing";
+	s:comment """The formula given was derived from parsing a
+	resource.""".
+
+:source rdf:Property;
+	s:label "source";
+	s:domain :Parsing;
+	s:range soc:Work;
+	s:comment
+	"""The source document which was parsed.
+	""".
+
+:Extraction s:subClassOf :Step;
+	s:label "Co""njunction elimination";
+	s:comment "The step of taking one statement out of a formula.
+	The step is identified by the :gives formula (the statement)
+	and the :because step's :gives formula (the formula extracted
+	from).
+	""".
+
+:because a rdf:Property;
+	s:label "because";
+	s:domain :Extraction;
+	s:range :Step;
+	s:comment """gives the step whose data was input to this step.""".
+
+:Conjunction a :Step;
+	s:label """The step of conjunction introduction: 
+	taking a bunch of compent statements
+	and building a formula from them.""".
+
+:component a rdf:Property;
+	s:label "component";
+	s:domain :Conjunction;
+	s:range :Step;
+	s:comment "A step whose data was used in building this conjunction".
+
+:Binding a s:Class;
+	s:label "binding";
+	s:comment """A binding is given eg in a proof or query result
+
+	""".
+
+:variable a rdf:Property;
+	s:label "variable";
+	s:domain :Binding;
+	s:range	n3:Symbol.
+
+:boundTo  a rdf:Property;
+	s:label "bound to";
+	s:domain :Binding;
+	s:range	n3:Term.
+
+
+
