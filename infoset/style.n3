@@ -4,11 +4,10 @@
 #  $Id $
 
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc.n3#>.
-@prefix log: <http://www.w3.org/2000/10/swap/log.n3#>.
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix dot: <http://www.w3.org/2001/02pd/gv#>.
-@prefix is: <http://www.w3.org/2001/04/infoset#> .
 
 # NOTE rdf2dot.xsl needs namespace URIs absolutized @@
 
@@ -42,9 +41,16 @@ s:range a dot:EdgeProperty; 	  dot:color "green1"; dot:style "bold".
 :theGraph dot:label "XML Infoset $Date$";
 	         dot:rankdir "LR".
 
-:theGraph dot:hasNode is:InfoItem.    # arbitrary seed to trace out from
+#:theGraph dot:hasNode is:InfoItem.    # arbitrary seed to trace out from
+
 
 <> log:forAll :n1, :n2, :p, :s.
+
+{ :theGraph dot:hasNode :n1.    # Seed it from any subclass relationship
+  :n1 s:subClass :n2.
+}
+   log:implies { :theGraph dot:hasNode :n1, :n2. }.
+
 
 { :theGraph dot:hasNode :n1.
   :n1 :p :n2.

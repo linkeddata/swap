@@ -14,7 +14,10 @@ dc:description """
 """;
 rcs:id "$Id$". # see changelog at the bottom.
 
-@prefix : <contact#> .
+
+@prefix : <http://www.w3.org/2000/10/swap/pim/contact#> .
+@prefix con: <http://www.w3.org/2000/10/swap/pim/contact#> . # Hint
+
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> . # type, Property
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix ont:  <http://www.daml.org/2001/03/daml-ont#> .
@@ -264,7 +267,10 @@ mso:WebPage  a rdfs:Property;
 
 <> rcs:log """
 $Log$
-Revision 1.5  2001-06-05 23:12:42  connolly
+Revision 1.6  2001-06-13 23:58:48  timbl
+Fixed bug in log:includes that bindings were not taken into target of includes
+
+Revision 1.5  2001/06/05 23:12:42  connolly
 added mailboxURI and emailAddress in contrast to mailbox
 also: homePage and homePageAddress
 

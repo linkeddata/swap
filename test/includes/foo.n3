@@ -17,12 +17,12 @@
 # Output should conclude all test* a :success and no failures.
 #
 
-<#theSky> s:isDefinedBy <> .
+foo:theSky s:isDefinedBy <> .
 
-<#is> a rdf:Property;
+foo:is a rdf:Property;
       s:isDefinedBy <> .
 
-<#blue> s:isDefinedBy <> .
+foo:blue s:isDefinedBy <> .
 
 
 #ends

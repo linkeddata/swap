@@ -21,12 +21,16 @@ function cwm_test () {
 #  (python ../cwm.py $args | sed -e 's/^ *#.*//' | sed -e 's/\$[I]d:\$//g' > temp/$case) || echo CRASH $case
   (python ../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' > temp/$case) || echo CRASH $case
   diff -Bbwu ref/$case temp/$case >diffs/$case
-  if [ -s diffs/$case ]; then echo FAIL: $case: see diffs/$case; else echo Pass $case; fi
+  if [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case; else echo Pass $case; fi
 }
 
 cwm_test animal.n3 "Parse a small RDF file, generate N3" -rdf animal.rdf -n3
 
-cwm_test animal-1.rdf "Parse a small RDF file" -rdf animal.rdf
+cwm_test animal-1.rdf "Parse a small RDF file and regenerate RDF" -rdf animal.rdf
+
+cwm_test contexts-1.n3 "Parse and generate simple contexts" contexts.n3
+
+cwm_test anon-prop-1.n3 "Parse and regen anonymous property" anon-prop.n3
 
 cwm_test daml-ont.n3 "Convert some RDF/XML into RDF/N3" daml-pref.n3 -rdf daml-ont.rdf -n3
 
@@ -82,7 +86,10 @@ cwm_test bi-t9.n3 "Filter event by date using strcmp BI's" includes/t9br.n3 -thi
 
 
 # $Log$
-# Revision 1.10  2001-05-30 22:03:40  timbl
+# Revision 1.11  2001-06-13 23:58:48  timbl
+# Fixed bug in log:includes that bindings were not taken into target of includes
+#
+# Revision 1.10  2001/05/30 22:03:40  timbl
 # mmm
 #
 # Revision 1.9  2001/05/21 14:35:47  connolly

@@ -5,7 +5,7 @@ $Id$
 
 Closed World Machine
 
-(also, in Wales, a valley  - a partially closed world perhaps?)
+(also, in Wales, a valley  - topologiclly a partially closed world perhaps?)
 
 This is an engine which knows a certian amount of stuff and can manipulate it.
 It is a query engine, not an inference engine: that is, it will apply rules
@@ -19,22 +19,18 @@ Date: 2000/07/17 21:46:13
 Agenda:
 =======
 
- - BUG: a [ b c ] d.   gets improperly output. See anon-pred
  
- - BUG: {} is a context but that is lost on output!!!
-     occursAs[CONTEXT] not enough. See foo2.n3 - change existential representation :-( to make context a real conjunction again?
-    (the forSome triple is special in that you can't remove it and reduce info)
- - filter out duplicate conclusions - BUG! - DONE
- - run hhtp daemon/client sending changes to database
+ - run http daemon/client sending changes to database
  - act as client/server for distributed system
  - Bultins - says, startsWith,
- - postgress underlying database?
+ - postgress, mySQl underlying database?
  -    
  -    standard mappping of SQL database into the web in N3/RDF
  -    
  - logic API as requested DC 2000/12/10
  - Jena-like API x=model.createResource(); addProperty(DC.creator, "Brian", "en")
- - sucking in the schema (http library?) --schemas ; to know about r1 see r2; daml:import
+ - sucking in the schema (http library?) --schemas ;
+ - to know about r1 see r2; daml:import
  - schema validation - done partly but no "no schema for xx predicate".
  -   syntax for "all she wrote" - schema is complete and definitive
  - metaindexes - "to know more about x please see r" - described by
@@ -45,16 +41,12 @@ Agenda:
  - Find closure for all synonyms
  - Find superclass closure?
  - Use unambiguous property to infer synomnyms
- - Validation:  validate domain and range constraints against closuer of classes and
-   mutually disjoint classes.
 - represent URIs bound to same equivalence closuse object?
+
 BULTINS WE NEED
-    - says(expr1, expr2)      >=  dixitInterAlia
-    - indirectlyImplies(expr1, expr2)   
-    - startsWith(x,y)
-    - URIof(x, str)
     - usesNamespace(x,y)   # find transitive closure for validation  - awful function in reality
     - delegation of query to remote database (cwm or rdbms)
+    - F impliesUnderThink G.  (entails? leadsTo? conclusion?)
 
 - Translation;  Try to represent the space (or a context) using a subset of namespaces
 
@@ -74,6 +66,7 @@ BULTINS WE NEED
 
 Done
 ====
+ - BUG: a [ b c ] d.   gets improperly output. See anon-pred
  - Separate the store hash table from the parser. - DONE
  - regeneration of genids on output. - DONE
  - repreentation of genids and foralls in model
@@ -85,6 +78,18 @@ Done
   - recursive dump of nested bags - DONE
  - semi-reification - reifying only subexpressions - DONE
  - Bug  :x :y :z as data should match [ :y :z ] as query. Fixed by stripping forSomes from top of query.
+ - BUG: {} is a context but that is lost on output!!!
+     occursAs[CONTEXT] not enough. See foo2.n3 - change existential representation :-( to make context a real conjunction again?
+    (the forSome triple is special in that you can't remove it and reduce info)
+ - filter out duplicate conclusions - BUG! - DONE
+ - Validation:  validate domain and range constraints against closuer of classes and
+   mutually disjoint classes.
+BULTINS WE HAVE DONE
+    - includes(expr1, expr2)      (cf >= ,  dixitInterAlia )
+    - indirectlyImplies(expr1, expr2)   
+    - startsWith(x,y)
+    - uri(x, str)
+    - usesNamespace(x,y)   # find transitive closure for validation  - awful function in reality
 
 NOTES
 
@@ -397,9 +402,6 @@ class Engine:
             if type == FORMULA: return r.internFrag(uriref[hash+1:], Formula)
             else: raise shouldntBeHere    # Source code did not expect other type
 
-######################################################## An global instance of a store 
-
-theEngine = Engine()   # The global engine - fed up with passing around pointers
 
 ######################################################## Storage
 # The store uses an index in the interned resource objects.
@@ -443,60 +445,65 @@ class Function:
     def __init__(self):
         pass
     
-    def evaluate(self, subj, obj):    # For inheritance only
-        return (obj == self.evaluateObject(subj))
+    def evaluate(self, store, context,  subj, obj):    # For inheritance only
+        return (obj is self.evaluateObject( store, context, subj))
 
-    def evaluateObject(self,subj):
+    def evaluateObject(self, store, context, subj, obj):
         raise function_has_no_evaluate_object_method #  Ooops - you can't inherit this.
 
 class ReverseFunction:
     def __init__(self):
         pass
 
-    def evaluate(self,subj, obj):    # For inheritance only
-        return (subj == self.evaluateSubject(obj))
+    def evaluate(self, store, context, subj, obj):    # For inheritance only
+        return (subj is self.evaluateSubject(store, context, obj))
 
-    def evaluateSubject(self,obj):
+    def evaluateSubject(self, store, context, obj):
         raise function_has_no_evaluate_subject_method #  Ooops - you can't inherit this.
 
 #   Light Built-in classes
 class BI_GreaterThan(LightBuiltIn):
-    def evaluate(self,subj, obj):
+    def evaluate(self, store, context, subj, obj):
         return (subj.string > obj.string)
 
 class BI_NotGreaterThan(LightBuiltIn):
-    def evaluate(self,subj, obj):
+    def evaluate(self, store, context, subj, obj):
         return (subj.string <= obj.string)
 
 class BI_LessThan(LightBuiltIn):
-    def evaluate(self,subj, obj):
+    def evaluate(self, store, context, subj, obj):
         return (subj.string < obj.string)
 
 class BI_NotLessThan(LightBuiltIn):
-    def evaluate(self,subj, obj):
+    def evaluate(self, store, context, subj, obj):
         return (subj.string >= obj.string)
 
 class BI_StartsWith(LightBuiltIn):
-    def evaluate(self,subj, obj):
+    def evaluate(self, store, context, subj, obj):
         return subj.string.startswith(obj.string)
 
 #  Constructors - more light built-ins
 
-class BI_concat(LightBuiltIn):
-    def evaluate(self,subj, obj):
-        return subj.string.startswith(obj.string)
+class BI_concat(LightBuiltIn, ReverseFunction):
+    def evaluateSubject(self, store, context, obj):
+        list = store.getList(obj, context)
+        progress("##### list:"+`list`)
+        if list == None: return store.engine.intern((LITERAL, "*** concat: BAD LIST!"))
+        str = ""
+        for x in list: str = str + x.string 
+        return store.engine.intern((LITERAL, str))
 
 
 # Equivalence relations
 
 class BI_EqualTo(LightBuiltIn,Function, ReverseFunction):
-    def evaluate(self,subj, obj):
-        return (subj == obj)
+    def evaluate(self, store, context, subj, obj):
+        return (subj is obj)   # Assumes interning
 
-    def evaluateObject(self,subj):
+    def evaluateObject(self, store, context, subj):
         return subj
 
-    def evaluateSubject(self,obj):
+    def evaluateSubject(self, store, context, obj):
         return obj
 
 # Functions 
@@ -504,15 +511,15 @@ class BI_EqualTo(LightBuiltIn,Function, ReverseFunction):
     
 class BI_uri(LightBuiltIn, Function, ReverseFunction):
 
-    def evaluateObject(self,subj):    
-        return theEngine.intern((LITERAL, subj.uriref))
+    def evaluateObject(self, store, context, subj):    
+        return store.engine.intern((LITERAL, subj.uriref))
 
-    def evaluateSubject(self,obj):    
-        return theEngine.intern((RESOURCE, subj.string))
+    def evaluateSubject(self, store, context, obj):    
+        return store.engine.intern((RESOURCE, subj.string))
 
 class BI_racine(LightBuiltIn, Function):
 
-    def evaluateObject(self,subj):
+    def evaluateObject(self, store, context, subj):
         if isinstance(subj, Fragment):
             return subj.resource
         else:
@@ -570,7 +577,7 @@ class BI_resolvesTo(HeavyBuiltIn, Function):
         p = notation3.SinkParser(store,  inputURI)
         p.load(inputURI)
         del(p)
-        F = theEngine.intern((FORMULA, inputURI+ "#_formula"))
+        F = store.engine.intern((FORMULA, inputURI+ "#_formula"))
         return F
     
     def evaluate2(self, store, subj, obj, variables):
@@ -608,7 +615,8 @@ class RDFStore(notation3.RDFSink) :
         self.notGreaterThan =   log.internFrag("notGreaterThan", BI_NotGreaterThan)
         self.lessThan =         log.internFrag("lessThan", BI_LessThan)
         self.notLessThan =      log.internFrag("notLessThan", BI_NotLessThan)
-        self.startsWith =       log.internFrag("startsWith", BI_StartsWith)
+        log.internFrag("startsWith", BI_StartsWith)
+        log.internFrag("concat", BI_concat)
 
 # Functions:        
 
@@ -678,6 +686,27 @@ class RDFStore(notation3.RDFSink) :
                 p_short = p
         for t in q[p_short].occursAs[p_short]:
             if t.triple == q: return t
+        return None
+
+    def any(self, q):
+        """  Quad contains one None as wildcard. Returns first value
+        matching in that position.
+	"""
+        short = 1000000 #@@
+	for p in ALL4:
+            if q[p] != None:
+                l = len(q[p].occursAs[p])
+                if l < short:
+                    short = l
+                    p_short = p
+        for t in q[p_short].occursAs[p_short]:
+            for p in ALL4:
+                if q[p] != None and q[p] is not t.triple[p]:
+                    break
+                else:
+                    for p in ALL4:
+                        if q[p] == None:
+                            return t.triple[p]
         return None
 
     def storeQuad(self, q):
@@ -904,7 +933,7 @@ class RDFStore(notation3.RDFSink) :
         This does not check whether the node is anonymous - check that first.
         
         """
-        if x == self.nil: return 1  # Yes, nil is the list ()
+        if x is self.nil: return 1  # Yes, nil is the list ()
 
         empty = 0
         left = []
@@ -926,7 +955,20 @@ class RDFStore(notation3.RDFSink) :
         if len(left) != 1 or len(right)!=1: return 0 # Invalid
         return self.isList(right[0], context)
     
-
+    def getList(self, x, context):
+        progress("#### getting list"+`x`)
+        """ Returns an N3 list as a Python sequence"""
+        if x is self.nil: return []  # Yes, nil is the list ()
+        first = self.any((context, self.first, x, None))
+        if first == None:
+            progress("Warning: Bad list - no first "+x2s(x))
+            return None   # Bad list!
+        rest =  self.any((context, self.rest,  x, None))
+        if rest == None:
+            progress("Warning: Bad list - no rest "+x2s(x))
+            return None  # Bad list!
+        return [ first ] + self.getList(rest, context)
+    
 
     def dumpNested(self, context, sink):
         """ Iterates over all URIs ever seen looking for statements
@@ -1319,21 +1361,21 @@ class RDFStore(notation3.RDFSink) :
 
 # Utilities to search the store:
 
-    def any(self, quad):             # Returns first match for one variable
-        variables = []
-        q2 = [ quad[0], quad[1], quad[2], quad[3]]  # tuple to list
-        for p in ALL4:
-            if quad[p] == None:
-                v = self.engine.intern((RESOURCE, "internaluseonly:#var"+`p`))
-                variables.append(v)
-                q2[p] = v
-        unmatched = [ ( q2[0], q2[1], q2[2], q2[3])]
-        listOfBindings = []
-        count = self.match(unmatched, variables, [], action=self.collectBindings, param=listOfBindings, justOne=1)
-        if listOfBindings == []: return None
-#        progress("#@@@ any findss %s " % listOfBindings)
-
-        return listOfBindings[0][0][1]  # First result, first variable, value.
+#    def any(self, quad):             # Returns first match for one variable
+#        variables = []
+#        q2 = [ quad[0], quad[1], quad[2], quad[3]]  # tuple to list
+#        for p in ALL4:
+#            if quad[p] == None:
+#                v = self.engine.intern((RESOURCE, "internaluseonly:#var"+`p`))
+#               variables.append(v)
+#                q2[p] = v
+#        unmatched = [ ( q2[0], q2[1], q2[2], q2[3])]
+#        listOfBindings = []
+#        count = self.match(unmatched, variables, [], action=self.collectBindings, param=listOfBindings, justOne=1)
+#        if listOfBindings == []: return None
+##        progress("#@@@ any findss %s " % listOfBindings)
+#
+#        return listOfBindings[0][0][1]  # First result, first variable, value.
 
 
     def every(self, quad):             # Returns a list of lists of values
@@ -1475,17 +1517,17 @@ class RDFStore(notation3.RDFSink) :
                 # Next, check for "light" (quick) built-in functions
                 if con in smartIn and isinstance(pred, LightBuiltIn):
                     if len(vars) == 0:   # no variables: constant expression - we can definitely evaluate it
-                        if pred.evaluate(subj, obj):
+                        if pred.evaluate(self, con, subj, obj):
                             return self.query(queue, variables, existentials, smartIn, action, param,
                                           bindings, []) # No new bindings but success in calculated logical operator
                         else: return 0   # We absoluteley know this won't match with this in it
                     elif len(vars) == 1 :  # The statement has one variable - try functions
                         if vars[0] == OBJ and isinstance(pred, Function):
                             return self.query(queue, variables, existentials, smartIn, action, param,
-                                                      bindings, [ (obj, pred.evaluateObject(subj))])
+                                                      bindings, [ (obj, pred.evaluateObject(self,con,subj))])
                         elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
                             return self.query(queue, variables, existentials, smartIn, action, param,
-                                                      bindings, [ (subj, pred.evaluateSubject(obj))])
+                                                      bindings, [ (subj, pred.evaluateSubject(self,con,obj))])
                     # Now we have a light builtin needs search, otherwise waiting for enough constants to run
                     state = 50
 
@@ -1509,11 +1551,11 @@ class RDFStore(notation3.RDFSink) :
                         len(quad[shortest_p].occursAs[shortest_p]),
                         x2s(quad[shortest_p]),
                         shortest_p)
-                    print "#    for ", quadToString(quad)
+                    print "#    for ", quadToString(quad, vars)
                     if chatty > 75:
                         print "#    where variables are"
                         for i in variables + existentials:
-                            print "#         ", `i`[-8:-1] 
+                            print "#   var or ext:      ", `i`[-8:-1] 
 
                 matches = 0
 #                zzz = quad[shortest_p].occursAs[shortest_p]
@@ -1545,6 +1587,7 @@ class RDFStore(notation3.RDFSink) :
 
                                 more_unmatched, more_variables = self.nestedContexts(quad[OBJ])
                                 _substitute([( quad[OBJ], quad[SUBJ])], more_unmatched)
+                                _substitute(bindings, more_unmatched)
                                 for quad in more_unmatched:
                                     item = 99, 0, [], [], quad
                                     queue.append(item)
@@ -2109,13 +2152,6 @@ Examples:
                     _outURI = option_inputs[0]        # Just output to same URI
                     option_baseURI = _outURI          # using that as base.
 
-#  Metadata context - storing information about what we are doing
-
-	_metaURI = urlparse.urljoin(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
-	global experience   # A global fourmula including first-hand knowledge from what happens
-	experience = theEngine.intern((FORMULA, _metaURI + "_forumla"))
-	history = None
-	
 #  Fix the output sink
         
 	if option_format == "rdf":
@@ -2134,10 +2170,16 @@ Examples:
         if option_pipe:
             _store = _outSink
         else:
-#            myEngine = Engine()
-            myEngine = theEngine      # Use one global one
+            myEngine = Engine()
             _store = RDFStore(myEngine, _outURI+"#_gs")
             workingContext = myEngine.intern((FORMULA, _outURI+ "#_formula"))   #@@@ Hack - use metadata
+#  Metadata context - storing information about what we are doing
+
+            _metaURI = urlparse.urljoin(option_baseURI, "RUN/") + `time.time()`  # Reserrved URI @@
+            global experience   # A global fourmula including first-hand knowledge from what happens
+            experience = myEngine.intern((FORMULA, _metaURI + "_forumla"))
+            history = None
+	
 
         if not _gotInput: #@@@@@@@@@@ default input
             _inputURI = _baseURI # Make abs from relative

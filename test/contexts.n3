@@ -8,5 +8,9 @@
 
 :conclusion = { :fred u:knows :mary . } .
 
+# The empty context is trivially true.
+# Check that we can input it and output it!
+
+:trivialTruth = { }.
 
 # ENDS
