@@ -168,6 +168,23 @@ subcontext_cache_context = None
 subcontext_cache_subcontexts = None
 
 
+# State values as follows, high value=try first:
+S_UNKNOWN = 	99  # State unknown - to be [re]calculated by setup.
+S_FAIL =   		80  # Have exhausted all possible ways to saitsfy this item. stop now.
+S_LIGHT_UNS_GO= 	70  # Light, not searched yet, but can run
+S_LIGHT_GO =  	65  # Light, can run  Do this!
+S_NOT_LIGHT =   	60  # Not a light built-in, haven't searched yet.
+S_LIGHT_EARLY=	50  # Light built-in, not enough constants to calculate, haven't searched yet.
+S_LIGHT_WAIT=	20  # Light built-in, not enough constants to calculate, search done.
+S_HEAVY_READY=	35  # Heavy built-in, search failed, but formula now has no vars left. Ready to run.
+S_HEAVY_WAIT=	10  # Heavy built-in, too many variables in args to calculate, search failed.
+S_HEAVY_WAIT_F=	 9  # Heavy built-in, too many vars within formula args to calculate, search failed.
+S_LIST_UNBOUND = 	 7  # List defining statement, search failed, unbound variables in list.?? no
+S_LIST_BOUND =	 5  # List defining statement, search failed, list is all bound.
+S_DONE =	 0  # Item has been staisfied, and is no longer a constraint
+
+
+
 ######################################################## Storage
 # The store uses an index in the interned resource objects.
     # Use the URI to allow sorted listings - for cannonnicalization if nothing else
@@ -370,14 +387,6 @@ class StoredStatement:
 #   The order of statements is only for cannonical output
 #   We cannot override __cmp__ or the object becomes unhashable, and can't be put into a dictionary.
 
-# Unused:
-#    def compareContextSubjPredObj(self, other):
-#        if self is other: return 0
-#        for p in [CONTEXT, SUBJ, PRED, OBJ]: # Note NOT internal order
-#            if self.quad[p] is not other.quad[p]:
-#                return compareURI(self.quad[p],other.quad[p])
-#        progress("Problem with duplicates - CSPO: '%s' and '%s'" % (self,other))
-#        raise RuntimeError, "should never have two identical distinct [@@]"
 
     def compareSubjPredObj(self, other):
         """Just compare SUBJ, Pred and OBJ, others the same
@@ -1570,16 +1579,6 @@ class RDFStore(RDFSink.RDFSink) :
 #  Note when we move things, then the store may shrink as they may
 # move on top of existing entries and we don't allow duplicates.
 #
-#    def moveContext(self, old, new, bindings=None):
-#        if thing.verbosity() > 0: progress("Move context - SLOW")
-#        self.reopen(new)    # If cannonical, uncannonicalize #@@ error prone if any references
-#        if bindings == None:
-#            bindings = [(old, new)]
-#        for s in old.statements[:] :   # Copy list!
-#            q = s.quad
-#            self.removeStatement(s)  # SLOW!
-#            del(s)
-#            self.storeQuad(_lookupQuad(bindings, q))
 
     def copyContextRecursive(self, old, new, bindings):
         total = 0
@@ -1600,29 +1599,37 @@ class RDFStore(RDFSink.RDFSink) :
                     q = q[:p] + (new,) + q[p+1:]
             self.storeQuad(q)
                 
-#  Clean up intermediate results:
-#
-# Statements in the given context that a term is a Chaff cause
-# any mentions of that term to be removed from the context.
 
     def purge(self, context, boringClass=None):
+        """Clean up intermediate results
+
+    Statements in the given context that a term is a Chaff cause
+    any mentions of that term to be removed from the context.
+    """
         if not boringClass:
             boringClass = self.Chaff
         for s in context.statementsMatching(self.type, None, boringClass)[:]:
             con, pred, subj, obj = s.quad  # subj is a member of boringClass
-            total = 0
-            for t in context.statementsMatching(subj=subj)[:]:
-                        self.removeStatement(t)    # SLOW
-                        total = total + 1
-            for t in context.statementsMatching(pred=subj)[:]:
-                        self.removeStatement(t)    # SLOW
-                        total = total + 1
-            for t in context.statementsMatching(obj=subj)[:]:
-                        self.removeStatement(t)    # SLOW
-                        total = total + 1
-                        
-            if thing.verbosity() > 30:
-                progress("Purged %i statements with %s" % (total,`subj`))
+	    self.purgeSymbol(context, subj)
+
+    def purgeSymbol(self, context, subj=None):
+	"""Purge all triples in which a symbol occurs.
+	Defaults to all removing occurrences of log:implies, eg rules.
+	"""
+	if subj == None: subj = self.implies
+	total = 0
+	for t in context.statementsMatching(subj=subj)[:]:
+		    self.removeStatement(t)    # SLOW
+		    total = total + 1
+	for t in context.statementsMatching(pred=subj)[:]:
+		    self.removeStatement(t)    # SLOW
+		    total = total + 1
+	for t in context.statementsMatching(obj=subj)[:]:
+		    self.removeStatement(t)    # SLOW
+		    total = total + 1
+	if thing.verbosity() > 30:
+	    progress("Purged %i statements with %s" % (total,`subj`))
+	return total
 
 
     def removeStatement(self, s):
@@ -1903,24 +1910,6 @@ class RDFStore(RDFSink.RDFSink) :
             return []
 
 
-#  Find whether any variables occur in an expression
-#  NOT Used.
-
-#    def anyOccurrences(self, vars, x):
-#        """ Figure out, given a set of variables whether any occur in a list, formula etc."""
-#        if x in vars: return x
-#        if isinstance(x, Formula):
-#            for s in x.statements:   # Should be valid list
-#                for p in PRED, SUBJ, OBJ:
-#                    y = s[p]
-#                    z = self.anyOccurrences(vars, y)
-#                    if z != None: return z
-#        elif x.asList() != None:
-#            for y in x.asList().value():
-#                z = self.anyOccurrences(vars, y)
-#                if z != None: return z
-#            return None
-#        return None            
         
 
 
@@ -1963,28 +1952,6 @@ class RDFStore(RDFSink.RDFSink) :
 # resource is then used for nothing else. Yes, we can search to see whether list is in the
 # store, as there may be a statemnt aboiut it, but built-ins can work on hypothetical lists.
 
-# Utilities to search the store:
-
-
-#    def every(self, quad):             # Returns a list of lists of values.  Used?
-#        variables = []
-#        q2 = list(quad)
-#        for p in ALL4:
-#            if quad[p] == None:
-#                v = self.intern((SYMBOL, "internaluseonly:#var"+`p`))
-#                variables.append(v)
-#                q2[p] = v
-#        unmatched = [ tuple(q2) ]
-#        listOfBindings = []
-#        count = self.match(unmatched, variables, [],
-#                      action=collectBindings, param=listOfBindings, justOne=0)
-#        results = []
-#        for bindings in listOfBindings:
-#            res = []
-#            for var, val in bindings:
-#                res.append(val)
-#            results.append(res)
-#        return results
 
     def checkList(self, context, L):
         """Check whether this new list causes ohter things to become lists"""
@@ -2103,19 +2070,6 @@ class RDFStore(RDFSink.RDFSink) :
 
 ##################################################################################
 
-    STATES2 = """State values as follows, high value=try first:
-    99  State unknown - to be [re]calculated by setup, which should change it to stg else.
-    80  Have exhausted all possible ways to saitsfy this item. stop now.
-    65  Light, can run  Do this!
-    60  Not a light built-in, haven't searched yet.
-    50  Light built-in, not enough constants to calculate, haven't searched yet.
-    20  Light built-in, not enough constants to calculate, search done.
-    35  Heavy built-in, search failed, but formula now has no vars left. Ready to run.
-    10  Heavy built-in, too many variables in args to calculate, search failed.
-     9  Heavy built-in, too many variables within formula args to calculate, search failed.
-     7  List defining statement, search failed, unbound variables in list.?? no
-     5  List defining statement, search failed, list is all bound.
-                    """
 
     def  query2(self,                # Neded for getting interned constants
                queue,               # Ordered queue of items we are trying to match CORRUPTED
@@ -2185,13 +2139,13 @@ class RDFStore(RDFSink.RDFSink) :
                          + " ExQuVars:("+seqToString(existentials)+")")
             con, pred, subj, obj = item.quad
             state = item.state
-            if state == 80:
+            if state == S_FAIL:
                 return total # Forget it -- must be impossible
-            if state == 70 or state == 65:
+            if state == S_LIGHT_UNS_GO or state == S_LIGHT_GO:
                 nbs = item.tryLight(queue)
-            elif state == 50 or state == 60: #  Not searched yet
+            elif state == S_LIGHT_EARLY or state == S_NOT_LIGHT: #  Not searched yet
                 nbs = item.trySearch()
-            elif state == 35:  # not light, may be heavy; or heavy ready to run
+            elif state == S_HEAVY_READY:  # not light, may be heavy; or heavy ready to run
                 if pred is self.includes:
                     if (isinstance(subj, Formula)
                         and isinstance(obj, Formula)):
@@ -2210,20 +2164,20 @@ class RDFStore(RDFSink.RDFSink) :
                                           "**** Includes: Adding %i new terms and %s as new existentials."%
                                           (len(more_unmatched),
                                            seqToString(more_variables)))
-                        item.state = 0
+                        item.state = S_DONE
                     else:
                         raise RuntimeError("Include can only work on formulae "+`item`)
                     nbs = []
                 else:
                     nbs = item.tryHeavy(queue, bindings)
-            elif state == 7: # Lists with unbound vars
+            elif state == S_LIST_UNBOUND: # Lists with unbound vars
                 if thing.verbosity()>50:
                         progress( " "*level+ "List left unbound, returing")
                 return 0   # forget it  (this right?!@@)
-            elif state == 5: # bound list
+            elif state == S_LIST_BOUND: # bound list
                 if thing.verbosity()>50: progress( " "*level+ "QUERY FOUND MATCH (dropping lists) with bindings: " + bindingsToString(bindings))
                 return action(bindings, param)  # No non-list terms left .. success!
-            elif state ==10 or state == 20: # Can't
+            elif state ==S_HEAVY_WAIT or state == S_LIGHT_WAIT: # Can't
                 if thing.verbosity() > 49 :
                     progress("@@@@ Warning: query can't find term which will work.")
                     progress( "   state is %s, queue length %i" % (state, len(queue)+1))
@@ -2247,8 +2201,8 @@ class RDFStore(RDFSink.RDFSink) :
                     if justOne and total:
                         return total
 
-            if item.state == 80: return total
-            if item.state != 0:   # state 0 means leave me off the list
+            if item.state == S_FAIL: return total
+            if item.state != S_DONE:   # state 0 means leave me off the list
                 queue.append(item)
             # And loop back to take the next item
 
@@ -2256,12 +2210,14 @@ class RDFStore(RDFSink.RDFSink) :
         return action(bindings, param, level)  # No terms left .. success!
 
 
+
+
 class QueryItem:
     def __init__(self, store, quad):
         self.quad = quad
         self.searchPattern = None # Will be list of variables
         self.store = store
-        self.state = 99  # Invalid
+        self.state = S_UNKNOWN  # Invalid
         self.short = INFINITY
         self.neededToRun = None   # see setup()
         self.myIndex = None     # will be list of satistfying statements
@@ -2315,14 +2271,14 @@ class QueryItem:
             self.short = len(self.myIndex)
 
         if con in smartIn and isinstance(pred, LightBuiltIn):
-            if self.canRun(): self.state = 70  # Can't do it here
-            else: self.state = 50 # Light built-in, can't run yet, not searched
+            if self.canRun(): self.state = S_LIGHT_UNS_GO  # Can't do it here
+            else: self.state = S_LIGHT_EARLY # Light built-in, can't run yet, not searched
         elif self.short == 0:  # Skip search if no possibilities!
             self.searchDone()
         else:
-            self.state = 60   # Not a light built in, not searched.
+            self.state = S_NOT_LIGHT   # Not a light built in, not searched.
         if thing.verbosity() > 80: progress("setup:" + `self`)
-        if self.state == 80: return 0
+        if self.state == S_FAIL: return 0
         return []
 
 
@@ -2333,13 +2289,13 @@ class QueryItem:
                 [...] list of binding lists"""
         con, pred, subj, obj = self.quad
 
-        self.state = 50   # Assume can't run
+        self.state = S_LIGHT_EARLY   # Assume can't run
         if (self.neededToRun[SUBJ] == []):
             if (self.neededToRun[OBJ] == []):   # bound expression - we can evaluate it
                 obj_py = self.store._toPython(obj, queue)
                 subj_py = self.store._toPython(subj, queue)
                 if pred.evaluate(self.store, con, subj, subj_py, obj, obj_py):
-                    self.state = 0 # satisfied
+                    self.state = S_DONE # satisfied
                     return []   # No new bindings but success in logical operator
                 else: return 0   # We absoluteley know this won't match with this in it
             else: 
@@ -2347,7 +2303,7 @@ class QueryItem:
                     subj_py = self.store._toPython(subj, queue)
                     result = pred.evaluateObject(self.store, con, subj, subj_py)
                     if result != None:
-                        self.state = 80
+                        self.state = S_FAIL
                         return [[ (obj, result)]]
         else:
             if (self.neededToRun[OBJ] == []):
@@ -2355,7 +2311,7 @@ class QueryItem:
                     obj_py = self.store._toPython(obj, queue)
                     result = pred.evaluateSubject(self.store, con, obj, obj_py)
                     if result != None:
-                        self.state = 80
+                        self.state = S_FAIL
                         return [[ (subj, result)]]
         if thing.verbosity() > 30:
             progress("Builtin could not give result"+`self`)
@@ -2398,20 +2354,20 @@ class QueryItem:
     def searchDone(self):
         """Search has been done: figure out next state."""
         con, pred, subj, obj = self.quad
-        if self.state == 50:   # Light, can't run yet.
-            self.state = 20    # Search done, can't run
+        if self.state == S_LIGHT_EARLY:   # Light, can't run yet.
+            self.state = S_LIGHT_WAIT    # Search done, can't run
         elif (subj.asList() != None
               and ( pred is self.store.first or pred is self.store.rest)):
             if self.neededToRun[SUBJ] == [] and self.neededToRun[OBJ] == []:
-                self.state = 5   # @@@ ONYY If existentially qual'd @@, it is true as an axiom.
+                self.state = S_LIST_BOUND   # @@@ ONYY If existentially qual'd @@, it is true as an axiom.
             else:
-                self.state = 7   # Still need to resolve this
+                self.state = S_LIST_UNBOUND   # Still need to resolve this
         elif not isinstance(pred, HeavyBuiltIn):
-            self.state = 80  # Done with this one: Do new bindings & stop
+            self.state = S_FAIL  # Done with this one: Do new bindings & stop
         elif self.canRun():
-            self.state = 35
+            self.state = S_HEAVY_READY
         else:
-            self.state = 10
+            self.state = S_HEAVY_WAIT
         if thing.verbosity() > 90:
             progress("...searchDone, now ",self)
         return
@@ -2433,14 +2389,14 @@ class QueryItem:
         """Deal with heavy built-in functions."""
         con, pred, subj, obj = self.quad
         try:
-            self.state = 10  # Assume can't resolve
+            self.state = S_HEAVY_WAIT  # Assume can't resolve
             if self.neededToRun[SUBJ] == []:
                 if self.neededToRun[OBJ] == []: # Binary operators?
                     result = pred.evaluate2(subj, obj, bindings[:])
                     if result:
                         if thing.verbosity() > 80:
                                 progress("Heavy predicate succeeds")
-                        self.state = 0  # done
+                        self.state = S_DONE  #  0 done
                         return []
                     else:
                         if thing.verbosity() > 80:
@@ -2451,7 +2407,7 @@ class QueryItem:
                         result = pred.evaluateObject2(subj)
                         if result == None: return 0
                         else:
-                            self.state = 80
+                            self.state = S_FAIL
                             return [[ (obj, result)]]
             else:
                 if (self.neededToRun[OBJ] == []
@@ -2459,7 +2415,7 @@ class QueryItem:
                         obj_py = self.store._toPython(obj, queue)
                         result = pred.evaluateSubject2(self.store, obj, obj_py)
                         if result != None:  # There is some such result
-                            self.state = 80  # Do this then stop - that is all
+                            self.state = S_FAIL  # Do this then stop - that is all
                             return [[ (subj, result)]]
                         else: return 0
             if thing.verbosity() > 30:
@@ -2496,7 +2452,7 @@ class QueryItem:
                 
         self.quad = q[0], q[1], q[2], q[3]  # yuk
 
-        if self.state in [60, 50, 75]: # Not searched yet
+        if self.state in [S_NOT_LIGHT, S_LIGHT_EARLY, 75]: # Not searched yet
             for p in PRED, SUBJ, OBJ:
                 x = self.quad[p]
                 if isinstance(x, Formula):
@@ -2514,20 +2470,20 @@ class QueryItem:
 
         if isinstance(self.quad[PRED], BuiltIn):
             if self.canRun():
-                if self.state == 50: self.state = 70
-                elif self.state == 20: self.state = 65
-                elif self.state == 10: self.state = 35
-        elif (self.state == 7
+                if self.state == S_LIGHT_EARLY: self.state = S_LIGHT_UNS_GO
+                elif self.state == S_LIGHT_WAIT: self.state = S_LIGHT_GO
+                elif self.state == S_HEAVY_WAIT: self.state = S_HEAVY_READY
+        elif (self.state == S_LIST_UNBOUND
               and self.neededToRun[SUBJ] == []
               and self.neededToRun[OBJ] == []):
-            self.state = 5
-	if self.state == 5 and self.searchPattern[SUBJ] != None:
+            self.state = S_LIST_BOUND
+	if self.state == S_LIST_BOUND and self.searchPattern[SUBJ] != None:
 	    if thing.verbosity() > 50:
 		progress("Rejecting list already searched and now bound", self)
-	    self.state = 80    # see test/list-bug1.n3
+	    self.state = S_FAIL    # see test/list-bug1.n3
         if thing.verbosity() > 90:
             progress("...bound becomes ", `self`)
-        if self.state == 80: return 0
+        if self.state == S_FAIL: return 0
         return [] # continue
 
     def __repr__(self):

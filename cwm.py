@@ -244,36 +244,42 @@ def reformat(str, thisURI):
             
 
 #################################################  Command line
+
+# Reoved from help:
+# --reify       Replace the statements in the store with statements describing them. 
+# --flat        Reify only nested subexpressions (not top level) so that no {} remain.
+
     
 def doCommand():
         """Command line RDF/N3 tool
         
  <command> <options> <inputURIs>
  
---pipe      Don't store, just pipe out *
+--pipe        Don't store, just pipe out *
 
---rdf       Input & Output ** in RDF M&S 1.0 insead of n3 from now on
---n3        Input & Output in N3 from now on
---rdf=flags Input & Output ** in RDF and set given RDF flags
---n3=flags  Input & Output in N3 and set N3 flags
---ntriples  Input & Output in NTriples (equiv --n3=spart -bySubject -quiet)
---ugly      Store input and regurgitate *
---bySubject Store input and regurgitate in subject order *
---no        No output *
-            (default is to store and pretty print with anonymous nodes) *
---strings   Dump :s to stdout ordered by :k whereever { :k log:outputString :s }
---apply=foo Read rules from foo, apply to store, adding conclusions to store
---filter=foo Read rules from foo, apply to store, REPLACING store with conclusions
---rules     Apply rules in store to store, adding conclusions to store
---think     as -rules but continue until no more rule matches (or forever!)
---think=foo as -apply=foo but continue until no more rule matches (or forever!)
---crypto    Enable processing of crypto builtin functions. Requires python crypto.
---reify     Replace the statements in the store with statements describing them.
---flat      Reify only nested subexpressions (not top level) so that no {} remain.
---help      print this message
---revision  print CVS revision numbers of major modules
---chatty=50 Verbose output of questionable use, range 0-99
---with      Pass any further arguments to the N3 store as os:argv values
+--rdf         Input & Output ** in RDF M&S 1.0 insead of n3 from now on
+--n3          Input & Output in N3 from now on
+--rdf=flags   Input & Output ** in RDF and set given RDF flags
+--n3=flags    Input & Output in N3 and set N3 flags
+--ntriples    Input & Output in NTriples (equiv --n3=spart -bySubject -quiet)
+--ugly        Store input and regurgitate *
+--bySubject   Store input and regurgitate in subject order *
+--no          No output *
+              (default is to store and pretty print with anonymous nodes) *
+--strings     Dump :s to stdout ordered by :k whereever { :k log:outputString :s }
+
+--apply=foo   Read rules from foo, apply to store, adding conclusions to store
+--filter=foo  Read rules from foo, apply to store, REPLACING store with conclusions
+--rules       Apply rules in store to store, adding conclusions to store
+--think       as -rules but continue until no more rule matches (or forever!)
+--think=foo   as -apply=foo but continue until no more rule matches (or forever!)
+--purge       Remove from store any triple involving anything in class log:Chaff
+--purge-rules Remove from store any triple involving log:implies
+--crypto      Enable processing of crypto builtin functions. Requires python crypto.
+--help        print this message
+--revision    print CVS revision numbers of major modules
+--chatty=50   Verbose output of questionable use, range 0-99
+--with        Pass any further arguments to the N3 store as os:argv values
  
 
             * mutually exclusive
@@ -559,6 +565,9 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 
             elif arg == "-purge":
                 _store.purge(workingContext)
+		
+            elif arg == "-purge-rules":
+                _store.purgeSymbol(workingContext)
 
             elif arg == "-rules":
                 _store.applyRules(workingContext, workingContext)
