@@ -1,15 +1,9 @@
-#    Schema validator in N3
+#    Schema rules for daml schema validation in N3
 #
-#   There is not on the semantic web a single meaning of
-# the term "schema valid", as one can make different choices
-# about what information is used for validation, and what lengths
-# are gone to to try to find inconsitencies. In general, one cannot
-# for any set of rules, just prove that a document does not violate
-# a given set of constraints.  However, we can set the bar at a
-# particular height. For example
-#  - Retrieve schemata for any namesapces used in the target
-#  - apply a given set of rules (a certian limite number of times?)
-#  - check the result has no inconsistencies.
+#    See validate.n3
+#
+# This is missing a bunch of general daml axioms such as UnambiguousProperty
+# rules etc.  It has stuff found useful for schema validation.
 #
 # The basic strategy is that which ontology systems seem to assume:
 # Find all classes to which everything belongs, and deduce things from that.

@@ -1,4 +1,5 @@
-#    Schema validator in N3
+#    Schema validation rules in N3
+#    See validate.n3
 #
 #   There is not on the semantic web a single meaning of
 # the term "schema valid", as one can make different choices
@@ -16,7 +17,6 @@
 #
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 @prefix doc: <http://www.w3.org/2000/10/swap/pim/doc#> .
-@prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 
@@ -29,40 +29,11 @@ this log:forAll <#p>, <#p1>, <#p2>,	# Properties
 
 <> doc:version "$Id$".
 
-# The following is a subset of the properties of =, which should not need stating.
-# But cwm currently doesn't know a lot about = inherently. @@
+# Transitivity (note DAML stuff repeats this effectively as it declares them transitive)
 
-{ <#x> <#p1> <#y> . <#p1> = <#p2> . } log:implies {<#x> <#p2> <#y> } . # Duh
+{ <#x> rdfs:subPropertyOf <#y>. <#y> rdfs:subPropertyOf <#z>. } log:implies { <#x> rdfs:subPropertyOf <#z>. }
+{ <#x> rdfs:subClassOf <#y>. <#y> rdfs:subClassOf <#z>. } log:implies { <#x> rdfs:subClassOf <#z>. }
 
-# Can deduce RDFS from daml versions:
-# (The example uses daml: and the groups seems to change its mind on which is best)
-
-daml:subPropertyOf = rdfs:subPropertyOf .
-daml:subClassOf = rdfs:subClassOf .
-daml:range 	= rdfs:range .
-daml:domain = rdfs:domain .
-
-daml:Class rdfs:subClassOf rdfs:Class.   # Make daml definitions work for RDFS engines
-daml:Property rdfs:subClassOf rdf:Property.
-
-daml:UniqueProperty rdfs:subClassOf daml:Property.
-daml:UnambiguousProperty rdfs:subClassOf daml:Property.
-
-# Implication of transitivity:
-
-
-{  <#p> a daml:TransitiveProperty . } log:implies
-
-{
-  {
-    { <#x> <#p> <#y>. <#y> <#p> <#z>. } log:implies { <#x> <#p> <#z>. }
-  } a log:Truth; log:forAll <#x> , <#y> , <#z>.
-} .
-
-
-rdfs:subPropertyOf 	a daml:TransitiveProperty .
-
-rdfs:subClassOf 		a daml:TransitiveProperty .
 
 # Implication of subclass:
 
@@ -86,28 +57,9 @@ rdfs:subClassOf 		a daml:TransitiveProperty .
 { 	<#p> rdfs:range <#c>.
 	<#x> <#p> <#y> . } log:implies  { <#y> a <#c> } .
 
-# From the above once can conclude the specific propagation rules
-# for of subclasss and subproperties, such as:
-#
-#rule1
-#	log:forAll <#x> <#y> ;
-#	a log:Truth;
-#	= {
-#    		{ <#x> rdfs:subProperty <#y>. <#y> rdfs:subProperty <#z>. } log:implies
-#			{ <#x> rdfs:subProperty <#z>. }
-#  	} .
 
 
-# The first NOT we come across is disjointWith:
-
-this log:forAll <#x>, <#y>, <#z> .
-{ 	<#x> a <#y> .
-	<#x> a <#z> .
-	<#y> daml:disjointFrom <#z> } log:implies { <#x> v:ERROR  "Member of disjoint classes" } .
-
-
-# <> daml:imports <rdfs.n3> . #?@@@@@@@@@@@
-
+# ends
 
 
 
