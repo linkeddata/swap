@@ -352,15 +352,15 @@ give</p>
 <p>This rule is simple and useful, but in practice them more powerful rules
 can be applied to any identifiers. We nee a way of saying this.  A given
 context is true even if the given identifier is replaced -- consistently
-throughout hte context -- with any other identifier. This is represented by
+throughout the context -- with any other identifier. This is represented by
 (guess what!) a property of the context.</p>
 <pre>this log:forAll :x, :y.
 { :x :parent :y .} log:implies { y: :child .} .</pre>
 
 <p>Read this something like: "This is true for any values of x and y. If x is
 the parent of y then y is the child of x."  The this refers to the formula
-whose {braces} immediately enclosing it - or the forumula expressed by the
-document if at the outer level.</p>
+whose {braces} immediately enclosing it - or as in this case the forumula
+expressed by the document if at the outer level.</p>
 
 <p>In fact you can use an ontology property to declare that parent and child
 are inverse.</p>

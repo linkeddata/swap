@@ -1,5 +1,3 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN"
-                      "http://www.w3.org/TR/REC-html40/loose.dtd">
 <html>
 <head>
   <title>Examples - Getting ino the semantic web and RDF using N3</title>
@@ -24,7 +22,7 @@ http://www.w3.org/2000/10/swap/test/ if you are reading this on paper.)  These
 are designed as examples, to show how something can be done, not as working
 products.</p>
 
-<p>Remember, to convert an RDF document from n3 syntax into xml syntax, 
+<p>Remember, to convert an RDF document from n3 syntax into xml syntax,
 <code>cwm xxx.n3 -rdf </code> should do it  among other things.  I haven't
 exhaustively tested all combinations of n3 and RDF in all cases.</p>
 
@@ -33,8 +31,8 @@ exhaustively tested all combinations of n3 and RDF in all cases.</p>
 <p>When explaining why the semantic web needs to be a web not a tree, I used
 slides showing information in blue from one source (blue links) with that from
 another sources (red and green links).<img
-src="/2000/Talks/0906-xmlweb-tbl/arcs-3.gif" alt="blue, red and green arcs
-merged" width="30%" align="right"></p>
+src="/2000/Talks/0906-xmlweb-tbl/arcs-3.gif"
+alt="blue, red and green arcs merged" width="30%" align="right"></p>
 <ul>
   <li><a href="/2000/Talks/0906-xmlweb-tbl/slide6-0.html">The first
     diagram</a> shows some information maybe from someone's personal
@@ -59,7 +57,7 @@ like:</p>
   <li>The green arcs (<a href="test/meet/green.n3">in N3</a>, <a
     href="test/meet/green.rdf">in XML</a>)</li>
   <li>The merged graph (<a href="test/meet/white.n3">in N3</a> made by<code>
-    cwm red.n3 blue.n3 green.n3 > white.n3</code>, <a
+    cwm red.n3 blue.n3 green.n3 &gt; white.n3</code>, <a
     href="test/meet/white.rdf">in XML</a>)</li>
 </ul>
 
@@ -86,7 +84,7 @@ this into N3</a><a></a>.</p>
   <li>The same data after processing by the rules, with each person's extended
     family relationships calculated (<a
     href="test/gedcom/lots.n3">gedcom/lots.n3</a>)</li>
-  <li><a href="test/gedcom/Makefile ">gedcom/Makefile </a>shows (for unix
+  <li><a href="test/gedcom/Makefile ">gedcom/Makefile</a>shows (for unix
     people) the commands to buld them
     <p></p>
   </li>
@@ -102,7 +100,7 @@ this into N3</a><a></a>.</p>
   own ontology.</i></p>
 </blockquote>
 
-<p> These examples do not contain rules, just ontology information in DAML.
+<p>These examples do not contain rules, just ontology information in DAML.
 DAML allows you to describe the properties and class you create and the
 relationships between them. Here are two fairly large examples from
 biochemistry. They seem to have been generated using the OILED software. They
@@ -180,7 +178,8 @@ definition of transitivity.</p>
     new otherwise.</li>
 </ul>
 
-<p><math>
+<p>
+<math xmlns="http://www.w3.org/1998/Math/MathML">
   <mtable>
   </mtable>
 </math>
@@ -225,9 +224,49 @@ instructive.</p>
     log:Chaff.</li>
 </ul>
 
+<h2>Integrating applications: Roadmaps, Organizations and diagrams</h2>
+
+<p>Many see the semantic web's impact on the industry as a tool for Enterprise
+Application Integration.  That is, just as the web integrates human-oriented
+information systems, so the Semantic Web integrates applications in which data
+has well-defined meaning. Here are some files which represent data which deal
+with technical architecture and the organizational structure around W3C.
+Imagine that these had been produced from specific applications for technical
+design and organizational management. Now it happens that there is a need bit
+of free softrware called GRphviz which is a tool for drawing diagrams. Putting
+all three together we can draw digrams of relationships between technical
+architecure and consortium organization. We can also make rule files to
+extract subsets of this data when focussing on a specific problem or area.</p>
+<ul>
+  <li>How the data is processed - <a
+    href="../../../2001/04/roadmap/about.svg">diagram</a></li>
+  <li>Technical architecture;  <a
+    href="../../../2001/04/roadmap/all.svg">diagram</a><a></a>, <a
+    href="../../../2001/04/roadmap/w3c.n3">data</a><a></a></li>
+  <li>Organizational  <a
+    href="../../../2001/04/roadmap/structure.svg">diagram</a><a></a>, <a
+    href="../../../2001/04/roadmap/structure.n3">data</a><a></a></li>
+  <li>Subsets: technical architecture planned for: web services, semantic web,
+    both</li>
+</ul>
+
+<p></p>
+<hr>
+
+<p></p>
+
+<h1>Appendix - Test files</h1>
+
+<p>There is a regresion test for cwm which uses many files.</p>
+<ul>
+  <li><a href="test/retest.sh">retest.sh</a></li>
+</ul>
+
+<p></p>
+
 <h2 id="Parser">Parser test files</h2>
 
-<p>These are ismple semantic web examples in N3 and RDF syntaxes made
+<p>These are simple semantic web examples in N3 and RDF syntaxes made
 typically in order to test the software, but you can use them to test your
 understanding.</p>
 <ul>
@@ -236,7 +275,6 @@ understanding.</p>
     discussion</li>
   <li>double-conclusion.n3  Testing that a reasoner wouldn't draw duplicate
     conclusions</li>
-  <li></li>
 </ul>
 
 <h2 id="References">References</h2>
