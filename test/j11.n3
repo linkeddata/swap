@@ -1,0 +1,55 @@
+# Base URI of process is file:///afs/w3.org/pub/WWW/2000/10/swap/test/
+# Input from  file:/afs/w3.org/pub/WWW/2000/10/swap/test/d11.n3
+# Input from  file:/afs/w3.org/pub/WWW/2000/10/swap/test/s1.n3
+# Input filter  file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3
+# Input from  file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3
+# We have 4 variables [<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#x>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#p>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#z>]
+# We have 1 terms in template <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#_g0>
+## match: called 1 terms, 0 bindings, terms & new bindings: [(<file:/afs/w3.org/pub/WWW/2000/10/swap/test/STDOUT>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/s1.n3#includes>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#x>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>)] [] []
+# One term has 2 vars, shortest list 4
+# Searching through 4 for <file:/afs/w3.org/pub/WWW/2000/10/swap/test/s1.n3#includes> in slot 1.
+## match: called 0 terms, 0 bindings, terms & new bindings: [] [] [(<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#x>, <http://www.example.org/#car>), (<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>, <http://www.example.org/#engine>)]
+# Match found with bindings:  [(<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#x>, <http://www.example.org/#car>), (<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>, <http://www.example.org/#engine>)]
+# *** Conclude:  (<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#_g1>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/s1.n3#partOf>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#x>)
+## match: called 0 terms, 0 bindings, terms & new bindings: [] [] [(<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#x>, <http://www.example.org/#engine>), (<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>, <http://www.example.org/#camshaft>)]
+# Match found with bindings:  [(<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#x>, <http://www.example.org/#engine>), (<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>, <http://www.example.org/#camshaft>)]
+# *** Conclude:  (<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#_g1>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/s1.n3#partOf>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#x>)
+## match: called 0 terms, 0 bindings, terms & new bindings: [] [] [(<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#x>, <http://www.example.org/#train>), (<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>, <http://www.example.org/#engine>)]
+# Match found with bindings:  [(<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#x>, <http://www.example.org/#train>), (<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>, <http://www.example.org/#engine>)]
+# *** Conclude:  (<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#_g1>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/s1.n3#partOf>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#x>)
+# Found 3 matches for <built-in function filter>.
+# We have 3 terms in template <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#_g2>
+## match: called 3 terms, 0 bindings, terms & new bindings: [(<file:/afs/w3.org/pub/WWW/2000/10/swap/test/STDOUT>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#p>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#x>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>), (<file:/afs/w3.org/pub/WWW/2000/10/swap/test/STDOUT>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#p>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#z>), (<file:/afs/w3.org/pub/WWW/2000/10/swap/test/STDOUT>, <http://www.w3.org/1999/02/22-rdf-syntax-ns#type>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#p>, <http://www.daml.org/2000/10/daml-ont#TransitiveProperty>)] [] []
+# One term has 3 vars, shortest list 9
+# One term has 3 vars, shortest list 9
+# One term has 1 vars, shortest list 3
+# Searching through 3 for <http://www.w3.org/1999/02/22-rdf-syntax-ns#type> in slot 1.
+## match: called 2 terms, 0 bindings, terms & new bindings: [(<file:/afs/w3.org/pub/WWW/2000/10/swap/test/STDOUT>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#p>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#x>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>), (<file:/afs/w3.org/pub/WWW/2000/10/swap/test/STDOUT>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#p>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#z>)] [] [(<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#p>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/s1.n3#includes>)]
+# One term has 2 vars, shortest list 3
+# One term has 2 vars, shortest list 3
+# Searching through 3 for <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#p> in slot 1.
+## match: called 2 terms, 0 bindings, terms & new bindings: [(<file:/afs/w3.org/pub/WWW/2000/10/swap/test/STDOUT>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#p>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#x>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>), (<file:/afs/w3.org/pub/WWW/2000/10/swap/test/STDOUT>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#p>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#y>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#z>)] [] [(<file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#p>, <file:/afs/w3.org/pub/WWW/2000/10/swap/test/s1.n3#partOf>)]
+# One term has 2 vars, shortest list 3
+# One term has 2 vars, shortest list 3
+# Searching through 3 for <file:/afs/w3.org/pub/WWW/2000/10/swap/test/f11.n3#p> in slot 1.
+# Found 0 matches for <built-in function filter>.
+# We have 0 variables []
+# Most popular Namesapce in <file:/afs/w3.org/pub/WWW/2000/10/swap/test/STDOUT> is <http://www.example.org/>
+
+#  Start notation3 generation
+#  $Id$
+
+     bind log: <http://www.w3.org/2000/10/swap/log.n3> .
+     bind ont: <http://www.daml.org/2000/10/daml-ont> .
+     bind test: <file:/afs/w3.org/pub/WWW/2000/10/swap/test/s1.n3> .
+     bind : <http://www.example.org/> .
+    :camshaft test:partOf :engine .
+    :train test:includes :engine .
+    :car test:includes :engine .
+    :engine test:includes :camshaft;
+         test:partOf :car,
+                :train .
+    test:includes a ont:TransitiveProperty .
+    test:partOf a ont:TransitiveProperty;
+         ont:inverseOf test:includes .
+    
