@@ -51,6 +51,25 @@ log:implies a rdfs:Property;
     rdfs:isDefinedBy <>;
     rdfs:range log:Formula.
 
+log:includes a rdfs:Property;
+    rdfs:comment "One formula is subset of other. Understood natively by cwm.";
+    rdfs:range log:Formula;
+    rdfs:isDefinedBy <>;
+    rdfs:range log:Formula.
+
+log:notIncludes a rdfs:Property;
+    rdfs:comment "One formula is NOT a subset of other. Understood natively by cwm.";
+    rdfs:range log:Formula;
+    rdfs:isDefinedBy <>;
+    rdfs:range log:Formula.
+
+log:equalTo, log:notEqualTo a rdfs:Property;
+    rdfs:comment 
+"""Equality in this sense is actually the same URI.
+Do not confuse with daml:EquivalentTo.
+A cwm built-in logical operator.
+""".
+ 
 log:resolvesTo a rdf:Property;
     rdfs:domain doc:Work;
     rdfs:range  log:Formula;
