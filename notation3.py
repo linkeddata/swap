@@ -1503,8 +1503,10 @@ Escapes = {'a':  '\a',
 
 def stringToN3(str):
     res = ''
-    if len(str) > 20 and (string.find(str, "\n") >=0 \
-                          or string.find(str, '"') >=0):
+    if (len(str) > 20 and
+        str[-1] <> '"' and
+        (string.find(str, "\n") >=0 
+         or string.find(str, '"') >=0)):
         delim= '"""'
         forbidden = ur'[\\\"\a\b\f\r\v\u0080-\uffff]'    # (allow tabs too now)
     else:
