@@ -19,11 +19,11 @@ Reaching Out Onto the Web</p>
 <h1>Trust</h1>
 
 <p>In the real world, you don't want a program doing things without being
-careful. On eof the more difficult things is fguring out what rules you
+careful. One of the more difficult things is figuring out what rules you
 really use for deciding what data to trust. The Semantic Web doesn't make
 that social problem much easier. When you have figured out a trust model, the
-Semantic Web allows you to write it down. Not only that -- if we introdcue
-cryptographic built-in functions, we can actually make a system whcih will
+Semantic Web allows you to write it down. Not only that -- if we introduce
+cryptographic built-in functions, we can actually make a system which will
 use public key cryptography to check the authenticity of data.</p>
 
 <p>This can of course get very big, and as complicated as your social or
@@ -39,12 +39,12 @@ thing, many quite reasonably need this "what's in it for me?"
 justification).</p>
 
 <p>We will formalize the social arrangements and then we will write the rules
-which encapsulate those arranegments so that they can be followed by a
+which encapsulate those arrangements so that they can be followed by a
 machine. Let's just take the case of a web page which is only accessible to
 W3C members. What does that mean? Well, when a company or organization joins
 the W3C Advisory Committee representative is chosen as the liaison between
 everyone at the organization and everything happening at W3C. Currently
-(2003) when someone says they belong to a company and want to acecss the
+(2003) when someone says they belong to a company and want to access the
 member site in that role, we check, by email, with the AC rep. Let's design a
 system to do it with digital signature.</p>
 
@@ -53,8 +53,8 @@ src="../../../../2002/Talks/04-sweb/elisaaccess.png" /></p>
 
 <p>In this picture, Alan Kotok is the W3C associate chairman who deals with
 membership. In this case, Kari is the AC rep for W3C member <em>Elisa
-Communications</em>. Alan delgates to Kari the right to say who, as a emploee
-of Elisa, get access to the W3C Member Site.</p>
+Communications</em>. Alan delegates to Kari the right to say who, as a
+employee of Elisa, get access to the W3C Member Site.</p>
 
 <h3>Master Key</h3>
 
@@ -87,15 +87,15 @@ log:implies a log:Chaff.</pre>
 
 <p>The <code>crypto:keyLength</code> built-in generates :x, which a string
 which actually contains both the private and the public keys. This is
-conventient, as anyone who knows a private key needs to keep track of which
+convenient, as anyone who knows a private key needs to keep track of which
 public key goes with it. This is not a very semantic web function, as it
-isn't repeatable rule you can resue - it is just a trick for generating a
+isn't repeatable rule you can reuse - it is just a trick for generating a
 key. (It will generate a different key each time, although the library at one
 stage didn't do that to make debugging easier).</p>
 
 <p>The <code>crypto:publicKey</code> builtin is a function which strips out
 the private parts of a key :x, leaving only the public part :y. Note we have
-class here <code>:Secret</code> which we just use for labellling things which
+class here <code>:Secret</code> which we just use for labelling things which
 we don't want another person to know.</p>
 
 <p>The log:Chaff part is to label those bits which are for deletion by the
@@ -106,7 +106,7 @@ representative. he does this in an identical fashion, using
 <code>access-gen-elisa.n3</code>. The actual passing of authority happens
 when Kari gives the public part of his key to Alan, in some way secure enough
 for Alan to be sure enough it , and Alan then signs something to the effect
-that it is indeed Kari's key as AC rep for Eliza.</p>
+that it is indeed Kari's key as AC rep for Elisa.</p>
 <pre>cwm access-elisa.public access-master.private access-sign-member-cert.n3 \
  --think --purge --with "Elisa" &gt; access-eliza.cert</pre>
 
@@ -128,13 +128,13 @@ rule file which does the signing. It contains, in essence:</p>
 
 <p></p>
 
-<p>:n resolves to be the name "Eliza", :tk resolves to be Eliza's public key.
+<p>:n resolves to be the name "Elisa", :tk resolves to be Elisa's public key.
 The string str is string form of the certificate formula, as the digital
 signatures work on strings. The MD5 checksum of the string is formed, and
 that is signed with the master key pair (:kp). All this happens as the left
 hand side of the rule is resolved, and when it has, then the conclusion is
 that that string has an endorsement which has a given signature and a given
-public key. This ensordsement information is the certificate.</p>
+public key. This endorsement information is the certificate.</p>
 
 <p>In exactly the same fashion, Tiina, the employee, makes a key, and gets a
 certificate from Kari about that key.</p>
@@ -148,7 +148,20 @@ up a request for the web page, and signs it with her private key.</p>
 access.</p>
 
 <p>The crux of this whole system is the file <code>access-rule.n3</code>
-which tells the web site how to trust a request.</p>
+which tells the web site how to trust a request. And the crux of that is its
+first rule.   It is a bit simple but you should get the idea. It says
+that:</p>
+
+<blockquote>
+  <p> if a request is supported by a key, and there is a certificate --
+  signed itself with k2 -- which says k is a good request key, and that there
+  is some other certificate, signed with the master key, that says that k2 is
+  a member key, then the request is a good request.</p>
+</blockquote>
+
+<p>The other details of what "supported" means are below.</p>
+
+<p></p>
 <pre>this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z , :q .
 
 # The rule of access.
@@ -242,35 +255,46 @@ the value of Semantic Web!</p>
 
 <p></p>
 
-<p>You will notice that in this example we didn't use a PKI cerificates
-looked up in a x.509 hierarchy.</p>
-
-<p>We could have. We would have used an RDF interface to PKI.</p>
+<p>You will notice that in this example we didn't use a PKI certificates
+looked up in a x.509 hierarchy. We could have. We would have used an RDF
+interface to PKI. </p>
 
 <p>There are two interesting reasons not to. One is that in designing the
-system fram scratch we defined exactly how it works. We defined what
-information Alan signed about Kari, without involvng any other information
+system from scratch we defined exactly how it works. We defined what
+information Alan signed about Kari, without involving any other information
 actually identifying Kari as an individual person in the world. We don't need
 to know Kari's social security number with the Finnish government. The key
 represents Kari in the role he plays in this system. Because we are using
 RDF, we can put whatever information into the certificate we like. We don't
 have to worry about extending the certificate format. Because what we are
-doing concerns and represents the realtionships between the involved social
-entities without any external authority, it is more weblike in nature: we are
-freer to model the actual social trust system we use.</p>
+doing concerns the relationships between the social entities involved without
+bringing in any  superfluous external authority, it is more weblike in
+nature. We are freer to model the actual social trust system we use.</p>
 
-<p>The other interesting point is that the finished system is in fact the
-amount of software for working out whether a request is valid is in fact
-quite small. One can make it even smaller. Tiina can generate a proof - an
-output of the bits of data</p>
+<p>The other interesting point is that the amount of software for working out
+whether a request is valid is in fact quite small.   The access rule is the
+secure part which is specific to this system.  Apart from that the trusted
+code base is a general-purpose engine and a cryptographic library.ne can make
+it even smaller. Tiina can g</p>
 
-<p></p>
+<p>One can make the code base even smaller. Tiina can herself run the access
+rule herself, and generate a proof - an output of the bits of data used and
+rules used step by step.   The web server then only has to check this proof. 
+Although it wasn't very difficult, it did involve running a simple inference
+engine.  Checking a proof is in fact simpler.  (Cwm is being adapted to
+generate proofs, but it can't do it yet for this case) .   We assumed that
+Tiina had a program to generate the request which know exactly how to do it.
+You could imagine a more difficult situation in which her access agent had to
+search for some connection between her and W3C, and find a way of justifying
+the request.  In this case, finding the credentials could have taken a long
+time, or used special knowledge -- things which the web server itself
+wouldn't want to worry about. The proof sent would then contain just the
+essential information actually used to justify entry.</p>
 
-<p>@@ Small trusted codebase</p>
-
-<p></p>
-
-<p></p>
+<p>The ability to write rules about what document actually says what allows
+us to make systems which behave in predicatable and appropriate ways in the
+real world.  Cryptography gives use the ability to build secure systems,
+which in a weblike way allow us to express what the real trust situation. </p>
 
 <p></p>
 <hr />
