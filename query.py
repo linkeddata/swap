@@ -1038,7 +1038,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if result != None:
 			    self.state = S_DONE
 			    rea=None
-			    if tracking: rea = BecauseBuiltIn(subj, pred, result, proof)
+			    if diag.tracking: rea = BecauseBuiltIn(subj, pred, result, proof)
 			    if isinstance(pred, MultipleFunction):
 				return [({obj:x}, rea) for x in result]
 			    else:
@@ -1059,7 +1059,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 			if result != None:
 			    self.state = S_DONE
 			    rea=None
-			    if tracking:
+			    if diag.tracking:
 				rea = BecauseBuiltIn(result, pred, obj, proof)
 			    if isinstance(pred, MultipleReverseFunction):
 				return [({subj:x}, rea) for x in result]

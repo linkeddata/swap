@@ -251,6 +251,8 @@ def explainStatement(s, ko):
 	statementReason = statementFormulaReason.reasonForStatement.get(s, None)
 	if statementReason == None:
 	    progress("Ooops, formula has no reason for statement,", s)
+	    progress("formula is: %s" % `f.statements`)
+	    progress("hash table is: %s" % `statementFormulaReason.reasonForStatement`)
 	    raise RuntimeError("see above")
 	    return None
 	ri = statementReason.explain(ko)

@@ -518,8 +518,8 @@ rdf/xml files. Note that this requires rdflib.
                 workingContext = _newContext
 
             elif arg == "-why":
-                
-		workingContext.close()
+                workingContext.stayOpen = False
+		workingContext = workingContext.close()
 		workingContext = workingContext.collector.explanation()
 
             elif arg == "-dump":
