@@ -32,6 +32,13 @@
 <xsl:template match="dict">
   <r:Description>
     <xsl:for-each select="key">
+      <!-- hmm... how to embed key names in URI space...
+           here we just assume one big namespace of plist
+	   keys. But perhaps the namespace should be a param.
+
+	   We have the usual squeeze-it-into-an-XML-name
+	   problem; we only handle a few cases here.
+	   -->
       <xsl:variable name='n1' select='translate(., " ", "_")'/>
       <xsl:variable name='pName'>
         <xsl:choose>
@@ -62,6 +69,7 @@
             </xsl:when>
 
             <xsl:when test='name() = "integer"'>
+	      <!-- using xsi:type in anticipation of RDF Core decisions...-->
               <xsl:attribute name="xsi:type">integer</xsl:attribute>
               <xsl:value-of select='.'/>
             </xsl:when>
