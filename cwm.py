@@ -396,7 +396,8 @@ rdf/xml files. Note that this requires rdflib.
 		load(_store, _inputURI,
 			    openFormula=workingContext,
 			    contentType =ContentType,
-			    flags=option_flags[option_format])
+			    flags=option_flags[option_format],
+                            referer="")
 
                 _gotInput = 1
 

@@ -361,7 +361,9 @@ class IndexedFormula(Formula):
 	    report(s, why)
 
         # Build 8 indexes.
-#       This now takes a lot of the time in a typical  cwm run! :-( 
+#       This now takes a lot of the time in a typical  cwm run! :-(
+#       I honestly think the above line is a bit pessemistic. The below lines scale.
+#       The above lines do not (removeStatement does not scale)
 
 	if subj is self:  # Catch variable declarations
 	    if pred is self.store.forAll:
@@ -379,31 +381,31 @@ class IndexedFormula(Formula):
         self.statements.append(s)
        
         list = self._index.get((None, None, obj), None)
-        if list == None: self._index[(None, None, obj)]=[s]
+        if list is None: self._index[(None, None, obj)]=[s]
         else: list.append(s)
 
         list = self._index.get((None, subj, None), None)
-        if list == None: self._index[(None, subj, None)]=[s]
+        if list is None: self._index[(None, subj, None)]=[s]
         else: list.append(s)
 
         list = self._index.get((None, subj, obj), None)
-        if list == None: self._index[(None, subj, obj)]=[s]
+        if list is None: self._index[(None, subj, obj)]=[s]
         else: list.append(s)
 
         list = self._index.get((pred, None, None), None)
-        if list == None: self._index[(pred, None, None)]=[s]
+        if list is None: self._index[(pred, None, None)]=[s]
         else: list.append(s)
 
         list = self._index.get((pred, None, obj), None)
-        if list == None: self._index[(pred, None, obj)]=[s]
+        if list is None: self._index[(pred, None, obj)]=[s]
         else: list.append(s)
 
         list = self._index.get((pred, subj, None), None)
-        if list == None: self._index[(pred, subj, None)]=[s]
+        if list is None: self._index[(pred, subj, None)]=[s]
         else: list.append(s)
 
         list = self._index.get((pred, subj, obj), None)
-        if list == None: self._index[(pred, subj, obj)]=[s]
+        if list is None: self._index[(pred, subj, obj)]=[s]
         else: list.append(s)
 
 	if self._closureMode != "":
@@ -417,6 +419,8 @@ class IndexedFormula(Formula):
 	"""Removes a statement The formula must be open.
 	
 	This implementation is alas slow, as removal of items from tha hash is slow.
+	The above statement is false. Removing items from a hash is easily over five times
+	faster than removing them from a list.
 	Also, truth mainainance is not done.  You can't undeclare things equal.
 	This is really a low-level method, used within add() and for cleaning up the store
 	to save space in purge() etc.
@@ -433,6 +437,7 @@ class IndexedFormula(Formula):
         self._index[(pred, None, obj)].remove(s)
         self._index[(pred, subj, None)].remove(s)
         self._index[(pred, subj, obj)].remove(s)
+        #raise RuntimeError("The triple is %s: %s %s %s"%(context, pred, subj, obj))
 	return
     
     def canonicalize(F):
@@ -612,7 +617,9 @@ class IndexedFormula(Formula):
 	
 	Check whether this new list (given as bnode) causes other things to become lists.
 	Set up redirection so the list is used from now on instead of the bnode.	
-	Internal function."""
+	Internal function.
+
+	This function is extraordinarily slow, .08 seconds per call on reify/reify3.n3"""
         if diag.chatty_flag > 80: progress("New list was %s, now %s = %s"%(`bnode`, `list`, `list.value()`))
 	if isinstance(bnode, List): return  ##@@@@@ why is this necessary? weid.
 	newBindings[bnode] = list

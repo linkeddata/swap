@@ -24,13 +24,15 @@ print_all_file_names = diag.print_all_file_names   # for listing test files
 
 
 
-def urlopenForRDF(addr):
+def urlopenForRDF(addr, referer):
     """A version of urllib.urlopen() which asks for RDF by preference
 
     This is now uses urllib2.urlopen(), in order to get better error handling
     """
     z = urllib2.Request(addr)
     z.add_header('Accept', 'text/rdf+n3, application/rdf+xml')
+    if referer: #consistently misspelt
+        z.add_header('Referer', referer)
 #    z.add_header('Accept', 'text/plain q=0.1')
     q =  urllib2.urlopen(z)
     if print_all_file_names:
@@ -38,7 +40,7 @@ def urlopenForRDF(addr):
     return q
 
 def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
-		flags="", why=None):
+		flags="", referer=None, why=None):
     """Get and parse document.  Guesses format if necessary.
 
     uri:      if None, load from standard input.
@@ -51,12 +53,14 @@ def load(store, uri=None, openFormula=None, asIfFrom=None, contentType=None,
     of the store. However, it is natural to call it as a method on the store.
     And a proliferation of APIs confuses.
     """
+    if referer is None:
+        raise RuntimeError("We are trying to force things to include a referer header")
     try:
 	baseURI = uripath.base()
 	if uri != None:
 	    addr = uripath.join(baseURI, uri) # Make abs from relative
 	    if diag.chatty_flag > 40: progress("Taking input from " + addr)
-	    netStream = urlopenForRDF(addr)
+	    netStream = urlopenForRDF(addr, referer)
 	    if diag.chatty_flag > 60:
 		progress("   Headers for %s: %s\n" %(addr, netStream.headers.items()))
 	    receivedContentType = netStream.headers.get(HTTP_Content_Type, None)
