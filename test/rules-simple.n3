@@ -1,0 +1,19 @@
+#    Test filter in N3
+# Use
+# cwm rules-simple.n3 -think
+#  should conclude that  granpa is ancestor of bill
+# 
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix daml: <http://www.daml.org/2001/03/daml+oil#> .
+@prefix : <#> .
+@prefix rules: <#> .
+
+# Simplified rules for debugging rules
+
+this log:forAll :y.
+
+{  :Joe :likes :y } log:implies { :y :madeof :chocolate }.
+
+:Joe :likes :easterEggs .
+
+
