@@ -216,6 +216,8 @@ def refTo(base, uri):
     n = string.count(base, "/", i)
     if n == 0 and i<len(uri) and uri[i] == '#':
         return "./" + uri[i:]
+    elif n == 0 and i == len(uri):
+        return "./"
     else:
         return ("../" * n) + uri[i:]
 
@@ -283,7 +285,9 @@ class Tests(unittest.TestCase):
                  ("http://example/x/y%2Fz", "http://example/x/abc", "abc"),
                  ("http://example/x/y/z", "http://example/x%2Fabc", "/x%2Fabc"),
                  ("http://example/x/y%2Fz", "http://example/x%2Fabc", "/x%2Fabc"),
-                 ("http://example/x%2Fy/z", "http://example/x%2Fy/abc", "abc")
+                 ("http://example/x%2Fy/z", "http://example/x%2Fy/abc", "abc"),
+                 # Ryan Lee
+                 ("http://example/x/abc.efg", "http://example/x/", "./")
                  )
 
         for inp1, inp2, exp in cases:
@@ -375,7 +379,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.11  2003-04-03 22:06:54  ryanlee
+# Revision 1.12  2003-04-03 22:35:12  ryanlee
+# fixed previous fix, added test case
+#
+# Revision 1.11  2003/04/03 22:06:54  ryanlee
 # small fix in if, line 217
 #
 # Revision 1.10  2003/02/24 15:06:38  connolly
