@@ -7,8 +7,8 @@
 #For example, I know now how to make a statement: Fred is the father Joe, 
 # and Bob is the brother of Fred.
 
-:Fred is :father of :Joe.
-:Bob is :brother of :Fred.
+:Joe has :father :Fred.
+:Fred has :brother :Bob.
 
 @prefix log: <http://www.w3.org/2000/10/swap/log#> .
 this log:forAll :who1, :who2.
