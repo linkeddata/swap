@@ -250,15 +250,15 @@ class SqlDBAlgae(RdfDBAlgae):
 
         aliases = []
         asz = []
-        self.vars = {};
+        vars = {};
         self.LAST_CH = ord('a')
-        self._walkQuerySets(implQuerySets, aliases, asz, wheres, row, flags)
+        self._walkQuerySets(implQuerySets, aliases, asz, vars, wheres, row, flags)
 
         selectPunct = []
         selects = []
         labels = []
-        self.orderedVars = self.vars.keys()
-        self._buildVarInfo(selectPunct, selects, labels, resultSet)
+        varOrder = vars.keys()
+        self._buildVarInfo(selectPunct, selects, labels, vars, varOrder, resultSet)
 
         query = self._buildQuery(implQuerySets, asz, wheres, selectPunct, selects, labels)
         messages.append("query SQLselect \"\"\""+query+"\"\"\" .")
@@ -266,10 +266,10 @@ class SqlDBAlgae(RdfDBAlgae):
         cursor = connection.cursor()
         cursor.execute(query)
 
-        nextResults, nextStatements = self._buildResults(cursor, selects, implQuerySets, row, statements)
+        nextResults, nextStatements = self._buildResults(cursor, selects, vars, varOrder, implQuerySets, row, statements)
         return nextResults, nextStatements
 
-    def _walkQuerySets(self, implQuerySets, aliases, asz, wheres, row, flags):
+    def _walkQuerySets(self, implQuerySets, aliases, asz, vars, wheres, row, flags):
         disjunction = implQuerySets.isDisjunction()
         for c in implQuerySets.getList():
             ch = chr(self.LAST_CH)
@@ -281,10 +281,10 @@ class SqlDBAlgae(RdfDBAlgae):
 
             symbol = s.symbol()
             try:
-                last = self.vars[symbol]
+                last = vars[symbol]
                 ch = last[0][3]
             except KeyError, e:
-                self.vars[symbol] = []
+                vars[symbol] = []
 
             if (s._const()):
                 uri = s._uri()
@@ -293,7 +293,7 @@ class SqlDBAlgae(RdfDBAlgae):
                 else:
                     raise RuntimeError, "not implemented"
             else:
-		self._addBinding(s, ch, table, None, SUBST_SUBJ, asz, innerWheres, disjunction);
+		self._addBinding(s, ch, table, None, SUBST_SUBJ, asz, vars, innerWheres, disjunction);
 
             if (o._const()):
                 lookFor = o._const()
@@ -302,38 +302,38 @@ class SqlDBAlgae(RdfDBAlgae):
                 else:
                     innerWheres.append(ch+"."+field+"=\""+lookFor+"\"")
             elif (o.symbol):
-		self._addBinding(o, ch, table, field, SUBST_SUBJ, asz, innerWheres, disjunction);
+		self._addBinding(o, ch, table, field, SUBST_SUBJ, asz, vars, innerWheres, disjunction);
             else:
                 raise RuntimeError, "what type is "+o.toString()
 
             if (len(innerWheres)):
                 wheres.append('('+string.join(innerWheres, "\n  AND ")+')')
                 
-    def _addBinding(self, ob, as, table, field, pos, asz, wheres, disjunction):
+    def _addBinding(self, ob, as, table, field, pos, asz, vars, wheres, disjunction):
         symbol = ob.symbol()
         pk = self.structure[table]['-primaryKey']
         try:
-            dummy = self.vars[symbol]
+            dummy = vars[symbol]
         except KeyError, e:
-            self.vars[symbol] = []
-        self.vars[symbol].append([ob, field, table, as, pk, pos, self._uniquesFor(table)])
-        if (len(self.vars[symbol]) == 1):
+            vars[symbol] = []
+        vars[symbol].append([ob, field, table, as, pk, pos, self._uniquesFor(table)])
+        if (len(vars[symbol]) == 1):
             if (field == None and disjunction == None):
                 self.LAST_CH = self.LAST_CH + 1
                 asz.append(table+" AS "+as)
         else:
-            ob0 = self.vars[symbol][0][0]
-            field0 = self.vars[symbol][0][1]
-            table0 = self.vars[symbol][0][2]
-            var0 = self.vars[symbol][0][3]
-            pk0 = self.vars[symbol][0][4]
+            ob0 = vars[symbol][0][0]
+            field0 = vars[symbol][0][1]
+            table0 = vars[symbol][0][2]
+            var0 = vars[symbol][0][3]
+            pk0 = vars[symbol][0][4]
 
-            N = len(self.vars[symbol]) - 1
-            obN = self.vars[symbol][N][0]
-            fieldN = self.vars[symbol][N][1]
-            tableN = self.vars[symbol][N][2]
-            varN = self.vars[symbol][N][3]
-            pkN = self.vars[symbol][N][4]
+            N = len(vars[symbol]) - 1
+            obN = vars[symbol][N][0]
+            fieldN = vars[symbol][N][1]
+            tableN = vars[symbol][N][2]
+            varN = vars[symbol][N][3]
+            pkN = vars[symbol][N][4]
 
             if (table0 != tableN):
                 if (field0 == None): field0 = pk0
@@ -392,12 +392,12 @@ class SqlDBAlgae(RdfDBAlgae):
             constraints.append(tableAs+"."+field+"=\""+value+"\"")
         return constraints
 
-    def _buildVarInfo(self, selectPunct, selects, labels, resultSet):
-        for var in self.orderedVars:
-            # self.vars[var] contains an array of every time a variable was
+    def _buildVarInfo(self, selectPunct, selects, labels, vars, varOrder, resultSet):
+        for var in varOrder:
+            # vars[var] contains an array of every time a variable was
             # referenced in a pattern. We care ony about the first for buiding
             # the selects list.
-            varInfo = self.vars[var][0]
+            varInfo = vars[var][0]
             queryPiece = varInfo[0]
             field = varInfo[1]
             table = varInfo[2]
@@ -463,7 +463,7 @@ class SqlDBAlgae(RdfDBAlgae):
         # /me thinks that one may group by ^existentials
         return string.join(segments, '')
 
-    def _buildResults(self, cursor, selects, implQuerySets, row, statements):
+    def _buildResults(self, cursor, selects, vars, varOrder, implQuerySets, row, statements):
         nextResults = []
         nextStatements = []
         uniqueStatementsCheat = {}
@@ -477,8 +477,8 @@ class SqlDBAlgae(RdfDBAlgae):
 
             rowBindings = {}
             iSelect = 0;
-            for var in self.orderedVars:
-                varInfo = self.vars[var][0]
+            for var in varOrder:
+                varInfo = vars[var][0]
                 queryPiece, field, table, var, pk, dummy, fieldz = varInfo
                 valueHash = {}
                 if (field):
@@ -558,13 +558,13 @@ class SqlDBAlgae(RdfDBAlgae):
 
 if __name__ == '__main__':
     s = [["<http://localhost/SqlDB/uris#uri>", "?urisRow", "<http://www.w3.org/Member/Overview.html>"], 
-         ["<http://localhost/SqlDB/uris#acl>", "?urisRow", "?aacl"], 
-         ["<http://localhost/SqlDB/acls#acl>", "?acl", "?aacl"], 
          ["<http://localhost/SqlDB/acls#access>", "?acl", "?access"], 
-         ["<http://localhost/SqlDB/ids#value>", "?u1", "\"eric\""], 
-         ["<http://localhost/SqlDB/idInclusions#id>", "?g1", "?u1"], 
+         ["<http://localhost/SqlDB/acls#acl>", "?acl", "?aacl"], 
+         ["<http://localhost/SqlDB/acls#id>", "?acl", "?accessor"], 
          ["<http://localhost/SqlDB/idInclusions#groupId>", "?g1", "?accessor"], 
-         ["<http://localhost/SqlDB/acls#id>", "?acl", "?accessor"]]
+         ["<http://localhost/SqlDB/idInclusions#id>", "?g1", "?u1"], 
+         ["<http://localhost/SqlDB/ids#value>", "?u1", "\"eric\""], 
+         ["<http://localhost/SqlDB/uris#acl>", "?urisRow", "?aacl"]]
     rs = ResultSet()
     qp = rs.buildQuerySetsFromArray(s)
     a = SqlDBAlgae("http://localhost/SqlDB/", "AclSqlObjects")
@@ -600,5 +600,16 @@ s
 b 2352
 c
 s
+
+this one works:
+    s = [["<http://localhost/SqlDB/uris#uri>", "?urisRow", "<http://www.w3.org/Member/Overview.html>"], 
+         ["<http://localhost/SqlDB/uris#acl>", "?urisRow", "?aacl"], 
+         ["<http://localhost/SqlDB/acls#acl>", "?acl", "?aacl"], 
+         ["<http://localhost/SqlDB/acls#access>", "?acl", "?access"], 
+         ["<http://localhost/SqlDB/ids#value>", "?u1", "\"eric\""], 
+         ["<http://localhost/SqlDB/idInclusions#id>", "?g1", "?u1"], 
+         ["<http://localhost/SqlDB/idInclusions#groupId>", "?g1", "?accessor"], 
+         ["<http://localhost/SqlDB/acls#id>", "?acl", "?accessor"]]
+
 """
 
