@@ -103,12 +103,117 @@ we don't want another person to know.</p>
 
 <p>Kari also generates a key, which represents the authority has as Elisa's
 representative. he does this in an identical fashion, using
-access-gen-elisa.n3. The actual passing of authority happens when Kari gives
-the public part of his key to Alan, in some way secure enough for Alan to be
-sure enough it , and Alan then signs something to the effect that it is
-indeed Kari's key as AC rep for Eliza. </p>
+<code>access-gen-elisa.n3</code>. The actual passing of authority happens
+when Kari gives the public part of his key to Alan, in some way secure enough
+for Alan to be sure enough it , and Alan then signs something to the effect
+that it is indeed Kari's key as AC rep for Eliza.</p>
+<pre>cwm access-elisa.public access-master.private access-sign-member-cert.n3 \
+ --think --purge --with "Elisa" &gt; access-eliza.cert</pre>
+
+<p>Here, Alan uses the private key which he (alone) has access to and the
+public key which Kari gave him. <code>access-sign-member-cert.n3</code> is a
+rule file which does the signing. It contains, in essence:</p>
+<pre>{ :n is os:argv of "1".
+  :tk a acc:MemberKey.
+  { :tk a acc:MemberKey;
+        acc:authorityName :n;
+        acc:junk "327462sjsdfjsakdhfkjsafd32164321"
+   } log:n3String :str.
+   :kp a acc:MasterKeyPair.
+   :k a acc:MasterKey.
+   ([is crypto:md5 of :str] :kp) crypto:sign :z
+} =&gt; {
+   :str acc:endorsement[acc:signature :z; acc:key :k
+} .</pre>
 
 <p></p>
+
+<p>:n resolves to be the name "Eliza", :tk resolves to be Eliza's public key.
+The string str is string form of the certificate formula, as the digital
+signatures work on strings. The MD5 checksum of the string is formed, and
+that is signed with the master key pair (:kp). All this happens as the left
+hand side of the rule is resolved, and when it has, then the conclusion is
+that that string has an endorsement which has a given signature and a given
+public key. This ensordsement information is the certificate.</p>
+
+<p>In exactly the same fashion, Tiina, the employee, makes a key, and gets a
+certificate from Kari about that key.</p>
+
+<p>Then the time comes that Tiina wants to access the member site. She makes
+up a request for the web page, and signs it with her private key.</p>
+<pre>cwm access-tiina.private access-sign-request.n3 \
+ --think --purge --with http://www.w3.org/Member &gt; access-1.request</pre>
+
+<p>The with command passes in the URI of the page she would like to
+access.</p>
+
+<p>The crux of this whole system is the file <code>access-rule.n3</code>
+which tells the web site how to trust a request.</p>
+<pre>this log:forAll :d, :F, :G, :k, :k2, :k3, :kp, :x, :request, :sig, :str, :y , :z , :q .
+
+# The rule of access.
+#
+#  acc:requestSupportedBy means that it correctly claimed to be
+#        signed by the given key.
+
+{ :request a acc:GoodRequest } is log:implies of
+{
+    :request acc:forDocument :d;
+             acc:requestSupportedBy :k.
+
+    []       acc:certSupportedBy :k2;    # Certificate
+             log:includes { :k a acc:RequestKey }.
+
+    []       acc:certSupportedBy [a acc:MasterKey];    # Certificate
+             log:includes { :k2 a acc:MemberKey }.
+
+}.
+
+#  What is a Master key?
+#
+#  (we could just put in the text here)
+
+{ &lt;access-master.public&gt; log:semantics [
+        log:includes {:x a acc:MasterKey}]
+} log:implies {:x a acc:MasterKey}.
+
+
+#  What do we belive is a request?
+#  We trust the command line in defining what is a request.
+
+{  "1"!os:argv!os:baseAbsolute^log:uri log:semantics :F.
+   :F log:includes { :str acc:endorsement[acc:signature :sig; acc:key :k]}.
+   :k crypto:verify ([is crypto:md5 of :str] :sig).
+   :str log:parsedAsN3:G } log:implies { :G acc:requestSupportedBy :k }.
+
+#  What do we believe from a signed request?
+#   - what it says it is asking for.
+#   - what it quotes as credentials
+#  It could actually enclose a copy of the credentials inline,
+#  but here we use the web.  A credential is a document which
+#  provides evidence in support of the request.
+
+{:G acc:requestSupportedBy :k; log:includes {:G acc:forDocument :d}} =&gt;
+   {:G acc:forDocument :d}.
+
+{:G acc:requestSupportedBy :k; log:includes {:G acc:credential :d}} =&gt;
+   {:G acc:credential :d}.
+
+# What do we belive from a signed credential.
+#
+# In this case, just note that a key supports the signed formula.
+# The fact of this support is used in the access rule above.
+# We don't actually beleive everything the certificate says.
+
+{  [] acc:credential [ log:semantics :F ].
+   :F log:includes { :str acc:endorsement[acc:signature :sig; acc:key :k]}.
+   :k crypto:verify ([is crypto:md5 of :str] :sig).
+   :str log:parsedAsN3 :G } log:implies { :G acc:certSupportedBy :k }.</pre>
+
+<p></p>
+
+<p>The important thing is that we are really trusting very specific
+information from different sources.</p>
 
 <p></p>
 
@@ -124,7 +229,7 @@ indeed Kari's key as AC rep for Eliza. </p>
 <p></p>
 
 <p>The bit at the bottom shows how the picture itself, <code>make.svg</code>,
-was generated from the Makefile - via RDF of course.  Some people have
+was generated from the Makefile - via RDF of course. Some people have
 actually started to use RDF just because of the diagram drawing facility, but
 we hope by this stage that you will have a longer term and wider vision of
 the value of Semantic Web!</p>
@@ -138,16 +243,16 @@ the value of Semantic Web!</p>
 <p></p>
 
 <p>You will notice that in this example we didn't use a PKI cerificates
-looked up in a x.509 hierarchy. </p>
+looked up in a x.509 hierarchy.</p>
 
-<p>We could have.  We would have used an RDF interface to PKI.</p>
+<p>We could have. We would have used an RDF interface to PKI.</p>
 
-<p>There are two interesting reasons not to.  One is that in designing the
+<p>There are two interesting reasons not to. One is that in designing the
 system fram scratch we defined exactly how it works. We defined what
 information Alan signed about Kari, without involvng any other information
-actually identifying Kari as an individual person in the world.  We don't
-need to know Kari's social security number with the Finnish government. The
-key represents Kari in the role he plays in this system. Because we are using
+actually identifying Kari as an individual person in the world. We don't need
+to know Kari's social security number with the Finnish government. The key
+represents Kari in the role he plays in this system. Because we are using
 RDF, we can put whatever information into the certificate we like. We don't
 have to worry about extending the certificate format. Because what we are
 doing concerns and represents the realtionships between the involved social
@@ -156,7 +261,7 @@ freer to model the actual social trust system we use.</p>
 
 <p>The other interesting point is that the finished system is in fact the
 amount of software for working out whether a request is valid is in fact
-quite small.  One can make it even smaller.   Tiina can generate a proof - an
+quite small. One can make it even smaller. Tiina can generate a proof - an
 output of the bits of data</p>
 
 <p></p>
