@@ -23,7 +23,7 @@ Note that table documents are namespace documents: when you
 define a prefix to correspond to the table document's URI with a hash on,
 then the table document automatically an RDF schema for the namespace. 
 """;
- doc:cvsversion "$Id$".
+ doc:version "$Id$".
 
  
 db:Database a rdfs:Class;
@@ -123,4 +123,3 @@ It must also identify <#item> as being of rdf$type of the Table.
 
 
 #ends
-
