@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE uridef[
+  <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY daml "http://www.daml.org/2001/03/daml+oil">
+  <!ENTITY state "http://www.daml.ri.cmu.edu/ont/State.daml">
+  <!ENTITY country "http://www.daml.ri.cmu.edu/ont/Country.daml">
+  <!ENTITY DEFAULT "http://www.daml.ri.cmu.edu/ont/City.daml">
+  <!ENTITY THIS "http://www.daml.ri.cmu.edu/ont/City.daml">
+]>
+ 
+<!--
+This document uses entity types as a shorthand for URIs.
+Download the source for a version with unexpanded entities.
+  -->
+ 
+<rdf:RDF
+  xmlns:rdf=    "&rdf;#"
+  xmlns:rdfs=   "&rdfs;#"
+  xmlns:daml=   "&daml;#"
+  xmlns:country="&country;#"
+  xmlns:state=  "&state;#"
+  xmlns=        "&DEFAULT;#">
+ 
+  <daml:Ontology about="">
+    <daml:versionInfo>
+      $Id$
+    </daml:versionInfo>
+    <rdfs:comment>
+      City Ontology.  Use as a top level ontology for describing cities.
+
+    </rdfs:comment>
+    <daml:imports rdf:resource="&rdf;" />
+    <daml:imports rdf:resource="&rdfs;" />
+    <daml:imports rdf:resource="&daml;" />
+  </daml:Ontology>
+ 
+  <rdfs:Class rdf:ID="City">
+    <rdfs:label>City</rdfs:label>
+    <rdfs:subClassOf rdf:resource="&daml;#Thing" />
+    <rdfs:comment> 
+      High level city concept.
+    </rdfs:comment> 
+  </rdfs:Class>
+ 
+  <rdf:Property rdf:ID="name">
+    <rdfs:domain rdf:resource="#City" />
+    <rdfs:range rdf:resource="&rdfs;#Literal"/>
+  </rdf:Property> 
+
+  <rdf:Property rdf:ID="country">
+    <rdfs:domain rdf:resource="#City" />
+    <rdfs:range rdf:resource="&country;#Country" />
+  </rdf:Property> 
+
+</rdf:RDF>

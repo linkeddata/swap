@@ -1,0 +1,770 @@
+<?xml version='1.0' encoding='ISO-8859-1'?>
+<!DOCTYPE uridef[
+  <!ENTITY rdf "http://www.w3.org/1999/02/22-rdf-syntax-ns">
+  <!ENTITY rdfs "http://www.w3.org/2000/01/rdf-schema">
+  <!ENTITY daml "http://www.daml.org/2001/03/daml+oil">
+  <!ENTITY log "http://www.w3.org/2000/10/swap/log">
+  <!ENTITY country "Country.daml">
+  <!ENTITY state "State.daml">
+  <!ENTITY uscity "USCity.daml">
+  <!ENTITY DEFAULT "USRegionState.daml">
+  <!ENTITY THIS "USRegionState.daml">
+]>
+ 
+<!--
+This document uses entity types as a shorthand for URIs.
+Download the source for a version with unexpanded entities.
+
+TBL: Added log lines - authoritativeDocument
+  -->
+ 
+<rdf:RDF
+  xmlns:rdf=    "&rdf;#"
+  xmlns:rdfs=   "&rdfs;#"
+  xmlns:daml=   "&daml;#"
+  xmlns:country="&country;#"
+  xmlns:log=    "&log;#"
+  xmlns:state=  "&state;#"
+  xmlns:uscity= "&uscity;#"
+  xmlns:this=   "&THIS;#"
+  xmlns=        "&DEFAULT;#">
+ 
+  <daml:Ontology about="">
+    <daml:versionInfo>
+      $Id$
+    </daml:versionInfo>
+    <rdfs:comment>
+      US Regions and States.
+    </rdfs:comment>
+    <daml:imports rdf:resource="&rdf;" />
+    <daml:imports rdf:resource="&rdfs;" />
+    <daml:imports rdf:resource="&daml;" />
+    <daml:imports rdf:resource="&state;" />
+  </daml:Ontology>
+ 
+  <!-- Here is the ontology of the different regions -->
+
+  <rdfs:Class rdf:ID="USState">
+    <rdfs:label>USState</rdfs:label>
+    <rdfs:subClassOf rdf:resource="&state;#State" />
+    <rdfs:comment>
+      Information about one of the US states.
+    </rdfs:comment>
+  </rdfs:Class>
+ 
+  <rdf:Property rdf:ID="region">
+    <rdfs:domain rdf:resource="&THIS;#USState" />
+    <rdfs:range rdf:resource="&THIS;#USRegion" />
+    <log:authoritativeDocument rdf:resource="&THIS;"/>
+  </rdf:Property> 
+
+  <rdf:Property rdf:ID="borderstate">
+    <rdfs:domain rdf:resource="&THIS;#USState" />
+    <log:authoritativeDocument rdf:resource="&THIS;"/>
+  </rdf:Property> 
+
+  <rdf:Property rdf:ID="name">
+    <rdfs:domain rdf:resource="&THIS;#USState" />
+    <log:authoritativeDocument rdf:resource="&THIS;"/>
+  </rdf:Property> 
+
+  <rdf:Property rdf:ID="code">
+    <rdfs:domain rdf:resource="&THIS;#USState" />
+    <log:authoritativeDocument rdf:resource="&THIS;"/>
+  </rdf:Property> 
+
+  <rdf:Property rdf:ID="capital">
+    <rdfs:domain rdf:resource="&THIS;#USState" />
+    <log:authoritativeDocument rdf:resource="&THIS;"/>
+  </rdf:Property> 
+
+  <!-- Constrain the country to be the USA -->
+  <rdf:Property rdf:about="&state;#country">
+    <rdfs:range rdf:resource="&country;#UNITED-STATES" />
+  </rdf:Property> 
+
+  <!-- Now to instantiate the states -->
+
+  <USState rdf:ID="AL">
+    <name>Alabama</name>
+    <code>AL</code>
+    <borderstate rdf:resource="&THIS;#FL"/>
+    <borderstate rdf:resource="&THIS;#GA"/>
+    <borderstate rdf:resource="&THIS;#MS"/>
+    <borderstate rdf:resource="&THIS;#TN"/>
+    <capital rdf:resource="&uscity;#montgomeryal"/>
+    <region rdf:resource="&THIS;#DeepSouth"/>
+  </USState>
+
+  <USState rdf:ID="AK">
+    <name>Alaska</name>
+    <code>AK</code>
+    <capital rdf:resource="&uscity;#juneauak"/>
+    <region rdf:resource="&THIS;#PacificWest"/>
+  </USState>
+
+  <USState rdf:ID="AZ">
+    <name>Arizona</name>
+    <code>AZ</code>
+    <borderstate rdf:resource="&THIS;#CA"/>
+    <borderstate rdf:resource="&THIS;#CO"/>
+    <borderstate rdf:resource="&THIS;#NV"/>
+    <borderstate rdf:resource="&THIS;#NM"/>
+    <borderstate rdf:resource="&THIS;#UT"/>
+    <capital rdf:resource="&uscity;#phoenixaz"/>
+    <region rdf:resource="&THIS;#SouthWest"/>
+  </USState>
+
+  <USState rdf:ID="AR">
+    <name>Arkansas</name>
+    <code>AR</code>
+    <borderstate rdf:resource="&THIS;#LA"/>
+    <borderstate rdf:resource="&THIS;#MS"/>
+    <borderstate rdf:resource="&THIS;#MO"/>
+    <borderstate rdf:resource="&THIS;#OK"/>
+    <borderstate rdf:resource="&THIS;#TN"/>
+    <borderstate rdf:resource="&THIS;#TX"/>
+    <capital rdf:resource="&uscity;#littlerockar"/>
+    <region rdf:resource="&THIS;#SouthCentral"/>
+  </USState>
+
+  <USState rdf:ID="CA">
+    <name>California</name>
+    <code>CA</code>
+    <borderstate rdf:resource="&THIS;#AZ"/>
+    <borderstate rdf:resource="&THIS;#NV"/>
+    <borderstate rdf:resource="&THIS;#OR"/>
+    <capital rdf:resource="&uscity;#sacramentoca"/>
+    <region rdf:resource="&THIS;#PacificWest"/>
+  </USState>
+
+  <USState rdf:ID="CO">
+    <name>Colorado</name>
+    <code>CO</code>
+    <borderstate rdf:resource="&THIS;#AZ"/>
+    <borderstate rdf:resource="&THIS;#KS"/>
+    <borderstate rdf:resource="&THIS;#NE"/>
+    <borderstate rdf:resource="&THIS;#NM"/>
+    <borderstate rdf:resource="&THIS;#OK"/>
+    <borderstate rdf:resource="&THIS;#UT"/>
+    <borderstate rdf:resource="&THIS;#WY"/>
+    <capital rdf:resource="&uscity;#denverco"/>
+    <region rdf:resource="&THIS;#SouthWest"/>
+  </USState>
+
+  <USState rdf:ID="CT">
+    <name>Connecticut</name>
+    <code>CT</code>
+    <borderstate rdf:resource="&THIS;#MA"/>
+    <borderstate rdf:resource="&THIS;#NY"/>
+    <borderstate rdf:resource="&THIS;#RI"/>
+    <capital rdf:resource="&uscity;#hartfordct"/>
+    <region rdf:resource="&THIS;#NewEngland"/>
+  </USState>
+
+  <USState rdf:ID="DC">
+    <name>District of Columbia</name>
+    <code>DC</code>
+    <capital rdf:resource="&uscity;#washingtondc"/>
+    <rdfs:comment>
+      Is this really a state?  Has been included
+      for completeness...
+    </rdfs:comment>
+  </USState>
+
+  <USState rdf:ID="DE">
+    <name>Delaware</name>
+    <code>DE</code>
+    <borderstate rdf:resource="&THIS;#MD"/>
+    <borderstate rdf:resource="&THIS;#NJ"/>
+    <borderstate rdf:resource="&THIS;#PA"/>
+    <capital rdf:resource="&uscity;#doverde"/>
+    <region rdf:resource="&THIS;#Mid-Atlantic"/>
+  </USState>
+
+  <USState rdf:ID="FL">
+    <name>Florida</name>
+    <code>FL</code>
+    <borderstate rdf:resource="&THIS;#AL"/>
+    <borderstate rdf:resource="&THIS;#GA"/>
+    <capital rdf:resource="&uscity;#tallahasseefl"/>
+    <region rdf:resource="&THIS;#DeepSouth"/>
+  </USState>
+
+  <USState rdf:ID="GA">
+    <name>Georgia</name>
+    <code>GA</code>
+    <borderstate rdf:resource="&THIS;#AL"/>
+    <borderstate rdf:resource="&THIS;#FL"/>
+    <borderstate rdf:resource="&THIS;#NC"/>
+    <borderstate rdf:resource="&THIS;#SC"/>
+    <borderstate rdf:resource="&THIS;#TN"/>
+    <capital rdf:resource="&uscity;#atlantaga"/>
+    <region rdf:resource="&THIS;#DeepSouth"/>
+  </USState>
+
+  <USState rdf:ID="HI">
+    <name>Hawaii</name>
+    <code>HI</code>
+    <capital rdf:resource="&uscity;#honoluluhi"/>
+    <region rdf:resource="&THIS;#PacificWest"/>
+  </USState>
+
+  <USState rdf:ID="ID">
+    <name>Idaho</name>
+    <code>ID</code>
+    <borderstate rdf:resource="&THIS;#MT"/>
+    <borderstate rdf:resource="&THIS;#NV"/>
+    <borderstate rdf:resource="&THIS;#OR"/>
+    <borderstate rdf:resource="&THIS;#UT"/>
+    <borderstate rdf:resource="&THIS;#WA"/>
+    <borderstate rdf:resource="&THIS;#WY"/>
+    <capital rdf:resource="&uscity;#boiseid"/>
+    <region rdf:resource="&THIS;#NorthWest"/>
+  </USState>
+
+  <USState rdf:ID="IL">
+    <name>Illinois</name>
+    <code>IL</code>
+    <borderstate rdf:resource="&THIS;#IN"/>
+    <borderstate rdf:resource="&THIS;#IA"/>
+    <borderstate rdf:resource="&THIS;#MI"/>
+    <borderstate rdf:resource="&THIS;#KY"/>
+    <borderstate rdf:resource="&THIS;#MO"/>
+    <borderstate rdf:resource="&THIS;#WI"/>
+    <capital rdf:resource="&uscity;#springfieldil"/>
+    <region rdf:resource="&THIS;#GreatLakes"/>
+  </USState>
+
+  <USState rdf:ID="IN">
+    <name>Indiana</name>
+    <code>IN</code>
+    <borderstate rdf:resource="&THIS;#IL"/>
+    <borderstate rdf:resource="&THIS;#KY"/>
+    <borderstate rdf:resource="&THIS;#MI"/>
+    <borderstate rdf:resource="&THIS;#OH"/>
+    <capital rdf:resource="&uscity;#indianapolisin"/>
+    <region rdf:resource="&THIS;#GreatLakes"/>
+  </USState>
+
+  <USState rdf:ID="IA">
+    <name>Iowa</name>
+    <code>IA</code>
+    <borderstate rdf:resource="&THIS;#IL"/>
+    <borderstate rdf:resource="&THIS;#MN"/>
+    <borderstate rdf:resource="&THIS;#MO"/>
+    <borderstate rdf:resource="&THIS;#NE"/>
+    <borderstate rdf:resource="&THIS;#SD"/>
+    <borderstate rdf:resource="&THIS;#WI"/>
+    <capital rdf:resource="&uscity;#desmoinesia"/>
+    <region rdf:resource="&THIS;#UpperPlains"/>
+  </USState>
+
+  <USState rdf:ID="KS">
+    <name>Kansas</name>
+    <code>KS</code>
+    <borderstate rdf:resource="&THIS;#CO"/>
+    <borderstate rdf:resource="&THIS;#MO"/>
+    <borderstate rdf:resource="&THIS;#NE"/>
+    <borderstate rdf:resource="&THIS;#OK"/>
+    <capital rdf:resource="&uscity;#topekaks"/>
+    <region rdf:resource="&THIS;#SouthCentral"/>
+  </USState>
+
+  <USState rdf:ID="KY">
+    <name>Kentucky</name>
+    <code>KY</code>
+    <borderstate rdf:resource="&THIS;#IL"/>
+    <borderstate rdf:resource="&THIS;#IN"/>
+    <borderstate rdf:resource="&THIS;#MO"/>
+    <borderstate rdf:resource="&THIS;#OH"/>
+    <borderstate rdf:resource="&THIS;#TN"/>
+    <borderstate rdf:resource="&THIS;#VA"/>
+    <borderstate rdf:resource="&THIS;#WV"/>
+    <capital rdf:resource="&uscity;#frankfortky"/>
+    <region rdf:resource="&THIS;#Mid-South"/>
+  </USState>
+
+  <USState rdf:ID="LA">
+    <name>Louisiana</name>
+    <code>LA</code>
+    <borderstate rdf:resource="&THIS;#AR"/>
+    <borderstate rdf:resource="&THIS;#MS"/>
+    <borderstate rdf:resource="&THIS;#TX"/>
+    <capital rdf:resource="&uscity;#batonrougela"/>
+    <region rdf:resource="&THIS;#DeepSouth"/>
+  </USState>
+
+  <USState rdf:ID="ME">
+    <name>Maine</name>
+    <code>ME</code>
+    <borderstate rdf:resource="&THIS;#NH"/>
+    <capital rdf:resource="&uscity;#augustame"/>
+    <region rdf:resource="&THIS;#NewEngland"/>
+  </USState>
+
+  <USState rdf:ID="MD">
+    <name>Maryland</name>
+    <code>MD</code>
+    <borderstate rdf:resource="&THIS;#DE"/>
+    <borderstate rdf:resource="&THIS;#PA"/>
+    <borderstate rdf:resource="&THIS;#VA"/>
+    <borderstate rdf:resource="&THIS;#WV"/>
+    <capital rdf:resource="&uscity;#annapolismd"/>
+    <region rdf:resource="&THIS;#Mid-Atlantic"/>
+  </USState>
+
+  <USState rdf:ID="MA">
+    <name>Massachusetts</name>
+    <code>MA</code>
+    <borderstate rdf:resource="&THIS;#CT"/>
+    <borderstate rdf:resource="&THIS;#NH"/>
+    <borderstate rdf:resource="&THIS;#NY"/>
+    <borderstate rdf:resource="&THIS;#RI"/>
+    <borderstate rdf:resource="&THIS;#VT"/>
+    <capital rdf:resource="&uscity;#bostonma"/>
+    <region rdf:resource="&THIS;#NewEngland"/>
+  </USState>
+
+  <USState rdf:ID="MI">
+    <name>Michigan</name>
+    <code>MI</code>
+    <borderstate rdf:resource="&THIS;#IL"/>
+    <borderstate rdf:resource="&THIS;#IN"/>
+    <borderstate rdf:resource="&THIS;#OH"/>
+    <borderstate rdf:resource="&THIS;#WI"/>
+    <capital rdf:resource="&uscity;#lansingmi"/>
+    <region rdf:resource="&THIS;#GreatLakes"/>
+  </USState>
+
+  <USState rdf:ID="MN">
+    <name>Minnesota</name>
+    <code>MN</code>
+    <borderstate rdf:resource="&THIS;#IA"/>
+    <borderstate rdf:resource="&THIS;#ND"/>
+    <borderstate rdf:resource="&THIS;#SD"/>
+    <borderstate rdf:resource="&THIS;#WI"/>
+    <capital rdf:resource="&uscity;#stpaulmn"/>
+    <region rdf:resource="&THIS;#UpperPlains"/>
+  </USState>
+
+  <USState rdf:ID="MS">
+    <name>Mississippi</name>
+    <code>MS</code>
+    <borderstate rdf:resource="&THIS;#AL"/>
+    <borderstate rdf:resource="&THIS;#AR"/>
+    <borderstate rdf:resource="&THIS;#LA"/>
+    <borderstate rdf:resource="&THIS;#TN"/>
+    <capital rdf:resource="&uscity;#jacksonms"/>
+    <region rdf:resource="&THIS;#DeepSouth"/>
+  </USState>
+
+  <USState rdf:ID="MO">
+    <name>Missouri</name>
+    <code>MO</code>
+    <borderstate rdf:resource="&THIS;#AR"/>
+    <borderstate rdf:resource="&THIS;#IL"/>
+    <borderstate rdf:resource="&THIS;#IA"/>
+    <borderstate rdf:resource="&THIS;#KS"/>
+    <borderstate rdf:resource="&THIS;#KY"/>
+    <borderstate rdf:resource="&THIS;#NE"/>
+    <borderstate rdf:resource="&THIS;#OK"/>
+    <borderstate rdf:resource="&THIS;#TN"/>
+    <capital rdf:resource="&uscity;#jeffersoncitymo"/>
+    <region rdf:resource="&THIS;#SouthCentral"/>
+  </USState>
+
+  <USState rdf:ID="MT">
+    <name>Montana</name>
+    <code>MT</code>
+    <borderstate rdf:resource="&THIS;#ID"/>
+    <borderstate rdf:resource="&THIS;#ND"/>
+    <borderstate rdf:resource="&THIS;#SD"/>
+    <borderstate rdf:resource="&THIS;#WY"/>
+    <capital rdf:resource="&uscity;#helenamt"/>
+    <region rdf:resource="&THIS;#NorthWest"/>
+  </USState>
+
+  <USState rdf:ID="NE">
+    <name>Nebraska</name>
+    <code>NE</code>
+    <borderstate rdf:resource="&THIS;#CO"/>
+    <borderstate rdf:resource="&THIS;#IA"/>
+    <borderstate rdf:resource="&THIS;#KS"/>
+    <borderstate rdf:resource="&THIS;#MO"/>
+    <borderstate rdf:resource="&THIS;#SD"/>
+    <borderstate rdf:resource="&THIS;#WY"/>
+    <capital rdf:resource="&uscity;#lincolnne"/>
+    <region rdf:resource="&THIS;#UpperPlains"/>
+  </USState>
+
+  <USState rdf:ID="NV">
+    <name>Nevada</name>
+    <code>NV</code>
+    <borderstate rdf:resource="&THIS;#AZ"/>
+    <borderstate rdf:resource="&THIS;#CA"/>
+    <borderstate rdf:resource="&THIS;#ID"/>
+    <borderstate rdf:resource="&THIS;#OR"/>
+    <borderstate rdf:resource="&THIS;#UT"/>
+    <capital rdf:resource="&uscity;#carsoncitynv"/>
+    <region rdf:resource="&THIS;#SouthWest"/>
+  </USState>
+
+  <USState rdf:ID="NH">
+    <name>New Hampshire</name>
+    <code>NH</code>
+    <borderstate rdf:resource="&THIS;#ME"/>
+    <borderstate rdf:resource="&THIS;#MA"/>
+    <borderstate rdf:resource="&THIS;#VT"/>
+    <capital rdf:resource="&uscity;#concordnh"/>
+    <region rdf:resource="&THIS;#NewEngland"/>
+  </USState>
+
+  <USState rdf:ID="NJ">
+    <name>New Jersey</name>
+    <code>NJ</code>
+    <borderstate rdf:resource="&THIS;#DE"/>
+    <borderstate rdf:resource="&THIS;#NY"/>
+    <borderstate rdf:resource="&THIS;#PA"/>
+    <capital rdf:resource="&uscity;#trentonnj"/>
+    <region rdf:resource="&THIS;#Mid-Atlantic"/>
+  </USState>
+
+  <USState rdf:ID="NM">
+    <name>New Mexico</name>
+    <code>NM</code>
+    <borderstate rdf:resource="&THIS;#AZ"/>
+    <borderstate rdf:resource="&THIS;#CO"/>
+    <borderstate rdf:resource="&THIS;#OK"/>
+    <borderstate rdf:resource="&THIS;#TX"/>
+    <borderstate rdf:resource="&THIS;#UT"/>
+    <capital rdf:resource="&uscity;#santafenm"/>
+    <region rdf:resource="&THIS;#SouthWest"/>
+  </USState>
+
+  <USState rdf:ID="NY">
+    <name>New York</name>
+    <code>NY</code>
+    <borderstate rdf:resource="&THIS;#CT"/>
+    <borderstate rdf:resource="&THIS;#MA"/>
+    <borderstate rdf:resource="&THIS;#NJ"/>
+    <borderstate rdf:resource="&THIS;#PA"/>
+    <borderstate rdf:resource="&THIS;#VT"/>
+    <capital rdf:resource="&uscity;#albanyny"/>
+    <region rdf:resource="&THIS;#Mid-Atlantic"/>
+  </USState>
+
+  <USState rdf:ID="NC">
+    <name>North Carolina</name>
+    <code>NC</code>
+    <borderstate rdf:resource="&THIS;#GA"/>
+    <borderstate rdf:resource="&THIS;#SC"/>
+    <borderstate rdf:resource="&THIS;#TN"/>
+    <borderstate rdf:resource="&THIS;#VA"/>
+    <capital rdf:resource="&uscity;#raleighdurhamnc"/>
+    <region rdf:resource="&THIS;#Mid-South"/>
+  </USState>
+
+  <USState rdf:ID="ND">
+    <name>North Dakota</name>
+    <code>ND</code>
+    <borderstate rdf:resource="&THIS;#MN"/>
+    <borderstate rdf:resource="&THIS;#MT"/>
+    <borderstate rdf:resource="&THIS;#SD"/>
+    <capital rdf:resource="&uscity;#bismarcknd"/>
+    <region rdf:resource="&THIS;#UpperPlains"/>
+  </USState>
+
+  <USState rdf:ID="OH">
+    <name>Ohio</name>
+    <code>OH</code>
+    <borderstate rdf:resource="&THIS;#IN"/>
+    <borderstate rdf:resource="&THIS;#KY"/>
+    <borderstate rdf:resource="&THIS;#MI"/>
+    <borderstate rdf:resource="&THIS;#PA"/>
+    <borderstate rdf:resource="&THIS;#WV"/>
+    <capital rdf:resource="&uscity;#columbusoh"/>
+    <region rdf:resource="&THIS;#GreatLakes"/>
+  </USState>
+
+  <USState rdf:ID="OK">
+    <name>Oklahoma</name>
+    <code>OK</code>
+    <borderstate rdf:resource="&THIS;#AR"/>
+    <borderstate rdf:resource="&THIS;#CO"/>
+    <borderstate rdf:resource="&THIS;#KS"/>
+    <borderstate rdf:resource="&THIS;#MO"/>
+    <borderstate rdf:resource="&THIS;#NM"/>
+    <borderstate rdf:resource="&THIS;#TX"/>
+    <capital rdf:resource="&uscity;#oklahomacityok"/>
+    <region rdf:resource="&THIS;#SouthCentral"/>
+  </USState>
+
+  <USState rdf:ID="OR">
+    <name>Oregon</name>
+    <code>OR</code>
+    <borderstate rdf:resource="&THIS;#CA"/>
+    <borderstate rdf:resource="&THIS;#ID"/>
+    <borderstate rdf:resource="&THIS;#NV"/>
+    <borderstate rdf:resource="&THIS;#WA"/>
+    <capital rdf:resource="&uscity;#salemor"/>
+    <region rdf:resource="&THIS;#NorthWest"/>
+  </USState>
+
+  <USState rdf:ID="PA">
+    <name>Pennsylvania</name>
+    <code>PA</code>
+    <borderstate rdf:resource="&THIS;#DE"/>
+    <borderstate rdf:resource="&THIS;#MD"/>
+    <borderstate rdf:resource="&THIS;#NJ"/>
+    <borderstate rdf:resource="&THIS;#NY"/>
+    <borderstate rdf:resource="&THIS;#OH"/>
+    <borderstate rdf:resource="&THIS;#WV"/>
+    <capital rdf:resource="&uscity;#harrisburgpa"/>
+    <region rdf:resource="&THIS;#Mid-Atlantic"/>
+  </USState>
+
+  <USState rdf:ID="RI">
+    <name>Rhode Island</name>
+    <code>RI</code>
+    <borderstate rdf:resource="&THIS;#CT"/>
+    <borderstate rdf:resource="&THIS;#MA"/>
+    <capital rdf:resource="&uscity;#providenceri"/>
+    <region rdf:resource="&THIS;#NewEngland"/>
+  </USState>
+
+  <USState rdf:ID="SC">
+    <name>South Carolina</name>
+    <code>SC</code>
+    <borderstate rdf:resource="&THIS;#GA"/>
+    <borderstate rdf:resource="&THIS;#NC"/>
+    <capital rdf:resource="&uscity;#columbiasc"/>
+    <region rdf:resource="&THIS;#Mid-South"/>
+  </USState>
+
+  <USState rdf:ID="SD">
+    <name>South Dakota</name>
+    <code>SD</code>
+    <borderstate rdf:resource="&THIS;#IA"/>
+    <borderstate rdf:resource="&THIS;#MN"/>
+    <borderstate rdf:resource="&THIS;#MT"/>
+    <borderstate rdf:resource="&THIS;#NE"/>
+    <borderstate rdf:resource="&THIS;#ND"/>
+    <borderstate rdf:resource="&THIS;#WY"/>
+    <capital rdf:resource="&uscity;#pierresd"/>
+    <region rdf:resource="&THIS;#UpperPlains"/>
+  </USState>
+
+  <USState rdf:ID="TN">
+    <name>Tennessee</name>
+    <code>TN</code>
+    <borderstate rdf:resource="&THIS;#AL"/>
+    <borderstate rdf:resource="&THIS;#AR"/>
+    <borderstate rdf:resource="&THIS;#GA"/>
+    <borderstate rdf:resource="&THIS;#KY"/>
+    <borderstate rdf:resource="&THIS;#MS"/>
+    <borderstate rdf:resource="&THIS;#MO"/>
+    <borderstate rdf:resource="&THIS;#NC"/>
+    <borderstate rdf:resource="&THIS;#VA"/>
+    <capital rdf:resource="&uscity;#nashvilletn"/>
+    <region rdf:resource="&THIS;#Mid-South"/>
+  </USState>
+
+  <USState rdf:ID="TX">
+    <name>Texas</name>
+    <code>TX</code>
+    <borderstate rdf:resource="&THIS;#AR"/>
+    <borderstate rdf:resource="&THIS;#LA"/>
+    <borderstate rdf:resource="&THIS;#NM"/>
+    <borderstate rdf:resource="&THIS;#OK"/>
+    <capital rdf:resource="&uscity;#austintx"/>
+    <region rdf:resource="&THIS;#SouthCentral"/>
+  </USState>
+
+  <USState rdf:ID="UT">
+    <name>Utah</name>
+    <code>UT</code>
+    <borderstate rdf:resource="&THIS;#AZ"/>
+    <borderstate rdf:resource="&THIS;#CO"/>
+    <borderstate rdf:resource="&THIS;#ID"/>
+    <borderstate rdf:resource="&THIS;#NV"/>
+    <borderstate rdf:resource="&THIS;#NM"/>
+    <borderstate rdf:resource="&THIS;#WY"/>
+    <capital rdf:resource="&uscity;#saltlakecityut"/>
+    <region rdf:resource="&THIS;#SouthWest"/>
+  </USState>
+
+  <USState rdf:ID="VT">
+    <name>Vermont</name>
+    <code>VT</code>
+    <borderstate rdf:resource="&THIS;#MA"/>
+    <borderstate rdf:resource="&THIS;#NH"/>
+    <borderstate rdf:resource="&THIS;#NY"/>
+    <capital rdf:resource="&uscity;#montpeliervt"/>
+    <region rdf:resource="&THIS;#NewEngland"/>
+  </USState>
+
+  <USState rdf:ID="VA">
+    <name>Virginia</name>
+    <code>VA</code>
+    <borderstate rdf:resource="&THIS;#KY"/>
+    <borderstate rdf:resource="&THIS;#MD"/>
+    <borderstate rdf:resource="&THIS;#NC"/>
+    <borderstate rdf:resource="&THIS;#TN"/>
+    <borderstate rdf:resource="&THIS;#WV"/>
+    <capital rdf:resource="&uscity;#richmondva"/>
+    <region rdf:resource="&THIS;#Mid-South"/>
+  </USState>
+
+  <USState rdf:ID="WA">
+    <name>Washington</name>
+    <code>WA</code>
+    <borderstate rdf:resource="&THIS;#ID"/>
+    <borderstate rdf:resource="&THIS;#OR"/>
+    <capital rdf:resource="&uscity;#olympiawa"/>
+    <region rdf:resource="&THIS;#NorthWest"/>
+  </USState>
+
+  <USState rdf:ID="WV">
+    <name>West Virginia</name>
+    <code>WV</code>
+    <borderstate rdf:resource="&THIS;#KY"/>
+    <borderstate rdf:resource="&THIS;#MD"/>
+    <borderstate rdf:resource="&THIS;#OH"/>
+    <borderstate rdf:resource="&THIS;#PA"/>
+    <borderstate rdf:resource="&THIS;#VA"/>
+    <capital rdf:resource="&uscity;#charlestonwv"/>
+    <region rdf:resource="&THIS;#Mid-Atlantic"/>
+  </USState>
+
+  <USState rdf:ID="WI">
+    <name>Wisconsin</name>
+    <code>WI</code>
+    <borderstate rdf:resource="&THIS;#IL"/>
+    <borderstate rdf:resource="&THIS;#IA"/>
+    <borderstate rdf:resource="&THIS;#MI"/>
+    <borderstate rdf:resource="&THIS;#MN"/>
+    <capital rdf:resource="&uscity;#madisonwi"/>
+    <region rdf:resource="&THIS;#GreatLakes"/>
+  </USState>
+
+  <USState rdf:ID="WY">
+    <name>Wyoming</name>
+    <code>WY</code>
+    <borderstate rdf:resource="&THIS;#CO"/>
+    <borderstate rdf:resource="&THIS;#ID"/>
+    <borderstate rdf:resource="&THIS;#MT"/>
+    <borderstate rdf:resource="&THIS;#NE"/>
+    <borderstate rdf:resource="&THIS;#SD"/>
+    <borderstate rdf:resource="&THIS;#UT"/>
+    <capital rdf:resource="&uscity;#cheyennewy"/>
+    <region rdf:resource="&THIS;#NorthWest"/>
+  </USState>
+
+  <!-- Here is the ontology of the different regions -->
+
+  <rdfs:Class rdf:ID="USRegion">
+    <rdfs:label>USRegion</rdfs:label>
+    <rdfs:subClassOf rdf:resource="&daml;#Thing" />
+    <rdfs:comment>
+      Information about the US regions.
+    </rdfs:comment>
+  </rdfs:Class>
+
+  <rdf:Property rdf:ID="memberstate">
+    <rdfs:domain rdf:resource="&THIS;#USRegion" />
+    <rdfs:range rdf:resource="&THIS;#USState" />
+  </rdf:Property> 
+
+  <USRegion rdf:ID="DeepSouth">
+    <rdfs:label>Deep South</rdfs:label>
+    <memberstate rdf:resource="&THIS;#AL"/>
+    <memberstate rdf:resource="&THIS;#FL"/>
+    <memberstate rdf:resource="&THIS;#GA"/>
+    <memberstate rdf:resource="&THIS;#LA"/>
+    <memberstate rdf:resource="&THIS;#MS"/>
+  </USRegion>
+
+  <USRegion rdf:ID="GreatLakes">
+    <rdfs:label>Great Lakes</rdfs:label>
+    <memberstate rdf:resource="&THIS;#IL"/>
+    <memberstate rdf:resource="&THIS;#IN"/>
+    <memberstate rdf:resource="&THIS;#MI"/>
+    <memberstate rdf:resource="&THIS;#OH"/>
+    <memberstate rdf:resource="&THIS;#WI"/>
+  </USRegion>
+
+  <USRegion rdf:ID="Mid-Atlantic">
+    <rdfs:label>Mid-Atlantic</rdfs:label>
+    <memberstate rdf:resource="&THIS;#DE"/>
+    <memberstate rdf:resource="&THIS;#MD"/>
+    <memberstate rdf:resource="&THIS;#NJ"/>
+    <memberstate rdf:resource="&THIS;#NY"/>
+    <memberstate rdf:resource="&THIS;#PA"/>
+    <memberstate rdf:resource="&THIS;#WV"/>
+  </USRegion>
+
+  <USRegion rdf:ID="Mid-South">
+    <rdfs:label>Mid-South</rdfs:label>
+    <memberstate rdf:resource="&THIS;#KY"/>
+    <memberstate rdf:resource="&THIS;#NC"/>
+    <memberstate rdf:resource="&THIS;#SC"/>
+    <memberstate rdf:resource="&THIS;#TN"/>
+    <memberstate rdf:resource="&THIS;#VA"/>
+  </USRegion>
+
+  <USRegion rdf:ID="NewEngland">
+    <rdfs:label>New England</rdfs:label>
+    <memberstate rdf:resource="&THIS;#CT"/>
+    <memberstate rdf:resource="&THIS;#ME"/>
+    <memberstate rdf:resource="&THIS;#MA"/>
+    <memberstate rdf:resource="&THIS;#NH"/>
+    <memberstate rdf:resource="&THIS;#RI"/>
+    <memberstate rdf:resource="&THIS;#VT"/>
+  </USRegion>
+
+  <USRegion rdf:ID="NorthWest">
+    <rdfs:label>NorthWest</rdfs:label>
+    <memberstate rdf:resource="&THIS;#ID"/>
+    <memberstate rdf:resource="&THIS;#MT"/>
+    <memberstate rdf:resource="&THIS;#OR"/>
+    <memberstate rdf:resource="&THIS;#WA"/>
+    <memberstate rdf:resource="&THIS;#WY"/>
+  </USRegion>
+
+  <USRegion rdf:ID="PacificWest">
+    <rdfs:label>Pacific West</rdfs:label>
+    <memberstate rdf:resource="&THIS;#AK"/>
+    <memberstate rdf:resource="&THIS;#CA"/>
+    <memberstate rdf:resource="&THIS;#HI"/>
+  </USRegion>
+
+  <USRegion rdf:ID="SouthCentral">
+    <rdfs:label>South Central</rdfs:label>
+    <memberstate rdf:resource="&THIS;#AR"/>
+    <memberstate rdf:resource="&THIS;#KS"/>
+    <memberstate rdf:resource="&THIS;#MO"/>
+    <memberstate rdf:resource="&THIS;#OK"/>
+    <memberstate rdf:resource="&THIS;#TX"/>
+  </USRegion>
+
+  <USRegion rdf:ID="SouthWest">
+    <rdfs:label>Southwest</rdfs:label>
+    <memberstate rdf:resource="&THIS;#AZ"/>
+    <memberstate rdf:resource="&THIS;#CO"/>
+    <memberstate rdf:resource="&THIS;#NV"/>
+    <memberstate rdf:resource="&THIS;#NM"/>
+    <memberstate rdf:resource="&THIS;#UT"/>
+  </USRegion>
+
+  <USRegion rdf:ID="UpperPlains">
+    <rdfs:label>Upper Plains</rdfs:label>
+    <memberstate rdf:resource="&THIS;#IA"/>
+    <memberstate rdf:resource="&THIS;#MN"/>
+    <memberstate rdf:resource="&THIS;#NE"/>
+    <memberstate rdf:resource="&THIS;#ND"/>
+    <memberstate rdf:resource="&THIS;#SD"/>
+  </USRegion>
+
+</rdf:RDF>
+

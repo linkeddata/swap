@@ -1,0 +1,13 @@
+#  test definitive document handling
+#
+#   cwm --mode=rse defdoc1.n3 --think
+#
+@prefix day: <daysoftheweek.n3#>.  # definitive table via schema
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+@prefix math: <http://www.w3.org/2000/10/swap/math#> . #builin
+@prefix : <#>.
+
+{ (?x  "1").math:sum math:equalTo ?y.
+   ?x day:label ?xl.  ?y day:label ?yl } => { ?yl :follows ?xl }.
+
+#ends	
