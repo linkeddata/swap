@@ -77,6 +77,7 @@ import cgi # for URL-encoded query parsing
 class DBViewServer(BaseHTTPServer.HTTPServer):
     """Export an SQL database, read-only, into HTTP/RDF.
 
+    see http://www.w3.org/DesignIssues/RDB-RDF.html
     databasename is
       'http://%s:%s%s%s' % (addr[0], addr[1], home, dbName)
     e.g.
@@ -589,7 +590,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.10  2002-03-06 06:37:32  connolly
+# Revision 1.11  2002-03-06 17:20:18  timbl
+# (timbl) Changed through Jigsaw.
+#
+# Revision 1.10  2002/03/06 06:37:32  connolly
 # structure browsing is starting to work:
 # listing tables in a database,
 # listing columns in a table.
