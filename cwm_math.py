@@ -55,7 +55,9 @@ def tidy(x):
 class BI_sum(LightBuiltIn, Function):
     def evaluateObject(self, store, context, subj, subj_py): 
         t = 0
-        for x in subj_py: t += float(x)
+        for x in subj_py:
+            if type(x) is not type(""): return None
+            t += float(x)
         return store.intern((LITERAL, tidy(t)))
 
 class BI_sumOf(LightBuiltIn, ReverseFunction):
@@ -117,11 +119,13 @@ class BI_remainderOf(LightBuiltIn, ReverseFunction):
 
 class BI_negation(LightBuiltIn, Function, ReverseFunction):
     def evaluateSubject(self, store, context, obj, obj_py): 
-        t = -float(obj.string)
-        if t is not None: return store.intern((LITERAL, tidy(t)))
-    def evaluateObject(self, store, context, subj, subj_py): 
-        t = -float(subj.string)
-        if t is not None: return store.intern((LITERAL, tidy(t)))
+        if isinstance(obj, Literal):
+            t = -float(obj.string)
+            if t is not None: return store.intern((LITERAL, tidy(t)))
+    def evaluateObject(self, store, context, subj, subj_py):
+        if isinstance(subj, Literal):
+            t = -float(subj.string)
+            if t is not None: return store.intern((LITERAL, tidy(t)))
 
 # Power
 

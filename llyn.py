@@ -171,7 +171,7 @@ subcontext_cache_subcontexts = None
     #  Put a type declaration before anything else except for strings
     
 def compareURI(self, other):
-        """Compare two langauge items
+    """Compare two langauge items
         This is a cannoncial ordering in that is designed to allow
         the same graph always to be printed in the same order.
         This makes the regression tests possible.
@@ -184,50 +184,50 @@ def compareURI(self, other):
         a function of the sorted information about them in that context.
         This is not done yet
         """
-        if self is other: return 0
-        if isinstance(self, Literal):
-            if isinstance(other, Literal):
-                return cmp(self.string, other.string)
-            else:
-                return -1
+    if self is other: return 0
+    if isinstance(self, Literal):
         if isinstance(other, Literal):
-            return 1
-
-        if isinstance(self, Formula):
-            if isinstance(other, Formula):
-                s = self.statements
-                o = other.statements
-                ls = len(s)
-                lo = len(o)
-                if ls > lo: return 1
-                if ls < lo: return -1
-
-                s.sort(StoredStatement.compareSubjPredObj) # forumulae are all the same
-                o.sort(StoredStatement.compareSubjPredObj)
-                for i in range(ls):
-                    diff = s[i].compareSubjPredObj(o[i])
-                    if diff != 0: return diff
-                raise RuntimeError("Identical formulae not interned!")
-            else:
-                return 1
-        if isinstance(other, Formula):
+            return cmp(self.string, other.string)
+        else:
             return -1
+    if isinstance(other, Literal):
+        return 1
+
+    if isinstance(self, Formula):
+        if isinstance(other, Formula):
+            s = self.statements
+            o = other.statements
+            ls = len(s)
+            lo = len(o)
+            if ls > lo: return 1
+            if ls < lo: return -1
+
+            s.sort(StoredStatement.compareSubjPredObj) # forumulae are all the same
+            o.sort(StoredStatement.compareSubjPredObj)
+            for i in range(ls):
+                diff = s[i].compareSubjPredObj(o[i])
+                if diff != 0: return diff
+            raise RuntimeError("Identical formulae not interned!")
+        else:
+            return 1
+    if isinstance(other, Formula):
+        return -1
 
         # Both regular URIs
 #        progress("comparing", self.representation(), other.representation())
-        _type = notation3.RDF_type_URI
-        s = self.uriref()
-        if s == _type:
+    _type = notation3.RDF_type_URI
+    s = self.uriref()
+    if s == _type:
             return -1
-        o = other.uriref()
-        if o == _type:
+    o = other.uriref()
+    if o == _type:
             return 1
-        if s < o :
+    if s < o :
             return -1
-        if s > o :
+    if s > o :
             return 1
-        print "Error with '%s' being the same as '%s'" %(s,o)
-        raise internalError # Strings should not match if not same object
+    print "Error with '%s' being the same as '%s'" %(s,o)
+    raise internalError # Strings should not match if not same object
 
 def compareFormulae(self, other):
     """ This algorithm checks for equality in the sense of structural equivalence, and
@@ -657,7 +657,7 @@ class BI_n3ExprFor(HeavyBuiltIn, Function):
             inputURI = subj.asHashURI() # iffy/bogus... rather asDataURI? yes! but make more efficient
             p = notation3.SinkParser(store, inputURI)
             p.startDoc()
-            p.feed(subj.string) #@@ catch parse errors
+            p.feed(subj.string.encode('utf-8')) #@@ catch parse errors
             p.endDoc()
             del(p)
             F = store.intern((FORMULA, inputURI+ "#_formula"))
@@ -767,7 +767,7 @@ class RDFStore(RDFSink.RDFSink) :
         self.cufi = log.internFrag("conclusion", BI_cufi)
         self.semanticsOrError = log.internFrag("semanticsOrError", BI_semanticsOrError)
         self.content = log.internFrag("content", BI_content)
-        log.internFrag("n3ExprFor",  BI_n3ExprFor)
+        self.n3ExprFor = log.internFrag("n3ExprFor",  BI_n3ExprFor)
         
 # Constants:
 
@@ -1278,7 +1278,7 @@ class RDFStore(RDFSink.RDFSink) :
 
     
 
-    def _toPython(self, x, queue):
+    def _toPython(self, x, queue=None):
         """#  Convert a data item in query with no unbound variables into a python equivalent 
        Given the entries in a queue template, find the value of a list.
        @@ slow
@@ -1289,18 +1289,22 @@ class RDFStore(RDFSink.RDFSink) :
         if x.asList() != None:
             if x is self.nil: return []
 #            if @@@ this is not in the queue, must be in the store @@@@
-            f = None
-            r = None
-            for item in queue:
-                con, pred, subj, obj = item.quad
-                if subj is x and pred is self.first: f = obj
-                if subj is x and pred is self.rest: r = obj
-            if f == None or r == None:
-                raise RuntimeError("Can't find value of list --maybe in store? "+`x`)
-#            if r is self.nil: return [x]
-            return [ self._toPython(f, queue) ] + self._toPython(r, queue)
-
-#            return x.asList().value()
+            if queue != None:
+                f = None
+                r = None
+                for item in queue:
+                    con, pred, subj, obj = item.quad
+                    if subj is x and pred is self.first: f = obj
+                    if subj is x and pred is self.rest: r = obj
+                if f != None and r != None:
+                    if r.asList() ==None:  #cut
+                        raise RuntimeError("@@@@@@@ List rest not a list:" + `r`)
+                    return [ self._toPython(f, queue) ] + self._toPython(r, queue)
+#                progress("@@@", `x`, x.asList())
+                y = []
+                for i in x.asList().value():
+                    y.append(self._toPython(i))
+                return y                
         if isinstance(x, Literal):
             return x.string
         return x    # If not a list, return unchanged
@@ -2150,7 +2154,7 @@ class RDFStore(RDFSink.RDFSink) :
                     progress( "   state is %s, queue length %i" % (state, len(queue)+1))
                     progress("@@ Current item: %s" % `item`)
                     progress(queueToString(queue))
-                    raise RuntimeError, "Insufficient clues"
+#                    raise RuntimeError, "Insufficient clues"
                 return 0  # Forget it
             else:
                 raise RuntimeError, "Unknown state " + `state`
