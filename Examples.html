@@ -131,7 +131,7 @@ href="http://www.biopathways.org/">biopathways consortium</a>.</p>
     regenerated in RDF</li>
 </ul>
 
-<h2 id="Schema">Schema validation</h2>
+<h2 id="Schema">Schema validation I</h2>
 
 <p>In the semantic web, there are many different forms of document validity.
 One useful form is to check that the document doesn't violate any rules
@@ -160,7 +160,8 @@ to do validation. A special-purpose program would be more efficient of
 course. However, this demonstrates how easy it is when data is a semantic
 form to process it using a general purpose engine.</p>
 
-<p>(update Mar 2002: see <a href="util/validate.n3">validate.n3</a>)</p>
+<p>(update Mar 2002: see <a href="util/validate.n3">validate.n3</a> discussed
+<a href="#Following">below</a>)</p>
 
 <h2 id="Rules">Rules making rules</h2>
 
@@ -260,7 +261,7 @@ this data when focussing on a specific problem or area.</p>
 <p>The schema validation above looked for inconsistencies with a schema. The
 example worked by the file and the schemas being given to cwm on the command
 line. However, it would be more useful to find the schemas automatically. By
-using notation3's forumlae, it is possible to extract all the predicates used
+using notation3's formulae, it is possible to extract all the predicates used
 in an RDF document.  If the namespace's URI scheme is dereferencable (such as
 http:), or if the user has a local schema catalog, then one should be able to
 look up the schema in real time.  The is done with cwm's builtin
@@ -271,15 +272,33 @@ parsing of the semantic content of a resource.</p>
     href="util/validate.n3">validate.n3</a></li>
 </ul>
 
-<p>This file doesn't (yet) check consistency as the example above, it just
-checks that the prediccates used are indeed declared as Proprties in the
-schema.</p>
+<p>Note how, when validate.n3 follows a URI to a schema, it doesn't just
+believe it - it looks objectively at what it says.  People early on with the
+Semantic Web were always afraid that inconsistencies could be sown which
+would trip up browsing agents. It is fundamental that you don't beleive
+everying on the Web. The log:semantics and  log:includes built-ins allow
+rules to look objectively at other documents to see what they say.</p>
 
-<p>Note how, when check.n3 follows a URI to a schema, it doesn't jsut believe
-it - it looks objectively at what it says.  People early on with the Semantic
-Web were always afraid that inconsistencies could be sown which would trip up
-browsing agents. It is fundamental that you don't beleive everying on the
-Web.</p>
+<p>As well as checking that the prediccates used are indeed declared as
+Properties in the schema, this file also checks consistency as the example <a
+href="#Schema">above</a>.  This involves, for each schema, finding the set of
+facts which the schema implies.  In other words, you don't have to state
+explicitly in the schema that something is (say) a class, if you have already
+said that it is a subclass of something. The validate.n3 rules takes each
+schema, merges it with the schema rules, and finds all the conclusions. This
+gives an <em>augmented schema</em> -- the schema plus the things implied by
+it according to the defined meanings of the terms (like subclass) used.  This
+uses the built-ins  <code>log:merge</code> (for merging formulae) and
+<code>log:conclusion</code>  (for doing, in effect, a <code>cwm
+--think</code> internally on a specfic formula).</p>
+
+<h3 id="Secure">Secure links - toward trust on the web</h3>
+
+<p>Try using the crypto module (thanks to Sean Palmer) for making rules which
+only accept information from resources on the web if they have the right
+cryptographic hash, or the right digital signature.</p>
+
+<p>@@ ...</p>
 
 <p></p>
 <hr>
