@@ -119,8 +119,8 @@ class DBViewServer(BaseHTTPServer.HTTPServer):
 
 
 class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
-    QPath = '/dbq'
-    UIPath = '/ui'
+    QPath = '/.dbq' # not an SQL name
+    UIPath = '/.ui'
     
     def do_GET(self):
         s = self.server
@@ -612,7 +612,7 @@ def testQ():
     host, port, user, passwd = sys.argv[1:5]
     port = int(port)
     
-    path='/administration/dbq?name1=users&fields1=family%2Cemail%2Ccity%2Cid&key1=id&name2=techplenary2002&fields2=plenary%2Cmeal_choice&key2=&kj2_1=id&name3=&fields3=&key3=&kj3_1=&kj3_2=&name4=&fields4=&key4=&kj4_1=&kj4_2=&kj4_3='
+    path='/administration/.dbq?name1=users&fields1=family%2Cemail%2Ccity%2Cid&key1=id&name2=techplenary2002&fields2=plenary%2Cmeal_choice&key2=&kj2_1=id&name3=&fields3=&key3=&kj3_1=&kj3_2=&name4=&fields4=&key4=&kj4_1=&kj4_2=&kj4_3='
 
     path, fields = split(path, '?')
     print "CGI parse:", cgi.parse_qs(fields)
@@ -644,7 +644,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.13  2002-03-07 00:24:43  connolly
+# Revision 1.14  2002-03-07 23:25:01  connolly
+# moved ui path to not conflict with table names
+#
+# Revision 1.13  2002/03/07 00:24:43  connolly
 # stop conflating stuff, per designissues thingy.
 # lightly tested...
 #
