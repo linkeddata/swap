@@ -1,6 +1,4 @@
-#!/usr/bin/python 
-"""
-Trigonometrical Built-Ins for CWM
+"""Trigonometrical Built-Ins for CWM
 
 Allows CWM to do do trigonometrical
 http://www.python.org/doc/2.3/lib/module-math.html
@@ -18,35 +16,15 @@ http://rdfig.xmlhack.com/2003/09/23/2003-09-23.html#1064356689.846120
 __author__ = 'Karl Dubost'
 __cvsid__ = '$Id$'
 __version__ = '$Revision$'
+__all__ = ["evaluateObject"]
 
 from math import sin, acos, asin, atan, atan2, cos, cosh, degrees, radians, sinh, tan, tanh
-
 from term import LightBuiltIn, Function, ReverseFunction
 import types
-
-# from RDFSink import DAML_LISTS, RDF_type_URI, DAML_sameAs_URI
+from diag import progress
+from cwm_math import *
 
 MATH_NS_URI = 'http://www.w3.org/2000/10/swap/math#'
-
-from diag import progress
-
-def obsolete():
-    import traceback
-    progress("Warning: Obsolete math built-in used.")
-    traceback.print_stack()
-
-def tidy(x):
-    #DWC bugfix: "39.03555" got changed to "393555"
-    if x == None: return None
-    s = str(x)
-    if s[-2:] == '.0': s=s[:-2]
-    return s
-
-
-def isString(x):
-    # in 2.2, evidently we can test for isinstance(types.StringTypes)
-    return type(x) is type('') or type(x) is type(u'')
-
 
 # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # # #
 #
@@ -60,59 +38,86 @@ def isString(x):
 # tangent, arc tangent, arc tangent (y/x)
 #
 
-def numeric(s):
-    if type(s) == types.IntType or type(s) is types.FloatType: return s
-    assert type(s) is type('') or type(s) is type(u'')
-    if s.find('.') < 0 and s.find('e') < 0 : return int(s)
-    return float(s)
-
 class BI_acos(LightBuiltIn, Function):
-    def evaluateObject(self, subj_py):
-		return acos(numeric(subj_py))
+    def evaluateObject(self, subj_py):      
+        """acos(x)
+        
+        Return the arc cosine (measured in radians) of x."""
+        return acos(numeric(subj_py))
 
 class BI_asin(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
-		return asin(numeric(subj_py))
+        """asin(x)
+        
+        Return the arc sine (measured in radians) of x."""
+        return asin(numeric(subj_py))
 
 class BI_atan(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
-		return atan(numeric(subj_py))
+        """atan(x)
+        
+        Return the arc tangent (measured in radians) of x."""
+        return atan(numeric(subj_py))
 
 class BI_atan2(LightBuiltIn, Function):
-    def evaluateObject(self, subj_py): 
-        if len(subj_py) == 2:
-	    return atan2(numeric(subj_py[0]),numeric(subj_py[1]))
+    def evaluateObject(self, subj_py):
+        """atan2(y, x)
+        
+        Return the arc tangent (measured in radians) of y/x.
+        Unlike atan(y/x), the signs of both x and y are considered.""" 
+        if len(numeric(subj_py)) == 2:
+        	return atan2(numeric(subj_py[0]),numeric(subj_py[1]))
         else: return None
 
 class BI_cos(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
-		return cos(numeric(subj_py))
+        """cos(x)
+        
+        Return the cosine of x (measured in radians)."""
+        return cos(numeric(subj_py))
 
 class BI_cosh(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
-		return cosh(numeric(subj_py))
+        """cosh(x)
+        
+        Return the hyperbolic cosine of x."""
+        return cosh(numeric(subj_py))
 
 class BI_degrees(LightBuiltIn, Function, ReverseFunction):
     def evaluateObject(self, subj_py):
+        """degrees(x) -> converts angle x from radians to degrees"""
         return degrees(numeric(subj_py))
     def evaluateSubject(self, obj_py): 
+        """radians(x) -> converts angle x from degrees to radians"""
         return radians(numeric(obj_py))
 
 class BI_sin(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
-		return sin(numeric(subj_py))
+        """sin(x)
+        
+        Return the sine of x (measured in radians)."""
+        return sin(numeric(subj_py))
 
 class BI_sinh(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
-		return sinh(numeric(subj_py))
+        """sinh(x)
+        
+        Return the hyperbolic sine of x."""
+        return sinh(numeric(subj_py))
 
 class BI_tan(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
-		return tan(numeric(subj_py))
+        """tan(x)
+        
+        Return the tangent of x (measured in radians)."""
+        return tan(numeric(subj_py))
 
 class BI_tanh(LightBuiltIn, Function):
     def evaluateObject(self, subj_py):
-		return tanh(numeric(subj_py))
+        """tanh(x)
+        
+        Return the hyperbolic tangent of x."""
+        return tanh(numeric(subj_py))
 
 #  Register the string built-ins with the store
 
