@@ -1,4 +1,4 @@
-# Author: sbp
+﻿# Author: sbp
 #  $Id$
 
 @prefix : <#> .
@@ -10,37 +10,16 @@ this log:forAll :x , :y , :z .
 
 # Some simple rules
 
-# Obsolete - do not use:
-#{ :x math:sumOf ("3" "5") } => { :x :valueOf "3 + 5" } .
-#{ :x math:differenceOf ("8" "3") } => { :x :valueOf "8 - 3" } .
-#{ :x math:differenceOf ("8") } => { :x :valueOf "8 - (error?)" } .
-#{ :x math:factors ("5" "3" "2") } => { :x :valueOf "5 * 3 * 2" } .
-#{ :x math:quotientOf ("7" "2") } => { :x :valueOf "7 / 2" } .
-#{ :x math:remainderOf ("7" "2") } => { :x :valueOf "7 % 2" } .
-#{ :x math:negation "3" } => { :x :valueOf "3 negated" } .
-#{ "-3" math:negation :x } => { :x :valueOf "what -3's the - of" } .
-#{ :x math:exponentiationOf ("2" "10") } => { :x :valueOf "2^10" } .
-
-# Using strings:
-
 { ("3" "5") math:sum :x } => { :x :valueOf "3 + 5" } .
-{ ("8" "3") math:difference :x} => { :x :valueOf "8 - 3" } .
-{ ("8") math:difference :x } => { :x :valueOf "8 - (error?)" } .
-{ ("5" "3" "2") math:product :x} => { :x :valueOf "5 * 3 * 2" } .
-{ :x is math:quotient of ("7" "2") } => { :x :valueOf "7 / 2" } .
-{ :x is math:remainder of ("7" "2") } => { :x :valueOf "7 % 2" } .
-{ :x math:negation "3" } => { :x :valueOf "3 negated" } .
-{ "-3" math:negation :x } => { :x :valueOf "what -3's the - of" } .
-{ :x is math:exponentiation of ("2" "10") } => { :x :valueOf "2^10" } .
 
 # test sine, cosine, arcsine, arcosine
 
-# 3.141 a Pi.        {    (2 [ a :Pi]  ?r ).math:product ...
+# 3.1415926535897931 a Pi.        {    (2 [ a :Pi]  ?r ).math:product ...
 
 3.141 a Pi .
 { (1) math:acos :x } => { :x :valueOf "acos(1) = 0" } .
 { (0) math:acos :x } => { :x :valueOf "acos(0) = 1.57079632679 (pi/2)" } .
 { (1) math:asin :x } => { :x :valueOf "asin(1) = 1.57079632679 (pi/2)" } .
 { (0) math:asin :x } => { :x :valueOf "asin(0) = 1" } .
-{ (-1) math:cos :x } => { :x :valueOf "cos(Pi) = -1" } .
+{ (Pi) math:cos :x } => { :x :valueOf "cos(Pi) = -1" } .
 
