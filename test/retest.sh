@@ -18,8 +18,8 @@ function cwm_test () {
 
   echo Test    cwm $args
   # Hmm... this suggests a --nocomments flag on cwm  its -quiet
-#  (python ../cwm.py $args | sed -e 's/^ *#.*//' | sed -e 's/\$Id$//g' > temp/$case) || echo CRASH $case
-  (python ../cwm.py -quiet $args | sed -e 's/\$Id$//g' > temp/$case) || echo CRASH $case
+#  (python ../cwm.py $args | sed -e 's/^ *#.*//' | sed -e 's/\$[I]d:\$//g' > temp/$case) || echo CRASH $case
+  (python ../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' > temp/$case) || echo CRASH $case
   diff -Bbwu ref/$case temp/$case >diffs/$case
   if [ -s diffs/$case ]; then echo FAIL: $case: see diffs/$case; else echo Pass $case; fi
 }
@@ -60,7 +60,10 @@ cwm_test schema1.n3 "Schema validity" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -
 cwm_test schema2.n3 "Schema validity using filtering out essential output" daml-ex.n3 invalid-ex.n3 schema-rules.n3 -think -filter=schema-filter.n3
 
 # $Log$
-# Revision 1.7  2001-05-21 11:27:48  timbl
+# Revision 1.8  2001-05-21 13:04:02  timbl
+# version field expansion deletion was expanded -- now fixed
+#
+# Revision 1.7  2001/05/21 11:27:48  timbl
 # Ids stripped
 #
 # Revision 1.5  2001/05/10 06:04:23  connolly
