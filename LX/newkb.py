@@ -7,20 +7,7 @@ import re
 
 import LX
 
-defaultScope = {
-    ("legal",): re.compile(r"^[a-zA-Z0-9_]+$"),
-    ("hint",): re.compile(r"(?:\/|#)([a-zA-Z0-9_]*)/?$")
-    }
-
-def stdValuesFilter(obj):
-    if isinstance(obj, type("")): return 1
-    if isinstance(obj, type(1)): return 1
-    if isinstance(obj, type(0.1)): return 1
-    # we'd like this to only be acceptable as a predicate/function...
-    if obj == LX.ns.lx.uri: return 1
-    return 0
-
-class KB(list):
+class KB:
     """A Knowledge Base, a list of implicitely conjoined sentences
     (logical formulas).  Can also be seen as a mutable logical
     formula.
@@ -50,80 +37,119 @@ class KB(list):
 
     An example.   More examples in the various functions....
 
-    PART 1: Get ourselves an empty KB, available on this platform,
-    with the features we want.
+    *** TRIVIAL EXAMPLE, USING INFERENCE:
+
+    Create a default KB:
     
     >>> from LX.newkb import KB
-    >>> kb = KB(features=("rdfs", "fol"))     # give ontology uris?  LX.ns.rdfs
-    >>> kb.engine
-    'otter with rdfs axioms'
+    >>> kb = KB()     # maybe we really want the otter one?  Or XSB?
 
-    PART 2: Load some data, using a Parser
+    Load it with some data, using a parsed for the "Lbase" language:
+    
+    >>> from LX.language.lbase import Parser
+    >>> parser = Parser(sink=kb)
+    >>> parser.parse("all ?x color(?x, red) -> Red(?x).")
+    >>> parser.parse("all ?x color(?x, green) -> Green(?x).")
+    >>> parser.parse("color(car1, blue).")
+    >>> parser.parse("color(car2, red).")
+    >>> parser.parse("color(apple1, red).")
+    >>> parser.parse("color(apple2, green).")
+    >>> print kb
 
-    >>> import LX.language.lbase
-    >>> parser = LX.language.lbase.Parser(sink=kb)
-    >>> parser.parse("all ?x color(?x, red) -> Red(?x)")
-    >>> parser.parse("all ?x color(?x, green) -> Green(?x)")
-    >>> kb
+    Query for things which are "Red":
+    
+    >>> q = kb.query(parser.parseToFormula("Red(?x)"))
+    >>> for result in q.results:
+    ...    print result
 
-    PART 3: Load some more data by hand, from Python
 
-    >>> x = kb.newUniversal(suggestedName="?x")
-    >>> speed = kb.newPredicate(suggestedName="speed")
-    >>> fast = kb.newConstant(suggestedName="fast")
-    >>> fastThing = kb.newPredicate(suggestedName="FastThing")
-    >>> formula = LX.logic.implies(speed(x, fast), fastThing(x))
-    >>> formula
+    *** PART 1: ADD AND DIRECTLY MANIPULATE THE DATA
+    
+    PART 1.1: Get ourselves an empty KB, available on this platform,
+    with the features we want.
+    
+    x>>> from LX.newkb import KB
+    x>>> kb = KB()
+
+    PART 1.2: Load some data, using a Parser
+
+    x>>> import LX.language.lbase
+    x>>> parser = LX.language.lbase.Parser(sink=kb)
+    x>>> parser.parse("all ?x color(?x, red) -> Red(?x)")
+    x>>> parser.parse("all ?x color(?x, green) -> Green(?x)")
+    x>>> kb
+
+    PART 1.3: Load some more data by hand, from Python
+
+    x>>> x = kb.newUniversal(suggestedName="?x")
+    x>>> speed = kb.newPredicate(suggestedName="speed")
+    x>>> fast = kb.newConstant(suggestedName="fast")
+    x>>> fastThing = kb.newPredicate(suggestedName="FastThing")
+    x>>> formula = LX.logic.implies(speed(x, fast), fastThing(x))
+    x>>> formula
     x
-    >>> kb.append(formula)
-    >>> myCar = kb.newConstant(suggestedName="sandro's car")
-    >>> kb.append(speed(myCar, fast))
-    >>> kb
+    x>>> kb.append(formula)
+    x>>> myCar = kb.newConstant(suggestedName="sandro's car")
+    x>>> kb.append(speed(myCar, fast))
+    x>>> kb
     x
 
-    PART 4: Try some Python values
+    PART 1.4: Try some Python values
 
-    >>> maxmph = kb.newPredicate("maxmph")
-    >>> kb.append(maxmph(myCar, 120))
-    >>> owner = kb.newFunction("owner")
-    >>> name = kb.newFunction("name")
-    >>> kb.append(name(owner(myCar)) == "Sandro")   # operator == is overloaded
-    >>> kb[4]
+    x>>> maxmph = kb.newPredicate("maxmph")
+    x>>> kb.append(maxmph(myCar, 120))
+    x>>> owner = kb.newFunction("owner")
+    x>>> name = kb.newFunction("name")
+    x>>> kb.append(name(owner(myCar)) == "Sandro")   # operator == is overloaded
+    x>>> kb[4]
 
-    PART 5: URIs and Spider KBs
-
-    >>> sandro = kb.newConstant(uri="http://www.w3.org/People/Sandro/data#sandro")
-    >>> officetel = kb.newConstant(uri="http://www.w3.org/People/Sandro/data#officetel")
-    >>> kb.append(owner(myCar) == sandro)
-    >>> kb2 = KB(features=("spider"), copyFrom=kb)
-    >>> websandro = kb2.intern(sandro)
-    >>> websandro.getValues(officetel)
-    '+1 617 ALE RATT'
+    *  access values
+    *  delete some stuff
+    *  property interface, for when in RDF-normal form; access via properties/functions
 
     PART 6: PROPERTY QUERIES -- Based off Expresions owner by KB
 
-    >>> sandro.getFunctionValue(name)
+    x>>> sandro.getFunctionValue(name)
     'Sandro Hawke'
-    >>> sandro[name]
+    x>>> sandro[name]
     'Sandro Hawke'
-    >>> name(sandro).value
+    x>>> name(sandro).value
     'Sandro Hawke'
-    >>> myCar.getValues(maxmph)
+    x>>> myCar.getValues(maxmph)
     [120]
-
-    PART 7: PATTERN QUERIES
-
-    >>> x = kb.Variable("?x")
-    >>> y = kb.Variable("?y")
-    >>> pat = fastThing(x) & (y == name(owner(x)))
-    >>> q = kb.query(pat)
-    >>> for res in q.results:
-    ...    print res
 
     PART 8: PROPERTY UPDATES
 
-    >>> sandro[name] = "Sandro D. Hawke"
-    >>> kb
+    x>>> sandro[name] = "Sandro D. Hawke"
+    x>>> kb
+
+    *** PART 2: TURN ON INFERENCING, QUERY FOR RESULTS
+
+    PART 5: URIs and Spider KBs
+
+    x>>> sandro = kb.newConstant(uri="http://www.w3.org/People/Sandro/data#sandro")
+    x>>> kb.append(owner(myCar) == sandro)
+
+    *: features: follow-uris-in-names, follow-seeAlso, follow-isDefinedBy
+    x>>> officetel = kb.newConstant(uri="http://www.w3.org/People/Sandro/data#officetel")
+    x>>> kb2 = KB(features=("spider"), copyFrom=kb)
+    x>>> websandro = kb2.intern(sandro)
+    x>>> websandro.getValues(officetel)
+    '+1 617 ALE RATT'
+
+    >>> #kb = KB(features=("rdfs", "fol"))     # give ontology uris?  LX.ns.rdfs   rdf-only
+    >>> #kb.engine
+    'otter with rdfs axioms'
+
+    PART 7: PATTERN QUERIES
+
+    x>>> x = kb.Variable("?x")
+    x>>> y = kb.Variable("?y")
+    x>>> pat = fastThing(x) & (y == name(owner(x)))
+    x>>> q = kb.query(pat)
+    x>>> for res in q.results:
+    ...    print res
+
 
     * retract?
     * link in with lbase terms
@@ -133,6 +159,20 @@ class KB(list):
     * spidering
     
     """
+
+    defaultScope = {
+        ("legal",): re.compile(r"^[a-zA-Z0-9_]+$"),
+        ("hint",): re.compile(r"(?:\/|#)([a-zA-Z0-9_]*)/?$")
+        }
+
+    def stdValuesFilter(obj):
+        if isinstance(obj, type("")): return 1
+        if isinstance(obj, type(1)): return 1
+        if isinstance(obj, type(0.1)): return 1
+        # we'd like this to only be acceptable as a predicate/function...
+        if obj == LX.ns.lx.uri: return 1
+        return 0
+    stdValuesFilter = staticmethod(stdValuesFilter)
 
     ################################################################
     ###
@@ -352,17 +392,17 @@ class KB(list):
         existentially quantified and are by default returned as part
         of each match.
 
-        >>> import LX.kb
-        >>> kb=LX.kb.testKB1
-        >>> kb
+        x>>> import LX.kb
+        x>>> kb=LX.kb.testKB1
+        x>>> kb
         
-        >>> pattern=LX.kb.testPat1
-        >>> pattern
+        x>>> pattern=LX.kb.testPat1
+        x>>> pattern
         
-        >>> q = kb.query(pattern)
-        >>> q
+        x>>> q = kb.query(pattern)
+        x>>> q
 
-        >>> for solution in q.results:
+        x>>> for solution in q.results:
         ...    print solution
         ...    print expr.subst(solution.map)
         ...    print solution.proof           # ,...?
@@ -457,14 +497,17 @@ class KB(list):
         """
 
 def _test():
-    import doctest, kb
-    return doctest.testmod(kb) 
+    import doctest, newkb
+    return doctest.testmod(newkb) 
 
 if __name__ == "__main__": _test()
 
  
 # $Log$
-# Revision 1.2  2003-02-21 05:19:34  sandro
+# Revision 1.3  2003-02-25 16:17:15  sandro
+# a little cleanup
+#
+# Revision 1.2  2003/02/21 05:19:34  sandro
 # some doctexts
 #
 # Revision 1.1  2003/02/20 22:16:20  sandro
