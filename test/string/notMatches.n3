@@ -1,0 +1,5 @@
+@prefix str: <http://www.w3.org/2000/10/swap/string#>.
+
+{ "abc" str:notMatches "A" } => { <#t1> a <#Success> }.
+
+{ "abc" str:notMatches "a" } => { <#t2> a <#Failure> }.
