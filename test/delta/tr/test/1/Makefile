@@ -1,20 +1,16 @@
 #  Generate and check one step in a sequence
+# $Id$
 P=python2.3
 
 S=../../../../..
 C=$S/cwm.py
 CANT=$S/cant.py
-CAL=$W/2002/12/cal
 
 # file name
 X=tr
-# Published as what URI?  Used namespace for calendar
-PUBURL=http://www.w3.org/2002/12/calendar/$X
 
-.SUFFIXES:  .check  .nt2 .cant .nt  .rdf .ics
+.SUFFIXES:  .check  .nt2 .cant .nt  .rdf
 
-.ics.rdf:
-	$P $CAL/fromIcal.py --base=$PUBURL $<  > $>
 .rdf.nt:
 	$P $C --rdf $< --ntriples > $>
 .nt.cant:
@@ -31,8 +27,6 @@ $X.checked: $X.nt $X.nt2 $X.cant
 	$P $S/cant.py -f $X.nt -d $X.nt2
 	touch $X.checked
 
-#$X.rdf: $X.ics
-#	$P $CAL/fromIcal.py --base=$PUBURL $X.ics  > $X.rdf
 $X.nt:  $X.rdf
 	$P $C --rdf $X.rdf --ntriples > $X.nt
 
@@ -42,7 +36,7 @@ previous:
 	echo "try, e.g.: ln -s ../280 previous"
 	exit 1
 
-$X.delta:  $X.rdf previous/$X.rdf 
+$X.delta:  $X.rdf previous/$X.rdf ../../assumptions.n3
 	$P $S/diff.py -f previous/$X.rdf -t $X.rdf \
 		--meta=../../assumptions.n3 > $X.delta
 $X.nt2: previous/$X.rdf $X.delta
