@@ -1,0 +1,104 @@
+#  n3
+# 
+#  Convert new OFX concepts back to old boring QIF ones
+#
+#  This takes the output of (for example) qfx2n3.py - an OFX-standard
+# file except in N3 format (.ofx3), and it generates a series of transaction
+# in a much simpler format rather like the old quicken interchange format (.qu3).
+#
+#  Actually reverse makes more sense as modelling is much better - this
+# way removes information.  The .ofx3 file is a self-describing
+#
+#  This invents URIs for bank accounts and transactions, so that otehr files
+# can easily refer to them, and different statements will refer to the
+# same bank account easily.
+#
+# Example Makefile exctract to convert downloaded .ofx files:
+#.ofx.ofx3:
+#	sed -f $(PIM)/qfx2n3.sed < $< > $@
+#.ofx3.qu3:
+#	$(CWM) $< -apply=qfx2qu.n3 -apply=qfx2qu.n3 --purge > $@
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix s: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix string: <http://www.w3.org/2000/10/swap/string#>.
+@prefix math: <http://www.w3.org/2000/10/swap/math#>.
+@prefix os: <http://www.w3.org/2000/10/swap/os#>.
+@prefix qu:  <http://www.w3.org/2000/10/swap/pim/qif#>.
+
+# QFX (OFX) format:
+@prefix ofx: <http://www.w3.org/2000/10/swap/pim/ofx#> .
+@prefix ofxh: <http://www.w3.org/2000/10/swap/pim/ofx-headers#> .
+#
+
+@prefix : <var#>.
+
+this log:forAll :a, :b, :d, :i, :l, :m, :n, :p, :r, :s, :t, :x, :y, :z.
+
+{
+:s ofx:OFX  [
+   ofx:BANKMSGSRSV1[
+       ofx:STMTTRNRS  [
+           ofx:STMTTRN  [
+               ofx:BANKACCTFROM  [
+                   ofx:ACCTID :a;
+                   ofx:ACCTTYPE :l;
+                   ofx:BANKID :b ];
+               ofx:BANKTRANLIST :x
+                        ]]]].
+
+# Construct a unique identifier for account which will match
+# between different statements:
+
+    :z 	log:uri [is os:baseAbsolute of
+		    [is string:concatenation of ( "acc#" :b "_" :a )]].
+	
+} log:implies {
+   :x	:listForAccount :z; :sourceDocument :s.
+   :z   ofx:ACCTID :a;
+        ofx:ACCTTYPE :l;  s:label :l;
+        ofx:BANKID :b.
+}.
+
+
+{  [:listForAccount :y; :sourceDocument :s] ofx:STMTTRN [
+   ofx:DTPOSTED :d;
+   ofx:FITID    :i;
+   ofx:MEMO     :m;
+   ofx:TRNAMT   :x ].
+   :r log:uri [is os:baseAbsolute of
+	[is string:concatenation of ( "fit.n3#" :i  )]].
+#   ofx:TRNTYPE  :t 
+} log:implies {
+:r  qu:toAccount :y ;
+   qu:date :d;
+   qu:payee :m;  	# Quicken seems to mix it like this
+   qu:accordingTo :s.	# useful to track the source
+   qu:amount :x .
+}.
+
+# For those with check numbers, get the check number:
+{  [:listForAccount :y] ofx:STMTTRN [
+   ofx:FITID    :i;
+   ofx:CHECKNUM   :x ].
+   :r log:uri [is os:baseAbsolute of
+	[is string:concatenation of ( "fit.n3#" :i  )]].
+#   ofx:TRNTYPE  :t 
+} log:implies {
+:r  qu:number :x .
+}.
+
+# Prepare for purging the old voabulary bits we no longer need:
+
+{} log:implies {ofx:STMTTRN a log:Chaff.
+		ofx:DTPOSTED a log:Chaff.  
+		ofx:FITID a log:Chaff.
+		ofx:MEMO a log:Chaff.
+		ofx:NAME a log:Chaff.
+		ofx:TRNAMT a log:Chaff. 
+		ofx:CHECKNUM a log:Chaff.
+		ofx:TRNTYPE a log:Chaff.}.
+
+   
+
+#ends
