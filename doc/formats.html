@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Comparing Formats</title>
+  <meta name="generator" content="amaya 7.1, see http://www.w3.org/Amaya/" />
+  <link href="primer.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a>
+| <a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> | Comparing Formats</p>
+
+<h1>Comparing Formats</h1>
+
+<p>@@ generate with quoting, links, command lines, ...</p>
+
+<p>Use restaurant/food example, over into food suppliers...</p>
+
+<p>It's good because everyone who travels eats at restaurants, there
+are judgements to be made, information to be shared, and no one is
+very touchy about it.   eg: boston late-night restaurant list.</p>
+
+<h2>English (Informal)</h2>
+
+<p class="example">
+There is a person, "pat", whose name is "Pat Smith".  This "pat" has a
+pet, a Dog, named "Rover".
+</p>
+
+<h2>N3</h2>
+
+<pre class="example">
+@prefix : <#> .
+@prefix bio: &lt;http://www.example.org/BiologicalOrganisms#&gt; .
+@prefix per: &lt;http://www.example.org/PersonalNotes#&gt; .
+    
+:pat     a bio:Human;
+     per:name "Pat Smith";
+     per:pet  [
+         a bio:Dog;
+         per:name "Rover" ] .
+</pre>
+
+<h2>Directed Labeled Graph</h2>
+<img class="example" src="formats-image1" />
+
+<h2>Prefixed N-Triples</h2>
+
+<pre class="example">
+@prefix : <#> .
+@prefix bio: &lt;http://www.example.org/BiologicalOrganisms#&gt; .
+@prefix per: &lt;http://www.example.org/PersonalNotes#&gt; .
+@prefix rdf: &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#&gt;.
+
+:pat rdf:type bio:Human.
+:pat per:name "Pat Smith".
+:pat per:pat _:genid1.
+_:genid1 rdf:type bio:Dog.
+_:genid1 per:name "Rover".
+</pre>
+
+<h2>RDF/XML</h2>
+
+<pre class="example">
+&lt;rdf:RDF xmlns="file:/home/sandro/cvs/cvs.w3c.org/WWW/2000/10/swap/doc/formats/pat.n3#"
+    xmlns:bio="http://www.example.org/BiologicalOrganisms#"
+    xmlns:per="http://www.example.org/PersonalNotes#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"&gt;
+
+    &lt;bio:Human rdf:about="#pat"&gt;
+        &lt;per:name&gt;Pat Smith&lt;/per:name&gt;
+        &lt;per:pet rdf:parseType="Resource"&gt;
+            &lt;rdf:type rdf:resource="http://www.example.org/BiologicalOrganisms#Dog"/&gt;
+            &lt;per:name&gt;Rover&lt;/per:name&gt;
+        &lt;/per:pet&gt;
+    &lt;/bio:Human&gt;
+&lt;/rdf:RDF&gt;
+</pre>
+
+<h2>N-Triples</h2>
+<pre class="example">
+&lt;file:/home/sandro/cvs/cvs.w3c.org/WWW/2000/10/swap/doc/formats/pat.rdf#pat&gt; &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.example.org/BiologicalOrganisms#Human&gt; .
+&lt;file:/home/sandro/cvs/cvs.w3c.org/WWW/2000/10/swap/doc/formats/pat.rdf#pat&gt; &lt;http://www.example.org/PersonalNotes#name&gt; "Pat Smith" .
+&lt;file:/home/sandro/cvs/cvs.w3c.org/WWW/2000/10/swap/doc/formats/pat.rdf#pat&gt; &lt;http://www.example.org/PersonalNotes#pet&gt; _:genid1 .
+_:genid1 &lt;http://www.w3.org/1999/02/22-rdf-syntax-ns#type&gt; &lt;http://www.example.org/BiologicalOrganisms#Dog&gt; .
+_:genid1 &lt;http://www.example.org/PersonalNotes#name&gt; "Rover" .
+</pre>
+
+<h2>Prolog (no namespaces)</h2>
+<pre class="example">
+Human(pat).
+Dog(rover).            % no way to avoid assigning a term
+name(pat, "Pat Smith").
+name(rover, "Rover").
+pet(pat, rover).
+</pre>
+
+<h2>SQL (one of several styles)</h2>
+<p>This approach uses one table per predicate and URIs as keys.  There are no NodeIDs, and certain kinds of type flexibility are not allowed.</p>
+<pre class="example">
+CREATE TABLE name (  # http://www.example.org/PersonalNotes#name
+  uri varchar(255),
+  name varchar(255)
+);
+CREATE TABLE pet (   # http://www.example.org/PersonalNotes#pet
+  owner varchar(255),
+  pet varchar(255)
+);
+CREATE TABLE type (   # http://www.w3.org/1999/02/22-rdf-syntax-ns#type
+  instance varchar(255),
+  class varchar(255)
+);
+INSERT INTO name VALUES ('#pat', 'Pat Smith');
+INSERT INTO name VALUES ('#_genid1', 'Rover');
+INSERT INTO pet VALUES ('#pat', '#_genid1');
+INSERT INTO type VALUES ('#pat', 'http://www.example.org/BiologicalOrganisms#Human');
+INSERT INTO type VALUES ('#_genid1', 'http://www.example.org/BiologicalOrganisms#Dog');
+
+mysql> select uri, name, class from name, pet, type where type.instance=name.uri;
++----------+-----------+--------------------------------------------------+
+| uri      | name      | class                                            |
++----------+-----------+--------------------------------------------------+
+| #pat     | Pat Smith | http://www.example.org/BiologicalOrganisms#Human |
+| #_genid1 | Rover     | http://www.example.org/BiologicalOrganisms#Dog   |
++----------+-----------+--------------------------------------------------+
+</pre>
+
+
+<h2>Striped XML</h2>
+
+<p>With this approach the markup language is designed for the application
+domain.  Conversion to and from triples requires specialized software</p>
+<pre class="example">
+&lt;Human&gt;
+  &lt;uri&gt;#pat&lt;/uri&gt;
+  &lt;name&gt;Pat Smith&lt;/name&gt;
+  &lt;pet&gt;
+    &lt;Dog&gt;
+     &lt;name&gt;Rover&lt;/name&gt;
+    &lt;/Dog&gt;
+  &lt;/pet&gt;
+&lt;/Human&gt;
+</pre>
+
+<h2>XML Triples</h2>
+
+<p>This is a general encoding of triples in XML, like RDF/XML but more 
+verbose and easier for some kinds of applications to handle</p>
+
+<pre class="example">
+&lt;!DOCTYPE Graph [
+ &lt;!ENTITY rdf    "http://www.w3.org/1999/02/22-rdf-syntax-ns#"&gt;
+ &lt;!ENTITY bio    "http://www.example.org/BiologicalOrganisms#"&gt;
+ &lt;!ENTITY per    "http://www.example.org/PersonalNotes#"&gt;
+]&gt;
+&lt;Graph&gt;
+  &lt;Triple&gt;
+    &lt;subject&gt;&lt;uri&gt;#pat&lt;/uri&gt;&lt;/subject&gt;
+    &lt;predicate&gt;&lt;uri&gt;&amp;rdf;type&lt;/uri&gt;&lt;/predicate&gt;
+    &lt;object&gt;&lt;uri&gt;&amp;bio;Human&lt;/uri&gt;&lt;/object&gt;
+  &lt;/Triple&gt;
+  &lt;Triple&gt;
+    &lt;subject&gt;&lt;uri&gt;#pat&lt;/uri&gt;&lt;/subject&gt;
+    &lt;predicate&gt;&lt;uri&gt;&amp;per;name&lt;/uri&gt;&lt;/predicate&gt;
+    &lt;object&gt;&lt;literal&gt;Pat Smith&lt;/literal&gt;&lt;/object&gt;
+  &lt;/Triple&gt;
+  &lt;Triple&gt;
+    &lt;subject&gt;&lt;uri&gt;#pat&lt;/uri&gt;&lt;/subject&gt;
+    &lt;predicate&gt;&lt;uri&gt;&amp;per;pet&lt;/uri&gt;&lt;/predicate&gt;
+    &lt;object&gt;&lt;nodeID&gt;genid1&lt;/nodeID&gt;&lt;/object&gt;
+  &lt;/Triple&gt;
+  &lt;Triple&gt;
+    &lt;subject&gt;&lt;nodeID&gt;genid1&lt;/nodeID&gt;&lt;/subject&gt;
+    &lt;predicate&gt;&lt;uri&gt;&amp;rdf;type&lt;/uri&gt;&lt;/predicate&gt;
+    &lt;object&gt;&lt;uri&gt;&amp;bio;Dog&lt;/uri&gt;&lt;/object&gt;
+  &lt;/Triple&gt;
+  &lt;Triple&gt;
+    &lt;subject&gt;&lt;nodeID&gt;genid1&lt;/nodeID&gt;&lt;/subject&gt;
+    &lt;predicate&gt;&lt;uri&gt;&amp;per;name&lt;/uri&gt;&lt;/predicate&gt;
+    &lt;object&gt;&lt;literal&gt;Rover&lt;/literal&gt;&lt;/object&gt;
+  &lt;/Triple&gt;
+&lt;/Graph&gt;
+</pre>
+
+
+
+
+<p></p>
+<hr />
+
+<p>$Id$</p>
+</body>
+</html>

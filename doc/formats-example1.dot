@@ -1,0 +1,16 @@
+digraph anon {
+  rankdir=LR;
+  pat -> "bio:Human" [ label="rdf:type" ];
+  rover -> "bio:Dog" [ label="rdf:type" ];
+  pat -> "\"Pat Smith\"" [ label="per:name" ];
+  rover -> "\"Rover\"" [ label="per:name" ];
+  pat -> rover [ label="per:pet" ];
+  rover [ label="" ];
+  {  rank=same
+     "\"Pat Smith\"" [ shape="box" ];
+     "\"Rover\""  [ shape="box" ];
+  }
+  rover [ shape="circle" ];
+  pat [ label=":pat" ];
+}
+
