@@ -1,16 +1,29 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/REC-html401/loose.dtd">
 <html>
 <head>
   <title>Semantic Web Application Platform</title>
   <meta http-equiv="Content-Type" content="text/html">
   <link href="/SyleSheets/base.css" rel="stylesheet" type="text/css">
+  <link href="/StyleSheets/base.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
+<p><a href="/">W3C </a>| <a href="/2000/01/sw/Overview.html">Semantic
+Web</a></p>
+
+<p>Related:</p>
+<ul>
+  <li><a href="/DesignIssues/Notation3.html">Notation3 in Design
+  Issues</a></li>
+</ul>
+
+<p></p>
+
 <h1>Semantic Web Area for Play</h1>
 
-<p>or if you like Semantic Web Application Platform...</p>
+<p></p>
+
+<p>or, if you like, <em>Semantic Web Application Platform</em>...  visiting
+RDF and all points west.</p>
 
 <h2 id="Motivation">Motivation</h2>
 
@@ -33,7 +46,7 @@
 <p>The bits are now as follows. There is NO guarantee or support or anything
 for these.</p>
 
-<p>Pyton modules</p>
+<h2 id="Python">Python modules</h2>
 
 <h3 id="L133">Serializing/deserializaing RDF: notation3.py</h3>
 
@@ -51,7 +64,23 @@ to be parsed and re-output.</p>
 <p>The module will also run as a CGI script to convert N3 to RDF M&amp;S 1.0 -
 by DanC magic.</p>
 <ul>
-  <li>Source</li>
+  <li><a href="notation3.py">Source</a></li>
+</ul>
+
+<p></p>
+
+<h3 id="L311">xml2rdf.py   Parsing RDF</h3>
+
+<p>Based on Python's xmllib, this parser is ocmpatible with the RDF stream
+interface of, notation3.py.  It completes the square of parsers and
+generators.</p>
+<ul>
+  <li>Parses RDF</li>
+</ul>
+
+<p>It has a command line mode for self-test purposes.</p>
+<ul>
+  <li><a href="xml2rdf.py">Source</a></li>
 </ul>
 
 <p></p>
@@ -62,8 +91,9 @@ by DanC magic.</p>
 triples are stored in/against the particular context in which they were read,
 eg RDF file or N3 { expression }. The features at the moment include</p>
 <ul>
-  <li>Loading N3 files.</li>
+  <li>Loading files in RDF and/or N3</li>
   <li>Applying rules written in N3 to the data.</li>
+  <li>Filtering the data to the result of a particular query</li>
   <li>Generating RDF or N3 files from the result.</li>
   <li>Pretty printing data so that anonymous nodes are used creatively to
     minimize the number of explicit existentials (generated Ids).</li>
@@ -76,7 +106,7 @@ data manipulator for RDF on the lines of sed, awk, etc or xsl.</p>
 
 <p>In progress.</p>
 <ul>
-  <li>Source</li>
+  <li><a href="cwm.py">Source</a></li>
 </ul>
 
 <h2>Design issues</h2>
