@@ -26,7 +26,8 @@ parser _Parser:
 
     token URIREF:   r'<[^ >]*>'
     token PREFIX:   r'[a-zA-Z0-9_-]*:'
-    token QNAME:    r'[a-zA-Z0-9_-]*:[a-zA-Z0-9_-]+'
+    token QNAME:    r'([a-zA-Z][a-zA-Z0-9_-]*)?:[a-zA-Z0-9_-]+'
+    token LNAME:    r'_:[a-zA-Z0-9_-]+'
     token STRLIT1:  r'"([^\"\\\n]|\\[\\\"nrt])*"'
     token STRLIT2:  r"'([^\'\\\n]|\\[\\\'nrt])*'"
     token STRLIT3:  r'"""([^\"\\]|\\[\\\"nrt])*"""' #@@not right
@@ -57,6 +58,7 @@ parser _Parser:
     rule term<<ctx>>
               : URIREF        {{ return self.uriref(URIREF) }}
               | QNAME         {{ return self.qname(QNAME) }}
+              | LNAME         {{ return self.lname(LNAME) }}
               | THIS          {{ return ctx }}
               | shorthand     {{ return shorthand }}
               | STRLIT3       {{ return self.strlit(STRLIT3, '"""') }}
@@ -65,7 +67,6 @@ parser _Parser:
               | list<<ctx>>   {{ return list }}
               | phrase<<ctx>> {{ return phrase }}
               | clause        {{ return clause }}
-              # @@TODO: _:foo
               # @@TODO: ?foo maybe? hmm...
               
     rule predicates0<<ctx,subj>> :
@@ -130,6 +131,7 @@ class Parser(_Parser):
         self._baseURI = baseURI
         self._prefixes = {}
         self._serial = 1
+        self._lnames = {}
 
     def docContext(self):
         return mkFormula(self._baseURI)
@@ -147,6 +149,15 @@ class Parser(_Parser):
             raise SyntaxError, "prefix %s not bound" % pfx
         else:
             return notation3.RESOURCE, ns + ln
+
+    def lname(self, str):
+        n = str[2:]
+        try:
+            return self._lnames[n]
+        except KeyError:
+            x = self.something(self.docContext(), n)
+            self._lnames[n] = x
+            return x
 
     def termA(self):
         return notation3.RDF_type
@@ -201,7 +212,10 @@ def DEBUG(*args):
     sys.stderr.write("\n")
     
 # $Log$
-# Revision 1.8  2001-08-31 22:15:44  connolly
+# Revision 1.9  2001-08-31 22:27:57  connolly
+# added support for _:foo as per n-triples
+#
+# Revision 1.8  2001/08/31 22:15:44  connolly
 # aha! fixed serious arg-ordering bug; a few other small clean-ups
 #
 # Revision 1.7  2001/08/31 21:28:39  connolly
