@@ -26,7 +26,7 @@ dc:description """
 
 :_nspolicy a rdf:Property; rdfs:label "namespace policy";
 	rdfs:isDefinedBy <http://www.w3.org/1999/10/nsuri>. # @@move these :_ things there.
-:_SubjectToChange rdfs:label "subject to change".
+:_SubjectToChange rdfs:label "subject to change". 
 
 ##################################### CONTACT INFORMATION ######
 #
@@ -268,7 +268,10 @@ mso:WebPage  a rdf:Property;
 
 <> dc:description """
 $Log$
-Revision 1.13  2002-07-18 05:30:49  connolly
+Revision 1.14  2002-10-07 17:32:15  timbl
+(timbl) Changed through Jigsaw.
+
+Revision 1.13  2002/07/18 05:30:49  connolly
 remove dependency on 2001/03swell/rcs stuff; fix pointer to outlook contacts
 
 Revision 1.12  2002/03/19 18:55:57  connolly
