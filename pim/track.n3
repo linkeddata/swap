@@ -24,13 +24,13 @@
 
 # State changes
 
-:opens a rdf:Property; s:domain doc:Work; r:range t:Issue;
+:opens a r:Property; s:domain doc:Work; r:range t:Issue;
     s:label "opens";
     s:comment ".
 
-:closes a rdf:Property; s:domain doc:Work; r:range t:Issue.
+:closes a r:Property; s:domain doc:Work; r:range t:Issue.
 
-:rejects a rdf:Property s:domain doc:Work; r:range t:Issue.
+:rejects a r:Property s:domain doc:Work; r:range t:Issue.
 
 #ends
 
