@@ -40,8 +40,8 @@ def splitFragP(uriref, punct=0):
 
     Punctuation is kept.
     
-    e.g. splitFrag("abc#def") = ("abc", "#def")
-    and splitFrag("abcdef") = ("abcdef", "")
+    e.g. splitFragP("abc#def") = ("abc", "#def")
+    and splitFragP("abcdef") = ("abcdef", "")
     """
     i = rfind(uriref, "#")
     if i>= 0: return uriref[:i], uriref[i:]
@@ -173,10 +173,12 @@ def refTo(base, uri):
 
     """
 
-    if base == None: return uri
+    assert base # don't mask bugs
     if base == uri: return ""
+
+    # Find how many path segments in common
     i=0
-    while i<len(uri) and i<len(base):  # Find how much in common
+    while i<len(uri) and i<len(base):
         if uri[i] == base[i]: i = i + 1
         else: break
     # print "# relative", base, uri, "   same up to ", i
@@ -185,10 +187,10 @@ def refTo(base, uri):
     m = commonHost.match(base[:i])
     if m:
 	k=uri.find("//")
-	if k<0: k=-2 # no host
-	l=uri.find("/", k+2)
-	if uri[l+1:l+2] != "/" and base[l+1:l+2] != "/":
-	    return uri[l:]
+        if k<0: k=-2 # no host
+        l=uri.find("/", k+2)
+        if uri[l+1:l+2] != "/" and base[l+1:l+2] != "/" and uri[:l]==base[:l]:
+            return uri[l:]
 
     if uri[i:i+1] =="#" and len(base) == i: return uri[i:] # fragment of base
 
@@ -257,6 +259,7 @@ def test():
              ('file:/ex/x/y/', 'file:/ex/x/y/z/', 'z/'),
 	     ('file:/devel/WWW/2000/10/swap/test/reluri-1.n3', 
 	     'file://meetings.example.com/cal#m1', 'file://meetings.example.com/cal#m1'),
+             ('file:/home/connolly/w3ccvs/WWW/2000/10/swap/test/reluri-1.n3', 'file://meetings.example.com/cal#m1', 'file://meetings.example.com/cal#m1'),
              ('file:/some/dir/foo', 'file:/some/dir/#blort', './#blort'),
              ('file:/some/dir/foo', 'file:/some/dir/#', './#')
              
@@ -361,7 +364,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.5  2002-08-23 04:36:15  connolly
+# Revision 1.6  2002-09-04 04:07:50  connolly
+# fixed uripath.refTo
+#
+# Revision 1.5  2002/08/23 04:36:15  connolly
 # fixed refTo case: file:/some/dir/foo  ->  file:/some/dir/#blort
 #
 # Revision 1.4  2002/08/07 14:32:21  timbl
