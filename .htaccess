@@ -1,4 +1,5 @@
 RewriteEngine On
 RewriteBase /2000/10/swap
 
-RewriteRule ^cwm.tar.gz$ cwm-0.7.3+.tar.gz [L]
+#RewriteRule ^cwm.tar.gz$ cwm-0.7.3+.tar.gz [L]
+RewriteRule ^cwm.tar.gz$ Overview.html [L]
