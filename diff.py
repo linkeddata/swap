@@ -102,6 +102,7 @@ def nailFormula(f):
 	newNailed = Set()
 	for preds, inverse, char in ((fps, 0, "."), (ifps, 1, "^")):
 	    for pred in preds:
+		if verbose: progress("Predicate", pred)
 		ss = f.statementsMatching(pred=pred)
 		for s in ss:
 		    if inverse: y, x = s.object(), s.subject()
@@ -109,13 +110,12 @@ def nailFormula(f):
 		    if not x.generated(): continue  # Only anchor bnodes
 		    if y not in loose:  # y is the possible anchor
 			defi = (x, inverse, pred, y)
-			if verbose: progress("   Defi is ", defi)
 			if x in loose:   # this node
-			    if verbose: progress("Nailed %s as %s%s%s" % (x, y, char, pred))
+			    if verbose: progress("   Nailed %s as %s%s%s" % (x, y, char, pred))
 			    loose.discard(x)
 			    newNailed.add(x)
 			else:
-			    if verbose: progress("Re-Nailed %s as %s%s%s" % (x, y, char, pred))
+			    if verbose: progress("   (ignored %s as %s%s%s)" % (x, y, char, pred))
 			definitions.append(defi)
 #			if verbose: progress("   Definition[x] is now", definition[x])
 			if inverse: equivalentSet = Set(f.each(obj=y, pred=pred))
@@ -234,6 +234,9 @@ def differences(f, g):
 
     g_bnodes, g_definitions = nailFormula(g)
     bnodes, definitions = nailFormula(f)
+
+    definitions.reverse()  # go back down list @@@ revers eth g list too? @@@
+
     unmatched = bnodes.copy()
     match = {}  # Mapping of nodes in f to nodes in g
     for x, inverse, pred, y in definitions:
@@ -244,12 +247,15 @@ def differences(f, g):
 	    unmatched.discard(x)
 	    continue
 
-	if verbose: progress("Definition %s = inverse:%i pred=%s y=%s", (x, inverse, pred, y))
+	if verbose: progress("Definition %s = %s%s%s"% (x,  pred, ".^"[inverse], y))
 
 	if y.generated():
+	    while y in f._redirections:
+		y = f._redirections[y]
+		if verbose: progress(" redirected to  %s = %s%s%s"% (x,  pred, ".^"[inverse], y))
 	    yg = match.get(y, None)
 	    if yg == None:
-		if verbose: progress("Had definition for %s in terms of %s which is not matched"%(x,y))
+		if verbose: progress("  Had definition for %s in terms of %s which is not matched"%(x,y))
 		continue
 	else:
 	    yg = y
@@ -270,9 +276,9 @@ def differences(f, g):
 	unmatched.discard(x)
 
     if len(unmatched) > 0:
-	if verbose: progress("Failed to match all nodes")
+	if verbose: progress("Failed to match all nodes:", unmatched)
 	raise RuntimeError(
-	    "bnode match by canonicalization not implemented yet. Failed to match:",
+	    "@@@ TBC - bnode match by canonicalization not implemented yet. Failed to match:",
 	    unmatched)
 
     # Find common parts
@@ -285,8 +291,6 @@ def differences(f, g):
     f = f.close()    #  We are not going to mess with them any more
     g = g.close()
     
-    definitions.reverse()  # go back down list
-
     common = Set([match[x] for x in match])
 
     if verbose: progress("Comon nodes (in g)", common)
