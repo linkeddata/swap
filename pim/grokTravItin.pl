@@ -405,7 +405,7 @@ IAD WASHINGTON DULLES
 NRT TOKYO NARITA
 MSP MINNEAPOLIS ST PL
 MEM MEMPHIS
-BRS BRUSSELS
+BRU BRUSSELS
 EODATA
 
     # SNA confirmed via http://www.ocair.com/
@@ -422,7 +422,10 @@ EODATA
 
 
 # $Log$
-# Revision 1.16  2004-08-19 21:16:10  connolly
+# Revision 1.17  2004-08-19 21:23:36  connolly
+# oops... BRUSSELS is BRU
+#
+# Revision 1.16  2004/08/19 21:16:10  connolly
 # BRS
 #
 # Revision 1.15  2004/03/31 21:25:58  connolly
