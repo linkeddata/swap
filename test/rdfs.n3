@@ -1,0 +1,168 @@
+# Base URI of process is file:///devel/WWW/2000/10/swap/test/
+# Input from  file:/devel/WWW/2000/10/swap/test/daml-pref.n3
+# Input from  http://www.w3.org/2000/01/rdf-schema
+
+#  Notation3 generation by
+#       notation3.py,v 1.36 2000/12/09 03:44:18 timbl Exp
+
+     @prefix ex: <http://www.daml.org/2000/10/daml-ex#> .
+     @prefix ont: <http://www.daml.org/2000/10/daml-ont#> .
+     @prefix : <http://www.w3.org/2000/01/rdf-schema#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+    
+    rdf:subject     a rdf:Property;
+         :label "subject",
+                "sujet";
+         :domain rdf:Statement;
+         :range :Resource .
+    
+    rdf:value     a rdf:Property;
+         :label "object",
+                "value" .
+    
+    rdf:Property     a :Class;
+         :label "Property",
+                "Propriété";
+         :comment "The concept of a property.";
+         :subClassOf :Resource .
+    
+    rdf:Alt     a :Class;
+         :label "Alt",
+                "Choix";
+         :subClassOf :Container .
+    
+    rdf:object     a rdf:Property;
+         :label "object",
+                "objet";
+         :domain rdf:Statement .
+    
+    rdf:Seq     a :Class;
+         :label "Sequence",
+                "Séquence";
+         :subClassOf :Container .
+    
+    rdf:Bag     a :Class;
+         :label "Bag",
+                "Ensemble";
+         :subClassOf :Container .
+    
+    rdf:Statement     a :Class;
+         :label "Statement",
+                "Déclaration";
+         :subClassOf :Resource;
+         :comment "This represents the set of reified statements." .
+    
+    rdf:predicate     a rdf:Property;
+         :label "predicate",
+                "prédicat";
+         rdf:type rdf:Property;
+         :domain rdf:Statement;
+         :range rdf:Property .
+    
+    rdf:type     a rdf:Property;
+         :label "type",
+                "type";
+         :comment "Indicates membership of a class";
+         :range :Class .
+    
+    <file:/devel/WWW/2000/10/swap/test/STDOUT>     :seeAlso <http://www.w3.org/2000/01/rdf-schema-more> .
+    
+    :seeAlso     a rdf:Property;
+         :label "seeAlso",
+                "voirAussi";
+         :comment "Indicates a resource that provides information about the subject resource.";
+         :range :Resource;
+         :domain :Resource .
+    
+    :Class     a :Class;
+         :label "Class",
+                "Classe";
+         :comment "The concept of Class";
+         :subClassOf :Resource .
+    
+    :subClassOf     a rdf:Property;
+         :label "subClassOf",
+                "sousClasseDe";
+         :comment "Indicates membership of a class";
+         :range :Class;
+         :domain :Class .
+    
+    :isDefinedBy     a rdf:Property;
+         rdf:type rdf:Property;
+         :subPropertyOf :seeAlso;
+         :label "isDefinedBy",
+                "esDéfiniPar";
+         :comment "Indicates a resource containing and defining the subject resource.";
+         :range :Resource;
+         :domain :Resource .
+    
+    :ConstraintProperty     a :Class;
+         :label "ConstraintProperty",
+                "PropriétéContrainte";
+         :subClassOf rdf:Property,
+                :ConstraintResource;
+         :comment "Properties used to express RDF Schema constraints." .
+    
+    :ConstraintResource     a :Class;
+         :label "ConstraintResource",
+                "RessourceContrainte";
+         rdf:type :Class;
+         :subClassOf :Resource;
+         :comment "Resources used to express RDF Schema constraints." .
+    
+    :range     a :ConstraintProperty;
+         :label "range",
+                "étendue";
+         :comment "Properties that can be used in a schema to provide constraints";
+         :range :Class;
+         :domain rdf:Property .
+    
+    :domain     a :ConstraintProperty;
+         :label "domain",
+                "domaine";
+         :comment "This is how we associate a class with properties that its instances can have" .
+    
+    :label     a rdf:Property;
+         rdf:type rdf:Property;
+         :label "label",
+                "label";
+         :domain :Resource;
+         :comment "Provides a human-readable version of a resource name.";
+         :range :Literal .
+    
+    :Container     a :Class;
+         :label "Container",
+                "Enveloppe";
+         :subClassOf :Resource;
+         :comment "This represents the set Containers." .
+    
+    :Resource     a :Class;
+         :label "Resource",
+                "Ressource";
+         :comment "The most general class" .
+    
+    :subPropertyOf     a rdf:Property;
+         :label "subPropertyOf",
+                "sousPropriétéDe";
+         :comment "Indicates specialization of properties";
+         :range rdf:Property;
+         :domain rdf:Property .
+    
+    :Literal     a :Class;
+         :label "Literal",
+                "Littéral";
+         rdf:type :Class;
+         :comment "This represents the set of atomic values, eg. textual strings." .
+    
+    :ContainerMembershipProperty     a :Class;
+         :label "ContainerMembershipProperty";
+         :subClassOf rdf:Property .
+    
+    :comment     a rdf:Property;
+         :label "comment",
+                "commentaire";
+         :domain :Resource;
+         :comment "Use this for descriptions";
+         :range :Literal .
+    
+ #ENDS

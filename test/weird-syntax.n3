@@ -1,0 +1,33 @@
+# Second test
+# Syntax weirdnesses
+
+@prefix : <#> .
+@prefix ont: <http://www.w3.org/2000/10/swap/log.n3#> .
+
+:a :b :c .
+
+[].  # There exists a _g
+
+[].
+
+[ :a :p . ].  # Missing  object means no statement, to allow ; .
+
+[ :a :p :b ; . ].  # Missing  object means no statement, to allow ; .
+
+[ :a :p :b ] . # Missing "." before "]" is allowed, statement is valid.
+
+[ :abcdefghijklmnopqurstuvwxyz_ABCDEFGHIJKLMNOPQRSTUVWXYZ :p :b ] .
+
+#[ log:first :a;
+#  ont:rest thatWhich has ont:first :b; 
+#  ont:rest thatWhich has ont:first :c; 
+#  ont:rest thatWhich has ont:first :d; 
+#  ont:rest thatWhich has ont:first :e ];
+#
+#( :a :b :c :d :e )
+
+a: p: [ ont:first :b;
+	ont:rest [ ont:first :c;
+	    ont:rest [ ont:first :d;
+	        ont:rest ont:null ]]].
+
