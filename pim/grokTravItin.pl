@@ -400,6 +400,7 @@ ZRH ZURICH
 BUD BUDAPEST
 CMH COLUMBUS OH
 IAD WASHINGTON DULLES
+NRT TOKYO NARITA
 EODATA
 
     # SNA confirmed via http://www.ocair.com/
@@ -416,7 +417,10 @@ EODATA
 
 
 # $Log$
-# Revision 1.13  2003-05-08 22:50:50  connolly
+# Revision 1.14  2003-09-16 14:57:54  connolly
+# added NRT
+#
+# Revision 1.13  2003/05/08 22:50:50  connolly
 # added CMH, IAD
 #
 # Revision 1.12  2003/04/14 21:20:51  connolly
