@@ -57,6 +57,7 @@ idea: use notation3 for wiki record keeping.
 
 
 import string
+import codecs # python 2-ism; for writing utf-8 in RDF/xml output
 import urlparse
 import urllib
 import re
@@ -833,7 +834,8 @@ class ToRDF(RDFSink):
     #@ Not actually complete, and can encode anyway
     def __init__(self, outFp, thisURI, base=None, flags=""):
         RDFSink.__init__(self)
-	self._wr = XMLWriter(outFp)
+        dummyEnc, dummyDec, dummyReader, encWriter = codecs.lookup('utf-8')
+	self._wr = XMLWriter(encWriter(outFp))
 	self._subj = None
 	self._base = base
 	if base == None: self._base = thisURI
@@ -1163,7 +1165,12 @@ class XMLWriter:
 	#@@ throw an exception if the element stack is empty
 	o = self._outFp
         self.flushClose()
-        xmldata(o.write, str, self.dataEsc)
+        try:
+            xmldata(o.write, str, self.dataEsc)
+        except:
+            print "@@problem writing", str
+            print "@@to", o
+            x=1/0
 	self.noWS = 1  # Suppress whitespace - we are in data
 
     def endDocument(self):

@@ -32,11 +32,15 @@
 
 """
 
-import xml.sax
-import notation3 # http://www.w3.org/2000/10/swap/notation3.py
 import urlparse  # Comes with python 1.6, lacks file<->url mapping
 import urllib   # Opening resources in load()
 import string
+
+import xml.sax
+from xml.sax.handler import feature_namespaces
+
+import notation3 # http://www.w3.org/2000/10/swap/notation3.py
+
 # States:
 
 STATE_NOT_RDF =     "not RDF"     # Before <rdf:RDF>
@@ -57,6 +61,7 @@ DPO_NS = "http://www.daml.org/2001/03/daml+oil#"  # DAML plus oil
 chatty = 0
 
 RDF_IS = RESOURCE, RDF_NS_URI + "is"   # Used with quoting
+
 
 class RDFHandler(xml.sax.ContentHandler):
 
@@ -108,7 +113,8 @@ class RDFHandler(xml.sax.ContentHandler):
     def uriref(self, str):
         """ Generate uri from uriref in this document
         """ 
-        return urlparse.urljoin(self._thisURI,str)
+        return urlparse.urljoin(self._thisURI,
+                                str.encode('utf-8')) # fails on non-ascii; do %xx encoding?
 
     def idAboutAttr(self, attrs):  #6.5 also proprAttr 6.10
         """ set up subject and maybe context from attributes
@@ -126,7 +132,7 @@ class RDFHandler(xml.sax.ContentHandler):
                         print ("# Warning -- %s attribute in %s namespace not RDF NS." %
                                name, ln)
                         ns = RDF_NS_URI  # @@HACK!
-                uri = ns + ln
+                uri = (ns + ln).encode('utf-8')
 #               raise NoNS   # @@@ Actually, XML spec says we should get these: parser is wrong
             if ns == RDF_NS_URI or ns == None:   # Opinions vary sometimes none but RDF_NS is common :-(
                 
@@ -143,8 +149,8 @@ class RDFHandler(xml.sax.ContentHandler):
                         self._subject = None
                     else: raise ooops # can't do about each prefix yet
                 elif ln == "bagid":
-                    c = self._context
-                    self._context = self.uriref("#" + value)
+                    c = self._context #@@dwc: this is broken, no?
+                    self._context = self.uriref("#" + value) #@@ non-ascii
                 elif ln == "parseType":
                     pass  #later - object-related
                 elif ln == "value":
@@ -205,7 +211,12 @@ class RDFHandler(xml.sax.ContentHandler):
         This makes lookup quick and easy, but
         it takes extra space and more time to
         set up a new binding."""
-        
+
+        #print "startPrefixMapping with prefix=", prefix, "uri=", `uri`
+        prefix = prefix or ""
+        uri = uri.encode('utf-8') # reduce XML's unicode to URI's US-ASCII
+        #print "startPrefixMapping uri encoded as=", `uri`
+
         if self._nsmap:
             b = self._nsmap[-1].copy()
         else:
@@ -224,7 +235,7 @@ class RDFHandler(xml.sax.ContentHandler):
         
         self.flush()
         
-        tagURI = (name[0] or "") + name[1]
+        tagURI = ((name[0] or "") + name[1]).encode('utf-8')
 
         if chatty:
             if not attrs:
@@ -265,7 +276,7 @@ class RDFHandler(xml.sax.ContentHandler):
                     elif value == "Resource":
                         c = self._context
                         s = self._subject
-                        self.idAboutAttr(attrs)  # set subject and context for nested description
+                        self.idAboutAttr(attrs)  # set subject and context for nested description @@dwc thinks this is buggy
                         self.sink.makeStatement(( (RESOURCE, c),
                                                   (RESOURCE, self._predicate),
                                                   (RESOURCE, s),
@@ -278,7 +289,7 @@ class RDFHandler(xml.sax.ContentHandler):
                             c = self._context
                             s = self._subject
                             self.idAboutAttr(attrs)  # set subject and context for nested description
-                            if self._predicate == RDF_NS_URI+"is": # magic :-(
+                            if self._predicate == RDF_NS_URI+"is": # magic :-( @@notation3.py switched to Logic_NS here, I think.
                                 self._subject = s  # Forget anonymous genid - context is subect
                                 print "#@@@@@@@@@@@@@ decided subject is ",`s`[-10:-1]
                             else:
@@ -348,10 +359,10 @@ class RDFHandler(xml.sax.ContentHandler):
             self._stack[-1][0] = STATE_NOVALUE  # When we return, cannot have literal now
 
         elif self._state == STATE_NOVALUE:
-            print "\n@@ Expected no value, found ", tag, attrs, "\n Stack: ",self._stack
-            raise syntaxError # Found tag, expected empty
+            print "\n@@ Expected no value, found ", name, qname, attrs, "\n Stack: ",self._stack
+            raise ValueError # Found tag, expected empty
         else:
-            raise internalError # Unknown state
+            raise RuntimeError # Unknown state
 
 # aboutEachprefix { <#> forall r . { r startsWith ppp } l:implies ( zzz } ) 
 # aboutEach { <#> forall r . { ppp rdf:li r } l:implies ( zzz } )
@@ -385,6 +396,38 @@ class RDFHandler(xml.sax.ContentHandler):
     def endDocument(self):
         self.flush()
         self.sink.endDoc()
+
+
+class RDFXMLParser(RDFHandler):
+    def __init__(self, sink, thisURI, **kw):
+        RDFHandler.__init__(self, sink, thisURI)
+        p = xml.sax.make_parser()
+        p.setFeature(feature_namespaces, 1)
+        p.setContentHandler(self)
+        self._p = p
+
+    def feed(self, data):
+        self._p.feed(data)
+
+    def load(self, uri, _baseURI=""):
+        if uri:
+            _inputURI = urlparse.urljoin(_baseURI, uri) # Make abs from relative
+            f = urllib.urlopen(_inputURI)
+            s = xml.sax.InputSource()
+            s.setByteStream(f)
+        else:
+            _inputURI = urlparse.urljoin(_baseURI, "STDIN") # Make abs from relative
+            f = sys.stdin
+
+        self._p.parse(s)
+        self.close()
+
+    def close(self):
+        self._p.reset()
+        self.flush()
+        self.sink.endDoc()
+
+
 
 def test(args = None):
     import sys, getopt
@@ -426,12 +469,12 @@ def test(args = None):
     t0 = time()
     try:
         if do_time:
-            print "@@parsing:", f
+            #print "parsing:", f
             s.setByteStream(f)
             p.parse(s)
         else:
             data = f.read()
-            print "@@data:", data
+            #print "data:", data
             if f is not sys.stdin:
                 f.close()
             for c in data:
