@@ -1,0 +1,39 @@
+
+<!-- Processed by Id: cwm.py,v 1.126 2003/02/14 17:48:08 sandro Exp -->
+<!--     using base file:/home/sandro/cvs/cvs.w3c.org/WWW/2000/10/swap/test/demo1/personal-notes.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2000/01/rdf-schema#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <rdf:Description rdf:about="">
+        <comment>
+
+  This is a very simple, very rough start of an ontology
+  of personal information, such as one might keep in notes
+  about one's friends (if one wrote that kind of stuff
+  down).
+
+  Really, this is just a demo of a trivial ontology.
+
+  $Id$
+
+</comment>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#name">
+        <comment>
+   a commonly used or standard name for
+   the person (or animal, or whatever)
+</comment>
+    </rdf:Description>
+
+    <rdf:Description rdf:about="#pet">
+        <comment>
+   the relationship from an pet's owner or
+   keeper to the pat itself
+</comment>
+    </rdf:Description>
+</rdf:RDF>

@@ -1,0 +1,39 @@
+@prefix : <#> .
+@prefix dc: <http://purl.org/dc/elements/1.1/> .
+@prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+
+<>  dc:title "Biology Ontology (demo)";
+    dc:creator "Sandro Hawke, sandro@w3.org";
+    dc:description """An Ontology of Biology, based on the standard 
+                      binomial nomenclature of Carolus Linnaeus.
+
+                      Far from being complete, this is just a small
+                      demonstration of what one could do.""";
+    dc:date "2003-03-28";
+    dc:language "en";
+    dc:subject "Biology";
+
+    a owl:Ontology;
+    owl:imports rdfs:, owl:;
+    owl:versionInfo "$Id$";
+
+    rdfs:seeAlso <http://www.wikipedia.org/wiki/Binomial_nomenclature>
+.
+
+
+# Some familiar names
+
+:Dog owl:sameClassAs :CanisFamiliaris.
+:Human owl:sameClassAs :HomoSapiens.
+
+# Some binomial names
+
+:CanisFamiliaris a owl:Class.
+:HomoSapiens a owl:Class.
+
+# Some class relationships
+
+:CanisFamiliaris owl:disjoint :HomoSapiens.
+

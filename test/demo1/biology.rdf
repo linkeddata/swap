@@ -1,0 +1,44 @@
+
+<!-- Processed by Id: cwm.py,v 1.126 2003/02/14 17:48:08 sandro Exp -->
+<!--     using base file:/home/sandro/cvs/cvs.w3c.org/WWW/2000/10/swap/test/demo1/biology.n3-->
+
+
+<rdf:RDF xmlns="http://www.w3.org/2002/07/owl#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:owl="http://www.w3.org/2002/07/owl#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+
+    <Ontology rdf:about="">
+        <dc:creator>Sandro Hawke, sandro@w3.org</dc:creator>
+        <dc:date>2003-03-28</dc:date>
+        <dc:description>An Ontology of Biology, based on the standard 
+                      binomial nomenclature of Carolus Linnaeus.
+
+                      Far from being complete, this is just a small
+                      demonstration of what one could do.</dc:description>
+        <dc:language>en</dc:language>
+        <dc:subject>Biology</dc:subject>
+        <dc:title>Biology Ontology (demo)</dc:title>
+        <rdfs:seeAlso rdf:resource="http://www.wikipedia.org/wiki/Binomial_nomenclature"/>
+        <imports rdf:resource="http://www.w3.org/2000/01/rdf-schema#"/>
+        <imports rdf:resource="http://www.w3.org/2002/07/owl#"/>
+        <versionInfo>$Id$</versionInfo>
+    </Ontology>
+
+    <Class rdf:about="#CanisFamiliaris">
+        <disjoint rdf:resource="#HomoSapiens"/>
+    </Class>
+
+    <rdf:Description rdf:about="#Dog">
+        <sameClassAs rdf:resource="#CanisFamiliaris"/>
+    </rdf:Description>
+
+    <Class rdf:about="#HomoSapiens">
+    </Class>
+
+    <rdf:Description rdf:about="#Human">
+        <sameClassAs rdf:resource="#HomoSapiens"/>
+    </rdf:Description>
+</rdf:RDF>
