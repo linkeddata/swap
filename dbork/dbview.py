@@ -6,7 +6,7 @@ Share and Enjoy. Open Source license:
 Copyright (c) 2001 W3C (MIT, INRIA, Keio)
 http://www.w3.org/Consortium/Legal/copyright-software-19980720
 
-hmm... RDF/SQL mapping issue: consider:
+consider:
 
   select person.name, phone.room from persons,phones
      where phone.owner=person.id;
@@ -14,23 +14,42 @@ hmm... RDF/SQL mapping issue: consider:
 we can look at persons, phones as RDF Classes...
 name as a property whose domain is person,
 and room as a property whose domain is phone.
-then... what's the subject of the resulting properties?
+then... what's the subject of the stuff in the
+result of the query?
 
-i.e.
-  { ?phone :room ?r; :owner [ is :id of ?who ]. ?who :name ?n}
-    log:implies { [ :room ?r; :owner [:name ?n]]}.
+What we really want is something like...
+  { ?phone :room ?r;
+           :owner ?who.
+    ?who :name ?n}
+    log:implies
+    { [ :room ?r;
+        :owner [:name ?n]]}.
 
-that's the way the SQL query should work, but how do I know where to
-put the []'s in the implies, when converting an SQL rule to an N3
-rule? Hmm... make the id disappear in the RDF level?
+but how do we know where to put the []'s in the implies, when
+converting an SQL rule to an N3 rule?
+
+The solution implemented here is to include primary key info in the
+query, and to treat (database, table, primary key value)s as
+URIs.
+
+A query regards a number of tables in a database; for
+each table, we're given
+  - the table's name
+  - the fields we want selected from the table (if any)
+  - the table's primary key (if relevant)
+  - the fields we want to join with other table's primary keys
+  - an optional/supplimentary WHERE clause
 
 
-  { ?phone :room ?r; :owner [ is :id of ?who ]. ?who :name ?n}
-    log:implies { [ :col1 ?r; :col2 ?n].
-                  :col1 sqlmap:cameFrom :name; sqlmap:tables (:person :phone).
-                  :col2 sqlmap:
-                }.
+TODO
+  - show tables, describe _table_ ==> RDF schema.
+  
+REFERENCES
 
+  Python Database API v2.0
+  http://www.python.org/topics/database/DatabaseAPI-2.0.html
+
+SEE ALSO
 
 earlier dev notes, links, ...
  http://ilrt.org/discovery/chatlogs/rdfig/2002-02-27#T18-29-01
@@ -44,19 +63,39 @@ from string import join, split
 
 import MySQLdb # MySQL for Python
                # http://sourceforge.net/projects/mysql-python
-               #
-               # implements...
-               #  Python Database API v2.0
-               #  http://www.python.org/topics/database/DatabaseAPI-2.0.html
-
+               # any Python Database API-happy implementation will do.
 
 import RDFSink
-import notation3 # move RDF/XML writer out of notation3
+import notation3 # @@move RDF/XML writer out of notation3
 
 import BaseHTTPServer
 import cgi # for URL-encoded query parsing
 
+
+
+
 class DBViewServer(BaseHTTPServer.HTTPServer):
+    """Export an SQL database, read-only, into HTTP/RDF.
+
+    databasename is
+      'http://%s:%s%s%s' % (addr[0], addr[1], home, dbName)
+    e.g.
+      http://example:9003/dbview/inventory
+
+    table names are, e.g.
+      http://example:9003/dbview/inventory/products
+
+    @@hmm... conflate the table-class name with an HTTP document?
+    
+    field names are, e.g.
+      http://example:9003/dbview/inventory/products#description
+
+    object names are, e.g.
+      http://example:9003/dbview/inventory/products/1432
+    where 1432 is the value of the primary key in the products table.
+    """
+
+    
     def __init__(self, addr, handlerClass, db, home, dbName):
         BaseHTTPServer.HTTPServer.__init__(self, addr, handlerClass)
         
@@ -64,6 +103,7 @@ class DBViewServer(BaseHTTPServer.HTTPServer):
         self._home = home
         self._dbName = dbName
         self._base = 'http://%s:%s%s%s' % (addr[0], addr[1], home, dbName)
+
 
 class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
     QPath = '/dbq'
@@ -74,10 +114,13 @@ class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
 
         #DEBUG "which get?", self.path, s._home + s._dbName + self.UIPath
         
-        if self.path == s._home + s._dbName + self.UIPath:
-            self.getUI()
+        pui = s._home + s._dbName + self.UIPath
+        pq = s._home + s._dbName + self.QPath
+        
+        if self.path == pui: self.getUI()
+        elif self.path[:len(pq)+1] == pq + '?': self.getView()
         else:
-            self.getView()
+            self.send_error(404, 'path not understood')
 
             
     def getUI(self):
@@ -106,19 +149,166 @@ class DBViewHandler(BaseHTTPServer.BaseHTTPRequestHandler):
         self.send_header("Content-type", "application/rdf+xml") #@@ cf. RDF Core "what mime type to use for RDF?" issue...
         self.end_headers()
 
-        dbaddr = self.server._base + self.path
+        s = self.server
+        dbaddr = s._home + s._dbName
         
         sink = notation3.ToRDF(self.wfile, dbaddr)
 
-        #@@hardcoded
-        fields = ('email', 'given', 'family', 'city', 'state', 'country', 'URL', 'last')
-        tables = ('users', 'techplenary2002')
-        condition = 'users.id=techplenary2002.id'
-        
-        askdb(self.server._db, dbaddr, sink, fields, tables, condition)
+        path, qs = split(self.path, '?')
+        fields, tables, keys, joins, cond = parseQuery(qs)
+
+        askdb(self.server._db, dbaddr, sink,
+              fields, tables, keys, joins, cond)
+
+        sink.endDoc()
 
 
 
+
+def asSQL(fields, tables, keys, joins, condextra = ''):
+    """format query as SQL.
+
+    rougly: select fields from tables where keyJoins and condextra
+
+    details:
+
+      tables is a list of table names
+
+      fields is a list of lists of fieldnames, one list per table
+
+      keys is a dictionary that maps tables to given primary key fields
+
+      and keyJoins is a list of lists... the bottom half
+      of a matrix... keyJoins[i][j] is None or the
+      name of a field in table i to join with the primary
+      key of table j.
+    
+      condextra is an SQL expression
+    """
+
+    fldnames = []
+    for ti in range(len(tables)):
+        for f in fields[ti]:
+            fldnames.append("%s.%s" % (tables[ti], f))
+
+    cond = ''
+    for i in range(len(tables)):
+        for j in range(i):
+            if joins[i][j]:
+                jexpr = "%s.%s = %s.%s" % (tables[i], joins[i][j],
+                                           tables[j], keys[tables[j]])
+                if cond: cond = cond + ' AND '
+                cond = cond + jexpr
+
+    if condextra:
+        if cond:
+            cond = cond + ' AND ' + condextra
+        else:
+            cond = condextra
+
+    return 'select %s from %s where %s;' % (join(fldnames, ','),
+                                            join(tables, ','),
+                                            cond)
+
+    
+
+def askdb(db, dbaddr, sink, fields, tables, keys, joins, condextra):
+    """ask a query of a database; return an RDF formula.
+
+    db is a python DB API database object
+    dbaddr is a URI for the database (see DBViewServer above for details)
+    sink is an RDF serializer (cf RDFSink module)
+    fields/tables/keys/joins/condextra per asSQL above.
+
+    note that fields really needs to be a list of lists, not
+    a list of tuples, since tuples don't grok .index(). Odd.
+
+    We assume table names are also
+    XML names (e.g. no colons) and
+    URI path segments (e.g. no non-ascii chars, no /?#).
+
+    """
+
+    fmla = something(None, None, 'F')
+    c = db.cursor()
+
+    q = asSQL(fields, tables, keys, joins, condextra)
+    
+    c.execute(q)
+
+    # using table names as namespace names seems to be aesthetic...
+    for n in tables:
+        sink.bind(n, (RDFSink.SYMBOL, "%s/%s#" % (dbaddr, n)))
+
+
+    while 1:
+	row=c.fetchone()
+	if not row:
+            break
+
+        things = [None] * len(tables)
+
+	col = 0
+        for ti in range(len(tables)):
+            if fields[ti]:
+                tbl = tables[ti]
+
+                # figure out the subject of these cells...
+                # all the property-fields from the same table-class
+                # share a subject...
+                # do we know a unique name for it?
+                # i.e. ... is the table/class keyed?
+
+                uri = None
+                try:
+                    kn = keys[tbl]
+
+                    # yes...
+                    # does this query return the key value?
+                    try:
+                        kc = fields[ti].index(kn)
+                    except ValueError:
+                        # no...
+                        pass
+                    else:
+                        kv = row[col+kc]
+                        uri = "%s/%s/%s" % (dbaddr, tbl, kv)
+                except KeyError:
+                    # no, no key supplied for this class/table
+                    pass
+
+                if uri: subj = (RDFSink.SYMBOL, uri)
+                else:   subj = something(sink, fmla, tbl)
+
+                # remember this for joins...
+                things[ti] = subj
+                
+                # subj rdf:type _tableClass_.
+                sink.makeStatement((fmla,
+                                    (RDFSink.SYMBOL, notation3.RDF_type_URI),
+                                    subj,
+                                    (RDFSink.SYMBOL, "%s/%s" % (dbaddr, tbl))
+                                    ))
+
+
+                for fld in fields[ti]:
+                    cell = row[col]
+                    # @@our mysql implementation happens to use iso8859-1
+                    ol = (RDFSink.LITERAL, str(cell).decode('iso8859-1'))
+
+                    # ok... now we have subj, pred and obj...
+                    prop = (RDFSink.SYMBOL, "%s/%s#%s" % (dbaddr, tbl, fld))
+                    sink.makeStatement((fmla, prop, subj, ol))
+
+                    col = col + 1
+
+                # now relate it to other things...
+                for j in range(ti):
+                    if joins[ti][j] and things[j]:
+                        prop = (RDFSink.SYMBOL, "%s/%s#%s" %
+                                (dbaddr, tables[ti], joins[ti][j]))
+                        sink.makeStatement((fmla, prop, subj, things[j]))
+                        
 
 g=0
 def something(sink, scope=None, hint='gensym'):
@@ -131,141 +321,6 @@ def something(sink, scope=None, hint='gensym'):
     return term
 
 
-def askdb(db, dbaddr, sink, fields, tables, condition):
-    scope = something(None, None, 'scope')
-    c = db.cursor()
-    q='select %s from %s where %s;' % (join(fields, ','), join(tables, ','), condition)
-    c.execute(q)
-
-
-    # we assume table names are also
-    # XML names (e.g. no colons) and
-    # URI path segments (e.g. no non-ascii chars)
-    for n in tables:
-        sink.bind(n, (RDFSink.SYMBOL, "%s/%s#" % (dbaddr, n)))
-
-
-    while 1:
-	row=c.fetchone()
-	if not row:
-            break
-	subj = something(sink, scope, 'ans')
-        sink.startAnonymousNode(subj)
-	col = 0
-	for cell in row:
-            # our mysql implementation happens to use iso8859-1
-            ol = cell.decode('iso8859-1')
-            
-	    tup = (scope,
-                   (RDFSink.SYMBOL,
-                    "%s/%s#%s" % (dbaddr,
-                                  tables[0], #@@right table
-                                  fields[col])),
-                   subj, (RDFSink.LITERAL, ol))
-            sink.makeStatement(tup)
-	    col = col + 1
-        sink.endAnonymousNode()
-
-
-def asSQL(fields, tables, joins, condextra):
-    fldnames = [ "%s.%s" % (f[0], f[1]) for f in fields ]
-
-    cond = ''
-    if joins:
-        joinexprs = [ "%s.%s = %s.%s" % (j[0][0], j[0][1], j[1][0], j[1][1])
-                      for j in joins ]
-        cond = join(joinexprs, ' AND ')
-    if condextra:
-        if cond:
-            cond = cond + ' AND ' + condextra
-        else:
-            cond = condextra
-
-    return 'select %s from %s where %s;' % (join(fldnames, ','),
-                                            join(tables, ','),
-                                            cond)
-
-    
-def askdb2(db, dbaddr, sink, fields, tables, keys, joins, condextra):
-    fmla = something(None, None, 'F')
-    c = db.cursor()
-
-    fields = list(fields) # odd... tuples don't do index()
-
-    q = asSQL(fields, tables, joins, condextra)
-    
-    c.execute(q)
-
-
-    # we assume table names are also
-    # XML names (e.g. no colons) and
-    # URI path segments (e.g. no non-ascii chars)
-    for n in tables:
-        sink.bind(n, (RDFSink.SYMBOL, "%s/%s#" % (dbaddr, n)))
-
-
-    while 1:
-	row=c.fetchone()
-	if not row:
-            break
-
-        things = {}
-
-	#@@subj = something(sink, fmla, 'ans')
-        #sink.startAnonymousNode(subj)
-
-	col = 0
-	for cell in row:
-            # @@our mysql implementation happens to use iso8859-1
-            ol = (RDFSink.LITERAL, str(cell).decode('iso8859-1'))
-
-            tbl, fld = fields[col]
-
-            # figure out the subject of this cell-statement...
-            # all the property-fields from the same table-class
-            # share a subject... do we already have it...?
-            try:
-                subj = things[tbl]
-            except KeyError:
-                # no... make up something in this table/class.
-                # do we know a unique name for it?
-                # i.e. ... is the table/class keyed?
-
-                uri = None
-                try:
-                    kn = keys[tbl]
-
-                    # yes...
-                    # does this query return the key value?
-                    try:
-                        kc = fields.index((tbl, kn))
-                    except ValueError:
-                        # no...
-                        pass
-                    else:
-                        kv = row[kc]
-                        uri = "%s/%s/%s" % (dbaddr, tbl, kv)
-                except KeyError:
-                    # no, no key supplied for this class/table
-                    pass
-
-                if uri: subj = (RDFSink.SYMBOL, uri)
-                else:   subj = something(sink, fmla, tbl)
-
-                # subj rdf:type _tableClass_.
-                sink.makeStatement((fmla,
-                                    (RDFSink.SYMBOL, notation3.RDF_type_URI),
-                                    subj,
-                                    (RDFSink.SYMBOL, "%s/%s" % (dbaddr, tbl))
-                                    ))
-
-                things[tbl] = subj
-
-            # ok... now we know what the relevant subject is...
-	    prop = (RDFSink.SYMBOL, "%s/%s#%s" % (dbaddr, tbl, fld))
-            sink.makeStatement((fmla, prop, subj, ol))
-
-	    col = col + 1
 
 
 ###############
@@ -300,15 +355,9 @@ def queryUI(write, n, qpath, dbName):
 def parseQuery(qs):
     """Parse url-encoded SQL query string
 
-    return fields, tables, keys, keyJoins, condition
-       (ala: select fields from tables where keyJoins and condition)
-    where fields is a list of (tableName, fieldName) pairs,
-      tables is a list of table names
-      keys is a dictionary that maps tables to given primary key fields
-      and keyJoins is a list of ((tn, fn), (tn, fn)) pairs.
-    
-    qs is an URL-encoded query string, ala the form above"""
-
+    qs is an URL-encoded query string, ala the form above
+    return fields, tables, keys, keyJoins, condition ala asSQL() above.
+    """
 
     form = cgi.parse_qs(qs)
 
@@ -333,10 +382,9 @@ def parseQuery(qs):
         try:
             fieldsI = split(form['fields%s' % i][0], ',')
         except KeyError:
-            pass
+            fields.append(())
         else:
-            for f in fieldsI:
-                fields.append((tname, f))
+            fields.append(fieldsI)
 
         try:
             key = form['key%s' % i][0]
@@ -349,20 +397,23 @@ def parseQuery(qs):
 
     keyJoins = []
     for i in range(1, len(tables)+1):
+        tjoins = []
         for j in range(1, i):
             kjN = 'kj%s_%s' % (i, j)
             try:
                 f = form[kjN][0]
             except KeyError:
-                pass
+                tjoins.append(None)
             else:
-                keyJoins.append(((tables[i-1], f),
-                                 (tables[j-1], keys[tables[j-1]]) ))
+                tjoins.append(f)
+        keyJoins.append(tjoins)
 
     return fields, tables, keys, keyJoins, condition
 
 
-#################
+
+
+###############################
 # Test harness...
 
 def testSvc():
@@ -385,33 +436,6 @@ def testSvc():
 
 
 
-
-def testDBView(fp, host, port, user, passwd):
-    #sink = notation3.ToN3(fp.write, 'stdout:')
-    sink = notation3.ToRDF(fp, 'stdout:')
-    db=MySQLdb.connect(host=host, port=port,
-                       user=user, passwd=passwd,
-                       db='administration')
-
-    dbaddr='http://example/w3c-admin-db'
-    askdb(db, dbaddr, sink,
-          ('email', 'given', 'family', 'city', 'state', 'country', 'URL', 'last'),
-          ('users', 'techplenary2002'),
-          'users.id=techplenary2002.id')
-    sink.endDoc()
-
-
-
-
-def testCLI():
-    import sys
-    from string import atoi
-    
-    host, port, user, passwd = sys.argv[1:5]
-
-    testDBView(sys.stdout, host, atoi(port), user, passwd)
-
-
 def testUI():
     import sys
     queryUI(sys.stdout.write, 3, '/', "niftydb")
@@ -431,7 +455,7 @@ def testQ():
     fields, tables, keys, joins, cond = parseQuery(fields)
     print "SQL parse:", fields, tables, keys, joins, cond
 
-    print "as SQL:", asSQL(fields, tables, joins, cond)
+    print "as SQL:", asSQL(fields, tables, keys, joins, cond)
     
     sink = notation3.ToRDF(sys.stdout, 'stdout:')
 
@@ -441,20 +465,24 @@ def testQ():
 
     dbaddr='http://example/administration'
     
-    askdb2(db, dbaddr, sink,
-           fields, tables, keys, joins, cond)
+    askdb(db, dbaddr, sink,
+          fields, tables, keys, joins, cond)
 
     sink.endDoc()
 
 
 if __name__ == '__main__':
-    #testCLI()
-    #testSvc()
+    testSvc()
     #testUI()
-    testQ()
-    
+    #testQ()
+
+
 # $Log$
-# Revision 1.8  2002-03-06 03:44:05  connolly
+# Revision 1.9  2002-03-06 05:41:32  connolly
+# OK! basic query interface, including joins,
+# seems to work.
+#
+# Revision 1.8  2002/03/06 03:44:05  connolly
 # the multi-table case is starting to work...
 # I haven't captured the joined relationships yet...
 # I'm thinking about turning the fields structure inside out...
