@@ -1,4 +1,4 @@
-<?xml-stylesheet href="../../../../2000/10/swap/util/rdfsStyle.css" ?>
+<?xml-stylesheet href='http://www.w3.org/2002/06/rdfs2html' type='application/xml'?>
 
 <!-- Processed by Id: cwm.py,v 1.129 2003/04/08 16:12:43 timbl Exp -->
 <!--     using base file:/home/connolly/w3ccvs/WWW/2000/10/swap/pim/contact.n3-->
@@ -37,7 +37,10 @@
 </dc:description>
         <dc:description>
 $Log$
-Revision 1.7  2003-07-08 14:23:53  connolly
+Revision 1.8  2003-07-08 14:25:33  connolly
+stylesheet link, take 2
+
+Revision 1.7  2003/07/08 14:23:53  connolly
 added stylesheet pointer
 
 Revision 1.6  2003/07/07 16:10:16  connolly
