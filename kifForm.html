@@ -37,6 +37,7 @@
             </dt>
             <dd>( <tt>"\\(\s*quote"</tt> <a href="#listexpr">listexpr</a>
                 <sub></sub> <tt>"\\)"</tt>  ) <br class=""/> | ( <tt>"'"</tt> <a href="#listexpr">listexpr</a>
+                <sub></sub>  ) <br class=""/> | ( <tt>"^"</tt> <a href="#listexpr">listexpr</a>
                 <sub></sub>  ) </dd>
             <dt>
                 <a name="listexpr"
@@ -46,7 +47,8 @@
             <dd>
                 <a href="#atom">atom</a>
                 <sub></sub> <br class=""/> | ( <tt>"\\("</tt> <a href="#listexpr">listexpr</a>
-                <sub></sub> * <tt>"\\)"</tt>  ) </dd>
+                <sub></sub> * <tt>"\\)"</tt>  ) <br class=""/> | ( <tt>","</tt> <a href="#listexpr">listexpr</a>
+                <sub></sub>  ) </dd>
             <dt>
                 <a name="atom"
                     id="atom">atom</a>

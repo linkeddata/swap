@@ -22,5 +22,14 @@ def test(text):
     p.feed(text)
     gen.endDoc()
 
+def testKIF(text, addr):
+    import KIFSink
+    gen = KIFSink.Sink(sys.stdout.write)
+    p = Parser(gen, addr)
+    gen.startDoc()
+    p.feed(text)
+    gen.endDoc()
+
 if __name__ == '__main__':
-    test(sys.stdin.read())
+    import os
+    testKIF(sys.stdin.read(), 'file:%s/STDIN' % (os.getcwd(),))
