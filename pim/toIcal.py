@@ -319,6 +319,7 @@ class CalWr:
         self.exportGeneral(E_PROP, sts, comp, ICAL.location, "LOCATION")
         self.exportGeneral(E_PROP, sts, comp, ICAL.priority, "PRIORITY")
         self.exportGeneral(E_PROP, sts, comp, ICAL.status, "STATUS")
+        self.timeProp(sts, "completed", comp)
 
 
         # notes on 4.8.4.6 Uniform Resource Locator
@@ -727,7 +728,10 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 2.6  2004-01-31 00:11:06  connolly
+# Revision 2.7  2004-01-31 00:45:10  timbl
+# Add COMPLETED:
+#
+# Revision 2.6  2004/01/31 00:11:06  connolly
 # todo status support; no test; blech
 #
 # Revision 2.5  2004/01/29 21:28:13  timbl
