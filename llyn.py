@@ -804,8 +804,8 @@ def loadToStore(store, uri=None, contentType=None, formulaURI=None, remember=1):
     #    @@ Get sensible net errors and produce dignostics
 
         guess = ct
-        if verbosity() > 29: progress("Content-type: " + ct + " for "+addr)
-        if ct.find('xml') < 0 and ct.find('rdf') < 0 :   # Rats - nothing to go on
+        if verbosity() > 29: progress("Content-type: " + `ct` + " for "+addr)
+        if ct == None or (ct.find('xml') < 0 and ct.find('rdf') < 0) :   # Rats - nothing to go on
             buffer = netStream.read(500)
             netStream.close()
             netStream = urllib.urlopen(addr)
@@ -2972,4 +2972,11 @@ def x2s(x):
 def isString(x):
     # in 2.2, evidently we can test for isinstance(types.StringTypes)
     return type(x) is type('') or type(x) is type(u'')
+
+#####################  Register this module
+
+from thing import setStoreClass
+setStoreClass(RDFStore)
+
+#ends
 

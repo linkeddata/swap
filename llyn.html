@@ -1662,7 +1662,8 @@ matching&nbsp;in&nbsp;that&nbsp;position.</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-clear"><strong>clear</strong></a>(self)</dt><dd><tt>Remove&nbsp;all&nbsp;formulas&nbsp;from&nbsp;the&nbsp;store&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;@@@&nbsp;DOESN'T&nbsp;ACTUALLY&nbsp;DO&nbsp;IT/BROKEN</tt></dd></dl>
 
-<dl><dt><a name="RDFStore-conclude"><strong>conclude</strong></a>(self, bindings, param, level<font color="#909090">=0</font>, evidence<font color="#909090">=[]</font>)</dt></dl>
+<dl><dt><a name="RDFStore-conclude"><strong>conclude</strong></a>(self, bindings, param, level<font color="#909090">=0</font>, evidence<font color="#909090">=[]</font>)</dt><dd><tt>#&nbsp;Whether&nbsp;we&nbsp;do&nbsp;a&nbsp;smart&nbsp;match&nbsp;determines&nbsp;whether&nbsp;we&nbsp;will&nbsp;be&nbsp;able&nbsp;to&nbsp;conclude<br>
+#&nbsp;things&nbsp;which&nbsp;in&nbsp;fact&nbsp;we&nbsp;knew&nbsp;already&nbsp;thanks&nbsp;to&nbsp;the&nbsp;builtins.</tt></dd></dl>
 
 <dl><dt><a name="RDFStore-copyContext"><strong>copyContext</strong></a>(self, old, new, why<font color="#909090">=None</font>)</dt></dl>
 
@@ -1809,7 +1810,7 @@ Builds&nbsp;the&nbsp;indxes&nbsp;and&nbsp;does&nbsp;stuff&nbsp;for&nbsp;lists.</
 
 <dl><dt><a name="RDFStore-think"><strong>think</strong></a>(self, F, G<font color="#909090">=None</font>)</dt></dl>
 
-<dl><dt><a name="RDFStore-tryRule"><strong>tryRule</strong></a>(self, rule, workingContext, targetContext, _variables, already<font color="#909090">=None</font>)</dt></dl>
+<dl><dt><a name="RDFStore-tryRule"><strong>tryRule</strong></a>(self, rule, workingContext, targetContext, _variables, already<font color="#909090">=None</font>)</dt><dd><tt>#&nbsp;Beware&nbsp;lists&nbsp;are&nbsp;corrupted.&nbsp;Already&nbsp;list&nbsp;is&nbsp;updated&nbsp;if&nbsp;present.</tt></dd></dl>
 
 <hr>
 Data and non-method functions defined here:<br>
@@ -1911,6 +1912,64 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 
 </td></tr></table></td></tr></table>
 <table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
+<tr bgcolor="#eeaa77">
+<td colspan=3 valign=bottom>&nbsp;<br>
+<font color="#ffffff" face="helvetica, arial"><big><strong>Functions</strong></big></font></td></tr>
+    
+<tr><td bgcolor="#eeaa77"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
+<td width="100%"><dl><dt><a name="-_indent"><strong>_indent</strong></a>(str)</dt><dd><tt>&nbsp;Return&nbsp;a&nbsp;string&nbsp;indented&nbsp;by&nbsp;4&nbsp;spaces</tt></dd></dl>
+ <dl><dt><a name="-_lookup"><strong>_lookup</strong></a>(bindings, value)</dt></dl>
+ <dl><dt><a name="-_lookupQuad"><strong>_lookupQuad</strong></a>(bindings, q)</dt></dl>
+ <dl><dt><a name="-_lookupQuadRecursive"><strong>_lookupQuadRecursive</strong></a>(bindings, q, why<font color="#909090">=None</font>)</dt></dl>
+ <dl><dt><a name="-_lookupRecursive"><strong>_lookupRecursive</strong></a>(bindings, x, old<font color="#909090">=None</font>, new<font color="#909090">=None</font>)</dt><dd><tt>&nbsp;Subsitute&nbsp;into&nbsp;formula.&nbsp;Problem:&nbsp;intermiediate&nbsp;formulae&nbsp;won't&nbsp;get&nbsp;garbage&nbsp;collected.</tt></dd></dl>
+ <dl><dt><a name="-_substitute"><strong>_substitute</strong></a>(bindings, list)</dt></dl>
+ <dl><dt><a name="-bindingsToString"><strong>bindingsToString</strong></a>(bindings)</dt><dd><tt>#&nbsp;&nbsp;&nbsp;DIAGNOSTIC&nbsp;STRING&nbsp;OUTPUT</tt></dd></dl>
+ <dl><dt><a name="-collectBindings"><strong>collectBindings</strong></a>(bindings, param, level<font color="#909090">=0</font>, evidence<font color="#909090">=None</font>)</dt><dd><tt>Return&nbsp;number&nbsp;of&nbsp;bindings&nbsp;found&nbsp;and&nbsp;collects&nbsp;them</tt></dd></dl>
+ <dl><dt><a name="-compareFormulae"><strong>compareFormulae</strong></a>(self, other)</dt><dd><tt>&nbsp;This&nbsp;algorithm&nbsp;checks&nbsp;for&nbsp;equality&nbsp;in&nbsp;the&nbsp;sense&nbsp;of&nbsp;structural&nbsp;equivalence,&nbsp;and<br>
+also&nbsp;provides&nbsp;an&nbsp;ordering&nbsp;which&nbsp;allows&nbsp;is&nbsp;to&nbsp;render&nbsp;a&nbsp;graph&nbsp;in&nbsp;a&nbsp;canonical&nbsp;way.<br>
+This&nbsp;is&nbsp;a&nbsp;form&nbsp;of&nbsp;unification.<br>
+&nbsp;<br>
+The&nbsp;steps&nbsp;are&nbsp;as&nbsp;follows:<br>
+1.&nbsp;If&nbsp;one&nbsp;forumula&nbsp;has&nbsp;more&nbsp;statments&nbsp;than&nbsp;the&nbsp;other,&nbsp;it&nbsp;is&nbsp;greater.<br>
+2.&nbsp;The&nbsp;variables&nbsp;of&nbsp;each&nbsp;are&nbsp;found.&nbsp;If&nbsp;they&nbsp;have&nbsp;different&nbsp;number&nbsp;of&nbsp;variables,<br>
+&nbsp;&nbsp;&nbsp;then&nbsp;the&nbsp;ine&nbsp;with&nbsp;the&nbsp;most&nbsp;is&nbsp;"greater".<br>
+3.&nbsp;The&nbsp;statements&nbsp;of&nbsp;both&nbsp;formulae&nbsp;are&nbsp;ordered,&nbsp;and&nbsp;the&nbsp;formulae&nbsp;compared&nbsp;statement<br>
+&nbsp;&nbsp;&nbsp;for&nbsp;statement&nbsp;ignoring&nbsp;variables.&nbsp;If&nbsp;this&nbsp;produced&nbsp;a&nbsp;difference,&nbsp;then<br>
+&nbsp;&nbsp;&nbsp;the&nbsp;one&nbsp;with&nbsp;the&nbsp;first&nbsp;largest&nbsp;statement&nbsp;is&nbsp;greater.<br>
+&nbsp;&nbsp;&nbsp;Note&nbsp;that&nbsp;this&nbsp;may&nbsp;involve&nbsp;a&nbsp;recursive&nbsp;comparison&nbsp;of&nbsp;subformulae.<br>
+3.&nbsp;If&nbsp;the&nbsp;formulae&nbsp;are&nbsp;still&nbsp;the&nbsp;same,&nbsp;then&nbsp;for&nbsp;each&nbsp;variable,&nbsp;a&nbsp;list<br>
+&nbsp;&nbsp;&nbsp;of&nbsp;appearances&nbsp;is&nbsp;created.&nbsp;&nbsp;Note&nbsp;that&nbsp;because&nbsp;we&nbsp;are&nbsp;comparing&nbsp;statements&nbsp;without<br>
+&nbsp;&nbsp;&nbsp;variables,&nbsp;two&nbsp;may&nbsp;be&nbsp;equal,&nbsp;in&nbsp;which&nbsp;case&nbsp;the&nbsp;same&nbsp;(first)&nbsp;statement&nbsp;number<br>
+&nbsp;&nbsp;&nbsp;is&nbsp;used&nbsp;whichever&nbsp;statement&nbsp;the&nbsp;variable&nbsp;was&nbsp;in&nbsp;fact&nbsp;in.&nbsp;Ooops<br>
+&nbsp;&nbsp;&nbsp;<br>
+NOT&nbsp;WRITTEN</tt></dd></dl>
+ <dl><dt><a name="-comparePair"><strong>comparePair</strong></a>(self, other)</dt></dl>
+ <dl><dt><a name="-compareURI"><strong>compareURI</strong></a>(self, other)</dt><dd><tt>Compare&nbsp;two&nbsp;langauge&nbsp;items<br>
+This&nbsp;is&nbsp;a&nbsp;cannoncial&nbsp;ordering&nbsp;in&nbsp;that&nbsp;is&nbsp;designed&nbsp;to&nbsp;allow<br>
+the&nbsp;same&nbsp;graph&nbsp;always&nbsp;to&nbsp;be&nbsp;printed&nbsp;in&nbsp;the&nbsp;same&nbsp;order.<br>
+This&nbsp;makes&nbsp;the&nbsp;regression&nbsp;tests&nbsp;possible.<br>
+The&nbsp;literals&nbsp;are&nbsp;deemed&nbsp;smaller&nbsp;than&nbsp;symbols,&nbsp;which&nbsp;are&nbsp;smaller<br>
+than&nbsp;formulae.&nbsp;&nbsp;This&nbsp;puts&nbsp;the&nbsp;rules&nbsp;at&nbsp;the&nbsp;botom&nbsp;of&nbsp;a&nbsp;file&nbsp;where<br>
+they&nbsp;tend&nbsp;to&nbsp;take&nbsp;a&nbsp;lot&nbsp;of&nbsp;space&nbsp;anyway.<br>
+Formulae&nbsp;have&nbsp;to&nbsp;be&nbsp;compared&nbsp;as&nbsp;a&nbsp;function&nbsp;of&nbsp;their&nbsp;sorted&nbsp;contents.<br>
+&nbsp;<br>
+@@&nbsp;Anonymous&nbsp;nodes&nbsp;have&nbsp;to,&nbsp;within&nbsp;a&nbsp;given&nbsp;<a href="#Formula">Formula</a>,&nbsp;be&nbsp;compared&nbsp;as<br>
+a&nbsp;function&nbsp;of&nbsp;the&nbsp;sorted&nbsp;information&nbsp;about&nbsp;them&nbsp;in&nbsp;that&nbsp;context.<br>
+This&nbsp;is&nbsp;not&nbsp;done&nbsp;yet</tt></dd></dl>
+ <dl><dt><a name="-isString"><strong>isString</strong></a>(x)</dt></dl>
+ <dl><dt><a name="-loadToStore"><strong>loadToStore</strong></a>(store, uri<font color="#909090">=None</font>, contentType<font color="#909090">=None</font>, formulaURI<font color="#909090">=None</font>, remember<font color="#909090">=1</font>)</dt><dd><tt>Get&nbsp;and&nbsp;parse&nbsp;document.&nbsp;&nbsp;Guesses&nbsp;format&nbsp;if&nbsp;necessary.<br>
+Returns&nbsp;top-level&nbsp;formula&nbsp;of&nbsp;the&nbsp;parsed&nbsp;document.<br>
+raises&nbsp;<a href="exceptions.html#IOError">IOError</a>,&nbsp;SyntaxError</tt></dd></dl>
+ <dl><dt><a name="-merge"><strong>merge</strong></a>(a, b)</dt><dd><tt>Merge&nbsp;sorted&nbsp;sequences<br>
+&nbsp;<br>
+The&nbsp;fact&nbsp;that&nbsp;the&nbsp;sequences&nbsp;are&nbsp;sorted&nbsp;makes&nbsp;this&nbsp;faster</tt></dd></dl>
+ <dl><dt><a name="-quadToString"><strong>quadToString</strong></a>(q, neededToRun<font color="#909090">=[[], [], [], []]</font>, pattern<font color="#909090">=[1, 1, 1, 1]</font>)</dt></dl>
+ <dl><dt><a name="-queueToString"><strong>queueToString</strong></a>(queue, level<font color="#909090">=0</font>)</dt></dl>
+ <dl><dt><a name="-seqToString"><strong>seqToString</strong></a>(set)</dt></dl>
+ <dl><dt><a name="-setToString"><strong>setToString</strong></a>(set)</dt></dl>
+ <dl><dt><a name="-x2s"><strong>x2s</strong></a>(x)</dt></dl>
+</td></tr></table>
+<table width="100%" cellspacing=0 cellpadding=2 border=0 summary="section">
 <tr bgcolor="#55aa55">
 <td colspan=3 valign=bottom>&nbsp;<br>
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
@@ -1966,7 +2025,6 @@ Methods inherited from <a href="exceptions.html#Exception">exceptions.Exception<
 <strong>forAllSym</strong> = 'http://www.w3.org/2000/10/swap/log#forAll'<br>
 <strong>forSomeSym</strong> = 'http://www.w3.org/2000/10/swap/log#forSome'<br>
 <strong>generators</strong> = _Feature((2, 2, 0, 'alpha', 1), (2, 3, 0, 'final', 0), 4096)<br>
-<strong>reason</strong> = &lt;thing.Namespace object&gt;<br>
 <strong>subcontext_cache_context</strong> = None<br>
 <strong>subcontext_cache_subcontexts</strong> = None</td></tr></table>
 </body></html>

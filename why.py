@@ -169,6 +169,7 @@ def explanation(self, ko=None):
     qed = ko.newBlankNode(why= dontAsk)
 #    ko.add(subj=ko, pred=reason.proves, obj=self, why=dontAsk) 
 #   ko.add(obj=ko, pred=reason.proof, subj=self, why=dontAsk) 
+    ko.add(subj=self, pred=rdf.type, obj=reason.QED, why=dontAsk) 
     ko.add(subj=self, pred=reason.because, obj=qed, why=dontAsk) 
     ko.add(subj=qed, pred=rdf.type, obj=reason.Conjunction, why=dontAsk) 
 #    ko.add(subj=qed, pred=reason.gives, obj=self, why=dontAsk)
@@ -210,9 +211,9 @@ def asFormula(self, store):
     uu = store.occurringIn(statementAsFormula, kb.universals())
     ee = store.occurringIn(statementAsFormula, kb.existentials())
     for v in uu:
-	statementAsFormula.add(subj= statementAsFormula, pred=log.forAll222, obj=v, why=dontAsk)
+	statementAsFormula.add(subj= statementAsFormula, pred=log.forAll, obj=v, why=dontAsk)
     for v in ee:
-	statementAsFormula.add(subj= statementAsFormula, pred=log.forSome222, obj=v, why=dontAsk)
+	statementAsFormula.add(subj= statementAsFormula, pred=log.forSome, obj=v, why=dontAsk)
     return statementAsFormula.close()  # probably slow - much slower than statement subclass of formula
 
 

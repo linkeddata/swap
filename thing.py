@@ -113,6 +113,16 @@ def universal(str, context, uri):
     formula as context, and return it for future use"""
     return _checkStore().newLiteral(context)
 
+def load(uri=None, formulaURI=None, remember=1):
+    """Get and parse document.  Guesses format if necessary.
+
+    uri:      if None, load from standard input.
+    remember: if 1, store as metadata the relationship between this URI and this formula.
+    
+    Returns:  top-level formula of the parsed document.
+    Raises:   IOError, SyntaxError, DocumentError
+    """
+    return _checkStore().load(uri, formulaURI, remember)
 
 
 class Namespace(object):
