@@ -13,6 +13,7 @@
 """
 
 import LX.engine.otter
+import LX.kb
 
 ##
 ##  Which axioms to use?   all at once?  Some which are theorems?
@@ -64,29 +65,31 @@ def checkConsistency(inputDocument,
 
     kb = LX.kb.KB()
 
-    parser = LX.language.getParser(language="rdflib", sink=kb)
-    parser.load(inputDocument)
-
-    if entailedDocument:
-        kb2 = LX.kb.KB()
-        parser = LX.language.getParser(language="rdflib", sink=kb2)
-        parser.load(entailedDocument)
-        #print "Adding negated:", kb2
-        kb.add(LX.logic.NOT(kb2.asFormula()))
-
-    # possible huge performance gains by using subset of axioms (when that's not cheating)
-    # possible huge performance gains by puting kb [or just kb2 if present] into SOS
-
     try:
-        LX.engine.otter.run(kb, fileBase=",ot/"+tag,
-                            includes=[axiomFile % axiomTag], maxSeconds=maxSeconds)
-        return "Inconsistent"
-    except LX.engine.otter.SOSEmpty:
-        return "Consistent"
-    except LX.engine.otter.TimeoutBeforeAnyProof:
-        return "Unknown"
+        
+        parser = LX.language.getParser(language="rdflib", sink=kb)
+        parser.load(inputDocument)
 
+        if entailedDocument:
+            kb2 = LX.kb.KB()
+            parser = LX.language.getParser(language="rdflib", sink=kb2)
+            parser.load(entailedDocument)
+            #print "Adding negated:", kb2
+            kb.add(LX.logic.NOT(kb2.asFormula()))
 
+        # possible huge performance gains by using subset of axioms (when that's not cheating)
+        # possible huge performance gains by puting kb [or just kb2 if present] into SOS
+
+        try:
+            LX.engine.otter.run(kb, fileBase=",ot/"+tag,
+                                includes=[axiomFile % axiomTag], maxSeconds=maxSeconds)
+            return "Inconsistent"
+        except LX.engine.otter.SOSEmpty:
+            return "Consistent"
+        except LX.engine.otter.TimeoutBeforeAnyProof:
+            return "Unknown"
+    except LX.kb.UnsupportedDatatype, e:
+        raise UnsupportedDatatype, e
 
 # but what we want and can test for is
 #    isKnownConsistent
