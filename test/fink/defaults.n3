@@ -1,0 +1,21 @@
+#
+#  Closed world assumptions for fink information
+#
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+@prefix os: <http://www.w3.org/2000/10/swap/os#>.
+@prefix fink: <http://www.w3.org/2000/10/swap/util/fink#>.
+@prefix :  <#>.
+
+this log:forAll :x, :y, :z.
+
+{ [] 	is log:semantics of [log:uri [is os:argv of "1"]];
+ 	log:includes { :x fink:depends :y};
+	log:notIncludes { [] fink:depends :x}.
+} log:implies {
+  :x a :topApplication.
+}.
+
+
+#ends
+
+
