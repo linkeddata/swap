@@ -1,0 +1,17 @@
+# based on a question from reagle, 5 Apr 2002.
+# usage:
+#  python cwm.py uncle.n3 --think --filter=uncleF.n3
+
+@prefix : <uncle#>.
+
+#For example, I know now how to make a statement: Fred is the father Joe, 
+# and Bob is the brother of Fred.
+
+:Fred is :father of :Joe.
+:Bob is :brother of :Fred.
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+this log:forAll :who1, :who2.
+
+{ :who1 :father [ :brother :who2 ] } log:implies { :who1 :uncle :who2 }.
+

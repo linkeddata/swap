@@ -1,0 +1,19 @@
+# based on a question from reagle, 5 Apr 2002.
+# usage:
+#  python cwm.py uncle.n3 --think --filter=uncleF.n3
+
+@prefix : <uncle#>.
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+this log:forAll :p.
+
+# But then how do I ask, what is the 
+# relationship between Joe and Fred.
+# [sic; I think he meant Bob]
+
+{ :Joe :p :Bob } log:implies { :p a :RelationshipBetweeJoeAndBob }.
+
+# Or, is Fred and Uncle of Joe?
+
+{ :Joe :uncle :Bob } log:implies { :Joe :uncle :Bob }.
