@@ -68,7 +68,7 @@ class TripleMaker:
         self._triples = [[None, None, None]]
         self.lists = []
         self._modes = [FORMULA]
-        self.bNodes = []
+        self.bNodes = {}
         self._predIsOfs = [NO]
         self._pathModes = [False]
         self.store.startDoc()
@@ -76,7 +76,6 @@ class TripleMaker:
     def end(self):
         assert len(self.formulas) == 1
         assert len(self.lists) == 0
-        assert len(self.bNodes) == 0
         self.store.endDoc(self.formulas[0])
         return self.formulas[0]
 
@@ -194,11 +193,11 @@ class TripleMaker:
         function to call
 
         """
-        if Id not in bNodes:
+        if Id not in self.bNodes:
             a = self.formulas[-1].newBlankNode()
-            bNodes[Id] = a
+            self.bNodes[Id] = a
         else:
-            a = bNodes[Id]
+            a = self.bNodes[Id]
         self.addNode(a)
         
     

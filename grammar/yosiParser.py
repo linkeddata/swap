@@ -194,7 +194,6 @@ class SinkParser:
                     tm.addQuestionMarkedSymbol(self._baseURI + '#' + token[1:])
                 elif token[:2] == '_:':
                     tm.addAnonymous(token)
-        
                 else:
                     raise ValueError(token)
             elif forMode == 1:

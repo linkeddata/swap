@@ -465,6 +465,10 @@ class N3Set(ImmutableSet, CompoundTerm): #,
             return cls.res[new_set]
         cls.res[new_set] = new_set
         return new_set
+
+##    def __setattr__(self, attr, value):
+##        print "%s=%s" % (`attr`, `value`)
+##        ImmutableSet.__setattr__(self, attr, value)
         
     def uriref(self):
         raise NotImplementedError
@@ -492,6 +496,46 @@ class N3Set(ImmutableSet, CompoundTerm): #,
 
     def asSequence(self):
         return self
+
+    def reification(self, sink, bnodeMap={}, why=None):
+	"""Describe myself in RDF to the given context
+	
+	[ reify:items ( [ reify:value "foo"]  .... ) ]
+	"""
+	elements = sink.store.newSet([ x.reification(sink, bnodeMap, why) for x in self])
+	b = sink.newBlankNode()
+	sink.add(subj=b, pred=sink.newSymbol(REIFY_NS+"items"), obj=elements, why=why)
+	return b
+
+    def flatten(self, sink, why=None):
+        newlist = sink.store.newSet([x.flatten(sink, why=why) for x in self])
+        return newlist
+
+    def unflatten(self, sink, bNodes, why=None):
+        newlist = sink.store.newSet([x.unflatten(sink, bNodes, why=why) for x in self])
+        return newlist
+
+    def classOrder(self):
+        return 10
+
+    def compareTerm(self, other):
+        """This is annoying
+
+        """
+        def my_max(the_set):
+            Max = None
+            for a in the_set:
+                if Max == None or a.compareAnyTerm(Max) > 0:
+                    Max = a
+            return Max
+        s1 = self - other
+        s2 = other - self
+        max1 = my_max(s1)
+        max2 = my_max(s2)
+        if max1 is max2: return 0
+        if max1 is None: return -1
+        if max2 is None: return 1
+        return max1.compareAnyTerm(max2)
     
 class List(CompoundTerm):
     def __init__(self, store, first, rest):  # Do not use directly

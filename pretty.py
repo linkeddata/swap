@@ -192,7 +192,9 @@ class Serializer:
 	for l in lists:
             if isinstance(l, N3Set):
                 a = context.newBlankNode()
-                list = self.store.newList(l)
+                ll = [mm for mm in l] #I hate sorting things
+                ll.sort(Term.compareAnyTerm)
+                list = self.store.newList(ll)
                 self._outputStatement(sink, (context, self.store.forSome, context, a))
                 l._list = list
                 l._node = a
@@ -210,7 +212,10 @@ class Serializer:
                 list = l._list
                 self._outputStatement(sink, (context, self.store.owlOneOf, l._node, list))
 	    while (not isinstance(list, EmptyList)) and list not in listList:
-		self._outputStatement(sink, (context, self.store.first, list, list.first))
+                if isinstance(list.first, N3Set):
+                    self._outputStatement(sink, (context, self.store.first, list, list.first._node))
+                else:
+                    self._outputStatement(sink, (context, self.store.first, list, list.first))
 		self._outputStatement(sink, (context, self.store.rest,  list, list.rest))
 		listList[list] = 1
 		list = list.rest
@@ -359,7 +364,7 @@ class Serializer:
 	elif z is not context:
 	    self._inContext[x] = "many"
 	    return
-        if isinstance(x, NonEmptyList):
+        if isinstance(x, NonEmptyList) or isinstance(x, N3Set):
 	    for y in x:
 		self._scanObj(context, y)	    
 	if isinstance(x, AnonymousVariable) or (isinstance(x, Fragment) and x.generated()): 
@@ -378,7 +383,7 @@ class Serializer:
 #	assert self.context._redirections.get(x, None) == None, "Should not be redirected: "+`x`
 	if verbosity() > 98: progress("scanning %s a %s in context %s" %(`x`, `x.__class__`,`context`),
 			x.generated(), self._inContext.get(x, "--"))
-	if isinstance(x, NonEmptyList):
+	if isinstance(x, NonEmptyList) or isinstance(x, N3Set):
 	    for y in x:
 		self._scanObj(context, y)
 	if isinstance(x, Formula):
@@ -562,7 +567,9 @@ class Serializer:
 	if isinstance(subj, List): li = subj
 	else: li = None
 	if isinstance(subj, N3Set):
-            se = subj
+            #I hate having to sort things
+            se = [mm for mm in subj]
+            se.sort(Term.compareAnyTerm)
             li = self.store.newList(se)
 	else: se = None
 	
@@ -650,7 +657,9 @@ class Serializer:
 
 	if isinstance(obj, N3Set):
             a = self.context.newBlankNode()
-            tempList = self.store.newList(obj)
+            tempobj = [mm for mm in obj] #I hate sorting things
+            tempobj.sort(Term.compareAnyTerm)
+            tempList = self.store.newList(tempobj)
             sink.startAnonymous(self.extern((triple[CONTEXT], triple[PRED], triple[SUBJ], a)))
             self.dumpStatement(sink, (context, self.store.owlOneOf, a, tempList), sorting)
             sink.endAnonymous(sub.asPair(), pre.asPair())
