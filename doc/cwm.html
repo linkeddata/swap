@@ -37,9 +37,11 @@ formats</a>:</p>
 <ul>
   <li><a href="http://www.agfa.com/w3c/euler/">Euler</a> - a
     backward-chaining reasoner by Jos de Roo</li>
+  <li>EulerSharp - a C# port of Euler</li>
   <li><a
     href="http://www.unc.edu/~bparsia/sw/cwmclone/cwmclone.html">cwmclone</a>
     - a [partial?] clone of cwm by Bijan Parsia</li>
+  <li>Jena RDF toolkit now accepts N3 as well as RDF/XML (2003/2)</li>
   <li>RDF::Notation3 perl module (<a
     href="http://archive.develooper.com/modules@perl.org/msg08120.html">submission</a>
     10 Oct 2001 by Petr Cimprich )</li>
@@ -66,9 +68,10 @@ cwm command cwm="python /whereverYouPutThem/cwm.py"</p>
 
 <h3>Prerequisites</h3>
 <ul>
-  <li><strong><a href="http://www.python.org/">Python</a></strong>. That you
-    need. It comes with many systems. If you don't have it, on debian type
-    apt-get install python. On OSX, type <a
+  <li><strong><a href="http://www.python.org/">Python</a></strong>. 
+    Currently (2003/2) cwm needs Python2.2 or later. It comes with many
+    systems. If you don't have it, on debian type apt-get install python. Mac
+     OSX comes witgh it after 10.2. On earlier, get fink then  type <a
     href="http://fink.sourceforge.net/"><code>fink</code></a> <code>install
     python</code>. On cygwin, select python in the setup.exe installer..</li>
   <li>If you are reading things in RDF/XML format, you will need the
@@ -147,8 +150,6 @@ are processed in order from left to right.</p>
     flags</dd>
   <dt>--ntriples</dt>
     <dd>As for n3, but customized to produce the "ntriples" N3 subset.</dd>
-  <dt>--rdf1out</dt>
-    <dd>output format is RDF. (flag)</dd>
   <dt><em>uri</em></dt>
     <dd>load the resource. Parsed relative to the local directory, so a
       filename will work.</dd>
@@ -193,8 +194,8 @@ how URIs were supposed to work.</p>
 <h3><a name="Mode" id="Mode">Mode flag</a>s</h3>
 <dl>
   <dt>r</dt>
-    <dd>This must be present for cwm to go out onto the net at all. It
-      enables: 
+    <dd>This must be present for cwm to go out onto the net to resolve
+      queries. It enables: 
       <ul>
         <li>Looking up properties in definitive documents</li>
         <li>Looking up properties at definitive servers</li>
@@ -211,7 +212,7 @@ how URIs were supposed to work.</p>
       and can't this makes the error fatal.</dd>
   <dt>m</dt>
     <dd>Schemas, definitive documents, when read, are merged into the
-      knowledge base (formula) being querieds.</dd>
+      knowledge base (formula) being queried.s.</dd>
 </dl>
 
 <h2>Environment Variables</h2>
