@@ -27,104 +27,89 @@ parser _Parser:
     token URIREF:   r'<[^ >]*>'
     token PREFIX:   r'[a-zA-Z0-9_-]*:'
     token QNAME:    r'([a-zA-Z][a-zA-Z0-9_-]*)?:[a-zA-Z0-9_-]+'
-    token LNAME:    r'_:[a-zA-Z0-9_-]+'
-    token VNAME:    r'\?[a-zA-Z0-9_-]+'
+    token EXVAR:    r'_:[a-zA-Z0-9_-]+'
+    token UVAR:     r'\?[a-zA-Z0-9_-]+'
     token STRLIT1:  r'"([^\"\\\n]|\\[\\\"nrt])*"'
     token STRLIT2:  r"'([^\'\\\n]|\\[\\\'nrt])*'"
     token STRLIT3:  r'"""([^\"\\]|\\[\\\"nrt])*"""' #@@not right
-    token THIS:     r'this\b'
-    token A:        r'a\b'   #@@matches axy:def?
-    token IS:       r'is\b ' #@@matches bxy:def?
-    token OF:       r'of\b ' #@@matches bxy:def?
-    token STOP:     r'\.'
-    token LP:       r'\('
-    token RP:       r'\)'
-    token LB:       r'\['
-    token RB:       r'\]'
-    token LC:       r'\{'
-    token RC:       r'\}'
     token END:      r'\Z'
 
-    rule document: {{ ctx = self.docContext() }}
-         ( directive | statement<<ctx>> ) * END
+    rule document:
+              {{ scp = self.docScope() }}
+         ( directive | statement<<scp>> ) * END
 
-    rule directive : "@prefix" PREFIX URIREF STOP
-    {{ self.bind(PREFIX[:-1], URIREF) }}
+    rule directive : "@prefix" PREFIX URIREF "\\."
+              {{ self.bind(PREFIX[:-1], URIREF) }}
 
     # foos0 is mnemonic for 0 or more foos
     # foos1      "          1 or more foos
 
-    rule statement<<ctx>> : term<<ctx>> predicates0<<ctx, term>> STOP
+    rule statement<<scp>> : clause_ind<<scp>> "\\."
 
-    rule term<<ctx>>
-              : URIREF        {{ return self.uriref(URIREF) }}
-              | QNAME         {{ return self.qname(QNAME) }}
-              | LNAME         {{ return self.lname(LNAME) }}
-              | VNAME         {{ return self.vname(VNAME) }}
-              | THIS          {{ return ctx }}
-              | shorthand     {{ return shorthand }}
-              | STRLIT3       {{ return self.strlit(STRLIT3, '"""') }}
-              | STRLIT1       {{ return self.strlit(STRLIT1, '"') }}
-              | STRLIT2       {{ return self.strlit(STRLIT2, "'") }}
-              | list<<ctx>>   {{ return list }}
-              | phrase<<ctx>> {{ return phrase }}
-              | clause        {{ return clause }}
-              # @@TODO: ?foo maybe? hmm...
+    rule clause_ind<<scp>>:
+         phrase<<scp>>
+           [predicate<<scp, phrase>> (";" predicate<<scp, phrase>>)* ]
+       | term<<scp>>
+            predicate<<scp, term>> (";" predicate<<scp, term>>)*
+
+    rule term<<scp>>:
+                expr<<scp>>     {{ return expr }}
+              | name<<scp>>     {{ return name }}
               
-    rule predicates0<<ctx,subj>> :
-        predicate<<ctx,subj>> predicates_rest<<ctx,subj>>
-        | # empty
+    rule predicate<<scp,subj>>: verb<<scp>> objects1<<scp,subj,verb>>
 
-    rule predicates_rest<<ctx,subj>> :
-        ";" predicates0<<ctx,subj>>
-        | # empty
-
-    rule predicate<<ctx,subj>>: verb<<ctx>> objects1<<ctx,subj,verb>>
-
-    rule verb<<ctx>> :
-          term<<ctx>>          {{ return (1, term) }}
-        | IS term<<ctx>> OF    {{ return (-1, term) }}
+    rule verb<<scp>> :
+          term<<scp>>           {{ return (1, term) }}
+        | "is" term<<scp>> "of" {{ return (-1, term) }}
     # earlier N3 specs had more verb sugar...
 
 
     # This is the central rule for recognizing a fact.
-    rule objects1<<ctx,subj,verb>> :
-        term<<ctx>>  {{ self.gotStatement(ctx, subj, verb, term) }}
-        ("," term<<ctx>>
-                     {{ self.gotStatement(ctx, subj, verb, term) }}
+    rule objects1<<scp,subj,verb>> :
+        term<<scp>>  {{ self.gotStatement(scp, subj, verb, term) }}
+        ("," term<<scp>>
+                     {{ self.gotStatement(scp, subj, verb, term) }}
          )*
 
 
     # details about terms...
 
-    rule shorthand :
-          A   {{ return self.termA() }}
-        | "=" {{ return self.termEq() }}
+    rule name<<scp>>:
+                URIREF        {{ return self.uriref(URIREF) }}
+              | QNAME         {{ return self.qname(QNAME) }}
+              | "a"           {{ return self.termA() }}
+              | "="           {{ return self.termEq() }}
 
-    rule list<<ctx>> : LP term<<ctx>> * RP #@@TODO: facts to build lists...
+    rule expr<<scp>>:
+                STRLIT3       {{ return self.strlit(STRLIT3, '"""') }}
+              | STRLIT1       {{ return self.strlit(STRLIT1, '"') }}
+              | STRLIT2       {{ return self.strlit(STRLIT2, "'") }}
+              | "this"        {{ return scp }}
+              | EXVAR         {{ return self.lname(EXVAR) }}
+              | UVAR          {{ return self.vname(UVAR) }}
+              | list<<scp>>   {{ return list }}
+              | phrase<<scp>> {{ return phrase }}
+              | clause_sub    {{ return clause_sub }}
 
-    rule phrase<<ctx>>: LB {{ subj = self.something(ctx) }}
-                          predicates0<<ctx,subj>>
-                        RB
-                          {{ return subj }}
+    rule list<<scp>> : "\\(" term<<scp>> * "\\)" #@@TODO: facts to build lists...
 
-    rule clause: LC {{ ctx = self.newClause() }}
-                  statements0<<ctx>>
-                 RC
-                    {{ return ctx }}
+    rule phrase<<scp>>:
+        "\\[" {{ subj = self.something(scp) }}
+        [predicate<<scp, subj>> (";" predicate<<scp, subj>>)* [";"] ]
+        "\\]" {{ return subj }}
 
-    rule statements0<<ctx>>:
-       term<<ctx>> predicates0<<ctx,term>> statements_rest<<ctx>>
-       | #empty
-       
-    rule statements_rest<<ctx>> :
-        STOP statements0<<ctx>>
-        | # empty
+    rule clause_sub:
+        "{" {{ scp = self.newScope() }}
+        [ clause_ind<<scp>> ("\\." clause_ind<<scp>>)* ["\\."]]
+        "}" {{ return scp }}
 
 %%
 
 def scanner(text):
     return _ParserScanner(text)
+
+class BadSyntax(SyntaxError):
+    pass
 
 class Parser(_Parser):
     def __init__(self, scanner, sink, baseURI):
@@ -136,7 +121,7 @@ class Parser(_Parser):
         self._lnames = {}
         self._vnames = {}
 
-    def docContext(self):
+    def docScope(self):
         return mkFormula(self._baseURI)
 
     def uriref(self, str):
@@ -149,7 +134,7 @@ class Parser(_Parser):
         try:
             ns = self._prefixes[pfx]
         except:
-            raise SyntaxError, "prefix %s not bound" % pfx
+            raise BadSyntax, "prefix %s not bound" % pfx
         else:
             return notation3.RESOURCE, ns + ln
 
@@ -158,7 +143,7 @@ class Parser(_Parser):
         try:
             return self._lnames[n]
         except KeyError:
-            x = self.something(self.docContext(), n)
+            x = self.something(self.docScope(), n)
             self._lnames[n] = x
             return x
 
@@ -167,7 +152,7 @@ class Parser(_Parser):
         try:
             return self._vnames[n]
         except KeyError:
-            x = self.something(self.docContext(), n,
+            x = self.something(self.docScope(), n,
                                quant=notation3.N3_forAll_URI)
             self._vnames[n] = x
             return x
@@ -193,24 +178,24 @@ class Parser(_Parser):
         #@@ check for pfx already bound?
         self._prefixes[pfx] = addr
 
-    def gotStatement(self, ctx, subj, verb, obj):
-        #DEBUG("gotStatement:", ctx, subj, verb, obj)
+    def gotStatement(self, scp, subj, verb, obj):
+        #DEBUG("gotStatement:", scp, subj, verb, obj)
         
         dir, pred = verb
         if dir<0: subj, obj = obj, subj
-        self._sink.makeStatement((ctx, pred, subj, obj))
+        self._sink.makeStatement((scp, pred, subj, obj))
 
-    def newClause(self):
-        return self.something(self.docContext(),
+    def newScope(self):
+        return self.something(self.docScope(),
                               "clause", notation3.FORMULA)
 
-    def something(self, ctx, hint="thing",
+    def something(self, scp, hint="thing",
                   ty=notation3.RESOURCE,
                   quant = notation3.N3_forSome_URI):
         it = (ty, "%s#%s_%s" % (self._baseURI, hint, self._serial))
 
         p = (notation3.RESOURCE, quant)
-        self._sink.makeStatement((ctx, p, ctx, it))
+        self._sink.makeStatement((scp, p, scp, it))
 
         self._serial = self._serial + 1
         return it
@@ -226,7 +211,14 @@ def DEBUG(*args):
     sys.stderr.write("\n")
     
 # $Log$
-# Revision 1.10  2001-08-31 22:59:58  connolly
+# Revision 1.11  2001-09-01 05:31:17  connolly
+# - gram2html.py generates HTML version of grammar from rdfn3.g
+# - make use of [] in rdfn3.g
+# - more inline terminals
+# - jargon change: scopes rather than contexts
+# - term rule split into name, expr; got rid of shorthand
+#
+# Revision 1.10  2001/08/31 22:59:58  connolly
 # ?foo for universally quantified variables; document-scoped, ala _:foo
 #
 # Revision 1.9  2001/08/31 22:27:57  connolly

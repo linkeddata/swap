@@ -1,0 +1,127 @@
+
+
+
+<html xmlns="">
+
+    <head>
+        <title>RDF Notation3 Grammar</title>
+    </head>
+
+    <body>
+        <h1>RDF Notation3 Grammar</h1>
+        <address>source: <a href="rdfn3.g">rdfn3.g</a>
+        </address>
+        <dl>
+            <dt>
+                <a name="document"
+                    id="document">document</a>
+                <sub></sub>
+            </dt>
+            <dd>( <a href="#directive">directive</a>
+                <sub></sub> <br class=""/> | <a href="#statement">statement</a>
+                <sub>scp</sub>  ) * <tt>END</tt> </dd>
+            <dt>
+                <a name="directive"
+                    id="directive">directive</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"@prefix"</tt> <tt>PREFIX</tt> <tt>URIREF</tt> <tt>"\\."</tt> </dd>
+            <dt>
+                <a name="statement"
+                    id="statement">statement</a>
+                <sub>scp</sub>
+            </dt>
+            <dd>
+                <a href="#clause_ind">clause_ind</a>
+                <sub>scp</sub> <tt>"\\."</tt> </dd>
+            <dt>
+                <a name="clause_ind"
+                    id="clause_ind">clause_ind</a>
+                <sub>scp</sub>
+            </dt>
+            <dd>( <a href="#phrase">phrase</a>
+                <sub>scp</sub> [ <a href="#predicate">predicate</a>
+                <sub>scp, phrase</sub> ( <tt>";"</tt> <a href="#predicate">predicate</a>
+                <sub>scp, phrase</sub>  ) *  ]  ) <br class=""/> | ( <a href="#term">term</a>
+                <sub>scp</sub> <a href="#predicate">predicate</a>
+                <sub>scp, term</sub> ( <tt>";"</tt> <a href="#predicate">predicate</a>
+                <sub>scp, term</sub>  ) *  ) </dd>
+            <dt>
+                <a name="term"
+                    id="term">term</a>
+                <sub>scp</sub>
+            </dt>
+            <dd>( <a href="#expr">expr</a>
+                <sub>scp</sub>  ) <br class=""/> | ( <a href="#name">name</a>
+                <sub>scp</sub>  ) </dd>
+            <dt>
+                <a name="predicate"
+                    id="predicate">predicate</a>
+                <sub>scp,subj</sub>
+            </dt>
+            <dd>
+                <a href="#verb">verb</a>
+                <sub>scp</sub> <a href="#objects1">objects1</a>
+                <sub>scp,subj,verb</sub> </dd>
+            <dt>
+                <a name="verb"
+                    id="verb">verb</a>
+                <sub>scp</sub>
+            </dt>
+            <dd>( <a href="#term">term</a>
+                <sub>scp</sub>  ) <br class=""/> | ( <tt>"is"</tt> <a href="#term">term</a>
+                <sub>scp</sub> <tt>"of"</tt>  ) </dd>
+            <dt>
+                <a name="objects1"
+                    id="objects1">objects1</a>
+                <sub>scp,subj,verb</sub>
+            </dt>
+            <dd>
+                <a href="#term">term</a>
+                <sub>scp</sub> ( <tt>","</tt> <a href="#term">term</a>
+                <sub>scp</sub>  ) * </dd>
+            <dt>
+                <a name="name"
+                    id="name">name</a>
+                <sub>scp</sub>
+            </dt>
+            <dd>( <tt>URIREF</tt>  ) <br class=""/> | ( <tt>QNAME</tt>  ) <br class=""/> | ( <tt>"a"</tt>  ) <br class=""/> | ( <tt>"="</tt>  ) </dd>
+            <dt>
+                <a name="expr"
+                    id="expr">expr</a>
+                <sub>scp</sub>
+            </dt>
+            <dd>( <tt>STRLIT3</tt>  ) <br class=""/> | ( <tt>STRLIT1</tt>  ) <br class=""/> | ( <tt>STRLIT2</tt>  ) <br class=""/> | ( <tt>"this"</tt>  ) <br class=""/> | ( <tt>EXVAR</tt>  ) <br class=""/> | ( <tt>UVAR</tt>  ) <br class=""/> | ( <a href="#list">list</a>
+                <sub>scp</sub>  ) <br class=""/> | ( <a href="#phrase">phrase</a>
+                <sub>scp</sub>  ) <br class=""/> | ( <a href="#clause_sub">clause_sub</a>
+                <sub></sub>  ) </dd>
+            <dt>
+                <a name="list"
+                    id="list">list</a>
+                <sub>scp</sub>
+            </dt>
+            <dd>
+                <tt>"\\("</tt> <a href="#term">term</a>
+                <sub>scp</sub> * <tt>"\\)"</tt> </dd>
+            <dt>
+                <a name="phrase"
+                    id="phrase">phrase</a>
+                <sub>scp</sub>
+            </dt>
+            <dd>
+                <tt>"\\["</tt> [ <a href="#predicate">predicate</a>
+                <sub>scp, subj</sub> ( <tt>";"</tt> <a href="#predicate">predicate</a>
+                <sub>scp, subj</sub>  ) * [ <tt>";"</tt>  ]  ] <tt>"\\]"</tt> </dd>
+            <dt>
+                <a name="clause_sub"
+                    id="clause_sub">clause_sub</a>
+                <sub></sub>
+            </dt>
+            <dd>
+                <tt>"{"</tt> [ <a href="#clause_ind">clause_ind</a>
+                <sub>scp</sub> ( <tt>"\\."</tt> <a href="#clause_ind">clause_ind</a>
+                <sub>scp</sub>  ) * [ <tt>"\\."</tt>  ]  ] <tt>"}"</tt> </dd>
+        </dl>
+    </body>
+</html>
