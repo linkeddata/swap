@@ -7,7 +7,7 @@
 #XSLT=/cygdrive/c/winnt/system32/sabcmd
 W=../../../..
 DOT=$(W)/2000/10/swap/test/viz/dot.exe
-RM=$(W)/2001/04/roadmap
+ROADMAP=$(W)/2001/04/roadmap
 
 #include $(PD)XSLT.mak
 #include $(PD)GVDOT.mak
@@ -19,13 +19,11 @@ SCHEMAS= ../log.n3 ../crypto.n3 ../math.n3 ../os.n3 ../string.n3 ../time.n3
 
 .SUFFIXES: .svg .dot .graph .n3
 
-# $(RM)/w3c.n3  $(RM)/style.n3
-
 .n3.graph:
 	$(PYTHON) $(CWM) $< -think -purge  -bySubject -rdf=c > $@
 
 .graph.svg:
-	TARGET=$< $(PYTHON) $(CWM) $(RM)/todot.n3 -think --strings | dot -Tsvg > $@
+	TARGET=$< $(PYTHON) $(CWM) $(ROADMAP)/todot.n3 -think --strings | dot -Tsvg > $@
  
 #.rdf.dot:
 ##	$(XSLT) $< $(PD)rdf2dot.xsl  $@
@@ -82,6 +80,12 @@ appendix.ps: $(APPENDICES) print.css $(APPFIGS)
 appendix.pdf: appendix.ps
 	$(PS2PDF) appendix.ps
 
+
+HTMLDOC=htmldoc # DebianPackage:htmldoc, http://www.easysw.com/htmldoc/htmldoc.html
+tutorial-book.pdf: $(TUTFILES) $(TUTFIGS) tutorial-bookstyle
+	echo htmldoc doesn't have a noprint thingy. Lose.
+	$(HTMLDOC) --batch tutorial-bookstyle -f $@ $(TUTFILES)
+
 cwm-help.txt : ../cwm.py ../notation3.py
 	cwm --help | sed -e 's/&/\&amp;/g' -e 's/</\&lt;/g' > cwm-help.txt
 
@@ -93,7 +97,8 @@ travelFigs:
 	(cd ../pim; make travelFigs)
 
 clean:
-	$(RM) swws.{rdf,dot,ps,svg,png}
+	$(RM) tutorial.ps tutorial.pdf tutorial-book.pdf cwm-help.txt CwmHelp.html appendix.ps appendix.pdf formats-examplex1.ps
+
 
 
 #ends
