@@ -39,5 +39,8 @@
 :annotation a r:Property s:domain t:Issue; r:range doc:Work;
     s:comment  """No semantics apart from human understanding. no state change""".
 
+
+#  Assigns?  Reassigns?
+
 #ends
 
