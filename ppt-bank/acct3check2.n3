@@ -1,7 +1,7 @@
 @prefix my: <acct3#>.
 @prefix : <checking#>.
 
-<> a :Check; :amount "3.00";
+<> a :Check; :amount 3.00;
    :payee "Fred";
    :account my:account;
    :number "0002".

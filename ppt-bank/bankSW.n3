@@ -4,9 +4,4 @@
 <acct3#account> a ck:Account;
   :statements (<acct3start.n3>);
 
-#  :transactions (<acct3check1.n3> <acct3check2.n3> <acct3check1.n3> ).
-
-  :transactions (<acct3check2.n3>).
-
-# :transactions ().
-
+  :transactions (<acct3check1.n3> <acct3check2.n3> ).
