@@ -194,12 +194,6 @@ class Resource(Thing):
             r.fragments[fragid] = f
             return f
                 
-    def internVariable(r, fragid):
-            f = r.fragments.get(fragid, None)
-            if f: return f
-            f = Variable(r, fragid)
-            r.fragments[fragid] = f
-            return f
                 
     
 class Fragment(Thing):
@@ -240,12 +234,6 @@ class Anonymous(Fragment):
     def asPair(self):
         return (ANONYMOUS, self.uriref(None))
         
-class Variable(Fragment):
-    def __init__(self, resource, fragid):
-        Fragment.__init__(self, resource, fragid)
-
-    def asPair(self):
-        return (VARIABLE, self.uriref(None))
         
 class Literal(Thing):
     """ A Literal is a data resource to make it clean
@@ -317,8 +305,7 @@ class Engine:
         else :      # This has a fragment and a resource
             r = self.intern((RESOURCE, uriref[:hash]))
             if type == RESOURCE:  return r.internFrag(uriref[hash+1:])
-            if type == ANONYMOUS: return r.internAnonymous(uriref[hash+1:])
-            if type == VARIABLE:  return r.internVariable(uriref[hash+1:])
+
 
 
 ######################################################## Storage
@@ -353,10 +340,13 @@ class RDFStore(notation3.RDFSink) :
               self.engine.intern(tuple[PRED]),
               self.engine.intern(tuple[SUBJ]),
               self.engine.intern(tuple[OBJ]) )
-        s = StoredStatement(q)
-        for p in ALL4: s.triple[p].occursAs[p].append(s)
-#        print "### %i now in %s"% (len(s.triple[CONTEXT].occursAs[CONTEXT]),`s.triple[CONTEXT]` )
+	self.storeQuad(q)
                     
+    def storeQuad(self, q):
+	s = StoredStatement(q)
+        for p in ALL4: s.triple[p].occursAs[p].append(s)
+
+
     def startDoc(self):
         pass
 
@@ -375,9 +365,6 @@ class RDFStore(notation3.RDFSink) :
                 total = total + (f.occurrences(PRED,context)+
                                  f.occurrences(SUBJ,context)+
                                  f.occurrences(OBJ,context))
-
-            if total > 2 and chatty:
-                print "#   Resource %s has %i occurrences in %s" % (`r`, total, `context`)
             if total > best :
                 best = total
                 mp = r
@@ -544,105 +531,98 @@ class RDFStore(notation3.RDFSink) :
 
 INFINITY = 1000000000           # @@ larger than any number occurences
 
-def match (unmatched,       # Tuple of tuples we are trying to match
-           variables,       # List of variables qualified universally
+def match (unmatched,       # Tuple of interned quads we are trying to match
+           variables,       # List of variables to match and return
+	   existentials,    # List of variables to match to anything
            action,
            param,
            bindings = [],    # Bindings discovered so far
            newBindings = [] ):  # Bindings JUST discovered - not followed though on
 
-        """ Apply action(bindings, param) to succussful matches
-    bindings      collected matches alreday found
-    newBindings  matches found and not yet applied - used in recursion
-        """
+    """ Apply action(bindings, param) to succussful matches
+bindings      collected matches alreday found
+newBindings  matches found and not yet applied - used in recursion
+    """
 # Scan terms to see what sort of a problem we have:
 #
 # We prefer terms with a single variable to those with two.
 # (Those with none we immediately check and therafter ignore)
 # Secondarily, we prefer short searches to long ones.
 
-        total = 0           # Number of matches found (recursively)
-        fewest = 5          # Variables to find
-        shortest = INFINITY # List to search for one of the variables
-        shortest_t = None
-        unmatched2 = unmatched[:] # Copy so we can remove() while iterating :-(
-        print "## match: called with %i terms" % (len(unmatched),)
+    total = 0           # Number of matches found (recursively)
+    fewest = 5          # Variables to find
+    shortest = INFINITY # List to search for one of the variables
+    shortest_t = None
+    print "## match: called %i terms, %i bindings, terms & new bindings:" % (len(unmatched),len(bindings)), `unmatched`, `bindings`,`newBindings`
 
-        for pair in newBindings:
-            variables.remove(pair[0])
-            bindings.append(pair)  # Record for posterity
-            for t in unmatched:     # Replace variables with values
-                for p in SUBJ, PRED, OBJ:
-                    if t[p] is pair[0] : t[p] = pair[1]
+
+    for pair in newBindings:
+        variables.remove(pair[0])
+        bindings.append(pair)  # Record for posterity
+        for q in unmatched:     # Replace variables with values
+            for p in ALL4:
+                if q[p] is pair[0] : q[p] = pair[1]
+
+    if len(unmatched) == 0:
+        print "# Match found with bindings: ", bindings
+        action(bindings, param)  # No terms left .. success!
+        return 1
+
+    
+    for quad in unmatched:
+        found = 0       # Count where variables are
+        short_p = -1
+        short = INFINITY
+        for p in ALL4:
+            r = quad[p]
+            if r in variables + existentials:
+                found = found + 1
+            else:
+                length = len(r.occursAs[p])
+                if length < short:
+                    short_p = p
+                    short = length
+
+
+        print "One term has %i vars+exists  shortest list %i" % (found, short)
         
-        for t in unmatched:
-            vars = []       # Count where variables are
-            q = []          # Count where constants are
-            short_p = -1
-            short = INFINITY
-            for p in PRED, SUBJ, OBJ:
-                r = t.triple[p]
-                if r in variables:
-                    vars.append(r)
-                else:
-                    if r.occursAs[p]< short:
-                        short_p = p
-                        short = r.occurs[p]
-                        consts.append(p)
+        if (found < fewest or
+            found == fewest and short < shortest) : # We find better.
+                fewest = found
+                shortest = short
+                shortest_p = short_p
+                shortest_t = quad
+    
+    # Now we have identified the  list to search
 
-            if short == 0: return 0 # No way we can satisfy that one - quick "no"
-            found = len(vars)
-            if found == 0: # This is an independant constant triple
-                          # It has to match or the whole thing fails
-                 
-                for s in r.occursAs[short_p]:
-                    if (s.triple[q[0]] is t.triple[q[0]]
-                        and s.triple[q[1]] is t.triple[q[1]]):
-                            unmatched2.remove(t)  # Ok - we believe it - ignore it
-                    else: # no match for a constant term: query fails
-                        return 0
+    if fewest == 4:
+        raise notimp
+        return 0    # Can't handle something with no constants at all.
+                    # Not a closed world problem - and this is a cwm!
 
-            if (found < fewest or
-                found == fewest and short < shortest) : # We find better.
-                    fewest = found
-                    shortest = short
-                    shortest_p = short_p
-                    shortest_t = t
-        
-        if len(unmatched2) == 0:
-            print "Found for bindings: ", bindings
-            action(bindings, param)  # No terms left .. success!
-            return 1
+    quad = shortest_t
+    unmatched.remove(quad)  # We will resolve this one now if possible
 
-        # Now we have identified the best statement to search for
-        t = shortest_t
-        parts_to_search = [ PRED, SUBJ, OBJ ]
-        unmatched2.remove(t)  # We will resolve this one now
+    consts = []   # Parts of speech to test for match
+    vars = []   # Parts of speech which are variables
+    for p in ALL4 :
+        if quad[p] in variables + existentials:
+            vars.append(p)
+        elif p != shortest_p :
+            consts.append(p)
 
-        q = []   # Parts of speech to test for match
-        v = []   # Parts of speech which are variables
-        for p in [PRED, SUBJ, OBJ] :
-            if t.triple[p] in variables:
-                parts_to_search.remove(p)
-                v.append(p)
-            elif p != shortest_p :
-                q.append(p)
+    print "# Searching through %i for %s in slot %i." %(shortest, `quad[shortest_p]`,shortest_p)    
 
-        if fewest ==1 :        # One variable, two constants - must search
-            for s in t.triple[shortest_p].occursAs[shortest_p]:
-                if s.triple[q[0]] is t.triple[q[0]]: # Found this one
-                    total = total + match(unmatched2, variables, action, param,
-                                          bindings, [ s.triple[pv], s.triple[pv] ])
-            
-        elif fewest == 2: # Two variables, one constant. Every one in occurrence list will be good
-            for s in t.triple[shortest_p].occursAs[shortest_p]:
-                total = total + match(unmatched2, variables, action, param, bindings,
-                                        [[ t.triple[v[0]], s.triple[v[0]]],
-                                        [ t.triple[v[1]], s.triple[v[1]]]])
-        else:  # fewest == 3:
-            raise oooops  , "Three variables?"
-        return total
-         
+    for s in quad[shortest_p].occursAs[shortest_p]:
+        for p in consts:
+            if s.triple[p] is not quad[p]: break
+        else:  # found match
+            nb = []
+            for p in vars: nb.append(( quad[p], s.triple[p]))
+            total = total + match(unmatched[:], variables[:], existentials[:], action, param,
+                                  bindings[:], nb)
+    return total
+     
                             
 
 
@@ -1010,11 +990,11 @@ def doCommand():
 
 # Manpulate it as directed:
 
-        outputContext = myEngine.intern((RESOURCE, _outURI))
+        workingContext = myEngine.intern((RESOURCE, _outURI))
         for i in option_inputs:
             _inputURI = urlparse.urljoin(_baseURI, i) # Make abs from relative
             inputContext = myEngine.intern((RESOURCE, _inputURI))
-            _sink.moveContext(inputContext,outputContext)  # Move input data to output context
+            _sink.moveContext(inputContext,workingContext)  # Move input data to output context
 
         N3_forAll = myEngine.intern(( RESOURCE, N3_forAll_URI)) # @@@@@ What about forSome? @@
         N3_implies = myEngine.intern(( RESOURCE, Logic_NS + "#implies"))
@@ -1027,7 +1007,7 @@ def doCommand():
             
             _inputURI = urlparse.urljoin(_baseURI, filter) # Make abs from relative
             filterContext = (myEngine.intern((RESOURCE, _inputURI)))
-            filterContexts.append(filterContext)
+
             print "# Input filter ", _inputURI
             p = notation3.SinkParser(_sink,  _inputURI)
             p.load(_inputURI)
@@ -1044,46 +1024,57 @@ def doCommand():
             
             for s in filterContext.occursAs[CONTEXT]:
                 t = s.triple
-                print "Filter quad:", t
+#                print "Filter quad:", t
                 if t[PRED] is N3_implies:
                     template = t[SUBJ]
                     conclusion = t[OBJ]
                     unmatched = []
                     print "# We have %i terms in template %s" % (len(template.occursAs[CONTEXT]),`template`)
-                    for arc in template.occursAs[CONTEXT]:
-                        print "############################### yesy"
-                        unmatched.append(arc)
+
+# To verify that for all x, f(s) one can either find that asserted explicitly,
+# or find an example for some specific value of x.  Here, we deliberately
+# chose only to do the first.
+
+		    _existentials = [] # Things existentially quantified in the template
+                    for arc in template.occursAs[CONTEXT]:   #@@@ and sub contexts!!
+
+                        context, pred, subj, obj = arc.triple
+			if subj is template and pred is N3_forSome:
+			    _existentials.append(obj)
+                        if context is template: context = workingContext # where we will look for it
+                        unmatched.append((context, pred, subj, obj))
                     
-                    found = match(unmatched, _variables, conclude, ( _sink, conclusion, outputContext))
+                    found = match(unmatched, _variables, _existentials,
+				  conclude, ( _sink, conclusion, workingContext))
                     print "# Found %i matches for %s." % (found, filter)
             
- 
-            
-#@@@@@@@@@@@ problem of deciding which contexts to dump and dumping > 1
-                #@@@ or of merging contexts
+		elif t[PRED] is N3_asserts and t[SUBJ] is filterContext:
+		    filter(t[OBJ], workingContext, targetContext)  # Nested rules
 
+ 
 # Squirt it out again as directed
         
         if not option_pipe:
             if option_ugly:
-                _sink.dumpChronological(outputContext, _outSink)
+                _sink.dumpChronological(workingContext, _outSink)
             elif option_bySubject:
-                _sink.dumpBySubject(outputContext, _outSink)
+                _sink.dumpBySubject(workingContext, _outSink)
             else:
-                _sink.dumpNested(outputContext, _outSink)
+                _sink.dumpNested(workingContext, _outSink)
                 
 def conclude(bindings, param):
     store, conclusion, targetContext = param
     for s in conclusion.occursAs[CONTEXT]:
-        print "# *** Conclude: ", s
-        store.makeStatement((targetContext,
-                             _lookup(bindings,s[PRED]),
-                             _lookup(bindings,s[SUBJ]),
-                             _lookup(bindings,s[OBJ]) ))
+        print "# *** Conclude: ", s.triple
+	context, pred, subj, obj = s.triple
+        store.storeQuad((targetContext,
+                             _lookup(bindings, pred),
+                             _lookup(bindings, subj),
+                             _lookup(bindings, obj) ))
                             
 def _lookup(bindings, value):
     for pair in bindings:
-        if pair[0] = value then return pair[1]
+        if pair[0] == value: return pair[1]
     return value
 
 ############################################################ Main program
