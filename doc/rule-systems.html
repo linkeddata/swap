@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Comparing Rule Systems</title>
+  <meta name="generator" content="amaya 7.1, see http://www.w3.org/Amaya/" />
+  <link href="main.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a>
+| <a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
+								    href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> | Comparing Rule Systems</p>
+
+<h1>Comparing Rule-Based Systems</h1>
+
+<p>Cwm acts as a rules processor, using information written in N3
+rules to guide it in manipulating the RDF/N3 information it has
+stored.   While rules processors are not exactly commonplace, and
+understanding them is not manditory for the working programmer, 
+they do have a long and solid history.   Where does cwm fit into
+that history?</p>
+
+<p>The field is sometimes called <a
+href="http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?knowledge-based+system">Knowledge-Based
+Systems</a> or <a
+href="http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?expert+system">Expert
+Systems</a>.
+</p>
+
+<p>We can perhaps divide the territory into four camps, as follows.</p>
+
+<h2>Automated Theorem Provers</h2>
+
+<p>Automated reasoning using first-order became generally feasible in
+1965 with Robinson's resolution and hyperresolution algorithms.  Today
+a raft of automated theorem provers continue this tradition, but they
+see little use in general computing.</p>
+
+<p>A focal point for this research is 
+<a href="http://www.tptp.org">Thousands of Problems for
+Theorem-Provers (TPTP)</a>, which includes links to provers
+and a conversion utility between logic languages.  You can play a
+little with its <a
+		   href="http://www.cs.jcu.edu.au/cgi-bin/tptp/tptp2X">web form</a> (try problem ALG001-1).
+</p>
+
+<p>In the RDF/Semantic Web community, people have used at least <a
+href="http://www-unix.mcs.anl.gov/AR/otter/">OTTER</a> and <a
+href="http://belo.stanford.edu:8080/iwregistrar/Lookup?type=1&value=SNARK&mode=full">SNARK</a>.</p>
+
+<h2>Logic Programming (Prolog)</h2>
+
+<p>In 1970-1972, <a
+href="http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?Prolog">Prolog</a>
+introduced <a
+href="http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?logic+programming">Logic
+Programming</a>, which took a restricted form of first-order logic
+(Horn clauses) and offered to prove things with them in a
+deterministic order, very much like running a program.   Always chaining
+backward from a query.</p>
+
+<p>(1970-1975 also <a href="http://www.byte.com/art/9509/sec7/art19.htm">saw</a> the introduction of C, Pascal, Scheme, Smalltalk, and Microsoft BASIC.)</p>
+
+</pre>
+
+<h2>Production Systems (OPS5, CLIPS, JESS)</h2>
+
+<pre>
+http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?production+system
+http://wombat.doc.ic.ac.uk/foldoc/foldoc.cgi?OPS5
+
+Usually (but not always) chaining forward from the givens.
+Same timeframe as awk.
+</pre>
+
+<h2>Modern Hybrid</h2>
+
+<pre>
+Euler?
+cwm...
+http://www.ksl.stanford.edu/software/IW/
+http://belo.stanford.edu:8080/iwregistrar/Lookup?type=1&value=JTP&mode=full
+</pre>
+
+<p></p>
+<hr />
+
+<p>$Id$</p>
+</body>
+</html>
