@@ -69,6 +69,8 @@ from RDFSink import CONTEXT, PRED, SUBJ, OBJ, PARTS, ALL4
 from RDFSink import FORMULA, LITERAL, ANONYMOUS, SYMBOL
 from RDFSink import Logic_NS
 
+from why import BecauseOfData
+
 N3_forSome_URI = RDFSink.forSomeSym
 N3_forAll_URI = RDFSink.forAllSym
 
@@ -108,7 +110,7 @@ interesting = re.compile(r'[\\\r\n\"]')
 class SinkParser:
     def __init__(self, sink, thisDoc, baseURI=None, bindings = {},
                  genPrefix = "", metaURI=None,
-                 formulaURI = None):
+                 formulaURI = None, why=None):
 	""" note: namespace names should *not* end in #;
 	the # will get added during qname processing """
 
@@ -124,7 +126,8 @@ class SinkParser:
 	self.keywords = ['a', 'this', 'bind', 'has', 'is', 'of' ]
 	self.keywordsSet = 0    # When and only when they have been set can others be considerd qnames
         self._anonymousNodes = []   # List of anon nodes already declared
-
+	self._reason = None	# Why the parser w
+	self._reason2 = None	# Why these triples
         if baseURI: self._baseURI = baseURI
         else: self._baseURI = thisDoc
 
@@ -159,10 +162,12 @@ class SinkParser:
             _inputURI = uripath.join(baseURI, uri) # Make abs from relative
             self._sink.makeComment("Taking input from " + _inputURI)
             stream = urllib.urlopen(_inputURI)
+	    if self._reason: self._reason2 = BecauseOfData(_inputURI, because=self._reason) 
         else:
             self._sink.makeComment("Taking input from standard input")
             _inputURI = uripath.join(baseURI, "STDIN") # Make abs from relative
             stream = sys.stdin     # May be big - buffered in memory!
+	    if self._reason: self._reason2 = BecauseOfData("@@standardInput", because=self._reason) 
 	return self.loadBuf(stream.read())    # self._formula
 
     def loadStream(self, stream):
@@ -276,7 +281,7 @@ class SinkParser:
 
     def makeStatement(self, quadruple):
 #        print "# Parser output: ", `triple`
-        self._sink.makeStatement(quadruple)
+        self._sink.makeStatement(quadruple, why=self._reason2)
 
 
 
@@ -996,7 +1001,7 @@ t   "this" and "()" special syntax should be suppresed.
     def _newline(self, extra=0):
         self._write("\n"+ "    " * (self.indent+extra))
 
-    def makeStatement(self, triple):
+    def makeStatement(self, triple, why=None):
         if self.stack[-1]:
             if 1:  # DAML_LISTS
                 if triple[PRED] == N3_first:
@@ -1341,7 +1346,7 @@ class Reifier(RDFSink.RDFSink):
     def bind(self, prefix, nsPair):
         self._sink.bind(prefix, nsPair)
                
-    def makeStatement(self, tuple):  # Quad of (type, value) pairs
+    def makeStatement(self, tuple, why=None):  # Quad of (type, value) pairs
         _statementURI = self._genPrefix + `self._nextId`
         self._nextId = self._nextId + 1
         N3_NS = "http://www.w3.org/2000/10/swap/model.n3#"

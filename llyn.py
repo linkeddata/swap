@@ -165,6 +165,7 @@ DAML_LISTS=1    # If not, do the funny compact ones
 
 from RDFSink import RDF_type_URI, DAML_equivalentTo_URI
 
+from why import Because, BecauseBuiltIn, BecauseOfRule
 
 STRING_NS_URI = "http://www.w3.org/2000/10/swap/string#"
 META_NS_URI = "http://www.w3.org/2000/10/swap/meta#"
@@ -428,7 +429,7 @@ class Formula(Fragment):
 	if pred == None: return s[PRED]
 	if subj == None: return s[SUBJ]
 	if obj == None: return s[OBJ]
-	raise parameterError("You must give one wildcard")
+	raise ParameterError("You must give one wildcard")
 
     def each(self, subj=None, pred=None, obj=None):
         """Return a list of values value filing the blank in the called parameters
@@ -444,7 +445,7 @@ class Formula(Fragment):
 	if pred == None: wc = PRED
 	elif subj == None: wc = SUBJ
 	elif obj == None: wc = OBJ
-	else: raise parameterError("You must give one wildcard None for any")
+	else: raise ParameterError("You must give one wildcard None for any")
 	res = []
 	for s in hits:
 	    res.append(s[wc])   # should use yeild @@ when we are ready
@@ -491,6 +492,27 @@ class Formula(Fragment):
         return buffer.getvalue()   # Do we need to explicitly close it or will it be GCd?
 
 
+    def explanation(self, ko=None):
+	"""Produce a justification for this formula into the output formula
+	
+	Creates an output formula if necessary.
+	returns it.
+	(This is different from the reason.explain(ko) which returns the reason)"""
+	if ko == None: ko = self.store.newFormula()
+	for s in self.statements:
+	    reason = s.why
+	    statementAsFormula = self.store.newFormula()
+	    statementAsFormula.add(subj=s[SUBJ], pred=s[PRED], obj=s[OBJ])
+	    statementAsFormula.close()
+	    ko.add(subj=reason, pred=reason.gives, obj=statementAsFormula)
+	    if reason != None:
+		ko.add(subj=self, pred=reason.because, obj=reason)
+		reason.explain(ko)
+	    else:
+		progress("Statement has no reason recorded "+`s`)
+	return ko
+
+
     def outputStrings(self, channel=None, relation=None):
         """Fetch output strings from store, sort and output
 
@@ -521,8 +543,9 @@ def comparePair(self, other):
 
 class StoredStatement:
 
-    def __init__(self, q):
+    def __init__(self, q, why=None):
         self.quad = q
+	self.why = why
 
     def __getitem__(self, i):   # So that we can index the stored thing directly
         return self.quad[i]
@@ -903,7 +926,6 @@ class BI_cufi(HeavyBuiltIn, Function):
 
             if verbosity() > 10: progress("Bultin: " + `subj`+ " log:conclusion " + `F`)
             F = store.newInterned(FORMULA)
-#            store.storeQuad((context, store.forSome, context, F ))
             store.copyContext(subj, F)
             store.think(F)
             store.storeQuad((store._experience, store.cufi, subj, F))  # Cache for later
@@ -921,7 +943,6 @@ class BI_conjunction(LightBuiltIn, Function):      # Light? well, I suppose so.
 #        F = conjunctionCache.get(subj_py, None)
 #        if F != None: return F
         F = store.newInterned(FORMULA)
-#        store.storeQuad((context, store.forSome, context, F ))
         for x in subj_py:
             if not isinstance(x, Formula): return None # Can't
             store.copyContext(x, F)
@@ -1260,8 +1281,9 @@ class RDFStore(RDFSink) :
             for s in F.statements[:]:
                 if verbosity() > 95: progress(".......removed", s.quad)
                 q2 = _lookupQuad(bindings, s.quad)
+		why = s.why
                 self.removeStatement(s)
-                self.storeQuad(q2)
+                self.storeQuad(q2, why)
                 if verbosity() > 95: progress(".......restored", q2)
         return new
 
@@ -1288,8 +1310,9 @@ class RDFStore(RDFSink) :
                 q2 = _lookupQuad(bindings, s.quad)
                 if q2 != s.quad:
                     if verbosity() > 95: progress(".......removed", s.quad)
+		    why = s.why
                     self.removeStatement(s)
-                    self.storeQuad(q2)   #  Could be faster? Patch the existing one?
+                    self.storeQuad(q2, why)   #  Could be faster? Patch the existing one?
                     if verbosity() > 95: progress(".......restored", q2)
 
 	if notThis: return F
@@ -1311,7 +1334,7 @@ class RDFStore(RDFSink) :
         if prefix != "":   #  Ignore binding to empty prefix
             return RDFSink.bind(self, prefix, nsPair) # Otherwise, do as usual.
     
-    def makeStatement(self, tuple):
+    def makeStatement(self, tuple, why=None):
 	"""Add a quad to the store, each part of the quad being in pair form."""
         q = ( self.intern(tuple[CONTEXT]),
               self.intern(tuple[PRED]),
@@ -1320,7 +1343,7 @@ class RDFStore(RDFSink) :
         if q[PRED] is self.forSome and isinstance(q[OBJ], Formula):
             if verbosity() > 97:  progress("Makestatement suppressed")
             return  # This is implicit, and the same formula can be used un >1 place
-        self.storeQuad(q)
+        self.storeQuad(q, why)
                     
     def makeComment(self, str):
         pass        # Can't store comments
@@ -1339,7 +1362,7 @@ class RDFStore(RDFSink) :
                 return list[0].quad[p]
 
 
-    def storeQuad(self, q):
+    def storeQuad(self, q, why=None):
         """ intern quads, in that dupliates are eliminated.
 
         Builds the indxes and does stuff for lists.         
@@ -1374,7 +1397,7 @@ class RDFStore(RDFSink) :
                     subj._asList = rest._asList.precededBy(obj)
                     self.checkList(context, subj)
 
-        s = StoredStatement(q)
+        s = StoredStatement(q, why)
 
 
         # Build 8 indexes.
@@ -1640,6 +1663,7 @@ class RDFStore(RDFSink) :
         elif type(x) == type(2):
             return self.intern((LITERAL, `x`))    # @@ Add literal numeric type to N3?
         elif type(x) == type([]):
+	    raise RunTimeError("Internals generating lists not supported yet")
             g = store.nil
             y = x
             y.reverse()
@@ -1811,31 +1835,30 @@ class RDFStore(RDFSink) :
             return
 
         self._outputStatement(sink, triple)
-                
-########1#########################  Manipulation methods:
+	
+
+##################################  Manipulation methods:
 #
 #  Note when we move things, then the store may shrink as they may
 # move on top of existing entries and we don't allow duplicates.
 #
 
-    def copyContextRecursive(self, old, new, bindings):
+    def copyContextRecursive(self, old, new, bindings, why=None):
         total = 0
         for s in old.statements[:] :   # Copy list!
-#            q = s.quad
-#            self.removeStatement(s)
             q2 = _lookupQuadRecursive(bindings, s.quad)
             if verbosity() > 30: progress("    Conclude: "+`q2`) 
-            total = total -1 + self.storeQuad(q2)
+            total = total -1 + self.storeQuad(q2, why)
         return total
                 
-    def copyContext(self, old, new):
+    def copyContext(self, old, new, why=None):
         for s in old.statements[:] :   # Copy list!
             q = s.quad
             for p in CONTEXT, PRED, SUBJ, OBJ:
                 x = q[p]
                 if x is old:
                     q = q[:p] + (new,) + q[p+1:]
-            self.storeQuad(q)
+            self.storeQuad(q, why)
                 
 
     def purge(self, context, boringClass=None):
@@ -1908,11 +1931,12 @@ class RDFStore(RDFSink) :
                    filterContext = None,    # Where to find the rules
                    targetContext = None,    # Where to put the conclusions
                    universals = [],             # Inherited from higher contexts
-                   alreadyDictionary = None):  # rule: list of bindings already found
+                   alreadyDictionary = None,  # rule: list of bindings already found
+		   why=None):			# Trace reason for all this
         """ Apply rules in one context to the same or another
         """
 
-# A rule here is defined by logic:implies, which associates the template (premise, precondidtion,
+# A rule here is defined by log:implies, which associates the template (premise, precondidtion,
 # antecedent) to the conclusion (postcondition).
 #
 # This is just a database search, very SQL-like.
@@ -1924,8 +1948,6 @@ class RDFStore(RDFSink) :
         if targetContext is None: targetContext = workingContext # return new data to store
         if filterContext is None: filterContext = workingContext # apply own rules
 
-        # Execute a filter:
-        
         _total = 0
         
         for s in filterContext.statements:
@@ -1963,10 +1985,10 @@ class RDFStore(RDFSink) :
         return _total
 
     # Beware lists are corrupted. Already list is updated if present.
-    def tryRule(self, s, workingContext, targetContext, _variables, already=None):
-        t = s.quad
-        template = t[SUBJ]
-        conclusion = t[OBJ]
+    def tryRule(self, rule, workingContext, targetContext, _variables, already=None):
+
+        template = rule[SUBJ]
+        conclusion = rule[OBJ]
 
 
         # When the template refers to itself, the thing we are
@@ -1990,14 +2012,13 @@ class RDFStore(RDFSink) :
             progress(" also used in conclusion " + seqToString(variablesUsed))
             progress("Existentials        " + seqToString(templateExistentials))
 
-#        conclusions, _outputVariables = self.nestedContexts(conclusion)
-#        _substitute([( conclusion, targetContext)], conclusions)                
+
 
     # The smartIn context was the template context but it has been mapped to the workingContext.
         return self.match(unmatched, variablesUsed, templateExistentials, [workingContext],
                           self.conclude,
                           ( self, conclusion, targetContext,  # _outputVariables,
-                            already),
+                            already, rule),
 			    meta=workingContext)
 
 
@@ -2243,14 +2264,14 @@ class RDFStore(RDFSink) :
                           bindings=[], justOne=justOne)
 
          
-    def doNothing(self, bindings, param, level=0):
+    def doNothing(self, bindings, param, level=0, evidence=None):
         if verbosity()>99: progress( " "*level, "doNothing: Success! found it!")
         return 1                    # Return count of calls only
 
     # Whether we do a smart match determines whether we will be able to conclude
     # things which in fact we knew already thanks to the builtins.
-    def conclude(self, bindings, param, level=0):  # Returns number of statements added to store
-        store, conclusion, targetContext,  already = param
+    def conclude(self, bindings, param, level=0, evidence=[]):  # Returns number of statements added to store
+        store, conclusion, targetContext,  already, rule = param
         if verbosity() >60: progress( "\n#Concluding tentatively..." + bindingsToString(bindings))
 
         if already != None:
@@ -2274,7 +2295,8 @@ class RDFStore(RDFSink) :
         if verbosity()>10:
             progress( "Concluding definitively" + bindingsToString(b2) )
         before = self.size
-        self.copyContextRecursive(conclusion, targetContext, b2)
+	reason = BecauseOfRule(rule, bindings=bindings, evidence=evidence)
+        self.copyContextRecursive(conclusion, targetContext, b2, reason)
         if verbosity()>30:
             progress( "  Size of store changed from %i to %i"%(before, self.size))
         return self.size - before
@@ -2294,16 +2316,16 @@ class RDFStore(RDFSink) :
 #                
 #            if already != None: raise RunTimeError, "Already in store but bindings new?" 
 #            return 0
-        if verbosity()>20:
-            progress( "Concluding definitively" + bindingsToString(bindings))
-        
-
-        total = 0
-        for q in myConclusions:
-            q2 = _lookupQuad(bindings2, q)
-            total = total + store.storeQuad(q2)
-            if verbosity()>10: progress( "        *** Conclude: " + quadToString(q2))
-        return total
+#        if verbosity()>20:
+#            progress( "Concluding definitively" + bindingsToString(bindings))
+#        
+#
+#        total = 0
+#        for q in myConclusions:
+#            q2 = _lookupQuad(bindings2, q)
+#            total = total + store.storeQuad(q2)
+#            if verbosity()>10: progress( "        *** Conclude: " + quadToString(q2))
+#        return total
 
 ##################################################################################
 
@@ -2319,7 +2341,8 @@ class RDFStore(RDFSink) :
                bindings = [],       # Bindings discovered so far
                newBindings = [],    # New bindings not yet incorporated
                justOne = 0,         # Flag: Stop when you find the first one
-               level = 0):          # Nesting level for diagnostic indentation only
+               level = 0,           # Nesting level for diagnostic indentation only
+	       evidence = []):	    # List of the statements found so far in this tree (for proof)
         """ Apply action(bindings, param) to succussful matches
     bindings      collected matches already found
     newBindings  matches found and not yet applied - used in recursion
@@ -2436,13 +2459,13 @@ class RDFStore(RDFSink) :
             if nbs == 0: return 0
             else:
                 total = 0
-                for nb in nbs:
+                for nb, reason in nbs:
                     q2 = []
                     for i in queue:
                         newItem = i.clone()
                         q2.append(newItem)  #@@@@@@@@@@  If exactly 1 binding, loop (tail recurse)
                     total = total + self.query2(q2, variables[:], existentials[:], smartIn, action, param,
-                                          bindings[:], nb, justOne=justOne, level=level+2)
+                                          bindings[:], nb, justOne=justOne, level=level+2, evidence=evidence+[reason])
                     if justOne and total:
                         return total
 
@@ -2452,7 +2475,7 @@ class RDFStore(RDFSink) :
             # And loop back to take the next item
 
         if verbosity()>50: progress( " "*level+"QUERY MATCH COMPLETE with bindings: " + bindingsToString(bindings))
-        return action(bindings, param, level)  # No terms left .. success!
+        return action(bindings, param, level, evidence)  # No terms left .. success!
 
     def remoteQuery(self, items, variables, existentials):
         import SqlDB
@@ -2471,6 +2494,7 @@ class RDFStore(RDFSink) :
         # print "query matrix \"\"\""+rs.toString({'dataFilter' : None})+"\"\"\" .\n"
 
 	bindings = []
+	reason = Because("Remote query") # @ add more info?
         for resultsRow in nextResults:
             boundRow = []
             for i in range(len(variables)):
@@ -2478,7 +2502,7 @@ class RDFStore(RDFSink) :
                 index = rs.getVarIndex(`v`)
                 interned = self.intern((LITERAL, `resultsRow[index]`))
                 boundRow = boundRow + [(v, interned)]
-            bindings.append(boundRow)
+            bindings.append((boundRow, reason))
 
 	progress("====> bindings from remote query:"+`bindings`)
 	return bindings   # No bindings for testing
@@ -2580,7 +2604,7 @@ class QueryItem:
                     result = pred.evaluateObject(self.store, con, subj, subj_py)
                     if result != None:
                         self.state = S_FAIL
-                        return [[ (obj, result)]]
+                        return [([ (obj, result)], BecauseBuiltIn(result, pred, obj))]
         else:
             if (self.neededToRun[OBJ] == []):
                 if isinstance(pred, ReverseFunction):
@@ -2588,7 +2612,7 @@ class QueryItem:
                     result = pred.evaluateSubject(self.store, con, obj, obj_py)
                     if result != None:
                         self.state = S_FAIL
-                        return [[ (subj, result)]]
+                        return [([ (subj, result)], BecauseBuiltIn(subj, pred, result))]
         if verbosity() > 30:
             progress("Builtin could not give result"+`self`)
 
@@ -2597,7 +2621,8 @@ class QueryItem:
         return []   # Keep going
         
     def trySearch(self):
-        """Search the store"""
+        """Search the store
+	Returns lists of list of bindings"""
         nbs = []
         if self.short == INFINITY:
             if verbosity() > 36:
@@ -2622,7 +2647,7 @@ class QueryItem:
                         if not duplicate:
                             nb.append(( self.quad[p], s.quad[p]))
                 if not reject:
-                    nbs.append(nb)  # Add the new bindings into the set
+                    nbs.append((nb, s))  # Add the new bindings into the set
 
         self.searchDone()  # State transitions
         return nbs
@@ -2686,7 +2711,7 @@ class QueryItem:
                         if result == None: return 0
                         else:
                             self.state = S_FAIL
-                            return [[ (obj, result)]]
+                            return [([ (obj, result)], BecauseBuiltIn(result, pred, obj))]
             else:
                 if (self.neededToRun[OBJ] == []
                     and isinstance(pred, ReverseFunction)):
@@ -2694,7 +2719,7 @@ class QueryItem:
                         result = pred.evaluateSubject2(self.store, obj, obj_py)
                         if result != None:  # There is some such result
                             self.state = S_FAIL  # Do this then stop - that is all
-                            return [[ (subj, result)]]
+                            return [([ (subj, result, pred)], BecauseBuiltIn(subj, pred, result))]
                         else: return 0
             if verbosity() > 30:
                 progress("Builtin could not give result"+`self`)
@@ -2773,7 +2798,7 @@ class QueryItem:
 
 # An action routine for collecting bindings:
 
-def collectBindings(bindings, param, level=0):
+def collectBindings(bindings, param, level=0, evidence=None):
     """Return number of bindings found and collects them"""
     param.append(bindings)
     return len(bindings)
@@ -2792,13 +2817,13 @@ def _lookupQuad(bindings, q):
             _lookup(bindings, subj),
             _lookup(bindings, obj) )
 
-def _lookupQuadRecursive(bindings, q):
+def _lookupQuadRecursive(bindings, q, why=None):
 	context, pred, subj, obj = q
 	return (
-            _lookupRecursive(bindings, context),
-            _lookupRecursive(bindings, pred),
-            _lookupRecursive(bindings, subj),
-            _lookupRecursive(bindings, obj) )
+            _lookupRecursive(bindings, context, why),
+            _lookupRecursive(bindings, pred, why),
+            _lookupRecursive(bindings, subj, why),
+            _lookupRecursive(bindings, obj, why) )
 
 def _lookup(bindings, value):
     for left, right in bindings:
@@ -2866,7 +2891,7 @@ def merge(a,b):
 def bindingsToString(bindings):
     str = ""
     for x, y in bindings:
-        str = str + (" %s->%s" % ( x2s(x), x2s(y)))
+        str = str + (" %s->%s " % ( x2s(x), x2s(y)))
     return str
 
 def setToString(set):

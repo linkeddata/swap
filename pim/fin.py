@@ -230,7 +230,7 @@ def doCommand():
 	satis = tax.Category, qu.Cat  # Satisfactory classes
 	classified =  kb.each(pred=rdf_type, obj=qu_Classified)
 	unclassified = kb.each(pred=rdf_type, obj=qu_Unclassified)
-	for t in classified: assert t not in unclassified, "Can't be classified and unclassified!"
+	for t in classified: assert t not in unclassified, "Can't be classified and unclassified!"+`t`
 	for s in classified + unclassified:
 	    t_ok, c_ok = 0, 0
 	    date = kb.any(subj=s, pred=qu_date).__str__()

@@ -159,7 +159,7 @@ class ToRDF(RDFSink.RDFStructuredOutput):
             self._nextId = 0
             self._docOpen = 1
 
-    def makeStatement(self,  tuple):
+    def makeStatement(self,  tuple, why=None):
         self.flushStart()
         context, pred, subj, obj = tuple # Context is ignored
 	predn = refTo(self._base, pred[1])
