@@ -38,6 +38,9 @@
     s:range  doc:Work;
     s:comment """The spec that has this problem""".
 
+#Need better way to talk about a W3C Working Group. I presume
+#this would be a subclass of contact:SocialEntity.
+
 :onBehalfOf a r:Property;
     s:domain t:Issue;
     s:range  contact:SocialEntity;
