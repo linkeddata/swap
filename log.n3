@@ -45,30 +45,47 @@ log:Truth a rdf:Class;
 #	rdfs:domain log:context.
 #
 
-log:implies a rdfs:Property;
+log:implies a rdf:Property;
     rdfs:comment "Logical implication. Understood natively by cwm.";
     rdfs:range log:Formula;
     rdfs:isDefinedBy <>;
     rdfs:range log:Formula.
 
-log:includes a rdfs:Property;
+log:includes a rdf:Property;
     rdfs:comment "One formula is subset of other. Understood natively by cwm.";
     rdfs:range log:Formula;
     rdfs:isDefinedBy <>;
     rdfs:range log:Formula.
 
-log:notIncludes a rdfs:Property;
+log:notIncludes a rdf:Property;
     rdfs:comment "One formula is NOT a subset of other. Understood natively by cwm.";
     rdfs:range log:Formula;
     rdfs:isDefinedBy <>;
     rdfs:range log:Formula.
 
-log:equalTo, log:notEqualTo a rdfs:Property;
-    rdfs:comment 
+log:equalTo a rdf:Property;
+    rdfs:comment
 """Equality in this sense is actually the same URI.
 Do not confuse with daml:EquivalentTo.
 A cwm built-in logical operator.
 """.
+
+log:notEqualTo a rdf:Property;
+    rdfs:comment
+"""Equality in this sense is actually the same URI.
+Do not confuse with daml:EquivalentTo.
+A cwm built-in logical operator.
+""".
+
+
+log:rawType a rdf:Property;
+    rdfs:comment """
+This is a low-level langauge type, one of log:Formula, log:Literal, 
+log:List, log:Other.  I only use testing for log:Formula right now (tbl 2001/9/17).
+List and Other are not stable and may change.
+""".
+
+    rdfs:Class rdf:type of log:Formula, log:Literal, log:List, log:Other.
  
 log:resolvesTo a rdf:Property;
     rdfs:domain doc:Work;
@@ -81,8 +98,10 @@ log:resolvesTo a rdf:Property;
 #
 #
 log:uri a rdf:Property;
-    rdfs:description """This allows one to look at the actual string of the URI
-        which identifies this.""";
+    rdfs:description 
+"""This allows one to look at the actual string of the URI
+which identifies this.
+Cwm can get the URI of a resource or get the resource from the URI.""";
     rdfs:range log:String.
 
 ############# Rules
