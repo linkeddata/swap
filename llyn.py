@@ -283,19 +283,24 @@ class BI_notIncludes(HeavyBuiltIn):
 
     notIncldues is a heavy function not only because it may take more time than
     a simple search, but also because it must be performed after other work so that
-    the variables within the formula have all been subsituted.  It makes no sense
+    the variables within the object formula have all been subsituted.  It makes no sense
     to ask a notIncludes question with variables, "Are there any ?x for which
     F does not include foo bar ?x" because of course there will always be an
     infinite number for any finite F.  So notIncludes can only be used to check, when a
     specific case has been found, that it does not exist in the formula.
-    This means we have to know that the variables do not occur in subj.
+    This means we have to know that the variables do not occur in obj.
+
+    As for the subject, it does make sense for the opposite reason.  If F(x)
+    includes G for all x, then G would have to be infinite.  
     """
     def evaluate2(self, store, subj, obj, variables, bindings):
         if isinstance(subj, Formula) and isinstance(obj, Formula):
-            x = store.anyOccurrences(variables, subj)
-            if x != None:                
-                if thing.verbosity() > 40: progress("   Waiting for unresolved: " + x2s(s[p]))
-                return None # Can't do - too many variables.
+            for F in subj, obj:
+                x = store.anyOccurrences(variables, F)
+                if x != None:                
+                    if thing.verbosity() > 40:
+                        progress(" Waiting for unresolved variable " + x2s(x))
+                    return None # Can't do - too many variables.
             return not store.testIncludes(subj, obj, [], bindings=bindings) # No (relevant) variables
         return 0   # Can't say it *doesn't* include it if it ain't a formula
 
@@ -1433,7 +1438,6 @@ class RDFStore(RDFSink.RDFSink) :
         template = t[SUBJ]
         conclusion = t[OBJ]
 
-        if thing.verbosity() >30: progress("\n=================== IMPLIES RULE ============")
 
         # When the template refers to itself, the thing we are
         # are looking for will refer to the context we are searching
@@ -1442,28 +1446,16 @@ class RDFStore(RDFSink.RDFSink) :
 
         unmatched, _templateVariables = self.oneContext(template)
         _substitute([( template, workingContext)], unmatched)
-
-# If we know :a :b :c, then [ :b :c ] is true.
-        u2 = []  #  Strip out "forSome" at top level as we don't need to find them
-        for quad in unmatched:
-            if (quad[CONTEXT] is workingContext
-                and quad[SUBJ] is workingContext
-                and quad[PRED] is self.forSome):
-                pass
-                if thing.verbosity()>80: progress( " Stripped forSome <%s" % `quad[OBJ]`[-10:])
-            else:
-                u2.append(quad)
-        if thing.verbosity()>80: progress( " Stripped %i  %i" % (len(unmatched), len(u2)))
-        unmatched = u2
         
         if thing.verbosity() >20:
-            progress( "# IMPLIES Template" + setToString(unmatched, _variables))
+            progress("\n=================== tryRule ============")
+            progress( "tryRule: looking for" + setToString(unmatched, _variables))
 
         conclusions, _outputVariables = self.nestedContexts(conclusion)
         _substitute([( conclusion, targetContext)], conclusions)                
 
         if thing.verbosity() > 50:
-            progress( "# IMPLIES rule, %i terms in template %s (%i t,%i e) => %s (%i t, %i e)" % (
+            progress( "  tryrule:, %i terms in template %s (%i t,%i e) => %s (%i t, %i e)" % (
                 len(template.occursAs[CONTEXT]),
                 `template`[-8:], len(unmatched), len(_templateVariables),
                 `conclusion`[-8:], len(conclusions), len(_outputVariables)))
@@ -1482,7 +1474,6 @@ class RDFStore(RDFSink.RDFSink) :
     def testIncludes(self, workingContext, template, _variables=[], smartIn=[], bindings=[]):
 
         if thing.verbosity() >30: progress("\n\n=================== testIncludes ============")
-#        thing.verbosity() = thing.verbosity()+100
 
         # When the template refers to itself, the thing we are
         # are looking for will refer to the context we are searching
@@ -1581,15 +1572,18 @@ class RDFStore(RDFSink.RDFSink) :
         """
         statements = []
         variables = []
-        existentials = []
+#        existentials = []
         for arc in con.occursAs[CONTEXT]:
             context, pred, subj, obj = arc.triple
             if not(subj is context and pred is self.forSome):
                 statements.append(arc.triple)
+            else:
+                if thing.verbosity()>79: progress( " Stripped forSome %s" % x2s(obj))
+
             if subj is context and (pred is self.forSome or pred is self.forAll): # @@@@
                 variables.append(obj)   # Collect list of existentials
-            if subj is context and pred is self.forSome: # @@@@
-                existentials.append(obj)   # Collect list of existentials
+#                if pred is self.forSome: # @@@@
+#                    existentials.append(obj)   # Collect list of existentials
                 
         return statements, variables
 
@@ -1788,12 +1782,6 @@ class RDFStore(RDFSink.RDFSink) :
         queue = []   #  Unmatched with more info, in order
         for quad in unmatched:
             item = (99, INFINITY, [], [], [], quad, 0) 
-#        self.quad = quad   # The pattern being searched for
-#        self.state = 99    # See table elsewhere
-#        self.short = 99999 # Shortest one to check 
-#        self.consts = []   # List of positions (PRED, SUBJ, etc) where quad is bound (not var)
-#        self.vars = []     #   Positions where quad has a variable (local exist'l, or rule univ'l), eEXcluding: 
-#        self.boundLists = [] # Variables which are in fact just list Ids for Lists containing no unbound vars
             queue.append(item)
         self._noteList(self.nil, queue)
         return self.query(queue, variables, existentials, smartIn, action, param,
@@ -1862,13 +1850,14 @@ class RDFStore(RDFSink.RDFSink) :
                         if (p == OBJ
                             and (PRED in boundLists or quad[PRED] is self.nil)): # and this is a list with no vars in daml:rest   @@@@???
                             newBoundList = 1
-            if state == 9 and ((not isinstance(Formula, quad[subj])
-                                or not self.anyOccurrences(variables, quad[subj]))
-                               and (not isinstance(Formula, quad[obj])
-                                    or not self.anyOccurrences(variables, quad[obj]))):
+            if state == 9 and ((not isinstance(quad[SUBJ], Formula)
+                                or not self.anyOccurrences(variables, quad[SUBJ]))
+                               and (not isinstance(quad[OBJ], Formula)
+                                    or not self.anyOccurrences(variables, quad[OBJ]))):
                 state = 15
+                changed=1
             if changed:   # Has fewer variables now .. this is progress
-                state = 99
+                if state != 15: state = 99
                 quad = _lookupQuad(newBindings, quad)
                 queue[i] = (state, short, consts, vars, boundLists, quad, listState)
                 if newBoundList:
@@ -1909,7 +1898,9 @@ class RDFStore(RDFSink.RDFSink) :
                 i = i - 1                
             state, short, consts, vars, boundLists, quad, listState = queue[best]
             queue = queue[:best] + queue[best+1:]
-            if thing.verbosity()>49: progress("Looking at " + quadToString(quad, vars, boundLists))
+            if thing.verbosity()>49:
+                progress("Looking at " + quadToString(quad, vars, boundLists)
+                         + ", vars("+seqToString(variables)+")")
 
 
             con, pred, subj, obj = quad
@@ -1978,148 +1969,140 @@ class RDFStore(RDFSink.RDFSink) :
                     if listState: state = 55
                     else: state = 60   # Not a light built in, not searched. Try it when it comes around.
 
+            else: # not 99
+                if state == 50 or state == 55 or state == 60: #  Not searched yet
+                    # Search the store
+                    if len(vars) == 4:
+                        raise notimp # Can't handle something with no constants at all.
+                        return 0    
+                                    # Not a closed world problem - and this is a cwm!
+                                    # Actually, it could be a valid problem -but pathalogical.
+                    shortest_p = consts[0]
+                    if thing.verbosity() > 36:
+                        progress( "# Searching %i with %s in slot %i for %s" %(
+                            len(quad[shortest_p].occursAs[shortest_p]),
+                            x2s(quad[shortest_p]),
+                            shortest_p,
+                            quadToString(quad, vars, boundLists)))
+                        if thing.verbosity() > 95:
+                            progress( "#    where variables are")
+                            for i in variables + existentials:
+                                progress ("#   var or ext:      " + `i`[-8:-1]) 
 
-            elif state == 50 or state == 55 or state == 60: #  Not searched yet
-                # Search the store
-                if len(vars) == 4:
-                    raise notimp # Can't handle something with no constants at all.
-                    return 0    
-                                # Not a closed world problem - and this is a cwm!
-                                # Actually, it could be a valid problem -but pathalogical.
-                shortest_p = consts[0]
-                if thing.verbosity() > 36:
-                    progress( "# Searching %i with %s in slot %i for %s" %(
-                        len(quad[shortest_p].occursAs[shortest_p]),
-                        x2s(quad[shortest_p]),
-                        shortest_p,
-                        quadToString(quad, vars, boundLists)))
-                    if thing.verbosity() > 95:
-                        progress( "#    where variables are")
-                        for i in variables + existentials:
-                            progress ("#   var or ext:      " + `i`[-8:-1]) 
+                    matches = 0
+                    for s in quad[shortest_p].occursAs[shortest_p]:
+                        for p in consts:
+                            if s.triple[p] is not quad[p]:
+                                if thing.verbosity()>90: progress( "   Rejecting " + quadToString(s.triple) +
+                                                        "\n      for " + quadToString(quad))
+                                break
+                        else:  # found match
+                            nb = []
+                            reject = 0
+                            for p in vars:
+                                binding = ( quad[p], s.triple[p])
+                                duplicate = 0
+                                for oldbinding in nb:
+                                    if oldbinding[0] is quad[p]:
+                                        if oldbinding[1] is binding[1]: # A binding we have already - no sweat
+                                            duplicate = 1
+                                        else: # A clash - reject binding the same to var to 2 different things!
+                                            reject = 1
+                                if not duplicate:
+                                    nb.append(( quad[p], s.triple[p]))
+                            if not reject:
+                            #  We must take copies of the lists each time, as they get corrupted and we need them again:
+                                total = total + self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
+                                                      bindings[:], nb[:], justOne=justOne)
+                                matches = matches + 1
+                                if justOne and total: return total
+                    # Search has failed
+                    if state == 50: state = 20   # Note that search on light builtin tried
+                    elif state == 55 or state == 60:   # List search failed
+                        if con in smartIn and isinstance(pred, HeavyBuiltIn):
+                            state = 15  # Try heavy now
+                        elif listState:
+                            if pred is self.nil or PRED in boundLists:  # This is a structural line: a hypothesis. Keep it
+                                state = 5
+                            else:
+                                state = 7
+                        else: # Not heavy, done search.
+                            if thing.verbosity() > 80: progress("Not builtin, search done, %i found." % total)
+                            return total
+                    
+                if state == 15:  # not light, may be heavy; or heavy ready to run
 
-                matches = 0
-                for s in quad[shortest_p].occursAs[shortest_p]:
-                    for p in consts:
-                        if s.triple[p] is not quad[p]:
-                            if thing.verbosity()>90: progress( "   Rejecting " + quadToString(s.triple) +
-                                                    "\n      for " + quadToString(quad))
-                            break
-                    else:  # found match
-                        nb = []
-                        reject = 0
-                        for p in vars:
-                            binding = ( quad[p], s.triple[p])
-                            duplicate = 0
-                            for oldbinding in nb:
-                                if oldbinding[0] is quad[p]:
-                                    if oldbinding[1] is binding[1]: # A binding we have already - no sweat
-                                        duplicate = 1
-                                    else: # A clash - reject binding the same to var to 2 different things!
-                                        reject = 1
-                            if not duplicate:
-                                nb.append(( quad[p], s.triple[p]))
-                        if not reject:
-                        #  We must take copies of the lists each time, as they get corrupted and we need them again:
-                            total = total + self.query(queue[:], variables[:], existentials[:], smartIn, action, param,
-                                                  bindings[:], nb[:], justOne=justOne)
-                            matches = matches + 1
-                            if justOne and total: return total
+                    # notIncludes has to be a recursive call, but log:includes just extends the search
+                    state = 10   # Heavy, man: assume can't resolve without more variables
+                    try:
+                        if pred is self.includes:
+                            if (isinstance(subj, Formula)
+                                and isinstance(obj, Formula)):
 
-                if state == 50: state = 20   # Note that search on light builtin tried
-                else: # state was 60 (not light, may be heavy)
-                    state = 0  # Not found and if not heavy (below), fail
+                                more_unmatched, more_variables = self.oneContext(quad[OBJ])
+                                _substitute([( obj, subj)], more_unmatched)
+                                _substitute(bindings, more_unmatched)
+                                for quad in more_unmatched:
+                                    item = 99, 0, [], [], [], quad, 0
+                                    queue.append(item)
+                                existentials = existentials + more_variables
+                                if thing.verbosity() > 40: progress(" **** Includes: Adding %i new terms and %s as new existentials."%
+                                                         (len(more_unmatched),seqToString(more_variables)))
+                                return self.query(queue, variables, existentials, smartIn, action, param,
+                                                  bindings=bindings, justOne=justOne) # bindings new to this forumula
+                            else:  # Not forumla
+                                if len(vars) == 0: return total  # Not going to work if not forumlae ever
+                                # otherwise might work if vars 
 
-# notIncludes has to be a recursive call, but log:includes just extends the search
-                    if con in smartIn and isinstance(pred, HeavyBuiltIn):
-                        state = 10   # Heavy, man: assume can't resolve without more variables
-                        try:
-                            if pred is self.includes:
-                                if (isinstance(subj, Formula)
-                                    and isinstance(obj, Formula)):
+                        elif len(vars)==0:  # Deal with others
 
-                                    more_unmatched, more_variables = self.oneContext(quad[OBJ])
-                                    _substitute([( obj, subj)], more_unmatched)
-                                    _substitute(bindings, more_unmatched)
-                                    for quad in more_unmatched:
-                                        item = 99, 0, [], [], [], quad, 0
-                                        queue.append(item)
-                                    existentials = existentials + more_variables
-                                    if thing.verbosity() > 40: progress(" **** Includes: Adding %i new terms and %s as new existentials."%
-                                                             (len(more_unmatched),seqToString(more_variables)))
+                                result = pred.evaluate2(self, subj, obj, variables[:], bindings[:])
+                                if result == None:
+                                    if thing.verbosity() > 40: progress("Heavy predicate not ready @@@")
+                                    state = 9   # Waiting for formula
+                                elif result:
+                                    if thing.verbosity() > 80: progress("Heavy predicate succeeds")
                                     return self.query(queue, variables, existentials, smartIn, action, param,
-                                                      bindings=bindings, justOne=justOne) # bindings new to this forumula
-                                else:  # Not forumla
-                                    if len(vars) == 0: return total  # Not going to work if not forumlae ever
-                                    # otherwise might work if vars 
+                                                  bindings, [],justOne=justOne) # No new bindings but success in calculated logical operator
+                                else:
+                                    if thing.verbosity() > 80: progress("Heavy predicate fails")
+                                    return total   # We absoluteley know this won't match with this in it
+                        elif len(vars) == 1 :  # The statement has one variable - try functions
+                            if vars[0] == OBJ and isinstance(pred, Function):
+                                result = pred.evaluateObject2(self, subj)
+                                if result != None:
+                                    return self.query(queue, variables, existentials, smartIn, action, param,
+                                                          bindings, [ (obj, result)],justOne=justOne)
+                            elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
+                                obj_py = self._toPython(obj, OBJ in boundLists, queue)
+                                result = pred.evaluateSubject2(self, obj, obj_py)
+                                if result != None:  # There is some such result
+                                    return self.query(queue, variables, existentials, smartIn, action, param,
+                                                          bindings, [ (subj, result)],justOne=justOne)
+                    except (IOError, SyntaxError):
+                        raise BuiltInFailed(sys.exc_info(),
+                                              (state, short, consts, vars, boundLists, quad) ),None
+                    #, sys.exc_info[2]
 
-                            elif len(vars)==0:  # Deal with others
-
-                                    result = pred.evaluate2(self, subj, obj, variables[:], bindings[:])
-                                    if result == None:
-                                        if thing.verbosity() > 40: progress("Heavy predicate not ready @@@")
-                                        state = 9   # Waiting for formula
-                                    elif result:
-                                        if thing.verbosity() > 80: progress("Heavy predicate succeeds")
-                                        return self.query(queue, variables, existentials, smartIn, action, param,
-                                                      bindings, [],justOne=justOne) # No new bindings but success in calculated logical operator
-                                    else:
-                                        if thing.verbosity() > 80: progress("Heavy predicate fails")
-                                        return total   # We absoluteley know this won't match with this in it
-                            elif len(vars) == 1 :  # The statement has one variable - try functions
-                                if vars[0] == OBJ and isinstance(pred, Function):
-                                    result = pred.evaluateObject2(self, subj)
-                                    if result != None:
-                                        return self.query(queue, variables, existentials, smartIn, action, param,
-                                                              bindings, [ (obj, result)],justOne=justOne)
-                                elif vars[0] == SUBJ and isinstance(pred, ReverseFunction):
-                                    obj_py = self._toPython(obj, OBJ in boundLists, queue)
-                                    result = pred.evaluateSubject2(self, obj, obj_py)
-                                    if result != None:  # There is some such result
-                                        return self.query(queue, variables, existentials, smartIn, action, param,
-                                                              bindings, [ (subj, result)],justOne=justOne)
-                        except (IOError, SyntaxError):
-                            raise BuiltInFailed(sys.exc_info(),
-                                                  (state, short, consts, vars, boundLists, quad) ),None
-                        #, sys.exc_info[2]
-
-                    elif listState:
-                        if pred is self.nil or PRED in boundLists:  # This is a structural line: a hypothesis. Keep it
-                            state = 5
-                        else:
-                            state = 7
-                    else: # Not heavy, done search.
-                        if thing.verbosity() > 80: progress("Not builtin, search done, %i found." % total)
-                        return total
                         
-            elif state < 9: # All we are left with are list definitions, which are fine  7 or 5
-                if thing.verbosity()>50: progress( "# QUERY FOUND MATCH (dropping lists) with bindings: " + bindingsToString(bindings))
-                return action(bindings, param)  # No non-list terms left .. success!
+                elif state < 9: # All we are left with are list definitions, which are fine  7 or 5
+                    if thing.verbosity()>50: progress( "# QUERY FOUND MATCH (dropping lists) with bindings: " + bindingsToString(bindings))
+                    return action(bindings, param)  # No non-list terms left .. success!
 
-            else: # state was not 99, 60 or 50 or <9, so either 20 or 10 or 9:
-                if thing.verbosity() > 49 :
-                    progress("@@@@ Warning: query can't find term which will work.")
-                    progress( "   state is %s, queue length %i" % (state, len(queue)+1))
+                elif state <50: # state was not 99, 60 or 50 or <9, so either 20 or 10 or 9:
+                    if thing.verbosity() > 49 :
+                        progress("@@@@ Warning: query can't find term which will work.")
+                        progress( "   state is %s, queue length %i" % (state, len(queue)+1))
 
-                    item = state, short, consts, vars, boundLists, quad, listState
-                    progress("@@ Current item: %s" % itemToString(item))
-                    progress(queueToString(queue))
-                return total  # Forget it
-#                raise internalError # We have something in an unknown state in the queue
+                        item = state, short, consts, vars, boundLists, quad, listState
+                        progress("@@ Current item: %s" % itemToString(item))
+                        progress(queueToString(queue))
+                        raise RuntimeError, "Insufficient clues"
+                    return total  # Forget it
+    #                raise internalError # We have something in an unknown state in the queue
 
-# Reinsert into queue, so that the easiest tasks are later on:                    
-# We prefer terms with a single variable to those with two.
-# (Those with none we immediately check and therafter ignore)
-# Secondarily, we prefer short searches to long ones.
 
             if state != 0:   # state 0 means leave me off the list
-#                i = 0
-#                while (i <len(queue)
-#                       and (state > queue[i][0]
-#                            or state == queue[i][0] and (len(consts) > len(queue[i][2])
-#                                                                 or len(consts) == len(queue[i][2])
-#                                                                     and short < queue[i][1]))):
-#                    i = i + 1
                 item = state, short, consts, vars, boundLists, quad, listState
                 queue.append(item)
             # And loop back to take the next item
@@ -2149,12 +2132,14 @@ class RDFStore(RDFSink.RDFSink) :
         # Does this conclusion exist already in the database?
         found = self.match(myConclusions[:], [], oes[:], smartIn=[targetContext],hypothetical=1, justOne=1)  # Find first occurrence, SMART
         if found:
-            if thing.verbosity()>60: progress( "Concluding: Forget it, already had ???@@@@??" + bindingsToString(bindings))
+            if thing.verbosity()>60:
+                progress( "Concluding: Forget it, already had ???@@@@??" + bindingsToString(bindings))
             return 0
         if thing.verbosity()>60: progress( "Concluding definitively" + bindingsToString(bindings))
         
         # Regenerate a new form with its own existential variables
         # because we can't reuse the subexpression identifiers.
+        # We don't want clashes with existing variables or constants!
         bindings2 = []
         for i in oes:
             if isinstance(i, Formula):
