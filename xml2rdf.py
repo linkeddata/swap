@@ -46,7 +46,8 @@ class RDFXMLParser(xmllib.XMLParser):
         self._genPrefix = "#_g"    # @@@ allow parameter override
         self._nextId = 0        # For generation of arbitrary names for anonymous nodes
         self.sink.startDoc()
-        self.sink.makeComment("RDF parsed by $Id$")
+        version = "$Id$"
+        self.sink.makeComment("RDF parsed by "+version[1:-1])
 
 
     def load(self, uri, _baseURI=""):
@@ -127,32 +128,39 @@ class RDFXMLParser(xmllib.XMLParser):
                         ns = RDF_NS  # @@@@@@@@@@@@@@@@
                 uri = ns + ln
             else:
-                raise NoNS
-            if uri == RDF_NS+"ID":
-                if self._subject:
-                    print "# oops - subject already", self._subject
-                    raise syntaxError # ">1 subject"
-                self._subject = self.uriref("#" + value)
-            elif uri == RDF_NS + "about":
-                if self._subject: raise syntaxError # ">1 subject"
-                self._subject = self.uriref(value)
-            elif uri == RDF_NS + "aboutEachPrefix":
-                if value == " ":  # OK - a trick to make NO subject
-                    self._subject = None
-                else: raise ooops # can't do about each prefix yet
-            elif uri == RDF_NS + "bagid":
-                c = self._context
-                self._context = self.uriref("#" + value)
-                if 0: self.sink.makeStatement((  # Note lexical nesting
-                    (RESOURCE, c),                                 
-                    (RESOURCE, notation3.N3_subExpression_URI),
-                    (RESOURCE, c),
-                    (RESOURCE, self._context) ))
-            elif uri == RDF_NS + "parseType":
-                pass  #later
+                ln = name
+                ns = None
+#               raise NoNS   # @@@ Actually, XML spec says we should get these: parser is wrong
+            if ns == RDF_NS or ns == None:   # These should have none but RDF_NS is common :-(
+                
+                if ln == "ID":
+                    if self._subject:
+                        print "# oops - subject already", self._subject
+                        raise syntaxError # ">1 subject"
+                    self._subject = self.uriref("#" + value)
+                elif ln == "about":
+                    if self._subject: raise syntaxError # ">1 subject"
+                    self._subject = self.uriref(value)
+                elif ln == "aboutEachPrefix":
+                    if value == " ":  # OK - a trick to make NO subject
+                        self._subject = None
+                    else: raise ooops # can't do about each prefix yet
+                elif ln == "bagid":
+                    c = self._context
+                    self._context = self.uriref("#" + value)
+                    if 0: self.sink.makeStatement((  # Note lexical nesting
+                        (RESOURCE, c),                                 
+                        (RESOURCE, notation3.N3_subExpression_URI),
+                        (RESOURCE, c),
+                        (RESOURCE, self._context) ))
+                elif ln == "parseType":
+                    pass  #later
+                else:
+                    properties.append((uri, value))
+#                    self.sink.makeComment("xml2rdf: Ignored attribute "+uri)
             else:  # Property attribute propAttr #6.10
                 properties.append((uri, value))
-                print "@@@@@@ <%s> <%s>" % properties[-1]
+#                print "@@@@@@ <%s> <%s>" % properties[-1]
 
         if self._subject == None:
             self._subject = self._generate()
@@ -240,7 +248,7 @@ class RDFXMLParser(xmllib.XMLParser):
             for name, value in attrs.items():
                 x = string.find(name, " ")
                 if x>=0: name=name[x+1:]    # Strip any namespace on attributes!!! @@@@
-                if name == "id":
+                if name == "ID":
                     print "# Warning: id=%s on <%s...> ignored" %  (value,) # Meaning?
                 elif name == "parseType":
                     if value == "Literal":
@@ -263,6 +271,8 @@ class RDFXMLParser(xmllib.XMLParser):
                             if p == pref and  (nsURI == DAML_ONT_NS
                                                or nsURI == DPO_NS): 
                                 self._state = STATE_LIST  # Linked list of obj's
+                                #print "########### Start list"
+                        #print "############ parsetype pref=",pref ,"nslist",nslist
 
                 elif name == "resource":
                     self.sink.makeStatement(((RESOURCE, self._context),
@@ -276,6 +286,9 @@ class RDFXMLParser(xmllib.XMLParser):
                                              (RESOURCE, self._subject),
                                              (LITERAL,  value) ))
                     self._state = STATE_NOVALUE  # NOT looking for value
+                else:
+                    self.sink.makeComment("# Warning: Ignored attribute %s on %s" % (
+                        name, tagURI))
                     
         elif self._state == STATE_LIST:   # damlCollection :: objs - make list
             # Subject and predicate are set and dangling. 
@@ -310,7 +323,7 @@ class RDFXMLParser(xmllib.XMLParser):
             self._stack[-1][0] = STATE_NOVALUE  # When we return, cannot have literal now
 
         elif self._state == STATE_NOVALUE:
-            print "\n@@ Expected no value, found ", tag, attrs
+            print "\n@@ Expected no value, found ", tag, attrs, "\n Stack: ",self._stack
             raise syntaxError # Found tag, expected empty
         else:
             raise internalError # Unknown state

@@ -347,11 +347,11 @@ class RDFStore(notation3.RDFSink) :
         self.type = engine.internURI(notation3.RDF_type_URI)
         self.subExpression = engine.internURI(Logic_NS + "subExpression")
         
-        self.first = engine.intern(notation3.N3_first)
-        self.rest = engine.intern(notation3.N3_rest)
-        self.nil = engine.intern(notation3.N3_nil)
-        self.Empty = engine.intern(notation3.N3_Empty)
-        self.List = engine.intern(notation3.N3_List)
+        self.first = engine.internURI(Logic_NS + "first")
+        self.rest = engine.internURI(Logic_NS + "rest")
+        self.null = engine.internURI(Logic_NS + "null")
+        self.Empty = engine.internURI(Logic_NS + "Empty")
+        self.List = engine.internURI(Logic_NS + "List")
 
 
 # Input methods:
@@ -562,7 +562,7 @@ class RDFStore(notation3.RDFSink) :
         without loss of information as a list.
         
         """
-        if x == self.nil: return 1  # Yes, null is the list ()
+        if x == self.null: return 1  # Yes, null is the list ()
 
         _anon, _incoming, _se = self.n3_anonymous(x, context)
         if not _anon: return 0  # This is not anonymous -> can't use list syntax.
@@ -1351,6 +1351,7 @@ Examples:
 """
         
         import urllib
+        import time
         option_ugly = 0     # Store and regurgitate with genids *
         option_pipe = 0     # Don't store, just pipe though
         option_bySubject= 0 # Store and regurgitate in subject order *
@@ -1358,7 +1359,11 @@ Examples:
         option_reify = 0    # Flag: reify on output  (process?)
         option_outURI = None
         _doneOutput = 0
-        _gotInput = 0     #  Do we not need to take input from stdin? 
+        _gotInput = 0     #  Do we not need to take input from stdin?
+        option_meta = 0
+
+        _step = 0           # Step number used for metadata
+
         hostname = "localhost" # @@@@@@@@@@@ Get real one
         
         # The base URI for this process - the Web equiv of cwd
@@ -1393,8 +1398,26 @@ Examples:
                 print doCommand.__doc__
                 return
             elif arg[0] == "-": pass  # Other option
-            else : _gotInput=1  # input filename
+            else :
+                option_inputs.append(urlparse.urljoin(option_baseURI,arg))
+                _gotInput = _gotInput + 1  # input filename
             
+
+#  Base defauts
+
+        if option_baseURI != _baseURI:
+            _baseURI = option_baseURI
+        else:
+            if _gotInput == 1:
+                _baseURI = option_inputs[0]
+
+#  Metadata context - storing information about what we are doing
+
+	_metaURI = urlparse.urljoin(option_baseURI, "META/")  # Reserrved URI @@
+	_runURI = _metaURI+`time.time()`
+	history = None
+
+# Between passes, prepare for processing
 
         _outURI = _baseURI
         if option_outURI: _outURI = urlparse.urljoin(_outURI, option_outURI)
@@ -1403,7 +1426,9 @@ Examples:
             _outSink = notation3.ToRDF(sys.stdout, _outURI)
         else:
             _outSink = notation3.ToN3(sys.stdout.write, _outURI)
-	_outSink.makeComment("# Base URI of process is" + _baseURI)
+        version = "$Id:"
+	_outSink.makeComment("Processed by " + version[1:-1]) # Strip $ to disarm
+	_outSink.makeComment("    using base " + _baseURI)
 
 
         if option_pipe:
@@ -1421,6 +1446,7 @@ Examples:
             del(p)
             if not option_pipe:
                 inputContext = myEngine.internURI(_inputURI)
+                history = inputContext
                 if inputContext is not workingContext:
                     _store.moveContext(inputContext,workingContext)  # Move input data to output context
 
@@ -1448,6 +1474,15 @@ Examples:
                 if not option_pipe:
                     inputContext = myEngine.internURI(_inputURI)
                     _store.moveContext(inputContext,workingContext)  # Move input data to output context
+                    _step  = _step + 1
+                    s = _metaURI + `_step`  #@@ leading 0s to make them sort?
+                    if history:
+                        _store.storeQuad(_meta, META_MergedWith, s, history)
+                        _store.storeQuad(_meta, META_Source, s, inputContext)
+                        _store.storeQuad(_meta, META_Run, s, run)
+                        history = s
+                    else:
+                        history = inputContext
                 _gotInput = 1
 
             elif arg == "-help":
@@ -1505,9 +1540,17 @@ Examples:
                 _playURI = urlparse.urljoin(_baseURI, "PLAY")  # Intermediate
                 _playContext = myEngine.internURI(_playURI)
                 _store.moveContext(workingContext, _playContext)
-                print "# Input filter ", _uri
+#                print "# Input filter ", _uri
                 _store.loadURI(_uri)
                 _store.applyRules(_playContext, filterContext, workingContext)
+
+                if doMeta:
+                    _step  = _step + 1
+                    s = _metaURI + `_step`  #@@ leading 0s to make them sort?
+                    _store.storeQuad(_meta, META_basis, s, history)
+                    _store.storeQuad(_meta, META_filter, s, inputContext)
+                    _store.storeQuad(_meta, META_run, s, run)
+                    history = s
 
             elif arg == "-rules":
                 _store.applyRules(workingContext, workingContext)

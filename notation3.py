@@ -671,6 +671,8 @@ class BadSyntax:
 class ToRDF(RDFSink):
     """keeps track of most recent subject, reuses it"""
 
+    _valChars = string.lowercase + string.uppercase + string.digits + "_ !#$%&().,+*/"
+    #@ Not actually complete, and can encode anyway
     def __init__(self, outFp, thisURI):
         RDFSink.__init__(self)
 	self._wr = XMLWriter(outFp)
@@ -687,6 +689,7 @@ class ToRDF(RDFSink):
         pass
 
     def endDoc(self):
+        self.flushStart()  # Note: can't just leave empty doc if not started: bad XML
 	if self._subj:
 	    self._wr.endElement()
 	self._subj = None
@@ -695,9 +698,8 @@ class ToRDF(RDFSink):
 
     def makeComment(self, str):
         self._wr.makeComment(str)
-        
-    def makeStatement(self,  tuple):
 
+    def flushStart(self):
         if not self._docOpen:
             if self.prefixes.get((RESOURCE, RDF_NS_URI), ":::") == ":::":
                 if self.namespaces.get("rdf", ":::") ==":::":
@@ -713,6 +715,8 @@ class ToRDF(RDFSink):
             self._nextId = 0
             self._docOpen = 1
 
+    def makeStatement(self,  tuple):
+        self.flushStart()
         context, pred, subj, obj = tuple # Context is ignored
 	predn = relativeURI(self._thisDoc, pred[1])
 	subjn = relativeURI(self._thisDoc, subj[1])
@@ -723,22 +727,30 @@ class ToRDF(RDFSink):
 #	    if pred == (RESOURCE, RDF_type_URI): # Special case starting with this
 #                
 	    self._wr.startElement(RDF_NS_URI+'Description',
-				 [('about', subjn),])
+				 [("about", subjn),], self.prefixes)
 	    self._subj = subj
 
 
 	if obj[0] != LITERAL: 
 	    objn = relativeURI(self._thisDoc, obj[1])
 	    self._wr.emptyElement(pred[1], [('resource', objn)], self.prefixes)
-	else:
-	    self._wr.startElement(pred[1], [], self.prefixes)
-	    self._wr.data(obj[1])
-	    self._wr.endElement()
+	    return
+	for ch in obj[1]:  # Is literal representable as an attribute value?
+            if ch in self._valChars: continue
+            else: break # No match
+        else:
+            if len(obj[1]) < 40:    # , say
+                self._wr.emptyElement(pred[1], [('value', obj[1])], self.prefixes)
+                return
+        self._wr.startElement(pred[1], [], self.prefixes)
+        self._wr.data(obj[1])
+        self._wr.endElement()
 
 # Below is for writing an anonymous node which is the object of only one arc
 # This is the arc leading to it.
 
     def startAnonymous(self,  tuple, isList =0):
+        self.flushStart()
         context, pred, subj, obj = tuple 
 	if self._subj != subj:
 	    if self._subj:
@@ -763,7 +775,8 @@ class ToRDF(RDFSink):
 # Below we do anonymous top level node - arrows only leave this circle
 
     def startAnonymousNode(self, subj):
-        self._wr.endElement()
+        self.flushStart()
+#        self._wr.endElement()  eh?!!
         self._wr.startElement(RDF_NS_URI+'Description', [], self.prefixes)
         self._subj = subj    # The object is not the subject context
         self._pred = None
@@ -776,6 +789,7 @@ class ToRDF(RDFSink):
 # Below we notate a nested bag of statements - a context
 
     def startBag(self, context):  # Doesn't work with RDF sorry ILLEGAL
+        self.flushStart()
         self.indent = self.indent + 1
         self._wr.startElement(RDF_NS_URI+'Quote', # Like description but no subject?
 			      [('context', relativeURI(self._thisDoc,context[1]))],
@@ -792,17 +806,10 @@ def relativeTo(here, there):
     print "### Relative to ", here[1], there[1]
     return relativeURI(here[1], there[1])
     
-def relativeToOld(here, there):    # algorithm!? @@@@
-    nh = here[1]
-    l = len(nh)
-    nt = there[1]
-    if nt[:l] == nh:
-	return nt[l:]
-    else:
-	return nt
 
 # Not perfect - should use root-relative in correct case but never mind.
 def relativeURI(base, uri):
+    if base == uri: return ""
     i=0
     while i<len(uri) and i<len(base):
         if uri[i] == base[i]:
@@ -811,6 +818,7 @@ def relativeURI(base, uri):
             break
 #    print "# relative", base, uri, "   same up to ", i
     # i point to end of shortest one or first difference
+    if uri[i] =="#": return uri[i:]  # fragment of base
     while i>0 and uri[i-1] != '/' : i=i-1  # scan for slash
     if i == 0: return uri  # No way.
     if string.find(base, "//", i)>0: return uri # An unshared "//"
@@ -833,7 +841,7 @@ class XMLWriter:
 	self.tab = 4        # Number of spaces to indent per level
         self.needClose = 0  # 1 Means we need a ">" but save till later
         self.noWS = 0       # 1 Means we cant use white space for prettiness
-        self.currentNS = RDF_NS_URI # @@@ Hack
+        self.currentNS = None # @@@ Hack
         
     #@@ on __del__, close all open elements?
 
@@ -865,7 +873,7 @@ class XMLWriter:
             self._wr(">")
             self.needClose = 0
 
-    def figurePrefix(self, uriref, prefixes):
+    def figurePrefix(self, uriref, rawAttrs, prefixes):
 	i = len(uriref)
 	while i>0:
 	    if uriref[i-1] in self._namechars:
@@ -874,7 +882,7 @@ class XMLWriter:
 		break
 	ln = uriref[i:]
 	ns = uriref[:i]
-
+#        print "@@@ ns=",ns, "@@@ prefixes =", prefixes
         prefix = prefixes.get((RESOURCE, ns), ":::")
         attrs = []
         if ns != self.currentNS:
@@ -883,24 +891,28 @@ class XMLWriter:
                 self.currentNS = ns
             else:
                 if prefix: ln = prefix + ":" + ln
-        return (ln, attrs)
+        for at, val in rawAttrs:
+            i = string.find(at," ")  #  USe space as delim like parser
+            if i<=0:            # No namespace - that is fine for rdf syntax
+#                print  ("# Warning: %s has no namespace on attr %s" %
+#                        (ln, at)) 
+                attrs.append((at, val))
+                continue
+            ans = at[:i]
+            lan = at[i+1:]
+            if ans == ns:    #  self.currentNS ?!! Default is same as
+                attrs.append((lan, val))
+                continue
+            prefix = prefixes.get((RESOURCE, ans),":::")
+            if prefix == ":::":
+                print ("#@@@@@ tag %s: atr %s has no prefiex :-(" %
+                       (uriref, at, `prefixes`))
+                raise NoPrefixForAttributeError
+            attrs.append(( prefix+":"+lan, val))    
 
-    def makeComment(self, str):
-        self.newline()
-        self._wr("<!-- " + str + "-->") # @@
-        
-    def startElement(self, n, attrs = [], prefixes={}):
-        oldNS = self.currentNS
-        ln, at2 = self.figurePrefix(n, prefixes)
-        attrs = at2 + attrs
 	self.newline(3-len(self._elts))    # Newlines separate higher levels
 	self._wr("<%s" % (ln,))
-	self._attrs(attrs)
-	
-	self._elts.append(ln, oldNS)
-	self.closeTag()
 
-    def _attrs(self, attrs):
         needNL = 0
 	for n, v in attrs:
 	    #@@BUG: need to escape markup chars in v
@@ -910,13 +922,23 @@ class XMLWriter:
 	    self._wr(" %s=\"%s\"" % (n, v))
 	    needNL = 1
 
+            
+        return (ln, attrs)
+
+    def makeComment(self, str):
+        self.newline()
+        self._wr("<!-- " + str + "-->") # @@
+        
+    def startElement(self, n, attrs = [], prefixes={}):
+        oldNS = self.currentNS
+        ln, at2 = self.figurePrefix(n, attrs, prefixes)
+	
+	self._elts.append((ln, oldNS))
+	self.closeTag()
+
     def emptyElement(self, n, attrs=[], prefixes={}):
         oldNS = self.currentNS
-        ln, at2 = self.figurePrefix(n, prefixes)
-        attrs = at2 + attrs
-	self.newline(3-len(self._elts))    # Newlines separate higher levels
-	self._wr("<%s" % (ln,))
-	self._attrs(attrs)
+        ln, at2 = self.figurePrefix(n, attrs, prefixes)
 
 	self.currentNS = oldNS  # Forget change - no nesting
 	self._wr("/")
@@ -930,7 +952,7 @@ class XMLWriter:
 	self.closeTag()
 
 
-    markupChar = re.compile(r"[\n\r<>&]")
+    markupChar = re.compile(r"[\r<>&]")  # timbl removed \n as can be in data
 
     def data(self, str):
 	#@@ throw an exception if the element stack is empty
