@@ -195,10 +195,10 @@ vCard.Business.URL, vCard.Business.Zipcode""" .
 :_addressProperty a rdf:Property.
 :mailbox :_addressProperty :mailboxURI.
 
-@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
-this log:forAll :x, :p, :y.
+#@prefix log:  <http://www.w3.org/2000/10/swap/log#> .
+#this log:forAll :x, :p, :y.
 
-{ :x [ is :_addressProperty of :p] [ is log:uri of :y] } log:implies { :x :p :y }.
+#{ :x [ is :_addressProperty of :p] [ is log:uri of :y] } log:implies { :x :p :y }.
 
 #  { :ent :mailboxURI [ log:equalTo [ is log:concat of ( "mailto:" [ :_uriEncode :addr ] ) ] ] } log:implies { :ent :emailAddress :addr }. # only goes one way because we could use PUT to HTTP resources to deliver mail.
 
@@ -269,7 +269,10 @@ mso:WebPage  a rdf:Property;
 
 <> rcs:log """
 $Log$
-Revision 1.10  2001-11-05 16:43:02  connolly
+Revision 1.11  2001-11-05 17:04:37  connolly
+commented out rules
+
+Revision 1.10  2001/11/05 16:43:02  connolly
 oops... really updated RDF/xml version
 
 Revision 1.9  2001/11/05 16:30:21  connolly
