@@ -1,10 +1,21 @@
 #!/bin/env python
 """
-uri manipulation, above the access layer
+Uniform Resource Identifier (URI) manipulation,
+above the access layer
+
+cf.
+
+* URI API design [was: URI Test Suite] Dan Connolly (Sun, Aug 12 2001)
+http://lists.w3.org/Archives/Public/uri/2001Aug/0021.html
 
 http://www.w3.org/DesignIssues/Model.html
 
 http://www.ietf.org/rfc/rfc2396.txt
+
+The name of this module and the functions are somewhat
+arbitrary; they hark to other parts of the python
+library; e.g. uripath.join() is somewhat like os.path.join().
+
 """
 
 __version__ = "$Id$"
@@ -12,18 +23,32 @@ __version__ = "$Id$"
 from string import find, rfind, index
 
 
-def splitFrag(uriref, punct=0):
+def splitFrag(uriref):
+    """split a URI reference between the fragment and the rest.
+
+    Punctuation is thrown away.
+    
+    e.g. splitFrag("abc#def") = ("abc", "def")
+    and splitFrag("abcdef") = ("abcdef", None)
+    """
     i = rfind(uriref, "#")
-    if punct:
-        if i>= 0: return uriref[:i], uriref[i:]
-        else: return uriref, ''
-    else:
-        if i>= 0: return uriref[:i], uriref[i+1:]
-        else: return uriref, None
+    if i>= 0: return uriref[:i], uriref[i+1:]
+    else: return uriref, None
+
+def splitFragP(uriref, punct=0):
+    """split a URI reference before the fragment
+
+    Punctuation is kept.
+    
+    e.g. splitFrag("abc#def") = ("abc", "#def")
+    and splitFrag("abcdef") = ("abcdef", "")
+    """
+    i = rfind(uriref, "#")
+    if i>= 0: return uriref[:i], uriref[i:]
+    else: return uriref, ''
 
 
-
-def pathJoin(here, there):
+def join(here, there):
     """join an absolute URI and URI reference
 
     here must be an absolute URI.
@@ -38,35 +63,35 @@ def pathJoin(here, there):
     slashl = find(there, '/')
     colonl = find(there, ':')
 
-    # pathJoin(base, 'foo:/') -- absolute
+    # join(base, 'foo:/') -- absolute
     if colonl >= 0 and (slashl < 0 or colonl < slashl):
         return there
 
     bcolonl = find(here, ':')
     assert(bcolonl >= 0) # else it's not absolute
 
-    # pathJoin('mid:foo@example', '../foo') bzzt
+    # join('mid:foo@example', '../foo') bzzt
     if here[bcolonl+1:bcolonl+3] <> '//':
         raise ValueError, here
 
     bpath = find(here, '/', bcolonl+3)
 
-    # pathJoin('http://xyz', 'foo')
+    # join('http://xyz', 'foo')
     if bpath < 0:
         bpath = len(here)
         here = here + '/'
 
-    # pathJoin('http://xyz/', '//abc') => 'http://abc'
+    # join('http://xyz/', '//abc') => 'http://abc'
     if there[:2] == '//':
         return here[:bcolonl+1] + there
 
-    # pathJoin('http://xyz/', '/abc') => 'http://xyz/abc'
+    # join('http://xyz/', '/abc') => 'http://xyz/abc'
     if there[:1] == '/':
         return here[:bpath] + there
 
     slashr = rfind(here, '/')
 
-    path, frag = splitFrag(there, 1)
+    path, frag = splitFragP(there)
     if not path: return here + frag
     
     while 1:
@@ -86,7 +111,7 @@ def pathJoin(here, there):
     return here[:slashr+1] + path + frag
 
 
-def pathTo(src, dest):
+def refTo(src, dest):
     """compute a path from one URI to another
 
     both src and dest are absolute URI references
@@ -95,7 +120,7 @@ def pathTo(src, dest):
     scolon = index(src, ':')
     dcolon = index(dest, ':')
 
-    # pathTo("foo:xyz", "bar:abc") => "bar:abc"
+    # refTo("foo:xyz", "bar:abc") => "bar:abc"
     if src[scolon+1:scolon+3] == '//' and \
        src[:scolon+3] <> dest[:dcolon+3]: return dest
 
@@ -134,11 +159,11 @@ def test():
              )
 
     for inp1, inp2, exp in cases:
-        print "pathTo input", inp1, " -> ", inp2
-        act = pathTo(inp1, inp2)
+        print "refTo input", inp1, " -> ", inp2
+        act = refTo(inp1, inp2)
         print "result:", act, " =?= ", exp
         assert act == exp
-        assert pathJoin(inp1, act) == inp2
+        assert join(inp1, act) == inp2
         print "pass"
         
     cases = (
@@ -217,7 +242,7 @@ def test():
     for b, inp, exp in normalExamples + otherExamples + moreExamples:
         print "sum input", b, " + ", inp
         try:
-            act = pathJoin(b, inp)
+            act = join(b, inp)
         except ValueError:
             act = None
         print "sum output" , act
@@ -232,6 +257,9 @@ if __name__ == '__main__':
 
 
 # $Log$
-# Revision 1.2  2002-02-18 07:33:51  connolly
+# Revision 1.1  2002-02-19 22:52:42  connolly
+# renamed uritools.py to uripath.py
+#
+# Revision 1.2  2002/02/18 07:33:51  connolly
 # pathTo seems to work
 #
