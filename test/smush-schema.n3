@@ -1,0 +1,34 @@
+@prefix : <#>.
+@prefix v: <#>.
+@prefix agg: <http://example.com/xmlns/aggregation-demo#>.
+
+@prefix log: <http://www.w3.org/2000/10/swap/log#>.
+
+
+# :UniquelyIdentifyingProperty has since
+#  been called daml+oil:UnambiguousProperty.
+# but let's not mix DAML into this...
+
+this log:forAll :p, :x, :y, :z.
+
+{  :p a agg:UniquelyIdentifyingProperty. } log:implies
+ { { :x :p :z. :y :p :z. } log:implies  { :x = :y } }.
+
+agg:personalMailbox a agg:UniquelyIdentifyingProperty.
+agg:personalHomepage a agg:UniquelyIdentifyingProperty.
+agg:corporateHomepage a agg:UniquelyIdentifyingProperty.
+
+# http://rdfweb.org/2001/01/design/smush.html
+# (Q1) What are the technology interests of persons who own companies that have an ethical
+#     policy committment to the policy stated in the document
+#     http://dotherightthing.example.org/policy.xhtml 
+
+this log:forAll :interest, :person, :company.
+
+{ :interest is agg:technologyInterest of :person.
+  :person is agg:owner of :company.
+  :company agg:ethicalPolicy
+	<http://dotherightthing.example.org/policy.xhtml>.
+}
+log:implies
+{ :interest a agg:Q1Answer }.

@@ -19,6 +19,7 @@ the same thing.""";
 @prefix : <#>.
 
 contact:mailbox a ont:UnambiguousProperty.
+contact:homePageAddress a ont:UnambiguousProperty.
 
 [ contact:mailbox <mailto:connolly@w3.org> ] :hairColor :red.
 [ contact:mailbox <mailto:connolly@w3.org> ] :birthPlace :KC.
