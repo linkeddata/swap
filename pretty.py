@@ -399,10 +399,13 @@ class Serializer:
                 if a is not None:
                     #print a
                     y = a[0][SUBJ]
-                    if _done.get(y, None) is x:
-                        self._inLoop[x] = 1
+                    beenHere = _done.get(y, None)
+                    if beenHere is x:
+                        self._inLoop[y] = 1
                         a = None
-                    if not (isinstance(y, AnonymousVariable) and not ((isinstance(y, Fragment) and y.generated()))):
+                    elif beenHere is not None:
+                        a = None
+                    elif not (isinstance(y, AnonymousVariable) and not ((isinstance(y, Fragment) and y.generated()))):
                         _done[y] = True
                         a = None
                     else:
