@@ -34,12 +34,22 @@ History:<br>
 &nbsp;&nbsp;&nbsp;&nbsp;Spilt&nbsp;off&nbsp;from&nbsp;&nbsp;thing.py&nbsp;2003-08-19<br>
 &nbsp;<br>
 $Log$
-Revision 1.6  2004-03-21 04:24:35  timbl
-(See doc/changes.html)
-on xml output, nodeID was incorrectly spelled.
-update.py provides cwm's --patch option.
-diff.py as independent progrem generates patch files for cwm --patch
+Revision 1.7  2004-05-12 01:27:08  timbl
+--patch uses delta namespace
+-- removed i18n tests
+-- numerics canonicalized
+see doc/changes.html
 <br>
+Revision&nbsp;1.8&nbsp;&nbsp;2004/04/19&nbsp;13:32:22&nbsp;&nbsp;connolly<br>
+trap&nbsp;__special_names__&nbsp;in&nbsp;<a href="#Namespace">Namespace</a>.__getattr__&nbsp;so<br>
+that&nbsp;pychecker&nbsp;can&nbsp;work<br>
+&nbsp;<br>
+Revision&nbsp;1.7&nbsp;&nbsp;2004/03/21&nbsp;04:24:35&nbsp;&nbsp;timbl<br>
+(See&nbsp;doc/changes.html)<br>
+on&nbsp;xml&nbsp;output,&nbsp;nodeID&nbsp;was&nbsp;incorrectly&nbsp;spelled.<br>
+update.py&nbsp;provides&nbsp;cwm's&nbsp;--patch&nbsp;option.<br>
+diff.py&nbsp;as&nbsp;independent&nbsp;progrem&nbsp;generates&nbsp;patch&nbsp;files&nbsp;for&nbsp;cwm&nbsp;--patch<br>
+&nbsp;<br>
 Revision&nbsp;1.6&nbsp;&nbsp;2004/03/09&nbsp;23:55:50&nbsp;&nbsp;connolly<br>
 updated&nbsp;load&nbsp;to&nbsp;track&nbsp;change&nbsp;in&nbsp;llyn<br>
 &nbsp;<br>
@@ -196,7 +206,7 @@ formula&nbsp;as&nbsp;context,&nbsp;and&nbsp;return&nbsp;it&nbsp;for&nbsp;future&
 <font color="#ffffff" face="helvetica, arial"><big><strong>Data</strong></big></font></td></tr>
     
 <tr><td bgcolor="#55aa55"><tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt></td><td>&nbsp;&nbsp;</td>
-<td width="100%"><strong>__file__</strong> = './myStore.py'<br>
+<td width="100%"><strong>__file__</strong> = './myStore.pyc'<br>
 <strong>__name__</strong> = 'myStore'<br>
 <strong>store</strong> = None<br>
 <strong>storeClass</strong> = None</td></tr></table>

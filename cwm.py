@@ -352,7 +352,6 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
             if option_first_format is None: option_first_format = option_format
 	    ContentType={ "rdf": "application/xml+rdf", "n3":
 				"application/n3" }[option_first_format]
-	    workingContext.reopen()
 	    workingContext = _store.load(
 #			    asIfFrom = join(_baseURI, ".stdin"),
 			    asIfFrom = _baseURI,
@@ -360,6 +359,7 @@ See http://www.w3.org/2000/10/swap/doc/cwm  for more documentation.
 			    flags = option_flags[option_first_format],
 			    remember = 0,
 			    why = becauseCwm)
+	    workingContext.reopen()
 
 
 

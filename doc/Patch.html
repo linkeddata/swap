@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+ xmlns="http://www.w3.org/1999/xhtml"<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <title>Reaching out onto the Web</title>
+  <link href="style.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body xml:lang="en" lang="en">
+
+<div class="noprint">
+<p><a href="/">W3C</a> | <a href="/2001/sw/Overview.html">Semantic Web</a> |
+<a href="/2000/01/sw/Overview.html">Advanced Development</a> | <a
+href="/2000/10/swap/">SWAP</a> | <a href="/2000/10/swap/doc/">Tutorial</a> |
+Diff patch and streams</p>
+</div>
+
+<h1>Differences, Patches and event streams</h1>
+
+<p>There are lots of reasons for comparing two RDF files. In this section we
+will compare some of the different ways. We will look specifically at ways
+which generate "patch" files - machine-readable files expressing the
+difference which</p>
+
+<h2>Just comparing RDF files</h2>
+
+<p>In some cases, you can tell that two RDF graphs are the same by printing
+them out with cwm and comparing the files. That's what a lot of the cwm test
+cases do. Cwm actually tries to make this more successful by being consistent
+with the way it formats a file, and the order in which it prints things. This
+also means that if you are tracking changes to RDF data using a code
+management system such as RCS or CVS, small changes to the data will tend to
+make small changes in the N3 file.</p>
+
+<p>While this works quite well for comparing different versions of the same
+file, it doesn't really work for comparing with a file from a completely
+different source. The problem is that in a lot of cases, the way a a file is
+written out involves some arbitrary choices which could be made differently
+in the two files being compared. The main problem is the way blank nodes are
+given arbitrary identifiers, bnodeID in XML, or "forSome" variable names in
+N3, and _: namespace names in NTriples. To actually print any file out in a
+standard way so that any file which expressed the same RDF data will come out
+the same is called making a canonical form, or canonicalizing.</p>
+
+<p>There are a number of programs which canonicalize a file. NTriples, a very
+simplified form of N3, is the language used for most test cases. The SWAP
+code includes a python program (cant.py) which under most practical
+circumstances will find a canonical form for an NTriples file. If you give it
+two files, it will canonicalize each internally and compare them. The Jena
+toolkit includes another.</p>
+
+<p>Comparing files by canonicalizing them is Ok for tests. Now lets look
+at</p>
+
+<div class="noprint">
+<p>Next: Web of Trust</p>
+</div>
+<hr />
+
+<h2>Footnotes</h2>
+
+<h4>References</h4>
+
+<p>A more detailed decission in Design Issues:  <a
+href="../../../../DesignIssues/Diff.html">Diff, Patch, pdate and Synch</a></p>
+
+<p> has more pointers</p>
+<hr />
+
+<div class="noprint">
+<p>Tim BL, with his director hat off</p>
+
+<p>$Id$</p>
+</div>
+</body>
+</html>

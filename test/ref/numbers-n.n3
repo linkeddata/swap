@@ -3,9 +3,17 @@
     
     "800/600"^^<http://example.com/types#rational>     <file:/devel/WWW/2000/10/swap/test/syntax/numbers.n3#is> "800/600 with datatype http://example.com/types#rational" .
     
-    "2.0"^^<http://www.w3.org/2001/XMLSchema#double>     <file:/devel/WWW/2000/10/swap/test/syntax/numbers.n3#is> "The rational number 2.0" .
+    "2.0"^^<http://www.w3.org/2001/XMLSchema#double>     <file:/devel/WWW/2000/10/swap/test/syntax/numbers.n3#is> "The number 2.0" .
     
-    "2.0e3"^^<http://www.w3.org/2001/XMLSchema#double>     <file:/devel/WWW/2000/10/swap/test/syntax/numbers.n3#is> "The double precision floating point 2.0e3" .
+    "2.0"^^<http://www.w3.org/2001/XMLSchema#double>     <file:/devel/WWW/2000/10/swap/test/syntax/numbers.n3#is> "The number 2.0 expressed with extra trailing zeroes" .
+    
+    "2000.0"^^<http://www.w3.org/2001/XMLSchema#double>     <file:/devel/WWW/2000/10/swap/test/syntax/numbers.n3#is> "The double precision floating point 2.0e3" .
+    
+    "-2"^^<http://www.w3.org/2001/XMLSchema#integer>     <file:/devel/WWW/2000/10/swap/test/syntax/numbers.n3#is> "The integer -2" .
+    
+    "0"^^<http://www.w3.org/2001/XMLSchema#integer>     <file:/devel/WWW/2000/10/swap/test/syntax/numbers.n3#is> "Zero" .
     
     "2"^^<http://www.w3.org/2001/XMLSchema#integer>     <file:/devel/WWW/2000/10/swap/test/syntax/numbers.n3#is> "The integer 2" .
+    
+    "2"^^<http://www.w3.org/2001/XMLSchema#integer>     <file:/devel/WWW/2000/10/swap/test/syntax/numbers.n3#is> "The integer 2 expressed with leading zeroes" .
     

@@ -2,7 +2,15 @@
 
 2 <#is>  "The integer 2".
 
-2.0 <#is>  "The rational number 2.0".
+00002 <#is>  "The integer 2 expressed with leading zeroes".
+
+-2 <#is>   "The integer -2".
+
+0 <#is>    "Zero".
+
+2.0 <#is>  "The number 2.0".
+
+2.0000 <#is>  "The number 2.0 expressed with extra trailing zeroes".
 
 #  2/3  <#is>  "The raional number 2/3".
 

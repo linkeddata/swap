@@ -23,15 +23,33 @@ Comparing Formats</p>
 href="../../../../DesignIssues/Notation3.html"><img alt="n3"
 src="../../../../RDF/icons/n3_small" /></a></p>
 
-<p>release to come ???</p>
+<h2>release to come ???</h2>
 
 <p></p>
 
 <p>Ooops - nodeID was misspelled nodeid on RDF/XML output.</p>
 
-<p>diff.y - @@describe &amp; doc</p>
+<h4>Patch functionality</h4>
 
-<p>cwm --patch</p>
+<p>The <code>--patch=<em>patchfile</em></code> command line argument allows a
+patch file to be applied to the knowledge base (current working formula). See
+the  <a href="../../../../DesignIssues/Diff">Diff, Patch, Update and Sync</a>
+note in the <em>Design Issues</em> series on the motivation for exchanging
+difference files, and how they work. Diff files can in certain specific
+circumstances (a well-labeled graph) be produced by the diff.py program
+included with this distribution.  The new tests are in
+$SWAP/test/delta/detailed.tests</p>
+
+<h4>Internationization undefined, Numerics canonicalized</h4>
+
+<p>The i18n/detailed.tests have been removed from the test harness. They were
+not right, and URI/ IRI issues are not clear yet.  It is not clear whether
+cwm should URI-canonicalize, or IRI-canonicalize. (My instinct is that it
+should - Tim).</p>
+
+<p>Cwm does not canonicalize numerical (xsd:double and xsd:integer) values on
+N3 output. It uses python's str(float(s)) and str(int(s)).   The effect is to
+reduce some over-precision in the output. </p>
 
 <p></p>
 

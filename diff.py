@@ -44,7 +44,7 @@ from llyn import Formula, CONTEXT, PRED, SUBJ, OBJ
 OWL = Namespace("http://www.w3.org/2002/07/owl#")
 RDF = Namespace("http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 LOG = Namespace("http://www.w3.org/2000/10/swap/log#")
-
+DELTA = Namespace("http://www.w3.org/2004/delta#")
 
 def lookUp(predicates):
     """Look up al lthe schemas for the predicates given"""
@@ -161,9 +161,9 @@ def patches(delta, f, only_f, originalBnodes, definitions, deleting=0):
     given the bnodes and definitions for f."""
     todo = only_f.copy()
     if deleting:
-	patchVerb = LOG.deletion
+	patchVerb = DELTA.deletion
     else:
-	patchVerb = LOG.insertion
+	patchVerb = DELTA.insertion
     if verbose: progress("Patch:", patchVerb)
     while todo:
 

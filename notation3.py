@@ -204,26 +204,11 @@ class SinkParser:
 	It used to be used only for tracking, but for tests in general
 	it makes the canonical ordering of bnodes repeatable."""
 #	if not diag.tracking: return None
-	return "%s_L%iC%i" % (self._genPrefix , self.lines + 1, i - self.startOfLine + 1) 
+	return "%s_L%iC%i" % (self._genPrefix , self.lines, i - self.startOfLine + 1) 
         
     def formula(self):
         return self._formula
     
-#    def load(self, uri, baseURI=""):
-#	"""Parses a document of the given URI and returns its top level formula"""
-#        if uri:
-#            _inputURI = uripath.join(baseURI, uri) # Make abs from relative
-#	    inputResource = self._store.newSymbol(_inputURI)
-#            self._store.makeComment("Taking input from " + _inputURI)
-#            stream = urlopenForRDF(_inputURI)
-#	    if diag.tracking: self._reason2 = BecauseOfData(inputResource, because=self._reason) 
-#        else:
-#            self._store.makeComment("Taking input from standard input")
-#            _inputURI = uripath.join(baseURI, "STDIN") # Make abs from relative
-#            stream = sys.stdin     # May be big - buffered in memory!
-#	    if self._reason: self._reason2 = BecauseOfData("@@standardInput", because=self._reason) 
-#	return self.loadBuf(stream.read())    # self._formula
-
     def loadStream(self, stream):
 	return self.loadBuf(stream.read())   # Not ideal
 
@@ -912,11 +897,13 @@ class SinkParser:
 				"Bad number syntax")
 		j = m.end()
 		if m.group(2) != None or  m.group(3) != None: # includes decimal exponent
-		    res.append(self._store.newLiteral(str[i:j],
-			self._store.newSymbol(FLOAT_DATATYPE)))
+		    res.append(float(str[i:j]))
+#		    res.append(self._store.newLiteral(str[i:j],
+#			self._store.newSymbol(FLOAT_DATATYPE)))
 		else:
-		    res.append(self._store.newLiteral(str[i:j],
-			self._store.newSymbol(INTEGER_DATATYPE)))
+		    res.append(int(str[i:j]))
+#		    res.append(self._store.newLiteral(str[i:j],
+#			self._store.newSymbol(INTEGER_DATATYPE)))
 		return j
 
 	    if str[i]=='"':
@@ -1433,15 +1420,16 @@ u   Use \u for unicode escaping in URIs instead of utf-8 %XX
 	    if type(value) is not types.TupleType:  # simple old-fashioned string
 		return stringToN3(value, singleLine=singleLine)
 	    s, dt, lang = value
-	    if dt != None:
+	    if dt != None and "n" not in self._flags:
 		dt_uri = dt.uriref()		 
-		if (dt_uri == INTEGER_DATATYPE or
-		    dt_uri == FLOAT_DATATYPE) and "n" not in self._flags:
-		    return s    # Naked numeric value
-	    str = stringToN3(s, singleLine= singleLine)
-	    if lang != None: str = str + "@" + lang
-	    if dt != None: return str + "^^" + self.representationOf(context, dt.asPair())
-	    return str
+		if (dt_uri == INTEGER_DATATYPE):
+		    return str(int(s))
+		if (dt_uri == FLOAT_DATATYPE):
+		    return str(float(s))    # numeric value python-normalized
+	    st = stringToN3(s, singleLine= singleLine)
+	    if lang != None: st = st + "@" + lang
+	    if dt != None: return st + "^^" + self.representationOf(context, dt.asPair())
+	    return st
 
 	aid = self._anodeId.get(pair[1], None)
 	if aid != None:  # "a" flag only

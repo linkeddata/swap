@@ -81,6 +81,8 @@
          :domain ex:Person;
          :range ex:Height .
     
+    ex:medium     a :Height .
+    
     ex:mom     a :Property;
          = ex:mother .
     
@@ -94,4 +96,8 @@
     ex:parent     a :Property;
          :cardinality "2";
          :domain ex:Animal .
+    
+    ex:short     a :Height .
+    
+    ex:tall     a :Height .
     

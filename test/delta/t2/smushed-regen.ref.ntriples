@@ -1,11 +1,11 @@
     
-    _:L3C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBalance> "-3347.47" .
+    _:L2C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBalance> "-3347.47" .
     
-    _:L3C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBank> _:g4 .
+    _:L2C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBank> _:g4 .
     
-    _:L3C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountHolder> _:g5 .
+    _:L2C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountHolder> _:g5 .
     
-    _:L3C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountNumber> "1234567-0" .
+    _:L2C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountNumber> "1234567-0" .
     
     _:g4     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#id> "10-23-45" .
     
@@ -17,23 +17,23 @@
     
     _:g5     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#ssn> "123456789" .
     
-    _:L12C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBalance> "40000" .
+    _:L11C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBalance> "40000" .
     
-    _:L12C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBank> _:g4 .
+    _:L11C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBank> _:g4 .
     
-    _:L12C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountHolder> _:g5 .
+    _:L11C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountHolder> _:g5 .
     
-    _:L12C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountNumber> "1234567-1" .
+    _:L11C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountNumber> "1234567-1" .
     
-    _:L17C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBalance> "3333" .
+    _:L16C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBalance> "3333" .
     
-    _:L17C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBank> _:g4 .
+    _:L16C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountBank> _:g4 .
     
-    _:L17C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountHolder> _:L19C30 .
+    _:L16C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountHolder> _:L18C30 .
     
-    _:L17C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountNumber> "555-1212-0" .
+    _:L16C7     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#accountNumber> "555-1212-0" .
     
-    _:L19C30     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#dateOfBirth> "1987-06-05" .
+    _:L18C30     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#dateOfBirth> "1987-06-05" .
     
     _:g18     <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#city> "Anytown" .
     

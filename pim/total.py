@@ -11,14 +11,16 @@ from diag import verbosity, setVerbosity, progress
 
 
 import notation3    	# N3 parsers and generators
+from term import Literal
+
 # import toXML 		#  RDF generator
 
-from RDFSink import FORMULA, LITERAL, ANONYMOUS, Logic_NS
+#from RDFSink import FORMULA, LITERAL, ANONYMOUS, Logic_NS
 import uripath
 import string
 import sys
 from uripath import join
-from thing import  Namespace
+from myStore import  Namespace
 from notation3 import RDF_NS_URI
 
 
@@ -31,12 +33,10 @@ cat_ns = Namespace("categories.n3#")
 ma = Namespace("http://www.w3.org/2000/10/swap/pim/massachusetts#") # Mass tax specials
 contact = Namespace("http://www.w3.org/2000/10/swap/pim/contact#") # Personal contact info
 
-import thing
+import llyn
+from myStore import load
 import uripath
 import re
-
-#store = llyn.RDFStore()
-#thing.setStore(store)
 
 cat = cat_ns
 
@@ -45,14 +45,9 @@ cat = cat_ns
 def doCommand(inputURI="/dev/stdin"):
         import sys
         global sax2rdf
-        import thing
-	from thing import load
 	global kb
-        #from thing import chatty
-        #import sax2rdf
 	import os
-	from thing import Literal
-	
+
 # Load the data:
 	 
 	progress("Data from", inputURI)

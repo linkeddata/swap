@@ -643,13 +643,6 @@ class Literal(Term):
         self.string = str    #  n3 notation EXcluding the "  "
 	self.datatype = dt
 	self.lang=lang
-#	self._value = None
-#	if dt == FLOAT_DATATYPE:
-#	    self._value = float(str)
-#	elif dt == INTEGER_DATATYPE:
-#	    self._value = int(str)
-#	elif dt == None:
-#	    self._value = str
 
     def __str__(self):
         return self.string

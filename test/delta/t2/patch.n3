@@ -2,6 +2,7 @@
      @prefix : <file:/devel/WWW/2000/10/swap/test/delta/bank.n3#> .
      @prefix f: <file:/devel/WWW/2000/10/swap/test/delta/t2/from.n3#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
+     @prefix del: <http://www.w3.org/2004/delta#> .
      @prefix to: <file:/devel/WWW/2000/10/swap/test/delta/t2/to.n3#> .
      @prefix pat: <#>.
     
@@ -11,17 +12,17 @@
     {
         pat:AC     :accountNumber "1234567-0" .
         
-        }     log:deletion {pat:AC     :accountBalance "-4000" .
+        }     del:deletion {pat:AC     :accountBalance "-4000" .
         } .
     {
         pat:ac2     :accountNumber "1234567-0" .
         
-        }     log:insertion {pat:ac2     :accountBalance "-3347.47" .
+        }     del:insertion {pat:ac2     :accountBalance "-3347.47" .
         } .
     {
         pat:Joe     :ssn "123456789" .
         
-        }     log:insertion {pat:Joe     :address  [
+        }     del:insertion {pat:Joe     :address  [
                  :city "Anytown";
                  :street "77 Accacia Avenue" ];
              :phoneNumber "+1 202 555 1212" .

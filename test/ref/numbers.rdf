@@ -16,16 +16,28 @@
 
     <rdf:Description>
         <rdf:is rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2.0</rdf:is>
-        <is>The rational number 2.0</is>
+        <is>The number 2.0</is>
+        <is>The number 2.0 expressed with extra trailing zeroes</is>
     </rdf:Description>
 
     <rdf:Description>
-        <rdf:is rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2.0e3</rdf:is>
+        <rdf:is rdf:datatype="http://www.w3.org/2001/XMLSchema#double">2000.0</rdf:is>
         <is>The double precision floating point 2.0e3</is>
+    </rdf:Description>
+
+    <rdf:Description>
+        <rdf:is rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">-2</rdf:is>
+        <is>The integer -2</is>
+    </rdf:Description>
+
+    <rdf:Description>
+        <rdf:is rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">0</rdf:is>
+        <is>Zero</is>
     </rdf:Description>
 
     <rdf:Description>
         <rdf:is rdf:datatype="http://www.w3.org/2001/XMLSchema#integer">2</rdf:is>
         <is>The integer 2</is>
+        <is>The integer 2 expressed with leading zeroes</is>
     </rdf:Description>
 </rdf:RDF>
