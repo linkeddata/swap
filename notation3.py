@@ -50,6 +50,8 @@ SUBJ = 1
 OBJ = 2
 PARTS = [ PRED, SUBJ, OBJ]
 
+N3CommentCharacter = "#"     # For unix script #! compatabilty
+
 class Parser:
     def __init__(self, baseURI, thisDoc, genBase, bindings = {}):
 	""" note: namespace names should *not* end in #;
@@ -78,6 +80,7 @@ class Parser:
 		j = self.statement(str, i)
 		if j<0:
 		    raise BadSyntax(str, i, "expected directive or statement")
+            j = self.checkDot(str,j)
 	    str = str[j:]
 
     def makeStatement(self, context, triple):
@@ -87,8 +90,13 @@ class Parser:
     _namechars = string.lowercase + string.uppercase + string.digits + '_'
 
     def tok(self, tok, str, i):
+        """tokenizer strips whitespace and comment"""
 	while i<len(str) and str[i] in string.whitespace:
 	    i = i + 1
+	if i == len(str): return -1
+	if str[i] == N3CommentCharacter:     # "#"?
+            while i<len(str) and str[i] != "\n":
+                i = i + 1
 	if str[i:i+len(tok)] == tok:
 	    i = i + len(tok)
 	    return i
@@ -200,11 +208,11 @@ class Parser:
 	    r = []
 	    j = self.tok('[', str, i)
 	    if j<0: return -1
-	    subj = self.genURI()
+	    subj = internAnonymous(self._thisDoc)
 	    i = self.property_list(str, j, subj)
 	    if i<0: raise BadSyntax(str, j, "property_list expected")
 	    j = self.tok(']', str, i)
-	    if j<0: raise BadSyntax(str, i, "] expected")
+	    if j<0: raise BadSyntax(str, i, "']' expected")
 	    res.append(subj)
 	    return j
 
@@ -241,8 +249,16 @@ class Parser:
 	if i<0: return -1
 	while 1:
 	    j = self.tok(',', str, i)
-	    if j<0: return i
-	    i = self.object(str, j, res)
+	    if j<0: return i    # Found something else!
+            i = self.object(str, j, res)
+
+    def checkDot(self, str, i):
+            j = self.tok('.', str, i)
+            if j<0:
+                print "N3: expected '.' in %s^%s" %(str[i-30:i], str[i:i+30])
+                return i
+            return j
+
 
     def uri_ref2(self, str, i, res):
 	#hmm... intern the resulting symbol?
@@ -287,6 +303,10 @@ class Parser:
     def skipSpace(self, str, i):
 	while i<len(str) and str[i] in string.whitespace: i = i + 1
 	if i == len(str): return -1
+	if str[i] == N3CommentCharacter:
+            while i<len(str) and str[i] != "\n": i = i + 1
+	if i == len(str): return -1
+
 	return i
 
     def qname(self, str, i, res):
@@ -494,6 +514,7 @@ class Resource(Thing):
     """   A Thing which has no fragment
     """
     table = {} # Table of resources
+    nextId = 0
     
     def __init__(self, uri):
         Thing.__init__(self)
@@ -505,6 +526,10 @@ class Resource(Thing):
             return ""
         else:
             return self.uri
+
+    def newId(self):
+        self.nextId = self.nextId + 1
+        return self.nextId - 1
 
 def mostPopular():
         """ Resource whose fragments have the most occurrences
@@ -548,7 +573,24 @@ class Fragment(Thing):
          It is useful to know that its ID has no use outside that
          context.
          """
-         return self.fragid[0] == "_"  # Convention for now @@@
+         return self.fragid[0] == "_"  # Convention for now @@@@@
+                                # parser should use seperate class
+
+    def representation(self, prefixes = {}, base=None):
+        return ":" + self.fragid;
+
+class Anonymous(Fragment):
+    def __init__(self, resource):
+        Fragment.__init__(self, resource, "_g"+ `resource.newId()`)
+
+    def generated(self):
+        return 1
+    
+class Variable(Fragment):
+    def __init__(self, resource):
+        Fragment.__init__(self, resource, "_v"+ `resource.newId()`)
+
+
         
 class Literal(Thing):
     """ A Literal is a data resource to make it clean
@@ -583,14 +625,21 @@ def uri_encode(str):
             else:
                 result.append(str[i])
         return result
-
     
+class Variable(Thing):
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return "?" + self.name
+        
 def intern(uriref):
     """  Returns either a Fragment or a Resource as appropriate
 
 This is the way they are actually made.
 """
     hash = len(uriref)-1
+#    print " ... interning <%s>" % uriref
     while (hash >= 0) and not (uriref[hash] == "#"):
         hash = hash-1
     if hash < 0 :     # This is a resource with no fragment
@@ -613,6 +662,19 @@ def internFrag(r,fragid):
             r.fragments[fragid] = f
             return f
             
+def internAnonymous(r):
+        f = Anonymous(r)
+        r.fragments[f.fragid] = f
+        return f
+            
+def internVariable(r, fragid):  #@@@ untested
+        try:
+            return r.fragments[fragid]
+        except KeyError:
+            f = Variable(r)
+            r.fragments[f.fragid] = f
+            return f
+            
 
 RDF_type = intern("http://www.w3.org/1999/02/22-rdf-syntax-ns#type")
 DAML_equivalentTo = intern("http://www.daml.org/2000/10/daml-ont#equivalentTo")
@@ -622,13 +684,16 @@ DAML_equivalentTo = intern("http://www.daml.org/2000/10/daml-ont#equivalentTo")
   
 def test():
     import sys
-  
-    t0 = """bind x: <http://example.org/x-ns/>
-	    bind dc: <http://purl.org/dc/elements/1.1/>"""
+    testString = []
+    
+    t0 = """bind x: <http://example.org/x-ns/> .
+	    bind dc: <http://purl.org/dc/elements/1.1/> ."""
 
-    t1="""[ >- x:firstname -> "Ora" ] >- dc:wrote -> [ >- dc:title -> "Moby Dick" ]
-bind default <http://example.org/default>
-<uriPath> :localProp defaultedName
+    t1="""[ >- x:firstname -> "Ora" ] >- dc:wrote ->
+    [ >- dc:title -> "Moby Dick" ] .
+     bind default <http://example.org/default>.
+     <uriPath> :localProp defaultedName .
+     
 """
     t2="""
 [ >- x:type -> x:Receipt;
@@ -652,29 +717,30 @@ bind default <http://example.org/default>
   >- x:phoneMain -> <tel:+1-913-441-8900>;
   >- x:fax -> <tel:+1-913-441-8118>;
   >- x:mailbox -> <mailto:info@topnotchheatingandair.com> ]
-]    
+].    
 
 <http://www.davelennox.com/residential/furnaces/re_furnaces_content_body_elite90gas.asp>
  >- x:describes -> [ >- x:type -> x:furnace;
  >- x:brand -> "Lennox";
  >- x:model -> "G26Q3-75"
- ]
+ ].
 """
     t3="""
-bind pp: <http://example.org/payPalStuff?>
-bind default <http://example.org/payPalStuff?>
+bind pp: <http://example.org/payPalStuff?>.
+bind default <http://example.org/payPalStuff?>.
 
 <> a pp:Check; pp:payee :tim; pp:amount "$10.00";
-dc:author :dan; dc:date "2000/10/7" ;  is pp:part of [ a pp:Transaction; = :t1 ]
+  dc:author :dan; dc:date "2000/10/7" ;
+  is pp:part of [ a pp:Transaction; = :t1 ] .
 """
 
 # Janets chart:
     t4="""
-bind q: <http://example.org/>
-bind m: <>
-bind n: <http://example.org/base/>
-bind : <http://void-prefix.example.org/>
-bind w3c: <http://www.w3.org/2000/10/org>
+bind q: <http://example.org/>.
+bind m: <>.
+bind n: <http://example.org/base/>.
+bind : <http://void-prefix.example.org/>.
+bind w3c: <http://www.w3.org/2000/10/org>.
 
 <#QA> :includes 
  [  = w3c:internal ; :includes <#TAB> , <#interoperability> ,
@@ -684,50 +750,44 @@ bind w3c: <http://www.w3.org/2000/10/org>
      :includes <#products>, <#content>, <#services> ],
  [ = <#support>; :includes
      <#tools>, <#tutorials>, <#workshops>, <#books_materails>,
-     <#certification> ] 
+     <#certification> ] .
 
-<#internal> q:supports <#conformance>  
-<#support> q:supports <#conformance>
+<#internal> q:supports <#conformance> .  
+<#support> q:supports <#conformance> .
 
 """
 
 
-    testString[0] = t0 + t1 + t2 + t3 + t4
+    testString.append(  t0 + t1 + t2 + t3 + t4 )
 
-    p=SinkParser(RDFSink(),'http://example.org/base/', 'file:notation3.py',
-		     'data:#')
+#    p=SinkParser(RDFSink(),'http://example.org/base/', 'file:notation3.py',
+#		     'data:#')
 
     r=SinkParser(SinkToN3(sys.stdout.write, intern('file:output')), 'http://example.org/base/', 'file:notation3.py',
 		  '#_')
 
-    p.startDoc()
+
     r.startDoc()
     
-    print "=== testing: \n ", t0, "\n========="
-    p.feed(t0)
+    print "=== test stringing: ===== STARTS\n ", t0, "\n========= ENDS\n"
     r.feed(t0)
 
-    print "=== testing: ", t1, "\n========="
-    p.feed(t1)
+    print "=== test stringing: ===== STARTS\n ", t1, "\n========= ENDS\n"
     r.feed(t1)
 
-
-    print "=== testing: ", t2, "\n========="
-    p.feed(t2)
+    print "=== test stringing: ===== STARTS\n ", t2, "\n========= ENDS\n"
     r.feed(t2)
 
-    print "=== testing: ", t3
-    p.feed(t3)
+    print "=== test stringing: ===== STARTS\n ", t3, "\n========= ENDS\n"
     r.feed(t3)
 
-    p.endDoc()
     r.endDoc()
 
     print "----------------------- Test store:"
 
     store = RDFStore()
-    p = SinkParser(store, 'http://example.org/base/', 'file:notation3.py',
-		     'file:notation3.py#_')
+    # (sink, baseURI, thisDoc, genBase, bindings)
+    p = SinkParser(store, 'http://example.org/base/', 'file:notation3.py', "#_")
     p.startDoc()
     p.feed(testString[0])
     p.endDoc()
@@ -742,21 +802,45 @@ bind w3c: <http://www.w3.org/2000/10/org>
 
     print "\n\n---------------- dumping nested:"
 
-    store.dumpNested(SinkToN3(sys.stdout.write, intern('file:notation3.py')))
+    thisDoc = intern("file:notation.py")
+    store.dumpNested(thisDoc, SinkToN3(sys.stdout.write, thisDoc))
 
-    print "Regression test"
+    print "Regression test **********************************************"
+
     
+    testString.append(reformat(testString[-1]))
+
+    if testString[-1] == testString[-2]:
+        print "\nRegression Test succeeded FIRST TIME- WEIRD!!!!!!!!!\n"
+        return
+    
+    testString.append(reformat(testString[-1]))
+
+    if testString[-1] == testString[-2]:
+        print "\nRegression Test succeeded!!!!!!!!!\n"
+    else:
+        print "Regression Test Failure: ===================== LEVEL 2:"
+        print testString[2]
+        print "\n============================================= END"
+
+    testString.append(reformat(testString[-1]))
+    if testString[-1] == testString[-2]:
+        print "\nRegression Test succeeded THIRD TIME.\n"
+
+    
+                
+def reformat(str):
+    print "Regression Test: ===================== INPUT:"
+    print str
+    print "================= ENDs"
     buffer=StringWriter()
     r=SinkParser(SinkToN3(buffer.write, intern('file:output')),
-                 'http://example.org/base/', 'file:notation3.py',)))
-
-    store.dumpNested(SinkToN3(buffer.write, intern('file:notation3.py')))
-    testString[1]=buffer.result()
-    buffer.clear()
+                 'http://example.org/base/', 'file:notation3.py', '#_')   # missed chars@?
+    r.startDoc()
+    r.feed(str)
+    r.endDoc()
+    return buffer.result()
     
-                 
-                
-
 
 ################################################################### Sinks
 
@@ -942,6 +1026,7 @@ class SinkToN3(RDFSink):
 
     def bind(self, prefix, ns):
         """ Just accepting a convention here """
+        self._endStatement()
         self.prefixes[ns] = prefix
         if prefix == "" :
             self._write(" bind default %s .\n" % (`ns`) )
@@ -954,20 +1039,18 @@ class SinkToN3(RDFSink):
       self._subj = None
 
     def endDoc(self):
-	if self._subj:
-	    self._write(" .\n\n")
-	self._subj = None
+	self._endStatement()
 
-    def makeStatement(self, context, subj, pred, obj):
-        self._makeSubjPred(context, subj, pred)        
-        self._write(obj.representation(self.prefixes, self.base));
+    def makeStatement(self, context, triple):
+        self._makeSubjPred(context, triple[SUBJ], triple[PRED])        
+        self._write(triple[OBJ].representation(self.prefixes, self.base));
         
 # Below is for writing an anonymous node which is the object of only one arc        
-    def startAnonymous(self, context, subj, pred, obj):
-        self._makeSubjPred(context, subj, pred)
+    def startAnonymous(self, context, triple):
+        self._makeSubjPred(context, triple[SUBJ], triple[PRED])
         self.indent = self.indent + 1
         self._write(" [ \n"+ "    " * self.indent + "    ")
-        self._subj = obj    # The object is not the subject context
+        self._subj = triple[OBJ]    # The object is not the subject context
         self._pred = None
 
     def endAnonymous(self, subject, verb):    # Remind me where we are
@@ -994,9 +1077,7 @@ class SinkToN3(RDFSink):
     def _makeSubjPred(self, context, subj, pred):
         
 	if self._subj is not subj:
-	    if self._subj:
-		  self._write(" .\n")
-		  self._write("    " * self.indent)
+	    self._endStatement()
 	    self._write(subj.representation(self.prefixes, self.base))
 	    self._subj = subj
 	    self._pred = None
@@ -1011,22 +1092,33 @@ class SinkToN3(RDFSink):
                 self._write(" a ")
             else :
 #	        self._write( " >- %s -> " % (pred.representation(self.prefixes,base)))
-                self._write( " %s : " % (pred.representation(self.prefixes,self.base)))
+                self._write( " %s " % (pred.representation(self.prefixes,self.base)))
 
 	    self._pred = pred
 	else:
 	    self._write(",\n" + "    " * (self.indent+3))    # Same subject and pred => object list
 
+    def _endStatement(self):
+        if self._subj:
+            self._write(" .\n")
+            self._write("    " * self.indent)
+            self._subj = None
+
+    
 class StringWriter:
 
-    def __init__(self)
-        buffer = ""
+    def __init__(self):
+        self.buffer = ""
 
-    def write(self, str)
-        buffer = buffer + str     #  No idea how to make this efficient in python
+    def write(self, str):
+        self.buffer = self.buffer + str     #  No idea how to make this efficient in python
 
-    def result()
-        return buffer
+    def result(self):
+        return self.buffer
+
+    def clear(self):
+        self.buffer = ""
+        
 
 ######################################################## Storage
 # The store uses an index in the actual resource objects.
@@ -1065,12 +1157,15 @@ class RDFStore(RDFSink) :
 # Output methods:
 
     def dumpChronological(self, sink):
+        sink.startDoc()
         for c in self.prefixes.items():   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
         for s in self.statements :
             sink.makeStatement(s.context, s.triple)
+        sink.endDoc()
 
     def dumpBySubject(self, sink):
+        sink.startDoc()
         for c in self.prefixes.items() :   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
 
@@ -1080,20 +1175,23 @@ class RDFStore(RDFSink) :
             for f in r.fragments.values() :  # then anything in its namespace
                 for s in f.occursAs[SUBJ] :
                     sink.makeStatement(s.context, s.triple)
+        sink.endDoc()
 
-    def dumpNested(self, sink):
+    def dumpNested(self, context, sink):
         """ Iterates over all URIs ever seen looking for statements
         """
+        sink.startDoc()
         for c in self.prefixes.items() :   #  bind in same way as input did FYI
             sink.bind(c[1], c[0])
-
+        print "#RDFStore: Done bindings, doing arcs:" 
         for r in Resource.table.values() :  # First the bare resource
-            self.dumpSubject(r, sink)
+            self._dumpSubject(r, context, sink)
             for f in r.fragments.values() :  # then anything in its namespace
-                self.dumpSubject(f, sink)
+                self._dumpSubject(f, context, sink)
+        sink.endDoc()
 
 
-    def dumpSubject(self, subj, sink):
+    def _dumpSubject(self, context, subj, sink):
         """ Take care of top level anonymous nodes
         """
         if (subj.generated() and  # The URI is irrelevant
@@ -1106,7 +1204,7 @@ class RDFStore(RDFSink) :
                 sink.endAnonymousNode()
         else:
             for s in subj.occursAs[SUBJ] :
-                self.coolMakeStatement(sink, s.triple)
+                self.coolMakeStatement(sink, context, s.triple)
 
     def coolMakeStatement(self, sink, context, triple):
      
@@ -1146,8 +1244,12 @@ class RDFTriple:
     
 
 INFINITY = 1000000000           # @@ larger than any number occurences
-def match (unmatched, action, param )
+def match (unmatched, action, param, bindings = [], newBindings = [] ):
 
+        """ Apply action(bindings, param) to succussful matches
+    bindings      collected matches alreday found
+    newBindings  matches found and not yet applied - used in recursion
+        """
 # Scan terms to see what sort of a problem we have:
 #
 # We prefer terms with a single variable to those with two.
@@ -1158,7 +1260,13 @@ def match (unmatched, action, param )
         shortest = INFINITY
         shortest_t = None
         found_single = 0   # Singles are better than doubles
-        unmatched2 = unmatched[:] # Copy
+        unmatched2 = unmatched[:] # Copy so we can remove() while iterating :-(
+
+        for pair in newBindings:
+            bindings.append(pair)  # Record for posterity
+            for t in unmatched:     # Replace variables with values
+                for p in SUBJ, PRED, OBJ:
+                    if t[p] is pair[0] : t[p] = pair[1]
         
         for t in unmatched:
             vars = []       # Count where variables are
@@ -1167,7 +1275,7 @@ def match (unmatched, action, param )
             short = INFINITY
             for p in PRED, SUBJ, OBJ:
                 r = t.triple[p]
-                if r isInstanceOf(Variable):
+                if isinstance(r,Variable):
                     vars.append(r)
                 else:
                     if r.occurs[p]< short:
@@ -1175,32 +1283,32 @@ def match (unmatched, action, param )
                         short = r.occurs[p]
                         consts.append(p)
 
-            if short == 0 return 0 # No way we can satisfy that one - quick "no"
+            if short == 0: return 0 # No way we can satisfy that one - quick "no"
 
             if len(vars) == 0: # This is an independant constant triple
                           # It has to match or the whole thing fails
                  
                 for s in r.occursAs[short_p]:
                     if (s.triple[q[0]] is t.triple[q[0]]
-                        and s.triple[q[1]] is t.triple[q[1]]:
+                        and s.triple[q[1]] is t.triple[q[1]]):
                             unmatched2.remove(t)  # Ok - we believe it - ignore it
                     else: # no match for a constant term: query fails
                         return 0
                 
             elif len(vars) == 1: # We have a single variable.
-            if if not found_single or short < shortest :
-                shortest = short
-                shortest_p = short_p
-                shortest_t = t
-                found_single = 1
+                if not found_single or short < shortest :
+                    shortest = short
+                    shortest_p = short_p
+                    shortest_t = t
+                    found_single = 1
                 
             else:   # Has two variables
-            if not found_single and short < shortest :
-                shortest = short
-                shortest_p = short_p
-                shortest_t = t
+                if not found_single and short < shortest :
+                    shortest = short
+                    shortest_p = short_p
+                    shortest_t = t
 
-        if len(unmatched) == 0:
+        if len(unmatched2) == 0:
             print "Found for bindings: ", bindings
             action(bindings, param)  # No terms left .. success!
             return 1
@@ -1213,27 +1321,23 @@ def match (unmatched, action, param )
         q = []   # Parts of speech to test for match
         v = []   # Parts of speech which are variables
         for p in [PRED, SUBJ, OBJ] :
-            if isInstanceOf(t.triple[p], Variable):
+            if isinstance(t.triple[p], Variable):
                 parts_to_search.remove(p)
                 v.append(p)
             elif p != shortest_p :
-                q.append(p) = p
+                q.append(p)
 
         if found_single:        # One variable, two constants - must search
             for s in t.occursAs[shortest_p]:
                 if s.triple[q[0]] is t.triple[q[0]]: # Found this one
-                    unmatched3 = unmatched2[:]
-                    replace_variable(s.triple[pv], s.triple[pv],unmatched2)
-                    bindings = bindings + [ s.triple[pv], s.triple[pv] ] 
-                    total = total + match(unmatched3, bindings, action)
+                    total = total + match(unmatched2, action, param,
+                                          bindings, [ s.triple[pv], s.triple[pv] ])
             
         else: # Two variables, one constant. Every one in occurrence list will be good
             for s in t.occursAs[shortest_p]:
-                unmatched3 = unmatched2[:]
-                for v1 in v:
-                    replace_variable(t.triple[v1], s.triple[v1],unmatched3)
-                    bindings = bindings + [ t.triple[v1], s.triple[v1]]
-                total = total + matches(unmatched3, bindings, action, param)
+                total = total + matches(unmatched2, action, param, bindings,
+                                        [ t.triple[v[0]], s.triple[v[0]]],
+                                        [ t.triple[v[1]], s.triple[v[1]]])
             
         return total
          
