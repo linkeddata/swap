@@ -44,3 +44,20 @@ this log:forAll :o, :cEK, :pEK, :d, :p, :productName, :c, :first, :last, :billAd
 
 }.
 
+# SQL query (so nicely formatted):
+# SELECT Products_0.id AS p_id,
+#          Products_0.name AS productName_name,
+#        Addresses_0.id AS billAddr_id,
+#          Addresses_0.city AS billCity_city,
+#          Addresses_0.state AS billState_state,
+#          Addresses_0.street AS billStreet_street,
+#        Customers_0.id AS c_id,
+#          Customers_0.familyName AS first_familyName,
+#          Customers_0.givenName AS last_givenName,
+#        Orders_0.id AS o_id,
+#          Orders_0.orderDate AS d_orderDate,
+#          Orders_0.product AS pEK_product
+# FROM Products AS Products_0, Addresses AS Addresses_0, Customers AS Customers_0, Orders AS Orders_0
+# WHERE Customers_0.billingAddress=Addresses_0.id
+#   AND Orders_0.customer=Customers_0.id
+#   AND Products_0.id=Orders_0.product

@@ -334,7 +334,8 @@ class SqlDBAlgae(RdfDBAlgae):
         if (self.checkUnderConstraintsBeforeQuery):
             self._checkForUnderConstraint()
 
-        self.selectPunct[-1] = ''
+        self.selectPunct.pop(0)
+        self.selectPunct.append('')
 
         query = self._buildQuery(implQuerySets)
         messages.append("query SQLselect \"\"\""+query+"\"\"\" .")
@@ -394,7 +395,7 @@ class SqlDBAlgae(RdfDBAlgae):
                         self._addWhere(sAlias+"."+field+"="+firstAlias+"."+firstField, term)
                         self._addReaches(sAlias, firstAlias, term)
                     except KeyError, e:
-                        col = self._addSelect(sAlias+"."+field, o.symbol()+"_"+field, "\n")
+                        col = self._addSelect(sAlias+"."+field, o.symbol()+"_"+field, "\n         ")
                         self.scalarBindings.append([o, [col]])
                         self.scalarReferences[o.symbol()] = [sAlias, field]
                 

@@ -32,14 +32,15 @@ this log:forAll :products, :name .
 
 }.
 
-# should create this SQL:
+# SQL queries (so nicely formatted):
 # SELECT Customers_0.id AS customer_id,
-#        Customers_0.givenName AS given_givenName,
-#        Customers_0.familyName AS family_familyName
+#          Customers_0.givenName AS given_givenName,
+#          Customers_0.familyName AS family_familyName
 # FROM Customers AS Customers_0
 
 # and
 
 # SELECT Products_0.id AS products_id,
-#        Products_0.name AS name_name
+#          Products_0.name AS name_name
 # FROM Products AS Products_0
+
