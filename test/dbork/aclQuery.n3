@@ -2,17 +2,17 @@
 
 #@prefix db: 		<http://localhost/SqlDB#>.
 # Tables:
-@prefix acls: 		<sql://rdftest.w3.org/OrderTracking/acls#>.
-@prefix uris: 		<sql://rdftest.w3.org/OrderTracking/uris#>.
-@prefix ids: 		<sql://rdftest.w3.org/OrderTracking/ids#>.
-@prefix idInclusions:	<sql://rdftest.w3.org/OrderTracking/idInclusions#>.
+@prefix acls: 		<mysql://rdftest.w3.org/OrderTracking/acls#>.
+@prefix uris: 		<mysql://rdftest.w3.org/OrderTracking/uris#>.
+@prefix ids: 		<mysql://rdftest.w3.org/OrderTracking/ids#>.
+@prefix idInclusions:	<mysql://rdftest.w3.org/OrderTracking/idInclusions#>.
 
 @prefix : <#>.
 @prefix v: <#>.
 
 this log:forAll :urisRow, :aacl, :acl, :access, :u1, :g1, :accessor .
 
-<sql://root@localhost/w3c> is log:definitiveService of
+<mysql://root@localhost/w3c> is log:definitiveService of
 	acls:acl, acls:access, acls:id, ids:value, idInclusions:id, 
 	idInclusions:groupId, uris:acl, uris:uri.
 {

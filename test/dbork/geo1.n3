@@ -5,11 +5,11 @@
 
 #@prefix db: 		<http://localhost/SqlDB#>.
 # Tables:
-@prefix Places: 	<sql://rdftest@swada.w3.org/WorldFacts/usgs_pop_places#>.
+@prefix Places: 	<mysql://rdftest@swada.w3.org/WorldFacts/usgs_pop_places#>.
 
 @prefix : <geo1#>.
 
-<sql://rdftest@swada.w3.org/WorldFacts/> is log:definitiveService of
+<mysql://rdftest@swada.w3.org/WorldFacts/> is log:definitiveService of
 	Places:state, Places:name, Places:feature_type ,Places:county
 	,Places:state_fips_code ,Places:lat ,Places:lon
 	,Places:elevation ,Places:population ,Places:mapname

@@ -1,6 +1,6 @@
      @prefix : <#> .
-     @prefix Customers: <sql://rdftest@swada.w3.org/OrderTracking/Customers#> .
-     @prefix Products: <sql://rdftest@swada.w3.org/OrderTracking/Products#> .
+     @prefix Customers: <mysql://rdftest@swada.w3.org/OrderTracking/Customers#> .
+     @prefix Products: <mysql://rdftest@swada.w3.org/OrderTracking/Products#> .
      @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
     this     log:forAll :customer,
@@ -17,32 +17,32 @@
     
     "'Eustis'"     :RESULT "'Walker'" .
     
-    "'sql://rdftest@swada.w3.org/OrderTracking/Products.id=1001'"     :RESULT "'white house'" .
+    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=1001'"     :RESULT "'white house'" .
     
-    "'sql://rdftest@swada.w3.org/OrderTracking/Products.id=1002'"     :RESULT "'picket fence'" .
+    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=1002'"     :RESULT "'picket fence'" .
     
-    "'sql://rdftest@swada.w3.org/OrderTracking/Products.id=1003'"     :RESULT "'sport utility vehicle'" .
+    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=1003'"     :RESULT "'sport utility vehicle'" .
     
-    "'sql://rdftest@swada.w3.org/OrderTracking/Products.id=1004'"     :RESULT "'pool'" .
+    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=1004'"     :RESULT "'pool'" .
     
-    "'sql://rdftest@swada.w3.org/OrderTracking/Products.id=1005'"     :RESULT "'grill'" .
+    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=1005'"     :RESULT "'grill'" .
     
-    "'sql://rdftest@swada.w3.org/OrderTracking/Products.id=2001'"     :RESULT "'skateboard'" .
+    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=2001'"     :RESULT "'skateboard'" .
     
-    "'sql://rdftest@swada.w3.org/OrderTracking/Products.id=2002'"     :RESULT "'rebelious music'" .
+    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=2002'"     :RESULT "'rebelious music'" .
     
-    "'sql://rdftest@swada.w3.org/OrderTracking/Products.id=2003'"     :RESULT "'earring'" .
+    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=2003'"     :RESULT "'earring'" .
     
-    "'sql://rdftest@swada.w3.org/OrderTracking/Products.id=2004'"     :RESULT "'nose ring'" .
+    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=2004'"     :RESULT "'nose ring'" .
     
-    "'sql://rdftest@swada.w3.org/OrderTracking/Products.id=2005'"     :RESULT "'other ring'" .
+    "'mysql://rdftest@swada.w3.org/OrderTracking/Products.id=2005'"     :RESULT "'other ring'" .
     
-    Customers:familyName     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    Customers:familyName     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
     
-    Customers:givenName     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/> .
+    Customers:givenName     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/> .
     
-    Products:name     log:definitiveService <sql://rdftest@swada.w3.org/OrderTracking/>,
-                <sql://root@localhost/OrderTracking> .
+    Products:name     log:definitiveService <mysql://rdftest@swada.w3.org/OrderTracking/>,
+                <mysql://root@localhost/OrderTracking> .
     {
         :products     Products:name :name .
         

@@ -5,6 +5,6 @@
 
 @prefix : <#>.
 
-<sql://rdftest@swada.w3.org/OrderTracking/> is log:definitiveService of
+<mysql://rdftest@swada.w3.org/OrderTracking/> is log:definitiveService of
 	Customers:familyName, Customers:givenName.
 #, Products:name.

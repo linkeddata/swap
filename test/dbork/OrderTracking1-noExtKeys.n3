@@ -2,16 +2,16 @@
 
 #@prefix db: 		<http://localhost/SqlDB#>.
 # Tables:
-@prefix Orders: 	<sql://rdftest@swada.w3.org/OrderTracking/Orders#>.
-@prefix Products: 	<sql://rdftest@swada.w3.org/OrderTracking/Products#>.
-@prefix Customers: 	<sql://rdftest@swada.w3.org/OrderTracking/Customers#>.
-@prefix Addresses: 	<sql://rdftest@swada.w3.org/OrderTracking/Addresses#>.
+@prefix Orders: 	<mysql://rdftest@swada.w3.org/OrderTracking/Orders#>.
+@prefix Products: 	<mysql://rdftest@swada.w3.org/OrderTracking/Products#>.
+@prefix Customers: 	<mysql://rdftest@swada.w3.org/OrderTracking/Customers#>.
+@prefix Addresses: 	<mysql://rdftest@swada.w3.org/OrderTracking/Addresses#>.
 
 @prefix : <#>.
 
 this log:forAll :o, :cEK, :pEK, :d, :p, :productName, :c, :first, :last, :billAddrEK, :billAddr, :billStreet, :billCity, :billState .
 
-<sql://rdftest@swada.w3.org/OrderTracking/> is log:definitiveService of
+<mysql://rdftest@swada.w3.org/OrderTracking/> is log:definitiveService of
 	Orders:id, Orders:customer, Orders:product, Orders:orderDate, 
 	Products:id, Products:name, 
 	Customers:id, Customers:familyName, Customers:givenName, Customers:billingAddress, 

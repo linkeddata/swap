@@ -290,7 +290,7 @@ class SqlDBAlgae(RdfDBAlgae):
                                       "(?P<table>\w+)\#(?P<field>[\w\d\%\=\&]+)$")
 
         if (self.structure == None):
-            if verbosity() > 10: progress("analyzing sql://%s/%s\n" % (host, database))
+            if verbosity() > 10: progress("analyzing mysql://%s/%s\n" % (host, database))
             self.structure = {}
             cursor = self._getCursor()
             cursor.execute("SHOW TABLES")
@@ -870,22 +870,22 @@ class SqlDBAlgae(RdfDBAlgae):
         return a
 
 if __name__ == '__main__':
-    s = [["<sql://rdftest@swada.w3.org/OrderTracking/uris#uri>", "?urisRow", "<http://www.w3.org/Member/Overview.html>"], 
-         ["<sql://rdftest@swada.w3.org/OrderTracking/acls#access>", "?acl", "?access"], 
-         ["<sql://rdftest@swada.w3.org/OrderTracking/acls#acl>", "?acl", "?aacl"], 
-         ["<sql://rdftest@swada.w3.org/OrderTracking/acls#id>", "?acl", "?accessor"], 
-         ["<sql://rdftest@swada.w3.org/OrderTracking/idInclusions#groupId>", "?g1", "?accessor"], 
-         ["<sql://rdftest@swada.w3.org/OrderTracking/idInclusions#id>", "?g1", "?u1"], 
-         ["<sql://rdftest@swada.w3.org/OrderTracking/ids#value>", "?u1", "\"eric\""], 
-         ["<sql://rdftest@swada.w3.org/OrderTracking/uris#acl>", "?urisRow", "?aacl"]]
+    s = [["<mysql://rdftest@swada.w3.org/OrderTracking/uris#uri>", "?urisRow", "<http://www.w3.org/Member/Overview.html>"], 
+         ["<mysql://rdftest@swada.w3.org/OrderTracking/acls#access>", "?acl", "?access"], 
+         ["<mysql://rdftest@swada.w3.org/OrderTracking/acls#acl>", "?acl", "?aacl"], 
+         ["<mysql://rdftest@swada.w3.org/OrderTracking/acls#id>", "?acl", "?accessor"], 
+         ["<mysql://rdftest@swada.w3.org/OrderTracking/idInclusions#groupId>", "?g1", "?accessor"], 
+         ["<mysql://rdftest@swada.w3.org/OrderTracking/idInclusions#id>", "?g1", "?u1"], 
+         ["<mysql://rdftest@swada.w3.org/OrderTracking/ids#value>", "?u1", "\"eric\""], 
+         ["<mysql://rdftest@swada.w3.org/OrderTracking/uris#acl>", "?urisRow", "?aacl"]]
     rs = ResultSet()
     qp = rs.buildQuerySetsFromArray(s)
-    a = SqlDBAlgae("sql://rdftest@swada.w3.org/OrderTracking/", "AclSqlObjects")
+    a = SqlDBAlgae("mysql://rdftest@swada.w3.org/OrderTracking/", "AclSqlObjects")
     messages = []
     nextResults, nextStatements = a._processRow([], [], qp, rs, messages, {})
     rs.results = nextResults
     def df(datum):
-        return re.sub("http://localhost/SqlDB#", "sql:", datum)
+        return re.sub("http://localhost/SqlDB#", "mysql:", datum)
     print string.join(messages, "\n")
     print "query matrix \"\"\""+rs.toString({'dataFilter' : None})+"\"\"\" .\n"
     for solutions in nextStatements:
@@ -901,7 +901,7 @@ aclQuery -- :acl acls:access :access .
 sentences[1].quad -- (attrib,      s,   p,      o)
                      (0_work, access, acl, access)
 p.uriref() -- 'file:/home/eric/WWW/2000/10/swap/test/dbork/aclQuery.n3#acl'
-s.uriref() -- 'sql://rdftest@swada.w3.org/OrderTracking/acls#access'
+s.uriref() -- 'mysql://rdftest@swada.w3.org/OrderTracking/acls#access'
 o.uriref() -- 'file:/home/eric/WWW/2000/10/swap/test/dbork/aclQuery.n3#access'
 existentials[1] == sentences[1].quad[2] -- 1
 
@@ -915,14 +915,14 @@ c
 s
 
 this one works:
-    s = [["<sql://rdftest@swada.w3.org/OrderTracking/uris#uri>", "?urisRow", "<http://www.w3.org/Member/Overview.html>"], 
-         ["<sql://rdftest@swada.w3.org/OrderTracking/uris#acl>", "?urisRow", "?aacl"], 
-         ["<sql://rdftest@swada.w3.org/OrderTracking/acls#acl>", "?acl", "?aacl"], 
-         ["<sql://rdftest@swada.w3.org/OrderTracking/acls#access>", "?acl", "?access"], 
-         ["<sql://rdftest@swada.w3.org/OrderTracking/ids#value>", "?u1", "\"eric\""], 
-         ["<sql://rdftest@swada.w3.org/OrderTracking/idInclusions#id>", "?g1", "?u1"], 
-         ["<sql://rdftest@swada.w3.org/OrderTracking/idInclusions#groupId>", "?g1", "?accessor"], 
-         ["<sql://rdftest@swada.w3.org/OrderTracking/acls#id>", "?acl", "?accessor"]]
+    s = [["<mysql://rdftest@swada.w3.org/OrderTracking/uris#uri>", "?urisRow", "<http://www.w3.org/Member/Overview.html>"], 
+         ["<mysql://rdftest@swada.w3.org/OrderTracking/uris#acl>", "?urisRow", "?aacl"], 
+         ["<mysql://rdftest@swada.w3.org/OrderTracking/acls#acl>", "?acl", "?aacl"], 
+         ["<mysql://rdftest@swada.w3.org/OrderTracking/acls#access>", "?acl", "?access"], 
+         ["<mysql://rdftest@swada.w3.org/OrderTracking/ids#value>", "?u1", "\"eric\""], 
+         ["<mysql://rdftest@swada.w3.org/OrderTracking/idInclusions#id>", "?g1", "?u1"], 
+         ["<mysql://rdftest@swada.w3.org/OrderTracking/idInclusions#groupId>", "?g1", "?accessor"], 
+         ["<mysql://rdftest@swada.w3.org/OrderTracking/acls#id>", "?acl", "?accessor"]]
 
 """
 

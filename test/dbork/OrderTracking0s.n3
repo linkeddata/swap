@@ -2,8 +2,8 @@
 
 #@prefix db: 		<http://localhost/SqlDB#>.
 # Tables:
-#@prefix Customers: 	<sql://rdftest@swada.w3.org/OrderTracking/Customers#>.
-#@prefix Products: 	<sql://rdftest@swada.w3.org/OrderTracking/Products#>.
+#@prefix Customers: 	<mysql://rdftest@swada.w3.org/OrderTracking/Customers#>.
+#@prefix Products: 	<mysql://rdftest@swada.w3.org/OrderTracking/Products#>.
 
 @prefix Customers: 	<Customers#>.
 @prefix Products: 	<Products#>.
@@ -12,7 +12,7 @@
 
 this log:forAll :customer, :family, :given .
 
-#<sql://rdftest@swada.w3.org/OrderTracking/> is log:definitiveService of
+#<mysql://rdftest@swada.w3.org/OrderTracking/> is log:definitiveService of
 #	Customers:familyName, Customers:givenName, Products:name.
 
 {
@@ -27,7 +27,7 @@ this log:forAll :customer, :family, :given .
 #
 #this log:forAll :product, :name .
 #
-#<sql://root@localhost/OrderTracking> is log:definitiveService of
+#<mysql://root@localhost/OrderTracking> is log:definitiveService of
 #	Products:name.
 #{
 # :product Products:name :name .

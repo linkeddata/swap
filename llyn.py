@@ -2769,10 +2769,10 @@ class Query:
         # Extract access info from the first item.
 	if verbosity() > 90:
 	    progress("    Remote service %s" %items[0].service.uri)
-        (user, password, host, database) = re.match("^sql://(?:([^@:]+)(?::([^@]+))?)@?([^/]+)/([^/]+)/$",
+        (user, password, host, database) = re.match("^mysql://(?:([^@:]+)(?::([^@]+))?)@?([^/]+)/([^/]+)/$",
                                                     items[0].service.uri).groups()
         # Look for one of a set of pre-compiled rdb schemas.
-        HostDB2SchemeMapping = { "sql://root@localhost/w3c" : "AclSqlObjects" }
+        HostDB2SchemeMapping = { "mysql://root@localhost/w3c" : "AclSqlObjects" }
         if (HostDB2SchemeMapping.has_key(items[0].service.uri)):
             cachedSchema = HostDB2SchemeMapping.get(items[0].service.uri)
         else:
@@ -2855,7 +2855,7 @@ class QueryItem(StoredStatement):  # Why inherit? Could be useful, and is logica
 		self.service = self.query.meta.any(pred=self.store.definitiveService, subj=pred)
 		if self.service == None:
 		    uri = pred.uriref()
-		    if uri[:4] == "sql:":
+		    if uri[:4] == "mysql:":
 			j = uri.rfind("/")
 			if j>0: self.service = meta.newSymbol(uri[:j])
 	    if verbosity() > 90 and self.service:
