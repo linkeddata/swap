@@ -22,6 +22,10 @@ http://www.w3.org/2000/10/swap/test/ if you are reading this on paper.)  These
 are designed as examples, to show how something can be done, not as working
 products.</p>
 
+<p>Remember, to convert an n3 file into RDF,  <code>cwm xxx.n3 -rdf </code>
+should do it  among other things.  I haven't exhaustively tested all
+combinations of n3 and RDF in all cases.</p>
+
 <h2 id="Schema">Schema validation</h2>
 
 <p>In the semantic web, there are many different forms of document validity.
@@ -94,7 +98,24 @@ optimised.  The rules are by no means complete, so the axoim set is not
 translated in its entirity. This example is unfinished but still may be
 instructive.</p>
 <ul>
-  <li>@@@</li>
+  <li>Makefile  contains the recipes - files are all in the dpo
+  subdirectory</li>
+  <li>axioms.txt  was cut and pasted from the axiomatic semantics
+  document</li>
+  <li>axioms.n3 is the result ofmaking this into N3 format for the KIF
+  lists</li>
+  <li>axioms.sed was the stream editor file used to do that;</li>
+  <li>kludge.n3 labels everything in the file as an axiom</li>
+  <li>consts.n3 is a list of all the constants which are deemed the same in
+    KIF and N3</li>
+  <li>convert.n3 has the actual rules for deriving some N3 expressions from
+    some KIF expressions;</li>
+  <li>result.n3 is the result of conversion</li>
+  <li>purged,n3 is the result of converting and purging the log:Chaff;</li>
+  <li>purged2.n3 is the result of purging it still futher (too far!) removing
+    all lists as well</li>
+  <li>noKIF.n3 is the file usedto do that, to label all lists as
+  log:Chaff.</li>
 </ul>
 
 <h2 id="Parser">Parser test files</h2>
@@ -104,7 +125,8 @@ typically in order to test the software, but you can use them to test your
 understanding.</p>
 <ul>
   <li><a href="test/s1.n3 ">s1.n3 </a>  some simple schema information</li>
-  <li>animal.rdf  a little DAML ontology about an animal</li>
+  <li>animal.rdf  a little DAML ontology about an animal - from a DAML
+    discussion</li>
   <li>double-conclusion.n3  Testing that a reasoner wouldn't draw duplicate
     conclusions</li>
   <li></li>
