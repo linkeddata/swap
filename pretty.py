@@ -263,11 +263,11 @@ class Serializer:
             aWorks = 0
 	    if pretty:
 		_anon, _incoming = self._topology(v, context)
-	    else:
-		_anon = 0
-	    if not _anon:
-		self._outputStatement(sink, (context, self.store.forSome, context, v), \
-                                      canItbeABNode(context, v))
+		if not _anon:
+		    self._outputStatement(sink, (context, self.store.forSome, context, v), \
+					canItbeABNode(context, v))
+	    else: # not pretty, no formulae, can always use _:a form
+		self._outputStatement(sink, (context, self.store.forSome, context, v), 1)
 
     def dumpBySubject(self, sorting=1):
         """ Dump one formula only by order of subject except forSome's first for n3=a mode"""
