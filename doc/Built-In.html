@@ -29,16 +29,21 @@ operations, and so on.</p>
 meaning and can test the validity of a statement or calculate the rest of the
 statement given part of it.</p>
 
-<p>Built-in functions are properties which cwm can calculate the object,
-given the subject.</p>
+<p>Built-in <dfn>functions</dfn> are properties which cwm can calculate the
+object, given the subject.</p>
 
-<p>Built-in inverse functions are properties which cwm can calculate the
-subject, given the object.</p>
+<p>Built-in <dfn>inverse functions</dfn> are properties which cwm can
+calculate the subject, given the object.</p>
 
-<p>Some built-ins are both. Exampes are log:uri, the relationship between a
+<p>Some built-ins are both. Examples are log:uri, the relationship between a
 resource and its URI, and time:inSeconds, the relationship between a
 date-time in standard string form and the date-time as number seconds since
-the start of the era, as one can work either way.</p>
+the start of the era, One can work these either way.</p>
+
+<p>Relational operators are bultins weher you can't calculate either side
+from th other, but you can test for truth if both sides have been realoved.
+Examples are comparison operations such as <code>math:equalTo</code> and
+<code>string:greaterThan</code>.</p>
 
 <p>A <a href="CwmBuiltins.html">complete list of of bultin- functions</a> is
 available.</p>
@@ -47,11 +52,12 @@ available.</p>
 inside the <strong>left-hand side of a rule</strong>.</p>
 
 <p>They are only used to figure out what things could take the place of a
-variable. If you add data to the stroe with a built-in function in it, it is
-just stored.</p>
+variable. If you just add data to the strore with a built-in function in it,
+it is just stored.</p>
 
-<p>Let's make a more complicates thermostat rule::</p>
-<pre>{ :thermostat :temp ?x.  ?x math:greaterThan "70" } log:implies { :cooling :power "high" } .</pre>
+<p>Let's make a more complicated thermostat rule::</p>
+<pre>{ :thermostat :temp ?x.  ?x math:greaterThan "70" } log:implies { :cooling :power "high" } .
+</pre>
 
 <p>The first part, <code>:thermostat :temp ?x</code>, is statisfied by
 looking in the strore, where presumably the temperature at the thermostat is
@@ -104,9 +110,9 @@ them with.</p>
 <p>These built-in functions give allow you to use basic properties of strings
 and numbers in your rules. They also allow you to do pragmatic things, such
 as pick up command line parameters and environment variables, which allow the
-whole rules system to be parameterized.  They also allow you do do somthing
-else.  They allow you to make rules which interrogate the Web, parse
-documents, and look objectively at the contents of documents.  This opens up
+whole rules system to be parameterized. They also allow you do do somthing
+else. They allow you to make rules which interrogate the Web, parse
+documents, and look objectively at the contents of documents. This opens up
 some very interesting possibilities -- so much so that it warrants a move to
 <a href="Reach.html">the next chapter</a>.</p>
 

@@ -203,16 +203,20 @@ how URIs were supposed to work.</p>
       </ul>
     </dd>
   <dt>s</dt>
-    <dd>For any predictae used in a query, cwm looks it up to see if any
+    <dd>For any predictate used in a query, cwm looks it up to see if any
       useful information can be obtained from its schema. This might be for
-      example, the pointer to a definitive document or a definitive
-    service.</dd>
+      example, the pointer to a definitive document or a definitive service. 
+      See <a href="Reach.html#Getting1">Getting results from the web:
+      log:definitiveDocument and log:definitiveService</a></dd>
   <dt>e</dt>
     <dd>If cwm tries to look something up (schema, definitive document etc)
-      and can't this makes the error fatal.</dd>
+      and can't,  this makes the error fatal. Otherwise, it just goes on.</dd>
   <dt>m</dt>
-    <dd>Schemas, definitive documents, when read, are merged into the
-      knowledge base (formula) being queried.s.</dd>
+    <dd>Schemas, and definitive documents, when read, are normally  kept in
+      separate metadata formuale, which cannot be seen by rules.   If the m
+      flag is, set, these formulae are actually merged into the knowledge
+      base (formula) being queried  sWhen combined with --think, this could
+      of course load rules which load rules which load rules....</dd>
 </dl>
 
 <h2><a name="Environmen" id="Environmen">Environment Variables</a></h2>
@@ -225,10 +229,10 @@ how URIs were supposed to work.</p>
 <h2 id="Tutorial">Tutorial</h2>
 
 <p>The <a href="Overview.html">tutorial</a> explains the N3 language from the
-practical point of view. </p>
+practical point of view.</p>
 
 <p>It explains how to encode data, make ontologies, and process data using
-rules. </p>
+rules.</p>
 
 <h2><a name="Built-in" id="Built-in">Built-in functions</a></h2>
 
