@@ -1,71 +1,71 @@
 
 
 
-<rdf:RDF xmlns="http://www.daml.org/2001/03/daml+oil#"
-    xmlns:ont="http://www.w3.org/2000/10/swap/log#"
-    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-    xmlns:t="file:/cygdrive/c/devel/WWW/2000/10/swap/test/test#">
+<rdf:RDF xmlns="file:/cygdrive/c/devel/WWW/2000/10/swap/test/test#"
+    xmlns:dpo="http://www.daml.org/2001/03/daml+oil#"
+    xmlns:log="http://www.w3.org/2000/10/swap/log#"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 
     <rdf:Description rdf:about="test#emptyList">
-        <equivalentTo rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+        <dpo:equivalentTo rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
     </rdf:Description>
 
     <rdf:Description rdf:about="test#listOf2Empties">
-        <equivalentTo rdf:parseType="Resource">
-            <first rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-            <rest rdf:parseType="Resource">
-                <first rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-                <rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-            </rest>
-        </equivalentTo>
+        <dpo:equivalentTo rdf:parseType="Resource">
+            <dpo:first rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+            <dpo:rest rdf:parseType="Resource">
+                <dpo:first rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+                <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+            </dpo:rest>
+        </dpo:equivalentTo>
     </rdf:Description>
 
     <rdf:Description rdf:about="test#nested">
-        <equivalentTo rdf:parseType="Resource">
-            <first rdf:resource="test#first"/>
-            <rest rdf:parseType="Resource">
-                <first rdf:resource="test#second"/>
-                <rest rdf:parseType="Resource">
-                    <first rdf:parseType="Resource">
-                        <first rdf:resource="test#left3"/>
-                        <rest rdf:parseType="Resource">
-                            <first rdf:resource="test#right3"/>
-                            <rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-                        </rest>
-                    </first>
-                    <rest rdf:parseType="Resource">
-                        <first rdf:resource="test#fourth"/>
-                        <rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-                    </rest>
-                </rest>
-            </rest>
-        </equivalentTo>
+        <dpo:equivalentTo rdf:parseType="Resource">
+            <dpo:first rdf:resource="test#first"/>
+            <dpo:rest rdf:parseType="Resource">
+                <dpo:first rdf:resource="test#second"/>
+                <dpo:rest rdf:parseType="Resource">
+                    <dpo:first rdf:parseType="Resource">
+                        <dpo:first rdf:resource="test#left3"/>
+                        <dpo:rest rdf:parseType="Resource">
+                            <dpo:first rdf:resource="test#right3"/>
+                            <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+                        </dpo:rest>
+                    </dpo:first>
+                    <dpo:rest rdf:parseType="Resource">
+                        <dpo:first rdf:resource="test#fourth"/>
+                        <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+                    </dpo:rest>
+                </dpo:rest>
+            </dpo:rest>
+        </dpo:equivalentTo>
     </rdf:Description>
 
     <rdf:Description rdf:about="test#threeItems">
-        <equivalentTo rdf:parseType="Resource">
-            <first rdf:resource="test#b"/>
-            <rest rdf:parseType="Resource">
-                <first rdf:resource="test#c"/>
-                <rest rdf:parseType="Resource">
-                    <first rdf:resource="test#d"/>
-                    <rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-                </rest>
-            </rest>
-        </equivalentTo>
+        <dpo:equivalentTo rdf:parseType="Resource">
+            <dpo:first rdf:resource="test#b"/>
+            <dpo:rest rdf:parseType="Resource">
+                <dpo:first rdf:resource="test#c"/>
+                <dpo:rest rdf:parseType="Resource">
+                    <dpo:first rdf:resource="test#d"/>
+                    <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+                </dpo:rest>
+            </dpo:rest>
+        </dpo:equivalentTo>
     </rdf:Description>
 
     <rdf:Description rdf:about="test#twoAnons">
-        <equivalentTo rdf:parseType="Resource">
-            <first rdf:parseType="Resource">
+        <dpo:equivalentTo rdf:parseType="Resource">
+            <dpo:first rdf:parseType="Resource">
                 <rdf:type rdf:resource="test#mother"/>
-            </first>
-            <rest rdf:parseType="Resource">
-                <first rdf:parseType="Resource">
+            </dpo:first>
+            <dpo:rest rdf:parseType="Resource">
+                <dpo:first rdf:parseType="Resource">
                     <rdf:type rdf:resource="test#father"/>
-                </first>
-                <rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
-            </rest>
-        </equivalentTo>
+                </dpo:first>
+                <dpo:rest rdf:resource="http://www.daml.org/2001/03/daml+oil#nil"/>
+            </dpo:rest>
+        </dpo:equivalentTo>
     </rdf:Description>
 </rdf:RDF>

@@ -3,9 +3,13 @@
 #  With no {} so it can be translated in DAML easily
 #
 
-bind t: <test> .
-bind : <test> .
-bind ont: <http://www.w3.org/2000/10/swap/log> .
+@prefix t: <test#> .
+@prefix : <test#> .
+@prefix log: <http://www.w3.org/2000/10/swap/log#> .
+
+# This is cheating a bit - in case output of first and rest is needed.
+
+@prefix dpo: <http://www.daml.org/2001/03/daml+oil#>.
 
 # Other interesting unimplemented syntaxes ...
 #[ log:first :a;
@@ -17,6 +21,20 @@ bind ont: <http://www.w3.org/2000/10/swap/log> .
 # etc
 #
 #( :a :b :c :d :e )
+#_________________________________________
+# cwm output from one version:
+#:threeItems = ( :b :c :d ) .
+#
+#:nested =( :first :second ( :left3 :right3 ) :fourth )  .
+#
+#:emptyList = ( ) .
+#
+#:listOf2Empties = (()()) .
+#
+#:twoAnons = ([a :mother][a :father]).
+#
+
+# :a_threebrackets = ( ( ( :fff ) ) ) .
 
 :threeItems = ( :b :c :d ) .
 

@@ -1,29 +1,29 @@
-     @prefix : <http://www.daml.org/2001/03/daml+oil#> .
-     @prefix ont: <http://www.w3.org/2000/10/swap/log#> .
-     @prefix t: <test#> .
+     @prefix : <test#> .
+     @prefix dpo: <http://www.daml.org/2001/03/daml+oil#> .
+     @prefix log: <http://www.w3.org/2000/10/swap/log#> .
     
-    t:emptyList     = () .
+    :emptyList     = () .
     
-    t:listOf2Empties     =  (
+    :listOf2Empties     =  (
         () 
         ()  ) .
     
-    t:nested     =  (
-        t:first 
-        t:second 
+    :nested     =  (
+        :first 
+        :second 
          (
-            t:left3 
-            t:right3  )
-        t:fourth  ) .
+            :left3 
+            :right3  )
+        :fourth  ) .
     
-    t:threeItems     =  (
-        t:b 
-        t:c 
-        t:d  ) .
+    :threeItems     =  (
+        :b 
+        :c 
+        :d  ) .
     
-    t:twoAnons     =  (
+    :twoAnons     =  (
          [
-                 a t:mother ]
+                 a :mother ]
          [
-                 a t:father ] ) .
+                 a :father ] ) .
     

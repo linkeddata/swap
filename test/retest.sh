@@ -19,9 +19,9 @@ function cwm_test () {
   echo Test    cwm $args
   # Hmm... this suggests a --nocomments flag on cwm  its -quiet
 #  (python ../cwm.py $args | sed -e 's/^ *#.*//' | sed -e 's/\$[I]d:\$//g' > temp/$case) || echo CRASH $case
-  (python2 ../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' > temp/$case) || echo CRASH $case
+  (python ../cwm.py -quiet $args | sed -e 's/\$[I]d.*\$//g' > temp/$case) || echo CRASH $case
   diff -Bbwu ref/$case temp/$case >diffs/$case
-  if [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case; else echo Pass $case; fi
+  if [ -s diffs/$case ]; then echo FAIL: $case: less diffs/$case "############"; else echo Pass $case; fi
 }
 
 cwm_test animal.n3 "Parse a small RDF file, generate N3" -rdf animal.rdf -n3
@@ -93,7 +93,10 @@ cwm_test smush.rdf "Data aggregation challenge from Jan 2001" --rdf smush-exampl
 
 
 # $Log$
-# Revision 1.14  2001-07-20 16:21:59  connolly
+# Revision 1.15  2001-08-09 21:38:09  timbl
+# See cwm.py log
+#
+# Revision 1.14  2001/07/20 16:21:59  connolly
 # split smush-query out of smush-schema; added expected results, entry in retest.sh
 #
 # Revision 1.13  2001/07/19 16:56:00  connolly

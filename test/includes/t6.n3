@@ -19,13 +19,17 @@
 #
 #  Someone whose mother is audrey knows someone whose sister is Betsy
 #
-[ :mother :Audrey ] :knows [ :sister :Betsy ].
+
+{{ :foo :bar [:baz :bam] } log:includes { :foo :bar [:baz :bam] }}  log:implies { :TEST1 a :success }.
  
-{this log:includes {[:mother :Audrey]:knows[:sister :Betsy]}}log:implies{testf_1 a :success} .
-{this log:notIncludes {[:mother :Audrey]:knows[:sister :Betsy]}}log:implies{testf_2 a :FAILURE} .
+#{{ [ :mother :Audrey ] :knows [ :sister :Betsy ]. :foo :bar :baz. }
+#  log:includes {[:mother :Audrey]:knows[:sister :Betsy]}}
+#               log:implies{:testf_1 a :success} .
+# { <#_formula> log:notIncludes {[:mother :Audrey]:knows[:sister :Betsy]}}log:implies{testf_2 a :FAILURE} .
 
+# log:includes a log:Chaff.
+  
 #ends
-
 
 
 
