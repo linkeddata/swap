@@ -9,26 +9,34 @@
 @prefix s: <http://www.w3.org/2000/01/rdf-schema#>.
 @prefix dot: <http://www.w3.org/2001/02pd/gv#>.
 @prefix is: <http://www.w3.org/2001/04/infoset#> .
+@prefix iu: <infosetUtil#>. #@@?
+@prefix dpo:  <http://www.daml.org/2001/03/daml+oil#> .
+@prefix dl: <damlList#>. #@@
 
 # NOTE rdf2dot.xsl needs namespace URIs absolutized @@
 
 @prefix : <http://www.w3.org/2001/04/roadmap/var#>.  # Just for variales in fact
 @prefix v: <http://www.w3.org/2001/04/roadmap/var#>.  # Just for variales in fact
 
-<> log:forAll :n1, :n2, :p, :s, :CR, :CD.
+<> log:forAll :n1, :n2, :p, :s, :s2, :CR, :CD.
 
 <> doc:cvsversion "$Id$".
 
 
-{ :n1 a s:Class} log:implies { :n1 dot:color "skyblue1"; style "filled" }.
+{ :n1 a s:Class} log:implies { :n1 dot:color "skyblue1"; dot:style "filled" }.
 { :n1 s:label :s } log:implies { :n1 dot:label :s }.
+s:Class s:label "Class".
 
 { :n1 a rdf:Property} log:implies { :n1 dot:color "khaki2"; dot:shape "box"; dot:style "filled"}.
 
 # the rdfs namespace is not hte one for Property. Confuses people.
-{ :n1 a s:Property}     log:implies { :n1 dot:color "khaki1"; dot:shape "box"; dot:style "filled"}.
+#{ :n1 a rdf:Property}     log:implies { :n1 dot:color "khaki1"; dot:shape "box"; dot:style "filled"}.
 
-s:subClassOf a dot:EdgeProperty; dot:color "skyblue2".
+{ :CR s:subClassOf :CD; s:label :s.
+  :CD s:label :s2. }
+log:means { :CR :gSubClass :CD }.
+  
+:gSubClassOf a dot:EdgeProperty; dot:color "skyblue2".
 
 s:subPropertyOf a dot:EdgeProperty; dot:color "khaki2".
 
@@ -37,10 +45,48 @@ s:subPropertyOf a dot:EdgeProperty; dot:color "khaki2".
 { :CD [ a dot:EdgeProperty; dot:label :s; dot:color "red" ] :CR.
   :theGraph dot:hasNode :CD, :CR }.
 
-{ :CD rdfs:subPropertyOf [ dpo:onProperty :p; dpo:toClass :CR]; s:label :s. }
+#@@ key: blue for many-to-one
+{ :CD rdfs:subClassOf [ dpo:onProperty :p;
+	dpo:toClass :CR].
+  :CR rdfs:label :s2.
+  :p a dpo:UniqueProperty;
+     s:label :s. }
   log:implies
-{ :CD [ a dot:EdgeProperty; dot:label :s; dot:color "red" ] :CR.
+{ :CD [ a dot:EdgeProperty; dot:label :s; dot:color "blue" ] :CR.
   :theGraph dot:hasNode :CD, :CR }.
+
+#@@ key: orange for one-to-many, unordered
+{ :CD rdfs:subClassOf [ dpo:onProperty :p;
+	dpo:toClass [ iu:setOf :CR]].
+  :p a dpo:UniqueProperty; s:label :s.
+  :CR s:label :s2. }
+  log:implies
+{ :CD [ a dot:EdgeProperty; dot:label :s; dot:color "orange" ] :CR.
+  :theGraph dot:hasNode :CD, :CR }.
+
+#@@ key: orange for one-to-many, ordered
+{ :CD rdfs:subClassOf [ dpo:onProperty :p;
+	dpo:toClass [ iu:listOf :CR]].
+  :p a dpo:UniqueProperty; s:label :s.
+  :CR s:label :s2 }
+  log:implies
+{ :CD [ a dot:EdgeProperty; dot:label :s; dot:color "green" ] :CR.
+  :theGraph dot:hasNode :CD, :CR }.
+
+#@@ key: bold green for ordered list/forest over X/Y/Z
+{ :CD iu:listOf [ dpo:disjointUnionOf [ dl:member :CR ] ].
+  :CR s:label :s2 }
+  log:implies
+{ :CD [ a dot:EdgeProperty; dot:label :s; dot:color "green"; dot:style "bold" ] :CR.
+  :theGraph dot:hasNode :CD, :CR }.
+
+#@@ key: bold orange for choice of X/Y/Z
+{ :CD dpo:oneOf [ dl:member :n1 ].
+  :n1 s:label :s2 }
+  log:implies
+{ :CD [ a dot:EdgeProperty; dot:label :s; dot:color "orange"; dot:style "bold" ] :n1.
+  :theGraph dot:hasNode :CD, :n1.
+  :n1 dot:shape "plaintext" }.
 
 
 ##########
@@ -49,7 +95,7 @@ s:subPropertyOf a dot:EdgeProperty; dot:color "khaki2".
 :theGraph dot:label "XML Infoset $Date$";
 	         dot:rankdir "LR".
 
-:theGraph dot:hasNode is:InfoItem.    # arbitrary seed to trace out from
+:theGraph dot:hasNode is:Document.    # arbitrary seed to trace out from
 
 <> log:forAll :n1, :n2, :p, :s.
 
