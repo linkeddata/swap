@@ -405,6 +405,7 @@ IAD WASHINGTON DULLES
 NRT TOKYO NARITA
 MSP MINNEAPOLIS ST PL
 MEM MEMPHIS
+BRS BRUSSELS
 EODATA
 
     # SNA confirmed via http://www.ocair.com/
@@ -421,7 +422,10 @@ EODATA
 
 
 # $Log$
-# Revision 1.15  2004-03-31 21:25:58  connolly
+# Revision 1.16  2004-08-19 21:16:10  connolly
+# BRS
+#
+# Revision 1.15  2004/03/31 21:25:58  connolly
 # added MSP, MEM
 #
 # Revision 1.14  2003/09/16 14:57:54  connolly
