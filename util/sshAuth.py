@@ -71,7 +71,7 @@ def ssh_agent_sign(auth, key, data):
     kpack = packString(key.to_blob())
     dpack = packString(data)
     fpack = struct.pack(">I", 0) # flags
-    buf = struct.pack("B", SSH2_AGENTC_SIGN_REQUEST) + kpack + dpack + fpack
+    buf = chr(SSH2_AGENTC_SIGN_REQUEST) + kpack + dpack + fpack
 
     msg = request_reply(auth, buf)
     ty = ord(msg[0])
@@ -122,14 +122,22 @@ def key_read(cpp):
     """from key.c
     """
     tn, uu, other = cpp.split()
+    progress("key_read:", tn, uu, other)
     if tn != "ssh-rsa": raise RuntimeError, "not implemented"
 
     blob = binascii.a2b_base64(uu)
+    keytn, blob = getString(blob)
+    if keytn != "ssh-rsa": raise RuntimeError, "not implemented"
     (e, blob) = getBignum(blob)
     (n, blob) = getBignum(blob)
     progress("read key: %x %x" % (e, n))
     return RSAKey(e, n)
 
+def getString(buf):
+    (ln, ) = struct.unpack(">I", buf[:4])
+    s = buf[4:4+ln]
+    return s, buf[4+ln:]
+    
 def packString(s):
     """ala buffer_put_cstring"""
     return struct.pack(">I", len(s)) + s
@@ -141,10 +149,12 @@ def getBignum(buf):
     """
     
     (ln,) = struct.unpack(">I", buf[:4])
+    progress("bignum bytes", ln)
     bin = buf[4:4+ln]
     x = 0
     for byte in bin:
 	x = x * 256 + ord(byte)
+	progress("getBignum: value so far: %x" %x)
     return x, buf[4+ln:]
 
 def packBignum(n):
@@ -155,16 +165,14 @@ def packBignum(n):
     if n<0: raise RuntimeError, "packing negative numbers not implemented"
     bs = ''
     while n > 0:
-	progress("packing: %x" % n)
 	n, b = divmod(n, 256)
 	bs = chr(b) + bs
-	progress("packed: %x" % b)
     return packString(bs)
 
 def progress(*args):
     import sys
     for a in args:
-	sys.stderr.write("%s" % a)
+	sys.stderr.write("%s " % a)
     sys.stderr.write("\n")
 
 def _test():
@@ -177,6 +185,9 @@ if __name__ == '__main__':
     test("data to sign")
 
 # $Log$
-# Revision 1.1  2003-09-13 22:54:52  connolly
+# Revision 1.2  2003-09-13 23:08:51  connolly
+# woohoo! got a signature back!
+#
+# Revision 1.1  2003/09/13 22:54:52  connolly
 # works well enough to not kill ssh-agent. loses with AgentFailed(5), though
 #
