@@ -46,9 +46,23 @@ def main():
     sig = ssh_agent_sign(as, key, data)
 
     keytn, sig = getString(sig)
-    sigdata, sig = getString(sig)
+    sigdata, sig = getBignum(sig)
+    if keytn <> "ssh-rsa": raise ProtocolError, ("unexpected key type", keytn)
     assert sig == ''
-    progress("signature:", keytn, binascii.hexlify(sigdata))
+    progress("signature:", keytn, sigdata)
+
+    #hmm... this doesn't work.
+    # reading http://www.faqs.org/rfcs/rfc2437.html
+    #  RFC 2437 - PKCS #1: RSA Cryptography Specifications Version 2.0
+    if 1:
+	# http://www.amk.ca/python/writing/pycrypt/pycrypt.html
+	# and debian python23-crypto package
+	from Crypto.PublicKey import RSA
+	from Crypto.Hash import SHA
+	k = RSA.construct((key._n, key._e))
+	dh = SHA.new(data).digest()
+	result = k.verify(dh, (sigdata,))
+	progress("result:", result)
 
 class RSAKey:
     def __init__(self, e, n):
@@ -130,7 +144,7 @@ def key_read(cpp):
     if keytn != "ssh-rsa": raise RuntimeError, "not implemented"
     (e, blob) = getBignum(blob)
     (n, blob) = getBignum(blob)
-    progress("read key: %x %x" % (e, n))
+    progress("read key: e=0x%x n=0x%x" % (e, n))
     return RSAKey(e, n)
 
 def getString(buf):
@@ -144,13 +158,14 @@ def packString(s):
 
 def getBignum(buf):
     """
-    >>> getBignum(packBignum(20) + "abc")
-    (20, 'abc')
+    >>> getBignum(packBignum(20L) + "abc")
+    (20L, 'abc')
     """
     
     (ln,) = struct.unpack(">I", buf[:4])
     bin = buf[4:4+ln]
-    x = 0
+    progress("getBignum bytes:", ln)
+    x = 0L
     for byte in bin:
 	x = x * 256 + ord(byte)
     return x, buf[4+ln:]
@@ -183,7 +198,10 @@ if __name__ == '__main__':
     main()
 
 # $Log$
-# Revision 1.3  2003-09-13 23:18:03  connolly
+# Revision 1.4  2003-09-16 04:36:24  connolly
+# trying to play with python crypto toolkit
+#
+# Revision 1.3  2003/09/13 23:18:03  connolly
 # decoded signature a bit
 #
 # Revision 1.2  2003/09/13 23:08:51  connolly
