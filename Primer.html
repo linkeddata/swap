@@ -7,8 +7,8 @@
 </head>
 
 <body>
-<p><a href="/">W3C </a>| <a href="/2000/01/sw/Overview.html">Semantic
-Web</a></p>
+<p><a href="/">W3C </a>| <a href="/2000/01/sw/Overview.html">Semantic Web</a>
+| <a href="Overview.html">SWAP</a> </p>
 
 <p></p>
 
@@ -23,9 +23,103 @@ easier to scribble when getting started.</p>
 
 <h2 id="L553">Subject, verb and object</h2>
 
-<p></p>
+<p>In RDF, information is simply a collection of statements, each with a
+subject, verb and object - and nothing else. In N3, you can write an RDF
+triple just like that, with a period:</p>
+<pre>&lt;#pat&gt; &lt;#knows&gt; &lt;#jo&gt; .
+</pre>
 
 <p></p>
+
+<p>Everything, be it subject, verb, or object, is idenified with a Universal
+Resource Identifier.  This is something like &lt;http://www.w3.org/&gt; or 
+&lt;http://www.w3.org/2000/10/swap/test/s1.n3#includes&gt;, but when
+everything is missed out before the "#" it identifies &lt;#pat&gt; in the
+current document whatever it is. </p>
+
+<p>There is one excption that the object (only) can be a string representing a
+value:</p>
+<pre>&lt;#pat&gt; &lt;#knows&gt; &lt;#jo&gt; .
+&lt;#pat&gt; &lt;#age&gt; "24" .
+</pre>
+
+<p>The verb "knows" is in RDF called a "property" and thought of as a noun
+expressing a relation between the two. In fact you can write</p>
+<pre>
+&lt;#pat&gt; &lt;#child&gt; &lt;#al&gt; .
+</pre>
+
+<p>alternatively, to make it more readable, as either</p>
+<pre>&lt;#pat&gt; has &lt;#child&gt; of &lt;#al&gt; .
+</pre>
+
+<p>or</p>
+<pre>&lt;#al&gt; is &lt;#child&gt; of &lt;#pat&gt; .
+</pre>
+
+<p>There are two shortcuts for when you have several statements about the same
+subject: a semicolon ";" introduces another property of the same subject, and
+a comma introduces another object with  the same predicate and subject.</p>
+<pre>&lt;#pat&gt; &lt;#child&gt;  &lt;#al&gt;, &lt;#chaz&gt;, &lt;#mo&gt; ;
+       &lt;#age&gt;    "24" ;
+       &lt;#eyecolor&gt; "blue" .</pre>
+<pre>So for example the data in hte table
+</pre>
+
+<table border="1">
+  <tbody>
+    <tr>
+      <td></td>
+      <td>age</td>
+      <td>eyecolor</td>
+    </tr>
+    <tr>
+      <td>pat</td>
+      <td>24</td>
+      <td>blue</td>
+    </tr>
+    <tr>
+      <td>al</td>
+      <td>3</td>
+      <td>green</td>
+    </tr>
+    <tr>
+      <td>jo</td>
+      <td>5</td>
+      <td>green</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>could be written</p>
+<pre>  &lt;#pat&gt;   &lt;#age&gt; "24";  &lt;#eyecolor&gt; "blue" .
+  &lt;#al&gt;    &lt;#age&gt;  "3";  &lt;#eyecolor&gt; "green" .
+  &lt;#jo&gt;    &lt;#age&gt;  "5";  &lt;#eyecolor&gt; "green" .</pre>
+<pre></pre>
+
+<p>Sometimes there are things involved in a statement don't actually have any
+identifier you want to give them - you know one exists but you only want to
+give the properties .  You represent this by square brackets with the
+properties inside.</p>
+<pre>&lt;#pat&gt; &lt;#child&gt; [ &lt;#age&gt; "4" ] , [ &lt;age&gt; "3" ].
+</pre>
+
+<p> You could read this as #pat has a #child which has #age of "4" and a
+#child which has an #age of "3".  There are two important things to
+remember</p>
+<ul>
+  <li>The identifiers are just identifiers - the fact that the letters p a t
+    are used doesn't tell anyone or any machine that we are talking about
+    anyone whose name is "Pat" -- unless we say &lt;#pat&gt; &lt;#name&gt;
+    "Pat".  The same applies to the verbs - never take the actual letters c h
+    i l d as telling you what it means - we will find out how to do that
+    later.</li>
+  <li></li>
+</ul>
+
+<p></p>
+
+<p>     </p>
 <hr>
 
 <p></p>
