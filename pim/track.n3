@@ -23,7 +23,7 @@
 
 :resolution a r:Property;
     s:range log:String;
-    s:comment "A summary of the resolution of the issue.". 
+    s:comment "A summary of the resolution of the issue - from the closing document.". 
 
 :notes a r:Property;
     s:comment "Comments about this eg for the use of group secretary". 
