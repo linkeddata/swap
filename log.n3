@@ -85,7 +85,7 @@ log:List, log:Other.  I only use testing for log:Formula right now (tbl 2001/9/1
 List and Other are not stable and may change.
 """.
 
-    rdfs:Class rdf:type of log:Formula, log:Literal, log:List, log:Other.
+    rdfs:Class is  rdf:type of log:Formula, log:Literal, log:List, log:Other.
  
 log:resolvesTo a rdf:Property;
     rdfs:domain doc:Work;
