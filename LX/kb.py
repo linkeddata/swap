@@ -312,12 +312,15 @@ class KB(list, pluggable.Store):
         """
         #print "LOADING",uri
         stream=urllib.urlopen(uri)
+        stream.info().uri = uri
         language=sniff.sniffLanguage(stream)
         #print "LANGUAGE",language
 
         # generalize this!   first one which can handle this lang!
         
         if language=="http://www.w3.org/1999/02/22-rdf-syntax-ns#RDF":
+            language="rdflib"
+        if language=="application/rdf":
             language="rdflib"
         
         parser=LX.language.getParser(language=language)
@@ -413,7 +416,10 @@ if __name__ == "__main__":
     doctest.testmod(sys.modules[__name__])
  
 # $Log$
-# Revision 1.19  2003-09-04 07:14:12  sandro
+# Revision 1.20  2003-09-04 15:23:18  sandro
+# make load() able to look at the URI, and grok more mime types
+#
+# Revision 1.19  2003/09/04 07:14:12  sandro
 # fixed plain literal handling
 #
 # Revision 1.18  2003/09/04 03:15:20  sandro
