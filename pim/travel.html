@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
 "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
@@ -9,7 +8,7 @@
 </head>
 
 <body>
-<p><a href="../../../../">W3C</a> <a href="../../../01/sw/">SWAD</a> <a
+<p><a href="../../../../">W3C</a> * <a href="../../../01/sw/">SWAD</a> * <a
 href="../">SWAP</a></p>
 
 <h1>Semantic Web Travel Tools</h1>
@@ -28,18 +27,72 @@ from the iterary into my calendar:</p>
     able to key in the diffs, but that's even more error prone.</li>
 </ol>
 
+<p>I'm pleased to report that with these semantic web travel tools, my
+computer handles these tasks for me:</p>
+
+<ul>
+<li>import travel itineraries into my PDA calendar</li>
+<li>import travel itineraries into my iCalendar-happy desktop PIM</li>
+<li>produce a brief summary of an itinerary for use in plain text email</li>
+<li>plot my itinerary on a map</li>
+<li>check proposed work travel itineraries against family constraints</li>
+</ul>
+
+<p>and I hope to automate various related tasks any time now:</p>
+
+<ul>
+<li>tell me when my travel schedule brings me unusually near a friend/colleague</li>
+<li>produce animated views of my travel schedule or past trips</li>
+<li>compute conflicts between teleconferences and flights</li>
+</ul>
+
+
 <h2>Step 1: Grok Legacy Data</h2>
 
-<p>So I wrote a little perl script (<a
-href="/2001/07dc-bos/grokNavItin.pl">grokNavItin.pl</a>) to convert the
-travel itinerary, which had obviously been dumped from a relational
-database...</p>
+<p>The data comes from the travel agency like this, probably
+dumped from their database system:</p>
+
 <pre>&gt;  11 JUL 01  -  WEDNESDAY
 &gt;     AIR   AMERICAN AIRLINES    FLT:1364   ECONOMY
 &gt;           LV KANSAS CITY INTL             144P           EQP: MD-80
 &gt;           DEPART: TERMINAL BUILDING A                    01HR 31MIN
 &gt;           AR CHICAGO OHARE                315P           NON-STOP
 &gt;           ARRIVE: TERMINAL 3    </pre>
+
+<p>I hope that before too long they'll dump it from their
+database directly into RDF
+or perhaps in XML using some travel industry vocabulary, but<p>
+
+<ul>
+
+<li>before they'll do so, somebody will have to show them why it's
+valuable</li>
+
+<li>with 10 years experience in building text-munging tools,
+reverse-engineering the structure of their data using a nasty perl
+script is an easier way to scratch the itch than begging them to do it
+The Right Way.</li>
+
+</ul>
+
+<p>So step one goes like this:</p>
+
+<table>
+<tr><th>Input</th><th>Processing</th></th>Output</th></tr>
+<tr><td>itinerary.txt</td><td>perl grokTravitin.pl</td><td>itinerary.nt</td></tr>
+</table>
+
+<p>The perl script writes the output in an RDF dialect called
+<a href="@@">n-triples</a>, a line-oriented serialization developed in the RDF
+Core working group for testing parsers.</p>
+
+<p>@@@@@@@@@@@@</p>
+
+<p>So I wrote a little perl script (<a
+href="/2001/07dc-bos/grokNavItin.pl">grokNavItin.pl</a>) to convert the
+travel itinerary, which had obviously been dumped from a relational
+database...</p>
+
 
 <p>... into RDF. Then I wrote <a href="/2001/07dc-bos/itin2datebook.n3">some
 rules</a> to relate this itinerary vocabulary to the <a
@@ -109,7 +162,7 @@ tools?]</em></p>
 <p>results:</p>
 
 <p><img alt="MCI to YMX and back for Extreme 2002"
-src="/2002/08dc-ymx/itinView.png" /></p>
+src="../../../../2002/08dc-ymx/itinView.png" /></p>
 
 <h2>Steps Toward Synchronization</h2>
 
