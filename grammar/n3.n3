@@ -13,8 +13,9 @@
 
 
 # Issues:
-# - string token regexp not right
-# - tokenizing rules in general: whitespace
+# - string token regexp not right  FIXED
+# - tokenizing rules in general: whitespace are not defined in n3.n3
+#   and it would be nice for the *entire* syntax description to be in RDF.
 # - encoding really needs specifying
 # - @keywords affects tokenizing
 # - Use of dot for !
@@ -100,8 +101,8 @@ propertylist bnf:mustBeOneSequence (
 
 propertylisttail bnf:mustBeOneSequence (
 		( )
-#		( ";" )
-		( ";" verb object objecttail propertylisttail )
+		( ";" propertylist )
+# was		( ";" verb object objecttail propertylisttail )
 	).
 
 
