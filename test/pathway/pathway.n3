@@ -1,0 +1,1571 @@
+#Processed by Id: cwm.py,v 1.27 2001/02/05 19:58:24 timbl Exp 
+        #    using base file:/devel/WWW/2000/10/swap/test/pathway/
+        
+#  Notation3 generation by
+#       notation3.py,v 1.53 2001/02/05 01:13:24 timbl Exp
+
+#   Base was: file:/devel/WWW/2000/10/swap/test/pathway/
+     @prefix log: <http://www.w3.org/2000/10/swap/log.n3#> .
+     @prefix : <http://www.daml.org/2000/12/daml+oil#> .
+     @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+     @prefix b: <http://www.w3.org/2000/01/rdf-schema#> .
+    
+    <ACCESSION>     a <c:record> .
+    
+    <AUTHORS>     a <c:sub_record> .
+    
+    <BASE_COUNT>     a <c:record> .
+    
+    <CAAT_region>     a <c:feature_type> .
+    
+    <CDS>     a <c:feature_type> .
+    
+    <C_region>     a <c:feature_type> .
+    
+    <DEFINITION>     a <c:record> .
+    
+    <D_loop>     a <c:feature_type> .
+    
+    <D_segment>     a <c:feature_type> .
+    
+    <FEATURES>     a <c:record> .
+    
+    <GC_signal>     a <c:feature_type> .
+    
+    <JOURNAL>     a <c:sub_record> .
+    
+    <J_region>     a <c:feature_type> .
+    
+    <KEYWORDS>     a <c:record> .
+    
+    <LOCUS>     a <c:record> .
+    
+    <LTR>     a <c:feature_type> .
+    
+    <N_region>     a <c:feature_type> .
+    
+    <ORGANISM>     a <c:sub_record> .
+    
+    <ORIGIN>     a <c:record> .
+    
+    <RBS>     a <c:feature_type> .
+    
+    <REFERENCE>     a <c:record> .
+    
+    <SEGMENT>     a <c:record> .
+    
+    <SEQUENCE>     a <c:record> .
+    
+    <SOURCE>     a <c:record> .
+    
+    <STS>     a <c:feature_type> .
+    
+    <S_region>     a <c:feature_type> .
+    
+    <TATA_signal>     a <c:feature_type> .
+    
+    <TITLE>     a <c:sub_record> .
+    
+    <VERSION>     a <c:record> .
+    
+    <V_region>     a <c:feature_type> .
+    
+    <_10_signal>     a <c:feature_type> .
+    
+    <_35_signal>     a <c:feature_type> .
+    
+    <_EC_number>     a :Thing .
+      [      a :Disjoint;
+             :first <metal>;
+             :rest  [
+                 a :Disjoint;
+                 :rest  (
+                 );
+                 :first <non_metal> ] ].
+    
+      [      a :Disjoint;
+             :first <chromosome>;
+             :rest  [
+                 a :Disjoint;
+                 :rest  (
+                 );
+                 :first <plasmid> ] ].
+    
+      [      a :Disjoint;
+             :first <dna>;
+             :rest  [
+                 a :Disjoint;
+                 :rest  (
+                 );
+                 :first <rna> ] ].
+    
+      [      a :Disjoint;
+             :first <small_molecule>;
+             :rest  [
+                 a :Disjoint;
+                 :rest  (
+                 );
+                 :first <macromolecule> ] ].
+    
+      [      a :Disjoint;
+             :first  [
+                 a b:Class;
+                 :oneOf  (
+                
+                <compartment_A>  ) ];
+             :rest  [
+                 a :Disjoint;
+                 :first  [
+                     a b:Class;
+                     :oneOf  (
+                    
+                    <compartment_B>  ) ];
+                 :rest  (
+                 ) ] ].
+    
+    <_anticodon>     a :Thing .
+    
+    <_bound_moiety>     a :Thing .
+    
+    <_citation>     a :Thing .
+    
+    <_codon>     a :Thing .
+    
+    <_codon_start>     a :Thing .
+    
+    <_cons_splice>     a :Thing .
+    
+    <_db_xref>     a :Thing .
+    
+    <_direction>     a :Thing .
+    
+    <_frequency>     a :Thing .
+    
+    <_function>     a :Thing .
+    
+    <_gene>     a :Thing .
+    
+    <_label>     a :Thing .
+    
+    <_map>     a :Thing .
+    
+    <_mod_base>     a :Thing .
+    
+    <accession_number>     a b:Class;
+         b:subClassOf <label> .
+    
+    <across>     a rdf:Property .
+    
+    <actin_binding>     a b:Class;
+         b:subClassOf <binding> .
+    
+    <affected_by>     a rdf:Property .
+    
+    <age>     a b:Class;
+         b:subClassOf <condition> .
+    
+    <allele>     a <c:feature_type> .
+    
+    <amino_acid>     a b:Class;
+         b:subClassOf <small_molecule> .
+    
+    <anatomy>     a b:Class;
+         b:subClassOf <physical_structure> .
+    
+    <anticoagulant>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <apoptosis_inhibitor>     a b:Class;
+         b:subClassOf <regulation> .
+    
+    <around>     a rdf:Property .
+    
+    <atom>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :toClass  [
+                 a b:Class ];
+             :onProperty <has_name> ],
+                 [
+             a :Restriction;
+             :hasValue  [
+                 a b:Class ];
+             :onProperty <has_name> ],
+                <chemical> .
+    
+    <attenuator>     a <c:feature_type> .
+    
+    <binding>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <binds>     a rdf:Property;
+         :inverseOf <bound_to> .
+    
+    <biological_function>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :onProperty <part_of>;
+             :hasValue <process> ],
+                <function> .
+    
+    <biological_system>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :onProperty <comprised_of>;
+             :hasValue <process> ],
+                 [
+             a :Restriction;
+             :hasValue <biopathway>;
+             :onProperty <has_part> ] .
+    
+    <biopathway>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue <biological_function>;
+             :onProperty <has_function> ],
+                 [
+             a :Restriction;
+             :onProperty <part_of>;
+             :hasValue <process> ],
+                 [
+             a :Restriction;
+             :minCardinality "1";
+             :onProperty <part_of>;
+             :hasValue <process> ],
+                 [
+             a :Restriction;
+             :hasValue <biopathway>;
+             :onProperty <has_child> ],
+                 [
+             a :Restriction;
+             :onProperty <has_part>;
+             :hasValue <reaction> ],
+                 [
+             a :Restriction;
+             :toClass  [
+                 a b:Class ];
+             :onProperty <unique_id> ],
+                 [
+             a :Restriction;
+             :hasValue  [
+                 a b:Class;
+                 :unionOf  (
+                
+                
+                
+                
+                <process> <chemical> <gene> <biopathway>  ) ];
+             :onProperty <upstream> ],
+                 [
+             a :Restriction;
+             :hasValue  [
+                 a b:Class;
+                 :unionOf  (
+                
+                
+                
+                
+                <process> <chemical> <gene> <biopathway>  ) ];
+             :onProperty <downstream> ],
+                <transformation> .
+    
+    <bound_to>     a rdf:Property .
+    
+    <boundary>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :onProperty <around>;
+             :hasValue <compartment> ],
+                <physical_structure> .
+    
+    <boundary_transport>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue  [
+                 a b:Class;
+                 :intersectionOf  (
+                
+                 [
+                         a :Restriction;
+                         :hasValue  [
+                             a b:Class;
+                             :oneOf  (
+                            
+                            <compartment_A>  ) ];
+                         :onProperty <located_in> ]
+                <chemical>  ) ];
+             :onProperty <upstream> ],
+                 [
+             a :Restriction;
+             :onProperty <across>;
+             :hasValue <boundary> ],
+                 [
+             a :Restriction;
+             :hasValue  [
+                 a b:Class;
+                 :intersectionOf  (
+                
+                 [
+                         a :Restriction;
+                         :hasValue  [
+                             a b:Class;
+                             :oneOf  (
+                            
+                            <compartment_B>  ) ];
+                         :onProperty <located_in> ]
+                <chemical>  ) ];
+             :onProperty <downstream> ],
+                <reaction> .
+    
+    <carbohydrate>     a b:Class;
+         b:subClassOf <small_molecule> .
+    
+    <catalysed_by>     a rdf:Property .
+    
+    <catalyses>     a rdf:Property;
+         :inverseOf <catalysed_by>;
+         b:domain <macromolecule>;
+         b:range <reaction> .
+    
+    <cell>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue <cell_state>;
+             :onProperty <has_state> ],
+                 [
+             a :Restriction;
+             :onProperty <part_of>;
+             :hasValue <tissue> ],
+                <physical_structure> .
+    
+    <cell_adhesion>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <cell_cycle_regulator>     a b:Class;
+         b:subClassOf <regulation> .
+    
+    <cell_state>     a b:Class;
+         b:subClassOf <modifier> .
+    
+    <chaperone>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <chemical>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue <compartment>;
+             :onProperty <located_in> ] .
+    
+    <chromosome>     a b:Class;
+         b:subClassOf <dna_structure> .
+    
+    <classification>     a b:Class;
+         b:subClassOf <mental_structure> .
+    
+    <coenzyme>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :onProperty <loosely_bound_to>;
+                 :hasValue <protein> ]
+        <cofactor>  ) .
+    
+    <coenzyme_requiring_enzyme>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue <amino_acid>;
+             :onProperty <polymer_of> ],
+                 [
+             a :Restriction;
+             :toClass <amino_acid>;
+             :onProperty <polymer_of> ],
+                 [
+             a :Restriction;
+             :onProperty <catalyses>;
+             :hasValue <reaction> ],
+                 [
+             a :Restriction;
+             :onProperty <binds>;
+             :hasValue <coenzyme> ],
+                <enzyme> .
+    
+    <cofactor>     a b:Class;
+         :intersectionOf  (
+         [
+                 a b:Class;
+                 :unionOf  (
+                
+                
+                <small_molecule> <metal_ion>  ) ]
+         ) .
+    
+    <compartment>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :onProperty <part_of>;
+             :hasValue <physical_structure> ],
+                <physical_structure> .
+    
+    <compartment_A>     a :Thing .
+    
+    <compartment_B>     a :Thing .
+    
+    <complement_dna>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :hasValue <deoxynucleotide>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :toClass <deoxynucleotide>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :hasValue  [
+                     a b:Class;
+                     :oneOf  (
+                    
+                    <single>  ) ];
+                 :onProperty <has_strandedness> ]
+         [
+                 a :Restriction;
+                 :hasValue <messenger_rna>;
+                 :onProperty <transcribed_from> ]
+        <dna>  ) .
+    
+    <complex>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :minCardinality "2";
+             :onProperty <has_part>;
+             :hasValue <protein> ],
+                <macromolecule> .
+    
+    <comprised_of>     a rdf:Property .
+    
+    <condition>     a b:Class .
+    
+    <conflict>     a <c:feature_type> .
+    
+    <coordinate>     a b:Class;
+         b:subClassOf <mental_structure> .
+    
+    <covalent_reaction>     a b:Class;
+         b:subClassOf <reaction> .
+    
+    <cytoskeletal_regulator>     a b:Class;
+         b:subClassOf <regulation> .
+    
+    <defenseimmunity_protein>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <delta_H>     a rdf:Property .
+    
+    <delta_S>     a rdf:Property .
+    
+    <deoxynucleotide>     a b:Class;
+         b:subClassOf <nucleotide> .
+    
+    <developmental_stage>     a b:Class;
+         b:subClassOf <condition> .
+    
+    <disease>     a b:Class;
+         b:subClassOf <condition> .
+    
+    <disease_state>     a b:Class;
+         b:subClassOf <modifier> .
+    
+    <dna>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :hasValue <deoxynucleotide>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :toClass <deoxynucleotide>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :onProperty <has_strandedness>;
+                 :hasValue :Thing ]
+        <nucleic_acid>  ) .
+    
+    <dna_structure>     a b:Class;
+         b:subClassOf <physical_structure> .
+    
+    <double>     a <c:selector> .
+    
+    <double_stranded_dna>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :hasValue <deoxynucleotide>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :toClass <deoxynucleotide>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :hasValue  [
+                     a b:Class;
+                     :oneOf  (
+                    
+                    <double>  ) ];
+                 :onProperty <has_strandedness> ]
+        <dna>  ) .
+    
+    <downstream>     a rdf:Property .
+    
+    <ec_number>     a b:Class;
+         b:subClassOf <label> .
+    
+    <enclosed_by>     a rdf:Property;
+         :inverseOf <around> .
+    
+    <enhancer>     a <c:feature_type> .
+    
+    <environment>     a b:Class;
+         b:subClassOf <condition> .
+    
+    <enzyme>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :hasValue <amino_acid>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :toClass <amino_acid>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :onProperty <catalyses>;
+                 :hasValue <reaction> ]
+        <protein>  );
+         b:subClassOf  [
+             a b:Class;
+             :unionOf  (
+             [
+                     a :Restriction;
+                     :hasValue <ec_number>;
+                     :onProperty <has_ec_number> ]
+             ) ] .
+    
+    <enzyme_activator>     a b:Class;
+         b:subClassOf <regulation> .
+    
+    <enzyme_function>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <enzyme_inhibitor>     a b:Class;
+         b:subClassOf <regulation> .
+    
+    <exon>     a b:Class;
+         b:subClassOf <dna_structure> .
+    
+    <expressed_sequence_tag>     a b:Class;
+         :equivalentTo <complement_dna>;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue <tissue>;
+             :onProperty <transcribed_from> ],
+                 [
+             a :Restriction;
+             :onProperty <affected_by>;
+             :hasValue <condition> ],
+                 [
+             a :Restriction;
+             :hasValue <methodology>;
+             :onProperty <produced_by> ],
+                <complement_dna> .
+    
+    <expression_profile>     a b:Class .
+    
+    <fad>     a b:Class;
+         b:subClassOf <prosthetic_group> .
+    
+    <feature_type>     a b:Class;
+         b:subClassOf <format_component> .
+    
+    <field>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :toClass  [
+                 a b:Class ];
+             :onProperty <has_content> ],
+                 [
+             a :Restriction;
+             :toClass  [
+                 a b:Class ];
+             :onProperty <in_column> ],
+                <format_component> .
+    
+    <five_UTR>     a <c:feature_type> .
+    
+    <five_clip>     a <c:feature_type> .
+    
+    <format_component>     a b:Class .
+    
+    <forms_complex>     a rdf:Property .
+    
+    <forms_polymer>     a rdf:Property .
+    
+    <function>     a b:Class .
+    
+    <genbank_file>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :toClass  [
+                 a b:Class ];
+             :onProperty <inc:has_name> ],
+                 [
+             a :Restriction;
+             :onProperty <has_content>;
+             :toClass <record> ],
+                <format_component> .
+    
+    <genbank_release>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :toClass  [
+                 a b:Class ];
+             :onProperty <inc:has_name> ],
+                 [
+             a :Restriction;
+             :toClass <genbank_file>;
+             :onProperty <has_content> ],
+                <format_component> .
+    
+    <gene>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue <gene_structure>;
+             :onProperty <has_structure> ],
+                 [
+             a :Restriction;
+             :hasValue <function>;
+             :onProperty <has_function> ],
+                 [
+             a :Restriction;
+             :hasValue <rna>;
+             :onProperty <transcribed_to> ],
+                 [
+             a :Restriction;
+             :onProperty <located_at>;
+             :hasValue <map_location> ],
+                 [
+             a :Restriction;
+             :onProperty <comprised_of>;
+             :hasValue <dna> ] .
+    
+    <gene_network>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue <gene_network>;
+             :onProperty <has_child> ],
+                 [
+             a :Restriction;
+             :hasValue  [
+                 a b:Class;
+                 :intersectionOf  (
+                
+                 [
+                         a :Restriction;
+                         :hasValue <gene>;
+                         :onProperty <upstream> ]
+                 [
+                         a :Restriction;
+                         :onProperty <downstream>;
+                         :hasValue <gene> ]
+                <reaction>  ) ];
+             :onProperty <has_part> ],
+                <biopathway> .
+    
+    <gene_regulation>     a b:Class;
+         b:subClassOf <function> .
+    
+    <gene_structure>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue  [
+                 a b:Class;
+                 :intersectionOf  (
+                
+                 [
+                         a :Restriction;
+                         :hasValue  [
+                             a b:Class;
+                             :intersectionOf  (
+                            
+                             [
+                                     a :Restriction;
+                                     :hasValue  [
+                                         a b:Class;
+                                         :unionOf  (
+                                        
+                                        
+                                        <intron> <exon>  ) ];
+                                     :onProperty <has_content> ]
+                            <pair>  ) ];
+                         :onProperty <has_content> ]
+                <ordered_set>  ) ];
+             :onProperty <has_part> ],
+                 [
+             a :Restriction;
+             :toClass  [
+                 a b:Class;
+                 :unionOf  (
+                
+                
+                <intron> <exon>  ) ];
+             :onProperty <has_part> ],
+                <physical_structure> .
+    
+    <genomic_dna>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :hasValue <deoxynucleotide>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :toClass <deoxynucleotide>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :hasValue  [
+                     a b:Class;
+                     :oneOf  (
+                    
+                    <double>  ) ];
+                 :onProperty <has_strandedness> ]
+         [
+                 a :Restriction;
+                 :hasValue  [
+                     a b:Class;
+                     :unionOf  (
+                    
+                    
+                    <plasmid> <chromosome>  ) ];
+                 :onProperty <part_of> ]
+        <dna>  ) .
+    
+    <has_accession_number>     a rdf:Property;
+         b:domain  [
+             a b:Class;
+             :unionOf  (
+            
+            
+            <nucleic_acid> <protein>  ) ];
+         b:range <accession_number> .
+    
+    <has_child>     a rdf:Property .
+    
+    <has_content>     a rdf:Property .
+    
+    <has_ec_number>     a rdf:Property;
+         b:domain <enzyme>;
+         b:range <ec_number> .
+    
+    <has_function>     a rdf:Property .
+    
+    <has_name>     a rdf:Property;
+         :inverseOf <name_of>;
+         b:range <name> .
+    
+    <has_part>     a rdf:Property;
+         :inverseOf <part_of> .
+    
+    <has_role>     a rdf:Property .
+    
+    <has_species>     a rdf:Property;
+         b:range <species> .
+    
+    <has_state>     a rdf:Property .
+    
+    <has_strandedness>     a rdf:Property;
+         b:domain <nucleic_acid>;
+         b:range  [
+             a b:Class;
+             :oneOf  (
+            
+            
+            <single> <double>  ) ] .
+    
+    <has_structure>     a rdf:Property .
+    
+    <holoenzyme>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :hasValue <amino_acid>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :toClass <amino_acid>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :onProperty <catalyses>;
+                 :hasValue <reaction> ]
+         [
+                 a :Restriction;
+                 :onProperty <binds>;
+                 :hasValue <prosthetic_group> ]
+        <protein>  ) .
+    
+    <holoprotein>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :hasValue <amino_acid>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :toClass <amino_acid>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :onProperty <binds>;
+                 :hasValue <prosthetic_group> ]
+        <protein>  ) .
+    
+    <hydrolase>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :hasValue <amino_acid>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :toClass <amino_acid>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :onProperty <catalyses>;
+                 :hasValue <hydrolysis> ]
+        <enzyme>  ) .
+    
+    <hydrolysis>     a b:Class;
+         b:subClassOf <covalent_reaction> .
+    
+    <hyphen>     a <c:feature_type> .
+    
+    <iDNA>     a <c:feature_type> .
+    
+    <in_column>     a rdf:Property .
+    
+    <interaction>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue <complex>;
+             :onProperty <forms_complex> ],
+                 [
+             a :Restriction;
+             :onProperty <binds>;
+             :hasValue <macromolecule> ],
+                 [
+             a :Restriction;
+             :minCardinality "2";
+             :onProperty <binds>;
+             :hasValue <macromolecule> ],
+                 [
+             a :Restriction;
+             :cardinality "1";
+             :hasValue <complex>;
+             :onProperty <forms_complex> ],
+                <reaction> .
+    
+    <intron>     a b:Class;
+         b:subClassOf <dna_structure> .
+    
+    <ion>     a b:Class;
+         b:subClassOf <chemical> .
+    
+    <is_part_of>     a rdf:Property .
+    
+    <label>     a b:Class;
+         b:subClassOf <mental_structure> .
+    
+    <ligand_binding_or_carrier>     a b:Class;
+         b:subClassOf <binding> .
+    
+    <ligand_function>     a b:Class;
+         b:subClassOf <signal_transduction> .
+    
+    <ligation>     a b:Class;
+         b:subClassOf <covalent_reaction> .
+    
+    <located_at>     a rdf:Property .
+    
+    <located_in>     a rdf:Property;
+         b:subPropertyOf <located_at> .
+    
+    <loosely_binds>     a rdf:Property;
+         :inverseOf <loosely_bound_to>;
+         b:subPropertyOf <binds> .
+    
+    <loosely_bound_to>     a rdf:Property .
+    
+    <mRNA>     a <c:feature_type> .
+    
+    <macromolecule>     a b:Class;
+         b:subClassOf <chemical> .
+    
+    <map_location>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue <dna_structure>;
+             :onProperty <located_at> ],
+                <physical_structure> .
+    
+    <mat_peptide>     a <c:feature_type> .
+    
+    <mental_structure>     a b:Class .
+    
+    <messenger_rna>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :onProperty <polymer_of>;
+                 :hasValue <ribonucleotide> ]
+         [
+                 a :Restriction;
+                 :onProperty <polymer_of>;
+                 :toClass <ribonucleotide> ]
+         [
+                 a :Restriction;
+                 :hasValue <dna>;
+                 :onProperty <transcribed_from> ]
+         [
+                 a :Restriction;
+                 :toClass <dna>;
+                 :onProperty <transcribed_from> ]
+         [
+                 a :Restriction;
+                 :hasValue <protein>;
+                 :onProperty <translated_to> ]
+         [
+                 a :Restriction;
+                 :toClass <protein>;
+                 :onProperty <translated_to> ]
+        <rna>  ) .
+    
+    <metabolic_pathway>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :onProperty <has_child>;
+             :hasValue <metabolic_pathway> ],
+                <biopathway> .
+    
+    <metal>     a b:Class;
+         b:subClassOf <atom> .
+    
+    <metal_ion>     a b:Class;
+         :intersectionOf  (
+        
+        
+        <ion> <metal>  ) .
+    
+    <methodology>     a b:Class;
+         b:subClassOf <mental_structure> .
+    
+    <microtubule_binding>     a b:Class;
+         b:subClassOf <binding> .
+    
+    <misc_RNA>     a <c:feature_type> .
+    
+    <misc_binding>     a <c:feature_type> .
+    
+    <misc_difference>     a <c:feature_type> .
+    
+    <misc_feature>     a <c:feature_type> .
+    
+    <misc_recomb>     a <c:feature_type> .
+    
+    <misc_signal>     a <c:feature_type> .
+    
+    <misc_structure>     a <c:feature_type> .
+    
+    <modified_base>     a <c:feature_type> .
+    
+    <modifier>     a b:Class .
+    
+    <molecular_function_unknown>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <motor>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <mutation>     a <c:feature_type> .
+    
+    <nad>     a b:Class;
+         b:subClassOf <prosthetic_group> .
+    
+    <nad_requiring_oxidoreductase>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue <amino_acid>;
+             :onProperty <polymer_of> ],
+                 [
+             a :Restriction;
+             :toClass <amino_acid>;
+             :onProperty <polymer_of> ],
+                 [
+             a :Restriction;
+             :onProperty <catalyses>;
+             :hasValue <oxidation_reduction> ],
+                 [
+             a :Restriction;
+             :onProperty <binds>;
+             :hasValue <nad> ],
+                <enzyme> .
+    
+    <name>     a b:Class;
+         b:subClassOf <label> .
+    
+    <name_of>     a rdf:Property .
+    
+    <non_metal>     a b:Class;
+         b:subClassOf <atom> .
+    
+    <nucleic_acid>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :hasValue <nucleotide>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :toClass <nucleotide>;
+                 :onProperty <polymer_of> ]
+        <macromolecule>  ) .
+    
+    <nucleic_acid_binding>     a b:Class;
+         b:subClassOf <binding> .
+    
+    <nucleotide>     a b:Class;
+         b:subClassOf <small_molecule> .
+    
+    <obsolete>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <old_sequence>     a <c:feature_type> .
+    
+    <ordered_set>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :onProperty <has_content>;
+             :hasValue <pair> ],
+                 [
+             a :Restriction;
+             :minCardinality "1";
+             :onProperty <has_content>;
+             :hasValue <pair> ],
+                <mental_structure> .
+    
+    <organ>     a b:Class;
+         b:subClassOf <anatomy> .
+    
+    <organism_classification>     a b:Class;
+         b:subClassOf <classification> .
+    
+    <oxidation_reduction>     a b:Class;
+         b:subClassOf <covalent_reaction> .
+    
+    <oxidoreductase>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :hasValue <amino_acid>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :toClass <amino_acid>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :onProperty <catalyses>;
+                 :hasValue <oxidation_reduction> ]
+        <enzyme>  ) .
+    
+    <pair>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :onProperty <has_name>;
+             :hasValue :Thing ],
+                 [
+             a :Restriction;
+             :onProperty <has_content>;
+             :hasValue :Thing ],
+                <mental_structure> .
+    
+    <param_type>     a rdf:Property .
+    
+    <param_unit>     a rdf:Property .
+    
+    <param_value>     a rdf:Property .
+    
+    <parameter>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue  [
+                 a b:Class ];
+             :onProperty <param_type> ],
+                 [
+             a :Restriction;
+             :hasValue  [
+                 a b:Class ];
+             :onProperty <param_value> ],
+                 [
+             a :Restriction;
+             :hasValue  [
+                 a b:Class ];
+             :onProperty <param_unit> ] .
+    
+    <part_of>     a rdf:Property .
+    
+    <physical_structure>     a b:Class .
+    
+    <plasmid>     a b:Class;
+         b:subClassOf <dna_structure> .
+    
+    <polyA_signal>     a <c:feature_type> .
+    
+    <polyA_site>     a <c:feature_type> .
+    
+    <polymer_of>     a rdf:Property;
+         :inverseOf <forms_polymer>;
+         b:range <small_molecule> .
+    
+    <precursor_RNA>     a <c:feature_type> .
+    
+    <prim_transcript>     a <c:feature_type> .
+    
+    <primer>     a <c:feature_type> .
+    
+    <primer_bind>     a <c:feature_type> .
+    
+    <process>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :onProperty <has_child>;
+             :hasValue <process> ],
+                 [
+             a :Restriction;
+             :onProperty <has_role>;
+             :hasValue <role> ],
+                 [
+             a :Restriction;
+             :hasValue <biological_function>;
+             :onProperty <has_part> ],
+                <transformation> .
+    
+    <produced_by>     a rdf:Property .
+    
+    <prosthetic_group>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a b:Class;
+                 :complementOf <metal_ion> ]
+         [
+                 a :Restriction;
+                 :hasValue <protein>;
+                 :onProperty <strongly_bound_to> ]
+        <cofactor>  ) .
+    
+    <protein>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :hasValue <amino_acid>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :toClass <amino_acid>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :hasValue <messenger_rna>;
+                 :onProperty <translated_from> ]
+        <macromolecule>  );
+         b:subClassOf  [
+             a b:Class;
+             :unionOf  (
+             [
+                     a :Restriction;
+                     :cardinality "1";
+                     :hasValue <accession_number>;
+                     :onProperty <has_accession_number> ]
+             ) ],
+                 [
+             a b:Class;
+             :unionOf  (
+             [
+                     a :Restriction;
+                     :minCardinality "1";
+                     :onProperty <has_species>;
+                     :hasValue <species> ]
+             ) ] .
+    
+    <protein_tagging>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <rRNA>     a <c:feature_type> .
+    
+    <reaction>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :minCardinality "1";
+             :hasValue <chemical>;
+             :onProperty <upstream> ],
+                 [
+             a :Restriction;
+             :minCardinality "1";
+             :hasValue <chemical>;
+             :onProperty <downstream> ],
+                 [
+             a :Restriction;
+             :hasValue <chemical>;
+             :onProperty <downstream> ],
+                 [
+             a :Restriction;
+             :onProperty <has_part>;
+             :hasValue <reaction> ],
+                 [
+             a :Restriction;
+             :minCardinality "0";
+             :onProperty <has_part>;
+             :hasValue <reaction> ],
+                 [
+             a :Restriction;
+             :hasValue <chemical>;
+             :onProperty <upstream> ],
+                 [
+             a :Restriction;
+             :onProperty <delta_H>;
+             :hasValue <parameter> ],
+                 [
+             a :Restriction;
+             :onProperty <delta_S>;
+             :hasValue <parameter> ],
+                <transformation> .
+    
+    <receptor>     a b:Class;
+         b:subClassOf <signal_transduction> .
+    
+    <receptor_signalling_protein>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :onProperty <has_function>;
+             :hasValue <signal_transduction> ],
+                <protein> .
+    
+    <record>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue <field>;
+             :onProperty <has_content> ],
+                 [
+             a :Restriction;
+             :hasValue  [
+                 a b:Class;
+                 :oneOf  (
+                <ACCESSION> 
+                <DEFINITION> 
+                <FEATURES> 
+                <KEYWORDS> 
+                <LOCUS> 
+                <ORIGIN> 
+                <REFERENCE> 
+                <SEGMENT> 
+                <SEQUENCE> 
+                <SOURCE> 
+                <VERSION> 
+                 ) ];
+             :onProperty <inc:has_name> ],
+                <format_component> .
+    
+    <regulation>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <rep_origin>     a <c:feature_type> .
+    
+    <repeat_region>     a <c:feature_type> .
+    
+    <repeat_unit>     a <c:feature_type> .
+    
+    <ribonucleotide>     a b:Class;
+         b:subClassOf <nucleotide> .
+    
+    <ribosomal_rna>     a b:Class;
+         b:subClassOf <rna> .
+    
+    <ribosomal_rna_function>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <ribozyme>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :onProperty <polymer_of>;
+                 :hasValue <ribonucleotide> ]
+         [
+                 a :Restriction;
+                 :onProperty <polymer_of>;
+                 :toClass <ribonucleotide> ]
+         [
+                 a :Restriction;
+                 :onProperty <catalyses>;
+                 :hasValue <covalent_reaction> ]
+        <rna>  ) .
+    
+    <rna>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :onProperty <polymer_of>;
+                 :hasValue <ribonucleotide> ]
+         [
+                 a :Restriction;
+                 :onProperty <polymer_of>;
+                 :toClass <ribonucleotide> ]
+        <nucleic_acid>  ) .
+    
+    <role>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :onProperty <is_part_of>;
+             :hasValue <process> ],
+                <mental_structure> .
+    
+    <satellite>     a <c:feature_type> .
+    
+    <scRNA>     a <c:feature_type> .
+    
+    <selector>     a b:Class;
+         b:subClassOf <modifier> .
+    
+    <sequence_entry>     a b:Class;
+         b:subClassOf <format_component> .
+    
+    <sig_peptide>     a <c:feature_type> .
+    
+    <signal_transduction>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <signal_transduction_pathway>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :onProperty <has_function>;
+             :hasValue <signal_transduction> ],
+                 [
+             a :Restriction;
+             :onProperty <has_child>;
+             :hasValue <signal_transduction_pathway> ],
+                <biopathway> .
+    
+    <single>     a <c:selector> .
+    
+    <single_stranded_dna>     a b:Class;
+         :intersectionOf  (
+        
+         [
+                 a :Restriction;
+                 :hasValue <deoxynucleotide>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :toClass <deoxynucleotide>;
+                 :onProperty <polymer_of> ]
+         [
+                 a :Restriction;
+                 :hasValue  [
+                     a b:Class;
+                     :oneOf  (
+                    
+                    <single>  ) ];
+                 :onProperty <has_strandedness> ]
+        <dna>  ) .
+    
+    <small_molecule>     a b:Class;
+         b:subClassOf <chemical> .
+    
+    <small_nuclear_rna_function>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <small_nucleolar_rna_function>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <snRNA>     a <c:feature_type> .
+    
+    <source2>     a <c:feature_type> .
+    
+    <species>     a b:Class;
+         :equivalentTo  [
+             a b:Class;
+             :intersectionOf  (
+            
+             [
+                     a :Restriction;
+                     :hasValue  [
+                         a b:Class;
+                         :oneOf  (
+                        <ORGANISM> 
+                         ) ];
+                     :onProperty <has_content> ]
+            <record>  ) ];
+         b:subClassOf <organism_classification> .
+    
+    <stem_loop>     a <c:feature_type> .
+    
+    <storage_protein>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <strongly_binds>     a rdf:Property;
+         :inverseOf <strongly_bound_to>;
+         b:subPropertyOf <binds> .
+    
+    <strongly_bound_to>     a rdf:Property .
+    
+    <structural_protein>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <sub_feature_type>     a b:Class;
+         b:subClassOf <format_component> .
+    
+    <sub_record>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue  [
+                 a b:Class;
+                 :oneOf  (
+                <AUTHORS> 
+                <JOURNAL> 
+                <ORGANISM> 
+                <TITLE> 
+                 ) ];
+             :onProperty <inc:has_name> ],
+                 [
+             a :Restriction;
+             :onProperty <is_part_of>;
+             :toClass <record> ],
+                 [
+             a :Restriction;
+             :cardinality "1";
+             :onProperty <is_part_of>;
+             :hasValue <record> ],
+                <record> .
+    
+    <tRNA>     a <c:feature_type> .
+    
+    <terminator>     a <c:feature_type> .
+    
+    <three_UTR>     a <c:feature_type> .
+    
+    <three_clip>     a <c:feature_type> .
+    
+    <tissue>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue <organ>;
+             :onProperty <part_of> ],
+                 [
+             a :Restriction;
+             :hasValue <age>;
+             :onProperty <has_state> ],
+                 [
+             a :Restriction;
+             :hasValue <developmental_stage>;
+             :onProperty <has_state> ],
+                 [
+             a :Restriction;
+             :hasValue <biological_system>;
+             :onProperty <part_of> ],
+                <physical_structure> .
+    
+    <transcribed_from>     a rdf:Property;
+         :inverseOf <transcribed_to> .
+    
+    <transcribed_to>     a rdf:Property .
+    
+    <transcription_factor_binding>     a b:Class;
+         b:subClassOf <binding> .
+    
+    <transfer_rna>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue <dna>;
+             :onProperty <transcribed_from> ],
+                <rna> .
+    
+    <transfer_rna_function>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <transformation>     a b:Class;
+         b:subClassOf  [
+             a :Restriction;
+             :hasValue :Thing;
+             :onProperty <upstream> ],
+                 [
+             a :Restriction;
+             :onProperty <downstream>;
+             :hasValue :Thing ] .
+    
+    <transit_peptide>     a <c:feature_type> .
+    
+    <translated_from>     a rdf:Property;
+         :inverseOf <translated_to> .
+    
+    <translated_to>     a rdf:Property .
+    
+    <transporter>     a b:Class;
+         b:subClassOf <biological_function> .
+    
+    <transposon>     a <c:feature_type> .
+    
+    <tumor_suppressor>     a b:Class;
+         b:subClassOf <regulation> .
+    
+    <two_component_response_regulator>     a b:Class;
+         b:subClassOf <signal_transduction> .
+    
+    <two_component_sensor_molecule>     a b:Class;
+         b:subClassOf <signal_transduction> .
+    
+    <unique_id>     a rdf:Property .
+    
+    <unsure>     a <c:feature_type> .
+    
+    <upstream>     a rdf:Property .
+    
+    <variation>     a <c:feature_type> .
+    
+    <inc:exon>     a <c:feature_type> .
+    
+    <inc:gene>     a <c:feature_type> .
+    
+    <inc:has_name>     a rdf:Property .
+    
+    <inc:intron>     a <c:feature_type> .
+    
+ #ENDS
